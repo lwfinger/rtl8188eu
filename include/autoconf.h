@@ -166,7 +166,7 @@
 
 #define CONFIG_SKB_COPY	//for amsdu
 
-//#define CONFIG_LED
+#define CONFIG_LED
 #ifdef CONFIG_LED
 	#define CONFIG_SW_LED
 	#ifdef CONFIG_SW_LED
@@ -360,7 +360,7 @@
  */
 #define DBG	1
 
-#define CONFIG_DEBUG /* DBG_871X, etc... */
+//#define CONFIG_DEBUG /* DBG_871X, etc... */
 //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
 
 #define CONFIG_PROC_DEBUG
