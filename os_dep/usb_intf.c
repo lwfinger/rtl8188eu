@@ -751,7 +751,7 @@ static void rtw_dev_unload(_adapter *padapter)
 			//DBG_871X("r871x_dev_unload()->rtl871x_hal_deinit()\n");
 #ifdef CONFIG_WOWLAN
 			if ((padapter->pwrctrlpriv.bSupportRemoteWakeup==_TRUE)&&(padapter->pwrctrlpriv.wowlan_mode==_TRUE)){
-				DBG_871X("%s bSupportWakeOnWlan==_TRUE  do not run rtw_hal_deinit()\n",__FUNCTION__);
+				DBG_871X("%s bSupportWakeOnWlan==_TRUE  do not run rtw_hal_deinit()\n",__func__);
 			}
 			else
 #endif //CONFIG_WOWLAN
@@ -806,7 +806,7 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 		{
 			extern char* ifname;
 			strncpy(ifname, "wlan10", 6); 
-			//DBG_871X("%s()-%d: ifname=%s, vid=%04X, pid=%04X\n", __FUNCTION__, __LINE__, ifname, vid, pid);
+			//DBG_871X("%s()-%d: ifname=%s, vid=%04X, pid=%04X\n", __func__, __LINE__, ifname, vid, pid);
 		}
 #endif /* RTK_DMP_PLATFORM */
 
@@ -887,7 +887,7 @@ int rtw_hw_suspend(_adapter *padapter )
 	return 0;
 	
 error_exit:
-	DBG_871X("%s, failed\n",__FUNCTION__);
+	DBG_871X("%s, failed\n",__func__);
 	return (-1);
 
 }
@@ -938,7 +938,7 @@ int rtw_hw_resume(_adapter *padapter)
 	
 	return 0;
 error_exit:
-	DBG_871X("%s, Open net dev failed\n",__FUNCTION__);
+	DBG_871X("%s, Open net dev failed\n",__func__);
 	return (-1);
 }
 #endif
@@ -960,7 +960,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	
 	_func_enter_;
 
-	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
+	DBG_871X("==> %s (%s:%d)\n",__func__, current->comm, current->pid);
 
 #ifdef CONFIG_WOWLAN
 	if (check_fwstate(pmlmepriv, _FW_LINKED))
@@ -1020,8 +1020,8 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 #ifdef CONFIG_LAYER2_ROAMING_RESUME
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) )
 	{
-		//DBG_871X("%s:%d assoc_ssid:%s\n", __FUNCTION__, __LINE__, pmlmepriv->assoc_ssid.Ssid);
-		DBG_871X("%s:%d %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n",__FUNCTION__, __LINE__,
+		//DBG_871X("%s:%d assoc_ssid:%s\n", __func__, __LINE__, pmlmepriv->assoc_ssid.Ssid);
+		DBG_871X("%s:%d %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n",__func__, __LINE__,
 				pmlmepriv->cur_network.network.Ssid.Ssid,
 				MAC_ARG(pmlmepriv->cur_network.network.MacAddress),
 				pmlmepriv->cur_network.network.Ssid.SsidLength,
@@ -1054,7 +1054,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 		rtw_indicate_disconnect(padapter);
 	
 exit:
-	DBG_871X("<===  %s return %d.............. in %dms\n", __FUNCTION__
+	DBG_871X("<===  %s return %d.............. in %dms\n", __func__
 		, ret, rtw_get_passing_time_ms(start_time));
 
 	_func_exit_;
@@ -1106,7 +1106,7 @@ int rtw_resume_process(_adapter *padapter)
 #endif	//#ifdef CONFIG_BT_COEXIST
 	_func_enter_;
 
-	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
+	DBG_871X("==> %s (%s:%d)\n",__func__, current->comm, current->pid);
 
 	if (padapter) {
 		pnetdev= padapter->pnetdev;
@@ -1209,7 +1209,7 @@ exit:
 	#endif //CONFIG_RESUME_IN_WORKQUEUE
 
 	pwrpriv->bInSuspend = _FALSE;
-	DBG_871X("<===  %s return %d.............. in %dms\n", __FUNCTION__
+	DBG_871X("<===  %s return %d.............. in %dms\n", __func__
 		, ret, rtw_get_passing_time_ms(start_time));
 	
 	_func_exit_;
@@ -1472,9 +1472,9 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 			//usb_autopm_get_interface(adapter_to_dvobj(padapter)->pusbintf );//init pm_usage_cnt ,let it start from 1
 
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
-			DBG_871X("%s...pm_usage_cnt(%d).....\n",__FUNCTION__,atomic_read(&(dvobj->pusbintf ->pm_usage_cnt)));
+			DBG_871X("%s...pm_usage_cnt(%d).....\n",__func__,atomic_read(&(dvobj->pusbintf ->pm_usage_cnt)));
 			#else
-			DBG_871X("%s...pm_usage_cnt(%d).....\n",__FUNCTION__,dvobj->pusbintf ->pm_usage_cnt);
+			DBG_871X("%s...pm_usage_cnt(%d).....\n",__func__,dvobj->pusbintf ->pm_usage_cnt);
 			#endif							
 		}
 	}	

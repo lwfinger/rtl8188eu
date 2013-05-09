@@ -867,9 +867,9 @@ u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 
 		if (word_en != 0xF)
 		{
-			DBG_871X("%s: offset=%#X\n", __FUNCTION__, offset);
-			DBG_871X("%s: word_en=%#X\n", __FUNCTION__, word_en);
-			DBG_871X("%s: data=", __FUNCTION__);
+			DBG_871X("%s: offset=%#X\n", __func__, offset);
+			DBG_871X("%s: word_en=%#X\n", __func__, word_en);
+			DBG_871X("%s: data=", __func__);
 			for (i=0; i<PGPKT_DATA_SIZE; i++)
 			{
 				DBG_871X("0x%02X ", newdata[i]);
@@ -1242,7 +1242,7 @@ int storeAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 		else
 			ret = _FAIL;
 	} else {
-		DBG_871X("%s NULL pointer\n",__FUNCTION__);
+		DBG_871X("%s NULL pointer\n",__func__);
 		ret =  _FAIL;
 	}
 	return ret;
@@ -1272,7 +1272,7 @@ int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 		#endif
 		
 	} else {
-		DBG_871X("%s NULL pointer\n",__FUNCTION__);
+		DBG_871X("%s NULL pointer\n",__func__);
 		ret = _FAIL;
 	}
 	return ret;

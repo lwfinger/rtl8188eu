@@ -697,7 +697,7 @@ ODM_RAInfo_Init(
 			max_rate_idx = 0x03;
 	}
 	
-	//printk("%s ==>WirelessMode:0x%08x ,max_raid_idx:0x%02x\n ",__FUNCTION__,WirelessMode,max_rate_idx);
+	//printk("%s ==>WirelessMode:0x%08x ,max_raid_idx:0x%02x\n ",__func__,WirelessMode,max_rate_idx);
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, 
 				("ODM_RAInfo_Init(): WirelessMode:0x%08x ,max_raid_idx:0x%02x\n", 
 				WirelessMode,max_rate_idx));

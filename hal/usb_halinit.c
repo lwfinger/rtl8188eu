@@ -88,7 +88,7 @@ _ConfigNormalChipOutEP_8188E(
 				break;
 			
 	}
-	DBG_871X("%s OutEpQueueSel(0x%02x), OutEpNumber(%d)\n",__FUNCTION__,pHalData->OutEpQueueSel,pHalData->OutEpNumber );
+	DBG_871X("%s OutEpQueueSel(0x%02x), OutEpNumber(%d)\n",__func__,pHalData->OutEpQueueSel,pHalData->OutEpNumber );
 
 }
 
@@ -1350,7 +1350,7 @@ _InitAntenna_Selection(IN	PADAPTER Adapter)
 
 	if (pHalData->AntDivCfg==0)
 		return;
-	DBG_8192C("==>  %s ....\n",__FUNCTION__);		
+	DBG_8192C("==>  %s ....\n",__func__);		
 		
 	rtw_write32(Adapter, REG_LEDCFG0, rtw_read32(Adapter, REG_LEDCFG0)|BIT23);	
 	PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT13, 0x01);
@@ -1359,7 +1359,7 @@ _InitAntenna_Selection(IN	PADAPTER Adapter)
 		pHalData->CurAntenna = Antenna_A;
 	else
 		pHalData->CurAntenna = Antenna_B;
-	DBG_8192C("%s,Cur_ant:(%x)%s\n",__FUNCTION__,pHalData->CurAntenna,(pHalData->CurAntenna == Antenna_A)?"Antenna_A":"Antenna_B");
+	DBG_8192C("%s,Cur_ant:(%x)%s\n",__func__,pHalData->CurAntenna,(pHalData->CurAntenna == Antenna_A)?"Antenna_A":"Antenna_B");
 			
 
 }
@@ -1703,7 +1703,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
 #endif //CONFIG_WOWLAN
 
 		if (status != _SUCCESS) {
-			DBG_871X("%s: Download Firmware failed!!\n", __FUNCTION__);
+			DBG_871X("%s: Download Firmware failed!!\n", __func__);
 			Adapter->bFWReady = _FALSE;
 			pHalData->fw_ractrl = _FALSE;
 			return status;
@@ -1757,7 +1757,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
 #if defined(CONFIG_IOL_EFUSE_PATCH)		
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if (status == _FAIL){	
-		DBG_871X("%s  rtl8188e_iol_efuse_patch failed\n",__FUNCTION__);
+		DBG_871X("%s  rtl8188e_iol_efuse_patch failed\n",__func__);
 		goto exit;
 	}	
 #endif
@@ -2070,7 +2070,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_LCK);
 exit:
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 
-	DBG_871X("%s in %dms\n", __FUNCTION__, rtw_get_passing_time_ms(init_start_time));
+	DBG_871X("%s in %dms\n", __func__, rtw_get_passing_time_ms(init_start_time));
 
 	#ifdef DBG_HAL_INIT_PROFILING
 	hal_init_stages_timestamp[HAL_INIT_STAGES_END]=rtw_get_current_time();
@@ -2197,7 +2197,7 @@ u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
  {
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-   	DBG_8192C("==> %s\n",__FUNCTION__);
+   	DBG_8192C("==> %s\n",__func__);
 
 #ifdef CONFIG_SUPPORT_USB_INT
 	rtw_write32(Adapter, REG_HIMR_88E, IMR_DISABLED_88E);
@@ -2270,7 +2270,7 @@ _func_enter_;
 	if (pHalData->RtIntInPipe != 0x05)
 	{
 		status = _FAIL;
-		DBG_871X("%s =>Warning !! Have not USB Int-IN pipe,  pHalData->RtIntInPipe(%d)!!!\n",__FUNCTION__,pHalData->RtIntInPipe);
+		DBG_871X("%s =>Warning !! Have not USB Int-IN pipe,  pHalData->RtIntInPipe(%d)!!!\n",__func__,pHalData->RtIntInPipe);
 		goto exit;
 	}	
 	_read_interrupt = pintfhdl->io_ops._read_interrupt;
@@ -2583,7 +2583,7 @@ _ReadMACAddress(
 		//sMacAddr[5] = (u8)GetRandomNumber(1, 254);		
 		_rtw_memcpy(pEEPROM->mac_addr, sMacAddr, ETH_ALEN);	
 	}
-	DBG_8192C("%s MAC Address from EFUSE = "MAC_FMT"\n",__FUNCTION__, MAC_ARG(pEEPROM->mac_addr));
+	DBG_8192C("%s MAC Address from EFUSE = "MAC_FMT"\n",__func__, MAC_ARG(pEEPROM->mac_addr));
 	//NicIFSetMacAddress(Adapter, Adapter->PermanentAddress);
 	//RT_PRINT_ADDR(COMP_INIT|COMP_EFUSE, DBG_LOUD, "MAC Addr: %s", Adapter->PermanentAddress);
 #endif
@@ -2911,7 +2911,7 @@ static void _ReadPSSetting(IN PADAPTER Adapter,IN u8*PROMContent,IN u8	AutoloadF
 		//if (SUPPORT_HW_RADIO_DETECT(Adapter))	
 			//Adapter->registrypriv.usbss_enable = Adapter->pwrctrlpriv.bSupportRemoteWakeup ;
 		
-		DBG_8192C("%s...bHWPwrPindetect(%x)-bHWPowerdown(%x) ,bSupportRemoteWakeup(%x)\n",__FUNCTION__,
+		DBG_8192C("%s...bHWPwrPindetect(%x)-bHWPowerdown(%x) ,bSupportRemoteWakeup(%x)\n",__func__,
 		Adapter->pwrctrlpriv.bHWPwrPindetect,Adapter->pwrctrlpriv.bHWPowerdown ,Adapter->pwrctrlpriv.bSupportRemoteWakeup);
 
 		DBG_8192C("### PS params=>  power_mgnt(%x),usbss_enable(%x) ###\n",Adapter->registrypriv.power_mgnt,Adapter->registrypriv.usbss_enable);
@@ -3134,7 +3134,7 @@ static int _ReadAdapterInfo8188EU(PADAPTER	Adapter)
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u32 start=rtw_get_current_time();
 	
-	MSG_8192C("====> %s\n", __FUNCTION__);
+	MSG_8192C("====> %s\n", __func__);
 
 	//Efuse_InitSomeVar(Adapter);
 
@@ -3144,9 +3144,9 @@ static int _ReadAdapterInfo8188EU(PADAPTER	Adapter)
 	_ReadRFType(Adapter);//rf_chip -> _InitRFType()
 	_ReadPROMContent(Adapter);
 
-	//MSG_8192C("%s()(done), rf_chip=0x%x, rf_type=0x%x\n",  __FUNCTION__, pHalData->rf_chip, pHalData->rf_type);
+	//MSG_8192C("%s()(done), rf_chip=0x%x, rf_type=0x%x\n",  __func__, pHalData->rf_chip, pHalData->rf_type);
 
-	MSG_8192C("<==== %s in %d ms\n", __FUNCTION__, rtw_get_passing_time_ms(start));
+	MSG_8192C("<==== %s in %d ms\n", __func__, rtw_get_passing_time_ms(start));
 
 	return _SUCCESS;
 }
@@ -3250,7 +3250,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 		val8 |= (mode<<2);
 		rtw_write8(Adapter, MSR, val8);
 		
-		DBG_871X("%s()-%d mode = %d\n", __FUNCTION__, __LINE__, mode);
+		DBG_871X("%s()-%d mode = %d\n", __func__, __LINE__, mode);
 
 		if ((mode == _HW_STATE_STATION_) || (mode == _HW_STATE_NOLINK_))
 		{
@@ -3343,7 +3343,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 			if ( check_buddy_fwstate(Adapter, (WIFI_STATION_STATE|WIFI_ASOC_STATE)) ) {
 				if (reset_tsf(Adapter, IFACE_PORT1) == _FALSE)
 					DBG_871X("ERROR! %s()-%d: Reset port1 TSF fail\n",
-						__FUNCTION__, __LINE__);
+						__func__, __LINE__);
 			}
 #endif	// CONFIG_TSF_RESET_OFFLOAD	
 		}
@@ -3359,7 +3359,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 		val8 |= mode;
 		rtw_write8(Adapter, MSR, val8);
 		
-		DBG_871X("%s()-%d mode = %d\n", __FUNCTION__, __LINE__, mode);
+		DBG_871X("%s()-%d mode = %d\n", __func__, __LINE__, mode);
 		
 		if ((mode == _HW_STATE_STATION_) || (mode == _HW_STATE_NOLINK_))
 		{
@@ -3453,7 +3453,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 			if ( check_buddy_fwstate(Adapter, (WIFI_STATION_STATE|WIFI_ASOC_STATE)) ) {
 				if (reset_tsf(Adapter, IFACE_PORT0) == _FALSE)
 					DBG_871X("ERROR! %s()-%d: Reset port0 TSF fail\n",
-						__FUNCTION__, __LINE__);
+						__func__, __LINE__);
 			}
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 		}
@@ -3580,7 +3580,7 @@ static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
 		// Update buddy port's TSF(TBTT) if it is SoftAP for beacon TX issue!
 			if (reset_tsf(Adapter, IFACE_PORT0) == _FALSE)
 				DBG_871X("ERROR! %s()-%d: Reset port0 TSF fail\n",
-					__FUNCTION__, __LINE__);
+					__func__, __LINE__);
 
 #endif	// CONFIG_TSF_RESET_OFFLOAD	
 		}		
@@ -3614,7 +3614,7 @@ static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
 		// Update buddy port's TSF if it is SoftAP for beacon TX issue!
 			if (reset_tsf(Adapter, IFACE_PORT1) == _FALSE)
 				DBG_871X("ERROR! %s()-%d: Reset port1 TSF fail\n",
-					__FUNCTION__, __LINE__);
+					__func__, __LINE__);
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 		}		
 
@@ -4069,7 +4069,7 @@ _func_enter_;
 				struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 				u16 bcn_interval = 	*((u16 *)val);
 				if ((pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE){
-					DBG_8192C("%s==> bcn_interval:%d, eraly_int:%d\n",__FUNCTION__,bcn_interval,bcn_interval>>1);
+					DBG_8192C("%s==> bcn_interval:%d, eraly_int:%d\n",__func__,bcn_interval,bcn_interval>>1);
 					rtw_write8(Adapter, REG_DRVERLYINT, bcn_interval>>1);// 50ms for sdio 
 				}			
 			}
@@ -5073,7 +5073,7 @@ void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level)
 	{				
 		rate_bitmap = ODM_Get_Rate_Bitmap(&pHalData->odmpriv,mac_id,mask,rssi_level);
 		printk("%s => mac_id:%d, networkType:0x%02x, mask:0x%08x\n\t ==> rssi_level:%d, rate_bitmap:0x%08x\n",
-			__FUNCTION__,mac_id,networkType,mask,rssi_level,rate_bitmap);
+			__func__,mac_id,networkType,mask,rssi_level,rate_bitmap);
 	}
 #endif
 	

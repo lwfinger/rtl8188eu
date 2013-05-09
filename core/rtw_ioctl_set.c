@@ -1446,7 +1446,7 @@ int rtw_set_country(_adapter *adapter, const char *country_code)
 	else if (0 == strcmp(country_code, "CN"))
 		channel_plan = RT_CHANNEL_DOMAIN_CHINA;
 	else
-		DBG_871X("%s unknown country_code:%s\n", __FUNCTION__, country_code);
+		DBG_871X("%s unknown country_code:%s\n", __func__, country_code);
 	
 	return rtw_set_channel_plan(adapter, channel_plan);
 }

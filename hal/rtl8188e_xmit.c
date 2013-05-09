@@ -145,9 +145,9 @@ InsertEMContent_8188E(
 	#ifdef DBG_EMINFO
 	{
 		int i;
-		DBG_8192C("\n%s ==> pEMInfo->EMPktNum =%d\n",__FUNCTION__,pEMInfo->EMPktNum);
+		DBG_8192C("\n%s ==> pEMInfo->EMPktNum =%d\n",__func__,pEMInfo->EMPktNum);
 		for (i=0;i< EARLY_MODE_MAX_PKT_NUM;i++){
-			DBG_8192C("%s ==> pEMInfo->EMPktLen[%d] =%d\n",__FUNCTION__,i,pEMInfo->EMPktLen[i]);
+			DBG_8192C("%s ==> pEMInfo->EMPktLen[%d] =%d\n",__func__,i,pEMInfo->EMPktLen[i]);
 		}
 
 	}
@@ -227,12 +227,12 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 	pmem= pframe->buf_addr;	
 	
 	#ifdef DBG_EMINFO			
-	DBG_8192C("\n%s ==> agg_num:%d\n",__FUNCTION__, pframe->agg_num);
+	DBG_8192C("\n%s ==> agg_num:%d\n",__func__, pframe->agg_num);
 	for (index=0;index<pframe->agg_num;index++){
 		offset = 	pxmitpriv->agg_pkt[index].offset;
 		pktlen = pxmitpriv->agg_pkt[index].pkt_len;
-		DBG_8192C("%s ==> agg_pkt[%d].offset=%d\n",__FUNCTION__,index,offset);
-		DBG_8192C("%s ==> agg_pkt[%d].pkt_len=%d\n",__FUNCTION__,index,pktlen);
+		DBG_8192C("%s ==> agg_pkt[%d].offset=%d\n",__func__,index,offset);
+		DBG_8192C("%s ==> agg_pkt[%d].pkt_len=%d\n",__func__,index,pktlen);
 	}
 	#endif
 	
@@ -277,7 +277,7 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 			}
 			
 			#ifdef DBG_EMINFO
-			DBG_8192C("%s ==> desc.pkt_len=%d\n",__FUNCTION__,ptxdesc->pktlen);
+			DBG_8192C("%s ==> desc.pkt_len=%d\n",__func__,ptxdesc->pktlen);
 			#endif
 			InsertEMContent_8188E(&eminfo,pEMInfo_mem);
 		}	

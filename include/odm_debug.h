@@ -100,10 +100,10 @@
 #define RT_PRINTK				DbgPrint
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	#define DbgPrint	printk
-	#define RT_PRINTK(fmt, args...)	DbgPrint( "%s(): " fmt, __FUNCTION__, ## args);
+	#define RT_PRINTK(fmt, args...)	DbgPrint( "%s(): " fmt, __func__, ## args);
 #else
 	#define DbgPrint	panic_printk
-#define RT_PRINTK(fmt, args...)	DbgPrint( "%s(): " fmt, __FUNCTION__, ## args);
+#define RT_PRINTK(fmt, args...)	DbgPrint( "%s(): " fmt, __func__, ## args);
 #endif
 
 #ifndef ASSERT
@@ -138,13 +138,13 @@
 #define ODM_RT_ASSERT(pDM_Odm, expr, fmt)											\
 		if (!(expr)) {																	\
 			DbgPrint( "Assertion failed! %s at ......\n", #expr);								\
-			DbgPrint( "      ......%s,%s,line=%d\n",__FILE__,__FUNCTION__,__LINE__);			\
+			DbgPrint( "      ......%s,%s,line=%d\n",__FILE__,__func__,__LINE__);			\
 			RT_PRINTK fmt;															\
 			ASSERT(FALSE);															\
 		}
-#define ODM_dbg_enter() { DbgPrint("==> %s\n", __FUNCTION__); }
-#define ODM_dbg_exit() { DbgPrint("<== %s\n", __FUNCTION__); }
-#define ODM_dbg_trace(str) { DbgPrint("%s:%s\n", __FUNCTION__, str); }
+#define ODM_dbg_enter() { DbgPrint("==> %s\n", __func__); }
+#define ODM_dbg_exit() { DbgPrint("<== %s\n", __func__); }
+#define ODM_dbg_trace(str) { DbgPrint("%s:%s\n", __func__, str); }
 
 #define ODM_PRINT_ADDR(pDM_Odm, comp, level, title_str, ptr)						\
 			if (((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
@@ -669,7 +669,7 @@ typedef enum tag_DBGP_Flag_Type_Definition
 
 /*------------------------Export Marco Definition---------------------------*/
 #if (DM_ODM_SUPPORT_TYPE != ODM_MP)
-#define RT_PRINTK(fmt, args...)    printk( "%s(): " fmt, __FUNCTION__, ## args);
+#define RT_PRINTK(fmt, args...)    printk( "%s(): " fmt, __func__, ## args);
 
 #if DBG
 #define ODM_RT_TRACE(pDM_Odm,comp, level, fmt)											\
@@ -687,11 +687,11 @@ typedef enum tag_DBGP_Flag_Type_Definition
 #define RT_ASSERT(expr,fmt)													\
 		if (!(expr)) {															\
 			printk( "Assertion failed! %s at ......\n", #expr);							\
-			printk( "      ......%s,%s,line=%d\n",__FILE__,__FUNCTION__,__LINE__);	\
+			printk( "      ......%s,%s,line=%d\n",__FILE__,__func__,__LINE__);	\
 		}
-#define dbg_enter() { printk("==> %s\n", __FUNCTION__); }
-#define dbg_exit() { printk("<== %s\n", __FUNCTION__); }
-#define dbg_trace(str) { printk("%s:%s\n", __FUNCTION__, str); }
+#define dbg_enter() { printk("==> %s\n", __func__); }
+#define dbg_exit() { printk("<== %s\n", __func__); }
+#define dbg_trace(str) { printk("%s:%s\n", __func__, str); }
 #else
 #define ODM_RT_TRACE(pDM_Odm,comp, level, fmt)
 #define RT_TRACE_F(comp, level, fmt)
@@ -849,8 +849,8 @@ typedef enum tag_DBGP_Flag_Type_Definition
 #define FuncEntry        FunctionIn(COMP_FUNC)
 #define FuncExit          FunctionOut(COMP_FUNC)
 
-#define FunctionIn(_comp)		ODM_RT_TRACE(pDM_Odm,(_comp), DBG_LOUD, ("==========> %s\n",  __FUNCTION__))
-#define FunctionOut(_comp)		ODM_RT_TRACE(pDM_Odm,(_comp), DBG_LOUD, ("<========== %s\n",  __FUNCTION__))
+#define FunctionIn(_comp)		ODM_RT_TRACE(pDM_Odm,(_comp), DBG_LOUD, ("==========> %s\n",  __func__))
+#define FunctionOut(_comp)		ODM_RT_TRACE(pDM_Odm,(_comp), DBG_LOUD, ("<========== %s\n",  __func__))
 
 
 #else

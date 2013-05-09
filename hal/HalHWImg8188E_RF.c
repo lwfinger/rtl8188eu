@@ -328,16 +328,16 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 	}
 #ifdef CONFIG_IOL_IOREG_CFG 		
 	if (biol){
-		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__FUNCTION__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);
+		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__func__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);
 		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
 		{			
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
-			printk("~~~ %s Success !!!\n",__FUNCTION__);
+			printk("~~~ %s Success !!!\n",__func__);
 			{
 				u4Byte idx;
 				u4Byte cdata;
-				printk("  %s data compare => array_len:%d\n",__FUNCTION__,cmpdata_idx);
-				printk("### %s data compared !!###\n",__FUNCTION__);
+				printk("  %s data compare => array_len:%d\n",__func__,cmpdata_idx);
+				printk("### %s data compared !!###\n",__func__);
 				for (idx=0;idx< cmpdata_idx;idx++)
 				{
 					cdata = ODM_GetRFReg(pDM_Odm, ODM_RF_PATH_A,cmpdata[idx].addr,bRFRegOffsetMask);
@@ -347,7 +347,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 						rst = HAL_STATUS_FAILURE;
 					}					
 				}	
-				printk("### %s data compared !!###\n",__FUNCTION__);
+				printk("### %s data compared !!###\n",__func__);
 				//if (rst == HAL_STATUS_FAILURE)
 				{//dump data from TX packet buffer				
 					rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
@@ -358,7 +358,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 		}
 		else{
 			rst = HAL_STATUS_FAILURE;
-			printk("~~~ IOL Config %s Failed !!!\n",__FUNCTION__);
+			printk("~~~ IOL Config %s Failed !!!\n",__func__);
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			{
 				//dump data from TX packet buffer				

@@ -628,7 +628,7 @@ int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 	} 
 	else if (left > 0)
 	{
-		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie length mismatch, %u too much", __FUNCTION__, left));
+		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie length mismatch, %u too much", __func__, left));
 		
 		return _FAIL;
 	}
@@ -644,7 +644,7 @@ int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 		
 		if (count == 0 || left < count * WPA_SELECTOR_LEN) {
 			RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie count botch (pairwise), "
-				   		"count %u left %u", __FUNCTION__, count, left));
+				   		"count %u left %u", __func__, count, left));
 			return _FAIL;
 		}
 		
@@ -659,7 +659,7 @@ int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 	} 
 	else if (left == 1)
 	{
-		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie too short (for key mgmt)",   __FUNCTION__));
+		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie too short (for key mgmt)",   __func__));
 		return _FAIL;
 	}
 
@@ -667,7 +667,7 @@ int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 		if (left >= 6) {
 			pos += 2;
 			if (_rtw_memcmp(pos, SUITE_1X, 4) == 1) {
-				RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("%s : there has 802.1x auth\n", __FUNCTION__));
+				RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("%s : there has 802.1x auth\n", __func__));
 				*is_8021x = 1;
 			}
 		}
@@ -708,7 +708,7 @@ int rtw_parse_wpa2_ie(u8* rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
 		left -= RSN_SELECTOR_LEN;
 		
 	} else if (left > 0) {
-		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie length mismatch, %u too much", __FUNCTION__, left));
+		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie length mismatch, %u too much", __func__, left));
 		return _FAIL;
 	}
 
@@ -722,7 +722,7 @@ int rtw_parse_wpa2_ie(u8* rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
 
 		if (count == 0 || left < count * RSN_SELECTOR_LEN) {
 			RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie count botch (pairwise), "
-				  		 "count %u left %u", __FUNCTION__, count, left));
+				  		 "count %u left %u", __func__, count, left));
 			return _FAIL;
 		}
 		
@@ -737,7 +737,7 @@ int rtw_parse_wpa2_ie(u8* rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
 	} 
 	else if (left == 1)
 	{
-		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie too short (for key mgmt)",  __FUNCTION__));
+		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("%s: ie too short (for key mgmt)",  __func__));
 		
 		return _FAIL;
 	}
@@ -746,7 +746,7 @@ int rtw_parse_wpa2_ie(u8* rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
 		if (left >= 6) {
 			pos += 2;
 			if (_rtw_memcmp(pos, SUITE_1X, 4) == 1) {
-				RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("%s (): there has 802.1x auth\n", __FUNCTION__));
+				RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("%s (): there has 802.1x auth\n", __func__));
 				*is_8021x = 1;
 			}
 		}
@@ -972,7 +972,7 @@ u8 *rtw_get_wps_attr(u8 *wps_ie, uint wps_ielen, u16 target_attr_id ,u8 *buf_att
 		u16 attr_data_len = RTW_GET_BE16(attr_ptr + 2);
 		u16 attr_len = attr_data_len + 4;
 		
-		//DBG_871X("%s attr_ptr:%p, id:%u, length:%u\n", __FUNCTION__, attr_ptr, attr_id, attr_data_len);
+		//DBG_871X("%s attr_ptr:%p, id:%u, length:%u\n", __func__, attr_ptr, attr_id, attr_data_len);
 		if ( attr_id == target_attr_id )
 		{
 			target_attr_ptr = attr_ptr;
@@ -1339,7 +1339,7 @@ void dump_ies(u8 *buf, u32 buf_len) {
 		id = *pos;
 		len = *(pos+1);
 
-		DBG_871X("%s ID:%u, LEN:%u\n", __FUNCTION__, id, len);
+		DBG_871X("%s ID:%u, LEN:%u\n", __func__, id, len);
 		#ifdef CONFIG_P2P
 		dump_p2p_ie(pos, len);
 		#endif
@@ -1366,7 +1366,7 @@ void dump_wps_ie(u8 *ie, u32 ie_len) {
 		id = RTW_GET_BE16(pos);
 		len = RTW_GET_BE16(pos + 2);
 
-		DBG_871X("%s ID:0x%04x, LEN:%u\n", __FUNCTION__, id, len);
+		DBG_871X("%s ID:0x%04x, LEN:%u\n", __func__, id, len);
 
 		pos+=(4+len);
 	}	
@@ -1390,7 +1390,7 @@ void dump_p2p_ie(u8 *ie, u32 ie_len) {
 		id = *pos;
 		len = RTW_GET_LE16(pos+1);
 
-		DBG_871X("%s ID:%u, LEN:%u\n", __FUNCTION__, id, len);
+		DBG_871X("%s ID:%u, LEN:%u\n", __func__, id, len);
 
 		pos+=(3+len);
 	}	
@@ -1487,7 +1487,7 @@ u8 *rtw_get_p2p_attr(u8 *p2p_ie, uint p2p_ielen, u8 target_attr_id ,u8 *buf_attr
 		u16 attr_data_len = RTW_GET_LE16(attr_ptr + 1);
 		u16 attr_len = attr_data_len + 3;
 		
-		//DBG_871X("%s attr_ptr:%p, id:%u, length:%u\n", __FUNCTION__, attr_ptr, attr_id, attr_data_len);
+		//DBG_871X("%s attr_ptr:%p, id:%u, length:%u\n", __func__, attr_ptr, attr_id, attr_data_len);
 		if ( attr_id == target_attr_id )
 		{
 			target_attr_ptr = attr_ptr;

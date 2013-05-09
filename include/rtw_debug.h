@@ -248,7 +248,7 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 		do {	\
 			if (GlobalDebugLevel >= _drv_debug_) \
 			{																	\
-				_dbgdump("\n %s : %s enters at %d\n", DRIVER_PREFIX, __FUNCTION__, __LINE__);\
+				_dbgdump("\n %s : %s enters at %d\n", DRIVER_PREFIX, __func__, __LINE__);\
 			}		\
 		} while (0)
 
@@ -257,7 +257,7 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 		do {	\
 			if (GlobalDebugLevel >= _drv_debug_) \
 			{																	\
-				_dbgdump("\n %s : %s exits at %d\n", DRIVER_PREFIX, __FUNCTION__, __LINE__); \
+				_dbgdump("\n %s : %s exits at %d\n", DRIVER_PREFIX, __func__, __LINE__); \
 			}	\
 		} while (0)
 

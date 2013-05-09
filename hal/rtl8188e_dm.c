@@ -200,7 +200,7 @@ dm_InterruptMigration(
 
 	//Update current settings.
 	if ( bCurrentIntMt != IntMtToSet ){
-		DBG_8192C("%s(): Update interrrupt migration(%d)\n",__FUNCTION__,IntMtToSet);
+		DBG_8192C("%s(): Update interrrupt migration(%d)\n",__func__,IntMtToSet);
 		if (IntMtToSet)
 		{
 			//
@@ -220,7 +220,7 @@ dm_InterruptMigration(
 	}
 
 	/*if ( bCurrentACIntDisable != ACIntToSet ){
-		DBG_8192C("%s(): Update AC interrrupt(%d)\n",__FUNCTION__,ACIntToSet);
+		DBG_8192C("%s(): Update AC interrrupt(%d)\n",__func__,ACIntToSet);
 		if (ACIntToSet) // Disable four ACs interrupts.
 		{
 			//
@@ -644,7 +644,7 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 
 		//PHY_SetBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300, pDM_SWAT_Table->CurAntenna);
 		rtw_antenna_select_cmd(Adapter, pDM_SWAT_Table->CurAntenna, _FALSE);
-		//DBG_8192C("%s change antenna to ANT_( %s ).....\n",__FUNCTION__, (pDM_SWAT_Table->CurAntenna==Antenna_A)?"A":"B");
+		//DBG_8192C("%s change antenna to ANT_( %s ).....\n",__func__, (pDM_SWAT_Table->CurAntenna==Antenna_A)?"A":"B");
 		return _TRUE;
 	}
 	else

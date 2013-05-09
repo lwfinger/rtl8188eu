@@ -276,7 +276,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 						
 #ifdef CONFIG_IOL_IOREG_CFG 
 	if (biol){
-		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__FUNCTION__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);		
+		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__func__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);		
 		
 		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
 		{			

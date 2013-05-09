@@ -314,7 +314,7 @@ void update_recvframe_phyinfo_88e(
 	if (psta)
 	{
 		pkt_info.StationID = psta->mac_id;		
-		//DBG_8192C("%s ==> StationID(%d)\n",__FUNCTION__,pkt_info.StationID);
+		//DBG_8192C("%s ==> StationID(%d)\n",__func__,pkt_info.StationID);
 	}			
 	pkt_info.Rate = pattrib->mcs_rate;	
 	//rtl8188e_query_rx_phy_status(precvframe, pphy_status);

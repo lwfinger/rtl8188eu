@@ -2903,7 +2903,7 @@ u4Byte ODM_Get_Rate_Bitmap(
 
 	}
 
-	//printk("%s ==> rssi_level:0x%02x, WirelessMode:0x%02x, rate_bitmap:0x%08x\n",__FUNCTION__,rssi_level,WirelessMode,rate_bitmap);
+	//printk("%s ==> rssi_level:0x%02x, WirelessMode:0x%02x, rate_bitmap:0x%08x\n",__func__,rssi_level,WirelessMode,rate_bitmap);
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, (" ==> rssi_level:0x%02x, WirelessMode:0x%02x, rate_bitmap:0x%08x\n",rssi_level,WirelessMode,rate_bitmap));
 
 	return rate_bitmap;
@@ -3095,7 +3095,7 @@ odm_RefreshRateAdaptiveMaskCE(
 		return;
 	}
 
-	//printk("==> %s\n",__FUNCTION__);
+	//printk("==> %s\n",__func__);
 
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++){
 		PSTA_INFO_T pstat = pDM_Odm->pODM_StaInfo[i];
@@ -3196,7 +3196,7 @@ ODM_RAStateCheck(
 		RATRState = DM_RATR_STA_MIDDLE;
 	else
 		RATRState = DM_RATR_STA_LOW;
-	//printk("==>%s,RATRState:0x%02x ,RSSI:%d\n",__FUNCTION__,RATRState,RSSI);
+	//printk("==>%s,RATRState:0x%02x ,RSSI:%d\n",__func__,RATRState,RSSI);
 
 	if ( *pRATRState!=RATRState || bForceUpdate)
 	{
@@ -3585,7 +3585,7 @@ odm_DynamicTxPower_92C(
 	if (Adapter->proximity.proxim_on== _TRUE){
 		struct proximity_priv *prox_priv=Adapter->proximity.proximity_priv;
 		// Intel set fixed tx power 
-		printk("\n %s  Adapter->proximity.proxim_on=%d prox_priv->proxim_modeinfo->power_output=%d\n",__FUNCTION__,Adapter->proximity.proxim_on,prox_priv->proxim_modeinfo->power_output);
+		printk("\n %s  Adapter->proximity.proxim_on=%d prox_priv->proxim_modeinfo->power_output=%d\n",__func__,Adapter->proximity.proxim_on,prox_priv->proxim_modeinfo->power_output);
 		if (prox_priv!=NULL){
 			if (prox_priv->proxim_modeinfo->power_output> 0)	
 			{
@@ -4292,7 +4292,7 @@ IN	PADAPTER	pAdapter
 	#if (RTL8192D_SUPPORT==1)
 	FindMinimumRSSI_Dmsp(pAdapter);
 	#endif
-	//DBG_8192C("%s=>MinUndecoratedPWDBForDM(%d)\n",__FUNCTION__,pdmpriv->MinUndecoratedPWDBForDM);
+	//DBG_8192C("%s=>MinUndecoratedPWDBForDM(%d)\n",__func__,pdmpriv->MinUndecoratedPWDBForDM);
 	//ODM_RT_TRACE(pDM_Odm,COMP_DIG, DBG_LOUD, ("MinUndecoratedPWDBForDM =%d\n",pHalData->MinUndecoratedPWDBForDM));
 }
 #endif
@@ -4389,7 +4389,7 @@ odm_RSSIMonitorCheckCE(
 						tmpEntryMaxPWDB = psta->rssi_stat.UndecoratedSmoothedPWDB;
 
 					if (psta->rssi_stat.UndecoratedSmoothedPWDB != (-1)){
-						//printk("%s==> mac_id(%d),rssi(%d)\n",__FUNCTION__,psta->mac_id,psta->rssi_stat.UndecoratedSmoothedPWDB);
+						//printk("%s==> mac_id(%d),rssi(%d)\n",__func__,psta->mac_id,psta->rssi_stat.UndecoratedSmoothedPWDB);
 						#if (RTL8192D_SUPPORT==1)
 						PWDB_rssi[sta_cnt++] = (psta->mac_id | (psta->rssi_stat.UndecoratedSmoothedPWDB<<16) | ((Adapter->stapriv.asoc_sta_count+1) << 8));
 						#else
@@ -4405,7 +4405,7 @@ odm_RSSIMonitorCheckCE(
 		_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 		#endif
 
-		//printk("%s==> sta_cnt(%d)\n",__FUNCTION__,sta_cnt);
+		//printk("%s==> sta_cnt(%d)\n",__func__,sta_cnt);
 
 		for (i=0; i< sta_cnt; i++)
 		{
@@ -4453,7 +4453,7 @@ odm_RSSIMonitorCheckCE(
 		if (pHalData->fw_ractrl == _TRUE)
 		{
 			u32 param = (u32)(pdmpriv->UndecoratedSmoothedPWDB<<16);
-	printk("%s==> rssi(%d)\n",__FUNCTION__,pdmpriv->UndecoratedSmoothedPWDB);	
+	printk("%s==> rssi(%d)\n",__func__,pdmpriv->UndecoratedSmoothedPWDB);	
 			param |= 0;//macid=0 for sta mode;
 			
 			rtl8192c_set_rssi_cmd(Adapter, (u8*)&param);
@@ -7736,7 +7736,7 @@ odm_IotEngine(
 			}
 #if ((DM_ODM_SUPPORT_TYPE==ODM_ADSL)||((DM_ODM_SUPPORT_TYPE==ODM_AP)&&(defined WMM_VIBE_PRI)))
 			if (priv->pshare->iot_mode_VO_exist) {
-				//printk("[%s %d] BE_pkt_count=%d\n", __FUNCTION__, __LINE__, priv->pshare->phw->BE_pkt_count);
+				//printk("[%s %d] BE_pkt_count=%d\n", __func__, __LINE__, priv->pshare->phw->BE_pkt_count);
 				if (!priv->pshare->iot_mode_BE_exist && (priv->pshare->phw->BE_pkt_count > 250)) {
 					priv->pshare->iot_mode_BE_exist++;
 					switch_turbo++;

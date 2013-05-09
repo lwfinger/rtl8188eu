@@ -416,7 +416,7 @@ static int mgnt_xmit_entry(struct sk_buff *skb, struct net_device *pnetdev)
 	struct hostapd_priv *phostapdpriv = rtw_netdev_priv(pnetdev);
 	_adapter *padapter = (_adapter *)phostapdpriv->padapter;
 
-	//DBG_871X("%s\n", __FUNCTION__);
+	//DBG_871X("%s\n", __func__);
 
 	return rtw_hal_hostap_mgnt_xmit_entry(padapter, skb);
 }
@@ -446,7 +446,7 @@ static int mgnt_netdev_close(struct net_device *pnetdev)
 {
 	struct hostapd_priv *phostapdpriv = rtw_netdev_priv(pnetdev);
 
-	DBG_871X("%s\n", __FUNCTION__);
+	DBG_871X("%s\n", __func__);
 
 	usb_kill_anchored_urbs(&phostapdpriv->anchored);
 

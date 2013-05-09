@@ -749,12 +749,12 @@ ODM_AntennaDiversity_88E(
 		}
 		if (pDM_Odm->Adapter->registrypriv.force_ant==1){
 			ODM_UpdateRxIdleAnt_88E(pDM_Odm, MAIN_ANT);
-			printk("%s fixed antenna in Main ant\n",__FUNCTION__);
+			printk("%s fixed antenna in Main ant\n",__func__);
 			return;
 		}
 		else if (pDM_Odm->Adapter->registrypriv.force_ant==2){
 			ODM_UpdateRxIdleAnt_88E(pDM_Odm, AUX_ANT);	
-			printk("%s fixed antenna in AUX ant\n",__FUNCTION__);
+			printk("%s fixed antenna in AUX ant\n",__func__);
 			return;
 		}		
 	}

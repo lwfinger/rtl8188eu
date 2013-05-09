@@ -2942,7 +2942,7 @@ static void _PHY_SwChnl8192C(PADAPTER Adapter, u8 channel)
 
 	if ( Adapter->bNotifyChannelChange )
 	{
-		DBG_871X( "[%s] ch = %d\n", __FUNCTION__, channel );
+		DBG_871X( "[%s] ch = %d\n", __func__, channel );
 	}
 
 	//s1. pre common command - CmdID_SetTxPowerLevel

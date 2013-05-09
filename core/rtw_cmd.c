@@ -332,7 +332,7 @@ int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 		|| pcmdpriv->cmdthd_running== _FALSE	//com_thread not running
 	)
 	{
-		//DBG_871X("%s:%s: drop cmdcode:%u, hw_init_completed:%u, cmdthd_running:%u\n", caller_func, __FUNCTION__,
+		//DBG_871X("%s:%s: drop cmdcode:%u, hw_init_completed:%u, cmdthd_running:%u\n", caller_func, __func__,
 		//	cmd_obj->cmdcode,
 		//	pcmdpriv->padapter->hw_init_completed,
 		//	pcmdpriv->cmdthd_running
@@ -455,7 +455,7 @@ _func_enter_;
 		if ((padapter->bDriverStopped == _TRUE)||(padapter->bSurpriseRemoved == _TRUE))
 		{
 			DBG_871X("%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
-				__FUNCTION__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
+				__func__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
 			break;
 		}
 
@@ -463,7 +463,7 @@ _func_enter_;
 		if (rtw_register_cmd_alive(padapter) != _SUCCESS)
 		{
 			RT_TRACE(_module_hal_xmit_c_, _drv_notice_,
-					 ("%s: wait to leave LPS_LCLK\n", __FUNCTION__));
+					 ("%s: wait to leave LPS_LCLK\n", __func__));
 			continue;
 		}
 #endif
@@ -472,7 +472,7 @@ _next:
 		if ((padapter->bDriverStopped == _TRUE)||(padapter->bSurpriseRemoved== _TRUE))
 		{
 			DBG_871X("%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
-				__FUNCTION__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
+				__func__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
 			break;
 		}
 
@@ -533,7 +533,7 @@ post_process:
 		}
 		else
 		{
-			RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("%s: cmdcode=0x%x callback not defined!\n", __FUNCTION__, pcmd->cmdcode));
+			RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("%s: cmdcode=0x%x callback not defined!\n", __func__, pcmd->cmdcode));
 			rtw_free_cmd_obj(pcmd);
 		}
 
@@ -551,7 +551,7 @@ post_process:
 		if (pcmd==NULL)
 			break;
 
-		//DBG_871X("%s: leaving... drop cmdcode:%u\n", __FUNCTION__, pcmd->cmdcode);
+		//DBG_871X("%s: leaving... drop cmdcode:%u\n", __func__, pcmd->cmdcode);
 
 		rtw_free_cmd_obj(pcmd);	
 	}while (1);
@@ -724,7 +724,7 @@ _func_enter_;
 
 	rtw_free_network_queue(padapter, _FALSE);
 
-	RT_TRACE(_module_rtl871x_cmd_c_, _drv_info_, ("%s: flush network queue\n", __FUNCTION__));
+	RT_TRACE(_module_rtl871x_cmd_c_, _drv_info_, ("%s: flush network queue\n", __func__));
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, psurveyPara, GEN_CMD_CODE(_SiteSurvey));
 

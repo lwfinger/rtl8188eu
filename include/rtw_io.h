@@ -408,17 +408,17 @@ extern int dbg_rtw_write16(_adapter *adapter, u32 addr, u16 val, const char *cal
 extern int dbg_rtw_write32(_adapter *adapter, u32 addr, u32 val, const char *caller, const int line);
 extern int dbg_rtw_writeN(_adapter *adapter, u32 addr ,u32 length , u8 *data, const char *caller, const int line);
 
-#define rtw_read8(adapter, addr) dbg_rtw_read8((adapter), (addr), __FUNCTION__, __LINE__)
-#define rtw_read16(adapter, addr) dbg_rtw_read16((adapter), (addr), __FUNCTION__, __LINE__)
-#define rtw_read32(adapter, addr) dbg_rtw_read32((adapter), (addr), __FUNCTION__, __LINE__)
+#define rtw_read8(adapter, addr) dbg_rtw_read8((adapter), (addr), __func__, __LINE__)
+#define rtw_read16(adapter, addr) dbg_rtw_read16((adapter), (addr), __func__, __LINE__)
+#define rtw_read32(adapter, addr) dbg_rtw_read32((adapter), (addr), __func__, __LINE__)
 #define rtw_read_mem(adapter, addr, cnt, mem) _rtw_read_mem((adapter), (addr), (cnt), (mem))
 #define rtw_read_port(adapter, addr, cnt, mem) _rtw_read_port((adapter), (addr), (cnt), (mem))
 #define rtw_read_port_cancel(adapter) _rtw_read_port_cancel((adapter))
 
-#define  rtw_write8(adapter, addr, val) dbg_rtw_write8((adapter), (addr), (val), __FUNCTION__, __LINE__)
-#define  rtw_write16(adapter, addr, val) dbg_rtw_write16((adapter), (addr), (val), __FUNCTION__, __LINE__)
-#define  rtw_write32(adapter, addr, val) dbg_rtw_write32((adapter), (addr), (val), __FUNCTION__, __LINE__)
-#define  rtw_writeN(adapter, addr, length, data) dbg_rtw_writeN((adapter), (addr), (length), (data), __FUNCTION__, __LINE__)
+#define  rtw_write8(adapter, addr, val) dbg_rtw_write8((adapter), (addr), (val), __func__, __LINE__)
+#define  rtw_write16(adapter, addr, val) dbg_rtw_write16((adapter), (addr), (val), __func__, __LINE__)
+#define  rtw_write32(adapter, addr, val) dbg_rtw_write32((adapter), (addr), (val), __func__, __LINE__)
+#define  rtw_writeN(adapter, addr, length, data) dbg_rtw_writeN((adapter), (addr), (length), (data), __func__, __LINE__)
 
 #define rtw_write8_async(adapter, addr, val) _rtw_write8_async((adapter), (addr), (val))
 #define rtw_write16_async(adapter, addr, val) _rtw_write16_async((adapter), (addr), (val))

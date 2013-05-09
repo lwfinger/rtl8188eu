@@ -567,7 +567,7 @@ void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char
 
 	if ( padapter->bNotifyChannelChange )
 	{
-		DBG_871X( "[%s] ch = %d, offset = %d, bwmode = %d\n", __FUNCTION__, channel, channel_offset, bwmode );
+		DBG_871X( "[%s] ch = %d, offset = %d, bwmode = %d\n", __func__, channel, channel_offset, bwmode );
 	}
 
 	if ((bwmode == HT_CHANNEL_WIDTH_20)||(channel_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE))
@@ -802,7 +802,7 @@ void write_cam(_adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *key)
 		//cmd = CAM_POLLINIG | CAM_WRITE | (addr + j);
 		//rtw_write32(padapter, RWCAM, cmd);
 		
-		//DBG_871X("%s=> cam write: %x, %x\n",__FUNCTION__, cmd, val);
+		//DBG_871X("%s=> cam write: %x, %x\n",__func__, cmd, val);
 		
 	}
 
@@ -927,18 +927,18 @@ int WFD_info_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 		u8	attr_content[ 10 ] = { 0x00 };
 		u32	attr_contentlen = 0;
 			
-		DBG_871X( "[%s] Found WFD IE\n", __FUNCTION__ );
+		DBG_871X( "[%s] Found WFD IE\n", __func__ );
 		rtw_get_wfd_attr_content( wfd_ie, wfd_ielen, WFD_ATTR_DEVICE_INFO, attr_content, &attr_contentlen);
 		if ( attr_contentlen )
 		{
 			pwdinfo->wfd_info->peer_rtsp_ctrlport = RTW_GET_BE16( attr_content + 2 );
-			DBG_8192C( "[%s] Peer PORT NUM = %d\n", __FUNCTION__, pwdinfo->wfd_info->peer_rtsp_ctrlport );
+			DBG_8192C( "[%s] Peer PORT NUM = %d\n", __func__, pwdinfo->wfd_info->peer_rtsp_ctrlport );
 			return( _TRUE );
 		}		
 	}
 	else
 	{
-		DBG_871X( "[%s] NO WFD IE\n", __FUNCTION__ );
+		DBG_871X( "[%s] NO WFD IE\n", __func__ );
 
 	}
 	return( _FAIL );
@@ -1321,7 +1321,7 @@ void HTOnAssocRsp(_adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	
-	DBG_871X("%s\n", __FUNCTION__);
+	DBG_871X("%s\n", __func__);
 
 	if ((pmlmeinfo->HT_info_enable) && (pmlmeinfo->HT_caps_enable))
 	{
@@ -1388,7 +1388,7 @@ void HTOnAssocRsp(_adapter *padapter)
 		{
 			pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
 		}*/
-		DBG_871X("%s(): WLAN_HT_CAP_SM_PS_STATIC\n",__FUNCTION__);
+		DBG_871X("%s(): WLAN_HT_CAP_SM_PS_STATIC\n",__func__);
 	}
 
 	//
@@ -2466,7 +2466,7 @@ void process_addba_req(_adapter *padapter, u8 *paddba_req, u8 *addr)
 		#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
 		preorder_ctrl->indicate_seq = start_seq;
 		#ifdef DBG_RX_SEQ
-		DBG_871X("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __FUNCTION__, __LINE__,
+		DBG_871X("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __func__, __LINE__,
 			preorder_ctrl->indicate_seq, start_seq);
 		#endif
 		#else
@@ -2617,7 +2617,7 @@ int rtw_handle_dualmac(_adapter *adapter, bool init)
 		/* For SMSP on 92DU-VC, driver do not probe another Interface. */
 		if (dvobj->NumInterfaces == 2 && dvobj->InterfaceNumber != 0 &&
 			adapter->registrypriv.mac_phy_mode == 1) {
-			DBG_871X("%s(): Do not init another USB Interface because SMSP\n",__FUNCTION__);
+			DBG_871X("%s(): Do not init another USB Interface because SMSP\n",__func__);
 			status = _FAIL;
 			goto exit;
 		}
@@ -2625,13 +2625,13 @@ int rtw_handle_dualmac(_adapter *adapter, bool init)
 		
 		if (pbuddy_padapter == NULL) {
 			pbuddy_padapter = adapter;
-			DBG_871X("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n",__FUNCTION__);
+			DBG_871X("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n",__func__);
 		} else {
 			adapter->pbuddy_adapter = pbuddy_padapter;
 			pbuddy_padapter->pbuddy_adapter = adapter;
 			// clear global value
 			pbuddy_padapter = NULL;
-			DBG_871X("%s(): pbuddy_padapter exist, Exchange Information\n",__FUNCTION__);
+			DBG_871X("%s(): pbuddy_padapter exist, Exchange Information\n",__func__);
 		}
 #ifdef CONFIG_DUALMAC_CONCURRENT
 		if (dvobj->InterfaceNumber == 0) {
@@ -2639,13 +2639,13 @@ int rtw_handle_dualmac(_adapter *adapter, bool init)
 			adapter->isprimary = _TRUE;
 			adapter->adapter_type = PRIMARY_ADAPTER;
 			adapter->iface_type = IFACE_PORT0;
-			DBG_871X("%s(): PRIMARY_ADAPTER\n",__FUNCTION__);
+			DBG_871X("%s(): PRIMARY_ADAPTER\n",__func__);
 		} else {
 			//set adapter_type/iface type
 			adapter->isprimary = _FALSE;
 			adapter->adapter_type = SECONDARY_ADAPTER;
 			adapter->iface_type = IFACE_PORT1;
-			DBG_871X("%s(): SECONDARY_ADAPTER\n",__FUNCTION__);
+			DBG_871X("%s(): SECONDARY_ADAPTER\n",__func__);
 		}
 #endif
 	}else {

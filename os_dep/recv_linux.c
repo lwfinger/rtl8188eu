@@ -269,7 +269,7 @@ _func_enter_;
 #ifdef CONFIG_WAPI_SUPPORT
 	if (rtw_wapi_check_for_drop(padapter,precv_frame))
 	{
-		WAPI_TRACE(WAPI_ERR, "%s(): Rx Reorder Drop case!!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_ERR, "%s(): Rx Reorder Drop case!!\n", __func__);
 		goto _recv_indicatepkt_drop;
 	}
 #endif

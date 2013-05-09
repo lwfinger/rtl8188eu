@@ -427,12 +427,12 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 		u32	attr_contentlen = 0;
 		int	i;
 
-		DBG_871X( "[%s] WFD IE Found!!\n", __FUNCTION__ );
+		DBG_871X( "[%s] WFD IE Found!!\n", __func__ );
 		rtw_get_wfd_attr_content( wfd_ie, wfd_ielen, WFD_ATTR_DEVICE_INFO, attr_content, &attr_contentlen);
 		if ( attr_contentlen )
 		{
 			ptdlsinfo->wfd_info->peer_rtsp_ctrlport = RTW_GET_BE16( attr_content + 2 );
-			DBG_871X( "[%s] Peer PORT NUM = %d\n", __FUNCTION__, ptdlsinfo->wfd_info->peer_rtsp_ctrlport );
+			DBG_871X( "[%s] Peer PORT NUM = %d\n", __func__, ptdlsinfo->wfd_info->peer_rtsp_ctrlport );
 		}
 
 		_rtw_memset( attr_content, 0x00, 10);
@@ -441,7 +441,7 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 		if ( attr_contentlen )
 		{
 			_rtw_memcpy(ptdlsinfo->wfd_info->peer_ip_address, ( attr_content + 1 ), 4);
-			DBG_871X( "[%s] Peer IP = %02u.%02u.%02u.%02u\n", __FUNCTION__, 
+			DBG_871X( "[%s] Peer IP = %02u.%02u.%02u.%02u\n", __func__, 
 				ptdlsinfo->wfd_info->peer_ip_address[0], ptdlsinfo->wfd_info->peer_ip_address[1],
 				ptdlsinfo->wfd_info->peer_ip_address[2], ptdlsinfo->wfd_info->peer_ip_address[3]
 				);
@@ -458,7 +458,7 @@ void issue_tunneled_probe_req(_adapter *padapter)
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	u8 baddr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff}; 
 
-	DBG_871X("[%s]\n", __FUNCTION__);
+	DBG_871X("[%s]\n", __func__);
 	
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
 	{
@@ -501,7 +501,7 @@ void issue_tunneled_probe_rsp(_adapter *padapter, union recv_frame *precv_frame)
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->u.hdr.attrib;
 
-	DBG_871X("[%s]\n", __FUNCTION__);
+	DBG_871X("[%s]\n", __func__);
 	
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
 	{
@@ -1345,7 +1345,7 @@ sint On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	
 	if (stat_code!=0)
 	{
-		DBG_871X( "[%s] status_code = %d, free_tdls_sta\n", __FUNCTION__, stat_code );
+		DBG_871X( "[%s] status_code = %d, free_tdls_sta\n", __func__, stat_code );
 		free_tdls_sta(adapter, ptdls_sta);
 		return _FAIL;
 	}
@@ -1510,7 +1510,7 @@ sint On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
 	_rtw_memcpy(&stat_code, ptr+2, 2);
 
 	if (stat_code!=0){
-		DBG_871X( "[%s] stat_code = %d\n, free_tdls_sta", __FUNCTION__, stat_code );
+		DBG_871X( "[%s] stat_code = %d\n, free_tdls_sta", __func__, stat_code );
 		free_tdls_sta(adapter, ptdls_sta);
 		return _FAIL;
 	}
@@ -2165,7 +2165,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	if (ptdls_sta == NULL )
 	{
-		DBG_871X("[%s] %d\n", __FUNCTION__, __LINE__);
+		DBG_871X("[%s] %d\n", __func__, __LINE__);
 		return;
 	}
 

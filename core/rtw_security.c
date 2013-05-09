@@ -795,7 +795,7 @@ _func_enter_;
 				if (psecuritypriv->binstallGrpkey==_FALSE)
 				{
 					res=_FAIL;				
-					DBG_8192C("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__FUNCTION__);
+					DBG_8192C("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__func__);
 					goto exit;
 				}
 				//DBG_871X("rx bc/mc packets, to perform sw rtw_tkip_decrypt\n");
@@ -1576,7 +1576,7 @@ _func_enter_;
 				ptdls_sta=rtw_get_stainfo(&padapter->stapriv ,&pattrib->dst[0] );
 				if ((ptdls_sta != NULL) && (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE) )
 				{
-					DBG_871X("[%s] for tdls link\n", __FUNCTION__);
+					DBG_871X("[%s] for tdls link\n", __func__);
 					prwskey=&ptdls_sta->tpk.tk[0];
 				}
 			}
@@ -1918,7 +1918,7 @@ _func_enter_;
 				if (psecuritypriv->binstallGrpkey==_FALSE)
 				{
 					res=_FAIL;				
-					DBG_8192C("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__FUNCTION__);
+					DBG_8192C("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__func__);
 					goto exit;
 				}
 				prwskey = psecuritypriv->dot118021XGrpKey[prxattrib->key_index].skey;
@@ -2829,7 +2829,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 	}
 
 	//Invalid MIC
-	DBG_871X( "[%s] Invalid MIC\n", __FUNCTION__);
+	DBG_871X( "[%s] Invalid MIC\n", __func__);
 	return 0;
 
 }

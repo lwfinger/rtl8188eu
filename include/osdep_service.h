@@ -388,7 +388,7 @@ static inline unsigned char *__skb_pull(struct sk_buff *skb, unsigned int len)
 {
 	skb->len -= len;
 	if (skb->len < skb->data_len)
-		printf("%s(),%d,error!\n",__FUNCTION__,__LINE__);
+		printf("%s(),%d,error!\n",__func__,__LINE__);
 	return skb->data += len;
 }
 static inline unsigned char *skb_pull(struct sk_buff *skb, unsigned int len)
@@ -717,12 +717,12 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 
 __inline static void _init_workitem(_workitem *pwork, void *pfunc, PVOID cntx)
 {
-	printf("%s Not implement yet!\n",__FUNCTION__);
+	printf("%s Not implement yet!\n",__func__);
 }
 
 __inline static void _set_workitem(_workitem *pwork)
 {
-	printf("%s Not implement yet!\n",__FUNCTION__);
+	printf("%s Not implement yet!\n",__func__);
 //	schedule_work(pwork);
 }
 
@@ -1303,17 +1303,17 @@ extern u8* dbg_rtw_malloc(u32 sz, const char *func, int line);
 extern u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line);
 extern void dbg_rtw_mfree(u8 *pbuf, u32 sz, const char *func, int line);
 #ifdef CONFIG_USE_VMALLOC
-#define rtw_vmalloc(sz)			dbg_rtw_vmalloc((sz), __FUNCTION__, __LINE__)
-#define rtw_zvmalloc(sz)			dbg_rtw_zvmalloc((sz), __FUNCTION__, __LINE__)
-#define rtw_vmfree(pbuf, sz)		dbg_rtw_vmfree((pbuf), (sz), __FUNCTION__, __LINE__)
+#define rtw_vmalloc(sz)			dbg_rtw_vmalloc((sz), __func__, __LINE__)
+#define rtw_zvmalloc(sz)			dbg_rtw_zvmalloc((sz), __func__, __LINE__)
+#define rtw_vmfree(pbuf, sz)		dbg_rtw_vmfree((pbuf), (sz), __func__, __LINE__)
 #else //CONFIG_USE_VMALLOC
-#define rtw_vmalloc(sz)			dbg_rtw_malloc((sz), __FUNCTION__, __LINE__)
-#define rtw_zvmalloc(sz)			dbg_rtw_zmalloc((sz), __FUNCTION__, __LINE__)
-#define rtw_vmfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), __FUNCTION__, __LINE__)
+#define rtw_vmalloc(sz)			dbg_rtw_malloc((sz), __func__, __LINE__)
+#define rtw_zvmalloc(sz)			dbg_rtw_zmalloc((sz), __func__, __LINE__)
+#define rtw_vmfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), __func__, __LINE__)
 #endif //CONFIG_USE_VMALLOC
-#define rtw_malloc(sz)			dbg_rtw_malloc((sz), __FUNCTION__, __LINE__)
-#define rtw_zmalloc(sz)			dbg_rtw_zmalloc((sz), __FUNCTION__, __LINE__)
-#define rtw_mfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), __FUNCTION__, __LINE__)
+#define rtw_malloc(sz)			dbg_rtw_malloc((sz), __func__, __LINE__)
+#define rtw_zmalloc(sz)			dbg_rtw_zmalloc((sz), __func__, __LINE__)
+#define rtw_mfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), __func__, __LINE__)
 #else
 #define rtw_update_mem_stat(flag, sz) do {} while (0)
 extern u8*	_rtw_vmalloc(u32 sz);
@@ -1384,8 +1384,8 @@ extern void	rtw_usleep_os(int us);
 extern u32 	rtw_atoi(u8* s);
 
 #ifdef DBG_DELAY_OS
-#define rtw_mdelay_os(ms) _rtw_mdelay_os((ms), __FUNCTION__, __LINE__)
-#define rtw_udelay_os(ms) _rtw_udelay_os((ms), __FUNCTION__, __LINE__)
+#define rtw_mdelay_os(ms) _rtw_mdelay_os((ms), __func__, __LINE__)
+#define rtw_udelay_os(ms) _rtw_udelay_os((ms), __func__, __LINE__)
 extern void _rtw_mdelay_os(int ms, const char *func, const int line);
 extern void _rtw_udelay_os(int us, const char *func, const int line);
 #else

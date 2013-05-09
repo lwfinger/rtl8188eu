@@ -1238,7 +1238,7 @@ typedef struct _BTData_ENTRY
 
 #define BTHCI_SM_WITH_INFO(_Adapter, _StateToEnter, _StateCmd, _EntryNum)	\
 {										\
-	RTPRINT(FIOCTL, IOCTL_STATE, ("[BT state change] caused by ""%s"", line=%d\n", __FUNCTION__, __LINE__));							\
+	RTPRINT(FIOCTL, IOCTL_STATE, ("[BT state change] caused by ""%s"", line=%d\n", __func__, __LINE__));							\
 	BTHCI_StateMachine(_Adapter, _StateToEnter, _StateCmd, _EntryNum);\
 }
 

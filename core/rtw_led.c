@@ -30,11 +30,11 @@ void BlinkTimerCallback(void *data)
 	PLED_871x	 pLed = (PLED_871x)data;
 	_adapter		*padapter = pLed->padapter;
 
-	//DBG_871X("%s\n", __FUNCTION__);
+	//DBG_871X("%s\n", __func__);
 
 	if ( (padapter->bSurpriseRemoved == _TRUE) || ( padapter->bDriverStopped == _TRUE))	
 	{
-		//DBG_871X("%s bSurpriseRemoved:%d, bDriverStopped:%d\n", __FUNCTION__, padapter->bSurpriseRemoved, padapter->bDriverStopped);
+		//DBG_871X("%s bSurpriseRemoved:%d, bDriverStopped:%d\n", __func__, padapter->bSurpriseRemoved, padapter->bDriverStopped);
 		return;
 	}
 
@@ -2302,11 +2302,11 @@ void BlinkHandler(PLED_871x	 pLed)
 	_adapter		*padapter = pLed->padapter;
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 
-	//DBG_871X("%s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
+	//DBG_871X("%s (%s:%d)\n",__func__, current->comm, current->pid);
 
 	if ( (padapter->bSurpriseRemoved == _TRUE) || ( padapter->bDriverStopped == _TRUE))	
 	{
-		//DBG_871X("%s bSurpriseRemoved:%d, bDriverStopped:%d\n", __FUNCTION__, padapter->bSurpriseRemoved, padapter->bDriverStopped);
+		//DBG_871X("%s bSurpriseRemoved:%d, bDriverStopped:%d\n", __func__, padapter->bSurpriseRemoved, padapter->bDriverStopped);
 		return;
 	}
 

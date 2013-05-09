@@ -123,9 +123,9 @@ int rtw_IOL_exec_empty_cmds_sync(ADAPTER *adapter, u32 max_wating_ms);
 int dbg_rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value, const char *caller, const int line);
 int dbg_rtw_IOL_append_WW_cmd(struct xmit_frame *xmit_frame, u16 addr, u16 value, const char *caller, const int line);
 int dbg_rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value, const char *caller, const int line);
-#define rtw_IOL_append_WB_cmd(xmit_frame, addr, value) dbg_rtw_IOL_append_WB_cmd((xmit_frame), (addr), (value), __FUNCTION__, __LINE__)
-#define rtw_IOL_append_WW_cmd(xmit_frame, addr, value) dbg_rtw_IOL_append_WW_cmd((xmit_frame), (addr), (value), __FUNCTION__, __LINE__)
-#define rtw_IOL_append_WD_cmd(xmit_frame, addr, value) dbg_rtw_IOL_append_WD_cmd((xmit_frame), (addr), (value), __FUNCTION__, __LINE__)
+#define rtw_IOL_append_WB_cmd(xmit_frame, addr, value) dbg_rtw_IOL_append_WB_cmd((xmit_frame), (addr), (value), __func__, __LINE__)
+#define rtw_IOL_append_WW_cmd(xmit_frame, addr, value) dbg_rtw_IOL_append_WW_cmd((xmit_frame), (addr), (value), __func__, __LINE__)
+#define rtw_IOL_append_WD_cmd(xmit_frame, addr, value) dbg_rtw_IOL_append_WD_cmd((xmit_frame), (addr), (value), __func__, __LINE__)
 #else
 #define rtw_IOL_append_WB_cmd(xmit_frame, addr, value) _rtw_IOL_append_WB_cmd((xmit_frame), (addr), (value))
 #define rtw_IOL_append_WW_cmd(xmit_frame, addr, value) _rtw_IOL_append_WW_cmd((xmit_frame), (addr), (value))

@@ -1999,7 +1999,7 @@ void netdev_br_init(struct net_device *netdev)
 				memcpy(adapter->br_mac, br_netdev->dev_addr, ETH_ALEN);
 				dev_put(br_netdev);
 			} else
-				printk("%s()-%d: dev_get_by_name(%s) failed!", __FUNCTION__, __LINE__, CONFIG_BR_EXT_BRNAME);
+				printk("%s()-%d: dev_get_by_name(%s) failed!", __func__, __LINE__, CONFIG_BR_EXT_BRNAME);
 		}
 		
 		adapter->ethBrExtInfo.addPPPoETag = 1;
@@ -2141,7 +2141,7 @@ int  ips_netdrv_open(_adapter *padapter)
 {
 	int status = _SUCCESS;
 	padapter->net_closed = _FALSE;
-	DBG_871X("===> %s.........\n",__FUNCTION__);
+	DBG_871X("===> %s.........\n",__func__);
 
 
 	padapter->bDriverStopped = _FALSE;
@@ -2209,7 +2209,7 @@ void rtw_ips_dev_unload(_adapter *padapter)
 {
 	struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
-	DBG_871X("====> %s...\n",__FUNCTION__);
+	DBG_871X("====> %s...\n",__func__);
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_FIFO_CLEARN_UP, 0);
 
