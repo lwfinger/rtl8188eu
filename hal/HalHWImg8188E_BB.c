@@ -196,7 +196,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
  	IN   PDM_ODM_T  pDM_Odm
  	)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
+	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
@@ -222,8 +222,8 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 #ifdef CONFIG_IOL_IOREG_CFG
 	biol = rtw_IOL_applied(Adapter);
 	
-	if(biol){		
-		if((pxmit_frame= rtw_IOL_accquire_xmit_frame(Adapter)) == NULL){
+	if (biol){		
+		if ((pxmit_frame= rtw_IOL_accquire_xmit_frame(Adapter)) == NULL){
 			printk("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
 		}
@@ -239,8 +239,8 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 	   	if ( v1 < 0xCDCDCDCD )
 	    	{
 	    		#ifdef CONFIG_IOL_IOREG_CFG
-	 		if(biol){	
-				if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
+	 		if (biol){	
+				if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 					bndy_cnt++;
 				rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);					
 	 		}
@@ -272,8 +272,8 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 		               		v2 != 0xCDCD && i < ArrayLen -2)
 		        	{
 		        		#ifdef CONFIG_IOL_IOREG_CFG
-	 				if(biol){	
-						if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
+	 				if (biol){	
+						if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 							bndy_cnt++;
 						rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);							
 	 				}
@@ -294,9 +294,9 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 		}	
 	}
 #ifdef CONFIG_IOL_IOREG_CFG
-	if(biol){
+	if (biol){
 		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__FUNCTION__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);
-		if(rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
+		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
 		{			
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			printk("~~~ %s Success !!! \n",__FUNCTION__);
@@ -527,7 +527,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
  	IN   PDM_ODM_T  pDM_Odm
  	)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
+	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
@@ -556,8 +556,8 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 #ifdef CONFIG_IOL_IOREG_CFG
 	biol = rtw_IOL_applied(Adapter);
 	
-	if(biol){		
-		if((pxmit_frame=rtw_IOL_accquire_xmit_frame(Adapter)) == NULL)
+	if (biol){		
+		if ((pxmit_frame=rtw_IOL_accquire_xmit_frame(Adapter)) == NULL)
 		{
 			printk("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
@@ -575,8 +575,8 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 	    if ( v1 < 0xCDCDCDCD )
 	    {
 	    		#ifdef CONFIG_IOL_IOREG_CFG
-	 		if(biol){	
-				if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
+	 		if (biol){	
+				if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 					bndy_cnt++;
 
 
@@ -638,8 +638,8 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 		               v2 != 0xCDCD && i < ArrayLen -2)
 		        {
 		        	#ifdef CONFIG_IOL_IOREG_CFG
-	 			if(biol){	
-					if(rtw_IOL_cmd_boundary_handle(pxmit_frame))	
+	 			if (biol){	
+					if (rtw_IOL_cmd_boundary_handle(pxmit_frame))	
 						bndy_cnt++;
 					if (v1 == 0xfe){						
 						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,50);						
@@ -688,9 +688,9 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 		}	
 	}
 #ifdef CONFIG_IOL_IOREG_CFG
-	if(biol){
+	if (biol){
 		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__FUNCTION__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);
-		if(rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
+		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
 		{			
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			printk("~~~ %s IOL_exec_cmds Success !!! \n",__FUNCTION__);
@@ -699,17 +699,17 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 				u4Byte cdata;
 				printk("  %s data compare => array_len:%d \n",__FUNCTION__,cmpdata_idx);
 				printk("### %s data compared !!###\n",__FUNCTION__);
-				for(idx=0;idx< cmpdata_idx;idx++)
+				for (idx=0;idx< cmpdata_idx;idx++)
 				{
 					cdata = ODM_Read4Byte(pDM_Odm, cmpdata[idx].addr);
-					if(cdata != cmpdata[idx].value){
+					if (cdata != cmpdata[idx].value){
 						printk(" addr:0x%04x, data:(0x%02x : 0x%02x) \n",
 							cmpdata[idx].addr,cmpdata[idx].value,cdata);
 						rst = HAL_STATUS_FAILURE;
 					}					
 				}
 				printk("### %s data compared !!###\n",__FUNCTION__);
-				//if(rst == HAL_STATUS_FAILURE)
+				//if (rst == HAL_STATUS_FAILURE)
 				{//dump data from TX packet buffer				
 					rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
 				}

@@ -21,7 +21,7 @@
  #ifndef __HAL_PHY_RF_H__
  #define __HAL_PHY_RF_H__
  
- #if(DM_ODM_SUPPORT_TYPE & ODM_MP)
+ #if (DM_ODM_SUPPORT_TYPE & ODM_MP)
  #define MAX_TOLERANCE		5
  #define IQK_DELAY_TIME		1		//ms
  

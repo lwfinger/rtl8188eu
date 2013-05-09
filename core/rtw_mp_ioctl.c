@@ -1783,7 +1783,7 @@ _func_enter_;
 			u8 res=_SUCCESS;
 			DEBUG_INFO(("===> Set OID_RT_PRO_H2C_GET_RATE_TABLE.\n"));
 
-			if(pmp_wi_cntx->bmp_wi_progress ==_TRUE){
+			if (pmp_wi_cntx->bmp_wi_progress ==_TRUE){
 				DEBUG_ERR(("\n mp workitem is progressing, not allow to set another workitem right now!!!\n"));
 				Status = NDIS_STATUS_NOT_ACCEPTED;
 				break;
@@ -1798,7 +1798,7 @@ _func_enter_;
 
 				res=rtw_getrttbl_cmd(Adapter,(struct getratable_rsp *)pmp_wi_cntx->param.data);
 				*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
-				if(res != _SUCCESS)
+				if (res != _SUCCESS)
 				{
 					Status = NDIS_STATUS_NOT_ACCEPTED;
 				}
@@ -2023,13 +2023,13 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 	}
 
 #if 0
-	if(offset <=100){  //For setting data rate and query data rate
-		if(offset==100){ //For query data rate
+	if (offset <=100){  //For setting data rate and query data rate
+		if (offset==100){ //For query data rate
 			RT_TRACE(_module_mp_, _drv_emerg_, ("\n mp_query_drv_var: offset(%d): query rate=0x%.2x \n",offset,padapter->registrypriv.tx_rate));
 			var=padapter->registrypriv.tx_rate;
 
 		}
-		else if(offset<0x1d){  //For setting data rate
+		else if (offset<0x1d){  //For setting data rate
 			padapter->registrypriv.tx_rate=offset;
 			var=padapter->registrypriv.tx_rate;
 			padapter->registrypriv.use_rate=_TRUE;
@@ -2042,12 +2042,12 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 	}
 	else if (offset<=110){  //for setting debug level
 		RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var: offset(%d) for set debug level\n",offset));
-		if(offset==110){ //For query data rate
+		if (offset==110){ //For query data rate
 			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var: offset(%d): query dbg level=0x%.2x \n",offset,padapter->registrypriv.dbg_level));
 			padapter->registrypriv.dbg_level=GlobalDebugLevel;
 			var=padapter->registrypriv.dbg_level;
 		}
-		else if(offset<110 && offset>100){
+		else if (offset<110 && offset>100){
 			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var: offset(%d): set dbg level=0x%.2x \n",offset,offset-100));
 			padapter->registrypriv.dbg_level=GlobalDebugLevel=offset-100;
 			var=padapter->registrypriv.dbg_level;
@@ -2062,13 +2062,13 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 
 		}
 	}
-	else if(offset >110 &&offset <116){
-		if(115==offset){
+	else if (offset >110 &&offset <116){
+		if (115==offset){
 			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var(_drv_emerg_): offset(%d): query TRX access type: [tx_block_mode=%x,rx_block_mode=%x]\n",\
 															offset, adapter_to_dvobj(padapter)->tx_block_mode, adapter_to_dvobj(padapter)->rx_block_mode));
 		}
 		else {
-			switch(offset){
+			switch (offset){
 				case 111:
 					adapter_to_dvobj(padapter)->tx_block_mode=1;
 					adapter_to_dvobj(padapter)->rx_block_mode=1;
@@ -2105,7 +2105,7 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 		}
 
 	}
-	else if(offset>=127){
+	else if (offset>=127){
 		u64	prnt_dbg_comp;
 		u8   chg_idx;
 		u64	tmp_dbg_comp;
@@ -2113,7 +2113,7 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 		tmp_dbg_comp=BIT(chg_idx);
 		prnt_dbg_comp=padapter->registrypriv.dbg_component= GlobalDebugComponents;
 		RT_TRACE(_module_mp_, _drv_emerg_, (" 1: mp_query_drv_var: offset(%d;0x%x):for dbg conpoment prnt_dbg_comp=0x%.16x GlobalDebugComponents=0x%.16x padapter->registrypriv.dbg_component=0x%.16x\n",offset,offset,prnt_dbg_comp,GlobalDebugComponents,padapter->registrypriv.dbg_component));
-		if(offset==127){
+		if (offset==127){
 	//		prnt_dbg_comp=padapter->registrypriv.dbg_component= GlobalDebugComponents;
 			var=(u32)(padapter->registrypriv.dbg_component);
 			RT_TRACE(0xffffffff, _drv_emerg_, ("2: mp_query_drv_var: offset(%d;0x%x):for query dbg conpoment=0x%x(l) 0x%x(h)  GlobalDebugComponents=0x%x(l) 0x%x(h) \n",offset,offset,padapter->registrypriv.dbg_component,prnt_dbg_comp));
@@ -2130,7 +2130,7 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 			prnt_dbg_comp=GlobalDebugComponents=padapter->registrypriv.dbg_component;
 			RT_TRACE(0xffffffff, _drv_emerg_, ("3-2: mp_query_drv_var: offset(%d;0x%x):for query dbg conpoment=0x%x(l) 0x%x(h)  GlobalDebugComponents=0x%x(l) 0x%x(h)\n",offset,offset,padapter->registrypriv.dbg_component,prnt_dbg_comp));
 
-			if(GlobalDebugComponents&tmp_dbg_comp){
+			if (GlobalDebugComponents&tmp_dbg_comp){
 				//this bit is already set, now clear it
 				GlobalDebugComponents=GlobalDebugComponents&(~tmp_dbg_comp);
 			}
@@ -2619,13 +2619,13 @@ _func_enter_;
 	rcr_val8 = rtw_read8(Adapter, 0x10250048);//RCR
 	rcr_val8 &= ~(RCR_AB|RCR_AM|RCR_APM|RCR_AAP);
 
-	if(rx_pkt_type == RX_PKT_BROADCAST){
+	if (rx_pkt_type == RX_PKT_BROADCAST){
 		rcr_val8 |= (RCR_AB | RCR_ACRC32 );
 	}
-	else if(rx_pkt_type == RX_PKT_DEST_ADDR){
+	else if (rx_pkt_type == RX_PKT_DEST_ADDR){
 		rcr_val8 |= (RCR_AAP| RCR_AM |RCR_ACRC32);
 	}
-	else if(rx_pkt_type == RX_PKT_PHY_MATCH){
+	else if (rx_pkt_type == RX_PKT_PHY_MATCH){
 		rcr_val8 |= (RCR_APM|RCR_ACRC32);
 	}
 	else{
@@ -2636,14 +2636,14 @@ _func_enter_;
 	rcr_val32 = rtw_read32(padapter, RCR);//RCR = 0x10250048
 	rcr_val32 &= ~(RCR_CBSSID|RCR_AB|RCR_AM|RCR_APM|RCR_AAP);
 #if 0
-	if(rx_pkt_type == RX_PKT_BROADCAST){
+	if (rx_pkt_type == RX_PKT_BROADCAST){
 		rcr_val32 |= (RCR_AB|RCR_AM|RCR_APM|RCR_AAP|RCR_ACRC32);
 	}
-	else if(rx_pkt_type == RX_PKT_DEST_ADDR){
+	else if (rx_pkt_type == RX_PKT_DEST_ADDR){
 		//rcr_val32 |= (RCR_CBSSID|RCR_AAP|RCR_AM|RCR_ACRC32);
 		rcr_val32 |= (RCR_CBSSID|RCR_APM|RCR_ACRC32);
 	}
-	else if(rx_pkt_type == RX_PKT_PHY_MATCH){
+	else if (rx_pkt_type == RX_PKT_PHY_MATCH){
 		rcr_val32 |= (RCR_APM|RCR_ACRC32);
 		//rcr_val32 |= (RCR_AAP|RCR_ACRC32);
 	}
@@ -2834,7 +2834,7 @@ unsigned int mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv)
 	pattrib->nr_frags = 1;
 	pattrib->priority = 0;
 #ifndef CONFIG_MP_LINUX
-	if(IS_MCAST(pethhdr->h_dest))
+	if (IS_MCAST(pethhdr->h_dest))
 		pattrib->mac_id = 4;
 	else
 		pattrib->mac_id = 5;

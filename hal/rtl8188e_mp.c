@@ -226,11 +226,11 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
 	if (!IS_92C_SERIAL(pHalData->VersionID))
 		return;
 #if 0
-	while(PlatformAtomicExchange(&Adapter->IntrCCKRefCount, TRUE) == TRUE)
+	while (PlatformAtomicExchange(&Adapter->IntrCCKRefCount, TRUE) == TRUE)
 	{
 		PlatformSleepUs(100);
 		TimeOut--;
-		if(TimeOut <= 0)
+		if (TimeOut <= 0)
 		{
 			RTPRINT(FINIT, INIT_TxPower,
 			 ("!!!MPT_CCKTxPowerAdjustbyIndex Wait for check CCK gain index too long!!!\n" ));
@@ -344,7 +344,7 @@ void Hal_SetChannel(PADAPTER pAdapter)
 	// set RF channel register
 	for (eRFPath = 0; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
 	{
-      		if(IS_HARDWARE_TYPE_8192D(pAdapter))
+      		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 			_write_rfreg(pAdapter, (RF_RADIO_PATH_E)eRFPath, ODM_CHANNEL, 0xFF, channel);
 		else
 			_write_rfreg(pAdapter, eRFPath, ODM_CHANNEL, 0x3FF, channel);
@@ -692,7 +692,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 
 	if (chgTx && chgRx)
 	{
-		switch(pHalData->rf_chip)
+		switch (pHalData->rf_chip)
 		{
 			case RF_8225:
 			case RF_8256:
@@ -783,7 +783,7 @@ void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 	{
 		RT_TRACE(_module_mp_,_drv_alert_, ("SetSingleCarrierTx: test start\n"));
 		// 1. if OFDM block on?
-		if(!read_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
+		if (!read_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
 			write_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn, bEnable);//set OFDM block on
 
 		{
@@ -938,11 +938,11 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
 	if (bStart) // Start Carrier Suppression.
 	{
 		RT_TRACE(_module_mp_,_drv_alert_, ("SetCarrierSuppressionTx: test start\n"));
-		//if(pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
+		//if (pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
 		if (pAdapter->mppriv.rateidx <= MPT_RATE_11M)
 		  {
 			// 1. if CCK block on?
-			if(!read_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn))
+			if (!read_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn))
 				write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, bEnable);//set CCK block on
 
 			//Turn Off All Test Mode
@@ -966,7 +966,7 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
 	else// Stop Carrier Suppression.
 	{
 		RT_TRACE(_module_mp_,_drv_alert_, ("SetCarrierSuppressionTx: test stop\n"));
-		//if(pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
+		//if (pMgntInfo->dot11CurrentWirelessMode == WIRELESS_MODE_B)
 		if (pAdapter->mppriv.rateidx <= MPT_RATE_11M ) {
 			write_bbreg(pAdapter, rCCK0_System, bCCKBBMode, 0x0);    //normal mode
 			write_bbreg(pAdapter, rCCK0_System, bCCKScramble, 0x1);  //turn on scramble setting
@@ -994,7 +994,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 			 ("SetCCKContinuousTx: test start\n"));
 
 		// 1. if CCK block on?
-		if(!read_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn))
+		if (!read_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn))
 			write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, bEnable);//set CCK block on
 
 		//Turn Off All Test Mode
@@ -1003,7 +1003,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleTone, bDisable);
 		//Set CCK Tx Test Rate
 		#if 0
-		switch(pAdapter->mppriv.rateidx)
+		switch (pAdapter->mppriv.rateidx)
 		{
 			case 2:
 				cckrate = 0;
@@ -1067,7 +1067,7 @@ void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 	if (bStart) {
 		RT_TRACE(_module_mp_, _drv_info_, ("SetOFDMContinuousTx: test start\n"));
 		// 1. if OFDM block on?
-		if(!read_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
+		if (!read_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn))
 			write_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn, bEnable);//set OFDM block on
         {
 

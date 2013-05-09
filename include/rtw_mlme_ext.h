@@ -692,7 +692,7 @@ int issue_nulldata(_adapter *padapter, unsigned char *da, unsigned int power_mod
 int issue_qos_nulldata(_adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms);
 int issue_deauth(_adapter *padapter, unsigned char *da, unsigned short reason);
 int issue_deauth_ex(_adapter *padapter, u8 *da, unsigned short reason, int try_cnt, int wait_ms);
-void issue_action_spct_ch_switch(_adapter *padapter, u8 *ra, u8 new_ch, u8 ch_offset);
+void issue_action_spct_ch_switch (_adapter *padapter, u8 *ra, u8 new_ch, u8 ch_offset);
 void issue_action_BA(_adapter *padapter, unsigned char *raddr, unsigned char action, unsigned short status);
 unsigned int send_delba(_adapter *padapter, u8 initiator, u8 *addr);
 unsigned int send_beacon(_adapter *padapter);
@@ -741,13 +741,13 @@ void addba_timer_hdl(struct sta_info *psta);
 	do { \
 		/*DBG_871X("%s set_survey_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms));*/ \
 		_set_timer(&(mlmeext)->survey_timer, (ms)); \
-	} while(0)
+	} while (0)
 
 #define set_link_timer(mlmeext, ms) \
 	do { \
 		/*DBG_871X("%s set_link_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms));*/ \
 		_set_timer(&(mlmeext)->link_timer, (ms)); \
-	} while(0)
+	} while (0)
 
 extern int cckrates_included(unsigned char *rate, int ratelen);
 extern int cckratesonly_included(unsigned char *rate, int ratelen);

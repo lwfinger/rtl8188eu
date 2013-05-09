@@ -23,7 +23,7 @@
 #include "../odm_precomp.h"
 
 #if (RTL8188E_SUPPORT == 1)
-#if(DM_ODM_SUPPORT_TYPE & (ODM_AP))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 
 
 u1Byte Array_8188E_FW_AP[] = {

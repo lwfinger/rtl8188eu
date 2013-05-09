@@ -82,7 +82,7 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 	ori_len = buf_offset+pattrib->pktlen;
 
 	//check if the io_buf can accommodate new cmds
-	if(ori_len + cmd_len + 8 > MAX_XMITBUF_SZ) {
+	if (ori_len + cmd_len + 8 > MAX_XMITBUF_SZ) {
 		DBG_871X("%s %u is large than MAX_XMITBUF_SZ:%u, can't accommodate new cmds\n", __FUNCTION__
 			, ori_len + cmd_len + 8, MAX_XMITBUF_SZ);
 		return _FAIL;
@@ -98,11 +98,11 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 }
 bool rtw_IOL_applied(ADAPTER *adapter)
 {	
-	if(1 == adapter->registrypriv.fw_iol)
+	if (1 == adapter->registrypriv.fw_iol)
 		return _TRUE;
 
 #ifdef CONFIG_USB_HCI
-	if((2 == adapter->registrypriv.fw_iol) && (!adapter_to_dvobj(adapter)->ishighspeed))
+	if ((2 == adapter->registrypriv.fw_iol) && (!adapter_to_dvobj(adapter)->ishighspeed))
 		return _TRUE;
 #endif
 
@@ -111,11 +111,11 @@ bool rtw_IOL_applied(ADAPTER *adapter)
 /*
 bool rtw_IOL_applied(ADAPTER *adapter)
 {
-	if(adapter->registrypriv.fw_iol)
+	if (adapter->registrypriv.fw_iol)
 		return _TRUE;
 
 #ifdef CONFIG_USB_HCI
-	if(!adapter_to_dvobj(adapter)->ishighspeed)
+	if (!adapter_to_dvobj(adapter)->ishighspeed)
 		return _TRUE;
 #endif
 
@@ -142,7 +142,7 @@ int _rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value, u8
 	cmd.address = cpu_to_le16(addr);	
 	cmd.data = cpu_to_le32(value);
 	
-	if(mask!=0xFF)
+	if (mask!=0xFF)
 	{
 		cmd.length = 12;
 		//RTW_PUT_LE32((u8*)&cmd.mask, (u32)mask);	
@@ -163,7 +163,7 @@ int _rtw_IOL_append_WW_cmd(struct xmit_frame *xmit_frame, u16 addr, u16 value, u
 	cmd.address = cpu_to_le16(addr);	
 	cmd.data = cpu_to_le32(value);
 	
-	if(mask!=0xFFFF)
+	if (mask!=0xFFFF)
 	{
 		cmd.length = 12;
 		//RTW_PUT_LE32((u8*)&cmd.mask, (u32)mask);	
@@ -184,7 +184,7 @@ int _rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value, u
 	cmd.address = cpu_to_le16(addr);	
 	cmd.data = cpu_to_le32(value);
 	
-	if(mask!=0xFFFFFFFF)
+	if (mask!=0xFFFFFFFF)
 	{
 		cmd.length = 12;
 		//RTW_PUT_LE32((u8*)&cmd.mask, (u32)mask);	
@@ -206,7 +206,7 @@ int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path, u16 addr,
 	cmd.address = (rf_path<<8) |((addr) &0xFF);	
 	cmd.data = cpu_to_le32(value);
 	
-	if(mask!=0x000FFFFF)
+	if (mask!=0x000FFFFF)
 	{
 		cmd.length = 12;
 		//RTW_PUT_LE32((u8*)&cmd.mask, (u32)mask);	
@@ -251,7 +251,7 @@ int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame)
 u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame)
 {	
 	u8 is_cmd_bndy = _FALSE;
-	if(((pxmit_frame->attrib.pktlen+32)%256) + 8 >= 256){
+	if (((pxmit_frame->attrib.pktlen+32)%256) + 8 >= 256){
 		rtw_IOL_append_END_cmd(pxmit_frame);
 		pxmit_frame->attrib.pktlen = ((((pxmit_frame->attrib.pktlen+32)/256)+1)*256 );
 		
@@ -268,10 +268,10 @@ void rtw_IOL_cmd_buf_dump(ADAPTER *Adapter,int buf_len,u8 *pbuf)
 	int j=1;
 	
 	printk("###### %s ######\n",__FUNCTION__);
-	for(i=0;i< buf_len;i++){
+	for (i=0;i< buf_len;i++){
 		printk("%02x-",*(pbuf+i));
 			
-		if(j%32 ==0) printk("\n");j++;				
+		if (j%32 ==0) printk("\n");j++;				
 	}
 	printk("\n");
 	printk("============= ioreg_cmd len = %d =============== \n",buf_len);	
@@ -380,10 +380,10 @@ int rtw_IOL_exec_cmd_array_sync(PADAPTER adapter, u8 *IOL_cmds, u32 cmd_num, u32
 {
 	struct xmit_frame	*xmit_frame;
 
-	if((xmit_frame=rtw_IOL_accquire_xmit_frame(adapter)) == NULL)
+	if ((xmit_frame=rtw_IOL_accquire_xmit_frame(adapter)) == NULL)
 		return _FAIL;
 
-	if(rtw_IOL_append_cmds(xmit_frame, IOL_cmds, cmd_num<<3) == _FAIL)
+	if (rtw_IOL_append_cmds(xmit_frame, IOL_cmds, cmd_num<<3) == _FAIL)
 		return _FAIL;
 
 	return rtw_IOL_exec_cmds_sync(adapter, xmit_frame, max_wating_ms,0);

@@ -498,7 +498,7 @@ extern	void	DBG_PrintAllComp(void)
  *---------------------------------------------------------------------------*/
 extern	void	DBG_PrintFlagEvent(u1Byte	DbgFlag)
 {
-	switch(DbgFlag)
+	switch (DbgFlag)
 	{
 		case	FQoS:
 		ODM_RT_TRACE(pDM_Odm,COMP_CMD, DBG_LOUD, 	("BIT 0    QoS_INIT\n"));

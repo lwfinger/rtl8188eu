@@ -544,8 +544,8 @@ static void rtw_gspi_if1_deinit(PADAPTER if1)
 #endif
 #endif
 
-	if(if1->DriverState != DRIVER_DISAPPEAR) {
-		if(pnetdev) {
+	if (if1->DriverState != DRIVER_DISAPPEAR) {
+		if (pnetdev) {
 			unregister_netdev(pnetdev); //will call netdev_close()
 			rtw_proc_remove_one(pnetdev);
 				}
@@ -565,7 +565,7 @@ static void rtw_gspi_if1_deinit(PADAPTER if1)
 
 	rtw_free_drv_sw(if1);
 
-	if(pnetdev)
+	if (pnetdev)
 		rtw_free_netdev(pnetdev);
 }
 
@@ -605,7 +605,7 @@ static int /*__devinit*/  rtw_drv_probe(struct spi_device *spi)
 		goto free_if2;
 
 #ifdef CONFIG_GLOBAL_UI_PID
-	if(ui_pid[1]!=0) {
+	if (ui_pid[1]!=0) {
 		DBG_871X("ui_pid[1]:%d\n",ui_pid[1]);
 		rtw_signal_process(ui_pid[1], SIGUSR2);
 		}
@@ -693,7 +693,7 @@ static int rtw_gspi_suspend(struct spi_device *spi, pm_message_t mesg)
 	while (pwrpriv->bips_processing == _TRUE)
 		rtw_msleep_os(1);
 
-	if((!padapter->bup) || (padapter->bDriverStopped)||(padapter->bSurpriseRemoved))
+	if ((!padapter->bup) || (padapter->bDriverStopped)||(padapter->bSurpriseRemoved))
 	{
 		DBG_871X("%s bup=%d bDriverStopped=%d bSurpriseRemoved = %d\n", __FUNCTION__
 			,padapter->bup, padapter->bDriverStopped,padapter->bSurpriseRemoved);
@@ -705,7 +705,7 @@ static int rtw_gspi_suspend(struct spi_device *spi, pm_message_t mesg)
 
 	//padapter->net_closed = _TRUE;
 	//s1.
-	if(pnetdev)
+	if (pnetdev)
 	{
 		netif_carrier_off(pnetdev);
 		rtw_netif_stop_queue(pnetdev);
@@ -718,7 +718,7 @@ static int rtw_gspi_suspend(struct spi_device *spi, pm_message_t mesg)
 #endif
 
 #ifdef CONFIG_LAYER2_ROAMING_RESUME
-	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) )
+	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) )
 	{
 		DBG_871X("%s %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n",__FUNCTION__,
 				pmlmepriv->cur_network.network.Ssid.Ssid,
@@ -742,10 +742,10 @@ static int rtw_gspi_suspend(struct spi_device *spi, pm_message_t mesg)
 
 	rtw_dev_unload(padapter);
 
-	if(check_fwstate(pmlmepriv, _FW_UNDER_SURVEY))
+	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY))
 		rtw_indicate_scan_done(padapter, 1);
 
-	if(check_fwstate(pmlmepriv, _FW_UNDER_LINKING))
+	if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING))
 		rtw_indicate_disconnect(padapter);
 
 	// interface deinit
@@ -817,7 +817,7 @@ int rtw_resume_process(_adapter *padapter)
 	pwrpriv->bkeepfwalive = _FALSE;
 
 	DBG_871X("bkeepfwalive(%x)\n",pwrpriv->bkeepfwalive);
-	if(pm_netdev_open(pnetdev,_TRUE) != 0) {
+	if (pm_netdev_open(pnetdev,_TRUE) != 0) {
 		ret = -1;
 		goto exit;
 	}
@@ -825,7 +825,7 @@ int rtw_resume_process(_adapter *padapter)
 	netif_device_attach(pnetdev);
 	netif_carrier_on(pnetdev);
 
-	if( padapter->pid[1]!=0) {
+	if ( padapter->pid[1]!=0) {
 		DBG_871X("pid[1]:%d\n",padapter->pid[1]);
 		rtw_signal_process(padapter->pid[1], SIGUSR2);
 	}
@@ -858,13 +858,13 @@ static int rtw_gspi_resume(struct spi_device *spi)
 
 	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
 
-	if(pwrpriv->bInternalAutoSuspend ){
+	if (pwrpriv->bInternalAutoSuspend ){
  		ret = rtw_resume_process(padapter);
 	} else {
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 		rtw_resume_in_workqueue(pwrpriv);
 #elif defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
-		if(rtw_is_earlysuspend_registered(pwrpriv)) {
+		if (rtw_is_earlysuspend_registered(pwrpriv)) {
 			//jeff: bypass resume here, do in late_resume
 			pwrpriv->do_late_resume = _TRUE;
 		} else {

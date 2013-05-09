@@ -50,7 +50,7 @@ void rtl8188eu_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
 
 	precvbuf->ref_cnt = 0;
 
-	if(precvbuf->pbuf)
+	if (precvbuf->pbuf)
 	{
 		precvbuf->pdata = precvbuf->phead = precvbuf->ptail = precvbuf->pbuf;
 		precvbuf->pend = precvbuf->pdata + MAX_RECVBUF_SZ;
@@ -78,14 +78,14 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 #ifdef PLATFORM_LINUX
 	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-	if(precvpriv->int_in_urb == NULL){
+	if (precvpriv->int_in_urb == NULL){
 		res= _FAIL;
 		DBG_8192C("alloc_urb for interrupt in endpoint fail !!!!\n");
 		goto exit;
 	}
 #endif
 	precvpriv->int_in_buf = rtw_zmalloc(INTERRUPT_MSG_FORMAT_LEN);
-	if(precvpriv->int_in_buf == NULL){
+	if (precvpriv->int_in_buf == NULL){
 		res= _FAIL;
 		DBG_8192C("alloc_mem for interrupt in endpoint fail !!!!\n");
 		goto exit;
@@ -100,7 +100,7 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_RX
 
 	precvpriv->pallocated_recv_buf = rtw_zmalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4);
-	if(precvpriv->pallocated_recv_buf==NULL){
+	if (precvpriv->pallocated_recv_buf==NULL){
 		res= _FAIL;
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("alloc recv_buf fail!\n"));
 		goto exit;
@@ -114,7 +114,7 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 
 	precvbuf = (struct recv_buf*)precvpriv->precv_buf;
 
-	for(i=0; i < NR_RECVBUFF ; i++)
+	for (i=0; i < NR_RECVBUFF ; i++)
 	{
 		_rtw_init_listhead(&precvbuf->list);
 
@@ -123,7 +123,7 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 		precvbuf->alloc_sz = MAX_RECVBUF_SZ;
 
 		res = rtw_os_recvbuf_resource_alloc(padapter, precvbuf);
-		if(res==_FAIL)
+		if (res==_FAIL)
 			break;
 
 		precvbuf->ref_cnt = 0;
@@ -151,7 +151,7 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 
 		skb_queue_head_init(&precvpriv->free_recv_skb_queue);
 
-		for(i=0; i<NR_PREALLOC_RECV_SKB; i++)
+		for (i=0; i<NR_PREALLOC_RECV_SKB; i++)
 		{
 
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) // http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html
@@ -160,7 +160,7 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 			pskb = __netdev_alloc_skb(padapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ, GFP_KERNEL);
 	#endif
 
-			if(pskb)
+			if (pskb)
 			{
 				pskb->dev = padapter->pnetdev;
 
@@ -193,24 +193,24 @@ void rtl8188eu_free_recv_priv (_adapter *padapter)
 
 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
 
-	for(i=0; i < NR_RECVBUFF ; i++)
+	for (i=0; i < NR_RECVBUFF ; i++)
 	{
 		rtw_os_recvbuf_resource_free(padapter, precvbuf);
 		precvbuf++;
 	}
 
-	if(precvpriv->pallocated_recv_buf)
+	if (precvpriv->pallocated_recv_buf)
 		rtw_mfree(precvpriv->pallocated_recv_buf, NR_RECVBUFF *sizeof(struct recv_buf) + 4);
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 #ifdef PLATFORM_LINUX
-	if(precvpriv->int_in_urb)
+	if (precvpriv->int_in_urb)
 	{
 		usb_free_urb(precvpriv->int_in_urb);
 	}
 #endif//PLATFORM_LINUX
 
-	if(precvpriv->int_in_buf)
+	if (precvpriv->int_in_buf)
 		rtw_mfree(precvpriv->int_in_buf, INTERRUPT_MSG_FORMAT_LEN);
 #endif//CONFIG_USB_INTERRUPT_IN_PIPE
 

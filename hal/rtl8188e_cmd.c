@@ -50,13 +50,13 @@ static u8 _is_fw_read_cmd_down(_adapter* padapter, u8 msgbox_num)
 
 	do{
 		valid = rtw_read8(padapter,REG_HMETFR) & BIT(msgbox_num);
-		if(0 == valid ){
+		if (0 == valid ){
 			read_down = _TRUE;
 		}
 #ifdef CONFIG_WOWLAN
 		rtw_msleep_os(2);
 #endif
-	}while( (!read_down) && (retry_cnts--));
+	}while ( (!read_down) && (retry_cnts--));
 
 	return read_down;
 
@@ -88,7 +88,7 @@ static s32 FillH2CCmd_88E(PADAPTER padapter, u8 ElementID, u32 CmdLen, u8 *pCmdB
 
 _func_enter_;
 
-	if(padapter->bFWReady == _FALSE)
+	if (padapter->bFWReady == _FALSE)
 	{
 		DBG_8192C("FillH2CCmd_88E(): return H2C cmd because fw is not ready\n");
 		return ret;
@@ -96,7 +96,7 @@ _func_enter_;
 
 #ifdef CONFIG_CONCURRENT_MODE
 
-	if(padapter->adapter_type > PRIMARY_ADAPTER)
+	if (padapter->adapter_type > PRIMARY_ADAPTER)
 	{
 		padapter = padapter->pbuddy_adapter;
 	}
@@ -120,14 +120,14 @@ _func_enter_;
 	do{
 		h2c_box_num = pHalData->LastHMEBoxNum;
 
-		if(!_is_fw_read_cmd_down(padapter, h2c_box_num)){
+		if (!_is_fw_read_cmd_down(padapter, h2c_box_num)){
 			DBG_8192C(" fw read cmd failed...\n");
 			goto exit;
 		}
 
 		*(u8*)(&h2c_cmd) = ElementID;
 
-		if(CmdLen<=3)
+		if (CmdLen<=3)
 		{
 			_rtw_memcpy((u8*)(&h2c_cmd)+1, pCmdBuffer, CmdLen );
 		}
@@ -139,7 +139,7 @@ _func_enter_;
 			//Write Ext command
 			msgbox_ex_addr = REG_HMEBOX_EXT_0 + (h2c_box_num *RTL88E_EX_MESSAGE_BOX_SIZE);
 			#ifdef CONFIG_H2C_EF
-			for(cmd_idx=0;cmd_idx<ext_cmd_len;cmd_idx++ ){
+			for (cmd_idx=0;cmd_idx<ext_cmd_len;cmd_idx++ ){
 				rtw_write8(padapter,msgbox_ex_addr+cmd_idx,*((u8*)(&h2c_cmd_ex)+cmd_idx));
 			}
 			#else
@@ -150,7 +150,7 @@ _func_enter_;
 		// Write command
 		msgbox_addr =REG_HMEBOX_0 + (h2c_box_num *RTL88E_MESSAGE_BOX_SIZE);
 		#ifdef CONFIG_H2C_EF
-		for(cmd_idx=0;cmd_idx<RTL88E_MESSAGE_BOX_SIZE;cmd_idx++ ){
+		for (cmd_idx=0;cmd_idx<RTL88E_MESSAGE_BOX_SIZE;cmd_idx++ ){
 			rtw_write8(padapter,msgbox_addr+cmd_idx,*((u8*)(&h2c_cmd)+cmd_idx));
 		}
 		#else
@@ -165,7 +165,7 @@ _func_enter_;
 
 		pHalData->LastHMEBoxNum = (h2c_box_num+1) % RTL88E_MAX_H2C_BOX_NUMS;
 
-	}while((!bcmd_down) && (retry_cnts--));
+	}while ((!bcmd_down) && (retry_cnts--));
 
 	ret = _SUCCESS;
 
@@ -186,7 +186,7 @@ u8 rtl8192c_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
 	u8 *pCmdBuffer;
 	struct cmd_msg_parm  *pcmdmsg;
 
-	if(!pbuf)
+	if (!pbuf)
 		return H2C_PARAMETERS_ERROR;
 
 	pcmdmsg = (struct cmd_msg_parm*)pbuf;
@@ -218,7 +218,7 @@ u8 rtl8188e_set_rssi_cmd(_adapter*padapter, u8 *param)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 _func_enter_;
 
-	if(pHalData->fw_ractrl == _TRUE){
+	if (pHalData->fw_ractrl == _TRUE){
 		#if 0
 	*((u32*) param ) = cpu_to_le32( *((u32*) param ) );
 
@@ -240,7 +240,7 @@ u8 rtl8188e_set_raid_cmd(_adapter*padapter, u32 mask)
 	u8	res=_SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 _func_enter_;
-	if(pHalData->fw_ractrl == _TRUE){
+	if (pHalData->fw_ractrl == _TRUE){
 		_rtw_memset(buf, 0, 3);
 		mask = cpu_to_le32( mask );
 		_rtw_memcpy(buf, &mask, 3);		
@@ -269,7 +269,7 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 	u8 macid, init_rate, raid, shortGIrate=_FALSE;
 
 #ifdef CONFIG_CONCURRENT_MODE
-	if(rtw_buddy_adapter_up(pAdapter) && pAdapter->adapter_type > PRIMARY_ADAPTER)	
+	if (rtw_buddy_adapter_up(pAdapter) && pAdapter->adapter_type > PRIMARY_ADAPTER)	
 		pHalData = GET_HAL_DATA(pAdapter->pbuddy_adapter);				
 #endif //CONFIG_CONCURRENT_MODE
 
@@ -279,7 +279,7 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 	raid = (bitmap>>28) & 0x0f;
 	bitmap &=0x0fffffff;	
 	
-	if(rssi_level != DM_RATR_STA_INIT)
+	if (rssi_level != DM_RATR_STA_INIT)
 		bitmap = ODM_Get_Rate_Bitmap(&pHalData->odmpriv, macid, bitmap, rssi_level);		
 	
 	bitmap |= ((raid<<28)&0xf0000000);
@@ -304,7 +304,7 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 			__FUNCTION__,macid ,raid ,bitmap, shortGIrate);
 
 
-#if(RATE_ADAPTIVE_SUPPORT == 1)
+#if (RATE_ADAPTIVE_SUPPORT == 1)
 	ODM_RA_UpdateRateInfo_8188E(
 			&(pHalData->odmpriv),
 			macid,
@@ -326,7 +326,7 @@ _func_enter_;
 	DBG_871X("%s: Mode=%d SmartPS=%d UAPSD=%d\n", __FUNCTION__,
 			Mode, pwrpriv->smart_ps, padapter->registrypriv.uapsd_enable);
 
-	switch(Mode)
+	switch (Mode)
 	{
 		case PS_MODE_ACTIVE:
 			H2CSetPwrMode.Mode = 0;
@@ -358,7 +358,7 @@ _func_enter_;
 
 	H2CSetPwrMode.bAllQueueUAPSD = padapter->registrypriv.uapsd_enable;
 
-	if(Mode > 0)
+	if (Mode > 0)
 	{
 		H2CSetPwrMode.PwrState = 0x00;// AllON(0x0C), RFON(0x04), RFOFF(0x00)
 #ifdef CONFIG_EXT_CLK
@@ -430,7 +430,7 @@ void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 	pframe += 2;
 	pktlen += 2;
 
-	if( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
+	if ( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
 		//DBG_871X("ie len=%d\n", cur_network->IELength);
 		pktlen += cur_network->IELength - sizeof(NDIS_802_11_FIXED_IEs);
@@ -451,7 +451,7 @@ void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 	// DS parameter set
 	pframe = rtw_set_ie(pframe, _DSSET_IE_, 1, (unsigned char *)&(cur_network->Configuration.DSConfig), &pktlen);
 
-	if( (pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE)
+	if ( (pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE)
 	{
 		u32 ATIMWindow;
 		// IBSS Parameter Set...
@@ -547,7 +547,7 @@ void ConstructNullFunctionData(
 		SetPwrMgt(fctrl);
 	}
 
-	switch(cur_network->network.InfrastructureMode)
+	switch (cur_network->network.InfrastructureMode)
 	{
 		case Ndis802_11Infrastructure:
 			SetToDs(fctrl);
@@ -620,7 +620,7 @@ void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr
 	pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
 	pframe += pktlen;
 
-	if(cur_network->IELength>MAX_IE_SZ)
+	if (cur_network->IELength>MAX_IE_SZ)
 		return;
 
 	_rtw_memcpy(pframe, cur_network->IEs, cur_network->IELength);
@@ -640,7 +640,7 @@ CheckFwRsvdPageContent(
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
 	u32	MaxBcnPageNum;
 
- 	if(pHalData->FwRsvdPageStartOffset != 0)
+ 	if (pHalData->FwRsvdPageStartOffset != 0)
  	{
  		/*MaxBcnPageNum = PageNum_128(pMgntInfo->MaxBeaconSize);
 		RT_ASSERT((MaxBcnPageNum <= pHalData->FwRsvdPageStartOffset),
@@ -813,7 +813,7 @@ _func_enter_;
 
 	DBG_871X("%s mstatus(%x)\n", __FUNCTION__,mstatus);
 
-	if(mstatus == 1)
+	if (mstatus == 1)
 	{
 		// We should set AID, correct TSF, HW seq enable before set JoinBssReport to Fw in 88/92C.
 		// Suggested by filen. Added by tynli.
@@ -836,7 +836,7 @@ _func_enter_;
 		rtw_write8(padapter, REG_BCN_CTRL, rtw_read8(padapter, REG_BCN_CTRL)&(~BIT(3)));
 		rtw_write8(padapter, REG_BCN_CTRL, rtw_read8(padapter, REG_BCN_CTRL)|BIT(4));
 			
-		if(pHalData->RegFwHwTxQCtrl&BIT6)
+		if (pHalData->RegFwHwTxQCtrl&BIT6)
 		{
 			DBG_871X("HalDownloadRSVDPage(): There is an Adapter is sending beacon.\n");
 			bSendBeacon = _TRUE;
@@ -862,15 +862,15 @@ _func_enter_;
 				// check rsvd page download OK.
 				rtw_hal_get_hwreg(padapter, HW_VAR_BCN_VALID, (u8*)(&bcn_valid));
 				poll++;
-			} while(!bcn_valid && (poll%10)!=0 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+			} while (!bcn_valid && (poll%10)!=0 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
 			
-		}while(!bcn_valid && DLBcnCount<=100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+		}while (!bcn_valid && DLBcnCount<=100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
 		
 		//RT_ASSERT(bcn_valid, ("HalDownloadRSVDPage88ES(): 1 Download RSVD page failed!\n"));
-		if(padapter->bSurpriseRemoved || padapter->bDriverStopped)
+		if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
 		{
 		}
-		else if(!bcn_valid)
+		else if (!bcn_valid)
 			DBG_871X("%s: 1 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __FUNCTION__ ,DLBcnCount, poll);
 		else
 			DBG_871X("%s: 1 Download RSVD success! DLBcnCount:%u, poll:%u\n", __FUNCTION__, DLBcnCount, poll);
@@ -880,10 +880,10 @@ _func_enter_;
 		// At run time, we cannot get the Tx Desc until it is released in TxHandleInterrupt() so we will return
 		// the beacon TCB in the following code. 2011.11.23. by tynli.
 		//
-		//if(bcn_valid && padapter->bEnterPnpSleep)
-		if(0)
+		//if (bcn_valid && padapter->bEnterPnpSleep)
+		if (0)
 		{
-			if(bSendBeacon)
+			if (bSendBeacon)
 			{
 				rtw_hal_set_hwreg(padapter, HW_VAR_BCN_VALID, NULL);
 				DLBcnCount = 0;
@@ -900,14 +900,14 @@ _func_enter_;
 						// check rsvd page download OK.
 						rtw_hal_get_hwreg(padapter, HW_VAR_BCN_VALID, (u8*)(&bcn_valid));
 						poll++;
-					} while(!bcn_valid && (poll%10)!=0 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
-				}while(!bcn_valid && DLBcnCount<=100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+					} while (!bcn_valid && (poll%10)!=0 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+				}while (!bcn_valid && DLBcnCount<=100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
 				
 				//RT_ASSERT(bcn_valid, ("HalDownloadRSVDPage(): 2 Download RSVD page failed!\n"));
-				if(padapter->bSurpriseRemoved || padapter->bDriverStopped)
+				if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
 				{
 				}
-				else if(!bcn_valid)
+				else if (!bcn_valid)
 					DBG_871X("%s: 2 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __FUNCTION__ ,DLBcnCount, poll);
 				else
 					DBG_871X("%s: 2 Download RSVD success! DLBcnCount:%u, poll:%u\n", __FUNCTION__, DLBcnCount, poll);
@@ -925,7 +925,7 @@ _func_enter_;
 		// prevent from setting 0x422[6] to 0 after download reserved page, or it will cause 
 		// the beacon cannot be sent by HW.
 		// 2010.06.23. Added by tynli.
-		if(bSendBeacon)
+		if (bSendBeacon)
 		{
 			rtw_write8(padapter, REG_FWHW_TXQ_CTRL+2, (pHalData->RegFwHwTxQCtrl|BIT6));
 			pHalData->RegFwHwTxQCtrl |= BIT6;
@@ -934,7 +934,7 @@ _func_enter_;
 		//
 		// Update RSVD page location H2C to Fw.
 		//
-		if(bcn_valid)
+		if (bcn_valid)
 		{
 			rtw_hal_set_hwreg(padapter, HW_VAR_BCN_VALID, NULL);
 			DBG_871X("Set RSVD page location to Fw.\n");
@@ -942,7 +942,7 @@ _func_enter_;
 		}
 		
 		// Do not enable HW DMA BCN or it will cause Pcie interface hang by timing issue. 2011.11.24. by tynli.
-		//if(!padapter->bEnterPnpSleep)
+		//if (!padapter->bEnterPnpSleep)
 		{
 			// Clear CR[8] or beacon packet will not be send to TxBuf anymore.
 			pHalData->RegCR_1 &= (~BIT0);
@@ -974,7 +974,7 @@ void rtl8188e_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state)
 _func_enter_;
 
 #if 1
-	switch(p2p_ps_state)
+	switch (p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
 			DBG_8192C("P2P_PS_DISABLE \n");
@@ -983,18 +983,18 @@ _func_enter_;
 		case P2P_PS_ENABLE:
 			DBG_8192C("P2P_PS_ENABLE \n");
 			// update CTWindow value.
-			if( pwdinfo->ctwindow > 0 )
+			if ( pwdinfo->ctwindow > 0 )
 			{
 				p2p_ps_offload->CTWindow_En = 1;
 				rtw_write8(padapter, REG_P2P_CTWIN, pwdinfo->ctwindow);
 			}
 
 			// hw only support 2 set of NoA
-			for( i=0 ; i<pwdinfo->noa_num ; i++)
+			for ( i=0 ; i<pwdinfo->noa_num ; i++)
 			{
 				// To control the register setting for which NOA
 				rtw_write8(padapter, REG_NOA_DESC_SEL, (i << 4));
-				if(i == 0)
+				if (i == 0)
 					p2p_ps_offload->NoA0_En = 1;
 				else
 					p2p_ps_offload->NoA1_En = 1;
@@ -1013,14 +1013,14 @@ _func_enter_;
 				rtw_write8(padapter, REG_NOA_DESC_COUNT, pwdinfo->noa_count[i]);
 			}
 
-			if( (pwdinfo->opp_ps == 1) || (pwdinfo->noa_num > 0) )
+			if ( (pwdinfo->opp_ps == 1) || (pwdinfo->noa_num > 0) )
 			{
 				// rst p2p circuit
 				rtw_write8(padapter, REG_DUAL_TSF_RST, BIT(4));
 
 				p2p_ps_offload->Offload_En = 1;
 
-				if(pwdinfo->role == P2P_ROLE_GO)
+				if (pwdinfo->role == P2P_ROLE_GO)
 				{
 					p2p_ps_offload->role= 1;
 					p2p_ps_offload->AllStaSleep = 0;
@@ -1121,26 +1121,26 @@ _func_enter_;
 		pwowlan_parm.second_mode =0;
 		pwowlan_parm.reserve=0;
 
-		if(enable){
+		if (enable){
 
 			pwowlan_parm.mode |=FW_WOWLAN_FUN_EN;
 			pwrpriv->wowlan_magic =_TRUE;
 			pwrpriv->wowlan_unicast =_TRUE;
 
-			if(pwrpriv->wowlan_pattern ==_TRUE){
+			if (pwrpriv->wowlan_pattern ==_TRUE){
 				pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
 				DBG_871X_LEVEL(_drv_info_, "%s 2.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
 			}
-			if(pwrpriv->wowlan_magic ==_TRUE){
+			if (pwrpriv->wowlan_magic ==_TRUE){
 				pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
 				DBG_871X_LEVEL(_drv_info_, "%s 3.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
 			}
-			if(pwrpriv->wowlan_unicast ==_TRUE){
+			if (pwrpriv->wowlan_unicast ==_TRUE){
 				pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
 				DBG_871X_LEVEL(_drv_info_, "%s 4.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
 			}
 
-			if(!(padapter->pwrctrlpriv.wowlan_wake_reason & FWDecisionDisconnect))
+			if (!(padapter->pwrctrlpriv.wowlan_wake_reason & FWDecisionDisconnect))
 				rtl8188e_set_FwJoinBssReport_cmd(padapter, 1);
 			else
 				DBG_871X_LEVEL(_drv_always_, "%s, disconnected, no FwJoinBssReport\n",__FUNCTION__);	

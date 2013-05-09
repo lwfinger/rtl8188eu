@@ -127,7 +127,7 @@ do {\
 	pcmd->cmdsz = sizeof (*pparm);\
 	pcmd->rsp = NULL;\
 	pcmd->rspsz = 0;\
-} while(0)
+} while (0)
 
 struct c2h_evt_hdr {
 	u8 id:4;

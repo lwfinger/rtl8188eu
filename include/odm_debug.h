@@ -112,31 +112,31 @@
 
 #if DBG
 #define ODM_RT_TRACE(pDM_Odm, comp, level, fmt)									\
-		if(((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
+		if (((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
 		{																			\
-			if(pDM_Odm->SupportICType == ODM_RTL8192C)								\
+			if (pDM_Odm->SupportICType == ODM_RTL8192C)								\
 				DbgPrint("[ODM-92C] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8192D)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8192D)							\
 				DbgPrint("[ODM-92D] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8723A)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8723A)							\
 				DbgPrint("[ODM-8723A] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8188E)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8188E)							\
 				DbgPrint("[ODM-8188E] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8812)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8812)							\
 				DbgPrint("[ODM-8812] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8821)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8821)							\
 				DbgPrint("[ODM-8821] ");												\
 			RT_PRINTK fmt;															\
 		}
 
 #define ODM_RT_TRACE_F(pDM_Odm, comp, level, fmt)									\
-		if(((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
+		if (((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
 		{																			\
 			RT_PRINTK fmt;															\
 		}
 
 #define ODM_RT_ASSERT(pDM_Odm, expr, fmt)											\
-		if(!(expr)) {																	\
+		if (!(expr)) {																	\
 			DbgPrint( "Assertion failed! %s at ......\n", #expr);								\
 			DbgPrint( "      ......%s,%s,line=%d\n",__FILE__,__FUNCTION__,__LINE__);			\
 			RT_PRINTK fmt;															\
@@ -147,14 +147,14 @@
 #define ODM_dbg_trace(str) { DbgPrint("%s:%s\n", __FUNCTION__, str); }
 
 #define ODM_PRINT_ADDR(pDM_Odm, comp, level, title_str, ptr)						\
-			if(((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
+			if (((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
 			{																		\
 				int __i;																\
 				pu1Byte	__ptr = (pu1Byte)ptr;											\
 				DbgPrint("[ODM] ");													\
 				DbgPrint(title_str);												\
 				DbgPrint(" ");														\
-				for( __i=0; __i<6; __i++ )												\
+				for ( __i=0; __i<6; __i++ )												\
 					DbgPrint("%02X%s", __ptr[__i], (__i==5)?"":"-");						\
 				DbgPrint("\n");														\
 			}
@@ -201,13 +201,13 @@ ODM_InitDebugSetting(
 // RT_PRINT_XXX macros: implemented for debugging purpose.
 // Added by Annie, 2005-11-21.
 #define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)			\
-			if(((_Comp) & ODM_GlobalDebugComponents) && (_Level <= ODM_GlobalDebugLevel))	\
+			if (((_Comp) & ODM_GlobalDebugComponents) && (_Level <= ODM_GlobalDebugLevel))	\
 			{																		\
 				int __i;																\
 				pu1Byte	ptr = (pu1Byte)_HexData;										\
 				DbgPrint("Rtl819x: ");													\
 				DbgPrint(_TitleString);												\
-				for( __i=0; __i<(int)_HexDataLen; __i++ )								\
+				for ( __i=0; __i<(int)_HexDataLen; __i++ )								\
 				{																	\
 					DbgPrint("%02X%s", ptr[__i], (((__i + 1) % 4) == 0)?"  ":" ");			\
 					if (((__i + 1) % 16) == 0)	DbgPrint("\n");							\
@@ -216,29 +216,29 @@ ODM_InitDebugSetting(
 			}
 
 #define RT_PRINT_ADDR(_Comp, _Level, _TitleString, _Ptr)								\
-			if(((_Comp) & ODM_GlobalDebugComponents) && (_Level <= ODM_GlobalDebugLevel))	\
+			if (((_Comp) & ODM_GlobalDebugComponents) && (_Level <= ODM_GlobalDebugLevel))	\
 			{																		\
 				int __i;																\
 				pu1Byte	ptr = (pu1Byte)_Ptr;											\
 				DbgPrint("Rtl819x: ");													\
 				DbgPrint(_TitleString);												\
 				DbgPrint(" ");															\
-				for( __i=0; __i<6; __i++ )												\
+				for ( __i=0; __i<6; __i++ )												\
 					DbgPrint("%02X%s", ptr[__i], (__i==5)?"":"-");							\
 				DbgPrint("\n");														\
 			}
 
 #define RT_PRINT_ADDRS(_Comp, _Level, _TitleString, _Ptr, _AddNum)					\
-			if(((_Comp) & ODM_GlobalDebugComponents) && (_Level <= ODM_GlobalDebugLevel))	\
+			if (((_Comp) & ODM_GlobalDebugComponents) && (_Level <= ODM_GlobalDebugLevel))	\
 			{																		\
 				int __i, __j;															\
 				pu1Byte	ptr = (pu1Byte)_Ptr;											\
 				DbgPrint("Rtl819x: ");													\
 				DbgPrint(_TitleString);												\
 				DbgPrint("\n");														\
-				for( __i=0; __i<(int)_AddNum; __i++ )									\
+				for ( __i=0; __i<(int)_AddNum; __i++ )									\
 				{																	\
-					for( __j=0; __j<6; __j++ )											\
+					for ( __j=0; __j<6; __j++ )											\
 						DbgPrint("%02X%s", ptr[__i*6+__j], (__j==5)?"":"-");				\
 					DbgPrint("\n");													\
 				}																	\
@@ -249,16 +249,16 @@ ODM_InitDebugSetting(
 #define	PRINTABLE(_ch)	(_ch>=' ' &&_ch<='~' )	// I want to see ASCII 33 to 126 only. Otherwise, I print '?'. Annie, 2005-11-22.
 
 #define RT_PRINT_STR(_Comp, _Level, _TitleString, _Ptr, _Len)							\
-			if(((_Comp) & ODM_GlobalDebugComponents) && (_Level <= ODM_GlobalDebugLevel))	\
+			if (((_Comp) & ODM_GlobalDebugComponents) && (_Level <= ODM_GlobalDebugLevel))	\
 			{																		\
 				int		__i;															\
 				u1Byte	buffer[MAX_STR_LEN];											\
 				int	length = (_Len<MAX_STR_LEN)? _Len : (MAX_STR_LEN-1) ;				\
 				PlatformZeroMemory( buffer, MAX_STR_LEN );							\
 				PlatformMoveMemory( buffer, (pu1Byte)_Ptr, length );						\
-				for( __i=0; __i<MAX_STR_LEN; __i++ )									\
+				for ( __i=0; __i<MAX_STR_LEN; __i++ )									\
 				{																	\
-					if( !PRINTABLE(buffer[__i]) )	buffer[__i] = '?';						\
+					if ( !PRINTABLE(buffer[__i]) )	buffer[__i] = '?';						\
 				}																	\
 				buffer[length] = '\0';													\
 				DbgPrint("Rtl819x: ");													\
@@ -673,19 +673,19 @@ typedef enum tag_DBGP_Flag_Type_Definition
 
 #if DBG
 #define ODM_RT_TRACE(pDM_Odm,comp, level, fmt)											\
-		if(((comp) & GlobalDebugComponents) && (level <= GlobalDebugLevel))	\
+		if (((comp) & GlobalDebugComponents) && (level <= GlobalDebugLevel))	\
 		{																	\
 			RT_PRINTK fmt;													\
 		}
 
 #define RT_TRACE_F(comp, level, fmt)											\
-		if(((comp) & GlobalDebugComponents) && (level <= GlobalDebugLevel))	\
+		if (((comp) & GlobalDebugComponents) && (level <= GlobalDebugLevel))	\
 		{																	\
 			RT_PRINTK fmt;													\
 		}
 
 #define RT_ASSERT(expr,fmt)													\
-		if(!(expr)) {															\
+		if (!(expr)) {															\
 			printk( "Assertion failed! %s at ......\n", #expr);							\
 			printk( "      ......%s,%s,line=%d\n",__FILE__,__FUNCTION__,__LINE__);	\
 		}
@@ -725,13 +725,13 @@ typedef enum tag_DBGP_Flag_Type_Definition
 // RT_PRINT_XXX macros: implemented for debugging purpose.
 // Added by Annie, 2005-11-21.
 #define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)			\
-			if(((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
+			if (((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
 			{																		\
 				int __i;																\
 				pu1Byte	ptr = (pu1Byte)_HexData;										\
 				DbgPrint("Rtl819x: ");													\
 				DbgPrint(_TitleString);												\
-				for( __i=0; __i<(int)_HexDataLen; __i++ )								\
+				for ( __i=0; __i<(int)_HexDataLen; __i++ )								\
 				{																	\
 					DbgPrint("%02X%s", ptr[__i], (((__i + 1) % 4) == 0)?"  ":" ");			\
 					if (((__i + 1) % 16) == 0)	DbgPrint("\n");							\
@@ -740,29 +740,29 @@ typedef enum tag_DBGP_Flag_Type_Definition
 			}
 
 #define RT_PRINT_ADDR(_Comp, _Level, _TitleString, _Ptr)								\
-			if(((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
+			if (((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
 			{																		\
 				int __i;																\
 				pu1Byte	ptr = (pu1Byte)_Ptr;											\
 				DbgPrint("Rtl819x: ");													\
 				DbgPrint(_TitleString);												\
 				DbgPrint(" ");															\
-				for( __i=0; __i<6; __i++ )												\
+				for ( __i=0; __i<6; __i++ )												\
 					DbgPrint("%02X%s", ptr[__i], (__i==5)?"":"-");							\
 				DbgPrint("\n");														\
 			}
 
 #define RT_PRINT_ADDRS(_Comp, _Level, _TitleString, _Ptr, _AddNum)					\
-			if(((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
+			if (((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
 			{																		\
 				int __i, __j;															\
 				pu1Byte	ptr = (pu1Byte)_Ptr;											\
 				DbgPrint("Rtl819x: ");													\
 				DbgPrint(_TitleString);												\
 				DbgPrint("\n");														\
-				for( __i=0; __i<(int)_AddNum; __i++ )									\
+				for ( __i=0; __i<(int)_AddNum; __i++ )									\
 				{																	\
-					for( __j=0; __j<6; __j++ )											\
+					for ( __j=0; __j<6; __j++ )											\
 						DbgPrint("%02X%s", ptr[__i*6+__j], (__j==5)?"":"-");				\
 					DbgPrint("\n");													\
 				}																	\
@@ -773,16 +773,16 @@ typedef enum tag_DBGP_Flag_Type_Definition
 #define	PRINTABLE(_ch)	(_ch>=' ' &&_ch<='~' )	// I want to see ASCII 33 to 126 only. Otherwise, I print '?'. Annie, 2005-11-22.
 
 #define RT_PRINT_STR(_Comp, _Level, _TitleString, _Ptr, _Len)							\
-			if(((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
+			if (((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
 			{																		\
 				int		__i;															\
 				u1Byte	buffer[MAX_STR_LEN];											\
 				int	length = (_Len<MAX_STR_LEN)? _Len : (MAX_STR_LEN-1) ;				\
 				PlatformZeroMemory( buffer, MAX_STR_LEN );							\
 				PlatformMoveMemory( buffer, (pu1Byte)_Ptr, length );						\
-				for( __i=0; __i<MAX_STR_LEN; __i++ )									\
+				for ( __i=0; __i<MAX_STR_LEN; __i++ )									\
 				{																	\
-					if( !PRINTABLE(buffer[__i]) )	buffer[__i] = '?';						\
+					if ( !PRINTABLE(buffer[__i]) )	buffer[__i] = '?';						\
 				}																	\
 				buffer[length] = '\0';													\
 				DbgPrint("Rtl819x: ");													\
@@ -825,7 +825,7 @@ typedef enum tag_DBGP_Flag_Type_Definition
 				pu1Byte	ptr = (pu1Byte)_Ptr;	\
 				DbgPrint printstr;				\
 				DbgPrint(" ");					\
-				for( __i=0; __i<6; __i++ )		\
+				for ( __i=0; __i<6; __i++ )		\
 					DbgPrint("%02X%s", ptr[__i], (__i==5)?"":"-");		\
 				DbgPrint("\n");							\
 	}\
@@ -838,7 +838,7 @@ typedef enum tag_DBGP_Flag_Type_Definition
 		int __i;									\
 		pu1Byte	ptr = (pu1Byte)_HexData;			\
 		DbgPrint(_TitleString);					\
-		for( __i=0; __i<(int)_HexDataLen; __i++ )	\
+		for ( __i=0; __i<(int)_HexDataLen; __i++ )	\
 		{										\
 			DbgPrint("%02X%s", ptr[__i], (((__i + 1) % 4) == 0)?"  ":" ");\
 			if (((__i + 1) % 16) == 0)	DbgPrint("\n");\

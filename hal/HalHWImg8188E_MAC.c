@@ -156,7 +156,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
  	IN   PDM_ODM_T  pDM_Odm
  	)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
+	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
@@ -187,8 +187,8 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 #ifdef CONFIG_IOL_IOREG_CFG 			
 	biol = rtw_IOL_applied(Adapter);
 	
-	if(biol){		
-		if((pxmit_frame=rtw_IOL_accquire_xmit_frame(Adapter)) == NULL)
+	if (biol){		
+		if ((pxmit_frame=rtw_IOL_accquire_xmit_frame(Adapter)) == NULL)
 		{
 			printk("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
@@ -207,9 +207,9 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	    	{
 	    		#ifdef CONFIG_IOL_IOREG_CFG 	
 				
-	 			if(biol){	
+	 			if (biol){	
 					
-					if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
+					if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 						bndy_cnt++;
 					rtw_IOL_append_WB_cmd(pxmit_frame,(u2Byte)v1, (u1Byte)v2,0xFF);
 					#ifdef CONFIG_IOL_IOREG_CFG_DBG
@@ -246,8 +246,8 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 		             		v2 != 0xCDCD && i < ArrayLen -2)
 		             {
 		             	#ifdef CONFIG_IOL_IOREG_CFG 
-	 				if(biol){	
-						if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
+	 				if (biol){	
+						if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 							bndy_cnt++;
 						rtw_IOL_append_WB_cmd(pxmit_frame,(u2Byte)v1, (u1Byte)v2,0xFF);
 						#ifdef CONFIG_IOL_IOREG_CFG_DBG
@@ -275,10 +275,10 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	}
 						
 #ifdef CONFIG_IOL_IOREG_CFG 
-	if(biol){
+	if (biol){
 		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__FUNCTION__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);		
 		
-		if(rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
+		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
 		{			
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG			
 			printk("~~~ IOL Config MAC Success !!! \n");
@@ -288,10 +288,10 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 				u1Byte cdata;
 				// HAL_STATUS_FAILURE;
 				printk("  MAC data compare => array_len:%d \n",cmpdata_idx);
-				for(idx=0;idx< cmpdata_idx;idx++)
+				for (idx=0;idx< cmpdata_idx;idx++)
 				{
 					cdata = ODM_Read1Byte(pDM_Odm, cmpdata[idx].addr);
-					if(cdata != cmpdata[idx].value){
+					if (cdata != cmpdata[idx].value){
 						printk("### MAC data compared failed !! addr:0x%04x, data:(0x%02x : 0x%02x) ###\n",
 							cmpdata[idx].addr,cmpdata[idx].value,cdata);
 						//rst = HAL_STATUS_FAILURE;
@@ -300,7 +300,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 
 
 				//dump data from TX packet buffer
-				//if(rst == HAL_STATUS_FAILURE)
+				//if (rst == HAL_STATUS_FAILURE)
 				{
 					rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
 				}	

@@ -108,7 +108,7 @@ do{\
 	pattrib_iv[2] = dot11txpn._byte_.TSC2;\
 	pattrib_iv[3] = ((keyidx & 0x3)<<6);\
 	dot11txpn.val = (dot11txpn.val == 0xffffff) ? 0: (dot11txpn.val+1);\
-}while(0)
+}while (0)
 
 
 #define TKIP_IV(pattrib_iv, dot11txpn, keyidx)\
@@ -122,7 +122,7 @@ do{\
 	pattrib_iv[6] = dot11txpn._byte_.TSC4;\
 	pattrib_iv[7] = dot11txpn._byte_.TSC5;\
 	dot11txpn.val = dot11txpn.val == 0xffffffffffffULL ? 0: (dot11txpn.val+1);\
-}while(0)
+}while (0)
 
 #define AES_IV(pattrib_iv, dot11txpn, keyidx)\
 do{\
@@ -135,7 +135,7 @@ do{\
 	pattrib_iv[6] = dot11txpn._byte_.TSC4;\
 	pattrib_iv[7] = dot11txpn._byte_.TSC5;\
 	dot11txpn.val = dot11txpn.val == 0xffffffffffffULL ? 0: (dot11txpn.val+1);\
-}while(0)
+}while (0)
 
 
 #define HWXMIT_ENTRY	4

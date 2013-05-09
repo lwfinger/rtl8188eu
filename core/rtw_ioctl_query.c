@@ -60,14 +60,14 @@ query_802_11_capability(
 
 
 	pCap->Length = sizeof(NDIS_802_11_CAPABILITY);
-	if(ulNumOfPairSupported > 1 )
+	if (ulNumOfPairSupported > 1 )
 		pCap->Length += 	(ulNumOfPairSupported-1) * sizeof(NDIS_802_11_AUTHENTICATION_ENCRYPTION);
 	
 	pCap->Version = 2;	
 	pCap->NoOfPMKIDs = NUM_PMKID_CACHE;	
 	pCap->NoOfAuthEncryptPairsSupported = ulNumOfPairSupported;
 
-	if( sizeof (szAuthEnc) <= 240 )		// 240 = 256 - 4*4	// SecurityInfo.szCapability: only 256 bytes in size.
+	if ( sizeof (szAuthEnc) <= 240 )		// 240 = 256 - 4*4	// SecurityInfo.szCapability: only 256 bytes in size.
 	{
 		_rtw_memcpy( pucAuthEncryptionSupported, (u8*)szAuthEnc,  sizeof (szAuthEnc) );
 		*pulOutLen = pCap->Length;
@@ -98,7 +98,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 	// Association Request related information
 	//------------------------------------------------------
 	// Req_1. AvailableRequestFixedIEs
-	if(psecnetwork!=NULL){
+	if (psecnetwork!=NULL){
 		
 	pAssocInfo->AvailableRequestFixedIEs |= NDIS_802_11_AI_REQFI_CAPABILITIES|NDIS_802_11_AI_REQFI_CURRENTAPADDRESS;
 	pAssocInfo->RequestFixedIEs.Capabilities = (unsigned short)* & psecnetwork->IEs[10];
@@ -107,25 +107,25 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 
 	pAssocInfo->OffsetRequestIEs = sizeof(NDIS_802_11_ASSOCIATION_INFORMATION);
 
-	if(check_fwstate( pmlmepriv, _FW_UNDER_LINKING|_FW_LINKED)==_TRUE)
+	if (check_fwstate( pmlmepriv, _FW_UNDER_LINKING|_FW_LINKED)==_TRUE)
 	{
 		
-		if(psecuritypriv->ndisauthtype>=Ndis802_11AuthModeWPA2)
+		if (psecuritypriv->ndisauthtype>=Ndis802_11AuthModeWPA2)
 			pDest[0] =48;		//RSN Information Element
 		else 
 			pDest[0] =221;	//WPA(SSN) Information Element
 		
 		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n Adapter->ndisauthtype==Ndis802_11AuthModeWPA)?0xdd:0x30 [%d]",pDest[0]));
 		supp_ie=&psecuritypriv->supplicant_ie[0];
-		for(i=0;i<supp_ie[0];i++)
+		for (i=0;i<supp_ie[0];i++)
 		{
 			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("IEs [%d] = 0x%x \n\n", i,supp_ie[i]));
 		}
 
 		i=13;	//0~11 is fixed information element		
 		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("i= %d tgt_network->network.IELength=%d\n\n", i,(int)psecnetwork->IELength));
-		while((i<supp_ie[0]) && (i<256)){
-			if((unsigned char)supp_ie[i]==pDest[0]){
+		while ((i<supp_ie[0]) && (i<256)){
+			if ((unsigned char)supp_ie[i]==pDest[0]){
 						_rtw_memcpy((u8 *)(pDest),
 							&supp_ie[i], 
 							supp_ie[1+i]+2);
@@ -134,7 +134,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 			}
 			
 			i=i+supp_ie[i+1]+2;
-			if(supp_ie[1+i]==0)
+			if (supp_ie[1+i]==0)
 				i=i+1;
 			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("iteration i=%d IEs [%d] = 0x%x \n\n", i,i,supp_ie[i+1]));
 			
@@ -155,10 +155,10 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 	// Association Response related information
 	//------------------------------------------------------
 
-	if(check_fwstate( pmlmepriv, _FW_LINKED)==_TRUE)
+	if (check_fwstate( pmlmepriv, _FW_LINKED)==_TRUE)
 	{
 		tgt_network =&(pmlmepriv->cur_network);
-		if(tgt_network!=NULL){
+		if (tgt_network!=NULL){
 		pAssocInfo->AvailableResponseFixedIEs =
 				NDIS_802_11_AI_RESFI_CAPABILITIES
 				|NDIS_802_11_AI_RESFI_ASSOCIATIONID
@@ -171,11 +171,11 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 		pDest = (u8 *)pAssocInfo + sizeof(NDIS_802_11_ASSOCIATION_INFORMATION)+pAssocInfo->RequestIELength;
 		auth_ie=&psecuritypriv->authenticator_ie[0];
 
-		for(i=0;i<auth_ie[0];i++)
+		for (i=0;i<auth_ie[0];i++)
 			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("IEs [%d] = 0x%x \n\n", i,auth_ie[i]));
 
 		i=auth_ie[0]-12;
-		if(i>0){
+		if (i>0){
 			_rtw_memcpy((u8 *)&pDest[0],&auth_ie[1],i);
 			pAssocInfo->ResponseIELength =i; 
 		}

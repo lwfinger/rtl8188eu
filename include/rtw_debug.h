@@ -155,21 +155,21 @@
 extern void rtl871x_cedbg(const char *fmt, ...);
 #endif
 
-#define RT_TRACE(_Comp, _Level, Fmt) do{}while(0)
-#define _func_enter_ do{}while(0)
-#define _func_exit_ do{}while(0)
-#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen) do{}while(0)
+#define RT_TRACE(_Comp, _Level, Fmt) do{}while (0)
+#define _func_enter_ do{}while (0)
+#define _func_exit_ do{}while (0)
+#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen) do{}while (0)
 
 #ifdef PLATFORM_WINDOWS
-	#define DBG_871X do {} while(0)
-	#define MSG_8192C do {} while(0)
-	#define DBG_8192C do {} while(0)
-	#define DBG_871X_LEVEL do {} while(0)
+	#define DBG_871X do {} while (0)
+	#define MSG_8192C do {} while (0)
+	#define DBG_8192C do {} while (0)
+	#define DBG_871X_LEVEL do {} while (0)
 #else
-	#define DBG_871X(x, ...) do {} while(0)
-	#define MSG_8192C(x, ...) do {} while(0)
-	#define DBG_8192C(x,...) do {} while(0)
-	#define DBG_871X_LEVEL(x,...) do {} while(0)
+	#define DBG_871X(x, ...) do {} while (0)
+	#define MSG_8192C(x, ...) do {} while (0)
+	#define DBG_8192C(x,...) do {} while (0)
+	#define DBG_871X_LEVEL(x,...) do {} while (0)
 #endif
 
 #undef	_dbgdump
@@ -199,7 +199,7 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 			else \
 				_dbgdump(DRIVER_PREFIX fmt, ##arg);\
 		}\
-	}while(0)
+	}while (0)
 #endif
 
 #ifdef CONFIG_DEBUG
@@ -207,17 +207,17 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 	#undef DBG_871X
 	#define DBG_871X(...)     do {\
 		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
-	}while(0)
+	}while (0)
 
 	#undef MSG_8192C
 	#define MSG_8192C(...)     do {\
 		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
-	}while(0)
+	}while (0)
 
 	#undef DBG_8192C
 	#define DBG_8192C(...)     do {\
 		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
-	}while(0)
+	}while (0)
 #endif
 #endif /* CONFIG_DEBUG */
 
@@ -232,11 +232,11 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 		#undef RT_TRACE
 		#define RT_TRACE(_Comp, _Level, Fmt)\
 		do {\
-			if((_Comp & GlobalDebugComponents) && (_Level <= GlobalDebugLevel)) {\
+			if ((_Comp & GlobalDebugComponents) && (_Level <= GlobalDebugLevel)) {\
 				_dbgdump("%s [0x%08x,%d]", DRIVER_PREFIX, (unsigned int)_Comp, _Level);\
 				_dbgdump Fmt;\
 			}\
-		}while(0)
+		}while (0)
 
 #endif
 
@@ -250,7 +250,7 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 			{																	\
 				_dbgdump("\n %s : %s enters at %d\n", DRIVER_PREFIX, __FUNCTION__, __LINE__);\
 			}		\
-		} while(0)
+		} while (0)
 
 		#undef  _func_exit_
 		#define _func_exit_ \
@@ -259,17 +259,17 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 			{																	\
 				_dbgdump("\n %s : %s exits at %d\n", DRIVER_PREFIX, __FUNCTION__, __LINE__); \
 			}	\
-		} while(0)
+		} while (0)
 
 		#undef RT_PRINT_DATA
 		#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)			\
-			if(((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
+			if (((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
 			{									\
 				int __i;								\
 				u8	*ptr = (u8 *)_HexData;				\
 				_dbgdump("%s", DRIVER_PREFIX);						\
 				_dbgdump(_TitleString);						\
-				for( __i=0; __i<(int)_HexDataLen; __i++ )				\
+				for ( __i=0; __i<(int)_HexDataLen; __i++ )				\
 				{								\
 					_dbgdump("%02X%s", ptr[__i], (((__i + 1) % 4) == 0)?"  ":" ");	\
 					if (((__i + 1) % 16) == 0)	_dbgdump("\n");			\

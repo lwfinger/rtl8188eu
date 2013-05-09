@@ -26,25 +26,25 @@ static inline void dump_buf(u8 *buf, u32 len)
 {
 	u32 i;
 	printk("-----------------Len %d----------------\n", len);
-	for(i=0; i<len; i++)
+	for (i=0; i<len; i++)
 		printk("%2.2x-", *(buf+i));
 	printk("\n");
 }
 
 #define WAPI_TRACE(component, x, args...) \
-do { if(wapi_debug_component & (component)) \
+do { if (wapi_debug_component & (component)) \
 	printk(KERN_DEBUG "WAPI" ":" x "" , \
 	       ##args);\
-}while(0);
+}while (0);
 
 #define WAPI_DATA(component, x, buf, len) \
-do { if(wapi_debug_component & (component)){ \
+do { if (wapi_debug_component & (component)){ \
 	printk("%s:\n", x);\
 	dump_buf((buf), (len));}\
-}while(0);
+}while (0);
 
 #define RT_ASSERT_RET(_Exp)								\
-		if(!(_Exp))									\
+		if (!(_Exp))									\
 		{											\
 			printk("RTWLAN: ");					\
                 	printk( "Assertion failed! %s,%s,line=%d\n", \
@@ -52,7 +52,7 @@ do { if(wapi_debug_component & (component)){ \
 			return;						\
 		}
 #define RT_ASSERT_RET_VALUE(_Exp,Ret)								\
-		if(!(_Exp))									\
+		if (!(_Exp))									\
 		{											\
 			printk("RTWLAN: ");					\
                 	printk( "Assertion failed! %s,%s,line=%d\n", \
@@ -61,10 +61,10 @@ do { if(wapi_debug_component & (component)){ \
 		}
 
 #else
-#define RT_ASSERT_RET(_Exp) do {} while(0)
-#define RT_ASSERT_RET_VALUE(_Exp,Ret) do {} while(0)
-#define WAPI_TRACE(component, x, args...) do {} while(0)
-#define WAPI_DATA(component, x, buf, len) do {} while(0)
+#define RT_ASSERT_RET(_Exp) do {} while (0)
+#define RT_ASSERT_RET_VALUE(_Exp,Ret) do {} while (0)
+#define WAPI_TRACE(component, x, args...) do {} while (0)
+#define WAPI_DATA(component, x, buf, len) do {} while (0)
 #endif
 
 

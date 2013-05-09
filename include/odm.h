@@ -85,7 +85,7 @@
 #define	Smooth_TH_3	4
 #define   Smooth_Step_Size 5
 #define	Adaptive_SIR	1
-#if(RTL8723_FPGA_VERIFICATION == 1)
+#if (RTL8723_FPGA_VERIFICATION == 1)
 #define	PSD_RESCAN		1
 #else
 #define	PSD_RESCAN		4
@@ -119,7 +119,7 @@
 // 2011/09/20 MH Add for AP/ADSLpseudo DM structuer requirement.
 // We need to remove to other position???
 //
-#if(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
 typedef		struct rtl8192cd_priv {
 	u1Byte		temp;
 
@@ -127,7 +127,7 @@ typedef		struct rtl8192cd_priv {
 #endif
 
 
-#if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 typedef		struct _ADAPTER{
 	u1Byte		temp;
 	#ifdef AP_BUILD_WORKAROUND
@@ -250,11 +250,11 @@ typedef struct _RX_High_Power_
 
 }RXHP_T, *pRXHP_T;
 
-#if(DM_ODM_SUPPORT_TYPE & (ODM_CE))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_CE))
 #define ASSOCIATE_ENTRY_NUM					32 // Max size of AsocEntry[].
 #define	ODM_ASSOCIATE_ENTRY_NUM				ASSOCIATE_ENTRY_NUM
 
-#elif(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
+#elif (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 #define ASSOCIATE_ENTRY_NUM					NUM_STAT
 #define	ODM_ASSOCIATE_ENTRY_NUM				ASSOCIATE_ENTRY_NUM+1
 
@@ -353,7 +353,7 @@ typedef struct _EDCA_TURBO_
 {
 	BOOLEAN bCurrentTurboEDCA;
 	BOOLEAN bIsCurRDLState;
-	#if(DM_ODM_SUPPORT_TYPE == ODM_CE	)
+	#if (DM_ODM_SUPPORT_TYPE == ODM_CE	)
 	u4Byte	prv_traffic_idx; // edca turbo
 	#endif
 
@@ -370,7 +370,7 @@ typedef struct _ODM_RATE_ADAPTIVE
 } ODM_RATE_ADAPTIVE, *PODM_RATE_ADAPTIVE;
 
 
-#if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 
 
 #ifdef ADSL_AP_BUILD_WORKAROUND
@@ -401,7 +401,7 @@ typedef enum _HT_IOT_PEER
 	HT_IOT_PEER_REALTEK_WOW 		= 15,	
 	HT_IOT_PEER_MAX 				= 16
 }HT_IOT_PEER_E, *PHTIOT_PEER_E;
-#endif//#if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
+#endif//#if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 
 
 
@@ -1070,7 +1070,7 @@ typedef enum _ANT_DIV_TYPE
 //
 // 2011/09/22 MH Copy from SD4 defined structure. We use to support PHY DM integration.
 //
-#if(DM_ODM_SUPPORT_TYPE & ODM_MP)
+#if (DM_ODM_SUPPORT_TYPE & ODM_MP)
 #if (RT_PLATFORM != PLATFORM_LINUX)
 typedef 
 #endif
@@ -1088,10 +1088,10 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	// WHen you use Adapter or priv pointer, you must make sure the pointer is ready.
 	BOOLEAN			odm_ready;
 
-#if(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
 	rtl8192cd_priv		fake_priv;
 #endif
-#if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	// ADSL_AP_BUILD_WORKAROUND
 	ADAPTER			fake_adapter;
 #endif
@@ -1332,7 +1332,7 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	#endif
 #endif
 
-#if(DM_ODM_SUPPORT_TYPE & ODM_MP)
+#if (DM_ODM_SUPPORT_TYPE & ODM_MP)
 	
 #if (RT_PLATFORM != PLATFORM_LINUX)
 } DM_ODM_T, *PDM_ODM_T;		// DM_Dynamic_Mechanism_Structure
@@ -1633,7 +1633,7 @@ ODM_RAStateCheck(
 	OUT		pu1Byte			pRATRState
 	);
 
-#if(DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_AP|ODM_ADSL))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_AP|ODM_ADSL))
 //============================================================
 // function prototype
 //============================================================
@@ -1664,7 +1664,7 @@ ODM_RateAdaptiveStateApInit(
 #define AP_InitRateAdaptiveState	ODM_RateAdaptiveStateApInit
 
 
-#if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 #ifdef WIFI_WMM
 VOID
 ODM_IotEdcaSwitch(
@@ -1680,7 +1680,7 @@ ODM_ChooseIotMainSTA(
 	);
 #endif
 
-#if(DM_ODM_SUPPORT_TYPE==ODM_AP)
+#if (DM_ODM_SUPPORT_TYPE==ODM_AP)
 #ifdef HW_ANT_SWITCH
 u1Byte
 ODM_Diversity_AntennaSelect(
@@ -1710,7 +1710,7 @@ VOID ODM_SwAntDivChkPerPktRssi(
 	IN PODM_PHY_INFO_T pPhyInfo
 	);
 
-#if((DM_ODM_SUPPORT_TYPE==ODM_MP)||(DM_ODM_SUPPORT_TYPE==ODM_CE))
+#if ((DM_ODM_SUPPORT_TYPE==ODM_MP)||(DM_ODM_SUPPORT_TYPE==ODM_CE))
 
 u4Byte ConvertTo_dB(u4Byte Value);
 
@@ -1737,7 +1737,7 @@ u4Byte ODM_Get_Rate_Bitmap(
 #endif
 	
 
-#if(DM_ODM_SUPPORT_TYPE & (ODM_MP))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_MP))
 #define	dm_PSDMonitorCallback	odm_PSDMonitorCallback
 VOID	odm_PSDMonitorCallback(PRT_TIMER		pTimer);
 
@@ -1962,7 +1962,7 @@ ODM_AntselStatistics_88C(
 	IN		BOOLEAN			isCCKrate
 );
 
-#if( DM_ODM_SUPPORT_TYPE & (ODM_MP |ODM_CE))
+#if ( DM_ODM_SUPPORT_TYPE & (ODM_MP |ODM_CE))
 
 VOID
 ODM_SingleDualAntennaDefaultSetting(
@@ -1975,7 +1975,7 @@ ODM_SingleDualAntennaDetection(
 	IN		u1Byte			mode
 	);
 
-#endif	// #if((DM_ODM_SUPPORT_TYPE==ODM_MP)||(DM_ODM_SUPPORT_TYPE==ODM_CE))
+#endif	// #if ((DM_ODM_SUPPORT_TYPE==ODM_MP)||(DM_ODM_SUPPORT_TYPE==ODM_CE))
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 void odm_dtc(PDM_ODM_T pDM_Odm);

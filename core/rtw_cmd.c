@@ -130,7 +130,7 @@ _func_enter_;
 #ifdef PLATFORM_OS_XP
 	pevtpriv->pc2h_mdl= IoAllocateMdl((u8 *)pevtpriv->c2h_mem, C2H_MEM_SZ , FALSE, FALSE, NULL);
 	
-	if(pevtpriv->pc2h_mdl == NULL){
+	if (pevtpriv->pc2h_mdl == NULL){
 		res= _FAIL;
 		goto exit;
 	}
@@ -172,7 +172,7 @@ _func_enter_;
 
 #ifdef CONFIG_C2H_WK
 	_cancel_workitem_sync(&pevtpriv->c2h_wk);
-	while(pevtpriv->c2h_wk_alive)
+	while (pevtpriv->c2h_wk_alive)
 		rtw_msleep_os(10);
 
 	while (!rtw_cbuf_empty(pevtpriv->c2h_queue)) {
@@ -194,7 +194,7 @@ void _rtw_free_cmd_priv (struct	cmd_priv *pcmdpriv)
 {
 _func_enter_;
 
-	if(pcmdpriv){
+	if (pcmdpriv){
 		_rtw_spinlock_free(&(pcmdpriv->cmd_queue.lock));
 		_rtw_free_sema(&(pcmdpriv->cmd_queue_sema));
 		//_rtw_free_sema(&(pcmdpriv->cmd_done_sema));
@@ -309,14 +309,14 @@ int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 	
 	#ifdef SUPPORT_HW_RFOFF_DETECTED
 	//To decide allow or not
-	if(	(pcmdpriv->padapter->pwrctrlpriv.bHWPwrPindetect)
+	if (	(pcmdpriv->padapter->pwrctrlpriv.bHWPwrPindetect)
 		&&(!pcmdpriv->padapter->registrypriv.usbss_enable)
 	)		
 	{
-		if(cmd_obj->cmdcode == GEN_CMD_CODE(_Set_Drv_Extra) ) 
+		if (cmd_obj->cmdcode == GEN_CMD_CODE(_Set_Drv_Extra) ) 
 		{
 			struct drvextra_cmd_parm	*pdrvextra_cmd_parm = (struct drvextra_cmd_parm	*)cmd_obj->parmbuf;	
-			if(pdrvextra_cmd_parm->ec_id == POWER_SAVING_CTRL_WK_CID)
+			if (pdrvextra_cmd_parm->ec_id == POWER_SAVING_CTRL_WK_CID)
 			{	
 				//DBG_871X("==>enqueue POWER_SAVING_CTRL_WK_CID\n");
 				bAllow = _TRUE;	
@@ -325,10 +325,10 @@ int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 	}
 	#endif
 
-	if(cmd_obj->cmdcode == GEN_CMD_CODE(_SetChannelPlan))
+	if (cmd_obj->cmdcode == GEN_CMD_CODE(_SetChannelPlan))
 		bAllow = _TRUE;
 
-	if( (pcmdpriv->padapter->hw_init_completed ==_FALSE && bAllow == _FALSE)
+	if ( (pcmdpriv->padapter->hw_init_completed ==_FALSE && bAllow == _FALSE)
 		|| pcmdpriv->cmdthd_running== _FALSE	//com_thread not running
 	)
 	{
@@ -363,14 +363,14 @@ _func_enter_;
 		pcmdpriv = &(padapter->pbuddy_adapter->cmdpriv);
 #endif	
 
-	if( _FAIL == (res=rtw_cmd_filter(pcmdpriv, cmd_obj)) ) {
+	if ( _FAIL == (res=rtw_cmd_filter(pcmdpriv, cmd_obj)) ) {
 		rtw_free_cmd_obj(cmd_obj);
 		goto exit;
 	}
 
 	res = _rtw_enqueue_cmd(&pcmdpriv->cmd_queue, cmd_obj);
 
-	if(res == _SUCCESS)
+	if (res == _SUCCESS)
 		_rtw_up_sema(&pcmdpriv->cmd_queue_sema);
 	
 exit:	
@@ -404,15 +404,15 @@ void rtw_free_cmd_obj(struct cmd_obj *pcmd)
 {
 _func_enter_;
 
-	if((pcmd->cmdcode!=_JoinBss_CMD_) &&(pcmd->cmdcode!= _CreateBss_CMD_))
+	if ((pcmd->cmdcode!=_JoinBss_CMD_) &&(pcmd->cmdcode!= _CreateBss_CMD_))
 	{
 		//free parmbuf in cmd_obj
 		rtw_mfree((unsigned char*)pcmd->parmbuf, pcmd->cmdsz);
 	}	
 	
-	if(pcmd->rsp!=NULL)
+	if (pcmd->rsp!=NULL)
 	{
-		if(pcmd->rspsz!= 0)
+		if (pcmd->rspsz!= 0)
 		{
 			//free rsp in cmd_obj
 			rtw_mfree((unsigned char*)pcmd->rsp, pcmd->rspsz);
@@ -447,7 +447,7 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("start r871x rtw_cmd_thread !!!!\n"));
 
-	while(1)
+	while (1)
 	{
 		if (_rtw_down_sema(&pcmdpriv->cmd_queue_sema) == _FAIL)
 			break;
@@ -476,14 +476,14 @@ _next:
 			break;
 		}
 
-		if(!(pcmd = rtw_dequeue_cmd(pcmdpriv))) {
+		if (!(pcmd = rtw_dequeue_cmd(pcmdpriv))) {
 #ifdef CONFIG_LPS_LCLK
 			rtw_unregister_cmd_alive(padapter);
 #endif
 			continue;
 		}
 
-		if( _FAIL == rtw_cmd_filter(pcmdpriv, pcmd) )
+		if ( _FAIL == rtw_cmd_filter(pcmdpriv, pcmd) )
 		{
 			pcmd->res = H2C_DROPPED;
 			goto post_process;
@@ -495,7 +495,7 @@ _next:
 
 		_rtw_memcpy(pcmdbuf, pcmd->parmbuf, pcmd->cmdsz);
 
-		if(pcmd->cmdcode <= (sizeof(wlancmds) /sizeof(struct cmd_hdl)))
+		if (pcmd->cmdcode <= (sizeof(wlancmds) /sizeof(struct cmd_hdl)))
 		{
 			cmd_hdl = wlancmds[pcmd->cmdcode].h2cfuns;
 
@@ -517,10 +517,10 @@ _next:
 post_process:
 
 		//call callback function for post-processed
-		if(pcmd->cmdcode <= (sizeof(rtw_cmd_callback) /sizeof(struct _cmd_callback)))
+		if (pcmd->cmdcode <= (sizeof(rtw_cmd_callback) /sizeof(struct _cmd_callback)))
 		{
 			pcmd_callback = rtw_cmd_callback[pcmd->cmdcode].callback;
-			if(pcmd_callback == NULL)
+			if (pcmd_callback == NULL)
 			{
 				RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("mlme_cmd_hdl(): pcmd_callback=0x%p, cmdcode=0x%x\n", pcmd_callback, pcmd->cmdcode));
 				rtw_free_cmd_obj(pcmd);
@@ -548,13 +548,13 @@ post_process:
 	// free all cmd_obj resources
 	do{
 		pcmd = rtw_dequeue_cmd(pcmdpriv);
-		if(pcmd==NULL)
+		if (pcmd==NULL)
 			break;
 
 		//DBG_871X("%s: leaving... drop cmdcode:%u\n", __FUNCTION__, pcmd->cmdcode);
 
 		rtw_free_cmd_obj(pcmd);	
-	}while(1);
+	}while (1);
 
 	_rtw_up_sema(&pcmdpriv->terminate_cmdthread_sema);
 
@@ -624,7 +624,7 @@ void rtw_free_evt_obj(struct evt_obj *pevtobj)
 {
 _func_enter_;
 
-	if(pevtobj->parmbuf)
+	if (pevtobj->parmbuf)
 		rtw_mfree((unsigned char*)pevtobj->parmbuf, pevtobj->evtsz);
 	
 	rtw_mfree((unsigned char*)pevtobj, sizeof(struct evt_obj));
@@ -701,7 +701,7 @@ u8 rtw_sitesurvey_cmd(_adapter  *padapter, NDIS_802_11_SSID *ssid, int ssid_num,
 _func_enter_;
 
 #ifdef CONFIG_LPS
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE){
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE){
 		rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_SCAN, 1);
 	}
 #endif
@@ -763,12 +763,12 @@ _func_enter_;
 
 	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 
-	if(res == _SUCCESS) {
+	if (res == _SUCCESS) {
 
 		pmlmepriv->scan_start_time = rtw_get_current_time();
 
 #ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-		if((padapter->pbuddy_adapter->mlmeextpriv.mlmext_info.state&0x03) == WIFI_FW_AP_STATE)
+		if ((padapter->pbuddy_adapter->mlmeextpriv.mlmext_info.state&0x03) == WIFI_FW_AP_STATE)
 			_set_timer(&pmlmepriv->scan_to_timer, SURVEY_TO * ( 38 + ( 38 / RTW_SCAN_NUM_OF_CH ) * RTW_STAY_AP_CH_MILLISECOND ) + 1000 );
 		else
 #endif //CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
@@ -878,13 +878,13 @@ u8 rtw_setphy_cmd(_adapter *padapter, u8 modem, u8 ch)
 _func_enter_;	
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 		}
 	psetphypara = (struct setphy_parm*)rtw_zmalloc(sizeof(struct setphy_parm)); 
 
-	if(psetphypara==NULL){
+	if (psetphypara==NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -911,13 +911,13 @@ u8 rtw_setbbreg_cmd(_adapter*padapter, u8 offset, u8 val)
 	u8	res=_SUCCESS;
 _func_enter_;
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 		}
 	pwritebbparm = (struct writeBB_parm*)rtw_zmalloc(sizeof(struct writeBB_parm)); 
 
-	if(pwritebbparm==NULL){
+	if (pwritebbparm==NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -943,13 +943,13 @@ u8 rtw_getbbreg_cmd(_adapter  *padapter, u8 offset, u8 *pval)
 	
 _func_enter_;
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res=_FAIL;
 		goto exit;
 		}
 	prdbbparm = (struct readBB_parm*)rtw_zmalloc(sizeof(struct readBB_parm)); 
 
-	if(prdbbparm ==NULL){
+	if (prdbbparm ==NULL){
 		rtw_mfree((unsigned char *) ph2c, sizeof(struct	cmd_obj));
 		return _FAIL;
 	}
@@ -977,13 +977,13 @@ u8 rtw_setrfreg_cmd(_adapter  *padapter, u8 offset, u32 val)
 	u8	res=_SUCCESS;
 _func_enter_;
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;	
 		goto exit;
 	}
 	pwriterfparm = (struct writeRF_parm*)rtw_zmalloc(sizeof(struct writeRF_parm)); 
 
-	if(pwriterfparm==NULL){
+	if (pwriterfparm==NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -1010,13 +1010,13 @@ u8 rtw_getrfreg_cmd(_adapter  *padapter, u8 offset, u8 *pval)
 _func_enter_;
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 
 	prdrfparm = (struct readRF_parm*)rtw_zmalloc(sizeof(struct readRF_parm)); 
-	if(prdrfparm ==NULL){
+	if (prdrfparm ==NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -1089,7 +1089,7 @@ _func_enter_;
 	}
 		
 	pcmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(pcmd==NULL){
+	if (pcmd==NULL){
 		res= _FAIL;
 		goto exit;
 	}
@@ -1128,7 +1128,7 @@ u8 rtw_createbss_cmd_ex(_adapter  *padapter, unsigned char *pbss, unsigned int s
 _func_enter_;
 			
 	pcmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(pcmd==NULL){
+	if (pcmd==NULL){
 		res= _FAIL;
 		goto exit;
 	}
@@ -1178,7 +1178,7 @@ _func_enter_;
 	}
 
 	pcmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(pcmd==NULL){
+	if (pcmd==NULL){
 		res=_FAIL;
 		RT_TRACE(_module_rtl871x_cmd_c_, _drv_err_, ("rtw_joinbss_cmd: memory allocate for cmd_obj fail!!!\n"));
 		goto exit;
@@ -1198,7 +1198,7 @@ _func_enter_;
 	//for hidden ap to set fw_state here
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) != _TRUE)
 	{
-		switch(ndis_network_mode)
+		switch (ndis_network_mode)
 		{
 			case Ndis802_11IBSS:
 				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
@@ -1217,9 +1217,9 @@ _func_enter_;
 	}
 
 	psecnetwork=(WLAN_BSSID_EX *)&psecuritypriv->sec_bss;
-	if(psecnetwork==NULL)
+	if (psecnetwork==NULL)
 	{
-		if(pcmd !=NULL)
+		if (pcmd !=NULL)
 			rtw_mfree((unsigned char *)pcmd, sizeof(struct	cmd_obj));
 		
 		res=_FAIL;
@@ -1236,7 +1236,7 @@ _func_enter_;
 	auth=&psecuritypriv->authenticator_ie[0];
 	psecuritypriv->authenticator_ie[0]=(unsigned char)psecnetwork->IELength;
 
-	if((psecnetwork->IELength-12) < (256-1)) {
+	if ((psecnetwork->IELength-12) < (256-1)) {
 		_rtw_memcpy(&psecuritypriv->authenticator_ie[1], &psecnetwork->IEs[12], psecnetwork->IELength-12);
 	} else {
 		_rtw_memcpy(&psecuritypriv->authenticator_ie[1], &psecnetwork->IEs[12], (256-1));
@@ -1258,7 +1258,7 @@ _func_enter_;
 
 	pqospriv->qos_option = 0;
 	
-	if(pregistrypriv->wmm_enable)	
+	if (pregistrypriv->wmm_enable)	
 	{	
 		u32 tmp_len;
 		
@@ -1277,7 +1277,7 @@ _func_enter_;
 
 #ifdef CONFIG_80211N_HT
 	phtpriv->ht_option = _FALSE;
-	if(pregistrypriv->ht_enable)
+	if (pregistrypriv->ht_enable)
 	{
 		//	Added by Albert 2010/06/23
 		//	For the WEP mode, we will use the bg mode to do the connection to avoid some IOT issue.
@@ -1306,7 +1306,7 @@ _func_enter_;
 	#if 0
 	psecuritypriv->supplicant_ie[0]=(u8)psecnetwork->IELength;
 
-	if(psecnetwork->IELength < (256-1))
+	if (psecnetwork->IELength < (256-1))
 	{
 		_rtw_memcpy(&psecuritypriv->supplicant_ie[1], &psecnetwork->IEs[0], psecnetwork->IELength);
 	}
@@ -1406,13 +1406,13 @@ u8 rtw_setopmode_cmd(_adapter  *padapter, NDIS_802_11_NETWORK_INFRASTRUCTURE net
 _func_enter_;
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));			
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FALSE;
 		goto exit;
 	}
 	psetop = (struct setopmode_parm*)rtw_zmalloc(sizeof(struct setopmode_parm)); 
 
-	if(psetop==NULL){
+	if (psetop==NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		res=_FALSE;
 		goto exit;
@@ -1451,14 +1451,14 @@ _func_enter_;
 	}
 
 	psetstakey_para = (struct set_stakey_parm*)rtw_zmalloc(sizeof(struct set_stakey_parm));
-	if(psetstakey_para==NULL){
+	if (psetstakey_para==NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		res=_FAIL;
 		goto exit;
 	}
 
 	psetstakey_rsp = (struct set_stakey_rsp*)rtw_zmalloc(sizeof(struct set_stakey_rsp)); 
-	if(psetstakey_rsp == NULL){
+	if (psetstakey_rsp == NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		rtw_mfree((u8 *) psetstakey_para, sizeof(struct set_stakey_parm));
 		res=_FAIL;
@@ -1471,9 +1471,9 @@ _func_enter_;
 
 	_rtw_memcpy(psetstakey_para->addr, sta->hwaddr,ETH_ALEN);
 	
-	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE)){
+	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)){
 #ifdef CONFIG_TDLS		
-		if(sta->tdls_sta_state&TDLS_LINKED_STATE)
+		if (sta->tdls_sta_state&TDLS_LINKED_STATE)
 			psetstakey_para->algorithm=(u8)sta->dot118021XPrivacy;
 		else
 #endif //CONFIG_TDLS
@@ -1484,7 +1484,7 @@ _func_enter_;
 
 	if (unicast_key == _TRUE) {
 #ifdef CONFIG_TDLS
-		if((sta->tdls_sta_state&TDLS_LINKED_STATE)==TDLS_LINKED_STATE)
+		if ((sta->tdls_sta_state&TDLS_LINKED_STATE)==TDLS_LINKED_STATE)
 			_rtw_memcpy(&psetstakey_para->key, sta->tpk.tk, 16);
 		else
 #endif //CONFIG_TDLS
@@ -1518,7 +1518,7 @@ u8 rtw_clearstakey_cmd(_adapter *padapter, u8 *psta, u8 entry, u8 enqueue)
 
 _func_enter_;
 
-	if(!enqueue)
+	if (!enqueue)
 	{
 		clear_cam_entry(padapter, entry);
 	}
@@ -1531,14 +1531,14 @@ _func_enter_;
 		}
 
 		psetstakey_para = (struct set_stakey_parm*)rtw_zmalloc(sizeof(struct set_stakey_parm));
-		if(psetstakey_para==NULL){
+		if (psetstakey_para==NULL){
 			rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 			res=_FAIL;
 			goto exit;
 		}
 
 		psetstakey_rsp = (struct set_stakey_rsp*)rtw_zmalloc(sizeof(struct set_stakey_rsp)); 
-		if(psetstakey_rsp == NULL){
+		if (psetstakey_rsp == NULL){
 			rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 			rtw_mfree((u8 *) psetstakey_para, sizeof(struct set_stakey_parm));
 			res=_FAIL;
@@ -1575,13 +1575,13 @@ u8 rtw_setrttbl_cmd(_adapter  *padapter, struct setratable_parm *prate_table)
 _func_enter_;	
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 		}
 	psetrttblparm = (struct setratable_parm*)rtw_zmalloc(sizeof(struct setratable_parm)); 
 
-	if(psetrttblparm==NULL){
+	if (psetrttblparm==NULL){
 		rtw_mfree((unsigned char *) ph2c, sizeof(struct	cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -1607,13 +1607,13 @@ u8 rtw_getrttbl_cmd(_adapter  *padapter, struct getratable_rsp *pval)
 _func_enter_;	
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 	pgetrttblparm = (struct getratable_parm*)rtw_zmalloc(sizeof(struct getratable_parm)); 
 
-	if(pgetrttblparm==NULL){
+	if (pgetrttblparm==NULL){
 		rtw_mfree((unsigned char *) ph2c, sizeof(struct	cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -1649,20 +1649,20 @@ u8 rtw_setassocsta_cmd(_adapter  *padapter, u8 *mac_addr)
 _func_enter_;	
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 
 	psetassocsta_para = (struct set_assocsta_parm*)rtw_zmalloc(sizeof(struct set_assocsta_parm));
-	if(psetassocsta_para==NULL){
+	if (psetassocsta_para==NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		res=_FAIL;
 		goto exit;
 	}
 
 	psetassocsta_rsp = (struct set_stakey_rsp*)rtw_zmalloc(sizeof(struct set_assocsta_rsp)); 
-	if(psetassocsta_rsp==NULL){
+	if (psetassocsta_rsp==NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct	cmd_obj));
 		rtw_mfree((u8 *) psetassocsta_para, sizeof(struct set_assocsta_parm));
 		return _FAIL;
@@ -1694,13 +1694,13 @@ u8 rtw_addbareq_cmd(_adapter*padapter, u8 tid, u8 *addr)
 _func_enter_;	
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));	
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 	
 	paddbareq_parm = (struct addBaReq_parm*)rtw_zmalloc(sizeof(struct addBaReq_parm)); 
-	if(paddbareq_parm==NULL){
+	if (paddbareq_parm==NULL){
 		rtw_mfree((unsigned char *)ph2c, sizeof(struct	cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -1738,13 +1738,13 @@ _func_enter_;
 #endif
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));	
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 	
 	pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm)); 
-	if(pdrvextra_cmd_parm==NULL){
+	if (pdrvextra_cmd_parm==NULL){
 		rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -1796,7 +1796,7 @@ _func_enter_;
 	if (enqueue) {
 		/* need enqueue, prepare cmd_obj and enqueue */
 		pcmdobj = (struct cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-		if(pcmdobj == NULL){
+		if (pcmdobj == NULL){
 			rtw_mfree((u8 *)set_ch_parm, sizeof(*set_ch_parm));
 			res=_FAIL;
 			goto exit;
@@ -1806,7 +1806,7 @@ _func_enter_;
 		res = rtw_enqueue_cmd(pcmdpriv, pcmdobj);
 	} else {
 		/* no need to enqueue, do the cmd hdl directly and free cmd parameter */
-		if( H2C_SUCCESS !=set_ch_hdl(padapter, (u8 *)set_ch_parm) )
+		if ( H2C_SUCCESS !=set_ch_hdl(padapter, (u8 *)set_ch_parm) )
 			res = _FAIL;
 		
 		rtw_mfree((u8 *)set_ch_parm, sizeof(*set_ch_parm));
@@ -1836,24 +1836,24 @@ _func_enter_;
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_set_chplan_cmd\n"));
 
 	//check input parameter
-	if(!rtw_is_channel_plan_valid(chplan)) {
+	if (!rtw_is_channel_plan_valid(chplan)) {
 		res = _FAIL;
 		goto exit;
 	}
 
 	//prepare cmd parameter
 	setChannelPlan_param = (struct	SetChannelPlan_param *)rtw_zmalloc(sizeof(struct SetChannelPlan_param));
-	if(setChannelPlan_param == NULL) {
+	if (setChannelPlan_param == NULL) {
 		res= _FAIL;
 		goto exit;
 	}
 	setChannelPlan_param->channel_plan=chplan;
 
-	if(enqueue)
+	if (enqueue)
 	{
 		//need enqueue, prepare cmd_obj and enqueue
 		pcmdobj = (struct	cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-		if(pcmdobj == NULL){
+		if (pcmdobj == NULL){
 			rtw_mfree((u8 *)setChannelPlan_param, sizeof(struct SetChannelPlan_param));
 			res=_FAIL;
 			goto exit;
@@ -1865,14 +1865,14 @@ _func_enter_;
 	else
 	{
 		//no need to enqueue, do the cmd hdl directly and free cmd parameter
-		if( H2C_SUCCESS !=set_chplan_hdl(padapter, (unsigned char *)setChannelPlan_param) )
+		if ( H2C_SUCCESS !=set_chplan_hdl(padapter, (unsigned char *)setChannelPlan_param) )
 			res = _FAIL;
 		
 		rtw_mfree((u8 *)setChannelPlan_param, sizeof(struct SetChannelPlan_param));
 	}
 
 	//do something based on res...
-	if(res == _SUCCESS)
+	if (res == _SUCCESS)
 		padapter->mlmepriv.ChannelPlan = chplan;
 	
 exit:
@@ -1895,13 +1895,13 @@ _func_enter_;
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_led_blink_cmd\n"));
 	
 	pcmdobj = (struct	cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-	if(pcmdobj == NULL){
+	if (pcmdobj == NULL){
 		res=_FAIL;
 		goto exit;
 	}
 
 	ledBlink_param = (struct	LedBlink_param *)rtw_zmalloc(sizeof(struct	LedBlink_param));
-	if(ledBlink_param == NULL) {
+	if (ledBlink_param == NULL) {
 		rtw_mfree((u8 *)pcmdobj, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -1933,13 +1933,13 @@ _func_enter_;
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_set_csa_cmd\n"));
 	
 	pcmdobj = (struct	cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-	if(pcmdobj == NULL){
+	if (pcmdobj == NULL){
 		res=_FAIL;
 		goto exit;
 	}
 
 	setChannelSwitch_param = (struct SetChannelSwitch_param *)rtw_zmalloc(sizeof(struct	SetChannelSwitch_param));
-	if(setChannelSwitch_param == NULL) {
+	if (setChannelSwitch_param == NULL) {
 		rtw_mfree((u8 *)pcmdobj, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -1973,13 +1973,13 @@ _func_enter_;
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_set_tdls_cmd\n"));
 
 	pcmdobj = (struct	cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-	if(pcmdobj == NULL){
+	if (pcmdobj == NULL){
 		res=_FAIL;
 		goto exit;
 	}
 
 	TDLSoption= (struct TDLSoption_param *)rtw_zmalloc(sizeof(struct TDLSoption_param));
-	if(TDLSoption == NULL) {
+	if (TDLSoption == NULL) {
 		rtw_mfree((u8 *)pcmdobj, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -2020,15 +2020,15 @@ static void traffic_status_watchdog(_adapter *padapter)
 	//
 	// Determine if our traffic is busy now
 	//
-	if((check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE) 
+	if ((check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE) 
 		/*&& !MgntInitAdapterInProgress(pMgntInfo)*/)
 	{
 
 #ifdef CONFIG_BT_COEXIST
-		if( pmlmepriv->LinkDetectInfo.NumRxOkInPeriod > 50 ||
+		if ( pmlmepriv->LinkDetectInfo.NumRxOkInPeriod > 50 ||
 			pmlmepriv->LinkDetectInfo.NumTxOkInPeriod > 50 )
 #else // !CONFIG_BT_COEXIST
-		if( pmlmepriv->LinkDetectInfo.NumRxOkInPeriod > 100 ||
+		if ( pmlmepriv->LinkDetectInfo.NumRxOkInPeriod > 100 ||
 			pmlmepriv->LinkDetectInfo.NumTxOkInPeriod > 100 )
 #endif // !CONFIG_BT_COEXIST
 		{
@@ -2041,7 +2041,7 @@ static void traffic_status_watchdog(_adapter *padapter)
 		}
 
 		// Higher Tx/Rx data.
-		if( pmlmepriv->LinkDetectInfo.NumRxOkInPeriod > 4000 ||
+		if ( pmlmepriv->LinkDetectInfo.NumRxOkInPeriod > 4000 ||
 			pmlmepriv->LinkDetectInfo.NumTxOkInPeriod > 4000 )
 		{
 			bHigherBusyTraffic = _TRUE;
@@ -2062,7 +2062,7 @@ static void traffic_status_watchdog(_adapter *padapter)
 		if (bPktCount > 20 && !pmlmepriv->ftp_lock_flag) {
 			pmlmepriv->ftp_lock_flag = 1;
 			rtw_lock_suspend();
-		} else if(bPktCount == 0 && pmlmepriv->ftp_lock_flag) {
+		} else if (bPktCount == 0 && pmlmepriv->ftp_lock_flag) {
 			pmlmepriv->ftp_lock_flag = 0;
 			rtw_unlock_suspend();
 		}
@@ -2070,7 +2070,7 @@ static void traffic_status_watchdog(_adapter *padapter)
 		
 #ifdef CONFIG_TDLS
 #ifdef CONFIG_TDLS_AUTOSETUP
-		if( ( ptdlsinfo->watchdog_count % TDLS_WATCHDOG_PERIOD ) == 0 )	//10 * 2sec, periodically sending
+		if ( ( ptdlsinfo->watchdog_count % TDLS_WATCHDOG_PERIOD ) == 0 )	//10 * 2sec, periodically sending
 			issue_tdls_dis_req( padapter, NULL );
 		ptdlsinfo->watchdog_count++;
 #endif //CONFIG_TDLS_AUTOSETUP
@@ -2082,7 +2082,7 @@ static void traffic_status_watchdog(_adapter *padapter)
 #endif
 		{
 		// check traffic for  powersaving.
-		if( ((pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod + pmlmepriv->LinkDetectInfo.NumTxOkInPeriod) > 8 ) ||
+		if ( ((pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod + pmlmepriv->LinkDetectInfo.NumTxOkInPeriod) > 8 ) ||
 			(pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod > 2) )
 		{
 			//DBG_871X("Tx = %d, Rx = %d \n",pmlmepriv->LinkDetectInfo.NumTxOkInPeriod,pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod);
@@ -2094,7 +2094,7 @@ static void traffic_status_watchdog(_adapter *padapter)
 		}
 
 		// LeisurePS only work in infra mode.
-		if(bEnterPS)
+		if (bEnterPS)
 		{
 			LPS_Enter(padapter);
 		}
@@ -2133,7 +2133,7 @@ void dynamic_chk_wk_hdl(_adapter *padapter, u8 *pbuf, int sz)
 
 #ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 #ifdef CONFIG_AP_MODE
-	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
+	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
 	{			
 		expire_timeout_chk(padapter);
 	}
@@ -2144,7 +2144,7 @@ void dynamic_chk_wk_hdl(_adapter *padapter, u8 *pbuf, int sz)
 	rtw_hal_sreset_xmit_status_check(padapter);		
 	#endif	
 
-	//if(check_fwstate(pmlmepriv, _FW_UNDER_LINKING|_FW_UNDER_SURVEY)==_FALSE)
+	//if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING|_FW_UNDER_SURVEY)==_FALSE)
 	{
 		linked_status_chk(padapter);	
 		traffic_status_watchdog(padapter);
@@ -2173,13 +2173,13 @@ void lps_ctrl_wk_hdl(_adapter *padapter, u8 lps_ctrl_type)
 	
 _func_enter_;
 
-	if((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE)
+	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE)
 		|| (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE))
 	{
 		return;
 	}
 
-	switch(lps_ctrl_type)
+	switch (lps_ctrl_type)
 	{
 		case LPS_CTRL_SCAN:
 			//DBG_871X("LPS_CTRL_SCAN \n");
@@ -2259,19 +2259,19 @@ u8 rtw_lps_ctrl_wk_cmd(_adapter*padapter, u8 lps_ctrl_type, u8 enqueue)
 	
 _func_enter_;
 
-	//if(!pwrctrlpriv->bLeisurePs)
+	//if (!pwrctrlpriv->bLeisurePs)
 	//	return res;
 
-	if(enqueue)
+	if (enqueue)
 	{
 		ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));	
-		if(ph2c==NULL){
+		if (ph2c==NULL){
 			res= _FAIL;
 			goto exit;
 		}
 		
 		pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm)); 
-		if(pdrvextra_cmd_parm==NULL){
+		if (pdrvextra_cmd_parm==NULL){
 			rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
 			res= _FAIL;
 			goto exit;
@@ -2316,13 +2316,13 @@ u8 rtw_rpt_timer_cfg_cmd(_adapter*padapter, u16 minRptTime)
 
 _func_enter_;
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));	
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 
 	pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
-	if(pdrvextra_cmd_parm==NULL){
+	if (pdrvextra_cmd_parm==NULL){
 		rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -2359,18 +2359,18 @@ u8 rtw_antenna_select_cmd(_adapter*padapter, u8 antenna,u8 enqueue)
 
 _func_enter_;
 	rtw_hal_get_def_var(padapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &(bSupportAntDiv));
-	if(_FALSE == bSupportAntDiv )	return res;
+	if (_FALSE == bSupportAntDiv )	return res;
 
-	if(_TRUE == enqueue)
+	if (_TRUE == enqueue)
 	{
 		ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));	
-		if(ph2c==NULL){
+		if (ph2c==NULL){
 			res= _FAIL;
 			goto exit;
 		}
 
 		pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
-		if(pdrvextra_cmd_parm==NULL){
+		if (pdrvextra_cmd_parm==NULL){
 			rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
 			res= _FAIL;
 			goto exit;
@@ -2412,19 +2412,19 @@ u8 p2p_protocol_wk_cmd(_adapter*padapter, int intCmdType )
 	
 _func_enter_;
 
-	if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
+	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 	{
 		return res;
 	}
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));	
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 			
 	pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm)); 
-	if(pdrvextra_cmd_parm==NULL){
+	if (pdrvextra_cmd_parm==NULL){
 		rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -2462,13 +2462,13 @@ _func_enter_;
 #endif
 	
 	ppscmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));	
-	if(ppscmd==NULL){
+	if (ppscmd==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 		
 	pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm)); 
-	if(pdrvextra_cmd_parm==NULL){
+	if (pdrvextra_cmd_parm==NULL){
 		rtw_mfree((unsigned char *)ppscmd, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -2497,31 +2497,31 @@ static void rtw_chk_hi_queue_hdl(_adapter *padapter)
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
 	psta_bmc = rtw_get_bcmc_stainfo(padapter);
-	if(!psta_bmc)
+	if (!psta_bmc)
 		return;
 
-	if(psta_bmc->sleepq_len==0)
+	if (psta_bmc->sleepq_len==0)
 	{		
 		u8 val = 0;
 
-		//while((rtw_read32(padapter, 0x414)&0x00ffff00)!=0)
-		//while((rtw_read32(padapter, 0x414)&0x0000ff00)!=0)
+		//while ((rtw_read32(padapter, 0x414)&0x00ffff00)!=0)
+		//while ((rtw_read32(padapter, 0x414)&0x0000ff00)!=0)
 		
 		rtw_hal_get_hwreg(padapter, HW_VAR_CHK_HI_QUEUE_EMPTY, &val);		
 		
-		while(_FALSE == val)
+		while (_FALSE == val)
 		{
 			rtw_msleep_os(100);
 
 			cnt++;
 			
-			if(cnt>10)
+			if (cnt>10)
 				break;
 
 			rtw_hal_get_hwreg(padapter, HW_VAR_CHK_HI_QUEUE_EMPTY, &val);
 		}
 
-		if(cnt<=10)
+		if (cnt<=10)
 		{
 			pstapriv->tim_bitmap &= ~BIT(0);
 			pstapriv->sta_dz_bitmap &= ~BIT(0);
@@ -2545,13 +2545,13 @@ u8 rtw_chk_hi_queue_cmd(_adapter*padapter)
 	u8	res = _SUCCESS;
 	
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));	
-	if(ph2c==NULL){
+	if (ph2c==NULL){
 		res= _FAIL;
 		goto exit;
 	}
 			
 	pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm)); 
-	if(pdrvextra_cmd_parm==NULL){
+	if (pdrvextra_cmd_parm==NULL){
 		rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -2678,12 +2678,12 @@ u8 rtw_drvextra_cmd_hdl(_adapter *padapter, unsigned char *pbuf)
 {
 	struct drvextra_cmd_parm *pdrvextra_cmd;
 
-	if(!pbuf)
+	if (!pbuf)
 		return H2C_PARAMETERS_ERROR;
 
 	pdrvextra_cmd = (struct drvextra_cmd_parm*)pbuf;
 	
-	switch(pdrvextra_cmd->ec_id)
+	switch (pdrvextra_cmd->ec_id)
 	{
 		case DYNAMIC_CHK_WK_CID:
 			dynamic_chk_wk_hdl(padapter, pdrvextra_cmd->pbuf, pdrvextra_cmd->type_size);
@@ -2749,7 +2749,7 @@ void rtw_survey_cmd_callback(_adapter*	padapter ,  struct cmd_obj *pcmd)
 
 _func_enter_;
 
-	if(pcmd->res == H2C_DROPPED)
+	if (pcmd->res == H2C_DROPPED)
 	{
 		//TODO: cancel timer and do timeout handler directly...
 		//need to make timeout handlerOS independent
@@ -2802,13 +2802,13 @@ void rtw_joinbss_cmd_callback(_adapter*	padapter,  struct cmd_obj *pcmd)
 
 _func_enter_;	
 
-	if(pcmd->res == H2C_DROPPED)
+	if (pcmd->res == H2C_DROPPED)
 	{
 		//TODO: cancel timer and do timeout handler directly...
 		//need to make timeout handlerOS independent
 		_set_timer(&pmlmepriv->assoc_timer, 1);
 	}
-	else if(pcmd->res != H2C_SUCCESS)
+	else if (pcmd->res != H2C_SUCCESS)
 	{				
 		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("********Error:rtw_select_and_join_from_scanned_queue Wait Sema  Fail ************\n"));
 		_set_timer(&pmlmepriv->assoc_timer, 1);	
@@ -2831,7 +2831,7 @@ void rtw_createbss_cmd_callback(_adapter *padapter, struct cmd_obj *pcmd)
 
 _func_enter_;	
 
-	if((pcmd->res != H2C_SUCCESS))
+	if ((pcmd->res != H2C_SUCCESS))
 	{	
 		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\n ********Error: rtw_createbss_cmd_callback  Fail ************\n\n."));
 		_set_timer(&pmlmepriv->assoc_timer, 1 );		
@@ -2861,10 +2861,10 @@ _func_enter_;
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 	
 	
-	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) )
+	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) )
 	{
 		psta = rtw_get_stainfo(&padapter->stapriv, pnetwork->MacAddress);
-		if(!psta)
+		if (!psta)
 		{
 		psta = rtw_alloc_stainfo(&padapter->stapriv, pnetwork->MacAddress);
 		if (psta == NULL) 
@@ -2885,7 +2885,7 @@ _func_enter_;
 		if ( pwlan == NULL)
 		{
 			pwlan = rtw_get_oldest_wlan_network(&pmlmepriv->scanned_queue);
-			if( pwlan == NULL)
+			if ( pwlan == NULL)
 			{
 				RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\n Error:  can't get pwlan in rtw_joinbss_event_callback \n"));
 				_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
@@ -2913,7 +2913,7 @@ _func_enter_;
 		_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 
 #if 0		
-		if((pmlmepriv->fw_state) & WIFI_AP_STATE)
+		if ((pmlmepriv->fw_state) & WIFI_AP_STATE)
 		{
 			psta = rtw_alloc_stainfo(&padapter->stapriv, pnetwork->MacAddress);
 
@@ -2955,7 +2955,7 @@ void rtw_setstaKey_cmdrsp_callback(_adapter*	padapter ,  struct cmd_obj *pcmd)
 
 _func_enter_;	
 
-	if(psta==NULL)
+	if (psta==NULL)
 	{
 		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\nERROR: rtw_setstaKey_cmdrsp_callback => can't get sta_info \n\n"));
 		goto exit;
@@ -2981,7 +2981,7 @@ void rtw_setassocsta_cmdrsp_callback(_adapter*	padapter,  struct cmd_obj *pcmd)
 
 _func_enter_;	
 	
-	if(psta==NULL)
+	if (psta==NULL)
 	{
 		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\nERROR: setassocsta_cmdrsp_callbac => can't get sta_info \n\n"));
 		goto exit;

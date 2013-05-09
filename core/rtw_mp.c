@@ -50,7 +50,7 @@ u32 read_macreg(_adapter *padapter, u32 addr, u32 sz)
 {
 	u32 val = 0;
 
-	switch(sz)
+	switch (sz)
 	{
 		case 1:
 			val = rtw_read8(padapter, addr);
@@ -72,7 +72,7 @@ u32 read_macreg(_adapter *padapter, u32 addr, u32 sz)
 
 void write_macreg(_adapter *padapter, u32 addr, u32 val, u32 sz)
 {
-	switch(sz)
+	switch (sz)
 	{
 		case 1:
 			rtw_write8(padapter, addr, (u8)val);
@@ -169,7 +169,7 @@ void mp_wi_callback(
 	struct mp_wi_cntx	*pmp_wi_cntx=&pmppriv->wi_cntx;
 
 	// Execute specified action.
-	if(pmp_wi_cntx->curractfunc != NULL)
+	if (pmp_wi_cntx->curractfunc != NULL)
 	{
 		LARGE_INTEGER	cur_time;
 		ULONGLONG start_time, end_time;
@@ -426,7 +426,7 @@ MPT_InitializeAdapter(
 	//ledsetting = rtw_read32(pAdapter, REG_LEDCFG0);
 	//rtw_write32(pAdapter, REG_LEDCFG0, ledsetting & ~LED0DIS);
 	
-	if(IS_HARDWARE_TYPE_8192DU(pAdapter))
+	if (IS_HARDWARE_TYPE_8192DU(pAdapter))
 	{
 		rtw_write32(pAdapter, REG_LEDCFG0, 0x8888);
 	}
@@ -505,9 +505,9 @@ MPT_DeInitAdapter(
 #if 0 // for Windows
 	PlatformFreeWorkItem( &(pMptCtx->MptWorkItem) );
 
-	while(pMptCtx->bMptWorkItemInProgress)
+	while (pMptCtx->bMptWorkItemInProgress)
 	{
-		if(NdisWaitEvent(&(pMptCtx->MptWorkItemEvent), 50))
+		if (NdisWaitEvent(&(pMptCtx->MptWorkItemEvent), 50))
 		{
 			break;
 		}
@@ -727,7 +727,7 @@ void mp_stop_test(PADAPTER padapter)
 
 	_irqL irqL;
 	
-	if(pmppriv->mode==MP_ON)
+	if (pmppriv->mode==MP_ON)
 	{
 	pmppriv->bSetTxPower=0;
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);	
@@ -1200,7 +1200,7 @@ void SetPacketTx(PADAPTER padapter)
 	desc->txdw4 |= cpu_to_le32(USERATE);
 	desc->txdw4 |= cpu_to_le32(DISDATAFB);
 
-	if( pmp_priv->preamble ){
+	if ( pmp_priv->preamble ){
 		if (pmp_priv->rateidx <=  MPT_RATE_54M)
 			desc->txdw4 |= cpu_to_le32(DATA_SHORT); // CCK Short Preamble
 	}
@@ -1210,7 +1210,7 @@ void SetPacketTx(PADAPTER padapter)
 	// offset 20
 	desc->txdw5 |= cpu_to_le32(pmp_priv->rateidx & 0x0000001F);
 
-	if( pmp_priv->preamble ){
+	if ( pmp_priv->preamble ){
 		if (pmp_priv->rateidx > MPT_RATE_54M)
 			desc->txdw5 |= cpu_to_le32(SGI); // MCS Short Guard Interval
 	}
@@ -1274,7 +1274,7 @@ void SetPacketRx(PADAPTER pAdapter, u8 bStartRx)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
-	if(bStartRx)
+	if (bStartRx)
 	{
 		// Accept CRC error and destination address
 #if 1
@@ -1438,7 +1438,7 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 	
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 	u32 num_xmit_extbuf = NR_XMIT_EXTBUFF;
-	if(padapter->registrypriv.mp_mode ==0)
+	if (padapter->registrypriv.mp_mode ==0)
 	{
 		max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 		num_xmit_extbuf = NR_XMIT_EXTBUFF;
@@ -1450,18 +1450,18 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 	}
 
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
-	for(i=0; i<num_xmit_extbuf; i++)
+	for (i=0; i<num_xmit_extbuf; i++)
 	{
 		rtw_os_xmit_resource_free(padapter, pxmitbuf,(max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
 		
 		pxmitbuf++;
 	}
 
-	if(pxmitpriv->pallocated_xmit_extbuf) {
+	if (pxmitpriv->pallocated_xmit_extbuf) {
 		rtw_vmfree(pxmitpriv->pallocated_xmit_extbuf, num_xmit_extbuf * sizeof(struct xmit_buf) + 4);
 	}
 
-	if(padapter->registrypriv.mp_mode ==0)
+	if (padapter->registrypriv.mp_mode ==0)
 	{
 		max_xmit_extbuf_size = 20000;
 		num_xmit_extbuf = 1;
@@ -1506,7 +1506,7 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 		pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), 4);
 */		
 
-		if((res=rtw_os_xmit_resource_alloc(padapter, pxmitbuf,max_xmit_extbuf_size + XMITBUF_ALIGN_SZ)) == _FAIL) {
+		if ((res=rtw_os_xmit_resource_alloc(padapter, pxmitbuf,max_xmit_extbuf_size + XMITBUF_ALIGN_SZ)) == _FAIL) {
 			res= _FAIL;
 			goto exit;
 		}

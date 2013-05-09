@@ -61,12 +61,12 @@ Efuse_Read1ByteFromFakeContent(
 	IN		u16		Offset,
 	IN OUT	u8		*Value	)
 {
-	if(Offset >= EFUSE_MAX_HW_SIZE)
+	if (Offset >= EFUSE_MAX_HW_SIZE)
 	{
 		return _FALSE;
 	}
 	//DbgPrint("Read fake content, offset = %d\n", Offset);
-	if(fakeEfuseBank == 0)
+	if (fakeEfuseBank == 0)
 		*Value = fakeEfuseContent[Offset];
 	else
 		*Value = fakeBTEfuseContent[fakeEfuseBank-1][Offset];
@@ -84,11 +84,11 @@ Efuse_Write1ByteToFakeContent(
 	IN		u16		Offset,
 	IN 		u8		Value	)
 {
-	if(Offset >= EFUSE_MAX_HW_SIZE)
+	if (Offset >= EFUSE_MAX_HW_SIZE)
 	{
 		return _FALSE;
 	}
-	if(fakeEfuseBank == 0)
+	if (fakeEfuseBank == 0)
 		fakeEfuseContent[Offset] = Value;
 	else
 	{
@@ -158,10 +158,10 @@ u8
 Efuse_CalculateWordCnts(IN u8	word_en)
 {
 	u8 word_cnts = 0;
-	if(!(word_en & BIT(0)))	word_cnts++; // 0 : write enable
-	if(!(word_en & BIT(1)))	word_cnts++;
-	if(!(word_en & BIT(2)))	word_cnts++;
-	if(!(word_en & BIT(3)))	word_cnts++;
+	if (!(word_en & BIT(0)))	word_cnts++; // 0 : write enable
+	if (!(word_en & BIT(1)))	word_cnts++;
+	if (!(word_en & BIT(2)))	word_cnts++;
+	if (!(word_en & BIT(3)))	word_cnts++;
 	return word_cnts;
 }
 
@@ -188,7 +188,7 @@ ReadEFuseByte(
 	u16	retry;
 	//u32 start=rtw_get_current_time();
 
-	if(bPseudoTest)
+	if (bPseudoTest)
 	{
 		Efuse_Read1ByteFromFakeContent(Adapter, _offset, pbuf);
 		return;
@@ -206,8 +206,8 @@ ReadEFuseByte(
 	//Check bit 32 read-ready
 	retry = 0;
 	value32 = rtw_read32(Adapter, EFUSE_CTRL);
-	//while(!(((value32 >> 24) & 0xff) & 0x80)  && (retry<10))
-	while(!(((value32 >> 24) & 0xff) & 0x80)  && (retry<10000))
+	//while (!(((value32 >> 24) & 0xff) & 0x80)  && (retry<10))
+	while (!(((value32 >> 24) & 0xff) & 0x80)  && (retry<10000))
 	{
 		value32 = rtw_read32(Adapter, EFUSE_CTRL);
 		retry++;
@@ -324,11 +324,11 @@ EFUSE_Read1Byte(
 
 		//Wait Write-ready (0x30[31]=1)
 		Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
-		while(!(Bytetemp & 0x80))
+		while (!(Bytetemp & 0x80))
 		{				
 			Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
 			k++;
-			if(k==1000)
+			if (k==1000)
 			{
 				k=0;
 				break;
@@ -378,7 +378,7 @@ EFUSE_Write1Byte(
 	//RT_TRACE(COMP_EFUSE, DBG_LOUD, ("Addr=%x Data =%x\n", Address, Value));
 	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI , TYPE_EFUSE_REAL_CONTENT_LEN, (PVOID)&contentLen, _FALSE);
 
-	if( Address < contentLen)	//E-fuse 512Byte
+	if ( Address < contentLen)	//E-fuse 512Byte
 	{
 		rtw_write8(Adapter, EFUSE_CTRL, Value);
 
@@ -398,11 +398,11 @@ EFUSE_Write1Byte(
 
 		//Wait Write-ready (0x30[31]=0)
 		Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
-		while(Bytetemp & 0x80)
+		while (Bytetemp & 0x80)
 		{
 			Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);			
 			k++;
-			if(k==100)
+			if (k==100)
 			{
 				k=0;
 				break;
@@ -422,7 +422,7 @@ efuse_OneByteRead(
 	u8	tmpidx = 0;
 	u8	bResult;
 
-	if(bPseudoTest)
+	if (bPseudoTest)
 	{
 		bResult = Efuse_Read1ByteFromFakeContent(pAdapter, addr, data);
 		return bResult;
@@ -435,11 +435,11 @@ efuse_OneByteRead(
 
 	rtw_write8(pAdapter, EFUSE_CTRL+3,  0x72);//read cmd	
 
-	while(!(0x80 &rtw_read8(pAdapter, EFUSE_CTRL+3))&&(tmpidx<100))
+	while (!(0x80 &rtw_read8(pAdapter, EFUSE_CTRL+3))&&(tmpidx<100))
 	{
 		tmpidx++;
 	}
-	if(tmpidx<100)
+	if (tmpidx<100)
 	{			
 		*data=rtw_read8(pAdapter, EFUSE_CTRL);		
 		bResult = _TRUE;
@@ -463,7 +463,7 @@ efuse_OneByteWrite(
 	u8	tmpidx = 0;
 	u8	bResult;
 
-	if(bPseudoTest)
+	if (bPseudoTest)
 	{
 		bResult = Efuse_Write1ByteToFakeContent(pAdapter, addr, data);
 		return bResult;
@@ -481,11 +481,11 @@ efuse_OneByteWrite(
 
 	rtw_write8(pAdapter, EFUSE_CTRL+3, 0xF2);//write cmd
 		
-	while((0x80 &  rtw_read8(pAdapter, EFUSE_CTRL+3)) && (tmpidx<100) ){
+	while ((0x80 &  rtw_read8(pAdapter, EFUSE_CTRL+3)) && (tmpidx<100) ){
 		tmpidx++;
 	}
 	
-	if(tmpidx<100)
+	if (tmpidx<100)
 	{					
 		bResult = _TRUE;
 	}
@@ -716,7 +716,7 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 		return _FAIL;
 
 	map = rtw_zmalloc(mapLen);
-	if(map == NULL){
+	if (map == NULL){
 		return _FAIL;
 	}
 
@@ -772,7 +772,7 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 			DBG_871X("offset=%x \n",offset);
 			DBG_871X("word_en=%x \n",word_en);
 
-			for(i=0;i<PGPKT_DATA_SIZE;i++)
+			for (i=0;i<PGPKT_DATA_SIZE;i++)
 			{
 				DBG_871X("data=%x \t",newdata[i]);
 			}
@@ -814,7 +814,7 @@ u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 		return _FAIL;
 
 	map = rtw_zmalloc(mapLen);
-	if(map == NULL){
+	if (map == NULL){
 		return _FAIL;
 	}
 
@@ -1099,7 +1099,7 @@ void EFUSE_ShadowMapUpdate(
 	else
 	{
 		#ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE			
-		if(_SUCCESS != retriveAdaptorInfoFile(pAdapter->registrypriv.adaptor_info_caching_file_path, pEEPROM)) {
+		if (_SUCCESS != retriveAdaptorInfoFile(pAdapter->registrypriv.adaptor_info_caching_file_path, pEEPROM)) {
 		#endif
 		
 		Efuse_ReadAllMap(pAdapter, efuseType, pEEPROM->efuse_eeprom_data, bPseudoTest);
@@ -1207,14 +1207,14 @@ Efuse_InitSomeVar(
 	_rtw_memset((PVOID)&fakeEfuseInitMap[0], 0xff, EFUSE_MAX_MAP_LEN);
 	_rtw_memset((PVOID)&fakeEfuseModifiedMap[0], 0xff, EFUSE_MAX_MAP_LEN);
 
-	for(i=0; i<EFUSE_MAX_BT_BANK; i++)
+	for (i=0; i<EFUSE_MAX_BT_BANK; i++)
 	{
 		_rtw_memset((PVOID)&BTEfuseContent[i][0], EFUSE_MAX_HW_SIZE, 0xff);
 	}
 	_rtw_memset((PVOID)&BTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 	_rtw_memset((PVOID)&BTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 
-	for(i=0; i<EFUSE_MAX_BT_BANK; i++)
+	for (i=0; i<EFUSE_MAX_BT_BANK; i++)
 	{
 		_rtw_memset((PVOID)&fakeBTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
 	}
@@ -1235,9 +1235,9 @@ int storeAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 {
 	int ret =_SUCCESS;
 
-	if(path && eeprom_priv) {
+	if (path && eeprom_priv) {
 		ret = rtw_store_to_file(path, eeprom_priv->efuse_eeprom_data, EEPROM_MAX_SIZE_512);
-		if(ret == EEPROM_MAX_SIZE)
+		if (ret == EEPROM_MAX_SIZE)
 			ret = _SUCCESS;
 		else
 			ret = _FAIL;
@@ -1254,17 +1254,17 @@ int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 	mm_segment_t oldfs;
 	struct file *fp;
 	
-	if(path && eeprom_priv) {
+	if (path && eeprom_priv) {
 
 		ret = rtw_retrive_from_file(path, eeprom_priv->efuse_eeprom_data, EEPROM_MAX_SIZE);
 		
-		if(ret == EEPROM_MAX_SIZE)
+		if (ret == EEPROM_MAX_SIZE)
 			ret = _SUCCESS;
 		else
 			ret = _FAIL;
 
 		#if 0
-		if(isAdaptorInfoFileValid()) {	
+		if (isAdaptorInfoFileValid()) {	
 			return 0;
 		} else {
 			return _FAIL;

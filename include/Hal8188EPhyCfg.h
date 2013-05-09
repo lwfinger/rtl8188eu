@@ -376,10 +376,10 @@ storePwrIndexDiffRateOffset(
 
 #define	SIC_MAX_POLL_CNT		5
 
-#if(SIC_HW_SUPPORT == 1)
+#if (SIC_HW_SUPPORT == 1)
 #define	SIC_CMD_READY			0
 #define	SIC_CMD_PREWRITE		0x1
-#if(RTL8188E_SUPPORT == 1)
+#if (RTL8188E_SUPPORT == 1)
 #define	SIC_CMD_WRITE			0x40
 #define	SIC_CMD_PREREAD		0x2
 #define	SIC_CMD_READ			0x80
@@ -407,7 +407,7 @@ storePwrIndexDiffRateOffset(
 #define	SIC_CMD_WRITE			1
 #define	SIC_CMD_READ			2
 
-#if(RTL8188E_SUPPORT == 1)
+#if (RTL8188E_SUPPORT == 1)
 #define	SIC_CMD_REG			0x1EB		// 1byte
 #define	SIC_ADDR_REG			0x1E8		// 1b9~1ba, 2 bytes
 #define	SIC_DATA_REG			0x1EC		// 1bc~1bf
@@ -418,7 +418,7 @@ storePwrIndexDiffRateOffset(
 #endif
 #endif
 
-#if(SIC_ENABLE == 1)
+#if (SIC_ENABLE == 1)
 VOID SIC_Init(IN PADAPTER Adapter);
 #endif
 

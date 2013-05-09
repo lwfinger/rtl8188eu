@@ -55,10 +55,10 @@ atomic_t _malloc_size = ATOMIC_INIT(0);
 * @return: one of RTW_STATUS_CODE
 */
 inline int RTW_STATUS_CODE(int error_code){
-	if(error_code >=0)
+	if (error_code >=0)
 		return _SUCCESS;
 
-	switch(error_code) {
+	switch (error_code) {
 		//case -ETIMEDOUT:
 		//	return RTW_STATUS_TIMEDOUT;
 		default:
@@ -76,17 +76,17 @@ u32 rtw_atoi(u8* s)
 
 	int num=0,flag=0;
 	int i;
-	for(i=0;i<=strlen(s);i++)
+	for (i=0;i<=strlen(s);i++)
 	{
-	  if(s[i] >= '0' && s[i] <= '9')
+	  if (s[i] >= '0' && s[i] <= '9')
 		 num = num * 10 + s[i] -'0';
-	  else if(s[0] == '-' && i==0) 
+	  else if (s[0] == '-' && i==0) 
 		 flag =1;
 	  else 
 		  break;
 	 }
 
-	if(flag == 1)
+	if (flag == 1)
 	   num = num * -1;
 
 	 return(num); 
@@ -166,7 +166,7 @@ u8* _rtw_malloc(u32 sz)
 
 #ifdef PLATFORM_LINUX
 #ifdef RTK_DMP_PLATFORM
-	if(sz > 0x4000)
+	if (sz > 0x4000)
 		pbuf = (u8 *)dvr_malloc(sz);
 	else
 #endif		
@@ -224,7 +224,7 @@ void	_rtw_mfree(u8 *pbuf, u32 sz)
 
 #ifdef	PLATFORM_LINUX
 #ifdef RTK_DMP_PLATFORM
-	if(sz > 0x4000)
+	if (sz > 0x4000)
 		dvr_free(pbuf);
 	else
 #endif
@@ -306,7 +306,7 @@ void rtw_update_mem_stat(u8 flag, u32 sz)
 	static u32 update_time = 0;
 	int peak, alloc;
 
-	if(!update_time) {
+	if (!update_time) {
 		ATOMIC_SET(&rtw_dbg_mem_stat.vir_alloc,0);
 		ATOMIC_SET(&rtw_dbg_mem_stat.vir_peak,0);
 		ATOMIC_SET(&rtw_dbg_mem_stat.vir_alloc_err,0);
@@ -315,7 +315,7 @@ void rtw_update_mem_stat(u8 flag, u32 sz)
 		ATOMIC_SET(&rtw_dbg_mem_stat.phy_alloc_err,0);
 	}
 		
-	switch(flag) {
+	switch (flag) {
 		case MEM_STAT_VIR_ALLOC_SUCCESS:
 			alloc = ATOMIC_ADD_RETURN(&rtw_dbg_mem_stat.vir_alloc, sz);
 			peak=ATOMIC_READ(&rtw_dbg_mem_stat.vir_peak);
@@ -434,7 +434,7 @@ inline u8* dbg_rtw_malloc(u32 sz, const char *func, int line)
 {
 	u8 *p;
 	
-	if((sz)>4096) 
+	if ((sz)>4096) 
 		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); 
 
 	p=_rtw_malloc((sz));
@@ -451,7 +451,7 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line)
 {
 	u8 *p;
 
-	if((sz)>4096)
+	if ((sz)>4096)
 		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
 
 	p = _rtw_zmalloc((sz));
@@ -467,7 +467,7 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line)
 
 inline void dbg_rtw_mfree(u8 *pbuf, u32 sz, const char *func, int line)
 {
-	if((sz)>4096)
+	if ((sz)>4096)
 		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%p,%d)\n", func, line, __FUNCTION__, (pbuf), (sz));
 	
 	_rtw_mfree((pbuf), (sz));
@@ -484,13 +484,13 @@ void* rtw_malloc2d(int h, int w, int size)
 	int j;
 
 	void **a = (void **) rtw_zmalloc( h*sizeof(void *) + h*w*size );
-	if(a == NULL)
+	if (a == NULL)
 	{
 		DBG_871X("%s: alloc memory fail!\n", __FUNCTION__);
 		return NULL;
 	}
 
-	for( j=0; j<h; j++ )
+	for ( j=0; j<h; j++ )
 		a[j] = ((char *)(a+h)) + j*w*size;
 
 	return a;
@@ -583,10 +583,10 @@ struct sk_buff * dev_alloc_skb(unsigned int size)
 	
 	//skb = (struct sk_buff *)_rtw_zmalloc(sizeof(struct sk_buff)); // for skb->len, etc.
 	skb = (struct sk_buff *)_rtw_malloc(sizeof(struct sk_buff));
-	if(!skb)
+	if (!skb)
 		goto out;
 	data = _rtw_malloc(size);
-	if(!data)
+	if (!data)
 		goto nodata;
 
 	skb->head = (unsigned char*)data;
@@ -608,10 +608,10 @@ goto out;
 void dev_kfree_skb_any(struct sk_buff *skb)
 {
 	//printf("%s()-%d: skb->head = %p\n", __FUNCTION__, __LINE__, skb->head);
-	if(skb->head)
+	if (skb->head)
 		_rtw_mfree(skb->head, 0);
 	//printf("%s()-%d: skb = %p\n", __FUNCTION__, __LINE__, skb);
-	if(skb)
+	if (skb)
 		_rtw_mfree((u8 *)skb, 0);
 }
 struct sk_buff *skb_clone(const struct sk_buff *skb)
@@ -745,7 +745,7 @@ void _rtw_init_sema(_sema	*sema, int init_val)
 #endif
 	
 #ifdef PLATFORM_OS_CE
-	if(*sema == NULL)
+	if (*sema == NULL)
 		*sema = CreateSemaphore(NULL, init_val, SEMA_UPBND, NULL);
 #endif
 
@@ -801,14 +801,14 @@ u32 _rtw_down_sema(_sema *sema)
 #endif
 #ifdef PLATFORM_OS_XP
 
-	if(STATUS_SUCCESS == KeWaitForSingleObject(sema, Executive, KernelMode, TRUE, NULL))
+	if (STATUS_SUCCESS == KeWaitForSingleObject(sema, Executive, KernelMode, TRUE, NULL))
 		return  _SUCCESS;
 	else
 		return _FAIL;
 #endif
 
 #ifdef PLATFORM_OS_CE
-	if(WAIT_OBJECT_0 == WaitForSingleObject(*sema, INFINITE ))
+	if (WAIT_OBJECT_0 == WaitForSingleObject(*sema, INFINITE ))
 		return _SUCCESS; 
 	else
 		return _FAIL;
@@ -903,7 +903,7 @@ void	_rtw_spinlock_free(_lock *plock)
 extern PADAPTER prtw_lock;
 
 void rtw_mtx_lock(_lock *plock){
-	if(prtw_lock){
+	if (prtw_lock){
 		mtx_lock(&prtw_lock->glock);
 	}
 	else{
@@ -911,7 +911,7 @@ void rtw_mtx_lock(_lock *plock){
 	}
 }
 void rtw_mtx_unlock(_lock *plock){
-	if(prtw_lock){
+	if (prtw_lock){
 		mtx_unlock(&prtw_lock->glock);
 	}
 	else{
@@ -1182,7 +1182,7 @@ void rtw_usleep_os(int us)
 void _rtw_mdelay_os(int ms, const char *func, const int line)
 {
 	#if 0
-	if(ms>10)
+	if (ms>10)
 		DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, ms);
 		rtw_msleep_os(ms);
 	return;
@@ -1207,7 +1207,7 @@ void _rtw_udelay_os(int us, const char *func, const int line)
 {
 
 	#if 0
-	if(us > 1000) {
+	if (us > 1000) {
 	DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, us);
 		rtw_usleep_os(us);
 		return;
@@ -1478,7 +1478,7 @@ static int openFile(struct file **fpp, char *path, int flag, int mode)
 	struct file *fp; 
  
 	fp=filp_open(path, flag, mode); 
-	if(IS_ERR(fp)) {
+	if (IS_ERR(fp)) {
 		*fpp=NULL;
 		return PTR_ERR(fp);
 	}
@@ -1506,11 +1506,11 @@ static int readFile(struct file *fp,char *buf,int len)
 	if (!fp->f_op || !fp->f_op->read) 
 		return -EPERM;
 
-	while(sum<len) {
+	while (sum<len) {
 		rlen=fp->f_op->read(fp,buf+sum,len-sum, &fp->f_pos);
-		if(rlen>0)
+		if (rlen>0)
 			sum+=rlen;
-		else if(0 != rlen)
+		else if (0 != rlen)
 			return rlen;
 		else
 			break;
@@ -1527,11 +1527,11 @@ static int writeFile(struct file *fp,char *buf,int len)
 	if (!fp->f_op || !fp->f_op->write) 
 		return -EPERM; 
 
-	while(sum<len) {
+	while (sum<len) {
 		wlen=fp->f_op->write(fp,buf+sum,len-sum, &fp->f_pos);
-		if(wlen>0)
+		if (wlen>0)
 			sum+=wlen;
-		else if(0 != wlen)
+		else if (0 != wlen)
 			return wlen;
 		else
 			break;
@@ -1554,13 +1554,13 @@ static int isFileReadable(char *path)
 	char buf;
  
 	fp=filp_open(path, O_RDONLY, 0); 
-	if(IS_ERR(fp)) {
+	if (IS_ERR(fp)) {
 		ret = PTR_ERR(fp);
 	}
 	else {
 		oldfs = get_fs(); set_fs(get_ds());
 		
-		if(1!=readFile(fp, &buf, 1))
+		if (1!=readFile(fp, &buf, 1))
 			ret = PTR_ERR(fp);
 		
 		set_fs(oldfs);
@@ -1582,8 +1582,8 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 	mm_segment_t oldfs;
 	struct file *fp;
 
-	if(path && buf) {
-		if( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
+	if (path && buf) {
+		if ( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
@@ -1616,8 +1616,8 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 	mm_segment_t oldfs;
 	struct file *fp;
 	
-	if(path && buf) {
-		if( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
+	if (path && buf) {
+		if ( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
@@ -1646,7 +1646,7 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 int rtw_is_file_readable(char *path)
 {
 #ifdef PLATFORM_LINUX
-	if(isFileReadable(path) == 0)
+	if (isFileReadable(path) == 0)
 		return _TRUE;
 	else
 		return _FALSE;
@@ -1746,12 +1746,12 @@ void rtw_free_netdev(struct net_device * netdev)
 {
 	struct rtw_netdev_priv_indicator *pnpi;
 	
-	if(!netdev)
+	if (!netdev)
 		goto RETURN;
 	
 	pnpi = netdev_priv(netdev);
 
-	if(!pnpi->priv)
+	if (!pnpi->priv)
 		goto RETURN;
 
 	rtw_vmfree(pnpi->priv, pnpi->sizeof_priv);
@@ -1772,19 +1772,19 @@ int rtw_change_ifname(_adapter *padapter, const char *ifname)
 	struct rereg_nd_name_data *rereg_priv;
 	int ret;
 
-	if(!padapter)
+	if (!padapter)
 		goto error;
 
 	rereg_priv = &padapter->rereg_nd_name_priv;
 	
 	//free the old_pnetdev
-	if(rereg_priv->old_pnetdev) {
+	if (rereg_priv->old_pnetdev) {
 		free_netdev(rereg_priv->old_pnetdev);
 		rereg_priv->old_pnetdev = NULL;
 	}
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
-	if(!rtnl_is_locked())
+	if (!rtnl_is_locked())
 		unregister_netdev(cur_pnetdev);
 	else
 #endif
@@ -1807,7 +1807,7 @@ int rtw_change_ifname(_adapter *padapter, const char *ifname)
 	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
-	if(!rtnl_is_locked())
+	if (!rtnl_is_locked())
 		ret = register_netdev(pnetdev);
 	else
 #endif

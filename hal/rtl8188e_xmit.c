@@ -70,22 +70,22 @@ void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
 	u8 bDumpTxDesc = _FALSE;
 	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DUMP_TXPKT, &(bDumpTxPkt));
 
-	if(bDumpTxPkt ==1){//dump txdesc for data frame
+	if (bDumpTxPkt ==1){//dump txdesc for data frame
 		DBG_871X("dump tx_desc for data frame\n");
-		if((frame_tag&0x0f) == DATA_FRAMETAG){	
+		if ((frame_tag&0x0f) == DATA_FRAMETAG){	
 			bDumpTxDesc = _TRUE;		
 		}
 	}	
-	else if(bDumpTxPkt ==2){//dump txdesc for mgnt frame
+	else if (bDumpTxPkt ==2){//dump txdesc for mgnt frame
 		DBG_871X("dump tx_desc for mgnt frame\n");
-		if((frame_tag&0x0f) == MGNT_FRAMETAG){	
+		if ((frame_tag&0x0f) == MGNT_FRAMETAG){	
 			bDumpTxDesc = _TRUE;		
 		}
 	}	
-	else if(bDumpTxPkt ==3){//dump early info
+	else if (bDumpTxPkt ==3){//dump early info
 	}
 
-	if(bDumpTxDesc){
+	if (bDumpTxDesc){
 		//	ptxdesc->txdw4 = cpu_to_le32(0x00001006);//RTS Rate=24M
 		//	ptxdesc->txdw6 = 0x6666f800;
 		DBG_8192C("=====================================\n");
@@ -140,14 +140,14 @@ InsertEMContent_8188E(
 #endif
 
 	_rtw_memset(VirtualAddress, 0, EARLY_MODE_INFO_SIZE);
-	if(pEMInfo->EMPktNum==0)
+	if (pEMInfo->EMPktNum==0)
 		return;
 
 	#ifdef DBG_EMINFO
 	{
 		int i;
 		DBG_8192C("\n%s ==> pEMInfo->EMPktNum =%d\n",__FUNCTION__,pEMInfo->EMPktNum);
-		for(i=0;i< EARLY_MODE_MAX_PKT_NUM;i++){
+		for (i=0;i< EARLY_MODE_MAX_PKT_NUM;i++){
 			DBG_8192C("%s ==> pEMInfo->EMPktLen[%d] =%d\n",__FUNCTION__,i,pEMInfo->EMPktLen[i]);
 		}
 
@@ -157,7 +157,7 @@ InsertEMContent_8188E(
 #if RTL8188E_EARLY_MODE_PKT_NUM_10 == 1
 	SET_EARLYMODE_PKTNUM(VirtualAddress, pEMInfo->EMPktNum);
 
-	if(pEMInfo->EMPktNum == 1){
+	if (pEMInfo->EMPktNum == 1){
 		dwtmp = pEMInfo->EMPktLen[0];
 	}else{
 		dwtmp = pEMInfo->EMPktLen[0];
@@ -165,7 +165,7 @@ InsertEMContent_8188E(
 		dwtmp += pEMInfo->EMPktLen[1];
 	}
 	SET_EARLYMODE_LEN0(VirtualAddress, dwtmp);
-	if(pEMInfo->EMPktNum <= 3){
+	if (pEMInfo->EMPktNum <= 3){
 		dwtmp = pEMInfo->EMPktLen[2];
 	}else{
 		dwtmp = pEMInfo->EMPktLen[2];
@@ -173,7 +173,7 @@ InsertEMContent_8188E(
 		dwtmp += pEMInfo->EMPktLen[3];
 	}
 	SET_EARLYMODE_LEN1(VirtualAddress, dwtmp);
-	if(pEMInfo->EMPktNum <= 5){
+	if (pEMInfo->EMPktNum <= 5){
 		dwtmp = pEMInfo->EMPktLen[4];
 	}else{
 		dwtmp = pEMInfo->EMPktLen[4];
@@ -182,7 +182,7 @@ InsertEMContent_8188E(
 	}
 	SET_EARLYMODE_LEN2_1(VirtualAddress, dwtmp&0xF);
 	SET_EARLYMODE_LEN2_2(VirtualAddress, dwtmp>>4);
-	if(pEMInfo->EMPktNum <= 7){
+	if (pEMInfo->EMPktNum <= 7){
 		dwtmp = pEMInfo->EMPktLen[6];
 	}else{
 		dwtmp = pEMInfo->EMPktLen[6];
@@ -190,7 +190,7 @@ InsertEMContent_8188E(
 		dwtmp += pEMInfo->EMPktLen[7];
 	}
 	SET_EARLYMODE_LEN3(VirtualAddress, dwtmp);
-	if(pEMInfo->EMPktNum <= 9){
+	if (pEMInfo->EMPktNum <= 9){
 		dwtmp = pEMInfo->EMPktLen[8];
 	}else{
 		dwtmp = pEMInfo->EMPktLen[8];
@@ -229,7 +229,7 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 	
 	#ifdef DBG_EMINFO			
 	DBG_8192C("\n%s ==> agg_num:%d\n",__FUNCTION__, pframe->agg_num);
-	for(index=0;index<pframe->agg_num;index++){
+	for (index=0;index<pframe->agg_num;index++){
 		offset = 	pxmitpriv->agg_pkt[index].offset;
 		pktlen = pxmitpriv->agg_pkt[index].pkt_len;
 		DBG_8192C("%s ==> agg_pkt[%d].offset=%d\n",__FUNCTION__,index,offset);
@@ -237,20 +237,20 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 	}
 	#endif
 	
-	if( pframe->agg_num > EARLY_MODE_MAX_PKT_NUM)
+	if ( pframe->agg_num > EARLY_MODE_MAX_PKT_NUM)
 	{	
 		node_num_0 = pframe->agg_num;
 		node_num_1= EARLY_MODE_MAX_PKT_NUM-1;
 	}
 	
-	for(index=0;index<pframe->agg_num;index++){
+	for (index=0;index<pframe->agg_num;index++){
 
 		offset = pxmitpriv->agg_pkt[index].offset;
 		pktlen = pxmitpriv->agg_pkt[index].pkt_len;		
 
 		_rtw_memset(&eminfo,0,sizeof(struct EMInfo));
-		if( pframe->agg_num > EARLY_MODE_MAX_PKT_NUM){
-			if(node_num_0 > EARLY_MODE_MAX_PKT_NUM){
+		if ( pframe->agg_num > EARLY_MODE_MAX_PKT_NUM){
+			if (node_num_0 > EARLY_MODE_MAX_PKT_NUM){
 				eminfo.EMPktNum = EARLY_MODE_MAX_PKT_NUM;
 				node_num_0--;
 			}
@@ -262,12 +262,12 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 		else{
 			eminfo.EMPktNum = pframe->agg_num-(index+1);	
 		}				
-		for(j=0;j< eminfo.EMPktNum ;j++){
+		for (j=0;j< eminfo.EMPktNum ;j++){
 			eminfo.EMPktLen[j] = pxmitpriv->agg_pkt[index+1+j].pkt_len+4;// 4 bytes CRC
 		}
 			
-		if(pmem){
-			if(index==0){
+		if (pmem){
+			if (index==0){
 				ptxdesc = (PTXDESC)(pmem);
 				pEMInfo_mem = ((u8 *)ptxdesc)+TXDESC_SIZE;				
 			}

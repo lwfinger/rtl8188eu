@@ -114,8 +114,8 @@ struct txrpt_ccx_8192c {
 void dump_txrpt_ccx_8192c(void *buf);
 void handle_txrpt_ccx_8192c(_adapter *adapter, void *buf);
 #else
-#define dump_txrpt_ccx_8192c(buf) do {} while(0)
-#define handle_txrpt_ccx_8192c(adapter, buf) do {} while(0)
+#define dump_txrpt_ccx_8192c(buf) do {} while (0)
+#define handle_txrpt_ccx_8192c(adapter, buf) do {} while (0)
 #endif
 
 #ifdef CONFIG_USB_HCI

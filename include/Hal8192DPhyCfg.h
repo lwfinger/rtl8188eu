@@ -132,7 +132,7 @@ typedef enum _WIRELESS_MODE {
 } WIRELESS_MODE;
 
 
-#if(TX_POWER_FOR_5G_BAND == 1)
+#if (TX_POWER_FOR_5G_BAND == 1)
 #define CHANNEL_MAX_NUMBER		14+24+21	// 14 is the max channel number
 #define CHANNEL_GROUP_MAX		3+9	// ch1~3, ch4~9, ch10~14 total three groups
 #define MAX_PG_GROUP 13

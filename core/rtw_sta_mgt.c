@@ -101,7 +101,7 @@ _func_enter_;
 
 	pstapriv->pallocated_stainfo_buf = rtw_zvmalloc (sizeof(struct sta_info) * NUM_STA+ 4);
 	
-	if(!pstapriv->pallocated_stainfo_buf)
+	if (!pstapriv->pallocated_stainfo_buf)
 		return _FAIL;
 
 	pstapriv->pstainfo_buf = pstapriv->pallocated_stainfo_buf + 4 - 
@@ -119,7 +119,7 @@ _func_enter_;
 	psta = (struct sta_info *)(pstapriv->pstainfo_buf);
 
 		
-	for(i = 0; i < NUM_STA; i++)
+	for (i = 0; i < NUM_STA; i++)
 	{
 		_rtw_init_stainfo(psta);
 
@@ -212,7 +212,7 @@ void rtw_mfree_stainfo(struct sta_info *psta)
 {
 _func_enter_;
 
-	if(&psta->lock != NULL)
+	if (&psta->lock != NULL)
 		 _rtw_spinlock_free(&psta->lock);
 
 	_rtw_free_sta_xmit_priv_lock(&psta->sta_xmitpriv);
@@ -283,11 +283,11 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 	int 	index;
 
 _func_enter_;
-	if(pstapriv){
+	if (pstapriv){
 
 		/*	delete all reordering_ctrl_timer		*/ 
 		_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
-		for(index = 0; index < NUM_STA; index++)
+		for (index = 0; index < NUM_STA; index++)
 		{
 			phead = &(pstapriv->sta_hash[index]);
 			plist = get_next(phead);
@@ -298,7 +298,7 @@ _func_enter_;
 				psta = LIST_CONTAINOR(plist, struct sta_info ,hash_list);
 				plist = get_next(plist);
 
-				for(i=0; i < 16 ; i++)
+				for (i=0; i < 16 ; i++)
 				{
 					preorder_ctrl = &psta->recvreorder_ctrl[i];
 					_cancel_timer_ex(&preorder_ctrl->reordering_ctrl_timer);	
@@ -310,7 +310,7 @@ _func_enter_;
 		
 		rtw_mfree_sta_priv_lock(pstapriv);
 
-		if(pstapriv->pallocated_stainfo_buf) {
+		if (pstapriv->pallocated_stainfo_buf) {
 			rtw_vmfree(pstapriv->pallocated_stainfo_buf, sizeof(struct sta_info)*NUM_STA+4);
 		}
 	}
@@ -362,7 +362,7 @@ _func_enter_;
 
 		RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_info_,("rtw_alloc_stainfo: index  = %x", index));
 
-		if(index >= NUM_STA){
+		if (index >= NUM_STA){
 			RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_err_,("ERROR=> rtw_alloc_stainfo: index >= NUM_STA"));
 			psta= NULL;	
 			goto exit;
@@ -382,7 +382,7 @@ _func_enter_;
 // In this case, this packet will be dropped by recv_decache function if we use the 0x00 as the default value for tid_rxseq variable.
 // So, we initialize the tid_rxseq variable as the 0xffff.
 
-		for( i = 0; i < 16; i++ )
+		for ( i = 0; i < 16; i++ )
 		{
                      _rtw_memcpy( &psta->sta_recvpriv.rxcache.tid_rxseq[ i ], &wRxSeqInitialValue, 2 );
 		}
@@ -403,7 +403,7 @@ _func_enter_;
 #endif //CONFIG_TDLS
 
 		//for A-MPDU Rx reordering buffer control
-		for(i=0; i < 16 ; i++)
+		for (i=0; i < 16 ; i++)
 		{
 			preorder_ctrl = &psta->recvreorder_ctrl[i];
 
@@ -532,7 +532,7 @@ _func_enter_;
 #endif //CONFIG_TDLS
 
 	//for A-MPDU Rx reordering buffer control, cancel reordering_ctrl_timer
-	for(i=0; i < 16 ; i++)
+	for (i=0; i < 16 ; i++)
 	{
 		_irqL irqL;
 		_list	*phead, *plist;
@@ -552,7 +552,7 @@ _func_enter_;
 		phead = 	get_list_head(ppending_recvframe_queue);
 		plist = get_next(phead);
 		
-		while(!rtw_is_list_empty(phead))
+		while (!rtw_is_list_empty(phead))
 		{	
 			prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 			
@@ -642,12 +642,12 @@ void rtw_free_all_stainfo(_adapter *padapter)
 	
 _func_enter_;	
 
-	if(pstapriv->asoc_sta_count==1)
+	if (pstapriv->asoc_sta_count==1)
 		goto exit;
 
 	_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 
-	for(index=0; index< NUM_STA; index++)
+	for (index=0; index< NUM_STA; index++)
 	{
 		phead = &(pstapriv->sta_hash[index]);
 		plist = get_next(phead);
@@ -658,7 +658,7 @@ _func_enter_;
 
 			plist = get_next(plist);
 
-			if(pbcmc_stainfo!=psta)					
+			if (pbcmc_stainfo!=psta)					
 				rtw_free_stainfo(padapter , psta);
 			
 		}
@@ -690,10 +690,10 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 
 _func_enter_;
 
-	if(hwaddr==NULL)
+	if (hwaddr==NULL)
 		return NULL;
 		
-	if(IS_MCAST(hwaddr))
+	if (IS_MCAST(hwaddr))
 	{
 		addr = bc_addr;
 	}
@@ -744,7 +744,7 @@ _func_enter_;
 
 	psta = rtw_alloc_stainfo(pstapriv, bcast_addr);
 	
-	if(psta==NULL){
+	if (psta==NULL){
 		res=_FAIL;
 		RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_err_,("rtw_alloc_stainfo fail"));
 		goto exit;
@@ -803,9 +803,9 @@ u8 rtw_access_ctrl(_adapter *padapter, u8 *mac_addr)
 		paclnode = LIST_CONTAINOR(plist, struct rtw_wlan_acl_node, list);
 		plist = get_next(plist);
 
-		if(_rtw_memcmp(paclnode->addr, mac_addr, ETH_ALEN))
+		if (_rtw_memcmp(paclnode->addr, mac_addr, ETH_ALEN))
 		{
-			if(paclnode->valid == _TRUE)
+			if (paclnode->valid == _TRUE)
 			{
 				match = _TRUE;
 				break;
@@ -815,11 +815,11 @@ u8 rtw_access_ctrl(_adapter *padapter, u8 *mac_addr)
 	_exit_critical_bh(&(pacl_node_q->lock), &irqL);
 	
 
-	if(pacl_list->mode == 1)//accept unless in deny list
+	if (pacl_list->mode == 1)//accept unless in deny list
 	{
 		res = (match == _TRUE) ?  _FALSE:_TRUE;
 	}	
-	else if(pacl_list->mode == 2)//deny unless in accept list
+	else if (pacl_list->mode == 2)//deny unless in accept list
 	{
 		res = (match == _TRUE) ?  _TRUE:_FALSE;
 	}

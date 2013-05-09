@@ -43,9 +43,9 @@
      // value: the value to be polled, masked by the msd field.
      // note: driver shall implement this cmd by
      // do{
-     // if( (Read(offset) & msk) == (value & msk) )
+     // if ( (Read(offset) & msk) == (value & msk) )
      // break;
-     // } while(not timeout);
+     // } while (not timeout);
 
 #define PWR_CMD_DELAY			0x03
      // offset: the value to delay

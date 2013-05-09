@@ -50,12 +50,12 @@ dm_CheckProtection(
 	PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
 	u1Byte			CurRate, RateThreshold;
 
-	if(pMgntInfo->pHTInfo->bCurBW40MHz)
+	if (pMgntInfo->pHTInfo->bCurBW40MHz)
 		RateThreshold = MGN_MCS1;
 	else
 		RateThreshold = MGN_MCS3;
 
-	if(Adapter->TxStats.CurrentInitTxRate <= RateThreshold)
+	if (Adapter->TxStats.CurrentInitTxRate <= RateThreshold)
 	{
 		pMgntInfo->bDmDisableProtect = TRUE;
 		DbgPrint("Forced disable protect: %x\n", Adapter->TxStats.CurrentInitTxRate);
@@ -74,7 +74,7 @@ dm_CheckStatistics(
 	)
 {
 #if 0
-	if(!Adapter->MgntInfo.bMediaConnect)
+	if (!Adapter->MgntInfo.bMediaConnect)
 		return;
 
 	//2008.12.10 tynli Add for getting Current_Tx_Rate_Reg flexibly.
@@ -94,7 +94,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 	u8	tmp1byte;
 	u8	bPbcPressed = _FALSE;
 
-	if(!padapter->registrypriv.hw_wps_pbc)
+	if (!padapter->registrypriv.hw_wps_pbc)
 		return;
 
 #ifdef CONFIG_USB_HCI
@@ -125,13 +125,13 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 	if (tmp1byte == 0xff || padapter->init_adpt_in_progress)
 		return ;
 
-	if((tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)==0)
+	if ((tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)==0)
 	{
 		bPbcPressed = _TRUE;
 	}
 #endif
 
-	if( _TRUE == bPbcPressed)
+	if ( _TRUE == bPbcPressed)
 	{
 		// Here we only set bPbcPressed to true
 		// After trigger PBC, the variable will be set to false
@@ -187,21 +187,21 @@ dm_InterruptMigration(
 	// <Roger_Notes> Currently we use busy traffic for reference instead of RxIntOK counts to prevent non-linear Rx statistics
 	// when interrupt migration is set before. 2010.03.05.
 	//
-	if(!Adapter->registrypriv.wifi_spec &&
+	if (!Adapter->registrypriv.wifi_spec &&
 		(check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE) &&
 		pmlmepriv->LinkDetectInfo.bHigherBusyTraffic)
 	{
 		IntMtToSet = _TRUE;
 
 		// To check whether we should disable Tx interrupt or not.
-		if(pmlmepriv->LinkDetectInfo.bHigherBusyRxTraffic )
+		if (pmlmepriv->LinkDetectInfo.bHigherBusyRxTraffic )
 			ACIntToSet = _TRUE;
 	}
 
 	//Update current settings.
-	if( bCurrentIntMt != IntMtToSet ){
+	if ( bCurrentIntMt != IntMtToSet ){
 		DBG_8192C("%s(): Update interrrupt migration(%d)\n",__FUNCTION__,IntMtToSet);
-		if(IntMtToSet)
+		if (IntMtToSet)
 		{
 			//
 			// <Roger_Notes> Set interrrupt migration timer and corresponging Tx/Rx counter.
@@ -219,9 +219,9 @@ dm_InterruptMigration(
 		}
 	}
 
-	/*if( bCurrentACIntDisable != ACIntToSet ){
+	/*if ( bCurrentACIntDisable != ACIntToSet ){
 		DBG_8192C("%s(): Update AC interrrupt(%d)\n",__FUNCTION__,ACIntToSet);
-		if(ACIntToSet) // Disable four ACs interrupts.
+		if (ACIntToSet) // Disable four ACs interrupts.
 		{
 			//
 			// <Roger_Notes> Disable VO, VI, BE and BK four AC interrupts to gain more efficient CPU utilization.
@@ -289,7 +289,7 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 	
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_PLATFORM,ODM_CE);
 
-	if(Adapter->interface_type == RTW_GSPI )
+	if (Adapter->interface_type == RTW_GSPI )
 		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_INTERFACE,ODM_ITRF_SDIO);
 	else
 		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_INTERFACE,Adapter->interface_type);//RTL871X_HCI_TYPE
@@ -308,7 +308,7 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 //#ifdef CONFIG_USB_HCI	
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_BOARD_TYPE,pHalData->BoardType);
 
-	if(pHalData->BoardType == BOARD_USB_High_PA){
+	if (pHalData->BoardType == BOARD_USB_High_PA){
 		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_EXT_LNA,_TRUE);
 		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_EXT_PA,_TRUE);
 	}
@@ -318,13 +318,13 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_BWIFI_TEST,Adapter->registrypriv.wifi_spec);
 		
 	
-	if(pHalData->rf_type == RF_1T1R){
+	if (pHalData->rf_type == RF_1T1R){
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_1T1R);		
 	}
-	else if(pHalData->rf_type == RF_2T2R){
+	else if (pHalData->rf_type == RF_2T2R){
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_2T2R);		
 	}
-	else if(pHalData->rf_type == RF_1T2R){		
+	else if (pHalData->rf_type == RF_1T2R){		
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_1T2R);		
 	}	
 
@@ -336,7 +336,7 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 	pdmpriv->InitODMFlag =	ODM_RF_CALIBRATION		|
 							ODM_RF_TX_PWR_TRACK	//|
 							;	
-	//if(pHalData->AntDivCfg)
+	//if (pHalData->AntDivCfg)
 	//	pdmpriv->InitODMFlag |= ODM_BB_ANT_DIV;
 	#endif	
 
@@ -369,7 +369,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 							ODM_RF_CALIBRATION		|
 							ODM_RF_TX_PWR_TRACK	
 							;	
-	if(pHalData->AntDivCfg)
+	if (pHalData->AntDivCfg)
 		pdmpriv->InitODMFlag |= ODM_BB_ANT_DIV;
 
 	#if (MP_DRIVER==1)
@@ -409,7 +409,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_POWER_SAVING,&(pwrctrlpriv->bpower_saving));
 	ODM_CmnInfoInit(pDM_Odm, ODM_CMNINFO_RF_ANTENNA_TYPE, pHalData->TRxAntDivType);
 
-	for(i=0; i< NUM_STA; i++)
+	for (i=0; i< NUM_STA; i++)
 	{
 		//pDM_Odm->pODM_StaInfo[i] = NULL;
 		ODM_CmnInfoPtrArrayHook(pDM_Odm, ODM_CMNINFO_STA_STATUS,i,NULL);
@@ -486,11 +486,11 @@ rtl8188e_HalDmWatchDog(
 #ifdef CONFIG_P2P_PS
 	// Fw is under p2p powersaving mode, driver should stop dynamic mechanism.
 	// modifed by thomas. 2011.06.11.
-	if(Adapter->wdinfo.p2p_ps_mode)
+	if (Adapter->wdinfo.p2p_ps_mode)
 		bFwPSAwake = _FALSE;
 #endif //CONFIG_P2P_PS
 
-	if( (hw_init_completed == _TRUE)
+	if ( (hw_init_completed == _TRUE)
 		&& ((!bFwCurrentInPSMode) && bFwPSAwake))
 	{
 		//
@@ -499,7 +499,7 @@ rtl8188e_HalDmWatchDog(
 		dm_CheckStatistics(Adapter);
 	
 #ifdef CONFIG_CONCURRENT_MODE
-		if(Adapter->adapter_type > PRIMARY_ADAPTER)
+		if (Adapter->adapter_type > PRIMARY_ADAPTER)
 			goto _record_initrate;
 #endif
 	
@@ -513,7 +513,7 @@ rtl8188e_HalDmWatchDog(
 		// Tx Migration settings.
 		//dm_InterruptMigration(Adapter);
 
-		//if(Adapter->HalFunc.TxCheckStuckHandler(Adapter))
+		//if (Adapter->HalFunc.TxCheckStuckHandler(Adapter))
 		//	PlatformScheduleWorkItem(&(GET_HAL_DATA(Adapter)->HalResetWorkItem));
 #endif
 		_record_initrate:
@@ -530,19 +530,19 @@ rtl8188e_HalDmWatchDog(
 		pHalData->odmpriv.SupportAbility = 0;
 		#endif
 			
-		if(	(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) ||
+		if (	(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) ||
 			(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE))
 		{				
-			if(Adapter->stapriv.asoc_sta_count > 2)
+			if (Adapter->stapriv.asoc_sta_count > 2)
 				bLinked = _TRUE;
 		}
 		else{//Station mode
-			if(check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE)
+			if (check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE)
 				bLinked = _TRUE;
 		}
 		
 #ifdef CONFIG_CONCURRENT_MODE
-		if(check_buddy_fw_link(Adapter))
+		if (check_buddy_fw_link(Adapter))
 			bLinked = _TRUE;
 #endif //CONFIG_CONCURRENT_MODE
 
@@ -556,7 +556,7 @@ skip_dm:
 	// Check GPIO to determine current RF on/off and Pbc status.
 	// Check Hardware Radio ON/OFF or not
 #ifdef CONFIG_PCI_HCI
-	if(pHalData->bGpioHwWpsPbc)
+	if (pHalData->bGpioHwWpsPbc)
 #endif
 	{
 		//temp removed
@@ -602,12 +602,12 @@ void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src
 	//PADAPTER Adapter = pDM_Odm->Adapter ;
 	
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	if(0 != pHalData->AntDivCfg )
+	if (0 != pHalData->AntDivCfg )
 	{
 		//DBG_8192C("update_network=> orgRSSI(%d)(%d),newRSSI(%d)(%d)\n",dst->Rssi,query_rx_pwr_percentage(dst->Rssi),
 		//	src->Rssi,query_rx_pwr_percentage(src->Rssi));
 		//select optimum_antenna for before linked =>For antenna diversity
-		if(dst->Rssi >=  src->Rssi )//keep org parameter
+		if (dst->Rssi >=  src->Rssi )//keep org parameter
 		{
 			src->Rssi = dst->Rssi;
 			src->PhyInfo.Optimum_antenna = dst->PhyInfo.Optimum_antenna;						
@@ -625,19 +625,19 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 	
 	// Condition that does not need to use antenna diversity.
-	if(pHalData->AntDivCfg==0)
+	if (pHalData->AntDivCfg==0)
 	{
 		//DBG_8192C("odm_AntDivBeforeLink8192C(): No AntDiv Mechanism.\n");
 		return _FALSE;
 	}
 
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	
 	{		
 		return _FALSE;
 	}
 
 
-	if(pDM_SWAT_Table->SWAS_NoLink_State == 0){
+	if (pDM_SWAT_Table->SWAS_NoLink_State == 0){
 		//switch channel
 		pDM_SWAT_Table->SWAS_NoLink_State = 1;
 		pDM_SWAT_Table->CurAntenna = (pDM_SWAT_Table->CurAntenna==Antenna_A)?Antenna_B:Antenna_A;

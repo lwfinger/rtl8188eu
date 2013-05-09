@@ -15,7 +15,7 @@ Major Change History:
 --*/
 #include "odm_precomp.h"
 
-//#if( DM_ODM_SUPPORT_TYPE == ODM_MP) 
+//#if ( DM_ODM_SUPPORT_TYPE == ODM_MP) 
 //#include "Mp_Precomp.h"
 //#endif
 
@@ -169,8 +169,8 @@ odm_SetTxRPTTiming_8188E(
 {
 	u1Byte idx = 0;
 
-	for(idx=0; idx<5; idx++)
-		if(DynamicTxRPTTiming[idx] == pRaInfo->RptTime)
+	for (idx=0; idx<5; idx++)
+		if (DynamicTxRPTTiming[idx] == pRaInfo->RptTime)
 			break;
 
 	if (extend==0) // back to default timing
@@ -181,7 +181,7 @@ odm_SetTxRPTTiming_8188E(
 			idx=5;
 	}
 	else if (extend==2) {// decrease the timing
-		if(idx!=0)
+		if (idx!=0)
 			idx-=1;
 	}
 	pRaInfo->RptTime=DynamicTxRPTTiming[idx];
@@ -199,7 +199,7 @@ odm_RateDown_8188E(
 	u1Byte i;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateDown_8188E()\n"));
-	if(NULL == pRaInfo)
+	if (NULL == pRaInfo)
 	{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("odm_RateDown_8188E(): pRaInfo is NULL\n"));
 		return -1;
@@ -215,7 +215,7 @@ odm_RateDown_8188E(
 	{
 		RateID=HighestRate;
 	}
-	else if(pRaInfo->RateSGI)
+	else if (pRaInfo->RateSGI)
 	{
 		pRaInfo->RateSGI=0;
 	}
@@ -243,14 +243,14 @@ RateDownFinish:
 		pRaInfo->RAWaitingCounter+=1;
 		pRaInfo->RAPendingCounter+=1;
 	}
-	else if(pRaInfo->RAWaitingCounter==0){
+	else if (pRaInfo->RAWaitingCounter==0){
 	}
 	else{
 		pRaInfo->RAWaitingCounter=0;
 		pRaInfo->RAPendingCounter=0;
 	}
 
-	if(pRaInfo->RAPendingCounter>=4)
+	if (pRaInfo->RAPendingCounter>=4)
 		pRaInfo->RAPendingCounter=4;
 	
 	pRaInfo->DecisionRate=RateID;
@@ -272,7 +272,7 @@ odm_RateUp_8188E(
 	u1Byte i;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateUp_8188E() \n"));
-	if(NULL == pRaInfo)
+	if (NULL == pRaInfo)
 	{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("odm_RateUp_8188E(): pRaInfo is NULL\n"));
 		return -1;
@@ -304,21 +304,21 @@ odm_RateUp_8188E(
 			}
 		}
 	}
-	else if(RateID == HighestRate)
+	else if (RateID == HighestRate)
 	{
 		if (pRaInfo->SGIEnable && (pRaInfo->RateSGI != 1))
 			pRaInfo->RateSGI = 1;
-		else if((pRaInfo->SGIEnable) !=1 )
+		else if ((pRaInfo->SGIEnable) !=1 )
 			pRaInfo->RateSGI = 0;
 	}
-	else //if((sta_info_ra->Decision_rate) > (sta_info_ra->Highest_rate))
+	else //if ((sta_info_ra->Decision_rate) > (sta_info_ra->Highest_rate))
 	{
 		RateID = HighestRate;
 		
 	}
 RateUpfinish:
-	//if(pRaInfo->RAWaitingCounter==10)
-	if(pRaInfo->RAWaitingCounter==(4+PendingForRateUpFail[pRaInfo->RAPendingCounter]))
+	//if (pRaInfo->RAWaitingCounter==10)
+	if (pRaInfo->RAWaitingCounter==(4+PendingForRateUpFail[pRaInfo->RAPendingCounter]))
 		pRaInfo->RAWaitingCounter=0;
 	else
 		pRaInfo->RAWaitingCounter++;
@@ -408,7 +408,7 @@ odm_RateDecision_8188E(
 		else if (pRaInfo->NscUp > N_THRESHOLD_HIGH[RateID])
 			odm_RateUp_8188E(pDM_Odm,pRaInfo);
 
-		if(pRaInfo->DecisionRate > pRaInfo->HighestRate)
+		if (pRaInfo->DecisionRate > pRaInfo->HighestRate)
 			pRaInfo->DecisionRate = pRaInfo->HighestRate;
 		
 		if ((pRaInfo->DecisionRate)==(pRaInfo->PreRate)) 
@@ -438,7 +438,7 @@ odm_ARFBRefresh_8188E(
 	u4Byte MaskFromReg;
 	s1Byte i;
 
-	switch(pRaInfo->RateID){
+	switch (pRaInfo->RateID){
 		case RATR_INX_WIRELESS_NGB:
 			pRaInfo->RAUseRate=(pRaInfo->RateMask)&0x0f8ff015;
 			break;
@@ -485,7 +485,7 @@ odm_ARFBRefresh_8188E(
 	if (pRaInfo->RAUseRate){
 		for (i=RATESIZE;i>=0;i--)
 		{
-			if((pRaInfo->RAUseRate)&BIT(i)){
+			if ((pRaInfo->RAUseRate)&BIT(i)){
 				pRaInfo->HighestRate=i;
 				break;
 			}
@@ -498,7 +498,7 @@ odm_ARFBRefresh_8188E(
 	if (pRaInfo->RAUseRate){
 		for (i=0;i<RATESIZE;i++)
 		{
-			if((pRaInfo->RAUseRate)&BIT(i))
+			if ((pRaInfo->RAUseRate)&BIT(i))
 			{
 				pRaInfo->LowestRate=i;
 				break;
@@ -512,9 +512,9 @@ odm_ARFBRefresh_8188E(
 #if POWER_TRAINING_ACTIVE == 1
 		if (pRaInfo->HighestRate >0x13)
 			pRaInfo->PTModeSS=3;
-		else if(pRaInfo->HighestRate >0x0b)
+		else if (pRaInfo->HighestRate >0x0b)
 			pRaInfo->PTModeSS=2;
-		else if(pRaInfo->HighestRate >0x0b)
+		else if (pRaInfo->HighestRate >0x0b)
 			pRaInfo->PTModeSS=1;
 		else
 			pRaInfo->PTModeSS=0;
@@ -523,7 +523,7 @@ odm_ARFBRefresh_8188E(
 		
 #endif
 
-	if(pRaInfo->DecisionRate > pRaInfo->HighestRate)
+	if (pRaInfo->DecisionRate > pRaInfo->HighestRate)
 		pRaInfo->DecisionRate = pRaInfo->HighestRate;
 	
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, 
@@ -572,7 +572,7 @@ odm_PTTryState_8188E(
 		{
 			if (pRaInfo->PTStage==0)
 				pRaInfo->PTStage=1;
-			else if(pRaInfo->PTStage==1)
+			else if (pRaInfo->PTStage==1)
 				pRaInfo->PTStage=3;
 			else
 				pRaInfo->PTStage=5;
@@ -608,10 +608,10 @@ odm_PTDecision_8188E(
 	stage_BUF=pRaInfo->PTStage;
 	numsc  = 0;
 	num_total= pRaInfo->TOTAL* PT_PENALTY[5];
-	for(j=0;j<=4;j++)
+	for (j=0;j<=4;j++)
 	{
 		numsc += pRaInfo->RTY[j] * PT_PENALTY[j];
-		if(numsc>num_total)
+		if (numsc>num_total)
 			break;
 	}
 
@@ -645,10 +645,10 @@ odm_RATxRPTTimerSetting(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,(" =====>odm_RATxRPTTimerSetting()\n"));
 	
 	
-	if(pDM_Odm->CurrminRptTime != minRptTime){
+	if (pDM_Odm->CurrminRptTime != minRptTime){
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, 
 		(" CurrminRptTime =0x%04x minRptTime=0x%04x\n", pDM_Odm->CurrminRptTime, minRptTime));
-		#if(DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_AP))
+		#if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_AP))
 		ODM_RA_Set_TxRPT_Time(pDM_Odm,minRptTime);	
 		#else
 		rtw_rpt_timer_cfg_cmd(pDM_Odm->Adapter,minRptTime);
@@ -684,16 +684,16 @@ ODM_RAInfo_Init(
 	#if 1
 	u1Byte WirelessMode=0xFF; //invalid value
 	u1Byte max_rate_idx = 0x13; //MCS7
-	if(pDM_Odm->pWirelessMode!=NULL){
+	if (pDM_Odm->pWirelessMode!=NULL){
 		WirelessMode=*(pDM_Odm->pWirelessMode);			
 	}
 
-	if(WirelessMode != 0xFF ){
-		if(WirelessMode & ODM_WM_N24G)
+	if (WirelessMode != 0xFF ){
+		if (WirelessMode & ODM_WM_N24G)
 			max_rate_idx = 0x13;
-		else if(WirelessMode & ODM_WM_G)
+		else if (WirelessMode & ODM_WM_G)
 			max_rate_idx = 0x0b;
-		else if(WirelessMode & ODM_WM_B)
+		else if (WirelessMode & ODM_WM_B)
 			max_rate_idx = 0x03;
 	}
 	
@@ -755,7 +755,7 @@ ODM_RAInfo_Init_all(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>\n"));
 	pDM_Odm->CurrminRptTime = 0;
 
-	for(MacID=0; MacID<ODM_ASSOCIATE_ENTRY_NUM; MacID++)
+	for (MacID=0; MacID<ODM_ASSOCIATE_ENTRY_NUM; MacID++)
 		ODM_RAInfo_Init(pDM_Odm,MacID);
 
 	return 0;
@@ -768,7 +768,7 @@ ODM_RA_GetShortGI_8188E(
 	IN 	u1Byte 		MacID
 )
 {
-	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
+	if ((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return 0;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, 
 		("MacID=%d SGI=%d\n", MacID, pDM_Odm->RAInfo[MacID].RateSGI));
@@ -783,7 +783,7 @@ ODM_RA_GetDecisionRate_8188E(
 {
 	u1Byte DecisionRate = 0;
 
-	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
+	if ((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return 0;
 	DecisionRate = (pDM_Odm->RAInfo[MacID].DecisionRate);
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, 
@@ -798,7 +798,7 @@ ODM_RA_GetHwPwrStatus_8188E(
 	)
 {
 	u1Byte PTStage = 5;
-	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
+	if ((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return 0;
 	PTStage = (pDM_Odm->RAInfo[MacID].PTStage);
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, 
@@ -820,7 +820,7 @@ ODM_RA_UpdateRateInfo_8188E(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, 
 		("MacID=%d RateID=0x%x RateMask=0x%x SGIEnable=%d\n", 
 		MacID, RateID, RateMask, SGIEnable));
-	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
+	if ((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return;
 	
 	pRaInfo = &(pDM_Odm->RAInfo[MacID]);
@@ -841,7 +841,7 @@ ODM_RA_SetRSSI_8188E(
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, 
 		(" MacID=%d Rssi=%d\n", MacID, Rssi));
-	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
+	if ((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return;
 
 	pRaInfo = &(pDM_Odm->RAInfo[MacID]);
@@ -854,7 +854,7 @@ ODM_RA_Set_TxRPT_Time(
 	IN	u2Byte 			minRptTime
 	)
 {
-#if(DM_ODM_SUPPORT_TYPE & (ODM_AP))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 	if (minRptTime != 0xffff)
 #endif
 	ODM_Write2Byte(pDM_Odm, REG_TX_RPT_TIME, minRptTime);
@@ -884,15 +884,15 @@ ODM_RA_TxRPT2Handle_8188E(
 
 	do
 	{
-		if(MacId >= ASSOCIATE_ENTRY_NUM)
+		if (MacId >= ASSOCIATE_ENTRY_NUM)
 			valid = 0;
-		else if(MacId >= 32)
+		else if (MacId >= 32)
 			valid = (1<<(MacId-32)) & MacIDValidEntry1;
 		else
 			valid = (1<<MacId) & MacIDValidEntry0;
 
 		pRAInfo = &(pDM_Odm->RAInfo[MacId]);
-		if(valid)
+		if (valid)
 		{
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE))
@@ -916,7 +916,7 @@ ODM_RA_TxRPT2Handle_8188E(
 							  pRAInfo->RTY[3] + \
 							  pRAInfo->RTY[4] + \
 							  pRAInfo->DROP;
-			if(pRAInfo->TOTAL != 0)
+			if (pRAInfo->TOTAL != 0)
 			{
 				ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, 
 							("macid=%d Total=%d R0=%d R1=%d R2=%d R3=%d R4=%d D0=%d valid0=%x valid1=%x\n", 
@@ -932,10 +932,10 @@ ODM_RA_TxRPT2Handle_8188E(
 							MacIDValidEntry1));
 #if POWER_TRAINING_ACTIVE == 1
 				if (pRAInfo->PTActive){
-					if(pRAInfo->RAstage<5){
+					if (pRAInfo->RAstage<5){
 						odm_RateDecision_8188E(pDM_Odm,pRAInfo);
 					}
-					else if(pRAInfo->RAstage==5){  // Power training try state
+					else if (pRAInfo->RAstage==5){  // Power training try state
 						odm_PTTryState_8188E(pRAInfo);
 					}
 					else {// RAstage==6
@@ -981,12 +981,12 @@ ODM_RA_TxRPT2Handle_8188E(
 				ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, (" TOTAL=0!!!!\n"));
 		}
 
-		if(minRptTime > pRAInfo->RptTime)
+		if (minRptTime > pRAInfo->RptTime)
 			minRptTime = pRAInfo->RptTime;	
 
 		pBuffer += TX_RPT2_ITEM_SIZE;
 		MacId++;
-	}while(MacId < ItemNum);
+	}while (MacId < ItemNum);
 	
         odm_RATxRPTTimerSetting(pDM_Odm,minRptTime);
 	

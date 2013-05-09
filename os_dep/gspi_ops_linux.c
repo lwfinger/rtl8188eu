@@ -137,7 +137,7 @@ int spi_read_write_reg(PADAPTER pAdapter, int  write_flag, u32 addr, char * buf,
 	{
 		int remainder = addr % 4;
 		u32 val32 = *(u32 *)buf;
-		switch(len) {
+		switch (len) {
 		case 1:
 			byte_en = (0x1 << remainder);
 			data_tmp = (val32& 0xff)<< (remainder*8);
@@ -158,7 +158,7 @@ int spi_read_write_reg(PADAPTER pAdapter, int  write_flag, u32 addr, char * buf,
 	}
 	else //read register
 	{
-		switch(len) {
+		switch (len) {
 		case 1:
 		    	byte_en = 0x1;
 		 	break;
@@ -380,7 +380,7 @@ _func_enter_;
 	spi_get_status_info(Adapter, status);
 
 	more_data = GET_STATUS_HISR_LOW8BIT(status) & BIT(0);
-	//if(more_data) {
+	//if (more_data) {
 	//	rtw_queue_delayed_work(Adapter->recv_wq, &Adapter->recv_work, 0, (void*)Adapter);
 	//}
 

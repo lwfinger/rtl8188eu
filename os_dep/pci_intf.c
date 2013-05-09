@@ -131,7 +131,7 @@ static u8 rtw_pci_platform_switch_device_pci_aspm(_adapter *padapter, u8 value)
 
 	error = pci_write_config_byte(pdvobjpriv->ppcidev, 0x80, value);
 
-	if(error != 0)
+	if (error != 0)
 	{
 		bresult = _FALSE;
 		DBG_871X("rtw_pci_platform_switch_device_pci_aspm error (%d)\n",error);
@@ -151,12 +151,12 @@ static u8 rtw_pci_switch_clk_req(_adapter *padapter, u8 value)
 
 	buffer = value;
 
-	if(!padapter->hw_init_completed)
+	if (!padapter->hw_init_completed)
 		return bresult;
 
 	error = pci_write_config_byte(pdvobjpriv->ppcidev, 0x81, value);
 
-	if(error != 0)
+	if (error != 0)
 	{
 		bresult = _FALSE;
 		DBG_871X("rtw_pci_switch_clk_req error (%d)\n",error);
@@ -746,10 +746,10 @@ void rtw_pci_disable_aspm(_adapter *padapter)
 
 	// We do not diable/enable ASPM by driver, in the future, the BIOS will enable host and NIC ASPM.
 	// Advertised by SD1 victorh. Added by tynli. 2009.11.23.
-	if(pdvobjpriv->const_pci_aspm == 0)
+	if (pdvobjpriv->const_pci_aspm == 0)
 		return;
 
-	if(!padapter->hw_init_completed)
+	if (!padapter->hw_init_completed)
 		return;
 
 	if (pcipriv->pcibridge_vendor == PCI_BRIDGE_VENDOR_UNKNOWN) {
@@ -781,7 +781,7 @@ void rtw_pci_disable_aspm(_adapter *padapter)
 
 	//When there exists anyone's BusNum, DevNum, and FuncNum that are set to 0xff,
 	// we do not execute any action and return. Added by tynli.
-	if( (pcipriv->busnumber == 0xff && pcipriv->devnumber == 0xff && pcipriv->funcnumber == 0xff) ||
+	if ( (pcipriv->busnumber == 0xff && pcipriv->devnumber == 0xff && pcipriv->funcnumber == 0xff) ||
 		(pcipriv->pcibridge_busnum == 0xff && pcipriv->pcibridge_devnum == 0xff && pcipriv->pcibridge_funcnum == 0xff) )
 	{
 		// Do Nothing!!
@@ -821,12 +821,12 @@ void rtw_pci_enable_aspm(_adapter *padapter)
 
 	// We do not diable/enable ASPM by driver, in the future, the BIOS will enable host and NIC ASPM.
 	// Advertised by SD1 victorh. Added by tynli. 2009.11.23.
-	if(pdvobjpriv->const_pci_aspm == 0)
+	if (pdvobjpriv->const_pci_aspm == 0)
 		return;
 
 	//When there exists anyone's BusNum, DevNum, and FuncNum that are set to 0xff,
 	// we do not execute any action and return. Added by tynli. 
-	if( (pcipriv->busnumber == 0xff && pcipriv->devnumber == 0xff && pcipriv->funcnumber == 0xff) ||
+	if ( (pcipriv->busnumber == 0xff && pcipriv->devnumber == 0xff && pcipriv->funcnumber == 0xff) ||
 		(pcipriv->pcibridge_busnum == 0xff && pcipriv->pcibridge_devnum == 0xff && pcipriv->pcibridge_funcnum == 0xff) )
 	{
 		DBG_871X("rtw_pci_enable_aspm(): Fail to enable ASPM. Cannot find the Bus of PCI(Bridge).\n");
@@ -844,24 +844,24 @@ void rtw_pci_enable_aspm(_adapter *padapter)
 		//NdisRawReadPortUlong((ULONG_PTR)PCI_CONF_DATA,&uDeviceASPMSupportSetting);
 		pci_read_config_dword(bridge_pdev, (pcipriv->pcibridge_pciehdr_offset+0x0C), &u_device_aspmsupportsetting);
 		DBG_871X("rtw_pci_enable_aspm(): Bridge ASPM support %x \n",u_device_aspmsupportsetting);
-		if(((u_device_aspmsupportsetting & BIT(11)) != BIT(11)) || ((u_device_aspmsupportsetting & BIT(10)) != BIT(10)))
+		if (((u_device_aspmsupportsetting & BIT(11)) != BIT(11)) || ((u_device_aspmsupportsetting & BIT(10)) != BIT(10)))
 		{
-			if(pdvobjpriv->const_devicepci_aspm_setting == 3)
+			if (pdvobjpriv->const_devicepci_aspm_setting == 3)
 			{
 				DBG_871X("rtw_pci_enable_aspm(): Bridge not support L0S or L1\n");
 				return;
 			}
-			else if(pdvobjpriv->const_devicepci_aspm_setting == 2)
+			else if (pdvobjpriv->const_devicepci_aspm_setting == 2)
 			{
-				if((u_device_aspmsupportsetting & BIT(11)) != BIT(11))
+				if ((u_device_aspmsupportsetting & BIT(11)) != BIT(11))
 				{
 					DBG_871X("rtw_pci_enable_aspm(): Bridge not support L1 \n");
 					return;
 				}
 			}
-			else if(pdvobjpriv->const_devicepci_aspm_setting == 1)
+			else if (pdvobjpriv->const_devicepci_aspm_setting == 1)
 			{
-				if((u_device_aspmsupportsetting & BIT(10)) != BIT(10))
+				if ((u_device_aspmsupportsetting & BIT(10)) != BIT(10))
 				{
 					DBG_871X("rtw_pci_enable_aspm(): Bridge not support L0s \n");
 					return;
@@ -1061,7 +1061,7 @@ static void rtw_pci_update_default_setting(_adapter *padapter)
 
 				pwrpriv->b_support_aspm = b_support_aspm;
 
-				/*if(pAdapter->MgntInfo.CustomerID == RT_CID_TOSHIBA &&
+				/*if (pAdapter->MgntInfo.CustomerID == RT_CID_TOSHIBA &&
 					pcipriv->pcibridge_vendor == PCI_BRIDGE_VENDOR_AMD && 
 					!pcipriv->amd_l1_patch)
 					b_support_backdoor = _FALSE;*/
@@ -1111,7 +1111,7 @@ static irqreturn_t rtw_pci_interrupt(int irq, void *priv, struct pt_regs *regs)
 		return IRQ_HANDLED;
 	}
 
-	if(rtw_hal_interrupt_handler(adapter) == _FAIL)
+	if (rtw_hal_interrupt_handler(adapter) == _FAIL)
 		return IRQ_HANDLED;
 		//return IRQ_NONE;
 
@@ -1225,7 +1225,7 @@ _func_enter_;
 
 	/*find bridge info*/
 	pcipriv->pcibridge_vendor = PCI_BRIDGE_VENDOR_UNKNOWN;
-	if(bridge_pdev){
+	if (bridge_pdev){
 		pcipriv->pcibridge_vendorid = bridge_pdev->vendor;
 		for (tmp = 0; tmp < PCI_BRIDGE_VENDOR_MAX; tmp++) {
 			if (bridge_pdev->vendor == pcibridge_vendors[tmp]) {
@@ -1237,7 +1237,7 @@ _func_enter_;
 	}
 
 	//if (pcipriv->pcibridge_vendor != PCI_BRIDGE_VENDOR_UNKNOWN) {
-	if(bridge_pdev){
+	if (bridge_pdev){
 		pcipriv->pcibridge_busnum = bridge_pdev->bus->number;
 		pcipriv->pcibridge_devnum = PCI_SLOT(bridge_pdev->devfn);
 		pcipriv->pcibridge_funcnum = PCI_FUNC(bridge_pdev->devfn);
@@ -1380,7 +1380,7 @@ static void decide_chip_type_by_pci_device_id(_adapter *padapter, struct pci_dev
 	//
 	// Decide hardware type here. 
 	//
-	if( deviceid == HAL_HW_PCI_8185_DEVICE_ID ||
+	if ( deviceid == HAL_HW_PCI_8185_DEVICE_ID ||
 	    deviceid == HAL_HW_PCI_8188_DEVICE_ID ||
 	    deviceid == HAL_HW_PCI_8198_DEVICE_ID)
 	{
@@ -1407,7 +1407,7 @@ static void decide_chip_type_by_pci_device_id(_adapter *padapter, struct pci_dev
 		// 8192e and and 8192se may have the same device ID 8192. However, their Revision
 		// ID is different
 		// Added for 92DE. We deferentiate it from SVID,SDID.
-		if( pdev->subsystem_vendor == 0x10EC && pdev->subsystem_device == 0xE020){
+		if ( pdev->subsystem_vendor == 0x10EC && pdev->subsystem_device == 0xE020){
 			padapter->HardwareType = HARDWARE_TYPE_RTL8192DE;
 			DBG_871X("Adapter(8192DE) is found - VendorID/DeviceID/RID=%X/%X/%X\n", venderid, deviceid, revisionid);
 		}else{
@@ -1427,7 +1427,7 @@ static void decide_chip_type_by_pci_device_id(_adapter *padapter, struct pci_dev
 			}
 		}
 	}
-	else if(deviceid==HAL_HW_PCI_8723E_DEVICE_ID )
+	else if (deviceid==HAL_HW_PCI_8723E_DEVICE_ID )
 	{//RTL8723E may have the same device ID with RTL8192CET
 		padapter->HardwareType = HARDWARE_TYPE_RTL8723AE;
 		DBG_871X("Adapter(8723 PCI-E) is found - VendorID/DeviceID=%x/%x\n", venderid, deviceid);
@@ -1493,7 +1493,7 @@ static void pci_intf_stop(_adapter *padapter)
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+pci_intf_stop\n"));
 
 	//Disable hw interrupt
-	if(padapter->bSurpriseRemoved == _FALSE)
+	if (padapter->bSurpriseRemoved == _FALSE)
 	{
 		//device still exists, so driver can do i/o operation
 		rtw_hal_disable_interrupt(padapter);
@@ -1530,7 +1530,7 @@ static void rtw_dev_unload(_adapter *padapter)
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_dev_unload\n"));
 
-	if(padapter->bup == _TRUE)
+	if (padapter->bup == _TRUE)
 	{
 		DBG_871X("+rtw_dev_unload\n");
 
@@ -1541,7 +1541,7 @@ static void rtw_dev_unload(_adapter *padapter)
 		#endif
 
 		//s3.
-		if(padapter->intf_stop)
+		if (padapter->intf_stop)
 		{
 			padapter->intf_stop(padapter);
 		}
@@ -1551,7 +1551,7 @@ static void rtw_dev_unload(_adapter *padapter)
 
 
 		//s5.
-		if(padapter->bSurpriseRemoved == _FALSE)
+		if (padapter->bSurpriseRemoved == _FALSE)
 		{
 			DBG_871X("r871x_dev_unload()->rtl871x_hal_deinit()\n");
 			rtw_hal_deinit(padapter);
@@ -1581,13 +1581,13 @@ static void disable_ht_for_spec_devid(const struct pci_device_id *pdid)
 	int i;
 	int num = sizeof(specific_device_id_tbl)/sizeof(struct specific_device_id);
 
-	for(i=0; i<num; i++)
+	for (i=0; i<num; i++)
 	{
 		vid = specific_device_id_tbl[i].idVendor;
 		pid = specific_device_id_tbl[i].idProduct;
 		flags = specific_device_id_tbl[i].flags;
 
-		if((pdid->vendor==vid) && (pdid->device==pid) && (flags&SPEC_DEV_ID_DISABLE_HT))
+		if ((pdid->vendor==vid) && (pdid->device==pid) && (flags&SPEC_DEV_ID_DISABLE_HT))
 		{
 			 rtw_ht_enable = 0;
 			 rtw_cbw40_enable = 0;
@@ -1650,7 +1650,7 @@ _adapter *rtw_pci_if1_init(struct dvobj_priv * dvobj, struct pci_dev *pdev, cons
 	decide_chip_type_by_pci_device_id(padapter, pdev);
 	#endif
 	
-	if((pnetdev = rtw_init_netdev(padapter)) == NULL) {
+	if ((pnetdev = rtw_init_netdev(padapter)) == NULL) {
 		goto free_adapter;
 	}
 
@@ -1664,7 +1664,7 @@ _adapter *rtw_pci_if1_init(struct dvobj_priv * dvobj, struct pci_dev *pdev, cons
 	padapter = rtw_netdev_priv(pnetdev);
 
 #ifdef CONFIG_IOCTL_CFG80211
-	if(rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0) {
+	if (rtw_wdev_alloc(padapter, dvobj_to_dev(dvobj)) != 0) {
 		goto free_adapter;
 	}
 #endif //CONFIG_IOCTL_CFG80211
@@ -1693,12 +1693,12 @@ _adapter *rtw_pci_if1_init(struct dvobj_priv * dvobj, struct pci_dev *pdev, cons
 	rtw_hal_read_chip_info(padapter);	
 
 	//step 5. 
-	if(rtw_init_drv_sw(padapter) ==_FAIL) {
+	if (rtw_init_drv_sw(padapter) ==_FAIL) {
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("Initialize driver software resource Failed!\n"));
 		goto free_hal_data;
 	}
 
-	if(rtw_hal_inirp_init(padapter) ==_FAIL) {
+	if (rtw_hal_inirp_init(padapter) ==_FAIL) {
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("Initialize PCI desc ring Failed!\n"));
 		goto free_hal_data;
 	}
@@ -1748,11 +1748,11 @@ _adapter *rtw_pci_if1_init(struct dvobj_priv * dvobj, struct pci_dev *pdev, cons
 	status = _SUCCESS;
 
 free_hal_data:
-	if(status != _SUCCESS && padapter->HalData)
+	if (status != _SUCCESS && padapter->HalData)
 		rtw_mfree(padapter->HalData, sizeof(*(padapter->HalData)));
 
 free_wdev:
-	if(status != _SUCCESS) {
+	if (status != _SUCCESS) {
 		#ifdef CONFIG_IOCTL_CFG80211
 		rtw_wdev_unregister(padapter->rtw_wdev);
 		rtw_wdev_free(padapter->rtw_wdev);
@@ -1778,7 +1778,7 @@ static void rtw_pci_if1_deinit(_adapter *if1)
 
 	//	padapter->intf_stop(padapter);
 
-	if(check_fwstate(pmlmepriv, _FW_LINKED))
+	if (check_fwstate(pmlmepriv, _FW_LINKED))
 		rtw_disassoc_cmd(if1, 0, _FALSE);
 
 #ifdef CONFIG_AP_MODE
@@ -1789,7 +1789,7 @@ static void rtw_pci_if1_deinit(_adapter *if1)
 #endif
 
 	if (if1->DriverState != DRIVER_DISAPPEAR) {
-		if(pnetdev) {
+		if (pnetdev) {
 			unregister_netdev(pnetdev); //will call netdev_close()
 			rtw_proc_remove_one(pnetdev);
 		}
@@ -1814,7 +1814,7 @@ static void rtw_pci_if1_deinit(_adapter *if1)
 	rtw_hal_inirp_deinit(if1);
 	rtw_free_drv_sw(if1);	
 
-	if(pnetdev)
+	if (pnetdev)
 		rtw_free_netdev(pnetdev);
 	
 #ifdef CONFIG_PLATFORM_RTD2880B
@@ -1858,7 +1858,7 @@ static int rtw_drv_init(struct pci_dev *pdev, const struct pci_device_id *pdid)
 
 	/* Initialize if2 */
 #ifdef CONFIG_CONCURRENT_MODE
-	if((if2 = rtw_drv_if2_init(if1, NULL, pci_set_intf_ops)) == NULL) {
+	if ((if2 = rtw_drv_if2_init(if1, NULL, pci_set_intf_ops)) == NULL) {
 		goto free_if1;
 	}
 #endif
@@ -1873,7 +1873,7 @@ static int rtw_drv_init(struct pci_dev *pdev, const struct pci_device_id *pdid)
 	status = _SUCCESS;
 
 free_if2:
-	if(status != _SUCCESS && if2) {
+	if (status != _SUCCESS && if2) {
 		#ifdef CONFIG_CONCURRENT_MODE
 		rtw_drv_if2_stop(if2);
 		rtw_drv_if2_free(if2);
@@ -1913,7 +1913,7 @@ _func_exit_;
 	padapter->bSurpriseRemoved = _FALSE;	// always trate as device exists
 											// this will let the driver to disable it's interrupt
 #else
-	if(pci_drvpriv.drv_registered == _TRUE)
+	if (pci_drvpriv.drv_registered == _TRUE)
 	{
 		//DBG_871X("r871xu_dev_remove():padapter->bSurpriseRemoved == _TRUE\n");
 		padapter->bSurpriseRemoved = _TRUE;

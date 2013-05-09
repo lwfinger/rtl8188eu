@@ -387,7 +387,7 @@ static inline unsigned char *skb_put(struct sk_buff *skb, unsigned int len)
 static inline unsigned char *__skb_pull(struct sk_buff *skb, unsigned int len)
 {
 	skb->len -= len;
-	if(skb->len < skb->data_len)
+	if (skb->len < skb->data_len)
 		printf("%s(),%d,error!\n",__FUNCTION__,__LINE__);
 	return skb->data += len;
 }
@@ -560,7 +560,7 @@ int rtw_usb_setup_endpoint(struct usb_device *dev,
 struct urb *rtw_usb_alloc_urb(uint16_t iso_packets, uint16_t mem_flags);
 struct usb_host_endpoint *rtw_usb_find_host_endpoint(struct usb_device *dev, uint8_t type, uint8_t ep);
 struct usb_host_interface *rtw_usb_altnum_to_altsetting(const struct usb_interface *intf, uint8_t alt_index);
-struct usb_interface *rtw_usb_ifnum_to_if(struct usb_device *dev, uint8_t iface_no);
+struct usb_interface *rtw_usb_ifnum_to_if (struct usb_device *dev, uint8_t iface_no);
 void *rtw_usb_buffer_alloc(struct usb_device *dev, usb_size_t size, uint8_t *dma_addr);
 void *rtw_usbd_get_intfdata(struct usb_interface *intf);
 void rtw_usb_linux_register(void *arg);
@@ -699,7 +699,7 @@ __inline static void _init_timer(_timer *ptimer,_nic_hdl padapter,void *pfunc,vo
 __inline static void _set_timer(_timer *ptimer,u32 delay_time)
 {	
 	//	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));
-	if(ptimer->function && ptimer->arg){
+	if (ptimer->function && ptimer->arg){
 		rtw_mtx_lock(NULL);
 		callout_reset(&ptimer->callout, delay_time,ptimer->function, ptimer->arg);
 		rtw_mtx_unlock(NULL);
@@ -1315,7 +1315,7 @@ extern void dbg_rtw_mfree(u8 *pbuf, u32 sz, const char *func, int line);
 #define rtw_zmalloc(sz)			dbg_rtw_zmalloc((sz), __FUNCTION__, __LINE__)
 #define rtw_mfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), __FUNCTION__, __LINE__)
 #else
-#define rtw_update_mem_stat(flag, sz) do {} while(0)
+#define rtw_update_mem_stat(flag, sz) do {} while (0)
 extern u8*	_rtw_vmalloc(u32 sz);
 extern u8*	_rtw_zvmalloc(u32 sz);
 extern void	_rtw_vmfree(u8 *pbuf, u32 sz);

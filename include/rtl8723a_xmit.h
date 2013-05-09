@@ -211,8 +211,8 @@ struct txrpt_ccx_8723a {
 void dump_txrpt_ccx_8723a(void *buf);
 void handle_txrpt_ccx_8723a(_adapter *adapter, void *buf);
 #else
-#define dump_txrpt_ccx_8723a(buf) do {} while(0)
-#define handle_txrpt_ccx_8723a(adapter, buf) do {} while(0)
+#define dump_txrpt_ccx_8723a(buf) do {} while (0)
+#define handle_txrpt_ccx_8723a(adapter, buf) do {} while (0)
 #endif //CONFIG_XMIT_ACK
 
 void rtl8723a_update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem);

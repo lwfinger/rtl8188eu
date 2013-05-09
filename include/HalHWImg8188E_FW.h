@@ -26,7 +26,7 @@
 /******************************************************************************
 *                           FW_AP.TXT
 ******************************************************************************/
-#if(DM_ODM_SUPPORT_TYPE & (ODM_AP))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 void
 ODM_ReadFirmware_8188E_FW_AP(
      IN   PDM_ODM_T    pDM_Odm,
