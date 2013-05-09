@@ -84,7 +84,7 @@ int proc_get_write_reg(char *page, char **start,
 	return 0;
 }
 
-int proc_set_write_reg(struct file *file, const char *buffer,
+int proc_set_write_reg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	struct net_device *dev = (struct net_device *)data;
@@ -168,7 +168,7 @@ int proc_get_read_reg(char *page, char **start,
 
 }
 
-int proc_set_read_reg(struct file *file, const char *buffer,
+int proc_set_read_reg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	char tmp[16];
@@ -651,7 +651,7 @@ int proc_get_rx_signal(char *page, char **start,
 	return len;
 }
 
-int proc_set_rx_signal(struct file *file, const char *buffer,
+int proc_set_rx_signal(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	struct net_device *dev = (struct net_device *)data;
@@ -709,7 +709,7 @@ int proc_get_ht_enable(char *page, char **start,
 	return len;
 }
 
-int proc_set_ht_enable(struct file *file, const char *buffer,
+int proc_set_ht_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	struct net_device *dev = (struct net_device *)data;
@@ -756,7 +756,7 @@ int proc_get_cbw40_enable(char *page, char **start,
 	return len;
 }
 
-int proc_set_cbw40_enable(struct file *file, const char *buffer,
+int proc_set_cbw40_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	struct net_device *dev = (struct net_device *)data;
@@ -805,7 +805,7 @@ int proc_get_ampdu_enable(char *page, char **start,
 	return len;
 }
 
-int proc_set_ampdu_enable(struct file *file, const char *buffer,
+int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	struct net_device *dev = (struct net_device *)data;
@@ -874,7 +874,7 @@ int proc_get_rx_stbc(char *page, char **start,
 	return len;
 }
 
-int proc_set_rx_stbc(struct file *file, const char *buffer,
+int proc_set_rx_stbc(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	struct net_device *dev = (struct net_device *)data;
@@ -911,7 +911,7 @@ int proc_get_rssi_disp(char *page, char **start,
 	return 0;
 }
 
-int proc_set_rssi_disp(struct file *file, const char *buffer,
+int proc_set_rssi_disp(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	struct net_device *dev = (struct net_device *)data;
@@ -1134,7 +1134,7 @@ int proc_get_btcoex_dbg(char *page, char **start,
 	return len;
 }
 
-int proc_set_btcoex_dbg(struct file *file, const char *buffer,
+int proc_set_btcoex_dbg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data)
 {
 	struct net_device *dev = (struct net_device *)data;

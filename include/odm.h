@@ -353,7 +353,7 @@ typedef struct _EDCA_TURBO_
 {
 	BOOLEAN bCurrentTurboEDCA;
 	BOOLEAN bIsCurRDLState;
-	#if (DM_ODM_SUPPORT_TYPE == ODM_CE	)
+	#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	u4Byte	prv_traffic_idx; // edca turbo
 	#endif
 

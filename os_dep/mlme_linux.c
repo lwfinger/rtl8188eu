@@ -137,9 +137,6 @@ void rtw_init_mlme_timer(_adapter *padapter)
 #endif	
 }
 
-extern void rtw_indicate_wx_assoc_event(_adapter *padapter);
-extern void rtw_indicate_wx_disassoc_event(_adapter *padapter);
-
 void rtw_os_indicate_connect(_adapter *adapter)
 {
 

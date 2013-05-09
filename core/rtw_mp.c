@@ -886,7 +886,7 @@ void SetTxPower(PADAPTER pAdapter)
 	Hal_SetTxPower(pAdapter);
 	}
 
-void SetTxAGCOffset(PADAPTER pAdapter, u32 ulTxAGCOffset)
+static void SetTxAGCOffset(PADAPTER pAdapter, u32 ulTxAGCOffset)
 {
 	u32 TxAGCOffset_B, TxAGCOffset_C, TxAGCOffset_D,tmpAGC;
 
@@ -970,13 +970,13 @@ void SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
 	Hal_SetCarrierSuppressionTx(pAdapter, bStart);
 }
 
-void SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
+static void SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetCCKContinuousTx(pAdapter,bStart);
 }
 
-void SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
+static void SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
    	Hal_SetOFDMContinuousTx( pAdapter, bStart);

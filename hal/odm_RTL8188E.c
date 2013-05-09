@@ -45,7 +45,7 @@ ODM_DIG_LowerBound_88E(
 }
 
 #if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
-VOID
+static VOID
 odm_RX_HWAntDivInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -83,7 +83,7 @@ odm_RX_HWAntDivInit(
 	//ODM_SetBBReg(pDM_Odm, 0xa00 , BIT15, 1); //Enable CCK AntDiv
 }
 
-VOID
+static VOID
 odm_TRX_HWAntDivInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -134,7 +134,7 @@ odm_TRX_HWAntDivInit(
 	//ODM_SetBBReg(pDM_Odm, 0xa00 , BIT15, 1); //Enable CCK AntDiv
 }
 
-VOID
+static VOID
 odm_FastAntTrainingInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -316,7 +316,7 @@ ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 }
 
 
-VOID
+static VOID
 odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u4Byte MacId)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -407,7 +407,7 @@ ODM_AntselStatistics_88E(
 }
 
 #define	TX_BY_REG	0
-VOID
+static VOID
 odm_HWAntDiv(
 	IN		PDM_ODM_T		pDM_Odm
 )

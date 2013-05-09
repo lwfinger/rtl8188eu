@@ -2301,7 +2301,7 @@ _func_exit_;
 #endif
 
 #if (RATE_ADAPTIVE_SUPPORT==1)
-void rpt_timer_setting_wk_hdl(_adapter *padapter, u16 minRptTime)
+static void rpt_timer_setting_wk_hdl(_adapter *padapter, u16 minRptTime)
 {
 	rtw_hal_set_hwreg(padapter, HW_VAR_RPT_TIMER_SETTING, (u8 *)(&minRptTime));
 }
@@ -2344,7 +2344,7 @@ _func_exit_;
 #endif
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
-void antenna_select_wk_hdl(_adapter *padapter, u8 antenna)
+static void antenna_select_wk_hdl(_adapter *padapter, u8 antenna)
 {
 	rtw_hal_set_hwreg(padapter, HW_VAR_ANTENNA_DIVERSITY_SELECT, (u8 *)(&antenna));
 }
@@ -2605,7 +2605,7 @@ exit:
 	return res;
 }
 
-s32 c2h_evt_hdl(_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter)
+static s32 c2h_evt_hdl(_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter)
 {
 	s32 ret = _FAIL;
 	u8 buf[16];

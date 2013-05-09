@@ -869,7 +869,7 @@ _func_enter_;
 		return NDIS_STATUS_NOT_ACCEPTED;
 
 	_irqlevel_changed_(&oldirql, LOWER);
-	rtw_hal_set_hwreg(Adapter, HW_VAR_TRIGGER_GPIO_0, 0);
+	rtw_hal_set_hwreg(Adapter, HW_VAR_TRIGGER_GPIO_0, NULL);
 	_irqlevel_changed_(&oldirql, RAISE);
 
 _func_exit_;

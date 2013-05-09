@@ -577,6 +577,14 @@ extern void hostapd_mode_unload(_adapter *padapter);
 #endif
 
 
+extern unsigned char WPA_TKIP_CIPHER[4];
+extern unsigned char RSN_TKIP_CIPHER[4];
+
+extern unsigned char REALTEK_96B_IE[];
+
+extern unsigned char	MCS_rate_2R[16];
+extern unsigned char	MCS_rate_1R[16];
+
 extern void rtw_joinbss_event_prehandle(_adapter *adapter, u8 *pbuf);
 extern void rtw_survey_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_surveydone_event_callback(_adapter *adapter, u8 *pbuf);
@@ -585,6 +593,9 @@ extern void rtw_stassoc_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_stadel_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_atimdone_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_cpwm_event_callback(_adapter *adapter, u8 *pbuf);
+void indicate_wx_scan_complete_event(_adapter *padapter);
+void rtw_indicate_wx_assoc_event(_adapter *padapter);
+void rtw_indicate_wx_disassoc_event(_adapter *padapter);
 
 #ifdef PLATFORM_WINDOWS
 extern thread_return event_thread(void *context);

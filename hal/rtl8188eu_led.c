@@ -22,8 +22,8 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtl8188e_hal.h>
+#include <rtl8188e_led.h>
 
-//================================================================================
 // LED object.
 //================================================================================
 
@@ -41,11 +41,7 @@
 //	Description:
 //		Turn on LED according to LedPin specified.
 //
-void
-SwLedOn(
-	_adapter			*padapter, 
-	PLED_871x		pLed
-)
+void SwLedOn(_adapter *padapter, PLED_871x pLed)
 {
 	u8	LedCfg;
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -78,11 +74,7 @@ SwLedOn(
 //	Description:
 //		Turn off LED according to LedPin specified.
 //
-void
-SwLedOff(
-	_adapter			*padapter, 
-	PLED_871x		pLed
-)
+void SwLedOff(_adapter *padapter, PLED_871x pLed)
 {
 	u8	LedCfg;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);

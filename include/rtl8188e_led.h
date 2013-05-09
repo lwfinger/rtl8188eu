@@ -28,19 +28,10 @@
 //================================================================================
 // Interface to manipulate LED objects.
 //================================================================================
-#ifdef CONFIG_USB_HCI
 void rtl8188eu_InitSwLeds(PADAPTER padapter);
 void rtl8188eu_DeInitSwLeds(PADAPTER padapter);
-#endif
-#ifdef CONFIG_PCI_HCI
-void rtl8188ee_gen_RefreshLedState(PADAPTER Adapter);
-void rtl8188ee_InitSwLeds(PADAPTER padapter);
-void rtl8188ee_DeInitSwLeds(PADAPTER padapter);
-#endif
-#ifdef CONFIG_SDIO_HCI
-void rtl8188es_InitSwLeds(PADAPTER padapter);
-void rtl8188es_DeInitSwLeds(PADAPTER padapter);
-#endif
+void SwLedOn(_adapter *padapter, PLED_871x pLed);
+void SwLedOff(_adapter *padapter, PLED_871x pLed);
 
 #endif
 
