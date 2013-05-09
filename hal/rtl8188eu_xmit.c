@@ -301,7 +301,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		offset += EARLY_MODE_INFO_SIZE ;//0x28			
 	}
 	#endif
-	//DBG_8192C("%s==>offset(0x%02x)  \n",__FUNCTION__,offset);
+	//DBG_8192C("%s==>offset(0x%02x) \n",__FUNCTION__,offset);
 	ptxdesc->txdw0 |= cpu_to_le32(((offset) << OFFSET_SHT) & 0x00ff0000);//32 bytes for TX Desc
 
 	if (bmcst) ptxdesc->txdw0 |= cpu_to_le32(BMC);
@@ -333,7 +333,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x3F);
 
 		qsel = (uint)(pattrib->qsel & 0x0000001f);
-		//DBG_8192C("==> macid(%d) qsel:0x%02x \n",pattrib->mac_id,qsel);
+		//DBG_8192C("==> macid(%d) qsel:0x%02x\n",pattrib->mac_id,qsel);
 		ptxdesc->txdw1 |= cpu_to_le32((qsel << QSEL_SHT) & 0x00001f00);
 
 		ptxdesc->txdw1 |= cpu_to_le32((pattrib->raid<< RATE_ID_SHT) & 0x000F0000);
@@ -763,12 +763,12 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	if (pxmitbuf == NULL) {
 		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
 		if (pxmitbuf == NULL){
-			//DBG_871X("%s #1, connot alloc xmitbuf!!!! \n",__FUNCTION__);
+			//DBG_871X("%s #1, connot alloc xmitbuf!!!!\n",__FUNCTION__);
 			return _FALSE;
 		}
 	}
 
-//DBG_8192C("%s ===================================== \n",__FUNCTION__);
+//DBG_8192C("%s =====================================\n",__FUNCTION__);
 	//3 1. pick up first frame
 	do {
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
@@ -936,7 +936,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 #else
 		res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
 		if (res == _FALSE) {
-			DBG_871X("%s coalesce failed \n",__FUNCTION__);
+			DBG_871X("%s coalesce failed\n",__FUNCTION__);
 			rtw_free_xmitframe(pxmitpriv, pxmitframe);
 			continue;
 		}
@@ -1011,7 +1011,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	
 	//3 4. write xmit buffer to USB FIFO
 	ff_hwaddr = rtw_get_ff_hwaddr(pfirstframe);
-//DBG_8192C("%s ===================================== write port,buf_size(%d) \n",__FUNCTION__,pbuf_tail);
+//DBG_8192C("%s ===================================== write port,buf_size(%d)\n",__FUNCTION__,pbuf_tail);
 	// xmit address == ((xmit_frame*)pxmitbuf->priv_data)->buf_addr
 	rtw_write_port(padapter, ff_hwaddr, pbuf_tail, (u8*)pxmitbuf);
 
@@ -1112,7 +1112,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 res = _SUCCESS;
-//DBG_8192C("==> %s \n",__FUNCTION__);
+//DBG_8192C("==> %s\n",__FUNCTION__);
 
 	res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
 	if (res == _SUCCESS) {
@@ -1145,7 +1145,7 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 	
 	_enter_critical_bh(&pxmitpriv->lock, &irqL);
 
-//DBG_8192C("==> %s \n",__FUNCTION__);
+//DBG_8192C("==> %s\n",__FUNCTION__);
 
 	if (rtw_txframes_sta_ac_pending(padapter, pattrib) > 0)
 	{

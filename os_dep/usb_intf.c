@@ -887,7 +887,7 @@ int rtw_hw_suspend(_adapter *padapter )
 	return 0;
 	
 error_exit:
-	DBG_871X("%s, failed \n",__FUNCTION__);
+	DBG_871X("%s, failed\n",__FUNCTION__);
 	return (-1);
 
 }
@@ -938,7 +938,7 @@ int rtw_hw_resume(_adapter *padapter)
 	
 	return 0;
 error_exit:
-	DBG_871X("%s, Open net dev failed \n",__FUNCTION__);
+	DBG_871X("%s, Open net dev failed\n",__FUNCTION__);
 	return (-1);
 }
 #endif
@@ -1282,7 +1282,7 @@ int autoresume_enter(_adapter* padapter)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	
-	DBG_871X("====> autoresume_enter \n");
+	DBG_871X("====> autoresume_enter\n");
 	
 	if (rf_off == pwrpriv->rf_pwrstate )
 	{
@@ -1332,7 +1332,7 @@ int autoresume_enter(_adapter* padapter)
 			DBG_871X("0!=pwrpriv->autopm_cnt[%d]   didn't usb_autopm_get_interface\n",pwrpriv->autopm_cnt);
 #endif //#ifndef	CONFIG_BT_COEXIST
 	}	
-	DBG_871X("<==== autoresume_enter \n");
+	DBG_871X("<==== autoresume_enter\n");
 error_exit:	
 
 	return result;
@@ -1483,7 +1483,7 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,33))				
 			if (usb_autopm_get_interface(pusb_intf) < 0) 
 				{
-					DBG_871X( "can't get autopm: \n");
+					DBG_871X( "can't get autopm:\n");
 				}
 	#endif
 #ifdef	CONFIG_BT_COEXIST

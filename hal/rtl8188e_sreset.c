@@ -55,7 +55,7 @@ static void _restore_security_setting(_adapter *padapter)
 	{
 		psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
 		if (psta == NULL) {
-			//DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail \n"));
+			//DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail\n"));
 		}
 		else
 		{
@@ -225,16 +225,16 @@ void rtl8188e_sreset_linked_status_check(_adapter *padapter)
 	u8 fw_status=0;
 	rx_dma_status = rtw_read32(padapter,REG_RXDMA_STATUS);
 	if (rx_dma_status!= 0x00){
-		DBG_8192C("%s REG_RXDMA_STATUS:0x%08x \n",__FUNCTION__,rx_dma_status);
+		DBG_8192C("%s REG_RXDMA_STATUS:0x%08x\n",__FUNCTION__,rx_dma_status);
 		rtw_write32(padapter,REG_RXDMA_STATUS,rx_dma_status);
 	}	
 	fw_status = rtw_read8(padapter,REG_FMETHR);
 	if (fw_status != 0x00)
 	{		
 		if (fw_status == 1)
-			DBG_8192C("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!   \n",__FUNCTION__,fw_status);
+			DBG_8192C("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!  \n",__FUNCTION__,fw_status);
 		else if (fw_status == 2)
-			DBG_8192C("%s REG_FW_STATUS (0x%02x), Condition_No_Match !!   \n",__FUNCTION__,fw_status);
+			DBG_8192C("%s REG_FW_STATUS (0x%02x), Condition_No_Match !!  \n",__FUNCTION__,fw_status);
 	}
 #if 0
 	u32 regc50,regc58,reg824,reg800;

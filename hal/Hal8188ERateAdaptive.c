@@ -258,7 +258,7 @@ RateDownFinish:
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("Rate down, RPT Timing default\n"));
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("RAWaitingCounter %d, RAPendingCounter %d",pRaInfo->RAWaitingCounter,pRaInfo->RAPendingCounter));
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("Rate down to RateID %d RateSGI %d\n", RateID, pRaInfo->RateSGI));
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("<=====odm_RateDown_8188E() \n"));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("<=====odm_RateDown_8188E()\n"));
 	return 0;
 }
 
@@ -271,7 +271,7 @@ odm_RateUp_8188E(
 	u1Byte RateID, HighestRate;
 	u1Byte i;
 
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateUp_8188E() \n"));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateUp_8188E()\n"));
 	if (NULL == pRaInfo)
 	{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("odm_RateUp_8188E(): pRaInfo is NULL\n"));
@@ -326,7 +326,7 @@ RateUpfinish:
 	pRaInfo->DecisionRate=RateID;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("Rate up to RateID %d\n", RateID));
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("RAWaitingCounter %d, RAPendingCounter %d",pRaInfo->RAWaitingCounter,pRaInfo->RAPendingCounter));
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("<=====odm_RateUp_8188E() \n"));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("<=====odm_RateUp_8188E()\n"));
 	return 0;
 }
 
@@ -347,7 +347,7 @@ odm_RateDecision_8188E(
 	//u4Byte pool_retry;
 	static u1Byte DynamicTxRPTTimingCounter=0;
 	
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateDecision_8188E() \n"));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateDecision_8188E()\n"));
 	
 	if (pRaInfo->Active && (pRaInfo->TOTAL > 0)) // STA used and data packet exits
 	{
@@ -426,7 +426,7 @@ odm_RateDecision_8188E(
 
 		odm_ResetRaCounter_8188E(  pRaInfo);
 	}
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("<=====odm_RateDecision_8188E() \n"));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("<=====odm_RateDecision_8188E()\n"));
 }
 
 static int 
@@ -527,7 +527,7 @@ odm_ARFBRefresh_8188E(
 		pRaInfo->DecisionRate = pRaInfo->HighestRate;
 	
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, 
-				("ODM_ARFBRefresh_8188E(): RateID=%d RateMask=%8.8x RAUseRate=%8.8x HighestRate=%d,DecisionRate=%d \n", 
+				("ODM_ARFBRefresh_8188E(): RateID=%d RateMask=%8.8x RAUseRate=%8.8x HighestRate=%d,DecisionRate=%d\n", 
 				pRaInfo->RateID, pRaInfo->RateMask, pRaInfo->RAUseRate, pRaInfo->HighestRate,pRaInfo->DecisionRate));
 	return 0;
 }
@@ -699,7 +699,7 @@ ODM_RAInfo_Init(
 	
 	//printk("%s ==>WirelessMode:0x%08x ,max_raid_idx:0x%02x\n ",__FUNCTION__,WirelessMode,max_rate_idx);
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, 
-				("ODM_RAInfo_Init(): WirelessMode:0x%08x ,max_raid_idx:0x%02x \n", 
+				("ODM_RAInfo_Init(): WirelessMode:0x%08x ,max_raid_idx:0x%02x\n", 
 				WirelessMode,max_rate_idx));
 	
 	pRaInfo->DecisionRate = max_rate_idx;

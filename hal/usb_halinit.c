@@ -88,7 +88,7 @@ _ConfigNormalChipOutEP_8188E(
 				break;
 			
 	}
-	DBG_871X("%s OutEpQueueSel(0x%02x), OutEpNumber(%d) \n",__FUNCTION__,pHalData->OutEpQueueSel,pHalData->OutEpNumber );
+	DBG_871X("%s OutEpQueueSel(0x%02x), OutEpNumber(%d)\n",__FUNCTION__,pHalData->OutEpQueueSel,pHalData->OutEpNumber );
 
 }
 
@@ -212,7 +212,7 @@ static void _InitPABias(_adapter *padapter)
 	//efuse_one_byte_read(padapter, 0x1FA, &pa_setting);
 	pa_setting = EFUSE_Read1Byte(padapter, 0x1FA);
 
-	//RT_TRACE(COMP_INIT, DBG_LOUD, ("_InitPABias 0x1FA 0x%x \n",pa_setting));
+	//RT_TRACE(COMP_INIT, DBG_LOUD, ("_InitPABias 0x1FA 0x%x\n",pa_setting));
 
 	if (!(pa_setting & BIT0))
 	{
@@ -1724,7 +1724,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MAC);
 	status = PHY_MACConfig8188E(Adapter);
 	if (status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init MAC ...... \n ");				
+		DBG_871X(" ### Failed to init MAC ......\n ");				
 		goto exit;
 	}
 #endif	
@@ -1737,7 +1737,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BB);
 	status = PHY_BBConfig8188E(Adapter);
 	if (status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init BB ...... \n ");
+		DBG_871X(" ### Failed to init BB ......\n ");
 		goto exit;
 	}
 #endif
@@ -1748,7 +1748,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
 	status = PHY_RFConfig8188E(Adapter);	
 	if (status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init RF ...... \n ");
+		DBG_871X(" ### Failed to init RF ......\n ");
 		goto exit;
 	}
 #endif
@@ -1757,7 +1757,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
 #if defined(CONFIG_IOL_EFUSE_PATCH)		
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if (status == _FAIL){	
-		DBG_871X("%s  rtl8188e_iol_efuse_patch failed \n",__FUNCTION__);
+		DBG_871X("%s  rtl8188e_iol_efuse_patch failed\n",__FUNCTION__);
 		goto exit;
 	}	
 #endif
@@ -1967,7 +1967,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_HAL_DM);
 		// Perform GPIO polling to find out current RF state. added by Roger, 2010.04.09.
 		if (pHalData->BoardType == BOARD_MINICARD /*&& (Adapter->MgntInfo.PowerSaveControl.bGpioRfSw)*/)
 		{
-			DBG_8192C("InitializeAdapter8192CU(): RF=%d \n", eRfPowerStateToSet);
+			DBG_8192C("InitializeAdapter8192CU(): RF=%d\n", eRfPowerStateToSet);
 			if (eRfPowerStateToSet == rf_off)
 			{				
 				//MgntActSet_RF_State(Adapter, rf_off, RF_CHANGE_BY_HW, _TRUE);
@@ -2197,7 +2197,7 @@ u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
  {
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-   	DBG_8192C("==> %s \n",__FUNCTION__);
+   	DBG_8192C("==> %s\n",__FUNCTION__);
 
 #ifdef CONFIG_SUPPORT_USB_INT
 	rtw_write32(Adapter, REG_HIMR_88E, IMR_DISABLED_88E);
@@ -2247,7 +2247,7 @@ _func_enter_;
 
 	status = _SUCCESS;
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("===> usb_inirp_init \n"));	
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("===> usb_inirp_init\n"));	
 		
 	precvpriv->ff_hwaddr = RECV_BULK_IN_ADDR;
 
@@ -2257,7 +2257,7 @@ _func_enter_;
 	{
 		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == _FALSE )
 		{
-			RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_port error \n"));
+			RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_port error\n"));
 			status = _FAIL;
 			goto exit;
 		}
@@ -2276,14 +2276,14 @@ _func_enter_;
 	_read_interrupt = pintfhdl->io_ops._read_interrupt;
 	if (_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == _FALSE )
 	{
-		RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_interrupt error \n"));
+		RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_interrupt error\n"));
 		status = _FAIL;
 	}
 #endif
 
 exit:
 	
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init\n"));
 
 _func_exit_;
 
@@ -2293,11 +2293,11 @@ _func_exit_;
 
 unsigned int rtl8188eu_inirp_deinit(PADAPTER Adapter)
 {	
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit\n"));
 	
 	rtw_read_port_cancel(Adapter);
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n <=== usb_rx_deinit \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n <=== usb_rx_deinit\n"));
 
 	return _SUCCESS;
 }
@@ -2950,7 +2950,7 @@ static u32 Hal_readPGDataFromConfigFile(
 		vfs_read(fp, temp, 2, &pos);
 		PROMContent[i] = simple_strtoul(temp, NULL, 16 );
 		pos += 1; // Filter the space character
-		DBG_871X("%02X \n", PROMContent[i]);
+		DBG_871X("%02X\n", PROMContent[i]);
 	}
 	DBG_871X("\n");
 	set_fs(fs);
@@ -3008,7 +3008,7 @@ Hal_ReadMACAddrFromFile_8188EU(
 				end++;
 				head = end;
 			}
-			DBG_871X("%02x \n", pEEPROM->mac_addr[i]);
+			DBG_871X("%02x\n", pEEPROM->mac_addr[i]);
 		}
 		DBG_871X("\n");
 		set_fs(fs);
@@ -4069,7 +4069,7 @@ _func_enter_;
 				struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 				u16 bcn_interval = 	*((u16 *)val);
 				if ((pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE){
-					DBG_8192C("%s==> bcn_interval:%d, eraly_int:%d \n",__FUNCTION__,bcn_interval,bcn_interval>>1);
+					DBG_8192C("%s==> bcn_interval:%d, eraly_int:%d\n",__FUNCTION__,bcn_interval,bcn_interval>>1);
 					rtw_write8(Adapter, REG_DRVERLYINT, bcn_interval>>1);// 50ms for sdio 
 				}			
 			}
@@ -4198,9 +4198,9 @@ _func_enter_;
 					ulCommand= ulCommand | CAM_POLLINIG|CAM_WRITE;
 					// write content 0 is equall to mark invalid
 					rtw_write32(Adapter, WCAMI, ulContent);  //delay_ms(40);
-					//RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A4: %lx \n",ulContent));
+					//RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A4: %lx\n",ulContent));
 					rtw_write32(Adapter, RWCAM, ulCommand);  //delay_ms(40);
-					//RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A0: %lx \n",ulCommand));
+					//RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A0: %lx\n",ulCommand));
 				}
 			}
 			break;
@@ -4495,7 +4495,7 @@ _func_enter_;
 							break;
 					}while (trycnt--);
 					if (trycnt ==0)
-						DBG_8192C("Stop RX DMA failed...... \n");
+						DBG_8192C("Stop RX DMA failed......\n");
 
 					//RQPN Load 0
 					rtw_write16(Adapter,REG_RQPN_NPQ,0x0);
@@ -4574,7 +4574,7 @@ _func_enter_;
 						}
 					}while (trycnt--);
 					if (trycnt ==0)
-						DBG_871X_LEVEL(_drv_always_, "Stop RX DMA failed...... \n");
+						DBG_871X_LEVEL(_drv_always_, "Stop RX DMA failed......\n");
 
 					//Set WOWLAN H2C command.
 					DBG_871X_LEVEL(_drv_always_, "Set WOWLan cmd\n");
@@ -4836,7 +4836,7 @@ GetHalDefVar8188EUsb(
 			{
 				u8Byte	DebugComponents = *((u32*)pValue);	
 				PDM_ODM_T	pDM_Odm = &(pHalData->odmpriv);
-				printk("pDM_Odm->DebugComponents = 0x%llx \n",pDM_Odm->DebugComponents );			
+				printk("pDM_Odm->DebugComponents = 0x%llx\n",pDM_Odm->DebugComponents );			
 			}
 			break;
 			
@@ -5253,7 +5253,7 @@ _func_enter_;
 
 	padapter->HalData = rtw_zmalloc(sizeof(HAL_DATA_TYPE));
 	if (padapter->HalData == NULL){
-		DBG_8192C("cant not alloc memory for HAL DATA \n");
+		DBG_8192C("cant not alloc memory for HAL DATA\n");
 	}
 	//_rtw_memset(padapter->HalData, 0, sizeof(HAL_DATA_TYPE));
 	padapter->hal_data_sz = sizeof(HAL_DATA_TYPE);

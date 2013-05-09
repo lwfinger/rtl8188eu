@@ -281,13 +281,13 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
 		{			
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG			
-			printk("~~~ IOL Config MAC Success !!! \n");
+			printk("~~~ IOL Config MAC Success !!!\n");
 			//compare writed data
 			{
 				u4Byte idx;
 				u1Byte cdata;
 				// HAL_STATUS_FAILURE;
-				printk("  MAC data compare => array_len:%d \n",cmpdata_idx);
+				printk("  MAC data compare => array_len:%d\n",cmpdata_idx);
 				for (idx=0;idx< cmpdata_idx;idx++)
 				{
 					cdata = ODM_Read1Byte(pDM_Odm, cmpdata[idx].addr);
@@ -310,7 +310,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 		
 		}
 		else{
-			printk("~~~ MAC IOL_exec_cmds Failed !!! \n");
+			printk("~~~ MAC IOL_exec_cmds Failed !!!\n");
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			{
 				//dump data from TX packet buffer				

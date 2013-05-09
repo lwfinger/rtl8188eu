@@ -527,7 +527,7 @@ int hostapd_mode_init(_adapter *padapter)
 	
 	if (dev_alloc_name(pnetdev,"mgnt.wlan%d") < 0)
 	{
-		DBG_871X("hostapd_mode_init(): dev_alloc_name, fail! \n");		
+		DBG_871X("hostapd_mode_init(): dev_alloc_name, fail!\n");		
 	}
 
 

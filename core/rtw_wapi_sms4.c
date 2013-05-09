@@ -399,7 +399,7 @@ void WapiGetLastRxUnicastPNForQoSData(
 			      memcpy(PNOut,pWapiStaInfo->lastRxUnicastPNVOQueue,16);
 			      break;
 		default:
-				WAPI_TRACE(WAPI_ERR, "%s: Unknown TID \n", __FUNCTION__);
+				WAPI_TRACE(WAPI_ERR, "%s: Unknown TID\n", __FUNCTION__);
 				break;
 	}
 	WAPI_TRACE(WAPI_RX, "<=========== %s\n", __FUNCTION__);
@@ -432,7 +432,7 @@ void WapiSetLastRxUnicastPNForQoSData(
 			      memcpy(pWapiStaInfo->lastRxUnicastPNVOQueue,PNIn,16);
 			      break;
 		default:
-				WAPI_TRACE(WAPI_ERR, "%s: Unknown TID \n", __FUNCTION__);
+				WAPI_TRACE(WAPI_ERR, "%s: Unknown TID\n", __FUNCTION__);
 				break;
 	}
 	WAPI_TRACE(WAPI_RX, "<=========== %s\n", __FUNCTION__);
@@ -591,7 +591,7 @@ void SecSWSMS4Encryption(
 
 	WAPI_TRACE(WAPI_TX, "=========>%s\n", __FUNCTION__);
 
-	WAPI_TRACE(WAPI_TX,"hdrlen: %d \n",pattrib->hdrlen);
+	WAPI_TRACE(WAPI_TX,"hdrlen: %d\n",pattrib->hdrlen);
 
 	return;
 

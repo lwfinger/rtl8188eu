@@ -283,7 +283,7 @@ _func_enter_;
 
 	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("rtw_recv_indicatepkt():skb != NULL !!!\n"));		
 	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("rtw_recv_indicatepkt():precv_frame->u.hdr.rx_head=%p  precv_frame->hdr.rx_data=%p\n", precv_frame->u.hdr.rx_head, precv_frame->u.hdr.rx_data));
-	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("precv_frame->hdr.rx_tail=%p precv_frame->u.hdr.rx_end=%p precv_frame->hdr.len=%d \n", precv_frame->u.hdr.rx_tail, precv_frame->u.hdr.rx_end, precv_frame->u.hdr.len));
+	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("precv_frame->hdr.rx_tail=%p precv_frame->u.hdr.rx_end=%p precv_frame->hdr.len=%d\n", precv_frame->u.hdr.rx_tail, precv_frame->u.hdr.rx_end, precv_frame->u.hdr.len));
 
 	skb->data = precv_frame->u.hdr.rx_data;
 
@@ -375,10 +375,10 @@ _func_enter_;
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	if ( (pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1) ) {
 		skb->ip_summed = CHECKSUM_UNNECESSARY;
-		//DBG_871X("CHECKSUM_UNNECESSARY \n");
+		//DBG_871X("CHECKSUM_UNNECESSARY\n");
 	} else {
 		skb->ip_summed = CHECKSUM_NONE;
-		//DBG_871X("CHECKSUM_NONE(%d, %d) \n", pattrib->tcpchk_valid, pattrib->tcp_chkrpt);
+		//DBG_871X("CHECKSUM_NONE(%d, %d)\n", pattrib->tcpchk_valid, pattrib->tcp_chkrpt);
 	}
 #else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
 

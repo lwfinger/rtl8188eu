@@ -1032,7 +1032,7 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 
 	if (dev_alloc_name(pnetdev, ifname) < 0)
 	{
-		RT_TRACE(_module_os_intfs_c_,_drv_err_,("dev_alloc_name, fail! \n"));
+		RT_TRACE(_module_os_intfs_c_,_drv_err_,("dev_alloc_name, fail!\n"));
 	}
 
 	netif_carrier_off(pnetdev);
@@ -1179,14 +1179,14 @@ void rtw_stop_drv_threads (_adapter *padapter)
 	_rtw_up_sema(&padapter->xmitpriv.xmit_sema);
 	_rtw_down_sema(&padapter->xmitpriv.terminate_xmitthread_sema);
 	}
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("\n drv_halt: rtw_xmit_thread can be terminated ! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("\n drv_halt: rtw_xmit_thread can be terminated !\n"));
 #endif
 	 
 #ifdef CONFIG_RECV_THREAD_MODE	
 	// Below is to termindate rx_thread...
 	_rtw_up_sema(&padapter->recvpriv.recv_sema);
 	_rtw_down_sema(&padapter->recvpriv.terminate_recvthread_sema);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("\n drv_halt:recv_thread can be terminated! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("\n drv_halt:recv_thread can be terminated!\n"));
 #endif
 
 	rtw_hal_stop_thread(padapter);
@@ -1451,7 +1451,7 @@ exit:
 void rtw_cancel_dynamic_chk_timer(_adapter *padapter)
 {
 	_cancel_timer_ex(&padapter->mlmepriv.dynamic_chk_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel dynamic_chk_timer! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel dynamic_chk_timer!\n"));
 }
 #endif
 
@@ -1460,20 +1460,20 @@ void rtw_cancel_all_timer(_adapter *padapter)
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+rtw_cancel_all_timer\n"));
 
 	_cancel_timer_ex(&padapter->mlmepriv.assoc_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel association timer complete! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel association timer complete!\n"));
 
 	//_cancel_timer_ex(&padapter->securitypriv.tkip_timer);
-	//RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel tkip_timer! \n"));
+	//RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel tkip_timer!\n"));
 
 	_cancel_timer_ex(&padapter->mlmepriv.scan_to_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel scan_to_timer! \n"));	
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel scan_to_timer!\n"));	
 	
 	_cancel_timer_ex(&padapter->mlmepriv.dynamic_chk_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel dynamic_chk_timer! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel dynamic_chk_timer!\n"));
 
 	// cancel sw led timer
 	rtw_hal_sw_led_deinit(padapter);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel DeInitSwLeds! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel DeInitSwLeds!\n"));
 
 	_cancel_timer_ex(&padapter->pwrctrlpriv.pwr_state_check_timer);
 
@@ -1485,7 +1485,7 @@ void rtw_cancel_all_timer(_adapter *padapter)
 
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
 	_cancel_timer_ex(&padapter->mlmepriv.set_scan_deny_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel set_scan_deny_timer! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel set_scan_deny_timer!\n"));
 #endif
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
@@ -1801,7 +1801,7 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, char *name,
 
 	//step init_io_priv
 	if ((rtw_init_io_priv(padapter, set_intf_ops)) == _FAIL) {
-		RT_TRACE(_module_hci_intfs_c_,_drv_err_,(" \n Can't init io_reqs\n"));
+		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("\n Can't init io_reqs\n"));
 	}
 
 	//step read_chip_version

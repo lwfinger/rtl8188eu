@@ -99,7 +99,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 #endif
 
 	if ( pIo_buf== NULL) {
-		DBG_8192C( "[%s] pIo_buf == NULL \n", __FUNCTION__ );
+		DBG_8192C( "[%s] pIo_buf == NULL\n", __FUNCTION__ );
 		status = -ENOMEM;
 		goto release_mutex;
 	}
@@ -409,7 +409,7 @@ void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
 		hisr_ex = le32_to_cpu(hisr_ex);
 		
 		if ((hisr != 0) || (hisr_ex!=0))
-			DBG_871X("===> %s hisr:0x%08x ,hisr_ex:0x%08x \n",__FUNCTION__,hisr,hisr_ex);
+			DBG_871X("===> %s hisr:0x%08x ,hisr_ex:0x%08x\n",__FUNCTION__,hisr,hisr_ex);
 	}
 	#endif
 
@@ -475,13 +475,13 @@ void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
 
 #ifdef DBG_CONFIG_ERROR_DETECT_INT
 	if (  pHalData->IntArray[1]  & IMR_TXERR_88E )
-		DBG_871X("===> %s Tx Error Flag Interrupt Status \n",__FUNCTION__);
+		DBG_871X("===> %s Tx Error Flag Interrupt Status\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_RXERR_88E )
-		DBG_871X("===> %s Rx Error Flag INT Status \n",__FUNCTION__);
+		DBG_871X("===> %s Rx Error Flag INT Status\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_TXFOVW_88E )
-		DBG_871X("===> %s Transmit FIFO Overflow \n",__FUNCTION__);
+		DBG_871X("===> %s Transmit FIFO Overflow\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_RXFOVW_88E )
-		DBG_871X("===> %s Receive FIFO Overflow \n",__FUNCTION__);	
+		DBG_871X("===> %s Receive FIFO Overflow\n",__FUNCTION__);	
 #endif//DBG_CONFIG_ERROR_DETECT_INT
 
 
@@ -844,7 +844,7 @@ static int recvbuf2recvframe(_adapter *padapter, struct recv_buf *precvbuf)
 		
 #ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV			
 		//if (pattrib->pkt_len>2000){
-		//	printk("%s: RX Warning!pkt_len= %d, data rate=0x%02x \n", __FUNCTION__,pattrib->pkt_len,pattrib->mcs_rate);	
+		//	printk("%s: RX Warning!pkt_len= %d, data rate=0x%02x\n", __FUNCTION__,pattrib->pkt_len,pattrib->mcs_rate);	
 		//}
 #endif					
 		if ((pattrib->crc_err) || (pattrib->icv_err))
@@ -852,7 +852,7 @@ static int recvbuf2recvframe(_adapter *padapter, struct recv_buf *precvbuf)
 			if (pattrib->pkt_len>2000){
 				DBG_8192C("%s: RX Warning! crc_err=%d icv_err=%d, skip!\n", __FUNCTION__, pattrib->crc_err, pattrib->icv_err);
 #ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV		
-				printk("%s: RX Warning!pkt_len= %d, data rate=0x%02x \n", __FUNCTION__,pattrib->pkt_len,pattrib->mcs_rate);
+				printk("%s: RX Warning!pkt_len= %d, data rate=0x%02x\n", __FUNCTION__,pattrib->pkt_len,pattrib->mcs_rate);
 #endif
 			}
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
@@ -980,13 +980,13 @@ static int recvbuf2recvframe(_adapter *padapter, struct recv_buf *precvbuf)
 				
 			//enqueue recvframe to txrtp queue
 			if (pattrib->pkt_rpt_type == TX_REPORT1){
-				//DBG_8192C("rx CCX \n");
+				//DBG_8192C("rx CCX\n");
 				//CCX-TXRPT ack for xmit mgmt frames.
 				handle_txrpt_ccx_88e(padapter, precvframe->u.hdr.rx_data);
 				
 			}
 			else if (pattrib->pkt_rpt_type == TX_REPORT2){
-				//DBG_8192C("rx TX RPT \n");
+				//DBG_8192C("rx TX RPT\n");
 				ODM_RA_TxRPT2Handle_8188E(
 							&pHalData->odmpriv,
 							precvframe->u.hdr.rx_data,
@@ -998,7 +998,7 @@ static int recvbuf2recvframe(_adapter *padapter, struct recv_buf *precvbuf)
 			}
 			else if (pattrib->pkt_rpt_type == HIS_REPORT)
 			{
-				//DBG_8192C("%s , rx USB HISR \n",__FUNCTION__);
+				//DBG_8192C("%s , rx USB HISR\n",__FUNCTION__);
 				#ifdef CONFIG_SUPPORT_USB_INT
 				interrupt_handler_8188eu(padapter,pattrib->pkt_len,precvframe->u.hdr.rx_data);
 				#endif
@@ -1033,7 +1033,7 @@ void rtl8188eu_recv_tasklet(void *priv)
 	{
 		if ((padapter->bDriverStopped == _TRUE)||(padapter->bSurpriseRemoved== _TRUE))
 		{
-			DBG_8192C("recv_tasklet => bDriverStopped or bSurpriseRemoved \n");
+			DBG_8192C("recv_tasklet => bDriverStopped or bSurpriseRemoved\n");
 			
 			break;
 		}
@@ -1086,7 +1086,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 	}
 	else
 	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0 \n", purb->status));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0\n", purb->status));
 	
 		DBG_8192C("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
@@ -1265,7 +1265,7 @@ static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
 		if ((pattrib->pkt_len<=0) || (pkt_offset>transfer_len))
 		{	
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("recvbuf2recvframe: pkt_len<=0\n"));
-			DBG_8192C("%s()-%d: RX Warning!,pkt_len<=0 or pkt_offset> transfoer_len \n", __FUNCTION__, __LINE__);	
+			DBG_8192C("%s()-%d: RX Warning!,pkt_len<=0 or pkt_offset> transfoer_len\n", __FUNCTION__, __LINE__);	
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
 			goto _exit_recvbuf2recvframe;
 		}
@@ -1319,7 +1319,7 @@ static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
 		{
 			if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0))
 			{				
-				DBG_8192C("recvbuf2recvframe: alloc_skb fail , drop frag frame \n");
+				DBG_8192C("recvbuf2recvframe: alloc_skb fail , drop frag frame\n");
 				rtw_free_recvframe(precvframe, pfree_recv_queue);
 				goto _exit_recvbuf2recvframe;
 			}
@@ -1386,12 +1386,12 @@ static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
 				
 			//enqueue recvframe to txrtp queue
 			if (pattrib->pkt_rpt_type == TX_REPORT1){
-				//DBG_8192C("rx CCX \n");
+				//DBG_8192C("rx CCX\n");
 				//CCX-TXRPT ack for xmit mgmt frames.
 				handle_txrpt_ccx_88e(padapter, precvframe->u.hdr.rx_data);
 			}
 			else if (pattrib->pkt_rpt_type == TX_REPORT2){
-				//DBG_8192C("rx TX RPT \n");
+				//DBG_8192C("rx TX RPT\n");
 				ODM_RA_TxRPT2Handle_8188E(
 							&pHalData->odmpriv,
 							precvframe->u.hdr.rx_data,
@@ -1403,7 +1403,7 @@ static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
 			}
 			else if (pattrib->pkt_rpt_type == HIS_REPORT)
 			{
-				//DBG_8192C("%s , rx USB HISR \n",__FUNCTION__);
+				//DBG_8192C("%s , rx USB HISR\n",__FUNCTION__);
 				#ifdef CONFIG_SUPPORT_USB_INT
 				interrupt_handler_8188eu(padapter,pattrib->pkt_len,precvframe->u.hdr.rx_data);
 				#endif
@@ -1438,7 +1438,7 @@ void rtl8188eu_recv_tasklet(void *priv)
 	{
 		if ((padapter->bDriverStopped == _TRUE)||(padapter->bSurpriseRemoved== _TRUE))
 		{
-			DBG_8192C("recv_tasklet => bDriverStopped or bSurpriseRemoved \n");
+			DBG_8192C("recv_tasklet => bDriverStopped or bSurpriseRemoved\n");
 			dev_kfree_skb_any(pskb);
 			break;
 		}
@@ -1529,7 +1529,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 	}
 	else
 	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0 \n", purb->status));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0\n", purb->status));
 	
 		DBG_8192C("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 

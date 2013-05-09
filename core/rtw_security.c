@@ -1872,9 +1872,9 @@ _func_enter_;
 	for (i=0;i<8;i++){
 		if (pframe[hdrlen+8+plen-8+i] != message[hdrlen+8+plen-8+i])
 		{
-			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x) \n",
+			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x)\n",
 						i,pframe[hdrlen+8+plen-8+i],message[hdrlen+8+plen-8+i]));
-			DBG_871X("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x) \n",
+			DBG_871X("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x)\n",
 						i,pframe[hdrlen+8+plen-8+i],message[hdrlen+8+plen-8+i]);
 			res = _FAIL;
 		}
@@ -1924,7 +1924,7 @@ _func_enter_;
 				prwskey = psecuritypriv->dot118021XGrpKey[prxattrib->key_index].skey;
 				if (psecuritypriv->dot118021XGrpKeyid != prxattrib->key_index)
 				{
-					DBG_871X("not match packet_index=%d, install_index=%d \n"
+					DBG_871X("not match packet_index=%d, install_index=%d\n"
 					, prxattrib->key_index, psecuritypriv->dot118021XGrpKeyid);
 					res=_FAIL;
 					goto exit;

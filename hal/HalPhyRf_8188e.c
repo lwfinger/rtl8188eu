@@ -337,7 +337,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 				if (ThermalValue_AVG_count)
 				{
 					ThermalValue = (u1Byte)(ThermalValue_AVG / ThermalValue_AVG_count);
-					ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("AVG Thermal Meter = 0x%x \n", ThermalValue));					
+					ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("AVG Thermal Meter = 0x%x\n", ThermalValue));					
 				}
 			}			
 		}
@@ -367,9 +367,9 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 		delta_LCK = (ThermalValue > pDM_Odm->RFCalibrateInfo.ThermalValue_LCK)?(ThermalValue - pDM_Odm->RFCalibrateInfo.ThermalValue_LCK):(pDM_Odm->RFCalibrateInfo.ThermalValue_LCK - ThermalValue);
 		delta_IQK = (ThermalValue > pDM_Odm->RFCalibrateInfo.ThermalValue_IQK)?(ThermalValue - pDM_Odm->RFCalibrateInfo.ThermalValue_IQK):(pDM_Odm->RFCalibrateInfo.ThermalValue_IQK - ThermalValue);
 #if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE))	
-		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("Readback Thermal Meter = 0x%x pre thermal meter 0x%x EEPROMthermalmeter 0x%x delta 0x%x delta_LCK 0x%x delta_IQK 0x%x \n",   ThermalValue, pDM_Odm->RFCalibrateInfo.ThermalValue, pHalData->EEPROMThermalMeter, delta, delta_LCK, delta_IQK));
+		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("Readback Thermal Meter = 0x%x pre thermal meter 0x%x EEPROMthermalmeter 0x%x delta 0x%x delta_LCK 0x%x delta_IQK 0x%x\n",   ThermalValue, pDM_Odm->RFCalibrateInfo.ThermalValue, pHalData->EEPROMThermalMeter, delta, delta_LCK, delta_IQK));
 #else
-		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("Readback Thermal Meter = 0x%x pre thermal meter 0x%x EEPROMthermalmeter 0x%x delta 0x%x delta_LCK 0x%x delta_IQK 0x%x \n",   ThermalValue, pDM_Odm->RFCalibrateInfo.ThermalValue, pDM_Odm->priv->pmib->dot11RFEntry.ther, delta, delta_LCK, delta_IQK));
+		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("Readback Thermal Meter = 0x%x pre thermal meter 0x%x EEPROMthermalmeter 0x%x delta 0x%x delta_LCK 0x%x delta_IQK 0x%x\n",   ThermalValue, pDM_Odm->RFCalibrateInfo.ThermalValue, pDM_Odm->priv->pmib->dot11RFEntry.ther, delta, delta_LCK, delta_IQK));
 #endif
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("pre thermal meter LCK 0x%x pre thermal meter IQK 0x%x delta_LCK_bound 0x%x delta_IQK_bound 0x%x\n",   pDM_Odm->RFCalibrateInfo.ThermalValue_LCK, pDM_Odm->RFCalibrateInfo.ThermalValue_IQK, pDM_Odm->RFCalibrateInfo.Delta_LCK, pDM_Odm->RFCalibrateInfo.Delta_IQK));
 
@@ -826,7 +826,7 @@ phy_PathA_RxIQK(
 
 	u4tmp = 0x80007C00 | (regE94&0x3FF0000)  | ((regE9C&0x3FF0000) >> 16);	
 	ODM_SetBBReg(pDM_Odm, rTx_IQK, bMaskDWord, u4tmp);
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("0xe40 = 0x%x u4tmp = 0x%x \n", ODM_GetBBReg(pDM_Odm, rTx_IQK, bMaskDWord), u4tmp));	
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("0xe40 = 0x%x u4tmp = 0x%x\n", ODM_GetBBReg(pDM_Odm, rTx_IQK, bMaskDWord), u4tmp));	
 	
 
 	//1 RX IQK
@@ -2536,8 +2536,8 @@ if (*(pDM_Odm->mp_mode) == 1)
 	is13simular = FALSE;
 
 
-	//ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK !!!interface %d currentband %d ishardwareD %d \n", pDM_Odm->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
-//	RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate \n"));
+	//ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK !!!interface %d currentband %d ishardwareD %d\n", pDM_Odm->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
+//	RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate\n"));
 	for (i=0; i<3; i++)
 	{		
 	 	
@@ -2602,7 +2602,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 			}
 		}
 	}
-//	RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate \n"));
+//	RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate\n"));
 
 	for (i=0; i<4; i++)
 	{

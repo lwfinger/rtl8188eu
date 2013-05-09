@@ -3576,7 +3576,7 @@ static void ro_ch_timer_process (void *FunctionContext)
 	_adapter *adapter = (_adapter *)FunctionContext;
 	struct rtw_wdev_priv *pwdev_priv = wdev_to_priv(adapter->rtw_wdev);
 
-	//printk("%s \n", __FUNCTION__);
+	//printk("%s\n", __FUNCTION__);
 	
 #ifdef	CONFIG_CONCURRENT_MODE
 	ATOMIC_SET(&pwdev_priv->ro_ch_to, 1);

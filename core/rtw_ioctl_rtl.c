@@ -235,7 +235,7 @@ NDIS_STATUS oid_rt_get_signal_quality_hdl(struct oid_par_priv* poid_par_priv)
 	NDIS_STATUS	 	status = NDIS_STATUS_SUCCESS;
 	PADAPTER		padapter = (PADAPTER)(poid_par_priv->adapter_context);
 
-	//DEBUG_ERR(("<**********************oid_rt_get_signal_quality_hdl \n"));
+	//DEBUG_ERR(("<**********************oid_rt_get_signal_quality_hdl\n"));
 	if (poid_par_priv->type_of_oid != QUERY_OID)
 	{
 		status = NDIS_STATUS_NOT_ACCEPTED;
@@ -727,7 +727,7 @@ NDIS_STATUS oid_rt_supported_wireless_mode_hdl(struct oid_par_priv* poid_par_pri
 	NDIS_STATUS	 	status = NDIS_STATUS_SUCCESS;
 	PADAPTER		padapter = (PADAPTER)(poid_par_priv->adapter_context);
 	ULONG 			ulInfo = 0 ;
-	//DEBUG_ERR(("<**********************oid_rt_supported_wireless_mode_hdl \n"));	
+	//DEBUG_ERR(("<**********************oid_rt_supported_wireless_mode_hdl\n"));	
 	if (poid_par_priv->type_of_oid != QUERY_OID)
 	{
 		status = NDIS_STATUS_NOT_ACCEPTED;
@@ -864,7 +864,7 @@ NDIS_STATUS oid_rt_pro_rf_write_registry_hdl(struct oid_par_priv* poid_par_priv)
 	PADAPTER		Adapter = (PADAPTER)(poid_par_priv->adapter_context);
 	_irqL			oldirql;
 	_func_enter_;
-	//DEBUG_ERR(("<**********************oid_rt_pro_rf_write_registry_hdl \n"));
+	//DEBUG_ERR(("<**********************oid_rt_pro_rf_write_registry_hdl\n"));
 	if (poid_par_priv->type_of_oid != SET_OID) //QUERY_OID
 	{
 		status = NDIS_STATUS_NOT_ACCEPTED;
@@ -906,7 +906,7 @@ NDIS_STATUS oid_rt_pro_rf_read_registry_hdl(struct oid_par_priv* poid_par_priv)
 	_irqL	oldirql;
 	_func_enter_;
 
-	//DEBUG_ERR(("<**********************oid_rt_pro_rf_read_registry_hdl \n"));
+	//DEBUG_ERR(("<**********************oid_rt_pro_rf_read_registry_hdl\n"));
 	if (poid_par_priv->type_of_oid != SET_OID) //QUERY_OID
 	{
 		status = NDIS_STATUS_NOT_ACCEPTED;

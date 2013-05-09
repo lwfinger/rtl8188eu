@@ -843,7 +843,7 @@ void rtw_pci_enable_aspm(_adapter *padapter)
 		//NdisRawWritePortUlong((ULONG_PTR)PCI_CONF_ADDRESS , PciCfgAddrPort+(Num4Bytes << 2));
 		//NdisRawReadPortUlong((ULONG_PTR)PCI_CONF_DATA,&uDeviceASPMSupportSetting);
 		pci_read_config_dword(bridge_pdev, (pcipriv->pcibridge_pciehdr_offset+0x0C), &u_device_aspmsupportsetting);
-		DBG_871X("rtw_pci_enable_aspm(): Bridge ASPM support %x \n",u_device_aspmsupportsetting);
+		DBG_871X("rtw_pci_enable_aspm(): Bridge ASPM support %x\n",u_device_aspmsupportsetting);
 		if (((u_device_aspmsupportsetting & BIT(11)) != BIT(11)) || ((u_device_aspmsupportsetting & BIT(10)) != BIT(10)))
 		{
 			if (pdvobjpriv->const_devicepci_aspm_setting == 3)
@@ -855,7 +855,7 @@ void rtw_pci_enable_aspm(_adapter *padapter)
 			{
 				if ((u_device_aspmsupportsetting & BIT(11)) != BIT(11))
 				{
-					DBG_871X("rtw_pci_enable_aspm(): Bridge not support L1 \n");
+					DBG_871X("rtw_pci_enable_aspm(): Bridge not support L1\n");
 					return;
 				}
 			}
@@ -863,7 +863,7 @@ void rtw_pci_enable_aspm(_adapter *padapter)
 			{
 				if ((u_device_aspmsupportsetting & BIT(10)) != BIT(10))
 				{
-					DBG_871X("rtw_pci_enable_aspm(): Bridge not support L0s \n");
+					DBG_871X("rtw_pci_enable_aspm(): Bridge not support L0s\n");
 					return;
 				}
 
@@ -871,7 +871,7 @@ void rtw_pci_enable_aspm(_adapter *padapter)
 		}
 		else
 		{
-			DBG_871X("rtw_pci_enable_aspm(): Bridge support L0s and L1 \n");
+			DBG_871X("rtw_pci_enable_aspm(): Bridge support L0s and L1\n");
 		}
 	}
 

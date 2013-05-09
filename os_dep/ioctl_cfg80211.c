@@ -1095,14 +1095,14 @@ _func_enter_;
 		struct sta_info * psta,*pbcmc_sta;
 		struct sta_priv * pstapriv = &padapter->stapriv;
 
-		//DBG_8192C("%s, : dot11AuthAlgrthm == dot11AuthAlgrthm_8021X \n", __func__);
+		//DBG_8192C("%s, : dot11AuthAlgrthm == dot11AuthAlgrthm_8021X\n", __func__);
 
 		if (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_MP_STATE) == _TRUE) //sta mode
 		{
 			psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));				
 			if (psta == NULL) {
-				//DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail \n"));
-				DBG_8192C("%s, : Obtain Sta_info fail \n", __func__);
+				//DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail\n"));
+				DBG_8192C("%s, : Obtain Sta_info fail\n", __func__);
 			}
 			else
 			{
@@ -1120,7 +1120,7 @@ _func_enter_;
 				if (param->u.crypt.set_tx ==1)//pairwise key
 				{ 
 
-					DBG_8192C("%s, : param->u.crypt.set_tx ==1 \n", __func__);
+					DBG_8192C("%s, : param->u.crypt.set_tx ==1\n", __func__);
 					
 					_rtw_memcpy(psta->dot118021x_UncstKey.skey,  param->u.crypt.key, (param->u.crypt.key_len>16 ?16:param->u.crypt.key_len));
 					
@@ -1164,7 +1164,7 @@ _func_enter_;
 			pbcmc_sta=rtw_get_bcmc_stainfo(padapter);
 			if (pbcmc_sta==NULL)
 			{
-				//DEBUG_ERR( ("Set OID_802_11_ADD_KEY: bcmc stainfo is null \n"));
+				//DEBUG_ERR( ("Set OID_802_11_ADD_KEY: bcmc stainfo is null\n"));
 			}
 			else
 			{
@@ -1322,9 +1322,9 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev,
 			}
 			_rtw_memcpy((void*)param->sta_addr, (void*)mac_addr, ETH_ALEN);
 		} else {
-			DBG_871X("mac_addr is null \n");
+			DBG_871X("mac_addr is null\n");
 		}
-		DBG_871X("rtw_wx_set_enc_ext: SMS4 case \n");
+		DBG_871X("rtw_wx_set_enc_ext: SMS4 case\n");
 		break;
 #endif
 
@@ -2346,7 +2346,7 @@ static int rtw_cfg80211_set_wpa_ie(_adapter *padapter, u8 *pie, size_t ielen)
 		int i;
 		DBG_8192C("set wpa_ie(length:%zu):\n", ielen);
 		for (i=0;i<ielen;i=i+8)
-			DBG_8192C("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x \n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
+			DBG_8192C("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
 	}
 
 	pos = buf;

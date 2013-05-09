@@ -93,7 +93,7 @@ _func_enter_;
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("\n rtw_do_join: phead = %p; plist = %p \n\n\n", phead, plist));
+	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("\n rtw_do_join: phead = %p; plist = %p\n\n\n", phead, plist));
 
 	pmlmepriv->cur_network.join_res = -2;
 		
@@ -163,14 +163,14 @@ _func_enter_;
 					
 				if (rtw_createbss_cmd(padapter)!=_SUCCESS)
 				{
-					RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("***Error=>do_goin: rtw_createbss_cmd status FAIL*** \n "));						
+					RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("***Error=>do_goin: rtw_createbss_cmd status FAIL***\n "));						
 					ret =  _FALSE;
 					goto exit;
 				}
 
 			     	pmlmepriv->to_join = _FALSE;
 
-				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("***Error=> rtw_select_and_join_from_scanned_queue FAIL under STA_Mode*** \n "));						
+				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("***Error=> rtw_select_and_join_from_scanned_queue FAIL under STA_Mode***\n "));						
 
 			}			
 			else
@@ -201,7 +201,7 @@ _func_enter_;
 					#endif
 				)
 				{
-					//DBG_871X("rtw_do_join() when   no desired bss in scanning queue \n");
+					//DBG_871X("rtw_do_join() when   no desired bss in scanning queue\n");
 					if ( _SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ){
 						pmlmepriv->to_join = _FALSE;
 						RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("do_join(): site survey return error\n."));
@@ -829,7 +829,7 @@ _func_enter_;
 
 	psecuritypriv->dot11PrivacyKeyIndex=keyid;
 
-	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_wep:security key material : %x %x %x %x %x %x %x %x %x %x %x %x %x \n",
+	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_wep:security key material : %x %x %x %x %x %x %x %x %x %x %x %x %x\n",
 		psecuritypriv->dot11DefKey[keyid].skey[0],psecuritypriv->dot11DefKey[keyid].skey[1],psecuritypriv->dot11DefKey[keyid].skey[2],
 		psecuritypriv->dot11DefKey[keyid].skey[3],psecuritypriv->dot11DefKey[keyid].skey[4],psecuritypriv->dot11DefKey[keyid].skey[5],
 		psecuritypriv->dot11DefKey[keyid].skey[6],psecuritypriv->dot11DefKey[keyid].skey[7],psecuritypriv->dot11DefKey[keyid].skey[8],
@@ -908,7 +908,7 @@ _func_enter_;
 		// it must fail the request and return NDIS_STATUS_INVALID_DATA.
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_key: ((key->KeyIndex & 0x80000000) == 0)[=%d] ",(int)(key->KeyIndex & 0x80000000) == 0));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_key:((key->KeyIndex & 0x40000000) > 0)[=%d]" , (int)(key->KeyIndex & 0x40000000) > 0));
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_key: key->KeyIndex=%d \n" ,(int)key->KeyIndex));
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_key: key->KeyIndex=%d\n" ,(int)key->KeyIndex));
 		ret= _FAIL;
 		goto exit;
 	}
@@ -1017,7 +1017,7 @@ _func_enter_;
 					break;
 				default:
 					padapter->securitypriv.dot11PrivacyAlgrthm=_NO_PRIVACY_;
-					RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("Adapter->securitypriv.dot11PrivacyAlgrthm= %x key->KeyLength=%u \n", padapter->securitypriv.dot11PrivacyAlgrthm,key->KeyLength));
+					RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("Adapter->securitypriv.dot11PrivacyAlgrthm= %x key->KeyLength=%u\n", padapter->securitypriv.dot11PrivacyAlgrthm,key->KeyLength));
 					break;
 			}
 			
@@ -1096,7 +1096,7 @@ _func_enter_;
 		wep->KeyIndex = keyindex ;
 		wep->KeyLength = key->KeyLength;
 		
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY:Before memcpy \n"));
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY:Before memcpy\n"));
 
 		_rtw_memcpy(wep->KeyMaterial, key->KeyMaterial, key->KeyLength);	
 		_rtw_memcpy(&(padapter->securitypriv.dot11DefKey[keyindex].skey[0]), key->KeyMaterial, key->KeyLength);

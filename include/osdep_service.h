@@ -717,12 +717,12 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 
 __inline static void _init_workitem(_workitem *pwork, void *pfunc, PVOID cntx)
 {
-	printf("%s Not implement yet! \n",__FUNCTION__);
+	printf("%s Not implement yet!\n",__FUNCTION__);
 }
 
 __inline static void _set_workitem(_workitem *pwork)
 {
-	printf("%s Not implement yet! \n",__FUNCTION__);
+	printf("%s Not implement yet!\n",__FUNCTION__);
 //	schedule_work(pwork);
 }
 

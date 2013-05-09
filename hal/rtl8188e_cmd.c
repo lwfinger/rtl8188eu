@@ -225,7 +225,7 @@ _func_enter_;
 		FillH2CCmd_88E(padapter, RSSI_SETTING_EID, 3, param);
 		#endif
 	}else{
-		DBG_8192C("==>%s fw dont support RA \n",__FUNCTION__);
+		DBG_8192C("==>%s fw dont support RA\n",__FUNCTION__);
 		res=_FAIL;
 	}
 
@@ -247,7 +247,7 @@ _func_enter_;
 
 		FillH2CCmd_88E(padapter, H2C_DM_MACID_CFG, 3, buf);
 	}else{
-		DBG_8192C("==>%s fw dont support RA \n",__FUNCTION__);
+		DBG_8192C("==>%s fw dont support RA\n",__FUNCTION__);
 		res=_FAIL;
 	}	
 
@@ -381,7 +381,7 @@ void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, u16 mstatus_rpt )
 	opmode = (u8) mst_rpt;
 	macid = (u8)(mst_rpt >> 8)  ;
 	
-	DBG_871X("### %s: MStatus=%x MACID=%d \n", __FUNCTION__,opmode,macid);
+	DBG_871X("### %s: MStatus=%x MACID=%d\n", __FUNCTION__,opmode,macid);
 	FillH2CCmd_88E(padapter, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
 }
 
@@ -977,11 +977,11 @@ _func_enter_;
 	switch (p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
-			DBG_8192C("P2P_PS_DISABLE \n");
+			DBG_8192C("P2P_PS_DISABLE\n");
 			_rtw_memset(p2p_ps_offload, 0 ,1);
 			break;
 		case P2P_PS_ENABLE:
-			DBG_8192C("P2P_PS_ENABLE \n");
+			DBG_8192C("P2P_PS_ENABLE\n");
 			// update CTWindow value.
 			if ( pwdinfo->ctwindow > 0 )
 			{
@@ -1034,11 +1034,11 @@ _func_enter_;
 			}
 			break;
 		case P2P_PS_SCAN:
-			DBG_8192C("P2P_PS_SCAN \n");
+			DBG_8192C("P2P_PS_SCAN\n");
 			p2p_ps_offload->discovery = 1;
 			break;
 		case P2P_PS_SCAN_DONE:
-			DBG_8192C("P2P_PS_SCAN_DONE \n");
+			DBG_8192C("P2P_PS_SCAN_DONE\n");
 			p2p_ps_offload->discovery = 0;
 			pwdinfo->p2p_ps_state = P2P_PS_ENABLE;
 			break;
@@ -1129,15 +1129,15 @@ _func_enter_;
 
 			if (pwrpriv->wowlan_pattern ==_TRUE){
 				pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
-				DBG_871X_LEVEL(_drv_info_, "%s 2.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
+				DBG_871X_LEVEL(_drv_info_, "%s 2.pwowlan_parm.mode=0x%x\n",__FUNCTION__,pwowlan_parm.mode );
 			}
 			if (pwrpriv->wowlan_magic ==_TRUE){
 				pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
-				DBG_871X_LEVEL(_drv_info_, "%s 3.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
+				DBG_871X_LEVEL(_drv_info_, "%s 3.pwowlan_parm.mode=0x%x\n",__FUNCTION__,pwowlan_parm.mode );
 			}
 			if (pwrpriv->wowlan_unicast ==_TRUE){
 				pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
-				DBG_871X_LEVEL(_drv_info_, "%s 4.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode );
+				DBG_871X_LEVEL(_drv_info_, "%s 4.pwowlan_parm.mode=0x%x\n",__FUNCTION__,pwowlan_parm.mode );
 			}
 
 			if (!(padapter->pwrctrlpriv.wowlan_wake_reason & FWDecisionDisconnect))
@@ -1160,8 +1160,8 @@ _func_enter_;
 			pwowlan_parm.gpio_index=0x80;
 #endif //CONFIG_SDIO_HCI
 
-			DBG_871X_LEVEL(_drv_info_, "%s 5.pwowlan_parm.mode=0x%x \n",__FUNCTION__,pwowlan_parm.mode);
-			DBG_871X_LEVEL(_drv_info_, "%s 6.pwowlan_parm.index=0x%x \n",__FUNCTION__,pwowlan_parm.gpio_index);
+			DBG_871X_LEVEL(_drv_info_, "%s 5.pwowlan_parm.mode=0x%x\n",__FUNCTION__,pwowlan_parm.mode);
+			DBG_871X_LEVEL(_drv_info_, "%s 6.pwowlan_parm.index=0x%x\n",__FUNCTION__,pwowlan_parm.gpio_index);
 			res = FillH2CCmd_88E(padapter, H2C_COM_WWLAN, 2, (u8 *)&pwowlan_parm);
 
 			rtw_msleep_os(2);

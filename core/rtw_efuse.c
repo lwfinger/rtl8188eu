@@ -769,8 +769,8 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 
 		if (word_en != 0xF) {
 			ret = Efuse_PgPacketWrite(padapter, offset, word_en, newdata, _FALSE);
-			DBG_871X("offset=%x \n",offset);
-			DBG_871X("word_en=%x \n",word_en);
+			DBG_871X("offset=%x\n",offset);
+			DBG_871X("word_en=%x\n",word_en);
 
 			for (i=0;i<PGPKT_DATA_SIZE;i++)
 			{

@@ -541,7 +541,7 @@ _func_enter_;
 	if (poid_par_priv->information_buf_len == sizeof(ULONG)) {
 		*(ULONG*)poid_par_priv->information_buf =  Adapter->mppriv.rx_pktcount;
 		*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
-		RT_TRACE(_module_mp_, _drv_alert_, ("recv_ok:%d \n",Adapter->mppriv.rx_pktcount));
+		RT_TRACE(_module_mp_, _drv_alert_, ("recv_ok:%d\n",Adapter->mppriv.rx_pktcount));
 	} else {
 		status = NDIS_STATUS_INVALID_LENGTH;
 	}
@@ -566,7 +566,7 @@ _func_enter_;
 	if (poid_par_priv->information_buf_len == sizeof(ULONG)) {
 		*(ULONG*)poid_par_priv->information_buf =  Adapter->mppriv.rx_crcerrpktcount;
 		*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
-		RT_TRACE(_module_mp_, _drv_alert_, ("recv_err:%d \n",Adapter->mppriv.rx_crcerrpktcount));
+		RT_TRACE(_module_mp_, _drv_alert_, ("recv_err:%d\n",Adapter->mppriv.rx_crcerrpktcount));
 	} else {
 		status = NDIS_STATUS_INVALID_LENGTH;
 	}
@@ -1957,7 +1957,7 @@ NDIS_STATUS oid_rt_pro_add_sta_info_hdl(struct oid_par_priv *poid_par_priv)
 		}
 	} else { //(between drv has received this event before and  fw have not yet to set key to CAM_ENTRY)
 		RT_TRACE(_module_rtl871x_ioctl_c_, _drv_err_,
-			("Error: OID_RT_PRO_ADD_STA_INFO: sta has been in sta_hash_queue \n"));
+			("Error: OID_RT_PRO_ADD_STA_INFO: sta has been in sta_hash_queue\n"));
 	}
 
 	_irqlevel_changed_(&oldirql, RAISE);
@@ -2025,7 +2025,7 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 #if 0
 	if (offset <=100){  //For setting data rate and query data rate
 		if (offset==100){ //For query data rate
-			RT_TRACE(_module_mp_, _drv_emerg_, ("\n mp_query_drv_var: offset(%d): query rate=0x%.2x \n",offset,padapter->registrypriv.tx_rate));
+			RT_TRACE(_module_mp_, _drv_emerg_, ("\n mp_query_drv_var: offset(%d): query rate=0x%.2x\n",offset,padapter->registrypriv.tx_rate));
 			var=padapter->registrypriv.tx_rate;
 
 		}
@@ -2033,7 +2033,7 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 			padapter->registrypriv.tx_rate=offset;
 			var=padapter->registrypriv.tx_rate;
 			padapter->registrypriv.use_rate=_TRUE;
-			RT_TRACE(_module_mp_, _drv_emerg_, ("\n mp_query_drv_var: offset(%d): set rate=0x%.2x \n",offset,padapter->registrypriv.tx_rate));
+			RT_TRACE(_module_mp_, _drv_emerg_, ("\n mp_query_drv_var: offset(%d): set rate=0x%.2x\n",offset,padapter->registrypriv.tx_rate));
 		}
 		else{ //not use the data rate
 			padapter->registrypriv.use_rate=_FALSE;
@@ -2043,22 +2043,22 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 	else if (offset<=110){  //for setting debug level
 		RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var: offset(%d) for set debug level\n",offset));
 		if (offset==110){ //For query data rate
-			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var: offset(%d): query dbg level=0x%.2x \n",offset,padapter->registrypriv.dbg_level));
+			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var: offset(%d): query dbg level=0x%.2x\n",offset,padapter->registrypriv.dbg_level));
 			padapter->registrypriv.dbg_level=GlobalDebugLevel;
 			var=padapter->registrypriv.dbg_level;
 		}
 		else if (offset<110 && offset>100){
-			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var: offset(%d): set dbg level=0x%.2x \n",offset,offset-100));
+			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var: offset(%d): set dbg level=0x%.2x\n",offset,offset-100));
 			padapter->registrypriv.dbg_level=GlobalDebugLevel=offset-100;
 			var=padapter->registrypriv.dbg_level;
-			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var(_drv_emerg_): offset(%d): set dbg level=0x%.2x \n",offset,GlobalDebugLevel));
-			RT_TRACE(_module_mp_, _drv_alert_, (" mp_query_drv_var(_drv_alert_): offset(%d): set dbg level=0x%.2x \n",offset,GlobalDebugLevel));
-			RT_TRACE(_module_mp_, _drv_crit_, (" mp_query_drv_var(_drv_crit_): offset(%d): set dbg level=0x%.2x \n",offset,GlobalDebugLevel));
-			RT_TRACE(_module_mp_, _drv_err_, (" mp_query_drv_var(_drv_err_): offset(%d): set dbg level=0x%.2x \n",offset,GlobalDebugLevel));
-			RT_TRACE(_module_mp_, _drv_warning_, (" mp_query_drv_var(_drv_warning_): offset(%d): set dbg level=0x%.2x \n",offset,GlobalDebugLevel));
-			RT_TRACE(_module_mp_, _drv_notice_, (" mp_query_drv_var(_drv_notice_): offset(%d): set dbg level=0x%.2x \n",offset,GlobalDebugLevel));
-			RT_TRACE(_module_mp_, _drv_info_, (" mp_query_drv_var(_drv_info_): offset(%d): set dbg level=0x%.2x \n",offset,GlobalDebugLevel));
-			RT_TRACE(_module_mp_, _drv_debug_, (" mp_query_drv_var(_drv_debug_): offset(%d): set dbg level=0x%.2x \n",offset,GlobalDebugLevel));
+			RT_TRACE(_module_mp_, _drv_emerg_, (" mp_query_drv_var(_drv_emerg_): offset(%d): set dbg level=0x%.2x\n",offset,GlobalDebugLevel));
+			RT_TRACE(_module_mp_, _drv_alert_, (" mp_query_drv_var(_drv_alert_): offset(%d): set dbg level=0x%.2x\n",offset,GlobalDebugLevel));
+			RT_TRACE(_module_mp_, _drv_crit_, (" mp_query_drv_var(_drv_crit_): offset(%d): set dbg level=0x%.2x\n",offset,GlobalDebugLevel));
+			RT_TRACE(_module_mp_, _drv_err_, (" mp_query_drv_var(_drv_err_): offset(%d): set dbg level=0x%.2x\n",offset,GlobalDebugLevel));
+			RT_TRACE(_module_mp_, _drv_warning_, (" mp_query_drv_var(_drv_warning_): offset(%d): set dbg level=0x%.2x\n",offset,GlobalDebugLevel));
+			RT_TRACE(_module_mp_, _drv_notice_, (" mp_query_drv_var(_drv_notice_): offset(%d): set dbg level=0x%.2x\n",offset,GlobalDebugLevel));
+			RT_TRACE(_module_mp_, _drv_info_, (" mp_query_drv_var(_drv_info_): offset(%d): set dbg level=0x%.2x\n",offset,GlobalDebugLevel));
+			RT_TRACE(_module_mp_, _drv_debug_, (" mp_query_drv_var(_drv_debug_): offset(%d): set dbg level=0x%.2x\n",offset,GlobalDebugLevel));
 
 		}
 	}
@@ -2116,7 +2116,7 @@ static u32 mp_query_drv_var(_adapter *padapter, u8 offset, u32 var)
 		if (offset==127){
 	//		prnt_dbg_comp=padapter->registrypriv.dbg_component= GlobalDebugComponents;
 			var=(u32)(padapter->registrypriv.dbg_component);
-			RT_TRACE(0xffffffff, _drv_emerg_, ("2: mp_query_drv_var: offset(%d;0x%x):for query dbg conpoment=0x%x(l) 0x%x(h)  GlobalDebugComponents=0x%x(l) 0x%x(h) \n",offset,offset,padapter->registrypriv.dbg_component,prnt_dbg_comp));
+			RT_TRACE(0xffffffff, _drv_emerg_, ("2: mp_query_drv_var: offset(%d;0x%x):for query dbg conpoment=0x%x(l) 0x%x(h)  GlobalDebugComponents=0x%x(l) 0x%x(h)\n",offset,offset,padapter->registrypriv.dbg_component,prnt_dbg_comp));
 			prnt_dbg_comp=GlobalDebugComponents;
 			RT_TRACE(0xffffffff, _drv_emerg_, ("2-1: mp_query_drv_var: offset(%d;0x%x):for query dbg conpoment=0x%x(l) 0x%x(h)  GlobalDebugComponents=0x%x(l) 0x%x(h)\n",offset,offset,padapter->registrypriv.dbg_component,prnt_dbg_comp));
 			prnt_dbg_comp=GlobalDebugComponents=padapter->registrypriv.dbg_component;
@@ -2240,12 +2240,12 @@ NDIS_STATUS oid_rt_pro_rx_packet_type_hdl(struct oid_par_priv *poid_par_priv)
 
 	if (poid_par_priv->type_of_oid == SET_OID) {
 		Adapter->mppriv.rx_with_status = *(UCHAR *) poid_par_priv->information_buf;
-		RT_TRACE(_module_rtl871x_ioctl_c_,_drv_err_, ("Query Information, OID_RT_PRO_RX_PACKET_TYPE:%d \n",\
+		RT_TRACE(_module_rtl871x_ioctl_c_,_drv_err_, ("Query Information, OID_RT_PRO_RX_PACKET_TYPE:%d\n",\
 												Adapter->mppriv.rx_with_status));
 
 		//*(u32 *)&Adapter->eeprompriv.mac_addr[0]=rtw_read32(Adapter, 0x10250050);
 		//*(u16 *)&Adapter->eeprompriv.mac_addr[4]=rtw_read16(Adapter, 0x10250054);
-		RT_TRACE(_module_rtl871x_ioctl_c_,_drv_err_,("MAC addr=0x%x:0x%x:0x%x:0x%x:0x%x:0x%x  \n",
+		RT_TRACE(_module_rtl871x_ioctl_c_,_drv_err_,("MAC addr=0x%x:0x%x:0x%x:0x%x:0x%x:0x%x \n",
 			Adapter->eeprompriv.mac_addr[0],Adapter->eeprompriv.mac_addr[1],Adapter->eeprompriv.mac_addr[2],\
 			Adapter->eeprompriv.mac_addr[3],Adapter->eeprompriv.mac_addr[4],Adapter->eeprompriv.mac_addr[5]));
 
@@ -2254,12 +2254,12 @@ NDIS_STATUS oid_rt_pro_rx_packet_type_hdl(struct oid_par_priv *poid_par_priv)
 		*(UCHAR *) poid_par_priv->information_buf = Adapter->mppriv.rx_with_status;
 		*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
 
-		RT_TRACE(_module_rtl871x_ioctl_c_,_drv_err_, ("Query Information, OID_RT_PRO_RX_PACKET_TYPE:%d \n", \
+		RT_TRACE(_module_rtl871x_ioctl_c_,_drv_err_, ("Query Information, OID_RT_PRO_RX_PACKET_TYPE:%d\n", \
 												Adapter->mppriv.rx_with_status));
 
 		//*(u32 *)&Adapter->eeprompriv.mac_addr[0]=rtw_read32(Adapter, 0x10250050);
 		//*(u16 *)&Adapter->eeprompriv.mac_addr[4]=rtw_read16(Adapter, 0x10250054);
-		RT_TRACE(_module_rtl871x_ioctl_c_,_drv_err_,("MAC addr=0x%x:0x%x:0x%x:0x%x:0x%x:0x%x  \n",
+		RT_TRACE(_module_rtl871x_ioctl_c_,_drv_err_,("MAC addr=0x%x:0x%x:0x%x:0x%x:0x%x:0x%x \n",
 			Adapter->eeprompriv.mac_addr[0],Adapter->eeprompriv.mac_addr[1],Adapter->eeprompriv.mac_addr[2],\
 			Adapter->eeprompriv.mac_addr[3],Adapter->eeprompriv.mac_addr[4],Adapter->eeprompriv.mac_addr[5]));
 	}

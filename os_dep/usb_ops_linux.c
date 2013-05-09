@@ -292,7 +292,7 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 		
 		precvbuf->reuse = _TRUE;	
 		if (precvbuf->purb)	 {
-			//DBG_8192C("usb_read_port_cancel : usb_kill_urb \n");
+			//DBG_8192C("usb_read_port_cancel : usb_kill_urb\n");
 			usb_kill_urb(precvbuf->purb);
 		}		
 		precvbuf++;
@@ -385,7 +385,7 @@ _func_enter_;
 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped ||padapter->bWritePortCancel)
 	{
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bDriverStopped(%d) OR bSurpriseRemoved(%d)", padapter->bDriverStopped, padapter->bSurpriseRemoved));
-		DBG_8192C("%s(): TX Warning! bDriverStopped(%d) OR bSurpriseRemoved(%d) bWritePortCancel(%d) pxmitbuf->ext_tag(%x) \n", 
+		DBG_8192C("%s(): TX Warning! bDriverStopped(%d) OR bSurpriseRemoved(%d) bWritePortCancel(%d) pxmitbuf->ext_tag(%x)\n", 
 		__FUNCTION__,padapter->bDriverStopped, padapter->bSurpriseRemoved,padapter->bReadPortCancel,pxmitbuf->ext_tag);	
 
 		goto check_completion;
@@ -395,7 +395,7 @@ _func_enter_;
 	if (purb->status==0) {
 	
 	} else {
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete : purb->status(%d) != 0 \n", purb->status));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete : purb->status(%d) != 0\n", purb->status));
 		DBG_871X("###=> urb_write_port_complete status(%d)\n",purb->status);
 		if ((purb->status==-EPIPE)||(purb->status==-EPROTO))
 		{
@@ -618,7 +618,7 @@ void usb_write_port_cancel(struct intf_hdl *pintfhdl)
 	_adapter	*padapter = pintfhdl->padapter;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)padapter->xmitpriv.pxmitbuf;
 
-	DBG_871X("%s \n", __func__);
+	DBG_871X("%s\n", __func__);
 	
 	padapter->bWritePortCancel = _TRUE;	
 	

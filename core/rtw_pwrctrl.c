@@ -229,7 +229,7 @@ void rtw_ps_processor(_adapter*padapter)
 					pwrpriv->ps_flag = _TRUE;
 
 				rfpwrstate = RfOnOffDetect(padapter);
-				DBG_871X("@@@@- #1  %s==> rfstate:%s \n",__FUNCTION__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
+				DBG_871X("@@@@- #1  %s==> rfstate:%s\n",__FUNCTION__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
 				if (rfpwrstate!= pwrpriv->rf_pwrstate)
 				{
 					if (rfpwrstate == rf_off)
@@ -248,7 +248,7 @@ void rtw_ps_processor(_adapter*padapter)
 	#endif //CONFIG_AUTOSUSPEND
 		{
 			rfpwrstate = RfOnOffDetect(padapter);
-			DBG_871X("@@@@- #2  %s==> rfstate:%s \n",__FUNCTION__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
+			DBG_871X("@@@@- #2  %s==> rfstate:%s\n",__FUNCTION__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
 
 			if (rfpwrstate!= pwrpriv->rf_pwrstate)
 			{
@@ -1651,7 +1651,7 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,33))				
 				if (usb_autopm_get_interface(adapter_to_dvobj(padapter)->pusbintf) < 0) 
 				{
-					DBG_871X( "can't get autopm: \n");
+					DBG_871X( "can't get autopm:\n");
 				}			
 			#elif (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,20))				
 				usb_autopm_disable(adapter_to_dvobj(padapter)->pusbintf);

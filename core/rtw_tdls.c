@@ -441,7 +441,7 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 		if ( attr_contentlen )
 		{
 			_rtw_memcpy(ptdlsinfo->wfd_info->peer_ip_address, ( attr_content + 1 ), 4);
-			DBG_871X( "[%s] Peer IP = %02u.%02u.%02u.%02u \n", __FUNCTION__, 
+			DBG_871X( "[%s] Peer IP = %02u.%02u.%02u.%02u\n", __FUNCTION__, 
 				ptdlsinfo->wfd_info->peer_ip_address[0], ptdlsinfo->wfd_info->peer_ip_address[1],
 				ptdlsinfo->wfd_info->peer_ip_address[2], ptdlsinfo->wfd_info->peer_ip_address[3]
 				);
@@ -1865,7 +1865,7 @@ sint On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 			ptdls_sta->option=7;
 			rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_OFF_CH);
 		}else{
-			DBG_871X("receive unsolicited channel switch response \n");
+			DBG_871X("receive unsolicited channel switch response\n");
 			rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_CS_OFF);
 		}
 		return _FAIL;
@@ -2185,7 +2185,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	if (ptdls_sta->stat_code!=0)	//invalid setup request
 	{
-		DBG_871X("ptdls_sta->stat_code:%04x \n", ptdls_sta->stat_code);		
+		DBG_871X("ptdls_sta->stat_code:%04x\n", ptdls_sta->stat_code);		
 		return;
 	}
 	

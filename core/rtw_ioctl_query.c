@@ -119,7 +119,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 		supp_ie=&psecuritypriv->supplicant_ie[0];
 		for (i=0;i<supp_ie[0];i++)
 		{
-			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("IEs [%d] = 0x%x \n\n", i,supp_ie[i]));
+			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("IEs [%d] = 0x%x\n\n", i,supp_ie[i]));
 		}
 
 		i=13;	//0~11 is fixed information element		
@@ -136,7 +136,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 			i=i+supp_ie[i+1]+2;
 			if (supp_ie[1+i]==0)
 				i=i+1;
-			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("iteration i=%d IEs [%d] = 0x%x \n\n", i,i,supp_ie[i+1]));
+			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("iteration i=%d IEs [%d] = 0x%x\n\n", i,i,supp_ie[i+1]));
 			
 		}
 		
@@ -146,7 +146,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 	}
 	
 
-		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n psecnetwork != NULL,fwstate==_FW_UNDER_LINKING \n"));
+		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n psecnetwork != NULL,fwstate==_FW_UNDER_LINKING\n"));
 
 	}
 	
@@ -172,7 +172,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 		auth_ie=&psecuritypriv->authenticator_ie[0];
 
 		for (i=0;i<auth_ie[0];i++)
-			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("IEs [%d] = 0x%x \n\n", i,auth_ie[i]));
+			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("IEs [%d] = 0x%x\n\n", i,auth_ie[i]));
 
 		i=auth_ie[0]-12;
 		if (i>0){
@@ -184,10 +184,10 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 		pAssocInfo->OffsetResponseIEs = sizeof(NDIS_802_11_ASSOCIATION_INFORMATION) + pAssocInfo->RequestIELength;  
 
 
-		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n tgt_network != NULL,fwstate==_FW_LINKED \n"));
+		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n tgt_network != NULL,fwstate==_FW_LINKED\n"));
 		}
 	}												  	
-	RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n exit query_802_11_association_information \n"));
+	RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n exit query_802_11_association_information\n"));
 _func_exit_;
 
 	return _TRUE;

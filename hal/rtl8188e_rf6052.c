@@ -818,7 +818,7 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 	u8 index = 0;	
 	
 
-	//DBG_871X("PHY_RF6052SetOFDMTxPower, channel(%d) \n", Channel);
+	//DBG_871X("PHY_RF6052SetOFDMTxPower, channel(%d)\n", Channel);
 
 	getPowerBase88E(Adapter, pPowerLevelOFDM,pPowerLevelBW20,pPowerLevelBW40, Channel, &powerBase0[0], &powerBase1[0]);
 

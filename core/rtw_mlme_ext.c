@@ -2659,7 +2659,7 @@ unsigned int OnAction_back(_adapter *padapter, union recv_frame *precv_frame)
 					preorder_ctrl->enable = _FALSE;
 					preorder_ctrl->indicate_seq = 0xffff;
 					#ifdef DBG_RX_SEQ
-					DBG_871X("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __FUNCTION__, __LINE__,
+					DBG_871X("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __FUNCTION__, __LINE__,
 						preorder_ctrl->indicate_seq);
 					#endif
 				}
@@ -8506,7 +8506,7 @@ unsigned int send_delba(_adapter *padapter, u8 initiator, u8 *addr)
 				psta->recvreorder_ctrl[tid].enable = _FALSE;
 				psta->recvreorder_ctrl[tid].indicate_seq = 0xffff;
 				#ifdef DBG_RX_SEQ
-				DBG_871X("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __FUNCTION__, __LINE__,
+				DBG_871X("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __FUNCTION__, __LINE__,
 					psta->recvreorder_ctrl[tid].indicate_seq);
 				#endif
 			}		
@@ -10293,7 +10293,7 @@ void _linked_rx_signal_strehgth_display(_adapter *padapter)
 	DBG_871X("UndecoratedSmoothedPWDB:%d\n",UndecoratedSmoothedPWDB);
 	DBG_871X("Rx RSSI:%d\n",padapter->recvpriv.rssi);
 	DBG_871X("Rx Signal_strength:%d\n",padapter->recvpriv.signal_strength);
-	DBG_871X("Rx Signal_qual:%d \n",padapter->recvpriv.signal_qual);
+	DBG_871X("Rx Signal_qual:%d\n",padapter->recvpriv.signal_qual);
 	if ( check_fwstate( &padapter->mlmepriv,  _FW_LINKED ) )
 	{
 		DBG_871X("bw mode: %d, channel: %d\n", padapter->mlmeextpriv.cur_bwmode, padapter->mlmeextpriv.cur_channel );

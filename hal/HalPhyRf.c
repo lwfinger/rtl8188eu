@@ -1252,9 +1252,9 @@ if (pAdapter->registrypriv.mp_mode == 1)
 	is13simular = FALSE;
 
 
-	RTPRINT(FINIT, INIT_IQK, ("IQK !!!interface %d currentband %d ishardwareD %d \n", pAdapter->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
+	RTPRINT(FINIT, INIT_IQK, ("IQK !!!interface %d currentband %d ishardwareD %d\n", pAdapter->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
 	AcquireCCKAndRWPageAControl(pAdapter);
-//	RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate \n"));
+//	RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate\n"));
 	for (i=0; i<3; i++)
 	{
 //		if (IS_HARDWARE_TYPE_8192C(pAdapter) || IS_HARDWARE_TYPE_8723A(pAdapter))
@@ -1319,7 +1319,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			}
 		}
 	}
-//	RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate \n"));
+//	RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate\n"));
 	ReleaseCCKAndRWPageAControl(pAdapter);
 
 	for (i=0; i<4; i++)

@@ -1188,7 +1188,7 @@ phy_ConfigBBWithHeaderFile(
 					podmpriv->RFCalibrateInfo.RegA24 = Rtl819XPHY_REGArray_Table[i+1];	
 
 				rtw_IOL_append_WD_cmd(xmit_frame, Rtl819XPHY_REGArray_Table[i], tmp_value);	
-				//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XPHY_REGArray_Table[i], Rtl819XPHY_REGArray_Table[i+1]));
+				//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx\n",Rtl819XPHY_REGArray_Table[i], Rtl819XPHY_REGArray_Table[i+1]));
 			}
 		
 			ret = rtw_IOL_exec_cmds_sync(Adapter, xmit_frame, 1000,0);
@@ -1221,7 +1221,7 @@ phy_ConfigBBWithHeaderFile(
 			// Add 1us delay between BB/RF register setting.
 			rtw_udelay_os(1);
 
-			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XPHY_REGArray_Table[i], Rtl819XPHY_REGArray_Table[i+1]));
+			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx\n",Rtl819XPHY_REGArray_Table[i], Rtl819XPHY_REGArray_Table[i+1]));
 		}
 		#endif
 		// for External PA
@@ -1241,7 +1241,7 @@ phy_ConfigBBWithHeaderFile(
 			for (i=0;i<AGCTAB_ArrayLen;i=i+2)
 			{
 				rtw_IOL_append_WD_cmd(xmit_frame, Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]);							
-				//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_Array_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]));
+				//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_Array_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx\n",Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]));
 			}
 		
 			ret = rtw_IOL_exec_cmds_sync(Adapter, xmit_frame, 1000,0);
@@ -1254,7 +1254,7 @@ phy_ConfigBBWithHeaderFile(
 			// Add 1us delay between BB/RF register setting.
 			rtw_udelay_os(1);
 
-			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_Array_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx \n",Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]));
+			//RT_TRACE(COMP_INIT, DBG_TRACE, ("The Rtl819XAGCTAB_Array_Table[0] is %lx Rtl819XPHY_REGArray[1] is %lx\n",Rtl819XAGCTAB_Array_Table[i], Rtl819XAGCTAB_Array_Table[i+1]));
 		}
 		#endif
 	}
@@ -1468,7 +1468,7 @@ phy_ConfigBBWithPgHeaderFile(
 				Rtl819XPHY_REGArray_Table_PG[i+1],
 				Rtl819XPHY_REGArray_Table_PG[i+2]);
 			//PHY_SetBBReg(Adapter, Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1], Rtl819XPHY_REGArray_Table_PG[i+2]);
-			//RT_TRACE(COMP_SEND, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table_PG[0] is %lx Rtl819XPHY_REGArray_Table_PG[1] is %lx \n",Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1]));
+			//RT_TRACE(COMP_SEND, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table_PG[0] is %lx Rtl819XPHY_REGArray_Table_PG[1] is %lx\n",Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1]));
 		}
 	}
 	else
@@ -1525,7 +1525,7 @@ phy_BB8190_Config_HardCode(
 	IN	PADAPTER	Adapter
 	)
 {
-	//RT_ASSERT(FALSE, ("This function is not implement yet!! \n"));
+	//RT_ASSERT(FALSE, ("This function is not implement yet!!\n"));
 	return _SUCCESS;
 }
 
@@ -2096,7 +2096,7 @@ PHY_CheckBBAndRFOK(
 		//
 		if (ulRegRead != WriteData[i])
 		{
-			//RT_TRACE(COMP_FPGA, DBG_LOUD, ("ulRegRead: %lx, WriteData: %lx \n", ulRegRead, WriteData[i]));
+			//RT_TRACE(COMP_FPGA, DBG_LOUD, ("ulRegRead: %lx, WriteData: %lx\n", ulRegRead, WriteData[i]));
 			rtStatus = _FAIL;
 			break;
 		}
@@ -2119,14 +2119,14 @@ rtl8192c_PHY_GetHWRegOriginalValue(
 	pHalData->DefaultInitialGain[2] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XCAGCCore1, bMaskByte0);
 	pHalData->DefaultInitialGain[3] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XDAGCCore1, bMaskByte0);
 	//RT_TRACE(COMP_INIT, DBG_LOUD,
-	//("Default initial gain (c50=0x%x, c58=0x%x, c60=0x%x, c68=0x%x) \n",
+	//("Default initial gain (c50=0x%x, c58=0x%x, c60=0x%x, c68=0x%x)\n",
 	//pHalData->DefaultInitialGain[0], pHalData->DefaultInitialGain[1],
 	//pHalData->DefaultInitialGain[2], pHalData->DefaultInitialGain[3]));
 
 	// read framesync
 	pHalData->framesync = (u8)PHY_QueryBBReg(Adapter, rOFDM0_RxDetector3, bMaskByte0);
 	pHalData->framesyncC34 = PHY_QueryBBReg(Adapter, rOFDM0_RxDetector2, bMaskDWord);
-	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Default framesync (0x%x) = 0x%x \n",
+	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Default framesync (0x%x) = 0x%x\n",
 	//	rOFDM0_RxDetector3, pHalData->framesync));
 }
 
@@ -2515,7 +2515,7 @@ void phy_PowerIndexCheck88E(
 	pHalData->CurrentBW2024GTxPwrIdx = BW20PowerLevel[0];
 	pHalData->CurrentBW4024GTxPwrIdx = BW40PowerLevel[0];
 
-	//DBG_871X("PHY_SetTxPowerLevel8188E(): CurrentCckTxPwrIdx : 0x%x,CurrentOfdm24GTxPwrIdx: 0x%x, CurrentBW2024GTxPwrIdx: 0x%dx, CurrentBW4024GTxPwrIdx: 0x%x \n", 
+	//DBG_871X("PHY_SetTxPowerLevel8188E(): CurrentCckTxPwrIdx : 0x%x,CurrentOfdm24GTxPwrIdx: 0x%x, CurrentBW2024GTxPwrIdx: 0x%dx, CurrentBW4024GTxPwrIdx: 0x%x\n", 
 	//	pHalData->CurrentCckTxPwrIdx, pHalData->CurrentOfdm24GTxPwrIdx, pHalData->CurrentBW2024GTxPwrIdx, pHalData->CurrentBW4024GTxPwrIdx);
 }
 /*-----------------------------------------------------------------------------
@@ -2682,7 +2682,7 @@ PHY_ScanOperationBackup8188E(
 				break;
 
 			default:
-				RT_TRACE(COMP_SCAN, DBG_LOUD, ("Unknown Scan Backup Operation. \n"));
+				RT_TRACE(COMP_SCAN, DBG_LOUD, ("Unknown Scan Backup Operation.\n"));
 				break;
 		}
 	}
@@ -2849,7 +2849,7 @@ _PHY_SetBWMode92C(
 
 	//pHalData->SetBWModeInProgress= FALSE;
 
-	//RT_TRACE(COMP_SCAN, DBG_LOUD, ("<==PHY_SetBWModeCallback8192C() \n" ));
+	//RT_TRACE(COMP_SCAN, DBG_LOUD, ("<==PHY_SetBWModeCallback8192C()\n" ));
 }
 
 

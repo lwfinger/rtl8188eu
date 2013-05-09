@@ -208,14 +208,14 @@ _func_enter_;
 	spi_setup(spi);
 
 #if 1
-	//DBG_8192C("set spi ==========================%d \n", spi_setup(spi));
+	//DBG_8192C("set spi ==========================%d\n", spi_setup(spi));
 
-	DBG_871X("%s, mode = %d \n", __func__, spi->mode);
-	DBG_871X("%s, bit_per_word = %d \n", __func__, spi->bits_per_word);
-	DBG_871X("%s, speed = %d \n", __func__, spi->max_speed_hz);
-	DBG_871X("%s, chip_select = %d \n", __func__, spi->chip_select);
-	DBG_871X("%s, controller_data = %d \n", __func__, *(int *)spi->controller_data);
-	DBG_871X("%s, irq= %d \n", __func__, oob_irq);
+	DBG_871X("%s, mode = %d\n", __func__, spi->mode);
+	DBG_871X("%s, bit_per_word = %d\n", __func__, spi->bits_per_word);
+	DBG_871X("%s, speed = %d\n", __func__, spi->max_speed_hz);
+	DBG_871X("%s, chip_select = %d\n", __func__, spi->chip_select);
+	DBG_871X("%s, controller_data = %d\n", __func__, *(int *)spi->controller_data);
+	DBG_871X("%s, irq= %d\n", __func__, oob_irq);
 #endif
 
 	spi_set_drvdata(spi, dvobj);

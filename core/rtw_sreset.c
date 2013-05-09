@@ -66,7 +66,7 @@ u8 sreset_get_wifi_status(_adapter *padapter)
 
 	if (WIFI_STATUS_SUCCESS !=psrtpriv->Wifi_Error_Status)
 	{
-		DBG_8192C("==>%s error_status(0x%x) \n",__FUNCTION__,psrtpriv->Wifi_Error_Status);
+		DBG_8192C("==>%s error_status(0x%x)\n",__FUNCTION__,psrtpriv->Wifi_Error_Status);
 		status = (psrtpriv->Wifi_Error_Status &( ~(USB_READ_PORT_FAIL|USB_WRITE_PORT_FAIL)));
 	}
 	DBG_8192C("==> %s wifi_status(0x%x)\n",__FUNCTION__,status);

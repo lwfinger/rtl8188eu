@@ -169,7 +169,7 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 			u1temp =( (rtemp8 & 0xE0) >> 5);
 			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x *rtemp&0xE0 0x%x\n", u1temp, *rtemp8 & 0xE0));
 
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x \n", u1temp));
+			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x\n", u1temp));
 
 			rtemp8 = *(phymap+eFuse_Addr);
 
@@ -209,7 +209,7 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 				// Check word enable condition in the section				
 				if (!(wren & 0x01))
 				{
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d \n", eFuse_Addr));
+					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d\n", eFuse_Addr));
 					rtemp8 = *(phymap+eFuse_Addr);
 					eFuse_Addr++;
 					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8)); 				
@@ -448,7 +448,7 @@ static s32 iol_read_efuse(
 s32 rtl8188e_iol_efuse_patch(PADAPTER padapter)
 {
 	s32	result = _SUCCESS;
-	printk("==> %s \n",__FUNCTION__);
+	printk("==> %s\n",__FUNCTION__);
 	
 	if (rtw_IOL_applied(padapter)){
 		iol_mode_enable(padapter, 1);
@@ -484,7 +484,7 @@ int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame,
 	int ret = _FAIL;
 	u32 t1,t2;
 	
-	//printk("===> %s ,bndy_cnt = %d \n",__FUNCTION__,bndy_cnt);
+	//printk("===> %s ,bndy_cnt = %d\n",__FUNCTION__,bndy_cnt);
 	if (rtw_IOL_append_END_cmd(xmit_frame) != _SUCCESS)
 		goto exit;
 #ifdef CONFIG_USB_HCI
@@ -509,7 +509,7 @@ int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame,
 	for (i=0;i<bndy_cnt;i++){
 		u8 page_no = 0;
 		page_no = i*2 ;
-		//printk(" i = %d, page_no = %d \n",i,page_no);	
+		//printk(" i = %d, page_no = %d\n",i,page_no);	
 		if ( (ret = iol_ioconfig(adapter, page_no)) != _SUCCESS)
 		{
 			break;
@@ -767,7 +767,7 @@ _WriteFW(
 #endif
 
 	pageNums = size / MAX_PAGE_SIZE ;
-	//RT_ASSERT((pageNums <= 4), ("Page numbers should not greater then 4 \n"));
+	//RT_ASSERT((pageNums <= 4), ("Page numbers should not greater then 4\n"));
 	remainSize = size % MAX_PAGE_SIZE;
 
 	for (page = 0; page < pageNums; page++) {
@@ -1314,7 +1314,7 @@ Hal_EfuseReadEFuse88E(
 			u1temp =( (*rtemp8 & 0xE0) >> 5);
 			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x *rtemp&0xE0 0x%x\n", u1temp, *rtemp8 & 0xE0));
 
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x \n", u1temp));
+			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x\n", u1temp));
 			
 			ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);	
 
@@ -1354,7 +1354,7 @@ Hal_EfuseReadEFuse88E(
 				// Check word enable condition in the section				
 				if (!(wren & 0x01))
 				{
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d \n", eFuse_Addr));
+					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d\n", eFuse_Addr));
 					ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);	
 					eFuse_Addr++;
 					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8)); 				
@@ -3326,7 +3326,7 @@ Hal_GetChnlGroup88E(
 			*pGroup = 5;	
 		else
 		{
-			//RT_TRACE(COMP_EFUSE,DBG_LOUD,("==>Hal_GetChnlGroup88E in 2.4 G, but Channel %d in Group not found \n",chnl));
+			//RT_TRACE(COMP_EFUSE,DBG_LOUD,("==>Hal_GetChnlGroup88E in 2.4 G, but Channel %d in Group not found\n",chnl));
 		}
 	}
 	else
@@ -3361,7 +3361,7 @@ Hal_GetChnlGroup88E(
 			*pGroup = 11;	
 		else
 		{
-			//RT_TRACE(COMP_EFUSE,DBG_LOUD,("==>Hal_GetChnlGroup88E in 5G, but Channel %d in Group not found \n",chnl));
+			//RT_TRACE(COMP_EFUSE,DBG_LOUD,("==>Hal_GetChnlGroup88E in 5G, but Channel %d in Group not found\n",chnl));
 		}
 
 	}

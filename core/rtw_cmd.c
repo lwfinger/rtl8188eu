@@ -159,7 +159,7 @@ void _rtw_free_evt_priv (struct	evt_priv *pevtpriv)
 {
 _func_enter_;
 
-	RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("+_rtw_free_evt_priv \n"));
+	RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("+_rtw_free_evt_priv\n"));
 
 #ifdef CONFIG_EVENT_THREAD_MODE
 	_rtw_free_sema(&(pevtpriv->evt_notify));
@@ -184,7 +184,7 @@ _func_enter_;
 	}
 #endif
 
-	RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("-_rtw_free_evt_priv \n"));
+	RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("-_rtw_free_evt_priv\n"));
 
 _func_exit_;	  	
 
@@ -2085,7 +2085,7 @@ static void traffic_status_watchdog(_adapter *padapter)
 		if ( ((pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod + pmlmepriv->LinkDetectInfo.NumTxOkInPeriod) > 8 ) ||
 			(pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod > 2) )
 		{
-			//DBG_871X("Tx = %d, Rx = %d \n",pmlmepriv->LinkDetectInfo.NumTxOkInPeriod,pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod);
+			//DBG_871X("Tx = %d, Rx = %d\n",pmlmepriv->LinkDetectInfo.NumTxOkInPeriod,pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod);
 			bEnterPS= _FALSE;
 		}
 		else
@@ -2182,7 +2182,7 @@ _func_enter_;
 	switch (lps_ctrl_type)
 	{
 		case LPS_CTRL_SCAN:
-			//DBG_871X("LPS_CTRL_SCAN \n");
+			//DBG_871X("LPS_CTRL_SCAN\n");
 #ifdef CONFIG_BT_COEXIST
 			BT_WifiScanNotify(padapter, _TRUE);
 			if (BT_1Ant(padapter) == _FALSE)
@@ -2195,11 +2195,11 @@ _func_enter_;
 			}
 			break;
 		case LPS_CTRL_JOINBSS:
-			//DBG_871X("LPS_CTRL_JOINBSS \n");
+			//DBG_871X("LPS_CTRL_JOINBSS\n");
 			LPS_Leave(padapter);
 			break;
 		case LPS_CTRL_CONNECT:
-			//DBG_871X("LPS_CTRL_CONNECT \n");
+			//DBG_871X("LPS_CTRL_CONNECT\n");
 			mstatus = 1;//connect
 			// Reset LPS Setting
 			padapter->pwrctrlpriv.LpsIdleCount = 0;
@@ -2209,7 +2209,7 @@ _func_enter_;
 #endif
 			break;
 		case LPS_CTRL_DISCONNECT:
-			//DBG_871X("LPS_CTRL_DISCONNECT \n");
+			//DBG_871X("LPS_CTRL_DISCONNECT\n");
 			mstatus = 0;//disconnect
 #ifdef CONFIG_BT_COEXIST
 			BT_WifiMediaStatusNotify(padapter, mstatus);
@@ -2221,7 +2221,7 @@ _func_enter_;
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_JOINBSSRPT, (u8 *)(&mstatus));
 			break;
 		case LPS_CTRL_SPECIAL_PACKET:
-			//DBG_871X("LPS_CTRL_SPECIAL_PACKET \n");
+			//DBG_871X("LPS_CTRL_SPECIAL_PACKET\n");
 			pwrpriv->DelayLPSLastTimeStamp = rtw_get_current_time();
 #ifdef CONFIG_BT_COEXIST
 			BT_SpecialPacketNotify(padapter);
@@ -2232,7 +2232,7 @@ _func_enter_;
 			}
 			break;
 		case LPS_CTRL_LEAVE:
-			//DBG_871X("LPS_CTRL_LEAVE \n");
+			//DBG_871X("LPS_CTRL_LEAVE\n");
 #ifdef CONFIG_BT_COEXIST
 			BT_LpsLeave(padapter);
 			if (BT_1Ant(padapter) == _FALSE)
@@ -2887,7 +2887,7 @@ _func_enter_;
 			pwlan = rtw_get_oldest_wlan_network(&pmlmepriv->scanned_queue);
 			if ( pwlan == NULL)
 			{
-				RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\n Error:  can't get pwlan in rtw_joinbss_event_callback \n"));
+				RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\n Error:  can't get pwlan in rtw_joinbss_event_callback\n"));
 				_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 				goto createbss_cmd_fail;
 			}
@@ -2957,7 +2957,7 @@ _func_enter_;
 
 	if (psta==NULL)
 	{
-		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\nERROR: rtw_setstaKey_cmdrsp_callback => can't get sta_info \n\n"));
+		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\nERROR: rtw_setstaKey_cmdrsp_callback => can't get sta_info\n\n"));
 		goto exit;
 	}
 	
@@ -2983,7 +2983,7 @@ _func_enter_;
 	
 	if (psta==NULL)
 	{
-		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\nERROR: setassocsta_cmdrsp_callbac => can't get sta_info \n\n"));
+		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\nERROR: setassocsta_cmdrsp_callbac => can't get sta_info\n\n"));
 		goto exit;
 	}
 	
