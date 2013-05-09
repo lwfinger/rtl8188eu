@@ -22,7 +22,6 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-#include <sdio_ops.h>
 #include <rtl8188e_hal.h>
 
 #ifdef CONFIG_XMIT_ACK
