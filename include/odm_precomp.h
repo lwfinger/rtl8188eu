@@ -75,7 +75,6 @@
 	#include <drv_conf.h>
 	#include <osdep_service.h>
 	#include <drv_types.h>
-	#include <rtw_byteorder.h>
 	#include <hal_intf.h>	
 		
 #elif (DM_ODM_SUPPORT_TYPE == ODM_MP)

@@ -20,7 +20,6 @@
 #define _HAL_INIT_C_
 
 #include <drv_types.h>
-#include <rtw_byteorder.h>
 #include <rtw_efuse.h>
 
 #include <rtl8188e_hal.h>

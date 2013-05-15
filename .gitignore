@@ -80,6 +80,8 @@ GRTAGS
 GSYMS
 GTAGS
 
+*.rej
+*.porig
 *.orig
 *~
 \#*#

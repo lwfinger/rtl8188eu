@@ -22,7 +22,6 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-#include <rtw_byteorder.h>
 
 #ifdef CONFIG_IOL
 #include <rtw_iol.h>

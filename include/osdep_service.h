@@ -22,12 +22,10 @@
 
 #include <drv_conf.h>
 #include <basic_types.h>
-//#include <rtl871x_byteorder.h>
 
 #define _FAIL		0
 #define _SUCCESS	1
 #define RTW_RX_HANDLED 2
-//#define RTW_STATUS_TIMEDOUT -110
 
 #undef _TRUE
 #define _TRUE		1

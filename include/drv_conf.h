@@ -76,8 +76,4 @@
 	#define CONFIG_USB_VENDOR_REQ_MUTEX
 #endif
 
-
-//#include <rtl871x_byteorder.h>
-
 #endif // __DRV_CONF_H__
-

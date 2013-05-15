@@ -19,7 +19,6 @@
  ******************************************************************************/
 #ifndef _LINUX_IP_H
 #define _LINUX_IP_H
-#include <rtw_byteorder.h>
 
 /* SOL_IP socket options */
 
