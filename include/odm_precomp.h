@@ -40,11 +40,6 @@
 
 	#include "../8192cd.h"
 	#include "../8192cd_util.h"
-	#ifdef _BIG_ENDIAN_
-	#define	ODM_ENDIAN_TYPE				ODM_ENDIAN_BIG
-	#else
-	#define	ODM_ENDIAN_TYPE				ODM_ENDIAN_LITTLE
-	#endif
 
 	#ifdef AP_BUILD_WORKAROUND
 	#include "../8192cd_headers.h"
@@ -59,11 +54,6 @@
 	#include "../common_types.h"	// OUTSRC and rtl8192cd both needs basic type such as UINT8 and BIT0.
 	#include "../8192cd.h"			// OUTSRC needs basic ADSL struct definition.
 	#include "../8192cd_util.h"		// OUTSRC needs basic I/O function.
-	#ifdef _BIG_ENDIAN_
-	#define	ODM_ENDIAN_TYPE				ODM_ENDIAN_BIG
-	#else
-	#define	ODM_ENDIAN_TYPE				ODM_ENDIAN_LITTLE
-	#endif
 
 	#ifdef ADSL_AP_BUILD_WORKAROUND
 	// NESTED_INC: Functions defined outside should not be included!! Marked by Annie, 2011-10-14.
@@ -79,7 +69,6 @@
 		
 #elif (DM_ODM_SUPPORT_TYPE == ODM_MP)
 	#include "Mp_Precomp.h"
-	#define	ODM_ENDIAN_TYPE				ODM_ENDIAN_LITTLE
 #endif
 
  

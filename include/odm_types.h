@@ -30,10 +30,6 @@
 
 #define	DM_ODM_SUPPORT_TYPE			ODM_CE
 
-// Deifne HW endian support
-#define	ODM_ENDIAN_BIG	0
-#define	ODM_ENDIAN_LITTLE	1	
-
 #if (DM_ODM_SUPPORT_TYPE != ODM_MP)
 #define 	RT_PCI_INTERFACE				1
 #define 	RT_USB_INTERFACE				2
@@ -216,13 +212,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 		#define DEV_BUS_TYPE  	RT_SDIO_INTERFACE
         #elif defined(CONFIG_GSPI_HCI)
 		#define DEV_BUS_TYPE  	RT_SDIO_INTERFACE
-	#endif
-	
-
-	#if defined(CONFIG_LITTLE_ENDIAN)	
-		#define	ODM_ENDIAN_TYPE			ODM_ENDIAN_LITTLE
-	#elif defined (CONFIG_BIG_ENDIAN)
-		#define	ODM_ENDIAN_TYPE			ODM_ENDIAN_BIG
 	#endif
 	
 	typedef struct timer_list		RT_TIMER, *PRT_TIMER;

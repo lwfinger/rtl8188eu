@@ -70,7 +70,7 @@
 
 typedef struct _Phy_Rx_AGC_Info
 {
-	#if (ODM_ENDIAN_TYPE == ODM_ENDIAN_LITTLE)	
+	#ifdef __LITTLE_ENDIAN	
 		u1Byte	gain:7,trsw:1;			
 	#else			
 		u1Byte	trsw:1,gain:7;
@@ -97,7 +97,7 @@ typedef struct _Phy_Status_Rpt_8192cd
 	s1Byte 	sig_evm;
 	u1Byte 	rsvd_3;	
 
-#if (ODM_ENDIAN_TYPE == ODM_ENDIAN_LITTLE)	
+#ifdef __LITTLE_ENDIAN	
 	u1Byte 	antsel_rx_keep_2:1;	//ex_intf_flg:1;
 	u1Byte 	sgi_en:1;
 	u1Byte 	rxsc:2;	
@@ -136,11 +136,11 @@ typedef struct _Phy_Status_Rpt_8195
 	u1Byte	rsvd_3[2];
 	s1Byte 	sig_evm;
 	u1Byte 	rsvd_4;	
-#if (ODM_ENDIAN_TYPE == ODM_ENDIAN_LITTLE)	
+#ifdef __LITTLE_ENDIAN	
 	u1Byte 	antidx_anta:3;
 	u1Byte 	antidx_antb:3;
 	u1Byte 	rsvd_5:2;
-#else	// _BIG_ENDIAN_	
+#else	// __BIG_ENDIAN_	
 	u1Byte 	rsvd_5:2;
 	u1Byte 	antidx_antb:3;
 	u1Byte 	antidx_anta:3;	

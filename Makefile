@@ -177,14 +177,10 @@ EXTRA_CFLAGS += -DCONFIG_RF_GAIN_OFFSET
 endif
 endif
 
-ifeq ($(CONFIG_PLATFORM_I386_PC), y)
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/)
+
+ifeq ($(CONFIG_PLATFORM_I386_PC), y)
 ARCH ?= $(SUBARCH)
-ifeq ($(ARCH), "powerpc")
-EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN
-else
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
-endif
 CROSS_COMPILE ?=
 KVER  := $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build
@@ -193,7 +189,7 @@ INSTALL_PREFIX :=
 endif
 
 ifeq ($(CONFIG_PLATFORM_ACTIONS_ATM702X), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_ACTIONS_ATM702X
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_ACTIONS_ATM702X
 #ARCH := arm
 ARCH := $(R_ARCH)
 #CROSS_COMPILE := arm-none-linux-gnueabi-
@@ -205,14 +201,14 @@ MODULE_NAME :=wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_TI_AM3517), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_SHUTTLE
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_SHUTTLE
 CROSS_COMPILE := arm-eabi-
 KSRC := $(shell pwd)/../../../Android/kernel
 ARCH := arm
 endif
 
 ifeq ($(CONFIG_PLATFORM_MSTAR_TITANIA12), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_MSTAR_TITANIA12
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_MSTAR_TITANIA12
 ARCH:=mips
 CROSS_COMPILE:= /usr/src/Mstar_kernel/mips-4.3/bin/mips-linux-gnu-
 KVER:= 2.6.28.9
@@ -220,8 +216,6 @@ KSRC:= /usr/src/Mstar_kernel/2.6.28.9/
 endif
 
 ifeq ($(CONFIG_PLATFORM_ANDROID_X86), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
-SUBARCH := $(shell uname -m | sed -e s/i.86/i386/)
 ARCH := $(SUBARCH)
 CROSS_COMPILE := /media/DATA-2/android-x86/ics-x86_20120130/prebuilt/linux-x86/toolchain/i686-unknown-linux-gnu-4.2.1/bin/i686-unknown-linux-gnu-
 KSRC := /media/DATA-2/android-x86/ics-x86_20120130/out/target/product/generic_x86/obj/kernel
@@ -229,7 +223,6 @@ MODULE_NAME :=wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_PXA2XX), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 ARCH := arm
 CROSS_COMPILE := arm-none-linux-gnueabi-
 KVER  := 2.6.34.1
@@ -237,7 +230,6 @@ KSRC ?= /usr/src/linux-2.6.34.1
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_S3C2K4), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 ARCH := arm
 CROSS_COMPILE := arm-linux-
 KVER  := 2.6.24.7_$(ARCH)
@@ -245,7 +237,6 @@ KSRC := /usr/src/kernels/linux-$(KVER)
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_S3C6K4), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 ARCH := arm
 CROSS_COMPILE := arm-none-linux-gnueabi-
 KVER  := 2.6.34.1
@@ -253,7 +244,7 @@ KSRC ?= /usr/src/linux-2.6.34.1
 endif
 
 ifeq ($(CONFIG_PLATFORM_RTD2880B), y)
-EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN -DCONFIG_PLATFORM_RTD2880B
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_RTD2880B
 ARCH:=
 CROSS_COMPILE:=
 KVER:=
@@ -261,7 +252,6 @@ KSRC:=
 endif
 
 ifeq ($(CONFIG_PLATFORM_MIPS_RMI), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 ARCH:=mips
 CROSS_COMPILE:=mipsisa32r2-uclibc-
 KVER:=
@@ -269,7 +259,6 @@ KSRC:= /root/work/kernel_realtek
 endif
 
 ifeq ($(CONFIG_PLATFORM_MIPS_PLM), y)
-EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN
 ARCH:=mips
 CROSS_COMPILE:=mipsisa32r2-uclibc-
 KVER:=
@@ -277,7 +266,7 @@ KSRC:= /root/work/kernel_realtek
 endif
 
 ifeq ($(CONFIG_PLATFORM_MSTAR389), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_MSTAR389
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_MSTAR389
 ARCH:=mips
 CROSS_COMPILE:= mips-linux-gnu-
 KVER:= 2.6.28.10
@@ -285,14 +274,13 @@ KSRC:= /home/mstar/mstar_linux/2.6.28.9/
 endif
 
 ifeq ($(CONFIG_PLATFORM_MIPS_AR9132), y)
-EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN
 ARCH := mips
 CROSS_COMPILE := mips-openwrt-linux-
 KSRC := /home/alex/test_openwrt/tmp/linux-2.6.30.9
 endif
 
 ifeq ($(CONFIG_PLATFORM_DMP_PHILIPS), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DRTK_DMP_PLATFORM
+EXTRA_CFLAGS += -DRTK_DMP_PLATFORM
 ARCH := mips
 #CROSS_COMPILE:=/usr/local/msdk-4.3.6-mips-EL-2.6.12.6-0.9.30.3/bin/mipsel-linux-
 CROSS_COMPILE:=/usr/local/toolchain_mipsel/bin/mipsel-linux-
@@ -300,7 +288,7 @@ KSRC ?=/usr/local/Jupiter/linux-2.6.12
 endif
 
 ifeq ($(CONFIG_PLATFORM_RTK_DMP), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DRTK_DMP_PLATFORM
+EXTRA_CFLAGS += -DRTK_DMP_PLATFORM
 ARCH:=mips
 CROSS_COMPILE:=mipsel-linux-
 KVER:=
@@ -308,7 +296,7 @@ KSRC ?= /usr/src/DMP_Kernel/jupiter/linux-2.6.12
 endif
 
 ifeq ($(CONFIG_PLATFORM_MT53XX), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_MT53XX
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_MT53XX
 ARCH:= arm
 CROSS_COMPILE:= arm11_mtk_le-
 KVER:= 2.6.27
@@ -316,7 +304,7 @@ KSRC?= /proj/mtk00802/BD_Compare/BDP/Dev/BDP_V301/BDP_Linux/linux-2.6.27
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_MX51_241H), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_WISTRON_PLATFORM
+EXTRA_CFLAGS += -DCONFIG_WISTRON_PLATFORM
 ARCH := arm
 CROSS_COMPILE := /opt/freescale/usr/local/gcc-4.1.2-glibc-2.5-nptl-3/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-
 KVER  := 2.6.31
@@ -324,7 +312,7 @@ KSRC ?= /lib/modules/2.6.31-770-g0e46b52/source
 endif
 
 ifeq ($(CONFIG_PLATFORM_ACTIONS_ATJ227X), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ACTIONS_ATJ227X
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_ACTIONS_ATJ227X
 ARCH := mips
 CROSS_COMPILE := /home/cnsd4/project/actions/tools-2.6.27/bin/mipsel-linux-gnu-
 KVER  := 2.6.27
@@ -332,7 +320,7 @@ KSRC := /home/cnsd4/project/actions/linux-2.6.27.28
 endif
 
 ifeq ($(CONFIG_PLATFORM_TI_DM365), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_TI_DM365
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_TI_DM365
 ARCH := arm
 CROSS_COMPILE := /home/cnsd4/Appro/mv_pro_5.0/montavista/pro/devkit/arm/v5t_le/bin/arm_v5t_le-
 KVER  := 2.6.18
@@ -340,7 +328,6 @@ KSRC := /home/cnsd4/Appro/mv_pro_5.0/montavista/pro/devkit/lsp/ti-davinci/linux-
 endif
 
 ifeq ($(CONFIG_PLATFORM_TEGRA3_CARDHU), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 ARCH := arm
 CROSS_COMPILE := /home/android_sdk/nvidia/tegra-16r3-partner-android-4.1_20120723/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 KSRC := /home/android_sdk/nvidia/tegra-16r3-partner-android-4.1_20120723/out/target/product/cardhu/obj/KERNEL
@@ -348,7 +335,6 @@ MODULE_NAME := wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_TEGRA4_DALMORE), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 ARCH := arm
 CROSS_COMPILE := /home/android_sdk/nvidia/tegra-17r9-partner-android-4.2-dalmore_20130131/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
 KSRC := /home/android_sdk/nvidia/tegra-17r9-partner-android-4.2-dalmore_20130131/out/target/product/dalmore/obj/KERNEL
@@ -356,7 +342,6 @@ MODULE_NAME := wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_TCC8900), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 ARCH := arm
 CROSS_COMPILE := /home/android_sdk/Telechips/SDK_2304_20110613/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 KSRC := /home/android_sdk/Telechips/SDK_2304_20110613/kernel
@@ -364,7 +349,6 @@ MODULE_NAME := wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_TCC8920), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 ARCH := arm
 CROSS_COMPILE := /home/android_sdk/Telechips/v12.06_r1-tcc-android-4.0.4/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 KSRC := /home/android_sdk/Telechips/v12.06_r1-tcc-android-4.0.4/kernel
@@ -372,7 +356,7 @@ MODULE_NAME := wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_RK2818), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_ROCKCHIPS -DCONFIG_MINIMAL_MEMORY_USAGE
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_ROCKCHIPS -DCONFIG_MINIMAL_MEMORY_USAGE
 ARCH := arm
 CROSS_COMPILE := /usr/src/release_fae_version/toolchain/arm-eabi-4.4.0/bin/arm-eabi-
 KSRC := /usr/src/release_fae_version/kernel25_A7_281x
@@ -380,7 +364,6 @@ MODULE_NAME := wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_URBETTER), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN #-DCONFIG_MINIMAL_MEMORY_USAGE
 ARCH := arm
 CROSS_COMPILE := /media/DATA-1/urbetter/arm-2009q3/bin/arm-none-linux-gnueabi-
 KSRC := /media/DATA-1/urbetter/ics-urbetter/kernel
@@ -388,7 +371,6 @@ MODULE_NAME := wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_TI_PANDA), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN #-DCONFIG_MINIMAL_MEMORY_USAGE
 ARCH := arm
 #CROSS_COMPILE := /media/DATA-1/aosp/ics-aosp_20111227/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 #KSRC := /media/DATA-1/aosp/android-omap-panda-3.0_20120104
@@ -398,14 +380,12 @@ MODULE_NAME := wlan
 endif
 
 ifeq ($(CONFIG_PLATFORM_MIPS_JZ4760), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_MINIMAL_MEMORY_USAGE
 ARCH ?= mips
 CROSS_COMPILE ?= /mnt/sdb5/Ingenic/Umido/mips-4.3/bin/mips-linux-gnu-
 KSRC ?= /mnt/sdb5/Ingenic/Umido/kernel
 endif
 
 ifeq ($(CONFIG_PLATFORM_SZEBOOK), y)
-EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN
 ARCH:=arm
 CROSS_COMPILE:=/opt/crosstool2/bin/armeb-unknown-linux-gnueabi- 
 KVER:= 2.6.31.6
@@ -414,7 +394,7 @@ endif
 
 #Add setting for MN10300
 ifeq ($(CONFIG_PLATFORM_MN10300), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_MN10300
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_MN10300
 ARCH := mn10300
 CROSS_COMPILE := mn10300-linux-
 KVER := 2.6.32.2
@@ -424,7 +404,7 @@ endif
 
 
 ifeq ($(CONFIG_PLATFORM_ARM_SUNxI), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ARM_SUNxI
+EXTRA_CFLAGS += -DCONFIG_PLATFORM_ARM_SUNxI
 ARCH := arm
 CROSS_COMPILE := arm-none-linux-gnueabi-
 KVER  := 3.0.8
