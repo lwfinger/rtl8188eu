@@ -45,6 +45,10 @@
 #include "./8192cd_debug.h"
 #endif	// rtw_wifi_driver
 
+#ifndef csum_ipv6_magic
+#include <net/ip6_checksum.h>
+#endif
+
 #ifdef CL_IPV6_PASS
 #ifdef __KERNEL__
 #include <linux/ipv6.h>
