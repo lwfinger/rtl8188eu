@@ -1,0 +1,10 @@
+--- hal/hal_intf.c
++++ hal/hal_intf.c
+@@ -22,7 +22,6 @@
+ #include <drv_conf.h>
+ #include <osdep_service.h>
+ #include <drv_types.h>
+-#include <rtw_byteorder.h>
+ #include <hal_intf.h>
+ #include <usb_hal.h>
+ 

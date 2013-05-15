@@ -1,0 +1,10 @@
+--- os_dep/xmit_linux.c
++++ os_dep/xmit_linux.c
+@@ -25,7 +25,6 @@
+ 
+ #include <linux/if_ether.h>
+ #include <linux/ip.h>
+-#include <rtw_byteorder.h>
+ #include <wifi.h>
+ #include <mlme_osdep.h>
+ #include <xmit_osdep.h>

@@ -1227,7 +1227,6 @@ __inline static void _set_workitem(_workitem *pwork)
 #include <osdep_ce_service.h>
 #endif
 
-#include <rtw_byteorder.h>
 
 #ifndef BIT
 	#define BIT(x)	( 1 << (x))

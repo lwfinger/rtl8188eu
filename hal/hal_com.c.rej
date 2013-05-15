@@ -1,0 +1,10 @@
+--- hal/hal_com.c
++++ hal/hal_com.c
+@@ -20,7 +20,6 @@
+ #include <drv_conf.h>
+ #include <osdep_service.h>
+ #include <drv_types.h>
+-#include <rtw_byteorder.h>
+ #include <hal_intf.h>
+ #include <hal_com.h>
+ #include <rtl8192d_hal.h>
