@@ -1413,9 +1413,9 @@ __inline static unsigned char _cancel_timer_ex(_timer *ptimer)
 
 static __inline void thread_enter(char *name)
 {
-	#ifdef daemonize
+#ifdef daemonize
 	daemonize("%s", name);
-	#endif
+#endif
 	allow_signal(SIGTERM);
 }
 

@@ -311,7 +311,7 @@ void rtw_proc_init_one(struct net_device *dev)
 {
 }
 
-#else	/* LINUX_VERSION_CODE > KERNEL_VERSION(3, 8. 0) */
+#else	/* create_proc_entry not defined */
 void rtw_proc_init_one(struct net_device *dev)
 {
 	struct proc_dir_entry *dir_dev = NULL;
