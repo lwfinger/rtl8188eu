@@ -301,7 +301,7 @@ static int	rtw_proc_cnt = 0;
 
 #define RTW_PROC_NAME DRV_NAME
 
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(3, 8, 0))
+#ifndef create_proc_entry
 /* dummy routines */
 void rtw_proc_remove_one(struct net_device *dev)
 {

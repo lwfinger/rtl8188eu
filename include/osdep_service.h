@@ -1413,7 +1413,7 @@ __inline static unsigned char _cancel_timer_ex(_timer *ptimer)
 
 static __inline void thread_enter(char *name)
 {
-	#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 8, 0))
+	#ifdef daemonize
 	daemonize("%s", name);
 	#endif
 	allow_signal(SIGTERM);
