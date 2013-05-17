@@ -2030,7 +2030,6 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_HAL_DM);
 
 	//tynli_test_tx_report.
 	rtw_write16(Adapter, REG_TX_RPT_TIME, 0x3DF0);
-	//RT_TRACE(COMP_INIT, DBG_TRACE, ("InitializeAdapter8188EUsb() <====\n"));
 
 	//enable tx DMA to drop the redundate data of packet
 	rtw_write16(Adapter,REG_TXDMA_OFFSET_CHK, (rtw_read16(Adapter,REG_TXDMA_OFFSET_CHK) | DROP_DATA_EN));
@@ -2113,7 +2112,7 @@ CardDisableRTL8188EU(
 	u32	val32;
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
 
-	RT_TRACE(COMP_INIT, DBG_LOUD, ("CardDisableRTL8188EU\n"));
+	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("CardDisableRTL8188EU\n"));
 
 	//Stop Tx Report Timer. 0x4EC[Bit1]=b'0
 	val8 = rtw_read8(Adapter, REG_TX_RPT_CTRL);
@@ -2127,25 +2126,16 @@ CardDisableRTL8188EU(
 
 	
 	// 2. 0x1F[7:0] = 0		// turn off RF
-	//rtw_write8(Adapter, REG_RF_CTRL, 0x00);
 
 	val8 = rtw_read8(Adapter, REG_MCUFWDL);
 	if ((val8 & RAM_DL_SEL) && Adapter->bFWReady) //8051 RAM code
 	{
-		//rtl8723a_FirmwareSelfReset(padapter);
-		//_8051Reset88E(padapter);		
-		
 		// Reset MCU 0x2[10]=0.
 		val8 = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
 		val8 &= ~BIT(2);	// 0x2[10], FEN_CPUEN
 		rtw_write8(Adapter, REG_SYS_FUNC_EN+1, val8);
 	}	
 
-	//val8 = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-	//val8 &= ~BIT(2);	// 0x2[10], FEN_CPUEN
-	//rtw_write8(Adapter, REG_SYS_FUNC_EN+1, val8);
-
-	// MCUFWDL 0x80[1:0]=0
 	// reset MCU ready status
 	rtw_write8(Adapter, REG_MCUFWDL, 0);
 
@@ -2163,23 +2153,16 @@ CardDisableRTL8188EU(
 	val8 = rtw_read8(Adapter, REG_RSV_CTRL+1);
 	rtw_write8(Adapter, REG_RSV_CTRL+1, val8|BIT3);
 	
-#if 0
-	// 7. RSV_CTRL 0x1C[7:0] = 0x0E			// lock ISO/CLK/Power control register
-	rtw_write8(Adapter, REG_RSV_CTRL, 0x0e);
-#endif
-#if 1
 	//YJ,test add, 111207. For Power Consumption.
 	val8 = rtw_read8(Adapter, GPIO_IN);
 	rtw_write8(Adapter, GPIO_OUT, val8);
 	rtw_write8(Adapter, GPIO_IO_SEL, 0xFF);//Reg0x46
 
 	val8 = rtw_read8(Adapter, REG_GPIO_IO_SEL);
-	//rtw_write8(Adapter, REG_GPIO_IO_SEL, (val8<<4)|val8);
 	rtw_write8(Adapter, REG_GPIO_IO_SEL, (val8<<4));
 	val8 = rtw_read8(Adapter, REG_GPIO_IO_SEL+1);
 	rtw_write8(Adapter, REG_GPIO_IO_SEL+1, val8|0x0F);//Reg0x43
 	rtw_write32(Adapter, REG_BB_PAD_CTRL, 0x00080808);//set LNA ,TRSW,EX_PA Pin to output mode
-#endif
 	pHalData->bMacPwrCtrlOn = _FALSE;
 	Adapter->bFWReady = _FALSE;
 }
@@ -2247,16 +2230,15 @@ _func_enter_;
 
 	status = _SUCCESS;
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("===> usb_inirp_init\n"));	
+	RT_TRACE(_module_hci_hal_init_c_, _drv_info_,
+		 ("===> usb_inirp_init\n"));	
 		
 	precvpriv->ff_hwaddr = RECV_BULK_IN_ADDR;
 
 	//issue Rx irp to receive data	
 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;	
-	for (i=0; i<NR_RECVBUFF; i++)
-	{
-		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == _FALSE )
-		{
+	for (i = 0; i < NR_RECVBUFF; i++) {
+		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == _FALSE ) {
 			RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_port error\n"));
 			status = _FAIL;
 			goto exit;
@@ -2267,16 +2249,16 @@ _func_enter_;
 	}
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	if (pHalData->RtIntInPipe != 0x05)
-	{
+	if (pHalData->RtIntInPipe != 0x05) {
 		status = _FAIL;
-		DBG_871X("%s =>Warning !! Have not USB Int-IN pipe,  pHalData->RtIntInPipe(%d)!!!\n",__func__,pHalData->RtIntInPipe);
+		DBG_871X("%s =>Warning !! Have not USB Int-IN pipe,  pHalData->RtIntInPipe(%d)!!!\n",
+			 __func__,i pHalData->RtIntInPipe);
 		goto exit;
 	}	
 	_read_interrupt = pintfhdl->io_ops._read_interrupt;
-	if (_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == _FALSE )
-	{
-		RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_interrupt error\n"));
+	if (_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == _FALSE ) {
+		RT_TRACE(_module_hci_hal_init_c_, _drv_err_,
+			 ("usb_rx_init: usb_read_interrupt error\n"));
 		status = _FAIL;
 	}
 #endif

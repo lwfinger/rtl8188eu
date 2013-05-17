@@ -11630,7 +11630,8 @@ ODM_SingleDualAntennaDetection(
 			{
 				pDM_SWAT_Table->ANTA_ON=TRUE;
 				pDM_SWAT_Table->ANTB_ON=TRUE;
-				RT_TRACE(COMP_ANTENNA, DBG_LOUD, ("ODM_SingleDualAntennaDetection(): Dual Antenna\n"));
+				ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD,
+					     ("ODM_SingleDualAntennaDetection(): Dual Antenna\n"));
 			}
 		}
 		else
