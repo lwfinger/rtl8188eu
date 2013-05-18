@@ -63,11 +63,6 @@
 //---------------------------------------------------------------------
 //		RTL8188E From header
 //---------------------------------------------------------------------
-#if 0
-	#define Rtl8188E_PHY_REG_Array_PG			Rtl8188ESPHY_REG_Array_PG
-	#define Rtl8188E_PHY_REG_Array_PGLength	Rtl8188ESPHY_REG_Array_PGLength	
-
-#endif
 	
 	//---------------------------------------------------------------------
 	//		RTL8188E Power Configuration CMDs for USB/SDIO interfaces
@@ -92,12 +87,6 @@
 	#define RTL8188E_PHY_REG_PG				"rtl8188E\\PHY_REG_PG.txt"
 	#define RTL8188E_PHY_REG_MP				"rtl8188E\\PHY_REG_MP.txt"
 
-#if 0
-	#define Rtl8188E_PHY_REG_Array_PG			Rtl8188EUPHY_REG_Array_PG
-	#define Rtl8188E_PHY_REG_Array_PGLength	Rtl8188EUPHY_REG_Array_PGLength	
-	
-#endif	
-	
 	//---------------------------------------------------------------------
 	//		RTL8188E Power Configuration CMDs for USB/SDIO interfaces
 	//---------------------------------------------------------------------

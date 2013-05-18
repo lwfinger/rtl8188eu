@@ -799,12 +799,6 @@ phy_APCalibrate_8192C(
 					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a},	//path settings equal to path b settings
 					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a}
 					};
-#if 0	
-	u4Byte			APK_RF_value_A[PATH_NUM][APK_BB_REG_NUM] = {
-					{0x1adb0, 0x1adb0, 0x1ada0, 0x1ad90, 0x1ad80},		
-					{0x00fb0, 0x00fb0, 0x00fa0, 0x00f90, 0x00f80}						
-					};
-#endif
 	u4Byte			AFE_on_off[PATH_NUM] = {
 					0x04db25a4, 0x0b1b25a4};	//path A on path B off / path A off path B on
 

@@ -512,25 +512,9 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 					// 2012/04/23 MH According to Luke's suggestion, we can not write BB digital
 					// to increase TX power. Otherwise, EVM will be bad.
 					//
-#if 0
-					//wirte new elements A, C, D to regC80 and regC94, element B is always 0
-					value32 = (ele_D<<22)|((ele_C&0x3F)<<16)|ele_A;
-					ODM_SetBBReg(pDM_Odm, rOFDM0_XATxIQImbalance, bMaskDWord, value32);
-
-					value32 = (ele_C&0x000003C0)>>6;
-					ODM_SetBBReg(pDM_Odm, rOFDM0_XCTxAFE, bMaskH4Bits, value32);
-
-					value32 = ((X * ele_D)>>7)&0x01;
-					ODM_SetBBReg(pDM_Odm, rOFDM0_ECCAThreshold, BIT24, value32);
-#endif					
 				}
 				else
 				{
-#if 0
-					ODM_SetBBReg(pDM_Odm, rOFDM0_XATxIQImbalance, bMaskDWord, OFDMSwingTable[(u1Byte)OFDM_index[0]]);				
-					ODM_SetBBReg(pDM_Odm, rOFDM0_XCTxAFE, bMaskH4Bits, 0x00);
-					ODM_SetBBReg(pDM_Odm, rOFDM0_ECCAThreshold, BIT24, 0x00);			
-#endif
 				}
 
 				ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("TxPwrTracking for path A: X = 0x%x, Y = 0x%x ele_A = 0x%x ele_C = 0x%x ele_D = 0x%x 0xe94 = 0x%x 0xe9c = 0x%x\n", 
@@ -541,29 +525,6 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 					// 2012/04/23 MH According to Luke's suggestion, we can not write BB digital
 					// to increase TX power. Otherwise, EVM will be bad.
 					//
-#if 0
-					//Adjust CCK according to IQK result
-					if (!pDM_Odm->RFCalibrateInfo.bCCKinCH14){
-						ODM_Write1Byte(pDM_Odm, 0xa22, CCKSwingTable_Ch1_Ch13[(u1Byte)CCK_index][0]);
-						ODM_Write1Byte(pDM_Odm, 0xa23, CCKSwingTable_Ch1_Ch13[(u1Byte)CCK_index][1]);
-						ODM_Write1Byte(pDM_Odm, 0xa24, CCKSwingTable_Ch1_Ch13[(u1Byte)CCK_index][2]);
-						ODM_Write1Byte(pDM_Odm, 0xa25, CCKSwingTable_Ch1_Ch13[(u1Byte)CCK_index][3]);
-						ODM_Write1Byte(pDM_Odm, 0xa26, CCKSwingTable_Ch1_Ch13[(u1Byte)CCK_index][4]);
-						ODM_Write1Byte(pDM_Odm, 0xa27, CCKSwingTable_Ch1_Ch13[(u1Byte)CCK_index][5]);
-						ODM_Write1Byte(pDM_Odm, 0xa28, CCKSwingTable_Ch1_Ch13[(u1Byte)CCK_index][6]);
-						ODM_Write1Byte(pDM_Odm, 0xa29, CCKSwingTable_Ch1_Ch13[(u1Byte)CCK_index][7]);		
-					}
-					else{
-						ODM_Write1Byte(pDM_Odm, 0xa22, CCKSwingTable_Ch14[(u1Byte)CCK_index][0]);
-						ODM_Write1Byte(pDM_Odm, 0xa23, CCKSwingTable_Ch14[(u1Byte)CCK_index][1]);
-						ODM_Write1Byte(pDM_Odm, 0xa24, CCKSwingTable_Ch14[(u1Byte)CCK_index][2]);
-						ODM_Write1Byte(pDM_Odm, 0xa25, CCKSwingTable_Ch14[(u1Byte)CCK_index][3]);
-						ODM_Write1Byte(pDM_Odm, 0xa26, CCKSwingTable_Ch14[(u1Byte)CCK_index][4]);
-						ODM_Write1Byte(pDM_Odm, 0xa27, CCKSwingTable_Ch14[(u1Byte)CCK_index][5]);
-						ODM_Write1Byte(pDM_Odm, 0xa28, CCKSwingTable_Ch14[(u1Byte)CCK_index][6]);
-						ODM_Write1Byte(pDM_Odm, 0xa29, CCKSwingTable_Ch14[(u1Byte)CCK_index][7]);	
-					}		
-#endif
 				}
 				
 				if (is2T)
@@ -575,9 +536,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 					Y = pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[Indexforchannel].Value[0][5];
 					
 					//if (X != 0 && pHalData->CurrentBandType92D == ODM_BAND_ON_2_4G)
-					if ((X != 0) && (*(pDM_Odm->pBandType) == ODM_BAND_2_4G))
-						
-					{
+					if ((X != 0) && (*(pDM_Odm->pBandType) == ODM_BAND_2_4G)) {
 						if ((X & 0x00000200) != 0)	//consider minus
 							X = X | 0xFFFFFC00;
 						ele_A = ((X * ele_D)>>8)&0x000003FF;
@@ -587,7 +546,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 							Y = Y | 0xFFFFFC00;
 						ele_C = ((Y * ele_D)>>8)&0x00003FF;
 						
-						//wirte new elements A, C, D to regC88 and regC9C, element B is always 0
+						//wtite new elements A, C, D to regC88 and regC9C, element B is always 0
 						value32=(ele_D<<22)|((ele_C&0x3F)<<16) |ele_A;
 						ODM_SetBBReg(pDM_Odm, rOFDM0_XBTxIQImbalance, bMaskDWord, value32);
 
@@ -597,9 +556,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 						value32 = ((X * ele_D)>>7)&0x01;
 						ODM_SetBBReg(pDM_Odm, rOFDM0_ECCAThreshold, BIT28, value32);
 
-					}
-					else
-					{
+					} else {
 						ODM_SetBBReg(pDM_Odm, rOFDM0_XBTxIQImbalance, bMaskDWord, OFDMSwingTable[(u1Byte)OFDM_index[1]]);										
 						ODM_SetBBReg(pDM_Odm, rOFDM0_XDTxAFE, bMaskH4Bits, 0x00);	
 						ODM_SetBBReg(pDM_Odm, rOFDM0_ECCAThreshold, BIT28, 0x00);				
@@ -731,20 +688,8 @@ phy_PathA_IQK_8188E(
 		result |= 0x01;
 	else							//if Tx not OK, ignore Rx
 		return result;
-
-#if 0
-	if (!(regEAC & BIT27) &&		//if Tx is OK, check whether Rx is OK
-		(((regEA4 & 0x03FF0000)>>16) != 0x132) &&
-		(((regEAC & 0x03FF0000)>>16) != 0x36))
-		result |= 0x02;
-	else
-		RTPRINT(FINIT, INIT_IQK, ("Path A Rx IQK fail!!\n"));
-#endif	
-
 	return result;
-
-
-	}
+}
 
 u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_RxIQK(
@@ -877,15 +822,6 @@ phy_PathA_RxIQK(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_IQK, bMaskDWord, 0x00000000);
 	ODM_SetRFReg(pDM_Odm, RF_PATH_A, 0xdf, bRFRegOffsetMask, 0x180 );
 	
-#if 0	
-	if (!(regEAC & BIT28) &&		
-		(((regE94 & 0x03FF0000)>>16) != 0x142) &&
-		(((regE9C & 0x03FF0000)>>16) != 0x42) )
-		result |= 0x01;
-	else							//if Tx not OK, ignore Rx
-		return result;
-#endif	
-
 	if (!(regEAC & BIT27) &&		//if Tx is OK, check whether Rx is OK
 		(((regEA4 & 0x03FF0000)>>16) != 0x132) &&
 		(((regEAC & 0x03FF0000)>>16) != 0x36))
@@ -1690,15 +1626,6 @@ else
 				result[t][1] = (ODM_GetBBReg(pDM_Odm, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;
 			break;
 		}
-#if 0		
-		else if (i == (retryCount-1) && PathAOK == 0x01)	//Tx IQK OK
-		{
-			RTPRINT(FINIT, INIT_IQK, ("Path A IQK Only  Tx Success!!\n"));
-			
-			result[t][0] = (ODM_GetBBReg(pDM_Odm, rTx_Power_Before_IQK_A, bMaskDWord)&0x3FF0000)>>16;
-			result[t][1] = (ODM_GetBBReg(pDM_Odm, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;			
-		}
-#endif		
 	}
 
 	for (i = 0 ; i < retryCount ; i++){
@@ -1709,14 +1636,10 @@ else
 #endif
 		if (PathAOK == 0x03){
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Path A Rx IQK Success!!\n"));
-//				result[t][0] = (ODM_GetBBReg(pDM_Odm, rTx_Power_Before_IQK_A, bMaskDWord)&0x3FF0000)>>16;
-//				result[t][1] = (ODM_GetBBReg(pDM_Odm, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;
 				result[t][2] = (ODM_GetBBReg(pDM_Odm, rRx_Power_Before_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
 				result[t][3] = (ODM_GetBBReg(pDM_Odm, rRx_Power_After_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
 			break;
-		}
-		else
-		{
+		} else {
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Path A Rx IQK Fail!!\n"));		
 		}
 	}
@@ -2504,22 +2427,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 	}
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK:Start!!!\n"));
 
-#if 0//Suggested by Edlu,120413
-
-    // IQK on channel 7, should switch back when completed.
-	//originChannel = pHalData->CurrentChannel;
-	originChannel = *(pDM_Odm->pChannel);
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-   	pAdapter->HalFunc.SwChnlByTimerHandler(pAdapter, channelToIQK);	
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	pAdapter->HalFunc.set_channel_handler(pAdapter, channelToIQK);
-#endif
-
-#endif
-
-	for (i = 0; i < 8; i++)
-	{
+	for (i = 0; i < 8; i++) {
 		result[0][i] = 0;
 		result[1][i] = 0;
 		result[2][i] = 0;
@@ -2535,11 +2443,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 	is23simular = FALSE;
 	is13simular = FALSE;
 
-
-	//ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK !!!interface %d currentband %d ishardwareD %d\n", pDM_Odm->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
-//	RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate\n"));
-	for (i=0; i<3; i++)
-	{		
+	for (i=0; i<3; i++) {		
 	 	
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 	 	phy_IQCalibrate_8188E(pAdapter, result, i, is2T);
@@ -2682,16 +2586,6 @@ if (*(pDM_Odm->mp_mode) == 1)
 #endif	
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK finished\n"));
-#if 0 //Suggested by Edlu,120413	
-
-	#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	pAdapter->HalFunc.SwChnlByTimerHandler(pAdapter, originChannel);	
-	#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	pAdapter->HalFunc.set_channel_handler(pAdapter, originChannel);
-	#endif
-
-#endif	
-
 }
 
 

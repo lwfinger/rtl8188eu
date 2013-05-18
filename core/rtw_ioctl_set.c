@@ -178,21 +178,6 @@ _func_enter_;
 				// can't associate ; reset under-linking			
 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 
-#if 0	
-				if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == _TRUE))
-				{
-					if (_rtw_memcmp(pmlmepriv->cur_network.network.Ssid.Ssid, pmlmepriv->assoc_ssid.Ssid, pmlmepriv->assoc_ssid.SsidLength))
-					{ 
-						// for funk to do roaming
-						// funk will reconnect, but funk will not sitesurvey before reconnect
-						RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("for funk to do roaming"));
-						if (pmlmepriv->sitesurveyctrl.traffic_busy==_FALSE)
-							rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0);
-					}
-				
-				}				
-#endif
-
 				//when set_ssid/set_bssid for rtw_do_join(), but there are no desired bss in scanning queue
 				//we try to issue sitesurvey firstly			
 				if (pmlmepriv->LinkDetectInfo.bBusyTraffic==_FALSE
@@ -201,7 +186,6 @@ _func_enter_;
 					#endif
 				)
 				{
-					//DBG_871X("rtw_do_join() when   no desired bss in scanning queue\n");
 					if ( _SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ){
 						pmlmepriv->to_join = _FALSE;
 						RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("do_join(): site survey return error\n."));

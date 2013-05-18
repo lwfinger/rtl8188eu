@@ -701,28 +701,12 @@ _func_enter_;
 		&& (psecuritypriv->busetkipkey==1 || prxattrib->encrypt !=_TKIP_ )
 		)
 	{
-#if 0
-		if ((prxstat->icv==1)&&(prxattrib->encrypt!=_AES_))
-		{
-			psecuritypriv->hw_decrypted=_FALSE;
+		psecuritypriv->hw_decrypted=_TRUE;
+		#ifdef DBG_RX_DECRYPTOR
+		DBG_871X("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  Setting psecuritypriv->hw_decrypted = %d\n"
+		, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
+		#endif
 
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("psecuritypriv->hw_decrypted=_FALSE"));
-
-			rtw_free_recvframe(precv_frame, &padapter->recvpriv.free_recv_queue);
-
-			return_packet=NULL;
-
-		}
-		else
-#endif
-		{
-			psecuritypriv->hw_decrypted=_TRUE;
-			#ifdef DBG_RX_DECRYPTOR
-			DBG_871X("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  Setting psecuritypriv->hw_decrypted = %d\n"
-			, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
-			#endif
-
-		}
 	}
 	else {
 		#ifdef DBG_RX_DECRYPTOR
@@ -737,7 +721,6 @@ _func_enter_;
 		return_packet = NULL;
 		
 	}
-	//recvframe_chkmic(adapter, precv_frame);   //move to recvframme_defrag function
 
 _func_exit_;
 
@@ -1734,21 +1717,6 @@ sint validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame)
 
 	RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("+validate_recv_mgnt_frame\n"));
 
-#if 0
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
-	{
-#ifdef CONFIG_NATIVEAP_MLME
-		mgt_dispatcher(padapter, precv_frame);
-#else
-		rtw_hostapd_mlme_rx(padapter, precv_frame);
-#endif
-	}
-	else
-	{
-		mgt_dispatcher(padapter, precv_frame);
-	}
-#endif
-
 	precv_frame = recvframe_chk_defrag(padapter, precv_frame);
 	if (precv_frame == NULL) {
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_,("%s: fragment packet\n",__func__));
@@ -1963,14 +1931,6 @@ _func_enter_;
 		ret= _FAIL;
 		goto exit;
 	}
-
-#if 0
-	if (psta->tdls_sta_state & TDLS_LINKED_STATE )
-	{
-		if (psta->dot118021XPrivacy==_AES_)
-			pattrib->encrypt=psta->dot118021XPrivacy;
-	}
-#endif //CONFIG_TDLS
 
 	if (pattrib->privacy){
 
@@ -2923,19 +2883,6 @@ int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 
 		/* Indicat the packets to upper layer */
 		if (sub_m) {
-
-#if 0
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-			if ( (pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1) ) {
-				sub_skb->ip_summed = CHECKSUM_UNNECESSARY;
-			} else {
-				sub_skb->ip_summed = CHECKSUM_NONE;
-			}
-#else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
-			sub_skb->ip_summed = CHECKSUM_NONE;
-#endif //CONFIG_TCP_CSUM_OFFLOAD_RX
-#endif //0
-
 			if ( ((u32)(mtod(sub_m, caddr_t) + 14) % 4) != 0)
 				printf("%s()-%d: mtod(sub_m) = %p\n", __func__, __LINE__, mtod(sub_m, caddr_t));
 #ifdef CONFIG_RX_INDICATE_QUEUE
@@ -3111,74 +3058,6 @@ exit:
 
 		a_len -= (type_len + ETH_HLEN + padding_len) ;
 
-
-#if 0
-
-	if (a_len > ETH_HLEN)
-	{
-		pnrframe_new = rtw_alloc_recvframe(pfree_recv_queue);
-		if (pnrframe_new)
-		{
-			_pkt *pskb_copy;
-			unsigned int copy_len  = pnrframe->u.hdr.len;
-
-			_rtw_init_listhead(&pnrframe_new->u.hdr.list);
-
-	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,18)) // http://www.mail-archive.com/netdev@vger.kernel.org/msg17214.html
-			pskb_copy = dev_alloc_skb(copy_len+64);
-	#else
-			pskb_copy = netdev_alloc_skb(padapter->pnetdev, copy_len + 64);
-	#endif
-			if (pskb_copy==NULL)
-			{
-				DBG_871X("amsdu_to_msdu:can not all(ocate memory for skb copy\n");
-			}
-
-			pnrframe_new->u.hdr.pkt = pskb_copy;
-
-			_rtw_memcpy(pskb_copy->data, pnrframe->u.hdr.rx_data, copy_len);
-
-			pnrframe_new->u.hdr.rx_data = pnrframe->u.hdr.rx_data;
-			pnrframe_new->u.hdr.rx_tail = pnrframe->u.hdr.rx_data + copy_len;
-
-
-			if ((padapter->bDriverStopped ==_FALSE)&&( padapter->bSurpriseRemoved==_FALSE))
-			{
-				rtw_recv_indicatepkt(padapter, pnrframe_new);//indicate this recv_frame
-			}
-			else
-			{
-				rtw_free_recvframe(pnrframe_new, pfree_recv_queue);//free this recv_frame
-			}
-
-		}
-		else
-		{
-			DBG_871X("amsdu_to_msdu:can not allocate memory for pnrframe_new\n");
-		}
-
-	}
-	else
-	{
-		if ((padapter->bDriverStopped ==_FALSE)&&( padapter->bSurpriseRemoved==_FALSE))
-		{
-			rtw_recv_indicatepkt(padapter, pnrframe);//indicate this recv_frame
-		}
-		else
-		{
-			rtw_free_recvframe(pnrframe, pfree_recv_queue);//free this recv_frame
-		}
-
-		pnrframe = NULL;
-
-	}
-
-#else // 0
-
-		//padding_len = (4) - ((type_len + ETH_HLEN)&(4-1));
-
-		//a_len -= (type_len + ETH_HLEN + padding_len) ;
-
 		pnrframe_new = NULL;
 
 
@@ -3189,9 +3068,6 @@ exit:
 			if (pnrframe_new)
 			{
 
-
-				//pnrframe_new->u.hdr.precvbuf = precvbuf;//precvbuf is assigned before call rtw_init_recvframe()
-				//rtw_init_recvframe(pnrframe_new, precvpriv);
 				{
 #ifdef PLATFORM_LINUX
 						_pkt *pskb = pnrframe->u.hdr.pkt;
@@ -3244,9 +3120,6 @@ exit:
 			pnrframe = pnrframe_new;
 		}
 
-
-#endif // end defined (PLATFORM_LINUX) || defined (PLATFORM_FREEBSD) 
-
 	}while (pnrframe);
 
 exit:
@@ -3255,7 +3128,6 @@ exit:
 #endif
 }
 
-int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num);
 int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
 {
 	u8	wsize = preorder_ctrl->wsize_b;
@@ -3408,21 +3280,11 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 	phead = 	get_list_head(ppending_recvframe_queue);
 	plist = get_next(phead);
 
-#if 0
-	// Check if there is any other indication thread running.
-	if (pTS->RxIndicateState == RXTS_INDICATE_PROCESSING)
-		return;
-#endif
-
 	// Handling some condition for forced indicate case.
 	if (bforced==_TRUE)
 	{
 		if (rtw_is_list_empty(phead))
-		{
-			// _exit_critical_ex(&ppending_recvframe_queue->lock, &irql);
-			//_rtw_spinunlock_ex(&ppending_recvframe_queue->lock);
 			return _TRUE;
-		}
 	
 		 prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 	        pattrib = &prframe->u.hdr.attrib;	
@@ -3446,17 +3308,6 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_,
 				 ("recv_indicatepkts_in_order: indicate=%d seq=%d amsdu=%d\n",
 				  preorder_ctrl->indicate_seq, pattrib->seq_num, pattrib->amsdu));
-
-#if 0
-			// This protect buffer from overflow.
-			if (index >= REORDER_WIN_SIZE)
-			{
-				RT_ASSERT(FALSE, ("IndicateRxReorderList(): Buffer overflow!!\n"));
-				bPktInBuf = TRUE;
-				break;
-			}
-#endif
-
 			plist = get_next(plist);
 			rtw_list_delete(&(prframe->u.hdr.list));
 
@@ -3469,33 +3320,12 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 				#endif
 			}
 
-#if 0
-			index++;
-			if (index==1)
-			{
-				//Cancel previous pending timer.
-				//PlatformCancelTimer(Adapter, &pTS->RxPktPendingTimer);
-				if (bforced!=_TRUE)
-				{
-					//DBG_871X("_cancel_timer(&preorder_ctrl->reordering_ctrl_timer, &bcancelled);\n");
-					_cancel_timer(&preorder_ctrl->reordering_ctrl_timer, &bcancelled);
-				}
-			}
-#endif
 
 			//Set this as a lock to make sure that only one thread is indicating packet.
-			//pTS->RxIndicateState = RXTS_INDICATE_PROCESSING;
-
-			// Indicate packets
-			//RT_ASSERT((index<=REORDER_WIN_SIZE), ("RxReorderIndicatePacket(): Rx Reorder buffer full!!\n"));
-
 
 			//indicate this recv_frame
-			//DbgPrint("recv_indicatepkts_in_order, indicate_seq=%d, seq_num=%d\n", precvpriv->indicate_seq, pattrib->seq_num);
 			if (!pattrib->amsdu)
 			{
-				//DBG_871X("recv_indicatepkts_in_order, amsdu!=1, indicate_seq=%d, seq_num=%d\n", preorder_ctrl->indicate_seq, pattrib->seq_num);
-
 				if ((padapter->bDriverStopped == _FALSE) &&
 				    (padapter->bSurpriseRemoved == _FALSE))
 				{
@@ -3898,22 +3728,6 @@ int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
 		ret = _FAIL;
 		goto _recv_data_drop;
 	}
-
-#if 0
-	if ( padapter->adapter_type == PRIMARY_ADAPTER )
-	{
-		DBG_871X("+++\n");
-		{
-			int i;
-			u8	*ptr = get_recvframe_data(prframe);
-			for (i=0; i<140;i=i+8)
-				DBG_871X("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:", *(ptr+i),
-				*(ptr+i+1), *(ptr+i+2) ,*(ptr+i+3) ,*(ptr+i+4),*(ptr+i+5), *(ptr+i+6), *(ptr+i+7));
-
-		}
-		DBG_871X("---\n");
-	}
-#endif
 
 #ifdef CONFIG_TDLS
 	//check TDLS frame

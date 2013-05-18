@@ -225,19 +225,6 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
 
 	if (!IS_92C_SERIAL(pHalData->VersionID))
 		return;
-#if 0
-	while (PlatformAtomicExchange(&Adapter->IntrCCKRefCount, TRUE) == TRUE)
-	{
-		PlatformSleepUs(100);
-		TimeOut--;
-		if (TimeOut <= 0)
-		{
-			RTPRINT(FINIT, INIT_TxPower,
-			 ("!!!MPT_CCKTxPowerAdjustbyIndex Wait for check CCK gain index too long!!!\n" ));
-			break;
-		}
-	}
-#endif
 	if (beven && !pMptCtx->bMptIndexEven)	//odd->even
 	{
 		Action = 2;
@@ -306,12 +293,6 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
 			rtw_write8(pAdapter, 0xa29, CCKSwingTable_Ch14[CCK_index][7]);
 		}
 	}
-#if 0
-	RTPRINT(FINIT, INIT_TxPower,
-	("MPT_CCKTxPowerAdjustbyIndex 0xa20=%x\n", PlatformEFIORead4Byte(Adapter, 0xa20)));
-
-	PlatformAtomicExchange(&Adapter->IntrCCKRefCount, FALSE);
-#endif
 }
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
 
@@ -323,12 +304,6 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
  */
 void Hal_SetChannel(PADAPTER pAdapter)
 {
-#if 0
-	struct mp_priv *pmp = &pAdapter->mppriv;
-
-//	SelectChannel(pAdapter, pmp->channel);
-	set_channel_bwmode(pAdapter, pmp->channel, pmp->channel_offset, pmp->bandwidth);
-#else
 	u8 		eRFPath;
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -361,8 +336,6 @@ void Hal_SetChannel(PADAPTER pAdapter)
 		pDM_Odm->RFCalibrateInfo.bCCKinCH14 = _FALSE;
 		Hal_MPT_CCKTxPowerAdjust(pAdapter, pDM_Odm->RFCalibrateInfo.bCCKinCH14);
 	}
-
-#endif
 }
 
 /*
@@ -635,19 +608,11 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 
 			// Disable Power save
 			//cosa r_ant_select_ofdm_val = 0x3321333;
-#if 0
-			// 2008/10/31 MH From SD3 Willi's suggestion. We must read RFA 2T table.
-			if ((pHalData->VersionID == VERSION_8192S_ACUT)) // For RTL8192SU A-Cut only, by Roger, 2008.11.07.
-			{
-				mpt_RFConfigFromPreParaArrary(pAdapter, 1, RF_PATH_A);
-			}
-#endif
 			// 2009/01/08 MH From Sd3 Willis. We need to enable RFA/B by SW control
 			if (pHalData->rf_type == RF_2T2R)
 			{
 				PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFInterfaceSW, BIT10, 0);
 				PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFInterfaceSW, BIT26, 0);
-//				PHY_SetBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT10, 0);
 				PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT1, 1);
 				PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT17, 1);
 			}
@@ -762,17 +727,9 @@ u8 Hal_ReadRFThermalMeter(PADAPTER pAdapter)
 
 void Hal_GetThermalMeter(PADAPTER pAdapter, u8 *value)
 {
-#if 0
-	fw_cmd(pAdapter, IOCMD_GET_THERMAL_METER);
-	rtw_msleep_os(1000);
-	fw_cmd_data(pAdapter, value, 1);
-	*value &= 0xFF;
-#else
-
 	Hal_TriggerRFThermalMeter(pAdapter);
 	rtw_msleep_os(1000);
 	*value = Hal_ReadRFThermalMeter(pAdapter);
-#endif
 }
 
 void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
@@ -1002,28 +959,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleCarrier, bDisable);
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleTone, bDisable);
 		//Set CCK Tx Test Rate
-		#if 0
-		switch (pAdapter->mppriv.rateidx)
-		{
-			case 2:
-				cckrate = 0;
-				break;
-			case 4:
-				cckrate = 1;
-				break;
-			case 11:
-				cckrate = 2;
-				break;
-			case 22:
-				cckrate = 3;
-				break;
-			default:
-				cckrate = 0;
-				break;
-		}
-		#else
 		cckrate  = pAdapter->mppriv.rateidx;
-		#endif
 		write_bbreg(pAdapter, rCCK0_System, bCCKTxRate, cckrate);
 		write_bbreg(pAdapter, rCCK0_System, bCCKBBMode, 0x2);	//transmit mode
 		write_bbreg(pAdapter, rCCK0_System, bCCKScramble, bEnable);	//turn on scramble setting
@@ -1108,13 +1044,6 @@ void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 
 void Hal_SetContinuousTx(PADAPTER pAdapter, u8 bStart)
 {
-#if 0
-	// ADC turn off [bit24-21] adc port0 ~ port1
-	if (bStart) {
-		write_bbreg(pAdapter, rRx_Wait_CCCA, read_bbreg(pAdapter, rRx_Wait_CCCA) & 0xFE1FFFFF);
-		rtw_usleep_os(100);
-	}
-#endif
 	RT_TRACE(_module_mp_, _drv_info_,
 		 ("SetContinuousTx: rate:%d\n", pAdapter->mppriv.rateidx));
 
@@ -1128,13 +1057,6 @@ void Hal_SetContinuousTx(PADAPTER pAdapter, u8 bStart)
 	{
 		Hal_SetOFDMContinuousTx(pAdapter, bStart);
 	}
-#if 0
-	// ADC turn on [bit24-21] adc port0 ~ port1
-	if (!bStart) {
-		write_bbreg(pAdapter, rRx_Wait_CCCA, read_bbreg(pAdapter, rRx_Wait_CCCA) | 0x01E00000);
-	}
-#endif
 }
 
 #endif // CONFIG_MP_INCLUDE
-

@@ -1571,38 +1571,6 @@ int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
 	return 0;
 }
 
-#if 0
-void mac_clone(_adapter *priv, unsigned char *addr)
-{
-	struct sockaddr sa;
-
-	memcpy(sa.sa_data, addr, ETH_ALEN);
-	DEBUG_INFO("MAC Clone: Addr=%02x%02x%02x%02x%02x%02x\n",
-		addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]);
-	rtl8192cd_set_hwaddr(priv->dev, &sa);
-}
-
-
-int mac_clone_handle_frame(_adapter *priv, struct sk_buff *skb)
-{
-	if (priv->ethBrExtInfo.macclone_enable && !priv->macclone_completed)
-	{
-		if (!(skb->data[ETH_ALEN] & 1))	//// check any other particular MAC add
-		{
-                        if (memcmp(skb->data+ETH_ALEN, GET_MY_HWADDR(priv), ETH_ALEN) &&
-				((priv->dev->br_port) &&
-				 memcmp(skb->data+ETH_ALEN, priv->br_mac, ETH_ALEN)))
-			{
-				mac_clone(priv, skb->data+ETH_ALEN);
-				priv->macclone_completed = 1;
-			}
-		}
-	}
-
-	return 0;
-}
-#endif // 0
-
 #define SERVER_PORT			67
 #define CLIENT_PORT			68
 #define DHCP_MAGIC			0x63825363

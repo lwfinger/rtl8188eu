@@ -717,42 +717,6 @@ odm_HwAntDiv(
 	IN	PDM_ODM_T	pDM_Odm
 );
 
-
-
-
-
-#if 0
-//#if ((DM_ODM_SUPPORT_TYPE==ODM_AP)&&defined(HW_ANT_SWITCH))
-VOID
-odm_HW_AntennaSwitchInit(
-	IN	PDM_ODM_T	pDM_Odm
-);
-
-VOID
-odm_SetRxIdleAnt(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		Ant
-);
-
-VOID
-odm_StaAntSelect(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	struct stat_info *pstat
-);
-
-VOID
-odm_HW_IdleAntennaSelect(
-	IN	PDM_ODM_T	pDM_Odm
-);
-
-u1Byte
-ODM_Diversity_AntennaSelect(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte	*data
-);
-#endif
-
-
 //============================================================
 //3 Export Interface
 //============================================================
@@ -1726,12 +1690,6 @@ odm_DIGbyRSSI_LPS(
 	pDIG_T						pDM_DigTable = &pDM_Odm->DM_DigTable;
 	PFALSE_ALARM_STATISTICS		pFalseAlmCnt = &pDM_Odm->FalseAlmCnt;
 
-#if 0		//and 2.3.5 coding rule
-	struct mlme_priv	*pmlmepriv = &(pAdapter->mlmepriv);
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);	
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-#endif 
-
 	u1Byte	RSSI_Lower=DM_DIG_MIN_NIC;   //0x1E or 0x1C
 	u1Byte	bFwCurrentInPSMode = FALSE;
 	u1Byte	CurrentIGI=pDM_Odm->RSSI_Min;
@@ -1895,16 +1853,6 @@ odm_DIG(
 	//if (!(pDM_Odm->SupportAbility & (ODM_BB_DIG|ODM_BB_FA_CNT)))
 	if ((!(pDM_Odm->SupportAbility&ODM_BB_DIG)) ||(!(pDM_Odm->SupportAbility&ODM_BB_FA_CNT)))
 	{
-#if 0	
-		if (pDM_Odm->SupportPlatform & (ODM_AP|ODM_ADSL))
-		{
-			if ((pDM_Odm->SupportICType == ODM_RTL8192C) && (pDM_Odm->ExtLNA == 1))
-				CurrentIGI = 0x30; //pDM_DigTable->CurIGValue  = 0x30;
-			else
-				CurrentIGI = 0x20; //pDM_DigTable->CurIGValue  = 0x20;
-			ODM_Write_DIG(pDM_Odm, CurrentIGI);//ODM_Write_DIG(pDM_Odm, pDM_DigTable->CurIGValue);
-		}
-#endif		
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_DIG() Return: SupportAbility ODM_BB_DIG or ODM_BB_FA_CNT is disabled\n"));
 		return;
 	}
@@ -3023,26 +2971,6 @@ odm_RefreshRateAdaptiveMaskMP(
 
 		for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++)
 		{
-#if 0	//By YJ,120208		
-			if (	pTargetAdapter->MgntInfo.AsocEntry[i].bUsed && pTargetAdapter->MgntInfo.AsocEntry[i].bAssociated)
-			{
-				pEntry = pTargetAdapter->MgntInfo.AsocEntry+i;
-				pEntryRA = &pEntry->RateAdaptive;
-				if ( ODM_RAStateCheck(pDM_Odm, pEntry->rssi_stat.UndecoratedSmoothedPWDB, pMgntInfo->bSetTXPowerTrainingByOid, &pEntryRA->RATRState) )
-				{
-					ODM_PRINT_ADDR(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target STA addr : "), pEntry->MacAddr);
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RSSI:%d, RSSI_LEVEL:%d\n", pEntry->rssi_stat.UndecoratedSmoothedPWDB, pEntryRA->RATRState));
-					pAdapter->HalFunc.UpdateHalRAMaskHandler(
-											pTargetAdapter,
-											FALSE,
-											pEntry->AID+1,
-											pEntry->MacAddr,
-											pEntry,
-											pEntryRA->RATRState,
-											RAMask_Normal);
-				}
-			}
-#else
 			pEntry = AsocEntry_EnumStation(pTargetAdapter, i);
 			if (NULL != pEntry)
 			{
@@ -3064,7 +2992,6 @@ odm_RefreshRateAdaptiveMaskMP(
 					}
 				}
 			}
-#endif		
 		}
 	}
 
@@ -3638,22 +3565,7 @@ odm_DynamicTxPower_92C(
 		
 		if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	// Default port
 		{
-		#if 0
-			//todo: AP Mode
-			if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE) ||
-			       (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE))
-			{
-				UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-				//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("AP Client PWDB = 0x%x\n", UndecoratedSmoothedPWDB));
-			}
-			else
-			{
-				UndecoratedSmoothedPWDB = pdmpriv->UndecoratedSmoothedPWDB;
-				//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("STA Default Port PWDB = 0x%x\n", UndecoratedSmoothedPWDB));
-			}
-		#else
-		UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;	
-		#endif
+			UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;	
 		}
 		else // associated entry pwdb
 		{	
@@ -3895,22 +3807,7 @@ odm_DynamicTxPower_92D(
 		
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	// Default port
 	{
-	#if 0
-		//todo: AP Mode
-		if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE) ||
-	       (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE))
-		{
-			UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("AP Client PWDB = 0x%x\n", UndecoratedSmoothedPWDB));
-		}
-		else
-		{
-			UndecoratedSmoothedPWDB = pdmpriv->UndecoratedSmoothedPWDB;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("STA Default Port PWDB = 0x%x\n", UndecoratedSmoothedPWDB));
-		}
-	#else
-	UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-	#endif
+		UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
 	}
 	else // associated entry pwdb
 	{	
@@ -4170,43 +4067,6 @@ FindMinimumRSSI_Dmsp(
 	IN	PADAPTER	pAdapter
 )
 {
-#if 0
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	s32	Rssi_val_min_back_for_mac0;
-	BOOLEAN		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
-	BOOLEAN		bRestoreRssi = _FALSE;
-	PADAPTER	BuddyAdapter = pAdapter->BuddyAdapter;
-
-	if (pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY)
-	{
-		if (BuddyAdapter!= NULL)
-		{
-			if (pHalData->bSlaveOfDMSP)
-			{
-				//ODM_RT_TRACE(pDM_Odm,COMP_EASY_CONCURRENT,DBG_LOUD,("bSlavecase of dmsp\n"));
-				BuddyAdapter->DualMacDMSPControl.RssiValMinForAnotherMacOfDMSP = pdmpriv->MinUndecoratedPWDBForDM;
-			}
-			else
-			{
-				if (bGetValueFromBuddyAdapter)
-				{
-					//ODM_RT_TRACE(pDM_Odm,COMP_EASY_CONCURRENT,DBG_LOUD,("get new RSSI\n"));
-					bRestoreRssi = _TRUE;
-					Rssi_val_min_back_for_mac0 = pdmpriv->MinUndecoratedPWDBForDM;
-					pdmpriv->MinUndecoratedPWDBForDM = pAdapter->DualMacDMSPControl.RssiValMinForAnotherMacOfDMSP;
-				}
-			}
-		}
-		
-	}
-
-	if (bRestoreRssi)
-	{
-		bRestoreRssi = _FALSE;
-		pdmpriv->MinUndecoratedPWDBForDM = Rssi_val_min_back_for_mac0;
-	}
-#endif
 }
 
 static void
@@ -4241,21 +4101,6 @@ IN	PADAPTER	pAdapter
 			      pdmpriv->EntryMinUndecoratedSmoothedPWDB = pbuddy_dmpriv->EntryMinUndecoratedSmoothedPWDB;
 			       
 		}
- 		#if 0
-		if ((pdmpriv->UndecoratedSmoothedPWDB != (-1)) &&
-			 (pbuddy_dmpriv->UndecoratedSmoothedPWDB != (-1)))
-		{
-			
-			if ((pdmpriv->UndecoratedSmoothedPWDB > pbuddy_dmpriv->UndecoratedSmoothedPWDB) &&
-				(pbuddy_dmpriv->UndecoratedSmoothedPWDB!=0))
-			            pdmpriv->UndecoratedSmoothedPWDB = pbuddy_dmpriv->UndecoratedSmoothedPWDB;
-		}
-		else                         
-		{
-			if ((pdmpriv->UndecoratedSmoothedPWDB == (-1)) && (pbuddy_dmpriv->UndecoratedSmoothedPWDB!=0))
-			      pdmpriv->UndecoratedSmoothedPWDB = pbuddy_dmpriv->UndecoratedSmoothedPWDB;                               
-		}                      
-		#endif
 	}
 #endif
 
@@ -4267,22 +4112,7 @@ IN	PADAPTER	pAdapter
 	}
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	// Default port
 	{
-		#if 0
-		if ((check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) ||
-			(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE) ||
-			(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE))
-		{
-			pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-			//ODM_RT_TRACE(pDM_Odm,COMP_BB_POWERSAVING, DBG_LOUD, ("AP Client PWDB = 0x%x\n", pHalData->MinUndecoratedPWDBForDM));
-		}
-		else//for STA mode
-		{
-			pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->UndecoratedSmoothedPWDB;
-			//ODM_RT_TRACE(pDM_Odm,COMP_BB_POWERSAVING, DBG_LOUD, ("STA Default Port PWDB = 0x%x\n", pHalData->MinUndecoratedPWDBForDM));
-		}
-		#else
 		pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-		#endif
 	}
 	else // associated entry pwdb
 	{	
@@ -4292,8 +4122,6 @@ IN	PADAPTER	pAdapter
 	#if (RTL8192D_SUPPORT==1)
 	FindMinimumRSSI_Dmsp(pAdapter);
 	#endif
-	//DBG_8192C("%s=>MinUndecoratedPWDBForDM(%d)\n",__func__,pdmpriv->MinUndecoratedPWDBForDM);
-	//ODM_RT_TRACE(pDM_Odm,COMP_DIG, DBG_LOUD, ("MinUndecoratedPWDBForDM =%d\n",pHalData->MinUndecoratedPWDBForDM));
 }
 #endif
 
@@ -4340,12 +4168,6 @@ odm_RSSIMonitorCheckCE(
 
 					if (psta->rssi_stat.UndecoratedSmoothedPWDB > tmpEntryMaxPWDB)
 						tmpEntryMaxPWDB = psta->rssi_stat.UndecoratedSmoothedPWDB;
-
-					#if 0
-					DBG_871X("%s mac_id:%u, mac:"MAC_FMT", rssi:%d\n", __func__,
-						psta->mac_id, MAC_ARG(psta->hwaddr), psta->rssi_stat.UndecoratedSmoothedPWDB);
-					#endif
-
 					if (psta->rssi_stat.UndecoratedSmoothedPWDB != (-1)) {
 						#if (RTL8192D_SUPPORT==1)
 						PWDB_rssi[sta_cnt++] = (psta->mac_id | (psta->rssi_stat.UndecoratedSmoothedPWDB<<16) | ((Adapter->stapriv.asoc_sta_count+1) << 8));
@@ -4446,25 +4268,6 @@ odm_RSSIMonitorCheckCE(
 		pdmpriv->EntryMinUndecoratedSmoothedPWDB = 0;
 	}
 
-#if 0
-	if (check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE) == _TRUE)
-	{
-	
-		if (pHalData->fw_ractrl == _TRUE)
-		{
-			u32 param = (u32)(pdmpriv->UndecoratedSmoothedPWDB<<16);
-	printk("%s==> rssi(%d)\n",__func__,pdmpriv->UndecoratedSmoothedPWDB);	
-			param |= 0;//macid=0 for sta mode;
-			
-			rtl8192c_set_rssi_cmd(Adapter, (u8*)&param);
-		}
-		else
-		{
-			rtw_write8(Adapter, 0x4fe, (u8)pdmpriv->UndecoratedSmoothedPWDB);
-			//DBG_8192C("0x4fe write %x %d\n", pdmpriv->UndecoratedSmoothedPWDB, pdmpriv->UndecoratedSmoothedPWDB);
-		}
-	}
-#endif		
 	FindMinimumRSSI(Adapter);
 	ODM_CmnInfoUpdate(&pHalData->odmpriv ,ODM_CMNINFO_RSSI_MIN, pdmpriv->MinUndecoratedPWDBForDM);
 #endif//if (DM_ODM_SUPPORT_TYPE == ODM_CE)
@@ -6348,109 +6151,6 @@ odm_HwAntDiv(
 
 
 #if (DM_ODM_SUPPORT_TYPE==ODM_AP)
-#if 0
-VOID
-odm_HwAntDiv(
-	IN	PDM_ODM_T	pDM_Odm
-)
-{
-	struct rtl8192cd_priv *priv=pDM_Odm->priv;
-	struct stat_info	*pstat, *pstat_min=NULL;
-	struct list_head	*phead, *plist;
-	int rssi_min= 0xff, i;
-	u1Byte	idleAnt=priv->pshare->rf_ft_var.CurAntenna;	
-	u1Byte	nextAnt;
-	BOOLEAN		bRet=FALSE;
-	
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("odm_HwAntDiv==============>\n"));
-
-	if ((!priv->pshare->rf_ft_var.antHw_enable) ||(!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV)))
-		return;
-	
-	//if test, return
-	if (priv->pshare->rf_ft_var.CurAntenna & 0x80)
-		return;
-	
-	phead = &priv->asoc_list;
-	plist = phead->next;
-	////=========================
-	//find mimum rssi sta
-	////=========================
-	while (plist != phead)	{
-		pstat = list_entry(plist, struct stat_info, asoc_list);
-		if ((pstat->expire_to) && (pstat->AntRSSI[0] || pstat->AntRSSI[1])) {
-			int rssi = (pstat->AntRSSI[0] < pstat->AntRSSI[1]) ? pstat->AntRSSI[0] : pstat->AntRSSI[1];
-			if ((!pstat_min) || ( rssi < rssi_min) ) {
-				pstat_min = pstat;
-				rssi_min = rssi;
-			}
-		}
-		///STA: found out default antenna
-		bRet=odm_StaDefAntSel(pDM_Odm,
-						pstat->hwRxAntSel[1],
-						pstat->hwRxAntSel[0],
-						pstat->cckPktCount[1],
-						pstat->cckPktCount[0],
-						&nextAnt
-						);
-		
-		//if default antenna selection: successful
-		if (bRet){	
-			pstat->CurAntenna = nextAnt;
-			//update rssi
-			for (i=0; i<2; i++) {
-				if (pstat->cckPktCount[i]==0 && pstat->hwRxAntSel[i]==0)
-					pstat->AntRSSI[i] = 0;
-			}
-			if (pstat->AntRSSI[idleAnt]==0)
-				pstat->AntRSSI[idleAnt] = pstat->AntRSSI[idleAnt^1];
-			// reset variables
-			pstat->hwRxAntSel[1] = pstat->hwRxAntSel[0] =0;
-			pstat->cckPktCount[1]= pstat->cckPktCount[0] =0;
-		}
-
-		if (plist == plist->next)
-			break;
-		plist = plist->next;
-		
-	};
-	////=========================
-	//Choose  RX Idle antenna according to minmum rssi
-	////=========================
-	if (pstat_min)	{
-		if (priv->pshare->rf_ft_var.CurAntenna!=pstat_min->CurAntenna)
-			odm_SetRxIdleAnt(pDM_Odm,pstat_min->CurAntenna,TRUE);
-		priv->pshare->rf_ft_var.CurAntenna = pstat_min->CurAntenna;
-	}
-
-
-#ifdef TX_SHORTCUT
-	if (!priv->pmib->dot11OperationEntry.disable_txsc) {
-		plist = phead->next;
-		while (plist != phead)	{
-			pstat = list_entry(plist, struct stat_info, asoc_list);
-			if (pstat->expire_to) {
-				for (i=0; i<TX_SC_ENTRY_NUM; i++) {
-					struct tx_desc *pdesc= &(pstat->tx_sc_ent[i].hwdesc1);	
-					pdesc->Dword2 &= set_desc(~ (BIT(24)|BIT(25)));
-					if ((pstat->CurAntenna^priv->pshare->rf_ft_var.CurAntenna)&1)
-						pdesc->Dword2 |= set_desc(BIT(24)|BIT(25));
-					pdesc= &(pstat->tx_sc_ent[i].hwdesc2);	
-					pdesc->Dword2 &= set_desc(~ (BIT(24)|BIT(25)));
-					if ((pstat->CurAntenna^priv->pshare->rf_ft_var.CurAntenna)&1)
-						pdesc->Dword2 |= set_desc(BIT(24)|BIT(25));					
-				}
-			}		
-
-			if (plist == plist->next)
-				break;
-			plist = plist->next;
-		};
-	}
-#endif	
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,"<==============odm_HwAntDiv\n");
-}
-#endif
 
 u1Byte
 ODM_Diversity_AntennaSelect(
@@ -6725,12 +6425,6 @@ odm_EdcaTurboCheckCE(
 
 		if ((pDM_Odm->DM_EDCA_Table.prv_traffic_idx != trafficIndex) || (!pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA))
 		{
-			
-#if 0
-			//adjust EDCA parameter for BE queue
-			edca_param = EDCAParam[pmlmeinfo->assoc_AP_vendor][trafficIndex];
-#else
-
 			if ((pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_CISCO) && (pmlmeext->cur_wireless_mode & WIRELESS_11_24N))
 			{
 				edca_param = EDCAParam[pmlmeinfo->assoc_AP_vendor][trafficIndex];
@@ -6739,7 +6433,6 @@ odm_EdcaTurboCheckCE(
 			{
 				edca_param = EDCAParam[HT_IOT_PEER_UNKNOWN][trafficIndex];
 			}
-#endif
 	
 #ifdef CONFIG_PCI_HCI
 			if (IS_92C_SERIAL(pHalData->VersionID))
@@ -7663,20 +7356,6 @@ odm_IotEngine(
 	if ((GET_ROOT(priv)->up_time % 2) == 0) 
 		priv->pshare->highTP_found_pstat==NULL;
 
-#if 0
-	phead = &priv->asoc_list;
-	plist = phead->next;
-	while (plist != phead)	{
-		pstat = list_entry(plist, struct stat_info, asoc_list);
-
-		if (ODM_ChooseIotMainSTA(pDM_Odm, pstat));              //find the correct station
-			break;
-		if (plist == plist->next)                                          //the last plist 
-			break;
-		plist = plist->next;
-	};
-#endif
-
 	//find highTP STA
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++) {
 		pstat = pDM_Odm->pODM_StaInfo[i];
@@ -7868,25 +7547,6 @@ odm_IotEngine(
 					else
 						priv->pshare->txop_enlarge = 2;
 
-					if (priv->pshare->iot_mode_enable)
-						switch_turbo++;
-				}
-#endif
-#if 0
-				if (priv->pshare->txop_enlarge != 2) 
-				{
-				#if (DM_ODM_SUPPORT_TYPE==ODM_AP)
-					if (pstat->IOTPeer==HT_IOT_PEER_INTEL)
-				#else
-					if (pstat->is_intel_sta)
-				#endif					
-						priv->pshare->txop_enlarge = 0xe;
-				#if (DM_ODM_SUPPORT_TYPE==ODM_AP)
-					else if (pstat->IOTPeer==HT_IOT_PEER_RALINK)
-						priv->pshare->txop_enlarge = 0xd;						
-				#endif
-					else
-						priv->pshare->txop_enlarge = 2;
 					if (priv->pshare->iot_mode_enable)
 						switch_turbo++;
 				}
@@ -8580,43 +8240,8 @@ odm_PSD_Monitor(
 		for (i = 0; i < 80; i++)
 			PSD_report[i] = 0;
 	}
-#if 0	//for test only
-	DbgPrint("cosa odm_PSD_Monitor call()\n");
-	DbgPrint("cosa pHalData->RSSI_BT = %d\n", pHalData->RSSI_BT);
-	DbgPrint("cosa pHalData->bUserAssignLevel = %d\n", pHalData->bUserAssignLevel);
-#if 0
-	psd_cnt++;
-	if (psd_cnt < ReScan)
-		PlatformSetTimer( Adapter, &pHalData->PSDTimer, Interval); //ms
-	else
-		psd_cnt = 0;
-	return;
-#endif
-#endif
 	//1 Backup Current Settings
 	CurrentChannel = ODM_GetRFReg(pDM_Odm, RF_PATH_A, RF_CHNLBW, bRFRegOffsetMask);
-/*
-	if (pDM_Odm->SupportICType==ODM_RTL8192D)
-	{
-		//2 Record Current synthesizer parameters based on current channel
-		if ((*pDM_Odm->MacPhyMode92D == SINGLEMAC_SINGLEPHY)||(*pDM_Odm->MacPhyMode92D == DUALMAC_SINGLEPHY))
-		{
-			SYN_RF25 = ODM_GetRFReg(Adapter, RF_PATH_B, 0x25, bMaskDWord);
-			SYN_RF26 = ODM_GetRFReg(Adapter, RF_PATH_B, 0x26, bMaskDWord);
-			SYN_RF27 = ODM_GetRFReg(Adapter, RF_PATH_B, 0x27, bMaskDWord);
-			SYN_RF2B = ODM_GetRFReg(Adapter, RF_PATH_B, 0x2B, bMaskDWord);
-			SYN_RF2C = ODM_GetRFReg(Adapter, RF_PATH_B, 0x2C, bMaskDWord);
-       	}
-		else     // DualMAC_DualPHY 2G
-		{
-			SYN_RF25 = ODM_GetRFReg(Adapter, RF_PATH_A, 0x25, bMaskDWord);
-			SYN_RF26 = ODM_GetRFReg(Adapter, RF_PATH_A, 0x26, bMaskDWord);
-			SYN_RF27 = ODM_GetRFReg(Adapter, RF_PATH_A, 0x27, bMaskDWord);
-			SYN_RF2B = ODM_GetRFReg(Adapter, RF_PATH_A, 0x2B, bMaskDWord);
-			SYN_RF2C = ODM_GetRFReg(Adapter, RF_PATH_A, 0x2C, bMaskDWord);
-		}
-	}
-*/
 	//RXIQI = PHY_QueryBBReg(Adapter, 0xC14, bMaskDWord);
 	RXIQI = ODM_GetBBReg(pDM_Odm, 0xC14, bMaskDWord);
 
@@ -8628,15 +8253,12 @@ odm_PSD_Monitor(
 
 	ODM_RT_TRACE(pDM_Odm,	COMP_PSD, DBG_LOUD,("PSD Scan Start\n"));
 	//1 Turn off CCK
-	//PHY_SetBBReg(Adapter, rFPGA0_RFMOD, BIT24, 0);
 	ODM_SetBBReg(pDM_Odm, rFPGA0_RFMOD, BIT24, 0);
 	//1 Turn off TX
 	//Pause TX Queue
-	//PlatformEFIOWrite1Byte(Adapter, REG_TXPAUSE, 0xFF);
 	ODM_Write1Byte(pDM_Odm,REG_TXPAUSE, 0xFF);
 	
 	//Force RX to stop TX immediately
-	//PHY_SetRFReg(Adapter, RF_PATH_A, RF_AC, bRFRegOffsetMask, 0x32E13);
 
 	ODM_SetRFReg(pDM_Odm, RF_PATH_A, RF_AC, bRFRegOffsetMask, 0x32E13);
 	//1 Turn off RX
@@ -8649,16 +8271,11 @@ odm_PSD_Monitor(
 
 	
 	//Turn off CCA
-	//PHY_SetBBReg(Adapter, 0xC14, bMaskDWord, 0x0);
 	ODM_SetBBReg(pDM_Odm, 0xC14, bMaskDWord, 0x0);
 	
 	//BB Reset
-	//BBReset = PlatformEFIORead1Byte(Adapter, 0x02);
 	BBReset = ODM_Read1Byte(pDM_Odm, 0x02);
 	
-	//PlatformEFIOWrite1Byte(Adapter, 0x02, BBReset&(~BIT0));
-	//PlatformEFIOWrite1Byte(Adapter, 0x02, BBReset|BIT0);
-
 	ODM_Write1Byte(pDM_Odm,  0x02, BBReset&(~BIT0));
 	ODM_Write1Byte(pDM_Odm,  0x02, BBReset|BIT0);
 	
@@ -10509,17 +10126,6 @@ ODM_PathDiversityBeforeLink92C(
 			pDM_PDTable->OFDMTXPath = 0x0;
 			pDM_PDTable->CCKTXPath = 0x0;
 		}
-#if 0	
-
-		pDM_SWAT_Table->PreAntenna = pDM_SWAT_Table->CurAntenna;
-		pDM_SWAT_Table->CurAntenna = (pDM_SWAT_Table->CurAntenna==Antenna_A)?Antenna_B:Antenna_A;
-		
-		RT_TRACE(COMP_SWAS, DBG_LOUD, 
-			("ODM_SwAntDivCheckBeforeLink8192C: Change to Ant(%s) for testing.\n", (pDM_SWAT_Table->CurAntenna==Antenna_A)?"A":"B"));
-		//PHY_SetBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300, DM_SWAT_Table.CurAntenna);
-		pDM_SWAT_Table->SWAS_NoLink_BK_Reg860 = ((pDM_SWAT_Table->SWAS_NoLink_BK_Reg860 & 0xfffffcff) | (pDM_SWAT_Table->CurAntenna<<8));
-		PHY_SetBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, bMaskDWord, pDM_SWAT_Table->SWAS_NoLink_BK_Reg860);
-#endif
 
 		// Go back to scan function again.
 		RT_TRACE(COMP_SWAS, DBG_LOUD, ("ODM_PathDiversityBeforeLink92C: Scan one more time\n"));
@@ -11687,12 +11293,6 @@ void odm_dtc(PDM_ODM_T pDM_Odm)
 	u8 sign;
 	u8 resp_txagc=0;
 
-	#if 0
-	/* As DIG is disabled, DTC is also disable */
-	if (!(pDM_Odm->SupportAbility & ODM_XXXXXX))
-		return;
-	#endif
-
 	if (DTC_BASE < pDM_Odm->RSSI_Min) {
 		/* need to decade the CTS TX power */
 		sign = 1;
@@ -11703,24 +11303,7 @@ void odm_dtc(PDM_ODM_T pDM_Odm)
 			else
 				dtc_steps++;
 		}
-	}
-#if 0
-	else if (DTC_DWN_BASE > pDM_Odm->RSSI_Min)
-	{
-		/* needs to increase the CTS TX power */
-		sign = 0;
-		dtc_steps = 1;
-		for (i=0;i<ARRAY_SIZE(dtc_table_up);i++)
-		{
-			if ((dtc_table_up[i] <= pDM_Odm->RSSI_Min) || (dtc_steps>=10))
-				break;
-			else
-				dtc_steps++;
-		}
-	}
-#endif
-	else
-	{
+	} else {
 		sign = 0;
 		dtc_steps = 0;
 	}
@@ -11735,4 +11318,3 @@ void odm_dtc(PDM_ODM_T pDM_Odm)
 }
 
 #endif /* #if (DM_ODM_SUPPORT_TYPE == ODM_CE) */
-

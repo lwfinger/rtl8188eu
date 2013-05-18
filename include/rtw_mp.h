@@ -82,39 +82,6 @@
 #define NDIS_STATUS_NO_ROUTE_TO_DESTINATION	((NDIS_STATUS)0xC0010029L)  // cause 3
 #endif /* #ifndef PLATFORM_WINDOWS */
 
-#if 0
-#define MPT_NOOP			0
-#define MPT_READ_MAC_1BYTE		1
-#define MPT_READ_MAC_2BYTE		2
-#define MPT_READ_MAC_4BYTE		3
-#define MPT_WRITE_MAC_1BYTE		4
-#define MPT_WRITE_MAC_2BYTE		5
-#define MPT_WRITE_MAC_4BYTE		6
-#define MPT_READ_BB_CCK			7
-#define MPT_WRITE_BB_CCK		8
-#define MPT_READ_BB_OFDM		9
-#define MPT_WRITE_BB_OFDM		10
-#define MPT_READ_RF			11
-#define MPT_WRITE_RF			12
-#define MPT_READ_EEPROM_1BYTE		13
-#define MPT_WRITE_EEPROM_1BYTE		14
-#define MPT_READ_EEPROM_2BYTE		15
-#define MPT_WRITE_EEPROM_2BYTE		16
-#define MPT_SET_CSTHRESHOLD		21
-#define MPT_SET_INITGAIN		22
-#define MPT_SWITCH_BAND			23
-#define MPT_SWITCH_CHANNEL		24
-#define MPT_SET_DATARATE		25
-#define MPT_SWITCH_ANTENNA		26
-#define MPT_SET_TX_POWER		27
-#define MPT_SET_CONT_TX			28
-#define MPT_SET_SINGLE_CARRIER		29
-#define MPT_SET_CARRIER_SUPPRESSION	30
-#define MPT_GET_RATE_TABLE		31
-#define MPT_READ_TSSI			32
-#define MPT_GET_THERMAL_METER		33
-#endif
-
 typedef enum _ANTENNA_PATH{
 		ANTENNA_NONE	= 0x00,
 		ANTENNA_D		,
@@ -508,30 +475,9 @@ struct bb_reg_param {
 #define RAISE	_FALSE
 
 /* Hardware Registers */
-#if 0
-#if 0
-#define IOCMD_CTRL_REG			0x102502C0
-#define IOCMD_DATA_REG			0x102502C4
-#else
-#define IOCMD_CTRL_REG			0x10250370
-#define IOCMD_DATA_REG			0x10250374
-#endif
-
-#define IOCMD_GET_THERMAL_METER		0xFD000028
-
-#define IOCMD_CLASS_BB_RF		0xF0
-#define IOCMD_BB_READ_IDX		0x00
-#define IOCMD_BB_WRITE_IDX		0x01
-#define IOCMD_RF_READ_IDX		0x02
-#define IOCMD_RF_WRIT_IDX		0x03
-#endif
 #define BB_REG_BASE_ADDR		0x800
 
 /* MP variables */
-#if 0
-#define _2MAC_MODE_	0
-#define _LOOPBOOK_MODE_	1
-#endif
 typedef enum _MP_MODE_ {
 	MP_OFF,
 	MP_ON,
@@ -589,14 +535,6 @@ typedef enum _MPT_RATE_INDEX
 	MPT_RATE_LAST
 }MPT_RATE_E, *PMPT_RATE_E;
 
-#if 0
-// Represent Channel Width in HT Capabilities
-typedef enum _HT_CHANNEL_WIDTH {
-	HT_CHANNEL_WIDTH_20 = 0,
-	HT_CHANNEL_WIDTH_40 = 1,
-}HT_CHANNEL_WIDTH, *PHT_CHANNEL_WIDTH;
-#endif
-
 #define MAX_TX_PWR_INDEX_N_MODE 64	// 0x3F
 
 typedef enum _POWER_MODE_ {
@@ -608,42 +546,6 @@ typedef enum _POWER_MODE_ {
 #define RX_PKT_BROADCAST	1
 #define RX_PKT_DEST_ADDR	2
 #define RX_PKT_PHY_MATCH	3
-
-#if 0
-#define RPTMaxCount 0x000FFFFF;
-
-// parameter 1 : BitMask
-// 	bit 0  : OFDM PPDU
-//	bit 1  : OFDM False Alarm
-//	bit 2  : OFDM MPDU OK
-//	bit 3  : OFDM MPDU Fail
-//	bit 4  : CCK PPDU
-//	bit 5  : CCK False Alarm
-//	bit 6  : CCK MPDU ok
-//	bit 7  : CCK MPDU fail
-//	bit 8  : HT PPDU counter
-//	bit 9  : HT false alarm
-//	bit 10 : HT MPDU total
-//	bit 11 : HT MPDU OK
-//	bit 12 : HT MPDU fail
-//	bit 15 : RX full drop
-typedef enum _RXPHY_BITMASK_
-{
-	OFDM_PPDU_BIT = 0,
-	OFDM_FALSE_BIT,
-	OFDM_MPDU_OK_BIT,
-	OFDM_MPDU_FAIL_BIT,
-	CCK_PPDU_BIT,
-	CCK_FALSE_BIT,
-	CCK_MPDU_OK_BIT,
-	CCK_MPDU_FAIL_BIT,
-	HT_PPDU_BIT,
-	HT_FALSE_BIT,
-	HT_MPDU_BIT,
-	HT_MPDU_OK_BIT,
-	HT_MPDU_FAIL_BIT,
-} RXPHY_BITMASK;
-#endif
 
 typedef enum _ENCRY_CTRL_STATE_ {
 	HW_CONTROL,		//hw encryption& decryption
@@ -665,17 +567,6 @@ extern s32 mp_start_test(PADAPTER padapter);
 extern void mp_stop_test(PADAPTER padapter);
 
 //=======================================================================
-//extern void	IQCalibrateBcut(PADAPTER pAdapter);
-
-//extern u32	bb_reg_read(PADAPTER Adapter, u16 offset);
-//extern u8	bb_reg_write(PADAPTER Adapter, u16 offset, u32 value);
-//extern u32	rf_reg_read(PADAPTER Adapter, u8 path, u8 offset);
-//extern u8	rf_reg_write(PADAPTER Adapter, u8 path, u8 offset, u32 value);
-
-//extern u32	get_bb_reg(PADAPTER Adapter, u16 offset, u32 bitmask);
-//extern u8	set_bb_reg(PADAPTER Adapter, u16 offset, u32 bitmask, u32 value);
-//extern u32	get_rf_reg(PADAPTER Adapter, u8 path, u8 offset, u32 bitmask);
-//extern u8	set_rf_reg(PADAPTER Adapter, u8 path, u8 offset, u32 bitmask, u32 value);
 
 extern u32 _read_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 bitmask);
 extern void _write_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);

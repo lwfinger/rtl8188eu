@@ -123,31 +123,6 @@ Except the IELength, all other fields are fixed length. Therefore, we can define
 partial sum.
 
 */
-#if 0
-typedef struct _NDIS_WLAN_BSSID_EX
-{
-  ULONG  Length;
-  NDIS_802_11_MAC_ADDRESS  MacAddress;
-  UCHAR  Reserved[2];//[0]: IS beacon frame, [1]:optimum_antenna=>For antenna diversity;
-  NDIS_802_11_SSID  Ssid;
-  ULONG  Privacy;
-  NDIS_802_11_RSSI  Rssi;
-  NDIS_802_11_NETWORK_TYPE  NetworkTypeInUse;
-  NDIS_802_11_CONFIGURATION  Configuration;
-  NDIS_802_11_NETWORK_INFRASTRUCTURE  InfrastructureMode;
-  NDIS_802_11_RATES_EX  SupportedRates;
-  ULONG  IELength;
-  UCHAR  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)
-} NDIS_WLAN_BSSID_EX, *PNDIS_WLAN_BSSID_EX;
-
-
-typedef struct _NDIS_802_11_BSSID_LIST_EX
-{
-  ULONG  NumberOfItems;
-  NDIS_WLAN_BSSID_EX  Bssid[1];
-} NDIS_802_11_BSSID_LIST_EX, *PNDIS_802_11_BSSID_LIST_EX;
-#endif
-
 typedef enum _NDIS_802_11_AUTHENTICATION_MODE
 {
     Ndis802_11AuthModeOpen,
@@ -395,30 +370,6 @@ Except the IELength, all other fields are fixed length. Therefore, we can define
 partial sum.
 
 */
-#if 0
-typedef struct _NDIS_WLAN_BSSID_EX
-{
-  ULONG  Length;
-  NDIS_802_11_MAC_ADDRESS  MacAddress;
-  UCHAR  Reserved[2];//[0]: IS beacon frame, [1]:optimum_antenna=>For antenna diversity;
-  NDIS_802_11_SSID  Ssid;
-  ULONG  Privacy;
-  NDIS_802_11_RSSI  Rssi;
-  NDIS_802_11_NETWORK_TYPE  NetworkTypeInUse;
-  NDIS_802_11_CONFIGURATION  Configuration;
-  NDIS_802_11_NETWORK_INFRASTRUCTURE  InfrastructureMode;
-  NDIS_802_11_RATES_EX  SupportedRates;
-  ULONG  IELength;
-  UCHAR  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)
-} NDIS_WLAN_BSSID_EX, *PNDIS_WLAN_BSSID_EX;
-
-
-typedef struct _NDIS_802_11_BSSID_LIST_EX
-{
-  ULONG  NumberOfItems;
-  NDIS_WLAN_BSSID_EX  Bssid[1];
-} NDIS_802_11_BSSID_LIST_EX, *PNDIS_802_11_BSSID_LIST_EX;
-#endif
 
 typedef enum _NDIS_802_11_AUTHENTICATION_MODE
 {
@@ -624,28 +575,7 @@ WLAN_BSSID_EX, *PWLAN_BSSID_EX;
 
 __inline  static uint get_WLAN_BSSID_EX_sz(WLAN_BSSID_EX *bss)
 {
-#if 0
-	uint t_len;
-	
-	t_len = sizeof (ULONG) 
-		+ sizeof (NDIS_802_11_MAC_ADDRESS) 
-		+ 2 
-		+ sizeof (NDIS_802_11_SSID) 
-		+ sizeof (ULONG) 
-		+ sizeof (NDIS_802_11_RSSI) 
-		+ sizeof (NDIS_802_11_NETWORK_TYPE)
-		+ sizeof (NDIS_802_11_CONFIGURATION)
-		+ sizeof (NDIS_802_11_NETWORK_INFRASTRUCTURE)
-		+ sizeof (NDIS_802_11_RATES_EX)
-		//all new member add here
-		+ sizeof(WLAN_PHY_INFO)
-		//all new member add here
-		+ sizeof (ULONG)
-		+ bss->IELength;	
-	return t_len;
-#else
-	return (sizeof(WLAN_BSSID_EX) -MAX_IE_SZ + bss->IELength);
-#endif
+	return sizeof(WLAN_BSSID_EX) - MAX_IE_SZ + bss->IELength;
 }
 
 struct	wlan_network {

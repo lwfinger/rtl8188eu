@@ -647,12 +647,7 @@ typedef struct hal_data_8723a
 #endif
 } HAL_DATA_8723A, *PHAL_DATA_8723A;
 
-#if 0
-#define HAL_DATA_TYPE HAL_DATA_8723A
-#define PHAL_DATA_TYPE PHAL_DATA_8723A
-#else
 typedef struct hal_data_8723a HAL_DATA_TYPE, *PHAL_DATA_TYPE;
-#endif
 
 #define GET_HAL_DATA(__pAdapter)	((HAL_DATA_TYPE *)((__pAdapter)->HalData))
 #define GET_RF_TYPE(priv)			(GET_HAL_DATA(priv)->rf_type)

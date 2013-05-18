@@ -394,13 +394,6 @@ if (padapter->registrypriv.mp_mode == 0)
 			data_rate =ODM_RA_GetDecisionRate_8188E(&pHalData->odmpriv,pattrib->mac_id);			
 			ptxdesc->txdw5 |= cpu_to_le32(data_rate & 0x3F);
 
-               	//for debug
-               	#if 0
-			if (padapter->fix_rate!= 0xFF){
-				ptxdesc->datarate = padapter->fix_rate;
-			}
-			#endif
-
 			#if (POWER_TRAINING_ACTIVE==1)
 			pwr_status = ODM_RA_GetHwPwrStatus_8188E(&pHalData->odmpriv,pattrib->mac_id);
 			ptxdesc->txdw4 |=cpu_to_le32( (pwr_status & 0x7)<< PWR_STATUS_SHT);

@@ -120,14 +120,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 			_rtw_memcpy( pIo_buf, pdata, len);
 		}		
 	
-		#if 0
-		//timeout test for firmware downloading
-		status = rtw_usb_control_msg(udev, pipe, request, reqtype, value, index, pIo_buf, len
-			, (value == FW_8188E_START_ADDRESS) ?RTW_USB_CONTROL_MSG_TIMEOUT_TEST : RTW_USB_CONTROL_MSG_TIMEOUT
-		);
-		#else
 		status = rtw_usb_control_msg(udev, pipe, request, reqtype, value, index, pIo_buf, len, RTW_USB_CONTROL_MSG_TIMEOUT);
-		#endif
 	
 		if ( status == len)   // Success this control transfer.
 		{
@@ -399,21 +392,6 @@ void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
 	_rtw_memcpy(&(pHalData->IntArray[0]), &(pbuf[USB_INTR_CONTENT_HISR_OFFSET]), 4);
 	_rtw_memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
 
-	#if 0 //DBG
-	{
-		u32 hisr=0 ,hisr_ex=0;
-		_rtw_memcpy(&hisr,&(pHalData->IntArray[0]),4);
-		hisr = le32_to_cpu(hisr);	
-		
-		_rtw_memcpy(&hisr_ex,&(pHalData->IntArray[1]),4);
-		hisr_ex = le32_to_cpu(hisr_ex);
-		
-		if ((hisr != 0) || (hisr_ex!=0))
-			DBG_871X("===> %s hisr:0x%08x ,hisr_ex:0x%08x\n",__func__,hisr,hisr_ex);
-	}
-	#endif
-
-
 #ifdef CONFIG_LPS_LCLK
 	if (  pHalData->IntArray[0]  & IMR_CPWM_88E )
 	{
@@ -436,34 +414,15 @@ void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
 	#endif	
 	{		
 		struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-		#if 0
-		if (pHalData->IntArray[0] & IMR_BCNDMAINT0_88E)
-			DBG_8192C("%s: HISR_BCNERLY_INT\n", __func__);
-		if (pHalData->IntArray[0] & IMR_TBDOK_88E)
-			DBG_8192C("%s: HISR_TXBCNOK\n", __func__);
-		if (pHalData->IntArray[0] & IMR_TBDER_88E)
-			DBG_8192C("%s: HISR_TXBCNERR\n", __func__);
-		#endif
-		
 
-		if (check_fwstate(pmlmepriv, WIFI_AP_STATE))
-		{
-			//send_beacon(padapter);
+		if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 			if (pmlmepriv->update_bcn == _TRUE)
-			{
-				//tx_beacon_hdl(padapter, NULL);
 				set_tx_beacon_cmd(padapter);
-			}
 		}
 #ifdef CONFIG_CONCURRENT_MODE
-		if (check_buddy_fwstate(padapter, WIFI_AP_STATE))
-		{
-			//send_beacon(padapter);
+		if (check_buddy_fwstate(padapter, WIFI_AP_STATE)) {
 			if (padapter->pbuddy_adapter->mlmepriv.update_bcn == _TRUE)
-			{
-				//tx_beacon_hdl(padapter, NULL);
 				set_tx_beacon_cmd(padapter->pbuddy_adapter);
-			}
 		}
 #endif
 		
@@ -618,81 +577,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 	}
 	else // Handle BC/MC Packets	
 	{
-		
 		u8 clone = _TRUE;
-#if 0		
-		u8 type, subtype, *paddr2, *paddr3;
-	
-		type =  GetFrameType(pbuf);
-		subtype = GetFrameSubType(pbuf); //bit(7)~bit(2)
-		
-		switch (type)
-		{
-			case WIFI_MGT_TYPE: //Handle BC/MC mgnt Packets
-				if (subtype == WIFI_BEACON)
-				{
-					paddr3 = GetAddr3Ptr(precvframe->u.hdr.rx_data);
-				
-					if (check_fwstate(&secondary_padapter->mlmepriv, _FW_LINKED) &&
-						_rtw_memcmp(paddr3, get_bssid(&secondary_padapter->mlmepriv), ETH_ALEN))
-					{
-						//change to secondary interface
-						precvframe->u.hdr.adapter = secondary_padapter;
-						clone = _FALSE;
-					}
-
-					if (check_fwstate(&primary_padapter->mlmepriv, _FW_LINKED) &&
-						_rtw_memcmp(paddr3, get_bssid(&primary_padapter->mlmepriv), ETH_ALEN))
-					{
-						if (clone==_FALSE)
-						{
-							clone = _TRUE;									
-						}	
-						else
-						{
-							clone = _FALSE;
-						}
-
-						precvframe->u.hdr.adapter = primary_padapter;	
-					}
-
-					if (check_fwstate(&primary_padapter->mlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) ||
-						check_fwstate(&secondary_padapter->mlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING))
-					{
-						clone = _TRUE;
-						precvframe->u.hdr.adapter = primary_padapter;	
-					}
-				
-				}
-				else if (subtype == WIFI_PROBEREQ)
-				{
-					//probe req frame is only for interface2
-					//change to secondary interface
-					precvframe->u.hdr.adapter = secondary_padapter;
-					clone = _FALSE;
-				}			
-				break;
-			case WIFI_CTRL_TYPE: // Handle BC/MC ctrl Packets
-			
-				break;
-			case WIFI_DATA_TYPE: //Handle BC/MC data Packets
-					//Notes: AP MODE never rx BC/MC data packets
-			
-				paddr2 = GetAddr2Ptr(precvframe->u.hdr.rx_data);
-
-				if (_rtw_memcmp(paddr2, get_bssid(&secondary_padapter->mlmepriv), ETH_ALEN))
-				{
-					//change to secondary interface
-					precvframe->u.hdr.adapter = secondary_padapter;
-					clone = _FALSE;
-				}
-
-				break;
-			default:
-			
-				break;			
-		}
-#endif
 
 		if (_TRUE == clone)
 		{
@@ -811,13 +696,6 @@ static int recvbuf2recvframe(_adapter *padapter, struct recv_buf *precvbuf)
 	prxstat = (struct recv_stat *)pbuf;	
 	pkt_cnt = (le32_to_cpu(prxstat->rxdw2)>>16) & 0xff;
 
-#if 0 //temp remove when disable usb rx aggregation
-	if ((pkt_cnt > 10) || (pkt_cnt < 1) || (transfer_len<RXDESC_SIZE) ||(pkt_len<=0))
-	{		
-		return _FAIL;
-	}
-#endif
-	
 	do{		
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 			 ("recvbuf2recvframe: rxdesc=offsset 0:0x%08x, 4:0x%08x, 8:0x%08x, C:0x%08x\n",
@@ -1217,12 +1095,6 @@ static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
 	prxstat = (struct recv_stat *)pbuf;	
 	pkt_cnt = (le32_to_cpu(prxstat->rxdw2)>>16) & 0xff;
 
-#if 0 //temp remove when disable usb rx aggregation
-	if ((pkt_cnt > 10) || (pkt_cnt < 1) || (transfer_len<RXDESC_SIZE) ||(pkt_len<=0))
-	{		
-		return _FAIL;
-	}
-#endif
 	do{		
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
 			 ("recvbuf2recvframe: rxdesc=offsset 0:0x%08x, 4:0x%08x, 8:0x%08x, C:0x%08x\n",

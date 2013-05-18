@@ -547,22 +547,7 @@ int	_rtw_memcmp(void *dst, void *src, u32 sz)
 
 void _rtw_memset(void *pbuf, int c, u32 sz)
 {
-
-#if defined (PLATFORM_LINUX)|| defined (PLATFORM_FREEBSD)
-
         memset(pbuf, c, sz);
-
-#endif
-
-#ifdef PLATFORM_WINDOWS
-#if 0
-	NdisZeroMemory(pbuf, sz);
-	if (c != 0) memset(pbuf, c, sz);
-#else
-	NdisFillMemory(pbuf, sz, c);
-#endif
-#endif
-
 }
 
 #ifdef PLATFORM_FREEBSD
@@ -1181,14 +1166,6 @@ void rtw_usleep_os(int us)
 #ifdef DBG_DELAY_OS
 void _rtw_mdelay_os(int ms, const char *func, const int line)
 {
-	#if 0
-	if (ms>10)
-		DBG_871X("%s:%d %s(%d)\n", func, line, __func__, ms);
-		rtw_msleep_os(ms);
-	return;
-	#endif
-
-
 	DBG_871X("%s:%d %s(%d)\n", func, line, __func__, ms);
 
 #if defined(PLATFORM_LINUX)
@@ -1205,16 +1182,6 @@ void _rtw_mdelay_os(int ms, const char *func, const int line)
 }
 void _rtw_udelay_os(int us, const char *func, const int line)
 {
-
-	#if 0
-	if (us > 1000) {
-	DBG_871X("%s:%d %s(%d)\n", func, line, __func__, us);
-		rtw_usleep_os(us);
-		return;
-	}
-	#endif 
-
-
 	DBG_871X("%s:%d %s(%d)\n", func, line, __func__, us);
 	
 	

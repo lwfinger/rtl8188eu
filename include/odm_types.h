@@ -169,16 +169,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	#include <basic_types.h>
 
-#if 0
-	typedef u8					u1Byte, *pu1Byte;
-	typedef u16					u2Byte,*pu2Byte;
-	typedef u32					u4Byte,*pu4Byte;
-	typedef u64					u8Byte,*pu8Byte;
-	typedef s8					s1Byte,*ps1Byte;
-	typedef s16					s2Byte,*ps2Byte;
-	typedef s32					s4Byte,*ps4Byte;
-	typedef s64					s8Byte,*ps8Byte;
-#else
 	#define u1Byte 		u8
 	#define pu1Byte 		u8*	
 
@@ -203,7 +193,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 	#define s8Byte 		s64
 	#define ps8Byte 		s64*	
 	
-#endif
 	#ifdef CONFIG_USB_HCI
 		#define DEV_BUS_TYPE  	RT_USB_INTERFACE
 	#elif defined(CONFIG_PCI_HCI)

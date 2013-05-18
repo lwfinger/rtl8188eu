@@ -218,11 +218,7 @@ u8 rtl8188e_set_rssi_cmd(_adapter*padapter, u8 *param)
 _func_enter_;
 
 	if (pHalData->fw_ractrl == _TRUE){
-		#if 0
-	*((u32*) param ) = cpu_to_le32( *((u32*) param ) );
-
-		FillH2CCmd_88E(padapter, RSSI_SETTING_EID, 3, param);
-		#endif
+		;
 	}else{
 		DBG_8192C("==>%s fw dont support RA\n",__func__);
 		res=_FAIL;

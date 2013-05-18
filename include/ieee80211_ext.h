@@ -272,21 +272,6 @@ struct ieee80211_mgmt {
 					u8 status_code;
 					u8 variable[0];
 				}  __attribute__ ((packed)) wme_action;
-#if 0
-				struct{
-					u8 action_code;
-					u8 element_id;
-					u8 length;
-					struct ieee80211_channel_sw_ie sw_elem;
-				}  __attribute__ ((packed)) chan_switch;
-				struct{
-					u8 action_code;
-					u8 dialog_token;
-					u8 element_id;
-					u8 length;
-					struct ieee80211_msrment_ie msr_elem;
-				}  __attribute__ ((packed)) measurement;
-#endif
 				struct{
 					u8 action_code;
 					u8 dialog_token;
@@ -376,29 +361,6 @@ struct ieee80211_mgmt {
 		struct {
 			u16 reason_code;
 		}  disassoc;
-#if 0		
-		struct {
-			__le64 timestamp;
-			u16 beacon_int;
-			u16 capab_info;
-			/* followed by some of SSID, Supported rates,
-			 * FH Params, DS Params, CF Params, IBSS Params, TIM */
-			u8 variable[0];
-		}  beacon;
-		struct {
-			/* only variable items: SSID, Supported rates */
-			u8 variable[0];
-		}  probe_req;
-		
-		struct {
-			__le64 timestamp;
-			u16 beacon_int;
-			u16 capab_info;
-			/* followed by some of SSID, Supported rates,
-			 * FH Params, DS Params, CF Params, IBSS Params */
-			u8 variable[0];
-		}  probe_resp;
-#endif	
 		struct {
 			u8 category;
 			union {
@@ -408,21 +370,6 @@ struct ieee80211_mgmt {
 					u8 status_code;
 					u8 variable[0];
 				}  wme_action;
-/*				
-				struct{
-					u8 action_code;
-					u8 element_id;
-					u8 length;
-					struct ieee80211_channel_sw_ie sw_elem;
-				}  chan_switch;
-				struct{
-					u8 action_code;
-					u8 dialog_token;
-					u8 element_id;
-					u8 length;
-					struct ieee80211_msrment_ie msr_elem;
-				}  measurement;
-*/				
 				struct{
 					u8 action_code;
 					u8 dialog_token;

@@ -494,12 +494,6 @@ phy_RFSerialRead(
 	u32						NewOffset;
 	u32 						tmplong,tmplong2;
 	u8					RfPiEnable=0;
-#if 0
-	if (pHalData->RFChipID == RF_8225 && Offset > 0x24) //36 valid regs
-		return	retValue;
-	if (pHalData->RFChipID == RF_8256 && Offset > 0x2D) //45 valid regs
-		return	retValue;
-#endif
 	//
 	// Make sure RF register offset is correct
 	//
@@ -616,13 +610,6 @@ phy_RFSerialWrite(
 	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32						NewOffset;
 
-#if 0
-	//<Roger_TODO> We should check valid regs for RF_6052 case.
-	if (pHalData->RFChipID == RF_8225 && Offset > 0x24) //36 valid regs
-		return;
-	if (pHalData->RFChipID == RF_8256 && Offset > 0x2D) //45 valid regs
-		return;
-#endif
 
 	// 2009/06/17 MH We can not execute IO for power save or other accident mode.
 	//if (RT_CANNOT_IO(Adapter))
@@ -1098,22 +1085,10 @@ phy_ConfigBBExternalPA(
 	u32 temp=0;
 
 	if (!pHalData->ExternalPA)
-	{
 		return;
-	}
 
 	// 2010/10/19 MH According to Jenyu/EEChou 's opinion, we need not to execute the
 	// same code as SU. It is already updated in PHY_REG_1T_HP.txt.
-#if 0
-	PHY_SetBBReg(Adapter, 0xee8, BIT28, 1);
-	temp = PHY_QueryBBReg(Adapter, 0x860, bMaskDWord);
-	temp |= (BIT26|BIT21|BIT10|BIT5);
-	PHY_SetBBReg(Adapter, 0x860, bMaskDWord, temp);
-	PHY_SetBBReg(Adapter, 0x870, BIT10, 0);
-	PHY_SetBBReg(Adapter, 0xc80, bMaskDWord, 0x20000080);
-	PHY_SetBBReg(Adapter, 0xc88, bMaskDWord, 0x40000100);
-#endif
-
 #endif
 }
 
@@ -1442,38 +1417,10 @@ phy_ConfigBBWithPgHeaderFile(
 	{
 		for (i=0;i<PHY_REGArrayPGLen;i=i+3)
 		{
-			#if 0 //without IO, no delay is neeeded...
-			if (Rtl819XPHY_REGArray_Table_PG[i] == 0xfe){
-				#ifdef CONFIG_LONG_DELAY_ISSUE
-				rtw_msleep_os(50);
-				#else
-				rtw_mdelay_os(50);
-				#endif
-			}
-			else if (Rtl819XPHY_REGArray_Table_PG[i] == 0xfd)
-				rtw_mdelay_os(5);
-			else if (Rtl819XPHY_REGArray_Table_PG[i] == 0xfc)
-				rtw_mdelay_os(1);
-			else if (Rtl819XPHY_REGArray_Table_PG[i] == 0xfb)
-				rtw_udelay_os(50);
-			else if (Rtl819XPHY_REGArray_Table_PG[i] == 0xfa)
-				rtw_udelay_os(5);
-			else if (Rtl819XPHY_REGArray_Table_PG[i] == 0xf9)
-				rtw_udelay_os(1);
-			//PHY_SetBBReg(Adapter, Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1], Rtl819XPHY_REGArray_Table_PG[i+2]);		
-			#endif
-			
 			storePwrIndexDiffRateOffset(Adapter, Rtl819XPHY_REGArray_Table_PG[i],
 				Rtl819XPHY_REGArray_Table_PG[i+1],
 				Rtl819XPHY_REGArray_Table_PG[i+2]);
-			//PHY_SetBBReg(Adapter, Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1], Rtl819XPHY_REGArray_Table_PG[i+2]);
-			//RT_TRACE(COMP_SEND, DBG_TRACE, ("The Rtl819XPHY_REGArray_Table_PG[0] is %lx Rtl819XPHY_REGArray_Table_PG[1] is %lx\n",Rtl819XPHY_REGArray_Table_PG[i], Rtl819XPHY_REGArray_Table_PG[i+1]));
 		}
-	}
-	else
-	{
-
-		//RT_TRACE(COMP_SEND, DBG_LOUD, ("phy_ConfigBBWithPgHeaderFile(): ConfigType != CONFIG_BB_PHY_REG\n"));
 	}
 
 	return _SUCCESS;
@@ -1488,16 +1435,6 @@ phy_BB8192C_Config_1T(
 	IN PADAPTER Adapter
 	)
 {
-#if 0
-	//for path - A
-	PHY_SetBBReg(Adapter, rFPGA0_TxInfo, 0x3, 0x1);
-	PHY_SetBBReg(Adapter, rFPGA1_TxInfo, 0x0303, 0x0101);
-	PHY_SetBBReg(Adapter, 0xe74, 0x0c000000, 0x1);
-	PHY_SetBBReg(Adapter, 0xe78, 0x0c000000, 0x1);
-	PHY_SetBBReg(Adapter, 0xe7c, 0x0c000000, 0x1);
-	PHY_SetBBReg(Adapter, 0xe80, 0x0c000000, 0x1);
-	PHY_SetBBReg(Adapter, 0xe88, 0x0c000000, 0x1);
-#endif
 	//for path - B
 	PHY_SetBBReg(Adapter, rFPGA0_TxInfo, 0x3, 0x2);
 	PHY_SetBBReg(Adapter, rFPGA1_TxInfo, 0x300033, 0x200022);
@@ -1664,16 +1601,6 @@ PHY_BBConfig8188E(
 	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_PPLL|FEN_PCIEA|FEN_DIO_PCIE|FEN_BB_GLB_RSTn|FEN_BBRSTB);
 #endif
 
-#if 0
-#ifdef CONFIG_USB_HCI
-	//To Fix MAC loopback mode fail. Suggested by SD4 Johnny. 2010.03.23.
-	rtw_write8(Adapter, REG_LDOHCI12_CTRL, 0x0f);
-	rtw_write8(Adapter, 0x15, 0xe9);
-#endif
-
-	rtw_write8(Adapter, REG_AFE_XTAL_CTRL+1, 0x80);
-#endif
-
 #ifdef CONFIG_USB_HCI
 		//rtw_write8(Adapter, 0x15, 0xe9);
 #endif
@@ -1715,27 +1642,6 @@ PHY_RFConfig8188E(
 	// RF config
 	//
 	rtStatus = PHY_RF6052_Config8188E(Adapter);
-#if 0
-	switch (pHalData->rf_chip)
-	{
-		case RF_6052:
-			rtStatus = PHY_RF6052_Config(Adapter);
-			break;
-		case RF_8225:
-			rtStatus = PHY_RF8225_Config(Adapter);
-			break;
-		case RF_8256:
-			rtStatus = PHY_RF8256_Config(Adapter);
-			break;
-		case RF_8258:
-			break;
-		case RF_PSEUDO_11N:
-			rtStatus = PHY_RF8225_Config(Adapter);
-			break;
-		default: //for MacOs Warning: "RF_TYPE_MIN" not handled in switch
-			break;
-	}
-#endif
 	return rtStatus;
 }
 
@@ -1802,21 +1708,10 @@ PHY_ConfigRFExternalPA(
 	u16 i=0;
 
 	if (!pHalData->ExternalPA)
-	{
 		return rtStatus;
-	}
 
 	// 2010/10/19 MH According to Jenyu/EEChou 's opinion, we need not to execute the
 	// same code as SU. It is already updated in radio_a_1T_HP.txt.
-#if 0
-	//add for SU High Power PA
-	for (i = 0;i<HighPowerRadioAArrayLen; i=i+2)
-	{
-		RT_TRACE(COMP_INIT, DBG_LOUD, ("External PA, write RF 0x%lx=0x%lx\n", Rtl8192S_HighPower_RadioA_Array[i], Rtl8192S_HighPower_RadioA_Array[i+1]));
-		PHY_SetRFReg(Adapter, eRFPath, Rtl8192S_HighPower_RadioA_Array[i], bRFRegOffsetMask, Rtl8192S_HighPower_RadioA_Array[i+1]);
-	}
-#endif
-
 #endif
 	return rtStatus;
 }
@@ -1968,20 +1863,12 @@ rtl8188e_PHY_ConfigRFWithHeaderFile(
 			for (i = 0;i<RadioB_ArrayLen; i=i+2)
 			{
 				if (Rtl819XRadioB_Array_Table[i] == 0xfe)
-				{ // Deay specific ms. Only RF configuration require delay.
-#if 0//#ifdef CONFIG_USB_HCI
-					#ifdef CONFIG_LONG_DELAY_ISSUE
-					rtw_msleep_os(1000);
-					#else
-					rtw_mdelay_os(1000);
-					#endif
-#else
+				{ // Delay specific ms. Only RF configuration require delay.
 					#ifdef CONFIG_LONG_DELAY_ISSUE
 					rtw_msleep_os(50);
 					#else
 					rtw_mdelay_os(50);
 					#endif
-#endif
 				}
 				else if (Rtl819XRadioB_Array_Table[i] == 0xfd)
 					rtw_mdelay_os(5);
@@ -2278,37 +2165,6 @@ PHY_GetTxPowerLevel8188E(
 	*powerlevel = TxPwrDbm;
 }
 
-#if 0
-static void getTxPowerIndex(
-	IN	PADAPTER		Adapter,
-	IN	u8			channel,
-	IN OUT u8*		cckPowerLevel,
-	IN OUT u8*		ofdmPowerLevel
-	)
-{
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-	u8				index = (channel -1);
-	// 1. CCK
-	cckPowerLevel[RF_PATH_A] = pHalData->TxPwrLevelCck[RF_PATH_A][index];	//RF-A
-	cckPowerLevel[RF_PATH_B] = pHalData->TxPwrLevelCck[RF_PATH_B][index];	//RF-B
-
-	// 2. OFDM for 1S or 2S
-	if (GET_RF_TYPE(Adapter) == RF_1T2R || GET_RF_TYPE(Adapter) == RF_1T1R)
-	{
-		// Read HT 40 OFDM TX power
-		ofdmPowerLevel[RF_PATH_A] = pHalData->TxPwrLevelHT40_1S[RF_PATH_A][index];
-		ofdmPowerLevel[RF_PATH_B] = pHalData->TxPwrLevelHT40_1S[RF_PATH_B][index];
-	}
-	else if (GET_RF_TYPE(Adapter) == RF_2T2R)
-	{
-		// Read HT 40 OFDM TX power
-		ofdmPowerLevel[RF_PATH_A] = pHalData->TxPwrLevelHT40_2S[RF_PATH_A][index];
-		ofdmPowerLevel[RF_PATH_B] = pHalData->TxPwrLevelHT40_2S[RF_PATH_B][index];
-	}
-	//RTPRINT(FPHY, PHY_TXPWR, ("Channel-%d, set tx power index !!\n", channel));
-}
-#endif
-
 void getTxPowerIndex88E(
 	IN	PADAPTER		Adapter,
 	IN	u8				channel,
@@ -2343,13 +2199,7 @@ void getTxPowerIndex88E(
 				pHalData->BW20_24G_Diff[TxCount][RF_PATH_A];
 			//2. BW40
 			BW40PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[TxCount][index];
-			//RTPRINT(FPHY, PHY_TXPWR, ("getTxPowerIndex88E(): 40MBase=0x%x  20Mdiff=%d  20MBase=0x%x!!\n", 
-			//	pHalData->Index24G_BW40_Base[RF_PATH_A][index],
-			//	pHalData->BW20_24G_Diff[TxCount][RF_PATH_A],
-			//	BW20PowerLevel[TxCount]));
-		}
-		else if (TxCount==RF_PATH_B)
-		{
+		} else if (TxCount==RF_PATH_B) {
 			// 1. CCK
 			cckPowerLevel[TxCount]		= pHalData->Index24G_CCK_Base[TxCount][index];
 			//2. OFDM
@@ -2405,41 +2255,6 @@ void getTxPowerIndex88E(
 		{
 		}
 	}
-
-#if 0 // (INTEL_PROXIMITY_SUPPORT == 1)
-	switch (pMgntInfo->IntelProximityModeInfo.PowerOutput){
-		case 1: // 100%
-			break;
-		case 2: // 70%
-			cckPowerLevel[0] -= 3;
-			cckPowerLevel[1] -= 3;
-			ofdmPowerLevel[0] -=3;
-			ofdmPowerLevel[1] -= 3; 
-			break;
-		case 3: // 50%
-			cckPowerLevel[0] -= 6;
-			cckPowerLevel[1] -= 6;
-			ofdmPowerLevel[0] -=6;
-			ofdmPowerLevel[1] -= 6; 
-			break;
-		case 4: // 35%
-			cckPowerLevel[0] -= 9;
-			cckPowerLevel[1] -= 9;
-			ofdmPowerLevel[0] -=9;
-			ofdmPowerLevel[1] -= 9; 
-			break;
-		case 5: // 15%
-			cckPowerLevel[0] -= 17;
-			cckPowerLevel[1] -= 17;
-			ofdmPowerLevel[0] -=17;
-			ofdmPowerLevel[1] -= 17; 
-			break;
-	
-		default:
-			break;
-	}	
-#endif
-	//RTPRINT(FPHY, PHY_TXPWR, ("Channel-%d, set tx power index !!\n", channel));
 }
 
 void phy_PowerIndexCheck88E(
@@ -2453,70 +2268,13 @@ void phy_PowerIndexCheck88E(
 {
 
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-#if 0 // (CCX_SUPPORT == 1)
-	PMGNT_INFO			pMgntInfo = &(Adapter->MgntInfo);
-	PRT_CCX_INFO		pCcxInfo = GET_CCX_INFO(pMgntInfo);
-
-	//
-	// CCX 2 S31, AP control of client transmit power:
-	// 1. We shall not exceed Cell Power Limit as possible as we can.
-	// 2. Tolerance is +/- 5dB.
-	// 3. 802.11h Power Contraint takes higher precedence over CCX Cell Power Limit.
-	// 
-	// TODO: 
-	// 1. 802.11h power contraint 
-	//
-	// 071011, by rcnjko.
-	//
-	if (	pMgntInfo->OpMode == RT_OP_MODE_INFRASTRUCTURE && 
-		pMgntInfo->mAssoc &&
-		pCcxInfo->bUpdateCcxPwr &&
-		pCcxInfo->bWithCcxCellPwr &&
-		channel == pMgntInfo->dot11CurrentChannelNumber)
-	{
-		u1Byte	CckCellPwrIdx = phy_DbmToTxPwrIdx(Adapter, WIRELESS_MODE_B, pCcxInfo->CcxCellPwr);
-		u1Byte	LegacyOfdmCellPwrIdx = phy_DbmToTxPwrIdx(Adapter, WIRELESS_MODE_G, pCcxInfo->CcxCellPwr);
-		u1Byte	OfdmCellPwrIdx = phy_DbmToTxPwrIdx(Adapter, WIRELESS_MODE_N_24G, pCcxInfo->CcxCellPwr);
-
-		RT_TRACE(COMP_TXAGC, DBG_LOUD, 
-		("CCX Cell Limit: %d dbm => CCK Tx power index : %d, Legacy OFDM Tx power index : %d, OFDM Tx power index: %d\n", 
-		pCcxInfo->CcxCellPwr, CckCellPwrIdx, LegacyOfdmCellPwrIdx, OfdmCellPwrIdx));
-		RT_TRACE(COMP_TXAGC, DBG_LOUD, 
-		("EEPROM channel(%d) => CCK Tx power index: %d, Legacy OFDM Tx power index : %d, OFDM Tx power index: %d\n",
-		channel, cckPowerLevel[0], ofdmPowerLevel[0] + pHalData->LegacyHTTxPowerDiff, ofdmPowerLevel[0])); 
-
-		// CCK
-		if (cckPowerLevel[0] > CckCellPwrIdx)
-			cckPowerLevel[0] = CckCellPwrIdx;
-		// Legacy OFDM, HT OFDM
-		if (ofdmPowerLevel[0] + pHalData->LegacyHTTxPowerDiff > LegacyOfdmCellPwrIdx)
-		{
-			if ((OfdmCellPwrIdx - pHalData->LegacyHTTxPowerDiff) > 0)
-			{
-				ofdmPowerLevel[0] = OfdmCellPwrIdx - pHalData->LegacyHTTxPowerDiff;
-			}
-			else
-			{
-				ofdmPowerLevel[0] = 0;
-			}
-		}
-
-		RT_TRACE(COMP_TXAGC, DBG_LOUD, 
-		("Altered CCK Tx power index : %d, Legacy OFDM Tx power index: %d, OFDM Tx power index: %d\n", 
-		cckPowerLevel[0], ofdmPowerLevel[0] + pHalData->LegacyHTTxPowerDiff, ofdmPowerLevel[0]));
-	}
-#else
-	// Add or not ???
-#endif
 
 	pHalData->CurrentCckTxPwrIdx = cckPowerLevel[0];
 	pHalData->CurrentOfdm24GTxPwrIdx = ofdmPowerLevel[0];
 	pHalData->CurrentBW2024GTxPwrIdx = BW20PowerLevel[0];
 	pHalData->CurrentBW4024GTxPwrIdx = BW40PowerLevel[0];
-
-	//DBG_871X("PHY_SetTxPowerLevel8188E(): CurrentCckTxPwrIdx : 0x%x,CurrentOfdm24GTxPwrIdx: 0x%x, CurrentBW2024GTxPwrIdx: 0x%dx, CurrentBW4024GTxPwrIdx: 0x%x\n", 
-	//	pHalData->CurrentCckTxPwrIdx, pHalData->CurrentOfdm24GTxPwrIdx, pHalData->CurrentBW2024GTxPwrIdx, pHalData->CurrentBW4024GTxPwrIdx);
 }
+
 /*-----------------------------------------------------------------------------
  * Function:    SetTxPowerLevel8190()
  *
@@ -2565,30 +2323,6 @@ PHY_SetTxPowerLevel8188E(
 
 	rtl8188e_PHY_RF6052SetCckTxPower(Adapter, &cckPowerLevel[0]);
 	rtl8188e_PHY_RF6052SetOFDMTxPower(Adapter, &ofdmPowerLevel[0],&BW20PowerLevel[0],&BW40PowerLevel[0], channel);
-
-#if 0
-	switch (pHalData->rf_chip)
-	{
-		case RF_8225:
-			PHY_SetRF8225CckTxPower(Adapter, cckPowerLevel[0]);
-			PHY_SetRF8225OfdmTxPower(Adapter, ofdmPowerLevel[0]);
-		break;
-
-		case RF_8256:
-			PHY_SetRF8256CCKTxPower(Adapter, cckPowerLevel[0]);
-			PHY_SetRF8256OFDMTxPower(Adapter, ofdmPowerLevel[0]);
-			break;
-
-		case RF_6052:
-			PHY_RF6052SetCckTxPower(Adapter, &cckPowerLevel[0]);
-			PHY_RF6052SetOFDMTxPower(Adapter, &ofdmPowerLevel[0], channel);
-			break;
-
-		case RF_8258:
-			break;
-	}
-#endif
-
 }
 
 
@@ -2662,30 +2396,6 @@ PHY_ScanOperationBackup8188E(
 	IN	u8		Operation
 	)
 {
-#if 0
-	IO_TYPE	IoType;
-
-	if (!Adapter->bDriverStopped)
-	{
-		switch (Operation)
-		{
-			case SCAN_OPT_BACKUP:
-				IoType = IO_CMD_PAUSE_DM_BY_SCAN;
-				rtw_hal_set_hwreg(Adapter,HW_VAR_IO_CMD,  (pu1Byte)&IoType);
-
-				break;
-
-			case SCAN_OPT_RESTORE:
-				IoType = IO_CMD_RESUME_DM_BY_SCAN;
-				rtw_hal_set_hwreg(Adapter,HW_VAR_IO_CMD,  (pu1Byte)&IoType);
-				break;
-
-			default:
-				RT_TRACE(COMP_SCAN, DBG_LOUD, ("Unknown Scan Backup Operation.\n"));
-				break;
-		}
-	}
-#endif
 }
 
 /*-----------------------------------------------------------------------------
@@ -2708,25 +2418,12 @@ _PHY_SetBWMode92C(
 	IN	PADAPTER	Adapter
 )
 {
-//	PADAPTER			Adapter = (PADAPTER)pTimer->Adapter;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8				regBwOpMode;
 	u8				regRRSR_RSC;
 
-	//return;
-
-	// Added it for 20/40 mhz switch time evaluation by guangan 070531
-	//u4Byte				NowL, NowH;
-	//u8Byte				BeginTime, EndTime;
-
-	/*RT_TRACE(COMP_SCAN, DBG_LOUD, ("==>PHY_SetBWModeCallback8192C()  Switch to %s bandwidth\n", \
-					pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20?"20MHz":"40MHz"))*/
-
 	if (pHalData->rf_chip == RF_PSEUDO_11N)
-	{
-		//pHalData->SetBWModeInProgress= _FALSE;
 		return;
-	}
 
 	// There is no 40MHz mode in RF_8225.
 	if (pHalData->rf_chip==RF_8225)
@@ -2735,19 +2432,12 @@ _PHY_SetBWMode92C(
 	if (Adapter->bDriverStopped)
 		return;
 
-	// Added it for 20/40 mhz switch time evaluation by guangan 070531
-	//NowL = PlatformEFIORead4Byte(Adapter, TSFR);
-	//NowH = PlatformEFIORead4Byte(Adapter, TSFR+4);
-	//BeginTime = ((u8Byte)NowH << 32) + NowL;
-
-	//3//
-	//3//<1>Set MAC register
-	//3//
-	//Adapter->HalFunc.SetBWModeHandler();
+	//3
+	//3<1>Set MAC register
+	//3
 
 	regBwOpMode = rtw_read8(Adapter, REG_BWOPMODE);
 	regRRSR_RSC = rtw_read8(Adapter, REG_RRSR+2);
-	//regBwOpMode = rtw_hal_get_hwreg(Adapter,HW_VAR_BWMODE,(pu1Byte)&regBwOpMode);
 
 	switch (pHalData->CurrentChannelBW)
 	{
@@ -2904,32 +2594,12 @@ PHY_SetBWMode8188E(
 
 	pHalData->CurrentChannelBW = Bandwidth;
 
-#if 0
-	if (Offset==HT_EXTCHNL_OFFSET_LOWER)
-		pHalData->nCur40MhzPrimeSC = HAL_PRIME_CHNL_OFFSET_UPPER;
-	else if (Offset==HT_EXTCHNL_OFFSET_UPPER)
-		pHalData->nCur40MhzPrimeSC = HAL_PRIME_CHNL_OFFSET_LOWER;
-	else
-		pHalData->nCur40MhzPrimeSC = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
-#else
 	pHalData->nCur40MhzPrimeSC = Offset;
-#endif
 
 	if ((!Adapter->bDriverStopped) && (!Adapter->bSurpriseRemoved))
-	{
-	#if 0
-		//PlatformSetTimer(Adapter, &(pHalData->SetBWModeTimer), 0);
-	#else
 		_PHY_SetBWMode92C(Adapter);
-	#endif
-	}
 	else
-	{
-		//RT_TRACE(COMP_SCAN, DBG_LOUD, ("PHY_SetBWMode8192C() SetBWModeInProgress FALSE driver sleep or unload\n"));
-		//pHalData->SetBWModeInProgress= FALSE;
 		pHalData->CurrentChannelBW = tmpBW;
-	}
-	
 }
 
 
@@ -3013,29 +2683,13 @@ PHY_SwChnl8188E(	// Call after initialization
 
 	pHalData->CurrentChannel=channel;
 
-	//pHalData->SwChnlStage=0;
-	//pHalData->SwChnlStep=0;
-
-	if ((!Adapter->bDriverStopped) && (!Adapter->bSurpriseRemoved))
-	{
-		#if 0
-		//PlatformSetTimer(Adapter, &(pHalData->SwChnlTimer), 0);
-		#else
+	if ((!Adapter->bDriverStopped) && (!Adapter->bSurpriseRemoved)) {
 		_PHY_SwChnl8192C(Adapter, channel);
-		#endif
 
-		if (bResult)
-		{
-			//RT_TRACE(COMP_SCAN, DBG_LOUD, ("PHY_SwChnl8192C SwChnlInProgress TRUE schdule workitem done\n"));
-		}
-		else
-		{
-			//RT_TRACE(COMP_SCAN, DBG_LOUD, ("PHY_SwChnl8192C SwChnlInProgress FALSE schdule workitem error\n"));
-			//if (IS_HARDWARE_TYPE_8192SU(Adapter))
-			//{
-			//	pHalData->SwChnlInProgress = FALSE;
-				pHalData->CurrentChannel = tmpchannel;
-			//}
+		if (bResult) {
+			;
+		} else {
+			pHalData->CurrentChannel = tmpchannel;
 		}
 
 	}
@@ -3060,154 +2714,6 @@ phy_SwChnlStepByStep(
 	OUT u32		*delay
 	)
 {
-#if 0
-	HAL_DATA_TYPE			*pHalData = GET_HAL_DATA(Adapter);
-	PCHANNEL_ACCESS_SETTING	pChnlAccessSetting;
-	SwChnlCmd				PreCommonCmd[MAX_PRECMD_CNT];
-	u4Byte					PreCommonCmdCnt;
-	SwChnlCmd				PostCommonCmd[MAX_POSTCMD_CNT];
-	u4Byte					PostCommonCmdCnt;
-	SwChnlCmd				RfDependCmd[MAX_RFDEPENDCMD_CNT];
-	u4Byte					RfDependCmdCnt;
-	SwChnlCmd				*CurrentCmd;
-	u1Byte					eRFPath;
-	u4Byte					RfTXPowerCtrl;
-	BOOLEAN					bAdjRfTXPowerCtrl = _FALSE;
-
-
-	RT_ASSERT((Adapter != NULL), ("Adapter should not be NULL\n"));
-#if (MP_DRIVER != 1)
-	RT_ASSERT(IsLegalChannel(Adapter, channel), ("illegal channel: %d\n", channel));
-#endif
-	RT_ASSERT((pHalData != NULL), ("pHalData should not be NULL\n"));
-
-	pChnlAccessSetting = &Adapter->MgntInfo.Info8185.ChannelAccessSetting;
-	RT_ASSERT((pChnlAccessSetting != NULL), ("pChnlAccessSetting should not be NULL\n"));
-
-	//for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-	//for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-	//{
-		// <1> Fill up pre common command.
-	PreCommonCmdCnt = 0;
-	phy_SetSwChnlCmdArray(PreCommonCmd, PreCommonCmdCnt++, MAX_PRECMD_CNT,
-				CmdID_SetTxPowerLevel, 0, 0, 0);
-	phy_SetSwChnlCmdArray(PreCommonCmd, PreCommonCmdCnt++, MAX_PRECMD_CNT,
-				CmdID_End, 0, 0, 0);
-
-		// <2> Fill up post common command.
-	PostCommonCmdCnt = 0;
-
-	phy_SetSwChnlCmdArray(PostCommonCmd, PostCommonCmdCnt++, MAX_POSTCMD_CNT,
-				CmdID_End, 0, 0, 0);
-
-		// <3> Fill up RF dependent command.
-	RfDependCmdCnt = 0;
-	switch ( pHalData->RFChipID )
-	{
-		case RF_8225:
-		RT_ASSERT((channel >= 1 && channel <= 14), ("illegal channel for Zebra: %d\n", channel));
-		// 2008/09/04 MH Change channel.
-		if (channel==14) channel++;
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT,
-			CmdID_RF_WriteReg, rZebra1_Channel, (0x10+channel-1), 10);
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT,
-		CmdID_End, 0, 0, 0);
-		break;
-
-	case RF_8256:
-		// TEST!! This is not the table for 8256!!
-		RT_ASSERT((channel >= 1 && channel <= 14), ("illegal channel for Zebra: %d\n", channel));
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT,
-			CmdID_RF_WriteReg, rRfChannel, channel, 10);
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT,
-		CmdID_End, 0, 0, 0);
-		break;
-
-	case RF_6052:
-		RT_ASSERT((channel >= 1 && channel <= 14), ("illegal channel for Zebra: %d\n", channel));
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT,
-			CmdID_RF_WriteReg, RF_CHNLBW, channel, 10);
-		phy_SetSwChnlCmdArray(RfDependCmd, RfDependCmdCnt++, MAX_RFDEPENDCMD_CNT,
-		CmdID_End, 0, 0, 0);
-
-		break;
-
-	case RF_8258:
-		break;
-
-	// For FPGA two MAC verification
-	case RF_PSEUDO_11N:
-		return TRUE;
-	default:
-		RT_ASSERT(FALSE, ("Unknown RFChipID: %d\n", pHalData->RFChipID));
-		return FALSE;
-		break;
-	}
-
-
-	do{
-		switch (*stage)
-		{
-		case 0:
-			CurrentCmd=&PreCommonCmd[*step];
-			break;
-		case 1:
-			CurrentCmd=&RfDependCmd[*step];
-			break;
-		case 2:
-			CurrentCmd=&PostCommonCmd[*step];
-			break;
-		}
-
-		if (CurrentCmd->CmdID==CmdID_End)
-		{
-			if ((*stage)==2)
-			{
-				return TRUE;
-			}
-			else
-			{
-				(*stage)++;
-				(*step)=0;
-				continue;
-			}
-		}
-
-		switch (CurrentCmd->CmdID)
-		{
-		case CmdID_SetTxPowerLevel:
-			PHY_SetTxPowerLevel8192C(Adapter,channel);
-			break;
-		case CmdID_WritePortUlong:
-			PlatformEFIOWrite4Byte(Adapter, CurrentCmd->Para1, CurrentCmd->Para2);
-			break;
-		case CmdID_WritePortUshort:
-			PlatformEFIOWrite2Byte(Adapter, CurrentCmd->Para1, (u2Byte)CurrentCmd->Para2);
-			break;
-		case CmdID_WritePortUchar:
-			PlatformEFIOWrite1Byte(Adapter, CurrentCmd->Para1, (u1Byte)CurrentCmd->Para2);
-			break;
-		case CmdID_RF_WriteReg:	// Only modify channel for the register now !!!!!
-			for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
-			{
-#if 1
-				pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffffc00) | CurrentCmd->Para2);
-				PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, CurrentCmd->Para1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
-#else
-				PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, CurrentCmd->Para1, bRFRegOffsetMask, (CurrentCmd->Para2));
-#endif
-			}
-			break;
-		}
-
-		break;
-	}while (TRUE);
-	//cosa }/*for (Number of RF paths)*/
-
-	(*delay)=CurrentCmd->msDelay;
-	(*step)++;
-	return FALSE;
-#endif
 	return _TRUE;
 }
 
@@ -3226,17 +2732,9 @@ phy_SetSwChnlCmdArray(
 	SwChnlCmd* pCmd;
 
 	if (CmdTable == NULL)
-	{
-		//RT_ASSERT(FALSE, ("phy_SetSwChnlCmdArray(): CmdTable cannot be NULL.\n"));
 		return _FALSE;
-	}
 	if (CmdTableIdx >= CmdTableSz)
-	{
-		//RT_ASSERT(FALSE,
-		//		("phy_SetSwChnlCmdArray(): Access invalid index, please check size of the table, CmdTableIdx:%ld, CmdTableSz:%ld\n",
-		//		CmdTableIdx, CmdTableSz));
 		return _FALSE;
-	}
 
 	pCmd = CmdTable + CmdTableIdx;
 	pCmd->CmdID = CmdID;
@@ -3254,19 +2752,7 @@ phy_FinishSwChnlNow(	// We should not call this function directly
 		IN	u8		channel
 		)
 {
-#if 0
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u32			delay;
-
-	while (!phy_SwChnlStepByStep(Adapter,channel,&pHalData->SwChnlStage,&pHalData->SwChnlStep,&delay))
-	{
-		if (delay>0)
-			rtw_mdelay_os(delay);
-	}
-#endif
 }
-
-
 
 //
 // Description:
@@ -3329,30 +2815,6 @@ PHY_SetMonitorMode8192C(
 	IN	BOOLEAN				bEnableMonitorMode
 	)
 {
-#if 0
-	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(pAdapter);
-	BOOLEAN				bFilterOutNonAssociatedBSSID = FALSE;
-
-	//2 Note: we may need to stop antenna diversity.
-	if (bEnableMonitorMode)
-	{
-		bFilterOutNonAssociatedBSSID = FALSE;
-		RT_TRACE(COMP_RM, DBG_LOUD, ("PHY_SetMonitorMode8192S(): enable monitor mode\n"));
-
-		pHalData->bInMonitorMode = TRUE;
-		pAdapter->HalFunc.AllowAllDestAddrHandler(pAdapter, TRUE, TRUE);
-		rtw_hal_set_hwreg(pAdapter, HW_VAR_CHECK_BSSID, (pu1Byte)&bFilterOutNonAssociatedBSSID);
-	}
-	else
-	{
-		bFilterOutNonAssociatedBSSID = TRUE;
-		RT_TRACE(COMP_RM, DBG_LOUD, ("PHY_SetMonitorMode8192S(): disable monitor mode\n"));
-
-		pAdapter->HalFunc.AllowAllDestAddrHandler(pAdapter, FALSE, TRUE);
-		pHalData->bInMonitorMode = FALSE;
-		rtw_hal_set_hwreg(pAdapter, HW_VAR_CHECK_BSSID, (pu1Byte)&bFilterOutNonAssociatedBSSID);
-	}
-#endif
 }
 
 
@@ -3382,16 +2844,6 @@ PHY_CheckIsLegalRfPath8192C(
 	BOOLEAN				rtValue = _TRUE;
 
 	// NOt check RF Path now.!
-#if 0
-	if (pHalData->RF_Type == RF_1T2R && eRFPath != RF_PATH_A)
-	{
-		rtValue = FALSE;
-	}
-	if (pHalData->RF_Type == RF_1T2R && eRFPath != RF_PATH_A)
-	{
-
-	}
-#endif
 	return	rtValue;
 
 }	/* PHY_CheckIsLegalRfPath8192C */

@@ -66,31 +66,6 @@ void BT_LpsLeave(PADAPTER padapter);
 #define TKIP_ENC_KEY_POS		32		//(KEK_LEN+KEK_LEN)
 #define MAXRSNIELEN				256
 
-// HEADER/QoSType.h
-#if 0
-//
-// BSS QOS data.
-// Ref: BssDscr in 8185 code. [def. in BssDscr.h]
-//
-typedef struct _BSS_QOS
-{
-	// Part 0. Ref. 8185 QoS code (From Emily)
-	QOS_MODE				bdQoSMode;
-	u8					bdWMMIEBuf[MAX_WMMELE_LENGTH];
-	OCTET_STRING			bdWMMIE;
-
-	QOS_ELE_SUBTYPE		EleSubType;
-
-	// Part 2. EDCA Parameter (perAC)
-	u8					*pWMMInfoEle;
-	u8					*pWMMParamEle;
-
-	// QBSS Load.
-	u8					QBssLoad[QBSS_LOAD_SIZE];
-	u8					bQBssLoadValid;
-} BSS_QOS, *PBSS_QOS;
-#endif
-
 // COMMON/Protocol802_11.h
 //----------------------------------------------------------------------------
 //      802.11 Management frame Status Code field

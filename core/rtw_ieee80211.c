@@ -1574,17 +1574,6 @@ static uint rtw_p2p_attr_remove(u8 *ie, uint ielen_ori, u8 attr_id)
 		{
 			u8 *next_attr = target_attr+target_attr_len;
 			uint remain_len = ielen-(next_attr-ie);
-			//dump_ies(ie, ielen);
-			#if 0
-			DBG_871X("[%d] ie:%p, ielen:%u\n"
-				"target_attr:%p, target_attr_len:%u\n"
-				"next_attr:%p, remain_len:%u\n"
-				, index++
-				, ie, ielen
-				, target_attr, target_attr_len
-				, next_attr, remain_len
-			);
-			#endif
 
 			_rtw_memset(target_attr, 0, target_attr_len);
 			_rtw_memcpy(target_attr, next_attr, remain_len);
@@ -1594,8 +1583,6 @@ static uint rtw_p2p_attr_remove(u8 *ie, uint ielen_ori, u8 attr_id)
 		}
 		else
 		{
-			//if (index>0)
-			//	dump_ies(ie, ielen);
 			break;
 		}
 	}
@@ -1611,13 +1598,6 @@ void rtw_WLAN_BSSID_EX_remove_p2p_attr(WLAN_BSSID_EX *bss_ex, u8 attr_id)
 	
 	if ( (p2p_ie=rtw_get_p2p_ie(bss_ex->IEs+_FIXED_IE_LENGTH_, bss_ex->IELength-_FIXED_IE_LENGTH_, NULL, &p2p_ielen_ori)) ) 
 	{
-		#if 0
-		if (rtw_get_p2p_attr(p2p_ie, p2p_ielen_ori, attr_id, NULL, NULL)) {
-			DBG_871X("rtw_get_p2p_attr: GOT P2P_ATTR:%u!!!!!!!!\n", attr_id);
-			dump_ies(bss_ex->IEs+_FIXED_IE_LENGTH_, bss_ex->IELength-_FIXED_IE_LENGTH_);
-		}
-		#endif
-
 		p2p_ielen=rtw_p2p_attr_remove(p2p_ie, p2p_ielen_ori, attr_id);
 		if (p2p_ielen != p2p_ielen_ori) {
 			
@@ -1628,11 +1608,6 @@ void rtw_WLAN_BSSID_EX_remove_p2p_attr(WLAN_BSSID_EX *bss_ex, u8 attr_id)
 			_rtw_memcpy(next_ie, next_ie_ori, remain_len);
 			_rtw_memset(next_ie+remain_len, 0, p2p_ielen_ori-p2p_ielen);
 			bss_ex->IELength -= p2p_ielen_ori-p2p_ielen;
-
-			#if 0
-			DBG_871X("remove P2P_ATTR:%u!\n", attr_id);
-			dump_ies(bss_ex->IEs+_FIXED_IE_LENGTH_, bss_ex->IELength-_FIXED_IE_LENGTH_);
-			#endif
 		}
 	}
 }

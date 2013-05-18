@@ -45,26 +45,6 @@ dm_CheckProtection(
 	IN	PADAPTER	Adapter
 	)
 {
-#if 0
-	PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
-	u1Byte			CurRate, RateThreshold;
-
-	if (pMgntInfo->pHTInfo->bCurBW40MHz)
-		RateThreshold = MGN_MCS1;
-	else
-		RateThreshold = MGN_MCS3;
-
-	if (Adapter->TxStats.CurrentInitTxRate <= RateThreshold)
-	{
-		pMgntInfo->bDmDisableProtect = TRUE;
-		DbgPrint("Forced disable protect: %x\n", Adapter->TxStats.CurrentInitTxRate);
-	}
-	else
-	{
-		pMgntInfo->bDmDisableProtect = FALSE;
-		DbgPrint("Enable protect: %x\n", Adapter->TxStats.CurrentInitTxRate);
-	}
-#endif
 }
 
 static VOID
@@ -72,20 +52,6 @@ dm_CheckStatistics(
 	IN	PADAPTER	Adapter
 	)
 {
-#if 0
-	if (!Adapter->MgntInfo.bMediaConnect)
-		return;
-
-	//2008.12.10 tynli Add for getting Current_Tx_Rate_Reg flexibly.
-	rtw_hal_get_hwreg( Adapter, HW_VAR_INIT_TX_RATE, (pu1Byte)(&Adapter->TxStats.CurrentInitTxRate) );
-
-	// Calculate current Tx Rate(Successful transmited!!)
-
-	// Calculate current Rx Rate(Successful received!!)
-
-	//for tx tx retry count
-	rtw_hal_get_hwreg( Adapter, HW_VAR_RETRY_COUNT, (pu1Byte)(&Adapter->TxStats.NumTxRetryCount) );
-#endif
 }
 
 static void dm_CheckPbcGPIO(_adapter *padapter)
@@ -303,17 +269,7 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 
 	ODM_CmnInfoInit(pDM_Odm,	ODM_CMNINFO_MP_TEST_CHIP,IS_NORMAL_CHIP(pHalData->VersionID));
 	
-#if 0	
-//#ifdef CONFIG_USB_HCI	
-	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_BOARD_TYPE,pHalData->BoardType);
-
-	if (pHalData->BoardType == BOARD_USB_High_PA){
-		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_EXT_LNA,_TRUE);
-		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_EXT_PA,_TRUE);
-	}
-#endif	
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_PATCH_ID,pHalData->CustomerID);
-	//	ODM_CMNINFO_BINHCT_TEST only for MP Team
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_BWIFI_TEST,Adapter->registrypriv.wifi_spec);
 		
 	

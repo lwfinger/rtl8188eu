@@ -70,17 +70,10 @@ typedef struct _SETPWRMODE_PARM
 	u8 AwakeInterval;	// unit: beacon interval
 	u8 bAllQueueUAPSD;
 
-#if 0
-	u8 LowRxBCN:1;
-	u8 AutoAntSwitch:1;
-	u8 PSAllowBTHighPriority:1;
-	u8 rsvd43:5;
-#else
 #define SETPM_LOWRXBCN			BIT(0)
 #define SETPM_AUTOANTSWITCH		BIT(1)
 #define SETPM_PSALLOWBTHIGHPRI	BIT(2)
 	u8 BcnAntMode;
-#endif
 }__attribute__((__packed__)) SETPWRMODE_PARM, *PSETPWRMODE_PARM;
 
 struct H2C_SS_RFOFF_PARAM{
@@ -119,16 +112,6 @@ struct P2P_PS_CTWPeriod_t {
 
 typedef struct _B_TYPE_TDMA_PARM
 {
-#if 0
-	u8 En:1;
-	u8 FixAntennaInBTSide:1;
-	u8 TxPspoll:1;
-	u8 val870:1; // value of 870, when disable
-	u8 AutoWakeUp:1;
-	u8 NoPS:1;
-	u8 WlanHighPriority:1;
-	u8 rsvd07:1;
-#else
 #define B_TDMA_EN				BIT(0)
 #define B_TDMA_FIXANTINBT		BIT(1)
 #define B_TDMA_TXPSPOLL 		BIT(2)
@@ -137,7 +120,6 @@ typedef struct _B_TYPE_TDMA_PARM
 #define B_TDMA_NOPS 			BIT(5)
 #define B_TDMA_WLANHIGHPRI		BIT(6)
 	u8 option;
-#endif
 
 	u8 TBTTOnPeriod;
 	u8 MedPeriod;
@@ -145,45 +127,16 @@ typedef struct _B_TYPE_TDMA_PARM
 }__attribute__((__packed__)) B_TYPE_TDMA_PARM, *PB_TYPE_TDMA_PARM;
 
 typedef struct _SCAN_EN_PARM {
-#if 0
-	u8 En:1;
-	u8 rsvd01:7;
-#else
 	u8 En;
-#endif
 }__attribute__((__packed__)) SCAN_EN_PARM, *PSCAN_EN_PARM;
 
 // BT_PWR
-#define SET_H2CCMD_BT_PWR_IDX(__pH2CCmd, __Value)							SET_BITS_TO_LE_1BYTE_8BIT(__pH2CCmd, 0, 8, __Value)
+#define SET_H2CCMD_BT_PWR_IDX(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE_8BIT(__pH2CCmd, 0, 8, __Value)
 
 // BT_FW_PATCH
-#if 0
-#define SET_H2CCMD_BT_FW_PATCH_ENABLE(__pH2CCmd, __Value)					SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
-#define SET_H2CCMD_BT_FW_PATCH_SIZE(__pH2CCmd, __Value) 					SET_BITS_TO_LE_2BYTE((__pH2CCmd)+1, 0, 16, __Value)
-#else
-#define SET_H2CCMD_BT_FW_PATCH_ENABLE(__pH2CCmd, __Value)					SET_BITS_TO_LE_4BYTE(__pH2CCmd, 0, 8, __Value) //	SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
-#define SET_H2CCMD_BT_FW_PATCH_SIZE(__pH2CCmd, __Value) 					SET_BITS_TO_LE_4BYTE(__pH2CCmd, 8, 16, __Value) //	SET_BITS_TO_LE_2BYTE((__pH2CCmd)+1, 0, 16, __Value)
-#endif
+#define SET_H2CCMD_BT_FW_PATCH_ENABLE(__pH2CCmd, __Value)		SET_BITS_TO_LE_4BYTE(__pH2CCmd, 0, 8, __Value) //	SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
+#define SET_H2CCMD_BT_FW_PATCH_SIZE(__pH2CCmd, __Value) 		SET_BITS_TO_LE_4BYTE(__pH2CCmd, 8, 16, __Value) //	SET_BITS_TO_LE_2BYTE((__pH2CCmd)+1, 0, 16, __Value)
 
-#if 0
-/*
- * H2C_LOWPWR_LPS
- * h2c cmd = 71
- * byte1[6:0]= bcn count : how many bcn not recevied should return to old mechanism
- * byte1[7] = enable : enable mechanism
- * byte2=bcn period : bcn recv time of this AP, unit 32 us
- * byte3= drop threshold : how many pkts be droped, rx dma should be release
- * byte4 = max early period
- * byte5 = max bcn timeout period
- */
-#define SET_H2CCMD_LOWPWR_LPS_BCN_COUNT(__pH2CCmd, __Value)    SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 4, __Value)
-#define SET_H2CCMD_LOWPWR_LPS_TB_BCN_THRESH(__pH2CCmd, __Value)   SET_BITS_TO_LE_1BYTE(__pH2CCmd, 4, 3, __Value)
-#define SET_H2CCMD_LOWPWR_LPS_ENABLE(__pH2CCmd, __Value)	 SET_BITS_TO_LE_1BYTE(__pH2CCmd, 7, 1, __Value)
-#define SET_H2CCMD_LOWPWR_LPS_BCN_PERIOD(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE_8BIT((__pH2CCmd)+1, 0, 8, __Value)
-#define SET_H2CCMD_LOWPWR_LPS_BCN_DROP_THRESH(__pH2CCmd, __Value)  SET_BITS_TO_LE_1BYTE_8BIT((__pH2CCmd)+2, 0, 8, __Value)
-#define SET_H2CCMD_LOWPWR_LPS_MAX_EARLY_PERIOD(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE_8BIT((__pH2CCmd)+3, 0, 8, __Value)
-#define SET_H2CCMD_LOWPWR_LPS_MAX_BCN_TO_PERIOD(__pH2CCmd, __Value)  SET_BITS_TO_LE_1BYTE_8BIT((__pH2CCmd)+4, 0, 8, __Value)
-#else
 typedef struct _LOWPWR_LPS_PARM
 {
 	u8 bcn_count:4;
@@ -194,7 +147,6 @@ typedef struct _LOWPWR_LPS_PARM
 	u8 max_early_period;
 	u8 max_bcn_timeout_period;
 }__attribute__((__packed__)) LOWPWR_LPS_PARM, *PLOWPWR_LPS_PARM;
-#endif
 
 
 // host message to firmware cmd
@@ -204,17 +156,12 @@ void rtl8723a_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus);
 void rtl8723a_set_BTCoex_AP_mode_FwRsvdPkt_cmd(PADAPTER padapter);
 #endif
 u8 rtl8192c_set_rssi_cmd(PADAPTER padapter, u8 *param);
-//u8 rtl8723a_set_rssi_cmd(PADAPTER padapter, u8 *param);
 u8 rtl8192c_set_raid_cmd(PADAPTER padapter, u32 mask, u8 arg);
-//u8 rtl8723a_set_raid_cmd(PADAPTER padapter, u32 mask, u8 arg);
 void rtl8192c_Add_RateATid(PADAPTER padapter, u32 bitmap, u8 arg, u8 rssi_level);
-//void rtl8723a_Add_RateATid(PADAPTER padapter, u32 bitmap, u8 arg);
 u8 rtl8192c_set_FwSelectSuspend_cmd(PADAPTER padapter, u8 bfwpoll, u16 period);
-//u8 rtl8723a_set_FwSelectSuspend_cmd(PADAPTER padapter, u8 bfwpoll, u16 period);
 
 #ifdef CONFIG_P2P
 void rtl8192c_set_p2p_ps_offload_cmd(PADAPTER padapter, u8 p2p_ps_state);
-//void rtl8723a_set_p2p_ps_offload_cmd(PADAPTER padapter, u8 p2p_ps_state);
 #endif //CONFIG_P2P
 
 void CheckFwRsvdPageContent(PADAPTER padapter);

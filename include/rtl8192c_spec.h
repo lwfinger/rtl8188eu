@@ -892,28 +892,6 @@ typedef	enum _BOARD_TYPE_8192CUSB{
 #define	EEPROM_USB_DEVICE_PWR				BIT(2)
 #define	EEPROM_EP_NUMBER						(BIT(3)|BIT(4))
 
-#if 0
-#define	EEPROM_CHANNEL_PLAN_FCC					0x0
-#define	EEPROM_CHANNEL_PLAN_IC					0x1
-#define	EEPROM_CHANNEL_PLAN_ETSI				0x2
-#define	EEPROM_CHANNEL_PLAN_SPAIN				0x3
-#define	EEPROM_CHANNEL_PLAN_FRANCE				0x4
-#define	EEPROM_CHANNEL_PLAN_MKK					0x5
-#define	EEPROM_CHANNEL_PLAN_MKK1				0x6
-#define	EEPROM_CHANNEL_PLAN_ISRAEL				0x7
-#define	EEPROM_CHANNEL_PLAN_TELEC				0x8
-#define	EEPROM_CHANNEL_PLAN_GLOBAL_DOMAIN		0x9
-#define	EEPROM_CHANNEL_PLAN_WORLD_WIDE_13		0xA
-#define	EEPROM_CHANNEL_PLAN_BY_HW_MASK			0x80
-
-#define	EEPROM_CID_DEFAULT						0x0
-
-#define	EEPROM_CID_WHQL 						0xFE // added by chiyoko for dtm, 20090108
-
-
-#define	EEPROM_CID_CCX							0x10 // CCX test. By Bruce, 2009-02-25.
-#endif
-
 #endif
 
 

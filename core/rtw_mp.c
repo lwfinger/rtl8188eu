@@ -380,17 +380,6 @@ MPT_InitializeAdapter(
 	pMptCtx->bMptIndexEven = _TRUE;	//default gain index is -6.0db
 	pMptCtx->h2cReqNum = 0x0;
 	/* Init mpt event. */
-#if 0 // for Windows
-	NdisInitializeEvent( &(pMptCtx->MptWorkItemEvent) );
-	NdisAllocateSpinLock( &(pMptCtx->MptWorkItemSpinLock) );
-
-	PlatformInitializeWorkItem(
-		Adapter,
-		&(pMptCtx->MptWorkItem),
-		(RT_WORKITEM_CALL_BACK)MPT_WorkItemCallback,
-		(PVOID)Adapter,
-		"MptWorkItem");
-#endif
 	//init for BT MP
 #ifdef CONFIG_RTL8723A
 	pMptCtx->bMPh2c_timeout = _FALSE;
@@ -415,17 +404,6 @@ MPT_InitializeAdapter(
 	rtw_write32(pAdapter, REG_RCR, 0x70000101);
 #endif
 
-#if 0
-	// If EEPROM or EFUSE is empty,we assign as RF 2T2R for MP.
-	if (pHalData->AutoloadFailFlag == TRUE)
-	{
-		pHalData->RF_Type = RF_2T2R;
-	}
-#endif
-
-	//ledsetting = rtw_read32(pAdapter, REG_LEDCFG0);
-	//rtw_write32(pAdapter, REG_LEDCFG0, ledsetting & ~LED0DIS);
-	
 	if (IS_HARDWARE_TYPE_8192DU(pAdapter))
 	{
 		rtw_write32(pAdapter, REG_LEDCFG0, 0x8888);
@@ -502,18 +480,6 @@ MPT_DeInitAdapter(
 	_rtw_free_sema(&(pMptCtx->MPh2c_Sema));
 	_cancel_timer_ex( &pMptCtx->MPh2c_timeout_timer);
 	#endif
-#if 0 // for Windows
-	PlatformFreeWorkItem( &(pMptCtx->MptWorkItem) );
-
-	while (pMptCtx->bMptWorkItemInProgress)
-	{
-		if (NdisWaitEvent(&(pMptCtx->MptWorkItemEvent), 50))
-		{
-			break;
-		}
-	}
-	NdisFreeSpinLock( &(pMptCtx->MptWorkItemSpinLock) );
-#endif
 }
 
 static u8 mpt_ProStartTest(PADAPTER padapter)
@@ -656,14 +622,6 @@ s32 mp_start_test(PADAPTER padapter)
 	pmppriv->prev_fw_state = get_fwstate(pmlmepriv);
 	if (padapter->registrypriv.mp_mode == 1)
 		pmlmepriv->fw_state = WIFI_MP_STATE;
-#if 0
-	if (pmppriv->mode == _LOOPBOOK_MODE_) {
-		set_fwstate(pmlmepriv, WIFI_MP_LPBK_STATE); //append txdesc
-		RT_TRACE(_module_mp_, _drv_notice_, ("+start mp in Lookback mode\n"));
-	} else {
-		RT_TRACE(_module_mp_, _drv_notice_, ("+start mp in normal mode\n"));
-	}
-#endif
 	set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
 
 	//3 2. create a new psta for mp driver
@@ -756,52 +714,6 @@ end_of_mp_stop_test:
 	}
 }
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
-#if 0
-//#ifdef CONFIG_USB_HCI
-static VOID mpt_AdjustRFRegByRateByChan92CU(PADAPTER pAdapter, u8 RateIdx, u8 Channel, u8 BandWidthID)
-{
-	u8		eRFPath;
-	u32		rfReg0x26;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-
-
-	if (RateIdx < MPT_RATE_6M) {	// CCK rate,for 88cu
-		rfReg0x26 = 0xf400;
-	}
-	else if ((RateIdx >= MPT_RATE_6M) && (RateIdx <= MPT_RATE_54M)) {// OFDM rate,for 88cu
-		if ((4 == Channel) || (8 == Channel) || (12 == Channel))
-			rfReg0x26 = 0xf000;
-		else if ((5 == Channel) || (7 == Channel) || (13 == Channel) || (14 == Channel))
-			rfReg0x26 = 0xf400;
-		else
-			rfReg0x26 = 0x4f200;
-	}
-	else if ((RateIdx >= MPT_RATE_MCS0) && (RateIdx <= MPT_RATE_MCS15)) {// MCS 20M ,for 88cu // MCS40M rate,for 88cu
-
-		if (HT_CHANNEL_WIDTH_20 == BandWidthID) {
-			if ((4 == Channel) || (8 == Channel))
-				rfReg0x26 = 0xf000;
-			else if ((5 == Channel) || (7 == Channel) || (13 == Channel) || (14 == Channel))
-				rfReg0x26 = 0xf400;
-			else
-				rfReg0x26 = 0x4f200;
-		}
-		else{
-			if ((4 == Channel) || (8 == Channel))
-				rfReg0x26 = 0xf000;
-			else if ((5 == Channel) || (7 == Channel))
-				rfReg0x26 = 0xf400;
-			else
-				rfReg0x26 = 0x4f200;
-		}
-	}
-
-//	RT_TRACE(COMP_CMD, DBG_LOUD, ("\n mpt_AdjustRFRegByRateByChan92CU():Chan:%d Rate=%d rfReg0x26:0x%08x\n",Channel, RateIdx,rfReg0x26));
-	for (eRFPath = 0; eRFPath < pHalData->NumTotalRFPath; eRFPath++) {
-		write_rfreg(pAdapter, eRFPath, RF_SYN_G2, rfReg0x26);
-	}
-}
-#endif
 /*-----------------------------------------------------------------------------
  * Function:	mpt_SwitchRfSetting
  *

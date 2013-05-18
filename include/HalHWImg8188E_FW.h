@@ -36,27 +36,8 @@ ODM_ReadFirmware_8188E_FW_AP(
 
 #else
 /******************************************************************************
-*                           FW_NIC.TXT
-******************************************************************************/
-#if 0
-void
-ODM_ReadFirmware_8188E_FW_NIC(
-     IN   PDM_ODM_T    pDM_Odm,
-     OUT  u1Byte       *pFirmware,
-     OUT  u4Byte       *pFirmwareSize
-);
-#endif
-/******************************************************************************
 *                           FW_WoWLAN.TXT
 ******************************************************************************/
-#if 0
-void
-ODM_ReadFirmware_8188E_FW_WoWLAN(
-     IN   PDM_ODM_T    pDM_Odm,
-     OUT  u1Byte       *pFirmware,
-     OUT  u4Byte       *pFirmwareSize
-);
-#endif
 #define ArrayLength_8188E_FW_WoWLAN 15764
 extern const u8 Array_8188E_FW_WoWLAN[ArrayLength_8188E_FW_WoWLAN];
 #endif
