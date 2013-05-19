@@ -56,7 +56,7 @@ PHY_APCalibrate_8192C(		IN	PADAPTER	pAdapter,
 #define ODM_TARGET_CHNL_NUM_2G_5G	59
 
 
-VOID
+void
 ODM_ResetIQKResult(
 	IN PDM_ODM_T	pDM_Odm
 );

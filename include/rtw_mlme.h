@@ -601,17 +601,17 @@ void rtw_indicate_wx_disassoc_event(_adapter *padapter);
 extern thread_return event_thread(void *context);
 
 extern void rtw_join_timeout_handler (
-	IN	PVOID					SystemSpecific1,
-	IN	PVOID					FunctionContext,
-	IN	PVOID					SystemSpecific2,
-	IN	PVOID					SystemSpecific3
+	IN	void *					SystemSpecific1,
+	IN	void *					FunctionContext,
+	IN	void *					SystemSpecific2,
+	IN	void *					SystemSpecific3
 	);
 
 extern void _rtw_scan_timeout_handler (
-	IN	PVOID					SystemSpecific1,
-	IN	PVOID					FunctionContext,
-	IN	PVOID					SystemSpecific2,
-	IN	PVOID					SystemSpecific3
+	IN	void *					SystemSpecific1,
+	IN	void *					FunctionContext,
+	IN	void *					SystemSpecific2,
+	IN	void *					SystemSpecific3
 	);
 
 #endif

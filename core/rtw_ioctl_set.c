@@ -277,12 +277,12 @@ _func_enter_;
 	switch (test->Type)
 	{
 		case 1:
-			NdisMIndicateStatus(padapter->hndis_adapter, NDIS_STATUS_MEDIA_SPECIFIC_INDICATION, (PVOID)&test->AuthenticationEvent, test->Length - 8);
+			NdisMIndicateStatus(padapter->hndis_adapter, NDIS_STATUS_MEDIA_SPECIFIC_INDICATION, (void *)&test->AuthenticationEvent, test->Length - 8);
 			NdisMIndicateStatusComplete(padapter->hndis_adapter);
 			break;
 
 		case 2:
-			NdisMIndicateStatus(padapter->hndis_adapter, NDIS_STATUS_MEDIA_SPECIFIC_INDICATION, (PVOID)&test->RssiTrigger, sizeof(NDIS_802_11_RSSI));
+			NdisMIndicateStatus(padapter->hndis_adapter, NDIS_STATUS_MEDIA_SPECIFIC_INDICATION, (void *)&test->RssiTrigger, sizeof(NDIS_802_11_RSSI));
 			NdisMIndicateStatusComplete(padapter->hndis_adapter);
 			break;
 

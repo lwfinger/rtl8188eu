@@ -51,7 +51,7 @@
  *	04/23/2012	MHC		Adjust TX agc directly not throughput BB digital.
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 ODM_TxPwrTrackAdjust88E(
 	PDM_ODM_T	pDM_Odm,
 	u1Byte		Type,				// 0 = OFDM, 1 = CCK
@@ -130,7 +130,7 @@ ODM_TxPwrTrackAdjust88E(
  *	04/23/2012	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 odm_TxPwrTrackSetPwr88E(
 	PDM_ODM_T	pDM_Odm
 	)
@@ -152,7 +152,7 @@ odm_TxPwrTrackSetPwr88E(
 
 
 //091212 chiyokolin
-VOID
+void
 odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
@@ -899,7 +899,7 @@ phy_PathB_IQK_8188E(
 
 }
 
-VOID
+void
 _PHY_PathAFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -974,7 +974,7 @@ _PHY_PathAFillIQKMatrix(
 	}
 }
 
-VOID
+void
 _PHY_PathBFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1078,7 +1078,7 @@ ODM_CheckPowerStatus(
 }
 #endif
 
-VOID
+void
 _PHY_SaveADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1111,7 +1111,7 @@ _PHY_SaveADDARegisters(
 }
 
 
-VOID
+void
 _PHY_SaveMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1141,7 +1141,7 @@ _PHY_SaveMACRegisters(
 }
 
 
-VOID
+void
 _PHY_ReloadADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1171,7 +1171,7 @@ _PHY_ReloadADDARegisters(
 	}
 }
 
-VOID
+void
 _PHY_ReloadMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1200,7 +1200,7 @@ _PHY_ReloadMACRegisters(
 }
 
 
-VOID
+void
 _PHY_PathADDAOn(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1240,7 +1240,7 @@ _PHY_PathADDAOn(
 
 }
 
-VOID
+void
 _PHY_MACSettingCalibration(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1272,7 +1272,7 @@ _PHY_MACSettingCalibration(
 
 }
 
-VOID
+void
 _PHY_PathAStandBy(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
@@ -1297,7 +1297,7 @@ _PHY_PathAStandBy(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_IQK, bMaskDWord, 0x80800000);
 }
 
-VOID
+void
 _PHY_PIModeSwitch(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1459,7 +1459,7 @@ phy_SimularityCompare_8188E(
 
 
 
-VOID
+void
 phy_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1739,7 +1739,7 @@ else
 }
 
 
-VOID
+void
 phy_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1830,7 +1830,7 @@ phy_LCCalibrate_8188E(
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
 
-VOID
+void
 phy_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -2323,7 +2323,7 @@ if (*(pDM_Odm->mp_mode) != 1)
 
 
 
-VOID
+void
 PHY_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -2589,7 +2589,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 }
 
 
-VOID
+void
 PHY_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
@@ -2678,7 +2678,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 
 }
 
-VOID
+void
 PHY_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -2729,7 +2729,7 @@ PHY_APCalibrate_8188E(
 #endif
 	}
 }
-VOID phy_SetRFPathSwitch_8188E(
+void phy_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
@@ -2778,7 +2778,7 @@ VOID phy_SetRFPathSwitch_8188E(
 			ODM_SetBBReg(pDM_Odm, rFPGA0_XA_RFInterfaceOE, BIT8|BIT9, 0x1);	//Aux
 	}
 }
-VOID PHY_SetRFPathSwitch_8188E(
+void PHY_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
@@ -2821,7 +2821,7 @@ VOID PHY_SetRFPathSwitch_8188E(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 //digital predistortion
-VOID
+void
 phy_DigitalPredistortion(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN	PADAPTER	pAdapter,
@@ -3256,7 +3256,7 @@ phy_DigitalPredistortion(
 #endif
 }
 
-VOID
+void
 PHY_DigitalPredistortion_8188E(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN	PADAPTER	pAdapter

@@ -1232,7 +1232,7 @@ _func_enter_;
 		("+oid_rt_pro_read_efuse_hd: buf_len=%d addr=%d cnts=%d\n",
 		 poid_par_priv->information_buf_len, addr, cnts));
 
-	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
+	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, _FALSE);
 
 	if ((addr + cnts) > max_available_size) {
 		RT_TRACE(_module_mp_, _drv_err_, ("!oid_rt_pro_read_efuse_hdl: parameter error!\n"));
@@ -1278,7 +1278,7 @@ _func_enter_;
 		 ("+oid_rt_pro_write_efuse_hdl: buf_len=%d addr=0x%04x cnts=%d\n",
 		  poid_par_priv->information_buf_len, addr, cnts));
 
-	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
+	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, _FALSE);
 
 	if ((addr + cnts) > max_available_size) {
 		RT_TRACE(_module_mp_, _drv_err_, ("!oid_rt_pro_write_efuse_hdl: parameter error"));
@@ -1443,7 +1443,7 @@ _func_enter_;
 
 	RT_TRACE(_module_mp_, _drv_notice_, ("+oid_rt_pro_efuse_map_hdl\n"));
 
-	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (PVOID)&mapLen, _FALSE);
+	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&mapLen, _FALSE);
 
 	*poid_par_priv->bytes_rw = 0;
 

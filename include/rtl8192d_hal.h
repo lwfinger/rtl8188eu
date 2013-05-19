@@ -623,7 +623,7 @@ typedef struct hal_data_8192de HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define RT_IS_FUNC_DISABLED(__pAdapter, __FuncBits) ( (__pAdapter)->DisabledFunctions & (__FuncBits) )
 
 void InterruptRecognized8192DE(PADAPTER Adapter, PRT_ISR_CONTENT pIsrContent);
-VOID UpdateInterruptMask8192DE(PADAPTER Adapter, u32 AddMSR, u32 RemoveMSR);
+void UpdateInterruptMask8192DE(PADAPTER Adapter, u32 AddMSR, u32 RemoveMSR);
 #endif
 
 #ifdef CONFIG_USB_HCI
@@ -839,14 +839,14 @@ typedef struct hal_data_8192du HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define GET_RF_TYPE(priv)	(GET_HAL_DATA(priv)->rf_type)
 
 int FirmwareDownload92D(IN PADAPTER Adapter);
-VOID rtl8192d_FirmwareSelfReset(IN PADAPTER Adapter);
+void rtl8192d_FirmwareSelfReset(IN PADAPTER Adapter);
 void rtl8192d_ReadChipVersion(IN PADAPTER Adapter);
-VOID rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-VOID rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, BOOLEAN AutoLoadFail);
-VOID rtl8192d_ResetDualMacSwitchVariables(IN PADAPTER Adapter);
+void rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
+void rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, BOOLEAN AutoLoadFail);
+void rtl8192d_ResetDualMacSwitchVariables(IN PADAPTER Adapter);
 u8 GetEEPROMSize8192D(PADAPTER Adapter);
 BOOLEAN PHY_CheckPowerOffFor8192D(PADAPTER Adapter);
-VOID PHY_SetPowerOnFor8192D(PADAPTER Adapter);
+void PHY_SetPowerOnFor8192D(PADAPTER Adapter);
 //void PHY_ConfigMacPhyMode92D(PADAPTER Adapter);
 void rtl8192d_free_hal_data(_adapter * padapter);
 void rtl8192d_set_hal_ops(struct hal_ops *pHalFunc);

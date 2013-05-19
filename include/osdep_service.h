@@ -713,7 +713,7 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 	rtw_mtx_unlock(NULL);
 }
 
-__inline static void _init_workitem(_workitem *pwork, void *pfunc, PVOID cntx)
+__inline static void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
 {
 	printf("%s Not implement yet!\n",__func__);
 }
@@ -969,14 +969,14 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 #ifdef PLATFORM_LINUX
 #define RTW_TIMER_HDL_ARGS void *FunctionContext
 #elif defined(PLATFORM_OS_CE) || defined(PLATFORM_WINDOWS)
-#define RTW_TIMER_HDL_ARGS IN PVOID SystemSpecific1, IN PVOID FunctionContext, IN PVOID SystemSpecific2, IN PVOID SystemSpecific3
+#define RTW_TIMER_HDL_ARGS IN void * SystemSpecific1, IN void * FunctionContext, IN PVOID SystemSpecific2, IN PVOID SystemSpecific3
 #endif
 
 #define RTW_TIMER_HDL_NAME(name) rtw_##name##_timer_hdl
 #define RTW_DECLARE_TIMER_HDL(name) void RTW_TIMER_HDL_NAME(name)(RTW_TIMER_HDL_ARGS)
 
 
-__inline static void _init_workitem(_workitem *pwork, void *pfunc, PVOID cntx)
+__inline static void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20))
 	INIT_WORK(pwork, pfunc);
@@ -1171,7 +1171,7 @@ __inline static void rtw_list_delete(_list *plist)
 	InitializeListHead(plist);
 }
 
-__inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,PVOID cntx)
+__inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void * cntx)
 {
 	NdisMInitializeTimer(ptimer, nic_hdl, pfunc, cntx);
 }
@@ -1186,7 +1186,7 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 	NdisMCancelTimer(ptimer,bcancelled);
 }
 
-__inline static void _init_workitem(_workitem *pwork, void *pfunc, PVOID cntx)
+__inline static void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
 {
 
 	NdisInitializeWorkItem(pwork, pfunc, cntx);

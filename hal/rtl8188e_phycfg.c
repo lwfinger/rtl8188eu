@@ -141,7 +141,7 @@ sic_CalculateBitShift(
 
 static u32
 sic_Read4Byte(
-	PVOID		Adapter,
+	void *		Adapter,
 	u32		offset
 	)
 {
@@ -192,9 +192,9 @@ sic_Read4Byte(
 	return u4ret;
 }
 
-static VOID
+static void
 sic_Write4Byte(
-	PVOID		Adapter,
+	void *		Adapter,
 	u32		offset,
 	u32		data
 	)
@@ -238,7 +238,7 @@ sic_Write4Byte(
 //============================================================
 // extern function
 //============================================================
-static VOID
+static void
 SIC_SetBBReg(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -321,7 +321,7 @@ SIC_QueryBBReg(
 	return (ReturnValue);
 }
 
-VOID
+void
 SIC_Init(
 	IN	PADAPTER	Adapter
 	)
@@ -422,7 +422,7 @@ rtl8188e_PHY_QueryBBReg(
 * Note:		This function is equal to "PutRegSetting" in PHY programming guide
 */
 
-VOID
+void
 rtl8188e_PHY_SetBBReg(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -597,7 +597,7 @@ phy_RFSerialRead(
  *
  *
 */
-static	VOID
+static	void
 phy_RFSerialWrite(
 	IN	PADAPTER			Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -724,7 +724,7 @@ rtl8188e_PHY_QueryRFReg(
 * Return:		None
 * Note:		This function is equal to "PutRFRegSetting" in PHY programming guide
 */
-VOID
+void
 rtl8188e_PHY_SetRFReg(
 	IN	PADAPTER			Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -932,7 +932,7 @@ s32 PHY_MACConfig8188E(PADAPTER Adapter)
 * Return:		None
 * Note:		The initialization value is constant and it should never be changes
 */
-static	VOID
+static	void
 phy_InitBBRFRegisterDefinition(
 	IN	PADAPTER		Adapter
 )
@@ -1074,7 +1074,7 @@ phy_ConfigBBWithParaFile(
 //****************************************
 // The following is for High Power PA
 //****************************************
-VOID
+void
 phy_ConfigBBExternalPA(
 	IN	PADAPTER			Adapter
 )
@@ -1238,7 +1238,7 @@ exit:
 }
 #endif //#ifndef CONFIG_PHY_SETTING_WITH_ODM
 
-VOID
+void
 storePwrIndexDiffRateOffset(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -1430,7 +1430,7 @@ phy_ConfigBBWithPgHeaderFile(
 
 
 
-static VOID
+static void
 phy_BB8192C_Config_1T(
 	IN PADAPTER Adapter
 	)
@@ -1992,7 +1992,7 @@ PHY_CheckBBAndRFOK(
 }
 
 
-VOID
+void
 rtl8192c_PHY_GetHWRegOriginalValue(
 	IN	PADAPTER		Adapter
 	)
@@ -2129,7 +2129,7 @@ phy_TxPwrIdxToDbm(
  * Return:      NONE
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 PHY_GetTxPowerLevel8188E(
 	IN	PADAPTER		Adapter,
 	OUT u32*		powerlevel
@@ -2292,7 +2292,7 @@ void phy_PowerIndexCheck88E(
  *	2009/01/21	MHC		Support new EEPROM format from SD3 requirement.
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 PHY_SetTxPowerLevel8188E(
 	IN	PADAPTER		Adapter,
 	IN	u8				channel
@@ -2390,7 +2390,7 @@ rtl8192c_PHY_SetBeaconHwReg(
 }
 
 
-VOID
+void
 PHY_ScanOperationBackup8188E(
 	IN	PADAPTER	Adapter,
 	IN	u8		Operation
@@ -2413,7 +2413,7 @@ PHY_ScanOperationBackup8188E(
  *			(2) Will two workitem of "switch channel" and "switch channel bandwidth" run
  *			     concurrently?
  *---------------------------------------------------------------------------*/
-static VOID
+static void
 _PHY_SetBWMode92C(
 	IN	PADAPTER	Adapter
 )
@@ -2556,7 +2556,7 @@ _PHY_SetBWMode92C(
  *
  * Note:		We do not take j mode into consideration now
  *---------------------------------------------------------------------------*/
-VOID
+void
 PHY_SetBWMode8188E(
 	IN	PADAPTER					Adapter,
 	IN	HT_CHANNEL_WIDTH	Bandwidth,	// 20M or 40M
@@ -2631,7 +2631,7 @@ static void _PHY_SwChnl8192C(PADAPTER Adapter, u8 channel)
 
 }
 
-VOID
+void
 PHY_SwChnl8188E(	// Call after initialization
 	IN	PADAPTER	Adapter,
 	IN	u8		channel
@@ -2763,7 +2763,7 @@ phy_FinishSwChnlNow(	// We should not call this function directly
 // However, this procedure is performed synchronously  which should be running under
 // passive level.
 //
-VOID
+void
 PHY_SwChnlPhy8192C(	// Only called during initialize
 	IN	PADAPTER	Adapter,
 	IN	u8		channel
@@ -2809,7 +2809,7 @@ PHY_SwChnlPhy8192C(	// Only called during initialize
 //		Note, because we possibly need to configure BB and RF in this function,
 //		so caller should in PASSIVE_LEVEL. 080118, by rcnjko.
 //
-VOID
+void
 PHY_SetMonitorMode8192C(
 	IN	PADAPTER			pAdapter,
 	IN	BOOLEAN				bEnableMonitorMode
@@ -2848,7 +2848,7 @@ PHY_CheckIsLegalRfPath8192C(
 
 }	/* PHY_CheckIsLegalRfPath8192C */
 
-static VOID _PHY_SetRFPathSwitch(
+static void _PHY_SetRFPathSwitch(
 	IN	PADAPTER	pAdapter,
 	IN	BOOLEAN		bMain,
 	IN	BOOLEAN		is2T
@@ -2915,7 +2915,7 @@ static BOOLEAN _PHY_QueryRFPathSwitch(
 }
 
 
-static VOID
+static void
 _PHY_DumpRFReg(IN	PADAPTER	pAdapter)
 {
 	u32 rfRegValue,rfRegOffset;
@@ -2941,7 +2941,7 @@ _PHY_DumpRFReg(IN	PADAPTER	pAdapter)
 //		To dump all Tx FIFO LLT related link-list table.
 //		Added by Roger, 2009.03.10.
 //
-VOID
+void
 DumpBBDbgPort_92CU(
 	IN	PADAPTER			Adapter
 	)

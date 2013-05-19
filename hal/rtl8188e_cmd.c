@@ -627,7 +627,7 @@ void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr
 
 // To check if reserved page content is destroyed by beacon beacuse beacon is too large.
 // 2010.06.23. Added by tynli.
-VOID
+void
 CheckFwRsvdPageContent(
 	IN	PADAPTER		Adapter
 )

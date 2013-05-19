@@ -264,7 +264,7 @@ BOOLEAN	PHY_UpdateTxPowerDbm8188E(	IN	PADAPTER	Adapter,
 											IN	int		powerInDbm	);
 
 //
-VOID
+void
 PHY_ScanOperationBackup8188E(IN	PADAPTER	Adapter,
 										IN	u8		Operation	);
 
@@ -311,14 +311,14 @@ void	PHY_SetMonitorMode8192C(IN	PADAPTER	pAdapter,
 BOOLEAN	PHY_CheckIsLegalRfPath8192C(IN	PADAPTER	pAdapter,
 											IN	u32		eRFPath	);
 
-VOID PHY_SetRFPathSwitch_8188E(IN	PADAPTER	pAdapter, IN	BOOLEAN		bMain);
+void PHY_SetRFPathSwitch_8188E(IN	PADAPTER	pAdapter, IN	BOOLEAN		bMain);
 
-extern	VOID
+extern	void
 PHY_SwitchEphyParameter(
 	IN	PADAPTER			Adapter
 	);
 
-extern	VOID
+extern	void
 PHY_EnableHostClkReq(
 	IN	PADAPTER			Adapter
 	);
@@ -330,7 +330,7 @@ SetAntennaConfig92C(
 	);
 
 #ifdef CONFIG_PHY_SETTING_WITH_ODM
-VOID
+void
 storePwrIndexDiffRateOffset(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -419,7 +419,7 @@ storePwrIndexDiffRateOffset(
 #endif
 
 #if (SIC_ENABLE == 1)
-VOID SIC_Init(IN PADAPTER Adapter);
+void SIC_Init(IN PADAPTER Adapter);
 #endif
 
 

@@ -64,7 +64,7 @@ typedef struct _MP_REG_ENTRY
 typedef struct _USB_EXTENSION {
     LPCUSB_FUNCS    _lpUsbFuncs;
 	USB_HANDLE	    _hDevice;
-    PVOID		    pAdapter;
+    void *		    pAdapter;
 } USB_EXTENSION, *PUSB_EXTENSION;
 #endif
 

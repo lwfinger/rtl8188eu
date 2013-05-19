@@ -195,11 +195,11 @@ struct hal_ops {
 	void	(*SetHwRegHandler)(_adapter *padapter, u8	variable,u8* val);
 	void	(*GetHwRegHandler)(_adapter *padapter, u8	variable,u8* val);
 
-	u8	(*GetHalDefVarHandler)(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
-	u8	(*SetHalDefVarHandler)(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
+	u8	(*GetHalDefVarHandler)(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
+	u8	(*SetHalDefVarHandler)(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
 
-	void	(*GetHalODMVarHandler)(_adapter *padapter, HAL_ODM_VARIABLE eVariable, PVOID pValue1,BOOLEAN bSet);
-	void	(*SetHalODMVarHandler)(_adapter *padapter, HAL_ODM_VARIABLE eVariable, PVOID pValue1,BOOLEAN bSet);
+	void	(*GetHalODMVarHandler)(_adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet);
+	void	(*SetHalODMVarHandler)(_adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet);
 
 	void	(*UpdateRAMaskHandler)(_adapter *padapter, u32 mac_id, u8 rssi_level);
 	void	(*SetBeaconRelatedRegistersHandler)(_adapter *padapter);
@@ -395,11 +395,11 @@ void rtw_hal_chip_configure(_adapter *padapter);
 void rtw_hal_read_chip_info(_adapter *padapter);
 void rtw_hal_read_chip_version(_adapter *padapter);
 
-u8 rtw_hal_set_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
-u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
+u8 rtw_hal_set_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
+u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
 
-void rtw_hal_set_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, PVOID pValue1,BOOLEAN bSet);
-void	rtw_hal_get_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, PVOID pValue1,BOOLEAN bSet);
+void rtw_hal_set_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet);
+void	rtw_hal_get_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet);
 
 void rtw_hal_enable_interrupt(_adapter *padapter);
 void rtw_hal_disable_interrupt(_adapter *padapter);

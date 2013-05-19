@@ -161,7 +161,7 @@ static void _init_mp_priv_(struct mp_priv *pmp_priv)
 /*
 void mp_wi_callback(
 	IN NDIS_WORK_ITEM*	pwk_item,
-	IN PVOID			cntx
+	IN void *			cntx
 	)
 {
 	_adapter* padapter =(_adapter *)cntx;
@@ -468,7 +468,7 @@ MPT_InitializeAdapter(
  *	05/18/2007	MHC		Add normal driver MPHalt code.
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 MPT_DeInitAdapter(
 	IN	PADAPTER	pAdapter
 	)
