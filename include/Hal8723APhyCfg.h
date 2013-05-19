@@ -27,4 +27,3 @@ int	PHY_RFConfig8723A(	IN	PADAPTER	Adapter	);
 s32 PHY_MACConfig8723A(PADAPTER padapter);
 
 #endif
-

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -22,18 +22,18 @@
  * Module:	__INC_HAL8192DPHYCFG_H
  *
  *
- * Note:	
- *			
+ * Note:
+ *
  *
  * Export:	Constants, macro, functions(API), global variables(None).
  *
- * Abbrev:	
+ * Abbrev:
  *
  * History:
- *		Data		Who		Remark 
- *      08/07/2007  MHC    	1. Porting from 9x series PHYCFG.h.
+ *		Data		Who		Remark
+ *      08/07/2007  MHC		1. Porting from 9x series PHYCFG.h.
  *							2. Reorganize code architecture.
- * 
+ *
  *****************************************************************************/
  /* Check to see if the file has been included already.  */
 #ifndef __INC_HAL8192DPHYCFG_H
@@ -74,7 +74,7 @@
 /*--------------------------Define Parameters-------------------------------*/
 
 
-/*------------------------------Define structure----------------------------*/ 
+/*------------------------------Define structure----------------------------*/
 typedef enum _SwChnlCmdID{
 	CmdID_End,
 	CmdID_SetTxPowerLevel,
@@ -115,7 +115,7 @@ typedef enum _RF_RADIO_PATH{
 	RF_PATH_B = 1,			//Radio Path B
 	RF_PATH_C = 2,			//Radio Path C
 	RF_PATH_D = 3,			//Radio Path D
-	//RF_PATH_MAX				//Max RF number 90 support 
+	//RF_PATH_MAX				//Max RF number 90 support
 }RF_RADIO_PATH_E, *PRF_RADIO_PATH_E;
 
 #define	RF_PATH_MAX			2
@@ -150,8 +150,8 @@ typedef enum _WIRELESS_MODE {
 
 #if (RTL8192D_DUAL_MAC_MODE_SWITCH == 1)
 typedef enum _BaseBand_Config_Type{
-	BaseBand_Config_PHY_REG = 0,			
-	BaseBand_Config_AGC_TAB = 1,			
+	BaseBand_Config_PHY_REG = 0,
+	BaseBand_Config_AGC_TAB = 1,
 	BaseBand_Config_AGC_TAB_2G = 2,
 	BaseBand_Config_AGC_TAB_5G = 3,
 }BaseBand_Config_Type, *PBaseBand_Config_Type;
@@ -166,7 +166,7 @@ typedef enum _BaseBand_Config_Type{
 typedef enum _MACPHY_MODE_8192D{
 	SINGLEMAC_SINGLEPHY,	//SMSP
 	DUALMAC_DUALPHY,		//DMDP
-	DUALMAC_SINGLEPHY,	//DMSP	
+	DUALMAC_SINGLEPHY,	//DMSP
 }MACPHY_MODE_8192D,*PMACPHY_MODE_8192D;
 
 typedef enum _MACPHY_MODE_CHANGE_ACTION{
@@ -180,7 +180,7 @@ typedef enum _MACPHY_MODE_CHANGE_ACTION{
 }MACPHY_MODE_CHANGE_ACTION,*PMACPHY_MODE_CHANGE_ACTION;
 
 typedef enum _BAND_TYPE{
-	BAND_ON_2_4G 	= 1,
+	BAND_ON_2_4G	= 1,
 	BAND_ON_5G	= 2,
 	BAND_ON_BOTH,
 	BANDMAX
@@ -201,77 +201,77 @@ typedef enum _PHY_Rate_Tx_Power_Offset_Area{
 typedef	enum _RF_TYPE_8190P{
 	RF_TYPE_MIN,	// 0
 	RF_8225=1,			// 1 11b/g RF for verification only
-	RF_8256=2,			// 2 11b/g/n 
+	RF_8256=2,			// 2 11b/g/n
 	RF_8258=3,			// 3 11a/b/g/n RF
 	RF_6052=4,		// 4 11b/g/n RF
 	//RF_6052=5,		// 4 11b/g/n RF
 	// TODO: We sholud remove this psudo PHY RF after we get new RF.
-	RF_PSEUDO_11N=5,	// 5, It is a temporality RF. 
+	RF_PSEUDO_11N=5,	// 5, It is a temporality RF.
 }RF_TYPE_8190P_E,*PRF_TYPE_8190P_E;
 
 
 
 typedef struct _BB_REGISTER_DEFINITION{
-	u32 rfintfs;			// set software control: 
+	u32 rfintfs;			// set software control:
 							//		0x870~0x877[8 bytes]
-							
-	u32 rfintfi;			// readback data: 
+
+	u32 rfintfi;			// readback data:
 							//		0x8e0~0x8e7[8 bytes]
-							
-	u32 rfintfo; 		// output data: 
+
+	u32 rfintfo;		// output data:
 							//		0x860~0x86f [16 bytes]
-							
-	u32 rfintfe; 		// output enable: 
+
+	u32 rfintfe;		// output enable:
 							//		0x860~0x86f [16 bytes]
-							
+
 	u32 rf3wireOffset;	// LSSI data:
 							//		0x840~0x84f [16 bytes]
-							
-	u32 rfLSSI_Select;	// BB Band Select: 
+
+	u32 rfLSSI_Select;	// BB Band Select:
 							//		0x878~0x87f [8 bytes]
-							
-	u32 rfTxGainStage;	// Tx gain stage: 
+
+	u32 rfTxGainStage;	// Tx gain stage:
 							//		0x80c~0x80f [4 bytes]
-							
-	u32 rfHSSIPara1; 	// wire parameter control1 : 
+
+	u32 rfHSSIPara1;	// wire parameter control1 :
 							//		0x820~0x823,0x828~0x82b, 0x830~0x833, 0x838~0x83b [16 bytes]
-							
-	u32 rfHSSIPara2; 	// wire parameter control2 : 
+
+	u32 rfHSSIPara2;	// wire parameter control2 :
 							//		0x824~0x827,0x82c~0x82f, 0x834~0x837, 0x83c~0x83f [16 bytes]
-								
-	u32 rfSwitchControl; //Tx Rx antenna control : 
+
+	u32 rfSwitchControl; //Tx Rx antenna control :
 							//		0x858~0x85f [16 bytes]
-								
-	u32 rfAGCControl1; 	//AGC parameter control1 : 
-							//		0xc50~0xc53,0xc58~0xc5b, 0xc60~0xc63, 0xc68~0xc6b [16 bytes] 
-								
-	u32 rfAGCControl2; 	//AGC parameter control2 : 
-							//		0xc54~0xc57,0xc5c~0xc5f, 0xc64~0xc67, 0xc6c~0xc6f [16 bytes] 
-							
-	u32 rfRxIQImbalance; //OFDM Rx IQ imbalance matrix : 
+
+	u32 rfAGCControl1;	//AGC parameter control1 :
+							//		0xc50~0xc53,0xc58~0xc5b, 0xc60~0xc63, 0xc68~0xc6b [16 bytes]
+
+	u32 rfAGCControl2;	//AGC parameter control2 :
+							//		0xc54~0xc57,0xc5c~0xc5f, 0xc64~0xc67, 0xc6c~0xc6f [16 bytes]
+
+	u32 rfRxIQImbalance; //OFDM Rx IQ imbalance matrix :
 							//		0xc14~0xc17,0xc1c~0xc1f, 0xc24~0xc27, 0xc2c~0xc2f [16 bytes]
-							
-	u32 rfRxAFE;  		//Rx IQ DC ofset and Rx digital filter, Rx DC notch filter : 
+
+	u32 rfRxAFE;		//Rx IQ DC ofset and Rx digital filter, Rx DC notch filter :
 							//		0xc10~0xc13,0xc18~0xc1b, 0xc20~0xc23, 0xc28~0xc2b [16 bytes]
-							
+
 	u32 rfTxIQImbalance; //OFDM Tx IQ imbalance matrix
 							//		0xc80~0xc83,0xc88~0xc8b, 0xc90~0xc93, 0xc98~0xc9b [16 bytes]
-							
-	u32 rfTxAFE; 		//Tx IQ DC Offset and Tx DFIR type
+
+	u32 rfTxAFE;		//Tx IQ DC Offset and Tx DFIR type
 							//		0xc84~0xc87,0xc8c~0xc8f, 0xc94~0xc97, 0xc9c~0xc9f [16 bytes]
-								
-	u32 rfLSSIReadBack; 	//LSSI RF readback data SI mode
+
+	u32 rfLSSIReadBack;	//LSSI RF readback data SI mode
 								//		0x8a0~0x8af [16 bytes]
 
-	u32 rfLSSIReadBackPi; 	//LSSI RF readback data PI mode 0x8b8-8bc for Path A and B
+	u32 rfLSSIReadBackPi;	//LSSI RF readback data PI mode 0x8b8-8bc for Path A and B
 
 }BB_REGISTER_DEFINITION_T, *PBB_REGISTER_DEFINITION_T;
 
 
-typedef struct _R_ANTENNA_SELECT_OFDM{	
-	u32			r_tx_antenna:4;	
+typedef struct _R_ANTENNA_SELECT_OFDM{
+	u32			r_tx_antenna:4;
 	u32			r_ant_l:4;
-	u32			r_ant_non_ht:4;	
+	u32			r_ant_non_ht:4;
 	u32			r_ant_ht1:4;
 	u32			r_ant_ht2:4;
 	u32			r_ant_ht_s1:4;
@@ -281,12 +281,12 @@ typedef struct _R_ANTENNA_SELECT_OFDM{
 }R_ANTENNA_SELECT_OFDM;
 
 typedef struct _R_ANTENNA_SELECT_CCK{
-	u8			r_cckrx_enable_2:2;	
+	u8			r_cckrx_enable_2:2;
 	u8			r_cckrx_enable:2;
 	u8			r_ccktx_enable:4;
 }R_ANTENNA_SELECT_CCK;
 
-/*------------------------------Define structure----------------------------*/ 
+/*------------------------------Define structure----------------------------*/
 
 
 /*------------------------Export global variable----------------------------*/
@@ -329,7 +329,7 @@ extern	int	PHY_BBConfig8192D(	IN	PADAPTER	Adapter	);
 extern	int	PHY_RFConfig8192D(	IN	PADAPTER	Adapter	);
 /* RF config */
 int	rtl8192d_PHY_ConfigRFWithParaFile(	IN	PADAPTER	Adapter,
-												IN	u8* 	pFileName,
+												IN	u8*	pFileName,
 												IN	RF_RADIO_PATH_E	eRFPath);
 int	rtl8192d_PHY_ConfigRFWithHeaderFile(	IN	PADAPTER			Adapter,
 												IN	RF_CONTENT			Content,
@@ -344,21 +344,21 @@ void	rtl8192d_PHY_GetHWRegOriginalValue(	IN	PADAPTER		Adapter	);
 //
 // RF Power setting
 //
-//extern	BOOLEAN	PHY_SetRFPowerState(IN	PADAPTER			Adapter, 
+//extern	BOOLEAN	PHY_SetRFPowerState(IN	PADAPTER			Adapter,
 //									IN	RT_RF_POWER_STATE	eRFPowerState);
 
 //
 // BB TX Power R/W
 //
 void	PHY_GetTxPowerLevel8192D(	IN	PADAPTER		Adapter,
-											OUT u32*    		powerlevel	);
+											OUT u32*		powerlevel	);
 void	PHY_SetTxPowerLevel8192D(	IN	PADAPTER		Adapter,
 											IN	u8			channel	);
 BOOLEAN	PHY_UpdateTxPowerDbm8192D(	IN	PADAPTER	Adapter,
 											IN	int		powerInDbm	);
 
 //
-VOID 
+VOID
 PHY_ScanOperationBackup8192D(IN	PADAPTER	Adapter,
 										IN	u8		Operation	);
 
@@ -396,7 +396,7 @@ void	PHY_SwChnlPhy8192D(	IN	PADAPTER		pAdapter,
 
 extern void ChkFwCmdIoDone(	IN	PADAPTER	Adapter);
 
-	
+
 //
 // BB/MAC/RF other monitor API
 //
@@ -410,7 +410,7 @@ BOOLEAN	PHY_CheckIsLegalRfPath8192D(IN	PADAPTER	pAdapter,
 //
 // Modify the value of the hw register when beacon interval be changed.
 //
-void	
+void
 rtl8192d_PHY_SetBeaconHwReg(	IN	PADAPTER		Adapter,
 					IN	u16			BeaconInterval	);
 
@@ -428,7 +428,7 @@ PHY_EnableHostClkReq(
 BOOLEAN
 SetAntennaConfig92C(
 	IN	PADAPTER	Adapter,
-	IN	u8		DefaultAnt	
+	IN	u8		DefaultAnt
 	);
 
 VOID
@@ -439,7 +439,7 @@ PHY_UpdateBBRFConfiguration8192D(
 
 VOID PHY_ReadMacPhyMode92D(
 	IN PADAPTER	Adapter,
-	IN BOOLEAN 	AutoloadFail	
+	IN BOOLEAN	AutoloadFail
 );
 
 VOID PHY_ConfigMacPhyMode92D(
@@ -460,7 +460,7 @@ rtl8192d_PHY_InitRxSetting(
 );
 
 
-VOID 
+VOID
 rtl8192d_PHY_SetRFPathSwitch(IN	PADAPTER	pAdapter, IN	BOOLEAN		bMain);
 
 VOID
@@ -469,7 +469,7 @@ HalChangeCCKStatus8192D(
 	IN	BOOLEAN		bCCKDisable
 );
 
-VOID 
+VOID
 PHY_InitPABias92D(IN	PADAPTER Adapter);
 
 /*--------------------------Exported Function prototype---------------------*/
@@ -483,4 +483,3 @@ PHY_InitPABias92D(IN	PADAPTER Adapter);
 #define PHY_SetMacReg	PHY_SetBBReg
 
 #endif	// __INC_HAL8192SPHYCFG_H
-

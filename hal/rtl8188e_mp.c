@@ -30,7 +30,7 @@
 s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	
+
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
 
@@ -58,7 +58,7 @@ s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	
+
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
 
@@ -110,14 +110,14 @@ static void Hal_disable_dm(PADAPTER padapter)
  *
  *---------------------------------------------------------------------------*/
 void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
-{	
+{
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct mp_priv	*pmp = &pAdapter->mppriv;
 	u1Byte				ChannelToSw = pmp->channel;
 	ULONG				ulRateIdx = pmp->rateidx;
 	ULONG				ulbandwidth = pmp->bandwidth;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
-	
+
 	// <20120525, Kordan> Dynamic mechanism for APK, asked by Dennis.
 		pmp->MptCtx.backup0x52_RF_A = (u1Byte)PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
 		pmp->MptCtx.backup0x52_RF_B = (u1Byte)PHY_QueryRFReg(pAdapter, RF_PATH_B, RF_0x52, 0x000F0);
@@ -304,13 +304,13 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
  */
 void Hal_SetChannel(PADAPTER pAdapter)
 {
-	u8 		eRFPath;
+	u8		eRFPath;
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct mp_priv	*pmp = &pAdapter->mppriv;
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
-	
+
 	u8		channel = pmp->channel;
 	u8		bandwidth = pmp->bandwidth;
 	u8		rate = pmp->rateidx;
@@ -319,7 +319,7 @@ void Hal_SetChannel(PADAPTER pAdapter)
 	// set RF channel register
 	for (eRFPath = 0; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
 	{
-      		if (IS_HARDWARE_TYPE_8192D(pAdapter))
+		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 			_write_rfreg(pAdapter, (RF_RADIO_PATH_E)eRFPath, ODM_CHANNEL, 0xFF, channel);
 		else
 			_write_rfreg(pAdapter, eRFPath, ODM_CHANNEL, 0x3FF, channel);
@@ -530,9 +530,9 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 		case ANTENNA_A:
 			p_ofdm_tx->r_tx_antenna		= 0x1;
 			r_ofdm_tx_en_val		= 0x1;
-			p_ofdm_tx->r_ant_l 		= 0x1;
-			p_ofdm_tx->r_ant_ht_s1 		= 0x1;
-			p_ofdm_tx->r_ant_non_ht_s1 	= 0x1;
+			p_ofdm_tx->r_ant_l		= 0x1;
+			p_ofdm_tx->r_ant_ht_s1		= 0x1;
+			p_ofdm_tx->r_ant_non_ht_s1	= 0x1;
 			p_cck_txrx->r_ccktx_enable	= 0x8;
 			chgTx = 1;
 
@@ -561,9 +561,9 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 		case ANTENNA_B:
 			p_ofdm_tx->r_tx_antenna		= 0x2;
 			r_ofdm_tx_en_val		= 0x2;
-			p_ofdm_tx->r_ant_l 		= 0x2;
-			p_ofdm_tx->r_ant_ht_s1 		= 0x2;
-			p_ofdm_tx->r_ant_non_ht_s1 	= 0x2;
+			p_ofdm_tx->r_ant_l		= 0x2;
+			p_ofdm_tx->r_ant_ht_s1		= 0x2;
+			p_ofdm_tx->r_ant_non_ht_s1	= 0x2;
 			p_cck_txrx->r_ccktx_enable	= 0x4;
 			chgTx = 1;
 
@@ -594,9 +594,9 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 		case ANTENNA_AB:	// For 8192S
 			p_ofdm_tx->r_tx_antenna		= 0x3;
 			r_ofdm_tx_en_val		= 0x3;
-			p_ofdm_tx->r_ant_l 		= 0x3;
-			p_ofdm_tx->r_ant_ht_s1 		= 0x3;
-			p_ofdm_tx->r_ant_non_ht_s1 	= 0x3;
+			p_ofdm_tx->r_ant_l		= 0x3;
+			p_ofdm_tx->r_ant_ht_s1		= 0x3;
+			p_ofdm_tx->r_ant_non_ht_s1	= 0x3;
 			p_cck_txrx->r_ccktx_enable	= 0xC;
 			chgTx = 1;
 
@@ -631,22 +631,22 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 	switch (pAdapter->mppriv.antenna_rx)
 	{
 		case ANTENNA_A:
-			r_rx_antenna_ofdm 		= 0x1;	// A
-			p_cck_txrx->r_cckrx_enable 	= 0x0;	// default: A
+			r_rx_antenna_ofdm		= 0x1;	// A
+			p_cck_txrx->r_cckrx_enable	= 0x0;	// default: A
 			p_cck_txrx->r_cckrx_enable_2	= 0x0;	// option: A
 			chgRx = 1;
 			break;
 
 		case ANTENNA_B:
-			r_rx_antenna_ofdm 		= 0x2;	// B
-			p_cck_txrx->r_cckrx_enable 	= 0x1;	// default: B
+			r_rx_antenna_ofdm		= 0x2;	// B
+			p_cck_txrx->r_cckrx_enable	= 0x1;	// default: B
 			p_cck_txrx->r_cckrx_enable_2	= 0x1;	// option: B
 			chgRx = 1;
 			break;
 
 		case ANTENNA_AB:
-			r_rx_antenna_ofdm 		= 0x3;	// AB
-			p_cck_txrx->r_cckrx_enable 	= 0x0;	// default:A
+			r_rx_antenna_ofdm		= 0x3;	// AB
+			p_cck_txrx->r_cckrx_enable	= 0x0;	// default:A
 			p_cck_txrx->r_cckrx_enable_2	= 0x1;	// option:B
 			chgRx = 1;
 			break;
@@ -707,7 +707,7 @@ s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 
 void Hal_TriggerRFThermalMeter(PADAPTER pAdapter)
 {
-  
+
 	_write_rfreg( pAdapter, RF_PATH_A , RF_T_METER_88E , BIT17 |BIT16 , 0x03 );
 
 //	RT_TRACE(_module_mp_,_drv_alert_, ("TriggerRFThermalMeter() finished.\n" ));
@@ -720,7 +720,7 @@ u8 Hal_ReadRFThermalMeter(PADAPTER pAdapter)
 	//ThermalValue = _read_rfreg(pAdapter, RF_PATH_A, RF_T_METER, 0x1F);	// 0x24: RF Reg[4:0]
 
 	ThermalValue = _read_rfreg(pAdapter, RF_PATH_A, RF_T_METER_88E, 0xfc00);
-	
+
 //	RT_TRACE(_module_mp_, _drv_alert_, ("ThermalValue = 0x%x\n", ThermalValue));
 	return (u8)ThermalValue;
 }
@@ -760,7 +760,7 @@ void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 		//for dynamic set Power index.
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
-		
+
 	}
 	else// Stop Single Carrier.
 	{
@@ -784,7 +784,7 @@ void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 		//Stop for dynamic set Power index.
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000100);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
-		
+
 	}
 }
 
@@ -815,7 +815,7 @@ void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 	{
 		RT_TRACE(_module_mp_,_drv_alert_, ("SetSingleToneTx: test start\n"));
 		{   // <20120326, Kordan> To amplify the power of tone for Xtal calibration. (asked by Edlu)
-            if (IS_HARDWARE_TYPE_8188E(pAdapter)) 
+            if (IS_HARDWARE_TYPE_8188E(pAdapter))
             {
                 reg58 = PHY_QueryRFReg(pAdapter, RF_PATH_A, LNA_Low_Gain_3, bRFRegOffsetMask);
                 reg58 &= 0xFFFFFFF0;
@@ -827,7 +827,7 @@ void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
         }
 
 		if (is92C)
-       		 {
+		 {
 			_write_rfreg(pAdapter, RF_PATH_A, 0x21, BIT19, 0x01);
 			rtw_usleep_os(100);
 			if (rfPath == RF_PATH_A)
@@ -836,7 +836,7 @@ void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 				write_rfreg(pAdapter, RF_PATH_A, 0x00, 0x10000); // PAD all on.
 			write_rfreg(pAdapter, rfPath, 0x00, 0x2001f); // PAD all on.
 			rtw_usleep_os(100);
-		} 
+		}
 		else
 		{
 			write_rfreg(pAdapter, rfPath, 0x21, 0xd4000);
@@ -848,21 +848,21 @@ void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 		//for dynamic set Power index.
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
-		
+
 	}
 	else// Stop Single Tone.
 	{
 			RT_TRACE(_module_mp_,_drv_alert_, ("SetSingleToneTx: test stop\n"));
-			
-	 	{   // <20120326, Kordan> To amplify the power of tone for Xtal calibration. (asked by Edlu)
+
+		{   // <20120326, Kordan> To amplify the power of tone for Xtal calibration. (asked by Edlu)
             // <20120326, Kordan> Only in single tone mode. (asked by Edlu)
-            if (IS_HARDWARE_TYPE_8188E(pAdapter)) 
+            if (IS_HARDWARE_TYPE_8188E(pAdapter))
             {
                 reg58 = PHY_QueryRFReg(pAdapter, RF_PATH_A, LNA_Low_Gain_3, bRFRegOffsetMask);
                 reg58 &= 0xFFFFFFF0;
                 PHY_SetRFReg(pAdapter, RF_PATH_A, LNA_Low_Gain_3, bRFRegOffsetMask, reg58);
             }
-	
+
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, 0x1);
 		write_bbreg(pAdapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
 		}
@@ -882,9 +882,9 @@ void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 		//Stop for dynamic set Power index.
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000100);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
-		
+
 	}
-	
+
 }
 
 
@@ -918,7 +918,7 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
 		//for dynamic set Power index.
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
-		
+
 	}
 	else// Stop Carrier Suppression.
 	{
@@ -936,7 +936,7 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
 		//Stop for dynamic set Power index.
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000100);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
-		
+
 	}
 	//DbgPrint("\n MPT_ProSetCarrierSupp() is finished.\n");
 }
@@ -1021,7 +1021,7 @@ void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 		//for dynamic set Power index.
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
-		
+
 	} else {
 		RT_TRACE(_module_mp_,_drv_info_, ("SetOFDMContinuousTx: test stop\n"));
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMContinueTx, bDisable);

@@ -24,4 +24,3 @@
 int	PHY_RF6052_Config8723A(	IN	PADAPTER		Adapter	);
 
 #endif
-

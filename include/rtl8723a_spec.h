@@ -335,8 +335,8 @@
 // SDIO host local register space mapping.
 #define SDIO_LOCAL_MSK				0x0FFF
 #define WLAN_IOREG_MSK				0x7FFF
-#define WLAN_FIFO_MSK		      		0x1FFF	// Aggregation Length[12:0]
-#define WLAN_RX0FF_MSK			      	0x0003
+#define WLAN_FIFO_MSK				0x1FFF	// Aggregation Length[12:0]
+#define WLAN_RX0FF_MSK				0x0003
 
 #define SDIO_WITHOUT_REF_DEVICE_ID		0	// Without reference to the SDIO Device ID
 #define SDIO_LOCAL_DEVICE_ID			0	// 0b[16], 000b[15:13]
@@ -438,7 +438,7 @@
 
 // SDIO Tx FIFO related
 #define SDIO_TX_FREE_PG_QUEUE			4	// The number of Tx FIFO free page
-#define SDIO_TX_FIFO_PAGE_SZ 			128
+#define SDIO_TX_FIFO_PAGE_SZ			128
 
 // vivi added for new cam search flow, 20091028
 #define SCR_TxUseBroadcastDK			BIT6	// Force Tx Use Broadcast Default Key
@@ -528,4 +528,3 @@
 
 
 #endif
-

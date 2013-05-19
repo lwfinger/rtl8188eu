@@ -63,7 +63,7 @@
 #define _module_hci_ops_os_c_		BIT(24)
 #define _module_rtl871x_ioctl_os_c	BIT(25)
 #define _module_rtl8712_cmd_c_		BIT(26)
-#define	_module_rtl8192c_xmit_c_ 	BIT(27)
+#define	_module_rtl8192c_xmit_c_	BIT(27)
 #define _module_hal_xmit_c_		BIT(28)
 #define _module_efuse_			BIT(29)
 #define _module_rtl8712_recv_c_		BIT(30)
@@ -157,7 +157,7 @@
 
 #define DRIVER_PREFIX	"RTL8188: "
 
-#define DBG_871X_LEVEL(_Level, fmt, arg...)     			\
+#define DBG_871X_LEVEL(_Level, fmt, arg...)				\
 	do {								\
 		if (_Level <= GlobalDebugLevel)				\
 			_dbgdump(DRIVER_PREFIX"ERROR " fmt, ##arg);	\
@@ -197,11 +197,11 @@ extern u32 GlobalDebugLevel;
 				 DRIVER_PREFIX, __func__, __LINE__);	\
 	} while (0)
 
-#define _func_exit_ 							\
+#define _func_exit_							\
 	do {								\
-		if (GlobalDebugLevel >= _drv_debug_) 			\
+		if (GlobalDebugLevel >= _drv_debug_)			\
 			_dbgdump("%s : %s exits at %d\n",		\
-				 DRIVER_PREFIX, __func__, __LINE__); 	\
+				 DRIVER_PREFIX, __func__, __LINE__);	\
 	} while (0)
 
 #define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)\
@@ -232,7 +232,7 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
- 	int proc_set_write_reg(struct file *file, const char __user *buffer,
+	int proc_set_write_reg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_read_reg(char *page, char **start,
@@ -350,7 +350,7 @@ extern u32 GlobalDebugLevel;
 	int proc_get_ht_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
-			  
+
 	int proc_set_ht_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
@@ -360,18 +360,18 @@ extern u32 GlobalDebugLevel;
 
 	int proc_set_cbw40_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
-	
+
 	int proc_get_ampdu_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
-			  
+
 	int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
-	
+
 	int proc_get_rx_stbc(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
-		
+
 	int proc_set_rx_stbc(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 #endif //CONFIG_80211N_HT
@@ -399,4 +399,3 @@ extern u32 GlobalDebugLevel;
 #endif //CONFIG_PROC_DEBUG
 
 #endif	//__RTW_DEBUG_H__
-

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -21,7 +21,7 @@
 #define _RTW_BR_EXT_H_
 
 #if 1	// rtw_wifi_driver
-#define CL_IPV6_PASS    	1
+#define CL_IPV6_PASS		1
 #define MACADDRLEN		6
 #define _DEBUG_ERR		DBG_8192C
 #define _DEBUG_INFO		//DBG_8192C
@@ -49,7 +49,7 @@ struct nat25_network_db_entry
 	atomic_t						use_count;
 	unsigned char					macAddr[6];
 	unsigned long					ageing_timer;
-	unsigned char    				networkAddr[MAX_NETWORK_ADDR_LEN];
+	unsigned char					networkAddr[MAX_NETWORK_ADDR_LEN];
 };
 
 enum NAT25_METHOD {
@@ -73,4 +73,3 @@ struct br_ext_info {
 void nat25_db_cleanup(_adapter *priv);
 
 #endif // _RTW_BR_EXT_H_
-

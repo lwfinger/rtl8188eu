@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -24,17 +24,16 @@
 
 #include "odm_precomp.h"
 
-VOID 
+VOID
 ODM_InitDebugSetting(
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
-pDM_Odm->DebugLevel				= 	ODM_DBG_TRACE;
+pDM_Odm->DebugLevel				=	ODM_DBG_TRACE;
 
-pDM_Odm->DebugComponents			= 
+pDM_Odm->DebugComponents			=
 \
 									0;
 }
 
 u32 GlobalDebugLevel;
-

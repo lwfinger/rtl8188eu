@@ -135,4 +135,3 @@ u8 HalPwrSeqCmdParsing(
 	WLAN_PWR_CFG	PwrCfgCmd[]);
 
 #endif
-

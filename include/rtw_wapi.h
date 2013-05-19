@@ -47,16 +47,16 @@ do { if (wapi_debug_component & (component)){ \
 		if (!(_Exp))									\
 		{											\
 			printk("RTWLAN: ");					\
-                	printk( "Assertion failed! %s,%s,line=%d\n", \
-                	#_Exp,__func__,__LINE__);          \
+			printk( "Assertion failed! %s,%s,line=%d\n", \
+			#_Exp,__func__,__LINE__);          \
 			return;						\
 		}
 #define RT_ASSERT_RET_VALUE(_Exp,Ret)								\
 		if (!(_Exp))									\
 		{											\
 			printk("RTWLAN: ");					\
-                	printk( "Assertion failed! %s,%s,line=%d\n", \
-                	#_Exp,__func__,__LINE__);          \
+			printk( "Assertion failed! %s,%s,line=%d\n", \
+			#_Exp,__func__,__LINE__);          \
 			return (Ret);						\
 		}
 
@@ -75,7 +75,7 @@ enum WAPI_DEBUG {
 	WAPI_RX				= 1<<3,
 	WAPI_MLME				= 1<<4,
 	WAPI_IOCTL				= 1<<5,
-	WAPI_ERR		        	= 1<<31
+	WAPI_ERR				= 1<<31
 };
 
 #define			WAPI_MAX_BKID_NUM				4
@@ -149,7 +149,7 @@ typedef struct _RT_WAPI_T
 //BKID
 	RT_WAPI_BKID		wapiBKID[WAPI_MAX_BKID_NUM];
 	struct list_head		wapiBKIDIdleList;
-	struct list_head  		wapiBKIDStoreList;
+	struct list_head		wapiBKIDStoreList;
 //Key for Tx Multicast/Broadcast
 	RT_WAPI_KEY		      wapiTxMsk;
 

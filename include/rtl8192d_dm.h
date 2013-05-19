@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -28,7 +28,7 @@
 //============================================================
 enum{
 	UP_LINK,
-	DOWN_LINK,	
+	DOWN_LINK,
 };
 /*------------------------Export global variable----------------------------*/
 /*------------------------Export global variable----------------------------*/
@@ -51,13 +51,13 @@ enum{
 #define IQK_Matrix_REG_NUM	8
 #define IQK_Matrix_Settings_NUM	1+24+21
 //###### duplicate code,will move to ODM #########
-struct 	dm_priv	
+struct	dm_priv
 {
 	u8	DM_Type;
 	u8	DMFlag;
 	u8	InitDMFlag;
 	u32	InitODMFlag;
-	
+
 	//* Upper and Lower Signal threshold for Rate Adaptive*/
 	int	UndecoratedSmoothedPWDB;
 	int	EntryMinUndecoratedSmoothedPWDB;
@@ -73,22 +73,22 @@ struct 	dm_priv
 
 	PS_T	DM_PSTable;
 
-	FALSE_ALARM_STATISTICS	FalseAlmCnt;	
-	
+	FALSE_ALARM_STATISTICS	FalseAlmCnt;
+
 	//for rate adaptive, in fact,  88c/92c fw will handle this
 	u8	bUseRAMask;
 	RATE_ADAPTIVE	RateAdaptive;
 */
-	
+
 	//for High Power
 	u8	bDynamicTxPowerEnable;
 	u8	LastDTPLvl;
 	u8	DynamicTxHighPowerLvl;//Add by Jacken Tx Power Control for Near/Far Range 2008/03/06
-		
+
 	//for tx power tracking
 	u8	bTXPowerTracking;
 	u8	TXPowercount;
-	u8	bTXPowerTrackingInit;	
+	u8	bTXPowerTrackingInit;
 	u8	TxPowerTrackControl;	//for mp mode, turn off txpwrtracking as default
 	u8	TM_Trigger;
 
@@ -111,7 +111,7 @@ struct 	dm_priv
 	u8	bAPKdone;
 	u8	bAPKThermalMeterIgnore;
 	u32	RegA24;
-	
+
 	//for IQK
 	u32	Reg874;
 	u32	RegC08;
@@ -125,22 +125,22 @@ struct 	dm_priv
 	u32	IQK_BB_backup[IQK_BB_REG_NUM];
 
 	u8	bCCKinCH14;
-	
+
 	char	CCK_index;
 	//u8 Record_CCK_20Mindex;
 	//u8 Record_CCK_40Mindex;
 	char	OFDM_index[2];
-	
+
 	BOOLEAN	bDPKdone[2];
 
 	u8	PowerIndex_backup[6];
-	
+
 	//for Antenna diversity
 //#ifdef CONFIG_ANTENNA_DIVERSITY
 	//SWAT_T DM_SWAT_Table;
 //#endif
        //Neil Chen----2011--06--23-----
-       //3 Path Diversity 
+       //3 Path Diversity
 	BOOLEAN		bPathDiv_Enable;	//For 92D Non-interrupt Antenna Diversity by Neil ,add by wl.2011.07.19
 	BOOLEAN		RSSI_test;
 	s32			RSSI_sum_A;
@@ -152,7 +152,7 @@ struct 	dm_priv
 
 	//for TxPwrTracking
 	int	RegE94;
-	int 	RegE9C;
+	int	RegE9C;
 	int	RegEB4;
 	int	RegEBC;
 #if MP_DRIVER == 1
@@ -180,4 +180,3 @@ void	rtl8192d_InitHalDm(IN PADAPTER Adapter);
 void	rtl8192d_HalDmWatchDog(IN PADAPTER Adapter);
 
 #endif	//__HAL8190PCIDM_H__
-

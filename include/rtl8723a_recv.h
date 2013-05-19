@@ -38,4 +38,3 @@ void update_recvframe_attrib(union recv_frame *precvframe, struct recv_stat *prx
 void update_recvframe_phyinfo(union recv_frame *precvframe, struct phy_stat *pphy_info);
 #endif
 #endif
-

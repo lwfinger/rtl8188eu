@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -18,7 +18,7 @@
  *
  ******************************************************************************/
 #ifndef __IOCTL_CFG80211_H__
-#define __IOCTL_CFG80211_H__ 
+#define __IOCTL_CFG80211_H__
 
 
 #if defined(RTW_USE_CFG80211_STA_EVENT)
@@ -30,7 +30,7 @@ struct rtw_wdev_invit_info {
 	u8 flags;
 	u8 status;
 	u8 req_op_ch;
-	u8 rsp_op_ch;	
+	u8 rsp_op_ch;
 };
 
 #define rtw_wdev_invit_info_init(invit_info) \
@@ -43,9 +43,9 @@ struct rtw_wdev_invit_info {
 	} while (0)
 
 struct rtw_wdev_priv
-{	
+{
 	struct wireless_dev *rtw_wdev;
-	
+
 	_adapter *padapter;
 
 	struct cfg80211_scan_request *scan_request;
@@ -66,9 +66,9 @@ struct rtw_wdev_priv
 
 #ifdef CONFIG_CONCURRENT_MODE
 	ATOMIC_T ro_ch_to;
-	ATOMIC_T switch_ch_to;	
-#endif	
-	
+	ATOMIC_T switch_ch_to;
+#endif
+
 };
 
 #define wdev_to_priv(w) ((struct rtw_wdev_priv *)(wdev_priv(w)))
@@ -112,4 +112,3 @@ bool rtw_cfg80211_pwr_mgmt(_adapter *adapter);
 #endif
 
 #endif //__IOCTL_CFG80211_H__
-

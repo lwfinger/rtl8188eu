@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -38,8 +38,8 @@
 #define	TDLS_ALIVE_STATE				0x00010000	//Check if peer sta is alived.
 
 #define	TPK_RESEND_COUNT				301
-#define 	CH_SWITCH_TIME				10
-#define 	CH_SWITCH_TIMEOUT			30
+#define		CH_SWITCH_TIME				10
+#define		CH_SWITCH_TIMEOUT			30
 #define	TDLS_STAY_TIME				500
 #define	TDLS_SIGNAL_THRESH			0x20
 #define	TDLS_WATCHDOG_PERIOD		10	//Periodically sending tdls discovery request in TDLS_WATCHDOG_PERIOD * 2 sec
@@ -140,4 +140,3 @@ u32 update_mask_tdls(_adapter *padapter, struct sta_info *psta);
 #endif //CONFIG_TDLS
 
 #endif
-

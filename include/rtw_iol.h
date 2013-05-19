@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -37,23 +37,23 @@ int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame);
 #define IOREG_CMD_END_LEN	4
 
 struct ioreg_cfg{
-	u8 	length;
-	u8 	cmd_id;
-	u16 	address;
+	u8	length;
+	u8	cmd_id;
+	u16	address;
 	u32	data;
 	u32  mask;
 };
 enum ioreg_cmd{
-	IOREG_CMD_LLT 			= 0x01,
-	IOREG_CMD_REFUSE 		= 0x02,
+	IOREG_CMD_LLT			= 0x01,
+	IOREG_CMD_REFUSE		= 0x02,
 	IOREG_CMD_EFUSE_PATH = 0x03,
 	IOREG_CMD_WB_REG		= 0x04,
 	IOREG_CMD_WW_REG	= 0x05,
-	IOREG_CMD_WD_REG 	= 0x06,
-	IOREG_CMD_W_RF 		= 0x07,
-	IOREG_CMD_DELAY_US 	= 0x10,
+	IOREG_CMD_WD_REG	= 0x06,
+	IOREG_CMD_W_RF		= 0x07,
+	IOREG_CMD_DELAY_US	= 0x10,
 	IOREG_CMD_DELAY_MS	= 0x11,
-	IOREG_CMD_END 		= 0xFF,		
+	IOREG_CMD_END		= 0xFF,
 };
 void read_efuse_from_txpktbuf(ADAPTER *adapter, int bcnhead, u8 *content, u16 *size);
 
@@ -88,7 +88,7 @@ typedef struct _io_offload_cmd {
 #define IOL_CMD_LLT			0x00
 //#define IOL_CMD_R_EFUSE	0x01
 #define IOL_CMD_WB_REG		0x02
-#define IOL_CMD_WW_REG 	0x03
+#define IOL_CMD_WW_REG	0x03
 #define IOL_CMD_WD_REG		0x04
 //#define IOL_CMD_W_RF		0x05
 #define IOL_CMD_DELAY_US	0x80
@@ -136,4 +136,3 @@ int dbg_rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value
 
 
 #endif //__RTW_IOL_H_
-

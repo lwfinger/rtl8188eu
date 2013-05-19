@@ -21,7 +21,7 @@
 #define __RTL8723A_CMD_H__
 
 
-#define H2C_BT_FW_PATCH_LEN 		3
+#define H2C_BT_FW_PATCH_LEN		3
 #define H2C_BT_PWR_FORCE_LEN		3
 
 enum cmd_msg_element_id
@@ -54,7 +54,7 @@ enum cmd_msg_element_id
 	SCAN_EN_EID = 59,
 	LOWPWR_LPS_EID = 71,
 	H2C_RESET_TSF = 75,
-	MAX_CMDMSG_EID	 
+	MAX_CMDMSG_EID
 };
 
 struct cmd_msg_parm {
@@ -114,10 +114,10 @@ typedef struct _B_TYPE_TDMA_PARM
 {
 #define B_TDMA_EN				BIT(0)
 #define B_TDMA_FIXANTINBT		BIT(1)
-#define B_TDMA_TXPSPOLL 		BIT(2)
+#define B_TDMA_TXPSPOLL			BIT(2)
 #define B_TDMA_VAL870			BIT(3)
 #define B_TDMA_AUTOWAKEUP		BIT(4)
-#define B_TDMA_NOPS 			BIT(5)
+#define B_TDMA_NOPS			BIT(5)
 #define B_TDMA_WLANHIGHPRI		BIT(6)
 	u8 option;
 
@@ -135,7 +135,7 @@ typedef struct _SCAN_EN_PARM {
 
 // BT_FW_PATCH
 #define SET_H2CCMD_BT_FW_PATCH_ENABLE(__pH2CCmd, __Value)		SET_BITS_TO_LE_4BYTE(__pH2CCmd, 0, 8, __Value) //	SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
-#define SET_H2CCMD_BT_FW_PATCH_SIZE(__pH2CCmd, __Value) 		SET_BITS_TO_LE_4BYTE(__pH2CCmd, 8, 16, __Value) //	SET_BITS_TO_LE_2BYTE((__pH2CCmd)+1, 0, 16, __Value)
+#define SET_H2CCMD_BT_FW_PATCH_SIZE(__pH2CCmd, __Value)			SET_BITS_TO_LE_4BYTE(__pH2CCmd, 8, 16, __Value) //	SET_BITS_TO_LE_2BYTE((__pH2CCmd)+1, 0, 16, __Value)
 
 typedef struct _LOWPWR_LPS_PARM
 {
@@ -171,4 +171,3 @@ void CheckFwRsvdPageContent(PADAPTER padapter);
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 u8 rtl8723c_reset_tsf(_adapter *padapter, u8 reset_port);
 #endif	// CONFIG_TSF_RESET_OFFLOAD
-

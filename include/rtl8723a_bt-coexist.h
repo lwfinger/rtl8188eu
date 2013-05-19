@@ -82,7 +82,7 @@ typedef struct _OCTET_STRING{
 enum
 {
 	AESCCMP_BLK_SIZE		=   16,     // # octets in an AES block
-	AESCCMP_MAX_PACKET 		=   4*512,  // largest packet size
+	AESCCMP_MAX_PACKET		=   4*512,  // largest packet size
 	AESCCMP_N_RESERVED		=   0,      // reserved nonce octet value
 	AESCCMP_A_DATA			=   0x40,   // the Adata bit in the flags
 	AESCCMP_M_SHIFT			=   3,      // how much to shift the 3-bit M field
@@ -159,7 +159,7 @@ typedef struct _CHNL_TXPOWER_TRIPLE
 //=============================================
 
 #define CAM_BT_START_INDEX		(HALF_CAM_ENTRY - 4)   // MAX_BT_ASOC_ENTRY_NUM : 4 !!!
-#define BT_HWCAM_STAR    		CAM_BT_START_INDEX  // We used  HALF_CAM_ENTRY ~ HALF_CAM_ENTRY -MAX_BT_ASOC_ENTRY_NUM
+#define BT_HWCAM_STAR			CAM_BT_START_INDEX  // We used  HALF_CAM_ENTRY ~ HALF_CAM_ENTRY -MAX_BT_ASOC_ENTRY_NUM
 
 typedef enum _HCI_STATUS
 {
@@ -442,7 +442,7 @@ typedef enum _HCI_EXTENSION_COMMANDS
 	HCI_EXTENSION_VERSION_NOTIFY					=0x0100,
 	HCI_LINK_STATUS_NOTIFY							=0x0101,
 	HCI_BT_OPERATION_NOTIFY							=0x0102,
-	HCI_ENABLE_WIFI_SCAN_NOTIFY 						=0x0103,
+	HCI_ENABLE_WIFI_SCAN_NOTIFY						=0x0103,
 
 
 	//The following is for IVT
@@ -570,7 +570,7 @@ typedef enum _HCI_STATE_MACHINE
 	HCI_STATE_AUTHENTICATING		=0x04,
 	HCI_STATE_CONNECTED			=0x08,
 	HCI_STATE_DISCONNECTING		=0x10,
-	HCI_STATE_DISCONNECTED 		=0x20
+	HCI_STATE_DISCONNECTED		=0x20
 } HCI_STATE_MACHINE, *PHCI_STATE_MACHINE;
 
 typedef enum _AMP_ASSOC_STRUCTURE_TYPE
@@ -713,7 +713,7 @@ typedef enum _BT_STATE_WPA_AUTH
 } BT_STATE_WPA_AUTH, *PBT_STATE_WPA_AUTH;
 
 #define BT_WPA_AUTH_TIMEOUT_PERIOD		1000
-#define BTMaxWPAAuthReTransmitCoun 		5
+#define BTMaxWPAAuthReTransmitCoun		5
 
 #define MAX_AMP_ASSOC_FRAG_LEN			248
 #define TOTAL_ALLOCIATE_ASSOC_LEN			1000
@@ -1330,7 +1330,7 @@ typedef struct _BTDM_8723A_2ANT
 	u8		bPreRfRxLpfShrink;
 	u8		bCurRfRxLpfShrink;
 
-	u8 		bPreLowPenaltyRa;
+	u8		bPreLowPenaltyRa;
 	u8		bCurLowPenaltyRa;
 
 	u8		preBtRetryIndex;
@@ -1344,7 +1344,7 @@ typedef struct _BTDM_8723A_2ANT
 	u8		bPreAdcBackOff;
 	u8		bCurAdcBackOff;
 
-	u8 		bPreAgcTableEn;
+	u8		bPreAgcTableEn;
 	u8		bCurAgcTableEn;
 
 	u32		preVal0x6c0;
@@ -1779,4 +1779,3 @@ extern u32 BTCoexDbgLevel;
 
 
 #endif // __RTL8723A_BT_COEXIST_H__
-

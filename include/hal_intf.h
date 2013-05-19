@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2012 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -31,8 +31,8 @@
 
 enum RTL871X_HCI_TYPE {
 	RTW_PCIE	= BIT0,
-	RTW_USB 	= BIT1,
-	RTW_SDIO 	= BIT2,
+	RTW_USB		= BIT1,
+	RTW_SDIO	= BIT2,
 	RTW_GSPI	= BIT3,
 };
 
@@ -43,7 +43,7 @@ enum _CHIP_TYPE {
 	RTL8188C_8192C,
 	RTL8192D,
 	RTL8723A,
-	RTL8188E,	
+	RTL8188E,
 	MAX_CHIP_TYPE
 };
 
@@ -98,7 +98,7 @@ typedef enum _HW_VARIABLES{
 	HW_VAR_INITIAL_GAIN,
 	HW_VAR_TRIGGER_GPIO_0,
 	HW_VAR_BT_SET_COEXIST,
-	HW_VAR_BT_ISSUE_DELBA,	
+	HW_VAR_BT_ISSUE_DELBA,
 	HW_VAR_CURRENT_ANTENNA,
 	HW_VAR_ANTENNA_DIVERSITY_LINK,
 	HW_VAR_ANTENNA_DIVERSITY_SELECT,
@@ -117,7 +117,7 @@ typedef enum _HW_VARIABLES{
 #endif
 	HW_VAR_NAV_UPPER,
 	HW_VAR_RPT_TIMER_SETTING,
-	HW_VAR_TX_RPT_MAX_MACID,	
+	HW_VAR_TX_RPT_MAX_MACID,
 	HW_VAR_H2C_MEDIA_STATUS_RPT,
 	HW_VAR_CHK_HI_QUEUE_EMPTY,
 }HW_VARIABLES;
@@ -142,7 +142,7 @@ typedef enum _HAL_DEF_VARIABLE{
 }HAL_DEF_VARIABLE;
 
 typedef enum _HAL_ODM_VARIABLE{
-	HAL_ODM_STA_INFO,	
+	HAL_ODM_STA_INFO,
 	HAL_ODM_P2P_STATE,
 	HAL_ODM_WIFI_DISPLAY_STATE,
 }HAL_ODM_VARIABLE;
@@ -205,7 +205,7 @@ struct hal_ops {
 	void	(*SetBeaconRelatedRegistersHandler)(_adapter *padapter);
 
 	void	(*Add_RateATid)(_adapter *padapter, u32 bitmap, u8 arg, u8 rssi_level);
-#ifdef CONFIG_CONCURRENT_MODE	
+#ifdef CONFIG_CONCURRENT_MODE
 	void	(*clone_haldata)(_adapter *dst_padapter, _adapter *src_padapter);
 #endif
 	void	(*run_thread)(_adapter *padapter);
@@ -233,14 +233,14 @@ struct hal_ops {
 	void (*ReadEFuse)(_adapter *padapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, BOOLEAN bPseudoTest);
 	void (*EFUSEGetEfuseDefinition)(_adapter *padapter, u8 efuseType, u8 type, void *pOut, BOOLEAN bPseudoTest);
 	u16	(*EfuseGetCurrentSize)(_adapter *padapter, u8 efuseType, BOOLEAN bPseudoTest);
-	int 	(*Efuse_PgPacketRead)(_adapter *padapter, u8 offset, u8 *data, BOOLEAN bPseudoTest);
-	int 	(*Efuse_PgPacketWrite)(_adapter *padapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
+	int	(*Efuse_PgPacketRead)(_adapter *padapter, u8 offset, u8 *data, BOOLEAN bPseudoTest);
+	int	(*Efuse_PgPacketWrite)(_adapter *padapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
 	u8	(*Efuse_WordEnableDataWrite)(_adapter *padapter, u16 efuse_addr, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
 	BOOLEAN	(*Efuse_PgPacketWrite_BT)(_adapter *padapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
-	
+
 #ifdef DBG_CONFIG_ERROR_DETECT
 	void (*sreset_init_value)(_adapter *padapter);
-	void (*sreset_reset_value)(_adapter *padapter);		
+	void (*sreset_reset_value)(_adapter *padapter);
 	void (*silentreset)(_adapter *padapter);
 	void (*sreset_xmit_status_check)(_adapter *padapter);
 	void (*sreset_linked_status_check) (_adapter *padapter);
@@ -262,8 +262,8 @@ struct hal_ops {
 	void (*hal_init_checkbthang_workqueue)(_adapter * padapter);
 	void (*hal_free_checkbthang_workqueue)(_adapter * padapter);
 	void (*hal_cancel_checkbthang_workqueue)(_adapter * padapter);
-	void (*hal_checke_bt_hang)(_adapter * padapter);	
-#endif	
+	void (*hal_checke_bt_hang)(_adapter * padapter);
+#endif
 };
 
 typedef	enum _RT_EEPROM_TYPE{
@@ -275,10 +275,10 @@ typedef	enum _RT_EEPROM_TYPE{
 
 
 #define RF_CHANGE_BY_INIT	0
-#define RF_CHANGE_BY_IPS 	BIT28
-#define RF_CHANGE_BY_PS 	BIT29
-#define RF_CHANGE_BY_HW 	BIT30
-#define RF_CHANGE_BY_SW 	BIT31
+#define RF_CHANGE_BY_IPS	BIT28
+#define RF_CHANGE_BY_PS		BIT29
+#define RF_CHANGE_BY_HW		BIT30
+#define RF_CHANGE_BY_SW		BIT31
 
 typedef enum _HARDWARE_TYPE{
 	HARDWARE_TYPE_RTL8180,
@@ -400,7 +400,7 @@ u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pVa
 
 void rtw_hal_set_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, PVOID pValue1,BOOLEAN bSet);
 void	rtw_hal_get_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, PVOID pValue1,BOOLEAN bSet);
-	
+
 void rtw_hal_enable_interrupt(_adapter *padapter);
 void rtw_hal_disable_interrupt(_adapter *padapter);
 
@@ -448,7 +448,7 @@ s32	rtw_hal_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt);
 
 #ifdef DBG_CONFIG_ERROR_DETECT
 void rtw_hal_sreset_init(_adapter *padapter);
-void rtw_hal_sreset_reset(_adapter *padapter);	
+void rtw_hal_sreset_reset(_adapter *padapter);
 void rtw_hal_sreset_reset_value(_adapter *padapter);
 void rtw_hal_sreset_xmit_status_check(_adapter *padapter);
 void rtw_hal_sreset_linked_status_check (_adapter *padapter);
@@ -470,4 +470,3 @@ s32 rtw_hal_c2h_handler(_adapter *adapter, struct c2h_evt_hdr *c2h_evt);
 c2h_id_filter rtw_hal_c2h_id_filter_ccx(_adapter *adapter);
 
 #endif //__HAL_INTF_H__
-

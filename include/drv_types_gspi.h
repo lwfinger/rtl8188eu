@@ -46,4 +46,3 @@ typedef struct gspi_data
 } GSPI_DATA, *PGSPI_DATA;
 
 #endif // #ifndef __DRV_TYPES_GSPI_H__
-

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -17,7 +17,7 @@
  *
  *
  ******************************************************************************/
- 
+
 #ifndef	__ODM_REGDEFINE11N_H__
 #define __ODM_REGDEFINE11N_H__
 
@@ -133,7 +133,7 @@
 #define	ODM_REG_TX_CCK_BBON_11N			0xE78
 #define	ODM_REG_OFDM_RFON_11N			0xE7C
 #define	ODM_REG_OFDM_BBON_11N			0xE80
-#define 	ODM_REG_TX2RX_11N				0xE84
+#define		ODM_REG_TX2RX_11N				0xE84
 #define	ODM_REG_TX2TX_11N				0xE88
 #define	ODM_REG_RX_CCK_11N				0xE8C
 #define	ODM_REG_RX_OFDM_11N				0xED0
@@ -169,4 +169,3 @@
 
 
 #endif
-

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -39,8 +39,8 @@
 #include "rtw_bt_mp.h"
 #endif
 #ifdef CONFIG_RTL8188E
-#include "odm_precomp.h"		
-#include "rtl8188e_hal.h"  
+#include "odm_precomp.h"
+#include "rtl8188e_hal.h"
 #endif
 
 
@@ -67,7 +67,7 @@ u32 read_macreg(_adapter *padapter, u32 addr, u32 sz)
 	}
 
 	return val;
-	
+
 }
 
 void write_macreg(_adapter *padapter, u32 addr, u32 val, u32 sz)
@@ -385,7 +385,7 @@ MPT_InitializeAdapter(
 	pMptCtx->bMPh2c_timeout = _FALSE;
 	pMptCtx->MptH2cRspEvent = _FALSE;
 	pMptCtx->MptBtC2hEvent = _FALSE;
-	
+
 	_rtw_init_sema(&pMptCtx->MPh2c_Sema, 0);
 	_init_timer( &pMptCtx->MPh2c_timeout_timer, pAdapter->pnetdev, MPh2c_timeout_handle, pAdapter );
 #endif
@@ -412,12 +412,12 @@ MPT_InitializeAdapter(
 	{
 		//rtw_write32(pAdapter, REG_LEDCFG0, 0x08080);
 		ledsetting = rtw_read32(pAdapter, REG_LEDCFG0);
-		
+
 	#if defined (CONFIG_RTL8192C) || defined( CONFIG_RTL8192D )
 			rtw_write32(pAdapter, REG_LEDCFG0, ledsetting & ~LED0DIS);
 	#endif
 	}
-	
+
 	PHY_IQCalibrate(pAdapter, _FALSE);
 	dm_CheckTXPowerTracking(&pHalData->odmpriv);	//trigger thermal meter
 	PHY_LCCalibrate(pAdapter);
@@ -561,7 +561,7 @@ s32 mp_start_test(PADAPTER padapter)
 
 	padapter->registrypriv.mp_mode = 1;
 	pmppriv->bSetTxPower=0;		//for  manually set tx power
-	
+
 	//3 disable dynamic mechanism
 	disable_dm(padapter);
 
@@ -684,11 +684,11 @@ void mp_stop_test(PADAPTER padapter)
 	struct sta_info *psta;
 
 	_irqL irqL;
-	
+
 	if (pmppriv->mode==MP_ON)
 	{
 	pmppriv->bSetTxPower=0;
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);	
+	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == _FALSE)
 		goto end_of_mp_stop_test;
 
@@ -792,7 +792,7 @@ void	SetAntennaPathPower(PADAPTER pAdapter)
 {
 	Hal_SetAntennaPathPower(pAdapter);
 }
-	
+
 void SetTxPower(PADAPTER pAdapter)
 {
 	Hal_SetTxPower(pAdapter);
@@ -891,7 +891,7 @@ static void SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 static void SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
-   	Hal_SetOFDMContinuousTx( pAdapter, bStart);
+	Hal_SetOFDMContinuousTx( pAdapter, bStart);
 }/* mpt_StartOfdmContTx */
 
 void SetContinuousTx(PADAPTER pAdapter, u8 bStart)
@@ -904,10 +904,10 @@ void SetContinuousTx(PADAPTER pAdapter, u8 bStart)
 void PhySetTxPowerLevel(PADAPTER pAdapter)
 {
 	struct mp_priv *pmp_priv = &pAdapter->mppriv;
-		
+
 	if (pmp_priv->bSetTxPower==0) // for NO manually set power index
 	{
-#ifdef CONFIG_RTL8188E	
+#ifdef CONFIG_RTL8188E
 		PHY_SetTxPowerLevel8188E(pAdapter,pmp_priv->channel);
 #elif defined(CONFIG_RTL8192D)
 		PHY_SetTxPowerLevel8192D(pAdapter,pmp_priv->channel);
@@ -983,7 +983,7 @@ static thread_return mp_xmit_packet_thread(thread_context context)
 
 		_rtw_memcpy((u8 *)(pxmitframe->buf_addr+TXDESC_OFFSET), pmptx->buf, pmptx->write_size);
 		_rtw_memcpy(&(pxmitframe->attrib), &(pmptx->attrib), sizeof(struct pkt_attrib));
-		
+
 		dump_mpframe(padapter, pxmitframe);
 
 		pmptx->sended++;
@@ -1010,7 +1010,7 @@ exit:
 }
 
 void fill_txdesc_for_mp(PADAPTER padapter, struct tx_desc *ptxdesc)
-{		
+{
 	struct mp_priv *pmp_priv = &padapter->mppriv;
 	_rtw_memcpy(ptxdesc, &(pmp_priv->tx.desc), TXDESC_SIZE);
 }
@@ -1080,14 +1080,14 @@ void SetPacketTx(PADAPTER padapter)
 	desc->txdw1 |= cpu_to_le32((0x01 << 26) & 0xff000000);
 #endif
 	// offset 4
-	#ifndef CONFIG_RTL8188E 
+	#ifndef CONFIG_RTL8188E
 		desc->txdw1 |= cpu_to_le32(BK); // don't aggregate(AMPDU)
 		desc->txdw1 |= cpu_to_le32((pattrib->mac_id) & 0x1F); //CAM_ID(MAC_ID)
 	#else
 		desc->txdw1 |= cpu_to_le32((pattrib->mac_id) & 0x3F); //CAM_ID(MAC_ID)
 	#endif
 	desc->txdw1 |= cpu_to_le32((pattrib->qsel << QSEL_SHT) & 0x00001F00); // Queue Select, TID
-	
+
 	#ifdef CONFIG_RTL8188E
 		desc->txdw1 |= cpu_to_le32((pattrib->raid << RATE_ID_SHT) & 0x000F0000); // Rate Adaptive ID
 	#else
@@ -1128,7 +1128,7 @@ void SetPacketTx(PADAPTER padapter)
 	}
 	#ifdef CONFIG_RTL8188E
 		desc->txdw5 |= cpu_to_le32(RTY_LMT_EN); // retry limit enable
-		desc->txdw5 |= cpu_to_le32(0x00180000); // DATA/RTS Rate Fallback Limit	
+		desc->txdw5 |= cpu_to_le32(0x00180000); // DATA/RTS Rate Fallback Limit
 	#else
 	desc->txdw5 |= cpu_to_le32(0x0001FF00); // DATA/RTS Rate Fallback Limit
 	#endif
@@ -1192,11 +1192,11 @@ void SetPacketRx(PADAPTER pAdapter, u8 bStartRx)
 #if 1
 //ndef CONFIG_RTL8723A
 		pHalData->ReceiveConfig = AAP | APM | AM | AB | APP_ICV | ADF | AMF | HTC_LOC_CTRL | APP_MIC | APP_PHYSTS;
-		
+
 		pHalData->ReceiveConfig |= ACRC32;
-		
+
 		rtw_write32(pAdapter, REG_RCR, pHalData->ReceiveConfig);
-		
+
 		// Accept all data frames
 		rtw_write16(pAdapter, REG_RXFLTMAP2, 0xFFFF);
 #else
@@ -1311,7 +1311,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
 	if (strlen(data) == 0) { //default value
 		psd_pts = 128;
 		psd_start = 64;
-		psd_stop = 128;   
+		psd_stop = 128;
 	} else {
 		sscanf(data, "pts=%d,start=%d,stop=%d", &psd_pts, &psd_start, &psd_stop);
 	}
@@ -1347,7 +1347,7 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 	  _adapter *padapter = pxmitpriv->adapter;
 	struct xmit_frame	*pxmitframe = (struct xmit_frame*) pxmitpriv->pxmit_frame_buf;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
-	
+
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 	u32 num_xmit_extbuf = NR_XMIT_EXTBUFF;
 	if (padapter->registrypriv.mp_mode ==0)
@@ -1365,7 +1365,7 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 	for (i=0; i<num_xmit_extbuf; i++)
 	{
 		rtw_os_xmit_resource_free(padapter, pxmitbuf,(max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
-		
+
 		pxmitbuf++;
 	}
 
@@ -1383,12 +1383,12 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 		max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 		num_xmit_extbuf = NR_XMIT_EXTBUFF;
 	}
-	
+
 	// Init xmit extension buff
 	_rtw_init_queue(&pxmitpriv->free_xmit_extbuf_queue);
 
 	pxmitpriv->pallocated_xmit_extbuf = rtw_zvmalloc(num_xmit_extbuf * sizeof(struct xmit_buf) + 4);
-	
+
 	if (pxmitpriv->pallocated_xmit_extbuf  == NULL){
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("alloc xmit_extbuf fail!\n"));
 		res= _FAIL;
@@ -1416,13 +1416,13 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 		}
 
 		pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), 4);
-*/		
+*/
 
 		if ((res=rtw_os_xmit_resource_alloc(padapter, pxmitbuf,max_xmit_extbuf_size + XMITBUF_ALIGN_SZ)) == _FAIL) {
 			res= _FAIL;
 			goto exit;
 		}
-		
+
 #if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 		pxmitbuf->phead = pxmitbuf->pbuf;
 		pxmitbuf->pend = pxmitbuf->pbuf + max_xmit_extbuf_size;
@@ -1435,7 +1435,7 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 		pxmitbuf->no=i;
 		#endif
 		pxmitbuf++;
-		
+
 	}
 
 	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
@@ -1446,4 +1446,3 @@ exit:
 
 
 #endif
-

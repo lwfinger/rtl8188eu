@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -26,9 +26,9 @@
 #include <drv_types.h>
 
 struct intf_priv {
-	
+
 	u8 *intf_dev;
-	u32	max_iosz; 	//USB2.0: 128, USB1.1: 64, SDIO:64
+	u32	max_iosz;	//USB2.0: 128, USB1.1: 64, SDIO:64
 	u32	max_xmitsz; //USB2.0: unlimited, SDIO:512
 	u32	max_recvsz; //USB2.0: unlimited, SDIO:512
 
@@ -36,9 +36,9 @@ struct intf_priv {
 	volatile u8 *allocated_io_rwmem;
 	u32	io_wsz; //unit: 4bytes
 	u32	io_rsz;//unit: 4bytes
-	u8 intf_status;	
-	
-	void (*_bus_io)(u8 *priv);	
+	u8 intf_status;
+
+	void (*_bus_io)(u8 *priv);
 
 /*
 Under Sync. IRP (SDIO/USB)
@@ -50,11 +50,11 @@ The protection mechanism is through the pending queue.
 
 	_mutex ioctl_mutex;
 
-	
-#ifdef PLATFORM_LINUX	
-	#ifdef CONFIG_USB_HCI	
+
+#ifdef PLATFORM_LINUX
+	#ifdef CONFIG_USB_HCI
 	// when in USB, IO is through interrupt in/out endpoints
-	struct usb_device 	*udev;
+	struct usb_device	*udev;
 	PURB	piorw_urb;
 	u8 io_irp_cnt;
 	u8 bio_irp_pending;
@@ -67,7 +67,7 @@ The protection mechanism is through the pending queue.
 
 #ifdef PLATFORM_OS_XP
 	#ifdef CONFIG_SDIO_HCI
-		// below is for io_rwmem...	
+		// below is for io_rwmem...
 		PMDL pmdl;
 		PSDBUS_REQUEST_PACKET  sdrp;
 		PSDBUS_REQUEST_PACKET  recv_sdrp;
@@ -81,11 +81,11 @@ The protection mechanism is through the pending queue.
 		PIRP		piorw_irp;
 		u8 io_irp_cnt;
 		u8 bio_irp_pending;
-		_sema io_retevt;	
-	#endif	
+		_sema io_retevt;
+	#endif
 #endif
 
-};	
+};
 
 
 #ifdef CONFIG_R871X_TEST
@@ -147,4 +147,3 @@ void rtw_drv_if2_stop(_adapter *if2);
 #endif
 
 #endif	//_OSDEP_INTF_H_
-

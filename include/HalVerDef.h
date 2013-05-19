@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -20,56 +20,56 @@
 #ifndef __HAL_VERSION_DEF_H__
 #define __HAL_VERSION_DEF_H__
 
-#define TRUE 	_TRUE	
+#define TRUE	_TRUE
 #define FALSE	_FALSE
 
 // HAL_IC_TYPE_E
 typedef enum tag_HAL_IC_Type_Definition
 {
-	CHIP_8192S 		=	0,
-	CHIP_8188C 	=	1,
-	CHIP_8192C 	=	2,
-	CHIP_8192D 	=	3,
-	CHIP_8723A 	=	4,
-	CHIP_8188E 		=	5,
-	CHIP_8881A 	=	6,
-	CHIP_8812A 	=	7,
-	CHIP_8821A 	=	8,
-	CHIP_8723B 	=	9,
-	CHIP_8192E 		=	10,	
+	CHIP_8192S		=	0,
+	CHIP_8188C	=	1,
+	CHIP_8192C	=	2,
+	CHIP_8192D	=	3,
+	CHIP_8723A	=	4,
+	CHIP_8188E		=	5,
+	CHIP_8881A	=	6,
+	CHIP_8812A	=	7,
+	CHIP_8821A	=	8,
+	CHIP_8723B	=	9,
+	CHIP_8192E		=	10,
 }HAL_IC_TYPE_E;
 
 //HAL_CHIP_TYPE_E
 typedef enum tag_HAL_CHIP_Type_Definition
 {
-	TEST_CHIP 		=	0,
-	NORMAL_CHIP 	=	1,
+	TEST_CHIP		=	0,
+	NORMAL_CHIP	=	1,
 	FPGA			=	2,
 }HAL_CHIP_TYPE_E;
 
 //HAL_CUT_VERSION_E
 typedef enum tag_HAL_Cut_Version_Definition
 {
-	A_CUT_VERSION 		=	0,
-	B_CUT_VERSION 		=	1,
-	C_CUT_VERSION 		=	2,
-	D_CUT_VERSION 		=	3,
-	E_CUT_VERSION 		=	4,
-	F_CUT_VERSION 		=	5,
-	G_CUT_VERSION 		=	6,
+	A_CUT_VERSION		=	0,
+	B_CUT_VERSION		=	1,
+	C_CUT_VERSION		=	2,
+	D_CUT_VERSION		=	3,
+	E_CUT_VERSION		=	4,
+	F_CUT_VERSION		=	5,
+	G_CUT_VERSION		=	6,
 }HAL_CUT_VERSION_E;
 
 // HAL_Manufacturer
 typedef enum tag_HAL_Manufacturer_Version_Definition
 {
-	CHIP_VENDOR_TSMC 	=	0,
-	CHIP_VENDOR_UMC 	=	1,
+	CHIP_VENDOR_TSMC	=	0,
+	CHIP_VENDOR_UMC		=	1,
 }HAL_VENDOR_E;
 
 typedef enum tag_HAL_RF_Type_Definition
 {
-	RF_TYPE_1T1R 	=	0,
-	RF_TYPE_1T2R 	=	1,
+	RF_TYPE_1T1R	=	0,
+	RF_TYPE_1T2R	=	1,
 	RF_TYPE_2T2R	=	2,
 	RF_TYPE_2T3R	=	3,
 	RF_TYPE_2T4R	=	4,
@@ -84,7 +84,7 @@ typedef	struct tag_HAL_VERSION
 	HAL_CHIP_TYPE_E		ChipType;
 	HAL_CUT_VERSION_E	CUTVersion;
 	HAL_VENDOR_E		VendorType;
-	HAL_RF_TYPE_E		RFType;	
+	HAL_RF_TYPE_E		RFType;
 	u8					ROMVer;
 }HAL_VERSION,*PHAL_VERSION;
 
@@ -137,7 +137,7 @@ typedef	struct tag_HAL_VERSION
 //----------------------------------------------------------------------------
 #define IS_81XXC_TEST_CHIP(version)		((IS_81XXC(version) && (!IS_NORMAL_CHIP(version)))? TRUE: FALSE)
 
-#define IS_92C_SERIAL(version)   					((IS_81XXC(version) && IS_2T2R(version)) ? TRUE : FALSE)
+#define IS_92C_SERIAL(version)						((IS_81XXC(version) && IS_2T2R(version)) ? TRUE : FALSE)
 #define IS_81xxC_VENDOR_UMC_A_CUT(version)	(IS_81XXC(version)?(IS_CHIP_VENDOR_UMC(version) ? (IS_A_CUT(version) ? TRUE : FALSE) : FALSE): FALSE)
 #define IS_81xxC_VENDOR_UMC_B_CUT(version)	(IS_81XXC(version)?(IS_CHIP_VENDOR_UMC(version) ? (IS_B_CUT(version) ? TRUE : FALSE) : FALSE): FALSE)
 #define IS_81xxC_VENDOR_UMC_C_CUT(version)	(IS_81XXC(version)?(IS_CHIP_VENDOR_UMC(version) ? (IS_C_CUT(version) ? TRUE : FALSE) : FALSE): FALSE)
@@ -153,4 +153,3 @@ typedef	struct tag_HAL_VERSION
 #define IS_8723A_B_CUT(version)				((IS_8723_SERIES(version)) ? ( IS_B_CUT(version)?TRUE : FALSE) : FALSE)
 
 #endif
-

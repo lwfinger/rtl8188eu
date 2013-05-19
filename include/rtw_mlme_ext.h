@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -49,7 +49,7 @@
 #else
 	#define ROAMING_LIMIT	8
 #endif
-//#define	IOCMD_REG0		0x10250370		 	
+//#define	IOCMD_REG0		0x10250370
 //#define	IOCMD_REG1		0x10250374
 //#define	IOCMD_REG2		0x10250378
 
@@ -65,32 +65,32 @@
 // BB ODM section BIT 0-15
 #define	DYNAMIC_BB_DIG				BIT(0)
 #define	DYNAMIC_BB_RA_MASK			BIT(1)
-#define	DYNAMIC_BB_DYNAMIC_TXPWR	BIT(2) 
-#define	DYNAMIC_BB_BB_FA_CNT			BIT(3) 
+#define	DYNAMIC_BB_DYNAMIC_TXPWR	BIT(2)
+#define	DYNAMIC_BB_BB_FA_CNT			BIT(3)
 
-#define 	DYNAMIC_BB_RSSI_MONITOR		BIT(4)
-#define 	DYNAMIC_BB_CCK_PD			BIT(5)
-#define 	DYNAMIC_BB_ANT_DIV			BIT(6)
-#define 	DYNAMIC_BB_PWR_SAVE			BIT(7)
-#define 	DYNAMIC_BB_PWR_TRAIN			BIT(8)
-#define 	DYNAMIC_BB_RATE_ADAPTIVE		BIT(9)
-#define 	DYNAMIC_BB_PATH_DIV			BIT(10)
-#define 	DYNAMIC_BB_PSD				BIT(11)
+#define		DYNAMIC_BB_RSSI_MONITOR		BIT(4)
+#define		DYNAMIC_BB_CCK_PD			BIT(5)
+#define		DYNAMIC_BB_ANT_DIV			BIT(6)
+#define		DYNAMIC_BB_PWR_SAVE			BIT(7)
+#define		DYNAMIC_BB_PWR_TRAIN			BIT(8)
+#define		DYNAMIC_BB_RATE_ADAPTIVE		BIT(9)
+#define		DYNAMIC_BB_PATH_DIV			BIT(10)
+#define		DYNAMIC_BB_PSD				BIT(11)
 
 // MAC DM section BIT 16-23
-#define 	DYNAMIC_MAC_EDCA_TURBO		BIT(16)
-#define 	DYNAMIC_MAC_EARLY_MODE		BIT(17)
+#define		DYNAMIC_MAC_EDCA_TURBO		BIT(16)
+#define		DYNAMIC_MAC_EARLY_MODE		BIT(17)
 
 // RF ODM section BIT 24-31
-#define 	DYNAMIC_RF_TX_PWR_TRACK		BIT(24)
-#define 	DYNAMIC_RF_RX_GAIN_TRACK		BIT(25)	
-#define 	DYNAMIC_RF_CALIBRATION		BIT(26)
+#define		DYNAMIC_RF_TX_PWR_TRACK		BIT(24)
+#define		DYNAMIC_RF_RX_GAIN_TRACK		BIT(25)
+#define		DYNAMIC_RF_CALIBRATION		BIT(26)
 
-#define 	DYNAMIC_ALL_FUNC_ENABLE		0xFFFFFFF
+#define		DYNAMIC_ALL_FUNC_ENABLE		0xFFFFFFF
 
 #define _HW_STATE_NOLINK_		0x00
 #define _HW_STATE_ADHOC_		0x01
-#define _HW_STATE_STATION_ 	0x02
+#define _HW_STATE_STATION_	0x02
 #define _HW_STATE_AP_			0x03
 
 
@@ -120,12 +120,12 @@ extern unsigned char WMM_PARA_OUI[];
 
 //
 // Channel Plan Type.
-// Note: 
-//	We just add new channel plan when the new channel plan is different from any of the following 
-//	channel plan. 
+// Note:
+//	We just add new channel plan when the new channel plan is different from any of the following
+//	channel plan.
 //	If you just wnat to customize the acitions(scan period or join actions) about one of the channel plan,
 //	customize them in RT_CHANNEL_INFO in the RT_CHANNEL_LIST.
-// 
+//
 typedef enum _RT_CHANNEL_DOMAIN
 {
 	//===== old channel plan mapping =====//
@@ -252,31 +252,31 @@ enum Associated_AP
 	marvellAP	= 3,
 	ralinkAP	= 4,
 	realtekAP	= 5,
-	airgocapAP 	= 6,
+	airgocapAP	= 6,
 	unknownAP	= 7,
 	maxAP,
 };
 
 typedef enum _HT_IOT_PEER
 {
-	HT_IOT_PEER_UNKNOWN 			= 0,
-	HT_IOT_PEER_REALTEK 			= 1,
-	HT_IOT_PEER_REALTEK_92SE 		= 2,
-	HT_IOT_PEER_BROADCOM 		= 3,
-	HT_IOT_PEER_RALINK 			= 4,
-	HT_IOT_PEER_ATHEROS 			= 5,
-	HT_IOT_PEER_CISCO 				= 6,
-	HT_IOT_PEER_MERU 				= 7,	
-	HT_IOT_PEER_MARVELL 			= 8,
-	HT_IOT_PEER_REALTEK_SOFTAP 	= 9,// peer is RealTek SOFT_AP, by Bohn, 2009.12.17
-	HT_IOT_PEER_SELF_SOFTAP 		= 10, // Self is SoftAP
-	HT_IOT_PEER_AIRGO 				= 11,
-	HT_IOT_PEER_INTEL 				= 12, 
-	HT_IOT_PEER_RTK_APCLIENT 		= 13, 
-	HT_IOT_PEER_REALTEK_81XX 		= 14,	
-	HT_IOT_PEER_REALTEK_WOW 		= 15,
-	HT_IOT_PEER_TENDA 				= 16,
-	HT_IOT_PEER_MAX 				= 17
+	HT_IOT_PEER_UNKNOWN			= 0,
+	HT_IOT_PEER_REALTEK			= 1,
+	HT_IOT_PEER_REALTEK_92SE		= 2,
+	HT_IOT_PEER_BROADCOM		= 3,
+	HT_IOT_PEER_RALINK			= 4,
+	HT_IOT_PEER_ATHEROS			= 5,
+	HT_IOT_PEER_CISCO				= 6,
+	HT_IOT_PEER_MERU				= 7,
+	HT_IOT_PEER_MARVELL			= 8,
+	HT_IOT_PEER_REALTEK_SOFTAP	= 9,// peer is RealTek SOFT_AP, by Bohn, 2009.12.17
+	HT_IOT_PEER_SELF_SOFTAP			= 10, // Self is SoftAP
+	HT_IOT_PEER_AIRGO				= 11,
+	HT_IOT_PEER_INTEL				= 12,
+	HT_IOT_PEER_RTK_APCLIENT		= 13,
+	HT_IOT_PEER_REALTEK_81XX		= 14,
+	HT_IOT_PEER_REALTEK_WOW			= 15,
+	HT_IOT_PEER_TENDA				= 16,
+	HT_IOT_PEER_MAX					= 17
 }HT_IOT_PEER_E, *PHTIOT_PEER_E;
 
 
@@ -302,7 +302,7 @@ struct action_handler {
 	unsigned int (*func)(_adapter *padapter, union recv_frame *precv_frame);
 };
 
-struct	ss_res	
+struct	ss_res
 {
 	int	state;
 	int	bss_cnt;
@@ -319,7 +319,7 @@ struct	ss_res
 //#define AD_HOC_MODE		0x04
 //#define NO_LINK_MODE	0x00
 
-#define 	WIFI_FW_NULL_STATE			_HW_STATE_NOLINK_
+#define		WIFI_FW_NULL_STATE			_HW_STATE_NOLINK_
 #define	WIFI_FW_STATION_STATE		_HW_STATE_STATION_
 #define	WIFI_FW_AP_STATE				_HW_STATE_AP_
 #define	WIFI_FW_ADHOC_STATE			_HW_STATE_ADHOC_
@@ -349,15 +349,15 @@ struct	ss_res
 // 13: Free TDLS sta
 enum TDLS_option
 {
-	TDLS_WRCR			= 	1,
-	TDLS_SD_PTI		= 	2,
-	TDLS_CS_OFF		= 	3,
-	TDLS_INIT_CH_SEN	= 	4,
+	TDLS_WRCR			=	1,
+	TDLS_SD_PTI		=	2,
+	TDLS_CS_OFF		=	3,
+	TDLS_INIT_CH_SEN	=	4,
 	TDLS_DONE_CH_SEN	=	5,
 	TDLS_OFF_CH		=	6,
-	TDLS_BASE_CH 		=	7,
+	TDLS_BASE_CH		=	7,
 	TDLS_P_OFF_CH		=	8,
-	TDLS_P_BASE_CH	= 	9,
+	TDLS_P_BASE_CH	=	9,
 	TDLS_RS_RCR		=	10,
 	TDLS_CKALV_PH1	=	11,
 	TDLS_CKALV_PH2	=	12,
@@ -378,17 +378,17 @@ struct FW_Sta_Info
 
 /*
  * Usage:
- * When one iface acted as AP mode and the other iface is STA mode and scanning, 
+ * When one iface acted as AP mode and the other iface is STA mode and scanning,
  * it should switch back to AP's operating channel periodically.
  * Parameters info:
  * When the driver scanned RTW_SCAN_NUM_OF_CH channels, it would switch back to AP's operating channel for
  * RTW_STAY_AP_CH_MILLISECOND * SURVEY_TO milliseconds.
  * Example:
- * For chip supports 2.4G + 5GHz and AP mode is operating in channel 1, 
+ * For chip supports 2.4G + 5GHz and AP mode is operating in channel 1,
  * RTW_SCAN_NUM_OF_CH is 8, RTW_STAY_AP_CH_MILLISECOND is 3 and SURVEY_TO is 100.
- * When it's STA mode gets set_scan command, 
- * it would 
- * 1. Doing the scan on channel 1.2.3.4.5.6.7.8 
+ * When it's STA mode gets set_scan command,
+ * it would
+ * 1. Doing the scan on channel 1.2.3.4.5.6.7.8
  * 2. Back to channel 1 for 300 milliseconds
  * 3. Go through doing site survey on channel 9.10.11.36.40.44.48.52
  * 4. Back to channel 1 for 300 milliseconds
@@ -396,8 +396,8 @@ struct FW_Sta_Info
  */
 #if defined CONFIG_STA_MODE_SCAN_UNDER_AP_MODE && defined CONFIG_CONCURRENT_MODE
 #define RTW_SCAN_NUM_OF_CH			8
-#define RTW_STAY_AP_CH_MILLISECOND	3	// this value is a multiplier,for example, when this value is 3, it would stay AP's op ch for 
-											// 3 * SURVEY_TO millisecond. 
+#define RTW_STAY_AP_CH_MILLISECOND	3	// this value is a multiplier,for example, when this value is 3, it would stay AP's op ch for
+											// 3 * SURVEY_TO millisecond.
 #endif //defined CONFIG_STA_MODE_SCAN_UNDER_AP_MODE && defined CONFIG_CONCURRENT_MODE
 
 struct mlme_ext_info
@@ -423,7 +423,7 @@ struct mlme_ext_info
 	u8	ERP_enable;
 	u8	ERP_IE;
 	u8	HT_enable;
-	u8	HT_caps_enable;	
+	u8	HT_caps_enable;
 	u8	HT_info_enable;
 	u8	HT_protection;
 	u8	turboMode_cts2self;
@@ -504,9 +504,9 @@ struct mlme_ext_priv
 	u8	mlmeext_init;
 	ATOMIC_T		event_seq;
 	u16	mgnt_seq;
-	
-	//struct fw_priv 	fwpriv;
-	
+
+	//struct fw_priv	fwpriv;
+
 	unsigned char	cur_channel;
 	unsigned char	cur_bwmode;
 	unsigned char	cur_ch_offset;//PRIME_CHNL_OFFSET
@@ -515,14 +515,14 @@ struct mlme_ext_priv
 	unsigned char	oper_channel; //saved channel info when call set_channel_bw
 	unsigned char	oper_bwmode;
 	unsigned char	oper_ch_offset;//PRIME_CHNL_OFFSET
-	
+
 	unsigned char	max_chan_nums;
 	RT_CHANNEL_INFO		channel_set[MAX_CHANNEL_NUM];
 	struct p2p_channels channel_list;
 	unsigned char	basicrate[NumRates];
 	unsigned char	datarate[NumRates];
-	
-	struct ss_res		sitesurvey_res;		
+
+	struct ss_res		sitesurvey_res;
 	struct mlme_ext_info	mlmext_info;//for sta/adhoc mode, including current scanning/connecting/connected related info.
                                                      //for ap mode, network includes ap's cap_info
 	_timer		survey_timer;
@@ -534,24 +534,24 @@ struct mlme_ext_priv
 	u8	tx_rate; // TXRATE when USERATE is set.
 
 	u32	retry; //retry for issue probereq
-	
+
 	u64 TSFValue;
 
-#ifdef CONFIG_AP_MODE	
+#ifdef CONFIG_AP_MODE
 	unsigned char bstart_bss;
 #endif
 
 #ifdef CONFIG_80211D
 	u8 update_channel_plan_by_ap_done;
 #endif
-	//recv_decache check for Action_public frame 
+	//recv_decache check for Action_public frame
 	u8 action_public_dialog_token;
-	u16 	 action_public_rxseq;
+	u16	 action_public_rxseq;
 
 #ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 	u8 active_keep_alive_check;
 #endif
-	
+
 };
 
 int init_mlme_ext_priv(_adapter* padapter);
@@ -781,7 +781,7 @@ u8	dc_check_xmit(_adapter *padapter);
 
 struct cmd_hdl {
 	uint	parmsize;
-	u8 (*h2cfuns)(struct _ADAPTER *padapter, u8 *pbuf);	
+	u8 (*h2cfuns)(struct _ADAPTER *padapter, u8 *pbuf);
 };
 
 
@@ -798,7 +798,7 @@ u8 join_cmd_hdl(_adapter *padapter, u8 *pbuf);
 u8 disconnect_hdl(_adapter *padapter, u8 *pbuf);
 u8 createbss_hdl(_adapter *padapter, u8 *pbuf);
 u8 setopmode_hdl(_adapter *padapter, u8 *pbuf);
-u8 sitesurvey_cmd_hdl(_adapter *padapter, u8 *pbuf);	
+u8 sitesurvey_cmd_hdl(_adapter *padapter, u8 *pbuf);
 u8 setauth_hdl(_adapter *padapter, u8 *pbuf);
 u8 setkey_hdl(_adapter *padapter, u8 *pbuf);
 u8 set_stakey_hdl(_adapter *padapter, u8 *pbuf);
@@ -821,7 +821,7 @@ u8 tdls_hdl(_adapter *padapter, unsigned char *pbuf);
 
 #ifdef _RTW_CMD_C_
 
-struct cmd_hdl wlancmds[] = 
+struct cmd_hdl wlancmds[] =
 {
 	GEN_DRV_CMD_HANDLER(0, NULL) /*0*/
 	GEN_DRV_CMD_HANDLER(0, NULL)
@@ -836,7 +836,7 @@ struct cmd_hdl wlancmds[] =
 	GEN_MLME_EXT_HANDLER(0, NULL) /*10*/
 	GEN_MLME_EXT_HANDLER(0, NULL)
 	GEN_MLME_EXT_HANDLER(0, NULL)
-	GEN_MLME_EXT_HANDLER(0, NULL)		
+	GEN_MLME_EXT_HANDLER(0, NULL)
 	GEN_MLME_EXT_HANDLER(sizeof (struct joinbss_parm), join_cmd_hdl) /*14*/
 	GEN_MLME_EXT_HANDLER(sizeof (struct disconnect_parm), disconnect_hdl)
 	GEN_MLME_EXT_HANDLER(sizeof (struct createbss_parm), createbss_hdl)
@@ -868,7 +868,7 @@ struct cmd_hdl wlancmds[] =
 	GEN_MLME_EXT_HANDLER(0, NULL)
 	GEN_MLME_EXT_HANDLER(0, NULL)
 	GEN_MLME_EXT_HANDLER(0, NULL)
-	GEN_MLME_EXT_HANDLER(sizeof(struct addBaReq_parm), add_ba_hdl)	
+	GEN_MLME_EXT_HANDLER(sizeof(struct addBaReq_parm), add_ba_hdl)
 	GEN_MLME_EXT_HANDLER(sizeof(struct set_ch_parm), set_ch_hdl) /* 46 */
 	GEN_MLME_EXT_HANDLER(0, NULL)
 	GEN_MLME_EXT_HANDLER(0, NULL)
@@ -877,7 +877,7 @@ struct cmd_hdl wlancmds[] =
 	GEN_MLME_EXT_HANDLER(0, NULL)
 	GEN_MLME_EXT_HANDLER(0, NULL)
 	GEN_MLME_EXT_HANDLER(0, NULL)
-	GEN_MLME_EXT_HANDLER(0, NULL) 
+	GEN_MLME_EXT_HANDLER(0, NULL)
 	GEN_MLME_EXT_HANDLER(sizeof(struct Tx_Beacon_param), tx_beacon_hdl) /*55*/
 
 	GEN_MLME_EXT_HANDLER(0, mlme_evt_hdl) /*56*/
@@ -901,13 +901,13 @@ struct C2HEvent_Header
 	unsigned int len:16;
 	unsigned int ID:8;
 	unsigned int seq:8;
-	
+
 #elif defined(__BIG_ENDIAN)
 
 	unsigned int seq:8;
 	unsigned int ID:8;
 	unsigned int len:16;
-	
+
 #else
 
 #  error "Must be LITTLE or BIG Endian"
@@ -925,39 +925,39 @@ enum rtw_c2h_event
 {
 	GEN_EVT_CODE(_Read_MACREG)=0, /*0*/
 	GEN_EVT_CODE(_Read_BBREG),
- 	GEN_EVT_CODE(_Read_RFREG),
- 	GEN_EVT_CODE(_Read_EEPROM),
- 	GEN_EVT_CODE(_Read_EFUSE),
+	GEN_EVT_CODE(_Read_RFREG),
+	GEN_EVT_CODE(_Read_EEPROM),
+	GEN_EVT_CODE(_Read_EFUSE),
 	GEN_EVT_CODE(_Read_CAM),			/*5*/
- 	GEN_EVT_CODE(_Get_BasicRate),  
- 	GEN_EVT_CODE(_Get_DataRate),   
- 	GEN_EVT_CODE(_Survey),	 /*8*/
- 	GEN_EVT_CODE(_SurveyDone),	 /*9*/
- 	
- 	GEN_EVT_CODE(_JoinBss) , /*10*/
- 	GEN_EVT_CODE(_AddSTA),
- 	GEN_EVT_CODE(_DelSTA),
- 	GEN_EVT_CODE(_AtimDone) ,
- 	GEN_EVT_CODE(_TX_Report),  
+	GEN_EVT_CODE(_Get_BasicRate),
+	GEN_EVT_CODE(_Get_DataRate),
+	GEN_EVT_CODE(_Survey),	 /*8*/
+	GEN_EVT_CODE(_SurveyDone),	 /*9*/
+
+	GEN_EVT_CODE(_JoinBss) , /*10*/
+	GEN_EVT_CODE(_AddSTA),
+	GEN_EVT_CODE(_DelSTA),
+	GEN_EVT_CODE(_AtimDone) ,
+	GEN_EVT_CODE(_TX_Report),
 	GEN_EVT_CODE(_CCX_Report),			/*15*/
- 	GEN_EVT_CODE(_DTM_Report),
- 	GEN_EVT_CODE(_TX_Rate_Statistics),
- 	GEN_EVT_CODE(_C2HLBK), 
- 	GEN_EVT_CODE(_FWDBG),
+	GEN_EVT_CODE(_DTM_Report),
+	GEN_EVT_CODE(_TX_Rate_Statistics),
+	GEN_EVT_CODE(_C2HLBK),
+	GEN_EVT_CODE(_FWDBG),
 	GEN_EVT_CODE(_C2HFEEDBACK),               /*20*/
 	GEN_EVT_CODE(_ADDBA),
 	GEN_EVT_CODE(_C2HBCN),
-	GEN_EVT_CODE(_ReportPwrState),		//filen: only for PCIE, USB	
+	GEN_EVT_CODE(_ReportPwrState),		//filen: only for PCIE, USB
 	GEN_EVT_CODE(_CloseRF),				//filen: only for PCIE, work around ASPM
- 	MAX_C2HEVT
+	MAX_C2HEVT
 };
 
 
-#ifdef _RTW_MLME_EXT_C_		
+#ifdef _RTW_MLME_EXT_C_
 
-static struct fwevent wlanevents[] = 
+static struct fwevent wlanevents[] =
 {
-	{0, rtw_dummy_event_callback}, 	/*0*/
+	{0, rtw_dummy_event_callback},	/*0*/
 	{0, NULL},
 	{0, NULL},
 	{0, NULL},
@@ -967,10 +967,10 @@ static struct fwevent wlanevents[] =
 	{0, NULL},
 	{0, &rtw_survey_event_callback},		/*8*/
 	{sizeof (struct surveydone_event), &rtw_surveydone_event_callback},	/*9*/
-		
+
 	{0, &rtw_joinbss_event_callback},		/*10*/
 	{sizeof(struct stassoc_event), &rtw_stassoc_event_callback},
-	{sizeof(struct stadel_event), &rtw_stadel_event_callback},	
+	{sizeof(struct stadel_event), &rtw_stadel_event_callback},
 	{0, &rtw_atimdone_event_callback},
 	{0, rtw_dummy_event_callback},
 	{0, NULL},	/*15*/
@@ -980,11 +980,10 @@ static struct fwevent wlanevents[] =
 	{0, rtw_fwdbg_event_callback},
 	{0, NULL},	 /*20*/
 	{0, NULL},
-	{0, NULL},	
+	{0, NULL},
 	{0, &rtw_cpwm_event_callback},
 };
 
 #endif//_RTL8192C_CMD_C_
 
 #endif
-

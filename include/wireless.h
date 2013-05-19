@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -44,7 +44,7 @@ struct	iw_point
 
 /* ------------------------ IOCTL REQUEST ------------------------ */
 /*
- * This structure defines the payload of an ioctl, and is used 
+ * This structure defines the payload of an ioctl, and is used
  * below.
  *
  * Note that this structure should fit on the memory footprint
@@ -69,7 +69,7 @@ union	iwreq_data
  * convenience...
  * Do I need to remind you about structure size (32 octets) ?
  */
-struct	iwreq 
+struct	iwreq
 {
 	union
 	{
@@ -81,4 +81,3 @@ struct	iwreq
 };
 
 #endif	/* _LINUX_WIRELESS_H */
-

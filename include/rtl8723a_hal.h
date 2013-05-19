@@ -54,7 +54,7 @@
 	#define RTL8723_PHY_RADIO_A				"rtl8723S\\radio_a_1T.txt"
 	#define RTL8723_PHY_RADIO_B				"rtl8723S\\radio_b_1T.txt"
 	#define RTL8723_AGC_TAB					"rtl8723S\\AGC_TAB_1T.txt"
-	#define RTL8723_PHY_MACREG 				"rtl8723S\\MAC_REG.txt"
+	#define RTL8723_PHY_MACREG				"rtl8723S\\MAC_REG.txt"
 	#define RTL8723_PHY_REG_PG				"rtl8723S\\PHY_REG_PG.txt"
 	#define RTL8723_PHY_REG_MP				"rtl8723S\\PHY_REG_MP.txt"
 
@@ -69,14 +69,14 @@
 	#define Rtl8723_ImgArrayLength				Rtl8723SImgArrayLength
 	#define Rtl8723_UMCBCutImgArrayLength		Rtl8723SUMCBCutImgArrayLength
 
-	#define Rtl8723_PHY_REG_Array_PG 			Rtl8723SPHY_REG_Array_PG
+	#define Rtl8723_PHY_REG_Array_PG			Rtl8723SPHY_REG_Array_PG
 	#define Rtl8723_PHY_REG_Array_PGLength		Rtl8723SPHY_REG_Array_PGLength
 #if MP_DRIVER == 1
 	#define Rtl8723E_FwBTImgArray				Rtl8723EFwBTImgArray
 	#define Rtl8723E_FwBTImgArrayLength			Rtl8723EBTImgArrayLength
 
 	#define Rtl8723_FwUMCBCutMPImageArray		Rtl8723SFwUMCBCutMPImgArray
-	#define Rtl8723_UMCBCutMPImgArrayLength 	Rtl8723SUMCBCutMPImgArrayLength
+	#define Rtl8723_UMCBCutMPImgArrayLength		Rtl8723SUMCBCutMPImgArrayLength
 
 	#define Rtl8723_PHY_REG_Array_MP			Rtl8723SPHY_REG_Array_MP
 	#define Rtl8723_PHY_REG_Array_MPLength		Rtl8723SPHY_REG_Array_MPLength
@@ -97,7 +97,7 @@
 	// Array length
 	#define Rtl8723_MAC_ArrayLength				Rtl8723SMAC_2T_ArrayLength
 	#define Rtl8723_AGCTAB_1TArrayLength		Rtl8723SAGCTAB_1TArrayLength
-	#define Rtl8723_PHY_REG_1TArrayLength 		Rtl8723SPHY_REG_1TArrayLength
+	#define Rtl8723_PHY_REG_1TArrayLength		Rtl8723SPHY_REG_1TArrayLength
 
 	#define Rtl8723_RadioA_1TArrayLength			Rtl8723SRadioA_1TArrayLength
 	#define Rtl8723_RadioB_1TArrayLength			Rtl8723SRadioB_1TArrayLength
@@ -117,7 +117,7 @@
 	#define RTL8723_PHY_RADIO_A				"rtl8723S\\radio_a_1T.txt"
 	#define RTL8723_PHY_RADIO_B				"rtl8723S\\radio_b_1T.txt"
 	#define RTL8723_AGC_TAB					"rtl8723S\\AGC_TAB_1T.txt"
-	#define RTL8723_PHY_MACREG 				"rtl8723S\\MAC_REG.txt"
+	#define RTL8723_PHY_MACREG				"rtl8723S\\MAC_REG.txt"
 	#define RTL8723_PHY_REG_PG				"rtl8723S\\PHY_REG_PG.txt"
 	#define RTL8723_PHY_REG_MP				"rtl8723S\\PHY_REG_MP.txt"
 
@@ -132,7 +132,7 @@
 	#define Rtl8723_ImgArrayLength				Rtl8723UImgArrayLength
 	#define Rtl8723_UMCBCutImgArrayLength		Rtl8723UUMCBCutImgArrayLength
 
-	#define Rtl8723_PHY_REG_Array_PG 			Rtl8723UPHY_REG_Array_PG
+	#define Rtl8723_PHY_REG_Array_PG			Rtl8723UPHY_REG_Array_PG
 	#define Rtl8723_PHY_REG_Array_PGLength		Rtl8723UPHY_REG_Array_PGLength
 
 #if MP_DRIVER == 1
@@ -163,7 +163,7 @@
 
 	#define Rtl8723_MAC_ArrayLength				Rtl8723UMAC_2T_ArrayLength
 	#define Rtl8723_AGCTAB_1TArrayLength			Rtl8723UAGCTAB_1TArrayLength
-	#define Rtl8723_PHY_REG_1TArrayLength 			Rtl8723UPHY_REG_1TArrayLength
+	#define Rtl8723_PHY_REG_1TArrayLength			Rtl8723UPHY_REG_1TArrayLength
 
 
 	#define Rtl8723_RadioA_1TArrayLength			Rtl8723URadioA_1TArrayLength
@@ -332,7 +332,7 @@ enum ChannelPlan
 #define EFUSE_MAP_LEN				128
 #define EFUSE_MAX_SECTION			16
 #define EFUSE_IC_ID_OFFSET			506	//For some inferiority IC purpose. added by Roger, 2009.09.02.
-#define AVAILABLE_EFUSE_ADDR(addr) 	(addr < EFUSE_REAL_CONTENT_LEN)
+#define AVAILABLE_EFUSE_ADDR(addr)	(addr < EFUSE_REAL_CONTENT_LEN)
 //
 // <Roger_Notes>
 // To prevent out of boundary programming case,
@@ -344,7 +344,7 @@ enum ChannelPlan
 //
 
 // PG data exclude header, dummy 6 bytes frome CP test and reserved 1byte.
-#define EFUSE_OOB_PROTECT_BYTES 		15
+#define EFUSE_OOB_PROTECT_BYTES			15
 
 #define EFUSE_REAL_CONTENT_LEN_8723A	512
 #define EFUSE_MAP_LEN_8723A				256
@@ -520,7 +520,7 @@ typedef struct hal_data_8723a
 	u8	RegReg542;
 
 	struct dm_priv	dmpriv;
-	DM_ODM_T 		odmpriv;
+	DM_ODM_T		odmpriv;
 	//_lock			odm_stainfo_lock;
 #ifdef DBG_CONFIG_ERROR_DETECT
 	struct sreset_priv srestpriv;
@@ -568,7 +568,7 @@ typedef struct hal_data_8723a
 	//
 	// Add For EEPROM Efuse switch and  Efuse Shadow map Setting
 	//
-	u8 			EepromOrEfuse;
+	u8			EepromOrEfuse;
 //	u8			EfuseMap[2][HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
 	u16			EfuseUsedBytes;
 	u8			EfuseUsedPercentage;
@@ -586,14 +586,14 @@ typedef struct hal_data_8723a
 	//
 	//------------------------8723-----------------------------------------//
 	RT_MULTI_FUNC			MultiFunc; // For multi-function consideration.
-	RT_POLARITY_CTL 		PolarityCtl; // For Wifi PDn Polarity control.
+	RT_POLARITY_CTL			PolarityCtl; // For Wifi PDn Polarity control.
 	RT_REGULATOR_MODE		RegulatorMode; // switching regulator or LDO
 	//------------------------8723-----------------------------------------//
 	//
 	// 2011/02/23 MH Add for 8723 mylti function definition. The define should be moved to an
 	// independent file in the future.
 
-	BOOLEAN 				bMACFuncEnable;
+	BOOLEAN					bMACFuncEnable;
 
 #ifdef CONFIG_P2P
 	struct P2P_PS_Offload_t	p2p_ps_offload;
@@ -635,7 +635,7 @@ typedef struct hal_data_8723a
 	// HIQ, MID, LOW, PUB free pages; padapter->xmitpriv.free_txpg
 	u8			SdioTxFIFOFreePage[SDIO_TX_FREE_PG_QUEUE];
 	_lock		SdioTxFIFOFreePageLock;
-	_thread_hdl_ 	SdioXmitThread;
+	_thread_hdl_	SdioXmitThread;
 	_sema		SdioXmitSema;
 	_sema		SdioXmitTerminateSema;
 
@@ -833,4 +833,3 @@ void rtl8723a_cancel_checkbthang_workqueue(_adapter * padapter);
 void rtl8723a_hal_check_bt_hang(_adapter * padapter);
 #endif
 #endif
-
