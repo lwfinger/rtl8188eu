@@ -3741,13 +3741,13 @@ odm_DynamicTxPower_92D(
 						ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() BuddyAdapter DMSP\n"));
 						if (Adapter->bSlaveOfDMSP)
 						{
-							ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() bslave case \n"));
+							ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() bslave case\n"));
 							BuddyAdapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP = TRUE;
 							BuddyAdapter->DualMacDMSPControl.CurTxHighLvlForAnotherMacOfDMSP = pHalData->DynamicTxHighPowerLvl;
 						}
 						else
 						{
-							ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() master case \n"));
+							ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() master case\n"));
 							if (!bGetValueFromBuddyAdapter)
 							{
 								ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() mac 0 for mac 0\n"));
@@ -3888,13 +3888,13 @@ odm_DynamicTxPower_92D(
 				//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() BuddyAdapter DMSP\n"));
 				if (Adapter->bSlaveOfDMSP)
 				{
-					//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() bslave case \n"));
+					//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() bslave case\n"));
 					BuddyAdapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP = _TRUE;
 					BuddyAdapter->DualMacDMSPControl.CurTxHighLvlForAnotherMacOfDMSP = pHalData->DynamicTxHighPowerLvl;
 				}
 				else
 				{
-					//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() master case \n"));
+					//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() master case\n"));
 					if (!bGetValueFromBuddyAdapter)
 					{
 						//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() mac 0 for mac 0\n"));
@@ -6552,7 +6552,7 @@ odm_EdcaTurboCheckMP(
 	IOTPeer=pMgntInfo->IOTPeer;
 	bBiasOnRx=(pMgntInfo->IOTAction & HT_IOT_ACT_EDCA_BIAS_ON_RX)?TRUE:FALSE;
 	bEdcaTurboOn=((!pHalData->bIsAnyNonBEPkts) && (!pMgntInfo->bDisableFrameBursting))?TRUE:FALSE;
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("bIsAnyNonBEPkts : 0x%lx  bDisableFrameBursting : 0x%lx \n",pHalData->bIsAnyNonBEPkts,pMgntInfo->bDisableFrameBursting));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("bIsAnyNonBEPkts : 0x%lx  bDisableFrameBursting : 0x%lx\n",pHalData->bIsAnyNonBEPkts,pMgntInfo->bDisableFrameBursting));
 
 #elif (DM_ODM_SUPPORT_TYPE==ODM_CE)
 	// Caculate TX/RX TP:
@@ -6568,7 +6568,7 @@ odm_EdcaTurboCheckMP(
 	IOTPeer=pmlmeinfo->assoc_AP_vendor;
 	bBiasOnRx=((IOTPeer == HT_IOT_PEER_RALINK)||(IOTPeer == HT_IOT_PEER_ATHEROS))?TRUE:FALSE;
 	bEdcaTurboOn=(bbtchange || (!precvpriv->bIsAnyNonBEPkts))?TRUE:FALSE;
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("bbtchange : 0x%lx  bIsAnyNonBEPkts : 0x%lx \n",bbtchange,precvpriv->bIsAnyNonBEPkts));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("bbtchange : 0x%lx  bIsAnyNonBEPkts : 0x%lx\n",bbtchange,precvpriv->bIsAnyNonBEPkts));
 #endif
 
 
@@ -6610,7 +6610,7 @@ odm_EdcaTurboCheckMP(
  //             }
 		pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = TRUE;
 
-		ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("EDCA_BE_DL : 0x%lx  EDCA_BE_UL : 0x%lx  EDCA_BE : 0x%lx \n",EDCA_BE_DL,EDCA_BE_UL,EDCA_BE));
+		ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("EDCA_BE_DL : 0x%lx  EDCA_BE_UL : 0x%lx  EDCA_BE : 0x%lx\n",EDCA_BE_DL,EDCA_BE_UL,EDCA_BE));
 
 	}
 	else
@@ -6626,7 +6626,7 @@ odm_EdcaTurboCheckMP(
 #endif
 
 			pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = FALSE;
-			ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("Restore EDCA BE: 0x%lx \n",pDM_Odm->WMMEDCA_BE));
+			ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("Restore EDCA BE: 0x%lx\n",pDM_Odm->WMMEDCA_BE));
 
 		}
 	}

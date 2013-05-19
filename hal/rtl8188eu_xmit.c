@@ -300,7 +300,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		offset += EARLY_MODE_INFO_SIZE ;//0x28
 	}
 	#endif
-	//DBG_8192C("%s==>offset(0x%02x) \n",__func__,offset);
+	//DBG_8192C("%s==>offset(0x%02x)\n",__func__,offset);
 	ptxdesc->txdw0 |= cpu_to_le32(((offset) << OFFSET_SHT) & 0x00ff0000);//32 bytes for TX Desc
 
 	if (bmcst) ptxdesc->txdw0 |= cpu_to_le32(BMC);
