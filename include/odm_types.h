@@ -118,7 +118,7 @@ typedef enum _RT_SPINLOCK_TYPE{
 	#include "../typedef.h"
 	#else
 	typedef void					void,*void *;
-	typedef unsigned char			BOOLEAN,*PBOOLEAN;
+	typedef unsigned char			bool,*bool *;
 	typedef unsigned char			u1Byte,*pu1Byte;
 	typedef unsigned short			u2Byte,*pu2Byte;
 	typedef unsigned int			u4Byte,*pu4Byte;
@@ -146,7 +146,7 @@ typedef enum _RT_SPINLOCK_TYPE{
 	#define ADSL_BUILD_WORKAROUND
 	//
 
-	typedef unsigned char		BOOLEAN,*PBOOLEAN;
+	typedef unsigned char		bool,*bool *;
 	typedef unsigned char		u1Byte,*pu1Byte;
 	typedef unsigned short		u2Byte,*pu2Byte;
 	typedef unsigned int			u4Byte,*pu4Byte;

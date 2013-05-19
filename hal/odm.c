@@ -362,7 +362,7 @@ odm_1R_CCA(
 void	odm_PathDiversityInit_92C(	IN	PADAPTER	Adapter);
 void	odm_2TPathDiversityInit_92C(	IN	PADAPTER	Adapter);
 void	odm_1TPathDiversityInit_92C(	IN	PADAPTER	Adapter);
-BOOLEAN	odm_IsConnected_92C(IN	PADAPTER	Adapter);
+bool	odm_IsConnected_92C(IN	PADAPTER	Adapter);
 void	odm_PathDiversityAfterLink_92C(	IN	PADAPTER	Adapter);
 
 void
@@ -645,7 +645,7 @@ odm_EdcaTurboCheckMP(
 	);
 
 //check if edca turbo is disabled
-BOOLEAN
+bool
 odm_IsEdcaTurboDisable(
 	IN	PDM_ODM_T	pDM_Odm
 );
@@ -662,8 +662,8 @@ odm_EdcaChooseTrafficIdx(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u8Byte				cur_tx_bytes,
 	IN	u8Byte				cur_rx_bytes,
-	IN	BOOLEAN			bBiasOnRx,
-	OUT BOOLEAN		*pbIsCurRDLState
+	IN	bool			bBiasOnRx,
+	OUT bool		*pbIsCurRDLState
 	);
 
 #elif (DM_ODM_SUPPORT_TYPE==ODM_CE)
@@ -693,7 +693,7 @@ odm_InitHybridAntDiv(
 	IN PDM_ODM_T	pDM_Odm
 	);
 
-BOOLEAN
+bool
 odm_StaDefAntSel(
 	IN PDM_ODM_T	pDM_Odm,
 	IN u4Byte		OFDM_Ant1_Cnt,
@@ -707,7 +707,7 @@ void
 odm_SetRxIdleAnt(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	u1Byte	Ant,
-	IN   BOOLEAN   bDualPath
+	IN   bool   bDualPath
 );
 
 
@@ -939,14 +939,14 @@ ODM_CmnInfoInit(
 			pDM_Odm->PatchID = (u1Byte)Value;
 			break;
 		case	ODM_CMNINFO_BINHCT_TEST:
-			pDM_Odm->bInHctTest = (BOOLEAN)Value;
+			pDM_Odm->bInHctTest = (bool)Value;
 			break;
 		case	ODM_CMNINFO_BWIFI_TEST:
-			pDM_Odm->bWIFITest = (BOOLEAN)Value;
+			pDM_Odm->bWIFITest = (bool)Value;
 			break;
 
 		case	ODM_CMNINFO_SMART_CONCURRENT:
-			pDM_Odm->bDualMacSmartConcurrent = (BOOLEAN )Value;
+			pDM_Odm->bDualMacSmartConcurrent = (bool )Value;
 			break;
 
 		//To remove the compiler warning, must add an empty default statement to handle the other values.
@@ -1019,7 +1019,7 @@ ODM_CmnInfoHook(
 			break;
 
 		case	ODM_CMNINFO_DMSP_GET_VALUE:
-			pDM_Odm->pbGetValueFromOtherMac = (BOOLEAN *)pValue;
+			pDM_Odm->pbGetValueFromOtherMac = (bool *)pValue;
 			break;
 
 		case	ODM_CMNINFO_BUDDY_ADAPTOR:
@@ -1027,15 +1027,15 @@ ODM_CmnInfoHook(
 			break;
 
 		case	ODM_CMNINFO_DMSP_IS_MASTER:
-			pDM_Odm->pbMasterOfDMSP = (BOOLEAN *)pValue;
+			pDM_Odm->pbMasterOfDMSP = (bool *)pValue;
 			break;
 
 		case	ODM_CMNINFO_SCAN:
-			pDM_Odm->pbScanInProcess = (BOOLEAN *)pValue;
+			pDM_Odm->pbScanInProcess = (bool *)pValue;
 			break;
 
 		case	ODM_CMNINFO_POWER_SAVING:
-			pDM_Odm->pbPowerSaving = (BOOLEAN *)pValue;
+			pDM_Odm->pbPowerSaving = (bool *)pValue;
 			break;
 
 		case	ODM_CMNINFO_ONE_PATH_CCA:
@@ -1043,15 +1043,15 @@ ODM_CmnInfoHook(
 			break;
 
 		case	ODM_CMNINFO_DRV_STOP:
-			pDM_Odm->pbDriverStopped =  (BOOLEAN *)pValue;
+			pDM_Odm->pbDriverStopped =  (bool *)pValue;
 			break;
 
 		case	ODM_CMNINFO_PNP_IN:
-			pDM_Odm->pbDriverIsGoingToPnpSetPowerSleep =  (BOOLEAN *)pValue;
+			pDM_Odm->pbDriverIsGoingToPnpSetPowerSleep =  (bool *)pValue;
 			break;
 
 		case	ODM_CMNINFO_INIT_ON:
-			pDM_Odm->pinit_adpt_in_progress =  (BOOLEAN *)pValue;
+			pDM_Odm->pinit_adpt_in_progress =  (bool *)pValue;
 			break;
 
 		case	ODM_CMNINFO_ANT_TEST:
@@ -1059,14 +1059,14 @@ ODM_CmnInfoHook(
 			break;
 
 		case	ODM_CMNINFO_NET_CLOSED:
-			pDM_Odm->pbNet_closed = (BOOLEAN *)pValue;
+			pDM_Odm->pbNet_closed = (bool *)pValue;
 			break;
 		case    ODM_CMNINFO_MP_MODE:
 			pDM_Odm->mp_mode = (u1Byte *)pValue;
 			break;
 
 		//case	ODM_CMNINFO_BT_COEXIST:
-		//	pDM_Odm->BTCoexist = (BOOLEAN *)pValue;
+		//	pDM_Odm->BTCoexist = (bool *)pValue;
 
 		//case	ODM_CMNINFO_STA_STATUS:
 			//pDM_Odm->pODM_StaInfo[] = (PSTA_INFO_T)pValue;
@@ -1141,15 +1141,15 @@ ODM_CmnInfoUpdate(
 			break;
 
 		case	ODM_CMNINFO_WIFI_DIRECT:
-			pDM_Odm->bWIFI_Direct = (BOOLEAN)Value;
+			pDM_Odm->bWIFI_Direct = (bool)Value;
 			break;
 
 		case	ODM_CMNINFO_WIFI_DISPLAY:
-			pDM_Odm->bWIFI_Display = (BOOLEAN)Value;
+			pDM_Odm->bWIFI_Display = (bool)Value;
 			break;
 
 		case	ODM_CMNINFO_LINK:
-			pDM_Odm->bLinked = (BOOLEAN)Value;
+			pDM_Odm->bLinked = (bool)Value;
 			break;
 
 		case	ODM_CMNINFO_RSSI_MIN:
@@ -1173,11 +1173,11 @@ ODM_CmnInfoUpdate(
 #if (BT_30_SUPPORT == 1)
 		// The following is for BT HS mode and BT coexist mechanism.
 		case ODM_CMNINFO_BT_DISABLED:
-			pDM_Odm->bBtDisabled = (BOOLEAN)Value;
+			pDM_Odm->bBtDisabled = (bool)Value;
 			break;
 
 		case	ODM_CMNINFO_BT_OPERATION:
-			pDM_Odm->bBtHsOperation = (BOOLEAN)Value;
+			pDM_Odm->bBtHsOperation = (bool)Value;
 			break;
 
 		case ODM_CMNINFO_BT_DIG:
@@ -1185,11 +1185,11 @@ ODM_CmnInfoUpdate(
 			break;
 
 		case	ODM_CMNINFO_BT_BUSY:
-			pDM_Odm->bBtBusy = (BOOLEAN)Value;
+			pDM_Odm->bBtBusy = (bool)Value;
 			break;
 
 		case	ODM_CMNINFO_BT_DISABLE_EDCA:
-			pDM_Odm->bBtDisableEdcaTurbo = (BOOLEAN)Value;
+			pDM_Odm->bBtDisableEdcaTurbo = (bool)Value;
 			break;
 #endif
 
@@ -1203,10 +1203,10 @@ odm_CommonInfoSelfInit(
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
-	pDM_Odm->bCckHighPower = (BOOLEAN) ODM_GetBBReg(pDM_Odm, 0x824, BIT9);
+	pDM_Odm->bCckHighPower = (bool) ODM_GetBBReg(pDM_Odm, 0x824, BIT9);
 	pDM_Odm->RFPathRxEnable = (u1Byte) ODM_GetBBReg(pDM_Odm, 0xc04, 0x0F);
 #if (DM_ODM_SUPPORT_TYPE != ODM_CE)
-	pDM_Odm->pbNet_closed = &pDM_Odm->BOOLEAN_temp;
+	pDM_Odm->pbNet_closed = &pDM_Odm->bool_temp;
 #endif
 	if (pDM_Odm->SupportICType & (ODM_RTL8192C|ODM_RTL8192D))
 	{
@@ -1438,7 +1438,7 @@ odm_IsLinked(
 	)
 {
 	u4Byte i;
-	BOOLEAN Linked = FALSE;
+	bool Linked = FALSE;
 
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++)
 	{
@@ -1590,7 +1590,7 @@ odm_DynamicEDCCA(
 	PADAPTER		pAdapter	= pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	u1Byte	RegC50, RegC58;
-	BOOLEAN	bEDCCAenable = FALSE;
+	bool	bEDCCAenable = FALSE;
 
 	RegC50 = (u1Byte)ODM_GetBBReg(pDM_Odm, rOFDM0_XAAGCCore1, bMaskByte0);
 	RegC58 = (u1Byte)ODM_GetBBReg(pDM_Odm, rOFDM0_XBAGCCore1, bMaskByte0);
@@ -1801,7 +1801,7 @@ odm_DIG(
 	pRXHP_T						pRX_HP_Table  = &pDM_Odm->DM_RXHP_Table;
 	u1Byte						DIG_Dynamic_MIN;
 	u1Byte						DIG_MaxOfMin;
-	BOOLEAN						FirstConnect, FirstDisConnect;
+	bool						FirstConnect, FirstDisConnect;
 	u1Byte						dm_dig_max, dm_dig_min;
 	u1Byte						CurrentIGI = pDM_DigTable->CurIGValue;
 
@@ -3077,13 +3077,13 @@ odm_RefreshRateAdaptiveMaskAPADSL(
 #endif
 }
 
-// Return Value: BOOLEAN
+// Return Value: bool
 // - TRUE: RATRState is changed.
-BOOLEAN
+bool
 ODM_RAStateCheck(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		s4Byte			RSSI,
-	IN		BOOLEAN			bForceUpdate,
+	IN		bool			bForceUpdate,
 	OUT		pu1Byte			pRATRState
 	)
 {
@@ -3619,7 +3619,7 @@ odm_DynamicTxPower_92D(
 	s4Byte				UndecoratedSmoothedPWDB;
 
 	PADAPTER	BuddyAdapter = Adapter->BuddyAdapter;
-	BOOLEAN		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(Adapter);
+	bool		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(Adapter);
 	u1Byte		HighPowerLvlBackForMac0 = TxHighPwrLevel_Level1;
 
 
@@ -3780,7 +3780,7 @@ odm_DynamicTxPower_92D(
 	int	UndecoratedSmoothedPWDB;
 	#if (RTL8192D_EASY_SMART_CONCURRENT == 1)
 	PADAPTER	BuddyAdapter = Adapter->BuddyAdapter;
-	BOOLEAN		bGetValueFromBuddyAdapter = DualMacGetParameterFromBuddyAdapter(Adapter);
+	bool		bGetValueFromBuddyAdapter = DualMacGetParameterFromBuddyAdapter(Adapter);
 	u8		HighPowerLvlBackForMac0 = TxHighPwrLevel_Level1;
 	#endif
 
@@ -5253,7 +5253,7 @@ odm_SwAntDivChkAntSwitchNIC(
 		ODM_SetAntenna(pDM_Odm,nextAntenna);
 		#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 		{
-			BOOLEAN bEnqueue;
+			bool bEnqueue;
 			bEnqueue = (pDM_Odm->SupportInterface ==  ODM_ITRF_PCIE)?FALSE :TRUE;
 			rtw_antenna_select_cmd(pDM_Odm->Adapter, nextAntenna, bEnqueue);
 		}
@@ -5496,7 +5496,7 @@ void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 #if ((defined(CONFIG_SW_ANTENNA_DIVERSITY))||(defined(CONFIG_HW_ANTENNA_DIVERSITY)))
-BOOLEAN
+bool
 ODM_SwAntDivCheckBeforeLink8192C(
 	IN		PDM_ODM_T		pDM_Odm
 	)
@@ -5702,7 +5702,7 @@ return FALSE;
 return FALSE;
 }
 #else
-BOOLEAN
+bool
 ODM_SwAntDivCheckBeforeLink8192C(
 	IN		PDM_ODM_T		pDM_Odm
 	)
@@ -5832,7 +5832,7 @@ odm_InitHybridAntDiv(
 }
 
 
-BOOLEAN
+bool
 odm_StaDefAntSel(
 	IN PDM_ODM_T	pDM_Odm,
 	IN u4Byte		OFDM_Ant1_Cnt,
@@ -5897,7 +5897,7 @@ void
 odm_SetRxIdleAnt(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	u1Byte	Ant,
-	IN   BOOLEAN   bDualPath
+	IN   bool   bDualPath
 )
 {
 	SWAT_T			*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -5932,7 +5932,7 @@ ODM_AntselStatistics_88C(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		u1Byte			MacId,
 	IN		u4Byte			PWDBAll,
-	IN		BOOLEAN			isCCKrate
+	IN		bool			isCCKrate
 )
 {
 	SWAT_T			*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -6012,7 +6012,7 @@ odm_HwAntDiv_92C_92D(
 	SWAT_T			*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 	u4Byte			RSSI_Min=0xFF, RSSI, RSSI_Ant1, RSSI_Ant2;
 	u1Byte			RxIdleAnt, i;
-	BOOLEAN		bRet=FALSE;
+	bool		bRet=FALSE;
 	PSTA_INFO_T	pEntry;
 
 #if (DM_ODM_SUPPORT_TYPE==ODM_AP)
@@ -6518,10 +6518,10 @@ odm_EdcaTurboCheckMP(
 	u4Byte				EDCA_BE_DL = 0x5ea42b;//Parameter suggested by Scott  //edca_setting_DL[pMgntInfo->IOTPeer];
        u4Byte                         EDCA_BE = 0x5ea42b;
 	u4Byte                         IOTPeer=0;
-	BOOLEAN                      *pbIsCurRDLState=NULL;
-	BOOLEAN                      bLastIsCurRDLState=FALSE;
-	BOOLEAN				 bBiasOnRx=FALSE;
-	BOOLEAN				bEdcaTurboOn=FALSE;
+	bool                      *pbIsCurRDLState=NULL;
+	bool                      bLastIsCurRDLState=FALSE;
+	bool				 bBiasOnRx=FALSE;
+	bool				bEdcaTurboOn=FALSE;
 
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("odm_EdcaTurboCheckMP========================>"));
@@ -6651,7 +6651,7 @@ dm_CheckEdcaTurbo_EXIT:
 
 
 //check if edca turbo is disabled
-BOOLEAN
+bool
 odm_IsEdcaTurboDisable(
 	IN	PDM_ODM_T	pDM_Odm
 )
@@ -6939,8 +6939,8 @@ odm_EdcaChooseTrafficIdx(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u8Byte				cur_tx_bytes,
 	IN	u8Byte				cur_rx_bytes,
-	IN	BOOLEAN			bBiasOnRx,
-	OUT BOOLEAN		*pbIsCurRDLState
+	IN	bool			bBiasOnRx,
+	OUT bool		*pbIsCurRDLState
 	)
 {
 
@@ -7081,14 +7081,14 @@ void odm_EdcaParaInit(
 	priv->pshare->iot_mode_VO_exist = 0;
 }
 
-BOOLEAN
+bool
 ODM_ChooseIotMainSTA(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	PSTA_INFO_T		pstat
 	)
 {
 	prtl8192cd_priv	priv = pDM_Odm->priv;
-	BOOLEAN		bhighTP_found_pstat=FALSE;
+	bool		bhighTP_found_pstat=FALSE;
 
 	if ((GET_ROOT(priv)->up_time % 2) == 0) {
 		unsigned int tx_2s_avg = 0;
@@ -7702,7 +7702,7 @@ odm_IotEngine(
 //
 // 2011/07/26 MH Add an API for testing IQK fail case.
 //
-BOOLEAN
+bool
 ODM_CheckPowerStatus(
 	IN	PADAPTER		Adapter)
 {
@@ -9610,7 +9610,7 @@ odm_OFDMTXPathDiversity_92C(
 }
 
 
-BOOLEAN
+bool
 odm_IsConnected_92C(
 	IN	PADAPTER	Adapter
 )
@@ -9618,7 +9618,7 @@ odm_IsConnected_92C(
 	PRT_WLAN_STA	pEntry;
 	PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
 	u4Byte		i;
-	BOOLEAN		bConnected=FALSE;
+	bool		bConnected=FALSE;
 
 	if (pMgntInfo->mAssoc)
 	{
@@ -9708,7 +9708,7 @@ odm_CCKTXPathDiversity_92C(
 	PRT_WLAN_STA	pEntry;
 	s4Byte	MinRSSI = 0xFF;
 	u1Byte	i, DefaultRespPath = 0;
-//	BOOLEAN	bBModePathDiv = FALSE;
+//	bool	bBModePathDiv = FALSE;
 	pPD_T	pDM_PDTable = &Adapter->DM_PDTable;
 
 	//1 Default Port
@@ -9979,21 +9979,21 @@ odm_CCKTXPathDiversityWorkItemCallback(
 void
 ODM_CCKPathDiversityChkPerPktRssi(
 	PADAPTER		Adapter,
-	BOOLEAN			bIsDefPort,
-	BOOLEAN			bMatchBSSID,
+	bool			bIsDefPort,
+	bool			bMatchBSSID,
 	PRT_WLAN_STA	pEntry,
 	PRT_RFD			pRfd,
 	pu1Byte			pDesc
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	BOOLEAN			bCount = FALSE;
+	bool			bCount = FALSE;
 	pPD_T	pDM_PDTable = &Adapter->DM_PDTable;
-	//BOOLEAN	isCCKrate = RX_HAL_IS_CCK_RATE_92C(pDesc);
+	//bool	isCCKrate = RX_HAL_IS_CCK_RATE_92C(pDesc);
 #if DEV_BUS_TYPE != RT_SDIO_INTERFACE
-	BOOLEAN	isCCKrate = RX_HAL_IS_CCK_RATE(Adapter, pDesc);
+	bool	isCCKrate = RX_HAL_IS_CCK_RATE(Adapter, pDesc);
 #else  //below code would be removed if we have verified SDIO
-	BOOLEAN	isCCKrate = IS_HARDWARE_TYPE_8188E(Adapter) ? RX_HAL_IS_CCK_RATE_88E(pDesc) : RX_HAL_IS_CCK_RATE_92C(pDesc);
+	bool	isCCKrate = IS_HARDWARE_TYPE_8188E(Adapter) ? RX_HAL_IS_CCK_RATE_88E(pDesc) : RX_HAL_IS_CCK_RATE_92C(pDesc);
 #endif
 
 	if ((pHalData->PathDivCfg != 1) || (pHalData->RSSI_test == FALSE))
@@ -10040,7 +10040,7 @@ ODM_CCKPathDiversityChkPerPktRssi(
 }
 
 
-BOOLEAN
+bool
 ODM_PathDiversityBeforeLink92C(
 	//IN	PADAPTER	Adapter
 	IN		PDM_ODM_T		pDM_Odm
@@ -10256,14 +10256,14 @@ ODM_PathDiversityBeforeLink92C(
 void
 ODM_PathDivChkPerPktRssi(
 	PADAPTER		Adapter,
-	BOOLEAN			bIsDefPort,
-	BOOLEAN			bMatchBSSID,
+	bool			bIsDefPort,
+	bool			bMatchBSSID,
 	PRT_WLAN_STA	pEntry,
 	PRT_RFD			pRfd
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	BOOLEAN			bCount = FALSE;
+	bool			bCount = FALSE;
 	PDM_ODM_T		pDM_Odm = &pHalData->DM_OutSrc;
 	pSWAT_T			pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 
@@ -10987,7 +10987,7 @@ odm_PHY_ReloadAFERegisters(
 //
 // Added by Roger, 2011.12.15
 //
-BOOLEAN
+bool
 ODM_SingleDualAntennaDetection(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		u1Byte			mode
@@ -11003,7 +11003,7 @@ ODM_SingleDualAntennaDetection(
 	u1Byte		initial_gain = 0x5a;
 	u4Byte		PSD_report_tmp;
 	u4Byte		AntA_report = 0x0, AntB_report = 0x0,AntO_report=0x0;
-	BOOLEAN		bResult = TRUE;
+	bool		bResult = TRUE;
 	u4Byte		AFE_Backup[16];
 	u4Byte		AFE_REG_8723A[16] = {
 					rRx_Wait_CCA,	rTx_CCK_RFON,

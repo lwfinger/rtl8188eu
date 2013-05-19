@@ -434,7 +434,7 @@ struct mlme_ext_info
 	u8	candidate_tid_bitmap;
 	u8	dialogToken;
 	// Accept ADDBA Request
-	BOOLEAN bAcceptAddbaReq;
+	bool bAcceptAddbaReq;
 	u8	bwmode_updated;
 	u8	hidden_ssid_mode;
 
@@ -600,7 +600,7 @@ void CAM_empty_entry(PADAPTER Adapter, u8 ucIndex);
 int allocate_fw_sta_entry(_adapter *padapter);
 void flush_all_cam_entry(_adapter *padapter);
 
-BOOLEAN IsLegal5GChannel(PADAPTER Adapter, u8 channel);
+bool IsLegal5GChannel(PADAPTER Adapter, u8 channel);
 
 void site_survey(_adapter *padapter);
 u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, WLAN_BSSID_EX *bssid);

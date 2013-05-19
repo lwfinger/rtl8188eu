@@ -129,7 +129,7 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
 
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
+void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 {
 	u32		TempVal = 0, TempVal2 = 0, TempVal3 = 0;
 	u32		CurrCCKSwingVal = 0, CCKSwingIndex = 12;
@@ -209,7 +209,7 @@ void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 	write_bbreg(Adapter, rCCK0_DebugPort, bMaskLWord, TempVal3);
 }
 
-void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
+void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
 {
 	s32		TempCCk;
 	u8		CCK_index, CCK_index_old;
@@ -792,7 +792,7 @@ void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	BOOLEAN		is92C = IS_92C_SERIAL(pHalData->VersionID);
+	bool		is92C = IS_92C_SERIAL(pHalData->VersionID);
 
 	u8 rfPath;
 	u32              reg58 = 0x0;

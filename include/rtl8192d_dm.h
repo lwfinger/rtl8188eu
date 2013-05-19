@@ -131,7 +131,7 @@ struct	dm_priv
 	//u8 Record_CCK_40Mindex;
 	char	OFDM_index[2];
 
-	BOOLEAN	bDPKdone[2];
+	bool	bDPKdone[2];
 
 	u8	PowerIndex_backup[6];
 
@@ -141,8 +141,8 @@ struct	dm_priv
 //#endif
        //Neil Chen----2011--06--23-----
        //3 Path Diversity
-	BOOLEAN		bPathDiv_Enable;	//For 92D Non-interrupt Antenna Diversity by Neil ,add by wl.2011.07.19
-	BOOLEAN		RSSI_test;
+	bool		bPathDiv_Enable;	//For 92D Non-interrupt Antenna Diversity by Neil ,add by wl.2011.07.19
+	bool		RSSI_test;
 	s32			RSSI_sum_A;
 	s32			RSSI_cnt_A;
 	s32			RSSI_sum_B;

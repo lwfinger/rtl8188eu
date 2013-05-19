@@ -50,12 +50,12 @@ u8	fakeBTEfuseModifiedMap[EFUSE_BT_MAX_MAP_LEN]={0};
 #define EFUSE_CTRL			REG_EFUSE_CTRL		// E-Fuse Control.
 //------------------------------------------------------------------------------
 
-BOOLEAN
+bool
 Efuse_Read1ByteFromFakeContent(
 	IN		PADAPTER	pAdapter,
 	IN		u16		Offset,
 	IN OUT	u8		*Value	);
-BOOLEAN
+bool
 Efuse_Read1ByteFromFakeContent(
 	IN		PADAPTER	pAdapter,
 	IN		u16		Offset,
@@ -73,12 +73,12 @@ Efuse_Read1ByteFromFakeContent(
 	return _TRUE;
 }
 
-BOOLEAN
+bool
 Efuse_Write1ByteToFakeContent(
 	IN		PADAPTER	pAdapter,
 	IN		u16		Offset,
 	IN		u8		Value	);
-BOOLEAN
+bool
 Efuse_Write1ByteToFakeContent(
 	IN		PADAPTER	pAdapter,
 	IN		u16		Offset,
@@ -144,7 +144,7 @@ u16
 Efuse_GetCurrentSize(
 	IN PADAPTER		pAdapter,
 	IN u8			efuseType,
-	IN BOOLEAN		bPseudoTest)
+	IN bool		bPseudoTest)
 {
 	u16 ret=0;
 
@@ -181,7 +181,7 @@ ReadEFuseByte(
 		PADAPTER	Adapter,
 		u16			_offset,
 		u8			*pbuf,
-		IN BOOLEAN	bPseudoTest)
+		IN bool	bPseudoTest)
 {
 	u32	value32;
 	u8	readbyte;
@@ -251,7 +251,7 @@ efuse_ReadEFuse(
 	u16		_offset,
 	u16		_size_byte,
 	u8		*pbuf,
-	IN	BOOLEAN	bPseudoTest
+	IN	bool	bPseudoTest
 	);
 void
 efuse_ReadEFuse(
@@ -260,7 +260,7 @@ efuse_ReadEFuse(
 	u16		_offset,
 	u16		_size_byte,
 	u8		*pbuf,
-	IN	BOOLEAN	bPseudoTest
+	IN	bool	bPseudoTest
 	)
 {
 	Adapter->HalFunc.ReadEFuse(Adapter, efuseType, _offset, _size_byte, pbuf, bPseudoTest);
@@ -272,7 +272,7 @@ EFUSE_GetEfuseDefinition(
 	IN		u8		efuseType,
 	IN		u8		type,
 	OUT		void		*pOut,
-	IN		BOOLEAN		bPseudoTest
+	IN		bool		bPseudoTest
 	)
 {
 	pAdapter->HalFunc.EFUSEGetEfuseDefinition(pAdapter, efuseType, type, pOut, bPseudoTest);
@@ -417,7 +417,7 @@ efuse_OneByteRead(
 	IN	PADAPTER	pAdapter,
 	IN	u16			addr,
 	IN	u8			*data,
-	IN	BOOLEAN		bPseudoTest)
+	IN	bool		bPseudoTest)
 {
 	u8	tmpidx = 0;
 	u8	bResult;
@@ -458,7 +458,7 @@ efuse_OneByteWrite(
 	IN	PADAPTER	pAdapter,
 	IN	u16			addr,
 	IN	u8			data,
-	IN	BOOLEAN		bPseudoTest)
+	IN	bool		bPseudoTest)
 {
 	u8	tmpidx = 0;
 	u8	bResult;
@@ -501,7 +501,7 @@ int
 Efuse_PgPacketRead(	IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+					IN	bool		bPseudoTest)
 {
 	int	ret=0;
 
@@ -515,7 +515,7 @@ Efuse_PgPacketWrite(IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			word_en,
 					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+					IN	bool		bPseudoTest)
 {
 	int ret;
 
@@ -530,7 +530,7 @@ Efuse_PgPacketWrite_BT(IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			word_en,
 					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+					IN	bool		bPseudoTest)
 {
 	int ret;
 
@@ -589,7 +589,7 @@ Efuse_WordEnableDataWrite(	IN	PADAPTER	pAdapter,
 							IN	u16		efuse_addr,
 							IN	u8		word_en,
 							IN	u8		*data,
-							IN	BOOLEAN		bPseudoTest)
+							IN	bool		bPseudoTest)
 {
 	u8	ret=0;
 
@@ -919,13 +919,13 @@ Efuse_ReadAllMap(
 	IN		PADAPTER	pAdapter,
 	IN		u8		efuseType,
 	IN OUT	u8		*Efuse,
-	IN		BOOLEAN		bPseudoTest);
+	IN		bool		bPseudoTest);
 void
 Efuse_ReadAllMap(
 	IN		PADAPTER	pAdapter,
 	IN		u8		efuseType,
 	IN OUT	u8		*Efuse,
-	IN		BOOLEAN		bPseudoTest)
+	IN		bool		bPseudoTest)
 {
 	u16	mapLen=0;
 
@@ -1085,7 +1085,7 @@ efuse_ShadowWrite4Byte(
 void EFUSE_ShadowMapUpdate(
 	IN PADAPTER	pAdapter,
 	IN u8		efuseType,
-	IN BOOLEAN	bPseudoTest)
+	IN bool	bPseudoTest)
 {
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(pAdapter);
 	u16	mapLen=0;

@@ -174,8 +174,8 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	s4Byte			Y, ele_C=0;
 	s1Byte			OFDM_index[2], CCK_index=0, OFDM_index_old[2]={0,0}, CCK_index_old=0, index;
 	u4Byte			i = 0, j = 0;
-	BOOLEAN			is2T = FALSE;
-	BOOLEAN			bInteralPA = FALSE;
+	bool			is2T = FALSE;
+	bool			bInteralPA = FALSE;
 
 	u1Byte			OFDM_min_index = 6, rf; //OFDM BB Swing should be less than +3.0dB, which is required by Arthur
 	u1Byte			Indexforchannel = 0/*GetRightChnlPlaceforIQK(pHalData->CurrentChannel)*/;
@@ -634,7 +634,7 @@ phy_PathA_IQK_8188E(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		configPathB
+	IN	bool		configPathB
 	)
 {
 	u4Byte regEAC, regE94, regE9C, regEA4;
@@ -698,7 +698,7 @@ phy_PathA_RxIQK(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		configPathB
+	IN	bool		configPathB
 	)
 {
 	u4Byte regEAC, regE94, regE9C, regEA4, u4tmp;
@@ -906,10 +906,10 @@ _PHY_PathAFillIQKMatrix(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN  BOOLEAN	bIQKOK,
+	IN  bool	bIQKOK,
 	IN	s4Byte		result[][8],
 	IN	u1Byte		final_candidate,
-	IN  BOOLEAN		bTxOnly
+	IN  bool		bTxOnly
 	)
 {
 	u4Byte	Oldval_0, X, TX0_A, reg;
@@ -981,10 +981,10 @@ _PHY_PathBFillIQKMatrix(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN  BOOLEAN	bIQKOK,
+	IN  bool	bIQKOK,
 	IN	s4Byte		result[][8],
 	IN	u1Byte		final_candidate,
-	IN	BOOLEAN		bTxOnly			//do Tx only
+	IN	bool		bTxOnly			//do Tx only
 	)
 {
 	u4Byte	Oldval_1, X, TX1_A, reg;
@@ -1046,7 +1046,7 @@ _PHY_PathBFillIQKMatrix(
 //
 // MP Already declare in odm.c
 #if !(DM_ODM_SUPPORT_TYPE & ODM_MP)
-BOOLEAN
+bool
 ODM_CheckPowerStatus(
 	IN	PADAPTER		Adapter)
 {
@@ -1208,8 +1208,8 @@ _PHY_PathADDAOn(
 	IN	PADAPTER	pAdapter,
 #endif
 	IN	pu4Byte		ADDAReg,
-	IN	BOOLEAN		isPathAOn,
-	IN	BOOLEAN		is2T
+	IN	bool		isPathAOn,
+	IN	bool		is2T
 	)
 {
 	u4Byte	pathOn;
@@ -1304,7 +1304,7 @@ _PHY_PIModeSwitch(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		PIMode
+	IN	bool		PIMode
 	)
 {
 	u4Byte	mode;
@@ -1324,7 +1324,7 @@ _PHY_PIModeSwitch(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_XB_HSSIParameter1, bMaskDWord, mode);
 }
 
-BOOLEAN
+bool
 phy_SimularityCompare_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -1347,8 +1347,8 @@ phy_SimularityCompare_8188E(
 	#endif
 #endif
 	u1Byte		final_candidate[2] = {0xFF, 0xFF};	//for path A and path B
-	BOOLEAN		bResult = TRUE;
-	BOOLEAN		is2T;
+	bool		bResult = TRUE;
+	bool		is2T;
 	s4Byte tmp1 = 0,tmp2 = 0;
 
 	if ( (pDM_Odm->RFType ==ODM_2T2R )||(pDM_Odm->RFType ==ODM_2T3R )||(pDM_Odm->RFType ==ODM_2T4R ))
@@ -1468,7 +1468,7 @@ phy_IQCalibrate_8188E(
 #endif
 	IN	s4Byte		result[][8],
 	IN	u1Byte		t,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -1746,7 +1746,7 @@ phy_LCCalibrate_8188E(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 	u1Byte	tmpReg;
@@ -1838,7 +1838,7 @@ phy_APCalibrate_8188E(
 	IN	PADAPTER	pAdapter,
 #endif
 	IN	s1Byte		delta,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2330,7 +2330,7 @@ PHY_IQCalibrate_8188E(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		bReCovery
+	IN	bool		bReCovery
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2354,17 +2354,17 @@ PHY_IQCalibrate_8188E(
 	s4Byte			result[4][8];	//last is final result
 	u1Byte			i, final_candidate, Indexforchannel;
 	u1Byte          channelToIQK = 7;
-	BOOLEAN			bPathAOK, bPathBOK;
+	bool			bPathAOK, bPathBOK;
 	s4Byte			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
-	BOOLEAN			is12simular, is13simular, is23simular;
-	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			is12simular, is13simular, is23simular;
+	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
 	u4Byte			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 					rOFDM0_XARxIQImbalance,		rOFDM0_XBRxIQImbalance,
 					rOFDM0_ECCAThreshold,	rOFDM0_AGCRSSITable,
 					rOFDM0_XATxIQImbalance,		rOFDM0_XBTxIQImbalance,
 					rOFDM0_XCTxAFE,			rOFDM0_XDTxAFE,
 					rOFDM0_RxIQExtAnta};
-	BOOLEAN		is2T;
+	bool		is2T;
 
 	is2T = (pDM_Odm->RFType == ODM_2T2R)?TRUE:FALSE;
 #if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE) )
@@ -2598,7 +2598,7 @@ PHY_LCCalibrate_8188E(
 #endif
 	)
 {
-	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
 	u4Byte			timeout = 2000, timecount = 0;
 
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2735,8 +2735,8 @@ void phy_SetRFPathSwitch_8188E(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		bMain,
-	IN	BOOLEAN		is2T
+	IN	bool		bMain,
+	IN	bool		is2T
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2784,7 +2784,7 @@ void PHY_SetRFPathSwitch_8188E(
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		bMain
+	IN	bool		bMain
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2828,7 +2828,7 @@ phy_DigitalPredistortion(
 #else
 	IN PDM_ODM_T	pDM_Odm,
 #endif
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 #if ( RT_PLATFORM == PLATFORM_WINDOWS)
@@ -3299,13 +3299,13 @@ PHY_DigitalPredistortion_8188E(
 
 //return value TRUE => Main; FALSE => Aux
 
-BOOLEAN phy_QueryRFPathSwitch_8188E(
+bool phy_QueryRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
 	IN	PADAPTER	pAdapter,
 #endif
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -3345,7 +3345,7 @@ BOOLEAN phy_QueryRFPathSwitch_8188E(
 
 
 //return value TRUE => Main; FALSE => Aux
-BOOLEAN PHY_QueryRFPathSwitch_8188E(
+bool PHY_QueryRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else

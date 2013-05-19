@@ -139,9 +139,9 @@ dm_InterruptMigration(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN			bCurrentIntMt, bCurrentACIntDisable;
-	BOOLEAN			IntMtToSet = _FALSE;
-	BOOLEAN			ACIntToSet = _FALSE;
+	bool			bCurrentIntMt, bCurrentACIntDisable;
+	bool			IntMtToSet = _FALSE;
+	bool			ACIntToSet = _FALSE;
 
 
 	// Retrieve current interrupt migration and Tx four ACs IMR settings first.
@@ -401,8 +401,8 @@ rtl8188e_HalDmWatchDog(
 	IN	PADAPTER	Adapter
 	)
 {
-	BOOLEAN		bFwCurrentInPSMode = _FALSE;
-	BOOLEAN		bFwPSAwake = _TRUE;
+	bool		bFwCurrentInPSMode = _FALSE;
+	bool		bFwPSAwake = _TRUE;
 	u8 hw_init_completed = _FALSE;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

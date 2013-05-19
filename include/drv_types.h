@@ -183,7 +183,7 @@ struct registry_priv
 	u8	bt_sco;
 	u8	bt_ampdu;
 #endif
-	BOOLEAN	bAcceptAddbaReq;
+	bool	bAcceptAddbaReq;
 
 	u8	antdiv_cfg;
 	u8	antdiv_type;

@@ -166,9 +166,9 @@ ODM_MacStatusQuery(
 	IN OUT	PDM_ODM_T					pDM_Odm,
 	IN		pu1Byte						pMacStatus,
 	IN		u1Byte						MacID,
-	IN		BOOLEAN						bPacketMatchBSSID,
-	IN		BOOLEAN						bPacketToSelf,
-	IN		BOOLEAN						bPacketBeacon
+	IN		bool						bPacketMatchBSSID,
+	IN		bool						bPacketToSelf,
+	IN		bool						bPacketBeacon
 	);
 #if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE|ODM_AP))
 HAL_STATUS

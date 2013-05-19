@@ -55,7 +55,7 @@ PHY_IQCalibrate_8188E(
 #else
 	IN PADAPTER	Adapter,
 #endif
-							IN	BOOLEAN		bReCovery);
+							IN	bool		bReCovery);
 
 
 //
@@ -105,8 +105,8 @@ _PHY_PathADDAOn(
 	IN	PADAPTER	pAdapter,
 #endif
 	IN	pu4Byte		ADDAReg,
-	IN	BOOLEAN		isPathAOn,
-	IN	BOOLEAN		is2T
+	IN	bool		isPathAOn,
+	IN	bool		is2T
 	);
 
 void

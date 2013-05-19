@@ -738,12 +738,12 @@ static void mpt_SwitchRfSetting(PADAPTER pAdapter)
 
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-static void MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
+static void MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 {
 	Hal_MPT_CCKTxPowerAdjust(Adapter,bInCH14);
 }
 
-static void MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven)
+static void MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
 {
 	Hal_MPT_CCKTxPowerAdjustbyIndex(pAdapter,beven);
 	}
@@ -816,7 +816,7 @@ void SetDataRate(PADAPTER pAdapter)
 	Hal_SetDataRate(pAdapter);
 }
 
-void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter ,BOOLEAN bMain)
+void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter ,bool bMain)
 {
 
 	PHY_SetRFPathSwitch(pAdapter,bMain);

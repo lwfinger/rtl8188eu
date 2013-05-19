@@ -517,7 +517,7 @@ struct hal_data_8192ce
 
 	u8	LegacyHTTxPowerDiff;// Legacy to HT rate power diff
 
-	BOOLEAN				EepromOrEfuse;
+	bool				EepromOrEfuse;
 	u8				EfuseMap[2][HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
 	u8				EfuseUsedPercentage;
 	EFUSE_HAL			EfuseHal;
@@ -560,7 +560,7 @@ struct hal_data_8192ce
 	u32	RfRegChnlVal[2];
 
 	//RDG enable
-	BOOLEAN	 bRDGEnable;
+	bool	 bRDGEnable;
 
 	//for host message to fw
 	u8	LastHMEBoxNum;
@@ -582,7 +582,7 @@ struct hal_data_8192ce
 	s32				RSSI_sum_B;
 	s32				RSSI_cnt_A;
 	s32				RSSI_cnt_B;
-	BOOLEAN		RSSI_test;
+	bool		RSSI_test;
 #endif
 #ifdef CONFIG_HW_ANTENNA_DIVERSITY
 	//Hybrid Antenna Diversity
@@ -726,7 +726,7 @@ struct hal_data_8192cu
 	u32	RfRegChnlVal[2];
 
 	//RDG enable
-	BOOLEAN	 bRDGEnable;
+	bool	 bRDGEnable;
 
 	//for host message to fw
 	u8	LastHMEBoxNum;
@@ -760,7 +760,7 @@ struct hal_data_8192cu
 	s32				RSSI_sum_B;
 	s32				RSSI_cnt_A;
 	s32				RSSI_cnt_B;
-	BOOLEAN		RSSI_test;
+	bool		RSSI_test;
 #endif
 
 #ifdef CONFIG_HW_ANTENNA_DIVERSITY
@@ -775,7 +775,7 @@ struct hal_data_8192cu
 	u8	FwRsvdPageStartOffset; //2010.06.23. Added by tynli. Reserve page start offset except beacon in TxQ.
 
 	// 2010/08/09 MH Add CU power down mode.
-	BOOLEAN		pwrdown;
+	bool		pwrdown;
 
 	// For 92C USB endpoint setting
 	//
@@ -804,15 +804,15 @@ struct hal_data_8192cu
 #endif
 
 	// 2010/12/10 MH Add for USB aggreation mode dynamic shceme.
-	BOOLEAN		UsbRxHighSpeedMode;
+	bool		UsbRxHighSpeedMode;
 
 	// 2010/11/22 MH Add for slim combo debug mode selective.
 	// This is used for fix the drawback of CU TSMC-A/UMC-A cut. HW auto suspend ability. Close BT clock.
-	BOOLEAN		SlimComboDbg;
+	bool		SlimComboDbg;
 
 	u16	EfuseUsedBytes;
 
-	BOOLEAN				EepromOrEfuse;
+	bool				EepromOrEfuse;
 	u8				EfuseMap[2][HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
 	u8				EfuseUsedPercentage;
 	EFUSE_HAL			EfuseHal;
@@ -836,10 +836,10 @@ void rtl8192c_FirmwareSelfReset(IN PADAPTER Adapter);
 int FirmwareDownload92C(IN PADAPTER Adapter);
 void InitializeFirmwareVars92C(PADAPTER Adapter);
 u8 GetEEPROMSize8192C(PADAPTER Adapter);
-void rtl8192c_EfuseParseChnlPlan(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
+void rtl8192c_EfuseParseChnlPlan(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
 
 HAL_VERSION rtl8192c_ReadChipVersion(IN PADAPTER Adapter);
-void rtl8192c_ReadBluetoothCoexistInfo(PADAPTER Adapter, u8 *PROMContent, BOOLEAN AutoloadFail);
+void rtl8192c_ReadBluetoothCoexistInfo(PADAPTER Adapter, u8 *PROMContent, bool AutoloadFail);
 //void rtl8192c_free_hal_data(_adapter * padapter);
 void rtl8192c_EfuseParseIDCode(PADAPTER pAdapter, u8 *hwinfo);
 void rtl8192c_set_hal_ops(struct hal_ops *pHalFunc);

@@ -421,7 +421,7 @@ typedef struct hal_data_8188e
 	u8	EEPROMThermalMeter;
 	u8	bAPKThermalMeterIgnore;
 
-	BOOLEAN				EepromOrEfuse;
+	bool				EepromOrEfuse;
 	u8				EfuseMap[2][HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
 	u8				EfuseUsedPercentage;
 	EFUSE_HAL			EfuseHal;
@@ -484,7 +484,7 @@ typedef struct hal_data_8188e
 	u32	RfRegChnlVal[2];
 
 	//RDG enable
-	BOOLEAN	 bRDGEnable;
+	bool	 bRDGEnable;
 
 	//for host message to fw
 	u8	LastHMEBoxNum;
@@ -518,7 +518,7 @@ typedef struct hal_data_8188e
 	u8	FwRsvdPageStartOffset; //2010.06.23. Added by tynli. Reserve page start offset except beacon in TxQ.
 
 	// 2010/08/09 MH Add CU power down mode.
-	BOOLEAN		pwrdown;
+	bool		pwrdown;
 
 	// Add for dual MAC  0--Mac0 1--Mac1
 	u32	interfaceIndex;
@@ -527,11 +527,11 @@ typedef struct hal_data_8188e
 	u8	OutEpNumber;
 
 	// 2010/12/10 MH Add for USB aggreation mode dynamic shceme.
-	BOOLEAN		UsbRxHighSpeedMode;
+	bool		UsbRxHighSpeedMode;
 
 	// 2010/11/22 MH Add for slim combo debug mode selective.
 	// This is used for fix the drawback of CU TSMC-A/UMC-A cut. HW auto suspend ability. Close BT clock.
-	BOOLEAN		SlimComboDbg;
+	bool		SlimComboDbg;
 
 	u16	EfuseUsedBytes;
 
@@ -650,7 +650,7 @@ void UpdateInterruptMask8188EE(PADAPTER Adapter, u32 AddMSR, u32 AddMSR1, u32 Re
 
 // rtl8188e_hal_init.c
 #ifdef CONFIG_WOWLAN
-s32 rtl8188e_FirmwareDownload(PADAPTER padapter, BOOLEAN  bUsedWoWLANFw);
+s32 rtl8188e_FirmwareDownload(PADAPTER padapter, bool  bUsedWoWLANFw);
 #else
 s32 rtl8188e_FirmwareDownload(PADAPTER padapter);
 #endif
@@ -664,30 +664,30 @@ s32 InitLLTTable(PADAPTER padapter, u8 txpktbuf_bndy);
 u8 GetEEPROMSize8188E(PADAPTER padapter);
 void Hal_InitPGData88E(PADAPTER padapter);
 void Hal_EfuseParseIDCode88E(PADAPTER padapter, u8 *hwinfo);
-void Hal_ReadTxPowerInfo88E(PADAPTER padapter,u8* hwinfo,BOOLEAN	AutoLoadFail);
+void Hal_ReadTxPowerInfo88E(PADAPTER padapter,u8* hwinfo,bool	AutoLoadFail);
 
-void Hal_EfuseParseEEPROMVer88E(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void rtl8188e_EfuseParseChnlPlan(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void Hal_EfuseParseCustomerID88E(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void Hal_ReadAntennaDiversity88E	(PADAPTER pAdapter,u8*PROMContent,BOOLEAN AutoLoadFail);
-void Hal_ReadThermalMeter_88E(PADAPTER	Adapter,u8* PROMContent,BOOLEAN		AutoloadFail);
-void Hal_EfuseParseXtal_8188E(PADAPTER pAdapter,u8* hwinfo,BOOLEAN AutoLoadFail);
-void Hal_EfuseParseBoardType88E(PADAPTER pAdapter,u8* hwinfo,BOOLEAN AutoLoadFail);
-void Hal_ReadPowerSavingMode88E(PADAPTER pAdapter,u8* hwinfo,BOOLEAN AutoLoadFail);
+void Hal_EfuseParseEEPROMVer88E(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
+void rtl8188e_EfuseParseChnlPlan(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
+void Hal_EfuseParseCustomerID88E(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
+void Hal_ReadAntennaDiversity88E	(PADAPTER pAdapter,u8*PROMContent,bool AutoLoadFail);
+void Hal_ReadThermalMeter_88E(PADAPTER	Adapter,u8* PROMContent,bool		AutoloadFail);
+void Hal_EfuseParseXtal_8188E(PADAPTER pAdapter,u8* hwinfo,bool AutoLoadFail);
+void Hal_EfuseParseBoardType88E(PADAPTER pAdapter,u8* hwinfo,bool AutoLoadFail);
+void Hal_ReadPowerSavingMode88E(PADAPTER pAdapter,u8* hwinfo,bool AutoLoadFail);
 
-BOOLEAN HalDetectPwrDownMode88E(PADAPTER Adapter);
+bool HalDetectPwrDownMode88E(PADAPTER Adapter);
 
 #ifdef CONFIG_WOWLAN
 void Hal_DetectWoWMode(PADAPTER pAdapter);
 #endif //CONFIG_WOWLAN
 
 #ifdef CONFIG_RF_GAIN_OFFSET
-void Hal_ReadRFGainOffset(PADAPTER pAdapter,u8* hwinfo,BOOLEAN AutoLoadFail);
+void Hal_ReadRFGainOffset(PADAPTER pAdapter,u8* hwinfo,bool AutoLoadFail);
 #endif //CONFIG_RF_GAIN_OFFSET
 
 //RT_CHANNEL_DOMAIN rtl8723a_HalMapChannelPlan(PADAPTER padapter, u8 HalChannelPlan);
 //VERSION_8192C rtl8723a_ReadChipVersion(PADAPTER padapter);
-//void rtl8723a_ReadBluetoothCoexistInfo(PADAPTER padapter, u8 *PROMContent, BOOLEAN AutoloadFail);
+//void rtl8723a_ReadBluetoothCoexistInfo(PADAPTER padapter, u8 *PROMContent, bool AutoloadFail);
 void Hal_InitChannelPlan(PADAPTER padapter);
 
 void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc);

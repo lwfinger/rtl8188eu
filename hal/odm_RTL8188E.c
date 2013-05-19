@@ -417,8 +417,8 @@ odm_HWAntDiv(
 	u1Byte	RxIdleAnt=0, TargetAnt=7;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
-	BOOLEAN	bMatchBSSID;
-	BOOLEAN	bPktFilterMacth = FALSE;
+	bool	bMatchBSSID;
+	bool	bPktFilterMacth = FALSE;
 	PSTA_INFO_T	pEntry;
 
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++)
@@ -541,7 +541,7 @@ odm_FastAntTraining(
 	u4Byte	i, MaxRSSI=0;
 	u1Byte	TargetAnt=2;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
-	BOOLEAN	bPktFilterMacth = FALSE;
+	bool	bPktFilterMacth = FALSE;
 	PSTA_INFO_T	pEntry;
 
 
@@ -822,7 +822,7 @@ odm_PrimaryCCA_Init(
 	PrimaryCCA->PriCCA_flag = 0;
 }
 
-BOOLEAN
+bool
 ODM_DynamicPrimaryCCA_DupRTS(
 	IN		PDM_ODM_T		pDM_Odm
 	)
@@ -849,9 +849,9 @@ odm_DynamicPrimaryCCA(
 	PFALSE_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
 	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 
-	BOOLEAN		Is40MHz;
-	BOOLEAN		Client_40MHz = FALSE, Client_tmp = FALSE;      // connected client BW
-	BOOLEAN		bConnected = FALSE;		// connected or not
+	bool		Is40MHz;
+	bool		Client_40MHz = FALSE, Client_tmp = FALSE;      // connected client BW
+	bool		bConnected = FALSE;		// connected or not
 	static u1Byte	Client_40MHz_pre = 0;
 	static u8Byte	lastTxOkCnt = 0;
 	static u8Byte	lastRxOkCnt = 0;
@@ -1218,7 +1218,7 @@ odm_DynamicPrimaryCCA(
 	)
 {
 }
-BOOLEAN
+bool
 ODM_DynamicPrimaryCCA_DupRTS(
 	IN		PDM_ODM_T		pDM_Odm
 	)

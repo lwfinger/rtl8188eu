@@ -1027,9 +1027,9 @@ ODM_MacStatusQuery(
 	IN OUT	PDM_ODM_T					pDM_Odm,
 	IN		pu1Byte						pMacStatus,
 	IN		u1Byte						MacID,
-	IN		BOOLEAN						bPacketMatchBSSID,
-	IN		BOOLEAN						bPacketToSelf,
-	IN		BOOLEAN						bPacketBeacon
+	IN		bool						bPacketMatchBSSID,
+	IN		bool						bPacketToSelf,
+	IN		bool						bPacketBeacon
 	)
 {
 	// 2011/10/19 Driver team will handle in the future.

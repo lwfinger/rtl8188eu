@@ -537,7 +537,7 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(ADAPTER *Adapter,int data_len)
 static void
 _FWDownloadEnable(
 	IN	PADAPTER		padapter,
-	IN	BOOLEAN			enable
+	IN	bool			enable
 	)
 {
 	u8	tmp;
@@ -825,7 +825,7 @@ u8	FwBuffer8188E[FW_8188E_SIZE];
 //		Download 8192C firmware code.
 //
 //
-s32 rtl8188e_FirmwareDownload(PADAPTER padapter, BOOLEAN  bUsedWoWLANFw)
+s32 rtl8188e_FirmwareDownload(PADAPTER padapter, bool  bUsedWoWLANFw)
 #else
 s32 rtl8188e_FirmwareDownload(PADAPTER padapter)
 #endif
@@ -1074,27 +1074,27 @@ enum{
 		LDOE25_SHIFT						= 28 ,
 	};
 
-static BOOLEAN
+static bool
 hal_EfusePgPacketWrite2ByteHeader(
 	IN	PADAPTER		pAdapter,
 	IN	u8				efuseType,
 	IN	u16				*pAddr,
 	IN	PPGPKT_STRUCT	pTargetPkt,
-	IN	BOOLEAN			bPseudoTest);
-static BOOLEAN
+	IN	bool			bPseudoTest);
+static bool
 hal_EfusePgPacketWrite1ByteHeader(
 	IN	PADAPTER		pAdapter,
 	IN	u8				efuseType,
 	IN	u16				*pAddr,
 	IN	PPGPKT_STRUCT	pTargetPkt,
-	IN	BOOLEAN			bPseudoTest);
-static BOOLEAN
+	IN	bool			bPseudoTest);
+static bool
 hal_EfusePgPacketWriteData(
 	IN	PADAPTER		pAdapter,
 	IN	u8				efuseType,
 	IN	u16				*pAddr,
 	IN	PPGPKT_STRUCT	pTargetPkt,
-	IN	BOOLEAN			bPseudoTest);
+	IN	bool			bPseudoTest);
 
 static void
 hal_EfusePowerSwitch_RTL8188E(
@@ -1208,7 +1208,7 @@ Hal_EfuseReadEFuse88E(
 	u16			_offset,
 	u16			_size_byte,
 	u8			*pbuf,
-	IN	BOOLEAN	bPseudoTest
+	IN	bool	bPseudoTest
 	)
 {
 	//u8	efuseTbl[EFUSE_MAP_LEN_88E];
@@ -1397,14 +1397,14 @@ exit:
 }
 
 
-static BOOLEAN
+static bool
 Hal_EfuseSwitchToBank(
 	IN		PADAPTER	pAdapter,
 	IN		u8			bank,
-	IN		BOOLEAN		bPseudoTest
+	IN		bool		bPseudoTest
 	)
 {
-	BOOLEAN		bRet = _FALSE;
+	bool		bRet = _FALSE;
 	u32		value32=0;
 
 	//RTPRINT(FEEPROM, EFUSE_PG, ("Efuse switch bank to %d\n", bank));
@@ -1456,7 +1456,7 @@ ReadEFuseByIC(
 	u16		 _offset,
 	u16		_size_byte,
 	u8		*pbuf,
-	IN BOOLEAN	bPseudoTest
+	IN bool	bPseudoTest
 	)
 {
 #ifdef DBG_IOL_READ_EFUSE_MAP
@@ -1515,7 +1515,7 @@ ReadEFuse_Pseudo (
 	u16		 _offset,
 	u16		_size_byte,
 	u8		*pbuf,
-	IN BOOLEAN	bPseudoTest
+	IN bool	bPseudoTest
 	)
 {
 	Hal_EfuseReadEFuse88E(Adapter, _offset, _size_byte, pbuf, bPseudoTest);
@@ -1528,7 +1528,7 @@ rtl8188e_ReadEFuse(
 	u16		_offset,
 	u16		_size_byte,
 	u8		*pbuf,
-	IN	BOOLEAN	bPseudoTest
+	IN	bool	bPseudoTest
 	)
 {
 	if (bPseudoTest)
@@ -1686,7 +1686,7 @@ rtl8188e_EFUSE_GetEfuseDefinition(
 	IN		u8		efuseType,
 	IN		u8		type,
 	OUT		void		*pOut,
-	IN		BOOLEAN		bPseudoTest
+	IN		bool		bPseudoTest
 	)
 {
 	if (bPseudoTest)
@@ -1704,7 +1704,7 @@ Hal_EfuseWordEnableDataWrite(	IN	PADAPTER	pAdapter,
 							IN	u16		efuse_addr,
 							IN	u8		word_en,
 							IN	u8		*data,
-							IN	BOOLEAN		bPseudoTest)
+							IN	bool		bPseudoTest)
 {
 	u16	tmpaddr = 0;
 	u16	start_addr = efuse_addr;
@@ -1770,7 +1770,7 @@ Hal_EfuseWordEnableDataWrite_Pseudo (	IN	PADAPTER	pAdapter,
 							IN	u16		efuse_addr,
 							IN	u8		word_en,
 							IN	u8		*data,
-							IN	BOOLEAN		bPseudoTest)
+							IN	bool		bPseudoTest)
 {
 	u8	ret=0;
 
@@ -1784,7 +1784,7 @@ rtl8188e_Efuse_WordEnableDataWrite(	IN	PADAPTER	pAdapter,
 							IN	u16		efuse_addr,
 							IN	u8		word_en,
 							IN	u8		*data,
-							IN	BOOLEAN		bPseudoTest)
+							IN	bool		bPseudoTest)
 {
 	u8	ret=0;
 
@@ -1803,7 +1803,7 @@ rtl8188e_Efuse_WordEnableDataWrite(	IN	PADAPTER	pAdapter,
 
 static u16
 hal_EfuseGetCurrentSize_8188e(IN	PADAPTER	pAdapter,
-		IN		BOOLEAN			bPseudoTest)
+		IN		bool			bPseudoTest)
 {
 	int	bContinual = _TRUE;
 
@@ -1874,7 +1874,7 @@ hal_EfuseGetCurrentSize_8188e(IN	PADAPTER	pAdapter,
 
 static u16
 Hal_EfuseGetCurrentSize_Pseudo (IN	PADAPTER	pAdapter,
-		IN		BOOLEAN			bPseudoTest)
+		IN		bool			bPseudoTest)
 {
 	u16	ret=0;
 
@@ -1888,7 +1888,7 @@ static u16
 rtl8188e_EfuseGetCurrentSize(
 	IN	PADAPTER	pAdapter,
 	IN	u8			efuseType,
-	IN	BOOLEAN		bPseudoTest)
+	IN	bool		bPseudoTest)
 {
 	u16	ret=0;
 
@@ -1911,7 +1911,7 @@ hal_EfusePgPacketRead_8188e(
 	IN	PADAPTER	pAdapter,
 	IN	u8			offset,
 	IN	u8			*data,
-	IN	BOOLEAN		bPseudoTest)
+	IN	bool		bPseudoTest)
 {
 	u8	ReadState = PG_STATE_HEADER;
 
@@ -2026,7 +2026,7 @@ static int
 Hal_EfusePgPacketRead(	IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			*data,
-					IN	BOOLEAN			bPseudoTest)
+					IN	bool			bPseudoTest)
 {
 	int	ret=0;
 
@@ -2040,7 +2040,7 @@ static int
 Hal_EfusePgPacketRead_Pseudo (	IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+					IN	bool		bPseudoTest)
 {
 	int	ret=0;
 
@@ -2053,7 +2053,7 @@ static int
 rtl8188e_Efuse_PgPacketRead(	IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+					IN	bool		bPseudoTest)
 {
 	int	ret=0;
 
@@ -2069,13 +2069,13 @@ rtl8188e_Efuse_PgPacketRead(	IN	PADAPTER	pAdapter,
 	return ret;
 }
 
-static BOOLEAN
+static bool
 hal_EfuseFixHeaderProcess(
 	IN		PADAPTER			pAdapter,
 	IN		u8					efuseType,
 	IN		PPGPKT_STRUCT		pFixPkt,
 	IN		u16					*pAddr,
-	IN		BOOLEAN				bPseudoTest
+	IN		bool				bPseudoTest
 )
 {
 	u8	originaldata[8], badworden=0;
@@ -2110,15 +2110,15 @@ hal_EfuseFixHeaderProcess(
 	return _TRUE;
 }
 
-static BOOLEAN
+static bool
 hal_EfusePgPacketWrite2ByteHeader(
 	IN			PADAPTER		pAdapter,
 	IN			u8				efuseType,
 	IN			u16				*pAddr,
 	IN			PPGPKT_STRUCT	pTargetPkt,
-	IN			BOOLEAN			bPseudoTest)
+	IN			bool			bPseudoTest)
 {
-	BOOLEAN		bRet=_FALSE, bContinual=_TRUE;
+	bool		bRet=_FALSE, bContinual=_TRUE;
 	u16	efuse_addr=*pAddr, efuse_max_available_len=0;
 	u8	pg_header=0, tmp_header=0, pg_header_temp=0;
 	u8	repeatcnt=0;
@@ -2207,15 +2207,15 @@ hal_EfusePgPacketWrite2ByteHeader(
 	return bRet;
 }
 
-static BOOLEAN
+static bool
 hal_EfusePgPacketWrite1ByteHeader(
 	IN			PADAPTER		pAdapter,
 	IN			u8				efuseType,
 	IN			u16				*pAddr,
 	IN			PPGPKT_STRUCT	pTargetPkt,
-	IN			BOOLEAN			bPseudoTest)
+	IN			bool			bPseudoTest)
 {
-	BOOLEAN		bRet=_FALSE;
+	bool		bRet=_FALSE;
 	u8	pg_header=0, tmp_header=0;
 	u16	efuse_addr=*pAddr;
 	u8	repeatcnt=0;
@@ -2255,15 +2255,15 @@ hal_EfusePgPacketWrite1ByteHeader(
 	return bRet;
 }
 
-static BOOLEAN
+static bool
 hal_EfusePgPacketWriteData(
 	IN			PADAPTER		pAdapter,
 	IN			u8				efuseType,
 	IN			u16				*pAddr,
 	IN			PPGPKT_STRUCT	pTargetPkt,
-	IN			BOOLEAN			bPseudoTest)
+	IN			bool			bPseudoTest)
 {
-	BOOLEAN	bRet=_FALSE;
+	bool	bRet=_FALSE;
 	u16	efuse_addr=*pAddr;
 	u8	badworden=0;
 	u32	PgWriteSuccess=0;
@@ -2292,15 +2292,15 @@ hal_EfusePgPacketWriteData(
 	return bRet;
 }
 
-static BOOLEAN
+static bool
 hal_EfusePgPacketWriteHeader(
 	IN			PADAPTER		pAdapter,
 	IN			u8				efuseType,
 	IN			u16				*pAddr,
 	IN			PPGPKT_STRUCT	pTargetPkt,
-	IN			BOOLEAN			bPseudoTest)
+	IN			bool			bPseudoTest)
 {
-	BOOLEAN		bRet=_FALSE;
+	bool		bRet=_FALSE;
 
 	if (pTargetPkt->offset >= EFUSE_MAX_SECTION_BASE)
 	{
@@ -2314,7 +2314,7 @@ hal_EfusePgPacketWriteHeader(
 	return bRet;
 }
 
-static BOOLEAN
+static bool
 wordEnMatched(
 	IN	PPGPKT_STRUCT	pTargetPkt,
 	IN	PPGPKT_STRUCT	pCurPkt,
@@ -2354,15 +2354,15 @@ wordEnMatched(
 		return _FALSE;
 }
 
-static BOOLEAN
+static bool
 hal_EfuseCheckIfDatafollowed(
 	IN		PADAPTER		pAdapter,
 	IN		u8				word_cnts,
 	IN		u16				startAddr,
-	IN		BOOLEAN			bPseudoTest
+	IN		bool			bPseudoTest
 	)
 {
-	BOOLEAN		bRet=_FALSE;
+	bool		bRet=_FALSE;
 	u8	i, efuse_data;
 
 	for (i=0; i<(word_cnts*2) ; i++)
@@ -2374,16 +2374,16 @@ hal_EfuseCheckIfDatafollowed(
 	return bRet;
 }
 
-static BOOLEAN
+static bool
 hal_EfusePartialWriteCheck(
 					IN	PADAPTER		pAdapter,
 					IN	u8				efuseType,
 					IN	u16				*pAddr,
 					IN	PPGPKT_STRUCT	pTargetPkt,
-					IN	BOOLEAN			bPseudoTest
+					IN	bool			bPseudoTest
 					)
 {
-	BOOLEAN		bRet=_FALSE;
+	bool		bRet=_FALSE;
 	u8	i, efuse_data=0, cur_header=0;
 	u8	new_wden=0, matched_wden=0, badworden=0;
 	u16	startAddr=0, efuse_max_available_len=0, efuse_max=0;
@@ -2499,11 +2499,11 @@ hal_EfusePartialWriteCheck(
 	return bRet;
 }
 
-static BOOLEAN
+static bool
 hal_EfusePgCheckAvailableAddr(
 	IN	PADAPTER	pAdapter,
 	IN	u8			efuseType,
-	IN	BOOLEAN		bPseudoTest
+	IN	bool		bPseudoTest
 	)
 {
 	u16	efuse_max_available_len=0;
@@ -2540,13 +2540,13 @@ hal_EfuseConstructPGPkt(
 	//RTPRINT(FEEPROM, EFUSE_PG, ("hal_EfuseConstructPGPkt(), targetPkt, offset=%d, word_en=0x%x, word_cnts=%d\n", pTargetPkt->offset, pTargetPkt->word_en, pTargetPkt->word_cnts));
 }
 
-static BOOLEAN
+static bool
 hal_EfusePgPacketWrite_BT(
 					IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			word_en,
 					IN	u8			*pData,
-					IN	BOOLEAN		bPseudoTest
+					IN	bool		bPseudoTest
 					)
 {
 	PGPKT_STRUCT	targetPkt;
@@ -2570,13 +2570,13 @@ hal_EfusePgPacketWrite_BT(
 	return _TRUE;
 }
 
-static BOOLEAN
+static bool
 hal_EfusePgPacketWrite_8188e(
 					IN	PADAPTER		pAdapter,
 					IN	u8			offset,
 					IN	u8			word_en,
 					IN	u8			*pData,
-					IN	BOOLEAN		bPseudoTest
+					IN	bool		bPseudoTest
 					)
 {
 	PGPKT_STRUCT	targetPkt;
@@ -2606,7 +2606,7 @@ Hal_EfusePgPacketWrite_Pseudo (IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			word_en,
 					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+					IN	bool		bPseudoTest)
 {
 	int ret;
 
@@ -2620,7 +2620,7 @@ Hal_EfusePgPacketWrite(IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			word_en,
 					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+					IN	bool		bPseudoTest)
 {
 	int	ret=0;
 	ret = hal_EfusePgPacketWrite_8188e(pAdapter, offset, word_en, data, bPseudoTest);
@@ -2634,7 +2634,7 @@ rtl8188e_Efuse_PgPacketWrite(IN	PADAPTER	pAdapter,
 					IN	u8			offset,
 					IN	u8			word_en,
 					IN	u8			*data,
-					IN	BOOLEAN		bPseudoTest)
+					IN	bool		bPseudoTest)
 {
 	int	ret;
 
@@ -2709,7 +2709,7 @@ void rtl8188e_GetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
-	BOOLEAN					bSet)
+	bool					bSet)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T podmpriv = &pHalData->odmpriv;
@@ -2724,7 +2724,7 @@ void rtl8188e_SetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
-	BOOLEAN					bSet)
+	bool					bSet)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T podmpriv = &pHalData->odmpriv;
@@ -3122,7 +3122,7 @@ static void
 Hal_ReadPowerValueFromPROM_8188E(
 	IN	PTxPowerInfo24G	pwrInfo24G,
 	IN	u8*				PROMContent,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	u32 rfPath, eeAddr=EEPROM_TX_PWR_INX_88E, group,TxCount=0;
@@ -3340,7 +3340,7 @@ Hal_GetChnlGroup88E(
 void Hal_ReadPowerSavingMode88E(
 	PADAPTER		padapter,
 	IN	u8*			hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -3382,7 +3382,7 @@ void
 Hal_ReadTxPowerInfo88E(
 	IN	PADAPTER		padapter,
 	IN	u8*				PROMContent,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -3457,7 +3457,7 @@ void
 Hal_EfuseParseXtal_8188E(
 	IN	PADAPTER		pAdapter,
 	IN	u8*			hwinfo,
-	IN	BOOLEAN		AutoLoadFail
+	IN	bool		AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -3479,7 +3479,7 @@ void
 Hal_EfuseParseBoardType88E(
 	IN	PADAPTER		pAdapter,
 	IN	u8*				hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -3495,7 +3495,7 @@ void
 Hal_EfuseParseEEPROMVer88E(
 	IN	PADAPTER		padapter,
 	IN	u8*			hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -3516,7 +3516,7 @@ void
 rtl8188e_EfuseParseChnlPlan(
 	IN	PADAPTER		padapter,
 	IN	u8*			hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	padapter->mlmepriv.ChannelPlan = hal_com_get_channel_plan(
@@ -3534,7 +3534,7 @@ void
 Hal_EfuseParseCustomerID88E(
 	IN	PADAPTER		padapter,
 	IN	u8*			hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -3558,7 +3558,7 @@ void
 Hal_ReadAntennaDiversity88E(
 	IN	PADAPTER		pAdapter,
 	IN	u8*				PROMContent,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -3606,7 +3606,7 @@ void
 Hal_ReadThermalMeter_88E(
 	IN	PADAPTER	Adapter,
 	IN	u8*			PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	IN	bool		AutoloadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3640,7 +3640,7 @@ Hal_InitChannelPlan(
 {
 }
 
-BOOLEAN HalDetectPwrDownMode88E(PADAPTER Adapter)
+bool HalDetectPwrDownMode88E(PADAPTER Adapter)
 {
 	u8 tmpvalue = 0;
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
@@ -3675,7 +3675,7 @@ void Hal_DetectWoWMode(PADAPTER pAdapter)
 void Hal_ReadRFGainOffset(
 	IN		PADAPTER		Adapter,
 	IN		u8*				PROMContent,
-	IN		BOOLEAN			AutoloadFail)
+	IN		bool			AutoloadFail)
 {
 	u8 buff[EFUSE_MAX_SIZE];
 	u32 res;

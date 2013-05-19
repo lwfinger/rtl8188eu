@@ -22,7 +22,7 @@
 #ifndef __INC_BB_8188E_HW_IMG_H
 #define __INC_BB_8188E_HW_IMG_H
 
-//static BOOLEAN CheckCondition(const u4Byte Condition, const u4Byte Hex);
+//static bool CheckCondition(const u4Byte Condition, const u4Byte Hex);
 
 /******************************************************************************
 *                           AGC_TAB_1T.TXT

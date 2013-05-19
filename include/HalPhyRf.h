@@ -30,14 +30,14 @@
 //
 
 void	PHY_SetMonitorMode8192C(IN	PADAPTER	pAdapter,
-										IN	BOOLEAN		bEnableMonitorMode	);
+										IN	bool		bEnableMonitorMode	);
 
 //
 // IQ calibrate
 //
 void
 PHY_IQCalibrate_8192C(		IN	PADAPTER	pAdapter,
-							IN	BOOLEAN		bReCovery);
+							IN	bool		bReCovery);
 
 //
 // LC calibrate

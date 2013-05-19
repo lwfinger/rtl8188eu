@@ -25,7 +25,7 @@
 #endif
 
 #if (RTL8188E_SUPPORT == 1)
-static BOOLEAN
+static bool
 CheckCondition(
     const u4Byte  Condition,
     const u4Byte  Hex
@@ -207,7 +207,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 	u1Byte     board       = pDM_Odm->BoardType;
 	u4Byte     ArrayLen    = sizeof(Array_AGC_TAB_1T_8188E)/sizeof(u4Byte);
 	pu4Byte    Array       = Array_AGC_TAB_1T_8188E;
-	BOOLEAN		biol = FALSE;
+	bool		biol = FALSE;
 #ifdef CONFIG_IOL_IOREG_CFG
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
@@ -538,7 +538,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 	u1Byte     board       = pDM_Odm->BoardType;
 	u4Byte     ArrayLen    = sizeof(Array_PHY_REG_1T_8188E)/sizeof(u4Byte);
 	pu4Byte    Array       = Array_PHY_REG_1T_8188E;
-	BOOLEAN		biol = FALSE;
+	bool		biol = FALSE;
 #ifdef CONFIG_IOL_IOREG_CFG
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
@@ -843,7 +843,7 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 	u1Byte     board       = pDM_Odm->BoardType;
 	u4Byte     ArrayLen    = sizeof(Array_PHY_REG_PG_8188E)/sizeof(u4Byte);
 	pu4Byte    Array       = Array_PHY_REG_PG_8188E;
-	BOOLEAN		biol = FALSE;
+	bool		biol = FALSE;
 
 	hex += board;
 	hex += interfaceValue << 8;

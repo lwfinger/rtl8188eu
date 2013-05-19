@@ -238,18 +238,18 @@ typedef void (*MPT_WORK_ITEM_HANDLER)(IN void * Adapter);
 typedef struct _MPT_CONTEXT
 {
 	// Indicate if we have started Mass Production Test.
-	BOOLEAN			bMassProdTest;
+	bool			bMassProdTest;
 
 	// Indicate if the driver is unloading or unloaded.
-	BOOLEAN			bMptDrvUnload;
+	bool			bMptDrvUnload;
 
 	_sema			MPh2c_Sema;
 	_timer			MPh2c_timeout_timer;
 // Event used to sync H2c for BT control
 
-	BOOLEAN		MptH2cRspEvent;
-	BOOLEAN		MptBtC2hEvent;
-	BOOLEAN		bMPh2c_timeout;
+	bool		MptH2cRspEvent;
+	bool		MptBtC2hEvent;
+	bool		bMPh2c_timeout;
 
 	/* 8190 PCI does not support NDIS_WORK_ITEM. */
 	// Work Item for Mass Production Test.
@@ -260,7 +260,7 @@ typedef struct _MPT_CONTEXT
 	// To protect the following variables.
 //	NDIS_SPIN_LOCK		MptWorkItemSpinLock;
 	// Indicate a MptWorkItem is scheduled and not yet finished.
-	BOOLEAN			bMptWorkItemInProgress;
+	bool			bMptWorkItemInProgress;
 	// An instance which implements function and context of MptWorkItem.
 	MPT_WORK_ITEM_HANDLER	CurrMptAct;
 
@@ -293,24 +293,24 @@ typedef struct _MPT_CONTEXT
 	// Content of RCR Regsiter for Mass Production Test.
 	ULONG			MptRCR;
 	// TRUE if we only receive packets with specific pattern.
-	BOOLEAN			bMptFilterPattern;
+	bool			bMptFilterPattern;
 	// Rx OK count, statistics used in Mass Production Test.
 	ULONG			MptRxOkCnt;
 	// Rx CRC32 error count, statistics used in Mass Production Test.
 	ULONG			MptRxCrcErrCnt;
 
-	BOOLEAN			bCckContTx;	// TRUE if we are in CCK Continuous Tx test.
-	BOOLEAN			bOfdmContTx;	// TRUE if we are in OFDM Continuous Tx test.
-	BOOLEAN			bStartContTx;	// TRUE if we have start Continuous Tx test.
+	bool			bCckContTx;	// TRUE if we are in CCK Continuous Tx test.
+	bool			bOfdmContTx;	// TRUE if we are in OFDM Continuous Tx test.
+	bool			bStartContTx;	// TRUE if we have start Continuous Tx test.
 	// TRUE if we are in Single Carrier Tx test.
-	BOOLEAN			bSingleCarrier;
+	bool			bSingleCarrier;
 	// TRUE if we are in Carrier Suppression Tx Test.
-	BOOLEAN			bCarrierSuppression;
+	bool			bCarrierSuppression;
 	//TRUE if we are in Single Tone Tx test.
-	BOOLEAN			bSingleTone;
+	bool			bSingleTone;
 
 	// ACK counter asked by K.Y..
-	BOOLEAN			bMptEnableAckCounter;
+	bool			bMptEnableAckCounter;
 	ULONG			MptAckCounter;
 
 	// SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~!
@@ -319,7 +319,7 @@ typedef struct _MPT_CONTEXT
 	//s4Byte			RfReadLine[2];
 
 	u8		APK_bound[2];	//for APK	path A/path B
-	BOOLEAN		bMptIndexEven;
+	bool		bMptIndexEven;
 
 	u8		backup0xc50;
 	u8		backup0xc58;
@@ -630,8 +630,8 @@ extern s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable);
 extern void Hal_GetPowerTracking(PADAPTER padapter, u8 * enable);
 extern void Hal_GetThermalMeter(PADAPTER pAdapter, u8 *value);
 extern void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter);
-extern void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14);
-extern void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, BOOLEAN beven);
+extern void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14);
+extern void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven);
 extern void Hal_SetCCKTxPower(PADAPTER pAdapter, u8 * TxPower);
 extern void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 * TxPower);
 extern void Hal_TriggerRFThermalMeter(PADAPTER pAdapter);
@@ -640,6 +640,6 @@ extern void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart);
 extern void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart);
 extern void Hal_ProSetCrystalCap (PADAPTER pAdapter , u32 CrystalCapVal);
 extern void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv);
-extern void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter ,BOOLEAN bMain);
+extern void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter ,bool bMain);
 
 #endif //_RTW_MP_H_

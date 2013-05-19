@@ -442,14 +442,14 @@ struct hal_data_8192de
 	MACPHY_MODE_8192D	MacPhyMode92D;
 	BAND_TYPE	CurrentBandType92D;	//0:2.4G, 1:5G
 	BAND_TYPE	BandSet92D;
-	BOOLEAN		bIsVS;
-	BOOLEAN		bSupportRemoteWakeUp;
+	bool		bIsVS;
+	bool		bSupportRemoteWakeUp;
 	u8	AutoLoadStatusFor8192D;
 
-	BOOLEAN		bNOPG;
+	bool		bNOPG;
 
-	BOOLEAN       bMasterOfDMSP;
-	BOOLEAN       bSlaveOfDMSP;
+	bool       bMasterOfDMSP;
+	bool       bSlaveOfDMSP;
 
 	u16	CustomerID;
 
@@ -547,21 +547,21 @@ struct hal_data_8192de
 	u32	RfRegChnlVal[2];
 
 
-	BOOLEAN		bPhyValueInitReady;
+	bool		bPhyValueInitReady;
 
-	BOOLEAN		bTXPowerDataReadFromEEPORM;
+	bool		bTXPowerDataReadFromEEPORM;
 
-	BOOLEAN		bInSetPower;
+	bool		bInSetPower;
 
 	//RDG enable
-	BOOLEAN		bRDGEnable;
+	bool		bRDGEnable;
 
-	BOOLEAN		bLoadIMRandIQKSettingFor2G;// True if IMR or IQK  have done  for 2.4G in scan progress
-	BOOLEAN		bNeedIQK;
+	bool		bLoadIMRandIQKSettingFor2G;// True if IMR or IQK  have done  for 2.4G in scan progress
+	bool		bNeedIQK;
 
-	BOOLEAN		bLCKInProgress;
+	bool		bLCKInProgress;
 
-	BOOLEAN		bEarlyModeEnable;
+	bool		bEarlyModeEnable;
 
 #if 1
 	IQK_MATRIX_REGS_SETTING IQKMatrixRegSetting[IQK_Matrix_Settings_NUM];
@@ -596,7 +596,7 @@ struct hal_data_8192de
 
 	u16	EfuseUsedBytes;
 
-	BOOLEAN				EepromOrEfuse;
+	bool				EepromOrEfuse;
 	u8				EfuseMap[2][HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
 	u8				EfuseUsedPercentage;
 	EFUSE_HAL			EfuseHal;
@@ -646,15 +646,15 @@ struct hal_data_8192du
 	MACPHY_MODE_8192D	MacPhyMode92D;
 	BAND_TYPE	CurrentBandType92D;	//0:2.4G, 1:5G
 	BAND_TYPE	BandSet92D;
-	BOOLEAN		bIsVS;
+	bool		bIsVS;
 
-	BOOLEAN		bNOPG;
+	bool		bNOPG;
 
-	BOOLEAN		bSupportRemoteWakeUp;
-	BOOLEAN       bMasterOfDMSP;
-	BOOLEAN       bSlaveOfDMSP;
+	bool		bSupportRemoteWakeUp;
+	bool       bMasterOfDMSP;
+	bool       bSlaveOfDMSP;
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	BOOLEAN		bInModeSwitchProcess;
+	bool		bInModeSwitchProcess;
 #endif
 
 	u16	CustomerID;
@@ -748,21 +748,21 @@ struct hal_data_8192du
 	u32	RfRegChnlVal[2];
 
 
-	BOOLEAN		bPhyValueInitReady;
+	bool		bPhyValueInitReady;
 
-	BOOLEAN		bTXPowerDataReadFromEEPORM;
+	bool		bTXPowerDataReadFromEEPORM;
 
-	BOOLEAN		bInSetPower;
+	bool		bInSetPower;
 
 	//RDG enable
-	BOOLEAN		bRDGEnable;
+	bool		bRDGEnable;
 
-	BOOLEAN		bLoadIMRandIQKSettingFor2G;// True if IMR or IQK  have done  for 2.4G in scan progress
-	BOOLEAN		bNeedIQK;
+	bool		bLoadIMRandIQKSettingFor2G;// True if IMR or IQK  have done  for 2.4G in scan progress
+	bool		bNeedIQK;
 
-	BOOLEAN		bLCKInProgress;
+	bool		bLCKInProgress;
 
-	BOOLEAN		bEarlyModeEnable;
+	bool		bEarlyModeEnable;
 
 #if 1
 	IQK_MATRIX_REGS_SETTING IQKMatrixRegSetting[IQK_Matrix_Settings_NUM];
@@ -789,7 +789,7 @@ struct hal_data_8192du
 	u8	FwRsvdPageStartOffset; //2010.06.23. Added by tynli. Reserve page start offset except beacon in TxQ.
 
 	//Query RF by FW
-	BOOLEAN		bReadRFbyFW;
+	bool		bReadRFbyFW;
 
 	// For 92C USB endpoint setting
 	//
@@ -821,7 +821,7 @@ struct hal_data_8192du
 
 	u16	EfuseUsedBytes;
 
-	BOOLEAN				EepromOrEfuse;
+	bool				EepromOrEfuse;
 	u8				EfuseMap[2][HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
 	u8				EfuseUsedPercentage;
 	EFUSE_HAL			EfuseHal;
@@ -841,11 +841,11 @@ typedef struct hal_data_8192du HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 int FirmwareDownload92D(IN PADAPTER Adapter);
 void rtl8192d_FirmwareSelfReset(IN PADAPTER Adapter);
 void rtl8192d_ReadChipVersion(IN PADAPTER Adapter);
-void rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, BOOLEAN AutoLoadFail);
+void rtl8192d_EfuseParseChnlPlan(PADAPTER Adapter, u8 *hwinfo, bool AutoLoadFail);
+void rtl8192d_ReadTxPowerInfo(PADAPTER Adapter, u8* PROMContent, bool AutoLoadFail);
 void rtl8192d_ResetDualMacSwitchVariables(IN PADAPTER Adapter);
 u8 GetEEPROMSize8192D(PADAPTER Adapter);
-BOOLEAN PHY_CheckPowerOffFor8192D(PADAPTER Adapter);
+bool PHY_CheckPowerOffFor8192D(PADAPTER Adapter);
 void PHY_SetPowerOnFor8192D(PADAPTER Adapter);
 //void PHY_ConfigMacPhyMode92D(PADAPTER Adapter);
 void rtl8192d_free_hal_data(_adapter * padapter);

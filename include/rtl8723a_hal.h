@@ -500,14 +500,14 @@ typedef struct hal_data_8723a
 
 	BB_REGISTER_DEFINITION_T	PHYRegDef[4];	//Radio A/B/C/D
 
-	BOOLEAN		bRFPathRxEnable[4];	// We support 4 RF path now.
+	bool		bRFPathRxEnable[4];	// We support 4 RF path now.
 
 	u32	RfRegChnlVal[2];
 
 	u8	bCckHighPower;
 
 	//RDG enable
-	BOOLEAN	 bRDGEnable;
+	bool	 bRDGEnable;
 
 	//for host message to fw
 	u8	LastHMEBoxNum;
@@ -559,11 +559,11 @@ typedef struct hal_data_8723a
 	u8	OutEpNumber;
 
 	// 2010/12/10 MH Add for USB aggreation mode dynamic shceme.
-	BOOLEAN		UsbRxHighSpeedMode;
+	bool		UsbRxHighSpeedMode;
 
 	// 2010/11/22 MH Add for slim combo debug mode selective.
 	// This is used for fix the drawback of CU TSMC-A/UMC-A cut. HW auto suspend ability. Close BT clock.
-	BOOLEAN		SlimComboDbg;
+	bool		SlimComboDbg;
 
 	//
 	// Add For EEPROM Efuse switch and  Efuse Shadow map Setting
@@ -593,7 +593,7 @@ typedef struct hal_data_8723a
 	// 2011/02/23 MH Add for 8723 mylti function definition. The define should be moved to an
 	// independent file in the future.
 
-	BOOLEAN					bMACFuncEnable;
+	bool					bMACFuncEnable;
 
 #ifdef CONFIG_P2P
 	struct P2P_PS_Offload_t	p2p_ps_offload;
@@ -792,19 +792,19 @@ s32 CardDisableWithoutHWSM(PADAPTER padapter);
 u8 GetEEPROMSize8723A(PADAPTER padapter);
 void Hal_InitPGData(PADAPTER padapter, u8 *PROMContent);
 void Hal_EfuseParseIDCode(PADAPTER padapter, u8 *hwinfo);
-void Hal_EfuseParseTxPowerInfo_8723A(PADAPTER padapter, u8 *PROMContent, BOOLEAN AutoLoadFail);
-void Hal_EfuseParseBTCoexistInfo_8723A(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void Hal_EfuseParseEEPROMVer(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void rtl8723a_EfuseParseChnlPlan(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void Hal_EfuseParseCustomerID(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void Hal_EfuseParseAntennaDiversity(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
-void Hal_EfuseParseRateIndicationOption(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
+void Hal_EfuseParseTxPowerInfo_8723A(PADAPTER padapter, u8 *PROMContent, bool AutoLoadFail);
+void Hal_EfuseParseBTCoexistInfo_8723A(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
+void Hal_EfuseParseEEPROMVer(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
+void rtl8723a_EfuseParseChnlPlan(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
+void Hal_EfuseParseCustomerID(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
+void Hal_EfuseParseAntennaDiversity(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
+void Hal_EfuseParseRateIndicationOption(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail);
 void Hal_EfuseParseXtal_8723A(PADAPTER pAdapter, u8 *hwinfo, u8 AutoLoadFail);
 void Hal_EfuseParseThermalMeter_8723A(PADAPTER padapter, u8 *hwinfo, u8 AutoLoadFail);
 
 //RT_CHANNEL_DOMAIN rtl8723a_HalMapChannelPlan(PADAPTER padapter, u8 HalChannelPlan);
 //VERSION_8192C rtl8723a_ReadChipVersion(PADAPTER padapter);
-//void rtl8723a_ReadBluetoothCoexistInfo(PADAPTER padapter, u8 *PROMContent, BOOLEAN AutoloadFail);
+//void rtl8723a_ReadBluetoothCoexistInfo(PADAPTER padapter, u8 *PROMContent, bool AutoloadFail);
 void Hal_InitChannelPlan(PADAPTER padapter);
 
 void rtl8723a_set_hal_ops(struct hal_ops *pHalFunc);

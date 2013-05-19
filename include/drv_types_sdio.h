@@ -61,7 +61,7 @@ typedef struct sdio_data
 	SD_DEVICE_HANDLE			hDevice;
 	SD_CARD_RCA					sd_rca;
 	SD_CARD_INTERFACE			card_intf;
-	BOOLEAN						enableIsarWithStatus;
+	bool						enableIsarWithStatus;
 	WCHAR						active_path[MAX_ACTIVE_REG_PATH];
 	SD_HOST_BLOCK_CAPABILITY	sd_host_blk_cap;
 #endif

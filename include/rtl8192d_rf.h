@@ -85,9 +85,9 @@ void	rtl8192d_PHY_RF6052SetOFDMTxPower(
 										IN	u8		Channel);
 int	PHY_RF6052_Config8192D(	IN	PADAPTER		Adapter	);
 
-BOOLEAN	rtl8192d_PHY_EnableAnotherPHY(IN	PADAPTER Adapter, IN	BOOLEAN	 bMac0);
+bool	rtl8192d_PHY_EnableAnotherPHY(IN	PADAPTER Adapter, IN	bool	 bMac0);
 
-void	rtl8192d_PHY_PowerDownAnotherPHY(IN PADAPTER Adapter, IN BOOLEAN bMac0);
+void	rtl8192d_PHY_PowerDownAnotherPHY(IN PADAPTER Adapter, IN bool bMac0);
 
 
 /*--------------------------Exported Function prototype---------------------*/

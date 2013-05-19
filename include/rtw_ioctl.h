@@ -239,7 +239,7 @@ NDIS_STATUS oid_802_11_statistics_hdl(struct oid_par_priv* poid_par_priv);
 //OID Handler for Segment ED
 NDIS_STATUS oid_rt_mh_vender_id_hdl(struct oid_par_priv* poid_par_priv);
 
-void Set_802_3_MULTICAST_LIST(ADAPTER *pAdapter, UCHAR *MCListbuf, ULONG MCListlen, BOOLEAN bAcceptAllMulticast);
+void Set_802_3_MULTICAST_LIST(ADAPTER *pAdapter, UCHAR *MCListbuf, ULONG MCListlen, bool bAcceptAllMulticast);
 
 #endif// end of PLATFORM_WINDOWS
 

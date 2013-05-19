@@ -42,7 +42,7 @@ phy_PathAStandBy(
 u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_8192C(
 	IN	PADAPTER	pAdapter,
-	IN	BOOLEAN		configPathB
+	IN	bool		configPathB
 	)
 {
 
@@ -179,10 +179,10 @@ phy_PathB_IQK_8192C(
 void
 phy_PathAFillIQKMatrix(
 	IN	PADAPTER	pAdapter,
-	IN  BOOLEAN	bIQKOK,
+	IN  bool	bIQKOK,
 	IN	s4Byte		result[][8],
 	IN	u1Byte		final_candidate,
-	IN  BOOLEAN		bTxOnly
+	IN  bool		bTxOnly
 	)
 {
 	u4Byte	Oldval_0, X, TX0_A, reg;
@@ -246,10 +246,10 @@ phy_PathAFillIQKMatrix(
 void
 phy_PathBFillIQKMatrix(
 	IN	PADAPTER	pAdapter,
-	IN  BOOLEAN	bIQKOK,
+	IN  bool	bIQKOK,
 	IN	s4Byte		result[][8],
 	IN	u1Byte		final_candidate,
-	IN	BOOLEAN		bTxOnly			//do Tx only
+	IN	bool		bTxOnly			//do Tx only
 	)
 {
 	u4Byte	Oldval_1, X, TX1_A, reg;
@@ -305,7 +305,7 @@ phy_PathBFillIQKMatrix(
 }
 
 
-BOOLEAN
+bool
 phy_SimularityCompare_92C(
 	IN	PADAPTER	pAdapter,
 	IN	s4Byte		result[][8],
@@ -316,7 +316,7 @@ phy_SimularityCompare_92C(
 	u4Byte		i, j, diff, SimularityBitMap, bound = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	u1Byte		final_candidate[2] = {0xFF, 0xFF};	//for path A and path B
-	BOOLEAN		bResult = TRUE, is2T = IS_92C_SERIAL( pHalData->VersionID);
+	bool		bResult = TRUE, is2T = IS_92C_SERIAL( pHalData->VersionID);
 
 	if (is2T)
 		bound = 8;
@@ -377,7 +377,7 @@ phy_SimularityCompare_92C(
 /*
 return FALSE => do IQK again
 */
-BOOLEAN
+bool
 phy_SimularityCompare(
 	IN	PADAPTER	pAdapter,
 	IN	s4Byte		result[][8],
@@ -397,7 +397,7 @@ phy_IQCalibrate_8192C(
 	IN	PADAPTER	pAdapter,
 	IN	s4Byte		result[][8],
 	IN	u1Byte		t,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -651,7 +651,7 @@ phy_IQCalibrate_8192C(
 void
 phy_LCCalibrate92C(
 	IN	PADAPTER	pAdapter,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 	u1Byte	tmpReg;
@@ -715,7 +715,7 @@ phy_LCCalibrate92C(
 void
 phy_LCCalibrate(
 	IN	PADAPTER	pAdapter,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 	if (IS_HARDWARE_TYPE_8192D(pAdapter))
@@ -743,7 +743,7 @@ void
 phy_APCalibrate_8192C(
 	IN	PADAPTER	pAdapter,
 	IN	s1Byte		delta,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1181,16 +1181,16 @@ if (pAdapter->registrypriv.mp_mode == 1)
 void
 PHY_IQCalibrate_8192C(
 	IN	PADAPTER	pAdapter,
-	IN	BOOLEAN		bReCovery
+	IN	bool		bReCovery
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	s4Byte			result[4][8];	//last is final result
 	u1Byte			i, final_candidate, Indexforchannel;
-	BOOLEAN			bPathAOK, bPathBOK;
+	bool			bPathAOK, bPathBOK;
 	s4Byte			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
-	BOOLEAN			is12simular, is13simular, is23simular;
-	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			is12simular, is13simular, is23simular;
+	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
 	u4Byte			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 					rOFDM0_XARxIQImbalance,		rOFDM0_XBRxIQImbalance,
 					rOFDM0_ECCAThreshold,	rOFDM0_AGCRSSITable,
@@ -1394,7 +1394,7 @@ PHY_LCCalibrate_8192C(
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
 	PMGNT_INFO		pMgntInfo=&pAdapter->MgntInfo;
 	PMGNT_INFO		pMgntInfoBuddyAdapter;
 	u4Byte			timeout = 2000, timecount = 0;

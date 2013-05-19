@@ -92,14 +92,14 @@ _ConfigNormalChipOutEP_8188E(
 
 }
 
-static BOOLEAN HalUsbSetQueuePipeMapping8188EUsb(
+static bool HalUsbSetQueuePipeMapping8188EUsb(
 	IN	PADAPTER	pAdapter,
 	IN	u8		NumInPipe,
 	IN	u8		NumOutPipe
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
-	BOOLEAN			result		= _FALSE;
+	bool			result		= _FALSE;
 
 	_ConfigNormalChipOutEP_8188E(pAdapter, NumOutPipe);
 
@@ -206,7 +206,7 @@ static void _InitPABias(_adapter *padapter)
 {
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(padapter);
 	u8			pa_setting;
-	BOOLEAN		is92C = IS_92C_SERIAL(pHalData->VersionID);
+	bool		is92C = IS_92C_SERIAL(pHalData->VersionID);
 
 	//FIXED PA current issue
 	//efuse_one_byte_read(padapter, 0x1FA, &pa_setting);
@@ -391,7 +391,7 @@ _InitQueueReservedPage(
 	u32			numPubQ;
 	u32			value32;
 	u8			value8;
-	BOOLEAN			bWiFiConfig	= pregistrypriv->wifi_spec;
+	bool			bWiFiConfig	= pregistrypriv->wifi_spec;
 
 	if (bWiFiConfig)
 	{
@@ -778,7 +778,7 @@ _InitEDCA(
 static void
 _InitBeaconMaxError(
 	IN  PADAPTER	Adapter,
-	IN	BOOLEAN		InfraMode
+	IN	bool		InfraMode
 	)
 {
 
@@ -994,7 +994,7 @@ InitUsbAggregationSetting(
 void
 HalRxAggr8188EUsb(
 	IN  PADAPTER Adapter,
-	IN BOOLEAN	Value
+	IN bool	Value
 	)
 {
 }
@@ -1065,7 +1065,7 @@ _InitRFType(
 {
 	struct registry_priv	 *pregpriv = &Adapter->registrypriv;
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
-	BOOLEAN			is92CU		= IS_92C_SERIAL(pHalData->VersionID);
+	bool			is92CU		= IS_92C_SERIAL(pHalData->VersionID);
 
 #if	DISABLE_BB_RF
 	pHalData->rf_chip	= RF_PSEUDO_11N;
@@ -1091,8 +1091,8 @@ _InitRFType(
 static void
 _BeaconFunctionEnable(
 	IN	PADAPTER		Adapter,
-	IN	BOOLEAN			Enable,
-	IN	BOOLEAN			Linked
+	IN	bool			Enable,
+	IN	bool			Linked
 	)
 {
 	rtw_write8(Adapter, REG_BCN_CTRL, (BIT4 | BIT3 | BIT1));
@@ -1935,7 +1935,7 @@ unsigned int rtl8188eu_inirp_deinit(PADAPTER Adapter)
 //	EEPROM/EFUSE Content Parsing
 //
 //-------------------------------------------------------------------
-static void _ReadIDs(PADAPTER	Adapter, u8 *PROMContent, BOOLEAN AutoloadFail)
+static void _ReadIDs(PADAPTER	Adapter, u8 *PROMContent, bool AutoloadFail)
 {
 }
 
@@ -1943,7 +1943,7 @@ static void
 _ReadBoardType(
 	IN	PADAPTER	Adapter,
 	IN	u8*		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	IN	bool		AutoloadFail
 	)
 {
 
@@ -1954,7 +1954,7 @@ static void
 _ReadLEDSetting(
 	IN	PADAPTER	Adapter,
 	IN	u8*		PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	IN	bool		AutoloadFail
 	)
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
@@ -1978,7 +1978,7 @@ static void
 _ReadThermalMeter(
 	IN	PADAPTER	Adapter,
 	IN	u8*	PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	IN	bool		AutoloadFail
 	)
 {
 }
@@ -1987,7 +1987,7 @@ static void
 _ReadRFSetting(
 	IN	PADAPTER	Adapter,
 	IN	u8*	PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	IN	bool		AutoloadFail
 	)
 {
 }
@@ -1996,7 +1996,7 @@ static void
 _ReadPROMVersion(
 	IN	PADAPTER	Adapter,
 	IN	u8*	PROMContent,
-	IN	BOOLEAN		AutoloadFail
+	IN	bool		AutoloadFail
 	)
 {
 }
@@ -2005,7 +2005,7 @@ static void
 readAntennaDiversity(
 	IN	PADAPTER	pAdapter,
 	IN	u8			*hwinfo,
-	IN	BOOLEAN		AutoLoadFail
+	IN	bool		AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -2025,7 +2025,7 @@ static void
 Hal_EfuseParsePIDVID_8188EU(
 	IN	PADAPTER		pAdapter,
 	IN	u8*				hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 
@@ -2061,7 +2061,7 @@ static void
 Hal_EfuseParseMACAddr_8188EU(
 	IN	PADAPTER		padapter,
 	IN	u8*			hwinfo,
-	IN	BOOLEAN			AutoLoadFail
+	IN	bool			AutoLoadFail
 	)
 {
 	u16			i, usValue;
@@ -3294,7 +3294,7 @@ _func_enter_;
 		case HW_VAR_ACK_PREAMBLE:
 			{
 				u8	regTmp;
-				u8	bShortPreamble = *( (PBOOLEAN)val );
+				u8	bShortPreamble = *( (bool *)val );
 				// Joseph marked out for Netgear 3500 TKIP channel 7 issue.(Temporarily)
 				regTmp = (pHalData->nCur40MhzPrimeSC)<<5;
 				if (bShortPreamble)

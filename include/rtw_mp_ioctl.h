@@ -76,7 +76,7 @@ typedef struct _DR_VARIABLE_STRUCT_ {
 
 //int mp_start_joinbss(_adapter *padapter, NDIS_802_11_SSID *pssid);
 
-//void _irqlevel_changed_(_irqL *irqlevel, /*BOOLEAN*/unsigned char bLower);
+//void _irqlevel_changed_(_irqL *irqlevel, /*bool*/unsigned char bLower);
 #ifdef PLATFORM_OS_XP
 static void _irqlevel_changed_(_irqL *irqlevel, u8 bLower)
 {

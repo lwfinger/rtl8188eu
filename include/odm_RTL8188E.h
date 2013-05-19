@@ -97,7 +97,7 @@ void
 odm_PrimaryCCA_Init(
 	IN		PDM_ODM_T		pDM_Odm);
 
-BOOLEAN
+bool
 ODM_DynamicPrimaryCCA_DupRTS(
 	IN		PDM_ODM_T		pDM_Odm);
 
