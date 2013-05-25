@@ -28,7 +28,7 @@
 
 void
 ODM_DIG_LowerBound_88E(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	pDIG_T		pDM_DigTable = &pDM_Odm->DM_DigTable;
@@ -47,7 +47,7 @@ ODM_DIG_LowerBound_88E(
 #if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 static void
 odm_RX_HWAntDivInit(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	u4Byte	value32;
@@ -85,7 +85,7 @@ odm_RX_HWAntDivInit(
 
 static void
 odm_TRX_HWAntDivInit(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	u4Byte	value32;
@@ -136,7 +136,7 @@ odm_TRX_HWAntDivInit(
 
 static void
 odm_FastAntTrainingInit(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	u4Byte	value32, i;
@@ -247,7 +247,7 @@ odm_FastAntTrainingInit(
 
 void
 ODM_AntennaDiversityInit_88E(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 /*
@@ -340,9 +340,9 @@ odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u4Byte MacId)
 #if (DM_ODM_SUPPORT_TYPE  & (ODM_MP|ODM_CE))
 void
 ODM_SetTxAntByTxInfo_88E(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		pu1Byte			pDesc,
-	IN		u1Byte			macId
+			PDM_ODM_T		pDM_Odm,
+			pu1Byte			pDesc,
+			u1Byte			macId
 	)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -359,7 +359,7 @@ ODM_SetTxAntByTxInfo_88E(
 #else// (DM_ODM_SUPPORT_TYPE == ODM_AP)
 void
 ODM_SetTxAntByTxInfo_88E(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 		)
 {
 }
@@ -367,10 +367,10 @@ ODM_SetTxAntByTxInfo_88E(
 
 void
 ODM_AntselStatistics_88E(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u1Byte			antsel_tr_mux,
-	IN		u4Byte			MacId,
-	IN		u1Byte			RxPWDBAll
+			PDM_ODM_T		pDM_Odm,
+			u1Byte			antsel_tr_mux,
+			u4Byte			MacId,
+			u1Byte			RxPWDBAll
 )
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -409,7 +409,7 @@ ODM_AntselStatistics_88E(
 #define	TX_BY_REG	0
 static void
 odm_HWAntDiv(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	u4Byte	i, MinRSSI=0xFF, AntDivMaxRSSI=0, MaxRSSI=0, LocalMinRSSI, LocalMaxRSSI;
@@ -478,7 +478,7 @@ odm_HWAntDiv(
 #if (!(DM_ODM_SUPPORT_TYPE == ODM_CE))
 void
 odm_SetNextMACAddrTarget(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -535,7 +535,7 @@ odm_SetNextMACAddrTarget(
 
 void
 odm_FastAntTraining(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	u4Byte	i, MaxRSSI=0;
@@ -630,7 +630,7 @@ odm_FastAntTraining(
 
 void
 odm_FastAntTrainingCallback(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 
@@ -651,7 +651,7 @@ odm_FastAntTrainingCallback(
 
 void
 odm_FastAntTrainingWorkItemCallback(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	odm_FastAntTraining(pDM_Odm);
@@ -660,7 +660,7 @@ odm_FastAntTrainingWorkItemCallback(
 
 void
 ODM_AntennaDiversity_88E(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 )
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -791,16 +791,16 @@ void odm_FastAntTrainingCallback(void *FunctionContext)
 #if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE))
 void
 ODM_SetTxAntByTxInfo_88E(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		pu1Byte			pDesc,
-	IN		u1Byte			macId
+			PDM_ODM_T		pDM_Odm,
+			pu1Byte			pDesc,
+			u1Byte			macId
 	)
 {
 }
 #else// (DM_ODM_SUPPORT_TYPE == ODM_AP)
 void
 ODM_SetTxAntByTxInfo_88E(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 		)
 {
 }
@@ -812,7 +812,7 @@ ODM_SetTxAntByTxInfo_88E(
 
 void
 odm_PrimaryCCA_Init(
-	IN		PDM_ODM_T		pDM_Odm)
+			PDM_ODM_T		pDM_Odm)
 {
 	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 	PrimaryCCA->DupRTS_flag = 0;
@@ -824,7 +824,7 @@ odm_PrimaryCCA_Init(
 
 bool
 ODM_DynamicPrimaryCCA_DupRTS(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 	)
 {
 	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
@@ -834,7 +834,7 @@ ODM_DynamicPrimaryCCA_DupRTS(
 
 void
 odm_DynamicPrimaryCCA(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 	)
 {
 	PADAPTER	Adapter =  pDM_Odm->Adapter;	// for NIC
@@ -1209,18 +1209,18 @@ ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 }
 void
 odm_PrimaryCCA_Init(
-	IN		PDM_ODM_T		pDM_Odm)
+			PDM_ODM_T		pDM_Odm)
 {
 }
 void
 odm_DynamicPrimaryCCA(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 	)
 {
 }
 bool
 ODM_DynamicPrimaryCCA_DupRTS(
-	IN		PDM_ODM_T		pDM_Odm
+			PDM_ODM_T		pDM_Odm
 	)
 {
 	return FALSE;

@@ -31,8 +31,8 @@
 #endif
 
 #define	MAX_BSS_CNT	128
-//#define   MAX_JOIN_TIMEOUT	2000
-//#define   MAX_JOIN_TIMEOUT	2500
+//#define   MAX_JOIN_TIME	2000
+//#define   MAX_JOIN_TIME	2500
 #define   MAX_JOIN_TIMEOUT	6500
 
 //	Commented by Albert 20101105
@@ -601,17 +601,17 @@ void rtw_indicate_wx_disassoc_event(_adapter *padapter);
 extern thread_return event_thread(void *context);
 
 extern void rtw_join_timeout_handler (
-	IN	void *					SystemSpecific1,
-	IN	void *					FunctionContext,
-	IN	void *					SystemSpecific2,
-	IN	void *					SystemSpecific3
+		void *					SystemSpecific1,
+		void *					FunctionContext,
+		void *					SystemSpecific2,
+		void *					SystemSpecific3
 	);
 
 extern void _rtw_scan_timeout_handler (
-	IN	void *					SystemSpecific1,
-	IN	void *					FunctionContext,
-	IN	void *					SystemSpecific2,
-	IN	void *					SystemSpecific3
+		void *					SystemSpecific1,
+		void *					FunctionContext,
+		void *					SystemSpecific2,
+		void *					SystemSpecific3
 	);
 
 #endif

@@ -42,14 +42,14 @@
 
 static void
 dm_CheckProtection(
-	IN	PADAPTER	Adapter
+		PADAPTER	Adapter
 	)
 {
 }
 
 static void
 dm_CheckStatistics(
-	IN	PADAPTER	Adapter
+		PADAPTER	Adapter
 	)
 {
 }
@@ -134,7 +134,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 //
 void
 dm_InterruptMigration(
-	IN	PADAPTER	Adapter
+		PADAPTER	Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -212,7 +212,7 @@ dm_InterruptMigration(
 //
 static void
 dm_InitGPIOSetting(
-	IN	PADAPTER	Adapter
+		PADAPTER	Adapter
 	)
 {
 	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(Adapter);
@@ -373,7 +373,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 
 void
 rtl8188e_InitHalDm(
-	IN	PADAPTER	Adapter
+		PADAPTER	Adapter
 	)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
@@ -398,7 +398,7 @@ rtl8188e_InitHalDm(
 
 void
 rtl8188e_HalDmWatchDog(
-	IN	PADAPTER	Adapter
+		PADAPTER	Adapter
 	)
 {
 	bool		bFwCurrentInPSMode = _FALSE;

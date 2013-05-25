@@ -256,7 +256,7 @@ void rtl8192c_issue_delete_ba(_adapter *padapter, u8 dir);
 void rtl8192c_init_dm_priv(IN PADAPTER Adapter);
 void rtl8192c_deinit_dm_priv(IN PADAPTER Adapter);
 
-void rtl8192c_InitHalDm(	IN	PADAPTER	Adapter);
+void rtl8192c_InitHalDm(		PADAPTER	Adapter);
 void rtl8192c_HalDmWatchDog(IN PADAPTER Adapter);
 
 #endif	//__HAL8190PCIDM_H__

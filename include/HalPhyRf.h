@@ -29,28 +29,28 @@
 // BB/MAC/RF other monitor API
 //
 
-void	PHY_SetMonitorMode8192C(IN	PADAPTER	pAdapter,
-										IN	bool		bEnableMonitorMode	);
+void	PHY_SetMonitorMode8192C(	PADAPTER	pAdapter,
+											bool		bEnableMonitorMode	);
 
 //
 // IQ calibrate
 //
 void
-PHY_IQCalibrate_8192C(		IN	PADAPTER	pAdapter,
-							IN	bool		bReCovery);
+PHY_IQCalibrate_8192C(			PADAPTER	pAdapter,
+								bool		bReCovery);
 
 //
 // LC calibrate
 //
 void
-PHY_LCCalibrate_8192C(		IN	PADAPTER	pAdapter);
+PHY_LCCalibrate_8192C(			PADAPTER	pAdapter);
 
 //
 // AP calibrate
 //
 void
-PHY_APCalibrate_8192C(		IN	PADAPTER	pAdapter,
-								IN	s1Byte		delta);
+PHY_APCalibrate_8192C(			PADAPTER	pAdapter,
+									s1Byte		delta);
 #endif
 
 #define ODM_TARGET_CHNL_NUM_2G_5G	59

@@ -359,8 +359,8 @@ void free_mp_priv(struct mp_priv *pmp_priv)
 
 s32
 MPT_InitializeAdapter(
-	IN	PADAPTER			pAdapter,
-	IN	u8				Channel
+		PADAPTER			pAdapter,
+		u8				Channel
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -470,7 +470,7 @@ MPT_InitializeAdapter(
  *---------------------------------------------------------------------------*/
 void
 MPT_DeInitAdapter(
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 	)
 {
 	PMPT_CONTEXT		pMptCtx = &pAdapter->mppriv.MptCtx;
@@ -719,7 +719,7 @@ end_of_mp_stop_test:
  *
  * Overview:	Change RF Setting when we siwthc channel/rate/BW for MP.
  *
- * Input:       IN	PADAPTER				pAdapter
+ * Input:       	PADAPTER				pAdapter
  *
  * Output:      NONE
  *

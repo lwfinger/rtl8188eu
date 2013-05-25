@@ -112,7 +112,7 @@ typedef enum _BT_CTRL_STATUS{
 	BT_STATUS_SUCCESS									= 0x00, // Success
 	BT_STATUS_BT_OP_SUCCESS								= 0x01, // bt fw op execution success
 	BT_STATUS_H2C_SUCCESS								= 0x02, // H2c success
-	BT_STATUS_H2C_TIMTOUT								= 0x03, // H2c timeout
+	BT_STATUS_H2C_TIMT								= 0x03, // H2c timeout
 	BT_STATUS_H2C_BT_NO_RSP								= 0x04, // H2c sent, bt no rsp
 	BT_STATUS_C2H_SUCCESS								= 0x05, // C2h success
 	BT_STATUS_C2H_REQNUM_MISMATCH						= 0x06, // bt fw wrong rsp
@@ -182,20 +182,20 @@ typedef enum _BT_REPORT_TYPE{
 
 void
 MPTBT_Test(
-	IN	PADAPTER	Adapter,
-	IN	u1Byte		opCode,
-	IN	u1Byte		byte1,
-	IN	u1Byte		byte2,
-	IN	u1Byte		byte3
+		PADAPTER	Adapter,
+		u1Byte		opCode,
+		u1Byte		byte1,
+		u1Byte		byte2,
+		u1Byte		byte3
 	);
 
 NDIS_STATUS
 MPTBT_SendOidBT(
-	IN	PADAPTER		pAdapter,
-	IN	void *			InformationBuffer,
-	IN	ULONG			InformationBufferLength,
-	OUT	PULONG			BytesRead,
-	OUT	PULONG			BytesNeeded
+		PADAPTER		pAdapter,
+		void *			InformationBuffer,
+		ULONG			InformationBufferLength,
+		PULONG			BytesRead,
+		PULONG			BytesNeeded
 	);
 
 void
@@ -264,7 +264,7 @@ typedef enum _BT_CTRL_OPCODE_LOWER{
 	BT_LO_OP_RESET												= 0x01,
 	BT_LO_OP_TEST_CTRL											= 0x02,
 	BT_LO_OP_SET_BT_MODE										= 0x03,
-	BT_LO_OP_SET_CHNL_TX_GAIN									= 0x04,
+	BT_LO_OP_SET_CHNL_TX_GA									= 0x04,
 	BT_LO_OP_SET_PKT_TYPE_LEN									= 0x05,
 	BT_LO_OP_SET_PKT_CNT_L_PL_TYPE								= 0x06,
 	BT_LO_OP_SET_PKT_CNT_H_PKT_INTV								= 0x07,

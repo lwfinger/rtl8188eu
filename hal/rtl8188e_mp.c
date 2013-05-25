@@ -97,7 +97,7 @@ static void Hal_disable_dm(PADAPTER padapter)
  *
  * Overview:	Change RF Setting when we siwthc channel/rate/BW for MP.
  *
- * Input:       IN	PADAPTER				pAdapter
+ * Input:       	PADAPTER				pAdapter
  *
  * Output:      NONE
  *

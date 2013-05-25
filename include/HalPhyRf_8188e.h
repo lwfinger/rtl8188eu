@@ -55,7 +55,7 @@ PHY_IQCalibrate_8188E(
 #else
 	IN PADAPTER	Adapter,
 #endif
-							IN	bool		bReCovery);
+								bool		bReCovery);
 
 
 //
@@ -66,7 +66,7 @@ PHY_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 #endif
 );
 
@@ -78,11 +78,11 @@ PHY_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-							IN	s1Byte		delta);
+								s1Byte		delta);
 void
-PHY_DigitalPredistortion_8188E(		IN	PADAPTER	pAdapter);
+PHY_DigitalPredistortion_8188E(			PADAPTER	pAdapter);
 
 
 void
@@ -90,11 +90,11 @@ _PHY_SaveADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		ADDAReg,
-	IN	pu4Byte		ADDABackup,
-	IN	u4Byte		RegisterNum
+		pu4Byte		ADDAReg,
+		pu4Byte		ADDABackup,
+		u4Byte		RegisterNum
 	);
 
 void
@@ -102,11 +102,11 @@ _PHY_PathADDAOn(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		ADDAReg,
-	IN	bool		isPathAOn,
-	IN	bool		is2T
+		pu4Byte		ADDAReg,
+		bool		isPathAOn,
+		bool		is2T
 	);
 
 void
@@ -114,10 +114,10 @@ _PHY_MACSettingCalibration(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		MACReg,
-	IN	pu4Byte		MACBackup
+		pu4Byte		MACReg,
+		pu4Byte		MACBackup
 	);
 
 
@@ -126,7 +126,7 @@ _PHY_PathAStandBy(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 #endif
 	);
 

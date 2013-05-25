@@ -25,7 +25,7 @@
 
 void
 phy_PathAStandBy(
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 	)
 {
 	RTPRINT(FINIT, INIT_IQK, ("Path-A standby mode!\n"));
@@ -41,8 +41,8 @@ phy_PathAStandBy(
 
 u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_8192C(
-	IN	PADAPTER	pAdapter,
-	IN	bool		configPathB
+		PADAPTER	pAdapter,
+		bool		configPathB
 	)
 {
 
@@ -129,7 +129,7 @@ phy_PathA_IQK_8192C(
 
 u1Byte				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK_8192C(
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 	)
 {
 	u4Byte regEAC, regEB4, regEBC, regEC4, regECC;
@@ -178,10 +178,10 @@ phy_PathB_IQK_8192C(
 
 void
 phy_PathAFillIQKMatrix(
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 	IN  bool	bIQKOK,
-	IN	s4Byte		result[][8],
-	IN	u1Byte		final_candidate,
+		s4Byte		result[][8],
+		u1Byte		final_candidate,
 	IN  bool		bTxOnly
 	)
 {
@@ -245,11 +245,11 @@ phy_PathAFillIQKMatrix(
 
 void
 phy_PathBFillIQKMatrix(
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 	IN  bool	bIQKOK,
-	IN	s4Byte		result[][8],
-	IN	u1Byte		final_candidate,
-	IN	bool		bTxOnly			//do Tx only
+		s4Byte		result[][8],
+		u1Byte		final_candidate,
+		bool		bTxOnly			//do Tx only
 	)
 {
 	u4Byte	Oldval_1, X, TX1_A, reg;
@@ -307,10 +307,10 @@ phy_PathBFillIQKMatrix(
 
 bool
 phy_SimularityCompare_92C(
-	IN	PADAPTER	pAdapter,
-	IN	s4Byte		result[][8],
-	IN	u1Byte		 c1,
-	IN	u1Byte		 c2
+		PADAPTER	pAdapter,
+		s4Byte		result[][8],
+		u1Byte		 c1,
+		u1Byte		 c2
 	)
 {
 	u4Byte		i, j, diff, SimularityBitMap, bound = 0;
@@ -379,10 +379,10 @@ return FALSE => do IQK again
 */
 bool
 phy_SimularityCompare(
-	IN	PADAPTER	pAdapter,
-	IN	s4Byte		result[][8],
-	IN	u1Byte		 c1,
-	IN	u1Byte		 c2
+		PADAPTER	pAdapter,
+		s4Byte		result[][8],
+		u1Byte		 c1,
+		u1Byte		 c2
 	)
 {
 	if (IS_HARDWARE_TYPE_8192D(pAdapter))
@@ -394,10 +394,10 @@ phy_SimularityCompare(
 
 void
 phy_IQCalibrate_8192C(
-	IN	PADAPTER	pAdapter,
-	IN	s4Byte		result[][8],
-	IN	u1Byte		t,
-	IN	bool		is2T
+		PADAPTER	pAdapter,
+		s4Byte		result[][8],
+		u1Byte		t,
+		bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -650,8 +650,8 @@ phy_IQCalibrate_8192C(
 
 void
 phy_LCCalibrate92C(
-	IN	PADAPTER	pAdapter,
-	IN	bool		is2T
+		PADAPTER	pAdapter,
+		bool		is2T
 	)
 {
 	u1Byte	tmpReg;
@@ -714,8 +714,8 @@ phy_LCCalibrate92C(
 
 void
 phy_LCCalibrate(
-	IN	PADAPTER	pAdapter,
-	IN	bool		is2T
+		PADAPTER	pAdapter,
+		bool		is2T
 	)
 {
 	if (IS_HARDWARE_TYPE_8192D(pAdapter))
@@ -741,9 +741,9 @@ phy_LCCalibrate(
 
 void
 phy_APCalibrate_8192C(
-	IN	PADAPTER	pAdapter,
-	IN	s1Byte		delta,
-	IN	bool		is2T
+		PADAPTER	pAdapter,
+		s1Byte		delta,
+		bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1180,8 +1180,8 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 void
 PHY_IQCalibrate_8192C(
-	IN	PADAPTER	pAdapter,
-	IN	bool		bReCovery
+		PADAPTER	pAdapter,
+		bool		bReCovery
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1390,7 +1390,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 void
 PHY_LCCalibrate_8192C(
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1458,8 +1458,8 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 void
 PHY_APCalibrate_8192C(
-	IN	PADAPTER	pAdapter,
-	IN	s1Byte		delta
+		PADAPTER	pAdapter,
+		s1Byte		delta
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);

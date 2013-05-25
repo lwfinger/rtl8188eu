@@ -140,9 +140,9 @@
 #define DESC_RATEMCS15_SG			0x1c
 #define DESC_RATEMCS32				0x20
 
-#define REG_P2P_CTWIN					0x0572 // 1 Byte long (in unit of TU)
-#define REG_NOA_DESC_SEL				0x05CF
-#define REG_NOA_DESC_DURATION		0x05E0
+#define REG_P2P_CTWIN				0x0572 // 1 Byte long (in unit of TU)
+#define REG_NOA_DESC_SEL			0x05CF
+#define REG_NOA_DESC_DURATION			0x05E0
 #define REG_NOA_DESC_INTERVAL			0x05E4
 #define REG_NOA_DESC_START			0x05E8
 #define REG_NOA_DESC_COUNT			0x05EC
@@ -153,11 +153,11 @@ void dump_chip_info(HAL_VERSION	ChipVersion);
 
 u8	//return the final channel plan decision
 hal_com_get_channel_plan(
-	IN	PADAPTER	padapter,
-	IN	u8			hw_channel_plan,	//channel plan from HW (efuse/eeprom)
-	IN	u8			sw_channel_plan,	//channel plan from SW (registry/module param)
-	IN	u8			def_channel_plan,	//channel plan used when the former two is invalid
-	IN	bool		AutoLoadFail
+		PADAPTER	padapter,
+		u8			hw_channel_plan,	//channel plan from HW (efuse/eeprom)
+		u8			sw_channel_plan,	//channel plan from SW (registry/module param)
+		u8			def_channel_plan,	//channel plan used when the former two is invalid
+		bool		AutoLoadFail
 	);
 
 u8	MRateToHwRate(u8 rate);
@@ -169,8 +169,8 @@ void	HalSetBrateCfg(
 
 bool
 Hal_MappingOutPipe(
-	IN	PADAPTER	pAdapter,
-	IN	u8		NumOutPipe
+		PADAPTER	pAdapter,
+		u8		NumOutPipe
 	);
 
 void hal_init_macaddr(_adapter *adapter);

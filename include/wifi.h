@@ -229,7 +229,7 @@ enum WIFI_REG_DOMAIN {
 	DOMAIN_FCC		= 1,
 	DOMAIN_IC		= 2,
 	DOMAIN_ETSI		= 3,
-	DOMAIN_SPAIN	= 4,
+	DOMAIN_SPA	= 4,
 	DOMAIN_FRANCE	= 5,
 	DOMAIN_MKK		= 6,
 	DOMAIN_ISRAEL	= 7,
@@ -993,7 +993,7 @@ typedef enum _HT_CAP_AMPDU_FACTOR {
 #define WPS_PDT_SCID_RTK_DMP			WPS_PDT_SCID_MEDIA_SERVER
 
 //	Value of Device Password ID
-#define WPS_DPID_PIN					0x0000
+#define WPS_DPID_P					0x0000
 #define WPS_DPID_USER_SPEC			0x0001
 #define WPS_DPID_MACHINE_SPEC			0x0002
 #define WPS_DPID_REKEY					0x0003
@@ -1111,12 +1111,12 @@ typedef enum _HT_CAP_AMPDU_FACTOR {
 #define	P2P_FINDPHASE_EX_SOCIAL_LAST		P2P_FINDPHASE_EX_MAX
 
 #define	P2P_PROVISION_TIMEOUT				5000	//	5 seconds timeout for sending the provision discovery request
-#define	P2P_CONCURRENT_PROVISION_TIMEOUT	3000	//	3 seconds timeout for sending the provision discovery request under concurrent mode
+#define	P2P_CONCURRENT_PROVISION_TIME	3000	//	3 seconds timeout for sending the provision discovery request under concurrent mode
 #define	P2P_GO_NEGO_TIMEOUT					5000	//	5 seconds timeout for receiving the group negotation response
-#define	P2P_CONCURRENT_GO_NEGO_TIMEOUT		3000	//	3 seconds timeout for sending the negotiation request under concurrent mode
+#define	P2P_CONCURRENT_GO_NEGO_TIME		3000	//	3 seconds timeout for sending the negotiation request under concurrent mode
 #define	P2P_TX_PRESCAN_TIMEOUT				100		//	100ms
 #define	P2P_INVITE_TIMEOUT					5000	//	5 seconds timeout for sending the invitation request
-#define	P2P_CONCURRENT_INVITE_TIMEOUT		3000	//	3 seconds timeout for sending the invitation request under concurrent mode
+#define	P2P_CONCURRENT_INVITE_TIME		3000	//	3 seconds timeout for sending the invitation request under concurrent mode
 #define	P2P_RESET_SCAN_CH						25000	//	25 seconds timeout to reset the scan channel ( based on channel plan )
 #define	P2P_MAX_INTENT						15
 
@@ -1133,8 +1133,8 @@ typedef enum _HT_CAP_AMPDU_FACTOR {
 #define	WPS_CM_KEYPAD						0x0100
 #define	WPS_CM_SW_PUHS_BUTTON				0x0280
 #define	WPS_CM_HW_PUHS_BUTTON				0x0480
-#define	WPS_CM_SW_DISPLAY_PIN				0x2008
-#define	WPS_CM_LCD_DISPLAY_PIN				0x4008
+#define	WPS_CM_SW_DISPLAY_P				0x2008
+#define	WPS_CM_LCD_DISPLAY_P				0x4008
 
 enum P2P_ROLE {
 	P2P_ROLE_DISABLE = 0,

@@ -24,11 +24,11 @@
 
 void
 odm_ConfigRFReg_8188E(
-	IN	PDM_ODM_T				pDM_Odm,
-	IN	u4Byte					Addr,
-	IN	u4Byte					Data,
+		PDM_ODM_T				pDM_Odm,
+		u4Byte					Addr,
+		u4Byte					Data,
 	IN  ODM_RF_RADIO_PATH_E     RF_PATH,
-	IN	u4Byte				    RegAddr
+		u4Byte				    RegAddr
 	)
 {
     if (Addr == 0xffe)
@@ -70,9 +70,9 @@ odm_ConfigRFReg_8188E(
 
 void
 odm_ConfigRF_RadioA_8188E(
-	IN	PDM_ODM_T				pDM_Odm,
-	IN	u4Byte					Addr,
-	IN	u4Byte					Data
+		PDM_ODM_T				pDM_Odm,
+		u4Byte					Addr,
+		u4Byte					Data
 	)
 {
 	u4Byte  content = 0x1000; // RF_Content: radioa_txt
@@ -85,9 +85,9 @@ odm_ConfigRF_RadioA_8188E(
 
 void
 odm_ConfigRF_RadioB_8188E(
-	IN	PDM_ODM_T				pDM_Odm,
-	IN	u4Byte					Addr,
-	IN	u4Byte					Data
+		PDM_ODM_T				pDM_Odm,
+		u4Byte					Addr,
+		u4Byte					Data
 	)
 {
 	u4Byte  content = 0x1001; // RF_Content: radiob_txt
@@ -101,9 +101,9 @@ odm_ConfigRF_RadioB_8188E(
 
 void
 odm_ConfigMAC_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		Addr,
-	IN	u1Byte		Data
+		PDM_ODM_T	pDM_Odm,
+		u4Byte		Addr,
+		u1Byte		Data
 	)
 {
 	ODM_Write1Byte(pDM_Odm, Addr, Data);
@@ -112,10 +112,10 @@ odm_ConfigMAC_8188E(
 
 void
 odm_ConfigBB_AGC_8188E(
-    IN	PDM_ODM_T	pDM_Odm,
-    IN	u4Byte		Addr,
-    IN	u4Byte		Bitmask,
-    IN	u4Byte		Data
+    	PDM_ODM_T	pDM_Odm,
+    	u4Byte		Addr,
+    	u4Byte		Bitmask,
+    	u4Byte		Data
     )
 {
 	ODM_SetBBReg(pDM_Odm, Addr, Bitmask, Data);
@@ -127,10 +127,10 @@ odm_ConfigBB_AGC_8188E(
 
 void
 odm_ConfigBB_PHY_REG_PG_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-    IN	u4Byte		Addr,
-    IN	u4Byte		Bitmask,
-    IN	u4Byte		Data
+		PDM_ODM_T	pDM_Odm,
+    	u4Byte		Addr,
+    	u4Byte		Bitmask,
+    	u4Byte		Data
     )
 {
 	if (Addr == 0xfe){
@@ -167,10 +167,10 @@ odm_ConfigBB_PHY_REG_PG_8188E(
 
 void
 odm_ConfigBB_PHY_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-    IN	u4Byte		Addr,
-    IN	u4Byte		Bitmask,
-    IN	u4Byte		Data
+		PDM_ODM_T	pDM_Odm,
+    	u4Byte		Addr,
+    	u4Byte		Bitmask,
+    	u4Byte		Data
     )
 {
 	if (Addr == 0xfe){

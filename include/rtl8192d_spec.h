@@ -489,8 +489,8 @@
 //----------------------------------------------------------------------------
 //       8192C GPIO PIN Control Register (offset 0x44, 4 byte)
 //----------------------------------------------------------------------------
-#define	GPIO_IN						REG_GPIO_PIN_CTRL		// GPIO pins input value
-#define	GPIO_OUT					(REG_GPIO_PIN_CTRL+1)	// GPIO pins output value
+#define	GPIO_						REG_GPIO_PIN_CTRL		// GPIO pins input value
+#define	GPIO_					(REG_GPIO_PIN_CTRL+1)	// GPIO pins output value
 #define	GPIO_IO_SEL				(REG_GPIO_PIN_CTRL+2)	// GPIO pins output enable when a bit is set to "1"; otherwise, input is configured.
 #define	GPIO_MOD					(REG_GPIO_PIN_CTRL+3)
 
@@ -611,7 +611,7 @@ Default: 00b.
 #define	IMR_TIMEOUT2				BIT17		// Timeout interrupt 2
 #define	IMR_TIMEOUT1				BIT16		// Timeout interrupt 1
 #define	IMR_TXFOVW				BIT15		// Transmit FIFO Overflow
-#define	IMR_PSTIMEOUT				BIT14		// Power save time out interrupt
+#define	IMR_PSTIME				BIT14		// Power save time out interrupt
 #define	IMR_BcnInt					BIT13		// Beacon DMA Interrupt 0
 #define	IMR_RXFOVW				BIT12		// Receive FIFO Overflow
 #define	IMR_RDU					BIT11		// Receive Descriptor Unavailable
@@ -692,13 +692,13 @@ Default: 00b.
 #define	EEPROM_CHANNEL_PLAN_FCC				0x0
 #define	EEPROM_CHANNEL_PLAN_IC				0x1
 #define	EEPROM_CHANNEL_PLAN_ETSI			0x2
-#define	EEPROM_CHANNEL_PLAN_SPAIN			0x3
+#define	EEPROM_CHANNEL_PLAN_SPA			0x3
 #define	EEPROM_CHANNEL_PLAN_FRANCE			0x4
 #define	EEPROM_CHANNEL_PLAN_MKK				0x5
 #define	EEPROM_CHANNEL_PLAN_MKK1			0x6
 #define	EEPROM_CHANNEL_PLAN_ISRAEL			0x7
 #define	EEPROM_CHANNEL_PLAN_TELEC			0x8
-#define	EEPROM_CHANNEL_PLAN_GLOBAL_DOMAIN	0x9
+#define	EEPROM_CHANNEL_PLAN_GLOBAL_DOMA	0x9
 #define	EEPROM_CHANNEL_PLAN_WORLD_WIDE_13	0xA
 #define	EEPROM_CHANNEL_PLAN_NCC				0xB
 #define	EEPROM_CHANNEL_PLAN_BY_HW_MASK	0x80

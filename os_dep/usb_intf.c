@@ -26,11 +26,7 @@
 #include <xmit_osdep.h>
 #include <hal_intf.h>
 #include <rtw_version.h>
-#ifndef CONFIG_USB_HCI
-
-#error "CONFIG_USB_HCI shall be on!\n"
-
-#endif
+#include <linux/usb.h>
 
 #include <usb_vendor_req.h>
 #include <usb_ops.h>

@@ -21,6 +21,6 @@
 #define __RTL8723A_RF_H__
 
 #include "rtl8192c_rf.h"
-int	PHY_RF6052_Config8723A(	IN	PADAPTER		Adapter	);
+int	PHY_RF6052_Config8723A(		PADAPTER		Adapter	);
 
 #endif

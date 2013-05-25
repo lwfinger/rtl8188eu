@@ -411,7 +411,7 @@
 #define SDIO_HISR_HSISR_IND			BIT20
 #define SDIO_HISR_GTINT3_IND			BIT21
 #define SDIO_HISR_GTINT4_IND			BIT22
-#define SDIO_HISR_PSTIMEOUT			BIT23
+#define SDIO_HISR_PSTIME			BIT23
 #define SDIO_HISR_OCPINT			BIT24
 #define SDIO_HISR_ATIMEND			BIT25
 #define SDIO_HISR_ATIMEND_E			BIT26
@@ -459,7 +459,7 @@
 //-----------------------------------------------------------------------------
 #define	UHIMR_TIMEOUT2					BIT31
 #define	UHIMR_TIMEOUT1					BIT30
-#define	UHIMR_PSTIMEOUT					BIT29
+#define	UHIMR_PSTIME					BIT29
 #define	UHIMR_GTINT4					BIT28
 #define	UHIMR_GTINT3					BIT27
 #define	UHIMR_TXBCNERR					BIT26

@@ -42,7 +42,7 @@
 
 u1Byte
 odm_QueryRxPwrPercentage(
-	IN		s1Byte		AntPower
+			s1Byte		AntPower
 	)
 {
 	if ((AntPower <= -100) || (AntPower >= 20))
@@ -278,7 +278,7 @@ odm_SignalScaleMapping_92CSeries(
 s4Byte
 odm_SignalScaleMapping(
 	IN OUT PDM_ODM_T pDM_Odm,
-	IN	s4Byte CurrSig
+		s4Byte CurrSig
 )
 {
 	if (	(pDM_Odm->SupportPlatform == ODM_MP) &&
@@ -348,7 +348,7 @@ static u1Byte odm_SQ_process_patch_RT_CID_819x_Lenovo(
 
 static u1Byte
 odm_EVMdbToPercentage(
-    IN		s1Byte Value
+    		s1Byte Value
    )
 {
 	//
@@ -379,10 +379,10 @@ odm_EVMdbToPercentage(
 
 void
 odm_RxPhyStatus92CSeries_Parsing(
-	IN OUT	PDM_ODM_T					pDM_Odm,
-	OUT		PODM_PHY_INFO_T			pPhyInfo,
-	IN		pu1Byte						pPhyStatus,
-	IN		PODM_PACKET_INFO_T			pPktinfo
+		PDM_ODM_T					pDM_Odm,
+			PODM_PHY_INFO_T			pPhyInfo,
+			pu1Byte						pPhyStatus,
+			PODM_PACKET_INFO_T			pPktinfo
 	)
 {
 	SWAT_T				*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -740,7 +740,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 void
 odm_Init_RSSIForDM(
-	IN OUT	PDM_ODM_T	pDM_Odm
+		PDM_ODM_T	pDM_Odm
 	)
 {
 
@@ -748,9 +748,9 @@ odm_Init_RSSIForDM(
 
 void
 odm_Process_RSSIForDM(
-	IN OUT	PDM_ODM_T					pDM_Odm,
-	IN		PODM_PHY_INFO_T			pPhyInfo,
-	IN		PODM_PACKET_INFO_T			pPktinfo
+		PDM_ODM_T					pDM_Odm,
+			PODM_PHY_INFO_T			pPhyInfo,
+			PODM_PACKET_INFO_T			pPktinfo
 	)
 {
 
@@ -970,10 +970,10 @@ odm_Process_RSSIForDM(
 //
 void
 ODM_PhyStatusQuery_92CSeries(
-	IN OUT	PDM_ODM_T					pDM_Odm,
-	OUT		PODM_PHY_INFO_T				pPhyInfo,
-	IN		pu1Byte						pPhyStatus,
-	IN		PODM_PACKET_INFO_T			pPktinfo
+		PDM_ODM_T					pDM_Odm,
+			PODM_PHY_INFO_T				pPhyInfo,
+			pu1Byte						pPhyStatus,
+			PODM_PACKET_INFO_T			pPktinfo
 	)
 {
 
@@ -1000,10 +1000,10 @@ ODM_PhyStatusQuery_92CSeries(
 //
 void
 ODM_PhyStatusQuery_JaguarSeries(
-	IN OUT	PDM_ODM_T					pDM_Odm,
-	OUT		PODM_PHY_INFO_T			pPhyInfo,
-	IN		pu1Byte						pPhyStatus,
-	IN		PODM_PACKET_INFO_T			pPktinfo
+		PDM_ODM_T					pDM_Odm,
+			PODM_PHY_INFO_T			pPhyInfo,
+			pu1Byte						pPhyStatus,
+			PODM_PACKET_INFO_T			pPktinfo
 	)
 {
 
@@ -1012,10 +1012,10 @@ ODM_PhyStatusQuery_JaguarSeries(
 
 void
 ODM_PhyStatusQuery(
-	IN OUT	PDM_ODM_T					pDM_Odm,
-	OUT		PODM_PHY_INFO_T				pPhyInfo,
-	IN		pu1Byte						pPhyStatus,
-	IN		PODM_PACKET_INFO_T			pPktinfo
+		PDM_ODM_T					pDM_Odm,
+			PODM_PHY_INFO_T				pPhyInfo,
+			pu1Byte						pPhyStatus,
+			PODM_PACKET_INFO_T			pPktinfo
 	)
 {
 	ODM_PhyStatusQuery_92CSeries(pDM_Odm,pPhyInfo,pPhyStatus,pPktinfo);
@@ -1024,12 +1024,12 @@ ODM_PhyStatusQuery(
 // For future use.
 void
 ODM_MacStatusQuery(
-	IN OUT	PDM_ODM_T					pDM_Odm,
-	IN		pu1Byte						pMacStatus,
-	IN		u1Byte						MacID,
-	IN		bool						bPacketMatchBSSID,
-	IN		bool						bPacketToSelf,
-	IN		bool						bPacketBeacon
+		PDM_ODM_T					pDM_Odm,
+			pu1Byte						pMacStatus,
+			u1Byte						MacID,
+			bool						bPacketMatchBSSID,
+			bool						bPacketToSelf,
+			bool						bPacketBeacon
 	)
 {
 	// 2011/10/19 Driver team will handle in the future.
@@ -1040,9 +1040,9 @@ ODM_MacStatusQuery(
 
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
-	IN	PDM_ODM_T			pDM_Odm,
-	IN	ODM_RF_RADIO_PATH_E	Content,
-	IN	ODM_RF_RADIO_PATH_E	eRFPath
+		PDM_ODM_T			pDM_Odm,
+		ODM_RF_RADIO_PATH_E	Content,
+		ODM_RF_RADIO_PATH_E	eRFPath
    )
 {
 	//RT_STATUS	rtStatus = RT_STATUS_SUCCESS;
@@ -1082,8 +1082,8 @@ ODM_ConfigRFWithHeaderFile(
 
 HAL_STATUS
 ODM_ConfigBBWithHeaderFile(
-	IN	PDM_ODM_T			pDM_Odm,
-	IN	ODM_BB_Config_Type		ConfigType
+		PDM_ODM_T			pDM_Odm,
+		ODM_BB_Config_Type		ConfigType
 	)
 {
 #if (RTL8723A_SUPPORT == 1)
@@ -1132,7 +1132,7 @@ ODM_ConfigBBWithHeaderFile(
 
 HAL_STATUS
 ODM_ConfigMACWithHeaderFile(
-	IN	PDM_ODM_T	pDM_Odm
+		PDM_ODM_T	pDM_Odm
 	)
 {
 	u1Byte result = HAL_STATUS_SUCCESS;

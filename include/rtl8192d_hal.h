@@ -378,7 +378,7 @@ enum ChannelPlan{
 	CHPL_FCC	= 0,
 	CHPL_IC		= 1,
 	CHPL_ETSI	= 2,
-	CHPL_SPAIN	= 3,
+	CHPL_SPA	= 3,
 	CHPL_FRANCE	= 4,
 	CHPL_MKK	= 5,
 	CHPL_MKK1	= 6,

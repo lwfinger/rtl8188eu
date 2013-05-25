@@ -632,9 +632,9 @@ phy_PathA_IQK_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	bool		configPathB
+		bool		configPathB
 	)
 {
 	u4Byte regEAC, regE94, regE9C, regEA4;
@@ -696,9 +696,9 @@ phy_PathA_RxIQK(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	bool		configPathB
+		bool		configPathB
 	)
 {
 	u4Byte regEAC, regE94, regE9C, regEA4, u4tmp;
@@ -841,7 +841,7 @@ phy_PathB_IQK_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 #endif
 	)
 {
@@ -904,11 +904,11 @@ _PHY_PathAFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
 	IN  bool	bIQKOK,
-	IN	s4Byte		result[][8],
-	IN	u1Byte		final_candidate,
+		s4Byte		result[][8],
+		u1Byte		final_candidate,
 	IN  bool		bTxOnly
 	)
 {
@@ -979,12 +979,12 @@ _PHY_PathBFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
 	IN  bool	bIQKOK,
-	IN	s4Byte		result[][8],
-	IN	u1Byte		final_candidate,
-	IN	bool		bTxOnly			//do Tx only
+		s4Byte		result[][8],
+		u1Byte		final_candidate,
+		bool		bTxOnly			//do Tx only
 	)
 {
 	u4Byte	Oldval_1, X, TX1_A, reg;
@@ -1048,7 +1048,7 @@ _PHY_PathBFillIQKMatrix(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_MP)
 bool
 ODM_CheckPowerStatus(
-	IN	PADAPTER		Adapter)
+		PADAPTER		Adapter)
 {
 /*
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -1083,11 +1083,11 @@ _PHY_SaveADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		ADDAReg,
-	IN	pu4Byte		ADDABackup,
-	IN	u4Byte		RegisterNum
+		pu4Byte		ADDAReg,
+		pu4Byte		ADDABackup,
+		u4Byte		RegisterNum
 	)
 {
 	u4Byte	i;
@@ -1116,10 +1116,10 @@ _PHY_SaveMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		MACReg,
-	IN	pu4Byte		MACBackup
+		pu4Byte		MACReg,
+		pu4Byte		MACBackup
 	)
 {
 	u4Byte	i;
@@ -1146,11 +1146,11 @@ _PHY_ReloadADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		ADDAReg,
-	IN	pu4Byte		ADDABackup,
-	IN	u4Byte		RegiesterNum
+		pu4Byte		ADDAReg,
+		pu4Byte		ADDABackup,
+		u4Byte		RegiesterNum
 	)
 {
 	u4Byte	i;
@@ -1176,10 +1176,10 @@ _PHY_ReloadMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		MACReg,
-	IN	pu4Byte		MACBackup
+		pu4Byte		MACReg,
+		pu4Byte		MACBackup
 	)
 {
 	u4Byte	i;
@@ -1205,11 +1205,11 @@ _PHY_PathADDAOn(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		ADDAReg,
-	IN	bool		isPathAOn,
-	IN	bool		is2T
+		pu4Byte		ADDAReg,
+		bool		isPathAOn,
+		bool		is2T
 	)
 {
 	u4Byte	pathOn;
@@ -1245,10 +1245,10 @@ _PHY_MACSettingCalibration(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	pu4Byte		MACReg,
-	IN	pu4Byte		MACBackup
+		pu4Byte		MACReg,
+		pu4Byte		MACBackup
 	)
 {
 	u4Byte	i = 0;
@@ -1302,9 +1302,9 @@ _PHY_PIModeSwitch(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	bool		PIMode
+		bool		PIMode
 	)
 {
 	u4Byte	mode;
@@ -1329,11 +1329,11 @@ phy_SimularityCompare_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	s4Byte		result[][8],
-	IN	u1Byte		 c1,
-	IN	u1Byte		 c2
+		s4Byte		result[][8],
+		u1Byte		 c1,
+		u1Byte		 c2
 	)
 {
 	u4Byte		i, j, diff, SimularityBitMap, bound = 0;
@@ -1464,11 +1464,11 @@ phy_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	s4Byte		result[][8],
-	IN	u1Byte		t,
-	IN	bool		is2T
+		s4Byte		result[][8],
+		u1Byte		t,
+		bool		is2T
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -1744,9 +1744,9 @@ phy_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	bool		is2T
+		bool		is2T
 	)
 {
 	u1Byte	tmpReg;
@@ -1835,10 +1835,10 @@ phy_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	s1Byte		delta,
-	IN	bool		is2T
+		s1Byte		delta,
+		bool		is2T
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2328,9 +2328,9 @@ PHY_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	bool		bReCovery
+		bool		bReCovery
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2594,7 +2594,7 @@ PHY_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 #endif
 	)
 {
@@ -2683,9 +2683,9 @@ PHY_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	s1Byte		delta
+		s1Byte		delta
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2733,10 +2733,10 @@ void phy_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	bool		bMain,
-	IN	bool		is2T
+		bool		bMain,
+		bool		is2T
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2782,9 +2782,9 @@ void PHY_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	bool		bMain
+		bool		bMain
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2824,11 +2824,11 @@ void PHY_SetRFPathSwitch_8188E(
 void
 phy_DigitalPredistortion(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #else
 	IN PDM_ODM_T	pDM_Odm,
 #endif
-	IN	bool		is2T
+		bool		is2T
 	)
 {
 #if ( RT_PLATFORM == PLATFORM_WINDOWS)
@@ -3259,7 +3259,7 @@ phy_DigitalPredistortion(
 void
 PHY_DigitalPredistortion_8188E(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 #else
 	IN PDM_ODM_T	pDM_Odm
 #endif
@@ -3303,9 +3303,9 @@ bool phy_QueryRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+		PADAPTER	pAdapter,
 #endif
-	IN	bool		is2T
+		bool		is2T
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -3349,7 +3349,7 @@ bool PHY_QueryRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN	PADAPTER	pAdapter
+		PADAPTER	pAdapter
 #endif
 	)
 {

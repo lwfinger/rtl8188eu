@@ -150,43 +150,43 @@ typedef struct _Phy_Status_Rpt_8195
 
 void
 odm_Init_RSSIForDM(
-	IN OUT	PDM_ODM_T	pDM_Odm
+		PDM_ODM_T	pDM_Odm
 	);
 
 void
 ODM_PhyStatusQuery(
-	IN OUT	PDM_ODM_T					pDM_Odm,
-	OUT		PODM_PHY_INFO_T			pPhyInfo,
-	IN		pu1Byte						pPhyStatus,
-	IN		PODM_PACKET_INFO_T			pPktinfo
+		PDM_ODM_T					pDM_Odm,
+			PODM_PHY_INFO_T			pPhyInfo,
+			pu1Byte						pPhyStatus,
+			PODM_PACKET_INFO_T			pPktinfo
 	);
 
 void
 ODM_MacStatusQuery(
-	IN OUT	PDM_ODM_T					pDM_Odm,
-	IN		pu1Byte						pMacStatus,
-	IN		u1Byte						MacID,
-	IN		bool						bPacketMatchBSSID,
-	IN		bool						bPacketToSelf,
-	IN		bool						bPacketBeacon
+		PDM_ODM_T					pDM_Odm,
+			pu1Byte						pMacStatus,
+			u1Byte						MacID,
+			bool						bPacketMatchBSSID,
+			bool						bPacketToSelf,
+			bool						bPacketBeacon
 	);
 #if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE|ODM_AP))
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
-	IN	PDM_ODM_T	      pDM_Odm,
-	IN	ODM_RF_RADIO_PATH_E	Content,
-	IN	ODM_RF_RADIO_PATH_E	eRFPath
+		PDM_ODM_T	      pDM_Odm,
+		ODM_RF_RADIO_PATH_E	Content,
+		ODM_RF_RADIO_PATH_E	eRFPath
 	);
 
 HAL_STATUS
 ODM_ConfigBBWithHeaderFile(
-	IN	PDM_ODM_T				pDM_Odm,
-	IN	ODM_BB_Config_Type		ConfigType
+		PDM_ODM_T				pDM_Odm,
+		ODM_BB_Config_Type		ConfigType
     );
 
 HAL_STATUS
 ODM_ConfigMACWithHeaderFile(
-	IN	PDM_ODM_T	pDM_Odm
+		PDM_ODM_T	pDM_Odm
     );
 #endif
 

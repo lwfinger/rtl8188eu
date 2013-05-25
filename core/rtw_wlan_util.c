@@ -52,7 +52,7 @@ extern unsigned char RSN_TKIP_CIPHER[4];
 
 #define R2T_PHY_DELAY	(0)
 
-//#define WAIT_FOR_BCN_TO_MIN	(3000)
+//#define WAIT_FOR_BCN_TO_M	(3000)
 #define WAIT_FOR_BCN_TO_MIN	(6000)
 #define WAIT_FOR_BCN_TO_MAX	(20000)
 

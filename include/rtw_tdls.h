@@ -39,7 +39,7 @@
 
 #define	TPK_RESEND_COUNT				301
 #define		CH_SWITCH_TIME				10
-#define		CH_SWITCH_TIMEOUT			30
+#define		CH_SWITCH_TIME			30
 #define	TDLS_STAY_TIME				500
 #define	TDLS_SIGNAL_THRESH			0x20
 #define	TDLS_WATCHDOG_PERIOD		10	//Periodically sending tdls discovery request in TDLS_WATCHDOG_PERIOD * 2 sec

@@ -65,8 +65,8 @@
 
 static void
 _ConfigNormalChipOutEP_8188E(
-	IN	PADAPTER	pAdapter,
-	IN	u8		NumOutPipe
+		PADAPTER	pAdapter,
+		u8		NumOutPipe
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
@@ -93,9 +93,9 @@ _ConfigNormalChipOutEP_8188E(
 }
 
 static bool HalUsbSetQueuePipeMapping8188EUsb(
-	IN	PADAPTER	pAdapter,
-	IN	u8		NumInPipe,
-	IN	u8		NumOutPipe
+		PADAPTER	pAdapter,
+		u8		NumInPipe,
+		u8		NumOutPipe
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
@@ -460,13 +460,13 @@ _InitPageBoundary(
 
 static void
 _InitNormalChipRegPriority(
-	IN	PADAPTER	Adapter,
-	IN	u16		beQ,
-	IN	u16		bkQ,
-	IN	u16		viQ,
-	IN	u16		voQ,
-	IN	u16		mgtQ,
-	IN	u16		hiQ
+		PADAPTER	Adapter,
+		u16		beQ,
+		u16		bkQ,
+		u16		viQ,
+		u16		voQ,
+		u16		mgtQ,
+		u16		hiQ
 	)
 {
 	u16 value16	= (rtw_read16(Adapter, REG_TRXDMA_CTRL) & 0x7);
@@ -480,7 +480,7 @@ _InitNormalChipRegPriority(
 
 static void
 _InitNormalChipOneOutEpPriority(
-	IN	PADAPTER Adapter
+		PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -515,7 +515,7 @@ _InitNormalChipOneOutEpPriority(
 
 static void
 _InitNormalChipTwoOutEpPriority(
-	IN	PADAPTER Adapter
+		PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -568,7 +568,7 @@ _InitNormalChipTwoOutEpPriority(
 
 static void
 _InitNormalChipThreeOutEpPriority(
-	IN	PADAPTER Adapter
+		PADAPTER Adapter
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -595,7 +595,7 @@ _InitNormalChipThreeOutEpPriority(
 
 static void
 _InitQueuePriority(
-	IN	PADAPTER Adapter
+		PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -661,7 +661,7 @@ _InitTransferPageSize(
 static void
 _InitDriverInfoSize(
 	IN  PADAPTER	Adapter,
-	IN	u8		drvInfoSize
+		u8		drvInfoSize
 	)
 {
 	rtw_write8(Adapter,REG_RX_DRVINFO_SZ, drvInfoSize);
@@ -778,7 +778,7 @@ _InitEDCA(
 static void
 _InitBeaconMaxError(
 	IN  PADAPTER	Adapter,
-	IN	bool		InfraMode
+		bool		InfraMode
 	)
 {
 
@@ -802,7 +802,7 @@ static void _InitHWLed(PADAPTER Adapter)
 
 static void
 _InitRDGSetting(
-	IN	PADAPTER Adapter
+		PADAPTER Adapter
 	)
 {
 	rtw_write8(Adapter,REG_RD_CTRL,0xFF);
@@ -812,7 +812,7 @@ _InitRDGSetting(
 
 static void
 _InitRxSetting(
-	IN	PADAPTER Adapter
+		PADAPTER Adapter
 	)
 {
 	rtw_write32(Adapter, REG_MACID, 0x87654321);
@@ -851,7 +851,7 @@ _InitRetryFunction(
  *---------------------------------------------------------------------------*/
 static void
 usb_AggSettingTxUpdate(
-	IN	PADAPTER			Adapter
+		PADAPTER			Adapter
 	)
 {
 #ifdef CONFIG_USB_TX_AGGREGATION
@@ -891,7 +891,7 @@ usb_AggSettingTxUpdate(
  *---------------------------------------------------------------------------*/
 static void
 usb_AggSettingRxUpdate(
-	IN	PADAPTER			Adapter
+		PADAPTER			Adapter
 	)
 {
 #ifdef CONFIG_USB_RX_AGGREGATION
@@ -1020,14 +1020,14 @@ HalRxAggr8188EUsb(
  *---------------------------------------------------------------------------*/
 void
 USB_AggModeSwitch(
-	IN	PADAPTER			Adapter
+		PADAPTER			Adapter
 	)
 {
 }	// USB_AggModeSwitch
 
 static void
 _InitOperationMode(
-	IN	PADAPTER			Adapter
+		PADAPTER			Adapter
 	)
 {
 }
@@ -1060,7 +1060,7 @@ _InitBeaconParameters(
 
 static void
 _InitRFType(
-	IN	PADAPTER Adapter
+		PADAPTER Adapter
 	)
 {
 	struct registry_priv	 *pregpriv = &Adapter->registrypriv;
@@ -1090,9 +1090,9 @@ _InitRFType(
 
 static void
 _BeaconFunctionEnable(
-	IN	PADAPTER		Adapter,
-	IN	bool			Enable,
-	IN	bool			Linked
+		PADAPTER		Adapter,
+		bool			Enable,
+		bool			Linked
 	)
 {
 	rtw_write8(Adapter, REG_BCN_CTRL, (BIT4 | BIT3 | BIT1));
@@ -1105,7 +1105,7 @@ _BeaconFunctionEnable(
 
 // Set CCK and OFDM Block "ON"
 static void _BBTurnOnBlock(
-	IN	PADAPTER		Adapter
+		PADAPTER		Adapter
 	)
 {
 #if (DISABLE_BB_RF)
@@ -1117,7 +1117,7 @@ static void _BBTurnOnBlock(
 }
 
 static void _RfPowerSave(
-	IN	PADAPTER		Adapter
+		PADAPTER		Adapter
 	)
 {
 }
@@ -1128,7 +1128,7 @@ enum {
 };
 
 static void
-_InitAntenna_Selection(IN	PADAPTER Adapter)
+_InitAntenna_Selection(	PADAPTER Adapter)
 {
 
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1177,8 +1177,8 @@ HalDetectSelectiveSuspendMode(
  *---------------------------------------------------------------------------*/
 static void
 HwSuspendModeEnable_88eu(
-	IN	PADAPTER	pAdapter,
-	IN	u8			Type
+		PADAPTER	pAdapter,
+		u8			Type
 	)
 {
 	//PRT_USB_DEVICE		pDevice = GET_RT_USB_DEVICE(pAdapter);
@@ -1217,7 +1217,7 @@ HwSuspendModeEnable_88eu(
 	}
 
 }	// HwSuspendModeEnable92Cu
-rt_rf_power_state RfOnOffDetect(IN	PADAPTER pAdapter )
+rt_rf_power_state RfOnOffDetect(	PADAPTER pAdapter )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
 	u8	val8;
@@ -1749,7 +1749,7 @@ void _ps_close_RF(_adapter *padapter){
 
 void
 CardDisableRTL8188EU(
-	IN	PADAPTER			Adapter
+		PADAPTER			Adapter
 )
 {
 //	PMGNT_INFO	pMgntInfo	= &(Adapter->MgntInfo);
@@ -1941,9 +1941,9 @@ static void _ReadIDs(PADAPTER	Adapter, u8 *PROMContent, bool AutoloadFail)
 
 static void
 _ReadBoardType(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent,
-	IN	bool		AutoloadFail
+		PADAPTER	Adapter,
+		u8*		PROMContent,
+		bool		AutoloadFail
 	)
 {
 
@@ -1952,9 +1952,9 @@ _ReadBoardType(
 
 static void
 _ReadLEDSetting(
-	IN	PADAPTER	Adapter,
-	IN	u8*		PROMContent,
-	IN	bool		AutoloadFail
+		PADAPTER	Adapter,
+		u8*		PROMContent,
+		bool		AutoloadFail
 	)
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
@@ -1976,36 +1976,36 @@ _ReadLEDSetting(
 
 static void
 _ReadThermalMeter(
-	IN	PADAPTER	Adapter,
-	IN	u8*	PROMContent,
-	IN	bool		AutoloadFail
+		PADAPTER	Adapter,
+		u8*	PROMContent,
+		bool		AutoloadFail
 	)
 {
 }
 
 static void
 _ReadRFSetting(
-	IN	PADAPTER	Adapter,
-	IN	u8*	PROMContent,
-	IN	bool		AutoloadFail
+		PADAPTER	Adapter,
+		u8*	PROMContent,
+		bool		AutoloadFail
 	)
 {
 }
 
 static void
 _ReadPROMVersion(
-	IN	PADAPTER	Adapter,
-	IN	u8*	PROMContent,
-	IN	bool		AutoloadFail
+		PADAPTER	Adapter,
+		u8*	PROMContent,
+		bool		AutoloadFail
 	)
 {
 }
 
 static void
 readAntennaDiversity(
-	IN	PADAPTER	pAdapter,
-	IN	u8			*hwinfo,
-	IN	bool		AutoLoadFail
+		PADAPTER	pAdapter,
+		u8			*hwinfo,
+		bool		AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -2016,16 +2016,16 @@ readAntennaDiversity(
 
 static void
 hal_InitPGData(
-	IN	PADAPTER	pAdapter,
-	IN	OUT	u8		*PROMContent
+		PADAPTER	pAdapter,
+			u8		*PROMContent
 	)
 {
 }
 static void
 Hal_EfuseParsePIDVID_8188EU(
-	IN	PADAPTER		pAdapter,
-	IN	u8*				hwinfo,
-	IN	bool			AutoLoadFail
+		PADAPTER		pAdapter,
+		u8*				hwinfo,
+		bool			AutoLoadFail
 	)
 {
 
@@ -2059,9 +2059,9 @@ Hal_EfuseParsePIDVID_8188EU(
 
 static void
 Hal_EfuseParseMACAddr_8188EU(
-	IN	PADAPTER		padapter,
-	IN	u8*			hwinfo,
-	IN	bool			AutoLoadFail
+		PADAPTER		padapter,
+		u8*			hwinfo,
+		bool			AutoLoadFail
 	)
 {
 	u16			i, usValue;
@@ -2092,7 +2092,7 @@ Hal_EfuseParseMACAddr_8188EU(
 
 static void
 Hal_CustomizeByCustomerID_8188EU(
-	IN	PADAPTER		padapter
+		PADAPTER		padapter
 	)
 {
 }
@@ -2217,7 +2217,7 @@ Hal_ReadMACAddrFromFile_8188EU(
 
 static void
 readAdapterInfo_8188EU(
-	IN	PADAPTER	padapter
+		PADAPTER	padapter
 	)
 {
 #if 1
@@ -2299,7 +2299,7 @@ static void _ReadPROMContent(
 
 static void
 _ReadRFType(
-	IN	PADAPTER	Adapter
+		PADAPTER	Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3893,9 +3893,9 @@ _func_exit_;
 //
 u8
 GetHalDefVar8188EUsb(
-	IN	PADAPTER				Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	void *					pValue
+		PADAPTER				Adapter,
+		HAL_DEF_VARIABLE		eVariable,
+		void *					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -4028,9 +4028,9 @@ GetHalDefVar8188EUsb(
 //
 u8
 SetHalDefVar8188EUsb(
-	IN	PADAPTER				Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	void *					pValue
+		PADAPTER				Adapter,
+		HAL_DEF_VARIABLE		eVariable,
+		void *					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

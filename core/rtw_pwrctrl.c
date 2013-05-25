@@ -23,6 +23,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <osdep_intf.h>
+#include <linux/usb.h>
 
 #ifdef CONFIG_BT_COEXIST
 #include <rtl8723a_hal.h>
