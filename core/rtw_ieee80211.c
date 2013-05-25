@@ -879,7 +879,7 @@ u8 rtw_is_wps_ie(u8 *ie_ptr, uint *wps_ielen)
 
 	if ((eid==_WPA_IE_ID_)&&(_rtw_memcmp(&ie_ptr[2], wps_oui, 4)==_TRUE))
 	{
-		//DBG_8192C("==> found WPS_IE.....\n");
+		//DBG_88E("==> found WPS_IE.....\n");
 		*wps_ielen = ie_ptr[1]+2;
 		match=_TRUE;
 	}
@@ -972,7 +972,7 @@ u8 *rtw_get_wps_attr(u8 *wps_ie, uint wps_ielen, u16 target_attr_id ,u8 *buf_att
 		u16 attr_data_len = RTW_GET_BE16(attr_ptr + 2);
 		u16 attr_len = attr_data_len + 4;
 
-		//DBG_871X("%s attr_ptr:%p, id:%u, length:%u\n", __func__, attr_ptr, attr_id, attr_data_len);
+		//DBG_88E("%s attr_ptr:%p, id:%u, length:%u\n", __func__, attr_ptr, attr_id, attr_data_len);
 		if ( attr_id == target_attr_id )
 		{
 			target_attr_ptr = attr_ptr;
@@ -1040,7 +1040,7 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
 	 * sub-type. */
 	if (elen < 4) {
 		if (show_errors) {
-			DBG_871X("short vendor specific "
+			DBG_88E("short vendor specific "
 				   "information element ignored (len=%lu)\n",
 				   (unsigned long) elen);
 		}
@@ -1061,7 +1061,7 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
 			break;
 		case WME_OUI_TYPE: /* this is a Wi-Fi WME info. element */
 			if (elen < 5) {
-				DBG_871X("short WME "
+				DBG_88E("short WME "
 					   "information element ignored "
 					   "(len=%lu)\n",
 					   (unsigned long) elen);
@@ -1078,7 +1078,7 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
 				elems->wme_tspec_len = elen;
 				break;
 			default:
-				DBG_871X("unknown WME "
+				DBG_88E("unknown WME "
 					   "information element ignored "
 					   "(subtype=%d len=%lu)\n",
 					   pos[4], (unsigned long) elen);
@@ -1091,7 +1091,7 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
 			elems->wps_ie_len = elen;
 			break;
 		default:
-			DBG_871X("Unknown Microsoft "
+			DBG_88E("Unknown Microsoft "
 				   "information element ignored "
 				   "(type=%d len=%lu)\n",
 				   pos[3], (unsigned long) elen);
@@ -1106,7 +1106,7 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
 			elems->vendor_ht_cap_len = elen;
 			break;
 		default:
-			DBG_871X("Unknown Broadcom "
+			DBG_88E("Unknown Broadcom "
 				   "information element ignored "
 				   "(type=%d len=%lu)\n",
 				   pos[3], (unsigned long) elen);
@@ -1115,7 +1115,7 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
 		break;
 
 	default:
-		DBG_871X("unknown vendor specific information "
+		DBG_88E("unknown vendor specific information "
 			   "element ignored (vendor OUI %02x:%02x:%02x "
 			   "len=%lu)\n",
 			   pos[0], pos[1], pos[2], (unsigned long) elen);
@@ -1153,7 +1153,7 @@ ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
 
 		if (elen > left) {
 			if (show_errors) {
-				DBG_871X("IEEE 802.11 element "
+				DBG_88E("IEEE 802.11 element "
 					   "parse failed (id=%d elen=%d "
 					   "left=%lu)\n",
 					   id, elen, (unsigned long) left);
@@ -1244,7 +1244,7 @@ ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
 			unknown++;
 			if (!show_errors)
 				break;
-			DBG_871X("IEEE 802.11 element parse "
+			DBG_88E("IEEE 802.11 element parse "
 				   "ignored unknown element (id=%d elen=%d)\n",
 				   id, elen);
 			break;
@@ -1325,10 +1325,10 @@ void rtw_macaddr_cfg(u8 *mac_addr)
 		mac[5] = 0x00;
 		// use default mac addresss
 		_rtw_memcpy(mac_addr, mac, ETH_ALEN);
-		DBG_871X("MAC Address from efuse error, assign default one !!!\n");
+		DBG_88E("MAC Address from efuse error, assign default one !!!\n");
 	}
 
-	DBG_871X("rtw_macaddr_cfg MAC Address  = "MAC_FMT"\n", MAC_ARG(mac_addr));
+	DBG_88E("rtw_macaddr_cfg MAC Address  = "MAC_FMT"\n", MAC_ARG(mac_addr));
 }
 
 void dump_ies(u8 *buf, u32 buf_len) {
@@ -1339,7 +1339,7 @@ void dump_ies(u8 *buf, u32 buf_len) {
 		id = *pos;
 		len = *(pos+1);
 
-		DBG_871X("%s ID:%u, LEN:%u\n", __func__, id, len);
+		DBG_88E("%s ID:%u, LEN:%u\n", __func__, id, len);
 		#ifdef CONFIG_P2P
 		dump_p2p_ie(pos, len);
 		#endif
@@ -1366,7 +1366,7 @@ void dump_wps_ie(u8 *ie, u32 ie_len) {
 		id = RTW_GET_BE16(pos);
 		len = RTW_GET_BE16(pos + 2);
 
-		DBG_871X("%s ID:0x%04x, LEN:%u\n", __func__, id, len);
+		DBG_88E("%s ID:0x%04x, LEN:%u\n", __func__, id, len);
 
 		pos+=(4+len);
 	}
@@ -1390,7 +1390,7 @@ void dump_p2p_ie(u8 *ie, u32 ie_len) {
 		id = *pos;
 		len = RTW_GET_LE16(pos+1);
 
-		DBG_871X("%s ID:%u, LEN:%u\n", __func__, id, len);
+		DBG_88E("%s ID:%u, LEN:%u\n", __func__, id, len);
 
 		pos+=(3+len);
 	}
@@ -1487,7 +1487,7 @@ u8 *rtw_get_p2p_attr(u8 *p2p_ie, uint p2p_ielen, u8 target_attr_id ,u8 *buf_attr
 		u16 attr_data_len = RTW_GET_LE16(attr_ptr + 1);
 		u16 attr_len = attr_data_len + 3;
 
-		//DBG_871X("%s attr_ptr:%p, id:%u, length:%u\n", __func__, attr_ptr, attr_id, attr_data_len);
+		//DBG_88E("%s attr_ptr:%p, id:%u, length:%u\n", __func__, attr_ptr, attr_id, attr_data_len);
 		if ( attr_id == target_attr_id )
 		{
 			target_attr_ptr = attr_ptr;

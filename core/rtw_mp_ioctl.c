@@ -733,7 +733,7 @@ _func_enter_;
 		struct mp_priv *pmp_priv = &Adapter->mppriv;
 		if (pmp_priv->tx.stop == 0) {
 			pmp_priv->tx.stop = 1;
-			DBG_871X("%s: pkt tx is running...\n", __func__);
+			DBG_88E("%s: pkt tx is running...\n", __func__);
 			rtw_msleep_os(5);
 		}
 		pmp_priv->tx.stop = 0;
@@ -771,7 +771,7 @@ _func_enter_;
 		struct mp_priv *pmp_priv = &Adapter->mppriv;
 		if (pmp_priv->tx.stop == 0) {
 			pmp_priv->tx.stop = 1;
-			DBG_871X("%s: pkt tx is running...\n", __func__);
+			DBG_88E("%s: pkt tx is running...\n", __func__);
 			rtw_msleep_os(5);
 		}
 		pmp_priv->tx.stop = 0;
@@ -809,7 +809,7 @@ _func_enter_;
 		struct mp_priv *pmp_priv = &Adapter->mppriv;
 		if (pmp_priv->tx.stop == 0) {
 			pmp_priv->tx.stop = 1;
-			DBG_871X("%s: pkt tx is running...\n", __func__);
+			DBG_88E("%s: pkt tx is running...\n", __func__);
 			rtw_msleep_os(5);
 		}
 		pmp_priv->tx.stop = 0;

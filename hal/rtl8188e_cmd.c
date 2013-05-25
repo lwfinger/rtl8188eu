@@ -45,7 +45,7 @@ static u8 _is_fw_read_cmd_down(_adapter* padapter, u8 msgbox_num)
 
 	u8 valid;
 
-	//DBG_8192C(" _is_fw_read_cmd_down ,reg_1cc(%x),msg_box(%d)...\n",rtw_read8(padapter,REG_HMETFR),msgbox_num);
+	//DBG_88E(" _is_fw_read_cmd_down ,reg_1cc(%x),msg_box(%d)...\n",rtw_read8(padapter,REG_HMETFR),msgbox_num);
 
 	do{
 		valid = rtw_read8(padapter,REG_HMETFR) & BIT(msgbox_num);
@@ -89,7 +89,7 @@ _func_enter_;
 
 	if (padapter->bFWReady == _FALSE)
 	{
-		DBG_8192C("FillH2CCmd_88E(): return H2C cmd because fw is not ready\n");
+		DBG_88E("FillH2CCmd_88E(): return H2C cmd because fw is not ready\n");
 		return ret;
 	}
 
@@ -120,7 +120,7 @@ _func_enter_;
 		h2c_box_num = pHalData->LastHMEBoxNum;
 
 		if (!_is_fw_read_cmd_down(padapter, h2c_box_num)){
-			DBG_8192C(" fw read cmd failed...\n");
+			DBG_88E(" fw read cmd failed...\n");
 			goto exit;
 		}
 
@@ -159,7 +159,7 @@ _func_enter_;
 
 		bcmd_down = _TRUE;
 
-	//	DBG_8192C("MSG_BOX:%d,CmdLen(%d), reg:0x%x =>h2c_cmd:0x%x, reg:0x%x =>h2c_cmd_ex:0x%x ..\n"
+	//	DBG_88E("MSG_BOX:%d,CmdLen(%d), reg:0x%x =>h2c_cmd:0x%x, reg:0x%x =>h2c_cmd_ex:0x%x ..\n"
 	//		,pHalData->LastHMEBoxNum ,CmdLen,msgbox_addr,h2c_cmd,msgbox_ex_addr,h2c_cmd_ex);
 
 		pHalData->LastHMEBoxNum = (h2c_box_num+1) % RTL88E_MAX_H2C_BOX_NUMS;
@@ -203,7 +203,7 @@ u8 rtl8192c_set_FwSelectSuspend_cmd(_adapter *padapter ,u8 bfwpoll, u16 period)
 {
 	u8	res=_SUCCESS;
 	struct H2C_SS_RFOFF_PARAM param;
-	DBG_8192C("==>%s bfwpoll(%x)\n",__func__,bfwpoll);
+	DBG_88E("==>%s bfwpoll(%x)\n",__func__,bfwpoll);
 	param.gpio_period = period;//Polling GPIO_11 period time
 	param.ROFOn = (_TRUE == bfwpoll)?1:0;
 	FillH2CCmd_88E(padapter, SELECTIVE_SUSPEND_ROF_CMD, sizeof(param), (u8*)(&param));
@@ -220,7 +220,7 @@ _func_enter_;
 	if (pHalData->fw_ractrl == _TRUE){
 		;
 	}else{
-		DBG_8192C("==>%s fw dont support RA\n",__func__);
+		DBG_88E("==>%s fw dont support RA\n",__func__);
 		res=_FAIL;
 	}
 
@@ -242,7 +242,7 @@ _func_enter_;
 
 		FillH2CCmd_88E(padapter, H2C_DM_MACID_CFG, 3, buf);
 	}else{
-		DBG_8192C("==>%s fw dont support RA\n",__func__);
+		DBG_88E("==>%s fw dont support RA\n",__func__);
 		res=_FAIL;
 	}
 
@@ -295,7 +295,7 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 
 	bitmap &= 0x0fffffff;
 
-	DBG_871X("%s=> mac_id:%d , raid:%d , ra_bitmap=0x%x, shortGIrate=0x%02x\n",
+	DBG_88E("%s=> mac_id:%d , raid:%d , ra_bitmap=0x%x, shortGIrate=0x%02x\n",
 			__func__,macid ,raid ,bitmap, shortGIrate);
 
 
@@ -318,7 +318,7 @@ void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode)
 	u8	RLBM = 0; // 0:Min, 1:Max , 2:User define
 _func_enter_;
 
-	DBG_871X("%s: Mode=%d SmartPS=%d UAPSD=%d\n", __func__,
+	DBG_88E("%s: Mode=%d SmartPS=%d UAPSD=%d\n", __func__,
 			Mode, pwrpriv->smart_ps, padapter->registrypriv.uapsd_enable);
 
 	switch (Mode)
@@ -376,7 +376,7 @@ void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, u16 mstatus_rpt )
 	opmode = (u8) mst_rpt;
 	macid = (u8)(mst_rpt >> 8)  ;
 
-	DBG_871X("### %s: MStatus=%x MACID=%d\n", __func__,opmode,macid);
+	DBG_88E("### %s: MStatus=%x MACID=%d\n", __func__,opmode,macid);
 	FillH2CCmd_88E(padapter, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
 }
 
@@ -391,7 +391,7 @@ void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 
-	//DBG_871X("%s\n", __func__);
+	//DBG_88E("%s\n", __func__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -427,7 +427,7 @@ void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 
 	if ( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
-		//DBG_871X("ie len=%d\n", cur_network->IELength);
+		//DBG_88E("ie len=%d\n", cur_network->IELength);
 		pktlen += cur_network->IELength - sizeof(NDIS_802_11_FIXED_IEs);
 		_rtw_memcpy(pframe, cur_network->IEs+sizeof(NDIS_802_11_FIXED_IEs), pktlen);
 
@@ -472,13 +472,13 @@ _ConstructBeacon:
 
 	if ((pktlen + TXDESC_SIZE) > 512)
 	{
-		DBG_871X("beacon frame too large\n");
+		DBG_88E("beacon frame too large\n");
 		return;
 	}
 
 	*pLength = pktlen;
 
-	//DBG_871X("%s bcn_sz=%d\n", __func__, pktlen);
+	//DBG_88E("%s bcn_sz=%d\n", __func__, pktlen);
 
 }
 
@@ -490,7 +490,7 @@ void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	//DBG_871X("%s\n", __func__);
+	//DBG_88E("%s\n", __func__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -531,7 +531,7 @@ void ConstructNullFunctionData(
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 
-	//DBG_871X("%s:%d\n", __func__, bForcePowerSave);
+	//DBG_88E("%s:%d\n", __func__, bForcePowerSave);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr*)pframe;
 
@@ -596,7 +596,7 @@ void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr
 	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
 
 
-	//DBG_871X("%s\n", __func__);
+	//DBG_88E("%s\n", __func__);
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -672,11 +672,11 @@ static void SetFwRsvdPagePkt(PADAPTER padapter, bool bDLFinished)
 	RSVDPAGE_LOC	RsvdPageLoc;
 
 
-	DBG_871X("%s\n", __func__);
+	DBG_88E("%s\n", __func__);
 
 	ReservedPagePacket = (u8*)rtw_zmalloc(1000);
 	if (ReservedPagePacket == NULL) {
-		DBG_871X("%s: alloc ReservedPagePacket fail!\n", __func__);
+		DBG_88E("%s: alloc ReservedPagePacket fail!\n", __func__);
 		return;
 	}
 
@@ -786,7 +786,7 @@ static void SetFwRsvdPagePkt(PADAPTER padapter, bool bDLFinished)
 
 	rtw_hal_mgnt_xmit(padapter, pmgntframe);
 
-	DBG_871X("%s: Set RSVD page location to Fw\n", __func__);
+	DBG_88E("%s: Set RSVD page location to Fw\n", __func__);
 	FillH2CCmd_88E(padapter, H2C_COM_RSVD_PAGE, sizeof(RsvdPageLoc), (u8*)&RsvdPageLoc);
 
 exit:
@@ -806,7 +806,7 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 
 _func_enter_;
 
-	DBG_871X("%s mstatus(%x)\n", __func__,mstatus);
+	DBG_88E("%s mstatus(%x)\n", __func__,mstatus);
 
 	if (mstatus == 1)
 	{
@@ -833,7 +833,7 @@ _func_enter_;
 
 		if (pHalData->RegFwHwTxQCtrl&BIT6)
 		{
-			DBG_871X("HalDownloadRSVDPage(): There is an Adapter is sending beacon.\n");
+			DBG_88E("HalDownloadRSVDPage(): There is an Adapter is sending beacon.\n");
 			bSendBeacon = _TRUE;
 		}
 
@@ -866,9 +866,9 @@ _func_enter_;
 		{
 		}
 		else if (!bcn_valid)
-			DBG_871X("%s: 1 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __func__ ,DLBcnCount, poll);
+			DBG_88E("%s: 1 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __func__ ,DLBcnCount, poll);
 		else
-			DBG_871X("%s: 1 Download RSVD success! DLBcnCount:%u, poll:%u\n", __func__, DLBcnCount, poll);
+			DBG_88E("%s: 1 Download RSVD success! DLBcnCount:%u, poll:%u\n", __func__, DLBcnCount, poll);
 		//
 		// We just can send the reserved page twice during the time that Tx thread is stopped (e.g. pnpsetpower)
 		// becuase we need to free the Tx BCN Desc which is used by the first reserved page packet.
@@ -903,9 +903,9 @@ _func_enter_;
 				{
 				}
 				else if (!bcn_valid)
-					DBG_871X("%s: 2 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __func__ ,DLBcnCount, poll);
+					DBG_88E("%s: 2 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __func__ ,DLBcnCount, poll);
 				else
-					DBG_871X("%s: 2 Download RSVD success! DLBcnCount:%u, poll:%u\n", __func__, DLBcnCount, poll);
+					DBG_88E("%s: 2 Download RSVD success! DLBcnCount:%u, poll:%u\n", __func__, DLBcnCount, poll);
 			}
 		}
 
@@ -932,7 +932,7 @@ _func_enter_;
 		if (bcn_valid)
 		{
 			rtw_hal_set_hwreg(padapter, HW_VAR_BCN_VALID, NULL);
-			DBG_871X("Set RSVD page location to Fw.\n");
+			DBG_88E("Set RSVD page location to Fw.\n");
 			//FillH2CCmd88E(Adapter, H2C_88E_RSVDPAGE, H2C_RSVDPAGE_LOC_LENGTH, pMgntInfo->u1RsvdPageLoc);
 		}
 
@@ -949,9 +949,9 @@ _func_enter_;
 		JoinBssRptParm.OpMode = mstatus;
 		JoinBssRptParm.MacID = 0;
 		FillH2CCmd_88E(padapter, H2C_COM_MEDIA_STATUS_RPT, sizeof(JoinBssRptParm), (u8 *)&JoinBssRptParm);
-		DBG_871X_LEVEL(_drv_info_, "%s opmode:%d MacId:%d\n", __func__, JoinBssRptParm.OpMode, JoinBssRptParm.MacID);
+		DBG_88E_LEVEL(_drv_info_, "%s opmode:%d MacId:%d\n", __func__, JoinBssRptParm.OpMode, JoinBssRptParm.MacID);
 	} else {
-		DBG_871X_LEVEL(_drv_info_, "%s wowlan_mode is off\n", __func__);
+		DBG_88E_LEVEL(_drv_info_, "%s wowlan_mode is off\n", __func__);
 	}
 #endif //CONFIG_WOWLAN
 _func_exit_;
@@ -972,11 +972,11 @@ _func_enter_;
 	switch (p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
-			DBG_8192C("P2P_PS_DISABLE\n");
+			DBG_88E("P2P_PS_DISABLE\n");
 			_rtw_memset(p2p_ps_offload, 0 ,1);
 			break;
 		case P2P_PS_ENABLE:
-			DBG_8192C("P2P_PS_ENABLE\n");
+			DBG_88E("P2P_PS_ENABLE\n");
 			// update CTWindow value.
 			if ( pwdinfo->ctwindow > 0 )
 			{
@@ -995,16 +995,16 @@ _func_enter_;
 					p2p_ps_offload->NoA1_En = 1;
 
 				// config P2P NoA Descriptor Register
-				//DBG_8192C("%s(): noa_duration = %x\n",__func__,pwdinfo->noa_duration[i]);
+				//DBG_88E("%s(): noa_duration = %x\n",__func__,pwdinfo->noa_duration[i]);
 				rtw_write32(padapter, REG_NOA_DESC_DURATION, pwdinfo->noa_duration[i]);
 
-				//DBG_8192C("%s(): noa_interval = %x\n",__func__,pwdinfo->noa_interval[i]);
+				//DBG_88E("%s(): noa_interval = %x\n",__func__,pwdinfo->noa_interval[i]);
 				rtw_write32(padapter, REG_NOA_DESC_INTERVAL, pwdinfo->noa_interval[i]);
 
-				//DBG_8192C("%s(): start_time = %x\n",__func__,pwdinfo->noa_start_time[i]);
+				//DBG_88E("%s(): start_time = %x\n",__func__,pwdinfo->noa_start_time[i]);
 				rtw_write32(padapter, REG_NOA_DESC_START, pwdinfo->noa_start_time[i]);
 
-				//DBG_8192C("%s(): noa_count = %x\n",__func__,pwdinfo->noa_count[i]);
+				//DBG_88E("%s(): noa_count = %x\n",__func__,pwdinfo->noa_count[i]);
 				rtw_write8(padapter, REG_NOA_DESC_COUNT, pwdinfo->noa_count[i]);
 			}
 
@@ -1029,11 +1029,11 @@ _func_enter_;
 			}
 			break;
 		case P2P_PS_SCAN:
-			DBG_8192C("P2P_PS_SCAN\n");
+			DBG_88E("P2P_PS_SCAN\n");
 			p2p_ps_offload->discovery = 1;
 			break;
 		case P2P_PS_SCAN_DONE:
-			DBG_8192C("P2P_PS_SCAN_DONE\n");
+			DBG_88E("P2P_PS_SCAN_DONE\n");
 			p2p_ps_offload->discovery = 0;
 			pwdinfo->p2p_ps_state = P2P_PS_ENABLE;
 			break;
@@ -1108,7 +1108,7 @@ void rtl8188es_set_wowlan_cmd(_adapter* padapter, u8 enable)
 	struct pwrctrl_priv	*pwrpriv=&padapter->pwrctrlpriv;
 
 _func_enter_;
-		DBG_871X_LEVEL(_drv_always_, "+%s+\n", __func__);
+		DBG_88E_LEVEL(_drv_info_, "+%s+\n", __func__);
 
 		pwowlan_parm.mode =0;
 		pwowlan_parm.gpio_index=0;
@@ -1124,21 +1124,21 @@ _func_enter_;
 
 			if (pwrpriv->wowlan_pattern ==_TRUE){
 				pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
-				DBG_871X_LEVEL(_drv_info_, "%s 2.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
+				DBG_88E_LEVEL(_drv_info_, "%s 2.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
 			}
 			if (pwrpriv->wowlan_magic ==_TRUE){
 				pwowlan_parm.mode |=FW_WOWLAN_MAGIC_PKT;
-				DBG_871X_LEVEL(_drv_info_, "%s 3.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
+				DBG_88E_LEVEL(_drv_info_, "%s 3.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
 			}
 			if (pwrpriv->wowlan_unicast ==_TRUE){
 				pwowlan_parm.mode |=FW_WOWLAN_UNICAST;
-				DBG_871X_LEVEL(_drv_info_, "%s 4.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
+				DBG_88E_LEVEL(_drv_info_, "%s 4.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode );
 			}
 
 			if (!(padapter->pwrctrlpriv.wowlan_wake_reason & FWDecisionDisconnect))
 				rtl8188e_set_FwJoinBssReport_cmd(padapter, 1);
 			else
-				DBG_871X_LEVEL(_drv_always_, "%s, disconnected, no FwJoinBssReport\n",__func__);
+				DBG_88E_LEVEL(_drv_info_, "%s, disconnected, no FwJoinBssReport\n",__func__);
 			rtw_msleep_os(2);
 
 			//WOWLAN_GPIO_ACTIVE means GPIO high active
@@ -1155,8 +1155,8 @@ _func_enter_;
 			pwowlan_parm.gpio_index=0x80;
 #endif //CONFIG_SDIO_HCI
 
-			DBG_871X_LEVEL(_drv_info_, "%s 5.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
-			DBG_871X_LEVEL(_drv_info_, "%s 6.pwowlan_parm.index=0x%x\n",__func__,pwowlan_parm.gpio_index);
+			DBG_88E_LEVEL(_drv_info_, "%s 5.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
+			DBG_88E_LEVEL(_drv_info_, "%s 6.pwowlan_parm.index=0x%x\n",__func__,pwowlan_parm.gpio_index);
 			res = FillH2CCmd_88E(padapter, H2C_COM_WWLAN, 2, (u8 *)&pwowlan_parm);
 
 			rtw_msleep_os(2);
@@ -1193,7 +1193,7 @@ _func_enter_;
 			res = FillH2CCmd_88E(padapter, H2C_COM_REMOTE_WAKE_CTRL, 3, (u8 *)&pwowlan_parm);
 		}
 _func_exit_;
-		DBG_871X_LEVEL(_drv_always_, "-%s res:%d-\n", __func__, res);
+		DBG_88E_LEVEL(_drv_info_, "-%s res:%d-\n", __func__, res);
 		return ;
 }
 #endif  //CONFIG_WOWLAN

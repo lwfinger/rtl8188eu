@@ -271,7 +271,7 @@ void free_tdls_sta(_adapter *padapter, struct sta_info *ptdls_sta)
 		ptdlsinfo->setup_state=TDLS_STATE_NONE;
 	}
 	else
-		DBG_871X("Remain tdls sta:%02x\n", ptdlsinfo->sta_cnt);
+		DBG_88E("Remain tdls sta:%02x\n", ptdlsinfo->sta_cnt);
 
 	rtw_free_stainfo(padapter,  ptdls_sta);
 
@@ -427,12 +427,12 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 		u32	attr_contentlen = 0;
 		int	i;
 
-		DBG_871X( "[%s] WFD IE Found!!\n", __func__ );
+		DBG_88E( "[%s] WFD IE Found!!\n", __func__ );
 		rtw_get_wfd_attr_content( wfd_ie, wfd_ielen, WFD_ATTR_DEVICE_INFO, attr_content, &attr_contentlen);
 		if ( attr_contentlen )
 		{
 			ptdlsinfo->wfd_info->peer_rtsp_ctrlport = RTW_GET_BE16( attr_content + 2 );
-			DBG_871X( "[%s] Peer PORT NUM = %d\n", __func__, ptdlsinfo->wfd_info->peer_rtsp_ctrlport );
+			DBG_88E( "[%s] Peer PORT NUM = %d\n", __func__, ptdlsinfo->wfd_info->peer_rtsp_ctrlport );
 		}
 
 		_rtw_memset( attr_content, 0x00, 10);
@@ -441,7 +441,7 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 		if ( attr_contentlen )
 		{
 			_rtw_memcpy(ptdlsinfo->wfd_info->peer_ip_address, ( attr_content + 1 ), 4);
-			DBG_871X( "[%s] Peer IP = %02u.%02u.%02u.%02u\n", __func__,
+			DBG_88E( "[%s] Peer IP = %02u.%02u.%02u.%02u\n", __func__,
 				ptdlsinfo->wfd_info->peer_ip_address[0], ptdlsinfo->wfd_info->peer_ip_address[1],
 				ptdlsinfo->wfd_info->peer_ip_address[2], ptdlsinfo->wfd_info->peer_ip_address[3]
 				);
@@ -458,7 +458,7 @@ void issue_tunneled_probe_req(_adapter *padapter)
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	u8 baddr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-	DBG_871X("[%s]\n", __func__);
+	DBG_88E("[%s]\n", __func__);
 
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
 	{
@@ -501,7 +501,7 @@ void issue_tunneled_probe_rsp(_adapter *padapter, union recv_frame *precv_frame)
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct rx_pkt_attrib	*rx_pkt_pattrib = &precv_frame->u.hdr.attrib;
 
-	DBG_871X("[%s]\n", __func__);
+	DBG_88E("[%s]\n", __func__);
 
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
 	{
@@ -631,7 +631,7 @@ void issue_tdls_teardown(_adapter *padapter, u8 *mac_addr)
 
 	ptdls_sta = rtw_get_stainfo(pstapriv, mac_addr);
 	if (ptdls_sta==NULL){
-		DBG_871X("issue tdls teardown unsuccessful\n");
+		DBG_88E("issue tdls teardown unsuccessful\n");
 		return;
 	}else{
 		ptdls_sta->tdls_sta_state=TDLS_STATE_NONE;
@@ -721,7 +721,7 @@ void issue_tdls_dis_req(_adapter *padapter, u8 *mac_addr)
 		goto exit;
 	}
 	rtw_dump_xframe(padapter, pmgntframe);
-	DBG_871X("issue tdls dis req\n");
+	DBG_88E("issue tdls dis req\n");
 
 exit:
 
@@ -1076,7 +1076,7 @@ sint On_TDLS_Dis_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 
 		if ( pattrib->RxPWDBAll + TDLS_SIGNAL_THRESH >= UndecoratedSmoothedPWDB);
 		{
-			DBG_871X("pattrib->RxPWDBAll=%d, pdmpriv->UndecoratedSmoothedPWDB=%d\n", pattrib->RxPWDBAll, UndecoratedSmoothedPWDB);
+			DBG_88E("pattrib->RxPWDBAll=%d, pdmpriv->UndecoratedSmoothedPWDB=%d\n", pattrib->RxPWDBAll, UndecoratedSmoothedPWDB);
 			issue_tdls_setup_req(adapter, psa);
 		}
 	}
@@ -1133,17 +1133,17 @@ sint On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 		if (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE){
 			//If the direct link is already set up
 			//Process as re-setup after tear down
-			DBG_871X("re-setup a direct link\n");
+			DBG_88E("re-setup a direct link\n");
 		}
 		//already receiving TDLS setup request
 		else if (ptdls_sta->tdls_sta_state & TDLS_INITIATOR_STATE){
-			DBG_871X("receive duplicated TDLS setup request frame in handshaking\n");
+			DBG_88E("receive duplicated TDLS setup request frame in handshaking\n");
 			goto exit;
 		}
 		//When receiving and sending setup_req to the same link at the same time, STA with higher MAC_addr would be initiator
 		//following is to check out MAC_addr
 		else if (ptdls_sta->tdls_sta_state & TDLS_RESPONDER_STATE){
-			DBG_871X("receive setup_req after sending setup_req\n");
+			DBG_88E("receive setup_req after sending setup_req\n");
 			for (i=0;i<6;i++){
 				if (*(pmyid+i)==*(psa+i)){
 				}
@@ -1345,7 +1345,7 @@ sint On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 
 	if (stat_code!=0)
 	{
-		DBG_871X( "[%s] status_code = %d, free_tdls_sta\n", __func__, stat_code );
+		DBG_88E( "[%s] status_code = %d, free_tdls_sta\n", __func__, stat_code );
 		free_tdls_sta(adapter, ptdls_sta);
 		return _FAIL;
 	}
@@ -1448,7 +1448,7 @@ sint On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 		}
 	}
 
-	DBG_871X("issue_tdls_setup_cfm\n");
+	DBG_88E("issue_tdls_setup_cfm\n");
 	issue_tdls_setup_cfm(adapter, precv_frame);
 
 	if (ptdls_sta->stat_code==0)
@@ -1510,7 +1510,7 @@ sint On_TDLS_Setup_Cfm(_adapter *adapter, union recv_frame *precv_frame)
 	_rtw_memcpy(&stat_code, ptr+2, 2);
 
 	if (stat_code!=0){
-		DBG_871X( "[%s] stat_code = %d\n, free_tdls_sta", __func__, stat_code );
+		DBG_88E( "[%s] stat_code = %d\n, free_tdls_sta", __func__, stat_code );
 		free_tdls_sta(adapter, ptdls_sta);
 		return _FAIL;
 	}
@@ -1740,7 +1740,7 @@ sint On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 
 			if (ptdls_sta->sleepq_len==0)
 			{
-				DBG_871X("no buffered packets for tdls to xmit\n");
+				DBG_88E("no buffered packets for tdls to xmit\n");
 				//on U-APSD + CH. switch state, when there is no buffered date to xmit,
 				// we should go back to base channel
 				if (state==2){
@@ -1749,13 +1749,13 @@ sint On_TDLS_Peer_Traffic_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 						ptdls_sta->tdls_sta_state &= ~(TDLS_SW_OFF_STATE);
 						ptdlsinfo->candidate_ch= pmlmeext->cur_channel;
 						issue_tdls_ch_switch_req(adapter, pattrib->src);
-						DBG_871X("issue tdls ch switch req back to base channel\n");
+						DBG_88E("issue tdls ch switch req back to base channel\n");
 				}
 
 			}
 			else
 			{
-				DBG_871X("error!psta->sleepq_len=%d\n", ptdls_sta->sleepq_len);
+				DBG_88E("error!psta->sleepq_len=%d\n", ptdls_sta->sleepq_len);
 				ptdls_sta->sleepq_len=0;
 			}
 
@@ -1828,10 +1828,10 @@ sint On_TDLS_Ch_Switch_Req(_adapter *adapter, union recv_frame *precv_frame)
 
 	issue_tdls_ch_switch_rsp(adapter, psa);
 
-	DBG_871X("issue tdls channel switch response\n");
+	DBG_88E("issue tdls channel switch response\n");
 
 	if ((ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE) && ptdls_sta->off_ch==pmlmeext->cur_channel){
-		DBG_871X("back to base channel %x\n", pmlmeext->cur_channel);
+		DBG_88E("back to base channel %x\n", pmlmeext->cur_channel);
 		ptdls_sta->option=7;
 		rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_BASE_CH);
 	}else{
@@ -1861,11 +1861,11 @@ sint On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	//it will go back to base channel and terminate this channel switch procedure
 	if (ptdls_sta->tdls_sta_state & TDLS_CH_SWITCH_ON_STATE ){
 		if (pmlmeext->cur_channel==ptdls_sta->off_ch){
-			DBG_871X("back to base channel %x\n", pmlmeext->cur_channel);
+			DBG_88E("back to base channel %x\n", pmlmeext->cur_channel);
 			ptdls_sta->option=7;
 			rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_OFF_CH);
 		}else{
-			DBG_871X("receive unsolicited channel switch response\n");
+			DBG_88E("receive unsolicited channel switch response\n");
 			rtw_tdls_cmd(adapter, ptdls_sta->hwaddr, TDLS_CS_OFF);
 		}
 		return _FAIL;
@@ -2165,7 +2165,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	if (ptdls_sta == NULL )
 	{
-		DBG_871X("[%s] %d\n", __func__, __LINE__);
+		DBG_88E("[%s] %d\n", __func__, __LINE__);
 		return;
 	}
 
@@ -2185,7 +2185,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	if (ptdls_sta->stat_code!=0)	//invalid setup request
 	{
-		DBG_871X("ptdls_sta->stat_code:%04x\n", ptdls_sta->stat_code);
+		DBG_88E("ptdls_sta->stat_code:%04x\n", ptdls_sta->stat_code);
 		return;
 	}
 
@@ -2770,7 +2770,7 @@ void _tdls_handshake_timer_hdl(void *FunctionContext)
 	{
 		if ( !(ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE) )
 		{
-			DBG_871X("tdls handshake time out\n");
+			DBG_88E("tdls handshake time out\n");
 			free_tdls_sta(ptdls_sta->padapter, ptdls_sta);
 		}
 	}
@@ -2796,7 +2796,7 @@ void _tdls_alive_timer_phase1_hdl(void *FunctionContext)
 
 	ptdls_sta->tdls_sta_state &= (~TDLS_ALIVE_STATE);
 
-	DBG_871X("issue_tdls_dis_req to check alive\n");
+	DBG_88E("issue_tdls_dis_req to check alive\n");
 	issue_tdls_dis_req( padapter, ptdls_sta->hwaddr);
 	rtw_tdls_cmd(padapter, ptdls_sta->hwaddr, TDLS_CKALV_PH1);
 	sta_update_last_rx_pkts(ptdls_sta);
@@ -2826,7 +2826,7 @@ void _tdls_alive_timer_phase2_hdl(void *FunctionContext)
 	if ( (ptdls_sta->tdls_sta_state & TDLS_ALIVE_STATE) &&
 		(sta_last_rx_pkts(ptdls_sta) + 3 <= sta_rx_pkts(ptdls_sta)) )
 	{
-		DBG_871X("TDLS STA ALIVE, ptdls_sta->sta_stats.last_rx_pkts:%llu, ptdls_sta->sta_stats.rx_pkts:%llu\n",
+		DBG_88E("TDLS STA ALIVE, ptdls_sta->sta_stats.last_rx_pkts:%llu, ptdls_sta->sta_stats.rx_pkts:%llu\n",
 			sta_last_rx_pkts(ptdls_sta), sta_rx_pkts(ptdls_sta));
 
 		ptdls_sta->alive_count = 0;
@@ -2835,9 +2835,9 @@ void _tdls_alive_timer_phase2_hdl(void *FunctionContext)
 	else
 	{
 		if ( !(ptdls_sta->tdls_sta_state & TDLS_ALIVE_STATE) )
-			DBG_871X("TDLS STA TOO FAR\n");
+			DBG_88E("TDLS STA TOO FAR\n");
 		if ( !(sta_last_rx_pkts(ptdls_sta) + 3 <= sta_rx_pkts(ptdls_sta)))
-			DBG_871X("TDLS LINK WITH LOW TRAFFIC, ptdls_sta->sta_stats.last_rx_pkts:%llu, ptdls_sta->sta_stats.rx_pkts:%llu\n",
+			DBG_88E("TDLS LINK WITH LOW TRAFFIC, ptdls_sta->sta_stats.last_rx_pkts:%llu, ptdls_sta->sta_stats.rx_pkts:%llu\n",
 				sta_last_rx_pkts(ptdls_sta), sta_rx_pkts(ptdls_sta));
 
 		ptdls_sta->alive_count++;

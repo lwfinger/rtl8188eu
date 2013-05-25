@@ -100,7 +100,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 	{
 		// Here we only set bPbcPressed to true
 		// After trigger PBC, the variable will be set to false
-		DBG_8192C("CheckPbcGPIO - PBC is pressed\n");
+		DBG_88E("CheckPbcGPIO - PBC is pressed\n");
 
 #ifdef RTK_DMP_PLATFORM
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
@@ -165,7 +165,7 @@ dm_InterruptMigration(
 
 	//Update current settings.
 	if ( bCurrentIntMt != IntMtToSet ){
-		DBG_8192C("%s(): Update interrrupt migration(%d)\n",__func__,IntMtToSet);
+		DBG_88E("%s(): Update interrrupt migration(%d)\n",__func__,IntMtToSet);
 		if (IntMtToSet)
 		{
 			//
@@ -185,7 +185,7 @@ dm_InterruptMigration(
 	}
 
 	/*if ( bCurrentACIntDisable != ACIntToSet ){
-		DBG_8192C("%s(): Update AC interrrupt(%d)\n",__func__,ACIntToSet);
+		DBG_88E("%s(): Update AC interrrupt(%d)\n",__func__,ACIntToSet);
 		if (ACIntToSet) // Disable four ACs interrupts.
 		{
 			//
@@ -559,7 +559,7 @@ void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	if (0 != pHalData->AntDivCfg )
 	{
-		//DBG_8192C("update_network=> orgRSSI(%d)(%d),newRSSI(%d)(%d)\n",dst->Rssi,query_rx_pwr_percentage(dst->Rssi),
+		//DBG_88E("update_network=> orgRSSI(%d)(%d),newRSSI(%d)(%d)\n",dst->Rssi,query_rx_pwr_percentage(dst->Rssi),
 		//	src->Rssi,query_rx_pwr_percentage(src->Rssi));
 		//select optimum_antenna for before linked =>For antenna diversity
 		if (dst->Rssi >=  src->Rssi )//keep org parameter
@@ -582,7 +582,7 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 	// Condition that does not need to use antenna diversity.
 	if (pHalData->AntDivCfg==0)
 	{
-		//DBG_8192C("odm_AntDivBeforeLink8192C(): No AntDiv Mechanism.\n");
+		//DBG_88E("odm_AntDivBeforeLink8192C(): No AntDiv Mechanism.\n");
 		return _FALSE;
 	}
 
@@ -599,7 +599,7 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 
 		//PHY_SetBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300, pDM_SWAT_Table->CurAntenna);
 		rtw_antenna_select_cmd(Adapter, pDM_SWAT_Table->CurAntenna, _FALSE);
-		//DBG_8192C("%s change antenna to ANT_( %s ).....\n",__func__, (pDM_SWAT_Table->CurAntenna==Antenna_A)?"A":"B");
+		//DBG_88E("%s change antenna to ANT_( %s ).....\n",__func__, (pDM_SWAT_Table->CurAntenna==Antenna_A)?"A":"B");
 		return _TRUE;
 	}
 	else

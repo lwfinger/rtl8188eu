@@ -31,13 +31,13 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
 #if 1
 	if ((xmit_frame = rtw_alloc_xmitframe(pxmitpriv)) == NULL)
 	{
-		DBG_871X("%s rtw_alloc_xmitframe return null\n", __func__);
+		DBG_88E("%s rtw_alloc_xmitframe return null\n", __func__);
 		goto exit;
 	}
 
 	if ((xmitbuf = rtw_alloc_xmitbuf(pxmitpriv)) == NULL)
 	{
-		DBG_871X("%s rtw_alloc_xmitbuf return null\n", __func__);
+		DBG_88E("%s rtw_alloc_xmitbuf return null\n", __func__);
 		rtw_free_xmitframe(pxmitpriv, xmit_frame);
 		xmit_frame=NULL;
 		goto exit;
@@ -57,7 +57,7 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
 #else
 	if ((xmit_frame = alloc_mgtxmitframe(pxmitpriv)) == NULL)
 	{
-		DBG_871X("%s alloc_mgtxmitframe return null\n", __func__);
+		DBG_88E("%s alloc_mgtxmitframe return null\n", __func__);
 	}
 	else {
 		pattrib = &xmit_frame->attrib;
@@ -83,7 +83,7 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 
 	//check if the io_buf can accommodate new cmds
 	if (ori_len + cmd_len + 8 > MAX_XMITBUF_SZ) {
-		DBG_871X("%s %u is large than MAX_XMITBUF_SZ:%u, can't accommodate new cmds\n", __func__
+		DBG_88E("%s %u is large than MAX_XMITBUF_SZ:%u, can't accommodate new cmds\n", __func__
 			, ori_len + cmd_len + 8, MAX_XMITBUF_SZ);
 		return _FAIL;
 	}
@@ -92,7 +92,7 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 	pattrib->pktlen += cmd_len;
 	pattrib->last_txcmdsz += cmd_len;
 
-	//DBG_871X("%s ori:%u + cmd_len:%u = %u\n", __func__, ori_len, cmd_len, buf_offset+pattrib->pktlen);
+	//DBG_88E("%s ori:%u + cmd_len:%u = %u\n", __func__, ori_len, cmd_len, buf_offset+pattrib->pktlen);
 
 	return _SUCCESS;
 }
@@ -149,7 +149,7 @@ int _rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value, u8
 		cmd.mask = cpu_to_le32(mask);
 	}
 
-	//DBG_871X("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __func__, addr,value,mask);
+	//DBG_88E("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __func__, addr,value,mask);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
 
@@ -170,7 +170,7 @@ int _rtw_IOL_append_WW_cmd(struct xmit_frame *xmit_frame, u16 addr, u16 value, u
 		cmd.mask =  cpu_to_le32(mask);
 	}
 
-	//DBG_871X("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __func__, addr,value,mask);
+	//DBG_88E("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __func__, addr,value,mask);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
 
@@ -191,7 +191,7 @@ int _rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value, u
 		cmd.mask =  cpu_to_le32(mask);
 	}
 
-	//DBG_871X("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __FU2NCTION__, addr,value,mask);
+	//DBG_88E("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __FU2NCTION__, addr,value,mask);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
 
@@ -213,7 +213,7 @@ int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path, u16 addr,
 		cmd.mask =  cpu_to_le32(mask);
 	}
 
-	//DBG_871X("%s rf_path:0x%02x addr:0x%04x,value:0x%08x,mask:0x%08x\n", __FU2NCTION__,rf_path, addr,value,mask);
+	//DBG_88E("%s rf_path:0x%02x addr:0x%04x,value:0x%08x,mask:0x%08x\n", __FU2NCTION__,rf_path, addr,value,mask);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
 
@@ -227,7 +227,7 @@ int rtw_IOL_append_DELAY_US_cmd(struct xmit_frame *xmit_frame, u16 us)
 	//RTW_PUT_LE16((u8*)&cmd.address, us);
 	cmd.address = cpu_to_le16(us);
 
-	//DBG_871X("%s %u\n", __func__, us);
+	//DBG_88E("%s %u\n", __func__, us);
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 4);
 }
 
@@ -238,7 +238,7 @@ int rtw_IOL_append_DELAY_MS_cmd(struct xmit_frame *xmit_frame, u16 ms)
 	//RTW_PUT_LE16((u8*)&cmd.address, ms);
 	cmd.address = cpu_to_le16(ms);
 
-	//DBG_871X("%s %u\n", __func__, ms);
+	//DBG_88E("%s %u\n", __func__, ms);
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 4);
 }
 int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame)
@@ -323,7 +323,7 @@ int _rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value)
 int dbg_rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value, const char *caller, const int line)
 {
 	if (match_write_sniff_ranges(addr, 1))
-		DBG_871X("DBG_IO %s:%d IOL_WB(0x%04x, 0x%02x)\n", caller, line, addr, value);
+		DBG_88E("DBG_IO %s:%d IOL_WB(0x%04x, 0x%02x)\n", caller, line, addr, value);
 
 	return _rtw_IOL_append_WB_cmd(xmit_frame, addr, value);
 }
@@ -331,7 +331,7 @@ int dbg_rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value,
 int dbg_rtw_IOL_append_WW_cmd(struct xmit_frame *xmit_frame, u16 addr, u16 value, const char *caller, const int line)
 {
 	if (match_write_sniff_ranges(addr, 2))
-		DBG_871X("DBG_IO %s:%d IOL_WW(0x%04x, 0x%04x)\n", caller, line, addr, value);
+		DBG_88E("DBG_IO %s:%d IOL_WW(0x%04x, 0x%04x)\n", caller, line, addr, value);
 
 	return _rtw_IOL_append_WW_cmd(xmit_frame, addr, value);
 }
@@ -339,7 +339,7 @@ int dbg_rtw_IOL_append_WW_cmd(struct xmit_frame *xmit_frame, u16 addr, u16 value
 int dbg_rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value, const char *caller, const int line)
 {
 	if (match_write_sniff_ranges(addr, 4))
-		DBG_871X("DBG_IO %s:%d IOL_WD(0x%04x, 0x%08x)\n", caller, line, addr, value);
+		DBG_88E("DBG_IO %s:%d IOL_WD(0x%04x, 0x%08x)\n", caller, line, addr, value);
 
 	return _rtw_IOL_append_WD_cmd(xmit_frame, addr, value);
 }
@@ -351,7 +351,7 @@ int rtw_IOL_append_DELAY_US_cmd(struct xmit_frame *xmit_frame, u16 us)
 
 	RTW_PUT_BE32((u8*)&cmd.value, (u32)us);
 
-	//DBG_871X("%s %u\n", __func__, us);
+	//DBG_88E("%s %u\n", __func__, us);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 8);
 }
@@ -362,7 +362,7 @@ int rtw_IOL_append_DELAY_MS_cmd(struct xmit_frame *xmit_frame, u16 ms)
 
 	RTW_PUT_BE32((u8*)&cmd.value, (u32)ms);
 
-	//DBG_871X("%s %u\n", __func__, ms);
+	//DBG_88E("%s %u\n", __func__, ms);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 8);
 }

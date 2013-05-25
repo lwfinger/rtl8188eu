@@ -351,13 +351,13 @@ void rtw_proc_init_one(struct net_device *dev)
 		rtw_proc=create_proc_entry(rtw_proc_name, S_IFDIR, init_net.proc_net);
 #endif
 		if (rtw_proc == NULL) {
-			DBG_871X(KERN_ERR "Unable to create rtw_proc directory\n");
+			DBG_88E(KERN_ERR "Unable to create rtw_proc directory\n");
 			return;
 		}
 
 		entry = create_proc_read_entry("ver_info", S_IFREG | S_IRUGO, rtw_proc, proc_get_drv_version, dev);
 		if (!entry) {
-			DBG_871X("Unable to create_proc_read_entry!\n");
+			DBG_88E("Unable to create_proc_read_entry!\n");
 			return;
 		}
 	}
@@ -386,7 +386,7 @@ void rtw_proc_init_one(struct net_device *dev)
 				}
 			}
 
-			DBG_871X("Unable to create dir_dev directory\n");
+			DBG_88E("Unable to create dir_dev directory\n");
 			return;
 		}
 	}
@@ -400,7 +400,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("write_reg", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_write_reg, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_write_reg;
@@ -408,7 +408,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("read_reg", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_read_reg, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_read_reg;
@@ -417,7 +417,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("fwstate", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_fwstate, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
@@ -425,7 +425,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("sec_info", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_sec_info, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
@@ -433,7 +433,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("mlmext_state", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_mlmext_state, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
@@ -441,98 +441,98 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("qos_option", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_qos_option, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("ht_option", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_ht_option, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("rf_info", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_rf_info, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("ap_info", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_ap_info, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("adapter_state", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_adapter_state, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("trx_info", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_trx_info, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("mac_reg_dump1", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_mac_reg_dump1, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("mac_reg_dump2", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_mac_reg_dump2, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("mac_reg_dump3", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_mac_reg_dump3, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("bb_reg_dump1", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_bb_reg_dump1, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("bb_reg_dump2", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_bb_reg_dump2, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("bb_reg_dump3", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_bb_reg_dump3, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("rf_reg_dump1", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_rf_reg_dump1, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
 	entry = create_proc_read_entry("rf_reg_dump2", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_rf_reg_dump2, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 
@@ -541,14 +541,14 @@ void rtw_proc_init_one(struct net_device *dev)
 		entry = create_proc_read_entry("rf_reg_dump3", S_IFREG | S_IRUGO,
 					   dir_dev, proc_get_rf_reg_dump3, dev);
 		if (!entry) {
-			DBG_871X("Unable to create_proc_read_entry!\n");
+			DBG_88E("Unable to create_proc_read_entry!\n");
 			return;
 		}
 
 		entry = create_proc_read_entry("rf_reg_dump4", S_IFREG | S_IRUGO,
 					   dir_dev, proc_get_rf_reg_dump4, dev);
 		if (!entry) {
-			DBG_871X("Unable to create_proc_read_entry!\n");
+			DBG_88E("Unable to create_proc_read_entry!\n");
 			return;
 		}
 	}
@@ -558,7 +558,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("all_sta_info", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_all_sta_info, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 #endif
@@ -567,7 +567,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("_malloc_cnt", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_malloc_cnt, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 #endif
@@ -576,7 +576,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("best_channel", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_best_channel, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 #endif
@@ -584,7 +584,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("rx_signal", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_rx_signal, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_rx_signal;
@@ -592,7 +592,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("ht_enable", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_ht_enable, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_ht_enable;
@@ -600,7 +600,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("cbw40_enable", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_cbw40_enable, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_cbw40_enable;
@@ -608,7 +608,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("ampdu_enable", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_ampdu_enable, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_ampdu_enable;
@@ -616,7 +616,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("rx_stbc", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_rx_stbc, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_rx_stbc;
@@ -629,7 +629,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("rssi_disp", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_rssi_disp, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_rssi_disp;
@@ -637,7 +637,7 @@ void rtw_proc_init_one(struct net_device *dev)
 	entry = create_proc_read_entry("btcoex_dbg", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_btcoex_dbg, dev);
 	if (!entry) {
-		DBG_871X("Unable to create_proc_read_entry!\n");
+		DBG_88E("Unable to create_proc_read_entry!\n");
 		return;
 	}
 	entry->write_proc = proc_set_btcoex_dbg;
@@ -872,7 +872,7 @@ static int rtw_net_set_mac_address(struct net_device *pnetdev, void *p)
 
 	if (padapter->bup == _FALSE)
 	{
-		//DBG_871X("r8711_net_set_mac_address(), MAC=%x:%x:%x:%x:%x:%x\n", addr->sa_data[0], addr->sa_data[1], addr->sa_data[2], addr->sa_data[3],
+		//DBG_88E("r8711_net_set_mac_address(), MAC=%x:%x:%x:%x:%x:%x\n", addr->sa_data[0], addr->sa_data[1], addr->sa_data[2], addr->sa_data[3],
 		//addr->sa_data[4], addr->sa_data[5]);
 		_rtw_memcpy(padapter->eeprompriv.mac_addr, addr->sa_data, ETH_ALEN);
 		//_rtw_memcpy(pnetdev->dev_addr, addr->sa_data, ETH_ALEN);
@@ -1014,7 +1014,7 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 		TargetNetdev = dev_get_by_name(devnet, "wlan0");
 #endif
 		if (TargetNetdev) {
-			DBG_871X("Force onboard module driver disappear !!!\n");
+			DBG_88E("Force onboard module driver disappear !!!\n");
 			TargetAdapter = rtw_netdev_priv(TargetNetdev);
 			TargetAdapter->DriverState = DRIVER_DISAPPEAR;
 
@@ -1069,7 +1069,7 @@ struct net_device *rtw_init_netdev(_adapter *old_padapter)
 	//pnetdev->init = NULL;
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
-	DBG_871X("register rtw_netdev_ops to netdev_ops\n");
+	DBG_88E("register rtw_netdev_ops to netdev_ops\n");
 	pnetdev->netdev_ops = &rtw_netdev_ops;
 #else
 	pnetdev->open = netdev_open;
@@ -1367,7 +1367,7 @@ _func_enter_;
 #ifdef CONFIG_TDLS
 	if (rtw_init_tdls_info(padapter) == _FAIL)
 	{
-		DBG_871X("Can't rtw_init_tdls_info\n");
+		DBG_88E("Can't rtw_init_tdls_info\n");
 		ret8=_FAIL;
 		goto exit;
 	}
@@ -1375,14 +1375,14 @@ _func_enter_;
 
 	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL)
 	{
-		DBG_871X("Can't _rtw_init_xmit_priv\n");
+		DBG_88E("Can't _rtw_init_xmit_priv\n");
 		ret8=_FAIL;
 		goto exit;
 	}
 
 	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL)
 	{
-		DBG_871X("Can't _rtw_init_recv_priv\n");
+		DBG_88E("Can't _rtw_init_recv_priv\n");
 		ret8=_FAIL;
 		goto exit;
 	}
@@ -1394,7 +1394,7 @@ _func_enter_;
 
 	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
 	{
-		DBG_871X("Can't _rtw_init_sta_priv\n");
+		DBG_88E("Can't _rtw_init_sta_priv\n");
 		ret8=_FAIL;
 		goto exit;
 	}
@@ -1409,7 +1409,7 @@ _func_enter_;
 
 #ifdef CONFIG_MP_INCLUDED
 	if (init_mp_priv(padapter) == _FAIL) {
-		DBG_871X("%s: initialize MP private data Fail!\n", __func__);
+		DBG_88E("%s: initialize MP private data Fail!\n", __func__);
 	}
 #endif
 
@@ -1425,7 +1425,7 @@ _func_enter_;
 #ifdef CONFIG_INTEL_WIDI
 	if (rtw_init_intel_widi(padapter) == _FAIL)
 	{
-		DBG_871X("Can't rtw_init_intel_widi\n");
+		DBG_88E("Can't rtw_init_intel_widi\n");
 		ret8=_FAIL;
 		goto exit;
 	}
@@ -1599,7 +1599,7 @@ int _netdev_if2_open(struct net_device *pnetdev)
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 	_adapter *primary_padapter = padapter->pbuddy_adapter;
 
-	DBG_871X("+871x_drv - if2_open, bup=%d\n", padapter->bup);
+	DBG_88E("+871x_drv - if2_open, bup=%d\n", padapter->bup);
 
 	if (primary_padapter->bup == _FALSE || primary_padapter->hw_init_completed == _FALSE)
 	{
@@ -1660,7 +1660,7 @@ int _netdev_if2_open(struct net_device *pnetdev)
 	else
 		rtw_netif_wake_queue(pnetdev);
 
-	DBG_871X("-871x_drv - if2_open, bup=%d\n", padapter->bup);
+	DBG_88E("-871x_drv - if2_open, bup=%d\n", padapter->bup);
 	return 0;
 
 netdev_if2_open_error:
@@ -1741,7 +1741,7 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, char *name,
 		goto error_rtw_drv_if2_init;
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
-	DBG_871X("register rtw_netdev_if2_ops to netdev_ops\n");
+	DBG_88E("register rtw_netdev_if2_ops to netdev_ops\n");
 	pnetdev->netdev_ops = &rtw_netdev_if2_ops;
 #else
 	pnetdev->open = netdev_if2_open;
@@ -1852,7 +1852,7 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, char *name,
 
 	_rtw_memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
-	DBG_871X("MAC Address (if2) = "MAC_FMT"\n", MAC_ARG(mac));
+	DBG_88E("MAC Address (if2) = "MAC_FMT"\n", MAC_ARG(mac));
 
 	primary_padapter->pbuddy_adapter = padapter;
 
@@ -2021,7 +2021,7 @@ int _netdev_open(struct net_device *pnetdev)
 	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+871x_drv - dev_open\n"));
-	DBG_871X("+871x_drv - drv_open, bup=%d\n", padapter->bup);
+	DBG_88E("+871x_drv - drv_open, bup=%d\n", padapter->bup);
 
 	if (pwrctrlpriv->ps_flag == _TRUE){
 		padapter->net_closed = _FALSE;
@@ -2041,7 +2041,7 @@ int _netdev_open(struct net_device *pnetdev)
 			goto netdev_open_error;
 		}
 
-		DBG_871X("MAC Address = "MAC_FMT"\n", MAC_ARG(pnetdev->dev_addr));
+		DBG_88E("MAC Address = "MAC_FMT"\n", MAC_ARG(pnetdev->dev_addr));
 
 #ifdef CONFIG_RF_GAIN_OFFSET
 		rtw_bb_rf_gain_offset(padapter);
@@ -2050,13 +2050,13 @@ int _netdev_open(struct net_device *pnetdev)
 		status=rtw_start_drv_threads(padapter);
 		if (status ==_FAIL)
 		{
-			DBG_871X("Initialize driver software resource Failed!\n");
+			DBG_88E("Initialize driver software resource Failed!\n");
 			goto netdev_open_error;
 		}
 
 		if (init_hw_mlme_ext(padapter) == _FAIL)
 		{
-			DBG_871X("can't init mlme_ext_priv\n");
+			DBG_88E("can't init mlme_ext_priv\n");
 			goto netdev_open_error;
 		}
 
@@ -2109,7 +2109,7 @@ netdev_open_normal_process:
 	#endif
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-871x_drv - dev_open\n"));
-	DBG_871X("-871x_drv - drv_open, bup=%d\n", padapter->bup);
+	DBG_88E("-871x_drv - drv_open, bup=%d\n", padapter->bup);
 
 	return 0;
 
@@ -2121,7 +2121,7 @@ netdev_open_error:
 	rtw_netif_stop_queue(pnetdev);
 
 	RT_TRACE(_module_os_intfs_c_,_drv_err_,("-871x_drv - dev_open, fail!\n"));
-	DBG_871X("-871x_drv - drv_open fail, bup=%d\n", padapter->bup);
+	DBG_88E("-871x_drv - drv_open fail, bup=%d\n", padapter->bup);
 
 	return (-1);
 
@@ -2144,7 +2144,7 @@ int  ips_netdrv_open(_adapter *padapter)
 {
 	int status = _SUCCESS;
 	padapter->net_closed = _FALSE;
-	DBG_871X("===> %s.........\n",__func__);
+	DBG_88E("===> %s.........\n",__func__);
 
 
 	padapter->bDriverStopped = _FALSE;
@@ -2171,7 +2171,7 @@ int  ips_netdrv_open(_adapter *padapter)
 
 netdev_open_error:
 	//padapter->bup = _FALSE;
-	DBG_871X("-ips_netdrv_open - drv_open failure, bup=%d\n", padapter->bup);
+	DBG_88E("-ips_netdrv_open - drv_open failure, bup=%d\n", padapter->bup);
 
 	return _FAIL;
 }
@@ -2181,14 +2181,14 @@ int rtw_ips_pwr_up(_adapter *padapter)
 {
 	int result;
 	u32 start_time = rtw_get_current_time();
-	DBG_871X("===>  rtw_ips_pwr_up..............\n");
+	DBG_88E("===>  rtw_ips_pwr_up..............\n");
 	rtw_reset_drv_sw(padapter);
 
 	result = ips_netdrv_open(padapter);
 
 	rtw_led_control(padapter, LED_CTL_NO_LINK);
 
-	DBG_871X("<===  rtw_ips_pwr_up.............. in %dms\n", rtw_get_passing_time_ms(start_time));
+	DBG_88E("<===  rtw_ips_pwr_up.............. in %dms\n", rtw_get_passing_time_ms(start_time));
 	return result;
 
 }
@@ -2196,7 +2196,7 @@ int rtw_ips_pwr_up(_adapter *padapter)
 void rtw_ips_pwr_down(_adapter *padapter)
 {
 	u32 start_time = rtw_get_current_time();
-	DBG_871X("===> rtw_ips_pwr_down...................\n");
+	DBG_88E("===> rtw_ips_pwr_down...................\n");
 
 	padapter->bCardDisableWOHSM = _TRUE;
 	padapter->net_closed = _TRUE;
@@ -2205,14 +2205,14 @@ void rtw_ips_pwr_down(_adapter *padapter)
 
 	rtw_ips_dev_unload(padapter);
 	padapter->bCardDisableWOHSM = _FALSE;
-	DBG_871X("<=== rtw_ips_pwr_down..................... in %dms\n", rtw_get_passing_time_ms(start_time));
+	DBG_88E("<=== rtw_ips_pwr_down..................... in %dms\n", rtw_get_passing_time_ms(start_time));
 }
 #endif
 void rtw_ips_dev_unload(_adapter *padapter)
 {
 	struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
-	DBG_871X("====> %s...\n",__func__);
+	DBG_88E("====> %s...\n",__func__);
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_FIFO_CLEARN_UP, 0);
 
@@ -2236,16 +2236,16 @@ void rtw_bb_rf_gain_offset(_adapter *padapter)
 	u8      tmp = 0x3e;
 	u32     res;
 
-	DBG_871X("+%s value: 0x%02x+\n", __func__, value);
+	DBG_88E("+%s value: 0x%02x+\n", __func__, value);
 
 	if (!(value & 0x01)) {
-		DBG_871X("Offset RF Gain.\n");
+		DBG_88E("Offset RF Gain.\n");
 		res = rtw_hal_read_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, 0xffffffff);
 		value &= tmp;
 		res = value << 14;
 		rtw_hal_write_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, RF_GAIN_OFFSET_MASK, res);
 	} else {
-		DBG_871X("Using the default RF gain.\n");
+		DBG_88E("Using the default RF gain.\n");
 	}
 }
 #endif //CONFIG_RF_GAIN_OFFSET
@@ -2281,7 +2281,7 @@ static int netdev_close(struct net_device *pnetdev)
 
 /*	if (!padapter->hw_init_completed)
 	{
-		DBG_871X("(1)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
+		DBG_88E("(1)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
 
 		padapter->bDriverStopped = _TRUE;
 
@@ -2289,7 +2289,7 @@ static int netdev_close(struct net_device *pnetdev)
 	}
 	else*/
 	if (padapter->pwrctrlpriv.rf_pwrstate == rf_on){
-		DBG_871X("(2)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
+		DBG_88E("(2)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
 
 		//s1.
 		if (pnetdev)
@@ -2340,7 +2340,7 @@ static int netdev_close(struct net_device *pnetdev)
 #endif
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-871x_drv - drv_close\n"));
-	DBG_871X("-871x_drv - drv_close, bup=%d\n", padapter->bup);
+	DBG_88E("-871x_drv - drv_close, bup=%d\n", padapter->bup);
 
 	return 0;
 

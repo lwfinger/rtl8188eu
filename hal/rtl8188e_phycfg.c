@@ -539,14 +539,14 @@ phy_RFSerialRead(
 	if (RfPiEnable)
 	{	// Read from BBreg8b8, 12 bits for 8190, 20bits for T65 RF
 		retValue = PHY_QueryBBReg(Adapter, pPhyReg->rfLSSIReadBackPi, bLSSIReadBackData);
-		//DBG_8192C("Readback from RF-PI : 0x%x\n", retValue);
+		//DBG_88E("Readback from RF-PI : 0x%x\n", retValue);
 	}
 	else
 	{	//Read from BBreg8a0, 12 bits for 8190, 20 bits for T65 RF
 		retValue = PHY_QueryBBReg(Adapter, pPhyReg->rfLSSIReadBack, bLSSIReadBackData);
-		//DBG_8192C("Readback from RF-SI : 0x%x\n", retValue);
+		//DBG_88E("Readback from RF-SI : 0x%x\n", retValue);
 	}
-	//DBG_8192C("RFR-%d Addr[0x%x]=0x%x\n", eRFPath, pPhyReg->rfLSSIReadBack, retValue);
+	//DBG_88E("RFR-%d Addr[0x%x]=0x%x\n", eRFPath, pPhyReg->rfLSSIReadBack, retValue);
 
 	return retValue;
 
@@ -1517,7 +1517,7 @@ phy_BB8188E_Config_ParaFile(
 	//if (pHalData->rf_type == RF_1T2R)
 	//{
 		//phy_BB8192C_Config_1T(Adapter);
-		//DBG_8192C("phy_BB8188E_Config_ParaFile():Config to 1T!!\n");
+		//DBG_88E("phy_BB8188E_Config_ParaFile():Config to 1T!!\n");
 	//}
 
 	//
@@ -2611,7 +2611,7 @@ static void _PHY_SwChnl8192C(PADAPTER Adapter, u8 channel)
 
 	if ( Adapter->bNotifyChannelChange )
 	{
-		DBG_871X( "[%s] ch = %d\n", __func__, channel );
+		DBG_88E( "[%s] ch = %d\n", __func__, channel );
 	}
 
 	//s1. pre common command - CmdID_SetTxPowerLevel

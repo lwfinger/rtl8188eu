@@ -370,7 +370,7 @@ void rtw_indicate_sta_assoc_event(_adapter *padapter, struct sta_info *psta)
 
 	_rtw_memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
 
-	DBG_871X("+rtw_indicate_sta_assoc_event\n");
+	DBG_88E("+rtw_indicate_sta_assoc_event\n");
 
 #ifndef CONFIG_IOCTL_CFG80211
 	wireless_send_event(padapter->pnetdev, IWEVREGISTERED, &wrqu, NULL);
@@ -397,7 +397,7 @@ void rtw_indicate_sta_disassoc_event(_adapter *padapter, struct sta_info *psta)
 
 	_rtw_memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
 
-	DBG_871X("+rtw_indicate_sta_disassoc_event\n");
+	DBG_88E("+rtw_indicate_sta_disassoc_event\n");
 
 #ifndef CONFIG_IOCTL_CFG80211
 	wireless_send_event(padapter->pnetdev, IWEVEXPIRED, &wrqu, NULL);
@@ -413,7 +413,7 @@ static int mgnt_xmit_entry(struct sk_buff *skb, struct net_device *pnetdev)
 	struct hostapd_priv *phostapdpriv = rtw_netdev_priv(pnetdev);
 	_adapter *padapter = (_adapter *)phostapdpriv->padapter;
 
-	//DBG_871X("%s\n", __func__);
+	//DBG_88E("%s\n", __func__);
 
 	return rtw_hal_hostap_mgnt_xmit_entry(padapter, skb);
 }
@@ -422,7 +422,7 @@ static int mgnt_netdev_open(struct net_device *pnetdev)
 {
 	struct hostapd_priv *phostapdpriv = rtw_netdev_priv(pnetdev);
 
-	DBG_871X("mgnt_netdev_open: MAC Address:" MAC_FMT "\n", MAC_ARG(pnetdev->dev_addr));
+	DBG_88E("mgnt_netdev_open: MAC Address:" MAC_FMT "\n", MAC_ARG(pnetdev->dev_addr));
 
 
 	init_usb_anchor(&phostapdpriv->anchored);
@@ -443,7 +443,7 @@ static int mgnt_netdev_close(struct net_device *pnetdev)
 {
 	struct hostapd_priv *phostapdpriv = rtw_netdev_priv(pnetdev);
 
-	DBG_871X("%s\n", __func__);
+	DBG_88E("%s\n", __func__);
 
 	usb_kill_anchored_urbs(&phostapdpriv->anchored);
 
@@ -492,7 +492,7 @@ int hostapd_mode_init(_adapter *padapter)
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
 
-	DBG_871X("register rtl871x_mgnt_netdev_ops to netdev_ops\n");
+	DBG_88E("register rtl871x_mgnt_netdev_ops to netdev_ops\n");
 
 	pnetdev->netdev_ops = &rtl871x_mgnt_netdev_ops;
 
@@ -524,7 +524,7 @@ int hostapd_mode_init(_adapter *padapter)
 
 	if (dev_alloc_name(pnetdev,"mgnt.wlan%d") < 0)
 	{
-		DBG_871X("hostapd_mode_init(): dev_alloc_name, fail!\n");
+		DBG_88E("hostapd_mode_init(): dev_alloc_name, fail!\n");
 	}
 
 
@@ -547,7 +547,7 @@ int hostapd_mode_init(_adapter *padapter)
 	/* Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0)
 	{
-		DBG_871X("hostapd_mode_init(): register_netdev fail!\n");
+		DBG_88E("hostapd_mode_init(): register_netdev fail!\n");
 
 		if (pnetdev)
 		{

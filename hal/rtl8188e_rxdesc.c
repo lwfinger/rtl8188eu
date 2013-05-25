@@ -45,7 +45,7 @@ static void process_rssi(_adapter *padapter,union recv_frame *prframe)
 	struct signal_stat * signal_stat = &padapter->recvpriv.signal_strength_data;
 #endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
 
-	//DBG_8192C("process_rssi=> pattrib->rssil(%d) signal_strength(%d)\n ",pattrib->RecvSignalPower,pattrib->signal_strength);
+	//DBG_88E("process_rssi=> pattrib->rssil(%d) signal_strength(%d)\n ",pattrib->RecvSignalPower,pattrib->signal_strength);
 	//if (pRfd->Status.bPacketToSelf || pRfd->Status.bPacketBeacon)
 	{
 
@@ -110,7 +110,7 @@ static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 	signal_stat = &padapter->recvpriv.signal_qual_data;
 #endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
 
-	//DBG_8192C("process_link_qual=> pattrib->signal_qual(%d)\n ",pattrib->signal_qual);
+	//DBG_88E("process_link_qual=> pattrib->signal_qual(%d)\n ",pattrib->signal_qual);
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	if (signal_stat->update_req) {
@@ -308,7 +308,7 @@ void update_recvframe_phyinfo_88e(
 	if (psta)
 	{
 		pkt_info.StationID = psta->mac_id;
-		//DBG_8192C("%s ==> StationID(%d)\n",__func__,pkt_info.StationID);
+		//DBG_88E("%s ==> StationID(%d)\n",__func__,pkt_info.StationID);
 	}
 	pkt_info.Rate = pattrib->mcs_rate;
 	//rtl8188e_query_rx_phy_status(precvframe, pphy_status);

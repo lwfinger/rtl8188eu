@@ -194,7 +194,7 @@ void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 
 void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 {
-	//DBG_8192C("cvs_mode=%d\n", pattrib->vcs_mode);
+	//DBG_88E("cvs_mode=%d\n", pattrib->vcs_mode);
 
 	switch (pattrib->vcs_mode)
 	{
@@ -231,7 +231,7 @@ void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 
 void fill_txdesc_phy(struct pkt_attrib *pattrib, u32 *pdw)
 {
-	//DBG_8192C("bwmode=%d, ch_off=%d\n", pattrib->bwmode, pattrib->ch_offset);
+	//DBG_88E("bwmode=%d, ch_off=%d\n", pattrib->bwmode, pattrib->ch_offset);
 
 	if (pattrib->ht_en)
 	{
@@ -280,7 +280,7 @@ if (padapter->registrypriv.mp_mode == 0)
 	//if ((!bagg_pkt) &&(rtw_usb_bulk_size_boundary(padapter,TXDESC_SIZE+sz)==_FALSE))
 	{
 		ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
-		//DBG_8192C("==> non-agg-pkt,shift pointer...\n");
+		//DBG_88E("==> non-agg-pkt,shift pointer...\n");
 		pull = 1;
 	}
 }
@@ -290,7 +290,7 @@ if (padapter->registrypriv.mp_mode == 0)
 
         //4 offset 0
 	ptxdesc->txdw0 |= cpu_to_le32(OWN | FSG | LSG);
-	//DBG_8192C("%s==> pkt_len=%d,bagg_pkt=%02x\n",__func__,sz,bagg_pkt);
+	//DBG_88E("%s==> pkt_len=%d,bagg_pkt=%02x\n",__func__,sz,bagg_pkt);
 	ptxdesc->txdw0 |= cpu_to_le32(sz & 0x0000ffff);//update TXPKTSIZE
 
 	offset = TXDESC_SIZE + OFFSET_SZ;
@@ -300,7 +300,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		offset += EARLY_MODE_INFO_SIZE ;//0x28
 	}
 	#endif
-	//DBG_8192C("%s==>offset(0x%02x)\n",__func__,offset);
+	//DBG_88E("%s==>offset(0x%02x)\n",__func__,offset);
 	ptxdesc->txdw0 |= cpu_to_le32(((offset) << OFFSET_SHT) & 0x00ff0000);//32 bytes for TX Desc
 
 	if (bmcst) ptxdesc->txdw0 |= cpu_to_le32(BMC);
@@ -315,7 +315,7 @@ if (padapter->registrypriv.mp_mode == 0)
 	}
 }
 #endif
-	//DBG_8192C("%s, pkt_offset=0x%02x\n",__func__,pxmitframe->pkt_offset);
+	//DBG_88E("%s, pkt_offset=0x%02x\n",__func__,pxmitframe->pkt_offset);
 
 	// pkt_offset, unit:8 bytes padding
 	if (pxmitframe->pkt_offset > 0)
@@ -326,13 +326,13 @@ if (padapter->registrypriv.mp_mode == 0)
 
 	if ((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
 	{
-		//DBG_8192C("pxmitframe->frame_tag == DATA_FRAMETAG\n");
+		//DBG_88E("pxmitframe->frame_tag == DATA_FRAMETAG\n");
 
 		//offset 4
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x3F);
 
 		qsel = (uint)(pattrib->qsel & 0x0000001f);
-		//DBG_8192C("==> macid(%d) qsel:0x%02x\n",pattrib->mac_id,qsel);
+		//DBG_88E("==> macid(%d) qsel:0x%02x\n",pattrib->mac_id,qsel);
 		ptxdesc->txdw1 |= cpu_to_le32((qsel << QSEL_SHT) & 0x00001f00);
 
 		ptxdesc->txdw1 |= cpu_to_le32((pattrib->raid<< RATE_ID_SHT) & 0x000F0000);
@@ -367,7 +367,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		//offset 20
 	#ifdef CONFIG_USB_TX_AGGREGATION
 		if (pxmitframe->agg_num > 1){
-			//DBG_8192C("%s agg_num:%d\n",__func__,pxmitframe->agg_num );
+			//DBG_88E("%s agg_num:%d\n",__func__,pxmitframe->agg_num );
 			ptxdesc->txdw5 |= cpu_to_le32((pxmitframe->agg_num << USB_TXAGG_NUM_SHT) & 0xFF000000);
 		}
 	#endif
@@ -432,13 +432,13 @@ if (padapter->registrypriv.mp_mode == 0)
 			// ptxdesc->txdw6 = 0; // clear TCP_CHECKSUM and IP_CHECKSUM. It's zero already!!
 			u8 ip_hdr_offset = 32 + pattrib->hdrlen + pattrib->iv_len + 8;
 			ptxdesc->txdw7 = (1 << 31) | (ip_hdr_offset << 16);
-			DBG_8192C("ptxdesc->txdw7 = %08x\n", ptxdesc->txdw7);
+			DBG_88E("ptxdesc->txdw7 = %08x\n", ptxdesc->txdw7);
 		}
 #endif
 	}
 	else if ((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG)
 	{
-		//DBG_8192C("pxmitframe->frame_tag == MGNT_FRAMETAG\n");
+		//DBG_88E("pxmitframe->frame_tag == MGNT_FRAMETAG\n");
 
 		//offset 4
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x3f);
@@ -457,7 +457,7 @@ if (padapter->registrypriv.mp_mode == 0)
 			#ifdef DBG_CCX
 			static u16 ccx_sw = 0x123;
 			ptxdesc->txdw7 |= cpu_to_le32(((ccx_sw)<<16)&0x0fff0000);
-			DBG_871X("%s set ccx, sw:0x%03x\n", __func__, ccx_sw);
+			DBG_88E("%s set ccx, sw:0x%03x\n", __func__, ccx_sw);
 			ccx_sw = (ccx_sw+1)%0xfff;
 			#endif
 			ptxdesc->txdw2 |= cpu_to_le32(BIT(19));
@@ -476,7 +476,7 @@ if (padapter->registrypriv.mp_mode == 0)
 
 #ifdef CONFIG_INTEL_PROXIM
 		if ((padapter->proximity.proxim_on==_TRUE)&&(pattrib->intel_proxim==_TRUE)){
-			DBG_871X("\n %s pattrib->rate=%d\n",__func__,pattrib->rate);
+			DBG_88E("\n %s pattrib->rate=%d\n",__func__,pattrib->rate);
 			ptxdesc->txdw5 |= cpu_to_le32( pattrib->rate);
 		}
 		else
@@ -487,7 +487,7 @@ if (padapter->registrypriv.mp_mode == 0)
 	}
 	else if ((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG)
 	{
-		DBG_8192C("pxmitframe->frame_tag == TXAGG_FRAMETAG\n");
+		DBG_88E("pxmitframe->frame_tag == TXAGG_FRAMETAG\n");
 	}
 #ifdef CONFIG_MP_INCLUDED
 	else if (((pxmitframe->frame_tag&0x0f) == MP_FRAMETAG) &&
@@ -498,7 +498,7 @@ if (padapter->registrypriv.mp_mode == 0)
 #endif
 	else
 	{
-		DBG_8192C("pxmitframe->frame_tag = %d\n", pxmitframe->frame_tag);
+		DBG_88E("pxmitframe->frame_tag = %d\n", pxmitframe->frame_tag);
 
 		//offset 4
 		ptxdesc->txdw1 |= cpu_to_le32((4)&0x3f);//CAM_ID(MAC_ID)
@@ -683,7 +683,7 @@ static s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 		rtw_count_tx_stats(padapter, pxmitframe, sz);
 
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_write_port, w_sz=%d\n", w_sz));
-		//DBG_8192C("rtw_write_port, w_sz=%d, sz=%d, txdesc_sz=%d, tid=%d\n", w_sz, sz, w_sz-sz, pattrib->priority);
+		//DBG_88E("rtw_write_port, w_sz=%d, sz=%d, txdesc_sz=%d, tid=%d\n", w_sz, sz, w_sz-sz, pattrib->priority);
 
 		mem_addr += w_sz;
 
@@ -755,12 +755,12 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	if (pxmitbuf == NULL) {
 		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
 		if (pxmitbuf == NULL){
-			//DBG_871X("%s #1, connot alloc xmitbuf!!!!\n",__func__);
+			//DBG_88E("%s #1, connot alloc xmitbuf!!!!\n",__func__);
 			return _FALSE;
 		}
 	}
 
-//DBG_8192C("%s =====================================\n",__func__);
+//DBG_88E("%s =====================================\n",__func__);
 	//3 1. pick up first frame
 	do {
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
@@ -768,7 +768,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		pxmitframe = rtw_dequeue_xframe(pxmitpriv, pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
 		if (pxmitframe == NULL) {
 			// no more xmit frame, release xmit buffer
-			//DBG_8192C("no more xmit frame ,return\n");
+			//DBG_88E("no more xmit frame ,return\n");
 			rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
 			return _FALSE;
 		}
@@ -792,7 +792,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 			continue;
 		}
 #endif
-		//DBG_8192C("==> pxmitframe->attrib.priority:%d\n",pxmitframe->attrib.priority);
+		//DBG_88E("==> pxmitframe->attrib.priority:%d\n",pxmitframe->attrib.priority);
 		pxmitframe->pxmitbuf = pxmitbuf;
 		pxmitframe->buf_addr = pxmitbuf->pbuf;
 		pxmitbuf->priv_data = pxmitframe;
@@ -864,7 +864,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 			phwxmit = pxmitpriv->hwxmits + 2;
 			break;
 	}
-//DBG_8192C("==> pkt_no=%d,pkt_len=%d,len=%d,RND8_LEN=%d,pkt_offset=0x%02x\n",
+//DBG_88E("==> pkt_no=%d,pkt_len=%d,len=%d,RND8_LEN=%d,pkt_offset=0x%02x\n",
 	//pxmitframe->agg_num,pxmitframe->attrib.last_txcmdsz,len,pbuf,pxmitframe->pkt_offset );
 
 
@@ -890,7 +890,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		if (_RND8(pbuf + len) > MAX_XMITBUF_SZ)
 		//if (_RND8(pbuf + len) > (MAX_XMITBUF_SZ/2))//to do : for TX TP finial tune , Georgia 2012-0323
 		{
-			//DBG_8192C("%s....len> MAX_XMITBUF_SZ\n",__func__);
+			//DBG_88E("%s....len> MAX_XMITBUF_SZ\n",__func__);
 			pxmitframe->agg_num = 1;
 			pxmitframe->pkt_offset = 1;
 			break;
@@ -928,12 +928,12 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 #else
 		res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
 		if (res == _FALSE) {
-			DBG_871X("%s coalesce failed\n",__func__);
+			DBG_88E("%s coalesce failed\n",__func__);
 			rtw_free_xmitframe(pxmitpriv, pxmitframe);
 			continue;
 		}
 #endif
-		//DBG_8192C("==> pxmitframe->attrib.priority:%d\n",pxmitframe->attrib.priority);
+		//DBG_88E("==> pxmitframe->attrib.priority:%d\n",pxmitframe->attrib.priority);
 		// always return ndis_packet after rtw_xmitframe_coalesce
 		rtw_os_xmit_complete(padapter, pxmitframe);
 
@@ -987,7 +987,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		pbuf_tail -= PACKET_OFFSET_SZ;
 		pfirstframe->buf_addr += PACKET_OFFSET_SZ;
 		pfirstframe->pkt_offset--;
-		//DBG_8192C("$$$$$ buf size equal to USB block size $$$$$$\n");
+		//DBG_88E("$$$$$ buf size equal to USB block size $$$$$$\n");
 	}
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
 
@@ -1003,7 +1003,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 
 	//3 4. write xmit buffer to USB FIFO
 	ff_hwaddr = rtw_get_ff_hwaddr(pfirstframe);
-//DBG_8192C("%s ===================================== write port,buf_size(%d)\n",__func__,pbuf_tail);
+//DBG_88E("%s ===================================== write port,buf_size(%d)\n",__func__,pbuf_tail);
 	// xmit address == ((xmit_frame*)pxmitbuf->priv_data)->buf_addr
 	rtw_write_port(padapter, ff_hwaddr, pbuf_tail, (u8*)pxmitbuf);
 
@@ -1063,7 +1063,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 				{
 					res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
 				}
-				//DBG_8192C("==> pxmitframe->attrib.priority:%d\n",pxmitframe->attrib.priority);
+				//DBG_88E("==> pxmitframe->attrib.priority:%d\n",pxmitframe->attrib.priority);
 				rtw_os_xmit_complete(padapter, pxmitframe);//always return ndis_packet after rtw_xmitframe_coalesce
 			}
 
@@ -1104,14 +1104,14 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 res = _SUCCESS;
-//DBG_8192C("==> %s\n",__func__);
+//DBG_88E("==> %s\n",__func__);
 
 	res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
 	if (res == _SUCCESS) {
 		rtw_dump_xframe(padapter, pxmitframe);
 	}
 	else{
-		DBG_8192C("==> %s xmitframe_coalsece failed\n",__func__);
+		DBG_88E("==> %s xmitframe_coalsece failed\n",__func__);
 	}
 
 	return res;
@@ -1137,11 +1137,11 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL);
 
-//DBG_8192C("==> %s\n",__func__);
+//DBG_88E("==> %s\n",__func__);
 
 	if (rtw_txframes_sta_ac_pending(padapter, pattrib) > 0)
 	{
-		//DBG_8192C("enqueue AC(%d)\n",pattrib->priority);
+		//DBG_88E("enqueue AC(%d)\n",pattrib->priority);
 		goto enqueue;
 	}
 
@@ -1210,7 +1210,7 @@ static void rtl8188eu_hostap_mgnt_xmit_cb(struct urb *urb)
 #ifdef PLATFORM_LINUX
 	struct sk_buff *skb = (struct sk_buff *)urb->context;
 
-	//DBG_8192C("%s\n", __func__);
+	//DBG_88E("%s\n", __func__);
 
 	dev_kfree_skb_any(skb);
 #endif
@@ -1233,7 +1233,7 @@ s32 rtl8188eu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 
 
-	//DBG_8192C("%s\n", __func__);
+	//DBG_88E("%s\n", __func__);
 
 	skb = pkt;
 
@@ -1306,7 +1306,7 @@ s32 rtl8188eu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 	pxmitbuf = pxmitbuf + TXDESC_SIZE;
 	_rtw_memcpy(pxmitbuf, skb->data, len);
 
-	//DBG_8192C("mgnt_xmit, len=%x\n", pxmit_skb->len);
+	//DBG_88E("mgnt_xmit, len=%x\n", pxmit_skb->len);
 
 
 	// ----- prepare urb for submit -----

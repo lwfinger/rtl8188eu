@@ -29,7 +29,7 @@ void dump_txrpt_ccx_88e(void *buf)
 {
 	struct txrpt_ccx_88e *txrpt_ccx = (struct txrpt_ccx_88e *)buf;
 
-	DBG_871X("%s:\n"
+	DBG_88E("%s:\n"
 		"tag1:%u, pkt_num:%u, txdma_underflow:%u, int_bt:%u, int_tri:%u, int_ccx:%u\n"
 		"mac_id:%u, pkt_ok:%u, bmc:%u\n"
 		"retry_cnt:%u, lifetime_over:%u, retry_over:%u\n"
@@ -70,13 +70,13 @@ void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
 	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DUMP_TXPKT, &(bDumpTxPkt));
 
 	if (bDumpTxPkt ==1){//dump txdesc for data frame
-		DBG_871X("dump tx_desc for data frame\n");
+		DBG_88E("dump tx_desc for data frame\n");
 		if ((frame_tag&0x0f) == DATA_FRAMETAG){
 			bDumpTxDesc = _TRUE;
 		}
 	}
 	else if (bDumpTxPkt ==2){//dump txdesc for mgnt frame
-		DBG_871X("dump tx_desc for mgnt frame\n");
+		DBG_88E("dump tx_desc for mgnt frame\n");
 		if ((frame_tag&0x0f) == MGNT_FRAMETAG){
 			bDumpTxDesc = _TRUE;
 		}
@@ -87,16 +87,16 @@ void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
 	if (bDumpTxDesc){
 		//	ptxdesc->txdw4 = cpu_to_le32(0x00001006);//RTS Rate=24M
 		//	ptxdesc->txdw6 = 0x6666f800;
-		DBG_8192C("=====================================\n");
-		DBG_8192C("txdw0(0x%08x)\n",ptxdesc->txdw0);
-		DBG_8192C("txdw1(0x%08x)\n",ptxdesc->txdw1);
-		DBG_8192C("txdw2(0x%08x)\n",ptxdesc->txdw2);
-		DBG_8192C("txdw3(0x%08x)\n",ptxdesc->txdw3);
-		DBG_8192C("txdw4(0x%08x)\n",ptxdesc->txdw4);
-		DBG_8192C("txdw5(0x%08x)\n",ptxdesc->txdw5);
-		DBG_8192C("txdw6(0x%08x)\n",ptxdesc->txdw6);
-		DBG_8192C("txdw7(0x%08x)\n",ptxdesc->txdw7);
-		DBG_8192C("=====================================\n");
+		DBG_88E("=====================================\n");
+		DBG_88E("txdw0(0x%08x)\n",ptxdesc->txdw0);
+		DBG_88E("txdw1(0x%08x)\n",ptxdesc->txdw1);
+		DBG_88E("txdw2(0x%08x)\n",ptxdesc->txdw2);
+		DBG_88E("txdw3(0x%08x)\n",ptxdesc->txdw3);
+		DBG_88E("txdw4(0x%08x)\n",ptxdesc->txdw4);
+		DBG_88E("txdw5(0x%08x)\n",ptxdesc->txdw5);
+		DBG_88E("txdw6(0x%08x)\n",ptxdesc->txdw6);
+		DBG_88E("txdw7(0x%08x)\n",ptxdesc->txdw7);
+		DBG_88E("=====================================\n");
 	}
 
 }
@@ -145,9 +145,9 @@ InsertEMContent_8188E(
 	#ifdef DBG_EMINFO
 	{
 		int i;
-		DBG_8192C("\n%s ==> pEMInfo->EMPktNum =%d\n",__func__,pEMInfo->EMPktNum);
+		DBG_88E("\n%s ==> pEMInfo->EMPktNum =%d\n",__func__,pEMInfo->EMPktNum);
 		for (i=0;i< EARLY_MODE_MAX_PKT_NUM;i++){
-			DBG_8192C("%s ==> pEMInfo->EMPktLen[%d] =%d\n",__func__,i,pEMInfo->EMPktLen[i]);
+			DBG_88E("%s ==> pEMInfo->EMPktLen[%d] =%d\n",__func__,i,pEMInfo->EMPktLen[i]);
 		}
 
 	}
@@ -227,12 +227,12 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 	pmem= pframe->buf_addr;
 
 	#ifdef DBG_EMINFO
-	DBG_8192C("\n%s ==> agg_num:%d\n",__func__, pframe->agg_num);
+	DBG_88E("\n%s ==> agg_num:%d\n",__func__, pframe->agg_num);
 	for (index=0;index<pframe->agg_num;index++){
 		offset =	pxmitpriv->agg_pkt[index].offset;
 		pktlen = pxmitpriv->agg_pkt[index].pkt_len;
-		DBG_8192C("%s ==> agg_pkt[%d].offset=%d\n",__func__,index,offset);
-		DBG_8192C("%s ==> agg_pkt[%d].pkt_len=%d\n",__func__,index,pktlen);
+		DBG_88E("%s ==> agg_pkt[%d].offset=%d\n",__func__,index,offset);
+		DBG_88E("%s ==> agg_pkt[%d].pkt_len=%d\n",__func__,index,pktlen);
 	}
 	#endif
 
@@ -277,7 +277,7 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 			}
 
 			#ifdef DBG_EMINFO
-			DBG_8192C("%s ==> desc.pkt_len=%d\n",__func__,ptxdesc->pktlen);
+			DBG_88E("%s ==> desc.pkt_len=%d\n",__func__,ptxdesc->pktlen);
 			#endif
 			InsertEMContent_8188E(&eminfo,pEMInfo_mem);
 		}

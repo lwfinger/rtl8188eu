@@ -94,7 +94,7 @@ int proc_set_write_reg(struct file *file, const char __user *buffer,
 
 	if (count < 3)
 	{
-		DBG_871X("argument size is less than 3\n");
+		DBG_88E("argument size is less than 3\n");
 		return -EFAULT;
 	}
 
@@ -103,7 +103,7 @@ int proc_set_write_reg(struct file *file, const char __user *buffer,
 		int num = sscanf(tmp, "%x %x %x", &addr, &val, &len);
 
 		if (num !=  3) {
-			DBG_871X("invalid write_reg parameter!\n");
+			DBG_88E("invalid write_reg parameter!\n");
 			return count;
 		}
 
@@ -119,7 +119,7 @@ int proc_set_write_reg(struct file *file, const char __user *buffer,
 				rtw_write32(padapter, addr, val);
 				break;
 			default:
-				DBG_871X("error write length=%d", len);
+				DBG_88E("error write length=%d", len);
 				break;
 		}
 
@@ -176,7 +176,7 @@ int proc_set_read_reg(struct file *file, const char __user *buffer,
 
 	if (count < 2)
 	{
-		DBG_871X("argument size is less than 2\n");
+		DBG_88E("argument size is less than 2\n");
 		return -EFAULT;
 	}
 
@@ -185,7 +185,7 @@ int proc_set_read_reg(struct file *file, const char __user *buffer,
 		int num = sscanf(tmp, "%x %x", &addr, &len);
 
 		if (num !=  2) {
-			DBG_871X("invalid read_reg parameter!\n");
+			DBG_88E("invalid read_reg parameter!\n");
 			return count;
 		}
 
@@ -678,9 +678,9 @@ int proc_set_rx_signal(struct file *file, const char __user *buffer,
 		padapter->recvpriv.signal_strength_dbg=signal_strength;
 
 		if (is_signal_dbg)
-			DBG_871X("set %s %u\n", "DBG_SIGNAL_STRENGTH", signal_strength);
+			DBG_88E("set %s %u\n", "DBG_SIGNAL_STRENGTH", signal_strength);
 		else
-			DBG_871X("set %s\n", "HW_SIGNAL_STRENGTH");
+			DBG_88E("set %s\n", "HW_SIGNAL_STRENGTH");
 
 	}
 
@@ -921,7 +921,7 @@ int proc_set_rssi_disp(struct file *file, const char __user *buffer,
 
 	if (count < 1)
 	{
-		DBG_8192C("argument size is less than 1\n");
+		DBG_88E("argument size is less than 1\n");
 		return -EFAULT;
 	}
 
@@ -930,18 +930,18 @@ int proc_set_rssi_disp(struct file *file, const char __user *buffer,
 		int num = sscanf(tmp, "%x", &enable);
 
 		if (num !=  1) {
-			DBG_8192C("invalid set_rssi_disp parameter!\n");
+			DBG_88E("invalid set_rssi_disp parameter!\n");
 			return count;
 		}
 
 		if (enable)
 		{
-			DBG_8192C("Turn On Rx RSSI Display Function\n");
+			DBG_88E("Turn On Rx RSSI Display Function\n");
 			padapter->bRxRSSIDisplay = enable ;
 		}
 		else
 		{
-			DBG_8192C("Turn Off Rx RSSI Display Function\n");
+			DBG_88E("Turn Off Rx RSSI Display Function\n");
 			padapter->bRxRSSIDisplay = 0 ;
 		}
 

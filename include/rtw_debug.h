@@ -157,29 +157,25 @@
 
 #define DRIVER_PREFIX	"RTL8188: "
 
-#define DBG_871X_LEVEL(_Level, fmt, arg...)				\
+extern u32 GlobalDebugLevel;
+
+#define DBG_88E_LEVEL(_Level, fmt, arg...)				\
 	do {								\
 		if (_Level <= GlobalDebugLevel)				\
 			_dbgdump(DRIVER_PREFIX"ERROR " fmt, ##arg);	\
 	} while (0)
 
-#define DBG_871X(...)							\
+#define DBG_88E(...)							\
 	do {								\
-		_dbgdump(DRIVER_PREFIX __VA_ARGS__);			\
+		if (_drv_err_ <= GlobalDebugLevel)			\
+			_dbgdump(DRIVER_PREFIX __VA_ARGS__);		\
 	} while (0)
 
-#define MSG_8192C(...)							\
+#define MSG_88E(...)							\
 	do {								\
-		_dbgdump(DRIVER_PREFIX __VA_ARGS__);			\
+		if (_drv_err_ <= GlobalDebugLevel)			\
+			_dbgdump(DRIVER_PREFIX __VA_ARGS__);			\
 	} while (0)
-
-#define DBG_8192C(...)							\
-	do {								\
-		_dbgdump(DRIVER_PREFIX __VA_ARGS__);			\
-	} while (0)
-
-extern u32 GlobalDebugLevel;
-
 
 #define RT_TRACE(_Comp, _Level, Fmt)					\
 	do {								\

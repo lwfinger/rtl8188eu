@@ -551,7 +551,7 @@ void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char
 
 	if ( padapter->bNotifyChannelChange )
 	{
-		DBG_871X( "[%s] ch = %d, offset = %d, bwmode = %d\n", __func__, channel, channel_offset, bwmode );
+		DBG_88E( "[%s] ch = %d, offset = %d, bwmode = %d\n", __func__, channel, channel_offset, bwmode );
 	}
 
 	if ((bwmode == HT_CHANNEL_WIDTH_20)||(channel_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE))
@@ -756,7 +756,7 @@ void write_cam(_adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *key)
 		//cmd = CAM_POLLINIG | CAM_WRITE | (addr + j);
 		//rtw_write32(padapter, RWCAM, cmd);
 
-		//DBG_871X("%s=> cam write: %x, %x\n",__func__, cmd, val);
+		//DBG_88E("%s=> cam write: %x, %x\n",__func__, cmd, val);
 
 	}
 
@@ -858,18 +858,18 @@ int WFD_info_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 		u8	attr_content[ 10 ] = { 0x00 };
 		u32	attr_contentlen = 0;
 
-		DBG_871X( "[%s] Found WFD IE\n", __func__ );
+		DBG_88E( "[%s] Found WFD IE\n", __func__ );
 		rtw_get_wfd_attr_content( wfd_ie, wfd_ielen, WFD_ATTR_DEVICE_INFO, attr_content, &attr_contentlen);
 		if ( attr_contentlen )
 		{
 			pwdinfo->wfd_info->peer_rtsp_ctrlport = RTW_GET_BE16( attr_content + 2 );
-			DBG_8192C( "[%s] Peer PORT NUM = %d\n", __func__, pwdinfo->wfd_info->peer_rtsp_ctrlport );
+			DBG_88E( "[%s] Peer PORT NUM = %d\n", __func__, pwdinfo->wfd_info->peer_rtsp_ctrlport );
 			return( _TRUE );
 		}
 	}
 	else
 	{
-		DBG_871X( "[%s] NO WFD IE\n", __func__ );
+		DBG_88E( "[%s] NO WFD IE\n", __func__ );
 
 	}
 	return( _FAIL );
@@ -981,7 +981,7 @@ void WMMOnAssocRsp(_adapter *padapter)
 				break;
 		}
 
-		DBG_871X("WMM(%x): %x, %x\n", ACI, ACM, acParm);
+		DBG_88E("WMM(%x): %x, %x\n", ACI, ACM, acParm);
 	}
 
 	if (padapter->registrypriv.acm_method == 1)
@@ -1030,7 +1030,7 @@ void WMMOnAssocRsp(_adapter *padapter)
 
 	for (i=0; i<4; i++) {
 		pxmitpriv->wmm_para_seq[i] = inx[i];
-		DBG_871X("wmm_para_seq(%d): %d\n", i, pxmitpriv->wmm_para_seq[i]);
+		DBG_88E("wmm_para_seq(%d): %d\n", i, pxmitpriv->wmm_para_seq[i]);
 	}
 
 	return;
@@ -1252,7 +1252,7 @@ void HTOnAssocRsp(_adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	DBG_871X("%s\n", __func__);
+	DBG_88E("%s\n", __func__);
 
 	if ((pmlmeinfo->HT_info_enable) && (pmlmeinfo->HT_caps_enable))
 	{
@@ -1387,12 +1387,12 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 	len = packet_len - sizeof(struct rtw_ieee80211_hdr_3addr);
 
 	if (len > MAX_IE_SZ) {
-		DBG_871X("%s IE too long for survey event\n", __func__);
+		DBG_88E("%s IE too long for survey event\n", __func__);
 		return _FAIL;
 	}
 
 	if (_rtw_memcmp(cur_network->network.MacAddress, pbssid, 6) == _FALSE) {
-		DBG_871X("Oops: rtw_check_network_encrypt linked but recv other bssid bcn\n" MAC_FMT MAC_FMT,
+		DBG_88E("Oops: rtw_check_network_encrypt linked but recv other bssid bcn\n" MAC_FMT MAC_FMT,
 				MAC_ARG(pbssid), MAC_ARG(cur_network->network.MacAddress));
 		return _TRUE;
 	}
@@ -1429,11 +1429,11 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 	}
 	if (ht_cap_info != cur_network->BcnInfo.ht_cap_info ||
 		((ht_info_infos_0&0x03) != (cur_network->BcnInfo.ht_info_infos_0&0x03))) {
-			DBG_871X("%s bcn now: ht_cap_info:%x ht_info_infos_0:%x\n", __func__,
+			DBG_88E("%s bcn now: ht_cap_info:%x ht_info_infos_0:%x\n", __func__,
 							ht_cap_info, ht_info_infos_0);
-			DBG_871X("%s bcn link: ht_cap_info:%x ht_info_infos_0:%x\n", __func__,
+			DBG_88E("%s bcn link: ht_cap_info:%x ht_info_infos_0:%x\n", __func__,
 							cur_network->BcnInfo.ht_cap_info, cur_network->BcnInfo.ht_info_infos_0);
-			DBG_871X("%s bw mode change, disconnect\n", __func__);
+			DBG_88E("%s bw mode change, disconnect\n", __func__);
 			{
 				//bcn_info_update
 				cur_network->BcnInfo.ht_cap_info = ht_cap_info;
@@ -1452,19 +1452,19 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 			if (pht_info) {
 					bcn_channel = pht_info->primary_channel;
 			} else { /* we don't find channel IE, so don't check it */
-					DBG_871X("Oops: %s we don't find channel IE, so don't check it\n", __func__);
+					DBG_88E("Oops: %s we don't find channel IE, so don't check it\n", __func__);
 					bcn_channel = Adapter->mlmeextpriv.cur_channel;
 			}
 	}
 	if (bcn_channel != Adapter->mlmeextpriv.cur_channel) {
-			DBG_871X("%s beacon channel:%d cur channel:%d disconnect\n", __func__,
+			DBG_88E("%s beacon channel:%d cur channel:%d disconnect\n", __func__,
 						   bcn_channel, Adapter->mlmeextpriv.cur_channel);
 			goto _mismatch;
 	}
 
 	/* checking SSID */
 	if ((p = rtw_get_ie(bssid->IEs + _FIXED_IE_LENGTH_, _SSID_IE_, &len, bssid->IELength - _FIXED_IE_LENGTH_)) == NULL) {
-		DBG_871X("%s marc: cannot find SSID for survey event\n", __func__);
+		DBG_88E("%s marc: cannot find SSID for survey event\n", __func__);
 		hidden_ssid = _TRUE;
 	} else {
 		hidden_ssid = _FALSE;
@@ -1486,7 +1486,7 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 	if (_rtw_memcmp(bssid->Ssid.Ssid, cur_network->network.Ssid.Ssid, 32) == _FALSE ||
 			bssid->Ssid.SsidLength != cur_network->network.Ssid.SsidLength) {
 		if (bssid->Ssid.Ssid[0] != '\0' && bssid->Ssid.SsidLength != 0) { /* not hidden ssid */
-			DBG_871X("%s(), SSID is not match return FAIL\n", __func__);
+			DBG_88E("%s(), SSID is not match return FAIL\n", __func__);
 			goto _mismatch;
 		}
 	}
@@ -1503,7 +1503,7 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 			("%s(): cur_network->network.Privacy is %d, bssid.Privacy is %d\n",
 			 __func__, cur_network->network.Privacy,bssid->Privacy));
 	if (cur_network->network.Privacy != bssid->Privacy) {
-		DBG_871X("%s(), privacy is not match return FAIL\n",__func__);
+		DBG_88E("%s(), privacy is not match return FAIL\n",__func__);
 		goto _mismatch;
 	}
 
@@ -1519,7 +1519,7 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 	}
 
 	if (cur_network->BcnInfo.encryp_protocol != encryp_protocol) {
-		DBG_871X("%s(): enctyp is not match ,return FAIL\n",__func__);
+		DBG_88E("%s(): enctyp is not match ,return FAIL\n",__func__);
 		goto _mismatch;
 	}
 
@@ -1546,14 +1546,14 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,
 				("%s cur_network->group_cipher is %d: %d\n",__func__, cur_network->BcnInfo.group_cipher, group_cipher));
 		if (pairwise_cipher != cur_network->BcnInfo.pairwise_cipher || group_cipher != cur_network->BcnInfo.group_cipher) {
-			DBG_871X("%s pairwise_cipher(%x:%x) or group_cipher(%x:%x) is not match ,return FAIL\n",__func__,
+			DBG_88E("%s pairwise_cipher(%x:%x) or group_cipher(%x:%x) is not match ,return FAIL\n",__func__,
 					pairwise_cipher, cur_network->BcnInfo.pairwise_cipher,
 					group_cipher, cur_network->BcnInfo.group_cipher);
 			goto _mismatch;
 		}
 
 		if (is_8021x != cur_network->BcnInfo.is_8021x) {
-			DBG_871X("%s authentication is not match ,return FAIL\n", __func__);
+			DBG_88E("%s authentication is not match ,return FAIL\n", __func__);
 			goto _mismatch;
 		}
 	}
@@ -2000,19 +2000,19 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 			case _VENDOR_SPECIFIC_IE_:
 				if ((_rtw_memcmp(pIE->data, ARTHEROS_OUI1, 3)) || (_rtw_memcmp(pIE->data, ARTHEROS_OUI2, 3)))
 				{
-					DBG_871X("link to Artheros AP\n");
+					DBG_88E("link to Artheros AP\n");
 					return HT_IOT_PEER_ATHEROS;
 				}
 				else if ((_rtw_memcmp(pIE->data, BROADCOM_OUI1, 3))
 							|| (_rtw_memcmp(pIE->data, BROADCOM_OUI2, 3))
 							|| (_rtw_memcmp(pIE->data, BROADCOM_OUI2, 3)))
 				{
-					DBG_871X("link to Broadcom AP\n");
+					DBG_88E("link to Broadcom AP\n");
 					return HT_IOT_PEER_BROADCOM;
 				}
 				else if (_rtw_memcmp(pIE->data, MARVELL_OUI, 3))
 				{
-					DBG_871X("link to Marvell AP\n");
+					DBG_88E("link to Marvell AP\n");
 					return HT_IOT_PEER_MARVELL;
 				}
 				else if (_rtw_memcmp(pIE->data, RALINK_OUI, 3))
@@ -2020,33 +2020,33 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 					if (!ralink_vendor_flag) {
 						ralink_vendor_flag = 1;
 					} else {
-						DBG_871X("link to Ralink AP\n");
+						DBG_88E("link to Ralink AP\n");
 						return HT_IOT_PEER_RALINK;
 					}
 				}
 				else if (_rtw_memcmp(pIE->data, CISCO_OUI, 3))
 				{
-					DBG_871X("link to Cisco AP\n");
+					DBG_88E("link to Cisco AP\n");
 					return HT_IOT_PEER_CISCO;
 				}
 				else if (_rtw_memcmp(pIE->data, REALTEK_OUI, 3))
 				{
-					DBG_871X("link to Realtek 96B\n");
+					DBG_88E("link to Realtek 96B\n");
 					return HT_IOT_PEER_REALTEK;
 				}
 				else if (_rtw_memcmp(pIE->data, AIRGOCAP_OUI,3))
 				{
-					DBG_871X("link to Airgo Cap\n");
+					DBG_88E("link to Airgo Cap\n");
 					return HT_IOT_PEER_AIRGO;
 				}
 				else if (_rtw_memcmp(pIE->data, EPIGRAM_OUI, 3))
 				{
 					 epigram_vendor_flag = 1;
 					if (ralink_vendor_flag) {
-						DBG_871X("link to Tenda W311R AP\n");
+						DBG_88E("link to Tenda W311R AP\n");
 						 return HT_IOT_PEER_TENDA;
 					} else {
-						DBG_871X("Capture EPIGRAM_OUI\n");
+						DBG_88E("Capture EPIGRAM_OUI\n");
 					}
 				}
 				else
@@ -2062,13 +2062,13 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 	}
 
 	if (ralink_vendor_flag && !epigram_vendor_flag) {
-		DBG_871X("link to Ralink AP\n");
+		DBG_88E("link to Ralink AP\n");
 		return HT_IOT_PEER_RALINK;
 	} else if (ralink_vendor_flag && epigram_vendor_flag){
-		DBG_871X("link to Tenda W311R AP\n");
+		DBG_88E("link to Tenda W311R AP\n");
 		return HT_IOT_PEER_TENDA;
 	} else {
-		DBG_871X("link to new AP\n");
+		DBG_88E("link to new AP\n");
 		return HT_IOT_PEER_UNKNOWN;
 	}
 }
@@ -2313,7 +2313,7 @@ void process_addba_req(_adapter *padapter, u8 *paddba_req, u8 *addr)
 		#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
 		preorder_ctrl->indicate_seq = start_seq;
 		#ifdef DBG_RX_SEQ
-		DBG_871X("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __func__, __LINE__,
+		DBG_88E("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __func__, __LINE__,
 			preorder_ctrl->indicate_seq, start_seq);
 		#endif
 		#else
@@ -2360,13 +2360,13 @@ int rtw_handle_dualmac(_adapter *adapter, bool init)
 	if (init) {
 		if (pbuddy_padapter == NULL) {
 			pbuddy_padapter = adapter;
-			DBG_871X("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n",__func__);
+			DBG_88E("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n",__func__);
 		} else {
 			adapter->pbuddy_adapter = pbuddy_padapter;
 			pbuddy_padapter->pbuddy_adapter = adapter;
 			// clear global value
 			pbuddy_padapter = NULL;
-			DBG_871X("%s(): pbuddy_padapter exist, Exchange Information\n",__func__);
+			DBG_88E("%s(): pbuddy_padapter exist, Exchange Information\n",__func__);
 		}
 #ifdef CONFIG_DUALMAC_CONCURRENT
 		if (dvobj->InterfaceNumber == 0) {
@@ -2374,13 +2374,13 @@ int rtw_handle_dualmac(_adapter *adapter, bool init)
 			adapter->isprimary = _TRUE;
 			adapter->adapter_type = PRIMARY_ADAPTER;
 			adapter->iface_type = IFACE_PORT0;
-			DBG_871X("%s(): PRIMARY_ADAPTER\n",__func__);
+			DBG_88E("%s(): PRIMARY_ADAPTER\n",__func__);
 		} else {
 			//set adapter_type/iface type
 			adapter->isprimary = _FALSE;
 			adapter->adapter_type = SECONDARY_ADAPTER;
 			adapter->iface_type = IFACE_PORT1;
-			DBG_871X("%s(): SECONDARY_ADAPTER\n",__func__);
+			DBG_88E("%s(): SECONDARY_ADAPTER\n",__func__);
 		}
 #endif
 	}else {

@@ -4440,7 +4440,7 @@ odm_TXPowerTrackingThermalMeterInit(
 		if ( *(pDM_Odm->mp_mode) != 1)
 			pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = _TRUE;
 		//#endif//#if	(MP_DRIVER != 1)
-		MSG_8192C("pDM_Odm TxPowerTrackControl = %d\n", pDM_Odm->RFCalibrateInfo.TxPowerTrackControl);
+		MSG_88E("pDM_Odm TxPowerTrackControl = %d\n", pDM_Odm->RFCalibrateInfo.TxPowerTrackControl);
 	}
 	#else
 	{
@@ -4459,7 +4459,7 @@ odm_TXPowerTrackingThermalMeterInit(
 				pdmpriv->TxPowerTrackControl = _TRUE;
 			//#endif//#if	(MP_DRIVER != 1)
 		}
-		MSG_8192C("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
+		MSG_88E("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
 
 	}
 	#endif//endif (CONFIG_RTL8188E==1)
@@ -4549,7 +4549,7 @@ odm_TXPowerTrackingCheckCE(
 		//pHalData->TxPowerCheckCnt++;	//cosa add for debug
 		//ODM_SetRFReg(pDM_Odm, RF_PATH_A, RF_T_METER, bRFRegOffsetMask, 0x60);
 		PHY_SetRFReg(Adapter, RF_PATH_A, RF_T_METER_88E, BIT17 | BIT16, 0x03);
-		//DBG_8192C("Trigger 92C Thermal Meter!!\n");
+		//DBG_88E("Trigger 92C Thermal Meter!!\n");
 
 		pDM_Odm->RFCalibrateInfo.TM_Trigger = 1;
 		return;
@@ -4557,7 +4557,7 @@ odm_TXPowerTrackingCheckCE(
 	}
 	else
 	{
-		//DBG_8192C("Schedule TxPowerTracking direct call!!\n");
+		//DBG_88E("Schedule TxPowerTracking direct call!!\n");
 		odm_TXPowerTrackingCallback_ThermalMeter_8188E(Adapter);
 		pDM_Odm->RFCalibrateInfo.TM_Trigger = 0;
 	}
@@ -11312,7 +11312,7 @@ void odm_dtc(PDM_ODM_T pDM_Odm)
 	resp_txagc = resp_txagc | (resp_txagc << 5);
 	ODM_Write1Byte(pDM_Odm, 0x06d9, resp_txagc);
 
-	DBG_871X("%s RSSI_Min:%u, set RESP_TXAGC to %s %u\n",
+	DBG_88E("%s RSSI_Min:%u, set RESP_TXAGC to %s %u\n",
 		__func__, pDM_Odm->RSSI_Min, sign?"minus":"plus", dtc_steps);
 #endif /* CONFIG_RESP_TXAGC_ADJUST */
 }

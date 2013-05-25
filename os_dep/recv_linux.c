@@ -226,7 +226,7 @@ void rtw_hostapd_mlme_rx(_adapter *padapter, union recv_frame *precv_frame)
 	//skb->protocol = __constant_htons(0x0019); /*ETH_P_80211_RAW*/
 	skb->protocol = __constant_htons(0x0003); /*ETH_P_80211_RAW*/
 
-	//DBG_871X("(1)data=0x%x, head=0x%x, tail=0x%x, mac_header=0x%x, len=%d\n", skb->data, skb->head, skb->tail, skb->mac_header, skb->len);
+	//DBG_88E("(1)data=0x%x, head=0x%x, tail=0x%x, mac_header=0x%x, len=%d\n", skb->data, skb->head, skb->tail, skb->mac_header, skb->len);
 
 	//skb->mac.raw = skb->data;
 	skb_reset_mac_header(skb);
@@ -302,7 +302,7 @@ _func_enter_;
 		struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 		int bmcast = IS_MCAST(pattrib->dst);
 
-		//DBG_871X("bmcast=%d\n", bmcast);
+		//DBG_88E("bmcast=%d\n", bmcast);
 
 		if (_rtw_memcmp(pattrib->dst, myid(&padapter->eeprompriv), ETH_ALEN)==_FALSE) {
 			if (bmcast) {
@@ -316,7 +316,7 @@ _func_enter_;
 			{
 				struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
 
-				//DBG_871X("directly forwarding to the rtw_xmit_entry\n");
+				//DBG_88E("directly forwarding to the rtw_xmit_entry\n");
 
 				//skb->ip_summed = CHECKSUM_NONE;
 				skb->dev = pnetdev;
@@ -336,7 +336,7 @@ _func_enter_;
 		}
 		else// to APself
 		{
-			//DBG_871X("to APSelf\n");
+			//DBG_88E("to APSelf\n");
 		}
 	}
 
@@ -372,10 +372,10 @@ _func_enter_;
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	if ( (pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1) ) {
 		skb->ip_summed = CHECKSUM_UNNECESSARY;
-		//DBG_871X("CHECKSUM_UNNECESSARY\n");
+		//DBG_88E("CHECKSUM_UNNECESSARY\n");
 	} else {
 		skb->ip_summed = CHECKSUM_NONE;
-		//DBG_871X("CHECKSUM_NONE(%d, %d)\n", pattrib->tcpchk_valid, pattrib->tcp_chkrpt);
+		//DBG_88E("CHECKSUM_NONE(%d, %d)\n", pattrib->tcpchk_valid, pattrib->tcp_chkrpt);
 	}
 #else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
 

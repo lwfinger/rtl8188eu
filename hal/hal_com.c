@@ -73,7 +73,7 @@ void dump_chip_info(HAL_VERSION	ChipVersion)
 
 	cnt += sprintf((buf+cnt), "RomVer(%d)\n", ChipVersion.ROMVer);
 
-	DBG_871X("%s", buf);
+	DBG_88E("%s", buf);
 }
 
 
@@ -369,7 +369,7 @@ s32 c2h_evt_read(_adapter *adapter, u8 *buf)
 		&c2h_evt , sizeof(c2h_evt));
 
 	if (0) {
-		DBG_871X("%s id:%u, len:%u, seq:%u, trigger:0x%02x\n", __func__
+		DBG_88E("%s id:%u, len:%u, seq:%u, trigger:0x%02x\n", __func__
 			, c2h_evt->id, c2h_evt->plen, c2h_evt->seq, trigger);
 	}
 

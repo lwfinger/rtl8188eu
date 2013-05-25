@@ -80,14 +80,14 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
 	if (precvpriv->int_in_urb == NULL){
 		res= _FAIL;
-		DBG_8192C("alloc_urb for interrupt in endpoint fail !!!!\n");
+		DBG_88E("alloc_urb for interrupt in endpoint fail !!!!\n");
 		goto exit;
 	}
 #endif
 	precvpriv->int_in_buf = rtw_zmalloc(INTERRUPT_MSG_FORMAT_LEN);
 	if (precvpriv->int_in_buf == NULL){
 		res= _FAIL;
-		DBG_8192C("alloc_mem for interrupt in endpoint fail !!!!\n");
+		DBG_88E("alloc_mem for interrupt in endpoint fail !!!!\n");
 		goto exit;
 	}
 #endif
@@ -217,7 +217,7 @@ void rtl8188eu_free_recv_priv (_adapter *padapter)
 #ifdef PLATFORM_LINUX
 
 	if (skb_queue_len(&precvpriv->rx_skb_queue)) {
-		DBG_8192C(KERN_WARNING "rx_skb_queue not empty\n");
+		DBG_88E(KERN_WARNING "rx_skb_queue not empty\n");
 	}
 
 	skb_queue_purge(&precvpriv->rx_skb_queue);
@@ -225,7 +225,7 @@ void rtl8188eu_free_recv_priv (_adapter *padapter)
 #ifdef CONFIG_PREALLOC_RECV_SKB
 
 	if (skb_queue_len(&precvpriv->free_recv_skb_queue)) {
-		DBG_8192C(KERN_WARNING "free_recv_skb_queue not empty, %d\n", skb_queue_len(&precvpriv->free_recv_skb_queue));
+		DBG_88E(KERN_WARNING "free_recv_skb_queue not empty, %d\n", skb_queue_len(&precvpriv->free_recv_skb_queue));
 	}
 
 	skb_queue_purge(&precvpriv->free_recv_skb_queue);

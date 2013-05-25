@@ -290,7 +290,7 @@ void rtw_dump_mem_stat (void)
 	rx_peak=ATOMIC_READ(&rtw_dbg_mem_stat.rx_peak);
 	rx_alloc_err=ATOMIC_READ(&rtw_dbg_mem_stat.rx_alloc_err);
 
-	DBG_871X(	"vir_alloc:%d, vir_peak:%d, vir_alloc_err:%d\n"
+	DBG_88E(	"vir_alloc:%d, vir_peak:%d, vir_alloc_err:%d\n"
 				"phy_alloc:%d, phy_peak:%d, phy_alloc_err:%d\n"
 				"tx_alloc:%d, tx_peak:%d, tx_alloc_err:%d\n"
 				"rx_alloc:%d, rx_peak:%d, rx_alloc_err:%d\n"
@@ -390,7 +390,7 @@ void rtw_update_mem_stat(u8 flag, u32 sz)
 inline u8* dbg_rtw_vmalloc(u32 sz, const char *func, int line)
 {
 	u8  *p;
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func,  line, __func__, (sz));
+	//DBG_88E("DBG_MEM_ALLOC %s:%d %s(%d)\n", func,  line, __func__, (sz));
 
 	p=_rtw_vmalloc((sz));
 
@@ -405,7 +405,7 @@ inline u8* dbg_rtw_vmalloc(u32 sz, const char *func, int line)
 inline u8* dbg_rtw_zvmalloc(u32 sz, const char *func, int line)
 {
 	u8 *p;
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __func__, (sz));
+	//DBG_88E("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __func__, (sz));
 
 	p=_rtw_zvmalloc((sz));
 
@@ -419,7 +419,7 @@ inline u8* dbg_rtw_zvmalloc(u32 sz, const char *func, int line)
 
 inline void dbg_rtw_vmfree(u8 *pbuf, u32 sz, const char *func, int line)
 {
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n",  func, line, __func__, (pbuf), (sz));
+	//DBG_88E("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n",  func, line, __func__, (pbuf), (sz));
 
 	_rtw_vmfree((pbuf), (sz));
 
@@ -435,7 +435,7 @@ inline u8* dbg_rtw_malloc(u32 sz, const char *func, int line)
 	u8 *p;
 
 	if ((sz)>4096)
-		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __func__, (sz));
+		DBG_88E("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __func__, (sz));
 
 	p=_rtw_malloc((sz));
 
@@ -452,7 +452,7 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line)
 	u8 *p;
 
 	if ((sz)>4096)
-		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __func__, (sz));
+		DBG_88E("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%d)\n", func, line, __func__, (sz));
 
 	p = _rtw_zmalloc((sz));
 
@@ -468,7 +468,7 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line)
 inline void dbg_rtw_mfree(u8 *pbuf, u32 sz, const char *func, int line)
 {
 	if ((sz)>4096)
-		DBG_871X("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%p,%d)\n", func, line, __func__, (pbuf), (sz));
+		DBG_88E("DBG_MEM_ALLOC !!!!!!!!!!!!!! %s:%d %s(%p,%d)\n", func, line, __func__, (pbuf), (sz));
 
 	_rtw_mfree((pbuf), (sz));
 
@@ -486,7 +486,7 @@ void* rtw_malloc2d(int h, int w, int size)
 	void **a = (void **) rtw_zmalloc( h*sizeof(void *) + h*w*size );
 	if (a == NULL)
 	{
-		DBG_871X("%s: alloc memory fail!\n", __func__);
+		DBG_88E("%s: alloc memory fail!\n", __func__);
 		return NULL;
 	}
 
@@ -1166,7 +1166,7 @@ void rtw_usleep_os(int us)
 #ifdef DBG_DELAY_OS
 void _rtw_mdelay_os(int ms, const char *func, const int line)
 {
-	DBG_871X("%s:%d %s(%d)\n", func, line, __func__, ms);
+	DBG_88E("%s:%d %s(%d)\n", func, line, __func__, ms);
 
 #if defined(PLATFORM_LINUX)
 
@@ -1182,7 +1182,7 @@ void _rtw_mdelay_os(int ms, const char *func, const int line)
 }
 void _rtw_udelay_os(int us, const char *func, const int line)
 {
-	DBG_871X("%s:%d %s(%d)\n", func, line, __func__, us);
+	DBG_88E("%s:%d %s(%d)\n", func, line, __func__, us);
 
 
 #if defined(PLATFORM_LINUX)
@@ -1289,7 +1289,7 @@ inline void rtw_lock_suspend()
 	#endif
 
 	#if  defined(CONFIG_WAKELOCK) || defined(CONFIG_ANDROID_POWER)
-	//DBG_871X("####%s: suspend_lock_count:%d####\n", __func__, rtw_suspend_lock.stat.count);
+	//DBG_88E("####%s: suspend_lock_count:%d####\n", __func__, rtw_suspend_lock.stat.count);
 	#endif
 }
 
@@ -1302,7 +1302,7 @@ inline void rtw_unlock_suspend()
 	#endif
 
 	#if  defined(CONFIG_WAKELOCK) || defined(CONFIG_ANDROID_POWER)
-	//DBG_871X("####%s: suspend_lock_count:%d####\n", __func__, rtw_suspend_lock.stat.count);
+	//DBG_88E("####%s: suspend_lock_count:%d####\n", __func__, rtw_suspend_lock.stat.count);
 	#endif
 }
 
@@ -1551,20 +1551,20 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 
 	if (path && buf) {
 		if ( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
-			DBG_871X("%s openFile path:%s fp=%p\n",__func__, path ,fp);
+			DBG_88E("%s openFile path:%s fp=%p\n",__func__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
 			ret=readFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
 
-			DBG_871X("%s readFile, ret:%d\n",__func__, ret);
+			DBG_88E("%s readFile, ret:%d\n",__func__, ret);
 
 		} else {
-			DBG_871X("%s openFile path:%s Fail, ret:%d\n",__func__, path, ret);
+			DBG_88E("%s openFile path:%s Fail, ret:%d\n",__func__, path, ret);
 		}
 	} else {
-		DBG_871X("%s NULL pointer\n",__func__);
+		DBG_88E("%s NULL pointer\n",__func__);
 		ret =  -EINVAL;
 	}
 	return ret;
@@ -1585,20 +1585,20 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 
 	if (path && buf) {
 		if ( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
-			DBG_871X("%s openFile path:%s fp=%p\n",__func__, path ,fp);
+			DBG_88E("%s openFile path:%s fp=%p\n",__func__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
 			ret=writeFile(fp, buf, sz);
 			set_fs(oldfs);
 			closeFile(fp);
 
-			DBG_871X("%s writeFile, ret:%d\n",__func__, ret);
+			DBG_88E("%s writeFile, ret:%d\n",__func__, ret);
 
 		} else {
-			DBG_871X("%s openFile path:%s Fail, ret:%d\n",__func__, path, ret);
+			DBG_88E("%s openFile path:%s Fail, ret:%d\n",__func__, path, ret);
 		}
 	} else {
-		DBG_871X("%s NULL pointer\n",__func__);
+		DBG_88E("%s NULL pointer\n",__func__);
 		ret =  -EINVAL;
 	}
 	return ret;
@@ -1983,7 +1983,7 @@ bool rtw_cbuf_push(struct rtw_cbuf *cbuf, void *buf)
 		return _FAIL;
 
 	if (0)
-		DBG_871X("%s on %u\n", __func__, cbuf->write);
+		DBG_88E("%s on %u\n", __func__, cbuf->write);
 	cbuf->bufs[cbuf->write] = buf;
 	cbuf->write = (cbuf->write+1)%cbuf->size;
 
@@ -2004,7 +2004,7 @@ void *rtw_cbuf_pop(struct rtw_cbuf *cbuf)
 		return NULL;
 
 	if (0)
-		DBG_871X("%s on %u\n", __func__, cbuf->read);
+		DBG_88E("%s on %u\n", __func__, cbuf->read);
 	buf = cbuf->bufs[cbuf->read];
 	cbuf->read = (cbuf->read+1)%cbuf->size;
 

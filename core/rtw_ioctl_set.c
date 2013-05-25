@@ -315,7 +315,7 @@ u8 rtw_set_802_11_bssid(_adapter* padapter, u8 *bssid)
 
 _func_enter_;
 
-	DBG_871X_LEVEL(_drv_always_, "set bssid:%pM\n", bssid);
+	DBG_88E_LEVEL(_drv_info_, "set bssid:%pM\n", bssid);
 
 	if ((bssid[0]==0x00 && bssid[1]==0x00 && bssid[2]==0x00 && bssid[3]==0x00 && bssid[4]==0x00 &&bssid[5]==0x00) ||
 	    (bssid[0]==0xFF && bssid[1]==0xFF && bssid[2]==0xFF && bssid[3]==0xFF && bssid[4]==0xFF &&bssid[5]==0xFF))
@@ -327,7 +327,7 @@ _func_enter_;
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
 
-	DBG_871X("Set BSSID under fw_state=0x%08x\n", get_fwstate(pmlmepriv));
+	DBG_88E("Set BSSID under fw_state=0x%08x\n", get_fwstate(pmlmepriv));
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == _TRUE) {
 		goto handle_tkip_countermeasure;
 	} else if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == _TRUE) {
@@ -414,7 +414,7 @@ u8 rtw_set_802_11_ssid(_adapter* padapter, NDIS_802_11_SSID *ssid)
 
 _func_enter_;
 
-	DBG_871X_LEVEL(_drv_always_, "set ssid [%s] fw_state=0x%08x\n",
+	DBG_88E_LEVEL(_drv_info_, "set ssid [%s] fw_state=0x%08x\n",
 			ssid->Ssid, get_fwstate(pmlmepriv));
 
 	if (padapter->hw_init_completed==_FALSE){
@@ -426,7 +426,7 @@ _func_enter_;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
-	DBG_871X("Set SSID under fw_state=0x%08x\n", get_fwstate(pmlmepriv));
+	DBG_88E("Set SSID under fw_state=0x%08x\n", get_fwstate(pmlmepriv));
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == _TRUE) {
 		goto handle_tkip_countermeasure;
 	} else if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == _TRUE) {
@@ -587,7 +587,7 @@ _func_enter_;
 		_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,(" change mode!"));
-		//DBG_871X("change mode, old_mode=%d, new_mode=%d, fw_state=0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv));
+		//DBG_88E("change mode, old_mode=%d, new_mode=%d, fw_state=0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv));
 
 		if (*pold_state==Ndis802_11APMode)
 		{
@@ -716,7 +716,7 @@ _func_enter_;
 		}
 	} else {
 		if (rtw_is_scan_deny(padapter)) {
-			DBG_871X(FUNC_ADPT_FMT": scan deny\n", FUNC_ADPT_ARG(padapter));
+			DBG_88E(FUNC_ADPT_FMT": scan deny\n", FUNC_ADPT_ARG(padapter));
 			indicate_wx_scan_complete_event(padapter);
 			return _SUCCESS;
 		}
@@ -1417,7 +1417,7 @@ int rtw_set_country(_adapter *adapter, const char *country_code)
 {
 	int channel_plan = RT_CHANNEL_DOMAIN_WORLD_WIDE_5G;
 
-	DBG_871X("%s country_code:%s\n", __func__, country_code);
+	DBG_88E("%s country_code:%s\n", __func__, country_code);
 
 	//TODO: should have a table to match country code and RT_CHANNEL_DOMAIN
 	//TODO: should consider 2-character and 3-character country code
@@ -1430,7 +1430,7 @@ int rtw_set_country(_adapter *adapter, const char *country_code)
 	else if (0 == strcmp(country_code, "CN"))
 		channel_plan = RT_CHANNEL_DOMAIN_CHINA;
 	else
-		DBG_871X("%s unknown country_code:%s\n", __func__, country_code);
+		DBG_88E("%s unknown country_code:%s\n", __func__, country_code);
 
 	return rtw_set_channel_plan(adapter, channel_plan);
 }

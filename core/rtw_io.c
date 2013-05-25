@@ -425,7 +425,7 @@ u8 dbg_rtw_read8(_adapter *adapter, u32 addr, const char *caller, const int line
 	u8 val = _rtw_read8(adapter, addr);
 
 	if (match_read_sniff_ranges(addr, 1))
-		DBG_871X("DBG_IO %s:%d rtw_read8(0x%04x) return 0x%02x\n", caller, line, addr, val);
+		DBG_88E("DBG_IO %s:%d rtw_read8(0x%04x) return 0x%02x\n", caller, line, addr, val);
 
 	return val;
 }
@@ -435,7 +435,7 @@ u16 dbg_rtw_read16(_adapter *adapter, u32 addr, const char *caller, const int li
 	u16 val = _rtw_read16(adapter, addr);
 
 	if (match_read_sniff_ranges(addr, 2))
-		DBG_871X("DBG_IO %s:%d rtw_read16(0x%04x) return 0x%04x\n", caller, line, addr, val);
+		DBG_88E("DBG_IO %s:%d rtw_read16(0x%04x) return 0x%04x\n", caller, line, addr, val);
 
 	return val;
 }
@@ -445,7 +445,7 @@ u32 dbg_rtw_read32(_adapter *adapter, u32 addr, const char *caller, const int li
 	u32 val = _rtw_read32(adapter, addr);
 
 	if (match_read_sniff_ranges(addr, 4))
-		DBG_871X("DBG_IO %s:%d rtw_read32(0x%04x) return 0x%08x\n", caller, line, addr, val);
+		DBG_88E("DBG_IO %s:%d rtw_read32(0x%04x) return 0x%08x\n", caller, line, addr, val);
 
 	return val;
 }
@@ -453,28 +453,28 @@ u32 dbg_rtw_read32(_adapter *adapter, u32 addr, const char *caller, const int li
 int dbg_rtw_write8(_adapter *adapter, u32 addr, u8 val, const char *caller, const int line)
 {
 	if (match_write_sniff_ranges(addr, 1))
-		DBG_871X("DBG_IO %s:%d rtw_write8(0x%04x, 0x%02x)\n", caller, line, addr, val);
+		DBG_88E("DBG_IO %s:%d rtw_write8(0x%04x, 0x%02x)\n", caller, line, addr, val);
 
 	return _rtw_write8(adapter, addr, val);
 }
 int dbg_rtw_write16(_adapter *adapter, u32 addr, u16 val, const char *caller, const int line)
 {
 	if (match_write_sniff_ranges(addr, 2))
-		DBG_871X("DBG_IO %s:%d rtw_write16(0x%04x, 0x%04x)\n", caller, line, addr, val);
+		DBG_88E("DBG_IO %s:%d rtw_write16(0x%04x, 0x%04x)\n", caller, line, addr, val);
 
 	return _rtw_write16(adapter, addr, val);
 }
 int dbg_rtw_write32(_adapter *adapter, u32 addr, u32 val, const char *caller, const int line)
 {
 	if (match_write_sniff_ranges(addr, 4))
-		DBG_871X("DBG_IO %s:%d rtw_write32(0x%04x, 0x%08x)\n", caller, line, addr, val);
+		DBG_88E("DBG_IO %s:%d rtw_write32(0x%04x, 0x%08x)\n", caller, line, addr, val);
 
 	return _rtw_write32(adapter, addr, val);
 }
 int dbg_rtw_writeN(_adapter *adapter, u32 addr ,u32 length , u8 *data, const char *caller, const int line)
 {
 	if (match_write_sniff_ranges(addr, length))
-		DBG_871X("DBG_IO %s:%d rtw_writeN(0x%04x, %u)\n", caller, line, addr, length);
+		DBG_88E("DBG_IO %s:%d rtw_writeN(0x%04x, %u)\n", caller, line, addr, length);
 
 	return _rtw_writeN(adapter, addr, length, data);
 }

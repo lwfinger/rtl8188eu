@@ -966,7 +966,7 @@ static thread_return mp_xmit_packet_thread(thread_context context)
 
 	thread_enter("RTW_MP_THREAD");
 
-	//DBG_871X("%s:pkTx Start\n", __func__);
+	//DBG_88E("%s:pkTx Start\n", __func__);
 	while (1) {
 		pxmitframe = alloc_mp_xmitframe(pxmitpriv);
 		if (pxmitframe == NULL) {
@@ -1001,7 +1001,7 @@ static thread_return mp_xmit_packet_thread(thread_context context)
 	}
 
 exit:
-	//DBG_871X("%s:pkTx Exit\n", __func__);
+	//DBG_88E("%s:pkTx Exit\n", __func__);
 	rtw_mfree(pmptx->pallocated_buf, pmptx->buf_size);
 	pmptx->pallocated_buf = NULL;
 	pmptx->stop = 1;
@@ -1058,7 +1058,7 @@ void SetPacketTx(PADAPTER padapter)
 	pmp_priv->tx.buf_size = pkt_size + XMITBUF_ALIGN_SZ;
 	pmp_priv->tx.pallocated_buf = rtw_zmalloc(pmp_priv->tx.buf_size);
 	if (pmp_priv->tx.pallocated_buf == NULL) {
-		DBG_871X("%s: malloc(%d) fail!!\n", __func__, pmp_priv->tx.buf_size);
+		DBG_88E("%s: malloc(%d) fail!!\n", __func__, pmp_priv->tx.buf_size);
 		return;
 	}
 	pmp_priv->tx.buf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pmp_priv->tx.pallocated_buf), XMITBUF_ALIGN_SZ);
@@ -1167,7 +1167,7 @@ void SetPacketTx(PADAPTER padapter)
 #ifdef PLATFORM_LINUX
 	pmp_priv->tx.PktTxThread = kthread_run(mp_xmit_packet_thread, pmp_priv, "RTW_MP_THREAD");
 	if (IS_ERR(pmp_priv->tx.PktTxThread))
-		DBG_871X("Create PktTx Thread Fail !!!!!\n");
+		DBG_88E("Create PktTx Thread Fail !!!!!\n");
 #endif
 #ifdef PLATFORM_FREEBSD
 {
@@ -1177,7 +1177,7 @@ void SetPacketTx(PADAPTER padapter)
 					&p, &td, RFHIGHPID, 0, "MPXmitThread", "MPXmitThread");
 
 	if (pmp_priv->tx.PktTxThread < 0)
-		DBG_871X("Create PktTx Thread Fail !!!!!\n");
+		DBG_88E("Create PktTx Thread Fail !!!!!\n");
 }
 #endif
 }
