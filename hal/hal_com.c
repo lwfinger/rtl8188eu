@@ -24,18 +24,7 @@
 #include <hal_intf.h>
 #include <hal_com.h>
 
-#ifdef CONFIG_RTL8192C
-#include <rtl8192c_hal.h>
-#endif
-#ifdef CONFIG_RTL8192D
-#include <rtl8192d_hal.h>
-#endif
-#ifdef CONFIG_RTL8723A
-#include <rtl8723a_hal.h>
-#endif
-#ifdef CONFIG_RTL8188E
 #include <rtl8188e_hal.h>
-#endif
 
 #define _HAL_INIT_C_
 

@@ -2138,11 +2138,6 @@ _func_enter_;
 
 	mlmeext_sta_add_event_callback(adapter, psta);
 
-#ifdef CONFIG_RTL8711
-	//submit SetStaKey_cmd to tell fw, fw will allocate an CAM entry for this sta
-	rtw_setstakey_cmd(adapter, (unsigned char*)psta, false);
-#endif
-
 exit:
 
 _func_exit_;
@@ -3447,14 +3442,6 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 		AMPDU_para [4:2]:Min MPDU Start Spacing
 		*/
 
-		/*
-		#if defined(CONFIG_RTL8188E )&& defined (CONFIG_SDIO_HCI)
-		ht_capie.ampdu_params_info = 2;
-		#else
-		ht_capie.ampdu_params_info = (IEEE80211_HT_CAP_AMPDU_FACTOR&0x03);
-		#endif
-		*/
-
 		rtw_hal_get_def_var(padapter, HW_VAR_MAX_RX_AMPDU_FACTOR, &max_rx_ampdu_factor);
 		ht_capie.ampdu_params_info = (max_rx_ampdu_factor&0x03);
 
@@ -3466,17 +3453,10 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 
 		pframe = rtw_set_ie(out_ie+out_len, _HT_CAPABILITY_IE_,
 							sizeof(struct rtw_ieee80211_ht_cap), (unsigned char*)&ht_capie, pout_len);
-
-
-		//_rtw_memcpy(out_ie+out_len, p, ielen+2);//gtest
-		//*pout_len = *pout_len + (ielen+2);
-
-
 		phtpriv->ht_option = true;
 
 		p = rtw_get_ie(in_ie+12, _HT_ADD_INFO_IE_, &ielen, in_len-12);
-		if (p && (ielen==sizeof(struct ieee80211_ht_addt_info)))
-		{
+		if (p && (ielen==sizeof(struct ieee80211_ht_addt_info))) {
 			out_len = *pout_len;
 			pframe = rtw_set_ie(out_ie+out_len, _HT_ADD_INFO_IE_, ielen, p+2 , pout_len);
 		}

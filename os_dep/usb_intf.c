@@ -251,22 +251,12 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf);
 	/****** 8188EUS ********/ \
 	{USB_DEVICE(0x8179, 0x07B8)}, /* Abocom - Abocom */
 
-#ifndef CONFIG_RTL8192C
 	#undef RTL8192C_USB_IDS
 	#define RTL8192C_USB_IDS
-#endif
-#ifndef CONFIG_RTL8192D
 	#undef RTL8192D_USB_IDS
 	#define RTL8192D_USB_IDS
-#endif
-#ifndef CONFIG_RTL8723A
 	#undef RTL8723A_USB_IDS
 	#define RTL8723A_USB_IDS
-#endif
-#ifndef CONFIG_RTL8188E
-	#undef RTL8188E_USB_IDS
-	#define RTL8188E_USB_IDS
-#endif
 
 static struct usb_device_id rtw_usb_id_tbl[] ={
 	RTL8192C_USB_IDS
@@ -305,78 +295,6 @@ struct rtw_usb_drv {
 #endif
 };
 
-#ifdef CONFIG_RTL8192C
-static struct usb_device_id rtl8192c_usb_id_tbl[] ={
-	RTL8192C_USB_IDS
-	{}	/* Terminating entry */
-};
-
-struct rtw_usb_drv rtl8192c_usb_drv = {
-	.usbdrv.name = (char*)"rtl8192cu",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8192c_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-	.usbdrv.reset_resume   = rtw_resume,
-	#endif
-	#ifdef CONFIG_AUTOSUSPEND
-	.usbdrv.supports_autosuspend = 1,
-	#endif
-};
-
-static struct rtw_usb_drv *usb_drv = &rtl8192c_usb_drv;
-#endif /* CONFIG_RTL8192C */
-
-#ifdef CONFIG_RTL8192D
-static struct usb_device_id rtl8192d_usb_id_tbl[] ={
-	RTL8192D_USB_IDS
-	{}	/* Terminating entry */
-};
-
-struct rtw_usb_drv rtl8192d_usb_drv = {
-	.usbdrv.name = (char*)"rtl8192du",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8192d_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-	.usbdrv.reset_resume   = rtw_resume,
-	#endif
-	#ifdef CONFIG_AUTOSUSPEND
-	.usbdrv.supports_autosuspend = 1,
-	#endif
-};
-static struct rtw_usb_drv *usb_drv = &rtl8192d_usb_drv;
-#endif /* CONFIG_RTL8192D */
-
-#ifdef CONFIG_RTL8723A
-static struct usb_device_id rtl8723a_usb_id_tbl[] ={
-	RTL8723A_USB_IDS
-	{}	/* Terminating entry */
-};
-
-struct rtw_usb_drv rtl8723a_usb_drv = {
-	.usbdrv.name = (char*)"rtl8723au",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8723a_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-	.usbdrv.reset_resume   = rtw_resume,
-	#endif
-	#ifdef CONFIG_AUTOSUSPEND
-	.usbdrv.supports_autosuspend = 1,
-	#endif
-};
-
-static struct rtw_usb_drv *usb_drv = &rtl8723a_usb_drv;
-#endif /* CONFIG_RTL8723A */
-
-#ifdef CONFIG_RTL8188E
 static struct usb_device_id rtl8188e_usb_id_tbl[] ={
 	RTL8188E_USB_IDS
 	{}	/* Terminating entry */
@@ -398,7 +316,6 @@ struct rtw_usb_drv rtl8188e_usb_drv = {
 };
 
 static struct rtw_usb_drv *usb_drv = &rtl8188e_usb_drv;
-#endif /* CONFIG_RTL8188E */
 
 static inline int RT_usb_endpoint_dir_in(const struct usb_endpoint_descriptor *epd)
 {
@@ -1813,7 +1730,6 @@ static int __init rtw_drv_entry(void)
 	writel(tmp,(volatile unsigned int*)0xb801a608);//write dummy register for 1055
 #endif
 #ifdef CONFIG_PLATFORM_ARM_SUNxI
-#ifndef CONFIG_RTL8723A
 	int ret = 0;
 	/* ----------get usb_wifi_usbc_num------------- */
 	ret = script_parser_fetch("usb_wifi_para", "usb_wifi_usbc_num", (int *)&usb_wifi_host, 64);
@@ -1824,7 +1740,6 @@ static int __init rtw_drv_entry(void)
 	}
 	DBG_88E("sw_usb_enable_hcd: usbc_num = %d\n", usb_wifi_host);
 	sw_usb_enable_hcd(usb_wifi_host);
-#endif //CONFIG_RTL8723A
 #endif //CONFIG_PLATFORM_ARM_SUNxI
 
 
@@ -1868,10 +1783,8 @@ static void __exit rtw_drv_halt(void)
 	_rtw_mutex_free(&usb_drv->setbw_mutex);
 #endif
 #ifdef CONFIG_PLATFORM_ARM_SUNxI
-#ifndef CONFIG_RTL8723A
 	DBG_88E("sw_usb_disable_hcd: usbc_num = %d\n", usb_wifi_host);
 	sw_usb_disable_hcd(usb_wifi_host);
-#endif //ifndef CONFIG_RTL8723A
 #endif	//CONFIG_PLATFORM_ARM_SUNxI
 
 	DBG_88E("-rtw_drv_halt\n");
