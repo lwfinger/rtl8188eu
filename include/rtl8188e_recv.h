@@ -20,9 +20,42 @@
 #ifndef __RTL8188E_RECV_H__
 #define __RTL8188E_RECV_H__
 
-#include <rtl8192c_recv.h>
-
 #define TX_RPT1_PKT_LEN 8
+
+#define RECV_BLK_SZ 512
+#define RECV_BLK_CNT 16
+#define RECV_BLK_TH RECV_BLK_CNT
+#define RECV_BULK_IN_ADDR		0x80
+#define RECV_INT_IN_ADDR		0x81
+
+#define NR_PREALLOC_RECV_SKB (8)
+
+#ifdef CONFIG_SINGLE_RECV_BUF
+	#define NR_RECVBUFF (1)
+#else
+	#define NR_RECVBUFF (4)
+#endif //CONFIG_SINGLE_RECV_BUF
+
+#ifndef CONFIG_MINIMAL_MEMORY_USAGE
+	#define MAX_RECVBUF_SZ (15360) // 15k < 16k
+#else
+	#define MAX_RECVBUF_SZ (4000) // about 4K
+#endif
+
+struct phy_stat {
+	unsigned int phydw0;
+	unsigned int phydw1;
+	unsigned int phydw2;
+	unsigned int phydw3;
+	unsigned int phydw4;
+	unsigned int phydw5;
+	unsigned int phydw6;
+	unsigned int phydw7;
+};
+
+// Rx smooth factor
+#define	Rx_Smooth_Factor (20)
+
 
 typedef enum _RX_PACKET_TYPE{
 	NORMAL_RX,//Normal rx packet
