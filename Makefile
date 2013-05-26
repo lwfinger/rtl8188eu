@@ -24,6 +24,7 @@ CONFIG_USB_AUTOSUSPEND = n
 CONFIG_HW_PWRP_DETECTION = n
 CONFIG_WIFI_TEST = n
 CONFIG_BT_COEXIST = n
+CONFIG_RTL8192CU_REDEFINE_1X1 = n
 CONFIG_INTEL_WIDI = n
 CONFIG_WAPI_SUPPORT = n
 CONFIG_EFUSE_CONFIG_FILE = n
@@ -44,6 +45,7 @@ OUTSRC_FILES := hal/odm_debug.o	\
 		hal/odm.o\
 		hal/HalPhyRf.o
 										
+ifeq ($(CONFIG_RTL8188E), y)
 
 RTL871X = rtl8188e
 HAL_COMM_FILES := hal/rtl8188e_xmit.o\
@@ -60,14 +62,18 @@ OUTSRC_FILES += hal/HalHWImg8188E_MAC.o\
 		hal/Hal8188ERateAdaptive.o\
 		hal/odm_RTL8188E.o
 
+ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_WOWLAN), y)
 OUTSRC_FILES += hal/HalHWImg8188E_FW.o
+endif
 endif
 
 PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
 		hal/Hal8188EPwrSeq.o
 
 CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES) 
+
+endif
 
 HCI_NAME = usb
 
@@ -135,6 +141,10 @@ ifeq ($(CONFIG_BT_COEXIST), y)
 EXTRA_CFLAGS += -DCONFIG_BT_COEXIST
 endif
 
+ifeq ($(CONFIG_RTL8192CU_REDEFINE_1X1), y)
+EXTRA_CFLAGS += -DRTL8192C_RECONFIG_TO_1T1R
+endif
+
 ifeq ($(CONFIG_INTEL_WIDI), y)
 EXTRA_CFLAGS += -DCONFIG_INTEL_WIDI
 endif
@@ -155,12 +165,16 @@ ifeq ($(CONFIG_FTP_PROTECT), y)
 EXTRA_CFLAGS += -DCONFIG_FTP_PROTECT
 endif
 
+ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_WOWLAN), y)
 EXTRA_CFLAGS += -DCONFIG_WOWLAN
 endif
+endif
 
+ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_EFUSE_CONFIG_FILE), y)
 EXTRA_CFLAGS += -DCONFIG_RF_GAIN_OFFSET
+endif
 endif
 
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/)
@@ -441,7 +455,12 @@ $(MODULE_NAME)-y += $(_OS_INTFS_FILES)
 
 $(MODULE_NAME)-$(CONFIG_MP_INCLUDED) += core/rtw_mp.o \
 					core/rtw_mp_ioctl.o
-obj-y := $(MODULE_NAME).o
+ifeq ($(CONFIG_RTL8723A), y)
+
+$(MODULE_NAME)-$(CONFIG_MP_INCLUDED)+= core/rtw_bt_mp.o
+endif
+
+obj-$(CONFIG_RTL8188EU) := $(MODULE_NAME).o
 
 else
 

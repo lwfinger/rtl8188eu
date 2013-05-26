@@ -1593,9 +1593,10 @@ _adapter *rtw_drv_if2_init(_adapter *primary_padapter, char *name,
 
 	//step init_io_priv
 	if ((rtw_init_io_priv(padapter, set_intf_ops)) == _FAIL) {
-		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("\n Can't init io_reqs\n"));
+		RT_TRACE(_module_hci_intfs_c_,_drv_always_,("\n Can't init io_reqs\n"));
 	}
 
+	pr_info("rtl8188eu - Driver version "DRIVERVERSION"\n");
 	//step read_chip_version
 	rtw_hal_read_chip_version(padapter);
 

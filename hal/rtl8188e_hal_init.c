@@ -2465,10 +2465,7 @@ rtl8188e_Efuse_PgPacketWrite(	PADAPTER	pAdapter,
 	return ret;
 }
 
-static HAL_VERSION
-ReadChipVersion8188E(
-		PADAPTER	padapter
-	)
+static HAL_VERSION ReadChipVersion8188E(PADAPTER padapter)
 {
 	u32				value32;
 	HAL_VERSION				ChipVersion;
@@ -2478,7 +2475,7 @@ ReadChipVersion8188E(
 	pHalData = GET_HAL_DATA(padapter);
 
 	value32 = rtw_read32(padapter, REG_SYS_CFG);
-	ChipVersion.ICType = CHIP_8188E ;
+	ChipVersion.ICType = CHIP_8188E;
 	ChipVersion.ChipType = ((value32 & RTL_ID) ? TEST_CHIP : NORMAL_CHIP);
 
 	ChipVersion.RFType = RF_TYPE_1T1R;
@@ -2492,10 +2489,7 @@ ReadChipVersion8188E(
 	pHalData->MultiFunc = RT_MULTI_FUNC_NONE;
 
 
-//#if DBG
-#if 1
 	dump_chip_info(ChipVersion);
-#endif
 
 	pHalData->VersionID = ChipVersion;
 
@@ -2506,8 +2500,7 @@ ReadChipVersion8188E(
 	else if (IS_2T2R(ChipVersion)){
 		pHalData->rf_type = RF_2T2R;
 		pHalData->NumTotalRFPath = 2;
-	}
-	else{
+	} else{
 		pHalData->rf_type = RF_1T1R;
 		pHalData->NumTotalRFPath = 1;
 	}
@@ -2521,6 +2514,7 @@ static void rtl8188e_read_chip_version(PADAPTER padapter)
 {
 	ReadChipVersion8188E(padapter);
 }
+
 void rtl8188e_GetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,

@@ -182,7 +182,19 @@ struct mp_tx
 	_thread_hdl_ PktTxThread;
 };
 
+#if defined(CONFIG_RTL8192C) || defined(CONFIG_RTL8192D) || defined(CONFIG_RTL8723A) || defined(CONFIG_RTL8188E)
+#ifdef CONFIG_RTL8192C
+#include <Hal8192CPhyCfg.h>
+#endif
+#ifdef CONFIG_RTL8192D
+#include <Hal8192DPhyCfg.h>
+#endif
+#ifdef CONFIG_RTL8723A
+#include <Hal8723APhyCfg.h>
+#endif
+#ifdef CONFIG_RTL8188E
 #include <Hal8188EPhyCfg.h>
+#endif
 
 #define MP_MAX_LINES		1000
 #define MP_MAX_LINES_BYTES	256
@@ -323,6 +335,8 @@ typedef struct _MPT_CONTEXT
     u1Byte          mptOutBuf[100];
 
 }MPT_CONTEXT, *PMPT_CONTEXT;
+#endif
+//#endif
 
 //#define RTPRIV_IOCTL_MP					( SIOCIWFIRSTPRIV + 0x17)
 enum {

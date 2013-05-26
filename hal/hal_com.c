@@ -24,7 +24,18 @@
 #include <hal_intf.h>
 #include <hal_com.h>
 
+#ifdef CONFIG_RTL8192C
+#include <rtl8192c_hal.h>
+#endif
+#ifdef CONFIG_RTL8192D
+#include <rtl8192d_hal.h>
+#endif
+#ifdef CONFIG_RTL8723A
+#include <rtl8723a_hal.h>
+#endif
+#ifdef CONFIG_RTL8188E
 #include <rtl8188e_hal.h>
+#endif
 
 #define _HAL_INIT_C_
 
@@ -35,36 +46,42 @@ void dump_chip_info(HAL_VERSION	ChipVersion)
 
 	if (IS_81XXC(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: %s_", IS_92C_SERIAL(ChipVersion)?"CHIP_8192C":"CHIP_8188C");
-	}
-	else if (IS_92D(ChipVersion)){
+	} else if (IS_92D(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8192D_");
-	}
-	else if (IS_8723_SERIES(ChipVersion)){
+	} else if (IS_8723_SERIES(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8723A_");
-	}
-	else if (IS_8188E(ChipVersion)){
+	} else if (IS_8188E(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8188E_");
 	}
 
 	cnt += sprintf((buf+cnt), "%s_", IS_NORMAL_CHIP(ChipVersion)?"Normal_Chip":"Test_Chip");
 	cnt += sprintf((buf+cnt), "%s_", IS_CHIP_VENDOR_TSMC(ChipVersion)?"TSMC":"UMC");
-	if (IS_A_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "A_CUT_");
-	else if (IS_B_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "B_CUT_");
-	else if (IS_C_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "C_CUT_");
-	else if (IS_D_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "D_CUT_");
-	else if (IS_E_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "E_CUT_");
-	else cnt += sprintf((buf+cnt), "UNKNOWN_CUT(%d)_", ChipVersion.CUTVersion);
+	if (IS_A_CUT(ChipVersion))
+		cnt += sprintf((buf+cnt), "A_CUT_");
+	else if (IS_B_CUT(ChipVersion))
+		cnt += sprintf((buf+cnt), "B_CUT_");
+	else if (IS_C_CUT(ChipVersion))
+		cnt += sprintf((buf+cnt), "C_CUT_");
+	else if (IS_D_CUT(ChipVersion))
+		cnt += sprintf((buf+cnt), "D_CUT_");
+	else if (IS_E_CUT(ChipVersion))
+		cnt += sprintf((buf+cnt), "E_CUT_");
+	else
+		cnt += sprintf((buf+cnt), "UNKNOWN_CUT(%d)_", ChipVersion.CUTVersion);
 
-	if (IS_1T1R(ChipVersion)) cnt += sprintf((buf+cnt), "1T1R_");
-	else if (IS_1T2R(ChipVersion)) cnt += sprintf((buf+cnt), "1T2R_");
-	else if (IS_2T2R(ChipVersion)) cnt += sprintf((buf+cnt), "2T2R_");
-	else cnt += sprintf((buf+cnt), "UNKNOWN_RFTYPE(%d)_", ChipVersion.RFType);
+	if (IS_1T1R(ChipVersion))
+		cnt += sprintf((buf+cnt), "1T1R_");
+	else if (IS_1T2R(ChipVersion))
+		cnt += sprintf((buf+cnt), "1T2R_");
+	else if (IS_2T2R(ChipVersion))
+		cnt += sprintf((buf+cnt), "2T2R_");
+	else
+		cnt += sprintf((buf+cnt), "UNKNOWN_RFTYPE(%d)_", ChipVersion.RFType);
 
 	cnt += sprintf((buf+cnt), "RomVer(%d)\n", ChipVersion.ROMVer);
 
-	DBG_88E("%s", buf);
+	pr_info("%s", buf);
 }
-
 
 #define	EEPROM_CHANNEL_PLAN_BY_HW_MASK	0x80
 
