@@ -792,7 +792,7 @@ _func_enter_;
 
 			if (IS_MCAST(prxattrib->ra))
 			{
-				if (psecuritypriv->binstallGrpkey==_FALSE)
+				if (psecuritypriv->binstallGrpkey==false)
 				{
 					res=_FAIL;
 					DBG_88E("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__func__);
@@ -1915,7 +1915,7 @@ _func_enter_;
 				//in concurrent we should use sw descrypt in group key, so we remove this message
 				//DBG_88E("rx bc/mc packets, to perform sw rtw_aes_decrypt\n");
 				//prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey;
-				if (psecuritypriv->binstallGrpkey==_FALSE)
+				if (psecuritypriv->binstallGrpkey==false)
 				{
 					res=_FAIL;
 					DBG_88E("%s:rx bc/mc packets,but didn't install group key!!!!!!!!!!\n",__func__);
@@ -2865,7 +2865,7 @@ _func_enter_;
 	}
 	*/
 
-	padapter->securitypriv.busetkipkey=_TRUE;
+	padapter->securitypriv.busetkipkey=true;
 
 	RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("^^^rtw_use_tkipkey_handler padapter->securitypriv.busetkipkey=%d^^^\n",padapter->securitypriv.busetkipkey));
 

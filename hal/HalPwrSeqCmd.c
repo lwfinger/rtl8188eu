@@ -57,7 +57,7 @@ u8 HalPwrSeqCmdParsing(
 	WLAN_PWR_CFG	PwrSeqCmd[])
 {
 	WLAN_PWR_CFG	PwrCfgCmd = {0};
-	u8				bPollingBit = _FALSE;
+	u8				bPollingBit = false;
 	u32				AryIdx = 0;
 	u8				value = 0;
 	u32				offset = 0;
@@ -130,7 +130,7 @@ u8 HalPwrSeqCmdParsing(
 				case PWR_CMD_POLLING:
 					RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_POLLING\n"));
 
-					bPollingBit = _FALSE;
+					bPollingBit = false;
 					offset = GET_PWR_CFG_OFFSET(PwrCfgCmd);
 #ifdef CONFIG_GSPI_HCI
 					if (GET_PWR_CFG_BASE(PwrCfgCmd) == PWR_BASEADDR_SDIO)
@@ -146,13 +146,13 @@ u8 HalPwrSeqCmdParsing(
 
 						value &= GET_PWR_CFG_MASK(PwrCfgCmd);
 						if (value == (GET_PWR_CFG_VALUE(PwrCfgCmd) & GET_PWR_CFG_MASK(PwrCfgCmd)))
-							bPollingBit = _TRUE;
+							bPollingBit = true;
 						else
 							rtw_udelay_os(10);
 
 						if (pollingCount++ > maxPollingCnt) {
 							DBG_88E("Fail to polling Offset[%#x]\n", offset);
-							return _FALSE;
+							return false;
 						}
 					} while (!bPollingBit);
 
@@ -169,7 +169,7 @@ u8 HalPwrSeqCmdParsing(
 				case PWR_CMD_END:
 					// When this command is parsed, end the process
 					RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_END\n"));
-					return _TRUE;
+					return true;
 					break;
 
 				default:
@@ -181,5 +181,5 @@ u8 HalPwrSeqCmdParsing(
 		AryIdx++;//Add Array Index
 	}while (1);
 
-	return _TRUE;
+	return true;
 }

@@ -136,9 +136,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 
 	#define		DEV_BUS_TYPE		RT_PCI_INTERFACE
 
-	#define _TRUE				1
-	#define _FALSE				0
-
 #elif (DM_ODM_SUPPORT_TYPE == ODM_ADSL)
 
 	// To let ADSL/AP project compile ok; it should be removed after all conflict are solved. Added by Annie, 2011-10-07.
@@ -162,9 +159,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 	typedef  void *				RT_TIMER_CALL_BACK;
 
 	#define DEV_BUS_TYPE	RT_PCI_INTERFACE
-
-	#define _TRUE				1
-	#define _FALSE				0
 
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	#include <basic_types.h>
@@ -207,12 +201,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 	typedef  void *				RT_TIMER_CALL_BACK;
 	#define	STA_INFO_T			struct sta_info
 	#define	PSTA_INFO_T		struct sta_info *
-
-
-
-	#define TRUE	_TRUE
-	#define FALSE	_FALSE
-
 
 	#define SET_TX_DESC_ANTSEL_A_88E(__pTxDesc, __Value) SET_BITS_TO_LE_4BYTE(__pTxDesc+8, 24, 1, __Value)
 	#define SET_TX_DESC_ANTSEL_B_88E(__pTxDesc, __Value) SET_BITS_TO_LE_4BYTE(__pTxDesc+8, 25, 1, __Value)

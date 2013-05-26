@@ -347,7 +347,7 @@ struct wifidirect_info{
 struct tdls_ss_record{	//signal strength record
 	u8		macaddr[ETH_ALEN];
 	u8		RxPWDBAll;
-	u8		is_tdls_sta;	// _TRUE: direct link sta, _FALSE: else
+	u8		is_tdls_sta;	// true: direct link sta, false: else
 };
 
 struct tdls_info{
@@ -641,9 +641,9 @@ __inline static u8 *get_bssid(struct mlme_priv *pmlmepriv)
 __inline static sint check_fwstate(struct mlme_priv *pmlmepriv, sint state)
 {
 	if (pmlmepriv->fw_state & state)
-		return _TRUE;
+		return true;
 
-	return _FALSE;
+	return false;
 }
 
 __inline static sint get_fwstate(struct mlme_priv *pmlmepriv)
@@ -663,7 +663,7 @@ __inline static void set_fwstate(struct mlme_priv *pmlmepriv, sint state)
 	pmlmepriv->fw_state |= state;
 	//FOR HW integration
 	if (_FW_UNDER_SURVEY==state){
-		pmlmepriv->bScanInProcess = _TRUE;
+		pmlmepriv->bScanInProcess = true;
 	}
 }
 
@@ -672,7 +672,7 @@ __inline static void _clr_fwstate_(struct mlme_priv *pmlmepriv, sint state)
 	pmlmepriv->fw_state &= ~state;
 	//FOR HW integration
 	if (_FW_UNDER_SURVEY==state){
-		pmlmepriv->bScanInProcess = _FALSE;
+		pmlmepriv->bScanInProcess = false;
 	}
 }
 
@@ -685,7 +685,7 @@ __inline static void clr_fwstate(struct mlme_priv *pmlmepriv, sint state)
 	_irqL irqL;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
-	if (check_fwstate(pmlmepriv, state) == _TRUE)
+	if (check_fwstate(pmlmepriv, state) == true)
 		pmlmepriv->fw_state ^= state;
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
 }
@@ -763,7 +763,7 @@ void rtw_clear_scan_deny(_adapter *adapter);
 void rtw_set_scan_deny_timer_hdl(_adapter *adapter);
 void rtw_set_scan_deny(_adapter *adapter, u32 ms);
 #else
-#define rtw_is_scan_deny(adapter) _FALSE
+#define rtw_is_scan_deny(adapter) false
 #define rtw_clear_scan_deny(adapter) do {} while (0)
 #define rtw_set_scan_deny_timer_hdl(adapter) do {} while (0)
 #define rtw_set_scan_deny(adapter, ms) do {} while (0)

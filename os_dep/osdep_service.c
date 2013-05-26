@@ -153,9 +153,9 @@ int	_rtw_memcmp(void *dst, void *src, u32 sz)
 {
 //under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0
 	if (!(memcmp(dst, src, sz)))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 void _rtw_memset(void *pbuf, int c, u32 sz)
@@ -176,9 +176,9 @@ Otherwise, there will be racing condition.
 u32	rtw_is_list_empty(_list *phead)
 {
 	if (list_empty(phead))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 void rtw_list_insert_head(_list *plist, _list *phead)
@@ -276,9 +276,9 @@ u32	  _rtw_queue_empty(_queue	*pqueue)
 u32 rtw_end_of_queue_search(_list *head, _list *plist)
 {
 	if (head == plist)
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 u32	rtw_get_current_time(void)
@@ -650,14 +650,14 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 /*
 * Test if the specifi @param path is a file and readable
 * @param path the path of the file to test
-* @return _TRUE or _FALSE
+* @return true or false
 */
 int rtw_is_file_readable(char *path)
 {
 	if (isFileReadable(path) == 0)
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 /*
@@ -892,22 +892,22 @@ keep_ori:
  * rtw_cbuf_full - test if cbuf is full
  * @cbuf: pointer of struct rtw_cbuf
  *
- * Returns: _TRUE if cbuf is full
+ * Returns: true if cbuf is full
  */
 inline bool rtw_cbuf_full(struct rtw_cbuf *cbuf)
 {
-	return (cbuf->write == cbuf->read-1)? _TRUE : _FALSE;
+	return (cbuf->write == cbuf->read-1)? true : false;
 }
 
 /**
  * rtw_cbuf_empty - test if cbuf is empty
  * @cbuf: pointer of struct rtw_cbuf
  *
- * Returns: _TRUE if cbuf is empty
+ * Returns: true if cbuf is empty
  */
 inline bool rtw_cbuf_empty(struct rtw_cbuf *cbuf)
 {
-	return (cbuf->write == cbuf->read)? _TRUE : _FALSE;
+	return (cbuf->write == cbuf->read)? true : false;
 }
 
 /**
@@ -916,7 +916,7 @@ inline bool rtw_cbuf_empty(struct rtw_cbuf *cbuf)
  * @buf: pointer to push in
  *
  * Lock free operation, be careful of the use scheme
- * Returns: _TRUE push success
+ * Returns: true push success
  */
 bool rtw_cbuf_push(struct rtw_cbuf *cbuf, void *buf)
 {

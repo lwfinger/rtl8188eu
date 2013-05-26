@@ -422,15 +422,15 @@ enum WIFI_REG_DOMAIN {
 ( \
 	( (addr[0] == 0xff) && (addr[1] == 0xff) && \
 		(addr[2] == 0xff) && (addr[3] == 0xff) && \
-		(addr[4] == 0xff) && (addr[5] == 0xff) )  ? _TRUE : _FALSE \
+		(addr[4] == 0xff) && (addr[5] == 0xff) )  ? true : false \
 )
 
 __inline static int IS_MCAST(unsigned char *da)
 {
 	if ((*da) & 0x01)
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 
@@ -511,9 +511,9 @@ __inline static unsigned char * get_hdr_bssid(unsigned char *pframe)
 __inline static int IsFrameTypeCtrl(unsigned char *pframe)
 {
 	if (WIFI_CTRL_TYPE == GetFrameType(pframe))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 /*-----------------------------------------------------------------------------
 			Below is for the security related definition

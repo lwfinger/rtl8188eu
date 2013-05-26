@@ -636,7 +636,7 @@ odm_FastAntTrainingCallback(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	PADAPTER	padapter = pDM_Odm->Adapter;
-	if (padapter->net_closed == _TRUE)
+	if (padapter->net_closed == true)
 	    return;
 	//if (*pDM_Odm->pbNet_closed == TRUE)
 	   // return;
@@ -773,7 +773,7 @@ void odm_FastAntTrainingCallback(void *FunctionContext)
 {
 	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
 	PADAPTER	padapter = pDM_Odm->Adapter;
-	if (padapter->net_closed == _TRUE)
+	if (padapter->net_closed == true)
 	    return;
 	odm_FastAntTraining(pDM_Odm);
 }

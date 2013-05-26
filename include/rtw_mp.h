@@ -471,8 +471,8 @@ struct bb_reg_param {
 };
 //=======================================================================
 
-#define LOWER	_TRUE
-#define RAISE	_FALSE
+#define LOWER	true
+#define RAISE	false
 
 /* Hardware Registers */
 #define BB_REG_BASE_ADDR		0x800

@@ -40,17 +40,17 @@ s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 		return _FAIL;
 	}
 
-	if (check_fwstate(&padapter->mlmepriv, WIFI_MP_STATE) == _FALSE) {
+	if (check_fwstate(&padapter->mlmepriv, WIFI_MP_STATE) == false) {
 		RT_TRACE(_module_mp_, _drv_warning_, ("SetPowerTracking! Fail: not in MP mode!\n"));
 		return _FAIL;
 	}
 
 	if (enable)
 	{
-			pDM_Odm->RFCalibrateInfo.bTXPowerTracking = _TRUE;
+			pDM_Odm->RFCalibrateInfo.bTXPowerTracking = true;
 	}
 	else
-		pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit= _FALSE;
+		pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit= false;
 
 	return _SUCCESS;
 }
@@ -85,11 +85,11 @@ static void Hal_disable_dm(PADAPTER padapter)
 	// disable Dynamic Initial Gain
 	// disable High Power
 	// disable Power Tracking
-	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, _FALSE);
+	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false);
 
 	// enable APK, LCK and IQK but disable power tracking
-	pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = _FALSE;
-	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, _TRUE);
+	pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = false;
+	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, true);
 }
 
 /*-----------------------------------------------------------------------------
@@ -228,12 +228,12 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
 	if (beven && !pMptCtx->bMptIndexEven)	//odd->even
 	{
 		Action = 2;
-		pMptCtx->bMptIndexEven = _TRUE;
+		pMptCtx->bMptIndexEven = true;
 	}
 	else if (!beven && pMptCtx->bMptIndexEven)	//even->odd
 	{
 		Action = 1;
-		pMptCtx->bMptIndexEven = _FALSE;
+		pMptCtx->bMptIndexEven = false;
 	}
 
 	if (Action != 0)
@@ -244,7 +244,7 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
 		{
 			if (pDM_Odm->RFCalibrateInfo.bCCKinCH14)
 			{
-				if (_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch14[i][2], 4) == _TRUE)
+				if (_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch14[i][2], 4) == true)
 				{
 					CCK_index_old = (u8) i;
 //					RTPRINT(FINIT, INIT_TxPower,("MPT_CCKTxPowerAdjustbyIndex: Initial reg0x%x = 0x%lx, CCK_index=0x%x, ch 14 %d\n",
@@ -254,7 +254,7 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
 			}
 			else
 			{
-				if (_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch1_Ch13[i][2], 4) == _TRUE)
+				if (_rtw_memcmp((void*)&TempCCk, (void*)&CCKSwingTable_Ch1_Ch13[i][2], 4) == true)
 				{
 					CCK_index_old = (u8) i;
 //					RTPRINT(FINIT, INIT_TxPower,("MPT_CCKTxPowerAdjustbyIndex: Initial reg0x%x = 0x%lx, CCK_index=0x%x, ch14 %d\n",
@@ -329,11 +329,11 @@ void Hal_SetChannel(PADAPTER pAdapter)
 	SelectChannel(pAdapter, channel);
 
 	if (pHalData->CurrentChannel == 14 && !pDM_Odm->RFCalibrateInfo.bCCKinCH14) {
-		pDM_Odm->RFCalibrateInfo.bCCKinCH14 = _TRUE;
+		pDM_Odm->RFCalibrateInfo.bCCKinCH14 = true;
 		Hal_MPT_CCKTxPowerAdjust(pAdapter, pDM_Odm->RFCalibrateInfo.bCCKinCH14);
 	}
 	else if (pHalData->CurrentChannel != 14 && pDM_Odm->RFCalibrateInfo.bCCKinCH14) {
-		pDM_Odm->RFCalibrateInfo.bCCKinCH14 = _FALSE;
+		pDM_Odm->RFCalibrateInfo.bCCKinCH14 = false;
 		Hal_MPT_CCKTxPowerAdjust(pAdapter, pDM_Odm->RFCalibrateInfo.bCCKinCH14);
 	}
 }
@@ -689,7 +689,7 @@ s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 		return _FAIL;
 	}
 
-	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == _FALSE) {
+	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == false) {
 		RT_TRACE(_module_mp_, _drv_warning_, ("SetThermalMeter: Fail! not in MP mode!\n"));
 		return _FAIL;
 	}
@@ -993,7 +993,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 	}
 
 	pAdapter->mppriv.MptCtx.bCckContTx = bStart;
-	pAdapter->mppriv.MptCtx.bOfdmContTx = _FALSE;
+	pAdapter->mppriv.MptCtx.bOfdmContTx = false;
 }/* mpt_StartCckContTx */
 
 void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
@@ -1038,7 +1038,7 @@ void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
 	}
 
-	pAdapter->mppriv.MptCtx.bCckContTx = _FALSE;
+	pAdapter->mppriv.MptCtx.bCckContTx = false;
 	pAdapter->mppriv.MptCtx.bOfdmContTx = bStart;
 }/* mpt_StartOfdmContTx */
 

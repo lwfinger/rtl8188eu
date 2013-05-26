@@ -75,12 +75,12 @@ _func_enter_;
 
 	if (pfile->pkt_len == 0) {
 _func_exit_;
-		return _TRUE;
+		return true;
 	}
 
 _func_exit_;
 
-	return _FALSE;
+	return false;
 }
 
 void rtw_set_tx_chksum_offload(_pkt *pkt, struct pkt_attrib *pattrib)
@@ -258,7 +258,7 @@ void rtw_os_xmit_schedule(_adapter *padapter)
 		pri_adapter = padapter->pbuddy_adapter;
 #endif
 
-	if (_rtw_queue_empty(&pri_adapter->xmitpriv.pending_xmitbuf_queue) == _FALSE)
+	if (_rtw_queue_empty(&pri_adapter->xmitpriv.pending_xmitbuf_queue) == false)
 		_rtw_up_sema(&pri_adapter->xmitpriv.xmit_sema);
 
 
@@ -326,7 +326,7 @@ int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 	plist = get_next(phead);
 
 	//free sta asoc_queue
-	while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 
@@ -353,13 +353,13 @@ int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 
 			_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
 			//dev_kfree_skb_any(skb);
-			return _FALSE;	// Caller shall tx this multicast frame via normal way.
+			return false;	// Caller shall tx this multicast frame via normal way.
 		}
 	}
 
 	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
 	dev_kfree_skb_any(skb);
-	return _TRUE;
+	return true;
 }
 #endif	// CONFIG_TX_MCAST2UNI
 
@@ -381,7 +381,7 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("+xmit_enry\n"));
 
-	if (rtw_if_up(padapter) == _FALSE) {
+	if (rtw_if_up(padapter) == false) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit_entry: rtw_if_up fail\n"));
 		#ifdef DBG_TX_DROP_FRAME
 		DBG_88E("DBG_TX_DROP_FRAME %s if_up fail\n", __func__);
@@ -393,7 +393,7 @@ _func_enter_;
 
 #ifdef CONFIG_TX_MCAST2UNI
 	if ( !rtw_mc2u_disable
-		&& check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE
+		&& check_fwstate(pmlmepriv, WIFI_AP_STATE) == true
 		&& ( IP_MCAST_MAC(pkt->data)
 			|| ICMPV6_MCAST_MAC(pkt->data) )
 		&& (padapter->registrypriv.wifi_spec == 0)
@@ -401,7 +401,7 @@ _func_enter_;
 	{
 		if ( pxmitpriv->free_xmitframe_cnt > (NR_XMITFRAME/4) ) {
 			res = rtw_mlcst2unicst(padapter, pkt);
-			if (res == _TRUE) {
+			if (res == true) {
 				goto exit;
 			}
 		} else {

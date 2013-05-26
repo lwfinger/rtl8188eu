@@ -60,7 +60,7 @@ static void _restore_security_setting(_adapter *padapter)
 		else
 		{
 			//pairwise key
-			rtw_setstakey_cmd(padapter, (unsigned char *)psta, _TRUE);
+			rtw_setstakey_cmd(padapter, (unsigned char *)psta, true);
 			//group key
 			rtw_set_key(padapter,&padapter->securitypriv,padapter->securitypriv.dot118021XGrpKeyid, 0);
 		}
@@ -116,7 +116,7 @@ static void _restore_network_status(_adapter *padapter)
 	}
 
 	//disable dynamic functions, such as high power, DIG
-	//Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, _FALSE);
+	//Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false);
 #endif
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_BSSID, pmlmeinfo->network.MacAddress);
@@ -153,13 +153,13 @@ void rtl8188e_silentreset_for_specific_platform(_adapter *padapter)
 	tasklet_kill(&pxmitpriv->xmit_tasklet);
 
 	_enter_critical_mutex(&psrtpriv->silentreset_mutex, &irqL);
-	psrtpriv->silent_reset_inprogress = _TRUE;
+	psrtpriv->silent_reset_inprogress = true;
 	pwrpriv->change_rfpwrstate = rf_off;
 #ifdef CONFIG_IPS
 	ips_enter(padapter);
 	ips_leave(padapter);
 #endif
-	if (check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE)
+	if (check_fwstate(pmlmepriv, _FW_LINKED)== true)
 	{
 		_restore_network_status(padapter);
 		_restore_security_setting(padapter);
@@ -167,7 +167,7 @@ void rtl8188e_silentreset_for_specific_platform(_adapter *padapter)
 
 	_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY | _FW_UNDER_LINKING);
 
-	psrtpriv->silent_reset_inprogress = _FALSE;
+	psrtpriv->silent_reset_inprogress = false;
 	_exit_critical_mutex(&psrtpriv->silentreset_mutex, &irqL);
 
 	tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);

@@ -1759,8 +1759,8 @@ odm_DIGInit(
 	//pDM_DigTable->CurMultiSTAConnectState = DIG_MultiSTA_DISCONNECT;
 	pDM_DigTable->RssiLowThresh	= DM_DIG_THRESH_LOW;
 	pDM_DigTable->RssiHighThresh	= DM_DIG_THRESH_HIGH;
-	pDM_DigTable->FALowThresh	= DM_FALSEALARM_THRESH_LOW;
-	pDM_DigTable->FAHighThresh	= DM_FALSEALARM_THRESH_HIGH;
+	pDM_DigTable->FALowThresh	= DM_FALSE_ALARM_THRESH_LOW;
+	pDM_DigTable->FAHighThresh	= DM_FALSE_ALARM_THRESH_HIGH;
 	if (pDM_Odm->BoardType == ODM_BOARD_HIGHPWR)
 	{
 		pDM_DigTable->rx_gain_range_max = DM_DIG_MAX_NIC;
@@ -2733,9 +2733,9 @@ odm_RateAdaptiveMaskInit(
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	pOdmRA->Type = DM_Type_ByDriver;
 	if (pOdmRA->Type == DM_Type_ByDriver)
-		pDM_Odm->bUseRAMask = _TRUE;
+		pDM_Odm->bUseRAMask = true;
 	else
-		pDM_Odm->bUseRAMask = _FALSE;
+		pDM_Odm->bUseRAMask = false;
 
 #endif
 
@@ -3174,13 +3174,13 @@ odm_DynamicTxPowerInit(
 	PADAPTER	Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	pdmpriv->bDynamicTxPowerEnable = _FALSE;
+	pdmpriv->bDynamicTxPowerEnable = false;
 
 	#if (RTL8192C_SUPPORT==1)
 	#ifdef CONFIG_USB_HCI
 
 	#ifdef CONFIG_INTEL_PROXIM
-	if ((pHalData->BoardType == BOARD_USB_High_PA)||(Adapter->proximity.proxim_support==_TRUE))
+	if ((pHalData->BoardType == BOARD_USB_High_PA)||(Adapter->proximity.proxim_support==true))
 	#else
 	if (pHalData->BoardType == BOARD_USB_High_PA)
 	#endif
@@ -3188,11 +3188,11 @@ odm_DynamicTxPowerInit(
 	{
 		//odm_SavePowerIndex(Adapter);
 		odm_DynamicTxPowerSavePowerIndex(pDM_Odm);
-		pdmpriv->bDynamicTxPowerEnable = _TRUE;
+		pdmpriv->bDynamicTxPowerEnable = true;
 	}
 	else
 	#else
-		pdmpriv->bDynamicTxPowerEnable = _FALSE;
+		pdmpriv->bDynamicTxPowerEnable = false;
 	#endif
 	#endif
 
@@ -3509,7 +3509,7 @@ odm_DynamicTxPower_92C(
 		return;
 
 #ifdef CONFIG_INTEL_PROXIM
-	if (Adapter->proximity.proxim_on== _TRUE){
+	if (Adapter->proximity.proxim_on== true){
 		struct proximity_priv *prox_priv=Adapter->proximity.proximity_priv;
 		// Intel set fixed tx power
 		printk("\n %s  Adapter->proximity.proxim_on=%d prox_priv->proxim_modeinfo->power_output=%d\n",__func__,Adapter->proximity.proxim_on,prox_priv->proxim_modeinfo->power_output);
@@ -3550,7 +3550,7 @@ odm_DynamicTxPower_92C(
 #endif
 	{
 		// STA not connected and AP not connected
-		if ((check_fwstate(pmlmepriv, _FW_LINKED) != _TRUE) &&
+		if ((check_fwstate(pmlmepriv, _FW_LINKED) != true) &&
 			(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
 		{
 			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("Not connected to any\n"));
@@ -3563,7 +3563,7 @@ odm_DynamicTxPower_92C(
 			return;
 		}
 
-		if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	// Default port
+		if (check_fwstate(pmlmepriv, _FW_LINKED) == true)	// Default port
 		{
 			UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
 		}
@@ -3785,7 +3785,7 @@ odm_DynamicTxPower_92D(
 	#endif
 
 	// If dynamic high power is disabled.
-	if ( (pdmpriv->bDynamicTxPowerEnable != _TRUE) ||
+	if ( (pdmpriv->bDynamicTxPowerEnable != true) ||
 		(!(podmpriv->SupportAbility& ODM_BB_DYNAMIC_TXPWR)) )
 	{
 		pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
@@ -3793,7 +3793,7 @@ odm_DynamicTxPower_92D(
 	}
 
 	// STA not connected and AP not connected
-	if ((check_fwstate(pmlmepriv, _FW_LINKED) != _TRUE) &&
+	if ((check_fwstate(pmlmepriv, _FW_LINKED) != true) &&
 		(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
 	{
 		//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("Not connected to any\n"));
@@ -3805,7 +3805,7 @@ odm_DynamicTxPower_92D(
 		return;
 	}
 
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	// Default port
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)	// Default port
 	{
 		UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
 	}
@@ -3864,7 +3864,7 @@ odm_DynamicTxPower_92D(
 			pHalData->DynamicTxHighPowerLvl = Adapter->DualMacDMSPControl.CurTxHighLvlForAnotherMacOfDMSP;
 			PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
 			pHalData->DynamicTxHighPowerLvl = HighPowerLvlBackForMac0;
-			Adapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP = _FALSE;
+			Adapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP = false;
 		}
 	}
 #endif
@@ -3889,7 +3889,7 @@ odm_DynamicTxPower_92D(
 				if (Adapter->bSlaveOfDMSP)
 				{
 					//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() bslave case\n"));
-					BuddyAdapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP = _TRUE;
+					BuddyAdapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP = true;
 					BuddyAdapter->DualMacDMSPControl.CurTxHighLvlForAnotherMacOfDMSP = pHalData->DynamicTxHighPowerLvl;
 				}
 				else
@@ -4104,13 +4104,13 @@ FindMinimumRSSI(
 	}
 #endif
 
-	if ((check_fwstate(pmlmepriv, _FW_LINKED) == _FALSE) &&
+	if ((check_fwstate(pmlmepriv, _FW_LINKED) == false) &&
 		(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
 	{
 		pdmpriv->MinUndecoratedPWDBForDM = 0;
 		//ODM_RT_TRACE(pDM_Odm,COMP_BB_POWERSAVING, DBG_LOUD, ("Not connected to any\n"));
 	}
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)	// Default port
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)	// Default port
 	{
 		pdmpriv->MinUndecoratedPWDBForDM = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
 	}
@@ -4147,7 +4147,7 @@ odm_RSSIMonitorCheckCE(
 		return;
 	}
 
-	//if (check_fwstate(&Adapter->mlmepriv, WIFI_AP_STATE|WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE)
+	//if (check_fwstate(&Adapter->mlmepriv, WIFI_AP_STATE|WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true)
 	{
 		#if 1
 		struct sta_info *psta;
@@ -4157,10 +4157,10 @@ odm_RSSIMonitorCheckCE(
 		for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++) {
 			if (IS_STA_VALID(psta = pDM_Odm->pODM_StaInfo[i])
 				&& (psta->state & WIFI_ASOC_STATE)
-				&& _rtw_memcmp(psta->hwaddr, bcast_addr, ETH_ALEN) == _FALSE
-				&& _rtw_memcmp(psta->hwaddr, myid(&Adapter->eeprompriv), ETH_ALEN) == _FALSE
+				&& _rtw_memcmp(psta->hwaddr, bcast_addr, ETH_ALEN) == false
+				&& _rtw_memcmp(psta->hwaddr, myid(&Adapter->eeprompriv), ETH_ALEN) == false
 				#ifdef CONFIG_CONCURRENT_MODE
-				&& (!Adapter->pbuddy_adapter || _rtw_memcmp(psta->hwaddr, myid(&Adapter->pbuddy_adapter->eeprompriv), ETH_ALEN) == _FALSE)
+				&& (!Adapter->pbuddy_adapter || _rtw_memcmp(psta->hwaddr, myid(&Adapter->pbuddy_adapter->eeprompriv), ETH_ALEN) == false)
 				#endif
 				) {
 					if (psta->rssi_stat.UndecoratedSmoothedPWDB < tmpEntryMinPWDB)
@@ -4191,7 +4191,7 @@ odm_RSSIMonitorCheckCE(
 			phead = &(pstapriv->sta_hash[i]);
 			plist = get_next(phead);
 
-			while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+			while ((rtw_end_of_queue_search(phead, plist)) == false)
 			{
 				psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 
@@ -4232,7 +4232,7 @@ odm_RSSIMonitorCheckCE(
 		for (i=0; i< sta_cnt; i++)
 		{
 			if (PWDB_rssi[i] != (0)){
-				if (pHalData->fw_ractrl == _TRUE)// Report every sta's RSSI to FW
+				if (pHalData->fw_ractrl == true)// Report every sta's RSSI to FW
 				{
 					#if (RTL8192D_SUPPORT==1)
 					FillH2CCmd92D(Adapter, H2C_RSSI_REPORT, 3, (u8 *)(&PWDB_rssi[i]));
@@ -4433,12 +4433,12 @@ odm_TXPowerTrackingThermalMeterInit(
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	#ifdef CONFIG_RTL8188E
 	{
-		pDM_Odm->RFCalibrateInfo.bTXPowerTracking = _TRUE;
+		pDM_Odm->RFCalibrateInfo.bTXPowerTracking = true;
 		pDM_Odm->RFCalibrateInfo.TXPowercount = 0;
-		pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = _FALSE;
+		pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = false;
 		//#if	(MP_DRIVER != 1)		//for mp driver, turn off txpwrtracking as default
 		if ( *(pDM_Odm->mp_mode) != 1)
-			pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = _TRUE;
+			pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = true;
 		//#endif//#if	(MP_DRIVER != 1)
 		MSG_88E("pDM_Odm TxPowerTrackControl = %d\n", pDM_Odm->RFCalibrateInfo.TxPowerTrackControl);
 	}
@@ -4450,13 +4450,13 @@ odm_TXPowerTrackingThermalMeterInit(
 
 		//if (IS_HARDWARE_TYPE_8192C(pHalData))
 		{
-			pdmpriv->bTXPowerTracking = _TRUE;
+			pdmpriv->bTXPowerTracking = true;
 			pdmpriv->TXPowercount = 0;
-			pdmpriv->bTXPowerTrackingInit = _FALSE;
+			pdmpriv->bTXPowerTrackingInit = false;
 			//#if	(MP_DRIVER != 1)		//for mp driver, turn off txpwrtracking as default
 
 			if (*(pDM_Odm->mp_mode) != 1)
-				pdmpriv->TxPowerTrackControl = _TRUE;
+				pdmpriv->TxPowerTrackControl = true;
 			//#endif//#if	(MP_DRIVER != 1)
 		}
 		MSG_88E("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
@@ -4466,10 +4466,10 @@ odm_TXPowerTrackingThermalMeterInit(
 #elif (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	#ifdef RTL8188E_SUPPORT
 	{
-		pDM_Odm->RFCalibrateInfo.bTXPowerTracking = _TRUE;
+		pDM_Odm->RFCalibrateInfo.bTXPowerTracking = true;
 		pDM_Odm->RFCalibrateInfo.TXPowercount = 0;
-		pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = _FALSE;
-		pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = _TRUE;
+		pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = false;
+		pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = true;
 	}
 	#endif
 #endif
@@ -5449,7 +5449,7 @@ void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
 {
 	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
 	PADAPTER	padapter = pDM_Odm->Adapter;
-	if (padapter->net_closed == _TRUE)
+	if (padapter->net_closed == true)
 	    return;
 	odm_SwAntDivChkAntSwitch(pDM_Odm, SWAW_STEP_DETERMINE);
 }
@@ -6367,7 +6367,7 @@ odm_EdcaTurboCheckCE(
 	u32	edca_param;
 	u64	cur_tx_bytes = 0;
 	u64	cur_rx_bytes = 0;
-	u8	bbtchange = _FALSE;
+	u8	bbtchange = false;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	struct xmit_priv		*pxmitpriv = &(Adapter->xmitpriv);
 	struct recv_priv		*precvpriv = &(Adapter->recvpriv);
@@ -6449,7 +6449,7 @@ odm_EdcaTurboCheckCE(
 			pDM_Odm->DM_EDCA_Table.prv_traffic_idx = trafficIndex;
 		}
 
-		pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = _TRUE;
+		pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = true;
 	}
 	else
 	{
@@ -6460,13 +6460,13 @@ odm_EdcaTurboCheckCE(
 		 if (pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA)
 		{
 			rtw_write32(Adapter, REG_EDCA_BE_PARAM, pHalData->AcParam_BE);
-			pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = _FALSE;
+			pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = false;
 		}
 	}
 
 dm_CheckEdcaTurbo_EXIT:
 	// Set variables for next time.
-	precvpriv->bIsAnyNonBEPkts = _FALSE;
+	precvpriv->bIsAnyNonBEPkts = false;
 	pxmitpriv->last_tx_bytes = pxmitpriv->tx_bytes;
 	precvpriv->last_rx_bytes = precvpriv->rx_bytes;
 #endif

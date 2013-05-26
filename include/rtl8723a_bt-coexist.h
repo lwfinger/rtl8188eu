@@ -56,7 +56,7 @@ void BT_HaltProcess(PADAPTER padapter);
 void BT_LpsLeave(PADAPTER padapter);
 
 
-#define	BT_HsConnectionEstablished(Adapter)					_FALSE
+#define	BT_HsConnectionEstablished(Adapter)					false
 // ===== End of sync from SD7 driver COMMON/BT.h =====
 #endif // __BT_C__
 

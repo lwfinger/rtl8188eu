@@ -251,7 +251,7 @@ void _rtw_read_mem(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 	_func_enter_;
 
-	if ( (adapter->bDriverStopped ==_TRUE) || (adapter->bSurpriseRemoved == _TRUE))
+	if ( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
 	{
 	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_, ("rtw_read_mem:bDriverStopped(%d) OR bSurpriseRemoved(%d)", adapter->bDriverStopped, adapter->bSurpriseRemoved));
 	     return;
@@ -291,7 +291,7 @@ void _rtw_read_port(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 	_func_enter_;
 
-	if ( (adapter->bDriverStopped ==_TRUE) || (adapter->bSurpriseRemoved == _TRUE))
+	if ( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
 	{
 	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_, ("rtw_read_port:bDriverStopped(%d) OR bSurpriseRemoved(%d)", adapter->bDriverStopped, adapter->bSurpriseRemoved));
 	     return;
@@ -403,10 +403,10 @@ bool match_read_sniff_ranges(u16 addr, u16 len)
 	int i;
 	for (i = 0; i<read_sniff_num; i++) {
 		if (addr + len > read_sniff_ranges[i][0] && addr <= read_sniff_ranges[i][1])
-			return _TRUE;
+			return true;
 	}
 
-	return _FALSE;
+	return false;
 }
 
 bool match_write_sniff_ranges(u16 addr, u16 len)
@@ -414,10 +414,10 @@ bool match_write_sniff_ranges(u16 addr, u16 len)
 	int i;
 	for (i = 0; i<write_sniff_num; i++) {
 		if (addr + len > write_sniff_ranges[i][0] && addr <= write_sniff_ranges[i][1])
-			return _TRUE;
+			return true;
 	}
 
-	return _FALSE;
+	return false;
 }
 
 u8 dbg_rtw_read8(_adapter *adapter, u32 addr, const char *caller, const int line)

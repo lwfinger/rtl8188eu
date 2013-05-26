@@ -278,9 +278,9 @@ void update_recvframe_phyinfo_88e(
 	struct sta_info *psta;
 	//_irqL		irqL;
 
-	pkt_info.bPacketMatchBSSID =_FALSE;
-	pkt_info.bPacketToSelf = _FALSE;
-	pkt_info.bPacketBeacon = _FALSE;
+	pkt_info.bPacketMatchBSSID =false;
+	pkt_info.bPacketToSelf = false;
+	pkt_info.bPacketBeacon = false;
 
 	wlanhdr = get_recvframe_data(precvframe);
 
@@ -293,7 +293,7 @@ void update_recvframe_phyinfo_88e(
 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
 
 	if (pkt_info.bPacketBeacon){
-		if (check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE) == _TRUE){
+		if (check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE) == true){
 			sa = padapter->mlmepriv.cur_network.network.MacAddress;
 		}
 		//to do Ad-hoc
@@ -325,7 +325,7 @@ void update_recvframe_phyinfo_88e(
 
 	precvframe->u.hdr.psta = NULL;
 	if (pkt_info.bPacketMatchBSSID &&
-		(check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == _TRUE))
+		(check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == true))
 	{
 		if (psta)
 		{
@@ -336,7 +336,7 @@ void update_recvframe_phyinfo_88e(
 	}
 	else if (pkt_info.bPacketToSelf || pkt_info.bPacketBeacon)
 	{
-		if (check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE)
+		if (check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true)
 		{
 			if (psta)
 			{

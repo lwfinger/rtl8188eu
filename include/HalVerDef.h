@@ -20,8 +20,8 @@
 #ifndef __HAL_VERSION_DEF_H__
 #define __HAL_VERSION_DEF_H__
 
-#define TRUE	_TRUE
-#define FALSE	_FALSE
+#define TRUE	true
+#define FALSE	false
 
 // HAL_IC_TYPE_E
 typedef enum tag_HAL_IC_Type_Definition

@@ -57,7 +57,7 @@ dm_CheckStatistics(
 static void dm_CheckPbcGPIO(_adapter *padapter)
 {
 	u8	tmp1byte;
-	u8	bPbcPressed = _FALSE;
+	u8	bPbcPressed = false;
 
 	if (!padapter->registrypriv.hw_wps_pbc)
 		return;
@@ -81,7 +81,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 
 	if (tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)
 	{
-		bPbcPressed = _TRUE;
+		bPbcPressed = true;
 	}
 #else
 	tmp1byte = rtw_read8(padapter, GPIO_IN);
@@ -92,11 +92,11 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 
 	if ((tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)==0)
 	{
-		bPbcPressed = _TRUE;
+		bPbcPressed = true;
 	}
 #endif
 
-	if ( _TRUE == bPbcPressed)
+	if ( true == bPbcPressed)
 	{
 		// Here we only set bPbcPressed to true
 		// After trigger PBC, the variable will be set to false
@@ -140,8 +140,8 @@ dm_InterruptMigration(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 	bool			bCurrentIntMt, bCurrentACIntDisable;
-	bool			IntMtToSet = _FALSE;
-	bool			ACIntToSet = _FALSE;
+	bool			IntMtToSet = false;
+	bool			ACIntToSet = false;
 
 
 	// Retrieve current interrupt migration and Tx four ACs IMR settings first.
@@ -153,14 +153,14 @@ dm_InterruptMigration(
 	// when interrupt migration is set before. 2010.03.05.
 	//
 	if (!Adapter->registrypriv.wifi_spec &&
-		(check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE) &&
+		(check_fwstate(pmlmepriv, _FW_LINKED)== true) &&
 		pmlmepriv->LinkDetectInfo.bHigherBusyTraffic)
 	{
-		IntMtToSet = _TRUE;
+		IntMtToSet = true;
 
 		// To check whether we should disable Tx interrupt or not.
 		if (pmlmepriv->LinkDetectInfo.bHigherBusyRxTraffic )
-			ACIntToSet = _TRUE;
+			ACIntToSet = true;
 	}
 
 	//Update current settings.
@@ -401,9 +401,9 @@ rtl8188e_HalDmWatchDog(
 		PADAPTER	Adapter
 	)
 {
-	bool		bFwCurrentInPSMode = _FALSE;
-	bool		bFwPSAwake = _TRUE;
-	u8 hw_init_completed = _FALSE;
+	bool		bFwCurrentInPSMode = false;
+	bool		bFwPSAwake = true;
+	u8 hw_init_completed = false;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
@@ -414,7 +414,7 @@ rtl8188e_HalDmWatchDog(
 	_func_enter_;
 
 	#if defined(CONFIG_CONCURRENT_MODE)
-	if (Adapter->isprimary == _FALSE && pbuddy_adapter) {
+	if (Adapter->isprimary == false && pbuddy_adapter) {
 		hw_init_completed = pbuddy_adapter->hw_init_completed;
 	} else
 	#endif
@@ -422,7 +422,7 @@ rtl8188e_HalDmWatchDog(
 		hw_init_completed = Adapter->hw_init_completed;
 	}
 
-	if (hw_init_completed == _FALSE)
+	if (hw_init_completed == false)
 		goto skip_dm;
 
 #ifdef CONFIG_LPS
@@ -442,10 +442,10 @@ rtl8188e_HalDmWatchDog(
 	// Fw is under p2p powersaving mode, driver should stop dynamic mechanism.
 	// modifed by thomas. 2011.06.11.
 	if (Adapter->wdinfo.p2p_ps_mode)
-		bFwPSAwake = _FALSE;
+		bFwPSAwake = false;
 #endif //CONFIG_P2P_PS
 
-	if ( (hw_init_completed == _TRUE)
+	if ( (hw_init_completed == true)
 		&& ((!bFwCurrentInPSMode) && bFwPSAwake))
 	{
 		//
@@ -477,28 +477,28 @@ rtl8188e_HalDmWatchDog(
 
 
 	//ODM
-	if (hw_init_completed == _TRUE)
+	if (hw_init_completed == true)
 	{
 		struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
-		u8	bLinked=_FALSE;
+		u8	bLinked=false;
 		#ifdef CONFIG_DISABLE_ODM
 		pHalData->odmpriv.SupportAbility = 0;
 		#endif
 
-		if (	(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) ||
-			(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == _TRUE))
+		if (	(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) ||
+			(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true))
 		{
 			if (Adapter->stapriv.asoc_sta_count > 2)
-				bLinked = _TRUE;
+				bLinked = true;
 		}
 		else{//Station mode
-			if (check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE)
-				bLinked = _TRUE;
+			if (check_fwstate(pmlmepriv, _FW_LINKED)== true)
+				bLinked = true;
 		}
 
 #ifdef CONFIG_CONCURRENT_MODE
 		if (check_buddy_fw_link(Adapter))
-			bLinked = _TRUE;
+			bLinked = true;
 #endif //CONFIG_CONCURRENT_MODE
 
 		ODM_CmnInfoUpdate(&pHalData->odmpriv ,ODM_CMNINFO_LINK, bLinked);
@@ -583,12 +583,12 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 	if (pHalData->AntDivCfg==0)
 	{
 		//DBG_88E("odm_AntDivBeforeLink8192C(): No AntDiv Mechanism.\n");
-		return _FALSE;
+		return false;
 	}
 
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-		return _FALSE;
+		return false;
 	}
 
 
@@ -598,14 +598,14 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 		pDM_SWAT_Table->CurAntenna = (pDM_SWAT_Table->CurAntenna==Antenna_A)?Antenna_B:Antenna_A;
 
 		//PHY_SetBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300, pDM_SWAT_Table->CurAntenna);
-		rtw_antenna_select_cmd(Adapter, pDM_SWAT_Table->CurAntenna, _FALSE);
+		rtw_antenna_select_cmd(Adapter, pDM_SWAT_Table->CurAntenna, false);
 		//DBG_88E("%s change antenna to ANT_( %s ).....\n",__func__, (pDM_SWAT_Table->CurAntenna==Antenna_A)?"A":"B");
-		return _TRUE;
+		return true;
 	}
 	else
 	{
 		pDM_SWAT_Table->SWAS_NoLink_State = 0;
-		return _FALSE;
+		return false;
 	}
 
 }

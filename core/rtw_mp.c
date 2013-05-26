@@ -187,7 +187,7 @@ void mp_wi_callback(
 	}
 
 	NdisAcquireSpinLock(&(pmp_wi_cntx->mp_wi_lock));
-	pmp_wi_cntx->bmp_wi_progress= _FALSE;
+	pmp_wi_cntx->bmp_wi_progress= false;
 	NdisReleaseSpinLock(&(pmp_wi_cntx->mp_wi_lock));
 
 	if (pmp_wi_cntx->bmpdrv_unload)
@@ -212,8 +212,8 @@ static int init_mp_priv_by_os(struct mp_priv *pmp_priv)
 	pmp_priv->tx_testcnt1 = 0;
 
 	pmp_wi_cntx = &pmp_priv->wi_cntx
-	pmp_wi_cntx->bmpdrv_unload = _FALSE;
-	pmp_wi_cntx->bmp_wi_progress = _FALSE;
+	pmp_wi_cntx->bmpdrv_unload = false;
+	pmp_wi_cntx->bmp_wi_progress = false;
 	pmp_wi_cntx->curractfunc = NULL;
 
 	return _SUCCESS;
@@ -290,8 +290,8 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
 //	do_queue_select(padapter, pattrib);
 	pattrib->nr_frags = 1;
 	pattrib->encrypt = 0;
-	pattrib->bswenc = _FALSE;
-	pattrib->qos_en = _FALSE;
+	pattrib->bswenc = false;
+	pattrib->qos_en = false;
 }
 
 s32 init_mp_priv(PADAPTER padapter)
@@ -375,22 +375,22 @@ MPT_InitializeAdapter(
 	//-------------------------------------------------------------------------
 	// SW Initialization for 8190 MP.
 	//-------------------------------------------------------------------------
-	pMptCtx->bMptDrvUnload = _FALSE;
-	pMptCtx->bMassProdTest = _FALSE;
-	pMptCtx->bMptIndexEven = _TRUE;	//default gain index is -6.0db
+	pMptCtx->bMptDrvUnload = false;
+	pMptCtx->bMassProdTest = false;
+	pMptCtx->bMptIndexEven = true;	//default gain index is -6.0db
 	pMptCtx->h2cReqNum = 0x0;
 	/* Init mpt event. */
 	//init for BT MP
 #ifdef CONFIG_RTL8723A
-	pMptCtx->bMPh2c_timeout = _FALSE;
-	pMptCtx->MptH2cRspEvent = _FALSE;
-	pMptCtx->MptBtC2hEvent = _FALSE;
+	pMptCtx->bMPh2c_timeout = false;
+	pMptCtx->MptH2cRspEvent = false;
+	pMptCtx->MptBtC2hEvent = false;
 
 	_rtw_init_sema(&pMptCtx->MPh2c_Sema, 0);
 	_init_timer( &pMptCtx->MPh2c_timeout_timer, pAdapter->pnetdev, MPh2c_timeout_handle, pAdapter );
 #endif
 
-	pMptCtx->bMptWorkItemInProgress = _FALSE;
+	pMptCtx->bMptWorkItemInProgress = false;
 	pMptCtx->CurrMptAct = NULL;
 	//-------------------------------------------------------------------------
 
@@ -418,7 +418,7 @@ MPT_InitializeAdapter(
 	#endif
 	}
 
-	PHY_IQCalibrate(pAdapter, _FALSE);
+	PHY_IQCalibrate(pAdapter, false);
 	dm_CheckTXPowerTracking(&pHalData->odmpriv);	//trigger thermal meter
 	PHY_LCCalibrate(pAdapter);
 
@@ -475,7 +475,7 @@ MPT_DeInitAdapter(
 {
 	PMPT_CONTEXT		pMptCtx = &pAdapter->mppriv.MptCtx;
 
-	pMptCtx->bMptDrvUnload = _TRUE;
+	pMptCtx->bMptDrvUnload = true;
 	#ifdef CONFIG_RTL8723A
 	_rtw_free_sema(&(pMptCtx->MPh2c_Sema));
 	_cancel_timer_ex( &pMptCtx->MPh2c_timeout_timer);
@@ -486,13 +486,13 @@ static u8 mpt_ProStartTest(PADAPTER padapter)
 {
 	PMPT_CONTEXT pMptCtx = &padapter->mppriv.MptCtx;
 
-	pMptCtx->bMassProdTest = _TRUE;
-	pMptCtx->bStartContTx = _FALSE;
-	pMptCtx->bCckContTx = _FALSE;
-	pMptCtx->bOfdmContTx = _FALSE;
-	pMptCtx->bSingleCarrier = _FALSE;
-	pMptCtx->bCarrierSuppression = _FALSE;
-	pMptCtx->bSingleTone = _FALSE;
+	pMptCtx->bMassProdTest = true;
+	pMptCtx->bStartContTx = false;
+	pMptCtx->bCckContTx = false;
+	pMptCtx->bOfdmContTx = false;
+	pMptCtx->bSingleCarrier = false;
+	pMptCtx->bCarrierSuppression = false;
+	pMptCtx->bSingleTone = false;
 
 	return _SUCCESS;
 }
@@ -535,13 +535,13 @@ static void disable_dm(PADAPTER padapter)
 	// disable Dynamic Initial Gain
 	// disable High Power
 	// disable Power Tracking
-	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, _FALSE);
+	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false);
 
 	// enable APK, LCK and IQK but disable power tracking
 #ifndef CONFIG_RTL8188E
-	pdmpriv->TxPowerTrackControl = _FALSE;
+	pdmpriv->TxPowerTrackControl = false;
 #endif
-	Switch_DM_Func(padapter, DYNAMIC_RF_CALIBRATION, _TRUE);
+	Switch_DM_Func(padapter, DYNAMIC_RF_CALIBRATION, true);
 }
 
 //This function initializes the DUT to the MP test mode
@@ -610,12 +610,12 @@ s32 mp_start_test(PADAPTER padapter)
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == _TRUE)
+	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
 		goto end_of_mp_start_test;
 
 	//init mp_start_test status
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) {
-		rtw_disassoc_cmd(padapter, 500, _TRUE);
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
+		rtw_disassoc_cmd(padapter, 500, true);
 		rtw_indicate_disconnect(padapter);
 		rtw_free_assoc_resources(padapter, 1);
 	}
@@ -689,7 +689,7 @@ void mp_stop_test(PADAPTER padapter)
 	{
 	pmppriv->bSetTxPower=0;
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == _FALSE)
+	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == false)
 		goto end_of_mp_stop_test;
 
 	//3 1. disconnect psudo AdHoc
@@ -1303,7 +1303,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
 	}
 #endif
 
-	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == _FALSE) {
+	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == false) {
 		RT_TRACE(_module_mp_, _drv_warning_, ("mp_query_psd: Fail! not in MP mode!\n"));
 		return 0;
 	}
@@ -1405,7 +1405,7 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 
 		pxmitbuf->priv_data = NULL;
 		pxmitbuf->padapter = padapter;
-		pxmitbuf->ext_tag = _TRUE;
+		pxmitbuf->ext_tag = true;
 
 /*
 		pxmitbuf->pallocated_buf = rtw_zmalloc(max_xmit_extbuf_size);

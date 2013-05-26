@@ -91,16 +91,16 @@ hal_com_get_channel_plan(
 	u8 swConfig;
 	u8 chnlPlan;
 
-	swConfig = _TRUE;
+	swConfig = true;
 	if (!AutoLoadFail)
 	{
 		if (!rtw_is_channel_plan_valid(sw_channel_plan))
-			swConfig = _FALSE;
+			swConfig = false;
 		if (hw_channel_plan & EEPROM_CHANNEL_PLAN_BY_HW_MASK)
-			swConfig = _FALSE;
+			swConfig = false;
 	}
 
-	if (swConfig == _TRUE)
+	if (swConfig == true)
 		chnlPlan = sw_channel_plan;
 	else
 		chnlPlan = hw_channel_plan & (~EEPROM_CHANNEL_PLAN_BY_HW_MASK);
@@ -296,9 +296,9 @@ Hal_MappingOutPipe(
 {
 	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
 
-	bool	 bWIFICfg = (pregistrypriv->wifi_spec) ?_TRUE:_FALSE;
+	bool	 bWIFICfg = (pregistrypriv->wifi_spec) ?true:false;
 
-	bool result = _TRUE;
+	bool result = true;
 
 	switch (NumOutPipe)
 	{
@@ -312,7 +312,7 @@ Hal_MappingOutPipe(
 			_OneOutPipeMapping(pAdapter);
 			break;
 		default:
-			result = _FALSE;
+			result = false;
 			break;
 	}
 

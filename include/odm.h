@@ -1415,8 +1415,8 @@ typedef enum tag_DIG_Connect_Definition
 #define		DM_SCAN_RSSI_TH				0x14 //scan return issue for LC
 
 
-#define		DM_FALSEALARM_THRESH_LOW	400
-#define		DM_FALSEALARM_THRESH_HIGH	1000
+#define		DM_FALSE_ALARM_THRESH_LOW	400
+#define		DM_FALSE_ALARM_THRESH_HIGH	1000
 
 #define		DM_DIG_MAX_NIC				0x3e
 #define		DM_DIG_MIN_NIC				0x1e //0x22//0x1c

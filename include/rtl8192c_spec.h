@@ -556,8 +556,8 @@ Default: 00b.
 #define	TOTAL_CAM_ENTRY			32
 #define	HALF_CAM_ENTRY			16
 
-#define	CAM_CONFIG_USEDK			_TRUE
-#define	CAM_CONFIG_NO_USEDK		_FALSE
+#define	CAM_CONFIG_USEDK			true
+#define	CAM_CONFIG_NO_USEDK		false
 
 #define	CAM_WRITE					BIT16
 #define	CAM_READ					0x00000000

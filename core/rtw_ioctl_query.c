@@ -71,13 +71,13 @@ query_802_11_capability(
 	{
 		_rtw_memcpy( pucAuthEncryptionSupported, (u8*)szAuthEnc,  sizeof (szAuthEnc) );
 		*pulOutLen = pCap->Length;
-		return _TRUE;
+		return true;
 	}
 	else
 	{
 		*pulOutLen = 0;
 		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("_query_802_11_capability(): szAuthEnc size is too large.\n"));
-		return _FALSE;
+		return false;
 	}
 }
 
@@ -107,7 +107,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 
 	pAssocInfo->OffsetRequestIEs = sizeof(NDIS_802_11_ASSOCIATION_INFORMATION);
 
-	if (check_fwstate( pmlmepriv, _FW_UNDER_LINKING|_FW_LINKED)==_TRUE)
+	if (check_fwstate( pmlmepriv, _FW_UNDER_LINKING|_FW_LINKED)==true)
 	{
 
 		if (psecuritypriv->ndisauthtype>=Ndis802_11AuthModeWPA2)
@@ -155,7 +155,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 	// Association Response related information
 	//------------------------------------------------------
 
-	if (check_fwstate( pmlmepriv, _FW_LINKED)==_TRUE)
+	if (check_fwstate( pmlmepriv, _FW_LINKED)==true)
 	{
 		tgt_network =&(pmlmepriv->cur_network);
 		if (tgt_network!=NULL){
@@ -190,6 +190,6 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 	RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n exit query_802_11_association_information\n"));
 _func_exit_;
 
-	return _TRUE;
+	return true;
 }
 #endif

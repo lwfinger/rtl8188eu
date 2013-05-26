@@ -88,7 +88,7 @@ sic_IsSICReady(
 		PADAPTER	Adapter
 	)
 {
-	bool		bRet=_FALSE;
+	bool		bRet=false;
 	u32		retryCnt=0;
 	u8		sic_cmd=0xff;
 
@@ -97,11 +97,11 @@ sic_IsSICReady(
 		if (retryCnt++ >= SIC_MAX_POLL_CNT)
 		{
 			//RTPRINT(FPHY, (PHY_SICR|PHY_SICW), ("[SIC], sic_IsSICReady() return FALSE\n"));
-			return _FALSE;
+			return false;
 		}
 
 		//if (RT_SDIO_CANNOT_IO(Adapter))
-		//	return _FALSE;
+		//	return false;
 
 		sic_cmd = rtw_read8(Adapter, SIC_CMD_REG);
 		//sic_cmd = PlatformEFIORead1Byte(Adapter, SIC_CMD_REG);
@@ -110,7 +110,7 @@ sic_IsSICReady(
 #endif
 		//RTPRINT(FPHY, (PHY_SICR|PHY_SICW), ("[SIC], sic_IsSICReady(), readback 0x%x=0x%x\n", SIC_CMD_REG, sic_cmd));
 		if (sic_cmd == SIC_CMD_READY)
-			return _TRUE;
+			return true;
 		else
 		{
 			rtw_msleep_os(1);
@@ -252,7 +252,7 @@ SIC_SetBBReg(
 
 	//RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_SetBBReg() start\n"));
 /*
-	while (PlatformAtomicExchange(&pHalData->bChangeBBInProgress, _TRUE) == _TRUE)
+	while (PlatformAtomicExchange(&pHalData->bChangeBBInProgress, true) == true)
 	{
 		BBWaitCounter ++;
 		delay_ms(10); // 1 ms
@@ -279,7 +279,7 @@ SIC_SetBBReg(
 
 	sic_Write4Byte(Adapter, RegAddr, Data);
 
-	//PlatformAtomicExchange(&pHalData->bChangeBBInProgress, _FALSE);
+	//PlatformAtomicExchange(&pHalData->bChangeBBInProgress, false);
 	//RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_SetBBReg() end\n"));
 }
 
@@ -297,7 +297,7 @@ SIC_QueryBBReg(
 	//RTPRINT(FPHY, PHY_SICR, ("[SIC], SIC_QueryBBReg() start\n"));
 
 /*
-	while (PlatformAtomicExchange(&pHalData->bChangeBBInProgress, _TRUE) == _TRUE)
+	while (PlatformAtomicExchange(&pHalData->bChangeBBInProgress, true) == true)
 	{
 		BBWaitCounter ++;
 		delay_ms(10); // 10 ms
@@ -317,7 +317,7 @@ SIC_QueryBBReg(
 	//RTPRINT(FPHY, PHY_SICR, ("[SIC], SIC_QueryBBReg(), 0x%x=0x%x\n", RegAddr, OriginalValue));
 	//RTPRINT(FPHY, PHY_SICR, ("[SIC], SIC_QueryBBReg() end\n"));
 
-	//PlatformAtomicExchange(&pHalData->bChangeBBInProgress, _FALSE);
+	//PlatformAtomicExchange(&pHalData->bChangeBBInProgress, false);
 	return (ReturnValue);
 }
 
@@ -354,7 +354,7 @@ SIC_LedOff(
 {
 	// When SIC is enabled, led pin will be used as debug pin,
 	// so don't execute led function when SIC is enabled.
-	return _TRUE;
+	return true;
 }
 #endif
 
@@ -1523,7 +1523,7 @@ phy_BB8188E_Config_ParaFile(
 	//
 	// 2. If EEPROM or EFUSE autoload OK, We must config by PHY_REG_PG.txt
 	//
-	if (pEEPROM->bautoload_fail_flag == _FALSE)
+	if (pEEPROM->bautoload_fail_flag == false)
 	{
 		pHalData->pwrGroupCnt = 0;
 
@@ -2367,7 +2367,7 @@ PHY_UpdateTxPowerDbm8188E(
 
 	//Adapter->HalFunc.SetTxPowerLevelHandler(Adapter, pHalData->CurrentChannel);//gtest:todo
 
-	return _TRUE;
+	return true;
 }
 
 
@@ -2637,10 +2637,10 @@ PHY_SwChnl8188E(	// Call after initialization
 		u8		channel
 	)
 {
-	//PADAPTER Adapter =  ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, _TRUE);
+	//PADAPTER Adapter =  ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, true);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	tmpchannel = pHalData->CurrentChannel;
-	bool  bResult = _TRUE;
+	bool  bResult = true;
 
 	if (pHalData->rf_chip == RF_PSEUDO_11N)
 	{
@@ -2714,7 +2714,7 @@ phy_SwChnlStepByStep(
 	OUT u32		*delay
 	)
 {
-	return _TRUE;
+	return true;
 }
 
 
@@ -2732,9 +2732,9 @@ phy_SetSwChnlCmdArray(
 	SwChnlCmd* pCmd;
 
 	if (CmdTable == NULL)
-		return _FALSE;
+		return false;
 	if (CmdTableIdx >= CmdTableSz)
-		return _FALSE;
+		return false;
 
 	pCmd = CmdTable + CmdTableIdx;
 	pCmd->CmdID = CmdID;
@@ -2742,7 +2742,7 @@ phy_SetSwChnlCmdArray(
 	pCmd->Para2 = Para2;
 	pCmd->msDelay = msDelay;
 
-	return _TRUE;
+	return true;
 }
 
 
@@ -2841,7 +2841,7 @@ PHY_CheckIsLegalRfPath8192C(
 		u32	eRFPath)
 {
 //	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	bool				rtValue = _TRUE;
+	bool				rtValue = true;
 
 	// NOt check RF Path now.!
 	return	rtValue;
@@ -2890,7 +2890,7 @@ static bool _PHY_QueryRFPathSwitch(
 	)
 {
 //	if (is2T)
-//		return _TRUE;
+//		return true;
 
 	if (!pAdapter->hw_init_completed)
 	{
@@ -2901,16 +2901,16 @@ static bool _PHY_QueryRFPathSwitch(
 	if (is2T)
 	{
 		if (PHY_QueryBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT5|BIT6) == 0x01)
-			return _TRUE;
+			return true;
 		else
-			return _FALSE;
+			return false;
 	}
 	else
 	{
 		if (PHY_QueryBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300) == 0x02)
-			return _TRUE;
+			return true;
 		else
-			return _FALSE;
+			return false;
 	}
 }
 
