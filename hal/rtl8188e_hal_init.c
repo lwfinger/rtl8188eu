@@ -38,21 +38,16 @@ static void iol_mode_enable(PADAPTER padapter, u8 enable)
 	{
 		//Enable initial offload
 		reg_0xf0 = rtw_read8(padapter, REG_SYS_CFG);
-		//DBG_88E("%s reg_0xf0:0x%02x, write 0x%02x\n", __func__, reg_0xf0, reg_0xf0|SW_OFFLOAD_EN);
 		rtw_write8(padapter, REG_SYS_CFG, reg_0xf0|SW_OFFLOAD_EN);
 
-		if (padapter->bFWReady == false)
-		{
-			printk("bFWReady == false call reset 8051...\n");
+		if (padapter->bFWReady == false) {
+			DBG_88E("bFWReady == false call reset 8051...\n");
 			_8051Reset88E(padapter);
 		}
 
-	}
-	else
-	{
+	} else {
 		//disable initial offload
 		reg_0xf0 = rtw_read8(padapter, REG_SYS_CFG);
-		//DBG_88E("%s reg_0xf0:0x%02x, write 0x%02x\n", __func__, reg_0xf0, reg_0xf0& ~SW_OFFLOAD_EN);
 		rtw_write8(padapter, REG_SYS_CFG, reg_0xf0 & ~SW_OFFLOAD_EN);
 	}
 }
@@ -62,21 +57,15 @@ static s32 iol_execute(PADAPTER padapter, u8 control)
 	s32 status = _FAIL;
 	u8 reg_0x88 = 0,reg_1c7=0;
 	u32 start = 0, passing_time = 0;
-
 	u32 t1,t2;
+
 	control = control&0x0f;
 	reg_0x88 = rtw_read8(padapter, REG_HMEBOX_E0);
-	//DBG_88E("%s reg_0x88:0x%02x, write 0x%02x\n", __func__, reg_0x88, reg_0x88|control);
 	rtw_write8(padapter, REG_HMEBOX_E0,  reg_0x88|control);
 
 	t1 = start = rtw_get_current_time();
-	while (
-		//(reg_1c7 = rtw_read8(padapter, 0x1c7) >1) &&
-		(reg_0x88=rtw_read8(padapter, REG_HMEBOX_E0)) & control
-		&& (passing_time=rtw_get_passing_time_ms(start))<1000
-	) {
-		//DBG_88E("%s polling reg_0x88:0x%02x,reg_0x1c7:0x%02x\n", __func__, reg_0x88,rtw_read8(padapter, 0x1c7) );
-		//rtw_udelay_os(100);
+	while ((reg_0x88=rtw_read8(padapter, REG_HMEBOX_E0)) & control &&
+	       (passing_time=rtw_get_passing_time_ms(start))<1000) {
 	}
 
 	reg_0x88 = rtw_read8(padapter, REG_HMEBOX_E0);
@@ -84,9 +73,6 @@ static s32 iol_execute(PADAPTER padapter, u8 control)
 	if (reg_0x88 & control<<4)
 		status = _FAIL;
 	t2= rtw_get_current_time();
-	//printk("==> step iol_execute :  %5u reg-0x1c0= 0x%02x\n",rtw_get_time_interval_ms(t1,t2),rtw_read8(padapter, 0x1c0));
-	//DBG_88E("%s in %u ms, reg_0x88:0x%02x\n", __func__, passing_time, reg_0x88);
-
 	return status;
 }
 
@@ -97,7 +83,6 @@ static s32 iol_InitLLTTable(
 {
 	s32 rst = _SUCCESS;
 	iol_mode_enable(padapter, 1);
-	//DBG_88E("%s txpktbuf_bndy:%u\n", __func__, txpktbuf_bndy);
 	rtw_write8(padapter, REG_TDECTRL+1, txpktbuf_bndy);
 	rst = iol_execute(padapter, CMD_INIT_LLT);
 	iol_mode_enable(padapter, 0);
@@ -117,17 +102,14 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	u8	efuse_usage = 0;
 	u8	u1temp = 0;
 
-
 	efuseTbl = (u8*)rtw_zmalloc(EFUSE_MAP_LEN_88E);
-	if (efuseTbl == NULL)
-	{
+	if (efuseTbl == NULL) {
 		DBG_88E("%s: alloc efuseTbl fail!\n", __func__);
 		goto exit;
 	}
 
 	eFuseWord= (u16 **)rtw_malloc2d(EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
-	if (eFuseWord == NULL)
-	{
+	if (eFuseWord == NULL) {
 		DBG_88E("%s: alloc eFuseWord fail!\n", __func__);
 		goto exit;
 	}
@@ -142,106 +124,65 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	//
 	//
 	rtemp8 = *(phymap+eFuse_Addr);
-	if (rtemp8 != 0xFF)
-	{
+	if (rtemp8 != 0xFF) {
 		efuse_utilized++;
-		//printk("efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, *rtemp8);
 		eFuse_Addr++;
-	}
-	else
-	{
+	} else {
 		DBG_88E("EFUSE is empty efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, rtemp8);
 		goto exit;
 	}
 
-
 	//
 	// 2. Read real efuse content. Filter PG header and every section data.
 	//
-	while ((rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E))
-	{
-		//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("efuse_Addr-%d efuse_data=%x\n", eFuse_Addr-1, *rtemp8));
-
+	while ((rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E)) {
 		// Check PG header for section num.
-		if ((rtemp8 & 0x1F ) == 0x0F)		//extended header
-		{
+		if ((rtemp8 & 0x1F ) == 0x0F) {		//extended header
 			u1temp =( (rtemp8 & 0xE0) >> 5);
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x *rtemp&0xE0 0x%x\n", u1temp, *rtemp8 & 0xE0));
-
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header u1temp=%x\n", u1temp));
-
 			rtemp8 = *(phymap+eFuse_Addr);
-
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("extended header efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, *rtemp8));
-
-			if ((rtemp8 & 0x0F) == 0x0F)
-			{
+			if ((rtemp8 & 0x0F) == 0x0F) {
 				eFuse_Addr++;
 				rtemp8 = *(phymap+eFuse_Addr);
 
 				if (rtemp8 != 0xFF && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E))
-				{
 					eFuse_Addr++;
-				}
 				continue;
-			}
-			else
-			{
+			} else {
 				offset = ((rtemp8 & 0xF0) >> 1) | u1temp;
 				wren = (rtemp8 & 0x0F);
 				eFuse_Addr++;
 			}
-		}
-		else
-		{
+		} else {
 			offset = ((rtemp8 >> 4) & 0x0f);
 			wren = (rtemp8 & 0x0f);
 		}
 
-		if (offset < EFUSE_MAX_SECTION_88E)
-		{
+		if (offset < EFUSE_MAX_SECTION_88E) {
 			// Get word enable value from PG header
-			//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Offset-%d Worden=%x\n", offset, wren));
-
-			for (i=0; i<EFUSE_MAX_WORD_UNIT; i++)
-			{
+			for (i=0; i<EFUSE_MAX_WORD_UNIT; i++) {
 				// Check word enable condition in the section
-				if (!(wren & 0x01))
-				{
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d\n", eFuse_Addr));
+				if (!(wren & 0x01)) {
 					rtemp8 = *(phymap+eFuse_Addr);
 					eFuse_Addr++;
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8));
 					efuse_utilized++;
 					eFuseWord[offset][i] = (rtemp8 & 0xff);
-
-
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
-
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d", eFuse_Addr));
 					rtemp8 = *(phymap+eFuse_Addr);
 					eFuse_Addr++;
-					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8));
-
 					efuse_utilized++;
 					eFuseWord[offset][i] |= (((u2Byte)rtemp8 << 8) & 0xff00);
 
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
 				}
-
 				wren >>= 1;
-
 			}
 		}
-
 		// Read next PG header
 		rtemp8 = *(phymap+eFuse_Addr);
-		//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Addr=%d rtemp 0x%x\n", eFuse_Addr, *rtemp8));
 
-		if (rtemp8 != 0xFF && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E))
-		{
+		if (rtemp8 != 0xFF && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E)) {
 			efuse_utilized++;
 			eFuse_Addr++;
 		}
@@ -250,29 +191,23 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	//
 	// 3. Collect 16 sections and 4 word unit into Efuse map.
 	//
-	for (i=0; i<EFUSE_MAX_SECTION_88E; i++)
-	{
-		for (j=0; j<EFUSE_MAX_WORD_UNIT; j++)
-		{
+	for (i=0; i<EFUSE_MAX_SECTION_88E; i++) {
+		for (j=0; j<EFUSE_MAX_WORD_UNIT; j++) {
 			efuseTbl[(i*8)+(j*2)]=(eFuseWord[i][j] & 0xff);
 			efuseTbl[(i*8)+((j*2)+1)]=((eFuseWord[i][j] >> 8) & 0xff);
 		}
 	}
 
-
 	//
 	// 4. Copy from Efuse map to output pointer memory!!!
 	//
 	for (i=0; i<_size_byte; i++)
-	{
 		pbuf[i] = efuseTbl[_offset+i];
-	}
 
 	//
 	// 5. Calculate Efuse utilization.
 	//
 	efuse_usage = (u1Byte)((efuse_utilized*100)/EFUSE_REAL_CONTENT_LEN_88E);
-	//Adapter->HalFunc.SetHwRegHandler(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&efuse_utilized);
 
 exit:
 	if (efuseTbl)
@@ -305,29 +240,20 @@ void efuse_read_phymap_from_txpktbuf(
 
 	DBG_88E("%s bcnhead:%d\n", __func__, bcnhead);
 
-	//reg_0x106 = rtw_read8(adapter, REG_PKT_BUFF_ACCESS_CTRL);
-	//DBG_88E("%s reg_0x106:0x%02x, write 0x%02x\n", __func__, reg_0x106, 0x69);
 	rtw_write8(adapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
-	//DBG_88E("%s reg_0x106:0x%02x\n", __func__, rtw_read8(adapter, 0x106));
 
 	dbg_addr = bcnhead*128/8; //8-bytes addressing
 
-	while (1)
-	{
-		//DBG_88E("%s dbg_addr:0x%x\n", __func__, dbg_addr+i);
+	while (1) {
 		rtw_write16(adapter, REG_PKTBUF_DBG_ADDR, dbg_addr+i);
 
-		//DBG_88E("%s write reg_0x143:0x00\n", __func__);
 		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
 		start = rtw_get_current_time();
-		while (!(reg_0x143=rtw_read8(adapter, REG_TXPKTBUF_DBG))//dbg
-		//while (rtw_read8(adapter, REG_TXPKTBUF_DBG) & BIT0
-			&& (passing_time=rtw_get_passing_time_ms(start))<1000
-		) {
+		while (!(reg_0x143=rtw_read8(adapter, REG_TXPKTBUF_DBG)) &&
+		       (passing_time=rtw_get_passing_time_ms(start))<1000) {
 			DBG_88E("%s polling reg_0x143:0x%02x, reg_0x106:0x%02x\n", __func__, reg_0x143, rtw_read8(adapter, 0x106));
 			rtw_usleep_os(100);
 		}
-
 
 		lo32 = rtw_read32(adapter, REG_PKTBUF_DBG_DATA_L);
 		hi32 = rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H);
@@ -356,8 +282,6 @@ void efuse_read_phymap_from_txpktbuf(
 			_rtw_memcpy(pos, ((u8*)&lo32), (limit>=count+4)?4:limit-count);
 			count+=(limit>=count+4)?4:limit-count;
 			pos=content+count;
-
-
 		}
 
 		if (limit>count && len-2>count) {
@@ -368,17 +292,12 @@ void efuse_read_phymap_from_txpktbuf(
 
 		if (limit<=count || len-2<=count)
 			break;
-
 		i++;
 	}
-
 	rtw_write8(adapter, REG_PKT_BUFF_ACCESS_CTRL, DISABLE_TRXPKT_BUF_ACCESS);
-
 	DBG_88E("%s read count:%u\n", __func__, count);
 	*size = count;
-
 }
-
 
 static s32 iol_read_efuse(
 	PADAPTER padapter,
@@ -394,30 +313,21 @@ static s32 iol_read_efuse(
 	u16 size = 512;
 	int i;
 
-
 	rtw_write8(padapter, REG_TDECTRL+1, txpktbuf_bndy);
 	_rtw_memset(physical_map, 0xFF, 512);
-
-	///reg_0x106 = rtw_read8(padapter, REG_PKT_BUFF_ACCESS_CTRL);
-	//DBG_88E("%s reg_0x106:0x%02x, write 0x%02x\n", __func__, reg_0x106, 0x69);
 	rtw_write8(padapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
-	//DBG_88E("%s reg_0x106:0x%02x\n", __func__, rtw_read8(padapter, 0x106));
-
 	status = iol_execute(padapter, CMD_READ_EFUSE_MAP);
-
 	if (status == _SUCCESS)
 		efuse_read_phymap_from_txpktbuf(padapter, txpktbuf_bndy, physical_map, &size);
-
 	efuse_phymap_to_logical(physical_map, offset, size_byte, logical_map);
-
 	return status;
 }
 
 s32 rtl8188e_iol_efuse_patch(PADAPTER padapter)
 {
 	s32	result = _SUCCESS;
-	DBG_88E("==> %s\n",__func__);
 
+	DBG_88E("==> %s\n",__func__);
 	if (rtw_IOL_applied(padapter)){
 		iol_mode_enable(padapter, 1);
 		result = iol_execute(padapter, CMD_READ_EFUSE_MAP);
@@ -436,7 +346,6 @@ static s32 iol_ioconfig(
 {
 	s32 rst = _SUCCESS;
 
-	//DBG_88E("%s iocfg_bndy:%u\n", __func__, iocfg_bndy);
 	rtw_write8(padapter, REG_TDECTRL+1, iocfg_bndy);
 	rst = iol_execute(padapter, CMD_IOCONFIG);
 
@@ -452,10 +361,8 @@ int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame,
 	int ret = _FAIL;
 	u32 t1,t2;
 
-	//printk("===> %s ,bndy_cnt = %d\n",__func__,bndy_cnt);
 	if (rtw_IOL_append_END_cmd(xmit_frame) != _SUCCESS)
 		goto exit;
-#ifdef CONFIG_USB_HCI
 	{
 		struct pkt_attrib	*pattrib = &xmit_frame->attrib;
 		if (rtw_usb_bulk_size_boundary(adapter,TXDESC_SIZE+pattrib->last_txcmdsz))
@@ -464,11 +371,6 @@ int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame,
 				goto exit;
 		}
 	}
-#endif //CONFIG_USB_HCI
-
-	//rtw_IOL_cmd_buf_dump(adapter,xmit_frame->attrib.pktlen+TXDESC_OFFSET,xmit_frame->buf_addr);
-	//rtw_hal_mgnt_xmit(adapter, xmit_frame);
-	//rtw_dump_xframe_sync(adapter, xmit_frame);
 
 	dump_mgntframe_and_wait(adapter, xmit_frame, max_wating_ms);
 
@@ -477,15 +379,11 @@ int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame,
 	for (i=0;i<bndy_cnt;i++){
 		u8 page_no = 0;
 		page_no = i*2 ;
-		//printk(" i = %d, page_no = %d\n",i,page_no);
 		if ( (ret = iol_ioconfig(adapter, page_no)) != _SUCCESS)
-		{
 			break;
-		}
 	}
 	iol_mode_enable(adapter, 0);
 	t2 = rtw_get_current_time();
-	//printk("==> %s :  %5u\n",__func__,rtw_get_time_interval_ms(t1,t2));
 exit:
 	//restore BCN_HEAD
 	rtw_write8(adapter, REG_TDECTRL+1, 0);
@@ -496,54 +394,40 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(ADAPTER *Adapter,int data_len)
 {
 	u32 fifo_data,reg_140;
 	u32 addr,rstatus,loop=0;
-
 	u16 data_cnts = (data_len/8)+1;
 	u8 *pbuf =rtw_zvmalloc(data_len+10);
-	printk("###### %s ######\n",__func__);
+	DBG_88E("###### %s ######\n",__func__);
 
 	rtw_write8(Adapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
 	if (pbuf){
 		for (addr=0;addr< data_cnts;addr++){
-			//printk("==> addr:0x%02x\n",addr);
 			rtw_write32(Adapter,0x140,addr);
 			rtw_usleep_os(2);
 			loop=0;
 			do{
 				rstatus=(reg_140=rtw_read32(Adapter,REG_PKTBUF_DBG_CTRL)&BIT24);
-				//printk("rstatus = %02x, reg_140:0x%08x\n",rstatus,reg_140);
 				if (rstatus){
 					fifo_data = rtw_read32(Adapter,REG_PKTBUF_DBG_DATA_L);
-					//printk("fifo_data_144:0x%08x\n",fifo_data);
 					_rtw_memcpy(pbuf+(addr*8),&fifo_data , 4);
 
 					fifo_data = rtw_read32(Adapter,REG_PKTBUF_DBG_DATA_H);
-					//printk("fifo_data_148:0x%08x\n",fifo_data);
 					_rtw_memcpy(pbuf+(addr*8+4), &fifo_data, 4);
-
 				}
 				rtw_usleep_os(2);
 			}while ( !rstatus && (loop++ <10));
 		}
 		rtw_IOL_cmd_buf_dump(Adapter,data_len,pbuf);
 		rtw_vmfree(pbuf, data_len+10);
-
 	}
-	printk("###### %s ######\n",__func__);
+	DBG_88E("###### %s ######\n",__func__);
 }
-
 #endif /* defined(CONFIG_IOL) */
 
-
-static void
-_FWDownloadEnable(
-		PADAPTER		padapter,
-		bool			enable
-	)
+static void _FWDownloadEnable(PADAPTER padapter, bool enable)
 {
 	u8	tmp;
 
-	if (enable)
-	{
+	if (enable) {
 		// MCU firmware download enable.
 		tmp = rtw_read8(padapter, REG_MCUFWDL);
 		rtw_write8(padapter, REG_MCUFWDL, tmp|0x01);
@@ -551,10 +435,7 @@ _FWDownloadEnable(
 		// 8051 reset
 		tmp = rtw_read8(padapter, REG_MCUFWDL+2);
 		rtw_write8(padapter, REG_MCUFWDL+2, tmp&0xf7);
-	}
-	else
-	{
-
+	} else {
 		// MCU firmware download disable.
 		tmp = rtw_read8(padapter, REG_MCUFWDL);
 		rtw_write8(padapter, REG_MCUFWDL, tmp&0xfe);
@@ -563,31 +444,21 @@ _FWDownloadEnable(
 		rtw_write8(padapter, REG_MCUFWDL+1, 0x00);
 	}
 }
+
 #define MAX_REG_BOLCK_SIZE	196
-static int
-_BlockWrite(
-			PADAPTER		padapter,
-			void *		buffer,
-			u32			buffSize
-	)
+
+static int _BlockWrite(PADAPTER padapter, void *buffer, u32 buffSize)
 {
 	int ret = _SUCCESS;
+	u32	blockSize_p1 = 4;	// (Default) Phase #1 : PCI muse use 4-byte write to download FW
+	u32	blockSize_p2 = 8;	// Phase #2 : Use 8-byte, if Phase#1 use big size to write FW.
+	u32	blockSize_p3 = 1;	// Phase #3 : Use 1-byte, the remnant of FW image.
+	u32	blockCount_p1 = 0, blockCount_p2 = 0, blockCount_p3 = 0;
+	u32	remainSize_p1 = 0, remainSize_p2 = 0;
+	u8	*bufferPtr	= (u8*)buffer;
+	u32	i=0, offset=0;
 
-	u32			blockSize_p1 = 4;	// (Default) Phase #1 : PCI muse use 4-byte write to download FW
-	u32			blockSize_p2 = 8;	// Phase #2 : Use 8-byte, if Phase#1 use big size to write FW.
-	u32			blockSize_p3 = 1;	// Phase #3 : Use 1-byte, the remnant of FW image.
-	u32			blockCount_p1 = 0, blockCount_p2 = 0, blockCount_p3 = 0;
-	u32			remainSize_p1 = 0, remainSize_p2 = 0;
-	u8			*bufferPtr	= (u8*)buffer;
-	u32			i=0, offset=0;
-#ifdef CONFIG_PCI_HCI
-	u8			remainFW[4] = {0, 0, 0, 0};
-	u8			*p = NULL;
-#endif
-
-#ifdef CONFIG_USB_HCI
 	blockSize_p1 = MAX_REG_BOLCK_SIZE;
-#endif
 
 	//3 Phase #1
 	blockCount_p1 = buffSize / blockSize_p1;
@@ -595,40 +466,15 @@ _BlockWrite(
 
 	if (blockCount_p1) {
 		RT_TRACE(_module_hal_init_c_, _drv_notice_,
-				("_BlockWrite: [P1] buffSize(%d) blockSize_p1(%d) blockCount_p1(%d) remainSize_p1(%d)\n",
-				buffSize, blockSize_p1, blockCount_p1, remainSize_p1));
+			("_BlockWrite: [P1] buffSize(%d) blockSize_p1(%d) blockCount_p1(%d) remainSize_p1(%d)\n",
+			buffSize, blockSize_p1, blockCount_p1, remainSize_p1));
 	}
 
-	for (i = 0; i < blockCount_p1; i++)
-	{
-#ifdef CONFIG_USB_HCI
+	for (i = 0; i < blockCount_p1; i++) {
 		ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + i * blockSize_p1), blockSize_p1, (bufferPtr + i * blockSize_p1));
-#else
-		ret = rtw_write32(padapter, (FW_8188E_START_ADDRESS + i * blockSize_p1), le32_to_cpu(*((u32*)(bufferPtr + i * blockSize_p1))));
-#endif
-
 		if (ret == _FAIL)
 			goto exit;
 	}
-
-#ifdef CONFIG_PCI_HCI
-	p = (u8*)((u32*)(bufferPtr + blockCount_p1 * blockSize_p1));
-	if (remainSize_p1) {
-		switch (remainSize_p1) {
-		case 0:
-			break;
-		case 3:
-			remainFW[2]=*(p+2);
-		case 2:
-			remainFW[1]=*(p+1);
-		case 1:
-			remainFW[0]=*(p);
-			ret = rtw_write32(padapter, (FW_8188E_START_ADDRESS + blockCount_p1 * blockSize_p1),
-				 le32_to_cpu(*(u32*)remainFW));
-		}
-		return ret;
-	}
-#endif
 
 	//3 Phase #2
 	if (remainSize_p1)
@@ -644,19 +490,16 @@ _BlockWrite(
 						(buffSize-offset), blockSize_p2 ,blockCount_p2, remainSize_p2));
 		}
 
-#ifdef CONFIG_USB_HCI
 		for (i = 0; i < blockCount_p2; i++) {
 			ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + offset + i*blockSize_p2), blockSize_p2, (bufferPtr + offset + i*blockSize_p2));
 
 			if (ret == _FAIL)
 				goto exit;
 		}
-#endif
 	}
 
 	//3 Phase #3
-	if (remainSize_p2)
-	{
+	if (remainSize_p2) {
 		offset = (blockCount_p1 * blockSize_p1) + (blockCount_p2 * blockSize_p2);
 
 		blockCount_p3 = remainSize_p2 / blockSize_p3;
@@ -677,13 +520,7 @@ exit:
 	return ret;
 }
 
-static int
-_PageWrite(
-			PADAPTER	padapter,
-			u32			page,
-			void *		buffer,
-			u32			size
-	)
+static int _PageWrite(PADAPTER	padapter, u32 page, void *buffer, u32 size)
 {
 	u8 value8;
 	u8 u8Page = (u8) (page & 0x07) ;
@@ -694,18 +531,14 @@ _PageWrite(
 	return _BlockWrite(padapter,buffer,size);
 }
 
-static void
-_FillDummy(
-	u8*		pFwBuf,
-	u32*	pFwLen
-	)
+static void _FillDummy(u8 *pFwBuf, u32 *pFwLen)
 {
 	u32	FwLen = *pFwLen;
 	u8	remain = (u8)(FwLen%4);
-	remain = (remain==0)?0:(4-remain);
 
-	while (remain>0)
-	{
+	remain = (remain == 0) ? 0 : (4 - remain);
+
+	while (remain > 0) {
 		pFwBuf[FwLen] = 0;
 		FwLen++;
 		remain--;
@@ -714,28 +547,16 @@ _FillDummy(
 	*pFwLen = FwLen;
 }
 
-static int
-_WriteFW(
-			PADAPTER		padapter,
-			void *			buffer,
-			u32			size
-	)
+static int _WriteFW(PADAPTER padapter, void *buffer, u32 size)
 {
 	// Since we need dynamic decide method of dwonload fw, so we call this function to get chip version.
 	// We can remove _ReadChipVersion from ReadpadapterInfo8192C later.
 	int ret = _SUCCESS;
 	u32	pageNums,remainSize ;
 	u32	page, offset;
-	u8		*bufferPtr = (u8*)buffer;
-
-#ifdef CONFIG_PCI_HCI
-	// 20100120 Joseph: Add for 88CE normal chip.
-	// Fill in zero to make firmware image to dword alignment.
-//		_FillDummy(bufferPtr, &size);
-#endif
+	u8	*bufferPtr = (u8 *)buffer;
 
 	pageNums = size / MAX_PAGE_SIZE ;
-	//RT_ASSERT((pageNums <= 4), ("Page numbers should not greater then 4\n"));
 	remainSize = size % MAX_PAGE_SIZE;
 
 	for (page = 0; page < pageNums; page++) {
@@ -752,10 +573,8 @@ _WriteFW(
 
 		if (ret == _FAIL)
 			goto exit;
-
 	}
 	RT_TRACE(_module_hal_init_c_, _drv_info_, ("_WriteFW Done- for Normal chip.\n"));
-
 exit:
 	return ret;
 }
@@ -768,7 +587,6 @@ void _8051Reset88E(PADAPTER padapter)
 	rtw_write8(padapter, REG_SYS_FUNC_EN+1, u1bTmp&(~BIT2));
 	rtw_write8(padapter, REG_SYS_FUNC_EN+1, u1bTmp|(BIT2));
 	DBG_88E("=====> _8051Reset88E(): 8051 reset success .\n");
-
 }
 
 static s32 _FWFreeToGo(PADAPTER padapter)
@@ -788,7 +606,6 @@ static s32 _FWFreeToGo(PADAPTER padapter)
 		return _FAIL;
 	}
 	DBG_88E("%s: Checksum report OK! REG_MCUFWDL:0x%08x\n", __func__, value32);
-
 
 	value32 = rtw_read32(padapter, REG_MCUFWDL);
 	value32 |= MCUFWDL_RDY;
@@ -813,7 +630,6 @@ static s32 _FWFreeToGo(PADAPTER padapter)
 }
 
 #define IS_FW_81xxC(padapter)	(((GET_HAL_DATA(padapter))->FirmwareSignature & 0xFFF0) == 0x88C0)
-
 
 #ifdef CONFIG_FILE_FWIMG
 extern char *rtw_fw_file_path;
