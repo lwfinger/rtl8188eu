@@ -323,12 +323,6 @@ extern u32 GlobalDebugLevel;
 
 #endif
 
-#ifdef DBG_MEMORY_LEAK
-	int proc_get_malloc_cnt(char *page, char **start,
-			  off_t offset, int count,
-			  int *eof, void *data);
-#endif
-
 #ifdef CONFIG_FIND_BEST_CHANNEL
 	int proc_get_best_channel(char *page, char **start,
 			  off_t offset, int count,

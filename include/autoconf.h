@@ -391,8 +391,6 @@
 
 //#define DBG_HAL_INIT_PROFILING
 
-//#define DBG_MEMORY_LEAK
-
 //TX use 1 urb
 //#define CONFIG_SINGLE_XMIT_BUF
 //RX use 1 urb

@@ -1028,26 +1028,6 @@ int proc_get_all_sta_info(char *page, char **start,
 
 #endif
 
-#ifdef DBG_MEMORY_LEAK
-#include <asm/atomic.h>
-extern atomic_t _malloc_cnt;;
-extern atomic_t _malloc_size;;
-
-int proc_get_malloc_cnt(char *page, char **start,
-			  off_t offset, int count,
-			  int *eof, void *data)
-{
-
-	int len = 0;
-
-	len += snprintf(page + len, count - len, "_malloc_cnt=%d\n", atomic_read(&_malloc_cnt));
-	len += snprintf(page + len, count - len, "_malloc_size=%d\n", atomic_read(&_malloc_size));
-
-	*eof = 1;
-	return len;
-}
-#endif /* DBG_MEMORY_LEAK */
-
 #ifdef CONFIG_FIND_BEST_CHANNEL
 int proc_get_best_channel(char *page, char **start,
 			  off_t offset, int count,
