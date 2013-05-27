@@ -372,7 +372,7 @@ odm_CCKTXPathDiversityCallback(
 
 void
 odm_CCKTXPathDiversityWorkItemCallback(
-    IN void *            pContext
+    void *            pContext
     );
 
 void
@@ -382,7 +382,7 @@ odm_PathDivChkAntSwitchCallback(
 
 void
 odm_PathDivChkAntSwitchWorkitemCallback(
-    IN void *            pContext
+    void *            pContext
     );
 
 void	odm_SetRespPath_92C(			PADAPTER	Adapter,		u1Byte	DefaultRespPath);
@@ -397,7 +397,7 @@ void	odm_Write_RXHP(		PDM_ODM_T	pDM_Odm);
 
 void	odm_PSD_RXHP(			PDM_ODM_T	pDM_Odm);
 void	odm_PSD_RXHPCallback(	PRT_TIMER		pTimer);
-void	odm_PSD_RXHPWorkitemCallback(	IN void *            pContext);
+void	odm_PSD_RXHPWorkitemCallback(void *            pContext);
 //End--------------------- RX High Power -----------------------//
 
 void
@@ -531,7 +531,7 @@ odm_SwAntDivChkAntSwitchCallback(
 );
 void
 odm_SwAntDivChkAntSwitchWorkitemCallback(
-    IN void *            pContext
+    void *            pContext
     );
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext);
@@ -604,17 +604,17 @@ ODM_RateAdaptiveStateApInit(
 
 void
 odm_TXPowerTrackingCallbackThermalMeter92C(
-            IN PADAPTER	Adapter
+            PADAPTER	Adapter
             );
 
 void
 odm_TXPowerTrackingCallbackRXGainThermalMeter92D(
-	IN PADAPTER	Adapter
+	PADAPTER	Adapter
 	);
 
 void
 odm_TXPowerTrackingCallbackThermalMeter92D(
-            IN PADAPTER	Adapter
+            PADAPTER	Adapter
             );
 
 void
@@ -690,24 +690,24 @@ odm_EdcaParaInit(
 
 void
 odm_InitHybridAntDiv(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 bool
 odm_StaDefAntSel(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u4Byte		OFDM_Ant1_Cnt,
-	IN u4Byte		OFDM_Ant2_Cnt,
-	IN u4Byte		CCK_Ant1_Cnt,
-	IN u4Byte		CCK_Ant2_Cnt,
-	OUT u1Byte		*pDefAnt
+	PDM_ODM_T	pDM_Odm,
+	u4Byte		OFDM_Ant1_Cnt,
+	u4Byte		OFDM_Ant2_Cnt,
+	u4Byte		CCK_Ant1_Cnt,
+	u4Byte		CCK_Ant2_Cnt,
+	u1Byte		*pDefAnt
 	);
 
 void
 odm_SetRxIdleAnt(
 		PDM_ODM_T	pDM_Odm,
 		u1Byte	Ant,
-	IN   bool   bDualPath
+	bool   bDualPath
 );
 
 
@@ -1345,7 +1345,7 @@ odm_CmnInfoUpdate_Debug(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 void
-ODM_InitAllWorkItems(IN PDM_ODM_T	pDM_Odm )
+ODM_InitAllWorkItems(PDM_ODM_T	pDM_Odm )
 {
 #if USE_WORKITEM
 	PADAPTER		pAdapter = pDM_Odm->Adapter;
@@ -1390,7 +1390,7 @@ ODM_InitAllWorkItems(IN PDM_ODM_T	pDM_Odm )
 }
 
 void
-ODM_FreeAllWorkItems(IN PDM_ODM_T	pDM_Odm )
+ODM_FreeAllWorkItems(PDM_ODM_T	pDM_Odm )
 {
 #if USE_WORKITEM
 	ODM_FreeWorkItem(	&(pDM_Odm->DM_SWAT_Table.SwAntennaSwitchWorkitem));
@@ -4304,7 +4304,7 @@ odm_RSSIMonitorCheckAP(
 
 void
 ODM_InitAllTimers(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	ODM_InitializeTimer(pDM_Odm,&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchTimer,
@@ -4339,7 +4339,7 @@ ODM_InitAllTimers(
 
 void
 ODM_CancelAllTimers(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
@@ -4373,7 +4373,7 @@ ODM_CancelAllTimers(
 
 void
 ODM_ReleaseAllTimers(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	ODM_ReleaseTimer(pDM_Odm,&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchTimer);
@@ -4767,7 +4767,7 @@ ODM_SwAntDivResetBeforeLink(
 //
 void
 ODM_SwAntDivRestAfterLink(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -4782,9 +4782,9 @@ ODM_SwAntDivRestAfterLink(
 
 void
 ODM_SwAntDivChkPerPktRssi(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u1Byte		StationID,
-	IN PODM_PHY_INFO_T pPhyInfo
+	PDM_ODM_T	pDM_Odm,
+	u1Byte		StationID,
+	PODM_PHY_INFO_T pPhyInfo
 	)
 {
 	SWAT_T		*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -5434,7 +5434,7 @@ odm_SwAntDivChkAntSwitchCallback(
 }
 void
 odm_SwAntDivChkAntSwitchWorkitemCallback(
-    IN void *            pContext
+    void *            pContext
     )
 {
 
@@ -5465,9 +5465,9 @@ void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
 
 void odm_SwAntDivInit(			PDM_ODM_T		pDM_Odm	) {}
 void ODM_SwAntDivChkPerPktRssi(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u1Byte		StationID,
-	IN PODM_PHY_INFO_T pPhyInfo
+	PDM_ODM_T	pDM_Odm,
+	u1Byte		StationID,
+	PODM_PHY_INFO_T pPhyInfo
 	) {}
 void odm_SwAntDivChkAntSwitch(
 			PDM_ODM_T		pDM_Odm,
@@ -5485,7 +5485,7 @@ odm_SwAntDivConsructChkScanChnl(
 #endif
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 void odm_SwAntDivChkAntSwitchCallback(	PRT_TIMER		pTimer){}
-void odm_SwAntDivChkAntSwitchWorkitemCallback(    IN void *            pContext    ){}
+void odm_SwAntDivChkAntSwitchWorkitemCallback(void *            pContext    ){}
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
 #elif (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -5722,7 +5722,7 @@ ODM_SwAntDivCheckBeforeLink8192C(
 #if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 void
 odm_InitHybridAntDiv_88C_92D(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 
@@ -5807,7 +5807,7 @@ odm_InitHybridAntDiv_88C_92D(
 
 void
 odm_InitHybridAntDiv(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	if (!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
@@ -5834,12 +5834,12 @@ odm_InitHybridAntDiv(
 
 bool
 odm_StaDefAntSel(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u4Byte		OFDM_Ant1_Cnt,
-	IN u4Byte		OFDM_Ant2_Cnt,
-	IN u4Byte		CCK_Ant1_Cnt,
-	IN u4Byte		CCK_Ant2_Cnt,
-	OUT u1Byte		*pDefAnt
+	PDM_ODM_T	pDM_Odm,
+	u4Byte		OFDM_Ant1_Cnt,
+	u4Byte		OFDM_Ant2_Cnt,
+	u4Byte		CCK_Ant1_Cnt,
+	u4Byte		CCK_Ant2_Cnt,
+	u1Byte		*pDefAnt
 
 	)
 {
@@ -5897,7 +5897,7 @@ void
 odm_SetRxIdleAnt(
 		PDM_ODM_T	pDM_Odm,
 		u1Byte	Ant,
-	IN   bool   bDualPath
+	bool   bDualPath
 )
 {
 	SWAT_T			*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -6242,7 +6242,7 @@ ODM_Diversity_AntennaSelect(
 
 #else //#if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 
-void odm_InitHybridAntDiv(	IN PDM_ODM_T	pDM_Odm		){}
+void odm_InitHybridAntDiv(	PDM_ODM_T	pDM_Odm		){}
 void odm_HwAntDiv(		PDM_ODM_T	pDM_Odm){}
 #if (DM_ODM_SUPPORT_TYPE==ODM_MP)
 void ODM_SetTxAntByTxInfo_88C_92D(
@@ -6265,7 +6265,7 @@ void ODM_SetTxAntByTxInfo_88C_92D(			PDM_ODM_T		pDM_Odm){ }
 //============================================================
 void
 ODM_EdcaTurboInit(
-	IN    PDM_ODM_T		pDM_Odm)
+	PDM_ODM_T		pDM_Odm)
 {
 
 #if ((DM_ODM_SUPPORT_TYPE == ODM_AP)||(DM_ODM_SUPPORT_TYPE==ODM_ADSL))
@@ -7739,7 +7739,7 @@ ODM_CheckPowerStatus(
 #if ((DM_ODM_SUPPORT_TYPE == ODM_MP)||(DM_ODM_SUPPORT_TYPE == ODM_CE))
 u4Byte
 GetPSDData(
-	IN PDM_ODM_T	pDM_Odm,
+	PDM_ODM_T	pDM_Odm,
 	unsigned int	point,
 	u1Byte initial_gain_psd)
 {
@@ -7864,7 +7864,7 @@ ConvertTo_dB(
 
 void
 odm_PSDMonitorInit(
-	IN PDM_ODM_T	pDM_Odm)
+	PDM_ODM_T	pDM_Odm)
 {
 #if (DEV_BUS_TYPE == RT_PCI_INTERFACE)|(DEV_BUS_TYPE == RT_USB_INTERFACE)
 	//HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -8712,7 +8712,7 @@ odm_PSDMonitorCallback(
 
 void
 odm_PSDMonitorWorkItemCallback(
-    IN void *            pContext
+    void *            pContext
     )
 {
 	PADAPTER	Adapter = (PADAPTER)pContext;
@@ -9482,7 +9482,7 @@ odm_PSD_RXHPCallback(
 
 void
 odm_PSD_RXHPWorkitemCallback(
-    IN void *            pContext
+    void *            pContext
     )
 {
 	PADAPTER	pAdapter = (PADAPTER)pContext;
@@ -9967,7 +9967,7 @@ odm_CCKTXPathDiversityCallback(
 
 void
 odm_CCKTXPathDiversityWorkItemCallback(
-    IN void *            pContext
+    void *            pContext
     )
 {
 	PADAPTER	Adapter = (PADAPTER)pContext;
@@ -10345,7 +10345,7 @@ odm_PathDivChkAntSwitchCallback(
 
 void
 odm_PathDivChkAntSwitchWorkitemCallback(
-    IN void *            pContext
+    void *            pContext
     )
 {
 	PADAPTER	pAdapter = (PADAPTER)pContext;

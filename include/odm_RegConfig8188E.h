@@ -27,7 +27,7 @@ odm_ConfigRFReg_8188E(
 		PDM_ODM_T				pDM_Odm,
 		u4Byte					Addr,
 		u4Byte					Data,
-	IN  ODM_RF_RADIO_PATH_E     RF_PATH,
+	ODM_RF_RADIO_PATH_E     RF_PATH,
 		u4Byte				    RegAddr
 	);
 

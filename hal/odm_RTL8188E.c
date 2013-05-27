@@ -277,7 +277,7 @@ ODM_AntennaDiversityInit_88E(
 
 
 void
-ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
+ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u4Byte	DefaultAnt, OptionalAnt;
@@ -317,7 +317,7 @@ ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 
 
 static void
-odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u4Byte MacId)
+odm_UpdateTxAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant, u4Byte MacId)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u1Byte	TargetAnt;
@@ -1204,7 +1204,7 @@ odm_DynamicPrimaryCCA(
 }
 #else //#if (RTL8188E_SUPPORT == 1)
 void
-ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
+ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant)
 {
 }
 void

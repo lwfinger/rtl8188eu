@@ -58,11 +58,11 @@ PHY_APCalibrate_8192C(			PADAPTER	pAdapter,
 
 void
 ODM_ResetIQKResult(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 );
 u1Byte
 ODM_GetRightChnlPlaceforIQK(
-    IN u1Byte chnl
+    u1Byte chnl
 );
 
 

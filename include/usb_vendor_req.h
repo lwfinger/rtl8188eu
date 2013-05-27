@@ -51,9 +51,4 @@ typedef enum _RT_USB_WVALUE {
 } RT_USB_WVALUE;
 
 
-//bool usbvendorrequest(PCE_USB_DEVICE	CEdevice, RT_USB_BREQUEST bRequest, RT_USB_WVALUE wValue, UCHAR wIndex, void * Data, UCHAR DataLength, bool isDirectionIn);
-//bool CEusbGetStatusRequest(PCE_USB_DEVICE CEdevice, IN USHORT Op, IN USHORT Index, void * Data);
-//bool CEusbFeatureRequest(PCE_USB_DEVICE CEdevice, IN USHORT Op, IN USHORT FeatureSelector, IN USHORT Index);
-//bool CEusbGetDescriptorRequest(PCE_USB_DEVICE CEdevice, IN short urbLength, IN UCHAR DescriptorType, IN UCHAR Index, IN USHORT LanguageId, IN void *  TransferBuffer, IN ULONG TransferBufferLength);
-
 #endif

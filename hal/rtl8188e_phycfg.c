@@ -1432,7 +1432,7 @@ phy_ConfigBBWithPgHeaderFile(
 
 static void
 phy_BB8192C_Config_1T(
-	IN PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	//for path - B
@@ -2132,7 +2132,7 @@ phy_TxPwrIdxToDbm(
 void
 PHY_GetTxPowerLevel8188E(
 		PADAPTER		Adapter,
-	OUT u32*		powerlevel
+	u32*		powerlevel
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2168,10 +2168,10 @@ PHY_GetTxPowerLevel8188E(
 void getTxPowerIndex88E(
 		PADAPTER		Adapter,
 		u8				channel,
-	IN OUT u8*			cckPowerLevel,
-	IN OUT u8*			ofdmPowerLevel,
-	IN OUT u8*			BW20PowerLevel,
-	IN OUT u8*			BW40PowerLevel
+	u8*			cckPowerLevel,
+	u8*			ofdmPowerLevel,
+	u8*			BW20PowerLevel,
+	u8*			BW40PowerLevel
 	)
 {
 
@@ -2260,10 +2260,10 @@ void getTxPowerIndex88E(
 void phy_PowerIndexCheck88E(
 		PADAPTER	Adapter,
 		u8			channel,
-	IN OUT u8 *		cckPowerLevel,
-	IN OUT u8 *		ofdmPowerLevel,
-	IN OUT u8 *		BW20PowerLevel,
-	IN OUT u8 *		BW40PowerLevel
+	u8 *		cckPowerLevel,
+	u8 *		ofdmPowerLevel,
+	u8 *		BW20PowerLevel,
+	u8 *		BW40PowerLevel
 	)
 {
 
@@ -2711,7 +2711,7 @@ phy_SwChnlStepByStep(
 		u8		channel,
 		u8		*stage,
 		u8		*step,
-	OUT u32		*delay
+	u32		*delay
 	)
 {
 	return true;

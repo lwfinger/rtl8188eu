@@ -309,32 +309,26 @@ void get_rate_set(_adapter *padapter, unsigned char *pbssrate, int *bssrate_len)
 	_rtw_memcpy(pbssrate, supportedrates, *bssrate_len);
 }
 
-void UpdateBrateTbl(
-	IN PADAPTER		Adapter,
-	IN u8			*mBratesOS
-)
+void UpdateBrateTbl(PADAPTER Adapter, u8 *mBratesOS)
 {
 	u8	i;
 	u8	rate;
 
 	// 1M, 2M, 5.5M, 11M, 6M, 12M, 24M are mandatory.
-	for (i=0;i<NDIS_802_11_LENGTH_RATES_EX;i++)
-	{
+	for (i = 0; i < NDIS_802_11_LENGTH_RATES_EX; i++) {
 		rate = mBratesOS[i] & 0x7f;
-		switch (rate)
-		{
-			case IEEE80211_CCK_RATE_1MB:
-			case IEEE80211_CCK_RATE_2MB:
-			case IEEE80211_CCK_RATE_5MB:
-			case IEEE80211_CCK_RATE_11MB:
-			case IEEE80211_OFDM_RATE_6MB:
-			case IEEE80211_OFDM_RATE_12MB:
-			case IEEE80211_OFDM_RATE_24MB:
-				mBratesOS[i] |= IEEE80211_BASIC_RATE_MASK;
-				break;
+		switch (rate) {
+		case IEEE80211_CCK_RATE_1MB:
+		case IEEE80211_CCK_RATE_2MB:
+		case IEEE80211_CCK_RATE_5MB:
+		case IEEE80211_CCK_RATE_11MB:
+		case IEEE80211_OFDM_RATE_6MB:
+		case IEEE80211_OFDM_RATE_12MB:
+		case IEEE80211_OFDM_RATE_24MB:
+			mBratesOS[i] |= IEEE80211_BASIC_RATE_MASK;
+			break;
 		}
 	}
-
 }
 
 void UpdateBrateTblForSoftAP(u8 *bssrateset, u32 bssratelen)

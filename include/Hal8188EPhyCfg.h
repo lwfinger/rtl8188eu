@@ -240,7 +240,7 @@ int	PHY_BBConfig8188E(	PADAPTER	Adapter	);
 int	PHY_RFConfig8188E(	PADAPTER	Adapter	);
 
 /* RF config */
-int	rtl8188e_PHY_ConfigRFWithParaFile(IN PADAPTER Adapter, IN u8 * pFileName, RF_RADIO_PATH_E eRFPath);
+int	rtl8188e_PHY_ConfigRFWithParaFile(PADAPTER Adapter, u8 * pFileName, RF_RADIO_PATH_E eRFPath);
 int	rtl8188e_PHY_ConfigRFWithHeaderFile(		PADAPTER			Adapter,
 														RF_RADIO_PATH_E		eRFPath);
 
@@ -256,12 +256,9 @@ void	rtl8192c_PHY_GetHWRegOriginalValue(		PADAPTER		Adapter	);
 //
 // BB TX Power R/W
 //
-void	PHY_GetTxPowerLevel8188E(		PADAPTER		Adapter,
-											OUT u32*		powerlevel	);
-void	PHY_SetTxPowerLevel8188E(		PADAPTER		Adapter,
-												u8			channel	);
-bool	PHY_UpdateTxPowerDbm8188E(		PADAPTER	Adapter,
-												int		powerInDbm	);
+void	PHY_GetTxPowerLevel8188E(PADAPTER Adapter, u32 *powerlevel);
+void	PHY_SetTxPowerLevel8188E(PADAPTER Adapter, u8 channel);
+bool	PHY_UpdateTxPowerDbm8188E(PADAPTER Adapter, int powerInDbm);
 
 //
 void
@@ -419,7 +416,7 @@ storePwrIndexDiffRateOffset(
 #endif
 
 #if (SIC_ENABLE == 1)
-void SIC_Init(IN PADAPTER Adapter);
+void SIC_Init(PADAPTER Adapter);
 #endif
 
 

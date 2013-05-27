@@ -459,7 +459,7 @@ ODM_StallExecution(
 }
 
 void
-ODM_delay_ms(IN u4Byte	ms)
+ODM_delay_ms(u4Byte	ms)
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	delay_ms(ms);
@@ -471,7 +471,7 @@ ODM_delay_ms(IN u4Byte	ms)
 }
 
 void
-ODM_delay_us(IN u4Byte	us)
+ODM_delay_us(u4Byte	us)
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	delay_us(us);
@@ -483,7 +483,7 @@ ODM_delay_us(IN u4Byte	us)
 }
 
 void
-ODM_sleep_ms(IN u4Byte	ms)
+ODM_sleep_ms(u4Byte	ms)
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 
@@ -494,7 +494,7 @@ ODM_sleep_ms(IN u4Byte	ms)
 }
 
 void
-ODM_sleep_us(IN u4Byte	us)
+ODM_sleep_us(u4Byte	us)
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 

@@ -314,7 +314,7 @@ RateUpfinish:
 	return 0;
 }
 
-static void odm_ResetRaCounter_8188E( IN PODM_RA_INFO_T  pRaInfo){
+static void odm_ResetRaCounter_8188E(PODM_RA_INFO_T  pRaInfo){
 	u1Byte RateID;
 	RateID=pRaInfo->DecisionRate;
 	pRaInfo->NscUp=(N_THRESHOLD_HIGH[RateID]+N_THRESHOLD_LOW[RateID])>>1;
@@ -731,7 +731,7 @@ ODM_RAInfo_Init(
 
 int
 ODM_RAInfo_Init_all(
-	IN    PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 	)
 {
 	u1Byte MacID = 0;
@@ -792,11 +792,11 @@ ODM_RA_GetHwPwrStatus_8188E(
 
 void
 ODM_RA_UpdateRateInfo_8188E(
-	IN PDM_ODM_T pDM_Odm,
-	IN u1Byte MacID,
-	IN u1Byte RateID,
-	IN u4Byte RateMask,
-	IN u1Byte SGIEnable
+	PDM_ODM_T pDM_Odm,
+	u1Byte MacID,
+	u1Byte RateID,
+	u4Byte RateMask,
+	u1Byte SGIEnable
 	)
 {
 	PODM_RA_INFO_T pRaInfo = NULL;
@@ -1009,7 +1009,7 @@ ODM_RAInfo_Init(
 
 int
 ODM_RAInfo_Init_all(
-	IN    PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 	)
 {
 	return 0;
@@ -1043,11 +1043,11 @@ ODM_RA_GetHwPwrStatus_8188E(
 
 void
 ODM_RA_UpdateRateInfo_8188E(
-	IN PDM_ODM_T pDM_Odm,
-	IN u1Byte MacID,
-	IN u1Byte RateID,
-	IN u4Byte RateMask,
-	IN u1Byte SGIEnable
+	PDM_ODM_T pDM_Odm,
+	u1Byte MacID,
+	u1Byte RateID,
+	u4Byte RateMask,
+	u1Byte SGIEnable
 	)
 {
 	return;

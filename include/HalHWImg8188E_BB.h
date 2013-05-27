@@ -30,7 +30,7 @@
 
 HAL_STATUS
 ODM_ReadAndConfig_AGC_TAB_1T_8188E(
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 );
 
 /******************************************************************************
@@ -39,7 +39,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 
 HAL_STATUS
 ODM_ReadAndConfig_PHY_REG_1T_8188E(
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 );
 
 /******************************************************************************
@@ -48,7 +48,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 
 void
 ODM_ReadAndConfig_PHY_REG_PG_8188E(
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 );
 
 #endif

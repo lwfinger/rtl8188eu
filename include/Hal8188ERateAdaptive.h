@@ -47,7 +47,7 @@ ODM_RASupport_Init(
 
 int
 ODM_RAInfo_Init_all(
-	IN    PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 	);
 
 int
@@ -75,11 +75,11 @@ ODM_RA_GetHwPwrStatus_8188E(
 	);
 void
 ODM_RA_UpdateRateInfo_8188E(
-	IN PDM_ODM_T pDM_Odm,
-	IN u1Byte MacID,
-	IN u1Byte RateID,
-	IN u4Byte RateMask,
-	IN u1Byte SGIEnable
+	PDM_ODM_T pDM_Odm,
+	u1Byte MacID,
+	u1Byte RateID,
+	u4Byte RateMask,
+	u1Byte SGIEnable
 	);
 
 void

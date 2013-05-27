@@ -52,9 +52,9 @@ struct pkt_file {
 #define ETH_ALEN	6
 
 extern NDIS_STATUS rtw_xmit_entry(
-IN _nic_hdl		cnxt,
-IN NDIS_PACKET		*pkt,
-IN UINT				flags
+_nic_hdl		cnxt,
+NDIS_PACKET		*pkt,
+UINT				flags
 );
 
 #endif

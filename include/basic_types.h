@@ -27,14 +27,12 @@
 #define FAIL	(-1)
 
 #include <linux/types.h>
-#define IN
-#define OUT
 #define NDIS_OID uint
 #define NDIS_STATUS uint
 
 typedef	signed int sint;
 
-       #define UCHAR u8
+#define UCHAR u8
 #define USHORT u16
 #define UINT u32
 #define ULONG u32

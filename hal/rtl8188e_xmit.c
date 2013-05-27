@@ -130,7 +130,7 @@ struct EMInfo{
 void
 InsertEMContent_8188E(
 	struct EMInfo *pEMInfo,
-	IN pu1Byte	VirtualAddress)
+	pu1Byte	VirtualAddress)
 {
 
 #if RTL8188E_EARLY_MODE_PKT_NUM_10 == 1

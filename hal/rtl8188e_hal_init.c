@@ -1272,7 +1272,7 @@ ReadEFuseByIC(
 	u16		 _offset,
 	u16		_size_byte,
 	u8		*pbuf,
-	IN bool	bPseudoTest
+	bool	bPseudoTest
 	)
 {
 #ifdef DBG_IOL_READ_EFUSE_MAP
@@ -1331,7 +1331,7 @@ ReadEFuse_Pseudo (
 	u16		 _offset,
 	u16		_size_byte,
 	u8		*pbuf,
-	IN bool	bPseudoTest
+	bool	bPseudoTest
 	)
 {
 	Hal_EfuseReadEFuse88E(Adapter, _offset, _size_byte, pbuf, bPseudoTest);
@@ -3078,16 +3078,11 @@ Hal_GetChnlGroup(
 
 	return group;
 }
-static u8
-Hal_GetChnlGroup88E(
-		u8	chnl,
-	OUT u8*	pGroup
-	)
+static u8 Hal_GetChnlGroup88E(u8 chnl, u8 *pGroup)
 {
 	u8 bIn24G=true;
 
-	if (chnl<=14)
-	{
+	if (chnl<=14) {
 		bIn24G=true;
 
 		if (chnl < 3)			// Chanel 1-2
@@ -3102,13 +3097,7 @@ Hal_GetChnlGroup88E(
 			*pGroup = 4;
 		else if (chnl ==14)		// Channel 14
 			*pGroup = 5;
-		else
-		{
-			//RT_TRACE(COMP_EFUSE,DBG_LOUD,("==>Hal_GetChnlGroup88E in 2.4 G, but Channel %d in Group not found\n",chnl));
-		}
-	}
-	else
-	{
+	} else {
 		bIn24G=false;
 
 		if (chnl <=40)
@@ -3137,21 +3126,11 @@ Hal_GetChnlGroup88E(
 			*pGroup = 10;
 		else if (chnl <=177)
 			*pGroup = 11;
-		else
-		{
-			//RT_TRACE(COMP_EFUSE,DBG_LOUD,("==>Hal_GetChnlGroup88E in 5G, but Channel %d in Group not found\n",chnl));
-		}
-
 	}
-	//RT_TRACE(COMP_EFUSE,DBG_LOUD,("<==Hal_GetChnlGroup88E,  Channel = %d, bIn24G =%d,\n",chnl,bIn24G));
 	return bIn24G;
 }
 
-void Hal_ReadPowerSavingMode88E(
-	PADAPTER		padapter,
-		u8*			hwinfo,
-		bool			AutoLoadFail
-	)
+void Hal_ReadPowerSavingMode88E(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;

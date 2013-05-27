@@ -115,7 +115,7 @@ static NDIS_STATUS oid_null_function(struct oid_par_priv* poid_par_priv)
 
 #ifdef PLATFORM_WINDOWS
 
-int TranslateNdisPsToRtPs(IN NDIS_802_11_POWER_MODE	ndisPsMode);
+int TranslateNdisPsToRtPs(NDIS_802_11_POWER_MODE	ndisPsMode);
 
 //OID Handler for Segment 1
 NDIS_STATUS oid_gen_supported_list_hdl(struct oid_par_priv* poid_par_priv);

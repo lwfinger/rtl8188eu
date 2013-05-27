@@ -288,8 +288,8 @@ void getPowerBase88E(
 		u8*			pPowerLevelBW20,
 		u8*			pPowerLevelBW40,
 		u8			Channel,
-	IN OUT u32*		OfdmBase,
-	IN OUT u32*		MCSBase
+	u32*		OfdmBase,
+	u32*		MCSBase
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

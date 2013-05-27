@@ -302,7 +302,7 @@ static void _InitBTCoexist(_adapter *padapter)
 //---------------------------------------------------------------
 static void
 _SetMacID(
-	IN  PADAPTER Adapter, u8* MacID
+	PADAPTER Adapter, u8* MacID
 	)
 {
 	u32 i;
@@ -318,7 +318,7 @@ _SetMacID(
 
 static void
 _SetBSSID(
-	IN  PADAPTER Adapter, u8* BSSID
+	PADAPTER Adapter, u8* BSSID
 	)
 {
 	u32 i;
@@ -336,7 +336,7 @@ _SetBSSID(
 // Shall USB interface init this?
 static void
 _InitInterrupt(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u32	imr,imr_ex;
@@ -379,7 +379,7 @@ _InitInterrupt(
 
 static void
 _InitQueueReservedPage(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -428,8 +428,8 @@ _InitQueueReservedPage(
 
 static void
 _InitTxBufferBoundary(
-	IN PADAPTER Adapter,
-	IN u8 txpktbuf_bndy
+	PADAPTER Adapter,
+	u8 txpktbuf_bndy
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -447,7 +447,7 @@ _InitTxBufferBoundary(
 
 static void
 _InitPageBoundary(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	// RX Page Boundary
@@ -623,7 +623,7 @@ _InitQueuePriority(
 
 static void
 _InitHardwareDropIncorrectBulkOut(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u32	value32 = rtw_read32(Adapter, REG_TXDMA_OFFSET_CHK);
@@ -633,7 +633,7 @@ _InitHardwareDropIncorrectBulkOut(
 
 static void
 _InitNetworkType(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u32	value32;
@@ -648,7 +648,7 @@ _InitNetworkType(
 
 static void
 _InitTransferPageSize(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	// Tx page size is always 128.
@@ -660,7 +660,7 @@ _InitTransferPageSize(
 
 static void
 _InitDriverInfoSize(
-	IN  PADAPTER	Adapter,
+	PADAPTER	Adapter,
 		u8		drvInfoSize
 	)
 {
@@ -669,7 +669,7 @@ _InitDriverInfoSize(
 
 static void
 _InitWMACSetting(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	//u4Byte			value32;
@@ -713,7 +713,7 @@ _InitWMACSetting(
 
 static void
 _InitAdaptiveCtrl(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u16	value16;
@@ -740,7 +740,7 @@ _InitAdaptiveCtrl(
 
 static void
 _InitRateFallback(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	// Set Data Auto Rate Fallback Retry Count register.
@@ -754,7 +754,7 @@ _InitRateFallback(
 
 static void
 _InitEDCA(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	// Set Spec SIFS (used in NAV)
@@ -777,7 +777,7 @@ _InitEDCA(
 
 static void
 _InitBeaconMaxError(
-	IN  PADAPTER	Adapter,
+	PADAPTER	Adapter,
 		bool		InfraMode
 	)
 {
@@ -821,7 +821,7 @@ _InitRxSetting(
 
 static void
 _InitRetryFunction(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	u8	value8;
@@ -977,7 +977,7 @@ usb_AggSettingRxUpdate(
 
 static void
 InitUsbAggregationSetting(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -993,8 +993,8 @@ InitUsbAggregationSetting(
 }
 void
 HalRxAggr8188EUsb(
-	IN  PADAPTER Adapter,
-	IN bool	Value
+	PADAPTER Adapter,
+	bool	Value
 	)
 {
 }
@@ -1035,7 +1035,7 @@ _InitOperationMode(
 
  static void
 _InitBeaconParameters(
-	IN  PADAPTER Adapter
+	PADAPTER Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1156,7 +1156,7 @@ _InitAntenna_Selection(	PADAPTER Adapter)
 //
 static void
 HalDetectSelectiveSuspendMode(
-	IN PADAPTER				Adapter
+	PADAPTER				Adapter
 	)
 {
 }	// HalDetectSelectiveSuspendMode
@@ -2098,7 +2098,7 @@ Hal_CustomizeByCustomerID_8188EU(
 }
 
 // Read HW power down mode selection
-static void _ReadPSSetting(IN PADAPTER Adapter,IN u8*PROMContent,IN u8	AutoloadFail)
+static void _ReadPSSetting(PADAPTER Adapter, u8 *PROMContent, u8 AutoloadFail)
 {
 }
 
@@ -2271,7 +2271,7 @@ readAdapterInfo_8188EU(
 }
 
 static void _ReadPROMContent(
-	IN PADAPTER		Adapter
+	PADAPTER		Adapter
 	)
 {
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);

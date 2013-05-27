@@ -155,9 +155,9 @@ odm_TxPwrTrackSetPwr88E(
 void
 odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 #else
-	IN PADAPTER	Adapter
+	PADAPTER	Adapter
 #endif
 	)
 {
@@ -630,7 +630,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -694,7 +694,7 @@ phy_PathA_IQK_8188E(
 u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_RxIQK(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -839,7 +839,7 @@ phy_PathA_RxIQK(
 u1Byte				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 #else
 		PADAPTER	pAdapter
 #endif
@@ -902,14 +902,14 @@ phy_PathB_IQK_8188E(
 void
 _PHY_PathAFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
-	IN  bool	bIQKOK,
+	bool	bIQKOK,
 		s4Byte		result[][8],
 		u1Byte		final_candidate,
-	IN  bool		bTxOnly
+	bool		bTxOnly
 	)
 {
 	u4Byte	Oldval_0, X, TX0_A, reg;
@@ -977,11 +977,11 @@ _PHY_PathAFillIQKMatrix(
 void
 _PHY_PathBFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
-	IN  bool	bIQKOK,
+	bool	bIQKOK,
 		s4Byte		result[][8],
 		u1Byte		final_candidate,
 		bool		bTxOnly			//do Tx only
@@ -1081,7 +1081,7 @@ ODM_CheckPowerStatus(
 void
 _PHY_SaveADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1114,7 +1114,7 @@ _PHY_SaveADDARegisters(
 void
 _PHY_SaveMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1144,7 +1144,7 @@ _PHY_SaveMACRegisters(
 void
 _PHY_ReloadADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1174,7 +1174,7 @@ _PHY_ReloadADDARegisters(
 void
 _PHY_ReloadMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1203,7 +1203,7 @@ _PHY_ReloadMACRegisters(
 void
 _PHY_PathADDAOn(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1243,7 +1243,7 @@ _PHY_PathADDAOn(
 void
 _PHY_MACSettingCalibration(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1275,9 +1275,9 @@ _PHY_MACSettingCalibration(
 void
 _PHY_PathAStandBy(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 #else
-	IN PADAPTER	pAdapter
+	PADAPTER	pAdapter
 #endif
 	)
 {
@@ -1300,7 +1300,7 @@ _PHY_PathAStandBy(
 void
 _PHY_PIModeSwitch(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1327,7 +1327,7 @@ _PHY_PIModeSwitch(
 bool
 phy_SimularityCompare_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1462,7 +1462,7 @@ phy_SimularityCompare_8188E(
 void
 phy_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1742,7 +1742,7 @@ else
 void
 phy_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -1833,7 +1833,7 @@ phy_LCCalibrate_8188E(
 void
 phy_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -2326,7 +2326,7 @@ if (*(pDM_Odm->mp_mode) != 1)
 void
 PHY_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -2592,7 +2592,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 void
 PHY_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 #else
 		PADAPTER	pAdapter
 #endif
@@ -2681,7 +2681,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 void
 PHY_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -2731,7 +2731,7 @@ PHY_APCalibrate_8188E(
 }
 void phy_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -2780,7 +2780,7 @@ void phy_SetRFPathSwitch_8188E(
 }
 void PHY_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -2826,7 +2826,7 @@ phy_DigitalPredistortion(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 		PADAPTER	pAdapter,
 #else
-	IN PDM_ODM_T	pDM_Odm,
+	PDM_ODM_T	pDM_Odm,
 #endif
 		bool		is2T
 	)
@@ -3261,7 +3261,7 @@ PHY_DigitalPredistortion_8188E(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 		PADAPTER	pAdapter
 #else
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 #endif
 	)
 {
@@ -3301,7 +3301,7 @@ PHY_DigitalPredistortion_8188E(
 
 bool phy_QueryRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -3347,7 +3347,7 @@ bool phy_QueryRFPathSwitch_8188E(
 //return value TRUE => Main; FALSE => Aux
 bool PHY_QueryRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 #else
 		PADAPTER	pAdapter
 #endif

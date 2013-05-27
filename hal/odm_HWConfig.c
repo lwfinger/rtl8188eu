@@ -67,7 +67,7 @@ odm_QueryRxPwrPercentage(
 //
 s4Byte
 odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
-	IN OUT PDM_ODM_T pDM_Odm,
+	PDM_ODM_T pDM_Odm,
 	s4Byte CurrSig
 )
 {
@@ -123,7 +123,7 @@ odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
 
 s4Byte
 odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
-	IN OUT PDM_ODM_T pDM_Odm,
+	PDM_ODM_T pDM_Odm,
 	s4Byte CurrSig
 )
 {
@@ -184,8 +184,8 @@ odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
 
 s4Byte
 odm_SignalScaleMapping_92CSeries(
-	IN OUT PDM_ODM_T pDM_Odm,
-	IN s4Byte CurrSig
+	PDM_ODM_T pDM_Odm,
+	s4Byte CurrSig
 )
 {
 	s4Byte RetSig;
@@ -277,7 +277,7 @@ odm_SignalScaleMapping_92CSeries(
 }
 s4Byte
 odm_SignalScaleMapping(
-	IN OUT PDM_ODM_T pDM_Odm,
+	PDM_ODM_T pDM_Odm,
 		s4Byte CurrSig
 )
 {
@@ -302,11 +302,11 @@ odm_SignalScaleMapping(
 
 //pMgntInfo->CustomerID == RT_CID_819x_Lenovo
 static u1Byte odm_SQ_process_patch_RT_CID_819x_Lenovo(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u1Byte		isCCKrate,
-	IN u1Byte		PWDB_ALL,
-	IN u1Byte		path,
-	IN u1Byte		RSSI
+	PDM_ODM_T	pDM_Odm,
+	u1Byte		isCCKrate,
+	u1Byte		PWDB_ALL,
+	u1Byte		path,
+	u1Byte		RSSI
 )
 {
 	u1Byte	SQ;

@@ -39,9 +39,9 @@ ODM_TxPwrTrackAdjust88E(
 void
 odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 #else
-	IN PADAPTER	Adapter
+	PADAPTER	Adapter
 #endif
 	);
 
@@ -51,9 +51,9 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 void
 PHY_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
-	IN PADAPTER	Adapter,
+	PADAPTER	Adapter,
 #endif
 								bool		bReCovery);
 
@@ -64,7 +64,7 @@ PHY_IQCalibrate_8188E(
 void
 PHY_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 #else
 		PADAPTER	pAdapter
 #endif
@@ -76,7 +76,7 @@ PHY_LCCalibrate_8188E(
 void
 PHY_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -88,7 +88,7 @@ PHY_DigitalPredistortion_8188E(			PADAPTER	pAdapter);
 void
 _PHY_SaveADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -100,7 +100,7 @@ _PHY_SaveADDARegisters(
 void
 _PHY_PathADDAOn(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -112,7 +112,7 @@ _PHY_PathADDAOn(
 void
 _PHY_MACSettingCalibration(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm,
+	PDM_ODM_T		pDM_Odm,
 #else
 		PADAPTER	pAdapter,
 #endif
@@ -124,7 +124,7 @@ _PHY_MACSettingCalibration(
 void
 _PHY_PathAStandBy(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 #else
 		PADAPTER	pAdapter
 #endif

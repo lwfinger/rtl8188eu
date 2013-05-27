@@ -520,7 +520,7 @@ skip_dm:
 	return;
 }
 
-void rtl8188e_init_dm_priv(IN PADAPTER Adapter)
+void rtl8188e_init_dm_priv(PADAPTER Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -535,7 +535,7 @@ void rtl8188e_init_dm_priv(IN PADAPTER Adapter)
 	ODM_InitDebugSetting(podmpriv);
 }
 
-void rtl8188e_deinit_dm_priv(IN PADAPTER Adapter)
+void rtl8188e_deinit_dm_priv(PADAPTER Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

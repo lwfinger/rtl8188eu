@@ -27,12 +27,7 @@
 *                           FW_AP.TXT
 ******************************************************************************/
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-void
-ODM_ReadFirmware_8188E_FW_AP(
-     IN   PDM_ODM_T    pDM_Odm,
-     OUT  u1Byte       *pFirmware,
-     OUT  u4Byte       *pFirmwareSize
-);
+void ODM_ReadFirmware_8188E_FW_AP(PDM_ODM_T    pDM_Odm, u1Byte *pFirmware, u4Byte *pFirmwareSize);
 
 #else
 /******************************************************************************

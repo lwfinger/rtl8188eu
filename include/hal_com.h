@@ -163,9 +163,9 @@ hal_com_get_channel_plan(
 u8	MRateToHwRate(u8 rate);
 
 void	HalSetBrateCfg(
-	IN PADAPTER		Adapter,
-	IN u8			*mBratesOS,
-	OUT u16			*pBrateCfg);
+	PADAPTER		Adapter,
+	u8			*mBratesOS,
+	u16			*pBrateCfg);
 
 bool
 Hal_MappingOutPipe(

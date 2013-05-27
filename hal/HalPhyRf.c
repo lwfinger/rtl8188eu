@@ -179,10 +179,10 @@ phy_PathB_IQK_8192C(
 void
 phy_PathAFillIQKMatrix(
 		PADAPTER	pAdapter,
-	IN  bool	bIQKOK,
+	bool	bIQKOK,
 		s4Byte		result[][8],
 		u1Byte		final_candidate,
-	IN  bool		bTxOnly
+	bool		bTxOnly
 	)
 {
 	u4Byte	Oldval_0, X, TX0_A, reg;
@@ -246,7 +246,7 @@ phy_PathAFillIQKMatrix(
 void
 phy_PathBFillIQKMatrix(
 		PADAPTER	pAdapter,
-	IN  bool	bIQKOK,
+	bool	bIQKOK,
 		s4Byte		result[][8],
 		u1Byte		final_candidate,
 		bool		bTxOnly			//do Tx only
@@ -1498,7 +1498,7 @@ PHY_APCalibrate_8192C(
 
 void
 ODM_ResetIQKResult(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 )
 {
 	u1Byte		i;

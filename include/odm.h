@@ -1657,11 +1657,7 @@ ODM_SwAntDivCheckBeforeLink8192C(
 #endif
 
 #define dm_SWAW_RSSI_Check	ODM_SwAntDivChkPerPktRssi
-void ODM_SwAntDivChkPerPktRssi(
-	IN PDM_ODM_T		pDM_Odm,
-	IN u1Byte			StationID,
-	IN PODM_PHY_INFO_T pPhyInfo
-	);
+void ODM_SwAntDivChkPerPktRssi(PDM_ODM_T pDM_Odm, u1Byte StationID, PODM_PHY_INFO_T pPhyInfo);
 
 #if ((DM_ODM_SUPPORT_TYPE==ODM_MP)||(DM_ODM_SUPPORT_TYPE==ODM_CE))
 
@@ -1696,7 +1692,7 @@ void	odm_PSDMonitorCallback(PRT_TIMER		pTimer);
 
 void
 odm_PSDMonitorWorkItemCallback(
-    IN void *            pContext
+    void *pContext
     );
 
 
@@ -1762,28 +1758,28 @@ ODM_CmnInfoUpdate(
 
 void
 ODM_InitAllTimers(
-    IN PDM_ODM_T	pDM_Odm
+    PDM_ODM_T	pDM_Odm
     );
 
 void
 ODM_CancelAllTimers(
-    IN PDM_ODM_T    pDM_Odm
+    PDM_ODM_T    pDM_Odm
     );
 
 void
 ODM_ReleaseAllTimers(
-    IN PDM_ODM_T	pDM_Odm
+    PDM_ODM_T	pDM_Odm
     );
 
 void
 ODM_ResetIQKResult(
-    IN PDM_ODM_T pDM_Odm
+    PDM_ODM_T pDM_Odm
     );
 
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-void ODM_InitAllWorkItems(IN PDM_ODM_T	pDM_Odm );
-void ODM_FreeAllWorkItems(IN PDM_ODM_T	pDM_Odm );
+void ODM_InitAllWorkItems(PDM_ODM_T	pDM_Odm );
+void ODM_FreeAllWorkItems(PDM_ODM_T	pDM_Odm );
 
 void odm_PathDivChkAntSwitch(PDM_ODM_T pDM_Odm);
 void ODM_PathDivRestAfterLink(
@@ -1818,8 +1814,8 @@ void ODM_PathDivChkPerPktRssi(PADAPTER		Adapter,
 
 u8Byte
 PlatformDivision64(
-	IN u8Byte	x,
-	IN u8Byte	y
+	u8Byte	x,
+	u8Byte	y
 );
 
 

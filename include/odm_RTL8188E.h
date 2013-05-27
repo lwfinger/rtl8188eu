@@ -65,8 +65,8 @@ ODM_SetTxAntByTxInfo_88E(
 
 void
 ODM_UpdateRxIdleAnt_88E(
-	IN PDM_ODM_T pDM_Odm,
-	IN u1Byte Ant
+	PDM_ODM_T pDM_Odm,
+	u1Byte Ant
 );
 
 void

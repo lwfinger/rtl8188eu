@@ -51,10 +51,10 @@ struct	dm_priv
 	u8	PowerIndex_backup[6];
 };
 
-void rtl8188e_init_dm_priv(IN PADAPTER Adapter);
-void rtl8188e_deinit_dm_priv(IN PADAPTER Adapter);
-void rtl8188e_InitHalDm(IN PADAPTER Adapter);
-void rtl8188e_HalDmWatchDog(IN PADAPTER Adapter);
+void rtl8188e_init_dm_priv(PADAPTER Adapter);
+void rtl8188e_deinit_dm_priv(PADAPTER Adapter);
+void rtl8188e_InitHalDm(PADAPTER Adapter);
+void rtl8188e_HalDmWatchDog(PADAPTER Adapter);
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
 void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
