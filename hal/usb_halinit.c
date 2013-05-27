@@ -121,7 +121,7 @@ static bool HalUsbSetQueuePipeMapping8188EUsb(
 
 }
 
-void rtl8188eu_interface_configure(_adapter *padapter)
+static void rtl8188eu_interface_configure(_adapter *padapter)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
@@ -204,9 +204,9 @@ static void _dbg_dump_macreg(_adapter *padapter)
 
 static void _InitPABias(_adapter *padapter)
 {
-	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(padapter);
-	u8			pa_setting;
-	bool		is92C = IS_92C_SERIAL(pHalData->VersionID);
+	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	u8	pa_setting;
+	bool	is92C = IS_92C_SERIAL(pHalData->VersionID);
 
 	//FIXED PA current issue
 	//efuse_one_byte_read(padapter, 0x1FA, &pa_setting);
@@ -498,7 +498,7 @@ _InitNormalChipOneOutEpPriority(
 			value = QUEUE_NORMAL;
 			break;
 		default:
-			//RT_ASSERT(FALSE,("Shall not reach here!\n"));
+			//RT_ASSERT(false,("Shall not reach here!\n"));
 			break;
 	}
 
@@ -541,7 +541,7 @@ _InitNormalChipTwoOutEpPriority(
 			valueLow = QUEUE_NORMAL;
 			break;
 		default:
-			//RT_ASSERT(FALSE,("Shall not reach here!\n"));
+			//RT_ASSERT(false,("Shall not reach here!\n"));
 			break;
 	}
 
@@ -612,7 +612,7 @@ _InitQueuePriority(
 			_InitNormalChipThreeOutEpPriority(Adapter);
 			break;
 		default:
-			//RT_ASSERT(FALSE,("Shall not reach here!\n"));
+			//RT_ASSERT(false,("Shall not reach here!\n"));
 			break;
 	}
 
@@ -969,7 +969,7 @@ usb_AggSettingRxUpdate(
 			pHalData->HwRxPageSize = 1024;
 			break;
 		default:
-			//RT_ASSERT(FALSE, ("RX_PAGE_SIZE_REG_VALUE definition is incorrect!\n"));
+			//RT_ASSERT(false, ("RX_PAGE_SIZE_REG_VALUE definition is incorrect!\n"));
 			break;
 	}
 #endif
@@ -991,7 +991,7 @@ InitUsbAggregationSetting(
 	// 201/12/10 MH Add for USB agg mode dynamic switch.
 	pHalData->UsbRxHighSpeedMode = false;
 }
-void
+static void
 HalRxAggr8188EUsb(
 	PADAPTER Adapter,
 	bool	Value
@@ -1018,7 +1018,7 @@ HalRxAggr8188EUsb(
  *	12/10/2010	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-void
+static void
 USB_AggModeSwitch(
 		PADAPTER			Adapter
 	)
@@ -1241,7 +1241,7 @@ rt_rf_power_state RfOnOffDetect(	PADAPTER pAdapter )
 
 void _ps_open_RF(_adapter *padapter);
 
-u32 rtl8188eu_hal_init(PADAPTER Adapter)
+static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 {
 	u8	value8 = 0;
 	u16  value16;
@@ -1741,18 +1741,14 @@ void _ps_open_RF(_adapter *padapter) {
 	//phy_SsPwrSwitch92CU(padapter, rf_on, 1);
 }
 
-void _ps_close_RF(_adapter *padapter){
+static void _ps_close_RF(_adapter *padapter){
 	//here call with bRegSSPwrLvl 1, bRegSSPwrLvl 2 needs to be verified
 	//phy_SsPwrSwitch92CU(padapter, rf_off, 1);
 }
 
 
-void
-CardDisableRTL8188EU(
-		PADAPTER			Adapter
-)
+static void CardDisableRTL8188EU(PADAPTER Adapter)
 {
-//	PMGNT_INFO	pMgntInfo	= &(Adapter->MgntInfo);
 	u8	val8;
 	u16	val16;
 	u32	val32;
@@ -1822,8 +1818,8 @@ static void rtl8192cu_hw_power_down(_adapter *padapter)
 	rtw_write16(padapter, REG_APS_FSMCO, 0x8812);
 }
 
-u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
- {
+static u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
+{
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	DBG_88E("==> %s\n",__func__);
@@ -1856,7 +1852,7 @@ u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
  }
 
 
-unsigned int rtl8188eu_inirp_init(PADAPTER Adapter)
+static unsigned int rtl8188eu_inirp_init(PADAPTER Adapter)
 {
 	u8 i;
 	struct recv_buf *precvbuf;
@@ -1919,7 +1915,7 @@ _func_exit_;
 
 }
 
-unsigned int rtl8188eu_inirp_deinit(PADAPTER Adapter)
+static unsigned int rtl8188eu_inirp_deinit(PADAPTER Adapter)
 {
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit\n"));
 
@@ -2372,7 +2368,8 @@ static void ResumeTxBeacon(_adapter *padapter)
 	pHalData->RegReg542 |= BIT0;
 	rtw_write8(padapter, REG_TBTT_PROHIBIT+2, pHalData->RegReg542);
 }
-void UpdateInterruptMask8188EU(PADAPTER padapter,u8 bHIMR0 ,u32 AddMSR, u32 RemoveMSR)
+
+static void UpdateInterruptMask8188EU(PADAPTER padapter,u8 bHIMR0 ,u32 AddMSR, u32 RemoveMSR)
 {
 	HAL_DATA_TYPE *pHalData;
 
@@ -2982,7 +2979,7 @@ static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
 #endif
 }
 
-void SetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
+static void SetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -3822,7 +3819,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void GetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
+static void GetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
@@ -3891,7 +3888,7 @@ _func_exit_;
 //	Description:
 //		Query setting of specified variable.
 //
-u8
+static u8
 GetHalDefVar8188EUsb(
 		PADAPTER				Adapter,
 		HAL_DEF_VARIABLE		eVariable,
@@ -4026,8 +4023,7 @@ GetHalDefVar8188EUsb(
 //	Description:
 //		Change default setting of specified variable.
 //
-u8
-SetHalDefVar8188EUsb(
+static u8 SetHalDefVar8188EUsb(
 		PADAPTER				Adapter,
 		HAL_DEF_VARIABLE		eVariable,
 		void *					pValue
@@ -4138,7 +4134,7 @@ u32  _update_92cu_basic_rate(_adapter *padapter, unsigned int mask)
 	return BrateCfg;
 }
 */
-void _update_response_rate(_adapter *padapter,unsigned int mask)
+static void _update_response_rate(_adapter *padapter,unsigned int mask)
 {
 	u8	RateIndex = 0;
 	// Set RRSR rate table.
@@ -4154,7 +4150,7 @@ void _update_response_rate(_adapter *padapter,unsigned int mask)
 	rtw_write8(padapter, REG_INIRTS_RATE_SEL, RateIndex);
 }
 
-void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level)
+static void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level)
 {
 	//volatile unsigned int result;
 	u8	init_rate=0;
@@ -4300,8 +4296,7 @@ void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level)
 
 }
 
-
-void SetBeaconRelatedRegisters8188EUsb(PADAPTER padapter)
+static void SetBeaconRelatedRegisters8188EUsb(PADAPTER padapter)
 {
 	u32	value32;
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);

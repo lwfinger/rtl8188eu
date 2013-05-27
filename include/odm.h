@@ -204,7 +204,7 @@ typedef struct _Dynamic_Power_Saving_
 
 }PS_T,*pPS_T;
 
-typedef struct _FALSE_ALARM_STATISTICS{
+typedef struct _false_ALARM_STATISTICS{
 	u4Byte	Cnt_Parity_Fail;
 	u4Byte	Cnt_Rate_Illegal;
 	u4Byte	Cnt_Crc8_fail;
@@ -219,7 +219,7 @@ typedef struct _FALSE_ALARM_STATISTICS{
 	u4Byte	Cnt_CCA_all;
 	u4Byte	Cnt_BW_USC;	//Gary
 	u4Byte	Cnt_BW_LSC;	//Gary
-}FALSE_ALARM_STATISTICS, *PFALSE_ALARM_STATISTICS;
+}false_ALARM_STATISTICS, *Pfalse_ALARM_STATISTICS;
 
 typedef struct _Dynamic_Primary_CCA{
 	u1Byte		PriCCA_flag;
@@ -544,7 +544,7 @@ typedef enum _ODM_Common_Info_Definition
 	ODM_CMNINFO_FAB_VER,					// ODM_FAB_E
 	ODM_CMNINFO_RF_TYPE,					// ODM_RF_PATH_E or ODM_RF_TYPE_E?
 	ODM_CMNINFO_BOARD_TYPE,				// ODM_BOARD_TYPE_E
-	ODM_CMNINFO_EXT_LNA,					// TRUE
+	ODM_CMNINFO_EXT_LNA,					// true
 	ODM_CMNINFO_EXT_PA,
 	ODM_CMNINFO_EXT_TRSW,
 	ODM_CMNINFO_PATCH_ID,				//CUSTOMER ID
@@ -1215,8 +1215,8 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	PS_T		DM_PSTable;
 	Pri_CCA_T	DM_PriCCA;
 	RXHP_T		DM_RXHP_Table;
-	FALSE_ALARM_STATISTICS	FalseAlmCnt;
-	FALSE_ALARM_STATISTICS	FlaseAlmCntBuddyAdapter;
+	false_ALARM_STATISTICS	FalseAlmCnt;
+	false_ALARM_STATISTICS	FlaseAlmCntBuddyAdapter;
 	//#ifdef CONFIG_ANTENNA_DIVERSITY
 	SWAT_T		DM_SWAT_Table;
 	bool		RSSI_test;
@@ -1415,8 +1415,8 @@ typedef enum tag_DIG_Connect_Definition
 #define		DM_SCAN_RSSI_TH				0x14 //scan return issue for LC
 
 
-#define		DM_FALSE_ALARM_THRESH_LOW	400
-#define		DM_FALSE_ALARM_THRESH_HIGH	1000
+#define		DM_false_ALARM_THRESH_LOW	400
+#define		DM_false_ALARM_THRESH_HIGH	1000
 
 #define		DM_DIG_MAX_NIC				0x3e
 #define		DM_DIG_MIN_NIC				0x1e //0x22//0x1c

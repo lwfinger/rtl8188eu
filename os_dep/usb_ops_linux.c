@@ -417,16 +417,16 @@ _func_enter_;
 		} else if (purb->status == -ESHUTDOWN) {
 			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete: ESHUTDOWN\n"));
 			padapter->bDriverStopped=true;
-			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bDriverStopped=TRUE\n"));
+			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bDriverStopped=true\n"));
 
 			goto check_completion;
 		}
 		else
 		{
 			padapter->bSurpriseRemoved=true;
-			DBG_88E("bSurpriseRemoved=TRUE\n");
+			DBG_88E("bSurpriseRemoved=true\n");
 			//rtl8192cu_trigger_gpio_0(padapter);
-			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bSurpriseRemoved=TRUE\n"));
+			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bSurpriseRemoved=true\n"));
 
 			goto check_completion;
 		}

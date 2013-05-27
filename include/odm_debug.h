@@ -140,7 +140,7 @@
 			DbgPrint( "Assertion failed! %s at ......\n", #expr);								\
 			DbgPrint( "      ......%s,%s,line=%d\n",__FILE__,__func__,__LINE__);			\
 			RT_PRINTK fmt;															\
-			ASSERT(FALSE);															\
+			ASSERT(false);															\
 		}
 #define ODM_dbg_enter() { DbgPrint("==> %s\n", __func__); }
 #define ODM_dbg_exit() { DbgPrint("<== %s\n", __func__); }

@@ -316,7 +316,7 @@ phy_SimularityCompare_92C(
 	u4Byte		i, j, diff, SimularityBitMap, bound = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	u1Byte		final_candidate[2] = {0xFF, 0xFF};	//for path A and path B
-	bool		bResult = TRUE, is2T = IS_92C_SERIAL( pHalData->VersionID);
+	bool		bResult = true, is2T = IS_92C_SERIAL( pHalData->VersionID);
 
 	if (is2T)
 		bound = 8;
@@ -352,7 +352,7 @@ phy_SimularityCompare_92C(
 			{
 				for ( j = i*4; j < (i+1)*4-2; j++)
 					result[3][j] = result[final_candidate[i]][j];
-				bResult = FALSE;
+				bResult = false;
 			}
 		}
 		return bResult;
@@ -361,21 +361,21 @@ phy_SimularityCompare_92C(
 	{
 		for (i = 0; i < 4; i++)
 			result[3][i] = result[c1][i];
-		return FALSE;
+		return false;
 	}
 	else if (!(SimularityBitMap & 0xF0) && is2T)	//path B OK
 	{
 		for (i = 4; i < 8; i++)
 			result[3][i] = result[c1][i];
-		return FALSE;
+		return false;
 	}
 	else
-		return FALSE;
+		return false;
 
 }
 
 /*
-return FALSE => do IQK again
+return false => do IQK again
 */
 bool
 phy_SimularityCompare(
@@ -465,7 +465,7 @@ phy_IQCalibrate_8192C(
 			phy_SaveADDARegisters(pAdapter, IQK_BB_REG_92C, pHalData->IQK_BB_backup, IQK_BB_REG_NUM);
 	}
 
-	phy_PathADDAOn(pAdapter, ADDA_REG, TRUE, is2T);
+	phy_PathADDAOn(pAdapter, ADDA_REG, true, is2T);
 
 
 
@@ -479,12 +479,12 @@ phy_IQCalibrate_8192C(
 
 		if (rfPathSwitch)   // Path Div On
 		{
-		    phy_PathADDAOn(pAdapter, ADDA_REG, TRUE, is2T);
+		    phy_PathADDAOn(pAdapter, ADDA_REG, true, is2T);
 		    //DbgPrint("=STEP= change ADDA Path from B to A Path\n");
 		}
 		else
 		{
-		    phy_PathADDAOn(pAdapter, ADDA_REG, FALSE, is2T);
+		    phy_PathADDAOn(pAdapter, ADDA_REG, false, is2T);
 		}
 		//3 end
 		//=====================================
@@ -499,7 +499,7 @@ phy_IQCalibrate_8192C(
 
 	if (!pHalData->bRfPiEnable){
 		// Switch BB to PI mode to do IQ Calibration.
-		phy_PIModeSwitch(pAdapter, TRUE);
+		phy_PIModeSwitch(pAdapter, true);
 	}
 
 	PHY_SetBBReg(pAdapter, rFPGA0_RFMOD, BIT24, 0x00);
@@ -577,7 +577,7 @@ phy_IQCalibrate_8192C(
 		phy_PathAStandBy(pAdapter);
 
 		// Turn Path B ADDA on
-		phy_PathADDAOn(pAdapter, ADDA_REG, FALSE, is2T);
+		phy_PathADDAOn(pAdapter, ADDA_REG, false, is2T);
 
 		for (i = 0 ; i < retryCount ; i++){
 			PathBOK = phy_PathB_IQK_8192C(pAdapter);
@@ -610,7 +610,7 @@ phy_IQCalibrate_8192C(
 	{
 		if (!pHalData->bRfPiEnable){
 			// Switch back BB to SI mode after finish IQ Calibration.
-			phy_PIModeSwitch(pAdapter, FALSE);
+			phy_PIModeSwitch(pAdapter, false);
 		}
 
 		// Reload ADDA power saving parameters
@@ -1172,7 +1172,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			((0x08 << 15) | (0x08 << 10) | (0x08 << 5) | 0x08));
 	}
 
-	pHalData->bAPKdone = TRUE;
+	pHalData->bAPKdone = true;
 
 	RTPRINT(FINIT, INIT_IQK, ("<==phy_APCalibrate_8192C()\n"));
 }
@@ -1190,7 +1190,7 @@ PHY_IQCalibrate_8192C(
 	bool			bPathAOK, bPathBOK;
 	s4Byte			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
 	bool			is12simular, is13simular, is23simular;
-	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
 	u4Byte			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 					rOFDM0_XARxIQImbalance,		rOFDM0_XBRxIQImbalance,
 					rOFDM0_ECCAThreshold,	rOFDM0_AGCRSSITable,
@@ -1198,7 +1198,7 @@ PHY_IQCalibrate_8192C(
 					rOFDM0_XCTxAFE,				rOFDM0_XDTxAFE,
 					rOFDM0_RxIQExtAnta};
 
-	if (ODM_CheckPowerStatus(pAdapter) == FALSE)
+	if (ODM_CheckPowerStatus(pAdapter) == false)
 		return;
 
 #if MP_DRIVER == 1
@@ -1239,11 +1239,11 @@ if (pAdapter->registrypriv.mp_mode == 1)
 		result[3][i] = 0;
 	}
 	final_candidate = 0xff;
-	bPathAOK = FALSE;
-	bPathBOK = FALSE;
-	is12simular = FALSE;
-	is23simular = FALSE;
-	is13simular = FALSE;
+	bPathAOK = false;
+	bPathBOK = false;
+	is12simular = false;
+	is23simular = false;
+	is13simular = false;
 
 
 	RTPRINT(FINIT, INIT_IQK, ("IQK !!!interface %d currentband %d ishardwareD %d\n", pAdapter->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
@@ -1256,12 +1256,12 @@ if (pAdapter->registrypriv.mp_mode == 1)
 		{
 			if (IS_92C_SERIAL( pHalData->VersionID))
 			{
-				phy_IQCalibrate_8192C(pAdapter, result, i, TRUE);
+				phy_IQCalibrate_8192C(pAdapter, result, i, true);
 			}
 			else
 			{
 				// For 88C 1T1R
-				phy_IQCalibrate_8192C(pAdapter, result, i, FALSE);
+				phy_IQCalibrate_8192C(pAdapter, result, i, false);
 			}
 		}
 		else/* if (IS_HARDWARE_TYPE_8192D(pAdapter))*/
@@ -1273,9 +1273,9 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			else if (pHalData->CurrentBandType92D == BAND_ON_2_4G)
 			{
 				if (IS_92D_SINGLEPHY(pHalData->VersionID))
-					phy_IQCalibrate_8192C(pAdapter, result, i, TRUE);
+					phy_IQCalibrate_8192C(pAdapter, result, i, true);
 				else
-					phy_IQCalibrate_8192C(pAdapter, result, i, FALSE);
+					phy_IQCalibrate_8192C(pAdapter, result, i, false);
 			}
 		}
 
@@ -1341,7 +1341,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 		RegECC = result[final_candidate][7];
 		RTPRINT(FINIT, INIT_IQK, ("IQK: final_candidate is %x\n",final_candidate));
 		RTPRINT(FINIT, INIT_IQK, ("IQK: RegE94=%x RegE9C=%x RegEA4=%x RegEAC=%x RegEB4=%x RegEBC=%x RegEC4=%x RegECC=%x\n ", RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC));
-		bPathAOK = bPathBOK = TRUE;
+		bPathAOK = bPathBOK = true;
 	}
 	else
 	{
@@ -1377,7 +1377,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			pHalData->IQKMatrixRegSetting[Indexforchannel].Value[0][i] =
 				result[final_candidate][i];
 
-		pHalData->IQKMatrixRegSetting[Indexforchannel].bIQKDone = TRUE;
+		pHalData->IQKMatrixRegSetting[Indexforchannel].bIQKDone = true;
 
 		RTPRINT(FINIT, INIT_IQK, ("\nIQK OK Indexforchannel %d.\n", Indexforchannel));
 	}
@@ -1394,7 +1394,7 @@ PHY_LCCalibrate_8192C(
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
 	PMGNT_INFO		pMgntInfo=&pAdapter->MgntInfo;
 	PMGNT_INFO		pMgntInfoBuddyAdapter;
 	u4Byte			timeout = 2000, timecount = 0;
@@ -1435,21 +1435,21 @@ if (pAdapter->registrypriv.mp_mode == 1)
 		timecount += 50;
 	}
 
-	pHalData->bLCKInProgress = TRUE;
+	pHalData->bLCKInProgress = true;
 
 	RTPRINT(FINIT, INIT_IQK, ("LCK:Start!!!interface %d currentband %x delay %d ms\n", pAdapter->interfaceIndex, pHalData->CurrentBandType92D, timecount));
 
 	//if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
 	if (IS_2T2R(pHalData->VersionID))
 	{
-		phy_LCCalibrate(pAdapter, TRUE);
+		phy_LCCalibrate(pAdapter, true);
 	}
 	else{
 		// For 88C 1T1R
-		phy_LCCalibrate(pAdapter, FALSE);
+		phy_LCCalibrate(pAdapter, false);
 	}
 
-	pHalData->bLCKInProgress = FALSE;
+	pHalData->bLCKInProgress = false;
 
 	RTPRINT(FINIT, INIT_IQK, ("LCK:Finish!!!interface %d\n", pAdapter->interfaceIndex));
 
@@ -1480,11 +1480,11 @@ PHY_APCalibrate_8192C(
 		return;
 
 	if (IS_92C_SERIAL( pHalData->VersionID)){
-		phy_APCalibrate_8192C(pAdapter, delta, TRUE);
+		phy_APCalibrate_8192C(pAdapter, delta, true);
 	}
 	else{
 		// For 88C 1T1R
-		phy_APCalibrate_8192C(pAdapter, delta, FALSE);
+		phy_APCalibrate_8192C(pAdapter, delta, false);
 	}
 }
 
@@ -1524,7 +1524,7 @@ ODM_ResetIQKResult(
 				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][5] =
 				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][7] = 0x0;
 
-			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].bIQKDone = FALSE;
+			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].bIQKDone = false;
 
 		}
 	}

@@ -426,11 +426,11 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		break;
 	case ANDROID_WIFI_CMD_RXFILTER_ADD:
 		//int filter_num = *(command + strlen(CMD_RXFILTER_ADD) + 1) - '0';
-		//bytes_written = net_os_rxfilter_add_remove(net, TRUE, filter_num);
+		//bytes_written = net_os_rxfilter_add_remove(net, true, filter_num);
 		break;
 	case ANDROID_WIFI_CMD_RXFILTER_REMOVE:
 		//int filter_num = *(command + strlen(CMD_RXFILTER_REMOVE) + 1) - '0';
-		//bytes_written = net_os_rxfilter_add_remove(net, FALSE, filter_num);
+		//bytes_written = net_os_rxfilter_add_remove(net, false, filter_num);
 		break;
 
 	case ANDROID_WIFI_CMD_BTCOEXSCAN_START:

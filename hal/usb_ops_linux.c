@@ -492,10 +492,10 @@ static void usb_read_interrupt_complete(struct urb *purb, struct pt_regs *regs)
 			case -ENODEV:
 			case -ESHUTDOWN:
 				//padapter->bSurpriseRemoved=true;
-				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=TRUE\n"));
+				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=true\n"));
 			case -ENOENT:
 				padapter->bDriverStopped=true;
-				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=TRUE\n"));
+				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=true\n"));
 				break;
 			case -EPROTO:
 				break;
@@ -978,10 +978,10 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 			case -ENODEV:
 			case -ESHUTDOWN:
 				//padapter->bSurpriseRemoved=true;
-				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=TRUE\n"));
+				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=true\n"));
 			case -ENOENT:
 				padapter->bDriverStopped=true;
-				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=TRUE\n"));
+				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=true\n"));
 				break;
 			case -EPROTO:
 			case -EOVERFLOW:
@@ -1415,10 +1415,10 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 			case -ENODEV:
 			case -ESHUTDOWN:
 				//padapter->bSurpriseRemoved=true;
-				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=TRUE\n"));
+				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bSurpriseRemoved=true\n"));
 			case -ENOENT:
 				padapter->bDriverStopped=true;
-				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=TRUE\n"));
+				RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped=true\n"));
 				break;
 			case -EPROTO:
 			case -EOVERFLOW:

@@ -41,8 +41,8 @@
 
 void dump_chip_info(HAL_VERSION	ChipVersion)
 {
-	int cnt = 0;
-	u8 buf[128];
+	uint cnt = 0;
+	char buf[128];
 
 	if (IS_81XXC(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: %s_", IS_92C_SERIAL(ChipVersion)?"CHIP_8192C":"CHIP_8188C");

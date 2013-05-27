@@ -23,7 +23,7 @@
 #define CONFIG_ODM_REFRESH_RAMASK
 #define CONFIG_PHY_SETTING_WITH_ODM
 //for FPGA VERIFICATION config
-#define RTL8188E_FPGA_TRUE_PHY_VERIFICATION 0
+#define RTL8188E_FPGA_true_PHY_VERIFICATION 0
 
 //***** temporarily flag *******
 /*

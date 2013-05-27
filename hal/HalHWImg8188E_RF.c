@@ -37,22 +37,22 @@ CheckCondition(
     u4Byte cond = Condition;
 
     if ( Condition == 0xCDCDCDCD )
-        return TRUE;
+        return true;
 
     cond = Condition & 0x000000FF;
     if ( (_board == cond) && cond != 0x00)
-        return FALSE;
+        return false;
 
     cond = Condition & 0x0000FF00;
     cond = cond >> 8;
     if ( (_interface & cond) == 0 && cond != 0x07)
-        return FALSE;
+        return false;
 
     cond = Condition & 0x00FF0000;
     cond = cond >> 16;
     if ( (_platform & cond) == 0 && cond != 0x0F)
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 
@@ -175,7 +175,7 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm)
 	u1Byte     board       = pDM_Odm->BoardType;
 	u4Byte     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u4Byte);
 	pu4Byte    Array       = Array_RadioA_1T_8188E;
-	bool		biol = FALSE;
+	bool		biol = false;
 #ifdef CONFIG_IOL_IOREG_CFG
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;

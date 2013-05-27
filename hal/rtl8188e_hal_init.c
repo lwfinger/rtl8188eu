@@ -868,7 +868,7 @@ void rtl8188e_InitializeFirmwareVars(PADAPTER padapter)
 	pHalData->LastHMEBoxNum = 0;
 //	pHalData->H2CQueueHead = 0;
 //	pHalData->H2CQueueTail = 0;
-//	pHalData->H2CStopInsertQueue = FALSE;
+//	pHalData->H2CStopInsertQueue = false;
 }
 #endif //CONFIG_WOWLAN
 
@@ -2968,7 +2968,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 
 		}
 
-		//pHalData->bNOPG = TRUE;
+		//pHalData->bNOPG = true;
 		return;
 	}
 
@@ -2981,7 +2981,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 			if (pwrInfo24G->IndexCCK_Base[rfPath][group] == 0xFF)
 			{
 				pwrInfo24G->IndexCCK_Base[rfPath][group] = EEPROM_DEFAULT_24G_INDEX;
-//				pHalData->bNOPG = TRUE;
+//				pHalData->bNOPG = true;
 			}
 		}
 		for (group = 0 ; group < MAX_CHNL_GROUP_24G-1; group++)
@@ -3182,7 +3182,7 @@ Hal_ReadTxPowerInfo88E(
 	Hal_ReadPowerValueFromPROM_8188E(&pwrInfo24G, PROMContent, AutoLoadFail);
 
 	if (!AutoLoadFail)
-		pHalData->bTXPowerDataReadFromEEPORM = TRUE;
+		pHalData->bTXPowerDataReadFromEEPORM = true;
 
 	//for (rfPath = 0 ; rfPath < MAX_RF_PATH ; rfPath++)
 	for (rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)

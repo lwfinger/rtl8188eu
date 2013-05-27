@@ -96,7 +96,7 @@ sic_IsSICReady(
 	{
 		if (retryCnt++ >= SIC_MAX_POLL_CNT)
 		{
-			//RTPRINT(FPHY, (PHY_SICR|PHY_SICW), ("[SIC], sic_IsSICReady() return FALSE\n"));
+			//RTPRINT(FPHY, (PHY_SICR|PHY_SICW), ("[SIC], sic_IsSICReady() return false\n"));
 			return false;
 		}
 
@@ -258,7 +258,7 @@ SIC_SetBBReg(
 		delay_ms(10); // 1 ms
 
 		if ((BBWaitCounter > 100) || RT_CANNOT_IO(Adapter))
-		{// Wait too long, return FALSE to avoid to be stuck here.
+		{// Wait too long, return false to avoid to be stuck here.
 			RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_SetBBReg(), Fail to set BB offset(%#x)!!, WaitCnt(%d)\n", RegAddr, BBWaitCounter));
 			return;
 		}
@@ -303,7 +303,7 @@ SIC_QueryBBReg(
 		delay_ms(10); // 10 ms
 
 		if ((BBWaitCounter > 100) || RT_CANNOT_IO(Adapter))
-		{// Wait too long, return FALSE to avoid to be stuck here.
+		{// Wait too long, return false to avoid to be stuck here.
 			RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_QueryBBReg(), Fail to query BB offset(%#x)!!, WaitCnt(%d)\n", RegAddr, BBWaitCounter));
 			return ReturnValue;
 		}
@@ -1461,7 +1461,7 @@ phy_BB8190_Config_HardCode(
 		PADAPTER	Adapter
 	)
 {
-	//RT_ASSERT(FALSE, ("This function is not implement yet!!\n"));
+	//RT_ASSERT(false, ("This function is not implement yet!!\n"));
 	return _SUCCESS;
 }
 
@@ -1946,7 +1946,7 @@ PHY_CheckBBAndRFOK(
 		switch (CheckBlock)
 		{
 		case HW90_BLOCK_MAC:
-			//RT_ASSERT(FALSE, ("PHY_CheckBBRFOK(): Never Write 0x100 here!"));
+			//RT_ASSERT(false, ("PHY_CheckBBRFOK(): Never Write 0x100 here!"));
 			//RT_TRACE(COMP_INIT, DBG_LOUD, ("PHY_CheckBBRFOK(): Never Write 0x100 here!\n"));
 			break;
 
@@ -2532,11 +2532,11 @@ _PHY_SetBWMode92C(
 			break;
 
 		default:
-			//RT_ASSERT(FALSE, ("Unknown RFChipID: %d\n", pHalData->RFChipID));
+			//RT_ASSERT(false, ("Unknown RFChipID: %d\n", pHalData->RFChipID));
 			break;
 	}
 
-	//pHalData->SetBWModeInProgress= FALSE;
+	//pHalData->SetBWModeInProgress= false;
 
 	//RT_TRACE(COMP_SCAN, DBG_LOUD, ("<==PHY_SetBWModeCallback8192C()\n" ));
 }
@@ -2590,7 +2590,7 @@ PHY_SetBWMode8188E(
 	//if (pHalData->SetBWModeInProgress)
 	//	return;
 
-	//pHalData->SetBWModeInProgress= TRUE;
+	//pHalData->SetBWModeInProgress= true;
 
 	pHalData->CurrentChannelBW = Bandwidth;
 
@@ -2644,7 +2644,7 @@ PHY_SwChnl8188E(	// Call after initialization
 
 	if (pHalData->rf_chip == RF_PSEUDO_11N)
 	{
-		//pHalData->SwChnlInProgress=FALSE;
+		//pHalData->SwChnlInProgress=false;
 		return;									//return immediately if it is peudo-phy
 	}
 
@@ -2672,12 +2672,12 @@ PHY_SwChnl8188E(	// Call after initialization
 			break;
 
 		default:
-			//RT_ASSERT(FALSE, ("Invalid WirelessMode(%#x)!!\n", pHalData->CurrentWirelessMode));
+			//RT_ASSERT(false, ("Invalid WirelessMode(%#x)!!\n", pHalData->CurrentWirelessMode));
 			break;
 	}
 	//--------------------------------------------
 
-	//pHalData->SwChnlInProgress = TRUE;
+	//pHalData->SwChnlInProgress = true;
 	if (channel == 0)
 		channel = 1;
 
@@ -2695,10 +2695,10 @@ PHY_SwChnl8188E(	// Call after initialization
 	}
 	else
 	{
-		//RT_TRACE(COMP_SCAN, DBG_LOUD, ("PHY_SwChnl8192C SwChnlInProgress FALSE driver sleep or unload\n"));
+		//RT_TRACE(COMP_SCAN, DBG_LOUD, ("PHY_SwChnl8192C SwChnlInProgress false driver sleep or unload\n"));
 		//if (IS_HARDWARE_TYPE_8192SU(Adapter))
 		//{
-		//	pHalData->SwChnlInProgress = FALSE;
+		//	pHalData->SwChnlInProgress = false;
 			pHalData->CurrentChannel = tmpchannel;
 		//}
 	}
@@ -2784,11 +2784,11 @@ PHY_SwChnlPhy8192C(	// Only called during initialize
 	//return immediately if it is peudo-phy
 	if (pHalData->rf_chip == RF_PSEUDO_11N)
 	{
-		//pHalData->SwChnlInProgress=FALSE;
+		//pHalData->SwChnlInProgress=false;
 		return;
 	}
 
-	//pHalData->SwChnlInProgress = TRUE;
+	//pHalData->SwChnlInProgress = true;
 	if ( channel == 0)
 		channel = 1;
 
@@ -2799,7 +2799,7 @@ PHY_SwChnlPhy8192C(	// Only called during initialize
 
 	phy_FinishSwChnlNow(Adapter,channel);
 
-	//pHalData->SwChnlInProgress = FALSE;
+	//pHalData->SwChnlInProgress = false;
 }
 
 
@@ -2882,7 +2882,7 @@ static void _PHY_SetRFPathSwitch(
 
 }
 
-//return value TRUE => Main; FALSE => Aux
+//return value true => Main; false => Aux
 
 static bool _PHY_QueryRFPathSwitch(
 		PADAPTER	pAdapter,

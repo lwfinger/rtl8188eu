@@ -265,7 +265,7 @@ ODM_AntennaDiversityInit_88E(
 	//ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("pDM_Odm->AntDivType=%d, pHalData->AntDivCfg=%d\n",
 	//	pDM_Odm->AntDivType, pHalData->AntDivCfg));
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("pDM_Odm->AntDivType=%d\n",pDM_Odm->AntDivType));
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("pDM_Odm->bIsMPChip=%s\n",(pDM_Odm->bIsMPChip?"TRUE":"FALSE")));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("pDM_Odm->bIsMPChip=%s\n",(pDM_Odm->bIsMPChip?"true":"false")));
 
 	if (pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV)
 		odm_RX_HWAntDivInit(pDM_Odm);
@@ -418,7 +418,7 @@ odm_HWAntDiv(
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
 	bool	bMatchBSSID;
-	bool	bPktFilterMacth = FALSE;
+	bool	bPktFilterMacth = false;
 	PSTA_INFO_T	pEntry;
 
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++)
@@ -541,7 +541,7 @@ odm_FastAntTraining(
 	u4Byte	i, MaxRSSI=0;
 	u1Byte	TargetAnt=2;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
-	bool	bPktFilterMacth = FALSE;
+	bool	bPktFilterMacth = false;
 	PSTA_INFO_T	pEntry;
 
 
@@ -559,7 +559,7 @@ odm_FastAntTraining(
 			else
 			{
 			pDM_FatTable->antAveRSSI[i] = pDM_FatTable->antSumRSSI[i] /pDM_FatTable->antRSSIcnt[i];
-				bPktFilterMacth = TRUE;
+				bPktFilterMacth = true;
 			}
 			if (pDM_FatTable->antAveRSSI[i] > MaxRSSI)
 			{
@@ -572,7 +572,7 @@ odm_FastAntTraining(
 		}
 
 		//2 Select TRX Antenna
-		if (bPktFilterMacth == FALSE)
+		if (bPktFilterMacth == false)
 		{
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("None Packet is matched\n"));
 
@@ -638,7 +638,7 @@ odm_FastAntTrainingCallback(
 	PADAPTER	padapter = pDM_Odm->Adapter;
 	if (padapter->net_closed == true)
 	    return;
-	//if (*pDM_Odm->pbNet_closed == TRUE)
+	//if (*pDM_Odm->pbNet_closed == true)
 	   // return;
 #endif
 
@@ -704,7 +704,7 @@ ODM_AntennaDiversity_88E(
 	if (!pDM_Odm->bLinked)
 	{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("ODM_AntennaDiversity_88E(): No Link.\n"));
-		if (pDM_FatTable->bBecomeLinked == TRUE)
+		if (pDM_FatTable->bBecomeLinked == true)
 		{
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Need to Turn off HW AntDiv\n"));
 			ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0);	//RegC50[7]=1'b1		//enable HW AntDiv
@@ -717,7 +717,7 @@ ODM_AntennaDiversity_88E(
 	}
 	else
 	{
-		if (pDM_FatTable->bBecomeLinked ==FALSE)
+		if (pDM_FatTable->bBecomeLinked ==false)
 		{
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Need to Turn on HW AntDiv\n"));
 			//Because HW AntDiv is disabled before Link, we enable HW AntDiv after link
@@ -846,12 +846,12 @@ odm_DynamicPrimaryCCA(
 	PRT_WLAN_STA	pEntry;
 #endif
 
-	PFALSE_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
+	Pfalse_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
 	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 
 	bool		Is40MHz;
-	bool		Client_40MHz = FALSE, Client_tmp = FALSE;      // connected client BW
-	bool		bConnected = FALSE;		// connected or not
+	bool		Client_40MHz = false, Client_tmp = false;      // connected client BW
+	bool		bConnected = false;		// connected or not
 	static u1Byte	Client_40MHz_pre = 0;
 	static u8Byte	lastTxOkCnt = 0;
 	static u8Byte	lastRxOkCnt = 0;
@@ -924,7 +924,7 @@ odm_DynamicPrimaryCCA(
 
 				if (pEntry->bAssociated)
 				{
-					bConnected=TRUE;    // client is connected or not
+					bConnected=true;    // client is connected or not
 					break;
 				}
 			}
@@ -947,7 +947,7 @@ odm_DynamicPrimaryCCA(
 				if (Client_tmp>Client_40MHz)
 					Client_40MHz = Client_tmp;     // 40M/20M coexist => 40M priority is High
 
-				bConnected = TRUE;
+				bConnected = true;
 			}
 		}
 #endif
@@ -1223,6 +1223,6 @@ ODM_DynamicPrimaryCCA_DupRTS(
 			PDM_ODM_T		pDM_Odm
 	)
 {
-	return FALSE;
+	return false;
 }
 #endif //#if (RTL8188E_SUPPORT == 1)

@@ -652,7 +652,7 @@ ODM_RASupport_Init(
 
 	// 2012/02/14 MH Be noticed, the init must be after IC type is recognized!!!!!
 	if (pDM_Odm->SupportICType == ODM_RTL8188E)
-		pDM_Odm->RaSupport88E = TRUE;
+		pDM_Odm->RaSupport88E = true;
 
 }
 
