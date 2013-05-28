@@ -12,6 +12,8 @@ EXTRA_CFLAGS += -Wno-uninitialized
 
 EXTRA_CFLAGS += -I$(src)/include
 
+ccflags-y += -D__CHECK_ENDIAN__
+
 CONFIG_AUTOCFG_CP = n
 
 CONFIG_RTL8188E = y
