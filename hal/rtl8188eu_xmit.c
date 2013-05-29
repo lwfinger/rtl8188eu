@@ -52,38 +52,16 @@ void	rtl8188eu_free_xmit_priv(_adapter *padapter)
 {
 }
 
-u8 urb_zero_packet_chk(_adapter *padapter, int sz)
+static u8 urb_zero_packet_chk(_adapter *padapter, int sz)
 {
-#if 1
 	u8 blnSetTxDescOffset;
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
 	blnSetTxDescOffset = (((sz + TXDESC_SIZE) %  pHalData->UsbBulkOutSize) ==0)?1:0;
 
-#else
-
-	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
-	if ( pdvobj->ishighspeed )
-	{
-		if ( ( (sz + TXDESC_SIZE) % 512 ) == 0 ) {
-			blnSetTxDescOffset = 1;
-		} else {
-			blnSetTxDescOffset = 0;
-		}
-	}
-	else
-	{
-		if ( ( (sz + TXDESC_SIZE) % 64 ) == 0 )		{
-			blnSetTxDescOffset = 1;
-		} else {
-			blnSetTxDescOffset = 0;
-		}
-	}
-#endif
 	return blnSetTxDescOffset;
-
 }
 
-void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
+static void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 {
 		u16	*usPtr = (u16*)ptxdesc;
 		u32 count = 16;		// (32 bytes / 2 bytes per XOR) => 16 times
@@ -93,12 +71,9 @@ void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 		//Clear first
 		ptxdesc->txdw7 &= cpu_to_le32(0xffff0000);
 
-		for (index = 0 ; index < count ; index++){
+		for (index = 0; index < count; index++)
 			checksum = checksum ^ le16_to_cpu(*(usPtr + index));
-		}
-
 		ptxdesc->txdw7 |= cpu_to_le32(0x0000ffff&checksum);
-
 }
 //
 // Description: In normal chip, we should send some packet to Hw which will be used by Fw
@@ -155,66 +130,55 @@ void rtl8188e_fill_fake_txdesc(
 #endif
 }
 
-void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
+static void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 {
-	if ((pattrib->encrypt > 0) && !pattrib->bswenc)
-	{
-		switch (pattrib->encrypt)
-		{
-			//SEC_TYPE : 0:NO_ENC,1:WEP40/TKIP,2:WAPI,3:AES
-			case _WEP40_:
-			case _WEP104_:
-					ptxdesc->txdw1 |= cpu_to_le32((0x01<<SEC_TYPE_SHT)&0x00c00000);
-					ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
-					break;
-			case _TKIP_:
-			case _TKIP_WTMIC_:
-					ptxdesc->txdw1 |= cpu_to_le32((0x01<<SEC_TYPE_SHT)&0x00c00000);
-					ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
-					break;
+	if ((pattrib->encrypt > 0) && !pattrib->bswenc) {
+		switch (pattrib->encrypt) {
+		//SEC_TYPE : 0:NO_ENC,1:WEP40/TKIP,2:WAPI,3:AES
+		case _WEP40_:
+		case _WEP104_:
+			ptxdesc->txdw1 |= cpu_to_le32((0x01<<SEC_TYPE_SHT)&0x00c00000);
+			ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
+			break;
+		case _TKIP_:
+		case _TKIP_WTMIC_:
+			ptxdesc->txdw1 |= cpu_to_le32((0x01<<SEC_TYPE_SHT)&0x00c00000);
+			ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
+			break;
 #ifdef CONFIG_WAPI_SUPPORT
-			case _SMS4_:
-					ptxdesc->txdw1 |= cpu_to_le32((0x02<<SEC_TYPE_SHT)&0x00c00000);
-					ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
-				break;
+		case _SMS4_:
+			ptxdesc->txdw1 |= cpu_to_le32((0x02<<SEC_TYPE_SHT)&0x00c00000);
+			ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
+			break;
 #endif
-			case _AES_:
-					ptxdesc->txdw1 |= cpu_to_le32((0x03<<SEC_TYPE_SHT)&0x00c00000);
-					ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
-					break;
-			case _NO_PRIVACY_:
-			default:
-					break;
-
-		}
-
-	}
-
-}
-
-void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
-{
-	//DBG_88E("cvs_mode=%d\n", pattrib->vcs_mode);
-
-	switch (pattrib->vcs_mode)
-	{
-		case RTS_CTS:
-			*pdw |= cpu_to_le32(RTS_EN);
+		case _AES_:
+			ptxdesc->txdw1 |= cpu_to_le32((0x03<<SEC_TYPE_SHT)&0x00c00000);
+			ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
 			break;
-		case CTS_TO_SELF:
-			*pdw |= cpu_to_le32(CTS_2_SELF);
-			break;
-		case NONE_VCS:
+		case _NO_PRIVACY_:
 		default:
 			break;
+		}
 	}
+}
 
+static void fill_txdesc_vcs(struct pkt_attrib *pattrib, __le32 *pdw)
+{
+	switch (pattrib->vcs_mode) {
+	case RTS_CTS:
+		*pdw |= cpu_to_le32(RTS_EN);
+		break;
+	case CTS_TO_SELF:
+		*pdw |= cpu_to_le32(CTS_2_SELF);
+		break;
+	case NONE_VCS:
+	default:
+		break;
+	}
 	if (pattrib->vcs_mode) {
 		*pdw |= cpu_to_le32(HW_RTS_EN);
-
 		// Set RTS BW
-		if (pattrib->ht_en)
-		{
+		if (pattrib->ht_en) {
 			*pdw |= (pattrib->bwmode&HT_CHANNEL_WIDTH_40)?	cpu_to_le32(BIT(27)):0;
 
 			if (pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_LOWER)
@@ -229,12 +193,9 @@ void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 	}
 }
 
-void fill_txdesc_phy(struct pkt_attrib *pattrib, u32 *pdw)
+static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
 {
-	//DBG_88E("bwmode=%d, ch_off=%d\n", pattrib->bwmode, pattrib->ch_offset);
-
-	if (pattrib->ht_en)
-	{
+	if (pattrib->ht_en) {
 		*pdw |= (pattrib->bwmode&HT_CHANNEL_WIDTH_40)?	cpu_to_le32(BIT(25)):0;
 
 		if (pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_LOWER)
@@ -347,7 +308,7 @@ if (padapter->registrypriv.mp_mode == 0)
 			//SET_TX_DESC_MCSG2_MAX_LEN_88E(pDesc, 0x6);
 			//SET_TX_DESC_MCSG3_MAX_LEN_88E(pDesc, 0x6);
 			//SET_TX_DESC_MCS7_SGI_MAX_LEN_88E(pDesc, 0x6);
-			ptxdesc->txdw6 = 0x6666f800;
+			ptxdesc->txdw6 = cpu_to_le32(0x6666f800);
 		}
 		else{
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_BK);//AGG BK

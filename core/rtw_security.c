@@ -212,7 +212,7 @@ _func_enter_;
 
 				length=pattrib->last_txcmdsz-pattrib->hdrlen-pattrib->iv_len- pattrib->icv_len;
 
-				*((unsigned long *)crc)=cpu_to_le32(getcrc32(payload,length));
+				*((__le32 *)crc)=cpu_to_le32(getcrc32(payload,length));
 
 				arcfour_init(&mycontext, wepkey,3+keylength);
 				arcfour_encrypt(&mycontext, payload, payload, length);
@@ -222,7 +222,7 @@ _func_enter_;
 			else
 			{
 			length=pxmitpriv->frag_len-pattrib->hdrlen-pattrib->iv_len-pattrib->icv_len ;
-				*((unsigned long *)crc)=cpu_to_le32(getcrc32(payload,length));
+				*((__le32 *)crc)=cpu_to_le32(getcrc32(payload,length));
 				arcfour_init(&mycontext, wepkey,3+keylength);
 				arcfour_encrypt(&mycontext, payload, payload, length);
 				arcfour_encrypt(&mycontext, payload+length, crc, 4);
@@ -725,8 +725,10 @@ _func_enter_;
 
 				if ((curfragnum+1)==pattrib->nr_frags){	//4 the last fragment
 					length=pattrib->last_txcmdsz-pattrib->hdrlen-pattrib->iv_len- pattrib->icv_len;
-					RT_TRACE(_module_rtl871x_security_c_,_drv_info_,("pattrib->iv_len =%x, pattrib->icv_len =%x\n", pattrib->iv_len,pattrib->icv_len));
-					*((u32 *)crc)=cpu_to_le32(getcrc32(payload,length));/* modified by Amy*/
+					RT_TRACE(_module_rtl871x_security_c_, _drv_info_,
+						 ("pattrib->iv_len =%x, pattrib->icv_len =%x\n",
+						 pattrib->iv_len,pattrib->icv_len));
+					*((__le32 *)crc)=cpu_to_le32(getcrc32(payload,length));/* modified by Amy*/
 
 					arcfour_init(&mycontext, rc4key,16);
 					arcfour_encrypt(&mycontext, payload, payload, length);
@@ -735,7 +737,7 @@ _func_enter_;
 				}
 				else{
 					length=pxmitpriv->frag_len-pattrib->hdrlen-pattrib->iv_len-pattrib->icv_len ;
-					*((u32 *)crc)=cpu_to_le32(getcrc32(payload,length));/* modified by Amy*/
+					*((__le32 *)crc)=cpu_to_le32(getcrc32(payload,length));/* modified by Amy*/
 					arcfour_init(&mycontext,rc4key,16);
 					arcfour_encrypt(&mycontext, payload, payload, length);
 					arcfour_encrypt(&mycontext, payload+length, crc, 4);

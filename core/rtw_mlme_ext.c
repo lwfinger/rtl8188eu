@@ -1122,9 +1122,10 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_AP_MODE
 	_irqL irqL;
-	unsigned int	auth_mode, seq, ie_len;
+	unsigned int	auth_mode, ie_len;
+	__le16 seq;
 	unsigned char	*sa, *p;
-	u16	algorithm;
+	__le16	algorithm;
 	int	status;
 	static struct sta_info stat;
 	struct	sta_info	*pstat=NULL;
@@ -2240,7 +2241,7 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
 
 unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
 {
-	unsigned short	reason;
+	__le16	reason;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);

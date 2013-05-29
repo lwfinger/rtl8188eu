@@ -148,6 +148,7 @@ int _rtw_write8(_adapter *adapter, u32 addr, u8 val)
 
 	return RTW_STATUS_CODE(ret);
 }
+
 int _rtw_write16(_adapter *adapter, u32 addr, u16 val)
 {
 	//struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue;
@@ -155,11 +156,12 @@ int _rtw_write16(_adapter *adapter, u32 addr, u16 val)
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
 	int (*_write16)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
 	int ret;
+	__le16 ival;
 	_func_enter_;
 	_write16 = pintfhdl->io_ops._write16;
 
-	val = rtw_cpu_to_le16(val);
-	ret = _write16(pintfhdl, addr, val);
+	ival = rtw_cpu_to_le16(val);
+	ret = _write16(pintfhdl, addr, ival);
 	_func_exit_;
 
 	return RTW_STATUS_CODE(ret);
@@ -171,11 +173,12 @@ int _rtw_write32(_adapter *adapter, u32 addr, u32 val)
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
 	int (*_write32)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
 	int ret;
+	__le32 ival;
 	_func_enter_;
 	_write32 = pintfhdl->io_ops._write32;
 
-	val = rtw_cpu_to_le32(val);
-	ret = _write32(pintfhdl, addr, val);
+	ival = rtw_cpu_to_le32(val);
+	ret = _write32(pintfhdl, addr, ival);
 	_func_exit_;
 
 	return RTW_STATUS_CODE(ret);

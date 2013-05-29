@@ -19,6 +19,7 @@
  ******************************************************************************/
 
 #include <drv_types.h>
+#include "rtw_led.h"
 
 //
 //	Description:
@@ -139,7 +140,7 @@ void SwLedOff(_adapter	*padapter, PLED_871x	pLed);
 
 #define CONFIG_LED_REMOVE_HAL
 
-void
+static void
 SwLedBlink(
 	PLED_871x			pLed
 	)
@@ -257,7 +258,7 @@ SwLedBlink(
 	}
 }
 
-void
+static void
 SwLedBlink1(
 	PLED_871x			pLed
 	)
@@ -469,7 +470,7 @@ SwLedBlink1(
 
 }
 
-void
+static void
 SwLedBlink2(
 	PLED_871x			pLed
 	)
@@ -591,7 +592,7 @@ SwLedBlink2(
 
 }
 
-void
+static void
 SwLedBlink3(
 	PLED_871x			pLed
 	)
@@ -762,7 +763,7 @@ SwLedBlink3(
 }
 
 
-void
+static void
 SwLedBlink4(
 	PLED_871x			pLed
 	)
@@ -961,7 +962,7 @@ SwLedBlink4(
 
 }
 
-void
+static void
 SwLedBlink5(
 	PLED_871x			pLed
 	)
@@ -1079,7 +1080,7 @@ SwLedBlink5(
 
 }
 
-void
+static void
 SwLedBlink6(
 	PLED_871x			pLed
 	)
