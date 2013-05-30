@@ -1351,8 +1351,8 @@ _func_enter_;
 		if (_rtw_memcmp(myhwaddr, pattrib->src, ETH_ALEN)){
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" SA==myself\n"));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_88E("DBG_RX_DROP_FRAME %s SA="MAC_FMT", myhwaddr="MAC_FMT"\n",
-				__func__, MAC_ARG(pattrib->src), MAC_ARG(myhwaddr));
+			DBG_88E("DBG_RX_DROP_FRAME %s SA=%pM, myhwaddr=%pM\n",
+				__func__, (pattrib->src), (myhwaddr));
 			#endif
 			ret= _FAIL;
 			goto exit;
@@ -1362,9 +1362,9 @@ _func_enter_;
 		if ((!_rtw_memcmp(myhwaddr, pattrib->dst, ETH_ALEN))&& (!bmcast))
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,
-				(" ap2sta_data_frame:  compare DA fail; DA="MAC_FMT"\n", MAC_ARG(pattrib->dst)));
+				(" ap2sta_data_frame:  compare DA fail; DA=%pM\n", (pattrib->dst)));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_88E("DBG_RX_DROP_FRAME %s DA="MAC_FMT"\n", __func__, MAC_ARG(pattrib->dst));
+			DBG_88E("DBG_RX_DROP_FRAME %s DA=%pM\n", __func__, (pattrib->dst));
 			#endif
 			ret= _FAIL;
 			goto exit;
@@ -1377,17 +1377,17 @@ _func_enter_;
 		     (!_rtw_memcmp(pattrib->bssid, mybssid, ETH_ALEN)) )
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,
-				(" ap2sta_data_frame:  compare BSSID fail ; BSSID="MAC_FMT"\n", MAC_ARG(pattrib->bssid)));
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("mybssid="MAC_FMT"\n", MAC_ARG(mybssid)));
+				(" ap2sta_data_frame:  compare BSSID fail ; BSSID=%pM\n", (pattrib->bssid)));
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("mybssid=%pM\n", (mybssid)));
 			#ifdef DBG_RX_DROP_FRAME
-			DBG_88E("DBG_RX_DROP_FRAME %s BSSID="MAC_FMT", mybssid="MAC_FMT"\n",
-				__func__, MAC_ARG(pattrib->bssid), MAC_ARG(mybssid));
+			DBG_88E("DBG_RX_DROP_FRAME %s BSSID=%pM, mybssid=%pM\n",
+				__func__, (pattrib->bssid), (mybssid));
 			DBG_88E( "this adapter = %d, buddy adapter = %d\n", adapter->adapter_type, adapter->pbuddy_adapter->adapter_type );
 			#endif
 
 			if (!bmcast)
 			{
-				DBG_88E("issue_deauth to the nonassociated ap=" MAC_FMT " for the reason(7)\n", MAC_ARG(pattrib->bssid));
+				DBG_88E("issue_deauth to the nonassociated ap=%pM for the reason(7)\n", (pattrib->bssid));
 				issue_deauth(adapter, pattrib->bssid, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
 			}
 
@@ -1458,7 +1458,7 @@ _func_enter_;
 			*psta = rtw_get_stainfo(pstapriv, pattrib->bssid); // get sta_info
 			if (*psta == NULL)
 			{
-				DBG_88E("issue_deauth to the ap=" MAC_FMT " for the reason(7)\n", MAC_ARG(pattrib->bssid));
+				DBG_88E("issue_deauth to the ap=%pM for the reason(7)\n", (pattrib->bssid));
 
 				issue_deauth(adapter, pattrib->bssid, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
 			}
@@ -1509,7 +1509,7 @@ _func_enter_;
 		if (*psta == NULL)
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("can't get psta under AP_MODE; drop pkt\n"));
-			DBG_88E("issue_deauth to sta=" MAC_FMT " for the reason(7)\n", MAC_ARG(pattrib->src));
+			DBG_88E("issue_deauth to sta=%pM for the reason(7)\n", (pattrib->src));
 
 			issue_deauth(adapter, pattrib->src, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
 
@@ -1536,7 +1536,7 @@ _func_enter_;
 			ret = RTW_RX_HANDLED;
 			goto exit;
 		}
-		DBG_88E("issue_deauth to sta=" MAC_FMT " for the reason(7)\n", MAC_ARG(pattrib->src));
+		DBG_88E("issue_deauth to sta=%pM for the reason(7)\n", (pattrib->src));
 		issue_deauth(adapter, pattrib->src, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
 		ret = RTW_RX_HANDLED;
 		goto exit;

@@ -1477,7 +1477,7 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 	sinfo->filled = 0;
 
 #ifdef CONFIG_DEBUG_CFG80211
-	DBG_88E(FUNC_NDEV_FMT" mac="MAC_FMT"\n", FUNC_NDEV_ARG(ndev), MAC_ARG(mac));
+	DBG_88E(FUNC_NDEV_FMT" mac=%pM\n", FUNC_NDEV_ARG(ndev), mac);
 #endif
 
 	//for infra./P2PClient mode
@@ -1489,7 +1489,7 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 
 		if (_rtw_memcmp(mac, cur_network->network.MacAddress, ETH_ALEN) == false)
 		{
-			DBG_88E("%s, mismatch bssid="MAC_FMT"\n", __func__, MAC_ARG(cur_network->network.MacAddress));
+			DBG_88E("%s, mismatch bssid=%pM\n", __func__, cur_network->network.MacAddress);
 			return -ENOENT;
 		}
 
@@ -2528,7 +2528,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 
 
 	if (sme->bssid)
-		DBG_88E("bssid="MAC_FMT"\n", MAC_ARG(sme->bssid));
+		DBG_88E("bssid=%pM\n", sme->bssid);
 
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
@@ -3155,8 +3155,8 @@ static int rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struct net_de
 			goto fail;
 		}
 
-		DBG_88E("RTW_Tx:da="MAC_FMT" via "FUNC_NDEV_FMT"\n",
-			MAC_ARG(GetAddr1Ptr(buf)), FUNC_NDEV_ARG(ndev));
+		DBG_88E("RTW_Tx:da=%pM via "FUNC_NDEV_FMT"\n",
+			GetAddr1Ptr(buf), FUNC_NDEV_ARG(ndev));
 		#ifdef CONFIG_P2P
 		if ((type = rtw_p2p_check_frames(padapter, buf, len, true)) >= 0)
 			goto dump;
@@ -3609,7 +3609,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 	}
 
 
-	DBG_88E("free sta macaddr =" MAC_FMT "\n", MAC_ARG(mac));
+	DBG_88E("free sta macaddr =%pM\n", mac);
 
 	if (mac[0] == 0xff && mac[1] == 0xff &&
 	    mac[2] == 0xff && mac[3] == 0xff &&
@@ -4456,7 +4456,7 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy, struct net_device *ndev,
 		goto exit;
 	}
 
-	DBG_88E("RTW_Tx:tx_ch=%d, da="MAC_FMT"\n", tx_ch, MAC_ARG(GetAddr1Ptr(buf)));
+	DBG_88E("RTW_Tx:tx_ch=%d, da=%pM\n", tx_ch, GetAddr1Ptr(buf));
 	#ifdef CONFIG_P2P
 	if ((type = rtw_p2p_check_frames(padapter, buf, len, true)) >= 0)
 		goto dump;

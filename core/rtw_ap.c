@@ -318,8 +318,8 @@ u8 chk_sta_is_alive(struct sta_info *psta)
 {
 	u8 ret = false;
 	#ifdef DBG_EXPIRATION_CHK
-	DBG_88E("sta:"MAC_FMT", rssi:%d, rx:"STA_PKTS_FMT", expire_to:%u, %s%ssq_len:%u\n"
-		, MAC_ARG(psta->hwaddr)
+	DBG_88E("sta:%pM, rssi:%d, rx:"STA_PKTS_FMT", expire_to:%u, %s%ssq_len:%u\n"
+		, (psta->hwaddr)
 		, psta->rssi_stat.UndecoratedSmoothedPWDB
 		//, STA_RX_PKTS_ARG(psta)
 		, STA_RX_PKTS_DIFF_ARG(psta)
@@ -468,7 +468,7 @@ void	expire_timeout_chk(_adapter *padapter)
 					psta->expire_to = pstapriv->expire_to;
 					psta->state |= WIFI_STA_ALIVE_CHK_STATE;
 
-					//DBG_88E("alive chk, sta:" MAC_FMT " is at ps mode!\n", MAC_ARG(psta->hwaddr));
+					//DBG_88E("alive chk, sta:%pM is at ps mode!\n", (psta->hwaddr));
 
 					//to update bcn with tim_bitmap for this station
 					pstapriv->tim_bitmap |= BIT(psta->aid);
@@ -494,7 +494,7 @@ void	expire_timeout_chk(_adapter *padapter)
 			rtw_list_delete(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
 
-			DBG_88E("asoc expire "MAC_FMT", state=0x%x\n", MAC_ARG(psta->hwaddr), psta->state);
+			DBG_88E("asoc expire %pM, state=0x%x\n", (psta->hwaddr), psta->state);
 			updated = ap_free_sta(padapter, psta, true, WLAN_REASON_DEAUTH_LEAVING);
 		}
 		else
@@ -503,8 +503,8 @@ void	expire_timeout_chk(_adapter *padapter)
 			if (psta->sleepq_len > (NR_XMITFRAME/pstapriv->asoc_list_cnt)
 				&& padapter->xmitpriv.free_xmitframe_cnt < (NR_XMITFRAME/pstapriv->asoc_list_cnt/2)
 			){
-				DBG_88E("%s sta:"MAC_FMT", sleepq_len:%u, free_xmitframe_cnt:%u, asoc_list_cnt:%u, clear sleep_q\n", __func__
-					, MAC_ARG(psta->hwaddr)
+				DBG_88E("%s sta:%pM, sleepq_len:%u, free_xmitframe_cnt:%u, asoc_list_cnt:%u, clear sleep_q\n", __func__
+					, (psta->hwaddr)
 					, psta->sleepq_len, padapter->xmitpriv.free_xmitframe_cnt, pstapriv->asoc_list_cnt);
 				wakeup_sta_to_xmit(padapter, psta);
 			}
@@ -539,7 +539,7 @@ if (chk_alive_num) {
 		psta->keep_alive_trycnt++;
 		if (ret == _SUCCESS)
 		{
-			DBG_88E("asoc check, sta(" MAC_FMT ") is alive\n", MAC_ARG(psta->hwaddr));
+			DBG_88E("asoc check, sta(%pM) is alive\n", (psta->hwaddr));
 			psta->expire_to = pstapriv->expire_to;
 			psta->keep_alive_trycnt = 0;
 			continue;
@@ -553,7 +553,7 @@ if (chk_alive_num) {
 
 		psta->keep_alive_trycnt = 0;
 
-		DBG_88E("asoc expire "MAC_FMT", state=0x%x\n", MAC_ARG(psta->hwaddr), psta->state);
+		DBG_88E("asoc expire %pM, state=0x%x\n", (psta->hwaddr), psta->state);
 		_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
 		rtw_list_delete(&psta->asoc_list);
 		pstapriv->asoc_list_cnt--;
@@ -1562,7 +1562,7 @@ int rtw_acl_add_sta(_adapter *padapter, u8 *addr)
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
 	_queue	*pacl_node_q =&pacl_list->acl_node_q;
 
-	DBG_88E("%s(acl_num=%d)=" MAC_FMT "\n", __func__, pacl_list->num, MAC_ARG(addr));
+	DBG_88E("%s(acl_num=%d)=%pM\n", __func__, pacl_list->num, (addr));
 
 	if ((NUM_ACL-1) < pacl_list->num)
 		return (-1);
@@ -1635,7 +1635,7 @@ int rtw_acl_remove_sta(_adapter *padapter, u8 *addr)
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
 	_queue	*pacl_node_q =&pacl_list->acl_node_q;
 
-	DBG_88E("%s(acl_num=%d)=" MAC_FMT "\n", __func__, pacl_list->num, MAC_ARG(addr));
+	DBG_88E("%s(acl_num=%d)=%pM\n", __func__, pacl_list->num, (addr));
 
 	_enter_critical_bh(&(pacl_node_q->lock), &irqL);
 
@@ -2152,8 +2152,8 @@ void bss_cap_update_on_sta_join(_adapter *padapter, struct sta_info *psta)
 	{
 		u16 ht_capab = le16_to_cpu(psta->htpriv.ht_cap.cap_info);
 
-		DBG_88E("HT: STA " MAC_FMT " HT Capabilities "
-			   "Info: 0x%04x\n", MAC_ARG(psta->hwaddr), ht_capab);
+		DBG_88E("HT: STA %pM HT Capabilities "
+			   "Info: 0x%04x\n", (psta->hwaddr), ht_capab);
 
 		if (psta->no_ht_set) {
 			psta->no_ht_set = 0;
@@ -2165,9 +2165,9 @@ void bss_cap_update_on_sta_join(_adapter *padapter, struct sta_info *psta)
 				psta->no_ht_gf_set = 1;
 				pmlmepriv->num_sta_ht_no_gf++;
 			}
-			DBG_88E("%s STA " MAC_FMT " - no "
+			DBG_88E("%s STA %pM - no "
 				   "greenfield, num of non-gf stations %d\n",
-				   __func__, MAC_ARG(psta->hwaddr),
+				   __func__, (psta->hwaddr),
 				   pmlmepriv->num_sta_ht_no_gf);
 		}
 
@@ -2176,9 +2176,9 @@ void bss_cap_update_on_sta_join(_adapter *padapter, struct sta_info *psta)
 				psta->ht_20mhz_set = 1;
 				pmlmepriv->num_sta_ht_20mhz++;
 			}
-			DBG_88E("%s STA " MAC_FMT " - 20 MHz HT, "
+			DBG_88E("%s STA %pM - 20 MHz HT, "
 				   "num of 20MHz HT STAs %d\n",
-				   __func__, MAC_ARG(psta->hwaddr),
+				   __func__, (psta->hwaddr),
 				   pmlmepriv->num_sta_ht_20mhz);
 		}
 
@@ -2190,9 +2190,8 @@ void bss_cap_update_on_sta_join(_adapter *padapter, struct sta_info *psta)
 			pmlmepriv->num_sta_no_ht++;
 		}
 		if (pmlmepriv->htpriv.ht_option == true) {
-			DBG_88E("%s STA " MAC_FMT
-				   " - no HT, num of non-HT stations %d\n",
-				   __func__, MAC_ARG(psta->hwaddr),
+			DBG_88E("%s STA %pM - no HT, num of non-HT stations %d\n",
+				   __func__, (psta->hwaddr),
 				   pmlmepriv->num_sta_no_ht);
 		}
 	}

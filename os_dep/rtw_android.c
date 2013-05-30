@@ -271,7 +271,7 @@ static int rtw_android_get_macaddr(struct net_device *net, char *command, int to
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
 	int bytes_written = 0;
 
-	bytes_written = snprintf(command, total_len, "Macaddr = "MAC_FMT, MAC_ARG(net->dev_addr));
+	bytes_written = snprintf(command, total_len, "Macaddr = %pM", net->dev_addr);
 	return bytes_written;
 }
 

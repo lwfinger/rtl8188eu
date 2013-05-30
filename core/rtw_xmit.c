@@ -705,9 +705,9 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 	} else {
 		psta = rtw_get_stainfo(pstapriv, pattrib->ra);
 		if (psta == NULL)	{ // if we cannot get psta => drrp the pkt
-			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:" MAC_FMT"\n", MAC_ARG(pattrib->ra)));
+			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra: %pM\n", (pattrib->ra)));
 			#ifdef DBG_TX_DROP_FRAME
-			DBG_88E("DBG_TX_DROP_FRAME %s get sta_info fail, ra:" MAC_FMT"\n", __func__, MAC_ARG(pattrib->ra));
+			DBG_88E("DBG_TX_DROP_FRAME %s get sta_info fail, ra: %pM\n", __func__, (pattrib->ra));
 			#endif
 			res =_FAIL;
 			goto exit;
@@ -728,9 +728,9 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 	else
 	{
 		// if we cannot get psta => drop the pkt
-		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:" MAC_FMT "\n", MAC_ARG(pattrib->ra)));
+		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:%pM\n", (pattrib->ra)));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_88E("DBG_TX_DROP_FRAME %s get sta_info fail, ra:" MAC_FMT"\n", __func__, MAC_ARG(pattrib->ra));
+		DBG_88E("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __func__, (pattrib->ra));
 		#endif
 		res = _FAIL;
 		goto exit;
@@ -2693,13 +2693,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 			memcpy(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN);
 			padapter->scdb_entry->ageing_timer = jiffies;
 			_exit_critical_bh(&padapter->br_ext_lock, &irqL);
-		}
-		else
-		//if (!priv->pmib->ethBrExtInfo.nat25_disable)
-		{
-//			if (priv->dev->br_port &&
-//				 !memcmp(skb->data+MACADDRLEN, priv->br_mac, MACADDRLEN)) {
-#if 1
+		} else {
 			if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_8021Q)) {
 				is_vlan_tag = 1;
 				vlan_hdr = *((unsigned short *)(skb->data+MACADDRLEN*2+2));
@@ -2707,7 +2701,6 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 					*((unsigned short *)(skb->data+MACADDRLEN*2+2-i*2)) = *((unsigned short *)(skb->data+MACADDRLEN*2-2-i*2));
 				skb_pull(skb, 4);
 			}
-			//if SA == br_mac && skb== IP  => copy SIP to br_ip ?? why
 			if (!memcmp(skb->data+MACADDRLEN, padapter->br_mac, MACADDRLEN) &&
 				(*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)))
 				memcpy(padapter->br_ip, skb->data+WLAN_ETHHDR_LEN+12, 4);
@@ -2723,22 +2716,18 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 						padapter->scdb_entry->ageing_timer = jiffies;
 						do_nat25 = 0;
 					}
-				}
-				else {
+				} else {
 					if (padapter->scdb_entry) {
 						padapter->scdb_entry->ageing_timer = jiffies;
 						do_nat25 = 0;
-					}
-					else {
+					} else {
 						memset(padapter->scdb_mac, 0, MACADDRLEN);
 						memset(padapter->scdb_ip, 0, 4);
 					}
 				}
 			}
 			_exit_critical_bh(&padapter->br_ext_lock, &irqL);
-#endif // 1
-			if (do_nat25)
-			{
+			if (do_nat25) {
 				int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method);
 				if (nat25_db_handle(padapter, skb, NAT25_CHECK) == 0) {
 					struct sk_buff *newskb;

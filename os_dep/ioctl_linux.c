@@ -3866,7 +3866,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 
 		if (_rtw_memcmp(bssid, pnetwork->network.MacAddress, ETH_ALEN) == true)//BSSID match, then check if supporting wpa/wpa2
 		{
-			DBG_88E("BSSID:" MAC_FMT "\n", MAC_ARG(bssid));
+			DBG_88E("BSSID:%pM\n", (bssid));
 
 			pbuf = rtw_get_wpa_ie(&pnetwork->network.IEs[12], &wpa_ielen, pnetwork->network.IELength-12);
 			if (pbuf && (wpa_ielen>0))
@@ -6702,7 +6702,7 @@ static int rtw_dbg_port(struct net_device *dev,
 						struct recv_reorder_ctrl *preorder_ctrl;
 
 						DBG_88E("SSID=%s\n", cur_network->network.Ssid.Ssid);
-						DBG_88E("sta's macaddr:" MAC_FMT "\n", MAC_ARG(psta->hwaddr));
+						DBG_88E("sta's macaddr: %pM\n", psta->hwaddr);
 						DBG_88E("cur_channel=%d, cur_bwmode=%d, cur_ch_offset=%d\n", pmlmeext->cur_channel, pmlmeext->cur_bwmode, pmlmeext->cur_ch_offset);
 						DBG_88E("rtsen=%d, cts2slef=%d\n", psta->rtsen, psta->cts2self);
 						DBG_88E("state=0x%x, aid=%d, macid=%d, raid=%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
@@ -6725,7 +6725,7 @@ static int rtw_dbg_port(struct net_device *dev,
 					}
 					else
 					{
-						DBG_88E("can't get sta's macaddr, cur_network's macaddr:" MAC_FMT "\n", MAC_ARG(cur_network->network.MacAddress));
+						DBG_88E("can't get sta's macaddr, cur_network's macaddr:%pM\n", (cur_network->network.MacAddress));
 					}
 					break;
 				case 0x06:
@@ -6778,7 +6778,7 @@ static int rtw_dbg_port(struct net_device *dev,
 
 								if (extra_arg == psta->aid)
 								{
-									DBG_88E("sta's macaddr:" MAC_FMT "\n", MAC_ARG(psta->hwaddr));
+									DBG_88E("sta's macaddr:%pM\n", (psta->hwaddr));
 									DBG_88E("rtsen=%d, cts2slef=%d\n", psta->rtsen, psta->cts2self);
 									DBG_88E("state=0x%x, aid=%d, macid=%d, raid=%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
 #ifdef CONFIG_80211N_HT
@@ -7742,7 +7742,7 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	DBG_88E("rtw_add_sta(aid=%d)=" MAC_FMT "\n", param->u.add_sta.aid, MAC_ARG(param->sta_addr));
+	DBG_88E("rtw_add_sta(aid=%d)=%pM\n", param->u.add_sta.aid, (param->sta_addr));
 
 	if (check_fwstate(pmlmepriv, (_FW_LINKED|WIFI_AP_STATE)) != true)
 	{
@@ -7831,7 +7831,7 @@ static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	DBG_88E("rtw_del_sta=" MAC_FMT "\n", MAC_ARG(param->sta_addr));
+	DBG_88E("rtw_del_sta=%pM\n", (param->sta_addr));
 
 	if (check_fwstate(pmlmepriv, (_FW_LINKED|WIFI_AP_STATE)) != true)
 	{
@@ -7889,7 +7889,7 @@ static int rtw_ioctl_get_sta_data(struct net_device *dev, struct ieee_param *par
 	struct ieee_param_ex *param_ex = (struct ieee_param_ex *)param;
 	struct sta_data *psta_data = (struct sta_data *)param_ex->data;
 
-	DBG_88E("rtw_ioctl_get_sta_info, sta_addr: " MAC_FMT "\n", MAC_ARG(param_ex->sta_addr));
+	DBG_88E("rtw_ioctl_get_sta_info, sta_addr: %pM\n", (param_ex->sta_addr));
 
 	if (check_fwstate(pmlmepriv, (_FW_LINKED|WIFI_AP_STATE)) != true)
 	{
@@ -7958,7 +7958,7 @@ static int rtw_get_sta_wpaie(struct net_device *dev, struct ieee_param *param)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	DBG_88E("rtw_get_sta_wpaie, sta_addr: " MAC_FMT "\n", MAC_ARG(param->sta_addr));
+	DBG_88E("rtw_get_sta_wpaie, sta_addr: %pM\n", (param->sta_addr));
 
 	if (check_fwstate(pmlmepriv, (_FW_LINKED|WIFI_AP_STATE)) != true)
 	{
@@ -8486,7 +8486,7 @@ static int rtw_wx_set_priv(struct net_device *dev,
 			}
 			break;
 		case ANDROID_WIFI_CMD_MACADDR :
-			sprintf(ext, "MACADDR = " MAC_FMT, MAC_ARG(dev->dev_addr));
+			sprintf(ext, "MACADDR = %pM", (dev->dev_addr));
 			break;
 		case ANDROID_WIFI_CMD_SCAN_ACTIVE :
 			{
@@ -11123,19 +11123,15 @@ static int rtw_tdls_enable(struct net_device *dev,
 		}
 		_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 
-		for (index=0; index< NUM_STA; index++)
-		{
-			if (!_rtw_memcmp(tdls_sta[index], empty_hwaddr, ETH_ALEN))
-			{
-				printk("issue tear down to "MAC_FMT"\n", MAC_ARG(tdls_sta[index]));
+		for (index=0; index< NUM_STA; index++) {
+			if (!_rtw_memcmp(tdls_sta[index], empty_hwaddr, ETH_ALEN)) {
+				pr_info("issue tear down to %pM\n", tdls_sta[index]);
 				issue_tdls_teardown(padapter, tdls_sta[index]);
 			}
 		}
 		rtw_tdls_cmd(padapter, myid(&(padapter->eeprompriv)), TDLS_RS_RCR);
 		rtw_reset_tdls_info(padapter);
-	}
-	else if (extra[ 0 ] == '1')
-	{
+	} else if (extra[ 0 ] == '1') {
 		ptdlsinfo->enable = 1;
 	}
 #endif //CONFIG_TDLS

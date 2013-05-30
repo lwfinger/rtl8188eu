@@ -962,12 +962,11 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 #ifdef CONFIG_LAYER2_ROAMING_RESUME
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) )
 	{
-		//DBG_88E("%s:%d assoc_ssid:%s\n", __func__, __LINE__, pmlmepriv->assoc_ssid.Ssid);
-		DBG_88E("%s:%d %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n",__func__, __LINE__,
-				pmlmepriv->cur_network.network.Ssid.Ssid,
-				MAC_ARG(pmlmepriv->cur_network.network.MacAddress),
-				pmlmepriv->cur_network.network.Ssid.SsidLength,
-				pmlmepriv->assoc_ssid.SsidLength);
+		DBG_88E("%s:%d %s( %pM ), length:%d assoc_ssid.length:%d\n",__func__, __LINE__,
+			pmlmepriv->cur_network.network.Ssid.Ssid,
+			pmlmepriv->cur_network.network.MacAddress,
+			pmlmepriv->cur_network.network.Ssid.SsidLength,
+			pmlmepriv->assoc_ssid.SsidLength);
 
 		pmlmepriv->to_roaming = 1;
 	}
@@ -1437,7 +1436,7 @@ _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	rtw_macaddr_cfg(padapter->eeprompriv.mac_addr);
 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr, padapter->eeprompriv.mac_addr);
 	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
-	DBG_88E("MAC Address from pnetdev->dev_addr= " MAC_FMT "\n", MAC_ARG(pnetdev->dev_addr));
+	DBG_88E("MAC Address from pnetdev->dev_addr=  %pM\n", pnetdev->dev_addr);
 
 #ifdef CONFIG_HOSTAPD_MLME
 	hostapd_mode_init(padapter);

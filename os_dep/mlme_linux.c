@@ -422,7 +422,7 @@ static int mgnt_netdev_open(struct net_device *pnetdev)
 {
 	struct hostapd_priv *phostapdpriv = rtw_netdev_priv(pnetdev);
 
-	DBG_88E("mgnt_netdev_open: MAC Address:" MAC_FMT "\n", MAC_ARG(pnetdev->dev_addr));
+	DBG_88E("mgnt_netdev_open: MAC Address: %pM\n", pnetdev->dev_addr);
 
 
 	init_usb_anchor(&phostapdpriv->anchored);

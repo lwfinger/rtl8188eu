@@ -725,9 +725,9 @@ _func_enter_;
 
 	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
 	if (strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_88E("%s %s("MAC_FMT", ch%u) ss_ori:%3u, sq_ori:%3u, rssi_ori:%3ld, ss_smp:%3u, sq_smp:%3u, rssi_smp:%3ld\n"
+		DBG_88E("%s %s(%pm, ch%u) ss_ori:%3u, sq_ori:%3u, rssi_ori:%3ld, ss_smp:%3u, sq_smp:%3u, rssi_smp:%3ld\n"
 			, __func__
-			, src->Ssid.Ssid, MAC_ARG(src->MacAddress), src->Configuration.DSConfig
+			, src->Ssid.Ssid, src->MacAddress, src->Configuration.DSConfig
 			,ss_ori, sq_ori, rssi_ori
 			,ss_smp, sq_smp, rssi_smp
 		);
@@ -768,9 +768,10 @@ _func_enter_;
 
 	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
 	if (strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_88E("%s %s("MAC_FMT"), SignalStrength:%u, SignalQuality:%u, RawRSSI:%ld\n"
-			, __func__
-			, dst->Ssid.Ssid, MAC_ARG(dst->MacAddress), dst->PhyInfo.SignalStrength, dst->PhyInfo.SignalQuality, dst->Rssi);
+		DBG_88E("%s %s(%pm SignalStrength:%u, SignalQuality:%u, RawRSSI:%ld\n",
+			__func__, dst->Ssid.Ssid, dst->MacAddress,
+			dst->PhyInfo.SignalStrength,
+			dst->PhyInfo.SignalQuality, dst->Rssi);
 	}
 	#endif
 
@@ -1315,8 +1316,8 @@ void rtw_free_assoc_resources(_adapter *adapter, int lock_scanned_queue)
 _func_enter_;
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_notice_, ("+rtw_free_assoc_resources\n"));
-	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("tgt_network->network.MacAddress="MAC_FMT" ssid=%s\n",
-		MAC_ARG(tgt_network->network.MacAddress), tgt_network->network.Ssid.Ssid));
+	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("tgt_network->network.MacAddress=%pM ssid=%s\n",
+		 tgt_network->network.MacAddress, tgt_network->network.Ssid.Ssid));
 
 	if (check_fwstate( pmlmepriv, WIFI_STATION_STATE|WIFI_AP_STATE))
 	{
@@ -1658,8 +1659,8 @@ static void rtw_joinbss_update_network(_adapter *padapter, struct wlan_network *
 
 	DBG_88E("%s\n", __func__);
 
-	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("\nfw_state:%x, BSSID:"MAC_FMT"\n"
-		,get_fwstate(pmlmepriv), MAC_ARG(pnetwork->network.MacAddress)));
+	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("\nfw_state:%x, BSSID:%pM\n",
+		 get_fwstate(pmlmepriv), pnetwork->network.MacAddress));
 
 
 	// why not use ptarget_wlan??
@@ -2170,7 +2171,7 @@ _func_enter_;
 	else
 		mac_id = pstadel->mac_id;
 
-	DBG_88E("%s(mac_id=%d)=" MAC_FMT "\n", __func__, mac_id, MAC_ARG(pstadel->macaddr));
+	DBG_88E("%s(mac_id=%d)= %pM\n", __func__, mac_id, pstadel->macaddr);
 
 	if (mac_id>=0){
 		u16 media_status;
@@ -2653,14 +2654,14 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 			#ifdef  CONFIG_LAYER2_ROAMING
 			"[to_roaming:%u] "
 			#endif
-			"new candidate: %s("MAC_FMT") rssi:%d\n",
+			"new candidate: %s(%pM rssi:%d\n",
 			pmlmepriv->assoc_by_bssid,
 			pmlmepriv->assoc_ssid.Ssid,
 			#ifdef  CONFIG_LAYER2_ROAMING
 			pmlmepriv->to_roaming,
 			#endif
 			(*candidate)->network.Ssid.Ssid,
-			MAC_ARG((*candidate)->network.MacAddress),
+			(*candidate)->network.MacAddress,
 			(int)(*candidate)->network.Rssi
 		);
 	}
@@ -2718,22 +2719,19 @@ _func_enter_;
 		ret = _FAIL;
 		goto exit;
 	} else {
-		DBG_88E("%s: candidate: %s("MAC_FMT", ch:%u)\n", __func__,
-			candidate->network.Ssid.Ssid, MAC_ARG(candidate->network.MacAddress),
+		DBG_88E("%s: candidate: %s(%pM ch:%u)\n", __func__,
+			candidate->network.Ssid.Ssid, candidate->network.MacAddress,
 			candidate->network.Configuration.DSConfig);
 	}
 
 
 	// check for situation of  _FW_LINKED
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
-	{
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 		DBG_88E("%s: _FW_LINKED while ask_for_joinbss!!!\n", __func__);
 
-		{
-			rtw_disassoc_cmd(adapter, 0, true);
-			rtw_indicate_disconnect(adapter);
-			rtw_free_assoc_resources(adapter, 0);
-		}
+		rtw_disassoc_cmd(adapter, 0, true);
+		rtw_indicate_disconnect(adapter);
+		rtw_free_assoc_resources(adapter, 0);
 	}
 
 	#ifdef CONFIG_ANTENNA_DIVERSITY
@@ -2842,11 +2840,9 @@ _func_enter_;
 				) {
 				roaming_candidate = pnetwork;
 				//RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,
-				DBG_88E
-					("roaming_candidate???: %s("MAC_FMT")\n",
-					roaming_candidate->network.Ssid.Ssid, MAC_ARG(roaming_candidate->network.MacAddress) )
-					//)
-					;
+				DBG_88E("roaming_candidate???: %s(%pM\n",
+					roaming_candidate->network.Ssid.Ssid,
+					roaming_candidate->network.MacAddress);
 			}
 			continue;
 		#endif
@@ -2898,8 +2894,8 @@ _func_enter_;
 	#ifdef CONFIG_LAYER2_ROAMING
 	if (pmlmepriv->to_roaming>0 && roaming_candidate ){
 		pnetwork=roaming_candidate;
-		DBG_88E("select_and_join_from_scanned_queue: roaming_candidate: %s("MAC_FMT")\n",
-			pnetwork->network.Ssid.Ssid, MAC_ARG(pnetwork->network.MacAddress));
+		DBG_88E("select_and_join_from_scanned_queue: roaming_candidate: %s(%pM\n",
+			pnetwork->network.Ssid.Ssid, pnetwork->network.MacAddress);
 		goto ask_for_joinbss;
 	}
 	#endif
@@ -2907,8 +2903,8 @@ _func_enter_;
 	if ((pmlmepriv->assoc_by_rssi==true)  && (pnetwork_max_rssi!=NULL))
 	{
 		pnetwork = pnetwork_max_rssi;
-		DBG_88E("select_and_join_from_scanned_queue: pnetwork_max_rssi: %s("MAC_FMT")\n",
-			pnetwork->network.Ssid.Ssid, MAC_ARG(pnetwork->network.MacAddress));
+		DBG_88E("select_and_join_from_scanned_queue: pnetwork_max_rssi: %s()))%pM\n",
+			pnetwork->network.Ssid.Ssid, pnetwork->network.MacAddress);
 		goto ask_for_joinbss;
 	}
 
@@ -3697,9 +3693,9 @@ void _rtw_roaming(_adapter *padapter, struct wlan_network *tgt_network)
 		pnetwork = &pmlmepriv->cur_network;
 
 	if (0 < pmlmepriv->to_roaming) {
-		DBG_88E("roaming from %s("MAC_FMT"), length:%d\n",
-				pnetwork->network.Ssid.Ssid, MAC_ARG(pnetwork->network.MacAddress),
-				pnetwork->network.Ssid.SsidLength);
+		DBG_88E("roaming from %s(%pM length:%d\n",
+			pnetwork->network.Ssid.Ssid, pnetwork->network.MacAddress,
+			pnetwork->network.Ssid.SsidLength);
 		_rtw_memcpy(&pmlmepriv->assoc_ssid, &pnetwork->network.Ssid, sizeof(NDIS_802_11_SSID));
 
 		pmlmepriv->assoc_by_bssid = false;

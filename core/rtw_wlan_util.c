@@ -1386,8 +1386,8 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 	}
 
 	if (_rtw_memcmp(cur_network->network.MacAddress, pbssid, 6) == false) {
-		DBG_88E("Oops: rtw_check_network_encrypt linked but recv other bssid bcn\n" MAC_FMT MAC_FMT,
-				MAC_ARG(pbssid), MAC_ARG(cur_network->network.MacAddress));
+		DBG_88E("Oops: rtw_check_network_encrypt linked but recv other bssid bcn\n%pM %pM\n",
+				(pbssid), (cur_network->network.MacAddress));
 		return true;
 	}
 
@@ -2235,7 +2235,6 @@ void update_wireless_mode(_adapter *padapter)
 		update_mgnt_tx_rate(padapter, IEEE80211_OFDM_RATE_6MB);
 }
 
-void fire_write_MAC_cmd(_adapter *padapter, unsigned int addr, unsigned int value);
 void fire_write_MAC_cmd(_adapter *padapter, unsigned int addr, unsigned int value)
 {
 }
