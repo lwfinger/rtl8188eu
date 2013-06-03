@@ -30,6 +30,7 @@
 #include <xmit_osdep.h>
 #include <osdep_intf.h>
 #include <circ_buf.h>
+#include <usb_osintf.h>
 
 uint rtw_remainder_len(struct pkt_file *pfile)
 {
@@ -311,7 +312,7 @@ static void rtw_check_xmit_resource(_adapter *padapter, _pkt *pkt)
 }
 
 #ifdef CONFIG_TX_MCAST2UNI
-int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
+static int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 {
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
@@ -370,7 +371,6 @@ int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 #ifdef CONFIG_TX_MCAST2UNI
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-	extern int rtw_mc2u_disable;
 #endif	// CONFIG_TX_MCAST2UNI
 	s32 res = 0;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))

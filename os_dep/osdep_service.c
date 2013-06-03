@@ -26,13 +26,12 @@
 #include <drv_types.h>
 #include <recv_osdep.h>
 #include <linux/vmalloc.h>
+#include <rtw_ioctl_set.h>
 #ifdef RTK_DMP_PLATFORM
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
 #include <linux/pageremap.h>
 #endif
 #endif
-
-#define RT_TAG	'1178'
 
 /*
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
@@ -242,26 +241,6 @@ void	_rtw_spinlock_free(_lock *plock)
 {
 }
 
-void	_rtw_spinlock(_lock	*plock)
-{
-	spin_lock(plock);
-}
-
-void	_rtw_spinunlock(_lock *plock)
-{
-	spin_unlock(plock);
-}
-
-void	_rtw_spinlock_ex(_lock	*plock)
-{
-	spin_lock(plock);
-}
-
-void	_rtw_spinunlock_ex(_lock *plock)
-{
-	spin_unlock(plock);
-}
-
 void	_rtw_init_queue(_queue	*pqueue)
 {
 	_rtw_init_listhead(&(pqueue->queue));
@@ -359,7 +338,7 @@ void rtw_udelay_os(int us)
 }
 #endif
 
-void rtw_yield_os()
+void rtw_yield_os(void)
 {
 	yield();
 }
@@ -374,7 +353,7 @@ static android_suspend_lock_t rtw_suspend_lock ={
 };
 #endif
 
-inline void rtw_suspend_lock_init()
+inline void rtw_suspend_lock_init(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock_init(&rtw_suspend_lock, WAKE_LOCK_SUSPEND, RTW_SUSPEND_LOCK_NAME);
@@ -383,7 +362,7 @@ inline void rtw_suspend_lock_init()
 	#endif
 }
 
-inline void rtw_suspend_lock_uninit()
+inline void rtw_suspend_lock_uninit(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock_destroy(&rtw_suspend_lock);
@@ -392,7 +371,7 @@ inline void rtw_suspend_lock_uninit()
 	#endif
 }
 
-inline void rtw_lock_suspend()
+inline void rtw_lock_suspend(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock(&rtw_suspend_lock);
@@ -405,7 +384,7 @@ inline void rtw_lock_suspend()
 	#endif
 }
 
-inline void rtw_unlock_suspend()
+inline void rtw_unlock_suspend(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_unlock(&rtw_suspend_lock);

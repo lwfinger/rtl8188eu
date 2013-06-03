@@ -229,7 +229,7 @@ ODM_SetRFReg(
 	PHY_SetRFReg(pDM_Odm->priv, eRFPath, RegAddr, BitMask, Data);
 #elif (DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
-	PHY_SetRFReg(Adapter, eRFPath, RegAddr, BitMask, Data);
+	PHY_SetRFReg(Adapter, (enum _RF_RADIO_PATH)eRFPath, RegAddr, BitMask, Data);
 #endif
 }
 
@@ -246,7 +246,7 @@ ODM_GetRFReg(
 	return PHY_QueryRFReg(pDM_Odm->priv, eRFPath, RegAddr, BitMask, 1);
 #elif (DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
 	PADAPTER		Adapter = pDM_Odm->Adapter;
-	return PHY_QueryRFReg(Adapter, eRFPath, RegAddr, BitMask);
+	return PHY_QueryRFReg(Adapter, (enum _RF_RADIO_PATH)eRFPath, RegAddr, BitMask);
 #endif
 }
 

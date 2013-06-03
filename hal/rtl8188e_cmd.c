@@ -179,38 +179,6 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtl8192c_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
-{
-	u8 ElementID, CmdLen;
-	u8 *pCmdBuffer;
-	struct cmd_msg_parm  *pcmdmsg;
-
-	if (!pbuf)
-		return H2C_PARAMETERS_ERROR;
-
-	pcmdmsg = (struct cmd_msg_parm*)pbuf;
-	ElementID = pcmdmsg->eid;
-	CmdLen = pcmdmsg->sz;
-	pCmdBuffer = pcmdmsg->buf;
-
-	FillH2CCmd_88E(padapter, ElementID, CmdLen, pCmdBuffer);
-
-	return H2C_SUCCESS;
-}
-/*
-#if defined(CONFIG_AUTOSUSPEND) && defined(SUPPORT_HW_RFOFF_DETECTED)
-u8 rtl8192c_set_FwSelectSuspend_cmd(_adapter *padapter ,u8 bfwpoll, u16 period)
-{
-	u8	res=_SUCCESS;
-	struct H2C_SS_RFOFF_PARAM param;
-	DBG_88E("==>%s bfwpoll(%x)\n",__func__,bfwpoll);
-	param.gpio_period = period;//Polling GPIO_11 period time
-	param.ROFOn = (true == bfwpoll)?1:0;
-	FillH2CCmd_88E(padapter, SELECTIVE_SUSPEND_ROF_CMD, sizeof(param), (u8*)(&param));
-	return res;
-}
-#endif //CONFIG_AUTOSUSPEND && SUPPORT_HW_RFOFF_DETECTED
-*/
 u8 rtl8188e_set_rssi_cmd(_adapter*padapter, u8 *param)
 {
 	u8	res=_SUCCESS;
@@ -234,11 +202,14 @@ u8 rtl8188e_set_raid_cmd(_adapter*padapter, u32 mask)
 	u8	buf[3];
 	u8	res=_SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+
 _func_enter_;
 	if (pHalData->fw_ractrl == true){
+		__le32 lmask;
+
 		_rtw_memset(buf, 0, 3);
-		mask = cpu_to_le32( mask );
-		_rtw_memcpy(buf, &mask, 3);
+		lmask = cpu_to_le32( mask );
+		_rtw_memcpy(buf, &lmask, 3);
 
 		FillH2CCmd_88E(padapter, H2C_DM_MACID_CFG, 3, buf);
 	}else{
@@ -380,7 +351,7 @@ void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, u16 mstatus_rpt )
 	FillH2CCmd_88E(padapter, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
 }
 
-void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
+static void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -482,7 +453,7 @@ _ConstructBeacon:
 
 }
 
-void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
+static void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -512,7 +483,7 @@ void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 	*pLength = 16;
 }
 
-void ConstructNullFunctionData(
+static void ConstructNullFunctionData(
 	PADAPTER padapter,
 	u8		*pframe,
 	u32		*pLength,
@@ -585,7 +556,7 @@ void ConstructNullFunctionData(
 	*pLength = pktlen;
 }
 
-void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
+static void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;

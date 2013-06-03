@@ -28,10 +28,7 @@
 
 #include <osdep_intf.h>
 #include <ethernet.h>
-
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
 
 //init os related resource in struct recv_priv
 int rtw_os_recv_resource_init(struct recv_priv *precvpriv, _adapter *padapter)
@@ -353,7 +350,6 @@ _func_enter_;
 
 	if ( br_port	&& (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true) )
 	{
-		int nat25_handle_frame(_adapter *priv, struct sk_buff *skb);
 		if (nat25_handle_frame(padapter, skb) == -1) {
 			//priv->ext_stats.rx_data_drops++;
 			//DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n");

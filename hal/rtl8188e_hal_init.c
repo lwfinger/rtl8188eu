@@ -217,7 +217,7 @@ exit:
 		rtw_mfree2d((void *)eFuseWord, EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
 }
 
-void efuse_read_phymap_from_txpktbuf(
+static void efuse_read_phymap_from_txpktbuf(
 	ADAPTER *adapter,
 	int bcnhead,	//beacon head, where FW store len(2-byte) and efuse physical map.
 	u8 *content,	//buffer to store efuse physical map
@@ -352,7 +352,7 @@ static s32 iol_ioconfig(
 	return rst;
 }
 
-int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms,u32 bndy_cnt)
+static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms,u32 bndy_cnt)
 {
 
 	u32 start_time = rtw_get_current_time();
@@ -1358,7 +1358,7 @@ rtl8188e_ReadEFuse(
 }
 
 //Do not support BT
-void
+static void
 Hal_EFUSEGetEfuseDefinition88E(
 			PADAPTER	pAdapter,
 			u1Byte		efuseType,
@@ -1426,8 +1426,8 @@ Hal_EFUSEGetEfuseDefinition88E(
 			break;
 	}
 }
-void
-Hal_EFUSEGetEfuseDefinition_Pseudo88E(
+
+static void Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 			PADAPTER	pAdapter,
 			u8			efuseType,
 			u8			type,
@@ -2515,7 +2515,7 @@ static void rtl8188e_read_chip_version(PADAPTER padapter)
 	ReadChipVersion8188E(padapter);
 }
 
-void rtl8188e_GetHalODMVar(
+static void rtl8188e_GetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
@@ -2530,7 +2530,7 @@ void rtl8188e_GetHalODMVar(
 			break;
 	}
 }
-void rtl8188e_SetHalODMVar(
+static void rtl8188e_SetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
@@ -2639,7 +2639,8 @@ void rtl8188e_stop_thread(_adapter *padapter)
 #endif
 #endif
 }
-void hal_notch_filter_8188e(_adapter *adapter, bool enable)
+
+static void hal_notch_filter_8188e(_adapter *adapter, bool enable)
 {
 	if (enable) {
 		DBG_88E("Enable notch filter\n");
@@ -2734,7 +2735,7 @@ u8 GetEEPROMSize8188E(PADAPTER padapter)
 // LLT R/W/Init function
 //
 //-------------------------------------------------------------------------
-s32 _LLTWrite(PADAPTER padapter, u32 address, u32 data)
+static s32 _LLTWrite(PADAPTER padapter, u32 address, u32 data)
 {
 	s32	status = _SUCCESS;
 	s32	count = 0;
@@ -2759,31 +2760,6 @@ s32 _LLTWrite(PADAPTER padapter, u32 address, u32 data)
 	} while (count++);
 
 	return status;
-}
-
-u8 _LLTRead(PADAPTER padapter, u32 address)
-{
-	s32	count = 0;
-	u32	value = _LLT_INIT_ADDR(address) | _LLT_OP(_LLT_READ_ACCESS);
-	u16	LLTReg = REG_LLT_INIT;
-
-
-	rtw_write32(padapter, LLTReg, value);
-
-	//polling and get value
-	do {
-		value = rtw_read32(padapter, LLTReg);
-		if (_LLT_NO_ACTIVE == _LLT_OP_VALUE(value)) {
-			return (u8)value;
-		}
-
-		if (count > POLLING_LLT_THRESHOLD) {
-			RT_TRACE(_module_hal_init_c_, _drv_err_, ("Failed to polling read LLT done at address %d!\n", address));
-			break;
-		}
-	} while (count++);
-
-	return 0xFF;
 }
 
 s32 InitLLTTable(PADAPTER padapter, u8 txpktbuf_bndy)

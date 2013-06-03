@@ -130,7 +130,7 @@ ODM_TxPwrTrackAdjust88E(
  *	04/23/2012	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-void
+static void
 odm_TxPwrTrackSetPwr88E(
 	PDM_ODM_T	pDM_Odm
 	)
@@ -627,7 +627,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #define MAX_TOLERANCE		5
 #define IQK_DELAY_TIME		1		//ms
 
-u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+static u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
@@ -691,7 +691,7 @@ phy_PathA_IQK_8188E(
 	return result;
 }
 
-u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+static u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_RxIQK(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
@@ -836,7 +836,7 @@ phy_PathA_RxIQK(
 
 }
 
-u1Byte				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+static u1Byte				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm
@@ -899,7 +899,7 @@ phy_PathB_IQK_8188E(
 
 }
 
-void
+static void
 _PHY_PathAFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
@@ -974,7 +974,7 @@ _PHY_PathAFillIQKMatrix(
 	}
 }
 
-void
+static void
 _PHY_PathBFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
@@ -1046,7 +1046,7 @@ _PHY_PathBFillIQKMatrix(
 //
 // MP Already declare in odm.c
 #if !(DM_ODM_SUPPORT_TYPE & ODM_MP)
-bool
+static bool
 ODM_CheckPowerStatus(
 		PADAPTER		Adapter)
 {
@@ -1111,8 +1111,7 @@ _PHY_SaveADDARegisters(
 }
 
 
-void
-_PHY_SaveMACRegisters(
+static void _PHY_SaveMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
 #else
@@ -1141,7 +1140,7 @@ _PHY_SaveMACRegisters(
 }
 
 
-void
+static void
 _PHY_ReloadADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
@@ -1171,7 +1170,7 @@ _PHY_ReloadADDARegisters(
 	}
 }
 
-void
+static void
 _PHY_ReloadMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
@@ -1297,8 +1296,7 @@ _PHY_PathAStandBy(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_IQK, bMaskDWord, 0x80800000);
 }
 
-void
-_PHY_PIModeSwitch(
+static void _PHY_PIModeSwitch(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
 #else
@@ -1324,8 +1322,7 @@ _PHY_PIModeSwitch(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_XB_HSSIParameter1, bMaskDWord, mode);
 }
 
-bool
-phy_SimularityCompare_8188E(
+static bool phy_SimularityCompare_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
 #else
@@ -1457,10 +1454,7 @@ phy_SimularityCompare_8188E(
 
 }
 
-
-
-void
-phy_IQCalibrate_8188E(
+static void phy_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
 #else
@@ -1519,8 +1513,6 @@ else
 	// Note: IQ calibration must be performed after loading
 	//		PHY_REG.txt , and radio_a, radio_b.txt
 
-	//u4Byte bbvalue;
-
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 #ifdef MP_TEST
 		if (pDM_Odm->priv->pshare->rf_ft_var.mp_specific)
@@ -1529,12 +1521,8 @@ else
 #endif
 
 
-	if (t==0)
-	{
-//		 bbvalue = ODM_GetBBReg(pDM_Odm, rFPGA0_RFMOD, bMaskDWord);
-//			RTPRINT(FINIT, INIT_IQK, ("phy_IQCalibrate_8188E()==>0x%08x\n",bbvalue));
-
-			ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("IQ Calibration for %s for %d times\n", (is2T ? "2T2R" : "1T1R"), t));
+	if (t==0) {
+		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("IQ Calibration for %s for %d times\n", (is2T ? "2T2R" : "1T1R"), t));
 
 		// Save ADDA parameters, turn Path A ADDA on
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -1550,17 +1538,12 @@ else
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("IQ Calibration for %s for %d times\n", (is2T ? "2T2R" : "1T1R"), t));
 
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
-
 	_PHY_PathADDAOn(pAdapter, ADDA_REG, true, is2T);
 #else
 	_PHY_PathADDAOn(pDM_Odm, ADDA_REG, true, is2T);
 #endif
-
-
 	if (t==0)
-	{
 		pDM_Odm->RFCalibrateInfo.bRfPiEnable = (u1Byte)ODM_GetBBReg(pDM_Odm, rFPGA0_XA_HSSIParameter1, BIT(8));
-	}
 
 	if (!pDM_Odm->RFCalibrateInfo.bRfPiEnable){
 		// Switch BB to PI mode to do IQ Calibration.
@@ -1739,8 +1722,7 @@ else
 }
 
 
-void
-phy_LCCalibrate_8188E(
+static void phy_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
 #else
@@ -1830,8 +1812,7 @@ phy_LCCalibrate_8188E(
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
 
-void
-phy_APCalibrate_8188E(
+static void phy_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
 #else
@@ -2729,7 +2710,8 @@ PHY_APCalibrate_8188E(
 #endif
 	}
 }
-void phy_SetRFPathSwitch_8188E(
+
+static void phy_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	PDM_ODM_T		pDM_Odm,
 #else

@@ -60,7 +60,7 @@ CheckCondition(
 *                           AGC_TAB_1T.TXT
 ******************************************************************************/
 
-u4Byte Array_AGC_TAB_1T_8188E[] = {
+static u4Byte Array_AGC_TAB_1T_8188E[] = {
 		0xC78, 0xFB000001,
 		0xC78, 0xFB010001,
 		0xC78, 0xFB020001,
@@ -327,7 +327,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 *                           PHY_REG_1T.TXT
 ******************************************************************************/
 
-u4Byte Array_PHY_REG_1T_8188E[] = {
+static u4Byte Array_PHY_REG_1T_8188E[] = {
 		0x800, 0x80040000,
 		0x804, 0x00000003,
 		0x808, 0x0000FC00,
@@ -737,7 +737,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 *                           PHY_REG_PG.TXT
 ******************************************************************************/
 
-u4Byte Array_PHY_REG_PG_8188E[] = {
+static u4Byte Array_PHY_REG_PG_8188E[] = {
 		0xE00, 0xFFFFFFFF, 0x06070809,
 		0xE04, 0xFFFFFFFF, 0x02020405,
 		0xE08, 0x0000FF00, 0x00000006,

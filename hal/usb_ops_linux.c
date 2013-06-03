@@ -377,7 +377,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 }
 
 #ifdef CONFIG_SUPPORT_USB_INT
-void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
+static void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
 {
 	HAL_DATA_TYPE	*pHalData=GET_HAL_DATA(padapter);
 	struct reportpwrstate_parm pwr_rpt;

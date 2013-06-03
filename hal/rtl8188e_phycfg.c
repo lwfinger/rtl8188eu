@@ -1074,12 +1074,8 @@ phy_ConfigBBWithParaFile(
 //****************************************
 // The following is for High Power PA
 //****************************************
-void
-phy_ConfigBBExternalPA(
-		PADAPTER			Adapter
-)
+static void phy_ConfigBBExternalPA(PADAPTER Adapter)
 {
-#ifdef CONFIG_USB_HCI
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u16 i=0;
 	u32 temp=0;
@@ -1089,7 +1085,6 @@ phy_ConfigBBExternalPA(
 
 	// 2010/10/19 MH According to Jenyu/EEChou 's opinion, we need not to execute the
 	// same code as SU. It is already updated in PHY_REG_1T_HP.txt.
-#endif
 }
 
 /*-----------------------------------------------------------------------------
@@ -1677,30 +1672,7 @@ rtl8188e_PHY_ConfigRFWithParaFile(
 
 }
 
-//****************************************
-// The following is for High Power PA
-//****************************************
-#define HighPowerRadioAArrayLen 22
-//This is for High power PA
-u32 Rtl8192S_HighPower_RadioA_Array[HighPowerRadioAArrayLen] = {
-0x013,0x00029ea4,
-0x013,0x00025e74,
-0x013,0x00020ea4,
-0x013,0x0001ced0,
-0x013,0x00019f40,
-0x013,0x00014e70,
-0x013,0x000106a0,
-0x013,0x0000c670,
-0x013,0x000082a0,
-0x013,0x00004270,
-0x013,0x00000240,
-};
-
-int
-PHY_ConfigRFExternalPA(
-		PADAPTER			Adapter,
-	RF_RADIO_PATH_E		eRFPath
-)
+static int PHY_ConfigRFExternalPA(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath)
 {
 	int	rtStatus = _SUCCESS;
 #ifdef CONFIG_USB_HCI
@@ -1901,97 +1873,6 @@ exit:
 }
 #endif//#ifndef CONFIG_PHY_SETTING_WITH_ODM
 
-/*-----------------------------------------------------------------------------
- * Function:    PHY_CheckBBAndRFOK()
- *
- * Overview:    This function is write register and then readback to make sure whether
- *			  BB[PHY0, PHY1], RF[Patha, path b, path c, path d] is Ok
- *
- * Input:	PADAPTER			Adapter
- *			HW90_BLOCK_E		CheckBlock
- *			RF_RADIO_PATH_E	eRFPath		// it is used only when CheckBlock is HW90_BLOCK_RF
- *
- * Output:      NONE
- *
- * Return:      RT_STATUS_SUCCESS: PHY is OK
- *
- * Note:		This function may be removed in the ASIC
- *---------------------------------------------------------------------------*/
-int
-PHY_CheckBBAndRFOK(
-		PADAPTER			Adapter,
-		HW90_BLOCK_E		CheckBlock,
-		RF_RADIO_PATH_E	eRFPath
-	)
-{
-	int			rtStatus = _SUCCESS;
-
-	u32				i, CheckTimes = 4,ulRegRead = 0;
-
-	u32				WriteAddr[4];
-	u32				WriteData[] = {0xfffff027, 0xaa55a02f, 0x00000027, 0x55aa502f};
-
-	// Initialize register address offset to be checked
-	WriteAddr[HW90_BLOCK_MAC] = 0x100;
-	WriteAddr[HW90_BLOCK_PHY0] = 0x900;
-	WriteAddr[HW90_BLOCK_PHY1] = 0x800;
-	WriteAddr[HW90_BLOCK_RF] = 0x3;
-
-	for (i=0 ; i < CheckTimes ; i++)
-	{
-
-		//
-		// Write Data to register and readback
-		//
-		switch (CheckBlock)
-		{
-		case HW90_BLOCK_MAC:
-			//RT_ASSERT(false, ("PHY_CheckBBRFOK(): Never Write 0x100 here!"));
-			//RT_TRACE(COMP_INIT, DBG_LOUD, ("PHY_CheckBBRFOK(): Never Write 0x100 here!\n"));
-			break;
-
-		case HW90_BLOCK_PHY0:
-		case HW90_BLOCK_PHY1:
-			rtw_write32(Adapter, WriteAddr[CheckBlock], WriteData[i]);
-			ulRegRead = rtw_read32(Adapter, WriteAddr[CheckBlock]);
-			break;
-
-		case HW90_BLOCK_RF:
-			// When initialization, we want the delay function(delay_ms(), delay_us()
-			// ==> actually we call PlatformStallExecution()) to do NdisStallExecution()
-			// [busy wait] instead of NdisMSleep(). So we acquire RT_INITIAL_SPINLOCK
-			// to run at Dispatch level to achive it.
-			//cosa PlatformAcquireSpinLock(Adapter, RT_INITIAL_SPINLOCK);
-			WriteData[i] &= 0xfff;
-			PHY_SetRFReg(Adapter, eRFPath, WriteAddr[HW90_BLOCK_RF], bRFRegOffsetMask, WriteData[i]);
-			// TODO: we should not delay for such a long time. Ask SD3
-			rtw_mdelay_os(10);
-			ulRegRead = PHY_QueryRFReg(Adapter, eRFPath, WriteAddr[HW90_BLOCK_RF], bMaskDWord);
-			rtw_mdelay_os(10);
-			//cosa PlatformReleaseSpinLock(Adapter, RT_INITIAL_SPINLOCK);
-			break;
-
-		default:
-			rtStatus = _FAIL;
-			break;
-		}
-
-
-		//
-		// Check whether readback data is correct
-		//
-		if (ulRegRead != WriteData[i])
-		{
-			//RT_TRACE(COMP_FPGA, DBG_LOUD, ("ulRegRead: %lx, WriteData: %lx\n", ulRegRead, WriteData[i]));
-			rtStatus = _FAIL;
-			break;
-		}
-	}
-
-	return rtStatus;
-}
-
-
 void
 rtl8192c_PHY_GetHWRegOriginalValue(
 		PADAPTER		Adapter
@@ -2004,18 +1885,11 @@ rtl8192c_PHY_GetHWRegOriginalValue(
 	pHalData->DefaultInitialGain[1] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XBAGCCore1, bMaskByte0);
 	pHalData->DefaultInitialGain[2] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XCAGCCore1, bMaskByte0);
 	pHalData->DefaultInitialGain[3] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XDAGCCore1, bMaskByte0);
-	//RT_TRACE(COMP_INIT, DBG_LOUD,
-	//("Default initial gain (c50=0x%x, c58=0x%x, c60=0x%x, c68=0x%x)\n",
-	//pHalData->DefaultInitialGain[0], pHalData->DefaultInitialGain[1],
-	//pHalData->DefaultInitialGain[2], pHalData->DefaultInitialGain[3]));
 
 	// read framesync
 	pHalData->framesync = (u8)PHY_QueryBBReg(Adapter, rOFDM0_RxDetector3, bMaskByte0);
 	pHalData->framesyncC34 = PHY_QueryBBReg(Adapter, rOFDM0_RxDetector2, bMaskDWord);
-	//RT_TRACE(COMP_INIT, DBG_LOUD, ("Default framesync (0x%x) = 0x%x\n",
-	//	rOFDM0_RxDetector3, pHalData->framesync));
 }
-
 
 //
 //	Description:
@@ -2080,12 +1954,7 @@ phy_DbmToTxPwrIdx(
 //		current wireless mode.
 //	By Bruce, 2008-01-29.
 //
-int
-phy_TxPwrIdxToDbm(
-		PADAPTER		Adapter,
-		WIRELESS_MODE	WirelessMode,
-		u8			TxPwrIdx
-	)
+static int phy_TxPwrIdxToDbm(PADAPTER Adapter, WIRELESS_MODE WirelessMode, u8 TxPwrIdx)
 {
 	int				Offset = 0;
 	int				PwrOutDbm = 0;
@@ -2165,30 +2034,21 @@ PHY_GetTxPowerLevel8188E(
 	*powerlevel = TxPwrDbm;
 }
 
-void getTxPowerIndex88E(
-		PADAPTER		Adapter,
-		u8				channel,
-	u8*			cckPowerLevel,
-	u8*			ofdmPowerLevel,
-	u8*			BW20PowerLevel,
-	u8*			BW40PowerLevel
-	)
+static void getTxPowerIndex88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLevel,
+			       u8 *ofdmPowerLevel, u8 *BW20PowerLevel,
+			       u8 *BW40PowerLevel)
 {
-
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u8				index = (channel -1);
 	u8				TxCount=0,path_nums;
 
-
-	if ((RF_1T2R == pHalData->rf_type) ||(RF_1T1R ==pHalData->rf_type ))
+	if ((RF_1T2R == pHalData->rf_type) || (RF_1T1R ==pHalData->rf_type))
 		path_nums = 1;
 	else
 		path_nums = 2;
 
-	for (TxCount=0;TxCount< path_nums ;TxCount++)
-	{
-		if (TxCount==RF_PATH_A)
-		{
+	for (TxCount=0; TxCount < path_nums; TxCount++) {
+		if (TxCount==RF_PATH_A) {
 			// 1. CCK
 			cckPowerLevel[TxCount]		= pHalData->Index24G_CCK_Base[TxCount][index];
 			//2. OFDM
@@ -2212,10 +2072,8 @@ void getTxPowerIndex88E(
 			pHalData->BW20_24G_Diff[TxCount][index];
 			//2. BW40
 			BW40PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[TxCount][index];
-		}
-		else if (TxCount==RF_PATH_C)
-		{
-	// 1. CCK
+		} else if (TxCount==RF_PATH_C) {
+			// 1. CCK
 			cckPowerLevel[TxCount]		= pHalData->Index24G_CCK_Base[TxCount][index];
 			//2. OFDM
 			ofdmPowerLevel[TxCount]		= pHalData->Index24G_BW40_Base[RF_PATH_A][index]+
@@ -2229,9 +2087,7 @@ void getTxPowerIndex88E(
 			pHalData->BW20_24G_Diff[TxCount][index];
 			//2. BW40
 			BW40PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[TxCount][index];
-		}
-		else if (TxCount==RF_PATH_D)
-		{
+		} else if (TxCount==RF_PATH_D) {
 			// 1. CCK
 			cckPowerLevel[TxCount]		= pHalData->Index24G_CCK_Base[TxCount][index];
 			//2. OFDM
@@ -2251,22 +2107,12 @@ void getTxPowerIndex88E(
 			//2. BW40
 			BW40PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[TxCount][index];
 		}
-		else
-		{
-		}
 	}
 }
 
-void phy_PowerIndexCheck88E(
-		PADAPTER	Adapter,
-		u8			channel,
-	u8 *		cckPowerLevel,
-	u8 *		ofdmPowerLevel,
-	u8 *		BW20PowerLevel,
-	u8 *		BW40PowerLevel
-	)
+static void phy_PowerIndexCheck88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLevel,
+				   u8 *ofdmPowerLevel, u8 *BW20PowerLevel, u8 *BW40PowerLevel)
 {
-
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 
 	pHalData->CurrentCckTxPwrIdx = cckPowerLevel[0];
@@ -2369,26 +2215,6 @@ PHY_UpdateTxPowerDbm8188E(
 
 	return true;
 }
-
-
-/*
-	Description:
-		When beacon interval is changed, the values of the
-		hw registers should be modified.
-	By tynli, 2008.10.24.
-
-*/
-
-
-void
-rtl8192c_PHY_SetBeaconHwReg(
-		PADAPTER		Adapter,
-		u16			BeaconInterval
-	)
-{
-
-}
-
 
 void
 PHY_ScanOperationBackup8188E(
@@ -2835,78 +2661,48 @@ PHY_SetMonitorMode8192C(
  *	11/15/2007	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-bool
-PHY_CheckIsLegalRfPath8192C(
-		PADAPTER	pAdapter,
-		u32	eRFPath)
+bool PHY_CheckIsLegalRfPath8192C(PADAPTER pAdapter, u32	eRFPath)
 {
-//	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	bool				rtValue = true;
-
-	// NOt check RF Path now.!
-	return	rtValue;
-
+	return	true;
 }	/* PHY_CheckIsLegalRfPath8192C */
 
-static void _PHY_SetRFPathSwitch(
-		PADAPTER	pAdapter,
-		bool		bMain,
-		bool		is2T
-	)
+static void _PHY_SetRFPathSwitch(PADAPTER pAdapter, bool bMain, bool is2T)
 {
 	u8	u1bTmp;
 
-	if (!pAdapter->hw_init_completed)
-	{
+	if (!pAdapter->hw_init_completed) {
 		u1bTmp = rtw_read8(pAdapter, REG_LEDCFG2) | BIT7;
 		rtw_write8(pAdapter, REG_LEDCFG2, u1bTmp);
-		//PHY_SetBBReg(pAdapter, REG_LEDCFG0, BIT23, 0x01);
 		PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT13, 0x01);
 	}
-
-	if (is2T)
-	{
+	if (is2T) {
 		if (bMain)
 			PHY_SetBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT5|BIT6, 0x1);	//92C_Path_A
 		else
 			PHY_SetBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT5|BIT6, 0x2);	//BT
-	}
-	else
-	{
-
+	} else {
 		if (bMain)
 			PHY_SetBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300, 0x2);	//Main
 		else
 			PHY_SetBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300, 0x1);	//Aux
 	}
-
 }
 
 //return value true => Main; false => Aux
 
-static bool _PHY_QueryRFPathSwitch(
-		PADAPTER	pAdapter,
-		bool		is2T
-	)
+static bool _PHY_QueryRFPathSwitch(PADAPTER pAdapter, bool is2T)
 {
-//	if (is2T)
-//		return true;
-
-	if (!pAdapter->hw_init_completed)
-	{
+	if (!pAdapter->hw_init_completed) {
 		PHY_SetBBReg(pAdapter, REG_LEDCFG0, BIT23, 0x01);
 		PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT13, 0x01);
 	}
 
-	if (is2T)
-	{
+	if (is2T) {
 		if (PHY_QueryBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT5|BIT6) == 0x01)
 			return true;
 		else
 			return false;
-	}
-	else
-	{
+	} else {
 		if (PHY_QueryBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300) == 0x02)
 			return true;
 		else
@@ -2914,67 +2710,10 @@ static bool _PHY_QueryRFPathSwitch(
 	}
 }
 
-
-static void
-_PHY_DumpRFReg(	PADAPTER	pAdapter)
+static void _PHY_DumpRFReg(PADAPTER pAdapter)
 {
 	u32 rfRegValue,rfRegOffset;
 
-	//RTPRINT(FINIT, INIT_RF, ("PHY_DumpRFReg()====>\n"));
-
-	for (rfRegOffset = 0x00;rfRegOffset<=0x30;rfRegOffset++){
+	for (rfRegOffset = 0x00;rfRegOffset<=0x30;rfRegOffset++)
 		rfRegValue = PHY_QueryRFReg(pAdapter,RF_PATH_A, rfRegOffset, bMaskDWord);
-		//RTPRINT(FINIT, INIT_RF, (" 0x%02x = 0x%08x\n",rfRegOffset,rfRegValue));
-	}
-	//RTPRINT(FINIT, INIT_RF, ("<===== PHY_DumpRFReg()\n"));
 }
-
-
-//
-// Move from phycfg.c to gen.c to be code independent later
-//
-//-------------------------Move to other DIR later----------------------------*/
-#ifdef CONFIG_USB_HCI
-
-//
-//	Description:
-//		To dump all Tx FIFO LLT related link-list table.
-//		Added by Roger, 2009.03.10.
-//
-void
-DumpBBDbgPort_92CU(
-		PADAPTER			Adapter
-	)
-{
-
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("BaseBand Debug Ports:\n"));
-
-	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0000);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
-	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0803);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
-	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0a06);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
-	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0007);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
-	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0100);
-	PHY_SetBBReg(Adapter, 0x0a28, 0x00ff0000, 0x000f0000);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
-	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0100);
-	PHY_SetBBReg(Adapter, 0x0a28, 0x00ff0000, 0x00150000);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0x800, PHY_QueryBBReg(Adapter, 0x0800, bMaskDWord)));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0x900, PHY_QueryBBReg(Adapter, 0x0900, bMaskDWord)));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xa00, PHY_QueryBBReg(Adapter, 0x0a00, bMaskDWord)));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xa54, PHY_QueryBBReg(Adapter, 0x0a54, bMaskDWord)));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xa58, PHY_QueryBBReg(Adapter, 0x0a58, bMaskDWord)));
-
-}
-#endif

@@ -25,7 +25,7 @@
 
 #ifdef CONFIG_P2P
 
-int rtw_p2p_is_channel_list_ok( u8 desired_ch, u8* ch_list, u8 ch_cnt )
+static int rtw_p2p_is_channel_list_ok( u8 desired_ch, u8* ch_list, u8 ch_cnt )
 {
 	int found = 0, i = 0;
 
@@ -40,7 +40,7 @@ int rtw_p2p_is_channel_list_ok( u8 desired_ch, u8* ch_list, u8 ch_cnt )
 	return( found );
 }
 
-int	is_any_client_associated( _adapter *padapter )
+static int is_any_client_associated( _adapter *padapter)
 {
 	_irqL irqL;
 	_list	*phead, *plist;

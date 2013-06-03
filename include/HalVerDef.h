@@ -89,12 +89,12 @@ typedef	struct tag_HAL_VERSION
 //HAL_VERSION			VersionID;
 
 // Get element
-#define GET_CVID_IC_TYPE(version)			((HAL_IC_TYPE_E)(((HAL_VERSION)version).ICType)	)
-#define GET_CVID_CHIP_TYPE(version)			((HAL_CHIP_TYPE_E)(((HAL_VERSION)version).ChipType)	)
-#define GET_CVID_RF_TYPE(version)			((HAL_RF_TYPE_E)(((HAL_VERSION)version).RFType))
-#define GET_CVID_MANUFACTUER(version)		((HAL_VENDOR_E)(((HAL_VERSION)version).VendorType))
-#define GET_CVID_CUT_VERSION(version)		((HAL_CUT_VERSION_E)(((HAL_VERSION)version).CUTVersion))
-#define GET_CVID_ROM_VERSION(version)		((((HAL_VERSION)version).ROMVer) & ROM_VERSION_MASK)
+#define GET_CVID_IC_TYPE(version)		(((version).ICType))
+#define GET_CVID_CHIP_TYPE(version)		(((version).ChipType))
+#define GET_CVID_RF_TYPE(version)		(((version).RFType))
+#define GET_CVID_MANUFACTUER(version)		(((version).VendorType))
+#define GET_CVID_CUT_VERSION(version)		(((version).CUTVersion))
+#define GET_CVID_ROM_VERSION(version)		(((version).ROMVer) & ROM_VERSION_MASK)
 
 //----------------------------------------------------------------------------
 //Common Macro. --
@@ -124,9 +124,9 @@ typedef	struct tag_HAL_VERSION
 #define IS_CHIP_VENDOR_UMC(version)	((GET_CVID_MANUFACTUER(version) == CHIP_VENDOR_UMC)? true: false)
 
 //HAL_RF_TYPE_E
-#define IS_1T1R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_1T1R)? true : false )
-#define IS_1T2R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_1T2R)? true : false)
-#define IS_2T2R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_2T2R)? true : false)
+#define IS_1T1R(version)		((GET_CVID_RF_TYPE(version) == RF_TYPE_1T1R) ? true : false )
+#define IS_1T2R(version)		((GET_CVID_RF_TYPE(version) == RF_TYPE_1T2R) ? true : false)
+#define IS_2T2R(version)		((GET_CVID_RF_TYPE(version) == RF_TYPE_2T2R) ? true : false)
 
 
 //----------------------------------------------------------------------------

@@ -23,7 +23,6 @@
 
 #define MAX_IE_SZ	768
 
-
 #ifdef PLATFORM_LINUX
 
 #define NDIS_802_11_LENGTH_SSID         32
@@ -666,5 +665,8 @@ typedef struct _NDIS_802_11_CAPABILITY
 } NDIS_802_11_CAPABILITY, *PNDIS_802_11_CAPABILITY;
 #endif
 
+u8 key_2char2num(u8 hch, u8 lch);
+u8 key_char2num(u8 ch);
+u8 str_2char2num(u8 hch, u8 lch);
 
 #endif //#ifndef WLAN_BSSDEF_H_

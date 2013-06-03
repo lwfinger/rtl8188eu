@@ -52,6 +52,7 @@ int rtw_os_recvbuf_resource_free(_adapter *padapter, struct recv_buf *precvbuf);
 void rtw_os_read_port(_adapter *padapter, struct recv_buf *precvbuf);
 
 void rtw_init_recv_timer(struct recv_reorder_ctrl *preorder_ctrl);
+int nat25_handle_frame(_adapter *priv, struct sk_buff *skb);
 
 
 #endif //

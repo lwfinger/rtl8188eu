@@ -453,10 +453,6 @@ extern void	_rtw_mutex_init(_mutex *pmutex);
 extern void	_rtw_mutex_free(_mutex *pmutex);
 extern void	_rtw_spinlock_init(_lock *plock);
 extern void	_rtw_spinlock_free(_lock *plock);
-extern void	_rtw_spinlock(_lock	*plock);
-extern void	_rtw_spinunlock(_lock	*plock);
-extern void	_rtw_spinlock_ex(_lock	*plock);
-extern void	_rtw_spinunlock_ex(_lock	*plock);
 
 extern void	_rtw_init_queue(_queue	*pqueue);
 extern u32	_rtw_queue_empty(_queue	*pqueue);

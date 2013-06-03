@@ -33,39 +33,11 @@ struct pkt_file {
 	SIZE_T buf_len;
 };
 
-#ifdef PLATFORM_WINDOWS
-
-#ifdef PLATFORM_OS_XP
-#ifdef CONFIG_USB_HCI
-#include <usb.h>
-#include <usbdlib.h>
-#include <usbioctl.h>
+#ifdef CONFIG_80211N_HT
+extern int rtw_ht_enable;
+extern int rtw_cbw40_enable;
+extern int rtw_ampdu_enable;//for enable tx_ampdu
 #endif
-#endif
-
-#ifdef CONFIG_GSPI_HCI
-#define NR_XMITFRAME     64
-#else
-#define NR_XMITFRAME     128
-#endif
-
-#define ETH_ALEN	6
-
-extern NDIS_STATUS rtw_xmit_entry(
-_nic_hdl		cnxt,
-NDIS_PACKET		*pkt,
-UINT				flags
-);
-
-#endif
-
-#ifdef PLATFORM_FREEBSD
-#define NR_XMITFRAME	256
-extern int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev);
-extern void rtw_xmit_entry_wrap (struct ifnet * pifp);
-#endif //PLATFORM_FREEBSD
-
-#ifdef PLATFORM_LINUX
 
 #define NR_XMITFRAME	256
 
@@ -76,8 +48,6 @@ struct xmit_frame;
 struct xmit_buf;
 
 extern int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev);
-
-#endif
 
 void rtw_os_xmit_schedule(_adapter *padapter);
 

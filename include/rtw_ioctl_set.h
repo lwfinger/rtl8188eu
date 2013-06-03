@@ -31,29 +31,6 @@ typedef struct _BSSIDInfo {
 	NDIS_802_11_PMKID_VALUE  PMKID;
 } BSSIDInfo, *PBSSIDInfo;
 
-
-#ifdef PLATFORM_OS_XP
-typedef struct _NDIS_802_11_PMKID {
-	u32	Length;
-	u32	BSSIDInfoCount;
-	BSSIDInfo BSSIDInfo[1];
-} NDIS_802_11_PMKID, *PNDIS_802_11_PMKID;
-#endif
-
-
-#ifdef PLATFORM_WINDOWS
-u8 rtw_set_802_11_reload_defaults(_adapter * padapter, NDIS_802_11_RELOAD_DEFAULTS reloadDefaults);
-u8 rtw_set_802_11_test(_adapter * padapter, NDIS_802_11_TEST * test);
-u8 rtw_set_802_11_pmkid(_adapter *pdapter, NDIS_802_11_PMKID *pmkid);
-
-u8 rtw_pnp_set_power_sleep(_adapter* padapter);
-u8 rtw_pnp_set_power_wakeup(_adapter* padapter);
-
-void rtw_pnp_resume_wk(void *context);
-void rtw_pnp_sleep_wk(void * context);
-
-#endif
-
 u8 rtw_set_802_11_add_key(_adapter * padapter, NDIS_802_11_KEY * key);
 u8 rtw_set_802_11_authentication_mode(_adapter *pdapter, NDIS_802_11_AUTHENTICATION_MODE authmode);
 u8 rtw_set_802_11_bssid(_adapter* padapter, u8 *bssid);
@@ -72,5 +49,6 @@ u16 rtw_get_cur_max_rate(_adapter *adapter);
 int rtw_set_scan_mode(_adapter *adapter, RT_SCAN_TYPE scan_mode);
 int rtw_set_channel_plan(_adapter *adapter, u8 channel_plan);
 int rtw_set_country(_adapter *adapter, const char *country_code);
+int rtw_change_ifname(_adapter *padapter, const char *ifname);
 
 #endif

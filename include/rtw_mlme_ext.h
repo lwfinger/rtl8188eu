@@ -821,7 +821,7 @@ u8 tdls_hdl(_adapter *padapter, unsigned char *pbuf);
 
 #ifdef _RTW_CMD_C_
 
-struct cmd_hdl wlancmds[] =
+static struct cmd_hdl wlancmds[] =
 {
 	GEN_DRV_CMD_HANDLER(0, NULL) /*0*/
 	GEN_DRV_CMD_HANDLER(0, NULL)

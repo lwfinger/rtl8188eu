@@ -97,13 +97,7 @@ typedef struct cmd_tlv {
 #endif /* PNO_SUPPORT */
 
 typedef struct android_wifi_priv_cmd {
-
-#ifdef CONFIG_COMPAT
-	compat_uptr_t buf;
-#else
 	char *buf;
-#endif
-
 	int used_len;
 	int total_len;
 } android_wifi_priv_cmd;
@@ -359,7 +353,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		ret = -EFAULT;
 		goto exit;
 	 }
-	if (copy_from_user(command, (void *)priv_cmd.buf, priv_cmd.total_len)) {
+	if (copy_from_user(command, (char __user *)priv_cmd.buf, priv_cmd.total_len)) {
 		ret = -EFAULT;
 		goto exit;
 	}
@@ -563,7 +557,7 @@ response:
 			bytes_written++;
 		}
 		priv_cmd.used_len = bytes_written;
-		if (copy_to_user((void *)priv_cmd.buf, command, bytes_written)) {
+		if (copy_to_user((char __user *)priv_cmd.buf, command, bytes_written)) {
 			DBG_88E("%s: failed to copy data to user buffer\n", __func__);
 			ret = -EFAULT;
 		}

@@ -26,18 +26,8 @@
 #include <osdep_intf.h>
 #include <circ_buf.h>
 #include <ip.h>
-
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-#error "Shall be Linux or Windows, but not both!\n"
-#endif
-
-#ifdef PLATFORM_WINDOWS
-#include <if_ether.h>
-#endif
-
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
+#include <usb_osintf.h>
 
 
 static u8 P802_1H_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0xf8 };
@@ -1105,8 +1095,7 @@ _func_enter_;
 
 	SetFrameSubType(fctrl, pattrib->subtype);
 
-	if (pattrib->subtype & WIFI_DATA_TYPE)
-	{
+	if (pattrib->subtype & WIFI_DATA_TYPE) {
 		if ((check_fwstate(pmlmepriv,  WIFI_STATION_STATE) == true)) {
 			//to_ds = 1, fr_ds = 0;
 #ifdef CONFIG_TDLS
@@ -1840,7 +1829,7 @@ _func_enter_;
 	snap->oui[1] = oui[1];
 	snap->oui[2] = oui[2];
 
-	*(u16 *)(data + SNAP_SIZE) = htons(h_proto);
+	*(__be16 *)(data + SNAP_SIZE) = htons(h_proto);
 
 _func_exit_;
 
@@ -2662,14 +2651,13 @@ _func_exit_;
 }
 
 #ifdef CONFIG_BR_EXT
-int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
+static int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 {
 	struct sk_buff *skb = *pskb;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	_irqL irqL;
 	//if (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true)
 	{
-		void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb);
 		int res, is_vlan_tag=0, i, do_nat25=1;
 		unsigned short vlan_hdr=0;
 		void *br_port = NULL;
@@ -2687,14 +2675,14 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 		if (	!(skb->data[0] & 1) &&
 				br_port &&
 				memcmp(skb->data+MACADDRLEN, padapter->br_mac, MACADDRLEN) &&
-				*((unsigned short *)(skb->data+MACADDRLEN*2)) != __constant_htons(ETH_P_8021Q) &&
-				*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP) &&
+				*((__be16 *)(skb->data+MACADDRLEN*2)) != __constant_htons(ETH_P_8021Q) &&
+				*((__be16 *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP) &&
 				!memcmp(padapter->scdb_mac, skb->data+MACADDRLEN, MACADDRLEN) && padapter->scdb_entry) {
 			memcpy(skb->data+MACADDRLEN, GET_MY_HWADDR(padapter), MACADDRLEN);
 			padapter->scdb_entry->ageing_timer = jiffies;
 			_exit_critical_bh(&padapter->br_ext_lock, &irqL);
 		} else {
-			if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_8021Q)) {
+			if (*((__be16 *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_8021Q)) {
 				is_vlan_tag = 1;
 				vlan_hdr = *((unsigned short *)(skb->data+MACADDRLEN*2+2));
 				for (i=0; i<6; i++)
@@ -2702,13 +2690,11 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 				skb_pull(skb, 4);
 			}
 			if (!memcmp(skb->data+MACADDRLEN, padapter->br_mac, MACADDRLEN) &&
-				(*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)))
+				(*((__be16 *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)))
 				memcpy(padapter->br_ip, skb->data+WLAN_ETHHDR_LEN+12, 4);
 
-			if (*((unsigned short *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)) {
+			if (*((__be16 *)(skb->data+MACADDRLEN*2)) == __constant_htons(ETH_P_IP)) {
 				if (memcmp(padapter->scdb_mac, skb->data+MACADDRLEN, MACADDRLEN)) {
-					void *scdb_findEntry(_adapter *priv, unsigned char *macAddr, unsigned char *ipAddr);
-
 					if ((padapter->scdb_entry = (struct nat25_network_db_entry *)scdb_findEntry(padapter,
 								skb->data+MACADDRLEN, skb->data+WLAN_ETHHDR_LEN+12)) != NULL) {
 						memcpy(padapter->scdb_mac, skb->data+MACADDRLEN, MACADDRLEN);
@@ -2728,7 +2714,6 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 			}
 			_exit_critical_bh(&padapter->br_ext_lock, &irqL);
 			if (do_nat25) {
-				int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method);
 				if (nat25_db_handle(padapter, skb, NAT25_CHECK) == 0) {
 					struct sk_buff *newskb;
 
@@ -2736,7 +2721,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 						skb_push(skb, 4);
 						for (i=0; i<6; i++)
 							*((unsigned short *)(skb->data+i*2)) = *((unsigned short *)(skb->data+4+i*2));
-						*((unsigned short *)(skb->data+MACADDRLEN*2)) = __constant_htons(ETH_P_8021Q);
+						*((__be16 *)(skb->data+MACADDRLEN*2)) = __constant_htons(ETH_P_8021Q);
 						*((unsigned short *)(skb->data+MACADDRLEN*2+2)) = vlan_hdr;
 					}
 
@@ -2797,7 +2782,7 @@ int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 				skb_push(skb, 4);
 				for (i=0; i<6; i++)
 					*((unsigned short *)(skb->data+i*2)) = *((unsigned short *)(skb->data+4+i*2));
-				*((unsigned short *)(skb->data+MACADDRLEN*2)) = __constant_htons(ETH_P_8021Q);
+				*((__be16 *)(skb->data+MACADDRLEN*2)) = __constant_htons(ETH_P_8021Q);
 				*((unsigned short *)(skb->data+MACADDRLEN*2+2)) = vlan_hdr;
 			}
 		}
@@ -3738,7 +3723,7 @@ int rtw_sctx_wait(struct submit_ctx *sctx)
 	return ret;
 }
 
-bool rtw_sctx_chk_waring_status(int status)
+static bool rtw_sctx_chk_waring_status(int status)
 {
 	switch (status) {
 	case RTW_SCTX_DONE_UNKNOWN:

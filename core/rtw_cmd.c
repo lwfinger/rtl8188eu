@@ -28,6 +28,7 @@
 #ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
 #endif //CONFIG_BR_EXT
+#include <rtw_mlme_ext.h>
 
 #ifdef CONFIG_BT_COEXIST
 #include <rtl8723a_hal.h>
@@ -1971,7 +1972,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	_rtw_spinlock(&(padapter->tdlsinfo.cmd_lock));
+	spin_lock(&(padapter->tdlsinfo.cmd_lock));
 	_rtw_memcpy(TDLSoption->addr, addr, 6);
 	TDLSoption->option = option;
 	_rtw_spinunlock(&(padapter->tdlsinfo.cmd_lock));

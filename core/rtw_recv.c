@@ -26,17 +26,7 @@
 #include <ip.h>
 #include <if_ether.h>
 #include <ethernet.h>
-
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
-
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #include <wifi.h>
 #include <circ_buf.h>
 
@@ -54,9 +44,6 @@ _func_enter_;
 	_rtw_memset((u8 *)psta_recvpriv, 0, sizeof (struct sta_recv_priv));
 
 	_rtw_spinlock_init(&psta_recvpriv->lock);
-
-	//for (i=0; i<MAX_RX_NUMBLKS; i++)
-	//	_rtw_init_queue(&psta_recvpriv->blk_strms[i]);
 
 	_rtw_init_queue(&psta_recvpriv->defrag_q);
 
@@ -372,7 +359,7 @@ void rtw_free_recvframe_queue(_queue *pframequeue,  _queue *pfree_recv_queue)
 	_list	*plist, *phead;
 
 _func_enter_;
-	_rtw_spinlock(&pframequeue->lock);
+	spin_lock(&pframequeue->lock);
 
 	phead = get_list_head(pframequeue);
 	plist = get_next(phead);
@@ -388,7 +375,7 @@ _func_enter_;
 		rtw_free_recvframe(precvframe, pfree_recv_queue);
 	}
 
-	_rtw_spinunlock(&pframequeue->lock);
+	spin_unlock(&pframequeue->lock);
 
 _func_exit_;
 
@@ -2594,10 +2581,8 @@ _func_enter_;
 
 			//Then enqueue the 0~(n-1) fragment into the defrag_q
 
-			//_rtw_spinlock(&pdefrag_q->lock);
 			phead = get_list_head(pdefrag_q);
 			rtw_list_insert_tail(&pfhdr->list, phead);
-			//_rtw_spinunlock(&pdefrag_q->lock);
 
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("Enqueuq: ismfrag = %d, fragnum= %d\n", ismfrag,fragnum));
 
@@ -2620,10 +2605,8 @@ _func_enter_;
 		//enqueue the last fragment
 		if (pdefrag_q != NULL)
 		{
-			//_rtw_spinlock(&pdefrag_q->lock);
 			phead = get_list_head(pdefrag_q);
 			rtw_list_insert_tail(&pfhdr->list,phead);
-			//_rtw_spinunlock(&pdefrag_q->lock);
 
 			//call recvframe_defrag to defrag
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("defrag: ismfrag = %d, fragnum= %d\n", ismfrag, fragnum));
@@ -2659,7 +2642,7 @@ _func_exit_;
 
 }
 
-int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
+static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 {
 #if defined (PLATFORM_LINUX) || defined (PLATFORM_FREEBSD)  //for amsdu TP improvement,Creator: Thomas
 	int	a_len, padding_len;
@@ -2815,25 +2798,7 @@ int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 			rcu_read_unlock();
 #endif  // (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
 
-
-			if ( br_port && (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true) )
-			{
-				int nat25_handle_frame(_adapter *priv, struct sk_buff *skb);
-				if (nat25_handle_frame(padapter, sub_skb) == -1) {
-					//priv->ext_stats.rx_data_drops++;
-					//DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n");
-					//return FAIL;
-
-#if 1
-					// bypass this frame to upper layer!!
-#else
-					dev_kfree_skb_any(sub_skb);
-					continue;
-#endif
-				}
-			}
 #endif	// CONFIG_BR_EXT
-
 			sub_skb->protocol = eth_type_trans(sub_skb, padapter->pnetdev);
 			sub_skb->dev = padapter->pnetdev;
 
@@ -3128,7 +3093,7 @@ exit:
 #endif
 }
 
-int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
+static int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
 {
 	u8	wsize = preorder_ctrl->wsize_b;
 	u16	wend = (preorder_ctrl->indicate_seq + wsize -1) & 0xFFF;//% 4096;
@@ -3206,87 +3171,45 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, union rec
 	union recv_frame *pnextrframe;
 	struct rx_pkt_attrib *pnextattrib;
 
-	//DbgPrint("+enqueue_reorder_recvframe()\n");
-
-	//_enter_critical_ex(&ppending_recvframe_queue->lock, &irql);
-	//_rtw_spinlock_ex(&ppending_recvframe_queue->lock);
-
-
 	phead = get_list_head(ppending_recvframe_queue);
 	plist = get_next(phead);
 
-	while (rtw_end_of_queue_search(phead, plist) == false)
-	{
+	while (rtw_end_of_queue_search(phead, plist) == false) {
 		pnextrframe = LIST_CONTAINOR(plist, union recv_frame, u);
 		pnextattrib = &pnextrframe->u.hdr.attrib;
 
 		if (SN_LESS(pnextattrib->seq_num, pattrib->seq_num))
-		{
 			plist = get_next(plist);
-		}
 		else if ( SN_EQUAL(pnextattrib->seq_num, pattrib->seq_num))
-		{
-			//Duplicate entry is found!! Do not insert current entry.
-			//RT_TRACE(COMP_RX_REORDER, DBG_TRACE, ("InsertRxReorderList(): Duplicate packet is dropped!! IndicateSeq: %d, NewSeq: %d\n", pTS->RxIndicateSeq, SeqNum));
-
-			//_exit_critical_ex(&ppending_recvframe_queue->lock, &irql);
-
 			return false;
-		}
 		else
-		{
 			break;
-		}
-
-		//DbgPrint("enqueue_reorder_recvframe():while\n");
-
 	}
-
-
-	//_enter_critical_ex(&ppending_recvframe_queue->lock, &irql);
-	//_rtw_spinlock_ex(&ppending_recvframe_queue->lock);
 
 	rtw_list_delete(&(prframe->u.hdr.list));
 
 	rtw_list_insert_tail(&(prframe->u.hdr.list), plist);
-
-	//_rtw_spinunlock_ex(&ppending_recvframe_queue->lock);
-	//_exit_critical_ex(&ppending_recvframe_queue->lock, &irql);
-
-
-	//RT_TRACE(COMP_RX_REORDER, DBG_TRACE, ("InsertRxReorderList(): Pkt insert into buffer!! IndicateSeq: %d, NewSeq: %d\n", pTS->RxIndicateSeq, SeqNum));
 	return true;
-
 }
 
-int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *preorder_ctrl, int bforced);
-int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *preorder_ctrl, int bforced)
+static int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *preorder_ctrl, int bforced)
 {
-	//_irqL irql;
-	//u8 bcancelled;
 	_list	*phead, *plist;
 	union recv_frame *prframe;
 	struct rx_pkt_attrib *pattrib;
-	//u8 index = 0;
 	int bPktInBuf = false;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 	_queue *ppending_recvframe_queue = &preorder_ctrl->pending_recvframe_queue;
-
-	//DbgPrint("+recv_indicatepkts_in_order\n");
-
-	//_enter_critical_ex(&ppending_recvframe_queue->lock, &irql);
-	//_rtw_spinlock_ex(&ppending_recvframe_queue->lock);
 
 	phead =		get_list_head(ppending_recvframe_queue);
 	plist = get_next(phead);
 
 	// Handling some condition for forced indicate case.
-	if (bforced==true)
-	{
+	if (bforced==true) {
 		if (rtw_is_list_empty(phead))
 			return true;
 
-		 prframe = LIST_CONTAINOR(plist, union recv_frame, u);
+		prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 	        pattrib = &prframe->u.hdr.attrib;
 		preorder_ctrl->indicate_seq = pattrib->seq_num;
 		#ifdef DBG_RX_SEQ
@@ -3297,14 +3220,12 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 
 	// Prepare indication list and indication.
 	// Check if there is any packet need indicate.
-	while (!rtw_is_list_empty(phead))
-	{
+	while (!rtw_is_list_empty(phead)) {
 
 		prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 		pattrib = &prframe->u.hdr.attrib;
 
-		if (!SN_LESS(preorder_ctrl->indicate_seq, pattrib->seq_num))
-		{
+		if (!SN_LESS(preorder_ctrl->indicate_seq, pattrib->seq_num)) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_,
 				 ("recv_indicatepkts_in_order: indicate=%d seq=%d amsdu=%d\n",
 				  preorder_ctrl->indicate_seq, pattrib->seq_num, pattrib->amsdu));
@@ -3657,7 +3578,7 @@ int process_recv_indicatepkts(_adapter *padapter, union recv_frame *prframe)
 
 }
 
-int recv_func_prehandle(_adapter *padapter, union recv_frame *rframe)
+static int recv_func_prehandle(_adapter *padapter, union recv_frame *rframe)
 {
 	int ret = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = &rframe->u.hdr.attrib;
@@ -3701,7 +3622,7 @@ exit:
 	return ret;
 }
 
-int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
+static int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
 {
 	int ret = _SUCCESS;
 	union recv_frame *orig_prframe = prframe;

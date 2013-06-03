@@ -508,14 +508,12 @@ enum RTL871X_MP_IOCTL_SUBCODE {
 
 u32 mp_ioctl_xmit_packet_hdl(struct oid_par_priv* poid_par_priv);
 
-#ifdef _RTW_MP_IOCTL_C_
-
 #define GEN_MP_IOCTL_HANDLER(sz, hdl, oid) {sz, hdl, oid},
 
 #define EXT_MP_IOCTL_HANDLER(sz, subcode, oid) {sz, mp_ioctl_ ## subcode ## _hdl, oid},
 
 
-struct mp_ioctl_handler mp_ioctl_hdl[] = {
+static struct mp_ioctl_handler mp_ioctl_hdl[] = {
 
 /*0*/	GEN_MP_IOCTL_HANDLER(sizeof(u32), oid_rt_pro_start_test_hdl, OID_RT_PRO_START_TEST)
 	GEN_MP_IOCTL_HANDLER(sizeof(u32), oid_rt_pro_stop_test_hdl, OID_RT_PRO_STOP_TEST)
@@ -557,13 +555,6 @@ struct mp_ioctl_handler mp_ioctl_hdl[] = {
 /*30*/	GEN_MP_IOCTL_HANDLER(sizeof(u8), oid_rt_set_power_down_hdl, OID_RT_SET_POWER_DOWN)
 /*31*/	GEN_MP_IOCTL_HANDLER(0, oid_rt_pro_trigger_gpio_hdl, 0)
 
-
 };
-
-#else /* _RTW_MP_IOCTL_C_ */
-
-extern struct mp_ioctl_handler mp_ioctl_hdl[];
-
-#endif /* _RTW_MP_IOCTL_C_ */
 
 #endif

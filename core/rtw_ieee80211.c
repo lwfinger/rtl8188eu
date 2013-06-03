@@ -24,6 +24,7 @@
 #include <wifi.h>
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
+#include <usb_osintf.h>
 
 u8 RTW_WPA_OUI_TYPE[] = { 0x00, 0x50, 0xf2, 1 };
 u16 RTW_WPA_VERSION = 1;
@@ -1261,8 +1262,7 @@ ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
 
 }
 
-static u8 key_char2num(u8 ch);
-static u8 key_char2num(u8 ch)
+u8 key_char2num(u8 ch)
 {
     if ((ch>='0')&&(ch<='9'))
         return ch - '0';
@@ -1274,24 +1274,16 @@ static u8 key_char2num(u8 ch)
 	 return 0xff;
 }
 
-u8 str_2char2num(u8 hch, u8 lch);
 u8 str_2char2num(u8 hch, u8 lch)
 {
     return ((key_char2num(hch) * 10 ) + key_char2num(lch));
 }
 
-u8 key_2char2num(u8 hch, u8 lch);
 u8 key_2char2num(u8 hch, u8 lch)
 {
     return ((key_char2num(hch) << 4) | key_char2num(lch));
 }
 
-u8 convert_ip_addr(u8 hch, u8 mch, u8 lch)
-{
-    return ((key_char2num(hch) * 100) + (key_char2num(mch) * 10 ) + key_char2num(lch));
-}
-
-extern char* rtw_initmac;
 void rtw_macaddr_cfg(u8 *mac_addr)
 {
 	u8 mac[ETH_ALEN];
@@ -1768,7 +1760,7 @@ int ieee80211_get_hdrlen(u16 fc)
 	return hdrlen;
 }
 
-int rtw_get_cipher_info(struct wlan_network *pnetwork)
+static int rtw_get_cipher_info(struct wlan_network *pnetwork)
 {
 	u32 wpa_ielen;
 	unsigned char *pbuf;

@@ -22,7 +22,6 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-
 #include <rtw_efuse.h>
 
 
@@ -525,7 +524,7 @@ Efuse_PgPacketWrite(	PADAPTER	pAdapter,
 }
 
 
-int
+static int
 Efuse_PgPacketWrite_BT(	PADAPTER	pAdapter,
 						u8			offset,
 						u8			word_en,

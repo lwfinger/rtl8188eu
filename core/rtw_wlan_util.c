@@ -25,19 +25,19 @@
 #include <wifi.h>
 
 
-unsigned char ARTHEROS_OUI1[] = {0x00, 0x03, 0x7f};
-unsigned char ARTHEROS_OUI2[] = {0x00, 0x13, 0x74};
+static unsigned char ARTHEROS_OUI1[] = {0x00, 0x03, 0x7f};
+static unsigned char ARTHEROS_OUI2[] = {0x00, 0x13, 0x74};
 
-unsigned char BROADCOM_OUI1[] = {0x00, 0x10, 0x18};
-unsigned char BROADCOM_OUI2[] = {0x00, 0x0a, 0xf7};
-unsigned char BROADCOM_OUI3[] = {0x00, 0x05, 0xb5};
+static unsigned char BROADCOM_OUI1[] = {0x00, 0x10, 0x18};
+static unsigned char BROADCOM_OUI2[] = {0x00, 0x0a, 0xf7};
+static unsigned char BROADCOM_OUI3[] = {0x00, 0x05, 0xb5};
 
-unsigned char CISCO_OUI[] = {0x00, 0x40, 0x96};
-unsigned char MARVELL_OUI[] = {0x00, 0x50, 0x43};
-unsigned char RALINK_OUI[] = {0x00, 0x0c, 0x43};
-unsigned char REALTEK_OUI[] = {0x00, 0xe0, 0x4c};
-unsigned char AIRGOCAP_OUI[] = {0x00, 0x0a, 0xf5};
-unsigned char EPIGRAM_OUI[] = {0x00, 0x90, 0x4c};
+static unsigned char CISCO_OUI[] = {0x00, 0x40, 0x96};
+static unsigned char MARVELL_OUI[] = {0x00, 0x50, 0x43};
+static unsigned char RALINK_OUI[] = {0x00, 0x0c, 0x43};
+static unsigned char REALTEK_OUI[] = {0x00, 0xe0, 0x4c};
+static unsigned char AIRGOCAP_OUI[] = {0x00, 0x0a, 0xf5};
+static unsigned char EPIGRAM_OUI[] = {0x00, 0x90, 0x4c};
 
 unsigned char REALTEK_96B_IE[] = {0x00, 0xe0, 0x4c, 0x02, 0x01, 0x20};
 
@@ -710,7 +710,7 @@ void CAM_empty_entry(
 
 void invalidate_cam_all(_adapter *padapter)
 {
-	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, 0);
+	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, NULL);
 }
 
 void write_cam(_adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *key)
@@ -826,7 +826,7 @@ void flush_all_cam_entry(_adapter *padapter)
 	}
 #else //CONFIG_CONCURRENT_MODE
 
-	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, 0);
+	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, NULL);
 
 #endif //CONFIG_CONCURRENT_MODE
 
@@ -2235,10 +2235,6 @@ void update_wireless_mode(_adapter *padapter)
 		update_mgnt_tx_rate(padapter, IEEE80211_OFDM_RATE_6MB);
 }
 
-void fire_write_MAC_cmd(_adapter *padapter, unsigned int addr, unsigned int value)
-{
-}
-
 void update_bmc_sta_support_rate(_adapter *padapter, u32 mac_id)
 {
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -2335,7 +2331,7 @@ void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len)
 
 void correct_TSF(_adapter *padapter, struct mlme_ext_priv *pmlmeext)
 {
-	rtw_hal_set_hwreg(padapter, HW_VAR_CORRECT_TSF, 0);
+	rtw_hal_set_hwreg(padapter, HW_VAR_CORRECT_TSF, NULL);
 }
 
 void beacon_timing_control(_adapter *padapter)

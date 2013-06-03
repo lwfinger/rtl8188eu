@@ -146,4 +146,9 @@ void rtw_drv_if2_free(_adapter *if2);
 void rtw_drv_if2_stop(_adapter *if2);
 #endif
 
+#ifdef SUPPORT_HW_RFOFF_DETECTED
+int rtw_hw_suspend(_adapter *padapter );
+int rtw_hw_resume(_adapter *padapter);
+#endif
+
 #endif	//_OSDEP_INTF_H_

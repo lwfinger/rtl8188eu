@@ -25,13 +25,17 @@
 #include <drv_types.h>
 #include <usb_vendor_req.h>
 
+extern char* rtw_initmac;
+extern int rtw_mc2u_disable;
+
 #define USBD_HALTED(Status) ((ULONG)(Status) >> 30 == 3)
 
-
-//uint usb_dvobj_init(_adapter * adapter);
-//void usb_dvobj_deinit(_adapter * adapter);
-
 u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, RT_USB_BREQUEST brequest, RT_USB_WVALUE wvalue, u8 windex, void* data, u8 datalen, u8 isdirectionin);
-
+int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
+void netdev_br_init(struct net_device *netdev);
+void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb);
+void *scdb_findEntry(_adapter *priv, unsigned char *macAddr, unsigned char *ipAddr);
+void nat25_db_expire(_adapter *priv);
+int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method);
 
 #endif

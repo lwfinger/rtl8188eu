@@ -3524,9 +3524,7 @@ _func_enter_;
 				// Forece leave RF low power mode for 1T1R to prevent conficting setting in Fw power
 				// saving sequence. 2010.06.07. Added by tynli. Suggested by SD3 yschang.
 				if ( (psmode != PS_MODE_ACTIVE) && (!IS_92C_SERIAL(pHalData->VersionID)))
-				{
 					ODM_RF_Saving(podmpriv, true);
-				}
 				rtl8188e_set_FwPwrMode_cmd(Adapter, psmode);
 			}
 			break;

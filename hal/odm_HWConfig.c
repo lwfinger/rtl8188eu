@@ -40,24 +40,14 @@
 #define READ_AND_CONFIG_MP(ic, txt) (ODM_ReadAndConfig##txt##ic(pDM_Odm))
 #define READ_AND_CONFIG_TC(ic, txt) (ODM_ReadAndConfig_TC##txt##ic(pDM_Odm))
 
-u1Byte
-odm_QueryRxPwrPercentage(
-			s1Byte		AntPower
-	)
+static u1Byte odm_QueryRxPwrPercentage(s1Byte		AntPower)
 {
 	if ((AntPower <= -100) || (AntPower >= 20))
-	{
 		return	0;
-	}
 	else if (AntPower >= 0)
-	{
 		return	100;
-	}
 	else
-	{
 		return	(100+AntPower);
-	}
-
 }
 
 #if (DM_ODM_SUPPORT_TYPE != ODM_MP)
@@ -65,8 +55,7 @@ odm_QueryRxPwrPercentage(
 // 2012/01/12 MH MOve some signal strength smooth method to MP HAL layer.
 // IF other SW team do not support the feature, remove this section.??
 //
-s4Byte
-odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
+static s4Byte odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
 	PDM_ODM_T pDM_Odm,
 	s4Byte CurrSig
 )
@@ -81,48 +70,29 @@ odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
 		// This modification makes the RSSI indication similar to Intel solution.
 		// 20100414 Joseph: Tunning RSSI for Lenovo according to RTL8191SE.
 		if (CurrSig >= 54 && CurrSig <= 100)
-		{
 			RetSig = 100;
-		}
 		else if (CurrSig>=42 && CurrSig <= 53)
-		{
 			RetSig = 95;
-		}
 		else if (CurrSig>=36 && CurrSig <= 41)
-		{
 			RetSig = 74 + ((CurrSig - 36) *20)/6;
-		}
 		else if (CurrSig>=33 && CurrSig <= 35)
-		{
 			RetSig = 65 + ((CurrSig - 33) *8)/2;
-		}
 		else if (CurrSig>=18 && CurrSig <= 32)
-		{
 			RetSig = 62 + ((CurrSig - 18) *2)/15;
-		}
 		else if (CurrSig>=15 && CurrSig <= 17)
-		{
 			RetSig = 33 + ((CurrSig - 15) *28)/2;
-		}
 		else if (CurrSig>=10 && CurrSig <= 14)
-		{
 			RetSig = 39;
-		}
 		else if (CurrSig>=8 && CurrSig <= 9)
-		{
 			RetSig = 33;
-		}
 		else if (CurrSig <= 8)
-		{
 			RetSig = 19;
-		}
 	}
 #endif //ENDIF (DM_ODM_SUPPORT_TYPE == ODM_MP)
 	return RetSig;
 }
 
-s4Byte
-odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
+static s4Byte odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
 	PDM_ODM_T pDM_Odm,
 	s4Byte CurrSig
 )
@@ -182,7 +152,7 @@ odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
 }
 
 
-s4Byte
+static s4Byte
 odm_SignalScaleMapping_92CSeries(
 	PDM_ODM_T pDM_Odm,
 	s4Byte CurrSig
@@ -275,7 +245,7 @@ odm_SignalScaleMapping_92CSeries(
 #endif
 	return RetSig;
 }
-s4Byte
+static s4Byte
 odm_SignalScaleMapping(
 	PDM_ODM_T pDM_Odm,
 		s4Byte CurrSig
@@ -377,7 +347,7 @@ odm_EVMdbToPercentage(
 
 
 
-void
+static void
 odm_RxPhyStatus92CSeries_Parsing(
 		PDM_ODM_T					pDM_Odm,
 			PODM_PHY_INFO_T			pPhyInfo,
@@ -746,7 +716,7 @@ odm_Init_RSSIForDM(
 
 }
 
-void
+static void
 odm_Process_RSSIForDM(
 		PDM_ODM_T					pDM_Odm,
 			PODM_PHY_INFO_T			pPhyInfo,
@@ -968,7 +938,7 @@ odm_Process_RSSIForDM(
 //
 // Endianness before calling this API
 //
-void
+static void
 ODM_PhyStatusQuery_92CSeries(
 		PDM_ODM_T					pDM_Odm,
 			PODM_PHY_INFO_T				pPhyInfo,
@@ -998,7 +968,7 @@ ODM_PhyStatusQuery_92CSeries(
 //
 // Endianness before calling this API
 //
-void
+static void
 ODM_PhyStatusQuery_JaguarSeries(
 		PDM_ODM_T					pDM_Odm,
 			PODM_PHY_INFO_T			pPhyInfo,
