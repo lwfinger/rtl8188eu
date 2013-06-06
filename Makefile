@@ -177,7 +177,7 @@ EXTRA_CFLAGS += -DCONFIG_RF_GAIN_OFFSET
 endif
 endif
 
-SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/)
+SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/ | sed -e s/armv6l/arm/)
 
 ifeq ($(CONFIG_PLATFORM_I386_PC), y)
 ARCH ?= $(SUBARCH)
