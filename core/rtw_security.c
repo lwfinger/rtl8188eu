@@ -254,17 +254,14 @@ void rtw_wep_decrypt(_adapter  *padapter, u8 *precvframe)
 
 _func_enter_;
 
-	pframe=(unsigned char *)((union recv_frame*)precvframe)->u.hdr.rx_data;
+	pframe = (unsigned char *)((union recv_frame*)precvframe)->u.hdr.rx_data;
 
 	//start to decrypt recvframe
-	if ((prxattrib->encrypt==_WEP40_)||(prxattrib->encrypt==_WEP104_))
-	{
+	if ((prxattrib->encrypt==_WEP40_)||(prxattrib->encrypt==_WEP104_)) {
 		iv=pframe+prxattrib->hdrlen;
-		//keyindex=(iv[3]&0x3);
 		keyindex = prxattrib->key_index;
 		keylength=psecuritypriv->dot11DefKeylen[keyindex];
 		_rtw_memcpy(&wepkey[0], iv, 3);
-		//_rtw_memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[psecuritypriv->dot11PrivacyKeyIndex].skey[0],keylength);
 		_rtw_memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[keyindex].skey[0],keylength);
 		length= ((union recv_frame *)precvframe)->u.hdr.len-prxattrib->hdrlen-prxattrib->iv_len;
 
@@ -275,20 +272,19 @@ _func_enter_;
 		arcfour_encrypt(&mycontext, payload, payload,  length);
 
 		//calculate icv and compare the icv
-		*((unsigned long *)crc)=le32_to_cpu(getcrc32(payload,length-4));
+		*((u32 *)crc) = le32_to_cpu(getcrc32(payload, length - 4));
 
-		if (crc[3]!=payload[length-1] || crc[2]!=payload[length-2] || crc[1]!=payload[length-3] || crc[0]!=payload[length-4])
-		{
-			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("rtw_wep_decrypt:icv error crc[3](%x)!=payload[length-1](%x) || crc[2](%x)!=payload[length-2](%x) || crc[1](%x)!=payload[length-3](%x) || crc[0](%x)!=payload[length-4](%x)\n",
-						crc[3],payload[length-1],crc[2],payload[length-2],crc[1],payload[length-3],crc[0],payload[length-4]));
+		if (crc[3] != payload[length-1] ||
+		    crc[2] != payload[length-2] ||
+		    crc[1] != payload[length-3] ||
+		    crc[0] != payload[length-4]) {
+			RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
+				 ("rtw_wep_decrypt:icv error crc (%4ph) != payload (%4ph)\n",
+				 &crc, &payload[length-4]));
 		}
-
 	}
-
 _func_exit_;
-
 	return;
-
 }
 
 //3		=====TKIP related=====
@@ -829,27 +825,25 @@ _func_enter_;
 			arcfour_init(&mycontext, rc4key,16);
 			arcfour_encrypt(&mycontext, payload, payload, length);
 
-			*((u32 *)crc)=le32_to_cpu(getcrc32(payload,length-4));
+			*((u32 *)crc) = le32_to_cpu(getcrc32(payload, length-4));
 
-			if (crc[3]!=payload[length-1] || crc[2]!=payload[length-2] || crc[1]!=payload[length-3] || crc[0]!=payload[length-4])
-			{
-			    RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("rtw_wep_decrypt:icv error crc[3](%x)!=payload[length-1](%x) || crc[2](%x)!=payload[length-2](%x) || crc[1](%x)!=payload[length-3](%x) || crc[0](%x)!=payload[length-4](%x)\n",
-						crc[3],payload[length-1],crc[2],payload[length-2],crc[1],payload[length-3],crc[0],payload[length-4]));
+			if (crc[3] != payload[length-1] ||
+			    crc[2] != payload[length-2] ||
+			    crc[1] != payload[length-3] ||
+			    crc[0] != payload[length-4]) {
+				RT_TRACE(_module_rtl871x_security_c_, _drv_err_,
+					 ("rtw_wep_decrypt:icv error crc (%4ph) != payload (%4ph)\n",
+					 &crc, &payload[length-4]));
 				res=_FAIL;
 			}
-
-
-		}
-		else{
+		} else {
 			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("rtw_tkip_decrypt: stainfo==NULL!!!\n"));
 			res=_FAIL;
 		}
-
 	}
 _func_exit_;
 exit:
 	return res;
-
 }
 
 

@@ -97,7 +97,7 @@ typedef struct cmd_tlv {
 #endif /* PNO_SUPPORT */
 
 typedef struct android_wifi_priv_cmd {
-	char *buf;
+	const char __user *buf;
 	int used_len;
 	int total_len;
 } android_wifi_priv_cmd;
