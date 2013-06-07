@@ -489,7 +489,7 @@ u8 *rtw_get_capability_from_ie(u8 *ie)
 
 u16 rtw_get_capability(WLAN_BSSID_EX *bss)
 {
-	u16	val;
+	__le16	val;
 _func_enter_;
 
 	_rtw_memcpy((u8 *)&val, rtw_get_capability_from_ie(bss->IEs), 2);
@@ -632,41 +632,25 @@ inline int is_same_ess(WLAN_BSSID_EX *a, WLAN_BSSID_EX *b)
 int is_same_network(WLAN_BSSID_EX *src, WLAN_BSSID_EX *dst)
 {
 	 u16 s_cap, d_cap;
+	__le16 le_scap, le_dcap;
 
 _func_enter_;
-
-#ifdef PLATFORM_OS_XP
-	 if ( ((uint)dst) <= 0x7fffffff ||
-		((uint)src) <= 0x7fffffff ||
-		((uint)&s_cap) <= 0x7fffffff ||
-		((uint)&d_cap) <= 0x7fffffff)
-	{
-		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("\n@@@@ error address of dst\n"));
-
-		KeBugCheckEx(0x87110000, (ULONG_PTR)dst, (ULONG_PTR)src,(ULONG_PTR)&s_cap, (ULONG_PTR)&d_cap);
-
-		return false;
-	}
-#endif
+	_rtw_memcpy((u8 *)&le_scap, rtw_get_capability_from_ie(src->IEs), 2);
+	_rtw_memcpy((u8 *)&le_dcap, rtw_get_capability_from_ie(dst->IEs), 2);
 
 
-	_rtw_memcpy((u8 *)&s_cap, rtw_get_capability_from_ie(src->IEs), 2);
-	_rtw_memcpy((u8 *)&d_cap, rtw_get_capability_from_ie(dst->IEs), 2);
-
-
-	s_cap = le16_to_cpu(s_cap);
-	d_cap = le16_to_cpu(d_cap);
+	s_cap = le16_to_cpu(le_scap);
+	d_cap = le16_to_cpu(le_dcap);
 
 _func_exit_;
 
 	return ((src->Ssid.SsidLength == dst->Ssid.SsidLength) &&
-		//	(src->Configuration.DSConfig == dst->Configuration.DSConfig) &&
-			( (_rtw_memcmp(src->MacAddress, dst->MacAddress, ETH_ALEN)) == true) &&
-			( (_rtw_memcmp(src->Ssid.Ssid, dst->Ssid.Ssid, src->Ssid.SsidLength)) == true) &&
-			((s_cap & WLAN_CAPABILITY_IBSS) ==
-			(d_cap & WLAN_CAPABILITY_IBSS)) &&
-			((s_cap & WLAN_CAPABILITY_BSS) ==
-			(d_cap & WLAN_CAPABILITY_BSS)));
+		( (_rtw_memcmp(src->MacAddress, dst->MacAddress, ETH_ALEN)) == true) &&
+		( (_rtw_memcmp(src->Ssid.Ssid, dst->Ssid.Ssid, src->Ssid.SsidLength)) == true) &&
+		((s_cap & WLAN_CAPABILITY_IBSS) ==
+		(d_cap & WLAN_CAPABILITY_IBSS)) &&
+		((s_cap & WLAN_CAPABILITY_BSS) ==
+		(d_cap & WLAN_CAPABILITY_BSS)));
 
 }
 
@@ -1384,8 +1368,7 @@ _func_enter_;
 
 	pmlmepriv->to_join = false;
 
-	if (!check_fwstate(&padapter->mlmepriv, _FW_LINKED))
-	{
+	if (!check_fwstate(&padapter->mlmepriv, _FW_LINKED)) {
 
 #ifdef CONFIG_SW_ANTENNA_DIVERSITY
 		rtw_hal_set_hwreg(padapter, HW_VAR_ANTENNA_DIVERSITY_LINK, 0);
@@ -1397,11 +1380,9 @@ _func_enter_;
 
 
 #ifdef CONFIG_DRVEXT_MODULE
-		if (padapter->drvextpriv.enable_wpa)
-		{
+		if (padapter->drvextpriv.enable_wpa) {
 			indicate_l2_connect(padapter);
-		}
-		else
+		} else
 #endif
 		{
 			rtw_os_indicate_connect(padapter);
@@ -3495,9 +3476,8 @@ void rtw_update_ht_cap(_adapter *padapter, u8 *pie, uint ie_len)
 
 	//update cur_bwmode & cur_ch_offset
 	if ((pregistrypriv->cbw40_enable) &&
-		(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info & BIT(1)) &&
-		(pmlmeinfo->HT_info.infos[0] & BIT(2)))
-	{
+	    (le16_to_cpu(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info) & BIT(1)) &&
+	    (pmlmeinfo->HT_info.infos[0] & BIT(2))) {
 		int i;
 		u8	rf_type;
 
@@ -3550,25 +3530,14 @@ void rtw_update_ht_cap(_adapter *padapter, u8 *pie, uint ie_len)
 	//
 	// Config SM Power Save setting
 	//
-	pmlmeinfo->SM_PS = (pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info & 0x0C) >> 2;
+	pmlmeinfo->SM_PS = (le16_to_cpu(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info) & 0x0C) >> 2;
 	if (pmlmeinfo->SM_PS == WLAN_HT_CAP_SM_PS_STATIC)
-	{
-		/*u8 i;
-		//update the MCS rates
-		for (i = 0; i < 16; i++)
-		{
-			pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-		}*/
 		DBG_88E("%s(): WLAN_HT_CAP_SM_PS_STATIC\n",__func__);
-	}
 
 	//
 	// Config current HT Protection mode.
 	//
 	pmlmeinfo->HT_protection = pmlmeinfo->HT_info.infos[1] & 0x3;
-
-
-
 }
 
 void rtw_issue_addbareq_cmd(_adapter *padapter, struct xmit_frame *pxmitframe)
