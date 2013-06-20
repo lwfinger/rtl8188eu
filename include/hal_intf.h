@@ -23,11 +23,7 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-
-#ifdef CONFIG_PCI_HCI
-#include <pci_hal.h>
-#endif
-
+#include <Hal8188EPhyCfg.h>
 
 enum RTL871X_HCI_TYPE {
 	RTW_PCIE	= BIT0,
@@ -428,8 +424,8 @@ void rtw_hal_bcn_related_reg_setting(_adapter *padapter);
 
 u32	rtw_hal_read_bbreg(_adapter *padapter, u32 RegAddr, u32 BitMask);
 void	rtw_hal_write_bbreg(_adapter *padapter, u32 RegAddr, u32 BitMask, u32 Data);
-u32	rtw_hal_read_rfreg(_adapter *padapter, u32 eRFPath, u32 RegAddr, u32 BitMask);
-void	rtw_hal_write_rfreg(_adapter *padapter, u32 eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
+u32	rtw_hal_read_rfreg(_adapter *padapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask);
+void	rtw_hal_write_rfreg(_adapter *padapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
 s32	rtw_hal_interrupt_handler(_adapter *padapter);
 

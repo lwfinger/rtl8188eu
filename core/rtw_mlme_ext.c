@@ -1123,9 +1123,9 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 #ifdef CONFIG_AP_MODE
 	_irqL irqL;
 	unsigned int	auth_mode, ie_len;
-	__le16 seq;
+	u16 seq;
 	unsigned char	*sa, *p;
-	__le16	algorithm;
+	u16 algorithm;
 	int	status;
 	static struct sta_info stat;
 	struct	sta_info	*pstat=NULL;
@@ -1154,19 +1154,17 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 	sa = GetAddr2Ptr(pframe);
 
 	auth_mode = psecuritypriv->dot11AuthAlgrthm;
-	seq = cpu_to_le16(*(u16*)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + 2));
-	algorithm = cpu_to_le16(*(u16*)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN));
+	seq = le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + 2));
+	algorithm = le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN));
 
 	DBG_88E("auth alg=%x, seq=%X\n", algorithm, seq);
 
-	if (auth_mode == 2 &&
-			psecuritypriv->dot11PrivacyAlgrthm != _WEP40_ &&
-			psecuritypriv->dot11PrivacyAlgrthm != _WEP104_)
+	if (auth_mode == 2 && psecuritypriv->dot11PrivacyAlgrthm != _WEP40_ &&
+	    psecuritypriv->dot11PrivacyAlgrthm != _WEP104_)
 		auth_mode = 0;
 
 	if ((algorithm > 0 && auth_mode == 0) ||	// rx a shared-key auth but shared not enabled
-		(algorithm == 0 && auth_mode == 1) )	// rx a open-system auth but shared-key is enabled
-	{
+	    (algorithm == 0 && auth_mode == 1)) {	// rx a open-system auth but shared-key is enabled
 		DBG_88E("auth rejected due to bad alg [alg=%d, auth_mib=%d] %02X%02X%02X%02X%02X%02X\n",
 			algorithm, auth_mode, sa[0], sa[1], sa[2], sa[3], sa[4], sa[5]);
 
@@ -1175,20 +1173,17 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 		goto auth_fail;
 	}
 
-	if (rtw_access_ctrl(padapter, sa) == false)
-	{
+	if (rtw_access_ctrl(padapter, sa) == false) {
 		status = _STATS_UNABLE_HANDLE_STA_;
 		goto auth_fail;
 	}
 
 	pstat = rtw_get_stainfo(pstapriv, sa);
-	if (pstat == NULL)
-	{
+	if (pstat == NULL) {
 		// allocate a new one
 		DBG_88E("going to alloc stainfo for sa=%pM\n", sa);
 		pstat = rtw_alloc_stainfo(pstapriv, sa);
-		if (pstat == NULL)
-		{
+		if (pstat == NULL) {
 			DBG_88E(" Exceed the upper limit of supported clients...\n");
 			status = _STATS_UNABLE_HANDLE_STA_;
 			goto auth_fail;
@@ -1197,12 +1192,9 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 		pstat->state = WIFI_FW_AUTH_NULL;
 		pstat->auth_seq = 0;
 
-	}
-	else
-	{
+	} else {
 		_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-		if (rtw_is_list_empty(&pstat->asoc_list)==false)
-		{
+		if (rtw_is_list_empty(&pstat->asoc_list)==false) {
 			rtw_list_delete(&pstat->asoc_list);
 			pstapriv->asoc_list_cnt--;
 			if (pstat->expire_to > 0)
@@ -1238,15 +1230,12 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 
 	if (algorithm==0 && (auth_mode == 0 || auth_mode == 2))
 	{
-		if (seq == 1)
-		{
+		if (seq == 1) {
 			pstat->state &= ~WIFI_FW_AUTH_NULL;
 			pstat->state |= WIFI_FW_AUTH_SUCCESS;
 			pstat->expire_to = pstapriv->assoc_to;
-			pstat->authalg = le16_to_cpu(algorithm);
-		}
-		else
-		{
+			pstat->authalg = algorithm;
+		} else {
 			DBG_88E("(2)auth rejected because out of seq [rx_seq=%d, exp_seq=%d]!\n",
 				seq, pstat->auth_seq+1);
 			status = _STATS_OUT_OF_AUTH_SEQ_;
@@ -1255,55 +1244,45 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 	}
 	else // shared system or auto authentication
 	{
-		if (seq == 1)
-		{
+		if (seq == 1) {
 			//prepare for the challenging txt...
 
 			//get_random_bytes((void *)pstat->chg_txt, 128);//TODO:
 
 			pstat->state &= ~WIFI_FW_AUTH_NULL;
 			pstat->state |= WIFI_FW_AUTH_STATE;
-			pstat->authalg = le16_to_cpu(algorithm);
+			pstat->authalg = algorithm;
 			pstat->auth_seq = 2;
-		}
-		else if (seq == 3)
-		{
+		} else if (seq == 3) {
 			//checking for challenging txt...
 			DBG_88E("checking for challenging txt...\n");
 
 			p = rtw_get_ie(pframe + WLAN_HDR_A3_LEN + 4 + _AUTH_IE_OFFSET_ , _CHLGETXT_IE_, (int *)&ie_len,
 					len - WLAN_HDR_A3_LEN - _AUTH_IE_OFFSET_ - 4);
 
-			if ((p==NULL) || (ie_len<=0))
-			{
+			if ((p==NULL) || (ie_len<=0)) {
 				DBG_88E("auth rejected because challenge failure!(1)\n");
 				status = _STATS_CHALLENGE_FAIL_;
 				goto auth_fail;
 			}
 
-			if (_rtw_memcmp((void *)(p + 2), pstat->chg_txt, 128))
-			{
+			if (_rtw_memcmp((void *)(p + 2), pstat->chg_txt, 128)) {
 				pstat->state &= (~WIFI_FW_AUTH_STATE);
 				pstat->state |= WIFI_FW_AUTH_SUCCESS;
 				// challenging txt is correct...
 				pstat->expire_to =  pstapriv->assoc_to;
-			}
-			else
-			{
+			} else {
 				DBG_88E("auth rejected because challenge failure!\n");
 				status = _STATS_CHALLENGE_FAIL_;
 				goto auth_fail;
 			}
-		}
-		else
-		{
+		} else {
 			DBG_88E("(3)auth rejected because out of seq [rx_seq=%d, exp_seq=%d]!\n",
 				seq, pstat->auth_seq+1);
 			status = _STATS_OUT_OF_AUTH_SEQ_;
 			goto auth_fail;
 		}
 	}
-
 
 	// Now, we are going to issue_auth...
 	pstat->auth_seq = seq + 1;
@@ -1314,7 +1293,6 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 
 	if (pstat->state & WIFI_FW_AUTH_SUCCESS)
 		pstat->auth_seq = 0;
-
 
 	return _SUCCESS;
 
@@ -1358,12 +1336,11 @@ unsigned int OnAuthClient(_adapter *padapter, union recv_frame *precv_frame)
 
 	offset = (GetPrivacy(pframe))? 4: 0;
 
-	algthm	= le16_to_cpu(*(unsigned short *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset));
-	seq	= le16_to_cpu(*(unsigned short *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset + 2));
-	status	= le16_to_cpu(*(unsigned short *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset + 4));
+	algthm	= le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset));
+	seq	= le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset + 2));
+	status	= le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset + 4));
 
-	if (status != 0)
-	{
+	if (status != 0) {
 		DBG_88E("clnt auth fail, status: %d\n", status);
 		if (status == 13)//&& pmlmeinfo->auth_algo == dot11AuthAlgrthm_Auto)
 		{
@@ -2078,8 +2055,8 @@ unsigned int OnAssocRsp(_adapter *padapter, union recv_frame *precv_frame)
 	_cancel_timer_ex(&pmlmeext->link_timer);
 
 	//status
-	if ((status = le16_to_cpu(*(unsigned short *)(pframe + WLAN_HDR_A3_LEN + 2))) > 0)
-	{
+	status = le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN + 2));
+	if (status > 0) {
 		DBG_88E("assoc reject, status code: %d\n", status);
 		pmlmeinfo->state = WIFI_FW_NULL_STATE;
 		res = -4;
@@ -2087,56 +2064,46 @@ unsigned int OnAssocRsp(_adapter *padapter, union recv_frame *precv_frame)
 	}
 
 	//get capabilities
-	pmlmeinfo->capability = le16_to_cpu(*(unsigned short *)(pframe + WLAN_HDR_A3_LEN));
+	pmlmeinfo->capability = le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN));
 
 	//set slot time
 	pmlmeinfo->slotTime = (pmlmeinfo->capability & BIT(10))? 9: 20;
 
 	//AID
-	res = pmlmeinfo->aid = (int)(le16_to_cpu(*(unsigned short *)(pframe + WLAN_HDR_A3_LEN + 4))&0x3fff);
+	res = pmlmeinfo->aid = (int)(le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN + 4))&0x3fff);
 
 	//following are moved to join event callback function
 	//to handle HT, WMM, rate adaptive, update MAC reg
 	//for not to handle the synchronous IO in the tasklet
-	for (i = (6 + WLAN_HDR_A3_LEN); i < pkt_len;)
-	{
+	for (i = (6 + WLAN_HDR_A3_LEN); i < pkt_len;) {
 		pIE = (PNDIS_802_11_VARIABLE_IEs)(pframe + i);
 
-		switch (pIE->ElementID)
-		{
-			case _VENDOR_SPECIFIC_IE_:
-				if (_rtw_memcmp(pIE->data, WMM_PARA_OUI, 6))	//WMM
-				{
-					WMM_param_handler(padapter, pIE);
-				}
+		switch (pIE->ElementID) {
+		case _VENDOR_SPECIFIC_IE_:
+			if (_rtw_memcmp(pIE->data, WMM_PARA_OUI, 6))	//WMM
+				WMM_param_handler(padapter, pIE);
 #if defined(CONFIG_P2P) && defined(CONFIG_WFD)
-				else if ( _rtw_memcmp(pIE->data, WFD_OUI, 4))		//WFD
-				{
-					DBG_88E( "[%s] Found WFD IE\n", __func__ );
-					WFD_info_handler( padapter, pIE );
-				}
+			else if ( _rtw_memcmp(pIE->data, WFD_OUI, 4)) {		//WFD
+				DBG_88E( "[%s] Found WFD IE\n", __func__ );
+				WFD_info_handler( padapter, pIE );
+			}
 #endif
-				break;
-
+			break;
 #ifdef CONFIG_WAPI_SUPPORT
-			case _WAPI_IE_:
-				pWapiIE = pIE;
-				break;
+		case _WAPI_IE_:
+			pWapiIE = pIE;
+			break;
 #endif
-
-			case _HT_CAPABILITY_IE_:	//HT caps
-				HT_caps_handler(padapter, pIE);
-				break;
-
-			case _HT_EXTRA_INFO_IE_:	//HT info
-				HT_info_handler(padapter, pIE);
-				break;
-
-			case _ERPINFO_IE_:
-				ERP_IE_handler(padapter, pIE);
-
-			default:
-				break;
+		case _HT_CAPABILITY_IE_:	//HT caps
+			HT_caps_handler(padapter, pIE);
+			break;
+		case _HT_EXTRA_INFO_IE_:	//HT info
+			HT_info_handler(padapter, pIE);
+			break;
+		case _ERPINFO_IE_:
+			ERP_IE_handler(padapter, pIE);
+		default:
+			break;
 		}
 
 		i += (pIE->Length + 2);
@@ -2187,7 +2154,7 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
 	}
 #endif //CONFIG_P2P
 
-	reason = le16_to_cpu(*(unsigned short *)(pframe + WLAN_HDR_A3_LEN));
+	reason = le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN));
 
 	DBG_88E("%s Reason code(%d)\n", __func__,reason);
 
@@ -5787,51 +5754,37 @@ unsigned int OnAction_p2p(_adapter *padapter, union recv_frame *precv_frame)
 	if (category != RTW_WLAN_CATEGORY_P2P)
 		return _SUCCESS;
 
-	if ( cpu_to_be32( *( ( u32* ) ( frame_body + 1 ) ) ) != P2POUI )
+	if (be32_to_cpu(*((__be32 * )(frame_body + 1))) != P2POUI)
 		return _SUCCESS;
 
 #ifdef CONFIG_IOCTL_CFG80211
-	if (wdev_to_priv(padapter->rtw_wdev)->p2p_enabled)
-	{
+	if (wdev_to_priv(padapter->rtw_wdev)->p2p_enabled) {
 		rtw_cfg80211_rx_action_p2p(padapter, pframe, len);
 		return _SUCCESS;
-	}
-	else
+	} else
 #endif //CONFIG_IOCTL_CFG80211
 	{
 		len -= sizeof(struct rtw_ieee80211_hdr_3addr);
 		OUI_Subtype = frame_body[5];
 		dialogToken = frame_body[6];
 
-		switch (OUI_Subtype)
-		{
-			case P2P_NOTICE_OF_ABSENCE:
-
-				break;
-
-			case P2P_PRESENCE_REQUEST:
-
-				process_p2p_presence_req(pwdinfo, pframe, len);
-
-				break;
-
-			case P2P_PRESENCE_RESPONSE:
-
-				break;
-
-			case P2P_GO_DISC_REQUEST:
-
-				break;
-
-			default:
-				break;
-
+		switch (OUI_Subtype) {
+		case P2P_NOTICE_OF_ABSENCE:
+			break;
+		case P2P_PRESENCE_REQUEST:
+			process_p2p_presence_req(pwdinfo, pframe, len);
+			break;
+		case P2P_PRESENCE_RESPONSE:
+			break;
+		case P2P_GO_DISC_REQUEST:
+			break;
+		default:
+			break;
 		}
 	}
 #endif //CONFIG_P2P
 
 	return _SUCCESS;
-
 }
 
 unsigned int OnAction(_adapter *padapter, union recv_frame *precv_frame)

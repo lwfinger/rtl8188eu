@@ -727,6 +727,7 @@ union recv_frame * portctrl(_adapter *adapter,union recv_frame * precv_frame)
 	u16	ether_type=0;
 	u16  eapol_type = 0x888e;//for Funia BD's WPA issue
 	struct rx_pkt_attrib *pattrib;
+	__be16 be_tmp;
 
 _func_enter_;
 
@@ -756,8 +757,8 @@ _func_enter_;
 
 			//get ether_type
 			ptr=ptr+pfhdr->attrib.hdrlen+pfhdr->attrib.iv_len+LLC_HEADER_SIZE;
-			_rtw_memcpy(&ether_type,ptr, 2);
-			ether_type= ntohs((unsigned short )ether_type);
+			_rtw_memcpy(&be_tmp, ptr, 2);
+			ether_type= ntohs(be_tmp);
 
 		        if (ether_type == eapol_type) {
 				prtnframe=precv_frame;
@@ -2159,6 +2160,7 @@ sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 {
 	sint	rmv_len;
 	u16	eth_type, len;
+	__be16 be_tmp;
 	u8	bsnaphdr;
 	u8	*psnap_type;
 	struct ieee80211_snap_hdr	*psnap;
@@ -2187,8 +2189,7 @@ _func_enter_;
 		 _rtw_memcmp(psnap, rtw_bridge_tunnel_header, SNAP_SIZE)){
 		/* remove RFC1042 or Bridge-Tunnel encapsulation and replace EtherType */
 		bsnaphdr = true;
-	}
-	else {
+	} else {
 		/* Leave Ethernet header part of hdr and full payload */
 		bsnaphdr = false;
 	}
@@ -2198,12 +2199,11 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("\n===pattrib->hdrlen: %x,  pattrib->iv_len:%x ===\n\n", pattrib->hdrlen,  pattrib->iv_len));
 
-	_rtw_memcpy(&eth_type, ptr+rmv_len, 2);
-	eth_type= ntohs((u16)eth_type); //pattrib->ether_type
+	_rtw_memcpy(&be_tmp, ptr+rmv_len, 2);
+	eth_type = ntohs(be_tmp); //pattrib->ether_type
 	pattrib->eth_type = eth_type;
 
-	if ((check_fwstate(pmlmepriv, WIFI_MP_STATE) == true))
-	{
+	if ((check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)) {
 		ptr += rmv_len ;
 		*ptr = 0x87;
 		*(ptr+1) = 0x12;
@@ -2222,8 +2222,8 @@ _func_enter_;
 	_rtw_memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
 
 	if (!bsnaphdr) {
-		len = htons(len);
-		_rtw_memcpy(ptr+12, &len, 2);
+		be_tmp = htons(len);
+		_rtw_memcpy(ptr+12, &be_tmp, 2);
 	}
 
 _func_exit_;
@@ -2240,12 +2240,11 @@ sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 	u8	bsnaphdr;
 	u8	*psnap_type;
 	struct ieee80211_snap_hdr	*psnap;
-
+	__be16 be_tmp;
 	sint ret=_SUCCESS;
 	_adapter	*adapter =precvframe->u.hdr.adapter;
 	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
-
-	u8* ptr = get_recvframe_data(precvframe) ; // point to frame_ctrl field
+	u8 *ptr = get_recvframe_data(precvframe); // point to frame_ctrl field
 	struct rx_pkt_attrib *pattrib = & precvframe->u.hdr.attrib;
 	struct _vlan *pvlan = NULL;
 
@@ -2286,8 +2285,8 @@ _func_enter_;
 
 	ptr += rmv_len ;
 
-	_rtw_memcpy(&eth_type, ptr, 2);
-	eth_type= ntohs((unsigned short )eth_type); //pattrib->ether_type
+	_rtw_memcpy(&be_tmp, ptr, 2);
+	eth_type= ntohs(be_tmp); //pattrib->ether_type
 	ptr +=2;
 
 	if (pattrib->encrypt){
@@ -2679,7 +2678,6 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 	while (a_len > ETH_HLEN) {
 
 		/* Offset 12 denote 2 mac address */
-		//nSubframe_Length = ntohs(*((u16*)(pdata + 12)));
 		nSubframe_Length = RTW_GET_BE16(pdata + 12);
 
 		if ( a_len < (ETHERNET_HEADER_SIZE + nSubframe_Length) ) {
@@ -2762,7 +2760,6 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 #ifndef PLATFORM_FREEBSD
 		sub_skb = subframes[i];
 		/* convert hdr + possible LLC headers into Ethernet header */
-		//eth_type = ntohs(*(u16*)&sub_skb->data[6]);
 		eth_type = RTW_GET_BE16(&sub_skb->data[6]);
 		if (sub_skb->len >= 8 &&
 			((_rtw_memcmp(sub_skb->data, rtw_rfc1042_header, SNAP_SIZE) &&
@@ -2773,7 +2770,7 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
 			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
 		} else {
-			u16 len;
+			__be16 len;
 			/* Leave Ethernet header part of hdr and full payload */
 			len = htons(sub_skb->len);
 			_rtw_memcpy(skb_push(sub_skb, 2), &len, 2);

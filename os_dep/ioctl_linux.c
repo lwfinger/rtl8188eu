@@ -300,6 +300,7 @@ static char *translate_scan(_adapter *padapter,
 {
 	struct iw_event iwe;
 	u16 cap;
+	__le16 le_tmp;
 	u32 ht_ielen = 0;
 	char custom[MAX_CUSTOM_LEN];
 	char *p;
@@ -469,10 +470,9 @@ static char *translate_scan(_adapter *padapter,
 
 	  /* Add mode */
         iwe.cmd = SIOCGIWMODE;
-	_rtw_memcpy((u8 *)&cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
+	_rtw_memcpy((u8 *)&le_tmp, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
 
-
-	cap = le16_to_cpu(cap);
+	cap = le16_to_cpu(le_tmp);
 
 	if (cap & (WLAN_CAPABILITY_IBSS |WLAN_CAPABILITY_BSS)){
 		if (cap & WLAN_CAPABILITY_BSS)
@@ -1829,29 +1829,22 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 
 	DBG_88E("%s\n", __func__);
 
-	reason = cpu_to_le16(mlme->reason_code);
-
+	reason = mlme->reason_code;
 
 	DBG_88E("%s, cmd=%d, reason=%d\n", __func__, mlme->cmd, reason);
 
-
-	switch (mlme->cmd)
-	{
-		case IW_MLME_DEAUTH:
-				if (!rtw_set_802_11_disassociate(padapter))
-				ret = -1;
-				break;
-
-		case IW_MLME_DISASSOC:
-				if (!rtw_set_802_11_disassociate(padapter))
-						ret = -1;
-
-				break;
-
-		default:
-			return -EOPNOTSUPP;
+	switch (mlme->cmd) {
+	case IW_MLME_DEAUTH:
+		if (!rtw_set_802_11_disassociate(padapter))
+			ret = -1;
+		break;
+	case IW_MLME_DISASSOC:
+		if (!rtw_set_802_11_disassociate(padapter))
+			ret = -1;
+		break;
+	default:
+		return -EOPNOTSUPP;
 	}
-
 	return ret;
 }
 
@@ -4530,40 +4523,30 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 		{
 			u8 *wpsie;
 			uint	wpsie_len = 0;
+			__be16 be_tmp;
 
-		//	The mac address is matched.
-
-			if ((wpsie=rtw_get_wps_ie(&pnetwork->network.IEs[ 12 ], pnetwork->network.IELength - 12, NULL, &wpsie_len)))
-			{
-				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_CONF_METHOD, (u8*) &attr_content, &attr_contentlen);
-				if (attr_contentlen)
-				{
-					attr_content = be16_to_cpu(attr_content);
+			// The mac address is matched.
+			if ((wpsie=rtw_get_wps_ie(&pnetwork->network.IEs[ 12 ], pnetwork->network.IELength - 12, NULL, &wpsie_len))) {
+				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_CONF_METHOD, (u8*) &be_tmp, &attr_contentlen);
+				if (attr_contentlen) {
+					attr_content = be16_to_cpu(be_tmp);
 					sprintf(attr_content_str, "\n\nM=%.4d", attr_content);
 					blnMatch = 1;
 				}
 			}
-
 			break;
-              }
-
+		}
 		plist = get_next(plist);
-
 	}
 
 	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 
 	if (!blnMatch)
-	{
 		sprintf(attr_content_str, "\n\nM=0000");
-	}
 
-	if (copy_to_user(wrqu->data.pointer, attr_content_str, 6 + 17)) {
+	if (copy_to_user(wrqu->data.pointer, attr_content_str, 6 + 17))
 		return -EFAULT;
-	}
-
 	return ret;
-
 }
 
 #ifdef CONFIG_WFD
@@ -4796,9 +4779,10 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
 				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_PRIMARY_DEV_TYPE, dev_type, &dev_type_len);
 				if (dev_type_len) {
 					u16	type = 0;
+					__be16 be_tmp;
 
-					memcpy(&type, dev_type, 2);
-					type = be16_to_cpu(type);
+					memcpy(&be_tmp, dev_type, 2);
+					type = be16_to_cpu(be_tmp);
 					sprintf(dev_type_str, "\n\nN=%.2d", type);
 					blnMatch = 1;
 				}
@@ -6116,7 +6100,7 @@ static int rtw_p2p_get(struct net_device *dev,
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 
 	if (padapter->bShowGetP2PState)
-		DBG_88E("[%s] extra = %s\n", __func__, (char*) wrqu->data.pointer);
+		DBG_88E("[%s] extra = %s\n", __func__, (char *)wrqu->data.pointer);
 
 	if (!memcmp(wrqu->data.pointer, "status", 6)) {
 		rtw_p2p_get_status(dev, info, wrqu, extra);
@@ -6169,28 +6153,19 @@ static int rtw_p2p_get2(struct net_device *dev,
 
 	DBG_88E("[%s] extra = %s\n", __func__, (char *)wrqu->data.pointer);
 
-	if (!memcmp(extra, "wpsCM=", 6))
-	{
+	if (!memcmp(extra, "wpsCM=", 6)) {
 		wrqu->data.length -= 6;
 		rtw_p2p_get_wps_configmethod(dev, info, wrqu,  &extra[6]);
-	}
-	else if (!memcmp(extra, "devN=", 5))
-	{
+	} else if (!memcmp(extra, "devN=", 5)) {
 		wrqu->data.length -= 5;
 		rtw_p2p_get_device_name(dev, info, wrqu, &extra[5]);
-	}
-	else if (!memcmp(extra, "dev_type=", 9))
-	{
+	} else if (!memcmp(extra, "dev_type=", 9)) {
 		wrqu->data.length -= 9;
 		rtw_p2p_get_device_type(dev, info, wrqu, &extra[9]);
-	}
-	else if (!memcmp(extra, "go_devadd=", 10))
-	{
+	} else if (!memcmp(extra, "go_devadd=", 10)) {
 		wrqu->data.length -= 10;
 		rtw_p2p_get_go_device_address(dev, info, wrqu, &extra[10]);
-	}
-	else if (!memcmp(extra, "InvProc=", 8))
-	{
+	} else if (!memcmp(extra, "InvProc=", 8)) {
 		wrqu->data.length -= 8;
 		rtw_p2p_get_invitation_procedure(dev, info, wrqu, &extra[8]);
 	}
@@ -6198,7 +6173,6 @@ static int rtw_p2p_get2(struct net_device *dev,
 #endif //CONFIG_P2P
 
 	return ret;
-
 }
 
 static int rtw_cta_test_start(struct net_device *dev,
@@ -6348,7 +6322,6 @@ static void rf_reg_dump(_adapter *padapter)
 		printk("\nRF_Path(%x)\n",path);
 		for (i=0;i<0x100;i++)
 		{
-			//value = PHY_QueryRFReg(padapter, (RF_RADIO_PATH_E)path,i, bMaskDWord);
 			value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
 			if (j%4==1)	printk("0x%02x ",i);
 			printk(" 0x%08x ",value);
@@ -10530,7 +10503,6 @@ static int rtw_mp_dump(struct net_device *dev,
 			 for (i = 0; i < 0x34; i++)
 #endif
 				{
-					//value = PHY_QueryRFReg(padapter, (RF_RADIO_PATH_E)path,i, bMaskDWord);
 					value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
 					if (j%4==1)	DBG_88E("0x%02x ",i);
 					DBG_88E(" 0x%08x ",value);

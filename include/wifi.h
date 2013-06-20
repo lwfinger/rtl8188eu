@@ -354,9 +354,9 @@ enum WIFI_REG_DOMAIN {
 		*(__le16 *)(pbuf) |= cpu_to_le16(type); \
 	} while (0)
 
-#define GetSequence(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + 22)) >> 4)
+#define GetSequence(pbuf)	(le16_to_cpu(*(__le16 *)((SIZE_PTR)(pbuf) + 22)) >> 4)
 
-#define GetFragNum(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + 22)) & 0x0f)
+#define GetFragNum(pbuf)	(le16_to_cpu(*(__le16 *)((SIZE_PTR)(pbuf) + 22)) & 0x0f)
 
 #define GetTupleCache(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + 22)))
 
@@ -385,7 +385,7 @@ enum WIFI_REG_DOMAIN {
 		*(__le16 *)(pbuf) |= cpu_to_le16(tid & 0xf); \
 	} while (0)
 
-#define GetPriority(pbuf)	((le16_to_cpu(*(unsigned short *)(pbuf))) & 0xf)
+#define GetPriority(pbuf)	((le16_to_cpu(*(__le16 *)(pbuf))) & 0xf)
 
 #define SetEOSP(pbuf, eosp)	\
 	do	{	\
@@ -397,18 +397,20 @@ enum WIFI_REG_DOMAIN {
 		*(__le16 *)(pbuf) |= cpu_to_le16( (ack & 3) << 5); \
 	} while (0)
 
-#define GetAckpolicy(pbuf) (((le16_to_cpu(*(unsigned short *)pbuf)) >> 5) & 0x3)
+#define GetAckpolicy(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 5) & 0x3)
 
-#define GetAMsdu(pbuf) (((le16_to_cpu(*(unsigned short *)pbuf)) >> 7) & 0x1)
+#define GetAMsdu(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 7) & 0x1)
 
 #define SetAMsdu(pbuf, amsdu)	\
 	do	{	\
 		*(__le16 *)(pbuf) |= cpu_to_le16( (amsdu & 1) << 7); \
 	} while (0)
 
-#define GetAid(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + 2)) & 0x3fff)
+#define GetAid(pbuf)	(le16_to_cpu(*(__le16 *)((SIZE_PTR)(pbuf) + 2)) & 0x3fff)
 
-#define GetTid(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + (((GetToDs(pbuf)<<1)|GetFrDs(pbuf))==3?30:24))) & 0x000f)
+#define GetTid(pbuf)	(le16_to_cpu(*(__le16 *)((SIZE_PTR)(pbuf) +	\
+			(((GetToDs(pbuf)<<1) | GetFrDs(pbuf)) == 3 ?	\
+			30 : 24))) & 0x000f)
 
 #define GetAddr1Ptr(pbuf)	((unsigned char *)((SIZE_PTR)(pbuf) + 4))
 
@@ -733,7 +735,7 @@ struct AC_param
 {
 	unsigned char		ACI_AIFSN;
 	unsigned char		CW;
-	unsigned short	TXOP_limit;
+	__le16	TXOP_limit;
 }  __attribute__ ((packed));
 
 struct WMM_para_element
@@ -806,7 +808,7 @@ struct AC_param
 {
 	unsigned char		ACI_AIFSN;
 	unsigned char		CW;
-	unsigned short	TXOP_limit;
+	__le16	TXOP_limit;
 };
 
 struct WMM_para_element

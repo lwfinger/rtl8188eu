@@ -623,7 +623,7 @@ __inline u8 *get_my_bssid(WLAN_BSSID_EX *pnetwork)
 
 u16 get_beacon_interval(WLAN_BSSID_EX *bss)
 {
-	unsigned short val;
+	__le16 val;
 	_rtw_memcpy((unsigned char *)&val, rtw_get_beacon_interval_from_ie(bss->IEs), 2);
 
 	return le16_to_cpu(val);
@@ -921,8 +921,7 @@ void WMMOnAssocRsp(_adapter *padapter)
 	struct xmit_priv		*pxmitpriv = &padapter->xmitpriv;
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 
-	if (pmlmeinfo->WMM_enable == 0)
-	{
+	if (pmlmeinfo->WMM_enable == 0) {
 		padapter->mlmepriv.acm_mask = 0;
 		return;
 	}
@@ -934,8 +933,7 @@ void WMMOnAssocRsp(_adapter *padapter)
 	else
 		aSifsTime = 16;
 
-	for (i = 0; i < 4; i++)
-	{
+	for (i = 0; i < 4; i++) {
 		ACI = (pmlmeinfo->WMM_param.ac_param[i].ACI_AIFSN >> 5) & 0x03;
 		ACM = (pmlmeinfo->WMM_param.ac_param[i].ACI_AIFSN >> 4) & 0x01;
 
@@ -948,8 +946,7 @@ void WMMOnAssocRsp(_adapter *padapter)
 
 		acParm = AIFS | (ECWMin << 8) | (ECWMax << 12) | (TXOP << 16);
 
-		switch (ACI)
-		{
+		switch (ACI) {
 			case 0x0:
 				rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_BE, (u8 *)(&acParm));
 				acm_mask |= (ACM? BIT(1):0);
@@ -1180,23 +1177,13 @@ void HT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 		}
 	}
 
-	//	Commented by Albert 2010/07/12
-	//	Have to handle the endian issue after copying.
-	//	HT_ext_caps didn't be used yet.
-	pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info = le16_to_cpu( pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info );
-	pmlmeinfo->HT_caps.u.HT_cap_element.HT_ext_caps = le16_to_cpu( pmlmeinfo->HT_caps.u.HT_cap_element.HT_ext_caps );
-
 	rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
 
 	//update the MCS rates
-	for (i = 0; i < 16; i++)
-	{
-		if ((rf_type == RF_1T1R) || (rf_type == RF_1T2R))
-		{
+	for (i = 0; i < 16; i++) {
+		if ((rf_type == RF_1T1R) || (rf_type == RF_1T2R)) {
 			pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-		}
-		else
-		{
+		} else {
 			#ifdef CONFIG_DISABLE_MCS13TO15
 			if (pmlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40 && (pregistrypriv->wifi_spec!=1))
 				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R_MCS13TO15_OFF[i];
@@ -1207,9 +1194,7 @@ void HT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 			#endif //CONFIG_DISABLE_MCS13TO15
 		}
 	        #ifdef RTL8192C_RECONFIG_TO_1T1R
-		{
-			pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-		}
+		pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
 		#endif
 	}
 #endif //CONFIG_80211N_HT
@@ -1878,14 +1863,10 @@ int support_short_GI(_adapter *padapter, struct HT_caps_element *pHT_caps)
 
 	bit_offset = (pmlmeext->cur_bwmode & HT_CHANNEL_WIDTH_40)? 6: 5;
 
-	if (pHT_caps->u.HT_cap_element.HT_caps_info & (0x1 << bit_offset))
-	{
+	if (__le16_to_cpu(pHT_caps->u.HT_cap_element.HT_caps_info) & (0x1 << bit_offset))
 		return _SUCCESS;
-	}
 	else
-	{
 		return _FAIL;
-	}
 }
 
 unsigned char get_highest_rate_idx(u32 mask)
@@ -2317,10 +2298,10 @@ void process_addba_req(_adapter *padapter, u8 *paddba_req, u8 *addr)
 void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len)
 {
 	u8* pIE;
-	u32 *pbuf;
+	__le32 *pbuf;
 
 	pIE = pframe + sizeof(struct rtw_ieee80211_hdr_3addr);
-	pbuf = (u32*)pIE;
+	pbuf = (__le32*)pIE;
 
 	pmlmeext->TSFValue = le32_to_cpu(*(pbuf+1));
 

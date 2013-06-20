@@ -418,20 +418,20 @@ _func_enter_;
 	ie += sz;
 
 	//beacon interval : 2bytes
-	*(u16*)ie = cpu_to_le16((u16)pdev_network->Configuration.BeaconPeriod);//BCN_INTERVAL;
+	*(__le16*)ie = cpu_to_le16((u16)pdev_network->Configuration.BeaconPeriod);//BCN_INTERVAL;
 	sz += 2;
 	ie += 2;
 
 	//capability info
 	*(u16*)ie = 0;
 
-	*(u16*)ie |= cpu_to_le16(cap_IBSS);
+	*(__le16*)ie |= cpu_to_le16(cap_IBSS);
 
 	if (pregistrypriv->preamble == PREAMBLE_SHORT)
-		*(u16*)ie |= cpu_to_le16(cap_ShortPremble);
+		*(__le16*)ie |= cpu_to_le16(cap_ShortPremble);
 
 	if (pdev_network->Privacy)
-		*(u16*)ie |= cpu_to_le16(cap_Privacy);
+		*(__le16*)ie |= cpu_to_le16(cap_Privacy);
 
 	sz += 2;
 	ie += 2;
@@ -502,6 +502,7 @@ unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
 {
 	int len;
 	u16 val16;
+	__le16 le_tmp;
 	unsigned char wpa_oui_type[] = {0x00, 0x50, 0xf2, 0x01};
 	u8 *pbuf = pie;
 	int limit_new = limit;
@@ -519,9 +520,9 @@ unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
 			}
 
 			//check version...
-			_rtw_memcpy((u8 *)&val16, (pbuf + 6), sizeof(val16));
+			_rtw_memcpy((u8 *)&le_tmp, (pbuf + 6), sizeof(val16));
 
-			val16 = le16_to_cpu(val16);
+			val16 = le16_to_cpu(le_tmp);
 			if (val16 != 0x0001)
 				goto check_next_ie;
 
@@ -1805,15 +1806,15 @@ void rtw_get_bcn_info(struct wlan_network *pnetwork)
 {
 	unsigned short cap = 0;
 	u8 bencrypt = 0;
-	//u8 wpa_ie[255],rsn_ie[255];
+	__le16 le_tmp;
 	u16 wpa_len=0,rsn_len=0;
 	struct HT_info_element *pht_info = NULL;
 	struct rtw_ieee80211_ht_cap *pht_cap = NULL;
 	unsigned int		len;
 	unsigned char		*p;
 
-	_rtw_memcpy((u8 *)&cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
-	cap = le16_to_cpu(cap);
+	_rtw_memcpy((u8 *)&le_tmp, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
+	cap = le16_to_cpu(le_tmp);
 	if (cap & WLAN_CAPABILITY_PRIVACY) {
 		bencrypt = 1;
 		pnetwork->network.Privacy = 1;
@@ -1935,12 +1936,9 @@ int rtw_action_frame_parse(const u8 *frame, u32 frame_len, u8* category, u8 *act
 
 	fc = le16_to_cpu(((struct rtw_ieee80211_hdr_3addr *)frame)->frame_ctl);
 
-	if ((fc & (RTW_IEEE80211_FCTL_FTYPE|RTW_IEEE80211_FCTL_STYPE))
-		!= (RTW_IEEE80211_FTYPE_MGMT|RTW_IEEE80211_STYPE_ACTION)
-	)
-	{
+	if ((fc & (RTW_IEEE80211_FCTL_FTYPE|RTW_IEEE80211_FCTL_STYPE)) !=
+	    (RTW_IEEE80211_FTYPE_MGMT|RTW_IEEE80211_STYPE_ACTION))
 		return false;
-	}
 
 	c = frame_body[0];
 

@@ -221,15 +221,8 @@ void	rtl8188e_PHY_SetBBReg(		PADAPTER	Adapter,
 									u32		RegAddr,
 									u32		BitMask,
 									u32		Data	);
-u32	rtl8188e_PHY_QueryRFReg(		PADAPTER			Adapter,
-									RF_RADIO_PATH_E	eRFPath,
-									u32				RegAddr,
-									u32				BitMask	);
-void	rtl8188e_PHY_SetRFReg(		PADAPTER			Adapter,
-									RF_RADIO_PATH_E	eRFPath,
-									u32				RegAddr,
-									u32				BitMask,
-									u32				Data	);
+u32	rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask);
+void	rtl8188e_PHY_SetRFReg(PADAPTER Adapter, RF_RADIO_PATH_E	eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
 //
 // Initialization related function

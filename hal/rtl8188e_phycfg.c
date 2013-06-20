@@ -661,13 +661,8 @@ phy_RFSerialWrite(
 * Return:		u4Byte			Readback value
 * Note:		This function is equal to "GetRFRegSetting" in PHY programming guide
 */
-u32
-rtl8188e_PHY_QueryRFReg(
-		PADAPTER			Adapter,
-		RF_RADIO_PATH_E	eRFPath,
-		u32				RegAddr,
-		u32				BitMask
-	)
+u32 rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath,
+			    u32 RegAddr, u32 BitMask)
 {
 	u32 Original_Value, Readback_Value, BitShift;
 	//HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);

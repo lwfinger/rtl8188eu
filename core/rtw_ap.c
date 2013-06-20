@@ -88,7 +88,7 @@ static void update_BCNTIM(_adapter *padapter)
 	//update TIM IE
 	if (true) {
 		u8 *p, *dst_ie, *premainder_ie=NULL, *pbackup_remainder_ie=NULL;
-		u16 tim_bitmap_le;
+		__le16 tim_bitmap_le;
 		uint offset, tmp_len, tim_ielen, tim_ie_offset, remainder_ielen;
 
 		tim_bitmap_le = cpu_to_le16(pstapriv->tim_bitmap);

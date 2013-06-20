@@ -1546,7 +1546,7 @@ int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
 			skb_push(skb, 4);
 			for (i=0; i<6; i++)
 				*((unsigned short *)(skb->data+i*2)) = *((unsigned short *)(skb->data+4+i*2));
-			*((unsigned short *)(skb->data+ETH_ALEN*2)) = __constant_htons(ETH_P_8021Q);
+			*((__be16 *)(skb->data+ETH_ALEN*2)) = __constant_htons(ETH_P_8021Q);
 			*((unsigned short *)(skb->data+ETH_ALEN*2+2)) = vlan_hdr;
 		}
 
