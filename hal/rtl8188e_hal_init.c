@@ -57,13 +57,12 @@ static s32 iol_execute(PADAPTER padapter, u8 control)
 	s32 status = _FAIL;
 	u8 reg_0x88 = 0,reg_1c7=0;
 	u32 start = 0, passing_time = 0;
-	u32 t1,t2;
 
 	control = control&0x0f;
 	reg_0x88 = rtw_read8(padapter, REG_HMEBOX_E0);
 	rtw_write8(padapter, REG_HMEBOX_E0,  reg_0x88|control);
 
-	t1 = start = rtw_get_current_time();
+	start = rtw_get_current_time();
 	while ((reg_0x88=rtw_read8(padapter, REG_HMEBOX_E0)) & control &&
 	       (passing_time=rtw_get_passing_time_ms(start))<1000) {
 	}
@@ -72,7 +71,6 @@ static s32 iol_execute(PADAPTER padapter, u8 control)
 	status = (reg_0x88 & control)?_FAIL:_SUCCESS;
 	if (reg_0x88 & control<<4)
 		status = _FAIL;
-	t2= rtw_get_current_time();
 	return status;
 }
 
@@ -99,7 +97,6 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	u16	i, j;
 	u16	**eFuseWord = NULL;
 	u16	efuse_utilized = 0;
-	u8	efuse_usage = 0;
 	u8	u1temp = 0;
 
 	efuseTbl = (u8*)rtw_zmalloc(EFUSE_MAP_LEN_88E);
@@ -207,7 +204,6 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	//
 	// 5. Calculate Efuse utilization.
 	//
-	efuse_usage = (u1Byte)((efuse_utilized*100)/EFUSE_REAL_CONTENT_LEN_88E);
 
 exit:
 	if (efuseTbl)
@@ -359,7 +355,6 @@ static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit
 	u32 passing_time_ms;
 	u8 polling_ret,i;
 	int ret = _FAIL;
-	u32 t1,t2;
 
 	if (rtw_IOL_append_END_cmd(xmit_frame) != _SUCCESS)
 		goto exit;
@@ -374,7 +369,6 @@ static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit
 
 	dump_mgntframe_and_wait(adapter, xmit_frame, max_wating_ms);
 
-	t1=	rtw_get_current_time();
 	iol_mode_enable(adapter, 1);
 	for (i=0;i<bndy_cnt;i++){
 		u8 page_no = 0;
@@ -383,7 +377,6 @@ static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit
 			break;
 	}
 	iol_mode_enable(adapter, 0);
-	t2 = rtw_get_current_time();
 exit:
 	//restore BCN_HEAD
 	rtw_write8(adapter, REG_TDECTRL+1, 0);
@@ -1036,7 +1029,6 @@ Hal_EfuseReadEFuse88E(
 	//u16	eFuseWord[EFUSE_MAX_SECTION_88E][EFUSE_MAX_WORD_UNIT];
 	u16	**eFuseWord = NULL;
 	u16	efuse_utilized = 0;
-	u8	efuse_usage = 0;
 	u8	u1temp = 0;
 
 	//
@@ -1201,7 +1193,6 @@ Hal_EfuseReadEFuse88E(
 	//
 	// 5. Calculate Efuse utilization.
 	//
-	efuse_usage = (u1Byte)((eFuse_Addr*100)/EFUSE_REAL_CONTENT_LEN_88E);
 	rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&eFuse_Addr);
 
 exit:
@@ -2884,15 +2875,12 @@ Hal_EEValueCheck(
 	{
 		case EETYPE_TX_PWR:
 			{
-				u8	*pIn, *pOut;
+				s8	*pIn, *pOut;
 				pIn = (u8*)pInValue;
 				pOut = (u8*)pOutValue;
-				if (*pIn >= 0 && *pIn <= 63)
-				{
+				if (*pIn >= 0 && *pIn <= 63) {
 					*pOut = *pIn;
-				}
-				else
-				{
+				} else {
 					RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("EETYPE_TX_PWR, value=%d is invalid, set to default=0x%x\n",
 						*pIn, EEPROM_Default_TxPowerLevel));
 					*pOut = EEPROM_Default_TxPowerLevel;

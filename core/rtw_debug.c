@@ -657,35 +657,30 @@ int proc_set_rx_signal(struct file *file, const char __user *buffer,
 	struct net_device *dev = (struct net_device *)data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	char tmp[32];
-	u32 is_signal_dbg, signal_strength;
+	u32 is_signal_dbg;
+	s32 signal_strength;
 
 	if (count < 1)
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-
 		int num = sscanf(tmp, "%u %u", &is_signal_dbg, &signal_strength);
-
-		is_signal_dbg = is_signal_dbg==0?0:1;
-
-		if (is_signal_dbg && num!=2)
+		is_signal_dbg = is_signal_dbg == 0 ? 0 : 1;
+		if (is_signal_dbg && num != 2)
 			return count;
 
-		signal_strength = signal_strength>100?100:signal_strength;
-		signal_strength = signal_strength<0?0:signal_strength;
+		signal_strength = signal_strength > 100 ? 100 : signal_strength;
+		signal_strength = signal_strength < 0 ? 0 : signal_strength;
 
 		padapter->recvpriv.is_signal_dbg = is_signal_dbg;
-		padapter->recvpriv.signal_strength_dbg=signal_strength;
+		padapter->recvpriv.signal_strength_dbg = signal_strength;
 
 		if (is_signal_dbg)
 			DBG_88E("set %s %u\n", "DBG_SIGNAL_STRENGTH", signal_strength);
 		else
 			DBG_88E("set %s\n", "HW_SIGNAL_STRENGTH");
-
 	}
-
 	return count;
-
 }
 #ifdef CONFIG_80211N_HT
 
@@ -696,7 +691,6 @@ int proc_get_ht_enable(char *page, char **start,
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-
 	int len = 0;
 
 	if (pregpriv)
@@ -704,7 +698,6 @@ int proc_get_ht_enable(char *page, char **start,
 			"%d\n",
 			pregpriv->ht_enable
 			);
-
 	*eof = 1;
 	return len;
 }
@@ -716,7 +709,7 @@ int proc_set_ht_enable(struct file *file, const char __user *buffer,
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	u32 mode;
+	s32 mode;
 
 	if (count < 1)
 		return -EFAULT;
@@ -763,7 +756,7 @@ int proc_set_cbw40_enable(struct file *file, const char __user *buffer,
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	u32 mode;
+	s32 mode;
 
 	if (count < 1)
 		return -EFAULT;
@@ -812,7 +805,7 @@ int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	u32 mode;
+	s32 mode;
 
 	if (count < 1)
 		return -EFAULT;

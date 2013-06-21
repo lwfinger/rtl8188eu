@@ -547,8 +547,8 @@ static char *translate_scan(_adapter *padapter,
 		u8 wpa_ie[255],rsn_ie[255];
 		u16 wpa_len=0,rsn_len=0;
 		u8 *p;
-		sint out_len=0;
-		out_len=rtw_get_sec_ie(pnetwork->network.IEs ,pnetwork->network.IELength,rsn_ie,&rsn_len,wpa_ie,&wpa_len);
+
+		rtw_get_sec_ie(pnetwork->network.IEs ,pnetwork->network.IELength,rsn_ie,&rsn_len,wpa_ie,&wpa_len);
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_wx_get_scan: ssid=%s\n",pnetwork->network.Ssid.Ssid));
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_wx_get_scan: wpa_len=%d rsn_len=%d\n",wpa_len,rsn_len));
 
@@ -1045,7 +1045,7 @@ _func_exit_;
 
 static int rtw_set_wpa_ie(_adapter *padapter, char *pie, unsigned short ielen)
 {
-	u8 *buf=NULL, *pos=NULL;
+	u8 *buf=NULL;
 	u32 left;
 	int group_cipher = 0, pairwise_cipher = 0;
 	int ret = 0;
@@ -1079,7 +1079,6 @@ static int rtw_set_wpa_ie(_adapter *padapter, char *pie, unsigned short ielen)
 				DBG_88E("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
 		}
 
-		pos = buf;
 		if (ielen < RSN_HEADER_LEN){
 			RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_err_,("Ie len too short %d\n", ielen));
 			ret  = -1;
@@ -3936,44 +3935,36 @@ static int rtw_wps_start(struct net_device *dev,
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct iw_point *pdata = &wrqu->data;
 	u32   u32wps_start = 0;
-        unsigned int uintRet = 0;
 
-        uintRet = copy_from_user((void*) &u32wps_start, pdata->pointer, 4);
+        ret = copy_from_user((void*) &u32wps_start, pdata->pointer, 4);
+	if (ret) {
+		ret= -EINVAL;
+		goto exit;
+	}
 
-	if ((padapter->bDriverStopped) || (pdata==NULL))
-	{
+	if ((padapter->bDriverStopped) || (pdata==NULL)) {
 		ret= -EINVAL;
 		goto exit;
 	}
 
 	if (u32wps_start == 0)
-	{
 		u32wps_start = *extra;
-	}
 
 	DBG_88E("[%s] wps_start = %d\n", __func__, u32wps_start);
 
 	if (u32wps_start == 1) // WPS Start
-	{
 		rtw_led_control(padapter, LED_CTL_START_WPS);
-	}
 	else if (u32wps_start == 2) // WPS Stop because of wps success
-	{
 		rtw_led_control(padapter, LED_CTL_STOP_WPS);
-	}
 	else if (u32wps_start == 3) // WPS Stop because of wps fail
-	{
 		rtw_led_control(padapter, LED_CTL_STOP_WPS_FAIL);
-	}
 
 #ifdef CONFIG_INTEL_WIDI
 	process_intel_widi_wps_status(padapter, u32wps_start);
 #endif //CONFIG_INTEL_WIDI
 
 exit:
-
 	return ret;
-
 }
 
 #ifdef CONFIG_P2P
@@ -6341,7 +6332,8 @@ static int rtw_dbg_port(struct net_device *dev,
 	int ret = 0;
 	u8 major_cmd, minor_cmd;
 	u16 arg;
-	u32 extra_arg, *pdata, val32;
+	s32 extra_arg;
+	u32 *pdata, val32;
 	struct sta_info *psta;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
@@ -9024,7 +9016,6 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 			struct iw_request_info *info,
 			union iwreq_data *wdata, char *extra)
 {
-	struct iw_point *wrqu;
 	PADAPTER padapter;
 	struct pwrctrl_priv *pwrctrlpriv ;
 	PHAL_DATA_TYPE pHalData;
@@ -9041,33 +9032,28 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	int err;
 
 
-	wrqu = (struct iw_point*)wdata;
 	padapter = rtw_netdev_priv(dev);
 	pwrctrlpriv = &padapter->pwrctrlpriv;
 	pHalData = GET_HAL_DATA(padapter);
 	pEfuseHal = &pHalData->EfuseHal;
 	err = 0;
 	setdata = _rtw_zmalloc(1024);
-	if (setdata == NULL)
-	{
+	if (setdata == NULL) {
 		err = -ENOMEM;
 		goto exit;
 	}
 	ShadowMapBT = _rtw_malloc(EFUSE_BT_MAX_MAP_LEN);
-	if (ShadowMapBT == NULL)
-	{
+	if (ShadowMapBT == NULL) {
 		err = -ENOMEM;
 		goto exit;
 	}
 	ShadowMapWiFi = _rtw_malloc(EFUSE_MAP_SIZE);
-	if (ShadowMapWiFi == NULL)
-	{
+	if (ShadowMapWiFi == NULL) {
 		err = -ENOMEM;
 		goto exit;
 	}
 	setrawdata = _rtw_malloc(EFUSE_MAX_SIZE);
-	if (setrawdata == NULL)
-	{
+	if (setrawdata == NULL) {
 		err = -ENOMEM;
 		goto exit;
 	}
@@ -9086,19 +9072,17 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	DBG_88E("%s: in=%s\n", __func__, extra);
 
 	i = 0;
-	while ((token = strsep(&pch, ",")) != NULL)
-	{
-		if (i > 2) break;
+	while ((token = strsep(&pch, ",")) != NULL) {
+		if (i > 2)
+			break;
 		tmp[i] = token;
 		i++;
 	}
 
 	// tmp[0],[1],[2]
 	// wmap,addr,00e04c871200
-	if (strcmp(tmp[0], "wmap") == 0)
-	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
-		{
+	if (strcmp(tmp[0], "wmap") == 0) {
+		if ((tmp[1]==NULL) || (tmp[2]==NULL)) {
 			err = -EINVAL;
 			goto exit;
 		}
@@ -9107,14 +9091,12 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		addr &= 0xFFF;
 
 		cnts = strlen(tmp[2]);
-		if (cnts%2)
-		{
+		if (cnts%2) {
 			err = -EINVAL;
 			goto exit;
 		}
 		cnts /= 2;
-		if (cnts == 0)
-		{
+		if (cnts == 0) {
 			err = -EINVAL;
 			goto exit;
 		}
@@ -9124,33 +9106,26 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		DBG_88E("%s: map data=%s\n", __func__, tmp[2]);
 
 		for (jj=0, kk=0; jj<cnts; jj++, kk+=2)
-		{
 			setdata[jj] = key_2char2num(tmp[2][kk], tmp[2][kk+1]);
-		}
 #ifndef CONFIG_RTL8188E
 		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 #else
 		//Change to check TYPE_EFUSE_MAP_LEN ,beacuse 8188E raw 256,logic map over 256.
 		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&max_available_size, false);
 #endif
-		if ((addr+cnts) > max_available_size)
-		{
+		if ((addr+cnts) > max_available_size) {
 			DBG_88E("%s: addr(0x%X)+cnts(%d) parameter error!\n", __func__, addr, cnts);
 			err = -EFAULT;
 			goto exit;
 		}
 
-		if (rtw_efuse_map_write(padapter, addr, cnts, setdata) == _FAIL)
-		{
+		if (rtw_efuse_map_write(padapter, addr, cnts, setdata) == _FAIL) {
 			DBG_88E("%s: rtw_efuse_map_write error!!\n", __func__);
 			err = -EFAULT;
 			goto exit;
 		}
-	}
-	else if (strcmp(tmp[0], "wraw") == 0)
-	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
-		{
+	} else if (strcmp(tmp[0], "wraw") == 0) {
+		if ((tmp[1] == NULL) || (tmp[2] == NULL)) {
 			err = -EINVAL;
 			goto exit;
 		}
@@ -9159,14 +9134,12 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		addr &= 0xFFF;
 
 		cnts = strlen(tmp[2]);
-		if (cnts%2)
-		{
+		if (cnts%2) {
 			err = -EINVAL;
 			goto exit;
 		}
 		cnts /= 2;
-		if (cnts == 0)
-		{
+		if (cnts == 0) {
 			err = -EINVAL;
 			goto exit;
 		}
@@ -9176,21 +9149,15 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		DBG_88E("%s: raw data=%s\n", __func__, tmp[2]);
 
 		for (jj=0, kk=0; jj<cnts; jj++, kk+=2)
-		{
 			setrawdata[jj] = key_2char2num(tmp[2][kk], tmp[2][kk+1]);
-		}
 
-		if (rtw_efuse_access(padapter, true, addr, cnts, setrawdata) == _FAIL)
-		{
+		if (rtw_efuse_access(padapter, true, addr, cnts, setrawdata) == _FAIL) {
 			DBG_88E("%s: rtw_efuse_access error!!\n", __func__);
 			err = -EFAULT;
 			goto exit;
 		}
-	}
-	else if (strcmp(tmp[0], "mac") == 0)
-	{
-		if (tmp[1]==NULL)
-		{
+	} else if (strcmp(tmp[0], "mac") == 0) {
+		if (tmp[1]==NULL) {
 			err = -EINVAL;
 			goto exit;
 		}
@@ -10106,7 +10073,6 @@ static int rtw_mp_ctx(struct net_device *dev,
 	stop = strncmp(extra, "stop", 4);
 	sscanf(extra, "count=%d,pkt", &count);
 
-	//DBG_88E("%s: count=%d countPkTx=%d cotuTx=%d CarrSprTx=%d scTx=%d sgleTx=%d pkTx=%d stop=%d\n", __func__, count, countPkTx, cotuTx, CarrSprTx, pkTx, sgleTx, scTx, stop);
 	_rtw_memset(extra, '\0', sizeof(extra));
 
 	if (stop == 0) {
@@ -10457,15 +10423,11 @@ static int rtw_mp_dump(struct net_device *dev,
 			struct iw_request_info *info,
 			struct iw_point *wrqu, char *extra)
 {
-	struct mp_priv *pmp_priv;
 	struct pkt_attrib *pattrib;
         u32 value;
 	u8 rf_type,path_nums = 0;
 	u32 i,j=1,path;
 	PADAPTER padapter = rtw_netdev_priv(dev);
-
-	pmp_priv = &padapter->mppriv;
-
 
 	//if (copy_from_user(extra, wrqu->data.pointer, wrqu->data.length))
 	//	return -EFAULT;
@@ -12713,7 +12675,6 @@ static int rtw_ioctl_wext_private(struct net_device *dev, union iwreq_data *wrq_
 	s32 k;
 	const iw_handler *priv;		/* Private ioctl */
 	const struct iw_priv_args *priv_args;	/* Private ioctl description */
-	u32 num_priv;				/* Number of ioctl */
 	u32 num_priv_args;			/* Number of descriptions */
 	iw_handler handler;
 	int temp;
@@ -12749,7 +12710,6 @@ static int rtw_ioctl_wext_private(struct net_device *dev, union iwreq_data *wrq_
 
 	priv = rtw_private_handler;
 	priv_args = rtw_private_args;
-	num_priv = sizeof(rtw_private_handler) / sizeof(iw_handler);
 	num_priv_args = sizeof(rtw_private_args) / sizeof(struct iw_priv_args);
 
 	if (num_priv_args == 0) {

@@ -883,11 +883,14 @@ s32 PHY_MACConfig8188E(PADAPTER Adapter)
 {
 	int		rtStatus = _SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+#ifndef CONFIG_EMBEDDED_FWIMG
 	s8			*pszMACRegFile;
+#endif
 	s8			sz8188EMACRegFile[] = RTL8188E_PHY_MACREG;
 
+#ifndef CONFIG_EMBEDDED_FWIMG
 	pszMACRegFile = sz8188EMACRegFile;
-
+#endif
 	//
 	// Config MAC
 	//
@@ -1469,15 +1472,20 @@ phy_BB8188E_Config_ParaFile(
 	u8	sz8188EBBRegPgFile[] = RTL8188E_PHY_REG_PG;
 	u8	sz8188EBBRegMpFile[] = RTL8188E_PHY_REG_MP;
 
-	u8	*pszBBRegFile = NULL, *pszAGCTableFile = NULL, *pszBBRegPgFile = NULL, *pszBBRegMpFile=NULL;
+#ifndef CONFIG_EMBEDDED_FWIMG
+	u8	*pszBBRegFile = NULL;
+	u8	*pszBBRegPgFile = NULL;
+	u8	*pszAGCTableFile = NULL;
+#endif
 
 
 	//RT_TRACE(COMP_INIT, DBG_TRACE, ("==>phy_BB8192S_Config_ParaFile\n"));
 
-	pszBBRegFile = sz8188EBBRegFile ;
-	pszAGCTableFile = sz8188EAGCTableFile;
+#ifndef CONFIG_EMBEDDED_FWIMG
+	pszBBRegFile = sz8188EBBRegFile;
 	pszBBRegPgFile = sz8188EBBRegPgFile;
-	pszBBRegMpFile = sz8188EBBRegMpFile;
+	pszAGCTableFile = sz8188EAGCTableFile;
+#endif
 
 	//
 	// 1. Read PHY_REG.TXT BB INIT!!
@@ -2707,8 +2715,4 @@ static bool _PHY_QueryRFPathSwitch(PADAPTER pAdapter, bool is2T)
 
 static void _PHY_DumpRFReg(PADAPTER pAdapter)
 {
-	u32 rfRegValue,rfRegOffset;
-
-	for (rfRegOffset = 0x00;rfRegOffset<=0x30;rfRegOffset++)
-		rfRegValue = PHY_QueryRFReg(pAdapter,RF_PATH_A, rfRegOffset, bMaskDWord);
 }

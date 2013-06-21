@@ -1317,7 +1317,7 @@ auth_fail:
 
 unsigned int OnAuthClient(_adapter *padapter, union recv_frame *precv_frame)
 {
-	unsigned int	seq, len, status, algthm, offset;
+	unsigned int	seq, len, status, offset;
 	unsigned char	*p;
 	unsigned int	go2asoc = 0;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
@@ -1336,7 +1336,6 @@ unsigned int OnAuthClient(_adapter *padapter, union recv_frame *precv_frame)
 
 	offset = (GetPrivacy(pframe))? 4: 0;
 
-	algthm	= le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset));
 	seq	= le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset + 2));
 	status	= le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset + 4));
 
@@ -1419,7 +1418,7 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_AP_MODE
 	_irqL irqL;
-	u16 capab_info, listen_interval;
+	u16 capab_info;
 	struct rtw_ieee802_11_elems elems;
 	struct sta_info	*pstat;
 	unsigned char		reassoc, *p, *pos, *wpa_ie;
@@ -1487,9 +1486,6 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 	}
 
 	capab_info = RTW_GET_LE16(pframe + WLAN_HDR_A3_LEN);
-	//capab_info = le16_to_cpu(*(unsigned short *)(pframe + WLAN_HDR_A3_LEN));
-	//listen_interval = le16_to_cpu(*(unsigned short *)(pframe + WLAN_HDR_A3_LEN+2));
-	listen_interval = RTW_GET_LE16(pframe + WLAN_HDR_A3_LEN+2);
 
 	left = pkt_len - (IEEE80211_3ADDR_LEN + ie_offset);
 	pos = pframe + (IEEE80211_3ADDR_LEN + ie_offset);
@@ -5313,7 +5309,7 @@ static unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 
 				//	Commented by Kurt 20120113
 				//	Get peer_dev_addr here if peer doesn't issue prov_disc frame.
-				if ( _rtw_memcmp(pwdinfo->rx_prov_disc_info.peerDevAddr, empty_addr, ETH_ALEN) );
+				if (_rtw_memcmp(pwdinfo->rx_prov_disc_info.peerDevAddr, empty_addr, ETH_ALEN))
 					_rtw_memcpy(pwdinfo->rx_prov_disc_info.peerDevAddr, GetAddr2Ptr(pframe), ETH_ALEN);
 
 				result = process_p2p_group_negotation_req( pwdinfo, frame_body, len );
@@ -5736,7 +5732,7 @@ unsigned int OnAction_p2p(_adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_P2P
 	u8 *frame_body;
-	u8 category, OUI_Subtype, dialogToken=0;
+	u8 category, OUI_Subtype;
 	u8 *pframe = precv_frame->u.hdr.rx_data;
 	uint len = precv_frame->u.hdr.len;
 	struct	wifidirect_info	*pwdinfo = &( padapter->wdinfo );
@@ -5766,7 +5762,6 @@ unsigned int OnAction_p2p(_adapter *padapter, union recv_frame *precv_frame)
 	{
 		len -= sizeof(struct rtw_ieee80211_hdr_3addr);
 		OUI_Subtype = frame_body[5];
-		dialogToken = frame_body[6];
 
 		switch (OUI_Subtype) {
 		case P2P_NOTICE_OF_ABSENCE:
@@ -7871,7 +7866,6 @@ void issue_action_BA(_adapter *padapter, unsigned char *raddr, unsigned char act
 	u16	reason_code;
 	u16	BA_timeout_value;
 	__le16	le_tmp;
-	__le16 lestatus;
 	u16	BA_starting_seqctrl;
 	HT_CAP_AMPDU_FACTOR max_rx_ampdu_factor;
 	struct xmit_frame		*pmgntframe;
@@ -7923,9 +7917,6 @@ void issue_action_BA(_adapter *padapter, unsigned char *raddr, unsigned char act
 
 	pframe = rtw_set_fixed_ie(pframe, 1, &(category), &(pattrib->pktlen));
 	pframe = rtw_set_fixed_ie(pframe, 1, &(action), &(pattrib->pktlen));
-
-	lestatus = cpu_to_le16(status);
-
 
 	if (category == 3) {
 		switch (action) {
@@ -11114,7 +11105,10 @@ _func_exit_;
 
 u8 mlme_evt_hdl(_adapter *padapter, unsigned char *pbuf)
 {
-	u8 evt_code, evt_seq;
+	u8 evt_code;
+	#ifdef CHECK_EVENT_SEQ
+	u8 evt_seq;
+	#endif
 	u16 evt_sz;
 	uint	*peventbuf;
 	void (*event_callback)(_adapter *dev, u8 *pbuf);
@@ -11122,7 +11116,9 @@ u8 mlme_evt_hdl(_adapter *padapter, unsigned char *pbuf)
 
 	peventbuf = (uint*)pbuf;
 	evt_sz = (u16)(*peventbuf&0xffff);
+	#ifdef CHECK_EVENT_SEQ
 	evt_seq = (u8)((*peventbuf>>24)&0x7f);
+	#endif
 	evt_code = (u8)((*peventbuf>>16)&0xff);
 
 
@@ -12217,14 +12213,15 @@ u8 set_chplan_hdl(_adapter *padapter, unsigned char *pbuf)
 
 u8 led_blink_hdl(_adapter *padapter, unsigned char *pbuf)
 {
+	#ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
 	struct LedBlink_param *ledBlink_param;
-
+	#endif
 	if (!pbuf)
 		return H2C_PARAMETERS_ERROR;
 
+	#ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
 	ledBlink_param = (struct LedBlink_param *)pbuf;
 
-	#ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
 	BlinkHandler(ledBlink_param->pLed);
 	#endif
 

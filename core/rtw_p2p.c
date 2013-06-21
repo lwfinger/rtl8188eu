@@ -2695,7 +2695,9 @@ u8 process_p2p_group_negotation_req( struct wifidirect_info *pwdinfo, u8 *pframe
 		u8	peer_ch_num = 0;
 		u8	ch_list_inclusioned[50] = { 0x00 };
 		u8	ch_num_inclusioned = 0;
+#if defined(CONFIG_WFD) && defined(CONFIG_TDLS)
 		u16	cap_attr;
+#endif //defined(CONFIG_WFD) && defined(CONFIG_TDLS)
 		__le16 le_tmp;
 
 		rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_ING);
@@ -2703,9 +2705,8 @@ u8 process_p2p_group_negotation_req( struct wifidirect_info *pwdinfo, u8 *pframe
 		//Check P2P Capability ATTR
 		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8*)&le_tmp, (uint*)&attr_contentlen) )
 		{
-			cap_attr = le16_to_cpu(le_tmp);
-
 #if defined(CONFIG_WFD) && defined(CONFIG_TDLS)
+			cap_attr = le16_to_cpu(le_tmp);
 			if (!(cap_attr & P2P_GRPCAP_INTRABSS) )
 				ptdlsinfo->ap_prohibited = true;
 #endif //defined(CONFIG_WFD) && defined(CONFIG_TDLS)
@@ -2894,7 +2895,9 @@ u8 process_p2p_group_negotation_resp( struct wifidirect_info *pwdinfo, u8 *pfram
 		uint	ch_cnt = 0;
 		u8	ch_content[50] = { 0x00 };
 		u8	groupid[ 38 ];
+#ifdef CONFIG_TDLS
 		u16	cap_attr;
+#endif // CONFIG_TDLS
 		u8	peer_ch_list[50] = { 0x00 };
 		u8	peer_ch_num = 0;
 		u8	ch_list_inclusioned[50] = { 0x00 };
@@ -2904,8 +2907,8 @@ u8 process_p2p_group_negotation_resp( struct wifidirect_info *pwdinfo, u8 *pfram
 		while (p2p_ie) {	//	Found the P2P IE.
 			//Check P2P Capability ATTR
 			if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8*)&le_tmp, (uint*)&attr_contentlen) ) {
-				cap_attr = le16_to_cpu(le_tmp);
 #ifdef CONFIG_TDLS
+				cap_attr = le16_to_cpu(le_tmp);
 				if (!(cap_attr & P2P_GRPCAP_INTRABSS) )
 					ptdlsinfo->ap_prohibited = true;
 #endif // CONFIG_TDLS
@@ -3222,7 +3225,6 @@ static void find_phase_handler( _adapter*	padapter )
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	NDIS_802_11_SSID	ssid;
 	_irqL				irqL;
-	u8					_status = 0;
 
 _func_enter_;
 
@@ -3233,7 +3235,6 @@ _func_enter_;
 	rtw_p2p_set_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH);
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
-	_status = rtw_sitesurvey_cmd(padapter, &ssid, 1, NULL, 0);
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
 
 

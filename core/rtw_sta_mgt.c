@@ -319,12 +319,9 @@ _func_exit_;
 	return _SUCCESS;
 }
 
-
-//struct	sta_info *rtw_alloc_stainfo(_queue *pfree_sta_queue, unsigned char *hwaddr)
-struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
+struct	sta_info *rtw_alloc_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 {
 	_irqL irqL, irqL2;
-	uint tmp_aid;
 	s32	index;
 	_list	*phash_list;
 	struct sta_info	*psta;
@@ -339,30 +336,18 @@ _func_enter_;
 
 	_enter_critical_bh(&(pfree_sta_queue->lock), &irqL);
 
-	if (_rtw_queue_empty(pfree_sta_queue) == true)
-	{
+	if (_rtw_queue_empty(pfree_sta_queue) == true) {
 		_exit_critical_bh(&(pfree_sta_queue->lock), &irqL);
 		psta = NULL;
-	}
-	else
-	{
+	} else {
 		psta = LIST_CONTAINOR(get_next(&pfree_sta_queue->queue), struct sta_info, list);
-
 		rtw_list_delete(&(psta->list));
-
 		_exit_critical_bh(&(pfree_sta_queue->lock), &irqL);
-
-		tmp_aid = psta->aid;
-
 		_rtw_init_stainfo(psta);
-
 		_rtw_memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
-
 		index = wifi_mac_hash(hwaddr);
-
 		RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_info_,("rtw_alloc_stainfo: index  = %x", index));
-
-		if (index >= NUM_STA){
+		if (index >= NUM_STA) {
 			RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_err_,("ERROR=> rtw_alloc_stainfo: index >= NUM_STA"));
 			psta= NULL;
 			goto exit;
@@ -733,7 +718,6 @@ u32 rtw_init_bcmc_stainfo(_adapter* padapter)
 {
 
 	struct sta_info		*psta;
-	struct tx_servq	*ptxservq;
 	u32 res=_SUCCESS;
 	NDIS_802_11_MAC_ADDRESS	bcast_addr= {0xff,0xff,0xff,0xff,0xff,0xff};
 
@@ -753,23 +737,10 @@ _func_enter_;
 	// default broadcast & multicast use macid 1
 	psta->mac_id = 1;
 
-	ptxservq= &(psta->sta_xmitpriv.be_q);
-
-/*
-	_enter_critical(&pstapending->lock, &irqL0);
-
-	if (rtw_is_list_empty(&ptxservq->tx_pending))
-		rtw_list_insert_tail(&ptxservq->tx_pending, get_list_head(pstapending));
-
-	_exit_critical(&pstapending->lock, &irqL0);
-*/
-
 exit:
 _func_exit_;
-	return _SUCCESS;
-
+	return res;
 }
-
 
 struct sta_info* rtw_get_bcmc_stainfo(_adapter* padapter)
 {

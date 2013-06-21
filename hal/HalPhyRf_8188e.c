@@ -172,7 +172,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	u4Byte			ThermalValue_AVG = 0;
 	s4Byte			ele_A=0, ele_D, TempCCk, X, value32;
 	s4Byte			Y, ele_C=0;
-	s1Byte			OFDM_index[2], CCK_index=0, OFDM_index_old[2]={0,0}, CCK_index_old=0, index;
+	s1Byte			OFDM_index[2], CCK_index=0, OFDM_index_old[2]={0,0}, CCK_index_old=0;
 	u4Byte			i = 0, j = 0;
 	bool			is2T = false;
 	bool			bInteralPA = false;
@@ -416,8 +416,6 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 					}
 					if (offset >= index_mapping_NUM_88E)
 						offset = index_mapping_NUM_88E-1;
-
-					index = OFDM_index_mapping[j][offset];
 
 					for (i = 0; i < rf; i++)
 						OFDM_index[i] = pDM_Odm->RFCalibrateInfo.OFDM_index[i] + OFDM_index_mapping[j][offset];
@@ -2338,7 +2336,7 @@ PHY_IQCalibrate_8188E(
 	bool			bPathAOK, bPathBOK;
 	s4Byte			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
 	bool			is12simular, is13simular, is23simular;
-	bool			bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
+	bool			bSingleTone = false, bCarrierSuppression = false;
 	u4Byte			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 					rOFDM0_XARxIQImbalance,		rOFDM0_XBRxIQImbalance,
 					rOFDM0_ECCAThreshold,	rOFDM0_AGCRSSITable,
@@ -2378,7 +2376,6 @@ PHY_IQCalibrate_8188E(
 #if MP_DRIVER == 1
 if (*(pDM_Odm->mp_mode) == 1)
 {
-	bStartContTx = pMptCtx->bStartContTx;
 	bSingleTone = pMptCtx->bSingleTone;
 	bCarrierSuppression = pMptCtx->bCarrierSuppression;
 }
@@ -2579,7 +2576,7 @@ PHY_LCCalibrate_8188E(
 #endif
 	)
 {
-	bool			bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
+	bool			bSingleTone = false, bCarrierSuppression = false;
 	u4Byte			timeout = 2000, timecount = 0;
 
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -2606,7 +2603,6 @@ PHY_LCCalibrate_8188E(
 #if MP_DRIVER == 1
 if (*(pDM_Odm->mp_mode) == 1)
 {
-	bStartContTx = pMptCtx->bStartContTx;
 	bSingleTone = pMptCtx->bSingleTone;
 	bCarrierSuppression = pMptCtx->bCarrierSuppression;
 }

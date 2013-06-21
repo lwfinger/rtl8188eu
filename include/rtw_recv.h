@@ -595,32 +595,21 @@ __inline static u8 *recvframe_pull(union recv_frame *precvframe, sint sz)
 
 __inline static u8 *recvframe_put(union recv_frame *precvframe, sint sz)
 {
-	// rx_tai += sz; move rx_tail sz bytes  hereafter
-
 	//used for append sz bytes from ptr to rx_tail, update rx_tail and return the updated rx_tail to the caller
 	//after putting, rx_tail must be still larger than rx_end.
-	unsigned char * prev_rx_tail;
 
 	if (precvframe==NULL)
 		return NULL;
 
-	prev_rx_tail = precvframe->u.hdr.rx_tail;
-
 	precvframe->u.hdr.rx_tail += sz;
 
-	if (precvframe->u.hdr.rx_tail > precvframe->u.hdr.rx_end)
-	{
+	if (precvframe->u.hdr.rx_tail > precvframe->u.hdr.rx_end) {
 		precvframe->u.hdr.rx_tail -= sz;
 		return NULL;
 	}
-
 	precvframe->u.hdr.len +=sz;
-
 	return precvframe->u.hdr.rx_tail;
-
 }
-
-
 
 __inline static u8 *recvframe_pull_tail(union recv_frame *precvframe, sint sz)
 {

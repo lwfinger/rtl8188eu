@@ -1697,7 +1697,9 @@ static void rtw_joinbss_update_network(_adapter *padapter, struct wlan_network *
 void rtw_joinbss_event_prehandle(_adapter *adapter, u8 *pbuf)
 {
 	_irqL irqL,irqL2;
+	#ifdef REJOIN
 	static u8 retry=0;
+	#endif
 	u8 timer_cancelled;
 	struct sta_info *ptarget_sta= NULL, *pcur_sta = NULL;
 	struct	sta_priv *pstapriv = &adapter->stapriv;
@@ -1708,27 +1710,6 @@ void rtw_joinbss_event_prehandle(_adapter *adapter, u8 *pbuf)
 	unsigned int		the_same_macaddr = false;
 
 _func_enter_;
-
-#ifdef CONFIG_RTL8712
-       //endian_convert
-	pnetwork->join_res = le32_to_cpu(pnetwork->join_res);
-	pnetwork->network_type = le32_to_cpu(pnetwork->network_type);
-	pnetwork->network.Length = le32_to_cpu(pnetwork->network.Length);
-	pnetwork->network.Ssid.SsidLength = le32_to_cpu(pnetwork->network.Ssid.SsidLength);
-	pnetwork->network.Privacy =le32_to_cpu( pnetwork->network.Privacy);
-	pnetwork->network.Rssi = le32_to_cpu(pnetwork->network.Rssi);
-	pnetwork->network.NetworkTypeInUse =le32_to_cpu(pnetwork->network.NetworkTypeInUse) ;
-	pnetwork->network.Configuration.ATIMWindow = le32_to_cpu(pnetwork->network.Configuration.ATIMWindow);
-	pnetwork->network.Configuration.BeaconPeriod = le32_to_cpu(pnetwork->network.Configuration.BeaconPeriod);
-	pnetwork->network.Configuration.DSConfig = le32_to_cpu(pnetwork->network.Configuration.DSConfig);
-	pnetwork->network.Configuration.FHConfig.DwellTime=le32_to_cpu(pnetwork->network.Configuration.FHConfig.DwellTime);
-	pnetwork->network.Configuration.FHConfig.HopPattern=le32_to_cpu(pnetwork->network.Configuration.FHConfig.HopPattern);
-	pnetwork->network.Configuration.FHConfig.HopSet=le32_to_cpu(pnetwork->network.Configuration.FHConfig.HopSet);
-	pnetwork->network.Configuration.FHConfig.Length=le32_to_cpu(pnetwork->network.Configuration.FHConfig.Length);
-	pnetwork->network.Configuration.Length = le32_to_cpu(pnetwork->network.Configuration.Length);
-	pnetwork->network.InfrastructureMode = le32_to_cpu(pnetwork->network.InfrastructureMode);
-	pnetwork->network.IELength = le32_to_cpu(pnetwork->network.IELength );
-#endif
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("joinbss event call back received with res=%d\n", pnetwork->join_res));
 
@@ -1754,7 +1735,9 @@ _func_enter_;
 
 	if (pnetwork->join_res > 0) {
 		_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+		#ifdef REJOIN
 		retry = 0;
+		#endif
 		if (check_fwstate(pmlmepriv,_FW_UNDER_LINKING) ) {
 			//s1. find ptarget_wlan
 			if (check_fwstate(pmlmepriv, _FW_LINKED) ) {
@@ -3003,17 +2986,8 @@ int rtw_restruct_wmm_ie(_adapter *adapter, u8 *in_ie, u8 *out_ie, uint in_len, u
 		{
 
 			//Append WMM IE to the last index of out_ie
-			/*
-			for (j=i; j< i+(in_ie[i+1]+2); j++)
-			{
-				out_ie[ielength] = in_ie[j];
-				ielength++;
-			}
-			out_ie[initial_out_len+8] = 0x00; //force the QoS Info Field to be zero
-	                */
 
-                        for ( j = i; j < i + 9; j++ )
-                        {
+                        for ( j = i; j < i + 9; j++ ) {
                             out_ie[ ielength] = in_ie[ j ];
                             ielength++;
                         }
@@ -3318,9 +3292,9 @@ void rtw_joinbss_reset(_adapter *padapter)
 //the fucntion is >= passive_level
 unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len)
 {
-	u32 ielen, out_len;
+	u32 ielen;
 	HT_CAP_AMPDU_FACTOR max_rx_ampdu_factor;
-	unsigned char *p, *pframe;
+	unsigned char *p;
 	struct rtw_ieee80211_ht_cap ht_capie;
 	unsigned char WMM_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00};
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
@@ -3332,18 +3306,10 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 
 	p = rtw_get_ie(in_ie+12, _HT_CAPABILITY_IE_, &ielen, in_len-12);
 
-	if (p && ielen>0)
-	{
-		if (pqospriv->qos_option == 0)
-		{
-			out_len = *pout_len;
-			pframe = rtw_set_ie(out_ie+out_len, _VENDOR_SPECIFIC_IE_,
-								_WMM_IE_Length_, WMM_IE, pout_len);
-
+	if (p && ielen>0) {
+		if (pqospriv->qos_option == 0) {
 			pqospriv->qos_option = 1;
 		}
-
-		out_len = *pout_len;
 
 		_rtw_memset(&ht_capie, 0, sizeof(struct rtw_ieee80211_ht_cap));
 
@@ -3381,29 +3347,11 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 			ht_capie.ampdu_params_info |= (IEEE80211_HT_CAP_AMPDU_DENSITY&(0x07<<2));
 		else
 			ht_capie.ampdu_params_info |= (IEEE80211_HT_CAP_AMPDU_DENSITY&0x00);
-
-
-		pframe = rtw_set_ie(out_ie+out_len, _HT_CAPABILITY_IE_,
-							sizeof(struct rtw_ieee80211_ht_cap), (unsigned char*)&ht_capie, pout_len);
-
-
-		//_rtw_memcpy(out_ie+out_len, p, ielen+2);//gtest
-		//*pout_len = *pout_len + (ielen+2);
-
-
 		phtpriv->ht_option = true;
 
 		p = rtw_get_ie(in_ie+12, _HT_ADD_INFO_IE_, &ielen, in_len-12);
-		if (p && (ielen==sizeof(struct ieee80211_ht_addt_info)))
-		{
-			out_len = *pout_len;
-			pframe = rtw_set_ie(out_ie+out_len, _HT_ADD_INFO_IE_, ielen, p+2 , pout_len);
-		}
-
 	}
-
 	return (phtpriv->ht_option);
-
 }
 
 //the fucntion is > passive_level (in critical_section)
@@ -3413,7 +3361,6 @@ void rtw_update_ht_cap(_adapter *padapter, u8 *pie, uint ie_len)
 	int len;
 	//struct sta_info *bmc_sta, *psta;
 	struct rtw_ieee80211_ht_cap *pht_capie;
-	struct ieee80211_ht_addt_info *pht_addtinfo;
 	//struct recv_reorder_ctrl *preorder_ctrl;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct ht_priv		*phtpriv = &pmlmepriv->htpriv;
@@ -3467,9 +3414,7 @@ void rtw_update_ht_cap(_adapter *padapter, u8 *pie, uint ie_len)
 
 	len=0;
 	p = rtw_get_ie(pie+sizeof (NDIS_802_11_FIXED_IEs), _HT_ADD_INFO_IE_, &len, ie_len-sizeof (NDIS_802_11_FIXED_IEs));
-	if (p && len>0)
-	{
-		pht_addtinfo = (struct ieee80211_ht_addt_info *)(p+2);
+	if (p && len>0) {
 		//todo:
 	}
 

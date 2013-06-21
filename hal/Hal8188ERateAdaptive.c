@@ -582,14 +582,12 @@ odm_PTDecision_8188E(
 		PODM_RA_INFO_T		pRaInfo
 	)
 {
-	u1Byte stage_BUF;
 	u1Byte j;
 	u1Byte temp_stage;
 	u4Byte numsc;
 	u4Byte num_total;
 	u1Byte stage_id;
 
-	stage_BUF=pRaInfo->PTStage;
 	numsc  = 0;
 	num_total= pRaInfo->TOTAL* PT_PENALTY[5];
 	for (j=0;j<=4;j++)

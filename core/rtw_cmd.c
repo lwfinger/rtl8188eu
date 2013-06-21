@@ -429,7 +429,7 @@ thread_return rtw_cmd_thread(thread_context context)
 {
 	u8 ret;
 	struct cmd_obj *pcmd;
-	u8 *pcmdbuf, *prspbuf;
+	u8 *pcmdbuf;
 	u8 (*cmd_hdl)(_adapter *padapter, u8* pbuf);
 	void (*pcmd_callback)(_adapter *dev, struct cmd_obj *pcmd);
 	PADAPTER padapter = (PADAPTER)context;
@@ -440,7 +440,6 @@ _func_enter_;
 	thread_enter("RTW_CMD_THREAD");
 
 	pcmdbuf = pcmdpriv->cmd_buf;
-	prspbuf = pcmdpriv->rsp_buf;
 
 	pcmdpriv->cmdthd_running=true;
 	_rtw_up_sema(&pcmdpriv->terminate_cmdthread_sema);
@@ -1044,7 +1043,6 @@ void rtw_getbbrfreg_cmdrsp_callback(_adapter*	padapter,  struct cmd_obj *pcmd)
 {
  _func_enter_;
 
-	//rtw_free_cmd_obj(pcmd);
 	rtw_mfree((unsigned char*) pcmd->parmbuf, pcmd->cmdsz);
 	rtw_mfree((unsigned char*) pcmd, sizeof(struct cmd_obj));
 
@@ -1151,7 +1149,7 @@ _func_exit_;
 
 u8 rtw_joinbss_cmd(_adapter  *padapter, struct wlan_network* pnetwork)
 {
-	u8	*auth, res = _SUCCESS;
+	u8	res = _SUCCESS;
 	uint	t_len = 0;
 	WLAN_BSSID_EX		*psecnetwork;
 	struct cmd_obj		*pcmd;
@@ -1233,7 +1231,6 @@ _func_enter_;
 
 	_rtw_memcpy(psecnetwork, &pnetwork->network, get_WLAN_BSSID_EX_sz(&pnetwork->network));
 
-	auth=&psecuritypriv->authenticator_ie[0];
 	psecuritypriv->authenticator_ie[0]=(unsigned char)psecnetwork->IELength;
 
 	if ((psecnetwork->IELength-12) < (256-1)) {

@@ -366,7 +366,6 @@ MPT_InitializeAdapter(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	s32		rtStatus = _SUCCESS;
 	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
-	u32		ledsetting;
 	struct mlme_priv *pmlmepriv = &pAdapter->mlmepriv;
 
 	//-------------------------------------------------------------------------
@@ -394,52 +393,18 @@ MPT_InitializeAdapter(
 	pMptCtx->CurrMptAct = NULL;
 	//-------------------------------------------------------------------------
 
-#if 1
 	// Don't accept any packets
 	rtw_write32(pAdapter, REG_RCR, 0);
-#else
-	// Accept CRC error and destination address
-	//pHalData->ReceiveConfig |= (RCR_ACRC32|RCR_AAP);
-	//rtw_write32(pAdapter, REG_RCR, pHalData->ReceiveConfig);
-	rtw_write32(pAdapter, REG_RCR, 0x70000101);
-#endif
-
-	if (IS_HARDWARE_TYPE_8192DU(pAdapter))
-	{
-		rtw_write32(pAdapter, REG_LEDCFG0, 0x8888);
-	}
-	else
-	{
-		//rtw_write32(pAdapter, REG_LEDCFG0, 0x08080);
-		ledsetting = rtw_read32(pAdapter, REG_LEDCFG0);
-
-	#if defined (CONFIG_RTL8192C) || defined( CONFIG_RTL8192D )
-			rtw_write32(pAdapter, REG_LEDCFG0, ledsetting & ~LED0DIS);
-	#endif
-	}
 
 	PHY_IQCalibrate(pAdapter, false);
 	dm_CheckTXPowerTracking(&pHalData->odmpriv);	//trigger thermal meter
 	PHY_LCCalibrate(pAdapter);
 
-#ifdef CONFIG_PCI_HCI
-	PHY_SetRFPathSwitch(pAdapter, 1/*pHalData->bDefaultAntenna*/);	//Wifi default use Main
-#else
-
-#ifdef CONFIG_RTL8192C
-	if (pHalData->BoardType == BOARD_MINICARD)
-		PHY_SetRFPathSwitch(pAdapter, 1/*pHalData->bDefaultAntenna*/); //default use Main
-#endif
-
-#endif
-
 	pMptCtx->backup0xc50 = (u1Byte)PHY_QueryBBReg(pAdapter, rOFDM0_XAAGCCore1, bMaskByte0);
 	pMptCtx->backup0xc58 = (u1Byte)PHY_QueryBBReg(pAdapter, rOFDM0_XBAGCCore1, bMaskByte0);
 	pMptCtx->backup0xc30 = (u1Byte)PHY_QueryBBReg(pAdapter, rOFDM0_RxDetector1, bMaskByte0);
-#ifdef CONFIG_RTL8188E
 	pMptCtx->backup0x52_RF_A = (u1Byte)PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
 	pMptCtx->backup0x52_RF_B = (u1Byte)PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
-#endif
 
 	//set ant to wifi side in mp mode
 	rtw_write16(pAdapter, 0x870, 0x300);

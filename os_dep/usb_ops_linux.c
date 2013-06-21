@@ -224,10 +224,7 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 
 
 	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx))
-	{
 		return _FAIL;
-	}
-
 
 	pcontext = (struct zero_bulkout_context *)rtw_zmalloc(sizeof(struct zero_bulkout_context));
 
@@ -240,9 +237,7 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	pcontext->pirp = NULL;
 	pcontext->padapter = padapter;
 
-
 	//translate DMA FIFO addr to pipehandle
-	//pipe = ffaddr2pipehdl(pdvobj, addr);
 
 	usb_fill_bulk_urb(purb, pusbd, pipe,
 				pbuf,
@@ -253,16 +248,11 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 
 	if (!status)
-	{
 		ret= _SUCCESS;
-	}
 	else
-	{
 		ret= _FAIL;
-	}
 
-
-	return _SUCCESS;
+	return ret;
 
 }
 

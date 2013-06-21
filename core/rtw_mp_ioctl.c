@@ -1569,16 +1569,7 @@ unsigned int mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv)
 //------------------------------------------------------------------------------
 NDIS_STATUS oid_rt_set_power_down_hdl(struct oid_par_priv *poid_par_priv)
 {
-#ifdef PLATFORM_OS_XP
-	_irqL		oldirql;
-#endif
-	u8		bpwrup;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-#ifdef PLATFORM_LINUX
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	PADAPTER	padapter = (PADAPTER)(poid_par_priv->adapter_context);
-#endif
-#endif
 
 _func_enter_;
 
@@ -1592,17 +1583,8 @@ _func_enter_;
 
 	_irqlevel_changed_(&oldirql, LOWER);
 
-	bpwrup = *(u8 *)poid_par_priv->information_buf;
 	//CALL  the power_down function
-#ifdef PLATFORM_LINUX
-#if defined(CONFIG_RTL8712) //Linux MP insmod unknown symbol
-	dev_power_down(padapter,bpwrup);
-#endif
-#endif
 	_irqlevel_changed_(&oldirql, RAISE);
-
-	//DEBUG_ERR(("\n <=== Query OID_RT_PRO_READ_REGISTER.
-	//	Add:0x%08x Width:%d Value:0x%08x\n",RegRWStruct->offset,RegRWStruct->width,RegRWStruct->value));
 
 _func_exit_;
 

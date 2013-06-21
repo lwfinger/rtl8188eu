@@ -367,14 +367,13 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 	PPHY_STATUS_RPT_8192CD_T pPhyStaRpt = (PPHY_STATUS_RPT_8192CD_T)pPhyStatus;
 
-	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M) && (pPktinfo->Rate <= DESC92C_RATE11M))?true :false;
+	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M) && (pPktinfo->Rate <= DESC92C_RATE11M)) ? true : false;
 
 	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_A] = -1;
 	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_B] = -1;
 
 
-	if (isCCKrate)
-	{
+	if (isCCKrate) {
 		u1Byte report;
 		u1Byte cck_agc_rpt;
 
@@ -384,56 +383,49 @@ odm_RxPhyStatus92CSeries_Parsing(
 		// (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive)
 		//
 
-		//if (pHalData->eRFPowerState == eRfOn)
-			cck_highpwr = pDM_Odm->bCckHighPower;
-		//else
-		//	cck_highpwr = false;
+		cck_highpwr = pDM_Odm->bCckHighPower;
 
 		cck_agc_rpt =  pPhyStaRpt->cck_agc_rpt_ofdm_cfosho_a ;
 
 		//2011.11.28 LukeLee: 88E use different LNA & VGA gain table
 		//The RSSI formula should be modified according to the gain table
 		//In 88E, cck_highpwr is always set to 1
-		if (pDM_Odm->SupportICType & (ODM_RTL8188E|ODM_RTL8812))
-		{
+		if (pDM_Odm->SupportICType & (ODM_RTL8188E|ODM_RTL8812)) {
 			LNA_idx = ((cck_agc_rpt & 0xE0) >>5);
 			VGA_idx = (cck_agc_rpt & 0x1F);
-			switch (LNA_idx)
-			{
-				case 7:
-					if (VGA_idx <= 27)
-						rx_pwr_all = -100 + 2*(27-VGA_idx); //VGA_idx = 27~2
-					else
-						rx_pwr_all = -100;
-					break;
-				case 6:
-						rx_pwr_all = -48 + 2*(2-VGA_idx); //VGA_idx = 2~0
-					break;
-				case 5:
-						rx_pwr_all = -42 + 2*(7-VGA_idx); //VGA_idx = 7~5
-					break;
-				case 4:
-						rx_pwr_all = -36 + 2*(7-VGA_idx); //VGA_idx = 7~4
-					break;
-				case 3:
-						//rx_pwr_all = -28 + 2*(7-VGA_idx); //VGA_idx = 7~0
-						rx_pwr_all = -24 + 2*(7-VGA_idx); //VGA_idx = 7~0
-					break;
-				case 2:
-					if (cck_highpwr)
-						rx_pwr_all = -12 + 2*(5-VGA_idx); //VGA_idx = 5~0
-					else
-						rx_pwr_all = -6+ 2*(5-VGA_idx);
-					break;
-				case 1:
-						rx_pwr_all = 8-2*VGA_idx;
-					break;
-				case 0:
-						rx_pwr_all = 14-2*VGA_idx;
-					break;
-				default:
-					//DbgPrint("CCK Exception default\n");
-					break;
+			switch (LNA_idx) {
+			case 7:
+				if (VGA_idx <= 27)
+					rx_pwr_all = -100 + 2*(27-VGA_idx); //VGA_idx = 27~2
+				else
+					rx_pwr_all = -100;
+				break;
+			case 6:
+				rx_pwr_all = -48 + 2*(2-VGA_idx); //VGA_idx = 2~0
+				break;
+			case 5:
+				rx_pwr_all = -42 + 2*(7-VGA_idx); //VGA_idx = 7~5
+				break;
+			case 4:
+				rx_pwr_all = -36 + 2*(7-VGA_idx); //VGA_idx = 7~4
+				break;
+			case 3:
+				rx_pwr_all = -24 + 2*(7-VGA_idx); //VGA_idx = 7~0
+				break;
+			case 2:
+				if (cck_highpwr)
+					rx_pwr_all = -12 + 2*(5-VGA_idx); //VGA_idx = 5~0
+				else
+					rx_pwr_all = -6+ 2*(5-VGA_idx);
+				break;
+			case 1:
+					rx_pwr_all = 8-2*VGA_idx;
+				break;
+			case 0:
+					rx_pwr_all = 14-2*VGA_idx;
+				break;
+			default:
+				break;
 			}
 			rx_pwr_all += 6;
 			PWDB_ALL = odm_QueryRxPwrPercentage(rx_pwr_all);
@@ -716,8 +708,7 @@ odm_Init_RSSIForDM(
 
 }
 
-static void
-odm_Process_RSSIForDM(
+static void odm_Process_RSSIForDM(
 		PDM_ODM_T					pDM_Odm,
 			PODM_PHY_INFO_T			pPhyInfo,
 			PODM_PACKET_INFO_T			pPktinfo
@@ -750,7 +741,7 @@ odm_Process_RSSIForDM(
 		return;
 	}
 
-	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M) && (pPktinfo->Rate <= DESC92C_RATE11M))?true :false;
+	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M) && (pPktinfo->Rate <= DESC92C_RATE11M)) ? true : false;
 
 #if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 #if ((RTL8192C_SUPPORT == 1) ||(RTL8192D_SUPPORT == 1))

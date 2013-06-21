@@ -770,42 +770,37 @@ _func_exit_;
 
 u8 rtw_set_802_11_add_wep(_adapter* padapter, NDIS_802_11_WEP *wep){
 
-	u8		bdefaultkey;
-	u8		btransmitkey;
 	sint		keyid,res;
 	struct security_priv* psecuritypriv=&(padapter->securitypriv);
 	u8		ret=_SUCCESS;
 
 _func_enter_;
 
-	bdefaultkey=(wep->KeyIndex & 0x40000000) > 0 ? false : true;   //for ???
-	btransmitkey= (wep->KeyIndex & 0x80000000) > 0 ? true  : false;	//for ???
 	keyid=wep->KeyIndex & 0x3fffffff;
 
-	if (keyid>4)
-	{
+	if (keyid>4) {
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("MgntActrtw_set_802_11_add_wep:keyid>4=>fail\n"));
 		ret=false;
 		goto exit;
 	}
 
-	switch (wep->KeyLength)
-	{
-		case 5:
-			psecuritypriv->dot11PrivacyAlgrthm=_WEP40_;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength=5\n"));
-			break;
-		case 13:
-			psecuritypriv->dot11PrivacyAlgrthm=_WEP104_;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength=13\n"));
-			break;
-		default:
-			psecuritypriv->dot11PrivacyAlgrthm=_NO_PRIVACY_;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength!=5 or 13\n"));
-			break;
+	switch (wep->KeyLength) {
+	case 5:
+		psecuritypriv->dot11PrivacyAlgrthm=_WEP40_;
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength=5\n"));
+		break;
+	case 13:
+		psecuritypriv->dot11PrivacyAlgrthm=_WEP104_;
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength=13\n"));
+		break;
+	default:
+		psecuritypriv->dot11PrivacyAlgrthm=_NO_PRIVACY_;
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength!=5 or 13\n"));
+		break;
 	}
-
-	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_wep:befor memcpy, wep->KeyLength=0x%x wep->KeyIndex=0x%x  keyid =%x\n",wep->KeyLength,wep->KeyIndex,keyid));
+	RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_info_,
+		 ("rtw_set_802_11_add_wep:befor memcpy, wep->KeyLength=0x%x wep->KeyIndex=0x%x  keyid =%x\n",
+		 wep->KeyLength,wep->KeyIndex,keyid));
 
 	_rtw_memcpy(&(psecuritypriv->dot11DefKey[keyid].skey[0]),&(wep->KeyMaterial),wep->KeyLength);
 
@@ -1068,7 +1063,6 @@ _func_enter_;
 	// If WEP encryption algorithm, just call rtw_set_802_11_add_wep().
 	if ((padapter->securitypriv.dot11AuthAlgrthm !=dot11AuthAlgrthm_8021X)&&(encryptionalgo== _WEP40_  || encryptionalgo== _WEP104_))
 	{
-		u8 ret;
 		u32 keyindex;
 		u32 len = FIELD_OFFSET(NDIS_802_11_KEY, KeyMaterial) + key->KeyLength;
 		NDIS_802_11_WEP *wep = &padapter->securitypriv.ndiswep;
@@ -1242,8 +1236,7 @@ _func_exit_;
 
 u8 rtw_set_802_11_remove_key(_adapter*	padapter, NDIS_802_11_REMOVE_KEY *key){
 
-	uint				encryptionalgo;
-	u8 * pbssid;
+	u8 *pbssid;
 	struct sta_info *stainfo;
 	u8	bgroup = (key->KeyIndex & 0x4000000) > 0 ? false: true;
 	u8	keyIndex = (u8)key->KeyIndex & 0x03;
@@ -1257,7 +1250,6 @@ _func_enter_;
 	}
 
 	if (bgroup == true) {
-		encryptionalgo= padapter->securitypriv.dot118021XGrpPrivacy;
 		// clear group key by index
 		//NdisZeroMemory(Adapter->MgntInfo.SecurityInfo.KeyBuf[keyIndex], MAX_WEP_KEY_LEN);
 		//Adapter->MgntInfo.SecurityInfo.KeyLen[keyIndex] = 0;
@@ -1265,32 +1257,23 @@ _func_enter_;
 		_rtw_memset(&padapter->securitypriv.dot118021XGrpKey[keyIndex], 0, 16);
 
 		//! \todo Send a H2C Command to Firmware for removing this Key in CAM Entry.
-
 	} else {
-
 		pbssid=get_bssid(&padapter->mlmepriv);
 		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid );
-		if (stainfo !=NULL){
-			encryptionalgo=stainfo->dot118021XPrivacy;
+		if (stainfo) {
+			// clear key by BSSID
+			_rtw_memset(&stainfo->dot118021x_UncstKey, 0, 16);
 
-		// clear key by BSSID
-		_rtw_memset(&stainfo->dot118021x_UncstKey, 0, 16);
-
-		//! \todo Send a H2C Command to Firmware for disable this Key in CAM Entry.
-
-		}
-		else{
+			//! \todo Send a H2C Command to Firmware for disable this Key in CAM Entry.
+		} else {
 			ret= _FAIL;
 			goto exit;
 		}
 	}
-
 exit:
 
 _func_exit_;
-
-	return true;
-
+	return ret;
 }
 
 /*

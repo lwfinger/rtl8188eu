@@ -705,7 +705,7 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 	u8	offset, word_en;
 	u8	*map;
 	u8	newdata[PGPKT_DATA_SIZE];
-	s32	i, j, idx;
+	s32	i, idx;
 	u8	ret = _SUCCESS;
 	u16	mapLen=0;
 
@@ -715,12 +715,12 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 		return _FAIL;
 
 	map = rtw_zmalloc(mapLen);
-	if (map == NULL){
+	if (map == NULL)
 		return _FAIL;
-	}
 
 	ret = rtw_efuse_map_read(padapter, 0, mapLen, map);
-	if (ret == _FAIL) goto exit;
+	if (ret == _FAIL)
+		goto exit;
 
 	Efuse_PowerSwitch(padapter, true, true);
 
@@ -728,7 +728,6 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 	word_en = 0xF;
 	_rtw_memset(newdata, 0xFF, PGPKT_DATA_SIZE);
 	i = addr & 0x7;	// index of one package
-	j = 0;		// index of new package
 	idx = 0;	// data index
 
 	if (i & 0x1) {
@@ -742,9 +741,9 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 		idx++;
 	}
 	do {
-		for (; i < PGPKT_DATA_SIZE; i += 2)
-		{
-			if (cnts == idx) break;
+		for (; i < PGPKT_DATA_SIZE; i += 2) {
+			if (cnts == idx)
+				break;
 			if ((cnts - idx) == 1) {
 				if (data[idx] != map[addr+idx]) {
 					word_en &= ~BIT(i >> 1);
@@ -755,15 +754,15 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 				break;
 			} else {
 				if ((data[idx] != map[addr+idx]) ||
-				    (data[idx+1] != map[addr+idx+1]))
-				{
+				    (data[idx+1] != map[addr+idx+1])) {
 					word_en &= ~BIT(i >> 1);
 					newdata[i] = data[idx];
 					newdata[i+1] = data[idx + 1];
 				}
 				idx += 2;
 			}
-			if (idx == cnts) break;
+			if (idx == cnts)
+				break;
 		}
 
 		if (word_en != 0xF) {
@@ -771,31 +770,26 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 			DBG_88E("offset=%x\n",offset);
 			DBG_88E("word_en=%x\n",word_en);
 
-			for (i=0;i<PGPKT_DATA_SIZE;i++)
-			{
+			for (i = 0; i < PGPKT_DATA_SIZE; i++)
 				DBG_88E("data=%x \t",newdata[i]);
-			}
-			if (ret == _FAIL) break;
+			if (ret == _FAIL)
+				break;
 		}
 
-		if (idx == cnts) break;
+		if (idx == cnts)
+			break;
 
 		offset++;
 		i = 0;
-		j = 0;
 		word_en = 0xF;
 		_rtw_memset(newdata, 0xFF, PGPKT_DATA_SIZE);
 	} while (1);
 
 	Efuse_PowerSwitch(padapter, true, false);
-
 exit:
-
 	rtw_mfree(map, mapLen);
-
 	return ret;
 }
-
 
 //------------------------------------------------------------------------------
 u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
@@ -803,7 +797,7 @@ u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 	u8	offset, word_en;
 	u8	*map;
 	u8	newdata[PGPKT_DATA_SIZE];
-	s32	i, j, idx;
+	s32	i, idx;
 	u8	ret = _SUCCESS;
 	u16	mapLen=0;
 
@@ -813,9 +807,8 @@ u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 		return _FAIL;
 
 	map = rtw_zmalloc(mapLen);
-	if (map == NULL){
+	if (map == NULL)
 		return _FAIL;
-	}
 
 	ret = rtw_BT_efuse_map_read(padapter, 0, mapLen, map);
 	if (ret == _FAIL) goto exit;
@@ -826,7 +819,6 @@ u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 	word_en = 0xF;
 	_rtw_memset(newdata, 0xFF, PGPKT_DATA_SIZE);
 	i = addr & 0x7;	// index of one package
-	j = 0;		// index of new package
 	idx = 0;	// data index
 
 	if (i & 0x1) {
@@ -840,9 +832,9 @@ u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 		idx++;
 	}
 	do {
-		for (; i < PGPKT_DATA_SIZE; i += 2)
-		{
-			if (cnts == idx) break;
+		for (; i < PGPKT_DATA_SIZE; i += 2) {
+			if (cnts == idx)
+				break;
 			if ((cnts - idx) == 1) {
 				if (data[idx] != map[addr+idx]) {
 					word_en &= ~BIT(i >> 1);
@@ -853,37 +845,35 @@ u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 				break;
 			} else {
 				if ((data[idx] != map[addr+idx]) ||
-				    (data[idx+1] != map[addr+idx+1]))
-				{
+				    (data[idx+1] != map[addr+idx+1])) {
 					word_en &= ~BIT(i >> 1);
 					newdata[i] = data[idx];
 					newdata[i+1] = data[idx + 1];
 				}
 				idx += 2;
 			}
-			if (idx == cnts) break;
+			if (idx == cnts)
+				break;
 		}
 
-		if (word_en != 0xF)
-		{
+		if (word_en != 0xF) {
 			DBG_88E("%s: offset=%#X\n", __func__, offset);
 			DBG_88E("%s: word_en=%#X\n", __func__, word_en);
 			DBG_88E("%s: data=", __func__);
 			for (i=0; i<PGPKT_DATA_SIZE; i++)
-			{
 				DBG_88E("0x%02X ", newdata[i]);
-			}
 			DBG_88E("\n");
 
 			ret = Efuse_PgPacketWrite_BT(padapter, offset, word_en, newdata, false);
-			if (ret == _FAIL) break;
+			if (ret == _FAIL)
+				break;
 		}
 
-		if (idx == cnts) break;
+		if (idx == cnts)
+			break;
 
 		offset++;
 		i = 0;
-		j = 0;
 		word_en = 0xF;
 		_rtw_memset(newdata, 0xFF, PGPKT_DATA_SIZE);
 	} while (1);

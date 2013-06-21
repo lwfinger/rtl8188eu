@@ -4355,12 +4355,10 @@ static void rtl8188eu_init_default_value(_adapter * padapter)
 {
 	PHAL_DATA_TYPE pHalData;
 	struct pwrctrl_priv *pwrctrlpriv;
-	struct dm_priv *pdmpriv;
 	u8 i;
 
 	pHalData = GET_HAL_DATA(padapter);
 	pwrctrlpriv = &padapter->pwrctrlpriv;
-	pdmpriv = &pHalData->dmpriv;
 
 
 	//init default value
@@ -4371,9 +4369,6 @@ static void rtl8188eu_init_default_value(_adapter * padapter)
 	//init dm default value
 	pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized = false;
 	pHalData->odmpriv.RFCalibrateInfo.TM_Trigger = 0;//for IQK
-	//pdmpriv->binitialized = false;
-//	pdmpriv->prv_traffic_idx = 3;
-//	pdmpriv->initialize = 0;
 	pHalData->pwrGroupCnt = 0;
 	pHalData->PGMaxGroup= 13;
 	pHalData->odmpriv.RFCalibrateInfo.ThermalValue_HP_index = 0;

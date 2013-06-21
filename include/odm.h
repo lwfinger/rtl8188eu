@@ -460,8 +460,8 @@ typedef struct _ODM_Phy_Dbg_Info_
 
 typedef struct _ODM_Per_Pkt_Info_
 {
-	u1Byte		Rate;
-	u1Byte		StationID;
+	s8		Rate;
+	u8		StationID;
 	bool		bPacketMatchBSSID;
 	bool		bPacketToSelf;
 	bool		bPacketBeacon;

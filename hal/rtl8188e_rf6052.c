@@ -650,13 +650,12 @@ phy_RF6052_Config_ParaFile(
 
 	static char			sz88eRadioAFile[] = RTL8188E_PHY_RADIO_A;
 	static char			sz88eRadioBFile[] = RTL8188E_PHY_RADIO_B;
+#ifndef CONFIG_EMBEDDED_FWIMG
 	char					*pszRadioAFile, *pszRadioBFile;
-
-
 
 	pszRadioAFile = sz88eRadioAFile;
 	pszRadioBFile = sz88eRadioBFile;
-
+#endif
 
 	//3//-----------------------------------------------------------------
 	//3// <2> Initialize RF
