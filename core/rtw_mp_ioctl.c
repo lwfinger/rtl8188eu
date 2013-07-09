@@ -24,11 +24,11 @@
 #include <drv_types.h>
 #include <mlme_osdep.h>
 
-//#include <rtw_mp.h>
+/* include <rtw_mp.h> */
 #include <rtw_mp_ioctl.h>
 
 
-//****************  oid_rtl_seg_81_85   section start ****************
+/*   oid_rtl_seg_81_85   section start **************** */
 NDIS_STATUS oid_rt_wireless_mode_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
@@ -53,7 +53,7 @@ _func_exit_;
 
 	return status;
 }
-//****************  oid_rtl_seg_81_87_80   section start ****************
+/*   oid_rtl_seg_81_87_80   section start **************** */
 NDIS_STATUS oid_rt_pro_write_bb_reg_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -77,7 +77,7 @@ _func_enter_;
 
 	pbbreg = (struct bb_reg_param *)(poid_par_priv->information_buf);
 
-	offset = (u16)(pbbreg->offset) & 0xFFF; //0ffset :0x800~0xfff
+	offset = (u16)(pbbreg->offset) & 0xFFF; /* 0ffset :0x800~0xfff */
 	if (offset < BB_REG_BASE_ADDR) offset |= BB_REG_BASE_ADDR;
 
 	value = pbbreg->value;
@@ -94,7 +94,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_read_bb_reg_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -118,7 +118,7 @@ _func_enter_;
 
 	pbbreg = (struct bb_reg_param *)(poid_par_priv->information_buf);
 
-	offset = (u16)(pbbreg->offset) & 0xFFF; //0ffset :0x800~0xfff
+	offset = (u16)(pbbreg->offset) & 0xFFF; /* 0ffset :0x800~0xfff */
 	if (offset < BB_REG_BASE_ADDR) offset |= BB_REG_BASE_ADDR;
 
 	_irqlevel_changed_(&oldirql, LOWER);
@@ -135,7 +135,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_write_rf_reg_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -183,7 +183,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_read_rf_reg_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -232,17 +232,17 @@ _func_exit_;
 
 	return status;
 }
-//****************  oid_rtl_seg_81_87_00   section end****************
-//------------------------------------------------------------------------------
+/*   oid_rtl_seg_81_87_00   section end**************** */
+/*  */
 
-//****************  oid_rtl_seg_81_80_00   section start ****************
-//------------------------------------------------------------------------------
+/*   oid_rtl_seg_81_80_00   section start **************** */
+/*  */
 NDIS_STATUS oid_rt_pro_set_data_rate_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
 	_irqL		oldirql;
 #endif
-	u32		ratevalue;//4
+	u32		ratevalue;/* 4 */
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
 	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
 
@@ -257,7 +257,7 @@ _func_enter_;
 	if (poid_par_priv->information_buf_len != sizeof(u32))
 		return NDIS_STATUS_INVALID_LENGTH;
 
-	ratevalue = *((u32*)poid_par_priv->information_buf);//4
+	ratevalue = *((u32*)poid_par_priv->information_buf);/* 4 */
 	RT_TRACE(_module_mp_, _drv_notice_,
 		 ("oid_rt_pro_set_data_rate_hdl: data rate idx=%d\n", ratevalue));
 	if (ratevalue >= MPT_RATE_LAST)
@@ -273,7 +273,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_start_test_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -295,10 +295,10 @@ _func_enter_;
 
 	_irqlevel_changed_(&oldirql, LOWER);
 
-	//IQCalibrateBcut(Adapter);
+	/* IQCalibrateBcut(Adapter); */
 
 	mode = *((u32*)poid_par_priv->information_buf);
-	Adapter->mppriv.mode = mode;// 1 for loopback
+	Adapter->mppriv.mode = mode;/*  1 for loopback */
 
 	if (mp_start_test(Adapter) == _FAIL) {
 		status = NDIS_STATUS_NOT_ACCEPTED;
@@ -314,7 +314,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_stop_test_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -340,7 +340,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_set_channel_direct_call_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -379,7 +379,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_set_bandwidth_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -401,7 +401,7 @@ _func_enter_;
 	if (poid_par_priv->information_buf_len < sizeof(u32))
 		return NDIS_STATUS_INVALID_LENGTH;
 
-	bandwidth = *((u32*)poid_par_priv->information_buf);//4
+	bandwidth = *((u32*)poid_par_priv->information_buf);/* 4 */
 	channel_offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
 
 	if (bandwidth != HT_CHANNEL_WIDTH_40)
@@ -421,7 +421,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_set_antenna_bb_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -499,9 +499,9 @@ _func_exit_;
 	return status;
 }
 
-//------------------------------------------------------------------------------
-//****************  oid_rtl_seg_81_80_20   section start ****************
-//------------------------------------------------------------------------------
+/*  */
+/*   oid_rtl_seg_81_80_20   section start **************** */
+/*  */
 NDIS_STATUS oid_rt_pro_query_tx_packet_sent_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
@@ -525,7 +525,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_query_rx_packet_received_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
@@ -550,7 +550,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_query_rx_packet_crc32_error_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
@@ -575,7 +575,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 
 NDIS_STATUS oid_rt_pro_reset_tx_packet_sent_hdl(struct oid_par_priv *poid_par_priv)
 {
@@ -596,7 +596,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_reset_rx_packet_received_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
@@ -621,7 +621,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_reset_phy_rx_packet_count_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -645,7 +645,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_get_phy_rx_packet_received_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -676,7 +676,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_get_phy_rx_packet_crc32_error_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -708,7 +708,7 @@ _func_exit_;
 
 	return status;
 }
-//****************  oid_rtl_seg_81_80_20   section end ****************
+/*   oid_rtl_seg_81_80_20   section end **************** */
 NDIS_STATUS oid_rt_pro_set_continuous_tx_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -876,13 +876,13 @@ _func_exit_;
 
 	return status;
 }
-//****************  oid_rtl_seg_81_80_00   section end ****************
-//------------------------------------------------------------------------------
+/*   oid_rtl_seg_81_80_00   section end **************** */
+/*  */
 NDIS_STATUS oid_rt_pro8711_join_bss_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_read_register_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -934,7 +934,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_write_register_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -997,69 +997,69 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_burst_read_register_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_burst_write_register_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_write_txcmd_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_read16_eeprom_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_write16_eeprom_hdl (struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro8711_wi_poll_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro8711_pkt_loss_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_rd_attrib_mem_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_wr_attrib_mem_hdl (struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS  oid_rt_pro_set_rf_intfs_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_poll_rx_status_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_cfg_debug_message_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_set_data_rate_ex_hdl(struct oid_par_priv *poid_par_priv)
 {
 	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
@@ -1087,7 +1087,7 @@ _func_exit_;
 
 	return status;
 }
-//-----------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_get_thermal_meter_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -1118,12 +1118,12 @@ _func_exit_;
 
 	return status;
 }
-//-----------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_read_tssi_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_set_power_tracking_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -1156,54 +1156,54 @@ _func_exit_;
 
 	return status;
 }
-//-----------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_set_basic_rate_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_qry_pwrstate_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_set_pwrstate_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_h2c_set_rate_table_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_h2c_get_rate_table_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
 
-//****************  oid_rtl_seg_87_12_00   section start ****************
+/*   oid_rtl_seg_87_12_00   section start **************** */
 NDIS_STATUS oid_rt_pro_encryption_ctrl_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_add_sta_info_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_dele_sta_info_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;
 }
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+/*  */
+/*  */
 NDIS_STATUS oid_rt_pro_rx_packet_type_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return NDIS_STATUS_SUCCESS;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_read_efuse_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -1251,7 +1251,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_write_efuse_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -1294,7 +1294,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_rw_efuse_pgpkt_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -1306,7 +1306,7 @@ NDIS_STATUS oid_rt_pro_rw_efuse_pgpkt_hdl(struct oid_par_priv *poid_par_priv)
 
 _func_enter_;
 
-//	RT_TRACE(_module_mp_, _drv_info_, ("+oid_rt_pro_rw_efuse_pgpkt_hdl\n"));
+/* 	RT_TRACE(_module_mp_, _drv_info_, ("+oid_rt_pro_rw_efuse_pgpkt_hdl\n")); */
 
 	*poid_par_priv->bytes_rw = 0;
 
@@ -1351,7 +1351,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_get_efuse_current_size_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -1383,7 +1383,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_get_efuse_max_size_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
@@ -1408,7 +1408,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_efuse_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status;
@@ -1428,7 +1428,7 @@ _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_pro_efuse_map_hdl(struct oid_par_priv *poid_par_priv)
 {
 #ifdef PLATFORM_OS_XP
@@ -1467,7 +1467,7 @@ _func_enter_;
 			status = NDIS_STATUS_FAILURE;
 		}
 	} else {
-		// SET_OID
+		/*  SET_OID */
 		RT_TRACE(_module_mp_, _drv_info_,
 			("oid_rt_pro_efuse_map_hdl: WRITE\n"));
 
@@ -1514,7 +1514,7 @@ _func_enter_;
 	if (poid_par_priv->information_buf_len < sizeof(u8))
 		return NDIS_STATUS_INVALID_LENGTH;
 
-	rx_pkt_type = *((u8*)poid_par_priv->information_buf);//4
+	rx_pkt_type = *((u8*)poid_par_priv->information_buf);/* 4 */
 
 	RT_TRACE(_module_mp_, _drv_info_, ("rx_pkt_type: %x\n",rx_pkt_type ));
 _func_exit_;
@@ -1566,7 +1566,7 @@ unsigned int mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv)
 	return NDIS_STATUS_SUCCESS;
 }
 
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_set_power_down_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
@@ -1583,14 +1583,14 @@ _func_enter_;
 
 	_irqlevel_changed_(&oldirql, LOWER);
 
-	//CALL  the power_down function
+	/* CALL  the power_down function */
 	_irqlevel_changed_(&oldirql, RAISE);
 
 _func_exit_;
 
 	return status;
 }
-//------------------------------------------------------------------------------
+/*  */
 NDIS_STATUS oid_rt_get_power_mode_hdl(struct oid_par_priv *poid_par_priv)
 {
 	return 0;

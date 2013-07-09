@@ -50,7 +50,7 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
 
 	pattrib = &xmit_frame->attrib;
 	update_mgntframe_attrib(adapter, pattrib);
-	pattrib->qsel = 0x10;//Beacon
+	pattrib->qsel = 0x10;/* Beacon */
 	pattrib->subtype = WIFI_BEACON;
 	pattrib->pktlen = pattrib->last_txcmdsz = 0;
 
@@ -81,7 +81,7 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 	buf_offset = TXDESC_OFFSET;
 	ori_len = buf_offset+pattrib->pktlen;
 
-	//check if the io_buf can accommodate new cmds
+	/* check if the io_buf can accommodate new cmds */
 	if (ori_len + cmd_len + 8 > MAX_XMITBUF_SZ) {
 		DBG_88E("%s %u is large than MAX_XMITBUF_SZ:%u, can't accommodate new cmds\n", __func__
 			, ori_len + cmd_len + 8, MAX_XMITBUF_SZ);
@@ -92,10 +92,9 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 	pattrib->pktlen += cmd_len;
 	pattrib->last_txcmdsz += cmd_len;
 
-	//DBG_88E("%s ori:%u + cmd_len:%u = %u\n", __func__, ori_len, cmd_len, buf_offset+pattrib->pktlen);
-
 	return _SUCCESS;
 }
+
 bool rtw_IOL_applied(ADAPTER *adapter)
 {
 	if (1 == adapter->registrypriv.fw_iol)
@@ -137,40 +136,31 @@ int _rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value, u8
 {
 	struct ioreg_cfg cmd = {8,IOREG_CMD_WB_REG,0x0, 0x0,0x0};
 
-	//RTW_PUT_LE16((u8*)&cmd.address, addr);
-	//RTW_PUT_LE32((u8*)&cmd.value, (u32)value);
 	cmd.address = cpu_to_le16(addr);
 	cmd.data = cpu_to_le32(value);
 
 	if (mask!=0xFF)
 	{
 		cmd.length = 12;
-		//RTW_PUT_LE32((u8*)&cmd.mask, (u32)mask);
 		cmd.mask = cpu_to_le32(mask);
 	}
 
-	//DBG_88E("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __func__, addr,value,mask);
-
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
-
 }
+
 int _rtw_IOL_append_WW_cmd(struct xmit_frame *xmit_frame, u16 addr, u16 value, u16 mask)
 {
 	struct ioreg_cfg cmd = {8,IOREG_CMD_WW_REG,0x0, 0x0,0x0};
 
-	//RTW_PUT_LE16((u8*)&cmd.address, addr);
-	//RTW_PUT_LE32((u8*)&cmd.value, (u32)value);
 	cmd.address = cpu_to_le16(addr);
 	cmd.data = cpu_to_le32(value);
 
 	if (mask!=0xFFFF)
 	{
 		cmd.length = 12;
-		//RTW_PUT_LE32((u8*)&cmd.mask, (u32)mask);
 		cmd.mask =  cpu_to_le32(mask);
 	}
 
-	//DBG_88E("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __func__, addr,value,mask);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
 
@@ -179,19 +169,15 @@ int _rtw_IOL_append_WD_cmd(struct xmit_frame *xmit_frame, u16 addr, u32 value, u
 {
 	struct ioreg_cfg cmd = {8,IOREG_CMD_WD_REG,0x0, 0x0,0x0};
 
-	//RTW_PUT_LE16((u8*)&cmd.address, addr);
-	//RTW_PUT_LE32((u8*)&cmd.value, (u32)value);
 	cmd.address = cpu_to_le16(addr);
 	cmd.data = cpu_to_le32(value);
 
 	if (mask!=0xFFFFFFFF)
 	{
 		cmd.length = 12;
-		//RTW_PUT_LE32((u8*)&cmd.mask, (u32)mask);
 		cmd.mask =  cpu_to_le32(mask);
 	}
 
-	//DBG_88E("%s addr:0x%04x,value:0x%08x,mask:0x%08x\n", __FU2NCTION__, addr,value,mask);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
 
@@ -201,33 +187,23 @@ int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path, u16 addr,
 {
 	struct ioreg_cfg cmd = {8,IOREG_CMD_W_RF,0x0, 0x0,0x0};
 
-	//RTW_PUT_LE16((u8*)&cmd.address, addr);
-	//RTW_PUT_LE32((u8*)&cmd.value, (u32)value);
-	cmd.address = (rf_path<<8) |((addr) &0xFF);
+	cmd.address = cpu_to_le16((rf_path<<8) |((addr) &0xFF));
 	cmd.data = cpu_to_le32(value);
 
-	if (mask!=0x000FFFFF)
-	{
+	if (mask != 0x000FFFFF) {
 		cmd.length = 12;
-		//RTW_PUT_LE32((u8*)&cmd.mask, (u32)mask);
 		cmd.mask =  cpu_to_le32(mask);
 	}
 
-	//DBG_88E("%s rf_path:0x%02x addr:0x%04x,value:0x%08x,mask:0x%08x\n", __FU2NCTION__,rf_path, addr,value,mask);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
-
 }
-
-
 
 int rtw_IOL_append_DELAY_US_cmd(struct xmit_frame *xmit_frame, u16 us)
 {
 	struct ioreg_cfg cmd = {4,IOREG_CMD_DELAY_US,0x0, 0x0,0x0};
-	//RTW_PUT_LE16((u8*)&cmd.address, us);
 	cmd.address = cpu_to_le16(us);
 
-	//DBG_88E("%s %u\n", __func__, us);
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 4);
 }
 
@@ -235,15 +211,13 @@ int rtw_IOL_append_DELAY_MS_cmd(struct xmit_frame *xmit_frame, u16 ms)
 {
 	struct ioreg_cfg cmd = {4,IOREG_CMD_DELAY_US,0x0, 0x0,0x0};
 
-	//RTW_PUT_LE16((u8*)&cmd.address, ms);
 	cmd.address = cpu_to_le16(ms);
 
-	//DBG_88E("%s %u\n", __func__, ms);
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 4);
 }
 int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame)
 {
-	struct ioreg_cfg cmd = {4,IOREG_CMD_END,0xFFFF, 0xFF,0x0};
+	struct ioreg_cfg cmd = {4, IOREG_CMD_END, cpu_to_le16(0xFFFF), cpu_to_le32(0xFF), 0x0};
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 4);
 
 }
@@ -255,7 +229,6 @@ u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame)
 		rtw_IOL_append_END_cmd(pxmit_frame);
 		pxmit_frame->attrib.pktlen = ((((pxmit_frame->attrib.pktlen+32)/256)+1)*256 );
 
-		//printk("==> %s, pktlen(%d)\n",__func__,pxmit_frame->attrib.pktlen);
 		pxmit_frame->attrib.last_txcmdsz = pxmit_frame->attrib.pktlen;
 		is_cmd_bndy = true;
 	}
@@ -278,7 +251,7 @@ void rtw_IOL_cmd_buf_dump(ADAPTER *Adapter,int buf_len,u8 *pbuf)
 }
 
 
-#else //CONFIG_IOL_NEW_GENERATION
+#else /* CONFIG_IOL_NEW_GENERATION */
 int rtw_IOL_append_LLT_cmd(struct xmit_frame *xmit_frame, u8 page_boundary)
 {
 	IOL_CMD cmd = {0x0, IOL_CMD_LLT, 0x0, 0x0};
@@ -351,8 +324,6 @@ int rtw_IOL_append_DELAY_US_cmd(struct xmit_frame *xmit_frame, u16 us)
 
 	RTW_PUT_BE32((u8*)&cmd.value, (u32)us);
 
-	//DBG_88E("%s %u\n", __func__, us);
-
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 8);
 }
 
@@ -361,8 +332,6 @@ int rtw_IOL_append_DELAY_MS_cmd(struct xmit_frame *xmit_frame, u16 ms)
 	IOL_CMD cmd = {0x0, IOL_CMD_DELAY_MS, 0x0, 0x0};
 
 	RTW_PUT_BE32((u8*)&cmd.value, (u32)ms);
-
-	//DBG_88E("%s %u\n", __func__, ms);
 
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, 8);
 }
@@ -394,9 +363,9 @@ int rtw_IOL_exec_empty_cmds_sync(ADAPTER *adapter, u32 max_wating_ms)
 	IOL_CMD end_cmd = {0x0, IOL_CMD_END, 0x0, 0x0};
 	return rtw_IOL_exec_cmd_array_sync(adapter, (u8*)&end_cmd, 1, max_wating_ms);
 }
-#endif //CONFIG_IOL_NEW_GENERATION
+#endif /* CONFIG_IOL_NEW_GENERATION */
 
 
 
 
-#endif //CONFIG_IOL
+#endif /* CONFIG_IOL */

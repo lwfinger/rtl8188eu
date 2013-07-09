@@ -71,7 +71,7 @@ u8 sreset_get_wifi_status(_adapter *padapter)
 	}
 	DBG_88E("==> %s wifi_status(0x%x)\n",__func__,status);
 
-	//status restore
+	/* status restore */
 	psrtpriv->Wifi_Error_Status = WIFI_STATUS_SUCCESS;
 
 	return status;

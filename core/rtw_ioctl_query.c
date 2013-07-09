@@ -27,9 +27,9 @@
 
 
 #ifdef PLATFORM_WINDOWS
-//
-// Added for WPA2-PSK, by Annie, 2005-09-20.
-//
+/*  */
+/*  Added for WPA2-PSK, by Annie, 2005-09-20. */
+/*  */
 u8
 query_802_11_capability(
 	_adapter*		Adapter,
@@ -67,7 +67,7 @@ query_802_11_capability(
 	pCap->NoOfPMKIDs = NUM_PMKID_CACHE;
 	pCap->NoOfAuthEncryptPairsSupported = ulNumOfPairSupported;
 
-	if ( sizeof (szAuthEnc) <= 240 )		// 240 = 256 - 4*4	// SecurityInfo.szCapability: only 256 bytes in size.
+	if ( sizeof (szAuthEnc) <= 240 )		/*  240 = 256 - 4*4	SecurityInfo.szCapability: only 256 bytes in size. */
 	{
 		_rtw_memcpy( pucAuthEncryptionSupported, (u8*)szAuthEnc,  sizeof (szAuthEnc) );
 		*pulOutLen = pCap->Length;
@@ -90,14 +90,12 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 	u8 *	pDest = (u8 *)pAssocInfo + sizeof(NDIS_802_11_ASSOCIATION_INFORMATION);
 	unsigned char i,*auth_ie,*supp_ie;
 
-	//NdisZeroMemory(pAssocInfo, sizeof(NDIS_802_11_ASSOCIATION_INFORMATION));
 	_rtw_memset(pAssocInfo, 0, sizeof(NDIS_802_11_ASSOCIATION_INFORMATION));
-	//pAssocInfo->Length = sizeof(NDIS_802_11_ASSOCIATION_INFORMATION);
 
-	//------------------------------------------------------
-	// Association Request related information
-	//------------------------------------------------------
-	// Req_1. AvailableRequestFixedIEs
+	/*  */
+	/*  Association Request related information */
+	/*  */
+	/*  Req_1. AvailableRequestFixedIEs */
 	if (psecnetwork!=NULL){
 
 	pAssocInfo->AvailableRequestFixedIEs |= NDIS_802_11_AI_REQFI_CAPABILITIES|NDIS_802_11_AI_REQFI_CURRENTAPADDRESS;
@@ -111,9 +109,9 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 	{
 
 		if (psecuritypriv->ndisauthtype>=Ndis802_11AuthModeWPA2)
-			pDest[0] =48;		//RSN Information Element
+			pDest[0] =48;		/* RSN Information Element */
 		else
-			pDest[0] =221;	//WPA(SSN) Information Element
+			pDest[0] =221;	/* WPA(SSN) Information Element */
 
 		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("\n Adapter->ndisauthtype==Ndis802_11AuthModeWPA)?0xdd:0x30 [%d]",pDest[0]));
 		supp_ie=&psecuritypriv->supplicant_ie[0];
@@ -122,7 +120,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 			RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("IEs [%d] = 0x%x\n\n", i,supp_ie[i]));
 		}
 
-		i=13;	//0~11 is fixed information element
+		i=13;	/* 0~11 is fixed information element */
 		RT_TRACE(_module_rtl871x_ioctl_query_c_,_drv_info_,("i= %d tgt_network->network.IELength=%d\n\n", i,(int)psecnetwork->IELength));
 		while ((i<supp_ie[0]) && (i<256)){
 			if ((unsigned char)supp_ie[i]==pDest[0]){
@@ -141,7 +139,7 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 		}
 
 
-		pAssocInfo->RequestIELength += (2 + supp_ie[1+i]);// (2 + psecnetwork->IEs[1+i]+4);
+		pAssocInfo->RequestIELength += (2 + supp_ie[1+i]);/*  (2 + psecnetwork->IEs[1+i]+4); */
 
 	}
 
@@ -151,9 +149,9 @@ u8 query_802_11_association_information(	_adapter *padapter,PNDIS_802_11_ASSOCIA
 	}
 
 
-	//------------------------------------------------------
-	// Association Response related information
-	//------------------------------------------------------
+	/*  */
+	/*  Association Response related information */
+	/*  */
 
 	if (check_fwstate( pmlmepriv, _FW_LINKED)==true)
 	{
