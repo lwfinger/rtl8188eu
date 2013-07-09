@@ -2030,8 +2030,8 @@ Hal_EfuseParsePIDVID_8188EU(
 	if ( !AutoLoadFail )
 	{
 		// VID, PID
-		pHalData->EEPROMVID = EF2Byte( *(u16 *)&hwinfo[EEPROM_VID_88EU] );
-		pHalData->EEPROMPID = EF2Byte( *(u16 *)&hwinfo[EEPROM_PID_88EU] );
+		pHalData->EEPROMVID = EF2BYTE( *(__le16 *)&hwinfo[EEPROM_VID_88EU] );
+		pHalData->EEPROMPID = EF2BYTE( *(__le16 *)&hwinfo[EEPROM_PID_88EU] );
 
 		// Customer ID, 0x00 and 0xff are reserved for Realtek.
 		pHalData->EEPROMCustomerID = *(u8 *)&hwinfo[EEPROM_CUSTOMERID_88E];
@@ -3801,7 +3801,7 @@ _func_enter_;
 	#endif
 		case HW_VAR_H2C_MEDIA_STATUS_RPT:
 			{
-				rtl8188e_set_FwMediaStatus_cmd(Adapter , (*(u16 *)val));
+				rtl8188e_set_FwMediaStatus_cmd(Adapter , (*(__le16 *)val));
 			}
 			break;
 		case HW_VAR_BCN_VALID:

@@ -340,10 +340,10 @@ _func_enter_;
 _func_exit_;
 }
 
-void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, u16 mstatus_rpt )
+void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, __le16 mstatus_rpt )
 {
 	u8 opmode,macid;
-	u16 mst_rpt = cpu_to_le16 (mstatus_rpt);
+	u16 mst_rpt = le16_to_cpu(mstatus_rpt);
 	opmode = (u8) mst_rpt;
 	macid = (u8)(mst_rpt >> 8)  ;
 

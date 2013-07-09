@@ -488,7 +488,7 @@ static int closeFile(struct file *fp)
 	return 0;
 }
 
-static int readFile(struct file *fp,char *buf,int len)
+static int readFile(struct file *fp,char __user *buf,int len)
 {
 	int rlen=0, sum=0;
 
@@ -509,7 +509,7 @@ static int readFile(struct file *fp,char *buf,int len)
 
 }
 
-static int writeFile(struct file *fp,char *buf,int len)
+static int writeFile(struct file *fp, char __user *buf, int len)
 {
 	int wlen=0, sum=0;
 
@@ -540,7 +540,7 @@ static int isFileReadable(char *path)
 	struct file *fp;
 	int ret = 0;
 	mm_segment_t oldfs;
-	char buf;
+	char __user buf;
 
 	fp=filp_open(path, O_RDONLY, 0);
 	if (IS_ERR(fp)) {
@@ -565,7 +565,7 @@ static int isFileReadable(char *path)
 * @param sz how many bytes to read at most
 * @return the byte we've read, or Linux specific error code
 */
-static int retriveFromFile(char *path, u8* buf, u32 sz)
+static int retriveFromFile(char *path, u8 __user *buf, u32 sz)
 {
 	int ret =-1;
 	mm_segment_t oldfs;
@@ -599,7 +599,7 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 * @param sz how many bytes to write at most
 * @return the byte we've written, or Linux specific error code
 */
-static int storeToFile(char *path, u8* buf, u32 sz)
+static int storeToFile(char *path, u8 __user *buf, u32 sz)
 {
 	int ret =0;
 	mm_segment_t oldfs;
@@ -646,7 +646,7 @@ int rtw_is_file_readable(char *path)
 * @param sz how many bytes to read at most
 * @return the byte we've read
 */
-int rtw_retrive_from_file(char *path, u8* buf, u32 sz)
+int rtw_retrive_from_file(char *path, u8 __user *buf, u32 sz)
 {
 	int ret =retriveFromFile(path, buf, sz);
 	return ret>=0?ret:0;
@@ -659,10 +659,10 @@ int rtw_retrive_from_file(char *path, u8* buf, u32 sz)
 * @param sz how many bytes to write at most
 * @return the byte we've written
 */
-int rtw_store_to_file(char *path, u8* buf, u32 sz)
+int rtw_store_to_file(char *path, u8 __user *buf, u32 sz)
 {
 	int ret =storeToFile(path, buf, sz);
-	return ret>=0?ret:0;
+	return ret >= 0 ? ret : 0;
 }
 
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv)

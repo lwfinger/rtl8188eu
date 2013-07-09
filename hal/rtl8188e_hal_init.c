@@ -261,10 +261,10 @@ static void efuse_read_phymap_from_txpktbuf(
 			lenc[0] = rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L);
 			lenc[1] = rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L+1);
 
-			aaabak = le16_to_cpup((u16*)lenc);
-			lenbak = le16_to_cpu(*((u16*)lenc));
-			aaa = le16_to_cpup((u16*)&lo32);
-			len = le16_to_cpu(*((u16*)&lo32));
+			aaabak = le16_to_cpup((__le16 *)lenc);
+			lenbak = le16_to_cpu(*((__le16 *)lenc));
+			aaa = le16_to_cpup((__le16 *)&lo32);
+			len = le16_to_cpu(*((__le16 *)&lo32));
 
 			limit = (len-2<limit)?len-2:limit;
 
@@ -2850,7 +2850,7 @@ Hal_EfuseParseIDCode88E(
 
 
 	// Checl 0x8129 again for making sure autoload status!!
-	EEPROMId = le16_to_cpu(*((u16*)hwinfo));
+	EEPROMId = le16_to_cpu(*((__le16 *)hwinfo));
 	if (EEPROMId != RTL_EEPROM_ID)
 	{
 		DBG_88E("EEPROM ID(%#x) is invalid!!\n", EEPROMId);

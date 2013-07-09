@@ -189,25 +189,13 @@ struct rx_pkt_attrib	{
 #define RXDESC_SIZE	24
 #define RXDESC_OFFSET RXDESC_SIZE
 
-struct recv_stat
-{
-	unsigned int rxdw0;
-
-	unsigned int rxdw1;
-
-	unsigned int rxdw2;
-
-	unsigned int rxdw3;
-
-	unsigned int rxdw4;
-
-	unsigned int rxdw5;
-
-#ifdef CONFIG_PCI_HCI
-	unsigned int rxdw6;
-
-	unsigned int rxdw7;
-#endif
+struct recv_stat {
+	__le32 rxdw0;
+	__le32 rxdw1;
+	__le32 rxdw2;
+	__le32 rxdw3;
+	__le32 rxdw4;
+	__le32 rxdw5;
 };
 
 #define EOR BIT(30)

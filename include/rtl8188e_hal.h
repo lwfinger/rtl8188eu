@@ -180,10 +180,10 @@ typedef struct _RT_8188E_FIRMWARE_HDR
 	// 8-byte alinment required
 
 	//--- LONG WORD 0 ----
-	u16		Signature;	// 92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut; 92C1: MP A-cut
+	__le16		Signature;	// 92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut; 92C1: MP A-cut
 	u8		Category;	// AP/NIC and USB/PCI
 	u8		Function;	// Reserved for different FW function indcation, for further use when driver needs to download different FW in different conditions
-	u16		Version;		// FW Version
+	__le16		Version;		// FW Version
 	u8		Subversion;	// FW Subversion, default 0x00
 	u16		Rsvd1;
 

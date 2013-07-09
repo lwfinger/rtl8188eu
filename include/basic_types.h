@@ -59,169 +59,132 @@ typedef	__kernel_ssize_t	SSIZE_T;
  *		3. After read integer from IO.
 */
 
-//
-// Byte Swapping routine.
-//
-#define EF1Byte
-#define EF2Byte		le16_to_cpu
-#define EF4Byte	le32_to_cpu
+/* Convert little data endian to host ordering */
+#define EF1BYTE(_val)		\
+	((u8)(_val))
+#define EF2BYTE(_val)		\
+	(le16_to_cpu(_val))
+#define EF4BYTE(_val)		\
+	(le32_to_cpu(_val))
 
-//
-// Read LE format data from memory
-//
-#define ReadEF1Byte(_ptr)		EF1Byte(*((u8 *)(_ptr)))
-#define ReadEF2Byte(_ptr)		EF2Byte(*((u16 *)(_ptr)))
-#define ReadEF4Byte(_ptr)		EF4Byte(*((u32 *)(_ptr)))
+/* Read data from memory */
+#define READEF1BYTE(_ptr)	\
+	EF1BYTE(*((u8 *)(_ptr)))
+/* Read le16 data from memory and convert to host ordering */
+#define READEF2BYTE(_ptr)	\
+	EF2BYTE(*(_ptr))
+#define READEF4BYTE(_ptr)	\
+	EF4BYTE(*(_ptr))
 
-//
-// Write LE data to memory
-//
-#define WriteEF1Byte(_ptr, _val)	(*((u8 *)(_ptr)))=EF1Byte(_val)
-#define WriteEF2Byte(_ptr, _val)	(*((u16 *)(_ptr)))=EF2Byte(_val)
-#define WriteEF4Byte(_ptr, _val)	(*((u32 *)(_ptr)))=EF4Byte(_val)
+/* Write data to memory */
+#define WRITEEF1BYTE(_ptr, _val)	\
+	(*((u8 *)(_ptr))) = EF1BYTE(_val)
+/* Write le data to memory in host ordering */
+#define WRITEEF2BYTE(_ptr, _val)	\
+	(*((u16 *)(_ptr))) = EF2BYTE(_val)
+#define WRITEEF4BYTE(_ptr, _val)	\
+	(*((u32 *)(_ptr))) = EF2BYTE(_val)
 
-//
-//	Example:
-//		BIT_LEN_MASK_32(0) => 0x00000000
-//		BIT_LEN_MASK_32(1) => 0x00000001
-//		BIT_LEN_MASK_32(2) => 0x00000003
-//		BIT_LEN_MASK_32(32) => 0xFFFFFFFF
-//
-#define BIT_LEN_MASK_32(__BitLen) \
-	(0xFFFFFFFF >> (32 - (__BitLen)))
-//
-//	Example:
-//		BIT_OFFSET_LEN_MASK_32(0, 2) => 0x00000003
-//		BIT_OFFSET_LEN_MASK_32(16, 2) => 0x00030000
-//
-#define BIT_OFFSET_LEN_MASK_32(__BitOffset, __BitLen) \
-	(BIT_LEN_MASK_32(__BitLen) << (__BitOffset))
+/* Create a bit mask
+ * Examples:
+ * BIT_LEN_MASK_32(0) => 0x00000000
+ * BIT_LEN_MASK_32(1) => 0x00000001
+ * BIT_LEN_MASK_32(2) => 0x00000003
+ * BIT_LEN_MASK_32(32) => 0xFFFFFFFF
+ */
+#define BIT_LEN_MASK_32(__bitlen)	 \
+	(0xFFFFFFFF >> (32 - (__bitlen)))
+#define BIT_LEN_MASK_16(__bitlen)	 \
+	(0xFFFF >> (16 - (__bitlen)))
+#define BIT_LEN_MASK_8(__bitlen) \
+	(0xFF >> (8 - (__bitlen)))
 
-//
-//	Description:
-//		Return 4-byte value in host byte ordering from
-//		4-byte pointer in litten-endian system.
-//
-#define LE_P4BYTE_TO_HOST_4BYTE(__pStart) \
-	(EF4Byte(*((u32 *)(__pStart))))
+/* Create an offset bit mask
+ * Examples:
+ * BIT_OFFSET_LEN_MASK_32(0, 2) => 0x00000003
+ * BIT_OFFSET_LEN_MASK_32(16, 2) => 0x00030000
+ */
+#define BIT_OFFSET_LEN_MASK_32(__bitoffset, __bitlen) \
+	(BIT_LEN_MASK_32(__bitlen) << (__bitoffset))
+#define BIT_OFFSET_LEN_MASK_16(__bitoffset, __bitlen) \
+	(BIT_LEN_MASK_16(__bitlen) << (__bitoffset))
+#define BIT_OFFSET_LEN_MASK_8(__bitoffset, __bitlen) \
+	(BIT_LEN_MASK_8(__bitlen) << (__bitoffset))
 
-//
-//	Description:
-//		Translate subfield (continuous bits in little-endian) of 4-byte value in litten byte to
-//		4-byte value in host byte ordering.
-//
-#define LE_BITS_TO_4BYTE(__pStart, __BitOffset, __BitLen) \
+/*Description:
+ * Return 4-byte value in host byte ordering from
+ * 4-byte pointer in little-endian system.
+ */
+#define LE_P4BYTE_TO_HOST_4BYTE(__pstart) \
+	(EF4BYTE(*((__le32 *)(__pstart))))
+#define LE_P2BYTE_TO_HOST_2BYTE(__pstart) \
+	(EF2BYTE(*((__le16 *)(__pstart))))
+#define LE_P1BYTE_TO_HOST_1BYTE(__pstart) \
+	(EF1BYTE(*((u8 *)(__pstart))))
+
+/*Description:
+Translate subfield (continuous bits in little-endian) of 4-byte
+value to host byte ordering.*/
+#define LE_BITS_TO_4BYTE(__pstart, __bitoffset, __bitlen) \
 	( \
-		( LE_P4BYTE_TO_HOST_4BYTE(__pStart) >> (__BitOffset) ) \
-		& \
-		BIT_LEN_MASK_32(__BitLen) \
+		(LE_P4BYTE_TO_HOST_4BYTE(__pstart) >> (__bitoffset))  & \
+		BIT_LEN_MASK_32(__bitlen) \
+	)
+#define LE_BITS_TO_2BYTE(__pstart, __bitoffset, __bitlen) \
+	( \
+		(LE_P2BYTE_TO_HOST_2BYTE(__pstart) >> (__bitoffset)) & \
+		BIT_LEN_MASK_16(__bitlen) \
+	)
+#define LE_BITS_TO_1BYTE(__pstart, __bitoffset, __bitlen) \
+	( \
+		(LE_P1BYTE_TO_HOST_1BYTE(__pstart) >> (__bitoffset)) & \
+		BIT_LEN_MASK_8(__bitlen) \
 	)
 
-//
-//	Description:
-//		Mask subfield (continuous bits in little-endian) of 4-byte value in litten byte oredering
-//		and return the result in 4-byte value in host byte ordering.
-//
-#define LE_BITS_CLEARED_TO_4BYTE(__pStart, __BitOffset, __BitLen) \
+/* Description:
+ * Mask subfield (continuous bits in little-endian) of 4-byte value
+ * and return the result in 4-byte value in host byte ordering.
+ */
+#define LE_BITS_CLEARED_TO_4BYTE(__pstart, __bitoffset, __bitlen) \
 	( \
-		LE_P4BYTE_TO_HOST_4BYTE(__pStart) \
-		& \
-		( ~BIT_OFFSET_LEN_MASK_32(__BitOffset, __BitLen) ) \
+		LE_P4BYTE_TO_HOST_4BYTE(__pstart)  & \
+		(~BIT_OFFSET_LEN_MASK_32(__bitoffset, __bitlen)) \
+	)
+#define LE_BITS_CLEARED_TO_2BYTE(__pstart, __bitoffset, __bitlen) \
+	( \
+		LE_P2BYTE_TO_HOST_2BYTE(__pstart) & \
+		(~BIT_OFFSET_LEN_MASK_16(__bitoffset, __bitlen)) \
+	)
+#define LE_BITS_CLEARED_TO_1BYTE(__pstart, __bitoffset, __bitlen) \
+	( \
+		LE_P1BYTE_TO_HOST_1BYTE(__pstart) & \
+		(~BIT_OFFSET_LEN_MASK_8(__bitoffset, __bitlen)) \
 	)
 
-//
-//	Description:
-//		Set subfield of little-endian 4-byte value to specified value.
-//
-#define SET_BITS_TO_LE_4BYTE(__pStart, __BitOffset, __BitLen, __Value) \
-	*((u32 *)(__pStart)) = \
-		EF4Byte( \
-			LE_BITS_CLEARED_TO_4BYTE(__pStart, __BitOffset, __BitLen) \
-			| \
-			( (((u32)__Value) & BIT_LEN_MASK_32(__BitLen)) << (__BitOffset) ) \
-		);
-
-
-#define BIT_LEN_MASK_16(__BitLen) \
-		(0xFFFF >> (16 - (__BitLen)))
-
-#define BIT_OFFSET_LEN_MASK_16(__BitOffset, __BitLen) \
-	(BIT_LEN_MASK_16(__BitLen) << (__BitOffset))
-
-#define LE_P2BYTE_TO_HOST_2BYTE(__pStart) \
-	(EF2Byte(*((u16 *)(__pStart))))
-
-#define LE_BITS_TO_2BYTE(__pStart, __BitOffset, __BitLen) \
+/* Description:
+ * Set subfield of little-endian 4-byte value to specified value.
+ */
+#define SET_BITS_TO_LE_4BYTE(__pstart, __bitoffset, __bitlen, __val) \
+	*((u32 *)(__pstart)) = \
 	( \
-		( LE_P2BYTE_TO_HOST_2BYTE(__pStart) >> (__BitOffset) ) \
-		& \
-		BIT_LEN_MASK_16(__BitLen) \
-	)
-
-#define LE_BITS_CLEARED_TO_2BYTE(__pStart, __BitOffset, __BitLen) \
+		LE_BITS_CLEARED_TO_4BYTE(__pstart, __bitoffset, __bitlen) | \
+		((((u32)__val) & BIT_LEN_MASK_32(__bitlen)) << (__bitoffset)) \
+	);
+#define SET_BITS_TO_LE_2BYTE(__pstart, __bitoffset, __bitlen, __val) \
+	*((u16 *)(__pstart)) = \
 	( \
-		LE_P2BYTE_TO_HOST_2BYTE(__pStart) \
-		& \
-		( ~BIT_OFFSET_LEN_MASK_16(__BitOffset, __BitLen) ) \
-	)
-
-#define SET_BITS_TO_LE_2BYTE(__pStart, __BitOffset, __BitLen, __Value) \
-	*((u16 *)(__pStart)) = \
-		EF2Byte( \
-			LE_BITS_CLEARED_TO_2BYTE(__pStart, __BitOffset, __BitLen) \
-			| \
-			( (((u16)__Value) & BIT_LEN_MASK_16(__BitLen)) << (__BitOffset) ) \
-		);
-
-#define BIT_LEN_MASK_8(__BitLen) \
-		(0xFF >> (8 - (__BitLen)))
-
-#define BIT_OFFSET_LEN_MASK_8(__BitOffset, __BitLen) \
-	(BIT_LEN_MASK_8(__BitLen) << (__BitOffset))
-
-#define LE_P1BYTE_TO_HOST_1BYTE(__pStart) \
-	(EF1Byte(*((u8 *)(__pStart))))
-
-#define LE_BITS_TO_1BYTE(__pStart, __BitOffset, __BitLen) \
+		LE_BITS_CLEARED_TO_2BYTE(__pstart, __bitoffset, __bitlen) | \
+		((((u16)__val) & BIT_LEN_MASK_16(__bitlen)) << (__bitoffset)) \
+	);
+#define SET_BITS_TO_LE_1BYTE(__pstart, __bitoffset, __bitlen, __val) \
+	*((u8 *)(__pstart)) = EF1BYTE \
 	( \
-		( LE_P1BYTE_TO_HOST_1BYTE(__pStart) >> (__BitOffset) ) \
-		& \
-		BIT_LEN_MASK_8(__BitLen) \
-	)
+		LE_BITS_CLEARED_TO_1BYTE(__pstart, __bitoffset, __bitlen) | \
+		((((u8)__val) & BIT_LEN_MASK_8(__bitlen)) << (__bitoffset)) \
+	);
 
-#define LE_BITS_CLEARED_TO_1BYTE(__pStart, __BitOffset, __BitLen) \
-	( \
-		LE_P1BYTE_TO_HOST_1BYTE(__pStart) \
-		& \
-		( ~BIT_OFFSET_LEN_MASK_8(__BitOffset, __BitLen) ) \
-	)
-
-#define SET_BITS_TO_LE_1BYTE(__pStart, __BitOffset, __BitLen, __Value) \
-	*((u8 *)(__pStart)) = \
-		EF1Byte( \
-			LE_BITS_CLEARED_TO_1BYTE(__pStart, __BitOffset, __BitLen) \
-			| \
-			( (((u8)__Value) & BIT_LEN_MASK_8(__BitLen)) << (__BitOffset) ) \
-		);
-
-//pclint
-#define LE_BITS_CLEARED_TO_1BYTE_8BIT(__pStart, __BitOffset, __BitLen) \
-	( \
-		LE_P1BYTE_TO_HOST_1BYTE(__pStart) \
-	)
-
-//pclint
-#define SET_BITS_TO_LE_1BYTE_8BIT(__pStart, __BitOffset, __BitLen, __Value) \
-{ \
-	*((pu1Byte)(__pStart)) = \
-		EF1Byte( \
-			LE_BITS_CLEARED_TO_1BYTE_8BIT(__pStart, __BitOffset, __BitLen) \
-			| \
-			((u1Byte)__Value) \
-		); \
-}
-
-// Get the N-bytes aligment offset from the current length
-#define N_BYTE_ALIGMENT(__Value, __Aligment) ((__Aligment == 1) ? (__Value) : (((__Value + __Aligment - 1) / __Aligment) * __Aligment))
+/*  Get the N-bytes aligment offset from the current length */
+#define	N_BYTE_ALIGMENT(__value, __aligment) ((__aligment == 1) ? \
+	(__value) : (((__value + __aligment - 1) / __aligment) * __aligment))
 
 #endif //__BASIC_TYPES_H__
