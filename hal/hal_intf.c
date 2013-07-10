@@ -68,7 +68,7 @@ void	rtw_hal_dm_init(_adapter *padapter)
 }
 void rtw_hal_dm_deinit(_adapter *padapter)
 {
-	// cancel dm  timer
+	/*  cancel dm  timer */
 	if (padapter->HalFunc.dm_deinit)
 		padapter->HalFunc.dm_deinit(padapter);
 }
@@ -103,7 +103,7 @@ uint	 rtw_hal_init(_adapter *padapter)
 		return status;
 	}
 
-	// before init mac0, driver must init mac1 first to avoid usb rx error.
+	/*  before init mac0, driver must init mac1 first to avoid usb rx error. */
 	if ((padapter->pbuddy_adapter != NULL) && (padapter->DualMacConcurrent == true)
 		&& (padapter->adapter_type == PRIMARY_ADAPTER))
 	{
@@ -306,7 +306,7 @@ void rtw_hal_update_ra_mask(_adapter *padapter, u32 mac_id, u8 rssi_level)
 			psta = pstapriv->sta_aid[(mac_id-1) - 1];
 #endif
 		if (psta)
-			add_RATid(padapter, psta, 0);//todo: based on rssi_level
+			add_RATid(padapter, psta, 0);/* todo: based on rssi_level */
 	}
 	else
 	{
@@ -423,7 +423,7 @@ s32	rtw_hal_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 		return padapter->HalFunc.hostap_mgnt_xmit_entry(padapter, pkt);
 	return _FAIL;
 }
-#endif //CONFIG_HOSTAPD_MLME
+#endif /* CONFIG_HOSTAPD_MLME */
 
 #ifdef DBG_CONFIG_ERROR_DETECT
 void	rtw_hal_sreset_init(_adapter *padapter)
@@ -465,7 +465,7 @@ u8   rtw_hal_sreset_get_wifi_status(_adapter *padapter)
 	return status;
 }
 
-#endif	//DBG_CONFIG_ERROR_DETECT
+#endif	/* DBG_CONFIG_ERROR_DETECT */
 
 #ifdef CONFIG_IOL
 int rtw_hal_iol_cmd(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)

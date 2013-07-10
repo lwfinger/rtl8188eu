@@ -54,14 +54,10 @@ static void _restore_security_setting(_adapter *padapter)
 		(padapter->securitypriv.dot11PrivacyAlgrthm == _AES_))
 	{
 		psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
-		if (psta == NULL) {
-			//DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail\n"));
-		}
-		else
-		{
-			//pairwise key
+		if (psta) {
+			/* pairwise key */
 			rtw_setstakey_cmd(padapter, (unsigned char *)psta, true);
-			//group key
+			/* group key */
 			rtw_set_key(padapter,&padapter->securitypriv,padapter->securitypriv.dot118021XGrpKeyid, 0);
 		}
 	}
@@ -76,36 +72,34 @@ static void _restore_network_status(_adapter *padapter)
 	WLAN_BSSID_EX	*pnetwork = (WLAN_BSSID_EX*)(&(pmlmeinfo->network));
 	unsigned short	caps;
 	u8	join_type;
-#if 1
 
-	//=======================================================
-	// reset related register of Beacon control
+	/*  */
+	/*  reset related register of Beacon control */
 
-	//set MSR to nolink
+	/* set MSR to nolink */
 	Set_MSR(padapter, _HW_STATE_NOLINK_);
-	// reject all data frame
+	/*  reject all data frame */
 	rtw_write16(padapter, REG_RXFLTMAP2,0x00);
-	//reset TSF
+	/* reset TSF */
 	rtw_write8(padapter, REG_DUAL_TSF_RST, (BIT(0)|BIT(1)));
 
-	// disable update TSF
+	/*  disable update TSF */
 	SetBcnCtrlReg(padapter, BIT(4), 0);
 
-	//=======================================================
+	/*  */
 	rtw_joinbss_reset(padapter);
 	set_channel_bwmode(padapter, pmlmeext->cur_channel, pmlmeext->cur_ch_offset, pmlmeext->cur_bwmode);
-	//pmlmeinfo->assoc_AP_vendor = maxAP;
 
 	if (padapter->registrypriv.wifi_spec) {
-		// for WiFi test, follow WMM test plan spec
+		/*  for WiFi test, follow WMM test plan spec */
 		rtw_write32(padapter, REG_EDCA_VO_PARAM, 0x002F431C);
 		rtw_write32(padapter, REG_EDCA_VI_PARAM, 0x005E541C);
 		rtw_write32(padapter, REG_EDCA_BE_PARAM, 0x0000A525);
 		rtw_write32(padapter, REG_EDCA_BK_PARAM, 0x0000A549);
 #ifdef CONFIG_80211N_HT
-		// for WiFi test, mixed mode with intel STA under bg mode throughput issue
+		/*  for WiFi test, mixed mode with intel STA under bg mode throughput issue */
 		if (padapter->mlmepriv.htpriv.ht_option == 0)
-#endif //CONFIG_80211N_HT
+#endif /* CONFIG_80211N_HT */
 		rtw_write32(padapter, REG_EDCA_BE_PARAM, 0x00004320);
 
 	} else {
@@ -115,10 +109,6 @@ static void _restore_network_status(_adapter *padapter)
 		rtw_write32(padapter, REG_EDCA_BK_PARAM, 0x0000A444);
 	}
 
-	//disable dynamic functions, such as high power, DIG
-	//Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false);
-#endif
-
 	rtw_hal_set_hwreg(padapter, HW_VAR_BSSID, pmlmeinfo->network.MacAddress);
 	join_type = 0;
 	rtw_hal_set_hwreg(padapter, HW_VAR_MLME_JOIN, (u8 *)(&join_type));
@@ -126,7 +116,7 @@ static void _restore_network_status(_adapter *padapter)
 	Set_MSR(padapter, (pmlmeinfo->state & 0x3));
 
 	mlmeext_joinbss_event_callback(padapter, 1);
-	//restore Sequence No.
+	/* restore Sequence No. */
 	rtw_write8(padapter,0x4dc,padapter->xmitpriv.nqos_ssn);
 }
 
@@ -194,9 +184,7 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 		rtl8188e_silentreset_for_specific_platform(padapter);
 	}
 #ifdef CONFIG_USB_HCI
-	//total xmit irp = 4
-	//DBG_88E("==>%s free_xmitbuf_cnt(%d),txirp_cnt(%d)\n",__func__,pxmitpriv->free_xmitbuf_cnt,pxmitpriv->txirp_cnt);
-	//if (pxmitpriv->txirp_cnt == NR_XMITBUFF+1)
+	/* total xmit irp = 4 */
 	current_time = rtw_get_current_time();
 	if (0==pxmitpriv->free_xmitbuf_cnt)
 	{
@@ -209,14 +197,13 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 			else{
 				diff_time = jiffies_to_msecs(current_time - psrtpriv->last_tx_complete_time);
 				if (diff_time > 4000){
-					//padapter->Wifi_Error_Status = WIFI_TX_HANG;
 					DBG_88E("%s tx hang\n", __func__);
 					rtl8188e_silentreset_for_specific_platform(padapter);
 				}
 			}
 		}
 	}
-#endif //CONFIG_USB_HCI
+#endif /* CONFIG_USB_HCI */
 }
 
 void rtl8188e_sreset_linked_status_check(_adapter *padapter)

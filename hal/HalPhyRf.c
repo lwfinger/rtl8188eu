@@ -35,11 +35,9 @@ phy_PathAStandBy(
 	PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x80800000);
 }
 
-//1 7.	IQK
-//#define MAX_TOLERANCE		5
-//#define IQK_DELAY_TIME		1		//ms
+/* 1 7.	IQK */
 
-u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+u1Byte			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_PathA_IQK_8192C(
 		PADAPTER	pAdapter,
 		bool		configPathB
@@ -52,7 +50,7 @@ phy_PathA_IQK_8192C(
 
 	RTPRINT(FINIT, INIT_IQK, ("Path A IQK!\n"));
 
-	//path-A IQK setting
+	/* path-A IQK setting */
 	RTPRINT(FINIT, INIT_IQK, ("Path-A IQK setting!\n"));
 	if (pAdapter->interfaceIndex == 0)
 	{
@@ -70,7 +68,7 @@ phy_PathA_IQK_8192C(
 	PHY_SetBBReg(pAdapter, rRx_IQK_PI_A, bMaskDWord, configPathB ? 0x28160202 :
 		IS_81xxC_VENDOR_UMC_B_CUT(pHalData->VersionID)?0x28160202:0x28160502);
 
-	//path-B IQK setting
+	/* path-B IQK setting */
 	if (configPathB)
 	{
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_B, bMaskDWord, 0x10008c22);
@@ -82,23 +80,23 @@ phy_PathA_IQK_8192C(
 			PHY_SetBBReg(pAdapter, rRx_IQK_PI_B, bMaskDWord, 0x28160202);
 	}
 
-	//LO calibration setting
+	/* LO calibration setting */
 	RTPRINT(FINIT, INIT_IQK, ("LO calibration setting!\n"));
 	if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		PHY_SetBBReg(pAdapter, rIQK_AGC_Rsp, bMaskDWord, 0x00462911);
 	else
 		PHY_SetBBReg(pAdapter, rIQK_AGC_Rsp, bMaskDWord, 0x001028d1);
 
-	//One shot, path A LOK & IQK
+	/* One shot, path A LOK & IQK */
 	RTPRINT(FINIT, INIT_IQK, ("One shot, path A LOK & IQK!\n"));
 	PHY_SetBBReg(pAdapter, rIQK_AGC_Pts, bMaskDWord, 0xf9000000);
 	PHY_SetBBReg(pAdapter, rIQK_AGC_Pts, bMaskDWord, 0xf8000000);
 
-	// delay x ms
+	/*  delay x ms */
 	RTPRINT(FINIT, INIT_IQK, ("Delay %d ms for One shot, path A LOK & IQK.\n", IQK_DELAY_TIME));
 	PlatformStallExecution(IQK_DELAY_TIME*1000);
 
-	// Check failed
+	/*  Check failed */
 	regEAC = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 	RTPRINT(FINIT, INIT_IQK, ("0xeac = 0x%x\n", regEAC));
 	regE94 = PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_A, bMaskDWord);
@@ -112,10 +110,10 @@ phy_PathA_IQK_8192C(
 		(((regE94 & 0x03FF0000)>>16) != 0x142) &&
 		(((regE9C & 0x03FF0000)>>16) != 0x42) )
 		result |= 0x01;
-	else							//if Tx not OK, ignore Rx
+	else							/* if Tx not OK, ignore Rx */
 		return result;
 
-	if (!(regEAC & BIT27) &&		//if Tx is OK, check whether Rx is OK
+	if (!(regEAC & BIT27) &&		/* if Tx is OK, check whether Rx is OK */
 		(((regEA4 & 0x03FF0000)>>16) != 0x132) &&
 		(((regEAC & 0x03FF0000)>>16) != 0x36))
 		result |= 0x02;
@@ -127,7 +125,7 @@ phy_PathA_IQK_8192C(
 
 }
 
-u1Byte				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+u1Byte				/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_PathB_IQK_8192C(
 		PADAPTER	pAdapter
 	)
@@ -136,16 +134,16 @@ phy_PathB_IQK_8192C(
 	u1Byte	result = 0x00;
 	RTPRINT(FINIT, INIT_IQK, ("Path B IQK!\n"));
 
-	//One shot, path B LOK & IQK
+	/* One shot, path B LOK & IQK */
 	RTPRINT(FINIT, INIT_IQK, ("One shot, path A LOK & IQK!\n"));
 	PHY_SetBBReg(pAdapter, rIQK_AGC_Cont, bMaskDWord, 0x00000002);
 	PHY_SetBBReg(pAdapter, rIQK_AGC_Cont, bMaskDWord, 0x00000000);
 
-	// delay x ms
+	/*  delay x ms */
 	RTPRINT(FINIT, INIT_IQK, ("Delay %d ms for One shot, path B LOK & IQK.\n", IQK_DELAY_TIME));
 	PlatformStallExecution(IQK_DELAY_TIME*1000);
 
-	// Check failed
+	/*  Check failed */
 	regEAC = PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord);
 	RTPRINT(FINIT, INIT_IQK, ("0xeac = 0x%x\n", regEAC));
 	regEB4 = PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord);
@@ -213,7 +211,7 @@ phy_PathAFillIQKMatrix(
 		if ((Y & 0x00000200) != 0)
 			Y = Y | 0xFFFFFC00;
 
-		//path B IQK result + 3
+		/* path B IQK result + 3 */
 		if (pAdapter->interfaceIndex == 1 && pHalData->CurrentBandType92D == BAND_ON_5G)
 			Y += 3;
 
@@ -249,7 +247,7 @@ phy_PathBFillIQKMatrix(
 	bool	bIQKOK,
 		s4Byte		result[][8],
 		u1Byte		final_candidate,
-		bool		bTxOnly			//do Tx only
+		bool		bTxOnly			/* do Tx only */
 	)
 {
 	u4Byte	Oldval_1, X, TX1_A, reg;
@@ -280,7 +278,7 @@ phy_PathBFillIQKMatrix(
 		if ((Y & 0x00000200) != 0)
 			Y = Y | 0xFFFFFC00;
 		if (pHalData->CurrentBandType92D == BAND_ON_5G)
-			Y += 3;		//temp modify for preformance
+			Y += 3;		/* temp modify for preformance */
 		TX1_C = (Y * Oldval_1) >> 8;
 		RTPRINT(FINIT, INIT_IQK, ("Y = 0x%x, TX1_C = 0x%x\n", Y, TX1_C));
 		PHY_SetBBReg(pAdapter, rOFDM0_XDTxAFE, 0xF0000000, ((TX1_C&0x3C0)>>6));
@@ -315,7 +313,7 @@ phy_SimularityCompare_92C(
 {
 	u4Byte		i, j, diff, SimularityBitMap, bound = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	u1Byte		final_candidate[2] = {0xFF, 0xFF};	//for path A and path B
+	u1Byte		final_candidate[2] = {0xFF, 0xFF};	/* for path A and path B */
 	bool		bResult = true, is2T = IS_92C_SERIAL( pHalData->VersionID);
 
 	if (is2T)
@@ -357,13 +355,13 @@ phy_SimularityCompare_92C(
 		}
 		return bResult;
 	}
-	else if (!(SimularityBitMap & 0x0F))			//path A OK
+	else if (!(SimularityBitMap & 0x0F))			/* path A OK */
 	{
 		for (i = 0; i < 4; i++)
 			result[3][i] = result[c1][i];
 		return false;
 	}
-	else if (!(SimularityBitMap & 0xF0) && is2T)	//path B OK
+	else if (!(SimularityBitMap & 0xF0) && is2T)	/* path B OK */
 	{
 		for (i = 4; i < 8; i++)
 			result[3][i] = result[c1][i];
@@ -416,7 +414,7 @@ phy_IQCalibrate_8192C(
 						REG_TXPAUSE,		REG_BCN_CTRL,
 						REG_BCN_CTRL_1,	REG_GPIO_MUXCFG};
 
-	//since 92C & 92D have the different define in IQK_BB_REG
+	/* since 92C & 92D have the different define in IQK_BB_REG */
 	u4Byte	IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 							rOFDM0_TRxPathEnable,		rOFDM0_TRMuxPar,
 							rFPGA0_XCD_RFInterfaceSW,	rConfig_AntA,	rConfig_AntB,
@@ -424,7 +422,7 @@ phy_IQCalibrate_8192C(
 							rFPGA0_XB_RFInterfaceOE,	rFPGA0_RFMOD
 							};
 
-	u4Byte	IQK_BB_REG_92D[IQK_BB_REG_NUM_92D] = {	//for normal
+	u4Byte	IQK_BB_REG_92D[IQK_BB_REG_NUM_92D] = {	/* for normal */
 							rFPGA0_XAB_RFInterfaceSW,	rFPGA0_XA_RFInterfaceOE,
 							rFPGA0_XB_RFInterfaceOE,	rOFDM0_TRMuxPar,
 							rFPGA0_XCD_RFInterfaceSW,	rOFDM0_TRxPathEnable,
@@ -440,12 +438,12 @@ phy_IQCalibrate_8192C(
 		retryCount = 2;
 
 
-	//Neil Chen--2011--05--19--
-       //3 Path Div
+	/* Neil Chen--2011--05--19-- */
+       /* 3 Path Div */
 	u1Byte                 rfPathSwitch=0x0;
 
-	// Note: IQ calibration must be performed after loading
-	//		PHY_REG.txt , and radio_a, radio_b.txt
+	/*  Note: IQ calibration must be performed after loading */
+	/* 		PHY_REG.txt , and radio_a, radio_b.txt */
 
 	u4Byte bbvalue;
 
@@ -456,7 +454,7 @@ phy_IQCalibrate_8192C(
 
 			RTPRINT(FINIT, INIT_IQK, ("IQ Calibration for %s\n", (is2T ? "2T2R" : "1T1R")));
 
-		// Save ADDA parameters, turn Path A ADDA on
+		/*  Save ADDA parameters, turn Path A ADDA on */
 		phy_SaveADDARegisters(pAdapter, ADDA_REG, pHalData->ADDA_backup, IQK_ADDA_REG_NUM);
 		phy_SaveMACRegisters(pAdapter, IQK_MAC_REG, pHalData->IQK_MAC_backup);
 		if (IS_HARDWARE_TYPE_8192D(pAdapter))
@@ -470,24 +468,24 @@ phy_IQCalibrate_8192C(
 
 
 	if (IS_HARDWARE_TYPE_8192D(pAdapter)){
-		//==============================
-		//3 Path Diversity
-		////Neil Chen--2011--05--20
+		/*  */
+		/* 3 Path Diversity */
+		/* Neil Chen--2011--05--20 */
 	       rfPathSwitch =(u1Byte) (PHY_QueryBBReg(pAdapter, 0xB30, bMaskDWord)>>27);
-		//rfPathSwitch = (u1Byte) DataB30;
+		/* rfPathSwitch = (u1Byte) DataB30; */
 		rfPathSwitch = rfPathSwitch&(0x01);
 
-		if (rfPathSwitch)   // Path Div On
+		if (rfPathSwitch)   /*  Path Div On */
 		{
 		    phy_PathADDAOn(pAdapter, ADDA_REG, true, is2T);
-		    //DbgPrint("=STEP= change ADDA Path from B to A Path\n");
+		    /* DbgPrint("=STEP= change ADDA Path from B to A Path\n"); */
 		}
 		else
 		{
 		    phy_PathADDAOn(pAdapter, ADDA_REG, false, is2T);
 		}
-		//3 end
-		//=====================================
+		/* 3 end */
+		/*  */
 
 		PHY_SetBBReg(pAdapter, rPdp_AntA, bMaskDWord, 0x01017038);
 	}
@@ -498,7 +496,7 @@ phy_IQCalibrate_8192C(
 	}
 
 	if (!pHalData->bRfPiEnable){
-		// Switch BB to PI mode to do IQ Calibration.
+		/*  Switch BB to PI mode to do IQ Calibration. */
 		phy_PIModeSwitch(pAdapter, true);
 	}
 
@@ -522,7 +520,7 @@ phy_IQCalibrate_8192C(
 		PHY_SetBBReg(pAdapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x00010000);
 	}
 
-	//MAC settings
+	/* MAC settings */
 	phy_MACSettingCalibration(pAdapter, IQK_MAC_REG, pHalData->IQK_MAC_backup);
 
 	if (IS_HARDWARE_TYPE_8192D(pAdapter))
@@ -536,7 +534,7 @@ phy_IQCalibrate_8192C(
 	}
 	else
 	{
-		//Page B init
+		/* Page B init */
 		PHY_SetBBReg(pAdapter, rConfig_AntA, bMaskDWord, 0x00080000);
 
 		if (is2T)
@@ -544,7 +542,7 @@ phy_IQCalibrate_8192C(
 			PHY_SetBBReg(pAdapter, rConfig_AntB, bMaskDWord, 0x00080000);
 		}
 	}
-	// IQ calibration setting
+	/*  IQ calibration setting */
 	RTPRINT(FINIT, INIT_IQK, ("IQK setting!\n"));
 	PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x80800000);
 	PHY_SetBBReg(pAdapter, rTx_IQK, bMaskDWord, 0x01007c00);
@@ -560,7 +558,7 @@ phy_IQCalibrate_8192C(
 				result[t][3] = (PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_A_2, bMaskDWord)&0x3FF0000)>>16;
 			break;
 		}
-		else if (i == (retryCount-1) && PathAOK == 0x01)	//Tx IQK OK
+		else if (i == (retryCount-1) && PathAOK == 0x01)	/* Tx IQK OK */
 		{
 			RTPRINT(FINIT, INIT_IQK, ("Path A IQK Only  Tx Success!!\n"));
 
@@ -576,7 +574,7 @@ phy_IQCalibrate_8192C(
 	if (is2T){
 		phy_PathAStandBy(pAdapter);
 
-		// Turn Path B ADDA on
+		/*  Turn Path B ADDA on */
 		phy_PathADDAOn(pAdapter, ADDA_REG, false, is2T);
 
 		for (i = 0 ; i < retryCount ; i++){
@@ -589,7 +587,7 @@ phy_IQCalibrate_8192C(
 				result[t][7] = (PHY_QueryBBReg(pAdapter, rRx_Power_After_IQK_B_2, bMaskDWord)&0x3FF0000)>>16;
 				break;
 			}
-			else if (i == (retryCount - 1) && PathBOK == 0x01)	//Tx IQK OK
+			else if (i == (retryCount - 1) && PathBOK == 0x01)	/* Tx IQK OK */
 			{
 				RTPRINT(FINIT, INIT_IQK, ("Path B Only Tx IQK Success!!\n"));
 				result[t][4] = (PHY_QueryBBReg(pAdapter, rTx_Power_Before_IQK_B, bMaskDWord)&0x3FF0000)>>16;
@@ -602,24 +600,24 @@ phy_IQCalibrate_8192C(
 		}
 	}
 
-	//Back to BB mode, load original value
+	/* Back to BB mode, load original value */
 	RTPRINT(FINIT, INIT_IQK, ("IQK:Back to BB mode, load original value!\n"));
 	PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0);
 
 	if (t!=0)
 	{
 		if (!pHalData->bRfPiEnable){
-			// Switch back BB to SI mode after finish IQ Calibration.
+			/*  Switch back BB to SI mode after finish IQ Calibration. */
 			phy_PIModeSwitch(pAdapter, false);
 		}
 
-		// Reload ADDA power saving parameters
+		/*  Reload ADDA power saving parameters */
 		phy_ReloadADDARegisters(pAdapter, ADDA_REG, pHalData->ADDA_backup, IQK_ADDA_REG_NUM);
 
-		// Reload MAC parameters
+		/*  Reload MAC parameters */
 		phy_ReloadMACRegisters(pAdapter, IQK_MAC_REG, pHalData->IQK_MAC_backup);
 
-		// Reload BB parameters
+		/*  Reload BB parameters */
 		if (IS_HARDWARE_TYPE_8192D(pAdapter))
 		{
 			if (is2T)
@@ -632,13 +630,13 @@ phy_IQCalibrate_8192C(
 
 		if (!IS_HARDWARE_TYPE_8192D(pAdapter))
 		{
-			// Restore RX initial gain
+			/*  Restore RX initial gain */
 			PHY_SetBBReg(pAdapter, rFPGA0_XA_LSSIParameter, bMaskDWord, 0x00032ed3);
 			if (is2T){
 				PHY_SetBBReg(pAdapter, rFPGA0_XB_LSSIParameter, bMaskDWord, 0x00032ed3);
 			}
 		}
-		//load 0xe30 IQC default value
+		/* load 0xe30 IQC default value */
 		PHY_SetBBReg(pAdapter, rTx_IQK_Tone_A, bMaskDWord, 0x01008c00);
 		PHY_SetBBReg(pAdapter, rRx_IQK_Tone_A, bMaskDWord, 0x01008c00);
 
@@ -656,56 +654,55 @@ phy_LCCalibrate92C(
 {
 	u1Byte	tmpReg;
 	u4Byte	RF_Amode=0, RF_Bmode=0, LC_Cal;
-//	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
-	//Check continuous TX and Packet TX
+	/* Check continuous TX and Packet TX */
 	tmpReg = PlatformEFIORead1Byte(pAdapter, 0xd03);
 
-	if ((tmpReg&0x70) != 0)			//Deal with contisuous TX case
-		PlatformEFIOWrite1Byte(pAdapter, 0xd03, tmpReg&0x8F);	//disable all continuous TX
-	else							// Deal with Packet TX case
-		PlatformEFIOWrite1Byte(pAdapter, REG_TXPAUSE, 0xFF);			// block all queues
+	if ((tmpReg&0x70) != 0)			/* Deal with contisuous TX case */
+		PlatformEFIOWrite1Byte(pAdapter, 0xd03, tmpReg&0x8F);	/* disable all continuous TX */
+	else							/*  Deal with Packet TX case */
+		PlatformEFIOWrite1Byte(pAdapter, REG_TXPAUSE, 0xFF);			/*  block all queues */
 
 	if ((tmpReg&0x70) != 0)
 	{
-		//1. Read original RF mode
-		//Path-A
+		/* 1. Read original RF mode */
+		/* Path-A */
 		RF_Amode = PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_AC, bMask12Bits);
 
-		//Path-B
+		/* Path-B */
 		if (is2T)
 			RF_Bmode = PHY_QueryRFReg(pAdapter, RF_PATH_B, RF_AC, bMask12Bits);
 
-		//2. Set RF mode = standby mode
-		//Path-A
+		/* 2. Set RF mode = standby mode */
+		/* Path-A */
 		PHY_SetRFReg(pAdapter, RF_PATH_A, RF_AC, bMask12Bits, (RF_Amode&0x8FFFF)|0x10000);
 
-		//Path-B
+		/* Path-B */
 		if (is2T)
 			PHY_SetRFReg(pAdapter, RF_PATH_B, RF_AC, bMask12Bits, (RF_Bmode&0x8FFFF)|0x10000);
 	}
 
-	//3. Read RF reg18
+	/* 3. Read RF reg18 */
 	LC_Cal = PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_CHNLBW, bMask12Bits);
 
-	//4. Set LC calibration begin	bit15
+	/* 4. Set LC calibration begin	bit15 */
 	PHY_SetRFReg(pAdapter, RF_PATH_A, RF_CHNLBW, bMask12Bits, LC_Cal|0x08000);
 
 	delay_ms(100);
 
 
-	//Restore original situation
-	if ((tmpReg&0x70) != 0)	//Deal with contisuous TX case
+	/* Restore original situation */
+	if ((tmpReg&0x70) != 0)	/* Deal with contisuous TX case */
 	{
-		//Path-A
+		/* Path-A */
 		PlatformEFIOWrite1Byte(pAdapter, 0xd03, tmpReg);
 		PHY_SetRFReg(pAdapter, RF_PATH_A, RF_AC, bMask12Bits, RF_Amode);
 
-		//Path-B
+		/* Path-B */
 		if (is2T)
 			PHY_SetRFReg(pAdapter, RF_PATH_B, RF_AC, bMask12Bits, RF_Bmode);
 	}
-	else // Deal with Packet TX case
+	else /*  Deal with Packet TX case */
 	{
 		PlatformEFIOWrite1Byte(pAdapter, REG_TXPAUSE, 0x00);
 	}
@@ -734,7 +731,7 @@ phy_LCCalibrate(
 
 
 
-//Analog Pre-distortion calibration
+/* Analog Pre-distortion calibration */
 #define		APK_BB_REG_NUM	8
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
@@ -786,7 +783,7 @@ phy_APCalibrate_8192C(
 					};
 
 	u4Byte			APK_normal_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
-					{0x0852c, 0x0a52c, 0x3a52c, 0x5a52c, 0x5a52c},	//path settings equal to path b settings
+					{0x0852c, 0x0a52c, 0x3a52c, 0x5a52c, 0x5a52c},	/* path settings equal to path b settings */
 					{0x0852c, 0x0a52c, 0x5a52c, 0x5a52c, 0x5a52c}
 					};
 
@@ -796,11 +793,11 @@ phy_APCalibrate_8192C(
 					};
 
 	u4Byte			APK_normal_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
-					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a},	//path settings equal to path b settings
+					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a},	/* path settings equal to path b settings */
 					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a}
 					};
 	u4Byte			AFE_on_off[PATH_NUM] = {
-					0x04db25a4, 0x0b1b25a4};	//path A on path B off / path A off path B on
+					0x04db25a4, 0x0b1b25a4};	/* path A on path B off / path A off path B on */
 
 	u4Byte			APK_offset[PATH_NUM] = {
 					rConfig_AntA, rConfig_AntB};
@@ -835,8 +832,8 @@ phy_APCalibrate_8192C(
 					0x00050006
 					};
 
-	u4Byte			APK_result[PATH_NUM][APK_BB_REG_NUM];	//val_1_1a, val_1_2a, val_2a, val_3a, val_4a
-//	u4Byte			AP_curve[PATH_NUM][APK_CURVE_REG_NUM];
+	u4Byte			APK_result[PATH_NUM][APK_BB_REG_NUM];	/* val_1_1a, val_1_2a, val_2a, val_3a, val_4a */
+/* 	u4Byte			AP_curve[PATH_NUM][APK_CURVE_REG_NUM]; */
 
 	s4Byte			BB_offset, delta_V, delta_offset;
 
@@ -855,12 +852,12 @@ if (pAdapter->registrypriv.mp_mode == 1)
 	if (!is2T)
 		pathbound = 1;
 
-	//2 FOR NORMAL CHIP SETTINGS
+	/* 2 FOR NORMAL CHIP SETTINGS */
 
-// Temporarily do not allow normal driver to do the following settings because these offset
-// and value will cause RF internal PA to be unpredictably disabled by HW, such that RF Tx signal
-// will disappear after disable/enable card many times on 88CU. RF SD and DD have not find the
-// root cause, so we remove these actions temporarily. Added by tynli and SD3 Allen. 2010.05.31.
+/*  Temporarily do not allow normal driver to do the following settings because these offset */
+/*  and value will cause RF internal PA to be unpredictably disabled by HW, such that RF Tx signal */
+/*  will disappear after disable/enable card many times on 88CU. RF SD and DD have not find the */
+/*  root cause, so we remove these actions temporarily. Added by tynli and SD3 Allen. 2010.05.31. */
 #if MP_DRIVER != 1
 	return;
 #endif
@@ -868,7 +865,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 	if (pAdapter->registrypriv.mp_mode != 1)
 		return;
 
-	//settings adjust for normal chip
+	/* settings adjust for normal chip */
 	for (index = 0; index < PATH_NUM; index ++)
 	{
 		APK_offset[index] = APK_normal_offset[index];
@@ -888,18 +885,18 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 	apkbound = 6;
 
-	//save BB default value
+	/* save BB default value */
 	for (index = 0; index < APK_BB_REG_NUM ; index++)
 	{
-		if (index == 0)		//skip
+		if (index == 0)		/* skip */
 			continue;
 		BB_backup[index] = PHY_QueryBBReg(pAdapter, BB_REG[index], bMaskDWord);
 	}
 
-	//save MAC default value
+	/* save MAC default value */
 	phy_SaveMACRegisters(pAdapter, MAC_REG, MAC_backup);
 
-	//save AFE default value
+	/* save AFE default value */
 	phy_SaveADDARegisters(pAdapter, AFE_REG, AFE_backup, IQK_ADDA_REG_NUM);
 
 	for (path = 0; path < pathbound; path++)
@@ -908,9 +905,9 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 		if (path == RF_PATH_A)
 		{
-			//path A APK
-			//load APK setting
-			//path-A
+			/* path A APK */
+			/* load APK setting */
+			/* path-A */
 			offset = rPdp_AntA;
 			for (index = 0; index < 11; index ++)
 			{
@@ -931,10 +928,10 @@ if (pAdapter->registrypriv.mp_mode == 1)
 				offset += 0x04;
 			}
 
-			//page-B1
+			/* page-B1 */
 			PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x40000000);
 
-			//path A
+			/* path A */
 			offset = rPdp_AntA;
 			for (index = 0; index < 16; index++)
 			{
@@ -947,9 +944,9 @@ if (pAdapter->registrypriv.mp_mode == 1)
 		}
 		else if (path == RF_PATH_B)
 		{
-			//path B APK
-			//load APK setting
-			//path-B
+			/* path B APK */
+			/* load APK setting */
+			/* path-B */
 			offset = rPdp_AntB;
 			for (index = 0; index < 10; index ++)
 			{
@@ -964,7 +961,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 			offset = rConfig_AntA;
 			index = 11;
-			for (; index < 13; index ++) //offset 0xb68, 0xb6c
+			for (; index < 13; index ++) /* offset 0xb68, 0xb6c */
 			{
 				PHY_SetBBReg(pAdapter, offset, bMaskDWord, APK_normal_setting_value_1[index]);
 				RTPRINT(FINIT, INIT_IQK, ("phy_APCalibrate_8192C() offset 0x%x value 0x%x\n", offset, PHY_QueryBBReg(pAdapter, offset, bMaskDWord)));
@@ -972,10 +969,10 @@ if (pAdapter->registrypriv.mp_mode == 1)
 				offset += 0x04;
 			}
 
-			//page-B1
+			/* page-B1 */
 			PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x40000000);
 
-			//path B
+			/* path B */
 			offset = 0xb60;
 			for (index = 0; index < 16; index++)
 			{
@@ -987,21 +984,21 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			PHY_SetBBReg(pAdapter, rFPGA0_IQK, bMaskDWord, 0x00000000);
 		}
 
-		//save RF default value
+		/* save RF default value */
 		regD[path] = PHY_QueryRFReg(pAdapter, path, RF_TXBIAS_A, bRFRegOffsetMask);
 
-		//Path A AFE all on, path B AFE All off or vise versa
+		/* Path A AFE all on, path B AFE All off or vise versa */
 		for (index = 0; index < IQK_ADDA_REG_NUM ; index++)
 			PHY_SetBBReg(pAdapter, AFE_REG[index], bMaskDWord, AFE_on_off[path]);
 		RTPRINT(FINIT, INIT_IQK, ("phy_APCalibrate_8192C() offset 0xe70 %x\n", PHY_QueryBBReg(pAdapter, rRx_Wait_CCA, bMaskDWord)));
 
-		//BB to AP mode
+		/* BB to AP mode */
 		if (path == 0)
 		{
 			for (index = 0; index < APK_BB_REG_NUM ; index++)
 			{
 
-				if (index == 0)		//skip
+				if (index == 0)		/* skip */
 					continue;
 				else if (index < 5)
 				PHY_SetBBReg(pAdapter, BB_REG[index], bMaskDWord, BB_AP_MODE[index]);
@@ -1014,7 +1011,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			PHY_SetBBReg(pAdapter, rTx_IQK_Tone_A, bMaskDWord, 0x01008c00);
 			PHY_SetBBReg(pAdapter, rRx_IQK_Tone_A, bMaskDWord, 0x01008c00);
 		}
-		else		//path B
+		else		/* path B */
 		{
 			PHY_SetBBReg(pAdapter, rTx_IQK_Tone_B, bMaskDWord, 0x01008c00);
 			PHY_SetBBReg(pAdapter, rRx_IQK_Tone_B, bMaskDWord, 0x01008c00);
@@ -1023,14 +1020,14 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 		RTPRINT(FINIT, INIT_IQK, ("phy_APCalibrate_8192C() offset 0x800 %x\n", PHY_QueryBBReg(pAdapter, 0x800, bMaskDWord)));
 
-		//MAC settings
+		/* MAC settings */
 		phy_MACSettingCalibration(pAdapter, MAC_REG, MAC_backup);
 
-		if (path == RF_PATH_A)	//Path B to standby mode
+		if (path == RF_PATH_A)	/* Path B to standby mode */
 		{
 			PHY_SetRFReg(pAdapter, RF_PATH_B, RF_AC, bRFRegOffsetMask, 0x10000);
 		}
-		else			//Path A to standby mode
+		else			/* Path A to standby mode */
 		{
 			PHY_SetRFReg(pAdapter, RF_PATH_A, RF_AC, bRFRegOffsetMask, 0x10000);
 			PHY_SetRFReg(pAdapter, RF_PATH_A, RF_MODE1, bRFRegOffsetMask, 0x1000f);
@@ -1043,10 +1040,10 @@ if (pAdapter->registrypriv.mp_mode == 1)
 		else if (delta_offset > 12)
 			delta_offset = 12;
 
-		//AP calibration
+		/* AP calibration */
 		for (index = 0; index < APK_BB_REG_NUM; index++)
 		{
-			if (index != 1)	//only DO PA11+PAD01001, AP RF setting
+			if (index != 1)	/* only DO PA11+PAD01001, AP RF setting */
 				continue;
 
 			tmpReg = APK_RF_init_value[path][index];
@@ -1055,7 +1052,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			{
 				BB_offset = (tmpReg & 0xF0000) >> 16;
 
-				if (!(tmpReg & BIT15)) //sign bit 0
+				if (!(tmpReg & BIT15)) /* sign bit 0 */
 				{
 					BB_offset = -BB_offset;
 				}
@@ -1091,7 +1088,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			PHY_SetRFReg(pAdapter, path, RF_TXBIAS_A, bRFRegOffsetMask, tmpReg);
 			RTPRINT(FINIT, INIT_IQK, ("phy_APCalibrate_8192C() offset 0xd %x\n", PHY_QueryRFReg(pAdapter, path, RF_TXBIAS_A, bRFRegOffsetMask)));
 
-			// PA11+PAD01111, one shot
+			/*  PA11+PAD01111, one shot */
 			i = 0;
 			do
 			{
@@ -1122,22 +1119,22 @@ if (pAdapter->registrypriv.mp_mode == 1)
 		}
 	}
 
-	//reload MAC default value
+	/* reload MAC default value */
 	phy_ReloadMACRegisters(pAdapter, MAC_REG, MAC_backup);
 
-	//reload BB default value
+	/* reload BB default value */
 	for (index = 0; index < APK_BB_REG_NUM ; index++)
 	{
 
-		if (index == 0)		//skip
+		if (index == 0)		/* skip */
 			continue;
 		PHY_SetBBReg(pAdapter, BB_REG[index], bMaskDWord, BB_backup[index]);
 	}
 
-	//reload AFE default value
+	/* reload AFE default value */
 	phy_ReloadADDARegisters(pAdapter, AFE_REG, AFE_backup, IQK_ADDA_REG_NUM);
 
-	//reload RF path default value
+	/* reload RF path default value */
 	for (path = 0; path < pathbound; path++)
 	{
 		PHY_SetRFReg(pAdapter, path, RF_TXBIAS_A, bRFRegOffsetMask, regD[path]);
@@ -1147,7 +1144,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			PHY_SetRFReg(pAdapter, RF_PATH_A, RF_MODE2, bRFRegOffsetMask, 0x20101);
 		}
 
-		//note no index == 0
+		/* note no index == 0 */
 		if (APK_result[path][1] > 6)
 			APK_result[path][1] = 6;
 		RTPRINT(FINIT, INIT_IQK, ("apk path %d result %d 0x%x \t", path, 1, APK_result[path][1]));
@@ -1185,7 +1182,7 @@ PHY_IQCalibrate_8192C(
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	s4Byte			result[4][8];	//last is final result
+	s4Byte			result[4][8];	/* last is final result */
 	u1Byte			i, final_candidate, Indexforchannel;
 	bool			bPathAOK, bPathBOK;
 	s4Byte			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
@@ -1210,7 +1207,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 }
 #endif
 
-	//ignore IQK when continuous Tx
+	/* ignore IQK when continuous Tx */
 	if (bStartContTx || bSingleTone || bCarrierSuppression)
 		return;
 
@@ -1248,10 +1245,8 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 	RTPRINT(FINIT, INIT_IQK, ("IQK !!!interface %d currentband %d ishardwareD %d\n", pAdapter->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter)));
 	AcquireCCKAndRWPageAControl(pAdapter);
-//	RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate\n"));
 	for (i=0; i<3; i++)
 	{
-//		if (IS_HARDWARE_TYPE_8192C(pAdapter) || IS_HARDWARE_TYPE_8723A(pAdapter))
 		if (!IS_HARDWARE_TYPE_8192D(pAdapter))
 		{
 			if (IS_92C_SERIAL( pHalData->VersionID))
@@ -1260,7 +1255,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			}
 			else
 			{
-				// For 88C 1T1R
+				/*  For 88C 1T1R */
 				phy_IQCalibrate_8192C(pAdapter, result, i, false);
 			}
 		}
@@ -1313,7 +1308,6 @@ if (pAdapter->registrypriv.mp_mode == 1)
 			}
 		}
 	}
-//	RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate\n"));
 	ReleaseCCKAndRWPageAControl(pAdapter);
 
 	for (i=0; i<4; i++)
@@ -1345,8 +1339,8 @@ if (pAdapter->registrypriv.mp_mode == 1)
 	}
 	else
 	{
-		RegE94 = RegEB4 = pHalData->RegE94 = pHalData->RegEB4 = 0x100;	//X default value
-		RegE9C = RegEBC = pHalData->RegE9C = pHalData->RegEBC = 0x0;		//Y default value
+		RegE94 = RegEB4 = pHalData->RegE94 = pHalData->RegEB4 = 0x100;	/* X default value */
+		RegE9C = RegEBC = pHalData->RegE9C = pHalData->RegEBC = 0x0;		/* Y default value */
 	}
 
 	if ((RegE94 != 0)/*&&(RegEA4 != 0)*/)
@@ -1413,7 +1407,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 	return;
 #endif
 
-	//ignore LCK when continuous Tx
+	/* ignore LCK when continuous Tx */
 	if (bStartContTx || bSingleTone || bCarrierSuppression)
 		return;
 
@@ -1439,13 +1433,12 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 	RTPRINT(FINIT, INIT_IQK, ("LCK:Start!!!interface %d currentband %x delay %d ms\n", pAdapter->interfaceIndex, pHalData->CurrentBandType92D, timecount));
 
-	//if (IS_92C_SERIAL(pHalData->VersionID) || IS_92D_SINGLEPHY(pHalData->VersionID))
 	if (IS_2T2R(pHalData->VersionID))
 	{
 		phy_LCCalibrate(pAdapter, true);
 	}
 	else{
-		// For 88C 1T1R
+		/*  For 88C 1T1R */
 		phy_LCCalibrate(pAdapter, false);
 	}
 
@@ -1464,7 +1457,7 @@ PHY_APCalibrate_8192C(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
-	//default disable APK, because Tx NG issue, suggest by Jenyu, 2011.11.25
+	/* default disable APK, because Tx NG issue, suggest by Jenyu, 2011.11.25 */
 	return;
 
 #if DISABLE_BB_RF
@@ -1483,7 +1476,7 @@ PHY_APCalibrate_8192C(
 		phy_APCalibrate_8192C(pAdapter, delta, true);
 	}
 	else{
-		// For 88C 1T1R
+		/*  For 88C 1T1R */
 		phy_APCalibrate_8192C(pAdapter, delta, false);
 	}
 }
@@ -1492,9 +1485,9 @@ PHY_APCalibrate_8192C(
 #endif
 
 
-//3============================================================
-//3 IQ Calibration
-//3============================================================
+/* 3============================================================ */
+/* 3 IQ Calibration */
+/* 3============================================================ */
 
 void
 ODM_ResetIQKResult(
@@ -1509,7 +1502,7 @@ ODM_ResetIQKResult(
 		return;
 #endif
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("PHY_ResetIQKResult:: settings regs %d default regs %d\n", (u32)(sizeof(pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting)/sizeof(IQK_MATRIX_REGS_SETTING)), IQK_Matrix_Settings_NUM));
-	//0xe94, 0xe9c, 0xea4, 0xeac, 0xeb4, 0xebc, 0xec4, 0xecc
+	/* 0xe94, 0xe9c, 0xea4, 0xeac, 0xeb4, 0xebc, 0xec4, 0xecc */
 
 	for (i = 0; i < IQK_Matrix_Settings_NUM; i++)
 	{

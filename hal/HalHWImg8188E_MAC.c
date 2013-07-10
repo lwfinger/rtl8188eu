@@ -177,7 +177,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	struct cmd_cmp cmpdata[ArrayLen];
 	u4Byte	cmpdata_idx=0;
 	#endif
-#endif //CONFIG_IOL_IOREG_CFG
+#endif /* CONFIG_IOL_IOREG_CFG */
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 	hex += board;
 	hex += interfaceValue << 8;
@@ -195,14 +195,14 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 		}
 	}
 
-#endif //CONFIG_IOL_IOREG_CFG
+#endif /* CONFIG_IOL_IOREG_CFG */
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
 		u4Byte v1 = Array[i];
 		u4Byte v2 = Array[i+1];
 
-		// This (offset, data) pair meets the condition.
+		/*  This (offset, data) pair meets the condition. */
 		if ( v1 < 0xCDCDCDCD )
 		{
 			#ifdef CONFIG_IOL_IOREG_CFG
@@ -219,16 +219,16 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 					#endif
 				}
 				else
-			#endif	//endif CONFIG_IOL_IOREG_CFG
+			#endif	/* endif CONFIG_IOL_IOREG_CFG */
 				{
 					odm_ConfigMAC_8188E(pDM_Odm, v1, (u1Byte)v2);
 				}
 				continue;
 		}
 		else
-		{ // This line is the start line of branch.
+		{ /*  This line is the start line of branch. */
 			if ( !CheckCondition(Array[i], hex) )
-			{ // Discard the following (offset, data) pairs.
+			{ /*  Discard the following (offset, data) pairs. */
 			READ_NEXT_PAIR(v1, v2, i);
 				while (	v2 != 0xDEAD &&
 					v2 != 0xCDEF &&
@@ -236,9 +236,9 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 		            {
 					READ_NEXT_PAIR(v1, v2, i);
 				}
-				i -= 2; // prevent from for-loop += 2
+				i -= 2; /*  prevent from for-loop += 2 */
 			}
-			else // Configure matched pairs and skip to end of if-else.
+			else /*  Configure matched pairs and skip to end of if-else. */
 			{
 				READ_NEXT_PAIR(v1, v2, i);
 				while (	v2 != 0xDEAD &&
@@ -257,7 +257,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 						#endif
 					}
 					else
-					#endif //#ifdef CONFIG_IOL_IOREG_CFG
+					#endif /* ifdef CONFIG_IOL_IOREG_CFG */
 					{
 						odm_ConfigMAC_8188E(pDM_Odm, v1, (u1Byte)v2);
 					}
@@ -276,17 +276,14 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 
 #ifdef CONFIG_IOL_IOREG_CFG
 	if (biol){
-		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__func__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);
-
-		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
-		{
+		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			printk("~~~ IOL Config MAC Success !!!\n");
-			//compare writed data
+			/* compare written data */
 			{
 				u4Byte idx;
 				u1Byte cdata;
-				// HAL_STATUS_FAILURE;
+				/*  HAL_STATUS_FAILURE; */
 				printk("  MAC data compare => array_len:%d\n",cmpdata_idx);
 				for (idx=0;idx< cmpdata_idx;idx++)
 				{
@@ -294,35 +291,35 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 					if (cdata != cmpdata[idx].value){
 						printk("### MAC data compared failed !! addr:0x%04x, data:(0x%02x : 0x%02x) ###\n",
 							cmpdata[idx].addr,cmpdata[idx].value,cdata);
-						//rst = HAL_STATUS_FAILURE;
+						/* rst = HAL_STATUS_FAILURE; */
 					}
 				}
 
 
-				//dump data from TX packet buffer
-				//if (rst == HAL_STATUS_FAILURE)
+				/* dump data from TX packet buffer */
+				/* if (rst == HAL_STATUS_FAILURE) */
 				{
 					rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
 				}
 
 			}
-			#endif //CONFIG_IOL_IOREG_CFG_DBG
+			#endif /* CONFIG_IOL_IOREG_CFG_DBG */
 
 		}
 		else{
 			printk("~~~ MAC IOL_exec_cmds Failed !!!\n");
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			{
-				//dump data from TX packet buffer
+				/* dump data from TX packet buffer */
 				rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
 			}
-			#endif //CONFIG_IOL_IOREG_CFG_DBG
+			#endif /* CONFIG_IOL_IOREG_CFG_DBG */
 			rst = HAL_STATUS_FAILURE;
 		}
 
 	}
-#endif	//#ifdef CONFIG_IOL_IOREG_CFG
+#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
 	return rst;
 }
 
-#endif // end of HWIMG_SUPPORT
+#endif /*  end of HWIMG_SUPPORT */

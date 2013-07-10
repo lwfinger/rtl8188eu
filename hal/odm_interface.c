@@ -18,14 +18,14 @@
  *
  ******************************************************************************/
 
-//============================================================
-// include files
-//============================================================
+/*  */
+/*  include files */
+/*  */
 
 #include "odm_precomp.h"
-//
-// ODM IO Relative API.
-//
+/*  */
+/*  ODM IO Relative API. */
+/*  */
 
 u1Byte
 ODM_Read1Byte(
@@ -253,9 +253,9 @@ ODM_GetRFReg(
 
 
 
-//
-// ODM Memory relative API.
-//
+/*  */
+/*  ODM Memory relative API. */
+/*  */
 void
 ODM_AllocateMemory(
 		PDM_ODM_T	pDM_Odm,
@@ -273,7 +273,7 @@ ODM_AllocateMemory(
 #endif
 }
 
-// length could be ignored, used to detect memory leakage.
+/*  length could be ignored, used to detect memory leakage. */
 void
 ODM_FreeMemory(
 		PDM_ODM_T	pDM_Odm,
@@ -286,7 +286,7 @@ ODM_FreeMemory(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE )
 	rtw_vmfree(pPtr, length);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_MP)
-	//PADAPTER    Adapter = pDM_Odm->Adapter;
+	/* PADAPTER    Adapter = pDM_Odm->Adapter; */
 	PlatformFreeMemory(pPtr, length);
 #endif
 }
@@ -308,9 +308,9 @@ s4Byte ODM_CompareMemory(
 
 
 
-//
-// ODM MISC relative API.
-//
+/*  */
+/*  ODM MISC relative API. */
+/*  */
 void
 ODM_AcquireSpinLock(
 		PDM_ODM_T			pDM_Odm,
@@ -342,9 +342,9 @@ ODM_ReleaseSpinLock(
 #endif
 }
 
-//
-// Work item relative API. FOr MP driver only~!
-//
+/*  */
+/*  Work item relative API. FOr MP driver only~! */
+/*  */
 void
 ODM_InitializeWorkItem(
 		PDM_ODM_T					pDM_Odm,
@@ -441,9 +441,9 @@ ODM_IsWorkItemScheduled(
 
 
 
-//
-// ODM Timer relative API.
-//
+/*  */
+/*  ODM Timer relative API. */
+/*  */
 void
 ODM_StallExecution(
 		u4Byte	usDelay
@@ -514,7 +514,7 @@ ODM_SetTimer(
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	mod_timer(pTimer, jiffies + (msDelay+9)/10);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	_set_timer(pTimer,msDelay ); //ms
+	_set_timer(pTimer,msDelay ); /* ms */
 #elif (DM_ODM_SUPPORT_TYPE & ODM_MP)
 	PADAPTER		Adapter = pDM_Odm->Adapter;
 	PlatformSetTimer(Adapter, pTimer, msDelay);
@@ -576,8 +576,8 @@ ODM_ReleaseTimer(
 
 	PADAPTER Adapter = pDM_Odm->Adapter;
 
-    // <20120301, Kordan> If the initilization fails, InitializeAdapterXxx will return regardless of InitHalDm.
-    // Hence, uninitialized timers cause BSOD when the driver releases resources since the init fail.
+    /*  <20120301, Kordan> If the initilization fails, InitializeAdapterXxx will return regardless of InitHalDm. */
+    /*  Hence, uninitialized timers cause BSOD when the driver releases resources since the init fail. */
     if (pTimer == 0)
     {
         ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_SERIOUS, ("=====>ODM_ReleaseTimer(), The timer is NULL! Please check it!\n"));
@@ -589,9 +589,9 @@ ODM_ReleaseTimer(
 }
 
 
-//
-// ODM FW relative API.
-//
+/*  */
+/*  ODM FW relative API. */
+/*  */
 #if (DM_ODM_SUPPORT_TYPE & ODM_MP)
 void
 ODM_FillH2CCmd(
@@ -652,7 +652,7 @@ ODM_FillH2CCmd(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 
 #elif (DM_ODM_SUPPORT_TYPE & ODM_MP)
-	//FillH2CCmd(pH2CBuffer, H2CBufferLen, CmdNum, pElementID, pCmdLen, pCmbBuffer, CmdStartSeq);
+	/* FillH2CCmd(pH2CBuffer, H2CBufferLen, CmdNum, pElementID, pCmdLen, pCmbBuffer, CmdStartSeq); */
 	return	false;
 #endif
 

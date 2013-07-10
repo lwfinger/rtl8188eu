@@ -24,27 +24,26 @@
 #include <rtl8188e_hal.h>
 #include <rtl8188e_led.h>
 
-// LED object.
-//================================================================================
+/*  LED object. */
+/*  */
 
 
-//================================================================================
-//	Prototype of protected function.
-//================================================================================
+/*  */
+/* 	Prototype of protected function. */
+/*  */
 
 
-//================================================================================
-// LED_819xUsb routines.
-//================================================================================
+/*  */
+/*  LED_819xUsb routines. */
+/*  */
 
-//
-//	Description:
-//		Turn on LED according to LedPin specified.
-//
+/*  */
+/* 	Description: */
+/* 		Turn on LED according to LedPin specified. */
+/*  */
 void SwLedOn(_adapter *padapter, PLED_871x pLed)
 {
 	u8	LedCfg;
-	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
 	if ( (padapter->bSurpriseRemoved == true) || ( padapter->bDriverStopped == true))
 	{
@@ -55,11 +54,11 @@ void SwLedOn(_adapter *padapter, PLED_871x pLed)
 	switch (pLed->LedPin)
 	{
 		case LED_PIN_LED0:
-			rtw_write8(padapter, REG_LEDCFG2, (LedCfg&0xf0)|BIT5|BIT6); // SW control led0 on.
+			rtw_write8(padapter, REG_LEDCFG2, (LedCfg&0xf0)|BIT5|BIT6); /*  SW control led0 on. */
 			break;
 
 		case LED_PIN_LED1:
-			rtw_write8(padapter, REG_LEDCFG2, (LedCfg&0x0f)|BIT5); // SW control led1 on.
+			rtw_write8(padapter, REG_LEDCFG2, (LedCfg&0x0f)|BIT5); /*  SW control led1 on. */
 			break;
 
 		default:
@@ -70,10 +69,10 @@ void SwLedOn(_adapter *padapter, PLED_871x pLed)
 }
 
 
-//
-//	Description:
-//		Turn off LED according to LedPin specified.
-//
+/*  */
+/* 	Description: */
+/* 		Turn off LED according to LedPin specified. */
+/*  */
 void SwLedOff(_adapter *padapter, PLED_871x pLed)
 {
 	u8	LedCfg;
@@ -85,14 +84,14 @@ void SwLedOff(_adapter *padapter, PLED_871x pLed)
 	}
 
 
-	LedCfg = rtw_read8(padapter, REG_LEDCFG2);//0x4E
+	LedCfg = rtw_read8(padapter, REG_LEDCFG2);/* 0x4E */
 
 	switch (pLed->LedPin)
 	{
 		case LED_PIN_LED0:
-			if (pHalData->bLedOpenDrain == true) // Open-drain arrangement for controlling the LED)
+			if (pHalData->bLedOpenDrain == true) /*  Open-drain arrangement for controlling the LED) */
 			{
-				LedCfg &= 0x90; // Set to software control.
+				LedCfg &= 0x90; /*  Set to software control. */
 				rtw_write8(padapter, REG_LEDCFG2, (LedCfg|BIT3));
 				LedCfg = rtw_read8(padapter, REG_MAC_PINMUX_CFG);
 				LedCfg &= 0xFE;
@@ -105,7 +104,7 @@ void SwLedOff(_adapter *padapter, PLED_871x pLed)
 			break;
 
 		case LED_PIN_LED1:
-			LedCfg &= 0x0f; // Set to software control.
+			LedCfg &= 0x0f; /*  Set to software control. */
 			rtw_write8(padapter, REG_LEDCFG2, (LedCfg|BIT3));
 			break;
 
@@ -117,19 +116,19 @@ exit:
 
 }
 
-//================================================================================
-// Interface to manipulate LED objects.
-//================================================================================
+/*  */
+/*  Interface to manipulate LED objects. */
+/*  */
 
 
-//================================================================================
-// Default LED behavior.
-//================================================================================
+/*  */
+/*  Default LED behavior. */
+/*  */
 
-//
-//	Description:
-//		Initialize all LED_871x objects.
-//
+/*  */
+/* 	Description: */
+/* 		Initialize all LED_871x objects. */
+/*  */
 void
 rtl8188eu_InitSwLeds(
 	_adapter	*padapter
@@ -145,10 +144,10 @@ rtl8188eu_InitSwLeds(
 }
 
 
-//
-//	Description:
-//		DeInitialize all LED_819xUsb objects.
-//
+/*  */
+/* 	Description: */
+/* 		DeInitialize all LED_819xUsb objects. */
+/*  */
 void
 rtl8188eu_DeInitSwLeds(
 	_adapter	*padapter

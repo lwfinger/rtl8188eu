@@ -26,10 +26,10 @@
 
 static s32  translate2dbm(u8 signal_strength_idx)
 {
-	s32	signal_power; // in dBm.
+	s32	signal_power; /*  in dBm. */
 
 
-	// Translate to dBm (x=0.5y-95).
+	/*  Translate to dBm (x=0.5y-95). */
 	signal_power = (s32)((signal_strength_idx + 1) >> 1);
 	signal_power -= 95;
 
@@ -43,10 +43,8 @@ static void process_rssi(_adapter *padapter,union recv_frame *prframe)
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	struct signal_stat * signal_stat = &padapter->recvpriv.signal_strength_data;
-#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
+#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
-	//DBG_88E("process_rssi=> pattrib->rssil(%d) signal_strength(%d)\n ",pattrib->RecvSignalPower,pattrib->signal_strength);
-	//if (pRfd->Status.bPacketToSelf || pRfd->Status.bPacketBeacon)
 	{
 
 	#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
@@ -59,9 +57,8 @@ static void process_rssi(_adapter *padapter,union recv_frame *prframe)
 		signal_stat->total_num++;
 		signal_stat->total_val  += pattrib->phy_info.SignalStrength;
 		signal_stat->avg_val = signal_stat->total_val / signal_stat->total_num;
-	#else //CONFIG_NEW_SIGNAL_STAT_PROCESS
+	#else /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
-		//Adapter->RxStats.RssiCalculateCnt++;	//For antenna Test
 		if (padapter->recvpriv.signal_strength_data.total_num++ >= PHY_RSSI_SLID_WIN_MAX)
 		{
 			padapter->recvpriv.signal_strength_data.total_num = PHY_RSSI_SLID_WIN_MAX;
@@ -86,10 +83,10 @@ static void process_rssi(_adapter *padapter,union recv_frame *prframe)
 		}
 
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("UI RSSI = %d, ui_rssi.TotalVal = %d, ui_rssi.TotalNum = %d\n", tmp_val, padapter->recvpriv.signal_strength_data.total_val,padapter->recvpriv.signal_strength_data.total_num));
-	#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
+	#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 	}
 
-}// Process_UI_RSSI_8192C
+}/*  Process_UI_RSSI_8192C */
 
 
 
@@ -99,7 +96,7 @@ static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 	struct rx_pkt_attrib *pattrib;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	struct signal_stat * signal_stat;
-#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
+#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 	if (prframe == NULL || padapter==NULL){
 		return;
@@ -108,9 +105,7 @@ static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 	pattrib = &prframe->u.hdr.attrib;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	signal_stat = &padapter->recvpriv.signal_qual_data;
-#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
-
-	//DBG_88E("process_link_qual=> pattrib->signal_qual(%d)\n ",pattrib->signal_qual);
+#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	if (signal_stat->update_req) {
@@ -123,12 +118,12 @@ static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 	signal_stat->total_val  += pattrib->phy_info.SignalQuality;
 	signal_stat->avg_val = signal_stat->total_val / signal_stat->total_num;
 
-#else //CONFIG_NEW_SIGNAL_STAT_PROCESS
+#else /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 	if (pattrib->phy_info.SignalQuality != 0)
 	{
-			//
-			// 1. Record the general EVM to the sliding window.
-			//
+			/*  */
+			/*  1. Record the general EVM to the sliding window. */
+			/*  */
 			if (padapter->recvpriv.signal_qual_data.total_num++ >= PHY_LINKQUALITY_SLID_WIN_MAX)
 			{
 				padapter->recvpriv.signal_qual_data.total_num = PHY_LINKQUALITY_SLID_WIN_MAX;
@@ -143,7 +138,7 @@ static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("Total SQ=%d  pattrib->signal_qual= %d\n", padapter->recvpriv.signal_qual_data.total_val, pattrib->phy_info.SignalQuality));
 
-			// <1> Showed on UI for user, in percentage.
+			/*  <1> Showed on UI for user, in percentage. */
 			tmpVal = padapter->recvpriv.signal_qual_data.total_val/padapter->recvpriv.signal_qual_data.total_num;
 			padapter->recvpriv.signal_qual=(u8)tmpVal;
 
@@ -152,28 +147,23 @@ static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 	{
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" pattrib->signal_qual =%d\n", pattrib->phy_info.SignalQuality));
 	}
-#endif //CONFIG_NEW_SIGNAL_STAT_PROCESS
+#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 }
 
-//void rtl8188e_process_phy_info(_adapter *padapter, union recv_frame *prframe)
 void rtl8188e_process_phy_info(_adapter *padapter, void *prframe)
 {
 	union recv_frame *precvframe = (union recv_frame *)prframe;
 
-	//
-	// Check RSSI
-	//
+	/*  */
+	/*  Check RSSI */
+	/*  */
 	process_rssi(padapter, precvframe);
-	//
-	// Check PWDB.
-	//
-	//process_PWDB(padapter, precvframe);
+	/*  */
+	/*  Check PWDB. */
+	/*  */
 
-	//UpdateRxSignalStatistics8192C(Adapter, pRfd);
-	//
-	// Check EVM
-	//
+	/*  Check EVM */
 	process_link_qual(padapter,  precvframe);
 
 }
@@ -196,51 +186,51 @@ void update_recvframe_attrib_88e(
 	pattrib = &precvframe->u.hdr.attrib;
 	_rtw_memset(pattrib, 0, sizeof(struct rx_pkt_attrib));
 
-	pattrib->crc_err = (u8)((le32_to_cpu(report.rxdw0) >> 14) & 0x1);;//(u8)prxreport->crc32;
+	pattrib->crc_err = (u8)((le32_to_cpu(report.rxdw0) >> 14) & 0x1);;/* u8)prxreport->crc32; */
 
-	// update rx report to recv_frame attribute
-	pattrib->pkt_rpt_type = (u8)((le32_to_cpu(report.rxdw3) >> 14) & 0x3);//prxreport->rpt_sel;
+	/*  update rx report to recv_frame attribute */
+	pattrib->pkt_rpt_type = (u8)((le32_to_cpu(report.rxdw3) >> 14) & 0x3);/* prxreport->rpt_sel; */
 
-	if (pattrib->pkt_rpt_type == NORMAL_RX) { //Normal rx packet
-		pattrib->pkt_len = (u16)(le32_to_cpu(report.rxdw0) & 0x00003fff);//(u16)prxreport->pktlen;
-		pattrib->drvinfo_sz = (u8)((le32_to_cpu(report.rxdw0) >> 16) & 0xf) * 8;//(u8)(prxreport->drvinfosize << 3);
+	if (pattrib->pkt_rpt_type == NORMAL_RX) { /* Normal rx packet */
+		pattrib->pkt_len = (u16)(le32_to_cpu(report.rxdw0) & 0x00003fff);/* u16)prxreport->pktlen; */
+		pattrib->drvinfo_sz = (u8)((le32_to_cpu(report.rxdw0) >> 16) & 0xf) * 8;/* u8)(prxreport->drvinfosize << 3); */
 
-		pattrib->physt =  (u8)((le32_to_cpu(report.rxdw0) >> 26) & 0x1);//(u8)prxreport->physt;
+		pattrib->physt =  (u8)((le32_to_cpu(report.rxdw0) >> 26) & 0x1);/* u8)prxreport->physt; */
 
-		pattrib->bdecrypted = (le32_to_cpu(report.rxdw0) & BIT(27))? 0:1;//(u8)(prxreport->swdec ? 0 : 1);
-		pattrib->encrypt = (u8)((le32_to_cpu(report.rxdw0) >> 20) & 0x7);//(u8)prxreport->security;
+		pattrib->bdecrypted = (le32_to_cpu(report.rxdw0) & BIT(27))? 0:1;/* u8)(prxreport->swdec ? 0 : 1); */
+		pattrib->encrypt = (u8)((le32_to_cpu(report.rxdw0) >> 20) & 0x7);/* u8)prxreport->security; */
 
-		pattrib->qos = (u8)((le32_to_cpu(report.rxdw0) >> 23) & 0x1);//(u8)prxreport->qos;
-		pattrib->priority = (u8)((le32_to_cpu(report.rxdw1) >> 8) & 0xf);//(u8)prxreport->tid;
+		pattrib->qos = (u8)((le32_to_cpu(report.rxdw0) >> 23) & 0x1);/* u8)prxreport->qos; */
+		pattrib->priority = (u8)((le32_to_cpu(report.rxdw1) >> 8) & 0xf);/* u8)prxreport->tid; */
 
-		pattrib->amsdu = (u8)((le32_to_cpu(report.rxdw1) >> 13) & 0x1);//(u8)prxreport->amsdu;
+		pattrib->amsdu = (u8)((le32_to_cpu(report.rxdw1) >> 13) & 0x1);/* u8)prxreport->amsdu; */
 
-		pattrib->seq_num = (u16)(le32_to_cpu(report.rxdw2) & 0x00000fff);//(u16)prxreport->seq;
-		pattrib->frag_num = (u8)((le32_to_cpu(report.rxdw2) >> 12) & 0xf);//(u8)prxreport->frag;
-		pattrib->mfrag = (u8)((le32_to_cpu(report.rxdw1) >> 27) & 0x1);//(u8)prxreport->mf;
-		pattrib->mdata = (u8)((le32_to_cpu(report.rxdw1) >> 26) & 0x1);//(u8)prxreport->md;
+		pattrib->seq_num = (u16)(le32_to_cpu(report.rxdw2) & 0x00000fff);/* u16)prxreport->seq; */
+		pattrib->frag_num = (u8)((le32_to_cpu(report.rxdw2) >> 12) & 0xf);/* u8)prxreport->frag; */
+		pattrib->mfrag = (u8)((le32_to_cpu(report.rxdw1) >> 27) & 0x1);/* u8)prxreport->mf; */
+		pattrib->mdata = (u8)((le32_to_cpu(report.rxdw1) >> 26) & 0x1);/* u8)prxreport->md; */
 
-		pattrib->mcs_rate = (u8)(le32_to_cpu(report.rxdw3) & 0x3f);//(u8)prxreport->rxmcs;
-		pattrib->rxht = (u8)((le32_to_cpu(report.rxdw3) >> 6) & 0x1);//(u8)prxreport->rxht;
+		pattrib->mcs_rate = (u8)(le32_to_cpu(report.rxdw3) & 0x3f);/* u8)prxreport->rxmcs; */
+		pattrib->rxht = (u8)((le32_to_cpu(report.rxdw3) >> 6) & 0x1);/* u8)prxreport->rxht; */
 
-		pattrib->icv_err = (u8)((le32_to_cpu(report.rxdw0) >> 15) & 0x1);//(u8)prxreport->icverr;
+		pattrib->icv_err = (u8)((le32_to_cpu(report.rxdw0) >> 15) & 0x1);/* u8)prxreport->icverr; */
 		pattrib->shift_sz = (u8)((le32_to_cpu(report.rxdw0) >> 24) & 0x3);
 
-	} else if (pattrib->pkt_rpt_type == TX_REPORT1) { //CCX
+	} else if (pattrib->pkt_rpt_type == TX_REPORT1) { /* CCX */
 		pattrib->pkt_len = TX_RPT1_PKT_LEN;
 		pattrib->drvinfo_sz = 0;
-	} else if (pattrib->pkt_rpt_type == TX_REPORT2) { // TX RPT
-		pattrib->pkt_len =(u16)(le32_to_cpu(report.rxdw0) & 0x3FF);//Rx length[9:0]
+	} else if (pattrib->pkt_rpt_type == TX_REPORT2) { /*  TX RPT */
+		pattrib->pkt_len =(u16)(le32_to_cpu(report.rxdw0) & 0x3FF);/* Rx length[9:0] */
 		pattrib->drvinfo_sz = 0;
 
-		//
-		// Get TX report MAC ID valid.
-		//
+		/*  */
+		/*  Get TX report MAC ID valid. */
+		/*  */
 		pattrib->MacIDValidEntry[0] = le32_to_cpu(report.rxdw4);
 		pattrib->MacIDValidEntry[1] = le32_to_cpu(report.rxdw5);
 
-	} else if (pattrib->pkt_rpt_type == HIS_REPORT) { // USB HISR RPT
-		pattrib->pkt_len = (u16)(le32_to_cpu(report.rxdw0) &0x00003fff);//(u16)prxreport->pktlen;
+	} else if (pattrib->pkt_rpt_type == HIS_REPORT) { /*  USB HISR RPT */
+		pattrib->pkt_len = (u16)(le32_to_cpu(report.rxdw0) &0x00003fff);/* u16)prxreport->pktlen; */
 	}
 
 }
@@ -263,7 +253,6 @@ void update_recvframe_phyinfo_88e(
 	u8 *sa;
 	struct sta_priv *pstapriv;
 	struct sta_info *psta;
-	//_irqL		irqL;
 
 	pkt_info.bPacketMatchBSSID =false;
 	pkt_info.bPacketToSelf = false;
@@ -283,7 +272,7 @@ void update_recvframe_phyinfo_88e(
 		if (check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE) == true){
 			sa = padapter->mlmepriv.cur_network.network.MacAddress;
 		}
-		//to do Ad-hoc
+		/* to do Ad-hoc */
 	}
 	else{
 		sa = get_sa(wlanhdr);
@@ -293,22 +282,16 @@ void update_recvframe_phyinfo_88e(
 	pkt_info.StationID = 0xFF;
 	psta = rtw_get_stainfo(pstapriv, sa);
 	if (psta)
-	{
 		pkt_info.StationID = psta->mac_id;
-		//DBG_88E("%s ==> StationID(%d)\n",__func__,pkt_info.StationID);
-	}
 	pkt_info.Rate = pattrib->mcs_rate;
-	//rtl8188e_query_rx_phy_status(precvframe, pphy_status);
 
 	#ifdef CONFIG_CONCURRENT_MODE
-	//get Primary adapter's odmpriv
+	/* get Primary adapter's odmpriv */
 	if (padapter->adapter_type > PRIMARY_ADAPTER){
 		pHalData = GET_HAL_DATA(padapter->pbuddy_adapter);
 	}
 	#endif
-	//_enter_critical_bh(&pHalData->odm_stainfo_lock, &irqL);
 	ODM_PhyStatusQuery(&pHalData->odmpriv,pPHYInfo,(u8 *)pphy_status,&(pkt_info));
-	//_exit_critical_bh(&pHalData->odm_stainfo_lock, &irqL);
 
 	precvframe->u.hdr.psta = NULL;
 	if (pkt_info.bPacketMatchBSSID &&

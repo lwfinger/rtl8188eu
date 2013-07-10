@@ -17,27 +17,27 @@
  *
  *
  ******************************************************************************/
-//============================================================
-// Description:
-//
-// This file is for 92CE/92CU dynamic mechanism only
-//
-//
-//============================================================
+/*  */
+/*  Description: */
+/*  */
+/*  This file is for 92CE/92CU dynamic mechanism only */
+/*  */
+/*  */
+/*  */
 #define _RTL8188E_DM_C_
 
-//============================================================
-// include files
-//============================================================
+/*  */
+/*  include files */
+/*  */
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 
 #include <rtl8188e_hal.h>
 
-//============================================================
-// Global var
-//============================================================
+/*  */
+/*  Global var */
+/*  */
 
 
 static void
@@ -65,14 +65,14 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 #ifdef CONFIG_USB_HCI
 	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
 	tmp1byte |= (HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	//enable GPIO[2] as output mode
+	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as output mode */
 
 	tmp1byte &= ~(HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter,  GPIO_IN, tmp1byte);		//reset the floating voltage level
+	rtw_write8(padapter,  GPIO_IN, tmp1byte);		/* reset the floating voltage level */
 
 	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
 	tmp1byte &= ~(HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	//enable GPIO[2] as input mode
+	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as input mode */
 
 	tmp1byte =rtw_read8(padapter, GPIO_IN);
 
@@ -85,7 +85,6 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 	}
 #else
 	tmp1byte = rtw_read8(padapter, GPIO_IN);
-	//RT_TRACE(COMP_IO, DBG_TRACE, ("dm_CheckPbcGPIO - %x\n", tmp1byte));
 
 	if (tmp1byte == 0xff || padapter->init_adpt_in_progress)
 		return ;
@@ -98,8 +97,8 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 
 	if ( true == bPbcPressed)
 	{
-		// Here we only set bPbcPressed to true
-		// After trigger PBC, the variable will be set to false
+		/*  Here we only set bPbcPressed to true */
+		/*  After trigger PBC, the variable will be set to false */
 		DBG_88E("CheckPbcGPIO - PBC is pressed\n");
 
 #ifdef RTK_DMP_PLATFORM
@@ -111,7 +110,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 #else
 
 		if ( padapter->pid[0] == 0 )
-		{	//	0 is the default value and it means the application monitors the HW PBC doesn't privde its pid to driver.
+		{	/* 	0 is the default value and it means the application monitors the HW PBC doesn't privde its pid to driver. */
 			return;
 		}
 
@@ -123,15 +122,15 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 }
 
 #ifdef CONFIG_PCI_HCI
-//
-//	Description:
-//		Perform interrupt migration dynamically to reduce CPU utilization.
-//
-//	Assumption:
-//		1. Do not enable migration under WIFI test.
-//
-//	Created by Roger, 2010.03.05.
-//
+/*  */
+/* 	Description: */
+/* 		Perform interrupt migration dynamically to reduce CPU utilization. */
+/*  */
+/* 	Assumption: */
+/* 		1. Do not enable migration under WIFI test. */
+/*  */
+/* 	Created by Roger, 2010.03.05. */
+/*  */
 void
 dm_InterruptMigration(
 		PADAPTER	Adapter
@@ -144,72 +143,50 @@ dm_InterruptMigration(
 	bool			ACIntToSet = false;
 
 
-	// Retrieve current interrupt migration and Tx four ACs IMR settings first.
+	/*  Retrieve current interrupt migration and Tx four ACs IMR settings first. */
 	bCurrentIntMt = pHalData->bInterruptMigration;
 	bCurrentACIntDisable = pHalData->bDisableTxInt;
 
-	//
-	// <Roger_Notes> Currently we use busy traffic for reference instead of RxIntOK counts to prevent non-linear Rx statistics
-	// when interrupt migration is set before. 2010.03.05.
-	//
+	/*  */
+	/*  <Roger_Notes> Currently we use busy traffic for reference instead of RxIntOK counts to prevent non-linear Rx statistics */
+	/*  when interrupt migration is set before. 2010.03.05. */
+	/*  */
 	if (!Adapter->registrypriv.wifi_spec &&
 		(check_fwstate(pmlmepriv, _FW_LINKED)== true) &&
 		pmlmepriv->LinkDetectInfo.bHigherBusyTraffic)
 	{
 		IntMtToSet = true;
 
-		// To check whether we should disable Tx interrupt or not.
+		/*  To check whether we should disable Tx interrupt or not. */
 		if (pmlmepriv->LinkDetectInfo.bHigherBusyRxTraffic )
 			ACIntToSet = true;
 	}
 
-	//Update current settings.
+	/* Update current settings. */
 	if ( bCurrentIntMt != IntMtToSet ){
 		DBG_88E("%s(): Update interrrupt migration(%d)\n",__func__,IntMtToSet);
 		if (IntMtToSet)
 		{
-			//
-			// <Roger_Notes> Set interrrupt migration timer and corresponging Tx/Rx counter.
-			// timer 25ns*0xfa0=100us for 0xf packets.
-			// 2010.03.05.
-			//
-			rtw_write32(Adapter, REG_INT_MIG, 0xff000fa0);// 0x306:Rx, 0x307:Tx
+			/*  */
+			/*  <Roger_Notes> Set interrrupt migration timer and corresponging Tx/Rx counter. */
+			/*  timer 25ns*0xfa0=100us for 0xf packets. */
+			/*  2010.03.05. */
+			/*  */
+			rtw_write32(Adapter, REG_INT_MIG, 0xff000fa0);/*  0x306:Rx, 0x307:Tx */
 			pHalData->bInterruptMigration = IntMtToSet;
-		}
-		else
-		{
-			// Reset all interrupt migration settings.
+		} else {
+			/*  Reset all interrupt migration settings. */
 			rtw_write32(Adapter, REG_INT_MIG, 0);
 			pHalData->bInterruptMigration = IntMtToSet;
 		}
 	}
-
-	/*if ( bCurrentACIntDisable != ACIntToSet ){
-		DBG_88E("%s(): Update AC interrrupt(%d)\n",__func__,ACIntToSet);
-		if (ACIntToSet) // Disable four ACs interrupts.
-		{
-			//
-			// <Roger_Notes> Disable VO, VI, BE and BK four AC interrupts to gain more efficient CPU utilization.
-			// When extremely highly Rx OK occurs, we will disable Tx interrupts.
-			// 2010.03.05.
-			//
-			UpdateInterruptMask8192CE( Adapter, 0, RT_AC_INT_MASKS );
-			pHalData->bDisableTxInt = ACIntToSet;
-		}
-		else// Enable four ACs interrupts.
-		{
-			UpdateInterruptMask8192CE( Adapter, RT_AC_INT_MASKS, 0 );
-			pHalData->bDisableTxInt = ACIntToSet;
-		}
-	}*/
-
 }
 
 #endif
 
-//
-// Initialize GPIO setting registers
-//
+/*  */
+/*  Initialize GPIO setting registers */
+/*  */
 static void
 dm_InitGPIOSetting(
 		PADAPTER	Adapter
@@ -223,7 +200,7 @@ dm_InitGPIOSetting(
 	tmp1byte &= (GPIOSEL_GPIO | ~GPIOSEL_ENBT);
 
 #ifdef CONFIG_BT_COEXIST
-	// UMB-B cut bug. We need to support the modification.
+	/*  UMB-B cut bug. We need to support the modification. */
 	if (IS_81xxC_VENDOR_UMC_B_CUT(pHalData->VersionID) &&
 		pHalData->bt_coexist.BT_Coexist)
 	{
@@ -234,9 +211,9 @@ dm_InitGPIOSetting(
 
 }
 
-//============================================================
-// functions
-//============================================================
+/*  */
+/*  functions */
+/*  */
 static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 {
 
@@ -245,9 +222,9 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
 	u8	cut_ver,fab_ver;
 
-	//
-	// Init Value
-	//
+	/*  */
+	/*  Init Value */
+	/*  */
 	_rtw_memset(pDM_Odm,0,sizeof(pDM_Odm));
 
 	pDM_Odm->Adapter = Adapter;
@@ -257,7 +234,7 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 	if (Adapter->interface_type == RTW_GSPI )
 		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_INTERFACE,ODM_ITRF_SDIO);
 	else
-		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_INTERFACE,Adapter->interface_type);//RTL871X_HCI_TYPE
+		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_INTERFACE,Adapter->interface_type);/* RTL871X_HCI_TYPE */
 
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_IC_TYPE,ODM_RTL8188E);
 
@@ -289,10 +266,8 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 	pdmpriv->InitODMFlag = 0;
 	#else
 	pdmpriv->InitODMFlag =	ODM_RF_CALIBRATION		|
-							ODM_RF_TX_PWR_TRACK	//|
+							ODM_RF_TX_PWR_TRACK	/*  */
 							;
-	//if (pHalData->AntDivCfg)
-	//	pdmpriv->InitODMFlag |= ODM_BB_ANT_DIV;
 	#endif
 
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,pdmpriv->InitODMFlag);
@@ -309,7 +284,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 	int i;
 	#ifdef CONFIG_DISABLE_ODM
 	pdmpriv->InitODMFlag = 0;
-	#else //CONFIG_DISABLE_ODM
+	#else /* CONFIG_DISABLE_ODM */
 
 	pdmpriv->InitODMFlag =	ODM_BB_DIG				|
 #ifdef	CONFIG_ODM_REFRESH_RAMASK
@@ -333,9 +308,9 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 		pdmpriv->InitODMFlag =	ODM_RF_CALIBRATION	|
 								ODM_RF_TX_PWR_TRACK;
 		}
-	#endif//(MP_DRIVER==1)
+	#endif/* MP_DRIVER==1) */
 
-	#endif//CONFIG_DISABLE_ODM
+	#endif/* CONFIG_DISABLE_ODM */
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,pdmpriv->InitODMFlag);
 
 	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_TX_UNI,&(Adapter->xmitpriv.tx_bytes));
@@ -347,28 +322,12 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_CHNL,&( pHalData->CurrentChannel));
 	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_NET_CLOSED,&( Adapter->net_closed));
 	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_MP_MODE,&(Adapter->registrypriv.mp_mode));
-	//================= only for 8192D   =================
-	/*
-	//pHalData->CurrentBandType92D
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_BAND,&(pDM_Odm->u1Byte_temp));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_DMSP_GET_VALUE,&(pDM_Odm->u1Byte_temp));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_BUDDY_ADAPTOR,&(pDM_Odm->PADAPTER_temp));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_DMSP_IS_MASTER,&(pDM_Odm->u1Byte_temp));
-	//================= only for 8192D   =================
-	// driver havn't those variable now
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_BT_OPERATION,&(pDM_Odm->u1Byte_temp));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_BT_DISABLE_EDCA,&(pDM_Odm->u1Byte_temp));
-	*/
-
 	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_SCAN,&(pmlmepriv->bScanInProcess));
 	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_POWER_SAVING,&(pwrctrlpriv->bpower_saving));
 	ODM_CmnInfoInit(pDM_Odm, ODM_CMNINFO_RF_ANTENNA_TYPE, pHalData->TRxAntDivType);
 
 	for (i=0; i< NUM_STA; i++)
-	{
-		//pDM_Odm->pODM_StaInfo[i] = NULL;
 		ODM_CmnInfoPtrArrayHook(pDM_Odm, ODM_CMNINFO_STA_STATUS,i,NULL);
-	}
 }
 
 void
@@ -409,7 +368,7 @@ rtl8188e_HalDmWatchDog(
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
 #ifdef CONFIG_CONCURRENT_MODE
 	PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
-#endif //CONFIG_CONCURRENT_MODE
+#endif /* CONFIG_CONCURRENT_MODE */
 
 	_func_enter_;
 
@@ -439,18 +398,18 @@ rtl8188e_HalDmWatchDog(
 #endif
 
 #ifdef CONFIG_P2P_PS
-	// Fw is under p2p powersaving mode, driver should stop dynamic mechanism.
-	// modifed by thomas. 2011.06.11.
+	/*  Fw is under p2p powersaving mode, driver should stop dynamic mechanism. */
+	/*  modifed by thomas. 2011.06.11. */
 	if (Adapter->wdinfo.p2p_ps_mode)
 		bFwPSAwake = false;
-#endif //CONFIG_P2P_PS
+#endif /* CONFIG_P2P_PS */
 
 	if ( (hw_init_completed == true)
 		&& ((!bFwCurrentInPSMode) && bFwPSAwake))
 	{
-		//
-		// Calculate Tx/Rx statistics.
-		//
+		/*  */
+		/*  Calculate Tx/Rx statistics. */
+		/*  */
 		dm_CheckStatistics(Adapter);
 
 #ifdef CONFIG_CONCURRENT_MODE
@@ -458,25 +417,12 @@ rtl8188e_HalDmWatchDog(
 			goto _record_initrate;
 #endif
 
-		//
-		// Dynamically switch RTS/CTS protection.
-		//
-		//dm_CheckProtection(Adapter);
-
-#ifdef CONFIG_PCI_HCI
-		// 20100630 Joseph: Disable Interrupt Migration mechanism temporarily because it degrades Rx throughput.
-		// Tx Migration settings.
-		//dm_InterruptMigration(Adapter);
-
-		//if (Adapter->HalFunc.TxCheckStuckHandler(Adapter))
-		//	PlatformScheduleWorkItem(&(GET_HAL_DATA(Adapter)->HalResetWorkItem));
-#endif
-		_record_initrate:
+_record_initrate:
 	_func_exit_;
 	}
 
 
-	//ODM
+	/* ODM */
 	if (hw_init_completed == true)
 	{
 		struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
@@ -491,7 +437,7 @@ rtl8188e_HalDmWatchDog(
 			if (Adapter->stapriv.asoc_sta_count > 2)
 				bLinked = true;
 		}
-		else{//Station mode
+		else{/* Station mode */
 			if (check_fwstate(pmlmepriv, _FW_LINKED)== true)
 				bLinked = true;
 		}
@@ -499,7 +445,7 @@ rtl8188e_HalDmWatchDog(
 #ifdef CONFIG_CONCURRENT_MODE
 		if (check_buddy_fw_link(Adapter))
 			bLinked = true;
-#endif //CONFIG_CONCURRENT_MODE
+#endif /* CONFIG_CONCURRENT_MODE */
 
 		ODM_CmnInfoUpdate(&pHalData->odmpriv ,ODM_CMNINFO_LINK, bLinked);
 		ODM_DMWatchdog(&pHalData->odmpriv);
@@ -508,14 +454,14 @@ rtl8188e_HalDmWatchDog(
 
 skip_dm:
 
-	// Check GPIO to determine current RF on/off and Pbc status.
-	// Check Hardware Radio ON/OFF or not
+	/*  Check GPIO to determine current RF on/off and Pbc status. */
+	/*  Check Hardware Radio ON/OFF or not */
 #ifdef CONFIG_PCI_HCI
 	if (pHalData->bGpioHwWpsPbc)
 #endif
 	{
-		//temp removed
-		//dm_CheckPbcGPIO(Adapter);
+		/* temp removed */
+		/* dm_CheckPbcGPIO(Adapter); */
 	}
 	return;
 }
@@ -526,10 +472,8 @@ void rtl8188e_init_dm_priv(PADAPTER Adapter)
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
 	_rtw_memset(pdmpriv, 0, sizeof(struct dm_priv));
-	//_rtw_spinlock_init(&(pHalData->odm_stainfo_lock));
 	Init_ODM_ComInfo_88E(Adapter);
 #ifdef CONFIG_SW_ANTENNA_DIVERSITY
-	//_init_timer(&(pdmpriv->SwAntennaSwitchTimer),  Adapter->pnetdev , odm_SW_AntennaSwitchCallback, Adapter);
 	ODM_InitAllTimers(podmpriv );
 #endif
 	ODM_InitDebugSetting(podmpriv);
@@ -540,29 +484,23 @@ void rtl8188e_deinit_dm_priv(PADAPTER Adapter)
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
-	//_rtw_spinlock_free(&pHalData->odm_stainfo_lock);
 #ifdef CONFIG_SW_ANTENNA_DIVERSITY
-	//_cancel_timer_ex(&pdmpriv->SwAntennaSwitchTimer);
 	ODM_CancelAllTimers(podmpriv);
 #endif
 }
 
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
-// Add new function to reset the state of antenna diversity before link.
-//
-// Compare RSSI for deciding antenna
+/*  Add new function to reset the state of antenna diversity before link. */
+/*  */
+/*  Compare RSSI for deciding antenna */
 void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src)
 {
-	//PADAPTER Adapter = pDM_Odm->Adapter ;
-
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	if (0 != pHalData->AntDivCfg )
 	{
-		//DBG_88E("update_network=> orgRSSI(%d)(%d),newRSSI(%d)(%d)\n",dst->Rssi,query_rx_pwr_percentage(dst->Rssi),
-		//	src->Rssi,query_rx_pwr_percentage(src->Rssi));
-		//select optimum_antenna for before linked =>For antenna diversity
-		if (dst->Rssi >=  src->Rssi )//keep org parameter
+		/* select optimum_antenna for before linked =>For antenna diversity */
+		if (dst->Rssi >=  src->Rssi )/* keep org parameter */
 		{
 			src->Rssi = dst->Rssi;
 			src->PhyInfo.Optimum_antenna = dst->PhyInfo.Optimum_antenna;
@@ -570,7 +508,7 @@ void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src
 	}
 }
 
-// Add new function to reset the state of antenna diversity before link.
+/*  Add new function to reset the state of antenna diversity before link. */
 u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 {
 
@@ -579,12 +517,9 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 	SWAT_T		*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 
-	// Condition that does not need to use antenna diversity.
+	/*  Condition that does not need to use antenna diversity. */
 	if (pHalData->AntDivCfg==0)
-	{
-		//DBG_88E("odm_AntDivBeforeLink8192C(): No AntDiv Mechanism.\n");
 		return false;
-	}
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
@@ -593,17 +528,13 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 
 
 	if (pDM_SWAT_Table->SWAS_NoLink_State == 0){
-		//switch channel
+		/* switch channel */
 		pDM_SWAT_Table->SWAS_NoLink_State = 1;
 		pDM_SWAT_Table->CurAntenna = (pDM_SWAT_Table->CurAntenna==Antenna_A)?Antenna_B:Antenna_A;
 
-		//PHY_SetBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300, pDM_SWAT_Table->CurAntenna);
 		rtw_antenna_select_cmd(Adapter, pDM_SWAT_Table->CurAntenna, false);
-		//DBG_88E("%s change antenna to ANT_( %s ).....\n",__func__, (pDM_SWAT_Table->CurAntenna==Antenna_A)?"A":"B");
 		return true;
-	}
-	else
-	{
+	} else {
 		pDM_SWAT_Table->SWAS_NoLink_State = 0;
 		return false;
 	}

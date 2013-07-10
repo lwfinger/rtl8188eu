@@ -62,7 +62,7 @@ odm_ConfigRFReg_8188E(
 	else
 	{
 		ODM_SetRFReg(pDM_Odm, RF_PATH, RegAddr, bRFRegOffsetMask, Data);
-		// Add 1us delay between BB/RF register setting.
+		/*  Add 1us delay between BB/RF register setting. */
 		ODM_delay_us(1);
 	}
 }
@@ -75,7 +75,7 @@ odm_ConfigRF_RadioA_8188E(
 		u4Byte					Data
 	)
 {
-	u4Byte  content = 0x1000; // RF_Content: radioa_txt
+	u4Byte  content = 0x1000; /*  RF_Content: radioa_txt */
 	u4Byte	maskforPhySet= (u4Byte)(content&0xE000);
 
     odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, ODM_RF_PATH_A, Addr|maskforPhySet);
@@ -90,7 +90,7 @@ odm_ConfigRF_RadioB_8188E(
 		u4Byte					Data
 	)
 {
-	u4Byte  content = 0x1001; // RF_Content: radiob_txt
+	u4Byte  content = 0x1001; /*  RF_Content: radiob_txt */
 	u4Byte	maskforPhySet= (u4Byte)(content&0xE000);
 
     odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, ODM_RF_PATH_B, Addr|maskforPhySet);
@@ -119,7 +119,7 @@ odm_ConfigBB_AGC_8188E(
     )
 {
 	ODM_SetBBReg(pDM_Odm, Addr, Bitmask, Data);
-	// Add 1us delay between BB/RF register setting.
+	/*  Add 1us delay between BB/RF register setting. */
 	ODM_delay_us(1);
 
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_TRACE, ("===> ODM_ConfigBBWithHeaderFile: [AGC_TAB] %08X %08X\n", Addr, Data));
@@ -200,7 +200,7 @@ odm_ConfigBB_PHY_8188E(
 			pDM_Odm->RFCalibrateInfo.RegA24 = Data;
 		ODM_SetBBReg(pDM_Odm, Addr, Bitmask, Data);
 
-		// Add 1us delay between BB/RF register setting.
+		/*  Add 1us delay between BB/RF register setting. */
 		ODM_delay_us(1);
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_TRACE, ("===> ODM_ConfigBBWithHeaderFile: [PHY_REG] %08X %08X\n", Addr, Data));
 	}
