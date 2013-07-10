@@ -920,7 +920,7 @@ _func_exit_;
 /* 			   (3) WMM */
 /* 			   (4) HT */
 /*                      (5) others */
-int rtw_is_desired_network(_adapter *adapter, struct wlan_network *pnetwork)
+static int rtw_is_desired_network(_adapter *adapter, struct wlan_network *pnetwork)
 {
 	struct security_priv *psecuritypriv = &adapter->securitypriv;
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
@@ -3268,7 +3268,7 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 {
 	u32 ielen, out_len;
 	HT_CAP_AMPDU_FACTOR max_rx_ampdu_factor;
-	unsigned char *p, *pframe;
+	unsigned char *p;
 	struct rtw_ieee80211_ht_cap ht_capie;
 	unsigned char WMM_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00};
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
@@ -3285,8 +3285,8 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 		if (pqospriv->qos_option == 0)
 		{
 			out_len = *pout_len;
-			pframe = rtw_set_ie(out_ie+out_len, _VENDOR_SPECIFIC_IE_,
-								_WMM_IE_Length_, WMM_IE, pout_len);
+			rtw_set_ie(out_ie+out_len, _VENDOR_SPECIFIC_IE_,
+				   _WMM_IE_Length_, WMM_IE, pout_len);
 
 			pqospriv->qos_option = 1;
 		}
@@ -3331,8 +3331,8 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 			ht_capie.ampdu_params_info |= (IEEE80211_HT_CAP_AMPDU_DENSITY&0x00);
 
 
-		pframe = rtw_set_ie(out_ie+out_len, _HT_CAPABILITY_IE_,
-							sizeof(struct rtw_ieee80211_ht_cap), (unsigned char*)&ht_capie, pout_len);
+		rtw_set_ie(out_ie+out_len, _HT_CAPABILITY_IE_,
+			   sizeof(struct rtw_ieee80211_ht_cap), (unsigned char*)&ht_capie, pout_len);
 
 
 		/* _rtw_memcpy(out_ie+out_len, p, ielen+2);//gtest */
@@ -3345,7 +3345,7 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 		if (p && (ielen==sizeof(struct ieee80211_ht_addt_info)))
 		{
 			out_len = *pout_len;
-			pframe = rtw_set_ie(out_ie+out_len, _HT_ADD_INFO_IE_, ielen, p+2 , pout_len);
+			rtw_set_ie(out_ie+out_len, _HT_ADD_INFO_IE_, ielen, p+2 , pout_len);
 		}
 
 	}

@@ -3250,7 +3250,7 @@ static int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ct
 	return bPktInBuf;
 }
 
-int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prframe)
+static int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prframe)
 {
 	_irqL irql;
 	int retval = _SUCCESS;
