@@ -20,7 +20,6 @@
 #ifndef _RTW_MP_H_
 #define _RTW_MP_H_
 
-#ifndef PLATFORM_WINDOWS
 //	00 - Success
 //	11 - Error
 #define STATUS_SUCCESS				(0x00000000L)
@@ -80,7 +79,6 @@
 #define NDIS_STATUS_INCOMPATABLE_QOS		((NDIS_STATUS)0xC0010027L)  // cause 49
 #define NDIS_STATUS_AAL_PARAMS_UNSUPPORTED	((NDIS_STATUS)0xC0010028L)  // cause 93
 #define NDIS_STATUS_NO_ROUTE_TO_DESTINATION	((NDIS_STATUS)0xC0010029L)  // cause 3
-#endif /* #ifndef PLATFORM_WINDOWS */
 
 typedef enum _ANTENNA_PATH{
 		ANTENNA_NONE	= 0x00,
@@ -125,12 +123,8 @@ struct mp_xmit_frame
 	u8 *mem_addr;
 	u32 sz[8];
 
-#if defined(PLATFORM_OS_XP) || defined(PLATFORM_LINUX)
+#if defined(PLATFORM_LINUX)
 	PURB pxmit_urb[8];
-#endif
-
-#ifdef PLATFORM_OS_XP
-	PIRP pxmit_irp[8];
 #endif
 
 	u8 bpending[8];
@@ -152,22 +146,6 @@ struct mp_wiparam
 };
 
 typedef void(*wi_act_func)(void* padapter);
-
-#ifdef PLATFORM_WINDOWS
-struct mp_wi_cntx
-{
-	u8 bmpdrv_unload;
-
-	// Work Item
-	NDIS_WORK_ITEM mp_wi;
-	NDIS_EVENT mp_wi_evt;
-	_lock mp_wi_lock;
-	u8 bmp_wi_progress;
-	wi_act_func curractfunc;
-	// Variable needed in each implementation of CurrActFunc.
-	struct mp_wiparam param;
-};
-#endif
 
 struct mp_tx
 {
@@ -404,31 +382,6 @@ struct mp_priv
 
 	struct wlan_network mp_network;
 	NDIS_802_11_MAC_ADDRESS network_macaddr;
-
-#ifdef PLATFORM_WINDOWS
-	u32 rx_testcnt;
-	u32 rx_testcnt1;
-	u32 rx_testcnt2;
-	u32 tx_testcnt;
-	u32 tx_testcnt1;
-
-	struct mp_wi_cntx wi_cntx;
-
-	u8 h2c_result;
-	u8 h2c_seqnum;
-	u16 h2c_cmdcode;
-	u8 h2c_resp_parambuf[512];
-	_lock h2c_lock;
-	_lock wkitm_lock;
-	u32 h2c_cmdcnt;
-	NDIS_EVENT h2c_cmd_evt;
-	NDIS_EVENT c2h_set;
-	NDIS_EVENT h2c_clr;
-	NDIS_EVENT cpwm_int;
-
-	NDIS_EVENT scsir_full_evt;
-	NDIS_EVENT scsiw_empty_evt;
-#endif
 
 	u8 *pallocated_mp_xmitframe_buf;
 	u8 *pmp_xmtframe_buf;

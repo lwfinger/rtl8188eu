@@ -27,10 +27,6 @@
 #include <usb_ops.h>
 #include <rtl8188e_hal.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-#error "Shall be Linux or Windows, but not both!\n"
-#endif
-
 s32	rtl8188eu_init_xmit_priv(_adapter *padapter)
 {
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;

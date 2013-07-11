@@ -103,8 +103,7 @@ struct oid_obj_priv {
 	NDIS_STATUS (*oidfuns)(struct oid_par_priv *poid_par_priv);
 };
 
-#if (defined(CONFIG_MP_INCLUDED) && defined(_RTW_MP_IOCTL_C_)) || \
-	(defined(PLATFORM_WINDOWS) && defined(_RTW_IOCTL_RTL_C_))
+#if (defined(CONFIG_MP_INCLUDED) && defined(_RTW_MP_IOCTL_C_))
 static NDIS_STATUS oid_null_function(struct oid_par_priv* poid_par_priv)
 {
 	_func_enter_;
@@ -112,136 +111,6 @@ static NDIS_STATUS oid_null_function(struct oid_par_priv* poid_par_priv)
 	return NDIS_STATUS_SUCCESS;
 }
 #endif
-
-#ifdef PLATFORM_WINDOWS
-
-int TranslateNdisPsToRtPs(NDIS_802_11_POWER_MODE	ndisPsMode);
-
-//OID Handler for Segment 1
-NDIS_STATUS oid_gen_supported_list_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_hardware_status_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_media_supported_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_media_in_use_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_maximum_lookahead_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_maximum_frame_size_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_link_speed_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_transmit_buffer_space_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_receive_buffer_space_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_transmit_block_size_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_receive_block_size_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_vendor_id_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_vendor_description_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_current_packet_filter_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_current_lookahead_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_driver_version_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_maximum_total_size_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_protocol_options_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_mac_options_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_media_connect_status_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_maximum_send_packets_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_vendor_driver_version_hdl(struct oid_par_priv* poid_par_priv);
-
-
-//OID Handler for Segment 2
-NDIS_STATUS oid_gen_physical_medium_hdl(struct oid_par_priv* poid_par_priv);
-
-//OID Handler for Segment 3
-NDIS_STATUS oid_gen_xmit_ok_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_rcv_ok_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_xmit_error_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_rcv_error_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_gen_rcv_no_buffer_hdl(struct oid_par_priv* poid_par_priv);
-
-
-//OID Handler for Segment 4
-NDIS_STATUS oid_802_3_permanent_address_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_current_address_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_multicast_list_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_maximum_list_size_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_mac_options_hdl(struct oid_par_priv* poid_par_priv);
-
-
-
-//OID Handler for Segment 5
-NDIS_STATUS oid_802_3_rcv_error_alignment_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_xmit_one_collision_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_xmit_more_collisions_hdl(struct oid_par_priv* poid_par_priv);
-
-
-//OID Handler for Segment 6
-NDIS_STATUS oid_802_3_xmit_deferred_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_xmit_max_collisions_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_rcv_overrun_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_xmit_underrun_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_xmit_heartbeat_failure_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_xmit_times_crs_lost_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_3_xmit_late_collisions_hdl(struct oid_par_priv* poid_par_priv);
-
-
-
-//OID Handler for Segment 7
-NDIS_STATUS oid_pnp_capabilities_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_pnp_set_power_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_pnp_query_power_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_pnp_add_wake_up_pattern_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_pnp_remove_wake_up_pattern_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_pnp_wake_up_pattern_list_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_pnp_enable_wake_up_hdl(struct oid_par_priv* poid_par_priv);
-
-
-
-//OID Handler for Segment 8
-NDIS_STATUS oid_802_11_bssid_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_ssid_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_infrastructure_mode_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_add_wep_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_remove_wep_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_disassociate_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_authentication_mode_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_privacy_filter_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_bssid_list_scan_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_encryption_status_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_reload_defaults_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_add_key_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_remove_key_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_association_information_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_test_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_media_stream_mode_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_capability_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_pmkid_hdl(struct oid_par_priv* poid_par_priv);
-
-
-
-
-
-//OID Handler for Segment 9
-NDIS_STATUS oid_802_11_network_types_supported_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_network_type_in_use_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_tx_power_level_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_rssi_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_rssi_trigger_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_fragmentation_threshold_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_rts_threshold_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_number_of_antennas_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_rx_antenna_selected_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_tx_antenna_selected_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_supported_rates_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_desired_rates_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_configuration_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_power_mode_hdl(struct oid_par_priv* poid_par_priv);
-NDIS_STATUS oid_802_11_bssid_list_hdl(struct oid_par_priv* poid_par_priv);
-
-
-//OID Handler for Segment 10
-NDIS_STATUS oid_802_11_statistics_hdl(struct oid_par_priv* poid_par_priv);
-
-
-//OID Handler for Segment ED
-NDIS_STATUS oid_rt_mh_vender_id_hdl(struct oid_par_priv* poid_par_priv);
-
-void Set_802_3_MULTICAST_LIST(ADAPTER *pAdapter, UCHAR *MCListbuf, ULONG MCListlen, bool bAcceptAllMulticast);
-
-#endif// end of PLATFORM_WINDOWS
 
 #if defined(PLATFORM_LINUX) && defined(CONFIG_WIRELESS_EXT)
 extern struct iw_handler_def  rtw_handlers_def;

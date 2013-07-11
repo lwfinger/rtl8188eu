@@ -127,15 +127,6 @@ _func_enter_;
 
 	pevtpriv->c2h_mem = pevtpriv->allocated_c2h_mem +  4\
 	- ( (u32)(pevtpriv->allocated_c2h_mem) & 3);
-#ifdef PLATFORM_OS_XP
-	pevtpriv->pc2h_mdl= IoAllocateMdl((u8 *)pevtpriv->c2h_mem, C2H_MEM_SZ , false, false, NULL);
-
-	if (pevtpriv->pc2h_mdl == NULL){
-		res= _FAIL;
-		goto exit;
-	}
-	MmBuildMdlForNonPagedPool(pevtpriv->pc2h_mdl);
-#endif
 #endif /* end of CONFIG_SDIO_HCI */
 
 	_rtw_init_queue(&(pevtpriv->evt_queue));

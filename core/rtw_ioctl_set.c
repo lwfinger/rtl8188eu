@@ -209,100 +209,6 @@ _func_exit_;
 	return ret;
 }
 
-#ifdef PLATFORM_WINDOWS
-u8 rtw_pnp_set_power_wakeup(_adapter* padapter)
-{
-	u8 res=_SUCCESS;
-
-_func_enter_;
-
-	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("==>rtw_pnp_set_power_wakeup!!!\n"));
-
-	res = rtw_setstandby_cmd(padapter, 0);
-
-	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("<==rtw_pnp_set_power_wakeup!!!\n"));
-
-_func_exit_;
-
-	return res;
-}
-
-u8 rtw_pnp_set_power_sleep(_adapter* padapter)
-{
-	u8 res=_SUCCESS;
-
-_func_enter_;
-
-	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("==>rtw_pnp_set_power_sleep!!!\n"));
-
-	res = rtw_setstandby_cmd(padapter, 1);
-
-	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("<==rtw_pnp_set_power_sleep!!!\n"));
-
-_func_exit_;
-
-	return res;
-}
-
-u8 rtw_set_802_11_reload_defaults(_adapter * padapter, NDIS_802_11_RELOAD_DEFAULTS reloadDefaults)
-{
-_func_enter_;
-
-	switch ( reloadDefaults)
-	{
-		case Ndis802_11ReloadWEPKeys:
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("SetInfo OID_802_11_RELOAD_DEFAULTS : Ndis802_11ReloadWEPKeys\n"));
-			break;
-	}
-
-	/*  8711 CAM was not for En/Decrypt only */
-	/*  so, we can't clear all keys. */
-	/*  should we disable WPAcfg (ox0088) bit 1-2, instead of clear all CAM */
-
-	/* TO DO... */
-
-_func_exit_;
-
-	return true;
-}
-
-u8 set_802_11_test(_adapter* padapter, NDIS_802_11_TEST *test)
-{
-	u8 ret=true;
-
-_func_enter_;
-
-	switch (test->Type)
-	{
-		case 1:
-			NdisMIndicateStatus(padapter->hndis_adapter, NDIS_STATUS_MEDIA_SPECIFIC_INDICATION, (void *)&test->AuthenticationEvent, test->Length - 8);
-			NdisMIndicateStatusComplete(padapter->hndis_adapter);
-			break;
-
-		case 2:
-			NdisMIndicateStatus(padapter->hndis_adapter, NDIS_STATUS_MEDIA_SPECIFIC_INDICATION, (void *)&test->RssiTrigger, sizeof(NDIS_802_11_RSSI));
-			NdisMIndicateStatusComplete(padapter->hndis_adapter);
-			break;
-
-		default:
-			ret=false;
-			break;
-	}
-
-_func_exit_;
-
-	return ret;
-}
-
-u8	rtw_set_802_11_pmkid(_adapter*	padapter, NDIS_802_11_PMKID *pmkid)
-{
-	u8	ret=_SUCCESS;
-
-	return ret;
-}
-
-#endif
-
 u8 rtw_set_802_11_bssid(_adapter* padapter, u8 *bssid)
 {
 	_irqL irqL;
@@ -492,32 +398,6 @@ _func_enter_;
 	}
 
 handle_tkip_countermeasure:
-#ifdef PLATFORM_WINDOWS
-	if (padapter->securitypriv.btkip_countermeasure==true)
-	{
-		LARGE_INTEGER	sys_time;
-		u32  diff_time,cur_time ;
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_ssid:padapter->securitypriv.btkip_countermeasure==true\n"));
-		NdisGetCurrentSystemTime(&sys_time);
-		cur_time=(u32)(sys_time.QuadPart/10);  /*  In micro-second. */
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_ssid:cur_time=0x%x\n",cur_time));
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_ssid:psecuritypriv->last_mic_err_time=0x%x\n",padapter->securitypriv.btkip_countermeasure_time));
-		diff_time = cur_time -padapter->securitypriv.btkip_countermeasure_time; /*  In micro-second. */
-		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_ssid:diff_time=0x%x\n",diff_time));
-
-		if (diff_time > 60000000) {
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_ssid(): countermeasure time >60s.\n"));
-			padapter->securitypriv.btkip_countermeasure=false;
-			/*  Update MIC error time. */
-			padapter->securitypriv.btkip_countermeasure_time=0;
-		} else {
-			/*  can't join  in 60 seconds. */
-			status = _FAIL;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_ssid(): countermeasure time <60s.\n"));
-			goto release_mlme_lock;
-		}
-	}
-#endif
 
 #ifdef PLATFORM_LINUX
 	if (padapter->securitypriv.btkip_countermeasure == true) {

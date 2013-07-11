@@ -279,17 +279,6 @@ _func_enter_;
 
 	if (!isfreeall)
 	{
-#ifdef PLATFORM_WINDOWS
-
-		delta_time = (curr_time -pnetwork->last_scanned)/10;
-
-		if (delta_time  < lifetime*1000000)/*  unit:usec */
-		{
-			goto exit;
-		}
-
-#endif
-
 #ifdef PLATFORM_LINUX
 
 		delta_time = (curr_time -pnetwork->last_scanned)/HZ;
@@ -745,13 +734,6 @@ static void update_current_network(_adapter *adapter, WLAN_BSSID_EX *pnetwork)
 
 _func_enter_;
 
-#ifdef PLATFORM_OS_XP
-	if ((unsigned long)(&(pmlmepriv->cur_network.network)) < 0x7ffffff)
-	{
-		KeBugCheckEx(0x87111c1c, (ULONG_PTR)(&(pmlmepriv->cur_network.network)), 0, 0,0);
-	}
-#endif
-
 	if ( (check_fwstate(pmlmepriv, _FW_LINKED)== true) && (is_same_network(&(pmlmepriv->cur_network.network), pnetwork)))
 	{
 		update_network(&(pmlmepriv->cur_network.network), pnetwork,adapter, true);
@@ -789,9 +771,6 @@ _func_enter_;
 
 		if ((unsigned long)(pnetwork) < 0x7ffffff)
 		{
-#ifdef PLATFORM_OS_XP
-			KeBugCheckEx(0x87111c1c, (ULONG_PTR)pnetwork, 0, 0,0);
-#endif
 		}
 
 		if (is_same_network(&(pnetwork->network), target))

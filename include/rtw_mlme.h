@@ -597,25 +597,6 @@ void indicate_wx_scan_complete_event(_adapter *padapter);
 void rtw_indicate_wx_assoc_event(_adapter *padapter);
 void rtw_indicate_wx_disassoc_event(_adapter *padapter);
 
-#ifdef PLATFORM_WINDOWS
-extern thread_return event_thread(void *context);
-
-extern void rtw_join_timeout_handler (
-		void *					SystemSpecific1,
-		void *					FunctionContext,
-		void *					SystemSpecific2,
-		void *					SystemSpecific3
-	);
-
-extern void _rtw_scan_timeout_handler (
-		void *					SystemSpecific1,
-		void *					FunctionContext,
-		void *					SystemSpecific2,
-		void *					SystemSpecific3
-	);
-
-#endif
-
 #if defined (PLATFORM_LINUX)
 extern int event_thread(void *context);
 extern void rtw_join_timeout_handler(void* FunctionContext);

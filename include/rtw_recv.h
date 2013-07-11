@@ -226,31 +226,13 @@ struct recv_priv
 	_sema	recv_sema;
 	_sema	terminate_recvthread_sema;
 #endif
-
-	//_queue	blk_strms[MAX_RX_NUMBLKS];    // keeping the block ack frame until return ack
 	_queue	free_recv_queue;
 	_queue	recv_pending_queue;
 	_queue	uc_swdec_pending_queue;
-
-
 	u8 *pallocated_frame_buf;
 	u8 *precv_frame_buf;
-
 	uint free_recvframe_cnt;
-
 	_adapter	*adapter;
-
-#ifdef PLATFORM_WINDOWS
-	_nic_hdl  RxPktPoolHdl;
-	_nic_hdl  RxBufPoolHdl;
-
-#ifdef PLATFORM_OS_XP
-	PMDL	pbytecnt_mdl;
-#endif
-	uint	counter; //record the number that up-layer will return to drv; only when counter==0 can we  release recv_priv
-	NDIS_EVENT	recv_resource_evt ;
-#endif
-
 	u32	bIsAnyNonBEPkts;
 	u64	rx_bytes;
 	u64	rx_pkts;
@@ -375,18 +357,10 @@ struct recv_buf
 
 #ifdef CONFIG_USB_HCI
 
-	#if defined(PLATFORM_OS_XP)||defined(PLATFORM_LINUX)
+	#if defined(PLATFORM_LINUX)
 	PURB	purb;
 	dma_addr_t dma_transfer_addr;	/* (in) dma addr for transfer_buffer */
 	u32 alloc_sz;
-	#endif
-
-	#ifdef PLATFORM_OS_XP
-	PIRP		pirp;
-	#endif
-
-	#ifdef PLATFORM_OS_CE
-	USB_TRANSFER	usb_transfer_read_port;
 	#endif
 
 	u8  irp_pending;
@@ -622,10 +596,6 @@ __inline static _buffer * get_rxbuf_desc(union recv_frame *precvframe)
 
 	if (precvframe==NULL)
 		return NULL;
-#ifdef PLATFORM_WINDOWS
-	NdisQueryPacket(precvframe->u.hdr.pkt, NULL, NULL, &buf_desc, NULL);
-#endif
-
 	return buf_desc;
 }
 
@@ -645,13 +615,6 @@ __inline static union recv_frame *pkt_to_recvframe(_pkt *pkt)
 
 	u8 * buf_star;
 	union recv_frame * precv_frame;
-#ifdef PLATFORM_WINDOWS
-	_buffer * buf_desc;
-	uint len;
-
-	NdisQueryPacket(pkt, NULL, NULL, &buf_desc, &len);
-	NdisQueryBufferSafe(buf_desc, &buf_star, &len, HighPagePriority);
-#endif
 	precv_frame = rxmem_to_recvframe((unsigned char*)buf_star);
 
 	return precv_frame;

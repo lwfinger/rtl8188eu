@@ -299,10 +299,6 @@ typedef struct _WLAN_BCN_INFO
 /* temporally add #pragma pack for structure alignment issue of
 *   WLAN_BSSID_EX and get_WLAN_BSSID_EX_sz()
 */
-#ifdef PLATFORM_WINDOWS
-#pragma pack(push)
-#pragma pack(1)
-#endif
 typedef struct _WLAN_BSSID_EX
 {
   ULONG  Length;
@@ -318,14 +314,8 @@ typedef struct _WLAN_BSSID_EX
   WLAN_PHY_INFO	PhyInfo;
   ULONG  IELength;
   UCHAR  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)
-}
-#ifndef PLATFORM_WINDOWS
-__attribute__((packed))
-#endif
+} __attribute__((packed))
 WLAN_BSSID_EX, *PWLAN_BSSID_EX;
-#ifdef PLATFORM_WINDOWS
-#pragma pack(pop)
-#endif
 
 __inline  static uint get_WLAN_BSSID_EX_sz(WLAN_BSSID_EX *bss)
 {
@@ -341,10 +331,6 @@ struct	wlan_network {
 	int	join_res;
 	WLAN_BSSID_EX	network; //must be the last item
 	WLAN_BCN_INFO	BcnInfo;
-#ifdef PLATFORM_WINDOWS
-	unsigned char  iebuf[MAX_IE_SZ];
-#endif
-
 };
 
 enum VRTL_CARRIER_SENSE
@@ -388,7 +374,6 @@ enum UAPSD_MAX_SP
 *	WPA2
 */
 
-#ifndef PLATFORM_OS_CE
 typedef struct _PMKID_CANDIDATE {
     NDIS_802_11_MAC_ADDRESS BSSID;
     ULONG Flags;
@@ -418,7 +403,6 @@ typedef struct _NDIS_802_11_CAPABILITY
 	NDIS_802_11_AUTHENTICATION_ENCRYPTION AuthenticationEncryptionSupported[1];
 
 } NDIS_802_11_CAPABILITY, *PNDIS_802_11_CAPABILITY;
-#endif
 
 u8 key_2char2num(u8 hch, u8 lch);
 u8 key_char2num(u8 ch);
