@@ -125,7 +125,6 @@ void rtw_set_tx_chksum_offload(_pkt *pkt, struct pkt_attrib *pattrib)
 
 int rtw_os_xmit_resource_alloc(_adapter *padapter, struct xmit_buf *pxmitbuf,u32 alloc_sz)
 {
-#ifdef CONFIG_USB_HCI
 	int i;
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
 	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
@@ -158,23 +157,11 @@ int rtw_os_xmit_resource_alloc(_adapter *padapter, struct xmit_buf *pxmitbuf,u32
 		}
 
 	}
-#endif
-#if defined(CONFIG_PCI_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	pxmitbuf->pallocated_buf = rtw_zmalloc(alloc_sz);
-	if (pxmitbuf->pallocated_buf == NULL)
-	{
-		return _FAIL;
-	}
-
-	pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
-#endif
-
 	return _SUCCESS;
 }
 
 void rtw_os_xmit_resource_free(_adapter *padapter, struct xmit_buf *pxmitbuf,u32 free_sz)
 {
-#ifdef CONFIG_USB_HCI
 	int i;
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
 	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
@@ -197,12 +184,6 @@ void rtw_os_xmit_resource_free(_adapter *padapter, struct xmit_buf *pxmitbuf,u32
 	if (pxmitbuf->pallocated_buf)
 		rtw_mfree(pxmitbuf->pallocated_buf, free_sz);
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
-
-#endif
-#if defined(CONFIG_PCI_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	if (pxmitbuf->pallocated_buf)
-		rtw_mfree(pxmitbuf->pallocated_buf, free_sz);
-#endif
 }
 
 #define WMM_XMIT_THRESHOLD	(NR_XMITFRAME*2/5)
@@ -250,20 +231,6 @@ void rtw_os_xmit_schedule(_adapter *padapter)
 {
 	_adapter *pri_adapter = padapter;
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	if (!padapter)
-		return;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->adapter_type > PRIMARY_ADAPTER)
-		pri_adapter = padapter->pbuddy_adapter;
-#endif
-
-	if (_rtw_queue_empty(&pri_adapter->xmitpriv.pending_xmitbuf_queue) == false)
-		_rtw_up_sema(&pri_adapter->xmitpriv.xmit_sema);
-
-
-#else
 	_irqL  irqL;
 	struct xmit_priv *pxmitpriv;
 
@@ -275,12 +242,9 @@ void rtw_os_xmit_schedule(_adapter *padapter)
 	_enter_critical_bh(&pxmitpriv->lock, &irqL);
 
 	if (rtw_txframes_pending(padapter))
-	{
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
-	}
 
 	_exit_critical_bh(&pxmitpriv->lock, &irqL);
-#endif
 }
 
 static void rtw_check_xmit_resource(_adapter *padapter, _pkt *pkt)

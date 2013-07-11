@@ -31,12 +31,6 @@
 #include <rtw_iol.h>
 #endif
 
-#ifndef CONFIG_USB_HCI
-
-#error "CONFIG_USB_HCI shall be on!\n"
-
-#endif
-
 #include <usb_ops.h>
 #include <usb_hal.h>
 #include <usb_osintf.h>
@@ -2124,7 +2118,6 @@ readAdapterInfo_8188EU(
 		PADAPTER	padapter
 	)
 {
-#if 1
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 
 	/* parse the eeprom/efuse content */
@@ -2150,28 +2143,9 @@ readAdapterInfo_8188EU(
 	/*  The following part initialize some vars by PG info. */
 	/*  */
 	Hal_InitChannelPlan(padapter);
-#if defined(CONFIG_WOWLAN) && defined(CONFIG_SDIO_HCI)
-	Hal_DetectWoWMode(padapter);
-#endif /* CONFIG_WOWLAN && CONFIG_SDIO_HCI */
 	Hal_CustomizeByCustomerID_8188EU(padapter);
 
 	_ReadLEDSetting(padapter, pEEPROM->efuse_eeprom_data, pEEPROM->bautoload_fail_flag);
-
-#else
-
-#ifdef CONFIG_INTEL_PROXIM
-		/* for intel proximity */
-	if (pHalData->rf_type== RF_1T1R) {
-		Adapter->proximity.proxim_support = true;
-	} else if (pHalData->rf_type== RF_2T2R) {
-		if ((pHalData->EEPROMPID == 0x8186) &&
-			(pHalData->EEPROMVID== 0x0bda))
-		Adapter->proximity.proxim_support = true;
-	} else {
-		Adapter->proximity.proxim_support = false;
-	}
-#endif /* CONFIG_INTEL_PROXIM */
-#endif
 }
 
 static void _ReadPROMContent(

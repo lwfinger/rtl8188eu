@@ -62,7 +62,6 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 	if (!padapter->registrypriv.hw_wps_pbc)
 		return;
 
-#ifdef CONFIG_USB_HCI
 	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
 	tmp1byte |= (HAL_8192C_HW_GPIO_WPS_BIT);
 	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as output mode */
@@ -83,17 +82,6 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 	{
 		bPbcPressed = true;
 	}
-#else
-	tmp1byte = rtw_read8(padapter, GPIO_IN);
-
-	if (tmp1byte == 0xff || padapter->init_adpt_in_progress)
-		return ;
-
-	if ((tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)==0)
-	{
-		bPbcPressed = true;
-	}
-#endif
 
 	if ( true == bPbcPressed)
 	{
@@ -109,69 +97,6 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 		rtw_signal_process(padapter->pid[0], SIGUSR1);
 	}
 }
-
-#ifdef CONFIG_PCI_HCI
-/*  */
-/* 	Description: */
-/* 		Perform interrupt migration dynamically to reduce CPU utilization. */
-/*  */
-/* 	Assumption: */
-/* 		1. Do not enable migration under WIFI test. */
-/*  */
-/* 	Created by Roger, 2010.03.05. */
-/*  */
-void
-dm_InterruptMigration(
-		PADAPTER	Adapter
-	)
-{
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	bool			bCurrentIntMt, bCurrentACIntDisable;
-	bool			IntMtToSet = false;
-	bool			ACIntToSet = false;
-
-
-	/*  Retrieve current interrupt migration and Tx four ACs IMR settings first. */
-	bCurrentIntMt = pHalData->bInterruptMigration;
-	bCurrentACIntDisable = pHalData->bDisableTxInt;
-
-	/*  */
-	/*  <Roger_Notes> Currently we use busy traffic for reference instead of RxIntOK counts to prevent non-linear Rx statistics */
-	/*  when interrupt migration is set before. 2010.03.05. */
-	/*  */
-	if (!Adapter->registrypriv.wifi_spec &&
-		(check_fwstate(pmlmepriv, _FW_LINKED)== true) &&
-		pmlmepriv->LinkDetectInfo.bHigherBusyTraffic)
-	{
-		IntMtToSet = true;
-
-		/*  To check whether we should disable Tx interrupt or not. */
-		if (pmlmepriv->LinkDetectInfo.bHigherBusyRxTraffic )
-			ACIntToSet = true;
-	}
-
-	/* Update current settings. */
-	if ( bCurrentIntMt != IntMtToSet ){
-		DBG_88E("%s(): Update interrrupt migration(%d)\n",__func__,IntMtToSet);
-		if (IntMtToSet)
-		{
-			/*  */
-			/*  <Roger_Notes> Set interrrupt migration timer and corresponging Tx/Rx counter. */
-			/*  timer 25ns*0xfa0=100us for 0xf packets. */
-			/*  2010.03.05. */
-			/*  */
-			rtw_write32(Adapter, REG_INT_MIG, 0xff000fa0);/*  0x306:Rx, 0x307:Tx */
-			pHalData->bInterruptMigration = IntMtToSet;
-		} else {
-			/*  Reset all interrupt migration settings. */
-			rtw_write32(Adapter, REG_INT_MIG, 0);
-			pHalData->bInterruptMigration = IntMtToSet;
-		}
-	}
-}
-
-#endif
 
 /*  */
 /*  Initialize GPIO setting registers */
@@ -329,9 +254,7 @@ rtl8188e_InitHalDm(
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
 	u8	i;
 
-#ifdef CONFIG_USB_HCI
 	dm_InitGPIOSetting(Adapter);
-#endif
 
 	pdmpriv->DM_Type = DM_Type_ByDriver;
 	pdmpriv->DMFlag = DYNAMIC_FUNC_DISABLE;
@@ -445,13 +368,6 @@ skip_dm:
 
 	/*  Check GPIO to determine current RF on/off and Pbc status. */
 	/*  Check Hardware Radio ON/OFF or not */
-#ifdef CONFIG_PCI_HCI
-	if (pHalData->bGpioHwWpsPbc)
-#endif
-	{
-		/* temp removed */
-		/* dm_CheckPbcGPIO(Adapter); */
-	}
 	return;
 }
 

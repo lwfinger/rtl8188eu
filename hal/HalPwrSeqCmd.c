@@ -34,11 +34,6 @@ Major Change History:
 
 --*/
 #include <HalPwrSeqCmd.h>
-#ifdef CONFIG_SDIO_HCI
-#include <sdio_ops.h>
-#elif defined(CONFIG_GSPI_HCI)
-#include <gspi_ops.h>
-#endif
 
 /*  */
 /* 	Description: */
@@ -80,101 +75,61 @@ u8 HalPwrSeqCmdParsing(
 
 		/* 2 Only Handle the command whose FAB, CUT, and Interface are matched */
 		if ((GET_PWR_CFG_FAB_MASK(PwrCfgCmd) & FabVersion) &&
-			(GET_PWR_CFG_CUT_MASK(PwrCfgCmd) & CutVersion) &&
-			(GET_PWR_CFG_INTF_MASK(PwrCfgCmd) & InterfaceType))
-		{
-			switch (GET_PWR_CFG_CMD(PwrCfgCmd))
-			{
-				case PWR_CMD_READ:
-					RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_READ\n"));
-					break;
+		    (GET_PWR_CFG_CUT_MASK(PwrCfgCmd) & CutVersion) &&
+		    (GET_PWR_CFG_INTF_MASK(PwrCfgCmd) & InterfaceType)) {
+			switch (GET_PWR_CFG_CMD(PwrCfgCmd)) {
+			case PWR_CMD_READ:
+				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_READ\n"));
+				break;
+			case PWR_CMD_WRITE:
+				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_WRITE\n"));
+				offset = GET_PWR_CFG_OFFSET(PwrCfgCmd);
 
-				case PWR_CMD_WRITE:
-					RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_WRITE\n"));
-					offset = GET_PWR_CFG_OFFSET(PwrCfgCmd);
+				/*  Read the value from system register */
+				value = rtw_read8(padapter, offset);
 
-#ifdef CONFIG_SDIO_HCI
-					/*  */
-					/*  <Roger_Notes> We should deal with interface specific address mapping for some interfaces, e.g., SDIO interface */
-					/*  2011.07.07. */
-					/*  */
-					if (GET_PWR_CFG_BASE(PwrCfgCmd) == PWR_BASEADDR_SDIO)
-					{
-						/*  Read Back SDIO Local value */
-						value = SdioLocalCmd52Read1Byte(padapter, offset);
+				value &= ~(GET_PWR_CFG_MASK(PwrCfgCmd));
+				value |= (GET_PWR_CFG_VALUE(PwrCfgCmd) & GET_PWR_CFG_MASK(PwrCfgCmd));
 
-						value &= ~(GET_PWR_CFG_MASK(PwrCfgCmd));
-						value |= (GET_PWR_CFG_VALUE(PwrCfgCmd) & GET_PWR_CFG_MASK(PwrCfgCmd));
+				/*  Write the value back to sytem register */
+				rtw_write8(padapter, offset, value);
+				break;
+			case PWR_CMD_POLLING:
+				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_POLLING\n"));
 
-						/*  Write Back SDIO Local value */
-						SdioLocalCmd52Write1Byte(padapter, offset, value);
-					}
-					else
-#endif
-					{
-#ifdef CONFIG_GSPI_HCI
-						if (GET_PWR_CFG_BASE(PwrCfgCmd) == PWR_BASEADDR_SDIO)
-							offset = SPI_LOCAL_OFFSET | offset;
-#endif
-						/*  Read the value from system register */
+				bPollingBit = false;
+				offset = GET_PWR_CFG_OFFSET(PwrCfgCmd);
+				do {
 						value = rtw_read8(padapter, offset);
 
-						value &= ~(GET_PWR_CFG_MASK(PwrCfgCmd));
-						value |= (GET_PWR_CFG_VALUE(PwrCfgCmd) & GET_PWR_CFG_MASK(PwrCfgCmd));
-
-						/*  Write the value back to sytem register */
-						rtw_write8(padapter, offset, value);
-					}
-					break;
-
-				case PWR_CMD_POLLING:
-					RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_POLLING\n"));
-
-					bPollingBit = false;
-					offset = GET_PWR_CFG_OFFSET(PwrCfgCmd);
-#ifdef CONFIG_GSPI_HCI
-					if (GET_PWR_CFG_BASE(PwrCfgCmd) == PWR_BASEADDR_SDIO)
-						offset = SPI_LOCAL_OFFSET | offset;
-#endif
-					do {
-#ifdef CONFIG_SDIO_HCI
-						if (GET_PWR_CFG_BASE(PwrCfgCmd) == PWR_BASEADDR_SDIO)
-							value = SdioLocalCmd52Read1Byte(padapter, offset);
-						else
-#endif
-							value = rtw_read8(padapter, offset);
-
-						value &= GET_PWR_CFG_MASK(PwrCfgCmd);
-						if (value == (GET_PWR_CFG_VALUE(PwrCfgCmd) & GET_PWR_CFG_MASK(PwrCfgCmd)))
-							bPollingBit = true;
-						else
-							rtw_udelay_os(10);
-
-						if (pollingCount++ > maxPollingCnt) {
-							DBG_88E("Fail to polling Offset[%#x]\n", offset);
-							return false;
-						}
-					} while (!bPollingBit);
-
-					break;
-
-				case PWR_CMD_DELAY:
-					RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_DELAY\n"));
-					if (GET_PWR_CFG_VALUE(PwrCfgCmd) == PWRSEQ_DELAY_US)
-						rtw_udelay_os(GET_PWR_CFG_OFFSET(PwrCfgCmd));
+					value &= GET_PWR_CFG_MASK(PwrCfgCmd);
+					if (value == (GET_PWR_CFG_VALUE(PwrCfgCmd) & GET_PWR_CFG_MASK(PwrCfgCmd)))
+						bPollingBit = true;
 					else
-						rtw_udelay_os(GET_PWR_CFG_OFFSET(PwrCfgCmd)*1000);
-					break;
+						rtw_udelay_os(10);
 
-				case PWR_CMD_END:
-					/*  When this command is parsed, end the process */
-					RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_END\n"));
-					return true;
-					break;
+					if (pollingCount++ > maxPollingCnt) {
+						DBG_88E("Fail to polling Offset[%#x]\n", offset);
+						return false;
+					}
+				} while (!bPollingBit);
 
-				default:
-					RT_TRACE(_module_hal_init_c_ , _drv_err_, ("HalPwrSeqCmdParsing: Unknown CMD!!\n"));
-					break;
+				break;
+			case PWR_CMD_DELAY:
+				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_DELAY\n"));
+				if (GET_PWR_CFG_VALUE(PwrCfgCmd) == PWRSEQ_DELAY_US)
+					rtw_udelay_os(GET_PWR_CFG_OFFSET(PwrCfgCmd));
+				else
+					rtw_udelay_os(GET_PWR_CFG_OFFSET(PwrCfgCmd)*1000);
+				break;
+			case PWR_CMD_END:
+				/*  When this command is parsed, end the process */
+				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_END\n"));
+				return true;
+				break;
+			default:
+				RT_TRACE(_module_hal_init_c_ , _drv_err_, ("HalPwrSeqCmdParsing: Unknown CMD!!\n"));
+				break;
 			}
 		}
 

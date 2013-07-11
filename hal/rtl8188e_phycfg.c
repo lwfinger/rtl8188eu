@@ -1287,21 +1287,7 @@ PHY_BBConfig8188E(
 
 	rtw_write8(Adapter, REG_RF_CTRL, RF_EN|RF_RSTB|RF_SDMRSTB);
 
-#ifdef CONFIG_USB_HCI
 	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_USBA | FEN_USBD | FEN_BB_GLB_RSTn | FEN_BBRSTB);
-#else
-	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_PPLL|FEN_PCIEA|FEN_DIO_PCIE|FEN_BB_GLB_RSTn|FEN_BBRSTB);
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	/*  Force use left antenna by default for 88C. */
-	/* 	if (!IS_92C_SERIAL(pHalData->VersionID) || IS_92C_1T2R(pHalData->VersionID)) */
-	if (Adapter->ledpriv.LedStrategy != SW_LED_MODE10)
-	{
-		RegVal = rtw_read32(Adapter, REG_LEDCFG0);
-		rtw_write32(Adapter, REG_LEDCFG0, RegVal|BIT23);
-	}
-#endif
 
 	/*  */
 	/*  Config BB and AGC */
@@ -1359,7 +1345,6 @@ rtl8188e_PHY_ConfigRFWithParaFile(
 static int PHY_ConfigRFExternalPA(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath)
 {
 	int	rtStatus = _SUCCESS;
-#ifdef CONFIG_USB_HCI
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u16 i=0;
 
@@ -1368,7 +1353,6 @@ static int PHY_ConfigRFExternalPA(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath)
 
 	/*  2010/10/19 MH According to Jenyu/EEChou 's opinion, we need not to execute the */
 	/*  same code as SU. It is already updated in radio_a_1T_HP.txt. */
-#endif
 	return rtStatus;
 }
 /*  */

@@ -150,11 +150,7 @@ static int rtw_hwpwrp_detect = 1;
 static int rtw_hwpwrp_detect = 0; //HW power  ping detect 0:disable , 1:enable
 #endif
 
-#ifdef CONFIG_USB_HCI
 static int rtw_hw_wps_pbc = 1;
-#else
-static int rtw_hw_wps_pbc = 0;
-#endif
 
 #ifdef CONFIG_TX_MCAST2UNI
 int rtw_mc2u_disable = 0;

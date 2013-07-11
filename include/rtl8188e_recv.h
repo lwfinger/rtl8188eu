@@ -149,27 +149,12 @@ typedef struct rxreport_8188e
 } RXREPORT, *PRXREPORT;
 
 
-#ifdef CONFIG_SDIO_HCI
-s32 rtl8188es_init_recv_priv(PADAPTER padapter);
-void rtl8188es_free_recv_priv(PADAPTER padapter);
-void rtl8188es_recv_hdl(PADAPTER padapter, struct recv_buf *precvbuf);
-#endif
-
-#ifdef CONFIG_USB_HCI
 #define INTERRUPT_MSG_FORMAT_LEN 60
 void rtl8188eu_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf);
 s32 rtl8188eu_init_recv_priv(PADAPTER padapter);
 void rtl8188eu_free_recv_priv(PADAPTER padapter);
 void rtl8188eu_recv_hdl(PADAPTER padapter, struct recv_buf *precvbuf);
 void rtl8188eu_recv_tasklet(void *priv);
-
-#endif
-
-#ifdef CONFIG_PCI_HCI
-s32 rtl8188ee_init_recv_priv(PADAPTER padapter);
-void rtl8188ee_free_recv_priv(PADAPTER padapter);
-#endif
-
 void rtl8188e_query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy_stat);
 void rtl8188e_process_phy_info(PADAPTER padapter, void *prframe);
 void update_recvframe_phyinfo_88e(union recv_frame	*precvframe,struct phy_stat *pphy_status);

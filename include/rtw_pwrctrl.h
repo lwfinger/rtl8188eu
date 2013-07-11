@@ -211,18 +211,6 @@ struct pwrctrl_priv
 	//RF OFF Level
 	u32	cur_ps_level;
 	u32	reg_rfps_level;
-
-
-
-#ifdef CONFIG_PCI_HCI
-	//just for PCIE ASPM
-	u8	b_support_aspm; // If it supports ASPM, Offset[560h] = 0x40, otherwise Offset[560h] = 0x00.
-	u8	b_support_backdoor;
-
-	//just for PCIE ASPM
-	u8	const_amdpci_aspm;
-#endif
-
 	uint	ips_enter_cnts;
 	uint	ips_leave_cnts;
 

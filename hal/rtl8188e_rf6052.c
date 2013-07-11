@@ -190,11 +190,9 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 				TxAGC[idx1] =
 					pPowerlevel[idx1] | (pPowerlevel[idx1]<<8) |
 					(pPowerlevel[idx1]<<16) | (pPowerlevel[idx1]<<24);
-#ifdef CONFIG_USB_HCI
 				/*  2010/10/18 MH For external PA module. We need to limit power index to be less than 0x20. */
 				if (TxAGC[idx1] > 0x20 && pHalData->ExternalPA)
 					TxAGC[idx1] = 0x20;
-#endif
 			}
 		}
 	}

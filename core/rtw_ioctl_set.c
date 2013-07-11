@@ -26,17 +26,8 @@
 #include <rtw_ioctl_set.h>
 #include <hal_intf.h>
 
-#ifdef CONFIG_USB_HCI
 #include <usb_osintf.h>
 #include <usb_ops.h>
-#endif
-#ifdef CONFIG_SDIO_HCI
-#include <sdio_osintf.h>
-#endif
-
-#ifdef CONFIG_GSPI_HCI
-#include <gspi_osintf.h>
-#endif
 
 extern void indicate_wx_scan_complete_event(_adapter *padapter);
 

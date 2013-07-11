@@ -1007,14 +1007,7 @@ _func_enter_;
 			pwowlan_parm.mode |=FW_WOWLAN_DEAUTH_WAKEUP;
 
 			/* DataPinWakeUp */
-#ifdef CONFIG_USB_HCI
 			pwowlan_parm.gpio_index=0x0;
-#endif /* CONFIG_USB_HCI */
-
-#ifdef CONFIG_SDIO_HCI
-			pwowlan_parm.gpio_index=0x80;
-#endif /* CONFIG_SDIO_HCI */
-
 			DBG_88E_LEVEL(_drv_info_, "%s 5.pwowlan_parm.mode=0x%x\n",__func__,pwowlan_parm.mode);
 			DBG_88E_LEVEL(_drv_info_, "%s 6.pwowlan_parm.index=0x%x\n",__func__,pwowlan_parm.gpio_index);
 			res = FillH2CCmd_88E(padapter, H2C_COM_WWLAN, 2, (u8 *)&pwowlan_parm);

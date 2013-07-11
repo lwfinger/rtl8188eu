@@ -47,11 +47,7 @@ A protection mechanism is necessary for the io_rwmem(read/write protocol)
 Under Async. IRP (SDIO/USB)
 The protection mechanism is through the pending queue.
 */
-
 	_mutex ioctl_mutex;
-
-
-	#ifdef CONFIG_USB_HCI
 	// when in USB, IO is through interrupt in/out endpoints
 	struct usb_device	*udev;
 	PURB	piorw_urb;
@@ -61,7 +57,6 @@ The protection mechanism is through the pending queue.
 	_timer	io_timer;
 	u8 bio_irp_timeout;
 	u8 bio_timer_cancel;
-	#endif
 };
 
 

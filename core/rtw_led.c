@@ -36,19 +36,13 @@ void BlinkTimerCallback(void *data)
 		return;
 	}
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 	#ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
 	rtw_led_blink_cmd(padapter, pLed);
 	#else
 	_set_workitem(&(pLed->BlinkWorkItem));
 	#endif
-#elif defined(CONFIG_PCI_HCI)
-	BlinkHandler(pLed);
-#endif
-
 }
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 /*  */
 /* 	Description: */
 /* 		Callback function of LED BlinkWorkItem. */
@@ -59,7 +53,6 @@ void BlinkWorkItemCallback(struct work_struct *work)
 	PLED_871x	 pLed = container_of(work, LED_871x, BlinkWorkItem);
 	BlinkHandler(pLed);
 }
-#endif
 
 /*  */
 /* 	Description: */
@@ -76,12 +69,10 @@ void ResetLedStatus(PLED_871x pLed) {
 	pLed->BlinkTimes = 0; /*  Number of times to toggle led state for blinking. */
 	pLed->BlinkingLedState = LED_UNKNOWN; /*  Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are. */
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 	pLed->bLedNoLinkBlinkInProgress = false;
 	pLed->bLedLinkBlinkInProgress = false;
 	pLed->bLedStartToLinkBlinkInProgress = false;
 	pLed->bLedScanBlinkInProgress = false;
-#endif
 }
 
  /*  */
@@ -102,9 +93,7 @@ InitLed871x(
 
 	_init_timer(&(pLed->BlinkTimer), padapter->pnetdev, BlinkTimerCallback, pLed);
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
-#endif
 }
 
 
@@ -117,9 +106,7 @@ DeInitLed871x(
 	PLED_871x			pLed
 	)
 {
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 	_cancel_workitem_sync(&(pLed->BlinkWorkItem));
-#endif
 	_cancel_timer_ex(&(pLed->BlinkTimer));
 	ResetLedStatus(pLed);
 }
@@ -130,7 +117,6 @@ DeInitLed871x(
 /* 		Implementation of LED blinking behavior. */
 /* 		It toggle off LED and schedule corresponding timer if necessary. */
 /*  */
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 
 void SwLedOn(_adapter *padapter, PLED_871x pLed);
 void SwLedOff(_adapter	*padapter, PLED_871x	pLed);
@@ -2403,5 +2389,3 @@ LedControl871x(
 
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("LedStrategy:%d, LedAction %d\n", ledpriv->LedStrategy,LedAction));
 }
-
-#endif

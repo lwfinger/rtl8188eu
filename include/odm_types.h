@@ -103,7 +103,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 	#define	STA_INFO_T			RT_WLAN_STA
 	#define	PSTA_INFO_T			PRT_WLAN_STA
 
-//    typedef unsigned long		u4Byte,*pu4Byte;
 	#define CONFIG_HW_ANTENNA_DIVERSITY
 #define CONFIG_SW_ANTENNA_DIVERSITY
 
@@ -187,15 +186,7 @@ typedef enum _RT_SPINLOCK_TYPE{
 	#define s8Byte		s64
 	#define ps8Byte			s64*
 
-	#ifdef CONFIG_USB_HCI
-		#define DEV_BUS_TYPE	RT_USB_INTERFACE
-	#elif defined(CONFIG_PCI_HCI)
-		#define DEV_BUS_TYPE	RT_PCI_INTERFACE
-	#elif defined(CONFIG_SDIO_HCI)
-		#define DEV_BUS_TYPE	RT_SDIO_INTERFACE
-        #elif defined(CONFIG_GSPI_HCI)
-		#define DEV_BUS_TYPE	RT_SDIO_INTERFACE
-	#endif
+	#define DEV_BUS_TYPE	RT_USB_INTERFACE
 
 	typedef struct timer_list		RT_TIMER, *PRT_TIMER;
 	typedef  void *				RT_TIMER_CALL_BACK;

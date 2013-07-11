@@ -183,7 +183,6 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 		rtw_write32(padapter,REG_TXDMA_STATUS,txdma_status);
 		rtl8188e_silentreset_for_specific_platform(padapter);
 	}
-#ifdef CONFIG_USB_HCI
 	/* total xmit irp = 4 */
 	current_time = rtw_get_current_time();
 	if (0==pxmitpriv->free_xmitbuf_cnt)
@@ -203,7 +202,6 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 			}
 		}
 	}
-#endif /* CONFIG_USB_HCI */
 }
 
 void rtl8188e_sreset_linked_status_check(_adapter *padapter)

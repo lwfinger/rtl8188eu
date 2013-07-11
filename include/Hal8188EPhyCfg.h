@@ -33,11 +33,7 @@
 #define IQK_BB_REG_NUM			9
 #define HP_THERMAL_NUM		8
 
-#ifdef CONFIG_PCI_HCI
-#define MAX_AGGR_NUM	0x0B
-#else
 #define MAX_AGGR_NUM	0x07
-#endif // CONFIG_PCI_HCI
 
 
 /*--------------------------Define Parameters-------------------------------*/

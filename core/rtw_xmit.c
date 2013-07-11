@@ -182,13 +182,6 @@ _func_enter_;
 			}
 		}
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		pxmitbuf->phead = pxmitbuf->pbuf;
-		pxmitbuf->pend = pxmitbuf->pbuf + MAX_XMITBUF_SZ;
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-
 		pxmitbuf->flags = XMIT_VO_QUEUE;
 
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmitbuf_queue.queue));
@@ -241,13 +234,6 @@ _func_enter_;
 			goto exit;
 		}
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		pxmitbuf->phead = pxmitbuf->pbuf;
-		pxmitbuf->pend = pxmitbuf->pbuf + max_xmit_extbuf_size;
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
 		#ifdef DBG_XMIT_BUF_EXT
 		pxmitbuf->no=i;
@@ -266,7 +252,6 @@ _func_enter_;
 		pxmitpriv->wmm_para_seq[i] = i;
 	}
 
-#ifdef CONFIG_USB_HCI
 	pxmitpriv->txirp_cnt=1;
 
 	_rtw_init_sema(&(pxmitpriv->tx_retevt), 0);
@@ -276,8 +261,6 @@ _func_enter_;
 	pxmitpriv->bkq_cnt = 0;
 	pxmitpriv->viq_cnt = 0;
 	pxmitpriv->voq_cnt = 0;
-#endif
-
 
 #ifdef CONFIG_XMIT_ACK
 	pxmitpriv->ack_tx = false;
@@ -1867,7 +1850,7 @@ void rtw_count_tx_stats(PADAPTER padapter, struct xmit_frame *pxmitframe, int sz
 	if ((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
 	{
 		pxmitpriv->tx_bytes += sz;
-#if defined(CONFIG_USB_TX_AGGREGATION) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
+#if defined(CONFIG_USB_TX_AGGREGATION)
 		pmlmepriv->LinkDetectInfo.NumTxOkInPeriod += pxmitframe->agg_num;
 #else
 		pmlmepriv->LinkDetectInfo.NumTxOkInPeriod++;
@@ -1877,7 +1860,7 @@ void rtw_count_tx_stats(PADAPTER padapter, struct xmit_frame *pxmitframe, int sz
 		if (psta)
 		{
 			pstats = &psta->sta_stats;
-#if defined(CONFIG_USB_TX_AGGREGATION) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
+#if defined(CONFIG_USB_TX_AGGREGATION)
 			pstats->tx_pkts += pxmitframe->agg_num;
 #else
 			pstats->tx_pkts++;
@@ -1921,14 +1904,6 @@ _func_enter_;
 
 		pxmitbuf->priv_data = NULL;
 		/* pxmitbuf->ext_tag = true; */
-
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-#endif
-#ifdef CONFIG_PCI_HCI
-		pxmitbuf->len = 0;
-#endif
 
 		if (pxmitbuf->sctx) {
 			DBG_88E("%s pxmitbuf->sctx is not NULL\n", __func__);
@@ -2009,16 +1984,6 @@ _func_enter_;
 
 		pxmitbuf->priv_data = NULL;
 		/* pxmitbuf->ext_tag = false; */
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		pxmitbuf->len = 0;
-		pxmitbuf->pdata = pxmitbuf->ptail = pxmitbuf->phead;
-		pxmitbuf->agg_num = 0;
-		pxmitbuf->pg_num = 0;
-#endif
-#ifdef CONFIG_PCI_HCI
-		pxmitbuf->len = 0;
-#endif
-
 		if (pxmitbuf->sctx) {
 			DBG_88E("%s pxmitbuf->sctx is not NULL\n", __func__);
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
@@ -2139,18 +2104,10 @@ _func_enter_;
 
 		pxframe->frame_tag = DATA_FRAMETAG;
 
-#ifdef CONFIG_USB_HCI
 		pxframe->pkt = NULL;
 		pxframe->pkt_offset = 1;/* default use pkt_offset to fill tx desc */
 
 #ifdef CONFIG_USB_TX_AGGREGATION
-		pxframe->agg_num = 1;
-#endif
-
-#endif /* ifdef CONFIG_USB_HCI */
-
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		pxframe->pg_num = 1;
 		pxframe->agg_num = 1;
 #endif
 
@@ -2287,9 +2244,6 @@ struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
 	_adapter *padapter = pxmitpriv->adapter;
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	int i, inx[4];
-#ifdef CONFIG_USB_HCI
-/* 	int j, tmp, acirp_cnt[4]; */
-#endif
 
 _func_enter_;
 
@@ -2299,10 +2253,8 @@ _func_enter_;
 	{
 		int j, tmp, acirp_cnt[4];
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 		for (j=0; j<4; j++)
 			inx[j] = pxmitpriv->wmm_para_seq[j];
-#endif
 	}
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL0);
@@ -3476,14 +3428,7 @@ void enqueue_pending_xmitbuf(
 	rtw_list_insert_tail(&pxmitbuf->list, get_list_head(pqueue));
 	_exit_critical_bh(&pqueue->lock, &irql);
 
-
-
-#if defined(CONFIG_SDIO_HCI) && defined(CONFIG_CONCURRENT_MODE)
-	if (pri_adapter->adapter_type > PRIMARY_ADAPTER)
-		pri_adapter = pri_adapter->pbuddy_adapter;
-#endif  /* SDIO_HCI + CONCURRENT */
 	_rtw_up_sema(&(pri_adapter->xmitpriv.xmit_sema));
-
 }
 
 struct xmit_buf* dequeue_pending_xmitbuf(
@@ -3519,9 +3464,7 @@ struct xmit_buf* dequeue_pending_xmitbuf_under_survey(
 {
 	_irqL irql;
 	struct xmit_buf *pxmitbuf;
-#ifdef CONFIG_USB_HCI
 	struct xmit_frame *pxmitframe;
-#endif
 	_queue *pqueue;
 
 
@@ -3543,7 +3486,6 @@ struct xmit_buf* dequeue_pending_xmitbuf_under_survey(
 
 			pxmitbuf = LIST_CONTAINOR(plist, struct xmit_buf, list);
 
-#ifdef CONFIG_USB_HCI
 			pxmitframe = (struct xmit_frame*)pxmitbuf->priv_data;
 			if (pxmitframe)
 			{
@@ -3553,9 +3495,6 @@ struct xmit_buf* dequeue_pending_xmitbuf_under_survey(
 			{
 				DBG_88E("%s, !!!ERROR!!! For USB, TODO ITEM\n", __func__);
 			}
-#else
-			type = GetFrameSubType(pxmitbuf->pbuf + TXDESC_OFFSET);
-#endif
 
 			if ((type == WIFI_PROBEREQ) ||
 				(type == WIFI_DATA_NULL) ||

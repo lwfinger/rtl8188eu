@@ -27,9 +27,8 @@
 #include <rtw_iol.h>
 
 #if defined(CONFIG_IOL)
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif
+
 static void iol_mode_enable(PADAPTER padapter, u8 enable)
 {
 	u8 reg_0xf0 = 0;
@@ -2525,63 +2524,15 @@ static void rtl8188e_SetHalODMVar(
 
 void rtl8188e_clone_haldata(_adapter* dst_adapter, _adapter* src_adapter)
 {
-#ifdef CONFIG_SDIO_HCI
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(dst_adapter);
-#ifndef CONFIG_SDIO_TX_TASKLET
-	_sema             temp_SdioXmitSema;
-	_sema             temp_SdioXmitTerminateSema;
-#endif
-	_lock                temp_SdioTxFIFOFreePageLock;
-
-#ifndef CONFIG_SDIO_TX_TASKLET
-	_rtw_memcpy(&temp_SdioXmitSema, &(pHalData->SdioXmitSema), sizeof(_sema));
-	_rtw_memcpy(&temp_SdioXmitTerminateSema, &(pHalData->SdioXmitTerminateSema), sizeof(_sema));
-#endif
-	_rtw_memcpy(&temp_SdioTxFIFOFreePageLock, &(pHalData->SdioTxFIFOFreePageLock), sizeof(_lock));
-
 	_rtw_memcpy(dst_adapter->HalData, src_adapter->HalData, dst_adapter->hal_data_sz);
-
-#ifndef CONFIG_SDIO_TX_TASKLET
-	_rtw_memcpy(&(pHalData->SdioXmitSema), &temp_SdioXmitSema, sizeof(_sema));
-	_rtw_memcpy(&(pHalData->SdioXmitTerminateSema), &temp_SdioXmitTerminateSema, sizeof(_sema));
-#endif
-	_rtw_memcpy(&(pHalData->SdioTxFIFOFreePageLock), &temp_SdioTxFIFOFreePageLock, sizeof(_lock));
-
-#else
-	_rtw_memcpy(dst_adapter->HalData, src_adapter->HalData, dst_adapter->hal_data_sz);
-#endif
-
 }
 
 void rtl8188e_start_thread(_adapter *padapter)
 {
-#ifdef CONFIG_SDIO_HCI
-#ifndef CONFIG_SDIO_TX_TASKLET
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-
-	pHalData->SdioXmitThread = kthread_run(rtl8188es_xmit_thread, padapter, "RTWHALXT");
-	if (IS_ERR(pHalData->SdioXmitThread))
-	{
-		RT_TRACE(_module_hal_xmit_c_, _drv_err_, ("%s: start rtl8188es_xmit_thread FAIL!!\n", __func__));
-	}
-#endif
-#endif
 }
 
 void rtl8188e_stop_thread(_adapter *padapter)
 {
-#ifdef CONFIG_SDIO_HCI
-#ifndef CONFIG_SDIO_TX_TASKLET
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-
-	/*  stop xmit_buf_thread */
-	if (pHalData->SdioXmitThread ) {
-		_rtw_up_sema(&pHalData->SdioXmitSema);
-		_rtw_down_sema(&pHalData->SdioXmitTerminateSema);
-		pHalData->SdioXmitThread = 0;
-	}
-#endif
-#endif
 }
 
 static void hal_notch_filter_8188e(_adapter *adapter, bool enable)
@@ -2673,7 +2624,6 @@ u8 GetEEPROMSize8188E(PADAPTER padapter)
 	return size;
 }
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_PCI_HCI)
 /*  */
 /*  */
 /*  LLT R/W/Init function */
@@ -2753,8 +2703,6 @@ s32 InitLLTTable(PADAPTER padapter, u8 txpktbuf_bndy)
 
 	return status;
 }
-#endif
-
 
 void
 Hal_InitPGData88E(PADAPTER	padapter)
@@ -3052,9 +3000,7 @@ void Hal_ReadPowerSavingMode88E(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail
 
 		/*  decide hw if support remote wakeup function */
 		/*  if hw supported, 8051 (SIE) will generate WeakUP signal( D+/D- toggle) when autoresume */
-#ifdef CONFIG_USB_HCI
 		padapter->pwrctrlpriv.bSupportRemoteWakeup = (hwinfo[EEPROM_USB_OPTIONAL_FUNCTION0] & BIT1)?true :false;
-#endif /* CONFIG_USB_HCI */
 
 		DBG_88E("%s...bHWPwrPindetect(%x)-bHWPowerdown(%x) ,bSupportRemoteWakeup(%x)\n",__func__,
 		padapter->pwrctrlpriv.bHWPwrPindetect,padapter->pwrctrlpriv.bHWPowerdown ,padapter->pwrctrlpriv.bSupportRemoteWakeup);

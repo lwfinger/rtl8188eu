@@ -379,9 +379,7 @@ int proc_get_trx_info(char *page, char **start,
 
 	len += snprintf(page + len, count - len, "free_xmitbuf_cnt=%d, free_xmitframe_cnt=%d, free_ext_xmitbuf_cnt=%d, free_recvframe_cnt=%d\n",
 				pxmitpriv->free_xmitbuf_cnt, pxmitpriv->free_xmitframe_cnt,pxmitpriv->free_xmit_extbuf_cnt, precvpriv->free_recvframe_cnt);
-#ifdef CONFIG_USB_HCI
 	len += snprintf(page + len, count - len, "rx_urb_pending_cn=%d\n", precvpriv->rx_pending_cnt);
-#endif
 
 	*eof = 1;
 	return len;

@@ -22,16 +22,8 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-
 #include <hal_intf.h>
-
-#ifdef CONFIG_SDIO_HCI
-	#include <sdio_hal.h>
-#elif defined(CONFIG_USB_HCI)
-	#include <usb_hal.h>
-#elif defined(CONFIG_GSPI_HCI)
-	#include <gspi_hal.h>
-#endif
+#include <usb_hal.h>
 
 void rtw_hal_chip_configure(_adapter *padapter)
 {

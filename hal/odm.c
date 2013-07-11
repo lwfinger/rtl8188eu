@@ -3047,7 +3047,6 @@ odm_DynamicTxPowerInit(
 	pdmpriv->bDynamicTxPowerEnable = false;
 
 	#if (RTL8192C_SUPPORT==1)
-	#ifdef CONFIG_USB_HCI
 
 	#ifdef CONFIG_INTEL_PROXIM
 	if ((pHalData->BoardType == BOARD_USB_High_PA)||(Adapter->proximity.proxim_support==true))
@@ -3060,9 +3059,6 @@ odm_DynamicTxPowerInit(
 		pdmpriv->bDynamicTxPowerEnable = true;
 	}
 	else
-	#else
-		pdmpriv->bDynamicTxPowerEnable = false;
-	#endif
 	#endif
 
 	pdmpriv->LastDTPLvl = TxHighPwrLevel_Normal;
@@ -6079,16 +6075,6 @@ odm_EdcaTurboCheckCE(
 				edca_param = EDCAParam[HT_IOT_PEER_UNKNOWN][trafficIndex];
 			}
 
-#ifdef CONFIG_PCI_HCI
-			if (IS_92C_SERIAL(pHalData->VersionID))
-			{
-				edca_param = 0x60a42b;
-			}
-			else
-			{
-				edca_param = 0x6ea42b;
-			}
-#endif
 			rtw_write32(Adapter, REG_EDCA_BE_PARAM, edca_param);
 
 			pDM_Odm->DM_EDCA_Table.prv_traffic_idx = trafficIndex;

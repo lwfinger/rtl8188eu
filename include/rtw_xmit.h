@@ -24,23 +24,6 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-//#define MAX_XMITBUF_SZ (30720)//	(2048)
-#ifdef CONFIG_TX_AGGREGATION
-#define MAX_XMITBUF_SZ	(20480)	// 20k
-#else
-#define MAX_XMITBUF_SZ (12288)  //12k 1536*8
-#endif
-
-#if defined CONFIG_SDIO_HCI
-#define NR_XMITBUFF	(16)
-#endif
-#if defined(CONFIG_GSPI_HCI)
-#define NR_XMITBUFF	(128)
-#endif
-
-#elif defined (CONFIG_USB_HCI)
-
 #ifdef CONFIG_USB_TX_AGGREGATION
 #define MAX_XMITBUF_SZ	(20480)	// 20k
 #else
@@ -51,16 +34,8 @@
 #else
 #define NR_XMITBUFF	(4)
 #endif //CONFIG_SINGLE_XMIT_BUF
-#elif defined (CONFIG_PCI_HCI)
-#define MAX_XMITBUF_SZ	(1664)
-#define NR_XMITBUFF	(128)
-#endif
 
-#ifdef CONFIG_PCI_HCI
 #define XMITBUF_ALIGN_SZ 4
-#else
-#define XMITBUF_ALIGN_SZ 512
-#endif
 
 // xmit extension buff defination
 #define MAX_XMIT_EXTBUF_SZ	(1536)
@@ -83,12 +58,6 @@
 #define TXCMD_QUEUE_INX	7
 
 #define HW_QUEUE_ENTRY	8
-
-#ifdef CONFIG_PCI_HCI
-//#define TXDESC_NUM						64
-#define TXDESC_NUM						128
-#define TXDESC_NUM_BE_QUEUE			128
-#endif
 
 #define WEP_IV(pattrib_iv, dot11txpn, keyidx)\
 do{\
@@ -136,23 +105,8 @@ do{\
 #define EARLY_MODE_INFO_SIZE	8
 #endif
 
-
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-#define TXDESC_OFFSET TXDESC_SIZE
-
-#endif
-
-#ifdef CONFIG_USB_HCI
 #define PACKET_OFFSET_SZ (8)
 #define TXDESC_OFFSET (TXDESC_SIZE + PACKET_OFFSET_SZ)
-#endif
-
-#ifdef CONFIG_PCI_HCI
-#define TXDESC_OFFSET 0
-#define TX_DESC_NEXT_DESC_OFFSET	40
-#endif
-
-
 
 struct tx_desc{
 
@@ -172,19 +126,6 @@ union txdesc {
 	struct tx_desc txdesc;
 	unsigned int value[TXDESC_SIZE>>2];
 };
-
-#ifdef CONFIG_PCI_HCI
-#define PCI_MAX_TX_QUEUE_COUNT	8
-
-struct rtw_tx_ring {
-	struct tx_desc	*desc;
-	dma_addr_t		dma;
-	unsigned int		idx;
-	unsigned int		entries;
-	_queue			queue;
-	u32				qlen;
-};
-#endif
 
 struct	hw_xmit	{
 	//_lock xmit_lock;
@@ -302,71 +243,37 @@ struct xmit_buf
 	u16 ext_tag; // 0: Normal xmitbuf, 1: extension xmitbuf.
 	u16 flags;
 	u32 alloc_sz;
-
 	u32  len;
-
 	struct submit_ctx *sctx;
-
-#ifdef CONFIG_USB_HCI
-
-	//u32 sz[8];
 	u32	ff_hwaddr;
-
 	PURB	pxmit_urb[8];
 	dma_addr_t dma_transfer_addr;	/* (in) dma addr for transfer_buffer */
 	u8 bpending[8];
 	sint last[8];
-#endif
-
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	u8 *phead;
-	u8 *pdata;
-	u8 *ptail;
-	u8 *pend;
-	u32 ff_hwaddr;
-	u8	pg_num;
-	u8	agg_num;
-#endif
 
 #if defined(DBG_XMIT_BUF )|| defined(DBG_XMIT_BUF_EXT)
 	u8 no;
 #endif
-
 };
-
 
 struct xmit_frame
 {
 	_list	list;
-
 	struct pkt_attrib attrib;
-
 	_pkt *pkt;
-
 	int	frame_tag;
-
 	_adapter *padapter;
-
 	u8	*buf_addr;
-
 	struct xmit_buf *pxmitbuf;
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	u8	pg_num;
-	u8	agg_num;
-#endif
-
-#ifdef CONFIG_USB_HCI
 #ifdef CONFIG_USB_TX_AGGREGATION
 	u8	agg_num;
 #endif
 	s8	pkt_offset;
-#endif
 
 #ifdef CONFIG_XMIT_ACK
 	u8 ack_report;
 #endif
-
 };
 
 struct tx_servq {
@@ -468,8 +375,6 @@ struct	xmit_priv	{
 	u8	hwxmit_entry;
 
 	u8	wmm_para_seq[4];//sequence for wmm ac parameter strength from large to small. it's value is 0->vo, 1->vi, 2->be, 3->bk.
-
-#ifdef CONFIG_USB_HCI
 	_sema	tx_retevt;//all tx return event;
 	u8		txirp_cnt;//
 	struct tasklet_struct xmit_tasklet;
@@ -478,23 +383,6 @@ struct	xmit_priv	{
 	int bkq_cnt;
 	int viq_cnt;
 	int voq_cnt;
-
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	// Tx
-	struct rtw_tx_ring	tx_ring[PCI_MAX_TX_QUEUE_COUNT];
-	int	txringcount[PCI_MAX_TX_QUEUE_COUNT];
-	u8	beaconDMAing;		//flag of indicating beacon is transmiting to HW by DMA
-	struct tasklet_struct xmit_tasklet;
-#endif
-
-#ifdef CONFIG_SDIO_HCI
-#ifdef CONFIG_SDIO_TX_TASKLET
-	struct tasklet_struct xmit_tasklet;
-#endif
-#endif
-
 	_queue free_xmitbuf_queue;
 	_queue pending_xmitbuf_queue;
 	u8 *pallocated_xmitbuf;
@@ -509,11 +397,7 @@ struct	xmit_priv	{
 	u16	nqos_ssn;
 	#ifdef CONFIG_TX_EARLY_MODE
 
-	#ifdef CONFIG_SDIO_HCI
-	#define MAX_AGG_PKT_NUM 20
-	#else
 	#define MAX_AGG_PKT_NUM 256 //Max tx ampdu coounts
-	#endif
 
 	struct agg_pkt_info agg_pkt[MAX_AGG_PKT_NUM];
 	#endif
