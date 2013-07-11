@@ -616,7 +616,7 @@ extern void _rtw_scan_timeout_handler (
 
 #endif
 
-#if defined (PLATFORM_LINUX)|| defined (PLATFORM_FREEBSD)
+#if defined (PLATFORM_LINUX)
 extern int event_thread(void *context);
 extern void rtw_join_timeout_handler(void* FunctionContext);
 extern void _rtw_scan_timeout_handler(void* FunctionContext);

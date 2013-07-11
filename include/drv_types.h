@@ -318,10 +318,6 @@ struct dvobj_priv
 	struct usb_device *pusbdev;
 #endif//PLATFORM_LINUX
 
-#ifdef PLATFORM_FREEBSD
-	struct usb_interface *pusbintf;
-	struct usb_device *pusbdev;
-#endif//PLATFORM_FREEBSD
 	ATOMIC_T continual_urb_error;
 #endif//CONFIG_USB_HCI
 
@@ -576,11 +572,6 @@ struct _ADAPTER{
 
 #endif //end of PLATFORM_LINUX
 
-#ifdef PLATFORM_FREEBSD
-	_nic_hdl pifp;
-	int bup;
-	_lock glock;
-#endif //PLATFORM_FREEBSD
 	int net_closed;
 
 	u8 bFWReady;

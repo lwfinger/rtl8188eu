@@ -23,9 +23,6 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-#ifdef PLATFORM_FREEBSD
-#include <if_ether.h>
-#endif //PLATFORM_FREEBSD
 
 #if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 //#define MAX_XMITBUF_SZ (30720)//	(2048)
@@ -255,13 +252,6 @@ struct pkt_attrib
 #endif
 };
 
-#ifdef PLATFORM_FREEBSD
-#define ETH_ALEN	6		/* Octets in one ethernet addr	 */
-#define ETH_HLEN	14		/* Total octets in header.	 */
-#define ETH_P_IP	0x0800		/* Internet Protocol packet	*/
-
-#endif //PLATFORM_FREEBSD
-
 #define WLANHDR_OFFSET	64
 
 #define NULL_FRAMETAG		(0x0)
@@ -332,7 +322,7 @@ struct xmit_buf
 	//u32 sz[8];
 	u32	ff_hwaddr;
 
-#if defined(PLATFORM_OS_XP)||defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD)
+#if defined(PLATFORM_OS_XP)||defined(PLATFORM_LINUX)
 	PURB	pxmit_urb[8];
 	dma_addr_t dma_transfer_addr;	/* (in) dma addr for transfer_buffer */
 #endif
@@ -521,9 +511,6 @@ struct	xmit_priv	{
 #endif
 #ifdef PLATFORM_LINUX
 	struct tasklet_struct xmit_tasklet;
-#endif
-#ifdef PLATFORM_FREEBSD
-	struct task xmit_tasklet;
 #endif
 	//per AC pending irp
 	int beq_cnt;

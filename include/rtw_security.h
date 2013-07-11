@@ -440,7 +440,4 @@ void rtw_use_tkipkey_handler (
 void rtw_use_tkipkey_handler(void* FunctionContext);
 #endif
 
-#ifdef PLATFORM_FREEBSD
-void rtw_use_tkipkey_handler(void* FunctionContext);
-#endif //PLATFORM_FREEBSD
 #endif	//__RTL871X_SECURITY_H_

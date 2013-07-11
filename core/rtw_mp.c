@@ -21,10 +21,6 @@
 
 #include <drv_types.h>
 
-#ifdef PLATFORM_FREEBSD
-#include <sys/unistd.h>		/* for RFHIGHPID */
-#endif
-
 #ifdef CONFIG_RTL8712
 #include <rtw_mp_phy_regdef.h>
 #endif
@@ -1066,17 +1062,6 @@ void SetPacketTx(PADAPTER padapter)
 	pmp_priv->tx.PktTxThread = kthread_run(mp_xmit_packet_thread, pmp_priv, "RTW_MP_THREAD");
 	if (IS_ERR(pmp_priv->tx.PktTxThread))
 		DBG_88E("Create PktTx Thread Fail !!!!!\n");
-#endif
-#ifdef PLATFORM_FREEBSD
-{
-	struct proc *p;
-	struct thread *td;
-	pmp_priv->tx.PktTxThread = kproc_kthread_add(mp_xmit_packet_thread, pmp_priv,
-					&p, &td, RFHIGHPID, 0, "MPXmitThread", "MPXmitThread");
-
-	if (pmp_priv->tx.PktTxThread < 0)
-		DBG_88E("Create PktTx Thread Fail !!!!!\n");
-}
 #endif
 }
 

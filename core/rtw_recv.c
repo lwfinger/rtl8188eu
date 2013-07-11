@@ -251,7 +251,7 @@ _func_enter_;
 	rtw_os_read_port(padapter, precvframe->u.hdr.precvbuf);
 #endif
 
-#if defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD)
+#if defined(PLATFORM_LINUX)
 
 	if (precvframe->u.hdr.pkt)
 	{
@@ -263,7 +263,7 @@ _func_enter_;
 		precvframe->u.hdr.pkt = NULL;
 	}
 
-#endif /* defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD) */
+#endif /* defined(PLATFORM_LINUX) */
 
 	_enter_critical_bh(&pfree_recv_queue->lock, &irqL);
 
@@ -2619,23 +2619,17 @@ _func_exit_;
 
 static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 {
-#if defined (PLATFORM_LINUX) || defined (PLATFORM_FREEBSD)  /* for amsdu TP improvement,Creator: Thomas */
+#if defined (PLATFORM_LINUX)  /* for amsdu TP improvement,Creator: Thomas */
 	int	a_len, padding_len;
 	u16	eth_type, nSubframe_Length;
 	u8	nr_subframes, i;
 	unsigned char *pdata;
 	struct rx_pkt_attrib *pattrib;
-#ifndef PLATFORM_FREEBSD
 	unsigned char *data_ptr;
 	_pkt *sub_skb,*subframes[MAX_SUBFRAME_COUNT];
-#endif /* PLATFORM_FREEBSD */
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 	_queue *pfree_recv_queue = &(precvpriv->free_recv_queue);
 	int	ret = _SUCCESS;
-#ifdef PLATFORM_FREEBSD
-	struct mbuf *sub_m=NULL, *subframes[MAX_SUBFRAME_COUNT];
-	u8 *ptr,offset;
-#endif /* PLATFORM_FREEBSD */
 	nr_subframes = 0;
 
 	pattrib = &prframe->u.hdr.attrib;
@@ -2661,7 +2655,6 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 			goto exit;
 		}
 
-#ifndef PLATFORM_FREEBSD
 		/* move the data point to data content */
 		pdata += ETH_HLEN;
 		a_len -= ETH_HLEN;
@@ -2692,24 +2685,9 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 			}
 		}
 
-#else   /*  PLATFORM_FREEBSD */
 
-		/* PLATFORM_FREEBSD */
-		/* Allocate a mbuff, */
-		/* sub_m =m_devget(pdata, nSubframe_Length+12, 12, padapter->pifp,NULL); */
-		sub_m =m_devget(pdata, nSubframe_Length+ETH_HLEN, ETHER_ALIGN, padapter->pifp,NULL);
-
-		pdata += ETH_HLEN;
-		a_len -= ETH_HLEN;
-#endif	/*  PLATFORM_FREEBSD */
-
-#ifndef PLATFORM_FREEBSD
 		/* sub_skb->dev = padapter->pnetdev; */
 		subframes[nr_subframes++] = sub_skb;
-#else  /* PLATFORM_FREEBSD */
-		/* PLATFORM_FREEBSD */
-		subframes[nr_subframes++] = sub_m;
-#endif  /* PLATFORM_FREEBSD */
 
 		if (nr_subframes >= MAX_SUBFRAME_COUNT) {
 			DBG_88E("ParseSubframe(): Too many Subframes! Packets dropped!\n");
@@ -2733,7 +2711,6 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 	}
 
 	for (i=0; i<nr_subframes; i++){
-#ifndef PLATFORM_FREEBSD
 		sub_skb = subframes[i];
 		/* convert hdr + possible LLC headers into Ethernet header */
 		eth_type = RTW_GET_BE16(&sub_skb->data[6]);
@@ -2783,53 +2760,6 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 
 			netif_rx(sub_skb);
 		}
-#else /* PLATFORM_FREEBSD */
-
-		/* PLATFORM_FREEBSD */
-		sub_m = subframes[i];
-		ptr=mtod(sub_m, u8 *);
-		offset=ETH_HLEN;
-		/* convert hdr + possible LLC headers into Ethernet header */
-		eth_type = ntohs(*(u16*)&ptr[offset+6]);
-		if (sub_m->m_pkthdr.len >= ETH_HLEN+8 &&
-			((_rtw_memcmp(ptr+ETH_HLEN, rtw_rfc1042_header, SNAP_SIZE) &&
-			  eth_type != ETH_P_AARP && eth_type != ETH_P_IPX) ||
-			 _rtw_memcmp(ptr+ETH_HLEN, rtw_bridge_tunnel_header, SNAP_SIZE) )) {
-			/* remove RFC1042 or Bridge-Tunnel encapsulation and replace EtherType */
-			offset+=SNAP_SIZE;
-			_rtw_memcpy(&ptr[offset-ETH_ALEN], pattrib->src, ETH_ALEN);
-			offset-=ETH_ALEN;
-			_rtw_memcpy(&ptr[offset-ETH_ALEN], pattrib->dst, ETH_ALEN);
-			offset-=ETH_ALEN;
-		} else {
-			u16 len;
-			/* Leave Ethernet header part of hdr and full payload */
-			len = htons(sub_m->m_pkthdr.len-offset);
-			_rtw_memcpy(&ptr[offset- 2], &len, 2);
-			offset-=2;
-			_rtw_memcpy(&ptr[offset-ETH_ALEN], pattrib->src, ETH_ALEN);
-			offset-=ETH_ALEN;
-			_rtw_memcpy(&ptr[offset-ETH_ALEN], pattrib->dst, ETH_ALEN);
-			offset-=ETH_ALEN;
-		}
-
-		m_adj(sub_m,offset);
-
-		/* Indicat the packets to upper layer */
-		if (sub_m) {
-			if ( ((u32)(mtod(sub_m, caddr_t) + 14) % 4) != 0)
-				printf("%s()-%d: mtod(sub_m) = %p\n", __func__, __LINE__, mtod(sub_m, caddr_t));
-#ifdef CONFIG_RX_INDICATE_QUEUE
-			IF_ENQUEUE(&precvpriv->rx_indicate_queue, sub_m);
-			if (_IF_QLEN(&precvpriv->rx_indicate_queue) <= 1) {
-				taskqueue_enqueue(taskqueue_thread, &precvpriv->rx_indicate_tasklet);
-			}
-#else	/*  CONFIG_RX_INDICATE_QUEUE */
-			(*padapter->pifp->if_input)(padapter->pifp, sub_m);
-#endif	/*  CONFIG_RX_INDICATE_QUEUE */
-		}
-
-#endif /* PLATFORM_FREEBSD */
 	}
 
 exit:
@@ -2838,7 +2768,7 @@ exit:
 	rtw_free_recvframe(prframe, pfree_recv_queue);/* free this recv_frame */
 
 	return ret;
-#else  /*  || defined (PLATFORM_LINUX) || defined (PLATFORM_FREEBSD) */
+#else  /*  || defined (PLATFORM_LINUX) */
 #ifdef PLATFORM_WINDOWS
 	_irqL irql;
 #endif /* PLATFORM_WINDOWS */

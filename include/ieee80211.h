@@ -315,7 +315,7 @@ struct ieee_ibss_seq {
 	_list	list;
 };
 
-#if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8711FW)||defined(PLATFORM_FREEBSD)
+#if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8711FW)
 
 struct rtw_ieee80211_hdr {
 	u16 frame_ctl;
@@ -524,7 +524,7 @@ enum eap_type {
 
 #define P80211_OUI_LEN 3
 
-#if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8711FW) || defined(PLATFORM_FREEBSD)
+#if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8711FW)
 
 struct ieee80211_snap_hdr {
 
@@ -757,7 +757,6 @@ struct ieee80211_frag_entry {
 	u8 dst_addr[ETH_ALEN];
 };
 
-#ifndef PLATFORM_FREEBSD //Baron BSD has already defined
 struct ieee80211_stats {
 	uint tx_unicast_frames;
 	uint tx_multicast_frames;
@@ -781,7 +780,7 @@ struct ieee80211_stats {
 	uint rx_message_in_msg_fragments;
 	uint rx_message_in_bad_msg_fragments;
 };
-#endif //PLATFORM_FREEBSD
+
 struct ieee80211_softmac_stats{
 	uint rx_ass_ok;
 	uint rx_ass_err;
@@ -1095,10 +1094,7 @@ join_res:
 > 0: TID
 */
 
-#ifndef PLATFORM_FREEBSD //Baron BSD has already defined
-
 enum ieee80211_state {
-
 	/* the card is not linked at all */
 	IEEE80211_NOLINK = 0,
 
@@ -1135,7 +1131,6 @@ enum ieee80211_state {
 	IEEE80211_LINKED_SCANNING,
 
 };
-#endif //PLATFORM_FREEBSD
 
 #define DEFAULT_MAX_SCAN_AGE (15 * HZ)
 #define DEFAULT_FTS 2346
@@ -1268,9 +1263,7 @@ enum rtw_ieee80211_back_parties {
 
 #define OUI_MICROSOFT 0x0050f2 /* Microsoft (also used in Wi-Fi specs)
 				* 00:50:F2 */
-#ifndef PLATFORM_FREEBSD //Baron BSD has defined
 #define WME_OUI_TYPE 2
-#endif //PLATFORM_FREEBSD
 #define WME_OUI_SUBTYPE_INFORMATION_ELEMENT 0
 #define WME_OUI_SUBTYPE_PARAMETER_ELEMENT 1
 #define WME_OUI_SUBTYPE_TSPEC_ELEMENT 2

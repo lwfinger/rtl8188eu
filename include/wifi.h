@@ -672,7 +672,7 @@ struct rtw_ieee80211_bar {
 #define IEEE80211_BAR_CTRL_CBMTID_COMPRESSED_BA  0x0004
 
 
- #if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8712FW) || defined(PLATFORM_FREEBSD)
+ #if defined(PLATFORM_LINUX)
 
 
 

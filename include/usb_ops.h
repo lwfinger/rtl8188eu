@@ -84,14 +84,7 @@ void rtl8192du_set_hw_type(_adapter *padapter);
 #define hal_set_hw_type rtl8192du_set_hw_type
 void rtl8192du_set_intf_ops(struct _io_ops *pops);
 #define usb_set_intf_ops  rtl8192du_set_intf_ops
-#ifndef PLATFORM_FREEBSD
 void rtl8192du_recv_tasklet(void *priv);
-#else	// PLATFORM_FREEBSD
-void rtl8192du_recv_tasklet(void *priv, int npending);
-#ifdef CONFIG_RX_INDICATE_QUEUE
-void rtw_rx_indicate_tasklet(void *priv, int npending);
-#endif	// CONFIG_RX_INDICATE_QUEUE
-#endif	// PLATFORM_FREEBSD
 
 void rtl8192du_xmit_tasklet(void *priv);
 #endif

@@ -128,7 +128,7 @@ typedef struct _LED_871x{
 	u8					bLedStartToLinkBlinkInProgress;
 	u8					bLedScanBlinkInProgress;
 
-	#if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)|| defined PLATFORM_FREEBSD
+	#if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)
 	_workitem			BlinkWorkItem; // Workitem used by BlinkTimer to manipulate H/W to blink LED.
 	#endif
 #endif //defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
