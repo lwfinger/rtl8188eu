@@ -42,11 +42,7 @@
 #elif defined (CONFIG_USB_HCI)
 
 #ifdef CONFIG_USB_TX_AGGREGATION
-#ifdef CONFIG_PLATFORM_ARM_SUNxI
-#define MAX_XMITBUF_SZ (12288)  //12k 1536*8
-#else
 #define MAX_XMITBUF_SZ	(20480)	// 20k
-#endif
 #else
 #define MAX_XMITBUF_SZ	(2048)
 #endif

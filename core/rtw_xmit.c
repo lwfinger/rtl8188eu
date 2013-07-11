@@ -2271,25 +2271,9 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 
 		xmitframe_plist = get_next(xmitframe_plist);
 
-/*#ifdef RTK_DMP_PLATFORM
-#ifdef CONFIG_USB_TX_AGGREGATION
-		if ((ptxservq->qcnt>0) && (ptxservq->qcnt<=2))
-		{
-			pxmitframe = NULL;
-
-			tasklet_schedule(&pxmitpriv->xmit_tasklet);
-
-			break;
-		}
-#endif
-#endif*/
 		rtw_list_delete(&pxmitframe->list);
 
 		ptxservq->qcnt--;
-
-		/* rtw_list_insert_tail(&pxmitframe->list, &phwxmit->pending); */
-
-		/* ptxservq->qcnt--; */
 
 		break;
 

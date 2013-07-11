@@ -9012,11 +9012,9 @@ void start_clnt_auth(_adapter* padapter)
 	/*  Because of AP's not receiving deauth before */
 	/*  AP may: 1)not response auth or 2)deauth us after link is complete */
 	/*  issue deauth before issuing auth to deal with the situation */
-#ifndef CONFIG_PLATFORM_RTK_DMP
 	/* 	Commented by Albert 2012/07/21 */
 	/* 	For the Win8 P2P connection, it will be hard to have a successful connection if this Wi-Fi doesn't connect to it. */
 	issue_deauth(padapter, (&(pmlmeinfo->network))->MacAddress, WLAN_REASON_DEAUTH_LEAVING);
-#endif
 
 	DBG_88E_LEVEL(_drv_info_, "start auth\n");
 	issue_auth(padapter, NULL, 0);

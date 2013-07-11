@@ -27,11 +27,6 @@
 #include <recv_osdep.h>
 #include <linux/vmalloc.h>
 #include <rtw_ioctl_set.h>
-#ifdef RTK_DMP_PLATFORM
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
-#include <linux/pageremap.h>
-#endif
-#endif
 
 /*
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
@@ -93,13 +88,7 @@ u8* _rtw_malloc(u32 sz)
 {
 	u8	*pbuf=NULL;
 
-#ifdef RTK_DMP_PLATFORM
-	if (sz > 0x4000)
-		pbuf = (u8 *)dvr_malloc(sz);
-	else
-#endif
-		pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
-
+	pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	return pbuf;
 }
 
@@ -114,11 +103,6 @@ u8* _rtw_zmalloc(u32 sz)
 
 void	_rtw_mfree(u8 *pbuf, u32 sz)
 {
-#ifdef RTK_DMP_PLATFORM
-	if (sz > 0x4000)
-		dvr_free(pbuf);
-	else
-#endif
 		kfree(pbuf);
 }
 
@@ -798,13 +782,6 @@ error:
 	return -1;
 
 }
-
-#ifdef CONFIG_PLATFORM_SPRD
-#ifdef do_div
-#undef do_div
-#endif
-#include <asm-generic/div64.h>
-#endif
 
 u64 rtw_modular64(u64 x, u64 y)
 {

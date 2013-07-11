@@ -1970,21 +1970,6 @@ _func_enter_;
 	}
 #endif /* CONFIG_TDLS */
 
-#ifdef RTK_DMP_PLATFORM
-	if ( 0 )
-	{
-		DBG_88E("++\n");
-		{
-			int i;
-			for (i=0; i<64;i=i+8)
-				DBG_88E("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:", *(ptr+i),
-				*(ptr+i+1), *(ptr+i+2) ,*(ptr+i+3) ,*(ptr+i+4),*(ptr+i+5), *(ptr+i+6), *(ptr+i+7));
-
-		}
-		DBG_88E("--\n");
-	}
-#endif /* RTK_DMP_PLATFORM */
-
 	/* add version chk */
 	if (ver!=0){
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail! (ver!=0)\n"));
