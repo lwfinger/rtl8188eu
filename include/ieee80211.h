@@ -20,19 +20,11 @@
 #ifndef __IEEE80211_H
 #define __IEEE80211_H
 
-
-#ifndef CONFIG_RTL8711FW
-
-	#include <drv_conf.h>
-	#include <osdep_service.h>
-	#include <drv_types.h>
-	#include "wifi.h"
-	#include <linux/wireless.h>
-#else
-
-	#include <list.h>
-
-#endif
+#include <drv_conf.h>
+#include <osdep_service.h>
+#include <drv_types.h>
+#include "wifi.h"
+#include <linux/wireless.h>
 
 #define MGMT_QUEUE_NUM 5
 

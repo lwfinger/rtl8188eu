@@ -708,10 +708,6 @@ void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMContinueTx, bDisable);
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleCarrier, bEnable);
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleTone, bDisable);
-#ifdef CONFIG_RTL8192C
-		/*  5. Disable TX power saving at STF & LLTF */
-		write_bbreg(pAdapter, rOFDM1_LSTF, BIT22, 1);
-#endif
 		/* for dynamic set Power index. */
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
@@ -725,10 +721,6 @@ void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMContinueTx, bDisable);
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleCarrier, bDisable);
 		write_bbreg(pAdapter, rOFDM1_LSTF, bOFDMSingleTone, bDisable);
-#ifdef CONFIG_RTL8192C
-		/*  Cancel disable TX power saving at STF&LLTF */
-		write_bbreg(pAdapter, rOFDM1_LSTF, BIT22, 0);
-#endif
 		rtw_msleep_os(10);
 
 		/* BB Reset */
@@ -914,13 +906,6 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rCCK0_System, bCCKBBMode, 0x2);	/* transmit mode */
 		write_bbreg(pAdapter, rCCK0_System, bCCKScramble, bEnable);	/* turn on scramble setting */
 
-#ifdef CONFIG_RTL8192C
-		/*  Patch for CCK 11M waveform */
-		if (cckrate == MPT_RATE_1M)
-			write_bbreg(pAdapter, 0xA71, BIT(6), bDisable);
-		else
-			write_bbreg(pAdapter, 0xA71, BIT(6), bEnable);
-#endif
 		/* for dynamic set Power index. */
 		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);

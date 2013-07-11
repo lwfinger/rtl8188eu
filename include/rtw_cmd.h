@@ -27,90 +27,88 @@
 
 #define C2H_MEM_SZ (16*1024)
 
-#ifndef CONFIG_RTL8711FW
-
-	#include <osdep_service.h>
-	#include <ieee80211.h> // <ieee80211/ieee80211.h>
+#include <osdep_service.h>
+#include <ieee80211.h> // <ieee80211/ieee80211.h>
 
 
-	#define FREE_CMDOBJ_SZ	128
+#define FREE_CMDOBJ_SZ	128
 
-	#define MAX_CMDSZ	1024
-	#define MAX_RSPSZ	512
-	#define MAX_EVTSZ	1024
+#define MAX_CMDSZ	1024
+#define MAX_RSPSZ	512
+#define MAX_EVTSZ	1024
 
-	#define CMDBUFF_ALIGN_SZ 512
+#define CMDBUFF_ALIGN_SZ 512
 
-	struct cmd_obj {
-		_adapter *padapter;
-		u16	cmdcode;
-		u8	res;
-		u8	*parmbuf;
-		u32	cmdsz;
-		u8	*rsp;
-		u32	rspsz;
-		//_sema		cmd_sem;
-		_list	list;
-	};
+struct cmd_obj {
+	_adapter *padapter;
+	u16	cmdcode;
+	u8	res;
+	u8	*parmbuf;
+	u32	cmdsz;
+	u8	*rsp;
+	u32	rspsz;
+	//_sema		cmd_sem;
+	_list	list;
+};
 
-	struct cmd_priv {
-		_sema	cmd_queue_sema;
-		//_sema	cmd_done_sema;
-		_sema	terminate_cmdthread_sema;
-		_queue	cmd_queue;
-		u8	cmd_seq;
-		u8	*cmd_buf;	//shall be non-paged, and 4 bytes aligned
-		u8	*cmd_allocated_buf;
-		u8	*rsp_buf;	//shall be non-paged, and 4 bytes aligned
-		u8	*rsp_allocated_buf;
-		u32	cmd_issued_cnt;
-		u32	cmd_done_cnt;
-		u32	rsp_cnt;
-		u8 cmdthd_running;
-		_adapter *padapter;
-	};
+struct cmd_priv {
+	_sema	cmd_queue_sema;
+	//_sema	cmd_done_sema;
+	_sema	terminate_cmdthread_sema;
+	_queue	cmd_queue;
+	u8	cmd_seq;
+	u8	*cmd_buf;	//shall be non-paged, and 4 bytes aligned
+	u8	*cmd_allocated_buf;
+	u8	*rsp_buf;	//shall be non-paged, and 4 bytes aligned
+	u8	*rsp_allocated_buf;
+	u32	cmd_issued_cnt;
+	u32	cmd_done_cnt;
+	u32	rsp_cnt;
+	u8 cmdthd_running;
+	_adapter *padapter;
+};
 
 #ifdef CONFIG_EVENT_THREAD_MODE
-	struct evt_obj {
-		u16	evtcode;
-		u8	res;
-		u8	*parmbuf;
-		u32	evtsz;
-		_list	list;
-	};
+struct evt_obj {
+	u16	evtcode;
+	u8	res;
+	u8	*parmbuf;
+	u32	evtsz;
+	_list	list;
+};
 #endif
 
-	struct	evt_priv {
+struct	evt_priv {
 #ifdef CONFIG_EVENT_THREAD_MODE
-		_sema	evt_notify;
-		_sema	terminate_evtthread_sema;
-		_queue	evt_queue;
+	_sema	evt_notify;
+	_sema	terminate_evtthread_sema;
+	_queue	evt_queue;
 #endif
 
 #define CONFIG_C2H_WK
 #ifdef CONFIG_C2H_WK
-		_workitem c2h_wk;
-		bool c2h_wk_alive;
-		struct rtw_cbuf *c2h_queue;
-		#define C2H_QUEUE_MAX_LEN 10
+	_workitem c2h_wk;
+	bool c2h_wk_alive;
+	struct rtw_cbuf *c2h_queue;
+	#define C2H_QUEUE_MAX_LEN 10
 #endif
 
 #ifdef CONFIG_H2CLBK
-		_sema	lbkevt_done;
-		u8	lbkevt_limit;
-		u8	lbkevt_num;
-		u8	*cmdevt_parm;
+	_sema	lbkevt_done;
+	u8	lbkevt_limit;
+	u8	lbkevt_num;
+	u8	*cmdevt_parm;
 #endif
-		ATOMIC_T event_seq;
-		u8	*evt_buf;	//shall be non-paged, and 4 bytes aligned
-		u8	*evt_allocated_buf;
-		u32	evt_done_cnt;
+	ATOMIC_T event_seq;
+	u8	*evt_buf;	//shall be non-paged, and 4 bytes aligned
+	u8	*evt_allocated_buf;
+	u32	evt_done_cnt;
 #if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		u8	*c2h_mem;
-		u8	*allocated_c2h_mem;
+	u8	*c2h_mem;
+	u8	*allocated_c2h_mem;
 #endif
 
-	};
+};
 
 #define init_h2fwcmd_w_parm_no_rsp(pcmd, pparm, code) \
 do {\
@@ -153,10 +151,6 @@ extern void rtw_evt_notify_isr(struct evt_priv *pevtpriv);
 #ifdef CONFIG_P2P
 u8 p2p_protocol_wk_cmd(_adapter*padapter, int intCmdType );
 #endif //CONFIG_P2P
-
-#else
-	#include <ieee80211.h>
-#endif	/* CONFIG_RTL8711FW */
 
 enum rtw_drvextra_cmd_id
 {

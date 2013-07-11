@@ -22,7 +22,6 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 
-#ifndef CONFIG_RTL8711FW
 #include <wlan_bssdef.h>
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
 #include <asm/semaphore.h>
@@ -30,11 +29,6 @@
 #include <linux/semaphore.h>
 #endif
 #include <linux/sem.h>
-#else
-#include <wlan_bssdef.h>
-#endif//CONFIG_RTL8711FW
-
-
 
 #ifdef CONFIG_H2CLBK
 #include <h2clbk.h>

@@ -21,24 +21,8 @@
 
 #include <drv_types.h>
 
-#ifdef CONFIG_RTL8712
-#include <rtw_mp_phy_regdef.h>
-#endif
-#ifdef CONFIG_RTL8192C
-#include <rtl8192c_hal.h>
-#endif
-#ifdef CONFIG_RTL8192D
-#include <rtl8192d_hal.h>
-#endif
-#ifdef CONFIG_RTL8723A
-#include <rtl8723a_hal.h>
-#include "rtw_bt_mp.h"
-#endif
-#ifdef CONFIG_RTL8188E
 #include "odm_precomp.h"
 #include "rtl8188e_hal.h"
-#endif
-
 
 #ifdef CONFIG_MP_INCLUDED
 
@@ -268,25 +252,9 @@ void free_mp_priv(struct mp_priv *pmp_priv)
 	pmp_priv->pmp_xmtframe_buf = NULL;
 }
 
-#if defined (CONFIG_RTL8192C) || defined (CONFIG_RTL8723A)
-#define PHY_IQCalibrate(a,b)	rtl8192c_PHY_IQCalibrate(a,b)
-#define PHY_LCCalibrate(a)	rtl8192c_PHY_LCCalibrate(a)
-/* define dm_CheckTXPowerTracking(a)	rtl8192c_odm_CheckTXPowerTracking(a) */
-#define PHY_SetRFPathSwitch(a,b)	rtl8192c_PHY_SetRFPathSwitch(a,b)
-#endif
-
-#ifdef CONFIG_RTL8192D
-#define PHY_IQCalibrate(a,b)	rtl8192d_PHY_IQCalibrate(a)
-#define PHY_LCCalibrate(a)	rtl8192d_PHY_LCCalibrate(a)
-/* define dm_CheckTXPowerTracking(a)	rtl8192d_odm_CheckTXPowerTracking(a) */
-#define PHY_SetRFPathSwitch(a,b)	rtl8192d_PHY_SetRFPathSwitch(a,b)
-#endif
-
-#ifdef CONFIG_RTL8188E
 #define PHY_IQCalibrate(a,b)	PHY_IQCalibrate_8188E(a,b)
 #define PHY_LCCalibrate(a)	PHY_LCCalibrate_8188E(a)
 #define PHY_SetRFPathSwitch(a,b) PHY_SetRFPathSwitch_8188E(a,b)
-#endif
 
 s32
 MPT_InitializeAdapter(
@@ -311,14 +279,6 @@ MPT_InitializeAdapter(
 	pMptCtx->h2cReqNum = 0x0;
 	/* Init mpt event. */
 	/* init for BT MP */
-#ifdef CONFIG_RTL8723A
-	pMptCtx->bMPh2c_timeout = false;
-	pMptCtx->MptH2cRspEvent = false;
-	pMptCtx->MptBtC2hEvent = false;
-
-	_rtw_init_sema(&pMptCtx->MPh2c_Sema, 0);
-	_init_timer( &pMptCtx->MPh2c_timeout_timer, pAdapter->pnetdev, MPh2c_timeout_handle, pAdapter );
-#endif
 
 	pMptCtx->bMptWorkItemInProgress = false;
 	pMptCtx->CurrMptAct = NULL;
@@ -372,10 +332,6 @@ MPT_DeInitAdapter(
 	PMPT_CONTEXT		pMptCtx = &pAdapter->mppriv.MptCtx;
 
 	pMptCtx->bMptDrvUnload = true;
-	#ifdef CONFIG_RTL8723A
-	_rtw_free_sema(&(pMptCtx->MPh2c_Sema));
-	_cancel_timer_ex( &pMptCtx->MPh2c_timeout_timer);
-	#endif
 }
 
 static u8 mpt_ProStartTest(PADAPTER padapter)
@@ -410,22 +366,16 @@ void GetPowerTracking(PADAPTER padapter, u8 *enable)
 
 static void disable_dm(PADAPTER padapter)
 {
-#ifndef CONFIG_RTL8723A
 	u8 v8;
-#endif
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 
 	/* 3 1. disable firmware dynamic mechanism */
 	/*  disable Power Training, Rate Adaptive */
-#ifdef CONFIG_RTL8723A
-	SetBcnCtrlReg(padapter, 0, EN_BCN_FUNCTION);
-#else
 	v8 = rtw_read8(padapter, REG_BCN_CTRL);
 	v8 &= ~EN_BCN_FUNCTION;
 	rtw_write8(padapter, REG_BCN_CTRL, v8);
-#endif
 
 	/* 3 2. disable driver dynamic mechanism */
 	/*  disable Dynamic Initial Gain */
@@ -434,9 +384,6 @@ static void disable_dm(PADAPTER padapter)
 	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false);
 
 	/*  enable APK, LCK and IQK but disable power tracking */
-#ifndef CONFIG_RTL8188E
-	pdmpriv->TxPowerTrackControl = false;
-#endif
 	Switch_DM_Func(padapter, DYNAMIC_RF_CALIBRATION, true);
 }
 
@@ -548,26 +495,10 @@ end_of_mp_start_test:
 	if (res == _SUCCESS)
 	{
 		/*  set MSR to WIFI_FW_ADHOC_STATE */
-#if  !defined (CONFIG_RTL8712)
 		val8 = rtw_read8(padapter, MSR) & 0xFC; /*  0x0102 */
 		val8 |= WIFI_FW_ADHOC_STATE;
 		rtw_write8(padapter, MSR, val8); /*  Link in ad hoc network */
-#endif
-
-#if  defined (CONFIG_RTL8712)
-		rtw_write8(padapter, MSR, 1); /*  Link in ad hoc network */
-		rtw_write8(padapter, RCR, 0); /*  RCR : disable all pkt, 0x10250048 */
-		rtw_write8(padapter, RCR+2, 0x57); /*  RCR disable Check BSSID, 0x1025004a */
-
-		/*  disable RX filter map , mgt frames will put in RX FIFO 0 */
-		rtw_write16(padapter, RXFLTMAP0, 0x0); /*  0x10250116 */
-
-		val8 = rtw_read8(padapter, EE_9346CR); /*  0x1025000A */
-		if (!(val8 & _9356SEL))/* boot from EFUSE */
-			efuse_change_max_size(padapter);
-#endif
 	}
-
 	return res;
 }
 /*  */
@@ -719,27 +650,6 @@ void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter ,bool bMain)
 
 }
 
-#if defined (CONFIG_RTL8712)
-/*------------------------------Define structure----------------------------*/
-typedef struct _R_ANTENNA_SELECT_OFDM {
-	u32 r_tx_antenna:4;
-	u32 r_ant_l:4;
-	u32 r_ant_non_ht:4;
-	u32 r_ant_ht1:4;
-	u32 r_ant_ht2:4;
-	u32 r_ant_ht_s1:4;
-	u32 r_ant_non_ht_s1:4;
-	u32 OFDM_TXSC:2;
-	u32 Reserved:2;
-}R_ANTENNA_SELECT_OFDM;
-
-typedef struct _R_ANTENNA_SELECT_CCK {
-	u8	r_cckrx_enable_2:2;
-	u8	r_cckrx_enable:2;
-	u8	r_ccktx_enable:4;
-}R_ANTENNA_SELECT_CCK;
-#endif
-
 s32 SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 {
 	return Hal_SetThermalMeter( pAdapter, target_ther);
@@ -802,15 +712,7 @@ void PhySetTxPowerLevel(PADAPTER pAdapter)
 	struct mp_priv *pmp_priv = &pAdapter->mppriv;
 
 	if (pmp_priv->bSetTxPower==0) /*  for NO manually set power index */
-	{
-#ifdef CONFIG_RTL8188E
 		PHY_SetTxPowerLevel8188E(pAdapter,pmp_priv->channel);
-#elif defined(CONFIG_RTL8192D)
-		PHY_SetTxPowerLevel8192D(pAdapter,pmp_priv->channel);
-#else
-		PHY_SetTxPowerLevel8192C(pAdapter,pmp_priv->channel);
-#endif
-	}
 }
 
 /*  */
@@ -967,40 +869,24 @@ void SetPacketTx(PADAPTER padapter)
 
 	/* 3 3. init TX descriptor */
 	/*  offset 0 */
-#if defined(CONFIG_RTL8188E) && !defined(CONFIG_RTL8188E_SDIO)
 	desc->txdw0 |= cpu_to_le32(OWN | FSG | LSG);
 	desc->txdw0 |= cpu_to_le32(pkt_size & 0x0000FFFF); /*  packet size */
 	desc->txdw0 |= cpu_to_le32(((TXDESC_SIZE + OFFSET_SZ) << OFFSET_SHT) & 0x00FF0000); /* 32 bytes for TX Desc */
 	if (bmcast) desc->txdw0 |= cpu_to_le32(BMC); /*  broadcast packet */
 
 	desc->txdw1 |= cpu_to_le32((0x01 << 26) & 0xff000000);
-#endif
 	/*  offset 4 */
-	#ifndef CONFIG_RTL8188E
-		desc->txdw1 |= cpu_to_le32(BK); /*  don't aggregate(AMPDU) */
-		desc->txdw1 |= cpu_to_le32((pattrib->mac_id) & 0x1F); /* CAM_ID(MAC_ID) */
-	#else
 		desc->txdw1 |= cpu_to_le32((pattrib->mac_id) & 0x3F); /* CAM_ID(MAC_ID) */
-	#endif
 	desc->txdw1 |= cpu_to_le32((pattrib->qsel << QSEL_SHT) & 0x00001F00); /*  Queue Select, TID */
 
-	#ifdef CONFIG_RTL8188E
-		desc->txdw1 |= cpu_to_le32((pattrib->raid << RATE_ID_SHT) & 0x000F0000); /*  Rate Adaptive ID */
-	#else
-	desc->txdw1 |= cpu_to_le32((pattrib->raid << Rate_ID_SHT) & 0x000F0000); /*  Rate Adaptive ID */
-
-	#endif
+	desc->txdw1 |= cpu_to_le32((pattrib->raid << RATE_ID_SHT) & 0x000F0000); /*  Rate Adaptive ID */
 	/*  offset 8 */
 	/*  offset 12 */
 
 	desc->txdw3 |= cpu_to_le32((pattrib->seqnum<<16)&0x0fff0000);
 
 	/*  offset 16 */
-	#ifdef CONFIG_RTL8188E
-		desc->txdw4 |= cpu_to_le32(HW_SSN);
-	#else
-	desc->txdw4 |= cpu_to_le32(HW_SEQ_EN);
-	#endif
+	desc->txdw4 |= cpu_to_le32(HW_SSN);
 	desc->txdw4 |= cpu_to_le32(USERATE);
 	desc->txdw4 |= cpu_to_le32(DISDATAFB);
 
@@ -1018,12 +904,8 @@ void SetPacketTx(PADAPTER padapter)
 		if (pmp_priv->rateidx > MPT_RATE_54M)
 			desc->txdw5 |= cpu_to_le32(SGI); /*  MCS Short Guard Interval */
 	}
-	#ifdef CONFIG_RTL8188E
-		desc->txdw5 |= cpu_to_le32(RTY_LMT_EN); /*  retry limit enable */
-		desc->txdw5 |= cpu_to_le32(0x00180000); /*  DATA/RTS Rate Fallback Limit */
-	#else
-	desc->txdw5 |= cpu_to_le32(0x0001FF00); /*  DATA/RTS Rate Fallback Limit */
-	#endif
+	desc->txdw5 |= cpu_to_le32(RTY_LMT_EN); /*  retry limit enable */
+	desc->txdw5 |= cpu_to_le32(0x00180000); /*  DATA/RTS Rate Fallback Limit */
 
 	/* 3 4. make wlan header, make_wlanhdr() */
 	hdr = (struct rtw_ieee80211_hdr *)pkt_start;
@@ -1065,11 +947,8 @@ void SetPacketRx(PADAPTER pAdapter, u8 bStartRx)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
-	if (bStartRx)
-	{
+	if (bStartRx) {
 		/*  Accept CRC error and destination address */
-#if 1
-/* ndef CONFIG_RTL8723A */
 		pHalData->ReceiveConfig = AAP | APM | AM | AB | APP_ICV | ADF | AMF | HTC_LOC_CTRL | APP_MIC | APP_PHYSTS;
 
 		pHalData->ReceiveConfig |= ACRC32;
@@ -1078,12 +957,7 @@ void SetPacketRx(PADAPTER pAdapter, u8 bStartRx)
 
 		/*  Accept all data frames */
 		rtw_write16(pAdapter, REG_RXFLTMAP2, 0xFFFF);
-#else
-		rtw_write32(pAdapter, REG_RCR, 0x70000101);
-#endif
-	}
-	else
-	{
+	} else {
 		rtw_write32(pAdapter, REG_RCR, 0);
 	}
 }

@@ -105,130 +105,6 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf);
 #define USB_VENDER_ID_REALTEK		0x0BDA
 
 /* DID_USB_v916_20130116 */
-#define RTL8192C_USB_IDS \
-	/*=== Realtek demoboard ===*/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8191)},/* Default ID */ \
-	/****** 8188CUS ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8176)},/* 8188cu 1*1 dongole */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8170)},/* 8188CE-VAU USB minCard */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817E)},/* 8188CE-VAU USB minCard */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817A)},/* 8188cu Slim Solo */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817B)},/* 8188cu Slim Combo */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817D)},/* 8188RU High-power USB Dongle */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8754)},/* 8188 Combo for BC4 */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817F)},/* 8188RU */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x818A)},/* RTL8188CUS-VL */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x018A)},/* RTL8188CTV */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x17C0)}, /* RTK demoboard - USB-N10E */ \
-	/****** 8192CUS ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8177)},/* 8191cu 1*2 */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8178)},/* 8192cu 2*2 */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x817C)},/* 8192CE-VAU USB minCard */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8191)},/* 8192CU 2*2 */ \
-	{USB_DEVICE(0x1058, 0x0631)},/* Alpha, 8192CU */ \
-	/*=== Customer ID ===*/	 \
-	/****** 8188CUS Dongle ********/ \
-	{USB_DEVICE(0x2019, 0xED17)},/* PCI - Edimax */ \
-	{USB_DEVICE(0x0DF6, 0x0052)},/* Sitecom - Edimax */ \
-	{USB_DEVICE(0x7392, 0x7811)},/* Edimax - Edimax */ \
-	{USB_DEVICE(0x07B8, 0x8189)},/* Abocom - Abocom */ \
-	{USB_DEVICE(0x0EB0, 0x9071)},/* NO Brand - Etop */ \
-	{USB_DEVICE(0x06F8, 0xE033)},/* Hercules - Edimax */ \
-	{USB_DEVICE(0x103C, 0x1629)},/* HP - Lite-On ,8188CUS Slim Combo */ \
-	{USB_DEVICE(0x2001, 0x3308)},/* D-Link - Alpha */ \
-	{USB_DEVICE(0x050D, 0x1102)},/* Belkin - Edimax */ \
-	{USB_DEVICE(0x2019, 0xAB2A)},/* Planex - Abocom */ \
-	{USB_DEVICE(0x20F4, 0x648B)},/* TRENDnet - Cameo */ \
-	{USB_DEVICE(0x4855, 0x0090)},/*  - Feixun */ \
-	{USB_DEVICE(0x13D3, 0x3357)},/*  - AzureWave */ \
-	{USB_DEVICE(0x0DF6, 0x005C)},/* Sitecom - Edimax */ \
-	{USB_DEVICE(0x0BDA, 0x5088)},/* Thinkware - CC&C */ \
-	{USB_DEVICE(0x4856, 0x0091)},/* NetweeN - Feixun */ \
-	{USB_DEVICE(0x0846, 0x9041)}, /* Netgear - Cameo */ \
-	{USB_DEVICE(0x2019, 0x4902)},/* Planex - Etop */ \
-	{USB_DEVICE(0x2019, 0xAB2E)},/* SW-WF02-AD15 -Abocom */ \
-	{USB_DEVICE(0x2001, 0x330B)}, /* D-LINK - T&W */ \
-	{USB_DEVICE(0xCDAB, 0x8010)}, /* - - compare */ \
-	{USB_DEVICE(0x0B05, 0x17BA)}, /* ASUS - Edimax */ \
-	{USB_DEVICE(0x0BDA, 0x1E1E)}, /* Intel - - */ \
-	{USB_DEVICE(0x04BB, 0x094c)}, /* I-O DATA - Edimax */ \
-	/****** 8188CTV ********/ \
-	{USB_DEVICE(0xCDAB, 0x8011)}, /* - - compare */ \
-	{USB_DEVICE(0x0BDA, 0x0A8A)}, /* Sony - Foxconn */ \
-	/****** 8188 RU ********/ \
-	{USB_DEVICE(0x0BDA, 0x317F)},/* Netcore,Netcore */ \
-	/****** 8188CE-VAU ********/ \
-	{USB_DEVICE(0x13D3, 0x3359)},/*  - Azwave */ \
-	{USB_DEVICE(0x13D3, 0x3358)},/*  - Azwave */ \
-	/****** 8188CUS Slim Solo********/ \
-	{USB_DEVICE(0x04F2, 0xAFF7)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x04F2, 0xAFF9)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x04F2, 0xAFFA)},/* XAVI - XAVI */ \
-	/****** 8188CUS Slim Combo ********/ \
-	{USB_DEVICE(0x04F2, 0xAFF8)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x04F2, 0xAFFB)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x04F2, 0xAFFC)},/* XAVI - XAVI */ \
-	{USB_DEVICE(0x2019, 0x1201)},/* Planex - Vencer */ \
-	/****** 8192CUS Dongle ********/ \
-	{USB_DEVICE(0x2001, 0x3307)},/* D-Link - Cameo */ \
-	{USB_DEVICE(0x2001, 0x330A)},/* D-Link - Alpha */ \
-	{USB_DEVICE(0x2001, 0x3309)},/* D-Link - Alpha */ \
-	{USB_DEVICE(0x0586, 0x341F)},/* Zyxel - Abocom */ \
-	{USB_DEVICE(0x7392, 0x7822)},/* Edimax - Edimax */ \
-	{USB_DEVICE(0x2019, 0xAB2B)},/* Planex - Abocom */ \
-	{USB_DEVICE(0x07B8, 0x8178)},/* Abocom - Abocom */ \
-	{USB_DEVICE(0x07AA, 0x0056)},/* ATKK - Gemtek */ \
-	{USB_DEVICE(0x4855, 0x0091)},/*  - Feixun */ \
-	{USB_DEVICE(0x050D, 0x2102)},/* Belkin - Sercomm */ \
-	{USB_DEVICE(0x050D, 0x2103)},/* Belkin - Edimax */ \
-	{USB_DEVICE(0x20F4, 0x624D)},/* TRENDnet */ \
-	{USB_DEVICE(0x0DF6, 0x0061)},/* Sitecom - Edimax */ \
-	{USB_DEVICE(0x0B05, 0x17AB)},/* ASUS - Edimax */ \
-	{USB_DEVICE(0x0846, 0x9021)},/* Netgear - Sercomm */ \
-	{USB_DEVICE(0x0846, 0xF001)}, /* Netgear - Sercomm */ \
-	{USB_DEVICE(0x0E66, 0x0019)},/* Hawking,Edimax */ \
-	{USB_DEVICE(0x0E66, 0x0020)}, /* Hawking  - Edimax */ \
-	{USB_DEVICE(0x050D, 0x1004)}, /* Belkin - Edimax */ \
-	{USB_DEVICE(0x0BDA, 0x2E2E)}, /* Intel - - */ \
-	{USB_DEVICE(0x2357, 0x0100)}, /* TP-Link - TP-Link */ \
-	{USB_DEVICE(0x06F8, 0xE035)}, /* Hercules - Edimax */ \
-	{USB_DEVICE(0x04BB, 0x0950)}, /* IO-DATA - Edimax */ \
-	{USB_DEVICE(0x0DF6, 0x0070)}, /* Sitecom - Edimax */ \
-	{USB_DEVICE(0x0789, 0x016D)}, /* LOGITEC - Edimax */ \
-	/****** 8192CE-VAU  ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8186)},/* Intel-Xavi( Azwave) */
-
-#define RTL8192D_USB_IDS \
-	/*=== Realtek demoboard ===*/ \
-	/****** 8192DU ********/ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8193)},/* 8192DU-VC */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8194)},/* 8192DU-VS */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8111)},/* Realtek 5G dongle for WiFi Display */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x0193)},/* 8192DE-VAU */ \
-	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8171)},/* 8192DU-VC */ \
-	/*=== Customer ID ===*/ \
-	/****** 8192DU-VC ********/ \
-	{USB_DEVICE(0x2019, 0xAB2C)},/* PCI - Abocm */ \
-	{USB_DEVICE(0x2019, 0x4903)},/* PCI - ETOP */ \
-	{USB_DEVICE(0x2019, 0x4904)},/* PCI - ETOP */ \
-	{USB_DEVICE(0x07B8, 0x8193)},/* Abocom - Abocom */ \
-	/****** 8192DU-VS ********/ \
-	{USB_DEVICE(0x20F4, 0x664B)}, /* TRENDnet - Cameo */ \
-	{USB_DEVICE(0x04DD, 0x954F)},  /* Sharp */ \
-	{USB_DEVICE(0x04DD, 0x96A6)},  /* Sharp */ \
-	{USB_DEVICE(0x050D, 0x110A)}, /* Belkin - Edimax */ \
-	{USB_DEVICE(0x050D, 0x1105)}, /* Belkin - Edimax */ \
-	{USB_DEVICE(0x050D, 0x120A)}, /* Belkin - Edimax */ \
-	{USB_DEVICE(0x1668, 0x8102)}, /*  -  */ \
-	{USB_DEVICE(0x0BDA, 0xE194)}, /*  - Edimax */ \
-	/****** 8192DU-WiFi Display Dongle ********/ \
-	{USB_DEVICE(0x2019, 0xAB2D)},/* Planex - Abocom ,5G dongle for WiFi Display */
-
-#define RTL8723A_USB_IDS \
-	{USB_DEVICE_AND_INTERFACE_INFO(USB_VENDER_ID_REALTEK, 0x8724,0xff,0xff,0xff)}, /* 8723AU 1*1 */ \
-	{USB_DEVICE_AND_INTERFACE_INFO(USB_VENDER_ID_REALTEK, 0x1724,0xff,0xff,0xff)}, /* 8723AU 1*1 */ \
-	{USB_DEVICE_AND_INTERFACE_INFO(USB_VENDER_ID_REALTEK, 0x0724,0xff,0xff,0xff)}, /* 8723AU 1*1 */
-
 #define RTL8188E_USB_IDS \
 	/*=== Realtek demoboard ===*/ \
 	{USB_DEVICE(USB_VENDER_ID_REALTEK, 0x8179)}, /* 8188EUS */ \
@@ -237,27 +113,7 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf);
 	/****** 8188EUS ********/ \
 	{USB_DEVICE(0x8179, 0x07B8)}, /* Abocom - Abocom */
 
-#ifndef CONFIG_RTL8192C
-	#undef RTL8192C_USB_IDS
-	#define RTL8192C_USB_IDS
-#endif
-#ifndef CONFIG_RTL8192D
-	#undef RTL8192D_USB_IDS
-	#define RTL8192D_USB_IDS
-#endif
-#ifndef CONFIG_RTL8723A
-	#undef RTL8723A_USB_IDS
-	#define RTL8723A_USB_IDS
-#endif
-#ifndef CONFIG_RTL8188E
-	#undef RTL8188E_USB_IDS
-	#define RTL8188E_USB_IDS
-#endif
-
 static struct usb_device_id rtw_usb_id_tbl[] ={
-	RTL8192C_USB_IDS
-	RTL8192D_USB_IDS
-	RTL8723A_USB_IDS
 	RTL8188E_USB_IDS
 	{}	/* Terminating entry */
 };
@@ -287,78 +143,6 @@ struct rtw_usb_drv {
 #endif
 };
 
-#ifdef CONFIG_RTL8192C
-static struct usb_device_id rtl8192c_usb_id_tbl[] ={
-	RTL8192C_USB_IDS
-	{}	/* Terminating entry */
-};
-
-struct rtw_usb_drv rtl8192c_usb_drv = {
-	.usbdrv.name = (char*)"rtl8192cu",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8192c_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-	.usbdrv.reset_resume   = rtw_resume,
-	#endif
-	#ifdef CONFIG_AUTOSUSPEND
-	.usbdrv.supports_autosuspend = 1,
-	#endif
-};
-
-static struct rtw_usb_drv *usb_drv = &rtl8192c_usb_drv;
-#endif /* CONFIG_RTL8192C */
-
-#ifdef CONFIG_RTL8192D
-static struct usb_device_id rtl8192d_usb_id_tbl[] ={
-	RTL8192D_USB_IDS
-	{}	/* Terminating entry */
-};
-
-struct rtw_usb_drv rtl8192d_usb_drv = {
-	.usbdrv.name = (char*)"rtl8192du",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8192d_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-	.usbdrv.reset_resume   = rtw_resume,
-	#endif
-	#ifdef CONFIG_AUTOSUSPEND
-	.usbdrv.supports_autosuspend = 1,
-	#endif
-};
-static struct rtw_usb_drv *usb_drv = &rtl8192d_usb_drv;
-#endif /* CONFIG_RTL8192D */
-
-#ifdef CONFIG_RTL8723A
-static struct usb_device_id rtl8723a_usb_id_tbl[] ={
-	RTL8723A_USB_IDS
-	{}	/* Terminating entry */
-};
-
-struct rtw_usb_drv rtl8723a_usb_drv = {
-	.usbdrv.name = (char*)"rtl8723au",
-	.usbdrv.probe = rtw_drv_init,
-	.usbdrv.disconnect = rtw_dev_remove,
-	.usbdrv.id_table = rtl8723a_usb_id_tbl,
-	.usbdrv.suspend =  rtw_suspend,
-	.usbdrv.resume = rtw_resume,
-	#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 22))
-	.usbdrv.reset_resume   = rtw_resume,
-	#endif
-	#ifdef CONFIG_AUTOSUSPEND
-	.usbdrv.supports_autosuspend = 1,
-	#endif
-};
-
-static struct rtw_usb_drv *usb_drv = &rtl8723a_usb_drv;
-#endif /* CONFIG_RTL8723A */
-
-#ifdef CONFIG_RTL8188E
 static struct usb_device_id rtl8188e_usb_id_tbl[] ={
 	RTL8188E_USB_IDS
 	{}	/* Terminating entry */
@@ -380,7 +164,6 @@ static struct rtw_usb_drv rtl8188e_usb_drv = {
 };
 
 static struct rtw_usb_drv *usb_drv = &rtl8188e_usb_drv;
-#endif /* CONFIG_RTL8188E */
 
 static inline int RT_usb_endpoint_dir_in(const struct usb_endpoint_descriptor *epd)
 {

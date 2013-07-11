@@ -951,28 +951,8 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_survey_event_callback, ssid=%s\n",  pnetwork->Ssid.Ssid));
 
-#ifdef CONFIG_RTL8712
-        /* endian_convert */
-	pnetwork->Length = le32_to_cpu(pnetwork->Length);
-	pnetwork->Ssid.SsidLength = le32_to_cpu(pnetwork->Ssid.SsidLength);
-	pnetwork->Privacy =le32_to_cpu( pnetwork->Privacy);
-	pnetwork->Rssi = le32_to_cpu(pnetwork->Rssi);
-	pnetwork->NetworkTypeInUse =le32_to_cpu(pnetwork->NetworkTypeInUse);
-	pnetwork->Configuration.ATIMWindow = le32_to_cpu(pnetwork->Configuration.ATIMWindow);
-	pnetwork->Configuration.BeaconPeriod = le32_to_cpu(pnetwork->Configuration.BeaconPeriod);
-	pnetwork->Configuration.DSConfig =le32_to_cpu(pnetwork->Configuration.DSConfig);
-	pnetwork->Configuration.FHConfig.DwellTime=le32_to_cpu(pnetwork->Configuration.FHConfig.DwellTime);
-	pnetwork->Configuration.FHConfig.HopPattern=le32_to_cpu(pnetwork->Configuration.FHConfig.HopPattern);
-	pnetwork->Configuration.FHConfig.HopSet=le32_to_cpu(pnetwork->Configuration.FHConfig.HopSet);
-	pnetwork->Configuration.FHConfig.Length=le32_to_cpu(pnetwork->Configuration.FHConfig.Length);
-	pnetwork->Configuration.Length = le32_to_cpu(pnetwork->Configuration.Length);
-	pnetwork->InfrastructureMode = le32_to_cpu(pnetwork->InfrastructureMode);
-	pnetwork->IELength = le32_to_cpu(pnetwork->IELength);
-#endif
-
 	len = get_WLAN_BSSID_EX_sz(pnetwork);
-	if (len > (sizeof(WLAN_BSSID_EX)))
-	{
+	if (len > (sizeof(WLAN_BSSID_EX))) {
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("\n ****rtw_survey_event_callback: return a wrong bss ***\n"));
 		return;
 	}
@@ -1981,11 +1961,6 @@ _func_enter_;
 
 
 	mlmeext_sta_add_event_callback(adapter, psta);
-
-#ifdef CONFIG_RTL8711
-	/* submit SetStaKey_cmd to tell fw, fw will allocate an CAM entry for this sta */
-	rtw_setstakey_cmd(adapter, (unsigned char*)psta, false);
-#endif
 
 exit:
 
@@ -3081,14 +3056,6 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 		AMPDU_para [4:2]:Min MPDU Start Spacing
 		*/
 
-		/*
-		#if defined(CONFIG_RTL8188E )&& defined (CONFIG_SDIO_HCI)
-		ht_capie.ampdu_params_info = 2;
-		#else
-		ht_capie.ampdu_params_info = (IEEE80211_HT_CAP_AMPDU_FACTOR&0x03);
-		#endif
-		*/
-
 		rtw_hal_get_def_var(padapter, HW_VAR_MAX_RX_AMPDU_FACTOR, &max_rx_ampdu_factor);
 		ht_capie.ampdu_params_info = (max_rx_ampdu_factor&0x03);
 
@@ -3100,11 +3067,6 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 
 		rtw_set_ie(out_ie+out_len, _HT_CAPABILITY_IE_,
 			   sizeof(struct rtw_ieee80211_ht_cap), (unsigned char*)&ht_capie, pout_len);
-
-
-		/* _rtw_memcpy(out_ie+out_len, p, ielen+2);//gtest */
-		/* pout_len = *pout_len + (ielen+2); */
-
 
 		phtpriv->ht_option = true;
 

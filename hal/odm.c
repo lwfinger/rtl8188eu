@@ -4185,58 +4185,15 @@ odm_TXPowerTrackingThermalMeterInit(
 		PDM_ODM_T	pDM_Odm
 	)
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
-	PMGNT_INFO		pMgntInfo = &Adapter->MgntInfo;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-
-	pMgntInfo->bTXPowerTracking = true;
-	pHalData->TXPowercount       = 0;
-	pHalData->bTXPowerTrackingInit = false;
-	#if	MP_DRIVER != 1					/* for mp driver, turn off txpwrtracking as default */
-	pHalData->TxPowerTrackControl = true;
-	#endif/* if	(MP_DRIVER != 1) */
-	ODM_RT_TRACE(pDM_Odm,COMP_POWER_TRACKING, DBG_LOUD, ("pMgntInfo->bTXPowerTracking = %d\n", pMgntInfo->bTXPowerTracking));
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	#ifdef CONFIG_RTL8188E
-	{
-		pDM_Odm->RFCalibrateInfo.bTXPowerTracking = true;
-		pDM_Odm->RFCalibrateInfo.TXPowercount = 0;
-		pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = false;
-		if ( *(pDM_Odm->mp_mode) != 1)
-			pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = true;
-		MSG_88E("pDM_Odm TxPowerTrackControl = %d\n", pDM_Odm->RFCalibrateInfo.TxPowerTrackControl);
-	}
-	#else
-	{
-		PADAPTER		Adapter = pDM_Odm->Adapter;
-		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-		struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-
-		pdmpriv->bTXPowerTracking = true;
-		pdmpriv->TXPowercount = 0;
-		pdmpriv->bTXPowerTrackingInit = false;
-
-		if (*(pDM_Odm->mp_mode) != 1)
-			pdmpriv->TxPowerTrackControl = true;
-		MSG_88E("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
-
-	}
-	#endif/* endif (CONFIG_RTL8188E==1) */
-#elif (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
-	#ifdef RTL8188E_SUPPORT
-	{
-		pDM_Odm->RFCalibrateInfo.bTXPowerTracking = true;
-		pDM_Odm->RFCalibrateInfo.TXPowercount = 0;
-		pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = false;
+	pDM_Odm->RFCalibrateInfo.bTXPowerTracking = true;
+	pDM_Odm->RFCalibrateInfo.TXPowercount = 0;
+	pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = false;
+	if ( *(pDM_Odm->mp_mode) != 1)
 		pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = true;
-	}
-	#endif
-#endif
+	MSG_88E("pDM_Odm TxPowerTrackControl = %d\n", pDM_Odm->RFCalibrateInfo.TxPowerTrackControl);
 
-    pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = true;
+	pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = true;
 }
-
 
 void
 ODM_TXPowerTrackingCheck(

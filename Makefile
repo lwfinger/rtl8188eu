@@ -26,7 +26,6 @@ CONFIG_USB_AUTOSUSPEND = n
 CONFIG_HW_PWRP_DETECTION = n
 CONFIG_WIFI_TEST = n
 CONFIG_BT_COEXIST = n
-CONFIG_RTL8192CU_REDEFINE_1X1 = n
 CONFIG_INTEL_WIDI = n
 CONFIG_WAPI_SUPPORT = n
 CONFIG_EFUSE_CONFIG_FILE = n
@@ -39,75 +38,65 @@ CONFIG_DRVEXT_MODULE = n
 export TopDIR ?= $(shell pwd)
 
 
-OUTSRC_FILES := hal/odm_debug.o	\
-		hal/odm_interface.o\
-		hal/odm_HWConfig.o\
-		hal/odm.o\
-		hal/HalPhyRf.o
-										
-ifeq ($(CONFIG_RTL8188E), y)
+OUTSRC_FILES :=				\
+		hal/HalHWImg8188E_MAC.o	\
+		hal/HalHWImg8188E_BB.o	\
+		hal/HalHWImg8188E_RF.o	\
+		hal/HalPhyRf.o		\
+		hal/HalPhyRf_8188e.o	\
+		hal/HalPwrSeqCmd.o	\
+		hal/Hal8188EFWImg_CE.o	\
+		hal/Hal8188EPwrSeq.o	\
+		hal/Hal8188ERateAdaptive.o\
+		hal/hal_intf.o		\
+		hal/hal_com.o		\
+		hal/odm.o		\
+		hal/odm_debug.o		\
+		hal/odm_interface.o	\
+		hal/odm_HWConfig.o	\
+		hal/odm_RegConfig8188E.o\
+		hal/odm_RTL8188E.o	\
+		hal/rtl8188e_cmd.o	\
+		hal/rtl8188e_dm.o	\
+		hal/rtl8188e_hal_init.o	\
+		hal/rtl8188e_phycfg.o	\
+		hal/rtl8188e_rf6052.o	\
+		hal/rtl8188e_rxdesc.o	\
+		hal/rtl8188e_sreset.o	\
+		hal/rtl8188e_xmit.o	\
+		hal/rtl8188eu_led.o	\
+		hal/rtl8188eu_recv.o	\
+		hal/rtl8188eu_xmit.o	\
+		hal/usb_halinit.o	\
+		hal/usb_ops_linux.o
 
 RTL871X = rtl8188e
-HAL_COMM_FILES := hal/rtl8188e_xmit.o\
-		  hal/rtl8188e_sreset.o
 
-MODULE_NAME = 8188eu
-
-OUTSRC_FILES += hal/HalHWImg8188E_MAC.o\
-		hal/HalHWImg8188E_BB.o\
-		hal/HalHWImg8188E_RF.o\
-		hal/Hal8188EFWImg_CE.o\
-		hal/HalPhyRf_8188e.o\
-		hal/odm_RegConfig8188E.o\
-		hal/Hal8188ERateAdaptive.o\
-		hal/odm_RTL8188E.o
-
-ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_WOWLAN), y)
 OUTSRC_FILES += hal/HalHWImg8188E_FW.o
-endif
-endif
-
-PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
-		hal/Hal8188EPwrSeq.o
-
-CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES) 
-
 endif
 
 HCI_NAME = usb
 
-_OS_INTFS_FILES :=	os_dep/osdep_service.o \
-			os_dep/os_intfs.o \
-			os_dep/usb_intf.o \
-			os_dep/usb_ops_linux.o \
-			os_dep/ioctl_linux.o \
-			os_dep/xmit_linux.o \
-			os_dep/mlme_linux.o \
-			os_dep/recv_linux.o \
-			os_dep/ioctl_cfg80211.o \
-			os_dep/rtw_android.o
+_OS_INTFS_FILES :=				\
+			os_dep/ioctl_cfg80211.o	\
+			os_dep/ioctl_linux.o	\
+			os_dep/mlme_linux.o	\
+			os_dep/os_intfs.o	\
+			os_dep/osdep_service.o	\
+			os_dep/recv_linux.o	\
+			os_dep/rtw_android.o	\
+			os_dep/usb_intf.o	\
+			os_dep/usb_ops_linux.o	\
+			os_dep/xmit_linux.o
 
-_HAL_INTFS_FILES :=	hal/hal_intf.o \
-			hal/hal_com.o \
-			hal/rtl8188e_hal_init.o \
-			hal/rtl8188e_phycfg.o \
-			hal/rtl8188e_rf6052.o \
-			hal/rtl8188e_dm.o \
-			hal/rtl8188e_rxdesc.o \
-			hal/rtl8188e_cmd.o \
-			hal/usb_halinit.o \
-			hal/rtl$(MODULE_NAME)_led.o \
-			hal/rtl$(MODULE_NAME)_xmit.o \
-			hal/rtl$(MODULE_NAME)_recv.o
 
-_HAL_INTFS_FILES += hal/usb_ops_linux.o
 
 ifeq ($(CONFIG_MP_INCLUDED), y)
 _HAL_INTFS_FILES += hal/rtl8188e_mp.o
 endif
 
-_HAL_INTFS_FILES += $(CHIP_FILES)
+_HAL_INTFS_FILES += $(OUTSRC_FILES)
 
 
 ifeq ($(CONFIG_AUTOCFG_CP), y)
@@ -121,7 +110,6 @@ EXTRA_CFLAGS += -DCONFIG_USB_AUTOSUSPEND
 endif
 
 ifeq ($(CONFIG_MP_INCLUDED), y)
-#MODULE_NAME := $(MODULE_NAME)_mp
 EXTRA_CFLAGS += -DCONFIG_MP_INCLUDED
 endif
 
@@ -139,10 +127,6 @@ endif
 
 ifeq ($(CONFIG_BT_COEXIST), y)
 EXTRA_CFLAGS += -DCONFIG_BT_COEXIST
-endif
-
-ifeq ($(CONFIG_RTL8192CU_REDEFINE_1X1), y)
-EXTRA_CFLAGS += -DRTL8192C_RECONFIG_TO_1T1R
 endif
 
 ifeq ($(CONFIG_INTEL_WIDI), y)
@@ -165,16 +149,12 @@ ifeq ($(CONFIG_FTP_PROTECT), y)
 EXTRA_CFLAGS += -DCONFIG_FTP_PROTECT
 endif
 
-ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_WOWLAN), y)
 EXTRA_CFLAGS += -DCONFIG_WOWLAN
 endif
-endif
 
-ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_EFUSE_CONFIG_FILE), y)
 EXTRA_CFLAGS += -DCONFIG_RF_GAIN_OFFSET
-endif
 endif
 
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/ | sed -e s/armv6l/arm/)
@@ -186,56 +166,46 @@ KSRC := /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
 INSTALL_PREFIX :=
 
-ifneq ($(USER_MODULE_NAME),)
-MODULE_NAME := $(USER_MODULE_NAME)
-endif
-
 ifneq ($(KERNELRELEASE),)
 
-rtk_core :=	core/rtw_cmd.o \
-		core/rtw_security.o \
-		core/rtw_debug.o \
-		core/rtw_io.o \
-		core/rtw_ioctl_query.o \
-		core/rtw_ioctl_set.o \
-		core/rtw_ieee80211.o \
-		core/rtw_mlme.o \
-		core/rtw_mlme_ext.o \
-		core/rtw_wlan_util.o \
-		core/rtw_pwrctrl.o \
-		core/rtw_rf.o \
-		core/rtw_recv.o \
-		core/rtw_sta_mgt.o \
-		core/rtw_ap.o \
-		core/rtw_xmit.o	\
-		core/rtw_p2p.o \
-		core/rtw_tdls.o \
-		core/rtw_br_ext.o \
-		core/rtw_iol.o \
-		core/rtw_led.o \
-		core/rtw_sreset.o
+rtk_core :=				\
+		core/rtw_ap.o		\
+		core/rtw_br_ext.o	\
+		core/rtw_cmd.o		\
+		core/rtw_debug.o	\
+		core/rtw_efuse.o	\
+		core/rtw_ieee80211.o	\
+		core/rtw_io.o		\
+		core/rtw_ioctl_query.o	\
+		core/rtw_ioctl_set.o	\
+		core/rtw_iol.o		\
+		core/rtw_led.o		\
+		core/rtw_mlme.o		\
+		core/rtw_mlme_ext.o	\
+		core/rtw_mp.o		\
+		core/rtw_mp_ioctl.o	\
+		core/rtw_pwrctrl.o	\
+		core/rtw_p2p.o		\
+		core/rtw_recv.o		\
+		core/rtw_rf.o		\
+		core/rtw_security.o	\
+		core/rtw_sreset.o	\
+		core/rtw_sta_mgt.o	\
+		core/rtw_tdls.o		\
+		core/rtw_wlan_util.o	\
+		core/rtw_xmit.o	
 
-$(MODULE_NAME)-y += $(rtk_core)
+8188eu-y += $(rtk_core)
 
-$(MODULE_NAME)-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
+8188eu-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
 
-$(MODULE_NAME)-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
+8188eu-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
 					core/rtw_wapi_sms4.o
+8188eu-y += $(_HAL_INTFS_FILES)
 
-$(MODULE_NAME)-y += core/rtw_efuse.o
+8188eu-y += $(_OS_INTFS_FILES)
 
-$(MODULE_NAME)-y += $(_HAL_INTFS_FILES)
-
-$(MODULE_NAME)-y += $(_OS_INTFS_FILES)
-
-$(MODULE_NAME)-$(CONFIG_MP_INCLUDED) += core/rtw_mp.o \
-					core/rtw_mp_ioctl.o
-ifeq ($(CONFIG_RTL8723A), y)
-
-$(MODULE_NAME)-$(CONFIG_MP_INCLUDED)+= core/rtw_bt_mp.o
-endif
-
-obj-$(CONFIG_RTL8188EU) := $(MODULE_NAME).o
+obj-$(CONFIG_RTL8188EU) := 8188eu.o
 
 else
 
@@ -247,14 +217,14 @@ modules:
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
 
 strip:
-	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded
+	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
 
 install:
-	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+	install -p -m 644 8188eu.ko  $(MODDESTDIR)
 	/sbin/depmod -a ${KVER}
 
 uninstall:
-	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
+	rm -f $(MODDESTDIR)/8188eu.ko
 	/sbin/depmod -a ${KVER}
 
 config_r:
