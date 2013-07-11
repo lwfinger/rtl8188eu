@@ -38,7 +38,6 @@ enum{
 #define MAX_VENDOR_REQ_CMD_SIZE	254		//8188cu SIE Support
 #define MAX_USB_IO_CTL_SIZE		(MAX_VENDOR_REQ_CMD_SIZE +ALIGNMENT_UNIT)
 
-#ifdef PLATFORM_LINUX
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,12))
 #define rtw_usb_control_msg(dev, pipe, request, requesttype, value, index, data, size, timeout_ms) \
 	usb_control_msg((dev), (pipe), (request), (requesttype), (value), (index), (data), (size), (timeout_ms))
@@ -53,7 +52,6 @@ enum{
 		((timeout_ms) == 0) ||((timeout_ms)*HZ/1000>0)?((timeout_ms)*HZ/1000):1)
 #endif
 #include <usb_ops_linux.h>
-#endif //PLATFORM_LINUX
 
 #ifdef CONFIG_RTL8192C
 void rtl8192cu_set_hw_type(_adapter *padapter);

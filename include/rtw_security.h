@@ -424,8 +424,6 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 						u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie);
 #endif //CONFIG_TDLS
 
-#ifdef PLATFORM_LINUX
 void rtw_use_tkipkey_handler(void* FunctionContext);
-#endif
 
 #endif	//__RTL871X_SECURITY_H_

@@ -656,7 +656,6 @@ __inline static int IsFrameTypeCtrl(unsigned char *pframe)
  * This structure refers to "HT BlockAckReq" as
  * described in 802.11n draft section 7.2.1.7.1
  */
- #if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8712FW)
 struct rtw_ieee80211_bar {
 	unsigned short frame_control;
 	unsigned short duration;
@@ -665,16 +664,10 @@ struct rtw_ieee80211_bar {
 	unsigned short control;
 	unsigned short start_seq_num;
 } __attribute__((packed));
- #endif
 
 /* 802.11 BAR control masks */
 #define IEEE80211_BAR_CTRL_ACK_POLICY_NORMAL     0x0000
 #define IEEE80211_BAR_CTRL_CBMTID_COMPRESSED_BA  0x0004
-
-
- #if defined(PLATFORM_LINUX)
-
-
 
  /**
  * struct rtw_ieee80211_ht_cap - HT capabilities
@@ -707,12 +700,9 @@ struct ieee80211_ht_addt_info {
 } __attribute__ ((packed));
 
 
-struct HT_caps_element
-{
-	union
-	{
-		struct
-		{
+struct HT_caps_element {
+	union {
+		struct {
 			__le16	HT_caps_info;
 			unsigned char	AMPDU_para;
 			unsigned char	MCS_rate[16];
@@ -721,41 +711,33 @@ struct HT_caps_element
 			unsigned char	ASEL_caps;
 		} HT_cap_element;
 		unsigned char HT_cap[26];
-	}u;
+	} u;
 } __attribute__ ((packed));
 
-struct HT_info_element
-{
+struct HT_info_element {
 	unsigned char	primary_channel;
 	unsigned char	infos[5];
 	unsigned char	MCS_rate[16];
 }  __attribute__ ((packed));
 
-struct AC_param
-{
+struct AC_param {
 	unsigned char		ACI_AIFSN;
 	unsigned char		CW;
 	__le16	TXOP_limit;
 }  __attribute__ ((packed));
 
-struct WMM_para_element
-{
+struct WMM_para_element {
 	unsigned char		QoS_info;
 	unsigned char		reserved;
 	struct AC_param	ac_param[4];
 }  __attribute__ ((packed));
 
-struct ADDBA_request
-{
+struct ADDBA_request {
 	unsigned char		dialog_token;
 	unsigned short	BA_para_set;
 	unsigned short	BA_timeout_value;
 	unsigned short	BA_starting_seqctrl;
 }  __attribute__ ((packed));
-
-
-
-#endif
 
 typedef enum _HT_CAP_AMPDU_FACTOR {
 	MAX_AMPDU_FACTOR_8K		= 0,

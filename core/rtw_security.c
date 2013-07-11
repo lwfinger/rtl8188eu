@@ -2810,9 +2810,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 }
 #endif /* CONFIG_TDLS */
 
-#ifdef PLATFORM_LINUX
 void rtw_use_tkipkey_handler(void *FunctionContext)
-#endif
 {
         _adapter *padapter = (_adapter *)FunctionContext;
 
@@ -2820,14 +2818,6 @@ void rtw_use_tkipkey_handler(void *FunctionContext)
 _func_enter_;
 
 	RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("^^^rtw_use_tkipkey_handler ^^^\n"));
-
-/*
-	if (padapter->bDriverStopped ||padapter->bSurpriseRemoved){
-			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("^^^rtw_use_tkipkey_handler (padapter->bDriverStopped %d)(padapter->bSurpriseRemoved %d)^^^\n",padapter->bDriverStopped,padapter->bSurpriseRemoved));
-
-		return;
-	}
-	*/
 
 	padapter->securitypriv.busetkipkey=true;
 

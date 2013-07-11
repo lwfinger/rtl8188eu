@@ -106,9 +106,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 			return;
 		}
 
-#ifdef PLATFORM_LINUX
 		rtw_signal_process(padapter->pid[0], SIGUSR1);
-#endif
 	}
 }
 

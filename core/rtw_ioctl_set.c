@@ -268,7 +268,6 @@ _func_enter_;
 handle_tkip_countermeasure:
 	/* should we add something here...? */
 
-#ifdef PLATFORM_LINUX
 	if (padapter->securitypriv.btkip_countermeasure == true) {
 		cur_time = rtw_get_current_time();
 
@@ -283,7 +282,6 @@ handle_tkip_countermeasure:
 			goto release_mlme_lock;
 		}
 	}
-#endif
 
 	_rtw_memcpy(&pmlmepriv->assoc_bssid, bssid, ETH_ALEN);
 	pmlmepriv->assoc_by_bssid=true;
@@ -399,7 +397,6 @@ _func_enter_;
 
 handle_tkip_countermeasure:
 
-#ifdef PLATFORM_LINUX
 	if (padapter->securitypriv.btkip_countermeasure == true) {
 		cur_time = rtw_get_current_time();
 
@@ -414,7 +411,6 @@ handle_tkip_countermeasure:
 			goto release_mlme_lock;
 		}
 	}
-#endif
 
 	#ifdef CONFIG_VALIDATE_SSID
 	if (rtw_validate_ssid(ssid) == false) {

@@ -590,19 +590,12 @@ extern void rtw_cpwm_event_callback(_adapter *adapter, u8 *pbuf);
 void indicate_wx_scan_complete_event(_adapter *padapter);
 void rtw_indicate_wx_assoc_event(_adapter *padapter);
 void rtw_indicate_wx_disassoc_event(_adapter *padapter);
-
-#if defined (PLATFORM_LINUX)
 extern int event_thread(void *context);
 extern void rtw_join_timeout_handler(void* FunctionContext);
 extern void _rtw_scan_timeout_handler(void* FunctionContext);
-#endif
-
 extern void rtw_free_network_queue(_adapter *adapter,u8 isfreeall);
 extern int rtw_init_mlme_priv(_adapter *adapter);// (struct mlme_priv *pmlmepriv);
-
 extern void rtw_free_mlme_priv (struct mlme_priv *pmlmepriv);
-
-
 extern sint rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv);
 extern sint rtw_set_key(_adapter *adapter,struct security_priv *psecuritypriv,sint keyid, u8 set_tx);
 extern sint rtw_set_auth(_adapter *adapter,struct security_priv *psecuritypriv);

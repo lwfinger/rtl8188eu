@@ -30,10 +30,7 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
-
-#ifdef PLATFORM_LINUX
 #include <drv_types_linux.h>
-#endif
 
 enum _NIC_VERSION {
 
@@ -279,10 +276,8 @@ struct dvobj_priv
 	u8 * usb_vendor_req_buf;
 #endif
 
-#ifdef PLATFORM_LINUX
 	struct usb_interface *pusbintf;
 	struct usb_device *pusbdev;
-#endif//PLATFORM_LINUX
 
 	ATOMIC_T continual_urb_error;
 #endif//CONFIG_USB_HCI
@@ -291,7 +286,6 @@ struct dvobj_priv
 
 #ifdef CONFIG_PCI_HCI
 
-#ifdef PLATFORM_LINUX
 	struct pci_dev *ppcidev;
 
 	//PCI MEM map
@@ -321,12 +315,10 @@ struct dvobj_priv
 	u8	b_support_aspm; // If it supports ASPM, Offset[560h] = 0x40, otherwise Offset[560h] = 0x00.
 	u8	b_support_backdoor;
 	u8 bdma64;
-#endif//PLATFORM_LINUX
 
 #endif//CONFIG_PCI_HCI
 };
 
-#ifdef PLATFORM_LINUX
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {
 	/* todo: get interface type from dvobj and the return the dev accordingly */
@@ -346,7 +338,6 @@ static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 	return &dvobj->ppcidev->dev;
 #endif
 }
-#endif
 
 enum _IFACE_TYPE {
 	IFACE_PORT0, //mapping to port0 for C/D series chips
@@ -496,16 +487,8 @@ struct _ADAPTER{
 	_thread_hdl_ evtThread;
 	_thread_hdl_ xmitThread;
 	_thread_hdl_ recvThread;
-
-#ifndef PLATFORM_LINUX
-	NDIS_STATUS (*dvobj_init)(struct dvobj_priv *dvobj);
-	void (*dvobj_deinit)(struct dvobj_priv *dvobj);
-#endif
-
 	void (*intf_start)(_adapter * adapter);
 	void (*intf_stop)(_adapter * adapter);
-
-#ifdef PLATFORM_LINUX
 	_nic_hdl pnetdev;
 
 	// used by rtw_rereg_nd_name related function
@@ -525,10 +508,7 @@ struct _ADAPTER{
 	struct wireless_dev *rtw_wdev;
 #endif //CONFIG_IOCTL_CFG80211
 
-#endif //end of PLATFORM_LINUX
-
 	int net_closed;
-
 	u8 bFWReady;
 	u8 bBTFWReady;
 	u8 bReadPortCancel;

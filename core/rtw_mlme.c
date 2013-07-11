@@ -277,19 +277,11 @@ _func_enter_;
 		(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==true ) )
 		lifetime = 1;
 
-	if (!isfreeall)
-	{
-#ifdef PLATFORM_LINUX
-
+	if (!isfreeall) {
 		delta_time = (curr_time -pnetwork->last_scanned)/HZ;
 
 		if (delta_time < lifetime)/*  unit:sec */
-		{
 			goto exit;
-		}
-
-#endif
-
 	}
 
 	_enter_critical_bh(&free_queue->lock, &irqL);
@@ -1444,10 +1436,6 @@ void rtw_scan_abort(_adapter *adapter)
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY)) {
 		if (!adapter->bDriverStopped && !adapter->bSurpriseRemoved)
 			DBG_88E(FUNC_NDEV_FMT"waiting for scan_abort time out!\n", FUNC_NDEV_ARG(adapter->pnetdev));
-		#ifdef CONFIG_PLATFORM_MSTAR_TITANIA12
-		set_survey_timer(pmlmeext, 0);
-		_set_timer(&pmlmepriv->scan_to_timer, 50);
-		#endif
 		rtw_indicate_scan_done(adapter, true);
 	}
 	pmlmeext->scan_abort = false;

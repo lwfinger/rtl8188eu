@@ -237,10 +237,7 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 	*bcancelled=  true;//true ==1; false==0
 }
 
-#ifdef PLATFORM_LINUX
 #define RTW_TIMER_HDL_ARGS void *FunctionContext
-#endif
-
 #define RTW_TIMER_HDL_NAME(name) rtw_##name##_timer_hdl
 #define RTW_DECLARE_TIMER_HDL(name) void RTW_TIMER_HDL_NAME(name)(RTW_TIMER_HDL_ARGS)
 

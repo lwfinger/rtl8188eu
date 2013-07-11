@@ -9128,7 +9128,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		chplan_ap.Len = i;
 
 #ifdef CONFIG_DEBUG_RTL871X
-#ifdef PLATFORM_LINUX
 		i = 0;
 		DBG_88E("%s: AP[%s] channel plan {", __func__, bssid->Ssid.Ssid);
 		while ((i < chplan_ap.Len) && (chplan_ap.Channel[i] != 0))
@@ -9138,11 +9137,9 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		}
 		DBG_88E("}\n");
 #endif
-#endif
 
 		_rtw_memcpy(chplan_sta, pmlmeext->channel_set, sizeof(chplan_sta));
 #ifdef CONFIG_DEBUG_RTL871X
-#ifdef PLATFORM_LINUX
 		i = 0;
 		DBG_88E("%s: STA channel plan {", __func__);
 		while ((i < MAX_CHANNEL_NUM) && (chplan_sta[i].ChannelNum != 0))
@@ -9151,7 +9148,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 			i++;
 		}
 		DBG_88E("}\n");
-#endif
 #endif
 
 		_rtw_memset(pmlmeext->channel_set, 0, sizeof(pmlmeext->channel_set));
@@ -9304,7 +9300,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		pmlmeext->update_channel_plan_by_ap_done = 1;
 
 #ifdef CONFIG_DEBUG_RTL871X
-#ifdef PLATFORM_LINUX
 		k = 0;
 		DBG_88E("%s: new STA channel plan {", __func__);
 		while ((k < MAX_CHANNEL_NUM) && (chplan_new[k].ChannelNum != 0))
@@ -9314,8 +9309,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		}
 		DBG_88E("}\n");
 #endif
-#endif
-
 	}
 
 	/*  If channel is used by AP, set channel scan type to active */
