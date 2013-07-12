@@ -1133,12 +1133,6 @@ _func_enter_;
 #endif /*  CONFIG_P2P_PS */
 
 	rtw_os_xmit_schedule(adapter);
-#ifdef CONFIG_CONCURRENT_MODE
-	rtw_os_xmit_schedule(adapter->pbuddy_adapter);
-#endif
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	dc_resume_xmit(adapter);
-#endif
 
 #ifdef CONFIG_DRVEXT_MODULE_WSC
 	drvext_surveydone_callback(&adapter->drvextpriv);
@@ -1426,15 +1420,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(_adapter *padapter, struct wl
 		DBG_88E("%s\n", __func__);
 
 		psta->aid  = pnetwork->join_res;
-#ifdef CONFIG_CONCURRENT_MODE
-
-			if (PRIMARY_ADAPTER == padapter->adapter_type)
-				psta->mac_id=0;
-			else
-				psta->mac_id=2;
-#else
 			psta->mac_id=0;
-#endif
 
 		/* sta mode */
 		rtw_hal_set_odm_var(padapter,HAL_ODM_STA_INFO,psta,true);
@@ -1762,14 +1748,6 @@ _func_enter_;
 	mlmeext_joinbss_event_callback(adapter, pnetwork->join_res);
 
 	rtw_os_xmit_schedule(adapter);
-
-#ifdef CONFIG_CONCURRENT_MODE
-	rtw_os_xmit_schedule(adapter->pbuddy_adapter);
-#endif
-
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	dc_resume_xmit(adapter);
-#endif
 
 _func_exit_;
 }
@@ -2201,32 +2179,6 @@ static void rtw_auto_scan_handler(_adapter *padapter)
 		pmlmepriv->scan_interval--;
 		if (pmlmepriv->scan_interval==0)
 		{
-/*
-			if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
-			{
-				DBG_88E("exit %s when _FW_UNDER_SURVEY|_FW_UNDER_LINKING ->\n", __func__);
-				return;
-			}
-
-			if (pmlmepriv->sitesurveyctrl.traffic_busy == true)
-			{
-				DBG_88E("%s exit cause traffic_busy(%x)\n",__func__, pmlmepriv->sitesurveyctrl.traffic_busy);
-				return;
-			}
-*/
-
-#ifdef CONFIG_CONCURRENT_MODE
-			if (rtw_buddy_adapter_up(padapter))
-			{
-				if ((check_buddy_fwstate(padapter, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true) ||
-					(padapter->pbuddy_adapter->mlmepriv.LinkDetectInfo.bBusyTraffic == true))
-				{
-					DBG_88E("%s, but buddy_intf is under scanning or linking or BusyTraffic\n", __func__);
-					return;
-				}
-			}
-#endif
-
 			DBG_88E("%s\n", __func__);
 
 			rtw_set_802_11_bssid_list_scan(padapter, NULL, 0);
@@ -2245,9 +2197,6 @@ void rtw_dynamic_check_timer_handlder(_adapter *adapter)
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 #endif /* CONFIG_AP_MODE */
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
-#ifdef CONFIG_CONCURRENT_MODE
-	PADAPTER pbuddy_adapter = adapter->pbuddy_adapter;
-#endif
 
 	if (!adapter)
 		return;
@@ -2262,20 +2211,8 @@ void rtw_dynamic_check_timer_handlder(_adapter *adapter)
 		return;
 
 
-#ifdef CONFIG_CONCURRENT_MODE
-	if (pbuddy_adapter)
-	{
-		if (adapter->net_closed == true && pbuddy_adapter->net_closed == true)
-		{
-			return;
-		}
-	}
-	else
-#endif /* CONFIG_CONCURRENT_MODE */
 	if (adapter->net_closed == true)
-	{
 		return;
-	}
 
 	rtw_dynamic_chk_wk_cmd(adapter);
 
@@ -2359,26 +2296,8 @@ void rtw_set_scan_deny_timer_hdl(_adapter *adapter)
 void rtw_set_scan_deny(_adapter *adapter, u32 ms)
 {
 	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
-#ifdef CONFIG_CONCURRENT_MODE
-	struct mlme_priv *b_mlmepriv;
-#endif
-
-	if (0)
-	DBG_88E(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
 	ATOMIC_SET(&mlmepriv->set_scan_deny, 1);
 	_set_timer(&mlmepriv->set_scan_deny_timer, ms);
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (!adapter->pbuddy_adapter)
-		return;
-
-	if (0)
-	DBG_88E(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter->pbuddy_adapter));
-	b_mlmepriv = &adapter->pbuddy_adapter->mlmepriv;
-	ATOMIC_SET(&b_mlmepriv->set_scan_deny, 1);
-	_set_timer(&b_mlmepriv->set_scan_deny_timer, ms);
-#endif
-
 }
 #endif
 
@@ -3292,65 +3211,3 @@ void _rtw_roaming(_adapter *padapter, struct wlan_network *tgt_network)
 
 }
 #endif
-
-#ifdef CONFIG_CONCURRENT_MODE
-sint rtw_buddy_adapter_up(_adapter *padapter)
-{
-	sint res = false;
-
-	if (padapter == NULL)
-		return res;
-
-
-	if (padapter->pbuddy_adapter == NULL)
-	{
-		res = false;
-	}
-	else if ( (padapter->pbuddy_adapter->bDriverStopped) || (padapter->pbuddy_adapter->bSurpriseRemoved) ||
-		(padapter->pbuddy_adapter->bup == false) || (padapter->pbuddy_adapter->hw_init_completed == false))
-	{
-		res = false;
-	}
-	else
-	{
-		res = true;
-	}
-
-	return res;
-
-}
-
-sint check_buddy_fwstate(_adapter *padapter, sint state)
-{
-	if (padapter == NULL)
-		return false;
-
-	if (padapter->pbuddy_adapter == NULL)
-		return false;
-
-	if ((state == WIFI_FW_NULL_STATE) &&
-		(padapter->pbuddy_adapter->mlmepriv.fw_state == WIFI_FW_NULL_STATE))
-		return true;
-
-	if (padapter->pbuddy_adapter->mlmepriv.fw_state & state)
-		return true;
-
-	return false;
-}
-
-sint check_buddy_fw_link(_adapter *padapter)
-{
-	if (	(check_buddy_fwstate(padapter, WIFI_AP_STATE) == true) ||
-			(check_buddy_fwstate(padapter, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true))
-	{
-		if (padapter->pbuddy_adapter->stapriv.asoc_sta_count > 2)
-			return true;
-	}
-	else
-	{	/* Station mode */
-		if (check_buddy_fwstate(padapter, _FW_LINKED)== true)
-			return true;
-	}
-	return false;
-}
-#endif /* CONFIG_CONCURRENT_MODE */

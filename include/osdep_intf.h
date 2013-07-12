@@ -104,13 +104,6 @@ int rtw_ips_pwr_up(_adapter *padapter);
 void rtw_ips_pwr_down(_adapter *padapter);
 #endif
 
-#ifdef CONFIG_CONCURRENT_MODE
-struct _io_ops;
-_adapter *rtw_drv_if2_init(_adapter *primary_padapter, char *name, void (*set_intf_ops)(struct _io_ops *pops));
-void rtw_drv_if2_free(_adapter *if2);
-void rtw_drv_if2_stop(_adapter *if2);
-#endif
-
 #ifdef SUPPORT_HW_RFOFF_DETECTED
 int rtw_hw_suspend(_adapter *padapter );
 int rtw_hw_resume(_adapter *padapter);

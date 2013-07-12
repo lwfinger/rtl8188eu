@@ -91,19 +91,6 @@ _func_enter_;
 		return ret;
 	}
 
-#ifdef CONFIG_CONCURRENT_MODE
-
-	if (padapter->adapter_type > PRIMARY_ADAPTER)
-	{
-		padapter = padapter->pbuddy_adapter;
-	}
-
-	pHalData = GET_HAL_DATA(padapter);
-
-	_enter_critical_mutex(padapter->ph2c_fwcmd_mutex, NULL);
-
-#endif
-
 	if (!pCmdBuffer) {
 		goto exit;
 	}
@@ -165,10 +152,6 @@ _func_enter_;
 
 exit:
 
-#ifdef CONFIG_CONCURRENT_MODE
-	_exit_critical_mutex(padapter->ph2c_fwcmd_mutex, NULL);
-#endif
-
 _func_exit_;
 
 	return ret;
@@ -227,11 +210,6 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
 	u8 macid, init_rate, raid, shortGIrate=false;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (rtw_buddy_adapter_up(pAdapter) && pAdapter->adapter_type > PRIMARY_ADAPTER)
-		pHalData = GET_HAL_DATA(pAdapter->pbuddy_adapter);
-#endif /* CONFIG_CONCURRENT_MODE */
 
 	macid = arg&0x1f;
 

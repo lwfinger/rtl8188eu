@@ -201,9 +201,6 @@ struct hal_ops {
 	void	(*SetBeaconRelatedRegistersHandler)(_adapter *padapter);
 
 	void	(*Add_RateATid)(_adapter *padapter, u32 bitmap, u8 arg, u8 rssi_level);
-#ifdef CONFIG_CONCURRENT_MODE
-	void	(*clone_haldata)(_adapter *dst_padapter, _adapter *src_padapter);
-#endif
 	void	(*run_thread)(_adapter *padapter);
 	void	(*cancel_thread)(_adapter *padapter);
 

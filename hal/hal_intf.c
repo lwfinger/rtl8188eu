@@ -88,37 +88,6 @@ uint	 rtw_hal_init(_adapter *padapter)
 {
 	uint	status = _SUCCESS;
 
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	if (padapter->hw_init_completed == true)
-	{
-		DBG_88E("rtw_hal_init: hw_init_completed == true\n");
-		return status;
-	}
-
-	/*  before init mac0, driver must init mac1 first to avoid usb rx error. */
-	if ((padapter->pbuddy_adapter != NULL) && (padapter->DualMacConcurrent == true)
-		&& (padapter->adapter_type == PRIMARY_ADAPTER))
-	{
-		if (padapter->pbuddy_adapter->hw_init_completed == true)
-		{
-			DBG_88E("rtw_hal_init: pbuddy_adapter hw_init_completed == true\n");
-		}
-		else
-		{
-			status =	padapter->HalFunc.hal_init(padapter->pbuddy_adapter);
-			if (status == _SUCCESS){
-				padapter->pbuddy_adapter->hw_init_completed = true;
-			}
-			else{
-				padapter->pbuddy_adapter->hw_init_completed = false;
-				RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail(pbuddy_adapter)\n"));
-				DBG_88E("rtw_hal_init: hal__init fail(pbuddy_adapter)\n");
-				return status;
-			}
-		}
-	}
-#endif
-
 	padapter->hw_init_completed=false;
 
 	status = padapter->HalFunc.hal_init(padapter);
@@ -312,13 +281,6 @@ void	rtw_hal_add_ra_tid(_adapter *padapter, u32 bitmap, u8 arg, u8 rssi_level)
 	if (padapter->HalFunc.Add_RateATid)
 		padapter->HalFunc.Add_RateATid(padapter, bitmap, arg, rssi_level);
 }
-#ifdef CONFIG_CONCURRENT_MODE
-void	rtw_hal_clone_data(_adapter *dst_padapter, _adapter *src_padapter)
-{
-	if (dst_padapter->HalFunc.clone_haldata)
-		dst_padapter->HalFunc.clone_haldata(dst_padapter, src_padapter);
-}
-#endif
 /*	Start specifical interface thread		*/
 void	rtw_hal_start_thread(_adapter *padapter)
 {
@@ -379,10 +341,6 @@ void	rtw_hal_set_chan(_adapter *padapter, u8 channel)
 
 void	rtw_hal_dm_watchdog(_adapter *padapter)
 {
-#if defined(CONFIG_CONCURRENT_MODE)
-	if (padapter->adapter_type != PRIMARY_ADAPTER)
-		return;
-#endif
 	if (padapter->HalFunc.hal_dm_watchdog)
 		padapter->HalFunc.hal_dm_watchdog(padapter);
 }
@@ -437,10 +395,6 @@ void rtw_hal_sreset_reset_value(_adapter *padapter)
 
 void rtw_hal_sreset_xmit_status_check(_adapter *padapter)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->adapter_type != PRIMARY_ADAPTER)
-		return;
-#endif
 	if (padapter->HalFunc.sreset_xmit_status_check)
 		padapter->HalFunc.sreset_xmit_status_check(padapter);
 }

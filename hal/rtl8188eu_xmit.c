@@ -220,11 +220,6 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;
 #endif /* CONFIG_P2P */
 
-#ifdef CONFIG_CONCURRENT_MODE
-	if (rtw_buddy_adapter_up(padapter) && padapter->adapter_type > PRIMARY_ADAPTER)
-		pHalData = GET_HAL_DATA(padapter->pbuddy_adapter);
-#endif /* CONFIG_CONCURRENT_MODE */
-
 #ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
 if (padapter->registrypriv.mp_mode == 0)
 {
@@ -1038,10 +1033,6 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-#ifdef CONFIG_CONCURRENT_MODE
-	PADAPTER pbuddy_adapter = padapter->pbuddy_adapter;
-	struct mlme_priv *pbuddy_mlmepriv = &(pbuddy_adapter->mlmepriv);
-#endif
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL);
 
@@ -1053,11 +1044,6 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
 		goto enqueue;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (check_fwstate(pbuddy_mlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
-		goto enqueue;
-#endif
 
 	pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
 	if (pxmitbuf == NULL)

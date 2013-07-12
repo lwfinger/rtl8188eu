@@ -3898,31 +3898,6 @@ FindMinimumRSSI(
 	struct mlme_priv	*pmlmepriv = &pAdapter->mlmepriv;
 
 	/* 1 1.Determine the minimum RSSI */
-
-
-#ifdef CONFIG_CONCURRENT_MODE
-	/* 	FindMinimumRSSI()	per-adapter */
-	if (rtw_buddy_adapter_up(pAdapter)){
-		PADAPTER pbuddy_adapter = pAdapter->pbuddy_adapter;
-		PHAL_DATA_TYPE	pbuddy_HalData = GET_HAL_DATA(pbuddy_adapter);
-		struct dm_priv *pbuddy_dmpriv = &pbuddy_HalData->dmpriv;
-
-		if ((pdmpriv->EntryMinUndecoratedSmoothedPWDB != 0) &&
-                  (pbuddy_dmpriv->EntryMinUndecoratedSmoothedPWDB != 0))
-		{
-
-			if (pdmpriv->EntryMinUndecoratedSmoothedPWDB > pbuddy_dmpriv->EntryMinUndecoratedSmoothedPWDB)
-				pdmpriv->EntryMinUndecoratedSmoothedPWDB = pbuddy_dmpriv->EntryMinUndecoratedSmoothedPWDB;
-             }
-		else
-		{
-			if (pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0)
-			      pdmpriv->EntryMinUndecoratedSmoothedPWDB = pbuddy_dmpriv->EntryMinUndecoratedSmoothedPWDB;
-
-		}
-	}
-#endif
-
 	if ((check_fwstate(pmlmepriv, _FW_LINKED) == false) &&
 		(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
 	{
@@ -3956,13 +3931,8 @@ odm_RSSIMonitorCheckCE(
 	u8	sta_cnt=0;
 	u32 PWDB_rssi[NUM_STA]={0};/* 0~15]:MACID, [16~31]:PWDB_rssi */
 
-	if (!check_fwstate(&Adapter->mlmepriv, _FW_LINKED)
-		#ifdef CONFIG_CONCURRENT_MODE
-		&& !check_buddy_fwstate(Adapter, _FW_LINKED)
-		#endif
-	) {
+	if (!check_fwstate(&Adapter->mlmepriv, _FW_LINKED))
 		return;
-	}
 
 	{
 		struct sta_info *psta;
@@ -3974,9 +3944,6 @@ odm_RSSIMonitorCheckCE(
 				&& (psta->state & WIFI_ASOC_STATE)
 				&& _rtw_memcmp(psta->hwaddr, bcast_addr, ETH_ALEN) == false
 				&& _rtw_memcmp(psta->hwaddr, myid(&Adapter->eeprompriv), ETH_ALEN) == false
-				#ifdef CONFIG_CONCURRENT_MODE
-				&& (!Adapter->pbuddy_adapter || _rtw_memcmp(psta->hwaddr, myid(&Adapter->pbuddy_adapter->eeprompriv), ETH_ALEN) == false)
-				#endif
 				) {
 					if (psta->rssi_stat.UndecoratedSmoothedPWDB < tmpEntryMinPWDB)
 						tmpEntryMinPWDB = psta->rssi_stat.UndecoratedSmoothedPWDB;

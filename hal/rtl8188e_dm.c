@@ -278,35 +278,17 @@ rtl8188e_HalDmWatchDog(
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
-#ifdef CONFIG_CONCURRENT_MODE
-	PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
-#endif /* CONFIG_CONCURRENT_MODE */
 
 	_func_enter_;
 
-	#if defined(CONFIG_CONCURRENT_MODE)
-	if (Adapter->isprimary == false && pbuddy_adapter) {
-		hw_init_completed = pbuddy_adapter->hw_init_completed;
-	} else
-	#endif
-	{
-		hw_init_completed = Adapter->hw_init_completed;
-	}
+	hw_init_completed = Adapter->hw_init_completed;
 
 	if (hw_init_completed == false)
 		goto skip_dm;
 
 #ifdef CONFIG_LPS
-	#if defined(CONFIG_CONCURRENT_MODE)
-	if (Adapter->iface_type != IFACE_PORT0 && pbuddy_adapter) {
-		bFwCurrentInPSMode = pbuddy_adapter->pwrctrlpriv.bFwCurrentInPSMode;
-		rtw_hal_get_hwreg(pbuddy_adapter, HW_VAR_FWLPS_RF_ON, (u8 *)(&bFwPSAwake));
-	} else
-	#endif
-	{
-		bFwCurrentInPSMode = Adapter->pwrctrlpriv.bFwCurrentInPSMode;
-		rtw_hal_get_hwreg(Adapter, HW_VAR_FWLPS_RF_ON, (u8 *)(&bFwPSAwake));
-	}
+	bFwCurrentInPSMode = Adapter->pwrctrlpriv.bFwCurrentInPSMode;
+	rtw_hal_get_hwreg(Adapter, HW_VAR_FWLPS_RF_ON, (u8 *)(&bFwPSAwake));
 #endif
 
 #ifdef CONFIG_P2P_PS
@@ -323,11 +305,6 @@ rtl8188e_HalDmWatchDog(
 		/*  Calculate Tx/Rx statistics. */
 		/*  */
 		dm_CheckStatistics(Adapter);
-
-#ifdef CONFIG_CONCURRENT_MODE
-		if (Adapter->adapter_type > PRIMARY_ADAPTER)
-			goto _record_initrate;
-#endif
 
 _record_initrate:
 	_func_exit_;
@@ -353,11 +330,6 @@ _record_initrate:
 			if (check_fwstate(pmlmepriv, _FW_LINKED)== true)
 				bLinked = true;
 		}
-
-#ifdef CONFIG_CONCURRENT_MODE
-		if (check_buddy_fw_link(Adapter))
-			bLinked = true;
-#endif /* CONFIG_CONCURRENT_MODE */
 
 		ODM_CmnInfoUpdate(&pHalData->odmpriv ,ODM_CMNINFO_LINK, bLinked);
 		ODM_DMWatchdog(&pHalData->odmpriv);

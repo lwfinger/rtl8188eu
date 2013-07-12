@@ -841,11 +841,7 @@ static void start_bss_network(_adapter *padapter, u8 *pbuf)
 	rtw_hal_set_hwreg(padapter, HW_VAR_BSSID, pnetwork->MacAddress);
 
 	/* Set EDCA param reg */
-#ifdef CONFIG_CONCURRENT_MODE
-	acparm = 0x005ea42b;
-#else
 	acparm = 0x002F3217; /*  VO */
-#endif
 	rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_VO, (u8 *)(&acparm));
 	acparm = 0x005E4317; /*  VI */
 	rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_VI, (u8 *)(&acparm));
@@ -865,20 +861,8 @@ static void start_bss_network(_adapter *padapter, u8 *pbuf)
 	rtw_hal_set_hwreg(padapter, HW_VAR_BASIC_RATE, pnetwork->SupportedRates);
 
 	if (pmlmepriv->cur_network.join_res != true) { /* setting only at  first time */
-#ifdef CONFIG_CONCURRENT_MODE
-		if (padapter->adapter_type > PRIMARY_ADAPTER) {
-			if (rtw_buddy_adapter_up(padapter)) {
-				_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
-
-				/* turn on all dynamic functions on PRIMARY_ADAPTER, dynamic functions only runs at PRIMARY_ADAPTER */
-				Switch_DM_Func(pbuddy_adapter, DYNAMIC_ALL_FUNC_ENABLE, true);
-			}
-		} else
-#endif
-		{
-			/* turn on all dynamic functions */
-			Switch_DM_Func(padapter, DYNAMIC_ALL_FUNC_ENABLE, true);
-		}
+		/* turn on all dynamic functions */
+		Switch_DM_Func(padapter, DYNAMIC_ALL_FUNC_ENABLE, true);
 	}
 #ifdef CONFIG_80211N_HT
 	/* set channel, bwmode */
@@ -903,80 +887,8 @@ static void start_bss_network(_adapter *padapter, u8 *pbuf)
 		}
 	}
 #endif /* CONFIG_80211N_HT */
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	dc_set_ap_channel_bandwidth(padapter, cur_channel, cur_ch_offset, cur_bwmode);
-#else
 	/* TODO: need to judge the phy parameters on concurrent mode for single phy */
-#ifdef CONFIG_CONCURRENT_MODE
-	if (!check_buddy_fwstate(padapter, _FW_LINKED|_FW_UNDER_LINKING|_FW_UNDER_SURVEY)) {
-		set_channel_bwmode(padapter, cur_channel, cur_ch_offset, cur_bwmode);
-	} else if (check_buddy_fwstate(padapter, _FW_LINKED)==true) {/* only second adapter can enter AP Mode */
-		_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
-		struct mlme_ext_priv *pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
-
-		/* To sync cur_channel/cur_bwmode/cur_ch_offset with primary adapter */
-		DBG_88E("primary iface is at linked state, sync cur_channel/cur_bwmode/cur_ch_offset\n");
-		DBG_88E("primary adapter, CH=%d, BW=%d, offset=%d\n", pbuddy_mlmeext->cur_channel, pbuddy_mlmeext->cur_bwmode, pbuddy_mlmeext->cur_ch_offset);
-		DBG_88E("second adapter, CH=%d, BW=%d, offset=%d\n", cur_channel, cur_bwmode, cur_ch_offset);
-
-		cur_channel = pbuddy_mlmeext->cur_channel;
-		if (cur_bwmode == HT_CHANNEL_WIDTH_40) {
-			if (pht_info)
-				pht_info->infos[0] &= ~(BIT(0)|BIT(1));
-
-			if (pbuddy_mlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40) {
-				cur_ch_offset = pbuddy_mlmeext->cur_ch_offset;
-
-				/* to update cur_ch_offset value in beacon */
-				if (pht_info) {
-					switch (cur_ch_offset) {
-					case HAL_PRIME_CHNL_OFFSET_LOWER:
-						pht_info->infos[0] |= 0x1;
-						break;
-					case HAL_PRIME_CHNL_OFFSET_UPPER:
-						pht_info->infos[0] |= 0x3;
-						break;
-					case HAL_PRIME_CHNL_OFFSET_DONT_CARE:
-					default:
-						break;
-					}
-				}
-			} else if (pbuddy_mlmeext->cur_bwmode == HT_CHANNEL_WIDTH_20) {
-				cur_bwmode = HT_CHANNEL_WIDTH_20;
-				cur_ch_offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
-
-				if (cur_channel > 0 && cur_channel < 5) {
-					if (pht_info)
-						pht_info->infos[0] |= 0x1;
-
-					cur_bwmode = HT_CHANNEL_WIDTH_40;
-					cur_ch_offset = HAL_PRIME_CHNL_OFFSET_LOWER;
-				}
-
-				if (cur_channel > 7 && cur_channel < (14+1)) {
-					if (pht_info)
-						pht_info->infos[0] |= 0x3;
-
-					cur_bwmode = HT_CHANNEL_WIDTH_40;
-					cur_ch_offset = HAL_PRIME_CHNL_OFFSET_UPPER;
-				}
-
-				set_channel_bwmode(padapter, cur_channel, cur_ch_offset, cur_bwmode);
-			}
-		}
-
-		/*  to update channel value in beacon */
-		pnetwork->Configuration.DSConfig = cur_channel;
-		p = rtw_get_ie((pnetwork->IEs + sizeof(NDIS_802_11_FIXED_IEs)), _DSSET_IE_, &ie_len, (pnetwork->IELength - sizeof(NDIS_802_11_FIXED_IEs)));
-		if (p && ie_len>0)
-			*(p + 2) = cur_channel;
-
-		if (pht_info)
-			pht_info->primary_channel = cur_channel;
-	}
-#else
 	set_channel_bwmode(padapter, cur_channel, cur_ch_offset, cur_bwmode);
-#endif /* CONFIG_CONCURRENT_MODE */
 
 	DBG_88E("CH=%d, BW=%d, offset=%d\n", cur_channel, cur_bwmode, cur_ch_offset);
 
@@ -984,7 +896,6 @@ static void start_bss_network(_adapter *padapter, u8 *pbuf)
 	pmlmeext->cur_channel = cur_channel;
 	pmlmeext->cur_bwmode = cur_bwmode;
 	pmlmeext->cur_ch_offset = cur_ch_offset;
-#endif /* CONFIG_DUALMAC_CONCURRENT */
 	pmlmeext->cur_wireless_mode = pmlmepriv->cur_network.network_type;
 
 	/* update cur_wireless_mode */

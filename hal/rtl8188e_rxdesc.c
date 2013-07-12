@@ -285,12 +285,6 @@ void update_recvframe_phyinfo_88e(
 		pkt_info.StationID = psta->mac_id;
 	pkt_info.Rate = pattrib->mcs_rate;
 
-	#ifdef CONFIG_CONCURRENT_MODE
-	/* get Primary adapter's odmpriv */
-	if (padapter->adapter_type > PRIMARY_ADAPTER){
-		pHalData = GET_HAL_DATA(padapter->pbuddy_adapter);
-	}
-	#endif
 	ODM_PhyStatusQuery(&pHalData->odmpriv,pPHYInfo,(u8 *)pphy_status,&(pkt_info));
 
 	precvframe->u.hdr.psta = NULL;

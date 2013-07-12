@@ -813,13 +813,6 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("update_attrib: bswenc=false\n"));
 	}
 
-#ifdef CONFIG_CONCURRENT_MODE
-	if ((pattrib->encrypt && bmcast) || (pattrib->encrypt ==_WEP40_) || (pattrib->encrypt ==_WEP104_))
-	{
-		pattrib->bswenc = true;/* force using sw enc. */
-	}
-#endif
-
 #ifdef CONFIG_WAPI_SUPPORT
 	if (pattrib->encrypt == _SMS4_)
 		pattrib->bswenc = false;

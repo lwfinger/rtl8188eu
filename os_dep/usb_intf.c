@@ -135,12 +135,6 @@ struct rtw_usb_drv {
 	int drv_registered;
 
 	_mutex hw_init_mutex;
-#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
-	//global variable
-	_mutex h2c_fwcmd_mutex;
-	_mutex setch_mutex;
-	_mutex setbw_mutex;
-#endif
 };
 
 static struct usb_device_id rtl8188e_usb_id_tbl[] ={
@@ -1055,24 +1049,7 @@ static _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 
 	padapter->bDriverStopped=true;
 
-#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
-	//set adapter_type/iface type for primary padapter
-	padapter->isprimary = true;
-	padapter->adapter_type = PRIMARY_ADAPTER;
-	#ifndef CONFIG_HWPORT_SWAP
-	padapter->iface_type = IFACE_PORT0;
-	#else
-	padapter->iface_type = IFACE_PORT1;
-	#endif
-#endif
-
 	padapter->hw_init_mutex = &usb_drv->hw_init_mutex;
-#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
-	//set global variable to primary adapter
-	padapter->ph2c_fwcmd_mutex = &usb_drv->h2c_fwcmd_mutex;
-	padapter->psetch_mutex = &usb_drv->setch_mutex;
-	padapter->psetbw_mutex = &usb_drv->setbw_mutex;
-#endif
 
 	#ifndef RTW_DVOBJ_CHIP_HW_TYPE
 	//step 1-1., decide the chip_type via vid/pid
@@ -1427,12 +1404,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		goto free_dvobj;
 	}
 
-#ifdef CONFIG_CONCURRENT_MODE
-	if ((if2 = rtw_drv_if2_init(if1, NULL, usb_set_intf_ops)) == NULL) {
-		goto free_if1;
-	}
-#endif
-
 #ifdef CONFIG_INTEL_PROXIM
 	rtw_sw_export=if1;
 #endif
@@ -1495,15 +1466,7 @@ _func_enter_;
 
 	LeaveAllPowerSaveMode(padapter);
 
-#ifdef CONFIG_CONCURRENT_MODE
-	rtw_drv_if2_stop(dvobj->if2);
-#endif
-
 	rtw_usb_if1_deinit(padapter);
-
-#ifdef CONFIG_CONCURRENT_MODE
-	rtw_drv_if2_free(dvobj->if2);
-#endif
 
 	usb_dvobj_deinit(pusb_intf);
 
@@ -1537,12 +1500,6 @@ static int __init rtw_drv_entry(void)
 	rtw_suspend_lock_init();
 
 	_rtw_mutex_init(&usb_drv->hw_init_mutex);
-#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
-	//init global variable
-	_rtw_mutex_init(&usb_drv->h2c_fwcmd_mutex);
-	_rtw_mutex_init(&usb_drv->setch_mutex);
-	_rtw_mutex_init(&usb_drv->setbw_mutex);
-#endif
 
 	usb_drv->drv_registered = true;
 	return usb_register(&usb_drv->usbdrv);
@@ -1559,11 +1516,6 @@ static void __exit rtw_drv_halt(void)
 	usb_deregister(&usb_drv->usbdrv);
 
 	_rtw_mutex_free(&usb_drv->hw_init_mutex);
-#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
-	_rtw_mutex_free(&usb_drv->h2c_fwcmd_mutex);
-	_rtw_mutex_free(&usb_drv->setch_mutex);
-	_rtw_mutex_free(&usb_drv->setbw_mutex);
-#endif
 	DBG_88E("-rtw_drv_halt\n");
 }
 

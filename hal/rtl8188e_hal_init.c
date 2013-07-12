@@ -2491,13 +2491,6 @@ static void rtl8188e_SetHalODMVar(
 		case HAL_ODM_STA_INFO:
 			{
 				struct sta_info *psta = (struct sta_info *)pValue1;
-				#ifdef CONFIG_CONCURRENT_MODE
-				/* get Primary adapter's odmpriv */
-				if (Adapter->adapter_type > PRIMARY_ADAPTER){
-					pHalData = GET_HAL_DATA(Adapter->pbuddy_adapter);
-					podmpriv = &pHalData->odmpriv;
-				}
-				#endif
 				if (bSet){
 					DBG_88E("### Set STA_(%d) info\n",psta->mac_id);
 					ODM_CmnInfoPtrArrayHook(podmpriv, ODM_CMNINFO_STA_STATUS,psta->mac_id,psta);
@@ -2560,9 +2553,6 @@ void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc)
 	pHalFunc->hal_dm_watchdog = &rtl8188e_HalDmWatchDog;
 
 	pHalFunc->Add_RateATid = &rtl8188e_Add_RateATid;
-#ifdef CONFIG_CONCURRENT_MODE
-	pHalFunc->clone_haldata = &rtl8188e_clone_haldata;
-#endif
 	pHalFunc->run_thread= &rtl8188e_start_thread;
 	pHalFunc->cancel_thread= &rtl8188e_stop_thread;
 

@@ -356,49 +356,22 @@ void Save_DM_Func_Flag(_adapter *padapter)
 {
 	u8	bSaveFlag = true;
 
-#ifdef CONFIG_CONCURRENT_MODE
-	_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
-	if (pbuddy_adapter)
-	rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
-#endif
-
 	rtw_hal_set_hwreg(padapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
-
 }
 
 void Restore_DM_Func_Flag(_adapter *padapter)
 {
 	u8	bSaveFlag = false;
-#ifdef CONFIG_CONCURRENT_MODE
-	_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
-	if (pbuddy_adapter)
-	rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
-#endif
+
 	rtw_hal_set_hwreg(padapter, HW_VAR_DM_FUNC_OP, (u8 *)(&bSaveFlag));
 }
 
 void Switch_DM_Func(_adapter *padapter, u32 mode, u8 enable)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	_adapter *pbuddy_adapter = padapter->pbuddy_adapter;
-#endif
-
 	if (enable == true)
-	{
-#ifdef CONFIG_CONCURRENT_MODE
-		if (pbuddy_adapter)
-		rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_SET, (u8 *)(&mode));
-#endif
 		rtw_hal_set_hwreg(padapter, HW_VAR_DM_FUNC_SET, (u8 *)(&mode));
-	}
 	else
-	{
-#ifdef CONFIG_CONCURRENT_MODE
-		if (pbuddy_adapter)
-		rtw_hal_set_hwreg(pbuddy_adapter, HW_VAR_DM_FUNC_CLR, (u8 *)(&mode));
-#endif
 		rtw_hal_set_hwreg(padapter, HW_VAR_DM_FUNC_CLR, (u8 *)(&mode));
-	}
 }
 
 static void Set_NETYPE1_MSR(_adapter *padapter, u8 type)
@@ -413,72 +386,36 @@ static void Set_NETYPE0_MSR(_adapter *padapter, u8 type)
 
 void Set_MSR(_adapter *padapter, u8 type)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->iface_type == IFACE_PORT1)
-	{
-		Set_NETYPE1_MSR(padapter, type);
-	}
-	else
-#endif
-	{
-		Set_NETYPE0_MSR(padapter, type);
-	}
+	Set_NETYPE0_MSR(padapter, type);
 }
 
 inline u8 rtw_get_oper_ch(_adapter *adapter)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	if (adapter->pcodatapriv)
-		return adapter->pcodatapriv->co_ch;
-	else
-#endif
 	return adapter->mlmeextpriv.oper_channel;
 }
 
 inline void rtw_set_oper_ch(_adapter *adapter, u8 ch)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	if (adapter->pcodatapriv)
-		adapter->pcodatapriv->co_ch = ch;
-#endif
 	adapter->mlmeextpriv.oper_channel = ch;
 }
 
 inline u8 rtw_get_oper_bw(_adapter *adapter)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	if (adapter->pcodatapriv)
-		return adapter->pcodatapriv->co_bw;
-	else
-#endif
 	return adapter->mlmeextpriv.oper_bwmode;
 }
 
 inline void rtw_set_oper_bw(_adapter *adapter, u8 bw)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	if (adapter->pcodatapriv)
-		adapter->pcodatapriv->co_bw = bw;
-#endif
 	adapter->mlmeextpriv.oper_bwmode = bw;
 }
 
 inline u8 rtw_get_oper_choffset(_adapter *adapter)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	if (adapter->pcodatapriv)
-		return adapter->pcodatapriv->co_ch_offset;
-	else
-#endif
 	return adapter->mlmeextpriv.oper_ch_offset;
 }
 
 inline void rtw_set_oper_choffset(_adapter *adapter, u8 offset)
 {
-#ifdef CONFIG_CONCURRENT_MODE
-	if (adapter->pcodatapriv)
-		adapter->pcodatapriv->co_ch_offset = offset;
-#endif
 	adapter->mlmeextpriv.oper_ch_offset = offset;
 }
 
@@ -486,56 +423,21 @@ void SelectChannel(_adapter *padapter, unsigned char channel)
 {
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	/* saved channel info */
-	rtw_set_oper_ch(padapter, channel);
-	dc_SelectChannel(padapter, channel);
-#else /* CONFIG_DUALMAC_CONCURRENT */
-
-
-#ifdef CONFIG_CONCURRENT_MODE
-	_enter_critical_mutex(padapter->psetch_mutex, NULL);
-#endif
-
 	/* saved channel info */
 	rtw_set_oper_ch(padapter, channel);
 
 	rtw_hal_set_chan(padapter, channel);
-
-
-#ifdef CONFIG_CONCURRENT_MODE
-	_exit_critical_mutex(padapter->psetch_mutex, NULL);
-#endif
-
-#endif /*  CONFIG_DUALMAC_CONCURRENT */
 }
 
 void SetBWMode(_adapter *padapter, unsigned short bwmode, unsigned char channel_offset)
 {
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	/* saved bw info */
-	rtw_set_oper_bw(padapter, bwmode);
-	rtw_set_oper_choffset(padapter, channel_offset);
-	dc_SetBWMode(padapter, bwmode, channel_offset);
-#else /* CONFIG_DUALMAC_CONCURRENT */
-
-#ifdef CONFIG_CONCURRENT_MODE
-	_enter_critical_mutex(padapter->psetbw_mutex, NULL);
-#endif
-
 	/* saved bw info */
 	rtw_set_oper_bw(padapter, bwmode);
 	rtw_set_oper_choffset(padapter, channel_offset);
 
 	rtw_hal_set_bwmode(padapter, (HT_CHANNEL_WIDTH)bwmode, channel_offset);
-
-#ifdef CONFIG_CONCURRENT_MODE
-	_exit_critical_mutex(padapter->psetbw_mutex, NULL);
-#endif
-
-#endif /*  CONFIG_DUALMAC_CONCURRENT */
 }
 
 void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char channel_offset, unsigned short bwmode)
@@ -569,35 +471,13 @@ void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char
 	}
 
 	/* set Channel */
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	/* saved channel/bw info */
-	rtw_set_oper_ch(padapter, channel);
-	rtw_set_oper_bw(padapter, bwmode);
-	rtw_set_oper_choffset(padapter, channel_offset);
-	dc_SelectChannel(padapter, center_ch);/*  set center channel */
-#else /* CONFIG_DUALMAC_CONCURRENT */
-
-
-#ifdef CONFIG_CONCURRENT_MODE
-	_enter_critical_mutex(padapter->psetch_mutex, NULL);
-#endif
-
 	/* saved channel/bw info */
 	rtw_set_oper_ch(padapter, channel);
 	rtw_set_oper_bw(padapter, bwmode);
 	rtw_set_oper_choffset(padapter, channel_offset);
 
 	rtw_hal_set_chan(padapter, center_ch); /*  set center channel */
-
-#ifdef CONFIG_CONCURRENT_MODE
-	_exit_critical_mutex(padapter->psetch_mutex, NULL);
-#endif
-
-#endif /*  CONFIG_DUALMAC_CONCURRENT */
-
-
 	SetBWMode(padapter, bwmode, channel_offset);
-
 }
 
 int get_bsstype(unsigned short capability)
@@ -788,50 +668,9 @@ void flush_all_cam_entry(_adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-#ifdef CONFIG_CONCURRENT_MODE
-
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-
-	/* if (check_buddy_mlmeinfo_state(padapter, _HW_STATE_NOLINK_)) */
-	if (check_buddy_fwstate(padapter, _FW_LINKED) == false)
-	{
-		rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, 0);
-	}
-	else
-	{
-		if (check_fwstate(pmlmepriv, WIFI_STATION_STATE))
-		{
-			struct sta_priv	*pstapriv = &padapter->stapriv;
-			struct sta_info	*psta;
-			u8 cam_id;/* cam_entry */
-
-			psta = rtw_get_stainfo(pstapriv, pmlmeinfo->network.MacAddress);
-			if (psta) {
-				if (psta->state & WIFI_AP_STATE)
-				{}   /* clear cam when ap free per sta_info */
-				else {
-					if (psta->mac_id==2)
-						cam_id = 5;
-					else
-						cam_id = 4;
-				}
-				/* clear_cam_entry(padapter, cam_id); */
-				rtw_clearstakey_cmd(padapter, (u8*)psta, cam_id, false);
-			}
-		}
-		else if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
-		{
-			/* clear cam when ap free per sta_info */
-		}
-	}
-#else /* CONFIG_CONCURRENT_MODE */
-
 	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, NULL);
 
-#endif /* CONFIG_CONCURRENT_MODE */
-
 	_rtw_memset((u8 *)(pmlmeinfo->FW_sta_info), 0, sizeof(pmlmeinfo->FW_sta_info));
-
 }
 
 #if defined(CONFIG_P2P) && defined(CONFIG_WFD)
@@ -2280,21 +2119,6 @@ int rtw_handle_dualmac(_adapter *adapter, bool init)
 			pbuddy_padapter = NULL;
 			DBG_88E("%s(): pbuddy_padapter exist, Exchange Information\n",__func__);
 		}
-#ifdef CONFIG_DUALMAC_CONCURRENT
-		if (dvobj->InterfaceNumber == 0) {
-			/* set adapter_type/iface type */
-			adapter->isprimary = true;
-			adapter->adapter_type = PRIMARY_ADAPTER;
-			adapter->iface_type = IFACE_PORT0;
-			DBG_88E("%s(): PRIMARY_ADAPTER\n",__func__);
-		} else {
-			/* set adapter_type/iface type */
-			adapter->isprimary = false;
-			adapter->adapter_type = SECONDARY_ADAPTER;
-			adapter->iface_type = IFACE_PORT1;
-			DBG_88E("%s(): SECONDARY_ADAPTER\n",__func__);
-		}
-#endif
 	}else {
 		pbuddy_padapter = NULL;
 	}

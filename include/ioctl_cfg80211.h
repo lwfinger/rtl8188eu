@@ -63,12 +63,6 @@ struct rtw_wdev_priv
 	u8 bandroid_scan;
 	bool block;
 	bool power_mgmt;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	ATOMIC_T ro_ch_to;
-	ATOMIC_T switch_ch_to;
-#endif
-
 };
 
 #define wdev_to_priv(w) ((struct rtw_wdev_priv *)(wdev_priv(w)))

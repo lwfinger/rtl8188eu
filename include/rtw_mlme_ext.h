@@ -346,14 +346,8 @@ struct FW_Sta_Info {
  * 4. Back to channel 1 for 300 milliseconds
  * 5. ... and so on, till survey done.
  */
-#if defined CONFIG_STA_MODE_SCAN_UNDER_AP_MODE && defined CONFIG_CONCURRENT_MODE
-#define RTW_SCAN_NUM_OF_CH			8
-#define RTW_STAY_AP_CH_MILLISECOND	3	// this value is a multiplier,for example, when this value is 3, it would stay AP's op ch for
-											// 3 * SURVEY_TO millisecond.
-#endif //defined CONFIG_STA_MODE_SCAN_UNDER_AP_MODE && defined CONFIG_CONCURRENT_MODE
 
-struct mlme_ext_info
-{
+struct mlme_ext_info {
 	u32	state;
 	u32	reauth_count;
 	u32	reassoc_count;
@@ -709,28 +703,6 @@ extern void process_addba_req(_adapter *padapter, u8 *paddba_req, u8 *addr);
 extern void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len);
 extern void correct_TSF(_adapter *padapter, struct mlme_ext_priv *pmlmeext);
 
-
-#ifdef CONFIG_CONCURRENT_MODE
- sint check_buddy_mlmeinfo_state(_adapter *padapter, u32 state);
-int concurrent_chk_start_clnt_join(_adapter *padapter);
-void concurrent_chk_joinbss_done(_adapter *padapter, int join_res);
-#endif //CONFIG_CONCURRENT_MODE
-
-#ifdef CONFIG_DUALMAC_CONCURRENT
-void	dc_SelectChannel(_adapter *padapter, unsigned char channel);
-void	dc_SetBWMode(_adapter *padapter, unsigned short bwmode, unsigned char channel_offset);
-void	dc_set_channel_bwmode_disconnect(_adapter *padapter);
-u8	dc_handle_join_request(_adapter *padapter);
-void	dc_handle_join_done(_adapter *padapter, u8 join_res);
-sint	dc_check_fwstate(_adapter *padapter, sint fw_state);
-u8	dc_handle_site_survey(_adapter *padapter);
-void	dc_report_survey_event(_adapter *padapter, union recv_frame *precv_frame);
-void	dc_set_channel_bwmode_survey_done(_adapter *padapter);
-void	dc_set_ap_channel_bandwidth(_adapter *padapter, u8 channel, u8 channel_offset, u8 bwmode);
-void	dc_resume_xmit(_adapter *padapter);
-u8	dc_check_xmit(_adapter *padapter);
-#endif
-
 struct cmd_hdl {
 	uint	parmsize;
 	u8 (*h2cfuns)(struct _ADAPTER *padapter, u8 *pbuf);
@@ -743,8 +715,6 @@ u8 read_bbreg_hdl(_adapter *padapter, u8 *pbuf);
 u8 write_bbreg_hdl(_adapter *padapter, u8 *pbuf);
 u8 read_rfreg_hdl(_adapter *padapter, u8 *pbuf);
 u8 write_rfreg_hdl(_adapter *padapter, u8 *pbuf);
-
-
 u8 NULL_hdl(_adapter *padapter, u8 *pbuf);
 u8 join_cmd_hdl(_adapter *padapter, u8 *pbuf);
 u8 disconnect_hdl(_adapter *padapter, u8 *pbuf);

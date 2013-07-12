@@ -340,10 +340,6 @@ Hal_MappingOutPipe(
 void hal_init_macaddr(_adapter *adapter)
 {
 	rtw_hal_set_hwreg(adapter, HW_VAR_MAC_ADDR, adapter->eeprompriv.mac_addr);
-#ifdef  CONFIG_CONCURRENT_MODE
-	if (adapter->pbuddy_adapter)
-		rtw_hal_set_hwreg(adapter->pbuddy_adapter, HW_VAR_MAC_ADDR, adapter->pbuddy_adapter->eeprompriv.mac_addr);
-#endif
 }
 
 /*

@@ -95,23 +95,11 @@
 	#endif
 
 
-	//#define CONFIG_CONCURRENT_MODE
-	#ifdef CONFIG_CONCURRENT_MODE
-		//#define CONFIG_HWPORT_SWAP				//Port0->Sec , Port1 -> Pri
-		#define CONFIG_TSF_RESET_OFFLOAD			// For 2 PORT TSF SYNC.
-	#endif
-
 	#define CONFIG_IOL
-//#else		//#ifndef CONFIG_MP_INCLUDED
-
-//#endif	//#ifndef CONFIG_MP_INCLUDED
 
 #define CONFIG_AP_MODE
 #ifdef CONFIG_AP_MODE
 	//#define CONFIG_INTERRUPT_BASED_TXBCN // Tx Beacon when driver BCN_OK ,BCN_ERR interrupt occurs
-	#if defined(CONFIG_CONCURRENT_MODE) && defined(CONFIG_INTERRUPT_BASED_TXBCN)
-		#undef CONFIG_INTERRUPT_BASED_TXBCN
-	#endif
 	#ifdef CONFIG_INTERRUPT_BASED_TXBCN
 		//#define CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
 		#define CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
