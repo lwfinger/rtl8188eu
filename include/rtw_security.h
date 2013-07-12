@@ -414,16 +414,6 @@ void rtw_wep_encrypt(_adapter *padapter, u8  *pxmitframe);
 u32 rtw_aes_decrypt(_adapter *padapter, u8  *precvframe);
 u32 rtw_tkip_decrypt(_adapter *padapter, u8  *precvframe);
 void rtw_wep_decrypt(_adapter *padapter, u8  *precvframe);
-
-#ifdef CONFIG_TDLS
-void wpa_tdls_generate_tpk(_adapter *padapter, struct sta_info *psta);
-int wpa_tdls_ftie_mic(u8 *kck, u8 trans_seq,
-						u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie,
-						u8 *mic);
-int tdls_verify_mic(u8 *kck, u8 trans_seq,
-						u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie);
-#endif //CONFIG_TDLS
-
 void rtw_use_tkipkey_handler(void* FunctionContext);
 
 #endif	//__RTL871X_SECURITY_H_

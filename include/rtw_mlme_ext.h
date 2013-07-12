@@ -320,42 +320,7 @@ struct	ss_res
 
 #define	WIFI_FW_LINKING_STATE		(WIFI_FW_AUTH_NULL | WIFI_FW_AUTH_STATE | WIFI_FW_AUTH_SUCCESS |WIFI_FW_ASSOC_STATE)
 
-#ifdef CONFIG_TDLS
-// 1: Write RCR DATA BIT
-// 2: Issue peer traffic indication
-// 3: Go back to the channel linked with AP, terminating channel switch procedure
-// 4: Init channel sensing, receive all data and mgnt frame
-// 5: Channel sensing and report candidate channel
-// 6: First time set channel to off channel
-// 7: Go back tp the channel linked with AP when set base channel as target channel
-// 8: Set channel back to base channel
-// 9: Set channel back to off channel
-// 10: Restore RCR DATA BIT
-// 11: Check alive
-// 12: Check alive
-// 13: Free TDLS sta
-enum TDLS_option
-{
-	TDLS_WRCR			=	1,
-	TDLS_SD_PTI		=	2,
-	TDLS_CS_OFF		=	3,
-	TDLS_INIT_CH_SEN	=	4,
-	TDLS_DONE_CH_SEN	=	5,
-	TDLS_OFF_CH		=	6,
-	TDLS_BASE_CH		=	7,
-	TDLS_P_OFF_CH		=	8,
-	TDLS_P_BASE_CH	=	9,
-	TDLS_RS_RCR		=	10,
-	TDLS_CKALV_PH1	=	11,
-	TDLS_CKALV_PH2	=	12,
-	TDLS_FREE_STA		=	13,
-	maxTDLS,
-};
-
-#endif //CONFIG_TDLS
-
-struct FW_Sta_Info
-{
+struct FW_Sta_Info {
 	struct sta_info	*psta;
 	u32	status;
 	u32	rx_pkt;

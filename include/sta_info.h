@@ -85,13 +85,6 @@ struct	stainfo_stats	{
 
 };
 
-#ifdef CONFIG_TDLS
-struct TDLS_PeerKey {
-	u8 kck[16]; /* TPK-KCK */
-	u8 tk[16]; /* TPK-TK; only CCMP will be used */
-} ;
-#endif //CONFIG_TDLS
-
 struct sta_info {
 
 	_lock	lock;
@@ -135,32 +128,6 @@ struct sta_info {
 	u32	ra_mask;
 	u8	wireless_mode;	// NETWORK_TYPE
 	struct stainfo_stats sta_stats;
-
-#ifdef CONFIG_TDLS
-	u32	tdls_sta_state;
-	u8	dialog;
-	u8	SNonce[32];
-	u8	ANonce[32];
-	u32	TDLS_PeerKey_Lifetime;
-	u16	TPK_count;
-	_timer	TPK_timer;
-	struct TDLS_PeerKey	tpk;
-	_adapter *padapter;
-	u16	stat_code;
-	u8	off_ch;
-	u16	ch_switch_time;
-	u16	ch_switch_timeout;
-	u8	option;
-	_timer	option_timer;
-	_timer	base_ch_timer;
-	_timer	off_ch_timer;
-
-	_timer handshake_timer;
-	_timer alive_timer1;
-	_timer alive_timer2;
-	u8 timer_flag;
-	u8 alive_count;
-#endif //CONFIG_TDLS
 
 	//for A-MPDU TX, ADDBA timeout check
 	_timer addba_retry_timer;

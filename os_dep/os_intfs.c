@@ -1203,14 +1203,6 @@ _func_enter_;
 		goto exit;
 	}
 
-#ifdef CONFIG_TDLS
-	if (rtw_init_tdls_info(padapter) == _FAIL) {
-		DBG_88E("Can't rtw_init_tdls_info\n");
-		ret8=_FAIL;
-		goto exit;
-	}
-#endif //CONFIG_TDLS
-
 	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
 		DBG_88E("Can't _rtw_init_xmit_priv\n");
 		ret8=_FAIL;

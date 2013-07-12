@@ -191,7 +191,6 @@ rtk_core :=				\
 		core/rtw_security.o	\
 		core/rtw_sreset.o	\
 		core/rtw_sta_mgt.o	\
-		core/rtw_tdls.o		\
 		core/rtw_wlan_util.o	\
 		core/rtw_xmit.o	
 

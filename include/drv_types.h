@@ -67,7 +67,6 @@ typedef struct _ADAPTER _adapter, ADAPTER,*PADAPTER;
 #include <rtw_led.h>
 #include <rtw_mlme_ext.h>
 #include <rtw_p2p.h>
-#include <rtw_tdls.h>
 #include <rtw_ap.h>
 
 #ifdef CONFIG_WAPI_SUPPORT
@@ -393,10 +392,6 @@ struct _ADAPTER{
 #ifdef CONFIG_P2P
 	struct wifidirect_info	wdinfo;
 #endif //CONFIG_P2P
-
-#ifdef CONFIG_TDLS
-	struct tdls_info	tdlsinfo;
-#endif //CONFIG_TDLS
 
 #ifdef CONFIG_WAPI_SUPPORT
 	u8	WapiSupport;
