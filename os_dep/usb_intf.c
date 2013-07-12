@@ -760,7 +760,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	} else {
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 		rtw_resume_in_workqueue(pwrpriv);
-#elif defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
+#elif defined(CONFIG_HAS_EARLYSUSPEND)
 #ifdef CONFIG_WOWLAN
 		if (rtw_is_earlysuspend_registered(pwrpriv) &&
 			!padapter->pwrctrlpriv.wowlan_mode) {
@@ -1457,7 +1457,7 @@ _func_enter_;
 		padapter->hw_init_completed = false;
 	}*/
 
-#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
+#if defined(CONFIG_HAS_EARLYSUSPEND)
 	rtw_unregister_early_suspend(&padapter->pwrctrlpriv);
 #endif
 

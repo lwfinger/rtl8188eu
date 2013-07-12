@@ -273,11 +273,6 @@ struct pwrctrl_priv
 	u8 do_late_resume;
 	#endif //CONFIG_HAS_EARLYSUSPEND
 
-	#ifdef CONFIG_ANDROID_POWER
-	android_early_suspend_t early_suspend;
-	u8 do_late_resume;
-	#endif
-
 	#ifdef CONFIG_INTEL_PROXIM
 	u8	stored_power_mgnt;
 	#endif
@@ -344,11 +339,11 @@ void LPS_Leave(PADAPTER padapter);
 void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv);
 #endif //CONFIG_RESUME_IN_WORKQUEUE
 
-#if defined(CONFIG_HAS_EARLYSUSPEND ) || defined(CONFIG_ANDROID_POWER)
+#if defined(CONFIG_HAS_EARLYSUSPEND )
 #define rtw_is_earlysuspend_registered(pwrpriv) (pwrpriv)->early_suspend.suspend
 void rtw_register_early_suspend(struct pwrctrl_priv *pwrpriv);
 void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv);
-#endif //CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER
+#endif //CONFIG_HAS_EARLYSUSPEND
 
 u8 rtw_interface_ps_func(_adapter *padapter,HAL_INTF_PS_FUNC efunc_id,u8* val);
 void rtw_set_ips_deny(_adapter *padapter, u32 ms);

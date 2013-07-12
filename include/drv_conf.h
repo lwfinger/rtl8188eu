@@ -26,14 +26,9 @@
 	#undef CONFIG_RESUME_IN_WORKQUEUE
 #endif
 
-#if defined(CONFIG_ANDROID_POWER) && defined (CONFIG_RESUME_IN_WORKQUEUE)
-	#warning "You have CONFIG_ANDROID_POWER enabled in your system, we disable CONFIG_RESUME_IN_WORKQUEUE automatically"
-	#undef CONFIG_RESUME_IN_WORKQUEUE
-#endif
-
 #ifdef CONFIG_RESUME_IN_WORKQUEUE //this can be removed, because there is no case for this...
-	#if !defined( CONFIG_WAKELOCK) && !defined(CONFIG_ANDROID_POWER)
-	#error "enable CONFIG_RESUME_IN_WORKQUEUE without CONFIG_WAKELOCK or CONFIG_ANDROID_POWER will suffer from the danger of wifi's unfunctionality..."
+	#if !defined( CONFIG_WAKELOCK)
+	#error "enable CONFIG_RESUME_IN_WORKQUEUE without CONFIG_WAKELOCK will suffer from the danger of wifi's unfunctionality..."
 	#error "If you still want to enable CONFIG_RESUME_IN_WORKQUEUE in this case, mask this preprossor checking and GOOD LUCK..."
 	#endif
 #endif

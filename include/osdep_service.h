@@ -562,8 +562,6 @@ __inline static u32 bitshift(u32 bitmask)
 // Suspend lock prevent system from going suspend
 #ifdef CONFIG_WAKELOCK
 #include <linux/wakelock.h>
-#elif defined(CONFIG_ANDROID_POWER)
-#include <linux/android_power.h>
 #endif
 
 extern void rtw_suspend_lock_init(void);
