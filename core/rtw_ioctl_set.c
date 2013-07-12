@@ -609,11 +609,6 @@ _func_enter_;
 	if (psecuritypriv->ndisauthtype>3)
 		psecuritypriv->dot11AuthAlgrthm=dot11AuthAlgrthm_8021X;
 
-#ifdef CONFIG_WAPI_SUPPORT
-	if (psecuritypriv->ndisauthtype == 6)
-		psecuritypriv->dot11AuthAlgrthm=dot11AuthAlgrthm_WAPI;
-#endif
-
 	res=rtw_set_auth(padapter,psecuritypriv);
 
 	if (res==_SUCCESS)

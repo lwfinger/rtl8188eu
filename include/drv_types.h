@@ -69,10 +69,6 @@ typedef struct _ADAPTER _adapter, ADAPTER,*PADAPTER;
 #include <rtw_p2p.h>
 #include <rtw_ap.h>
 
-#ifdef CONFIG_WAPI_SUPPORT
-#include <rtw_wapi.h>
-#endif
-
 #ifdef CONFIG_DRVEXT_MODULE
 #include <drvext_api.h>
 #endif
@@ -372,12 +368,6 @@ struct _ADAPTER{
 #ifdef CONFIG_P2P
 	struct wifidirect_info	wdinfo;
 #endif //CONFIG_P2P
-
-#ifdef CONFIG_WAPI_SUPPORT
-	u8	WapiSupport;
-	RT_WAPI_T	wapiInfo;
-#endif
-
 
 #ifdef CONFIG_WFD
 	struct wifi_display_info wfd_info;

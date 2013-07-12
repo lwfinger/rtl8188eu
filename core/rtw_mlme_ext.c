@@ -1962,11 +1962,6 @@ unsigned int OnAssocRsp(_adapter *padapter, union recv_frame *precv_frame)
 			}
 #endif
 			break;
-#ifdef CONFIG_WAPI_SUPPORT
-		case _WAPI_IE_:
-			pWapiIE = pIE;
-			break;
-#endif
 		case _HT_CAPABILITY_IE_:	/* HT caps */
 			HT_caps_handler(padapter, pIE);
 			break;
@@ -1981,10 +1976,6 @@ unsigned int OnAssocRsp(_adapter *padapter, union recv_frame *precv_frame)
 
 		i += (pIE->Length + 2);
 	}
-
-#ifdef CONFIG_WAPI_SUPPORT
-	rtw_wapi_on_assoc_ok(padapter, pIE);
-#endif
 
 	pmlmeinfo->state &= (~WIFI_FW_ASSOC_STATE);
 	pmlmeinfo->state |= WIFI_FW_ASSOC_SUCCESS;
@@ -6820,10 +6811,6 @@ void issue_assocreq(_adapter *padapter)
 	if (pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_REALTEK)
 		pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, 6 , REALTEK_96B_IE, &(pattrib->pktlen));
 
-#ifdef CONFIG_WAPI_SUPPORT
-	rtw_build_assoc_req_wapi_ie(padapter, pframe, pattrib);
-#endif
-
 #ifdef CONFIG_P2P
 
 #ifdef CONFIG_IOCTL_CFG80211
@@ -8422,13 +8409,6 @@ void start_clnt_join(_adapter* padapter)
 
 		val8 = (pmlmeinfo->auth_algo == dot11AuthAlgrthm_8021X)? 0xcc: 0xcf;
 
-#ifdef CONFIG_WAPI_SUPPORT
-		if (padapter->wapiInfo.bWapiEnable && pmlmeinfo->auth_algo == dot11AuthAlgrthm_WAPI)
-		{
-			/* Disable TxUseDefaultKey, RxUseDefaultKey, RxBroadcastUseDefaultKey. */
-			val8 = 0x4c;
-		}
-#endif
 		rtw_hal_set_hwreg(padapter, HW_VAR_SEC_CFG, (u8 *)(&val8));
 
 		/* switch channel */
@@ -9850,10 +9830,6 @@ u8 join_cmd_hdl(_adapter *padapter, u8 *pbuf)
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
 	rtw_antenna_select_cmd(padapter, pparm->network.PhyInfo.Optimum_antenna, false);
-#endif
-
-#ifdef CONFIG_WAPI_SUPPORT
-	rtw_wapi_clear_all_cam_entry(padapter);
 #endif
 
 	rtw_joinbss_reset(padapter);

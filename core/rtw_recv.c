@@ -605,13 +605,8 @@ _func_enter_;
 		case _AES_:
 			res = rtw_aes_decrypt(padapter, (u8 * )precv_frame);
 			break;
-#ifdef CONFIG_WAPI_SUPPORT
-		case _SMS4_:
-			rtw_sms4_decrypt(padapter, (u8 * )precv_frame);
-			break;
-#endif
 		default:
-				break;
+			break;
 		}
 	}
 	else if (prxattrib->bdecrypted==1
@@ -1688,14 +1683,6 @@ sint validate_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
 	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
 #endif
 
-#ifdef CONFIG_WAPI_SUPPORT
-	PRT_WAPI_T	pWapiInfo = &adapter->wapiInfo;
-	struct recv_frame_hdr *phdr = &precv_frame->u.hdr;
-	u8 wai_pkt = 0;
-	u16 sc;
-	u8	external_len = 0;
-#endif
-
 _func_enter_;
 
 
@@ -1727,9 +1714,6 @@ _func_enter_;
 	pattrib->mdata = GetMData(ptr);
 	pattrib->privacy = GetPrivacy(ptr);
 	pattrib->order = GetOrder(ptr);
-#ifdef CONFIG_WAPI_SUPPORT
-	sc = (pattrib->seq_num<<4) | pattrib->frag_num;
-#endif
 
 #if 1 /* Dump rx packets */
 {
@@ -1787,45 +1771,11 @@ _func_enter_;
 			retval = _FAIL; /*  only data frame return _SUCCESS */
 			break;
 		case WIFI_DATA_TYPE: /* data */
-#ifdef CONFIG_WAPI_SUPPORT
-			if (pattrib->qos)
-				external_len = 2;
-			else
-				external_len= 0;
-
-			wai_pkt = rtw_wapi_is_wai_packet(adapter,ptr);
-
-			phdr->bIsWaiPacket = wai_pkt;
-
-			if (wai_pkt !=0){
-				if (sc != adapter->wapiInfo.wapiSeqnumAndFragNum)
-				{
-					adapter->wapiInfo.wapiSeqnumAndFragNum = sc;
-				}
-				else
-				{
-					retval = _FAIL;
-					break;
-				}
-			}
-			else{
-
-					if (rtw_wapi_drop_for_key_absent(adapter,GetAddr2Ptr(ptr))){
-						retval=_FAIL;
-						WAPI_TRACE(WAPI_RX,"drop for key absent for rx\n");
-						break;
-					}
-			}
-
-#endif
-
 			rtw_led_control(adapter, LED_CTL_RX);
 			pattrib->qos = (subtype & BIT(7))? 1:0;
 			retval = validate_recv_data_frame(adapter, precv_frame);
-			if (retval == _FAIL)
-			{
+			if (retval == _FAIL) {
 				struct recv_priv *precvpriv = &adapter->recvpriv;
-				/* RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail\n")); */
 				precvpriv->rx_drop++;
 			}
 			break;
@@ -2930,10 +2880,6 @@ static int recv_func_posthandle(_adapter *padapter, union recv_frame *prframe)
 	}
 
 	count_rx_stats(padapter, prframe, NULL);
-
-#ifdef CONFIG_WAPI_SUPPORT
-	rtw_wapi_update_info(padapter, prframe);
-#endif
 
 #ifdef CONFIG_80211N_HT
 	ret = process_recv_indicatepkts(padapter, prframe);
