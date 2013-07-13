@@ -113,19 +113,14 @@
 #define CONFIG_LED
 #ifdef CONFIG_LED
 	#define CONFIG_SW_LED
-	#ifdef CONFIG_SW_LED
-		//#define CONFIG_LED_HANDLED_BY_CMD_THREAD
-	#endif
 #endif // CONFIG_LED
 
 #ifdef CONFIG_IOL
 	#define CONFIG_IOL_NEW_GENERATION
 	#define CONFIG_IOL_READ_EFUSE_MAP
-	//#define DBG_IOL_READ_EFUSE_MAP
 	#define CONFIG_IOL_LLT
 	#define CONFIG_IOL_EFUSE_PATCH
 	#define CONFIG_IOL_IOREG_CFG
-	//#define CONFIG_IOL_IOREG_CFG_DBG
 #endif
 
 
@@ -133,13 +128,8 @@
 #define CONFIG_GLOBAL_UI_PID
 
 #define CONFIG_LAYER2_ROAMING
-#define CONFIG_LAYER2_ROAMING_RESUME
-//#define CONFIG_ADAPTOR_INFO_CACHING_FILE // now just applied on 8192cu only, should make it general...
-//#define CONFIG_RESUME_IN_WORKQUEUE
-//#define CONFIG_SET_SCAN_DENY_TIMER
 #define CONFIG_LONG_DELAY_ISSUE
 #define CONFIG_NEW_SIGNAL_STAT_PROCESS
-//#define CONFIG_SIGNAL_DISPLAY_DBM //display RX signal with dbm
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 
 #define CONFIG_BR_EXT		// Enable NAT2.5 support for STA mode interface with a L2 Bridge
