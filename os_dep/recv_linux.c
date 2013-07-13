@@ -209,9 +209,6 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 	_queue	*pfree_recv_queue;
 	_pkt *skb;
 	struct mlme_priv*pmlmepriv = &padapter->mlmepriv;
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
-#endif
 
 #ifdef CONFIG_BR_EXT
 	void *br_port = NULL;
@@ -322,20 +319,7 @@ _func_enter_;
 #endif	// CONFIG_BR_EXT
 
 
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-	if ( (pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1) ) {
-		skb->ip_summed = CHECKSUM_UNNECESSARY;
-		//DBG_88E("CHECKSUM_UNNECESSARY\n");
-	} else {
-		skb->ip_summed = CHECKSUM_NONE;
-		//DBG_88E("CHECKSUM_NONE(%d, %d)\n", pattrib->tcpchk_valid, pattrib->tcp_chkrpt);
-	}
-#else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
-
 	skb->ip_summed = CHECKSUM_NONE;
-
-#endif
-
 	skb->dev = padapter->pnetdev;
 	skb->protocol = eth_type_trans(skb, padapter->pnetdev);
 

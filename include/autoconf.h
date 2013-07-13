@@ -59,27 +59,18 @@
 
 #define CONFIG_RECV_REORDERING_CTRL
 
-//#define CONFIG_TCP_CSUM_OFFLOAD_RX
-
-//#define CONFIG_DRVEXT_MODULE
-
  #define CONFIG_SUPPORT_USB_INT
  #ifdef	CONFIG_SUPPORT_USB_INT
-//#define CONFIG_USB_INTERRUPT_IN_PIPE
 #endif
 
-//#ifndef CONFIG_MP_INCLUDED
 	#define CONFIG_IPS
 	#ifdef CONFIG_IPS
-	//#define CONFIG_IPS_LEVEL_2	 //enable this to set default IPS mode to IPS_LEVEL_2
 	#endif
 	#define SUPPORT_HW_RFOFF_DETECTED
 
 	#define CONFIG_LPS
 	#if defined(CONFIG_LPS) && defined(CONFIG_SUPPORT_USB_INT)
 
-
-	//#define CONFIG_LPS_LCLK
 	#endif
 
 	#ifdef CONFIG_LPS_LCLK
