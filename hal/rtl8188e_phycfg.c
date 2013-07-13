@@ -951,11 +951,7 @@ phy_ConfigBBWithHeaderFile(
 		for (i=0;i<PHY_REGArrayLen;i=i+2)
 		{
 			if (Rtl819XPHY_REGArray_Table[i] == 0xfe){
-				#ifdef CONFIG_LONG_DELAY_ISSUE
 				rtw_msleep_os(50);
-				#else
-				rtw_mdelay_os(50);
-				#endif
 			}
 			else if (Rtl819XPHY_REGArray_Table[i] == 0xfd)
 				rtw_mdelay_os(5);
@@ -1434,11 +1430,7 @@ rtl8188e_PHY_ConfigRFWithHeaderFile(
 			for (i = 0;i<RadioA_ArrayLen; i=i+2)
 			{
 				if (Rtl819XRadioA_Array_Table[i] == 0xfe) {
-					#ifdef CONFIG_LONG_DELAY_ISSUE
 					rtw_msleep_os(50);
-					#else
-					rtw_mdelay_os(50);
-					#endif
 				}
 				else if (Rtl819XRadioA_Array_Table[i] == 0xfd)
 					rtw_mdelay_os(5);
@@ -1502,11 +1494,7 @@ rtl8188e_PHY_ConfigRFWithHeaderFile(
 			{
 				if (Rtl819XRadioB_Array_Table[i] == 0xfe)
 				{ /*  Delay specific ms. Only RF configuration require delay. */
-					#ifdef CONFIG_LONG_DELAY_ISSUE
 					rtw_msleep_os(50);
-					#else
-					rtw_mdelay_os(50);
-					#endif
 				}
 				else if (Rtl819XRadioB_Array_Table[i] == 0xfd)
 					rtw_mdelay_os(5);

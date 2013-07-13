@@ -33,11 +33,7 @@ odm_ConfigRFReg_8188E(
 {
     if (Addr == 0xffe)
 	{
-		#ifdef CONFIG_LONG_DELAY_ISSUE
 		ODM_sleep_ms(50);
-		#else
-		ODM_delay_ms(50);
-		#endif
 	}
 	else if (Addr == 0xfd)
 	{
@@ -134,11 +130,7 @@ odm_ConfigBB_PHY_REG_PG_8188E(
     )
 {
 	if (Addr == 0xfe){
-		#ifdef CONFIG_LONG_DELAY_ISSUE
 		ODM_sleep_ms(50);
-		#else
-		ODM_delay_ms(50);
-		#endif
 	}
 	else if (Addr == 0xfd){
 		ODM_delay_ms(5);
@@ -174,11 +166,7 @@ odm_ConfigBB_PHY_8188E(
     )
 {
 	if (Addr == 0xfe){
-		#ifdef CONFIG_LONG_DELAY_ISSUE
 		ODM_sleep_ms(50);
-		#else
-		ODM_delay_ms(50);
-		#endif
 	}
 	else if (Addr == 0xfd){
 		ODM_delay_ms(5);

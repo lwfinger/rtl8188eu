@@ -1081,12 +1081,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
 		i++;
 	}
 
-	#ifdef CONFIG_LONG_DELAY_ISSUE
 	rtw_msleep_os(100);
-	#else
-	rtw_mdelay_os(100);
-	#endif
-
 	return strlen(data)+1;
 }
 
