@@ -525,12 +525,6 @@ _func_enter_;
 				usb_write_port_complete,
 				pxmitbuf);//context is pxmitbuf
 
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_TX
-	purb->transfer_dma = pxmitbuf->dma_transfer_addr;
-	purb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-	purb->transfer_flags |= URB_ZERO_PACKET;
-#endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
-
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 	if (!status) {
 		#ifdef DBG_CONFIG_ERROR_DETECT

@@ -214,16 +214,12 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;
 #endif /* CONFIG_P2P */
 
-#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
-if (padapter->registrypriv.mp_mode == 0)
-{
-	if ((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)==0))/* sz %512) != 0 */
-	{
-		ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
-		pull = 1;
+	if (padapter->registrypriv.mp_mode == 0) {
+		if ((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)==0))/* sz %512) != 0 */ {
+			ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
+			pull = 1;
+		}
 	}
-}
-#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
 	_rtw_memset(ptxdesc, 0, sizeof(struct tx_desc));
 
@@ -242,16 +238,12 @@ if (padapter->registrypriv.mp_mode == 0)
 
 	if (bmcst) ptxdesc->txdw0 |= cpu_to_le32(BMC);
 
-#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
-if (padapter->registrypriv.mp_mode == 0)
-{
-	if (!bagg_pkt){
-		if ((pull) && (pxmitframe->pkt_offset>0)) {
-			pxmitframe->pkt_offset = pxmitframe->pkt_offset -1;
+	if (padapter->registrypriv.mp_mode == 0) {
+		if (!bagg_pkt){
+			if ((pull) && (pxmitframe->pkt_offset>0))
+				pxmitframe->pkt_offset = pxmitframe->pkt_offset -1;
 		}
 	}
-}
-#endif
 
 	/*  pkt_offset, unit:8 bytes padding */
 	if (pxmitframe->pkt_offset > 0)
@@ -873,7 +865,6 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		rtw_issue_addbareq_cmd(padapter, pfirstframe);
 	}
 #endif /* CONFIG_80211N_HT */
-#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
 	/* 3 3. update first frame txdesc */
 	if ((pbuf_tail % bulkSize) == 0) {
 		/*  remove pkt_offset */
@@ -881,7 +872,6 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		pfirstframe->buf_addr += PACKET_OFFSET_SZ;
 		pfirstframe->pkt_offset--;
 	}
-#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
 	update_txdesc(pfirstframe, pfirstframe->buf_addr, pfirstframe->attrib.last_txcmdsz,true);
 
