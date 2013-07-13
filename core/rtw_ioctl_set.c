@@ -102,40 +102,28 @@ _func_enter_;
 		/* when set_ssid/set_bssid for rtw_do_join(), but scanning queue is empty */
 		/* we try to issue sitesurvey firstly */
 
-		if (pmlmepriv->LinkDetectInfo.bBusyTraffic==false
-			#ifdef CONFIG_LAYER2_ROAMING
-			|| pmlmepriv->to_roaming >0
-			#endif
-		)
-		{
+		if (pmlmepriv->LinkDetectInfo.bBusyTraffic==false ||
+		    pmlmepriv->to_roaming >0) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_do_join(): site survey if scanned_queue is empty\n."));
 			/*  submit site_survey_cmd */
 			if (_SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ) {
 				pmlmepriv->to_join = false;
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_do_join(): site survey return error\n."));
 			}
-		}
-		else
-		{
+		} else {
 			pmlmepriv->to_join = false;
 			ret = _FAIL;
 		}
 
 		goto exit;
-	}
-	else
-	{
+	} else {
 		int select_ret;
 		_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-		if ((select_ret=rtw_select_and_join_from_scanned_queue(pmlmepriv))==_SUCCESS)
-		{
+		if ((select_ret=rtw_select_and_join_from_scanned_queue(pmlmepriv))==_SUCCESS) {
 			pmlmepriv->to_join = false;
 			_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
-		}
-		else
-		{
-			if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==true)
-			{
+		} else {
+			if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==true) {
 				/*  submit createbss_cmd to change to a ADHOC_MASTER */
 
 				/* pmlmepriv->lock has been acquired by caller... */
@@ -171,19 +159,13 @@ _func_enter_;
 
 				/* when set_ssid/set_bssid for rtw_do_join(), but there are no desired bss in scanning queue */
 				/* we try to issue sitesurvey firstly */
-				if (pmlmepriv->LinkDetectInfo.bBusyTraffic==false
-					#ifdef CONFIG_LAYER2_ROAMING
-					|| pmlmepriv->to_roaming >0
-					#endif
-				)
-				{
+				if (pmlmepriv->LinkDetectInfo.bBusyTraffic==false ||
+				    pmlmepriv->to_roaming >0) {
 					if ( _SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ){
 						pmlmepriv->to_join = false;
 						RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("do_join(): site survey return error\n."));
 					}
-				}
-				else
-				{
+				} else {
 					ret = _FAIL;
 					pmlmepriv->to_join = false;
 				}

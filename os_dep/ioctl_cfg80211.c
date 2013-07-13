@@ -498,7 +498,6 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 	}
 #endif //CONFIG_P2P
 
-	#ifdef CONFIG_LAYER2_ROAMING
 	if (pmlmepriv->to_roaming > 0) {
 		#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
 		struct wiphy *wiphy = pwdev->wiphy;
@@ -525,10 +524,7 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 			, pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6
 			, pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6
 			, GFP_ATOMIC);
-	}
-	else
-	#endif
-	{
+	} else {
 		DBG_88E("pwdev->sme_state(b)=%d\n", pwdev->sme_state);
 		cfg80211_connect_result(padapter->pnetdev, cur_network->network.MacAddress
 			, pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2
