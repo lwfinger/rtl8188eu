@@ -1155,10 +1155,6 @@ static _adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 	DBG_88E("MAC Address from pnetdev->dev_addr=  %pM\n", pnetdev->dev_addr);
 
-#ifdef CONFIG_HOSTAPD_MLME
-	hostapd_mode_init(padapter);
-#endif
-
 	//step 6. /* Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0) {
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("register_netdev() failed\n"));
@@ -1210,9 +1206,6 @@ static void rtw_usb_if1_deinit(_adapter *if1)
 
 #ifdef CONFIG_AP_MODE
 	free_mlme_ap_info(if1);
-	#ifdef CONFIG_HOSTAPD_MLME
-	hostapd_mode_unload(if1);
-	#endif
 #endif
 
 	if (if1->DriverState != DRIVER_DISAPPEAR) {

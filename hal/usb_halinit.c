@@ -3715,10 +3715,6 @@ _func_enter_;
 	pHalFunc->hal_xmit = &rtl8188eu_hal_xmit;
 	pHalFunc->mgnt_xmit = &rtl8188eu_mgnt_xmit;
 
-
-#ifdef CONFIG_HOSTAPD_MLME
-	pHalFunc->hostap_mgnt_xmit_entry = &rtl8188eu_hostap_mgnt_xmit_entry;
-#endif
 	pHalFunc->interface_ps_func = &rtl8188eu_ps_func;
 
 	rtl8188e_set_hal_ops(pHalFunc);

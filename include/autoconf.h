@@ -90,32 +90,22 @@
 
 #define CONFIG_AP_MODE
 #ifdef CONFIG_AP_MODE
-	//#define CONFIG_INTERRUPT_BASED_TXBCN // Tx Beacon when driver BCN_OK ,BCN_ERR interrupt occurs
 	#ifdef CONFIG_INTERRUPT_BASED_TXBCN
-		//#define CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-		#define CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
+	#define CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
 	#endif
 
 	#define CONFIG_NATIVEAP_MLME
-	#ifndef CONFIG_NATIVEAP_MLME
-		#define CONFIG_HOSTAPD_MLME
-	#endif
 	#define CONFIG_FIND_BEST_CHANNEL
-	//#define CONFIG_NO_WIRELESS_HANDLERS
 #endif
 
 #define CONFIG_P2P
 #ifdef CONFIG_P2P
-	//The CONFIG_WFD is for supporting the Wi-Fi display
-	//#define CONFIG_WFD
 
 	#ifndef CONFIG_WIFI_TEST
 		#define CONFIG_P2P_REMOVE_GROUP_INFO
 	#endif
-	//#define CONFIG_DBG_P2P
 
 	#define CONFIG_P2P_PS
-	//#define CONFIG_P2P_IPS
 #endif
 
 #define CONFIG_SKB_COPY	//for amsdu
