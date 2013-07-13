@@ -399,16 +399,7 @@ if (padapter->registrypriv.mp_mode == 0)
 		else
 			ptxdesc->txdw5 |= cpu_to_le32(0x00300000);/* retry limit = 12 */
 
-#ifdef CONFIG_INTEL_PROXIM
-		if ((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)){
-			DBG_88E("\n %s pattrib->rate=%d\n",__func__,pattrib->rate);
-			ptxdesc->txdw5 |= cpu_to_le32( pattrib->rate);
-		}
-		else
-#endif
-		{
-			ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
-		}
+		ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
 	}
 	else if ((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG)
 	{

@@ -34,6 +34,7 @@
 #include <rtw_mp_ioctl.h>
 #include <usb_ops.h>
 #include <rtw_version.h>
+#include <rtl8188e_hal.h>
 
 #ifdef CONFIG_MP_INCLUDED
 #include <rtw_mp.h>
@@ -3529,10 +3530,6 @@ static int rtw_wps_start(struct net_device *dev,
 		rtw_led_control(padapter, LED_CTL_STOP_WPS);
 	else if (u32wps_start == 3) // WPS Stop because of wps fail
 		rtw_led_control(padapter, LED_CTL_STOP_WPS_FAIL);
-
-#ifdef CONFIG_INTEL_WIDI
-	process_intel_widi_wps_status(padapter, u32wps_start);
-#endif //CONFIG_INTEL_WIDI
 
 exit:
 	return ret;
@@ -10136,45 +10133,8 @@ static int rtw_tdls_get(struct net_device *dev,
 	return 0;
 }
 
-#ifdef CONFIG_INTEL_WIDI
-static int rtw_widi_set(struct net_device *dev,
-                               struct iw_request_info *info,
-                               union iwreq_data *wrqu, char *extra)
-{
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-
-	process_intel_widi_cmd(padapter, extra);
-
-	return 0;
-}
-
-static int rtw_widi_set_probe_request(struct net_device *dev,
-                               struct iw_request_info *info,
-                               union iwreq_data *wrqu, char *extra)
-{
-	int	ret = 0;
-	u8	*pbuf = NULL;
-	_adapter	*padapter = (_adapter *)rtw_netdev_priv(dev);
-
-#if 1
-	pbuf = rtw_malloc(sizeof(l2_msg_t));
-	if (pbuf)
-	{
-		_rtw_memcpy(pbuf, wrqu->data.pointer, wrqu->data.length);
-		intel_widi_wk_cmd(padapter, INTEL_WIDI_ISSUE_PROB_WK, pbuf);
-	}
-#else
-	DBG_88E("[%s] len = %d\n", __func__,wrqu->data.length);
-
-	issue_probereq_widi(padapter, wrqu->data.pointer);
-#endif
-	return ret;
-}
-#endif // CONFIG_INTEL_WIDI
-
 #ifdef CONFIG_MAC_LOOPBACK_DRIVER
 
-#include <rtl8188e_hal.h>
 extern void rtl8188e_cal_txdesc_chksum(struct tx_desc *ptxdesc);
 #define cal_txdesc_chksum rtl8188e_cal_txdesc_chksum
 
@@ -10900,17 +10860,6 @@ static const struct iw_priv_args rtw_private_args[] = {
 		IW_PRIV_TYPE_CHAR | 40, IW_PRIV_TYPE_CHAR | 0x7FF, "test"
 	},
 
-#ifdef CONFIG_INTEL_WIDI
-	{
-		SIOCIWFIRSTPRIV + 0x1E,
-		IW_PRIV_TYPE_CHAR | 64, 0, "widi_set"
-	},
-	{
-		SIOCIWFIRSTPRIV + 0x1F,
-		IW_PRIV_TYPE_CHAR | 128, 0, "widi_prob_req"
-	},
-#endif // CONFIG_INTEL_WIDI
-
 #ifdef CONFIG_MP_INCLUDED
 
 	{ SIOCIWFIRSTPRIV + 0x0E, IW_PRIV_TYPE_CHAR | 1024, 0 , ""},  //set
@@ -10995,10 +10944,6 @@ static iw_handler rtw_private_handler[] =
 	rtw_mp_efuse_get,				//0x1B
 	NULL,							// 0x1C is reserved for hostapd
 	rtw_test,						// 0x1D
-#ifdef CONFIG_INTEL_WIDI
-	rtw_widi_set,					//0x1E
-	rtw_widi_set_probe_request,		//0x1F
-#endif // CONFIG_INTEL_WIDI
 };
 
 #endif // #if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_MP_IWPRIV_SUPPORT)

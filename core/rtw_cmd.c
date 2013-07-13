@@ -2570,12 +2570,6 @@ u8 rtw_drvextra_cmd_hdl(_adapter *padapter, unsigned char *pbuf)
 			rtw_chk_hi_queue_hdl(padapter);
 			break;
 #endif /* CONFIG_AP_MODE */
-#ifdef CONFIG_INTEL_WIDI
-		case INTEl_WIDI_WK_CID:
-			intel_widi_wk_hdl(padapter, pdrvextra_cmd->type_size, pdrvextra_cmd->pbuf);
-			break;
-#endif /* CONFIG_INTEL_WIDI */
-
 		case C2H_WK_CID:
 			c2h_evt_hdl(padapter, (struct c2h_evt_hdr *)pdrvextra_cmd->pbuf, NULL);
 			break;

@@ -1455,63 +1455,11 @@ sint validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame)
 		}
 	}
 
-#ifdef CONFIG_INTEL_PROXIM
-	if (padapter->proximity.proxim_on==true)
-	{
-		struct rx_pkt_attrib * pattrib=&precv_frame->u.hdr.attrib;
-		 struct recv_stat* prxstat=( struct recv_stat * )  precv_frame->u.hdr.rx_head ;
-		 u8 * pda,*psa,*pbssid,*ptr;
-		 ptr=precv_frame->u.hdr.rx_data;
-		pda = get_da(ptr);
-		psa = get_sa(ptr);
-		pbssid = get_hdr_bssid(ptr);
-
-
-		_rtw_memcpy(pattrib->dst, pda, ETH_ALEN);
-		_rtw_memcpy(pattrib->src, psa, ETH_ALEN);
-
-		_rtw_memcpy(pattrib->bssid, pbssid, ETH_ALEN);
-
-	switch (pattrib->to_fr_ds)
-	{
-		case 0:
-			_rtw_memcpy(pattrib->ra, pda, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, psa, ETH_ALEN);
-			break;
-
-		case 1:
-			_rtw_memcpy(pattrib->ra, pda, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, pbssid, ETH_ALEN);
-			break;
-
-		case 2:
-			_rtw_memcpy(pattrib->ra, pbssid, ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, psa, ETH_ALEN);
-			break;
-
-		case 3:
-			_rtw_memcpy(pattrib->ra, GetAddr1Ptr(ptr), ETH_ALEN);
-			_rtw_memcpy(pattrib->ta, GetAddr2Ptr(ptr), ETH_ALEN);
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,(" case 3\n"));
-			break;
-
-		default:
-			break;
-
-		}
-			pattrib->priority=0;
-			pattrib->hdrlen = pattrib->to_fr_ds==3 ? 30 : 24;
-
-		 padapter->proximity.proxim_rx(padapter,precv_frame);
-	}
-#endif
 	mgt_dispatcher(padapter, precv_frame);
 
 	return _SUCCESS;
-
 }
 
-sint validate_recv_data_frame(_adapter *adapter, union recv_frame *precv_frame);
 sint validate_recv_data_frame(_adapter *adapter, union recv_frame *precv_frame)
 {
 	u8 bretry;

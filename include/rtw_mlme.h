@@ -26,10 +26,6 @@
 #include <drv_types.h>
 #include <wlan_bssdef.h>
 
-#ifdef CONFIG_INTEL_WIDI
-#include <rtw_intel_widi.h>
-#endif
-
 #define	MAX_BSS_CNT	128
 //#define   MAX_JOIN_TIME	2000
 //#define   MAX_JOIN_TIME	2500
@@ -525,17 +521,6 @@ struct mlme_priv {
 
 #endif
 
-#ifdef CONFIG_INTEL_WIDI
-	int	widi_state;
-	int	listen_state;
-	_timer	listen_timer;
-	ATOMIC_T	rx_probe_rsp; // 1:receive probe respone from RDS source.
-	u8	*l2sdTaBuffer;
-	u8	channel_idx;
-	u8	group_cnt;	//In WiDi 3.5, they specified another scan algo. for WFD/RDS co-existed
-	u8	sa_ext[L2SDTA_SERVICE_VE_LEN];
-#endif // CONFIG_INTEL_WIDI
-
 #ifdef CONFIG_FTP_PROTECT
 	u8	ftp_lock_flag;
 #endif //CONFIG_FTP_PROTECT
@@ -766,9 +751,4 @@ void _rtw_roaming(_adapter *padapter, struct wlan_network *tgt_network);
 #endif
 
 void rtw_stassoc_hw_rpt(_adapter *adapter,struct sta_info *psta);
-#ifdef CONFIG_INTEL_PROXIM
-void rtw_proxim_enable(_adapter *padapter);
-void rtw_proxim_disable(_adapter *padapter);
-void rtw_proxim_send_packet(_adapter *padapter,u8 *pbuf,u16 len,u8 hw_rate);
-#endif //CONFIG_INTEL_PROXIM
 #endif //__RTL871X_MLME_H_

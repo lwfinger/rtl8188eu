@@ -290,18 +290,6 @@ typedef enum _DRIVER_STATE{
 	DRIVER_REPLACE_DONGLE = 2,
 }DRIVER_STATE;
 
-#ifdef CONFIG_INTEL_PROXIM
-struct proxim {
-	bool proxim_support;
-	bool proxim_on;
-
-	void *proximity_priv;
-	int (*proxim_rx)(_adapter *padapter,
-		union recv_frame *precv_frame);
-	u8	(*proxim_get_var)(_adapter* padapter, u8 type);
-};
-#endif	//CONFIG_INTEL_PROXIM
-
 #ifdef CONFIG_MAC_LOOPBACK_DRIVER
 typedef struct loopbackdata
 {
@@ -451,13 +439,6 @@ struct _ADAPTER{
 
 	struct br_ext_info		ethBrExtInfo;
 #endif	// CONFIG_BR_EXT
-
-#ifdef CONFIG_INTEL_PROXIM
-	/* intel Proximity, should be alloc mem
-	 * in intel Proximity module and can only
-	 * be used in intel Proximity mode */
-	struct proxim proximity;
-#endif	//CONFIG_INTEL_PROXIM
 
 #ifdef CONFIG_MAC_LOOPBACK_DRIVER
 	PLOOPBACKDATA ploopback;

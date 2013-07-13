@@ -1404,10 +1404,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		goto free_dvobj;
 	}
 
-#ifdef CONFIG_INTEL_PROXIM
-	rtw_sw_export=if1;
-#endif
-
 #ifdef CONFIG_GLOBAL_UI_PID
 	if (ui_pid[1]!=0) {
 		DBG_88E("ui_pid[1]:%d\n",ui_pid[1]);
@@ -1473,11 +1469,6 @@ _func_enter_;
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-dev_remove()\n"));
 	DBG_88E("-r871xu_dev_remove, done\n");
 
-
-#ifdef CONFIG_INTEL_PROXIM
-	rtw_sw_export=NULL;
-#endif
-
 	#ifdef DBG_MEM_ALLOC
 	rtw_dump_mem_stat ();
 	#endif
@@ -1519,14 +1510,5 @@ static void __exit rtw_drv_halt(void)
 	DBG_88E("-rtw_drv_halt\n");
 }
 
-
 module_init(rtw_drv_entry);
 module_exit(rtw_drv_halt);
-
-#ifdef CONFIG_INTEL_PROXIM
-_adapter  *rtw_usb_get_sw_pointer(void)
-{
-	return rtw_sw_export;
-}
-EXPORT_SYMBOL(rtw_usb_get_sw_pointer);
-#endif	//CONFIG_INTEL_PROXIM

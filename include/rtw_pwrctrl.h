@@ -272,10 +272,6 @@ struct pwrctrl_priv
 	struct early_suspend early_suspend;
 	u8 do_late_resume;
 	#endif //CONFIG_HAS_EARLYSUSPEND
-
-	#ifdef CONFIG_INTEL_PROXIM
-	u8	stored_power_mgnt;
-	#endif
 };
 
 #define rtw_get_ips_mode_req(pwrctrlpriv) \
