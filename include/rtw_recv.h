@@ -248,10 +248,6 @@ struct recv_priv
 	struct ifqueue rx_indicate_queue;
 #endif	// CONFIG_RX_INDICATE_QUEUE
 
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
-	_queue	recv_buf_pending_queue;
-#endif	// CONFIG_USE_USB_BUFFER_ALLOC_RX
-
 	u8 *pallocated_recv_buf;
 	u8 *precv_buf;    // 4 alignment
 	_queue	free_recv_buf_queue;

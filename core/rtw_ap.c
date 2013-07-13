@@ -360,15 +360,12 @@ void	expire_timeout_chk(_adapter *padapter)
 		if (chk_sta_is_alive(psta) || !psta->expire_to) {
 			psta->expire_to = pstapriv->expire_to;
 			psta->keep_alive_trycnt = 0;
-			#ifdef CONFIG_TX_MCAST2UNI
 			psta->under_exist_checking = 0;
-			#endif	/*  CONFIG_TX_MCAST2UNI */
 		} else {
 			psta->expire_to--;
 		}
 
 #ifndef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-#ifdef CONFIG_TX_MCAST2UNI
 #ifdef CONFIG_80211N_HT
 		if ( (psta->flags & WLAN_STA_HT) && (psta->htpriv.agg_enable_bitmap || psta->under_exist_checking) ) {
 			/*  check sta by delba(addba) for 11n STA */
@@ -387,7 +384,6 @@ void	expire_timeout_chk(_adapter *padapter)
 			}
 		}
 #endif /* CONFIG_80211N_HT */
-#endif /*  CONFIG_TX_MCAST2UNI */
 #endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
 
 		if (psta->expire_to <= 0) {

@@ -1138,9 +1138,7 @@ enum P2P_PS_MODE
 #define	WFD_DEVINFO_PC_TDLS					0x0080
 #define	WFD_DEVINFO_HDCP_SUPPORT			0x0100
 
-#ifdef  CONFIG_TX_MCAST2UNI
 #define IP_MCAST_MAC(mac)		((mac[0]==0x01)&&(mac[1]==0x00)&&(mac[2]==0x5e))
 #define ICMPV6_MCAST_MAC(mac)	((mac[0]==0x33)&&(mac[1]==0x33)&&(mac[2]!=0xff))
-#endif	// CONFIG_TX_MCAST2UNI
 
 #endif // _WIFI_H_

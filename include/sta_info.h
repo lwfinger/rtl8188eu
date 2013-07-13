@@ -215,10 +215,7 @@ struct sta_info {
 	u8 dev_name[32];
 #endif //CONFIG_P2P
 
-#ifdef CONFIG_TX_MCAST2UNI
 	u8 under_exist_checking;
-#endif	// CONFIG_TX_MCAST2UNI
-
 	u8 keep_alive_trycnt;
 
 #endif	// CONFIG_AP_MODE

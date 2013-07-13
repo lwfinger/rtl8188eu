@@ -67,9 +67,7 @@ _func_enter_;
 	psta->ht_20mhz_set = 0;
 #endif
 
-#ifdef CONFIG_TX_MCAST2UNI
 	psta->under_exist_checking = 0;
-#endif	/*  CONFIG_TX_MCAST2UNI */
 
 	psta->keep_alive_trycnt = 0;
 
@@ -563,9 +561,7 @@ _func_enter_;
 
 #endif	/*  CONFIG_NATIVEAP_MLME */
 
-#ifdef CONFIG_TX_MCAST2UNI
 	psta->under_exist_checking = 0;
-#endif	/*  CONFIG_TX_MCAST2UNI */
 
 #endif	/*  CONFIG_AP_MODE */
 

@@ -1479,22 +1479,13 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 		rtw_write8(Adapter, REG_EARLY_MODE_CONTROL, 0);
 	}
 
-#if defined(CONFIG_TX_MCAST2UNI)
-
 #ifdef CONFIG_CHECK_AC_LIFETIME
 	/*  Enable lifetime check for the four ACs */
 	rtw_write8(Adapter, REG_LIFETIME_EN, 0x0F);
 #endif	/*  CONFIG_CHECK_AC_LIFETIME */
 
-#ifdef CONFIG_TX_MCAST2UNI
 	rtw_write16(Adapter, REG_PKT_VO_VI_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 	rtw_write16(Adapter, REG_PKT_BE_BK_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
-#else	/*  CONFIG_TX_MCAST2UNI */
-	rtw_write16(Adapter, REG_PKT_VO_VI_LIFE_TIME, 0x3000);	/*  unit: 256us. 3s */
-	rtw_write16(Adapter, REG_PKT_BE_BK_LIFE_TIME, 0x3000);	/*  unit: 256us. 3s */
-#endif	/*  CONFIG_TX_MCAST2UNI */
-#endif	/*  CONFIG_TX_MCAST2UNI */
-
 
 #ifdef CONFIG_LED
 	_InitHWLed(Adapter);
