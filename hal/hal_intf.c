@@ -352,7 +352,6 @@ void rtw_hal_bcn_related_reg_setting(_adapter *padapter)
 }
 
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 u8	rtw_hal_antdiv_before_linked(_adapter *padapter)
 {
 	if (padapter->HalFunc.AntDivBeforeLinkHandler)
@@ -364,7 +363,6 @@ void	rtw_hal_antdiv_rssi_compared(_adapter *padapter, WLAN_BSSID_EX *dst, WLAN_B
 	if (padapter->HalFunc.AntDivCompareHandler)
 		padapter->HalFunc.AntDivCompareHandler(padapter, dst, src);
 }
-#endif
 
 #ifdef DBG_CONFIG_ERROR_DETECT
 void	rtw_hal_sreset_init(_adapter *padapter)

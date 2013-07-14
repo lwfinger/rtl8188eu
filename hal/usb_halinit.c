@@ -2976,20 +2976,12 @@ _func_enter_;
 			}
 			break;
 #endif
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-
-		case HW_VAR_ANTENNA_DIVERSITY_LINK:
-			ODM_SwAntDivRestAfterLink(podmpriv);
-			break;
-#endif
-#ifdef CONFIG_ANTENNA_DIVERSITY
 		case HW_VAR_ANTENNA_DIVERSITY_SELECT:
 			{
 				u8	Optimum_antenna = (*(u8 *)val);
 				u8	Ant ;
 				/* switch antenna to Optimum_antenna */
-				if (pHalData->CurAntenna !=  Optimum_antenna)
-				{
+				if (pHalData->CurAntenna !=  Optimum_antenna) {
 					Ant = (Optimum_antenna==2)?MAIN_ANT:AUX_ANT;
 					ODM_UpdateRxIdleAnt_88E(&pHalData->odmpriv, Ant);
 
@@ -2997,7 +2989,6 @@ _func_enter_;
 				}
 			}
 			break;
-#endif
 		case HW_VAR_EFUSE_BYTES: /*  To set EFUE total used bytes, added by Roger, 2008.12.22. */
 			pHalData->EfuseUsedBytes = *((u16 *)val);
 			break;
@@ -3196,11 +3187,9 @@ _func_enter_;
 				}
 			}
 			break;
-#ifdef CONFIG_ANTENNA_DIVERSITY
 		case HW_VAR_CURRENT_ANTENNA:
 			val[0] = pHalData->CurAntenna;
 			break;
-#endif
 		case HW_VAR_EFUSE_BYTES: /*  To get EFUE total used bytes, added by Roger, 2008.12.22. */
 			*((u16 *)(val)) = pHalData->EfuseUsedBytes;
 			break;
@@ -3255,14 +3244,10 @@ GetHalDefVar8188EUsb(
 #endif
 			break;
 		case HAL_DEF_IS_SUPPORT_ANT_DIV:
-#ifdef CONFIG_ANTENNA_DIVERSITY
 			*((u8 *)pValue) = (pHalData->AntDivCfg==0)?false:true;
-#endif
 			break;
 		case HAL_DEF_CURRENT_ANTENNA:
-#ifdef CONFIG_ANTENNA_DIVERSITY
 			*(( u8*)pValue) = pHalData->CurAntenna;
-#endif
 			break;
 		case HAL_DEF_DRVINFO_SZ:
 			*(( u32*)pValue) = DRVINFO_SZ;

@@ -1193,13 +1193,7 @@ odm_CommonInfoSelfInit(
 	pDM_Odm->pbNet_closed = &pDM_Odm->bool_temp;
 #endif
 	if (pDM_Odm->SupportICType & (ODM_RTL8192C|ODM_RTL8192D))
-	{
-#if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 		pDM_Odm->AntDivType = CG_TRX_HW_ANTDIV;
-#elif (defined(CONFIG_SW_ANTENNA_DIVERSITY))
-		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
-#endif
-	}
 	if (pDM_Odm->SupportICType & (ODM_RTL8723A))
 		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
 
@@ -1354,7 +1348,6 @@ ODM_InitAllWorkItems(PDM_ODM_T	pDM_Odm )
 		(RT_WORKITEM_CALL_BACK)odm_CCKTXPathDiversityWorkItemCallback,
 		(void *)pAdapter,
 		"CCKTXPathDiversityWorkItem");
-#if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 #if (RTL8188E_SUPPORT == 1)
 	ODM_InitializeWorkItem(
 		pDM_Odm,
@@ -1362,7 +1355,6 @@ ODM_InitAllWorkItems(PDM_ODM_T	pDM_Odm )
 		(RT_WORKITEM_CALL_BACK)odm_FastAntTrainingWorkItemCallback,
 		(void *)pAdapter,
 		"FastAntTrainingWorkitem");
-#endif
 #endif
 	ODM_InitializeWorkItem(
 		pDM_Odm,
@@ -3989,11 +3981,9 @@ ODM_InitAllTimers(
 		(RT_TIMER_CALL_BACK)odm_SwAntDivChkAntSwitchCallback, NULL, "SwAntennaSwitchTimer");
 
 #if (!(DM_ODM_SUPPORT_TYPE == ODM_CE))
-#if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 #if (RTL8188E_SUPPORT == 1)
 	ODM_InitializeTimer(pDM_Odm,&pDM_Odm->FastAntTrainingTimer,
 		(RT_TIMER_CALL_BACK)odm_FastAntTrainingCallback, NULL, "FastAntTrainingTimer");
-#endif
 #endif
 #endif
 
@@ -4291,801 +4281,66 @@ odm_TXPowerTrackingThermalMeterCheck(
 /* 3============================================================ */
 /* 3 SW Antenna Diversity */
 /* 3============================================================ */
-#if (defined(CONFIG_SW_ANTENNA_DIVERSITY))
-void
-odm_SwAntDivInit(
-			PDM_ODM_T		pDM_Odm
-	)
+void odm_SwAntDivInit(PDM_ODM_T pDM_Odm)
 {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE))
-	odm_SwAntDivInit_NIC(pDM_Odm);
-#elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-	dm_SW_AntennaSwitchInit(pDM_Odm->priv);
-#endif
-}
-#if (RTL8723A_SUPPORT==1)
-/*  Only for 8723A SW ANT DIV INIT--2012--07--17 */
-void
-odm_SwAntDivInit_NIC_8723A(
-		PDM_ODM_T		pDM_Odm)
-{
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
-	u1Byte			btAntNum=BT_GetPGAntNum(Adapter);
-
-
-	if (IS_HARDWARE_TYPE_8723A(Adapter))
-	{
-		pDM_SWAT_Table->ANTA_ON =true;
-
-		/*  Set default antenna B status by PG */
-		if (btAntNum == Ant_x2)
-			pDM_SWAT_Table->ANTB_ON = true;
-		else if (btAntNum ==Ant_x1)
-			pDM_SWAT_Table->ANTB_ON = false;
-		else
-			pDM_SWAT_Table->ANTB_ON = true;
-	}
-
-}
-#endif
-void
-odm_SwAntDivInit_NIC(
-			PDM_ODM_T		pDM_Odm
-	)
-{
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-/*  Init SW ANT DIV mechanism for 8723AE/AU/AS Neil Chen--2012--07--17--- */
-/*  CE/AP/ADSL no using SW ANT DIV for 8723A Series IC */
-#if (RTL8723A_SUPPORT==1)
-	if (pDM_Odm->SupportICType == ODM_RTL8723A)
-	{
-		odm_SwAntDivInit_NIC_8723A(pDM_Odm);
-	}
-#endif
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS:Init SW Antenna Switch\n"));
-	pDM_SWAT_Table->RSSI_sum_A = 0;
-	pDM_SWAT_Table->RSSI_cnt_A = 0;
-	pDM_SWAT_Table->RSSI_sum_B = 0;
-	pDM_SWAT_Table->RSSI_cnt_B = 0;
-	pDM_SWAT_Table->CurAntenna = Antenna_A;
-	pDM_SWAT_Table->PreAntenna = Antenna_A;
-	pDM_SWAT_Table->try_flag = 0xff;
-	pDM_SWAT_Table->PreRSSI = 0;
-	pDM_SWAT_Table->SWAS_NoLink_State = 0;
-	pDM_SWAT_Table->bTriggerAntennaSwitch = 0;
-	pDM_SWAT_Table->SelectAntennaMap=0xAA;
-	pDM_SWAT_Table->lastTxOkCnt = 0;
-	pDM_SWAT_Table->lastRxOkCnt = 0;
-	pDM_SWAT_Table->TXByteCnt_A = 0;
-	pDM_SWAT_Table->TXByteCnt_B = 0;
-	pDM_SWAT_Table->RXByteCnt_A = 0;
-	pDM_SWAT_Table->RXByteCnt_B = 0;
-	pDM_SWAT_Table->TrafficLoad = TRAFFIC_LOW;
-	pDM_SWAT_Table->SWAS_NoLink_BK_Reg860 = ODM_Read4Byte(pDM_Odm, 0x860);
 }
 
-/*  */
-/*  20100514 Joseph: */
-/*  Add new function to reset the state of antenna diversity before link. */
-/*  */
-static void
-ODM_SwAntDivResetBeforeLink(
-			PDM_ODM_T		pDM_Odm
-	)
+void ODM_SwAntDivChkPerPktRssi(PDM_ODM_T pDM_Odm, u1Byte StationID, PODM_PHY_INFO_T pPhyInfo)
 {
-
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-
-	pDM_SWAT_Table->SWAS_NoLink_State = 0;
-
 }
 
-/*  */
-/*  20100514 Luke/Joseph: */
-/*  Add new function to reset antenna diversity state after link. */
-/*  */
-void
-ODM_SwAntDivRestAfterLink(
-	PDM_ODM_T	pDM_Odm
-	)
+void odm_SwAntDivChkAntSwitch(PDM_ODM_T pDM_Odm, u1Byte Step)
 {
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-
-	pDM_SWAT_Table->RSSI_cnt_A = 0;
-	pDM_SWAT_Table->RSSI_cnt_B = 0;
-	pDM_Odm->RSSI_test = false;
-	pDM_SWAT_Table->try_flag = 0xff;
-	pDM_SWAT_Table->RSSI_Trying = 0;
-	pDM_SWAT_Table->SelectAntennaMap=0xAA;
 }
 
-void
-ODM_SwAntDivChkPerPktRssi(
-	PDM_ODM_T	pDM_Odm,
-	u1Byte		StationID,
-	PODM_PHY_INFO_T pPhyInfo
-	)
-{
-	SWAT_T		*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-
-	if (!(pDM_Odm->SupportAbility & (ODM_BB_ANT_DIV)))
-		return;
-
-	if (StationID == pDM_SWAT_Table->RSSI_target)
-	{
-		/* 1 RSSI for SW Antenna Switch */
-		if (pDM_SWAT_Table->CurAntenna == Antenna_A)
-		{
-			pDM_SWAT_Table->RSSI_sum_A += pPhyInfo->RxPWDBAll;
-			pDM_SWAT_Table->RSSI_cnt_A++;
-		}
-		else
-		{
-			pDM_SWAT_Table->RSSI_sum_B += pPhyInfo->RxPWDBAll;
-			pDM_SWAT_Table->RSSI_cnt_B++;
-
-		}
-	}
-
-}
-
-/*  */
-void
-odm_SwAntDivChkAntSwitch(
-			PDM_ODM_T		pDM_Odm,
-			u1Byte			Step
-	)
-{
-	/*  */
-	/*  For AP/ADSL use prtl8192cd_priv */
-	/*  For CE/NIC use PADAPTER */
-	/*  */
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
-	prtl8192cd_priv	priv		= pDM_Odm->priv;
-
-	/*  */
-	/*  2011/09/29 MH In HW integration first stage, we provide 4 different handle to operate */
-	/*  at the same time. In the stage2/3, we need to prive universal interface and merge all */
-	/*  HW dynamic mechanism. */
-	/*  */
-	switch	(pDM_Odm->SupportPlatform)
-	{
-		case	ODM_MP:
-		case	ODM_CE:
-			odm_SwAntDivChkAntSwitchNIC(pDM_Odm, Step);
-			break;
-
-		case	ODM_AP:
-		case	ODM_ADSL:
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP |ODM_ADSL))
-			if (priv->pshare->rf_ft_var.antSw_enable && (priv->up_time % 4==1))
-				dm_SW_AntennaSwitch(priv, SWAW_STEP_PEAK);
-#endif
-			break;
-	}
-
-}
-
-/*  */
-/*  20100514 Luke/Joseph: */
-/*  Add new function for antenna diversity after link. */
-/*  This is the main function of antenna diversity after link. */
-/*  This function is called in HalDmWatchDog() and ODM_SwAntDivChkAntSwitchCallback(). */
-/*  HalDmWatchDog() calls this function with SWAW_STEP_PEAK to initialize the antenna test. */
-/*  In SWAW_STEP_PEAK, another antenna and a 500ms timer will be set for testing. */
-/*  After 500ms, ODM_SwAntDivChkAntSwitchCallback() calls this function to compare the signal just */
-/*  listened on the air with the RSSI of original antenna. */
-/*  It chooses the antenna with better RSSI. */
-/*  There is also a aged policy for error trying. Each error trying will cost more 5 seconds waiting */
-/*  penalty to get next try. */
-
-
-void
-ODM_SetAntenna(
-		PDM_ODM_T	pDM_Odm,
-		u1Byte		Antenna)
-{
-	ODM_SetBBReg(pDM_Odm, 0x860, BIT8|BIT9, Antenna);
-}
-/* 2012--09--06-- */
-/* Note: Antenna_Main--> Antenna_A */
-/*         Antenna_Aux---> Antenna_B */
-/*  */
-void
-odm_SwAntDivChkAntSwitchNIC(
-			PDM_ODM_T		pDM_Odm,
-			u1Byte		Step
-	)
-{
-#if ((RTL8192C_SUPPORT==1)||(RTL8723A_SUPPORT==1))
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-	s4Byte			curRSSI=100, RSSI_A, RSSI_B;
-	u1Byte			nextAntenna=Antenna_B;
-	u8Byte			curTxOkCnt, curRxOkCnt;
-	u8Byte			CurByteCnt=0, PreByteCnt=0;
-	u1Byte			Score_A=0, Score_B=0;
-	u1Byte			i;
-
-	if (!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
-		return;
-
-	if (pDM_Odm->SupportICType & (ODM_RTL8192D|ODM_RTL8188E))
-		return;
-
-	if ((pDM_Odm->SupportICType == ODM_RTL8192C) &&(pDM_Odm->RFType == ODM_2T2R))
-		return;
-
-	if (pDM_Odm->SupportPlatform & ODM_MP)
-	{
-		if (*(pDM_Odm->pAntennaTest))
-			return;
-	}
-
-	if ((pDM_SWAT_Table->ANTA_ON == false) ||(pDM_SWAT_Table->ANTB_ON == false))
-	{
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,
-				("odm_SwAntDivChkAntSwitch(): No AntDiv Mechanism, Antenna A or B is off\n"));
-		return;
-	}
-
-	/*  Radio off: Status reset to default and return. */
-	if (*(pDM_Odm->pbPowerSaving)==true) /* pHalData->eRFPowerState==eRfOff */
-	{
-		ODM_SwAntDivRestAfterLink(pDM_Odm);
-		return;
-	}
-
-
-	/*  Handling step mismatch condition. */
-	/*  Peak step is not finished at last time. Recover the variable and check again. */
-	if (	Step != pDM_SWAT_Table->try_flag	)
-	{
-		ODM_SwAntDivRestAfterLink(pDM_Odm);
-	}
-
-#if  (DM_ODM_SUPPORT_TYPE &( ODM_MP| ODM_CE ))
-
-	if (pDM_SWAT_Table->try_flag == 0xff)
-	{
-		pDM_SWAT_Table->RSSI_target = 0xff;
-
-		#if (DM_ODM_SUPPORT_TYPE & ODM_CE)
-		{
-			u1Byte			index = 0;
-			PSTA_INFO_T		pEntry = NULL;
-
-
-			for (index=0; index<ODM_ASSOCIATE_ENTRY_NUM; index++)
-			{
-				pEntry =  pDM_Odm->pODM_StaInfo[i];
-				if (IS_STA_VALID(pEntry) ) {
-					break;
-				}
-			}
-			if (pEntry == NULL)
-			{
-				ODM_SwAntDivRestAfterLink(pDM_Odm);
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_SwAntDivChkAntSwitch(): No Link.\n"));
-				return;
-			}
-			else
-			{
-				pDM_SWAT_Table->RSSI_target = index;
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_SwAntDivChkAntSwitch(): RSSI_target is PEER STA\n"));
-			}
-                }
-		#elif (DM_ODM_SUPPORT_TYPE & ODM_MP)
-		{
-			PADAPTER	pAdapter	 =  pDM_Odm->Adapter;
-			PMGNT_INFO	pMgntInfo=&pAdapter->MgntInfo;
-
-			/*  Select RSSI checking target */
-			if (pMgntInfo->mAssoc && !ACTING_AS_AP(pAdapter))
-			{
-				/*  Target: Infrastructure mode AP. */
-				/* pDM_SWAT_Table->RSSI_target = NULL; */
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,("odm_SwAntDivChkAntSwitch(): RSSI_target is DEF AP!\n"));
-			}
-			else
-			{
-				u1Byte			index = 0;
-				PSTA_INFO_T		pEntry = NULL;
-				PADAPTER		pTargetAdapter = NULL;
-
-				if (pMgntInfo->mIbss )
-				{
-					/*  Target: AP/IBSS peer. */
-					pTargetAdapter = pAdapter;
-				}
-				else
-				{
-					pTargetAdapter = GetFirstAPAdapter(pAdapter);
-				}
-
-				if (pTargetAdapter != NULL)
-				{
-					for (index=0; index<ODM_ASSOCIATE_ENTRY_NUM; index++)
-					{
-
-						pEntry = AsocEntry_EnumStation(pTargetAdapter, index);
-						if (pEntry != NULL)
-						{
-							if (pEntry->bAssociated)
-								break;
-						}
-
-					}
-
-				}
-
-				if (pEntry == NULL)
-				{
-					ODM_SwAntDivRestAfterLink(pDM_Odm);
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_SwAntDivChkAntSwitch(): No Link.\n"));
-					return;
-				}
-				else
-				{
-					/* pDM_SWAT_Table->RSSI_target = pEntry; */
-					pDM_SWAT_Table->RSSI_target = index;
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_SwAntDivChkAntSwitch(): RSSI_target is PEER STA\n"));
-				}
-			}/* end if (pMgntInfo->mAssoc && !ACTING_AS_AP(Adapter)) */
-
-		}
-		#endif
-
-		pDM_SWAT_Table->RSSI_cnt_A = 0;
-		pDM_SWAT_Table->RSSI_cnt_B = 0;
-		pDM_SWAT_Table->try_flag = 0;
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,("odm_SwAntDivChkAntSwitch(): Set try_flag to 0 prepare for peak!\n"));
-		return;
-	}
-	else
-	{
-#if (DM_ODM_SUPPORT_TYPE &( ODM_MP))
-		curTxOkCnt = pAdapter->TxStats.NumTxBytesUnicast - pDM_SWAT_Table->lastTxOkCnt;
-		curRxOkCnt =pAdapter->RxStats.NumRxBytesUnicast - pDM_SWAT_Table->lastRxOkCnt;
-		pDM_SWAT_Table->lastTxOkCnt = pAdapter->TxStats.NumTxBytesUnicast;
-		pDM_SWAT_Table->lastRxOkCnt = pAdapter->RxStats.NumRxBytesUnicast;
-#else
-		curTxOkCnt = *(pDM_Odm->pNumTxBytesUnicast) - pDM_SWAT_Table->lastTxOkCnt;
-		curRxOkCnt = *(pDM_Odm->pNumRxBytesUnicast) - pDM_SWAT_Table->lastRxOkCnt;
-		pDM_SWAT_Table->lastTxOkCnt = *(pDM_Odm->pNumTxBytesUnicast);
-		pDM_SWAT_Table->lastRxOkCnt = *(pDM_Odm->pNumRxBytesUnicast);
-#endif
-             ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("curTxOkCnt = %lld\n",curTxOkCnt));
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("curRxOkCnt = %lld\n",curRxOkCnt));
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("lastTxOkCnt = %lld\n",pDM_SWAT_Table->lastTxOkCnt));
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("lastRxOkCnt = %lld\n",pDM_SWAT_Table->lastRxOkCnt));
-
-		if (pDM_SWAT_Table->try_flag == 1) {
-			if (pDM_SWAT_Table->CurAntenna == Antenna_A) {
-				pDM_SWAT_Table->TXByteCnt_A += curTxOkCnt;
-				pDM_SWAT_Table->RXByteCnt_A += curRxOkCnt;
-			} else {
-				pDM_SWAT_Table->TXByteCnt_B += curTxOkCnt;
-				pDM_SWAT_Table->RXByteCnt_B += curRxOkCnt;
-			}
-
-			nextAntenna = (pDM_SWAT_Table->CurAntenna == Antenna_A)? Antenna_B : Antenna_A;
-			pDM_SWAT_Table->RSSI_Trying--;
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("RSSI_Trying = %d\n",pDM_SWAT_Table->RSSI_Trying));
-			if (pDM_SWAT_Table->RSSI_Trying == 0) {
-				CurByteCnt = (pDM_SWAT_Table->CurAntenna == Antenna_A)? (pDM_SWAT_Table->TXByteCnt_A+pDM_SWAT_Table->RXByteCnt_A) : (pDM_SWAT_Table->TXByteCnt_B+pDM_SWAT_Table->RXByteCnt_B);
-				PreByteCnt = (pDM_SWAT_Table->CurAntenna == Antenna_A)? (pDM_SWAT_Table->TXByteCnt_B+pDM_SWAT_Table->RXByteCnt_B) : (pDM_SWAT_Table->TXByteCnt_A+pDM_SWAT_Table->RXByteCnt_A);
-
-				if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-					PreByteCnt = PreByteCnt*9;
-				else if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_LOW)
-					PreByteCnt = PreByteCnt*2;
-
-				if (pDM_SWAT_Table->RSSI_cnt_A > 0)
-					RSSI_A = pDM_SWAT_Table->RSSI_sum_A/pDM_SWAT_Table->RSSI_cnt_A;
-				else
-					RSSI_A = 0;
-				if (pDM_SWAT_Table->RSSI_cnt_B > 0)
-					RSSI_B = pDM_SWAT_Table->RSSI_sum_B/pDM_SWAT_Table->RSSI_cnt_B;
-				else
-					RSSI_B = 0;
-				curRSSI = (pDM_SWAT_Table->CurAntenna == Antenna_A)? RSSI_A : RSSI_B;
-				pDM_SWAT_Table->PreRSSI =  (pDM_SWAT_Table->CurAntenna == Antenna_A)? RSSI_B : RSSI_A;
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Luke:PreRSSI = %d, CurRSSI = %d\n",pDM_SWAT_Table->PreRSSI, curRSSI));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: preAntenna= %s, curAntenna= %s\n",
-				(pDM_SWAT_Table->PreAntenna == Antenna_A?"A":"B"), (pDM_SWAT_Table->CurAntenna == Antenna_A?"A":"B")));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Luke:RSSI_A= %d, RSSI_cnt_A = %d, RSSI_B= %d, RSSI_cnt_B = %d\n",
-					RSSI_A, pDM_SWAT_Table->RSSI_cnt_A, RSSI_B, pDM_SWAT_Table->RSSI_cnt_B));
-			}
-		} else {
-			if (pDM_SWAT_Table->RSSI_cnt_A > 0)
-				RSSI_A = pDM_SWAT_Table->RSSI_sum_A/pDM_SWAT_Table->RSSI_cnt_A;
-			else
-				RSSI_A = 0;
-			if (pDM_SWAT_Table->RSSI_cnt_B > 0)
-				RSSI_B = pDM_SWAT_Table->RSSI_sum_B/pDM_SWAT_Table->RSSI_cnt_B;
-			else
-				RSSI_B = 0;
-			curRSSI = (pDM_SWAT_Table->CurAntenna == Antenna_A)? RSSI_A : RSSI_B;
-			pDM_SWAT_Table->PreRSSI =  (pDM_SWAT_Table->PreAntenna == Antenna_A)? RSSI_A : RSSI_B;
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Ekul:PreRSSI = %d, CurRSSI = %d\n", pDM_SWAT_Table->PreRSSI, curRSSI));
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: preAntenna= %s, curAntenna= %s\n",
-			(pDM_SWAT_Table->PreAntenna == Antenna_A?"A":"B"), (pDM_SWAT_Table->CurAntenna == Antenna_A?"A":"B")));
-
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Ekul:RSSI_A= %d, RSSI_cnt_A = %d, RSSI_B= %d, RSSI_cnt_B = %d\n",
-				RSSI_A, pDM_SWAT_Table->RSSI_cnt_A, RSSI_B, pDM_SWAT_Table->RSSI_cnt_B));
-		}
-
-		/* 1 Trying State */
-		if ((pDM_SWAT_Table->try_flag == 1)&&(pDM_SWAT_Table->RSSI_Trying == 0)) {
-			if (pDM_SWAT_Table->TestMode == TP_MODE) {
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: TestMode = TP_MODE"));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("TRY:CurByteCnt = %lld,", CurByteCnt));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("TRY:PreByteCnt = %lld\n",PreByteCnt));
-				if (CurByteCnt < PreByteCnt) {
-					if (pDM_SWAT_Table->CurAntenna == Antenna_A)
-						pDM_SWAT_Table->SelectAntennaMap=pDM_SWAT_Table->SelectAntennaMap<<1;
-					else
-						pDM_SWAT_Table->SelectAntennaMap=(pDM_SWAT_Table->SelectAntennaMap<<1)+1;
-				} else {
-					if (pDM_SWAT_Table->CurAntenna == Antenna_A)
-						pDM_SWAT_Table->SelectAntennaMap=(pDM_SWAT_Table->SelectAntennaMap<<1)+1;
-					else
-						pDM_SWAT_Table->SelectAntennaMap=pDM_SWAT_Table->SelectAntennaMap<<1;
-				}
-				for (i= 0; i<8; i++) {
-					if (((pDM_SWAT_Table->SelectAntennaMap>>i)&BIT0) == 1)
-						Score_A++;
-					else
-						Score_B++;
-				}
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SelectAntennaMap=%x\n ",pDM_SWAT_Table->SelectAntennaMap));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Score_A=%d, Score_B=%d\n", Score_A, Score_B));
-
-				if (pDM_SWAT_Table->CurAntenna == Antenna_A) {
-					nextAntenna = (Score_A > Score_B)?Antenna_A:Antenna_B;
-				} else {
-					nextAntenna = (Score_B > Score_A)?Antenna_B:Antenna_A;
-				}
-
-				if (nextAntenna != pDM_SWAT_Table->CurAntenna) {
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: Switch back to another antenna"));
-				} else {
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: current anntena is good\n"));
-				}
-			}
-
-			if (pDM_SWAT_Table->TestMode == RSSI_MODE) {
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: TestMode = RSSI_MODE"));
-				pDM_SWAT_Table->SelectAntennaMap=0xAA;
-				if (curRSSI < pDM_SWAT_Table->PreRSSI) /* Current antenna is worse than previous antenna */
-				{
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: Switch back to another antenna"));
-					nextAntenna = (pDM_SWAT_Table->CurAntenna == Antenna_A)? Antenna_B : Antenna_A;
-				}
-				else /*  current anntena is good */
-				{
-					nextAntenna =pDM_SWAT_Table->CurAntenna;
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: current anntena is good\n"));
-				}
-			}
-			pDM_SWAT_Table->try_flag = 0;
-			pDM_Odm->RSSI_test = false;
-			pDM_SWAT_Table->RSSI_sum_A = 0;
-			pDM_SWAT_Table->RSSI_cnt_A = 0;
-			pDM_SWAT_Table->RSSI_sum_B = 0;
-			pDM_SWAT_Table->RSSI_cnt_B = 0;
-			pDM_SWAT_Table->TXByteCnt_A = 0;
-			pDM_SWAT_Table->TXByteCnt_B = 0;
-			pDM_SWAT_Table->RXByteCnt_A = 0;
-			pDM_SWAT_Table->RXByteCnt_B = 0;
-
-		}
-
-		/* 1 Normal State */
-		else if (pDM_SWAT_Table->try_flag == 0)
-		{
-			if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-			{
-				if ((curTxOkCnt+curRxOkCnt) > 3750000)/* if (PlatformDivision64(curTxOkCnt+curRxOkCnt, 2) > 1875000) */
-					pDM_SWAT_Table->TrafficLoad = TRAFFIC_HIGH;
-				else
-					pDM_SWAT_Table->TrafficLoad = TRAFFIC_LOW;
-			}
-			else if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_LOW)
-				{
-				if ((curTxOkCnt+curRxOkCnt) > 3750000) /* if (PlatformDivision64(curTxOkCnt+curRxOkCnt, 2) > 1875000) */
-					pDM_SWAT_Table->TrafficLoad = TRAFFIC_HIGH;
-				else
-					pDM_SWAT_Table->TrafficLoad = TRAFFIC_LOW;
-			}
-			if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-				pDM_SWAT_Table->bTriggerAntennaSwitch = 0;
-
-			/* Prepare To Try Antenna */
-					nextAntenna = (pDM_SWAT_Table->CurAntenna == Antenna_A)? Antenna_B : Antenna_A;
-					pDM_SWAT_Table->try_flag = 1;
-					pDM_Odm->RSSI_test = true;
-			if ((curRxOkCnt+curTxOkCnt) > 1000)
-			{
-				pDM_SWAT_Table->RSSI_Trying = 4;
-				pDM_SWAT_Table->TestMode = TP_MODE;
-				}
-				else
-				{
-				pDM_SWAT_Table->RSSI_Trying = 2;
-				pDM_SWAT_Table->TestMode = RSSI_MODE;
-
-			}
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: Normal State -> Begin Trying!\n"));
-
-
-			pDM_SWAT_Table->RSSI_sum_A = 0;
-			pDM_SWAT_Table->RSSI_cnt_A = 0;
-			pDM_SWAT_Table->RSSI_sum_B = 0;
-			pDM_SWAT_Table->RSSI_cnt_B = 0;
-		}
-	}
-
-	/* 1 4.Change TRX antenna */
-	if (nextAntenna != pDM_SWAT_Table->CurAntenna)
-	{
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: Change TX Antenna!\n "));
-		#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-		ODM_SetAntenna(pDM_Odm,nextAntenna);
-		#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-		{
-			bool bEnqueue;
-			bEnqueue = (pDM_Odm->SupportInterface ==  ODM_ITRF_PCIE)?false :true;
-			rtw_antenna_select_cmd(pDM_Odm->Adapter, nextAntenna, bEnqueue);
-		}
-		#endif
-
-	}
-
-	/* 1 5.Reset Statistics */
-	pDM_SWAT_Table->PreAntenna = pDM_SWAT_Table->CurAntenna;
-	pDM_SWAT_Table->CurAntenna = nextAntenna;
-	pDM_SWAT_Table->PreRSSI = curRSSI;
-
-	/* 1 6.Set next timer */
-	{
-		PADAPTER		pAdapter = pDM_Odm->Adapter;
-		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-
-
-	if (pDM_SWAT_Table->RSSI_Trying == 0)
-		return;
-
-	if (pDM_SWAT_Table->RSSI_Trying%2 == 0)
-	{
-		if (pDM_SWAT_Table->TestMode == TP_MODE)
-		{
-			if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-			{
-				ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 10 ); /* ms */
-
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("dm_SW_AntennaSwitch(): Test another antenna for 10 ms\n"));
-			}
-			else if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_LOW)
-			{
-				ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 50 ); /* ms */
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("dm_SW_AntennaSwitch(): Test another antenna for 50 ms\n"));
-			}
-		}
-		else
-		{
-			ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 500 ); /* ms */
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("dm_SW_AntennaSwitch(): Test another antenna for 500 ms\n"));
-		}
-	}
-	else
-	{
-		if (pDM_SWAT_Table->TestMode == TP_MODE)
-		{
-			if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-				ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 90 ); /* ms */
-			else if (pDM_SWAT_Table->TrafficLoad == TRAFFIC_LOW)
-				ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 100 ); /* ms */
-		}
-		else
-			ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 100 ); /* ms */
-	}
-	}
-#endif	/*  #if (DM_ODM_SUPPORT_TYPE  & (ODM_MP|ODM_CE)) */
-#endif	/*  #if (RTL8192C_SUPPORT==1) */
-}
-
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-
-u1Byte
-odm_SwAntDivSelectChkChnl(
-		PADAPTER	Adapter
-	)
-{
-#if (RT_MEM_SIZE_LEVEL != RT_MEM_SIZE_MINIMUM)
-	u1Byte	index, target_chnl=0;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-	PDM_ODM_T			pDM_Odm = &pHalData->DM_OutSrc;
-	u1Byte	chnl_peer_cnt[14] = {0};
-
-	if (Adapter->MgntInfo.tmpNumBssDesc==0)
-	{
-		return 0;
-	}
-	else
-	{
-		/*  20100519 Joseph: Select checking channel from current scan list. */
-		/*  We just choose the channel with most APs to be the test scan channel. */
-		for (index=0; index<Adapter->MgntInfo.tmpNumBssDesc; index++)
-		{
-			/*  Add by hpfan: prevent access invalid channel number */
-			/*  TODO: Verify channel number by channel plan */
-			if (Adapter->MgntInfo.tmpbssDesc[index].ChannelNumber == 0 ||
-				Adapter->MgntInfo.tmpbssDesc[index].ChannelNumber > 13)
-				continue;
-
-			chnl_peer_cnt[Adapter->MgntInfo.tmpbssDesc[index].ChannelNumber-1]++;
-		}
-		for (index=0; index<14; index++)
-		{
-			if (chnl_peer_cnt[index]>chnl_peer_cnt[target_chnl])
-				target_chnl = index;
-		}
-		target_chnl+=1;
-		ODM_RT_TRACE(pDM_Odm,COMP_SWAS, DBG_LOUD,
-			("odm_SwAntDivSelectChkChnl(): Channel %d is select as test channel.\n", target_chnl));
-
-		return target_chnl;
-	}
-#else
-	return	0;
-#endif
-}
-
-
-void
-odm_SwAntDivConsructChkScanChnl(
-		PADAPTER	Adapter,
-		u1Byte		ChkChnl
-	)
-{
-
-	PMGNT_INFO			pMgntInfo = &Adapter->MgntInfo;
-	PRT_CHANNEL_LIST	pChannelList = GET_RT_CHANNEL_LIST(pMgntInfo);
-	u1Byte				index;
-
-	if (ChkChnl==0)
-	{
-		/*  20100519 Joseph: Original antenna scanned nothing. */
-		/*  Test antenna shall scan all channel with half period in this condition. */
-		RtActChannelList(Adapter, RT_CHNL_LIST_ACTION_CONSTRUCT_SCAN_LIST, NULL, NULL);
-		for (index=0; index<pChannelList->ChannelLen; index++)
-			pChannelList->ChannelInfo[index].ScanPeriod /= 2;
-	}
-	else
-	{
-		/*  The using of this CustomizedScanRequest is a trick to rescan the two channels */
-		/* 	under the NORMAL scanning process. It will not affect MGNT_INFO.CustomizedScanRequest. */
-		CUSTOMIZED_SCAN_REQUEST CustomScanReq;
-
-		CustomScanReq.bEnabled = true;
-		CustomScanReq.Channels[0] = ChkChnl;
-		CustomScanReq.Channels[1] = pMgntInfo->dot11CurrentChannelNumber;
-		CustomScanReq.nChannels = 2;
-		CustomScanReq.ScanType = SCAN_ACTIVE;
-		CustomScanReq.Duration = DEFAULT_ACTIVE_SCAN_PERIOD;
-
-		RtActChannelList(Adapter, RT_CHNL_LIST_ACTION_CONSTRUCT_SCAN_LIST, &CustomScanReq, NULL);
-	}
-
-}
-#endif /* if (DM_ODM_SUPPORT_TYPE == ODM_MP) */
-
-/*  */
-/*  20100514 Luke/Joseph: */
-/*  Callback function for 500ms antenna test trying. */
-/*  */
-#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-void
-odm_SwAntDivChkAntSwitchCallback(
-	PRT_TIMER		pTimer
-)
-{
-	PADAPTER		Adapter = (PADAPTER)pTimer->Adapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	pSWAT_T		pDM_SWAT_Table = &pHalData->DM_OutSrc.DM_SWAT_Table;
-
-	#if DEV_BUS_TYPE==RT_PCI_INTERFACE
-	#if USE_WORKITEM
-	ODM_ScheduleWorkItem(&pDM_SWAT_Table->SwAntennaSwitchWorkitem);
-	#else
-	odm_SwAntDivChkAntSwitch(&pHalData->DM_OutSrc, SWAW_STEP_DETERMINE);
-	#endif
-#else
-	ODM_ScheduleWorkItem(&pDM_SWAT_Table->SwAntennaSwitchWorkitem);
-	#endif
-
-}
-void
-odm_SwAntDivChkAntSwitchWorkitemCallback(
-    void *            pContext
-    )
-{
-
-	PADAPTER		pAdapter = (PADAPTER)pContext;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-
-	odm_SwAntDivChkAntSwitch(&pHalData->DM_OutSrc, SWAW_STEP_DETERMINE);
-
-}
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
-{
-	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
-	PADAPTER	padapter = pDM_Odm->Adapter;
-	if (padapter->net_closed == true)
-	    return;
-	odm_SwAntDivChkAntSwitch(pDM_Odm, SWAW_STEP_DETERMINE);
-}
-#elif (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
-void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
-{
-	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
-	odm_SwAntDivChkAntSwitch(pDM_Odm, SWAW_STEP_DETERMINE);
-}
-#endif
-
-#else /* if (defined(CONFIG_SW_ANTENNA_DIVERSITY)) */
-
-void odm_SwAntDivInit(			PDM_ODM_T		pDM_Odm	) {}
-void ODM_SwAntDivChkPerPktRssi(
-	PDM_ODM_T	pDM_Odm,
-	u1Byte		StationID,
-	PODM_PHY_INFO_T pPhyInfo
-	) {}
-void odm_SwAntDivChkAntSwitch(
-			PDM_ODM_T		pDM_Odm,
-			u1Byte			Step
-	) {}
 static void ODM_SwAntDivResetBeforeLink(PDM_ODM_T pDM_Odm)
 {
+
 }
 
-void ODM_SwAntDivRestAfterLink(			PDM_ODM_T		pDM_Odm	){}
+void ODM_SwAntDivRestAfterLink(PDM_ODM_T pDM_Odm)
+{
+}
+
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-u1Byte odm_SwAntDivSelectChkChnl(		PADAPTER	Adapter	){	return 0;}
-void
-odm_SwAntDivConsructChkScanChnl(
-		PADAPTER	Adapter,
-		u1Byte		ChkChnl
-	){}
+u1Byte odm_SwAntDivSelectChkChnl(PADAPTER Adapter)
+{
+	return 0;
+}
+
+void odm_SwAntDivConsructChkScanChnl(PADAPTER	Adapter, u1Byte ChkChnl)
+{
+}
+
 #endif
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-void odm_SwAntDivChkAntSwitchCallback(	PRT_TIMER		pTimer){}
-void odm_SwAntDivChkAntSwitchWorkitemCallback(void *            pContext    ){}
+void odm_SwAntDivChkAntSwitchCallback(PRT_TIMER	 pTimer)
+{
+}
+
+void odm_SwAntDivChkAntSwitchWorkitemCallback(void *pContext)
+{
+}
+
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
+void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
+{
+}
+
 #elif (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
-void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
+void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
+{
+}
 #endif
 
-#endif /* if (defined(CONFIG_SW_ANTENNA_DIVERSITY)) */
-
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-#if ((defined(CONFIG_SW_ANTENNA_DIVERSITY))||(defined(CONFIG_HW_ANTENNA_DIVERSITY)))
-bool
-ODM_SwAntDivCheckBeforeLink8192C(
-			PDM_ODM_T		pDM_Odm
-	)
+bool ODM_SwAntDivCheckBeforeLink8192C(PDM_ODM_T pDM_Odm)
 {
 
 #if (RT_MEM_SIZE_LEVEL != RT_MEM_SIZE_MINIMUM)
 	PADAPTER Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData=NULL;
 	PMGNT_INFO		pMgntInfo = NULL;
-	/* pSWAT_T			pDM_SWAT_Table = &Adapter->DM_SWAT_Table; */
 	pSWAT_T			pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 
@@ -5280,17 +4535,6 @@ return false;
 
 return false;
 }
-#else
-bool
-ODM_SwAntDivCheckBeforeLink8192C(
-			PDM_ODM_T		pDM_Odm
-	)
-{
-
-	return false;
-
-}
-#endif /* if ((defined(CONFIG_SW_ANTENNA_DIVERSITY))||(defined(CONFIG_HW_ANTENNA_DIVERSITY))) */
 #endif /* if (DM_ODM_SUPPORT_TYPE==ODM_MP) */
 
 
@@ -5298,7 +4542,6 @@ ODM_SwAntDivCheckBeforeLink8192C(
 /* 3 SW Antenna Diversity */
 /* 3============================================================ */
 
-#if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 static void odm_InitHybridAntDiv_88C_92D(
 	PDM_ODM_T	pDM_Odm
 	)
@@ -5796,25 +5039,6 @@ ODM_Diversity_AntennaSelect(
 	return 1;
 }
 #endif
-
-#else /* if (defined(CONFIG_HW_ANTENNA_DIVERSITY)) */
-
-void odm_InitHybridAntDiv(	PDM_ODM_T	pDM_Odm		){}
-void odm_HwAntDiv(		PDM_ODM_T	pDM_Odm){}
-#if (DM_ODM_SUPPORT_TYPE==ODM_MP)
-void ODM_SetTxAntByTxInfo_88C_92D(
-			PDM_ODM_T		pDM_Odm,
-			pu1Byte			pDesc,
-			u1Byte			macId
-){}
-#elif (DM_ODM_SUPPORT_TYPE==ODM_CE)
-void ODM_SetTxAntByTxInfo_88C_92D(			PDM_ODM_T		pDM_Odm){ }
-#elif (DM_ODM_SUPPORT_TYPE==ODM_AP)
-void ODM_SetTxAntByTxInfo_88C_92D(			PDM_ODM_T		pDM_Odm){ }
-#endif
-
-#endif /* if (defined(CONFIG_HW_ANTENNA_DIVERSITY)) */
-
 
 /*  */
 /* EDCA Turbo */

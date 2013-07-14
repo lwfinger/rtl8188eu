@@ -661,9 +661,7 @@ void update_network(WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src,
 
 _func_enter_;
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 	rtw_hal_antdiv_rssi_compared(padapter, dst, src); /* this will update src.Rssi, need consider again */
-#endif
 
 	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
 	if (strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
@@ -786,9 +784,7 @@ _func_enter_;
 			/* list_del_init(&oldest->list); */
 			pnetwork = oldest;
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(target->PhyInfo.Optimum_antenna));
-#endif
 			_rtw_memcpy(&(pnetwork->network), target,  get_WLAN_BSSID_EX_sz(target));
 			/*  variable initialize */
 			pnetwork->fixed = false;
@@ -801,23 +797,19 @@ _func_enter_;
 			/* bss info not receving from the right channel */
 			if (pnetwork->network.PhyInfo.SignalQuality == 101)
 				pnetwork->network.PhyInfo.SignalQuality = 0;
-		}
-		else {
+		} else {
 			/* Otherwise just pull from the free list */
 
 			pnetwork = rtw_alloc_network(pmlmepriv); /*  will update scan_time */
 
-			if (pnetwork==NULL){
+			if (pnetwork == NULL) {
 				RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("\n\n\nsomething wrong here\n\n\n"));
 				goto exit;
 			}
 
 			bssid_ex_sz = get_WLAN_BSSID_EX_sz(target);
 			target->Length = bssid_ex_sz;
-#ifdef CONFIG_ANTENNA_DIVERSITY
-			/* target->PhyInfo.Optimum_antenna = pHalData->CurAntenna; */
 			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(target->PhyInfo.Optimum_antenna));
-#endif
 			_rtw_memcpy(&(pnetwork->network), target, bssid_ex_sz );
 
 			pnetwork->last_scanned = rtw_get_current_time();
@@ -1263,15 +1255,9 @@ _func_enter_;
 	pmlmepriv->to_join = false;
 
 	if (!check_fwstate(&padapter->mlmepriv, _FW_LINKED)) {
-
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-		rtw_hal_set_hwreg(padapter, HW_VAR_ANTENNA_DIVERSITY_LINK, 0);
-#endif
-
 		set_fwstate(pmlmepriv, _FW_LINKED);
 
 		rtw_led_control(padapter, LED_CTL_LINK);
-
 
 #ifdef CONFIG_DRVEXT_MODULE
 		if (padapter->drvextpriv.enable_wpa) {
@@ -2389,7 +2375,6 @@ _func_enter_;
 		rtw_free_assoc_resources(adapter, 0);
 	}
 
-	#ifdef CONFIG_ANTENNA_DIVERSITY
 	rtw_hal_get_def_var(adapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &(bSupportAntDiv));
 	if (true == bSupportAntDiv)
 	{
@@ -2400,7 +2385,6 @@ _func_enter_;
 			(2==CurrentAntenna)?"A":"B"
 		);
 	}
-	#endif
 
 	ret = rtw_joinbss_cmd(adapter, candidate);
 

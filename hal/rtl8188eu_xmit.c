@@ -437,14 +437,11 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 
 	}
 
-#ifdef CONFIG_HW_ANTENNA_DIVERSITY /* CONFIG_ANTENNA_DIVERSITY */
 	ODM_SetTxAntByTxInfo_88E(&pHalData->odmpriv, pmem, pattrib->mac_id);
-#endif
 
 	rtl8188eu_cal_txdesc_chksum(ptxdesc);
 	_dbg_dump_tx_info(padapter,pxmitframe->frame_tag,ptxdesc);
 	return pull;
-
 }
 
 

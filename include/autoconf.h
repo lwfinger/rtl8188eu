@@ -77,14 +77,6 @@
 #define CONFIG_XMIT_THREAD_MODE
 #endif
 
-//befor link
-#define CONFIG_ANTENNA_DIVERSITY
-
-//after link
-#ifdef CONFIG_ANTENNA_DIVERSITY
-#define CONFIG_HW_ANTENNA_DIVERSITY
-#endif
-
 #define CONFIG_AP_MODE
 #ifdef CONFIG_AP_MODE
 	#ifdef CONFIG_INTERRUPT_BASED_TXBCN

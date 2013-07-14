@@ -56,9 +56,7 @@ void rtl8188e_deinit_dm_priv(PADAPTER Adapter);
 void rtl8188e_InitHalDm(PADAPTER Adapter);
 void rtl8188e_HalDmWatchDog(PADAPTER Adapter);
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
 u8 AntDivBeforeLink8188E(PADAPTER Adapter );
-#endif
 
 #endif

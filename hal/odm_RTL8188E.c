@@ -44,7 +44,6 @@ ODM_DIG_LowerBound_88E(
 
 }
 
-#if (defined(CONFIG_HW_ANTENNA_DIVERSITY))
 static void
 odm_RX_HWAntDivInit(
 			PDM_ODM_T		pDM_Odm
@@ -704,25 +703,6 @@ ODM_AntennaDiversity_88E(
 	#endif
 }
 
-#else /* if (defined(CONFIG_HW_ANTENNA_DIVERSITY)) */
-#if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE))
-void
-ODM_SetTxAntByTxInfo_88E(
-			PDM_ODM_T		pDM_Odm,
-			pu1Byte			pDesc,
-			u1Byte			macId
-	)
-{
-}
-#else/*  (DM_ODM_SUPPORT_TYPE == ODM_AP) */
-void
-ODM_SetTxAntByTxInfo_88E(
-			PDM_ODM_T		pDM_Odm
-		)
-{
-}
-#endif
-#endif /* if (defined(CONFIG_HW_ANTENNA_DIVERSITY)) */
 /* 3============================================================ */
 /* 3 Dynamic Primary CCA */
 /* 3============================================================ */

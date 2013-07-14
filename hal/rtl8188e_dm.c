@@ -350,9 +350,6 @@ void rtl8188e_init_dm_priv(PADAPTER Adapter)
 	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
 	_rtw_memset(pdmpriv, 0, sizeof(struct dm_priv));
 	Init_ODM_ComInfo_88E(Adapter);
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-	ODM_InitAllTimers(podmpriv );
-#endif
 	ODM_InitDebugSetting(podmpriv);
 }
 
@@ -361,21 +358,15 @@ void rtl8188e_deinit_dm_priv(PADAPTER Adapter)
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-	ODM_CancelAllTimers(podmpriv);
-#endif
 }
 
-
-#ifdef CONFIG_ANTENNA_DIVERSITY
 /*  Add new function to reset the state of antenna diversity before link. */
 /*  */
 /*  Compare RSSI for deciding antenna */
 void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	if (0 != pHalData->AntDivCfg )
-	{
+	if (0 != pHalData->AntDivCfg) {
 		/* select optimum_antenna for before linked =>For antenna diversity */
 		if (dst->Rssi >=  src->Rssi )/* keep org parameter */
 		{
@@ -399,10 +390,7 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 		return false;
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
-	{
 		return false;
-	}
-
 
 	if (pDM_SWAT_Table->SWAS_NoLink_State == 0){
 		/* switch channel */
@@ -417,4 +405,3 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 	}
 
 }
-#endif

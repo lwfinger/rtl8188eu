@@ -103,9 +103,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 	#define	STA_INFO_T			RT_WLAN_STA
 	#define	PSTA_INFO_T			PRT_WLAN_STA
 
-	#define CONFIG_HW_ANTENNA_DIVERSITY
-#define CONFIG_SW_ANTENNA_DIVERSITY
-
 #elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
 
 	// To let ADSL/AP project compile ok; it should be removed after all conflict are solved. Added by Annie, 2011-10-07.
