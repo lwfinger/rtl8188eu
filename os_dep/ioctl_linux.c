@@ -40,6 +40,7 @@
 #include <rtw_mp.h>
 #endif //#ifdef CONFIG_MP_INCLUDED
 #include <rtl8188e_hal.h>
+#include <rtw_iol.h>
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27))
 #define  iwe_stream_add_event(a, b, c, d, e)  iwe_stream_add_event(b, c, d, e)
@@ -5732,9 +5733,6 @@ static void rf_reg_dump(_adapter *padapter)
 	}
 }
 
-#ifdef CONFIG_IOL
-#include <rtw_iol.h>
-#endif
 static int rtw_dbg_port(struct net_device *dev,
                                struct iw_request_info *info,
                                union iwreq_data *wrqu, char *extra)
@@ -5829,7 +5827,6 @@ static int rtw_dbg_port(struct net_device *dev,
 		case 0x78: //IOL test
 			switch (minor_cmd)
 			{
-				#ifdef CONFIG_IOL
 				case 0x04: //LLT table initialization test
 				{
 					u8 page_boundary = 0xf9;
@@ -5865,17 +5862,10 @@ static int rtw_dbg_port(struct net_device *dev,
 						}
 
 						for (i=0;i<blink_num;i++){
-							#ifdef CONFIG_IOL_NEW_GENERATION
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x00,0xff);
 							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x08,0xff);
 							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
-							#else
-							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x00);
-							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
-							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x08);
-							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
-							#endif
 						}
 						if (_SUCCESS != rtw_IOL_exec_cmds_sync(padapter, xmit_frame, (blink_delay_ms*blink_num*2)+200,0))
 							ret = -EPERM;
@@ -5899,13 +5889,8 @@ static int rtw_dbg_port(struct net_device *dev,
 							break;
 						}
 
-						for (i=0;i<write_num;i++){
-							#ifdef CONFIG_IOL_NEW_GENERATION
+						for (i=0;i<write_num;i++)
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, i+start_value,0xFF);
-							#else
-							rtw_IOL_append_WB_cmd(xmit_frame, reg, i+start_value);
-							#endif
-						}
 						if (_SUCCESS != rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
 							ret = -EPERM;
 					}
@@ -5935,13 +5920,8 @@ static int rtw_dbg_port(struct net_device *dev,
 							break;
 						}
 
-						for (i=0;i<write_num;i++){
-							#ifdef CONFIG_IOL_NEW_GENERATION
+						for (i=0;i<write_num;i++)
 							rtw_IOL_append_WW_cmd(xmit_frame, reg, i+start_value,0xFFFF);
-							#else
-							rtw_IOL_append_WW_cmd(xmit_frame, reg, i+start_value);
-							#endif
-						}
 						if (_SUCCESS !=rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
 							ret = -EPERM;
 					}
@@ -5971,13 +5951,8 @@ static int rtw_dbg_port(struct net_device *dev,
 							break;
 						}
 
-						for (i=0;i<write_num;i++){
-							#ifdef CONFIG_IOL_NEW_GENERATION
+						for (i=0;i<write_num;i++)
 							rtw_IOL_append_WD_cmd(xmit_frame, reg, i+start_value,0xFFFFFFFF);
-							#else
-							rtw_IOL_append_WD_cmd(xmit_frame, reg, i+start_value);
-							#endif
-						}
 						if (_SUCCESS !=rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
 							ret = -EPERM;
 
@@ -5990,7 +5965,6 @@ static int rtw_dbg_port(struct net_device *dev,
 					}
 				}
 					break;
-				#endif //CONFIG_IOL
 			}
 			break;
 		case 0x79:
@@ -7856,9 +7830,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	u16 i=0, j=0, mapLen=0, addr=0, cnts=0;
 	u16 max_available_size=0, raw_cursize=0, raw_maxsize=0;
 	int err;
-	#ifdef CONFIG_IOL
 	u8 org_fw_iol = padapter->registrypriv.fw_iol;// 0:Disable, 1:enable, 2:by usb speed
-	#endif
 
 	wrqu = (struct iw_point*)wdata;
 	pwrctrlpriv = &padapter->pwrctrlpriv;
@@ -7904,9 +7876,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		tmp[i] = token;
 		i++;
 	}
-	#ifdef CONFIG_IOL
 	padapter->registrypriv.fw_iol = 0;// 0:Disable, 1:enable, 2:by usb speed
-	#endif
 
 	if (strcmp(tmp[0], "status") == 0){
 		sprintf(extra, "Load File efuse=%s,Load File MAC=%s",(pEEPROM->bloadfile_fail_flag? "FAIL" : "OK"),(pEEPROM->bloadmac_fail_flag? "FAIL" : "OK"));
@@ -8311,9 +8281,7 @@ exit:
 	#ifdef CONFIG_LPS
 	rtw_pm_set_lps(padapter, lps_mode);
 	#endif
-	#ifdef CONFIG_IOL
 	padapter->registrypriv.fw_iol = org_fw_iol;// 0:Disable, 1:enable, 2:by usb speed
-	#endif
 	return err;
 }
 

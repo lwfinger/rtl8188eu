@@ -26,11 +26,7 @@
 
 #include <rtl8188e_hal.h>
 #include <rtl8188e_led.h>
-
-#ifdef CONFIG_IOL
 #include <rtw_iol.h>
-#endif
-
 #include <usb_ops.h>
 #include <usb_hal.h>
 #include <usb_osintf.h>
@@ -1236,7 +1232,7 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 
 _func_enter_;
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 
 #ifdef CONFIG_WOWLAN
 
@@ -1288,8 +1284,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 		goto exit;
 	}
 
-
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_PW_ON);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_PW_ON);
 	status = rtl8188eu_InitPowerOn(Adapter);
 	if (status == _FAIL){
 		RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("Failed to init power on!\n"));
@@ -1315,19 +1310,15 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_PW_ON);
 		txpktbuf_bndy = WMM_NORMAL_TX_PAGE_BOUNDARY_88E;
 	}
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC01);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC01);
 	_InitQueueReservedPage(Adapter);
 	_InitQueuePriority(Adapter);
 	_InitPageBoundary(Adapter);
 	_InitTransferPageSize(Adapter);
 
-#ifdef CONFIG_IOL_IOREG_CFG
 	_InitTxBufferBoundary(Adapter, 0);
-#endif
 
-
-
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
 #if (MP_DRIVER == 1)
 	if (Adapter->registrypriv.mp_mode == 1)
 	{
@@ -1357,7 +1348,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
 	}
 	rtl8188e_InitializeFirmwareVars(Adapter);
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MAC);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MAC);
 #if (HAL_MAC_ENABLE == 1)
 	status = PHY_MACConfig8188E(Adapter);
 	if (status == _FAIL)
@@ -1370,7 +1361,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MAC);
 	/*  */
 	/* d. Initialize BB related configurations. */
 	/*  */
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BB);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BB);
 #if (HAL_BB_ENABLE == 1)
 	status = PHY_BBConfig8188E(Adapter);
 	if (status == _FAIL)
@@ -1381,7 +1372,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BB);
 #endif
 
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
 #if (HAL_RF_ENABLE == 1)
 	status = PHY_RFConfig8188E(Adapter);
 	if (status == _FAIL)
@@ -1391,25 +1382,23 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
 	}
 #endif
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
-#if defined(CONFIG_IOL_EFUSE_PATCH)
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if (status == _FAIL){
 		DBG_88E("%s  rtl8188e_iol_efuse_patch failed\n",__func__);
 		goto exit;
 	}
-#endif
 
 	_InitTxBufferBoundary(Adapter, txpktbuf_bndy);
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_LLTT);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_LLTT);
 	status =  InitLLTTable(Adapter, txpktbuf_bndy);
 	if (status == _FAIL){
 		RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("Failed to init LLT table\n"));
 		goto exit;
 	}
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	/*  Get Rx PHY status in order to report RSSI and others. */
 	_InitDriverInfoSize(Adapter, DRVINFO_SZ);
 

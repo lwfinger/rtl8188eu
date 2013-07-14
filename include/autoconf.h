@@ -63,30 +63,27 @@
  #ifdef	CONFIG_SUPPORT_USB_INT
 #endif
 
-	#define CONFIG_IPS
-	#ifdef CONFIG_IPS
-	#endif
-	#define SUPPORT_HW_RFOFF_DETECTED
+#define CONFIG_IPS
+#ifdef CONFIG_IPS
+#endif
+#define SUPPORT_HW_RFOFF_DETECTED
 
-	#define CONFIG_LPS
-	#if defined(CONFIG_LPS) && defined(CONFIG_SUPPORT_USB_INT)
+#define CONFIG_LPS
+#if defined(CONFIG_LPS) && defined(CONFIG_SUPPORT_USB_INT)
 
-	#endif
+#endif
 
-	#ifdef CONFIG_LPS_LCLK
-	#define CONFIG_XMIT_THREAD_MODE
-	#endif
+#ifdef CONFIG_LPS_LCLK
+#define CONFIG_XMIT_THREAD_MODE
+#endif
 
-	//befor link
-	#define CONFIG_ANTENNA_DIVERSITY
+//befor link
+#define CONFIG_ANTENNA_DIVERSITY
 
-	//after link
-	#ifdef CONFIG_ANTENNA_DIVERSITY
-	#define CONFIG_HW_ANTENNA_DIVERSITY
-	#endif
-
-
-	#define CONFIG_IOL
+//after link
+#ifdef CONFIG_ANTENNA_DIVERSITY
+#define CONFIG_HW_ANTENNA_DIVERSITY
+#endif
 
 #define CONFIG_AP_MODE
 #ifdef CONFIG_AP_MODE
@@ -114,15 +111,6 @@
 #ifdef CONFIG_LED
 	#define CONFIG_SW_LED
 #endif // CONFIG_LED
-
-#ifdef CONFIG_IOL
-	#define CONFIG_IOL_NEW_GENERATION
-	#define CONFIG_IOL_READ_EFUSE_MAP
-	#define CONFIG_IOL_LLT
-	#define CONFIG_IOL_EFUSE_PATCH
-	#define CONFIG_IOL_IOREG_CFG
-#endif
-
 
 #define USB_INTERFERENCE_ISSUE // this should be checked in all usb interface
 #define CONFIG_GLOBAL_UI_PID

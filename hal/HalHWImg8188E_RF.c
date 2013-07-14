@@ -20,9 +20,7 @@
 
 #include "odm_precomp.h"
 
-#ifdef CONFIG_IOL_IOREG_CFG
 #include <rtw_iol.h>
-#endif
 
 #if (RTL8188E_SUPPORT == 1)
 static bool
@@ -176,22 +174,15 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm)
 	u4Byte     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u4Byte);
 	pu4Byte    Array       = Array_RadioA_1T_8188E;
 	bool		biol = false;
-#ifdef CONFIG_IOL_IOREG_CFG
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
 	u8 bndy_cnt = 1;
-	#ifdef CONFIG_IOL_IOREG_CFG_DBG
-	struct cmd_cmp cmpdata[ArrayLen];
-	u4Byte	cmpdata_idx=0;
-	#endif
-#endif/* ifdef CONFIG_IOL_IOREG_CFG */
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 
 	hex += board;
 	hex += interfaceValue << 8;
 	hex += platform << 16;
 	hex += 0xFF000000;
-#ifdef CONFIG_IOL_IOREG_CFG
 	biol = rtw_IOL_applied(Adapter);
 
 	if (biol){
@@ -201,7 +192,6 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm)
 			return HAL_STATUS_FAILURE;
 		}
 	}
-#endif/* ifdef CONFIG_IOL_IOREG_CFG */
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
@@ -211,7 +201,6 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm)
 	    /*  This (offset, data) pair meets the condition. */
 	    if ( v1 < 0xCDCDCDCD )
 	    {
-			#ifdef CONFIG_IOL_IOREG_CFG
 			if (biol){
 				if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 					bndy_cnt++;
@@ -237,16 +226,10 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm)
 				}
 				else{
 					rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u2Byte)v1, v2,bRFRegOffsetMask) ;
-					#ifdef CONFIG_IOL_IOREG_CFG_DBG
-					cmpdata[cmpdata_idx].addr = v1;
-					cmpdata[cmpdata_idx].value= v2;
-					cmpdata_idx++;
-					#endif
 				}
 
 			}
 			else
-			#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
 			{
 				odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 			}
@@ -272,7 +255,6 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm)
 		               v2 != 0xCDEF &&
 		               v2 != 0xCDCD && i < ArrayLen -2)
 		        {
-				#ifdef CONFIG_IOL_IOREG_CFG
 				if (biol){
 					if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 						bndy_cnt++;
@@ -298,17 +280,10 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm)
 					}
 					else{
 						rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u2Byte)v1, v2,bRFRegOffsetMask) ;
-						#ifdef CONFIG_IOL_IOREG_CFG_DBG
-						cmpdata[cmpdata_idx].addr = v1;
-						cmpdata[cmpdata_idx].value= v2;
-						cmpdata_idx++;
-						#endif
-
 					}
 
 				}
 				else
-				#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
 				{
 					odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 				}
@@ -316,55 +291,16 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm)
 		        }
 
 		        while (v2 != 0xDEAD && i < ArrayLen -2)
-		        {
 		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-
 		    }
 		}
 	}
-#ifdef CONFIG_IOL_IOREG_CFG
 	if (biol){
-		if (rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
-		{
-			#ifdef CONFIG_IOL_IOREG_CFG_DBG
-			printk("~~~ %s Success !!!\n",__func__);
-			{
-				u4Byte idx;
-				u4Byte cdata;
-				printk("  %s data compare => array_len:%d\n",__func__,cmpdata_idx);
-				printk("### %s data compared !!###\n",__func__);
-				for (idx=0;idx< cmpdata_idx;idx++)
-				{
-					cdata = ODM_GetRFReg(pDM_Odm, ODM_RF_PATH_A,cmpdata[idx].addr,bRFRegOffsetMask);
-					if (cdata != cmpdata[idx].value){
-						printk("addr:0x%04x, data:(0x%02x : 0x%02x)\n",
-							cmpdata[idx].addr,cmpdata[idx].value,cdata);
-						rst = HAL_STATUS_FAILURE;
-					}
-				}
-				printk("### %s data compared !!###\n",__func__);
-				{/* dump data from TX packet buffer */
-					rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
-				}
-			}
-			#endif /* CONFIG_IOL_IOREG_CFG_DBG */
-
-		}
-		else{
+		if (!rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
 			rst = HAL_STATUS_FAILURE;
 			printk("~~~ IOL Config %s Failed !!!\n",__func__);
-			#ifdef CONFIG_IOL_IOREG_CFG_DBG
-			{
-				/* dump data from TX packet buffer */
-				rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
-			}
-			#endif /* CONFIG_IOL_IOREG_CFG_DBG */
 		}
 	}
-
-
-#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
 	return rst;
 }
 
