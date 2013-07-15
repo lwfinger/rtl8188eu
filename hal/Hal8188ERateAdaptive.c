@@ -15,13 +15,8 @@ Major Change History:
 --*/
 #include "odm_precomp.h"
 
-/* if ( DM_ODM_SUPPORT_TYPE == ODM_MP) */
-/* include "Mp_Precomp.h" */
-/* endif */
-
 #if (RATE_ADAPTIVE_SUPPORT == 1)
 /*  Rate adaptive parameters */
-
 
 static u1Byte RETRY_PENALTY[PERENTRY][RETRYSIZE+1] = {
 		{5,4,3,2,0,3},/* 92 , idx=0 */
@@ -52,27 +47,6 @@ static u1Byte	RETRY_PENALTY_UP[RETRYSIZE+1]={49,44,16,16,0,48};  /*  12% for rat
 
 static u1Byte PT_PENALTY[RETRYSIZE+1]={34,31,30,24,0,32};
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-static u1Byte	RETRY_PENALTY_IDX[2][RATESIZE] =	{
-		{4,4,4,5,4,4,5,7,7,7,8,0x0a,	       /*  SS>TH */
-		4,4,4,4,6,0x0a,0x0b,0x0d,
-		5,5,7,7,8,0x0b,0x0d,0x0f},			   /*  0329 R01 */
-		{0x0a,0x0a,0x0a,0x0a,0x0c,0x0c,0x0e,0x10,0x11,0x12,0x12,0x13,	   /*  SS<TH */
-		0x0e,0x0f,0x10,0x10,0x11,0x14,0x14,0x15,
-		9,9,9,9,0x0c,0x0e,0x11,0x13}};
-
-static u1Byte	RETRY_PENALTY_UP_IDX[RATESIZE] = {
-		0x10,0x10,0x10,0x10,0x11,0x11,0x12,0x12,0x12,0x13,0x13,0x14,	       /*  SS>TH */
-		0x13,0x13,0x14,0x14,0x15,0x15,0x15,0x15,
-		0x11,0x11,0x12,0x13,0x13,0x13,0x14,0x15};
-
-static u1Byte	RSSI_THRESHOLD[RATESIZE] = {
-		0,0,0,0,
-		0,0,0,0,0,0x24,0x26,0x2a,
-		0x13,0x15,0x17,0x18,0x1a,0x1c,0x1d,0x1f,
-		0,0,0,0x1f,0x23,0x28,0x2a,0x2c};
-#else
-
 /*  wilson modify */
 static u1Byte	RETRY_PENALTY_IDX[2][RATESIZE] = {
 		{4,4,4,5,4,4,5,7,7,7,8,0x0a,	       /*  SS>TH */
@@ -94,8 +68,6 @@ static u1Byte	RSSI_THRESHOLD[RATESIZE] = {
 		0,0,0,0,0,0x24,0x26,0x2a,
 		0x18,0x1a,0x1d,0x1f,0x21,0x27,0x29,0x2a,
 		0,0,0,0x1f,0x23,0x28,0x2a,0x2c};
-
-#endif
 
 static u2Byte	N_THRESHOLD_HIGH[RATESIZE] = {
 		4,4,8,16,
@@ -599,16 +571,11 @@ odm_RATxRPTTimerSetting(
 	if (pDM_Odm->CurrminRptTime != minRptTime){
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD,
 		(" CurrminRptTime =0x%04x minRptTime=0x%04x\n", pDM_Odm->CurrminRptTime, minRptTime));
-		#if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_AP))
-		ODM_RA_Set_TxRPT_Time(pDM_Odm,minRptTime);
-		#else
 		rtw_rpt_timer_cfg_cmd(pDM_Odm->Adapter,minRptTime);
-		#endif
 		pDM_Odm->CurrminRptTime = minRptTime;
 	}
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,(" <=====odm_RATxRPTTimerSetting()\n"));
 }
-
 
 void
 ODM_RASupport_Init(
@@ -804,9 +771,6 @@ ODM_RA_Set_TxRPT_Time(
 		u2Byte			minRptTime
 	)
 {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	if (minRptTime != 0xffff)
-#endif
 	ODM_Write2Byte(pDM_Odm, REG_TX_RPT_TIME, minRptTime);
 }
 
@@ -845,21 +809,12 @@ ODM_RA_TxRPT2Handle_8188E(
 		if (valid)
 		{
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE))
 			pRAInfo->RTY[0] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_0(pBuffer);
 			pRAInfo->RTY[1] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_1(pBuffer);
 			pRAInfo->RTY[2] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_2(pBuffer);
 			pRAInfo->RTY[3] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_3(pBuffer);
 			pRAInfo->RTY[4] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_4(pBuffer);
 			pRAInfo->DROP =   (u2Byte)GET_TX_REPORT_TYPE1_DROP_0(pBuffer);
-#else
-			pRAInfo->RTY[0] = (unsigned short)(pBuffer[1] << 8 | pBuffer[0]);
-			pRAInfo->RTY[1] = pBuffer[2];
-			pRAInfo->RTY[2] = pBuffer[3];
-			pRAInfo->RTY[3] = pBuffer[4];
-			pRAInfo->RTY[4] = pBuffer[5];
-			pRAInfo->DROP  =  pBuffer[6];
-#endif
 			pRAInfo->TOTAL = pRAInfo->RTY[0] + \
 							  pRAInfo->RTY[1] + \
 							  pRAInfo->RTY[2] + \
@@ -903,15 +858,6 @@ ODM_RA_TxRPT2Handle_8188E(
 				}
 #else
 				odm_RateDecision_8188E(pDM_Odm, pRAInfo);
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-				extern void RTL8188E_SetStationTxRateInfo(PDM_ODM_T, PODM_RA_INFO_T, int);
-				RTL8188E_SetStationTxRateInfo(pDM_Odm, pRAInfo, MacId);
-#ifdef DETECT_STA_EXISTANCE
-				void RTL8188E_DetectSTAExistance(PDM_ODM_T	pDM_Odm, PODM_RA_INFO_T pRAInfo, int MacID);
-				RTL8188E_DetectSTAExistance(pDM_Odm, pRAInfo, MacId);
-#endif
 #endif
 
 				ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD,

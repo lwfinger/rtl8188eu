@@ -108,16 +108,13 @@ struct phy_info //ODM_PHY_INFO_T
 	u8		SignalQuality;	 // in 0-100 index.
 	u8		RxMIMOSignalQuality[MAX_PATH_NUM_92CS]; //EVM
 	u8		RxMIMOSignalStrength[MAX_PATH_NUM_92CS];// in 0~100 index
-//#if (DM_ODM_SUPPORT_TYPE &  (ODM_MP|ODM_CE))
 	s8		RxPower; // in dBm Translate from PWdB
 	s8		RecvSignalPower;// Real power in dBm for this packet, no beautification and aggregation. Keep this raw info to be used for the other procedures.
 	u8		BTRxRSSIPercentage;
 	u8		SignalStrength; // in 0-100 index.
 	u8		RxPwr[MAX_PATH_NUM_92CS];//per-path's pwdb
 	u8		RxSNR[MAX_PATH_NUM_92CS];//per-path's SNR
-//#endif
 };
-
 
 struct rx_pkt_attrib	{
 	u16	pkt_len;

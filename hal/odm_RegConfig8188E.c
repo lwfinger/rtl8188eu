@@ -149,12 +149,8 @@ odm_ConfigBB_PHY_REG_PG_8188E(
 	}
 	else{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_LOUD, ("===> @@@@@@@ ODM_ConfigBBWithHeaderFile: [PHY_REG] %08X %08X %08X\n", Addr, Bitmask, Data));
-
-	#if	!(DM_ODM_SUPPORT_TYPE&ODM_AP)
 		storePwrIndexDiffRateOffset(pDM_Odm->Adapter, Addr, Bitmask, Data);
-	#endif
 	}
-
 }
 
 void

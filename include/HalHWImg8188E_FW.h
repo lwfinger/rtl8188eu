@@ -26,10 +26,6 @@
 /******************************************************************************
 *                           FW_AP.TXT
 ******************************************************************************/
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-void ODM_ReadFirmware_8188E_FW_AP(PDM_ODM_T    pDM_Odm, u1Byte *pFirmware, u4Byte *pFirmwareSize);
-
-#else
 /******************************************************************************
 *                           FW_WoWLAN.TXT
 ******************************************************************************/
@@ -37,5 +33,4 @@ void ODM_ReadFirmware_8188E_FW_AP(PDM_ODM_T    pDM_Odm, u1Byte *pFirmware, u4Byt
 extern const u8 Array_8188E_FW_WoWLAN[ArrayLength_8188E_FW_WoWLAN];
 #endif
 
-#endif
 #endif // end of HWIMG_SUPPORT

@@ -96,15 +96,8 @@
 #define ODM_COMP_INIT					BIT31
 
 /*------------------------Export Marco Definition---------------------------*/
-#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-#define RT_PRINTK				DbgPrint
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	#define DbgPrint	printk
 	#define RT_PRINTK(fmt, args...)	DbgPrint( "%s(): " fmt, __func__, ## args);
-#else
-	#define DbgPrint	panic_printk
-#define RT_PRINTK(fmt, args...)	DbgPrint( "%s(): " fmt, __func__, ## args);
-#endif
 
 #ifndef ASSERT
 	#define ASSERT(expr)

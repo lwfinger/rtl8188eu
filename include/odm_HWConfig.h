@@ -170,7 +170,7 @@ ODM_MacStatusQuery(
 			bool						bPacketToSelf,
 			bool						bPacketBeacon
 	);
-#if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE|ODM_AP))
+
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
 		PDM_ODM_T	      pDM_Odm,
@@ -188,7 +188,5 @@ HAL_STATUS
 ODM_ConfigMACWithHeaderFile(
 		PDM_ODM_T	pDM_Odm
     );
-#endif
-
 
 #endif
