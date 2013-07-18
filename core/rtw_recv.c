@@ -2503,13 +2503,6 @@ static int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prfram
 
 			return _SUCCESS;
 		}
-
-#ifndef CONFIG_RECV_REORDERING_CTRL
-		/* indicate this recv_frame */
-		rtw_recv_indicatepkt(padapter, prframe);
-		return _SUCCESS;
-#endif
-
 	}
 	else if (pattrib->amsdu==1) /* temp filter -> means didn't support A-MSDUs in a A-MPDU */
 	{
