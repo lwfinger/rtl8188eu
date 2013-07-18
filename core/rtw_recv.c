@@ -2246,9 +2246,6 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 
 		/* Indicat the packets to upper layer */
 		if (sub_skb) {
-			/* memset(sub_skb->cb, 0, sizeof(sub_skb->cb)); */
-
-#ifdef CONFIG_BR_EXT
 			/*  Insert NAT2.5 RX here! */
 			struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 
@@ -2257,7 +2254,6 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 			rcu_read_unlock();
 #endif  /*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
 
-#endif	/*  CONFIG_BR_EXT */
 			sub_skb->protocol = eth_type_trans(sub_skb, padapter->pnetdev);
 			sub_skb->dev = padapter->pnetdev;
 

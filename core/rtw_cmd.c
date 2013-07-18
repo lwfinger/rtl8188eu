@@ -25,9 +25,7 @@
 #include <recv_osdep.h>
 #include <cmd_osdep.h>
 #include <mlme_osdep.h>
-#ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
-#endif /* CONFIG_BR_EXT */
 #include <rtw_mlme_ext.h>
 
 #ifdef CONFIG_BT_COEXIST
@@ -2610,8 +2608,7 @@ void rtw_disassoc_cmd_callback(_adapter*	padapter,  struct cmd_obj *pcmd)
 
 _func_enter_;
 
-	if (pcmd->res != H2C_SUCCESS)
-	{
+	if (pcmd->res != H2C_SUCCESS) {
 		_enter_critical_bh(&pmlmepriv->lock, &irqL);
 		set_fwstate(pmlmepriv, _FW_LINKED);
 		_exit_critical_bh(&pmlmepriv->lock, &irqL);
@@ -2619,11 +2616,8 @@ _func_enter_;
 		RT_TRACE(_module_rtl871x_cmd_c_,_drv_err_,("\n ***Error: disconnect_cmd_callback Fail ***\n."));
 
 		goto exit;
-	}
-#ifdef CONFIG_BR_EXT
-	else /* clear bridge database */
+	} else /* clear bridge database */
 		nat25_db_cleanup(padapter);
-#endif /* CONFIG_BR_EXT */
 
 	/*  free cmd */
 	rtw_free_cmd_obj(pcmd);

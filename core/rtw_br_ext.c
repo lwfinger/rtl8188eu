@@ -47,10 +47,6 @@
 #endif
 #endif
 
-#ifdef CONFIG_BR_EXT
-
-/* define BR_EXT_DEBUG */
-
 #define NAT25_IPV4		01
 #define NAT25_IPV6		02
 #define NAT25_IPX		03
@@ -1657,5 +1653,3 @@ void *scdb_findEntry(_adapter *priv, unsigned char *macAddr,
 	/* _exit_critical_bh(&priv->br_ext_lock, &irqL); */
 	return NULL;
 }
-
-#endif	/*  CONFIG_BR_EXT */

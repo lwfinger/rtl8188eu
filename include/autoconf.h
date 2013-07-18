@@ -101,10 +101,7 @@
 
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 
-#define CONFIG_BR_EXT		// Enable NAT2.5 support for STA mode interface with a L2 Bridge
-#ifdef CONFIG_BR_EXT
 #define CONFIG_BR_EXT_BRNAME	"br0"
-#endif	// CONFIG_BR_EXT
 
 /*
  * Interface  Related Config

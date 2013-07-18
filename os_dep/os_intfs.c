@@ -31,10 +31,7 @@
 
 #include <usb_osintf.h>
 #include <usb_hal.h>
-
-#ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
-#endif //CONFIG_BR_EXT
 
 #ifdef CONFIG_RF_GAIN_OFFSET
 #define		REG_RF_BB_GAIN_OFFSET	0x55
@@ -1203,9 +1200,7 @@ _func_enter_;
 	rtw_hal_sreset_init(padapter);
 #endif
 
-#ifdef CONFIG_BR_EXT
 	_rtw_spinlock_init(&padapter->br_ext_lock);
-#endif	// CONFIG_BR_EXT
 
 exit:
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-rtw_init_drv_sw\n"));
@@ -1284,9 +1279,7 @@ u8 rtw_free_drv_sw(_adapter *padapter)
 	#endif
 
 
-#ifdef CONFIG_BR_EXT
 	_rtw_spinlock_free(&padapter->br_ext_lock);
-#endif	// CONFIG_BR_EXT
 
 	free_mlme_ext_priv(&padapter->mlmeextpriv);
 
@@ -1331,7 +1324,6 @@ u8 rtw_free_drv_sw(_adapter *padapter)
 	return _SUCCESS;
 }
 
-#ifdef CONFIG_BR_EXT
 void netdev_br_init(struct net_device *netdev)
 {
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(netdev);
@@ -1376,7 +1368,6 @@ void netdev_br_init(struct net_device *netdev)
 	rcu_read_unlock();
 #endif	// (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
 }
-#endif //CONFIG_BR_EXT
 
 int _netdev_open(struct net_device *pnetdev)
 {
@@ -1447,9 +1438,7 @@ int _netdev_open(struct net_device *pnetdev)
 	else
 		rtw_netif_wake_queue(pnetdev);
 
-#ifdef CONFIG_BR_EXT
 	netdev_br_init(pnetdev);
-#endif	// CONFIG_BR_EXT
 
 netdev_open_normal_process:
 
@@ -1631,9 +1620,7 @@ static int netdev_close(struct net_device *pnetdev)
 		rtw_led_control(padapter, LED_CTL_POWER_OFF);
 	}
 
-#ifdef CONFIG_BR_EXT
 	nat25_db_cleanup(padapter);
-#endif	// CONFIG_BR_EXT
 
 #ifdef CONFIG_P2P
 	#ifdef CONFIG_IOCTL_CFG80211

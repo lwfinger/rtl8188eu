@@ -172,10 +172,7 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 	_queue	*pfree_recv_queue;
 	_pkt *skb;
 	struct mlme_priv*pmlmepriv = &padapter->mlmepriv;
-
-#ifdef CONFIG_BR_EXT
 	void *br_port = NULL;
-#endif
 
 _func_enter_;
 
@@ -254,9 +251,6 @@ _func_enter_;
 		}
 	}
 
-
-#ifdef CONFIG_BR_EXT
-
 #if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
 	br_port = padapter->pnetdev->br_port;
 #else   // (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
@@ -264,23 +258,6 @@ _func_enter_;
 	br_port = rcu_dereference(padapter->pnetdev->rx_handler_data);
 	rcu_read_unlock();
 #endif  // (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-
-	if ( br_port	&& (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true) )
-	{
-		if (nat25_handle_frame(padapter, skb) == -1) {
-			//priv->ext_stats.rx_data_drops++;
-			//DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n");
-			//return FAIL;
-#if 1
-			// bypass this frame to upper layer!!
-#else
-			goto _recv_indicatepkt_drop;
-#endif
-		}
-	}
-
-#endif	// CONFIG_BR_EXT
-
 
 	skb->ip_summed = CHECKSUM_NONE;
 	skb->dev = padapter->pnetdev;
