@@ -35,10 +35,7 @@
 #include <usb_hal.h>
 #include <rtw_ioctl.h>
 
-#ifdef CONFIG_GLOBAL_UI_PID
 int ui_pid[3] = {0, 0, 0};
-#endif
-
 
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
@@ -1379,12 +1376,10 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		goto free_dvobj;
 	}
 
-#ifdef CONFIG_GLOBAL_UI_PID
-	if (ui_pid[1]!=0) {
+	if (ui_pid[1] != 0) {
 		DBG_88E("ui_pid[1]:%d\n",ui_pid[1]);
 		rtw_signal_process(ui_pid[1], SIGUSR2);
 	}
-#endif
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-871x_drv - drv_init, success!\n"));
 

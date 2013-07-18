@@ -133,8 +133,7 @@ extern	NDIS_STATUS	drv_set_info(
 		u32*			BytesRead,
 		u32*			BytesNeeded
 	);
-#ifdef CONFIG_GLOBAL_UI_PID
+
 extern int ui_pid[3];
-#endif
 
 #endif // #ifndef __INC_CEINFO_
