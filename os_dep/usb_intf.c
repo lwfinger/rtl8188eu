@@ -758,25 +758,11 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	} else {
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 		rtw_resume_in_workqueue(pwrpriv);
-#elif defined(CONFIG_HAS_EARLYSUSPEND)
-#ifdef CONFIG_WOWLAN
-		if (rtw_is_earlysuspend_registered(pwrpriv) &&
-			!padapter->pwrctrlpriv.wowlan_mode) {
-#else
-		if (rtw_is_earlysuspend_registered(pwrpriv)) {
-#endif //CONFIG_WOWLAN
-			//jeff: bypass resume here, do in late_resume
-			pwrpriv->do_late_resume = true;
-		} else {
-			ret = rtw_resume_process(padapter);
-		}
 #else // Normal resume process
 		ret = rtw_resume_process(padapter);
 #endif //CONFIG_RESUME_IN_WORKQUEUE
 	}
-
 	return ret;
-
 }
 
 int rtw_resume_process(_adapter *padapter)
@@ -1441,10 +1427,6 @@ _func_enter_;
 		//DBG_88E("r871xu_dev_remove():module removed\n");
 		padapter->hw_init_completed = false;
 	}*/
-
-#if defined(CONFIG_HAS_EARLYSUSPEND)
-	rtw_unregister_early_suspend(&padapter->pwrctrlpriv);
-#endif
 
 	rtw_pm_set_ips(padapter, IPS_NONE);
 	rtw_pm_set_lps(padapter, PS_MODE_ACTIVE);
