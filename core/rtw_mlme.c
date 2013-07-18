@@ -1032,24 +1032,16 @@ _func_enter_;
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("nic status =%x, survey done event comes too late!\n", get_fwstate(pmlmepriv)));
 	}
 
-	#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&adapter->recvpriv);
-	#endif
 
-	if (pmlmepriv->to_join == true)
-	{
-		if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==true) )
-		{
-			if (check_fwstate(pmlmepriv, _FW_LINKED)==false)
-			{
+	if (pmlmepriv->to_join == true) {
+		if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==true) ) {
+			if (check_fwstate(pmlmepriv, _FW_LINKED)==false) {
 				set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
 
-				if (rtw_select_and_join_from_scanned_queue(pmlmepriv)==_SUCCESS)
-				{
+				if (rtw_select_and_join_from_scanned_queue(pmlmepriv)==_SUCCESS) {
 					_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT );
-				}
-				else
-				{
+				} else {
 					WLAN_BSSID_EX    *pdev_network = &(adapter->registrypriv.dev_network);
 					u8 *pibss = adapter->registrypriv.dev_network.MacAddress;
 
@@ -1073,29 +1065,21 @@ _func_enter_;
 					pmlmepriv->to_join = false;
 				}
 			}
-		}
-		else
-		{
+		} else {
 			int s_ret;
 			set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
 			pmlmepriv->to_join = false;
-			if (_SUCCESS == (s_ret=rtw_select_and_join_from_scanned_queue(pmlmepriv)))
-			{
+			if (_SUCCESS == (s_ret=rtw_select_and_join_from_scanned_queue(pmlmepriv))) {
 			     _set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
-			}
-			else if (s_ret == 2)/* there is no need to wait for join */
-			{
+			} else if (s_ret == 2) { /* there is no need to wait for join */
 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 				rtw_indicate_connect(adapter);
-			}
-			else
-			{
+			} else {
 				DBG_88E("try_to_join, but select scanning queue fail, to_roaming:%d\n", pmlmepriv->to_roaming);
 
 				if (pmlmepriv->to_roaming!=0) {
-					if ( --pmlmepriv->to_roaming == 0
-						|| _SUCCESS != rtw_sitesurvey_cmd(adapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)
-					) {
+					if (--pmlmepriv->to_roaming == 0 ||
+					    _SUCCESS != rtw_sitesurvey_cmd(adapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) {
 						pmlmepriv->to_roaming = 0;
 						rtw_free_assoc_resources(adapter, 1);
 						rtw_indicate_disconnect(adapter);
@@ -1480,9 +1464,7 @@ static void rtw_joinbss_update_network(_adapter *padapter, struct wlan_network *
 	cur_network->aid = pnetwork->join_res;
 
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
-#endif
 	padapter->recvpriv.signal_strength = ptarget_wlan->network.PhyInfo.SignalStrength;
 	padapter->recvpriv.signal_qual = ptarget_wlan->network.PhyInfo.SignalQuality;
 	/* the ptarget_wlan->network.Rssi is raw data, we use ptarget_wlan->network.PhyInfo.SignalStrength instead (has scaled) */
@@ -1496,9 +1478,7 @@ static void rtw_joinbss_update_network(_adapter *padapter, struct wlan_network *
 			, padapter->recvpriv.signal_qual
 	);
 	#endif
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
-#endif
 
 	/* update fw_state will clr _FW_UNDER_LINKING here indirectly */
 	switch (pnetwork->network.InfrastructureMode)

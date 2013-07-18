@@ -1113,13 +1113,10 @@ u8 rtw_reset_drv_sw(_adapter *padapter)
 	//mlmeextpriv
 	padapter->mlmeextpriv.sitesurvey_res.state= SCAN_DISABLE;
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
-#endif
 
 	return ret8;
 }
-
 
 u8 rtw_init_drv_sw(_adapter *padapter)
 {
@@ -1256,9 +1253,7 @@ void rtw_cancel_all_timer(_adapter *padapter)
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel set_scan_deny_timer!\n"));
 #endif
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	_cancel_timer_ex(&padapter->recvpriv.signal_stat_timer);
-#endif
 #if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
 	if (padapter->HalFunc.hal_cancel_checkbthang_workqueue)
 		padapter->HalFunc.hal_cancel_checkbthang_workqueue(padapter);

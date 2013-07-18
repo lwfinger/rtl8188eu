@@ -30,10 +30,7 @@
 #include <wifi.h>
 #include <circ_buf.h>
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
-
 
 void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
 {
@@ -104,14 +101,11 @@ _func_enter_;
 
 	res = rtw_hal_init_recv_priv(padapter);
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	_init_timer(&precvpriv->signal_stat_timer, padapter->pnetdev, RTW_TIMER_HDL_NAME(signal_stat), padapter);
 
 	precvpriv->signal_stat_sampling_interval = 1000; /* ms */
 
 	rtw_set_signal_stat_timer(precvpriv);
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
-
 exit:
 
 _func_exit_;
@@ -2983,7 +2977,6 @@ _func_exit_;
 	return ret;
 }
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
 	_adapter *adapter = (_adapter *)FunctionContext;
 	struct recv_priv *recvpriv = &adapter->recvpriv;
@@ -3061,4 +3054,3 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
 	rtw_set_signal_stat_timer(recvpriv);
 
 }
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */

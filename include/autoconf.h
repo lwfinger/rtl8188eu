@@ -99,7 +99,6 @@
 
 #define CONFIG_SKB_COPY	//for amsdu
 
-#define CONFIG_NEW_SIGNAL_STAT_PROCESS
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 
 #define CONFIG_BR_EXT		// Enable NAT2.5 support for STA mode interface with a L2 Bridge
