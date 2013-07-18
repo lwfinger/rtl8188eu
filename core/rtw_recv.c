@@ -2173,33 +2173,24 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 		a_len -= ETH_HLEN;
 
 		/* Allocate new skb for releasing to upper layer */
-#ifdef CONFIG_SKB_COPY
 		sub_skb = dev_alloc_skb(nSubframe_Length + 12);
-		if (sub_skb)
-		{
+		if (sub_skb) {
 			skb_reserve(sub_skb, 12);
 			data_ptr = (u8 *)skb_put(sub_skb, nSubframe_Length);
 			_rtw_memcpy(data_ptr, pdata, nSubframe_Length);
-		}
-		else
-#endif /*  CONFIG_SKB_COPY */
-		{
+		} else {
 			sub_skb = skb_clone(prframe->u.hdr.pkt, GFP_ATOMIC);
-			if (sub_skb)
-			{
+			if (sub_skb) {
 				sub_skb->data = pdata;
 				sub_skb->len = nSubframe_Length;
 				skb_set_tail_pointer(sub_skb, nSubframe_Length);
-			}
-			else
-			{
+			} else {
 				DBG_88E("skb_clone() Fail!!! , nr_subframes = %d\n",nr_subframes);
 				break;
 			}
 		}
 
 
-		/* sub_skb->dev = padapter->pnetdev; */
 		subframes[nr_subframes++] = sub_skb;
 
 		if (nr_subframes >= MAX_SUBFRAME_COUNT) {

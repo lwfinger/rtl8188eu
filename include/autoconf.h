@@ -97,8 +97,6 @@
 	#define CONFIG_P2P_PS
 #endif
 
-#define CONFIG_SKB_COPY	//for amsdu
-
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 
 #define CONFIG_BR_EXT_BRNAME	"br0"
