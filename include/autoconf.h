@@ -99,13 +99,6 @@
 
 #define CONFIG_SKB_COPY	//for amsdu
 
-#define CONFIG_LED
-#ifdef CONFIG_LED
-	#define CONFIG_SW_LED
-#endif // CONFIG_LED
-
-#define USB_INTERFERENCE_ISSUE // this should be checked in all usb interface
-
 #define CONFIG_NEW_SIGNAL_STAT_PROCESS
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 

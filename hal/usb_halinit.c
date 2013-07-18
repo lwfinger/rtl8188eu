@@ -711,18 +711,10 @@ _InitEDCA(
 	rtw_write32(Adapter, REG_EDCA_VO_PARAM, 0x002FA226);
 }
 
-
-static void
-_InitBeaconMaxError(
-	PADAPTER	Adapter,
-		bool		InfraMode
-	)
+static void _InitBeaconMaxError(PADAPTER	Adapter, bool		InfraMode)
 {
-
 }
 
-
-#ifdef CONFIG_LED
 static void _InitHWLed(PADAPTER Adapter)
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
@@ -735,12 +727,8 @@ static void _InitHWLed(PADAPTER Adapter)
 /* must consider cases of antenna diversity/ commbo card/solo card/mini card */
 
 }
-#endif /* CONFIG_LED */
 
-static void
-_InitRDGSetting(
-		PADAPTER Adapter
-	)
+static void _InitRDGSetting(PADAPTER Adapter)
 {
 	rtw_write8(Adapter,REG_RD_CTRL,0xFF);
 	rtw_write16(Adapter, REG_RD_NAV_NXT, 0x200);
@@ -1476,10 +1464,7 @@ _func_enter_;
 	rtw_write16(Adapter, REG_PKT_VO_VI_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 	rtw_write16(Adapter, REG_PKT_BE_BK_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 
-#ifdef CONFIG_LED
 	_InitHWLed(Adapter);
-#endif /* CONFIG_LED */
-
 
 	/*  */
 	/*  Joseph Note: Keep RfRegChnlVal for later use. */
@@ -1828,7 +1813,6 @@ _ReadLEDSetting(
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-#ifdef CONFIG_SW_LED
 	pledpriv->bRegUseLed = true;
 
 	switch (pHalData->CustomerID)
@@ -1838,9 +1822,6 @@ _ReadLEDSetting(
 			break;
 	}
 	pHalData->bLedOpenDrain = true;/*  Support Open-drain arrangement for controlling the LED. Added by Roger, 2009.10.16. */
-#else /*  HW LED */
-	pledpriv->LedStrategy = HW_LED;
-#endif /* CONFIG_SW_LED */
 }
 
 static void
@@ -3662,13 +3643,8 @@ _func_enter_;
 
 	pHalFunc->init_recv_priv = &rtl8188eu_init_recv_priv;
 	pHalFunc->free_recv_priv = &rtl8188eu_free_recv_priv;
-#ifdef CONFIG_SW_LED
 	pHalFunc->InitSwLeds = &rtl8188eu_InitSwLeds;
 	pHalFunc->DeInitSwLeds = &rtl8188eu_DeInitSwLeds;
-#else /* case of hw led or no led */
-	pHalFunc->InitSwLeds = NULL;
-	pHalFunc->DeInitSwLeds = NULL;
-#endif/* CONFIG_SW_LED */
 
 	pHalFunc->init_default_value = &rtl8188eu_init_default_value;
 	pHalFunc->intf_chip_configure = &rtl8188eu_interface_configure;

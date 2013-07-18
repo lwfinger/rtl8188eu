@@ -36,11 +36,7 @@ void BlinkTimerCallback(void *data)
 		return;
 	}
 
-	#ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
-	rtw_led_blink_cmd(padapter, pLed);
-	#else
 	_set_workitem(&(pLed->BlinkWorkItem));
-	#endif
 }
 
 /*  */
@@ -120,8 +116,6 @@ DeInitLed871x(
 
 void SwLedOn(_adapter *padapter, PLED_871x pLed);
 void SwLedOff(_adapter	*padapter, PLED_871x	pLed);
-
-#define CONFIG_LED_REMOVE_HAL
 
 static void
 SwLedBlink(
@@ -247,18 +241,10 @@ SwLedBlink1(
 	)
 {
 	_adapter				*padapter = pLed->padapter;
-#ifndef CONFIG_LED_REMOVE_HAL
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
-#endif
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 	PLED_871x			pLed1 = &(ledpriv->SwLed1);
 	u8					bStopBlinking = false;
-
-#ifndef CONFIG_LED_REMOVE_HAL
-	if (pHalData->EEPROMCustomerID == RT_CID_819x_CAMEO)
-		pLed = &(ledpriv->SwLed1);
-#endif
 
 	/*  Change LED according to BlinkingLedState specified. */
 	if ( pLed->BlinkingLedState == RTW_LED_ON )
@@ -271,35 +257,6 @@ SwLedBlink1(
 		SwLedOff(padapter, pLed);
 		RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Blinktimes (%d): turn off\n", pLed->BlinkTimes));
 	}
-
-#ifndef CONFIG_LED_REMOVE_HAL
-	if (pHalData->EEPROMCustomerID == RT_CID_DEFAULT)
-	{
-		if (check_fwstate(pmlmepriv, _FW_LINKED)== true)
-		{
-			if (!pLed1->bSWLedCtrl)
-			{
-				SwLedOn(padapter, pLed1);
-				pLed1->bSWLedCtrl = true;
-			}
-			else if (!pLed1->bLedOn)
-				SwLedOn(padapter, pLed1);
-			RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Blinktimes (): turn on pLed1\n"));
-		}
-		else
-		{
-			if (!pLed1->bSWLedCtrl)
-			{
-				SwLedOff(padapter, pLed1);
-				pLed1->bSWLedCtrl = true;
-			}
-			else if (pLed1->bLedOn)
-				SwLedOff(padapter, pLed1);
-			RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Blinktimes (): turn off pLed1\n"));
-		}
-	}
-
-#endif
 
 	if ( padapter->pwrctrlpriv.rf_pwrstate != rf_on )
 	{
@@ -1208,20 +1165,11 @@ SwLedControlMode1(
 	LED_CTL_MODE		LedAction
 )
 {
-#ifndef CONFIG_LED_REMOVE_HAL
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
-#endif
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
 	PLED_871x			pLed = &(ledpriv->SwLed0);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 
-#ifndef CONFIG_LED_REMOVE_HAL
-	if (pHalData->EEPROMCustomerID == RT_CID_819x_CAMEO)
-		pLed = &(ledpriv->SwLed1);
-#endif
-
-	switch (LedAction)
-	{
+	switch (LedAction) {
 		case LED_CTL_POWER_ON:
 		case LED_CTL_START_TO_LINK:
 		case LED_CTL_NO_LINK:
@@ -2159,20 +2107,11 @@ SwLedControlMode5(
 	LED_CTL_MODE		LedAction
 )
 {
-#ifndef CONFIG_LED_REMOVE_HAL
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-#endif
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	PLED_871x		pLed = &(ledpriv->SwLed0);
 
-#ifndef CONFIG_LED_REMOVE_HAL
-	if (pHalData->EEPROMCustomerID == RT_CID_819x_CAMEO)
-		pLed = &(ledpriv->SwLed1);
-#endif
-
-	switch (LedAction)
-	{
+	switch (LedAction) {
 		case LED_CTL_POWER_ON:
 		case LED_CTL_NO_LINK:
 		case LED_CTL_LINK:	/* solid blue */
