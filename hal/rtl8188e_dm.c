@@ -176,13 +176,8 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 
 	ODM_CmnInfoInit(pDM_Odm, ODM_CMNINFO_RF_ANTENNA_TYPE, pHalData->TRxAntDivType);
 
-	#ifdef CONFIG_DISABLE_ODM
-	pdmpriv->InitODMFlag = 0;
-	#else
-	pdmpriv->InitODMFlag =	ODM_RF_CALIBRATION		|
-							ODM_RF_TX_PWR_TRACK	/*  */
-							;
-	#endif
+	pdmpriv->InitODMFlag =	ODM_RF_CALIBRATION |
+				ODM_RF_TX_PWR_TRACK;
 
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,pdmpriv->InitODMFlag);
 
@@ -196,23 +191,19 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	int i;
-	#ifdef CONFIG_DISABLE_ODM
-	pdmpriv->InitODMFlag = 0;
-	#else /* CONFIG_DISABLE_ODM */
 
-	pdmpriv->InitODMFlag =	ODM_BB_DIG				|
+	pdmpriv->InitODMFlag =	ODM_BB_DIG		|
 #ifdef	CONFIG_ODM_REFRESH_RAMASK
-							ODM_BB_RA_MASK		|
+				ODM_BB_RA_MASK		|
 #endif
-							ODM_BB_DYNAMIC_TXPWR	|
-							ODM_BB_FA_CNT			|
-							ODM_BB_RSSI_MONITOR	|
-							ODM_BB_CCK_PD			|
-							ODM_BB_PWR_SAVE		|
-							ODM_MAC_EDCA_TURBO	|
-							ODM_RF_CALIBRATION		|
-							ODM_RF_TX_PWR_TRACK
-							;
+				ODM_BB_DYNAMIC_TXPWR	|
+				ODM_BB_FA_CNT		|
+				ODM_BB_RSSI_MONITOR	|
+				ODM_BB_CCK_PD		|
+				ODM_BB_PWR_SAVE		|
+				ODM_MAC_EDCA_TURBO	|
+				ODM_RF_CALIBRATION	|
+				ODM_RF_TX_PWR_TRACK ;
 	if (pHalData->AntDivCfg)
 		pdmpriv->InitODMFlag |= ODM_BB_ANT_DIV;
 
@@ -224,7 +215,6 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 		}
 	#endif/* MP_DRIVER==1) */
 
-	#endif/* CONFIG_DISABLE_ODM */
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,pdmpriv->InitODMFlag);
 
 	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_TX_UNI,&(Adapter->xmitpriv.tx_bytes));
@@ -312,13 +302,9 @@ _record_initrate:
 
 
 	/* ODM */
-	if (hw_init_completed == true)
-	{
+	if (hw_init_completed == true) {
 		struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
 		u8	bLinked=false;
-		#ifdef CONFIG_DISABLE_ODM
-		pHalData->odmpriv.SupportAbility = 0;
-		#endif
 
 		if (	(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) ||
 			(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE|WIFI_ADHOC_MASTER_STATE) == true))
