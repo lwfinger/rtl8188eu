@@ -86,41 +86,6 @@ _func_exit_;
 
 void rtw_set_tx_chksum_offload(_pkt *pkt, struct pkt_attrib *pattrib)
 {
-
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-	struct sk_buff *skb = (struct sk_buff *)pkt;
-	pattrib->hw_tcp_csum = 0;
-
-	if (skb->ip_summed == CHECKSUM_PARTIAL) {
-		if (skb_shinfo(skb)->nr_frags == 0)
-		{
-                        const struct iphdr *ip = ip_hdr(skb);
-                        if (ip->protocol == IPPROTO_TCP) {
-                                // TCP checksum offload by HW
-                                DBG_88E("CHECKSUM_PARTIAL TCP\n");
-                                pattrib->hw_tcp_csum = 1;
-                                //skb_checksum_help(skb);
-                        } else if (ip->protocol == IPPROTO_UDP) {
-                                //DBG_88E("CHECKSUM_PARTIAL UDP\n");
-#if 1
-                                skb_checksum_help(skb);
-#else
-                                // Set UDP checksum = 0 to skip checksum check
-                                struct udphdr *udp = skb_transport_header(skb);
-                                udp->check = 0;
-#endif
-                        } else {
-				DBG_88E("%s-%d TCP CSUM offload Error!!\n", __func__, __LINE__);
-                                WARN_ON(1);     /* we need a WARN() */
-			    }
-		}
-		else { // IP fragmentation case
-			DBG_88E("%s-%d nr_frags != 0, using skb_checksum_help(skb);!!\n", __func__, __LINE__);
-			skb_checksum_help(skb);
-		}
-	}
-#endif
-
 }
 
 int rtw_os_xmit_resource_alloc(_adapter *padapter, struct xmit_buf *pxmitbuf,u32 alloc_sz)

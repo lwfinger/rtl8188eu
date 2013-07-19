@@ -942,11 +942,6 @@ struct net_device *rtw_init_netdev(_adapter *old_padapter)
 	pnetdev->get_stats = rtw_net_get_stats;
 	pnetdev->do_ioctl = rtw_ioctl;
 #endif
-
-
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-	pnetdev->features |= NETIF_F_IP_CSUM;
-#endif
 	pnetdev->watchdog_timeo = HZ*3; /* 3 second timeout */
 #ifdef CONFIG_WIRELESS_EXT
 	pnetdev->wireless_handlers = (struct iw_handler_def *)&rtw_handlers_def;

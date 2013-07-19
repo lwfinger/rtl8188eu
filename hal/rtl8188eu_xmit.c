@@ -343,18 +343,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 
 			ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
 		}
-
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-		/* offset 24 */
-		if ( pattrib->hw_tcp_csum == 1 ) {
-			u8 ip_hdr_offset = 32 + pattrib->hdrlen + pattrib->iv_len + 8;
-			ptxdesc->txdw7 = (1 << 31) | (ip_hdr_offset << 16);
-			DBG_88E("ptxdesc->txdw7 = %08x\n", ptxdesc->txdw7);
-		}
-#endif
-	}
-	else if ((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG)
-	{
+	} else if ((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG) {
 
 		/* offset 4 */
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x3f);

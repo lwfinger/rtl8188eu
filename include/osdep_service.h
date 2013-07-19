@@ -68,11 +68,6 @@
 #include <net/cfg80211.h>
 #endif //CONFIG_IOCTL_CFG80211
 
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-#include <linux/in.h>
-#include <linux/udp.h>
-#endif
-
 #include <linux/usb.h>
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,21))
 #include <linux/usb_ch9.h>
