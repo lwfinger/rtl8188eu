@@ -429,67 +429,6 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	return pull;
 }
 
-
-#ifdef CONFIG_XMIT_THREAD_MODE
-/*
- * Description
- *	Transmit xmitbuf to hardware tx fifo
- *
- * Return
- *	_SUCCESS	ok
- *	_FAIL		something error
- */
-s32 rtl8188eu_xmit_buf_handler(PADAPTER padapter)
-{
-	struct xmit_priv *pxmitpriv;
-	struct xmit_buf *pxmitbuf;
-	s32 ret;
-
-
-	pxmitpriv = &padapter->xmitpriv;
-	ret = _rtw_down_sema(&pxmitpriv->xmit_sema);
-	if (_FAIL == ret) {
-		RT_TRACE(_module_hal_xmit_c_, _drv_emerg_,
-				 ("%s: down SdioXmitBufSema fail!\n", __func__));
-		return _FAIL;
-	}
-
-	ret = (padapter->bDriverStopped == true) || (padapter->bSurpriseRemoved == true);
-	if (ret) {
-		RT_TRACE(_module_hal_xmit_c_, _drv_notice_,
-				 ("%s: bDriverStopped(%d) bSurpriseRemoved(%d)!\n",
-				  __func__, padapter->bDriverStopped, padapter->bSurpriseRemoved));
-		return _FAIL;
-	}
-
-	if (check_pending_xmitbuf(pxmitpriv) == false)
-		return _SUCCESS;
-
-#ifdef CONFIG_LPS_LCLK
-	ret = rtw_register_tx_alive(padapter);
-	if (ret != _SUCCESS) {
-		RT_TRACE(_module_hal_xmit_c_, _drv_notice_,
-				 ("%s: wait to leave LPS_LCLK\n", __func__));
-		return _SUCCESS;
-	}
-#endif
-
-	do {
-		pxmitbuf = dequeue_pending_xmitbuf(pxmitpriv);
-		if (pxmitbuf == NULL) break;
-
-		rtw_write_port(padapter, pxmitbuf->ff_hwaddr, pxmitbuf->len, (unsigned char*)pxmitbuf);
-
-	} while (1);
-
-#ifdef CONFIG_LPS_LCLK
-	rtw_unregister_tx_alive(padapter);
-#endif
-
-	return _SUCCESS;
-}
-#endif
-
 /* for non-agg data frame or  management frame */
 static s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
@@ -549,13 +488,7 @@ static s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 		}
 		ff_hwaddr = rtw_get_ff_hwaddr(pxmitframe);
 
-#ifdef CONFIG_XMIT_THREAD_MODE
-		pxmitbuf->len = w_sz;
-		pxmitbuf->ff_hwaddr = ff_hwaddr;
-		enqueue_pending_xmitbuf(pxmitpriv, pxmitbuf);
-#else
 		inner_ret = rtw_write_port(padapter, ff_hwaddr, w_sz, (unsigned char*)pxmitbuf);
-#endif
 
 		rtw_count_tx_stats(padapter, pxmitframe, sz);
 

@@ -2579,14 +2579,9 @@ void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc)
 	pHalFunc->GetHalODMVarHandler = &rtl8188e_GetHalODMVar;
 	pHalFunc->SetHalODMVarHandler = &rtl8188e_SetHalODMVar;
 
-#ifdef CONFIG_XMIT_THREAD_MODE
-	pHalFunc->xmit_thread_handler = &hal_xmit_handler;
-#endif
-
 	pHalFunc->IOL_exec_cmds_sync = &rtl8188e_IOL_exec_cmds_sync;
 
 	pHalFunc->hal_notch_filter = &hal_notch_filter_8188e;
-
 }
 
 u8 GetEEPROMSize8188E(PADAPTER padapter)
