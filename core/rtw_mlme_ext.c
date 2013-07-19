@@ -6671,14 +6671,7 @@ void issue_assocreq(_adapter *padapter)
 					DBG_88E("declare supporting RX STBC\n");
 					pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0200);/* RX STBC two spatial stream */
 				}
-				#ifdef CONFIG_DISABLE_MCS13TO15
-				if (pmlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40 && (pregpriv->wifi_spec!=1))
-					_rtw_memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R_MCS13TO15_OFF, 16);
-				else
-					_rtw_memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R, 16);
-				#else /* CONFIG_DISABLE_MCS13TO15 */
 				_rtw_memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R, 16);
-				#endif /* CONFIG_DISABLE_MCS13TO15 */
 				break;
 			}
 #ifdef RTL8192C_RECONFIG_TO_1T1R

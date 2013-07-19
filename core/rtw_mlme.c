@@ -36,12 +36,7 @@
 extern void indicate_wx_scan_complete_event(_adapter *padapter);
 extern u8 rtw_do_join(_adapter * padapter);
 
-#ifdef CONFIG_DISABLE_MCS13TO15
-extern unsigned char	MCS_rate_2R_MCS13TO15_OFF[16];
 extern unsigned char	MCS_rate_2R[16];
-#else /* CONFIG_DISABLE_MCS13TO15 */
-extern unsigned char	MCS_rate_2R[16];
-#endif /* CONFIG_DISABLE_MCS13TO15 */
 extern unsigned char	MCS_rate_1R[16];
 
 sint	_rtw_init_mlme_priv (_adapter* padapter)
@@ -2967,25 +2962,11 @@ void rtw_update_ht_cap(_adapter *padapter, u8 *pie, uint ie_len)
 		padapter->HalFunc.GetHwRegHandler(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
 
 		/* update the MCS rates */
-		for (i = 0; i < 16; i++)
-		{
+		for (i = 0; i < 16; i++) {
 			if ((rf_type == RF_1T1R) || (rf_type == RF_1T2R))
-			{
 				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-			}
 			else
-			{
-				#ifdef CONFIG_DISABLE_MCS13TO15
-				if (pmlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40 && pregistrypriv->wifi_spec != 1 )
-				{
-					pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R_MCS13TO15_OFF[i];
-				}
-				else
-					pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R[i];
-				#else
 				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R[i];
-				#endif /* CONFIG_DISABLE_MCS13TO15 */
-			}
 			#ifdef RTL8192C_RECONFIG_TO_1T1R
 			{
 				pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];

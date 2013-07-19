@@ -42,9 +42,6 @@ static unsigned char EPIGRAM_OUI[] = {0x00, 0x90, 0x4c};
 unsigned char REALTEK_96B_IE[] = {0x00, 0xe0, 0x4c, 0x02, 0x01, 0x20};
 
 extern unsigned char	MCS_rate_2R[16];
-#ifdef CONFIG_DISABLE_MCS13TO15
-extern unsigned char	MCS_rate_2R_MCS13TO15_OFF[16];
-#endif /* CONFIG_DISABLE_MCS13TO15 */
 extern unsigned char	MCS_rate_1R[16];
 extern unsigned char RTW_WPA_OUI[];
 extern unsigned char WPA_TKIP_CIPHER[4];
@@ -995,18 +992,10 @@ void HT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 
 	/* update the MCS rates */
 	for (i = 0; i < 16; i++) {
-		if ((rf_type == RF_1T1R) || (rf_type == RF_1T2R)) {
+		if ((rf_type == RF_1T1R) || (rf_type == RF_1T2R))
 			pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-		} else {
-			#ifdef CONFIG_DISABLE_MCS13TO15
-			if (pmlmeext->cur_bwmode == HT_CHANNEL_WIDTH_40 && (pregistrypriv->wifi_spec!=1))
-				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R_MCS13TO15_OFF[i];
-			else
+		else
 			pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R[i];
-			#else
-			pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R[i];
-			#endif /* CONFIG_DISABLE_MCS13TO15 */
-		}
 	        #ifdef RTL8192C_RECONFIG_TO_1T1R
 		pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
 		#endif
