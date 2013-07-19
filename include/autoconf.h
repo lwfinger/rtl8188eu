@@ -85,8 +85,6 @@
  * Interface  Related Config
  */
 
-#define CONFIG_USB_RX_AGGREGATION
-
 #define CONFIG_PREALLOC_RECV_SKB
 
 /*
@@ -123,7 +121,6 @@
 #ifdef CONFIG_MP_INCLUDED
 	#define MP_DRIVER 1
 	#define CONFIG_MP_IWPRIV_SUPPORT
-	//#undef CONFIG_USB_RX_AGGREGATION
 #else
 	#define MP_DRIVER 0
 #endif

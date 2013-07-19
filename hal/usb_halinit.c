@@ -121,13 +121,11 @@ static void rtl8188eu_interface_configure(_adapter *padapter)
 	pHalData->UsbTxAggMode		= 1;
 	pHalData->UsbTxAggDescNum	= 0x6;	/*  only 4 bits */
 
-#ifdef CONFIG_USB_RX_AGGREGATION
 	pHalData->UsbRxAggMode		= USB_RX_AGG_DMA;/*  USB_RX_AGG_DMA; */
 	pHalData->UsbRxAggBlockCount	= 8; /* unit : 512b */
 	pHalData->UsbRxAggBlockTimeout	= 0x6;
 	pHalData->UsbRxAggPageCount	= 48; /* uint :128 b 0x0A;	10 = MAX_RX_DMA_BUFFER_SIZE/2/pHalData->UsbBulkOutSize */
 	pHalData->UsbRxAggPageTimeout	= 0x4; /* 6, absolute time = 34ms/(2^6) */
-#endif
 
 	HalUsbSetQueuePipeMapping8188EUsb(padapter,
 				pdvobjpriv->RtNumInPipes, pdvobjpriv->RtNumOutPipes);
@@ -813,7 +811,6 @@ usb_AggSettingRxUpdate(
 		PADAPTER			Adapter
 	)
 {
-#ifdef CONFIG_USB_RX_AGGREGATION
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8			valueDMA;
 	u8			valueUSB;
@@ -889,7 +886,6 @@ usb_AggSettingRxUpdate(
 		default:
 			break;
 	}
-#endif
 }	/*  usb_AggSettingRxUpdate */
 
 static void
@@ -2861,7 +2857,6 @@ _func_enter_;
 			}
 			break;
 		case HW_VAR_RXDMA_AGG_PG_TH:
-			#ifdef CONFIG_USB_RX_AGGREGATION
 			{
 				u8	threshold = *((u8 *)val);
 				if ( threshold == 0)
@@ -2870,7 +2865,6 @@ _func_enter_;
 				}
 				rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH, threshold);
 			}
-			#endif
 			break;
 		case HW_VAR_SET_RPWM:
 #ifdef CONFIG_LPS_LCLK
