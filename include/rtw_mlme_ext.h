@@ -493,11 +493,7 @@ struct mlme_ext_priv
 	//recv_decache check for Action_public frame
 	u8 action_public_dialog_token;
 	u16	 action_public_rxseq;
-
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 	u8 active_keep_alive_check;
-#endif
-
 };
 
 int init_mlme_ext_priv(_adapter* padapter);
@@ -506,8 +502,6 @@ void free_mlme_ext_priv (struct mlme_ext_priv *pmlmeext);
 extern void init_mlme_ext_timer(_adapter *padapter);
 extern void init_addba_retry_timer(_adapter *padapter, struct sta_info *psta);
 extern struct xmit_frame *alloc_mgtxmitframe(struct xmit_priv *pxmitpriv);
-
-//void fill_fwpriv(_adapter * padapter, struct fw_priv *pfwpriv);
 
 unsigned char networktype_to_raid(unsigned char network_type);
 u8 judge_network_type(_adapter *padapter, unsigned char *rate, int ratelen);
@@ -519,8 +513,6 @@ void Save_DM_Func_Flag(_adapter *padapter);
 void Restore_DM_Func_Flag(_adapter *padapter);
 void Switch_DM_Func(_adapter *padapter, u32 mode, u8 enable);
 
-//void Set_NETYPE1_MSR(_adapter *padapter, u8 type);
-//void Set_NETYPE0_MSR(_adapter *padapter, u8 type);
 void Set_MSR(_adapter *padapter, u8 type);
 
 u8 rtw_get_oper_ch(_adapter *adapter);

@@ -365,29 +365,7 @@ void	expire_timeout_chk(_adapter *padapter)
 			psta->expire_to--;
 		}
 
-#ifndef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-#ifdef CONFIG_80211N_HT
-		if ( (psta->flags & WLAN_STA_HT) && (psta->htpriv.agg_enable_bitmap || psta->under_exist_checking) ) {
-			/*  check sta by delba(addba) for 11n STA */
-			/*  ToDo: use CCX report to check for all STAs */
-			if ( psta->expire_to <= (pstapriv->expire_to - 50 ) ) {
-				DBG_88E("asoc expire by DELBA/ADDBA! (%d s)\n", (pstapriv->expire_to-psta->expire_to)*2);
-				psta->under_exist_checking = 0;
-				psta->expire_to = 0;
-			} else if ( psta->expire_to <= (pstapriv->expire_to - 3) && (psta->under_exist_checking==0)) {
-				DBG_88E("asoc check by DELBA/ADDBA! (%d s)\n", (pstapriv->expire_to-psta->expire_to)*2);
-				psta->under_exist_checking = 1;
-				/* tear down TX AMPDU */
-				send_delba(padapter, 1, psta->hwaddr);/* originator */
-				psta->htpriv.agg_enable_bitmap = 0x0;/* reset */
-				psta->htpriv.candidate_tid_bitmap = 0x0;/* reset */
-			}
-		}
-#endif /* CONFIG_80211N_HT */
-#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-
 		if (psta->expire_to <= 0) {
-			#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 			struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
 			if (padapter->registrypriv.wifi_spec == 1) {
@@ -418,7 +396,6 @@ void	expire_timeout_chk(_adapter *padapter)
 				}
 				continue;
 			}
-			#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
 
 			rtw_list_delete(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
@@ -440,7 +417,6 @@ void	expire_timeout_chk(_adapter *padapter)
 
 	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
 
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 	if (chk_alive_num) {
 
 		u8 backup_oper_channel=0;
@@ -487,7 +463,6 @@ void	expire_timeout_chk(_adapter *padapter)
 		if (backup_oper_channel>0) /* back to the original operation channel */
 			SelectChannel(padapter, backup_oper_channel);
 	}
-#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
 
 	associated_clients_update(padapter, updated);
 }

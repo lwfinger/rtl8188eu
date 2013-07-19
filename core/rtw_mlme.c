@@ -2156,15 +2156,6 @@ void rtw_dynamic_check_timer_handlder(_adapter *adapter)
 		}
 	}
 
-#ifndef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-#ifdef CONFIG_AP_MODE
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
-	{
-		expire_timeout_chk(adapter);
-	}
-#endif
-#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
 	rcu_read_lock();
 #endif	/*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */

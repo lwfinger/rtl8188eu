@@ -30,8 +30,6 @@
 #define RTL871X_MODULE_NAME "88EU"
 #define DRV_NAME "rtl8188eu"
 
-#define CONFIG_USB_HCI
-
 #define CONFIG_RTL8188E
 
 #ifdef CONFIG_IOCTL_CFG80211
@@ -43,10 +41,8 @@
  * Internal  General Config
  */
 
-//#define CONFIG_H2CLBK
 
 #define CONFIG_EMBEDDED_FWIMG
-//#define CONFIG_FILE_FWIMG
 
 #define CONFIG_XMIT_ACK
 #ifdef CONFIG_XMIT_ACK
