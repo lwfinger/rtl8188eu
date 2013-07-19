@@ -3220,16 +3220,12 @@ static void rtw_dbg_mode_hdl(_adapter *padapter, u32 id, u8 *pdata, u32 len)
 			rtw_hal_set_hwreg(padapter, HW_VAR_BT_ISSUE_DELBA, pdata);
 			break;
 #endif
-#ifdef DBG_CONFIG_ERROR_DETECT
 		case GEN_MP_IOCTL_SUBCODE(GET_WIFI_STATUS):
 			*pdata = rtw_hal_sreset_get_wifi_status(padapter);
 			break;
-#endif
-
 		default:
 			break;
 	}
-
 }
 
 static int rtw_mp_ioctl_hdl(struct net_device *dev, struct iw_request_info *info,
@@ -6149,15 +6145,11 @@ static int rtw_dbg_port(struct net_device *dev,
 						}
 					}
 					break;
-		#ifdef DBG_CONFIG_ERROR_DETECT
 				case 0x0f:
-						{
-							if (extra_arg == 0){
-								DBG_88E("###### silent reset test.......#####\n");
-								rtw_hal_sreset_reset(padapter);
-							}
-
-						}
+					if (extra_arg == 0){
+						DBG_88E("###### silent reset test.......#####\n");
+						rtw_hal_sreset_reset(padapter);
+					}
 				break;
 				case 0x15:
 					{
@@ -6166,7 +6158,6 @@ static int rtw_dbg_port(struct net_device *dev,
 					}
 					break;
 
-		#endif
 
 				case 0x10:// driver version display
 					DBG_88E("rtw driver version=%s\n", DRIVERVERSION);

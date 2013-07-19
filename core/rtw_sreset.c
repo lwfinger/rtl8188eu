@@ -18,9 +18,8 @@
  *
  ******************************************************************************/
 
-#include<rtw_sreset.h>
+#include <rtw_sreset.h>
 
-#if defined(DBG_CONFIG_ERROR_DETECT)
 void sreset_init_value(_adapter *padapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -82,4 +81,3 @@ void sreset_set_wifi_error_status(_adapter *padapter, u32 status)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	pHalData->srestpriv.Wifi_Error_Status = status;
 }
-#endif /* defined(DBG_CONFIG_ERROR_DETECT) */

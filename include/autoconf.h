@@ -168,6 +168,3 @@
 #define DBG	1
 
 #define CONFIG_PROC_DEBUG
-
-#define DBG_CONFIG_ERROR_DETECT
-

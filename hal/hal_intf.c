@@ -364,7 +364,6 @@ void	rtw_hal_antdiv_rssi_compared(_adapter *padapter, WLAN_BSSID_EX *dst, WLAN_B
 		padapter->HalFunc.AntDivCompareHandler(padapter, dst, src);
 }
 
-#ifdef DBG_CONFIG_ERROR_DETECT
 void	rtw_hal_sreset_init(_adapter *padapter)
 {
 	if (padapter->HalFunc.sreset_init_value)
@@ -399,8 +398,6 @@ u8   rtw_hal_sreset_get_wifi_status(_adapter *padapter)
 		status = padapter->HalFunc.sreset_get_wifi_status(padapter);
 	return status;
 }
-
-#endif	/* DBG_CONFIG_ERROR_DETECT */
 
 int rtw_hal_iol_cmd(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {

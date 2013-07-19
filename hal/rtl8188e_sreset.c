@@ -22,7 +22,6 @@
 #include <rtl8188e_sreset.h>
 #include <rtl8188e_hal.h>
 
-#ifdef DBG_CONFIG_ERROR_DETECT
 extern void rtw_cancel_all_timer(_adapter *padapter);
 static void _restore_security_setting(_adapter *padapter)
 {
@@ -222,4 +221,3 @@ void rtl8188e_sreset_linked_status_check(_adapter *padapter)
 			DBG_88E("%s REG_FW_STATUS (0x%02x), Condition_No_Match !! \n",__func__,fw_status);
 	}
 }
-#endif
