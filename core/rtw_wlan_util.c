@@ -2035,9 +2035,6 @@ void process_addba_req(_adapter *padapter, u8 *paddba_req, u8 *addr)
 {
 	struct sta_info *psta;
 	u16 tid;
-	#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
-	u16 start_seq;
-	#endif
 	u16 param;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -2048,25 +2045,10 @@ void process_addba_req(_adapter *padapter, u8 *paddba_req, u8 *addr)
 	psta = rtw_get_stainfo(pstapriv, addr);
 
 	if (psta) {
-		#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
-		start_seq = le16_to_cpu(preq->BA_starting_seqctrl) >> 4;
-		#endif
-
 		param = le16_to_cpu(preq->BA_para_set);
 		tid = (param>>2)&0x0f;
-
 		preorder_ctrl = &psta->recvreorder_ctrl[tid];
-
-		#ifdef CONFIG_UPDATE_INDICATE_SEQ_WHILE_PROCESS_ADDBA_REQ
-		preorder_ctrl->indicate_seq = start_seq;
-		#ifdef DBG_RX_SEQ
-		DBG_88E("DBG_RX_SEQ %s:%d IndicateSeq: %d, start_seq: %d\n", __func__, __LINE__,
-			preorder_ctrl->indicate_seq, start_seq);
-		#endif
-		#else
 		preorder_ctrl->indicate_seq = 0xffff;
-		#endif
-
 		preorder_ctrl->enable =(pmlmeinfo->bAcceptAddbaReq == true)? true :false;
 	}
 }
