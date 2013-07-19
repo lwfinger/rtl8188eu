@@ -44,25 +44,14 @@
 
 #define CONFIG_EMBEDDED_FWIMG
 
-#define CONFIG_XMIT_ACK
-#ifdef CONFIG_XMIT_ACK
-	#define CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-#endif
 #define CONFIG_80211N_HT
 
 #define CONFIG_SUPPORT_USB_INT
-#ifdef	CONFIG_SUPPORT_USB_INT
-#endif
 
 #define CONFIG_IPS
-#ifdef CONFIG_IPS
-#endif
 #define SUPPORT_HW_RFOFF_DETECTED
 
 #define CONFIG_LPS
-#if defined(CONFIG_LPS) && defined(CONFIG_SUPPORT_USB_INT)
-
-#endif
 
 #ifdef CONFIG_LPS_LCLK
 #define CONFIG_XMIT_THREAD_MODE

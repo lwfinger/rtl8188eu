@@ -262,11 +262,9 @@ _func_enter_;
 	pxmitpriv->viq_cnt = 0;
 	pxmitpriv->voq_cnt = 0;
 
-#ifdef CONFIG_XMIT_ACK
 	pxmitpriv->ack_tx = false;
 	_rtw_mutex_init(&pxmitpriv->ack_tx_mutex);
 	rtw_sctx_init(&pxmitpriv->ack_tx_ops, 0);
-#endif
 
 	rtw_hal_init_xmit_priv(padapter);
 
@@ -363,14 +361,11 @@ void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 
 	rtw_free_hwxmits(padapter);
 
-#ifdef CONFIG_XMIT_ACK
 	_rtw_mutex_free(&pxmitpriv->ack_tx_mutex);
-#endif
 
 out:
 
 _func_exit_;
-
 }
 
 static void update_attrib_vcs_info(_adapter *padapter, struct xmit_frame *pxmitframe)
@@ -1742,10 +1737,7 @@ _func_enter_;
 		pxframe->agg_num = 1;
 #endif
 
-#ifdef CONFIG_XMIT_ACK
 		pxframe->ack_report = 0;
-#endif
-
 	}
 
 	_exit_critical_bh(&pfree_xmit_queue->lock, &irqL);
@@ -3085,64 +3077,8 @@ void rtw_sctx_done(struct submit_ctx **sctx)
 	rtw_sctx_done_err(sctx, RTW_SCTX_DONE_SUCCESS);
 }
 
-#ifdef CONFIG_XMIT_ACK
-
-#ifdef CONFIG_XMIT_ACK_POLLING
-s32 c2h_evt_hdl(_adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter);
-
-/**
- * rtw_ack_tx_polling -
- * @pxmitpriv: xmit_priv to address ack_tx_ops
- * @timeout_ms: timeout msec
- *
- * Init ack_tx_ops and then do c2h_evt_hdl() and polling ack_tx_ops repeatedly
- * till tx report or timeout
- * Returns: _SUCCESS if TX report ok, _FAIL for others
- */
-int rtw_ack_tx_polling(struct xmit_priv *pxmitpriv, u32 timeout_ms)
-{
-	int ret = _FAIL;
-	struct submit_ctx *pack_tx_ops = &pxmitpriv->ack_tx_ops;
-	_adapter *adapter = container_of(pxmitpriv, _adapter, xmitpriv);
-
-	pack_tx_ops->submit_time = rtw_get_current_time();
-	pack_tx_ops->timeout_ms = timeout_ms;
-	pack_tx_ops->status = RTW_SCTX_SUBMITTED;
-
-	do {
-		c2h_evt_hdl(adapter, NULL, rtw_hal_c2h_id_filter_ccx(adapter));
-		if (pack_tx_ops->status != RTW_SCTX_SUBMITTED)
-			break;
-
-		if (adapter->bDriverStopped) {
-			pack_tx_ops->status = RTW_SCTX_DONE_DRV_STOP;
-			break;
-		}
-		if (adapter->bSurpriseRemoved) {
-			pack_tx_ops->status = RTW_SCTX_DONE_DEV_REMOVE;
-			break;
-		}
-
-		rtw_msleep_os(10);
-	} while (rtw_get_passing_time_ms(pack_tx_ops->submit_time) < timeout_ms);
-
-	if (pack_tx_ops->status == RTW_SCTX_SUBMITTED) {
-		pack_tx_ops->status = RTW_SCTX_DONE_TIMEOUT;
-		DBG_88E("%s timeout\n", __func__);
-	}
-
-	if (pack_tx_ops->status == RTW_SCTX_DONE_SUCCESS)
-		ret = _SUCCESS;
-
-	return ret;
-}
-#endif
-
 int rtw_ack_tx_wait(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 {
-#ifdef CONFIG_XMIT_ACK_POLLING
-	return rtw_ack_tx_polling(pxmitpriv, timeout_ms);
-#else
 	struct submit_ctx *pack_tx_ops = &pxmitpriv->ack_tx_ops;
 
 	pack_tx_ops->submit_time = rtw_get_current_time();
@@ -3150,7 +3086,6 @@ int rtw_ack_tx_wait(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 	pack_tx_ops->status = RTW_SCTX_SUBMITTED;
 
 	return rtw_sctx_wait(pack_tx_ops);
-#endif
 }
 
 void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status)
@@ -3163,4 +3098,3 @@ void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status)
 		DBG_88E("%s ack_tx not set\n", __func__);
 	}
 }
-#endif /* CONFIG_XMIT_ACK */

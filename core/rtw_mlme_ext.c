@@ -5441,7 +5441,6 @@ s32 dump_mgntframe_and_wait(_adapter *padapter, struct xmit_frame *pmgntframe, i
 
 s32 dump_mgntframe_and_wait_ack(_adapter *padapter, struct xmit_frame *pmgntframe)
 {
-#ifdef CONFIG_XMIT_ACK
 	s32 ret = _FAIL;
 	u32 timeout_ms = 500;/*   500ms */
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
@@ -5462,11 +5461,6 @@ s32 dump_mgntframe_and_wait_ack(_adapter *padapter, struct xmit_frame *pmgntfram
 	_exit_critical_mutex(&pxmitpriv->ack_tx_mutex, NULL);
 
 	 return ret;
-#else /* CONFIG_XMIT_ACK */
-	dump_mgntframe(padapter, pmgntframe);
-	rtw_msleep_os(50);
-	return _SUCCESS;
-#endif /* CONFIG_XMIT_ACK */
 }
 
 static int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)

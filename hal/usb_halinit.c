@@ -1565,10 +1565,8 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_LCK);
 /* 	_InitPABias(Adapter); */
 	rtw_write8(Adapter, REG_USB_HRPWM, 0);
 
-#ifdef CONFIG_XMIT_ACK
 	/* ack for xmit mgmt frames. */
 	rtw_write32(Adapter, REG_FWHW_TXQ_CTRL, rtw_read32(Adapter, REG_FWHW_TXQ_CTRL)|BIT(12));
-#endif /* CONFIG_XMIT_ACK */
 
 exit:
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);

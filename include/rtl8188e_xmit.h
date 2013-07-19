@@ -268,13 +268,8 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmitbuf );
 #endif
 
-#ifdef CONFIG_XMIT_ACK
 void dump_txrpt_ccx_88e(void *buf);
 void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf);
-#else
-#define dump_txrpt_ccx_88e(buf) do {} while (0)
-#define handle_txrpt_ccx_88e(adapter, buf) do {} while (0)
-#endif //CONFIG_XMIT_ACK
 
 void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
 #endif //__RTL8188E_XMIT_H__

@@ -24,7 +24,6 @@
 #include <drv_types.h>
 #include <rtl8188e_hal.h>
 
-#ifdef CONFIG_XMIT_ACK
 void dump_txrpt_ccx_88e(void *buf)
 {
 	struct txrpt_ccx_88e *txrpt_ccx = (struct txrpt_ccx_88e *)buf;
@@ -61,7 +60,6 @@ void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf)
 			rtw_ack_tx_done(&adapter->xmitpriv, RTW_SCTX_DONE_CCX_PKT_FAIL);
 	}
 }
-#endif /* CONFIG_XMIT_ACK */
 
 void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
 {
