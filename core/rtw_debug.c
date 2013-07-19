@@ -1006,7 +1006,6 @@ int proc_get_all_sta_info(char *page, char **start,
 }
 #endif
 
-#ifdef CONFIG_FIND_BEST_CHANNEL
 int proc_get_best_channel(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data)
@@ -1066,7 +1065,6 @@ int proc_get_best_channel(char *page, char **start,
 	return len;
 
 }
-#endif /* CONFIG_FIND_BEST_CHANNEL */
 #ifdef CONFIG_BT_COEXIST
 #define _bt_dbg_off_		0
 #define _bt_dbg_on_		1

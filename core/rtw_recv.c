@@ -1615,20 +1615,15 @@ sint validate_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
 
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	u8  ver =(unsigned char) (*ptr)&0x3 ;
-#ifdef CONFIG_FIND_BEST_CHANNEL
 	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
-#endif
 
 _func_enter_;
 
-
-#ifdef CONFIG_FIND_BEST_CHANNEL
 	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
 		int ch_set_idx = rtw_ch_set_search_ch(pmlmeext->channel_set, rtw_get_oper_ch(adapter));
 		if (ch_set_idx >= 0)
 			pmlmeext->channel_set[ch_set_idx].rx_count++;
 	}
-#endif
 
 	/* add version chk */
 	if (ver!=0){

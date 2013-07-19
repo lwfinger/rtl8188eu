@@ -9937,9 +9937,6 @@ u8 sitesurvey_cmd_hdl(_adapter *padapter, u8 *pbuf)
 
 	if ((pmlmeext->sitesurvey_res.state == SCAN_START) || (pmlmeext->sitesurvey_res.state == SCAN_TXNULL))
 	{
-#ifdef CONFIG_FIND_BEST_CHANNEL
-#endif /* CONFIG_FIND_BEST_CHANNEL */
-
 		/* disable dynamic functions, such as high power, DIG */
 		Save_DM_Func_Flag(padapter);
 		Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false);

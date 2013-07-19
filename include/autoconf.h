@@ -64,7 +64,6 @@
 	#endif
 
 	#define CONFIG_NATIVEAP_MLME
-	#define CONFIG_FIND_BEST_CHANNEL
 #endif
 
 #define CONFIG_P2P
