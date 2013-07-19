@@ -193,9 +193,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 	int i;
 
 	pdmpriv->InitODMFlag =	ODM_BB_DIG		|
-#ifdef	CONFIG_ODM_REFRESH_RAMASK
 				ODM_BB_RA_MASK		|
-#endif
 				ODM_BB_DYNAMIC_TXPWR	|
 				ODM_BB_FA_CNT		|
 				ODM_BB_RSSI_MONITOR	|

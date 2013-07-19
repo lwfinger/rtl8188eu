@@ -3477,13 +3477,9 @@ static void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level
 	}
 
 	rate_bitmap = 0x0fffffff;
-#ifdef	CONFIG_ODM_REFRESH_RAMASK
-	{
-		rate_bitmap = ODM_Get_Rate_Bitmap(&pHalData->odmpriv,mac_id,mask,rssi_level);
-		DBG_88E("%s => mac_id:%d, networkType:0x%02x, mask:0x%08x\n\t ==> rssi_level:%d, rate_bitmap:0x%08x\n",
-			 __func__,mac_id,networkType,mask,rssi_level,rate_bitmap);
-	}
-#endif
+	rate_bitmap = ODM_Get_Rate_Bitmap(&pHalData->odmpriv,mac_id,mask,rssi_level);
+	DBG_88E("%s => mac_id:%d, networkType:0x%02x, mask:0x%08x\n\t ==> rssi_level:%d, rate_bitmap:0x%08x\n",
+		 __func__,mac_id,networkType,mask,rssi_level,rate_bitmap);
 
 	mask &= rate_bitmap;
 

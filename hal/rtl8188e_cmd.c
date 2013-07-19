@@ -213,7 +213,6 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 
 	macid = arg&0x1f;
 
-#ifdef CONFIG_ODM_REFRESH_RAMASK
 	raid = (bitmap>>28) & 0x0f;
 	bitmap &=0x0fffffff;
 
@@ -221,7 +220,6 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 		bitmap = ODM_Get_Rate_Bitmap(&pHalData->odmpriv, macid, bitmap, rssi_level);
 
 	bitmap |= ((raid<<28)&0xf0000000);
-#endif /* CONFIG_ODM_REFRESH_RAMASK */
 
 
 	init_rate = get_highest_rate_idx(bitmap&0x0fffffff)&0x3f;
