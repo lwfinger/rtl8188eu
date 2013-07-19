@@ -24,11 +24,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 #define MAX_XMITBUF_SZ	(20480)	// 20k
-#else
-#define MAX_XMITBUF_SZ	(2048)
-#endif
 #ifdef CONFIG_SINGLE_XMIT_BUF
 #define NR_XMITBUFF	(1)
 #else
@@ -266,11 +262,8 @@ struct xmit_frame
 	u8	*buf_addr;
 	struct xmit_buf *pxmitbuf;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	u8	agg_num;
-#endif
 	s8	pkt_offset;
-
 	u8 ack_report;
 };
 

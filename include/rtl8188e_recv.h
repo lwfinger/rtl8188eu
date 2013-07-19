@@ -36,11 +36,7 @@
 	#define NR_RECVBUFF (4)
 #endif //CONFIG_SINGLE_RECV_BUF
 
-#ifndef CONFIG_MINIMAL_MEMORY_USAGE
-	#define MAX_RECVBUF_SZ (15360) // 15k < 16k
-#else
-	#define MAX_RECVBUF_SZ (4000) // about 4K
-#endif
+#define MAX_RECVBUF_SZ (15360) // 15k < 16k
 
 struct phy_stat {
 	unsigned int phydw0;

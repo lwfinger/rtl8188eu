@@ -479,10 +479,8 @@ typedef struct hal_data_8188e
 	u32	IntArray[3];//HISR0,HISR1,HSISR
 	u32	IntrMask[3];
 	u8	C2hArray[16];
-#ifdef CONFIG_USB_TX_AGGREGATION
 	u8	UsbTxAggMode;
 	u8	UsbTxAggDescNum;
-#endif
 #ifdef CONFIG_USB_RX_AGGREGATION
 	u16	HwRxPageSize;				// Hardware setting
 	u32	MaxUsbRxAggBlock;
