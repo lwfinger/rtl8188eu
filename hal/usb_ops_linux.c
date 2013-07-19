@@ -396,18 +396,6 @@ static void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
 	}
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 
-#ifdef DBG_CONFIG_ERROR_DETECT_INT
-	if (  pHalData->IntArray[1]  & IMR_TXERR_88E )
-		DBG_88E("===> %s Tx Error Flag Interrupt Status\n",__func__);
-	if (  pHalData->IntArray[1]  & IMR_RXERR_88E )
-		DBG_88E("===> %s Rx Error Flag INT Status\n",__func__);
-	if (  pHalData->IntArray[1]  & IMR_TXFOVW_88E )
-		DBG_88E("===> %s Transmit FIFO Overflow\n",__func__);
-	if (  pHalData->IntArray[1]  & IMR_RXFOVW_88E )
-		DBG_88E("===> %s Receive FIFO Overflow\n",__func__);
-#endif/* DBG_CONFIG_ERROR_DETECT_INT */
-
-
 	/*  C2H Event */
 	if (pbuf[0]!= 0){
 		_rtw_memcpy(&(pHalData->C2hArray[0]), &(pbuf[USB_INTR_CONTENT_C2H_OFFSET]), 16);
