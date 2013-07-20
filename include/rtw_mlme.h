@@ -31,18 +31,13 @@
 //#define   MAX_JOIN_TIME	2500
 #define   MAX_JOIN_TIMEOUT	6500
 
-//	Commented by Albert 20101105
 //	Increase the scanning timeout because of increasing the SURVEY_TO value.
 
 #define		SCANNING_TIMEOUT	8000
 
 #define	SCAN_INTERVAL	(30) // unit:2sec, 30*2=60sec
 
-#ifdef PALTFORM_OS_WINCE
-#define	SCANQUEUE_LIFETIME 12000000 // unit:us
-#else
 #define	SCANQUEUE_LIFETIME 20 // unit:sec
-#endif
 
 #define		WIFI_NULL_STATE			0x00000000
 
@@ -57,8 +52,6 @@
 #define   WIFI_UNDER_LINKING		0x00000080
 
 #define	WIFI_UNDER_WPS			0x00000100
-//#define	WIFI_UNDER_CMD			0x00000200
-//#define	WIFI_UNDER_P2P			0x00000400
 #define	WIFI_STA_ALIVE_CHK_STATE	0x00000400
 #define	WIFI_SITE_MONITOR			0x00000800		//to indicate the station is under site surveying
 
