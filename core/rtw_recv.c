@@ -215,13 +215,8 @@ int rtw_free_recvframe(union recv_frame *precvframe, _queue *pfree_recv_queue)
 
 _func_enter_;
 
-	if (precvframe->u.hdr.pkt)
-	{
-#ifdef CONFIG_BSD_RX_USE_MBUF
-		m_freem(precvframe->u.hdr.pkt);
-#else	/*  CONFIG_BSD_RX_USE_MBUF */
+	if (precvframe->u.hdr.pkt) {
 		dev_kfree_skb_any(precvframe->u.hdr.pkt);/* free skb by driver */
-#endif	/*  CONFIG_BSD_RX_USE_MBUF */
 		precvframe->u.hdr.pkt = NULL;
 	}
 
