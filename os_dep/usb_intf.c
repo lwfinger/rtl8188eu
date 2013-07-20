@@ -495,7 +495,6 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 	}
 }
 
-#ifdef SUPPORT_HW_RFOFF_DETECTED
 int rtw_hw_suspend(_adapter *padapter )
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
@@ -619,7 +618,6 @@ error_exit:
 	DBG_88E("%s, Open net dev failed\n",__func__);
 	return (-1);
 }
-#endif
 
 static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 {
@@ -657,15 +655,12 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	if (pwrpriv->bInternalAutoSuspend )
 	{
 	#ifdef CONFIG_AUTOSUSPEND
-	#ifdef SUPPORT_HW_RFOFF_DETECTED
 		// The FW command register update must after MAC and FW init ready.
 		if ((padapter->bFWReady) && ( padapter->pwrctrlpriv.bHWPwrPindetect ) && (padapter->registrypriv.usbss_enable ))
 		{
 			u8 bOpen = true;
 			rtw_interface_ps_func(padapter,HAL_USB_SELECT_SUSPEND,&bOpen);
-			//rtl8192c_set_FwSelectSuspend_cmd(padapter,true ,500);//note fw to support hw power down ping detect
 		}
-	#endif
 	#endif
 	}
 	pwrpriv->bInSuspend = true;
@@ -810,7 +805,6 @@ int rtw_resume_process(_adapter *padapter)
 	if (pwrpriv->bInternalAutoSuspend )
 	{
 		#ifdef CONFIG_AUTOSUSPEND
-		#ifdef SUPPORT_HW_RFOFF_DETECTED
 			// The FW command register update must after MAC and FW init ready.
 		if ((padapter->bFWReady) && ( padapter->pwrctrlpriv.bHWPwrPindetect ) && (padapter->registrypriv.usbss_enable ))
 		{
@@ -818,7 +812,6 @@ int rtw_resume_process(_adapter *padapter)
 			u8 bOpen = false;
 			rtw_interface_ps_func(padapter,HAL_USB_SELECT_SUSPEND,&bOpen);
 		}
-		#endif
 		#endif
 #ifdef CONFIG_BT_COEXIST
 		DBG_88E("pwrpriv->bAutoResume (%x)\n",pwrpriv->bAutoResume );

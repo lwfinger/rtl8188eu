@@ -101,10 +101,7 @@ void rtw_bb_rf_gain_offset(_adapter *padapter);
 
 int rtw_ips_pwr_up(_adapter *padapter);
 void rtw_ips_pwr_down(_adapter *padapter);
-
-#ifdef SUPPORT_HW_RFOFF_DETECTED
 int rtw_hw_suspend(_adapter *padapter );
 int rtw_hw_resume(_adapter *padapter);
-#endif
 
 #endif	//_OSDEP_INTF_H_

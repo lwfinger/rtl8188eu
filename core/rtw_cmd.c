@@ -283,43 +283,24 @@ int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {
 	u8 bAllow = false; /* set to true to allow enqueuing cmd when hw_init_completed is false */
 
-	#ifdef SUPPORT_HW_RFOFF_DETECTED
 	/* To decide allow or not */
-	if (	(pcmdpriv->padapter->pwrctrlpriv.bHWPwrPindetect)
-		&&(!pcmdpriv->padapter->registrypriv.usbss_enable)
-	)
-	{
-		if (cmd_obj->cmdcode == GEN_CMD_CODE(_Set_Drv_Extra) )
-		{
+	if ((pcmdpriv->padapter->pwrctrlpriv.bHWPwrPindetect) &&
+	    (!pcmdpriv->padapter->registrypriv.usbss_enable)) {
+		if (cmd_obj->cmdcode == GEN_CMD_CODE(_Set_Drv_Extra) ) {
 			struct drvextra_cmd_parm	*pdrvextra_cmd_parm = (struct drvextra_cmd_parm	*)cmd_obj->parmbuf;
 			if (pdrvextra_cmd_parm->ec_id == POWER_SAVING_CTRL_WK_CID)
-			{
-				/* DBG_88E("==>enqueue POWER_SAVING_CTRL_WK_CID\n"); */
 				bAllow = true;
-			}
 		}
 	}
-	#endif
 
 	if (cmd_obj->cmdcode == GEN_CMD_CODE(_SetChannelPlan))
 		bAllow = true;
 
-	if ( (pcmdpriv->padapter->hw_init_completed ==false && bAllow == false)
-		|| pcmdpriv->cmdthd_running== false	/* com_thread not running */
-	)
-	{
-		/* DBG_88E("%s:%s: drop cmdcode:%u, hw_init_completed:%u, cmdthd_running:%u\n", caller_func, __func__, */
-		/* 	cmd_obj->cmdcode, */
-		/* 	pcmdpriv->padapter->hw_init_completed, */
-		/* 	pcmdpriv->cmdthd_running */
-		/*  */
-
+	if ((pcmdpriv->padapter->hw_init_completed ==false && bAllow == false) ||
+	    pcmdpriv->cmdthd_running== false)	/* com_thread not running */
 		return _FAIL;
-	}
 	return _SUCCESS;
 }
-
-
 
 u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {

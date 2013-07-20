@@ -1676,17 +1676,13 @@ static u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
 	rtw_write32(Adapter, REG_HIMRE_88E, IMR_DISABLED_88E);
 #endif
 
- #ifdef SUPPORT_HW_RFOFF_DETECTED
 	DBG_88E("bkeepfwalive(%x)\n",Adapter->pwrctrlpriv.bkeepfwalive);
 	if (Adapter->pwrctrlpriv.bkeepfwalive)
 	{
 		_ps_close_RF(Adapter);
 		if ((Adapter->pwrctrlpriv.bHWPwrPindetect) && (Adapter->pwrctrlpriv.bHWPowerdown))
 			rtl8192cu_hw_power_down(Adapter);
-	}
-	else
-#endif
-	{
+	} else {
 		if (Adapter->hw_init_completed == true){
 			CardDisableRTL8188EU(Adapter);
 
@@ -3532,13 +3528,13 @@ static u8 rtl8188eu_ps_func(PADAPTER Adapter,HAL_INTF_PS_FUNC efunc_id, u8 *val)
 	u8 bResult = true;
 	switch (efunc_id){
 
-		#if defined(CONFIG_AUTOSUSPEND) && defined(SUPPORT_HW_RFOFF_DETECTED)
+		#if defined(CONFIG_AUTOSUSPEND)
 		case HAL_USB_SELECT_SUSPEND:
 			{
 				u8 bfwpoll = *(( u8*)val);
 			}
 			break;
-		#endif /* CONFIG_AUTOSUSPEND && SUPPORT_HW_RFOFF_DETECTED */
+		#endif /* CONFIG_AUTOSUSPEND */
 
 		default:
 			break;

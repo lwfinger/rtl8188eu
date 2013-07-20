@@ -42,8 +42,6 @@
 
 #define CONFIG_SUPPORT_USB_INT
 
-#define SUPPORT_HW_RFOFF_DETECTED
-
 #define CONFIG_AP_MODE
 
 #define CONFIG_P2P

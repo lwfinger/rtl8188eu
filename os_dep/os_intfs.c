@@ -708,10 +708,8 @@ _func_enter_;
 #ifdef CONFIG_AUTOSUSPEND
 	registry_par->usbss_enable = (u8)rtw_enusbss;//0:disable,1:enable
 #endif
-#ifdef SUPPORT_HW_RFOFF_DETECTED
 	registry_par->hwpdn_mode = (u8)rtw_hwpdn_mode;//0:disable,1:enable,2:by EFUSE config
 	registry_par->hwpwrp_detect = (u8)rtw_hwpwrp_detect;//0:disable,1:enable
-#endif
 	registry_par->hw_wps_pbc = (u8)rtw_hw_wps_pbc;
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
 	snprintf(registry_par->adaptor_info_caching_file_path, PATH_LENGTH_MAX, "%s", rtw_adaptor_info_caching_file_path);
