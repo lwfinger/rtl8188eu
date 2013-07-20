@@ -740,35 +740,6 @@ void nat25_db_expire(_adapter *priv)
 	_exit_critical_bh(&priv->br_ext_lock, &irqL);
 }
 
-
-#ifdef SUPPORT_TX_MCAST2UNI
-static int checkIPMcAndReplace(_adapter *priv, struct sk_buff *skb, unsigned int *dst_ip)
-{
-	struct stat_info	*pstat;
-	struct list_head	*phead, *plist;
-	int i;
-
-	phead = &priv->asoc_list;
-	plist = phead->next;
-
-	while (plist != phead) {
-		pstat = list_entry(plist, struct stat_info, asoc_list);
-		plist = plist->next;
-
-		if (pstat->ipmc_num == 0)
-			continue;
-
-		for (i=0; i<MAX_IP_MC_ENTRY; i++) {
-			if (pstat->ipmc[i].used && !memcmp(&pstat->ipmc[i].mcmac[3], ((unsigned char *)dst_ip)+1, 3)) {
-				memcpy(skb->data, pstat->ipmc[i].mcmac, ETH_ALEN);
-				return 1;
-			}
-		}
-	}
-	return 0;
-}
-#endif
-
 int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 {
 	unsigned short protocol;
@@ -820,32 +791,23 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 			case NAT25_LOOKUP:
 				{
 					DEBUG_INFO("NAT25: Lookup IP, SA=%08x, DA=%08x\n", iph->saddr, iph->daddr);
-#ifdef SUPPORT_TX_MCAST2UNI
-					if (priv->pshare->rf_ft_var.mc2u_disable ||
-							((((OPMODE & (WIFI_STATION_STATE|WIFI_ASOC_STATE))
-							== (WIFI_STATION_STATE|WIFI_ASOC_STATE)) &&
-							!checkIPMcAndReplace(priv, skb, &iph->daddr)) ||
-							(OPMODE & WIFI_ADHOC_STATE)))
-#endif
-					{
-						tmp = be32_to_cpu(iph->daddr);
-						__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
+					tmp = be32_to_cpu(iph->daddr);
+					__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
 
-						if (!__nat25_db_network_lookup_and_replace(priv, skb, networkAddr)) {
-							if (*((unsigned char *)&iph->daddr + 3) == 0xff) {
-								/*  L2 is unicast but L3 is broadcast, make L2 bacome broadcast */
-								DEBUG_INFO("NAT25: Set DA as boardcast\n");
-								memset(skb->data, 0xff, ETH_ALEN);
+					if (!__nat25_db_network_lookup_and_replace(priv, skb, networkAddr)) {
+						if (*((unsigned char *)&iph->daddr + 3) == 0xff) {
+							/*  L2 is unicast but L3 is broadcast, make L2 bacome broadcast */
+							DEBUG_INFO("NAT25: Set DA as boardcast\n");
+							memset(skb->data, 0xff, ETH_ALEN);
+						}
+						else {
+							/*  forward unknow IP packet to upper TCP/IP */
+							DEBUG_INFO("NAT25: Replace DA with BR's MAC\n");
+							if ( (*(u32 *)priv->br_mac) == 0 && (*(u16 *)(priv->br_mac+4)) == 0 ) {
+								printk("Re-init netdev_br_init() due to br_mac==0!\n");
+								netdev_br_init(priv->pnetdev);
 							}
-							else {
-								/*  forward unknow IP packet to upper TCP/IP */
-								DEBUG_INFO("NAT25: Replace DA with BR's MAC\n");
-								if ( (*(u32 *)priv->br_mac) == 0 && (*(u16 *)(priv->br_mac+4)) == 0 ) {
-									printk("Re-init netdev_br_init() due to br_mac==0!\n");
-									netdev_br_init(priv->pnetdev);
-								}
-								memcpy(skb->data, priv->br_mac, ETH_ALEN);
-							}
+							memcpy(skb->data, priv->br_mac, ETH_ALEN);
 						}
 					}
 				}
