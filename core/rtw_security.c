@@ -2399,9 +2399,7 @@ static void rijndaelEncrypt(u32 rk[/*44*/], u8 pt[16], u8 ct[16])
 {
 	u32 s0, s1, s2, s3, t0, t1, t2, t3;
 	int Nr = 10;
-#ifndef FULL_UNROLL
 	int r;
-#endif /* ?FULL_UNROLL */
 
 	/*
 	 * map byte array block to cipher state
@@ -2418,21 +2416,6 @@ d##1 = TE0(s##1) ^ TE1(s##2) ^ TE2(s##3) ^ TE3(s##0) ^ rk[4 * i + 1]; \
 d##2 = TE0(s##2) ^ TE1(s##3) ^ TE2(s##0) ^ TE3(s##1) ^ rk[4 * i + 2]; \
 d##3 = TE0(s##3) ^ TE1(s##0) ^ TE2(s##1) ^ TE3(s##2) ^ rk[4 * i + 3]
 
-#ifdef FULL_UNROLL
-
-	ROUND(1,t,s);
-	ROUND(2,s,t);
-	ROUND(3,t,s);
-	ROUND(4,s,t);
-	ROUND(5,t,s);
-	ROUND(6,s,t);
-	ROUND(7,t,s);
-	ROUND(8,s,t);
-	ROUND(9,t,s);
-
-	rk += Nr << 2;
-
-#else  /* !FULL_UNROLL */
 
 	/* Nr - 1 full rounds: */
 	r = Nr >> 1;
@@ -2443,10 +2426,6 @@ d##3 = TE0(s##3) ^ TE1(s##0) ^ TE2(s##1) ^ TE3(s##2) ^ rk[4 * i + 3]
 			break;
 		ROUND(0,s,t);
 	}
-
-#endif /* ?FULL_UNROLL */
-
-#undef ROUND
 
 	/*
 	 * apply last round and
