@@ -1583,26 +1583,17 @@ void rtw_cfg80211_surveydone_event_callback(_adapter *padapter)
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while (1)
-	{
+	while (1) {
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
 
 		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
 
 		//report network only if the current channel set contains the channel to which this network belongs
-		if (rtw_ch_set_search_ch(padapter->mlmeextpriv.channel_set, pnetwork->network.Configuration.DSConfig) >= 0
-			#ifdef CONFIG_VALIDATE_SSID
-			&& true == rtw_validate_ssid(&(pnetwork->network.Ssid))
-			#endif
-		)
-		{
-			//ev=translate_scan(padapter, a, pnetwork, ev, stop);
+		if (rtw_ch_set_search_ch(padapter->mlmeextpriv.channel_set, pnetwork->network.Configuration.DSConfig) >= 0)
 			rtw_cfg80211_inform_bss(padapter, pnetwork);
-		}
 
 		plist = get_next(plist);
-
 	}
 
 	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);

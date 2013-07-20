@@ -378,13 +378,6 @@ handle_tkip_countermeasure:
 		}
 	}
 
-	#ifdef CONFIG_VALIDATE_SSID
-	if (rtw_validate_ssid(ssid) == false) {
-		status = _FAIL;
-		goto release_mlme_lock;
-	}
-	#endif
-
 	_rtw_memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(NDIS_802_11_SSID));
 	pmlmepriv->assoc_by_bssid=false;
 
