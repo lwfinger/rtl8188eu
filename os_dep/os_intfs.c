@@ -114,11 +114,7 @@ static int rtw_lowrate_two_xmit = 1;//Use 2 path Tx to transmit MCS0~7 and legac
 
 static int rtw_rf_config = RF_819X_MAX_TYPE;  //auto
 static int rtw_low_power = 0;
-#ifdef CONFIG_WIFI_TEST
-static int rtw_wifi_spec = 1;//for wifi test
-#else
 static int rtw_wifi_spec = 0;
-#endif
 static int rtw_channel_plan = RT_CHANNEL_DOMAIN_MAX;
 
 #ifdef CONFIG_BT_COEXIST

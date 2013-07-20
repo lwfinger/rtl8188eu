@@ -749,13 +749,6 @@ unsigned int OnProbeReq(_adapter *padapter, union recv_frame *precv_frame)
 
 		/* 	Commented by Kurt 2012/10/16 */
 		/* 	IOT issue: Google Nexus7 use 1M rate to send p2p_probe_req after GO nego completed and Nexus7 is client */
-#ifdef CONFIG_WIFI_TEST
-		if ( pattrib->mcs_rate <= 3 )
-		{
-			wifi_test_chk_rate = 0;
-		}
-#endif /* CONFIG_WIFI_TEST */
-
 		if ( wifi_test_chk_rate == 1 )
 		{
 			if ((is_valid_p2p_probereq = process_probe_req_p2p_ie(pwdinfo, pframe, len)) == true)

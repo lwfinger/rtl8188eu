@@ -63,9 +63,7 @@
 #define CONFIG_P2P
 #ifdef CONFIG_P2P
 
-	#ifndef CONFIG_WIFI_TEST
-		#define CONFIG_P2P_REMOVE_GROUP_INFO
-	#endif
+	#define CONFIG_P2P_REMOVE_GROUP_INFO
 
 	#define CONFIG_P2P_PS
 #endif
