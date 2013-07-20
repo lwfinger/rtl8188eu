@@ -243,10 +243,6 @@ struct xmit_buf
 	dma_addr_t dma_transfer_addr;	/* (in) dma addr for transfer_buffer */
 	u8 bpending[8];
 	sint last[8];
-
-#if defined(DBG_XMIT_BUF )
-	u8 no;
-#endif
 };
 
 struct xmit_frame
