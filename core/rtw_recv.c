@@ -569,13 +569,7 @@ _func_enter_;
 
 	if ((prxattrib->encrypt>0) && ((prxattrib->bdecrypted==0) ||(psecuritypriv->sw_decrypt==true)))
 	{
-
 		psecuritypriv->hw_decrypted=false;
-
-		#ifdef DBG_RX_DECRYPTOR
-		DBG_88E("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  Setting psecuritypriv->hw_decrypted = %d\n"
-			, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
-		#endif
 
 		switch (prxattrib->encrypt){
 		case _WEP40_:
@@ -592,40 +586,22 @@ _func_enter_;
 			break;
 		}
 	}
-	else if (prxattrib->bdecrypted==1
-		&& prxattrib->encrypt >0
-		&& (psecuritypriv->busetkipkey==1 || prxattrib->encrypt !=_TKIP_ )
-		)
-	{
+	else if (prxattrib->bdecrypted == 1 && prxattrib->encrypt > 0 &&
+		 (psecuritypriv->busetkipkey==1 || prxattrib->encrypt !=_TKIP_))
 		psecuritypriv->hw_decrypted=true;
-		#ifdef DBG_RX_DECRYPTOR
-		DBG_88E("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  Setting psecuritypriv->hw_decrypted = %d\n"
-		, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
-		#endif
 
-	}
-	else {
-		#ifdef DBG_RX_DECRYPTOR
-		DBG_88E("prxstat->bdecrypted:%d,  prxattrib->encrypt:%d,  psecuritypriv->hw_decrypted:%d\n"
-		, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
-		#endif
-	}
-
-	if (res == _FAIL)
-	{
+	if (res == _FAIL) {
 		rtw_free_recvframe(return_packet,&padapter->recvpriv.free_recv_queue);
 		return_packet = NULL;
-
 	}
 
 _func_exit_;
 
 	return return_packet;
-
 }
+
 /* set the security information in the recv_frame */
-union recv_frame * portctrl(_adapter *adapter,union recv_frame * precv_frame);
-union recv_frame * portctrl(_adapter *adapter,union recv_frame * precv_frame)
+union recv_frame *portctrl(_adapter *adapter, union recv_frame *precv_frame)
 {
 	u8   *psta_addr, *ptr;
 	uint  auth_alg;
