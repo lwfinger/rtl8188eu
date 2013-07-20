@@ -144,10 +144,8 @@ void rtl8188e_silentreset_for_specific_platform(_adapter *padapter)
 	_enter_critical_mutex(&psrtpriv->silentreset_mutex, &irqL);
 	psrtpriv->silent_reset_inprogress = true;
 	pwrpriv->change_rfpwrstate = rf_off;
-#ifdef CONFIG_IPS
 	ips_enter(padapter);
 	ips_leave(padapter);
-#endif
 	if (check_fwstate(pmlmepriv, _FW_LINKED)== true)
 	{
 		_restore_network_status(padapter);

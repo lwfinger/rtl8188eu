@@ -62,11 +62,7 @@ static int rtw_adhoc_tx_pwr = 1;
 static int rtw_soft_ap = 0;
 #ifdef CONFIG_POWER_SAVING
 static int rtw_power_mgnt = 1;
-#ifdef CONFIG_IPS_LEVEL_2
-static int rtw_ips_mode = IPS_LEVEL_2;
-#else
 static int rtw_ips_mode = IPS_NORMAL;
-#endif
 #else
 static int rtw_power_mgnt = PS_MODE_ACTIVE;
 static int rtw_ips_mode = IPS_NONE;
@@ -1441,7 +1437,6 @@ int netdev_open(struct net_device *pnetdev)
 	return ret;
 }
 
-#ifdef CONFIG_IPS
 static int  ips_netdrv_open(_adapter *padapter)
 {
 	int status = _SUCCESS;
@@ -1502,7 +1497,6 @@ void rtw_ips_pwr_down(_adapter *padapter)
 	padapter->bCardDisableWOHSM = false;
 	DBG_88E("<=== rtw_ips_pwr_down..................... in %dms\n", rtw_get_passing_time_ms(start_time));
 }
-#endif
 
 void rtw_ips_dev_unload(_adapter *padapter)
 {
@@ -1547,11 +1541,8 @@ int pm_netdev_open(struct net_device *pnetdev,u8 bnormal)
 
 	if (true == bnormal)
 		status = netdev_open(pnetdev);
-#ifdef CONFIG_IPS
 	else
 		status =  (_SUCCESS == ips_netdrv_open((_adapter *)rtw_netdev_priv(pnetdev)))?(0):(-1);
-#endif
-
 	return status;
 }
 

@@ -29,7 +29,6 @@
 #include <rtl8723a_hal.h>
 #endif
 
-#ifdef CONFIG_IPS
 void ips_enter(_adapter * padapter)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
@@ -126,9 +125,6 @@ int ips_leave(_adapter * padapter)
 
 	return result;
 }
-
-
-#endif
 
 #ifdef CONFIG_AUTOSUSPEND
 extern void autosuspend_enter(_adapter* padapter);
@@ -312,9 +308,7 @@ void rtw_ps_processor(_adapter*padapter)
 			pwrpriv->change_rfpwrstate = rf_off;
 			#endif	/* defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND) */
 
-			#ifdef CONFIG_IPS
 			ips_enter(padapter);
-			#endif
 		}
 	}
 exit:
@@ -323,7 +317,6 @@ exit:
 	return;
 }
 
-void pwr_state_check_handler(void *FunctionContext);
 void pwr_state_check_handler(void *FunctionContext)
 {
 	_adapter *padapter = (_adapter *)FunctionContext;
@@ -869,7 +862,6 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 		else
 #endif
 		{
-#ifdef CONFIG_IPS
 			DBG_88E("%s call ips_leave....\n",__func__);
 			if (_FAIL ==  ips_leave(padapter))
 			{
@@ -877,7 +869,6 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 				ret = _FAIL;
 				goto exit;
 			}
-#endif
 		}
 	}
 

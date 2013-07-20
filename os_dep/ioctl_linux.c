@@ -7840,10 +7840,8 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	lps_mode = pwrctrlpriv->power_mgnt;//keep org value
 	rtw_pm_set_lps(padapter,PS_MODE_ACTIVE);
 
-	#ifdef CONFIG_IPS
 	ips_mode = pwrctrlpriv->ips_mode;//keep org value
 	rtw_pm_set_ips(padapter,IPS_NONE);
-	#endif
 
 	pch = extra;
 	DBG_88E("%s: in=%s\n", __func__, extra);
@@ -8255,9 +8253,7 @@ exit:
 	if (!err)
 		wrqu->length = strlen(extra);
 
-	#ifdef CONFIG_IPS
 	rtw_pm_set_ips(padapter, ips_mode);
-	#endif
 	rtw_pm_set_lps(padapter, lps_mode);
 	padapter->registrypriv.fw_iol = org_fw_iol;// 0:Disable, 1:enable, 2:by usb speed
 	return err;
@@ -8312,10 +8308,8 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	lps_mode = pwrctrlpriv->power_mgnt;//keep org value
 	rtw_pm_set_lps(padapter,PS_MODE_ACTIVE);
 
-	#ifdef CONFIG_IPS
 	ips_mode = pwrctrlpriv->ips_mode;//keep org value
 	rtw_pm_set_ips(padapter,IPS_NONE);
-	#endif
 
 	pch = extra;
 	DBG_88E("%s: in=%s\n", __func__, extra);
@@ -8676,9 +8670,7 @@ exit:
 	if (setrawdata)
 		_rtw_mfree(setrawdata, EFUSE_MAX_SIZE);
 
-	#ifdef CONFIG_IPS
 	rtw_pm_set_ips(padapter, ips_mode);
-	#endif
 	rtw_pm_set_lps(padapter, lps_mode);
 
 	return err;

@@ -552,9 +552,7 @@ int rtw_hw_suspend(_adapter *padapter )
 
 		//s2-4.
 		rtw_free_network_queue(padapter,true);
-		#ifdef CONFIG_IPS
 		rtw_ips_dev_unload(padapter);
-		#endif
 		pwrpriv->rf_pwrstate = rf_off;
 		pwrpriv->bips_processing = false;
 

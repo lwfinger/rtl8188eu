@@ -282,10 +282,8 @@ extern void rtw_free_pwrctrl_priv(_adapter * adapter);
 extern void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode);
 extern void rtw_set_rpwm(_adapter * padapter, u8 val8);
 extern void LeaveAllPowerSaveMode(PADAPTER Adapter);
-#ifdef CONFIG_IPS
 void ips_enter(_adapter * padapter);
 int ips_leave(_adapter * padapter);
-#endif
 
 void rtw_ps_processor(_adapter*padapter);
 

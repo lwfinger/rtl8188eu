@@ -99,10 +99,8 @@ void rtw_ips_dev_unload(_adapter *padapter);
 void rtw_bb_rf_gain_offset(_adapter *padapter);
 #endif //CONFIG_RF_GAIN_OFFSET
 
-#ifdef CONFIG_IPS
 int rtw_ips_pwr_up(_adapter *padapter);
 void rtw_ips_pwr_down(_adapter *padapter);
-#endif
 
 #ifdef SUPPORT_HW_RFOFF_DETECTED
 int rtw_hw_suspend(_adapter *padapter );
