@@ -8724,38 +8724,13 @@ static u8 chk_ap_is_alive(_adapter *padapter, struct sta_info *psta)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	#ifdef DBG_EXPIRATION_CHK
-	DBG_88E(FUNC_ADPT_FMT" rx:"STA_PKTS_FMT", beacon:%llu, probersp_to_self:%llu"
-				/*", probersp_bm:%llu, probersp_uo:%llu, probereq:%llu, BI:%u"*/
-				", retry:%u\n"
-		, FUNC_ADPT_ARG(padapter)
-		, STA_RX_PKTS_DIFF_ARG(psta)
-		, psta->sta_stats.rx_beacon_pkts - psta->sta_stats.last_rx_beacon_pkts
-		, psta->sta_stats.rx_probersp_pkts - psta->sta_stats.last_rx_probersp_pkts
-		/*, psta->sta_stats.rx_probersp_bm_pkts - psta->sta_stats.last_rx_probersp_bm_pkts
-		, psta->sta_stats.rx_probersp_uo_pkts - psta->sta_stats.last_rx_probersp_uo_pkts
-		, psta->sta_stats.rx_probereq_pkts - psta->sta_stats.last_rx_probereq_pkts
-		, pmlmeinfo->bcn_interval*/
-		, pmlmeext->retry
-	);
-
-	DBG_88E(FUNC_ADPT_FMT" tx_pkts:%llu, link_count:%u\n", FUNC_ADPT_ARG(padapter)
-		, padapter->xmitpriv.tx_pkts
-		, pmlmeinfo->link_count
-	);
-	#endif
-
 	if ((sta_rx_data_pkts(psta) == sta_last_rx_data_pkts(psta))
 		&& sta_rx_beacon_pkts(psta) == sta_last_rx_beacon_pkts(psta)
 		&& sta_rx_probersp_pkts(psta) == sta_last_rx_probersp_pkts(psta)
 	)
-	{
 		ret = false;
-	}
 	else
-	{
 		ret = true;
-	}
 
 	sta_update_last_rx_pkts(psta);
 
@@ -8821,9 +8796,6 @@ void linked_status_chk(_adapter *padapter)
 			} else {
 				if (rx_chk != _SUCCESS) {
 					if (pmlmeext->retry == 0) {
-						#ifdef DBG_EXPIRATION_CHK
-						DBG_88E("issue_probereq to trigger probersp, retry=%d\n", pmlmeext->retry);
-						#endif
 						issue_probereq(padapter, &pmlmeinfo->network.Ssid, pmlmeinfo->network.MacAddress);
 						issue_probereq(padapter, &pmlmeinfo->network.Ssid, pmlmeinfo->network.MacAddress);
 						issue_probereq(padapter, &pmlmeinfo->network.Ssid, pmlmeinfo->network.MacAddress);
@@ -8831,9 +8803,6 @@ void linked_status_chk(_adapter *padapter)
 				}
 
 				if (tx_chk != _SUCCESS && pmlmeinfo->link_count++ == 0xf) {
-					#ifdef DBG_EXPIRATION_CHK
-					DBG_88E("%s issue_nulldata 0\n", __func__);
-					#endif
 					tx_chk = issue_nulldata(padapter, NULL, 0, 1, 0);
 				}
 			}
