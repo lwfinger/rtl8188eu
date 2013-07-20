@@ -130,13 +130,6 @@ extern void eeprom_write16(_adapter *padapter, u16 reg, u16 data);
 extern u16 eeprom_read16(_adapter *padapter, u16 reg);
 extern void read_eeprom_content(_adapter *padapter);
 extern void eeprom_read_sz(_adapter * padapter, u16 reg,u8* data, u32 sz);
-
 extern void read_eeprom_content_by_attrib(_adapter *	padapter	);
-
-#ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-extern int isAdaptorInfoFileValid(void);
-extern int storeAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv);
-extern int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv);
-#endif //CONFIG_ADAPTOR_INFO_CACHING_FILE
 
 #endif  //__RTL871X_EEPROM_H__
