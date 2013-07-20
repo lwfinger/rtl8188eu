@@ -1231,9 +1231,7 @@ odm_DIGbyRSSI_LPS(
 		return;
 
 	CurrentIGI=CurrentIGI+RSSI_OFFSET_DIG;
-#ifdef CONFIG_LPS
 	bFwCurrentInPSMode = pAdapter->pwrctrlpriv.bFwCurrentInPSMode;
-#endif
 
 	/*  Using FW PS mode to make IGI */
 	if (bFwCurrentInPSMode)

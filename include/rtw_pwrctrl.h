@@ -296,12 +296,9 @@ int autoresume_enter(_adapter* padapter);
 rt_rf_power_state RfOnOffDetect(	PADAPTER pAdapter );
 #endif
 
-
-#ifdef CONFIG_LPS
 s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms);
 void LPS_Enter(PADAPTER padapter);
 void LPS_Leave(PADAPTER padapter);
-#endif
 
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv);

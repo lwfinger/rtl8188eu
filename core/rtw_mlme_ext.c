@@ -9102,10 +9102,7 @@ void mlmeext_joinbss_event_callback(_adapter *padapter, int join_res)
 
 		/* set_link_timer(pmlmeext, DISCONNECT_TO); */
 	}
-
-#ifdef CONFIG_LPS
 	rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_CONNECT, 0);
-#endif
 
 exit_mlmeext_joinbss_event_callback:
 

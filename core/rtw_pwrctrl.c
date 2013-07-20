@@ -330,9 +330,6 @@ void pwr_state_check_handler(void *FunctionContext)
 	rtw_ps_cmd(padapter);
 }
 
-
-
-#ifdef CONFIG_LPS
 /*
  *
  * Parameters
@@ -621,7 +618,6 @@ _func_enter_;
 
 _func_exit_;
 }
-#endif
 
 /*  */
 /*  Description: Leave all power save mode: LPS, FwLPS, IPS if needed. */
@@ -640,10 +636,7 @@ _func_enter_;
 		p2p_ps_wk_cmd(Adapter, P2P_PS_DISABLE, enqueue);
 #endif /* CONFIG_P2P_PS */
 
-#ifdef CONFIG_LPS
 		rtw_lps_ctrl_wk_cmd(Adapter, LPS_CTRL_LEAVE, enqueue);
-#endif
-
 	} else {
 		if (Adapter->pwrctrlpriv.rf_pwrstate== rf_off)
 		{

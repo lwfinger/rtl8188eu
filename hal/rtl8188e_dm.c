@@ -274,10 +274,8 @@ rtl8188e_HalDmWatchDog(
 	if (hw_init_completed == false)
 		goto skip_dm;
 
-#ifdef CONFIG_LPS
 	bFwCurrentInPSMode = Adapter->pwrctrlpriv.bFwCurrentInPSMode;
 	rtw_hal_get_hwreg(Adapter, HW_VAR_FWLPS_RF_ON, (u8 *)(&bFwPSAwake));
-#endif
 
 #ifdef CONFIG_P2P_PS
 	/*  Fw is under p2p powersaving mode, driver should stop dynamic mechanism. */

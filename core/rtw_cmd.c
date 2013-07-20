@@ -656,11 +656,9 @@ u8 rtw_sitesurvey_cmd(_adapter  *padapter, NDIS_802_11_SSID *ssid, int ssid_num,
 
 _func_enter_;
 
-#ifdef CONFIG_LPS
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true){
 		rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_SCAN, 1);
 	}
-#endif
 
 #ifdef CONFIG_P2P_PS
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
@@ -1853,9 +1851,7 @@ u8 rtw_tdls_cmd(_adapter *padapter, u8 *addr, u8 option)
 
 static void traffic_status_watchdog(_adapter *padapter)
 {
-#ifdef CONFIG_LPS
 	u8	bEnterPS;
-#endif
 	u8	bBusyTraffic = false, bTxBusyTraffic = false, bRxBusyTraffic = false;
 	u8	bHigherBusyTraffic = false, bHigherBusyRxTraffic = false, bHigherBusyTxTraffic = false;
 #ifdef CONFIG_FTP_PROTECT
@@ -1914,7 +1910,6 @@ static void traffic_status_watchdog(_adapter *padapter)
 		}
 #endif /* CONFIG_KEEP_FTP_TRANSMIT */
 
-#ifdef CONFIG_LPS
 #ifdef CONFIG_BT_COEXIST
 		if (BT_1Ant(padapter) == false)
 #endif
@@ -1941,13 +1936,10 @@ static void traffic_status_watchdog(_adapter *padapter)
 			LPS_Leave(padapter);
 		}
 		}
-#endif /*  CONFIG_LPS */
 	}
 	else
 	{
-#ifdef CONFIG_LPS
 		LPS_Leave(padapter);
-#endif
 	}
 
 	pmlmepriv->LinkDetectInfo.NumRxOkInPeriod = 0;
@@ -1986,8 +1978,6 @@ void dynamic_chk_wk_hdl(_adapter *padapter, u8 *pbuf, int sz)
 	BT_CoexistMechanism(padapter);
 #endif
 }
-
-#ifdef CONFIG_LPS
 
 void lps_ctrl_wk_hdl(_adapter *padapter, u8 lps_ctrl_type)
 {
@@ -2121,8 +2111,6 @@ _func_exit_;
 	return res;
 
 }
-
-#endif
 
 #if (RATE_ADAPTIVE_SUPPORT==1)
 static void rpt_timer_setting_wk_hdl(_adapter *padapter, u16 minRptTime)
@@ -2507,11 +2495,9 @@ u8 rtw_drvextra_cmd_hdl(_adapter *padapter, unsigned char *pbuf)
 		case POWER_SAVING_CTRL_WK_CID:
 			power_saving_wk_hdl(padapter, pdrvextra_cmd->pbuf, pdrvextra_cmd->type_size);
 			break;
-#ifdef CONFIG_LPS
 		case LPS_CTRL_WK_CID:
 			lps_ctrl_wk_hdl(padapter, (u8)pdrvextra_cmd->type_size);
 			break;
-#endif
 #if (RATE_ADAPTIVE_SUPPORT==1)
 		case RTP_TIMER_CFG_WK_CID:
 			rpt_timer_setting_wk_hdl(padapter, pdrvextra_cmd->type_size);

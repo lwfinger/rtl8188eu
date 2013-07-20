@@ -336,20 +336,13 @@ _func_enter_;
 						_clr_fwstate_(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
 						set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
 					}
-				}
-				else
-				{
+				} else {
 					goto release_mlme_lock;/* it means driver is in WIFI_ADHOC_MASTER_STATE, we needn't create bss again. */
 				}
-			}
-#ifdef CONFIG_LPS
-			else {
+			} else {
 				rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_JOINBSS, 1);
 			}
-#endif
-		}
-		else
-		{
+		} else {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("Set SSID not the same ssid\n"));
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("set_ssid=[%s] len=0x%x\n", ssid->Ssid, (unsigned int)ssid->SsidLength));
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("assoc_ssid=[%s] len=0x%x\n", pmlmepriv->assoc_ssid.Ssid, (unsigned int)pmlmepriv->assoc_ssid.SsidLength));

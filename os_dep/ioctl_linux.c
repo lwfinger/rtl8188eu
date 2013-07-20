@@ -7844,10 +7844,8 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		err = -EFAULT;
 		goto exit;
 	}
-	#ifdef CONFIG_LPS
 	lps_mode = pwrctrlpriv->power_mgnt;//keep org value
 	rtw_pm_set_lps(padapter,PS_MODE_ACTIVE);
-	#endif
 
 	#ifdef CONFIG_IPS
 	ips_mode = pwrctrlpriv->ips_mode;//keep org value
@@ -8267,9 +8265,7 @@ exit:
 	#ifdef CONFIG_IPS
 	rtw_pm_set_ips(padapter, ips_mode);
 	#endif
-	#ifdef CONFIG_LPS
 	rtw_pm_set_lps(padapter, lps_mode);
-	#endif
 	padapter->registrypriv.fw_iol = org_fw_iol;// 0:Disable, 1:enable, 2:by usb speed
 	return err;
 }
@@ -8320,10 +8316,8 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		goto exit;
 	}
 
-	#ifdef CONFIG_LPS
 	lps_mode = pwrctrlpriv->power_mgnt;//keep org value
 	rtw_pm_set_lps(padapter,PS_MODE_ACTIVE);
-	#endif
 
 	#ifdef CONFIG_IPS
 	ips_mode = pwrctrlpriv->ips_mode;//keep org value
@@ -8692,9 +8686,7 @@ exit:
 	#ifdef CONFIG_IPS
 	rtw_pm_set_ips(padapter, ips_mode);
 	#endif
-	#ifdef CONFIG_LPS
 	rtw_pm_set_lps(padapter, lps_mode);
-	#endif
 
 	return err;
 }
