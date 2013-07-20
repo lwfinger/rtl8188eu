@@ -429,13 +429,7 @@ struct mlme_priv {
 	u32 p2p_assoc_req_ie_len;
 	_lock	bcn_update_lock;
 	u8		update_bcn;
-
-
 #endif //#if defined (CONFIG_AP_MODE)
-
-#ifdef CONFIG_FTP_PROTECT
-	u8	ftp_lock_flag;
-#endif //CONFIG_FTP_PROTECT
 };
 
 #ifdef CONFIG_AP_MODE

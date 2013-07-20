@@ -1828,9 +1828,6 @@ static void traffic_status_watchdog(_adapter *padapter)
 	u8	bEnterPS;
 	u8	bBusyTraffic = false, bTxBusyTraffic = false, bRxBusyTraffic = false;
 	u8	bHigherBusyTraffic = false, bHigherBusyRxTraffic = false, bHigherBusyTxTraffic = false;
-#ifdef CONFIG_FTP_PROTECT
-	u16	bPktCount = 0;
-#endif
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 
 	/*  */
@@ -1867,22 +1864,6 @@ static void traffic_status_watchdog(_adapter *padapter)
 			else
 				bHigherBusyTxTraffic = true;
 		}
-
-#ifdef CONFIG_FTP_PROTECT
-		DBG_88E("RX in period:%d, TX in period:%d, ftp_lock_flag:%d\n",
-			pmlmepriv->LinkDetectInfo.NumRxOkInPeriod,
-			pmlmepriv->LinkDetectInfo.NumTxOkInPeriod,
-			pmlmepriv->ftp_lock_flag);
-
-		bPktCount = pmlmepriv->LinkDetectInfo.NumRxOkInPeriod + pmlmepriv->LinkDetectInfo.NumTxOkInPeriod;
-		if (bPktCount > 20 && !pmlmepriv->ftp_lock_flag) {
-			pmlmepriv->ftp_lock_flag = 1;
-			rtw_lock_suspend();
-		} else if (bPktCount == 0 && pmlmepriv->ftp_lock_flag) {
-			pmlmepriv->ftp_lock_flag = 0;
-			rtw_unlock_suspend();
-		}
-#endif /* CONFIG_KEEP_FTP_TRANSMIT */
 
 #ifdef CONFIG_BT_COEXIST
 		if (BT_1Ant(padapter) == false)

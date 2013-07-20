@@ -89,10 +89,6 @@ _func_enter_;
 
 	rtw_clear_scan_deny(padapter);
 
-	#ifdef CONFIG_FTP_PROTECT
-	pmlmepriv->ftp_lock_flag = 0;
-	#endif /* CONFIG_FTP_PROTECT */
-
 	rtw_init_mlme_timer(padapter);
 
 exit:
@@ -102,7 +98,6 @@ _func_exit_;
 	return res;
 }
 
-void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv);
 void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv)
 {
 	_rtw_spinlock_free(&pmlmepriv->lock);
