@@ -945,12 +945,6 @@ u32 rtw_start_drv_threads(_adapter *padapter)
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+rtw_start_drv_threads\n"));
 
-#ifdef CONFIG_RECV_THREAD_MODE
-	padapter->recvThread = kthread_run(rtw_recv_thread, padapter, "RTW_RECV_THREAD");
-	if (IS_ERR(padapter->recvThread))
-		_status = _FAIL;
-#endif
-
 	padapter->cmdThread = kthread_run(rtw_cmd_thread, padapter, "RTW_CMD_THREAD");
         if (IS_ERR(padapter->cmdThread))
 		_status = _FAIL;
@@ -983,12 +977,6 @@ void rtw_stop_drv_threads (_adapter *padapter)
 	}
 #endif
 
-#ifdef CONFIG_RECV_THREAD_MODE
-	// Below is to termindate rx_thread...
-	_rtw_up_sema(&padapter->recvpriv.recv_sema);
-	_rtw_down_sema(&padapter->recvpriv.terminate_recvthread_sema);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("\n drv_halt:recv_thread can be terminated!\n"));
-#endif
 	rtw_hal_stop_thread(padapter);
 }
 

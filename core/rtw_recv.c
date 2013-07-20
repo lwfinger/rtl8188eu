@@ -116,11 +116,6 @@ _func_exit_;
 void rtw_mfree_recv_priv_lock(struct recv_priv *precvpriv)
 {
 	_rtw_spinlock_free(&precvpriv->lock);
-#ifdef CONFIG_RECV_THREAD_MODE
-	_rtw_free_sema(&precvpriv->recv_sema);
-	_rtw_free_sema(&precvpriv->terminate_recvthread_sema);
-#endif
-
 	_rtw_spinlock_free(&precvpriv->free_recv_queue.lock);
 	_rtw_spinlock_free(&precvpriv->recv_pending_queue.lock);
 
