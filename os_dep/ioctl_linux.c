@@ -36,9 +36,7 @@
 #include <rtw_version.h>
 #include <rtl8188e_hal.h>
 
-#ifdef CONFIG_MP_INCLUDED
 #include <rtw_mp.h>
-#endif //#ifdef CONFIG_MP_INCLUDED
 #include <rtl8188e_hal.h>
 #include <rtw_iol.h>
 
@@ -1667,16 +1665,14 @@ _func_enter_;
 	DBG_88E("DBG_IOCTL %s:%d\n",__func__, __LINE__);
 	#endif
 
-#ifdef CONFIG_MP_INCLUDED
-if (padapter->registrypriv.mp_mode == 1)
-{
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
+	if (padapter->registrypriv.mp_mode == 1)
 	{
-		ret = -1;
-		goto exit;
+		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
+		{
+			ret = -1;
+			goto exit;
+		}
 	}
-}
-#endif
 	if (_FAIL == rtw_pwr_wakeup(padapter))
 	{
 		ret= -1;
@@ -3276,8 +3272,6 @@ static int rtw_mp_ioctl_hdl(struct net_device *dev, struct iw_request_info *info
 		goto _rtw_mp_ioctl_hdl_exit;
 	}
 
-	//DBG_88E("%s: %d\n", __func__, poidparam->subcode);
-#ifdef CONFIG_MP_INCLUDED
 if (padapter->registrypriv.mp_mode == 1)
 {
 	phandler = mp_ioctl_hdl + poidparam->subcode;
@@ -3324,9 +3318,8 @@ if (padapter->registrypriv.mp_mode == 1)
 	}
 }
 else
-#endif
-{
-	rtw_dbg_mode_hdl(padapter, poidparam->subcode, poidparam->data, poidparam->len);
+	{
+		rtw_dbg_mode_hdl(padapter, poidparam->subcode, poidparam->data, poidparam->len);
 }
 
 	if (bset == 0x00) {//query info
@@ -8691,7 +8684,7 @@ exit:
 	return err;
 }
 
-#if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_MP_IWPRIV_SUPPORT)
+#if defined(CONFIG_MP_IWPRIV_SUPPORT)
 /*
  * Input Format: %s,%d,%d
  *	%s is width, could be
@@ -9933,7 +9926,7 @@ static int rtw_mp_get(struct net_device *dev,
 	return 0;
 }
 
-#endif //#if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_MP_IWPRIV_SUPPORT)
+#endif //#if defined(CONFIG_MP_IWPRIV_SUPPORT)
 
 static int rtw_wfd_tdls_enable(struct net_device *dev,
 				struct iw_request_info *info,
@@ -10809,7 +10802,6 @@ static const struct iw_priv_args rtw_private_args[] = {
 		IW_PRIV_TYPE_CHAR | 40, IW_PRIV_TYPE_CHAR | 0x7FF, "test"
 	},
 
-#ifdef CONFIG_MP_INCLUDED
 
 	{ SIOCIWFIRSTPRIV + 0x0E, IW_PRIV_TYPE_CHAR | 1024, 0 , ""},  //set
 	{ SIOCIWFIRSTPRIV + 0x0F, IW_PRIV_TYPE_CHAR | 1024, IW_PRIV_TYPE_CHAR | IW_PRIV_SIZE_MASK , ""},//get
@@ -10869,13 +10861,8 @@ static iw_handler rtw_private_handler[] =
 	rtw_wx_write_rf,					//0x0C
 	rtw_wx_read_rf,					//0x0D
 
-#ifndef CONFIG_MP_INCLUDED
-	rtw_wx_priv_null,				//0x0E
-	rtw_wx_priv_null,				//0x0F
-#else
 	rtw_mp_set,					//0x0E
 	rtw_mp_get,					//0x0F
-#endif
 	rtw_p2p_set,					//0x10
 	rtw_p2p_get,					//0x11
 	rtw_p2p_get2,					//0x12
@@ -10894,8 +10881,6 @@ static iw_handler rtw_private_handler[] =
 	NULL,							// 0x1C is reserved for hostapd
 	rtw_test,						// 0x1D
 };
-
-#endif // #if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_MP_IWPRIV_SUPPORT)
 
 #if WIRELESS_EXT >= 17
 static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)

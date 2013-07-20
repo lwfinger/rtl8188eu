@@ -24,47 +24,42 @@
 #include "odm_precomp.h"
 #include "rtl8188e_hal.h"
 
-#ifdef CONFIG_MP_INCLUDED
-
 u32 read_macreg(_adapter *padapter, u32 addr, u32 sz)
 {
 	u32 val = 0;
 
-	switch (sz)
-	{
-		case 1:
-			val = rtw_read8(padapter, addr);
-			break;
-		case 2:
-			val = rtw_read16(padapter, addr);
-			break;
-		case 4:
-			val = rtw_read32(padapter, addr);
-			break;
-		default:
-			val = 0xffffffff;
-			break;
+	switch (sz) {
+	case 1:
+		val = rtw_read8(padapter, addr);
+		break;
+	case 2:
+		val = rtw_read16(padapter, addr);
+		break;
+	case 4:
+		val = rtw_read32(padapter, addr);
+		break;
+	default:
+		val = 0xffffffff;
+		break;
 	}
 
 	return val;
-
 }
 
 void write_macreg(_adapter *padapter, u32 addr, u32 val, u32 sz)
 {
-	switch (sz)
-	{
-		case 1:
-			rtw_write8(padapter, addr, (u8)val);
-			break;
-		case 2:
-			rtw_write16(padapter, addr, (u16)val);
-			break;
-		case 4:
-			rtw_write32(padapter, addr, val);
-			break;
-		default:
-			break;
+	switch (sz) {
+	case 1:
+		rtw_write8(padapter, addr, (u8)val);
+		break;
+	case 2:
+		rtw_write16(padapter, addr, (u16)val);
+		break;
+	case 4:
+		rtw_write32(padapter, addr, val);
+		break;
+	default:
+		break;
 	}
 
 }
@@ -190,19 +185,12 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
 	_rtw_memset(desc, 0, TXDESC_SIZE);
 
 	pattrib->ether_type = 0x8712;
-	/* _rtw_memcpy(pattrib->src, padapter->eeprompriv.mac_addr, ETH_ALEN); */
-/* 	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN); */
 	_rtw_memset(pattrib->dst, 0xFF, ETH_ALEN);
-/* 	pattrib->pctrl = 0; */
-/* 	pattrib->dhcp_pkt = 0; */
-/* 	pattrib->pktlen = 0; */
 	pattrib->ack_policy = 0;
-/* 	pattrib->pkt_hdrlen = ETH_HLEN; */
 	pattrib->hdrlen = WLAN_HDR_A3_LEN;
 	pattrib->subtype = WIFI_DATA;
 	pattrib->priority = 0;
 	pattrib->qsel = pattrib->priority;
-/* 	do_queue_select(padapter, pattrib); */
 	pattrib->nr_frags = 1;
 	pattrib->encrypt = 0;
 	pattrib->bswenc = false;
@@ -1170,6 +1158,3 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 exit:
 	;
 }
-
-
-#endif

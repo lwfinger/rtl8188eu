@@ -20,7 +20,6 @@ CONFIG_RTL8188E = y
 
 CONFIG_USB_HCI = y
 
-CONFIG_MP_INCLUDED = y
 CONFIG_POWER_SAVING = y
 CONFIG_USB_AUTOSUSPEND = n
 CONFIG_HW_PWRP_DETECTION = n
@@ -56,6 +55,7 @@ OUTSRC_FILES :=				\
 		hal/rtl8188e_cmd.o	\
 		hal/rtl8188e_dm.o	\
 		hal/rtl8188e_hal_init.o	\
+		hal/rtl8188e_mp.o	\
 		hal/rtl8188e_phycfg.o	\
 		hal/rtl8188e_rf6052.o	\
 		hal/rtl8188e_rxdesc.o	\
@@ -89,9 +89,6 @@ _OS_INTFS_FILES :=				\
 
 
 
-ifeq ($(CONFIG_MP_INCLUDED), y)
-_HAL_INTFS_FILES += hal/rtl8188e_mp.o
-endif
 
 _HAL_INTFS_FILES += $(OUTSRC_FILES)
 
@@ -104,10 +101,6 @@ endif
 
 ifeq ($(CONFIG_USB_AUTOSUSPEND), y)
 EXTRA_CFLAGS += -DCONFIG_USB_AUTOSUSPEND
-endif
-
-ifeq ($(CONFIG_MP_INCLUDED), y)
-EXTRA_CFLAGS += -DCONFIG_MP_INCLUDED
 endif
 
 ifeq ($(CONFIG_POWER_SAVING), y)

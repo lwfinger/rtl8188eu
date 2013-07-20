@@ -18,7 +18,6 @@
  *
  ******************************************************************************/
 #define _RTL8188E_MP_C_
-#ifdef CONFIG_MP_INCLUDED
 
 #include <drv_types.h>
 #include <rtw_mp.h>
@@ -993,5 +992,3 @@ void Hal_SetContinuousTx(PADAPTER pAdapter, u8 bStart)
 		Hal_SetOFDMContinuousTx(pAdapter, bStart);
 	}
 }
-
-#endif /*  CONFIG_MP_INCLUDE */

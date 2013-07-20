@@ -1159,10 +1159,8 @@ _func_enter_;
 
 	rtw_init_pwrctrl_priv(padapter);
 
-#ifdef CONFIG_MP_INCLUDED
 	if (init_mp_priv(padapter) == _FAIL)
 		DBG_88E("%s: initialize MP private data Fail!\n", __func__);
-#endif
 
 	ret8 = rtw_init_default_value(padapter);
 

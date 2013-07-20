@@ -1743,16 +1743,14 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy, struct net_device *ndev,
 	DBG_88E(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 #endif
 
-#ifdef CONFIG_MP_INCLUDED
-if (padapter->registrypriv.mp_mode == 1)
-{
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
+	if (padapter->registrypriv.mp_mode == 1)
 	{
-		ret = -EPERM;
-		goto exit;
+		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
+		{
+			ret = -EPERM;
+			goto exit;
+		}
 	}
-}
-#endif
 
 	_enter_critical_bh(&pwdev_priv->scan_req_lock, &irqL);
 	pwdev_priv->scan_request = request;
