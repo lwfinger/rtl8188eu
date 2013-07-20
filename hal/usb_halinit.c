@@ -2151,17 +2151,6 @@ static void ReadAdapterInfo8188EU(PADAPTER Adapter)
 #define GPIO_DEBUG_PORT_NUM 0
 static void rtl8192cu_trigger_gpio_0(_adapter *padapter)
 {
-#ifdef CONFIG_USB_SUPPORT_ASYNC_VDN_REQ
-	u32 gpioctrl;
-	DBG_88E("==> trigger_gpio_0...\n");
-	rtw_write16_async(padapter,REG_GPIO_PIN_CTRL,0);
-	rtw_write8_async(padapter,REG_GPIO_PIN_CTRL+2,0xFF);
-	gpioctrl = (BIT(GPIO_DEBUG_PORT_NUM)<<24 )|(BIT(GPIO_DEBUG_PORT_NUM)<<16);
-	rtw_write32_async(padapter,REG_GPIO_PIN_CTRL,gpioctrl);
-	gpioctrl |= (BIT(GPIO_DEBUG_PORT_NUM)<<8);
-	rtw_write32_async(padapter,REG_GPIO_PIN_CTRL,gpioctrl);
-	DBG_88E("<=== trigger_gpio_0...\n");
-#endif
 }
 
 static void ResumeTxBeacon(_adapter *padapter)
