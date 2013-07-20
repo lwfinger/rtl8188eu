@@ -2243,15 +2243,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 
 		if ((mode == _HW_STATE_STATION_) || (mode == _HW_STATE_NOLINK_))
 		{
-			{
-			#ifdef CONFIG_INTERRUPT_BASED_TXBCN
-				#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-				rtw_write8(Adapter, REG_DRVERLYINT, 0x05);/* restore early int time to 5ms */
-				UpdateInterruptMask8188EU(Adapter,true, 0, IMR_BCNDMAINT0_88E);
-				#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-			#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
-				StopTxBeacon(Adapter);
-			}
+			StopTxBeacon(Adapter);
 
 			rtw_write8(Adapter,REG_BCN_CTRL, 0x19);/* disable atim wnd */
 		}
@@ -2262,13 +2254,6 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 		}
 		else if (mode == _HW_STATE_AP_)
 		{
-
-#ifdef CONFIG_INTERRUPT_BASED_TXBCN
-			#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-			UpdateInterruptMask8188EU(Adapter,true ,IMR_BCNDMAINT0_88E, 0);
-			#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
-
 
 			ResumeTxBeacon(Adapter);
 
@@ -2602,18 +2587,6 @@ _func_enter_;
 			break;
 		case HW_VAR_BEACON_INTERVAL:
 			rtw_write16(Adapter, REG_BCN_INTERVAL, *((u16 *)val));
-#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-			{
-				struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
-				struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-				u16 bcn_interval =	*((u16 *)val);
-				if ((pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE){
-					DBG_88E("%s==> bcn_interval:%d, eraly_int:%d\n",__func__,bcn_interval,bcn_interval>>1);
-					rtw_write8(Adapter, REG_DRVERLYINT, bcn_interval>>1);/*  50ms for sdio */
-				}
-			}
-#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-
 			break;
 		case HW_VAR_SLOT_TIME:
 			{

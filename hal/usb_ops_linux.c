@@ -365,27 +365,9 @@ static void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
 	_rtw_memcpy(&(pHalData->IntArray[0]), &(pbuf[USB_INTR_CONTENT_HISR_OFFSET]), 4);
 	_rtw_memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
 
-#ifdef CONFIG_INTERRUPT_BASED_TXBCN
-
-	#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-	if (pHalData->IntArray[0] & IMR_BCNDMAINT0_88E)
-	#endif
-	{
-		struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-		if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
-			if (pmlmepriv->update_bcn == true)
-				set_tx_beacon_cmd(padapter);
-		}
-	}
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
-
 	/*  C2H Event */
-	if (pbuf[0]!= 0){
+	if (pbuf[0]!= 0)
 		_rtw_memcpy(&(pHalData->C2hArray[0]), &(pbuf[USB_INTR_CONTENT_C2H_OFFSET]), 16);
-		/* rtw_c2h_wk_cmd(padapter); to do.. */
-	}
-
 }
 #endif
 

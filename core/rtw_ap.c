@@ -163,9 +163,7 @@ static void update_BCNTIM(_adapter *padapter)
 		pnetwork_mlmeext->IELength = offset + remainder_ielen;
 	}
 
-#ifndef CONFIG_INTERRUPT_BASED_TXBCN
 	set_tx_beacon_cmd(padapter);
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 }
 
 void rtw_add_bcn_ie(_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index, u8 *data, u8 len)
@@ -887,16 +885,10 @@ static void start_bss_network(_adapter *padapter, u8 *pbuf)
 	{
 		update_beacon(padapter, _TIM_IE_, NULL, false);
 
-#ifndef CONFIG_INTERRUPT_BASED_TXBCN /* other case will  tx beacon when bcn interrupt coming in. */
 		/* issue beacon frame */
 		if (send_beacon(padapter)==_FAIL)
-		{
 			DBG_88E("issue_beacon, fail!\n");
-		}
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
-
 	}
-
 
 	/* update bc/mc sta_info */
 	update_bmc_sta(padapter);
@@ -1578,10 +1570,8 @@ void update_beacon(_adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
 
 	_exit_critical_bh(&pmlmepriv->bcn_update_lock, &irqL);
 
-#ifndef CONFIG_INTERRUPT_BASED_TXBCN
 	if (tx)
 		set_tx_beacon_cmd(padapter);
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 }
 
 #ifdef CONFIG_80211N_HT

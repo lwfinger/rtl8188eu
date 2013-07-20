@@ -51,10 +51,6 @@
 #define SUPPORT_HW_RFOFF_DETECTED
 
 #define CONFIG_AP_MODE
-#ifdef CONFIG_AP_MODE
-	#ifdef CONFIG_INTERRUPT_BASED_TXBCN
-	#endif
-#endif
 
 #define CONFIG_P2P
 #ifdef CONFIG_P2P
