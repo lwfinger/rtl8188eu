@@ -244,7 +244,7 @@ struct xmit_buf
 	u8 bpending[8];
 	sint last[8];
 
-#if defined(DBG_XMIT_BUF )|| defined(DBG_XMIT_BUF_EXT)
+#if defined(DBG_XMIT_BUF )
 	u8 no;
 #endif
 };

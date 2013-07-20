@@ -1147,9 +1147,6 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 		}
 
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
-		#ifdef DBG_XMIT_BUF_EXT
-		pxmitbuf->no=i;
-		#endif
 		pxmitbuf++;
 	}
 

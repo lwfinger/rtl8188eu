@@ -235,11 +235,7 @@ _func_enter_;
 		}
 
 		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
-		#ifdef DBG_XMIT_BUF_EXT
-		pxmitbuf->no=i;
-		#endif
 		pxmitbuf++;
-
 	}
 
 	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
@@ -248,9 +244,7 @@ _func_enter_;
 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
 
 	for (i = 0; i < 4; i ++)
-	{
 		pxmitpriv->wmm_para_seq[i] = i;
-	}
 
 	pxmitpriv->txirp_cnt=1;
 
@@ -1484,10 +1478,6 @@ _func_enter_;
 	if (pxmitbuf !=  NULL)
 	{
 		pxmitpriv->free_xmit_extbuf_cnt--;
-		#ifdef DBG_XMIT_BUF_EXT
-		DBG_88E("DBG_XMIT_BUF_EXT ALLOC no=%d,  free_xmit_extbuf_cnt=%d\n",pxmitbuf->no, pxmitpriv->free_xmit_extbuf_cnt);
-		#endif
-
 
 		pxmitbuf->priv_data = NULL;
 		/* pxmitbuf->ext_tag = true; */
@@ -1524,9 +1514,6 @@ _func_enter_;
 
 	rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_queue));
 	pxmitpriv->free_xmit_extbuf_cnt++;
-	#ifdef DBG_XMIT_BUF_EXT
-	DBG_88E("DBG_XMIT_BUF_EXT FREE no=%d, free_xmit_extbuf_cnt=%d\n",pxmitbuf->no ,pxmitpriv->free_xmit_extbuf_cnt);
-	#endif
 
 	_exit_critical(&pfree_queue->lock, &irqL);
 
