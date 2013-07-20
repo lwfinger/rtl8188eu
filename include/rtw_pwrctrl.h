@@ -191,11 +191,6 @@ struct pwrctrl_priv
 
 	u32	alives;
 	_workitem cpwm_event;
-#ifdef CONFIG_LPS_RPWM_TIMER
-	u8 brpwmtimeout;
-	_workitem rpwmtimeoutwi;
-	_timer pwr_rpwm_timer;
-#endif // CONFIG_LPS_RPWM_TIMER
 	u8	bpower_saving;
 
 	u8	b_hw_radio_off;

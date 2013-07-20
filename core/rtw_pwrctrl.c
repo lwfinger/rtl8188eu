@@ -356,19 +356,10 @@ _func_enter_;
 			pslv = PS_STATE_S3;
 	}
 
-#ifdef CONFIG_LPS_RPWM_TIMER
-	if (pwrpriv->brpwmtimeout == true)
-	{
-		DBG_88E("%s: RPWM timeout, force to set RPWM(0x%02X) again!\n", __func__, pslv);
-	}
-	else
-#endif /*  CONFIG_LPS_RPWM_TIMER */
-	{
 	if ( (pwrpriv->rpwm == pslv)) {
 		RT_TRACE(_module_rtl871x_pwrctrl_c_,_drv_err_,
 			("%s: Already set rpwm[0x%02X], new=0x%02X!\n", __func__, pwrpriv->rpwm, pslv));
 		return;
-	}
 	}
 
 	if ((padapter->bSurpriseRemoved == true) ||
@@ -401,10 +392,6 @@ _func_enter_;
 
 	pwrpriv->rpwm = pslv;
 
-#ifdef CONFIG_LPS_RPWM_TIMER
-	if (rpwm & PS_ACK)
-		_set_timer(&pwrpriv->pwr_rpwm_timer, LPS_RPWM_WAIT_MS);
-#endif /*  CONFIG_LPS_RPWM_TIMER */
 	rtw_hal_set_hwreg(padapter, HW_VAR_SET_RPWM, (u8 *)(&rpwm));
 
 	pwrpriv->tog += 0x80;
