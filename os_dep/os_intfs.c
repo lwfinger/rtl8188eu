@@ -70,9 +70,6 @@ static int rtw_ips_mode = IPS_NONE;
 
 static int rtw_smart_ps = 2;
 
-#ifdef CONFIG_TX_EARLY_MODE
-static int rtw_early_mode=1;
-#endif
 module_param(rtw_ips_mode, int, 0644);
 MODULE_PARM_DESC(rtw_ips_mode,"The default IPS mode");
 
@@ -195,10 +192,6 @@ module_param(rtw_enusbss, int, 0644);
 module_param(rtw_hwpdn_mode, int, 0644);
 module_param(rtw_hwpwrp_detect, int, 0644);
 module_param(rtw_hw_wps_pbc, int, 0644);
-
-#ifdef CONFIG_TX_EARLY_MODE
-module_param(rtw_early_mode, int, 0644);
-#endif
 
 static uint rtw_max_roaming_times=2;
 module_param(rtw_max_roaming_times, uint, 0644);
@@ -682,9 +675,6 @@ _func_enter_;
 	registry_par->ampdu_enable = (u8)rtw_ampdu_enable;
 	registry_par->rx_stbc = (u8)rtw_rx_stbc;
 	registry_par->ampdu_amsdu = (u8)rtw_ampdu_amsdu;
-#endif
-#ifdef CONFIG_TX_EARLY_MODE
-	registry_par->early_mode = (u8)rtw_early_mode;
 #endif
 	registry_par->lowrate_two_xmit = (u8)rtw_lowrate_two_xmit;
 	registry_par->rf_config = (u8)rtw_rf_config;

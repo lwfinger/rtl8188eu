@@ -264,12 +264,9 @@ s32 rtl8188eu_xmit_buf_handler(PADAPTER padapter);
 void rtl8188eu_xmit_tasklet(void *priv);
 s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
 
-#ifdef CONFIG_TX_EARLY_MODE
-void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmitbuf );
-#endif
-
 void dump_txrpt_ccx_88e(void *buf);
 void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf);
 
 void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
+
 #endif //__RTL8188E_XMIT_H__
