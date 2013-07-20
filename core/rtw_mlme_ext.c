@@ -2238,10 +2238,6 @@ unsigned int OnAction_back(_adapter *padapter, union recv_frame *precv_frame)
 					preorder_ctrl =  &psta->recvreorder_ctrl[tid];
 					preorder_ctrl->enable = false;
 					preorder_ctrl->indicate_seq = 0xffff;
-					#ifdef DBG_RX_SEQ
-					DBG_88E("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __func__, __LINE__,
-						preorder_ctrl->indicate_seq);
-					#endif
 				}
 
 				DBG_88E("%s(): DELBA: %x(%x)\n", __func__,pmlmeinfo->agg_enable_bitmap, reason_code);
@@ -7238,10 +7234,6 @@ unsigned int send_delba(_adapter *padapter, u8 initiator, u8 *addr)
 				issue_action_BA(padapter, addr, RTW_WLAN_ACTION_DELBA, (((tid <<1) |initiator)&0x1F));
 				psta->recvreorder_ctrl[tid].enable = false;
 				psta->recvreorder_ctrl[tid].indicate_seq = 0xffff;
-				#ifdef DBG_RX_SEQ
-				DBG_88E("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __func__, __LINE__,
-					psta->recvreorder_ctrl[tid].indicate_seq);
-				#endif
 			}
 		}
 	}

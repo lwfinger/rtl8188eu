@@ -2197,17 +2197,7 @@ static int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_n
 
 	/*  Rx Reorder initialize condition. */
 	if (preorder_ctrl->indicate_seq == 0xFFFF)
-	{
 		preorder_ctrl->indicate_seq = seq_num;
-		#ifdef DBG_RX_SEQ
-		DBG_88E("DBG_RX_SEQ %s:%d init IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-			preorder_ctrl->indicate_seq, seq_num);
-		#endif
-
-		/* DbgPrint("check_indicate_seq, 1st->indicate_seq=%d\n", precvpriv->indicate_seq); */
-	}
-
-	/* DbgPrint("enter->check_indicate_seq(): IndicateSeq: %d, NewSeq: %d\n", precvpriv->indicate_seq, seq_num); */
 
 	/*  Drop out the packet which SeqNum is smaller than WinStart */
 	if ( SN_LESS(seq_num, preorder_ctrl->indicate_seq) )
@@ -2221,29 +2211,14 @@ static int check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_n
 	if ( SN_EQUAL(seq_num, preorder_ctrl->indicate_seq) )
 	{
 		preorder_ctrl->indicate_seq = (preorder_ctrl->indicate_seq + 1) & 0xFFF;
-		#ifdef DBG_RX_SEQ
-		DBG_88E("DBG_RX_SEQ %s:%d SN_EQUAL IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-			preorder_ctrl->indicate_seq, seq_num);
-		#endif
 	}
 	else if (SN_LESS(wend, seq_num))
 	{
-		/* RT_TRACE(COMP_RX_REORDER, DBG_LOUD, ("CheckRxTsIndicateSeq(): Window Shift! IndicateSeq: %d, NewSeq: %d\n", pTS->RxIndicateSeq, NewSeqNum)); */
-		/* DbgPrint("CheckRxTsIndicateSeq(): Window Shift! IndicateSeq: %d, NewSeq: %d\n", precvpriv->indicate_seq, seq_num); */
-
-		/*  boundary situation, when seq_num cross 0xFFF */
 		if (seq_num >= (wsize - 1))
 			preorder_ctrl->indicate_seq = seq_num + 1 -wsize;
 		else
 			preorder_ctrl->indicate_seq = 0xFFF - (wsize - (seq_num + 1)) + 1;
-
-		#ifdef DBG_RX_SEQ
-		DBG_88E("DBG_RX_SEQ %s:%d SN_LESS(wend, seq_num) IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-			preorder_ctrl->indicate_seq, seq_num);
-		#endif
 	}
-
-	/* DbgPrint("exit->check_indicate_seq(): IndicateSeq: %d, NewSeq: %d\n", precvpriv->indicate_seq, seq_num); */
 
 	return true;
 }
@@ -2298,10 +2273,6 @@ static int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ct
 		prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 	        pattrib = &prframe->u.hdr.attrib;
 		preorder_ctrl->indicate_seq = pattrib->seq_num;
-		#ifdef DBG_RX_SEQ
-		DBG_88E("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-			preorder_ctrl->indicate_seq, pattrib->seq_num);
-		#endif
 	}
 
 	/*  Prepare indication list and indication. */
@@ -2319,14 +2290,7 @@ static int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ct
 			rtw_list_delete(&(prframe->u.hdr.list));
 
 			if (SN_EQUAL(preorder_ctrl->indicate_seq, pattrib->seq_num))
-			{
 				preorder_ctrl->indicate_seq = (preorder_ctrl->indicate_seq + 1) & 0xFFF;
-				#ifdef DBG_RX_SEQ
-				DBG_88E("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-					preorder_ctrl->indicate_seq, pattrib->seq_num);
-				#endif
-			}
-
 
 			/* Set this as a lock to make sure that only one thread is indicating packet. */
 
@@ -2400,19 +2364,9 @@ static int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prfram
 		{
 			/* indicate this recv_frame */
 			preorder_ctrl->indicate_seq = pattrib->seq_num;
-			#ifdef DBG_RX_SEQ
-			DBG_88E("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-				preorder_ctrl->indicate_seq, pattrib->seq_num);
-			#endif
-
 			rtw_recv_indicatepkt(padapter, prframe);
 
 			preorder_ctrl->indicate_seq = (preorder_ctrl->indicate_seq + 1)%4096;
-			#ifdef DBG_RX_SEQ
-			DBG_88E("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-				preorder_ctrl->indicate_seq, pattrib->seq_num);
-			#endif
-
 			return _SUCCESS;
 		}
 	}
@@ -2421,19 +2375,9 @@ static int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prfram
 		if (preorder_ctrl->enable == false)
 		{
 			preorder_ctrl->indicate_seq = pattrib->seq_num;
-			#ifdef DBG_RX_SEQ
-			DBG_88E("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-				preorder_ctrl->indicate_seq, pattrib->seq_num);
-			#endif
-
 			retval = amsdu_to_msdu(padapter, prframe);
 
 			preorder_ctrl->indicate_seq = (preorder_ctrl->indicate_seq + 1)%4096;
-			#ifdef DBG_RX_SEQ
-			DBG_88E("DBG_RX_SEQ %s:%d IndicateSeq: %d, NewSeq: %d\n", __func__, __LINE__,
-				preorder_ctrl->indicate_seq, pattrib->seq_num);
-			#endif
-
 			return retval;
 		}
 	}

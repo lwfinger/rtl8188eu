@@ -1377,10 +1377,6 @@ static struct sta_info *rtw_joinbss_update_stainfo(_adapter *padapter, struct wl
 			preorder_ctrl = &psta->recvreorder_ctrl[i];
 			preorder_ctrl->enable = false;
 			preorder_ctrl->indicate_seq = 0xffff;
-			#ifdef DBG_RX_SEQ
-			DBG_88E("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __func__, __LINE__,
-				preorder_ctrl->indicate_seq);
-			#endif
 			preorder_ctrl->wend_b= 0xffff;
 			preorder_ctrl->wsize_b = 64;/* max_ampdu_sz; ex. 32(kbytes) -> wsize_b=32 */
 		}
@@ -1395,10 +1391,6 @@ static struct sta_info *rtw_joinbss_update_stainfo(_adapter *padapter, struct wl
 				preorder_ctrl = &bmc_sta->recvreorder_ctrl[i];
 				preorder_ctrl->enable = false;
 				preorder_ctrl->indicate_seq = 0xffff;
-				#ifdef DBG_RX_SEQ
-				DBG_88E("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __func__, __LINE__,
-					preorder_ctrl->indicate_seq);
-				#endif
 				preorder_ctrl->wend_b= 0xffff;
 				preorder_ctrl->wsize_b = 64;/* max_ampdu_sz; ex. 32(kbytes) -> wsize_b=32 */
 			}
