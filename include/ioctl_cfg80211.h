@@ -20,11 +20,6 @@
 #ifndef __IOCTL_CFG80211_H__
 #define __IOCTL_CFG80211_H__
 
-
-#if defined(RTW_USE_CFG80211_STA_EVENT)
-	#undef CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER
-#endif
-
 struct rtw_wdev_invit_info {
 	u8 token;
 	u8 flags;

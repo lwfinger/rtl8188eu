@@ -298,10 +298,6 @@ static int rtw_android_set_block(struct net_device *net, char *command, int tota
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
 	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
 
-	#ifdef CONFIG_IOCTL_CFG80211
-	wdev_to_priv(adapter->rtw_wdev)->block = (*block_value=='0')?false:true;
-	#endif
-
 	return 0;
 }
 
@@ -460,15 +456,6 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//int skip = strlen(CMD_P2P_SET_PS) + 1;
 		//bytes_written = wl_cfg80211_set_p2p_ps(net, command + skip, priv_cmd.total_len - skip);
 		break;
-
-#ifdef CONFIG_IOCTL_CFG80211
-	case ANDROID_WIFI_CMD_SET_AP_WPS_P2P_IE:
-	{
-		int skip = strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_SET_AP_WPS_P2P_IE]) + 3;
-		bytes_written = rtw_cfg80211_set_mgnt_wpsp2pie(net, command + skip, priv_cmd.total_len - skip, *(command + skip - 2) - '0');
-		break;
-	}
-#endif //CONFIG_IOCTL_CFG80211
 
 #ifdef CONFIG_WFD
 	case ANDROID_WIFI_CMD_WFD_ENABLE:

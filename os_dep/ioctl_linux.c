@@ -148,14 +148,10 @@ static void indicate_wx_custom_event(_adapter *padapter, char *msg)
 	wrqu.data.length = strlen(msg);
 
 	DBG_88E("%s %s\n", __func__, buff);
-#ifndef CONFIG_IOCTL_CFG80211
 	wireless_send_event(padapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
-#endif
 
 	rtw_mfree(buff, IW_CUSTOM_MAX+1);
-
 }
-
 
 static void request_wps_pbc_event(_adapter *padapter)
 {
@@ -181,9 +177,7 @@ static void request_wps_pbc_event(_adapter *padapter)
 
 	DBG_88E("%s\n", __func__);
 
-#ifndef CONFIG_IOCTL_CFG80211
 	wireless_send_event(padapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
-#endif
 
 	if (buff)
 	{
@@ -200,10 +194,7 @@ void indicate_wx_scan_complete_event(_adapter *padapter)
 
 	_rtw_memset(&wrqu, 0, sizeof(union iwreq_data));
 
-	//DBG_88E("+rtw_indicate_wx_scan_complete_event\n");
-#ifndef CONFIG_IOCTL_CFG80211
 	wireless_send_event(padapter->pnetdev, SIOCGIWSCAN, &wrqu, NULL);
-#endif
 }
 
 
@@ -219,9 +210,7 @@ void rtw_indicate_wx_assoc_event(_adapter *padapter)
 	_rtw_memcpy(wrqu.ap_addr.sa_data, pmlmepriv->cur_network.network.MacAddress, ETH_ALEN);
 
 	DBG_88E_LEVEL(_drv_always_, "assoc success\n");
-#ifndef CONFIG_IOCTL_CFG80211
 	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
-#endif
 }
 
 void rtw_indicate_wx_disassoc_event(_adapter *padapter)
@@ -233,10 +222,8 @@ void rtw_indicate_wx_disassoc_event(_adapter *padapter)
 	wrqu.ap_addr.sa_family = ARPHRD_ETHER;
 	_rtw_memset(wrqu.ap_addr.sa_data, 0, ETH_ALEN);
 
-#ifndef CONFIG_IOCTL_CFG80211
 	DBG_88E_LEVEL(_drv_always_, "indicate disassoc\n");
 	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
-#endif
 }
 
 /*

@@ -32,15 +32,9 @@
 
 #define CONFIG_RTL8188E
 
-#ifdef CONFIG_IOCTL_CFG80211
-	#define CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER
-	#define CONFIG_SET_SCAN_DENY_TIMER
-#endif
-
 /*
  * Internal  General Config
  */
-
 
 #define CONFIG_EMBEDDED_FWIMG
 

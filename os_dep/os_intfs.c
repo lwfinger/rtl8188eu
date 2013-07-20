@@ -1116,9 +1116,6 @@ _func_enter_;
 	rtw_init_wifidirect_timers(padapter);
 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
 	reset_global_wifidirect_info(padapter);
-	#ifdef CONFIG_IOCTL_CFG80211
-	rtw_init_cfg80211_wifidirect_info(padapter);
-	#endif
 #ifdef CONFIG_WFD
 	if (rtw_init_wifi_display_info(padapter) == _FAIL)
 		RT_TRACE(_module_os_intfs_c_,_drv_err_,("\n Can't init init_wifi_display_info\n"));
@@ -1201,17 +1198,6 @@ void rtw_cancel_all_timer(_adapter *padapter)
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel DeInitSwLeds!\n"));
 
 	_cancel_timer_ex(&padapter->pwrctrlpriv.pwr_state_check_timer);
-
-#ifdef CONFIG_IOCTL_CFG80211
-#ifdef CONFIG_P2P
-	_cancel_timer_ex(&padapter->cfg80211_wdinfo.remain_on_ch_timer);
-#endif //CONFIG_P2P
-#endif //CONFIG_IOCTL_CFG80211
-
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
-	_cancel_timer_ex(&padapter->mlmepriv.set_scan_deny_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel set_scan_deny_timer!\n"));
-#endif
 
 	_cancel_timer_ex(&padapter->recvpriv.signal_stat_timer);
 #if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
@@ -1384,9 +1370,6 @@ int _netdev_open(struct net_device *pnetdev)
 			padapter->intf_start(padapter);
 		rtw_proc_init_one(pnetdev);
 
-#ifdef CONFIG_IOCTL_CFG80211
-		rtw_cfg80211_init_wiphy(padapter);
-#endif
 		rtw_led_control(padapter, LED_CTL_NO_LINK);
 
 		padapter->bup = true;
@@ -1583,18 +1566,8 @@ static int netdev_close(struct net_device *pnetdev)
 	nat25_db_cleanup(padapter);
 
 #ifdef CONFIG_P2P
-	#ifdef CONFIG_IOCTL_CFG80211
-	if (wdev_to_priv(padapter->rtw_wdev)->p2p_enabled == true)
-		wdev_to_priv(padapter->rtw_wdev)->p2p_enabled = false;
-	#endif
 	rtw_p2p_enable(padapter, P2P_ROLE_DISABLE);
 #endif //CONFIG_P2P
-
-#ifdef CONFIG_IOCTL_CFG80211
-	rtw_scan_abort(padapter);
-	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
-	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; //set this at the end
-#endif //CONFIG_IOCTL_CFG80211
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-88eu_drv - drv_close\n"));
 	DBG_88E("-88eu_drv - drv_close, bup=%d\n", padapter->bup);

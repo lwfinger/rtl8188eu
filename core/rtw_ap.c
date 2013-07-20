@@ -1970,20 +1970,7 @@ u8 ap_free_sta(_adapter *padapter, struct sta_info *psta, bool active, u16 reaso
 	psta->state &= ~_FW_LINKED;
 	_exit_critical_bh(&psta->lock, &irqL);
 
-	#ifdef CONFIG_IOCTL_CFG80211
-	if (1) {
-		#ifdef COMPAT_KERNEL_RELEASE
-		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
-		#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
-		rtw_cfg80211_indicate_sta_disassoc(padapter, psta->hwaddr, reason);
-		#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
-		/* will call rtw_cfg80211_indicate_sta_disassoc() in cmd_thread for old API context */
-		#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
-	} else
-	#endif /* CONFIG_IOCTL_CFG80211 */
-	{
-		rtw_indicate_sta_disassoc_event(padapter, psta);
-	}
+	rtw_indicate_sta_disassoc_event(padapter, psta);
 
 	report_del_sta_event(padapter, psta->hwaddr, reason);
 
@@ -1993,9 +1980,7 @@ u8 ap_free_sta(_adapter *padapter, struct sta_info *psta, bool active, u16 reaso
 	rtw_free_stainfo(padapter, psta);
 	_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL);
 
-
 	return beacon_updated;
-
 }
 
 int rtw_ap_inform_ch_switch (_adapter *padapter, u8 new_ch, u8 ch_offset)

@@ -234,18 +234,6 @@ struct scan_limit_info{
 	u8					operation_ch[2];				//	Store the operation channel of invitation request frame
 };
 
-#ifdef CONFIG_IOCTL_CFG80211
-struct cfg80211_wifidirect_info{
-	_timer					remain_on_ch_timer;
-	u8						restore_channel;
-	struct ieee80211_channel	remain_on_ch_channel;
-	enum nl80211_channel_type	remain_on_ch_type;
-	u64						remain_on_ch_cookie;
-	struct net_device			*remain_on_ch_dev;
-	bool is_ro_ch;
-};
-#endif //CONFIG_IOCTL_CFG80211
-
 struct wifidirect_info{
 	_adapter*				padapter;
 	_timer					find_phase_timer;
@@ -392,11 +380,6 @@ struct mlme_priv {
 	_timer scan_to_timer; // driver itself handles scan_timeout status.
 	u32 scan_start_time; // used to evaluate the time spent in scanning
 
-	#ifdef CONFIG_SET_SCAN_DENY_TIMER
-	_timer set_scan_deny_timer;
-	ATOMIC_T set_scan_deny; //0: allowed, 1: deny
-	#endif
-
 	struct qos_priv qospriv;
 
 #ifdef CONFIG_80211N_HT
@@ -464,12 +447,11 @@ struct mlme_priv {
 	u8 *wps_beacon_ie;
 	//u8 *wps_probe_req_ie;
 	u8 *wps_probe_resp_ie;
-	u8 *wps_assoc_resp_ie; // for CONFIG_IOCTL_CFG80211, this IE could include p2p ie / wfd ie
+	u8 *wps_assoc_resp_ie;
 
 	u32 wps_beacon_ie_len;
-	//u32 wps_probe_req_ie_len;
 	u32 wps_probe_resp_ie_len;
-	u32 wps_assoc_resp_ie_len; // for CONFIG_IOCTL_CFG80211, this IE len could include p2p ie / wfd ie
+	u32 wps_assoc_resp_ie_len;
 
 	u8 *p2p_beacon_ie;
 	u8 *p2p_probe_req_ie;
@@ -482,40 +464,11 @@ struct mlme_priv {
 	u32 p2p_probe_resp_ie_len;
 	u32 p2p_go_probe_resp_ie_len; //for GO
 	u32 p2p_assoc_req_ie_len;
-/*
-#if defined(CONFIG_P2P) && defined(CONFIG_IOCTL_CFG80211)
-	//u8 *wps_p2p_beacon_ie;
-	u8 *p2p_beacon_ie;
-	u8 *wps_p2p_probe_resp_ie;
-	u8 *wps_p2p_assoc_resp_ie;
-	//u32 wps_p2p_beacon_ie_len;
-	u32 p2p_beacon_ie_len;
-	u32 wps_p2p_probe_resp_ie_len;
-	u32 wps_p2p_assoc_resp_ie_len;
-#endif
-*/
-
 	_lock	bcn_update_lock;
 	u8		update_bcn;
 
 
 #endif //#if defined (CONFIG_AP_MODE)
-
-#if defined(CONFIG_WFD) && defined(CONFIG_IOCTL_CFG80211)
-
-	u8 *wfd_beacon_ie;
-	u8 *wfd_probe_req_ie;
-	u8 *wfd_probe_resp_ie;
-	u8 *wfd_go_probe_resp_ie; //for GO
-	u8 *wfd_assoc_req_ie;
-
-	u32 wfd_beacon_ie_len;
-	u32 wfd_probe_req_ie_len;
-	u32 wfd_probe_resp_ie_len;
-	u32 wfd_go_probe_resp_ie_len; //for GO
-	u32 wfd_assoc_req_ie_len;
-
-#endif
 
 #ifdef CONFIG_FTP_PROTECT
 	u8	ftp_lock_flag;
@@ -682,17 +635,10 @@ extern void _rtw_join_timeout_handler(_adapter *adapter);
 extern void rtw_scan_timeout_handler(_adapter *adapter);
 
 extern void rtw_dynamic_check_timer_handlder(_adapter *adapter);
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
-bool rtw_is_scan_deny(_adapter *adapter);
-void rtw_clear_scan_deny(_adapter *adapter);
-void rtw_set_scan_deny_timer_hdl(_adapter *adapter);
-void rtw_set_scan_deny(_adapter *adapter, u32 ms);
-#else
 #define rtw_is_scan_deny(adapter) false
 #define rtw_clear_scan_deny(adapter) do {} while (0)
 #define rtw_set_scan_deny_timer_hdl(adapter) do {} while (0)
 #define rtw_set_scan_deny(adapter, ms) do {} while (0)
-#endif
 
 
 extern int _rtw_init_mlme_priv(_adapter *padapter);

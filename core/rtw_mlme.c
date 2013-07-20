@@ -136,15 +136,6 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
 	rtw_free_mlme_ie_data(&pmlmepriv->p2p_go_probe_resp_ie, &pmlmepriv->p2p_go_probe_resp_ie_len);
 	rtw_free_mlme_ie_data(&pmlmepriv->p2p_assoc_req_ie, &pmlmepriv->p2p_assoc_req_ie_len);
 #endif
-
-#if defined(CONFIG_WFD) && defined(CONFIG_IOCTL_CFG80211)
-	rtw_free_mlme_ie_data(&pmlmepriv->wfd_beacon_ie, &pmlmepriv->wfd_beacon_ie_len);
-	rtw_free_mlme_ie_data(&pmlmepriv->wfd_probe_req_ie, &pmlmepriv->wfd_probe_req_ie_len);
-	rtw_free_mlme_ie_data(&pmlmepriv->wfd_probe_resp_ie, &pmlmepriv->wfd_probe_resp_ie_len);
-	rtw_free_mlme_ie_data(&pmlmepriv->wfd_go_probe_resp_ie, &pmlmepriv->wfd_go_probe_resp_ie_len);
-	rtw_free_mlme_ie_data(&pmlmepriv->wfd_assoc_req_ie, &pmlmepriv->wfd_assoc_req_ie_len);
-#endif
-
 }
 
 void _rtw_free_mlme_priv (struct mlme_priv *pmlmepriv)
@@ -1106,10 +1097,6 @@ _func_enter_;
 		}
 	}
 
-#ifdef CONFIG_IOCTL_CFG80211
-	rtw_cfg80211_surveydone_event_callback(adapter);
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 _func_exit_;
 
 }
@@ -1747,38 +1734,6 @@ _func_enter_;
 		psta = rtw_get_stainfo(&adapter->stapriv, pstassoc->macaddr);
 		if (psta)
 		{
-#ifdef CONFIG_IOCTL_CFG80211
-			#ifdef COMPAT_KERNEL_RELEASE
-
-			#elif (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
-			u8 *passoc_req = NULL;
-			u32 assoc_req_len;
-
-			_enter_critical_bh(&psta->lock, &irqL);
-			if (psta->passoc_req && psta->assoc_req_len>0)
-			{
-				passoc_req = rtw_zmalloc(psta->assoc_req_len);
-				if (passoc_req)
-				{
-					assoc_req_len = psta->assoc_req_len;
-					_rtw_memcpy(passoc_req, psta->passoc_req, assoc_req_len);
-
-					_rtw_mfree(psta->passoc_req , psta->assoc_req_len);
-					psta->passoc_req = NULL;
-					psta->assoc_req_len = 0;
-				}
-			}
-			_exit_critical_bh(&psta->lock, &irqL);
-
-			if (passoc_req && assoc_req_len>0)
-			{
-				rtw_cfg80211_indicate_sta_assoc(adapter, passoc_req, assoc_req_len);
-
-				_rtw_mfree(passoc_req, assoc_req_len);
-			}
-			#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 			/* bss_cap_update_on_sta_join(adapter, psta); */
 			/* sta_info_update(adapter, psta); */
 			ap_sta_info_defer_update(adapter, psta);
@@ -1881,18 +1836,7 @@ _func_enter_;
 	}
 
         if (check_fwstate(pmlmepriv, WIFI_AP_STATE))
-        {
-#ifdef CONFIG_IOCTL_CFG80211
-		#ifdef COMPAT_KERNEL_RELEASE
-
-		#elif (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
-		rtw_cfg80211_indicate_sta_disassoc(adapter, pstadel->macaddr, *(u16*)pstadel->rsvd);
-		#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) || defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER) */
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 		return;
-        }
-
 
 	mlmeext_sta_del_event_callback(adapter);
 
@@ -2151,34 +2095,6 @@ void rtw_dynamic_check_timer_handlder(_adapter *adapter)
 	rcu_read_unlock();
 #endif	/*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
 }
-
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
-inline bool rtw_is_scan_deny(_adapter *adapter)
-{
-	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
-	return (ATOMIC_READ(&mlmepriv->set_scan_deny) != 0) ? true : false;
-}
-
-inline void rtw_clear_scan_deny(_adapter *adapter)
-{
-	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
-	ATOMIC_SET(&mlmepriv->set_scan_deny, 0);
-	if (0)
-	DBG_88E(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
-}
-
-void rtw_set_scan_deny_timer_hdl(_adapter *adapter)
-{
-	rtw_clear_scan_deny(adapter);
-}
-
-void rtw_set_scan_deny(_adapter *adapter, u32 ms)
-{
-	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
-	ATOMIC_SET(&mlmepriv->set_scan_deny, 1);
-	_set_timer(&mlmepriv->set_scan_deny_timer, ms);
-}
-#endif
 
 #if defined(IEEE80211_SCAN_RESULT_EXPIRE)
 #define RTW_SCAN_RESULT_EXPIRE IEEE80211_SCAN_RESULT_EXPIRE/HZ*1000 -1000 /* 3000 -1000 */

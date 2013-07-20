@@ -76,7 +76,6 @@ endif
 HCI_NAME = usb
 
 _OS_INTFS_FILES :=				\
-			os_dep/ioctl_cfg80211.o	\
 			os_dep/ioctl_linux.o	\
 			os_dep/mlme_linux.o	\
 			os_dep/os_intfs.o	\

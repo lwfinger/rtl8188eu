@@ -63,11 +63,6 @@
 #include <linux/ip.h>
 #include <linux/kthread.h>
 
-#ifdef CONFIG_IOCTL_CFG80211
-#include <net/ieee80211_radiotap.h>
-#include <net/cfg80211.h>
-#endif //CONFIG_IOCTL_CFG80211
-
 #include <linux/usb.h>
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,21))
 #include <linux/usb_ch9.h>

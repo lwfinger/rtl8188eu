@@ -59,12 +59,6 @@ void	process_p2p_ps_ie(PADAPTER padapter, u8 *IEs, u32 IELength);
 void	p2p_ps_wk_hdl(_adapter *padapter, u8 p2p_ps_state);
 u8	p2p_ps_wk_cmd(_adapter*padapter, u8 p2p_ps_state, u8 enqueue);
 
-#ifdef CONFIG_IOCTL_CFG80211
-void rtw_init_cfg80211_wifidirect_info( _adapter*	padapter);
-int rtw_p2p_check_frames(_adapter *padapter, const u8 *buf, u32 len, u8 tx);
-void rtw_append_wfd_ie(_adapter *padapter, u8 *buf, u32 *len);
-#endif //CONFIG_IOCTL_CFG80211
-
 void reset_global_wifidirect_info( _adapter* padapter );
 int rtw_init_wifi_display_info(_adapter* padapter);
 void rtw_init_wifidirect_timers(_adapter* padapter);
