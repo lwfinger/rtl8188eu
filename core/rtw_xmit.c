@@ -640,9 +640,6 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 		psta = rtw_get_stainfo(pstapriv, pattrib->ra);
 		if (psta == NULL)	{ /*  if we cannot get psta => drrp the pkt */
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra: %pM\n", (pattrib->ra)));
-			#ifdef DBG_TX_DROP_FRAME
-			DBG_88E("DBG_TX_DROP_FRAME %s get sta_info fail, ra: %pM\n", __func__, (pattrib->ra));
-			#endif
 			res =_FAIL;
 			goto exit;
 		}
@@ -663,9 +660,6 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 	{
 		/*  if we cannot get psta => drop the pkt */
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:%pM\n", (pattrib->ra)));
-		#ifdef DBG_TX_DROP_FRAME
-		DBG_88E("DBG_TX_DROP_FRAME %s get sta_info fail, ra:%pM\n", __func__, (pattrib->ra));
-		#endif
 		res = _FAIL;
 		goto exit;
 	}
@@ -705,9 +699,6 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 		if ((pattrib->ether_type != 0x888e) && (check_fwstate(pmlmepriv, WIFI_MP_STATE) == false))
 		{
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("\npsta->ieee8021x_blocked == true,  pattrib->ether_type(%.4x) != 0x888e\n",pattrib->ether_type));
-			#ifdef DBG_TX_DROP_FRAME
-			DBG_88E("DBG_TX_DROP_FRAME %s psta->ieee8021x_blocked == true,  pattrib->ether_type(%04x) != 0x888e\n", __func__,pattrib->ether_type);
-			#endif
 			res = _FAIL;
 			goto exit;
 		}
@@ -752,9 +743,6 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 			if (padapter->securitypriv.busetkipkey==_FAIL)
 			{
 				RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("\npadapter->securitypriv.busetkipkey(%d)==_FAIL drop packet\n", padapter->securitypriv.busetkipkey));
-				#ifdef DBG_TX_DROP_FRAME
-				DBG_88E("DBG_TX_DROP_FRAME %s padapter->securitypriv.busetkipkey(%d)==_FAIL drop packet\n", __func__, padapter->securitypriv.busetkipkey);
-				#endif
 				res =_FAIL;
 				goto exit;
 			}
@@ -2350,9 +2338,7 @@ s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
 	pxmitframe = rtw_alloc_xmitframe(pxmitpriv);
 	if (pxmitframe == NULL) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit: no more pxmitframe\n"));
-		/* ifdef DBG_TX_DROP_FRAME */
 		DBG_88E("DBG_TX_DROP_FRAME %s no more pxmitframe\n", __func__);
-		/* endif */
 		return -1;
 	}
 
@@ -2378,9 +2364,6 @@ s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
 
 	if (res == _FAIL) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit: update attrib fail\n"));
-		#ifdef DBG_TX_DROP_FRAME
-		DBG_88E("DBG_TX_DROP_FRAME %s update attrib fail\n", __func__);
-		#endif
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
 		return -1;
 	}
