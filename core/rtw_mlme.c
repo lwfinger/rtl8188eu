@@ -2951,27 +2951,19 @@ void rtw_update_ht_cap(_adapter *padapter, u8 *pie, uint ie_len)
 				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
 			else
 				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R[i];
-			#ifdef RTL8192C_RECONFIG_TO_1T1R
-			{
-				pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-			}
-			#endif
 		}
 		/* switch to the 40M Hz mode accoring to the AP */
 		pmlmeext->cur_bwmode = HT_CHANNEL_WIDTH_40;
-		switch ((pmlmeinfo->HT_info.infos[0] & 0x3))
-		{
-			case HT_EXTCHNL_OFFSET_UPPER:
-				pmlmeext->cur_ch_offset = HAL_PRIME_CHNL_OFFSET_LOWER;
-				break;
-
-			case HT_EXTCHNL_OFFSET_LOWER:
-				pmlmeext->cur_ch_offset = HAL_PRIME_CHNL_OFFSET_UPPER;
-				break;
-
-			default:
-				pmlmeext->cur_ch_offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
-				break;
+		switch ((pmlmeinfo->HT_info.infos[0] & 0x3)) {
+		case HT_EXTCHNL_OFFSET_UPPER:
+			pmlmeext->cur_ch_offset = HAL_PRIME_CHNL_OFFSET_LOWER;
+			break;
+		case HT_EXTCHNL_OFFSET_LOWER:
+			pmlmeext->cur_ch_offset = HAL_PRIME_CHNL_OFFSET_UPPER;
+			break;
+		default:
+			pmlmeext->cur_ch_offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
+			break;
 		}
 	}
 
