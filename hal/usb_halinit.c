@@ -323,11 +323,7 @@ _InitInterrupt(
 	usb_opt = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION);
 
 
-	if (!adapter_to_dvobj(Adapter)->ishighspeed
-		#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-		|| pHalData->RtIntInPipe == 0x05
-		#endif
-	)
+	if (!adapter_to_dvobj(Adapter)->ishighspeed)
 		usb_opt = usb_opt & (~INT_BULK_SEL);
 	else
 		usb_opt = usb_opt | (INT_BULK_SEL);
@@ -1704,10 +1700,6 @@ static unsigned int rtl8188eu_inirp_init(PADAPTER Adapter)
 	struct intf_hdl * pintfhdl=&Adapter->iopriv.intf;
 	struct recv_priv *precvpriv = &(Adapter->recvpriv);
 	u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
-	u32 (*_read_interrupt)(struct intf_hdl *pintfhdl, u32 addr);
-#endif
 
 _func_enter_;
 
@@ -1733,21 +1725,6 @@ _func_enter_;
 		precvpriv->free_recv_buf_queue_cnt--;
 	}
 
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	if (pHalData->RtIntInPipe != 0x05) {
-		status = _FAIL;
-		DBG_88E("%s =>Warning !! Have not USB Int-IN pipe,  pHalData->RtIntInPipe(%d)!!!\n",
-			 __func__,i pHalData->RtIntInPipe);
-		goto exit;
-	}
-	_read_interrupt = pintfhdl->io_ops._read_interrupt;
-	if (_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == false ) {
-		RT_TRACE(_module_hci_hal_init_c_, _drv_err_,
-			 ("usb_rx_init: usb_read_interrupt error\n"));
-		status = _FAIL;
-	}
-#endif
-
 exit:
 
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init\n"));
@@ -1755,7 +1732,6 @@ exit:
 _func_exit_;
 
 	return status;
-
 }
 
 static unsigned int rtl8188eu_inirp_deinit(PADAPTER Adapter)

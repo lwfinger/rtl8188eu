@@ -61,21 +61,6 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 	     (void(*)(unsigned long))rtl8188eu_recv_tasklet,
 	     (unsigned long)padapter);
 
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-	if (precvpriv->int_in_urb == NULL){
-		res= _FAIL;
-		DBG_88E("alloc_urb for interrupt in endpoint fail !!!!\n");
-		goto exit;
-	}
-	precvpriv->int_in_buf = rtw_zmalloc(INTERRUPT_MSG_FORMAT_LEN);
-	if (precvpriv->int_in_buf == NULL){
-		res= _FAIL;
-		DBG_88E("alloc_mem for interrupt in endpoint fail !!!!\n");
-		goto exit;
-	}
-#endif
-
 	/* init recv_buf */
 	_rtw_init_queue(&precvpriv->free_recv_buf_queue);
 
@@ -172,16 +157,6 @@ void rtl8188eu_free_recv_priv (_adapter *padapter)
 
 	if (precvpriv->pallocated_recv_buf)
 		rtw_mfree(precvpriv->pallocated_recv_buf, NR_RECVBUFF *sizeof(struct recv_buf) + 4);
-
-#ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	if (precvpriv->int_in_urb)
-	{
-		usb_free_urb(precvpriv->int_in_urb);
-	}
-
-	if (precvpriv->int_in_buf)
-		rtw_mfree(precvpriv->int_in_buf, INTERRUPT_MSG_FORMAT_LEN);
-#endif/* CONFIG_USB_INTERRUPT_IN_PIPE */
 
 	if (skb_queue_len(&precvpriv->rx_skb_queue))
 		DBG_88E(KERN_WARNING "rx_skb_queue not empty\n");
