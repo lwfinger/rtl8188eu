@@ -739,15 +739,10 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	 int ret = 0;
 
-	if (pwrpriv->bInternalAutoSuspend ){
+	if (pwrpriv->bInternalAutoSuspend)
 		ret = rtw_resume_process(padapter);
-	} else {
-#ifdef CONFIG_RESUME_IN_WORKQUEUE
-		rtw_resume_in_workqueue(pwrpriv);
-#else // Normal resume process
+	else
 		ret = rtw_resume_process(padapter);
-#endif //CONFIG_RESUME_IN_WORKQUEUE
-	}
 	return ret;
 }
 
@@ -856,10 +851,6 @@ int rtw_resume_process(_adapter *padapter)
 
 	ret = 0;
 exit:
-	#ifdef CONFIG_RESUME_IN_WORKQUEUE
-	rtw_unlock_suspend();
-	#endif //CONFIG_RESUME_IN_WORKQUEUE
-
 	pwrpriv->bInSuspend = false;
 	DBG_88E("<===  %s return %d.............. in %dms\n", __func__
 		, ret, rtw_get_passing_time_ms(start_time));
