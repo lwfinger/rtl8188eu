@@ -1349,8 +1349,6 @@ int rtw_acl_remove_sta(_adapter *padapter, u8 *addr)
 
 }
 
-#ifdef CONFIG_NATIVEAP_MLME
-
 static void update_bcn_fixed_ie(_adapter *padapter)
 {
 	DBG_88E("%s\n", __func__);
@@ -2253,5 +2251,4 @@ void stop_ap_mode(_adapter *padapter)
 
 }
 
-#endif /* CONFIG_NATIVEAP_MLME */
 #endif /* CONFIG_AP_MODE */

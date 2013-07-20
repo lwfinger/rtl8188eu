@@ -58,7 +58,7 @@ _func_enter_;
 	psta->bpairwise_key_installed = false;
 
 
-#ifdef CONFIG_NATIVEAP_MLME
+#ifdef CONFIG_AP_MODE
 	psta->nonerp_set = 0;
 	psta->no_short_slot_time_set = 0;
 	psta->no_short_preamble_set = 0;
@@ -516,11 +516,6 @@ _func_enter_;
 
 #ifdef CONFIG_AP_MODE
 
-/*
-	_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL0);
-	rtw_list_delete(&psta->asoc_list);
-	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL0);
-*/
 	_enter_critical_bh(&pstapriv->auth_list_lock, &irqL0);
 	if (!rtw_is_list_empty(&psta->auth_list)) {
 		rtw_list_delete(&psta->auth_list);
@@ -541,20 +536,15 @@ _func_enter_;
 
 	psta->has_legacy_ac = 0;
 
-#ifdef CONFIG_NATIVEAP_MLME
 
 	pstapriv->sta_dz_bitmap &=~BIT(psta->aid);
 	pstapriv->tim_bitmap &=~BIT(psta->aid);
-
-	/* rtw_indicate_sta_disassoc_event(padapter, psta); */
 
 	if ((psta->aid >0)&&(pstapriv->sta_aid[psta->aid - 1] == psta))
 	{
 		pstapriv->sta_aid[psta->aid - 1] = NULL;
 		psta->aid = 0;
 	}
-
-#endif	/*  CONFIG_NATIVEAP_MLME */
 
 	psta->under_exist_checking = 0;
 

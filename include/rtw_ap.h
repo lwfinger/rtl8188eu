@@ -46,7 +46,7 @@ void rtw_set_macaddr_acl(_adapter *padapter, int mode);
 int rtw_acl_add_sta(_adapter *padapter, u8 *addr);
 int rtw_acl_remove_sta(_adapter *padapter, u8 *addr);
 
-#ifdef CONFIG_NATIVEAP_MLME
+#ifdef CONFIG_AP_MODE
 void associated_clients_update(_adapter *padapter, u8 updated);
 void bss_cap_update_on_sta_join(_adapter *padapter, struct sta_info *psta);
 u8 bss_cap_update_on_sta_leave(_adapter *padapter, struct sta_info *psta);

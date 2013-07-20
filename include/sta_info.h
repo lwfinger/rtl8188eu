@@ -175,7 +175,7 @@ struct sta_info {
 
 	u8 bpairwise_key_installed;
 
-#ifdef CONFIG_NATIVEAP_MLME
+#ifdef CONFIG_AP_MODE
 	u8 wpa_ie[32];
 
 	u8 nonerp_set;
@@ -184,7 +184,7 @@ struct sta_info {
 	u8 no_ht_gf_set;
 	u8 no_ht_set;
 	u8 ht_20mhz_set;
-#endif	// CONFIG_NATIVEAP_MLME
+#endif	// CONFIG_AP_MODE
 
 	unsigned int tx_ra_bitmap;
 	u8 qos_info;

@@ -262,7 +262,7 @@ void rtw_hal_update_ra_mask(_adapter *padapter, u32 mac_id, u8 rssi_level)
 	{
 		struct sta_info *psta = NULL;
 		struct sta_priv *pstapriv = &padapter->stapriv;
-#ifdef CONFIG_NATIVEAP_MLME
+#ifdef CONFIG_AP_MODE
 		if ((mac_id-1)>0)
 			psta = pstapriv->sta_aid[(mac_id-1) - 1];
 #endif
