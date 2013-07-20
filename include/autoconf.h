@@ -53,12 +53,6 @@
 #define CONFIG_AP_MODE
 
 #define CONFIG_P2P
-#ifdef CONFIG_P2P
-
-	#define CONFIG_P2P_REMOVE_GROUP_INFO
-
-	#define CONFIG_P2P_PS
-#endif
 
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 

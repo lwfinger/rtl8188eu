@@ -936,10 +936,7 @@ unsigned int OnBeacon(_adapter *padapter, union recv_frame *precv_frame)
 				process_csa_ie(padapter, pframe, len);	/* channel switch announcement */
 #endif /* CONFIG_DFS */
 
-#ifdef CONFIG_P2P_PS
 				process_p2p_ps_ie(padapter, (pframe + WLAN_HDR_A3_LEN), (len - WLAN_HDR_A3_LEN));
-#endif /* CONFIG_P2P_PS */
-
 			}
 		}
 		else if ((pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE)

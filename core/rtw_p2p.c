@@ -3586,7 +3586,6 @@ _func_enter_;
 _func_exit_;
 }
 
-#ifdef CONFIG_P2P_PS
 void process_p2p_ps_ie(PADAPTER padapter, u8 *IEs, u32 IELength)
 {
 	u8 * ies;
@@ -3801,7 +3800,6 @@ _func_exit_;
 	return res;
 
 }
-#endif /*  CONFIG_P2P_PS */
 
 static void reset_ch_sitesurvey_timer_process (void *FunctionContext)
 {

@@ -800,7 +800,6 @@ _func_enter_;
 _func_exit_;
 }
 
-#ifdef CONFIG_P2P_PS
 void rtl8188e_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -811,7 +810,6 @@ void rtl8188e_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state)
 
 _func_enter_;
 
-#if 1
 	switch (p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
@@ -878,12 +876,10 @@ _func_enter_;
 	}
 
 	FillH2CCmd_88E(padapter, H2C_PS_P2P_OFFLOAD, 1, (u8 *)p2p_ps_offload);
-#endif
 
 _func_exit_;
 
 }
-#endif /* CONFIG_P2P_PS */
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 /*

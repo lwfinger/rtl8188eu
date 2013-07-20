@@ -839,16 +839,14 @@ exit:
 _func_exit_;
 }
 
-void rtw_add_network(_adapter *adapter, WLAN_BSSID_EX *pnetwork);
 void rtw_add_network(_adapter *adapter, WLAN_BSSID_EX *pnetwork)
 {
 	_irqL irqL;
 	struct	mlme_priv	*pmlmepriv = &(((_adapter *)adapter)->mlmepriv);
-	/* _queue	*queue	= &(pmlmepriv->scanned_queue); */
 
 _func_enter_;
 
-	#if defined(CONFIG_P2P) && defined(CONFIG_P2P_REMOVE_GROUP_INFO)
+	#if defined(CONFIG_P2P)
 	rtw_WLAN_BSSID_EX_remove_p2p_attr(pnetwork, P2P_ATTR_GROUP_INFO);
 	#endif
 
@@ -1091,11 +1089,9 @@ _func_enter_;
 
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
 
-#ifdef CONFIG_P2P_PS
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 		p2p_ps_wk_cmd(adapter, P2P_PS_SCAN_DONE, 0);
 	}
-#endif /*  CONFIG_P2P_PS */
 
 	rtw_os_xmit_schedule(adapter);
 
@@ -1292,9 +1288,7 @@ _func_enter_;
 
 	}
 
-#ifdef CONFIG_P2P_PS
 	p2p_ps_wk_cmd(padapter, P2P_PS_DISABLE, 1);
-#endif /*  CONFIG_P2P_PS */
 
 #ifdef CONFIG_WOWLAN
 	if (padapter->pwrctrlpriv.wowlan_mode==false)
