@@ -179,30 +179,6 @@ struct tx_invite_resp_info{
 	u8					token;	//	Used to record the dialog token of p2p invitation request frame.
 };
 
-#ifdef CONFIG_WFD
-
-struct wifi_display_info{
-	u16							wfd_enable;			//	Eanble/Disable the WFD function.
-	u16							rtsp_ctrlport;		//	TCP port number at which the this WFD device listens for RTSP messages
-	u16							peer_rtsp_ctrlport;	//	TCP port number at which the peer WFD device listens for RTSP messages
-													//	This filed should be filled when receiving the gropu negotiation request
-
-	u8							peer_session_avail;	//	WFD session is available or not for the peer wfd device.
-													//	This variable will be set when sending the provisioning discovery request to peer WFD device.
-													//	And this variable will be reset when it is read by using the iwpriv p2p_get wfd_sa command.
-	u8							ip_address[4];
-	u8							peer_ip_address[4];
-	u8							wfd_pc;				//	WFD preferred connection
-													//	0 -> Prefer to use the P2P for WFD connection on peer side.
-													//	1 -> Prefer to use the TDLS for WFD connection on peer side.
-
-	u8							wfd_device_type;	//	WFD Device Type
-													//	0 -> WFD Source Device
-													//	1 -> WFD Primary Sink Device
-	enum	SCAN_RESULT_TYPE	scan_result_type;	//	Used when P2P is enable. This parameter will impact the scan result.
-};
-#endif //CONFIG_WFD
-
 struct tx_provdisc_req_info{
 	u16					wps_config_method_request;	//	Used when sending the provisioning request frame
 	u16					peer_channel_num[2];		//	The channel number which the receiver stands.
@@ -252,9 +228,6 @@ struct wifidirect_info{
 	struct group_id_info		groupid_info;	//	Store the group id information when doing the group negotiation handshake.
 	struct scan_limit_info		rx_invitereq_info;	//	Used for get the limit scan channel from the Invitation procedure
 	struct scan_limit_info		p2p_info;		//	Used for get the limit scan channel from the P2P negotiation handshake
-#ifdef CONFIG_WFD
-	struct wifi_display_info		*wfd_info;
-#endif
 	enum P2P_ROLE			role;
 	enum P2P_STATE			pre_p2p_state;
 	enum P2P_STATE			p2p_state;
@@ -341,9 +314,6 @@ struct tdls_info{
 	u8					watchdog_count;
 	u8					dev_discovered;		//WFD_TDLS: for sigma test
 	u8					enable;
-#ifdef CONFIG_WFD
-	struct wifi_display_info		*wfd_info;
-#endif
 };
 
 struct mlme_priv {

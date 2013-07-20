@@ -336,11 +336,7 @@ struct _ADAPTER{
 	struct wifidirect_info	wdinfo;
 #endif //CONFIG_P2P
 
-#ifdef CONFIG_WFD
-	struct wifi_display_info wfd_info;
-#endif //CONFIG_WFD
-
-	void *			HalData;
+	void *HalData;
 	u32 hal_data_sz;
 	struct hal_ops	HalFunc;
 

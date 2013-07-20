@@ -1114,10 +1114,6 @@ _func_enter_;
 	rtw_init_wifidirect_timers(padapter);
 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
 	reset_global_wifidirect_info(padapter);
-#ifdef CONFIG_WFD
-	if (rtw_init_wifi_display_info(padapter) == _FAIL)
-		RT_TRACE(_module_os_intfs_c_,_drv_err_,("\n Can't init init_wifi_display_info\n"));
-#endif
 #endif /* CONFIG_P2P */
 
 	if (init_mlme_ext_priv(padapter) == _FAIL) {
