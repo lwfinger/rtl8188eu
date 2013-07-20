@@ -2249,11 +2249,6 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 				rtw_write8(Adapter, REG_DRVERLYINT, 0x05);/* restore early int time to 5ms */
 				UpdateInterruptMask8188EU(Adapter,true, 0, IMR_BCNDMAINT0_88E);
 				#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-
-				#ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-				UpdateInterruptMask8188EU(Adapter,true ,0, (IMR_TBDER_88E|IMR_TBDOK_88E));
-				#endif /* CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR */
-
 			#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 				StopTxBeacon(Adapter);
 			}
@@ -2272,11 +2267,6 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 			#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
 			UpdateInterruptMask8188EU(Adapter,true ,IMR_BCNDMAINT0_88E, 0);
 			#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-
-			#ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-			UpdateInterruptMask8188EU(Adapter,true ,(IMR_TBDER_88E|IMR_TBDOK_88E), 0);
-			#endif/* CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR */
-
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 
 
@@ -2307,11 +2297,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 
 		        /* enable BCN0 Function for if1 */
 			/* don't enable update TSF0 for if1 (due to TSF update when beacon/probe rsp are received) */
-			#if defined(CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR)
-			rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT0_NORMAL_CHIP|EN_BCN_FUNCTION | EN_TXBCN_RPT|BIT(1)));
-			#else
 			rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT0_NORMAL_CHIP|EN_BCN_FUNCTION |BIT(1)));
-			#endif
 
 			/* dis BCN1 ATIM  WND if if2 is station */
 			rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1)|BIT(0));
