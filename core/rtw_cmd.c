@@ -91,13 +91,6 @@ sint _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 
 _func_enter_;
 
-#ifdef CONFIG_H2CLBK
-	_rtw_init_sema(&(pevtpriv->lbkevt_done), 0);
-	pevtpriv->lbkevt_limit = 0;
-	pevtpriv->lbkevt_num = 0;
-	pevtpriv->cmdevt_parm = NULL;
-#endif
-
 	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
 	ATOMIC_SET(&pevtpriv->event_seq, 0);
 	pevtpriv->evt_done_cnt = 0;
