@@ -296,20 +296,6 @@ void rtw_usleep_os(int us)
 		msleep( (us/1000) + 1);
 }
 
-#ifdef DBG_DELAY_OS
-void _rtw_mdelay_os(int ms, const char *func, const int line)
-{
-	DBG_88E("%s:%d %s(%d)\n", func, line, __func__, ms);
-
-	mdelay((unsigned long)ms);
-}
-
-void _rtw_udelay_os(int us, const char *func, const int line)
-{
-	DBG_88E("%s:%d %s(%d)\n", func, line, __func__, us);
-	udelay((unsigned long)us);
-}
-#else
 void rtw_mdelay_os(int ms)
 {
 	mdelay((unsigned long)ms);
@@ -319,7 +305,6 @@ void rtw_udelay_os(int us)
 {
       udelay((unsigned long)us);
 }
-#endif
 
 void rtw_yield_os(void)
 {

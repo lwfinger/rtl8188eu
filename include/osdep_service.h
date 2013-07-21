@@ -424,15 +424,8 @@ extern void	rtw_usleep_os(int us);
 
 extern u32	rtw_atoi(u8* s);
 
-#ifdef DBG_DELAY_OS
-#define rtw_mdelay_os(ms) _rtw_mdelay_os((ms), __func__, __LINE__)
-#define rtw_udelay_os(ms) _rtw_udelay_os((ms), __func__, __LINE__)
-extern void _rtw_mdelay_os(int ms, const char *func, const int line);
-extern void _rtw_udelay_os(int us, const char *func, const int line);
-#else
 extern void	rtw_mdelay_os(int ms);
 extern void	rtw_udelay_os(int us);
-#endif
 
 extern void rtw_yield_os(void);
 
