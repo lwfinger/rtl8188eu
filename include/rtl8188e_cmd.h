@@ -136,11 +136,6 @@ void rtl8188e_set_p2p_ps_offload_cmd(PADAPTER padapter, u8 p2p_ps_state);
 void CheckFwRsvdPageContent(PADAPTER padapter);
 void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, __le16 mstatus_rpt);
 
-#ifdef CONFIG_TSF_RESET_OFFLOAD
-//u8 rtl8188e_reset_tsf(_adapter *padapter, u8 reset_port);
-int reset_tsf(PADAPTER Adapter, u8 reset_port );
-#endif	// CONFIG_TSF_RESET_OFFLOAD
-
 #ifdef CONFIG_WOWLAN
 typedef struct _SETWOWLAN_PARM{
 	u8		mode;

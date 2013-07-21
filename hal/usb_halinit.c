@@ -2224,17 +2224,8 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 
 			/* dis BCN1 ATIM  WND if if2 is station */
 			rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1)|BIT(0));
-#ifdef CONFIG_TSF_RESET_OFFLOAD
-			/*  Reset TSF for STA+AP concurrent mode */
-			if ( check_buddy_fwstate(Adapter, (WIFI_STATION_STATE|WIFI_ASOC_STATE)) ) {
-				if (reset_tsf(Adapter, IFACE_PORT0) == false)
-					DBG_88E("ERROR! %s()-%d: Reset port0 TSF fail\n",
-						__func__, __LINE__);
-			}
-#endif	/*  CONFIG_TSF_RESET_OFFLOAD */
 		}
 	}
-
 }
 
 static void hw_var_set_macaddr(PADAPTER Adapter, u8 variable, u8* val)
