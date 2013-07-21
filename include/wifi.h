@@ -55,10 +55,6 @@
 // This test verifies the WLAN NIC can update the NAV through sending the CTS with large duration.
 #define	WiFiNavUpperUs				30000	// 30 ms
 
-#ifdef GREEN_HILL
-#pragma pack(1)
-#endif
-
 enum WIFI_FRAME_TYPE {
 	WIFI_MGT_TYPE  =	(0),
 	WIFI_CTRL_TYPE =	(BIT(2)),
