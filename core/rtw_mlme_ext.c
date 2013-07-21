@@ -7353,25 +7353,6 @@ void site_survey(_adapter *padapter)
 			SelectChannel(padapter, survey_channel);
 		}
 
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-		if ( stay_buddy_ch == 1 )
-		{
-			val8 = 0; /* survey done */
-			rtw_hal_set_hwreg(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
-
-			if (check_buddy_mlmeinfo_state(padapter, WIFI_FW_AP_STATE) &&
-				check_buddy_fwstate(padapter, _FW_LINKED))
-			{
-				update_beacon(padapter->pbuddy_adapter, 0, NULL, true);
-			}
-		}
-		else if ( stay_buddy_ch == 2 )
-		{
-			val8 = 1; /* under site survey */
-			rtw_hal_set_hwreg(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
-		}
-#endif /* CONFIG_STA_MODE_SCAN_UNDER_AP_MODE */
-
 		if (ScanType == SCAN_ACTIVE) /* obey the channel plan setting... */
 		{
 			#ifdef CONFIG_P2P
@@ -7405,17 +7386,8 @@ void site_survey(_adapter *padapter)
 			}
 		}
 
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-		if ( stay_buddy_ch == 1 )
-			set_survey_timer(pmlmeext, pmlmeext->chan_scan_time * RTW_STAY_AP_CH_MILLISECOND );
-		else
-#endif /* CONFIG_STA_MODE_SCAN_UNDER_AP_MODE */
-			set_survey_timer(pmlmeext, pmlmeext->chan_scan_time);
-
-	}
-	else
-	{
-
+		set_survey_timer(pmlmeext, pmlmeext->chan_scan_time);
+	} else {
 		/* 	channel number is 0 or this channel is not valid. */
 
 #ifdef CONFIG_P2P
@@ -7450,11 +7422,6 @@ void site_survey(_adapter *padapter)
 		else
 #endif /* CONFIG_P2P */
 		{
-
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-			pmlmeinfo->scan_cnt = 0;
-#endif /* CONFIG_DMP_STA_NODE_SCAN_UNDER_AP_MODE */
-
 			/*  20100721:Interrupt scan operation here. */
 			/*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
 			/*  It compares the scan result and select beter one to do connection. */
@@ -8885,12 +8852,7 @@ void survey_timer_hdl(_adapter *padapter)
 	if (pmlmeext->sitesurvey_res.state > SCAN_START)
 	{
 		if (pmlmeext->sitesurvey_res.state ==  SCAN_PROCESS)
-		{
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-			if ( padapter->mlmeextpriv.mlmext_info.scan_cnt != RTW_SCAN_NUM_OF_CH )
-#endif /* CONFIG_STA_MODE_SCAN_UNDER_AP_MODE */
-				pmlmeext->sitesurvey_res.channel_idx++;
-		}
+			pmlmeext->sitesurvey_res.channel_idx++;
 
 		if (pmlmeext->scan_abort == true)
 		{

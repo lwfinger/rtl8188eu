@@ -390,10 +390,6 @@ struct mlme_ext_info {
 	struct HT_info_element		HT_info;
 	WLAN_BSSID_EX			network;//join network or bss_network, if in ap mode, it is the same to cur_network.network
 	struct FW_Sta_Info		FW_sta_info[NUM_STA];
-
-#ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
-	u8 scan_cnt;
-#endif //CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
 };
 
 // The channel information about this channel including joining, scanning, and power constraints.
@@ -401,9 +397,6 @@ typedef struct _RT_CHANNEL_INFO
 {
 	u8				ChannelNum;		// The channel number.
 	RT_SCAN_TYPE	ScanType;		// Scan type such as passive or active scan.
-	//u16				ScanPeriod;		// Listen time in millisecond in this channel.
-	//s32				MaxTxPwrDbm;	// Max allowed tx power.
-	//u32				ExInfo;			// Extended Information for this channel.
 	u32				rx_count;
 }RT_CHANNEL_INFO, *PRT_CHANNEL_INFO;
 
