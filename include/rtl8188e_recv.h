@@ -30,11 +30,7 @@
 
 #define NR_PREALLOC_RECV_SKB (8)
 
-#ifdef CONFIG_SINGLE_RECV_BUF
-	#define NR_RECVBUFF (1)
-#else
-	#define NR_RECVBUFF (4)
-#endif //CONFIG_SINGLE_RECV_BUF
+#define NR_RECVBUFF (4)
 
 #define MAX_RECVBUF_SZ (15360) // 15k < 16k
 
