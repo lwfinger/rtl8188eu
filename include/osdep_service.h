@@ -372,22 +372,6 @@ enum {
 	MEM_STAT_RX_FREE
 };
 
-#ifdef DBG_MEM_ALLOC
-void rtw_update_mem_stat(u8 flag, u32 sz);
-void rtw_dump_mem_stat (void);
-extern u8* dbg_rtw_vmalloc(u32 sz, const char *func, int line);
-extern u8* dbg_rtw_zvmalloc(u32 sz, const char *func, int line);
-extern void dbg_rtw_vmfree(u8 *pbuf, u32 sz, const char *func, int line);
-extern u8* dbg_rtw_malloc(u32 sz, const char *func, int line);
-extern u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line);
-extern void dbg_rtw_mfree(u8 *pbuf, u32 sz, const char *func, int line);
-#define rtw_vmalloc(sz)			dbg_rtw_vmalloc((sz), __func__, __LINE__)
-#define rtw_zvmalloc(sz)			dbg_rtw_zvmalloc((sz), __func__, __LINE__)
-#define rtw_vmfree(pbuf, sz)		dbg_rtw_vmfree((pbuf), (sz), __func__, __LINE__)
-#define rtw_malloc(sz)			dbg_rtw_malloc((sz), __func__, __LINE__)
-#define rtw_zmalloc(sz)			dbg_rtw_zmalloc((sz), __func__, __LINE__)
-#define rtw_mfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), __func__, __LINE__)
-#else
 #define rtw_update_mem_stat(flag, sz) do {} while (0)
 extern u8*	_rtw_vmalloc(u32 sz);
 extern u8*	_rtw_zvmalloc(u32 sz);
@@ -401,7 +385,6 @@ extern void	_rtw_mfree(u8 *pbuf, u32 sz);
 #define rtw_malloc(sz)			_rtw_malloc((sz))
 #define rtw_zmalloc(sz)			_rtw_zmalloc((sz))
 #define rtw_mfree(pbuf, sz)		_rtw_mfree((pbuf), (sz))
-#endif
 
 extern void*	rtw_malloc2d(int h, int w, int size);
 extern void	rtw_mfree2d(void *pbuf, int h, int w, int size);
