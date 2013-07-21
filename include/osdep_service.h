@@ -354,8 +354,6 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 
 extern int RTW_STATUS_CODE(int error_code);
 
-#define CONFIG_USE_VMALLOC
-
 //flags used for rtw_update_mem_stat()
 enum {
 	MEM_STAT_VIR_ALLOC_SUCCESS,
@@ -383,15 +381,9 @@ extern void dbg_rtw_vmfree(u8 *pbuf, u32 sz, const char *func, int line);
 extern u8* dbg_rtw_malloc(u32 sz, const char *func, int line);
 extern u8* dbg_rtw_zmalloc(u32 sz, const char *func, int line);
 extern void dbg_rtw_mfree(u8 *pbuf, u32 sz, const char *func, int line);
-#ifdef CONFIG_USE_VMALLOC
 #define rtw_vmalloc(sz)			dbg_rtw_vmalloc((sz), __func__, __LINE__)
 #define rtw_zvmalloc(sz)			dbg_rtw_zvmalloc((sz), __func__, __LINE__)
 #define rtw_vmfree(pbuf, sz)		dbg_rtw_vmfree((pbuf), (sz), __func__, __LINE__)
-#else //CONFIG_USE_VMALLOC
-#define rtw_vmalloc(sz)			dbg_rtw_malloc((sz), __func__, __LINE__)
-#define rtw_zvmalloc(sz)			dbg_rtw_zmalloc((sz), __func__, __LINE__)
-#define rtw_vmfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), __func__, __LINE__)
-#endif //CONFIG_USE_VMALLOC
 #define rtw_malloc(sz)			dbg_rtw_malloc((sz), __func__, __LINE__)
 #define rtw_zmalloc(sz)			dbg_rtw_zmalloc((sz), __func__, __LINE__)
 #define rtw_mfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), __func__, __LINE__)
@@ -403,15 +395,9 @@ extern void	_rtw_vmfree(u8 *pbuf, u32 sz);
 extern u8*	_rtw_zmalloc(u32 sz);
 extern u8*	_rtw_malloc(u32 sz);
 extern void	_rtw_mfree(u8 *pbuf, u32 sz);
-#ifdef CONFIG_USE_VMALLOC
 #define rtw_vmalloc(sz)			_rtw_vmalloc((sz))
 #define rtw_zvmalloc(sz)			_rtw_zvmalloc((sz))
 #define rtw_vmfree(pbuf, sz)		_rtw_vmfree((pbuf), (sz))
-#else //CONFIG_USE_VMALLOC
-#define rtw_vmalloc(sz)			_rtw_malloc((sz))
-#define rtw_zvmalloc(sz)			_rtw_zmalloc((sz))
-#define rtw_vmfree(pbuf, sz)		_rtw_mfree((pbuf), (sz))
-#endif //CONFIG_USE_VMALLOC
 #define rtw_malloc(sz)			_rtw_malloc((sz))
 #define rtw_zmalloc(sz)			_rtw_zmalloc((sz))
 #define rtw_mfree(pbuf, sz)		_rtw_mfree((pbuf), (sz))
