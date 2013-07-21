@@ -3268,35 +3268,12 @@ void Hal_DetectWoWMode(PADAPTER pAdapter)
 }
 #endif
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-void Hal_ReadRFGainOffset(
-			PADAPTER		Adapter,
-			u8*				PROMContent,
-			bool			AutoloadFail)
-{
-	u8 buff[EFUSE_MAX_SIZE];
-	u32 res;
-	/*  */
-	/*  BB_RF Gain Offset from EEPROM */
-	/*  */
-	res = rtw_efuse_access(Adapter, false, 0, EFUSE_MAX_SIZE, buff);
-	if (!AutoloadFail && res != _FAIL)
-		Adapter->eeprompriv.EEPROMRFGainOffset = buff[EEPROM_RF_GAIN_OFFSET_88E];
-	else
-		Adapter->eeprompriv.EEPROMRFGainOffset = EEPROM_Default_RFGainOffset;
-	DBG_88E("EEPRORFGainOffset = 0x%02x\n", Adapter->eeprompriv.EEPROMRFGainOffset);
-}
-#endif /* CONFIG_RF_GAIN_OFFSET */
-
-/*  */
-/*  */
-/*  20100209 Joseph: */
 /*  This function is used only for 92C to set REG_BCN_CTRL(0x550) register. */
 /*  We just reserve the value of the register in variable pHalData->RegBcnCtrlVal and then operate */
 /*  the value of the register via atomic operation. */
 /*  This prevents from race condition when setting this register. */
 /*  The value of pHalData->RegBcnCtrlVal is initialized in HwConfigureRTL8192CE() function. */
-/*  */
+
 void SetBcnCtrlReg(
 	PADAPTER	padapter,
 	u8		SetBits,

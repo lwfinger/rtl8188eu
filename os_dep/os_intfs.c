@@ -33,11 +33,6 @@
 #include <usb_hal.h>
 #include <rtw_br_ext.h>
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-#define		REG_RF_BB_GAIN_OFFSET	0x55
-#define		RF_GAIN_OFFSET_MASK		0xfffff
-#endif //CONFIG_RF_GAIN_OFFSET
-
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
 MODULE_AUTHOR("Realtek Semiconductor Corp.");
@@ -1297,10 +1292,6 @@ int _netdev_open(struct net_device *pnetdev)
 
 		pr_info("MAC Address = %pM\n", pnetdev->dev_addr);
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-		rtw_bb_rf_gain_offset(padapter);
-#endif //CONFIG_RF_GAIN_OFFSET
-
 		status=rtw_start_drv_threads(padapter);
 		if (status ==_FAIL) {
 			pr_info("Initialize driver software resource Failed!\n");
@@ -1446,27 +1437,6 @@ void rtw_ips_dev_unload(_adapter *padapter)
 	if (padapter->bSurpriseRemoved == false)
 		rtw_hal_deinit(padapter);
 }
-
-#ifdef CONFIG_RF_GAIN_OFFSET
-void rtw_bb_rf_gain_offset(_adapter *padapter)
-{
-	u8      value = padapter->eeprompriv.EEPROMRFGainOffset;
-	u8      tmp = 0x3e;
-	u32     res;
-
-	DBG_88E("+%s value: 0x%02x+\n", __func__, value);
-
-	if (!(value & 0x01)) {
-		DBG_88E("Offset RF Gain.\n");
-		res = rtw_hal_read_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, 0xffffffff);
-		value &= tmp;
-		res = value << 14;
-		rtw_hal_write_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, RF_GAIN_OFFSET_MASK, res);
-	} else {
-		DBG_88E("Using the default RF gain.\n");
-	}
-}
-#endif //CONFIG_RF_GAIN_OFFSET
 
 int pm_netdev_open(struct net_device *pnetdev,u8 bnormal)
 {

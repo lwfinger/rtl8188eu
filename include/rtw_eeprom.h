@@ -119,11 +119,7 @@ struct eeprom_priv {
 	u8		mac_addr[6];	//PermanentAddress
 	u16		channel_plan;
 	u8		EepromOrEfuse;
-	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
-
-#ifdef CONFIG_RF_GAIN_OFFSET
-	u8		EEPROMRFGainOffset;
-#endif //CONFIG_RF_GAIN_OFFSET
+	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512];
 };
 
 extern void eeprom_write16(_adapter *padapter, u16 reg, u16 data);

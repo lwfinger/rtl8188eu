@@ -1519,10 +1519,6 @@ Current IOREG MAP
 #define	EEPROM_CUSTOMERID_88E				0xC5
 #define	EEPROM_RF_ANTENNA_OPT_88E			0xC9
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-#define	EEPROM_RF_GAIN_OFFSET_88E			0xFD
-#endif //CONFIG_RF_GAIN_OFFSET
-
 // RTL88EE
 #define	EEPROM_MAC_ADDR_88EE				0xD0
 #define	EEPROM_VID_88EE						0xD6
@@ -1576,10 +1572,6 @@ Current IOREG MAP
 
 #define EEPROM_Default_CrystalCap_88E		0x20
 #define	EEPROM_Default_ThermalMeter_88E		0x18
-
-#ifdef CONFIG_RF_GAIN_OFFSET
-#define EEPROM_Default_RFGainOffset			0xff
-#endif //CONFIG_RF_GAIN_OFFSET
 
 //New EFUSE deafult value
 #define		EEPROM_DEFAULT_24G_INDEX		0x2D

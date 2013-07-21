@@ -90,10 +90,6 @@ void rtw_proc_remove_one(struct net_device *dev);
 
 void rtw_ips_dev_unload(_adapter *padapter);
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-void rtw_bb_rf_gain_offset(_adapter *padapter);
-#endif //CONFIG_RF_GAIN_OFFSET
-
 int rtw_ips_pwr_up(_adapter *padapter);
 void rtw_ips_pwr_down(_adapter *padapter);
 int rtw_hw_suspend(_adapter *padapter );
