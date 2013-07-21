@@ -219,9 +219,6 @@ struct dvobj_priv
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {
 	/* todo: get interface type from dvobj and the return the dev accordingly */
-#ifdef RTW_DVOBJ_CHIP_HW_TYPE
-#endif
-
 	return &dvobj->pusbintf->dev;
 }
 
