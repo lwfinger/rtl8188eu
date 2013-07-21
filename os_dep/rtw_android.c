@@ -61,15 +61,7 @@ static const char *android_wifi_cmd_str[ANDROID_WIFI_CMD_MAX] = {
 	"P2P_GET_NOA",
 	"P2P_SET_PS",
 	"SET_AP_WPS_P2P_IE",
-#ifdef PNO_SUPPORT
-	"PNOSSIDCLR",
-	"PNOSETUP ",
-	"PNOFORCE",
-	"PNODEBUG",
-#endif
-
 	"MACADDR",
-
 	"BLOCK",
 	"WFD-ENABLE",
 	"WFD-DISABLE",
@@ -77,24 +69,6 @@ static const char *android_wifi_cmd_str[ANDROID_WIFI_CMD_MAX] = {
 	"WFD-SET-MAXTPUT",
 	"WFD-SET-DEVTYPE",
 };
-
-#ifdef PNO_SUPPORT
-#define PNO_TLV_PREFIX			'S'
-#define PNO_TLV_VERSION			'1'
-#define PNO_TLV_SUBVERSION		'2'
-#define PNO_TLV_RESERVED		'0'
-#define PNO_TLV_TYPE_SSID_IE		'S'
-#define PNO_TLV_TYPE_TIME		'T'
-#define PNO_TLV_FREQ_REPEAT		'R'
-#define PNO_TLV_FREQ_EXPO_MAX		'M'
-
-typedef struct cmd_tlv {
-	char prefix;
-	char version;
-	char subver;
-	char reserved;
-} cmd_tlv_t;
-#endif /* PNO_SUPPORT */
 
 typedef struct android_wifi_priv_cmd {
 	const char __user *buf;
@@ -111,115 +85,6 @@ typedef struct android_wifi_priv_cmd {
  * wl_android_wifi_on
  */
 static int g_wifi_on = true;
-
-
-#ifdef PNO_SUPPORT
-static int wl_android_set_pno_setup(struct net_device *dev, char *command, int total_len)
-{
-	wlc_ssid_t ssids_local[MAX_PFN_LIST_COUNT];
-	int res = -1;
-	int nssid = 0;
-	cmd_tlv_t *cmd_tlv_temp;
-	char *str_ptr;
-	int tlv_size_left;
-	int pno_time = 0;
-	int pno_repeat = 0;
-	int pno_freq_expo_max = 0;
-
-#ifdef PNO_SET_DEBUG
-	int i;
-	char pno_in_example[] = {
-		'P', 'N', 'O', 'S', 'E', 'T', 'U', 'P', ' ',
-		'S', '1', '2', '0',
-		'S',
-		0x05,
-		'd', 'l', 'i', 'n', 'k',
-		'S',
-		0x04,
-		'G', 'O', 'O', 'G',
-		'T',
-		'0', 'B',
-		'R',
-		'2',
-		'M',
-		'2',
-		0x00
-		};
-#endif /* PNO_SET_DEBUG */
-
-	DHD_INFO(("%s: command=%s, len=%d\n", __func__, command, total_len));
-
-	if (total_len < (strlen(CMD_PNOSETUP_SET) + sizeof(cmd_tlv_t))) {
-		DBG_88E("%s argument=%d less min size\n", __func__, total_len);
-		goto exit_proc;
-	}
-
-#ifdef PNO_SET_DEBUG
-	memcpy(command, pno_in_example, sizeof(pno_in_example));
-	for (i = 0; i < sizeof(pno_in_example); i++)
-		printf("%02X ", command[i]);
-	printf("\n");
-	total_len = sizeof(pno_in_example);
-#endif
-
-	str_ptr = command + strlen(CMD_PNOSETUP_SET);
-	tlv_size_left = total_len - strlen(CMD_PNOSETUP_SET);
-
-	cmd_tlv_temp = (cmd_tlv_t *)str_ptr;
-	memset(ssids_local, 0, sizeof(ssids_local));
-
-	if ((cmd_tlv_temp->prefix == PNO_TLV_PREFIX) &&
-		(cmd_tlv_temp->version == PNO_TLV_VERSION) &&
-		(cmd_tlv_temp->subver == PNO_TLV_SUBVERSION)) {
-
-		str_ptr += sizeof(cmd_tlv_t);
-		tlv_size_left -= sizeof(cmd_tlv_t);
-
-		if ((nssid = wl_iw_parse_ssid_list_tlv(&str_ptr, ssids_local,
-			MAX_PFN_LIST_COUNT, &tlv_size_left)) <= 0) {
-			DBG_88E("SSID is not presented or corrupted ret=%d\n", nssid);
-			goto exit_proc;
-		} else {
-			if ((str_ptr[0] != PNO_TLV_TYPE_TIME) || (tlv_size_left <= 1)) {
-				DBG_88E("%s scan duration corrupted field size %d\n",
-					__func__, tlv_size_left);
-				goto exit_proc;
-			}
-			str_ptr++;
-			pno_time = simple_strtoul(str_ptr, &str_ptr, 16);
-			DHD_INFO(("%s: pno_time=%d\n", __func__, pno_time));
-
-			if (str_ptr[0] != 0) {
-				if ((str_ptr[0] != PNO_TLV_FREQ_REPEAT)) {
-					DBG_88E("%s pno repeat : corrupted field\n",
-						__func__);
-					goto exit_proc;
-				}
-				str_ptr++;
-				pno_repeat = simple_strtoul(str_ptr, &str_ptr, 16);
-				DHD_INFO(("%s :got pno_repeat=%d\n", __func__, pno_repeat));
-				if (str_ptr[0] != PNO_TLV_FREQ_EXPO_MAX) {
-					DBG_88E("%s FREQ_EXPO_MAX corrupted field size\n",
-						__func__);
-					goto exit_proc;
-				}
-				str_ptr++;
-				pno_freq_expo_max = simple_strtoul(str_ptr, &str_ptr, 16);
-				DHD_INFO(("%s: pno_freq_expo_max=%d\n",
-					__func__, pno_freq_expo_max));
-			}
-		}
-	} else {
-		DBG_88E("%s get wrong TLV command\n", __func__);
-		goto exit_proc;
-	}
-
-	res = dhd_dev_pno_set(dev, ssids_local, nssid, pno_time, pno_repeat, pno_freq_expo_max);
-
-exit_proc:
-	return res;
-}
-#endif /* PNO_SUPPORT */
 
 int rtw_android_cmdstr_to_num(char *cmdstr)
 {
@@ -375,11 +240,8 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	}
 
 	switch (cmd_num) {
-
 	case ANDROID_WIFI_CMD_STOP:
-		//bytes_written = wl_android_wifi_off(net);
 		break;
-
 	case ANDROID_WIFI_CMD_SCAN_ACTIVE:
 		break;
 	case ANDROID_WIFI_CMD_SCAN_PASSIVE:
@@ -390,30 +252,20 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	case ANDROID_WIFI_CMD_LINKSPEED:
 		bytes_written = rtw_android_get_link_speed(net, command, priv_cmd.total_len);
 		break;
-
 	case ANDROID_WIFI_CMD_MACADDR:
 		bytes_written = rtw_android_get_macaddr(net, command, priv_cmd.total_len);
 		break;
-
 	case ANDROID_WIFI_CMD_BLOCK:
 		bytes_written = rtw_android_set_block(net, command, priv_cmd.total_len);
 		break;
-
 	case ANDROID_WIFI_CMD_RXFILTER_START:
-		//bytes_written = net_os_set_packet_filter(net, 1);
 		break;
 	case ANDROID_WIFI_CMD_RXFILTER_STOP:
-		//bytes_written = net_os_set_packet_filter(net, 0);
 		break;
 	case ANDROID_WIFI_CMD_RXFILTER_ADD:
-		//int filter_num = *(command + strlen(CMD_RXFILTER_ADD) + 1) - '0';
-		//bytes_written = net_os_rxfilter_add_remove(net, true, filter_num);
 		break;
 	case ANDROID_WIFI_CMD_RXFILTER_REMOVE:
-		//int filter_num = *(command + strlen(CMD_RXFILTER_REMOVE) + 1) - '0';
-		//bytes_written = net_os_rxfilter_add_remove(net, false, filter_num);
 		break;
-
 	case ANDROID_WIFI_CMD_BTCOEXSCAN_START:
 		/* TBD: BTCOEXSCAN-START */
 		break;
@@ -423,7 +275,6 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	case ANDROID_WIFI_CMD_BTCOEXMODE:
 		break;
 	case ANDROID_WIFI_CMD_SETSUSPENDOPT:
-		//bytes_written = wl_android_set_suspendopt(net, command, priv_cmd.total_len);
 		break;
 	case ANDROID_WIFI_CMD_SETBAND:
 		break;
@@ -432,29 +283,14 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	case ANDROID_WIFI_CMD_COUNTRY:
 		bytes_written = rtw_android_set_country(net, command, priv_cmd.total_len);
 		break;
-
-#ifdef PNO_SUPPORT
-	case ANDROID_WIFI_CMD_PNOSSIDCLR_SET:
-		break;
-	case ANDROID_WIFI_CMD_PNOSETUP_SET:
-		break;
-	case ANDROID_WIFI_CMD_PNOENABLE_SET:
-		break;
-#endif
-
 	case ANDROID_WIFI_CMD_P2P_DEV_ADDR:
 		bytes_written = rtw_android_get_p2p_dev_addr(net, command, priv_cmd.total_len);
 		break;
 	case ANDROID_WIFI_CMD_P2P_SET_NOA:
-		//int skip = strlen(CMD_P2P_SET_NOA) + 1;
-		//bytes_written = wl_cfg80211_set_p2p_noa(net, command + skip, priv_cmd.total_len - skip);
 		break;
 	case ANDROID_WIFI_CMD_P2P_GET_NOA:
-		//bytes_written = wl_cfg80211_get_p2p_noa(net, command, priv_cmd.total_len);
 		break;
 	case ANDROID_WIFI_CMD_P2P_SET_PS:
-		//int skip = strlen(CMD_P2P_SET_PS) + 1;
-		//bytes_written = wl_cfg80211_set_p2p_ps(net, command + skip, priv_cmd.total_len - skip);
 		break;
 	default:
 		DBG_88E("Unknown PRIVATE command %s - ignored\n", command);
