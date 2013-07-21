@@ -19,7 +19,6 @@
  ******************************************************************************/
 #define _IOCTL_LINUX_C_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <wlan_bssdef.h>

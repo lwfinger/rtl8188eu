@@ -19,7 +19,6 @@
  ******************************************************************************/
 
 #define _HAL_INTF_C_
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <hal_intf.h>

@@ -20,7 +20,6 @@
 #ifndef __RTW_LED_H_
 #define __RTW_LED_H_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 

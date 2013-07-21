@@ -19,7 +19,6 @@
  ******************************************************************************/
 #define _HCI_OPS_OS_C_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <osdep_intf.h>
@@ -59,10 +58,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		goto exit;
 	}
 
-	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_enter_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex, NULL);
-	#endif
-
 
 	/*  Acquire IO memory for vendorreq */
 #ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
@@ -157,12 +153,9 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	#endif
 
 release_mutex:
-	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_exit_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex, NULL);
-	#endif
 exit:
 	return status;
-
 }
 
 static u8 usb_read8(struct intf_hdl *pintfhdl, u32 addr)

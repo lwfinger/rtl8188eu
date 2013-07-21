@@ -27,7 +27,7 @@
 #ifndef __DRV_TYPES_H__
 #define __DRV_TYPES_H__
 
-#include <drv_conf.h>
+#include <autoconf.h>
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
 #include <drv_types_linux.h>

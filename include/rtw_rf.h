@@ -20,7 +20,6 @@
 #ifndef	__RTW_RF_H_
 #define __RTW_RF_H_
 
-#include <drv_conf.h>
 #include <rtw_cmd.h>
 
 #define OFDM_PHY		1

@@ -19,7 +19,6 @@
  ******************************************************************************/
 #define _RTL8188E_REDESC_C_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtl8188e_hal.h>

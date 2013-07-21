@@ -19,7 +19,6 @@
  ******************************************************************************/
 #define _RTW_MP_IOCTL_C_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <mlme_osdep.h>

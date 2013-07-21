@@ -20,7 +20,6 @@
 #define _RTW_IOCTL_SET_C_
 
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtw_ioctl_set.h>

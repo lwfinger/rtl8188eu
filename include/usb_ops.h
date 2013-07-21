@@ -20,7 +20,6 @@
 #ifndef __USB_OPS_H_
 #define __USB_OPS_H_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <osdep_intf.h>

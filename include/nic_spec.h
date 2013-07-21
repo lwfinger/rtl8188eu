@@ -22,8 +22,6 @@
 #ifndef __NIC_SPEC_H__
 #define __NIC_SPEC_H__
 
-#include <drv_conf.h>
-
 #define RTL8711_MCTRL_		(0x20000)
 #define RTL8711_UART_		(0x30000)
 #define RTL8711_TIMER_		(0x40000)

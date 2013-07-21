@@ -20,7 +20,6 @@
 #ifndef __RTW_IOL_H_
 #define __RTW_IOL_H_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter);

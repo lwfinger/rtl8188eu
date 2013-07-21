@@ -28,7 +28,6 @@
 #include <linux/if_pppox.h>
 #endif
 
-#include <drv_conf.h>
 #include <drv_types.h>
 #include "rtw_br_ext.h"
 #include <usb_osintf.h>

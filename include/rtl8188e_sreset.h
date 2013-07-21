@@ -20,7 +20,6 @@
 #ifndef _RTL8188E_SRESET_H_
 #define _RTL8188E_SRESET_H_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtw_sreset.h>

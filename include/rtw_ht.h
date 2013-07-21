@@ -20,7 +20,6 @@
 #ifndef _RTW_HT_H_
 #define _RTW_HT_H_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include "wifi.h"
 

@@ -20,7 +20,6 @@
 #ifndef __RTW_IOCTL_SET_H_
 #define __RTW_IOCTL_SET_H_
 
-#include <drv_conf.h>
 #include <drv_types.h>
 
 

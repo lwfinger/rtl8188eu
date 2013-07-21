@@ -20,10 +20,8 @@
 #ifndef __RTW_AP_H_
 #define __RTW_AP_H_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-
 
 #ifdef CONFIG_AP_MODE
 

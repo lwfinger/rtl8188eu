@@ -20,8 +20,6 @@
 #ifndef _RTW_MP_IOCTL_H_
 #define _RTW_MP_IOCTL_H_
 
-//#include <drv_conf.h>
-//#include <osdep_service.h>
 #include <drv_types.h>
 #include <mp_custom_oid.h>
 #include <rtw_ioctl.h>

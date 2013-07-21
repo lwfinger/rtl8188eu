@@ -20,7 +20,6 @@
 #ifndef __RTW_MLME_H_
 #define __RTW_MLME_H_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <mlme_osdep.h>
 #include <drv_types.h>

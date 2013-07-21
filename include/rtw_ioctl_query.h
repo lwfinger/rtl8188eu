@@ -20,7 +20,6 @@
 #ifndef _RTW_IOCTL_QUERY_H_
 #define _RTW_IOCTL_QUERY_H_
 
-#include <drv_conf.h>
 #include <drv_types.h>
 
 #endif

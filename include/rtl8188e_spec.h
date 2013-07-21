@@ -19,8 +19,6 @@
 #ifndef __RTL8188E_SPEC_H__
 #define __RTL8188E_SPEC_H__
 
-#include <drv_conf.h>
-
 #ifndef BIT
 #define BIT(x)		(1 << (x))
 #endif

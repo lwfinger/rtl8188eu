@@ -20,7 +20,6 @@
 #ifndef _RTW_RECV_H_
 #define _RTW_RECV_H_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 

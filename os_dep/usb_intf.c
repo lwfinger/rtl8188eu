@@ -19,7 +19,6 @@
  ******************************************************************************/
 #define _HCI_INTF_C_
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <recv_osdep.h>
@@ -200,10 +199,7 @@ static u8 rtw_init_intf_priv(struct dvobj_priv *dvobj)
 {
 	u8 rst = _SUCCESS;
 
-	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_rtw_mutex_init(&dvobj->usb_vendor_req_mutex);
-	#endif
-
 
 	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 	dvobj->usb_alloc_vendor_req_buf = rtw_zmalloc(MAX_USB_IO_CTL_SIZE);
@@ -230,9 +226,7 @@ static u8 rtw_deinit_intf_priv(struct dvobj_priv *dvobj)
 		rtw_mfree(dvobj->usb_alloc_vendor_req_buf, MAX_USB_IO_CTL_SIZE);
 	#endif
 
-	#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_rtw_mutex_free(&dvobj->usb_vendor_req_mutex);
-	#endif
 
 	return rst;
 }

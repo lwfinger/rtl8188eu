@@ -20,7 +20,6 @@
 #ifndef __RTL8188E_LED_H__
 #define __RTL8188E_LED_H__
 
-#include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 
