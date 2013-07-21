@@ -250,23 +250,6 @@ typedef enum _DRIVER_STATE{
 	DRIVER_REPLACE_DONGLE = 2,
 }DRIVER_STATE;
 
-#ifdef CONFIG_MAC_LOOPBACK_DRIVER
-typedef struct loopbackdata
-{
-	_sema	sema;
-	_thread_hdl_ lbkthread;
-	u8 bstop;
-	u32 cnt;
-	u16 size;
-	u16 txsize;
-	u8 txbuf[0x8000];
-	u16 rxsize;
-	u8 rxbuf[0x8000];
-	u8 msg[100];
-
-}LOOPBACKDATA, *PLOOPBACKDATA;
-#endif
-
 struct _ADAPTER{
 	int	DriverState;// for disable driver using module, use dongle to replace module.
 	int	pid[3];//process id from UI, 0:wps, 1:hostapd, 2:dhcpcd
@@ -376,14 +359,9 @@ struct _ADAPTER{
 	unsigned char			br_ip[4];
 	struct br_ext_info		ethBrExtInfo;
 
-#ifdef CONFIG_MAC_LOOPBACK_DRIVER
-	PLOOPBACKDATA ploopback;
-#endif
-
         u8    fix_rate;
 
 	unsigned char     in_cta_test;
-
 };
 
 #define adapter_to_dvobj(adapter) (adapter->dvobj)
