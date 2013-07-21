@@ -54,23 +54,6 @@
 #define	WIFI_STA_ALIVE_CHK_STATE	0x00000400
 #define	WIFI_SITE_MONITOR			0x00000800		//to indicate the station is under site surveying
 
-#ifdef WDS
-#define	WIFI_WDS					0x00001000
-#define	WIFI_WDS_RX_BEACON		0x00002000		// already rx WDS AP beacon
-#endif
-#ifdef AUTO_CONFIG
-#define	WIFI_AUTOCONF				0x00004000
-#define	WIFI_AUTOCONF_IND		0x00008000
-#endif
-
-/*
-// ========== P2P Section Start ===============
-#define	WIFI_P2P_LISTEN_STATE		0x00010000
-#define	WIFI_P2P_GROUP_FORMATION_STATE		0x00020000
-// ========== P2P Section End ===============
-*/
-
-//#ifdef UNDER_MPTEST
 #define	WIFI_MP_STATE							0x00010000
 #define	WIFI_MP_CTX_BACKGROUND				0x00020000	// in continous tx background
 #define	WIFI_MP_CTX_ST						0x00040000	// in continous tx with single-tone
@@ -78,21 +61,18 @@
 #define	WIFI_MP_CTX_CCK_HW					0x00100000	// in continous tx
 #define	WIFI_MP_CTX_CCK_CS					0x00200000	// in continous tx with carrier suppression
 #define   WIFI_MP_LPBK_STATE					0x00400000
-//#endif
 
-//#define _FW_UNDER_CMD		WIFI_UNDER_CMD
 #define _FW_UNDER_LINKING	WIFI_UNDER_LINKING
 #define _FW_LINKED			WIFI_ASOC_STATE
 #define _FW_UNDER_SURVEY	WIFI_SITE_MONITOR
 
-
 enum dot11AuthAlgrthmNum {
- dot11AuthAlgrthm_Open = 0,
- dot11AuthAlgrthm_Shared,
- dot11AuthAlgrthm_8021X,
- dot11AuthAlgrthm_Auto,
- dot11AuthAlgrthm_WAPI,
- dot11AuthAlgrthm_MaxNum
+	dot11AuthAlgrthm_Open = 0,
+	dot11AuthAlgrthm_Shared,
+	dot11AuthAlgrthm_8021X,
+	dot11AuthAlgrthm_Auto,
+	dot11AuthAlgrthm_WAPI,
+	dot11AuthAlgrthm_MaxNum
 };
 
 // Scan type including active and passive scan.
