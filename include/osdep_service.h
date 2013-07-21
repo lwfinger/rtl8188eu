@@ -518,11 +518,6 @@ __inline static u32 bitshift(u32 bitmask)
 // limitation of path length
 	#define PATH_LENGTH_MAX PATH_MAX
 
-// Suspend lock prevent system from going suspend
-#ifdef CONFIG_WAKELOCK
-#include <linux/wakelock.h>
-#endif
-
 extern void rtw_suspend_lock_init(void);
 extern void rtw_suspend_lock_uninit(void);
 extern void rtw_lock_suspend(void);
@@ -532,7 +527,7 @@ extern void rtw_lock_suspend_timeout(long timeout);
 #endif //CONFIG_WOWLAN
 
 //Atomic integer operations
-	#define ATOMIC_T atomic_t
+#define ATOMIC_T atomic_t
 
 extern void ATOMIC_SET(ATOMIC_T *v, int i);
 extern int ATOMIC_READ(ATOMIC_T *v);
