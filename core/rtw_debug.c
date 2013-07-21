@@ -19,8 +19,8 @@
  ******************************************************************************/
 #define _RTW_DEBUG_C_
 
-
 #include <rtw_debug.h>
+#include <rtw_version.h>
 
 #ifdef CONFIG_DEBUG_RTL871X
 
@@ -58,9 +58,6 @@
 			_module_efuse_;
 
 #endif
-
-#ifdef CONFIG_PROC_DEBUG
-#include <rtw_version.h>
 
 int proc_get_drv_version(char *page, char **start,
 			  off_t offset, int count,
@@ -1117,8 +1114,4 @@ int proc_set_btcoex_dbg(struct file *file, const char __user *buffer,
 
 }
 
-
-
 #endif /* CONFIG_BT_COEXIST */
-
-#endif

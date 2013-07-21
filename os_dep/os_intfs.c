@@ -222,7 +222,6 @@ int _netdev_open(struct net_device *pnetdev);
 int netdev_open (struct net_device *pnetdev);
 static int netdev_close (struct net_device *pnetdev);
 
-#ifdef CONFIG_PROC_DEBUG
 #define RTL8192C_PROC_NAME "rtl819xC"
 #define RTL8192D_PROC_NAME "rtl819xD"
 static char rtw_proc_name[IFNAMSIZ];
@@ -610,7 +609,6 @@ void rtw_proc_remove_one(struct net_device *dev)
 		}
 	}
 }
-#endif
 #endif
 
 static uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev)

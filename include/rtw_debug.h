@@ -218,8 +218,6 @@ extern u32 GlobalDebugLevel;
 		}							\
 	} while (0)
 
-#ifdef CONFIG_PROC_DEBUG
-
 	int proc_get_drv_version(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
@@ -384,6 +382,5 @@ extern u32 GlobalDebugLevel;
 		unsigned long count, void *data);
 
 #endif //CONFIG_BT_COEXIST
-#endif //CONFIG_PROC_DEBUG
 
 #endif	//__RTW_DEBUG_H__
