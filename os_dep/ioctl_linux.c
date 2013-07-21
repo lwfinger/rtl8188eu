@@ -1590,11 +1590,6 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_wx_set_scan\n"));
 
 _func_enter_;
-
-	#ifdef DBG_IOCTL
-	DBG_88E("DBG_IOCTL %s:%d\n",__func__, __LINE__);
-	#endif
-
 	if (padapter->registrypriv.mp_mode == 1)
 	{
 		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
@@ -1780,12 +1775,8 @@ _func_enter_;
 		ret = -1;
 
 exit:
-	#ifdef DBG_IOCTL
-	DBG_88E("DBG_IOCTL %s:%d return %d\n",__func__, __LINE__, ret);
-	#endif
 
 _func_exit_;
-
 	return ret;
 }
 
@@ -1811,10 +1802,6 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_info_, (" Start of Query SIOCGIWSCAN .\n"));
 
 	_func_enter_;
-
-	#ifdef DBG_IOCTL
-	DBG_88E("DBG_IOCTL %s:%d\n",__func__, __LINE__);
-	#endif
 
 	if (padapter->pwrctrlpriv.brfoffbyhw && padapter->bDriverStopped)
 	{
@@ -1883,11 +1870,6 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 
 exit:
 	_func_exit_;
-
-	#ifdef DBG_IOCTL
-	DBG_88E("DBG_IOCTL %s:%d return %d\n",__func__, __LINE__, ret);
-	#endif
-
 	return ret ;
 }
 
@@ -1915,10 +1897,6 @@ static int rtw_wx_set_essid(struct net_device *dev,
 	uint ret = 0, len;
 
 	_func_enter_;
-
-	#ifdef DBG_IOCTL
-	DBG_88E("DBG_IOCTL %s:%d\n",__func__, __LINE__);
-	#endif
 
 	RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_,
 		 ("+rtw_wx_set_essid: fw_state=0x%08x\n", get_fwstate(pmlmepriv)));
@@ -2032,10 +2010,6 @@ static int rtw_wx_set_essid(struct net_device *dev,
 exit:
 
 	DBG_88E("<=%s, ret %d\n",__func__, ret);
-
-	#ifdef DBG_IOCTL
-	DBG_88E("DBG_IOCTL %s:%d return %d\n",__func__, __LINE__, ret);
-	#endif
 
 	_func_exit_;
 

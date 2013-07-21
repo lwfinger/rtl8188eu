@@ -1234,20 +1234,8 @@ Hal_EfuseSwitchToBank(
 
 
 
-static void
-ReadEFuseByIC(
-	PADAPTER	Adapter,
-	u8		efuseType,
-	u16		 _offset,
-	u16		_size_byte,
-	u8		*pbuf,
-	bool	bPseudoTest
-	)
+static void ReadEFuseByIC(PADAPTER Adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest)
 {
-#ifdef DBG_IOL_READ_EFUSE_MAP
-	u8 logical_map[512];
-#endif
-
 	if (!bPseudoTest )/*  rtw_IOL_applied(Adapter)) */
 	{
 		int ret = _FAIL;
@@ -1256,11 +1244,7 @@ ReadEFuseByIC(
 			rtw_hal_power_on(Adapter);
 
 			iol_mode_enable(Adapter, 1);
-			#ifdef DBG_IOL_READ_EFUSE_MAP
-			iol_read_efuse(Adapter, 0, _offset, _size_byte, logical_map);
-			#else
 			ret = iol_read_efuse(Adapter, 0, _offset, _size_byte, pbuf);
-			#endif
 			iol_mode_enable(Adapter, 0);
 
 			if (_SUCCESS == ret)
@@ -1270,24 +1254,6 @@ ReadEFuseByIC(
 	Hal_EfuseReadEFuse88E(Adapter, _offset, _size_byte, pbuf, bPseudoTest);
 
 exit:
-
-#ifdef DBG_IOL_READ_EFUSE_MAP
-	if (_rtw_memcmp(logical_map, Adapter->eeprompriv.efuse_eeprom_data, 0x130) == false)
-	{
-		int i;
-		DBG_88E("%s compare first 0x130 byte fail\n", __func__);
-		for (i=0;i<512;i++)
-		{
-			if (i%16==0)
-				DBG_88E("0x%03x: ", i);
-			DBG_88E("%02x ", logical_map[i]);
-			if (i%16==15)
-				DBG_88E("\n");
-		}
-		DBG_88E("\n");
-	}
-#endif
-
 	return;
 }
 
