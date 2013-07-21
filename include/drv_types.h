@@ -196,12 +196,6 @@ struct dvobj_priv
 
 	u8	irq_alloc;
 
-/*-------- below is for SDIO INTERFACE --------*/
-
-#ifdef INTF_DATA
-	INTF_DATA intf_data;
-#endif
-
 /*-------- below is for USB INTERFACE --------*/
 
 	u8	nr_endpoint;
