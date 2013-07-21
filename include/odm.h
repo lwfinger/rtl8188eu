@@ -296,11 +296,7 @@ typedef struct _ODM_RATE_ADAPTIVE
 #define IQK_MAC_REG_NUM		4
 #define IQK_ADDA_REG_NUM		16
 #define IQK_BB_REG_NUM_MAX	10
-#if (RTL8192D_SUPPORT==1)
-#define IQK_BB_REG_NUM		10
-#else
 #define IQK_BB_REG_NUM		9
-#endif
 #define HP_THERMAL_NUM		8
 
 #define AVG_THERMAL_NUM		8
@@ -609,12 +605,6 @@ typedef enum tag_ODM_RF_Type_Definition
 // ODM Dynamic common info value definition
 //
 
-//typedef enum _MACPHY_MODE_8192D{
-//	SINGLEMAC_SINGLEPHY,
-//	DUALMAC_DUALPHY,
-//	DUALMAC_SINGLEPHY,
-//}MACPHY_MODE_8192D,*PMACPHY_MODE_8192D;
-// Above is the original define in MP driver. Please use the same define. THX.
 typedef enum tag_ODM_MAC_PHY_Mode_Definition
 {
 	ODM_SMSP	= 0,

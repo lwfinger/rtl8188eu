@@ -52,22 +52,6 @@
 #include "odm_interface.h"
 #include "odm_reg.h"
 
-#if (RTL8192C_SUPPORT==1)
-#include "rtl8192c/odm_RTL8192C.h"
-#endif
-#if (RTL8192D_SUPPORT==1)
-#include "rtl8192d/odm_RTL8192D.h"
-#endif
-
-#if (RTL8723A_SUPPORT==1)
-#include "rtl8723a/HalHWImg8723A_MAC.h"
-#include "rtl8723a/HalHWImg8723A_RF.h"
-#include "rtl8723a/HalHWImg8723A_BB.h"
-#include "rtl8723a/HalHWImg8723A_FW.h"
-#include "rtl8723a/odm_RegConfig8723A.h"
-#endif
-
-#if (RTL8188E_SUPPORT==1)
 #include "HalHWImg8188E_MAC.h"
 #include "HalHWImg8188E_RF.h"
 #include "HalHWImg8188E_BB.h"
@@ -87,6 +71,5 @@
 
 #include "odm_RegConfig8188E.h"
 #include "odm_RTL8188E.h"
-#endif
 
 #endif	// __ODM_PRECOMP_H__

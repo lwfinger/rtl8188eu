@@ -607,21 +607,7 @@ static void odm_Process_RSSIForDM(
 
 	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M) && (pPktinfo->Rate <= DESC92C_RATE11M)) ? true : false;
 
-#if ((RTL8192C_SUPPORT == 1) ||(RTL8192D_SUPPORT == 1))
-	if (pDM_Odm->SupportICType & ODM_RTL8192C|ODM_RTL8192D)
-	{
-			if (pPktinfo->bPacketToSelf || pPktinfo->bPacketBeacon)
-			{
-				/* if (pPktinfo->bPacketBeacon) */
-				/*  */
-				/* 	DbgPrint("This is beacon, isCCKrate=%d\n", isCCKrate); */
-				/*  */
-				ODM_AntselStatistics_88C(pDM_Odm, pPktinfo->StationID,  pPhyInfo->RxPWDBAll, isCCKrate);
-			}
-	}
-#endif
 	/* Smart Antenna Debug Message------------------  */
-#if (RTL8188E_SUPPORT == 1)
 	if (pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 		u1Byte	antsel_tr_mux;
@@ -656,7 +642,6 @@ static void odm_Process_RSSIForDM(
 		}
 
 	}
-#endif
 	/* Smart Antenna Debug Message------------------ */ 
 
 	UndecoratedSmoothedCCK =  pEntry->rssi_stat.UndecoratedSmoothedCCK;
