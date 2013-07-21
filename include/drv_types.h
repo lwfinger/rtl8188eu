@@ -121,9 +121,6 @@ struct registry_priv
 	u8	mp_mode;
 	u8	software_encrypt;
 	u8	software_decrypt;
-	#ifdef CONFIG_TX_EARLY_MODE
-	u8   early_mode;
-	#endif
 	u8	acm_method;
 	  //UAPSD
 	u8	wmm_enable;
@@ -180,12 +177,6 @@ struct registry_priv
 	u8 if2name[16];
 
 	u8 notch_filter;
-
-#ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
-	u8 force_ant;//0 normal,1 main,2 aux
-	u8 force_igi;//0 normal
-#endif
-
 };
 
 

@@ -144,13 +144,6 @@ int rtw_mc2u_disable = 0;
 static int rtw_80211d = 0;
 #endif
 
-#ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
-int rtw_force_ant = 2;//0 :normal, 1:Main ant, 2:Aux ant
-int rtw_force_igi =0;//0 :normal
-module_param(rtw_force_ant, int, 0644);
-module_param(rtw_force_igi, int, 0644);
-#endif
-
 static char* ifname = "wlan%d";
 module_param(ifname, charp, 0644);
 MODULE_PARM_DESC(ifname, "The default name to allocate for first interface");
@@ -707,10 +700,6 @@ _func_enter_;
 	snprintf(registry_par->ifname, 16, "%s", ifname);
 	snprintf(registry_par->if2name, 16, "%s", if2name);
 	registry_par->notch_filter = (u8)rtw_notch_filter;
-#ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
-	registry_par->force_ant = (u8)rtw_force_ant;
-	registry_par->force_igi = (u8)rtw_force_igi;
-#endif
 _func_exit_;
 	return status;
 }
