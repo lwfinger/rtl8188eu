@@ -135,9 +135,7 @@ static int rtw_hw_wps_pbc = 1;
 
 int rtw_mc2u_disable = 0;
 
-#ifdef CONFIG_80211D
 static int rtw_80211d = 0;
-#endif
 
 static char* ifname = "wlan%d";
 module_param(ifname, charp, 0644);
@@ -197,10 +195,8 @@ MODULE_PARM_DESC(rtw_fw_file_path, "The path of fw image");
 
 module_param(rtw_mc2u_disable, int, 0644);
 
-#ifdef CONFIG_80211D
 module_param(rtw_80211d, int, 0644);
 MODULE_PARM_DESC(rtw_80211d, "Enable 802.11d mechanism");
-#endif
 
 #ifdef CONFIG_BT_COEXIST
 module_param(rtw_btcoex_enable, int, 0644);
@@ -687,9 +683,7 @@ _func_enter_;
 
 	registry_par->fw_iol = rtw_fw_iol;
 
-#ifdef CONFIG_80211D
 	registry_par->enable80211d = (u8)rtw_80211d;
-#endif
 	snprintf(registry_par->ifname, 16, "%s", ifname);
 	snprintf(registry_par->if2name, 16, "%s", if2name);
 	registry_par->notch_filter = (u8)rtw_notch_filter;

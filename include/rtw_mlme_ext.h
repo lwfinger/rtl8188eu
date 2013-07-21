@@ -478,9 +478,7 @@ struct mlme_ext_priv
 	unsigned char bstart_bss;
 #endif
 
-#ifdef CONFIG_80211D
 	u8 update_channel_plan_by_ap_done;
-#endif
 	//recv_decache check for Action_public frame
 	u8 action_public_dialog_token;
 	u16	 action_public_rxseq;

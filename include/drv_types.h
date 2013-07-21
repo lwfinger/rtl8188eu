@@ -169,16 +169,13 @@ struct registry_priv
 
 	u8 fw_iol; //enable iol without other concern
 
-#ifdef CONFIG_80211D
 	u8 enable80211d;
-#endif
 
 	u8 ifname[16];
 	u8 if2name[16];
 
 	u8 notch_filter;
 };
-
 
 //For registry parameters
 #define RGTRY_OFT(field) ((ULONG)FIELD_OFFSET(struct registry_priv,field))

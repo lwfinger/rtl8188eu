@@ -7874,7 +7874,6 @@ unsigned int receive_disconnect(_adapter *padapter, unsigned char *MacAddr, unsi
 	return _SUCCESS;
 }
 
-#ifdef CONFIG_80211D
 static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 {
 	struct registry_priv *pregistrypriv;
@@ -7889,8 +7888,7 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 
 	/*  Adjust channel plan by AP Country IE */
 	if (pregistrypriv->enable80211d &&
-		(!pmlmeext->update_channel_plan_by_ap_done))
-	{
+	    (!pmlmeext->update_channel_plan_by_ap_done)) {
 		u8 *ie, *p;
 		u32 len;
 		RT_CHANNEL_PLAN chplan_ap;
@@ -7901,9 +7899,10 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		u8 j, k;
 
 		ie = rtw_get_ie(bssid->IEs + _FIXED_IE_LENGTH_, _COUNTRY_IE_, &len, bssid->IELength - _FIXED_IE_LENGTH_);
-		if (!ie) return;
-		if (len < 6) return;
-
+		if (!ie)
+			return;
+		if (len < 6)
+			return;
 		ie += 2;
 		p = ie;
 		ie += len;
@@ -7915,16 +7914,16 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 				("%s: 802.11d country=%s\n", __func__, country));
 
 		i = 0;
-		while ((ie - p) >= 3)
-		{
+		while ((ie - p) >= 3) {
 			fcn = *(p++);
 			noc = *(p++);
 			p++;
 
-			for (j = 0; j < noc; j++)
-			{
-				if (fcn <= 14) channel = fcn + j; /*  2.4 GHz */
-				else channel = fcn + j*4; /*  5 GHz */
+			for (j = 0; j < noc; j++) {
+				if (fcn <= 14)
+					channel = fcn + j; /*  2.4 GHz */
+				else
+					channel = fcn + j*4; /*  5 GHz */
 
 				chplan_ap.Channel[i++] = channel;
 			}
@@ -7934,8 +7933,7 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 #ifdef CONFIG_DEBUG_RTL871X
 		i = 0;
 		DBG_88E("%s: AP[%s] channel plan {", __func__, bssid->Ssid.Ssid);
-		while ((i < chplan_ap.Len) && (chplan_ap.Channel[i] != 0))
-		{
+		while ((i < chplan_ap.Len) && (chplan_ap.Channel[i] != 0)) {
 			DBG_88E("%02d,", chplan_ap.Channel[i]);
 			i++;
 		}
@@ -8139,7 +8137,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		i++;
 	}
 }
-#endif
 
 /****************************************************************************
 
@@ -8201,16 +8198,13 @@ void report_survey_event(_adapter *padapter, union recv_frame *precv_frame)
 		return;
 	}
 
-#ifdef CONFIG_80211D
 	process_80211d(padapter, &psurvey_evt->bss);
-#endif
 
 	rtw_enqueue_cmd(pcmdpriv, pcmd_obj);
 
 	pmlmeext->sitesurvey_res.bss_cnt++;
 
 	return;
-
 }
 
 void report_surveydone_event(_adapter *padapter)
@@ -8224,13 +8218,10 @@ void report_surveydone_event(_adapter *padapter)
 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
 
 	if ((pcmd_obj = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj))) == NULL)
-	{
 		return;
-	}
 
 	cmdsz = (sizeof(struct surveydone_event) + sizeof(struct C2HEvent_Header));
-	if ((pevtcmd = (u8*)rtw_zmalloc(cmdsz)) == NULL)
-	{
+	if ((pevtcmd = (u8*)rtw_zmalloc(cmdsz)) == NULL) {
 		rtw_mfree((u8 *)pcmd_obj, sizeof(struct cmd_obj));
 		return;
 	}
