@@ -68,11 +68,6 @@ typedef struct _ADAPTER _adapter, ADAPTER,*PADAPTER;
 #include <rtw_mlme_ext.h>
 #include <rtw_p2p.h>
 #include <rtw_ap.h>
-
-#ifdef CONFIG_DRVEXT_MODULE
-#include <drvext_api.h>
-#endif
-
 #include <rtw_mp.h>
 
 #include <rtw_br_ext.h>
@@ -307,10 +302,6 @@ struct _ADAPTER{
 	struct delayed_work checkbt_work;
 #endif
        struct	mp_priv	mppriv;
-
-#ifdef CONFIG_DRVEXT_MODULE
-	struct	drvext_priv	drvextpriv;
-#endif
 
 #ifdef CONFIG_AP_MODE
 	struct	hostapd_priv	*phostapdpriv;

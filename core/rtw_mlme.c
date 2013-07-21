@@ -1080,10 +1080,6 @@ _func_enter_;
 
 	rtw_os_xmit_schedule(adapter);
 
-#ifdef CONFIG_DRVEXT_MODULE_WSC
-	drvext_surveydone_callback(&adapter->drvextpriv);
-#endif
-
 	{
 		struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
 		if (pmlmeext->sitesurvey_res.bss_cnt == 0){
@@ -1213,15 +1209,7 @@ _func_enter_;
 
 		rtw_led_control(padapter, LED_CTL_LINK);
 
-#ifdef CONFIG_DRVEXT_MODULE
-		if (padapter->drvextpriv.enable_wpa) {
-			indicate_l2_connect(padapter);
-		} else
-#endif
-		{
-			rtw_os_indicate_connect(padapter);
-		}
-
+		rtw_os_indicate_connect(padapter);
 	}
 
 	pmlmepriv->to_roaming=0;
@@ -1233,7 +1221,6 @@ _func_enter_;
 _func_exit_;
 
 }
-
 
 /*
 *rtw_indicate_disconnect: the caller has to lock pmlmepriv->lock
@@ -1962,13 +1949,7 @@ _func_enter_;
 
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
 
-
-#ifdef CONFIG_DRVEXT_MODULE_WSC
-	drvext_assoc_fail_indicate(&adapter->drvextpriv);
-#endif
-
 _func_exit_;
-
 }
 
 /*
@@ -2515,10 +2496,6 @@ _func_enter_;
 		_rtw_memcpy(&out_ie[ielength], &psecuritypriv->supplicant_ie[0], psecuritypriv->supplicant_ie[1]+2);
 		ielength+=psecuritypriv->supplicant_ie[1]+2;
 		rtw_report_sec_ie(adapter, authmode, psecuritypriv->supplicant_ie);
-
-#ifdef CONFIG_DRVEXT_MODULE
-		drvext_report_sec_ie(&adapter->drvextpriv, authmode, sec_ie);
-#endif
 	}
 
 	iEntry = SecIsInPMKIDList(adapter, pmlmepriv->assoc_bssid);
