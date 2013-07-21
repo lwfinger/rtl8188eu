@@ -166,18 +166,11 @@ typedef enum _USB_RX_AGG_MODE{
 
 #define TX_TOTAL_PAGE_NUMBER_88E		0xA9//  169 (21632=> 21k)
 
-#ifdef RTL8188ES_MAC_LOOPBACK
-#define TX_PAGE_BOUNDARY_88E 0x48 //72
-#else //TX_PAGE_BOUNDARY_LOOPBACK_MODE
 #define TX_PAGE_BOUNDARY_88E (TX_TOTAL_PAGE_NUMBER_88E + 1)
-#endif
-
 
 //Note: For Normal Chip Setting ,modify later
 #define WMM_NORMAL_TX_TOTAL_PAGE_NUMBER	TX_TOTAL_PAGE_NUMBER_88E  //0xA9 , 0xb0=>176=>22k
 #define WMM_NORMAL_TX_PAGE_BOUNDARY_88E	(WMM_NORMAL_TX_TOTAL_PAGE_NUMBER + 1) //0xA9
-
-
 
 //-------------------------------------------------------------------------
 //	Chip specific
