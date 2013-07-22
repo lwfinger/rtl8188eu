@@ -89,11 +89,7 @@ typedef enum _FIRMWARE_SOURCE {
 
 typedef struct _RT_FIRMWARE {
 	FIRMWARE_SOURCE	eFWSource;
-#ifdef CONFIG_EMBEDDED_FWIMG
 	u8*			szFwBuffer;
-#else
-	u8			szFwBuffer[FW_8188E_SIZE];
-#endif
 	u32			ulFwLength;
 
 #ifdef CONFIG_WOWLAN

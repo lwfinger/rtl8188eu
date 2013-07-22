@@ -36,8 +36,6 @@
  * Internal  General Config
  */
 
-#define CONFIG_EMBEDDED_FWIMG
-
 #define CONFIG_80211N_HT
 
 #define CONFIG_SUPPORT_USB_INT

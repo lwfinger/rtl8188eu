@@ -576,12 +576,6 @@ phy_RF6052_Config_ParaFile(
 
 	static char			sz88eRadioAFile[] = RTL8188E_PHY_RADIO_A;
 	static char			sz88eRadioBFile[] = RTL8188E_PHY_RADIO_B;
-#ifndef CONFIG_EMBEDDED_FWIMG
-	char					*pszRadioAFile, *pszRadioBFile;
-
-	pszRadioAFile = sz88eRadioAFile;
-	pszRadioBFile = sz88eRadioBFile;
-#endif
 
 	/* 3----------------------------------------------------------------- */
 	/* 3 <2> Initialize RF */
@@ -621,20 +615,12 @@ phy_RF6052_Config_ParaFile(
 		/*----Initialize RF fom connfiguration file----*/
 		switch (eRFPath) {
 		case RF_PATH_A:
-#ifdef CONFIG_EMBEDDED_FWIMG
 			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
 				rtStatus= _FAIL;
-#else
-			rtStatus = rtl8188e_PHY_ConfigRFWithParaFile(Adapter, pszRadioAFile, (RF_RADIO_PATH_E)eRFPath);
-#endif/* ifdef CONFIG_EMBEDDED_FWIMG */
 			break;
 		case RF_PATH_B:
-#ifdef CONFIG_EMBEDDED_FWIMG
 			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
 				rtStatus= _FAIL;
-#else
-			rtStatus =rtl8188e_PHY_ConfigRFWithParaFile(Adapter, pszRadioBFile, (RF_RADIO_PATH_E)eRFPath);
-#endif
 			break;
 		case RF_PATH_C:
 			break;

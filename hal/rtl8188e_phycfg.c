@@ -622,26 +622,13 @@ s32 PHY_MACConfig8188E(PADAPTER Adapter)
 {
 	int		rtStatus = _SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-#ifndef CONFIG_EMBEDDED_FWIMG
-	s8			*pszMACRegFile;
-#endif
 	s8			sz8188EMACRegFile[] = RTL8188E_PHY_MACREG;
 
-#ifndef CONFIG_EMBEDDED_FWIMG
-	pszMACRegFile = sz8188EMACRegFile;
-#endif
 	/*  */
 	/*  Config MAC */
 	/*  */
-#ifdef CONFIG_EMBEDDED_FWIMG
 	if (HAL_STATUS_FAILURE == ODM_ConfigMACWithHeaderFile(&pHalData->odmpriv))
 		rtStatus = _FAIL;
-#else
-
-	/*  Not make sure EEPROM, add later */
-	rtStatus = phy_ConfigMACWithParaFile(Adapter, pszMACRegFile);
-#endif/* CONFIG_EMBEDDED_FWIMG */
-
 
 	/*  2010.07.13 AMPDU aggregation number B */
 	rtw_write16(Adapter, REG_MAX_AGGR_NUM, MAX_AGGR_NUM);
@@ -939,31 +926,12 @@ phy_BB8188E_Config_ParaFile(
 	u8	sz8188EBBRegPgFile[] = RTL8188E_PHY_REG_PG;
 	u8	sz8188EBBRegMpFile[] = RTL8188E_PHY_REG_MP;
 
-#ifndef CONFIG_EMBEDDED_FWIMG
-	u8	*pszBBRegFile = NULL;
-	u8	*pszBBRegPgFile = NULL;
-	u8	*pszAGCTableFile = NULL;
-#endif
-
-#ifndef CONFIG_EMBEDDED_FWIMG
-	pszBBRegFile = sz8188EBBRegFile;
-	pszBBRegPgFile = sz8188EBBRegPgFile;
-	pszAGCTableFile = sz8188EAGCTableFile;
-#endif
-
 	/*  */
 	/*  1. Read PHY_REG.TXT BB INIT!! */
 	/*  We will seperate as 88C / 92C according to chip version */
 	/*  */
-#ifdef CONFIG_EMBEDDED_FWIMG
 	if (HAL_STATUS_FAILURE ==ODM_ConfigBBWithHeaderFile(&pHalData->odmpriv, CONFIG_BB_PHY_REG))
 		rtStatus = _FAIL;
-#else
-	/*  No matter what kind of CHIP we always read PHY_REG.txt. We must copy different */
-	/*  type of parameter files to phy_reg.txt at first. */
-	rtStatus = phy_ConfigBBWithParaFile(Adapter,pszBBRegFile);
-#endif/* ifdef CONFIG_EMBEDDED_FWIMG */
-
 	if (rtStatus != _SUCCESS)
 		goto phy_BB8190_Config_ParaFile_Fail;
 
@@ -974,12 +942,8 @@ phy_BB8188E_Config_ParaFile(
 	{
 		pHalData->pwrGroupCnt = 0;
 
-#ifdef CONFIG_EMBEDDED_FWIMG
 		if (HAL_STATUS_FAILURE ==ODM_ConfigBBWithHeaderFile(&pHalData->odmpriv, CONFIG_BB_PHY_REG_PG))
 			rtStatus = _FAIL;
-#else
-		rtStatus = phy_ConfigBBWithPgParaFile(Adapter, pszBBRegPgFile);
-#endif
 	}
 
 	if (rtStatus != _SUCCESS)
@@ -988,13 +952,8 @@ phy_BB8188E_Config_ParaFile(
 	/*  */
 	/*  3. BB AGC table Initialization */
 	/*  */
-#ifdef CONFIG_EMBEDDED_FWIMG
 	if (HAL_STATUS_FAILURE ==ODM_ConfigBBWithHeaderFile(&pHalData->odmpriv,  CONFIG_BB_AGC_TAB))
 		rtStatus = _FAIL;
-#else
-	/* RT_TRACE(COMP_INIT, DBG_LOUD, ("phy_BB8192S_Config_ParaFile AGC_TAB.txt\n")); */
-	rtStatus = phy_ConfigBBWithParaFile(Adapter, pszAGCTableFile);
-#endif/* ifdef CONFIG_EMBEDDED_FWIMG */
 
 	if (rtStatus != _SUCCESS)
 		goto phy_BB8190_Config_ParaFile_Fail;
