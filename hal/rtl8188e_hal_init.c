@@ -639,7 +639,7 @@ s32 rtl8188e_FirmwareDownload(PADAPTER padapter)
 	s32	rtStatus = _SUCCESS;
 	u8 writeFW_retry = 0;
 	u32 fwdl_start_time;
-	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(padapter);
 
 	u8			*FwImage;
 	u32			FwImageLen;
@@ -800,7 +800,7 @@ Exit:
 #ifdef CONFIG_WOWLAN
 void rtl8188e_InitializeFirmwareVars(PADAPTER padapter)
 {
-	PHAL_DATA_TYPE pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv *pwrpriv;
 	pwrpriv = &padapter->pwrctrlpriv;
 
@@ -827,7 +827,7 @@ SetFwRelatedForWoWLAN8188ES(
 )
 {
 		int				status=_FAIL;
-		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+		struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 		u8				bRecover = false;
 	/*  */
 	/*  1. Before WoWLAN we need to re-download WoWLAN Fw. */
@@ -847,7 +847,7 @@ SetFwRelatedForWoWLAN8188ES(
 #else
 void rtl8188e_InitializeFirmwareVars(PADAPTER padapter)
 {
-	PHAL_DATA_TYPE pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(padapter);
 
 	/*  Init Fw LPS related. */
 	padapter->pwrctrlpriv.bFwCurrentInPSMode = false;
@@ -861,7 +861,7 @@ static void rtl8188e_free_hal_data(PADAPTER padapter)
 {
 _func_enter_;
 	if (padapter->HalData) {
-		rtw_mfree(padapter->HalData, sizeof(HAL_DATA_TYPE));
+		rtw_mfree(padapter->HalData, sizeof(struct hal_data_8188e));
 		padapter->HalData = NULL;
 	}
 _func_exit_;
@@ -2380,7 +2380,7 @@ static struct HAL_VERSION ReadChipVersion8188E(PADAPTER padapter)
 {
 	u32				value32;
 	struct HAL_VERSION		ChipVersion;
-	HAL_DATA_TYPE	*pHalData;
+	struct hal_data_8188e	*pHalData;
 
 
 	pHalData = GET_HAL_DATA(padapter);
@@ -2432,7 +2432,7 @@ static void rtl8188e_GetHalODMVar(
 	void *					pValue1,
 	bool					bSet)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T podmpriv = &pHalData->odmpriv;
 	switch (eVariable){
 		case HAL_ODM_STA_INFO:
@@ -2447,7 +2447,7 @@ static void rtl8188e_SetHalODMVar(
 	void *					pValue1,
 	bool					bSet)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T podmpriv = &pHalData->odmpriv;
 	switch (eVariable){
 		case HAL_ODM_STA_INFO:
@@ -2601,7 +2601,7 @@ s32 InitLLTTable(PADAPTER padapter, u8 txpktbuf_bndy)
 	s32	status = _FAIL;
 	u32	i;
 	u32	Last_Entry_Of_TxPktBuf = LAST_ENTRY_OF_TX_PKT_BUFFER;/*  176, 22k */
-	HAL_DATA_TYPE *pHalData	= GET_HAL_DATA(padapter);
+	struct hal_data_8188e *pHalData	= GET_HAL_DATA(padapter);
 
 	if (rtw_IOL_applied(padapter)) {
 		status = iol_InitLLTTable(padapter, txpktbuf_bndy);
@@ -2916,7 +2916,7 @@ static u8 Hal_GetChnlGroup88E(u8 chnl, u8 *pGroup)
 
 void Hal_ReadPowerSavingMode88E(PADAPTER padapter, u8 *hwinfo, bool AutoLoadFail)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
 	u8 tmpvalue;
 
@@ -2953,7 +2953,7 @@ Hal_ReadTxPowerInfo88E(
 		bool			AutoLoadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	TxPowerInfo24G		pwrInfo24G;
 	u8			rfPath, ch, group, rfPathMax=1;
 	u8			pwr, diff,bIn24G,TxCount;
@@ -3027,7 +3027,7 @@ Hal_EfuseParseXtal_8188E(
 		bool		AutoLoadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 	if (!AutoLoadFail)
 	{
@@ -3049,7 +3049,7 @@ Hal_EfuseParseBoardType88E(
 		bool			AutoLoadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 	if (!AutoLoadFail)
 		pHalData->BoardType = ((hwinfo[EEPROM_RF_BOARD_OPTION_88E]&0xE0)>>5);
@@ -3065,7 +3065,7 @@ Hal_EfuseParseEEPROMVer88E(
 		bool			AutoLoadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 	if (!AutoLoadFail){
 		pHalData->EEPROMVersion = hwinfo[EEPROM_VERSION_88E];
@@ -3104,7 +3104,7 @@ Hal_EfuseParseCustomerID88E(
 		bool			AutoLoadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 	if (!AutoLoadFail)
 	{
@@ -3126,7 +3126,7 @@ Hal_ReadAntennaDiversity88E(
 		bool			AutoLoadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct registry_priv	*registry_par = &pAdapter->registrypriv;
 
 	if (!AutoLoadFail)
@@ -3174,7 +3174,7 @@ Hal_ReadThermalMeter_88E(
 		bool		AutoloadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u1Byte			tempval;
 
 	/*  */
@@ -3206,7 +3206,7 @@ Hal_InitChannelPlan(
 bool HalDetectPwrDownMode88E(PADAPTER Adapter)
 {
 	u8 tmpvalue = 0;
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
 	struct pwrctrl_priv *pwrctrlpriv = &Adapter->pwrctrlpriv;
 
 	EFUSE_ShadowRead(Adapter, 1, EEPROM_RF_FEATURE_OPTION_88E, (u32 *)&tmpvalue);
@@ -3245,7 +3245,7 @@ void SetBcnCtrlReg(
 	u8		SetBits,
 	u8		ClearBits)
 {
-	PHAL_DATA_TYPE pHalData;
+	struct hal_data_8188e *pHalData;
 
 
 	pHalData = GET_HAL_DATA(padapter);

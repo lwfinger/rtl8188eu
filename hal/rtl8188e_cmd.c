@@ -74,7 +74,7 @@ static s32 FillH2CCmd_88E(PADAPTER padapter, u8 ElementID, u32 CmdLen, u8 *pCmdB
 	u8 h2c_box_num;
 	u32	msgbox_addr;
 	u32 msgbox_ex_addr;
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(padapter);
 	u8 cmd_idx,ext_cmd_len;
 	u32	h2c_cmd = 0;
 	u32	h2c_cmd_ex = 0;
@@ -146,7 +146,7 @@ _func_exit_;
 u8 rtl8188e_set_rssi_cmd(_adapter*padapter, u8 *param)
 {
 	u8	res=_SUCCESS;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 _func_enter_;
 
 	if (pHalData->fw_ractrl == true){
@@ -165,7 +165,7 @@ u8 rtl8188e_set_raid_cmd(_adapter*padapter, u32 mask)
 {
 	u8	buf[3];
 	u8	res=_SUCCESS;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 _func_enter_;
 	if (pHalData->fw_ractrl == true){
@@ -193,7 +193,7 @@ _func_exit_;
 /* arg[5] = Short GI */
 void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 	u8 macid, init_rate, raid, shortGIrate=false;
 
@@ -543,7 +543,7 @@ CheckFwRsvdPageContent(
 /*  2009.10.15 by tynli. */
 static void SetFwRsvdPagePkt(PADAPTER padapter, bool bDLFinished)
 {
-	PHAL_DATA_TYPE pHalData;
+	struct hal_data_8188e *pHalData;
 	struct xmit_frame	*pmgntframe;
 	struct pkt_attrib	*pattrib;
 	struct xmit_priv	*pxmitpriv;
@@ -666,7 +666,7 @@ exit:
 void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 {
 	JOINBSSRPT_PARM	JoinBssRptParm;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	bool		bSendBeacon=false;
@@ -783,7 +783,7 @@ _func_exit_;
 
 void rtl8188e_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv		*pwrpriv = &padapter->pwrctrlpriv;
 	struct wifidirect_info	*pwdinfo = &( padapter->wdinfo );
 	struct P2P_PS_Offload_t	*p2p_ps_offload = &pHalData->p2p_ps_offload;

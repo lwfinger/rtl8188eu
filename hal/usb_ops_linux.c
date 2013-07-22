@@ -100,7 +100,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 					padapter->bSurpriseRemoved = true;
 				} else {
 					{
-						HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+						struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 						pHalData->srestpriv.Wifi_Error_Status = USB_VEN_REQ_CMD_FAIL;
 					}
 				}
@@ -319,7 +319,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 
 static void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
 {
-	HAL_DATA_TYPE	*pHalData=GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData=GET_HAL_DATA(padapter);
 	struct reportpwrstate_parm pwr_rpt;
 
 	if ( pkt_len != INTERRUPT_MSG_FORMAT_LEN )
@@ -354,7 +354,7 @@ static int recvbuf2recvframe(_adapter *padapter, _pkt *pskb)
 	_pkt				*pkt_copy = NULL;
 	union recv_frame	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	_queue			*pfree_recv_queue = &precvpriv->free_recv_queue;
 
@@ -620,7 +620,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 		case -EPROTO:
 		case -EOVERFLOW:
 			{
-				HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+				struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 				pHalData->srestpriv.Wifi_Error_Status = USB_READ_PORT_FAIL;
 			}
 			precvbuf->reuse = true;

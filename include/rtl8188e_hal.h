@@ -469,10 +469,7 @@ typedef struct hal_data_8188e
 	u8	UsbRxAggPageTimeout;
 } HAL_DATA_8188E, *PHAL_DATA_8188E;
 
-typedef struct hal_data_8188e HAL_DATA_TYPE, *PHAL_DATA_TYPE;
-
-
-#define GET_HAL_DATA(__pAdapter)	((HAL_DATA_TYPE *)((__pAdapter)->HalData))
+#define GET_HAL_DATA(__pAdapter)	((struct hal_data_8188e *)((__pAdapter)->HalData))
 #define GET_RF_TYPE(priv)			(GET_HAL_DATA(priv)->rf_type)
 
 #define INCLUDE_MULTI_FUNC_BT(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_BT)

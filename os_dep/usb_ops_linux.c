@@ -230,7 +230,7 @@ _func_enter_;
 	}
 
 	{
-		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+		struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 		pHalData->srestpriv.last_tx_complete_time = rtw_get_current_time();
 	}
 
@@ -318,7 +318,7 @@ _func_enter_;
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 	if (!status) {
 		{
-			HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+			struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 			pHalData->srestpriv.last_tx_time = rtw_get_current_time();
 		}
 	} else {

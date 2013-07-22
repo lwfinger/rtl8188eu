@@ -184,7 +184,7 @@ SIC_SetBBReg(
 		u32		Data
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u32			OriginalValue, BitShift;
 	u16			BBWaitCounter = 0;
 
@@ -208,7 +208,7 @@ SIC_QueryBBReg(
 		u32		BitMask
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u32			ReturnValue = 0, OriginalValue, BitShift;
 	u16			BBWaitCounter = 0;
 
@@ -313,7 +313,7 @@ rtl8188e_PHY_SetBBReg(
 		u32		Data
 	)
 {
-	HAL_DATA_TYPE	*pHalData		= GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData		= GET_HAL_DATA(Adapter);
 	u32			OriginalValue, BitShift;
 
 #if (DISABLE_BB_RF == 1)
@@ -365,7 +365,7 @@ phy_RFSerialRead(
 	)
 {
 	u32						retValue = 0;
-	HAL_DATA_TYPE				*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e				*pHalData = GET_HAL_DATA(Adapter);
 	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32						NewOffset;
 	u32						tmplong,tmplong2;
@@ -468,7 +468,7 @@ phy_RFSerialWrite(
 	)
 {
 	u32						DataAndAddr = 0;
-	HAL_DATA_TYPE				*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e				*pHalData = GET_HAL_DATA(Adapter);
 	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32						NewOffset;
 
@@ -595,7 +595,7 @@ phy_ConfigMACWithParaFile(
 		u8*			pFileName
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	int		rtStatus = _FAIL;
 
@@ -621,7 +621,7 @@ phy_ConfigMACWithParaFile(
 s32 PHY_MACConfig8188E(PADAPTER Adapter)
 {
 	int		rtStatus = _SUCCESS;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	s8			sz8188EMACRegFile[] = RTL8188E_PHY_MACREG;
 
 	/*  */
@@ -653,7 +653,7 @@ phy_InitBBRFRegisterDefinition(
 		PADAPTER		Adapter
 )
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 
 	/*  RF Interface Sowrtware Control */
 	pHalData->PHYRegDef[RF_PATH_A].rfintfs = rFPGA0_XAB_RFInterfaceSW; /*  16 LSBs if read 32-bit from 0x870 */
@@ -774,7 +774,7 @@ phy_ConfigBBWithParaFile(
 		u8*			pFileName
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	int		rtStatus = _SUCCESS;
 
@@ -788,7 +788,7 @@ phy_ConfigBBWithParaFile(
 /*  */
 static void phy_ConfigBBExternalPA(PADAPTER Adapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u16 i=0;
 	u32 temp=0;
 
@@ -807,7 +807,7 @@ storePwrIndexDiffRateOffset(
 		u32		Data
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	if (RegAddr == rTxAGC_A_Rate18_06)
 		pHalData->MCSTxPowerLevelOriginalOffset[pHalData->pwrGroupCnt][0] = Data;
@@ -869,7 +869,7 @@ phy_ConfigBBWithPgParaFile(
 		PADAPTER		Adapter,
 		u8*			pFileName)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	int		rtStatus = _SUCCESS;
 
@@ -918,7 +918,7 @@ phy_BB8188E_Config_ParaFile(
 	)
 {
 	EEPROM_EFUSE_PRIV	*pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 	int			rtStatus = _SUCCESS;
 
 	u8	sz8188EBBRegFile[] = RTL8188E_PHY_REG;
@@ -969,7 +969,7 @@ PHY_BBConfig8188E(
 	)
 {
 	int	rtStatus = _SUCCESS;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u32	RegVal;
 	u8	TmpU1B=0;
 	u8	value8,CrystalCap;
@@ -1004,7 +1004,7 @@ PHY_RFConfig8188E(
 		PADAPTER	Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	int		rtStatus = _SUCCESS;
 
 	/*  */
@@ -1043,7 +1043,7 @@ rtl8188e_PHY_ConfigRFWithParaFile(
 static int PHY_ConfigRFExternalPA(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath)
 {
 	int	rtStatus = _SUCCESS;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u16 i=0;
 
 	if (!pHalData->ExternalPA)
@@ -1059,7 +1059,7 @@ rtl8192c_PHY_GetHWRegOriginalValue(
 		PADAPTER		Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	/*  read rx initial gain */
 	pHalData->DefaultInitialGain[0] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XAAGCCore1, bMaskByte0);
@@ -1181,7 +1181,7 @@ PHY_GetTxPowerLevel8188E(
 	u32*		powerlevel
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u8			TxPwrLevel = 0;
 	int			TxPwrDbm;
 
@@ -1215,7 +1215,7 @@ static void getTxPowerIndex88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLevel,
 			       u8 *ofdmPowerLevel, u8 *BW20PowerLevel,
 			       u8 *BW40PowerLevel)
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 	u8				index = (channel -1);
 	u8				TxCount=0,path_nums;
 
@@ -1290,7 +1290,7 @@ static void getTxPowerIndex88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLevel,
 static void phy_PowerIndexCheck88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLevel,
 				   u8 *ofdmPowerLevel, u8 *BW20PowerLevel, u8 *BW40PowerLevel)
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 
 	pHalData->CurrentCckTxPwrIdx = cckPowerLevel[0];
 	pHalData->CurrentOfdm24GTxPwrIdx = ofdmPowerLevel[0];
@@ -1321,7 +1321,7 @@ PHY_SetTxPowerLevel8188E(
 		u8				channel
 	)
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 
 	u8	cckPowerLevel[MAX_TX_COUNT], ofdmPowerLevel[MAX_TX_COUNT];/*  [0]:RF-A, [1]:RF-B */
 	u8	BW20PowerLevel[MAX_TX_COUNT], BW40PowerLevel[MAX_TX_COUNT];
@@ -1349,7 +1349,7 @@ PHY_UpdateTxPowerDbm8188E(
 		int		powerInDbm
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u8				idx;
 	u8			rf_path;
 
@@ -1402,7 +1402,7 @@ _PHY_SetBWMode92C(
 		PADAPTER	Adapter
 )
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 	u8				regBwOpMode;
 	u8				regRRSR_RSC;
 
@@ -1518,7 +1518,7 @@ PHY_SetBWMode8188E(
 		unsigned char	Offset		/*  Upper, Lower, or Don't care */
 )
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	HT_CHANNEL_WIDTH	tmpBW= pHalData->CurrentChannelBW;
 
 	pHalData->CurrentChannelBW = Bandwidth;
@@ -1535,7 +1535,7 @@ static void _PHY_SwChnl8192C(PADAPTER Adapter, u8 channel)
 {
 	u8 eRFPath;
 	u32 param1, param2;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	if ( Adapter->bNotifyChannelChange )
 	{
@@ -1560,7 +1560,7 @@ PHY_SwChnl8188E(	/*  Call after initialization */
 		u8		channel
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u8	tmpchannel = pHalData->CurrentChannel;
 	bool  bResult = true;
 
@@ -1666,7 +1666,7 @@ PHY_SwChnlPhy8192C(	/*  Only called during initialize */
 		u8		channel
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	/* return immediately if it is peudo-phy */
 	if (pHalData->rf_chip == RF_PSEUDO_11N)

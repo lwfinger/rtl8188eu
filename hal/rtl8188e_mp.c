@@ -28,7 +28,7 @@
 
 s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
@@ -56,7 +56,7 @@ s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 
 void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
@@ -68,7 +68,7 @@ void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable)
 static void Hal_disable_dm(PADAPTER padapter)
 {
 	u8 v8;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
@@ -110,12 +110,12 @@ static void Hal_disable_dm(PADAPTER padapter)
  *---------------------------------------------------------------------------*/
 void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
 {
-	/* HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter); */
+	/* struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter); */
 	struct mp_priv	*pmp = &pAdapter->mppriv;
 	u1Byte				ChannelToSw = pmp->channel;
 	ULONG				ulRateIdx = pmp->rateidx;
 	ULONG				ulbandwidth = pmp->bandwidth;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(pAdapter);
 
 	/*  <20120525, Kordan> Dynamic mechanism for APK, asked by Dennis. */
 		pmp->MptCtx.backup0x52_RF_A = (u1Byte)PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
@@ -133,7 +133,7 @@ void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 	u32		TempVal = 0, TempVal2 = 0, TempVal3 = 0;
 	u32		CurrCCKSwingVal = 0, CCKSwingIndex = 12;
 	u8		i;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 
 	/*  get current cck swing value and check 0xa22 & 0xa23 later to match the table. */
@@ -211,7 +211,7 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
 	u8		Action = 0;	/* 0: no action, 1: even->odd, 2:odd->even */
 	u8		TimeOut = 100;
 	s32		i = 0;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -294,7 +294,7 @@ void Hal_SetChannel(PADAPTER pAdapter)
 {
 	u8		eRFPath;
 
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct mp_priv	*pmp = &pAdapter->mppriv;
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
@@ -364,7 +364,7 @@ void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower)
 	u32 TxAGC = 0;
 	u8 tmpval = 0;
 	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 
 	/*  HT Tx-rf(A) */
@@ -393,7 +393,7 @@ void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower)
 
 void Hal_SetAntennaPathPower(PADAPTER pAdapter)
 {
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 	u8 TxPowerLevel[MAX_RF_PATH_NUMS];
 	u8 rfPath;
 
@@ -432,7 +432,7 @@ void Hal_SetAntennaPathPower(PADAPTER pAdapter)
 
 void Hal_SetTxPower(PADAPTER pAdapter)
 {
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 	u8 TxPower = pAdapter->mppriv.txpoweridx;
 	u8 TxPowerLevel[MAX_RF_PATH_NUMS];
 	u8 rf, rfPath;
@@ -480,7 +480,7 @@ void Hal_SetDataRate(PADAPTER pAdapter)
 
 void Hal_SetAntenna(PADAPTER pAdapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 	R_ANTENNA_SELECT_OFDM *p_ofdm_tx;	/* OFDM Tx register */
 	R_ANTENNA_SELECT_CCK *p_cck_txrx;
@@ -641,7 +641,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 
 s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 {
-	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 
 
 	if (!netif_running(pAdapter->pnetdev)) {
@@ -688,7 +688,7 @@ void Hal_GetThermalMeter(PADAPTER pAdapter, u8 *value)
 
 void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 {
-    HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
+    struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 	pAdapter->mppriv.MptCtx.bSingleCarrier = bStart;
 	if (bStart)/*  Start Single Carrier. */
 	{
@@ -736,7 +736,7 @@ void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 
 void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	bool		is92C = IS_92C_SERIAL(pHalData->VersionID);
 
 	u8 rfPath;
@@ -932,7 +932,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 
 void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 {
-    HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+    struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 	if (bStart) {
 		RT_TRACE(_module_mp_, _drv_info_, ("SetOFDMContinuousTx: test start\n"));

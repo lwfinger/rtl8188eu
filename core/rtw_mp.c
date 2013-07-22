@@ -250,7 +250,7 @@ MPT_InitializeAdapter(
 		u8				Channel
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	s32		rtStatus = _SUCCESS;
 	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
 	struct mlme_priv *pmlmepriv = &pAdapter->mlmepriv;
@@ -355,7 +355,7 @@ void GetPowerTracking(PADAPTER padapter, u8 *enable)
 static void disable_dm(PADAPTER padapter)
 {
 	u8 v8;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 
@@ -933,7 +933,7 @@ void SetPacketTx(PADAPTER padapter)
 
 void SetPacketRx(PADAPTER pAdapter, u8 bStartRx)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 	if (bStartRx) {
 		/*  Accept CRC error and destination address */

@@ -47,7 +47,7 @@ _ConfigNormalChipOutEP_8188E(
 		u8		NumOutPipe
 	)
 {
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(pAdapter);
 
 	switch (NumOutPipe){
 		case	3:
@@ -76,7 +76,7 @@ static bool HalUsbSetQueuePipeMapping8188EUsb(
 		u8		NumOutPipe
 	)
 {
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(pAdapter);
 	bool			result		= false;
 
 	_ConfigNormalChipOutEP_8188E(pAdapter, NumOutPipe);
@@ -98,7 +98,7 @@ static bool HalUsbSetQueuePipeMapping8188EUsb(
 
 static void rtl8188eu_interface_configure(_adapter *padapter)
 {
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(padapter);
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
 
 	if (pdvobjpriv->ishighspeed == true)
@@ -130,7 +130,7 @@ static u32 rtl8188eu_InitPowerOn(_adapter *padapter)
 {
 	u16 value16;
 	/*  HW Power on sequence */
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(padapter);
 	if (true == pHalData->bMacPwrCtrlOn)
 		return _SUCCESS;
 
@@ -175,7 +175,7 @@ static void _dbg_dump_macreg(_adapter *padapter)
 
 static void _InitPABias(_adapter *padapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	u8	pa_setting;
 	bool	is92C = IS_92C_SERIAL(pHalData->VersionID);
 
@@ -209,7 +209,7 @@ static void _InitPABias(_adapter *padapter)
 #ifdef CONFIG_BT_COEXIST
 static void _InitBTCoexist(_adapter *padapter)
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(padapter);
 	struct btcoexist_priv	*pbtpriv = &(pHalData->bt_coexist);
 	u8 u1Tmp;
 
@@ -297,7 +297,7 @@ _InitInterrupt(
 {
 	u32	imr,imr_ex;
 	u8  usb_opt;
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(Adapter);
 
 	/* HISR write one to clear */
 	rtw_write32(Adapter, REG_HISR_88E, 0xFFFFFFFF);
@@ -329,7 +329,7 @@ _InitQueueReservedPage(
 	PADAPTER Adapter
 	)
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 	struct registry_priv	*pregistrypriv = &Adapter->registrypriv;
 	u32			outEPNum	= (u32)pHalData->OutEpNumber;
 	u32			numHQ		= 0;
@@ -428,7 +428,7 @@ _InitNormalChipOneOutEpPriority(
 		PADAPTER Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(Adapter);
 
 	u16	value = 0;
 	switch (pHalData->OutEpQueueSel)
@@ -462,7 +462,7 @@ _InitNormalChipTwoOutEpPriority(
 		PADAPTER Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(Adapter);
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
 	u16			beQ,bkQ,viQ,voQ,mgtQ,hiQ;
 
@@ -541,7 +541,7 @@ _InitQueuePriority(
 		PADAPTER Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(Adapter);
 
 	switch (pHalData->OutEpNumber)
 	{
@@ -613,7 +613,7 @@ _InitWMACSetting(
 	PADAPTER Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	pHalData->ReceiveConfig =
 	RCR_AAP | RCR_APM | RCR_AM | RCR_AB |RCR_CBSSID_DATA| RCR_CBSSID_BCN| RCR_APP_ICV | RCR_AMF | RCR_HTC_LOC_CTRL | RCR_APP_MIC | RCR_APP_PHYSTS;
@@ -760,7 +760,7 @@ usb_AggSettingTxUpdate(
 		PADAPTER			Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u32			value32;
 
 	if (Adapter->registrypriv.wifi_spec)
@@ -796,7 +796,7 @@ usb_AggSettingRxUpdate(
 		PADAPTER			Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u8			valueDMA;
 	u8			valueUSB;
 
@@ -878,7 +878,7 @@ InitUsbAggregationSetting(
 	PADAPTER Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	/*  Tx aggregation setting */
 	usb_AggSettingTxUpdate(Adapter);
@@ -936,7 +936,7 @@ _InitBeaconParameters(
 	PADAPTER Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	rtw_write16(Adapter, REG_BCN_CTRL, 0x1010);
 
@@ -962,7 +962,7 @@ _InitRFType(
 	)
 {
 	struct registry_priv	 *pregpriv = &Adapter->registrypriv;
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(Adapter);
 	bool			is92CU		= IS_92C_SERIAL(pHalData->VersionID);
 
 #if	DISABLE_BB_RF
@@ -1026,7 +1026,7 @@ static void
 _InitAntenna_Selection(	PADAPTER Adapter)
 {
 
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(Adapter);
 
 	if (pHalData->AntDivCfg==0)
 		return;
@@ -1080,7 +1080,7 @@ HwSuspendModeEnable_88eu(
 
 rt_rf_power_state RfOnOffDetect(	PADAPTER pAdapter )
 {
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(pAdapter);
 	u8	val8;
 	rt_rf_power_state rfpowerstate = rf_off;
 
@@ -1108,7 +1108,7 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 	u16  value16;
 	u8	txpktbuf_bndy;
 	u32	status = _SUCCESS;
-	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 	struct pwrctrl_priv		*pwrctrlpriv = &Adapter->pwrctrlpriv;
 	struct registry_priv	*pregistrypriv = &Adapter->registrypriv;
 	rt_rf_power_state		eRfPowerStateToSet;
@@ -1465,7 +1465,7 @@ static void CardDisableRTL8188EU(PADAPTER Adapter)
 	u8	val8;
 	u16	val16;
 	u32	val32;
-	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData	= GET_HAL_DATA(Adapter);
 
 	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("CardDisableRTL8188EU\n"));
 
@@ -1534,7 +1534,7 @@ static void rtl8192cu_hw_power_down(_adapter *padapter)
 static u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
 {
 
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	DBG_88E("==> %s\n",__func__);
 
 	rtw_write32(Adapter, REG_HIMR_88E, IMR_DISABLED_88E);
@@ -1641,7 +1641,7 @@ _ReadLEDSetting(
 	)
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	pledpriv->bRegUseLed = true;
 
 	switch (pHalData->CustomerID)
@@ -1687,7 +1687,7 @@ readAntennaDiversity(
 		bool		AutoLoadFail
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct registry_priv	*registry_par = &pAdapter->registrypriv;
 
 	pHalData->AntDivCfg = registry_par->antdiv_cfg ;  /*  0:OFF , 1:ON, */
@@ -1708,7 +1708,7 @@ Hal_EfuseParsePIDVID_8188EU(
 	)
 {
 
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 	if ( !AutoLoadFail )
 	{
@@ -1838,7 +1838,7 @@ _ReadRFType(
 		PADAPTER	Adapter
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 #if DISABLE_BB_RF
 	pHalData->rf_chip = RF_PSEUDO_11N;
@@ -1878,7 +1878,7 @@ static void rtl8192cu_trigger_gpio_0(_adapter *padapter)
 
 static void ResumeTxBeacon(_adapter *padapter)
 {
-	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e*	pHalData = GET_HAL_DATA(padapter);
 
 	/*  2010.03.01. Marked by tynli. No need to call workitem beacause we record the value */
 	/*  which should be read from register to a global variable. */
@@ -1892,7 +1892,7 @@ static void ResumeTxBeacon(_adapter *padapter)
 
 static void UpdateInterruptMask8188EU(PADAPTER padapter,u8 bHIMR0 ,u32 AddMSR, u32 RemoveMSR)
 {
-	HAL_DATA_TYPE *pHalData;
+	struct hal_data_8188e *pHalData;
 
 	u32 *himr;
 	pHalData = GET_HAL_DATA(padapter);
@@ -1917,7 +1917,7 @@ static void UpdateInterruptMask8188EU(PADAPTER padapter,u8 bHIMR0 ,u32 AddMSR, u
 
 static void StopTxBeacon(_adapter *padapter)
 {
-	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e*	pHalData = GET_HAL_DATA(padapter);
 
 	/*  2010.03.01. Marked by tynli. No need to call workitem beacause we record the value */
 	/*  which should be read from register to a global variable. */
@@ -2050,7 +2050,7 @@ static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
 
 static void SetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
 _func_enter_;
@@ -2757,7 +2757,7 @@ _func_exit_;
 
 static void GetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
 _func_enter_;
 
@@ -2829,7 +2829,7 @@ GetHalDefVar8188EUsb(
 		void *					pValue
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u8			bResult = _SUCCESS;
 
 	switch (eVariable)
@@ -2958,7 +2958,7 @@ static u8 SetHalDefVar8188EUsb(
 		void *					pValue
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u8			bResult = _SUCCESS;
 
 	switch (eVariable)
@@ -3054,7 +3054,7 @@ static void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level
 	u8	shortGIrate = false;
 	int	supportRateNum = 0;
 	struct sta_info	*psta;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
@@ -3203,7 +3203,7 @@ static void SetBeaconRelatedRegisters8188EUsb(PADAPTER padapter)
 
 static void rtl8188eu_init_default_value(_adapter * padapter)
 {
-	PHAL_DATA_TYPE pHalData;
+	struct hal_data_8188e *pHalData;
 	struct pwrctrl_priv *pwrctrlpriv;
 	u8 i;
 
@@ -3238,11 +3238,11 @@ void rtl8188eu_set_hal_ops(_adapter * padapter)
 
 _func_enter_;
 
-	padapter->HalData = rtw_zmalloc(sizeof(HAL_DATA_TYPE));
+	padapter->HalData = rtw_zmalloc(sizeof(struct hal_data_8188e));
 	if (padapter->HalData == NULL){
 		DBG_88E("cant not alloc memory for HAL DATA\n");
 	}
-	padapter->hal_data_sz = sizeof(HAL_DATA_TYPE);
+	padapter->hal_data_sz = sizeof(struct hal_data_8188e);
 
 	pHalFunc->hal_power_on = rtl8188eu_InitPowerOn;
 	pHalFunc->hal_init = &rtl8188eu_hal_init;

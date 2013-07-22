@@ -512,7 +512,7 @@ odm_DynamicPrimaryCCA(
 	PADAPTER	Adapter =  pDM_Odm->Adapter;	/*  for NIC */
 	prtl8192cd_priv	priv		= pDM_Odm->priv;	/*  for AP */
 
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	Pfalse_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
 	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);

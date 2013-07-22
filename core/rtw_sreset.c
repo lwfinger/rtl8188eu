@@ -22,7 +22,7 @@
 
 void sreset_init_value(_adapter *padapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
 
 	_rtw_mutex_init(&psrtpriv->silentreset_mutex);
@@ -33,7 +33,7 @@ void sreset_init_value(_adapter *padapter)
 }
 void sreset_reset_value(_adapter *padapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
 
 	psrtpriv->silent_reset_inprogress = false;
@@ -44,7 +44,7 @@ void sreset_reset_value(_adapter *padapter)
 
 u8 sreset_get_wifi_status(_adapter *padapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
 
 	u8 status = WIFI_STATUS_SUCCESS;
@@ -78,6 +78,6 @@ u8 sreset_get_wifi_status(_adapter *padapter)
 
 void sreset_set_wifi_error_status(_adapter *padapter, u32 status)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	pHalData->srestpriv.Wifi_Error_Status = status;
 }
