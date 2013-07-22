@@ -330,10 +330,6 @@ struct _ADAPTER{
 	//	The driver will show the current P2P status when the upper application reads it.
 	u8 bShowGetP2PState;
 #endif
-#ifdef CONFIG_AUTOSUSPEND
-	u8	bDisableAutosuspend;
-#endif
-
 	_adapter *pbuddy_adapter;
 
 	_mutex *hw_init_mutex;

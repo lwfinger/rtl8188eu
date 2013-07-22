@@ -125,11 +125,6 @@ int ips_leave(_adapter * padapter)
 	return result;
 }
 
-#ifdef CONFIG_AUTOSUSPEND
-extern void autosuspend_enter(_adapter* padapter);
-extern int autoresume_enter(_adapter* padapter);
-#endif
-
 static bool rtw_pwr_unassociated_idle(_adapter *adapter)
 {
 	_adapter *buddy = adapter->pbuddy_adapter;
@@ -197,52 +192,24 @@ void rtw_ps_processor(_adapter*padapter)
 	/* DBG_88E("==> fw report state(0x%x)\n",rtw_read8(padapter,0x1ca)); */
 	if (padapter->pwrctrlpriv.bHWPwrPindetect)
 	{
-	#ifdef CONFIG_AUTOSUSPEND
-		if (padapter->registrypriv.usbss_enable)
+		rfpwrstate = RfOnOffDetect(padapter);
+		DBG_88E("@@@@- #2  %s==> rfstate:%s\n",__func__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
+
+		if (rfpwrstate!= pwrpriv->rf_pwrstate)
 		{
-			if (pwrpriv->rf_pwrstate == rf_on)
+			if (rfpwrstate == rf_off)
 			{
-				if (padapter->net_closed == true)
-					pwrpriv->ps_flag = true;
-
-				rfpwrstate = RfOnOffDetect(padapter);
-				DBG_88E("@@@@- #1  %s==> rfstate:%s\n",__func__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
-				if (rfpwrstate!= pwrpriv->rf_pwrstate)
-				{
-					if (rfpwrstate == rf_off)
-					{
-						pwrpriv->change_rfpwrstate = rf_off;
-
-						pwrpriv->bkeepfwalive = true;
-						pwrpriv->brfoffbyhw = true;
-
-						autosuspend_enter(padapter);
-					}
-				}
+				pwrpriv->change_rfpwrstate = rf_off;
+				pwrpriv->brfoffbyhw = true;
+				padapter->bCardDisableWOHSM = true;
+				rtw_hw_suspend(padapter );
 			}
-		}
-		else
-	#endif /* CONFIG_AUTOSUSPEND */
-		{
-			rfpwrstate = RfOnOffDetect(padapter);
-			DBG_88E("@@@@- #2  %s==> rfstate:%s\n",__func__,(rfpwrstate==rf_on)?"rf_on":"rf_off");
-
-			if (rfpwrstate!= pwrpriv->rf_pwrstate)
+			else
 			{
-				if (rfpwrstate == rf_off)
-				{
-					pwrpriv->change_rfpwrstate = rf_off;
-					pwrpriv->brfoffbyhw = true;
-					padapter->bCardDisableWOHSM = true;
-					rtw_hw_suspend(padapter );
-				}
-				else
-				{
-					pwrpriv->change_rfpwrstate = rf_on;
-					rtw_hw_resume(padapter );
-				}
-				DBG_88E("current rf_pwrstate(%s)\n",(pwrpriv->rf_pwrstate == rf_off)?"rf_off":"rf_on");
+				pwrpriv->change_rfpwrstate = rf_on;
+				rtw_hw_resume(padapter );
 			}
+			DBG_88E("current rf_pwrstate(%s)\n",(pwrpriv->rf_pwrstate == rf_off)?"rf_off":"rf_on");
 		}
 		pwrpriv->pwr_state_check_cnts ++;
 	}
@@ -256,45 +223,9 @@ void rtw_ps_processor(_adapter*padapter)
 	if ((pwrpriv->rf_pwrstate == rf_on) && ((pwrpriv->pwr_state_check_cnts%4)==0))
 	{
 		DBG_88E("==>%s .fw_state(%x)\n",__func__,get_fwstate(pmlmepriv));
-		#if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND)
-		#else
 		pwrpriv->change_rfpwrstate = rf_off;
-		#endif
-		#ifdef CONFIG_AUTOSUSPEND
-		if (padapter->registrypriv.usbss_enable)
-		{
-			if (pwrpriv->bHWPwrPindetect)
-				pwrpriv->bkeepfwalive = true;
 
-			if (padapter->net_closed == true)
-				pwrpriv->ps_flag = true;
-
-			#if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND)
-			if (true==pwrpriv->bInternalAutoSuspend) {
-				DBG_88E("<==%s .pwrpriv->bInternalAutoSuspend)(%x)\n",__func__,pwrpriv->bInternalAutoSuspend);
-			} else {
-				pwrpriv->change_rfpwrstate = rf_off;
-				padapter->bCardDisableWOHSM = true;
-				DBG_88E("<==%s .pwrpriv->bInternalAutoSuspend)(%x) call autosuspend_enter\n",__func__,pwrpriv->bInternalAutoSuspend);
-				autosuspend_enter(padapter);
-			}
-			#else
-			padapter->bCardDisableWOHSM = true;
-			autosuspend_enter(padapter);
-			#endif	/* if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND) */
-		}
-		else if (pwrpriv->bHWPwrPindetect)
-		{
-		}
-		else
-		#endif /* CONFIG_AUTOSUSPEND */
-		{
-			#if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND)
-			pwrpriv->change_rfpwrstate = rf_off;
-			#endif	/* defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND) */
-
-			ips_enter(padapter);
-		}
+		ips_enter(padapter);
 	}
 exit:
 	rtw_set_pwr_state_check_timer(&padapter->pwrctrlpriv);
@@ -603,23 +534,6 @@ _func_enter_;
 		p2p_ps_wk_cmd(Adapter, P2P_PS_DISABLE, enqueue);
 
 		rtw_lps_ctrl_wk_cmd(Adapter, LPS_CTRL_LEAVE, enqueue);
-	} else {
-		if (Adapter->pwrctrlpriv.rf_pwrstate== rf_off)
-		{
-			#ifdef CONFIG_AUTOSUSPEND
-			if (Adapter->registrypriv.usbss_enable)
-			{
-				#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
-				usb_disable_autosuspend(adapter_to_dvobj(Adapter)->pusbdev);
-				#elif (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22) && LINUX_VERSION_CODE<=KERNEL_VERSION(2,6,34))
-				adapter_to_dvobj(Adapter)->pusbdev->autosuspend_disabled = Adapter->bDisableAutosuspend;/* autosuspend disabled by the user */
-				#endif
-			}
-			else
-			#endif
-			{
-			}
-		}
 	}
 
 _func_exit_;
@@ -645,10 +559,6 @@ _func_enter_;
 	pwrctrlpriv->bInternalAutoSuspend = false;
 	pwrctrlpriv->bInSuspend = false;
 	pwrctrlpriv->bkeepfwalive = false;
-
-#ifdef CONFIG_AUTOSUSPEND
-	pwrctrlpriv->pwr_state_check_interval = (pwrctrlpriv->bHWPwrPindetect) ?1000:2000;
-#endif
 
 	pwrctrlpriv->LpsIdleCount = 0;
 	if (padapter->registrypriv.mp_mode == 1)
@@ -745,57 +655,17 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 	/* I think this should be check in IPS, LPS, autosuspend functions... */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
-#if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND)
-		if (true==pwrpriv->bInternalAutoSuspend){
-			if (0==pwrpriv->autopm_cnt){
-			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,33))
-				if (usb_autopm_get_interface(adapter_to_dvobj(padapter)->pusbintf) < 0)
-				{
-					DBG_88E( "can't get autopm:\n");
-				}
-			#elif (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,20))
-				usb_autopm_disable(adapter_to_dvobj(padapter)->pusbintf);
-			#else
-				usb_autoresume_device(adapter_to_dvobj(padapter)->pusbdev, 1);
-			#endif
-			pwrpriv->autopm_cnt++;
-			}
-#endif	/* if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND) */
 		ret = _SUCCESS;
 		goto exit;
-#if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND)
-		}
-#endif	/* if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND) */
 	}
 	if (rf_off == pwrpriv->rf_pwrstate )
 	{
-#ifdef CONFIG_AUTOSUSPEND
-		 if (pwrpriv->brfoffbyhw==true)
+		DBG_88E("%s call ips_leave....\n",__func__);
+		if (_FAIL ==  ips_leave(padapter))
 		{
-			DBG_88E("hw still in rf_off state ...........\n");
+			DBG_88E("======> ips_leave fail.............\n");
 			ret = _FAIL;
 			goto exit;
-		}
-		else if (padapter->registrypriv.usbss_enable)
-		{
-			DBG_88E("%s call autoresume_enter....\n",__func__);
-			if (_FAIL ==  autoresume_enter(padapter))
-			{
-				DBG_88E("======> autoresume fail.............\n");
-				ret = _FAIL;
-				goto exit;
-			}
-		}
-		else
-#endif
-		{
-			DBG_88E("%s call ips_leave....\n",__func__);
-			if (_FAIL ==  ips_leave(padapter))
-			{
-				DBG_88E("======> ips_leave fail.............\n");
-				ret = _FAIL;
-				goto exit;
-			}
 		}
 	}
 

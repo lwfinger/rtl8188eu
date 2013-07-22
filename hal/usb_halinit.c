@@ -3458,19 +3458,6 @@ static void rtl8188eu_init_default_value(_adapter * padapter)
 static u8 rtl8188eu_ps_func(PADAPTER Adapter,HAL_INTF_PS_FUNC efunc_id, u8 *val)
 {
 	u8 bResult = true;
-	switch (efunc_id){
-
-		#if defined(CONFIG_AUTOSUSPEND)
-		case HAL_USB_SELECT_SUSPEND:
-			{
-				u8 bfwpoll = *(( u8*)val);
-			}
-			break;
-		#endif /* CONFIG_AUTOSUSPEND */
-
-		default:
-			break;
-	}
 	return bResult;
 }
 

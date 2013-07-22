@@ -70,12 +70,6 @@
 #endif
 
 	typedef struct urb *  PURB;
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
-#ifdef CONFIG_USB_SUSPEND
-#define CONFIG_AUTOSUSPEND	1
-#endif
-#endif
-
 	typedef struct	semaphore _sema;
 	typedef	spinlock_t	_lock;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
