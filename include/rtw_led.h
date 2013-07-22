@@ -93,18 +93,18 @@ enum LED_STATE_871x {
 	LED_BLINK_ALWAYS_ON = 16,
 };
 
-typedef enum _LED_PIN_871x{
+enum LED_PIN_871x {
 	LED_PIN_NULL = 0,
 	LED_PIN_LED0 = 1,
 	LED_PIN_LED1 = 2,
 	LED_PIN_LED2 = 3,
 	LED_PIN_GPIO0 = 4,
-}LED_PIN_871x;
+};
 
 typedef struct _LED_871x{
 	_adapter				*padapter;
 
-	LED_PIN_871x		LedPin;	// Identify how to implement this SW led.
+	enum LED_PIN_871x	LedPin;	// Identify how to implement this SW led.
 	enum LED_STATE_871x	CurrLedState; // Current LED state.
 	enum LED_STATE_871x	BlinkingLedState; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
 
@@ -185,7 +185,7 @@ void
 InitLed871x(
 	_adapter			*padapter,
 	PLED_871x		pLed,
-	LED_PIN_871x	LedPin
+	enum LED_PIN_871x	LedPin
 	);
 
 void

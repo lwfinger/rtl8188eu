@@ -71,15 +71,13 @@ void ResetLedStatus(PLED_871x pLed) {
 	pLed->bLedScanBlinkInProgress = false;
 }
 
- /*  */
 /* 	Description: */
 /* 		Initialize an LED_871x object. */
-/*  */
 void
 InitLed871x(
 	_adapter			*padapter,
 	PLED_871x		pLed,
-	LED_PIN_871x	LedPin
+	enum LED_PIN_871x	LedPin
 	)
 {
 	pLed->padapter = padapter;
