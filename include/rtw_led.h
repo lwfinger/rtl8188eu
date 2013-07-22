@@ -73,7 +73,7 @@ enum LED_CTL_MODE {
 	LED_CTL_CONNECTION_NO_TRANSFER = 14,
 };
 
-typedef enum _LED_STATE_871x{
+enum LED_STATE_871x {
 	LED_UNKNOWN = 0,
 	RTW_LED_ON = 1,
 	RTW_LED_OFF = 2,
@@ -91,7 +91,7 @@ typedef enum _LED_STATE_871x{
 	LED_BLINK_CAMEO = 14,
 	LED_BLINK_XAVI = 15,
 	LED_BLINK_ALWAYS_ON = 16,
-}LED_STATE_871x;
+};
 
 typedef enum _LED_PIN_871x{
 	LED_PIN_NULL = 0,
@@ -105,8 +105,8 @@ typedef struct _LED_871x{
 	_adapter				*padapter;
 
 	LED_PIN_871x		LedPin;	// Identify how to implement this SW led.
-	LED_STATE_871x		CurrLedState; // Current LED state.
-	LED_STATE_871x		BlinkingLedState; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
+	enum LED_STATE_871x	CurrLedState; // Current LED state.
+	enum LED_STATE_871x	BlinkingLedState; // Next state for blinking, either RTW_LED_ON or RTW_LED_OFF are.
 
 	u8					bLedOn; // true if LED is ON, false if LED is OFF.
 
