@@ -1399,16 +1399,11 @@ static int rtw_wx_get_range(struct net_device *dev,
 			  IW_ENC_CAPA_CIPHER_TKIP|IW_ENC_CAPA_CIPHER_CCMP;
 #endif
 
-#ifdef IW_SCAN_CAPA_ESSID //WIRELESS_EXT > 21
 	range->scan_capa = IW_SCAN_CAPA_ESSID | IW_SCAN_CAPA_TYPE |IW_SCAN_CAPA_BSSID|
 					IW_SCAN_CAPA_CHANNEL|IW_SCAN_CAPA_MODE|IW_SCAN_CAPA_RATE;
-#endif
-
-
 	_func_exit_;
 
 	return 0;
-
 }
 
 //set bssid flow
