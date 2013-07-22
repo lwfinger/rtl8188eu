@@ -52,8 +52,6 @@
  * Interface  Related Config
  */
 
-#define CONFIG_PREALLOC_RECV_SKB
-
 #define CONFIG_VENDOR_REQ_RETRY
 
 /*

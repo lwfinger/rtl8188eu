@@ -578,22 +578,14 @@ void rtl8188eu_recv_tasklet(void *priv)
 
 		recvbuf2recvframe(padapter, pskb);
 
-#ifdef CONFIG_PREALLOC_RECV_SKB
-
 		skb_reset_tail_pointer(pskb);
 
 		pskb->len = 0;
 
 		skb_queue_tail(&precvpriv->free_recv_skb_queue, pskb);
 
-#else
-		dev_kfree_skb_any(pskb);
-#endif
-
 	}
-
 }
-
 
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
@@ -611,14 +603,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 	{
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete:bDriverStopped(%d) OR bSurpriseRemoved(%d)\n", padapter->bDriverStopped, padapter->bSurpriseRemoved));
 
-	#ifdef CONFIG_PREALLOC_RECV_SKB
 		precvbuf->reuse = true;
-	#else
-		if (precvbuf->pskb){
-			DBG_88E("==> free skb(%p)\n",precvbuf->pskb);
-			dev_kfree_skb_any(precvbuf->pskb);
-		}
-	#endif
 		DBG_88E("%s() RX Warning! bDriverStopped(%d) OR bSurpriseRemoved(%d) bReadPortCancel(%d)\n",
 		__func__,padapter->bDriverStopped, padapter->bSurpriseRemoved,padapter->bReadPortCancel);
 		goto exit;
@@ -711,22 +696,15 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 
 _func_enter_;
 
-	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)
-	{
+	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx) {
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port:( padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		return _FAIL;
 	}
 
-#ifdef CONFIG_PREALLOC_RECV_SKB
-	if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL))
-	{
+	if ((precvbuf->reuse == false) || (precvbuf->pskb == NULL)) {
 		if (NULL != (precvbuf->pskb = skb_dequeue(&precvpriv->free_recv_skb_queue)))
-		{
 			precvbuf->reuse = true;
-		}
 	}
-#endif
-
 
 	if (precvbuf !=NULL)
 	{
