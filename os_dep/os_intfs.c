@@ -53,13 +53,8 @@ static int rtw_preamble = PREAMBLE_LONG;//long, short, auto
 static int rtw_scan_mode = 1;//active, passive
 static int rtw_adhoc_tx_pwr = 1;
 static int rtw_soft_ap = 0;
-#ifdef CONFIG_POWER_SAVING
 static int rtw_power_mgnt = 1;
 static int rtw_ips_mode = IPS_NORMAL;
-#else
-static int rtw_power_mgnt = PS_MODE_ACTIVE;
-static int rtw_ips_mode = IPS_NONE;
-#endif
 
 static int rtw_smart_ps = 2;
 
