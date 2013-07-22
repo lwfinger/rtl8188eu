@@ -9539,13 +9539,9 @@ _func_exit_;
 	return res;
 }
 
-
 u8 mlme_evt_hdl(_adapter *padapter, unsigned char *pbuf)
 {
 	u8 evt_code;
-	#ifdef CHECK_EVENT_SEQ
-	u8 evt_seq;
-	#endif
 	u16 evt_sz;
 	uint	*peventbuf;
 	void (*event_callback)(_adapter *dev, u8 *pbuf);
@@ -9553,23 +9549,7 @@ u8 mlme_evt_hdl(_adapter *padapter, unsigned char *pbuf)
 
 	peventbuf = (uint*)pbuf;
 	evt_sz = (u16)(*peventbuf&0xffff);
-	#ifdef CHECK_EVENT_SEQ
-	evt_seq = (u8)((*peventbuf>>24)&0x7f);
-	#endif
 	evt_code = (u8)((*peventbuf>>16)&0xff);
-
-
-	#ifdef CHECK_EVENT_SEQ
-	/*  checking event sequence... */
-	if (evt_seq != (ATOMIC_READ(&pevt_priv->event_seq) & 0x7f) )
-	{
-		RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("Evetn Seq Error! %d vs %d\n", (evt_seq & 0x7f), (ATOMIC_READ(&pevt_priv->event_seq) & 0x7f)));
-
-		pevt_priv->event_seq = (evt_seq+1)&0x7f;
-
-		goto _abort_event_;
-	}
-	#endif
 
 	/*  checking if event code is valid */
 	if (evt_code >= MAX_C2HEVT)
