@@ -1047,7 +1047,7 @@ SwLedBlink6(
 static void
 SwLedControlMode0(
 	_adapter		*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE	LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -1162,7 +1162,7 @@ SwLedControlMode0(
 static void
 SwLedControlMode1(
 	_adapter		*padapter,
-	LED_CTL_MODE		LedAction
+	enum LED_CTL_MODE	LedAction
 )
 {
 	struct led_priv		*ledpriv = &(padapter->ledpriv);
@@ -1427,8 +1427,8 @@ SwLedControlMode1(
  /* Arcadyan/Sitecom , added by chiyoko, 20090216 */
 static void
 SwLedControlMode2(
-	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	_adapter		*padapter,
+	enum LED_CTL_MODE	LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -1592,8 +1592,8 @@ SwLedControlMode2(
   /* COREGA, added by chiyoko, 20090316 */
  static void
  SwLedControlMode3(
-	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	_adapter		*padapter,
+	enum LED_CTL_MODE	LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -1771,8 +1771,8 @@ SwLedControlMode2(
  /* Edimax-Belkin, added by chiyoko, 20090413 */
 static void
 SwLedControlMode4(
-	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	_adapter		*padapter,
+	enum LED_CTL_MODE	LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -2103,8 +2103,8 @@ SwLedControlMode4(
  /* Sercomm-Belkin, added by chiyoko, 20090415 */
 static void
 SwLedControlMode5(
-	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	_adapter		*padapter,
+	enum LED_CTL_MODE	LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -2185,8 +2185,8 @@ SwLedControlMode5(
  /* WNC-Corega, added by chiyoko, 20090902 */
 static void
 SwLedControlMode6(
-	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	_adapter		*padapter,
+	enum LED_CTL_MODE	LedAction
 )
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -2265,8 +2265,8 @@ void BlinkHandler(PLED_871x	 pLed)
 
 void
 LedControl871x(
-	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	_adapter		*padapter,
+	enum LED_CTL_MODE	LedAction
 	)
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);

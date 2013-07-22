@@ -56,7 +56,7 @@
 // 060421, rcnjko: Customized for Sercomm Printer Server case.
 #define LED_CM3_BLINK_INTERVAL				1500
 
-typedef enum _LED_CTL_MODE{
+enum LED_CTL_MODE {
 	LED_CTL_POWER_ON = 1,
 	LED_CTL_LINK = 2,
 	LED_CTL_NO_LINK = 3,
@@ -71,7 +71,7 @@ typedef enum _LED_CTL_MODE{
 	LED_CTL_STOP_WPS_FAIL = 12, //added for ALPHA
 	LED_CTL_STOP_WPS_FAIL_OVERLAP = 13, //added for BELKIN
 	LED_CTL_CONNECTION_NO_TRANSFER = 14,
-}LED_CTL_MODE;
+};
 
 typedef enum _LED_STATE_871x{
 	LED_UNKNOWN = 0,
@@ -156,8 +156,8 @@ typedef	enum _LED_STRATEGY_871x{
 
 void
 LedControl871x(
-	_adapter				*padapter,
-	LED_CTL_MODE		LedAction
+	_adapter 		*padapter,
+	enum LED_CTL_MODE	LedAction
 	);
 
 struct led_priv{
@@ -166,7 +166,7 @@ struct led_priv{
 	LED_871x			SwLed1;
 	LED_STRATEGY_871x	LedStrategy;
 	u8					bRegUseLed;
-	void (*LedControlHandler)(_adapter *padapter, LED_CTL_MODE LedAction);
+	void (*LedControlHandler)(_adapter *padapter, enum LED_CTL_MODE LedAction);
 	/* add for led controll */
 };
 
