@@ -173,53 +173,7 @@ u1Byte CCKSwingTable_Ch14 [CCK_TABLE_SIZE][8]= {
 	{0x09, 0x08, 0x07, 0x04, 0x00, 0x00, 0x00, 0x00}	/*  32, -16.0dB */
 };
 
-
-#ifdef AP_BUILD_WORKAROUND
-
-unsigned int TxPwrTrk_OFDM_SwingTbl[TxPwrTrk_OFDM_SwingTbl_Len] = {
-	/*  +6.0dB */ 0x7f8001fe,
-	/*  +5.5dB */ 0x788001e2,
-	/*  +5.0dB */ 0x71c001c7,
-	/*  +4.5dB */ 0x6b8001ae,
-	/*  +4.0dB */ 0x65400195,
-	/*  +3.5dB */ 0x5fc0017f,
-	/*  +3.0dB */ 0x5a400169,
-	/*  +2.5dB */ 0x55400155,
-	/*  +2.0dB */ 0x50800142,
-	/*  +1.5dB */ 0x4c000130,
-	/*  +1.0dB */ 0x47c0011f,
-	/*  +0.5dB */ 0x43c0010f,
-	/*   0.0dB */ 0x40000100,
-	/*  -0.5dB */ 0x3c8000f2,
-	/*  -1.0dB */ 0x390000e4,
-	/*  -1.5dB */ 0x35c000d7,
-	/*  -2.0dB */ 0x32c000cb,
-	/*  -2.5dB */ 0x300000c0,
-	/*  -3.0dB */ 0x2d4000b5,
-	/*  -3.5dB */ 0x2ac000ab,
-	/*  -4.0dB */ 0x288000a2,
-	/*  -4.5dB */ 0x26000098,
-	/*  -5.0dB */ 0x24000090,
-	/*  -5.5dB */ 0x22000088,
-	/*  -6.0dB */ 0x20000080,
-	/*  -6.5dB */ 0x1a00006c,
-	/*  -7.0dB */ 0x1c800072,
-	/*  -7.5dB */ 0x18000060,
-	/*  -8.0dB */ 0x19800066,
-	/*  -8.5dB */ 0x15800056,
-	/*  -9.0dB */ 0x26c0005b,
-	/*  -9.5dB */ 0x14400051,
-	/* -10.0dB */ 0x24400051,
-	/* -10.5dB */ 0x1300004c,
-	/* -11.0dB */ 0x12000048,
-	/* -11.5dB */ 0x11000044,
-	/* -12.0dB */ 0x10000040
-};
-#endif
-
-/*  */
 /*  Local Function predefine. */
-/*  */
 
 /* START------------COMMON INFO RELATED---------------  */
 void
@@ -246,17 +200,6 @@ void
 odm_CmnInfoUpdate_Debug(
 			PDM_ODM_T		pDM_Odm
 	);
-/*
-void
-odm_FindMinimumRSSI(
-			PDM_ODM_T		pDM_Odm
-	);
-
-void
-odm_IsLinked(
-			PDM_ODM_T		pDM_Odm
-	);
-*/
 /* END------------COMMON INFO RELATED--------------- */
 
 /* START---------------DIG--------------------------- */
@@ -423,12 +366,6 @@ odm_TXPowerTrackingCheckAP(
 			PDM_ODM_T		pDM_Odm
 	);
 
-
-
-
-
-
-
 void
 odm_RateAdaptiveMaskInit(
 		PDM_ODM_T	pDM_Odm
@@ -502,13 +439,9 @@ odm_HwAntDiv(
 		PDM_ODM_T	pDM_Odm
 );
 
-/*  */
 /* 3 Export Interface */
-/*  */
 
-/*  */
 /*  2011/09/21 MH Add to describe different team necessary resource allocate?? */
-/*  */
 void
 ODM_DMInit(
 			PDM_ODM_T		pDM_Odm
