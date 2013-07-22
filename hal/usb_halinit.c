@@ -1121,88 +1121,14 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	struct pwrctrl_priv		*pwrctrlpriv = &Adapter->pwrctrlpriv;
 	struct registry_priv	*pregistrypriv = &Adapter->registrypriv;
-
 	rt_rf_power_state		eRfPowerStateToSet;
 #ifdef CONFIG_BT_COEXIST
 	struct btcoexist_priv	*pbtpriv = &(pHalData->bt_coexist);
 #endif
-
 	u32 init_start_time = rtw_get_current_time();
 
 
-#ifdef DBG_HAL_INIT_PROFILING
-
-	enum HAL_INIT_STAGES {
-		HAL_INIT_STAGES_BEGIN = 0,
-		HAL_INIT_STAGES_INIT_PW_ON,
-		HAL_INIT_STAGES_MISC01,
-		HAL_INIT_STAGES_DOWNLOAD_FW,
-		HAL_INIT_STAGES_MAC,
-		HAL_INIT_STAGES_BB,
-		HAL_INIT_STAGES_RF,
-		HAL_INIT_STAGES_EFUSE_PATCH,
-		HAL_INIT_STAGES_INIT_LLTT,
-
-		HAL_INIT_STAGES_MISC02,
-		HAL_INIT_STAGES_TURN_ON_BLOCK,
-		HAL_INIT_STAGES_INIT_SECURITY,
-		HAL_INIT_STAGES_MISC11,
-		HAL_INIT_STAGES_INIT_HAL_DM,
-		/* HAL_INIT_STAGES_RF_PS, */
-		HAL_INIT_STAGES_IQK,
-		HAL_INIT_STAGES_PW_TRACK,
-		HAL_INIT_STAGES_LCK,
-		/* HAL_INIT_STAGES_MISC21, */
-		/* HAL_INIT_STAGES_INIT_PABIAS, */
-		#ifdef CONFIG_BT_COEXIST
-		HAL_INIT_STAGES_BT_COEXIST,
-		#endif
-		/* HAL_INIT_STAGES_ANTENNA_SEL, */
-		/* HAL_INIT_STAGES_MISC31, */
-		HAL_INIT_STAGES_END,
-		HAL_INIT_STAGES_NUM
-	};
-
-	char * hal_init_stages_str[] = {
-		"HAL_INIT_STAGES_BEGIN",
-		"HAL_INIT_STAGES_INIT_PW_ON",
-		"HAL_INIT_STAGES_MISC01",
-		"HAL_INIT_STAGES_DOWNLOAD_FW",
-		"HAL_INIT_STAGES_MAC",
-		"HAL_INIT_STAGES_BB",
-		"HAL_INIT_STAGES_RF",
-		"HAL_INIT_STAGES_EFUSE_PATCH",
-		"HAL_INIT_STAGES_INIT_LLTT",
-		"HAL_INIT_STAGES_MISC02",
-		"HAL_INIT_STAGES_TURN_ON_BLOCK",
-		"HAL_INIT_STAGES_INIT_SECURITY",
-		"HAL_INIT_STAGES_MISC11",
-		"HAL_INIT_STAGES_INIT_HAL_DM",
-		/* HAL_INIT_STAGES_RF_PS", */
-		"HAL_INIT_STAGES_IQK",
-		"HAL_INIT_STAGES_PW_TRACK",
-		"HAL_INIT_STAGES_LCK",
-		/* HAL_INIT_STAGES_MISC21", */
-		#ifdef CONFIG_BT_COEXIST
-		"HAL_INIT_STAGES_BT_COEXIST",
-		#endif
-		/* HAL_INIT_STAGES_ANTENNA_SEL", */
-		/* HAL_INIT_STAGES_MISC31", */
-		"HAL_INIT_STAGES_END",
-	};
-
-	int hal_init_profiling_i;
-	u32 hal_init_stages_timestamp[HAL_INIT_STAGES_NUM]; /* used to record the time of each stage's starting point */
-
-	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM;hal_init_profiling_i++)
-		hal_init_stages_timestamp[hal_init_profiling_i]=0;
-
-	#define HAL_INIT_PROFILE_TAG(stage) hal_init_stages_timestamp[(stage)]=rtw_get_current_time();
-#else
 	#define HAL_INIT_PROFILE_TAG(stage) do {} while (0)
-#endif /* DBG_HAL_INIT_PROFILING */
-
-
 
 _func_enter_;
 
@@ -1536,20 +1462,6 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 
 	DBG_88E("%s in %dms\n", __func__, rtw_get_passing_time_ms(init_start_time));
 
-	#ifdef DBG_HAL_INIT_PROFILING
-	hal_init_stages_timestamp[HAL_INIT_STAGES_END]=rtw_get_current_time();
-
-	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM-1;hal_init_profiling_i++) {
-		DBG_88E("DBG_HAL_INIT_PROFILING: %35s, %u, %5u, %5u\n"
-			, hal_init_stages_str[hal_init_profiling_i]
-			, hal_init_stages_timestamp[hal_init_profiling_i]
-			, (hal_init_stages_timestamp[hal_init_profiling_i+1]-hal_init_stages_timestamp[hal_init_profiling_i])
-			, rtw_get_time_interval_ms(hal_init_stages_timestamp[hal_init_profiling_i], hal_init_stages_timestamp[hal_init_profiling_i+1])
-		);
-	}
-	#endif
-
-
 _func_exit_;
 
 	return status;
@@ -1564,7 +1476,6 @@ static void _ps_close_RF(_adapter *padapter){
 	/* here call with bRegSSPwrLvl 1, bRegSSPwrLvl 2 needs to be verified */
 	/* phy_SsPwrSwitch92CU(padapter, rf_off, 1); */
 }
-
 
 static void CardDisableRTL8188EU(PADAPTER Adapter)
 {
