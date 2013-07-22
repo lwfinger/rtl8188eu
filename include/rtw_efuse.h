@@ -83,7 +83,7 @@ struct pgpkt {
 };
 
 /*------------------------------Define structure----------------------------*/
-typedef struct _EFUSE_HAL{
+struct efuse_hal {
 	u8	fakeEfuseBank;
 	u32	fakeEfuseUsedBytes;
 	u8	fakeEfuseContent[EFUSE_MAX_HW_SIZE];
@@ -100,8 +100,7 @@ typedef struct _EFUSE_HAL{
 	u8	fakeBTEfuseContent[EFUSE_MAX_BT_BANK][EFUSE_MAX_HW_SIZE];
 	u8	fakeBTEfuseInitMap[EFUSE_BT_MAX_MAP_LEN];
 	u8	fakeBTEfuseModifiedMap[EFUSE_BT_MAX_MAP_LEN];
-}EFUSE_HAL, *PEFUSE_HAL;
-
+};
 
 /*------------------------Export global variable----------------------------*/
 extern u8 fakeEfuseBank;

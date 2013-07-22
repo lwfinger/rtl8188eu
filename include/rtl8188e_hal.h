@@ -335,7 +335,7 @@ typedef struct hal_data_8188e
 	bool				EepromOrEfuse;
 	u8				EfuseMap[2][HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
 	u8				EfuseUsedPercentage;
-	EFUSE_HAL			EfuseHal;
+	struct efuse_hal		EfuseHal;
 
 	//u8	bIQKInitialized;
 

@@ -7116,7 +7116,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	PADAPTER padapter = rtw_netdev_priv(dev);
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 	PHAL_DATA_TYPE pHalData = GET_HAL_DATA(padapter);
-	PEFUSE_HAL pEfuseHal;
+	struct efuse_hal *pEfuseHal;
 	struct iw_point *wrqu;
 
 	u8	*PROMContent = pEEPROM->efuse_eeprom_data;
@@ -7582,7 +7582,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	PADAPTER padapter;
 	struct pwrctrl_priv *pwrctrlpriv ;
 	PHAL_DATA_TYPE pHalData;
-	PEFUSE_HAL pEfuseHal;
+	struct efuse_hal *pEfuseHal;
 
 	u8 ips_mode,lps_mode;
 	u32 i, jj, kk;
