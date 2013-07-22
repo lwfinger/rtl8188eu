@@ -2098,10 +2098,6 @@ unsigned int on_action_spct(_adapter *padapter, union recv_frame *precv_frame)
 	case RTW_WLAN_ACTION_SPCT_TPC_RPRT:
 		break;
 	case RTW_WLAN_ACTION_SPCT_CHL_SWITCH:
-		#ifdef CONFIG_SPCT_CH_SWITCH
-		ret = on_action_spct_ch_switch (padapter, psta, &frame_body[2],
-			frame_len-(frame_body-pframe)-2);
-		#endif
 		break;
 	default:
 		break;
