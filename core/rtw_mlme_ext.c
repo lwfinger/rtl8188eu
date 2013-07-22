@@ -866,22 +866,8 @@ unsigned int OnBeacon(_adapter *padapter, union recv_frame *precv_frame)
 			return _SUCCESS;
 		}
 
-		if (((pmlmeinfo->state&0x03) == WIFI_FW_STATION_STATE) && (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS))
-		{
-			if ((psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe))) != NULL)
-			{
-				#ifdef CONFIG_PATCH_JOIN_WRONG_CHANNEL
-				/* Merge from 8712 FW code */
-				if (cmp_pkt_chnl_diff(padapter,pframe,len) != 0)
-				{            /*  join wrong channel, deauth and reconnect */
-					issue_deauth(padapter, (&(pmlmeinfo->network))->MacAddress, WLAN_REASON_DEAUTH_LEAVING);
-
-					report_del_sta_event(padapter,(&(pmlmeinfo->network))->MacAddress, WLAN_REASON_JOIN_WRONG_CHANNEL);
-					pmlmeinfo->state &= (~WIFI_FW_ASSOC_SUCCESS);
-					return _SUCCESS;
-				}
-				#endif /* CONFIG_PATCH_JOIN_WRONG_CHANNEL */
-
+		if (((pmlmeinfo->state&0x03) == WIFI_FW_STATION_STATE) && (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS)) {
+			if ((psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe))) != NULL) {
 				ret = rtw_check_bcn_info(padapter, pframe, len);
 				if (!ret) {
 						DBG_88E_LEVEL(_drv_info_, "ap has changed, disconnect now\n ");
@@ -891,33 +877,20 @@ unsigned int OnBeacon(_adapter *padapter, union recv_frame *precv_frame)
 				/* update WMM, ERP in the beacon */
 				/* todo: the timer is used instead of the number of the beacon received */
 				if ((sta_rx_pkts(psta) & 0xf) == 0)
-				{
-					/* DBG_88E("update_bcn_info\n"); */
 					update_beacon_info(padapter, pframe, len, psta);
-				}
 				process_p2p_ps_ie(padapter, (pframe + WLAN_HDR_A3_LEN), (len - WLAN_HDR_A3_LEN));
 			}
-		}
-		else if ((pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE)
-		{
-			if ((psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe))) != NULL)
-			{
+		} else if ((pmlmeinfo->state&0x03) == WIFI_FW_ADHOC_STATE) {
+			if ((psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe))) != NULL) {
 				/* update WMM, ERP in the beacon */
 				/* todo: the timer is used instead of the number of the beacon received */
 				if ((sta_rx_pkts(psta) & 0xf) == 0)
-				{
-					/* DBG_88E("update_bcn_info\n"); */
 					update_beacon_info(padapter, pframe, len, psta);
-				}
 
-			}
-			else
-			{
+			} else {
 				/* allocate a new CAM entry for IBSS station */
 				if ((cam_idx = allocate_fw_sta_entry(padapter)) == NUM_STA)
-				{
 					goto _END_ONBEACON_;
-				}
 
 				/* get supported rate */
 				if (update_sta_support_rate(padapter, (pframe + WLAN_HDR_A3_LEN + _BEACON_IE_OFFSET_), (len - WLAN_HDR_A3_LEN - _BEACON_IE_OFFSET_), cam_idx) == _FAIL)
