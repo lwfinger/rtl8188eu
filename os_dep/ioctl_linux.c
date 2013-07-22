@@ -7013,11 +7013,6 @@ static int rtw_wx_set_priv(struct net_device *dev,
 				union iwreq_data *awrq,
 				char *extra)
 {
-
-#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	char *ext_dbg;
-#endif
-
 	int ret = 0;
 	int len = 0;
 	char *ext;
@@ -7039,21 +7034,6 @@ static int rtw_wx_set_priv(struct net_device *dev,
 		return -EFAULT;
 	}
 
-
-	//RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_notice_,
-	//	 ("rtw_wx_set_priv: %s req=%s\n",
-	//	  dev->name, ext));
-
-	#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	if (!(ext_dbg = rtw_vmalloc(len)))
-	{
-		rtw_vmfree(ext, len);
-		return -ENOMEM;
-	}
-
-	_rtw_memcpy(ext_dbg, ext, len);
-	#endif
-
 	//added for wps2.0 @20110524
 	if (dwrq->flags == 0x8766 && len > 8)
 	{
@@ -7068,8 +7048,6 @@ static int rtw_wx_set_priv(struct net_device *dev,
 		{
 			cp_sz = probereq_wpsie_len>MAX_WPS_IE_LEN ? MAX_WPS_IE_LEN:probereq_wpsie_len;
 
-			//_rtw_memcpy(pmlmepriv->probereq_wpsie, probereq_wpsie, cp_sz);
-			//pmlmepriv->probereq_wpsie_len = cp_sz;
 			if (pmlmepriv->wps_probe_req_ie)
 			{
 				u32 free_len = pmlmepriv->wps_probe_req_ie_len;
@@ -7105,9 +7083,6 @@ static int rtw_wx_set_priv(struct net_device *dev,
 FREE_EXT:
 
 	rtw_vmfree(ext, len);
-	#ifdef CONFIG_DEBUG_RTW_WX_SET_PRIV
-	rtw_vmfree(ext_dbg, len);
-	#endif
 
 	return ret;
 }
