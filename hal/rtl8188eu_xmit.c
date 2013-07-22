@@ -346,15 +346,8 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 
 		/* offset 8 */
 		/* CCX-TXRPT ack for xmit mgmt frames. */
-		if (pxmitframe->ack_report) {
-			#ifdef DBG_CCX
-			static u16 ccx_sw = 0x123;
-			ptxdesc->txdw7 |= cpu_to_le32(((ccx_sw)<<16)&0x0fff0000);
-			DBG_88E("%s set ccx, sw:0x%03x\n", __func__, ccx_sw);
-			ccx_sw = (ccx_sw+1)%0xfff;
-			#endif
+		if (pxmitframe->ack_report)
 			ptxdesc->txdw2 |= cpu_to_le32(BIT(19));
-		}
 
 		/* offset 12 */
 		ptxdesc->txdw3 |= cpu_to_le32((pattrib->seqnum<<SEQ_SHT)&0x0FFF0000);

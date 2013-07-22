@@ -48,10 +48,6 @@ void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf)
 {
 	struct txrpt_ccx_88e *txrpt_ccx = (struct txrpt_ccx_88e *)buf;
 
-	#ifdef DBG_CCX
-	dump_txrpt_ccx_88e(buf);
-	#endif
-
 	if (txrpt_ccx->int_ccx) {
 		if (txrpt_ccx->pkt_ok)
 			rtw_ack_tx_done(&adapter->xmitpriv, RTW_SCTX_DONE_SUCCESS);
