@@ -29,8 +29,6 @@
 
 #include <rtl8188e_hal.h>
 
-#define CONFIG_H2C_EF
-
 #define RTL88E_MAX_H2C_BOX_NUMS	4
 #define RTL88E_MAX_CMD_LEN	7
 #define RTL88E_MESSAGE_BOX_SIZE		4
@@ -121,31 +119,20 @@ _func_enter_;
 
 			/* Write Ext command */
 			msgbox_ex_addr = REG_HMEBOX_EXT_0 + (h2c_box_num *RTL88E_EX_MESSAGE_BOX_SIZE);
-			#ifdef CONFIG_H2C_EF
 			for (cmd_idx=0;cmd_idx<ext_cmd_len;cmd_idx++ ){
 				rtw_write8(padapter,msgbox_ex_addr+cmd_idx,*((u8*)(&h2c_cmd_ex)+cmd_idx));
 			}
-			#else
-			h2c_cmd_ex = le32_to_cpu( h2c_cmd_ex );
-			rtw_write32(padapter, msgbox_ex_addr, h2c_cmd_ex);
-			#endif
 		}
 		/*  Write command */
 		msgbox_addr =REG_HMEBOX_0 + (h2c_box_num *RTL88E_MESSAGE_BOX_SIZE);
-		#ifdef CONFIG_H2C_EF
 		for (cmd_idx=0;cmd_idx<RTL88E_MESSAGE_BOX_SIZE;cmd_idx++ ){
 			rtw_write8(padapter,msgbox_addr+cmd_idx,*((u8*)(&h2c_cmd)+cmd_idx));
 		}
-		#else
-		h2c_cmd = le32_to_cpu( h2c_cmd );
-		rtw_write32(padapter,msgbox_addr, h2c_cmd);
-		#endif
-
 		bcmd_down = true;
 
 		pHalData->LastHMEBoxNum = (h2c_box_num+1) % RTL88E_MAX_H2C_BOX_NUMS;
 
-	}while ((!bcmd_down) && (retry_cnts--));
+	} while ((!bcmd_down) && (retry_cnts--));
 
 	ret = _SUCCESS;
 
