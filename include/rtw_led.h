@@ -142,7 +142,7 @@ struct LED_871x {
 // LED customization.
 //================================================================================
 
-typedef	enum _LED_STRATEGY_871x{
+enum LED_STRATEGY_871x {
 	SW_LED_MODE0 = 0, // SW control 1 LED via GPIO0. It is default option.
 	SW_LED_MODE1= 1, // 2 LEDs, through LED0 and LED1. For ALPHA.
 	SW_LED_MODE2 = 2, // SW control 1 LED via GPIO0, customized for AzWave 8187 minicard.
@@ -152,7 +152,7 @@ typedef	enum _LED_STRATEGY_871x{
 	SW_LED_MODE6 = 6, //for 88CU minicard, porting from ce SW_LED_MODE7
 	HW_LED = 50, // HW control 2 LEDs, LED0 and LED1 (there are 4 different control modes, see MAC.CONFIG1 for details.)
 	LED_ST_NONE = 99,
-}LED_STRATEGY_871x, *PLED_STRATEGY_871x;
+};
 
 void
 LedControl871x(
@@ -164,7 +164,7 @@ struct led_priv{
 	/* add for led controll */
 	struct LED_871x			SwLed0;
 	struct LED_871x			SwLed1;
-	LED_STRATEGY_871x	LedStrategy;
+	enum LED_STRATEGY_871x	LedStrategy;
 	u8					bRegUseLed;
 	void (*LedControlHandler)(_adapter *padapter, enum LED_CTL_MODE LedAction);
 	/* add for led controll */
