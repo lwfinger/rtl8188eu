@@ -1461,14 +1461,10 @@ static void rtw_joinbss_update_network(_adapter *padapter, struct wlan_network *
 /* if join_res > 0, for (fw_state==WIFI_STATION_STATE), we check if  "ptarget_sta" & "ptarget_wlan" exist. */
 /* if join_res > 0, for (fw_state==WIFI_ADHOC_STATE), we only check if "ptarget_wlan" exist. */
 /* if join_res > 0, update "cur_network->network" from "pnetwork->network" if (ptarget_wlan !=NULL). */
-/*  */
-/* define REJOIN */
+
 void rtw_joinbss_event_prehandle(_adapter *adapter, u8 *pbuf)
 {
 	_irqL irqL,irqL2;
-	#ifdef REJOIN
-	static u8 retry=0;
-	#endif
 	u8 timer_cancelled;
 	struct sta_info *ptarget_sta= NULL, *pcur_sta = NULL;
 	struct	sta_priv *pstapriv = &adapter->stapriv;
@@ -1504,9 +1500,6 @@ _func_enter_;
 
 	if (pnetwork->join_res > 0) {
 		_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-		#ifdef REJOIN
-		retry = 0;
-		#endif
 		if (check_fwstate(pmlmepriv,_FW_UNDER_LINKING) ) {
 			/* s1. find ptarget_wlan */
 			if (check_fwstate(pmlmepriv, _FW_LINKED) ) {
@@ -1588,32 +1581,9 @@ _func_enter_;
 			_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 		}
 	} else { /* if join_res < 0 (join fails), then try again */
+		_set_timer(&pmlmepriv->assoc_timer, 1);
+		_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 
-		#ifdef REJOIN
-		res = _FAIL;
-		if (retry < 2) {
-			res = rtw_select_and_join_from_scanned_queue(pmlmepriv);
-			RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("rtw_select_and_join_from_scanned_queue again! res:%d\n",res));
-		}
-
-		 if (res == _SUCCESS) {
-			/* extend time of assoc_timer */
-			_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
-			retry++;
-		} else if (res == 2) { /* there is no need to wait for join */
-			_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
-			rtw_indicate_connect(adapter);
-		} else {
-			RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("Set Assoc_Timer = 1; can't find match ssid in scanned_q\n"));
-		#endif
-
-			_set_timer(&pmlmepriv->assoc_timer, 1);
-			_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
-
-		#ifdef REJOIN
-			retry = 0;
-		}
-		#endif
 	}
 
 ignore_joinbss_callback:
