@@ -276,12 +276,7 @@ _func_enter_;
 	H2CSetPwrMode.bAllQueueUAPSD = padapter->registrypriv.uapsd_enable;
 
 	if (Mode > 0)
-	{
 		H2CSetPwrMode.PwrState = 0x00;/*  AllON(0x0C), RFON(0x04), RFOFF(0x00) */
-#ifdef CONFIG_EXT_CLK
-		H2CSetPwrMode.Mode |= BIT(7);/* supporting 26M XTAL CLK_Request feature. */
-#endif /* CONFIG_EXT_CLK */
-	}
 	else
 		H2CSetPwrMode.PwrState = 0x0C;/*  AllON(0x0C), RFON(0x04), RFOFF(0x00) */
 
