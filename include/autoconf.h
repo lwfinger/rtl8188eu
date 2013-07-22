@@ -38,8 +38,6 @@
 
 #define CONFIG_80211N_HT
 
-#define CONFIG_SUPPORT_USB_INT
-
 #define CONFIG_AP_MODE
 
 #define CONFIG_P2P

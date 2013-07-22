@@ -310,7 +310,6 @@ _InitInterrupt(
 	rtw_write32(Adapter, REG_HIMRE_88E, imr_ex);
 	pHalData->IntrMask[1]=imr_ex;
 
-#ifdef CONFIG_SUPPORT_USB_INT
 	/*  REG_USB_SPECIAL_OPTION - BIT(4) */
 	/*  0; Use interrupt endpoint to upload interrupt pkt */
 	/*  1; Use bulk endpoint to upload interrupt pkt, */
@@ -323,11 +322,7 @@ _InitInterrupt(
 		usb_opt = usb_opt | (INT_BULK_SEL);
 
 	rtw_write8(Adapter, REG_USB_SPECIAL_OPTION, usb_opt );
-
-#endif/* CONFIG_SUPPORT_USB_INT */
-
 }
-
 
 static void
 _InitQueueReservedPage(
@@ -1542,10 +1537,8 @@ static u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	DBG_88E("==> %s\n",__func__);
 
-#ifdef CONFIG_SUPPORT_USB_INT
 	rtw_write32(Adapter, REG_HIMR_88E, IMR_DISABLED_88E);
 	rtw_write32(Adapter, REG_HIMRE_88E, IMR_DISABLED_88E);
-#endif
 
 	DBG_88E("bkeepfwalive(%x)\n",Adapter->pwrctrlpriv.bkeepfwalive);
 	if (Adapter->pwrctrlpriv.bkeepfwalive)
