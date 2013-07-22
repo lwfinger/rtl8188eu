@@ -1340,19 +1340,12 @@ _func_enter_;
 
 	rtw_write8(Adapter, REG_EARLY_MODE_CONTROL, 0);
 
-#ifdef CONFIG_CHECK_AC_LIFETIME
-	/*  Enable lifetime check for the four ACs */
-	rtw_write8(Adapter, REG_LIFETIME_EN, 0x0F);
-#endif	/*  CONFIG_CHECK_AC_LIFETIME */
-
 	rtw_write16(Adapter, REG_PKT_VO_VI_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 	rtw_write16(Adapter, REG_PKT_BE_BK_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 
 	_InitHWLed(Adapter);
 
-	/*  */
-	/*  Joseph Note: Keep RfRegChnlVal for later use. */
-	/*  */
+	/* Keep RfRegChnlVal for later use. */
 	pHalData->RfRegChnlVal[0] = PHY_QueryRFReg(Adapter, (RF_RADIO_PATH_E)0, RF_CHNLBW, bRFRegOffsetMask);
 	pHalData->RfRegChnlVal[1] = PHY_QueryRFReg(Adapter, (RF_RADIO_PATH_E)1, RF_CHNLBW, bRFRegOffsetMask);
 
