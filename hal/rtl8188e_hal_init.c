@@ -880,21 +880,21 @@ hal_EfusePgPacketWrite2ByteHeader(
 		PADAPTER		pAdapter,
 		u8				efuseType,
 		u16				*pAddr,
-		PPGPKT_STRUCT	pTargetPkt,
+		struct pgpkt *pTargetPkt,
 		bool			bPseudoTest);
 static bool
 hal_EfusePgPacketWrite1ByteHeader(
 		PADAPTER		pAdapter,
 		u8				efuseType,
 		u16				*pAddr,
-		PPGPKT_STRUCT	pTargetPkt,
+		struct pgpkt *pTargetPkt,
 		bool			bPseudoTest);
 static bool
 hal_EfusePgPacketWriteData(
 		PADAPTER		pAdapter,
 		u8				efuseType,
 		u16				*pAddr,
-		PPGPKT_STRUCT	pTargetPkt,
+		struct pgpkt *pTargetPkt,
 		bool			bPseudoTest);
 
 static void
@@ -1818,7 +1818,7 @@ static bool
 hal_EfuseFixHeaderProcess(
 			PADAPTER			pAdapter,
 			u8					efuseType,
-			PPGPKT_STRUCT		pFixPkt,
+			struct pgpkt *pFixPkt,
 			u16					*pAddr,
 			bool				bPseudoTest
 )
@@ -1860,7 +1860,7 @@ hal_EfusePgPacketWrite2ByteHeader(
 				PADAPTER		pAdapter,
 				u8				efuseType,
 				u16				*pAddr,
-				PPGPKT_STRUCT	pTargetPkt,
+				struct pgpkt *pTargetPkt,
 				bool			bPseudoTest)
 {
 	bool		bRet=false, bContinual=true;
@@ -1922,7 +1922,7 @@ hal_EfusePgPacketWrite2ByteHeader(
 			}
 			else if (pg_header != tmp_header)	/* offset PG fail */
 			{
-				PGPKT_STRUCT	fixPkt;
+				struct pgpkt	fixPkt;
 				fixPkt.offset = ((pg_header_temp & 0xE0) >> 5) | ((tmp_header & 0xF0) >> 1);
 				fixPkt.word_en = tmp_header & 0x0F;
 				fixPkt.word_cnts = Efuse_CalculateWordCnts(fixPkt.word_en);
@@ -1951,7 +1951,7 @@ hal_EfusePgPacketWrite1ByteHeader(
 				PADAPTER		pAdapter,
 				u8				efuseType,
 				u16				*pAddr,
-				PPGPKT_STRUCT	pTargetPkt,
+				struct pgpkt *pTargetPkt,
 				bool			bPseudoTest)
 {
 	bool		bRet=false;
@@ -1980,7 +1980,7 @@ hal_EfusePgPacketWrite1ByteHeader(
 	}
 	else
 	{
-		PGPKT_STRUCT	fixPkt;
+		struct pgpkt	fixPkt;
 		fixPkt.offset = (tmp_header>>4) & 0x0F;
 		fixPkt.word_en = tmp_header & 0x0F;
 		fixPkt.word_cnts = Efuse_CalculateWordCnts(fixPkt.word_en);
@@ -1997,7 +1997,7 @@ hal_EfusePgPacketWriteData(
 				PADAPTER		pAdapter,
 				u8				efuseType,
 				u16				*pAddr,
-				PPGPKT_STRUCT	pTargetPkt,
+				struct pgpkt *pTargetPkt,
 				bool			bPseudoTest)
 {
 	bool	bRet=false;
@@ -2032,7 +2032,7 @@ hal_EfusePgPacketWriteHeader(
 				PADAPTER		pAdapter,
 				u8				efuseType,
 				u16				*pAddr,
-				PPGPKT_STRUCT	pTargetPkt,
+				struct pgpkt *pTargetPkt,
 				bool			bPseudoTest)
 {
 	bool		bRet=false;
@@ -2051,8 +2051,8 @@ hal_EfusePgPacketWriteHeader(
 
 static bool
 wordEnMatched(
-		PPGPKT_STRUCT	pTargetPkt,
-		PPGPKT_STRUCT	pCurPkt,
+		struct pgpkt *pTargetPkt,
+		struct pgpkt *pCurPkt,
 		u8				*pWden
 )
 {
@@ -2114,7 +2114,7 @@ hal_EfusePartialWriteCheck(
 						PADAPTER		pAdapter,
 						u8				efuseType,
 						u16				*pAddr,
-						PPGPKT_STRUCT	pTargetPkt,
+						struct pgpkt *pTargetPkt,
 						bool			bPseudoTest
 					)
 {
@@ -2122,7 +2122,7 @@ hal_EfusePartialWriteCheck(
 	u8	i, efuse_data=0, cur_header=0;
 	u8	new_wden=0, matched_wden=0, badworden=0;
 	u16	startAddr=0, efuse_max_available_len=0, efuse_max=0;
-	PGPKT_STRUCT	curPkt;
+	struct pgpkt curPkt;
 
 	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (void *)&efuse_max_available_len, bPseudoTest);
 	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_EFUSE_REAL_CONTENT_LEN, (void *)&efuse_max, bPseudoTest);
@@ -2255,7 +2255,7 @@ hal_EfuseConstructPGPkt(
 						u8				offset,
 						u8				word_en,
 						u8				*pData,
-						PPGPKT_STRUCT	pTargetPkt
+						struct pgpkt *pTargetPkt
 
 )
 {
@@ -2276,7 +2276,7 @@ hal_EfusePgPacketWrite_BT(
 						bool		bPseudoTest
 					)
 {
-	PGPKT_STRUCT	targetPkt;
+	struct pgpkt	targetPkt;
 	u16	startAddr=0;
 	u8	efuseType=EFUSE_BT;
 
@@ -2306,7 +2306,7 @@ hal_EfusePgPacketWrite_8188e(
 						bool		bPseudoTest
 					)
 {
-	PGPKT_STRUCT	targetPkt;
+	struct pgpkt	targetPkt;
 	u16			startAddr=0;
 	u8			efuseType=EFUSE_WIFI;
 

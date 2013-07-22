@@ -1217,20 +1217,18 @@ _func_exit_;
 /*  */
 NDIS_STATUS oid_rt_pro_rw_efuse_pgpkt_hdl(struct oid_par_priv *poid_par_priv)
 {
-	PPGPKT_STRUCT	ppgpkt;
+	struct pgpkt *ppgpkt;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
 	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
-/* 	RT_TRACE(_module_mp_, _drv_info_, ("+oid_rt_pro_rw_efuse_pgpkt_hdl\n")); */
-
 	*poid_par_priv->bytes_rw = 0;
 
-	if (poid_par_priv->information_buf_len < sizeof(PGPKT_STRUCT))
+	if (poid_par_priv->information_buf_len < sizeof(struct pgpkt *))
 		return NDIS_STATUS_INVALID_LENGTH;
 
-	ppgpkt = (PPGPKT_STRUCT)poid_par_priv->information_buf;
+	ppgpkt = (struct pgpkt *)poid_par_priv->information_buf;
 
 	_irqlevel_changed_(&oldirql, LOWER);
 

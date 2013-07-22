@@ -75,12 +75,12 @@ enum _EFUSE_DEF_TYPE {
 #define		EFUSE_MAX_WORD_UNIT			4
 
 /*------------------------------Define structure----------------------------*/
-typedef struct PG_PKT_STRUCT_A{
+struct pgpkt {
 	u8 offset;
 	u8 word_en;
 	u8 data[8];
 	u8 word_cnts;
-}PGPKT_STRUCT,*PPGPKT_STRUCT;
+};
 
 /*------------------------------Define structure----------------------------*/
 typedef struct _EFUSE_HAL{
