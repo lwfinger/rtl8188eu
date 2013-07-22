@@ -101,7 +101,7 @@ enum LED_PIN_871x {
 	LED_PIN_GPIO0 = 4,
 };
 
-typedef struct _LED_871x{
+struct LED_871x {
 	_adapter				*padapter;
 
 	enum LED_PIN_871x	LedPin;	// Identify how to implement this SW led.
@@ -129,14 +129,14 @@ typedef struct _LED_871x{
 	#if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)
 	_workitem			BlinkWorkItem; // Workitem used by BlinkTimer to manipulate H/W to blink LED.
 	#endif
-} LED_871x, *PLED_871x;
+};
 
-#define IS_LED_WPS_BLINKING(_LED_871x)	(((PLED_871x)_LED_871x)->CurrLedState==LED_BLINK_WPS \
-					|| ((PLED_871x)_LED_871x)->CurrLedState==LED_BLINK_WPS_STOP \
-					|| ((PLED_871x)_LED_871x)->bLedWPSBlinkInProgress)
+#define IS_LED_WPS_BLINKING(_LED_871x)	(((struct LED_871x *)_LED_871x)->CurrLedState==LED_BLINK_WPS \
+					|| ((struct LED_871x *)_LED_871x)->CurrLedState==LED_BLINK_WPS_STOP \
+					|| ((struct LED_871x *)_LED_871x)->bLedWPSBlinkInProgress)
 
-#define IS_LED_BLINKING(_LED_871x)	(((PLED_871x)_LED_871x)->bLedWPSBlinkInProgress \
-					||((PLED_871x)_LED_871x)->bLedScanBlinkInProgress)
+#define IS_LED_BLINKING(_LED_871x)	(((struct LED_871x *)_LED_871x)->bLedWPSBlinkInProgress \
+					||((struct LED_871x *)_LED_871x)->bLedScanBlinkInProgress)
 
 //================================================================================
 // LED customization.
@@ -162,8 +162,8 @@ LedControl871x(
 
 struct led_priv{
 	/* add for led controll */
-	LED_871x			SwLed0;
-	LED_871x			SwLed1;
+	struct LED_871x			SwLed0;
+	struct LED_871x			SwLed1;
 	LED_STRATEGY_871x	LedStrategy;
 	u8					bRegUseLed;
 	void (*LedControlHandler)(_adapter *padapter, enum LED_CTL_MODE LedAction);
@@ -179,21 +179,21 @@ struct led_priv{
 void BlinkTimerCallback(void *data);
 void BlinkWorkItemCallback(struct work_struct *work);
 
-void ResetLedStatus(PLED_871x pLed);
+void ResetLedStatus(struct LED_871x * pLed);
 
 void
 InitLed871x(
 	_adapter			*padapter,
-	PLED_871x		pLed,
+	struct LED_871x *pLed,
 	enum LED_PIN_871x	LedPin
 	);
 
 void
 DeInitLed871x(
-	PLED_871x			pLed
+	struct LED_871x *	pLed
 	);
 
 //hal...
-extern void BlinkHandler(PLED_871x	 pLed);
+extern void BlinkHandler(struct LED_871x * pLed);
 
 #endif //__RTW_LED_H_

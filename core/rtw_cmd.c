@@ -1611,7 +1611,7 @@ _func_exit_;
 	return res;
 }
 
-u8 rtw_led_blink_cmd(_adapter*padapter, PLED_871x pLed)
+u8 rtw_led_blink_cmd(_adapter*padapter, struct LED_871x * pLed)
 {
 	struct	cmd_obj*	pcmdobj;
 	struct	LedBlink_param *ledBlink_param;

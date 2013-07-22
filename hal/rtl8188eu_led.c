@@ -40,7 +40,7 @@
 /* 	Description: */
 /* 		Turn on LED according to LedPin specified. */
 /*  */
-void SwLedOn(_adapter *padapter, PLED_871x pLed)
+void SwLedOn(_adapter *padapter, struct LED_871x * pLed)
 {
 	u8	LedCfg;
 
@@ -72,7 +72,7 @@ void SwLedOn(_adapter *padapter, PLED_871x pLed)
 /* 	Description: */
 /* 		Turn off LED according to LedPin specified. */
 /*  */
-void SwLedOff(_adapter *padapter, PLED_871x pLed)
+void SwLedOff(_adapter *padapter, struct LED_871x * pLed)
 {
 	u8	LedCfg;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);

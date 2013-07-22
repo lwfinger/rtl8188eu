@@ -29,7 +29,7 @@
 //================================================================================
 void rtl8188eu_InitSwLeds(PADAPTER padapter);
 void rtl8188eu_DeInitSwLeds(PADAPTER padapter);
-void SwLedOn(_adapter *padapter, PLED_871x pLed);
-void SwLedOff(_adapter *padapter, PLED_871x pLed);
+void SwLedOn(_adapter *padapter, struct LED_871x * pLed);
+void SwLedOff(_adapter *padapter, struct LED_871x * pLed);
 
 #endif
