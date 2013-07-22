@@ -26,7 +26,7 @@
 
 #define _HAL_INIT_C_
 
-void dump_chip_info(HAL_VERSION	ChipVersion)
+void dump_chip_info(struct HAL_VERSION	ChipVersion)
 {
 	uint cnt = 0;
 	char buf[128];

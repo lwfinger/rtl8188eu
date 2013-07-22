@@ -2376,10 +2376,10 @@ rtl8188e_Efuse_PgPacketWrite(	PADAPTER	pAdapter,
 	return ret;
 }
 
-static HAL_VERSION ReadChipVersion8188E(PADAPTER padapter)
+static struct HAL_VERSION ReadChipVersion8188E(PADAPTER padapter)
 {
 	u32				value32;
-	HAL_VERSION				ChipVersion;
+	struct HAL_VERSION		ChipVersion;
 	HAL_DATA_TYPE	*pHalData;
 
 

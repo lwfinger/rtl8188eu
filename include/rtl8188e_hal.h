@@ -289,7 +289,7 @@ typedef enum _RT_REGULATOR_MODE {
 
 typedef struct hal_data_8188e
 {
-	HAL_VERSION			VersionID;
+	struct HAL_VERSION	VersionID;
 	RT_MULTI_FUNC		MultiFunc; // For multi-function consideration.
 	RT_POLARITY_CTL		PolarityCtl; // For Wifi PDn Polarity control.
 	RT_REGULATOR_MODE	RegulatorMode; // switching regulator or LDO
