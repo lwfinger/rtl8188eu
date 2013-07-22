@@ -20,7 +20,6 @@ CONFIG_RTL8188E = y
 
 CONFIG_USB_HCI = y
 
-CONFIG_USB_AUTOSUSPEND = n
 CONFIG_BT_COEXIST = n
 CONFIG_WOWLAN = n
 
@@ -88,11 +87,6 @@ _HAL_INTFS_FILES += $(OUTSRC_FILES)
 ifeq ($(CONFIG_AUTOCFG_CP), y)
 
 $(shell cp $(TopDIR)/autoconf_rtl8188e_usb_linux.h $(TopDIR)/include/autoconf.h)
-endif
-
-
-ifeq ($(CONFIG_USB_AUTOSUSPEND), y)
-EXTRA_CFLAGS += -DCONFIG_USB_AUTOSUSPEND
 endif
 
 ifeq ($(CONFIG_BT_COEXIST), y)
