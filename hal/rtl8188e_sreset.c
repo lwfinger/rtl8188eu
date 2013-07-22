@@ -121,48 +121,6 @@ static void _restore_network_status(_adapter *padapter)
 
 void rtl8188e_silentreset_for_specific_platform(_adapter *padapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
-
-	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
-	_irqL irqL;
-
-#ifdef DBG_CONFIG_ERROR_RESET
-
-	DBG_88E("%s\n", __func__);
-
-	psrtpriv->Wifi_Error_Status = WIFI_STATUS_SUCCESS;
-
-	if (!netif_queue_stopped(padapter->pnetdev))
-		netif_stop_queue(padapter->pnetdev);
-
-	rtw_cancel_all_timer(padapter);
-	tasklet_kill(&pxmitpriv->xmit_tasklet);
-
-	_enter_critical_mutex(&psrtpriv->silentreset_mutex, &irqL);
-	psrtpriv->silent_reset_inprogress = true;
-	pwrpriv->change_rfpwrstate = rf_off;
-	ips_enter(padapter);
-	ips_leave(padapter);
-	if (check_fwstate(pmlmepriv, _FW_LINKED)== true)
-	{
-		_restore_network_status(padapter);
-		_restore_security_setting(padapter);
-	}
-
-	_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY | _FW_UNDER_LINKING);
-
-	psrtpriv->silent_reset_inprogress = false;
-	_exit_critical_mutex(&psrtpriv->silentreset_mutex, &irqL);
-
-	tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
-	_set_timer(&padapter->mlmepriv.dynamic_chk_timer, 2000);
-
-	if (netif_queue_stopped(padapter->pnetdev))
-		netif_wake_queue(padapter->pnetdev);
-#endif
 }
 
 void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
