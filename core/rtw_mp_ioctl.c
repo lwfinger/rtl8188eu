@@ -826,7 +826,7 @@ NDIS_STATUS oid_rt_pro8711_join_bss_hdl(struct oid_par_priv *poid_par_priv)
 /*  */
 NDIS_STATUS oid_rt_pro_read_register_hdl(struct oid_par_priv *poid_par_priv)
 {
-	pRW_Reg		RegRWStruct;
+	struct mp_rw_reg *		RegRWStruct;
 	u32		offset, width;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
 	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
@@ -839,7 +839,7 @@ _func_enter_;
 	if (poid_par_priv->type_of_oid != QUERY_OID)
 		return NDIS_STATUS_NOT_ACCEPTED;
 
-	RegRWStruct = (pRW_Reg)poid_par_priv->information_buf;
+	RegRWStruct = (struct mp_rw_reg *)poid_par_priv->information_buf;
 	offset = RegRWStruct->offset;
 	width = RegRWStruct->width;
 
@@ -875,7 +875,7 @@ _func_exit_;
 /*  */
 NDIS_STATUS oid_rt_pro_write_register_hdl(struct oid_par_priv *poid_par_priv)
 {
-	pRW_Reg		RegRWStruct;
+	struct mp_rw_reg *RegRWStruct;
 	u32		offset, width, value;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
 	PADAPTER	padapter = (PADAPTER)(poid_par_priv->adapter_context);
@@ -888,7 +888,7 @@ _func_enter_;
 	if (poid_par_priv->type_of_oid != SET_OID)
 		return NDIS_STATUS_NOT_ACCEPTED;
 
-	RegRWStruct = (pRW_Reg)poid_par_priv->information_buf;
+	RegRWStruct = (struct mp_rw_reg *)poid_par_priv->information_buf;
 	offset = RegRWStruct->offset;
 	width = RegRWStruct->width;
 	value = RegRWStruct->value;
@@ -1132,7 +1132,7 @@ NDIS_STATUS oid_rt_pro_rx_packet_type_hdl(struct oid_par_priv *poid_par_priv)
 /*  */
 NDIS_STATUS oid_rt_pro_read_efuse_hdl(struct oid_par_priv *poid_par_priv)
 {
-	PEFUSE_ACCESS_STRUCT pefuse;
+	struct efuse_access_struct * pefuse;
 	u8 *data;
 	u16 addr = 0, cnts = 0, max_available_size = 0;
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
@@ -1143,10 +1143,10 @@ _func_enter_;
 	if (poid_par_priv->type_of_oid != QUERY_OID)
 		return NDIS_STATUS_NOT_ACCEPTED;
 
-	if (poid_par_priv->information_buf_len < sizeof(EFUSE_ACCESS_STRUCT))
+	if (poid_par_priv->information_buf_len < sizeof(struct efuse_access_struct))
 		return NDIS_STATUS_INVALID_LENGTH;
 
-	pefuse = (PEFUSE_ACCESS_STRUCT)poid_par_priv->information_buf;
+	pefuse = (struct efuse_access_struct *)poid_par_priv->information_buf;
 	addr = pefuse->start_addr;
 	cnts = pefuse->cnts;
 	data = pefuse->data;
@@ -1177,7 +1177,7 @@ _func_exit_;
 /*  */
 NDIS_STATUS oid_rt_pro_write_efuse_hdl(struct oid_par_priv *poid_par_priv)
 {
-	PEFUSE_ACCESS_STRUCT pefuse;
+	struct efuse_access_struct * pefuse;
 	u8 *data;
 	u16 addr = 0, cnts = 0, max_available_size = 0;
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
@@ -1189,7 +1189,7 @@ _func_enter_;
 	if (poid_par_priv->type_of_oid != SET_OID)
 		return NDIS_STATUS_NOT_ACCEPTED;
 
-	pefuse = (PEFUSE_ACCESS_STRUCT)poid_par_priv->information_buf;
+	pefuse = (struct efuse_access_struct *)poid_par_priv->information_buf;
 	addr = pefuse->start_addr;
 	cnts = pefuse->cnts;
 	data = pefuse->data;
@@ -1440,14 +1440,14 @@ NDIS_STATUS oid_rt_pro_set_pkt_test_mode_hdl(struct oid_par_priv *poid_par_priv)
 
 unsigned int mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv)
 {
-	PMP_XMIT_PARM pparm;
+	struct mp_xmit_parm * pparm;
 	PADAPTER padapter;
 	struct mp_priv *pmp_priv;
 	struct pkt_attrib *pattrib;
 
 	RT_TRACE(_module_mp_, _drv_notice_, ("+%s\n", __func__));
 
-	pparm = (PMP_XMIT_PARM)poid_par_priv->information_buf;
+	pparm = (struct mp_xmit_parm *)poid_par_priv->information_buf;
 	padapter = (PADAPTER)poid_par_priv->adapter_context;
 	pmp_priv = &padapter->mppriv;
 

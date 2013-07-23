@@ -28,53 +28,44 @@
 #include <rtw_mp.h>
 
 //------------------------------------------------------------------------------
-typedef struct CFG_DBG_MSG_STRUCT {
+struct cfg_dbg_msg_struct {
 	u32 DebugLevel;
 	u32 DebugComponent_H32;
 	u32 DebugComponent_L32;
-}CFG_DBG_MSG_STRUCT,*PCFG_DBG_MSG_STRUCT;
+};
 
-typedef struct _RW_REG {
+struct mp_rw_reg {
 	u32 offset;
 	u32 width;
 	u32 value;
-}mp_rw_reg,RW_Reg, *pRW_Reg;
+};
 
-//for OID_RT_PRO_READ16_EEPROM & OID_RT_PRO_WRITE16_EEPROM
-typedef struct _EEPROM_RW_PARAM {
-	u32 offset;
-	u16 value;
-}eeprom_rw_param,EEPROM_RWParam, *pEEPROM_RWParam;
-
-typedef struct _EFUSE_ACCESS_STRUCT_ {
+struct efuse_access_struct {
 	u16	start_addr;
 	u16	cnts;
 	u8	data[0];
-}EFUSE_ACCESS_STRUCT, *PEFUSE_ACCESS_STRUCT;
+};
 
-typedef struct _BURST_RW_REG {
+struct burst_rw_reg {
 	u32 offset;
 	u32 len;
 	u8 Data[256];
-}burst_rw_reg,Burst_RW_Reg, *pBurst_RW_Reg;
+};
 
-typedef struct _USB_VendorReq{
+struct usb_vendor_req {
 	u8	bRequest;
 	u16	wValue;
 	u16	wIndex;
 	u16	wLength;
 	u8	u8Dir;//0:OUT, 1:IN
 	u8	u8InData;
-}usb_vendor_req, USB_VendorReq, *pUSB_VendorReq;
+};
 
-typedef struct _DR_VARIABLE_STRUCT_ {
+struct dr_variable_struct {
 	u8 offset;
 	u32 variable;
-}DR_VARIABLE_STRUCT;
+};
 
-//int mp_start_joinbss(_adapter *padapter, NDIS_802_11_SSID *pssid);
-
-//void _irqlevel_changed_(_irqL *irqlevel, /*bool*/unsigned char bLower);
 #define _irqlevel_changed_(a,b)
 
 //oid_rtl_seg_81_80_00
@@ -408,13 +399,13 @@ struct rfintfs_parm {
 	u32 rfintfs;
 };
 
-typedef struct _mp_xmit_parm_ {
+struct mp_xmit_parm {
 	u8 enable;
 	u32 count;
 	u16 length;
 	u8 payload_type;
 	u8 da[ETH_ALEN];
-}MP_XMIT_PARM, *PMP_XMIT_PARM;
+};
 
 struct mp_xmit_packet {
 	u32 len;
@@ -524,7 +515,7 @@ static struct mp_ioctl_handler mp_ioctl_hdl[] = {
 
 	GEN_MP_IOCTL_HANDLER(sizeof(struct eeprom_rw_param), NULL, 0)
 	GEN_MP_IOCTL_HANDLER(sizeof(struct eeprom_rw_param), NULL, 0)
-	GEN_MP_IOCTL_HANDLER(sizeof(EFUSE_ACCESS_STRUCT), oid_rt_pro_efuse_hdl, OID_RT_PRO_EFUSE)
+	GEN_MP_IOCTL_HANDLER(sizeof(struct efuse_access_struct), oid_rt_pro_efuse_hdl, OID_RT_PRO_EFUSE)
 /*25*/	GEN_MP_IOCTL_HANDLER(0, oid_rt_pro_efuse_map_hdl, OID_RT_PRO_EFUSE_MAP)
 	GEN_MP_IOCTL_HANDLER(sizeof(u32), oid_rt_get_efuse_max_size_hdl, OID_RT_GET_EFUSE_MAX_SIZE)
 	GEN_MP_IOCTL_HANDLER(sizeof(u32), oid_rt_get_efuse_current_size_hdl, OID_RT_GET_EFUSE_CURRENT_SIZE)
