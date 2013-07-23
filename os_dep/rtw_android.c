@@ -70,11 +70,11 @@ static const char *android_wifi_cmd_str[ANDROID_WIFI_CMD_MAX] = {
 	"WFD-SET-DEVTYPE",
 };
 
-typedef struct android_wifi_priv_cmd {
+struct android_wifi_priv_cmd {
 	const char __user *buf;
 	int used_len;
 	int total_len;
-} android_wifi_priv_cmd;
+};
 
 /**
  * Local (static) functions and variables
@@ -188,7 +188,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	char *command = NULL;
 	int cmd_num;
 	int bytes_written = 0;
-	android_wifi_priv_cmd priv_cmd;
+	struct android_wifi_priv_cmd priv_cmd;
 
 	rtw_lock_suspend();
 
@@ -196,7 +196,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		ret = -EINVAL;
 		goto exit;
 	}
-	if (copy_from_user(&priv_cmd, ifr->ifr_data, sizeof(android_wifi_priv_cmd))) {
+	if (copy_from_user(&priv_cmd, ifr->ifr_data, sizeof(struct android_wifi_priv_cmd))) {
 		ret = -EFAULT;
 		goto exit;
 	}
