@@ -189,35 +189,29 @@ ODM_ReleaseSpinLock(
 /*  */
 /*  Work item relative API. FOr MP driver only~! */
 /*  */
-void ODM_InitializeWorkItem(PDM_ODM_T pDM_Odm, PRT_WORK_ITEM pRtWorkItem,
+void ODM_InitializeWorkItem(PDM_ODM_T pDM_Odm, void *pRtWorkItem,
 			    RT_WORKITEM_CALL_BACK RtWorkItemCallback,
 			    void *pContext, const char*szID)
 {
 }
 
-void
-ODM_StartWorkItem(
-		PRT_WORK_ITEM pRtWorkItem
-	)
+void ODM_StartWorkItem(void *pRtWorkItem)
 {
 }
 
-void
-ODM_StopWorkItem(
-		PRT_WORK_ITEM pRtWorkItem
-	)
+void ODM_StopWorkItem(void *pRtWorkItem)
 {
 }
 
-void ODM_FreeWorkItem(PRT_WORK_ITEM pRtWorkItem)
+void ODM_FreeWorkItem(void *pRtWorkItem)
 {
 }
 
-void ODM_ScheduleWorkItem(PRT_WORK_ITEM pRtWorkItem)
+void ODM_ScheduleWorkItem(void *pRtWorkItem)
 {
 }
 
-void ODM_IsWorkItemScheduled(PRT_WORK_ITEM pRtWorkItem)
+void ODM_IsWorkItemScheduled(void *pRtWorkItem)
 {
 }
 
