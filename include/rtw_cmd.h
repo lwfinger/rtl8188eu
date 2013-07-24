@@ -46,14 +46,12 @@ struct cmd_obj {
 	u32	cmdsz;
 	u8	*rsp;
 	u32	rspsz;
-	//_sema		cmd_sem;
 	_list	list;
 };
 
 struct cmd_priv {
-	_sema	cmd_queue_sema;
-	//_sema	cmd_done_sema;
-	_sema	terminate_cmdthread_sema;
+	struct semaphore cmd_queue_sema;
+	struct semaphore terminate_cmdthread_sema;
 	_queue	cmd_queue;
 	u8	cmd_seq;
 	u8	*cmd_buf;	//shall be non-paged, and 4 bytes aligned

@@ -69,7 +69,6 @@
 #include <linux/usb/ch9.h>
 #endif
 
-	typedef struct	semaphore _sema;
 	typedef	spinlock_t	_lock;
 	typedef struct timer_list _timer;
 
@@ -379,10 +378,10 @@ extern void	rtw_list_insert_head(_list *plist, _list *phead);
 extern void	rtw_list_insert_tail(_list *plist, _list *phead);
 extern void	rtw_list_delete(_list *plist);
 
-extern void	_rtw_init_sema(_sema *sema, int init_val);
-extern void	_rtw_free_sema(_sema	*sema);
-extern void	_rtw_up_sema(_sema	*sema);
-extern u32	_rtw_down_sema(_sema *sema);
+extern void	_rtw_init_sema(struct semaphore *sema, int init_val);
+extern void	_rtw_free_sema(struct semaphore *sema);
+extern void	_rtw_up_sema(struct semaphore *sema);
+extern u32	_rtw_down_sema(struct semaphore *sema);
 extern void	_rtw_mutex_init(struct mutex *pmutex);
 extern void	_rtw_mutex_free(struct mutex *pmutex);
 extern void	_rtw_spinlock_init(_lock *plock);

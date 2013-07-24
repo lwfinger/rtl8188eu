@@ -204,7 +204,7 @@ struct dvobj_priv
 	u8	RtNumOutPipes;
 	int	ep_num[5]; //endpoint number
 	int	RegUsbSS;
-	_sema	usb_suspend_sema;
+	struct semaphore usb_suspend_sema;
 	struct mutex  usb_vendor_req_mutex;
 
 	u8 * usb_alloc_vendor_req_buf;

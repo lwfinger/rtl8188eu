@@ -199,7 +199,7 @@ typedef struct _MPT_CONTEXT
 	// Indicate if the driver is unloading or unloaded.
 	bool			bMptDrvUnload;
 
-	_sema			MPh2c_Sema;
+	struct semaphore MPh2c_Sema;
 	_timer			MPh2c_timeout_timer;
 // Event used to sync H2c for BT control
 
