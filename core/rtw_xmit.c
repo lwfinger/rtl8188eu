@@ -118,9 +118,9 @@ _func_enter_;
 		res= _FAIL;
 		goto exit;
 	}
-	pxmitpriv->pxmit_frame_buf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_frame_buf), 4);
+	pxmitpriv->pxmit_frame_buf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_frame_buf), 4);
 	/* pxmitpriv->pxmit_frame_buf = pxmitpriv->pallocated_frame_buf + 4 - */
-	/* 						((SIZE_PTR) (pxmitpriv->pallocated_frame_buf) &3); */
+	/* 						((size_t) (pxmitpriv->pallocated_frame_buf) &3); */
 
 	pxframe = (struct xmit_frame*) pxmitpriv->pxmit_frame_buf;
 
@@ -158,9 +158,9 @@ _func_enter_;
 		goto exit;
 	}
 
-	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_xmitbuf), 4);
+	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmitbuf), 4);
 	/* pxmitpriv->pxmitbuf = pxmitpriv->pallocated_xmitbuf + 4 - */
-	/* 						((SIZE_PTR) (pxmitpriv->pallocated_xmitbuf) &3); */
+	/* 						((size_t) (pxmitpriv->pallocated_xmitbuf) &3); */
 
 	pxmitbuf = (struct xmit_buf*)pxmitpriv->pxmitbuf;
 
@@ -200,7 +200,7 @@ _func_enter_;
 		goto exit;
 	}
 
-	pxmitpriv->pxmit_extbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitpriv->pallocated_xmit_extbuf), 4);
+	pxmitpriv->pxmit_extbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmit_extbuf), 4);
 
 	pxmitbuf = (struct xmit_buf*)pxmitpriv->pxmit_extbuf;
 
@@ -220,7 +220,7 @@ _func_enter_;
 			goto exit;
 		}
 
-		pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), 4);
+		pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitbuf->pallocated_buf), 4);
 */
 
 		if ((res=rtw_os_xmit_resource_alloc(padapter, pxmitbuf,max_xmit_extbuf_size + XMITBUF_ALIGN_SZ)) == _FAIL) {
@@ -856,7 +856,7 @@ _func_enter_;
 			payload=pframe;
 
 			for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
-				payload=(u8 *)RND4((SIZE_PTR)(payload));
+				payload=(u8 *)RND4((size_t)(payload));
 				RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("===curfragnum=%d, pframe= 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x,!!!\n",
 					curfragnum,*payload, *(payload+1),*(payload+2),*(payload+3),*(payload+4),*(payload+5),*(payload+6),*(payload+7)));
 
@@ -1162,7 +1162,7 @@ s32 rtw_xmitframe_coalesce(_adapter *padapter, _pkt *pkt, struct xmit_frame *pxm
 
 	s32 frg_inx, frg_len, mpdu_len, llc_sz, mem_sz;
 
-	SIZE_PTR addr;
+	size_t addr;
 
 	u8 *pframe, *mem_start;
 	u8 hw_hdr_offset;
@@ -1311,7 +1311,7 @@ _func_enter_;
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("%s: There're still something in packet!\n", __func__));
 		}
 
-		addr = (SIZE_PTR)(pframe);
+		addr = (size_t)(pframe);
 
 		mem_start = (unsigned char *)RND4(addr) + hw_hdr_offset;
 		_rtw_memcpy(mem_start, pbuf_start + hw_hdr_offset, pattrib->hdrlen);

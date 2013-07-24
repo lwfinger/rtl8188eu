@@ -33,7 +33,7 @@
 
 uint rtw_remainder_len(struct pkt_file *pfile)
 {
-	return (pfile->buf_len - ((SIZE_PTR)(pfile->cur_addr) - (SIZE_PTR)(pfile->buf_start)));
+	return (pfile->buf_len - ((size_t)(pfile->cur_addr) - (size_t)(pfile->buf_start)));
 }
 
 void _rtw_open_pktfile (_pkt *pktptr, struct pkt_file *pfile)
@@ -99,7 +99,7 @@ int rtw_os_xmit_resource_alloc(_adapter *padapter, struct xmit_buf *pxmitbuf,u32
 		return _FAIL;
 	}
 
-	pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
+	pxmitbuf->pbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
 	pxmitbuf->dma_transfer_addr = 0;
 
 	for (i=0; i<8; i++) {

@@ -477,7 +477,7 @@ static s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 		mem_addr += w_sz;
 
-		mem_addr = (u8 *)RND4(((SIZE_PTR)(mem_addr)));
+		mem_addr = (u8 *)RND4(((size_t)(mem_addr)));
 
 	}
 

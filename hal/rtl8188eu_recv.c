@@ -71,7 +71,7 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 	}
 	_rtw_memset(precvpriv->pallocated_recv_buf, 0, NR_RECVBUFF *sizeof(struct recv_buf) + 4);
 
-	precvpriv->precv_buf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(precvpriv->pallocated_recv_buf), 4);
+	precvpriv->precv_buf = (u8 *)N_BYTE_ALIGMENT((size_t)(precvpriv->pallocated_recv_buf), 4);
 
 
 	precvbuf = (struct recv_buf*)precvpriv->precv_buf;
@@ -101,8 +101,8 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 
 	{
 		int i;
-		SIZE_PTR tmpaddr=0;
-		SIZE_PTR alignment=0;
+		size_t tmpaddr=0;
+		size_t alignment=0;
 		struct sk_buff *pskb=NULL;
 
 		skb_queue_head_init(&precvpriv->free_recv_skb_queue);
@@ -120,7 +120,7 @@ int	rtl8188eu_init_recv_priv(_adapter *padapter)
 			{
 				pskb->dev = padapter->pnetdev;
 
-				tmpaddr = (SIZE_PTR)pskb->data;
+				tmpaddr = (size_t)pskb->data;
 				alignment = tmpaddr & (RECVBUFF_ALIGN_SZ-1);
 				skb_reserve(pskb, (RECVBUFF_ALIGN_SZ - alignment));
 

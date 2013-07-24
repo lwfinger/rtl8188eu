@@ -205,7 +205,7 @@ static u8 rtw_init_intf_priv(struct dvobj_priv *dvobj)
 		goto exit;
 	}
 	dvobj->usb_vendor_req_buf  =
-		(u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(dvobj->usb_alloc_vendor_req_buf ), ALIGNMENT_UNIT);
+		(u8 *)N_BYTE_ALIGMENT((size_t)(dvobj->usb_alloc_vendor_req_buf ), ALIGNMENT_UNIT);
 exit:
 	return rst;
 }

@@ -89,7 +89,7 @@ _func_enter_;
 		return _FAIL;
 
 	pstapriv->pstainfo_buf = pstapriv->pallocated_stainfo_buf + 4 -
-		((SIZE_PTR)(pstapriv->pallocated_stainfo_buf ) & 3);
+		((size_t)(pstapriv->pallocated_stainfo_buf ) & 3);
 
 	_rtw_init_queue(&pstapriv->free_sta_queue);
 

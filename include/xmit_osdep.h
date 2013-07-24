@@ -25,11 +25,11 @@
 
 struct pkt_file {
 	_pkt *pkt;
-	SIZE_T pkt_len;	 //the remainder length of the open_file
+	size_t pkt_len;	 //the remainder length of the open_file
 	_buffer *cur_buffer;
 	u8 *buf_start;
 	u8 *cur_addr;
-	SIZE_T buf_len;
+	size_t buf_len;
 };
 
 #ifdef CONFIG_80211N_HT

@@ -940,8 +940,8 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 	sa = GetAddr2Ptr(pframe);
 
 	auth_mode = psecuritypriv->dot11AuthAlgrthm;
-	seq = le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + 2));
-	algorithm = le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN));
+	seq = le16_to_cpu(*(__le16 *)((size_t)pframe + WLAN_HDR_A3_LEN + 2));
+	algorithm = le16_to_cpu(*(__le16 *)((size_t)pframe + WLAN_HDR_A3_LEN));
 
 	DBG_88E("auth alg=%x, seq=%X\n", algorithm, seq);
 
@@ -1120,8 +1120,8 @@ unsigned int OnAuthClient(_adapter *padapter, union recv_frame *precv_frame)
 
 	offset = (GetPrivacy(pframe))? 4: 0;
 
-	seq	= le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset + 2));
-	status	= le16_to_cpu(*(__le16 *)((SIZE_PTR)pframe + WLAN_HDR_A3_LEN + offset + 4));
+	seq	= le16_to_cpu(*(__le16 *)((size_t)pframe + WLAN_HDR_A3_LEN + offset + 2));
+	status	= le16_to_cpu(*(__le16 *)((size_t)pframe + WLAN_HDR_A3_LEN + offset + 4));
 
 	if (status != 0) {
 		DBG_88E("clnt auth fail, status: %d\n", status);

@@ -1349,12 +1349,12 @@ void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb)
 
 			if (iph->protocol == IPPROTO_UDP) /*  UDP */
 			{
-				struct udphdr *udph = (struct udphdr *)((SIZE_PTR)iph + (iph->ihl << 2));
+				struct udphdr *udph = (struct udphdr *)((size_t)iph + (iph->ihl << 2));
 
 				if ((udph->source == __constant_htons(CLIENT_PORT)) &&
 				    (udph->dest == __constant_htons(SERVER_PORT))) { /*  DHCP request */
 					struct dhcpMessage *dhcph =
-						(struct dhcpMessage *)((SIZE_PTR)udph + sizeof(struct udphdr));
+						(struct dhcpMessage *)((size_t)udph + sizeof(struct udphdr));
 					u32 cookie = be32_to_cpu((__be32)dhcph->cookie);
 
 					if (cookie == DHCP_MAGIC) { /*  match magic word */
