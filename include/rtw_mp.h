@@ -118,7 +118,7 @@ struct mp_xmit_frame
 	//insert urb, irp, and irpcnt info below...
 	u8 *mem_addr;
 	u32 sz[8];
-	PURB pxmit_urb[8];
+	struct urb * pxmit_urb[8];
 	u8 bpending[8];
 	sint ac_tag[8];
 	sint last[8];

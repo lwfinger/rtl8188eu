@@ -383,7 +383,7 @@ s32 mp_start_test(PADAPTER padapter)
 	u32 length;
 	u8 val8;
 
-	_irqL irqL;
+	unsigned long irqL;
 	s32 res = _SUCCESS;
 
 	struct mp_priv *pmppriv = &padapter->mppriv;
@@ -498,7 +498,7 @@ void mp_stop_test(PADAPTER padapter)
 	struct wlan_network *tgt_network = &pmlmepriv->cur_network;
 	struct sta_info *psta;
 
-	_irqL irqL;
+	unsigned long irqL;
 
 	if (pmppriv->mode==MP_ON)
 	{

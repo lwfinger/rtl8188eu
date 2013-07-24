@@ -518,7 +518,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	struct sta_info *psta = NULL;
 	struct tx_servq *ptxservq = NULL;
 
-	_irqL irqL;
+	unsigned long irqL;
 	_list *xmitframe_plist = NULL, *xmitframe_phead = NULL;
 
 	u32	pbuf;	/*  next pkt address */
@@ -732,7 +732,7 @@ static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
  */
 static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
-        _irqL irqL;
+        unsigned long irqL;
 	s32 res;
 	struct xmit_buf *pxmitbuf = NULL;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;

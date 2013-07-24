@@ -556,7 +556,7 @@ void rtl8188eu_recv_tasklet(void *priv)
 
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	uint isevt, *pbuf;
 	struct recv_buf	*precvbuf = (struct recv_buf *)purb->context;
 	_adapter			*padapter =(_adapter *)precvbuf->adapter;
@@ -640,13 +640,13 @@ _func_exit_;
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	int err;
 	unsigned int pipe;
 	SIZE_PTR tmpaddr=0;
 	SIZE_PTR alignment=0;
 	u32 ret = _SUCCESS;
-	PURB purb = NULL;
+	struct urb * purb = NULL;
 	struct recv_buf	*precvbuf = (struct recv_buf *)rmem;
 	_adapter		*adapter = pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(adapter);

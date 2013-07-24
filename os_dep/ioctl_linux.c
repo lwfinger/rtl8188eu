@@ -1403,7 +1403,7 @@ static int rtw_wx_set_wap(struct net_device *dev,
 			 union iwreq_data *awrq,
 			 char *extra)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	uint ret = 0;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct sockaddr *temp = (struct sockaddr *)awrq;
@@ -1556,7 +1556,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
-	_irqL	irqL;
+	unsigned long	irqL;
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 #endif //CONFIG_P2P
@@ -1756,7 +1756,7 @@ _func_exit_;
 static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 			     union iwreq_data *wrqu, char *extra)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list					*plist, *phead;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -1855,7 +1855,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 			      struct iw_request_info *a,
 			      union iwreq_data *wrqu, char *extra)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	_queue *queue = &pmlmepriv->scanned_queue;
@@ -3119,7 +3119,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 {
 	int bssid_match, ret = 0;
 	u32 cnt=0, wpa_ielen;
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list	*plist, *phead;
 	unsigned char *pbuf;
 	u8 bssid[ETH_ALEN];
@@ -3767,7 +3767,7 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 	int					jj,kk;
 	u8					peerMACStr[ 17 ] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	_irqL				irqL;
+	unsigned long				irqL;
 	_list					*plist, *phead;
 	_queue				*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
@@ -3847,7 +3847,7 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 	int					jj,kk;
 	u8					peerMACStr[ 17 ] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	_irqL				irqL;
+	unsigned long				irqL;
 	_list					*plist, *phead;
 	_queue				*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
@@ -3955,7 +3955,7 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
 	int					jj,kk;
 	u8					peerMACStr[ 17 ] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	_irqL				irqL;
+	unsigned long				irqL;
 	_list					*plist, *phead;
 	_queue				*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
@@ -4046,7 +4046,7 @@ static int rtw_p2p_get_device_name(struct net_device *dev,
 	int					jj,kk;
 	u8					peerMACStr[ 17 ] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	_irqL				irqL;
+	unsigned long				irqL;
 	_list					*plist, *phead;
 	_queue				*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
@@ -4132,7 +4132,7 @@ static int rtw_p2p_get_invitation_procedure(struct net_device *dev,
 	int					jj,kk;
 	u8					peerMACStr[ 17 ] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	_irqL				irqL;
+	unsigned long				irqL;
 	_list					*plist, *phead;
 	_queue				*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
@@ -4233,7 +4233,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 	int					jj,kk;
 	u8					peerMACStr[ ETH_ALEN * 2 ] = { 0x00 };
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	_irqL				irqL;
+	unsigned long				irqL;
 	_list					*plist, *phead;
 	_queue				*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
@@ -4338,7 +4338,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 	u8						attr_content[50] = { 0x00 }, _status = 0;
 	u8						*p2pie;
 	uint						p2pielen = 0, attr_contentlen = 0;
-	_irqL					irqL;
+	unsigned long					irqL;
 	struct tx_invite_req_info*	pinvite_req_info = &pwdinfo->invitereq_info;
 
 	//	The input data contains two informations.
@@ -4477,7 +4477,7 @@ static int rtw_p2p_set_persistent(struct net_device *dev,
 	u8						attr_content[50] = { 0x00 }, _status = 0;
 	u8						*p2pie;
 	uint						p2pielen = 0, attr_contentlen = 0;
-	_irqL					irqL;
+	unsigned long					irqL;
 	struct tx_invite_req_info*	pinvite_req_info = &pwdinfo->invitereq_info;
 
 	//	The input data is 0 or 1
@@ -4532,7 +4532,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 	u8					attr_content[100] = { 0x00 }, _status = 0;
 	u8 *p2pie;
 	uint					p2pielen = 0, attr_contentlen = 0;
-	_irqL				irqL;
+	unsigned long				irqL;
 
 	//	The input data contains two informations.
 	//	1. First information is the MAC address which wants to issue the provisioning discovery request frame.
@@ -5052,7 +5052,7 @@ static int rtw_dbg_port(struct net_device *dev,
                                struct iw_request_info *info,
                                union iwreq_data *wrqu, char *extra)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	int ret = 0;
 	u8 major_cmd, minor_cmd;
 	u16 arg;
@@ -6345,7 +6345,7 @@ static int rtw_set_beacon(struct net_device *dev, struct ieee_param *param, int 
 
 static int rtw_hostapd_sta_flush(struct net_device *dev)
 {
-	//_irqL irqL;
+	//unsigned long irqL;
 	//_list	*phead, *plist;
 	int ret=0;
 	//struct sta_info *psta = NULL;
@@ -6364,7 +6364,7 @@ static int rtw_hostapd_sta_flush(struct net_device *dev)
 
 static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	int ret=0;
 	struct sta_info *psta = NULL;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
@@ -6453,7 +6453,7 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 
 static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	int ret=0;
 	struct sta_info *psta = NULL;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);

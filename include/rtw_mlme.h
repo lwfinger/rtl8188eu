@@ -502,7 +502,7 @@ __inline static void _clr_fwstate_(struct mlme_priv *pmlmepriv, sint state)
  */
 __inline static void clr_fwstate(struct mlme_priv *pmlmepriv, sint state)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 	if (check_fwstate(pmlmepriv, state) == true)
@@ -512,7 +512,7 @@ __inline static void clr_fwstate(struct mlme_priv *pmlmepriv, sint state)
 
 __inline static void clr_fwstate_ex(struct mlme_priv *pmlmepriv, sint state)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 	_clr_fwstate_(pmlmepriv, state);
@@ -521,7 +521,7 @@ __inline static void clr_fwstate_ex(struct mlme_priv *pmlmepriv, sint state)
 
 __inline static void up_scanned_network(struct mlme_priv *pmlmepriv)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 	pmlmepriv->num_of_scanned++;
@@ -530,7 +530,7 @@ __inline static void up_scanned_network(struct mlme_priv *pmlmepriv)
 
 __inline static void down_scanned_network(struct mlme_priv *pmlmepriv)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 	pmlmepriv->num_of_scanned--;
@@ -539,7 +539,7 @@ __inline static void down_scanned_network(struct mlme_priv *pmlmepriv)
 
 __inline static void set_scanned_network_val(struct mlme_priv *pmlmepriv, sint val)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 	pmlmepriv->num_of_scanned = val;

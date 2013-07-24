@@ -177,7 +177,7 @@ void rtw_os_xmit_schedule(_adapter *padapter)
 {
 	_adapter *pri_adapter = padapter;
 
-	_irqL  irqL;
+	unsigned long  irqL;
 	struct xmit_priv *pxmitpriv;
 
 	if (!padapter)
@@ -225,7 +225,7 @@ static int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 {
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list	*phead, *plist;
 	struct sk_buff *newskb;
 	struct sta_info *psta = NULL;

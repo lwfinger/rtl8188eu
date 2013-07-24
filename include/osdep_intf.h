@@ -49,7 +49,7 @@ The protection mechanism is through the pending queue.
 	_mutex ioctl_mutex;
 	// when in USB, IO is through interrupt in/out endpoints
 	struct usb_device	*udev;
-	PURB	piorw_urb;
+	struct urb *	piorw_urb;
 	u8 io_irp_cnt;
 	u8 bio_irp_pending;
 	_sema io_retevt;

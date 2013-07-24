@@ -49,7 +49,7 @@ u8 sreset_get_wifi_status(_adapter *padapter)
 
 	u8 status = WIFI_STATUS_SUCCESS;
 	u32 val32 = 0;
-	_irqL irqL;
+	unsigned long irqL;
 	if (psrtpriv->silent_reset_inprogress == true)
         {
 		return status;

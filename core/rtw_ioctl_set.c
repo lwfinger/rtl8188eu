@@ -70,7 +70,7 @@ _func_exit_;
 u8 rtw_do_join(_adapter * padapter);
 u8 rtw_do_join(_adapter * padapter)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list	*plist, *phead;
 	u8* pibss = NULL;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -183,7 +183,7 @@ _func_exit_;
 
 u8 rtw_set_802_11_bssid(_adapter* padapter, u8 *bssid)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 status=_SUCCESS;
 	u32 cur_time = 0;
 
@@ -279,7 +279,7 @@ _func_exit_;
 
 u8 rtw_set_802_11_ssid(_adapter* padapter, struct ndis_802_11_ssid *ssid)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 status = _SUCCESS;
 	u32 cur_time = 0;
 
@@ -403,7 +403,7 @@ _func_exit_;
 u8 rtw_set_802_11_infrastructure_mode(_adapter* padapter,
 	enum ndis_802_11_network_infra networktype)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct	wlan_network	*cur_network = &pmlmepriv->cur_network;
 	enum ndis_802_11_network_infra* pold_state = &(cur_network->network.InfrastructureMode);
@@ -483,7 +483,7 @@ _func_exit_;
 
 u8 rtw_set_802_11_disassociate(_adapter *padapter)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct mlme_priv * pmlmepriv = &padapter->mlmepriv;
 
 _func_enter_;
@@ -509,7 +509,7 @@ _func_exit_;
 
 u8 rtw_set_802_11_bssid_list_scan(_adapter* padapter, struct ndis_802_11_ssid *pssid, int ssid_max_num)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct	mlme_priv		*pmlmepriv= &padapter->mlmepriv;
 	u8	res=true;
 
