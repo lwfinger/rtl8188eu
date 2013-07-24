@@ -371,7 +371,7 @@ struct mp_priv
 
 	u8 *pallocated_mp_xmitframe_buf;
 	u8 *pmp_xmtframe_buf;
-	_queue free_mp_xmitqueue;
+	struct __queue free_mp_xmitqueue;
 	u32 free_mp_xmitframe_cnt;
 
 	MPT_CONTEXT MptCtx;

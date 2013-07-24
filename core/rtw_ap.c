@@ -1212,7 +1212,7 @@ int rtw_acl_add_sta(_adapter *padapter, u8 *addr)
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
-	_queue	*pacl_node_q =&pacl_list->acl_node_q;
+	struct __queue *pacl_node_q =&pacl_list->acl_node_q;
 
 	DBG_88E("%s(acl_num=%d)=%pM\n", __func__, pacl_list->num, (addr));
 
@@ -1285,7 +1285,7 @@ int rtw_acl_remove_sta(_adapter *padapter, u8 *addr)
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
-	_queue	*pacl_node_q =&pacl_list->acl_node_q;
+	struct __queue *pacl_node_q =&pacl_list->acl_node_q;
 
 	DBG_88E("%s(acl_num=%d)=%pM\n", __func__, pacl_list->num, (addr));
 
@@ -2157,7 +2157,7 @@ void stop_ap_mode(_adapter *padapter)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
-	_queue	*pacl_node_q =&pacl_list->acl_node_q;
+	struct __queue *pacl_node_q =&pacl_list->acl_node_q;
 
 	pmlmepriv->update_bcn = false;
 	pmlmeext->bstart_bss = false;

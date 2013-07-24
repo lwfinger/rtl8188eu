@@ -74,7 +74,6 @@
 		spinlock_t lock;
 	};
 
-	typedef struct	__queue	_queue;
 	typedef struct	list_head	_list;
 	typedef	struct	net_device * _nic_hdl;
 
@@ -116,7 +115,7 @@ __inline static _list *get_next(_list	*list)
 	return list->next;
 }
 
-__inline static _list	*get_list_head(_queue	*queue)
+__inline static _list	*get_list_head(struct __queue *queue)
 {
 	return (&(queue->queue));
 }
@@ -381,8 +380,8 @@ extern void	_rtw_mutex_free(struct mutex *pmutex);
 extern void	_rtw_spinlock_init(spinlock_t *plock);
 extern void	_rtw_spinlock_free(spinlock_t *plock);
 
-extern void	_rtw_init_queue(_queue	*pqueue);
-extern u32	_rtw_queue_empty(_queue	*pqueue);
+extern void	_rtw_init_queue(struct __queue *pqueue);
+extern u32	_rtw_queue_empty(struct __queue *pqueue);
 extern u32	rtw_end_of_queue_search(_list *queue, _list *pelement);
 
 extern u32	rtw_get_current_time(void);

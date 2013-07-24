@@ -224,13 +224,13 @@ void	_rtw_spinlock_free(spinlock_t *plock)
 {
 }
 
-void	_rtw_init_queue(_queue	*pqueue)
+void	_rtw_init_queue(struct __queue *pqueue)
 {
 	_rtw_init_listhead(&(pqueue->queue));
 	_rtw_spinlock_init(&(pqueue->lock));
 }
 
-u32	  _rtw_queue_empty(_queue	*pqueue)
+u32	  _rtw_queue_empty(struct __queue *pqueue)
 {
 	return rtw_is_list_empty(&(pqueue->queue));
 }
