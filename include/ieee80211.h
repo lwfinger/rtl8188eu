@@ -147,7 +147,7 @@ extern u8 RSN_CIPHER_SUITE_WRAP[];
 extern u8 RSN_CIPHER_SUITE_CCMP[];
 extern u8 RSN_CIPHER_SUITE_WEP104[];
 
-typedef enum _RATR_TABLE_MODE{
+enum ratr_table_mode {
 	RATR_INX_WIRELESS_NGB = 0,	// BGN 40 Mhz 2SS 1SS
 	RATR_INX_WIRELESS_NG = 1,		// GN or N
 	RATR_INX_WIRELESS_NB = 2,		// BGN 20 Mhz 2SS 1SS  or BN
@@ -157,10 +157,9 @@ typedef enum _RATR_TABLE_MODE{
 	RATR_INX_WIRELESS_B = 6,
 	RATR_INX_WIRELESS_MC = 7,
 	RATR_INX_WIRELESS_AC_N = 8,
-}RATR_TABLE_MODE, *PRATR_TABLE_MODE;
+};
 
-enum NETWORK_TYPE
-{
+enum NETWORK_TYPE {
     WIRELESS_INVALID = 0,
     //Sub-Element
     WIRELESS_11B = BIT(0), // tx: cck only , rx: cck only, hw: cck
@@ -198,7 +197,7 @@ enum NETWORK_TYPE
 #define IsSupportedTxMCS(NetType) ((NetType) & (WIRELESS_11_24N|WIRELESS_11_5N) ? true : false)
 
 
-typedef struct ieee_param {
+struct ieee_param {
 	u32 cmd;
 	u8 sta_addr[ETH_ALEN];
 	union {
@@ -239,14 +238,14 @@ typedef struct ieee_param {
 #endif
 
 	} u;
-}ieee_param;
+};
 
 #ifdef CONFIG_AP_MODE
-typedef struct ieee_param_ex {
+struct ieee_param_ex {
 	u32 cmd;
 	u8 sta_addr[ETH_ALEN];
 	u8 data[0];
-}ieee_param_ex;
+};
 
 struct sta_data{
 	u16 aid;
@@ -961,12 +960,10 @@ static __inline int is_broadcast_mac_addr(const u8 *addr)
 #define CFG_IEEE80211_RESERVE_FCS (1<<0)
 #define CFG_IEEE80211_COMPUTE_FCS (1<<1)
 
-typedef struct tx_pending_t{
+struct tx_pending {
 	int frag;
 	struct ieee80211_txb *txb;
-}tx_pending_t;
-
-
+};
 
 #define MAXTID	16
 
@@ -1196,9 +1193,13 @@ struct rtw_ieee802_11_elems {
 	u8 vendor_ht_cap_len;
 };
 
-typedef enum { ParseOK = 0, ParseUnknown = 1, ParseFailed = -1 } ParseRes;
+enum parse_res {
+	ParseOK = 0,
+	ParseUnknown = 1,
+	ParseFailed = -1
+};
 
-ParseRes rtw_ieee802_11_parse_elems(u8 *start, uint len,
+enum parse_res rtw_ieee802_11_parse_elems(u8 *start, uint len,
 				struct rtw_ieee802_11_elems *elems,
 				int show_errors);
 
