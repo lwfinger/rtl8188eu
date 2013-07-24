@@ -287,7 +287,7 @@ s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms);
 void LPS_Enter(PADAPTER padapter);
 void LPS_Leave(PADAPTER padapter);
 
-u8 rtw_interface_ps_func(_adapter *padapter,HAL_INTF_PS_FUNC efunc_id,u8* val);
+u8 rtw_interface_ps_func(_adapter *padapter,enum hal_intf_ps_func efunc_id,u8* val);
 void rtw_set_ips_deny(_adapter *padapter, u32 ms);
 int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller);
 #define rtw_pwr_wakeup(adapter) _rtw_pwr_wakeup(adapter, RTW_PWR_STATE_CHK_INTERVAL, __func__)

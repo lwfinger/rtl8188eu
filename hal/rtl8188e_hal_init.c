@@ -2428,7 +2428,7 @@ static void rtl8188e_read_chip_version(PADAPTER padapter)
 
 static void rtl8188e_GetHalODMVar(
 	PADAPTER				Adapter,
-	HAL_ODM_VARIABLE		eVariable,
+	enum hal_odm_variable		eVariable,
 	void *					pValue1,
 	bool					bSet)
 {
@@ -2443,7 +2443,7 @@ static void rtl8188e_GetHalODMVar(
 }
 static void rtl8188e_SetHalODMVar(
 	PADAPTER				Adapter,
-	HAL_ODM_VARIABLE		eVariable,
+	enum hal_odm_variable		eVariable,
 	void *					pValue1,
 	bool					bSet)
 {

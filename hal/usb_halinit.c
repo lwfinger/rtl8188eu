@@ -2825,7 +2825,7 @@ _func_exit_;
 static u8
 GetHalDefVar8188EUsb(
 		PADAPTER				Adapter,
-		HAL_DEF_VARIABLE		eVariable,
+		enum hal_def_variable		eVariable,
 		void *					pValue
 	)
 {
@@ -2954,7 +2954,7 @@ GetHalDefVar8188EUsb(
 /*  */
 static u8 SetHalDefVar8188EUsb(
 		PADAPTER				Adapter,
-		HAL_DEF_VARIABLE		eVariable,
+		enum hal_def_variable		eVariable,
 		void *					pValue
 	)
 {
@@ -3226,7 +3226,7 @@ static void rtl8188eu_init_default_value(_adapter * padapter)
 		pHalData->odmpriv.RFCalibrateInfo.ThermalValue_HP[i] = 0;
 }
 
-static u8 rtl8188eu_ps_func(PADAPTER Adapter,HAL_INTF_PS_FUNC efunc_id, u8 *val)
+static u8 rtl8188eu_ps_func(PADAPTER Adapter,enum hal_intf_ps_func efunc_id, u8 *val)
 {
 	u8 bResult = true;
 	return bResult;

@@ -143,25 +143,25 @@ void rtw_hal_get_hwreg(_adapter *padapter, u8 variable, u8 *val)
 		padapter->HalFunc.GetHwRegHandler(padapter, variable, val);
 }
 
-u8 rtw_hal_set_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue)
+u8 rtw_hal_set_def_var(_adapter *padapter, enum hal_def_variable eVariable, void * pValue)
 {
 	if (padapter->HalFunc.SetHalDefVarHandler)
 		return padapter->HalFunc.SetHalDefVarHandler(padapter,eVariable,pValue);
 	return _FAIL;
 }
-u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue)
+u8 rtw_hal_get_def_var(_adapter *padapter, enum hal_def_variable eVariable, void * pValue)
 {
 	if (padapter->HalFunc.GetHalDefVarHandler)
 		return padapter->HalFunc.GetHalDefVarHandler(padapter,eVariable,pValue);
 	return _FAIL;
 }
 
-void rtw_hal_set_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet)
+void rtw_hal_set_odm_var(_adapter *padapter, enum hal_odm_variable eVariable, void * pValue1,bool bSet)
 {
 	if (padapter->HalFunc.SetHalODMVarHandler)
 		padapter->HalFunc.SetHalODMVarHandler(padapter,eVariable,pValue1,bSet);
 }
-void	rtw_hal_get_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet)
+void	rtw_hal_get_odm_var(_adapter *padapter, enum hal_odm_variable eVariable, void * pValue1,bool bSet)
 {
 	if (padapter->HalFunc.GetHalODMVarHandler)
 		padapter->HalFunc.GetHalODMVarHandler(padapter,eVariable,pValue1,bSet);
@@ -205,7 +205,7 @@ u32	rtw_hal_inirp_deinit(_adapter *padapter)
 
 }
 
-u8	rtw_hal_intf_ps_func(_adapter *padapter,HAL_INTF_PS_FUNC efunc_id, u8* val)
+u8	rtw_hal_intf_ps_func(_adapter *padapter,enum hal_intf_ps_func efunc_id, u8* val)
 {
 	if (padapter->HalFunc.interface_ps_func)
 		return padapter->HalFunc.interface_ps_func(padapter,efunc_id,val);

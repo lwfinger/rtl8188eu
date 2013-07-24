@@ -596,7 +596,7 @@ _func_enter_;
 _func_exit_;
 }
 
-u8 rtw_interface_ps_func(_adapter *padapter,HAL_INTF_PS_FUNC efunc_id,u8* val)
+u8 rtw_interface_ps_func(_adapter *padapter,enum hal_intf_ps_func efunc_id,u8* val)
 {
 	u8 bResult = true;
 	rtw_hal_intf_ps_func(padapter,efunc_id,val);
