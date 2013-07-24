@@ -69,8 +69,6 @@
 #include <linux/usb/ch9.h>
 #endif
 
-	typedef struct timer_list _timer;
-
 	struct	__queue	{
 		struct	list_head	queue;
 		spinlock_t lock;
@@ -187,19 +185,19 @@ __inline static void rtw_list_delete(_list *plist)
 	list_del_init(plist);
 }
 
-__inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
+__inline static void _init_timer(struct timer_list *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
 {
 	ptimer->function = pfunc;
 	ptimer->data = (unsigned long)cntx;
 	init_timer(ptimer);
 }
 
-__inline static void _set_timer(_timer *ptimer,u32 delay_time)
+__inline static void _set_timer(struct timer_list *ptimer,u32 delay_time)
 {
 	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));
 }
 
-__inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
+__inline static void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
 {
 	del_timer_sync(ptimer);
 	*bcancelled=  true;//true ==1; false==0
@@ -408,7 +406,7 @@ extern void	rtw_udelay_os(int us);
 
 extern void rtw_yield_os(void);
 
-__inline static unsigned char _cancel_timer_ex(_timer *ptimer)
+__inline static unsigned char _cancel_timer_ex(struct timer_list *ptimer)
 {
 	return del_timer_sync(ptimer);
 }

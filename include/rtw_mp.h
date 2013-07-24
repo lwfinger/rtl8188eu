@@ -200,7 +200,7 @@ typedef struct _MPT_CONTEXT
 	bool			bMptDrvUnload;
 
 	struct semaphore MPh2c_Sema;
-	_timer			MPh2c_timeout_timer;
+	struct timer_list MPh2c_timeout_timer;
 // Event used to sync H2c for BT control
 
 	bool		MptH2cRspEvent;

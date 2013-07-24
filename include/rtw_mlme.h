@@ -114,7 +114,7 @@ struct sitesurvey_ctrl {
 	u64	last_tx_pkts;
 	uint	last_rx_pkts;
 	sint	traffic_busy;
-	_timer	sitesurvey_ctrl_timer;
+	struct timer_list sitesurvey_ctrl_timer;
 };
 
 typedef struct _RT_LINK_DETECT_T{
@@ -184,13 +184,13 @@ struct scan_limit_info{
 
 struct wifidirect_info{
 	_adapter*				padapter;
-	_timer					find_phase_timer;
-	_timer					restore_p2p_state_timer;
+	struct timer_list find_phase_timer;
+	struct timer_list restore_p2p_state_timer;
 
 	//	Used to do the scanning. After confirming the peer is availalble, the driver transmits the P2P frame to peer.
-	_timer					pre_tx_scan_timer;
-	_timer					reset_ch_sitesurvey;
-	_timer					reset_ch_sitesurvey2;	//	Just for resetting the scan limit function by using p2p nego
+	struct timer_list pre_tx_scan_timer;
+	struct timer_list reset_ch_sitesurvey;
+	struct timer_list reset_ch_sitesurvey2;	//	Just for resetting the scan limit function by using p2p nego
 	struct tx_provdisc_req_info	tx_prov_disc_info;
 	struct rx_provdisc_req_info rx_prov_disc_info;
 	struct tx_invite_req_info	invitereq_info;
@@ -314,12 +314,12 @@ struct mlme_priv {
 
 	u32	scan_interval;
 
-	_timer assoc_timer;
+	struct timer_list assoc_timer;
 
 	uint assoc_by_bssid;
 	uint assoc_by_rssi;
 
-	_timer scan_to_timer; // driver itself handles scan_timeout status.
+	struct timer_list scan_to_timer; // driver itself handles scan_timeout status.
 	u32 scan_start_time; // used to evaluate the time spent in scanning
 
 	struct qos_priv qospriv;
@@ -340,7 +340,7 @@ struct mlme_priv {
 #endif
 
 	RT_LINK_DETECT_T	LinkDetectInfo;
-	_timer	dynamic_chk_timer; //dynamic/periodic check timer
+	struct timer_list dynamic_chk_timer; //dynamic/periodic check timer
 
 	u8	key_mask; //use for ips to set wep key after ips_leave
 	u8	acm_mask; // for wmm acm mask

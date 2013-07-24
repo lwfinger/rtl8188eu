@@ -231,7 +231,7 @@ struct pwrctrl_priv
 	u8		wowlan_wake_reason;
 	u32		wowlan_pattern_context[8][5];
 #endif // CONFIG_WOWLAN
-	_timer	pwr_state_check_timer;
+	struct timer_list pwr_state_check_timer;
 	int		pwr_state_check_interval;
 	u8		pwr_state_check_cnts;
 
@@ -259,7 +259,6 @@ struct pwrctrl_priv
 
 #define _rtw_set_pwr_state_check_timer(pwrctrlpriv, ms) \
 	do { \
-		/*DBG_88E("%s _rtw_set_pwr_state_check_timer(%p, %d)\n", __func__, (pwrctrlpriv), (ms));*/ \
 		_set_timer(&(pwrctrlpriv)->pwr_state_check_timer, (ms)); \
 	} while (0)
 

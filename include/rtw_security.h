@@ -144,11 +144,8 @@ struct security_priv
 
 	u8	binstallGrpkey;
 	u8	busetkipkey;
-	//_timer tkip_timer;
 	u8	bcheck_grpkey;
 	u8	bgrpkey_handshake;
-
-	//u8	packet_cnt;//unused, removed
 
 	s32	sw_encrypt;//from registry_priv
 	s32	sw_decrypt;//from registry_priv

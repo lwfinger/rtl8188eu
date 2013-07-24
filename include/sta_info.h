@@ -129,7 +129,7 @@ struct sta_info {
 	struct stainfo_stats sta_stats;
 
 	//for A-MPDU TX, ADDBA timeout check
-	_timer addba_retry_timer;
+	struct timer_list addba_retry_timer;
 
 	//for A-MPDU Rx reordering buffer control
 	struct recv_reorder_ctrl recvreorder_ctrl[16];

@@ -116,7 +116,7 @@ struct LED_871x {
 
 	u32					BlinkTimes; // Number of times to toggle led state for blinking.
 
-	_timer				BlinkTimer; // Timer object for led blinking.
+	struct timer_list BlinkTimer; // Timer object for led blinking.
 
 	u8					bSWLedCtrl;
 

@@ -61,7 +61,7 @@ struct recv_reorder_ctrl
 	u16 wend_b;
 	u8 wsize_b;
 	_queue pending_recvframe_queue;
-	_timer reordering_ctrl_timer;
+	struct timer_list reordering_ctrl_timer;
 };
 
 struct	stainfo_rxcache	{
@@ -234,7 +234,7 @@ struct recv_priv
 	s8 RxRssi[2];
 	int FalseAlmCnt_all;
 
-	_timer signal_stat_timer;
+	struct timer_list signal_stat_timer;
 	u32 signal_stat_sampling_interval;
 	struct signal_stat signal_qual_data;
 	struct signal_stat signal_strength_data;
