@@ -115,7 +115,7 @@ struct phy_info //ODM_PHY_INFO_T
 	u8		RxSNR[MAX_PATH_NUM_92CS];//per-path's SNR
 };
 
-struct rx_pkt_attrib	{
+struct rx_pkt_attrib {
 	u16	pkt_len;
 	u8	physt;
 	u8	drvinfo_sz;
@@ -246,18 +246,9 @@ struct sta_recv_priv {
 
 	spinlock_t lock;
 	sint	option;
-
-	//_queue	blk_strms[MAX_RX_NUMBLKS];
 	_queue defrag_q;	 //keeping the fragment frame until defrag
-
 	struct	stainfo_rxcache rxcache;
-
-	//uint	sta_rx_bytes;
-	//uint	sta_rx_pkts;
-	//uint	sta_rx_fail;
-
 };
-
 
 struct recv_buf
 {
@@ -283,7 +274,7 @@ struct recv_buf
 
 	u8  irp_pending;
 	int  transfer_len;
-	_pkt	*pskb;
+	struct sk_buff *pskb;
 	u8	reuse;
 };
 
@@ -508,7 +499,7 @@ __inline static union recv_frame *rxmem_to_recvframe(u8 *rxmem)
 
 }
 
-__inline static union recv_frame *pkt_to_recvframe(_pkt *pkt)
+__inline static union recv_frame *pkt_to_recvframe(struct sk_buff *pkt)
 {
 
 	u8 * buf_star;
@@ -518,7 +509,7 @@ __inline static union recv_frame *pkt_to_recvframe(_pkt *pkt)
 	return precv_frame;
 }
 
-__inline static u8 *pkt_to_recvmem(_pkt *pkt)
+__inline static u8 *pkt_to_recvmem(struct sk_buff *pkt)
 {
 	// return the rx_head
 
@@ -528,7 +519,7 @@ __inline static u8 *pkt_to_recvmem(_pkt *pkt)
 
 }
 
-__inline static u8 *pkt_to_recvdata(_pkt *pkt)
+__inline static u8 *pkt_to_recvdata(struct sk_buff *pkt)
 {
 	// return the rx_data
 

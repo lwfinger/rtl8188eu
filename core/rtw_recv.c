@@ -2064,7 +2064,7 @@ static int amsdu_to_msdu(_adapter *padapter, union recv_frame *prframe)
 	unsigned char *pdata;
 	struct rx_pkt_attrib *pattrib;
 	unsigned char *data_ptr;
-	_pkt *sub_skb,*subframes[MAX_SUBFRAME_COUNT];
+	struct sk_buff *sub_skb,*subframes[MAX_SUBFRAME_COUNT];
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 	_queue *pfree_recv_queue = &(precvpriv->free_recv_queue);
 	int	ret = _SUCCESS;

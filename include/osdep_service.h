@@ -74,7 +74,6 @@
 		spinlock_t lock;
 	};
 
-	typedef	struct sk_buff	_pkt;
 	typedef unsigned char	_buffer;
 
 	typedef struct	__queue	_queue;

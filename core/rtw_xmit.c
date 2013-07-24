@@ -545,7 +545,7 @@ static void set_qos(struct pkt_file *ppktfile, struct pkt_attrib *pattrib)
 	pattrib->subtype = WIFI_QOS_DATA_TYPE;
 }
 
-static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattrib)
+static s32 update_attrib(_adapter *padapter, struct sk_buff *pkt, struct pkt_attrib *pattrib)
 {
 	struct pkt_file pktfile;
 	struct sta_info *psta = NULL;
@@ -1156,7 +1156,7 @@ This sub-routine will perform all the following:
 6. apply sw-encrypt, if necessary.
 
 */
-s32 rtw_xmitframe_coalesce(_adapter *padapter, _pkt *pkt, struct xmit_frame *pxmitframe)
+s32 rtw_xmitframe_coalesce(_adapter *padapter, struct sk_buff *pkt, struct xmit_frame *pxmitframe)
 {
 	struct pkt_file pktfile;
 
@@ -1675,7 +1675,7 @@ s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitfram
 	unsigned long irqL;
 	_queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
 	_adapter *padapter = pxmitpriv->adapter;
-	_pkt *pndis_pkt = NULL;
+	struct sk_buff *pndis_pkt = NULL;
 
 _func_enter_;
 
@@ -2289,7 +2289,7 @@ static void do_queue_select(_adapter	*padapter, struct pkt_attrib *pattrib)
  *	0	success, hardware will handle this xmit frame(packet)
  *	<0	fail
  */
-s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
+s32 rtw_xmit(_adapter *padapter, struct sk_buff **ppkt)
 {
 #ifdef CONFIG_AP_MODE
 	unsigned long irqL0;
