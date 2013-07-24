@@ -88,12 +88,7 @@
 
 	typedef struct	__queue	_queue;
 	typedef struct	list_head	_list;
-	typedef	int	_OS_STATUS;
 	typedef	struct	net_device * _nic_hdl;
-
-	typedef void*		_thread_hdl_;
-	typedef int		thread_return;
-	typedef void*	thread_context;
 
 	#define thread_exit() complete_and_exit(NULL, 0)
 
@@ -439,7 +434,7 @@ __inline static void flush_signals_thread(void)
 		flush_signals(current);
 }
 
-__inline static _OS_STATUS res_to_status(sint res)
+__inline static int res_to_status(sint res)
 {
 	return res;
 }

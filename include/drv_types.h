@@ -295,10 +295,10 @@ struct _ADAPTER{
 	u8	init_adpt_in_progress;
 	u8	bHaltInProgress;
 
-	_thread_hdl_ cmdThread;
-	_thread_hdl_ evtThread;
-	_thread_hdl_ xmitThread;
-	_thread_hdl_ recvThread;
+	void *cmdThread;
+	void *evtThread;
+	void *xmitThread;
+	void *recvThread;
 	void (*intf_start)(_adapter * adapter);
 	void (*intf_stop)(_adapter * adapter);
 	_nic_hdl pnetdev;

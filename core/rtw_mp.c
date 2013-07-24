@@ -737,7 +737,7 @@ static struct xmit_frame *alloc_mp_xmitframe(struct xmit_priv *pxmitpriv)
 
 }
 
-static thread_return mp_xmit_packet_thread(thread_context context)
+static int mp_xmit_packet_thread(void *context)
 {
 	struct xmit_frame	*pxmitframe;
 	struct mp_tx		*pmptx;
