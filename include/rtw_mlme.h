@@ -154,7 +154,7 @@ struct tx_invite_resp_info{
 struct tx_provdisc_req_info{
 	u16					wps_config_method_request;	//	Used when sending the provisioning request frame
 	u16					peer_channel_num[2];		//	The channel number which the receiver stands.
-	NDIS_802_11_SSID	ssid;
+	struct ndis_802_11_ssid	ssid;
 	u8					peerDevAddr[ ETH_ALEN ];		//	Peer device address
 	u8					peerIFAddr[ ETH_ALEN ];		//	Peer interface address
 	u8					benable;					//	This provision discovery request frame is trigger to send or not
@@ -305,7 +305,7 @@ struct mlme_priv {
 	u8		*free_bss_buf;
 	u32	num_of_scanned;
 
-	NDIS_802_11_SSID	assoc_ssid;
+	struct ndis_802_11_ssid	assoc_ssid;
 	u8	assoc_bssid[6];
 
 	struct wlan_network	cur_network;
@@ -546,8 +546,8 @@ __inline static void set_scanned_network_val(struct mlme_priv *pmlmepriv, sint v
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
 }
 
-extern u16 rtw_get_capability(WLAN_BSSID_EX *bss);
-extern void rtw_update_scanned_network(_adapter *adapter, WLAN_BSSID_EX *target);
+extern u16 rtw_get_capability(struct wlan_bssid_ex *bss);
+extern void rtw_update_scanned_network(_adapter *adapter, struct wlan_bssid_ex *target);
 extern void rtw_disconnect_hdl_under_linked(_adapter* adapter, struct sta_info *psta, u8 free_assoc);
 extern void rtw_generate_random_ibss(u8 *pibss);
 extern struct wlan_network* rtw_find_network(_queue *scanned_queue, u8 *addr);
@@ -615,7 +615,7 @@ void rtw_issue_addbareq_cmd(_adapter *padapter, struct xmit_frame *pxmitframe);
 #endif
 
 int rtw_is_same_ibss(_adapter *adapter, struct wlan_network *pnetwork);
-int is_same_network(WLAN_BSSID_EX *src, WLAN_BSSID_EX *dst);
+int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst);
 
 void rtw_roaming(_adapter *padapter, struct wlan_network *tgt_network);
 void _rtw_roaming(_adapter *padapter, struct wlan_network *tgt_network);

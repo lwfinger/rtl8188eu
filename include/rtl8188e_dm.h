@@ -56,7 +56,7 @@ void rtl8188e_deinit_dm_priv(PADAPTER Adapter);
 void rtl8188e_InitHalDm(PADAPTER Adapter);
 void rtl8188e_HalDmWatchDog(PADAPTER Adapter);
 
-void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
+void	AntDivCompare8188E(PADAPTER Adapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
 u8 AntDivBeforeLink8188E(PADAPTER Adapter );
 
 #endif

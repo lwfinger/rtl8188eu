@@ -160,9 +160,9 @@ struct security_priv
 	u32 ndisauthtype;	// NDIS_802_11_AUTHENTICATION_MODE
 	u32 ndisencryptstatus;	// NDIS_802_11_ENCRYPTION_STATUS
 
-	WLAN_BSSID_EX sec_bss;  //for joinbss (h2c buffer) usage
+	struct wlan_bssid_ex sec_bss;  //for joinbss (h2c buffer) usage
 
-	NDIS_802_11_WEP ndiswep;
+	struct ndis_802_11_wep ndiswep;
 	u8 assoc_info[600];
 	u8 szofcapability[256]; //for wpa2 usage
 	u8 oidassociation[512]; //for wpa/wpa2 usage

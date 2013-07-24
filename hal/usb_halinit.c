@@ -3057,7 +3057,7 @@ static void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
+	struct wlan_bssid_ex	*cur_network = &(pmlmeinfo->network);
 
 	if (mac_id >= NUM_STA) /* CAM_SIZE */
 		return;

@@ -296,7 +296,7 @@ struct	ss_res
 	int	scan_mode;
 	u8 ssid_num;
 	u8 ch_num;
-	NDIS_802_11_SSID ssid[RTW_SSID_SCAN_AMOUNT];
+	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
 };
 
@@ -324,7 +324,7 @@ struct FW_Sta_Info {
 	u32	status;
 	u32	rx_pkt;
 	u32	retry;
-	NDIS_802_11_RATES_EX  SupportedRates;
+	unsigned char SupportedRates[NDIS_802_11_LENGTH_RATES_EX];
 };
 
 /*
@@ -387,7 +387,7 @@ struct mlme_ext_info {
 	struct WMM_para_element	WMM_param;
 	struct HT_caps_element	HT_caps;
 	struct HT_info_element		HT_info;
-	WLAN_BSSID_EX			network;//join network or bss_network, if in ap mode, it is the same to cur_network.network
+	struct wlan_bssid_ex			network;//join network or bss_network, if in ap mode, it is the same to cur_network.network
 	struct FW_Sta_Info		FW_sta_info[NUM_STA];
 };
 
@@ -529,12 +529,12 @@ void flush_all_cam_entry(_adapter *padapter);
 bool IsLegal5GChannel(PADAPTER Adapter, u8 channel);
 
 void site_survey(_adapter *padapter);
-u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, WLAN_BSSID_EX *bssid);
-void update_network(WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src, _adapter * padapter, bool update_ie);
+u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, struct wlan_bssid_ex *bssid);
+void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src, _adapter * padapter, bool update_ie);
 
 int get_bsstype(unsigned short capability);
-u8* get_my_bssid(WLAN_BSSID_EX *pnetwork);
-u16 get_beacon_interval(WLAN_BSSID_EX *bss);
+u8* get_my_bssid(struct wlan_bssid_ex *pnetwork);
+u16 get_beacon_interval(struct wlan_bssid_ex *bss);
 
 int is_client_associated_to_ap(_adapter *padapter);
 int is_client_associated_to_ibss(_adapter *padapter);
@@ -542,14 +542,14 @@ int is_IBSS_empty(_adapter *padapter);
 
 unsigned char check_assoc_AP(u8 *pframe, uint len);
 
-int WMM_param_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE);
+int WMM_param_handler(_adapter *padapter, struct ndis_802_11_var_ie *	pIE);
 void WMMOnAssocRsp(_adapter *padapter);
 
-void HT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
-void HT_info_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
+void HT_caps_handler(_adapter *padapter, struct ndis_802_11_var_ie * pIE);
+void HT_info_handler(_adapter *padapter, struct ndis_802_11_var_ie * pIE);
 void HTOnAssocRsp(_adapter *padapter);
 
-void ERP_IE_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
+void ERP_IE_handler(_adapter *padapter, struct ndis_802_11_var_ie * pIE);
 void VCS_update(_adapter *padapter, struct sta_info *psta);
 
 void update_beacon_info(_adapter *padapter, u8 *pframe, uint len, struct sta_info *psta);
@@ -606,8 +606,8 @@ void issue_probersp(_adapter *padapter, unsigned char *da, u8 is_valid_p2p_probe
 void issue_assocreq(_adapter *padapter);
 void issue_asocrsp(_adapter *padapter, unsigned short status, struct sta_info *pstat, int pkt_type);
 void issue_auth(_adapter *padapter, struct sta_info *psta, unsigned short status);
-void issue_probereq(_adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da);
-s32 issue_probereq_ex(_adapter *padapter, NDIS_802_11_SSID *pssid, u8* da, int try_cnt, int wait_ms);
+void issue_probereq(_adapter *padapter, struct ndis_802_11_ssid *pssid, u8 *da);
+s32 issue_probereq_ex(_adapter *padapter, struct ndis_802_11_ssid *pssid, u8* da, int try_cnt, int wait_ms);
 int issue_nulldata(_adapter *padapter, unsigned char *da, unsigned int power_mode, int try_cnt, int wait_ms);
 int issue_qos_nulldata(_adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms);
 int issue_deauth(_adapter *padapter, unsigned char *da, unsigned short reason);

@@ -93,7 +93,7 @@ struct registry_priv
 	u8	rfintfs;
 	u8	lbkmode;
 	u8	hci;
-	NDIS_802_11_SSID	ssid;
+	struct ndis_802_11_ssid	ssid;
 	u8	network_mode;	//infra, ad-hoc, auto
 	u8	channel;//ad-hoc support requirement
 	u8	wireless_mode;//A, B, G, auto
@@ -126,7 +126,7 @@ struct registry_priv
 	u8	uapsd_acvi_en;
 	u8	uapsd_acvo_en;
 
-	WLAN_BSSID_EX    dev_network;
+	struct wlan_bssid_ex    dev_network;
 
 #ifdef CONFIG_80211N_HT
 	u8	ht_enable;
@@ -175,8 +175,8 @@ struct registry_priv
 //For registry parameters
 #define RGTRY_OFT(field) ((ULONG)FIELD_OFFSET(struct registry_priv,field))
 #define RGTRY_SZ(field)   sizeof(((struct registry_priv*) 0)->field)
-#define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(WLAN_BSSID_EX,field))
-#define BSSID_SZ(field)   sizeof(((PWLAN_BSSID_EX) 0)->field)
+#define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(struct wlan_bssid_ex,field))
+#define BSSID_SZ(field)   sizeof(((Pstruct wlan_bssid_ex) 0)->field)
 
 #define MAX_CONTINUAL_URB_ERR 4
 

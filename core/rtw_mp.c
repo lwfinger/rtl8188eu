@@ -96,7 +96,7 @@ void write_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 val)
 
 static void _init_mp_priv_(struct mp_priv *pmp_priv)
 {
-	WLAN_BSSID_EX *pnetwork;
+	struct wlan_bssid_ex *pnetwork;
 
 	_rtw_memset(pmp_priv, 0, sizeof(struct mp_priv));
 
@@ -378,7 +378,7 @@ static void disable_dm(PADAPTER padapter)
 /* This function initializes the DUT to the MP test mode */
 s32 mp_start_test(PADAPTER padapter)
 {
-	WLAN_BSSID_EX bssid;
+	struct wlan_bssid_ex bssid;
 	struct sta_info *psta;
 	u32 length;
 	u8 val8;
@@ -424,8 +424,8 @@ s32 mp_start_test(PADAPTER padapter)
 
 	mpt_ProStartTest(padapter);
 
-	/* 3 1. initialize a new WLAN_BSSID_EX */
-/* 	_rtw_memset(&bssid, 0, sizeof(WLAN_BSSID_EX)); */
+	/* 3 1. initialize a new struct wlan_bssid_ex */
+/* 	_rtw_memset(&bssid, 0, sizeof(struct wlan_bssid_ex)); */
 	_rtw_memcpy(bssid.MacAddress, pmppriv->network_macaddr, ETH_ALEN);
 	bssid.Ssid.SsidLength = strlen("mp_pseudo_adhoc");
 	_rtw_memcpy(bssid.Ssid.Ssid, (u8*)"mp_pseudo_adhoc", bssid.Ssid.SsidLength);
@@ -433,7 +433,7 @@ s32 mp_start_test(PADAPTER padapter)
 	bssid.NetworkTypeInUse = Ndis802_11DS;
 	bssid.IELength = 0;
 
-	length = get_WLAN_BSSID_EX_sz(&bssid);
+	length = get_wlan_bssid_ex_sz(&bssid);
 	if (length % 4)
 		bssid.Length = ((length >> 2) + 1) << 2; /* round up to multiple of 4 bytes. */
 	else

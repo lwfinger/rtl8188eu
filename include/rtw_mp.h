@@ -357,21 +357,17 @@ struct mp_priv
 	u8 txpoweridx_b;
 	u8 rateidx;
 	u32 preamble;
-//	u8 modem;
 	u32 CrystalCap;
-//	u32 curr_crystalcap;
 
 	u16 antenna_tx;
 	u16 antenna_rx;
-//	u8 curr_rfpath;
 
 	u8 check_mp_pkt;
 
 	u8 bSetTxPower;
-//	uint ForcedDataRate;
 
 	struct wlan_network mp_network;
-	NDIS_802_11_MAC_ADDRESS network_macaddr;
+	unsigned char network_macaddr[ETH_ALEN];
 
 	u8 *pallocated_mp_xmitframe_buf;
 	u8 *pmp_xmtframe_buf;

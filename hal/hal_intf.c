@@ -357,7 +357,7 @@ u8	rtw_hal_antdiv_before_linked(_adapter *padapter)
 		return padapter->HalFunc.AntDivBeforeLinkHandler(padapter);
 	return false;
 }
-void	rtw_hal_antdiv_rssi_compared(_adapter *padapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src)
+void	rtw_hal_antdiv_rssi_compared(_adapter *padapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src)
 {
 	if (padapter->HalFunc.AntDivCompareHandler)
 		padapter->HalFunc.AntDivCompareHandler(padapter, dst, src);
