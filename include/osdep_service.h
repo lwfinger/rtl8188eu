@@ -74,8 +74,6 @@
 		spinlock_t lock;
 	};
 
-	typedef unsigned char	_buffer;
-
 	typedef struct	__queue	_queue;
 	typedef struct	list_head	_list;
 	typedef	struct	net_device * _nic_hdl;
