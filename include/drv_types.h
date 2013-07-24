@@ -205,7 +205,7 @@ struct dvobj_priv
 	int	ep_num[5]; //endpoint number
 	int	RegUsbSS;
 	_sema	usb_suspend_sema;
-	_mutex  usb_vendor_req_mutex;
+	struct mutex  usb_vendor_req_mutex;
 
 	u8 * usb_alloc_vendor_req_buf;
 	u8 * usb_vendor_req_buf;
@@ -332,7 +332,7 @@ struct _ADAPTER{
 #endif
 	_adapter *pbuddy_adapter;
 
-	_mutex *hw_init_mutex;
+	struct mutex *hw_init_mutex;
 
 	_lock					br_ext_lock;
 	struct nat25_network_db_entry	*nethash[NAT25_HASH_SIZE];

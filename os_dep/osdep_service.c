@@ -199,7 +199,7 @@ u32 _rtw_down_sema(_sema *sema)
 		return _SUCCESS;
 }
 
-void	_rtw_mutex_init(_mutex *pmutex)
+void	_rtw_mutex_init(struct mutex *pmutex)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 	mutex_init(pmutex);
@@ -208,7 +208,7 @@ void	_rtw_mutex_init(_mutex *pmutex)
 #endif
 }
 
-void	_rtw_mutex_free(_mutex *pmutex)
+void	_rtw_mutex_free(struct mutex *pmutex)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 	mutex_destroy(pmutex);

@@ -24,7 +24,7 @@
 #include <drv_types.h>
 
 struct sreset_priv {
-	_mutex	silentreset_mutex;
+	struct mutex	silentreset_mutex;
 	u8	silent_reset_inprogress;
 	u8	Wifi_Error_Status;
 	unsigned long last_tx_time;

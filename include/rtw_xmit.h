@@ -364,7 +364,7 @@ struct	xmit_priv	{
 
 	u16	nqos_ssn;
 	int	ack_tx;
-	_mutex ack_tx_mutex;
+	struct mutex ack_tx_mutex;
 	struct submit_ctx ack_tx_ops;
 };
 

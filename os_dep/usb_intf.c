@@ -130,7 +130,7 @@ struct rtw_usb_drv {
 	struct usb_driver usbdrv;
 	int drv_registered;
 
-	_mutex hw_init_mutex;
+	struct mutex hw_init_mutex;
 };
 
 static struct usb_device_id rtl8188e_usb_id_tbl[] ={

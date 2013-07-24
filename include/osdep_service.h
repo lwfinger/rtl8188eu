@@ -71,11 +71,6 @@
 
 	typedef struct	semaphore _sema;
 	typedef	spinlock_t	_lock;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
-	typedef struct mutex		_mutex;
-#else
-	typedef struct semaphore	_mutex;
-#endif
 	typedef struct timer_list _timer;
 
 	struct	__queue	{
@@ -168,7 +163,7 @@ __inline static void _exit_critical_bh(_lock *plock, unsigned long *pirqL)
 	spin_unlock_bh(plock);
 }
 
-__inline static int _enter_critical_mutex(_mutex *pmutex, unsigned long *pirqL)
+__inline static int _enter_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {
 	int ret = 0;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
@@ -180,7 +175,7 @@ __inline static int _enter_critical_mutex(_mutex *pmutex, unsigned long *pirqL)
 }
 
 
-__inline static void _exit_critical_mutex(_mutex *pmutex, unsigned long *pirqL)
+__inline static void _exit_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 		mutex_unlock(pmutex);
@@ -388,8 +383,8 @@ extern void	_rtw_init_sema(_sema *sema, int init_val);
 extern void	_rtw_free_sema(_sema	*sema);
 extern void	_rtw_up_sema(_sema	*sema);
 extern u32	_rtw_down_sema(_sema *sema);
-extern void	_rtw_mutex_init(_mutex *pmutex);
-extern void	_rtw_mutex_free(_mutex *pmutex);
+extern void	_rtw_mutex_init(struct mutex *pmutex);
+extern void	_rtw_mutex_free(struct mutex *pmutex);
 extern void	_rtw_spinlock_init(_lock *plock);
 extern void	_rtw_spinlock_free(_lock *plock);
 
