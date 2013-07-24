@@ -215,12 +215,12 @@ void	_rtw_mutex_free(struct mutex *pmutex)
 #endif
 }
 
-void	_rtw_spinlock_init(_lock *plock)
+void	_rtw_spinlock_init(spinlock_t *plock)
 {
 	spin_lock_init(plock);
 }
 
-void	_rtw_spinlock_free(_lock *plock)
+void	_rtw_spinlock_free(spinlock_t *plock)
 {
 }
 

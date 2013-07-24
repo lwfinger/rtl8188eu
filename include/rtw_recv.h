@@ -192,7 +192,7 @@ using enter_critical section to protect
 */
 struct recv_priv
 {
-	_lock	lock;
+	spinlock_t lock;
 	_queue	free_recv_queue;
 	_queue	recv_pending_queue;
 	_queue	uc_swdec_pending_queue;
@@ -244,7 +244,7 @@ struct recv_priv
 
 struct sta_recv_priv {
 
-	_lock	lock;
+	spinlock_t lock;
 	sint	option;
 
 	//_queue	blk_strms[MAX_RX_NUMBLKS];
@@ -263,7 +263,7 @@ struct recv_buf
 {
 	_list list;
 
-	_lock recvbuf_lock;
+	spinlock_t recvbuf_lock;
 
 	u32	ref_cnt;
 

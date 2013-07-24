@@ -281,8 +281,8 @@ struct tdls_info{
 	u8					cur_channel;
 	u8					candidate_ch;
 	u8					collect_pkt_num[MAX_CHANNEL_NUM];
-	_lock				cmd_lock;
-	_lock				hdl_lock;
+	spinlock_t cmd_lock;
+	spinlock_t hdl_lock;
 	u8					watchdog_count;
 	u8					dev_discovered;		//WFD_TDLS: for sigma test
 	u8					enable;
@@ -290,7 +290,7 @@ struct tdls_info{
 
 struct mlme_priv {
 
-	_lock	lock;
+	spinlock_t lock;
 	sint	fw_state;	//shall we protect this variable? maybe not necessarily...
 	u8 bScanInProcess;
 	u8	to_join; //flag
@@ -406,7 +406,7 @@ struct mlme_priv {
 	u32 p2p_probe_resp_ie_len;
 	u32 p2p_go_probe_resp_ie_len; //for GO
 	u32 p2p_assoc_req_ie_len;
-	_lock	bcn_update_lock;
+	spinlock_t bcn_update_lock;
 	u8		update_bcn;
 #endif //#if defined (CONFIG_AP_MODE)
 };

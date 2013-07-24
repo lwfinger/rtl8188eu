@@ -69,12 +69,11 @@
 #include <linux/usb/ch9.h>
 #endif
 
-	typedef	spinlock_t	_lock;
 	typedef struct timer_list _timer;
 
 	struct	__queue	{
 		struct	list_head	queue;
-		_lock	lock;
+		spinlock_t lock;
 	};
 
 	typedef	struct sk_buff	_pkt;
@@ -132,32 +131,32 @@ __inline static _list	*get_list_head(_queue	*queue)
         ((type *)((char *)(ptr)-(size_t)(&((type *)0)->member)))
 
 
-__inline static void _enter_critical(_lock *plock, unsigned long *pirqL)
+__inline static void _enter_critical(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
 }
 
-__inline static void _exit_critical(_lock *plock, unsigned long *pirqL)
+__inline static void _exit_critical(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static void _enter_critical_ex(_lock *plock, unsigned long *pirqL)
+__inline static void _enter_critical_ex(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
 }
 
-__inline static void _exit_critical_ex(_lock *plock, unsigned long *pirqL)
+__inline static void _exit_critical_ex(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static void _enter_critical_bh(_lock *plock, unsigned long *pirqL)
+__inline static void _enter_critical_bh(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_lock_bh(plock);
 }
 
-__inline static void _exit_critical_bh(_lock *plock, unsigned long *pirqL)
+__inline static void _exit_critical_bh(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_unlock_bh(plock);
 }
@@ -384,8 +383,8 @@ extern void	_rtw_up_sema(struct semaphore *sema);
 extern u32	_rtw_down_sema(struct semaphore *sema);
 extern void	_rtw_mutex_init(struct mutex *pmutex);
 extern void	_rtw_mutex_free(struct mutex *pmutex);
-extern void	_rtw_spinlock_init(_lock *plock);
-extern void	_rtw_spinlock_free(_lock *plock);
+extern void	_rtw_spinlock_init(spinlock_t *plock);
+extern void	_rtw_spinlock_free(spinlock_t *plock);
 
 extern void	_rtw_init_queue(_queue	*pqueue);
 extern u32	_rtw_queue_empty(_queue	*pqueue);

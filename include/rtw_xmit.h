@@ -253,7 +253,7 @@ struct tx_servq {
 
 struct sta_xmit_priv
 {
-	_lock	lock;
+	spinlock_t lock;
 	sint	option;
 	sint	apsd_setting;	//When bit mask is on, the associated edca queue supports APSD.
 
@@ -294,7 +294,7 @@ struct agg_pkt_info{
 
 struct	xmit_priv	{
 
-	_lock	lock;
+	spinlock_t lock;
 
 	struct semaphore xmit_sema;
 	struct semaphore terminate_xmitthread_sema;
