@@ -43,7 +43,7 @@ static int rtw_p2p_is_channel_list_ok( u8 desired_ch, u8* ch_list, u8 ch_cnt )
 static int is_any_client_associated( _adapter *padapter)
 {
 	unsigned long irqL;
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	int	intFound = false;
 
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -76,7 +76,7 @@ static int is_any_client_associated( _adapter *padapter)
 static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
 	unsigned long irqL;
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	u32 len=0;
 	u16 attr_len = 0;
 	u8 tmplen, *pdata_attr, *pstart, *pcur;
@@ -1074,7 +1074,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 				if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_DEVICE_ID, dev_addr, &attr_contentlen))
 				{
 					unsigned long irqL;
-					_list	*phead, *plist;
+					struct list_head *phead, *plist;
 
 					_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
 					phead = &pstapriv->asoc_list;
@@ -1091,13 +1091,9 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 							_rtw_memcmp(psta->dev_addr, dev_addr, ETH_ALEN))
 						{
 
-							/* _exit_critical_bh(&pstapriv->asoc_list_lock, &irqL); */
 							/* issue GO Discoverability Request */
 							issue_group_disc_req(pwdinfo, psta->hwaddr);
-							/* _enter_critical_bh(&pstapriv->asoc_list_lock, &irqL); */
-
 							status = P2P_STATUS_SUCCESS;
-
 							break;
 						}
 						else
@@ -1192,9 +1188,7 @@ static u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_conte
 		ch_cnt -= 1;
 		temp = *ch_content;
 		for ( i = 0 ; i < temp ; i++, j++ )
-		{
 			peer_ch_list[j] = *( ch_content + 1 + i );
-		}
 		ch_content += (temp + 1);
 		ch_cnt -= (temp + 1);
 		ch_no += temp ;

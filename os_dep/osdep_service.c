@@ -145,7 +145,7 @@ void _rtw_memset(void *pbuf, int c, u32 sz)
         memset(pbuf, c, sz);
 }
 
-void _rtw_init_listhead(_list *list)
+void _rtw_init_listhead(struct list_head *list)
 {
         INIT_LIST_HEAD(list);
 }
@@ -155,7 +155,7 @@ For the following list_xxx operations,
 caller must guarantee the atomic context.
 Otherwise, there will be racing condition.
 */
-u32	rtw_is_list_empty(_list *phead)
+u32	rtw_is_list_empty(struct list_head *phead)
 {
 	if (list_empty(phead))
 		return true;
@@ -163,12 +163,12 @@ u32	rtw_is_list_empty(_list *phead)
 		return false;
 }
 
-void rtw_list_insert_head(_list *plist, _list *phead)
+void rtw_list_insert_head(struct list_head *plist, struct list_head *phead)
 {
 	list_add(plist, phead);
 }
 
-void rtw_list_insert_tail(_list *plist, _list *phead)
+void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead)
 {
 	list_add_tail(plist, phead);
 }
@@ -235,7 +235,7 @@ u32	  _rtw_queue_empty(struct __queue *pqueue)
 	return rtw_is_list_empty(&(pqueue->queue));
 }
 
-u32 rtw_end_of_queue_search(_list *head, _list *plist)
+u32 rtw_end_of_queue_search(struct list_head *head, struct list_head *plist)
 {
 	if (head == plist)
 		return true;

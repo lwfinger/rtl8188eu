@@ -202,7 +202,7 @@ void rtw_mfree_all_stainfo(struct sta_priv *pstapriv );
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv )
 {
 	unsigned long	 irqL;
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	struct sta_info *psta = NULL;
 
 _func_enter_;
@@ -252,7 +252,7 @@ void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 {
 	unsigned long	irqL;
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	struct sta_info *psta = NULL;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	int	index;
@@ -296,7 +296,7 @@ struct	sta_info *rtw_alloc_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 {
 	unsigned long irqL, irqL2;
 	s32	index;
-	_list	*phash_list;
+	struct list_head *phash_list;
 	struct sta_info	*psta;
 	struct __queue *pfree_sta_queue;
 	struct recv_reorder_ctrl *preorder_ctrl;
@@ -446,7 +446,7 @@ _func_enter_;
 	for (i=0; i < 16 ; i++)
 	{
 		unsigned long irqL;
-		_list	*phead, *plist;
+		struct list_head *phead, *plist;
 		union recv_frame *prframe;
 		struct __queue *ppending_recvframe_queue;
 		struct __queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
@@ -533,7 +533,7 @@ _func_exit_;
 void rtw_free_all_stainfo(_adapter *padapter)
 {
 	unsigned long	 irqL;
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	s32	index;
 	struct sta_info *psta = NULL;
 	struct	sta_priv *pstapriv = &padapter->stapriv;
@@ -574,17 +574,11 @@ _func_exit_;
 /* any station allocated can be searched by hash list */
 struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 {
-
 	unsigned long	 irqL;
-
-	_list	*plist, *phead;
-
+	struct list_head *plist, *phead;
 	struct sta_info *psta = NULL;
-
 	u32	index;
-
 	u8 *addr;
-
 	u8 bc_addr[ETH_ALEN] = {0xff,0xff,0xff,0xff,0xff,0xff};
 
 _func_enter_;
@@ -593,13 +587,9 @@ _func_enter_;
 		return NULL;
 
 	if (IS_MCAST(hwaddr))
-	{
 		addr = bc_addr;
-	}
 	else
-	{
 		addr = hwaddr;
-	}
 
 	index = wifi_mac_hash(addr);
 
@@ -670,7 +660,7 @@ u8 rtw_access_ctrl(_adapter *padapter, u8 *mac_addr)
 	u8 res = true;
 #ifdef  CONFIG_AP_MODE
 	unsigned long irqL;
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	struct rtw_wlan_acl_node *paclnode;
 	u8 match = false;
 	struct sta_priv *pstapriv = &padapter->stapriv;

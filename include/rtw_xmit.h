@@ -207,14 +207,10 @@ void rtw_sctx_done(struct submit_ctx **sctx);
 
 struct xmit_buf
 {
-	_list	list;
-
+	struct list_head list;
 	_adapter *padapter;
-
 	u8 *pallocated_buf;
-
 	u8 *pbuf;
-
 	void *priv_data;
 
 	u16 ext_tag; // 0: Normal xmitbuf, 1: extension xmitbuf.
@@ -231,7 +227,7 @@ struct xmit_buf
 
 struct xmit_frame
 {
-	_list	list;
+	struct list_head list;
 	struct pkt_attrib attrib;
 	struct sk_buff *pkt;
 	int	frame_tag;
@@ -245,7 +241,7 @@ struct xmit_frame
 };
 
 struct tx_servq {
-	_list	tx_pending;
+	struct list_head tx_pending;
 	struct __queue sta_pending;
 	int qcnt;
 };
@@ -263,8 +259,8 @@ struct sta_xmit_priv
 	struct tx_servq	bk_q;			//priority == 1,2
 	struct tx_servq	vi_q;			//priority == 4,5
 	struct tx_servq	vo_q;			//priority == 6,7
-	_list	legacy_dz;
-	_list  apsd;
+	struct list_head legacy_dz;
+	struct list_head apsd;
 
 	u16 txseq_tid[16];
 };

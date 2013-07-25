@@ -74,7 +74,6 @@
 		spinlock_t lock;
 	};
 
-	typedef struct	list_head	_list;
 	typedef	struct	net_device * _nic_hdl;
 
 	#define thread_exit() complete_and_exit(NULL, 0)
@@ -110,12 +109,12 @@ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
 }
 #endif
 
-__inline static _list *get_next(_list	*list)
+__inline static struct list_head *get_next(struct list_head *list)
 {
 	return list->next;
 }
 
-__inline static _list	*get_list_head(struct __queue *queue)
+__inline static struct list_head *get_list_head(struct __queue *queue)
 {
 	return (&(queue->queue));
 }
@@ -176,7 +175,7 @@ __inline static void _exit_critical_mutex(struct mutex *pmutex, unsigned long *p
 #endif
 }
 
-__inline static void rtw_list_delete(_list *plist)
+__inline static void rtw_list_delete(struct list_head *plist)
 {
 	list_del_init(plist);
 }
@@ -365,11 +364,11 @@ extern void	_rtw_memcpy(void* dec, void* sour, u32 sz);
 extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
 extern void	_rtw_memset(void *pbuf, int c, u32 sz);
 
-extern void	_rtw_init_listhead(_list *list);
-extern u32	rtw_is_list_empty(_list *phead);
-extern void	rtw_list_insert_head(_list *plist, _list *phead);
-extern void	rtw_list_insert_tail(_list *plist, _list *phead);
-extern void	rtw_list_delete(_list *plist);
+extern void	_rtw_init_listhead(struct list_head *list);
+extern u32	rtw_is_list_empty(struct list_head *phead);
+extern void	rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
+extern void	rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
+extern void	rtw_list_delete(struct list_head *plist);
 
 extern void	_rtw_init_sema(struct semaphore *sema, int init_val);
 extern void	_rtw_free_sema(struct semaphore *sema);
@@ -382,7 +381,7 @@ extern void	_rtw_spinlock_free(spinlock_t *plock);
 
 extern void	_rtw_init_queue(struct __queue *pqueue);
 extern u32	_rtw_queue_empty(struct __queue *pqueue);
-extern u32	rtw_end_of_queue_search(_list *queue, _list *pelement);
+extern u32	rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
 
 extern u32	rtw_get_current_time(void);
 extern u32	rtw_systime_to_ms(u32 systime);

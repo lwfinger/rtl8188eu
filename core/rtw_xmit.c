@@ -1438,7 +1438,7 @@ struct xmit_buf *rtw_alloc_xmitbuf_ext(struct xmit_priv *pxmitpriv)
 {
 	unsigned long irqL;
 	struct xmit_buf *pxmitbuf =  NULL;
-	_list *plist, *phead;
+	struct list_head *plist, *phead;
 	struct __queue *pfree_queue = &pxmitpriv->free_xmit_extbuf_queue;
 
 _func_enter_;
@@ -1509,7 +1509,7 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 {
 	unsigned long irqL;
 	struct xmit_buf *pxmitbuf =  NULL;
-	_list *plist, *phead;
+	struct list_head *plist, *phead;
 	struct __queue *pfree_xmitbuf_queue = &pxmitpriv->free_xmitbuf_queue;
 
 _func_enter_;
@@ -1610,7 +1610,7 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)/* _queue *pf
 
 	unsigned long irqL;
 	struct xmit_frame *pxframe = NULL;
-	_list *plist, *phead;
+	struct list_head *plist, *phead;
 	struct __queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
 	_adapter *padapter = pxmitpriv->adapter;
 
@@ -1703,7 +1703,7 @@ _func_exit_;
 void rtw_free_xmitframe_queue(struct xmit_priv *pxmitpriv, struct __queue *pframequeue)
 {
 	unsigned long irqL;
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	struct	xmit_frame	*pxmitframe;
 
 _func_enter_;
@@ -1743,7 +1743,7 @@ s32 rtw_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit, struct tx_servq *ptxservq, struct __queue *pframe_queue)
 {
-	_list	*xmitframe_plist, *xmitframe_phead;
+	struct list_head *xmitframe_plist, *xmitframe_phead;
 	struct	xmit_frame	*pxmitframe=NULL;
 
 	xmitframe_phead = get_list_head(pframe_queue);
@@ -1771,7 +1771,7 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit_i, sint entry)
 {
 	unsigned long irqL0;
-	_list *sta_plist, *sta_phead;
+	struct list_head *sta_plist, *sta_phead;
 	struct hw_xmit *phwxmit;
 	struct tx_servq *ptxservq = NULL;
 	struct __queue *pframe_queue = NULL;
@@ -1954,22 +1954,12 @@ _func_enter_;
 
 	ptxservq = rtw_get_sta_pending(padapter, psta, pattrib->priority, (u8 *)(&ac_index));
 
-	/* _enter_critical(&pstapending->lock, &irqL0); */
-
-	if (rtw_is_list_empty(&ptxservq->tx_pending)) {
+	if (rtw_is_list_empty(&ptxservq->tx_pending))
 		rtw_list_insert_tail(&ptxservq->tx_pending, get_list_head(phwxmits[ac_index].sta_queue));
-	}
-
-	/* _enter_critical(&ptxservq->sta_pending.lock, &irqL1); */
 
 	rtw_list_insert_tail(&pxmitframe->list, get_list_head(&ptxservq->sta_pending));
 	ptxservq->qcnt++;
 	phwxmits[ac_index].accnt++;
-
-	/* _exit_critical(&ptxservq->sta_pending.lock, &irqL1); */
-
-	/* _exit_critical(&pstapending->lock, &irqL0); */
-
 exit:
 
 _func_exit_;
@@ -2054,12 +2044,7 @@ void rtw_init_hwxmits(struct hw_xmit *phwxmit, sint entry)
 	sint i;
 _func_enter_;
 	for (i = 0; i < entry; i++, phwxmit++)
-	{
-		/* _rtw_spinlock_init(&phwxmit->xmit_lock); */
-		/* _rtw_init_listhead(&phwxmit->pending); */
-		/* phwxmit->txcmdcnt = 0; */
 		phwxmit->accnt = 0;
-	}
 _func_exit_;
 }
 
@@ -2068,13 +2053,11 @@ static int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 	struct sk_buff *skb = *pskb;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	unsigned long irqL;
-	/* if (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true) */
 	{
 		int res, is_vlan_tag=0, i, do_nat25=1;
 		unsigned short vlan_hdr=0;
 		void *br_port = NULL;
 
-		/* mac_clone_handle_frame(priv, skb); */
 
 #if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
 		br_port = padapter->pnetdev->br_port;
@@ -2403,8 +2386,6 @@ sint xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *p
 		{
 			rtw_list_delete(&pxmitframe->list);
 
-			/* _enter_critical_bh(&psta->sleep_q.lock, &irqL); */
-
 			rtw_list_insert_tail(&pxmitframe->list, get_list_head(&psta->sleep_q));
 
 			psta->sleepq_len++;
@@ -2468,7 +2449,7 @@ sint xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *p
 
 static void dequeue_xmitframes_to_sleeping_queue(_adapter *padapter, struct sta_info *psta, struct __queue *pframequeue)
 {
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	u8	ac_index;
 	struct tx_servq	*ptxservq;
 	struct pkt_attrib	*pattrib;
@@ -2544,7 +2525,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 	unsigned long irqL;
 	u8 update_mask=0, wmmps_ac=0;
 	struct sta_info *psta_bmc;
-	_list	*xmitframe_plist, *xmitframe_phead;
+	struct list_head *xmitframe_plist, *xmitframe_phead;
 	struct xmit_frame *pxmitframe=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -2702,7 +2683,7 @@ void xmit_delivery_enabled_frames(_adapter *padapter, struct sta_info *psta)
 {
 	unsigned long irqL;
 	u8 wmmps_ac=0;
-	_list	*xmitframe_plist, *xmitframe_phead;
+	struct list_head *xmitframe_plist, *xmitframe_phead;
 	struct xmit_frame *pxmitframe=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 

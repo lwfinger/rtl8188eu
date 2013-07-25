@@ -71,7 +71,7 @@ u8 rtw_do_join(_adapter * padapter);
 u8 rtw_do_join(_adapter * padapter)
 {
 	unsigned long	irqL;
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	u8* pibss = NULL;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct __queue *queue	= &(pmlmepriv->scanned_queue);

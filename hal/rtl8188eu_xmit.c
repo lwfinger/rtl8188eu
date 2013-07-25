@@ -519,7 +519,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	struct tx_servq *ptxservq = NULL;
 
 	unsigned long irqL;
-	_list *xmitframe_plist = NULL, *xmitframe_phead = NULL;
+	struct list_head *xmitframe_plist = NULL, *xmitframe_phead = NULL;
 
 	u32	pbuf;	/*  next pkt address */
 	u32	pbuf_tail;	/*  last pkt tail */

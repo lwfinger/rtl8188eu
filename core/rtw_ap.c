@@ -281,7 +281,7 @@ static u8 chk_sta_is_alive(struct sta_info *psta)
 void	expire_timeout_chk(_adapter *padapter)
 {
 	unsigned long irqL;
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	u8 updated;
 	struct sta_info *psta=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -1206,7 +1206,7 @@ void rtw_set_macaddr_acl(_adapter *padapter, int mode)
 int rtw_acl_add_sta(_adapter *padapter, u8 *addr)
 {
 	unsigned long irqL;
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	u8 added = false;
 	int i, ret=0;
 	struct rtw_wlan_acl_node *paclnode;
@@ -1280,7 +1280,7 @@ int rtw_acl_add_sta(_adapter *padapter, u8 *addr)
 int rtw_acl_remove_sta(_adapter *padapter, u8 *addr)
 {
 	unsigned long irqL;
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	int i, ret=0;
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -1644,7 +1644,7 @@ void associated_clients_update(_adapter *padapter, u8 updated)
 	if (updated == true)
 	{
 		unsigned long irqL;
-		_list	*phead, *plist;
+		struct list_head *phead, *plist;
 		struct sta_info *psta=NULL;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -1965,7 +1965,7 @@ u8 ap_free_sta(_adapter *padapter, struct sta_info *psta, bool active, u16 reaso
 int rtw_ap_inform_ch_switch (_adapter *padapter, u8 new_ch, u8 ch_offset)
 {
 	unsigned long irqL;
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	int ret=0;
 	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -2002,7 +2002,7 @@ int rtw_ap_inform_ch_switch (_adapter *padapter, u8 new_ch, u8 ch_offset)
 int rtw_sta_flush(_adapter *padapter)
 {
 	unsigned long irqL;
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	int ret=0;
 	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -2150,7 +2150,7 @@ void start_ap_mode(_adapter *padapter)
 void stop_ap_mode(_adapter *padapter)
 {
 	unsigned long irqL;
-	_list	*phead, *plist;
+	struct list_head *phead, *plist;
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_info *psta=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
