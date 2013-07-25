@@ -66,7 +66,7 @@ struct cmd_priv {
 };
 
 struct	evt_priv {
-	_workitem c2h_wk;
+	struct work_struct c2h_wk;
 	bool c2h_wk_alive;
 	struct rtw_cbuf *c2h_queue;
 	#define C2H_QUEUE_MAX_LEN 10

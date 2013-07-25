@@ -125,10 +125,7 @@ struct LED_871x {
 	u8					bLedLinkBlinkInProgress;
 	u8					bLedStartToLinkBlinkInProgress;
 	u8					bLedScanBlinkInProgress;
-
-	#if LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0)
-	_workitem			BlinkWorkItem; // Workitem used by BlinkTimer to manipulate H/W to blink LED.
-	#endif
+	struct work_struct BlinkWorkItem; // Workitem used by BlinkTimer to manipulate H/W to blink LED.
 };
 
 #define IS_LED_WPS_BLINKING(_LED_871x)	(((struct LED_871x *)_LED_871x)->CurrLedState==LED_BLINK_WPS \

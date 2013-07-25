@@ -185,7 +185,7 @@ struct pwrctrl_priv
 	u8	bcn_ant_mode;
 
 	u32	alives;
-	_workitem cpwm_event;
+	struct work_struct cpwm_event;
 	u8	bpower_saving;
 
 	u8	b_hw_radio_off;

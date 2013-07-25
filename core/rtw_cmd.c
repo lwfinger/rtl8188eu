@@ -81,7 +81,7 @@ _func_exit_;
 
 }
 
-static void c2h_wk_callback(_workitem *work);
+static void c2h_wk_callback(struct work_struct *work);
 
 sint _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 {
@@ -2258,7 +2258,7 @@ exit:
 	return ret;
 }
 
-static void c2h_wk_callback(_workitem *work)
+static void c2h_wk_callback(struct work_struct *work)
 {
 	struct evt_priv *evtpriv = container_of(work, struct evt_priv, c2h_wk);
 	_adapter *adapter = container_of(evtpriv, _adapter, evtpriv);
