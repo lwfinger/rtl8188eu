@@ -74,8 +74,6 @@
 		spinlock_t lock;
 	};
 
-	typedef	struct	net_device * _nic_hdl;
-
 	#define thread_exit() complete_and_exit(NULL, 0)
 
 	typedef void timer_hdl_return;
@@ -180,7 +178,7 @@ __inline static void rtw_list_delete(struct list_head *plist)
 	list_del_init(plist);
 }
 
-__inline static void _init_timer(struct timer_list *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
+__inline static void _init_timer(struct timer_list *ptimer,struct  net_device *nic_hdl,void *pfunc,void* cntx)
 {
 	ptimer->function = pfunc;
 	ptimer->data = (unsigned long)cntx;

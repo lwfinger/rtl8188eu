@@ -46,7 +46,7 @@ struct sta_xmit_priv;
 struct xmit_frame;
 struct xmit_buf;
 
-extern int rtw_xmit_entry(struct sk_buff *pkt, _nic_hdl pnetdev);
+extern int rtw_xmit_entry(struct sk_buff *pkt, struct  net_device *pnetdev);
 
 void rtw_os_xmit_schedule(_adapter *padapter);
 

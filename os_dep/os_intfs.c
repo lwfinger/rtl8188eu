@@ -576,7 +576,7 @@ void rtw_proc_remove_one(struct net_device *dev)
 }
 #endif
 
-static uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev)
+static uint loadparam( _adapter *padapter,  struct  net_device *pnetdev)
 {
 
 	uint status = _SUCCESS;

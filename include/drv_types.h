@@ -301,11 +301,11 @@ struct _ADAPTER{
 	void *recvThread;
 	void (*intf_start)(_adapter * adapter);
 	void (*intf_stop)(_adapter * adapter);
-	_nic_hdl pnetdev;
+	struct  net_device *pnetdev;
 
 	// used by rtw_rereg_nd_name related function
 	struct rereg_nd_name_data {
-		_nic_hdl old_pnetdev;
+		struct  net_device *old_pnetdev;
 		char old_ifname[IFNAMSIZ];
 		u8 old_ips_mode;
 		u8 old_bRegUseLed;
