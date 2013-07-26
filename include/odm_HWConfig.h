@@ -150,20 +150,20 @@ typedef struct _Phy_Status_Rpt_8195
 
 void
 odm_Init_RSSIForDM(
-		PDM_ODM_T	pDM_Odm
+		struct odm_dm_struct *pDM_Odm
 	);
 
 void
 ODM_PhyStatusQuery(
-		PDM_ODM_T					pDM_Odm,
-			PODM_PHY_INFO_T			pPhyInfo,
+		struct odm_dm_struct *				pDM_Odm,
+			struct odm_phy_status_info *pPhyInfo,
 			pu1Byte						pPhyStatus,
-			PODM_PACKET_INFO_T			pPktinfo
+			struct odm_per_pkt_info *pPktinfo
 	);
 
 void
 ODM_MacStatusQuery(
-		PDM_ODM_T					pDM_Odm,
+		struct odm_dm_struct *				pDM_Odm,
 			pu1Byte						pMacStatus,
 			u1Byte						MacID,
 			bool						bPacketMatchBSSID,
@@ -173,20 +173,20 @@ ODM_MacStatusQuery(
 
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
-		PDM_ODM_T	      pDM_Odm,
-		ODM_RF_RADIO_PATH_E	Content,
-		ODM_RF_RADIO_PATH_E	eRFPath
+		struct odm_dm_struct *      pDM_Odm,
+		enum ODM_RF_RADIO_PATH	Content,
+		enum ODM_RF_RADIO_PATH	eRFPath
 	);
 
 HAL_STATUS
 ODM_ConfigBBWithHeaderFile(
-		PDM_ODM_T				pDM_Odm,
-		ODM_BB_Config_Type		ConfigType
+		struct odm_dm_struct *			pDM_Odm,
+		enum odm_bb_config_type		ConfigType
     );
 
 HAL_STATUS
 ODM_ConfigMACWithHeaderFile(
-		PDM_ODM_T	pDM_Odm
+		struct odm_dm_struct *pDM_Odm
     );
 
 #endif

@@ -132,7 +132,7 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 	u8	cut_ver,fab_ver;
 
 	/*  */
@@ -187,7 +187,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 	struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
 	struct pwrctrl_priv *pwrctrlpriv = &Adapter->pwrctrlpriv;
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	int i;
 
@@ -238,7 +238,7 @@ rtl8188e_InitHalDm(
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 	u8	i;
 
 	dm_InitGPIOSetting(Adapter);
@@ -264,7 +264,7 @@ rtl8188e_HalDmWatchDog(
 	u8 hw_init_completed = false;
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 
 	_func_enter_;
 
@@ -326,7 +326,7 @@ void rtl8188e_init_dm_priv(PADAPTER Adapter)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
+	struct odm_dm_struct *	podmpriv = &pHalData->odmpriv;
 	_rtw_memset(pdmpriv, 0, sizeof(struct dm_priv));
 	Init_ODM_ComInfo_88E(Adapter);
 	ODM_InitDebugSetting(podmpriv);
@@ -336,7 +336,7 @@ void rtl8188e_deinit_dm_priv(PADAPTER Adapter)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
+	struct odm_dm_struct *	podmpriv = &pHalData->odmpriv;
 }
 
 /*  Add new function to reset the state of antenna diversity before link. */
@@ -360,8 +360,8 @@ u8 AntDivBeforeLink8188E(PADAPTER Adapter )
 {
 
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
-	PDM_ODM_T	pDM_Odm =&pHalData->odmpriv;
-	SWAT_T		*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
+	struct odm_dm_struct *pDM_Odm =&pHalData->odmpriv;
+	struct sw_ant_switch *pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 
 	/*  Condition that does not need to use antenna diversity. */

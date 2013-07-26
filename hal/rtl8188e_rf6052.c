@@ -615,11 +615,11 @@ phy_RF6052_Config_ParaFile(
 		/*----Initialize RF fom connfiguration file----*/
 		switch (eRFPath) {
 		case RF_PATH_A:
-			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
+			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(enum ODM_RF_RADIO_PATH)eRFPath, (enum ODM_RF_RADIO_PATH)eRFPath))
 				rtStatus= _FAIL;
 			break;
 		case RF_PATH_B:
-			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
+		if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(enum ODM_RF_RADIO_PATH)eRFPath, (enum ODM_RF_RADIO_PATH)eRFPath))
 				rtStatus= _FAIL;
 			break;
 		case RF_PATH_C:

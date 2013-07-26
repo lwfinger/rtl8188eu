@@ -18,7 +18,6 @@
 *
 ******************************************************************************/
 
-#if (RTL8188E_SUPPORT == 1)
 #ifndef __INC_MAC_8188E_HW_IMG_H
 #define __INC_MAC_8188E_HW_IMG_H
 
@@ -28,10 +27,6 @@
 *                           MAC_REG.TXT
 ******************************************************************************/
 
-HAL_STATUS
-ODM_ReadAndConfig_MAC_REG_8188E(
-	PDM_ODM_T  pDM_Odm
-);
+HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E( struct odm_dm_struct *pDM_Odm);
 
-#endif
 #endif // end of HWIMG_SUPPORT

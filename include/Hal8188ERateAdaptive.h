@@ -40,40 +40,40 @@ Major Change History:
 
 void
 ODM_RASupport_Init(
-		PDM_ODM_T	pDM_Odm
+		struct odm_dm_struct *pDM_Odm
 	);
 
 int
 ODM_RAInfo_Init_all(
-	PDM_ODM_T		pDM_Odm
+	struct odm_dm_struct *	pDM_Odm
 	);
 
 int
 ODM_RAInfo_Init(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	);
 
 u1Byte
 ODM_RA_GetShortGI_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	);
 
 u1Byte
 ODM_RA_GetDecisionRate_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	);
 
 u1Byte
 ODM_RA_GetHwPwrStatus_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	);
 void
 ODM_RA_UpdateRateInfo_8188E(
-	PDM_ODM_T pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 	u1Byte MacID,
 	u1Byte RateID,
 	u4Byte RateMask,
@@ -82,14 +82,14 @@ ODM_RA_UpdateRateInfo_8188E(
 
 void
 ODM_RA_SetRSSI_8188E(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		u1Byte			MacID,
 		u1Byte			Rssi
 	);
 
 void
 ODM_RA_TxRPT2Handle_8188E(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		pu1Byte			TxRPT_Buf,
 		u2Byte			TxRPT_Len,
 		u4Byte			MacIDValidEntry0,
@@ -99,7 +99,7 @@ ODM_RA_TxRPT2Handle_8188E(
 
 void
 ODM_RA_Set_TxRPT_Time(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		u2Byte			minRptTime
 	);
 #endif

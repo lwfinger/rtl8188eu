@@ -2433,7 +2433,7 @@ static void rtl8188e_GetHalODMVar(
 	bool					bSet)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	PDM_ODM_T podmpriv = &pHalData->odmpriv;
+	struct odm_dm_struct *podmpriv = &pHalData->odmpriv;
 	switch (eVariable){
 		case HAL_ODM_STA_INFO:
 			break;
@@ -2448,7 +2448,7 @@ static void rtl8188e_SetHalODMVar(
 	bool					bSet)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	PDM_ODM_T podmpriv = &pHalData->odmpriv;
+	struct odm_dm_struct *podmpriv = &pHalData->odmpriv;
 	switch (eVariable){
 		case HAL_ODM_STA_INFO:
 			{

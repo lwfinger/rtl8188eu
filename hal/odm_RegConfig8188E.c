@@ -24,10 +24,10 @@
 
 void
 odm_ConfigRFReg_8188E(
-		PDM_ODM_T				pDM_Odm,
+		struct odm_dm_struct *			pDM_Odm,
 		u4Byte					Addr,
 		u4Byte					Data,
-	ODM_RF_RADIO_PATH_E     RF_PATH,
+	enum ODM_RF_RADIO_PATH     RF_PATH,
 		u4Byte				    RegAddr
 	)
 {
@@ -66,7 +66,7 @@ odm_ConfigRFReg_8188E(
 
 void
 odm_ConfigRF_RadioA_8188E(
-		PDM_ODM_T				pDM_Odm,
+		struct odm_dm_struct *			pDM_Odm,
 		u4Byte					Addr,
 		u4Byte					Data
 	)
@@ -81,7 +81,7 @@ odm_ConfigRF_RadioA_8188E(
 
 void
 odm_ConfigRF_RadioB_8188E(
-		PDM_ODM_T				pDM_Odm,
+		struct odm_dm_struct *			pDM_Odm,
 		u4Byte					Addr,
 		u4Byte					Data
 	)
@@ -97,7 +97,7 @@ odm_ConfigRF_RadioB_8188E(
 
 void
 odm_ConfigMAC_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u4Byte		Addr,
 		u1Byte		Data
 	)
@@ -108,7 +108,7 @@ odm_ConfigMAC_8188E(
 
 void
 odm_ConfigBB_AGC_8188E(
-    	PDM_ODM_T	pDM_Odm,
+    	struct odm_dm_struct *pDM_Odm,
     	u4Byte		Addr,
     	u4Byte		Bitmask,
     	u4Byte		Data
@@ -123,7 +123,7 @@ odm_ConfigBB_AGC_8188E(
 
 void
 odm_ConfigBB_PHY_REG_PG_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
     	u4Byte		Addr,
     	u4Byte		Bitmask,
     	u4Byte		Data
@@ -155,7 +155,7 @@ odm_ConfigBB_PHY_REG_PG_8188E(
 
 void
 odm_ConfigBB_PHY_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
     	u4Byte		Addr,
     	u4Byte		Bitmask,
     	u4Byte		Data

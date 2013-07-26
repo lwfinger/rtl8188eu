@@ -191,7 +191,7 @@ static u4Byte Array_AGC_TAB_1T_8188E[] = {
 
 HAL_STATUS
 ODM_ReadAndConfig_AGC_TAB_1T_8188E(
-	PDM_ODM_T  pDM_Odm
+	struct odm_dm_struct * pDM_Odm
 	)
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
@@ -493,7 +493,7 @@ static u4Byte Array_PHY_REG_1T_8188E[] = {
 
 HAL_STATUS
 ODM_ReadAndConfig_PHY_REG_1T_8188E(
-	PDM_ODM_T  pDM_Odm
+	struct odm_dm_struct * pDM_Odm
 	)
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
@@ -742,7 +742,7 @@ static u4Byte Array_PHY_REG_PG_8188E[] = {
 
 void
 ODM_ReadAndConfig_PHY_REG_PG_8188E(
-	PDM_ODM_T  pDM_Odm
+	struct odm_dm_struct * pDM_Odm
 	)
 {
 	u4Byte     hex = 0;

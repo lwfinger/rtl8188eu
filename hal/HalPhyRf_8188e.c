@@ -53,7 +53,7 @@
  *---------------------------------------------------------------------------*/
 void
 ODM_TxPwrTrackAdjust88E(
-	PDM_ODM_T	pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 	u1Byte		Type,				/*  0 = OFDM, 1 = CCK */
 	pu1Byte		pDirection,			/*  1 = +(increase) 2 = -(decrease) */
 	pu4Byte		pOutWriteVal		/*  Tx tracking CCK/OFDM BB swing index adjust */
@@ -132,7 +132,7 @@ ODM_TxPwrTrackAdjust88E(
  *---------------------------------------------------------------------------*/
 static void
 odm_TxPwrTrackSetPwr88E(
-	PDM_ODM_T	pDM_Odm
+	struct odm_dm_struct *pDM_Odm
 	)
 {
 	if (pDM_Odm->BbSwingFlagOfdm == true || pDM_Odm->BbSwingFlagCck == true)
@@ -181,7 +181,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 					12,	14,	16,	18,	20,	22,
 					25,	25,	25},
 					};
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	/*  2012/04/25 MH Add for tx power tracking to set tx power in tx agc for 88E. */
 	odm_TxPwrTrackSetPwr88E(pDM_Odm);
@@ -554,7 +554,7 @@ phy_PathA_IQK_8188E(
 	u4Byte regEAC, regE94, regE9C, regEA4;
 	u1Byte result = 0x00;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Path A IQK!\n"));
 
     /* 1 Tx IQK */
@@ -607,7 +607,7 @@ phy_PathA_RxIQK(
 	u4Byte regEAC, regE94, regE9C, regEA4, u4tmp;
 	u1Byte result = 0x00;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Path A Rx IQK!\n"));
 
 	/* 1 Get TXIMR setting */
@@ -740,7 +740,7 @@ phy_PathB_IQK_8188E(
 	u4Byte regEAC, regEB4, regEBC, regEC4, regECC;
 	u1Byte	result = 0x00;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Path B IQK!\n"));
 
 	/* One shot, path B LOK & IQK */
@@ -796,7 +796,7 @@ _PHY_PathAFillIQKMatrix(
 	u4Byte	Oldval_0, X, TX0_A, reg;
 	s4Byte	Y, TX0_C;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Path A IQ Calibration %s !\n",(bIQKOK)?"Success":"Failed"));
 
 	if (final_candidate == 0xFF)
@@ -856,7 +856,7 @@ _PHY_PathBFillIQKMatrix(
 	u4Byte	Oldval_1, X, TX1_A, reg;
 	s4Byte	Y, TX1_C;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Path B IQ Calibration %s !\n",(bIQKOK)?"Success":"Failed"));
 
 	if (final_candidate == 0xFF)
@@ -921,7 +921,7 @@ _PHY_SaveADDARegisters(
 {
 	u4Byte	i;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	if (ODM_CheckPowerStatus(pAdapter) == false)
 		return;
@@ -941,7 +941,7 @@ static void _PHY_SaveMACRegisters(
 {
 	u4Byte	i;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Save MAC parameters.\n"));
 	for ( i = 0 ; i < (IQK_MAC_REG_NUM - 1); i++){
 		MACBackup[i] = ODM_Read1Byte(pDM_Odm, MACReg[i]);
@@ -961,7 +961,7 @@ _PHY_ReloadADDARegisters(
 {
 	u4Byte	i;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Reload ADDA power saving parameters !\n"));
 	for (i = 0 ; i < RegiesterNum; i++)
@@ -979,7 +979,7 @@ _PHY_ReloadMACRegisters(
 {
 	u4Byte	i;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Reload MAC parameters !\n"));
 	for (i = 0 ; i < (IQK_MAC_REG_NUM - 1); i++){
@@ -1000,7 +1000,7 @@ _PHY_PathADDAOn(
 	u4Byte	pathOn;
 	u4Byte	i;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("ADDA ON.\n"));
 
 	pathOn = isPathAOn ? 0x04db25a4 : 0x0b1b25a4;
@@ -1027,7 +1027,7 @@ _PHY_MACSettingCalibration(
 {
 	u4Byte	i = 0;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("MAC settings for Calibration.\n"));
 
@@ -1046,7 +1046,7 @@ _PHY_PathAStandBy(
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Path-A standby mode!\n"));
 
@@ -1062,7 +1062,7 @@ static void _PHY_PIModeSwitch(
 {
 	u4Byte	mode;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("BB Switch to %s mode!\n", (PIMode ? "PI" : "SI")));
 
@@ -1080,7 +1080,7 @@ static bool phy_SimularityCompare_8188E(
 {
 	u4Byte		i, j, diff, SimularityBitMap, bound = 0;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	u1Byte		final_candidate[2] = {0xFF, 0xFF};	/* for path A and path B */
 	bool		bResult = true;
 	bool		is2T;
@@ -1199,7 +1199,7 @@ static void phy_IQCalibrate_8188E(
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	u4Byte			i;
 	u1Byte			PathAOK, PathBOK;
 	u4Byte			ADDA_REG[IQK_ADDA_REG_NUM] = {
@@ -1387,7 +1387,7 @@ static void phy_LCCalibrate_8188E(
 	u1Byte	tmpReg;
 	u4Byte	RF_Amode=0, RF_Bmode=0, LC_Cal;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	/* Check continuous TX and Packet TX */
 	tmpReg = ODM_Read1Byte(pDM_Odm, 0xd03);
@@ -1454,7 +1454,7 @@ static void phy_APCalibrate_8188E(
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 	u4Byte			regD[PATH_NUM];
 	u4Byte			tmpReg, index, offset,  apkbound;
 	u1Byte			path, i, pathbound = PATH_NUM;
@@ -1887,7 +1887,7 @@ PHY_IQCalibrate_8188E(
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	#if (MP_DRIVER == 1)
 		PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
@@ -2078,7 +2078,7 @@ PHY_LCCalibrate_8188E(
 
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	#if (MP_DRIVER == 1)
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
@@ -2136,7 +2136,7 @@ PHY_APCalibrate_8188E(
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 #if DISABLE_BB_RF
 	return;
@@ -2168,7 +2168,7 @@ static void phy_SetRFPathSwitch_8188E(
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	if (pAdapter->hw_init_completed == false)
 	{
@@ -2200,7 +2200,7 @@ void PHY_SetRFPathSwitch_8188E(
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
+	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 #if DISABLE_BB_RF
 	return;

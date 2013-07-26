@@ -83,49 +83,49 @@ typedef void (*RT_WORKITEM_CALL_BACK)(void * pContext);
 // =========== EXtern Function Prototype
 //
 
-u1Byte ODM_Read1Byte(PDM_ODM_T pDM_Odm, u4Byte RegAddr);
+u1Byte ODM_Read1Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr);
 
-u2Byte ODM_Read2Byte(PDM_ODM_T pDM_Odm, u4Byte RegAddr);
+u2Byte ODM_Read2Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr);
 
-u4Byte ODM_Read4Byte(PDM_ODM_T pDM_Odm, u4Byte RegAddr);
+u4Byte ODM_Read4Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr);
 
-void ODM_Write1Byte(PDM_ODM_T pDM_Odm, u4Byte RegAddr, u1Byte Data);
+void ODM_Write1Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u1Byte Data);
 
-void ODM_Write2Byte(PDM_ODM_T pDM_Odm, u4Byte RegAddr, u2Byte Data);
+void ODM_Write2Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u2Byte Data);
 
-void ODM_Write4Byte(PDM_ODM_T pDM_Odm, u4Byte RegAddr, u4Byte Data);
+void ODM_Write4Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte Data);
 
-void ODM_SetMACReg(PDM_ODM_T pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
+void ODM_SetMACReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
 
-u4Byte ODM_GetMACReg(PDM_ODM_T pDM_Odm, u4Byte RegAddr, u4Byte BitMask);
+u4Byte ODM_GetMACReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask);
 
-void ODM_SetBBReg(PDM_ODM_T pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
+void ODM_SetBBReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
 
-u4Byte ODM_GetBBReg(PDM_ODM_T pDM_Odm, u4Byte RegAddr, u4Byte BitMask);
+u4Byte ODM_GetBBReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask);
 
-void ODM_SetRFReg(PDM_ODM_T pDM_Odm, ODM_RF_RADIO_PATH_E eRFPath, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
+void ODM_SetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH eRFPath, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
 
-u4Byte ODM_GetRFReg(PDM_ODM_T pDM_Odm, ODM_RF_RADIO_PATH_E eRFPath, u4Byte RegAddr, u4Byte BitMask);
+u4Byte ODM_GetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH eRFPath, u4Byte RegAddr, u4Byte BitMask);
 
 //
 // Memory Relative Function.
 //
-void ODM_AllocateMemory(PDM_ODM_T pDM_Odm, void **pPtr, u4Byte length);
-void ODM_FreeMemory(PDM_ODM_T pDM_Odm, void *pPtr, u4Byte length);
+void ODM_AllocateMemory(struct odm_dm_struct *pDM_Odm, void **pPtr, u4Byte length);
+void ODM_FreeMemory(struct odm_dm_struct *pDM_Odm, void *pPtr, u4Byte length);
 
-s4Byte ODM_CompareMemory(PDM_ODM_T pDM_Odm, void *pBuf1, void *pBuf2, u4Byte length);
+s4Byte ODM_CompareMemory(struct odm_dm_struct *pDM_Odm, void *pBuf1, void *pBuf2, u4Byte length);
 
 //
 // ODM MISC-spin lock relative API.
 //
-void ODM_AcquireSpinLock(PDM_ODM_T pDM_Odm, RT_SPINLOCK_TYPE	type);
+void ODM_AcquireSpinLock(struct odm_dm_struct *pDM_Odm, RT_SPINLOCK_TYPE	type);
 
-void ODM_ReleaseSpinLock(PDM_ODM_T pDM_Odm, RT_SPINLOCK_TYPE	type);
+void ODM_ReleaseSpinLock(struct odm_dm_struct *pDM_Odm, RT_SPINLOCK_TYPE	type);
 
 //
 // ODM MISC-workitem relative API.
 //
-void ODM_InitializeWorkItem(PDM_ODM_T pDM_Odm, void *pRtWorkItem,
+void ODM_InitializeWorkItem(struct odm_dm_struct *pDM_Odm, void *pRtWorkItem,
 			    RT_WORKITEM_CALL_BACK RtWorkItemCallback,
 			    void *pContext, const char *szID);
 
@@ -152,13 +152,13 @@ void ODM_sleep_ms(u4Byte ms);
 
 void ODM_sleep_us(u4Byte us);
 
-void ODM_SetTimer(PDM_ODM_T pDM_Odm, PRT_TIMER		pTimer, u4Byte msDelay);
+void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER		pTimer, u4Byte msDelay);
 
-void ODM_InitializeTimer(PDM_ODM_T pDM_Odm, PRT_TIMER pTimer, RT_TIMER_CALL_BACK CallBackFunc, void *pContext, const char *szID);
+void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER pTimer, RT_TIMER_CALL_BACK CallBackFunc, void *pContext, const char *szID);
 
-void ODM_CancelTimer(PDM_ODM_T pDM_Odm, PRT_TIMER		pTimer);
+void ODM_CancelTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER		pTimer);
 
-void ODM_ReleaseTimer(PDM_ODM_T pDM_Odm, PRT_TIMER		pTimer);
+void ODM_ReleaseTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER		pTimer);
 
 //
 // ODM FW relative API.

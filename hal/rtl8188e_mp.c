@@ -31,7 +31,7 @@ s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 
 
 	if (!netif_running(padapter->pnetdev)) {
@@ -59,7 +59,7 @@ void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable)
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 
 
 	*enable = pDM_Odm->RFCalibrateInfo.TxPowerTrackControl;
@@ -71,7 +71,7 @@ static void Hal_disable_dm(PADAPTER padapter)
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 
 
 	/* 3 1. disable firmware dynamic mechanism */
@@ -215,7 +215,7 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
 	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 
 
 	if (!IS_92C_SERIAL(pHalData->VersionID))
@@ -297,7 +297,7 @@ void Hal_SetChannel(PADAPTER pAdapter)
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct mp_priv	*pmp = &pAdapter->mppriv;
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 
 	u8		channel = pmp->channel;
 	u8		bandwidth = pmp->bandwidth;

@@ -177,9 +177,9 @@ void update_recvframe_phyinfo_88e(
 	PADAPTER			padapter = precvframe->u.hdr.adapter;
 	struct rx_pkt_attrib	*pattrib = &precvframe->u.hdr.attrib;
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(padapter);
-	PODM_PHY_INFO_T		pPHYInfo  = (PODM_PHY_INFO_T)(&pattrib->phy_info);
+	struct odm_phy_status_info *pPHYInfo  = (struct odm_phy_status_info *)(&pattrib->phy_info);
 	u8					*wlanhdr;
-	ODM_PACKET_INFO_T	pkt_info;
+	struct odm_per_pkt_info	pkt_info;
 	u8 *sa;
 	struct sta_priv *pstapriv;
 	struct sta_info *psta;

@@ -28,10 +28,10 @@
 
 void
 ODM_DIG_LowerBound_88E(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 )
 {
-	pDIG_T		pDM_DigTable = &pDM_Odm->DM_DigTable;
+	struct rtw_dig *		pDM_DigTable = &pDM_Odm->DM_DigTable;
 
 	if (pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
 	{
@@ -46,7 +46,7 @@ ODM_DIG_LowerBound_88E(
 
 static void
 odm_RX_HWAntDivInit(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 )
 {
 	u4Byte	value32;
@@ -81,7 +81,7 @@ odm_RX_HWAntDivInit(
 
 static void
 odm_TRX_HWAntDivInit(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 )
 {
 	u4Byte	value32;
@@ -129,11 +129,11 @@ odm_TRX_HWAntDivInit(
 
 static void
 odm_FastAntTrainingInit(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 )
 {
 	u4Byte	value32, i;
-	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
+	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u4Byte	AntCombination = 2;
 	PADAPTER		Adapter = pDM_Odm->Adapter;
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit()\n"));
@@ -226,7 +226,7 @@ odm_FastAntTrainingInit(
 
 void
 ODM_AntennaDiversityInit_88E(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 )
 {
 	if (pDM_Odm->SupportICType != ODM_RTL8188E)
@@ -245,9 +245,9 @@ ODM_AntennaDiversityInit_88E(
 
 
 void
-ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant)
+ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant)
 {
-	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
+	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u4Byte	DefaultAnt, OptionalAnt;
 
 	if (pDM_FatTable->RxIdleAnt != Ant)
@@ -285,9 +285,9 @@ ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant)
 
 
 static void
-odm_UpdateTxAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant, u4Byte MacId)
+odm_UpdateTxAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant, u4Byte MacId)
 {
-	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
+	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u1Byte	TargetAnt;
 
 	if (Ant == MAIN_ANT)
@@ -307,12 +307,12 @@ odm_UpdateTxAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant, u4Byte MacId)
 
 void
 ODM_SetTxAntByTxInfo_88E(
-			PDM_ODM_T		pDM_Odm,
+			struct odm_dm_struct *	pDM_Odm,
 			pu1Byte			pDesc,
 			u1Byte			macId
 	)
 {
-	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
+	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 
 	if ((pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)||(pDM_Odm->AntDivType == CG_TRX_SMART_ANTDIV))
 	{
@@ -324,13 +324,13 @@ ODM_SetTxAntByTxInfo_88E(
 
 void
 ODM_AntselStatistics_88E(
-			PDM_ODM_T		pDM_Odm,
+			struct odm_dm_struct *	pDM_Odm,
 			u1Byte			antsel_tr_mux,
 			u4Byte			MacId,
 			u1Byte			RxPWDBAll
 )
 {
-	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
+	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 	if (pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
 	{
 		if (antsel_tr_mux == MAIN_ANT_CG_TRX)
@@ -366,14 +366,14 @@ ODM_AntselStatistics_88E(
 #define	TX_BY_REG	0
 static void
 odm_HWAntDiv(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 )
 {
 	u4Byte	i, MinRSSI=0xFF, AntDivMaxRSSI=0, MaxRSSI=0, LocalMinRSSI, LocalMaxRSSI;
 	u4Byte	Main_RSSI, Aux_RSSI;
 	u1Byte	RxIdleAnt=0, TargetAnt=7;
-	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
-	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
+	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
+	struct rtw_dig *pDM_DigTable = &pDM_Odm->DM_DigTable;
 	bool	bMatchBSSID;
 	bool	bPktFilterMacth = false;
 	PSTA_INFO_T	pEntry;
@@ -433,10 +433,10 @@ odm_HWAntDiv(
 
 void
 ODM_AntennaDiversity_88E(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 )
 {
-	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
+	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 	if ((pDM_Odm->SupportICType != ODM_RTL8188E) || (!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV)))
 		return;
 	if (!pDM_Odm->bLinked)
@@ -484,9 +484,9 @@ ODM_AntennaDiversity_88E(
 
 void
 odm_PrimaryCCA_Init(
-			PDM_ODM_T		pDM_Odm)
+			struct odm_dm_struct *	pDM_Odm)
 {
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
+	struct dyn_primary_cca *PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 	PrimaryCCA->DupRTS_flag = 0;
 	PrimaryCCA->intf_flag = 0;
 	PrimaryCCA->intf_type = 0;
@@ -496,26 +496,26 @@ odm_PrimaryCCA_Init(
 
 bool
 ODM_DynamicPrimaryCCA_DupRTS(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 	)
 {
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
+	struct dyn_primary_cca *PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 
 	return	PrimaryCCA->DupRTS_flag;
 }
 
 void
 odm_DynamicPrimaryCCA(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 	)
 {
 	PADAPTER	Adapter =  pDM_Odm->Adapter;	/*  for NIC */
-	prtl8192cd_priv	priv		= pDM_Odm->priv;	/*  for AP */
+	struct rtl8192cd_priv *priv = pDM_Odm->priv;	/*  for AP */
 
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
-	Pfalse_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
+	struct false_alarm_stats *FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
+	struct dyn_primary_cca *PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 
 	bool		Is40MHz;
 	bool		Client_40MHz = false, Client_tmp = false;      /*  connected client BW */
@@ -802,23 +802,23 @@ odm_DynamicPrimaryCCA(
 }
 #else /* if (RTL8188E_SUPPORT == 1) */
 void
-ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant)
+ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant)
 {
 }
 void
 odm_PrimaryCCA_Init(
-			PDM_ODM_T		pDM_Odm)
+			struct odm_dm_struct *	pDM_Odm)
 {
 }
 void
 odm_DynamicPrimaryCCA(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 	)
 {
 }
 bool
 ODM_DynamicPrimaryCCA_DupRTS(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 	)
 {
 	return false;

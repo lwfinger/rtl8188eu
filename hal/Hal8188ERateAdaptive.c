@@ -117,8 +117,8 @@ static u2Byte DynamicTxRPTTiming[6] = {
 /*  End Rate adaptive parameters */
 
 static void odm_SetTxRPTTiming_8188E(
-		PDM_ODM_T		pDM_Odm,
-		PODM_RA_INFO_T		pRaInfo,
+		struct odm_dm_struct *	pDM_Odm,
+		struct odm_ra_info *pRaInfo,
 		u1Byte			extend
 	)
 {
@@ -145,8 +145,8 @@ static void odm_SetTxRPTTiming_8188E(
 }
 
 static int odm_RateDown_8188E(
-		PDM_ODM_T	pDM_Odm,
-		PODM_RA_INFO_T  pRaInfo
+		struct odm_dm_struct *pDM_Odm,
+		struct odm_ra_info *pRaInfo
 	)
 {
 	u1Byte RateID, LowestRate, HighestRate;
@@ -204,8 +204,8 @@ RateDownFinish:
 }
 
 static int odm_RateUp_8188E(
-		PDM_ODM_T		pDM_Odm,
-		PODM_RA_INFO_T  pRaInfo
+		struct odm_dm_struct *	pDM_Odm,
+		struct odm_ra_info *pRaInfo
 	)
 {
 	u1Byte RateID, HighestRate;
@@ -259,15 +259,15 @@ RateUpfinish:
 	return 0;
 }
 
-static void odm_ResetRaCounter_8188E(PODM_RA_INFO_T  pRaInfo){
+static void odm_ResetRaCounter_8188E(struct odm_ra_info *pRaInfo){
 	u1Byte RateID;
 	RateID=pRaInfo->DecisionRate;
 	pRaInfo->NscUp=(N_THRESHOLD_HIGH[RateID]+N_THRESHOLD_LOW[RateID])>>1;
 	pRaInfo->NscDown=(N_THRESHOLD_HIGH[RateID]+N_THRESHOLD_LOW[RateID])>>1;
 }
 
-static void odm_RateDecision_8188E(PDM_ODM_T		pDM_Odm,
-		PODM_RA_INFO_T  pRaInfo
+static void odm_RateDecision_8188E(struct odm_dm_struct *	pDM_Odm,
+		struct odm_ra_info *pRaInfo
 	)
 {
 	u1Byte RateID = 0, RtyPtID = 0, PenaltyID1 = 0, PenaltyID2 = 0;
@@ -356,8 +356,8 @@ static void odm_RateDecision_8188E(PDM_ODM_T		pDM_Odm,
 
 static int
 odm_ARFBRefresh_8188E(
-		PDM_ODM_T		pDM_Odm,
-		PODM_RA_INFO_T  pRaInfo
+		struct odm_dm_struct *	pDM_Odm,
+		struct odm_ra_info *pRaInfo
 	)
 {  /*  Wilson 2011/10/26 */
 	u4Byte MaskFromReg;
@@ -460,7 +460,7 @@ odm_ARFBRefresh_8188E(
 #if POWER_TRAINING_ACTIVE == 1
 static void
 odm_PTTryState_8188E(
-		PODM_RA_INFO_T	pRaInfo
+		struct odm_ra_info *pRaInfo
 	)
 {
 	pRaInfo->PTTryState=0;
@@ -520,7 +520,7 @@ odm_PTTryState_8188E(
 
 static void
 odm_PTDecision_8188E(
-		PODM_RA_INFO_T		pRaInfo
+		struct odm_ra_info *pRaInfo
 	)
 {
 	u1Byte j;
@@ -561,7 +561,7 @@ odm_PTDecision_8188E(
 
 static void
 odm_RATxRPTTimerSetting(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		u2Byte			minRptTime
 )
 {
@@ -579,7 +579,7 @@ odm_RATxRPTTimerSetting(
 
 void
 ODM_RASupport_Init(
-		PDM_ODM_T	pDM_Odm
+		struct odm_dm_struct *pDM_Odm
 	)
 {
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>ODM_RASupport_Init()\n"));
@@ -594,11 +594,11 @@ ODM_RASupport_Init(
 
 int
 ODM_RAInfo_Init(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	)
 {
-	PODM_RA_INFO_T pRaInfo = &pDM_Odm->RAInfo[MacID];
+	struct odm_ra_info *pRaInfo = &pDM_Odm->RAInfo[MacID];
 	#if 1
 	u1Byte WirelessMode=0xFF; /* invalid value */
 	u1Byte max_rate_idx = 0x13; /* MCS7 */
@@ -664,7 +664,7 @@ ODM_RAInfo_Init(
 
 int
 ODM_RAInfo_Init_all(
-	PDM_ODM_T		pDM_Odm
+	struct odm_dm_struct *	pDM_Odm
 	)
 {
 	u1Byte MacID = 0;
@@ -681,7 +681,7 @@ ODM_RAInfo_Init_all(
 
 u1Byte
 ODM_RA_GetShortGI_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 )
 {
@@ -694,7 +694,7 @@ ODM_RA_GetShortGI_8188E(
 
 u1Byte
 ODM_RA_GetDecisionRate_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	)
 {
@@ -710,7 +710,7 @@ ODM_RA_GetDecisionRate_8188E(
 
 u1Byte
 ODM_RA_GetHwPwrStatus_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	)
 {
@@ -725,14 +725,14 @@ ODM_RA_GetHwPwrStatus_8188E(
 
 void
 ODM_RA_UpdateRateInfo_8188E(
-	PDM_ODM_T pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 	u1Byte MacID,
 	u1Byte RateID,
 	u4Byte RateMask,
 	u1Byte SGIEnable
 	)
 {
-	PODM_RA_INFO_T pRaInfo = NULL;
+	struct odm_ra_info *pRaInfo = NULL;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD,
 		("MacID=%d RateID=0x%x RateMask=0x%x SGIEnable=%d\n",
@@ -749,12 +749,12 @@ ODM_RA_UpdateRateInfo_8188E(
 
 void
 ODM_RA_SetRSSI_8188E(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		u1Byte			MacID,
 		u1Byte			Rssi
 	)
 {
-	PODM_RA_INFO_T pRaInfo = NULL;
+	struct odm_ra_info *pRaInfo = NULL;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,
 		(" MacID=%d Rssi=%d\n", MacID, Rssi));
@@ -767,7 +767,7 @@ ODM_RA_SetRSSI_8188E(
 
 void
 ODM_RA_Set_TxRPT_Time(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		u2Byte			minRptTime
 	)
 {
@@ -777,14 +777,14 @@ ODM_RA_Set_TxRPT_Time(
 
 void
 ODM_RA_TxRPT2Handle_8188E(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		pu1Byte			TxRPT_Buf,
 		u2Byte			TxRPT_Len,
 		u4Byte			MacIDValidEntry0,
 		u4Byte			MacIDValidEntry1
 	)
 {
-	PODM_RA_INFO_T pRAInfo = NULL;
+	struct odm_ra_info *pRAInfo = NULL;
 	u1Byte			MacId = 0;
 	pu1Byte			pBuffer = NULL;
 	u4Byte			valid = 0, ItemNum = 0;
@@ -894,7 +894,7 @@ ODM_RA_TxRPT2Handle_8188E(
 
 static void
 odm_RATxRPTTimerSetting(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		u2Byte			minRptTime
 )
 {
@@ -904,7 +904,7 @@ odm_RATxRPTTimerSetting(
 
 void
 ODM_RASupport_Init(
-		PDM_ODM_T	pDM_Odm
+		struct odm_dm_struct *pDM_Odm
 	)
 {
 	return;
@@ -912,7 +912,7 @@ ODM_RASupport_Init(
 
 int
 ODM_RAInfo_Init(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	)
 {
@@ -921,7 +921,7 @@ ODM_RAInfo_Init(
 
 int
 ODM_RAInfo_Init_all(
-	PDM_ODM_T		pDM_Odm
+	struct odm_dm_struct *	pDM_Odm
 	)
 {
 	return 0;
@@ -929,7 +929,7 @@ ODM_RAInfo_Init_all(
 
 u1Byte
 ODM_RA_GetShortGI_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	)
 {
@@ -938,7 +938,7 @@ ODM_RA_GetShortGI_8188E(
 
 u1Byte
 ODM_RA_GetDecisionRate_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	)
 {
@@ -946,7 +946,7 @@ ODM_RA_GetDecisionRate_8188E(
 }
 u1Byte
 ODM_RA_GetHwPwrStatus_8188E(
-		PDM_ODM_T	pDM_Odm,
+		struct odm_dm_struct *pDM_Odm,
 		u1Byte		MacID
 	)
 {
@@ -955,7 +955,7 @@ ODM_RA_GetHwPwrStatus_8188E(
 
 void
 ODM_RA_UpdateRateInfo_8188E(
-	PDM_ODM_T pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 	u1Byte MacID,
 	u1Byte RateID,
 	u4Byte RateMask,
@@ -967,7 +967,7 @@ ODM_RA_UpdateRateInfo_8188E(
 
 void
 ODM_RA_SetRSSI_8188E(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		u1Byte			MacID,
 		u1Byte			Rssi
 	)
@@ -977,7 +977,7 @@ ODM_RA_SetRSSI_8188E(
 
 void
 ODM_RA_Set_TxRPT_Time(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		u2Byte			minRptTime
 	)
 {
@@ -986,7 +986,7 @@ ODM_RA_Set_TxRPT_Time(
 
 void
 ODM_RA_TxRPT2Handle_8188E(
-		PDM_ODM_T		pDM_Odm,
+		struct odm_dm_struct *	pDM_Odm,
 		pu1Byte			TxRPT_Buf,
 		u2Byte			TxRPT_Len,
 		u4Byte			MacIDValidEntry0,

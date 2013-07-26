@@ -409,7 +409,7 @@ typedef struct hal_data_8188e
 	u8	RegCR_1;
 
 	struct dm_priv	dmpriv;
-	DM_ODM_T		odmpriv;
+	struct odm_dm_struct odmpriv;
 	struct sreset_priv srestpriv;
 
 #ifdef CONFIG_BT_COEXIST

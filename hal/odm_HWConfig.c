@@ -55,7 +55,7 @@ static u1Byte odm_QueryRxPwrPercentage(s1Byte		AntPower)
 /*  IF other SW team do not support the feature, remove this section.?? */
 /*  */
 static s4Byte odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
-	PDM_ODM_T pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 	s4Byte CurrSig
 )
 {
@@ -64,7 +64,7 @@ static s4Byte odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
 }
 
 static s4Byte odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
-	PDM_ODM_T pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 	s4Byte CurrSig
 )
 {
@@ -74,7 +74,7 @@ static s4Byte odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
 
 static s4Byte
 odm_SignalScaleMapping_92CSeries(
-	PDM_ODM_T pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 	s4Byte CurrSig
 )
 {
@@ -167,7 +167,7 @@ odm_SignalScaleMapping_92CSeries(
 }
 static s4Byte
 odm_SignalScaleMapping(
-	PDM_ODM_T pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 		s4Byte CurrSig
 )
 {
@@ -191,7 +191,7 @@ odm_SignalScaleMapping(
 
 /* pMgntInfo->CustomerID == RT_CID_819x_Lenovo */
 static u1Byte odm_SQ_process_patch_RT_CID_819x_Lenovo(
-	PDM_ODM_T	pDM_Odm,
+	struct odm_dm_struct *pDM_Odm,
 	u1Byte		isCCKrate,
 	u1Byte		PWDB_ALL,
 	u1Byte		path,
@@ -235,13 +235,13 @@ odm_EVMdbToPercentage(
 
 static void
 odm_RxPhyStatus92CSeries_Parsing(
-		PDM_ODM_T					pDM_Odm,
-			PODM_PHY_INFO_T			pPhyInfo,
+		struct odm_dm_struct *				pDM_Odm,
+			struct odm_phy_status_info *pPhyInfo,
 			pu1Byte						pPhyStatus,
-			PODM_PACKET_INFO_T			pPktinfo
+			struct odm_per_pkt_info *pPktinfo
 	)
 {
-	SWAT_T				*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
+	struct sw_ant_switch *pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 	u1Byte				i, Max_spatial_stream;
 	s1Byte				rx_pwr[4], rx_pwr_all=0;
 	u1Byte				EVM, PWDB_ALL = 0, PWDB_ALL_BT;
@@ -566,16 +566,16 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 void
 odm_Init_RSSIForDM(
-		PDM_ODM_T	pDM_Odm
+		struct odm_dm_struct *pDM_Odm
 	)
 {
 
 }
 
 static void odm_Process_RSSIForDM(
-		PDM_ODM_T					pDM_Odm,
-			PODM_PHY_INFO_T			pPhyInfo,
-			PODM_PACKET_INFO_T			pPktinfo
+		struct odm_dm_struct *				pDM_Odm,
+			struct odm_phy_status_info *pPhyInfo,
+			struct odm_per_pkt_info *pPktinfo
 	)
 {
 
@@ -611,7 +611,7 @@ static void odm_Process_RSSIForDM(
 	if (pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 		u1Byte	antsel_tr_mux;
-		pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
+		struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 
 		if (pDM_Odm->AntDivType == CG_TRX_SMART_ANTDIV)
 		{
@@ -778,10 +778,10 @@ static void odm_Process_RSSIForDM(
 /*  */
 static void
 ODM_PhyStatusQuery_92CSeries(
-		PDM_ODM_T					pDM_Odm,
-			PODM_PHY_INFO_T				pPhyInfo,
+		struct odm_dm_struct *				pDM_Odm,
+			struct odm_phy_status_info *pPhyInfo,
 			pu1Byte						pPhyStatus,
-			PODM_PACKET_INFO_T			pPktinfo
+			struct odm_per_pkt_info *pPktinfo
 	)
 {
 
@@ -808,10 +808,10 @@ ODM_PhyStatusQuery_92CSeries(
 /*  */
 static void
 ODM_PhyStatusQuery_JaguarSeries(
-		PDM_ODM_T					pDM_Odm,
-			PODM_PHY_INFO_T			pPhyInfo,
+		struct odm_dm_struct *				pDM_Odm,
+			struct odm_phy_status_info *pPhyInfo,
 			pu1Byte						pPhyStatus,
-			PODM_PACKET_INFO_T			pPktinfo
+			struct odm_per_pkt_info *pPktinfo
 	)
 {
 
@@ -820,10 +820,10 @@ ODM_PhyStatusQuery_JaguarSeries(
 
 void
 ODM_PhyStatusQuery(
-		PDM_ODM_T					pDM_Odm,
-			PODM_PHY_INFO_T				pPhyInfo,
+		struct odm_dm_struct *				pDM_Odm,
+			struct odm_phy_status_info *pPhyInfo,
 			pu1Byte						pPhyStatus,
-			PODM_PACKET_INFO_T			pPktinfo
+			struct odm_per_pkt_info *pPktinfo
 	)
 {
 	ODM_PhyStatusQuery_92CSeries(pDM_Odm,pPhyInfo,pPhyStatus,pPktinfo);
@@ -832,7 +832,7 @@ ODM_PhyStatusQuery(
 /*  For future use. */
 void
 ODM_MacStatusQuery(
-		PDM_ODM_T					pDM_Odm,
+		struct odm_dm_struct *				pDM_Odm,
 			pu1Byte						pMacStatus,
 			u1Byte						MacID,
 			bool						bPacketMatchBSSID,
@@ -846,9 +846,9 @@ ODM_MacStatusQuery(
 
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
-		PDM_ODM_T			pDM_Odm,
-		ODM_RF_RADIO_PATH_E	Content,
-		ODM_RF_RADIO_PATH_E	eRFPath
+		struct odm_dm_struct *		pDM_Odm,
+		enum ODM_RF_RADIO_PATH	Content,
+		enum ODM_RF_RADIO_PATH	eRFPath
    )
 {
 	/* RT_STATUS	rtStatus = RT_STATUS_SUCCESS; */
@@ -875,8 +875,8 @@ ODM_ConfigRFWithHeaderFile(
 
 HAL_STATUS
 ODM_ConfigBBWithHeaderFile(
-		PDM_ODM_T			pDM_Odm,
-		ODM_BB_Config_Type		ConfigType
+		struct odm_dm_struct *		pDM_Odm,
+		enum odm_bb_config_type		ConfigType
 	)
 {
 
@@ -905,7 +905,7 @@ ODM_ConfigBBWithHeaderFile(
 
 HAL_STATUS
 ODM_ConfigMACWithHeaderFile(
-		PDM_ODM_T	pDM_Odm
+		struct odm_dm_struct *pDM_Odm
 	)
 {
 	u1Byte result = HAL_STATUS_SUCCESS;

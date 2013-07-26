@@ -18,17 +18,13 @@
 *
 ******************************************************************************/
 
-#if (RTL8188E_SUPPORT == 1)
 #ifndef __INC_RF_8188E_HW_IMG_H
 #define __INC_RF_8188E_HW_IMG_H
 
-//static bool CheckCondition(const u4Byte Condition, const u4Byte Hex);
-
 /******************************************************************************
-*                           RadioA_1T.TXT
-******************************************************************************/
+ *                           RadioA_1T.TXT
+ ******************************************************************************/
 
-HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(PDM_ODM_T  pDM_Odm);
+HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm);
 
-#endif
 #endif // end of HWIMG_SUPPORT

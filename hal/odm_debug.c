@@ -26,7 +26,7 @@
 
 void
 ODM_InitDebugSetting(
-			PDM_ODM_T		pDM_Odm
+			struct odm_dm_struct *	pDM_Odm
 	)
 {
 pDM_Odm->DebugLevel				=	ODM_DBG_TRACE;

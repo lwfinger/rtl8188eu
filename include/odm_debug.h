@@ -161,6 +161,6 @@
 #define ODM_PRINT_ADDR(pDM_Odm, comp, level, title_str, ptr)
 #endif
 
-void ODM_InitDebugSetting(PDM_ODM_T pDM_Odm);
+void ODM_InitDebugSetting(struct odm_dm_struct *pDM_Odm);
 
 #endif	// __ODM_DBG_H__

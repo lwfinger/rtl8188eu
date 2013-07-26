@@ -2052,7 +2052,7 @@ static void SetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
+	struct odm_dm_struct *podmpriv = &pHalData->odmpriv;
 _func_enter_;
 
 	switch (variable)
@@ -2551,7 +2551,7 @@ _func_enter_;
 			break;
 		case HW_VAR_INITIAL_GAIN:
 			{
-				DIG_T	*pDigTable = &podmpriv->DM_DigTable;
+				struct rtw_dig *pDigTable = &podmpriv->DM_DigTable;
 				u32		rx_gain = ((u32 *)(val))[0];
 
 				if (rx_gain == 0xff){/* restore rx gain */
@@ -2758,7 +2758,7 @@ _func_exit_;
 static void GetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
+	struct odm_dm_struct *podmpriv = &pHalData->odmpriv;
 _func_enter_;
 
 	switch (variable)
@@ -2925,7 +2925,7 @@ GetHalDefVar8188EUsb(
 		case HW_DEF_ODM_DBG_FLAG:
 			{
 				u8Byte	DebugComponents = *((u32*)pValue);
-				PDM_ODM_T	pDM_Odm = &(pHalData->odmpriv);
+				struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
 				printk("pDM_Odm->DebugComponents = 0x%llx\n",pDM_Odm->DebugComponents );
 			}
 			break;
@@ -2967,7 +2967,7 @@ static u8 SetHalDefVar8188EUsb(
 			{
 				u8 dm_func = *(( u8*)pValue);
 				struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-				DM_ODM_T		*podmpriv = &pHalData->odmpriv;
+				struct odm_dm_struct *podmpriv = &pHalData->odmpriv;
 
 				if (dm_func == 0){ /* disable all dynamic func */
 					podmpriv->SupportAbility = DYNAMIC_FUNC_DISABLE;
@@ -2990,7 +2990,7 @@ static u8 SetHalDefVar8188EUsb(
 				else if (dm_func == 6){/* turn on all dynamic func */
 					if (!(podmpriv->SupportAbility  & DYNAMIC_BB_DIG))
 					{
-						DIG_T	*pDigTable = &podmpriv->DM_DigTable;
+						struct rtw_dig *pDigTable = &podmpriv->DM_DigTable;
 						pDigTable->CurIGValue= rtw_read8(Adapter,0xc50);
 					}
 					podmpriv->SupportAbility = DYNAMIC_ALL_FUNC_ENABLE;
@@ -3007,7 +3007,7 @@ static u8 SetHalDefVar8188EUsb(
 		case HW_DEF_FA_CNT_DUMP:
 			{
 				u8 bRSSIDump = *((u8*)pValue);
-				PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+				struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
 				if (bRSSIDump)
 					pDM_Odm->DebugComponents	=	ODM_COMP_DIG|ODM_COMP_FA_CNT	;
 				else
@@ -3018,7 +3018,7 @@ static u8 SetHalDefVar8188EUsb(
 		case HW_DEF_ODM_DBG_FLAG:
 			{
 				u8Byte	DebugComponents = *((u8Byte*)pValue);
-				PDM_ODM_T	pDM_Odm = &(pHalData->odmpriv);
+				struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
 				pDM_Odm->DebugComponents = DebugComponents;
 			}
 			break;
