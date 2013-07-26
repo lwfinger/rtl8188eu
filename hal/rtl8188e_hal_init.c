@@ -649,14 +649,14 @@ s32 rtl8188e_FirmwareDownload(PADAPTER padapter)
 	u32			FwImageWoWLANLen;
 #endif
 	u8			*pucMappedFile = NULL;
-	PRT_FIRMWARE_8188E	pFirmware = NULL;
-	PRT_8188E_FIRMWARE_HDR		pFwHdr = NULL;
+	struct rt_firmware *pFirmware = NULL;
+	struct rt_firmware_hdr *pFwHdr = NULL;
 	u8			*pFirmwareBuf;
 	u32			FirmwareLen;
 
 
 	RT_TRACE(_module_hal_init_c_, _drv_info_, ("+%s\n", __func__));
-	pFirmware = (PRT_FIRMWARE_8188E)rtw_zmalloc(sizeof(RT_FIRMWARE_8188E));
+	pFirmware = (struct rt_firmware *)rtw_zmalloc(sizeof(struct rt_firmware));
 	if (!pFirmware)
 	{
 
@@ -715,7 +715,7 @@ s32 rtl8188e_FirmwareDownload(PADAPTER padapter)
 	if (bUsedWoWLANFw) {
 		pFirmwareBuf = pFirmware->szWoWLANFwBuffer;
 		FirmwareLen = pFirmware->ulWoWLANFwLength;
-		pFwHdr = (PRT_8188E_FIRMWARE_HDR)pFirmware->szWoWLANFwBuffer;
+		pFwHdr = (struct rt_firmware_hdr *)pFirmware->szWoWLANFwBuffer;
 	} else
 #endif
 	{
@@ -724,7 +724,7 @@ s32 rtl8188e_FirmwareDownload(PADAPTER padapter)
 	DBG_88E_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, FirmwareLen);
 
 	/*  To Check Fw header. Added by tynli. 2009.12.04. */
-	pFwHdr = (PRT_8188E_FIRMWARE_HDR)pFirmware->szFwBuffer;
+	pFwHdr = (struct rt_firmware_hdr *)pFirmware->szFwBuffer;
 	}
 
 	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->Version);
@@ -783,7 +783,7 @@ s32 rtl8188e_FirmwareDownload(PADAPTER padapter)
 Exit:
 
 	if (pFirmware)
-		rtw_mfree((u8*)pFirmware, sizeof(RT_FIRMWARE_8188E));
+		rtw_mfree((u8*)pFirmware, sizeof(struct rt_firmware));
 
 #ifdef CONFIG_WOWLAN
 	if (padapter->pwrctrlpriv.wowlan_mode)
@@ -2715,14 +2715,14 @@ Hal_EEValueCheck(
 
 static void
 Hal_ReadPowerValueFromPROM_8188E(
-		PTxPowerInfo24G	pwrInfo24G,
+		struct txpowerinfo24g *pwrInfo24G,
 		u8*				PROMContent,
 		bool			AutoLoadFail
 	)
 {
 	u32 rfPath, eeAddr=EEPROM_TX_PWR_INX_88E, group,TxCount=0;
 
-	_rtw_memset(pwrInfo24G, 0, sizeof(TxPowerInfo24G));
+	_rtw_memset(pwrInfo24G, 0, sizeof(struct txpowerinfo24g));
 
 	if (AutoLoadFail)
 	{
@@ -2954,7 +2954,7 @@ Hal_ReadTxPowerInfo88E(
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-	TxPowerInfo24G		pwrInfo24G;
+	struct txpowerinfo24g pwrInfo24G;
 	u8			rfPath, ch, group, rfPathMax=1;
 	u8			pwr, diff,bIn24G,TxCount;
 

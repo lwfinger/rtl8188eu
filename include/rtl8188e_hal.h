@@ -82,13 +82,13 @@
 									(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x2300 ||\
 									(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x88E0)
 
-typedef enum _FIRMWARE_SOURCE {
+enum firmware_source {
 	FW_SOURCE_IMG_FILE = 0,
 	FW_SOURCE_HEADER_FILE = 1,		//from header file
-} FIRMWARE_SOURCE, *PFIRMWARE_SOURCE;
+};
 
-typedef struct _RT_FIRMWARE {
-	FIRMWARE_SOURCE	eFWSource;
+struct rt_firmware {
+	enum firmware_source	eFWSource;
 	u8*			szFwBuffer;
 	u32			ulFwLength;
 
@@ -96,14 +96,11 @@ typedef struct _RT_FIRMWARE {
 	u8*			szWoWLANFwBuffer;
 	u32			ulWoWLANFwLength;
 #endif //CONFIG_WOWLAN
-} RT_FIRMWARE, *PRT_FIRMWARE, RT_FIRMWARE_8188E, *PRT_FIRMWARE_8188E;
+};
 
-//
-// This structure must be cared byte-ordering
-//
+// This structure must be careful with byte-ordering
 
-typedef struct _RT_8188E_FIRMWARE_HDR
-{
+struct rt_firmware_hdr {
 	// 8-byte alinment required
 
 	//--- LONG WORD 0 ----
@@ -120,28 +117,28 @@ typedef struct _RT_8188E_FIRMWARE_HDR
 	u8		Date;	// Release time Date field
 	u8		Hour;	// Release time Hour field
 	u8		Minute;	// Release time Minute field
-	u16		RamCodeSize;	// The size of RAM code
+	__le16		RamCodeSize;	// The size of RAM code
 	u8		Foundry;
 	u8		Rsvd2;
 
 	//--- LONG WORD 2 ----
-	u32		SvnIdx;	// The SVN entry index
+	__le32		SvnIdx;	// The SVN entry index
 	u32		Rsvd3;
 
 	//--- LONG WORD 3 ----
 	u32		Rsvd4;
 	u32		Rsvd5;
-}RT_8188E_FIRMWARE_HDR, *PRT_8188E_FIRMWARE_HDR;
+};
 
 #define DRIVER_EARLY_INT_TIME		0x05
 #define BCN_DMA_ATIME_INT_TIME		0x02
 
-typedef enum _USB_RX_AGG_MODE{
+enum usb_rx_agg_mode {
 	USB_RX_AGG_DISABLE,
 	USB_RX_AGG_DMA,
 	USB_RX_AGG_USB,
 	USB_RX_AGG_MIX
-}USB_RX_AGG_MODE;
+};
 
 #define MAX_RX_DMA_BUFFER_SIZE_88E	      0x2400 //9k for 88E nornal chip , //MaxRxBuff=10k-max(TxReportSize(64*8), WOLPattern(16*24))
 
@@ -196,22 +193,7 @@ enum ChannelPlan
 	CHPL_WORLD	= 10,
 };
 
-typedef struct _TxPowerInfo
-{
-	u8 CCKIndex[RF_PATH_MAX][CHANNEL_GROUP_MAX_88E];
-	u8 HT40_1SIndex[RF_PATH_MAX][CHANNEL_GROUP_MAX_88E];
-	u8 HT40_2SIndexDiff[RF_PATH_MAX][CHANNEL_GROUP_MAX_88E];
-	u8 HT20IndexDiff[RF_PATH_MAX][CHANNEL_GROUP_MAX_88E];
-	u8 OFDMIndexDiff[RF_PATH_MAX][CHANNEL_GROUP_MAX_88E];
-	u8 HT40MaxOffset[RF_PATH_MAX][CHANNEL_GROUP_MAX_88E];
-	u8 HT20MaxOffset[RF_PATH_MAX][CHANNEL_GROUP_MAX_88E];
-	u8 TSSI_A[3];
-	u8 TSSI_B[3];
-	u8 TSSI_A_5G[3];		//5GL/5GM/5GH
-	u8 TSSI_B_5G[3];
-} TxPowerInfo, *PTxPowerInfo;
-
-typedef struct _TxPowerInfo24G{
+struct txpowerinfo24g {
 	u1Byte IndexCCK_Base[MAX_RF_PATH][MAX_CHNL_GROUP_24G];
 	u1Byte IndexBW40_Base[MAX_RF_PATH][MAX_CHNL_GROUP_24G-1];
 	//If only one tx, only BW20 and OFDM are used.
@@ -219,7 +201,7 @@ typedef struct _TxPowerInfo24G{
 	s1Byte OFDM_Diff[MAX_RF_PATH][MAX_TX_COUNT];
 	s1Byte BW20_Diff[MAX_RF_PATH][MAX_TX_COUNT];
 	s1Byte BW40_Diff[MAX_RF_PATH][MAX_TX_COUNT];
-}TxPowerInfo24G, *PTxPowerInfo24G;
+};
 
 #define EFUSE_REAL_CONTENT_LEN		512
 #define EFUSE_MAP_LEN				128
@@ -265,34 +247,33 @@ typedef struct _TxPowerInfo24G{
 //
 // <Roger_Notes> For RTL8723 WiFi/BT/GPS multi-function configuration. 2010.10.06.
 //
-typedef enum _RT_MULTI_FUNC {
+enum rt_multi_func {
 	RT_MULTI_FUNC_NONE = 0x00,
 	RT_MULTI_FUNC_WIFI = 0x01,
 	RT_MULTI_FUNC_BT = 0x02,
 	RT_MULTI_FUNC_GPS = 0x04,
-} RT_MULTI_FUNC, *PRT_MULTI_FUNC;
+};
 
 //
 // <Roger_Notes> For RTL8723 WiFi PDn/GPIO polarity control configuration. 2010.10.08.
 //
-typedef enum _RT_POLARITY_CTL {
+enum rt_polarity_ctl {
 	RT_POLARITY_LOW_ACT = 0,
 	RT_POLARITY_HIGH_ACT = 1,
-} RT_POLARITY_CTL, *PRT_POLARITY_CTL;
+};
 
 // For RTL8723 regulator mode. by tynli. 2011.01.14.
-typedef enum _RT_REGULATOR_MODE {
+enum rt_regulator_mode {
 	RT_SWITCHING_REGULATOR = 0,
 	RT_LDO_REGULATOR = 1,
-} RT_REGULATOR_MODE, *PRT_REGULATOR_MODE;
+};
 
 
-typedef struct hal_data_8188e
-{
+struct hal_data_8188e {
 	struct HAL_VERSION	VersionID;
-	RT_MULTI_FUNC		MultiFunc; // For multi-function consideration.
-	RT_POLARITY_CTL		PolarityCtl; // For Wifi PDn Polarity control.
-	RT_REGULATOR_MODE	RegulatorMode; // switching regulator or LDO
+	enum rt_multi_func MultiFunc; // For multi-function consideration.
+	enum rt_polarity_ctl PolarityCtl; // For Wifi PDn Polarity control.
+	enum rt_regulator_mode RegulatorMode; // switching regulator or LDO
 	u16	CustomerID;
 
 	u16	FirmwareVersion;
@@ -382,12 +363,8 @@ typedef struct hal_data_8188e
 
 	u8	bLedOpenDrain; // Support Open-drain arrangement for controlling the LED. Added by Roger, 2009.10.16.
 
-	//u32	LedControlNum;
-	//u32	LedControlMode;
-	//u32	TxPowerTrackControl;
 	u8	b1x1RecvCombine;	// for 1T1R receive combining
 
-	//u8	bCurrentTurboEDCA;
 	u32	AcParam_BE; //Original parameter for BE, use for EDCA turbo.
 
 	struct bb_reg_def PHYRegDef[4];	//Radio A/B/C/D
@@ -461,12 +438,12 @@ typedef struct hal_data_8188e
 	u16	HwRxPageSize;				// Hardware setting
 	u32	MaxUsbRxAggBlock;
 
-	USB_RX_AGG_MODE	UsbRxAggMode;
+	enum usb_rx_agg_mode UsbRxAggMode;
 	u8	UsbRxAggBlockCount;			// USB Block count. Block size is 512-byte in hight speed and 64-byte in full speed
 	u8	UsbRxAggBlockTimeout;
 	u8	UsbRxAggPageCount;			// 8192C DMA page count
 	u8	UsbRxAggPageTimeout;
-} HAL_DATA_8188E, *PHAL_DATA_8188E;
+};
 
 #define GET_HAL_DATA(__pAdapter)	((struct hal_data_8188e *)((__pAdapter)->HalData))
 #define GET_RF_TYPE(priv)			(GET_HAL_DATA(priv)->rf_type)
