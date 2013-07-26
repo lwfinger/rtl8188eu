@@ -2642,7 +2642,7 @@ s32 InitLLTTable(PADAPTER padapter, u8 txpktbuf_bndy)
 void
 Hal_InitPGData88E(PADAPTER	padapter)
 {
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 	u32			i;
 	u16			value16;
 
@@ -2666,7 +2666,7 @@ Hal_EfuseParseIDCode88E(
 		u8			*hwinfo
 	)
 {
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 	u16			EEPROMId;
 
 
