@@ -63,24 +63,24 @@ struct	regulatory_class {
 	u8	modem;
 };
 
-typedef enum _CAPABILITY{
-	cESS			= 0x0001,
-	cIBSS			= 0x0002,
-	cPollable		= 0x0004,
-	cPollReq			= 0x0008,
-	cPrivacy		= 0x0010,
+enum capability {
+	cESS		= 0x0001,
+	cIBSS		= 0x0002,
+	cPollable	= 0x0004,
+	cPollReq	= 0x0008,
+	cPrivacy	= 0x0010,
 	cShortPreamble	= 0x0020,
-	cPBCC			= 0x0040,
+	cPBCC		= 0x0040,
 	cChannelAgility	= 0x0080,
 	cSpectrumMgnt	= 0x0100,
-	cQos			= 0x0200,	// For HCCA, use with CF-Pollable and CF-PollReq
+	cQos		= 0x0200,	// For HCCA, use with CF-Pollable and CF-PollReq
 	cShortSlotTime	= 0x0400,
-	cAPSD			= 0x0800,
-	cRM				= 0x1000,	// RRM (Radio Request Measurement)
+	cAPSD		= 0x0800,
+	cRM		= 0x1000,	// RRM (Radio Request Measurement)
 	cDSSS_OFDM	= 0x2000,
-	cDelayedBA		= 0x4000,
+	cDelayedBA	= 0x4000,
 	cImmediateBA	= 0x8000,
-}CAPABILITY, *PCAPABILITY;
+};
 
 enum	_REG_PREAMBLE_MODE{
 	PREAMBLE_LONG	= 1,
@@ -101,13 +101,13 @@ enum _RTL8712_RF_MIMO_CONFIG_{
 };
 
 
-typedef enum _RF90_RADIO_PATH{
-	RF90_PATH_A = 0,			//Radio Path A
-	RF90_PATH_B = 1,			//Radio Path B
-	RF90_PATH_C = 2,			//Radio Path C
+enum rf90_radio_path {
+	RF90_PATH_A = 0,		//Radio Path A
+	RF90_PATH_B = 1,		//Radio Path B
+	RF90_PATH_C = 2,		//Radio Path C
 	RF90_PATH_D = 3			//Radio Path D
-	//RF90_PATH_MAX				//Max RF number 90 support
-}RF90_RADIO_PATH_E, *PRF90_RADIO_PATH_E;
+	//RF90_PATH_MAX			//Max RF number 90 support
+};
 
 // Bandwidth Offset
 #define HAL_PRIME_CHNL_OFFSET_DONT_CARE	0
@@ -116,38 +116,34 @@ typedef enum _RF90_RADIO_PATH{
 
 // Represent Channel Width in HT Capabilities
 //
-typedef enum _HT_CHANNEL_WIDTH {
-
+enum ht_channel_width {
 	HT_CHANNEL_WIDTH_20 = 0,
 	HT_CHANNEL_WIDTH_40 = 1,
 	HT_CHANNEL_WIDTH_80 = 2,
 	HT_CHANNEL_WIDTH_160 = 3,
 	HT_CHANNEL_WIDTH_10 = 4,
-
-}HT_CHANNEL_WIDTH, *PHT_CHANNEL_WIDTH;
+};
 
 //
 // Represent Extention Channel Offset in HT Capabilities
 // This is available only in 40Mhz mode.
 //
-typedef enum _HT_EXTCHNL_OFFSET{
+enum ht_extchnl_offset {
 	HT_EXTCHNL_OFFSET_NO_EXT = 0,
 	HT_EXTCHNL_OFFSET_UPPER = 1,
 	HT_EXTCHNL_OFFSET_NO_DEF = 2,
 	HT_EXTCHNL_OFFSET_LOWER = 3,
-}HT_EXTCHNL_OFFSET, *PHT_EXTCHNL_OFFSET;
+};
 
 /* 2007/11/15 MH Define different RF type. */
-typedef	enum _RT_RF_TYPE_DEFINITION
-{
+enum rt_rf_type_def {
 	RF_1T2R = 0,
 	RF_2T4R = 1,
 	RF_2T2R = 2,
 	RF_1T1R = 3,
 	RF_2T2R_GREEN = 4,
 	RF_819X_MAX_TYPE = 5,
-}RT_RF_TYPE_DEF_E;
-
+};
 
 u32 rtw_ch2freq(u32 ch);
 u32 rtw_freq2ch(u32 freq);

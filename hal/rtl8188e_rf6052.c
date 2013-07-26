@@ -115,7 +115,7 @@ void rtl8188e_RF_ChangeTxPath(		PADAPTER	Adapter,
 void
 rtl8188e_PHY_RF6052SetBandwidth(
 		PADAPTER				Adapter,
-		HT_CHANNEL_WIDTH		Bandwidth)	/* 20M or 40M */
+		enum ht_channel_width Bandwidth)	/* 20M or 40M */
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 

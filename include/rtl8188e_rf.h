@@ -30,7 +30,7 @@ void		rtl8188e_RF_ChangeTxPath(		PADAPTER	Adapter,
 											u16		DataRate);
 void		rtl8188e_PHY_RF6052SetBandwidth(
 											PADAPTER				Adapter,
-											HT_CHANNEL_WIDTH		Bandwidth);
+											enum ht_channel_width Bandwidth);
 void	rtl8188e_PHY_RF6052SetCckTxPower(
 											PADAPTER	Adapter,
 											u8*		pPowerlevel);

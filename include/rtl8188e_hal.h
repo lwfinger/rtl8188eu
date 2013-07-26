@@ -284,7 +284,7 @@ struct hal_data_8188e {
 	//current WIFI_PHY values
 	u32	ReceiveConfig;
 	enum wireless_mode CurrentWirelessMode;
-	HT_CHANNEL_WIDTH	CurrentChannelBW;
+	enum ht_channel_width CurrentChannelBW;
 	u8	CurrentChannel;
 	u8	nCur40MhzPrimeSC;// Control channel sub-carrier
 

@@ -235,23 +235,12 @@ PHY_ScanOperationBackup8188E(	PADAPTER	Adapter,
 //
 // Switch bandwidth for 8192S
 //
-void	PHY_SetBWMode8188E(		PADAPTER			pAdapter,
-										HT_CHANNEL_WIDTH	ChnlWidth,
-										unsigned char	Offset	);
-
-//
-// Set FW CMD IO for 8192S.
-//
-//extern	bool HalSetIO8192C(		PADAPTER			Adapter,
-//										IO_TYPE				IOType);
+void	PHY_SetBWMode8188E(PADAPTER pAdapter, enum ht_channel_width ChnlWidth, unsigned char Offset);
 
 //
 // Set A2 entry to fw for 8192S
 //
-extern	void FillA2Entry8192C(			PADAPTER			Adapter,
-											u8				index,
-											u8*				val);
-
+extern	void FillA2Entry8192C(PADAPTER Adapter, u8 index, u8 *val);
 
 //
 // channel switch related funciton

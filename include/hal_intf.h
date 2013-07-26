@@ -182,7 +182,7 @@ struct hal_ops {
 	void	(*disable_interrupt)(_adapter *padapter);
 	s32	(*interrupt_handler)(_adapter *padapter);
 
-	void	(*set_bwmode_handler)(_adapter *padapter, HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
+	void	(*set_bwmode_handler)(_adapter *padapter, enum ht_channel_width Bandwidth, u8 Offset);
 	void	(*set_channel_handler)(_adapter *padapter, u8 channel);
 
 	void	(*hal_dm_watchdog)(_adapter *padapter);
@@ -410,7 +410,7 @@ void	rtw_hal_write_rfreg(_adapter *padapter, enum rf_radio_path eRFPath, u32 Reg
 
 s32	rtw_hal_interrupt_handler(_adapter *padapter);
 
-void	rtw_hal_set_bwmode(_adapter *padapter, HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
+void	rtw_hal_set_bwmode(_adapter *padapter, enum ht_channel_width Bandwidth, u8 Offset);
 void	rtw_hal_set_chan(_adapter *padapter, u8 channel);
 void	rtw_hal_dm_watchdog(_adapter *padapter);
 

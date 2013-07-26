@@ -433,7 +433,7 @@ void SetBWMode(_adapter *padapter, unsigned short bwmode, unsigned char channel_
 	rtw_set_oper_bw(padapter, bwmode);
 	rtw_set_oper_choffset(padapter, channel_offset);
 
-	rtw_hal_set_bwmode(padapter, (HT_CHANNEL_WIDTH)bwmode, channel_offset);
+	rtw_hal_set_bwmode(padapter, (enum ht_channel_width)bwmode, channel_offset);
 }
 
 void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char channel_offset, unsigned short bwmode)
