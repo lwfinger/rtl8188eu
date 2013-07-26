@@ -41,14 +41,14 @@
 #define AES_BLOCK_SIZE 16
 #define AES_PRIV_SIZE (4 * 44)
 
-typedef enum {
+enum {
 	ENCRYP_PROTOCOL_OPENSYS,   //open system
 	ENCRYP_PROTOCOL_WEP,       //WEP
 	ENCRYP_PROTOCOL_WPA,       //WPA
 	ENCRYP_PROTOCOL_WPA2,      //WPA2
 	ENCRYP_PROTOCOL_WAPI,      //WAPI: Not support in this version
 	ENCRYP_PROTOCOL_MAX
-}ENCRYP_PROTOCOL_E;
+};
 
 
 #ifndef Ndis802_11AuthModeWPA2
@@ -99,27 +99,23 @@ union Keytype {
 };
 
 
-typedef struct _RT_PMKID_LIST
-{
-	u8						bUsed;
-	u8						Bssid[6];
-	u8						PMKID[16];
-	u8						SsidBuf[33];
-	u8*						ssid_octet;
-	u16						ssid_length;
-} RT_PMKID_LIST, *PRT_PMKID_LIST;
-
+struct rt_pmkid_list {
+	u8	bUsed;
+	u8	Bssid[6];
+	u8	PMKID[16];
+	u8	SsidBuf[33];
+	u8*	ssid_octet;
+	u16	ssid_length;
+};
 
 struct security_priv
 {
 	u32	  dot11AuthAlgrthm;		// 802.11 auth, could be open, shared, 8021x and authswitch
 	u32	  dot11PrivacyAlgrthm;	// This specify the privacy for shared auth. algorithm.
-
 	/* WEP */
 	u32	  dot11PrivacyKeyIndex;	// this is only valid for legendary wep, 0~3 for key id. (tx key index)
 	union Keytype dot11DefKey[4];			// this is only valid for def. key
 	u32	dot11DefKeylen[4];
-
 	u32 dot118021XGrpPrivacy;	// This specify the privacy algthm. used for Grp key
 	u32	dot118021XGrpKeyid;		// key id used for Grp Key ( tx key index)
 	union Keytype	dot118021XGrpKey[4];	// 802.1x Group Key, for inx0 and inx1
@@ -127,7 +123,6 @@ struct security_priv
 	union Keytype	dot118021XGrprxmickey[4];
 	union pn48		dot11Grptxpn;			// PN48 used for Grp Key xmit.
 	union pn48		dot11Grprxpn;			// PN48 used for Grp Key recv.
-
 #ifdef CONFIG_AP_MODE
 	//extend security capabilities for AP_MODE
 	unsigned int dot8021xalg;//0:disable, 1:psk, 2:802.1x
@@ -137,35 +132,26 @@ struct security_priv
 	unsigned int wpa_pairwise_cipher;
 	unsigned int wpa2_pairwise_cipher;
 #endif
-
 	u8 wps_ie[MAX_WPS_IE_LEN];//added in assoc req
 	int wps_ie_len;
-
-
 	u8	binstallGrpkey;
 	u8	busetkipkey;
 	u8	bcheck_grpkey;
 	u8	bgrpkey_handshake;
-
 	s32	sw_encrypt;//from registry_priv
 	s32	sw_decrypt;//from registry_priv
-
 	s32	hw_decrypted;//if the rx packets is hw_decrypted==false, it means the hw has not been ready.
-
 
 	//keeps the auth_type & enc_status from upper layer ioctl(wpa_supplicant or wzc)
 	u32 ndisauthtype;	// NDIS_802_11_AUTHENTICATION_MODE
 	u32 ndisencryptstatus;	// NDIS_802_11_ENCRYPTION_STATUS
-
 	struct wlan_bssid_ex sec_bss;  //for joinbss (h2c buffer) usage
-
 	struct ndis_802_11_wep ndiswep;
 	u8 assoc_info[600];
 	u8 szofcapability[256]; //for wpa2 usage
 	u8 oidassociation[512]; //for wpa/wpa2 usage
 	u8 authenticator_ie[256];  //store ap security information element
 	u8 supplicant_ie[256];  //store sta security information element
-
 
 	//for tkip countermeasure
 	u32 last_mic_err_time;
@@ -177,12 +163,8 @@ struct security_priv
 	// For WPA2 Pre-Authentication.
 	//---------------------------------------------------------------------------
 	//u8				RegEnablePreAuth;				// Default value: Pre-Authentication enabled or not, from registry "EnablePreAuth". Added by Annie, 2005-11-01.
-	//u8				EnablePreAuthentication;			// Current Value: Pre-Authentication enabled or not.
-	RT_PMKID_LIST		PMKIDList[NUM_PMKID_CACHE];	// Renamed from PreAuthKey[NUM_PRE_AUTH_KEY]. Annie, 2006-10-13.
+	struct rt_pmkid_list PMKIDList[NUM_PMKID_CACHE];	// Renamed from PreAuthKey[NUM_PRE_AUTH_KEY]. Annie, 2006-10-13.
 	u8				PMKIDIndex;
-	//u32				PMKIDCount;						// Added by Annie, 2006-10-13.
-	//u8				szCapability[256];				// For WPA2-PSK using zero-config, by Annie, 2005-09-20.
-
 	u8 bWepDefaultKeyIdxSet;
 };
 

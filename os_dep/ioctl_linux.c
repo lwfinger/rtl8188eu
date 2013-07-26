@@ -1254,7 +1254,7 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
         else if (pPMK->cmd == IW_PMKSA_FLUSH)
         {
             DBG_88E("[rtw_wx_set_pmkid] IW_PMKSA_FLUSH!\n");
-            _rtw_memset(&psecuritypriv->PMKIDList[ 0 ], 0x00, sizeof(RT_PMKID_LIST) * NUM_PMKID_CACHE);
+            _rtw_memset(&psecuritypriv->PMKIDList[ 0 ], 0x00, sizeof(struct rt_pmkid_list) * NUM_PMKID_CACHE);
             psecuritypriv->PMKIDIndex = 0;
             intReturn = true;
         }
