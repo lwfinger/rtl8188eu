@@ -237,7 +237,7 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 
 void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode)
 {
-	SETPWRMODE_PARM H2CSetPwrMode;
+	struct setpwrmode_parm H2CSetPwrMode;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	u8	RLBM = 0; /*  0:Min, 1:Max , 2:User define */
 _func_enter_;
@@ -555,8 +555,7 @@ static void SetFwRsvdPagePkt(PADAPTER padapter, bool bDLFinished)
 	u8	PageNum, PageNeed, TxDescLen;
 	u16	BufIndex;
 	u32	TotalPacketLen;
-	RSVDPAGE_LOC	RsvdPageLoc;
-
+	struct rsvdpage_loc RsvdPageLoc;
 
 	DBG_88E("%s\n", __func__);
 
@@ -665,7 +664,7 @@ exit:
 
 void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 {
-	JOINBSSRPT_PARM	JoinBssRptParm;
+	struct joinbssrpt_parm JoinBssRptParm;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -868,8 +867,8 @@ void rtl8188es_set_wowlan_cmd(_adapter* padapter, u8 enable)
 	u8		res=_SUCCESS;
 	u32		test=0;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
-	SETWOWLAN_PARM		pwowlan_parm;
-	SETAOAC_GLOBAL_INFO	paoac_global_info_parm;
+	struct setwowlan_parm pwowlan_parm;
+	struct setaoac_glocal_info paoac_global_info_parm;
 	struct pwrctrl_priv	*pwrpriv=&padapter->pwrctrlpriv;
 
 _func_enter_;

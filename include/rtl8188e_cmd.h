@@ -20,8 +20,7 @@
 #ifndef __RTL8188E_CMD_H__
 #define __RTL8188E_CMD_H__
 
-typedef enum _RTL8188E_H2C_CMD_ID
-{
+enum RTL8188E_H2C_CMD_ID {
 	//Class Common
 	H2C_COM_RSVD_PAGE			=0x00,
 	H2C_COM_MEDIA_STATUS_RPT	=0x01,
@@ -63,7 +62,7 @@ typedef enum _RTL8188E_H2C_CMD_ID
 
 	//Class
 	 H2C_RESET_TSF				=0xc0,
-}RTL8188E_H2C_CMD_ID;
+};
 
 struct cmd_msg_parm {
 	u8 eid; //element id
@@ -75,34 +74,33 @@ enum{
 	PWRS
 };
 
-typedef struct _SETPWRMODE_PARM {
+struct setpwrmode_parm {
 	u8 Mode;//0:Active,1:LPS,2:WMMPS
 	u8 SmartPS_RLBM;//LPS=0:PS_Poll,1:PS_Poll,2:NullData,WMM=0:PS_Poll,1:NullData
 	u8 AwakeInterval;	// unit: beacon interval
 	u8 bAllQueueUAPSD;
 	u8 PwrState;//AllON(0x0c),RFON(0x04),RFOFF(0x00)
-} SETPWRMODE_PARM, *PSETPWRMODE_PARM;
+};
 
 struct H2C_SS_RFOFF_PARAM{
 	u8 ROFOn; // 1: on, 0:off
 	u16 gpio_period; // unit: 1024 us
 }__attribute__ ((packed));
 
-
-typedef struct JOINBSSRPT_PARM{
+struct joinbssrpt_parm {
 	u8 OpMode;	// RT_MEDIA_STATUS
 #ifdef CONFIG_WOWLAN
 	u8 MacID;       // MACID
 #endif //CONFIG_WOWLAN
-}JOINBSSRPT_PARM, *PJOINBSSRPT_PARM;
+};
 
-typedef struct _RSVDPAGE_LOC {
+struct rsvdpage_loc {
 	u8 LocProbeRsp;
 	u8 LocPsPoll;
 	u8 LocNullData;
 	u8 LocQosNull;
 	u8 LocBTQosNull;
-} RSVDPAGE_LOC, *PRSVDPAGE_LOC;
+};
 
 struct P2P_PS_Offload_t {
 	u8 Offload_En:1;
@@ -137,18 +135,18 @@ void CheckFwRsvdPageContent(PADAPTER padapter);
 void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, __le16 mstatus_rpt);
 
 #ifdef CONFIG_WOWLAN
-typedef struct _SETWOWLAN_PARM{
+struct setwowlan_parm {
 	u8		mode;
 	u8		gpio_index;
 	u8		gpio_duration;
 	u8		second_mode;
 	u8		reserve;
-}SETWOWLAN_PARM, *PSETWOWLAN_PARM;
+};
 
-typedef struct _SETAOAC_GLOBAL_INFO{
+struct setaoac_glocal_info {
 	u8		pairwiseEncAlg;
 	u8		groupEncAlg;
-}SETAOAC_GLOBAL_INFO, *PSETAOAC_GLOBAL_INFO;
+};
 
 #define FW_WOWLAN_FUN_EN				BIT(0)
 #define FW_WOWLAN_PATTERN_MATCH			BIT(1)
