@@ -251,7 +251,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 	u1Byte				cck_highpwr = 0;
 	u1Byte				LNA_idx, VGA_idx;
 
-	PPHY_STATUS_RPT_8192CD_T pPhyStaRpt = (PPHY_STATUS_RPT_8192CD_T)pPhyStatus;
+	struct phy_status_rpt *pPhyStaRpt = (struct phy_status_rpt *)pPhyStatus;
 
 	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M) && (pPktinfo->Rate <= DESC92C_RATE11M)) ? true : false;
 
