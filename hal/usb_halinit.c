@@ -1078,11 +1078,11 @@ HwSuspendModeEnable_88eu(
 {
 }	/*  HwSuspendModeEnable92Cu */
 
-rt_rf_power_state RfOnOffDetect(	PADAPTER pAdapter )
+enum rt_rf_power_state RfOnOffDetect(PADAPTER pAdapter)
 {
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(pAdapter);
 	u8	val8;
-	rt_rf_power_state rfpowerstate = rf_off;
+	enum rt_rf_power_state rfpowerstate = rf_off;
 
 	if (pAdapter->pwrctrlpriv.bHWPowerdown)
 	{
@@ -1111,7 +1111,7 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 	struct pwrctrl_priv		*pwrctrlpriv = &Adapter->pwrctrlpriv;
 	struct registry_priv	*pregistrypriv = &Adapter->registrypriv;
-	rt_rf_power_state		eRfPowerStateToSet;
+	enum rt_rf_power_state	eRfPowerStateToSet;
 #ifdef CONFIG_BT_COEXIST
 	struct btcoexist_priv	*pbtpriv = &(pHalData->bt_coexist);
 #endif
