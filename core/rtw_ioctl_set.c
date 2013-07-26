@@ -1176,7 +1176,7 @@ u16 rtw_get_cur_max_rate(_adapter *adapter)
 *
 * Return _SUCCESS or _FAIL
 */
-int rtw_set_scan_mode(_adapter *adapter, RT_SCAN_TYPE scan_mode)
+int rtw_set_scan_mode(_adapter *adapter, enum rt_scan_type scan_mode)
 {
 	if (scan_mode != SCAN_ACTIVE && scan_mode != SCAN_PASSIVE)
 		return _FAIL;

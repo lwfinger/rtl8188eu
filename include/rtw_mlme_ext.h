@@ -377,7 +377,7 @@ struct mlme_ext_info {
 // The channel information about this channel including joining, scanning, and power constraints.
 struct rt_channel_info {
 	u8				ChannelNum;		// The channel number.
-	RT_SCAN_TYPE	ScanType;		// Scan type such as passive or active scan.
+	enum rt_scan_type ScanType;		// Scan type such as passive or active scan.
 	u32				rx_count;
 };
 

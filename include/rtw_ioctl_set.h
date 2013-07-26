@@ -40,7 +40,7 @@ u8 rtw_set_802_11_remove_key(_adapter * padapter, struct ndis_802_11_remove_key 
 u8 rtw_validate_ssid(struct ndis_802_11_ssid *ssid);
 
 u16 rtw_get_cur_max_rate(_adapter *adapter);
-int rtw_set_scan_mode(_adapter *adapter, RT_SCAN_TYPE scan_mode);
+int rtw_set_scan_mode(_adapter *adapter, enum rt_scan_type scan_mode);
 int rtw_set_channel_plan(_adapter *adapter, u8 channel_plan);
 int rtw_set_country(_adapter *adapter, const char *country_code);
 int rtw_change_ifname(_adapter *padapter, const char *ifname);

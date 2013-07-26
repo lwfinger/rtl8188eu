@@ -76,12 +76,11 @@ enum dot11AuthAlgrthmNum {
 };
 
 // Scan type including active and passive scan.
-typedef enum _RT_SCAN_TYPE
-{
+enum rt_scan_type {
 	SCAN_PASSIVE,
 	SCAN_ACTIVE,
 	SCAN_MIX,
-}RT_SCAN_TYPE, *PRT_SCAN_TYPE;
+};
 
 enum SCAN_RESULT_TYPE
 {
@@ -117,17 +116,17 @@ struct sitesurvey_ctrl {
 	struct timer_list sitesurvey_ctrl_timer;
 };
 
-typedef struct _RT_LINK_DETECT_T{
-	u32				NumTxOkInPeriod;
-	u32				NumRxOkInPeriod;
-	u32				NumRxUnicastOkInPeriod;
-	bool			bBusyTraffic;
-	bool			bTxBusyTraffic;
-	bool			bRxBusyTraffic;
-	bool			bHigherBusyTraffic; // For interrupt migration purpose.
-	bool			bHigherBusyRxTraffic; // We may disable Tx interrupt according as Rx traffic.
-	bool			bHigherBusyTxTraffic; // We may disable Tx interrupt according as Tx traffic.
-}RT_LINK_DETECT_T, *PRT_LINK_DETECT_T;
+struct rt_link_detect {
+	u32	NumTxOkInPeriod;
+	u32	NumRxOkInPeriod;
+	u32	NumRxUnicastOkInPeriod;
+	bool	bBusyTraffic;
+	bool	bTxBusyTraffic;
+	bool	bRxBusyTraffic;
+	bool	bHigherBusyTraffic; // For interrupt migration purpose.
+	bool	bHigherBusyRxTraffic; // We may disable Tx interrupt according as Rx traffic.
+	bool	bHigherBusyTxTraffic; // We may disable Tx interrupt according as Tx traffic.
+};
 
 struct profile_info {
 	u8	ssidlen;
@@ -339,13 +338,13 @@ struct mlme_priv {
 
 #endif
 
-	RT_LINK_DETECT_T	LinkDetectInfo;
+	struct rt_link_detect LinkDetectInfo;
 	struct timer_list dynamic_chk_timer; //dynamic/periodic check timer
 
 	u8	key_mask; //use for ips to set wep key after ips_leave
 	u8	acm_mask; // for wmm acm mask
 	u8	ChannelPlan;
-	RT_SCAN_TYPE	scan_mode; // active: 1, passive: 0
+	enum rt_scan_type scan_mode; // active: 1, passive: 0
 
 	//u8 probereq_wpsie[MAX_WPS_IE_LEN];//added in probe req
 	//int probereq_wpsie_len;
