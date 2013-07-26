@@ -376,7 +376,7 @@ odm_HWAntDiv(
 	struct rtw_dig *pDM_DigTable = &pDM_Odm->DM_DigTable;
 	bool	bMatchBSSID;
 	bool	bPktFilterMacth = false;
-	PSTA_INFO_T	pEntry;
+	struct sta_info *	pEntry;
 
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++)
 	{

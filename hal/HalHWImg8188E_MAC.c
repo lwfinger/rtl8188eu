@@ -149,7 +149,7 @@ static u4Byte Array_MAC_REG_8188E[] = {
 		0x70B, 0x00000087,
 };
 
-HAL_STATUS
+enum HAL_STATUS
 ODM_ReadAndConfig_MAC_REG_8188E(
 	struct odm_dm_struct * pDM_Odm
 	)
@@ -170,7 +170,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
 	u8 bndy_cnt = 1;
-	HAL_STATUS rst =HAL_STATUS_SUCCESS;
+	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 	hex += board;
 	hex += interfaceValue << 8;
 	hex += platform << 16;

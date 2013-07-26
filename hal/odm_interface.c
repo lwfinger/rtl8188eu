@@ -170,7 +170,7 @@ s4Byte ODM_CompareMemory(
 void
 ODM_AcquireSpinLock(
 		struct odm_dm_struct *pDM_Odm,
-		RT_SPINLOCK_TYPE	type
+		enum RT_SPINLOCK_TYPE	type
 	)
 {
 }
@@ -178,7 +178,7 @@ ODM_AcquireSpinLock(
 void
 ODM_ReleaseSpinLock(
 		struct odm_dm_struct *pDM_Odm,
-		RT_SPINLOCK_TYPE	type
+		enum RT_SPINLOCK_TYPE	type
 	)
 {
 }
@@ -240,25 +240,25 @@ void ODM_sleep_us(u4Byte us)
 	rtw_usleep_os(us);
 }
 
-void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER pTimer, u4Byte msDelay)
+void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, struct timer_list * pTimer, u4Byte msDelay)
 {
 	_set_timer(pTimer,msDelay ); /* ms */
 }
 
-void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER pTimer,
-			 RT_TIMER_CALL_BACK CallBackFunc, void *pContext,
+void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer,
+			 void *CallBackFunc, void *pContext,
 			 const char *szID)
 {
 	PADAPTER Adapter = pDM_Odm->Adapter;
 	_init_timer(pTimer,Adapter->pnetdev,CallBackFunc,pDM_Odm);
 }
 
-void ODM_CancelTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER pTimer)
+void ODM_CancelTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer)
 {
 	_cancel_timer_ex(pTimer);
 }
 
-void ODM_ReleaseTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER pTimer)
+void ODM_ReleaseTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer)
 {
 }
 

@@ -189,7 +189,7 @@ static u4Byte Array_AGC_TAB_1T_8188E[] = {
 		0xC78, 0x407F0001,
 };
 
-HAL_STATUS
+enum HAL_STATUS
 ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 	struct odm_dm_struct * pDM_Odm
 	)
@@ -209,7 +209,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
 	u8 bndy_cnt=1;
-	HAL_STATUS rst =HAL_STATUS_SUCCESS;
+	enum HAL_STATUS rst =HAL_STATUS_SUCCESS;
 
 	hex += board;
 	hex += interfaceValue << 8;
@@ -491,7 +491,7 @@ static u4Byte Array_PHY_REG_1T_8188E[] = {
 };
 
 
-HAL_STATUS
+enum HAL_STATUS
 ODM_ReadAndConfig_PHY_REG_1T_8188E(
 	struct odm_dm_struct * pDM_Odm
 	)
@@ -511,7 +511,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
 	u8 bndy_cnt=1;
-	HAL_STATUS rst =HAL_STATUS_SUCCESS;
+	enum HAL_STATUS rst =HAL_STATUS_SUCCESS;
 	hex += board;
 	hex += interfaceValue << 8;
 	hex += platform << 16;

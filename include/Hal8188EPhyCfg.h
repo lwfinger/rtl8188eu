@@ -235,7 +235,6 @@ PHY_ScanOperationBackup8188E(	PADAPTER	Adapter,
 //
 // Switch bandwidth for 8192S
 //
-//extern	void	PHY_SetBWModeCallback8192C(		PRT_TIMER		pTimer	);
 void	PHY_SetBWMode8188E(		PADAPTER			pAdapter,
 										HT_CHANNEL_WIDTH	ChnlWidth,
 										unsigned char	Offset	);
@@ -257,7 +256,6 @@ extern	void FillA2Entry8192C(			PADAPTER			Adapter,
 //
 // channel switch related funciton
 //
-//extern	void	PHY_SwChnlCallback8192C(		PRT_TIMER		pTimer	);
 void	PHY_SwChnl8188E(		PADAPTER		pAdapter,
 										u8			channel	);
 				// Call after initialization

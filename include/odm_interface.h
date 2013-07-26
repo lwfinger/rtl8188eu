@@ -118,9 +118,9 @@ s4Byte ODM_CompareMemory(struct odm_dm_struct *pDM_Odm, void *pBuf1, void *pBuf2
 //
 // ODM MISC-spin lock relative API.
 //
-void ODM_AcquireSpinLock(struct odm_dm_struct *pDM_Odm, RT_SPINLOCK_TYPE	type);
+void ODM_AcquireSpinLock(struct odm_dm_struct *pDM_Odm, enum RT_SPINLOCK_TYPE	type);
 
-void ODM_ReleaseSpinLock(struct odm_dm_struct *pDM_Odm, RT_SPINLOCK_TYPE	type);
+void ODM_ReleaseSpinLock(struct odm_dm_struct *pDM_Odm, enum RT_SPINLOCK_TYPE	type);
 
 //
 // ODM MISC-workitem relative API.
@@ -152,13 +152,13 @@ void ODM_sleep_ms(u4Byte ms);
 
 void ODM_sleep_us(u4Byte us);
 
-void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER		pTimer, u4Byte msDelay);
+void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer, u4Byte msDelay);
 
-void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER pTimer, RT_TIMER_CALL_BACK CallBackFunc, void *pContext, const char *szID);
+void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer, void *CallBackFunc, void *pContext, const char *szID);
 
-void ODM_CancelTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER		pTimer);
+void ODM_CancelTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer);
 
-void ODM_ReleaseTimer(struct odm_dm_struct *pDM_Odm, PRT_TIMER		pTimer);
+void ODM_ReleaseTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer);
 
 //
 // ODM FW relative API.

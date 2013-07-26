@@ -585,7 +585,7 @@ static void odm_Process_RSSIForDM(
 	u4Byte			OFDM_pkt=0;
 	u4Byte			Weighting=0;
 
-	PSTA_INFO_T	pEntry;
+	struct sta_info *	pEntry;
 
 	if (pPktinfo->StationID == 0xFF)
 		return;
@@ -844,7 +844,7 @@ ODM_MacStatusQuery(
 
 }
 
-HAL_STATUS
+enum HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
 		struct odm_dm_struct *		pDM_Odm,
 		enum ODM_RF_RADIO_PATH	Content,
@@ -873,7 +873,7 @@ ODM_ConfigRFWithHeaderFile(
 }
 
 
-HAL_STATUS
+enum HAL_STATUS
 ODM_ConfigBBWithHeaderFile(
 		struct odm_dm_struct *		pDM_Odm,
 		enum odm_bb_config_type		ConfigType
@@ -903,7 +903,7 @@ ODM_ConfigBBWithHeaderFile(
 	return HAL_STATUS_SUCCESS;
 }
 
-HAL_STATUS
+enum HAL_STATUS
 ODM_ConfigMACWithHeaderFile(
 		struct odm_dm_struct *pDM_Odm
 	)

@@ -28,7 +28,7 @@
 *                           AGC_TAB_1T.TXT
 ******************************************************************************/
 
-HAL_STATUS
+enum HAL_STATUS
 ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 	struct odm_dm_struct * pDM_Odm
 );
@@ -37,7 +37,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 *                           PHY_REG_1T.TXT
 ******************************************************************************/
 
-HAL_STATUS
+enum HAL_STATUS
 ODM_ReadAndConfig_PHY_REG_1T_8188E(
 	struct odm_dm_struct * pDM_Odm
 );

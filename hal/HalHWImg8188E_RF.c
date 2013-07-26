@@ -160,7 +160,7 @@ static u4Byte Array_RadioA_1T_8188E[] = {
 		0x000, 0x00033E60,
 };
 
-HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm)
+enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm)
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
 
@@ -177,7 +177,7 @@ HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm)
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
 	u8 bndy_cnt = 1;
-	HAL_STATUS rst =HAL_STATUS_SUCCESS;
+	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 
 	hex += board;
 	hex += interfaceValue << 8;

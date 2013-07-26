@@ -32,20 +32,14 @@
 #define		RT_USB_INTERFACE				2
 #define		RT_SDIO_INTERFACE				3
 
-typedef enum _HAL_STATUS{
+enum HAL_STATUS {
 	HAL_STATUS_SUCCESS,
 	HAL_STATUS_FAILURE,
-	/*RT_STATUS_PENDING,
-	RT_STATUS_RESOURCE,
-	RT_STATUS_INVALID_CONTEXT,
-	RT_STATUS_INVALID_PARAMETER,
-	RT_STATUS_NOT_SUPPORT,
-	RT_STATUS_OS_API_FAILED,*/
-}HAL_STATUS,*PHAL_STATUS;
+};
 
-typedef enum _RT_SPINLOCK_TYPE{
+enum RT_SPINLOCK_TYPE {
 	RT_TEMP =1,
-}RT_SPINLOCK_TYPE;
+};
 
 #include <basic_types.h>
 
@@ -74,11 +68,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 #define ps8Byte			s64*
 
 #define DEV_BUS_TYPE	RT_USB_INTERFACE
-
-typedef struct timer_list		RT_TIMER, *PRT_TIMER;
-typedef  void *				RT_TIMER_CALL_BACK;
-#define	STA_INFO_T			struct sta_info
-#define	PSTA_INFO_T		struct sta_info *
 
 #define SET_TX_DESC_ANTSEL_A_88E(__pTxDesc, __Value) SET_BITS_TO_LE_4BYTE(__pTxDesc+8, 24, 1, __Value)
 #define SET_TX_DESC_ANTSEL_B_88E(__pTxDesc, __Value) SET_BITS_TO_LE_4BYTE(__pTxDesc+8, 25, 1, __Value)

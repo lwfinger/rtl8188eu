@@ -27,6 +27,6 @@
 *                           MAC_REG.TXT
 ******************************************************************************/
 
-HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E( struct odm_dm_struct *pDM_Odm);
+enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E( struct odm_dm_struct *pDM_Odm);
 
 #endif // end of HWIMG_SUPPORT

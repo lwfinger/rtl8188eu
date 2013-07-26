@@ -760,7 +760,7 @@ ODM_CmnInfoHook(
 		/* 	pDM_Odm->BTCoexist = (bool *)pValue; */
 
 		/* case	ODM_CMNINFO_STA_STATUS: */
-			/* pDM_Odm->pODM_StaInfo[] = (PSTA_INFO_T)pValue; */
+			/* pDM_Odm->pODM_StaInfo[] = (struct sta_info *)pValue; */
 			/* break; */
 
 		/* case	ODM_CMNINFO_PHY_STATUS: */
@@ -797,7 +797,7 @@ ODM_CmnInfoPtrArrayHook(
 		/*  Dynamic call by reference pointer. */
 		/*  */
 		case	ODM_CMNINFO_STA_STATUS:
-			pDM_Odm->pODM_StaInfo[Index] = (PSTA_INFO_T)pValue;
+			pDM_Odm->pODM_StaInfo[Index] = (struct sta_info *)pValue;
 			break;
 		/* To remove the compiler warning, must add an empty default statement to handle the other values. */
 		default:
@@ -911,7 +911,7 @@ odm_CommonInfoSelfUpdate(
 {
 	u1Byte	EntryCnt=0;
 	u1Byte	i;
-	PSTA_INFO_T	pEntry;
+	struct sta_info *	pEntry;
 
 	if (*(pDM_Odm->pBandWidth) == ODM_BW40M)
 	{
@@ -1922,7 +1922,7 @@ u4Byte ODM_Get_Rate_Bitmap(
 		u4Byte		ra_mask,
 		u1Byte		rssi_level)
 {
-	PSTA_INFO_T	pEntry;
+	struct sta_info *	pEntry;
 	u4Byte	rate_bitmap = 0x0fffffff;
 	u1Byte	WirelessMode;
 
@@ -2076,7 +2076,7 @@ odm_RefreshRateAdaptiveMaskCE(
 	}
 
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++){
-		PSTA_INFO_T pstat = pDM_Odm->pODM_StaInfo[i];
+		struct sta_info * pstat = pDM_Odm->pODM_StaInfo[i];
 		if (IS_STA_VALID(pstat) ) {
 			if ( true == ODM_RAStateCheck(pDM_Odm, pstat->rssi_stat.UndecoratedSmoothedPWDB, false , &pstat->rssi_level) ) {
 				ODM_RT_TRACE(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RSSI:%d, RSSI_LEVEL:%d\n", pstat->rssi_stat.UndecoratedSmoothedPWDB, pstat->rssi_level));
@@ -2456,7 +2456,7 @@ ODM_InitAllTimers(
 	)
 {
 	ODM_InitializeTimer(pDM_Odm,&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchTimer,
-		(RT_TIMER_CALL_BACK)odm_SwAntDivChkAntSwitchCallback, NULL, "SwAntennaSwitchTimer");
+		(void *)odm_SwAntDivChkAntSwitchCallback, NULL, "SwAntennaSwitchTimer");
 }
 
 void
@@ -2840,7 +2840,7 @@ static void odm_HwAntDiv_92C_92D(struct odm_dm_struct *pDM_Odm)
 	u4Byte			RSSI_Min=0xFF, RSSI, RSSI_Ant1, RSSI_Ant2;
 	u1Byte			RxIdleAnt, i;
 	bool		bRet=false;
-	PSTA_INFO_T	pEntry;
+	struct sta_info *pEntry;
 
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("odm_HwAntDiv==============>\n"));
 

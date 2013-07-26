@@ -210,7 +210,7 @@ struct rx_hpc {
 	bool		First_time_enter;
 	bool		RXHP_enable;
 	u1Byte		TP_Mode;
-	RT_TIMER	PSDTimer;
+	struct timer_list PSDTimer;
 };
 
 #define ASSOCIATE_ENTRY_NUM					32 // Max size of AsocEntry[].
@@ -257,7 +257,7 @@ struct sw_ant_switch {
 	u8Byte		RXByteCnt_A;
 	u8Byte		RXByteCnt_B;
 	u1Byte		TrafficLoad;
-	RT_TIMER	SwAntennaSwitchTimer;
+	struct timer_list SwAntennaSwitchTimer;
 	//Hybrid Antenna Diversity
 	u4Byte		CCK_Ant1_Cnt[ASSOCIATE_ENTRY_NUM];
 	u4Byte		CCK_Ant2_Cnt[ASSOCIATE_ENTRY_NUM];
@@ -361,7 +361,7 @@ enum odm_ability {
 };
 
 //
-// 2011/20/20 MH For MP driver RT_WLAN_STA =  STA_INFO_T
+// 2011/20/20 MH For MP driver RT_WLAN_STA =  struct sta_info
 // Please declare below ODM relative info in your STA info structure.
 //
 struct odm_sta_info {
@@ -927,7 +927,7 @@ struct odm_dm_struct {
 	//2 Define STA info.
 	// _ODM_STA_INFO
 	// 2012/01/12 MH For MP, we need to reduce one array pointer for default port.??
-	PSTA_INFO_T		pODM_StaInfo[ODM_ASSOCIATE_ENTRY_NUM];
+	struct sta_info *pODM_StaInfo[ODM_ASSOCIATE_ENTRY_NUM];
 
 #if (RATE_ADAPTIVE_SUPPORT == 1)
 	u2Byte			CurrminRptTime;
@@ -973,7 +973,7 @@ struct odm_dm_struct {
 
 	//PSD
 	bool			bUserAssignLevel;
-	RT_TIMER		PSDTimer;
+	struct timer_list PSDTimer;
 	u1Byte			RSSI_BT;			//come from BT
 	bool			bPSDinProcess;
 	bool			bDMInitialGainEnable;
@@ -1003,10 +1003,10 @@ struct odm_dm_struct {
 	//
 
 	// ODM relative time.
-	RT_TIMER				PathDivSwitchTimer;
+	struct timer_list PathDivSwitchTimer;
 	//2011.09.27 add for Path Diversity
-	RT_TIMER				CCKPathDiversityTimer;
-	RT_TIMER	FastAntTrainingTimer;
+	struct timer_list CCKPathDiversityTimer;
+	struct timer_list FastAntTrainingTimer;
 };		// DM_Dynamic_Mechanism_Structure
 
 #define ODM_RF_PATH_MAX 2
