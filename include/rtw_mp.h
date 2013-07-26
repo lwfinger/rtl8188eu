@@ -80,7 +80,7 @@
 #define NDIS_STATUS_AAL_PARAMS_UNSUPPORTED	((NDIS_STATUS)0xC0010028L)  // cause 93
 #define NDIS_STATUS_NO_ROUTE_TO_DESTINATION	((NDIS_STATUS)0xC0010029L)  // cause 3
 
-typedef enum _ANTENNA_PATH{
+enum antenna_path {
 		ANTENNA_NONE	= 0x00,
 		ANTENNA_D		,
 		ANTENNA_C		,
@@ -97,7 +97,7 @@ typedef enum _ANTENNA_PATH{
 		ANTENNA_ABD	,
 		ANTENNA_ABC	,
 		ANTENNA_ABCD
-} ANTENNA_PATH;
+};
 
 
 #define MAX_MP_XMITBUF_SZ	2048
@@ -137,8 +137,7 @@ struct mp_wiparam
 
 typedef void(*wi_act_func)(void* padapter);
 
-struct mp_tx
-{
+struct mp_tx {
 	u8 stop;
 	u32 count, sended;
 	u8 payload;
@@ -191,8 +190,8 @@ struct mp_tx
 
 
 typedef void (*MPT_WORK_ITEM_HANDLER)(void *Adapter);
-typedef struct _MPT_CONTEXT
-{
+
+struct mpt_context {
 	// Indicate if we have started Mass Production Test.
 	bool			bMassProdTest;
 
@@ -209,12 +208,7 @@ typedef struct _MPT_CONTEXT
 
 	/* 8190 PCI does not support NDIS_WORK_ITEM. */
 	// Work Item for Mass Production Test.
-	//NDIS_WORK_ITEM	MptWorkItem;
-//	RT_WORK_ITEM		MptWorkItem;
 	// Event used to sync the case unloading driver and MptWorkItem is still in progress.
-//	NDIS_EVENT		MptWorkItemEvent;
-	// To protect the following variables.
-//	NDIS_SPIN_LOCK		MptWorkItemSpinLock;
 	// Indicate a MptWorkItem is scheduled and not yet finished.
 	bool			bMptWorkItemInProgress;
 	// An instance which implements function and context of MptWorkItem.
@@ -236,7 +230,6 @@ typedef struct _MPT_CONTEXT
 	enum wireless_mode MptWirelessModeToSw;	// Wireless mode to switch.
 	u8			MptChannelToSw;		// Channel to switch.
 	u8			MptInitGainToSet;	// Initial gain to set.
-	//ULONG			bMptAntennaA;		// true if we want to use antenna A.
 	ULONG			MptBandWidth;		// bandwidth to switch.
 	ULONG			MptRateIndex;		// rate index.
 	// Register value kept for Single Carrier Tx test.
@@ -290,7 +283,7 @@ typedef struct _MPT_CONTEXT
 	ULONG			mptOutLen;
     u1Byte          mptOutBuf[100];
 
-}MPT_CONTEXT, *PMPT_CONTEXT;
+};
 
 enum {
 	WRITE_REG = 1,
@@ -374,14 +367,14 @@ struct mp_priv
 	struct __queue free_mp_xmitqueue;
 	u32 free_mp_xmitframe_cnt;
 
-	MPT_CONTEXT MptCtx;
+	struct mpt_context MptCtx;
 };
 
-typedef struct _IOCMD_STRUCT_ {
+struct iocmd_struct {
 	u8	cmdclass;
 	u16	value;
 	u8	index;
-}IOCMD_STRUCT;
+};
 
 struct rf_reg_param {
 	u32 path;
@@ -402,7 +395,7 @@ struct bb_reg_param {
 #define BB_REG_BASE_ADDR		0x800
 
 /* MP variables */
-typedef enum _MP_MODE_ {
+enum mp_mode_{
 	MP_OFF,
 	MP_ON,
 	MP_ERR,
@@ -412,17 +405,14 @@ typedef enum _MP_MODE_ {
 	MP_SINGLE_TONE_TX,
 	MP_PACKET_TX,
 	MP_PACKET_RX
-} MP_MODE;
-
+};
 
 #define MAX_RF_PATH_NUMS	RF_PATH_MAX
-
 
 extern u8 mpdatarate[NumRates];
 
 /* MP set force data rate base on the definition. */
-typedef enum _MPT_RATE_INDEX
-{
+enum mpt_rate_index {
 	/* CCK rate. */
 	MPT_RATE_1M,	/* 0 */
 	MPT_RATE_2M,
@@ -457,27 +447,25 @@ typedef enum _MPT_RATE_INDEX
 	MPT_RATE_MCS14,
 	MPT_RATE_MCS15,	/* 27 */
 	MPT_RATE_LAST
-}MPT_RATE_E, *PMPT_RATE_E;
+};
 
 #define MAX_TX_PWR_INDEX_N_MODE 64	// 0x3F
 
-typedef enum _POWER_MODE_ {
+enum power_mode {
 	POWER_LOW = 0,
 	POWER_NORMAL
-}POWER_MODE;
-
+};
 
 #define RX_PKT_BROADCAST	1
 #define RX_PKT_DEST_ADDR	2
 #define RX_PKT_PHY_MATCH	3
 
-typedef enum _ENCRY_CTRL_STATE_ {
+enum encry_ctrl_state {
 	HW_CONTROL,		//hw encryption& decryption
 	SW_CONTROL,		//sw encryption& decryption
 	HW_ENCRY_SW_DECRY,	//hw encryption & sw decryption
 	SW_ENCRY_HW_DECRY	//sw encryption & hw decryption
-}ENCRY_CTRL_STATE;
-
+};
 
 //=======================================================================
 //extern struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv);

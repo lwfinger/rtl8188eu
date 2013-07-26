@@ -1551,7 +1551,7 @@ static void phy_APCalibrate_8188E(
 #if MP_DRIVER == 1
 if ( *(pDM_Odm->mp_mode) == 1)
 {
-	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
+	struct mpt_context *	pMptCtx = &(pAdapter->mppriv.MptCtx);
 	pMptCtx->APK_bound[0] = 45;
 	pMptCtx->APK_bound[1] = 52;
 }
@@ -1890,7 +1890,7 @@ PHY_IQCalibrate_8188E(
 	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	#if (MP_DRIVER == 1)
-		PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
+		struct mpt_context *	pMptCtx = &(pAdapter->mppriv.MptCtx);
 	#endif/* MP_DRIVER == 1) */
 
 	s4Byte			result[4][8];	/* last is final result */
@@ -2081,7 +2081,7 @@ PHY_LCCalibrate_8188E(
 	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
 
 	#if (MP_DRIVER == 1)
-	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
+	struct mpt_context *pMptCtx = &(pAdapter->mppriv.MptCtx);
 	#endif/* MP_DRIVER == 1) */
 
 #if MP_DRIVER == 1

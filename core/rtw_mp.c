@@ -252,7 +252,7 @@ MPT_InitializeAdapter(
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	s32		rtStatus = _SUCCESS;
-	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
+	struct mpt_context *	pMptCtx = &pAdapter->mppriv.MptCtx;
 	struct mlme_priv *pmlmepriv = &pAdapter->mlmepriv;
 
 	/*  */
@@ -317,14 +317,14 @@ MPT_DeInitAdapter(
 		PADAPTER	pAdapter
 	)
 {
-	PMPT_CONTEXT		pMptCtx = &pAdapter->mppriv.MptCtx;
+	struct mpt_context *		pMptCtx = &pAdapter->mppriv.MptCtx;
 
 	pMptCtx->bMptDrvUnload = true;
 }
 
 static u8 mpt_ProStartTest(PADAPTER padapter)
 {
-	PMPT_CONTEXT pMptCtx = &padapter->mppriv.MptCtx;
+	struct mpt_context * pMptCtx = &padapter->mppriv.MptCtx;
 
 	pMptCtx->bMassProdTest = true;
 	pMptCtx->bStartContTx = false;

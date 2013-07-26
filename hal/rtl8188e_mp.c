@@ -212,7 +212,7 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
 	u8		TimeOut = 100;
 	s32		i = 0;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
+	struct mpt_context *	pMptCtx = &pAdapter->mppriv.MptCtx;
 
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct odm_dm_struct *	pDM_Odm = &(pHalData->odmpriv);
@@ -363,7 +363,7 @@ void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower)
 {
 	u32 TxAGC = 0;
 	u8 tmpval = 0;
-	PMPT_CONTEXT	pMptCtx = &pAdapter->mppriv.MptCtx;
+	struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
 
