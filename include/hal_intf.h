@@ -212,8 +212,8 @@ struct hal_ops {
 
 	u32	(*read_bbreg)(_adapter *padapter, u32 RegAddr, u32 BitMask);
 	void	(*write_bbreg)(_adapter *padapter, u32 RegAddr, u32 BitMask, u32 Data);
-	u32	(*read_rfreg)(_adapter *padapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask);
-	void	(*write_rfreg)(_adapter *padapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
+	u32	(*read_rfreg)(_adapter *padapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask);
+	void	(*write_rfreg)(_adapter *padapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
 	void (*EfusePowerSwitch)(_adapter *padapter, u8 bWrite, u8 PwrState);
 	void (*ReadEFuse)(_adapter *padapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
@@ -405,8 +405,8 @@ void rtw_hal_bcn_related_reg_setting(_adapter *padapter);
 
 u32	rtw_hal_read_bbreg(_adapter *padapter, u32 RegAddr, u32 BitMask);
 void	rtw_hal_write_bbreg(_adapter *padapter, u32 RegAddr, u32 BitMask, u32 Data);
-u32	rtw_hal_read_rfreg(_adapter *padapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask);
-void	rtw_hal_write_rfreg(_adapter *padapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
+u32	rtw_hal_read_rfreg(_adapter *padapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask);
+void	rtw_hal_write_rfreg(_adapter *padapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
 s32	rtw_hal_interrupt_handler(_adapter *padapter);
 

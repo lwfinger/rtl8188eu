@@ -302,7 +302,7 @@ typedef struct hal_data_8188e
 	u8	PGMaxGroup;
 	//current WIFI_PHY values
 	u32	ReceiveConfig;
-	WIRELESS_MODE		CurrentWirelessMode;
+	enum wireless_mode CurrentWirelessMode;
 	HT_CHANNEL_WIDTH	CurrentChannelBW;
 	u8	CurrentChannel;
 	u8	nCur40MhzPrimeSC;// Control channel sub-carrier
@@ -390,7 +390,7 @@ typedef struct hal_data_8188e
 	//u8	bCurrentTurboEDCA;
 	u32	AcParam_BE; //Original parameter for BE, use for EDCA turbo.
 
-	BB_REGISTER_DEFINITION_T	PHYRegDef[4];	//Radio A/B/C/D
+	struct bb_reg_def PHYRegDef[4];	//Radio A/B/C/D
 
 	u32	RfRegChnlVal[2];
 

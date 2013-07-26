@@ -569,11 +569,9 @@ phy_RF6052_Config_ParaFile(
 {
 	u32					u4RegValue;
 	u8					eRFPath;
-	BB_REGISTER_DEFINITION_T	*pPhyReg;
-
+	struct bb_reg_def *pPhyReg;
 	int					rtStatus = _SUCCESS;
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
-
 	static char			sz88eRadioAFile[] = RTL8188E_PHY_RADIO_A;
 	static char			sz88eRadioBFile[] = RTL8188E_PHY_RADIO_B;
 

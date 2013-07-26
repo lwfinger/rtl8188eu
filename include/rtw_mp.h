@@ -233,7 +233,7 @@ typedef struct _MPT_CONTEXT
 	// The RfPath of IO operation is depend of MptActType.
 	ULONG			MptRfPath;
 
-	WIRELESS_MODE		MptWirelessModeToSw;	// Wireless mode to switch.
+	enum wireless_mode MptWirelessModeToSw;	// Wireless mode to switch.
 	u8			MptChannelToSw;		// Channel to switch.
 	u8			MptInitGainToSet;	// Initial gain to set.
 	//ULONG			bMptAntennaA;		// true if we want to use antenna A.

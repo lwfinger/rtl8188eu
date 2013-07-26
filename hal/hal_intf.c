@@ -306,17 +306,17 @@ void	rtw_hal_write_bbreg(_adapter *padapter, u32 RegAddr, u32 BitMask, u32 Data)
 		padapter->HalFunc.write_bbreg(padapter, RegAddr, BitMask, Data);
 }
 
-u32	rtw_hal_read_rfreg(_adapter *padapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask)
+u32	rtw_hal_read_rfreg(_adapter *padapter, enum rf_radio_path rfpath, u32 RegAddr, u32 BitMask)
 {
 	u32 data = 0;
 	if ( padapter->HalFunc.read_rfreg)
-		data = padapter->HalFunc.read_rfreg(padapter, eRFPath, RegAddr, BitMask);
+		data = padapter->HalFunc.read_rfreg(padapter, rfpath, RegAddr, BitMask);
 	return data;
 }
-void	rtw_hal_write_rfreg(_adapter *padapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask, u32 Data)
+void	rtw_hal_write_rfreg(_adapter *padapter, enum rf_radio_path rfpath, u32 RegAddr, u32 BitMask, u32 Data)
 {
 	if (padapter->HalFunc.write_rfreg)
-		padapter->HalFunc.write_rfreg(padapter, eRFPath, RegAddr, BitMask, Data);
+		padapter->HalFunc.write_rfreg(padapter, rfpath, RegAddr, BitMask, Data);
 }
 
 s32	rtw_hal_interrupt_handler(_adapter *padapter)

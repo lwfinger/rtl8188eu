@@ -345,7 +345,7 @@ rtl8188e_PHY_SetBBReg(
 *
 * Input:
 *			PADAPTER		Adapter,
-*			RF_RADIO_PATH_E	eRFPath,	Radio path of A/B/C/D
+*			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
 *			u4Byte			Offset,		The target address to be read
 *
 * Output:	None
@@ -360,13 +360,13 @@ rtl8188e_PHY_SetBBReg(
 static	u32
 phy_RFSerialRead(
 		PADAPTER			Adapter,
-		RF_RADIO_PATH_E	eRFPath,
+		enum rf_radio_path eRFPath,
 		u32				Offset
 	)
 {
 	u32						retValue = 0;
 	struct hal_data_8188e				*pHalData = GET_HAL_DATA(Adapter);
-	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
+	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32						NewOffset;
 	u32						tmplong,tmplong2;
 	u8					RfPiEnable=0;
@@ -423,7 +423,7 @@ phy_RFSerialRead(
 *
 * Input:
 *			PADAPTER		Adapter,
-*			RF_RADIO_PATH_E	eRFPath,	Radio path of A/B/C/D
+*			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
 *			u4Byte			Offset,		The target address to be read
 *			u4Byte			Data		The new register Data in the target bit position
 *									of the target to be read
@@ -462,14 +462,14 @@ phy_RFSerialRead(
 static	void
 phy_RFSerialWrite(
 		PADAPTER			Adapter,
-		RF_RADIO_PATH_E	eRFPath,
+		enum rf_radio_path eRFPath,
 		u32				Offset,
 		u32				Data
 	)
 {
 	u32						DataAndAddr = 0;
 	struct hal_data_8188e				*pHalData = GET_HAL_DATA(Adapter);
-	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
+	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32						NewOffset;
 
 
@@ -500,7 +500,7 @@ phy_RFSerialWrite(
 *
 * Input:
 *			PADAPTER		Adapter,
-*			RF_RADIO_PATH_E	eRFPath,	Radio path of A/B/C/D
+*			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
 *			u4Byte			RegAddr,	The target address to be read
 *			u4Byte			BitMask		The target bit position in the target address
 *									to be read
@@ -509,7 +509,7 @@ phy_RFSerialWrite(
 * Return:		u4Byte			Readback value
 * Note:		This function is equal to "GetRFRegSetting" in PHY programming guide
 */
-u32 rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath,
+u32 rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, enum rf_radio_path eRFPath,
 			    u32 RegAddr, u32 BitMask)
 {
 	u32 Original_Value, Readback_Value, BitShift;
@@ -532,7 +532,7 @@ u32 rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath,
 *
 * Input:
 *			PADAPTER		Adapter,
-*			RF_RADIO_PATH_E	eRFPath,	Radio path of A/B/C/D
+*			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
 *			u4Byte			RegAddr,	The target address to be modified
 *			u4Byte			BitMask		The target bit position in the target address
 *									to be modified
@@ -546,7 +546,7 @@ u32 rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath,
 void
 rtl8188e_PHY_SetRFReg(
 		PADAPTER			Adapter,
-		RF_RADIO_PATH_E	eRFPath,
+		enum rf_radio_path eRFPath,
 		u32				RegAddr,
 		u32				BitMask,
 		u32				Data
@@ -1022,7 +1022,7 @@ PHY_RFConfig8188E(
  *
  * Input:	PADAPTER			Adapter
  *			ps1Byte					pFileName
- *			RF_RADIO_PATH_E	eRFPath
+ *			enum rf_radio_path eRFPath
  *
  * Output:      NONE
  *
@@ -1034,13 +1034,13 @@ int
 rtl8188e_PHY_ConfigRFWithParaFile(
 		PADAPTER			Adapter,
 		u8*				pFileName,
-	RF_RADIO_PATH_E		eRFPath
+	enum rf_radio_path eRFPath
 )
 {
 	return _SUCCESS;
 }
 
-static int PHY_ConfigRFExternalPA(PADAPTER Adapter, RF_RADIO_PATH_E eRFPath)
+static int PHY_ConfigRFExternalPA(PADAPTER Adapter, enum rf_radio_path eRFPath)
 {
 	int	rtStatus = _SUCCESS;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
@@ -1082,7 +1082,7 @@ rtl8192c_PHY_GetHWRegOriginalValue(
 static	u8
 phy_DbmToTxPwrIdx(
 		PADAPTER		Adapter,
-		WIRELESS_MODE	WirelessMode,
+		enum wireless_mode WirelessMode,
 		int			PowerInDbm
 	)
 {
@@ -1131,7 +1131,7 @@ phy_DbmToTxPwrIdx(
 /* 		current wireless mode. */
 /* 	By Bruce, 2008-01-29. */
 /*  */
-static int phy_TxPwrIdxToDbm(PADAPTER Adapter, WIRELESS_MODE WirelessMode, u8 TxPwrIdx)
+static int phy_TxPwrIdxToDbm(PADAPTER Adapter, enum wireless_mode WirelessMode, u8 TxPwrIdx)
 {
 	int				Offset = 0;
 	int				PwrOutDbm = 0;
@@ -1550,7 +1550,7 @@ static void _PHY_SwChnl8192C(PADAPTER Adapter, u8 channel)
 	param2 = channel;
 	for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++) {
 		pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffffc00) | param2);
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
+		PHY_SetRFReg(Adapter, (enum rf_radio_path)eRFPath, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
 	}
 }
 
@@ -1618,16 +1618,16 @@ phy_SwChnlStepByStep(
 
 static	bool
 phy_SetSwChnlCmdArray(
-	SwChnlCmd*		CmdTable,
+	struct sw_chnl_cmd *CmdTable,
 	u32			CmdTableIdx,
 	u32			CmdTableSz,
-	SwChnlCmdID		CmdID,
+	enum sw_chnl_cmd_id	CmdID,
 	u32			Para1,
 	u32			Para2,
 	u32			msDelay
 	)
 {
-	SwChnlCmd* pCmd;
+	struct sw_chnl_cmd *pCmd;
 
 	if (CmdTable == NULL)
 		return false;

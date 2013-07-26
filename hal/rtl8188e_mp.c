@@ -308,7 +308,7 @@ void Hal_SetChannel(PADAPTER pAdapter)
 	for (eRFPath = 0; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
 	{
 		if (IS_HARDWARE_TYPE_8192D(pAdapter))
-			_write_rfreg(pAdapter, (RF_RADIO_PATH_E)eRFPath, ODM_CHANNEL, 0xFF, channel);
+			_write_rfreg(pAdapter, (enum rf_radio_path)eRFPath, ODM_CHANNEL, 0xFF, channel);
 		else
 			_write_rfreg(pAdapter, eRFPath, ODM_CHANNEL, 0x3FF, channel);
 	}
@@ -482,16 +482,16 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
-	R_ANTENNA_SELECT_OFDM *p_ofdm_tx;	/* OFDM Tx register */
-	R_ANTENNA_SELECT_CCK *p_cck_txrx;
+	struct ant_sel_ofdm *p_ofdm_tx;	/* OFDM Tx register */
+	struct ant_sel_cck *p_cck_txrx;
 
 	u8	r_rx_antenna_ofdm = 0, r_ant_select_cck_val = 0;
 	u8	chgTx = 0, chgRx = 0;
 	u32	r_ant_sel_cck_val = 0, r_ant_select_ofdm_val = 0, r_ofdm_tx_en_val = 0;
 
 
-	p_ofdm_tx = (R_ANTENNA_SELECT_OFDM *)&r_ant_select_ofdm_val;
-	p_cck_txrx = (R_ANTENNA_SELECT_CCK *)&r_ant_select_cck_val;
+	p_ofdm_tx = (struct ant_sel_ofdm *)&r_ant_select_ofdm_val;
+	p_cck_txrx = (struct ant_sel_cck *)&r_ant_select_cck_val;
 
 	p_ofdm_tx->r_ant_ht1	= 0x1;
 	p_ofdm_tx->r_ant_ht2	= 0x2;	/*  Second TX RF path is A */

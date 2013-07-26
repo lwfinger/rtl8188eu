@@ -114,7 +114,7 @@ ODM_SetRFReg(
 	)
 {
 	PADAPTER Adapter = pDM_Odm->Adapter;
-	PHY_SetRFReg(Adapter, (enum _RF_RADIO_PATH)eRFPath, RegAddr, BitMask, Data);
+	PHY_SetRFReg(Adapter, (enum rf_radio_path)eRFPath, RegAddr, BitMask, Data);
 }
 
 
@@ -127,11 +127,8 @@ ODM_GetRFReg(
 	)
 {
 	PADAPTER Adapter = pDM_Odm->Adapter;
-	return PHY_QueryRFReg(Adapter, (enum _RF_RADIO_PATH)eRFPath, RegAddr, BitMask);
+	return PHY_QueryRFReg(Adapter, (enum rf_radio_path)eRFPath, RegAddr, BitMask);
 }
-
-
-
 
 /*  */
 /*  ODM Memory relative API. */
