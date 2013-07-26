@@ -203,7 +203,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	struct tx_desc	*ptxdesc = (struct tx_desc *)pmem;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	sint	bmcst = IS_MCAST(pattrib->ra);
+	int	bmcst = IS_MCAST(pattrib->ra);
 
 #ifdef CONFIG_P2P
 	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;

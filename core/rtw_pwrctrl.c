@@ -82,7 +82,7 @@ int ips_leave(_adapter * padapter)
 	struct security_priv* psecuritypriv=&(padapter->securitypriv);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 	int result = _SUCCESS;
-	sint keyid;
+	int keyid;
 
 
 	_enter_pwrlock(&pwrpriv->lock);

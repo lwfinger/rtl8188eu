@@ -48,13 +48,13 @@ _func_exit_;
 
 }
 
-sint _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter)
+int _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter)
 {
-	sint i;
+	int i;
 
 	union recv_frame *precvframe;
 
-	sint	res=_SUCCESS;
+	int	res=_SUCCESS;
 
 _func_enter_;
 	_rtw_spinlock_init(&precvpriv->lock);
@@ -239,7 +239,7 @@ _func_exit_;
 
 
 
-sint _rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
+int _rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
 {
 
 	_adapter *padapter=precvframe->u.hdr.adapter;
@@ -260,9 +260,9 @@ _func_exit_;
 	return _SUCCESS;
 }
 
-sint rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
+int rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
 {
-	sint ret;
+	int ret;
 	unsigned long irqL;
 
 	_enter_critical_bh(&queue->lock, &irqL);
@@ -320,7 +320,7 @@ u32 rtw_free_uc_swdec_pending_queue(_adapter *adapter)
 }
 
 
-sint rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, struct __queue *queue)
+int rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, struct __queue *queue)
 {
 	unsigned long irqL;
 
@@ -334,7 +334,7 @@ sint rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, struct __queue *queu
 	return _SUCCESS;
 }
 
-sint rtw_enqueue_recvbuf(struct recv_buf *precvbuf, struct __queue *queue)
+int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, struct __queue *queue)
 {
 	unsigned long irqL;
 	_enter_critical_ex(&queue->lock, &irqL);
@@ -376,10 +376,9 @@ struct recv_buf *rtw_dequeue_recvbuf (struct __queue *queue)
 
 }
 
-sint recvframe_chkmic(_adapter *adapter,  union recv_frame *precvframe);
-sint recvframe_chkmic(_adapter *adapter,  union recv_frame *precvframe){
+int recvframe_chkmic(_adapter *adapter,  union recv_frame *precvframe){
 
-	sint	i,res=_SUCCESS;
+	int	i,res=_SUCCESS;
 	u32	datalen;
 	u8	miccode[8];
 	u8	bmic_err=false,brpt_micerror = true;
@@ -673,10 +672,9 @@ _func_exit_;
 
 }
 
-sint recv_decache(union recv_frame *precv_frame, u8 bretry, struct stainfo_rxcache *prxcache);
-sint recv_decache(union recv_frame *precv_frame, u8 bretry, struct stainfo_rxcache *prxcache)
+int recv_decache(union recv_frame *precv_frame, u8 bretry, struct stainfo_rxcache *prxcache)
 {
-	sint tid = precv_frame->u.hdr.attrib.priority;
+	int tid = precv_frame->u.hdr.attrib.priority;
 
 	u16 seq_ctrl = ( (precv_frame->u.hdr.attrib.seq_num&0xffff) << 4) |
 		(precv_frame->u.hdr.attrib.frag_num & 0xf);
@@ -849,26 +847,26 @@ void count_rx_stats(_adapter *padapter, union recv_frame *prframe, struct sta_in
 
 }
 
-sint sta2sta_data_frame(
+int sta2sta_data_frame(
 	_adapter *adapter,
 	union recv_frame *precv_frame,
 	struct sta_info**psta
 );
-sint sta2sta_data_frame(
+int sta2sta_data_frame(
 	_adapter *adapter,
 	union recv_frame *precv_frame,
 	struct sta_info**psta
 )
 {
 	u8 *ptr = precv_frame->u.hdr.rx_data;
-	sint ret = _SUCCESS;
+	int ret = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = & precv_frame->u.hdr.attrib;
 	struct	sta_priv		*pstapriv = &adapter->stapriv;
 	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
 	u8 *mybssid  = get_bssid(pmlmepriv);
 	u8 *myhwaddr = myid(&adapter->eeprompriv);
 	u8 * sta_addr = NULL;
-	sint bmcast = IS_MCAST(pattrib->dst);
+	int bmcast = IS_MCAST(pattrib->dst);
 
 _func_enter_;
 
@@ -971,23 +969,19 @@ _func_exit_;
 
 }
 
-sint ap2sta_data_frame(
-	_adapter *adapter,
-	union recv_frame *precv_frame,
-	struct sta_info**psta );
-sint ap2sta_data_frame(
+int ap2sta_data_frame(
 	_adapter *adapter,
 	union recv_frame *precv_frame,
 	struct sta_info**psta )
 {
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	struct rx_pkt_attrib *pattrib = & precv_frame->u.hdr.attrib;
-	sint ret = _SUCCESS;
+	int ret = _SUCCESS;
 	struct	sta_priv		*pstapriv = &adapter->stapriv;
 	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
 	u8 *mybssid  = get_bssid(pmlmepriv);
 	u8 *myhwaddr = myid(&adapter->eeprompriv);
-	sint bmcast = IS_MCAST(pattrib->dst);
+	int bmcast = IS_MCAST(pattrib->dst);
 
 _func_enter_;
 
@@ -1107,11 +1101,7 @@ _func_exit_;
 
 }
 
-sint sta2ap_data_frame(
-	_adapter *adapter,
-	union recv_frame *precv_frame,
-	struct sta_info**psta );
-sint sta2ap_data_frame(
+int sta2ap_data_frame(
 	_adapter *adapter,
 	union recv_frame *precv_frame,
 	struct sta_info**psta )
@@ -1121,7 +1111,7 @@ sint sta2ap_data_frame(
 	struct	sta_priv		*pstapriv = &adapter->stapriv;
 	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
 	unsigned char *mybssid  = get_bssid(pmlmepriv);
-	sint ret=_SUCCESS;
+	int ret=_SUCCESS;
 
 _func_enter_;
 
@@ -1179,8 +1169,7 @@ _func_exit_;
 
 }
 
-sint validate_recv_ctrl_frame(_adapter *padapter, union recv_frame *precv_frame);
-sint validate_recv_ctrl_frame(_adapter *padapter, union recv_frame *precv_frame)
+int validate_recv_ctrl_frame(_adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_AP_MODE
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
@@ -1339,8 +1328,8 @@ sint validate_recv_ctrl_frame(_adapter *padapter, union recv_frame *precv_frame)
 }
 
 union recv_frame* recvframe_chk_defrag(PADAPTER padapter, union recv_frame *precv_frame);
-sint validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame);
-sint validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame)
+
+int validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame)
 {
 	/* struct mlme_priv *pmlmepriv = &adapter->mlmepriv; */
 
@@ -1378,7 +1367,7 @@ sint validate_recv_mgnt_frame(PADAPTER padapter, union recv_frame *precv_frame)
 	return _SUCCESS;
 }
 
-sint validate_recv_data_frame(_adapter *adapter, union recv_frame *precv_frame)
+int validate_recv_data_frame(_adapter *adapter, union recv_frame *precv_frame)
 {
 	u8 bretry;
 	u8 *psa, *pda, *pbssid;
@@ -1387,7 +1376,7 @@ sint validate_recv_data_frame(_adapter *adapter, union recv_frame *precv_frame)
 	struct rx_pkt_attrib	*pattrib = & precv_frame->u.hdr.attrib;
 	struct sta_priv		*pstapriv = &adapter->stapriv;
 	struct security_priv	*psecuritypriv = &adapter->securitypriv;
-	sint ret = _SUCCESS;
+	int ret = _SUCCESS;
 
 _func_enter_;
 
@@ -1518,8 +1507,7 @@ _func_exit_;
 	return ret;
 }
 
-sint validate_recv_frame(_adapter *adapter, union recv_frame *precv_frame);
-sint validate_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
+int validate_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
 {
 	/* shall check frame subtype, to / from ds, da, bssid */
 
@@ -1527,7 +1515,7 @@ sint validate_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
 
 	u8 type;
 	u8 subtype;
-	sint retval = _SUCCESS;
+	int retval = _SUCCESS;
 
 	struct rx_pkt_attrib *pattrib = & precv_frame->u.hdr.attrib;
 
@@ -1643,19 +1631,17 @@ _func_exit_;
 
 
 /* remove the wlanhdr and add the eth_hdr */
-#if 1
 
-sint wlanhdr_to_ethhdr ( union recv_frame *precvframe);
-sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
+int wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 {
-	sint	rmv_len;
+	int	rmv_len;
 	u16	eth_type, len;
 	__be16 be_tmp;
 	u8	bsnaphdr;
 	u8	*psnap_type;
 	struct ieee80211_snap_hdr	*psnap;
 
-	sint ret=_SUCCESS;
+	int ret=_SUCCESS;
 	_adapter			*adapter =precvframe->u.hdr.adapter;
 	struct mlme_priv	*pmlmepriv = &adapter->mlmepriv;
 
@@ -1720,117 +1706,6 @@ _func_exit_;
 	return ret;
 
 }
-
-#else
-
-sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
-{
-	sint rmv_len;
-	u16 eth_type;
-	u8	bsnaphdr;
-	u8	*psnap_type;
-	struct ieee80211_snap_hdr	*psnap;
-	__be16 be_tmp;
-	sint ret=_SUCCESS;
-	_adapter	*adapter =precvframe->u.hdr.adapter;
-	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
-	u8 *ptr = get_recvframe_data(precvframe); /*  point to frame_ctrl field */
-	struct rx_pkt_attrib *pattrib = & precvframe->u.hdr.attrib;
-	struct _vlan *pvlan = NULL;
-
-_func_enter_;
-
-	psnap=(struct ieee80211_snap_hdr	*)(ptr+pattrib->hdrlen + pattrib->iv_len);
-	psnap_type=ptr+pattrib->hdrlen + pattrib->iv_len+SNAP_SIZE;
-	if (psnap->dsap==0xaa && psnap->ssap==0xaa && psnap->ctrl==0x03)
-	{
-		if (_rtw_memcmp(psnap->oui, oui_rfc1042, WLAN_IEEE_OUI_LEN))
-			bsnaphdr=true;/* wlan_pkt_format = WLAN_PKT_FORMAT_SNAP_RFC1042; */
-		else if (_rtw_memcmp(psnap->oui, SNAP_HDR_APPLETALK_DDP, WLAN_IEEE_OUI_LEN) &&
-			_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_APPLETALK_DDP, 2) )
-			bsnaphdr=true;	/* wlan_pkt_format = WLAN_PKT_FORMAT_APPLETALK; */
-		else if (_rtw_memcmp( psnap->oui, oui_8021h, WLAN_IEEE_OUI_LEN))
-			bsnaphdr=true;	/* wlan_pkt_format = WLAN_PKT_FORMAT_SNAP_TUNNEL; */
-		else {
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("drop pkt due to invalid frame format!\n"));
-			ret= _FAIL;
-			goto exit;
-		}
-
-	} else
-		bsnaphdr=false;/* wlan_pkt_format = WLAN_PKT_FORMAT_OTHERS; */
-
-	rmv_len = pattrib->hdrlen + pattrib->iv_len +(bsnaphdr?SNAP_SIZE:0);
-	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("===pattrib->hdrlen: %x,  pattrib->iv_len:%x ===\n", pattrib->hdrlen,  pattrib->iv_len));
-
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
-	{
-		ptr += rmv_len ;
-		*ptr = 0x87;
-		*(ptr+1) = 0x12;
-
-		/* back to original pointer */
-		ptr -= rmv_len;
-	}
-
-	ptr += rmv_len ;
-
-	_rtw_memcpy(&be_tmp, ptr, 2);
-	eth_type= ntohs(be_tmp); /* pattrib->ether_type */
-	ptr +=2;
-
-	if (pattrib->encrypt){
-		recvframe_pull_tail(precvframe, pattrib->icv_len);
-	}
-
-	if (eth_type == 0x8100) /* vlan */
-	{
-		pvlan = (struct _vlan *) ptr;
-
-		rmv_len += 4;
-		ptr+=4;
-	}
-
-	if (eth_type==0x0800)/* ip */
-	{
-		/* struct iphdr*  piphdr = (struct iphdr*) ptr; */
-		/* __u8 tos = (unsigned char)(pattrib->priority & 0xff); */
-
-		/* piphdr->tos = tos; */
-
-		/* if (piphdr->protocol == 0x06) */
-		/*  */
-		/* 	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("@@@===recv tcp len:%d @@@===\n", precvframe->u.hdr.len)); */
-		/*  */
-	}
-	else if (eth_type==0x8712)/*  append rx status for mp test packets */
-	{
-		/* ptr -= 16; */
-		/* _rtw_memcpy(ptr, get_rxmem(precvframe), 16); */
-	}
-
-	if (eth_type==0x8712)/*  append rx status for mp test packets */
-	{
-		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2)-24);
-		_rtw_memcpy(ptr, get_rxmem(precvframe), 24);
-		ptr+=24;
-	}
-	else
-		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2));
-
-	_rtw_memcpy(ptr, pattrib->dst, ETH_ALEN);
-	_rtw_memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
-
-	eth_type = htons((unsigned short)eth_type) ;
-	_rtw_memcpy(ptr+12, &eth_type, 2);
-
-exit:
-
-_func_exit_;
-
-	return ret;
-}
-#endif
 
 /* perform defrag */
 union recv_frame *recvframe_defrag(_adapter *adapter, struct __queue *defrag_q)

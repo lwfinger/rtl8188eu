@@ -38,13 +38,13 @@ extern u8 rtw_do_join(_adapter * padapter);
 extern unsigned char	MCS_rate_2R[16];
 extern unsigned char	MCS_rate_1R[16];
 
-sint	_rtw_init_mlme_priv (_adapter* padapter)
+int	_rtw_init_mlme_priv (_adapter* padapter)
 {
-	sint	i;
+	int	i;
 	u8	*pbuf;
 	struct wlan_network	*pnetwork;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	sint	res = _SUCCESS;
+	int	res = _SUCCESS;
 
 _func_enter_;
 
@@ -148,7 +148,7 @@ _func_enter_;
 _func_exit_;
 }
 
-sint	_rtw_enqueue_network(struct __queue *queue, struct wlan_network *pnetwork)
+int	_rtw_enqueue_network(struct __queue *queue, struct wlan_network *pnetwork)
 {
 	unsigned long irqL;
 
@@ -389,9 +389,9 @@ _func_exit_;
 
 
 
-sint rtw_if_up(_adapter *padapter)	{
+int rtw_if_up(_adapter *padapter)	{
 
-	sint res;
+	int res;
 _func_enter_;
 
 	if ( padapter->bDriverStopped || padapter->bSurpriseRemoved ||
@@ -2178,12 +2178,12 @@ _func_exit_;
 	return ret;
 }
 
-sint rtw_set_auth(_adapter * adapter,struct security_priv *psecuritypriv)
+int rtw_set_auth(_adapter * adapter,struct security_priv *psecuritypriv)
 {
 	struct	cmd_obj* pcmd;
 	struct	setauth_parm *psetauthparm;
 	struct	cmd_priv	*pcmdpriv=&(adapter->cmdpriv);
-	sint		res=_SUCCESS;
+	int		res=_SUCCESS;
 
 _func_enter_;
 
@@ -2225,14 +2225,14 @@ _func_exit_;
 }
 
 
-sint rtw_set_key(_adapter * adapter,struct security_priv *psecuritypriv,sint keyid, u8 set_tx)
+int rtw_set_key(_adapter * adapter, struct security_priv *psecuritypriv, int keyid, u8 set_tx)
 {
 	u8	keylen;
 	struct cmd_obj		*pcmd;
 	struct setkey_parm	*psetkeyparm;
 	struct cmd_priv		*pcmdpriv = &(adapter->cmdpriv);
 	struct mlme_priv		*pmlmepriv = &(adapter->mlmepriv);
-	sint	res=_SUCCESS;
+	int	res=_SUCCESS;
 
 _func_enter_;
 
@@ -2418,7 +2418,8 @@ static int rtw_append_pmkid(_adapter *Adapter,int iEntry, u8 *ie, uint ie_len)
 	return (ie_len);
 
 }
-sint rtw_restruct_sec_ie(_adapter *adapter,u8 *in_ie, u8 *out_ie, uint in_len)
+
+int rtw_restruct_sec_ie(_adapter *adapter,u8 *in_ie, u8 *out_ie, uint in_len)
 {
 	u8 authmode, securitytype, match;
 	u8 sec_ie[255], uncst_oui[4], bkup_ie[255];

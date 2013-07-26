@@ -24,7 +24,7 @@
 #include <drv_types.h>
 
 
-extern sint _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter);
+extern int _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter);
 extern void _rtw_free_recv_priv (struct recv_priv *precvpriv);
 
 

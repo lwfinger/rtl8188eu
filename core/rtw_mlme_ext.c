@@ -5059,7 +5059,7 @@ s32 dump_mgntframe_and_wait_ack(_adapter *padapter, struct xmit_frame *pmgntfram
 static int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
 {
 	u8 *ssid_ie;
-	sint ssid_len_ori;
+	int ssid_len_ori;
 	int len_diff = 0;
 
 	ssid_ie = rtw_get_ie(ies,  WLAN_EID_SSID, &ssid_len_ori, ies_len);

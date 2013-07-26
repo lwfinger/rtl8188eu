@@ -70,7 +70,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	int i;
 	struct xmit_buf *pxmitbuf;
 	struct xmit_frame *pxframe;
-	sint	res=_SUCCESS;
+	int	res=_SUCCESS;
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 	u32 num_xmit_extbuf = NR_XMIT_EXTBUFF;
 
@@ -540,12 +540,12 @@ static s32 update_attrib(_adapter *padapter, struct sk_buff *pkt, struct pkt_att
 	struct sta_info *psta = NULL;
 	struct ethhdr etherhdr;
 
-	sint bmcast;
+	int bmcast;
 	struct sta_priv		*pstapriv = &padapter->stapriv;
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct qos_priv		*pqospriv= &pmlmepriv->qospriv;
-	sint res = _SUCCESS;
+	int res = _SUCCESS;
 
  _func_enter_;
 
@@ -764,7 +764,7 @@ _func_exit_;
 }
 
 static s32 xmitframe_addmic(_adapter *padapter, struct xmit_frame *pxmitframe){
-	sint			curfragnum,length;
+	int			curfragnum,length;
 	u8	*pframe, *payload,mic[8];
 	struct	mic_data		micdata;
 	struct	sta_info		*stainfo;
@@ -774,7 +774,7 @@ static s32 xmitframe_addmic(_adapter *padapter, struct xmit_frame *pxmitframe){
 	struct	xmit_priv		*pxmitpriv=&padapter->xmitpriv;
 	u8 priority[4]={0x0,0x0,0x0,0x0};
 	u8 hw_hdr_offset = 0;
-	sint bmcst = IS_MCAST(pattrib->ra);
+	int bmcst = IS_MCAST(pattrib->ra);
 
 	if (pattrib->psta)
 	{
@@ -936,12 +936,12 @@ s32 rtw_make_wlanhdr (_adapter *padapter , u8 *hdr, struct pkt_attrib *pattrib)
 	struct qos_priv *pqospriv = &pmlmepriv->qospriv;
 	u8 qos_option = false;
 
-	sint res = _SUCCESS;
+	int res = _SUCCESS;
 	u16 *fctrl = &pwlanhdr->frame_ctl;
 
 	struct sta_info *psta;
 
-	sint bmcst = IS_MCAST(pattrib->ra);
+	int bmcst = IS_MCAST(pattrib->ra);
 
 _func_enter_;
 
@@ -1369,7 +1369,7 @@ void rtw_update_protection(_adapter *padapter, u8 *ie, uint ie_len)
 
 	uint	protection;
 	u8	*perp;
-	sint	 erp_len;
+	int	 erp_len;
 	struct	xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct	registry_priv *pregistrypriv = &padapter->registrypriv;
 
@@ -1768,7 +1768,7 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 	return pxmitframe;
 }
 
-struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit_i, sint entry)
+struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit_i, int entry)
 {
 	unsigned long irqL0;
 	struct list_head *sta_plist, *sta_phead;
@@ -1831,7 +1831,7 @@ _func_exit_;
 }
 
 #if 1
-struct tx_servq *rtw_get_sta_pending(_adapter *padapter, struct sta_info *psta, sint up, u8 *ac)
+struct tx_servq *rtw_get_sta_pending(_adapter *padapter, struct sta_info *psta, int up, u8 *ac)
 {
 	struct tx_servq *ptxservq;
 
@@ -1876,7 +1876,7 @@ _func_exit_;
 }
 #else
 __inline static struct tx_servq *rtw_get_sta_pending
-	(_adapter *padapter, struct __queue **ppstapending, struct sta_info *psta, sint up)
+	(_adapter *padapter, struct __queue **ppstapending, struct sta_info *psta, int up)
 {
 	struct tx_servq *ptxservq;
 	struct hw_xmit *phwxmits =  padapter->xmitpriv.hwxmits;
@@ -1935,7 +1935,7 @@ s32 rtw_xmit_classifier(_adapter *padapter, struct xmit_frame *pxmitframe)
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
 	struct sta_priv	*pstapriv = &padapter->stapriv;
 	struct hw_xmit	*phwxmits =  padapter->xmitpriv.hwxmits;
-	sint res = _SUCCESS;
+	int res = _SUCCESS;
 
 _func_enter_;
 
@@ -2039,9 +2039,9 @@ void rtw_free_hwxmits(_adapter *padapter)
 		rtw_mfree((u8 *)hwxmits, (sizeof (struct hw_xmit) * pxmitpriv->hwxmit_entry));
 }
 
-void rtw_init_hwxmits(struct hw_xmit *phwxmit, sint entry)
+void rtw_init_hwxmits(struct hw_xmit *phwxmit, int entry)
 {
-	sint i;
+	int i;
 _func_enter_;
 	for (i = 0; i < entry; i++, phwxmit++)
 		phwxmit->accnt = 0;
@@ -2316,15 +2316,15 @@ s32 rtw_xmit(_adapter *padapter, struct sk_buff **ppkt)
 
 #if defined(CONFIG_AP_MODE)
 
-sint xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *pxmitframe)
+int xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	unsigned long irqL;
-	sint ret=false;
+	int ret=false;
 	struct sta_info *psta=NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	sint bmcst = IS_MCAST(pattrib->ra);
+	int bmcst = IS_MCAST(pattrib->ra);
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == false)
 	    return ret;

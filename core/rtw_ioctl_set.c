@@ -590,7 +590,7 @@ _func_exit_;
 
 u8 rtw_set_802_11_add_wep(_adapter* padapter, struct ndis_802_11_wep *wep){
 
-	sint		keyid,res;
+	int		keyid,res;
 	struct security_priv* psecuritypriv=&(padapter->securitypriv);
 	u8		ret=_SUCCESS;
 

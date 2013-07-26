@@ -114,8 +114,8 @@ struct phy_status_rpt {
 #endif
 };
 
-typedef struct _Phy_Status_Rpt_8195
-{
+#if 0
+struct phy_status_rpt_8195 {
 	struct phy_rx_agc_info path_agc[2];
 	u1Byte	ch_num[2];
 	u1Byte	cck_sig_qual_ofdm_pwdb_all;
@@ -142,8 +142,8 @@ typedef struct _Phy_Status_Rpt_8195
 	u1Byte	antidx_antb:3;
 	u1Byte	antidx_anta:3;
 #endif
-} PHY_STATUS_RPT_8195_T,*pPHY_STATUS_RPT_8195_T;
-
+};
+#endif
 
 void
 odm_Init_RSSIForDM(

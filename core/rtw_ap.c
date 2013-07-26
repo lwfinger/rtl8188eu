@@ -96,7 +96,7 @@ static void update_BCNTIM(_adapter *padapter)
 		if (p != NULL && tim_ielen>0) {
 			tim_ielen += 2;
 			premainder_ie = p+tim_ielen;
-			tim_ie_offset = (sint)(p -pie);
+			tim_ie_offset = (int)(p -pie);
 			remainder_ielen = pnetwork_mlmeext->IELength - tim_ie_offset - tim_ielen;
 			/* append TIM IE from dst_ie offset */
 			dst_ie = p;
@@ -194,7 +194,7 @@ void rtw_add_bcn_ie(_adapter *padapter, struct wlan_bssid_ex *pnetwork, u8 index
 
 		premainder_ie = p+ielen;
 
-		ie_offset = (sint)(p -pie);
+		ie_offset = (int)(p -pie);
 
 		remainder_ielen = pnetwork->IELength - ie_offset - ielen;
 
@@ -239,7 +239,7 @@ void rtw_remove_bcn_ie(_adapter *padapter, struct wlan_bssid_ex *pnetwork, u8 in
 
 		premainder_ie = p+ielen;
 
-		ie_offset = (sint)(p -pie);
+		ie_offset = (int)(p -pie);
 
 		remainder_ielen = pnetwork->IELength - ie_offset - ielen;
 

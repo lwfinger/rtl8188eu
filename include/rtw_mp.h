@@ -120,8 +120,8 @@ struct mp_xmit_frame
 	u32 sz[8];
 	struct urb * pxmit_urb[8];
 	u8 bpending[8];
-	sint ac_tag[8];
-	sint last[8];
+	int ac_tag[8];
+	int last[8];
 	uint irpcnt;
 	uint fragcnt;
 	uint mem[(MAX_MP_XMITBUF_SZ >> 2)];

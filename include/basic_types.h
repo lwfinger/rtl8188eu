@@ -27,8 +27,6 @@
 #define NDIS_OID uint
 #define NDIS_STATUS uint
 
-typedef	signed int sint;
-
 #define UCHAR u8
 #define USHORT u16
 #define UINT u32

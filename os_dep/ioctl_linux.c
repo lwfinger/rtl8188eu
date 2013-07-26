@@ -1767,7 +1767,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	u32 ret = 0;
 	u32 cnt=0;
 	u32 wait_for_surveydone;
-	sint wait_status;
+	int wait_status;
 #ifdef CONFIG_P2P
 	struct	wifidirect_info*	pwdinfo = &padapter->wdinfo;
 #endif //CONFIG_P2P

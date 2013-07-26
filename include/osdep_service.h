@@ -414,7 +414,7 @@ __inline static void flush_signals_thread(void)
 		flush_signals(current);
 }
 
-__inline static int res_to_status(sint res)
+__inline static int res_to_status(int res)
 {
 	return res;
 }
