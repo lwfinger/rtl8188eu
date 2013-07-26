@@ -29,7 +29,7 @@ extern int rtw_mc2u_disable;
 
 #define USBD_HALTED(Status) ((ULONG)(Status) >> 30 == 3)
 
-u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, RT_USB_BREQUEST brequest, RT_USB_WVALUE wvalue, u8 windex, void* data, u8 datalen, u8 isdirectionin);
+u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, enum bt_usb_request brequest, enum rt_usb_wvalue wvalue, u8 windex, void* data, u8 datalen, u8 isdirectionin);
 int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 void netdev_br_init(struct net_device *netdev);
 void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb);

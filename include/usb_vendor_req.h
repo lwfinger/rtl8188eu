@@ -34,21 +34,19 @@
 #define	RT_USB_SYSCLK_60MHZ		2
 
 
-typedef enum _RT_USB_BREQUEST {
+enum bt_usb_request {
 	RT_USB_SET_REGISTER		= 1,
 	RT_USB_SET_SYSCLK		= 2,
 	RT_USB_GET_SYSCLK		= 3,
 	RT_USB_GET_REGISTER		= 4
-} RT_USB_BREQUEST;
+};
 
-
-typedef enum _RT_USB_WVALUE {
+enum rt_usb_wvalue {
 	RT_USB_RESET_MASK	=	1,
 	RT_USB_SLEEP_MASK	=	2,
 	RT_USB_USB_HRCPWM	=	3,
 	RT_USB_LDO			=	4,
 	RT_USB_BOOT_TYPE	=	5
-} RT_USB_WVALUE;
-
+};
 
 #endif
