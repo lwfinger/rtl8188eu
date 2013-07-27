@@ -1938,10 +1938,6 @@ void rtw_dynamic_check_timer_handlder(struct adapter *adapter)
 
 	if (!adapter)
 		return;
-#if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
-	if (adapter->HalFunc.hal_checke_bt_hang)
-		adapter->HalFunc.hal_checke_bt_hang(adapter);
-#endif
 	if (adapter->hw_init_completed == false)
 		return;
 
@@ -1996,11 +1992,7 @@ void rtw_dynamic_check_timer_handlder(struct adapter *adapter)
 #endif	/*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
 }
 
-#if defined(IEEE80211_SCAN_RESULT_EXPIRE)
-#define RTW_SCAN_RESULT_EXPIRE IEEE80211_SCAN_RESULT_EXPIRE/HZ*1000 -1000 /* 3000 -1000 */
-#else
 #define RTW_SCAN_RESULT_EXPIRE 2000
-#endif
 
 /*
 * Select a new join candidate from the original @param candidate and @param competitor

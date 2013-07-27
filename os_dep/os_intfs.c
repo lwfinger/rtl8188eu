@@ -1054,10 +1054,6 @@ void rtw_cancel_all_timer(struct adapter *padapter)
 	_cancel_timer_ex(&padapter->pwrctrlpriv.pwr_state_check_timer);
 
 	_cancel_timer_ex(&padapter->recvpriv.signal_stat_timer);
-#if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
-	if (padapter->HalFunc.hal_cancel_checkbthang_workqueue)
-		padapter->HalFunc.hal_cancel_checkbthang_workqueue(padapter);
-#endif
 	//cancel dm timer
 	rtw_hal_dm_deinit(padapter);
 }
@@ -1093,10 +1089,6 @@ u8 rtw_free_drv_sw(struct adapter *padapter)
 	rtw_free_evt_priv(&padapter->evtpriv);
 
 	rtw_free_mlme_priv(&padapter->mlmepriv);
-#if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
-	if (padapter->HalFunc.hal_free_checkbthang_workqueue)
-		padapter->HalFunc.hal_free_checkbthang_workqueue(padapter);
-#endif
 	_rtw_free_xmit_priv(&padapter->xmitpriv);
 
 	_rtw_free_sta_priv(&padapter->stapriv); //will free bcmc_stainfo here

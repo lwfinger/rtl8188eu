@@ -59,11 +59,6 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 	_init_timer(&(pmlmepriv->scan_to_timer), padapter->pnetdev, _rtw_scan_timeout_handler, padapter);
 
 	_init_timer(&(pmlmepriv->dynamic_chk_timer), padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
-
-#if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
-	if (padapter->HalFunc.hal_init_checkbthang_workqueue)
-		padapter->HalFunc.hal_init_checkbthang_workqueue(padapter);
-#endif
 }
 
 void rtw_os_indicate_connect(struct adapter *adapter)

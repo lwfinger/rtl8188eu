@@ -4350,9 +4350,7 @@ int issue_probereq_p2p_ex(struct adapter *adapter, u8 *da, int try_cnt, int wait
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-		#ifndef DBG_XMIT_ACK
 		goto exit;
-		#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -5660,9 +5658,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid, 
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-		#ifndef DBG_XMIT_ACK
 		goto exit;
-		#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -6425,9 +6421,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-		#ifndef DBG_XMIT_ACK
 		goto exit;
-		#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -6559,9 +6553,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-		#ifndef DBG_XMIT_ACK
 		goto exit;
-		#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -6675,9 +6667,7 @@ int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason, int
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
-		#ifndef DBG_XMIT_ACK
 		goto exit;
-		#endif
 	}
 
 	if (try_cnt && wait_ms) {
@@ -7560,16 +7550,6 @@ u8 collect_bss_info(struct adapter *padapter, union recv_frame *precv_frame, str
 #endif /* CONFIG_80211N_HT */
 
 	}
-
-	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) & 1
-	if (strcmp(bssid->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_88E("Receiving %s(%pM, DSConfig:%u) from ch%u with ss:%3u, sq:%3u, RawRSSI:%3ld\n"
-			, bssid->Ssid.Ssid, bssid->MacAddress, bssid->Configuration.DSConfig
-			, rtw_get_oper_ch(padapter)
-			, bssid->PhyInfo.SignalStrength, bssid->PhyInfo.SignalQuality, bssid->Rssi
-		);
-	}
-	#endif
 
 	/*  mark bss info receving from nearby channel as SignalQuality 101 */
 	if (bssid->Configuration.DSConfig != rtw_get_oper_ch(padapter))
