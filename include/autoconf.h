@@ -58,17 +58,8 @@
 
 #define RTL8188E_RX_PACKET_INCLUDE_CRC	0
 
-#define SUPPORTED_BLOCK_IO
-
-#define CONFIG_OUT_EP_WIFI_MODE	0
-
 #define MP_DRIVER 1
-#define CONFIG_MP_IWPRIV_SUPPORT
 
-
-/*
- * Platform  Related Config
- */
 /*
  * Outsource  Related Config
  */

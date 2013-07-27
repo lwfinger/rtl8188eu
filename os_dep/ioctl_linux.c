@@ -7972,7 +7972,6 @@ exit:
 	return err;
 }
 
-#if defined(CONFIG_MP_IWPRIV_SUPPORT)
 /*
  * Input Format: %s,%d,%d
  *	%s is width, could be
@@ -7992,7 +7991,6 @@ static int rtw_mp_write_reg(struct net_device *dev,
 	u32 addr, data;
 	int ret;
 	struct adapter * padapter = rtw_netdev_priv(dev);
-
 
 	pch = extra;
 	pnext = strpbrk(pch, " ,.-");
@@ -8014,29 +8012,29 @@ static int rtw_mp_write_reg(struct net_device *dev,
 	ret = 0;
 	width = width_str[0];
 	switch (width) {
-		case 'b':
-			// 1 byte
-			if (data > 0xFF) {
-				ret = -EINVAL;
-				break;
-			}
-			rtw_write8(padapter, addr, data);
-			break;
-		case 'w':
-			// 2 bytes
-			if (data > 0xFFFF) {
-				ret = -EINVAL;
-				break;
-			}
-			rtw_write16(padapter, addr, data);
-			break;
-		case 'd':
-			// 4 bytes
-			rtw_write32(padapter, addr, data);
-			break;
-		default:
+	case 'b':
+		// 1 byte
+		if (data > 0xFF) {
 			ret = -EINVAL;
 			break;
+		}
+		rtw_write8(padapter, addr, data);
+		break;
+	case 'w':
+		// 2 bytes
+		if (data > 0xFFFF) {
+			ret = -EINVAL;
+			break;
+		}
+		rtw_write16(padapter, addr, data);
+		break;
+	case 'd':
+		// 4 bytes
+		rtw_write32(padapter, addr, data);
+		break;
+	default:
+		ret = -EINVAL;
+		break;
 	}
 
 	return ret;
@@ -8100,13 +8098,11 @@ static int rtw_mp_read_reg(struct net_device *dev,
 	switch (width) {
 	case 'b':
 		// 1 byte
-		// *(u8*)data = rtw_read8(padapter, addr);
 		sprintf(extra, "%d\n",  rtw_read8(padapter, addr));
 		wrqu->length = strlen(extra);
 		break;
 	case 'w':
 		// 2 bytes
-		//*(u16*)data = rtw_read16(padapter, addr);
 		sprintf(data, "%04x\n", rtw_read16(padapter, addr));
 		for (i=0 ; i <= strlen(data) ; i++) {
 			if (i%2==0) {
@@ -8138,7 +8134,6 @@ static int rtw_mp_read_reg(struct net_device *dev,
 		break;
 	case 'd':
 		// 4 bytes
-		//*data = rtw_read32(padapter, addr);
 		sprintf(data, "%08x", rtw_read32(padapter, addr));
 			//add read data format blank
 		for (i=0 ; i <= strlen(data) ; i++) {
@@ -8188,10 +8183,6 @@ static int rtw_mp_read_reg(struct net_device *dev,
 			struct iw_request_info *info,
 			struct iw_point *wrqu, char *extra)
 {
-/*static int rtw_mp_write_rf(struct net_device *dev,
-			struct iw_request_info *info,
-			union iwreq_data *wrqu, char *extra)
-*/
 	u32 path, addr, data;
 	int ret;
 	struct adapter * padapter = rtw_netdev_priv(dev);
@@ -9213,8 +9204,6 @@ static int rtw_mp_get(struct net_device *dev,
 	rtw_msleep_os(10); //delay 5ms for sending pkt before exit adb shell operation
 	return 0;
 }
-
-#endif //#if defined(CONFIG_MP_IWPRIV_SUPPORT)
 
 static int rtw_wfd_tdls_enable(struct net_device *dev,
 				struct iw_request_info *info,
