@@ -222,8 +222,6 @@ void rtl8188e_Add_RateATid(struct adapter * pAdapter, u32 bitmap, u8 arg, u8 rss
 	DBG_88E("%s=> mac_id:%d , raid:%d , ra_bitmap=0x%x, shortGIrate=0x%02x\n",
 			__func__,macid ,raid ,bitmap, shortGIrate);
 
-
-#if (RATE_ADAPTIVE_SUPPORT == 1)
 	ODM_RA_UpdateRateInfo_8188E(
 			&(pHalData->odmpriv),
 			macid,
@@ -231,8 +229,6 @@ void rtl8188e_Add_RateATid(struct adapter * pAdapter, u32 bitmap, u8 arg, u8 rss
 			bitmap,
 			shortGIrate
 			);
-#endif
-
 }
 
 void rtl8188e_set_FwPwrMode_cmd(struct adapter * padapter, u8 Mode)

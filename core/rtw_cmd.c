@@ -1935,7 +1935,6 @@ _func_exit_;
 
 }
 
-#if (RATE_ADAPTIVE_SUPPORT==1)
 static void rpt_timer_setting_wk_hdl(struct adapter *padapter, u16 minRptTime)
 {
 	rtw_hal_set_hwreg(padapter, HW_VAR_RPT_TIMER_SETTING, (u8 *)(&minRptTime));
@@ -1975,8 +1974,6 @@ _func_exit_;
 	return res;
 
 }
-
-#endif
 
 static void antenna_select_wk_hdl(struct adapter *padapter, u8 antenna)
 {
@@ -2319,11 +2316,9 @@ u8 rtw_drvextra_cmd_hdl(struct adapter *padapter, unsigned char *pbuf)
 		case LPS_CTRL_WK_CID:
 			lps_ctrl_wk_hdl(padapter, (u8)pdrvextra_cmd->type_size);
 			break;
-#if (RATE_ADAPTIVE_SUPPORT==1)
 		case RTP_TIMER_CFG_WK_CID:
 			rpt_timer_setting_wk_hdl(padapter, pdrvextra_cmd->type_size);
 			break;
-#endif
 		case ANT_SELECT_WK_CID:
 			antenna_select_wk_hdl(padapter, pdrvextra_cmd->type_size);
 			break;

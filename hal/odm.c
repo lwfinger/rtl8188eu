@@ -2413,10 +2413,8 @@ odm_RSSIMonitorCheckCE(
 				{
 				}
 				else{
-					#if (RATE_ADAPTIVE_SUPPORT == 1)
 					ODM_RA_SetRSSI_8188E(
 					&(pHalData->odmpriv), (PWDB_rssi[i]&0xFF), (u8)((PWDB_rssi[i]>>16) & 0xFF));
-					#endif
 				}
 			}
 		}

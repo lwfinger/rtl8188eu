@@ -293,7 +293,6 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			ptxdesc->txdw4 |= cpu_to_le32(0x00000008);/* RTS Rate=24M */
 			ptxdesc->txdw5 |= cpu_to_le32(0x0001ff00);/* DATA/RTS  Rate FB LMT */
 
-	#if (RATE_ADAPTIVE_SUPPORT == 1)
 			if (pattrib->ht_en){
 				if ( ODM_RA_GetShortGI_8188E(&pHalData->odmpriv,pattrib->mac_id))
 					ptxdesc->txdw5 |= cpu_to_le32(SGI);/* SGI */
@@ -306,22 +305,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			pwr_status = ODM_RA_GetHwPwrStatus_8188E(&pHalData->odmpriv,pattrib->mac_id);
 			ptxdesc->txdw4 |=cpu_to_le32( (pwr_status & 0x7)<< PWR_STATUS_SHT);
 			#endif /* POWER_TRAINING_ACTIVE==1) */
-	#else/* if (RATE_ADAPTIVE_SUPPORT == 1) */
-
-			if (pattrib->ht_en)
-				ptxdesc->txdw5 |= cpu_to_le32(SGI);/* SGI */
-
-			data_rate = 0x13; /* default rate: MCS7 */
-			 if (padapter->fix_rate!= 0xFF){/* rate control by iwpriv */
-				data_rate = padapter->fix_rate;
-			}
-			ptxdesc->txdw5 |= cpu_to_le32(data_rate & 0x3F);
-
-	#endif/* if (RATE_ADAPTIVE_SUPPORT == 1) */
-
-		}
-		else
-		{
+		} else {
 			/*  EAP data packet and ARP packet and DHCP. */
 			/*  Use the 1M data rate to send the EAP/ARP packet. */
 			/*  This will maybe make the handshake smooth. */

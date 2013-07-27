@@ -2456,9 +2456,7 @@ static void rtl8188e_SetHalODMVar(
 				if (bSet){
 					DBG_88E("### Set STA_(%d) info\n",psta->mac_id);
 					ODM_CmnInfoPtrArrayHook(podmpriv, ODM_CMNINFO_STA_STATUS,psta->mac_id,psta);
-					#if (RATE_ADAPTIVE_SUPPORT==1)
 					ODM_RAInfo_Init(podmpriv,psta->mac_id);
-					#endif
 				}
 				else{
 					DBG_88E("### Clean STA_(%d) info\n",psta->mac_id);

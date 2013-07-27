@@ -929,10 +929,8 @@ struct odm_dm_struct {
 	// 2012/01/12 MH For MP, we need to reduce one array pointer for default port.??
 	struct sta_info *pODM_StaInfo[ODM_ASSOCIATE_ENTRY_NUM];
 
-#if (RATE_ADAPTIVE_SUPPORT == 1)
 	u2Byte			CurrminRptTime;
 	struct odm_ra_info RAInfo[ODM_ASSOCIATE_ENTRY_NUM]; //Use MacID as array index. STA MacID=0, VWiFi Client MacID={1, ODM_ASSOCIATE_ENTRY_NUM-1} //YJ,add,120119
-#endif
 	//
 	// 2012/02/14 MH Add to share 88E ra with other SW team.
 	// We need to colelct all support abilit to a proper area.

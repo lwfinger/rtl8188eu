@@ -1321,17 +1321,14 @@ _func_enter_;
 		_InitRDGSetting(Adapter);
 	}
 
-#if (RATE_ADAPTIVE_SUPPORT==1)
-	{/* Enable TX Report */
-		/* Enable Tx Report Timer */
-		value8 = rtw_read8(Adapter, REG_TX_RPT_CTRL);
-		rtw_write8(Adapter,  REG_TX_RPT_CTRL, (value8|BIT1|BIT0));
-		/* Set MAX RPT MACID */
-		rtw_write8(Adapter,  REG_TX_RPT_CTRL+1, 2);/* FOR sta mode ,0: bc/mc ,1:AP */
-		/* Tx RPT Timer. Unit: 32us */
-		rtw_write16(Adapter, REG_TX_RPT_TIME, 0xCdf0);
-	}
-#endif
+	/* Enable TX Report */
+	/* Enable Tx Report Timer */
+	value8 = rtw_read8(Adapter, REG_TX_RPT_CTRL);
+	rtw_write8(Adapter,  REG_TX_RPT_CTRL, (value8|BIT1|BIT0));
+	/* Set MAX RPT MACID */
+	rtw_write8(Adapter,  REG_TX_RPT_CTRL+1, 2);/* FOR sta mode ,0: bc/mc ,1:AP */
+	/* Tx RPT Timer. Unit: 32us */
+	rtw_write16(Adapter, REG_TX_RPT_TIME, 0xCdf0);
 
 	rtw_write8(Adapter, REG_EARLY_MODE_CONTROL, 0);
 
@@ -2580,14 +2577,12 @@ _func_enter_;
 			}
 			break;
 #endif
-#if (RATE_ADAPTIVE_SUPPORT==1)
 		case HW_VAR_RPT_TIMER_SETTING:
 			{
 				u16	min_rpt_time = (*(u16 *)val);
 				ODM_RA_Set_TxRPT_Time(podmpriv,min_rpt_time);
 			}
 			break;
-#endif
 		case HW_VAR_ANTENNA_DIVERSITY_SELECT:
 			{
 				u8	Optimum_antenna = (*(u8 *)val);
@@ -2728,7 +2723,6 @@ _func_enter_;
 #endif /* CONFIG_WOWLAN */
 
 
-	#if (RATE_ADAPTIVE_SUPPORT == 1)
 		case HW_VAR_TX_RPT_MAX_MACID:
 			{
 				u8 maxMacid = *val;
@@ -2736,7 +2730,6 @@ _func_enter_;
 				rtw_write8(Adapter, REG_TX_RPT_CTRL+1, maxMacid+1);
 			}
 			break;
-	#endif
 		case HW_VAR_H2C_MEDIA_STATUS_RPT:
 			{
 				rtl8188e_set_FwMediaStatus_cmd(Adapter , (*(__le16 *)val));
@@ -2863,7 +2856,6 @@ GetHalDefVar8188EUsb(
 	case HAL_DEF_DBG_DM_FUNC:
 		*(( u32*)pValue) =pHalData->odmpriv.SupportAbility;
 		break;
-#if (RATE_ADAPTIVE_SUPPORT == 1)
 	case HAL_DEF_RA_DECISION_RATE:
 		{
 			u8 MacID = *((u8*)pValue);
@@ -2876,7 +2868,6 @@ GetHalDefVar8188EUsb(
 			*((u8*)pValue) = ODM_RA_GetShortGI_8188E(&(pHalData->odmpriv), MacID);
 		}
 		break;
-#endif
 	case HAL_DEF_PT_PWR_STATUS:
 #if (POWER_TRAINING_ACTIVE==1)
 		{
@@ -2889,7 +2880,6 @@ GetHalDefVar8188EUsb(
 		*(( u32*)pValue) = MAX_AMPDU_FACTOR_64K;
 		break;
         case HW_DEF_RA_INFO_DUMP:
-#if (RATE_ADAPTIVE_SUPPORT == 1)
 		{
 			u8 entry_id = *((u8*)pValue);
 			if (check_fwstate(&Adapter->mlmepriv, _FW_LINKED)== true)
@@ -2904,7 +2894,6 @@ GetHalDefVar8188EUsb(
 					pHalData->odmpriv.RAInfo[entry_id].PTStage);
 			}
 		}
-#endif	/* RATE_ADAPTIVE_SUPPORT == 1) */
 		break;
 	case HW_DEF_ODM_DBG_FLAG:
 		{
@@ -3123,9 +3112,6 @@ static void UpdateHalRAMask8188EUsb(struct adapter * padapter, u32 mac_id, u8 rs
 	}
 	else
 	{
-
-#if (RATE_ADAPTIVE_SUPPORT == 1)
-
 		ODM_RA_UpdateRateInfo_8188E(
 				&(pHalData->odmpriv),
 				mac_id,
@@ -3133,8 +3119,6 @@ static void UpdateHalRAMask8188EUsb(struct adapter * padapter, u32 mac_id, u8 rs
 				mask,
 				shortGIrate
 				);
-
-#endif
 	}
 
 

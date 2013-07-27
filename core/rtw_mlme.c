@@ -1606,7 +1606,6 @@ _func_exit_;
 static u8 search_max_mac_id(struct adapter *padapter)
 {
 	u8 mac_id, aid;
-#if (RATE_ADAPTIVE_SUPPORT==1)	/* for 88E RA */
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -1633,24 +1632,20 @@ static u8 search_max_mac_id(struct adapter *padapter)
 			}
 		}
 	}
-#endif
 	return mac_id;
-
 }
 
 /* FOR AP ,AD-HOC mode */
 void rtw_stassoc_hw_rpt(struct adapter *adapter,struct sta_info *psta)
 {
 	u16 media_status;
+	u8 macid;
 
-	if (psta==NULL)	return;
+	if (psta==NULL)
+		return;
 
-	#if (RATE_ADAPTIVE_SUPPORT==1)	/* for 88E RA */
-	{
-		u8 macid = search_max_mac_id(adapter);
-		rtw_hal_set_hwreg(adapter,HW_VAR_TX_RPT_MAX_MACID, (u8*)&macid);
-	}
-	#endif
+	macid = search_max_mac_id(adapter);
+	rtw_hal_set_hwreg(adapter,HW_VAR_TX_RPT_MAX_MACID, (u8*)&macid);
 	media_status = (psta->mac_id<<8)|1; /*   MACID|OPMODE:1 connect */
 	rtw_hal_set_hwreg(adapter,HW_VAR_H2C_MEDIA_STATUS_RPT,(u8 *)&media_status);
 }

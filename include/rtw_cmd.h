@@ -816,9 +816,7 @@ extern u8 rtw_addbareq_cmd(struct adapter*padapter, u8 tid, u8 *addr);
 extern u8 rtw_dynamic_chk_wk_cmd(struct adapter *adapter);
 
 u8 rtw_lps_ctrl_wk_cmd(struct adapter*padapter, u8 lps_ctrl_type, u8 enqueue);
-#if (RATE_ADAPTIVE_SUPPORT==1)
 u8 rtw_rpt_timer_cfg_cmd(struct adapter*padapter, u16 minRptTime);
-#endif
 
 extern  u8 rtw_antenna_select_cmd(struct adapter*padapter, u8 antenna,u8 enqueue);
 extern u8 rtw_ps_cmd(struct adapter*padapter);
