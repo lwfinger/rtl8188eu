@@ -271,10 +271,6 @@ rtl8188e_PHY_QueryBBReg(
 	u32	ReturnValue = 0, OriginalValue, BitShift;
 	u16	BBWaitCounter = 0;
 
-#if (DISABLE_BB_RF == 1)
-	return 0;
-#endif
-
 #if (SIC_ENABLE == 1)
 	return SIC_QueryBBReg(Adapter, RegAddr, BitMask);
 #endif
@@ -315,10 +311,6 @@ rtl8188e_PHY_SetBBReg(
 {
 	struct hal_data_8188e	*pHalData		= GET_HAL_DATA(Adapter);
 	u32			OriginalValue, BitShift;
-
-#if (DISABLE_BB_RF == 1)
-	return;
-#endif
 
 #if (SIC_ENABLE == 1)
 	SIC_SetBBReg(Adapter, RegAddr, BitMask, Data);
@@ -514,10 +506,6 @@ u32 rtl8188e_PHY_QueryRFReg(struct adapter * Adapter, enum rf_radio_path eRFPath
 {
 	u32 Original_Value, Readback_Value, BitShift;
 
-#if (DISABLE_BB_RF == 1)
-	return 0;
-#endif
-
 	Original_Value = phy_RFSerialRead(Adapter, eRFPath, RegAddr);
 
 	BitShift =  phy_CalculateBitShift(BitMask);
@@ -553,10 +541,6 @@ rtl8188e_PHY_SetRFReg(
 	)
 {
 	u32		Original_Value, BitShift;
-
-#if (DISABLE_BB_RF == 1)
-	return;
-#endif
 
 	/*  RF data is 12 bits only */
 	if (BitMask != bRFRegOffsetMask)

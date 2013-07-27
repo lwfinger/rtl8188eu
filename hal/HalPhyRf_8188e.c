@@ -1925,10 +1925,6 @@ if (*(pDM_Odm->mp_mode) == 1)
 	if (bSingleTone || bCarrierSuppression)
 		return;
 
-#if DISABLE_BB_RF
-	return;
-#endif
-
 	if (bReCovery)
 	{
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("PHY_IQCalibrate_8188E: Return due to bReCovery!\n"));
@@ -2089,12 +2085,6 @@ if (*(pDM_Odm->mp_mode) == 1)
 	bCarrierSuppression = pMptCtx->bCarrierSuppression;
 }
 #endif
-
-
-#if DISABLE_BB_RF
-	return;
-#endif
-
 	if (!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION))
 	{
 		return;
@@ -2135,10 +2125,6 @@ PHY_APCalibrate_8188E(
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
-
-#if DISABLE_BB_RF
-	return;
-#endif
 
 	return;
 	if (!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION))
@@ -2199,10 +2185,6 @@ void PHY_SetRFPathSwitch_8188E(
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
-
-#if DISABLE_BB_RF
-	return;
-#endif
 
 	if (pDM_Odm->RFType == ODM_2T2R) {
 		phy_SetRFPathSwitch_8188E(pAdapter, bMain, true);
