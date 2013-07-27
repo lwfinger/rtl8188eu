@@ -76,177 +76,6 @@ phy_CalculateBitShift(
 	return (i);
 }
 
-#if (SIC_ENABLE == 1)
-static bool
-sic_IsSICReady(
-		struct adapter *	Adapter
-	)
-{
-	bool		bRet=false;
-	u32		retryCnt=0;
-	u8		sic_cmd=0xff;
-
-	while (1)
-	{
-		if (retryCnt++ >= SIC_MAX_POLL_CNT)
-		{
-			return false;
-		}
-
-		sic_cmd = rtw_read8(Adapter, SIC_CMD_REG);
-#if (SIC_HW_SUPPORT == 1)
-		sic_cmd &= 0xf0;	/*  [7:4] */
-#endif
-		if (sic_cmd == SIC_CMD_READY)
-			return true;
-		else
-		{
-			rtw_msleep_os(1);
-		}
-	}
-
-	return bRet;
-}
-
-static u32
-sic_Read4Byte(
-	void *		Adapter,
-	u32		offset
-	)
-{
-	u32	u4ret=0xffffffff;
-#if RTL8188E_SUPPORT == 1
-	u8	retry = 0;
-#endif
-
-	if (sic_IsSICReady(Adapter))
-	{
-#if (SIC_HW_SUPPORT == 1)
-		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_PREREAD);
-#endif
-		rtw_write8(Adapter, SIC_ADDR_REG, (u8)(offset&0xff));
-		rtw_write8(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8));
-		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_READ);
-
-#if RTL8188E_SUPPORT == 1
-		retry = 4;
-		while (retry--){
-			rtw_udelay_os(50);
-		}
-#else
-		rtw_udelay_os(200);
-#endif
-
-		if (sic_IsSICReady(Adapter))
-			u4ret = rtw_read32(Adapter, SIC_DATA_REG);
-	}
-
-	return u4ret;
-}
-
-static void
-sic_Write4Byte(
-	void *		Adapter,
-	u32		offset,
-	u32		data
-	)
-{
-#if RTL8188E_SUPPORT == 1
-	u8	retry = 6;
-#endif
-	if (sic_IsSICReady(Adapter))
-	{
-#if (SIC_HW_SUPPORT == 1)
-		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_PREWRITE);
-#endif
-		rtw_write8(Adapter, SIC_ADDR_REG, (u8)(offset&0xff));
-		rtw_write8(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8));
-		rtw_write32(Adapter, SIC_DATA_REG, (u32)data);
-		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_WRITE);
-#if RTL8188E_SUPPORT == 1
-		while (retry--){
-			rtw_udelay_os(50);
-		}
-#else
-		rtw_udelay_os(150);
-#endif
-
-	}
-}
-/*  */
-/*  extern function */
-/*  */
-static void
-SIC_SetBBReg(
-		struct adapter *	Adapter,
-		u32		RegAddr,
-		u32		BitMask,
-		u32		Data
-	)
-{
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	u32			OriginalValue, BitShift;
-	u16			BBWaitCounter = 0;
-
-	/*  */
-	/*  Critical section start */
-	/*  */
-
-	if (BitMask!= bMaskDWord){/* if not "double word" write */
-		OriginalValue = sic_Read4Byte(Adapter, RegAddr);
-		BitShift = phy_CalculateBitShift(BitMask);
-		Data = (((OriginalValue) & (~BitMask)) | (Data << BitShift));
-	}
-
-	sic_Write4Byte(Adapter, RegAddr, Data);
-}
-
-static u32
-SIC_QueryBBReg(
-		struct adapter *	Adapter,
-		u32		RegAddr,
-		u32		BitMask
-	)
-{
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	u32			ReturnValue = 0, OriginalValue, BitShift;
-	u16			BBWaitCounter = 0;
-
-	OriginalValue = sic_Read4Byte(Adapter, RegAddr);
-	BitShift = phy_CalculateBitShift(BitMask);
-	ReturnValue = (OriginalValue & BitMask) >> BitShift;
-
-	return (ReturnValue);
-}
-
-void
-SIC_Init(
-		struct adapter *	Adapter
-	)
-{
-	/*  Here we need to write 0x1b8~0x1bf = 0 after fw is downloaded */
-	/*  because for 8723E at beginning 0x1b8=0x1e, that will cause */
-	/*  sic always not be ready */
-#if (SIC_HW_SUPPORT == 1)
-	rtw_write8(Adapter, SIC_INIT_REG, SIC_INIT_VAL);
-	rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_INIT);
-#else
-	rtw_write32(Adapter, SIC_CMD_REG, 0);
-	rtw_write32(Adapter, SIC_CMD_REG+4, 0);
-#endif
-}
-
-static bool
-SIC_LedOff(
-		struct adapter *	Adapter
-	)
-{
-	/*  When SIC is enabled, led pin will be used as debug pin, */
-	/*  so don't execute led function when SIC is enabled. */
-	return true;
-}
-#endif
-
 /**
 * Function:	PHY_QueryBBReg
 *
@@ -271,14 +100,9 @@ rtl8188e_PHY_QueryBBReg(
 	u32	ReturnValue = 0, OriginalValue, BitShift;
 	u16	BBWaitCounter = 0;
 
-#if (SIC_ENABLE == 1)
-	return SIC_QueryBBReg(Adapter, RegAddr, BitMask);
-#endif
-
 	OriginalValue = rtw_read32(Adapter, RegAddr);
 	BitShift = phy_CalculateBitShift(BitMask);
 	ReturnValue = (OriginalValue & BitMask) >> BitShift;
-
 	return (ReturnValue);
 }
 
@@ -311,11 +135,6 @@ rtl8188e_PHY_SetBBReg(
 {
 	struct hal_data_8188e	*pHalData		= GET_HAL_DATA(Adapter);
 	u32			OriginalValue, BitShift;
-
-#if (SIC_ENABLE == 1)
-	SIC_SetBBReg(Adapter, RegAddr, BitMask, Data);
-	return;
-#endif
 
 	if (BitMask!= bMaskDWord){/* if not "double word" write */
 		OriginalValue = rtw_read32(Adapter, RegAddr);
