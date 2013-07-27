@@ -230,11 +230,11 @@ enum _ADAPTER_TYPE {
 	MAX_ADAPTER,
 };
 
-typedef enum _DRIVER_STATE{
+enum driver_state {
 	DRIVER_NORMAL = 0,
 	DRIVER_DISAPPEAR = 1,
 	DRIVER_REPLACE_DONGLE = 2,
-}DRIVER_STATE;
+};
 
 struct adapter {
 	int	DriverState;// for disable driver using module, use dongle to replace module.

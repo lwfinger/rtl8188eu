@@ -735,12 +735,12 @@ struct ADDBA_request {
 	unsigned short	BA_starting_seqctrl;
 }  __attribute__ ((packed));
 
-typedef enum _HT_CAP_AMPDU_FACTOR {
+enum ht_cap_ampdu_factor {
 	MAX_AMPDU_FACTOR_8K		= 0,
 	MAX_AMPDU_FACTOR_16K	= 1,
 	MAX_AMPDU_FACTOR_32K	= 2,
 	MAX_AMPDU_FACTOR_64K	= 3,
-}HT_CAP_AMPDU_FACTOR;
+};
 
 /* 802.11n HT capabilities masks */
 #define IEEE80211_HT_CAP_SUP_WIDTH		0x0002
