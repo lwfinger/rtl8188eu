@@ -641,17 +641,6 @@ _func_enter_;
 
 	rtw_hal_antdiv_rssi_compared(padapter, dst, src); /* this will update src.Rssi, need consider again */
 
-	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
-	if (strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_88E("%s %s(%pm, ch%u) ss_ori:%3u, sq_ori:%3u, rssi_ori:%3ld, ss_smp:%3u, sq_smp:%3u, rssi_smp:%3ld\n"
-			, __func__
-			, src->Ssid.Ssid, src->MacAddress, src->Configuration.DSConfig
-			,ss_ori, sq_ori, rssi_ori
-			,ss_smp, sq_smp, rssi_smp
-		);
-	}
-	#endif
-
 	/* The rule below is 1/5 for sample value, 4/5 for history value */
 	if (check_fwstate(&padapter->mlmepriv, _FW_LINKED) && is_same_network(&(padapter->mlmepriv.cur_network.network), src)) {
 		/* Take the recvpriv's value for the connected AP*/
@@ -662,8 +651,7 @@ _func_enter_;
 			rssi_final = (src->Rssi+dst->Rssi*4)/5;
 		else
 			rssi_final = rssi_ori;
-	}
-	else {
+	} else {
 		if (sq_smp != 101) { /* from the right channel */
 			ss_final = ((u32)(src->PhyInfo.SignalStrength)+(u32)(dst->PhyInfo.SignalStrength)*4)/5;
 			sq_final = ((u32)(src->PhyInfo.SignalQuality)+(u32)(dst->PhyInfo.SignalQuality)*4)/5;
@@ -683,15 +671,6 @@ _func_enter_;
 	dst->PhyInfo.SignalStrength = ss_final;
 	dst->PhyInfo.SignalQuality = sq_final;
 	dst->Rssi = rssi_final;
-
-	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
-	if (strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
-		DBG_88E("%s %s(%pm SignalStrength:%u, SignalQuality:%u, RawRSSI:%ld\n",
-			__func__, dst->Ssid.Ssid, dst->MacAddress,
-			dst->PhyInfo.SignalStrength,
-			dst->PhyInfo.SignalQuality, dst->Rssi);
-	}
-	#endif
 
 _func_exit_;
 }
@@ -1412,15 +1391,6 @@ static void rtw_joinbss_update_network(struct adapter *padapter, struct wlan_net
 	padapter->recvpriv.signal_qual = ptarget_wlan->network.PhyInfo.SignalQuality;
 	/* the ptarget_wlan->network.Rssi is raw data, we use ptarget_wlan->network.PhyInfo.SignalStrength instead (has scaled) */
 	padapter->recvpriv.rssi = translate_percentage_to_dbm(ptarget_wlan->network.PhyInfo.SignalStrength);
-	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING) && 1
-		DBG_88E("%s signal_strength:%3u, rssi:%3d, signal_qual:%3u"
-			"\n"
-			, __func__
-			, padapter->recvpriv.signal_strength
-			, padapter->recvpriv.rssi
-			, padapter->recvpriv.signal_qual
-	);
-	#endif
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
 
 	/* update fw_state will clr _FW_UNDER_LINKING here indirectly */

@@ -2602,12 +2602,6 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
 	u32 tmp_s, tmp_q;
 	u8 avg_signal_strength = 0;
 	u8 avg_signal_qual = 0;
-	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING)
-	u32 num_signal_strength = 0;
-	#endif
-	#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING)
-	u32 num_signal_qual = 0;
-	#endif
 	u8 _alpha = 3; /*  this value is based on converging_constant = 5000 and sampling_interval = 1000 */
 
 	if (adapter->recvpriv.is_signal_dbg) {
@@ -2618,18 +2612,12 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
 
 		if (recvpriv->signal_strength_data.update_req == 0) {/*  update_req is clear, means we got rx */
 			avg_signal_strength = recvpriv->signal_strength_data.avg_val;
-			#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING)
-			num_signal_strength = recvpriv->signal_strength_data.total_num;
-			#endif
 			/*  after avg_vals are accquired, we can re-stat the signal values */
 			recvpriv->signal_strength_data.update_req = 1;
 		}
 
 		if (recvpriv->signal_qual_data.update_req == 0) {/*  update_req is clear, means we got rx */
 			avg_signal_qual = recvpriv->signal_qual_data.avg_val;
-			#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING)
-			num_signal_qual = recvpriv->signal_qual_data.total_num;
-			#endif
 			/*  after avg_vals are accquired, we can re-stat the signal values */
 			recvpriv->signal_qual_data.update_req = 1;
 		}
@@ -2655,18 +2643,6 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
 			recvpriv->signal_strength = tmp_s;
 			recvpriv->rssi = (s8)translate_percentage_to_dbm(tmp_s);
 			recvpriv->signal_qual = tmp_q;
-
-			#if defined(DBG_RX_SIGNAL_DISPLAY_PROCESSING)
-			DBG_88E("%s signal_strength:%3u, rssi:%3d, signal_qual:%3u"
-				", num_signal_strength:%u, num_signal_qual:%u"
-				"\n"
-				, __func__
-				, recvpriv->signal_strength
-				, recvpriv->rssi
-				, recvpriv->signal_qual
-				, num_signal_strength, num_signal_qual
-			);
-			#endif
 		}
 	}
 	rtw_set_signal_stat_timer(recvpriv);
