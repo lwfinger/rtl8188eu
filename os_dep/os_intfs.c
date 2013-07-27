@@ -168,12 +168,6 @@ static int rtw_fw_iol=1;// 0:Disable, 1:enable, 2:by usb speed
 module_param(rtw_fw_iol, int, 0644);
 MODULE_PARM_DESC(rtw_fw_iol,"FW IOL");
 
-#ifdef CONFIG_FILE_FWIMG
-char *rtw_fw_file_path= "";
-module_param(rtw_fw_file_path, charp, 0644);
-MODULE_PARM_DESC(rtw_fw_file_path, "The path of fw image");
-#endif //CONFIG_FILE_FWIMG
-
 module_param(rtw_mc2u_disable, int, 0644);
 
 module_param(rtw_80211d, int, 0644);

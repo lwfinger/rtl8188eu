@@ -621,10 +621,6 @@ static s32 _FWFreeToGo(struct adapter * padapter)
 
 #define IS_FW_81xxC(padapter)	(((GET_HAL_DATA(padapter))->FirmwareSignature & 0xFFF0) == 0x88C0)
 
-#ifdef CONFIG_FILE_FWIMG
-extern char *rtw_fw_file_path;
-u8	FwBuffer8188E[FW_8188E_SIZE];
-#endif /* CONFIG_FILE_FWIMG */
 #ifdef CONFIG_WOWLAN
 /*  */
 /* 	Description: */
@@ -673,26 +669,10 @@ s32 rtl8188e_FirmwareDownload(struct adapter * padapter)
 #endif /* CONFIG_WOWLAN */
 
 
-	#ifdef CONFIG_FILE_FWIMG
-	if (rtw_is_file_readable(rtw_fw_file_path) == true)
-	{
-		DBG_88E("%s accquire FW from file:%s\n", __func__, rtw_fw_file_path);
-		pFirmware->eFWSource = FW_SOURCE_IMG_FILE;
-	}
-	else
-	#endif /* CONFIG_FILE_FWIMG */
-	{
-		pFirmware->eFWSource = FW_SOURCE_HEADER_FILE;
-	}
+	pFirmware->eFWSource = FW_SOURCE_HEADER_FILE;
 
-	switch (pFirmware->eFWSource)
-	{
+	switch (pFirmware->eFWSource) {
 		case FW_SOURCE_IMG_FILE:
-			#ifdef CONFIG_FILE_FWIMG
-			rtStatus = rtw_retrive_from_file(rtw_fw_file_path, FwBuffer8188E, FW_8188E_SIZE);
-			pFirmware->ulFwLength = rtStatus>=0?rtStatus:0;
-			pFirmware->szFwBuffer = FwBuffer8188E;
-			#endif /* CONFIG_FILE_FWIMG */
 			break;
 		case FW_SOURCE_HEADER_FILE:
 			if (FwImageLen > FW_8188E_SIZE) {
