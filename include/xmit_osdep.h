@@ -32,11 +32,9 @@ struct pkt_file {
 	size_t buf_len;
 };
 
-#ifdef CONFIG_80211N_HT
 extern int rtw_ht_enable;
 extern int rtw_cbw40_enable;
 extern int rtw_ampdu_enable;//for enable tx_ampdu
-#endif
 
 #define NR_XMITFRAME	256
 

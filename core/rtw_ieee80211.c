@@ -479,14 +479,12 @@ _func_enter_;
 		ie = rtw_set_ie(ie, _EXT_SUPPORTEDRATES_IE_, (rateLen - 8), (pdev_network->SupportedRates + 8), &sz);
 	}
 
-#ifdef CONFIG_80211N_HT
 	/* HT Cap. */
 	if (((pregistrypriv->wireless_mode&WIRELESS_11_5N)||(pregistrypriv->wireless_mode&WIRELESS_11_24N))
 		&& (pregistrypriv->ht_enable==true))
 	{
 		/* todo: */
 	}
-#endif /* CONFIG_80211N_HT */
 
 _func_exit_;
 

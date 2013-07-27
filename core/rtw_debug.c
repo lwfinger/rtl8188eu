@@ -235,9 +235,7 @@ int proc_get_ht_option(char *page, char **start,
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
 	int len = 0;
-#ifdef CONFIG_80211N_HT
 	len += snprintf(page + len, count - len, "ht_option=%d\n", pmlmepriv->htpriv.ht_option);
-#endif /* CONFIG_80211N_HT */
 	*eof = 1;
 	return len;
 }
@@ -284,12 +282,10 @@ int proc_get_ap_info(char *page, char **start,
 		len += snprintf(page + len, count - len, "cur_channel=%d, cur_bwmode=%d, cur_ch_offset=%d\n", pmlmeext->cur_channel, pmlmeext->cur_bwmode, pmlmeext->cur_ch_offset);
 		len += snprintf(page + len, count - len, "rtsen=%d, cts2slef=%d\n", psta->rtsen, psta->cts2self);
 		len += snprintf(page + len, count - len, "state=0x%x, aid=%d, macid=%d, raid=%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
-#ifdef CONFIG_80211N_HT
 		len += snprintf(page + len, count - len, "qos_en=%d, ht_en=%d, init_rate=%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
 		len += snprintf(page + len, count - len, "bwmode=%d, ch_offset=%d, sgi=%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
 		len += snprintf(page + len, count - len, "ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
 		len += snprintf(page + len, count - len, "agg_enable_bitmap=%x, candidate_tid_bitmap=%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
-#endif /* CONFIG_80211N_HT */
 
 		for (i=0;i<16;i++)
 		{
@@ -636,7 +632,6 @@ int proc_set_rx_signal(struct file *file, const char __user *buffer,
 	}
 	return count;
 }
-#ifdef CONFIG_80211N_HT
 
 int proc_get_ht_enable(char *page, char **start,
 			  off_t offset, int count,
@@ -779,7 +774,6 @@ int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 	return count;
 
 }
-#endif /* CONFIG_80211N_HT */
 
 int proc_get_two_path_rssi(char *page, char **start,
 			  off_t offset, int count,
@@ -800,7 +794,7 @@ int proc_get_two_path_rssi(char *page, char **start,
 	*eof = 1;
 	return len;
 }
-#ifdef CONFIG_80211N_HT
+
 int proc_get_rx_stbc(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data)
@@ -847,8 +841,6 @@ int proc_set_rx_stbc(struct file *file, const char __user *buffer,
 	return count;
 
 }
-#endif /* CONFIG_80211N_HT */
-
 
 int proc_get_rssi_disp(char *page, char **start,
 			  off_t offset, int count,
@@ -934,12 +926,10 @@ int proc_get_all_sta_info(char *page, char **start,
 			len += snprintf(page + len, count - len, "sta's macaddr: %pM\n", psta->hwaddr);
 			len += snprintf(page + len, count - len, "rtsen=%d, cts2slef=%d\n", psta->rtsen, psta->cts2self);
 			len += snprintf(page + len, count - len, "state=0x%x, aid=%d, macid=%d, raid=%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
-#ifdef CONFIG_80211N_HT
 			len += snprintf(page + len, count - len, "qos_en=%d, ht_en=%d, init_rate=%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
 			len += snprintf(page + len, count - len, "bwmode=%d, ch_offset=%d, sgi=%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
 			len += snprintf(page + len, count - len, "ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
 			len += snprintf(page + len, count - len, "agg_enable_bitmap=%x, candidate_tid_bitmap=%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
-#endif /* CONFIG_80211N_HT */
 			len += snprintf(page + len, count - len, "sleepq_len=%d\n", psta->sleepq_len);
 			len += snprintf(page + len, count - len, "capability=0x%x\n", psta->capability);
 			len += snprintf(page + len, count - len, "flags=0x%x\n", psta->flags);

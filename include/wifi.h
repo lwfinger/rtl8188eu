@@ -636,8 +636,6 @@ __inline static int IsFrameTypeCtrl(unsigned char *pframe)
 				Below is the definition for 802.11n
 ------------------------------------------------------------------------------*/
 
-//#ifdef CONFIG_80211N_HT
-
 #define SetOrderBit(pbuf)	\
 	do	{	\
 		*(unsigned short *)(pbuf) |= cpu_to_le16(_ORDER_); \
@@ -823,10 +821,6 @@ enum ht_cap_ampdu_factor {
 #define HT_INFO_STBC_PARAM_LSIG_TXOP_PROTECT_ALLOWED	((u16) BIT(9))
 #define HT_INFO_STBC_PARAM_PCO_ACTIVE			((u16) BIT(10))
 #define HT_INFO_STBC_PARAM_PCO_PHASE			((u16) BIT(11))
-
-
-
-//#endif
 
 //	===============WPS Section===============
 //	For WPSv1.0

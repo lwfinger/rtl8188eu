@@ -295,10 +295,6 @@ static void convert_ipv6_mac_to_mc(struct sk_buff *skb)
 	dst_mac[0] = 0x33;
 	dst_mac[1] = 0x33;
 	memcpy(&dst_mac[2], &iph->daddr.s6_addr32[3], 4);
-	#if defined(__LINUX_2_6__)
-	/*modified by qinjunjie,warning:should not remove next line*/
-	skb->pkt_type = PACKET_MULTICAST;
-	#endif
 }
 
 static __inline__ int __nat25_network_hash(unsigned char *networkAddr)

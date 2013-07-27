@@ -2326,9 +2326,6 @@ int process_recv_indicatepkts(struct adapter *padapter, union recv_frame *prfram
 	/* struct recv_priv *precvpriv = &padapter->recvpriv; */
 	/* struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib; */
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-
-#ifdef CONFIG_80211N_HT
-
 	struct ht_priv	*phtpriv = &pmlmepriv->htpriv;
 
 	if (phtpriv->ht_option==true)  /* B/G/N Mode */
@@ -2346,7 +2343,6 @@ int process_recv_indicatepkts(struct adapter *padapter, union recv_frame *prfram
 		}
 	}
 	else /* B/G mode */
-#endif
 	{
 		retval=wlanhdr_to_ethhdr (prframe);
 		if (retval != _SUCCESS)
@@ -2450,7 +2446,6 @@ static int recv_func_posthandle(struct adapter *padapter, union recv_frame *prfr
 
 	count_rx_stats(padapter, prframe, NULL);
 
-#ifdef CONFIG_80211N_HT
 	ret = process_recv_indicatepkts(padapter, prframe);
 	if (ret != _SUCCESS)
 	{
@@ -2458,51 +2453,6 @@ static int recv_func_posthandle(struct adapter *padapter, union recv_frame *prfr
 		rtw_free_recvframe(orig_prframe, pfree_recv_queue);/* free this recv_frame */
 		goto _recv_data_drop;
 	}
-#else /*  CONFIG_80211N_HT */
-	if (!pattrib->amsdu)
-	{
-		ret = wlanhdr_to_ethhdr (prframe);
-		if (ret != _SUCCESS)
-		{
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("wlanhdr_to_ethhdr: drop pkt\n"));
-			rtw_free_recvframe(orig_prframe, pfree_recv_queue);/* free this recv_frame */
-			goto _recv_data_drop;
-		}
-
-		if ((padapter->bDriverStopped == false) && (padapter->bSurpriseRemoved == false))
-		{
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("@@@@ recv_func: recv_func rtw_recv_indicatepkt\n" ));
-			/* indicate this recv_frame */
-			ret = rtw_recv_indicatepkt(padapter, prframe);
-			if (ret != _SUCCESS)
-			{
-				goto _recv_data_drop;
-			}
-		}
-		else
-		{
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("@@@@  recv_func: rtw_free_recvframe\n" ));
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_debug_, ("recv_func:bDriverStopped(%d) OR bSurpriseRemoved(%d)", padapter->bDriverStopped, padapter->bSurpriseRemoved));
-			ret = _FAIL;
-			rtw_free_recvframe(orig_prframe, pfree_recv_queue); /* free this recv_frame */
-		}
-
-	}
-	else if (pattrib->amsdu==1)
-	{
-
-		ret = amsdu_to_msdu(padapter, prframe);
-		if (ret != _SUCCESS)
-		{
-			rtw_free_recvframe(orig_prframe, pfree_recv_queue);
-			goto _recv_data_drop;
-		}
-	}
-	else
-	{
-		goto _recv_data_drop;
-	}
-#endif /*  CONFIG_80211N_HT */
 
 _exit_recv_func:
 	return ret;

@@ -136,9 +136,7 @@ struct sta_info {
 	u16	BA_starting_seqctrl[16];
 
 
-#ifdef CONFIG_80211N_HT
 	struct ht_priv	htpriv;
-#endif
 
 	//Notes:
 	//STA_Mode:

@@ -29,8 +29,6 @@
  * Internal  General Config
  */
 
-#define CONFIG_80211N_HT
-
 #define CONFIG_AP_MODE
 
 #define CONFIG_P2P
