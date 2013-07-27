@@ -2714,18 +2714,9 @@ odm_InitHybridAntDiv(
 }
 
 
-bool
-odm_StaDefAntSel(
-	struct odm_dm_struct *pDM_Odm,
-	u4Byte		OFDM_Ant1_Cnt,
-	u4Byte		OFDM_Ant2_Cnt,
-	u4Byte		CCK_Ant1_Cnt,
-	u4Byte		CCK_Ant2_Cnt,
-	u1Byte		*pDefAnt
-
-	)
+bool odm_StaDefAntSel(struct odm_dm_struct *pDM_Odm, u4Byte OFDM_Ant1_Cnt,
+		      u4Byte OFDM_Ant2_Cnt, u4Byte CCK_Ant1_Cnt, u4Byte CCK_Ant2_Cnt, u1Byte *pDefAnt)
 {
-#if 1
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("odm_StaDefAntSelect==============>\n"));
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("OFDM_Ant1_Cnt:%d, OFDM_Ant2_Cnt:%d\n",OFDM_Ant1_Cnt,OFDM_Ant2_Cnt));
@@ -2760,7 +2751,6 @@ odm_StaDefAntSel(
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("TxAnt = %s\n",((*pDefAnt)==1)?"Ant1":"Ant2"));
 
-#endif
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("<==============odm_StaDefAntSelect\n"));
 
 	return true;

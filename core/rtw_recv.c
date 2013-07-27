@@ -1516,9 +1516,8 @@ int validate_recv_frame(struct adapter *adapter, union recv_frame *precv_frame)
 	u8 type;
 	u8 subtype;
 	int retval = _SUCCESS;
-
+	u8 bDumpRxPkt;
 	struct rx_pkt_attrib *pattrib = & precv_frame->u.hdr.attrib;
-
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	u8  ver =(unsigned char) (*ptr)&0x3 ;
 	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
@@ -1552,9 +1551,7 @@ _func_enter_;
 	pattrib->privacy = GetPrivacy(ptr);
 	pattrib->order = GetOrder(ptr);
 
-#if 1 /* Dump rx packets */
-{
-	u8 bDumpRxPkt;
+	/* Dump rx packets */
 	rtw_hal_get_def_var(adapter, HAL_DEF_DBG_DUMP_RXPKT, &(bDumpRxPkt));
 	if (bDumpRxPkt ==1){/* dump all rx packets */
 		int i;
@@ -1575,8 +1572,7 @@ _func_enter_;
 				*(ptr+i+1), *(ptr+i+2) ,*(ptr+i+3) ,*(ptr+i+4),*(ptr+i+5), *(ptr+i+6), *(ptr+i+7));
 			DBG_88E("#############################\n");
 		}
-	}
-	else if (bDumpRxPkt ==3){
+	} else if (bDumpRxPkt ==3){
 		if (type== WIFI_DATA_TYPE){
 			int i;
 			DBG_88E("#############################\n");
@@ -1587,39 +1583,36 @@ _func_enter_;
 			DBG_88E("#############################\n");
 		}
 	}
-}
-#endif
-	switch (type)
-	{
-		case WIFI_MGT_TYPE: /* mgnt */
-			retval = validate_recv_mgnt_frame(adapter, precv_frame);
-			if (retval == _FAIL)
-			{
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_mgnt_frame fail\n"));
-			}
-			retval = _FAIL; /*  only data frame return _SUCCESS */
-			break;
-		case WIFI_CTRL_TYPE: /* ctrl */
-			retval = validate_recv_ctrl_frame(adapter, precv_frame);
-			if (retval == _FAIL)
-			{
-				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_ctrl_frame fail\n"));
-			}
-			retval = _FAIL; /*  only data frame return _SUCCESS */
-			break;
-		case WIFI_DATA_TYPE: /* data */
-			rtw_led_control(adapter, LED_CTL_RX);
-			pattrib->qos = (subtype & BIT(7))? 1:0;
-			retval = validate_recv_data_frame(adapter, precv_frame);
-			if (retval == _FAIL) {
-				struct recv_priv *precvpriv = &adapter->recvpriv;
-				precvpriv->rx_drop++;
-			}
-			break;
-		default:
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail! type=0x%x\n", type));
-			retval = _FAIL;
-			break;
+	switch (type) {
+	case WIFI_MGT_TYPE: /* mgnt */
+		retval = validate_recv_mgnt_frame(adapter, precv_frame);
+		if (retval == _FAIL)
+		{
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_mgnt_frame fail\n"));
+		}
+		retval = _FAIL; /*  only data frame return _SUCCESS */
+		break;
+	case WIFI_CTRL_TYPE: /* ctrl */
+		retval = validate_recv_ctrl_frame(adapter, precv_frame);
+		if (retval == _FAIL)
+		{
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_ctrl_frame fail\n"));
+		}
+		retval = _FAIL; /*  only data frame return _SUCCESS */
+		break;
+	case WIFI_DATA_TYPE: /* data */
+		rtw_led_control(adapter, LED_CTL_RX);
+		pattrib->qos = (subtype & BIT(7))? 1:0;
+		retval = validate_recv_data_frame(adapter, precv_frame);
+		if (retval == _FAIL) {
+			struct recv_priv *precvpriv = &adapter->recvpriv;
+			precvpriv->rx_drop++;
+		}
+		break;
+	default:
+		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("validate_recv_data_frame fail! type=0x%x\n", type));
+		retval = _FAIL;
+		break;
 	}
 
 exit:

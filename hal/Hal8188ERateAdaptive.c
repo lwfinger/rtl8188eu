@@ -599,7 +599,6 @@ ODM_RAInfo_Init(
 	)
 {
 	struct odm_ra_info *pRaInfo = &pDM_Odm->RAInfo[MacID];
-	#if 1
 	u1Byte WirelessMode=0xFF; /* invalid value */
 	u1Byte max_rate_idx = 0x13; /* MCS7 */
 	if (pDM_Odm->pWirelessMode!=NULL){
@@ -622,11 +621,6 @@ ODM_RAInfo_Init(
 	pRaInfo->DecisionRate = max_rate_idx;
 	pRaInfo->PreRate = max_rate_idx;
 	pRaInfo->HighestRate=max_rate_idx;
-	#else
-	pRaInfo->DecisionRate = 0x13;
-	pRaInfo->PreRate = 0x13;
-	pRaInfo->HighestRate= 0x13;
-	#endif
 	pRaInfo->LowestRate=0;
 	pRaInfo->RateID=0;
 	pRaInfo->RateMask=0xffffffff;

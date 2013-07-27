@@ -958,7 +958,7 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 	struct usb_host_endpoint		*host_endp;
 	struct usb_endpoint_descriptor	*endp_desc;
 
-#if 1 /* The usb device this usb interface belongs to */
+	/* The usb device this usb interface belongs to */
 	DBG_88E("usb_interface:%p, usb_device:%p(num:%d, path:%s), usb_device_descriptor:%p\n", usb_intf, udev, udev->devnum, udev->devpath, dev_desc);
 	DBG_88E("bLength:%u\n", dev_desc->bLength);
 	DBG_88E("bDescriptorType:0x%02x\n", dev_desc->bDescriptorType);
@@ -974,10 +974,8 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 	DBG_88E("iProduct:0x%02x\n", dev_desc->iProduct);
 	DBG_88E("iSerialNumber:0x%02x\n", dev_desc->iSerialNumber);
 	DBG_88E("bNumConfigurations:%u\n", dev_desc->bNumConfigurations);
-#endif
 
-
-#if 1 /* The acting usb_config_descriptor */
+	/* The acting usb_config_descriptor */
 	DBG_88E("\nact_conf_desc:%p\n", act_conf_desc);
 	DBG_88E("bLength:%u\n", act_conf_desc->bLength);
 	DBG_88E("bDescriptorType:0x%02x\n", act_conf_desc->bDescriptorType);
@@ -987,15 +985,13 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 	DBG_88E("iConfiguration:0x%02x\n", act_conf_desc->iConfiguration);
 	DBG_88E("bmAttributes:0x%02x\n", act_conf_desc->bmAttributes);
 	DBG_88E("bMaxPower=%u\n", act_conf_desc->bMaxPower);
-#endif
-
 
 	DBG_88E("****** num of altsetting = (%d) ******/\n", usb_intf->num_altsetting);
 	/* Get he host side alternate setting (the current alternate setting) for this interface*/
 	host_iface = usb_intf->cur_altsetting;
 	iface_desc = &host_iface->desc;
 
-#if 1 /* The current alternate setting*/
+	/* The current alternate setting*/
 	DBG_88E("\nusb_interface_descriptor:%p:\n", iface_desc);
 	DBG_88E("bLength:%u\n", iface_desc->bLength);
 	DBG_88E("bDescriptorType:0x%02x\n", iface_desc->bDescriptorType);
@@ -1006,11 +1002,6 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 	DBG_88E("bInterfaceSubClass=%x\n", iface_desc->bInterfaceSubClass);
 	DBG_88E("bInterfaceProtocol=%x\n", iface_desc->bInterfaceProtocol);
 	DBG_88E("iInterface=%x\n", iface_desc->iInterface);
-#endif
-
-
-#if 1
-	//DBG_88E("\ndump usb_endpoint_descriptor:\n");
 
 	for (i = 0; i < iface_desc->bNumEndpoints; i++)
 	{
@@ -1027,30 +1018,21 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 			DBG_88E("wMaxPacketSize=%x\n",endp_desc->wMaxPacketSize);
 			DBG_88E("wMaxPacketSize=%x\n",le16_to_cpu(endp_desc->wMaxPacketSize));
 			DBG_88E("bInterval=%x\n",endp_desc->bInterval);
-			//DBG_88E("bRefresh=%x\n",pendp_desc->bRefresh);
-			//DBG_88E("bSynchAddress=%x\n",pendp_desc->bSynchAddress);
 
 			if (RT_usb_endpoint_is_bulk_in(endp_desc))
 			{
 				DBG_88E("RT_usb_endpoint_is_bulk_in = %x\n", RT_usb_endpoint_num(endp_desc));
-				//pdvobjpriv->RtNumInPipes++;
 			}
 			else if (RT_usb_endpoint_is_int_in(endp_desc))
 			{
 				DBG_88E("RT_usb_endpoint_is_int_in = %x, Interval = %x\n", RT_usb_endpoint_num(endp_desc),endp_desc->bInterval);
-				//pdvobjpriv->RtNumInPipes++;
 			}
 			else if (RT_usb_endpoint_is_bulk_out(endp_desc))
 			{
 				DBG_88E("RT_usb_endpoint_is_bulk_out = %x\n", RT_usb_endpoint_num(endp_desc));
-				//pdvobjpriv->RtNumOutPipes++;
 			}
-			//pdvobjpriv->ep_num[i] = RT_usb_endpoint_num(pendp_desc);
 		}
 	}
-
-	//DBG_88E("nr_endpoint=%d, in_num=%d, out_num=%d\n\n", pdvobjpriv->nr_endpoint, pdvobjpriv->RtNumInPipes, pdvobjpriv->RtNumOutPipes);
-#endif
 
 	if (udev->speed == USB_SPEED_HIGH)
 		DBG_88E("USB_SPEED_HIGH\n");

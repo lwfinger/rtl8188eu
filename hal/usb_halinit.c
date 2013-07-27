@@ -2832,114 +2832,96 @@ GetHalDefVar8188EUsb(
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u8			bResult = _SUCCESS;
 
-	switch (eVariable)
-	{
-		case HAL_DEF_UNDERCORATEDSMOOTHEDPWDB:
-#if 1 /* trunk */
+	switch (eVariable) {
+	case HAL_DEF_UNDERCORATEDSMOOTHEDPWDB:
+		{
+			struct mlme_priv *pmlmepriv = &Adapter->mlmepriv;
+			struct sta_priv * pstapriv = &Adapter->stapriv;
+			struct sta_info * psta;
+			psta = rtw_get_stainfo(pstapriv, pmlmepriv->cur_network.network.MacAddress);
+			if (psta)
 			{
-				struct mlme_priv *pmlmepriv = &Adapter->mlmepriv;
-				struct sta_priv * pstapriv = &Adapter->stapriv;
-				struct sta_info * psta;
-				psta = rtw_get_stainfo(pstapriv, pmlmepriv->cur_network.network.MacAddress);
-				if (psta)
-				{
-					*((int *)pValue) = psta->rssi_stat.UndecoratedSmoothedPWDB;
-				}
+				*((int *)pValue) = psta->rssi_stat.UndecoratedSmoothedPWDB;
 			}
-#else /* V4 branch */
-				if (check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE) == true){
-						*((int *)pValue) = pHalData->dmpriv.UndecoratedSmoothedPWDB;
-				}
-				else{
-
-				}
-#endif
-			break;
-		case HAL_DEF_IS_SUPPORT_ANT_DIV:
-			*((u8 *)pValue) = (pHalData->AntDivCfg==0)?false:true;
-			break;
-		case HAL_DEF_CURRENT_ANTENNA:
-			*(( u8*)pValue) = pHalData->CurAntenna;
-			break;
-		case HAL_DEF_DRVINFO_SZ:
-			*(( u32*)pValue) = DRVINFO_SZ;
-			break;
-		case HAL_DEF_MAX_RECVBUF_SZ:
-			*(( u32*)pValue) = MAX_RECVBUF_SZ;
-			break;
-		case HAL_DEF_RX_PACKET_OFFSET:
-			*(( u32*)pValue) = RXDESC_SIZE + DRVINFO_SZ;
-			break;
-
-		case HAL_DEF_DBG_DM_FUNC:
-			*(( u32*)pValue) =pHalData->odmpriv.SupportAbility;
-			break;
+		}
+		break;
+	case HAL_DEF_IS_SUPPORT_ANT_DIV:
+		*((u8 *)pValue) = (pHalData->AntDivCfg==0)?false:true;
+		break;
+	case HAL_DEF_CURRENT_ANTENNA:
+		*(( u8*)pValue) = pHalData->CurAntenna;
+		break;
+	case HAL_DEF_DRVINFO_SZ:
+		*(( u32*)pValue) = DRVINFO_SZ;
+		break;
+	case HAL_DEF_MAX_RECVBUF_SZ:
+		*(( u32*)pValue) = MAX_RECVBUF_SZ;
+		break;
+	case HAL_DEF_RX_PACKET_OFFSET:
+		*(( u32*)pValue) = RXDESC_SIZE + DRVINFO_SZ;
+		break;
+	case HAL_DEF_DBG_DM_FUNC:
+		*(( u32*)pValue) =pHalData->odmpriv.SupportAbility;
+		break;
 #if (RATE_ADAPTIVE_SUPPORT == 1)
-		case HAL_DEF_RA_DECISION_RATE:
-			{
-				u8 MacID = *((u8*)pValue);
-				*((u8*)pValue) = ODM_RA_GetDecisionRate_8188E(&(pHalData->odmpriv), MacID);
-			}
-			break;
-
-		case HAL_DEF_RA_SGI:
-			{
-				u8 MacID = *((u8*)pValue);
-				*((u8*)pValue) = ODM_RA_GetShortGI_8188E(&(pHalData->odmpriv), MacID);
-			}
-			break;
+	case HAL_DEF_RA_DECISION_RATE:
+		{
+			u8 MacID = *((u8*)pValue);
+			*((u8*)pValue) = ODM_RA_GetDecisionRate_8188E(&(pHalData->odmpriv), MacID);
+		}
+		break;
+	case HAL_DEF_RA_SGI:
+		{
+			u8 MacID = *((u8*)pValue);
+			*((u8*)pValue) = ODM_RA_GetShortGI_8188E(&(pHalData->odmpriv), MacID);
+		}
+		break;
 #endif
-
-
-		case HAL_DEF_PT_PWR_STATUS:
+	case HAL_DEF_PT_PWR_STATUS:
 #if (POWER_TRAINING_ACTIVE==1)
-			{
-				u8 MacID = *((u8*)pValue);
-				*((u8*)pValue) = ODM_RA_GetHwPwrStatus_8188E(&(pHalData->odmpriv), MacID);
-			}
+		{
+			u8 MacID = *((u8*)pValue);
+			*((u8*)pValue) = ODM_RA_GetHwPwrStatus_8188E(&(pHalData->odmpriv), MacID);
+		}
 #endif/* POWER_TRAINING_ACTIVE==1) */
-			break;
-
-		case HW_VAR_MAX_RX_AMPDU_FACTOR:
-			*(( u32*)pValue) = MAX_AMPDU_FACTOR_64K;
-			break;
-
-                case HW_DEF_RA_INFO_DUMP:
+		break;
+	case HW_VAR_MAX_RX_AMPDU_FACTOR:
+		*(( u32*)pValue) = MAX_AMPDU_FACTOR_64K;
+		break;
+        case HW_DEF_RA_INFO_DUMP:
 #if (RATE_ADAPTIVE_SUPPORT == 1)
+		{
+			u8 entry_id = *((u8*)pValue);
+			if (check_fwstate(&Adapter->mlmepriv, _FW_LINKED)== true)
 			{
-				u8 entry_id = *((u8*)pValue);
-				if (check_fwstate(&Adapter->mlmepriv, _FW_LINKED)== true)
-				{
-					DBG_88E("============ RA status check ===================\n");
-					DBG_88E("Mac_id:%d ,RateID = %d,RAUseRate = 0x%08x,RateSGI = %d, DecisionRate = 0x%02x ,PTStage = %d\n",
-						entry_id,
-						pHalData->odmpriv.RAInfo[entry_id].RateID,
-						pHalData->odmpriv.RAInfo[entry_id].RAUseRate,
-						pHalData->odmpriv.RAInfo[entry_id].RateSGI,
-						pHalData->odmpriv.RAInfo[entry_id].DecisionRate,
-						pHalData->odmpriv.RAInfo[entry_id].PTStage);
-				}
+				DBG_88E("============ RA status check ===================\n");
+				DBG_88E("Mac_id:%d ,RateID = %d,RAUseRate = 0x%08x,RateSGI = %d, DecisionRate = 0x%02x ,PTStage = %d\n",
+					entry_id,
+					pHalData->odmpriv.RAInfo[entry_id].RateID,
+					pHalData->odmpriv.RAInfo[entry_id].RAUseRate,
+					pHalData->odmpriv.RAInfo[entry_id].RateSGI,
+					pHalData->odmpriv.RAInfo[entry_id].DecisionRate,
+					pHalData->odmpriv.RAInfo[entry_id].PTStage);
 			}
+		}
 #endif	/* RATE_ADAPTIVE_SUPPORT == 1) */
-			break;
-		case HW_DEF_ODM_DBG_FLAG:
-			{
-				u8Byte	DebugComponents = *((u32*)pValue);
-				struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
-				printk("pDM_Odm->DebugComponents = 0x%llx\n",pDM_Odm->DebugComponents );
-			}
-			break;
-
-		case HAL_DEF_DBG_DUMP_RXPKT:
-			*(( u8*)pValue) = pHalData->bDumpRxPkt;
-			break;
-		case HAL_DEF_DBG_DUMP_TXPKT:
-			*(( u8*)pValue) = pHalData->bDumpTxPkt;
-			break;
-
-		default:
-			bResult = _FAIL;
-			break;
+		break;
+	case HW_DEF_ODM_DBG_FLAG:
+		{
+			u8Byte	DebugComponents = *((u32*)pValue);
+			struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
+			printk("pDM_Odm->DebugComponents = 0x%llx\n",pDM_Odm->DebugComponents );
+		}
+		break;
+	case HAL_DEF_DBG_DUMP_RXPKT:
+		*(( u8*)pValue) = pHalData->bDumpRxPkt;
+		break;
+	case HAL_DEF_DBG_DUMP_TXPKT:
+		*(( u8*)pValue) = pHalData->bDumpTxPkt;
+		break;
+	default:
+		bResult = _FAIL;
+		break;
 	}
 
 	return bResult;

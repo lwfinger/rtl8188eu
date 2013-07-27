@@ -6033,7 +6033,7 @@ void issue_assocreq(struct adapter *padapter)
 
 	/* supported rate & extended supported rate */
 
-#if 1	/*  Check if the AP's supported rates are also supported by STA. */
+	/*  Check if the AP's supported rates are also supported by STA. */
 	get_rate_set(padapter, sta_bssrate, &sta_bssrate_len);
 
 	if (pmlmeext->cur_channel == 14)/*  for JAPAN, channel 14 can only uses B Mode(CCK) */
@@ -6068,17 +6068,6 @@ void issue_assocreq(struct adapter *padapter)
 
 	bssrate_len = index;
 	DBG_88E("bssrate_len = %d\n", bssrate_len);
-
-#else	/*  Check if the AP's supported rates are also supported by STA. */
-	for (bssrate_len = 0; bssrate_len < NumRates; bssrate_len++) {
-		if (pmlmeinfo->network.SupportedRates[bssrate_len] == 0) break;
-
-		if (pmlmeinfo->network.SupportedRates[bssrate_len] == 0x2C) /*  Avoid the proprietary data rate (22Mbps) of Handlink WSG-4000 AP */
-			break;
-
-		bssrate[bssrate_len] = pmlmeinfo->network.SupportedRates[bssrate_len];
-	}
-#endif	/*  Check if the AP's supported rates are also supported by STA. */
 
 	if (bssrate_len == 0) {
 		rtw_free_xmitbuf(pxmitpriv, pmgntframe->pxmitbuf);
