@@ -2869,12 +2869,10 @@ GetHalDefVar8188EUsb(
 		}
 		break;
 	case HAL_DEF_PT_PWR_STATUS:
-#if (POWER_TRAINING_ACTIVE==1)
 		{
 			u8 MacID = *((u8*)pValue);
 			*((u8*)pValue) = ODM_RA_GetHwPwrStatus_8188E(&(pHalData->odmpriv), MacID);
 		}
-#endif/* POWER_TRAINING_ACTIVE==1) */
 		break;
 	case HW_VAR_MAX_RX_AMPDU_FACTOR:
 		*(( u32*)pValue) = MAX_AMPDU_FACTOR_64K;

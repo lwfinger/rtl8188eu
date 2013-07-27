@@ -432,8 +432,6 @@ odm_ARFBRefresh_8188E(
 	else{
 		pRaInfo->LowestRate=0;
 	}
-
-#if POWER_TRAINING_ACTIVE == 1
 		if (pRaInfo->HighestRate >0x13)
 			pRaInfo->PTModeSS=3;
 		else if (pRaInfo->HighestRate >0x0b)
@@ -445,8 +443,6 @@ odm_ARFBRefresh_8188E(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD,
 				("ODM_ARFBRefresh_8188E(): PTModeSS=%d\n", pRaInfo->PTModeSS));
 
-#endif
-
 	if (pRaInfo->DecisionRate > pRaInfo->HighestRate)
 		pRaInfo->DecisionRate = pRaInfo->HighestRate;
 
@@ -456,7 +452,6 @@ odm_ARFBRefresh_8188E(
 	return 0;
 }
 
-#if POWER_TRAINING_ACTIVE == 1
 static void
 odm_PTTryState_8188E(
 		struct odm_ra_info *pRaInfo
@@ -556,7 +551,6 @@ odm_PTDecision_8188E(
 	pRaInfo->PTStage=temp_stage;
 
 }
-#endif
 
 static void
 odm_RATxRPTTimerSetting(
@@ -641,7 +635,6 @@ ODM_RAInfo_Init(
 	pRaInfo->TOTAL=0;
 	pRaInfo->RAWaitingCounter=0;
 	pRaInfo->RAPendingCounter=0;
-#if POWER_TRAINING_ACTIVE == 1
 	pRaInfo->PTActive=1;   /*  Active when this STA is use */
 	pRaInfo->PTTryState=0;
 	pRaInfo->PTStage=5; /*  Need to fill into HW_PWR_STATUS */
@@ -651,8 +644,7 @@ ODM_RAInfo_Init(
 	pRaInfo->PTPreRssi=0;
 	pRaInfo->PTModeSS=0;
 	pRaInfo->RAstage=0;
-#endif
-    return 0;
+	return 0;
 }
 
 int
@@ -828,7 +820,6 @@ ODM_RA_TxRPT2Handle_8188E(
 							pRAInfo->DROP,
 							MacIDValidEntry0 ,
 							MacIDValidEntry1));
-#if POWER_TRAINING_ACTIVE == 1
 				if (pRAInfo->PTActive){
 					if (pRAInfo->RAstage<5){
 						odm_RateDecision_8188E(pDM_Odm,pRAInfo);
@@ -849,10 +840,6 @@ ODM_RA_TxRPT2Handle_8188E(
 				else{
 					odm_RateDecision_8188E(pDM_Odm,pRAInfo);
 				}
-#else
-				odm_RateDecision_8188E(pDM_Odm, pRAInfo);
-#endif
-
 				ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD,
 							("macid=%d R0=%d R1=%d R2=%d R3=%d R4=%d drop=%d valid0=%x RateID=%d SGI=%d\n",
 							MacId,

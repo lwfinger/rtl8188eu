@@ -301,10 +301,8 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			data_rate =ODM_RA_GetDecisionRate_8188E(&pHalData->odmpriv,pattrib->mac_id);
 			ptxdesc->txdw5 |= cpu_to_le32(data_rate & 0x3F);
 
-			#if (POWER_TRAINING_ACTIVE==1)
 			pwr_status = ODM_RA_GetHwPwrStatus_8188E(&pHalData->odmpriv,pattrib->mac_id);
 			ptxdesc->txdw4 |=cpu_to_le32( (pwr_status & 0x7)<< PWR_STATUS_SHT);
-			#endif /* POWER_TRAINING_ACTIVE==1) */
 		} else {
 			/*  EAP data packet and ARP packet and DHCP. */
 			/*  Use the 1M data rate to send the EAP/ARP packet. */
