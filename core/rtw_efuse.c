@@ -1136,12 +1136,8 @@ EFUSE_ShadowWrite(
 		u16		Offset,
 		u32		Value)
 {
-#if (MP_DRIVER == 0)
-	return;
-#endif
 	if ( pAdapter->registrypriv.mp_mode == 0)
 		return;
-
 
 	if (Type == 1)
 		efuse_ShadowWrite1Byte(pAdapter, Offset, (u8)Value);
@@ -1152,14 +1148,7 @@ EFUSE_ShadowWrite(
 
 }	/*  EFUSE_ShadowWrite */
 
-void
-Efuse_InitSomeVar(
-			struct adapter *	pAdapter
-	);
-void
-Efuse_InitSomeVar(
-			struct adapter *	pAdapter
-	)
+void Efuse_InitSomeVar(struct adapter *pAdapter)
 {
 	u8 i;
 

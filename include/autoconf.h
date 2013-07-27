@@ -22,11 +22,8 @@
 /*
  * Public  General Config
  */
-#define AUTOCONF_INCLUDED
 #define RTL871X_MODULE_NAME "88EU"
 #define DRV_NAME "rtl8188eu"
-
-#define CONFIG_RTL8188E
 
 /*
  * Internal  General Config
@@ -41,20 +38,6 @@
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 
 #define CONFIG_BR_EXT_BRNAME	"br0"
-
-/*
- * Interface  Related Config
- */
-
-#define CONFIG_VENDOR_REQ_RETRY
-
-/*
- * HAL  Related Config
- */
-
-#define RTL8188E_RX_PACKET_INCLUDE_CRC	0
-
-#define MP_DRIVER 1
 
 /*
  * Outsource  Related Config

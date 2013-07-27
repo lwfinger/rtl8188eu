@@ -209,7 +209,6 @@ static void _InitBTCoexist(struct adapter *padapter)
 	if (pbtpriv->BT_Coexist && pbtpriv->BT_CoexistType == BT_CSR_BC4)
 	{
 
-/* if MP_DRIVER != 1 */
 	if (padapter->registrypriv.mp_mode == 0)
 	{
 		if (pbtpriv->BT_Ant_isolation)
@@ -218,47 +217,40 @@ static void _InitBTCoexist(struct adapter *padapter)
 			DBG_88E("BT write 0x%x = 0x%x\n", REG_GPIO_MUXCFG, 0xa0);
 		}
 	}
-/* endif */
 
-		u1Tmp = rtw_read8(padapter, 0x4fd) & BIT0;
-		u1Tmp = u1Tmp |
-				((pbtpriv->BT_Ant_isolation==1)?0:BIT1) |
-				((pbtpriv->BT_Service==BT_SCO)?0:BIT2);
-		rtw_write8( padapter, 0x4fd, u1Tmp);
-		DBG_88E("BT write 0x%x = 0x%x for non-isolation\n", 0x4fd, u1Tmp);
+	u1Tmp = rtw_read8(padapter, 0x4fd) & BIT0;
+	u1Tmp = u1Tmp |
+			((pbtpriv->BT_Ant_isolation==1)?0:BIT1) |
+			((pbtpriv->BT_Service==BT_SCO)?0:BIT2);
+	rtw_write8( padapter, 0x4fd, u1Tmp);
+	DBG_88E("BT write 0x%x = 0x%x for non-isolation\n", 0x4fd, u1Tmp);
 
 
-		rtw_write32(padapter, REG_BT_COEX_TABLE+4, 0xaaaa9aaa);
-		DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+4, 0xaaaa9aaa);
+	rtw_write32(padapter, REG_BT_COEX_TABLE+4, 0xaaaa9aaa);
+	DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+4, 0xaaaa9aaa);
 
-		rtw_write32(padapter, REG_BT_COEX_TABLE+8, 0xffbd0040);
-		DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+8, 0xffbd0040);
+	rtw_write32(padapter, REG_BT_COEX_TABLE+8, 0xffbd0040);
+	DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+8, 0xffbd0040);
 
-		rtw_write32(padapter,  REG_BT_COEX_TABLE+0xc, 0x40000010);
-		DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+0xc, 0x40000010);
+	rtw_write32(padapter,  REG_BT_COEX_TABLE+0xc, 0x40000010);
+	DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+0xc, 0x40000010);
 
-		/* Config to 1T1R */
-		u1Tmp =  rtw_read8(padapter,rOFDM0_TRxPathEnable);
-		u1Tmp &= ~(BIT1);
-		rtw_write8( padapter, rOFDM0_TRxPathEnable, u1Tmp);
-		DBG_88E("BT write 0xC04 = 0x%x\n", u1Tmp);
+	/* Config to 1T1R */
+	u1Tmp =  rtw_read8(padapter,rOFDM0_TRxPathEnable);
+	u1Tmp &= ~(BIT1);
+	rtw_write8( padapter, rOFDM0_TRxPathEnable, u1Tmp);
+	DBG_88E("BT write 0xC04 = 0x%x\n", u1Tmp);
 
-		u1Tmp = rtw_read8(padapter, rOFDM1_TRxPathEnable);
-		u1Tmp &= ~(BIT1);
-		rtw_write8( padapter, rOFDM1_TRxPathEnable, u1Tmp);
-		DBG_88E("BT write 0xD04 = 0x%x\n", u1Tmp);
+	u1Tmp = rtw_read8(padapter, rOFDM1_TRxPathEnable);
+	u1Tmp &= ~(BIT1);
+	rtw_write8( padapter, rOFDM1_TRxPathEnable, u1Tmp);
+	DBG_88E("BT write 0xD04 = 0x%x\n", u1Tmp);
 
 	}
 }
 #endif
 
-
-
-/*  */
-/*  */
 /* 	MAC init functions */
-/*  */
-/*  */
 static void
 _SetMacID(
 	struct adapter * Adapter, u8* MacID
@@ -610,10 +602,6 @@ _InitWMACSetting(
 
 	pHalData->ReceiveConfig =
 	RCR_AAP | RCR_APM | RCR_AM | RCR_AB |RCR_CBSSID_DATA| RCR_CBSSID_BCN| RCR_APP_ICV | RCR_AMF | RCR_HTC_LOC_CTRL | RCR_APP_MIC | RCR_APP_PHYSTS;
-
-#if (1 == RTL8188E_RX_PACKET_INCLUDE_CRC)
-	pHalData->ReceiveConfig |= ACRC32;
-#endif
 
 	/*  some REG_RCR will be modified later by phy_ConfigMACWithHeaderFile() */
 	rtw_write32(Adapter, REG_RCR, pHalData->ReceiveConfig);
@@ -1193,7 +1181,6 @@ _func_enter_;
 	_InitTxBufferBoundary(Adapter, 0);
 
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
-#if (MP_DRIVER == 1)
 	if (Adapter->registrypriv.mp_mode == 1)
 	{
 		_InitRxSetting(Adapter);
@@ -1201,7 +1188,6 @@ _func_enter_;
 		pHalData->fw_ractrl = false;
 	}
 	else
-#endif  /* MP_DRIVER == 1 */
 	{
 #ifdef CONFIG_WOWLAN
 	status = rtl8188e_FirmwareDownload(Adapter, false);
@@ -1355,14 +1341,12 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC11);
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_HAL_DM);
 	rtl8188e_InitHalDm(Adapter);
 
-#if (MP_DRIVER == 1)
 	if (Adapter->registrypriv.mp_mode == 1)
 	{
 		Adapter->mppriv.channel = pHalData->CurrentChannel;
 		MPT_InitializeAdapter(Adapter, Adapter->mppriv.channel);
 	}
 	else
-#endif  /* if (MP_DRIVER == 1) */
 	{
 	/*  */
 	/*  2010/08/11 MH Merge from 8192SE for Minicard init. We need to confirm current radio status */

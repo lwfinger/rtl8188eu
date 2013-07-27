@@ -50,16 +50,15 @@ odm_RX_HWAntDivInit(
 )
 {
 	u4Byte	value32;
-	struct adapter *		Adapter = pDM_Odm->Adapter;
-        #if (MP_DRIVER == 1)
-        if (*(pDM_Odm->mp_mode) == 1)
+	struct adapter *Adapter = pDM_Odm->Adapter;
+      
+	if (*(pDM_Odm->mp_mode) == 1)
 	{
 		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
 		ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0); /*  disable HW AntDiv */
 		ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT31, 1);  /*  1:CG, 0:CS */
 		return;
         }
-        #endif
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_RX_HWAntDivInit()\n"));
 
 	/* MAC Setting */
@@ -87,17 +86,13 @@ odm_TRX_HWAntDivInit(
 	u4Byte	value32;
 	struct adapter *		Adapter = pDM_Odm->Adapter;
 
-        #if (MP_DRIVER == 1)
 	if (*(pDM_Odm->mp_mode) == 1)
         {
 		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
 		ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0); /*  disable HW AntDiv */
 		ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT5|BIT4|BIT3, 0); /* Default RX   (0/1) */
 		return;
-		}
-
-        #endif
-
+	}
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_TRX_HWAntDivInit()\n"));
 
 	/* MAC Setting */
@@ -138,16 +133,13 @@ odm_FastAntTrainingInit(
 	struct adapter *		Adapter = pDM_Odm->Adapter;
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit()\n"));
 
-#if (MP_DRIVER == 1)
 	if (*(pDM_Odm->mp_mode) == 1)
 	{
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("pDM_Odm->AntDivType: %d\n", pDM_Odm->AntDivType));
 		 return;
 	}
-#endif
 
-	for (i=0; i<6; i++)
-	{
+	for (i=0; i<6; i++) {
 		pDM_FatTable->Bssid[i] = 0;
 		pDM_FatTable->antSumRSSI[i] = 0;
 		pDM_FatTable->antRSSIcnt[i] = 0;

@@ -34,10 +34,8 @@ void ips_enter(struct adapter * padapter)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct xmit_priv *pxmit_priv = &padapter->xmitpriv;
 
-#if (MP_DRIVER == 1)
 	if (padapter->registrypriv.mp_mode == 1)
 		return;
-#endif
 
 	if (pxmit_priv->free_xmitbuf_cnt != NR_XMITBUFF ||
 		pxmit_priv->free_xmit_extbuf_cnt != NR_XMIT_EXTBUFF) {

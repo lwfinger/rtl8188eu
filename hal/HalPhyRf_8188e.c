@@ -189,10 +189,8 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	pDM_Odm->RFCalibrateInfo.TXPowerTrackingCallbackCnt++; /* cosa add for debug */
 	pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = true;
 
-#if (MP_DRIVER == 1)
-    /*  <Kordan> RFCalibrateInfo.RegA24 will be initialized when ODM HW configuring, but MP configures with para files. */
-    pDM_Odm->RFCalibrateInfo.RegA24 = 0x090e1317;
-#endif
+	/*  <Kordan> RFCalibrateInfo.RegA24 will be initialized when ODM HW configuring, but MP configures with para files. */
+	pDM_Odm->RFCalibrateInfo.RegA24 = 0x090e1317;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("===>dm_TXPowerTrackingCallback_ThermalMeter_8188E txpowercontrol %d\n",  pDM_Odm->RFCalibrateInfo.TxPowerTrackControl));
 
@@ -1223,17 +1221,13 @@ static void phy_IQCalibrate_8188E(
 							rFPGA0_XB_RFInterfaceOE,	rFPGA0_RFMOD
 							};
 
-#if MP_DRIVER
 	u4Byte	retryCount = 9;
-#else
-	u4Byte	retryCount = 2;
-#endif
 	if ( *(pDM_Odm->mp_mode) == 1)
 		retryCount = 9;
-else
+	else
 		retryCount = 2;
-		/*  Note: IQ calibration must be performed after loading */
-		/* 		PHY_REG.txt , and radio_a, radio_b.txt */
+	/*  Note: IQ calibration must be performed after loading */
+	/* 		PHY_REG.txt , and radio_a, radio_b.txt */
 
 	if (t==0) {
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("IQ Calibration for %s for %d times\n", (is2T ? "2T2R" : "1T1R"), t));
@@ -1544,18 +1538,13 @@ static void phy_APCalibrate_8188E(
 					};
 
 	u4Byte			APK_result[PATH_NUM][APK_BB_REG_NUM];	/* val_1_1a, val_1_2a, val_2a, val_3a, val_4a */
-/* 	u4Byte			AP_curve[PATH_NUM][APK_CURVE_REG_NUM]; */
-
 	s4Byte			BB_offset, delta_V, delta_offset;
 
-#if MP_DRIVER == 1
-if ( *(pDM_Odm->mp_mode) == 1)
-{
-	struct mpt_context *	pMptCtx = &(pAdapter->mppriv.MptCtx);
-	pMptCtx->APK_bound[0] = 45;
-	pMptCtx->APK_bound[1] = 52;
-}
-#endif
+	if ( *(pDM_Odm->mp_mode) == 1) {
+		struct mpt_context *	pMptCtx = &(pAdapter->mppriv.MptCtx);
+		pMptCtx->APK_bound[0] = 45;
+		pMptCtx->APK_bound[1] = 52;
+	}
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("==>phy_APCalibrate_8188E() delta %d\n", delta));
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("AP Calibration for %s\n", (is2T ? "2T2R" : "1T1R")));
@@ -1568,10 +1557,8 @@ if ( *(pDM_Odm->mp_mode) == 1)
 /*  and value will cause RF internal PA to be unpredictably disabled by HW, such that RF Tx signal */
 /*  will disappear after disable/enable card many times on 88CU. RF SD and DD have not find the */
 /*  root cause, so we remove these actions temporarily. Added by tynli and SD3 Allen. 2010.05.31. */
-/* if MP_DRIVER != 1 */
-if (*(pDM_Odm->mp_mode) != 1)
-	return;
-/* endif */
+	if (*(pDM_Odm->mp_mode) != 1)
+		return;
 	/* settings adjust for normal chip */
 	for (index = 0; index < PATH_NUM; index ++)
 	{
@@ -1884,13 +1871,8 @@ PHY_IQCalibrate_8188E(
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-
 	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
-
-	#if (MP_DRIVER == 1)
-		struct mpt_context *	pMptCtx = &(pAdapter->mppriv.MptCtx);
-	#endif/* MP_DRIVER == 1) */
-
+	struct mpt_context *	pMptCtx = &(pAdapter->mppriv.MptCtx);
 	s4Byte			result[4][8];	/* last is final result */
 	u1Byte			i, final_candidate, Indexforchannel;
 	u1Byte          channelToIQK = 7;
@@ -1913,13 +1895,10 @@ PHY_IQCalibrate_8188E(
 	if (!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION))
 		return;
 
-#if MP_DRIVER == 1
-if (*(pDM_Odm->mp_mode) == 1)
-{
-	bSingleTone = pMptCtx->bSingleTone;
-	bCarrierSuppression = pMptCtx->bCarrierSuppression;
-}
-#endif
+	if (*(pDM_Odm->mp_mode) == 1) {
+		bSingleTone = pMptCtx->bSingleTone;
+		bCarrierSuppression = pMptCtx->bCarrierSuppression;
+	}
 
 	/*  20120213<Kordan> Turn on when continuous Tx to pass lab testing. (required by Edlu) */
 	if (bSingleTone || bCarrierSuppression)
@@ -2069,22 +2048,14 @@ PHY_LCCalibrate_8188E(
 {
 	bool			bSingleTone = false, bCarrierSuppression = false;
 	u4Byte			timeout = 2000, timecount = 0;
-
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-
 	struct odm_dm_struct *	pDM_Odm = &pHalData->odmpriv;
-
-	#if (MP_DRIVER == 1)
 	struct mpt_context *pMptCtx = &(pAdapter->mppriv.MptCtx);
-	#endif/* MP_DRIVER == 1) */
 
-#if MP_DRIVER == 1
-if (*(pDM_Odm->mp_mode) == 1)
-{
-	bSingleTone = pMptCtx->bSingleTone;
-	bCarrierSuppression = pMptCtx->bCarrierSuppression;
-}
-#endif
+	if (*(pDM_Odm->mp_mode) == 1) {
+		bSingleTone = pMptCtx->bSingleTone;
+		bCarrierSuppression = pMptCtx->bCarrierSuppression;
+	}
 	if (!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION))
 	{
 		return;
