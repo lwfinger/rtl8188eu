@@ -20,7 +20,7 @@
 
 #include <rtw_sreset.h>
 
-void sreset_init_value(_adapter *padapter)
+void sreset_init_value(struct adapter *padapter)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
@@ -31,7 +31,7 @@ void sreset_init_value(_adapter *padapter)
 	psrtpriv->last_tx_time =0;
 	psrtpriv->last_tx_complete_time =0;
 }
-void sreset_reset_value(_adapter *padapter)
+void sreset_reset_value(struct adapter *padapter)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
@@ -42,7 +42,7 @@ void sreset_reset_value(_adapter *padapter)
 	psrtpriv->last_tx_complete_time =0;
 }
 
-u8 sreset_get_wifi_status(_adapter *padapter)
+u8 sreset_get_wifi_status(struct adapter *padapter)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
@@ -76,7 +76,7 @@ u8 sreset_get_wifi_status(_adapter *padapter)
 	return status;
 }
 
-void sreset_set_wifi_error_status(_adapter *padapter, u32 status)
+void sreset_set_wifi_error_status(struct adapter *padapter, u32 status)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	pHalData->srestpriv.Wifi_Error_Status = status;

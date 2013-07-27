@@ -714,7 +714,7 @@ ODM_CmnInfoHook(
 			break;
 
 		case	ODM_CMNINFO_BUDDY_ADAPTOR:
-			pDM_Odm->pBuddyAdapter = (PADAPTER *)pValue;
+			pDM_Odm->pBuddyAdapter = (struct adapter * *)pValue;
 			break;
 
 		case	ODM_CMNINFO_DMSP_IS_MASTER:
@@ -1125,7 +1125,7 @@ odm_DIGbyRSSI_LPS(
 			struct odm_dm_struct *	pDM_Odm
 	)
 {
-	PADAPTER					pAdapter =pDM_Odm->Adapter;
+	struct adapter *					pAdapter =pDM_Odm->Adapter;
 	struct rtw_dig *						pDM_DigTable = &pDM_Odm->DM_DigTable;
 	struct false_alarm_stats *pFalseAlmCnt = &pDM_Odm->FalseAlmCnt;
 
@@ -2063,7 +2063,7 @@ odm_RefreshRateAdaptiveMaskCE(
 	)
 {
 	u1Byte	i;
-	PADAPTER	pAdapter	 =  pDM_Odm->Adapter;
+	struct adapter *	pAdapter	 =  pDM_Odm->Adapter;
 
 	if (pAdapter->bDriverStopped) {
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_TRACE, ("<---- odm_RefreshRateAdaptiveMask(): driver is going to unload\n"));
@@ -2162,7 +2162,7 @@ odm_DynamicTxPowerInit(
 			struct odm_dm_struct *	pDM_Odm
 	)
 {
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	pdmpriv->bDynamicTxPowerEnable = false;
@@ -2178,7 +2178,7 @@ odm_DynamicTxPowerSavePowerIndex(
 	u1Byte		index;
 	u4Byte		Power_Index_REG[6] = {0xc90, 0xc91, 0xc92, 0xc98, 0xc99, 0xc9a};
 
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	for (index = 0; index< 6; index++)
@@ -2191,7 +2191,7 @@ odm_DynamicTxPowerRestorePowerIndex(
 	)
 {
 	u1Byte			index;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *		Adapter = pDM_Odm->Adapter;
 
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u4Byte			Power_Index_REG[6] = {0xc90, 0xc91, 0xc92, 0xc98, 0xc99, 0xc9a};
@@ -2221,7 +2221,7 @@ odm_DynamicTxPower(
 {
 	/*  */
 	/*  For AP/ADSL use struct rtl8192cd_priv * */
-	/*  For CE/NIC use PADAPTER */
+	/*  For CE/NIC use struct adapter * */
 	/*  */
 
 	if (!(pDM_Odm->SupportAbility & ODM_BB_DYNAMIC_TXPWR))
@@ -2292,9 +2292,9 @@ odm_RSSIMonitorCheck(
 {
 	/*  */
 	/*  For AP/ADSL use struct rtl8192cd_priv * */
-	/*  For CE/NIC use PADAPTER */
+	/*  For CE/NIC use struct adapter * */
 	/*  */
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
+	struct adapter *		pAdapter = pDM_Odm->Adapter;
 	struct rtl8192cd_priv *priv		= pDM_Odm->priv;
 
 	if (!(pDM_Odm->SupportAbility & ODM_BB_RSSI_MONITOR))
@@ -2339,14 +2339,14 @@ odm_RSSIMonitorCheckMP(
 /*  */
 static void
 FindMinimumRSSI_Dmsp(
-		PADAPTER	pAdapter
+		struct adapter *	pAdapter
 )
 {
 }
 
 static void
 FindMinimumRSSI(
-	PADAPTER	pAdapter
+	struct adapter *	pAdapter
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
@@ -2374,7 +2374,7 @@ odm_RSSIMonitorCheckCE(
 			struct odm_dm_struct *	pDM_Odm
 	)
 {
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	int	i;
@@ -2513,9 +2513,9 @@ ODM_TXPowerTrackingCheck(
 {
 	/*  */
 	/*  For AP/ADSL use struct rtl8192cd_priv * */
-	/*  For CE/NIC use PADAPTER */
+	/*  For CE/NIC use struct adapter * */
 	/*  */
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
+	struct adapter *		pAdapter = pDM_Odm->Adapter;
 	struct rtl8192cd_priv *priv		= pDM_Odm->priv;
 
 	/* if (!(pDM_Odm->SupportAbility & ODM_RF_TX_PWR_TRACK)) */
@@ -2552,7 +2552,7 @@ odm_TXPowerTrackingCheckCE(
 			struct odm_dm_struct *	pDM_Odm
 	)
 {
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 
 	if (!(pDM_Odm->SupportAbility & ODM_RF_TX_PWR_TRACK))
 	{
@@ -2931,7 +2931,7 @@ ODM_EdcaTurboInit(
 	struct odm_dm_struct *	pDM_Odm)
 {
 
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = false;
 	pDM_Odm->DM_EDCA_Table.bIsCurRDLState = false;
 	Adapter->recvpriv.bIsAnyNonBEPkts =false;
@@ -2951,9 +2951,9 @@ odm_EdcaTurboCheck(
 {
 	/*  */
 	/*  For AP/ADSL use struct rtl8192cd_priv * */
-	/*  For CE/NIC use PADAPTER */
+	/*  For CE/NIC use struct adapter * */
 	/*  */
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
+	struct adapter *		pAdapter = pDM_Odm->Adapter;
 	struct rtl8192cd_priv *priv = pDM_Odm->priv;
 
 	/*  */
@@ -2986,7 +2986,7 @@ odm_EdcaTurboCheckCE(
 			struct odm_dm_struct *	pDM_Odm
 	)
 {
-	PADAPTER		       Adapter = pDM_Odm->Adapter;
+	struct adapter *		       Adapter = pDM_Odm->Adapter;
 
 	u32	trafficIndex;
 	u32	edca_param;

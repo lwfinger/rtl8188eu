@@ -30,7 +30,7 @@ ODM_ResetIQKResult(
 )
 {
 	u1Byte		i;
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 
 	if (!IS_HARDWARE_TYPE_8192D(Adapter))
 		return;

@@ -44,7 +44,7 @@ void dump_txrpt_ccx_88e(void *buf)
 	);
 }
 
-void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf)
+void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf)
 {
 	struct txrpt_ccx_88e *txrpt_ccx = (struct txrpt_ccx_88e *)buf;
 
@@ -56,7 +56,7 @@ void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf)
 	}
 }
 
-void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
+void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
 {
 	u8 bDumpTxPkt;
 	u8 bDumpTxDesc = false;

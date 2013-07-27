@@ -22,8 +22,8 @@
 #include <rtl8188e_sreset.h>
 #include <rtl8188e_hal.h>
 
-extern void rtw_cancel_all_timer(_adapter *padapter);
-static void _restore_security_setting(_adapter *padapter)
+extern void rtw_cancel_all_timer(struct adapter *padapter);
+static void _restore_security_setting(struct adapter *padapter)
 {
 	u8 EntryId = 0;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -63,7 +63,7 @@ static void _restore_security_setting(_adapter *padapter)
 
 }
 
-static void _restore_network_status(_adapter *padapter)
+static void _restore_network_status(struct adapter *padapter)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
@@ -119,11 +119,11 @@ static void _restore_network_status(_adapter *padapter)
 	rtw_write8(padapter,0x4dc,padapter->xmitpriv.nqos_ssn);
 }
 
-void rtl8188e_silentreset_for_specific_platform(_adapter *padapter)
+void rtl8188e_silentreset_for_specific_platform(struct adapter *padapter)
 {
 }
 
-void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
+void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
@@ -159,7 +159,7 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 	}
 }
 
-void rtl8188e_sreset_linked_status_check(_adapter *padapter)
+void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
 {
 	u32 rx_dma_status = 0;
 	u8 fw_status=0;

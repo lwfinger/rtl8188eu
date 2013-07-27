@@ -22,11 +22,11 @@
 
 #include <osdep_service.h>
 #include <drv_types.h>
-struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter);
+struct xmit_frame	*rtw_IOL_accquire_xmit_frame(struct adapter  *adapter);
 int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len);
 int rtw_IOL_append_LLT_cmd(struct xmit_frame *xmit_frame, u8 page_boundary);
-int rtw_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
-bool rtw_IOL_applied(ADAPTER *adapter);
+int rtw_IOL_exec_cmds_sync(struct adapter  *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
+bool rtw_IOL_applied(struct adapter  *adapter);
 int rtw_IOL_append_DELAY_US_cmd(struct xmit_frame *xmit_frame, u16 us);
 int rtw_IOL_append_DELAY_MS_cmd(struct xmit_frame *xmit_frame, u16 ms);
 int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame);
@@ -53,7 +53,7 @@ enum ioreg_cmd{
 	IOREG_CMD_DELAY_MS	= 0x11,
 	IOREG_CMD_END		= 0xFF,
 };
-void read_efuse_from_txpktbuf(ADAPTER *adapter, int bcnhead, u8 *content, u16 *size);
+void read_efuse_from_txpktbuf(struct adapter  *adapter, int bcnhead, u8 *content, u16 *size);
 
 int _rtw_IOL_append_WB_cmd(struct xmit_frame *xmit_frame, u16 addr, u8 value, u8 mask);
 int _rtw_IOL_append_WW_cmd(struct xmit_frame *xmit_frame, u16 addr, u16 value, u16 mask);
@@ -65,6 +65,6 @@ int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path, u16 addr,
 #define rtw_IOL_append_WRF_cmd(xmit_frame, rf_path, addr, value,mask) _rtw_IOL_append_WRF_cmd((xmit_frame),(rf_path), (addr), (value),(mask))
 
 u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame);
-void  rtw_IOL_cmd_buf_dump(ADAPTER *Adapter,int buf_len,u8 *pbuf);
+void  rtw_IOL_cmd_buf_dump(struct adapter  *Adapter,int buf_len,u8 *pbuf);
 
 #endif //__RTW_IOL_H_

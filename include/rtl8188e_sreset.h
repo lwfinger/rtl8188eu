@@ -24,8 +24,8 @@
 #include <drv_types.h>
 #include <rtw_sreset.h>
 
-extern void rtl8188e_silentreset_for_specific_platform(_adapter *padapter);
-extern void rtl8188e_sreset_xmit_status_check(_adapter *padapter);
-extern void rtl8188e_sreset_linked_status_check(_adapter *padapter);
+extern void rtl8188e_silentreset_for_specific_platform(struct adapter *padapter);
+extern void rtl8188e_sreset_xmit_status_check(struct adapter *padapter);
+extern void rtl8188e_sreset_linked_status_check(struct adapter *padapter);
 
 #endif

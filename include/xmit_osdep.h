@@ -48,10 +48,10 @@ struct xmit_buf;
 
 extern int rtw_xmit_entry(struct sk_buff *pkt, struct  net_device *pnetdev);
 
-void rtw_os_xmit_schedule(_adapter *padapter);
+void rtw_os_xmit_schedule(struct adapter *padapter);
 
-int rtw_os_xmit_resource_alloc(_adapter *padapter, struct xmit_buf *pxmitbuf,u32 alloc_sz);
-void rtw_os_xmit_resource_free(_adapter *padapter, struct xmit_buf *pxmitbuf,u32 free_sz);
+int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitbuf,u32 alloc_sz);
+void rtw_os_xmit_resource_free(struct adapter *padapter, struct xmit_buf *pxmitbuf,u32 free_sz);
 
 extern void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib);
 
@@ -60,7 +60,7 @@ extern void _rtw_open_pktfile(struct sk_buff *pkt, struct pkt_file *pfile);
 extern uint _rtw_pktfile_read (struct pkt_file *pfile, u8 *rmem, uint rlen);
 extern int rtw_endofpktfile (struct pkt_file *pfile);
 
-extern void rtw_os_pkt_complete(_adapter *padapter, struct sk_buff *pkt);
-extern void rtw_os_xmit_complete(_adapter *padapter, struct xmit_frame *pxframe);
+extern void rtw_os_pkt_complete(struct adapter *padapter, struct sk_buff *pkt);
+extern void rtw_os_xmit_complete(struct adapter *padapter, struct xmit_frame *pxframe);
 
 #endif //__XMIT_OSDEP_H_

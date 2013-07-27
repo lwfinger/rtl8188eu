@@ -24,7 +24,7 @@
 #include "odm_precomp.h"
 #include "rtl8188e_hal.h"
 
-u32 read_macreg(_adapter *padapter, u32 addr, u32 sz)
+u32 read_macreg(struct adapter *padapter, u32 addr, u32 sz)
 {
 	u32 val = 0;
 
@@ -46,7 +46,7 @@ u32 read_macreg(_adapter *padapter, u32 addr, u32 sz)
 	return val;
 }
 
-void write_macreg(_adapter *padapter, u32 addr, u32 val, u32 sz)
+void write_macreg(struct adapter *padapter, u32 addr, u32 val, u32 sz)
 {
 	switch (sz) {
 	case 1:
@@ -64,32 +64,32 @@ void write_macreg(_adapter *padapter, u32 addr, u32 val, u32 sz)
 
 }
 
-u32 read_bbreg(_adapter *padapter, u32 addr, u32 bitmask)
+u32 read_bbreg(struct adapter *padapter, u32 addr, u32 bitmask)
 {
 	return rtw_hal_read_bbreg(padapter, addr, bitmask);
 }
 
-void write_bbreg(_adapter *padapter, u32 addr, u32 bitmask, u32 val)
+void write_bbreg(struct adapter *padapter, u32 addr, u32 bitmask, u32 val)
 {
 	rtw_hal_write_bbreg(padapter, addr, bitmask, val);
 }
 
-u32 _read_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 bitmask)
+u32 _read_rfreg(struct adapter * padapter, u8 rfpath, u32 addr, u32 bitmask)
 {
 	return rtw_hal_read_rfreg(padapter, (enum rf_radio_path)rfpath, addr, bitmask);
 }
 
-void _write_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val)
+void _write_rfreg(struct adapter * padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val)
 {
 	rtw_hal_write_rfreg(padapter, (enum rf_radio_path)rfpath, addr, bitmask, val);
 }
 
-u32 read_rfreg(PADAPTER padapter, u8 rfpath, u32 addr)
+u32 read_rfreg(struct adapter * padapter, u8 rfpath, u32 addr)
 {
 	return _read_rfreg(padapter, (enum rf_radio_path)rfpath, addr, bRFRegOffsetMask);
 }
 
-void write_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 val)
+void write_rfreg(struct adapter * padapter, u8 rfpath, u32 addr, u32 val)
 {
 	_write_rfreg(padapter, (enum rf_radio_path)rfpath, addr, bRFRegOffsetMask, val);
 }
@@ -173,7 +173,7 @@ _exit_init_mp_priv:
 	return res;
 }
 
-static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
+static void mp_init_xmit_attrib(struct mp_tx *pmptx, struct adapter * padapter)
 {
 	struct pkt_attrib *pattrib;
 	struct tx_desc *desc;
@@ -197,7 +197,7 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
 	pattrib->qos_en = false;
 }
 
-s32 init_mp_priv(PADAPTER padapter)
+s32 init_mp_priv(struct adapter * padapter)
 {
 	struct mp_priv *pmppriv = &padapter->mppriv;
 
@@ -246,7 +246,7 @@ void free_mp_priv(struct mp_priv *pmp_priv)
 
 s32
 MPT_InitializeAdapter(
-		PADAPTER			pAdapter,
+		struct adapter *			pAdapter,
 		u8				Channel
 	)
 {
@@ -300,7 +300,7 @@ MPT_InitializeAdapter(
  *
  * Overview:	Extra DeInitialization for Mass Production Test.
  *
- * Input:		PADAPTER	pAdapter
+ * Input:		struct adapter *	pAdapter
  *
  * Output:		NONE
  *
@@ -314,7 +314,7 @@ MPT_InitializeAdapter(
  *---------------------------------------------------------------------------*/
 void
 MPT_DeInitAdapter(
-		PADAPTER	pAdapter
+		struct adapter *	pAdapter
 	)
 {
 	struct mpt_context *		pMptCtx = &pAdapter->mppriv.MptCtx;
@@ -322,7 +322,7 @@ MPT_DeInitAdapter(
 	pMptCtx->bMptDrvUnload = true;
 }
 
-static u8 mpt_ProStartTest(PADAPTER padapter)
+static u8 mpt_ProStartTest(struct adapter * padapter)
 {
 	struct mpt_context * pMptCtx = &padapter->mppriv.MptCtx;
 
@@ -340,19 +340,19 @@ static u8 mpt_ProStartTest(PADAPTER padapter)
 /*
  * General use
  */
-s32 SetPowerTracking(PADAPTER padapter, u8 enable)
+s32 SetPowerTracking(struct adapter * padapter, u8 enable)
 {
 
 	Hal_SetPowerTracking( padapter, enable );
 	return 0;
 }
 
-void GetPowerTracking(PADAPTER padapter, u8 *enable)
+void GetPowerTracking(struct adapter * padapter, u8 *enable)
 {
 	Hal_GetPowerTracking( padapter, enable );
 }
 
-static void disable_dm(PADAPTER padapter)
+static void disable_dm(struct adapter * padapter)
 {
 	u8 v8;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
@@ -376,7 +376,7 @@ static void disable_dm(PADAPTER padapter)
 }
 
 /* This function initializes the DUT to the MP test mode */
-s32 mp_start_test(PADAPTER padapter)
+s32 mp_start_test(struct adapter * padapter)
 {
 	struct wlan_bssid_ex bssid;
 	struct sta_info *psta;
@@ -491,7 +491,7 @@ end_of_mp_start_test:
 }
 /*  */
 /* This function change the DUT from the MP test mode into normal mode */
-void mp_stop_test(PADAPTER padapter)
+void mp_stop_test(struct adapter * padapter)
 {
 	struct mp_priv *pmppriv = &padapter->mppriv;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -534,7 +534,7 @@ end_of_mp_stop_test:
  *
  * Overview:	Change RF Setting when we siwthc channel/rate/BW for MP.
  *
- * Input:       	PADAPTER				pAdapter
+ * Input:       	struct adapter *				pAdapter
  *
  * Output:      NONE
  *
@@ -546,19 +546,19 @@ end_of_mp_stop_test:
  * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
-static void mpt_SwitchRfSetting(PADAPTER pAdapter)
+static void mpt_SwitchRfSetting(struct adapter * pAdapter)
 {
 	Hal_mpt_SwitchRfSetting(pAdapter);
     }
 
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-static void MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
+static void MPT_CCKTxPowerAdjust(struct adapter * Adapter, bool bInCH14)
 {
 	Hal_MPT_CCKTxPowerAdjust(Adapter,bInCH14);
 }
 
-static void MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
+static void MPT_CCKTxPowerAdjustbyIndex(struct adapter * pAdapter, bool beven)
 {
 	Hal_MPT_CCKTxPowerAdjustbyIndex(pAdapter,beven);
 	}
@@ -571,7 +571,7 @@ static void MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
  *	Use H2C command to change channel,
  *	not only modify rf register, but also other setting need to be done.
  */
-void SetChannel(PADAPTER pAdapter)
+void SetChannel(struct adapter * pAdapter)
 {
 	Hal_SetChannel(pAdapter);
 
@@ -581,39 +581,39 @@ void SetChannel(PADAPTER pAdapter)
  * Notice
  *	Switch bandwitdth may change center frequency(channel)
  */
-void SetBandwidth(PADAPTER pAdapter)
+void SetBandwidth(struct adapter * pAdapter)
 {
 	Hal_SetBandwidth(pAdapter);
 
 }
 
-static void SetCCKTxPower(PADAPTER pAdapter, u8 *TxPower)
+static void SetCCKTxPower(struct adapter * pAdapter, u8 *TxPower)
 {
 	Hal_SetCCKTxPower(pAdapter,TxPower);
 }
 
-static void SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower)
+static void SetOFDMTxPower(struct adapter * pAdapter, u8 *TxPower)
 {
 	Hal_SetOFDMTxPower(pAdapter,TxPower);
 	}
 
 
-void SetAntenna(PADAPTER pAdapter)
+void SetAntenna(struct adapter * pAdapter)
 	{
 	Hal_SetAntenna(pAdapter);
 }
 
-void	SetAntennaPathPower(PADAPTER pAdapter)
+void	SetAntennaPathPower(struct adapter * pAdapter)
 {
 	Hal_SetAntennaPathPower(pAdapter);
 }
 
-void SetTxPower(PADAPTER pAdapter)
+void SetTxPower(struct adapter * pAdapter)
 {
 	Hal_SetTxPower(pAdapter);
 	}
 
-static void SetTxAGCOffset(PADAPTER pAdapter, u32 ulTxAGCOffset)
+static void SetTxAGCOffset(struct adapter * pAdapter, u32 ulTxAGCOffset)
 {
 	u32 TxAGCOffset_B, TxAGCOffset_C, TxAGCOffset_D,tmpAGC;
 
@@ -626,76 +626,76 @@ static void SetTxAGCOffset(PADAPTER pAdapter, u32 ulTxAGCOffset)
 			(bXBTxAGC|bXCTxAGC|bXDTxAGC), tmpAGC);
 }
 
-void SetDataRate(PADAPTER pAdapter)
+void SetDataRate(struct adapter * pAdapter)
 {
 	Hal_SetDataRate(pAdapter);
 }
 
-void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter ,bool bMain)
+void MP_PHY_SetRFPathSwitch(struct adapter * pAdapter ,bool bMain)
 {
 
 	PHY_SetRFPathSwitch(pAdapter,bMain);
 
 }
 
-s32 SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
+s32 SetThermalMeter(struct adapter * pAdapter, u8 target_ther)
 {
 	return Hal_SetThermalMeter( pAdapter, target_ther);
 }
 
-static void TriggerRFThermalMeter(PADAPTER pAdapter)
+static void TriggerRFThermalMeter(struct adapter * pAdapter)
 {
 	Hal_TriggerRFThermalMeter(pAdapter);
 }
 
-static u8 ReadRFThermalMeter(PADAPTER pAdapter)
+static u8 ReadRFThermalMeter(struct adapter * pAdapter)
 {
 	return Hal_ReadRFThermalMeter(pAdapter);
 }
 
-void GetThermalMeter(PADAPTER pAdapter, u8 *value)
+void GetThermalMeter(struct adapter * pAdapter, u8 *value)
 {
 	Hal_GetThermalMeter(pAdapter,value);
 }
 
-void SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
+void SetSingleCarrierTx(struct adapter * pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetSingleCarrierTx(pAdapter,bStart);
 }
 
-void SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
+void SetSingleToneTx(struct adapter * pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetSingleToneTx(pAdapter,bStart);
 }
 
-void SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
+void SetCarrierSuppressionTx(struct adapter * pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetCarrierSuppressionTx(pAdapter, bStart);
 }
 
-static void SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
+static void SetCCKContinuousTx(struct adapter * pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetCCKContinuousTx(pAdapter,bStart);
 }
 
-static void SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
+static void SetOFDMContinuousTx(struct adapter * pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetOFDMContinuousTx( pAdapter, bStart);
 }/* mpt_StartOfdmContTx */
 
-void SetContinuousTx(PADAPTER pAdapter, u8 bStart)
+void SetContinuousTx(struct adapter * pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetContinuousTx(pAdapter,bStart);
 }
 
 
-void PhySetTxPowerLevel(PADAPTER pAdapter)
+void PhySetTxPowerLevel(struct adapter * pAdapter)
 {
 	struct mp_priv *pmp_priv = &pAdapter->mppriv;
 
@@ -704,7 +704,7 @@ void PhySetTxPowerLevel(PADAPTER pAdapter)
 }
 
 /*  */
-static void dump_mpframe(PADAPTER padapter, struct xmit_frame *pmpframe)
+static void dump_mpframe(struct adapter * padapter, struct xmit_frame *pmpframe)
 {
 	rtw_hal_mgnt_xmit(padapter, pmpframe);
 }
@@ -743,7 +743,7 @@ static int mp_xmit_packet_thread(void *context)
 	struct mp_tx		*pmptx;
 	struct mp_priv	*pmp_priv;
 	struct xmit_priv	*pxmitpriv;
-	PADAPTER padapter;
+	struct adapter * padapter;
 
 	pmp_priv = (struct mp_priv *)context;
 	pmptx = &pmp_priv->tx;
@@ -795,13 +795,13 @@ exit:
 	thread_exit();
 }
 
-void fill_txdesc_for_mp(PADAPTER padapter, struct tx_desc *ptxdesc)
+void fill_txdesc_for_mp(struct adapter * padapter, struct tx_desc *ptxdesc)
 {
 	struct mp_priv *pmp_priv = &padapter->mppriv;
 	_rtw_memcpy(ptxdesc, &(pmp_priv->tx.desc), TXDESC_SIZE);
 }
 
-void SetPacketTx(PADAPTER padapter)
+void SetPacketTx(struct adapter * padapter)
 {
 	u8 *ptr, *pkt_start, *pkt_end;
 	u32 pkt_size,offset;
@@ -931,7 +931,7 @@ void SetPacketTx(PADAPTER padapter)
 		DBG_88E("Create PktTx Thread Fail !!!!!\n");
 }
 
-void SetPacketRx(PADAPTER pAdapter, u8 bStartRx)
+void SetPacketRx(struct adapter * pAdapter, u8 bStartRx)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
@@ -950,7 +950,7 @@ void SetPacketRx(PADAPTER pAdapter, u8 bStartRx)
 	}
 }
 
-void ResetPhyRxPktCount(PADAPTER pAdapter)
+void ResetPhyRxPktCount(struct adapter * pAdapter)
 {
 	u32 i, phyrx_set = 0;
 
@@ -962,7 +962,7 @@ void ResetPhyRxPktCount(PADAPTER pAdapter)
 	}
 }
 
-static u32 GetPhyRxPktCounts(PADAPTER pAdapter, u32 selbit)
+static u32 GetPhyRxPktCounts(struct adapter * pAdapter, u32 selbit)
 {
 	/* selection */
 	u32 phyrx_set = 0, count = 0;
@@ -976,7 +976,7 @@ static u32 GetPhyRxPktCounts(PADAPTER pAdapter, u32 selbit)
 	return count;
 }
 
-u32 GetPhyRxPktReceived(PADAPTER pAdapter)
+u32 GetPhyRxPktReceived(struct adapter * pAdapter)
 {
 	u32 OFDM_cnt = 0, CCK_cnt = 0, HT_cnt = 0;
 
@@ -987,7 +987,7 @@ u32 GetPhyRxPktReceived(PADAPTER pAdapter)
 	return OFDM_cnt + CCK_cnt + HT_cnt;
 }
 
-u32 GetPhyRxPktCRC32Error(PADAPTER pAdapter)
+u32 GetPhyRxPktCRC32Error(struct adapter * pAdapter)
 {
 	u32 OFDM_cnt = 0, CCK_cnt = 0, HT_cnt = 0;
 
@@ -1001,7 +1001,7 @@ u32 GetPhyRxPktCRC32Error(PADAPTER pAdapter)
 /* reg 0x808[9:0]: FFT data x */
 /* reg 0x808[22]:  0  -->  1  to get 1 FFT data y */
 /* reg 0x8B4[15:0]: FFT data y report */
-static u32 rtw_GetPSDData(PADAPTER pAdapter, u32 point)
+static u32 rtw_GetPSDData(struct adapter * pAdapter, u32 point)
 {
 	int psd_val;
 
@@ -1031,7 +1031,7 @@ static u32 rtw_GetPSDData(PADAPTER pAdapter, u32 point)
  * 1024	512			512 + 1024 = 1536
  *
  */
-u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
+u32 mp_query_psd(struct adapter * pAdapter, u8 *data)
 {
 	u32 i, psd_pts=0, psd_start=0, psd_stop=0;
 	u32 psd_data=0;
@@ -1078,7 +1078,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
 void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 {
 	   int i,res;
-	  _adapter *padapter = pxmitpriv->adapter;
+	  struct adapter *padapter = pxmitpriv->adapter;
 	struct xmit_frame	*pxmitframe = (struct xmit_frame*) pxmitpriv->pxmit_frame_buf;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
 

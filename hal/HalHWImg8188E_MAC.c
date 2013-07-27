@@ -167,7 +167,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	pu4Byte    Array       = Array_MAC_REG_8188E;
 	bool		biol = false;
 
-	PADAPTER	Adapter =  pDM_Odm->Adapter;
+	struct adapter *	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;

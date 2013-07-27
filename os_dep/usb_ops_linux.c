@@ -80,7 +80,7 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	unsigned char *pbuf;
 	struct zero_bulkout_context *pcontext;
 	struct urb *	purb = NULL;
-	_adapter *padapter = (_adapter *)pintfhdl->padapter;
+	struct adapter *padapter = (struct adapter *)pintfhdl->padapter;
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 	struct usb_device *pusbd = pdvobj->pusbdev;
 
@@ -135,7 +135,7 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 {
 	int i;
 	struct recv_buf *precvbuf;
-	_adapter	*padapter = pintfhdl->padapter;
+	struct adapter	*padapter = pintfhdl->padapter;
 	precvbuf = (struct recv_buf *)padapter->recvpriv.precv_buf;
 
 	DBG_88E("%s\n", __func__);
@@ -158,7 +158,7 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 	unsigned long irqL;
 	int i;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)purb->context;
-	_adapter	*padapter = pxmitbuf->padapter;
+	struct adapter	*padapter = pxmitbuf->padapter;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 
 _func_enter_;
@@ -256,7 +256,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	int status;
 	u32 ret = _FAIL, bwritezero = false;
 	struct urb *	purb = NULL;
-	_adapter *padapter = (_adapter *)pintfhdl->padapter;
+	struct adapter *padapter = (struct adapter *)pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)wmem;
@@ -360,7 +360,7 @@ _func_exit_;
 void usb_write_port_cancel(struct intf_hdl *pintfhdl)
 {
 	int i, j;
-	_adapter	*padapter = pintfhdl->padapter;
+	struct adapter	*padapter = pintfhdl->padapter;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)padapter->xmitpriv.pxmitbuf;
 
 	DBG_88E("%s\n", __func__);

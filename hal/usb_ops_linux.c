@@ -29,7 +29,7 @@
 
 static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u16 index, void *pdata, u16 len, u8 requesttype)
 {
-	_adapter	*padapter = pintfhdl->padapter;
+	struct adapter	*padapter = pintfhdl->padapter;
 	struct dvobj_priv  *pdvobjpriv = adapter_to_dvobj(padapter);
 	struct usb_device *udev = pdvobjpriv->pusbdev;
 
@@ -317,7 +317,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 
 }
 
-static void interrupt_handler_8188eu(_adapter *padapter,u16 pkt_len,u8 *pbuf)
+static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pbuf)
 {
 	struct hal_data_8188e	*pHalData=GET_HAL_DATA(padapter);
 	struct reportpwrstate_parm pwr_rpt;
@@ -342,7 +342,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 	return _SUCCESS;
 }
 
-static int recvbuf2recvframe(_adapter *padapter, struct sk_buff *pskb)
+static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 {
 	u8	*pbuf;
 	u8	shift_sz = 0;
@@ -537,7 +537,7 @@ _exit_recvbuf2recvframe:
 void rtl8188eu_recv_tasklet(void *priv)
 {
 	struct sk_buff *pskb;
-	_adapter		*padapter = (_adapter*)priv;
+	struct adapter		*padapter = (struct adapter*)priv;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 
 	while (NULL != (pskb = skb_dequeue(&precvpriv->rx_skb_queue))) {
@@ -558,7 +558,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 	unsigned long irqL;
 	uint isevt, *pbuf;
 	struct recv_buf	*precvbuf = (struct recv_buf *)purb->context;
-	_adapter			*padapter =(_adapter *)precvbuf->adapter;
+	struct adapter			*padapter =(struct adapter *)precvbuf->adapter;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 
 	RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete!!!\n"));
@@ -647,7 +647,7 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	u32 ret = _SUCCESS;
 	struct urb * purb = NULL;
 	struct recv_buf	*precvbuf = (struct recv_buf *)rmem;
-	_adapter		*adapter = pintfhdl->padapter;
+	struct adapter		*adapter = pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(adapter);
 	struct recv_priv	*precvpriv = &adapter->recvpriv;
 	struct usb_device	*pusbd = pdvobj->pusbdev;
@@ -736,7 +736,7 @@ _func_exit_;
 void rtl8188eu_xmit_tasklet(void *priv)
 {
 	int ret = false;
-	_adapter *padapter = (_adapter*)priv;
+	struct adapter *padapter = (struct adapter*)priv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
 	if (check_fwstate(&padapter->mlmepriv, _FW_UNDER_SURVEY) == true)
@@ -777,7 +777,7 @@ void rtl8188eu_set_intf_ops(struct _io_ops	*pops)
 	_func_exit_;
 }
 
-void rtl8188eu_set_hw_type(_adapter *padapter)
+void rtl8188eu_set_hw_type(struct adapter *padapter)
 {
 	padapter->chip_type = RTL8188E;
 	padapter->HardwareType = HARDWARE_TYPE_RTL8188EU;

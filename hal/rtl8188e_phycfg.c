@@ -79,7 +79,7 @@ phy_CalculateBitShift(
 #if (SIC_ENABLE == 1)
 static bool
 sic_IsSICReady(
-		PADAPTER	Adapter
+		struct adapter *	Adapter
 	)
 {
 	bool		bRet=false;
@@ -178,7 +178,7 @@ sic_Write4Byte(
 /*  */
 static void
 SIC_SetBBReg(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u32		RegAddr,
 		u32		BitMask,
 		u32		Data
@@ -203,7 +203,7 @@ SIC_SetBBReg(
 
 static u32
 SIC_QueryBBReg(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u32		RegAddr,
 		u32		BitMask
 	)
@@ -221,7 +221,7 @@ SIC_QueryBBReg(
 
 void
 SIC_Init(
-		PADAPTER	Adapter
+		struct adapter *	Adapter
 	)
 {
 	/*  Here we need to write 0x1b8~0x1bf = 0 after fw is downloaded */
@@ -238,7 +238,7 @@ SIC_Init(
 
 static bool
 SIC_LedOff(
-		PADAPTER	Adapter
+		struct adapter *	Adapter
 	)
 {
 	/*  When SIC is enabled, led pin will be used as debug pin, */
@@ -253,7 +253,7 @@ SIC_LedOff(
 * OverView:	Read "sepcific bits" from BB register
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct adapter *		Adapter,
 *			u4Byte			RegAddr,	The target address to be readback
 *			u4Byte			BitMask		The target bit position in the target address
 *								to be readback
@@ -263,7 +263,7 @@ SIC_LedOff(
 */
 u32
 rtl8188e_PHY_QueryBBReg(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u32		RegAddr,
 		u32		BitMask
 	)
@@ -293,7 +293,7 @@ rtl8188e_PHY_QueryBBReg(
 * OverView:	Write "Specific bits" to BB register (page 8~)
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct adapter *		Adapter,
 *			u4Byte			RegAddr,	The target address to be modified
 *			u4Byte			BitMask		The target bit position in the target address
 *									to be modified
@@ -307,7 +307,7 @@ rtl8188e_PHY_QueryBBReg(
 
 void
 rtl8188e_PHY_SetBBReg(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u32		RegAddr,
 		u32		BitMask,
 		u32		Data
@@ -344,7 +344,7 @@ rtl8188e_PHY_SetBBReg(
 * OverView:	Read regster from RF chips
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct adapter *		Adapter,
 *			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
 *			u4Byte			Offset,		The target address to be read
 *
@@ -359,7 +359,7 @@ rtl8188e_PHY_SetBBReg(
 */
 static	u32
 phy_RFSerialRead(
-		PADAPTER			Adapter,
+		struct adapter *			Adapter,
 		enum rf_radio_path eRFPath,
 		u32				Offset
 	)
@@ -422,7 +422,7 @@ phy_RFSerialRead(
 * OverView:	Write data to RF register (page 8~)
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct adapter *		Adapter,
 *			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
 *			u4Byte			Offset,		The target address to be read
 *			u4Byte			Data		The new register Data in the target bit position
@@ -461,7 +461,7 @@ phy_RFSerialRead(
 */
 static	void
 phy_RFSerialWrite(
-		PADAPTER			Adapter,
+		struct adapter *			Adapter,
 		enum rf_radio_path eRFPath,
 		u32				Offset,
 		u32				Data
@@ -499,7 +499,7 @@ phy_RFSerialWrite(
 * OverView:	Query "Specific bits" to RF register (page 8~)
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct adapter *		Adapter,
 *			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
 *			u4Byte			RegAddr,	The target address to be read
 *			u4Byte			BitMask		The target bit position in the target address
@@ -509,7 +509,7 @@ phy_RFSerialWrite(
 * Return:		u4Byte			Readback value
 * Note:		This function is equal to "GetRFRegSetting" in PHY programming guide
 */
-u32 rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, enum rf_radio_path eRFPath,
+u32 rtl8188e_PHY_QueryRFReg(struct adapter * Adapter, enum rf_radio_path eRFPath,
 			    u32 RegAddr, u32 BitMask)
 {
 	u32 Original_Value, Readback_Value, BitShift;
@@ -531,7 +531,7 @@ u32 rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, enum rf_radio_path eRFPath,
 * OverView:	Write "Specific bits" to RF register (page 8~)
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct adapter *		Adapter,
 *			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
 *			u4Byte			RegAddr,	The target address to be modified
 *			u4Byte			BitMask		The target bit position in the target address
@@ -545,7 +545,7 @@ u32 rtl8188e_PHY_QueryRFReg(PADAPTER Adapter, enum rf_radio_path eRFPath,
 */
 void
 rtl8188e_PHY_SetRFReg(
-		PADAPTER			Adapter,
+		struct adapter *			Adapter,
 		enum rf_radio_path eRFPath,
 		u32				RegAddr,
 		u32				BitMask,
@@ -579,7 +579,7 @@ rtl8188e_PHY_SetRFReg(
  * Overview:    This function read BB parameters from general file format, and do register
  *			  Read/Write
  *
- * Input:	PADAPTER		Adapter
+ * Input:	struct adapter *		Adapter
  *			ps1Byte				pFileName
  *
  * Output:      NONE
@@ -591,7 +591,7 @@ rtl8188e_PHY_SetRFReg(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigMACWithParaFile(
-		PADAPTER		Adapter,
+		struct adapter *		Adapter,
 		u8*			pFileName
 )
 {
@@ -618,7 +618,7 @@ phy_ConfigMACWithParaFile(
  *  08/12/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-s32 PHY_MACConfig8188E(PADAPTER Adapter)
+s32 PHY_MACConfig8188E(struct adapter * Adapter)
 {
 	int		rtStatus = _SUCCESS;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
@@ -642,7 +642,7 @@ s32 PHY_MACConfig8188E(PADAPTER Adapter)
 * OverView:	Initialize Register definition offset for Radio Path A/B/C/D
 *
 * Input:
-*			PADAPTER		Adapter,
+*			struct adapter *		Adapter,
 *
 * Output:	None
 * Return:		None
@@ -650,7 +650,7 @@ s32 PHY_MACConfig8188E(PADAPTER Adapter)
 */
 static	void
 phy_InitBBRFRegisterDefinition(
-		PADAPTER		Adapter
+		struct adapter *		Adapter
 )
 {
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
@@ -758,7 +758,7 @@ phy_InitBBRFRegisterDefinition(
  * Overview:    This function read BB parameters from general file format, and do register
  *			  Read/Write
  *
- * Input:	PADAPTER		Adapter
+ * Input:	struct adapter *		Adapter
  *			ps1Byte				pFileName
  *
  * Output:      NONE
@@ -770,7 +770,7 @@ phy_InitBBRFRegisterDefinition(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithParaFile(
-		PADAPTER		Adapter,
+		struct adapter *		Adapter,
 		u8*			pFileName
 )
 {
@@ -786,7 +786,7 @@ phy_ConfigBBWithParaFile(
 /*  */
 /*  The following is for High Power PA */
 /*  */
-static void phy_ConfigBBExternalPA(PADAPTER Adapter)
+static void phy_ConfigBBExternalPA(struct adapter * Adapter)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u16 i=0;
@@ -801,7 +801,7 @@ static void phy_ConfigBBExternalPA(PADAPTER Adapter)
 
 void
 storePwrIndexDiffRateOffset(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u32		RegAddr,
 		u32		BitMask,
 		u32		Data
@@ -866,7 +866,7 @@ storePwrIndexDiffRateOffset(
  *---------------------------------------------------------------------------*/
 static	int
 phy_ConfigBBWithPgParaFile(
-		PADAPTER		Adapter,
+		struct adapter *		Adapter,
 		u8*			pFileName)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
@@ -880,7 +880,7 @@ phy_ConfigBBWithPgParaFile(
 
 static void
 phy_BB8192C_Config_1T(
-	PADAPTER Adapter
+	struct adapter * Adapter
 	)
 {
 	/* for path - B */
@@ -906,7 +906,7 @@ phy_BB8192C_Config_1T(
 /*  Now it is just for 8256. */
 static	int
 phy_BB8190_Config_HardCode(
-		PADAPTER	Adapter
+		struct adapter *	Adapter
 	)
 {
 	return _SUCCESS;
@@ -914,7 +914,7 @@ phy_BB8190_Config_HardCode(
 
 static	int
 phy_BB8188E_Config_ParaFile(
-		PADAPTER	Adapter
+		struct adapter *	Adapter
 	)
 {
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
@@ -965,7 +965,7 @@ phy_BB8190_Config_ParaFile_Fail:
 
 int
 PHY_BBConfig8188E(
-		PADAPTER	Adapter
+		struct adapter *	Adapter
 	)
 {
 	int	rtStatus = _SUCCESS;
@@ -1001,7 +1001,7 @@ PHY_BBConfig8188E(
 
 int
 PHY_RFConfig8188E(
-		PADAPTER	Adapter
+		struct adapter *	Adapter
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
@@ -1020,7 +1020,7 @@ PHY_RFConfig8188E(
  *
  * Overview:    This function read RF parameters from general file format, and do RF 3-wire
  *
- * Input:	PADAPTER			Adapter
+ * Input:	struct adapter *			Adapter
  *			ps1Byte					pFileName
  *			enum rf_radio_path eRFPath
  *
@@ -1032,7 +1032,7 @@ PHY_RFConfig8188E(
  *---------------------------------------------------------------------------*/
 int
 rtl8188e_PHY_ConfigRFWithParaFile(
-		PADAPTER			Adapter,
+		struct adapter *			Adapter,
 		u8*				pFileName,
 	enum rf_radio_path eRFPath
 )
@@ -1040,7 +1040,7 @@ rtl8188e_PHY_ConfigRFWithParaFile(
 	return _SUCCESS;
 }
 
-static int PHY_ConfigRFExternalPA(PADAPTER Adapter, enum rf_radio_path eRFPath)
+static int PHY_ConfigRFExternalPA(struct adapter * Adapter, enum rf_radio_path eRFPath)
 {
 	int	rtStatus = _SUCCESS;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
@@ -1056,7 +1056,7 @@ static int PHY_ConfigRFExternalPA(PADAPTER Adapter, enum rf_radio_path eRFPath)
 
 void
 rtl8192c_PHY_GetHWRegOriginalValue(
-		PADAPTER		Adapter
+		struct adapter *		Adapter
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
@@ -1081,7 +1081,7 @@ rtl8192c_PHY_GetHWRegOriginalValue(
 /*  */
 static	u8
 phy_DbmToTxPwrIdx(
-		PADAPTER		Adapter,
+		struct adapter *		Adapter,
 		enum wireless_mode WirelessMode,
 		int			PowerInDbm
 	)
@@ -1131,7 +1131,7 @@ phy_DbmToTxPwrIdx(
 /* 		current wireless mode. */
 /* 	By Bruce, 2008-01-29. */
 /*  */
-static int phy_TxPwrIdxToDbm(PADAPTER Adapter, enum wireless_mode WirelessMode, u8 TxPwrIdx)
+static int phy_TxPwrIdxToDbm(struct adapter * Adapter, enum wireless_mode WirelessMode, u8 TxPwrIdx)
 {
 	int				Offset = 0;
 	int				PwrOutDbm = 0;
@@ -1167,7 +1167,7 @@ static int phy_TxPwrIdxToDbm(PADAPTER Adapter, enum wireless_mode WirelessMode, 
  *
  * Overview:    This function is export to "common" moudule
  *
- * Input:       PADAPTER		Adapter
+ * Input:       struct adapter *		Adapter
  *			psByte			Power Level
  *
  * Output:      NONE
@@ -1177,7 +1177,7 @@ static int phy_TxPwrIdxToDbm(PADAPTER Adapter, enum wireless_mode WirelessMode, 
  *---------------------------------------------------------------------------*/
 void
 PHY_GetTxPowerLevel8188E(
-		PADAPTER		Adapter,
+		struct adapter *		Adapter,
 	u32*		powerlevel
 	)
 {
@@ -1211,7 +1211,7 @@ PHY_GetTxPowerLevel8188E(
 	*powerlevel = TxPwrDbm;
 }
 
-static void getTxPowerIndex88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLevel,
+static void getTxPowerIndex88E(struct adapter * Adapter, u8 channel, u8 *cckPowerLevel,
 			       u8 *ofdmPowerLevel, u8 *BW20PowerLevel,
 			       u8 *BW40PowerLevel)
 {
@@ -1287,7 +1287,7 @@ static void getTxPowerIndex88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLevel,
 	}
 }
 
-static void phy_PowerIndexCheck88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLevel,
+static void phy_PowerIndexCheck88E(struct adapter * Adapter, u8 channel, u8 *cckPowerLevel,
 				   u8 *ofdmPowerLevel, u8 *BW20PowerLevel, u8 *BW40PowerLevel)
 {
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
@@ -1304,7 +1304,7 @@ static void phy_PowerIndexCheck88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLev
  * Overview:    This function is export to "HalCommon" moudule
  *			We must consider RF path later!!!!!!!
  *
- * Input:       PADAPTER		Adapter
+ * Input:       struct adapter *		Adapter
  *			u1Byte		channel
  *
  * Output:      NONE
@@ -1317,7 +1317,7 @@ static void phy_PowerIndexCheck88E(PADAPTER Adapter, u8 channel, u8 *cckPowerLev
  *---------------------------------------------------------------------------*/
 void
 PHY_SetTxPowerLevel8188E(
-		PADAPTER		Adapter,
+		struct adapter *		Adapter,
 		u8				channel
 	)
 {
@@ -1345,7 +1345,7 @@ PHY_SetTxPowerLevel8188E(
 /*  */
 bool
 PHY_UpdateTxPowerDbm8188E(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		int		powerInDbm
 	)
 {
@@ -1376,7 +1376,7 @@ PHY_UpdateTxPowerDbm8188E(
 
 void
 PHY_ScanOperationBackup8188E(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u8		Operation
 	)
 {
@@ -1399,7 +1399,7 @@ PHY_ScanOperationBackup8188E(
  *---------------------------------------------------------------------------*/
 static void
 _PHY_SetBWMode92C(
-		PADAPTER	Adapter
+		struct adapter *	Adapter
 )
 {
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
@@ -1502,7 +1502,7 @@ _PHY_SetBWMode92C(
  *
  * Overview:  This function is export to "HalCommon" moudule
  *
- * Input:		PADAPTER			Adapter
+ * Input:		struct adapter *			Adapter
  *			enum ht_channel_width Bandwidth	20M or 40M
  *
  * Output:      NONE
@@ -1513,7 +1513,7 @@ _PHY_SetBWMode92C(
  *---------------------------------------------------------------------------*/
 void
 PHY_SetBWMode8188E(
-		PADAPTER					Adapter,
+		struct adapter *					Adapter,
 		enum ht_channel_width Bandwidth,	/*  20M or 40M */
 		unsigned char	Offset		/*  Upper, Lower, or Don't care */
 )
@@ -1531,7 +1531,7 @@ PHY_SetBWMode8188E(
 		pHalData->CurrentChannelBW = tmpBW;
 }
 
-static void _PHY_SwChnl8192C(PADAPTER Adapter, u8 channel)
+static void _PHY_SwChnl8192C(struct adapter * Adapter, u8 channel)
 {
 	u8 eRFPath;
 	u32 param1, param2;
@@ -1556,7 +1556,7 @@ static void _PHY_SwChnl8192C(PADAPTER Adapter, u8 channel)
 
 void
 PHY_SwChnl8188E(	/*  Call after initialization */
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u8		channel
 	)
 {
@@ -1605,7 +1605,7 @@ PHY_SwChnl8188E(	/*  Call after initialization */
 
 static	bool
 phy_SwChnlStepByStep(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u8		channel,
 		u8		*stage,
 		u8		*step,
@@ -1645,7 +1645,7 @@ phy_SetSwChnlCmdArray(
 
 static	void
 phy_FinishSwChnlNow(	/*  We should not call this function directly */
-			PADAPTER	Adapter,
+			struct adapter *	Adapter,
 			u8		channel
 		)
 {
@@ -1662,7 +1662,7 @@ phy_FinishSwChnlNow(	/*  We should not call this function directly */
 /*  */
 void
 PHY_SwChnlPhy8192C(	/*  Only called during initialize */
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u8		channel
 	)
 {
@@ -1688,7 +1688,7 @@ PHY_SwChnlPhy8192C(	/*  Only called during initialize */
 /*  */
 void
 PHY_SetMonitorMode8192C(
-		PADAPTER			pAdapter,
+		struct adapter *			pAdapter,
 		bool				bEnableMonitorMode
 	)
 {
@@ -1712,12 +1712,12 @@ PHY_SetMonitorMode8192C(
  *	11/15/2007	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-bool PHY_CheckIsLegalRfPath8192C(PADAPTER pAdapter, u32	eRFPath)
+bool PHY_CheckIsLegalRfPath8192C(struct adapter * pAdapter, u32	eRFPath)
 {
 	return	true;
 }	/* PHY_CheckIsLegalRfPath8192C */
 
-static void _PHY_SetRFPathSwitch(PADAPTER pAdapter, bool bMain, bool is2T)
+static void _PHY_SetRFPathSwitch(struct adapter * pAdapter, bool bMain, bool is2T)
 {
 	u8	u1bTmp;
 
@@ -1739,7 +1739,7 @@ static void _PHY_SetRFPathSwitch(PADAPTER pAdapter, bool bMain, bool is2T)
 	}
 }
 
-static bool _PHY_QueryRFPathSwitch(PADAPTER pAdapter, bool is2T)
+static bool _PHY_QueryRFPathSwitch(struct adapter * pAdapter, bool is2T)
 {
 	if (!pAdapter->hw_init_completed) {
 		PHY_SetBBReg(pAdapter, REG_LEDCFG0, BIT23, 0x01);
@@ -1759,6 +1759,6 @@ static bool _PHY_QueryRFPathSwitch(PADAPTER pAdapter, bool is2T)
 	}
 }
 
-static void _PHY_DumpRFReg(PADAPTER pAdapter)
+static void _PHY_DumpRFReg(struct adapter * pAdapter)
 {
 }

@@ -91,7 +91,7 @@ struct addba_event
 
 struct fwevent {
 	u32	parmsize;
-	void (*event_callback)(_adapter *dev, u8 *pbuf);
+	void (*event_callback)(struct adapter *dev, u8 *pbuf);
 };
 
 #define C2HEVENT_SZ			32

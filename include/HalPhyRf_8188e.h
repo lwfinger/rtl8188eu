@@ -38,33 +38,33 @@ ODM_TxPwrTrackAdjust88E(
 
 void
 odm_TXPowerTrackingCallback_ThermalMeter_8188E(
-	PADAPTER	Adapter
+	struct adapter *	Adapter
 	);
 
 
 //1 7.	IQK
 
 void
-PHY_IQCalibrate_8188E(PADAPTER	Adapter, bool		bReCovery);
+PHY_IQCalibrate_8188E(struct adapter *	Adapter, bool		bReCovery);
 
 
 //
 // LC calibrate
 //
-void PHY_LCCalibrate_8188E( PADAPTER	pAdapter);
+void PHY_LCCalibrate_8188E( struct adapter *	pAdapter);
 
 //
 // AP calibrate
 //
-void PHY_APCalibrate_8188E(PADAPTER	pAdapter, s1Byte		delta);
+void PHY_APCalibrate_8188E(struct adapter *	pAdapter, s1Byte		delta);
 
 void
-PHY_DigitalPredistortion_8188E(			PADAPTER	pAdapter);
+PHY_DigitalPredistortion_8188E(			struct adapter *	pAdapter);
 
 
 void
 _PHY_SaveADDARegisters(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		ADDAReg,
 		pu4Byte		ADDABackup,
 		u4Byte		RegisterNum
@@ -72,7 +72,7 @@ _PHY_SaveADDARegisters(
 
 void
 _PHY_PathADDAOn(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		ADDAReg,
 		bool		isPathAOn,
 		bool		is2T
@@ -80,7 +80,7 @@ _PHY_PathADDAOn(
 
 void
 _PHY_MACSettingCalibration(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		MACReg,
 		pu4Byte		MACBackup
 	);
@@ -88,7 +88,7 @@ _PHY_MACSettingCalibration(
 
 void
 _PHY_PathAStandBy(
-		PADAPTER	pAdapter
+		struct adapter *pAdapter
 	);
 
 

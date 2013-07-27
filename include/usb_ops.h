@@ -52,7 +52,7 @@ enum{
 #endif
 #include <usb_ops_linux.h>
 
-void rtl8188eu_set_hw_type(_adapter *padapter);
+void rtl8188eu_set_hw_type(struct adapter *padapter);
 #define hal_set_hw_type rtl8188eu_set_hw_type
 void rtl8188eu_set_intf_ops(struct _io_ops *pops);
 #define usb_set_intf_ops rtl8188eu_set_intf_ops
@@ -86,7 +86,7 @@ static inline void rtw_reset_continual_urb_error(struct dvobj_priv *dvobj)
 #define USB_HIGH_SPEED_BULK_SIZE	512
 #define USB_FULL_SPEED_BULK_SIZE	64
 
-static inline u8 rtw_usb_bulk_size_boundary(_adapter * padapter,int buf_len)
+static inline u8 rtw_usb_bulk_size_boundary(struct adapter * padapter,int buf_len)
 {
 	u8 rst = true;
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);

@@ -31,7 +31,7 @@
 NDIS_STATUS oid_rt_wireless_mode_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
-	PADAPTER Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter * Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -59,7 +59,7 @@ NDIS_STATUS oid_rt_pro_write_bb_reg_hdl(struct oid_par_priv *poid_par_priv)
 	u16 offset;
 	u32 value;
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
-	PADAPTER Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter * Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -97,7 +97,7 @@ NDIS_STATUS oid_rt_pro_read_bb_reg_hdl(struct oid_par_priv *poid_par_priv)
 	u16 offset;
 	u32 value;
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
-	PADAPTER Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter * Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -136,7 +136,7 @@ NDIS_STATUS oid_rt_pro_write_rf_reg_hdl(struct oid_par_priv *poid_par_priv)
 	u8 offset;
 	u32 value;
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
-	PADAPTER Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter * Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -180,7 +180,7 @@ NDIS_STATUS oid_rt_pro_read_rf_reg_hdl(struct oid_par_priv *poid_par_priv)
 	u8 path;
 	u8 offset;
 	u32 value;
-	PADAPTER Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter * Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
 
 _func_enter_;
@@ -228,7 +228,7 @@ NDIS_STATUS oid_rt_pro_set_data_rate_hdl(struct oid_par_priv *poid_par_priv)
 {
 	u32		ratevalue;/* 4 */
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -262,7 +262,7 @@ NDIS_STATUS oid_rt_pro_start_test_hdl(struct oid_par_priv *poid_par_priv)
 {
 	u32		mode;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -299,7 +299,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_pro_stop_test_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -323,7 +323,7 @@ NDIS_STATUS oid_rt_pro_set_channel_direct_call_hdl(struct oid_par_priv *poid_par
 {
 	u32		Channel;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -360,7 +360,7 @@ NDIS_STATUS oid_rt_set_bandwidth_hdl(struct oid_par_priv *poid_par_priv)
 	u16		bandwidth;
 	u16		channel_offset;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	padapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	padapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -398,7 +398,7 @@ NDIS_STATUS oid_rt_pro_set_antenna_bb_hdl(struct oid_par_priv *poid_par_priv)
 {
 	u32		antenna;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -434,7 +434,7 @@ NDIS_STATUS oid_rt_pro_set_tx_power_control_hdl(struct oid_par_priv *poid_par_pr
 {
 	u32		tx_pwr_idx;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -471,7 +471,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_pro_query_tx_packet_sent_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -495,7 +495,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_pro_query_rx_packet_received_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -520,7 +520,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_pro_query_rx_packet_crc32_error_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -546,7 +546,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_pro_reset_tx_packet_sent_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -566,7 +566,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_pro_reset_rx_packet_received_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -591,7 +591,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_reset_phy_rx_packet_count_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -612,7 +612,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_get_phy_rx_packet_received_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -640,7 +640,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_get_phy_rx_packet_crc32_error_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -670,7 +670,7 @@ NDIS_STATUS oid_rt_pro_set_continuous_tx_hdl(struct oid_par_priv *poid_par_priv)
 {
 	u32		bStartTest;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -705,7 +705,7 @@ NDIS_STATUS oid_rt_pro_set_single_carrier_tx_hdl(struct oid_par_priv *poid_par_p
 {
 	u32		bStartTest;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -740,7 +740,7 @@ NDIS_STATUS oid_rt_pro_set_carrier_suppression_tx_hdl(struct oid_par_priv *poid_
 {
 	u32		bStartTest;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -775,7 +775,7 @@ NDIS_STATUS oid_rt_pro_set_single_tone_tx_hdl(struct oid_par_priv *poid_par_priv
 {
 	u32		bStartTest;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -802,7 +802,7 @@ NDIS_STATUS oid_rt_pro_set_modulation_hdl(struct oid_par_priv* poid_par_priv)
 
 NDIS_STATUS oid_rt_pro_trigger_gpio_hdl(struct oid_par_priv *poid_par_priv)
 {
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
 _func_enter_;
 
@@ -829,7 +829,7 @@ NDIS_STATUS oid_rt_pro_read_register_hdl(struct oid_par_priv *poid_par_priv)
 	struct mp_rw_reg *		RegRWStruct;
 	u32		offset, width;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -878,7 +878,7 @@ NDIS_STATUS oid_rt_pro_write_register_hdl(struct oid_par_priv *poid_par_priv)
 	struct mp_rw_reg *RegRWStruct;
 	u32		offset, width, value;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	padapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	padapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -997,7 +997,7 @@ NDIS_STATUS oid_rt_pro_cfg_debug_message_hdl(struct oid_par_priv *poid_par_priv)
 /*  */
 NDIS_STATUS oid_rt_pro_set_data_rate_ex_hdl(struct oid_par_priv *poid_par_priv)
 {
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
 
@@ -1024,7 +1024,7 @@ NDIS_STATUS oid_rt_get_thermal_meter_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
 	u8 thermal = 0;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -1056,7 +1056,7 @@ NDIS_STATUS oid_rt_pro_read_tssi_hdl(struct oid_par_priv *poid_par_priv)
 NDIS_STATUS oid_rt_pro_set_power_tracking_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 
 _func_enter_;
@@ -1136,7 +1136,7 @@ NDIS_STATUS oid_rt_pro_read_efuse_hdl(struct oid_par_priv *poid_par_priv)
 	u8 *data;
 	u16 addr = 0, cnts = 0, max_available_size = 0;
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
-	PADAPTER Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter * Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -1181,7 +1181,7 @@ NDIS_STATUS oid_rt_pro_write_efuse_hdl(struct oid_par_priv *poid_par_priv)
 	u8 *data;
 	u16 addr = 0, cnts = 0, max_available_size = 0;
 	NDIS_STATUS status = NDIS_STATUS_SUCCESS;
-	PADAPTER Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter * Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 
 _func_enter_;
@@ -1219,7 +1219,7 @@ NDIS_STATUS oid_rt_pro_rw_efuse_pgpkt_hdl(struct oid_par_priv *poid_par_priv)
 {
 	struct pgpkt *ppgpkt;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -1272,7 +1272,7 @@ NDIS_STATUS oid_rt_get_efuse_current_size_hdl(struct oid_par_priv *poid_par_priv
 	u16 size;
 	u8 ret;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -1299,7 +1299,7 @@ _func_exit_;
 NDIS_STATUS oid_rt_get_efuse_max_size_hdl(struct oid_par_priv *poid_par_priv)
 {
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 
 _func_enter_;
 
@@ -1345,7 +1345,7 @@ NDIS_STATUS oid_rt_pro_efuse_map_hdl(struct oid_par_priv *poid_par_priv)
 {
 	u8		*data;
 	NDIS_STATUS	status = NDIS_STATUS_SUCCESS;
-	PADAPTER	Adapter = (PADAPTER)(poid_par_priv->adapter_context);
+	struct adapter *	Adapter = (struct adapter *)(poid_par_priv->adapter_context);
 	u16	mapLen=0;
 
 _func_enter_;
@@ -1441,14 +1441,14 @@ NDIS_STATUS oid_rt_pro_set_pkt_test_mode_hdl(struct oid_par_priv *poid_par_priv)
 unsigned int mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv)
 {
 	struct mp_xmit_parm * pparm;
-	PADAPTER padapter;
+	struct adapter * padapter;
 	struct mp_priv *pmp_priv;
 	struct pkt_attrib *pattrib;
 
 	RT_TRACE(_module_mp_, _drv_notice_, ("+%s\n", __func__));
 
 	pparm = (struct mp_xmit_parm *)poid_par_priv->information_buf;
-	padapter = (PADAPTER)poid_par_priv->adapter_context;
+	padapter = (struct adapter *)poid_par_priv->adapter_context;
 	pmp_priv = &padapter->mppriv;
 
 	if (poid_par_priv->type_of_oid == QUERY_OID) {

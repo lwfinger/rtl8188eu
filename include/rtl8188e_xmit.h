@@ -148,19 +148,19 @@ struct txrpt_ccx_88e {
 #define txrpt_ccx_sw_88e(txrpt_ccx) ((txrpt_ccx)->sw0 + ((txrpt_ccx)->sw1<<8))
 #define txrpt_ccx_qtime_88e(txrpt_ccx) ((txrpt_ccx)->ccx_qtime0+((txrpt_ccx)->ccx_qtime1<<8))
 
-void rtl8188e_fill_fake_txdesc(PADAPTER	padapter,u8*pDesc,u32 BufferLen,u8 IsPsPoll,u8	IsBTQosNull);
-s32 rtl8188eu_init_xmit_priv(PADAPTER padapter);
-void rtl8188eu_free_xmit_priv(PADAPTER padapter);
-s32 rtl8188eu_hal_xmit(PADAPTER padapter, struct xmit_frame *pxmitframe);
-s32 rtl8188eu_mgnt_xmit(PADAPTER padapter, struct xmit_frame *pmgntframe);
-s32 rtl8188eu_xmit_buf_handler(PADAPTER padapter);
+void rtl8188e_fill_fake_txdesc(struct adapter *	padapter,u8*pDesc,u32 BufferLen,u8 IsPsPoll,u8	IsBTQosNull);
+s32 rtl8188eu_init_xmit_priv(struct adapter * padapter);
+void rtl8188eu_free_xmit_priv(struct adapter * padapter);
+s32 rtl8188eu_hal_xmit(struct adapter * padapter, struct xmit_frame *pxmitframe);
+s32 rtl8188eu_mgnt_xmit(struct adapter * padapter, struct xmit_frame *pmgntframe);
+s32 rtl8188eu_xmit_buf_handler(struct adapter * padapter);
 #define hal_xmit_handler rtl8188eu_xmit_buf_handler
 void rtl8188eu_xmit_tasklet(void *priv);
-s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
+s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
 
 void dump_txrpt_ccx_88e(void *buf);
-void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf);
+void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf);
 
-void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
+void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
 
 #endif //__RTL8188E_XMIT_H__

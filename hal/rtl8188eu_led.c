@@ -40,7 +40,7 @@
 /* 	Description: */
 /* 		Turn on LED according to LedPin specified. */
 /*  */
-void SwLedOn(_adapter *padapter, struct LED_871x * pLed)
+void SwLedOn(struct adapter *padapter, struct LED_871x * pLed)
 {
 	u8	LedCfg;
 
@@ -72,7 +72,7 @@ void SwLedOn(_adapter *padapter, struct LED_871x * pLed)
 /* 	Description: */
 /* 		Turn off LED according to LedPin specified. */
 /*  */
-void SwLedOff(_adapter *padapter, struct LED_871x * pLed)
+void SwLedOff(struct adapter *padapter, struct LED_871x * pLed)
 {
 	u8	LedCfg;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
@@ -130,7 +130,7 @@ exit:
 /*  */
 void
 rtl8188eu_InitSwLeds(
-	_adapter	*padapter
+	struct adapter	*padapter
 	)
 {
 	struct led_priv *pledpriv = &(padapter->ledpriv);
@@ -149,7 +149,7 @@ rtl8188eu_InitSwLeds(
 /*  */
 void
 rtl8188eu_DeInitSwLeds(
-	_adapter	*padapter
+	struct adapter	*padapter
 	)
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);

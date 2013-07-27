@@ -28,7 +28,7 @@
 #include <usb_osintf.h>
 #include <usb_ops.h>
 
-extern void indicate_wx_scan_complete_event(_adapter *padapter);
+extern void indicate_wx_scan_complete_event(struct adapter *padapter);
 
 #define IS_MAC_ADDRESS_BROADCAST(addr) \
 ( \
@@ -67,8 +67,8 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_do_join(_adapter * padapter);
-u8 rtw_do_join(_adapter * padapter)
+u8 rtw_do_join(struct adapter * padapter);
+u8 rtw_do_join(struct adapter * padapter)
 {
 	unsigned long	irqL;
 	struct list_head *plist, *phead;
@@ -181,7 +181,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_bssid(_adapter* padapter, u8 *bssid)
+u8 rtw_set_802_11_bssid(struct adapter* padapter, u8 *bssid)
 {
 	unsigned long irqL;
 	u8 status=_SUCCESS;
@@ -277,7 +277,7 @@ _func_exit_;
 	return status;
 }
 
-u8 rtw_set_802_11_ssid(_adapter* padapter, struct ndis_802_11_ssid *ssid)
+u8 rtw_set_802_11_ssid(struct adapter* padapter, struct ndis_802_11_ssid *ssid)
 {
 	unsigned long irqL;
 	u8 status = _SUCCESS;
@@ -400,7 +400,7 @@ _func_exit_;
 
 }
 
-u8 rtw_set_802_11_infrastructure_mode(_adapter* padapter,
+u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
 	enum ndis_802_11_network_infra networktype)
 {
 	unsigned long irqL;
@@ -481,7 +481,7 @@ _func_exit_;
 }
 
 
-u8 rtw_set_802_11_disassociate(_adapter *padapter)
+u8 rtw_set_802_11_disassociate(struct adapter *padapter)
 {
 	unsigned long irqL;
 	struct mlme_priv * pmlmepriv = &padapter->mlmepriv;
@@ -507,7 +507,7 @@ _func_exit_;
 	return true;
 }
 
-u8 rtw_set_802_11_bssid_list_scan(_adapter* padapter, struct ndis_802_11_ssid *pssid, int ssid_max_num)
+u8 rtw_set_802_11_bssid_list_scan(struct adapter* padapter, struct ndis_802_11_ssid *pssid, int ssid_max_num)
 {
 	unsigned long	irqL;
 	struct	mlme_priv		*pmlmepriv= &padapter->mlmepriv;
@@ -559,7 +559,7 @@ _func_exit_;
 	return res;
 }
 
-u8 rtw_set_802_11_authentication_mode(_adapter* padapter, enum ndis_802_11_auth_mode authmode)
+u8 rtw_set_802_11_authentication_mode(struct adapter* padapter, enum ndis_802_11_auth_mode authmode)
 {
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	int res;
@@ -588,7 +588,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_add_wep(_adapter* padapter, struct ndis_802_11_wep *wep){
+u8 rtw_set_802_11_add_wep(struct adapter* padapter, struct ndis_802_11_wep *wep){
 
 	int		keyid,res;
 	struct security_priv* psecuritypriv=&(padapter->securitypriv);
@@ -647,7 +647,7 @@ _func_exit_;
 
 }
 
-u8 rtw_set_802_11_remove_wep(_adapter* padapter, u32 keyindex){
+u8 rtw_set_802_11_remove_wep(struct adapter* padapter, u32 keyindex){
 
 	u8 ret=_SUCCESS;
 
@@ -690,7 +690,7 @@ _func_exit_;
 
 }
 
-u8 rtw_set_802_11_add_key(_adapter* padapter, struct ndis_802_11_key *key){
+u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key){
 
 	uint	encryptionalgo;
 	u8 * pbssid;
@@ -1053,7 +1053,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtw_set_802_11_remove_key(_adapter*	padapter, struct ndis_802_11_remove_key *key){
+u8 rtw_set_802_11_remove_key(struct adapter*	padapter, struct ndis_802_11_remove_key *key){
 
 	u8 *pbssid;
 	struct sta_info *stainfo;
@@ -1095,11 +1095,11 @@ _func_exit_;
 
 /*
 * rtw_get_cur_max_rate -
-* @adapter: pointer to _adapter structure
+* @adapter: pointer to struct adapter structure
 *
 * Return 0 or 100Kbps
 */
-u16 rtw_get_cur_max_rate(_adapter *adapter)
+u16 rtw_get_cur_max_rate(struct adapter *adapter)
 {
 	int	i = 0;
 	u8	*p;
@@ -1171,12 +1171,12 @@ u16 rtw_get_cur_max_rate(_adapter *adapter)
 
 /*
 * rtw_set_scan_mode -
-* @adapter: pointer to _adapter structure
+* @adapter: pointer to struct adapter structure
 * @scan_mode:
 *
 * Return _SUCCESS or _FAIL
 */
-int rtw_set_scan_mode(_adapter *adapter, enum rt_scan_type scan_mode)
+int rtw_set_scan_mode(struct adapter *adapter, enum rt_scan_type scan_mode)
 {
 	if (scan_mode != SCAN_ACTIVE && scan_mode != SCAN_PASSIVE)
 		return _FAIL;
@@ -1188,12 +1188,12 @@ int rtw_set_scan_mode(_adapter *adapter, enum rt_scan_type scan_mode)
 
 /*
 * rtw_set_channel_plan -
-* @adapter: pointer to _adapter structure
+* @adapter: pointer to struct adapter structure
 * @channel_plan:
 *
 * Return _SUCCESS or _FAIL
 */
-int rtw_set_channel_plan(_adapter *adapter, u8 channel_plan)
+int rtw_set_channel_plan(struct adapter *adapter, u8 channel_plan)
 {
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
@@ -1204,12 +1204,12 @@ int rtw_set_channel_plan(_adapter *adapter, u8 channel_plan)
 
 /*
 * rtw_set_country -
-* @adapter: pointer to _adapter structure
+* @adapter: pointer to struct adapter structure
 * @country_code: string of country code
 *
 * Return _SUCCESS or _FAIL
 */
-int rtw_set_country(_adapter *adapter, const char *country_code)
+int rtw_set_country(struct adapter *adapter, const char *country_code)
 {
 	int channel_plan = RT_CHANNEL_DOMAIN_WORLD_WIDE_5G;
 

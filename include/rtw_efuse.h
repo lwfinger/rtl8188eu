@@ -120,29 +120,29 @@ extern u8 fakeBTEfuseInitMap[];
 extern u8 fakeBTEfuseModifiedMap[];
 /*------------------------Export global variable----------------------------*/
 
-u8	efuse_GetCurrentSize(PADAPTER padapter, u16 *size);
-u16	efuse_GetMaxSize(PADAPTER padapter);
-u8	rtw_efuse_access(PADAPTER padapter, u8 bRead, u16 start_addr, u16 cnts, u8 *data);
-u8	rtw_efuse_map_read(PADAPTER padapter, u16 addr, u16 cnts, u8 *data);
-u8	rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data);
-u8	rtw_BT_efuse_map_read(PADAPTER padapter, u16 addr, u16 cnts, u8 *data);
-u8	rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data);
+u8	efuse_GetCurrentSize(struct adapter * padapter, u16 *size);
+u16	efuse_GetMaxSize(struct adapter * padapter);
+u8	rtw_efuse_access(struct adapter * padapter, u8 bRead, u16 start_addr, u16 cnts, u8 *data);
+u8	rtw_efuse_map_read(struct adapter * padapter, u16 addr, u16 cnts, u8 *data);
+u8	rtw_efuse_map_write(struct adapter * padapter, u16 addr, u16 cnts, u8 *data);
+u8	rtw_BT_efuse_map_read(struct adapter * padapter, u16 addr, u16 cnts, u8 *data);
+u8	rtw_BT_efuse_map_write(struct adapter * padapter, u16 addr, u16 cnts, u8 *data);
 
-u16	Efuse_GetCurrentSize(PADAPTER pAdapter, u8 efuseType, bool bPseudoTest);
+u16	Efuse_GetCurrentSize(struct adapter * pAdapter, u8 efuseType, bool bPseudoTest);
 u8	Efuse_CalculateWordCnts(u8 word_en);
-void	ReadEFuseByte(PADAPTER Adapter, u16 _offset, u8 *pbuf, bool bPseudoTest) ;
-void	EFUSE_GetEfuseDefinition(PADAPTER pAdapter, u8 efuseType, u8 type, void *pOut, bool bPseudoTest);
-u8	efuse_OneByteRead(PADAPTER pAdapter, u16 addr, u8 *data, bool	 bPseudoTest);
-u8	efuse_OneByteWrite(PADAPTER pAdapter, u16 addr, u8 data, bool	 bPseudoTest);
+void	ReadEFuseByte(struct adapter * Adapter, u16 _offset, u8 *pbuf, bool bPseudoTest) ;
+void	EFUSE_GetEfuseDefinition(struct adapter * pAdapter, u8 efuseType, u8 type, void *pOut, bool bPseudoTest);
+u8	efuse_OneByteRead(struct adapter * pAdapter, u16 addr, u8 *data, bool	 bPseudoTest);
+u8	efuse_OneByteWrite(struct adapter * pAdapter, u16 addr, u8 data, bool	 bPseudoTest);
 
-void	Efuse_PowerSwitch(PADAPTER pAdapter,u8	bWrite,u8	 PwrState);
-int	Efuse_PgPacketRead(PADAPTER pAdapter, u8 offset, u8 *data, bool bPseudoTest);
-int	Efuse_PgPacketWrite(PADAPTER pAdapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
+void	Efuse_PowerSwitch(struct adapter * pAdapter,u8	bWrite,u8	 PwrState);
+int	Efuse_PgPacketRead(struct adapter * pAdapter, u8 offset, u8 *data, bool bPseudoTest);
+int	Efuse_PgPacketWrite(struct adapter * pAdapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
 void	efuse_WordEnableDataRead(u8 word_en, u8 *sourdata, u8 *targetdata);
-u8	Efuse_WordEnableDataWrite(PADAPTER pAdapter, u16 efuse_addr, u8 word_en, u8 *data, bool bPseudoTest);
+u8	Efuse_WordEnableDataWrite(struct adapter * pAdapter, u16 efuse_addr, u8 word_en, u8 *data, bool bPseudoTest);
 
-u8	EFUSE_Read1Byte(PADAPTER pAdapter, u16 Address);
-void	EFUSE_ShadowMapUpdate(PADAPTER pAdapter, u8 efuseType, bool bPseudoTest);
-void	EFUSE_ShadowRead(PADAPTER pAdapter, u8 Type, u16 Offset, u32 *Value);
+u8	EFUSE_Read1Byte(struct adapter * pAdapter, u16 Address);
+void	EFUSE_ShadowMapUpdate(struct adapter * pAdapter, u8 efuseType, bool bPseudoTest);
+void	EFUSE_ShadowRead(struct adapter * pAdapter, u8 Type, u16 Offset, u32 *Value);
 
 #endif

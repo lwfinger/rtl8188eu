@@ -91,7 +91,7 @@ static	struct rf_shadow	RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
  *						Firmwaer support the utility later.
  *
  *---------------------------------------------------------------------------*/
-void rtl8188e_RF_ChangeTxPath(		PADAPTER	Adapter,
+void rtl8188e_RF_ChangeTxPath(		struct adapter *	Adapter,
 											u16		DataRate)
 {
 /*  We do not support gain table change inACUT now !!!! Delete later !!! */
@@ -103,7 +103,7 @@ void rtl8188e_RF_ChangeTxPath(		PADAPTER	Adapter,
  *
  * Overview:    This function is called by SetBWModeCallback8190Pci() only
  *
- * Input:       PADAPTER				Adapter
+ * Input:       struct adapter *				Adapter
  *			WIRELESS_BANDWIDTH_E	Bandwidth	20M or 40M
  *
  * Output:      NONE
@@ -114,7 +114,7 @@ void rtl8188e_RF_ChangeTxPath(		PADAPTER	Adapter,
  *---------------------------------------------------------------------------*/
 void
 rtl8188e_PHY_RF6052SetBandwidth(
-		PADAPTER				Adapter,
+		struct adapter *				Adapter,
 		enum ht_channel_width Bandwidth)	/* 20M or 40M */
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
@@ -158,7 +158,7 @@ rtl8188e_PHY_RF6052SetBandwidth(
 
 void
 rtl8188e_PHY_RF6052SetCckTxPower(
-		PADAPTER		Adapter,
+		struct adapter *		Adapter,
 		u8*			pPowerlevel)
 {
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
@@ -274,7 +274,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 /*  powerbase1 for HT MCS rates */
 /*  */
 static void getPowerBase88E(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u8*			pPowerLevelOFDM,
 		u8*			pPowerLevelBW20,
 		u8*			pPowerLevelBW40,
@@ -315,7 +315,7 @@ static void getPowerBase88E(
 }
 
 static void getTxPowerWriteValByRegulatory88E(
-			PADAPTER	Adapter,
+			struct adapter *	Adapter,
 			u8			Channel,
 			u8			index,
 			u32*		powerBase0,
@@ -433,7 +433,7 @@ static void getTxPowerWriteValByRegulatory88E(
 }
 
 static void writeOFDMPowerReg88E(
-			PADAPTER	Adapter,
+			struct adapter *	Adapter,
 			u8		index,
 			u32*		pValue
 	)
@@ -516,7 +516,7 @@ static void writeOFDMPowerReg88E(
 
 void
 rtl8188e_PHY_RF6052SetOFDMTxPower(
-		PADAPTER	Adapter,
+		struct adapter *	Adapter,
 		u8*		pPowerLevelOFDM,
 		u8*		pPowerLevelBW20,
 		u8*		pPowerLevelBW40,
@@ -557,14 +557,14 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 
 static void
 phy_RF6052_Config_HardCode(
-		PADAPTER		Adapter
+		struct adapter *		Adapter
 	)
 {
 }
 
 static int
 phy_RF6052_Config_ParaFile(
-		PADAPTER		Adapter
+		struct adapter *		Adapter
 	)
 {
 	u32					u4RegValue;
@@ -653,7 +653,7 @@ phy_RF6052_Config_ParaFile_Fail:
 
 int
 PHY_RF6052_Config8188E(
-		PADAPTER		Adapter)
+		struct adapter *		Adapter)
 {
 	struct hal_data_8188e				*pHalData = GET_HAL_DATA(Adapter);
 	int					rtStatus = _SUCCESS;

@@ -148,7 +148,7 @@ odm_TxPwrTrackSetPwr88E(
 /* 091212 chiyokolin */
 void
 odm_TXPowerTrackingCallback_ThermalMeter_8188E(
-	PADAPTER	Adapter
+	struct adapter *	Adapter
 	)
 {
 
@@ -547,7 +547,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 
 static u1Byte			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_PathA_IQK_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		bool		configPathB
 	)
 {
@@ -600,7 +600,7 @@ phy_PathA_IQK_8188E(
 
 static u1Byte			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_PathA_RxIQK(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		bool		configPathB
 	)
 {
@@ -734,7 +734,7 @@ phy_PathA_RxIQK(
 
 static u1Byte				/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_PathB_IQK_8188E(
-		PADAPTER	pAdapter
+		struct adapter *	pAdapter
 	)
 {
 	u4Byte regEAC, regEB4, regEBC, regEC4, regECC;
@@ -786,7 +786,7 @@ phy_PathB_IQK_8188E(
 
 static void
 _PHY_PathAFillIQKMatrix(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 	bool	bIQKOK,
 		s4Byte		result[][8],
 		u1Byte		final_candidate,
@@ -846,7 +846,7 @@ _PHY_PathAFillIQKMatrix(
 
 static void
 _PHY_PathBFillIQKMatrix(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 	bool	bIQKOK,
 		s4Byte		result[][8],
 		u1Byte		final_candidate,
@@ -906,14 +906,14 @@ _PHY_PathBFillIQKMatrix(
 /*  MP Already declare in odm.c */
 static bool
 ODM_CheckPowerStatus(
-		PADAPTER		Adapter)
+		struct adapter *		Adapter)
 {
 	return	true;
 }
 
 void
 _PHY_SaveADDARegisters(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		ADDAReg,
 		pu4Byte		ADDABackup,
 		u4Byte		RegisterNum
@@ -934,7 +934,7 @@ _PHY_SaveADDARegisters(
 
 
 static void _PHY_SaveMACRegisters(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		MACReg,
 		pu4Byte		MACBackup
 	)
@@ -953,7 +953,7 @@ static void _PHY_SaveMACRegisters(
 
 static void
 _PHY_ReloadADDARegisters(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		ADDAReg,
 		pu4Byte		ADDABackup,
 		u4Byte		RegiesterNum
@@ -972,7 +972,7 @@ _PHY_ReloadADDARegisters(
 
 static void
 _PHY_ReloadMACRegisters(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		MACReg,
 		pu4Byte		MACBackup
 	)
@@ -991,7 +991,7 @@ _PHY_ReloadMACRegisters(
 
 void
 _PHY_PathADDAOn(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		ADDAReg,
 		bool		isPathAOn,
 		bool		is2T
@@ -1020,7 +1020,7 @@ _PHY_PathADDAOn(
 
 void
 _PHY_MACSettingCalibration(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		pu4Byte		MACReg,
 		pu4Byte		MACBackup
 	)
@@ -1042,7 +1042,7 @@ _PHY_MACSettingCalibration(
 
 void
 _PHY_PathAStandBy(
-	PADAPTER	pAdapter
+	struct adapter *	pAdapter
 	)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1056,7 +1056,7 @@ _PHY_PathAStandBy(
 }
 
 static void _PHY_PIModeSwitch(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		bool		PIMode
 	)
 {
@@ -1072,7 +1072,7 @@ static void _PHY_PIModeSwitch(
 }
 
 static bool phy_SimularityCompare_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		s4Byte		result[][8],
 		u1Byte		 c1,
 		u1Byte		 c2
@@ -1192,7 +1192,7 @@ static bool phy_SimularityCompare_8188E(
 }
 
 static void phy_IQCalibrate_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		s4Byte		result[][8],
 		u1Byte		t,
 		bool		is2T
@@ -1380,7 +1380,7 @@ else
 }
 
 static void phy_LCCalibrate_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		bool		is2T
 	)
 {
@@ -1448,7 +1448,7 @@ static void phy_LCCalibrate_8188E(
 #define		PATH_NUM		2
 
 static void phy_APCalibrate_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		s1Byte		delta,
 		bool		is2T
 	)
@@ -1881,7 +1881,7 @@ if (*(pDM_Odm->mp_mode) != 1)
 
 void
 PHY_IQCalibrate_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		bool		bReCovery
 	)
 {
@@ -2070,7 +2070,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 
 void
 PHY_LCCalibrate_8188E(
-		PADAPTER	pAdapter
+		struct adapter *	pAdapter
 	)
 {
 	bool			bSingleTone = false, bCarrierSuppression = false;
@@ -2131,7 +2131,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 
 void
 PHY_APCalibrate_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		s1Byte		delta
 	)
 {
@@ -2162,7 +2162,7 @@ PHY_APCalibrate_8188E(
 }
 
 static void phy_SetRFPathSwitch_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		bool		bMain,
 		bool		is2T
 	)
@@ -2195,7 +2195,7 @@ static void phy_SetRFPathSwitch_8188E(
 	}
 }
 void PHY_SetRFPathSwitch_8188E(
-		PADAPTER	pAdapter,
+		struct adapter *	pAdapter,
 		bool		bMain
 	)
 {

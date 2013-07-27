@@ -20,7 +20,7 @@
 
 #include<rtw_iol.h>
 
-struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
+struct xmit_frame	*rtw_IOL_accquire_xmit_frame(struct adapter  *adapter)
 {
 	struct xmit_frame	*xmit_frame;
 	struct xmit_buf	*xmitbuf;
@@ -94,7 +94,7 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 	return _SUCCESS;
 }
 
-bool rtw_IOL_applied(ADAPTER *adapter)
+bool rtw_IOL_applied(struct adapter  *adapter)
 {
 	if (1 == adapter->registrypriv.fw_iol)
 		return true;
@@ -104,7 +104,7 @@ bool rtw_IOL_applied(ADAPTER *adapter)
 	return false;
 }
 
-int rtw_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
+int rtw_IOL_exec_cmds_sync(struct adapter  *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {
 	return rtw_hal_iol_cmd(adapter, xmit_frame, max_wating_ms,bndy_cnt);
 }
@@ -216,7 +216,7 @@ u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame)
 	return is_cmd_bndy;
 }
 
-void rtw_IOL_cmd_buf_dump(ADAPTER *Adapter,int buf_len,u8 *pbuf)
+void rtw_IOL_cmd_buf_dump(struct adapter  *Adapter,int buf_len,u8 *pbuf)
 {
 	int i;
 	int j=1;

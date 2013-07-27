@@ -817,7 +817,7 @@ enum ant_div_type {
 // 2011/09/22 MH Copy from SD4 defined structure. We use to support PHY DM integration.
 struct odm_dm_struct {
 	//	Add for different team use temporarily
-	PADAPTER		Adapter;		// For CE/NIC team
+	struct adapter *		Adapter;		// For CE/NIC team
 	struct rtl8192cd_priv *priv;			// For AP/ADSL team
 	// WHen you use Adapter or priv pointer, you must make sure the pointer is ready.
 	bool			odm_ready;
@@ -873,7 +873,7 @@ struct odm_dm_struct {
 
 	u1Byte			u1Byte_temp;
 	bool			bool_temp;
-	PADAPTER		PADAPTER_temp;
+	struct adapter *adapter_temp;
 
 	// MAC PHY Mode SMSP/DMSP/DMDP = 0/1/2
 	u1Byte			*pMacPhyMode;
@@ -896,7 +896,7 @@ struct odm_dm_struct {
 	// Common info for 92D DMSP
 
 	bool			*pbGetValueFromOtherMac;
-	PADAPTER		*pBuddyAdapter;
+	struct adapter **pBuddyAdapter;
 	bool			*pbMasterOfDMSP; //MAC0: master, MAC1: slave
 	// Common info for Status
 	bool			*pbScanInProcess;

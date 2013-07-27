@@ -33,7 +33,7 @@
 #include <rtl8188e_hal.h>
 
 
-void rtl8188eu_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
+void rtl8188eu_init_recvbuf(struct adapter *padapter, struct recv_buf *precvbuf)
 {
 
 	precvbuf->transfer_len = 0;
@@ -50,7 +50,7 @@ void rtl8188eu_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
 
 }
 
-int	rtl8188eu_init_recv_priv(_adapter *padapter)
+int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 {
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 	int	i, res = _SUCCESS;
@@ -138,7 +138,7 @@ exit:
 
 }
 
-void rtl8188eu_free_recv_priv (_adapter *padapter)
+void rtl8188eu_free_recv_priv (struct adapter *padapter)
 {
 	int	i;
 	struct recv_buf	*precvbuf;

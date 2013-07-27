@@ -128,7 +128,7 @@ static int skb_pull_and_merge(struct sk_buff *skb, unsigned char *src, int len)
 	return 0;
 }
 
-static __inline__ unsigned long __nat25_timeout(_adapter *priv)
+static __inline__ unsigned long __nat25_timeout(struct adapter *priv)
 {
 	unsigned long timeout;
 
@@ -138,7 +138,7 @@ static __inline__ unsigned long __nat25_timeout(_adapter *priv)
 }
 
 
-static __inline__ int  __nat25_has_expired(_adapter *priv,
+static __inline__ int  __nat25_has_expired(struct adapter *priv,
 				struct nat25_network_db_entry *fdb)
 {
 	if (time_before_eq(fdb->ageing_timer, __nat25_timeout(priv)))
@@ -355,7 +355,7 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 	}
 }
 
-static __inline__ void __network_hash_link(_adapter *priv,
+static __inline__ void __network_hash_link(struct adapter *priv,
 				struct nat25_network_db_entry *ent, int hash)
 {
 	/*  Caller must _enter_critical_bh already! */
@@ -388,7 +388,7 @@ static __inline__ void __network_hash_unlink(struct nat25_network_db_entry *ent)
 }
 
 
-static int __nat25_db_network_lookup_and_replace(_adapter *priv,
+static int __nat25_db_network_lookup_and_replace(struct adapter *priv,
 				struct sk_buff *skb, unsigned char *networkAddr)
 {
 	struct nat25_network_db_entry *db;
@@ -443,7 +443,7 @@ static int __nat25_db_network_lookup_and_replace(_adapter *priv,
 	return 0;
 }
 
-static void __nat25_db_network_insert(_adapter *priv,
+static void __nat25_db_network_insert(struct adapter *priv,
 				unsigned char *macAddr, unsigned char *networkAddr)
 {
 	struct nat25_network_db_entry *db;
@@ -483,7 +483,7 @@ static void __nat25_db_network_insert(_adapter *priv,
 }
 
 
-static void __nat25_db_print(_adapter *priv)
+static void __nat25_db_print(struct adapter *priv)
 {
 }
 
@@ -491,7 +491,7 @@ static void __nat25_db_print(_adapter *priv)
  *	NAT2.5 interface
  */
 
-void nat25_db_cleanup(_adapter *priv)
+void nat25_db_cleanup(struct adapter *priv)
 {
 	int i;
 	unsigned long irqL;
@@ -522,7 +522,7 @@ void nat25_db_cleanup(_adapter *priv)
 }
 
 
-void nat25_db_expire(_adapter *priv)
+void nat25_db_expire(struct adapter *priv)
 {
 	int i;
 	unsigned long irqL;
@@ -559,7 +559,7 @@ void nat25_db_expire(_adapter *priv)
 	_exit_critical_bh(&priv->br_ext_lock, &irqL);
 }
 
-int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
+int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 {
 	unsigned short protocol;
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
@@ -1247,7 +1247,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 	return -1;
 }
 
-int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
+int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 {
 	if (!(skb->data[0] & 1)) {
 		int is_vlan_tag=0, i, retval=0;
@@ -1334,7 +1334,7 @@ struct dhcpMessage {
 	u_int8_t options[308]; /* 312 - cookie */
 };
 
-void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb)
+void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 {
 	if (skb == NULL)
 		return;
@@ -1380,7 +1380,7 @@ void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb)
 }
 
 
-void *scdb_findEntry(_adapter *priv, unsigned char *macAddr,
+void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
 				unsigned char *ipAddr)
 {
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];

@@ -29,43 +29,43 @@
 
 u1Byte ODM_Read1Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	return rtw_read8(Adapter,RegAddr);
 }
 
 u2Byte ODM_Read2Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	return rtw_read16(Adapter,RegAddr);
 }
 
 u4Byte ODM_Read4Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	return rtw_read32(Adapter,RegAddr);
 }
 
 void ODM_Write1Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u1Byte Data)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	rtw_write8(Adapter,RegAddr, Data);
 }
 
 void ODM_Write2Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u2Byte Data)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	rtw_write16(Adapter,RegAddr, Data);
 }
 
 void ODM_Write4Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte Data)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	rtw_write32(Adapter,RegAddr, Data);
 }
 
 void ODM_SetMACReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
 }
 
@@ -76,7 +76,7 @@ ODM_GetMACReg(
 		u4Byte BitMask
 	)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
 }
 
@@ -88,7 +88,7 @@ ODM_SetBBReg(
 		u4Byte Data
 	)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
 }
 
@@ -99,7 +99,7 @@ ODM_GetBBReg(
 		u4Byte BitMask
 	)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
 }
 
@@ -113,7 +113,7 @@ ODM_SetRFReg(
 		u4Byte Data
 	)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	PHY_SetRFReg(Adapter, (enum rf_radio_path)eRFPath, RegAddr, BitMask, Data);
 }
 
@@ -126,7 +126,7 @@ ODM_GetRFReg(
 		u4Byte BitMask
 	)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	return PHY_QueryRFReg(Adapter, (enum rf_radio_path)eRFPath, RegAddr, BitMask);
 }
 
@@ -249,7 +249,7 @@ void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTime
 			 void *CallBackFunc, void *pContext,
 			 const char *szID)
 {
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter * Adapter = pDM_Odm->Adapter;
 	_init_timer(pTimer,Adapter->pnetdev,CallBackFunc,pDM_Odm);
 }
 

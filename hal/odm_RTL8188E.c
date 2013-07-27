@@ -50,7 +50,7 @@ odm_RX_HWAntDivInit(
 )
 {
 	u4Byte	value32;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *		Adapter = pDM_Odm->Adapter;
         #if (MP_DRIVER == 1)
         if (*(pDM_Odm->mp_mode) == 1)
 	{
@@ -85,7 +85,7 @@ odm_TRX_HWAntDivInit(
 )
 {
 	u4Byte	value32;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *		Adapter = pDM_Odm->Adapter;
 
         #if (MP_DRIVER == 1)
 	if (*(pDM_Odm->mp_mode) == 1)
@@ -135,7 +135,7 @@ odm_FastAntTrainingInit(
 	u4Byte	value32, i;
 	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u4Byte	AntCombination = 2;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *		Adapter = pDM_Odm->Adapter;
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit()\n"));
 
 #if (MP_DRIVER == 1)
@@ -509,7 +509,7 @@ odm_DynamicPrimaryCCA(
 			struct odm_dm_struct *	pDM_Odm
 	)
 {
-	PADAPTER	Adapter =  pDM_Odm->Adapter;	/*  for NIC */
+	struct adapter *	Adapter =  pDM_Odm->Adapter;	/*  for NIC */
 	struct rtl8192cd_priv *priv = pDM_Odm->priv;	/*  for AP */
 
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);

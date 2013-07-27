@@ -120,10 +120,10 @@ struct eeprom_priv {
 	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512];
 };
 
-extern void eeprom_write16(_adapter *padapter, u16 reg, u16 data);
-extern u16 eeprom_read16(_adapter *padapter, u16 reg);
-extern void read_eeprom_content(_adapter *padapter);
-extern void eeprom_read_sz(_adapter * padapter, u16 reg,u8* data, u32 sz);
-extern void read_eeprom_content_by_attrib(_adapter *	padapter	);
+extern void eeprom_write16(struct adapter *padapter, u16 reg, u16 data);
+extern u16 eeprom_read16(struct adapter *padapter, u16 reg);
+extern void read_eeprom_content(struct adapter *padapter);
+extern void eeprom_read_sz(struct adapter * padapter, u16 reg,u8* data, u32 sz);
+extern void read_eeprom_content_by_attrib(struct adapter *	padapter	);
 
 #endif  //__RTL871X_EEPROM_H__

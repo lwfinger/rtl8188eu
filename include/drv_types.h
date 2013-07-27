@@ -38,11 +38,7 @@ enum _NIC_VERSION {
 	RTL8712_NIC,
 	RTL8713_NIC,
 	RTL8716_NIC
-
 };
-
-
-typedef struct _ADAPTER _adapter, ADAPTER,*PADAPTER;
 
 #ifdef CONFIG_80211N_HT
 #include <rtw_ht.h>
@@ -182,8 +178,8 @@ struct registry_priv
 
 struct dvobj_priv
 {
-	_adapter *if1;
-	_adapter *if2;
+	struct adapter *if1;
+	struct adapter *if2;
 
 	//For 92D, DMDP have 2 interface.
 	u8	InterfaceNumber;
@@ -240,7 +236,7 @@ typedef enum _DRIVER_STATE{
 	DRIVER_REPLACE_DONGLE = 2,
 }DRIVER_STATE;
 
-struct _ADAPTER{
+struct adapter {
 	int	DriverState;// for disable driver using module, use dongle to replace module.
 	int	pid[3];//process id from UI, 0:wps, 1:hostapd, 2:dhcpcd
 	int	bDongle;//build-in module or external dongle
@@ -299,8 +295,8 @@ struct _ADAPTER{
 	void *evtThread;
 	void *xmitThread;
 	void *recvThread;
-	void (*intf_start)(_adapter * adapter);
-	void (*intf_stop)(_adapter * adapter);
+	void (*intf_start)(struct adapter * adapter);
+	void (*intf_stop)(struct adapter * adapter);
 	struct  net_device *pnetdev;
 
 	// used by rtw_rereg_nd_name related function
@@ -330,7 +326,7 @@ struct _ADAPTER{
 	//	The driver will show the current P2P status when the upper application reads it.
 	u8 bShowGetP2PState;
 #endif
-	_adapter *pbuddy_adapter;
+	struct adapter *pbuddy_adapter;
 
 	struct mutex *hw_init_mutex;
 
@@ -352,7 +348,7 @@ struct _ADAPTER{
 
 #define adapter_to_dvobj(adapter) (adapter->dvobj)
 
-int rtw_handle_dualmac(_adapter *adapter, bool init);
+int rtw_handle_dualmac(struct adapter *adapter, bool init);
 
 __inline static u8 *myid(struct eeprom_priv *peepriv)
 {

@@ -26,7 +26,7 @@
 #include <rtl8188e_dm.h>
 
 
-s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
+s32 Hal_SetPowerTracking(struct adapter * padapter, u8 enable)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
@@ -54,7 +54,7 @@ s32 Hal_SetPowerTracking(PADAPTER padapter, u8 enable)
 	return _SUCCESS;
 }
 
-void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable)
+void Hal_GetPowerTracking(struct adapter * padapter, u8 *enable)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
@@ -65,7 +65,7 @@ void Hal_GetPowerTracking(PADAPTER padapter, u8 *enable)
 	*enable = pDM_Odm->RFCalibrateInfo.TxPowerTrackControl;
 }
 
-static void Hal_disable_dm(PADAPTER padapter)
+static void Hal_disable_dm(struct adapter * padapter)
 {
 	u8 v8;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
@@ -96,7 +96,7 @@ static void Hal_disable_dm(PADAPTER padapter)
  *
  * Overview:	Change RF Setting when we siwthc channel/rate/BW for MP.
  *
- * Input:       	PADAPTER				pAdapter
+ * Input:       	struct adapter *				pAdapter
  *
  * Output:      NONE
  *
@@ -108,7 +108,7 @@ static void Hal_disable_dm(PADAPTER padapter)
  * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
-void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
+void Hal_mpt_SwitchRfSetting(struct adapter * pAdapter)
 {
 	/* struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter); */
 	struct mp_priv	*pmp = &pAdapter->mppriv;
@@ -128,7 +128,7 @@ void Hal_mpt_SwitchRfSetting(PADAPTER pAdapter)
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
 
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
+void Hal_MPT_CCKTxPowerAdjust(struct adapter * Adapter, bool bInCH14)
 {
 	u32		TempVal = 0, TempVal2 = 0, TempVal3 = 0;
 	u32		CurrCCKSwingVal = 0, CCKSwingIndex = 12;
@@ -204,7 +204,7 @@ void Hal_MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 	write_bbreg(Adapter, rCCK0_DebugPort, bMaskLWord, TempVal3);
 }
 
-void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
+void Hal_MPT_CCKTxPowerAdjustbyIndex(struct adapter * pAdapter, bool beven)
 {
 	s32		TempCCk;
 	u8		CCK_index, CCK_index_old;
@@ -290,7 +290,7 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(PADAPTER pAdapter, bool beven)
  *	Use H2C command to change channel,
  *	not only modify rf register, but also other setting need to be done.
  */
-void Hal_SetChannel(PADAPTER pAdapter)
+void Hal_SetChannel(struct adapter * pAdapter)
 {
 	u8		eRFPath;
 
@@ -330,7 +330,7 @@ void Hal_SetChannel(PADAPTER pAdapter)
  * Notice
  *	Switch bandwitdth may change center frequency(channel)
  */
-void Hal_SetBandwidth(PADAPTER pAdapter)
+void Hal_SetBandwidth(struct adapter * pAdapter)
 {
 	struct mp_priv *pmp = &pAdapter->mppriv;
 
@@ -339,7 +339,7 @@ void Hal_SetBandwidth(PADAPTER pAdapter)
 	Hal_mpt_SwitchRfSetting(pAdapter);
 }
 
-void Hal_SetCCKTxPower(PADAPTER pAdapter, u8 *TxPower)
+void Hal_SetCCKTxPower(struct adapter * pAdapter, u8 *TxPower)
 {
 	u32 tmpval = 0;
 
@@ -359,7 +359,7 @@ void Hal_SetCCKTxPower(PADAPTER pAdapter, u8 *TxPower)
 		  TxPower[RF_PATH_A], TxPower[RF_PATH_B]));
 }
 
-void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower)
+void Hal_SetOFDMTxPower(struct adapter * pAdapter, u8 *TxPower)
 {
 	u32 TxAGC = 0;
 	u8 tmpval = 0;
@@ -391,7 +391,7 @@ void Hal_SetOFDMTxPower(PADAPTER pAdapter, u8 *TxPower)
 
 }
 
-void Hal_SetAntennaPathPower(PADAPTER pAdapter)
+void Hal_SetAntennaPathPower(struct adapter * pAdapter)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 	u8 TxPowerLevel[MAX_RF_PATH_NUMS];
@@ -430,7 +430,7 @@ void Hal_SetAntennaPathPower(PADAPTER pAdapter)
 	}
 }
 
-void Hal_SetTxPower(PADAPTER pAdapter)
+void Hal_SetTxPower(struct adapter * pAdapter)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 	u8 TxPower = pAdapter->mppriv.txpoweridx;
@@ -473,12 +473,12 @@ void Hal_SetTxPower(PADAPTER pAdapter)
 	}
 }
 
-void Hal_SetDataRate(PADAPTER pAdapter)
+void Hal_SetDataRate(struct adapter * pAdapter)
 {
 	Hal_mpt_SwitchRfSetting(pAdapter);
 }
 
-void Hal_SetAntenna(PADAPTER pAdapter)
+void Hal_SetAntenna(struct adapter * pAdapter)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
@@ -639,7 +639,7 @@ void Hal_SetAntenna(PADAPTER pAdapter)
 	RT_TRACE(_module_mp_, _drv_notice_, ("-SwitchAntenna: finished\n"));
 }
 
-s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
+s32 Hal_SetThermalMeter(struct adapter * pAdapter, u8 target_ther)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 
@@ -665,13 +665,13 @@ s32 Hal_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 	return _SUCCESS;
 }
 
-void Hal_TriggerRFThermalMeter(PADAPTER pAdapter)
+void Hal_TriggerRFThermalMeter(struct adapter * pAdapter)
 {
 
 	_write_rfreg( pAdapter, RF_PATH_A , RF_T_METER_88E , BIT17 |BIT16 , 0x03 );
 }
 
-u8 Hal_ReadRFThermalMeter(PADAPTER pAdapter)
+u8 Hal_ReadRFThermalMeter(struct adapter * pAdapter)
 {
 	u32 ThermalValue = 0;
 
@@ -679,14 +679,14 @@ u8 Hal_ReadRFThermalMeter(PADAPTER pAdapter)
 	return (u8)ThermalValue;
 }
 
-void Hal_GetThermalMeter(PADAPTER pAdapter, u8 *value)
+void Hal_GetThermalMeter(struct adapter * pAdapter, u8 *value)
 {
 	Hal_TriggerRFThermalMeter(pAdapter);
 	rtw_msleep_os(1000);
 	*value = Hal_ReadRFThermalMeter(pAdapter);
 }
 
-void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
+void Hal_SetSingleCarrierTx(struct adapter * pAdapter, u8 bStart)
 {
     struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 	pAdapter->mppriv.MptCtx.bSingleCarrier = bStart;
@@ -734,7 +734,7 @@ void Hal_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 }
 
 
-void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
+void Hal_SetSingleToneTx(struct adapter * pAdapter, u8 bStart)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	bool		is92C = IS_92C_SERIAL(pHalData->VersionID);
@@ -834,7 +834,7 @@ void Hal_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 
 
 
-void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
+void Hal_SetCarrierSuppressionTx(struct adapter * pAdapter, u8 bStart)
 {
 	pAdapter->mppriv.MptCtx.bCarrierSuppression = bStart;
 	if (bStart) /*  Start Carrier Suppression. */
@@ -882,7 +882,7 @@ void Hal_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
 	}
 }
 
-void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
+void Hal_SetCCKContinuousTx(struct adapter * pAdapter, u8 bStart)
 {
 	u32 cckrate;
 
@@ -930,7 +930,7 @@ void Hal_SetCCKContinuousTx(PADAPTER pAdapter, u8 bStart)
 	pAdapter->mppriv.MptCtx.bOfdmContTx = false;
 }/* mpt_StartCckContTx */
 
-void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
+void Hal_SetOFDMContinuousTx(struct adapter * pAdapter, u8 bStart)
 {
     struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
@@ -976,7 +976,7 @@ void Hal_SetOFDMContinuousTx(PADAPTER pAdapter, u8 bStart)
 	pAdapter->mppriv.MptCtx.bOfdmContTx = bStart;
 }/* mpt_StartOfdmContTx */
 
-void Hal_SetContinuousTx(PADAPTER pAdapter, u8 bStart)
+void Hal_SetContinuousTx(struct adapter * pAdapter, u8 bStart)
 {
 	RT_TRACE(_module_mp_, _drv_info_,
 		 ("SetContinuousTx: rate:%d\n", pAdapter->mppriv.rateidx));

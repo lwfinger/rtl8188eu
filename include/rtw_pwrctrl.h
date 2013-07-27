@@ -263,29 +263,29 @@ struct pwrctrl_priv
 #define rtw_set_pwr_state_check_timer(pwrctrlpriv) \
 	_rtw_set_pwr_state_check_timer((pwrctrlpriv), (pwrctrlpriv)->pwr_state_check_interval)
 
-extern void rtw_init_pwrctrl_priv(_adapter *adapter);
-extern void rtw_free_pwrctrl_priv(_adapter * adapter);
+extern void rtw_init_pwrctrl_priv(struct adapter *adapter);
+extern void rtw_free_pwrctrl_priv(struct adapter * adapter);
 
-extern void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode);
-extern void rtw_set_rpwm(_adapter * padapter, u8 val8);
-extern void LeaveAllPowerSaveMode(PADAPTER Adapter);
-void ips_enter(_adapter * padapter);
-int ips_leave(_adapter * padapter);
+extern void rtw_set_ps_mode(struct adapter * padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode);
+extern void rtw_set_rpwm(struct adapter * padapter, u8 val8);
+extern void LeaveAllPowerSaveMode(struct adapter * Adapter);
+void ips_enter(struct adapter * padapter);
+int ips_leave(struct adapter * padapter);
 
-void rtw_ps_processor(_adapter*padapter);
+void rtw_ps_processor(struct adapter*padapter);
 
-enum rt_rf_power_state RfOnOffDetect(PADAPTER pAdapter );
+enum rt_rf_power_state RfOnOffDetect(struct adapter * pAdapter );
 
-s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms);
-void LPS_Enter(PADAPTER padapter);
-void LPS_Leave(PADAPTER padapter);
+s32 LPS_RF_ON_check(struct adapter * padapter, u32 delay_ms);
+void LPS_Enter(struct adapter * padapter);
+void LPS_Leave(struct adapter * padapter);
 
-u8 rtw_interface_ps_func(_adapter *padapter,enum hal_intf_ps_func efunc_id,u8* val);
-void rtw_set_ips_deny(_adapter *padapter, u32 ms);
-int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller);
+u8 rtw_interface_ps_func(struct adapter *padapter,enum hal_intf_ps_func efunc_id,u8* val);
+void rtw_set_ips_deny(struct adapter *padapter, u32 ms);
+int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *caller);
 #define rtw_pwr_wakeup(adapter) _rtw_pwr_wakeup(adapter, RTW_PWR_STATE_CHK_INTERVAL, __func__)
 #define rtw_pwr_wakeup_ex(adapter, ips_deffer_ms) _rtw_pwr_wakeup(adapter, ips_deffer_ms, __func__)
-int rtw_pm_set_ips(_adapter *padapter, u8 mode);
-int rtw_pm_set_lps(_adapter *padapter, u8 mode);
+int rtw_pm_set_ips(struct adapter *padapter, u8 mode);
+int rtw_pm_set_lps(struct adapter *padapter, u8 mode);
 
 #endif  //__RTL871X_PWRCTRL_H_

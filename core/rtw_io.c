@@ -52,7 +52,7 @@ jackson@realtek.com.tw
 #define rtw_cpu_to_le32(val)		cpu_to_le32(val)
 
 
-u8 _rtw_read8(_adapter *adapter, u32 addr)
+u8 _rtw_read8(struct adapter *adapter, u32 addr)
 {
 	u8 r_val;
 	/* struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue; */
@@ -67,7 +67,7 @@ u8 _rtw_read8(_adapter *adapter, u32 addr)
 	return r_val;
 }
 
-u16 _rtw_read16(_adapter *adapter, u32 addr)
+u16 _rtw_read16(struct adapter *adapter, u32 addr)
 {
 	u16 r_val;
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -81,7 +81,7 @@ _func_exit_;
 	return r_val;
 }
 
-u32 _rtw_read32(_adapter *adapter, u32 addr)
+u32 _rtw_read32(struct adapter *adapter, u32 addr)
 {
 	u32 r_val;
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -95,7 +95,7 @@ _func_exit_;
 	return r_val;
 }
 
-int _rtw_write8(_adapter *adapter, u32 addr, u8 val)
+int _rtw_write8(struct adapter *adapter, u32 addr, u8 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
@@ -110,7 +110,7 @@ int _rtw_write8(_adapter *adapter, u32 addr, u8 val)
 	return RTW_STATUS_CODE(ret);
 }
 
-int _rtw_write16(_adapter *adapter, u32 addr, u16 val)
+int _rtw_write16(struct adapter *adapter, u32 addr, u16 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
@@ -124,7 +124,7 @@ int _rtw_write16(_adapter *adapter, u32 addr, u16 val)
 
 	return RTW_STATUS_CODE(ret);
 }
-int _rtw_write32(_adapter *adapter, u32 addr, u32 val)
+int _rtw_write32(struct adapter *adapter, u32 addr, u32 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
@@ -139,7 +139,7 @@ int _rtw_write32(_adapter *adapter, u32 addr, u32 val)
 	return RTW_STATUS_CODE(ret);
 }
 
-int _rtw_writeN(_adapter *adapter, u32 addr ,u32 length , u8 *pdata)
+int _rtw_writeN(struct adapter *adapter, u32 addr ,u32 length , u8 *pdata)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
         struct	intf_hdl	*pintfhdl = (struct intf_hdl*)(&(pio_priv->intf));
@@ -153,7 +153,7 @@ int _rtw_writeN(_adapter *adapter, u32 addr ,u32 length , u8 *pdata)
 
 	return RTW_STATUS_CODE(ret);
 }
-int _rtw_write8_async(_adapter *adapter, u32 addr, u8 val)
+int _rtw_write8_async(struct adapter *adapter, u32 addr, u8 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
@@ -168,7 +168,7 @@ int _rtw_write8_async(_adapter *adapter, u32 addr, u8 val)
 	return RTW_STATUS_CODE(ret);
 }
 
-int _rtw_write16_async(_adapter *adapter, u32 addr, u16 val)
+int _rtw_write16_async(struct adapter *adapter, u32 addr, u16 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
@@ -183,7 +183,7 @@ _func_exit_;
 	return RTW_STATUS_CODE(ret);
 }
 
-int _rtw_write32_async(_adapter *adapter, u32 addr, u32 val)
+int _rtw_write32_async(struct adapter *adapter, u32 addr, u32 val)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
@@ -198,7 +198,7 @@ _func_exit_;
 	return RTW_STATUS_CODE(ret);
 }
 
-void _rtw_read_mem(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
+void _rtw_read_mem(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 {
 	void (*_read_mem)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -220,7 +220,7 @@ void _rtw_read_mem(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 }
 
-void _rtw_write_mem(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
+void _rtw_write_mem(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 {
 	void (*_write_mem)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -236,7 +236,7 @@ void _rtw_write_mem(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 }
 
-void _rtw_read_port(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
+void _rtw_read_port(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 {
 	u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -258,7 +258,7 @@ void _rtw_read_port(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 }
 
-void _rtw_read_port_cancel(_adapter *adapter)
+void _rtw_read_port_cancel(struct adapter *adapter)
 {
 	void (*_read_port_cancel)(struct intf_hdl *pintfhdl);
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -271,7 +271,7 @@ void _rtw_read_port_cancel(_adapter *adapter)
 
 }
 
-u32 _rtw_write_port(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
+u32 _rtw_write_port(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 {
 	u32 (*_write_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -289,7 +289,7 @@ u32 _rtw_write_port(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	return ret;
 }
 
-u32 _rtw_write_port_and_wait(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem, int timeout_ms)
+u32 _rtw_write_port_and_wait(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem, int timeout_ms)
 {
 	int ret = _SUCCESS;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pmem;
@@ -306,7 +306,7 @@ u32 _rtw_write_port_and_wait(_adapter *adapter, u32 addr, u32 cnt, u8 *pmem, int
 	 return ret;
 }
 
-void _rtw_write_port_cancel(_adapter *adapter)
+void _rtw_write_port_cancel(struct adapter *adapter)
 {
 	void (*_write_port_cancel)(struct intf_hdl *pintfhdl);
 	struct io_priv *pio_priv = &adapter->iopriv;
@@ -319,7 +319,7 @@ void _rtw_write_port_cancel(_adapter *adapter)
 
 }
 
-int rtw_init_io_priv(_adapter *padapter, void (*set_intf_ops)(struct _io_ops *pops))
+int rtw_init_io_priv(struct adapter *padapter, void (*set_intf_ops)(struct _io_ops *pops))
 {
 	struct io_priv	*piopriv = &padapter->iopriv;
 	struct intf_hdl *pintf = &piopriv->intf;
