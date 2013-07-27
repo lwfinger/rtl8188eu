@@ -18,7 +18,6 @@
 *
 ******************************************************************************/
 
-#if (RTL8188E_SUPPORT == 1)
 #ifndef __INC_FW_8188E_HW_IMG_H
 #define __INC_FW_8188E_HW_IMG_H
 
@@ -31,6 +30,5 @@
 ******************************************************************************/
 #define ArrayLength_8188E_FW_WoWLAN 15764
 extern const u8 Array_8188E_FW_WoWLAN[ArrayLength_8188E_FW_WoWLAN];
-#endif
 
-#endif // end of HWIMG_SUPPORT
+#endif

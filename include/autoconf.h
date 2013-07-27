@@ -40,16 +40,6 @@
 #define CONFIG_BR_EXT_BRNAME	"br0"
 
 /*
- * Outsource  Related Config
- */
-
-#define RTL8188EE_SUPPORT				0
-#define RTL8188EU_SUPPORT				1
-#define RTL8188ES_SUPPORT				0
-#define RTL8188E_SUPPORT				(RTL8188EE_SUPPORT|RTL8188EU_SUPPORT|RTL8188ES_SUPPORT)
-#define RTL8188E_FOR_TEST_CHIP			0
-
-/*
  * Debug Related Config
  */
 #define DBG	1

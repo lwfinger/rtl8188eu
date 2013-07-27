@@ -20,8 +20,6 @@
 #ifndef __INC_ODM_REGCONFIG_H_8188E
 #define __INC_ODM_REGCONFIG_H_8188E
 
-#if (RTL8188E_SUPPORT == 1)
-
 void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr, u4Byte Data,
 			   enum ODM_RF_RADIO_PATH  RF_PATH, u4Byte RegAddr);
 
@@ -70,4 +68,3 @@ odm_ConfigBB_PHY_8188E(
     	u4Byte		Data
     );
 #endif
-#endif // end of SUPPORT

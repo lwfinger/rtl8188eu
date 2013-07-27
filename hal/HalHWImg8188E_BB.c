@@ -22,7 +22,6 @@
 
 #include <rtw_iol.h>
 
-#if (RTL8188E_SUPPORT == 1)
 static bool
 CheckCondition(
     const u4Byte  Condition,
@@ -792,5 +791,3 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 	}
 
 }
-
-#endif /*  end of HWIMG_SUPPORT */

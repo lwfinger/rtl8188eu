@@ -20,8 +20,6 @@
 
 #include "odm_precomp.h"
 
-#if (RTL8188E_SUPPORT == 1)
-
 void
 odm_ConfigRFReg_8188E(
 		struct odm_dm_struct *			pDM_Odm,
@@ -189,4 +187,3 @@ odm_ConfigBB_PHY_8188E(
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_TRACE, ("===> ODM_ConfigBBWithHeaderFile: [PHY_REG] %08X %08X\n", Addr, Data));
 	}
 }
-#endif

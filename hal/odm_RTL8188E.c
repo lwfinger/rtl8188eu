@@ -24,30 +24,20 @@
 
 #include "odm_precomp.h"
 
-#if (RTL8188E_SUPPORT == 1)
-
-void
-ODM_DIG_LowerBound_88E(
-			struct odm_dm_struct *	pDM_Odm
-)
+void ODM_DIG_LowerBound_88E(struct odm_dm_struct *	pDM_Odm)
 {
 	struct rtw_dig *		pDM_DigTable = &pDM_Odm->DM_DigTable;
 
 	if (pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
 	{
 		pDM_DigTable->rx_gain_range_min = (u1Byte) pDM_DigTable->AntDiv_RSSI_max;
-		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("ODM_DIG_LowerBound_88E(): pDM_DigTable->AntDiv_RSSI_max=%d\n",pDM_DigTable->AntDiv_RSSI_max));
+		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,
+			     ("ODM_DIG_LowerBound_88E(): pDM_DigTable->AntDiv_RSSI_max=%d\n",pDM_DigTable->AntDiv_RSSI_max));
 	}
 	/* If only one Entry connected */
-
-
-
 }
 
-static void
-odm_RX_HWAntDivInit(
-			struct odm_dm_struct *	pDM_Odm
-)
+static void odm_RX_HWAntDivInit(struct odm_dm_struct *	pDM_Odm)
 {
 	u4Byte	value32;
 	struct adapter *Adapter = pDM_Odm->Adapter;
@@ -78,16 +68,12 @@ odm_RX_HWAntDivInit(
 	ODM_SetBBReg(pDM_Odm, ODM_REG_ANT_MAPPING1_11N , 0xFFFF, 0x0201);	/* antenna mapping table */
 }
 
-static void
-odm_TRX_HWAntDivInit(
-			struct odm_dm_struct *	pDM_Odm
-)
+static void odm_TRX_HWAntDivInit(struct odm_dm_struct *	pDM_Odm)
 {
 	u4Byte	value32;
 	struct adapter *		Adapter = pDM_Odm->Adapter;
 
-	if (*(pDM_Odm->mp_mode) == 1)
-        {
+	if (*(pDM_Odm->mp_mode) == 1) {
 		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
 		ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0); /*  disable HW AntDiv */
 		ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT5|BIT4|BIT3, 0); /* Default RX   (0/1) */
@@ -122,10 +108,7 @@ odm_TRX_HWAntDivInit(
 		ODM_SetBBReg(pDM_Odm, ODM_REG_ANT_MAPPING1_11N , bMaskDWord, 0x0201);	/* Reg914=3'b010, Reg915=3'b001 */
 }
 
-static void
-odm_FastAntTrainingInit(
-			struct odm_dm_struct *	pDM_Odm
-)
+static void odm_FastAntTrainingInit(struct odm_dm_struct *pDM_Odm)
 {
 	u4Byte	value32, i;
 	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -133,8 +116,7 @@ odm_FastAntTrainingInit(
 	struct adapter *		Adapter = pDM_Odm->Adapter;
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit()\n"));
 
-	if (*(pDM_Odm->mp_mode) == 1)
-	{
+	if (*(pDM_Odm->mp_mode) == 1) {
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("pDM_Odm->AntDivType: %d\n", pDM_Odm->AntDivType));
 		 return;
 	}
@@ -177,9 +159,7 @@ odm_FastAntTrainingInit(
 			ODM_SetBBReg(pDM_Odm, 0x914 , bMaskByte0, 1);
 			ODM_SetBBReg(pDM_Odm, 0x914 , bMaskByte1, 2);
 		}
-	}
-	else if (AntCombination == 7)
-	{
+	} else if (AntCombination == 7) {
 		if (!pDM_Odm->bIsMPChip) /* testchip */
 		{
 			ODM_SetBBReg(pDM_Odm, 0x858 , BIT10|BIT9|BIT8, 0);	/* Reg858[10:8]=3'b000 */
@@ -216,10 +196,7 @@ odm_FastAntTrainingInit(
 	ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 1);	/* RegC50[7]=1'b1		enable HW AntDiv */
 }
 
-void
-ODM_AntennaDiversityInit_88E(
-			struct odm_dm_struct *	pDM_Odm
-)
+void ODM_AntennaDiversityInit_88E(struct odm_dm_struct *pDM_Odm)
 {
 	if (pDM_Odm->SupportICType != ODM_RTL8188E)
 		return;
@@ -235,9 +212,7 @@ ODM_AntennaDiversityInit_88E(
 		odm_FastAntTrainingInit(pDM_Odm);
 }
 
-
-void
-ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant)
+void ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant)
 {
 	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u4Byte	DefaultAnt, OptionalAnt;
@@ -276,8 +251,7 @@ ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant)
 }
 
 
-static void
-odm_UpdateTxAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant, u4Byte MacId)
+static void odm_UpdateTxAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant, u4Byte MacId)
 {
 	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u1Byte	TargetAnt;
@@ -297,69 +271,43 @@ odm_UpdateTxAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant, u4Byte MacId)
 							pDM_FatTable->antsel_c[MacId] , pDM_FatTable->antsel_b[MacId] , pDM_FatTable->antsel_a[MacId] ));
 }
 
-void
-ODM_SetTxAntByTxInfo_88E(
-			struct odm_dm_struct *	pDM_Odm,
-			pu1Byte			pDesc,
-			u1Byte			macId
-	)
+void ODM_SetTxAntByTxInfo_88E(struct odm_dm_struct *pDM_Odm, pu1Byte pDesc, u1Byte macId)
 {
 	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
 
-	if ((pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)||(pDM_Odm->AntDivType == CG_TRX_SMART_ANTDIV))
-	{
+	if ((pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)||(pDM_Odm->AntDivType == CG_TRX_SMART_ANTDIV)) {
 		SET_TX_DESC_ANTSEL_A_88E(pDesc, pDM_FatTable->antsel_a[macId]);
 		SET_TX_DESC_ANTSEL_B_88E(pDesc, pDM_FatTable->antsel_b[macId]);
 		SET_TX_DESC_ANTSEL_C_88E(pDesc, pDM_FatTable->antsel_c[macId]);
 	}
 }
 
-void
-ODM_AntselStatistics_88E(
-			struct odm_dm_struct *	pDM_Odm,
-			u1Byte			antsel_tr_mux,
-			u4Byte			MacId,
-			u1Byte			RxPWDBAll
-)
+void ODM_AntselStatistics_88E(struct odm_dm_struct *pDM_Odm, u1Byte antsel_tr_mux, u4Byte MacId, u1Byte RxPWDBAll)
 {
 	struct fast_ant_train *pDM_FatTable = &pDM_Odm->DM_FatTable;
-	if (pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
-	{
-		if (antsel_tr_mux == MAIN_ANT_CG_TRX)
-		{
+	if (pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV) {
+		if (antsel_tr_mux == MAIN_ANT_CG_TRX) {
 
 			pDM_FatTable->MainAnt_Sum[MacId]+=RxPWDBAll;
 			pDM_FatTable->MainAnt_Cnt[MacId]++;
-		}
-		else
-		{
+		} else {
 			pDM_FatTable->AuxAnt_Sum[MacId]+=RxPWDBAll;
 			pDM_FatTable->AuxAnt_Cnt[MacId]++;
 
 		}
-	}
-	else if (pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV)
-	{
-		if (antsel_tr_mux == MAIN_ANT_CGCS_RX)
-		{
-
+	} else if (pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV) {
+		if (antsel_tr_mux == MAIN_ANT_CGCS_RX) {
 			pDM_FatTable->MainAnt_Sum[MacId]+=RxPWDBAll;
 			pDM_FatTable->MainAnt_Cnt[MacId]++;
-		}
-		else
-		{
+		} else {
 			pDM_FatTable->AuxAnt_Sum[MacId]+=RxPWDBAll;
 			pDM_FatTable->AuxAnt_Cnt[MacId]++;
-
 		}
 	}
 }
 
 #define	TX_BY_REG	0
-static void
-odm_HWAntDiv(
-			struct odm_dm_struct *	pDM_Odm
-)
+static void odm_HWAntDiv(struct odm_dm_struct *pDM_Odm)
 {
 	u4Byte	i, MinRSSI=0xFF, AntDivMaxRSSI=0, MaxRSSI=0, LocalMinRSSI, LocalMaxRSSI;
 	u4Byte	Main_RSSI, Aux_RSSI;
@@ -370,11 +318,9 @@ odm_HWAntDiv(
 	bool	bPktFilterMacth = false;
 	struct sta_info *	pEntry;
 
-	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++)
-	{
+	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++) {
 		pEntry = pDM_Odm->pODM_StaInfo[i];
-		if (IS_STA_VALID(pEntry))
-		{
+		if (IS_STA_VALID(pEntry)) {
 			/* 2 Caculate RSSI per Antenna */
 			Main_RSSI = (pDM_FatTable->MainAnt_Cnt[i]!=0)?(pDM_FatTable->MainAnt_Sum[i]/pDM_FatTable->MainAnt_Cnt[i]):0;
 			Aux_RSSI = (pDM_FatTable->AuxAnt_Cnt[i]!=0)?(pDM_FatTable->AuxAnt_Sum[i]/pDM_FatTable->AuxAnt_Cnt[i]):0;
@@ -397,8 +343,7 @@ odm_HWAntDiv(
 				Aux_RSSI = Main_RSSI;
 
 			LocalMinRSSI = (Main_RSSI>Aux_RSSI)?Aux_RSSI:Main_RSSI;
-			if (LocalMinRSSI < MinRSSI)
-			{
+			if (LocalMinRSSI < MinRSSI) {
 				MinRSSI = LocalMinRSSI;
 				RxIdleAnt = TargetAnt;
 			}
@@ -792,27 +737,3 @@ odm_DynamicPrimaryCCA(
 
 	Client_40MHz_pre = Client_40MHz;
 }
-#else /* if (RTL8188E_SUPPORT == 1) */
-void
-ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *pDM_Odm, u1Byte Ant)
-{
-}
-void
-odm_PrimaryCCA_Init(
-			struct odm_dm_struct *	pDM_Odm)
-{
-}
-void
-odm_DynamicPrimaryCCA(
-			struct odm_dm_struct *	pDM_Odm
-	)
-{
-}
-bool
-ODM_DynamicPrimaryCCA_DupRTS(
-			struct odm_dm_struct *	pDM_Odm
-	)
-{
-	return false;
-}
-#endif /* if (RTL8188E_SUPPORT == 1) */

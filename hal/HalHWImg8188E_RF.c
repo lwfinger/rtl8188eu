@@ -22,12 +22,7 @@
 
 #include <rtw_iol.h>
 
-#if (RTL8188E_SUPPORT == 1)
-static bool
-CheckCondition(
-    const u4Byte  Condition,
-    const u4Byte  Hex
-    )
+static bool CheckCondition(const u4Byte  Condition, const u4Byte  Hex)
 {
     u4Byte _board     = (Hex & 0x000000FF);
     u4Byte _interface = (Hex & 0x0000FF00) >> 8;
@@ -303,5 +298,3 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm
 	}
 	return rst;
 }
-
-#endif /*  end of HWIMG_SUPPORT */

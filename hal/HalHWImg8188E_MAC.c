@@ -20,12 +20,8 @@
 
 #include "odm_precomp.h"
 #include <rtw_iol.h>
-#if (RTL8188E_SUPPORT == 1)
-static bool
-CheckCondition(
-    const u4Byte  Condition,
-    const u4Byte  Hex
-    )
+
+static bool CheckCondition(const u4Byte  Condition, const u4Byte  Hex)
 {
     u4Byte _board     = (Hex & 0x000000FF);
     u4Byte _interface = (Hex & 0x0000FF00) >> 8;
@@ -256,5 +252,3 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	}
 	return rst;
 }
-
-#endif /*  end of HWIMG_SUPPORT */

@@ -24,18 +24,7 @@
 
 #include "odm_precomp.h"
 
-#if (RTL8188E_FOR_TEST_CHIP > 1)
-    #define READ_AND_CONFIG(ic, txt) do {\
-                                            if (pDM_Odm->bIsMPChip)\
-						    READ_AND_CONFIG_MP(ic,txt);\
-                                            else\
-                                                READ_AND_CONFIG_TC(ic,txt);\
-                                     } while (0)
-#elif (RTL8188E_FOR_TEST_CHIP == 1)
-    #define READ_AND_CONFIG     READ_AND_CONFIG_TC
-#else
-    #define READ_AND_CONFIG     READ_AND_CONFIG_MP
-#endif
+#define READ_AND_CONFIG     READ_AND_CONFIG_MP
 
 #define READ_AND_CONFIG_MP(ic, txt) (ODM_ReadAndConfig##txt##ic(pDM_Odm))
 #define READ_AND_CONFIG_TC(ic, txt) (ODM_ReadAndConfig_TC##txt##ic(pDM_Odm))
@@ -851,27 +840,18 @@ ODM_ConfigRFWithHeaderFile(
 		enum ODM_RF_RADIO_PATH	eRFPath
    )
 {
-	/* RT_STATUS	rtStatus = RT_STATUS_SUCCESS; */
-
-
-    ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("===>ODM_ConfigRFWithHeaderFile\n"));
-#if (RTL8188E_SUPPORT == 1)
+	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("===>ODM_ConfigRFWithHeaderFile\n"));
 	if (pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 		if (eRFPath == ODM_RF_PATH_A)
 			READ_AND_CONFIG(8188E,_RadioA_1T_);
-		/* else if (eRFPath == ODM_RF_PATH_B) */
-		/* 	READ_AND_CONFIG(8188E,_RadioB_1T_); */
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> ODM_ConfigRFWithHeaderFile() Radio_A:Rtl8188ERadioA_1TArray\n"));
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> ODM_ConfigRFWithHeaderFile() Radio_B:Rtl8188ERadioB_1TArray\n"));
 	}
 
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_TRACE, ("ODM_ConfigRFWithHeaderFile: Radio No %x\n", eRFPath));
-	/* rtStatus = RT_STATUS_SUCCESS; */
-#endif
 	return HAL_STATUS_SUCCESS;
 }
-
 
 enum HAL_STATUS
 ODM_ConfigBBWithHeaderFile(
@@ -880,7 +860,6 @@ ODM_ConfigBBWithHeaderFile(
 	)
 {
 
-#if (RTL8188E_SUPPORT == 1)
     if (pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 
@@ -898,8 +877,6 @@ ODM_ConfigBBWithHeaderFile(
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> phy_ConfigBBWithHeaderFile() agc:Rtl8188EPHY_REG_PGArray\n"));
 		}
 	}
-#endif
-
 	return HAL_STATUS_SUCCESS;
 }
 
@@ -909,12 +886,7 @@ ODM_ConfigMACWithHeaderFile(
 	)
 {
 	u1Byte result = HAL_STATUS_SUCCESS;
-#if (RTL8188E_SUPPORT == 1)
 	if (pDM_Odm->SupportICType == ODM_RTL8188E)
-	{
 		result = READ_AND_CONFIG(8188E,_MAC_REG_);
-	}
-#endif
-
 	return result;
 }

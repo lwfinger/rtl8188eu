@@ -1556,11 +1556,7 @@ Current IOREG MAP
 
 #define EEPROM_Default_AntTxPowerDiff		0x0
 #define EEPROM_Default_TxPwDiff_CrystalCap	0x5
-#if (RTL8188ES_SUPPORT==1) //for SDIO
-#define EEPROM_Default_TxPowerLevel			0x25
-#else	//for USB/PCIE
 #define EEPROM_Default_TxPowerLevel			0x2A
-#endif
 
 #define EEPROM_Default_HT40_2SDiff			0x0
 #define EEPROM_Default_HT20_Diff			2	// HT20<->40 default Tx Power Index Difference

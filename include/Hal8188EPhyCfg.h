@@ -318,14 +318,8 @@ storePwrIndexDiffRateOffset(
 #define	SIC_CMD_WRITE			1
 #define	SIC_CMD_READ			2
 
-#if (RTL8188E_SUPPORT == 1)
 #define	SIC_CMD_REG			0x1EB		// 1byte
 #define	SIC_ADDR_REG			0x1E8		// 1b9~1ba, 2 bytes
 #define	SIC_DATA_REG			0x1EC		// 1bc~1bf
-#else
-#define	SIC_CMD_REG			0x1b8		// 1byte
-#define	SIC_ADDR_REG			0x1b9		// 1b9~1ba, 2 bytes
-#define	SIC_DATA_REG			0x1bc		// 1bc~1bf
-#endif
 
 #endif	// __INC_HAL8192CPHYCFG_H
