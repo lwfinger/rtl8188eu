@@ -55,13 +55,12 @@ jackson@realtek.com.tw
 u8 _rtw_read8(struct adapter *adapter, u32 addr)
 {
 	u8 r_val;
-	/* struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
-	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
+	struct	intf_hdl *pintfhdl = &(pio_priv->intf);
 	u8 (*_read8)(struct intf_hdl *pintfhdl, u32 addr);
+
 	_func_enter_;
 	_read8 = pintfhdl->io_ops._read8;
-
 	r_val = _read8(pintfhdl, addr);
 	_func_exit_;
 	return r_val;
@@ -139,16 +138,16 @@ int _rtw_write32(struct adapter *adapter, u32 addr, u32 val)
 	return RTW_STATUS_CODE(ret);
 }
 
-int _rtw_writeN(struct adapter *adapter, u32 addr ,u32 length , u8 *pdata)
+int _rtw_writeN(struct adapter *adapter, u32 addr , u32 length , u8 *pdata)
 {
 	struct io_priv *pio_priv = &adapter->iopriv;
-        struct	intf_hdl	*pintfhdl = (struct intf_hdl*)(&(pio_priv->intf));
-	int (*_writeN)(struct intf_hdl *pintfhdl, u32 addr,u32 length, u8 *pdata);
+	struct	intf_hdl *pintfhdl = (struct intf_hdl *)(&(pio_priv->intf));
+	int (*_writeN)(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata);
 	int ret;
 	_func_enter_;
 	_writeN = pintfhdl->io_ops._writeN;
 
-	ret = _writeN(pintfhdl, addr,length,pdata);
+	ret = _writeN(pintfhdl, addr, length, pdata);
 	_func_exit_;
 
 	return RTW_STATUS_CODE(ret);
@@ -205,19 +204,15 @@ void _rtw_read_mem(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
 
 	_func_enter_;
-
-	if ( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
-	{
-	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_, ("rtw_read_mem:bDriverStopped(%d) OR bSurpriseRemoved(%d)", adapter->bDriverStopped, adapter->bSurpriseRemoved));
+	if (adapter->bDriverStopped || adapter->bSurpriseRemoved) {
+	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_,
+		      ("rtw_read_mem:bDriverStopped(%d) OR bSurpriseRemoved(%d)",
+		      adapter->bDriverStopped, adapter->bSurpriseRemoved));
 	     return;
 	}
-
 	_read_mem = pintfhdl->io_ops._read_mem;
-
 	_read_mem(pintfhdl, addr, cnt, pmem);
-
 	_func_exit_;
-
 }
 
 void _rtw_write_mem(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
@@ -233,7 +228,6 @@ void _rtw_write_mem(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	_write_mem(pintfhdl, addr, cnt, pmem);
 
 	_func_exit_;
-
 }
 
 void _rtw_read_port(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
@@ -244,9 +238,10 @@ void _rtw_read_port(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 
 	_func_enter_;
 
-	if ( (adapter->bDriverStopped ==true) || (adapter->bSurpriseRemoved == true))
-	{
-	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_, ("rtw_read_port:bDriverStopped(%d) OR bSurpriseRemoved(%d)", adapter->bDriverStopped, adapter->bSurpriseRemoved));
+	if (adapter->bDriverStopped || adapter->bSurpriseRemoved) {
+	     RT_TRACE(_module_rtl871x_io_c_, _drv_info_,
+		      ("rtw_read_port:bDriverStopped(%d) OR bSurpriseRemoved(%d)",
+		      adapter->bDriverStopped, adapter->bSurpriseRemoved));
 	     return;
 	}
 
@@ -255,7 +250,6 @@ void _rtw_read_port(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	_read_port(pintfhdl, addr, cnt, pmem);
 
 	_func_exit_;
-
 }
 
 void _rtw_read_port_cancel(struct adapter *adapter)
@@ -268,7 +262,6 @@ void _rtw_read_port_cancel(struct adapter *adapter)
 
 	if (_read_port_cancel)
 		_read_port_cancel(pintfhdl);
-
 }
 
 u32 _rtw_write_port(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
@@ -316,7 +309,6 @@ void _rtw_write_port_cancel(struct adapter *adapter)
 
 	if (_write_port_cancel)
 		_write_port_cancel(pintfhdl);
-
 }
 
 int rtw_init_io_priv(struct adapter *padapter, void (*set_intf_ops)(struct _io_ops *pops))
