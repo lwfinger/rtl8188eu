@@ -185,12 +185,11 @@ InitLed871x(
 	enum LED_PIN_871x	LedPin
 	);
 
-void
-DeInitLed871x(
-	struct LED_871x *	pLed
-	);
+void DeInitLed871x(struct LED_871x *pLed);
 
 //hal...
-extern void BlinkHandler(struct LED_871x * pLed);
+void BlinkHandler(struct LED_871x * pLed);
+void SwLedOn(struct adapter *padapter, struct LED_871x * pLed);
+void SwLedOff(struct adapter *padapter, struct LED_871x *pLed);
 
 #endif //__RTW_LED_H_
