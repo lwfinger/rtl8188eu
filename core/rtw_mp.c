@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
+ *published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
@@ -61,7 +61,6 @@ void write_macreg(struct adapter *padapter, u32 addr, u32 val, u32 sz)
 	default:
 		break;
 	}
-
 }
 
 u32 read_bbreg(struct adapter *padapter, u32 addr, u32 bitmask)
@@ -74,22 +73,22 @@ void write_bbreg(struct adapter *padapter, u32 addr, u32 bitmask, u32 val)
 	rtw_hal_write_bbreg(padapter, addr, bitmask, val);
 }
 
-u32 _read_rfreg(struct adapter * padapter, u8 rfpath, u32 addr, u32 bitmask)
+u32 _read_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 bitmask)
 {
 	return rtw_hal_read_rfreg(padapter, (enum rf_radio_path)rfpath, addr, bitmask);
 }
 
-void _write_rfreg(struct adapter * padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val)
+void _write_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val)
 {
 	rtw_hal_write_rfreg(padapter, (enum rf_radio_path)rfpath, addr, bitmask, val);
 }
 
-u32 read_rfreg(struct adapter * padapter, u8 rfpath, u32 addr)
+u32 read_rfreg(struct adapter *padapter, u8 rfpath, u32 addr)
 {
 	return _read_rfreg(padapter, (enum rf_radio_path)rfpath, addr, bRFRegOffsetMask);
 }
 
-void write_rfreg(struct adapter * padapter, u8 rfpath, u32 addr, u32 val)
+void write_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 val)
 {
 	_write_rfreg(padapter, (enum rf_radio_path)rfpath, addr, bRFRegOffsetMask, val);
 }
@@ -137,7 +136,8 @@ static int init_mp_priv_by_os(struct mp_priv *pmp_priv)
 	int i, res;
 	struct mp_xmit_frame *pmp_xmitframe;
 
-	if (pmp_priv == NULL) return _FAIL;
+	if (pmp_priv == NULL)
+		return _FAIL;
 
 	_rtw_init_queue(&pmp_priv->free_mp_xmitqueue);
 
@@ -148,12 +148,11 @@ static int init_mp_priv_by_os(struct mp_priv *pmp_priv)
 		goto _exit_init_mp_priv;
 	}
 
-	pmp_priv->pmp_xmtframe_buf = pmp_priv->pallocated_mp_xmitframe_buf + 4 - ((size_t) (pmp_priv->pallocated_mp_xmitframe_buf) & 3);
+	pmp_priv->pmp_xmtframe_buf = pmp_priv->pallocated_mp_xmitframe_buf + 4 - ((size_t)(pmp_priv->pallocated_mp_xmitframe_buf) & 3);
 
-	pmp_xmitframe = (struct mp_xmit_frame*)pmp_priv->pmp_xmtframe_buf;
+	pmp_xmitframe = (struct mp_xmit_frame *)pmp_priv->pmp_xmtframe_buf;
 
-	for (i = 0; i < NR_MP_XMITFRAME; i++)
-	{
+	for (i = 0; i < NR_MP_XMITFRAME; i++) {
 		_rtw_init_listhead(&pmp_xmitframe->list);
 		rtw_list_insert_tail(&pmp_xmitframe->list, &pmp_priv->free_mp_xmitqueue.queue);
 
@@ -173,7 +172,7 @@ _exit_init_mp_priv:
 	return res;
 }
 
-static void mp_init_xmit_attrib(struct mp_tx *pmptx, struct adapter * padapter)
+static void mp_init_xmit_attrib(struct mp_tx *pmptx, struct adapter *padapter)
 {
 	struct pkt_attrib *pattrib;
 	struct tx_desc *desc;
@@ -197,7 +196,7 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, struct adapter * padapter)
 	pattrib->qos_en = false;
 }
 
-s32 init_mp_priv(struct adapter * padapter)
+s32 init_mp_priv(struct adapter *padapter)
 {
 	struct mp_priv *pmppriv = &padapter->mppriv;
 
@@ -208,24 +207,24 @@ s32 init_mp_priv(struct adapter * padapter)
 	mp_init_xmit_attrib(&pmppriv->tx, padapter);
 
 	switch (padapter->registrypriv.rf_config) {
-		case RF_1T1R:
-			pmppriv->antenna_tx = ANTENNA_A;
-			pmppriv->antenna_rx = ANTENNA_A;
-			break;
-		case RF_1T2R:
-		default:
-			pmppriv->antenna_tx = ANTENNA_A;
-			pmppriv->antenna_rx = ANTENNA_AB;
-			break;
-		case RF_2T2R:
-		case RF_2T2R_GREEN:
-			pmppriv->antenna_tx = ANTENNA_AB;
-			pmppriv->antenna_rx = ANTENNA_AB;
-			break;
-		case RF_2T4R:
-			pmppriv->antenna_tx = ANTENNA_AB;
-			pmppriv->antenna_rx = ANTENNA_ABCD;
-			break;
+	case RF_1T1R:
+		pmppriv->antenna_tx = ANTENNA_A;
+		pmppriv->antenna_rx = ANTENNA_A;
+		break;
+	case RF_1T2R:
+	default:
+		pmppriv->antenna_tx = ANTENNA_A;
+		pmppriv->antenna_rx = ANTENNA_AB;
+		break;
+	case RF_2T2R:
+	case RF_2T2R_GREEN:
+		pmppriv->antenna_tx = ANTENNA_AB;
+		pmppriv->antenna_rx = ANTENNA_AB;
+		break;
+	case RF_2T4R:
+		pmppriv->antenna_tx = ANTENNA_AB;
+		pmppriv->antenna_rx = ANTENNA_ABCD;
+		break;
 	}
 
 	return _SUCCESS;
@@ -240,27 +239,19 @@ void free_mp_priv(struct mp_priv *pmp_priv)
 	pmp_priv->pmp_xmtframe_buf = NULL;
 }
 
-#define PHY_IQCalibrate(a,b)	PHY_IQCalibrate_8188E(a,b)
+#define PHY_IQCalibrate(a, b)	PHY_IQCalibrate_8188E(a, b)
 #define PHY_LCCalibrate(a)	PHY_LCCalibrate_8188E(a)
-#define PHY_SetRFPathSwitch(a,b) PHY_SetRFPathSwitch_8188E(a,b)
+#define PHY_SetRFPathSwitch(a, b) PHY_SetRFPathSwitch_8188E(a, b)
 
-s32
-MPT_InitializeAdapter(
-		struct adapter *			pAdapter,
-		u8				Channel
-	)
+s32 MPT_InitializeAdapter(struct adapter *pAdapter, u8 Channel)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	s32		rtStatus = _SUCCESS;
-	struct mpt_context *	pMptCtx = &pAdapter->mppriv.MptCtx;
+	struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
 	struct mlme_priv *pmlmepriv = &pAdapter->mlmepriv;
 
-	/*  */
 	/*  HW Initialization for 8190 MPT. */
-	/*  */
-	/*  */
 	/*  SW Initialization for 8190 MP. */
-	/*  */
 	pMptCtx->bMptDrvUnload = false;
 	pMptCtx->bMassProdTest = false;
 	pMptCtx->bMptIndexEven = true;	/* default gain index is -6.0db */
@@ -312,19 +303,16 @@ MPT_InitializeAdapter(
  *	05/18/2007	MHC		Add normal driver MPHalt code.
  *
  *---------------------------------------------------------------------------*/
-void
-MPT_DeInitAdapter(
-		struct adapter *	pAdapter
-	)
+void MPT_DeInitAdapter(struct adapter *pAdapter)
 {
-	struct mpt_context *		pMptCtx = &pAdapter->mppriv.MptCtx;
+	struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
 
 	pMptCtx->bMptDrvUnload = true;
 }
 
-static u8 mpt_ProStartTest(struct adapter * padapter)
+static u8 mpt_ProStartTest(struct adapter *padapter)
 {
-	struct mpt_context * pMptCtx = &padapter->mppriv.MptCtx;
+	struct mpt_context *pMptCtx = &padapter->mppriv.MptCtx;
 
 	pMptCtx->bMassProdTest = true;
 	pMptCtx->bStartContTx = false;
@@ -340,19 +328,18 @@ static u8 mpt_ProStartTest(struct adapter * padapter)
 /*
  * General use
  */
-s32 SetPowerTracking(struct adapter * padapter, u8 enable)
+s32 SetPowerTracking(struct adapter *padapter, u8 enable)
 {
-
-	Hal_SetPowerTracking( padapter, enable );
+	Hal_SetPowerTracking(padapter, enable);
 	return 0;
 }
 
-void GetPowerTracking(struct adapter * padapter, u8 *enable)
+void GetPowerTracking(struct adapter *padapter, u8 *enable)
 {
-	Hal_GetPowerTracking( padapter, enable );
+	Hal_GetPowerTracking(padapter, enable);
 }
 
-static void disable_dm(struct adapter * padapter)
+static void disable_dm(struct adapter *padapter)
 {
 	u8 v8;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
@@ -376,7 +363,7 @@ static void disable_dm(struct adapter * padapter)
 }
 
 /* This function initializes the DUT to the MP test mode */
-s32 mp_start_test(struct adapter * padapter)
+s32 mp_start_test(struct adapter *padapter)
 {
 	struct wlan_bssid_ex bssid;
 	struct sta_info *psta;
@@ -391,7 +378,7 @@ s32 mp_start_test(struct adapter * padapter)
 	struct wlan_network *tgt_network = &pmlmepriv->cur_network;
 
 	padapter->registrypriv.mp_mode = 1;
-	pmppriv->bSetTxPower=0;		/* for  manually set tx power */
+	pmppriv->bSetTxPower = 0;		/* for  manually set tx power */
 
 	/* 3 disable dynamic mechanism */
 	disable_dm(padapter);
@@ -399,36 +386,35 @@ s32 mp_start_test(struct adapter * padapter)
 	/* 3 0. update mp_priv */
 
 	if (padapter->registrypriv.rf_config == RF_819X_MAX_TYPE) {
-/* 		switch (phal->rf_type) { */
 		switch (GET_RF_TYPE(padapter)) {
-			case RF_1T1R:
-				pmppriv->antenna_tx = ANTENNA_A;
-				pmppriv->antenna_rx = ANTENNA_A;
-				break;
-			case RF_1T2R:
-			default:
-				pmppriv->antenna_tx = ANTENNA_A;
-				pmppriv->antenna_rx = ANTENNA_AB;
-				break;
-			case RF_2T2R:
-			case RF_2T2R_GREEN:
-				pmppriv->antenna_tx = ANTENNA_AB;
-				pmppriv->antenna_rx = ANTENNA_AB;
-				break;
-			case RF_2T4R:
-				pmppriv->antenna_tx = ANTENNA_AB;
-				pmppriv->antenna_rx = ANTENNA_ABCD;
-				break;
+		case RF_1T1R:
+			pmppriv->antenna_tx = ANTENNA_A;
+			pmppriv->antenna_rx = ANTENNA_A;
+			break;
+		case RF_1T2R:
+		default:
+			pmppriv->antenna_tx = ANTENNA_A;
+			pmppriv->antenna_rx = ANTENNA_AB;
+			break;
+		case RF_2T2R:
+		case RF_2T2R_GREEN:
+			pmppriv->antenna_tx = ANTENNA_AB;
+			pmppriv->antenna_rx = ANTENNA_AB;
+			break;
+		case RF_2T4R:
+			pmppriv->antenna_tx = ANTENNA_AB;
+			pmppriv->antenna_rx = ANTENNA_ABCD;
+			break;
 		}
 	}
 
 	mpt_ProStartTest(padapter);
 
 	/* 3 1. initialize a new struct wlan_bssid_ex */
-/* 	_rtw_memset(&bssid, 0, sizeof(struct wlan_bssid_ex)); */
+/*	_rtw_memset(&bssid, 0, sizeof(struct wlan_bssid_ex)); */
 	_rtw_memcpy(bssid.MacAddress, pmppriv->network_macaddr, ETH_ALEN);
 	bssid.Ssid.SsidLength = strlen("mp_pseudo_adhoc");
-	_rtw_memcpy(bssid.Ssid.Ssid, (u8*)"mp_pseudo_adhoc", bssid.Ssid.SsidLength);
+	_rtw_memcpy(bssid.Ssid.Ssid, (u8 *)"mp_pseudo_adhoc", bssid.Ssid.SsidLength);
 	bssid.InfrastructureMode = Ndis802_11IBSS;
 	bssid.NetworkTypeInUse = Ndis802_11DS;
 	bssid.IELength = 0;
@@ -458,7 +444,8 @@ s32 mp_start_test(struct adapter * padapter)
 	/* 3 2. create a new psta for mp driver */
 	/* clear psta in the cur_network, if any */
 	psta = rtw_get_stainfo(&padapter->stapriv, tgt_network->network.MacAddress);
-	if (psta) rtw_free_stainfo(padapter, psta);
+	if (psta)
+		rtw_free_stainfo(padapter, psta);
 
 	psta = rtw_alloc_stainfo(&padapter->stapriv, bssid.MacAddress);
 	if (psta == NULL) {
@@ -470,7 +457,8 @@ s32 mp_start_test(struct adapter * padapter)
 
 	/* 3 3. join psudo AdHoc */
 	tgt_network->join_res = 1;
-	tgt_network->aid = psta->aid = 1;
+	tgt_network->aid = 1;
+	psta->aid = 1;
 	_rtw_memcpy(&tgt_network->network, &bssid, length);
 
 	rtw_indicate_connect(padapter);
@@ -480,8 +468,7 @@ end_of_mp_start_test:
 
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
 
-	if (res == _SUCCESS)
-	{
+	if (res == _SUCCESS) {
 		/*  set MSR to WIFI_FW_ADHOC_STATE */
 		val8 = rtw_read8(padapter, MSR) & 0xFC; /*  0x0102 */
 		val8 |= WIFI_FW_ADHOC_STATE;
@@ -491,7 +478,7 @@ end_of_mp_start_test:
 }
 /*  */
 /* This function change the DUT from the MP test mode into normal mode */
-void mp_stop_test(struct adapter * padapter)
+void mp_stop_test(struct adapter *padapter)
 {
 	struct mp_priv *pmppriv = &padapter->mppriv;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -500,32 +487,31 @@ void mp_stop_test(struct adapter * padapter)
 
 	unsigned long irqL;
 
-	if (pmppriv->mode==MP_ON)
-	{
-	pmppriv->bSetTxPower=0;
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == false)
-		goto end_of_mp_stop_test;
+	if (pmppriv->mode == MP_ON) {
+		pmppriv->bSetTxPower = 0;
+		_enter_critical_bh(&pmlmepriv->lock, &irqL);
+		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == false)
+			goto end_of_mp_stop_test;
 
-	/* 3 1. disconnect psudo AdHoc */
-	rtw_indicate_disconnect(padapter);
+		/* 3 1. disconnect psudo AdHoc */
+		rtw_indicate_disconnect(padapter);
 
-	/* 3 2. clear psta used in mp test mode. */
-/* 	rtw_free_assoc_resources(padapter, 1); */
-	psta = rtw_get_stainfo(&padapter->stapriv, tgt_network->network.MacAddress);
-	if (psta) rtw_free_stainfo(padapter, psta);
+		/* 3 2. clear psta used in mp test mode. */
+		psta = rtw_get_stainfo(&padapter->stapriv, tgt_network->network.MacAddress);
+		if (psta)
+			rtw_free_stainfo(padapter, psta);
 
-	/* 3 3. return to normal state (default:station mode) */
-	pmlmepriv->fw_state = pmppriv->prev_fw_state; /*  WIFI_STATION_STATE; */
+		/* 3 3. return to normal state (default:station mode) */
+		pmlmepriv->fw_state = pmppriv->prev_fw_state; /*  WIFI_STATION_STATE; */
 
-	/* flush the cur_network */
-	_rtw_memset(tgt_network, 0, sizeof(struct wlan_network));
+		/* flush the cur_network */
+		_rtw_memset(tgt_network, 0, sizeof(struct wlan_network));
 
-	_clr_fwstate_(pmlmepriv, WIFI_MP_STATE);
+		_clr_fwstate_(pmlmepriv, WIFI_MP_STATE);
 
 end_of_mp_stop_test:
 
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+		_exit_critical_bh(&pmlmepriv->lock, &irqL);
 	}
 }
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
@@ -534,7 +520,7 @@ end_of_mp_stop_test:
  *
  * Overview:	Change RF Setting when we siwthc channel/rate/BW for MP.
  *
- * Input:       	struct adapter *				pAdapter
+ * Input:	struct adapter *				pAdapter
  *
  * Output:      NONE
  *
@@ -546,21 +532,21 @@ end_of_mp_stop_test:
  * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
  *
  *---------------------------------------------------------------------------*/
-static void mpt_SwitchRfSetting(struct adapter * pAdapter)
+static void mpt_SwitchRfSetting(struct adapter *pAdapter)
 {
 	Hal_mpt_SwitchRfSetting(pAdapter);
     }
 
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-static void MPT_CCKTxPowerAdjust(struct adapter * Adapter, bool bInCH14)
+static void MPT_CCKTxPowerAdjust(struct adapter *Adapter, bool bInCH14)
 {
-	Hal_MPT_CCKTxPowerAdjust(Adapter,bInCH14);
+	Hal_MPT_CCKTxPowerAdjust(Adapter, bInCH14);
 }
 
-static void MPT_CCKTxPowerAdjustbyIndex(struct adapter * pAdapter, bool beven)
+static void MPT_CCKTxPowerAdjustbyIndex(struct adapter *pAdapter, bool beven)
 {
-	Hal_MPT_CCKTxPowerAdjustbyIndex(pAdapter,beven);
+	Hal_MPT_CCKTxPowerAdjustbyIndex(pAdapter, beven);
 	}
 
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
@@ -571,51 +557,49 @@ static void MPT_CCKTxPowerAdjustbyIndex(struct adapter * pAdapter, bool beven)
  *	Use H2C command to change channel,
  *	not only modify rf register, but also other setting need to be done.
  */
-void SetChannel(struct adapter * pAdapter)
+void SetChannel(struct adapter *pAdapter)
 {
 	Hal_SetChannel(pAdapter);
-
 }
 
 /*
  * Notice
  *	Switch bandwitdth may change center frequency(channel)
  */
-void SetBandwidth(struct adapter * pAdapter)
+void SetBandwidth(struct adapter *pAdapter)
 {
 	Hal_SetBandwidth(pAdapter);
-
 }
 
-static void SetCCKTxPower(struct adapter * pAdapter, u8 *TxPower)
+static void SetCCKTxPower(struct adapter *pAdapter, u8 *TxPower)
 {
-	Hal_SetCCKTxPower(pAdapter,TxPower);
+	Hal_SetCCKTxPower(pAdapter, TxPower);
 }
 
-static void SetOFDMTxPower(struct adapter * pAdapter, u8 *TxPower)
+static void SetOFDMTxPower(struct adapter *pAdapter, u8 *TxPower)
 {
-	Hal_SetOFDMTxPower(pAdapter,TxPower);
+	Hal_SetOFDMTxPower(pAdapter, TxPower);
 	}
 
 
-void SetAntenna(struct adapter * pAdapter)
-	{
+void SetAntenna(struct adapter *pAdapter)
+{
 	Hal_SetAntenna(pAdapter);
 }
 
-void	SetAntennaPathPower(struct adapter * pAdapter)
+void	SetAntennaPathPower(struct adapter *pAdapter)
 {
 	Hal_SetAntennaPathPower(pAdapter);
 }
 
-void SetTxPower(struct adapter * pAdapter)
+void SetTxPower(struct adapter *pAdapter)
 {
 	Hal_SetTxPower(pAdapter);
 	}
 
-static void SetTxAGCOffset(struct adapter * pAdapter, u32 ulTxAGCOffset)
+static void SetTxAGCOffset(struct adapter *pAdapter, u32 ulTxAGCOffset)
 {
-	u32 TxAGCOffset_B, TxAGCOffset_C, TxAGCOffset_D,tmpAGC;
+	u32 TxAGCOffset_B, TxAGCOffset_C, TxAGCOffset_D, tmpAGC;
 
 	TxAGCOffset_B = (ulTxAGCOffset&0x000000ff);
 	TxAGCOffset_C = ((ulTxAGCOffset&0x0000ff00)>>8);
@@ -623,88 +607,86 @@ static void SetTxAGCOffset(struct adapter * pAdapter, u32 ulTxAGCOffset)
 
 	tmpAGC = (TxAGCOffset_D<<8 | TxAGCOffset_C<<4 | TxAGCOffset_B);
 	write_bbreg(pAdapter, rFPGA0_TxGainStage,
-			(bXBTxAGC|bXCTxAGC|bXDTxAGC), tmpAGC);
+		    (bXBTxAGC|bXCTxAGC|bXDTxAGC), tmpAGC);
 }
 
-void SetDataRate(struct adapter * pAdapter)
+void SetDataRate(struct adapter *pAdapter)
 {
 	Hal_SetDataRate(pAdapter);
 }
 
-void MP_PHY_SetRFPathSwitch(struct adapter * pAdapter ,bool bMain)
+void MP_PHY_SetRFPathSwitch(struct adapter *pAdapter , bool bMain)
 {
-
-	PHY_SetRFPathSwitch(pAdapter,bMain);
-
+	PHY_SetRFPathSwitch(pAdapter, bMain);
 }
 
-s32 SetThermalMeter(struct adapter * pAdapter, u8 target_ther)
+s32 SetThermalMeter(struct adapter *pAdapter, u8 target_ther)
 {
-	return Hal_SetThermalMeter( pAdapter, target_ther);
+	return Hal_SetThermalMeter(pAdapter, target_ther);
 }
 
-static void TriggerRFThermalMeter(struct adapter * pAdapter)
+static void TriggerRFThermalMeter(struct adapter *pAdapter)
 {
 	Hal_TriggerRFThermalMeter(pAdapter);
 }
 
-static u8 ReadRFThermalMeter(struct adapter * pAdapter)
+static u8 ReadRFThermalMeter(struct adapter *pAdapter)
 {
 	return Hal_ReadRFThermalMeter(pAdapter);
 }
 
-void GetThermalMeter(struct adapter * pAdapter, u8 *value)
+void GetThermalMeter(struct adapter *pAdapter, u8 *value)
 {
-	Hal_GetThermalMeter(pAdapter,value);
+	Hal_GetThermalMeter(pAdapter, value);
 }
 
-void SetSingleCarrierTx(struct adapter * pAdapter, u8 bStart)
-{
-	PhySetTxPowerLevel(pAdapter);
-	Hal_SetSingleCarrierTx(pAdapter,bStart);
-}
-
-void SetSingleToneTx(struct adapter * pAdapter, u8 bStart)
+void SetSingleCarrierTx(struct adapter *pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
-	Hal_SetSingleToneTx(pAdapter,bStart);
+	Hal_SetSingleCarrierTx(pAdapter, bStart);
 }
 
-void SetCarrierSuppressionTx(struct adapter * pAdapter, u8 bStart)
+void SetSingleToneTx(struct adapter *pAdapter, u8 bStart)
+{
+	PhySetTxPowerLevel(pAdapter);
+	Hal_SetSingleToneTx(pAdapter, bStart);
+}
+
+void SetCarrierSuppressionTx(struct adapter *pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetCarrierSuppressionTx(pAdapter, bStart);
 }
 
-static void SetCCKContinuousTx(struct adapter * pAdapter, u8 bStart)
+static void SetCCKContinuousTx(struct adapter *pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
-	Hal_SetCCKContinuousTx(pAdapter,bStart);
+	Hal_SetCCKContinuousTx(pAdapter, bStart);
 }
 
-static void SetOFDMContinuousTx(struct adapter * pAdapter, u8 bStart)
+static void SetOFDMContinuousTx(struct adapter *pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
-	Hal_SetOFDMContinuousTx( pAdapter, bStart);
-}/* mpt_StartOfdmContTx */
+	Hal_SetOFDMContinuousTx(pAdapter, bStart);
+} /* mpt_StartOfdmContTx */
 
-void SetContinuousTx(struct adapter * pAdapter, u8 bStart)
+void SetContinuousTx(struct adapter *pAdapter, u8 bStart)
 {
 	PhySetTxPowerLevel(pAdapter);
-	Hal_SetContinuousTx(pAdapter,bStart);
+	Hal_SetContinuousTx(pAdapter, bStart);
 }
 
 
-void PhySetTxPowerLevel(struct adapter * pAdapter)
+void PhySetTxPowerLevel(struct adapter *pAdapter)
 {
 	struct mp_priv *pmp_priv = &pAdapter->mppriv;
 
-	if (pmp_priv->bSetTxPower==0) /*  for NO manually set power index */
-		PHY_SetTxPowerLevel8188E(pAdapter,pmp_priv->channel);
+	if (pmp_priv->bSetTxPower == 0) /*  for NO manually set power index */
+		PHY_SetTxPowerLevel8188E(pAdapter, pmp_priv->channel);
 }
 
 /*  */
-static void dump_mpframe(struct adapter * padapter, struct xmit_frame *pmpframe)
+static void dump_mpframe(struct adapter *padapter, struct xmit_frame *pmpframe)
 {
 	rtw_hal_mgnt_xmit(padapter, pmpframe);
 }
@@ -714,13 +696,12 @@ static struct xmit_frame *alloc_mp_xmitframe(struct xmit_priv *pxmitpriv)
 	struct xmit_frame	*pmpframe;
 	struct xmit_buf	*pxmitbuf;
 
-	if ((pmpframe = rtw_alloc_xmitframe(pxmitpriv)) == NULL)
-	{
+	pmpframe = rtw_alloc_xmitframe(pxmitpriv);
+	if (pmpframe == NULL)
 		return NULL;
-	}
 
-	if ((pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv)) == NULL)
-	{
+	pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
+	if (pxmitbuf == NULL) {
 		rtw_free_xmitframe(pxmitpriv, pmpframe);
 		return NULL;
 	}
@@ -734,7 +715,6 @@ static struct xmit_frame *alloc_mp_xmitframe(struct xmit_priv *pxmitpriv)
 	pxmitbuf->priv_data = pmpframe;
 
 	return pmpframe;
-
 }
 
 static int mp_xmit_packet_thread(void *context)
@@ -743,7 +723,7 @@ static int mp_xmit_packet_thread(void *context)
 	struct mp_tx		*pmptx;
 	struct mp_priv	*pmp_priv;
 	struct xmit_priv	*pxmitpriv;
-	struct adapter * padapter;
+	struct adapter *padapter;
 
 	pmp_priv = (struct mp_priv *)context;
 	pmptx = &pmp_priv->tx;
@@ -760,8 +740,7 @@ static int mp_xmit_packet_thread(void *context)
 			    padapter->bSurpriseRemoved ||
 			    padapter->bDriverStopped) {
 				goto exit;
-			}
-			else {
+			} else {
 				rtw_msleep_os(1);
 				continue;
 			}
@@ -795,16 +774,16 @@ exit:
 	thread_exit();
 }
 
-void fill_txdesc_for_mp(struct adapter * padapter, struct tx_desc *ptxdesc)
+void fill_txdesc_for_mp(struct adapter *padapter, struct tx_desc *ptxdesc)
 {
 	struct mp_priv *pmp_priv = &padapter->mppriv;
 	_rtw_memcpy(ptxdesc, &(pmp_priv->tx.desc), TXDESC_SIZE);
 }
 
-void SetPacketTx(struct adapter * padapter)
+void SetPacketTx(struct adapter *padapter)
 {
 	u8 *ptr, *pkt_start, *pkt_end;
-	u32 pkt_size,offset;
+	u32 pkt_size, offset;
 	struct tx_desc *desc;
 	struct rtw_ieee80211_hdr *hdr;
 	u8 payload;
@@ -814,7 +793,8 @@ void SetPacketTx(struct adapter * padapter)
 
 
 	pmp_priv = &padapter->mppriv;
-	if (pmp_priv->tx.stop) return;
+	if (pmp_priv->tx.stop)
+		return;
 	pmp_priv->tx.sended = 0;
 	pmp_priv->tx.stop = 0;
 	pmp_priv->tx_pktcount = 0;
@@ -860,7 +840,8 @@ void SetPacketTx(struct adapter * padapter)
 	desc->txdw0 |= cpu_to_le32(OWN | FSG | LSG);
 	desc->txdw0 |= cpu_to_le32(pkt_size & 0x0000FFFF); /*  packet size */
 	desc->txdw0 |= cpu_to_le32(((TXDESC_SIZE + OFFSET_SZ) << OFFSET_SHT) & 0x00FF0000); /* 32 bytes for TX Desc */
-	if (bmcast) desc->txdw0 |= cpu_to_le32(BMC); /*  broadcast packet */
+	if (bmcast)
+		desc->txdw0 |= cpu_to_le32(BMC); /*  broadcast packet */
 
 	desc->txdw1 |= cpu_to_le32((0x01 << 26) & 0xff000000);
 	/*  offset 4 */
@@ -878,7 +859,7 @@ void SetPacketTx(struct adapter * padapter)
 	desc->txdw4 |= cpu_to_le32(USERATE);
 	desc->txdw4 |= cpu_to_le32(DISDATAFB);
 
-	if ( pmp_priv->preamble ){
+	if (pmp_priv->preamble) {
 		if (pmp_priv->rateidx <=  MPT_RATE_54M)
 			desc->txdw4 |= cpu_to_le32(DATA_SHORT); /*  CCK Short Preamble */
 	}
@@ -888,7 +869,7 @@ void SetPacketTx(struct adapter * padapter)
 	/*  offset 20 */
 	desc->txdw5 |= cpu_to_le32(pmp_priv->rateidx & 0x0000001F);
 
-	if ( pmp_priv->preamble ){
+	if (pmp_priv->preamble) {
 		if (pmp_priv->rateidx > MPT_RATE_54M)
 			desc->txdw5 |= cpu_to_le32(SGI); /*  MCS Short Guard Interval */
 	}
@@ -906,21 +887,21 @@ void SetPacketTx(struct adapter * padapter)
 	ptr = pkt_start + pattrib->hdrlen;
 
 	switch (pmp_priv->tx.payload) {
-		case 0:
-			payload = 0x00;
-			break;
-		case 1:
-			payload = 0x5a;
-			break;
-		case 2:
-			payload = 0xa5;
-			break;
-		case 3:
-			payload = 0xff;
-			break;
-		default:
-			payload = 0x00;
-			break;
+	case 0:
+		payload = 0x00;
+		break;
+	case 1:
+		payload = 0x5a;
+		break;
+	case 2:
+		payload = 0xa5;
+		break;
+	case 3:
+		payload = 0xff;
+		break;
+	default:
+		payload = 0x00;
+		break;
 	}
 
 	_rtw_memset(ptr, payload, pkt_end - ptr);
@@ -931,7 +912,7 @@ void SetPacketTx(struct adapter * padapter)
 		DBG_88E("Create PktTx Thread Fail !!!!!\n");
 }
 
-void SetPacketRx(struct adapter * pAdapter, u8 bStartRx)
+void SetPacketRx(struct adapter *pAdapter, u8 bStartRx)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 
@@ -950,7 +931,7 @@ void SetPacketRx(struct adapter * pAdapter, u8 bStartRx)
 	}
 }
 
-void ResetPhyRxPktCount(struct adapter * pAdapter)
+void ResetPhyRxPktCount(struct adapter *pAdapter)
 {
 	u32 i, phyrx_set = 0;
 
@@ -962,7 +943,7 @@ void ResetPhyRxPktCount(struct adapter * pAdapter)
 	}
 }
 
-static u32 GetPhyRxPktCounts(struct adapter * pAdapter, u32 selbit)
+static u32 GetPhyRxPktCounts(struct adapter *pAdapter, u32 selbit)
 {
 	/* selection */
 	u32 phyrx_set = 0, count = 0;
@@ -976,7 +957,7 @@ static u32 GetPhyRxPktCounts(struct adapter * pAdapter, u32 selbit)
 	return count;
 }
 
-u32 GetPhyRxPktReceived(struct adapter * pAdapter)
+u32 GetPhyRxPktReceived(struct adapter *pAdapter)
 {
 	u32 OFDM_cnt = 0, CCK_cnt = 0, HT_cnt = 0;
 
@@ -987,7 +968,7 @@ u32 GetPhyRxPktReceived(struct adapter * pAdapter)
 	return OFDM_cnt + CCK_cnt + HT_cnt;
 }
 
-u32 GetPhyRxPktCRC32Error(struct adapter * pAdapter)
+u32 GetPhyRxPktCRC32Error(struct adapter *pAdapter)
 {
 	u32 OFDM_cnt = 0, CCK_cnt = 0, HT_cnt = 0;
 
@@ -1001,7 +982,7 @@ u32 GetPhyRxPktCRC32Error(struct adapter * pAdapter)
 /* reg 0x808[9:0]: FFT data x */
 /* reg 0x808[22]:  0  -->  1  to get 1 FFT data y */
 /* reg 0x8B4[15:0]: FFT data y report */
-static u32 rtw_GetPSDData(struct adapter * pAdapter, u32 point)
+static u32 rtw_GetPSDData(struct adapter *pAdapter, u32 point)
 {
 	int psd_val;
 
@@ -1024,17 +1005,17 @@ static u32 rtw_GetPSDData(struct adapter * pAdapter, u32 point)
 }
 
 /*
- * pts	start_point_min		stop_point_max
+ *pts	start_point_min		stop_point_max
  * 128	64			64 + 128 = 192
  * 256	128			128 + 256 = 384
  * 512	256			256 + 512 = 768
  * 1024	512			512 + 1024 = 1536
  *
  */
-u32 mp_query_psd(struct adapter * pAdapter, u8 *data)
+u32 mp_query_psd(struct adapter *pAdapter, u8 *data)
 {
-	u32 i, psd_pts=0, psd_start=0, psd_stop=0;
-	u32 psd_data=0;
+	u32 i, psd_pts = 0, psd_start = 0, psd_stop = 0;
+	u32 psd_data = 0;
 
 
 	if (!netif_running(pAdapter->pnetdev)) {
@@ -1052,14 +1033,13 @@ u32 mp_query_psd(struct adapter * pAdapter, u8 *data)
 		psd_start = 64;
 		psd_stop = 128;
 	} else {
-		sscanf(data, "pts=%d,start=%d,stop=%d", &psd_pts, &psd_start, &psd_stop);
+		sscanf(data, "pts =%d, start =%d, stop =%d", &psd_pts, &psd_start, &psd_stop);
 	}
 
 	_rtw_memset(data, '\0', sizeof(data));
 
 	i = psd_start;
-	while (i < psd_stop)
-	{
+	while (i < psd_stop) {
 		if (i >= psd_pts) {
 			psd_data = rtw_GetPSDData(pAdapter, i-psd_pts);
 		} else {
@@ -1073,47 +1053,37 @@ u32 mp_query_psd(struct adapter * pAdapter, u8 *data)
 	return strlen(data)+1;
 }
 
-
-
-void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
+void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv)
 {
-	   int i,res;
+	   int i, res;
 	  struct adapter *padapter = pxmitpriv->adapter;
-	struct xmit_frame	*pxmitframe = (struct xmit_frame*) pxmitpriv->pxmit_frame_buf;
+	struct xmit_frame	*pxmitframe = (struct xmit_frame *) pxmitpriv->pxmit_frame_buf;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
 
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 	u32 num_xmit_extbuf = NR_XMIT_EXTBUFF;
-	if (padapter->registrypriv.mp_mode ==0)
-	{
+	if (padapter->registrypriv.mp_mode == 0) {
 		max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 		num_xmit_extbuf = NR_XMIT_EXTBUFF;
-	}
-	else
-	{
+	} else {
 		max_xmit_extbuf_size = 20000;
 		num_xmit_extbuf = 1;
 	}
 
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
-	for (i=0; i<num_xmit_extbuf; i++)
-	{
-		rtw_os_xmit_resource_free(padapter, pxmitbuf,(max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
+	for (i = 0; i < num_xmit_extbuf; i++) {
+		rtw_os_xmit_resource_free(padapter, pxmitbuf, (max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
 
 		pxmitbuf++;
 	}
 
-	if (pxmitpriv->pallocated_xmit_extbuf) {
+	if (pxmitpriv->pallocated_xmit_extbuf)
 		rtw_vmfree(pxmitpriv->pallocated_xmit_extbuf, num_xmit_extbuf * sizeof(struct xmit_buf) + 4);
-	}
 
-	if (padapter->registrypriv.mp_mode ==0)
-	{
+	if (padapter->registrypriv.mp_mode == 0) {
 		max_xmit_extbuf_size = 20000;
 		num_xmit_extbuf = 1;
-	}
-	else
-	{
+	} else {
 		max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 		num_xmit_extbuf = NR_XMIT_EXTBUFF;
 	}
@@ -1123,9 +1093,9 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 
 	pxmitpriv->pallocated_xmit_extbuf = rtw_zvmalloc(num_xmit_extbuf * sizeof(struct xmit_buf) + 4);
 
-	if (pxmitpriv->pallocated_xmit_extbuf  == NULL){
-		RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("alloc xmit_extbuf fail!\n"));
-		res= _FAIL;
+	if (pxmitpriv->pallocated_xmit_extbuf  == NULL) {
+		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xmit_extbuf fail!\n"));
+		res = _FAIL;
 		goto exit;
 	}
 
@@ -1133,16 +1103,16 @@ void _rtw_mp_xmit_priv (struct xmit_priv *pxmitpriv)
 
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
 
-	for (i = 0; i < num_xmit_extbuf; i++)
-	{
+	for (i = 0; i < num_xmit_extbuf; i++) {
 		_rtw_init_listhead(&pxmitbuf->list);
 
 		pxmitbuf->priv_data = NULL;
 		pxmitbuf->padapter = padapter;
 		pxmitbuf->ext_tag = true;
 
-		if ((res=rtw_os_xmit_resource_alloc(padapter, pxmitbuf,max_xmit_extbuf_size + XMITBUF_ALIGN_SZ)) == _FAIL) {
-			res= _FAIL;
+		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, max_xmit_extbuf_size + XMITBUF_ALIGN_SZ);
+		if (res == _FAIL) {
+			res = _FAIL;
 			goto exit;
 		}
 
