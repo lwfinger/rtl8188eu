@@ -337,13 +337,19 @@ enum {
 	MEM_STAT_RX_FREE
 };
 
+extern unsigned char MCS_rate_2R[16];
+extern unsigned char MCS_rate_1R[16];
+extern unsigned char RTW_WPA_OUI[];
+extern unsigned char WPA_TKIP_CIPHER[4];
+extern unsigned char RSN_TKIP_CIPHER[4];
+
 #define rtw_update_mem_stat(flag, sz) do {} while (0)
-extern u8*	_rtw_vmalloc(u32 sz);
-extern u8*	_rtw_zvmalloc(u32 sz);
-extern void	_rtw_vmfree(u8 *pbuf, u32 sz);
-extern u8*	_rtw_zmalloc(u32 sz);
-extern u8*	_rtw_malloc(u32 sz);
-extern void	_rtw_mfree(u8 *pbuf, u32 sz);
+extern u8 *_rtw_vmalloc(u32 sz);
+extern u8 *_rtw_zvmalloc(u32 sz);
+extern void _rtw_vmfree(u8 *pbuf, u32 sz);
+extern u8 *_rtw_zmalloc(u32 sz);
+extern u8 *_rtw_malloc(u32 sz);
+extern void _rtw_mfree(u8 *pbuf, u32 sz);
 #define rtw_vmalloc(sz)			_rtw_vmalloc((sz))
 #define rtw_zvmalloc(sz)			_rtw_zvmalloc((sz))
 #define rtw_vmfree(pbuf, sz)		_rtw_vmfree((pbuf), (sz))
@@ -351,47 +357,47 @@ extern void	_rtw_mfree(u8 *pbuf, u32 sz);
 #define rtw_zmalloc(sz)			_rtw_zmalloc((sz))
 #define rtw_mfree(pbuf, sz)		_rtw_mfree((pbuf), (sz))
 
-extern void*	rtw_malloc2d(int h, int w, int size);
-extern void	rtw_mfree2d(void *pbuf, int h, int w, int size);
+extern void *rtw_malloc2d(int h, int w, int size);
+extern void rtw_mfree2d(void *pbuf, int h, int w, int size);
 
-extern void	_rtw_memcpy(void* dec, void* sour, u32 sz);
-extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
-extern void	_rtw_memset(void *pbuf, int c, u32 sz);
+extern void _rtw_memcpy(void *dec, void *sour, u32 sz);
+extern int  _rtw_memcmp(void *dst, void *src, u32 sz);
+extern void _rtw_memset(void *pbuf, int c, u32 sz);
 
-extern void	_rtw_init_listhead(struct list_head *list);
-extern u32	rtw_is_list_empty(struct list_head *phead);
-extern void	rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
-extern void	rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
-extern void	rtw_list_delete(struct list_head *plist);
+extern void _rtw_init_listhead(struct list_head *list);
+extern u32  rtw_is_list_empty(struct list_head *phead);
+extern void rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
+extern void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
+extern void rtw_list_delete(struct list_head *plist);
 
-extern void	_rtw_init_sema(struct semaphore *sema, int init_val);
-extern void	_rtw_free_sema(struct semaphore *sema);
-extern void	_rtw_up_sema(struct semaphore *sema);
-extern u32	_rtw_down_sema(struct semaphore *sema);
-extern void	_rtw_mutex_init(struct mutex *pmutex);
-extern void	_rtw_mutex_free(struct mutex *pmutex);
-extern void	_rtw_spinlock_init(spinlock_t *plock);
-extern void	_rtw_spinlock_free(spinlock_t *plock);
+extern void _rtw_init_sema(struct semaphore *sema, int init_val);
+extern void _rtw_free_sema(struct semaphore *sema);
+extern void _rtw_up_sema(struct semaphore *sema);
+extern u32  _rtw_down_sema(struct semaphore *sema);
+extern void _rtw_mutex_init(struct mutex *pmutex);
+extern void _rtw_mutex_free(struct mutex *pmutex);
+extern void _rtw_spinlock_init(spinlock_t *plock);
+extern void _rtw_spinlock_free(spinlock_t *plock);
 
-extern void	_rtw_init_queue(struct __queue *pqueue);
-extern u32	_rtw_queue_empty(struct __queue *pqueue);
-extern u32	rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
+extern void _rtw_init_queue(struct __queue *pqueue);
+extern u32  _rtw_queue_empty(struct __queue *pqueue);
+extern u32  rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
 
-extern u32	rtw_get_current_time(void);
-extern u32	rtw_systime_to_ms(u32 systime);
-extern u32	rtw_ms_to_systime(u32 ms);
-extern s32	rtw_get_passing_time_ms(u32 start);
-extern s32	rtw_get_time_interval_ms(u32 start, u32 end);
+extern u32  rtw_get_current_time(void);
+extern u32  rtw_systime_to_ms(u32 systime);
+extern u32  rtw_ms_to_systime(u32 ms);
+extern s32  rtw_get_passing_time_ms(u32 start);
+extern s32  rtw_get_time_interval_ms(u32 start, u32 end);
 
-extern void	rtw_sleep_schedulable(int ms);
+extern void rtw_sleep_schedulable(int ms);
 
-extern void	rtw_msleep_os(int ms);
-extern void	rtw_usleep_os(int us);
+extern void rtw_msleep_os(int ms);
+extern void rtw_usleep_os(int us);
 
-extern u32	rtw_atoi(u8* s);
+extern u32  rtw_atoi(u8 *s);
 
-extern void	rtw_mdelay_os(int ms);
-extern void	rtw_udelay_os(int us);
+extern void rtw_mdelay_os(int ms);
+extern void rtw_udelay_os(int us);
 
 extern void rtw_yield_os(void);
 
