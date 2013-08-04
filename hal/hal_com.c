@@ -26,87 +26,88 @@
 
 #define _HAL_INIT_C_
 
-void dump_chip_info(struct HAL_VERSION	ChipVersion)
+void dump_chip_info(struct HAL_VERSION	chip_vers)
 {
 	uint cnt = 0;
 	char buf[128];
 
-	if (IS_81XXC(ChipVersion)){
-		cnt += sprintf((buf+cnt), "Chip Version Info: %s_", IS_92C_SERIAL(ChipVersion)?"CHIP_8192C":"CHIP_8188C");
-	} else if (IS_92D(ChipVersion)){
+	if (IS_81XXC(chip_vers)) {
+		cnt += sprintf((buf+cnt), "Chip Version Info: %s_",
+			       IS_92C_SERIAL(chip_vers) ?
+			       "CHIP_8192C" : "CHIP_8188C");
+	} else if (IS_92D(chip_vers)) {
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8192D_");
-	} else if (IS_8723_SERIES(ChipVersion)){
+	} else if (IS_8723_SERIES(chip_vers)) {
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8723A_");
-	} else if (IS_8188E(ChipVersion)){
+	} else if (IS_8188E(chip_vers)) {
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8188E_");
 	}
 
-	cnt += sprintf((buf+cnt), "%s_", IS_NORMAL_CHIP(ChipVersion)?"Normal_Chip":"Test_Chip");
-	cnt += sprintf((buf+cnt), "%s_", IS_CHIP_VENDOR_TSMC(ChipVersion)?"TSMC":"UMC");
-	if (IS_A_CUT(ChipVersion))
+	cnt += sprintf((buf+cnt), "%s_", IS_NORMAL_CHIP(chip_vers) ?
+		       "Normal_Chip" : "Test_Chip");
+	cnt += sprintf((buf+cnt), "%s_", IS_CHIP_VENDOR_TSMC(chip_vers) ?
+		       "TSMC" : "UMC");
+	if (IS_A_CUT(chip_vers))
 		cnt += sprintf((buf+cnt), "A_CUT_");
-	else if (IS_B_CUT(ChipVersion))
+	else if (IS_B_CUT(chip_vers))
 		cnt += sprintf((buf+cnt), "B_CUT_");
-	else if (IS_C_CUT(ChipVersion))
+	else if (IS_C_CUT(chip_vers))
 		cnt += sprintf((buf+cnt), "C_CUT_");
-	else if (IS_D_CUT(ChipVersion))
+	else if (IS_D_CUT(chip_vers))
 		cnt += sprintf((buf+cnt), "D_CUT_");
-	else if (IS_E_CUT(ChipVersion))
+	else if (IS_E_CUT(chip_vers))
 		cnt += sprintf((buf+cnt), "E_CUT_");
 	else
-		cnt += sprintf((buf+cnt), "UNKNOWN_CUT(%d)_", ChipVersion.CUTVersion);
+		cnt += sprintf((buf+cnt), "UNKNOWN_CUT(%d)_",
+			       chip_vers.CUTVersion);
 
-	if (IS_1T1R(ChipVersion))
+	if (IS_1T1R(chip_vers))
 		cnt += sprintf((buf+cnt), "1T1R_");
-	else if (IS_1T2R(ChipVersion))
+	else if (IS_1T2R(chip_vers))
 		cnt += sprintf((buf+cnt), "1T2R_");
-	else if (IS_2T2R(ChipVersion))
+	else if (IS_2T2R(chip_vers))
 		cnt += sprintf((buf+cnt), "2T2R_");
 	else
-		cnt += sprintf((buf+cnt), "UNKNOWN_RFTYPE(%d)_", ChipVersion.RFType);
+		cnt += sprintf((buf+cnt), "UNKNOWN_RFTYPE(%d)_",
+			       chip_vers.RFType);
 
-	cnt += sprintf((buf+cnt), "RomVer(%d)\n", ChipVersion.ROMVer);
+	cnt += sprintf((buf+cnt), "RomVer(%d)\n", chip_vers.ROMVer);
 
 	pr_info("%s", buf);
 }
 
-#define	EEPROM_CHANNEL_PLAN_BY_HW_MASK	0x80
+#define	CHAN_PLAN_HW	0x80
 
-u8	/* return the final channel plan decision */
-hal_com_get_channel_plan(
-		struct adapter *	padapter,
-		u8			hw_channel_plan,	/* channel plan from HW (efuse/eeprom) */
-		u8			sw_channel_plan,	/* channel plan from SW (registry/module param) */
-		u8			def_channel_plan,	/* channel plan used when the former two is invalid */
-		bool		AutoLoadFail
-	)
+u8 /* return the final channel plan decision */
+hal_com_get_channel_plan(struct adapter *padapter, u8 hw_channel_plan,
+			 u8 sw_channel_plan, u8 def_channel_plan,
+			 bool load_fail)
 {
-	u8 swConfig;
-	u8 chnlPlan;
+	u8 sw_cfg;
+	u8 chnlplan;
 
-	swConfig = true;
-	if (!AutoLoadFail)
-	{
+	sw_cfg = true;
+	if (!load_fail) {
 		if (!rtw_is_channel_plan_valid(sw_channel_plan))
-			swConfig = false;
-		if (hw_channel_plan & EEPROM_CHANNEL_PLAN_BY_HW_MASK)
-			swConfig = false;
+			sw_cfg = false;
+		if (hw_channel_plan & CHAN_PLAN_HW)
+			sw_cfg = false;
 	}
 
-	if (swConfig == true)
-		chnlPlan = sw_channel_plan;
+	if (sw_cfg)
+		chnlplan = sw_channel_plan;
 	else
-		chnlPlan = hw_channel_plan & (~EEPROM_CHANNEL_PLAN_BY_HW_MASK);
+		chnlplan = hw_channel_plan & (~CHAN_PLAN_HW);
 
-	if (!rtw_is_channel_plan_valid(chnlPlan))
-		chnlPlan = def_channel_plan;
+	if (!rtw_is_channel_plan_valid(chnlplan))
+		chnlplan = def_channel_plan;
 
-	return chnlPlan;
+	return chnlplan;
 }
 
-u8	MRateToHwRate(u8 rate)
+u8 MRateToHwRate(u8 rate)
 {
-	u8	ret = DESC_RATE1M;
+	u8 ret = DESC_RATE1M;
 
 	switch (rate) {
 		/*  CCK and OFDM non-HT rates */
@@ -152,63 +153,60 @@ u8	MRateToHwRate(u8 rate)
 	return ret;
 }
 
-void	HalSetBrateCfg(
-	struct adapter *		Adapter,
-	u8			*mBratesOS,
-	u16			*pBrateCfg)
+void HalSetBrateCfg(struct adapter *adapt, u8 *brates, u16 *rate_cfg)
 {
-	u8	i, is_brate, brate;
+	u8 i, is_brate, brate;
 
-	for (i=0;i<NDIS_802_11_LENGTH_RATES_EX;i++) {
-		is_brate = mBratesOS[i] & IEEE80211_BASIC_RATE_MASK;
-		brate = mBratesOS[i] & 0x7f;
+	for (i = 0; i < NDIS_802_11_LENGTH_RATES_EX; i++) {
+		is_brate = brates[i] & IEEE80211_BASIC_RATE_MASK;
+		brate = brates[i] & 0x7f;
 
-		if ( is_brate ) {
+		if (is_brate) {
 			switch (brate) {
 			case IEEE80211_CCK_RATE_1MB:
-				*pBrateCfg |= RATE_1M;
+				*rate_cfg |= RATE_1M;
 				break;
 			case IEEE80211_CCK_RATE_2MB:
-				*pBrateCfg |= RATE_2M;
+				*rate_cfg |= RATE_2M;
 				break;
 			case IEEE80211_CCK_RATE_5MB:
-				*pBrateCfg |= RATE_5_5M;
+				*rate_cfg |= RATE_5_5M;
 				break;
 			case IEEE80211_CCK_RATE_11MB:
-				*pBrateCfg |= RATE_11M;
+				*rate_cfg |= RATE_11M;
 				break;
 			case IEEE80211_OFDM_RATE_6MB:
-				*pBrateCfg |= RATE_6M;
+				*rate_cfg |= RATE_6M;
 				break;
 			case IEEE80211_OFDM_RATE_9MB:
-				*pBrateCfg |= RATE_9M;
+				*rate_cfg |= RATE_9M;
 				break;
 			case IEEE80211_OFDM_RATE_12MB:
-				*pBrateCfg |= RATE_12M;
+				*rate_cfg |= RATE_12M;
 				break;
 			case IEEE80211_OFDM_RATE_18MB:
-				*pBrateCfg |= RATE_18M;
+				*rate_cfg |= RATE_18M;
 				break;
 			case IEEE80211_OFDM_RATE_24MB:
-				*pBrateCfg |= RATE_24M;
+				*rate_cfg |= RATE_24M;
 				break;
 			case IEEE80211_OFDM_RATE_36MB:
-				*pBrateCfg |= RATE_36M;
+				*rate_cfg |= RATE_36M;
 				break;
 			case IEEE80211_OFDM_RATE_48MB:
-				*pBrateCfg |= RATE_48M;
+				*rate_cfg |= RATE_48M;
 				break;
 			case IEEE80211_OFDM_RATE_54MB:
-				*pBrateCfg |= RATE_54M;
+				*rate_cfg |= RATE_54M;
 				break;
 			}
 		}
 	}
 }
 
-static void _OneOutPipeMapping(struct adapter *	pAdapter)
+static void one_out_pipe(struct adapter *adapter)
 {
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
+	struct dvobj_priv *pdvobjpriv = adapter_to_dvobj(adapter);
 
 	pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[0];/* VO */
 	pdvobjpriv->Queue2Pipe[1] = pdvobjpriv->RtOutPipe[0];/* VI */
@@ -221,14 +219,13 @@ static void _OneOutPipeMapping(struct adapter *	pAdapter)
 	pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];/* TXCMD */
 }
 
-static void _TwoOutPipeMapping(struct adapter *	pAdapter, bool	bWIFICfg)
+static void two_out_pipe(struct adapter *adapter, bool wifi_cfg)
 {
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
+	struct dvobj_priv *pdvobjpriv = adapter_to_dvobj(adapter);
 
-	if (bWIFICfg){ /* WMM */
-
-		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
-		/*   0,		1,	0,	1,	0,	0,	0,	0,		0	}; */
+	if (wifi_cfg) { /* WMM */
+		/* BK, BE, VI, VO, BCN,	CMD, MGT, HIGH, HCCA */
+		/*  0,  1,  0,  1,   0,   0,   0,    0,    0}; */
 		/* 0:H, 1:L */
 
 		pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[1];/* VO */
@@ -241,12 +238,9 @@ static void _TwoOutPipeMapping(struct adapter *	pAdapter, bool	bWIFICfg)
 		pdvobjpriv->Queue2Pipe[6] = pdvobjpriv->RtOutPipe[0];/* HIGH */
 		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];/* TXCMD */
 
-	}
-	else{/* typical setting */
-
-
-		/* BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
-		/*   1,		1,	0,	0,	0,	0,	0,	0,		0	}; */
+	} else {/* typical setting */
+		/* BK, BE, VI, VO, BCN,	CMD, MGT, HIGH, HCCA */
+		/*  1,	1,  0,  0,   0,   0,   0,    0,    0}; */
 		/* 0:H, 1:L */
 
 		pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[0];/* VO */
@@ -258,22 +252,16 @@ static void _TwoOutPipeMapping(struct adapter *	pAdapter, bool	bWIFICfg)
 		pdvobjpriv->Queue2Pipe[5] = pdvobjpriv->RtOutPipe[0];/* MGT */
 		pdvobjpriv->Queue2Pipe[6] = pdvobjpriv->RtOutPipe[0];/* HIGH */
 		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];/* TXCMD */
-
 	}
-
 }
 
-static void _ThreeOutPipeMapping(
-		struct adapter *	pAdapter,
-		bool		bWIFICfg
-	)
+static void three_out_pipe(struct adapter *adapter, bool wifi_cfg)
 {
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
+	struct dvobj_priv *pdvobjpriv = adapter_to_dvobj(adapter);
 
-	if (bWIFICfg){/* for WMM */
-
-		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
-		/*   1,		2,	1,	0,	0,	0,	0,	0,		0	}; */
+	if (wifi_cfg) {/* for WMM */
+		/* BK, BE, VI, VO, BCN,	CMD, MGT, HIGH, HCCA */
+		/*  1,	2,  1,  0,   0,   0,   0,    0,    0}; */
 		/* 0:H, 1:N, 2:L */
 
 		pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[0];/* VO */
@@ -287,8 +275,8 @@ static void _ThreeOutPipeMapping(
 		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];/* TXCMD */
 
 	} else {/* typical setting */
-		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
-		/*   2,		2,	1,	0,	0,	0,	0,	0,		0	}; */
+		/* BK, BE, VI, VO, BCN,	CMD, MGT, HIGH, HCCA */
+		/*  2,  2,  1,  0,   0,   0,   0,    0,    0}; */
 		/* 0:H, 1:N, 2:L */
 
 		pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[0];/* VO */
@@ -301,44 +289,35 @@ static void _ThreeOutPipeMapping(
 		pdvobjpriv->Queue2Pipe[6] = pdvobjpriv->RtOutPipe[0];/* HIGH */
 		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];/* TXCMD */
 	}
-
 }
 
-bool
-Hal_MappingOutPipe(
-		struct adapter *	pAdapter,
-		u8		NumOutPipe
-	)
+bool Hal_MappingOutPipe(struct adapter *adapter, u8 numoutpipe)
 {
-	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
-
-	bool	 bWIFICfg = (pregistrypriv->wifi_spec) ?true:false;
-
+	struct registry_priv *pregistrypriv = &adapter->registrypriv;
+	bool  wifi_cfg = (pregistrypriv->wifi_spec) ? true : false;
 	bool result = true;
 
-	switch (NumOutPipe)
-	{
-		case 2:
-			_TwoOutPipeMapping(pAdapter, bWIFICfg);
-			break;
-		case 3:
-			_ThreeOutPipeMapping(pAdapter, bWIFICfg);
-			break;
-		case 1:
-			_OneOutPipeMapping(pAdapter);
-			break;
-		default:
-			result = false;
-			break;
+	switch (numoutpipe) {
+	case 2:
+		two_out_pipe(adapter, wifi_cfg);
+		break;
+	case 3:
+		three_out_pipe(adapter, wifi_cfg);
+		break;
+	case 1:
+		one_out_pipe(adapter);
+		break;
+	default:
+		result = false;
+		break;
 	}
-
 	return result;
-
 }
 
 void hal_init_macaddr(struct adapter *adapter)
 {
-	rtw_hal_set_hwreg(adapter, HW_VAR_MAC_ADDR, adapter->eeprompriv.mac_addr);
+	rtw_hal_set_hwreg(adapter, HW_VAR_MAC_ADDR,
+			  adapter->eeprompriv.mac_addr);
 }
 
 /*
@@ -364,11 +343,10 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 
 	trigger = rtw_read8(adapter, REG_C2HEVT_CLEAR);
 
-	if (trigger == C2H_EVT_HOST_CLOSE) {
+	if (trigger == C2H_EVT_HOST_CLOSE)
 		goto exit; /* Not ready */
-	} else if (trigger != C2H_EVT_FW_CLOSE) {
+	else if (trigger != C2H_EVT_FW_CLOSE)
 		goto clear_evt; /* Not a valid value */
-	}
 
 	c2h_evt = (struct c2h_evt_hdr *)buf;
 
@@ -378,26 +356,24 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 	*(buf+1) = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1);
 
 	RT_PRINT_DATA(_module_hal_init_c_, _drv_info_, "c2h_evt_read(): ",
-		&c2h_evt , sizeof(c2h_evt));
-
-	if (0) {
-		DBG_88E("%s id:%u, len:%u, seq:%u, trigger:0x%02x\n", __func__
-			, c2h_evt->id, c2h_evt->plen, c2h_evt->seq, trigger);
-	}
+		      &c2h_evt , sizeof(c2h_evt));
 
 	/* Read the content */
 	for (i = 0; i < c2h_evt->plen; i++)
-		c2h_evt->payload[i] = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + sizeof(*c2h_evt) + i);
+		c2h_evt->payload[i] = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL +
+						sizeof(*c2h_evt) + i);
 
-	RT_PRINT_DATA(_module_hal_init_c_, _drv_info_, "c2h_evt_read(): Command Content:\n",
-		c2h_evt->payload, c2h_evt->plen);
+	RT_PRINT_DATA(_module_hal_init_c_, _drv_info_,
+		      "c2h_evt_read(): Command Content:\n",
+		      c2h_evt->payload, c2h_evt->plen);
 
 	ret = _SUCCESS;
 
 clear_evt:
 	/*
 	* Clear event to notify FW we have read the command.
-	* If this field isn't clear, the FW won't update the next command message.
+	* If this field isn't clear, the FW won't update the next
+	* command message.
 	*/
 	c2h_evt_clear(adapter);
 exit:
