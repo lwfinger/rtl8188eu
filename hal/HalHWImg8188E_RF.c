@@ -24,28 +24,28 @@
 
 static bool CheckCondition(const u4Byte  Condition, const u4Byte  Hex)
 {
-    u4Byte _board     = (Hex & 0x000000FF);
-    u4Byte _interface = (Hex & 0x0000FF00) >> 8;
-    u4Byte _platform  = (Hex & 0x00FF0000) >> 16;
-    u4Byte cond = Condition;
+	u4Byte _board     = (Hex & 0x000000FF);
+	u4Byte _interface = (Hex & 0x0000FF00) >> 8;
+	u4Byte _platform  = (Hex & 0x00FF0000) >> 16;
+	u4Byte cond = Condition;
 
-    if ( Condition == 0xCDCDCDCD )
-        return true;
+	if (Condition == 0xCDCDCDCD)
+		return true;
 
-    cond = Condition & 0x000000FF;
-    if ( (_board == cond) && cond != 0x00)
-        return false;
+	cond = Condition & 0x000000FF;
+	if ((_board == cond) && cond != 0x00)
+		return false;
 
-    cond = Condition & 0x0000FF00;
-    cond = cond >> 8;
-    if ( (_interface & cond) == 0 && cond != 0x07)
-        return false;
+	cond = Condition & 0x0000FF00;
+	cond = cond >> 8;
+	if ((_interface & cond) == 0 && cond != 0x07)
+		return false;
 
-    cond = Condition & 0x00FF0000;
-    cond = cond >> 16;
-    if ( (_platform & cond) == 0 && cond != 0x0F)
-        return false;
-    return true;
+	cond = Condition & 0x00FF0000;
+	cond = cond >> 16;
+	if ((_platform & cond) == 0 && cond != 0x0F)
+		return false;
+	return true;
 }
 
 
@@ -90,11 +90,11 @@ static u4Byte Array_RadioA_1T_8188E[] = {
 		0x0DF, 0x00000180,
 		0x0EF, 0x000001A0,
 		0x051, 0x0006B27D,
-	0xFF0F041F, 0xABCD,
+		0xFF0F041F, 0xABCD,
 		0x052, 0x0007E4DD,
-	0xCDCDCDCD, 0xCDCD,
+		0xCDCDCDCD, 0xCDCD,
 		0x052, 0x0007E49D,
-	0xFF0F041F, 0xDEAD,
+		0xFF0F041F, 0xDEAD,
 		0x053, 0x00000073,
 		0x056, 0x00051FF3,
 		0x035, 0x00000086,
@@ -155,9 +155,11 @@ static u4Byte Array_RadioA_1T_8188E[] = {
 		0x000, 0x00033E60,
 };
 
-enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm)
+enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
+	#define READ_NEXT_PAIR(v1, v2, i) do	\
+		 { i += 2; v1 = Array[i];	\
+		 v2 = Array[i+1]; } while (0)
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
@@ -169,7 +171,7 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm
 	u4Byte     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u4Byte);
 	pu4Byte    Array       = Array_RadioA_1T_8188E;
 	bool		biol = false;
-	struct adapter *	Adapter =  pDM_Odm->Adapter;
+	struct adapter *Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
@@ -180,120 +182,89 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm
 	hex += 0xFF000000;
 	biol = rtw_IOL_applied(Adapter);
 
-	if (biol){
-		if ((pxmit_frame=rtw_IOL_accquire_xmit_frame(Adapter)) == NULL)
-		{
-			printk("rtw_IOL_accquire_xmit_frame failed\n");
+	if (biol) {
+		pxmit_frame = rtw_IOL_accquire_xmit_frame(Adapter);
+		if (pxmit_frame== NULL) {
+			pr_info("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
 		}
 	}
 
-	for (i = 0; i < ArrayLen; i += 2 )
-	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
+	for (i = 0; i < ArrayLen; i += 2) {
+		u4Byte v1 = Array[i];
+		u4Byte v2 = Array[i+1];
 
-	    /*  This (offset, data) pair meets the condition. */
-	    if ( v1 < 0xCDCDCDCD )
-	    {
-			if (biol){
+		/*  This (offset, data) pair meets the condition. */
+		if (v1 < 0xCDCDCDCD) {
+			if (biol) {
 				if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 					bndy_cnt++;
 
 				if (v1 == 0xffe)
-				{
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,50);
-				}
-				else if (v1 == 0xfd){
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,5);
-				}
-				else if (v1 == 0xfc){
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,1);
-				}
-				else if (v1 == 0xfb){
-					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,50);
-				}
-				else if (v1 == 0xfa){
-					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,5);
-				}
-				else if (v1 == 0xf9){
-					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,1);
-				}
-				else{
-					rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u2Byte)v1, v2,bRFRegOffsetMask) ;
-				}
-
-			}
-			else
-			{
+					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 50);
+				else if (v1 == 0xfd)
+					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 5);
+				else if (v1 == 0xfc)
+					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 1);
+				else if (v1 == 0xfb)
+					rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 50);
+				else if (v1 == 0xfa)
+					rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 5);
+				else if (v1 == 0xf9)
+					rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 1);
+				else
+					rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A, (u2Byte)v1, v2, bRFRegOffsetMask);
+			} else {
 				odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 			}
 		    continue;
-		}
-		else
-		{ /*  This line is the start line of branch. */
-		    if ( !CheckCondition(Array[i], hex) )
-		    { /*  Discard the following (offset, data) pairs. */
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-		        i -= 2; /*  prevent from for-loop += 2 */
-		    }
-		    else /*  Configure matched pairs and skip to end of if-else. */
-		    {
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-				if (biol){
-					if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
-						bndy_cnt++;
+		} else { /*  This line is the start line of branch. */
+			if (!CheckCondition(Array[i], hex)) {
+				/*  Discard the following (offset, data) pairs. */
+				READ_NEXT_PAIR(v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < ArrayLen - 2)
+					READ_NEXT_PAIR(v1, v2, i);
+				i -= 2; /*  prevent from for-loop += 2 */
+			} else { /*  Configure matched pairs and skip to end of if-else. */
+			READ_NEXT_PAIR(v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < ArrayLen - 2) {
+					if (biol) {
+						if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
+							bndy_cnt++;
 
-					if (v1 == 0xffe)
-					{
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,50);
+						if (v1 == 0xffe)
+							rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 50);
+						else if (v1 == 0xfd)
+							rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 5);
+						else if (v1 == 0xfc)
+							rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 1);
+						else if (v1 == 0xfb)
+							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 50);
+						else if (v1 == 0xfa)
+							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 5);
+						else if (v1 == 0xf9)
+							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 1);
+						else
+							rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A, (u2Byte)v1, v2, bRFRegOffsetMask);
+					} else {
+						odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 					}
-					else if (v1 == 0xfd){
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,5);
-					}
-					else if (v1 == 0xfc){
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,1);
-					}
-					else if (v1 == 0xfb){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,50);
-					}
-					else if (v1 == 0xfa){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,5);
-					}
-					else if (v1 == 0xf9){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,1);
-					}
-					else{
-						rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u2Byte)v1, v2,bRFRegOffsetMask) ;
-					}
-
+					READ_NEXT_PAIR(v1, v2, i);
 				}
-				else
-				{
-					odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
-				}
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
 
-		        while (v2 != 0xDEAD && i < ArrayLen -2)
-		            READ_NEXT_PAIR(v1, v2, i);
-		    }
+				while (v2 != 0xDEAD && i < ArrayLen - 2)
+					READ_NEXT_PAIR(v1, v2, i);
+			}
 		}
 	}
-	if (biol){
+	if (biol) {
 		if (!rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
 			rst = HAL_STATUS_FAILURE;
-			printk("~~~ IOL Config %s Failed !!!\n",__func__);
+			pr_info("~~~ IOL Config %s Failed !!!\n", __func__);
 		}
 	}
 	return rst;
