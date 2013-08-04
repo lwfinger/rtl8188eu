@@ -22,34 +22,37 @@
 
 #include <rtw_iol.h>
 
-static bool
-CheckCondition(
-    const u4Byte  Condition,
-    const u4Byte  Hex
-    )
+#define read_next_pair(array, v1, v2, i)		\
+	 do {						\
+		 i += 2;				\
+		 v1 = array[i];				\
+		 v2 = array[i+1];			\
+	 } while (0)
+
+static bool CheckCondition(const u4Byte  condition, const u4Byte  hex)
 {
-    u4Byte _board     = (Hex & 0x000000FF);
-    u4Byte _interface = (Hex & 0x0000FF00) >> 8;
-    u4Byte _platform  = (Hex & 0x00FF0000) >> 16;
-    u4Byte cond = Condition;
+	u4Byte _board     = (hex & 0x000000FF);
+	u4Byte _interface = (hex & 0x0000FF00) >> 8;
+	u4Byte _platform  = (hex & 0x00FF0000) >> 16;
+	u4Byte cond = condition;
 
-    if ( Condition == 0xCDCDCDCD )
-        return true;
+	if (condition == 0xCDCDCDCD)
+		return true;
 
-    cond = Condition & 0x000000FF;
-    if ( (_board == cond) && cond != 0x00)
-        return false;
+	cond = condition & 0x000000FF;
+	if ((_board == cond) && cond != 0x00)
+		return false;
 
-    cond = Condition & 0x0000FF00;
-    cond = cond >> 8;
-    if ( (_interface & cond) == 0 && cond != 0x07)
-        return false;
+	cond = condition & 0x0000FF00;
+	cond = cond >> 8;
+	if ((_interface & cond) == 0 && cond != 0x07)
+		return false;
 
-    cond = Condition & 0x00FF0000;
-    cond = cond >> 16;
-    if ( (_platform & cond) == 0 && cond != 0x0F)
-        return false;
-    return true;
+	cond = condition & 0x00FF0000;
+	cond = cond >> 16;
+	if ((_platform & cond) == 0 && cond != 0x0F)
+		return false;
+	return true;
 }
 
 
@@ -57,7 +60,7 @@ CheckCondition(
 *                           AGC_TAB_1T.TXT
 ******************************************************************************/
 
-static u4Byte Array_AGC_TAB_1T_8188E[] = {
+static u4Byte array_agc_tab_1t_8188e[] = {
 		0xC78, 0xFB000001,
 		0xC78, 0xFB010001,
 		0xC78, 0xFB020001,
@@ -188,103 +191,84 @@ static u4Byte Array_AGC_TAB_1T_8188E[] = {
 		0xC78, 0x407F0001,
 };
 
-enum HAL_STATUS
-ODM_ReadAndConfig_AGC_TAB_1T_8188E(
-	struct odm_dm_struct * pDM_Odm
-	)
+enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
-
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
 	u2Byte     count       = 0;
 	pu4Byte    ptr_array   = NULL;
-	u1Byte     platform    = pDM_Odm->SupportPlatform;
-	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
-	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_AGC_TAB_1T_8188E)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_AGC_TAB_1T_8188E;
+	u1Byte     platform    = dm_odm->SupportPlatform;
+	u1Byte     interfaceValue   = dm_odm->SupportInterface;
+	u1Byte     board       = dm_odm->BoardType;
+	u4Byte     arraylen    = sizeof(array_agc_tab_1t_8188e)/sizeof(u4Byte);
+	pu4Byte    array       = array_agc_tab_1t_8188e;
 	bool		biol = false;
-	struct adapter *	Adapter =  pDM_Odm->Adapter;
+	struct adapter *adapter =  dm_odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
-	u8 bndy_cnt=1;
-	enum HAL_STATUS rst =HAL_STATUS_SUCCESS;
+	u8 bndy_cnt = 1;
+	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 
 	hex += board;
 	hex += interfaceValue << 8;
 	hex += platform << 16;
 	hex += 0xFF000000;
-	biol = rtw_IOL_applied(Adapter);
+	biol = rtw_IOL_applied(adapter);
 
-	if (biol){
-		if ((pxmit_frame= rtw_IOL_accquire_xmit_frame(Adapter)) == NULL){
-			printk("rtw_IOL_accquire_xmit_frame failed\n");
+	if (biol) {
+		pxmit_frame = rtw_IOL_accquire_xmit_frame(adapter);
+		if (pxmit_frame == NULL) {
+			pr_info("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
 		}
 	}
 
-	for (i = 0; i < ArrayLen; i += 2 )
-	{
-		u4Byte v1 = Array[i];
-		u4Byte v2 = Array[i+1];
+	for (i = 0; i < arraylen; i += 2) {
+		u4Byte v1 = array[i];
+		u4Byte v2 = array[i+1];
 
 		/*  This (offset, data) pair meets the condition. */
-		if ( v1 < 0xCDCDCDCD )
-		{
-			if (biol){
+		if (v1 < 0xCDCDCDCD) {
+			if (biol) {
 				if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 					bndy_cnt++;
-				rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);
-			}
-			else
-			{
-				odm_ConfigBB_AGC_8188E(pDM_Odm, v1, bMaskDWord, v2);
+				rtw_IOL_append_WD_cmd(pxmit_frame, (u2Byte)v1, v2, bMaskDWord);
+			} else {
+				odm_ConfigBB_AGC_8188E(dm_odm, v1, bMaskDWord, v2);
 			}
 			continue;
-		}
-		else
-		{ /*  This line is the start line of branch. */
-			if ( !CheckCondition(Array[i], hex) )
-			{ /*  Discard the following (offset, data) pairs. */
-				READ_NEXT_PAIR(v1, v2, i);
-				while (	v2 != 0xDEAD &&
-					v2 != 0xCDEF &&
-					v2 != 0xCDCD && i < ArrayLen -2)
-				{
-					READ_NEXT_PAIR(v1, v2, i);
-				}
+		} else {
+			/*  This line is the start line of branch. */
+			if (!CheckCondition(array[i], hex)) {
+				/*  Discard the following (offset, data) pairs. */
+				read_next_pair(array, v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < arraylen - 2)
+					read_next_pair(array, v1, v2, i);
 				i -= 2; /*  prevent from for-loop += 2 */
-			}
-			else /*  Configure matched pairs and skip to end of if-else. */
-			{
-				READ_NEXT_PAIR(v1, v2, i);
-				while (	v2 != 0xDEAD &&
-					v2 != 0xCDEF &&
-					v2 != 0xCDCD && i < ArrayLen -2)
-				{
-					if (biol){
+			} else { /*  Configure matched pairs and skip to end of if-else. */
+				read_next_pair(array, v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < arraylen - 2) {
+					if (biol) {
 						if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 							bndy_cnt++;
-						rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);
+						rtw_IOL_append_WD_cmd(pxmit_frame, (u2Byte)v1, v2, bMaskDWord);
+					} else {
+						odm_ConfigBB_AGC_8188E(dm_odm, v1, bMaskDWord, v2);
 					}
-					else
-					{
-						odm_ConfigBB_AGC_8188E(pDM_Odm, v1, bMaskDWord, v2);
-					}
-					READ_NEXT_PAIR(v1, v2, i);
+					read_next_pair(array, v1, v2, i);
 				}
 
-				while (v2 != 0xDEAD && i < ArrayLen -2)
-				{
-					READ_NEXT_PAIR(v1, v2, i);
-				}
-
+				while (v2 != 0xDEAD && i < arraylen - 2)
+					read_next_pair(array, v1, v2, i);
 			}
 		}
 	}
-	if (biol){
-		if (!rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
-			printk("~~~ %s IOL_exec_cmds Failed !!!\n",__func__);
+	if (biol) {
+		if (!rtw_IOL_exec_cmds_sync(dm_odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
+			printk("~~~ %s IOL_exec_cmds Failed !!!\n", __func__);
 			rst = HAL_STATUS_FAILURE;
 		}
 	}
@@ -295,7 +279,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 *                           PHY_REG_1T.TXT
 ******************************************************************************/
 
-static u4Byte Array_PHY_REG_1T_8188E[] = {
+static u4Byte array_phy_reg_1t_8188e[] = {
 		0x800, 0x80040000,
 		0x804, 0x00000003,
 		0x808, 0x0000FC00,
@@ -489,155 +473,116 @@ static u4Byte Array_PHY_REG_1T_8188E[] = {
 		0xF00, 0x00000300,
 };
 
-
-enum HAL_STATUS
-ODM_ReadAndConfig_PHY_REG_1T_8188E(
-	struct odm_dm_struct * pDM_Odm
-	)
+enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
-
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
 	u2Byte     count       = 0;
 	pu4Byte    ptr_array   = NULL;
-	u1Byte     platform    = pDM_Odm->SupportPlatform;
-	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
-	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_PHY_REG_1T_8188E)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_PHY_REG_1T_8188E;
+	u1Byte     platform    = dm_odm->SupportPlatform;
+	u1Byte     interfaceValue   = dm_odm->SupportInterface;
+	u1Byte     board       = dm_odm->BoardType;
+	u4Byte     arraylen    = sizeof(array_phy_reg_1t_8188e)/sizeof(u4Byte);
+	pu4Byte    array       = array_phy_reg_1t_8188e;
 	bool		biol = false;
-	struct adapter *	Adapter =  pDM_Odm->Adapter;
+	struct adapter *adapter =  dm_odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
-	u8 bndy_cnt=1;
-	enum HAL_STATUS rst =HAL_STATUS_SUCCESS;
+	u8 bndy_cnt = 1;
+	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 	hex += board;
 	hex += interfaceValue << 8;
 	hex += platform << 16;
 	hex += 0xFF000000;
-	biol = rtw_IOL_applied(Adapter);
+	biol = rtw_IOL_applied(adapter);
 
-	if (biol){
-		if ((pxmit_frame=rtw_IOL_accquire_xmit_frame(Adapter)) == NULL)
-		{
-			printk("rtw_IOL_accquire_xmit_frame failed\n");
+	if (biol) {
+		pxmit_frame = rtw_IOL_accquire_xmit_frame(adapter);
+		if (pxmit_frame == NULL) {
+			pr_info("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
 		}
 	}
 
-	for (i = 0; i < ArrayLen; i += 2 )
-	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
+	for (i = 0; i < arraylen; i += 2) {
+		u4Byte v1 = array[i];
+		u4Byte v2 = array[i+1];
 
-
-	    /*  This (offset, data) pair meets the condition. */
-	    if ( v1 < 0xCDCDCDCD )
-	    {
-			if (biol){
+		/*  This (offset, data) pair meets the condition. */
+		if (v1 < 0xCDCDCDCD) {
+			if (biol) {
 				if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 					bndy_cnt++;
-
-
-				if (v1 == 0xfe){
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,50);
-				}
-				else if (v1 == 0xfd){
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,5);
-				}
-				else if (v1 == 0xfc){
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,1);
-				}
-				else if (v1 == 0xfb){
-					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,50);
-				}
-				else if (v1 == 0xfa){
+				if (v1 == 0xfe) {
+					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 50);
+				} else if (v1 == 0xfd) {
+					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 5);
+				} else if (v1 == 0xfc) {
+					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 1);
+				} else if (v1 == 0xfb) {
+					rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 50);
+				} else if (v1 == 0xfa) {
 					rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 5);
-				}
-				else if (v1 == 0xf9){
-					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,1);
-				}
-				else{
+				} else if (v1 == 0xf9) {
+					rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 1);
+				} else {
 					if (v1 == 0xa24)
-						pDM_Odm->RFCalibrateInfo.RegA24 = v2;
-
-					rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);
+						dm_odm->RFCalibrateInfo.RegA24 = v2;
+					rtw_IOL_append_WD_cmd(pxmit_frame, (u2Byte)v1, v2, bMaskDWord);
 				}
-			}
-			else
-			{
-				odm_ConfigBB_PHY_8188E(pDM_Odm, v1, bMaskDWord, v2);
+			} else {
+				odm_ConfigBB_PHY_8188E(dm_odm, v1, bMaskDWord, v2);
 			}
 			continue;
-		}
-		else
-		{ /*  This line is the start line of branch. */
-		    if ( !CheckCondition(Array[i], hex) )
-		    { /*  Discard the following (offset, data) pairs. */
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-		        i -= 2; /*  prevent from for-loop += 2 */
-		    }
-		    else /*  Configure matched pairs and skip to end of if-else. */
-		    {
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-				if (biol){
-					if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
-						bndy_cnt++;
-					if (v1 == 0xfe){
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,50);
-					}
-					else if (v1 == 0xfd){
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,5);
-					}
-					else if (v1 == 0xfc){
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,1);
-					}
-					else if (v1 == 0xfb){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,50);
-					}
-					else if (v1 == 0xfa){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,5);
-					}
-					else if (v1 == 0xf9){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,1);
-					}
-					else{
-						if (v1 == 0xa24)
-							pDM_Odm->RFCalibrateInfo.RegA24 = v2;
+		} else { /*  This line is the start line of branch. */
+			if (!CheckCondition(array[i], hex)) {
+				/*  Discard the following (offset, data) pairs. */
+				read_next_pair(array, v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < arraylen - 2)
+					read_next_pair(array, v1, v2, i);
+				i -= 2; /*  prevent from for-loop += 2 */
+			} else { /*  Configure matched pairs and skip to end of if-else. */
+				read_next_pair(array, v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < arraylen - 2) {
+					if (biol) {
+						if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
+							bndy_cnt++;
+						if (v1 == 0xfe) {
+							rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 50);
+						} else if (v1 == 0xfd) {
+							rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 5);
+						} else if (v1 == 0xfc) {
+							rtw_IOL_append_DELAY_MS_cmd(pxmit_frame, 1);
+						} else if (v1 == 0xfb) {
+							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 50);
+						} else if (v1 == 0xfa) {
+							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 5);
+						} else if (v1 == 0xf9) {
+							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 1);
+						} else{
+							if (v1 == 0xa24)
+								dm_odm->RFCalibrateInfo.RegA24 = v2;
 
-						rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);
+							rtw_IOL_append_WD_cmd(pxmit_frame, (u2Byte)v1, v2, bMaskDWord);
+						}
+					} else {
+						odm_ConfigBB_PHY_8188E(dm_odm, v1, bMaskDWord, v2);
 					}
+					read_next_pair(array, v1, v2, i);
 				}
-				else
-				{
-					odm_ConfigBB_PHY_8188E(pDM_Odm, v1, bMaskDWord, v2);
-				}
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
 
-		        while (v2 != 0xDEAD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-
-		    }
+				while (v2 != 0xDEAD && i < arraylen - 2)
+					read_next_pair(array, v1, v2, i);
+			}
 		}
 	}
-	if (biol){
-		/* printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__func__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt); */
-		if (!rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
+	if (biol) {
+		if (!rtw_IOL_exec_cmds_sync(dm_odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
 			rst = HAL_STATUS_FAILURE;
-			printk("~~~ IOL Config %s Failed !!!\n",__func__);
+			pr_info("~~~ IOL Config %s Failed !!!\n", __func__);
 		}
 	}
 	return rst;
@@ -647,7 +592,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 *                           PHY_REG_PG.TXT
 ******************************************************************************/
 
-static u4Byte Array_PHY_REG_PG_8188E[] = {
+static u4Byte array_phy_reg_pg_8188e[] = {
 		0xE00, 0xFFFFFFFF, 0x06070809,
 		0xE04, 0xFFFFFFFF, 0x02020405,
 		0xE08, 0x0000FF00, 0x00000006,
@@ -739,55 +684,45 @@ static u4Byte Array_PHY_REG_PG_8188E[] = {
 
 };
 
-void
-ODM_ReadAndConfig_PHY_REG_PG_8188E(
-	struct odm_dm_struct * pDM_Odm
-	)
+void ODM_ReadAndConfig_PHY_REG_PG_8188E(struct odm_dm_struct *dm_odm)
 {
-	u4Byte     hex = 0;
-	u4Byte     i           = 0;
-	u2Byte     count       = 0;
-	pu4Byte    ptr_array   = NULL;
-	u1Byte     platform    = pDM_Odm->SupportPlatform;
-	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
-	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_PHY_REG_PG_8188E)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_PHY_REG_PG_8188E;
-	bool		biol = false;
+	u4Byte  hex;
+	u4Byte  i           = 0;
+	u2Byte  count       = 0;
+	pu4Byte ptr_array   = NULL;
+	u1Byte  platform    = dm_odm->SupportPlatform;
+	u1Byte  interfaceValue   = dm_odm->SupportInterface;
+	u1Byte  board       = dm_odm->BoardType;
+	u4Byte  arraylen    = sizeof(array_phy_reg_pg_8188e) / sizeof(u4Byte);
+	pu4Byte array       = array_phy_reg_pg_8188e;
+	bool	biol = false;
 
-	hex += board;
-	hex += interfaceValue << 8;
-	hex += platform << 16;
-	hex += 0xFF000000;
+	hex = board + (interfaceValue << 8);
+	hex += (platform << 16) + 0xFF000000;
 
-	for (i = 0; i < ArrayLen; i += 3 )
-	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
-	    u4Byte v3 = Array[i+2];
+	for (i = 0; i < arraylen; i += 3) {
+		u4Byte v1 = array[i];
+		u4Byte v2 = array[i+1];
+		u4Byte v3 = array[i+2];
 
-	    /*  this line is a line of pure_body */
-	    if ( v1 < 0xCDCDCDCD ) {
-
-			odm_ConfigBB_PHY_REG_PG_8188E(pDM_Odm, v1, v2, v3);
-
-			 continue;
-	    } else { /*  this line is the start of branch */
-	        if ( !CheckCondition(Array[i], hex) )
-	        { /*  don't need the hw_body */
-	            i += 2; /*  skip the pair of expression */
-	            v1 = Array[i];
-	            v2 = Array[i+1];
-	            v3 = Array[i+2];
-	            while (v2 != 0xDEAD)
-	            {
-	                i += 3;
-	                v1 = Array[i];
-	                v2 = Array[i+1];
-	                v3 = Array[i+1];
-	            }
-	        }
-	    }
+		/*  this line is a line of pure_body */
+		if (v1 < 0xCDCDCDCD) {
+			odm_ConfigBB_PHY_REG_PG_8188E(dm_odm, v1, v2, v3);
+			continue;
+		} else { /*  this line is the start of branch */
+			if (!CheckCondition(array[i], hex)) {
+				/*  don't need the hw_body */
+				i += 2; /*  skip the pair of expression */
+				v1 = array[i];
+				v2 = array[i+1];
+				v3 = array[i+2];
+				while (v2 != 0xDEAD) {
+					i += 3;
+					v1 = array[i];
+					v2 = array[i+1];
+					v3 = array[i+1];
+				}
+			}
+		}
 	}
-
 }
