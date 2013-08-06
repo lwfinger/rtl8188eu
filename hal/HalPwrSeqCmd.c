@@ -33,63 +33,57 @@ Major Change History:
 	2011-07-07 Roger            Create.
 
 --*/
+
 #include <HalPwrSeqCmd.h>
 
-/*  */
-/* 	Description: */
-/* 		This routine deal with the Power Configuration CMDs parsing for RTL8723/RTL8188E Series IC. */
-/*  */
-/* 	Assumption: */
-/* 		We should follow specific format which was released from HW SD. */
-/*  */
-/* 	2011.07.07, added by Roger. */
-/*  */
-u8 HalPwrSeqCmdParsing(
-	struct adapter *		padapter,
-	u8				CutVersion,
-	u8				FabVersion,
-	u8				InterfaceType,
-	struct wl_pwr_cfg PwrSeqCmd[])
+/*	Description: */
+/*		This routine deals with the Power Configuration CMDs parsing
+ *		for RTL8723/RTL8188E Series IC.
+ *	Assumption:
+ *		We should follow specific format which was released from HW SD.
+ */
+u8 HalPwrSeqCmdParsing(struct adapter *padapter, u8 cut_vers, u8 fab_vers,
+		       u8 ifacetype, struct wl_pwr_cfg pwrseqcmd[])
 {
-	struct wl_pwr_cfg PwrCfgCmd = {0};
-	u8				bPollingBit = false;
-	u32				AryIdx = 0;
-	u8				value = 0;
-	u32				offset = 0;
-	u32				pollingCount = 0; /*  polling autoload done. */
-	u32				maxPollingCnt = 5000;
+	struct wl_pwr_cfg pwrcfgcmd = {0};
+	u8 poll_bit = false;
+	u32 aryidx = 0;
+	u8 value = 0;
+	u32 offset = 0;
+	u32 poll_count = 0; /*  polling autoload done. */
+	u32 max_poll_count = 5000;
 
 	do {
-		PwrCfgCmd = PwrSeqCmd[AryIdx];
+		pwrcfgcmd = pwrseqcmd[aryidx];
 
 		RT_TRACE(_module_hal_init_c_ , _drv_info_,
-				 ("HalPwrSeqCmdParsing: offset(%#x) cut_msk(%#x) fab_msk(%#x) interface_msk(%#x) base(%#x) cmd(%#x) msk(%#x) value(%#x)\n",
-					GET_PWR_CFG_OFFSET(PwrCfgCmd),
-					GET_PWR_CFG_CUT_MASK(PwrCfgCmd),
-					GET_PWR_CFG_FAB_MASK(PwrCfgCmd),
-					GET_PWR_CFG_INTF_MASK(PwrCfgCmd),
-					GET_PWR_CFG_BASE(PwrCfgCmd),
-					GET_PWR_CFG_CMD(PwrCfgCmd),
-					GET_PWR_CFG_MASK(PwrCfgCmd),
-					GET_PWR_CFG_VALUE(PwrCfgCmd)));
+			 ("HalPwrSeqCmdParsing: offset(%#x) cut_msk(%#x) fab_msk(%#x) interface_msk(%#x) base(%#x) cmd(%#x) msk(%#x) value(%#x)\n",
+			 GET_PWR_CFG_OFFSET(pwrcfgcmd),
+			 GET_PWR_CFG_CUT_MASK(pwrcfgcmd),
+			 GET_PWR_CFG_FAB_MASK(pwrcfgcmd),
+			 GET_PWR_CFG_INTF_MASK(pwrcfgcmd),
+			 GET_PWR_CFG_BASE(pwrcfgcmd),
+			 GET_PWR_CFG_CMD(pwrcfgcmd),
+			 GET_PWR_CFG_MASK(pwrcfgcmd),
+			 GET_PWR_CFG_VALUE(pwrcfgcmd)));
 
 		/* 2 Only Handle the command whose FAB, CUT, and Interface are matched */
-		if ((GET_PWR_CFG_FAB_MASK(PwrCfgCmd) & FabVersion) &&
-		    (GET_PWR_CFG_CUT_MASK(PwrCfgCmd) & CutVersion) &&
-		    (GET_PWR_CFG_INTF_MASK(PwrCfgCmd) & InterfaceType)) {
-			switch (GET_PWR_CFG_CMD(PwrCfgCmd)) {
+		if ((GET_PWR_CFG_FAB_MASK(pwrcfgcmd) & fab_vers) &&
+		    (GET_PWR_CFG_CUT_MASK(pwrcfgcmd) & cut_vers) &&
+		    (GET_PWR_CFG_INTF_MASK(pwrcfgcmd) & ifacetype)) {
+			switch (GET_PWR_CFG_CMD(pwrcfgcmd)) {
 			case PWR_CMD_READ:
 				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_READ\n"));
 				break;
 			case PWR_CMD_WRITE:
 				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_WRITE\n"));
-				offset = GET_PWR_CFG_OFFSET(PwrCfgCmd);
+				offset = GET_PWR_CFG_OFFSET(pwrcfgcmd);
 
 				/*  Read the value from system register */
 				value = rtw_read8(padapter, offset);
 
-				value &= ~(GET_PWR_CFG_MASK(PwrCfgCmd));
-				value |= (GET_PWR_CFG_VALUE(PwrCfgCmd) & GET_PWR_CFG_MASK(PwrCfgCmd));
+				value &= ~(GET_PWR_CFG_MASK(pwrcfgcmd));
+				value |= (GET_PWR_CFG_VALUE(pwrcfgcmd) & GET_PWR_CFG_MASK(pwrcfgcmd));
 
 				/*  Write the value back to sytem register */
 				rtw_write8(padapter, offset, value);
@@ -97,30 +91,29 @@ u8 HalPwrSeqCmdParsing(
 			case PWR_CMD_POLLING:
 				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_POLLING\n"));
 
-				bPollingBit = false;
-				offset = GET_PWR_CFG_OFFSET(PwrCfgCmd);
+				poll_bit = false;
+				offset = GET_PWR_CFG_OFFSET(pwrcfgcmd);
 				do {
 						value = rtw_read8(padapter, offset);
 
-					value &= GET_PWR_CFG_MASK(PwrCfgCmd);
-					if (value == (GET_PWR_CFG_VALUE(PwrCfgCmd) & GET_PWR_CFG_MASK(PwrCfgCmd)))
-						bPollingBit = true;
+					value &= GET_PWR_CFG_MASK(pwrcfgcmd);
+					if (value == (GET_PWR_CFG_VALUE(pwrcfgcmd) & GET_PWR_CFG_MASK(pwrcfgcmd)))
+						poll_bit = true;
 					else
 						rtw_udelay_os(10);
 
-					if (pollingCount++ > maxPollingCnt) {
+					if (poll_count++ > max_poll_count) {
 						DBG_88E("Fail to polling Offset[%#x]\n", offset);
 						return false;
 					}
-				} while (!bPollingBit);
-
+				} while (!poll_bit);
 				break;
 			case PWR_CMD_DELAY:
 				RT_TRACE(_module_hal_init_c_ , _drv_info_, ("HalPwrSeqCmdParsing: PWR_CMD_DELAY\n"));
-				if (GET_PWR_CFG_VALUE(PwrCfgCmd) == PWRSEQ_DELAY_US)
-					rtw_udelay_os(GET_PWR_CFG_OFFSET(PwrCfgCmd));
+				if (GET_PWR_CFG_VALUE(pwrcfgcmd) == PWRSEQ_DELAY_US)
+					rtw_udelay_os(GET_PWR_CFG_OFFSET(pwrcfgcmd));
 				else
-					rtw_udelay_os(GET_PWR_CFG_OFFSET(PwrCfgCmd)*1000);
+					rtw_udelay_os(GET_PWR_CFG_OFFSET(pwrcfgcmd)*1000);
 				break;
 			case PWR_CMD_END:
 				/*  When this command is parsed, end the process */
@@ -133,8 +126,7 @@ u8 HalPwrSeqCmdParsing(
 			}
 		}
 
-		AryIdx++;/* Add Array Index */
-	}while (1);
-
+		aryidx++;/* Add Array Index */
+	} while (1);
 	return true;
 }
