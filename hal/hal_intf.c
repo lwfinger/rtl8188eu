@@ -212,7 +212,7 @@ u32 rtw_hal_inirp_deinit(struct adapter *adapt)
 }
 
 u8 rtw_hal_intf_ps_func(struct adapter *adapt,
-		        enum hal_intf_ps_func efunc_id, u8 *val)
+			enum hal_intf_ps_func efunc_id, u8 *val)
 {
 	if (adapt->HalFunc.interface_ps_func)
 		return adapt->HalFunc.interface_ps_func(adapt, efunc_id,

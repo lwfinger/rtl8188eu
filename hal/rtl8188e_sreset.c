@@ -22,45 +22,38 @@
 #include <rtl8188e_sreset.h>
 #include <rtl8188e_hal.h>
 
-extern void rtw_cancel_all_timer(struct adapter *padapter);
 static void _restore_security_setting(struct adapter *padapter)
 {
 	u8 EntryId = 0;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct sta_priv * pstapriv = &padapter->stapriv;
+	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct sta_info *psta;
-	struct security_priv* psecuritypriv=&(padapter->securitypriv);
+	struct security_priv *psecuritypriv = &(padapter->securitypriv);
 	struct mlme_ext_info	*pmlmeinfo = &padapter->mlmeextpriv.mlmext_info;
 
-	(pmlmeinfo->auth_algo == dot11AuthAlgrthm_8021X)
-		? rtw_write8(padapter, REG_SECCFG, 0xcc)
-		: rtw_write8(padapter, REG_SECCFG, 0xcf);
+	(pmlmeinfo->auth_algo == dot11AuthAlgrthm_8021X) ?
+				 rtw_write8(padapter, REG_SECCFG, 0xcc) :
+				 rtw_write8(padapter, REG_SECCFG, 0xcf);
 
-	if (	( padapter->securitypriv.dot11PrivacyAlgrthm == _WEP40_ ) ||
-		( padapter->securitypriv.dot11PrivacyAlgrthm == _WEP104_ ))
-	{
-
-		for (EntryId=0; EntryId<4; EntryId++)
-		{
+	if ((padapter->securitypriv.dot11PrivacyAlgrthm == _WEP40_) ||
+	    (padapter->securitypriv.dot11PrivacyAlgrthm == _WEP104_)) {
+		for (EntryId = 0; EntryId < 4; EntryId++) {
 			if (EntryId == psecuritypriv->dot11PrivacyKeyIndex)
-				rtw_set_key(padapter,&padapter->securitypriv, EntryId, 1);
+				rtw_set_key(padapter, &padapter->securitypriv, EntryId, 1);
 			else
-				rtw_set_key(padapter,&padapter->securitypriv, EntryId, 0);
+				rtw_set_key(padapter, &padapter->securitypriv, EntryId, 0);
 		}
 
-	}
-	else if ((padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_) ||
-		(padapter->securitypriv.dot11PrivacyAlgrthm == _AES_))
-	{
+	} else if ((padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_) ||
+		   (padapter->securitypriv.dot11PrivacyAlgrthm == _AES_)) {
 		psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
 		if (psta) {
 			/* pairwise key */
 			rtw_setstakey_cmd(padapter, (unsigned char *)psta, true);
 			/* group key */
-			rtw_set_key(padapter,&padapter->securitypriv,padapter->securitypriv.dot118021XGrpKeyid, 0);
+			rtw_set_key(padapter, &padapter->securitypriv, padapter->securitypriv.dot118021XGrpKeyid, 0);
 		}
 	}
-
 }
 
 static void _restore_network_status(struct adapter *padapter)
@@ -68,7 +61,7 @@ static void _restore_network_status(struct adapter *padapter)
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	struct wlan_bssid_ex	*pnetwork = (struct wlan_bssid_ex*)(&(pmlmeinfo->network));
+	struct wlan_bssid_ex	*pnetwork = (struct wlan_bssid_ex *)(&(pmlmeinfo->network));
 	unsigned short	caps;
 	u8	join_type;
 
@@ -78,7 +71,7 @@ static void _restore_network_status(struct adapter *padapter)
 	/* set MSR to nolink */
 	Set_MSR(padapter, _HW_STATE_NOLINK_);
 	/*  reject all data frame */
-	rtw_write16(padapter, REG_RXFLTMAP2,0x00);
+	rtw_write16(padapter, REG_RXFLTMAP2, 0x00);
 	/* reset TSF */
 	rtw_write8(padapter, REG_DUAL_TSF_RST, (BIT(0)|BIT(1)));
 
@@ -114,7 +107,7 @@ static void _restore_network_status(struct adapter *padapter)
 
 	mlmeext_joinbss_event_callback(padapter, 1);
 	/* restore Sequence No. */
-	rtw_write8(padapter,0x4dc,padapter->xmitpriv.nqos_ssn);
+	rtw_write8(padapter, 0x4dc, padapter->xmitpriv.nqos_ssn);
 }
 
 void rtl8188e_silentreset_for_specific_platform(struct adapter *padapter)
@@ -131,24 +124,23 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 	unsigned int diff_time;
 	u32 txdma_status;
 
-	if ( (txdma_status=rtw_read32(padapter, REG_TXDMA_STATUS)) !=0x00){
+	txdma_status = rtw_read32(padapter, REG_TXDMA_STATUS);
+	if (txdma_status != 0x00) {
 		DBG_88E("%s REG_TXDMA_STATUS:0x%08x\n", __func__, txdma_status);
-		rtw_write32(padapter,REG_TXDMA_STATUS,txdma_status);
+		rtw_write32(padapter, REG_TXDMA_STATUS, txdma_status);
 		rtl8188e_silentreset_for_specific_platform(padapter);
 	}
 	/* total xmit irp = 4 */
 	current_time = rtw_get_current_time();
-	if (0==pxmitpriv->free_xmitbuf_cnt)
-	{
+	if (0 == pxmitpriv->free_xmitbuf_cnt) {
 		diff_time = jiffies_to_msecs(current_time - psrtpriv->last_tx_time);
 
-		if (diff_time > 2000){
-			if (psrtpriv->last_tx_complete_time==0){
+		if (diff_time > 2000) {
+			if (psrtpriv->last_tx_complete_time == 0) {
 				psrtpriv->last_tx_complete_time = current_time;
-			}
-			else{
+			} else {
 				diff_time = jiffies_to_msecs(current_time - psrtpriv->last_tx_complete_time);
-				if (diff_time > 4000){
+				if (diff_time > 4000) {
 					DBG_88E("%s tx hang\n", __func__);
 					rtl8188e_silentreset_for_specific_platform(padapter);
 				}
@@ -160,18 +152,17 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
 {
 	u32 rx_dma_status = 0;
-	u8 fw_status=0;
-	rx_dma_status = rtw_read32(padapter,REG_RXDMA_STATUS);
-	if (rx_dma_status!= 0x00){
-		DBG_88E("%s REG_RXDMA_STATUS:0x%08x\n",__func__,rx_dma_status);
-		rtw_write32(padapter,REG_RXDMA_STATUS,rx_dma_status);
+	u8 fw_status = 0;
+	rx_dma_status = rtw_read32(padapter, REG_RXDMA_STATUS);
+	if (rx_dma_status != 0x00) {
+		DBG_88E("%s REG_RXDMA_STATUS:0x%08x\n", __func__, rx_dma_status);
+		rtw_write32(padapter, REG_RXDMA_STATUS, rx_dma_status);
 	}
-	fw_status = rtw_read8(padapter,REG_FMETHR);
-	if (fw_status != 0x00)
-	{
+	fw_status = rtw_read8(padapter, REG_FMETHR);
+	if (fw_status != 0x00) {
 		if (fw_status == 1)
-			DBG_88E("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !! \n",__func__,fw_status);
+			DBG_88E("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!\n", __func__, fw_status);
 		else if (fw_status == 2)
-			DBG_88E("%s REG_FW_STATUS (0x%02x), Condition_No_Match !! \n",__func__,fw_status);
+			DBG_88E("%s REG_FW_STATUS (0x%02x), Condition_No_Match !!\n", __func__, fw_status);
 	}
 }
