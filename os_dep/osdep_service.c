@@ -31,35 +31,28 @@
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
 * @return: one of RTW_STATUS_CODE
 */
-inline int RTW_STATUS_CODE(int error_code){
-	if (error_code >=0)
+inline int RTW_STATUS_CODE(int error_code)
+{
+	if (error_code >= 0)
 		return _SUCCESS;
-
-	switch (error_code) {
-		//case -ETIMEDOUT:
-		//	return RTW_STATUS_TIMEDOUT;
-		default:
-			return _FAIL;
-	}
+	return _FAIL;
 }
 
-u32 rtw_atoi(u8* s)
+u32 rtw_atoi(u8 *s)
 {
 	int num = 0, flag = 0;
 	int i;
 	for (i = 0; i <= strlen(s); i++) {
-	  if (s[i] >= '0' && s[i] <= '9')
-		 num = num * 10 + s[i] -'0';
-	  else if (s[0] == '-' && i == 0)
-		 flag =1;
-	  else
-		  break;
-	 }
-
+		if (s[i] >= '0' && s[i] <= '9')
+			num = num * 10 + s[i] - '0';
+		else if (s[0] == '-' && i == 0)
+			flag = 1;
+		else
+			break;
+	}
 	if (flag == 1)
-	   num = num * -1;
-
-	 return(num);
+		num = num * -1;
+	 return num;
 }
 
 inline u8 *_rtw_vmalloc(u32 sz)
@@ -69,7 +62,7 @@ inline u8 *_rtw_vmalloc(u32 sz)
 	return pbuf;
 }
 
-inline u8* _rtw_zvmalloc(u32 sz)
+inline u8 *_rtw_zvmalloc(u32 sz)
 {
 	u8	*pbuf;
 	pbuf = _rtw_vmalloc(sz);
@@ -83,15 +76,15 @@ inline void _rtw_vmfree(u8 *pbuf, u32 sz)
 	vfree(pbuf);
 }
 
-u8* _rtw_malloc(u32 sz)
+u8 *_rtw_malloc(u32 sz)
 {
-	u8	*pbuf=NULL;
+	u8	*pbuf = NULL;
 
-	pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
+	pbuf = kmalloc(sz, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 	return pbuf;
 }
 
-u8* _rtw_zmalloc(u32 sz)
+u8 *_rtw_zmalloc(u32 sz)
 {
 	u8	*pbuf = _rtw_malloc(sz);
 
@@ -105,17 +98,17 @@ void	_rtw_mfree(u8 *pbuf, u32 sz)
 		kfree(pbuf);
 }
 
-void* rtw_malloc2d(int h, int w, int size)
+void *rtw_malloc2d(int h, int w, int size)
 {
 	int j;
 
-	void **a = (void **) rtw_zmalloc( h*sizeof(void *) + h*w*size );
+	void **a = (void **)rtw_zmalloc(h*sizeof(void *) + h*w*size);
 	if (a == NULL) {
 		pr_info("%s: alloc memory fail!\n", __func__);
 		return NULL;
 	}
 
-	for ( j=0; j < h; j++ )
+	for (j = 0; j < h; j++)
 		a[j] = ((char *)(a+h)) + j*w*size;
 
 	return a;
@@ -123,17 +116,18 @@ void* rtw_malloc2d(int h, int w, int size)
 
 void rtw_mfree2d(void *pbuf, int h, int w, int size)
 {
-	rtw_mfree((u8 *)pbuf, h*sizeof(void*) + w*h*size);
+	rtw_mfree((u8 *)pbuf, h*sizeof(void *) + w*h*size);
 }
 
-void _rtw_memcpy(void* dst, void* src, u32 sz)
+void _rtw_memcpy(void *dst, void *src, u32 sz)
 {
 	memcpy(dst, src, sz);
 }
 
-int	_rtw_memcmp(void *dst, void *src, u32 sz)
+int _rtw_memcmp(void *dst, void *src, u32 sz)
 {
-//under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0
+/* under Linux/GNU/GLibc, the return value of memcmp for two same
+ * mem. chunk is 0 */
 	if (!(memcmp(dst, src, sz)))
 		return true;
 	else
@@ -142,12 +136,12 @@ int	_rtw_memcmp(void *dst, void *src, u32 sz)
 
 void _rtw_memset(void *pbuf, int c, u32 sz)
 {
-        memset(pbuf, c, sz);
+	memset(pbuf, c, sz);
 }
 
 void _rtw_init_listhead(struct list_head *list)
 {
-        INIT_LIST_HEAD(list);
+	INIT_LIST_HEAD(list);
 }
 
 /*
@@ -201,7 +195,7 @@ u32 _rtw_down_sema(struct semaphore *sema)
 
 void	_rtw_mutex_init(struct mutex *pmutex)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37))
 	mutex_init(pmutex);
 #else
 	init_MUTEX(pmutex);
@@ -210,7 +204,7 @@ void	_rtw_mutex_init(struct mutex *pmutex)
 
 void	_rtw_mutex_free(struct mutex *pmutex)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37))
 	mutex_destroy(pmutex);
 #endif
 }
@@ -258,7 +252,8 @@ inline u32 rtw_ms_to_systime(u32 ms)
 	return ms * HZ / 1000;
 }
 
-// the input parameter start use the same unit as returned by rtw_get_current_time
+/*  the input parameter start use the same unit as returned by
+ *  rtw_get_current_time */
 inline s32 rtw_get_passing_time_ms(u32 start)
 {
 	return rtw_systime_to_ms(jiffies-start);
@@ -271,16 +266,14 @@ inline s32 rtw_get_time_interval_ms(u32 start, u32 end)
 
 void rtw_sleep_schedulable(int ms)
 {
-    u32 delta;
+	u32 delta;
 
-    delta = (ms * HZ)/1000;//(ms)
-    if (delta == 0) {
-        delta = 1;// 1 ms
-    }
-    set_current_state(TASK_INTERRUPTIBLE);
-    if (schedule_timeout(delta) != 0) {
-        return ;
-    }
+	delta = (ms * HZ)/1000;/* ms) */
+	if (delta == 0)
+		delta = 1;/*  1 ms */
+	set_current_state(TASK_INTERRUPTIBLE);
+	if (schedule_timeout(delta) != 0)
+		return;
 }
 
 void rtw_msleep_os(int ms)
@@ -290,10 +283,10 @@ void rtw_msleep_os(int ms)
 
 void rtw_usleep_os(int us)
 {
-	if ( 1 < (us/1000) )
+	if (1 < (us/1000))
 		msleep(1);
 	else
-		msleep( (us/1000) + 1);
+		msleep((us/1000) + 1);
 }
 
 void rtw_mdelay_os(int ms)
@@ -303,7 +296,7 @@ void rtw_mdelay_os(int ms)
 
 void rtw_udelay_os(int us)
 {
-      udelay((unsigned long)us);
+	udelay((unsigned long)us);
 }
 
 void rtw_yield_os(void)
@@ -333,11 +326,11 @@ inline void rtw_unlock_suspend(void)
 inline void rtw_lock_suspend_timeout(long timeout)
 {
 }
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 
 inline void ATOMIC_SET(ATOMIC_T *v, int i)
 {
-	atomic_set(v,i);
+	atomic_set(v, i);
 }
 
 inline int ATOMIC_READ(ATOMIC_T *v)
@@ -347,12 +340,12 @@ inline int ATOMIC_READ(ATOMIC_T *v)
 
 inline void ATOMIC_ADD(ATOMIC_T *v, int i)
 {
-	atomic_add(i,v);
+	atomic_add(i, v);
 }
 
 inline void ATOMIC_SUB(ATOMIC_T *v, int i)
 {
-	atomic_sub(i,v);
+	atomic_sub(i, v);
 }
 
 inline void ATOMIC_INC(ATOMIC_T *v)
@@ -367,12 +360,12 @@ inline void ATOMIC_DEC(ATOMIC_T *v)
 
 inline int ATOMIC_ADD_RETURN(ATOMIC_T *v, int i)
 {
-	return atomic_add_return(i,v);
+	return atomic_add_return(i, v);
 }
 
 inline int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i)
 {
-	return atomic_sub_return(i,v);
+	return atomic_sub_return(i, v);
 }
 
 inline int ATOMIC_INC_RETURN(ATOMIC_T *v)
@@ -385,139 +378,133 @@ inline int ATOMIC_DEC_RETURN(ATOMIC_T *v)
 	return atomic_dec_return(v);
 }
 
-/*
-* Open a file with the specific @param path, @param flag, @param mode
-* @param fpp the pointer of struct file pointer to get struct file pointer while file opening is success
-* @param path the path of the file to open
-* @param flag file operation flags, please refer to linux document
-* @param mode please refer to linux document
-* @return Linux specific error code
-*/
-static int openFile(struct file **fpp, char *path, int flag, int mode)
+/* Open a file with the specific @param path, @param flag, @param mode
+ * @param fpp the pointer of struct file pointer to get struct file pointer while file opening is success
+ * @param path the path of the file to open
+ * @param flag file operation flags, please refer to linux document
+ * @param mode please refer to linux document
+ * @return Linux specific error code
+ */
+static int openfile(struct file **fpp, char *path, int flag, int mode)
 {
 	struct file *fp;
 
-	fp=filp_open(path, flag, mode);
+	fp = filp_open(path, flag, mode);
 	if (IS_ERR(fp)) {
-		*fpp=NULL;
+		*fpp = NULL;
 		return PTR_ERR(fp);
-	}
-	else {
-		*fpp=fp;
+	} else {
+		*fpp = fp;
 		return 0;
 	}
 }
 
-/*
-* Close the file with the specific @param fp
-* @param fp the pointer of struct file to close
-* @return always 0
-*/
-static int closeFile(struct file *fp)
+/* Close the file with the specific @param fp
+ * @param fp the pointer of struct file to close
+ * @return always 0
+ */
+static int closefile(struct file *fp)
 {
-	filp_close(fp,NULL);
+	filp_close(fp, NULL);
 	return 0;
 }
 
-static int readFile(struct file *fp,char __user *buf,int len)
+static int readfile(struct file *fp, char __user *buf, int len)
 {
-	int rlen=0, sum=0;
+	int rlen = 0, sum = 0;
 
 	if (!fp->f_op || !fp->f_op->read)
 		return -EPERM;
 
-	while (sum<len) {
-		rlen=fp->f_op->read(fp,buf+sum,len-sum, &fp->f_pos);
-		if (rlen>0)
-			sum+=rlen;
+	while (sum < len) {
+		rlen = fp->f_op->read(fp, buf+sum, len-sum, &fp->f_pos);
+		if (rlen > 0)
+			sum += rlen;
 		else if (0 != rlen)
 			return rlen;
 		else
 			break;
 	}
-
 	return  sum;
-
 }
 
-static int writeFile(struct file *fp, char __user *buf, int len)
+static int writefile(struct file *fp, char __user *buf, int len)
 {
-	int wlen=0, sum=0;
+	int wlen = 0, sum = 0;
 
 	if (!fp->f_op || !fp->f_op->write)
 		return -EPERM;
 
-	while (sum<len) {
-		wlen=fp->f_op->write(fp,buf+sum,len-sum, &fp->f_pos);
-		if (wlen>0)
-			sum+=wlen;
+	while (sum < len) {
+		wlen = fp->f_op->write(fp, buf+sum, len-sum, &fp->f_pos);
+		if (wlen > 0)
+			sum += wlen;
 		else if (0 != wlen)
 			return wlen;
 		else
 			break;
 	}
-
 	return sum;
-
 }
 
-/*
-* Test if the specifi @param path is a file and readable
-* @param path the path of the file to test
-* @return Linux specific error code
-*/
-static int isFileReadable(char *path)
+/* Test if the specifi @param path is a file and readable
+ * @param path the path of the file to test
+ * @return Linux specific error code
+ */
+static int isfilereadable(char *path)
 {
 	struct file *fp;
 	int ret = 0;
 	mm_segment_t oldfs;
 	char __user buf;
 
-	fp=filp_open(path, O_RDONLY, 0);
+	fp = filp_open(path, O_RDONLY, 0);
 	if (IS_ERR(fp)) {
 		ret = PTR_ERR(fp);
-	}
-	else {
+	} else {
 		oldfs = get_fs(); set_fs(get_ds());
 
-		if (1!=readFile(fp, &buf, 1))
+		if (1 != readfile(fp, &buf, 1))
 			ret = PTR_ERR(fp);
 
 		set_fs(oldfs);
-		filp_close(fp,NULL);
+		filp_close(fp, NULL);
 	}
 	return ret;
 }
 
-/*
-* Open the file with @param path and retrive the file content into memory starting from @param buf for @param sz at most
-* @param path the path of the file to open and read
-* @param buf the starting address of the buffer to store file content
-* @param sz how many bytes to read at most
-* @return the byte we've read, or Linux specific error code
-*/
-static int retriveFromFile(char *path, u8 __user *buf, u32 sz)
+/* Open the file with @param path and retrive the file content into
+ * memory starting from @param buf for @param sz at most
+ * @param path the path of the file to open and read
+ * @param buf the starting address of the buffer to store file content
+ * @param sz how many bytes to read at most
+ * @return the byte we've read, or Linux specific error code
+ */
+static int retrievefromfile(char *path, u8 __user *buf, u32 sz)
 {
-	int ret =-1;
+	int ret = -1;
 	mm_segment_t oldfs;
 	struct file *fp;
 
 	if (path && buf) {
-		if ( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
-			DBG_88E("%s openFile path:%s fp=%p\n",__func__, path ,fp);
+		ret = openfile(&fp, path, O_RDONLY, 0);
+		if (0 == ret) {
+			DBG_88E("%s openfile path:%s fp =%p\n", __func__,
+				path, fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
-			ret=readFile(fp, buf, sz);
+			ret = readfile(fp, buf, sz);
 			set_fs(oldfs);
-			closeFile(fp);
+			closefile(fp);
 
-			DBG_88E("%s readFile, ret:%d\n",__func__, ret);
+			DBG_88E("%s readfile, ret:%d\n", __func__, ret);
 
 		} else {
-			DBG_88E("%s openFile path:%s Fail, ret:%d\n",__func__, path, ret);
+			DBG_88E("%s openfile path:%s Fail, ret:%d\n", __func__,
+				path, ret);
 		}
 	} else {
-		DBG_88E("%s NULL pointer\n",__func__);
+		DBG_88E("%s NULL pointer\n", __func__);
 		ret =  -EINVAL;
 	}
 	return ret;
@@ -530,28 +517,29 @@ static int retriveFromFile(char *path, u8 __user *buf, u32 sz)
 * @param sz how many bytes to write at most
 * @return the byte we've written, or Linux specific error code
 */
-static int storeToFile(char *path, u8 __user *buf, u32 sz)
+static int storetofile(char *path, u8 __user *buf, u32 sz)
 {
-	int ret =0;
+	int ret = 0;
 	mm_segment_t oldfs;
 	struct file *fp;
 
 	if (path && buf) {
-		if ( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
-			DBG_88E("%s openFile path:%s fp=%p\n",__func__, path ,fp);
+		ret = openfile(&fp, path, O_CREAT|O_WRONLY, 0666);
+		if (0 == ret) {
+			DBG_88E("%s openfile path:%s fp =%p\n", __func__, path, fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
-			ret=writeFile(fp, buf, sz);
+			ret = writefile(fp, buf, sz);
 			set_fs(oldfs);
-			closeFile(fp);
+			closefile(fp);
 
-			DBG_88E("%s writeFile, ret:%d\n",__func__, ret);
+			DBG_88E("%s writefile, ret:%d\n", __func__, ret);
 
 		} else {
-			DBG_88E("%s openFile path:%s Fail, ret:%d\n",__func__, path, ret);
+			DBG_88E("%s openfile path:%s Fail, ret:%d\n", __func__, path, ret);
 		}
 	} else {
-		DBG_88E("%s NULL pointer\n",__func__);
+		DBG_88E("%s NULL pointer\n", __func__);
 		ret =  -EINVAL;
 	}
 	return ret;
@@ -564,7 +552,7 @@ static int storeToFile(char *path, u8 __user *buf, u32 sz)
 */
 int rtw_is_file_readable(char *path)
 {
-	if (isFileReadable(path) == 0)
+	if (isfilereadable(path) == 0)
 		return true;
 	else
 		return false;
@@ -579,30 +567,34 @@ int rtw_is_file_readable(char *path)
 */
 int rtw_retrive_from_file(char *path, u8 __user *buf, u32 sz)
 {
-	int ret =retriveFromFile(path, buf, sz);
-	return ret>=0?ret:0;
-}
+	int ret = retrievefromfile(path, buf, sz);
 
-/*
-* Open the file with @param path and wirte @param sz byte of data starting from @param buf into the file
-* @param path the path of the file to open and write
-* @param buf the starting address of the data to write into file
-* @param sz how many bytes to write at most
-* @return the byte we've written
-*/
-int rtw_store_to_file(char *path, u8 __user *buf, u32 sz)
-{
-	int ret =storeToFile(path, buf, sz);
 	return ret >= 0 ? ret : 0;
 }
 
-struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv)
+/*
+ * Open the file with @param path and wirte @param sz byte of data
+ * starting from @param buf into the file
+ * @param path the path of the file to open and write
+ * @param buf the starting address of the data to write into file
+ * @param sz how many bytes to write at most
+ * @return the byte we've written
+ */
+int rtw_store_to_file(char *path, u8 __user *buf, u32 sz)
+{
+	int ret = storetofile(path, buf, sz);
+	return ret >= 0 ? ret : 0;
+}
+
+struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv,
+						    void *old_priv)
 {
 	struct net_device *pnetdev;
 	struct rtw_netdev_priv_indicator *pnpi;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
-	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator), 4);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
+	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator),
+				    4);
 #else
 	pnetdev = alloc_etherdev(sizeof(struct rtw_netdev_priv_indicator));
 #endif
@@ -610,8 +602,8 @@ struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_p
 		goto RETURN;
 
 	pnpi = netdev_priv(pnetdev);
-	pnpi->priv=old_priv;
-	pnpi->sizeof_priv=sizeof_priv;
+	pnpi->priv = old_priv;
+	pnpi->sizeof_priv = sizeof_priv;
 
 RETURN:
 	return pnetdev;
@@ -622,8 +614,9 @@ struct net_device *rtw_alloc_etherdev(int sizeof_priv)
 	struct net_device *pnetdev;
 	struct rtw_netdev_priv_indicator *pnpi;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
-	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator), 4);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
+	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator),
+				    4);
 #else
 	pnetdev = alloc_etherdev(sizeof(struct rtw_netdev_priv_indicator));
 #endif
@@ -639,12 +632,12 @@ struct net_device *rtw_alloc_etherdev(int sizeof_priv)
 		goto RETURN;
 	}
 
-	pnpi->sizeof_priv=sizeof_priv;
+	pnpi->sizeof_priv = sizeof_priv;
 RETURN:
 	return pnetdev;
 }
 
-void rtw_free_netdev(struct net_device * netdev)
+void rtw_free_netdev(struct net_device *netdev)
 {
 	struct rtw_netdev_priv_indicator *pnpi;
 
@@ -664,8 +657,8 @@ RETURN:
 }
 
 /*
-* Jeff: this function should be called under ioctl (rtnl_lock is accquired) while
-* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26)
+* this function should be called under ioctl (rtnl_lock is accquired) while
+* LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26)
 */
 int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 {
@@ -679,13 +672,13 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 
 	rereg_priv = &padapter->rereg_nd_name_priv;
 
-	//free the old_pnetdev
+	/* free the old_pnetdev */
 	if (rereg_priv->old_pnetdev) {
 		free_netdev(rereg_priv->old_pnetdev);
 		rereg_priv->old_pnetdev = NULL;
 	}
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26))
 	if (!rtnl_is_locked())
 		unregister_netdev(cur_pnetdev);
 	else
@@ -694,7 +687,7 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 
 	rtw_proc_remove_one(cur_pnetdev);
 
-	rereg_priv->old_pnetdev=cur_pnetdev;
+	rereg_priv->old_pnetdev = cur_pnetdev;
 
 	pnetdev = rtw_init_netdev(padapter);
 	if (!pnetdev)  {
@@ -708,26 +701,21 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 
 	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26))
 	if (!rtnl_is_locked())
 		ret = register_netdev(pnetdev);
 	else
 #endif
 		ret = register_netdevice(pnetdev);
-
-	if ( ret != 0) {
-		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("register_netdev() failed\n"));
+	if (ret != 0) {
+		RT_TRACE(_module_hci_intfs_c_, _drv_err_,
+			 ("register_netdev() failed\n"));
 		goto error;
 	}
-
 	rtw_proc_init_one(pnetdev);
-
 	return 0;
-
 error:
-
 	return -1;
-
 }
 
 u64 rtw_modular64(u64 x, u64 y)
@@ -795,7 +783,7 @@ keep_ori:
  */
 inline bool rtw_cbuf_full(struct rtw_cbuf *cbuf)
 {
-	return (cbuf->write == cbuf->read-1)? true : false;
+	return (cbuf->write == cbuf->read-1) ? true : false;
 }
 
 /**
@@ -806,7 +794,7 @@ inline bool rtw_cbuf_full(struct rtw_cbuf *cbuf)
  */
 inline bool rtw_cbuf_empty(struct rtw_cbuf *cbuf)
 {
-	return (cbuf->write == cbuf->read)? true : false;
+	return (cbuf->write == cbuf->read) ? true : false;
 }
 
 /**
@@ -861,13 +849,14 @@ struct rtw_cbuf *rtw_cbuf_alloc(u32 size)
 {
 	struct rtw_cbuf *cbuf;
 
-	cbuf = (struct rtw_cbuf *)rtw_malloc(sizeof(*cbuf) + sizeof(void*)*size);
+	cbuf = (struct rtw_cbuf *)rtw_malloc(sizeof(*cbuf) +
+	       sizeof(void *)*size);
 
 	if (cbuf) {
-		cbuf->write = cbuf->read = 0;
+		cbuf->write = 0;
+		cbuf->read = 0;
 		cbuf->size = size;
 	}
-
 	return cbuf;
 }
 
@@ -877,5 +866,5 @@ struct rtw_cbuf *rtw_cbuf_alloc(u32 size)
  */
 void rtw_cbuf_free(struct rtw_cbuf *cbuf)
 {
-	rtw_mfree((u8*)cbuf, sizeof(*cbuf) + sizeof(void*)*cbuf->size);
+	rtw_mfree((u8 *)cbuf, sizeof(*cbuf) + sizeof(void *)*cbuf->size);
 }
