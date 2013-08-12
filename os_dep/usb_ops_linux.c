@@ -15,7 +15,7 @@
  * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
  *
- *******************************************************************************/
+ ******************************************************************************/
 #define _USB_OPS_LINUX_C_
 
 #include <drv_types.h>
@@ -24,15 +24,13 @@
 
 unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr)
 {
-	unsigned int pipe=0, ep_num=0;
+	unsigned int pipe = 0, ep_num = 0;
 	struct usb_device *pusbd = pdvobj->pusbdev;
 
 	if (addr == RECV_BULK_IN_ADDR) {
-		pipe=usb_rcvbulkpipe(pusbd, pdvobj->RtInPipe[0]);
-
+		pipe = usb_rcvbulkpipe(pusbd, pdvobj->RtInPipe[0]);
 	} else if (addr == RECV_INT_IN_ADDR) {
-		pipe=usb_rcvbulkpipe(pusbd, pdvobj->RtInPipe[1]);
-
+		pipe = usb_rcvbulkpipe(pusbd, pdvobj->RtInPipe[1]);
 	} else if (addr < HW_QUEUE_ENTRY) {
 		ep_num = pdvobj->Queue2Pipe[addr];
 		pipe = usb_sndbulkpipe(pusbd, ep_num);
@@ -41,7 +39,7 @@ unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr)
 	return pipe;
 }
 
-struct zero_bulkout_context{
+struct zero_bulkout_context {
 	void *pbuf;
 	void *purb;
 	void *pirp;
@@ -52,25 +50,15 @@ static void usb_bulkout_zero_complete(struct urb *purb, struct pt_regs *regs)
 {
 	struct zero_bulkout_context *pcontext = (struct zero_bulkout_context *)purb->context;
 
-	//DBG_88E("+usb_bulkout_zero_complete\n");
-
-	if (pcontext)
-	{
+	if (pcontext) {
 		if (pcontext->pbuf)
-		{
 			rtw_mfree(pcontext->pbuf, sizeof(int));
-		}
 
-		if (pcontext->purb && (pcontext->purb==purb))
-		{
+		if (pcontext->purb && (pcontext->purb == purb))
 			usb_free_urb(pcontext->purb);
-		}
 
-
-		rtw_mfree((u8*)pcontext, sizeof(struct zero_bulkout_context));
+		rtw_mfree((u8 *)pcontext, sizeof(struct zero_bulkout_context));
 	}
-
-
 }
 
 static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
@@ -79,15 +67,13 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	u32 ret;
 	unsigned char *pbuf;
 	struct zero_bulkout_context *pcontext;
-	struct urb *	purb = NULL;
+	struct urb *purb = NULL;
 	struct adapter *padapter = (struct adapter *)pintfhdl->padapter;
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 	struct usb_device *pusbd = pdvobj->pusbdev;
 
-	//DBG_88E("%s\n", __func__);
-
-
-	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx))
+	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||
+	    (padapter->pwrctrlpriv.pnp_bstop_trx))
 		return _FAIL;
 
 	pcontext = (struct zero_bulkout_context *)rtw_zmalloc(sizeof(struct zero_bulkout_context));
@@ -101,35 +87,31 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	pcontext->pirp = NULL;
 	pcontext->padapter = padapter;
 
-	//translate DMA FIFO addr to pipehandle
+	/* translate DMA FIFO addr to pipehandle */
 
 	usb_fill_bulk_urb(purb, pusbd, pipe,
-				pbuf,
-				len,
-				usb_bulkout_zero_complete,
-				pcontext);//context is pcontext
+			  pbuf,
+			  len,
+			  usb_bulkout_zero_complete,
+			  pcontext);/* context is pcontext */
 
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 
 	if (!status)
-		ret= _SUCCESS;
+		ret = _SUCCESS;
 	else
-		ret= _FAIL;
+		ret = _FAIL;
 
 	return ret;
-
 }
 
 void usb_read_mem(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {
-
 }
 
 void usb_write_mem(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 {
-
 }
-
 
 void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 {
@@ -142,13 +124,10 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 
 	padapter->bReadPortCancel = true;
 
-	for (i=0; i < NR_RECVBUFF ; i++) {
-
+	for (i = 0; i < NR_RECVBUFF; i++) {
 		precvbuf->reuse = true;
-		if (precvbuf->purb)	 {
-			//DBG_88E("usb_read_port_cancel : usb_kill_urb\n");
+		if (precvbuf->purb)
 			usb_kill_urb(precvbuf->purb);
-		}
 		precvbuf++;
 	}
 }
@@ -160,6 +139,7 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)purb->context;
 	struct adapter	*padapter = pxmitbuf->padapter;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
+	struct hal_data_8188e	*haldata;
 
 _func_enter_;
 
@@ -185,26 +165,26 @@ _func_enter_;
 		break;
 	}
 
-	if (padapter->bSurpriseRemoved || padapter->bDriverStopped ||padapter->bWritePortCancel) {
+	if (padapter->bSurpriseRemoved || padapter->bDriverStopped ||
+	    padapter->bWritePortCancel) {
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
 			 ("usb_write_port_complete:bDriverStopped(%d) OR bSurpriseRemoved(%d)",
 			 padapter->bDriverStopped, padapter->bSurpriseRemoved));
 		DBG_88E("%s(): TX Warning! bDriverStopped(%d) OR bSurpriseRemoved(%d) bWritePortCancel(%d) pxmitbuf->ext_tag(%x)\n",
-		__func__,padapter->bDriverStopped, padapter->bSurpriseRemoved,padapter->bReadPortCancel,pxmitbuf->ext_tag);
+			__func__, padapter->bDriverStopped,
+			padapter->bSurpriseRemoved, padapter->bReadPortCancel,
+			pxmitbuf->ext_tag);
 
 		goto check_completion;
 	}
 
-	if (purb->status==0) {
-
-	} else {
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete : purb->status(%d) != 0\n", purb->status));
-		DBG_88E("###=> urb_write_port_complete status(%d)\n",purb->status);
-		if ((purb->status==-EPIPE)||(purb->status==-EPROTO))
-		{
+	if (purb->status) {
+		RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usb_write_port_complete : purb->status(%d) != 0\n", purb->status));
+		DBG_88E("###=> urb_write_port_complete status(%d)\n", purb->status);
+		if ((purb->status == -EPIPE) || (purb->status == -EPROTO)) {
 			sreset_set_wifi_error_status(padapter, USB_WRITE_PORT_FAIL);
 		} else if (purb->status == -EINPROGRESS) {
-			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete: EINPROGESS\n"));
+			RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usb_write_port_complete: EINPROGESS\n"));
 			goto check_completion;
 		} else if (purb->status == -ENOENT) {
 			DBG_88E("%s: -ENOENT\n", __func__);
@@ -213,40 +193,32 @@ _func_enter_;
 			DBG_88E("%s: -ECONNRESET\n", __func__);
 			goto check_completion;
 		} else if (purb->status == -ESHUTDOWN) {
-			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete: ESHUTDOWN\n"));
-			padapter->bDriverStopped=true;
-			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bDriverStopped=true\n"));
+			RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usb_write_port_complete: ESHUTDOWN\n"));
+			padapter->bDriverStopped = true;
+			RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usb_write_port_complete:bDriverStopped = true\n"));
 			goto check_completion;
-		}
-		else
-		{
-			padapter->bSurpriseRemoved=true;
-			DBG_88E("bSurpriseRemoved=true\n");
-			//rtl8192cu_trigger_gpio_0(padapter);
-			RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port_complete:bSurpriseRemoved=true\n"));
+		} else {
+			padapter->bSurpriseRemoved = true;
+			DBG_88E("bSurpriseRemoved = true\n");
+			RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usb_write_port_complete:bSurpriseRemoved = true\n"));
 
 			goto check_completion;
 		}
 	}
 
-	{
-		struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-		pHalData->srestpriv.last_tx_complete_time = rtw_get_current_time();
-	}
+	haldata = GET_HAL_DATA(padapter);
+	haldata->srestpriv.last_tx_complete_time = rtw_get_current_time();
 
 check_completion:
 	rtw_sctx_done_err(&pxmitbuf->sctx,
-		purb->status ? RTW_SCTX_DONE_WRITE_PORT_ERR : RTW_SCTX_DONE_SUCCESS);
+			  purb->status ? RTW_SCTX_DONE_WRITE_PORT_ERR :
+			  RTW_SCTX_DONE_SUCCESS);
 
 	rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
 
-	//if (rtw_txframes_pending(padapter))
-	{
-		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
-	}
+	tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
 
 _func_exit_;
-
 }
 
 u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
@@ -255,7 +227,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	unsigned int pipe;
 	int status;
 	u32 ret = _FAIL, bwritezero = false;
-	struct urb *	purb = NULL;
+	struct urb *purb = NULL;
 	struct adapter *padapter = (struct adapter *)pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
@@ -266,69 +238,69 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 
 _func_enter_;
 
-	RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("+usb_write_port\n"));
+	RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("+usb_write_port\n"));
 
-	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||(padapter->pwrctrlpriv.pnp_bstop_trx)) {
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port:( padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
+	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||
+	    (padapter->pwrctrlpriv.pnp_bstop_trx)) {
+		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
+			 ("usb_write_port:( padapter->bDriverStopped ||padapter->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_TX_DENY);
 		goto exit;
 	}
 
 	_enter_critical(&pxmitpriv->lock, &irqL);
 
-	switch (addr)
-	{
-		case VO_QUEUE_INX:
-			pxmitpriv->voq_cnt++;
-			pxmitbuf->flags = VO_QUEUE_INX;
-			break;
-		case VI_QUEUE_INX:
-			pxmitpriv->viq_cnt++;
-			pxmitbuf->flags = VI_QUEUE_INX;
-			break;
-		case BE_QUEUE_INX:
-			pxmitpriv->beq_cnt++;
-			pxmitbuf->flags = BE_QUEUE_INX;
-			break;
-		case BK_QUEUE_INX:
-			pxmitpriv->bkq_cnt++;
-			pxmitbuf->flags = BK_QUEUE_INX;
-			break;
-		case HIGH_QUEUE_INX:
-			pxmitbuf->flags = HIGH_QUEUE_INX;
-			break;
-		default:
-			pxmitbuf->flags = MGT_QUEUE_INX;
-			break;
+	switch (addr) {
+	case VO_QUEUE_INX:
+		pxmitpriv->voq_cnt++;
+		pxmitbuf->flags = VO_QUEUE_INX;
+		break;
+	case VI_QUEUE_INX:
+		pxmitpriv->viq_cnt++;
+		pxmitbuf->flags = VI_QUEUE_INX;
+		break;
+	case BE_QUEUE_INX:
+		pxmitpriv->beq_cnt++;
+		pxmitbuf->flags = BE_QUEUE_INX;
+		break;
+	case BK_QUEUE_INX:
+		pxmitpriv->bkq_cnt++;
+		pxmitbuf->flags = BK_QUEUE_INX;
+		break;
+	case HIGH_QUEUE_INX:
+		pxmitbuf->flags = HIGH_QUEUE_INX;
+		break;
+	default:
+		pxmitbuf->flags = MGT_QUEUE_INX;
+		break;
 	}
 
 	_exit_critical(&pxmitpriv->lock, &irqL);
 
 	purb	= pxmitbuf->pxmit_urb[0];
 
-	//translate DMA FIFO addr to pipehandle
+	/* translate DMA FIFO addr to pipehandle */
 	pipe = ffaddr2pipehdl(pdvobj, addr);
 
 	usb_fill_bulk_urb(purb, pusbd, pipe,
-				pxmitframe->buf_addr, //= pxmitbuf->pbuf
-				cnt,
-				usb_write_port_complete,
-				pxmitbuf);//context is pxmitbuf
+			  pxmitframe->buf_addr, /*  pxmitbuf->pbuf */
+			  cnt,
+			  usb_write_port_complete,
+			  pxmitbuf);/* context is pxmitbuf */
 
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 	if (!status) {
-		{
-			struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-			pHalData->srestpriv.last_tx_time = rtw_get_current_time();
-		}
+		struct hal_data_8188e	*haldata = GET_HAL_DATA(padapter);
+
+		haldata->srestpriv.last_tx_time = rtw_get_current_time();
 	} else {
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_WRITE_PORT_ERR);
-		DBG_88E("usb_write_port, status=%d\n", status);
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_write_port(): usb_submit_urb, status=%x\n", status));
+		DBG_88E("usb_write_port, status =%d\n", status);
+		RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usb_write_port(): usb_submit_urb, status =%x\n", status));
 
 		switch (status) {
 		case -ENODEV:
-			padapter->bDriverStopped=true;
+			padapter->bDriverStopped = true;
 			break;
 		default:
 			break;
@@ -336,25 +308,17 @@ _func_enter_;
 		goto exit;
 	}
 
-	ret= _SUCCESS;
+	ret = _SUCCESS;
 
-//   Commented by Albert 2009/10/13
-//   We add the URB_ZERO_PACKET flag to urb so that the host will send the zero packet automatically.
-/*
-	if (bwritezero == true)
-	{
-		usb_bulkout_zero(pintfhdl, addr);
-	}
-*/
+/*    We add the URB_ZERO_PACKET flag to urb so that the host will send the zero packet automatically. */
 
-	RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("-usb_write_port\n"));
+	RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("-usb_write_port\n"));
 
 exit:
 	if (ret != _SUCCESS)
 		rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
 _func_exit_;
 	return ret;
-
 }
 
 void usb_write_port_cancel(struct intf_hdl *pintfhdl)
@@ -367,21 +331,19 @@ void usb_write_port_cancel(struct intf_hdl *pintfhdl)
 
 	padapter->bWritePortCancel = true;
 
-	for (i=0; i<NR_XMITBUFF; i++) {
-		for (j=0; j<8; j++) {
-			if (pxmitbuf->pxmit_urb[j]) {
+	for (i = 0; i < NR_XMITBUFF; i++) {
+		for (j = 0; j < 8; j++) {
+			if (pxmitbuf->pxmit_urb[j])
 				usb_kill_urb(pxmitbuf->pxmit_urb[j]);
-			}
 		}
 		pxmitbuf++;
 	}
 
-	pxmitbuf = (struct xmit_buf*)padapter->xmitpriv.pxmit_extbuf;
+	pxmitbuf = (struct xmit_buf *)padapter->xmitpriv.pxmit_extbuf;
 	for (i = 0; i < NR_XMIT_EXTBUFF; i++) {
-		for (j=0; j<8; j++) {
-			if (pxmitbuf->pxmit_urb[j]) {
+		for (j = 0; j < 8; j++) {
+			if (pxmitbuf->pxmit_urb[j])
 				usb_kill_urb(pxmitbuf->pxmit_urb[j]);
-			}
 		}
 		pxmitbuf++;
 	}
