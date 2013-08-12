@@ -57,8 +57,8 @@
 #include <linux/if_arp.h>
 #include <linux/rtnetlink.h>
 #include <linux/delay.h>
-#include <linux/proc_fs.h>	// Necessary because we use the proc fs
-#include <linux/interrupt.h>	// for struct tasklet_struct
+#include <linux/proc_fs.h>	/*  Necessary because we use the proc fs */
+#include <linux/interrupt.h>	/*  for struct tasklet_struct */
 #include <linux/ip.h>
 #include <linux/kthread.h>
 
@@ -81,7 +81,7 @@
 #endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22))
-// Porting from linux kernel, for compatible with old kernel.
+/*  Porting from linux kernel, for compatible with old kernel. */
 static inline unsigned char *skb_tail_pointer(const struct sk_buff *skb)
 {
 	return skb->tail;
@@ -189,7 +189,7 @@ __inline static void _set_timer(struct timer_list *ptimer,u32 delay_time)
 __inline static void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
 {
 	del_timer_sync(ptimer);
-	*bcancelled=  true;//true ==1; false==0
+	*bcancelled=  true;/* true ==1; false==0 */
 }
 
 #define RTW_TIMER_HDL_ARGS void *FunctionContext
@@ -218,9 +218,9 @@ __inline static void _cancel_workitem_sync(struct work_struct *pwork)
 	flush_scheduled_work();
 #endif
 }
-//
-// Global Mutex: can only be used at PASSIVE level.
-//
+/*  */
+/*  Global Mutex: can only be used at PASSIVE level. */
+/*  */
 
 #define ACQUIRE_GLOBAL_MUTEX(_MutexCounter)                              \
 {                                                               \
@@ -319,7 +319,7 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 
 extern int RTW_STATUS_CODE(int error_code);
 
-//flags used for rtw_update_mem_stat()
+/* flags used for rtw_update_mem_stat() */
 enum {
 	MEM_STAT_VIR_ALLOC_SUCCESS,
 	MEM_STAT_VIR_ALLOC_FAIL,
@@ -327,11 +327,11 @@ enum {
 	MEM_STAT_PHY_ALLOC_SUCCESS,
 	MEM_STAT_PHY_ALLOC_FAIL,
 	MEM_STAT_PHY_FREE,
-	MEM_STAT_TX, //used to distinguish TX/RX, asigned from caller
+	MEM_STAT_TX, /* used to distinguish TX/RX, asigned from caller */
 	MEM_STAT_TX_ALLOC_SUCCESS,
 	MEM_STAT_TX_ALLOC_FAIL,
 	MEM_STAT_TX_FREE,
-	MEM_STAT_RX, //used to distinguish TX/RX, asigned from caller
+	MEM_STAT_RX, /* used to distinguish TX/RX, asigned from caller */
 	MEM_STAT_RX_ALLOC_SUCCESS,
 	MEM_STAT_RX_ALLOC_FAIL,
 	MEM_STAT_RX_FREE
@@ -479,7 +479,7 @@ __inline static u32 bitshift(u32 bitmask)
 
 #define STRUCT_PACKED __attribute__ ((packed))
 
-// limitation of path length
+/*  limitation of path length */
 	#define PATH_LENGTH_MAX PATH_MAX
 
 extern void rtw_suspend_lock_init(void);
@@ -488,9 +488,9 @@ extern void rtw_lock_suspend(void);
 extern void rtw_unlock_suspend(void);
 #ifdef CONFIG_WOWLAN
 extern void rtw_lock_suspend_timeout(long timeout);
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 
-//Atomic integer operations
+/* Atomic integer operations */
 #define ATOMIC_T atomic_t
 
 extern void ATOMIC_SET(ATOMIC_T *v, int i);
@@ -504,7 +504,7 @@ extern int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i);
 extern int ATOMIC_INC_RETURN(ATOMIC_T *v);
 extern int ATOMIC_DEC_RETURN(ATOMIC_T *v);
 
-//File operation APIs, just for linux now
+/* File operation APIs, just for linux now */
 extern int rtw_is_file_readable(char *path);
 extern int rtw_retrive_from_file(char *path, u8 __user *buf, u32 sz);
 extern int rtw_store_to_file(char *path, u8 __user *buf, u32 sz);
@@ -528,11 +528,11 @@ extern void rtw_free_netdev(struct net_device * netdev);
 #define FUNC_ADPT_FMT "%s(%s)"
 #define FUNC_ADPT_ARG(adapter) __func__, adapter->pnetdev->name
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
 #define rtw_signal_process(pid, sig) kill_pid(find_vpid((pid)),(sig), 1)
-#else //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)) */
 #define rtw_signal_process(pid, sig) kill_proc((pid), (sig), 1)
-#endif //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)) */
 
 extern u64 rtw_modular64(u64 x, u64 y);
 extern u64 rtw_division64(u64 x, u64 y);

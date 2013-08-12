@@ -27,4 +27,4 @@ void ODM_ResetIQKResult(struct odm_dm_struct *pDM_Odm);
 
 u1Byte ODM_GetRightChnlPlaceforIQK(u1Byte chnl);
 
-#endif	// #ifndef __HAL_PHY_RF_H__
+#endif	/*  #ifndef __HAL_PHY_RF_H__ */

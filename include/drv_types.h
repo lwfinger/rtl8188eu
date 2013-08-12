@@ -87,14 +87,14 @@ struct registry_priv
 	u8	lbkmode;
 	u8	hci;
 	struct ndis_802_11_ssid	ssid;
-	u8	network_mode;	//infra, ad-hoc, auto
-	u8	channel;//ad-hoc support requirement
-	u8	wireless_mode;//A, B, G, auto
-	u8	scan_mode;//active, passive
+	u8	network_mode;	/* infra, ad-hoc, auto */
+	u8	channel;/* ad-hoc support requirement */
+	u8	wireless_mode;/* A, B, G, auto */
+	u8	scan_mode;/* active, passive */
 	u8	radio_enable;
-	u8	preamble;//long, short, auto
-	u8	vrtl_carrier_sense;//Enable, Disable, Auto
-	u8	vcs_type;//RTS/CTS, CTS-to-self
+	u8	preamble;/* long, short, auto */
+	u8	vrtl_carrier_sense;/* Enable, Disable, Auto */
+	u8	vcs_type;/* RTS/CTS, CTS-to-self */
 	u16	rts_thresh;
 	u16  frag_thresh;
 	u8	adhoc_tx_pwr;
@@ -110,7 +110,7 @@ struct registry_priv
 	u8	software_encrypt;
 	u8	software_decrypt;
 	u8	acm_method;
-	  //UAPSD
+	  /* UAPSD */
 	u8	wmm_enable;
 	u8	uapsd_enable;
 	u8	uapsd_max_sp;
@@ -123,15 +123,15 @@ struct registry_priv
 
 	u8	ht_enable;
 	u8	cbw40_enable;
-	u8	ampdu_enable;//for tx
+	u8	ampdu_enable;/* for tx */
 	u8	rx_stbc;
-	u8	ampdu_amsdu;//A-MPDU Supports A-MSDU is permitted
+	u8	ampdu_amsdu;/* A-MPDU Supports A-MSDU is permitted */
 	u8	lowrate_two_xmit;
 
 	u8	rf_config ;
 	u8	low_power ;
 
-	u8	wifi_spec;// !turbo_mode
+	u8	wifi_spec;/*  !turbo_mode */
 
 	u8	channel_plan;
 #ifdef CONFIG_BT_COEXIST
@@ -145,15 +145,15 @@ struct registry_priv
 	u8	antdiv_cfg;
 	u8	antdiv_type;
 
-	u8	usbss_enable;//0:disable,1:enable
-	u8	hwpdn_mode;//0:disable,1:enable,2:decide by EFUSE config
-	u8	hwpwrp_detect;//0:disable,1:enable
+	u8	usbss_enable;/* 0:disable,1:enable */
+	u8	hwpdn_mode;/* 0:disable,1:enable,2:decide by EFUSE config */
+	u8	hwpwrp_detect;/* 0:disable,1:enable */
 
-	u8	hw_wps_pbc;//0:disable,1:enable
+	u8	hw_wps_pbc;/* 0:disable,1:enable */
 
-	u8	max_roaming_times; // the max number driver will try to roaming
+	u8	max_roaming_times; /*  the max number driver will try to roaming */
 
-	u8 fw_iol; //enable iol without other concern
+	u8 fw_iol; /* enable iol without other concern */
 
 	u8 enable80211d;
 
@@ -163,7 +163,7 @@ struct registry_priv
 	u8 notch_filter;
 };
 
-//For registry parameters
+/* For registry parameters */
 #define RGTRY_OFT(field) ((ULONG)FIELD_OFFSET(struct registry_priv,field))
 #define RGTRY_SZ(field)   sizeof(((struct registry_priv*) 0)->field)
 #define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(struct wlan_bssid_ex,field))
@@ -176,14 +176,14 @@ struct dvobj_priv
 	struct adapter *if1;
 	struct adapter *if2;
 
-	//For 92D, DMDP have 2 interface.
+	/* For 92D, DMDP have 2 interface. */
 	u8	InterfaceNumber;
 	u8	NumInterfaces;
 
-	//In /Out Pipe information
+	/* In /Out Pipe information */
 	int	RtInPipe[2];
 	int	RtOutPipe[3];
-	u8	Queue2Pipe[HW_QUEUE_ENTRY];//for out pipe mapping
+	u8	Queue2Pipe[HW_QUEUE_ENTRY];/* for out pipe mapping */
 
 	u8	irq_alloc;
 
@@ -193,7 +193,7 @@ struct dvobj_priv
 	u8	ishighspeed;
 	u8	RtNumInPipes;
 	u8	RtNumOutPipes;
-	int	ep_num[5]; //endpoint number
+	int	ep_num[5]; /* endpoint number */
 	int	RegUsbSS;
 	struct semaphore usb_suspend_sema;
 	struct mutex  usb_vendor_req_mutex;
@@ -214,8 +214,8 @@ static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 }
 
 enum _IFACE_TYPE {
-	IFACE_PORT0, //mapping to port0 for C/D series chips
-	IFACE_PORT1, //mapping to port1 for C/D series chip
+	IFACE_PORT0, /* mapping to port0 for C/D series chips */
+	IFACE_PORT1, /* mapping to port1 for C/D series chip */
 	MAX_IFACE_PORT,
 };
 
@@ -232,19 +232,19 @@ enum driver_state {
 };
 
 struct adapter {
-	int	DriverState;// for disable driver using module, use dongle to replace module.
-	int	pid[3];//process id from UI, 0:wps, 1:hostapd, 2:dhcpcd
-	int	bDongle;//build-in module or external dongle
+	int	DriverState;/*  for disable driver using module, use dongle to replace module. */
+	int	pid[3];/* process id from UI, 0:wps, 1:hostapd, 2:dhcpcd */
+	int	bDongle;/* build-in module or external dongle */
 	u16	chip_type;
 	u16	HardwareType;
-	u16	interface_type;//USB,SDIO,SPI,PCI
+	u16	interface_type;/* USB,SDIO,SPI,PCI */
 
 	struct dvobj_priv *dvobj;
 	struct	mlme_priv mlmepriv;
 	struct	mlme_ext_priv mlmeextpriv;
 	struct	cmd_priv	cmdpriv;
 	struct	evt_priv	evtpriv;
-	//struct	io_queue	*pio_queue;
+	/* struct	io_queue	*pio_queue; */
 	struct	io_priv	iopriv;
 	struct	xmit_priv	xmitpriv;
 	struct	recv_priv	recvpriv;
@@ -262,7 +262,7 @@ struct adapter {
 
 #ifdef CONFIG_P2P
 	struct wifidirect_info	wdinfo;
-#endif //CONFIG_P2P
+#endif /* CONFIG_P2P */
 
 	void *HalData;
 	u32 hal_data_sz;
@@ -289,7 +289,7 @@ struct adapter {
 	void (*intf_stop)(struct adapter * adapter);
 	struct  net_device *pnetdev;
 
-	// used by rtw_rereg_nd_name related function
+	/*  used by rtw_rereg_nd_name related function */
 	struct rereg_nd_name_data {
 		struct  net_device *old_pnetdev;
 		char old_ifname[IFNAMSIZ];
@@ -300,7 +300,7 @@ struct adapter {
 	int bup;
 	struct net_device_stats stats;
 	struct iw_statistics iwstats;
-	struct proc_dir_entry *dir_dev;// for proc directory
+	struct proc_dir_entry *dir_dev;/*  for proc directory */
 
 	int net_closed;
 	u8 bFWReady;
@@ -308,12 +308,12 @@ struct adapter {
 	u8 bReadPortCancel;
 	u8 bWritePortCancel;
 	u8 bRxRSSIDisplay;
-	//	Added by Albert 2012/10/26
-	//	The driver will show up the desired channel number when this flag is 1.
+	/* 	Added by Albert 2012/10/26 */
+	/* 	The driver will show up the desired channel number when this flag is 1. */
 	u8 bNotifyChannelChange;
 #ifdef CONFIG_P2P
-	//	Added by Albert 2012/12/06
-	//	The driver will show the current P2P status when the upper application reads it.
+	/* 	Added by Albert 2012/12/06 */
+	/* 	The driver will show the current P2P status when the upper application reads it. */
 	u8 bShowGetP2PState;
 #endif
 	struct adapter *pbuddy_adapter;
@@ -346,4 +346,4 @@ __inline static u8 *myid(struct eeprom_priv *peepriv)
 }
 
 
-#endif //__DRV_TYPES_H__
+#endif /* __DRV_TYPES_H__ */

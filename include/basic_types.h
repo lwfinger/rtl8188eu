@@ -39,8 +39,8 @@ typedef void (*proc_t)(void*);
 #define MEM_ALIGNMENT_OFFSET	(sizeof (size_t))
 #define MEM_ALIGNMENT_PADDING	(sizeof(size_t) - 1)
 
-//port from fw by thomas
-// TODO: Belows are Sync from SD7-Driver. It is necessary to check correctness
+/* port from fw by thomas */
+/*  TODO: Belows are Sync from SD7-Driver. It is necessary to check correctness */
 
 /*
  *	Call endian free function when
@@ -177,4 +177,4 @@ value to host byte ordering.*/
 #define	N_BYTE_ALIGMENT(__value, __aligment) ((__aligment == 1) ? \
 	(__value) : (((__value + __aligment - 1) / __aligment) * __aligment))
 
-#endif //__BASIC_TYPES_H__
+#endif /* __BASIC_TYPES_H__ */

@@ -24,4 +24,4 @@
 
 #define CIRC_SPACE(head,tail,size) CIRC_CNT((tail),((head)+1),(size))
 
-#endif //_CIRC_BUF_H_
+#endif /* _CIRC_BUF_H_ */

@@ -54,7 +54,7 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role);
 static inline void _rtw_p2p_set_state(struct wifidirect_info *wdinfo, enum P2P_STATE state)
 {
 	if (wdinfo->p2p_state != state) {
-		//wdinfo->pre_p2p_state = wdinfo->p2p_state;
+		/* wdinfo->pre_p2p_state = wdinfo->p2p_state; */
 		wdinfo->p2p_state = state;
 	}
 }
@@ -106,11 +106,11 @@ static inline bool _rtw_p2p_chk_role(struct wifidirect_info *wdinfo, enum P2P_RO
 #define rtw_p2p_findphase_ex_set(wdinfo, value) \
 	(wdinfo)->find_phase_state_exchange_cnt = (value)
 
-//is this find phase exchange for social channel scan?
+/* is this find phase exchange for social channel scan? */
 #define rtw_p2p_findphase_ex_is_social(wdinfo)   \
 	(wdinfo)->find_phase_state_exchange_cnt >= P2P_FINDPHASE_EX_SOCIAL_FIRST
 
-//should we need find phase exchange anymore?
+/* should we need find phase exchange anymore? */
 #define rtw_p2p_findphase_ex_is_needed(wdinfo) \
 	((wdinfo)->find_phase_state_exchange_cnt < P2P_FINDPHASE_EX_MAX && \
 	(wdinfo)->find_phase_state_exchange_cnt != P2P_FINDPHASE_EX_NONE)

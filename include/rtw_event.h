@@ -78,7 +78,7 @@ struct stassoc_event {
 
 struct stadel_event {
  unsigned char macaddr[6];
- unsigned char rsvd[2]; //for reason
+ unsigned char rsvd[2]; /* for reason */
  int mac_id;
 };
 
@@ -120,4 +120,4 @@ struct network_queue {
 };
 
 
-#endif // _WLANEVENT_H_
+#endif /*  _WLANEVENT_H_ */

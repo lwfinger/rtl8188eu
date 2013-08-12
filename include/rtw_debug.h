@@ -298,6 +298,6 @@ extern u32 GlobalDebugLevel;
 	int proc_set_btcoex_dbg(struct file *file, const char *buffer,
 		unsigned long count, void *data);
 
-#endif //CONFIG_BT_COEXIST
+#endif /* CONFIG_BT_COEXIST */
 
-#endif	//__RTW_DEBUG_H__
+#endif	/* __RTW_DEBUG_H__ */

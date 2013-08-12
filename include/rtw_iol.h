@@ -67,4 +67,4 @@ int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path, u16 addr,
 u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame);
 void  rtw_IOL_cmd_buf_dump(struct adapter  *Adapter,int buf_len,u8 *pbuf);
 
-#endif //__RTW_IOL_H_
+#endif /* __RTW_IOL_H_ */

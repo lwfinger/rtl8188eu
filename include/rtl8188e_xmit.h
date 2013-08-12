@@ -21,19 +21,19 @@
 #define __RTL8188E_XMIT_H__
 
 #define		MAX_TX_AGG_PACKET_NUMBER	0xFF
-//
-// Queue Select Value in TxDesc
-//
-#define QSLT_BK							0x2//0x01
+/*  */
+/*  Queue Select Value in TxDesc */
+/*  */
+#define QSLT_BK							0x2/* 0x01 */
 #define QSLT_BE							0x0
-#define QSLT_VI							0x5//0x4
-#define QSLT_VO							0x7//0x6
+#define QSLT_VI							0x5/* 0x4 */
+#define QSLT_VO							0x7/* 0x6 */
 #define QSLT_BEACON						0x10
 #define QSLT_HIGH						0x11
 #define QSLT_MGNT						0x12
 #define QSLT_CMD						0x13
 
-//For 88e early mode
+/* For 88e early mode */
 #define SET_EARLYMODE_PKTNUM(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr, 0, 3, __Value)
 #define SET_EARLYMODE_LEN0(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr, 4, 12, __Value)
 #define SET_EARLYMODE_LEN1(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr, 16, 12, __Value)
@@ -42,13 +42,13 @@
 #define SET_EARLYMODE_LEN3(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr+4, 8, 12, __Value)
 #define SET_EARLYMODE_LEN4(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr+4, 20, 12, __Value)
 
-//
-//defined for TX DESC Operation
-//
+/*  */
+/* defined for TX DESC Operation */
+/*  */
 
 #define MAX_TID (15)
 
-//OFFSET 0
+/* OFFSET 0 */
 #define OFFSET_SZ	0
 #define OFFSET_SHT	16
 #define BMC		BIT(24)
@@ -57,7 +57,7 @@
 #define OWN		BIT(31)
 
 
-//OFFSET 4
+/* OFFSET 4 */
 #define PKT_OFFSET_SZ		0
 #define QSEL_SHT			8
 #define RATE_ID_SHT			16
@@ -65,7 +65,7 @@
 #define SEC_TYPE_SHT		22
 #define PKT_OFFSET_SHT		26
 
-//OFFSET 8
+/* OFFSET 8 */
 #define AGG_EN				BIT(12)
 #define AGG_BK					BIT(16)
 #define AMPDU_DENSITY_SHT	20
@@ -75,11 +75,11 @@
 #define TX_ANTL_SHT			28
 #define TX_ANT_HT_SHT		30
 
-//OFFSET 12
+/* OFFSET 12 */
 #define SEQ_SHT				16
 #define EN_HWSEQ			BIT(31)
 
-//OFFSET 16
+/* OFFSET 16 */
 #define		QOS                          BIT(6)
 #define	HW_SSN				BIT(7)
 #define		USERATE			BIT(8)
@@ -92,7 +92,7 @@
 #define		DATA_SC_SHT		20
 #define		DATA_BW			BIT(25)
 
-//OFFSET 20
+/* OFFSET 20 */
 #define	RTY_LMT_EN			BIT(17)
 
 enum TXDESC_SC{
@@ -101,7 +101,7 @@ enum TXDESC_SC{
 	SC_LOWER=0x02,
 	SC_DUPLICATE=0x03
 };
-//OFFSET 20
+/* OFFSET 20 */
 #define SGI					BIT(6)
 #define USB_TXAGG_NUM_SHT	24
 
@@ -163,4 +163,4 @@ void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf);
 
 void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
 
-#endif //__RTL8188E_XMIT_H__
+#endif /* __RTL8188E_XMIT_H__ */

@@ -98,7 +98,7 @@ struct ethhdr
 };
 
 struct _vlan {
-   unsigned short       h_vlan_TCI;                // Encapsulates priority and VLAN ID
+   unsigned short       h_vlan_TCI;                /*  Encapsulates priority and VLAN ID */
    unsigned short       h_vlan_encapsulated_proto;
 };
 

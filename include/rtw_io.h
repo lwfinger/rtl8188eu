@@ -57,7 +57,7 @@
 #define _IO_WAIT_COMPLETE   1
 #define _IO_WAIT_RSP        2
 
-// IO COMMAND TYPE
+/*  IO COMMAND TYPE */
 #define _IOSZ_MASK_		(0x7F)
 #define _IO_WRITE_		BIT(7)
 #define _IO_FIXED_		BIT(8)
@@ -76,7 +76,7 @@
 
 
 
-// IO STATUS TYPE
+/*  IO STATUS TYPE */
 #define _IO_ERR_		BIT(2)
 #define _IO_SUCCESS_	BIT(1)
 #define _IO_DONE_		BIT(0)
@@ -109,9 +109,9 @@
 
 
 
-//below is for the intf_option bit defition...
+/* below is for the intf_option bit defition... */
 
-#define _INTF_ASYNC_	BIT(0)	//support async io
+#define _INTF_ASYNC_	BIT(0)	/* support async io */
 
 struct intf_priv;
 struct intf_hdl;
@@ -163,7 +163,7 @@ struct io_req {
 
 struct	intf_hdl {
 	struct adapter *padapter;
-	struct dvobj_priv *pintf_dev;//	pointer to &(padapter->dvobjpriv);
+	struct dvobj_priv *pintf_dev;/* 	pointer to &(padapter->dvobjpriv); */
 
 	struct _io_ops	io_ops;
 
@@ -173,34 +173,34 @@ struct reg_protocol_rd {
 
 #ifdef __LITTLE_ENDIAN
 
-	//DW1
+	/* DW1 */
 	u32		NumOfTrans:4;
 	u32		Reserved1:4;
 	u32		Reserved2:24;
-	//DW2
+	/* DW2 */
 	u32		ByteCount:7;
-	u32		WriteEnable:1;		//0:read, 1:write
-	u32		FixOrContinuous:1;	//0:continuous, 1: Fix
+	u32		WriteEnable:1;		/* 0:read, 1:write */
+	u32		FixOrContinuous:1;	/* 0:continuous, 1: Fix */
 	u32		BurstMode:1;
 	u32		Byte1Access:1;
 	u32		Byte2Access:1;
 	u32		Byte4Access:1;
 	u32		Reserved3:3;
 	u32		Reserved4:16;
-	//DW3
+	/* DW3 */
 	u32		BusAddress;
-	//DW4
-	//u32		Value;
+	/* DW4 */
+	/* u32		Value; */
 #else
 
 
-//DW1
+/* DW1 */
 	u32 Reserved1  :4;
 	u32 NumOfTrans :4;
 
 	u32 Reserved2  :24;
 
-	//DW2
+	/* DW2 */
 	u32 WriteEnable : 1;
 	u32 ByteCount :7;
 
@@ -215,11 +215,11 @@ struct reg_protocol_rd {
 
 	u32 Reserved4 : 16;
 
-	//DW3
+	/* DW3 */
 	u32		BusAddress;
 
-	//DW4
-	//u32		Value;
+	/* DW4 */
+	/* u32		Value; */
 
 #endif
 
@@ -231,33 +231,33 @@ struct reg_protocol_wt {
 
 #ifdef __LITTLE_ENDIAN
 
-	//DW1
+	/* DW1 */
 	u32		NumOfTrans:4;
 	u32		Reserved1:4;
 	u32		Reserved2:24;
-	//DW2
+	/* DW2 */
 	u32		ByteCount:7;
-	u32		WriteEnable:1;		//0:read, 1:write
-	u32		FixOrContinuous:1;	//0:continuous, 1: Fix
+	u32		WriteEnable:1;		/* 0:read, 1:write */
+	u32		FixOrContinuous:1;	/* 0:continuous, 1: Fix */
 	u32		BurstMode:1;
 	u32		Byte1Access:1;
 	u32		Byte2Access:1;
 	u32		Byte4Access:1;
 	u32		Reserved3:3;
 	u32		Reserved4:16;
-	//DW3
+	/* DW3 */
 	u32		BusAddress;
-	//DW4
+	/* DW4 */
 	u32		Value;
 
 #else
-	//DW1
+	/* DW1 */
 	u32 Reserved1  :4;
 	u32 NumOfTrans :4;
 
 	u32 Reserved2  :24;
 
-	//DW2
+	/* DW2 */
 	u32 WriteEnable : 1;
 	u32 ByteCount :7;
 
@@ -271,10 +271,10 @@ struct reg_protocol_wt {
 
 	u32 Reserved4 : 16;
 
-	//DW3
+	/* DW3 */
 	u32		BusAddress;
 
-	//DW4
+	/* DW4 */
 	u32		Value;
 
 #endif
@@ -291,9 +291,9 @@ Below is the data structure used by _io_handler
 struct io_queue {
 	spinlock_t lock;
 	struct list_head free_ioreqs;
-	struct list_head pending;		//The io_req list that will be served in the single protocol read/write.
+	struct list_head pending;		/* The io_req list that will be served in the single protocol read/write. */
 	struct list_head processing;
-	u8	*free_ioreqs_buf; // 4-byte aligned
+	u8	*free_ioreqs_buf; /*  4-byte aligned */
 	u8	*pallocated_free_ioreqs_buf;
 	struct	intf_hdl	intf;
 };
@@ -365,7 +365,7 @@ extern void _rtw_write_port_cancel(struct adapter *adapter);
 
 extern void rtw_write_scsi(struct adapter *adapter, u32 cnt, u8 *pmem);
 
-//ioreq
+/* ioreq */
 extern void ioreq_read8(struct adapter *adapter, u32 addr, u8 *pval);
 extern void ioreq_read16(struct adapter *adapter, u32 addr, u16 *pval);
 extern void ioreq_read32(struct adapter *adapter, u32 addr, u32 *pval);
@@ -437,4 +437,4 @@ extern void dev_power_down(struct adapter * Adapter, u8 bpwrup);
 #define PlatformEFIORead4Byte(_a,_b)		\
 		rtw_read32(_a,_b)
 
-#endif	//_RTL8711_IO_H_
+#endif	/* _RTL8711_IO_H_ */

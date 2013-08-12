@@ -27,4 +27,4 @@
 
 enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct * pDM_Odm);
 
-#endif // end of HWIMG_SUPPORT
+#endif /*  end of HWIMG_SUPPORT */

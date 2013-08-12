@@ -27,7 +27,7 @@
 #define C2H_MEM_SZ (16*1024)
 
 #include <osdep_service.h>
-#include <ieee80211.h> // <ieee80211/ieee80211.h>
+#include <ieee80211.h> /*  <ieee80211/ieee80211.h> */
 
 
 #define FREE_CMDOBJ_SZ	128
@@ -54,9 +54,9 @@ struct cmd_priv {
 	struct semaphore terminate_cmdthread_sema;
 	struct __queue cmd_queue;
 	u8	cmd_seq;
-	u8	*cmd_buf;	//shall be non-paged, and 4 bytes aligned
+	u8	*cmd_buf;	/* shall be non-paged, and 4 bytes aligned */
 	u8	*cmd_allocated_buf;
-	u8	*rsp_buf;	//shall be non-paged, and 4 bytes aligned
+	u8	*rsp_buf;	/* shall be non-paged, and 4 bytes aligned */
 	u8	*rsp_allocated_buf;
 	u32	cmd_issued_cnt;
 	u32	cmd_done_cnt;
@@ -71,7 +71,7 @@ struct	evt_priv {
 	struct rtw_cbuf *c2h_queue;
 	#define C2H_QUEUE_MAX_LEN 10
 	ATOMIC_T event_seq;
-	u8	*evt_buf;	//shall be non-paged, and 4 bytes aligned
+	u8	*evt_buf;	/* shall be non-paged, and 4 bytes aligned */
 	u8	*evt_allocated_buf;
 	u32	evt_done_cnt;
 };
@@ -110,7 +110,7 @@ extern void rtw_cmd_clr_isr(struct cmd_priv *pcmdpriv);
 extern void rtw_evt_notify_isr(struct evt_priv *pevtpriv);
 #ifdef CONFIG_P2P
 u8 p2p_protocol_wk_cmd(struct adapter*padapter, int intCmdType );
-#endif //CONFIG_P2P
+#endif /* CONFIG_P2P */
 
 enum rtw_drvextra_cmd_id
 {
@@ -118,12 +118,12 @@ enum rtw_drvextra_cmd_id
 	DYNAMIC_CHK_WK_CID,
 	DM_CTRL_WK_CID,
 	PBC_POLLING_WK_CID,
-	POWER_SAVING_CTRL_WK_CID,//IPS,AUTOSuspend
+	POWER_SAVING_CTRL_WK_CID,/* IPS,AUTOSuspend */
 	LPS_CTRL_WK_CID,
 	ANT_SELECT_WK_CID,
 	P2P_PS_WK_CID,
 	P2P_PROTO_WK_CID,
-	CHECK_HIQ_WK_CID,//for softap mode, check hi queue if empty
+	CHECK_HIQ_WK_CID,/* for softap mode, check hi queue if empty */
 	INTEl_WIDI_WK_CID,
 	C2H_WK_CID,
 	RTP_TIMER_CFG_WK_CID,
@@ -155,7 +155,7 @@ Command Mode
 
 */
 struct usb_suspend_parm {
-	u32 action;// 1: sleep, 0:resume
+	u32 action;/*  1: sleep, 0:resume */
 };
 
 /*
@@ -202,24 +202,6 @@ struct createbss_parm {
 	struct wlan_bssid_ex network;
 };
 
-/*
-Caller Mode: AP, Ad-HoC, Infra
-
-Notes: To set the NIC mode of RTL8711
-
-Command Mode
-
-The definition of mode:
-
-#define IW_MODE_AUTO	0	// Let the driver decides which AP to join
-#define IW_MODE_ADHOC	1	// Single cell network (Ad-Hoc Clients)
-#define IW_MODE_INFRA	2	// Multi cell network, roaming, ..
-#define IW_MODE_MASTER	3	// Synchronisation master or Access Point
-#define IW_MODE_REPEAT	4	// Wireless Repeater (forwarder)
-#define IW_MODE_SECOND	5	// Secondary master/repeater (backup)
-#define IW_MODE_MONITOR	6	// Passive monitor (listen only)
-
-*/
 struct	setopmode_parm {
 	u8	mode;
 	u8	rsvd[3];
@@ -234,10 +216,10 @@ Command-Event Mode
 
 */
 
-#define RTW_SSID_SCAN_AMOUNT 9 // for WEXT_CSCAN_AMOUNT 9
+#define RTW_SSID_SCAN_AMOUNT 9 /*  for WEXT_CSCAN_AMOUNT 9 */
 #define RTW_CHANNEL_SCAN_AMOUNT (14+37)
 struct sitesurvey_parm {
-	int scan_mode;	//active: 1, passive: 0
+	int scan_mode;	/* active: 1, passive: 0 */
 	u8 ssid_num;
 	u8 ch_num;
 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
@@ -253,8 +235,8 @@ Command Mode
 
 */
 struct setauth_parm {
-	u8 mode;  //0: legacy open, 1: legacy shared 2: 802.1x
-	u8 _1x;   //0: PSK, 1: TLS
+	u8 mode;  /* 0: legacy open, 1: legacy shared 2: 802.1x */
+	u8 _1x;   /* 0: PSK, 1: TLS */
 	u8 rsvd[2];
 };
 
@@ -271,11 +253,11 @@ when 802.1x ==> keyid > 2 ==> unicast key
 
 */
 struct setkey_parm {
-	u8	algorithm;	// encryption algorithm, could be none, wep40, TKIP, CCMP, wep104
+	u8	algorithm;	/*  encryption algorithm, could be none, wep40, TKIP, CCMP, wep104 */
 	u8	keyid;
-	u8	grpkey;		// 1: this is the grpkey for 802.1x. 0: this is the unicast key for 802.1x
-	u8	set_tx;		// 1: main tx key for wep. 0: other key.
-	u8	key[16];	// this could be 40 or 104
+	u8	grpkey;		/*  1: this is the grpkey for 802.1x. 0: this is the unicast key for 802.1x */
+	u8	set_tx;		/*  1: main tx key for wep. 0: other key. */
+	u8	key[16];	/*  this could be 40 or 104 */
 };
 
 /*
@@ -290,7 +272,7 @@ when shared key ==> algorithm/keyid
 struct set_stakey_parm {
 	u8	addr[ETH_ALEN];
 	u8	algorithm;
-	u8	id;// currently for erasing cam entry if algorithm == _NO_PRIVACY_
+	u8	id;/*  currently for erasing cam entry if algorithm == _NO_PRIVACY_ */
 	u8	key[16];
 };
 
@@ -559,10 +541,10 @@ struct Tx_Beacon_param
 
 */
 
-// CMD param Format for driver extra cmd handler
+/*  CMD param Format for driver extra cmd handler */
 struct drvextra_cmd_parm {
-	int ec_id; //extra cmd id
-	int type_size; // Can use this field as the type id or command size
+	int ec_id; /* extra cmd id */
+	int type_size; /*  Can use this field as the type id or command size */
 	unsigned char *pbuf;
 };
 
@@ -591,7 +573,7 @@ struct gettxagctbl_rsp {
 };
 
 struct setagcctrl_parm {
-	u32	agcctrl;		// 0: pure hw, 1: fw
+	u32	agcctrl;		/*  0: pure hw, 1: fw */
 };
 
 
@@ -660,7 +642,7 @@ struct getratable_rsp {
 };
 
 
-//to get TX,RX retry count
+/* to get TX,RX retry count */
 struct gettxretrycnt_parm{
 	unsigned int rsvd;
 };
@@ -675,7 +657,7 @@ struct getrxretrycnt_rsp{
 	unsigned long rx_retrycnt;
 };
 
-//to get BCNOK,BCNERR count
+/* to get BCNOK,BCNERR count */
 struct getbcnokcnt_parm{
 	unsigned int rsvd;
 };
@@ -690,7 +672,7 @@ struct getbcnerrcnt_rsp{
 	unsigned long bcnerrcnt;
 };
 
-// to get current TX power level
+/*  to get current TX power level */
 struct getcurtxpwrlevel_parm{
 	unsigned int rsvd;
 };
@@ -1009,4 +991,4 @@ static struct _cmd_callback	rtw_cmd_callback[] =
 };
 #endif
 
-#endif // _CMD_H_
+#endif /*  _CMD_H_ */

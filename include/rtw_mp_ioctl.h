@@ -27,7 +27,7 @@
 #include <rtw_efuse.h>
 #include <rtw_mp.h>
 
-//------------------------------------------------------------------------------
+/*  */
 struct cfg_dbg_msg_struct {
 	u32 DebugLevel;
 	u32 DebugComponent_H32;
@@ -57,7 +57,7 @@ struct usb_vendor_req {
 	u16	wValue;
 	u16	wIndex;
 	u16	wLength;
-	u8	u8Dir;//0:OUT, 1:IN
+	u8	u8Dir;/* 0:OUT, 1:IN */
 	u8	u8InData;
 };
 
@@ -68,14 +68,14 @@ struct dr_variable_struct {
 
 #define _irqlevel_changed_(a,b)
 
-//oid_rtl_seg_81_80_00
+/* oid_rtl_seg_81_80_00 */
 NDIS_STATUS oid_rt_pro_set_data_rate_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_start_test_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_stop_test_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_set_channel_direct_call_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_set_antenna_bb_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_set_tx_power_control_hdl(struct oid_par_priv* poid_par_priv);
-//oid_rtl_seg_81_80_20
+/* oid_rtl_seg_81_80_20 */
 NDIS_STATUS oid_rt_pro_query_tx_packet_sent_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_query_rx_packet_received_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_query_rx_packet_crc32_error_hdl(struct oid_par_priv* poid_par_priv);
@@ -90,7 +90,7 @@ NDIS_STATUS oid_rt_pro_set_carrier_suppression_tx_hdl(struct oid_par_priv* poid_
 NDIS_STATUS oid_rt_pro_set_single_tone_tx_hdl(struct oid_par_priv* poid_par_priv);
 
 
-//oid_rtl_seg_81_87
+/* oid_rtl_seg_81_87 */
 NDIS_STATUS oid_rt_pro_write_bb_reg_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_read_bb_reg_hdl(struct oid_par_priv* poid_par_priv);
 
@@ -98,11 +98,11 @@ NDIS_STATUS oid_rt_pro_write_rf_reg_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_read_rf_reg_hdl(struct oid_par_priv* poid_par_priv);
 
 
-//oid_rtl_seg_81_85
+/* oid_rtl_seg_81_85 */
 NDIS_STATUS oid_rt_wireless_mode_hdl(struct oid_par_priv* poid_par_priv);
 
 
-// oid_rtl_seg_87_11_00
+/*  oid_rtl_seg_87_11_00 */
 NDIS_STATUS oid_rt_pro8711_join_bss_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_read_register_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_write_register_hdl(struct oid_par_priv* poid_par_priv);
@@ -117,21 +117,21 @@ NDIS_STATUS oid_rt_rd_attrib_mem_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_wr_attrib_mem_hdl (struct oid_par_priv* poid_par_priv);
 NDIS_STATUS  oid_rt_pro_set_rf_intfs_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_poll_rx_status_hdl(struct oid_par_priv* poid_par_priv);
-// oid_rtl_seg_87_11_20
+/*  oid_rtl_seg_87_11_20 */
 NDIS_STATUS oid_rt_pro_cfg_debug_message_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_set_data_rate_ex_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_set_basic_rate_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_read_tssi_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_set_power_tracking_hdl(struct oid_par_priv* poid_par_priv);
-//oid_rtl_seg_87_11_50
+/* oid_rtl_seg_87_11_50 */
 NDIS_STATUS oid_rt_pro_qry_pwrstate_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_set_pwrstate_hdl(struct oid_par_priv* poid_par_priv);
-//oid_rtl_seg_87_11_F0
+/* oid_rtl_seg_87_11_F0 */
 NDIS_STATUS oid_rt_pro_h2c_set_rate_table_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_h2c_get_rate_table_hdl(struct oid_par_priv* poid_par_priv);
 
 
-//oid_rtl_seg_87_12_00
+/* oid_rtl_seg_87_12_00 */
 NDIS_STATUS oid_rt_pro_encryption_ctrl_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_add_sta_info_hdl(struct oid_par_priv* poid_par_priv);
 NDIS_STATUS oid_rt_pro_dele_sta_info_hdl(struct oid_par_priv* poid_par_priv);
@@ -169,201 +169,201 @@ NDIS_STATUS oid_rt_pro_trigger_gpio_hdl(struct oid_par_priv *poid_par_priv);
 
 static const struct oid_obj_priv oid_rtl_seg_81_80_00[] =
 {
-	{1, &oid_null_function},			//0x00	OID_RT_PRO_RESET_DUT
-	{1, &oid_rt_pro_set_data_rate_hdl},		//0x01
-	{1, &oid_rt_pro_start_test_hdl},		//0x02
-	{1, &oid_rt_pro_stop_test_hdl},			//0x03
-	{1, &oid_null_function},			//0x04	OID_RT_PRO_SET_PREAMBLE
-	{1, &oid_null_function},			//0x05	OID_RT_PRO_SET_SCRAMBLER
-	{1, &oid_null_function},			//0x06	OID_RT_PRO_SET_FILTER_BB
-	{1, &oid_null_function},			//0x07	OID_RT_PRO_SET_MANUAL_DIVERSITY_BB
-	{1, &oid_rt_pro_set_channel_direct_call_hdl},	//0x08
-	{1, &oid_null_function},			//0x09	OID_RT_PRO_SET_SLEEP_MODE_DIRECT_CALL
-	{1, &oid_null_function},			//0x0A	OID_RT_PRO_SET_WAKE_MODE_DIRECT_CALL
-	{1, &oid_rt_pro_set_continuous_tx_hdl},		//0x0B	OID_RT_PRO_SET_TX_CONTINUOUS_DIRECT_CALL
-	{1, &oid_rt_pro_set_single_carrier_tx_hdl},	//0x0C	OID_RT_PRO_SET_SINGLE_CARRIER_TX_CONTINUOUS
-	{1, &oid_null_function},			//0x0D	OID_RT_PRO_SET_TX_ANTENNA_BB
-	{1, &oid_rt_pro_set_antenna_bb_hdl},		//0x0E
-	{1, &oid_null_function},			//0x0F	OID_RT_PRO_SET_CR_SCRAMBLER
-	{1, &oid_null_function},			//0x10	OID_RT_PRO_SET_CR_NEW_FILTER
-	{1, &oid_rt_pro_set_tx_power_control_hdl},	//0x11	OID_RT_PRO_SET_TX_POWER_CONTROL
-	{1, &oid_null_function},			//0x12	OID_RT_PRO_SET_CR_TX_CONFIG
-	{1, &oid_null_function},			//0x13	OID_RT_PRO_GET_TX_POWER_CONTROL
-	{1, &oid_null_function},			//0x14	OID_RT_PRO_GET_CR_SIGNAL_QUALITY
-	{1, &oid_null_function},			//0x15	OID_RT_PRO_SET_CR_SETPOINT
-	{1, &oid_null_function},			//0x16	OID_RT_PRO_SET_INTEGRATOR
-	{1, &oid_null_function},			//0x17	OID_RT_PRO_SET_SIGNAL_QUALITY
-	{1, &oid_null_function},			//0x18	OID_RT_PRO_GET_INTEGRATOR
-	{1, &oid_null_function},			//0x19	OID_RT_PRO_GET_SIGNAL_QUALITY
-	{1, &oid_null_function},			//0x1A	OID_RT_PRO_QUERY_EEPROM_TYPE
-	{1, &oid_null_function},			//0x1B	OID_RT_PRO_WRITE_MAC_ADDRESS
-	{1, &oid_null_function},			//0x1C	OID_RT_PRO_READ_MAC_ADDRESS
-	{1, &oid_null_function},			//0x1D	OID_RT_PRO_WRITE_CIS_DATA
-	{1, &oid_null_function},			//0x1E	OID_RT_PRO_READ_CIS_DATA
-	{1, &oid_null_function}				//0x1F	OID_RT_PRO_WRITE_POWER_CONTROL
+	{1, &oid_null_function},			/* 0x00	OID_RT_PRO_RESET_DUT */
+	{1, &oid_rt_pro_set_data_rate_hdl},		/* 0x01 */
+	{1, &oid_rt_pro_start_test_hdl},		/* 0x02 */
+	{1, &oid_rt_pro_stop_test_hdl},			/* 0x03 */
+	{1, &oid_null_function},			/* 0x04	OID_RT_PRO_SET_PREAMBLE */
+	{1, &oid_null_function},			/* 0x05	OID_RT_PRO_SET_SCRAMBLER */
+	{1, &oid_null_function},			/* 0x06	OID_RT_PRO_SET_FILTER_BB */
+	{1, &oid_null_function},			/* 0x07	OID_RT_PRO_SET_MANUAL_DIVERSITY_BB */
+	{1, &oid_rt_pro_set_channel_direct_call_hdl},	/* 0x08 */
+	{1, &oid_null_function},			/* 0x09	OID_RT_PRO_SET_SLEEP_MODE_DIRECT_CALL */
+	{1, &oid_null_function},			/* 0x0A	OID_RT_PRO_SET_WAKE_MODE_DIRECT_CALL */
+	{1, &oid_rt_pro_set_continuous_tx_hdl},		/* 0x0B	OID_RT_PRO_SET_TX_CONTINUOUS_DIRECT_CALL */
+	{1, &oid_rt_pro_set_single_carrier_tx_hdl},	/* 0x0C	OID_RT_PRO_SET_SINGLE_CARRIER_TX_CONTINUOUS */
+	{1, &oid_null_function},			/* 0x0D	OID_RT_PRO_SET_TX_ANTENNA_BB */
+	{1, &oid_rt_pro_set_antenna_bb_hdl},		/* 0x0E */
+	{1, &oid_null_function},			/* 0x0F	OID_RT_PRO_SET_CR_SCRAMBLER */
+	{1, &oid_null_function},			/* 0x10	OID_RT_PRO_SET_CR_NEW_FILTER */
+	{1, &oid_rt_pro_set_tx_power_control_hdl},	/* 0x11	OID_RT_PRO_SET_TX_POWER_CONTROL */
+	{1, &oid_null_function},			/* 0x12	OID_RT_PRO_SET_CR_TX_CONFIG */
+	{1, &oid_null_function},			/* 0x13	OID_RT_PRO_GET_TX_POWER_CONTROL */
+	{1, &oid_null_function},			/* 0x14	OID_RT_PRO_GET_CR_SIGNAL_QUALITY */
+	{1, &oid_null_function},			/* 0x15	OID_RT_PRO_SET_CR_SETPOINT */
+	{1, &oid_null_function},			/* 0x16	OID_RT_PRO_SET_INTEGRATOR */
+	{1, &oid_null_function},			/* 0x17	OID_RT_PRO_SET_SIGNAL_QUALITY */
+	{1, &oid_null_function},			/* 0x18	OID_RT_PRO_GET_INTEGRATOR */
+	{1, &oid_null_function},			/* 0x19	OID_RT_PRO_GET_SIGNAL_QUALITY */
+	{1, &oid_null_function},			/* 0x1A	OID_RT_PRO_QUERY_EEPROM_TYPE */
+	{1, &oid_null_function},			/* 0x1B	OID_RT_PRO_WRITE_MAC_ADDRESS */
+	{1, &oid_null_function},			/* 0x1C	OID_RT_PRO_READ_MAC_ADDRESS */
+	{1, &oid_null_function},			/* 0x1D	OID_RT_PRO_WRITE_CIS_DATA */
+	{1, &oid_null_function},			/* 0x1E	OID_RT_PRO_READ_CIS_DATA */
+	{1, &oid_null_function}				/* 0x1F	OID_RT_PRO_WRITE_POWER_CONTROL */
 
 };
 
 static const struct oid_obj_priv oid_rtl_seg_81_80_20[] =
 {
-	{1, &oid_null_function},			//0x20	OID_RT_PRO_READ_POWER_CONTROL
-	{1, &oid_null_function},			//0x21	OID_RT_PRO_WRITE_EEPROM
-	{1, &oid_null_function},			//0x22	OID_RT_PRO_READ_EEPROM
-	{1, &oid_rt_pro_reset_tx_packet_sent_hdl},	//0x23
-	{1, &oid_rt_pro_query_tx_packet_sent_hdl},	//0x24
-	{1, &oid_rt_pro_reset_rx_packet_received_hdl},	//0x25
-	{1, &oid_rt_pro_query_rx_packet_received_hdl},	//0x26
-	{1, &oid_rt_pro_query_rx_packet_crc32_error_hdl},	//0x27
-	{1, &oid_null_function},			//0x28	OID_RT_PRO_QUERY_CURRENT_ADDRESS
-	{1, &oid_null_function},			//0x29	OID_RT_PRO_QUERY_PERMANENT_ADDRESS
-	{1, &oid_null_function},			//0x2A	OID_RT_PRO_SET_PHILIPS_RF_PARAMETERS
-	{1, &oid_rt_pro_set_carrier_suppression_tx_hdl},//0x2B	OID_RT_PRO_SET_CARRIER_SUPPRESSION_TX
-	{1, &oid_null_function},			//0x2C	OID_RT_PRO_RECEIVE_PACKET
-	{1, &oid_null_function},			//0x2D	OID_RT_PRO_WRITE_EEPROM_BYTE
-	{1, &oid_null_function},			//0x2E	OID_RT_PRO_READ_EEPROM_BYTE
-	{1, &oid_rt_pro_set_modulation_hdl}		//0x2F
+	{1, &oid_null_function},			/* 0x20	OID_RT_PRO_READ_POWER_CONTROL */
+	{1, &oid_null_function},			/* 0x21	OID_RT_PRO_WRITE_EEPROM */
+	{1, &oid_null_function},			/* 0x22	OID_RT_PRO_READ_EEPROM */
+	{1, &oid_rt_pro_reset_tx_packet_sent_hdl},	/* 0x23 */
+	{1, &oid_rt_pro_query_tx_packet_sent_hdl},	/* 0x24 */
+	{1, &oid_rt_pro_reset_rx_packet_received_hdl},	/* 0x25 */
+	{1, &oid_rt_pro_query_rx_packet_received_hdl},	/* 0x26 */
+	{1, &oid_rt_pro_query_rx_packet_crc32_error_hdl},	/* 0x27 */
+	{1, &oid_null_function},			/* 0x28	OID_RT_PRO_QUERY_CURRENT_ADDRESS */
+	{1, &oid_null_function},			/* 0x29	OID_RT_PRO_QUERY_PERMANENT_ADDRESS */
+	{1, &oid_null_function},			/* 0x2A	OID_RT_PRO_SET_PHILIPS_RF_PARAMETERS */
+	{1, &oid_rt_pro_set_carrier_suppression_tx_hdl},/* 0x2B	OID_RT_PRO_SET_CARRIER_SUPPRESSION_TX */
+	{1, &oid_null_function},			/* 0x2C	OID_RT_PRO_RECEIVE_PACKET */
+	{1, &oid_null_function},			/* 0x2D	OID_RT_PRO_WRITE_EEPROM_BYTE */
+	{1, &oid_null_function},			/* 0x2E	OID_RT_PRO_READ_EEPROM_BYTE */
+	{1, &oid_rt_pro_set_modulation_hdl}		/* 0x2F */
 
 };
 
 static const struct oid_obj_priv oid_rtl_seg_81_80_40[] =
 {
-	{1, &oid_null_function},			//0x40
-	{1, &oid_null_function},			//0x41
-	{1, &oid_null_function},			//0x42
-	{1, &oid_rt_pro_set_single_tone_tx_hdl},	//0x43
-	{1, &oid_null_function},			//0x44
-	{1, &oid_null_function}				//0x45
+	{1, &oid_null_function},			/* 0x40 */
+	{1, &oid_null_function},			/* 0x41 */
+	{1, &oid_null_function},			/* 0x42 */
+	{1, &oid_rt_pro_set_single_tone_tx_hdl},	/* 0x43 */
+	{1, &oid_null_function},			/* 0x44 */
+	{1, &oid_null_function}				/* 0x45 */
 };
 
 static const struct oid_obj_priv oid_rtl_seg_81_80_80[] =
 {
-	{1, &oid_null_function},			//0x80	OID_RT_DRIVER_OPTION
-	{1, &oid_null_function},			//0x81	OID_RT_RF_OFF
-	{1, &oid_null_function}				//0x82	OID_RT_AUTH_STATUS
+	{1, &oid_null_function},			/* 0x80	OID_RT_DRIVER_OPTION */
+	{1, &oid_null_function},			/* 0x81	OID_RT_RF_OFF */
+	{1, &oid_null_function}				/* 0x82	OID_RT_AUTH_STATUS */
 
 };
 
 static const struct oid_obj_priv oid_rtl_seg_81_85[] =
 {
-	{1, &oid_rt_wireless_mode_hdl}			//0x00	OID_RT_WIRELESS_MODE
+	{1, &oid_rt_wireless_mode_hdl}			/* 0x00	OID_RT_WIRELESS_MODE */
 };
 
 static struct oid_obj_priv oid_rtl_seg_81_87[] =
 {
-	{1, &oid_null_function},			//0x80	OID_RT_PRO8187_WI_POLL
-	{1, &oid_rt_pro_write_bb_reg_hdl},		//0x81
-	{1, &oid_rt_pro_read_bb_reg_hdl},		//0x82
-	{1, &oid_rt_pro_write_rf_reg_hdl},		//0x82
-	{1, &oid_rt_pro_read_rf_reg_hdl}		//0x83
+	{1, &oid_null_function},			/* 0x80	OID_RT_PRO8187_WI_POLL */
+	{1, &oid_rt_pro_write_bb_reg_hdl},		/* 0x81 */
+	{1, &oid_rt_pro_read_bb_reg_hdl},		/* 0x82 */
+	{1, &oid_rt_pro_write_rf_reg_hdl},		/* 0x82 */
+	{1, &oid_rt_pro_read_rf_reg_hdl}		/* 0x83 */
 };
 
 static struct oid_obj_priv oid_rtl_seg_87_11_00[] =
 {
-	{1, &oid_rt_pro8711_join_bss_hdl},		//0x00  //S
-	{1, &oid_rt_pro_read_register_hdl},		//0x01
-	{1, &oid_rt_pro_write_register_hdl},		//0x02
-	{1, &oid_rt_pro_burst_read_register_hdl},	//0x03
-	{1, &oid_rt_pro_burst_write_register_hdl},	//0x04
-	{1, &oid_rt_pro_write_txcmd_hdl},		//0x05
-	{1, &oid_rt_pro_read16_eeprom_hdl},		//0x06
-	{1, &oid_rt_pro_write16_eeprom_hdl},		//0x07
-	{1, &oid_null_function},			//0x08	OID_RT_PRO_H2C_SET_COMMAND
-	{1, &oid_null_function},			//0x09	OID_RT_PRO_H2C_QUERY_RESULT
-	{1, &oid_rt_pro8711_wi_poll_hdl},		//0x0A
-	{1, &oid_rt_pro8711_pkt_loss_hdl},		//0x0B
-	{1, &oid_rt_rd_attrib_mem_hdl},			//0x0C
-	{1, &oid_rt_wr_attrib_mem_hdl},			//0x0D
-	{1, &oid_null_function},			//0x0E
-	{1, &oid_null_function},			//0x0F
-	{1, &oid_null_function},			//0x10	OID_RT_PRO_H2C_CMD_MODE
-	{1, &oid_null_function},			//0x11	OID_RT_PRO_H2C_CMD_RSP_MODE
-	{1, &oid_null_function},			//0X12	OID_RT_PRO_WAIT_C2H_EVENT
-	{1, &oid_null_function},			//0X13	OID_RT_PRO_RW_ACCESS_PROTOCOL_TEST
-	{1, &oid_null_function},			//0X14	OID_RT_PRO_SCSI_ACCESS_TEST
-	{1, &oid_null_function},			//0X15	OID_RT_PRO_SCSI_TCPIPOFFLOAD_OUT
-	{1, &oid_null_function},			//0X16	OID_RT_PRO_SCSI_TCPIPOFFLOAD_IN
-	{1, &oid_null_function},			//0X17	OID_RT_RRO_RX_PKT_VIA_IOCTRL
-	{1, &oid_null_function},			//0X18	OID_RT_RRO_RX_PKTARRAY_VIA_IOCTRL
-	{1, &oid_null_function},			//0X19	OID_RT_RPO_SET_PWRMGT_TEST
-	{1, &oid_null_function},			//0X1A
-	{1, &oid_null_function},			//0X1B	OID_RT_PRO_QRY_PWRMGT_TEST
-	{1, &oid_null_function},			//0X1C	OID_RT_RPO_ASYNC_RWIO_TEST
-	{1, &oid_null_function},			//0X1D	OID_RT_RPO_ASYNC_RWIO_POLL
-	{1, &oid_rt_pro_set_rf_intfs_hdl},		//0X1E
-	{1, &oid_rt_poll_rx_status_hdl}			//0X1F
+	{1, &oid_rt_pro8711_join_bss_hdl},		/* 0x00  S */
+	{1, &oid_rt_pro_read_register_hdl},		/* 0x01 */
+	{1, &oid_rt_pro_write_register_hdl},		/* 0x02 */
+	{1, &oid_rt_pro_burst_read_register_hdl},	/* 0x03 */
+	{1, &oid_rt_pro_burst_write_register_hdl},	/* 0x04 */
+	{1, &oid_rt_pro_write_txcmd_hdl},		/* 0x05 */
+	{1, &oid_rt_pro_read16_eeprom_hdl},		/* 0x06 */
+	{1, &oid_rt_pro_write16_eeprom_hdl},		/* 0x07 */
+	{1, &oid_null_function},			/* 0x08	OID_RT_PRO_H2C_SET_COMMAND */
+	{1, &oid_null_function},			/* 0x09	OID_RT_PRO_H2C_QUERY_RESULT */
+	{1, &oid_rt_pro8711_wi_poll_hdl},		/* 0x0A */
+	{1, &oid_rt_pro8711_pkt_loss_hdl},		/* 0x0B */
+	{1, &oid_rt_rd_attrib_mem_hdl},			/* 0x0C */
+	{1, &oid_rt_wr_attrib_mem_hdl},			/* 0x0D */
+	{1, &oid_null_function},			/* 0x0E */
+	{1, &oid_null_function},			/* 0x0F */
+	{1, &oid_null_function},			/* 0x10	OID_RT_PRO_H2C_CMD_MODE */
+	{1, &oid_null_function},			/* 0x11	OID_RT_PRO_H2C_CMD_RSP_MODE */
+	{1, &oid_null_function},			/* 0X12	OID_RT_PRO_WAIT_C2H_EVENT */
+	{1, &oid_null_function},			/* 0X13	OID_RT_PRO_RW_ACCESS_PROTOCOL_TEST */
+	{1, &oid_null_function},			/* 0X14	OID_RT_PRO_SCSI_ACCESS_TEST */
+	{1, &oid_null_function},			/* 0X15	OID_RT_PRO_SCSI_TCPIPOFFLOAD_OUT */
+	{1, &oid_null_function},			/* 0X16	OID_RT_PRO_SCSI_TCPIPOFFLOAD_IN */
+	{1, &oid_null_function},			/* 0X17	OID_RT_RRO_RX_PKT_VIA_IOCTRL */
+	{1, &oid_null_function},			/* 0X18	OID_RT_RRO_RX_PKTARRAY_VIA_IOCTRL */
+	{1, &oid_null_function},			/* 0X19	OID_RT_RPO_SET_PWRMGT_TEST */
+	{1, &oid_null_function},			/* 0X1A */
+	{1, &oid_null_function},			/* 0X1B	OID_RT_PRO_QRY_PWRMGT_TEST */
+	{1, &oid_null_function},			/* 0X1C	OID_RT_RPO_ASYNC_RWIO_TEST */
+	{1, &oid_null_function},			/* 0X1D	OID_RT_RPO_ASYNC_RWIO_POLL */
+	{1, &oid_rt_pro_set_rf_intfs_hdl},		/* 0X1E */
+	{1, &oid_rt_poll_rx_status_hdl}			/* 0X1F */
 };
 
 static struct oid_obj_priv oid_rtl_seg_87_11_20[] =
 {
-	{1, &oid_rt_pro_cfg_debug_message_hdl},		//0x20
-	{1, &oid_rt_pro_set_data_rate_ex_hdl},		//0x21
-	{1, &oid_rt_pro_set_basic_rate_hdl},		//0x22
-	{1, &oid_rt_pro_read_tssi_hdl},			//0x23
-	{1, &oid_rt_pro_set_power_tracking_hdl}		//0x24
+	{1, &oid_rt_pro_cfg_debug_message_hdl},		/* 0x20 */
+	{1, &oid_rt_pro_set_data_rate_ex_hdl},		/* 0x21 */
+	{1, &oid_rt_pro_set_basic_rate_hdl},		/* 0x22 */
+	{1, &oid_rt_pro_read_tssi_hdl},			/* 0x23 */
+	{1, &oid_rt_pro_set_power_tracking_hdl}		/* 0x24 */
 };
 
 
 static struct oid_obj_priv oid_rtl_seg_87_11_50[] =
 {
-	{1, &oid_rt_pro_qry_pwrstate_hdl},		//0x50
-	{1, &oid_rt_pro_set_pwrstate_hdl}		//0x51
+	{1, &oid_rt_pro_qry_pwrstate_hdl},		/* 0x50 */
+	{1, &oid_rt_pro_set_pwrstate_hdl}		/* 0x51 */
 };
 
 static struct oid_obj_priv oid_rtl_seg_87_11_80[] =
 {
-	{1, &oid_null_function}				//0x80
+	{1, &oid_null_function}				/* 0x80 */
 };
 
 static struct oid_obj_priv oid_rtl_seg_87_11_B0[] =
 {
-	{1, &oid_null_function}				//0xB0
+	{1, &oid_null_function}				/* 0xB0 */
 };
 
 static struct oid_obj_priv oid_rtl_seg_87_11_F0[] =
 {
-	{1, &oid_null_function},			//0xF0
-	{1, &oid_null_function},			//0xF1
-	{1, &oid_null_function},			//0xF2
-	{1, &oid_null_function},			//0xF3
-	{1, &oid_null_function},			//0xF4
-	{1, &oid_null_function},			//0xF5
-	{1, &oid_null_function},			//0xF6
-	{1, &oid_null_function},			//0xF7
-	{1, &oid_null_function},			//0xF8
-	{1, &oid_null_function},			//0xF9
-	{1, &oid_null_function},			//0xFA
-	{1, &oid_rt_pro_h2c_set_rate_table_hdl},	//0xFB
-	{1, &oid_rt_pro_h2c_get_rate_table_hdl},	//0xFC
-	{1, &oid_null_function},			//0xFD
-	{1, &oid_null_function},			//0xFE	OID_RT_PRO_H2C_C2H_LBK_TEST
-	{1, &oid_null_function}				//0xFF
+	{1, &oid_null_function},			/* 0xF0 */
+	{1, &oid_null_function},			/* 0xF1 */
+	{1, &oid_null_function},			/* 0xF2 */
+	{1, &oid_null_function},			/* 0xF3 */
+	{1, &oid_null_function},			/* 0xF4 */
+	{1, &oid_null_function},			/* 0xF5 */
+	{1, &oid_null_function},			/* 0xF6 */
+	{1, &oid_null_function},			/* 0xF7 */
+	{1, &oid_null_function},			/* 0xF8 */
+	{1, &oid_null_function},			/* 0xF9 */
+	{1, &oid_null_function},			/* 0xFA */
+	{1, &oid_rt_pro_h2c_set_rate_table_hdl},	/* 0xFB */
+	{1, &oid_rt_pro_h2c_get_rate_table_hdl},	/* 0xFC */
+	{1, &oid_null_function},			/* 0xFD */
+	{1, &oid_null_function},			/* 0xFE	OID_RT_PRO_H2C_C2H_LBK_TEST */
+	{1, &oid_null_function}				/* 0xFF */
 
 };
 
 static struct oid_obj_priv oid_rtl_seg_87_12_00[]=
 {
-	{1, &oid_rt_pro_encryption_ctrl_hdl},		//0x00	Q&S
-	{1, &oid_rt_pro_add_sta_info_hdl},		//0x01	S
-	{1, &oid_rt_pro_dele_sta_info_hdl},		//0x02	S
-	{1, &oid_rt_pro_query_dr_variable_hdl},		//0x03	Q
-	{1, &oid_rt_pro_rx_packet_type_hdl},		//0x04	Q,S
-	{1, &oid_rt_pro_read_efuse_hdl},		//0x05	Q	OID_RT_PRO_READ_EFUSE
-	{1, &oid_rt_pro_write_efuse_hdl},		//0x06	S	OID_RT_PRO_WRITE_EFUSE
-	{1, &oid_rt_pro_rw_efuse_pgpkt_hdl},		//0x07	Q,S
-	{1, &oid_rt_get_efuse_current_size_hdl},	//0x08	Q
-	{1, &oid_rt_set_bandwidth_hdl},			//0x09
-	{1, &oid_rt_set_crystal_cap_hdl},		//0x0a
-	{1, &oid_rt_set_rx_packet_type_hdl},		//0x0b	S
-	{1, &oid_rt_get_efuse_max_size_hdl},		//0x0c
-	{1, &oid_rt_pro_set_tx_agc_offset_hdl},		//0x0d
-	{1, &oid_rt_pro_set_pkt_test_mode_hdl},		//0x0e
-	{1, &oid_null_function},			//0x0f		OID_RT_PRO_FOR_EVM_TEST_SETTING
-	{1, &oid_rt_get_thermal_meter_hdl},		//0x10	Q	OID_RT_PRO_GET_THERMAL_METER
-	{1, &oid_rt_reset_phy_rx_packet_count_hdl},	//0x11	S	OID_RT_RESET_PHY_RX_PACKET_COUNT
-	{1, &oid_rt_get_phy_rx_packet_received_hdl},	//0x12	Q	OID_RT_GET_PHY_RX_PACKET_RECEIVED
-	{1, &oid_rt_get_phy_rx_packet_crc32_error_hdl},	//0x13	Q	OID_RT_GET_PHY_RX_PACKET_CRC32_ERROR
-	{1, &oid_rt_set_power_down_hdl},		//0x14	Q	OID_RT_SET_POWER_DOWN
-	{1, &oid_rt_get_power_mode_hdl}			//0x15	Q	OID_RT_GET_POWER_MODE
+	{1, &oid_rt_pro_encryption_ctrl_hdl},		/* 0x00	Q&S */
+	{1, &oid_rt_pro_add_sta_info_hdl},		/* 0x01	S */
+	{1, &oid_rt_pro_dele_sta_info_hdl},		/* 0x02	S */
+	{1, &oid_rt_pro_query_dr_variable_hdl},		/* 0x03	Q */
+	{1, &oid_rt_pro_rx_packet_type_hdl},		/* 0x04	Q,S */
+	{1, &oid_rt_pro_read_efuse_hdl},		/* 0x05	Q	OID_RT_PRO_READ_EFUSE */
+	{1, &oid_rt_pro_write_efuse_hdl},		/* 0x06	S	OID_RT_PRO_WRITE_EFUSE */
+	{1, &oid_rt_pro_rw_efuse_pgpkt_hdl},		/* 0x07	Q,S */
+	{1, &oid_rt_get_efuse_current_size_hdl},	/* 0x08	Q */
+	{1, &oid_rt_set_bandwidth_hdl},			/* 0x09 */
+	{1, &oid_rt_set_crystal_cap_hdl},		/* 0x0a */
+	{1, &oid_rt_set_rx_packet_type_hdl},		/* 0x0b	S */
+	{1, &oid_rt_get_efuse_max_size_hdl},		/* 0x0c */
+	{1, &oid_rt_pro_set_tx_agc_offset_hdl},		/* 0x0d */
+	{1, &oid_rt_pro_set_pkt_test_mode_hdl},		/* 0x0e */
+	{1, &oid_null_function},			/* 0x0f		OID_RT_PRO_FOR_EVM_TEST_SETTING */
+	{1, &oid_rt_get_thermal_meter_hdl},		/* 0x10	Q	OID_RT_PRO_GET_THERMAL_METER */
+	{1, &oid_rt_reset_phy_rx_packet_count_hdl},	/* 0x11	S	OID_RT_RESET_PHY_RX_PACKET_COUNT */
+	{1, &oid_rt_get_phy_rx_packet_received_hdl},	/* 0x12	Q	OID_RT_GET_PHY_RX_PACKET_RECEIVED */
+	{1, &oid_rt_get_phy_rx_packet_crc32_error_hdl},	/* 0x13	Q	OID_RT_GET_PHY_RX_PACKET_CRC32_ERROR */
+	{1, &oid_rt_set_power_down_hdl},		/* 0x14	Q	OID_RT_SET_POWER_DOWN */
+	{1, &oid_rt_get_power_mode_hdl}			/* 0x15	Q	OID_RT_GET_POWER_MODE */
 };
 
 #endif /* _RTL871X_MP_IOCTL_C_ */
@@ -417,7 +417,7 @@ struct psmode_param {
 	u32 smart_ps;
 };
 
-//for OID_RT_PRO_READ16_EEPROM & OID_RT_PRO_WRITE16_EEPROM
+/* for OID_RT_PRO_READ16_EEPROM & OID_RT_PRO_WRITE16_EEPROM */
 struct eeprom_rw_param {
 	u32 offset;
 	u16 value;

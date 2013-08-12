@@ -20,8 +20,8 @@
 #ifndef _RTW_MP_H_
 #define _RTW_MP_H_
 
-//	00 - Success
-//	11 - Error
+/* 	00 - Success */
+/* 	11 - Error */
 #define STATUS_SUCCESS				(0x00000000L)
 #define STATUS_PENDING				(0x00000103L)
 
@@ -73,12 +73,12 @@
 #define NDIS_STATUS_SAP_IN_USE			((NDIS_STATUS)0xC0010021L)
 #define NDIS_STATUS_INVALID_ADDRESS		((NDIS_STATUS)0xC0010022L)
 #define NDIS_STATUS_VC_NOT_ACTIVATED		((NDIS_STATUS)0xC0010023L)
-#define NDIS_STATUS_DEST_OUT_OF_ORDER		((NDIS_STATUS)0xC0010024L)  // cause 27
-#define NDIS_STATUS_VC_NOT_AVAILABLE		((NDIS_STATUS)0xC0010025L)  // cause 35,45
-#define NDIS_STATUS_CELLRATE_NOT_AVAILABLE	((NDIS_STATUS)0xC0010026L)  // cause 37
-#define NDIS_STATUS_INCOMPATABLE_QOS		((NDIS_STATUS)0xC0010027L)  // cause 49
-#define NDIS_STATUS_AAL_PARAMS_UNSUPPORTED	((NDIS_STATUS)0xC0010028L)  // cause 93
-#define NDIS_STATUS_NO_ROUTE_TO_DESTINATION	((NDIS_STATUS)0xC0010029L)  // cause 3
+#define NDIS_STATUS_DEST_OUT_OF_ORDER		((NDIS_STATUS)0xC0010024L)  /*  cause 27 */
+#define NDIS_STATUS_VC_NOT_AVAILABLE		((NDIS_STATUS)0xC0010025L)  /*  cause 35,45 */
+#define NDIS_STATUS_CELLRATE_NOT_AVAILABLE	((NDIS_STATUS)0xC0010026L)  /*  cause 37 */
+#define NDIS_STATUS_INCOMPATABLE_QOS		((NDIS_STATUS)0xC0010027L)  /*  cause 49 */
+#define NDIS_STATUS_AAL_PARAMS_UNSUPPORTED	((NDIS_STATUS)0xC0010028L)  /*  cause 93 */
+#define NDIS_STATUS_NO_ROUTE_TO_DESTINATION	((NDIS_STATUS)0xC0010029L)  /*  cause 3 */
 
 enum antenna_path {
 		ANTENNA_NONE	= 0x00,
@@ -115,7 +115,7 @@ struct mp_xmit_frame
 
 	struct adapter *padapter;
 
-	//insert urb, irp, and irpcnt info below...
+	/* insert urb, irp, and irpcnt info below... */
 	u8 *mem_addr;
 	u32 sz[8];
 	struct urb * pxmit_urb[8];
@@ -192,82 +192,82 @@ struct mp_tx {
 typedef void (*MPT_WORK_ITEM_HANDLER)(void *Adapter);
 
 struct mpt_context {
-	// Indicate if we have started Mass Production Test.
+	/*  Indicate if we have started Mass Production Test. */
 	bool			bMassProdTest;
 
-	// Indicate if the driver is unloading or unloaded.
+	/*  Indicate if the driver is unloading or unloaded. */
 	bool			bMptDrvUnload;
 
 	struct semaphore MPh2c_Sema;
 	struct timer_list MPh2c_timeout_timer;
-// Event used to sync H2c for BT control
+/*  Event used to sync H2c for BT control */
 
 	bool		MptH2cRspEvent;
 	bool		MptBtC2hEvent;
 	bool		bMPh2c_timeout;
 
 	/* 8190 PCI does not support NDIS_WORK_ITEM. */
-	// Work Item for Mass Production Test.
-	// Event used to sync the case unloading driver and MptWorkItem is still in progress.
-	// Indicate a MptWorkItem is scheduled and not yet finished.
+	/*  Work Item for Mass Production Test. */
+	/*  Event used to sync the case unloading driver and MptWorkItem is still in progress. */
+	/*  Indicate a MptWorkItem is scheduled and not yet finished. */
 	bool			bMptWorkItemInProgress;
-	// An instance which implements function and context of MptWorkItem.
+	/*  An instance which implements function and context of MptWorkItem. */
 	MPT_WORK_ITEM_HANDLER	CurrMptAct;
 
-	// 1=Start, 0=Stop from UI.
+	/*  1=Start, 0=Stop from UI. */
 	ULONG			MptTestStart;
-	// _TEST_MODE, defined in MPT_Req2.h
+	/*  _TEST_MODE, defined in MPT_Req2.h */
 	ULONG			MptTestItem;
-	// Variable needed in each implementation of CurrMptAct.
-	ULONG			MptActType;	// Type of action performed in CurrMptAct.
-	// The Offset of IO operation is depend of MptActType.
+	/*  Variable needed in each implementation of CurrMptAct. */
+	ULONG			MptActType;	/*  Type of action performed in CurrMptAct. */
+	/*  The Offset of IO operation is depend of MptActType. */
 	ULONG			MptIoOffset;
-	// The Value of IO operation is depend of MptActType.
+	/*  The Value of IO operation is depend of MptActType. */
 	ULONG			MptIoValue;
-	// The RfPath of IO operation is depend of MptActType.
+	/*  The RfPath of IO operation is depend of MptActType. */
 	ULONG			MptRfPath;
 
-	enum wireless_mode MptWirelessModeToSw;	// Wireless mode to switch.
-	u8			MptChannelToSw;		// Channel to switch.
-	u8			MptInitGainToSet;	// Initial gain to set.
-	ULONG			MptBandWidth;		// bandwidth to switch.
-	ULONG			MptRateIndex;		// rate index.
-	// Register value kept for Single Carrier Tx test.
+	enum wireless_mode MptWirelessModeToSw;	/*  Wireless mode to switch. */
+	u8			MptChannelToSw;		/*  Channel to switch. */
+	u8			MptInitGainToSet;	/*  Initial gain to set. */
+	ULONG			MptBandWidth;		/*  bandwidth to switch. */
+	ULONG			MptRateIndex;		/*  rate index. */
+	/*  Register value kept for Single Carrier Tx test. */
 	u8			btMpCckTxPower;
-	// Register value kept for Single Carrier Tx test.
+	/*  Register value kept for Single Carrier Tx test. */
 	u8			btMpOfdmTxPower;
-	// For MP Tx Power index
-	u8			TxPwrLevel[2];	// rf-A, rf-B
+	/*  For MP Tx Power index */
+	u8			TxPwrLevel[2];	/*  rf-A, rf-B */
 
-	// Content of RCR Regsiter for Mass Production Test.
+	/*  Content of RCR Regsiter for Mass Production Test. */
 	ULONG			MptRCR;
-	// true if we only receive packets with specific pattern.
+	/*  true if we only receive packets with specific pattern. */
 	bool			bMptFilterPattern;
-	// Rx OK count, statistics used in Mass Production Test.
+	/*  Rx OK count, statistics used in Mass Production Test. */
 	ULONG			MptRxOkCnt;
-	// Rx CRC32 error count, statistics used in Mass Production Test.
+	/*  Rx CRC32 error count, statistics used in Mass Production Test. */
 	ULONG			MptRxCrcErrCnt;
 
-	bool			bCckContTx;	// true if we are in CCK Continuous Tx test.
-	bool			bOfdmContTx;	// true if we are in OFDM Continuous Tx test.
-	bool			bStartContTx;	// true if we have start Continuous Tx test.
-	// true if we are in Single Carrier Tx test.
+	bool			bCckContTx;	/*  true if we are in CCK Continuous Tx test. */
+	bool			bOfdmContTx;	/*  true if we are in OFDM Continuous Tx test. */
+	bool			bStartContTx;	/*  true if we have start Continuous Tx test. */
+	/*  true if we are in Single Carrier Tx test. */
 	bool			bSingleCarrier;
-	// true if we are in Carrier Suppression Tx Test.
+	/*  true if we are in Carrier Suppression Tx Test. */
 	bool			bCarrierSuppression;
-	//true if we are in Single Tone Tx test.
+	/* true if we are in Single Tone Tx test. */
 	bool			bSingleTone;
 
-	// ACK counter asked by K.Y..
+	/*  ACK counter asked by K.Y.. */
 	bool			bMptEnableAckCounter;
 	ULONG			MptAckCounter;
 
-	// SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~!
-	//s1Byte		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT];
-	//s1Byte			BufOfLines[2][MP_MAX_LINES][MP_MAX_LINES_BYTES];
-	//s4Byte			RfReadLine[2];
+	/*  SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~! */
+	/* s1Byte		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT]; */
+	/* s1Byte			BufOfLines[2][MP_MAX_LINES][MP_MAX_LINES_BYTES]; */
+	/* s4Byte			RfReadLine[2]; */
 
-	u8		APK_bound[2];	//for APK	path A/path B
+	u8		APK_bound[2];	/* for APK	path A/path B */
 	bool		bMptIndexEven;
 
 	u8		backup0xc50;
@@ -321,28 +321,28 @@ struct mp_priv
 {
 	struct adapter *papdater;
 
-	//Testing Flag
-	u32 mode;//0 for normal type packet, 1 for loopback packet (16bytes TXCMD)
+	/* Testing Flag */
+	u32 mode;/* 0 for normal type packet, 1 for loopback packet (16bytes TXCMD) */
 
 	u32 prev_fw_state;
 
-	//OID cmd handler
+	/* OID cmd handler */
 	struct mp_wiparam workparam;
-//	u8 act_in_progress;
+/* 	u8 act_in_progress; */
 
-	//Tx Section
+	/* Tx Section */
 	u8 TID;
 	u32 tx_pktcount;
 	struct mp_tx tx;
 
-	//Rx Section
+	/* Rx Section */
 	u32 rx_pktcount;
 	u32 rx_crcerrpktcount;
 	u32 rx_pktloss;
 
 	struct recv_stat rxstat;
 
-	//RF/BB relative
+	/* RF/BB relative */
 	u8 channel;
 	u8 bandwidth;
 	u8 prime_channel_offset;
@@ -386,7 +386,7 @@ struct bb_reg_param {
 	u32 offset;
 	u32 value;
 };
-//=======================================================================
+/*  */
 
 #define LOWER	true
 #define RAISE	false
@@ -449,7 +449,7 @@ enum mpt_rate_index {
 	MPT_RATE_LAST
 };
 
-#define MAX_TX_PWR_INDEX_N_MODE 64	// 0x3F
+#define MAX_TX_PWR_INDEX_N_MODE 64	/*  0x3F */
 
 enum power_mode {
 	POWER_LOW = 0,
@@ -461,15 +461,15 @@ enum power_mode {
 #define RX_PKT_PHY_MATCH	3
 
 enum encry_ctrl_state {
-	HW_CONTROL,		//hw encryption& decryption
-	SW_CONTROL,		//sw encryption& decryption
-	HW_ENCRY_SW_DECRY,	//hw encryption & sw decryption
-	SW_ENCRY_HW_DECRY	//sw encryption & hw decryption
+	HW_CONTROL,		/* hw encryption& decryption */
+	SW_CONTROL,		/* sw encryption& decryption */
+	HW_ENCRY_SW_DECRY,	/* hw encryption & sw decryption */
+	SW_ENCRY_HW_DECRY	/* sw encryption & hw decryption */
 };
 
-//=======================================================================
-//extern struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv);
-//extern int free_mp_xmitframe(struct xmit_priv *pxmitpriv, struct mp_xmit_frame *pmp_xmitframe);
+/*  */
+/* extern struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv); */
+/* extern int free_mp_xmitframe(struct xmit_priv *pxmitpriv, struct mp_xmit_frame *pmp_xmitframe); */
 
 extern s32 init_mp_priv(struct adapter * padapter);
 extern void free_mp_priv(struct mp_priv *pmp_priv);
@@ -478,7 +478,7 @@ extern void MPT_DeInitAdapter(struct adapter * padapter);
 extern s32 mp_start_test(struct adapter * padapter);
 extern void mp_stop_test(struct adapter * padapter);
 
-//=======================================================================
+/*  */
 
 extern u32 _read_rfreg(struct adapter * padapter, u8 rfpath, u32 addr, u32 bitmask);
 extern void _write_rfreg(struct adapter * padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
@@ -551,4 +551,4 @@ extern void Hal_ProSetCrystalCap (struct adapter * pAdapter , u32 CrystalCapVal)
 extern void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv);
 extern void MP_PHY_SetRFPathSwitch(struct adapter * pAdapter ,bool bMain);
 
-#endif //_RTW_MP_H_
+#endif /* _RTW_MP_H_ */

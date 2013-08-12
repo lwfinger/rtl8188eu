@@ -34,7 +34,7 @@ enum{
 	VENDOR_READ = 0x01,
 };
 #define ALIGNMENT_UNIT				16
-#define MAX_VENDOR_REQ_CMD_SIZE	254		//8188cu SIE Support
+#define MAX_VENDOR_REQ_CMD_SIZE	254		/* 8188cu SIE Support */
 #define MAX_USB_IO_CTL_SIZE		(MAX_VENDOR_REQ_CMD_SIZE +ALIGNMENT_UNIT)
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,12))
@@ -70,7 +70,7 @@ static inline int rtw_inc_and_chk_continual_urb_error(struct dvobj_priv *dvobj)
 		DBG_88E("[dvobj:%p][ERROR] continual_urb_error:%d > %d\n", dvobj, value, MAX_CONTINUAL_URB_ERR);
 		ret = true;
 	} else {
-		//DBG_88E("[dvobj:%p] continual_urb_error:%d\n", dvobj, value);
+		/* DBG_88E("[dvobj:%p] continual_urb_error:%d\n", dvobj, value); */
 	}
 	return ret;
 }
@@ -99,4 +99,4 @@ static inline u8 rtw_usb_bulk_size_boundary(struct adapter * padapter,int buf_le
 }
 
 
-#endif //__USB_OPS_H_
+#endif /* __USB_OPS_H_ */

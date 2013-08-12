@@ -22,7 +22,7 @@
 #define __HAL_PHY_RF_8188E_H__
 
 /*--------------------------Define Parameters-------------------------------*/
-#define	IQK_DELAY_TIME_88E		10		//ms
+#define	IQK_DELAY_TIME_88E		10		/* ms */
 #define	index_mapping_NUM_88E	15
 #define AVG_THERMAL_NUM_88E	4
 
@@ -30,9 +30,9 @@
 void
 ODM_TxPwrTrackAdjust88E(
 	struct odm_dm_struct *pDM_Odm,
-	u1Byte		Type,				// 0 = OFDM, 1 = CCK
-	pu1Byte		pDirection,			// 1 = +(increase) 2 = -(decrease)
-	pu4Byte		pOutWriteVal		// Tx tracking CCK/OFDM BB swing index adjust
+	u1Byte		Type,				/*  0 = OFDM, 1 = CCK */
+	pu1Byte		pDirection,			/*  1 = +(increase) 2 = -(decrease) */
+	pu4Byte		pOutWriteVal		/*  Tx tracking CCK/OFDM BB swing index adjust */
 	);
 
 
@@ -42,20 +42,20 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	);
 
 
-//1 7.	IQK
+/* 1 7.	IQK */
 
 void
 PHY_IQCalibrate_8188E(struct adapter *	Adapter, bool		bReCovery);
 
 
-//
-// LC calibrate
-//
+/*  */
+/*  LC calibrate */
+/*  */
 void PHY_LCCalibrate_8188E( struct adapter *	pAdapter);
 
-//
-// AP calibrate
-//
+/*  */
+/*  AP calibrate */
+/*  */
 void PHY_APCalibrate_8188E(struct adapter *	pAdapter, s1Byte		delta);
 
 void
@@ -92,4 +92,4 @@ _PHY_PathAStandBy(
 	);
 
 
-#endif	// #ifndef __HAL_PHY_RF_8188E_H__
+#endif	/*  #ifndef __HAL_PHY_RF_8188E_H__ */

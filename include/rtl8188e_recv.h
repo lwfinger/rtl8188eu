@@ -32,7 +32,7 @@
 
 #define NR_RECVBUFF (4)
 
-#define MAX_RECVBUF_SZ (15360) // 15k < 16k
+#define MAX_RECVBUF_SZ (15360) /*  15k < 16k */
 
 struct phy_stat {
 	unsigned int phydw0;
@@ -45,14 +45,14 @@ struct phy_stat {
 	unsigned int phydw7;
 };
 
-// Rx smooth factor
+/*  Rx smooth factor */
 #define	Rx_Smooth_Factor (20)
 
 enum rx_packet_type {
-	NORMAL_RX,//Normal rx packet
-	TX_REPORT1,//CCX
-	TX_REPORT2,//TX RPT
-	HIS_REPORT,// USB HISR RPT
+	NORMAL_RX,/* Normal rx packet */
+	TX_REPORT1,/* CCX */
+	TX_REPORT2,/* TX RPT */
+	HIS_REPORT,/*  USB HISR RPT */
 };
 
 #define INTERRUPT_MSG_FORMAT_LEN 60

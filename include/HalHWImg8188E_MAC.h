@@ -21,12 +21,10 @@
 #ifndef __INC_MAC_8188E_HW_IMG_H
 #define __INC_MAC_8188E_HW_IMG_H
 
-//static bool CheckCondition(const u4Byte Condition, const u4Byte Hex);
-
 /******************************************************************************
 *                           MAC_REG.TXT
 ******************************************************************************/
 
 enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E( struct odm_dm_struct *pDM_Odm);
 
-#endif // end of HWIMG_SUPPORT
+#endif /*  end of HWIMG_SUPPORT */

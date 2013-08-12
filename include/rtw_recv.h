@@ -40,7 +40,7 @@ static u8 SNAP_ETH_TYPE_IPX[2] = {0x81, 0x37};
 static u8 SNAP_ETH_TYPE_APPLETALK_AARP[2] = {0x80, 0xf3};
 static u8 SNAP_ETH_TYPE_APPLETALK_DDP[2] = {0x80, 0x9b};
 static u8 SNAP_ETH_TYPE_TDLS[2] = {0x89, 0x0d};
-static u8 SNAP_HDR_APPLETALK_DDP[3] = {0x08, 0x00, 0x07}; // Datagram Delivery Protocol
+static u8 SNAP_HDR_APPLETALK_DDP[3] = {0x08, 0x00, 0x07}; /*  Datagram Delivery Protocol */
 
 static u8 oui_8021h[] = {0x00, 0x00, 0xf8};
 static u8 oui_rfc1042[]= {0x00,0x00,0x00};
@@ -52,12 +52,12 @@ static u8 rtw_rfc1042_header[] =
 static u8 rtw_bridge_tunnel_header[] =
 { 0xaa, 0xaa, 0x03, 0x00, 0x00, 0xf8 };
 
-//for Rx reordering buffer control
+/* for Rx reordering buffer control */
 struct recv_reorder_ctrl
 {
 	struct adapter	*padapter;
 	u8 enable;
-	u16 indicate_seq;//=wstart_b, init_value=0xffff
+	u16 indicate_seq;/* wstart_b, init_value=0xffff */
 	u16 wend_b;
 	u8 wsize_b;
 	struct __queue pending_recvframe_queue;
@@ -88,30 +88,30 @@ struct	stainfo_rxcache	{
 
 
 struct smooth_rssi_data {
-	u32	elements[100];	//array to store values
-	u32	index;			//index to current array to store
-	u32	total_num;		//num of valid elements
-	u32	total_val;		//sum of valid elements
+	u32	elements[100];	/* array to store values */
+	u32	index;			/* index to current array to store */
+	u32	total_num;		/* num of valid elements */
+	u32	total_val;		/* sum of valid elements */
 };
 
 struct signal_stat {
-	u8	update_req;		//used to indicate
-	u8	avg_val;		//avg of valid elements
-	u32	total_num;		//num of valid elements
-	u32	total_val;		//sum of valid elements
+	u8	update_req;		/* used to indicate */
+	u8	avg_val;		/* avg of valid elements */
+	u32	total_num;		/* num of valid elements */
+	u32	total_val;		/* sum of valid elements */
 };
 #define MAX_PATH_NUM_92CS		2
 struct phy_info {
 	u8		RxPWDBAll;
-	u8		SignalQuality;	 // in 0-100 index.
-	u8		RxMIMOSignalQuality[MAX_PATH_NUM_92CS]; //EVM
-	u8		RxMIMOSignalStrength[MAX_PATH_NUM_92CS];// in 0~100 index
-	s8		RxPower; // in dBm Translate from PWdB
-	s8		RecvSignalPower;// Real power in dBm for this packet, no beautification and aggregation. Keep this raw info to be used for the other procedures.
+	u8		SignalQuality;	 /*  in 0-100 index. */
+	u8		RxMIMOSignalQuality[MAX_PATH_NUM_92CS]; /* EVM */
+	u8		RxMIMOSignalStrength[MAX_PATH_NUM_92CS];/*  in 0~100 index */
+	s8		RxPower; /*  in dBm Translate from PWdB */
+	s8		RecvSignalPower;/*  Real power in dBm for this packet, no beautification and aggregation. Keep this raw info to be used for the other procedures. */
 	u8		BTRxRSSIPercentage;
-	u8		SignalStrength; // in 0-100 index.
-	u8		RxPwr[MAX_PATH_NUM_92CS];//per-path's pwdb
-	u8		RxSNR[MAX_PATH_NUM_92CS];//per-path's SNR
+	u8		SignalStrength; /*  in 0-100 index. */
+	u8		RxPwr[MAX_PATH_NUM_92CS];/* per-path's pwdb */
+	u8		RxSNR[MAX_PATH_NUM_92CS];/* per-path's SNR */
 };
 
 struct rx_pkt_attrib {
@@ -119,7 +119,7 @@ struct rx_pkt_attrib {
 	u8	physt;
 	u8	drvinfo_sz;
 	u8	shift_sz;
-	u8	hdrlen; //the WLAN Header Len
+	u8	hdrlen; /* the WLAN Header Len */
 	u8	to_fr_ds;
 	u8	amsdu;
 	u8	qos;
@@ -130,9 +130,9 @@ struct rx_pkt_attrib {
 	u8	frag_num;
 	u8	mfrag;
 	u8	order;
-	u8	privacy; //in frame_ctrl field
+	u8	privacy; /* in frame_ctrl field */
 	u8	bdecrypted;
-	u8	encrypt; //when 0 indicate no encrypt. when non-zero, indicate the encrypt algorith
+	u8	encrypt; /* when 0 indicate no encrypt. when non-zero, indicate the encrypt algorith */
 	u8	iv_len;
 	u8	icv_len;
 	u8	crc_err;
@@ -154,18 +154,18 @@ struct rx_pkt_attrib {
 	u8	rxht;
 	u8	sgi;
 	u8	pkt_rpt_type;
-	u32	MacIDValidEntry[2];	// 64 bits present 64 entry.
+	u32	MacIDValidEntry[2];	/*  64 bits present 64 entry. */
 
 	struct phy_info phy_info;
 };
 
 
-//These definition is used for Rx packet reordering.
+/* These definition is used for Rx packet reordering. */
 #define SN_LESS(a, b)		(((a-b)&0x800)!=0)
 #define SN_EQUAL(a, b)	(a == b)
-//#define REORDER_WIN_SIZE	128
-//#define REORDER_ENTRY_NUM	128
-#define REORDER_WAIT_TIME	(50) // (ms)
+/* define REORDER_WIN_SIZE	128 */
+/* define REORDER_ENTRY_NUM	128 */
+#define REORDER_WAIT_TIME	(50) /*  (ms) */
 
 #define RECVBUFF_ALIGN_SZ 8
 
@@ -218,12 +218,12 @@ struct recv_priv
 	struct sk_buff_head free_recv_skb_queue;
 	struct sk_buff_head rx_skb_queue;
 	u8 *pallocated_recv_buf;
-	u8 *precv_buf;    // 4 alignment
+	u8 *precv_buf;    /*  4 alignment */
 	struct __queue free_recv_buf_queue;
 	u32	free_recv_buf_queue_cnt;
-	//For display the phy informatiom
-	u8 is_signal_dbg;	// for debug
-	u8 signal_strength_dbg;	// for debug
+	/* For display the phy informatiom */
+	u8 is_signal_dbg;	/*  for debug */
+	u8 signal_strength_dbg;	/*  for debug */
 	s8 rssi;
 	s8 rxpwdb;
 	u8 signal_strength;
@@ -245,7 +245,7 @@ struct sta_recv_priv {
 
 	spinlock_t lock;
 	int	option;
-	struct __queue defrag_q;	 //keeping the fragment frame until defrag
+	struct __queue defrag_q;	 /* keeping the fragment frame until defrag */
 	struct	stainfo_rxcache rxcache;
 };
 
@@ -316,10 +316,10 @@ struct recv_frame_hdr
 	void *precvbuf;
 
 
-	//
+	/*  */
 	struct sta_info *psta;
 
-	//for A-MPDU Rx reordering buffer control
+	/* for A-MPDU Rx reordering buffer control */
 	struct recv_reorder_ctrl *preorder_ctrl;
 };
 
@@ -331,13 +331,13 @@ union recv_frame{
 		uint mem[RECVFRAME_HDR_ALIGN>>2];
 	}u;
 
-	//uint mem[MAX_RXSZ>>2];
+	/* uint mem[MAX_RXSZ>>2]; */
 
 };
 
 
-extern union recv_frame *_rtw_alloc_recvframe (struct __queue *pfree_recv_queue);  //get a free recv_frame from pfree_recv_queue
-extern union recv_frame *rtw_alloc_recvframe (struct __queue *pfree_recv_queue);  //get a free recv_frame from pfree_recv_queue
+extern union recv_frame *_rtw_alloc_recvframe (struct __queue *pfree_recv_queue);  /* get a free recv_frame from pfree_recv_queue */
+extern union recv_frame *rtw_alloc_recvframe (struct __queue *pfree_recv_queue);  /* get a free recv_frame from pfree_recv_queue */
 extern void rtw_init_recvframe(union recv_frame *precvframe ,struct recv_priv *precvpriv);
 extern int	 rtw_free_recvframe(union recv_frame *precvframe, struct __queue *pfree_recv_queue);
 
@@ -356,7 +356,7 @@ void rtw_reordering_ctrl_timeout_handler(void *pcontext);
 
 __inline static u8 *get_rxmem(union recv_frame *precvframe)
 {
-	//always return rx_head...
+	/* always return rx_head... */
 	if (precvframe==NULL)
 		return NULL;
 
@@ -373,7 +373,7 @@ __inline static u8 *get_rx_status(union recv_frame *precvframe)
 __inline static u8 *get_recvframe_data(union recv_frame *precvframe)
 {
 
-	//alwasy return rx_data
+	/* alwasy return rx_data */
 	if (precvframe==NULL)
 		return NULL;
 
@@ -383,7 +383,7 @@ __inline static u8 *get_recvframe_data(union recv_frame *precvframe)
 
 __inline static u8 *recvframe_push(union recv_frame *precvframe, int sz)
 {
-	// append data before rx_data
+	/*  append data before rx_data */
 
 	/* add data to the start of recv_frame
  *
@@ -411,9 +411,9 @@ __inline static u8 *recvframe_push(union recv_frame *precvframe, int sz)
 
 __inline static u8 *recvframe_pull(union recv_frame *precvframe, int sz)
 {
-	// rx_data += sz; move rx_data sz bytes  hereafter
+	/*  rx_data += sz; move rx_data sz bytes  hereafter */
 
-	//used for extract sz bytes from rx_data, update rx_data and return the updated rx_data to the caller
+	/* used for extract sz bytes from rx_data, update rx_data and return the updated rx_data to the caller */
 
 
 	if (precvframe==NULL)
@@ -436,8 +436,8 @@ __inline static u8 *recvframe_pull(union recv_frame *precvframe, int sz)
 
 __inline static u8 *recvframe_put(union recv_frame *precvframe, int sz)
 {
-	//used for append sz bytes from ptr to rx_tail, update rx_tail and return the updated rx_tail to the caller
-	//after putting, rx_tail must be still larger than rx_end.
+	/* used for append sz bytes from ptr to rx_tail, update rx_tail and return the updated rx_tail to the caller */
+	/* after putting, rx_tail must be still larger than rx_end. */
 
 	if (precvframe==NULL)
 		return NULL;
@@ -454,10 +454,10 @@ __inline static u8 *recvframe_put(union recv_frame *precvframe, int sz)
 
 __inline static u8 *recvframe_pull_tail(union recv_frame *precvframe, int sz)
 {
-	// rmv data from rx_tail (by yitsen)
+	/*  rmv data from rx_tail (by yitsen) */
 
-	//used for extract sz bytes from rx_end, update rx_end and return the updated rx_end to the caller
-	//after pulling, rx_end must be still larger than rx_data.
+	/* used for extract sz bytes from rx_end, update rx_end and return the updated rx_end to the caller */
+	/* after pulling, rx_end must be still larger than rx_data. */
 
 	if (precvframe==NULL)
 		return NULL;
@@ -490,9 +490,9 @@ __inline static unsigned char *get_rxbuf_desc(union recv_frame *precvframe)
 
 __inline static union recv_frame *rxmem_to_recvframe(u8 *rxmem)
 {
-	//due to the design of 2048 bytes alignment of recv_frame, we can reference the union recv_frame
-	//from any given member of recv_frame.
-	// rxmem indicates the any member/address in recv_frame
+	/* due to the design of 2048 bytes alignment of recv_frame, we can reference the union recv_frame */
+	/* from any given member of recv_frame. */
+	/*  rxmem indicates the any member/address in recv_frame */
 
 	return (union recv_frame*)(((size_t)rxmem >> RXFRAME_ALIGN) << RXFRAME_ALIGN);
 
@@ -510,7 +510,7 @@ __inline static union recv_frame *pkt_to_recvframe(struct sk_buff *pkt)
 
 __inline static u8 *pkt_to_recvmem(struct sk_buff *pkt)
 {
-	// return the rx_head
+	/*  return the rx_head */
 
 	union recv_frame * precv_frame = pkt_to_recvframe(pkt);
 
@@ -520,7 +520,7 @@ __inline static u8 *pkt_to_recvmem(struct sk_buff *pkt)
 
 __inline static u8 *pkt_to_recvdata(struct sk_buff *pkt)
 {
-	// return the rx_data
+	/*  return the rx_data */
 
 	union recv_frame * precv_frame =pkt_to_recvframe(pkt);
 
@@ -537,9 +537,9 @@ __inline static int get_recvframe_len(union recv_frame *precvframe)
 
 __inline static s32 translate_percentage_to_dbm(u32 SignalStrengthIndex)
 {
-	s32	SignalPower; // in dBm.
+	s32	SignalPower; /*  in dBm. */
 
-	// Translate to dBm (x=0.5y-95).
+	/*  Translate to dBm (x=0.5y-95). */
 	SignalPower = (s32)((SignalStrengthIndex + 1) >> 1);
 	SignalPower -= 95;
 
