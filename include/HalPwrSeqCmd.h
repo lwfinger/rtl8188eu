@@ -52,7 +52,7 @@
      /*  msk: N/A */
      /*  value: the unit of delay, 0: us, 1: ms */
 
-#define PWR_CMD_END				0x04
+#define PWR_CMD_END			0x04
      /*  offset: N/A */
      /*  msk: N/A */
      /*  value: N/A */
@@ -84,7 +84,7 @@
 /*---------------------------------------------*/
 /* 3 The value of cut_msk: 8 bits */
 /*---------------------------------------------*/
-#define	PWR_CUT_TESTCHIP_MSK	BIT(0)
+#define	PWR_CUT_TESTCHIP_MSK		BIT(0)
 #define	PWR_CUT_A_MSK			BIT(1)
 #define	PWR_CUT_B_MSK			BIT(2)
 #define	PWR_CUT_C_MSK			BIT(3)
@@ -115,20 +115,14 @@ struct wl_pwr_cfg {
 #define GET_PWR_CFG_CUT_MASK(__PWR_CMD)		__PWR_CMD.cut_msk
 #define GET_PWR_CFG_FAB_MASK(__PWR_CMD)		__PWR_CMD.fab_msk
 #define GET_PWR_CFG_INTF_MASK(__PWR_CMD)	__PWR_CMD.interface_msk
-#define GET_PWR_CFG_BASE(__PWR_CMD)			__PWR_CMD.base
-#define GET_PWR_CFG_CMD(__PWR_CMD)			__PWR_CMD.cmd
-#define GET_PWR_CFG_MASK(__PWR_CMD)			__PWR_CMD.msk
+#define GET_PWR_CFG_BASE(__PWR_CMD)		__PWR_CMD.base
+#define GET_PWR_CFG_CMD(__PWR_CMD)		__PWR_CMD.cmd
+#define GET_PWR_CFG_MASK(__PWR_CMD)		__PWR_CMD.msk
 #define GET_PWR_CFG_VALUE(__PWR_CMD)		__PWR_CMD.value
 
 
-/*  */
-/* 	Prototype of protected function. */
-/*  */
-u8 HalPwrSeqCmdParsing(
-	struct adapter *		padapter,
-	u8				CutVersion,
-	u8				FabVersion,
-	u8				InterfaceType,
-	struct wl_pwr_cfg PwrCfgCmd[]);
+/*	Prototype of protected function. */
+u8 HalPwrSeqCmdParsing(struct adapter *padapter, u8 CutVersion, u8 FabVersion,
+		       u8 InterfaceType, struct wl_pwr_cfg PwrCfgCmd[]);
 
 #endif

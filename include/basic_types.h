@@ -25,22 +25,22 @@
 
 #include <linux/types.h>
 #define NDIS_OID uint
-#define NDIS_STATUS uint
 
 #define UCHAR u8
 #define USHORT u16
 #define UINT u32
 #define ULONG u32
 
-typedef void (*proc_t)(void*);
+typedef void (*proc_t)(void *);
 
-#define FIELD_OFFSET(s,field)	((ssize_t)&((s*)(0))->field)
+#define FIELD_OFFSET(s, field)	((ssize_t)&((s *)(0))->field)
 
-#define MEM_ALIGNMENT_OFFSET	(sizeof (size_t))
+#define MEM_ALIGNMENT_OFFSET	(sizeof(size_t))
 #define MEM_ALIGNMENT_PADDING	(sizeof(size_t) - 1)
 
-/* port from fw by thomas */
-/*  TODO: Belows are Sync from SD7-Driver. It is necessary to check correctness */
+/* port from fw */
+/*  TODO: Macros Below are Sync from SD7-Driver. It is necessary
+ * to check correctness */
 
 /*
  *	Call endian free function when
@@ -67,13 +67,20 @@ typedef void (*proc_t)(void*);
 	EF4BYTE(*(_ptr))
 
 /* Write data to memory */
-#define WRITEEF1BYTE(_ptr, _val)	\
-	(*((u8 *)(_ptr))) = EF1BYTE(_val)
+#define WRITEEF1BYTE(_ptr, _val)			\
+	do {						\
+		(*((u8 *)(_ptr))) = EF1BYTE(_val)	\
+	} while (0)
 /* Write le data to memory in host ordering */
-#define WRITEEF2BYTE(_ptr, _val)	\
-	(*((u16 *)(_ptr))) = EF2BYTE(_val)
-#define WRITEEF4BYTE(_ptr, _val)	\
-	(*((u32 *)(_ptr))) = EF2BYTE(_val)
+#define WRITEEF2BYTE(_ptr, _val)			\
+	do {						\
+		(*((u16 *)(_ptr))) = EF2BYTE(_val)	\
+	} while (0)
+
+#define WRITEEF4BYTE(_ptr, _val)			\
+	do {						\
+		(*((u32 *)(_ptr))) = EF2BYTE(_val)	\
+	} while (0)
 
 /* Create a bit mask
  * Examples:
@@ -155,23 +162,31 @@ value to host byte ordering.*/
  * Set subfield of little-endian 4-byte value to specified value.
  */
 #define SET_BITS_TO_LE_4BYTE(__pstart, __bitoffset, __bitlen, __val) \
-	*((u32 *)(__pstart)) = \
-	( \
+	do {							\
+		*((u32 *)(__pstart)) =				\
+		(							\
 		LE_BITS_CLEARED_TO_4BYTE(__pstart, __bitoffset, __bitlen) | \
 		((((u32)__val) & BIT_LEN_MASK_32(__bitlen)) << (__bitoffset)) \
-	);
+		);							\
+	} while (0)
+					
 #define SET_BITS_TO_LE_2BYTE(__pstart, __bitoffset, __bitlen, __val) \
-	*((u16 *)(__pstart)) = \
-	( \
+	do {							\
+		*((u16 *)(__pstart)) =				\
+		(						\
 		LE_BITS_CLEARED_TO_2BYTE(__pstart, __bitoffset, __bitlen) | \
 		((((u16)__val) & BIT_LEN_MASK_16(__bitlen)) << (__bitoffset)) \
-	);
+		);						\
+	} while (0)
+
 #define SET_BITS_TO_LE_1BYTE(__pstart, __bitoffset, __bitlen, __val) \
-	*((u8 *)(__pstart)) = EF1BYTE \
-	( \
+	do {							\
+		*((u8 *)(__pstart)) = EF1BYTE			\
+		(					 	\
 		LE_BITS_CLEARED_TO_1BYTE(__pstart, __bitoffset, __bitlen) | \
 		((((u8)__val) & BIT_LEN_MASK_8(__bitlen)) << (__bitoffset)) \
-	);
+		);						\
+	} while (0)
 
 /*  Get the N-bytes aligment offset from the current length */
 #define	N_BYTE_ALIGMENT(__value, __aligment) ((__aligment == 1) ? \

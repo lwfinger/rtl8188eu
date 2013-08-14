@@ -26,10 +26,10 @@
 #include <TypeDef.h>
 
 
-void _lbk_cmd(struct adapter * Adapter);
+void _lbk_cmd(struct adapter *adapter);
 
-void _lbk_rsp(struct adapter * Adapter);
+void _lbk_rsp(struct adapter *adapter);
 
-void _lbk_evt(IN struct adapter * Adapter);
+void _lbk_evt(IN struct adapter *adapter);
 
 void h2c_event_callback(unsigned char *dev, unsigned char *pbuf);

@@ -32,7 +32,6 @@ enum RTL871X_HCI_TYPE {
 };
 
 enum _CHIP_TYPE {
-
 	NULL_CHIP_TYPE,
 	RTL8712_8188S_8191S_8192S,
 	RTL8188C_8192C,
@@ -41,7 +40,6 @@ enum _CHIP_TYPE {
 	RTL8188E,
 	MAX_CHIP_TYPE
 };
-
 
 enum hw_variables {
 	HW_VAR_MEDIA_STATUS,
@@ -104,8 +102,10 @@ enum hw_variables {
 	HW_VAR_EFUSE_BT_BYTES,
 	HW_VAR_FIFO_CLEARN_UP,
 	HW_VAR_CHECK_TXBUF,
-	HW_VAR_APFM_ON_MAC, /* Auto FSM to Turn On, include clock, isolation, power control for MAC only */
-	/*  The valid upper nav range for the HW updating, if the true value is larger than the upper range, the HW won't update it. */
+	HW_VAR_APFM_ON_MAC, /* Auto FSM to Turn On, include clock, isolation,
+			     * power control for MAC only */
+	/*  The valid upper nav range for the HW updating, if the true value is
+	 *  larger than the upper range, the HW won't update it. */
 	/*  Unit in microsecond. 0 means disable this function. */
 #ifdef CONFIG_WOWLAN
 	HW_VAR_WOWLAN,
@@ -182,47 +182,81 @@ struct hal_ops {
 	void	(*disable_interrupt)(struct adapter *padapter);
 	s32	(*interrupt_handler)(struct adapter *padapter);
 
-	void	(*set_bwmode_handler)(struct adapter *padapter, enum ht_channel_width Bandwidth, u8 Offset);
+	void	(*set_bwmode_handler)(struct adapter *padapter,
+				      enum ht_channel_width Bandwidth,
+				      u8 Offset);
 	void	(*set_channel_handler)(struct adapter *padapter, u8 channel);
 
 	void	(*hal_dm_watchdog)(struct adapter *padapter);
 
-	void	(*SetHwRegHandler)(struct adapter *padapter, u8	variable,u8* val);
-	void	(*GetHwRegHandler)(struct adapter *padapter, u8	variable,u8* val);
+	void	(*SetHwRegHandler)(struct adapter *padapter, u8	variable,
+				   u8 *val);
+	void	(*GetHwRegHandler)(struct adapter *padapter, u8	variable,
+				   u8 *val);
 
-	u8	(*GetHalDefVarHandler)(struct adapter *padapter, enum hal_def_variable eVariable, void * pValue);
-	u8	(*SetHalDefVarHandler)(struct adapter *padapter, enum hal_def_variable eVariable, void * pValue);
+	u8	(*GetHalDefVarHandler)(struct adapter *padapter,
+				       enum hal_def_variable eVariable,
+				       void *pValue);
+	u8	(*SetHalDefVarHandler)(struct adapter *padapter,
+				       enum hal_def_variable eVariable,
+				       void *pValue);
 
-	void	(*GetHalODMVarHandler)(struct adapter *padapter, enum hal_odm_variable eVariable, void * pValue1,bool bSet);
-	void	(*SetHalODMVarHandler)(struct adapter *padapter, enum hal_odm_variable eVariable, void * pValue1,bool bSet);
+	void	(*GetHalODMVarHandler)(struct adapter *padapter,
+				       enum hal_odm_variable eVariable,
+				       void *pValue1, bool bSet);
+	void	(*SetHalODMVarHandler)(struct adapter *padapter,
+				       enum hal_odm_variable eVariable,
+				       void *pValue1, bool bSet);
 
-	void	(*UpdateRAMaskHandler)(struct adapter *padapter, u32 mac_id, u8 rssi_level);
+	void	(*UpdateRAMaskHandler)(struct adapter *padapter,
+				       u32 mac_id, u8 rssi_level);
 	void	(*SetBeaconRelatedRegistersHandler)(struct adapter *padapter);
 
-	void	(*Add_RateATid)(struct adapter *padapter, u32 bitmap, u8 arg, u8 rssi_level);
-	void	(*run_thread)(struct adapter *padapter);
-	void	(*cancel_thread)(struct adapter *padapter);
+	void	(*Add_RateATid)(struct adapter *adapter, u32 bitmap, u8 arg,
+				u8 rssi_level);
+	void	(*run_thread)(struct adapter *adapter);
+	void	(*cancel_thread)(struct adapter *adapter);
 
-	u8	(*AntDivBeforeLinkHandler)(struct adapter *padapter);
-	void	(*AntDivCompareHandler)(struct adapter *padapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
-	u8	(*interface_ps_func)(struct adapter *padapter,enum hal_intf_ps_func efunc_id, u8* val);
+	u8	(*AntDivBeforeLinkHandler)(struct adapter *adapter);
+	void	(*AntDivCompareHandler)(struct adapter *adapter,
+					struct wlan_bssid_ex *dst,
+					struct wlan_bssid_ex *src);
+	u8	(*interface_ps_func)(struct adapter *padapter,
+				     enum hal_intf_ps_func efunc_id, u8 *val);
 
-	s32	(*hal_xmit)(struct adapter *padapter, struct xmit_frame *pxmitframe);
-	s32 (*mgnt_xmit)(struct adapter *padapter, struct xmit_frame *pmgntframe);
+	s32	(*hal_xmit)(struct adapter *padapter,
+			    struct xmit_frame *pxmitframe);
+	s32 (*mgnt_xmit)(struct adapter *padapter,
+			 struct xmit_frame *pmgntframe);
 
-	u32	(*read_bbreg)(struct adapter *padapter, u32 RegAddr, u32 BitMask);
-	void	(*write_bbreg)(struct adapter *padapter, u32 RegAddr, u32 BitMask, u32 Data);
-	u32	(*read_rfreg)(struct adapter *padapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask);
-	void	(*write_rfreg)(struct adapter *padapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
+	u32	(*read_bbreg)(struct adapter *padapter, u32 RegAddr,
+			      u32 BitMask);
+	void	(*write_bbreg)(struct adapter *padapter, u32 RegAddr,
+			       u32 BitMask, u32 Data);
+	u32	(*read_rfreg)(struct adapter *padapter,
+			      enum rf_radio_path eRFPath, u32 RegAddr,
+			      u32 BitMask);
+	void	(*write_rfreg)(struct adapter *padapter,
+			       enum rf_radio_path eRFPath, u32 RegAddr,
+			       u32 BitMask, u32 Data);
 
-	void (*EfusePowerSwitch)(struct adapter *padapter, u8 bWrite, u8 PwrState);
-	void (*ReadEFuse)(struct adapter *padapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
-	void (*EFUSEGetEfuseDefinition)(struct adapter *padapter, u8 efuseType, u8 type, void *pOut, bool bPseudoTest);
-	u16	(*EfuseGetCurrentSize)(struct adapter *padapter, u8 efuseType, bool bPseudoTest);
-	int	(*Efuse_PgPacketRead)(struct adapter *padapter, u8 offset, u8 *data, bool bPseudoTest);
-	int	(*Efuse_PgPacketWrite)(struct adapter *padapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
-	u8	(*Efuse_WordEnableDataWrite)(struct adapter *padapter, u16 efuse_addr, u8 word_en, u8 *data, bool bPseudoTest);
-	bool	(*Efuse_PgPacketWrite_BT)(struct adapter *padapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
+	void (*EfusePowerSwitch)(struct adapter *padapter, u8 bWrite,
+				 u8 PwrState);
+	void (*ReadEFuse)(struct adapter *padapter, u8 efuseType, u16 _offset,
+			  u16 _size_byte, u8 *pbuf, bool bPseudoTest);
+	void (*EFUSEGetEfuseDefinition)(struct adapter *padapter, u8 efuseType,
+				        u8 type, void *pOut, bool bPseudoTest);
+	u16	(*EfuseGetCurrentSize)(struct adapter *padapter, u8 efuseType,
+				       bool bPseudoTest);
+	int	(*Efuse_PgPacketRead)(struct adapter *adapter, u8 offset,
+				      u8 *data, bool bPseudoTest);
+	int	(*Efuse_PgPacketWrite)(struct adapter *padapter, u8 offset,
+				       u8 word_en, u8 *data, bool bPseudoTest);
+	u8	(*Efuse_WordEnableDataWrite)(struct adapter *padapter,
+					     u16 efuse_addr, u8 word_en,
+					     u8 *data, bool bPseudoTest);
+	bool	(*Efuse_PgPacketWrite_BT)(struct adapter *padapter, u8 offset,
+					  u8 word_en, u8 *data, bool test);
 
 	void (*sreset_init_value)(struct adapter *padapter);
 	void (*sreset_reset_value)(struct adapter *padapter);
@@ -231,11 +265,14 @@ struct hal_ops {
 	void (*sreset_linked_status_check) (struct adapter *padapter);
 	u8 (*sreset_get_wifi_status)(struct adapter *padapter);
 
-	int (*IOL_exec_cmds_sync)(struct adapter *padapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
+	int (*IOL_exec_cmds_sync)(struct adapter *padapter,
+				  struct xmit_frame *frame, u32 max_wait,
+				  u32 bndy_cnt);
 
 	void (*hal_notch_filter)(struct adapter * adapter, bool enable);
 	void (*hal_reset_security_engine)(struct adapter * adapter);
-	s32 (*c2h_handler)(struct adapter *padapter, struct c2h_evt_hdr *c2h_evt);
+	s32 (*c2h_handler)(struct adapter *padapter,
+			   struct c2h_evt_hdr *c2h_evt);
 	c2h_id_filter c2h_id_filter_ccx;
 };
 
@@ -274,39 +311,43 @@ enum hardware_type {
 	HARDWARE_TYPE_MAX,
 };
 
-/*  */
 /*  RTL8192C Series */
-/*  */
-#define IS_HARDWARE_TYPE_8192CE(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192CE)
-#define IS_HARDWARE_TYPE_8192CU(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192CU)
+#define IS_HARDWARE_TYPE_8192CE(_Adapter)			\
+(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192CE)
+#define IS_HARDWARE_TYPE_8192CU(_Adapter)			\
+(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192CU)
 #define	IS_HARDWARE_TYPE_8192C(_Adapter)			\
 (IS_HARDWARE_TYPE_8192CE(_Adapter) || IS_HARDWARE_TYPE_8192CU(_Adapter))
 
-/*  */
 /*  RTL8192D Series */
-/*  */
-#define IS_HARDWARE_TYPE_8192DE(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DE)
-#define IS_HARDWARE_TYPE_8192DU(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DU)
+#define IS_HARDWARE_TYPE_8192DE(_Adapter)			\
+	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DE)
+#define IS_HARDWARE_TYPE_8192DU(_Adapter)			\
+	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DU)
 #define	IS_HARDWARE_TYPE_8192D(_Adapter)			\
 (IS_HARDWARE_TYPE_8192DE(_Adapter) || IS_HARDWARE_TYPE_8192DU(_Adapter))
 
-/*  */
 /*  RTL8723A Series */
-/*  */
-#define IS_HARDWARE_TYPE_8723AE(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AE)
-#define IS_HARDWARE_TYPE_8723AU(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AU)
-#define IS_HARDWARE_TYPE_8723AS(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AS)
+#define IS_HARDWARE_TYPE_8723AE(_Adapter)			\
+(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AE)
+#define IS_HARDWARE_TYPE_8723AU(_Adapter)			\
+(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AU)
+#define IS_HARDWARE_TYPE_8723AS(_Adapter)			\
+(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AS)
 #define	IS_HARDWARE_TYPE_8723A(_Adapter)	\
-(IS_HARDWARE_TYPE_8723AE(_Adapter) || IS_HARDWARE_TYPE_8723AU(_Adapter) || IS_HARDWARE_TYPE_8723AS(_Adapter))
+(IS_HARDWARE_TYPE_8723AE(_Adapter) || IS_HARDWARE_TYPE_8723AU(_Adapter) || \
+IS_HARDWARE_TYPE_8723AS(_Adapter))
 
-/*  */
 /*  RTL8188E Series */
-/*  */
-#define IS_HARDWARE_TYPE_8188EE(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188EE)
-#define IS_HARDWARE_TYPE_8188EU(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188EU)
-#define IS_HARDWARE_TYPE_8188ES(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188ES)
+#define IS_HARDWARE_TYPE_8188EE(_Adapter)			\
+(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188EE)
+#define IS_HARDWARE_TYPE_8188EU(_Adapter)			\
+(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188EU)
+#define IS_HARDWARE_TYPE_8188ES(_Adapter)			\
+(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188ES)
 #define	IS_HARDWARE_TYPE_8188E(_Adapter)	\
-(IS_HARDWARE_TYPE_8188EE(_Adapter) || IS_HARDWARE_TYPE_8188EU(_Adapter) || IS_HARDWARE_TYPE_8188ES(_Adapter))
+(IS_HARDWARE_TYPE_8188EE(_Adapter) || IS_HARDWARE_TYPE_8188EU(_Adapter) || \
+ IS_HARDWARE_TYPE_8188ES(_Adapter))
 
 #define GET_EEPROM_EFUSE_PRIV(adapter) (&adapter->eeprompriv)
 
@@ -315,16 +356,16 @@ enum hardware_type {
 #ifdef CONFIG_WOWLAN
 enum wowlan_subcode {
 	WOWLAN_PATTERN_MATCH	= 1,
-	WOWLAN_MAGIC_PACKET		= 2,
-	WOWLAN_UNICAST			= 3,
-	WOWLAN_SET_PATTERN		= 4,
-	WOWLAN_DUMP_REG			= 5,
-	WOWLAN_ENABLE			= 6,
-	WOWLAN_DISABLE			= 7,
-	WOWLAN_STATUS			= 8,
+	WOWLAN_MAGIC_PACKET	= 2,
+	WOWLAN_UNICAST		= 3,
+	WOWLAN_SET_PATTERN	= 4,
+	WOWLAN_DUMP_REG		= 5,
+	WOWLAN_ENABLE		= 6,
+	WOWLAN_DISABLE		= 7,
+	WOWLAN_STATUS		= 8,
 	WOWLAN_DEBUG_RELOAD_FW	= 9,
-	WOWLAN_DEBUG_1			=10,
-	WOWLAN_DEBUG_2			=11
+	WOWLAN_DEBUG_1		= 10,
+	WOWLAN_DEBUG_2		= 11
 };
 
 struct wowlan_ioctl_param{
@@ -336,11 +377,11 @@ struct wowlan_ioctl_param{
 };
 
 #define Rx_Pairwisekey			0x01
-#define Rx_GTK					0x02
-#define Rx_DisAssoc				0x04
-#define Rx_DeAuth				0x08
-#define FWDecisionDisconnect	0x10
-#define Rx_MagicPkt				0x21
+#define Rx_GTK				0x02
+#define Rx_DisAssoc			0x04
+#define Rx_DeAuth			0x08
+#define FWDecisionDisconnect		0x10
+#define Rx_MagicPkt			0x21
 #define Rx_UnicastPkt			0x22
 #define Rx_PatternPkt			0x23
 #endif /*  CONFIG_WOWLAN */
@@ -365,11 +406,17 @@ void rtw_hal_chip_configure(struct adapter *padapter);
 void rtw_hal_read_chip_info(struct adapter *padapter);
 void rtw_hal_read_chip_version(struct adapter *padapter);
 
-u8 rtw_hal_set_def_var(struct adapter *padapter, enum hal_def_variable eVariable, void * pValue);
-u8 rtw_hal_get_def_var(struct adapter *padapter, enum hal_def_variable eVariable, void * pValue);
+u8 rtw_hal_set_def_var(struct adapter *padapter,
+		       enum hal_def_variable eVariable, void *pValue);
+u8 rtw_hal_get_def_var(struct adapter *padapter,
+		       enum hal_def_variable eVariable, void *pValue);
 
-void rtw_hal_set_odm_var(struct adapter *padapter, enum hal_odm_variable eVariable, void * pValue1,bool bSet);
-void rtw_hal_get_odm_var(struct adapter *padapter, enum hal_odm_variable eVariable, void * pValue1,bool bSet);
+void rtw_hal_set_odm_var(struct adapter *padapter,
+			 enum hal_odm_variable eVariable, void *pValue1,
+			 bool bSet);
+void rtw_hal_get_odm_var(struct adapter *padapter,
+			 enum hal_odm_variable eVariable,
+			 void *pValue1, bool bSet);
 
 void rtw_hal_enable_interrupt(struct adapter *padapter);
 void rtw_hal_disable_interrupt(struct adapter *padapter);
@@ -377,10 +424,12 @@ void rtw_hal_disable_interrupt(struct adapter *padapter);
 u32	rtw_hal_inirp_init(struct adapter *padapter);
 u32	rtw_hal_inirp_deinit(struct adapter *padapter);
 
-u8	rtw_hal_intf_ps_func(struct adapter *padapter,enum hal_intf_ps_func efunc_id, u8* val);
+u8	rtw_hal_intf_ps_func(struct adapter *padapter,
+			     enum hal_intf_ps_func efunc_id, u8 *val);
 
 s32	rtw_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe);
-s32	rtw_hal_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe);
+s32	rtw_hal_mgnt_xmit(struct adapter *padapter,
+			  struct xmit_frame *pmgntframe);
 
 s32	rtw_hal_init_xmit_priv(struct adapter *padapter);
 void	rtw_hal_free_xmit_priv(struct adapter *padapter);
@@ -388,27 +437,35 @@ void	rtw_hal_free_xmit_priv(struct adapter *padapter);
 s32	rtw_hal_init_recv_priv(struct adapter *padapter);
 void	rtw_hal_free_recv_priv(struct adapter *padapter);
 
-void rtw_hal_update_ra_mask(struct adapter *padapter, u32 mac_id, u8 rssi_level);
-void	rtw_hal_add_ra_tid(struct adapter *padapter, u32 bitmap, u8 arg, u8 rssi_level);
-void	rtw_hal_clone_data(struct adapter *dst_padapter, struct adapter *src_padapter);
+void rtw_hal_update_ra_mask(struct adapter *padapter, u32 mac_id, u8 level);
+void	rtw_hal_add_ra_tid(struct adapter *adapt, u32 bitmap, u8 arg, u8 level);
+void	rtw_hal_clone_data(struct adapter *dst_adapt,
+			   struct adapter *src_adapt);
 void	rtw_hal_start_thread(struct adapter *padapter);
 void	rtw_hal_stop_thread(struct adapter *padapter);
 
 void rtw_hal_bcn_related_reg_setting(struct adapter *padapter);
 
 u32	rtw_hal_read_bbreg(struct adapter *padapter, u32 RegAddr, u32 BitMask);
-void	rtw_hal_write_bbreg(struct adapter *padapter, u32 RegAddr, u32 BitMask, u32 Data);
-u32	rtw_hal_read_rfreg(struct adapter *padapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask);
-void	rtw_hal_write_rfreg(struct adapter *padapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
+void	rtw_hal_write_bbreg(struct adapter *padapter, u32 RegAddr, u32 BitMask,
+			    u32 Data);
+u32	rtw_hal_read_rfreg(struct adapter *padapter, enum rf_radio_path eRFPath,
+			   u32 RegAddr, u32 BitMask);
+void	rtw_hal_write_rfreg(struct adapter *padapter,
+			    enum rf_radio_path eRFPath, u32 RegAddr,
+			    u32 BitMask, u32 Data);
 
 s32	rtw_hal_interrupt_handler(struct adapter *padapter);
 
-void	rtw_hal_set_bwmode(struct adapter *padapter, enum ht_channel_width Bandwidth, u8 Offset);
+void	rtw_hal_set_bwmode(struct adapter *padapter,
+			   enum ht_channel_width Bandwidth, u8 Offset);
 void	rtw_hal_set_chan(struct adapter *padapter, u8 channel);
 void	rtw_hal_dm_watchdog(struct adapter *padapter);
 
 u8	rtw_hal_antdiv_before_linked(struct adapter *padapter);
-void	rtw_hal_antdiv_rssi_compared(struct adapter *padapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
+void	rtw_hal_antdiv_rssi_compared(struct adapter *padapter,
+				     struct wlan_bssid_ex *dst,
+				     struct wlan_bssid_ex *src);
 
 void rtw_hal_sreset_init(struct adapter *padapter);
 void rtw_hal_sreset_reset(struct adapter *padapter);
@@ -417,12 +474,14 @@ void rtw_hal_sreset_xmit_status_check(struct adapter *padapter);
 void rtw_hal_sreset_linked_status_check (struct adapter *padapter);
 u8   rtw_hal_sreset_get_wifi_status(struct adapter *padapter);
 
-int rtw_hal_iol_cmd(struct adapter  *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
+int rtw_hal_iol_cmd(struct adapter  *adapter, struct xmit_frame *xmit_frame,
+		    u32 max_wating_ms, u32 bndy_cnt);
 
 void rtw_hal_notch_filter(struct adapter * adapter, bool enable);
 void rtw_hal_reset_security_engine(struct adapter * adapter);
 
-s32 rtw_hal_c2h_handler(struct adapter *adapter, struct c2h_evt_hdr *c2h_evt);
+s32 rtw_hal_c2h_handler(struct adapter *adapter,
+		        struct c2h_evt_hdr *c2h_evt);
 c2h_id_filter rtw_hal_c2h_id_filter_ccx(struct adapter *adapter);
 
 #endif /* __HAL_INTF_H__ */

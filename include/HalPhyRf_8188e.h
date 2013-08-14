@@ -27,69 +27,37 @@
 #define AVG_THERMAL_NUM_88E	4
 
 
-void
-ODM_TxPwrTrackAdjust88E(
-	struct odm_dm_struct *pDM_Odm,
-	u1Byte		Type,				/*  0 = OFDM, 1 = CCK */
-	pu1Byte		pDirection,			/*  1 = +(increase) 2 = -(decrease) */
-	pu4Byte		pOutWriteVal		/*  Tx tracking CCK/OFDM BB swing index adjust */
-	);
+void ODM_TxPwrTrackAdjust88E(struct odm_dm_struct *pDM_Odm,
+			     u1Byte Type,	/* 0 = OFDM, 1 = CCK */
+			     pu1Byte pDirection,/* 1 = +(incr) 2 = -(decr) */
+			     pu4Byte pOutWriteVal); /* Tx tracking CCK/OFDM BB
+						     * swing index adjust */
 
 
-void
-odm_TXPowerTrackingCallback_ThermalMeter_8188E(
-	struct adapter *	Adapter
-	);
+void odm_TXPowerTrackingCallback_ThermalMeter_8188E(struct adapter *Adapter);
 
 
 /* 1 7.	IQK */
 
-void
-PHY_IQCalibrate_8188E(struct adapter *	Adapter, bool		bReCovery);
+void PHY_IQCalibrate_8188E(struct adapter *Adapter, bool ReCovery);
 
-
-/*  */
 /*  LC calibrate */
-/*  */
-void PHY_LCCalibrate_8188E( struct adapter *	pAdapter);
+void PHY_LCCalibrate_8188E(struct adapter *pAdapter);
 
-/*  */
 /*  AP calibrate */
-/*  */
-void PHY_APCalibrate_8188E(struct adapter *	pAdapter, s1Byte		delta);
+void PHY_APCalibrate_8188E(struct adapter *pAdapter, s1Byte delta);
 
-void
-PHY_DigitalPredistortion_8188E(			struct adapter *	pAdapter);
+void PHY_DigitalPredistortion_8188E(struct adapter * pAdapter); 
 
+void _PHY_SaveADDARegisters(struct adapter *pAdapter, pu4Byte ADDAReg,
+			    pu4Byte ADDABackup, u4Byte RegisterNum);
 
-void
-_PHY_SaveADDARegisters(
-		struct adapter *	pAdapter,
-		pu4Byte		ADDAReg,
-		pu4Byte		ADDABackup,
-		u4Byte		RegisterNum
-	);
+void _PHY_PathADDAOn(struct adapter *pAdapter, pu4Byte ADDAReg,
+		     bool isPathAOn, bool is2T);
 
-void
-_PHY_PathADDAOn(
-		struct adapter *	pAdapter,
-		pu4Byte		ADDAReg,
-		bool		isPathAOn,
-		bool		is2T
-	);
+void _PHY_MACSettingCalibration(struct adapter *pAdapter, pu4Byte MACReg,
+			        pu4Byte MACBackup);
 
-void
-_PHY_MACSettingCalibration(
-		struct adapter *	pAdapter,
-		pu4Byte		MACReg,
-		pu4Byte		MACBackup
-	);
-
-
-void
-_PHY_PathAStandBy(
-		struct adapter *pAdapter
-	);
-
+void _PHY_PathAStandBy(struct adapter *pAdapter);
 
 #endif	/*  #ifndef __HAL_PHY_RF_8188E_H__ */

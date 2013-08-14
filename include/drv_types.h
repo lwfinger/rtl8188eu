@@ -17,11 +17,11 @@
  *
  *
  ******************************************************************************/
-/*-------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 
 	For type defines and data structure defines
 
---------------------------------------------------------------------------------*/
+------------------------------------------------------------------------------*/
 
 
 #ifndef __DRV_TYPES_H__
@@ -31,15 +31,6 @@
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
 #include <drv_types_linux.h>
-
-enum _NIC_VERSION {
-
-	RTL8711_NIC,
-	RTL8712_NIC,
-	RTL8713_NIC,
-	RTL8716_NIC
-};
-
 #include <rtw_ht.h>
 #include <rtw_cmd.h>
 #include <wlan_bssdef.h>
@@ -62,26 +53,29 @@ enum _NIC_VERSION {
 #include <rtw_p2p.h>
 #include <rtw_ap.h>
 #include <rtw_mp.h>
-
 #include <rtw_br_ext.h>
-#define SPEC_DEV_ID_NONE BIT(0)
-#define SPEC_DEV_ID_DISABLE_HT BIT(1)
-#define SPEC_DEV_ID_ENABLE_PS BIT(2)
-#define SPEC_DEV_ID_RF_CONFIG_1T1R BIT(3)
-#define SPEC_DEV_ID_RF_CONFIG_2T2R BIT(4)
-#define SPEC_DEV_ID_ASSIGN_IFNAME BIT(5)
 
-struct specific_device_id{
-
-	u32		flags;
-
-	u16		idVendor;
-	u16		idProduct;
-
+enum _NIC_VERSION {
+	RTL8711_NIC,
+	RTL8712_NIC,
+	RTL8713_NIC,
+	RTL8716_NIC
 };
 
-struct registry_priv
-{
+#define SPEC_DEV_ID_NONE		BIT(0)
+#define SPEC_DEV_ID_DISABLE_HT		BIT(1)
+#define SPEC_DEV_ID_ENABLE_PS		BIT(2)
+#define SPEC_DEV_ID_RF_CONFIG_1T1R	BIT(3)
+#define SPEC_DEV_ID_RF_CONFIG_2T2R	BIT(4)
+#define SPEC_DEV_ID_ASSIGN_IFNAME	BIT(5)
+
+struct specific_device_id {
+	u32		flags;
+	u16		idVendor;
+	u16		idProduct;
+};
+
+struct registry_priv {
 	u8	chip_version;
 	u8	rfintfs;
 	u8	lbkmode;
@@ -96,7 +90,7 @@ struct registry_priv
 	u8	vrtl_carrier_sense;/* Enable, Disable, Auto */
 	u8	vcs_type;/* RTS/CTS, CTS-to-self */
 	u16	rts_thresh;
-	u16  frag_thresh;
+	u16	frag_thresh;
 	u8	adhoc_tx_pwr;
 	u8	soft_ap;
 	u8	power_mgnt;
@@ -128,8 +122,8 @@ struct registry_priv
 	u8	ampdu_amsdu;/* A-MPDU Supports A-MSDU is permitted */
 	u8	lowrate_two_xmit;
 
-	u8	rf_config ;
-	u8	low_power ;
+	u8	rf_config;
+	u8	low_power;
 
 	u8	wifi_spec;/*  !turbo_mode */
 
@@ -151,28 +145,27 @@ struct registry_priv
 
 	u8	hw_wps_pbc;/* 0:disable,1:enable */
 
-	u8	max_roaming_times; /*  the max number driver will try to roaming */
+	u8	max_roaming_times; /*  the max number driver will try */
 
-	u8 fw_iol; /* enable iol without other concern */
+	u8	fw_iol; /* enable iol without other concern */
 
-	u8 enable80211d;
+	u8	enable80211d;
 
-	u8 ifname[16];
-	u8 if2name[16];
+	u8	ifname[16];
+	u8	if2name[16];
 
-	u8 notch_filter;
+	u8	notch_filter;
 };
 
 /* For registry parameters */
-#define RGTRY_OFT(field) ((ULONG)FIELD_OFFSET(struct registry_priv,field))
-#define RGTRY_SZ(field)   sizeof(((struct registry_priv*) 0)->field)
-#define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(struct wlan_bssid_ex,field))
-#define BSSID_SZ(field)   sizeof(((Pstruct wlan_bssid_ex) 0)->field)
+#define RGTRY_OFT(field) ((ULONG)FIELD_OFFSET(struct registry_priv, field))
+#define RGTRY_SZ(field)   sizeof(((struct registry_priv *)0)->field)
+#define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(struct wlan_bssid_ex, field))
+#define BSSID_SZ(field)   sizeof(((struct wlan_bssid_ex *)0)->field)
 
-#define MAX_CONTINUAL_URB_ERR 4
+#define MAX_CONTINUAL_URB_ERR		4
 
-struct dvobj_priv
-{
+struct dvobj_priv {
 	struct adapter *if1;
 	struct adapter *if2;
 
@@ -198,8 +191,8 @@ struct dvobj_priv
 	struct semaphore usb_suspend_sema;
 	struct mutex  usb_vendor_req_mutex;
 
-	u8 * usb_alloc_vendor_req_buf;
-	u8 * usb_vendor_req_buf;
+	u8 *usb_alloc_vendor_req_buf;
+	u8 *usb_vendor_req_buf;
 
 	struct usb_interface *pusbintf;
 	struct usb_device *pusbdev;
@@ -209,7 +202,8 @@ struct dvobj_priv
 
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {
-	/* todo: get interface type from dvobj and the return the dev accordingly */
+	/* todo: get interface type from dvobj and the return
+	 * the dev accordingly */
 	return &dvobj->pusbintf->dev;
 }
 
@@ -232,7 +226,8 @@ enum driver_state {
 };
 
 struct adapter {
-	int	DriverState;/*  for disable driver using module, use dongle to replace module. */
+	int	DriverState;/* for disable driver using module, use dongle toi
+			     * replace module. */
 	int	pid[3];/* process id from UI, 0:wps, 1:hostapd, 2:dhcpcd */
 	int	bDongle;/* build-in module or external dongle */
 	u16	chip_type;
@@ -244,7 +239,6 @@ struct adapter {
 	struct	mlme_ext_priv mlmeextpriv;
 	struct	cmd_priv	cmdpriv;
 	struct	evt_priv	evtpriv;
-	/* struct	io_queue	*pio_queue; */
 	struct	io_priv	iopriv;
 	struct	xmit_priv	xmitpriv;
 	struct	recv_priv	recvpriv;
@@ -270,7 +264,7 @@ struct adapter {
 
 	s32	bDriverStopped;
 	s32	bSurpriseRemoved;
-	s32  bCardDisableWOHSM;
+	s32	bCardDisableWOHSM;
 
 	u32	IsrContent;
 	u32	ImrContent;
@@ -285,8 +279,8 @@ struct adapter {
 	void *evtThread;
 	void *xmitThread;
 	void *recvThread;
-	void (*intf_start)(struct adapter * adapter);
-	void (*intf_stop)(struct adapter * adapter);
+	void (*intf_start)(struct adapter *adapter);
+	void (*intf_stop)(struct adapter *adapter);
 	struct  net_device *pnetdev;
 
 	/*  used by rtw_rereg_nd_name related function */
@@ -308,12 +302,12 @@ struct adapter {
 	u8 bReadPortCancel;
 	u8 bWritePortCancel;
 	u8 bRxRSSIDisplay;
-	/* 	Added by Albert 2012/10/26 */
-	/* 	The driver will show up the desired channel number when this flag is 1. */
+	/* The driver will show up the desired channel number
+	 * when this flag is 1. */
 	u8 bNotifyChannelChange;
 #ifdef CONFIG_P2P
-	/* 	Added by Albert 2012/12/06 */
-	/* 	The driver will show the current P2P status when the upper application reads it. */
+	/* The driver will show the current P2P status when the
+	 * upper application reads it. */
 	u8 bShowGetP2PState;
 #endif
 	struct adapter *pbuddy_adapter;
@@ -331,7 +325,7 @@ struct adapter {
 	unsigned char			br_ip[4];
 	struct br_ext_info		ethBrExtInfo;
 
-        u8    fix_rate;
+	u8	fix_rate;
 
 	unsigned char     in_cta_test;
 };
@@ -340,10 +334,9 @@ struct adapter {
 
 int rtw_handle_dualmac(struct adapter *adapter, bool init);
 
-__inline static u8 *myid(struct eeprom_priv *peepriv)
+static inline u8 *myid(struct eeprom_priv *peepriv)
 {
-	return (peepriv->mac_addr);
+	return peepriv->mac_addr;
 }
-
 
 #endif /* __DRV_TYPES_H__ */
