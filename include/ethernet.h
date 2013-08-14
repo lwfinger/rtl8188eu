@@ -29,14 +29,14 @@
 #define MAXIMUM_ETHERNET_PACKET_SIZE	1514	/*  Max Ethernet Packet Size */
 
 /*  Is Multicast Address? */
-#define RT_ETH_IS_MULTICAST(_addr)	((((UCHAR *)(_addr))[0]&0x01) != 0)
+#define RT_ETH_IS_MULTICAST(_addr)	((((u8 *)(_addr))[0]&0x01) != 0)
 #define RT_ETH_IS_BROADCAST(_addr)	(			\
-		((UCHAR *)(_addr))[0] == 0xff &&		\
-		((UCHAR *)(_addr))[1] == 0xff &&		\
-		((UCHAR *)(_addr))[2] == 0xff &&		\
-		((UCHAR *)(_addr))[3] == 0xff &&		\
-		((UCHAR *)(_addr))[4] == 0xff &&		\
-		((UCHAR *)(_addr))[5] == 0xff)	/*  Is Broadcast Address? */
+		((u8 *)(_addr))[0] == 0xff &&		\
+		((u8 *)(_addr))[1] == 0xff &&		\
+		((u8 *)(_addr))[2] == 0xff &&		\
+		((u8 *)(_addr))[3] == 0xff &&		\
+		((u8 *)(_addr))[4] == 0xff &&		\
+		((u8 *)(_addr))[5] == 0xff)	/*  Is Broadcast Address? */
 
 
 #endif /*  #ifndef __INC_ETHERNET_H */

@@ -30,8 +30,8 @@
 #define NDIS_802_11_RSSI long           /*  in dBm */
 
 struct ndis_802_11_ssid {
-	ULONG  SsidLength;
-	UCHAR  Ssid[32];
+	u32  SsidLength;
+	u8  Ssid[32];
 };
 
 enum NDIS_802_11_NETWORK_TYPE {
@@ -43,10 +43,10 @@ enum NDIS_802_11_NETWORK_TYPE {
 };
 
 struct ndis_802_11_config_fh {
-	ULONG           Length;		/*  Length of structure */
-	ULONG           HopPattern;	/*  As defined by 802.11, MSB set */
-	ULONG           HopSet;		/*  to one if non-802.11 */
-	ULONG           DwellTime;	/*  units are Kusec */
+	u32           Length;		/*  Length of structure */
+	u32           HopPattern;	/*  As defined by 802.11, MSB set */
+	u32           HopSet;		/*  to one if non-802.11 */
+	u32           DwellTime;	/*  units are Kusec */
 };
 
 /*
@@ -54,10 +54,10 @@ struct ndis_802_11_config_fh {
  *	ODI Handler will convert the channel number to freq. number.
  */
 struct ndis_802_11_config {
-	ULONG           Length;             /*  Length of structure */
-	ULONG           BeaconPeriod;       /*  units are Kusec */
-	ULONG           ATIMWindow;         /*  units are Kusec */
-	ULONG           DSConfig;           /*  Frequency, units are kHz */
+	u32           Length;             /*  Length of structure */
+	u32           BeaconPeriod;       /*  units are Kusec */
+	u32           ATIMWindow;         /*  units are Kusec */
+	u32           DSConfig;           /*  Frequency, units are kHz */
 	struct ndis_802_11_config_fh    FHConfig;
 };
 
@@ -70,22 +70,22 @@ enum ndis_802_11_network_infra {
 };
 
 struct ndis_802_11_fixed_ie {
-	UCHAR  Timestamp[8];
-	USHORT  BeaconInterval;
-	USHORT  Capabilities;
+	u8  Timestamp[8];
+	u16  BeaconInterval;
+	u16  Capabilities;
 };
 
 
 
 struct ndis_802_11_var_ie {
-	UCHAR  ElementID;
-	UCHAR  Length;
-	UCHAR  data[1];
+	u8  ElementID;
+	u8  Length;
+	u8  data[1];
 };
 
 /*
  * Length is the 4 bytes multiples of the sume of
- *	[ETH_ALEN] + 2 + sizeof (struct ndis_802_11_ssid) + sizeof (ULONG)
+ *	[ETH_ALEN] + 2 + sizeof (struct ndis_802_11_ssid) + sizeof (u32)
  *	+ sizeof (NDIS_802_11_RSSI) + sizeof (enum NDIS_802_11_NETWORK_TYPE)
  *	+ sizeof (struct ndis_802_11_config)
  *	+ NDIS_802_11_LENGTH_RATES_EX + IELength
@@ -129,27 +129,27 @@ enum ndis_802_11_wep_status {
 #define NDIS_802_11_AI_RESFI_ASSOCIATIONID     4
 
 struct ndis_802_11_ai_reqfi {
-    USHORT Capabilities;
-    USHORT ListenInterval;
+    u16 Capabilities;
+    u16 ListenInterval;
     unsigned char CurrentAPAddress[ETH_ALEN];
 };
 
 struct ndis_802_11_ai_resfi {
-    USHORT Capabilities;
-    USHORT StatusCode;
-    USHORT AssociationId;
+    u16 Capabilities;
+    u16 StatusCode;
+    u16 AssociationId;
 };
 
 struct ndis_802_11_assoc_info {
-	ULONG  Length;
-	USHORT AvailableRequestFixedIEs;
+	u32  Length;
+	u16 AvailableRequestFixedIEs;
 	struct ndis_802_11_ai_reqfi    RequestFixedIEs;
-	ULONG  RequestIELength;
-	ULONG  OffsetRequestIEs;
-	USHORT AvailableResponseFixedIEs;
+	u32  RequestIELength;
+	u32  OffsetRequestIEs;
+	u16 AvailableResponseFixedIEs;
 	struct ndis_802_11_ai_resfi    ResponseFixedIEs;
-	ULONG  ResponseIELength;
-	ULONG  OffsetResponseIEs;
+	u32  ResponseIELength;
+	u32  OffsetResponseIEs;
 };
 
 enum ndis_802_11_reload_def {
@@ -158,32 +158,32 @@ enum ndis_802_11_reload_def {
 
 /*  Key mapping keys require a BSSID */
 struct ndis_802_11_key {
-	ULONG           Length;             /*  Length of this structure */
-	ULONG           KeyIndex;
-	ULONG           KeyLength;          /*  length of key in bytes */
+	u32           Length;             /*  Length of this structure */
+	u32           KeyIndex;
+	u32           KeyLength;          /*  length of key in bytes */
 	unsigned char BSSID[ETH_ALEN];
 	unsigned long long KeyRSC;
-	UCHAR           KeyMaterial[32];  /* var len depending on above field */
+	u8           KeyMaterial[32];  /* var len depending on above field */
 };
 
 struct ndis_802_11_remove_key {
-	ULONG                   Length;        /*  Length */
-	ULONG                   KeyIndex;
+	u32                   Length;        /*  Length */
+	u32                   KeyIndex;
 	unsigned char BSSID[ETH_ALEN];
 };
 
 struct ndis_802_11_wep {
-	ULONG     Length;        /*  Length of this structure */
-	ULONG     KeyIndex;      /*  0 is the per-client key,
+	u32     Length;        /*  Length of this structure */
+	u32     KeyIndex;      /*  0 is the per-client key,
 				  * 1-N are the global keys */
-	ULONG     KeyLength;     /*  length of key in bytes */
-	UCHAR     KeyMaterial[16];/*  variable len depending on above field */
+	u32     KeyLength;     /*  length of key in bytes */
+	u8     KeyMaterial[16];/*  variable len depending on above field */
 };
 
 struct ndis_802_11_auth_req {
-	ULONG Length;            /*  Length of structure */
+	u32 Length;            /*  Length of structure */
 	unsigned char Bssid[ETH_ALEN];
-	ULONG Flags;
+	u32 Flags;
 };
 
 enum ndis_802_11_status_type {
@@ -214,8 +214,8 @@ struct ndis_802_11_auth_evt {
 };
 
 struct ndis_802_11_test {
-	ULONG Length;
-	ULONG Type;
+	u32 Length;
+	u32 Type;
 	union {
 		struct ndis_802_11_auth_evt AuthenticationEvent;
 		NDIS_802_11_RSSI RssiTrigger;
@@ -251,19 +251,19 @@ struct wlan_bcn_info {
 *   struct wlan_bssid_ex and get_struct wlan_bssid_ex_sz()
 */
 struct wlan_bssid_ex {
-	ULONG  Length;
+	u32  Length;
 	unsigned char MacAddress[ETH_ALEN];
-	UCHAR  Reserved[2];/* 0]: IS beacon frame */
+	u8  Reserved[2];/* 0]: IS beacon frame */
 	struct ndis_802_11_ssid  Ssid;
-	ULONG  Privacy;
+	u32  Privacy;
 	NDIS_802_11_RSSI  Rssi;/* in dBM,raw data ,get from PHY) */
 	enum  NDIS_802_11_NETWORK_TYPE  NetworkTypeInUse;
 	struct ndis_802_11_config  Configuration;
 	enum ndis_802_11_network_infra  InfrastructureMode;
 	unsigned char SupportedRates[NDIS_802_11_LENGTH_RATES_EX];
 	struct wlan_phy_info	PhyInfo;
-	ULONG  IELength;
-	UCHAR  IEs[MAX_IE_SZ];	/* timestamp, beacon interval, and
+	u32  IELength;
+	u8  IEs[MAX_IE_SZ];	/* timestamp, beacon interval, and
 				 * capability information) */
 } __packed;
 
@@ -318,12 +318,12 @@ enum UAPSD_MAX_SP {
 
 struct pmkid_candidate {
 	unsigned char BSSID[ETH_ALEN];
-	ULONG Flags;
+	u32 Flags;
 };
 
 struct ndis_802_11_pmkid_list {
-	ULONG Version;       /*  Version of the structure */
-	ULONG NumCandidates; /*  No. of pmkid candidates */
+	u32 Version;       /*  Version of the structure */
+	u32 NumCandidates; /*  No. of pmkid candidates */
 	struct pmkid_candidate CandidateList[1];
 };
 
@@ -333,10 +333,10 @@ struct ndis_802_11_auth_encrypt {
 };
 
 struct ndis_802_11_cap {
-	ULONG  Length;
-	ULONG  Version;
-	ULONG  NoOfPMKIDs;
-	ULONG  NoOfAuthEncryptPairsSupported;
+	u32  Length;
+	u32  Version;
+	u32  NoOfPMKIDs;
+	u32  NoOfAuthEncryptPairsSupported;
 	struct ndis_802_11_auth_encrypt AuthenticationEncryptionSupported[1];
 };
 

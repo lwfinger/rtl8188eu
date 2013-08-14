@@ -481,8 +481,8 @@ _func_enter_;
 		return status;
 	}
 
-	if (poid_par_priv->information_buf_len == sizeof(ULONG)) {
-		*(ULONG *)poid_par_priv->information_buf =  Adapter->mppriv.tx_pktcount;
+	if (poid_par_priv->information_buf_len == sizeof(u32)) {
+		*(u32 *)poid_par_priv->information_buf =  Adapter->mppriv.tx_pktcount;
 		*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
 	} else {
 		status = NDIS_STATUS_INVALID_LENGTH;
@@ -505,8 +505,8 @@ _func_enter_;
 		return status;
 	}
 	RT_TRACE(_module_mp_, _drv_alert_, ("===> oid_rt_pro_query_rx_packet_received_hdl.\n"));
-	if (poid_par_priv->information_buf_len == sizeof(ULONG)) {
-		*(ULONG *)poid_par_priv->information_buf =  Adapter->mppriv.rx_pktcount;
+	if (poid_par_priv->information_buf_len == sizeof(u32)) {
+		*(u32 *)poid_par_priv->information_buf =  Adapter->mppriv.rx_pktcount;
 		*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
 		RT_TRACE(_module_mp_, _drv_alert_, ("recv_ok:%d\n", Adapter->mppriv.rx_pktcount));
 	} else {
@@ -530,8 +530,8 @@ _func_enter_;
 		return status;
 	}
 	RT_TRACE(_module_mp_, _drv_alert_, ("===> oid_rt_pro_query_rx_packet_crc32_error_hdl.\n"));
-	if (poid_par_priv->information_buf_len == sizeof(ULONG)) {
-		*(ULONG *)poid_par_priv->information_buf =  Adapter->mppriv.rx_crcerrpktcount;
+	if (poid_par_priv->information_buf_len == sizeof(u32)) {
+		*(u32 *)poid_par_priv->information_buf =  Adapter->mppriv.rx_crcerrpktcount;
 		*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
 		RT_TRACE(_module_mp_, _drv_alert_, ("recv_err:%d\n", Adapter->mppriv.rx_crcerrpktcount));
 	} else {
@@ -576,7 +576,7 @@ _func_enter_;
 		return status;
 	}
 
-	if (poid_par_priv->information_buf_len == sizeof(ULONG)) {
+	if (poid_par_priv->information_buf_len == sizeof(u32)) {
 		Adapter->mppriv.rx_pktcount = 0;
 		Adapter->mppriv.rx_crcerrpktcount = 0;
 	} else {
@@ -621,16 +621,16 @@ _func_enter_;
 	if (poid_par_priv->type_of_oid != QUERY_OID)
 		return NDIS_STATUS_NOT_ACCEPTED;
 
-	if (poid_par_priv->information_buf_len != sizeof(ULONG))
+	if (poid_par_priv->information_buf_len != sizeof(u32))
 		return NDIS_STATUS_INVALID_LENGTH;
 
 	_irqlevel_changed_(&oldirql, LOWER);
-	*(ULONG *)poid_par_priv->information_buf = GetPhyRxPktReceived(Adapter);
+	*(u32 *)poid_par_priv->information_buf = GetPhyRxPktReceived(Adapter);
 	_irqlevel_changed_(&oldirql, RAISE);
 
 	*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
 
-	RT_TRACE(_module_mp_, _drv_notice_, ("-oid_rt_get_phy_rx_packet_received_hdl: recv_ok=%d\n", *(ULONG *)poid_par_priv->information_buf));
+	RT_TRACE(_module_mp_, _drv_notice_, ("-oid_rt_get_phy_rx_packet_received_hdl: recv_ok=%d\n", *(u32 *)poid_par_priv->information_buf));
 
 _func_exit_;
 
@@ -650,18 +650,18 @@ _func_enter_;
 		return NDIS_STATUS_NOT_ACCEPTED;
 
 
-	if (poid_par_priv->information_buf_len != sizeof(ULONG))
+	if (poid_par_priv->information_buf_len != sizeof(u32))
 		return NDIS_STATUS_INVALID_LENGTH;
 
 	_irqlevel_changed_(&oldirql, LOWER);
-	*(ULONG *)poid_par_priv->information_buf = GetPhyRxPktCRC32Error(Adapter);
+	*(u32 *)poid_par_priv->information_buf = GetPhyRxPktCRC32Error(Adapter);
 	_irqlevel_changed_(&oldirql, RAISE);
 
 	*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
 
 	RT_TRACE(_module_mp_, _drv_info_,
 		 ("-oid_rt_get_phy_rx_packet_crc32_error_hdl: recv_err =%d\n",
-		 *(ULONG *)poid_par_priv->information_buf));
+		 *(u32 *)poid_par_priv->information_buf));
 
 _func_exit_;
 

@@ -2472,7 +2472,7 @@ GetHalDefVar8188EUsb(
 		break;
 	case HW_DEF_ODM_DBG_FLAG:
 		{
-			u8Byte	DebugComponents = *((u32 *)pValue);
+			u64	DebugComponents = *((u32 *)pValue);
 			struct odm_dm_struct *dm_ocm = &(haldata->odmpriv);
 			pr_info("dm_ocm->DebugComponents = 0x%llx\n", dm_ocm->DebugComponents);
 		}
@@ -2548,7 +2548,7 @@ static u8 SetHalDefVar8188EUsb(struct adapter *Adapter, enum hal_def_variable eV
 		break;
 	case HW_DEF_ODM_DBG_FLAG:
 		{
-			u8Byte	DebugComponents = *((u8Byte *)pValue);
+			u64	DebugComponents = *((u64 *)pValue);
 			struct odm_dm_struct *dm_ocm = &(haldata->odmpriv);
 			dm_ocm->DebugComponents = DebugComponents;
 		}

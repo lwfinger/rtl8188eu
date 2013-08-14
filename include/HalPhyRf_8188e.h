@@ -28,9 +28,9 @@
 
 
 void ODM_TxPwrTrackAdjust88E(struct odm_dm_struct *pDM_Odm,
-			     u1Byte Type,	/* 0 = OFDM, 1 = CCK */
-			     pu1Byte pDirection,/* 1 = +(incr) 2 = -(decr) */
-			     pu4Byte pOutWriteVal); /* Tx tracking CCK/OFDM BB
+			     u8 Type,	/* 0 = OFDM, 1 = CCK */
+			     u8 *pDirection,/* 1 = +(incr) 2 = -(decr) */
+			     u32 *pOutWriteVal); /* Tx tracking CCK/OFDM BB
 						     * swing index adjust */
 
 
@@ -45,18 +45,18 @@ void PHY_IQCalibrate_8188E(struct adapter *Adapter, bool ReCovery);
 void PHY_LCCalibrate_8188E(struct adapter *pAdapter);
 
 /*  AP calibrate */
-void PHY_APCalibrate_8188E(struct adapter *pAdapter, s1Byte delta);
+void PHY_APCalibrate_8188E(struct adapter *pAdapter, s8 delta);
 
-void PHY_DigitalPredistortion_8188E(struct adapter * pAdapter); 
+void PHY_DigitalPredistortion_8188E(struct adapter *pAdapter); 
 
-void _PHY_SaveADDARegisters(struct adapter *pAdapter, pu4Byte ADDAReg,
-			    pu4Byte ADDABackup, u4Byte RegisterNum);
+void _PHY_SaveADDARegisters(struct adapter *pAdapter, u32 *ADDAReg,
+			    u32 *ADDABackup, u32 RegisterNum);
 
-void _PHY_PathADDAOn(struct adapter *pAdapter, pu4Byte ADDAReg,
+void _PHY_PathADDAOn(struct adapter *pAdapter, u32 *ADDAReg,
 		     bool isPathAOn, bool is2T);
 
-void _PHY_MACSettingCalibration(struct adapter *pAdapter, pu4Byte MACReg,
-			        pu4Byte MACBackup);
+void _PHY_MACSettingCalibration(struct adapter *pAdapter, u32 *MACReg,
+			        u32 *MACBackup);
 
 void _PHY_PathAStandBy(struct adapter *pAdapter);
 

@@ -27,7 +27,7 @@
 extern char *rtw_initmac;
 extern int rtw_mc2u_disable;
 
-#define USBD_HALTED(Status) ((ULONG)(Status) >> 30 == 3)
+#define USBD_HALTED(Status) ((u32)(Status) >> 30 == 3)
 
 u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, enum bt_usb_request brequest,
 		    enum rt_usb_wvalue wvalue, u8 windex, void *data,

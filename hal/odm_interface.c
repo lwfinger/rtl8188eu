@@ -21,91 +21,91 @@
 #include "odm_precomp.h"
 /*  ODM IO Relative API. */
 
-u1Byte ODM_Read1Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr)
+u8 ODM_Read1Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	return rtw_read8(Adapter, RegAddr);
 }
 
-u2Byte ODM_Read2Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr)
+u16 ODM_Read2Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	return rtw_read16(Adapter, RegAddr);
 }
 
-u4Byte ODM_Read4Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr)
+u32 ODM_Read4Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	return rtw_read32(Adapter, RegAddr);
 }
 
-void ODM_Write1Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u1Byte Data)
+void ODM_Write1Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u8 Data)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	rtw_write8(Adapter, RegAddr, Data);
 }
 
-void ODM_Write2Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u2Byte Data)
+void ODM_Write2Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u16 Data)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	rtw_write16(Adapter, RegAddr, Data);
 }
 
-void ODM_Write4Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte Data)
+void ODM_Write4Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 Data)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	rtw_write32(Adapter, RegAddr, Data);
 }
 
-void ODM_SetMACReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data)
+void ODM_SetMACReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32 Data)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
 }
 
-u4Byte ODM_GetMACReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask)
+u32 ODM_GetMACReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
 }
 
-void ODM_SetBBReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data)
+void ODM_SetBBReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32 Data)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
 }
 
-u4Byte ODM_GetBBReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask)
+u32 ODM_GetBBReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
 }
 
-void ODM_SetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH	eRFPath, u4Byte RegAddr, u4Byte BitMask, u4Byte Data)
+void ODM_SetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH	eRFPath, u32 RegAddr, u32 BitMask, u32 Data)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	PHY_SetRFReg(Adapter, (enum rf_radio_path)eRFPath, RegAddr, BitMask, Data);
 }
 
-u4Byte ODM_GetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH	eRFPath, u4Byte RegAddr, u4Byte BitMask)
+u32 ODM_GetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH	eRFPath, u32 RegAddr, u32 BitMask)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	return PHY_QueryRFReg(Adapter, (enum rf_radio_path)eRFPath, RegAddr, BitMask);
 }
 
 /*  ODM Memory relative API. */
-void ODM_AllocateMemory(struct odm_dm_struct *pDM_Odm, void **pPtr, u4Byte length)
+void ODM_AllocateMemory(struct odm_dm_struct *pDM_Odm, void **pPtr, u32 length)
 {
 	*pPtr = rtw_zvmalloc(length);
 }
 
 /*  length could be ignored, used to detect memory leakage. */
-void ODM_FreeMemory(struct odm_dm_struct *pDM_Odm, void *pPtr, u4Byte length)
+void ODM_FreeMemory(struct odm_dm_struct *pDM_Odm, void *pPtr, u32 length)
 {
 	rtw_vmfree(pPtr, length);
 }
 
-s4Byte ODM_CompareMemory(struct odm_dm_struct *pDM_Odm, void *pBuf1, void *pBuf2, u4Byte length)
+s32 ODM_CompareMemory(struct odm_dm_struct *pDM_Odm, void *pBuf1, void *pBuf2, u32 length)
 {
 	return _rtw_memcmp(pBuf1, pBuf2, length);
 }
@@ -147,32 +147,32 @@ void ODM_IsWorkItemScheduled(void *pRtWorkItem)
 }
 
 /*  ODM Timer relative API. */
-void ODM_StallExecution(u4Byte usDelay)
+void ODM_StallExecution(u32 usDelay)
 {
 	rtw_udelay_os(usDelay);
 }
 
-void ODM_delay_ms(u4Byte ms)
+void ODM_delay_ms(u32 ms)
 {
 	rtw_mdelay_os(ms);
 }
 
-void ODM_delay_us(u4Byte us)
+void ODM_delay_us(u32 us)
 {
 	rtw_udelay_os(us);
 }
 
-void ODM_sleep_ms(u4Byte ms)
+void ODM_sleep_ms(u32 ms)
 {
 	rtw_msleep_os(ms);
 }
 
-void ODM_sleep_us(u4Byte us)
+void ODM_sleep_us(u32 us)
 {
 	rtw_usleep_os(us);
 }
 
-void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer, u4Byte msDelay)
+void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer, u32 msDelay)
 {
 	_set_timer(pTimer, msDelay); /* ms */
 }
@@ -195,9 +195,9 @@ void ODM_ReleaseTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer)
 }
 
 /*  ODM FW relative API. */
-u4Byte ODM_FillH2CCmd(pu1Byte pH2CBuffer, u4Byte H2CBufferLen, u4Byte CmdNum,
-		      pu4Byte pElementID, pu4Byte pCmdLen,
-		      pu1Byte *pCmbBuffer, pu1Byte CmdStartSeq)
+u32 ODM_FillH2CCmd(u8 *pH2CBuffer, u32 H2CBufferLen, u32 CmdNum,
+		      u32 *pElementID, u32 *pCmdLen,
+		      u8 **pCmbBuffer, u8 *CmdStartSeq)
 {
 	return	true;
 }

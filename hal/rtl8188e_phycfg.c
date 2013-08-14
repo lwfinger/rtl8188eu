@@ -55,10 +55,10 @@
 * OverView:	Get shifted position of the BitMask
 *
 * Input:
-*			u4Byte		BitMask,
+*			u32		BitMask,
 *
 * Output:	none
-* Return:		u4Byte		Return the shift bit bit position of the mask
+* Return:		u32		Return the shift bit bit position of the mask
 */
 static	u32 phy_CalculateBitShift(u32 BitMask)
 {
@@ -78,11 +78,11 @@ static	u32 phy_CalculateBitShift(u32 BitMask)
 *
 * Input:
 *			struct adapter *Adapter,
-*			u4Byte			RegAddr,	The target address to be readback
-*			u4Byte			BitMask		The target bit position in the target address
+*			u32			RegAddr,	The target address to be readback
+*			u32			BitMask		The target bit position in the target address
 *								to be readback
 * Output:	None
-* Return:		u4Byte			Data		The readback register value
+* Return:		u32			Data		The readback register value
 * Note:		This function is equal to "GetRegSetting" in PHY programming guide
 */
 u32
@@ -109,10 +109,10 @@ rtl8188e_PHY_QueryBBReg(
 *
 * Input:
 *			struct adapter *Adapter,
-*			u4Byte			RegAddr,	The target address to be modified
-*			u4Byte			BitMask		The target bit position in the target address
+*			u32			RegAddr,	The target address to be modified
+*			u32			BitMask		The target bit position in the target address
 *									to be modified
-*			u4Byte			Data		The new register value in the target bit position
+*			u32			Data		The new register value in the target bit position
 *									of the target address
 *
 * Output:	None
@@ -146,10 +146,10 @@ void rtl8188e_PHY_SetBBReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u3
 * Input:
 *			struct adapter *Adapter,
 *			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
-*			u4Byte			Offset,		The target address to be read
+*			u32			Offset,		The target address to be read
 *
 * Output:	None
-* Return:		u4Byte			reback value
+* Return:		u32			reback value
 * Note:		Threre are three types of serial operations:
 *			1. Software serial write
 *			2. Hardware LSSI-Low Speed Serial Interface
@@ -220,8 +220,8 @@ phy_RFSerialRead(
 * Input:
 *			struct adapter *Adapter,
 *			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
-*			u4Byte			Offset,		The target address to be read
-*			u4Byte			Data		The new register Data in the target bit position
+*			u32			Offset,		The target address to be read
+*			u32			Data		The new register Data in the target bit position
 *									of the target to be read
 *
 * Output:	None
@@ -297,12 +297,12 @@ phy_RFSerialWrite(
 * Input:
 *			struct adapter *Adapter,
 *			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
-*			u4Byte			RegAddr,	The target address to be read
-*			u4Byte			BitMask		The target bit position in the target address
+*			u32			RegAddr,	The target address to be read
+*			u32			BitMask		The target bit position in the target address
 *									to be read
 *
 * Output:	None
-* Return:		u4Byte			Readback value
+* Return:		u32			Readback value
 * Note:		This function is equal to "GetRFRegSetting" in PHY programming guide
 */
 u32 rtl8188e_PHY_QueryRFReg(struct adapter *Adapter, enum rf_radio_path eRFPath,
@@ -325,10 +325,10 @@ u32 rtl8188e_PHY_QueryRFReg(struct adapter *Adapter, enum rf_radio_path eRFPath,
 * Input:
 *			struct adapter *Adapter,
 *			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
-*			u4Byte			RegAddr,	The target address to be modified
-*			u4Byte			BitMask		The target bit position in the target address
+*			u32			RegAddr,	The target address to be modified
+*			u32			BitMask		The target bit position in the target address
 *									to be modified
-*			u4Byte			Data		The new register Data in the target bit position
+*			u32			Data		The new register Data in the target bit position
 *									of the target address
 *
 * Output:	None
@@ -367,7 +367,7 @@ rtl8188e_PHY_SetRFReg(
  *			  Read/Write
  *
  * Input:	struct adapter *Adapter
- *			ps1Byte				pFileName
+ *			ps8				pFileName
  *
  * Output:      NONE
  *
@@ -542,7 +542,7 @@ phy_InitBBRFRegisterDefinition(
  *			  Read/Write
  *
  * Input:	struct adapter *Adapter
- *			ps1Byte				pFileName
+ *			ps8				pFileName
  *
  * Output:      NONE
  *
@@ -753,7 +753,7 @@ int PHY_RFConfig8188E(struct adapter *Adapter)
  * Overview:    This function read RF parameters from general file format, and do RF 3-wire
  *
  * Input:	struct adapter *Adapter
- *			ps1Byte					pFileName
+ *			ps8					pFileName
  *			enum rf_radio_path eRFPath
  *
  * Output:      NONE
@@ -1008,7 +1008,7 @@ static void phy_PowerIndexCheck88E(struct adapter *Adapter, u8 channel, u8 *cckP
  *			We must consider RF path later!!!!!!!
  *
  * Input:       struct adapter *Adapter
- *			u1Byte		channel
+ *			u8		channel
  *
  * Output:      NONE
  *

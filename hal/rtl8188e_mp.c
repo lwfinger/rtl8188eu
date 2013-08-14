@@ -110,14 +110,14 @@ void Hal_mpt_SwitchRfSetting(struct adapter *pAdapter)
 {
 	/* struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter); */
 	struct mp_priv	*pmp = &pAdapter->mppriv;
-	u1Byte				ChannelToSw = pmp->channel;
-	ULONG				ulRateIdx = pmp->rateidx;
-	ULONG				ulbandwidth = pmp->bandwidth;
+	u8				ChannelToSw = pmp->channel;
+	u32				ulRateIdx = pmp->rateidx;
+	u32				ulbandwidth = pmp->bandwidth;
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(pAdapter);
 
 	/*  <20120525, Kordan> Dynamic mechanism for APK, asked by Dennis. */
-		pmp->MptCtx.backup0x52_RF_A = (u1Byte)PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
-		pmp->MptCtx.backup0x52_RF_B = (u1Byte)PHY_QueryRFReg(pAdapter, RF_PATH_B, RF_0x52, 0x000F0);
+		pmp->MptCtx.backup0x52_RF_A = (u8)PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
+		pmp->MptCtx.backup0x52_RF_B = (u8)PHY_QueryRFReg(pAdapter, RF_PATH_B, RF_0x52, 0x000F0);
 		PHY_SetRFReg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0, 0xD);
 		PHY_SetRFReg(pAdapter, RF_PATH_B, RF_0x52, 0x000F0, 0xD);
 

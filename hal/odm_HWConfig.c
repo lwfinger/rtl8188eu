@@ -27,7 +27,7 @@
 #define READ_AND_CONFIG_MP(ic, txt) (ODM_ReadAndConfig##txt##ic(dm_odm))
 #define READ_AND_CONFIG_TC(ic, txt) (ODM_ReadAndConfig_TC##txt##ic(dm_odm))
 
-static u1Byte odm_QueryRxPwrPercentage(s1Byte AntPower)
+static u8 odm_QueryRxPwrPercentage(s8 AntPower)
 {
 	if ((AntPower <= -100) || (AntPower >= 20))
 		return	0;
@@ -39,22 +39,22 @@ static u1Byte odm_QueryRxPwrPercentage(s1Byte AntPower)
 
 /*  2012/01/12 MH MOve some signal strength smooth method to MP HAL layer. */
 /*  IF other SW team do not support the feature, remove this section.?? */
-static s4Byte odm_sig_patch_lenove(struct odm_dm_struct *dm_odm, s4Byte CurrSig)
+static s32 odm_sig_patch_lenove(struct odm_dm_struct *dm_odm, s32 CurrSig)
 {
-	s4Byte RetSig;
+	s32 RetSig;
 
 	return RetSig;
 }
 
-static s4Byte odm_sig_patch_netcore(struct odm_dm_struct *dm_odm, s4Byte CurrSig)
+static s32 odm_sig_patch_netcore(struct odm_dm_struct *dm_odm, s32 CurrSig)
 {
-	s4Byte RetSig;
+	s32 RetSig;
 	return RetSig;
 }
 
-static s4Byte odm_SignalScaleMapping_92CSeries(struct odm_dm_struct *dm_odm, s4Byte CurrSig)
+static s32 odm_SignalScaleMapping_92CSeries(struct odm_dm_struct *dm_odm, s32 CurrSig)
 {
-	s4Byte RetSig;
+	s32 RetSig;
 
 	if ((dm_odm->SupportInterface  == ODM_ITRF_USB) ||
 	    (dm_odm->SupportInterface  == ODM_ITRF_SDIO)) {
@@ -78,7 +78,7 @@ static s4Byte odm_SignalScaleMapping_92CSeries(struct odm_dm_struct *dm_odm, s4B
 	return RetSig;
 }
 
-static s4Byte odm_SignalScaleMapping(struct odm_dm_struct *dm_odm, s4Byte CurrSig)
+static s32 odm_SignalScaleMapping(struct odm_dm_struct *dm_odm, s32 CurrSig)
 {
 	if ((dm_odm->SupportPlatform == ODM_MP) &&
 	    (dm_odm->SupportInterface != ODM_ITRF_PCIE) && /* USB & SDIO */
@@ -93,17 +93,17 @@ static s4Byte odm_SignalScaleMapping(struct odm_dm_struct *dm_odm, s4Byte CurrSi
 }
 
 /* pMgntInfo->CustomerID == RT_CID_819x_Lenovo */
-static u1Byte odm_SQ_process_patch_RT_CID_819x_Lenovo(struct odm_dm_struct *dm_odm,
-	u1Byte isCCKrate, u1Byte PWDB_ALL, u1Byte path, u1Byte RSSI)
+static u8 odm_SQ_process_patch_RT_CID_819x_Lenovo(struct odm_dm_struct *dm_odm,
+	u8 isCCKrate, u8 PWDB_ALL, u8 path, u8 RSSI)
 {
-	u1Byte SQ;
+	u8 SQ;
 	return SQ;
 }
 
-static u1Byte odm_EVMdbToPercentage(s1Byte Value)
+static u8 odm_EVMdbToPercentage(s8 Value)
 {
 	/*  -33dB~0dB to 0%~99% */
-	s1Byte ret_val;
+	s8 ret_val;
 
 	ret_val = Value;
 
@@ -122,18 +122,18 @@ static u1Byte odm_EVMdbToPercentage(s1Byte Value)
 
 static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
 			struct odm_phy_status_info *pPhyInfo,
-			pu1Byte pPhyStatus,
+			u8 *pPhyStatus,
 			struct odm_per_pkt_info *pPktinfo)
 {
 	struct sw_ant_switch *pDM_SWAT_Table = &dm_odm->DM_SWAT_Table;
-	u1Byte i, Max_spatial_stream;
-	s1Byte rx_pwr[4], rx_pwr_all = 0;
-	u1Byte EVM, PWDB_ALL = 0, PWDB_ALL_BT;
-	u1Byte RSSI, total_rssi = 0;
-	u1Byte isCCKrate = 0;
-	u1Byte rf_rx_num = 0;
-	u1Byte cck_highpwr = 0;
-	u1Byte LNA_idx, VGA_idx;
+	u8 i, Max_spatial_stream;
+	s8 rx_pwr[4], rx_pwr_all = 0;
+	u8 EVM, PWDB_ALL = 0, PWDB_ALL_BT;
+	u8 RSSI, total_rssi = 0;
+	u8 isCCKrate = 0;
+	u8 rf_rx_num = 0;
+	u8 cck_highpwr = 0;
+	u8 LNA_idx, VGA_idx;
 
 	struct phy_status_rpt *pPhyStaRpt = (struct phy_status_rpt *)pPhyStatus;
 
@@ -143,8 +143,8 @@ static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
 	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_B] = -1;
 
 	if (isCCKrate) {
-		u1Byte report;
-		u1Byte cck_agc_rpt;
+		u8 report;
+		u8 cck_agc_rpt;
 
 		dm_odm->PhyDbgInfo.NumQryPhyStatusCCK++;
 		/*  (1)Hardware does not provide RSSI for CCK */
@@ -271,7 +271,7 @@ static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
 		pPhyInfo->RecvSignalPower = rx_pwr_all;
 		/*  (3) Get Signal Quality (EVM) */
 		if (pPktinfo->bPacketMatchBSSID) {
-			u1Byte SQ, SQ_rpt;
+			u8 SQ, SQ_rpt;
 
 			if ((dm_odm->SupportPlatform == ODM_MP) && (dm_odm->PatchID == 19)) {
 				SQ = odm_SQ_process_patch_RT_CID_819x_Lenovo(dm_odm, isCCKrate, PWDB_ALL, 0, 0);
@@ -320,11 +320,11 @@ static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
 					RSSI -= 4;
 			}
 
-			pPhyInfo->RxMIMOSignalStrength[i] = (u1Byte)RSSI;
+			pPhyInfo->RxMIMOSignalStrength[i] = (u8)RSSI;
 
 			/* Get Rx snr value in DB */
-			pPhyInfo->RxSNR[i] = (s4Byte)(pPhyStaRpt->path_rxsnr[i]/2);
-			dm_odm->PhyDbgInfo.RxSNRdB[i] = (s4Byte)(pPhyStaRpt->path_rxsnr[i]/2);
+			pPhyInfo->RxSNR[i] = (s32)(pPhyStaRpt->path_rxsnr[i]/2);
+			dm_odm->PhyDbgInfo.RxSNRdB[i] = (s32)(pPhyStaRpt->path_rxsnr[i]/2);
 
 			/* Record Signal Strength for next packet */
 			if (pPktinfo->bPacketMatchBSSID) {
@@ -362,8 +362,8 @@ static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
 
 				if (pPktinfo->bPacketMatchBSSID) {
 					if (i == ODM_RF_PATH_A) /*  Fill value in RFD, Get the first spatial stream only */
-						pPhyInfo->SignalQuality = (u1Byte)(EVM & 0xff);
-					pPhyInfo->RxMIMOSignalQuality[i] = (u1Byte)(EVM & 0xff);
+						pPhyInfo->SignalQuality = (u8)(EVM & 0xff);
+					pPhyInfo->RxMIMOSignalQuality[i] = (u8)(EVM & 0xff);
 				}
 			}
 		}
@@ -371,10 +371,10 @@ static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
 	/* UI BSS List signal strength(in percentage), make it good looking, from 0~100. */
 	/* It is assigned to the BSS List in GetValueFromBeaconOrProbeRsp(). */
 	if (isCCKrate) {
-		pPhyInfo->SignalStrength = (u1Byte)(odm_SignalScaleMapping(dm_odm, PWDB_ALL));/* PWDB_ALL; */
+		pPhyInfo->SignalStrength = (u8)(odm_SignalScaleMapping(dm_odm, PWDB_ALL));/* PWDB_ALL; */
 	} else {
 		if (rf_rx_num != 0)
-			pPhyInfo->SignalStrength = (u1Byte)(odm_SignalScaleMapping(dm_odm, total_rssi /= rf_rx_num));
+			pPhyInfo->SignalStrength = (u8)(odm_SignalScaleMapping(dm_odm, total_rssi /= rf_rx_num));
 	}
 
 	/* For 92C/92D HW (Hybrid) Antenna Diversity */
@@ -393,12 +393,12 @@ static void odm_Process_RSSIForDM(struct odm_dm_struct *dm_odm,
 				  struct odm_phy_status_info *pPhyInfo,
 				  struct odm_per_pkt_info *pPktinfo)
 {
-	s4Byte UndecoratedSmoothedPWDB, UndecoratedSmoothedCCK;
-	s4Byte UndecoratedSmoothedOFDM, RSSI_Ave;
-	u1Byte isCCKrate = 0;
-	u1Byte RSSI_max, RSSI_min, i;
-	u4Byte OFDM_pkt = 0;
-	u4Byte Weighting = 0;
+	s32 UndecoratedSmoothedPWDB, UndecoratedSmoothedCCK;
+	s32 UndecoratedSmoothedOFDM, RSSI_Ave;
+	u8 isCCKrate = 0;
+	u8 RSSI_max, RSSI_min, i;
+	u32 OFDM_pkt = 0;
+	u32 Weighting = 0;
 	struct sta_info *pEntry;
 
 	if (pPktinfo->StationID == 0xFF)
@@ -413,7 +413,7 @@ static void odm_Process_RSSIForDM(struct odm_dm_struct *dm_odm,
 
 	/* Smart Antenna Debug Message------------------  */
 	if (dm_odm->SupportICType == ODM_RTL8188E) {
-		u1Byte antsel_tr_mux;
+		u8 antsel_tr_mux;
 		struct fast_ant_train *pDM_FatTable = &dm_odm->DM_FatTable;
 
 		if (dm_odm->AntDivType == CG_TRX_SMART_ANTDIV) {
@@ -466,7 +466,7 @@ static void odm_Process_RSSIForDM(struct odm_dm_struct *dm_odm,
 			if (UndecoratedSmoothedOFDM <= 0) {	/*  initialize */
 				UndecoratedSmoothedOFDM = pPhyInfo->RxPWDBAll;
 			} else {
-				if (pPhyInfo->RxPWDBAll > (u4Byte)UndecoratedSmoothedOFDM) {
+				if (pPhyInfo->RxPWDBAll > (u32)UndecoratedSmoothedOFDM) {
 					UndecoratedSmoothedOFDM =
 							(((UndecoratedSmoothedOFDM)*(Rx_Smooth_Factor-1)) +
 							(RSSI_Ave)) / (Rx_Smooth_Factor);
@@ -487,7 +487,7 @@ static void odm_Process_RSSIForDM(struct odm_dm_struct *dm_odm,
 			if (UndecoratedSmoothedCCK <= 0) {	/*  initialize */
 				UndecoratedSmoothedCCK = pPhyInfo->RxPWDBAll;
 			} else {
-				if (pPhyInfo->RxPWDBAll > (u4Byte)UndecoratedSmoothedCCK) {
+				if (pPhyInfo->RxPWDBAll > (u32)UndecoratedSmoothedCCK) {
 					UndecoratedSmoothedCCK =
 							((UndecoratedSmoothedCCK * (Rx_Smooth_Factor-1)) +
 							pPhyInfo->RxPWDBAll) / Rx_Smooth_Factor;
@@ -507,7 +507,7 @@ static void odm_Process_RSSIForDM(struct odm_dm_struct *dm_odm,
 			pEntry->rssi_stat.ValidBit++;
 
 		for (i = 0; i < pEntry->rssi_stat.ValidBit; i++)
-			OFDM_pkt += (u1Byte)(pEntry->rssi_stat.PacketMap>>i)&BIT0;
+			OFDM_pkt += (u8)(pEntry->rssi_stat.PacketMap>>i)&BIT0;
 
 		if (pEntry->rssi_stat.ValidBit == 64) {
 			Weighting = ((OFDM_pkt<<4) > 64) ? 64 : (OFDM_pkt<<4);
@@ -529,7 +529,7 @@ static void odm_Process_RSSIForDM(struct odm_dm_struct *dm_odm,
 /*  Endianness before calling this API */
 static void ODM_PhyStatusQuery_92CSeries(struct odm_dm_struct *dm_odm,
 					 struct odm_phy_status_info *pPhyInfo,
-					 pu1Byte pPhyStatus,
+					 u8 *pPhyStatus,
 					 struct odm_per_pkt_info *pPktinfo)
 {
 	odm_RxPhyStatus92CSeries_Parsing(dm_odm, pPhyInfo, pPhyStatus,
@@ -545,14 +545,14 @@ static void ODM_PhyStatusQuery_92CSeries(struct odm_dm_struct *dm_odm,
 
 void ODM_PhyStatusQuery(struct odm_dm_struct *dm_odm,
 			struct odm_phy_status_info *pPhyInfo,
-			pu1Byte pPhyStatus, struct odm_per_pkt_info *pPktinfo)
+			u8 *pPhyStatus, struct odm_per_pkt_info *pPktinfo)
 {
 	ODM_PhyStatusQuery_92CSeries(dm_odm, pPhyInfo, pPhyStatus, pPktinfo);
 }
 
 /*  For future use. */
-void ODM_MacStatusQuery(struct odm_dm_struct *dm_odm, pu1Byte mac_stat,
-			u1Byte macid, bool pkt_match_bssid,
+void ODM_MacStatusQuery(struct odm_dm_struct *dm_odm, u8 *mac_stat,
+			u8 macid, bool pkt_match_bssid,
 			bool pkttoself, bool pkt_beacon)
 {
 	/*  2011/10/19 Driver team will handle in the future. */
@@ -593,7 +593,7 @@ enum HAL_STATUS ODM_ConfigBBWithHeaderFile(struct odm_dm_struct *dm_odm,
 
 enum HAL_STATUS ODM_ConfigMACWithHeaderFile(struct odm_dm_struct *dm_odm)
 {
-	u1Byte result = HAL_STATUS_SUCCESS;
+	u8 result = HAL_STATUS_SUCCESS;
 	if (dm_odm->SupportICType == ODM_RTL8188E)
 		result = READ_AND_CONFIG(8188E, _MAC_REG_);
 	return result;

@@ -22,12 +22,12 @@
 
 #include <rtw_iol.h>
 
-static bool CheckCondition(const u4Byte  Condition, const u4Byte  Hex)
+static bool CheckCondition(const u32  Condition, const u32  Hex)
 {
-	u4Byte _board     = (Hex & 0x000000FF);
-	u4Byte _interface = (Hex & 0x0000FF00) >> 8;
-	u4Byte _platform  = (Hex & 0x00FF0000) >> 16;
-	u4Byte cond = Condition;
+	u32 _board     = (Hex & 0x000000FF);
+	u32 _interface = (Hex & 0x0000FF00) >> 8;
+	u32 _platform  = (Hex & 0x00FF0000) >> 16;
+	u32 cond = Condition;
 
 	if (Condition == 0xCDCDCDCD)
 		return true;
@@ -53,7 +53,7 @@ static bool CheckCondition(const u4Byte  Condition, const u4Byte  Hex)
 *                           RadioA_1T.TXT
 ******************************************************************************/
 
-static u4Byte Array_RadioA_1T_8188E[] = {
+static u32 Array_RadioA_1T_8188E[] = {
 		0x000, 0x00030000,
 		0x008, 0x00084000,
 		0x018, 0x00000407,
@@ -161,15 +161,15 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 		 { i += 2; v1 = Array[i];	\
 		 v2 = Array[i+1]; } while (0)
 
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
-	u2Byte     count       = 0;
-	pu4Byte    ptr_array   = NULL;
-	u1Byte     platform    = pDM_Odm->SupportPlatform;
-	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
-	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_RadioA_1T_8188E;
+	u32     hex         = 0;
+	u32     i           = 0;
+	u16     count       = 0;
+	u32    *ptr_array   = NULL;
+	u8     platform    = pDM_Odm->SupportPlatform;
+	u8     interfaceValue   = pDM_Odm->SupportInterface;
+	u8     board       = pDM_Odm->BoardType;
+	u32     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u32);
+	u32    *Array       = Array_RadioA_1T_8188E;
 	bool		biol = false;
 	struct adapter *Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
@@ -191,8 +191,8 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 	}
 
 	for (i = 0; i < ArrayLen; i += 2) {
-		u4Byte v1 = Array[i];
-		u4Byte v2 = Array[i+1];
+		u32 v1 = Array[i];
+		u32 v2 = Array[i+1];
 
 		/*  This (offset, data) pair meets the condition. */
 		if (v1 < 0xCDCDCDCD) {
@@ -213,7 +213,7 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 				else if (v1 == 0xf9)
 					rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 1);
 				else
-					rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A, (u2Byte)v1, v2, bRFRegOffsetMask);
+					rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A, (u16)v1, v2, bRFRegOffsetMask);
 			} else {
 				odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 			}
@@ -249,7 +249,7 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 						else if (v1 == 0xf9)
 							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 1);
 						else
-							rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A, (u2Byte)v1, v2, bRFRegOffsetMask);
+							rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A, (u16)v1, v2, bRFRegOffsetMask);
 					} else {
 						odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 					}

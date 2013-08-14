@@ -70,47 +70,47 @@
 
 struct phy_rx_agc_info {
 	#ifdef __LITTLE_ENDIAN
-		u1Byte	gain:7,trsw:1;
+		u8	gain:7,trsw:1;
 	#else
-		u1Byte	trsw:1,gain:7;
+		u8	trsw:1,gain:7;
 	#endif
 };
 
 struct phy_status_rpt {
 	struct phy_rx_agc_info path_agc[2];
-	u1Byte	ch_corr[2];
-	u1Byte	cck_sig_qual_ofdm_pwdb_all;
-	u1Byte	cck_agc_rpt_ofdm_cfosho_a;
-	u1Byte	cck_rpt_b_ofdm_cfosho_b;
-	u1Byte	rsvd_1;/* ch_corr_msb; */
-	u1Byte	noise_power_db_msb;
-	u1Byte	path_cfotail[2];
-	u1Byte	pcts_mask[2];
-	s1Byte	stream_rxevm[2];
-	u1Byte	path_rxsnr[2];
-	u1Byte	noise_power_db_lsb;
-	u1Byte	rsvd_2[3];
-	u1Byte	stream_csi[2];
-	u1Byte	stream_target_csi[2];
-	s1Byte	sig_evm;
-	u1Byte	rsvd_3;
+	u8	ch_corr[2];
+	u8	cck_sig_qual_ofdm_pwdb_all;
+	u8	cck_agc_rpt_ofdm_cfosho_a;
+	u8	cck_rpt_b_ofdm_cfosho_b;
+	u8	rsvd_1;/* ch_corr_msb; */
+	u8	noise_power_db_msb;
+	u8	path_cfotail[2];
+	u8	pcts_mask[2];
+	s8	stream_rxevm[2];
+	u8	path_rxsnr[2];
+	u8	noise_power_db_lsb;
+	u8	rsvd_2[3];
+	u8	stream_csi[2];
+	u8	stream_target_csi[2];
+	s8	sig_evm;
+	u8	rsvd_3;
 
 #ifdef __LITTLE_ENDIAN
-	u1Byte	antsel_rx_keep_2:1;	/* ex_intf_flg:1; */
-	u1Byte	sgi_en:1;
-	u1Byte	rxsc:2;
-	u1Byte	idle_long:1;
-	u1Byte	r_ant_train_en:1;
-	u1Byte	ant_sel_b:1;
-	u1Byte	ant_sel:1;
+	u8	antsel_rx_keep_2:1;	/* ex_intf_flg:1; */
+	u8	sgi_en:1;
+	u8	rxsc:2;
+	u8	idle_long:1;
+	u8	r_ant_train_en:1;
+	u8	ant_sel_b:1;
+	u8	ant_sel:1;
 #else	/*  _BIG_ENDIAN_ */
-	u1Byte	ant_sel:1;
-	u1Byte	ant_sel_b:1;
-	u1Byte	r_ant_train_en:1;
-	u1Byte	idle_long:1;
-	u1Byte	rxsc:2;
-	u1Byte	sgi_en:1;
-	u1Byte	antsel_rx_keep_2:1;	/* ex_intf_flg:1; */
+	u8	ant_sel:1;
+	u8	ant_sel_b:1;
+	u8	r_ant_train_en:1;
+	u8	idle_long:1;
+	u8	rxsc:2;
+	u8	sgi_en:1;
+	u8	antsel_rx_keep_2:1;	/* ex_intf_flg:1; */
 #endif
 };
 
@@ -123,15 +123,15 @@ void
 ODM_PhyStatusQuery(
 		struct odm_dm_struct *				pDM_Odm,
 			struct odm_phy_status_info *pPhyInfo,
-			pu1Byte						pPhyStatus,
+			u8 *pPhyStatus,
 			struct odm_per_pkt_info *pPktinfo
 	);
 
 void
 ODM_MacStatusQuery(
 		struct odm_dm_struct *				pDM_Odm,
-			pu1Byte						pMacStatus,
-			u1Byte						MacID,
+			u8 *pMacStatus,
+			u8						MacID,
 			bool						bPacketMatchBSSID,
 			bool						bPacketToSelf,
 			bool						bPacketBeacon

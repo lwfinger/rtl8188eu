@@ -29,12 +29,12 @@
 		 v2 = array[i+1];			\
 	 } while (0)
 
-static bool CheckCondition(const u4Byte  condition, const u4Byte  hex)
+static bool CheckCondition(const u32  condition, const u32  hex)
 {
-	u4Byte _board     = (hex & 0x000000FF);
-	u4Byte _interface = (hex & 0x0000FF00) >> 8;
-	u4Byte _platform  = (hex & 0x00FF0000) >> 16;
-	u4Byte cond = condition;
+	u32 _board     = (hex & 0x000000FF);
+	u32 _interface = (hex & 0x0000FF00) >> 8;
+	u32 _platform  = (hex & 0x00FF0000) >> 16;
+	u32 cond = condition;
 
 	if (condition == 0xCDCDCDCD)
 		return true;
@@ -60,7 +60,7 @@ static bool CheckCondition(const u4Byte  condition, const u4Byte  hex)
 *                           AGC_TAB_1T.TXT
 ******************************************************************************/
 
-static u4Byte array_agc_tab_1t_8188e[] = {
+static u32 array_agc_tab_1t_8188e[] = {
 		0xC78, 0xFB000001,
 		0xC78, 0xFB010001,
 		0xC78, 0xFB020001,
@@ -193,15 +193,15 @@ static u4Byte array_agc_tab_1t_8188e[] = {
 
 enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 {
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
-	u2Byte     count       = 0;
-	pu4Byte    ptr_array   = NULL;
-	u1Byte     platform    = dm_odm->SupportPlatform;
-	u1Byte     interfaceValue   = dm_odm->SupportInterface;
-	u1Byte     board       = dm_odm->BoardType;
-	u4Byte     arraylen    = sizeof(array_agc_tab_1t_8188e)/sizeof(u4Byte);
-	pu4Byte    array       = array_agc_tab_1t_8188e;
+	u32     hex         = 0;
+	u32     i           = 0;
+	u16     count       = 0;
+	u32    *ptr_array   = NULL;
+	u8     platform    = dm_odm->SupportPlatform;
+	u8     interfaceValue   = dm_odm->SupportInterface;
+	u8     board       = dm_odm->BoardType;
+	u32     arraylen    = sizeof(array_agc_tab_1t_8188e)/sizeof(u32);
+	u32    *array       = array_agc_tab_1t_8188e;
 	bool		biol = false;
 	struct adapter *adapter =  dm_odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
@@ -223,15 +223,15 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 	}
 
 	for (i = 0; i < arraylen; i += 2) {
-		u4Byte v1 = array[i];
-		u4Byte v2 = array[i+1];
+		u32 v1 = array[i];
+		u32 v2 = array[i+1];
 
 		/*  This (offset, data) pair meets the condition. */
 		if (v1 < 0xCDCDCDCD) {
 			if (biol) {
 				if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 					bndy_cnt++;
-				rtw_IOL_append_WD_cmd(pxmit_frame, (u2Byte)v1, v2, bMaskDWord);
+				rtw_IOL_append_WD_cmd(pxmit_frame, (u16)v1, v2, bMaskDWord);
 			} else {
 				odm_ConfigBB_AGC_8188E(dm_odm, v1, bMaskDWord, v2);
 			}
@@ -254,7 +254,7 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 					if (biol) {
 						if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 							bndy_cnt++;
-						rtw_IOL_append_WD_cmd(pxmit_frame, (u2Byte)v1, v2, bMaskDWord);
+						rtw_IOL_append_WD_cmd(pxmit_frame, (u16)v1, v2, bMaskDWord);
 					} else {
 						odm_ConfigBB_AGC_8188E(dm_odm, v1, bMaskDWord, v2);
 					}
@@ -279,7 +279,7 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 *                           PHY_REG_1T.TXT
 ******************************************************************************/
 
-static u4Byte array_phy_reg_1t_8188e[] = {
+static u32 array_phy_reg_1t_8188e[] = {
 		0x800, 0x80040000,
 		0x804, 0x00000003,
 		0x808, 0x0000FC00,
@@ -475,15 +475,15 @@ static u4Byte array_phy_reg_1t_8188e[] = {
 
 enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 {
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
-	u2Byte     count       = 0;
-	pu4Byte    ptr_array   = NULL;
-	u1Byte     platform    = dm_odm->SupportPlatform;
-	u1Byte     interfaceValue   = dm_odm->SupportInterface;
-	u1Byte     board       = dm_odm->BoardType;
-	u4Byte     arraylen    = sizeof(array_phy_reg_1t_8188e)/sizeof(u4Byte);
-	pu4Byte    array       = array_phy_reg_1t_8188e;
+	u32     hex         = 0;
+	u32     i           = 0;
+	u16     count       = 0;
+	u32    *ptr_array   = NULL;
+	u8     platform    = dm_odm->SupportPlatform;
+	u8     interfaceValue   = dm_odm->SupportInterface;
+	u8     board       = dm_odm->BoardType;
+	u32     arraylen    = sizeof(array_phy_reg_1t_8188e)/sizeof(u32);
+	u32    *array       = array_phy_reg_1t_8188e;
 	bool		biol = false;
 	struct adapter *adapter =  dm_odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
@@ -504,8 +504,8 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 	}
 
 	for (i = 0; i < arraylen; i += 2) {
-		u4Byte v1 = array[i];
-		u4Byte v2 = array[i+1];
+		u32 v1 = array[i];
+		u32 v2 = array[i+1];
 
 		/*  This (offset, data) pair meets the condition. */
 		if (v1 < 0xCDCDCDCD) {
@@ -527,7 +527,7 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 				} else {
 					if (v1 == 0xa24)
 						dm_odm->RFCalibrateInfo.RegA24 = v2;
-					rtw_IOL_append_WD_cmd(pxmit_frame, (u2Byte)v1, v2, bMaskDWord);
+					rtw_IOL_append_WD_cmd(pxmit_frame, (u16)v1, v2, bMaskDWord);
 				}
 			} else {
 				odm_ConfigBB_PHY_8188E(dm_odm, v1, bMaskDWord, v2);
@@ -566,7 +566,7 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 							if (v1 == 0xa24)
 								dm_odm->RFCalibrateInfo.RegA24 = v2;
 
-							rtw_IOL_append_WD_cmd(pxmit_frame, (u2Byte)v1, v2, bMaskDWord);
+							rtw_IOL_append_WD_cmd(pxmit_frame, (u16)v1, v2, bMaskDWord);
 						}
 					} else {
 						odm_ConfigBB_PHY_8188E(dm_odm, v1, bMaskDWord, v2);
@@ -592,7 +592,7 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 *                           PHY_REG_PG.TXT
 ******************************************************************************/
 
-static u4Byte array_phy_reg_pg_8188e[] = {
+static u32 array_phy_reg_pg_8188e[] = {
 		0xE00, 0xFFFFFFFF, 0x06070809,
 		0xE04, 0xFFFFFFFF, 0x02020405,
 		0xE08, 0x0000FF00, 0x00000006,
@@ -686,24 +686,24 @@ static u4Byte array_phy_reg_pg_8188e[] = {
 
 void ODM_ReadAndConfig_PHY_REG_PG_8188E(struct odm_dm_struct *dm_odm)
 {
-	u4Byte  hex;
-	u4Byte  i           = 0;
-	u2Byte  count       = 0;
-	pu4Byte ptr_array   = NULL;
-	u1Byte  platform    = dm_odm->SupportPlatform;
-	u1Byte  interfaceValue   = dm_odm->SupportInterface;
-	u1Byte  board       = dm_odm->BoardType;
-	u4Byte  arraylen    = sizeof(array_phy_reg_pg_8188e) / sizeof(u4Byte);
-	pu4Byte array       = array_phy_reg_pg_8188e;
+	u32  hex;
+	u32  i           = 0;
+	u16  count       = 0;
+	u32 *ptr_array   = NULL;
+	u8  platform    = dm_odm->SupportPlatform;
+	u8  interfaceValue   = dm_odm->SupportInterface;
+	u8  board       = dm_odm->BoardType;
+	u32  arraylen    = sizeof(array_phy_reg_pg_8188e) / sizeof(u32);
+	u32 *array       = array_phy_reg_pg_8188e;
 	bool	biol = false;
 
 	hex = board + (interfaceValue << 8);
 	hex += (platform << 16) + 0xFF000000;
 
 	for (i = 0; i < arraylen; i += 3) {
-		u4Byte v1 = array[i];
-		u4Byte v2 = array[i+1];
-		u4Byte v3 = array[i+2];
+		u32 v1 = array[i];
+		u32 v2 = array[i+1];
+		u32 v3 = array[i+2];
 
 		/*  this line is a line of pure_body */
 		if (v1 < 0xCDCDCDCD) {

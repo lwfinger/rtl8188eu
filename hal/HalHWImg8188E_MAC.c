@@ -21,12 +21,12 @@
 #include "odm_precomp.h"
 #include <rtw_iol.h>
 
-static bool Checkcondition(const u4Byte  condition, const u4Byte  hex)
+static bool Checkcondition(const u32  condition, const u32  hex)
 {
-	u4Byte _board     = (hex & 0x000000FF);
-	u4Byte _interface = (hex & 0x0000FF00) >> 8;
-	u4Byte _platform  = (hex & 0x00FF0000) >> 16;
-	u4Byte cond = condition;
+	u32 _board     = (hex & 0x000000FF);
+	u32 _interface = (hex & 0x0000FF00) >> 8;
+	u32 _platform  = (hex & 0x00FF0000) >> 16;
+	u32 cond = condition;
 
 	if (condition == 0xCDCDCDCD)
 		return true;
@@ -52,7 +52,7 @@ static bool Checkcondition(const u4Byte  condition, const u4Byte  hex)
 *                           MAC_REG.TXT
 ******************************************************************************/
 
-static u4Byte array_MAC_REG_8188E[] = {
+static u32 array_MAC_REG_8188E[] = {
 		0x026, 0x00000041,
 		0x027, 0x00000035,
 		0x428, 0x0000000A,
@@ -149,15 +149,15 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = array[i]; v2 = array[i+1]; } while (0)
 
-	u4Byte     hex         = 0;
-	u4Byte     i;
-	u2Byte     count       = 0;
-	pu4Byte    ptr_array   = NULL;
-	u1Byte     platform    = dm_odm->SupportPlatform;
-	u1Byte     interface_val   = dm_odm->SupportInterface;
-	u1Byte     board       = dm_odm->BoardType;
-	u4Byte     array_len    = sizeof(array_MAC_REG_8188E)/sizeof(u4Byte);
-	pu4Byte    array       = array_MAC_REG_8188E;
+	u32     hex         = 0;
+	u32     i;
+	u16     count       = 0;
+	u32    *ptr_array   = NULL;
+	u8     platform    = dm_odm->SupportPlatform;
+	u8     interface_val   = dm_odm->SupportInterface;
+	u8     board       = dm_odm->BoardType;
+	u32     array_len    = sizeof(array_MAC_REG_8188E)/sizeof(u32);
+	u32    *array       = array_MAC_REG_8188E;
 	bool	biol = false;
 
 	struct adapter *adapt =  dm_odm->Adapter;
@@ -180,17 +180,17 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 	}
 
 	for (i = 0; i < array_len; i += 2) {
-		u4Byte v1 = array[i];
-		u4Byte v2 = array[i+1];
+		u32 v1 = array[i];
+		u32 v2 = array[i+1];
 
 		/*  This (offset, data) pair meets the condition. */
 		if (v1 < 0xCDCDCDCD) {
 				if (biol) {
 					if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 						bndy_cnt++;
-					rtw_IOL_append_WB_cmd(pxmit_frame, (u2Byte)v1, (u1Byte)v2, 0xFF);
+					rtw_IOL_append_WB_cmd(pxmit_frame, (u16)v1, (u8)v2, 0xFF);
 				} else {
-					odm_ConfigMAC_8188E(dm_odm, v1, (u1Byte)v2);
+					odm_ConfigMAC_8188E(dm_odm, v1, (u8)v2);
 				}
 				continue;
 		} else { /*  This line is the start line of branch. */
@@ -211,9 +211,9 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 					if (biol) {
 						if (rtw_IOL_cmd_boundary_handle(pxmit_frame))
 							bndy_cnt++;
-						rtw_IOL_append_WB_cmd(pxmit_frame, (u2Byte)v1, (u1Byte)v2, 0xFF);
+						rtw_IOL_append_WB_cmd(pxmit_frame, (u16)v1, (u8)v2, 0xFF);
 					} else {
-						odm_ConfigMAC_8188E(dm_odm, v1, (u1Byte)v2);
+						odm_ConfigMAC_8188E(dm_odm, v1, (u8)v2);
 					}
 
 					READ_NEXT_PAIR(v1, v2, i);

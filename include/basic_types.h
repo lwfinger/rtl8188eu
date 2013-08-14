@@ -26,11 +26,6 @@
 #include <linux/types.h>
 #define NDIS_OID uint
 
-#define UCHAR u8
-#define USHORT u16
-#define UINT u32
-#define ULONG u32
-
 typedef void (*proc_t)(void *);
 
 #define FIELD_OFFSET(s, field)	((ssize_t)&((s *)(0))->field)

@@ -81,44 +81,38 @@
 #define NDIS_STATUS_NO_ROUTE_TO_DESTINATION	((int)0xC0010029L)  /*  cause 3 */
 
 enum antenna_path {
-		ANTENNA_NONE	= 0x00,
-		ANTENNA_D		,
-		ANTENNA_C		,
-		ANTENNA_CD		,
-		ANTENNA_B		,
-		ANTENNA_BD		,
-		ANTENNA_BC		,
-		ANTENNA_BCD	,
-		ANTENNA_A		,
-		ANTENNA_AD		,
-		ANTENNA_AC		,
-		ANTENNA_ACD	,
-		ANTENNA_AB		,
-		ANTENNA_ABD	,
-		ANTENNA_ABC	,
-		ANTENNA_ABCD
+	ANTENNA_NONE = 0x00,
+	ANTENNA_D,
+	ANTENNA_C,
+	ANTENNA_CD,
+	ANTENNA_B,
+	ANTENNA_BD,
+	ANTENNA_BC,
+	ANTENNA_BCD,
+	ANTENNA_A,
+	ANTENNA_AD,
+	ANTENNA_AC,
+	ANTENNA_ACD,
+	ANTENNA_AB,
+	ANTENNA_ABD,
+	ANTENNA_ABC,
+	ANTENNA_ABCD
 };
 
 
 #define MAX_MP_XMITBUF_SZ	2048
 #define NR_MP_XMITFRAME		8
 
-struct mp_xmit_frame
-{
+struct mp_xmit_frame {
 	struct list_head list;
-
 	struct pkt_attrib attrib;
-
 	struct sk_buff *pkt;
-
 	int frame_tag;
-
 	struct adapter *padapter;
-
+	struct urb *pxmit_urb[8];
 	/* insert urb, irp, and irpcnt info below... */
 	u8 *mem_addr;
 	u32 sz[8];
-	struct urb * pxmit_urb[8];
 	u8 bpending[8];
 	int ac_tag[8];
 	int last[8];
@@ -127,15 +121,14 @@ struct mp_xmit_frame
 	uint mem[(MAX_MP_XMITBUF_SZ >> 2)];
 };
 
-struct mp_wiparam
-{
+struct mp_wiparam {
 	u32 bcompleted;
 	u32 act_type;
 	u32 io_offset;
 	u32 io_value;
 };
 
-typedef void(*wi_act_func)(void* padapter);
+typedef void(*wi_act_func)(void *padapter);
 
 struct mp_tx {
 	u8 stop;
@@ -153,41 +146,6 @@ struct mp_tx {
 
 #define MP_MAX_LINES		1000
 #define MP_MAX_LINES_BYTES	256
-#define u1Byte u8
-#define s1Byte s8
-#define u4Byte u32
-#define s4Byte s32
-#define u1Byte		u8
-#define pu1Byte			u8*
-
-#define u2Byte		u16
-#define pu2Byte			u16*
-
-#define u4Byte		u32
-#define pu4Byte			u32*
-
-#define u8Byte		u64
-#define pu8Byte			u64*
-
-#define s1Byte		s8
-#define ps1Byte			s8*
-
-#define s2Byte		s16
-#define ps2Byte			s16*
-
-#define s4Byte		s32
-#define ps4Byte			s32*
-
-#define s8Byte		s64
-#define ps8Byte			s64*
-
-#define UCHAR u8
-#define USHORT u16
-#define UINT u32
-#define ULONG u32
-#define PULONG u32*
-
-
 
 typedef void (*MPT_WORK_ITEM_HANDLER)(void *Adapter);
 
@@ -215,23 +173,23 @@ struct mpt_context {
 	MPT_WORK_ITEM_HANDLER	CurrMptAct;
 
 	/*  1=Start, 0=Stop from UI. */
-	ULONG			MptTestStart;
+	u32			MptTestStart;
 	/*  _TEST_MODE, defined in MPT_Req2.h */
-	ULONG			MptTestItem;
+	u32			MptTestItem;
 	/*  Variable needed in each implementation of CurrMptAct. */
-	ULONG			MptActType;	/*  Type of action performed in CurrMptAct. */
+	u32			MptActType;	/*  Type of action performed in CurrMptAct. */
 	/*  The Offset of IO operation is depend of MptActType. */
-	ULONG			MptIoOffset;
+	u32			MptIoOffset;
 	/*  The Value of IO operation is depend of MptActType. */
-	ULONG			MptIoValue;
+	u32			MptIoValue;
 	/*  The RfPath of IO operation is depend of MptActType. */
-	ULONG			MptRfPath;
+	u32			MptRfPath;
 
 	enum wireless_mode MptWirelessModeToSw;	/*  Wireless mode to switch. */
 	u8			MptChannelToSw;		/*  Channel to switch. */
 	u8			MptInitGainToSet;	/*  Initial gain to set. */
-	ULONG			MptBandWidth;		/*  bandwidth to switch. */
-	ULONG			MptRateIndex;		/*  rate index. */
+	u32			MptBandWidth;		/*  bandwidth to switch. */
+	u32			MptRateIndex;		/*  rate index. */
 	/*  Register value kept for Single Carrier Tx test. */
 	u8			btMpCckTxPower;
 	/*  Register value kept for Single Carrier Tx test. */
@@ -240,13 +198,13 @@ struct mpt_context {
 	u8			TxPwrLevel[2];	/*  rf-A, rf-B */
 
 	/*  Content of RCR Regsiter for Mass Production Test. */
-	ULONG			MptRCR;
+	u32			MptRCR;
 	/*  true if we only receive packets with specific pattern. */
 	bool			bMptFilterPattern;
 	/*  Rx OK count, statistics used in Mass Production Test. */
-	ULONG			MptRxOkCnt;
+	u32			MptRxOkCnt;
 	/*  Rx CRC32 error count, statistics used in Mass Production Test. */
-	ULONG			MptRxCrcErrCnt;
+	u32			MptRxCrcErrCnt;
 
 	bool			bCckContTx;	/*  true if we are in CCK Continuous Tx test. */
 	bool			bOfdmContTx;	/*  true if we are in OFDM Continuous Tx test. */
@@ -260,12 +218,12 @@ struct mpt_context {
 
 	/*  ACK counter asked by K.Y.. */
 	bool			bMptEnableAckCounter;
-	ULONG			MptAckCounter;
+	u32			MptAckCounter;
 
 	/*  SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~! */
-	/* s1Byte		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT]; */
-	/* s1Byte			BufOfLines[2][MP_MAX_LINES][MP_MAX_LINES_BYTES]; */
-	/* s4Byte			RfReadLine[2]; */
+	/* s8		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT]; */
+	/* s8			BufOfLines[2][MP_MAX_LINES][MP_MAX_LINES_BYTES]; */
+	/* s32			RfReadLine[2]; */
 
 	u8		APK_bound[2];	/* for APK	path A/path B */
 	bool		bMptIndexEven;
@@ -276,12 +234,12 @@ struct mpt_context {
 	u8		backup0x52_RF_A;
 	u8		backup0x52_RF_B;
 
-	u1Byte			h2cReqNum;
-	u1Byte			c2hBuf[20];
+	u8			h2cReqNum;
+	u8			c2hBuf[20];
 
-    u1Byte          btInBuf[100];
-	ULONG			mptOutLen;
-    u1Byte          mptOutBuf[100];
+    u8          btInBuf[100];
+	u32			mptOutLen;
+    u8          mptOutBuf[100];
 
 };
 

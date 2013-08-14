@@ -20,9 +20,9 @@
 
 #include "odm_precomp.h"
 
-void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr,
-			   u4Byte Data, enum ODM_RF_RADIO_PATH RF_PATH,
-			   u4Byte RegAddr)
+void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
+			   u32 Data, enum ODM_RF_RADIO_PATH RF_PATH,
+			   u32 RegAddr)
 {
     if (Addr == 0xffe) {
 		ODM_sleep_ms(50);
@@ -43,32 +43,32 @@ void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr,
 	}
 }
 
-void odm_ConfigRF_RadioA_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr, u4Byte Data)
+void odm_ConfigRF_RadioA_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Data)
 {
-	u4Byte  content = 0x1000; /*  RF_Content: radioa_txt */
-	u4Byte maskforPhySet = (u4Byte)(content&0xE000);
+	u32  content = 0x1000; /*  RF_Content: radioa_txt */
+	u32 maskforPhySet = (u32)(content&0xE000);
 
 	odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, ODM_RF_PATH_A, Addr|maskforPhySet);
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_TRACE, ("===> ODM_ConfigRFWithHeaderFile: [RadioA] %08X %08X\n", Addr, Data));
 }
 
-void odm_ConfigRF_RadioB_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr, u4Byte Data)
+void odm_ConfigRF_RadioB_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Data)
 {
-	u4Byte  content = 0x1001; /*  RF_Content: radiob_txt */
-	u4Byte maskforPhySet = (u4Byte)(content&0xE000);
+	u32  content = 0x1001; /*  RF_Content: radiob_txt */
+	u32 maskforPhySet = (u32)(content&0xE000);
 
 	odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, ODM_RF_PATH_B, Addr|maskforPhySet);
 
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_TRACE, ("===> ODM_ConfigRFWithHeaderFile: [RadioB] %08X %08X\n", Addr, Data));
 }
 
-void odm_ConfigMAC_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr, u1Byte Data)
+void odm_ConfigMAC_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u8 Data)
 {
 	ODM_Write1Byte(pDM_Odm, Addr, Data);
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_TRACE, ("===> ODM_ConfigMACWithHeaderFile: [MAC_REG] %08X %08X\n", Addr, Data));
 }
 
-void odm_ConfigBB_AGC_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr, u4Byte Bitmask, u4Byte Data)
+void odm_ConfigBB_AGC_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Bitmask, u32 Data)
 {
 	ODM_SetBBReg(pDM_Odm, Addr, Bitmask, Data);
 	/*  Add 1us delay between BB/RF register setting. */
@@ -79,8 +79,8 @@ void odm_ConfigBB_AGC_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr, u4Byte B
 		     Addr, Data));
 }
 
-void odm_ConfigBB_PHY_REG_PG_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr,
-				   u4Byte Bitmask, u4Byte Data)
+void odm_ConfigBB_PHY_REG_PG_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
+				   u32 Bitmask, u32 Data)
 {
 	if (Addr == 0xfe) {
 		ODM_sleep_ms(50);
@@ -102,7 +102,7 @@ void odm_ConfigBB_PHY_REG_PG_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr,
 	}
 }
 
-void odm_ConfigBB_PHY_8188E(struct odm_dm_struct *pDM_Odm, u4Byte Addr, u4Byte Bitmask, u4Byte Data)
+void odm_ConfigBB_PHY_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Bitmask, u32 Data)
 {
 	if (Addr == 0xfe) {
 		ODM_sleep_ms(50);

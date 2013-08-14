@@ -43,30 +43,6 @@ enum RT_SPINLOCK_TYPE {
 
 #include <basic_types.h>
 
-#define u1Byte		u8
-#define pu1Byte			u8*
-
-#define u2Byte		u16
-#define pu2Byte			u16*
-
-#define u4Byte		u32
-#define pu4Byte			u32*
-
-#define u8Byte		u64
-#define pu8Byte			u64*
-
-#define s1Byte		s8
-#define ps1Byte			s8*
-
-#define s2Byte		s16
-#define ps2Byte			s16*
-
-#define s4Byte		s32
-#define ps4Byte			s32*
-
-#define s8Byte		s64
-#define ps8Byte			s64*
-
 #define DEV_BUS_TYPE	RT_USB_INTERFACE
 
 #define SET_TX_DESC_ANTSEL_A_88E(__pTxDesc, __Value) SET_BITS_TO_LE_4BYTE(__pTxDesc+8, 24, 1, __Value)

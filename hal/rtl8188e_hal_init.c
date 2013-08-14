@@ -163,7 +163,7 @@ efuse_phymap_to_logical(u8 *phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 					rtemp8 = *(phymap+eFuse_Addr);
 					eFuse_Addr++;
 					efuse_utilized++;
-					eFuseWord[offset][i] |= (((u2Byte)rtemp8 << 8) & 0xff00);
+					eFuseWord[offset][i] |= (((u16)rtemp8 << 8) & 0xff00);
 
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
@@ -1044,7 +1044,7 @@ Hal_EfuseReadEFuse88E(
 					ReadEFuseByte(Adapter, eFuse_Addr, rtemp8, bPseudoTest);
 					eFuse_Addr++;
 					efuse_utilized++;
-					eFuseWord[offset][i] |= (((u2Byte)*rtemp8 << 8) & 0xff00);
+					eFuseWord[offset][i] |= (((u16)*rtemp8 << 8) & 0xff00);
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
 				}
@@ -1160,7 +1160,7 @@ static void rtl8188e_ReadEFuse(struct adapter *Adapter, u8 efuseType,
 }
 
 /* Do not support BT */
-static void Hal_EFUSEGetEfuseDefinition88E(struct adapter *pAdapter, u1Byte efuseType, u1Byte type, void *pOut)
+static void Hal_EFUSEGetEfuseDefinition88E(struct adapter *pAdapter, u8 efuseType, u8 type, void *pOut)
 {
 	switch (type) {
 	case TYPE_EFUSE_MAX_SECTION:
@@ -1228,43 +1228,43 @@ static void Hal_EFUSEGetEfuseDefinition_Pseudo88E(struct adapter *pAdapter, u8 e
 	case TYPE_EFUSE_MAX_SECTION:
 		{
 			u8 *pMax_section;
-			pMax_section = (pu1Byte)pOut;
+			pMax_section = (u8 *)pOut;
 			*pMax_section = EFUSE_MAX_SECTION_88E;
 		}
 		break;
 	case TYPE_EFUSE_REAL_CONTENT_LEN:
 		{
 			u16 *pu2Tmp;
-			pu2Tmp = (pu2Byte)pOut;
+			pu2Tmp = (u16 *)pOut;
 			*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
 		}
 		break;
 	case TYPE_EFUSE_CONTENT_LEN_BANK:
 		{
 			u16 *pu2Tmp;
-			pu2Tmp = (pu2Byte)pOut;
+			pu2Tmp = (u16 *)pOut;
 			*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
 		}
 		break;
 	case TYPE_AVAILABLE_EFUSE_BYTES_BANK:
 		{
 			u16 *pu2Tmp;
-			pu2Tmp = (pu2Byte)pOut;
-			*pu2Tmp = (u2Byte)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+			pu2Tmp = (u16 *)pOut;
+			*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
 		}
 		break;
 	case TYPE_AVAILABLE_EFUSE_BYTES_TOTAL:
 		{
 			u16 *pu2Tmp;
-			pu2Tmp = (pu2Byte)pOut;
-			*pu2Tmp = (u2Byte)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+			pu2Tmp = (u16 *)pOut;
+			*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
 		}
 		break;
 	case TYPE_EFUSE_MAP_LEN:
 		{
 			u16 *pu2Tmp;
-			pu2Tmp = (pu2Byte)pOut;
-			*pu2Tmp = (u2Byte)EFUSE_MAP_LEN_88E;
+			pu2Tmp = (u16 *)pOut;
+			*pu2Tmp = (u16)EFUSE_MAP_LEN_88E;
 		}
 		break;
 	case TYPE_EFUSE_PROTECT_BYTES_BANK:
@@ -2600,7 +2600,7 @@ void Hal_ReadAntennaDiversity88E(struct adapter *pAdapter, u8 *PROMContent, bool
 void Hal_ReadThermalMeter_88E(struct adapter *Adapter, u8 *PROMContent, bool AutoloadFail)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	u1Byte			tempval;
+	u8			tempval;
 
 	/*  ThermalMeter from EEPROM */
 	if (!AutoloadFail)

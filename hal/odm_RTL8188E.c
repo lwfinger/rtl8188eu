@@ -25,7 +25,7 @@ void ODM_DIG_LowerBound_88E(struct odm_dm_struct *dm_odm)
 	struct rtw_dig *pDM_DigTable = &dm_odm->DM_DigTable;
 
 	if (dm_odm->AntDivType == CG_TRX_HW_ANTDIV) {
-		pDM_DigTable->rx_gain_range_min = (u1Byte) pDM_DigTable->AntDiv_RSSI_max;
+		pDM_DigTable->rx_gain_range_min = (u8) pDM_DigTable->AntDiv_RSSI_max;
 		ODM_RT_TRACE(dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,
 			     ("ODM_DIG_LowerBound_88E(): pDM_DigTable->AntDiv_RSSI_max=%d\n", pDM_DigTable->AntDiv_RSSI_max));
 	}
@@ -34,7 +34,7 @@ void ODM_DIG_LowerBound_88E(struct odm_dm_struct *dm_odm)
 
 static void odm_RX_HWAntDivInit(struct odm_dm_struct *dm_odm)
 {
-	u4Byte	value32;
+	u32	value32;
 	struct adapter *Adapter = dm_odm->Adapter;
 
 	if (*(dm_odm->mp_mode) == 1) {
@@ -64,7 +64,7 @@ static void odm_RX_HWAntDivInit(struct odm_dm_struct *dm_odm)
 
 static void odm_TRX_HWAntDivInit(struct odm_dm_struct *dm_odm)
 {
-	u4Byte	value32;
+	u32	value32;
 	struct adapter *Adapter = dm_odm->Adapter;
 
 	if (*(dm_odm->mp_mode) == 1) {
@@ -103,9 +103,9 @@ static void odm_TRX_HWAntDivInit(struct odm_dm_struct *dm_odm)
 
 static void odm_FastAntTrainingInit(struct odm_dm_struct *dm_odm)
 {
-	u4Byte	value32, i;
+	u32	value32, i;
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
-	u4Byte	AntCombination = 2;
+	u32	AntCombination = 2;
 	struct adapter *Adapter = dm_odm->Adapter;
 
 	ODM_RT_TRACE(dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit()\n"));
@@ -198,10 +198,10 @@ void ODM_AntennaDiversityInit_88E(struct odm_dm_struct *dm_odm)
 		odm_FastAntTrainingInit(dm_odm);
 }
 
-void ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *dm_odm, u1Byte Ant)
+void ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *dm_odm, u8 Ant)
 {
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
-	u4Byte	DefaultAnt, OptionalAnt;
+	u32	DefaultAnt, OptionalAnt;
 
 	if (dm_fat_tbl->RxIdleAnt != Ant) {
 		ODM_RT_TRACE(dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Need to Update Rx Idle Ant\n"));
@@ -228,10 +228,10 @@ void ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *dm_odm, u1Byte Ant)
 	pr_info("RxIdleAnt=%s\n", (Ant == MAIN_ANT) ? "MAIN_ANT" : "AUX_ANT");
 }
 
-static void odm_UpdateTxAnt_88E(struct odm_dm_struct *dm_odm, u1Byte Ant, u4Byte MacId)
+static void odm_UpdateTxAnt_88E(struct odm_dm_struct *dm_odm, u8 Ant, u32 MacId)
 {
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
-	u1Byte	TargetAnt;
+	u8	TargetAnt;
 
 	if (Ant == MAIN_ANT)
 		TargetAnt = MAIN_ANT_CG_TRX;
@@ -249,7 +249,7 @@ static void odm_UpdateTxAnt_88E(struct odm_dm_struct *dm_odm, u1Byte Ant, u4Byte
 		     dm_fat_tbl->antsel_c[MacId], dm_fat_tbl->antsel_b[MacId], dm_fat_tbl->antsel_a[MacId]));
 }
 
-void ODM_SetTxAntByTxInfo_88E(struct odm_dm_struct *dm_odm, pu1Byte pDesc, u1Byte macId)
+void ODM_SetTxAntByTxInfo_88E(struct odm_dm_struct *dm_odm, u8 *pDesc, u8 macId)
 {
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
 
@@ -260,7 +260,7 @@ void ODM_SetTxAntByTxInfo_88E(struct odm_dm_struct *dm_odm, pu1Byte pDesc, u1Byt
 	}
 }
 
-void ODM_AntselStatistics_88E(struct odm_dm_struct *dm_odm, u1Byte antsel_tr_mux, u4Byte MacId, u1Byte RxPWDBAll)
+void ODM_AntselStatistics_88E(struct odm_dm_struct *dm_odm, u8 antsel_tr_mux, u32 MacId, u8 RxPWDBAll)
 {
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
 	if (dm_odm->AntDivType == CG_TRX_HW_ANTDIV) {
@@ -284,9 +284,9 @@ void ODM_AntselStatistics_88E(struct odm_dm_struct *dm_odm, u1Byte antsel_tr_mux
 
 static void odm_HWAntDiv(struct odm_dm_struct *dm_odm)
 {
-	u4Byte	i, MinRSSI = 0xFF, AntDivMaxRSSI = 0, MaxRSSI = 0, LocalMinRSSI, LocalMaxRSSI;
-	u4Byte	Main_RSSI, Aux_RSSI;
-	u1Byte	RxIdleAnt = 0, TargetAnt = 7;
+	u32	i, MinRSSI = 0xFF, AntDivMaxRSSI = 0, MaxRSSI = 0, LocalMinRSSI, LocalMaxRSSI;
+	u32	Main_RSSI, Aux_RSSI;
+	u8	RxIdleAnt = 0, TargetAnt = 7;
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
 	struct rtw_dig *pDM_DigTable = &dm_odm->DM_DigTable;
 	bool	bMatchBSSID;

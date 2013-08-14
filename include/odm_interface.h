@@ -83,37 +83,37 @@ typedef void (*RT_WORKITEM_CALL_BACK)(void * pContext);
 /*  =========== EXtern Function Prototype */
 /*  */
 
-u1Byte ODM_Read1Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr);
+u8 ODM_Read1Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr);
 
-u2Byte ODM_Read2Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr);
+u16 ODM_Read2Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr);
 
-u4Byte ODM_Read4Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr);
+u32 ODM_Read4Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr);
 
-void ODM_Write1Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u1Byte Data);
+void ODM_Write1Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u8 Data);
 
-void ODM_Write2Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u2Byte Data);
+void ODM_Write2Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u16 Data);
 
-void ODM_Write4Byte(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte Data);
+void ODM_Write4Byte(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 Data);
 
-void ODM_SetMACReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
+void ODM_SetMACReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32 Data);
 
-u4Byte ODM_GetMACReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask);
+u32 ODM_GetMACReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask);
 
-void ODM_SetBBReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
+void ODM_SetBBReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32 Data);
 
-u4Byte ODM_GetBBReg(struct odm_dm_struct *pDM_Odm, u4Byte RegAddr, u4Byte BitMask);
+u32 ODM_GetBBReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask);
 
-void ODM_SetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH eRFPath, u4Byte RegAddr, u4Byte BitMask, u4Byte Data);
+void ODM_SetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
-u4Byte ODM_GetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH eRFPath, u4Byte RegAddr, u4Byte BitMask);
+u32 ODM_GetRFReg(struct odm_dm_struct *pDM_Odm, enum ODM_RF_RADIO_PATH eRFPath, u32 RegAddr, u32 BitMask);
 
 /*  */
 /*  Memory Relative Function. */
 /*  */
-void ODM_AllocateMemory(struct odm_dm_struct *pDM_Odm, void **pPtr, u4Byte length);
-void ODM_FreeMemory(struct odm_dm_struct *pDM_Odm, void *pPtr, u4Byte length);
+void ODM_AllocateMemory(struct odm_dm_struct *pDM_Odm, void **pPtr, u32 length);
+void ODM_FreeMemory(struct odm_dm_struct *pDM_Odm, void *pPtr, u32 length);
 
-s4Byte ODM_CompareMemory(struct odm_dm_struct *pDM_Odm, void *pBuf1, void *pBuf2, u4Byte length);
+s32 ODM_CompareMemory(struct odm_dm_struct *pDM_Odm, void *pBuf1, void *pBuf2, u32 length);
 
 /*  */
 /*  ODM MISC-spin lock relative API. */
@@ -142,17 +142,17 @@ void ODM_IsWorkItemScheduled(void *pRtWorkItem);
 /*  */
 /*  ODM Timer relative API. */
 /*  */
-void ODM_StallExecution(u4Byte usDelay);
+void ODM_StallExecution(u32 usDelay);
 
-void ODM_delay_ms(u4Byte ms); 
+void ODM_delay_ms(u32 ms); 
 
-void ODM_delay_us(u4Byte us);
+void ODM_delay_us(u32 us);
 
-void ODM_sleep_ms(u4Byte ms);
+void ODM_sleep_ms(u32 ms);
 
-void ODM_sleep_us(u4Byte us);
+void ODM_sleep_us(u32 us);
 
-void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer, u4Byte msDelay);
+void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer, u32 msDelay);
 
 void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer, void *CallBackFunc, void *pContext, const char *szID);
 
@@ -163,6 +163,6 @@ void ODM_ReleaseTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer);
 /*  */
 /*  ODM FW relative API. */
 /*  */
-u4Byte ODM_FillH2CCmd(pu1Byte pH2CBuffer, u4Byte H2CBufferLen, u4Byte CmdNum, pu4Byte pElementID, pu4Byte pCmdLen, pu1Byte *pCmbBuffer, pu1Byte CmdStartSeq);
+u32 ODM_FillH2CCmd(u8 *pH2CBuffer, u32 H2CBufferLen, u32 CmdNum, u32 *pElementID, u32 *pCmdLen, u8 **pCmbBuffer, u8 *CmdStartSeq);
 
 #endif	/*  __ODM_INTERFACE_H__ */
