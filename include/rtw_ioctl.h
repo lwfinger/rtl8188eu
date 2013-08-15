@@ -64,9 +64,9 @@
 #define OID_MP_SEG4		0xFF011100
 
 #define DEBUG_OID(dbg, str)						\
-       if ((!dbg)) {							\
-	   RT_TRACE(_module_rtl871x_ioctl_c_, _drv_info_,		\
-		    ("%s(%d): %s", __func__, __LINE__, str));		\
+	if ((!dbg)) {							\
+		RT_TRACE(_module_rtl871x_ioctl_c_, _drv_info_,		\
+			 ("%s(%d): %s", __func__, __line__, str));	\
 	}
 
 enum oid_type {
@@ -83,8 +83,7 @@ struct oid_funs_node {
 	int set_counter; /* count the number of set hits for this segment */
 };
 
-struct oid_par_priv
-{
+struct oid_par_priv {
 	void		*adapter_context;
 	NDIS_OID	oid;
 	void		*information_buf;
@@ -96,13 +95,13 @@ struct oid_par_priv
 };
 
 struct oid_obj_priv {
-	unsigned char	dbg; /*  0: without OID debug message  1: with OID debug message */
+	unsigned char	dbg; /*  0: without OID debug message
+			      *  1: with OID debug message */
 	int (*oidfuns)(struct oid_par_priv *poid_par_priv);
 };
 
 #if defined(_RTW_MP_IOCTL_C_)
-static int oid_null_function(struct oid_par_priv* poid_par_priv)
-{
+static int oid_null_function(struct oid_par_priv *poid_par_priv) {
 	_func_enter_;
 	_func_exit_;
 	return NDIS_STATUS_SUCCESS;

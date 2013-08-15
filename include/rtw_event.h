@@ -23,11 +23,7 @@
 #include <osdep_service.h>
 
 #include <wlan_bssdef.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
-#include <asm/semaphore.h>
-#else
 #include <linux/semaphore.h>
-#endif
 #include <linux/sem.h>
 
 /*
@@ -66,24 +62,21 @@ struct joinbss_event {
 /*
 Used to report a given STA has joinned the created BSS.
 It is used in AP/Ad-HoC(M) mode.
-
-
 */
+
 struct stassoc_event {
 	unsigned char macaddr[6];
 	unsigned char rsvd[2];
 	int    cam_id;
-
 };
 
 struct stadel_event {
- unsigned char macaddr[6];
- unsigned char rsvd[2]; /* for reason */
- int mac_id;
+	unsigned char macaddr[6];
+	unsigned char rsvd[2]; /* for reason */
+	int mac_id;
 };
 
-struct addba_event
-{
+struct addba_event {
 	unsigned int tid;
 };
 
@@ -96,17 +89,17 @@ struct fwevent {
 
 #define C2HEVENT_SZ			32
 
-struct event_node{
+struct event_node {
 	unsigned char *node;
 	unsigned char evt_code;
 	unsigned short evt_sz;
-	volatile int	*caller_ff_tail;
+	int	*caller_ff_tail;
 	int	caller_ff_sz;
 };
 
 struct c2hevent_queue {
-	volatile int	head;
-	volatile int	tail;
+	int	head;
+	int	tail;
 	struct	event_node	nodes[C2HEVENT_SZ];
 	unsigned char	seq;
 };
@@ -114,10 +107,9 @@ struct c2hevent_queue {
 #define NETWORK_QUEUE_SZ	4
 
 struct network_queue {
-	volatile int	head;
-	volatile int	tail;
+	int	head;
+	int	tail;
 	struct wlan_bssid_ex networks[NETWORK_QUEUE_SZ];
 };
-
 
 #endif /*  _WLANEVENT_H_ */
