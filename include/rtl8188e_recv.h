@@ -56,14 +56,14 @@ enum rx_packet_type {
 };
 
 #define INTERRUPT_MSG_FORMAT_LEN 60
-void rtl8188eu_init_recvbuf(struct adapter *padapter, struct recv_buf *precvbuf);
-s32 rtl8188eu_init_recv_priv(struct adapter * padapter);
+void rtl8188eu_init_recvbuf(struct adapter *padapter, struct recv_buf *buf);
+s32 rtl8188eu_init_recv_priv(struct adapter *padapter);
 void rtl8188eu_free_recv_priv(struct adapter * padapter);
 void rtl8188eu_recv_hdl(struct adapter * padapter, struct recv_buf *precvbuf);
 void rtl8188eu_recv_tasklet(void *priv);
-void rtl8188e_query_rx_phy_status(union recv_frame *prframe, struct phy_stat *pphy_stat);
+void rtl8188e_query_rx_phy_status(union recv_frame *fr, struct phy_stat *phy);
 void rtl8188e_process_phy_info(struct adapter * padapter, void *prframe);
-void update_recvframe_phyinfo_88e(union recv_frame	*precvframe,struct phy_stat *pphy_status);
-void update_recvframe_attrib_88e(	union recv_frame *precvframe,	struct recv_stat *prxstat);
+void update_recvframe_phyinfo_88e(union recv_frame *fra, struct phy_stat *phy);
+void update_recvframe_attrib_88e(union recv_frame *fra, struct recv_stat *stat);
 
 #endif

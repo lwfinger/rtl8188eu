@@ -284,6 +284,7 @@ struct ieee80211_mgmt {
 } __packed;
 
 /* mgmt header + 1 byte category code */
-#define IEEE80211_MIN_ACTION_SIZE FIELD_OFFSET(struct ieee80211_mgmt, u.action.u)
+#define IEEE80211_MIN_ACTION_SIZE				\
+	 FIELD_OFFSET(struct ieee80211_mgmt, u.action.u)
 
 #endif

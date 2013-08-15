@@ -44,7 +44,7 @@
 #define ETH_P_ARP	0x0806		/* Address Resolution packet	*/
 #define	ETH_P_BPQ	0x08FF		/* G8BPQ AX.25 Ethernet Packet  */
 #define ETH_P_IEEEPUP	0x0a00		/* Xerox IEEE802.3 PUP packet   */
-#define ETH_P_IEEEPUPAT	0x0a01		/* Xerox IEEE802.3 PUP 		*/
+#define ETH_P_IEEEPUPAT	0x0a01		/* Xerox IEEE802.3 PUP		*/
 #define ETH_P_DEC       0x6000          /* DEC Assigned proto           */
 #define ETH_P_DNA_DL    0x6001          /* DEC DNA Dump/Load            */
 #define ETH_P_DNA_RC    0x6002          /* DEC DNA Remote Console       */
@@ -90,8 +90,7 @@
  *	This is an Ethernet frame header.
  */
 
-struct ethhdr
-{
+struct ethhdr {
 	unsigned char	h_dest[ETH_ALEN];	/* destination eth addr	*/
 	unsigned char	h_source[ETH_ALEN];	/* source ether addr	*/
 	unsigned short	h_proto;		/* packet type ID field	*/
@@ -103,9 +102,9 @@ struct _vlan {
 };
 
 #define get_vlan_id(pvlan)				\
-	((ntohs((unsigned short )pvlan->h_vlan_TCI)) & 0xfff)
+	((ntohs((unsigned short)pvlan->h_vlan_TCI)) & 0xfff)
 #define get_vlan_priority(pvlan)			\
-	((ntohs((unsigned short )pvlan->h_vlan_TCI))>>13)
+	((ntohs((unsigned short)pvlan->h_vlan_TCI))>>13)
 #define get_vlan_encap_proto(pvlan)			\
 	 (ntohs((unsigned short)pvlan->h_vlan_encapsulated_proto))
 

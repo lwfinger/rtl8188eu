@@ -61,9 +61,6 @@ struct rtw_wdev_priv {
 
 #define wdev_to_priv(w) ((struct rtw_wdev_priv *)(wdev_priv(w)))
 
-#define wiphy_tostruct adapter(x)			\
-((struct adapter *)(((struct rtw_wdev_priv *)wiphy_priv(x))->padapter))
-
 #define wiphy_to_wdev(x)				\
 ((struct wireless_dev *)(((struct rtw_wdev_priv *)wiphy_priv(x))->rtw_wdev))
 
@@ -102,8 +99,8 @@ int rtw_cfg80211_set_mgnt_wpsp2pie(struct net_device *net,
 
 bool rtw_cfg80211_pwr_mgmt(struct adapter *adapter);
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))  &&	\
-    !defined(COMPAT_KERNEL_RELEASE)
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 4, 0))  &&	\
+	!defined(COMPAT_KERNEL_RELEASE)
 #define rtw_cfg80211_rx_mgmt(dev, freq, sig_dbm, buf, len, gfp)		\
 	cfg80211_rx_mgmt(dev, freq, buf, len, gfp)
 #define rtw_cfg80211_send_rx_assoc(dev, bss, buf, len)			\

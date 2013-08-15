@@ -26,17 +26,20 @@
 #ifdef CONFIG_AP_MODE
 
 /* external function */
-extern void rtw_indicate_sta_assoc_event(struct adapter *padapter, struct sta_info *psta);
-extern void rtw_indicate_sta_disassoc_event(struct adapter *padapter, struct sta_info *psta);
-
-
+void rtw_indicate_sta_assoc_event(struct adapter *padapter,
+				  struct sta_info *psta);
+void rtw_indicate_sta_disassoc_event(struct adapter *padapter,
+				     struct sta_info *psta);
 void init_mlme_ap_info(struct adapter *padapter);
 void free_mlme_ap_info(struct adapter *padapter);
-/* void update_BCNTIM(struct adapter *padapter); */
-void rtw_add_bcn_ie(struct adapter *padapter, struct wlan_bssid_ex *pnetwork, u8 index, u8 *data, u8 len);
-void rtw_remove_bcn_ie(struct adapter *padapter, struct wlan_bssid_ex *pnetwork, u8 index);
-void update_beacon(struct adapter *padapter, u8 ie_id, u8 *oui, u8 tx);
-void add_RATid(struct adapter *padapter, struct sta_info *psta, u8 rssi_level);
+void rtw_add_bcn_ie(struct adapter *padapter, struct wlan_bssid_ex *pnetwork,
+		    u8 index, u8 *data, u8 len);
+void rtw_remove_bcn_ie(struct adapter *padapter,
+		       struct wlan_bssid_ex *pnetwork, u8 index);
+void update_beacon(struct adapter *padapter, u8 ie_id,
+		   u8 *oui, u8 tx);
+void add_RATid(struct adapter *padapter, struct sta_info *psta,
+	       u8 rssi_level);
 void expire_timeout_chk(struct adapter *padapter);
 void update_sta_info_apmode(struct adapter *padapter, struct sta_info *psta);
 int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len);
@@ -50,9 +53,10 @@ void bss_cap_update_on_sta_join(struct adapter *padapter, struct sta_info *psta)
 u8 bss_cap_update_on_sta_leave(struct adapter *padapter, struct sta_info *psta);
 void sta_info_update(struct adapter *padapter, struct sta_info *psta);
 void ap_sta_info_defer_update(struct adapter *padapter, struct sta_info *psta);
-u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta, bool active, u16 reason);
+u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
+	       bool active, u16 reason);
 int rtw_sta_flush(struct adapter *padapter);
-int rtw_ap_inform_ch_switch (struct adapter *padapter, u8 new_ch, u8 ch_offset);
+int rtw_ap_inform_ch_switch(struct adapter *padapter, u8 new_ch, u8 ch_offset);
 void start_ap_mode(struct adapter *padapter);
 void stop_ap_mode(struct adapter *padapter);
 #endif

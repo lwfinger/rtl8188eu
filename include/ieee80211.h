@@ -162,21 +162,27 @@ enum ratr_table_mode {
 enum NETWORK_TYPE {
 	WIRELESS_INVALID = 0,
 	/* Sub-Element */
-	WIRELESS_11B = BIT(0), /*  tx: cck only, rx: cck only, hw: cck */
-	WIRELESS_11G = BIT(1), /*  tx: ofdm only, rx: ofdm & cck, hw: cck & ofdm */
-	WIRELESS_11A = BIT(2), /*  tx: ofdm only, rx: ofdm only, hw: ofdm only */
-	WIRELESS_11_24N = BIT(3), /*  tx: MCS only, rx: MCS & cck, hw: MCS & cck */
-	WIRELESS_11_5N = BIT(4), /*  tx: MCS only, rx: MCS & ofdm, hw: ofdm only */
-	/* WIRELESS_AUTO		= BIT(5), */
+	WIRELESS_11B = BIT(0), /* tx:cck only, rx:cck only, hw: cck */
+	WIRELESS_11G = BIT(1), /* tx:ofdm only, rx:ofdm & cck, hw:cck & ofdm*/
+	WIRELESS_11A = BIT(2), /* tx:ofdm only, rx: ofdm only, hw:ofdm only */
+	WIRELESS_11_24N = BIT(3), /* tx:MCS only, rx:MCS & cck, hw:MCS & cck */
+	WIRELESS_11_5N = BIT(4), /* tx:MCS only, rx:MCS & ofdm, hw:ofdm only */
 	WIRELESS_AC		= BIT(6),
 
 	/* Combination */
-	WIRELESS_11BG = (WIRELESS_11B|WIRELESS_11G), /*  tx: cck & ofdm, rx: cck & ofdm & MCS, hw: cck & ofdm */
-	WIRELESS_11G_24N = (WIRELESS_11G|WIRELESS_11_24N), /*  tx: ofdm & MCS, rx: ofdm & cck & MCS, hw: cck & ofdm */
-	WIRELESS_11A_5N = (WIRELESS_11A|WIRELESS_11_5N), /*  tx: ofdm & MCS, rx: ofdm & MCS, hw: ofdm only */
-	WIRELESS_11BG_24N = (WIRELESS_11B|WIRELESS_11G|WIRELESS_11_24N), /*  tx: ofdm & cck & MCS, rx: ofdm & cck & MCS, hw: ofdm & cck */
-	WIRELESS_11AGN = (WIRELESS_11A|WIRELESS_11G|WIRELESS_11_24N|WIRELESS_11_5N), /*  tx: ofdm & MCS, rx: ofdm & MCS, hw: ofdm only */
-	WIRELESS_11ABGN = (WIRELESS_11A|WIRELESS_11B|WIRELESS_11G|WIRELESS_11_24N|WIRELESS_11_5N),
+	/*  tx: cck & ofdm, rx: cck & ofdm & MCS, hw: cck & ofdm */
+	WIRELESS_11BG = (WIRELESS_11B | WIRELESS_11G),
+	/*  tx: ofdm & MCS, rx: ofdm & cck & MCS, hw: cck & ofdm */
+	WIRELESS_11G_24N = (WIRELESS_11G | WIRELESS_11_24N),
+	/*  tx: ofdm & MCS, rx: ofdm & MCS, hw: ofdm only */
+	WIRELESS_11A_5N = (WIRELESS_11A | WIRELESS_11_5N),
+	/*  tx: ofdm & cck & MCS, rx: ofdm & cck & MCS, hw: ofdm & cck */
+	WIRELESS_11BG_24N = (WIRELESS_11B | WIRELESS_11G | WIRELESS_11_24N),
+	/*  tx: ofdm & MCS, rx: ofdm & MCS, hw: ofdm only */
+	WIRELESS_11AGN = (WIRELESS_11A | WIRELESS_11G | WIRELESS_11_24N |
+			  WIRELESS_11_5N),
+	WIRELESS_11ABGN = (WIRELESS_11A | WIRELESS_11B | WIRELESS_11G |
+			   WIRELESS_11_24N | WIRELESS_11_5N),
 };
 
 #define SUPPORTED_24G_NETTYPE_MSK				\
@@ -257,7 +263,7 @@ struct ieee_param_ex {
 	u8 data[0];
 };
 
-struct sta_data{
+struct sta_data {
 	u16 aid;
 	u16 capability;
 	int flags;
@@ -373,21 +379,21 @@ enum eap_type {
 
 /* Frame control field constants */
 #define RTW_IEEE80211_FCTL_VERS		0x0003
-#define RTW_IEEE80211_FCTL_FTYPE		0x000c
-#define RTW_IEEE80211_FCTL_STYPE		0x00f0
+#define RTW_IEEE80211_FCTL_FTYPE	0x000c
+#define RTW_IEEE80211_FCTL_STYPE	0x00f0
 #define RTW_IEEE80211_FCTL_TODS		0x0100
 #define RTW_IEEE80211_FCTL_FROMDS	0x0200
 #define RTW_IEEE80211_FCTL_MOREFRAGS	0x0400
-#define RTW_IEEE80211_FCTL_RETRY		0x0800
+#define RTW_IEEE80211_FCTL_RETRY	0x0800
 #define RTW_IEEE80211_FCTL_PM		0x1000
 #define RTW_IEEE80211_FCTL_MOREDATA	0x2000
 #define RTW_IEEE80211_FCTL_PROTECTED	0x4000
-#define RTW_IEEE80211_FCTL_ORDER		0x8000
+#define RTW_IEEE80211_FCTL_ORDER	0x8000
 #define RTW_IEEE80211_FCTL_CTL_EXT	0x0f00
 
-#define RTW_IEEE80211_FTYPE_MGMT		0x0000
+#define RTW_IEEE80211_FTYPE_MGMT	0x0000
 #define RTW_IEEE80211_FTYPE_CTL		0x0004
-#define RTW_IEEE80211_FTYPE_DATA		0x0008
+#define RTW_IEEE80211_FTYPE_DATA	0x0008
 #define RTW_IEEE80211_FTYPE_EXT		0x000c
 
 /* management */
@@ -397,36 +403,36 @@ enum eap_type {
 #define RTW_IEEE80211_STYPE_REASSOC_RESP	0x0030
 #define RTW_IEEE80211_STYPE_PROBE_REQ	0x0040
 #define RTW_IEEE80211_STYPE_PROBE_RESP	0x0050
-#define RTW_IEEE80211_STYPE_BEACON		0x0080
-#define RTW_IEEE80211_STYPE_ATIM		0x0090
+#define RTW_IEEE80211_STYPE_BEACON	0x0080
+#define RTW_IEEE80211_STYPE_ATIM	0x0090
 #define RTW_IEEE80211_STYPE_DISASSOC	0x00A0
-#define RTW_IEEE80211_STYPE_AUTH		0x00B0
-#define RTW_IEEE80211_STYPE_DEAUTH		0x00C0
-#define RTW_IEEE80211_STYPE_ACTION		0x00D0
+#define RTW_IEEE80211_STYPE_AUTH	0x00B0
+#define RTW_IEEE80211_STYPE_DEAUTH	0x00C0
+#define RTW_IEEE80211_STYPE_ACTION	0x00D0
 
 /* control */
-#define RTW_IEEE80211_STYPE_CTL_EXT		0x0060
-#define RTW_IEEE80211_STYPE_BACK_REQ		0x0080
-#define RTW_IEEE80211_STYPE_BACK		0x0090
-#define RTW_IEEE80211_STYPE_PSPOLL		0x00A0
+#define RTW_IEEE80211_STYPE_CTL_EXT	0x0060
+#define RTW_IEEE80211_STYPE_BACK_REQ	0x0080
+#define RTW_IEEE80211_STYPE_BACK	0x0090
+#define RTW_IEEE80211_STYPE_PSPOLL	0x00A0
 #define RTW_IEEE80211_STYPE_RTS		0x00B0
 #define RTW_IEEE80211_STYPE_CTS		0x00C0
 #define RTW_IEEE80211_STYPE_ACK		0x00D0
-#define RTW_IEEE80211_STYPE_CFEND		0x00E0
-#define RTW_IEEE80211_STYPE_CFENDACK		0x00F0
+#define RTW_IEEE80211_STYPE_CFEND	0x00E0
+#define RTW_IEEE80211_STYPE_CFENDACK	0x00F0
 
 /* data */
-#define RTW_IEEE80211_STYPE_DATA		0x0000
+#define RTW_IEEE80211_STYPE_DATA	0x0000
 #define RTW_IEEE80211_STYPE_DATA_CFACK	0x0010
 #define RTW_IEEE80211_STYPE_DATA_CFPOLL	0x0020
 #define RTW_IEEE80211_STYPE_DATA_CFACKPOLL	0x0030
 #define RTW_IEEE80211_STYPE_NULLFUNC	0x0040
-#define RTW_IEEE80211_STYPE_CFACK		0x0050
-#define RTW_IEEE80211_STYPE_CFPOLL		0x0060
+#define RTW_IEEE80211_STYPE_CFACK	0x0050
+#define RTW_IEEE80211_STYPE_CFPOLL	0x0060
 #define RTW_IEEE80211_STYPE_CFACKPOLL	0x0070
-#define RTW_IEEE80211_STYPE_QOS_DATA		0x0080
-#define RTW_IEEE80211_STYPE_QOS_DATA_CFACK		0x0090
-#define RTW_IEEE80211_STYPE_QOS_DATA_CFPOLL		0x00A0
+#define RTW_IEEE80211_STYPE_QOS_DATA	0x0080
+#define RTW_IEEE80211_STYPE_QOS_DATA_CFACK	0x0090
+#define RTW_IEEE80211_STYPE_QOS_DATA_CFPOLL	0x00A0
 #define RTW_IEEE80211_STYPE_QOS_DATA_CFACKPOLL	0x00B0
 #define RTW_IEEE80211_STYPE_QOS_NULLFUNC	0x00C0
 #define RTW_IEEE80211_STYPE_QOS_CFACK		0x00D0
@@ -445,7 +451,7 @@ enum eap_type {
 /* QoS, QOS */
 #define NORMAL_ACK			0
 #define NO_ACK				1
-#define NON_EXPLICIT_ACK	2
+#define NON_EXPLICIT_ACK		2
 #define BLOCK_ACK			3
 
 #ifndef ETH_P_PAE
@@ -618,22 +624,25 @@ struct ieee80211_snap_hdr {
 #define IEEE80211_CCK_RATES_MASK		0x0000000F
 #define IEEE80211_CCK_BASIC_RATES_MASK	(IEEE80211_CCK_RATE_1MB_MASK | \
 	IEEE80211_CCK_RATE_2MB_MASK)
-#define IEEE80211_CCK_DEFAULT_RATES_MASK	(IEEE80211_CCK_BASIC_RATES_MASK | \
-	IEEE80211_CCK_RATE_5MB_MASK | \
+#define IEEE80211_CCK_DEFAULT_RATES_MASK				\
+	(IEEE80211_CCK_BASIC_RATES_MASK |				\
+	IEEE80211_CCK_RATE_5MB_MASK |					\
 	IEEE80211_CCK_RATE_11MB_MASK)
 
 #define IEEE80211_OFDM_RATES_MASK		0x00000FF0
 #define IEEE80211_OFDM_BASIC_RATES_MASK	(IEEE80211_OFDM_RATE_6MB_MASK | \
-	IEEE80211_OFDM_RATE_12MB_MASK | \
+	IEEE80211_OFDM_RATE_12MB_MASK |					\
 	IEEE80211_OFDM_RATE_24MB_MASK)
-#define IEEE80211_OFDM_DEFAULT_RATES_MASK	(IEEE80211_OFDM_BASIC_RATES_MASK | \
-	IEEE80211_OFDM_RATE_9MB_MASK  | \
-	IEEE80211_OFDM_RATE_18MB_MASK | \
-	IEEE80211_OFDM_RATE_36MB_MASK | \
-	IEEE80211_OFDM_RATE_48MB_MASK | \
+#define IEEE80211_OFDM_DEFAULT_RATES_MASK				\
+	(IEEE80211_OFDM_BASIC_RATES_MASK |				\
+	IEEE80211_OFDM_RATE_9MB_MASK  |					\
+	IEEE80211_OFDM_RATE_18MB_MASK |					\
+	IEEE80211_OFDM_RATE_36MB_MASK |					\
+	IEEE80211_OFDM_RATE_48MB_MASK |					\
 	IEEE80211_OFDM_RATE_54MB_MASK)
-#define IEEE80211_DEFAULT_RATES_MASK (IEEE80211_OFDM_DEFAULT_RATES_MASK | \
-				IEEE80211_CCK_DEFAULT_RATES_MASK)
+#define IEEE80211_DEFAULT_RATES_MASK					\
+	(IEEE80211_OFDM_DEFAULT_RATES_MASK |				\
+	 IEEE80211_CCK_DEFAULT_RATES_MASK)
 
 #define IEEE80211_NUM_OFDM_RATES	8
 #define IEEE80211_NUM_CCK_RATES		4
@@ -952,7 +961,7 @@ static inline int is_multicast_mac_addr(const u8 *addr)
 
 static inline int is_broadcast_mac_addr(const u8 *addr)
 {
-	return (addr[0] == 0xff) && (addr[1] == 0xff) && (addr[2] == 0xff) && \
+	return (addr[0] == 0xff) && (addr[1] == 0xff) && (addr[2] == 0xff) &&
 	       (addr[3] == 0xff) && (addr[4] == 0xff) && (addr[5] == 0xff);
 }
 
@@ -1001,7 +1010,7 @@ enum rtw_ieee80211_spectrum_mgmt_actioncode {
 	RTW_WLAN_ACTION_SPCT_EXT_CHL_SWITCH = 5,
 };
 
-enum _PUBLIC_ACTION{
+enum _PUBLIC_ACTION {
 	ACT_PUBLIC_BSSCOEXIST = 0, /*  20/40 BSS Coexistence */
 	ACT_PUBLIC_DSE_ENABLE = 1,
 	ACT_PUBLIC_DSE_DEENABLE = 2,
@@ -1031,14 +1040,14 @@ enum rtw_ieee80211_back_actioncode {
 /* HT features action code */
 enum rtw_ieee80211_ht_actioncode {
 	RTW_WLAN_ACTION_NOTIFY_CH_WIDTH = 0,
-       RTW_WLAN_ACTION_SM_PS = 1,
-       RTW_WLAN_ACTION_PSPM = 2,
-       RTW_WLAN_ACTION_PCO_PHASE = 3,
-       RTW_WLAN_ACTION_MIMO_CSI_MX = 4,
-       RTW_WLAN_ACTION_MIMO_NONCP_BF = 5,
-       RTW_WLAN_ACTION_MIMP_CP_BF = 6,
-       RTW_WLAN_ACTION_ASEL_INDICATES_FB = 7,
-       RTW_WLAN_ACTION_HI_INFO_EXCHG = 8,
+	RTW_WLAN_ACTION_SM_PS = 1,
+	RTW_WLAN_ACTION_PSPM = 2,
+	RTW_WLAN_ACTION_PCO_PHASE = 3,
+	RTW_WLAN_ACTION_MIMO_CSI_MX = 4,
+	RTW_WLAN_ACTION_MIMO_NONCP_BF = 5,
+	RTW_WLAN_ACTION_MIMP_CP_BF = 6,
+	RTW_WLAN_ACTION_ASEL_INDICATES_FB = 7,
+	RTW_WLAN_ACTION_HI_INFO_EXCHG = 8,
 };
 
 /* BACK (block-ack) parties */
@@ -1192,7 +1201,7 @@ u8 *rtw_set_ie_secondary_ch_offset(u8 *buf, u32 *buf_len,
 u8 *rtw_set_ie_mesh_ch_switch_parm(u8 *buf, u32 *buf_len, u8 ttl,
 				   u8 flags, u16 reason, u16 precedence);
 
-u8 *rtw_get_ie(u8*pbuf, int index, int *len, int limit);
+u8 *rtw_get_ie(u8 *pbuf, int index, int *len, int limit);
 u8 *rtw_get_ie_ex(u8 *in_ie, uint in_len, u8 eid, u8 *oui,
 		  u8 oui_len, u8 *ie, uint *ielen);
 int rtw_ies_remove_ie(u8 *ies, uint *ies_len, uint offset,
@@ -1205,9 +1214,9 @@ unsigned char *rtw_get_wpa2_ie(unsigned char *pie, int *rsn_ie_len, int limit);
 int rtw_get_wpa_cipher_suite(u8 *s);
 int rtw_get_wpa2_cipher_suite(u8 *s);
 int rtw_get_wapi_ie(u8 *in_ie, uint in_len, u8 *wapi_ie, u16 *wapi_len);
-int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher,
+int rtw_parse_wpa_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher,
 		     int *pairwise_cipher, int *is_8021x);
-int rtw_parse_wpa2_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher,
+int rtw_parse_wpa2_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher,
 		      int *pairwise_cipher, int *is_8021x);
 
 int rtw_get_sec_ie(u8 *in_ie, uint in_len, u8 *rsn_ie, u16 *rsn_len,
@@ -1227,8 +1236,8 @@ u8 *rtw_get_wps_attr_content(u8 *wps_ie, uint wps_ielen, u16 target_attr_id,
  * @buf_len:
  */
 #define for_each_ie(ie, buf, buf_len) \
-	for (ie = (void*)buf; (((u8*)ie) - ((u8*)buf) + 1) < buf_len;	\
-		ie = (void*)(((u8*)ie) + *(((u8*)ie)+1) + 2))
+	for (ie = (void *)buf; (((u8 *)ie) - ((u8 *)buf) + 1) < buf_len;	\
+		ie = (void *)(((u8 *)ie) + *(((u8 *)ie)+1) + 2))
 
 void dump_ies(u8 *buf, u32 buf_len);
 void dump_wps_ie(u8 *ie, u32 ie_len);
@@ -1267,7 +1276,7 @@ void rtw_macaddr_cfg(u8 *mac_addr);
 u16 rtw_mcs_rate(u8 rf_type, u8 bw_40MHz, u8 short_GI_20, u8 short_GI_40,
 		 unsigned char *MCS_rate);
 
-int rtw_action_frame_parse(const u8 *frame, u32 frame_len, u8* category,
+int rtw_action_frame_parse(const u8 *frame, u32 frame_len, u8 *category,
 			   u8 *action);
 const char *action_public_str(u8 action);
 

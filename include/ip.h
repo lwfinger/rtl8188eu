@@ -107,7 +107,7 @@ struct iphdr {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	__u8	ihl:4,
 		version:4;
-#elif defined (__BIG_ENDIAN_BITFIELD)
+#elif defined(__BIG_ENDIAN_BITFIELD)
 	__u8	version:4,
 		ihl:4;
 #endif

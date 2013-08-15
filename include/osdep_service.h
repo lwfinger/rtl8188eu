@@ -34,21 +34,17 @@
 #include <linux/init.h>
 #include <linux/slab.h>
 #include <linux/module.h>
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,5))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 5))
 #include <linux/kref.h>
 #endif
 #include <linux/netdevice.h>
 #include <linux/skbuff.h>
 #include <linux/circ_buf.h>
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #include <asm/byteorder.h>
-#include <asm/atomic.h>
-#include <asm/io.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
-#include <asm/semaphore.h>
-#else
+#include <linux/atomic.h>
+#include <linux/io.h>
 #include <linux/semaphore.h>
-#endif
 #include <linux/sem.h>
 #include <linux/sched.h>
 #include <linux/etherdevice.h>
@@ -63,24 +59,23 @@
 #include <linux/kthread.h>
 
 #include <linux/usb.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,21))
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 21))
 #include <linux/usb_ch9.h>
 #else
 #include <linux/usb/ch9.h>
 #endif
+struct	__queue	{
+	struct	list_head	queue;
+	spinlock_t lock;
+};
 
-	struct	__queue	{
-		struct	list_head	queue;
-		spinlock_t lock;
-	};
+#define thread_exit() complete_and_exit(NULL, 0)
 
-	#define thread_exit() complete_and_exit(NULL, 0)
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24))
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
 	#define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
 #endif
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22))
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 22))
 /*  Porting from linux kernel, for compatible with old kernel. */
 static inline unsigned char *skb_tail_pointer(const struct sk_buff *skb)
 {
@@ -103,12 +98,12 @@ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
 }
 #endif
 
-__inline static struct list_head *get_next(struct list_head *list)
+static inline struct list_head *get_next(struct list_head *list)
 {
 	return list->next;
 }
 
-__inline static struct list_head *get_list_head(struct __queue *queue)
+static inline struct list_head *get_list_head(struct __queue *queue)
 {
 	return (&(queue->queue));
 }
@@ -118,37 +113,37 @@ __inline static struct list_head *get_list_head(struct __queue *queue)
         ((type *)((char *)(ptr)-(size_t)(&((type *)0)->member)))
 
 
-__inline static void _enter_critical(spinlock_t *plock, unsigned long *pirqL)
+static inline void _enter_critical(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
 }
 
-__inline static void _exit_critical(spinlock_t *plock, unsigned long *pirqL)
+static inline void _exit_critical(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static void _enter_critical_ex(spinlock_t *plock, unsigned long *pirqL)
+static inline void _enter_critical_ex(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
 }
 
-__inline static void _exit_critical_ex(spinlock_t *plock, unsigned long *pirqL)
+static inline void _exit_critical_ex(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static void _enter_critical_bh(spinlock_t *plock, unsigned long *pirqL)
+static inline void _enter_critical_bh(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_lock_bh(plock);
 }
 
-__inline static void _exit_critical_bh(spinlock_t *plock, unsigned long *pirqL)
+static inline void _exit_critical_bh(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_unlock_bh(plock);
 }
 
-__inline static int _enter_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
+static inline int _enter_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {
 	int ret = 0;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
@@ -160,7 +155,7 @@ __inline static int _enter_critical_mutex(struct mutex *pmutex, unsigned long *p
 }
 
 
-__inline static void _exit_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
+static inline void _exit_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 		mutex_unlock(pmutex);
@@ -169,24 +164,24 @@ __inline static void _exit_critical_mutex(struct mutex *pmutex, unsigned long *p
 #endif
 }
 
-__inline static void rtw_list_delete(struct list_head *plist)
+static inline void rtw_list_delete(struct list_head *plist)
 {
 	list_del_init(plist);
 }
 
-__inline static void _init_timer(struct timer_list *ptimer,struct  net_device *nic_hdl,void *pfunc,void* cntx)
+static inline void _init_timer(struct timer_list *ptimer,struct  net_device *nic_hdl,void *pfunc,void* cntx)
 {
 	ptimer->function = pfunc;
 	ptimer->data = (unsigned long)cntx;
 	init_timer(ptimer);
 }
 
-__inline static void _set_timer(struct timer_list *ptimer,u32 delay_time)
+static inline void _set_timer(struct timer_list *ptimer,u32 delay_time)
 {
 	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));
 }
 
-__inline static void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
+static inline void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
 {
 	del_timer_sync(ptimer);
 	*bcancelled=  true;/* true ==1; false==0 */
@@ -196,7 +191,7 @@ __inline static void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
 #define RTW_TIMER_HDL_NAME(name) rtw_##name##_timer_hdl
 #define RTW_DECLARE_TIMER_HDL(name) void RTW_TIMER_HDL_NAME(name)(RTW_TIMER_HDL_ARGS)
 
-__inline static void _init_workitem(struct work_struct *pwork, void *pfunc, void * cntx)
+static inline void _init_workitem(struct work_struct *pwork, void *pfunc, void * cntx)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20))
 	INIT_WORK(pwork, pfunc);
@@ -205,12 +200,12 @@ __inline static void _init_workitem(struct work_struct *pwork, void *pfunc, void
 #endif
 }
 
-__inline static void _set_workitem(struct work_struct *pwork)
+static inline void _set_workitem(struct work_struct *pwork)
 {
 	schedule_work(pwork);
 }
 
-__inline static void _cancel_workitem_sync(struct work_struct *pwork)
+static inline void _cancel_workitem_sync(struct work_struct *pwork)
 {
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
 	cancel_work_sync(pwork);
@@ -401,7 +396,7 @@ extern void rtw_udelay_os(int us);
 
 extern void rtw_yield_os(void);
 
-__inline static unsigned char _cancel_timer_ex(struct timer_list *ptimer)
+static inline unsigned char _cancel_timer_ex(struct timer_list *ptimer)
 {
 	return del_timer_sync(ptimer);
 }
@@ -414,13 +409,13 @@ static __inline void thread_enter(char *name)
 	allow_signal(SIGTERM);
 }
 
-__inline static void flush_signals_thread(void)
+static inline void flush_signals_thread(void)
 {
 	if (signal_pending (current))
 		flush_signals(current);
 }
 
-__inline static int res_to_status(int res)
+static inline int res_to_status(int res)
 {
 	return res;
 }
@@ -428,7 +423,7 @@ __inline static int res_to_status(int res)
 #define _RND(sz, r) ((((sz)+((r)-1))/(r))*(r))
 #define RND4(x)	(((x >> 2) + (((x & 3) == 0) ?  0: 1)) << 2)
 
-__inline static u32 _RND4(u32 sz)
+static inline u32 _RND4(u32 sz)
 {
 	u32	val;
 
@@ -436,7 +431,7 @@ __inline static u32 _RND4(u32 sz)
 	return val;
 }
 
-__inline static u32 _RND8(u32 sz)
+static inline u32 _RND8(u32 sz)
 {
 	u32	val;
 
@@ -444,7 +439,7 @@ __inline static u32 _RND8(u32 sz)
 	return val;
 }
 
-__inline static u32 _RND128(u32 sz)
+static inline u32 _RND128(u32 sz)
 {
 	u32	val;
 
@@ -452,7 +447,7 @@ __inline static u32 _RND128(u32 sz)
 	return val;
 }
 
-__inline static u32 _RND256(u32 sz)
+static inline u32 _RND256(u32 sz)
 {
 	u32	val;
 
@@ -460,7 +455,7 @@ __inline static u32 _RND256(u32 sz)
 	return val;
 }
 
-__inline static u32 _RND512(u32 sz)
+static inline u32 _RND512(u32 sz)
 {
 	u32	val;
 
@@ -468,7 +463,7 @@ __inline static u32 _RND512(u32 sz)
 	return val;
 }
 
-__inline static u32 bitshift(u32 bitmask)
+static inline u32 bitshift(u32 bitmask)
 {
 	u32 i;
 
@@ -477,47 +472,47 @@ __inline static u32 bitshift(u32 bitmask)
 	return i;
 }
 
-#define STRUCT_PACKED __attribute__ ((packed))
-
 /*  limitation of path length */
-	#define PATH_LENGTH_MAX PATH_MAX
+#define PATH_LENGTH_MAX PATH_MAX
 
-extern void rtw_suspend_lock_init(void);
-extern void rtw_suspend_lock_uninit(void);
-extern void rtw_lock_suspend(void);
-extern void rtw_unlock_suspend(void);
+void rtw_suspend_lock_init(void);
+void rtw_suspend_lock_uninit(void);
+void rtw_lock_suspend(void);
+void rtw_unlock_suspend(void);
 #ifdef CONFIG_WOWLAN
-extern void rtw_lock_suspend_timeout(long timeout);
+void rtw_lock_suspend_timeout(long timeout);
 #endif /* CONFIG_WOWLAN */
 
 /* Atomic integer operations */
 #define ATOMIC_T atomic_t
 
-extern void ATOMIC_SET(ATOMIC_T *v, int i);
-extern int ATOMIC_READ(ATOMIC_T *v);
-extern void ATOMIC_ADD(ATOMIC_T *v, int i);
-extern void ATOMIC_SUB(ATOMIC_T *v, int i);
-extern void ATOMIC_INC(ATOMIC_T *v);
-extern void ATOMIC_DEC(ATOMIC_T *v);
-extern int ATOMIC_ADD_RETURN(ATOMIC_T *v, int i);
-extern int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i);
-extern int ATOMIC_INC_RETURN(ATOMIC_T *v);
-extern int ATOMIC_DEC_RETURN(ATOMIC_T *v);
+void ATOMIC_SET(ATOMIC_T *v, int i);
+int ATOMIC_READ(ATOMIC_T *v);
+void ATOMIC_ADD(ATOMIC_T *v, int i);
+void ATOMIC_SUB(ATOMIC_T *v, int i);
+void ATOMIC_INC(ATOMIC_T *v);
+void ATOMIC_DEC(ATOMIC_T *v);
+int ATOMIC_ADD_RETURN(ATOMIC_T *v, int i);
+int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i);
+int ATOMIC_INC_RETURN(ATOMIC_T *v);
+int ATOMIC_DEC_RETURN(ATOMIC_T *v);
 
 /* File operation APIs, just for linux now */
-extern int rtw_is_file_readable(char *path);
-extern int rtw_retrive_from_file(char *path, u8 __user *buf, u32 sz);
-extern int rtw_store_to_file(char *path, u8 __user *buf, u32 sz);
+int rtw_is_file_readable(char *path);
+int rtw_retrive_from_file(char *path, u8 __user *buf, u32 sz);
+int rtw_store_to_file(char *path, u8 __user *buf, u32 sz);
 
 struct rtw_netdev_priv_indicator {
 	void *priv;
 	u32 sizeof_priv;
 };
-struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv);
-extern struct net_device * rtw_alloc_etherdev(int sizeof_priv);
+struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv,
+						    void *old_priv);
+struct net_device *rtw_alloc_etherdev(int sizeof_priv);
 
-#define rtw_netdev_priv(netdev) ( ((struct rtw_netdev_priv_indicator *)netdev_priv(netdev))->priv )
-extern void rtw_free_netdev(struct net_device * netdev);
+#define rtw_netdev_priv(netdev)					\
+	(((struct rtw_netdev_priv_indicator *)netdev_priv(netdev))->priv)
+void rtw_free_netdev(struct net_device *netdev);
 
 #define NDEV_FMT "%s"
 #define NDEV_ARG(ndev) ndev->name
@@ -534,8 +529,8 @@ extern void rtw_free_netdev(struct net_device * netdev);
 #define rtw_signal_process(pid, sig) kill_proc((pid), (sig), 1)
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)) */
 
-extern u64 rtw_modular64(u64 x, u64 y);
-extern u64 rtw_division64(u64 x, u64 y);
+u64 rtw_modular64(u64 x, u64 y);
+u64 rtw_division64(u64 x, u64 y);
 
 /* Macros for handling unaligned memory accesses */
 

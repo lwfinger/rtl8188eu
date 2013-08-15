@@ -33,41 +33,24 @@ void ODM_AntennaDiversityInit_88E(struct odm_dm_struct *pDM_Odm);
 
 void ODM_AntennaDiversity_88E(struct odm_dm_struct *pDM_Odm);
 
-void ODM_SetTxAntByTxInfo_88E(struct odm_dm_struct *pDM_Odm, u8 *pDesc, u8 macId);
+void ODM_SetTxAntByTxInfo_88E(struct odm_dm_struct *pDM_Odm, u8 *pDesc,
+			      u8 macId);
 
 void ODM_UpdateRxIdleAnt_88E(struct odm_dm_struct *pDM_Odm, u8 Ant);
 
-void ODM_AntselStatistics_88E(struct odm_dm_struct *pDM_Odm,
-			u8			antsel_tr_mux,
-			u32			MacId,
-			u8			RxPWDBAll
-);
+void ODM_AntselStatistics_88E(struct odm_dm_struct *pDM_Odm, u8	antsel_tr_mux,
+			      u32 MacId, u8 RxPWDBAll);
 
-void
-odm_FastAntTraining(
-			struct odm_dm_struct *pDM_Odm
-);
+void odm_FastAntTraining(struct odm_dm_struct *pDM_Odm);
 
-void
-odm_FastAntTrainingCallback(
-			struct odm_dm_struct *pDM_Odm
-);
+void odm_FastAntTrainingCallback(struct odm_dm_struct *pDM_Odm);
 
-void
-odm_FastAntTrainingWorkItemCallback(
-			struct odm_dm_struct *pDM_Odm
-);
+void odm_FastAntTrainingWorkItemCallback(struct odm_dm_struct *pDM_Odm);
 
-void
-odm_PrimaryCCA_Init(
-			struct odm_dm_struct *pDM_Odm);
+void odm_PrimaryCCA_Init(struct odm_dm_struct *pDM_Odm);
 
-bool
-ODM_DynamicPrimaryCCA_DupRTS(
-			struct odm_dm_struct *pDM_Odm);
+bool ODM_DynamicPrimaryCCA_DupRTS(struct odm_dm_struct *pDM_Odm);
 
-void
-odm_DynamicPrimaryCCA(
-			struct odm_dm_struct *pDM_Odm);
+void odm_DynamicPrimaryCCA(struct odm_dm_struct *pDM_Odm);
 
 #endif

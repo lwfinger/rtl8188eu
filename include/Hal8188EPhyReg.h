@@ -148,7 +148,7 @@
 #define	rCCK0_RxHP			0xa14
 
 /* Timing recovery & Channel estimation threshold */
-#define	rCCK0_DSPParameter1		0xa18i
+#define	rCCK0_DSPParameter1		0xa18
 #define	rCCK0_DSPParameter2		0xa1c	/* SQ threshold */
 
 #define	rCCK0_TxFilter1			0xa20
@@ -192,7 +192,7 @@
 #define	rOFDM0_XDRxAFE			0xc28
 #define	rOFDM0_XDRxIQImbalance		0xc2c
 
-#define	rOFDM0_RxDetector1		0xc30  /* PD,BW & SBD	DM tune init gain */
+#define	rOFDM0_RxDetector1		0xc30  /*PD,BW & SBD DM tune init gain*/
 #define	rOFDM0_RxDetector2		0xc34  /* SBD & Fame Sync. */
 #define	rOFDM0_RxDetector3		0xc38  /* Frame Sync. */
 #define	rOFDM0_RxDetector4		0xc3c  /* PD, SBD, Frame Sync & Short-GI */

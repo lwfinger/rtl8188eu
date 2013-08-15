@@ -138,20 +138,20 @@ struct HAL_VERSION {
 	((IS_81XXC(version) && IS_2T2R(version)) ? true : false)
 #define IS_81xxC_VENDOR_UMC_A_CUT(version)		\
 	(IS_81XXC(version) ? (IS_CHIP_VENDOR_UMC(version) ?	\
-	(IS_A_CUT(version) ? true : false) : false): false)
+	(IS_A_CUT(version) ? true : false) : false) : false)
 #define IS_81xxC_VENDOR_UMC_B_CUT(version)		\
 	(IS_81XXC(version) ? (IS_CHIP_VENDOR_UMC(version) ?	\
-	(IS_B_CUT(version) ? true : false) : false): false)
+	(IS_B_CUT(version) ? true : false) : false) : false)
 #define IS_81xxC_VENDOR_UMC_C_CUT(version)		\
 	(IS_81XXC(version) ? (IS_CHIP_VENDOR_UMC(version) ? \
-	 (IS_C_CUT(version) ? true : false) : false): false)
+	 (IS_C_CUT(version) ? true : false) : false) : false)
 
 #define IS_NORMAL_CHIP92D(version)			\
-	(( IS_92D(version)) ?				\
-	((GET_CVID_CHIP_TYPE(version) == NORMAL_CHIP)? true : false) : false)
+	((IS_92D(version)) ?				\
+	((GET_CVID_CHIP_TYPE(version) == NORMAL_CHIP) ? true : false) : false)
 
 #define IS_92D_SINGLEPHY(version)			\
-	((IS_92D(version)) ? (IS_2T2R(version) ? true: false) : false)
+	((IS_92D(version)) ? (IS_2T2R(version) ? true : false) : false)
 #define IS_92D_C_CUT(version)				\
 	((IS_92D(version)) ? (IS_C_CUT(version) ? true : false) : false)
 #define IS_92D_D_CUT(version)				\
@@ -160,8 +160,8 @@ struct HAL_VERSION {
 	((IS_92D(version)) ? (IS_E_CUT(version) ? true : false) : false)
 
 #define IS_8723A_A_CUT(version)				\
-	((IS_8723_SERIES(version)) ? ( IS_A_CUT(version)?true : false) : false)
+	((IS_8723_SERIES(version)) ? (IS_A_CUT(version) ? true : false) : false)
 #define IS_8723A_B_CUT(version)				\
-	((IS_8723_SERIES(version)) ? ( IS_B_CUT(version)?true : false) : false)
+	((IS_8723_SERIES(version)) ? (IS_B_CUT(version) ? true : false) : false)
 
 #endif
