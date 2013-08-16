@@ -28,7 +28,6 @@
 #include <mlme_osdep.h>
 #include <xmit_osdep.h>
 #include <osdep_intf.h>
-#include <circ_buf.h>
 #include <usb_osintf.h>
 
 uint rtw_remainder_len(struct pkt_file *pfile)

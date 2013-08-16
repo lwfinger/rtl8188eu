@@ -28,7 +28,6 @@
 
 #include <usb_ops.h>
 #include <wifi.h>
-#include <circ_buf.h>
 
 #include <rtl8188e_hal.h>
 

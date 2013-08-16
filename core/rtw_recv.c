@@ -28,7 +28,6 @@
 #include <ethernet.h>
 #include <usb_ops.h>
 #include <wifi.h>
-#include <circ_buf.h>
 
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
 
