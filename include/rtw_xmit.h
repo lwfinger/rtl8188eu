@@ -345,7 +345,7 @@ struct tx_servq *rtw_get_sta_pending(struct adapter *padapter,
 				     struct sta_info *psta, int up, u8 *ac);
 s32 rtw_xmitframe_enqueue(struct adapter *padapter,
 			  struct xmit_frame *pxmitframe);
-struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv,
+struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv,
 				      struct hw_xmit *phwxmit_i, int entry);
 
 s32 rtw_xmit_classifier(struct adapter *padapter,

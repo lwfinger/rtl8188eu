@@ -44,7 +44,7 @@ static u8 SNAP_ETH_TYPE_TDLS[2] = {0x89, 0x0d};
 static u8 SNAP_HDR_APPLETALK_DDP[3] = {0x08, 0x00, 0x07};
 
 static u8 oui_8021h[] = {0x00, 0x00, 0xf8};
-static u8 oui_rfc1042[] = {0x00,0x00,0x00};
+static u8 oui_rfc1042[] = {0x00, 0x00, 0x00};
 
 #define MAX_SUBFRAME_COUNT	64
 static u8 rtw_rfc1042_header[] = {
@@ -103,18 +103,18 @@ struct signal_stat {
 };
 #define MAX_PATH_NUM_92CS		2
 struct phy_info {
-	u8		RxPWDBAll;
-	u8		SignalQuality;	 /*  in 0-100 index. */
-	u8		RxMIMOSignalQuality[MAX_PATH_NUM_92CS]; /* EVM */
-	u8		RxMIMOSignalStrength[MAX_PATH_NUM_92CS];/*  in 0~100 index */
-	s8		RxPower; /*  in dBm Translate from PWdB */
+	u8	RxPWDBAll;
+	u8	SignalQuality;	 /*  in 0-100 index. */
+	u8	RxMIMOSignalQuality[MAX_PATH_NUM_92CS]; /* EVM */
+	u8	RxMIMOSignalStrength[MAX_PATH_NUM_92CS];/*  in 0~100 index */
+	s8	RxPower; /*  in dBm Translate from PWdB */
 /*  Real power in dBm for this packet, no beautification and aggregation.
  * Keep this raw info to be used for the other procedures. */
-	s8		recvpower;
-	u8		BTRxRSSIPercentage;
-	u8		SignalStrength; /*  in 0-100 index. */
-	u8		RxPwr[MAX_PATH_NUM_92CS];/* per-path's pwdb */
-	u8		RxSNR[MAX_PATH_NUM_92CS];/* per-path's SNR */
+	s8	recvpower;
+	u8	BTRxRSSIPercentage;
+	u8	SignalStrength; /*  in 0-100 index. */
+	u8	RxPwr[MAX_PATH_NUM_92CS];/* per-path's pwdb */
+	u8	RxSNR[MAX_PATH_NUM_92CS];/* per-path's SNR */
 };
 
 struct rx_pkt_attrib {
@@ -165,10 +165,8 @@ struct rx_pkt_attrib {
 
 
 /* These definition is used for Rx packet reordering. */
-#define SN_LESS(a, b)		(((a-b)&0x800)!=0)
+#define SN_LESS(a, b)		(((a - b) & 0x800) != 0)
 #define SN_EQUAL(a, b)	(a == b)
-/* define REORDER_WIN_SIZE	128 */
-/* define REORDER_ENTRY_NUM	128 */
 #define REORDER_WAIT_TIME	(50) /*  (ms) */
 
 #define RECVBUFF_ALIGN_SZ 8
@@ -317,21 +315,21 @@ union recv_frame {
 	} u;
 };
 
-union recv_frame *_rtw_alloc_recvframe (struct __queue *pfree_recv_queue);
-union recv_frame *rtw_alloc_recvframe (struct __queue *pfree_recv_queue);
+union recv_frame *_rtw_alloc_recvframe(struct __queue *pfree_recv_queue);
+union recv_frame *rtw_alloc_recvframe(struct __queue *pfree_recv_queue);
 void rtw_init_recvframe(union recv_frame *precvframe,
-			       struct recv_priv *precvpriv);
+			struct recv_priv *precvpriv);
 int  rtw_free_recvframe(union recv_frame *precvframe,
-		        struct __queue *pfree_recv_queue);
+			struct __queue *pfree_recv_queue);
 #define rtw_dequeue_recvframe(queue) rtw_alloc_recvframe(queue)
 int _rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue);
 int rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue);
 void rtw_free_recvframe_queue(struct __queue *pframequeue,
 			      struct __queue *pfree_recv_queue);
 u32 rtw_free_uc_swdec_pending_queue(struct adapter *adapter);
-int rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, struct __queue *queue);
+int rtw_enqueue_recvbuf_to_head(struct recv_buf *buf, struct __queue *queue);
 int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, struct __queue *queue);
-struct recv_buf *rtw_dequeue_recvbuf (struct __queue *queue);
+struct recv_buf *rtw_dequeue_recvbuf(struct __queue *queue);
 
 void rtw_reordering_ctrl_timeout_handler(void *pcontext);
 
@@ -369,11 +367,11 @@ static inline u8 *recvframe_push(union recv_frame *precvframe, int sz)
 	if (precvframe == NULL)
 		return NULL;
 	precvframe->u.hdr.rx_data -= sz ;
-	if ( precvframe->u.hdr.rx_data < precvframe->u.hdr.rx_head) {
-		precvframe->u.hdr.rx_data += sz ;
+	if (precvframe->u.hdr.rx_data < precvframe->u.hdr.rx_head) {
+		precvframe->u.hdr.rx_data += sz;
 		return NULL;
 	}
-	precvframe->u.hdr.len +=sz;
+	precvframe->u.hdr.len += sz;
 	return precvframe->u.hdr.rx_data;
 }
 
@@ -410,7 +408,7 @@ static inline u8 *recvframe_put(union recv_frame *precvframe, int sz)
 		precvframe->u.hdr.rx_tail -= sz;
 		return NULL;
 	}
-	precvframe->u.hdr.len +=sz;
+	precvframe->u.hdr.len += sz;
 	return precvframe->u.hdr.rx_tail;
 }
 
@@ -444,7 +442,8 @@ static inline unsigned char *get_rxbuf_desc(union recv_frame *precvframe)
 
 static inline union recv_frame *rxmem_to_recvframe(u8 *rxmem)
 {
-	/* due to the design of 2048 bytes alignment of recv_frame, we can reference the union recv_frame */
+	/* due to the design of 2048 bytes alignment of recv_frame,
+	 * we can reference the union recv_frame */
 	/* from any given member of recv_frame. */
 	/*  rxmem indicates the any member/address in recv_frame */
 
@@ -473,7 +472,7 @@ static inline u8 *pkt_to_recvdata(struct sk_buff *pkt)
 {
 	/*  return the rx_data */
 
-	union recv_frame *precv_frame =pkt_to_recvframe(pkt);
+	union recv_frame *precv_frame = pkt_to_recvframe(pkt);
 
 	return	precv_frame->u.hdr.rx_data;
 }

@@ -90,8 +90,8 @@ union pn48	{
 };
 
 union Keytype {
-        u8   skey[16];
-        u32    lkey[4];
+	u8   skey[16];
+	u32    lkey[4];
 };
 
 struct rt_pmkid_list {
@@ -99,7 +99,7 @@ struct rt_pmkid_list {
 	u8	Bssid[6];
 	u8	PMKID[16];
 	u8	SsidBuf[33];
-	u8*	ssid_octet;
+	u8	*ssid_octet;
 	u16	ssid_length;
 };
 
@@ -175,62 +175,62 @@ struct sha256_state {
 	u8 buf[64];
 };
 
-#define GET_ENCRY_ALGO(psecuritypriv, psta, encry_algo, bmcst)\
-do {\
-	switch (psecuritypriv->dot11AuthAlgrthm) {\
-		case dot11AuthAlgrthm_Open:\
-		case dot11AuthAlgrthm_Shared:\
-		case dot11AuthAlgrthm_Auto:\
-			encry_algo = (u8)psecuritypriv->dot11PrivacyAlgrthm;\
-			break;\
-		case dot11AuthAlgrthm_8021X:\
-			if (bmcst)\
-				encry_algo = (u8)psecuritypriv->dot118021XGrpPrivacy;\
-			else\
-				encry_algo =(u8) psta->dot118021XPrivacy;\
-			break;\
-	     case dot11AuthAlgrthm_WAPI:\
-		     encry_algo = (u8)psecuritypriv->dot11PrivacyAlgrthm;\
-		     break;\
-	}\
+#define GET_ENCRY_ALGO(psecuritypriv, psta, encry_algo, bmcst)		\
+do {									\
+	switch (psecuritypriv->dot11AuthAlgrthm) {			\
+	case dot11AuthAlgrthm_Open:					\
+	case dot11AuthAlgrthm_Shared:					\
+	case dot11AuthAlgrthm_Auto:					\
+		encry_algo = (u8)psecuritypriv->dot11PrivacyAlgrthm;	\
+		break;							\
+	case dot11AuthAlgrthm_8021X:					\
+		if (bmcst)						\
+			encry_algo = (u8)psecuritypriv->dot118021XGrpPrivacy;\
+		else							\
+			encry_algo = (u8)psta->dot118021XPrivacy;	\
+		break;							\
+	case dot11AuthAlgrthm_WAPI:					\
+		encry_algo = (u8)psecuritypriv->dot11PrivacyAlgrthm;	\
+		break;							\
+	}								\
 } while (0)
 
-#define SET_ICE_IV_LEN(iv_len, icv_len, encrypt)\
-do {\
-	switch (encrypt) {\
-		case _WEP40_:\
-		case _WEP104_:\
-			iv_len = 4;\
-			icv_len = 4;\
-			break;\
-		case _TKIP_:\
-			iv_len = 8;\
-			icv_len = 4;\
-			break;\
-		case _AES_:\
-			iv_len = 8;\
-			icv_len = 8;\
-			break;\
-		case _SMS4_:\
-			iv_len = 18;\
-			icv_len = 16;\
-			break;\
-		default:\
-			iv_len = 0;\
-			icv_len = 0;\
-			break;\
-	}\
+#define SET_ICE_IV_LEN(iv_len, icv_len, encrypt)			\
+do {									\
+	switch (encrypt) {						\
+	case _WEP40_:							\
+	case _WEP104_:							\
+		iv_len = 4;						\
+		icv_len = 4;						\
+		break;							\
+	case _TKIP_:							\
+		iv_len = 8;						\
+		icv_len = 4;						\
+		break;							\
+	case _AES_:							\
+		iv_len = 8;						\
+		icv_len = 8;						\
+		break;							\
+	case _SMS4_:							\
+		iv_len = 18;						\
+		icv_len = 16;						\
+		break;							\
+	default:							\
+		iv_len = 0;						\
+		icv_len = 0;						\
+		break;							\
+	}								\
 } while (0)
 
 
-#define GET_TKIP_PN(iv,dot11txpn)\
-do {\
-	dot11txpn._byte_.TSC0=iv[2];\
-	dot11txpn._byte_.TSC1=iv[0];\
-	dot11txpn._byte_.TSC2=iv[4];\
-	dot11txpn._byte_.TSC3=iv[5];\
-	dot11txpn._byte_.TSC4=iv[6];\
-	dot11txpn._byte_.TSC5=iv[7];\
+#define GET_TKIP_PN(iv, dot11txpn)					\
+do {									\
+	dot11txpn._byte_.TSC0 = iv[2];					\
+	dot11txpn._byte_.TSC1 = iv[0];					\
+	dot11txpn._byte_.TSC2 = iv[4];					\
+	dot11txpn._byte_.TSC3 = iv[5];					\
+	dot11txpn._byte_.TSC4 = iv[6];					\
+	dot11txpn._byte_.TSC5 = iv[7];					\
 } while (0)
 
 
@@ -241,7 +241,7 @@ struct mic_data {
 	u32  K0, K1;         /*  Key */
 	u32  L, R;           /*  Current state */
 	u32  M;              /*  Message accumulator (single word) */
-	u32     nBytesInM;      /*  # bytes in M */
+	u32  nBytesInM;      /*  # bytes in M */
 };
 
 extern const u32 Te0[256];
@@ -352,10 +352,10 @@ static const unsigned long K[64] = {
 
 /* Various logical functions */
 #define RORc(x, y) \
-(((((unsigned long) (x) & 0xFFFFFFFFUL) >> (unsigned long) ((y) & 31)) | \
- ((unsigned long) (x) << (unsigned long) (32 - ((y) & 31)))) & 0xFFFFFFFFUL)
-#define Ch(x,y,z)       (z ^ (x & (y ^ z)))
-#define Maj(x,y,z)      (((x | y) & z) | (x & y))
+	(((((unsigned long)(x) & 0xFFFFFFFFUL) >> (unsigned long)((y)&31)) | \
+	 ((unsigned long)(x) << (unsigned long)(32-((y)&31)))) & 0xFFFFFFFFUL)
+#define Ch(x, y ,z)       (z ^ (x & (y ^ z)))
+#define Maj(x, y, z)      (((x | y) & z) | (x & y))
 #define S(x, n)         RORc((x), (n))
 #define R(x, n)         (((x)&0xFFFFFFFFUL)>>(n))
 #define Sigma0(x)       (S(x, 2) ^ S(x, 13) ^ S(x, 22))

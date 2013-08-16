@@ -64,39 +64,39 @@ enum WIFI_FRAME_TYPE {
 };
 
 enum WIFI_FRAME_SUBTYPE {
-    /*  below is for mgt frame */
-    WIFI_ASSOCREQ       = (0 | WIFI_MGT_TYPE),
-    WIFI_ASSOCRSP       = (BIT(4) | WIFI_MGT_TYPE),
-    WIFI_REASSOCREQ     = (BIT(5) | WIFI_MGT_TYPE),
-    WIFI_REASSOCRSP     = (BIT(5) | BIT(4) | WIFI_MGT_TYPE),
-    WIFI_PROBEREQ       = (BIT(6) | WIFI_MGT_TYPE),
-    WIFI_PROBERSP       = (BIT(6) | BIT(4) | WIFI_MGT_TYPE),
-    WIFI_BEACON         = (BIT(7) | WIFI_MGT_TYPE),
-    WIFI_ATIM           = (BIT(7) | BIT(4) | WIFI_MGT_TYPE),
-    WIFI_DISASSOC       = (BIT(7) | BIT(5) | WIFI_MGT_TYPE),
-    WIFI_AUTH           = (BIT(7) | BIT(5) | BIT(4) | WIFI_MGT_TYPE),
-    WIFI_DEAUTH         = (BIT(7) | BIT(6) | WIFI_MGT_TYPE),
-    WIFI_ACTION         = (BIT(7) | BIT(6) | BIT(4) | WIFI_MGT_TYPE),
+	/*  below is for mgt frame */
+	WIFI_ASSOCREQ       = (0 | WIFI_MGT_TYPE),
+	WIFI_ASSOCRSP       = (BIT(4) | WIFI_MGT_TYPE),
+	WIFI_REASSOCREQ     = (BIT(5) | WIFI_MGT_TYPE),
+	WIFI_REASSOCRSP     = (BIT(5) | BIT(4) | WIFI_MGT_TYPE),
+	WIFI_PROBEREQ       = (BIT(6) | WIFI_MGT_TYPE),
+	WIFI_PROBERSP       = (BIT(6) | BIT(4) | WIFI_MGT_TYPE),
+	WIFI_BEACON         = (BIT(7) | WIFI_MGT_TYPE),
+	WIFI_ATIM           = (BIT(7) | BIT(4) | WIFI_MGT_TYPE),
+	WIFI_DISASSOC       = (BIT(7) | BIT(5) | WIFI_MGT_TYPE),
+	WIFI_AUTH           = (BIT(7) | BIT(5) | BIT(4) | WIFI_MGT_TYPE),
+	WIFI_DEAUTH         = (BIT(7) | BIT(6) | WIFI_MGT_TYPE),
+	WIFI_ACTION         = (BIT(7) | BIT(6) | BIT(4) | WIFI_MGT_TYPE),
 
-    /*  below is for control frame */
-    WIFI_PSPOLL         = (BIT(7) | BIT(5) | WIFI_CTRL_TYPE),
-    WIFI_RTS            = (BIT(7) | BIT(5) | BIT(4) | WIFI_CTRL_TYPE),
-    WIFI_CTS            = (BIT(7) | BIT(6) | WIFI_CTRL_TYPE),
-    WIFI_ACK            = (BIT(7) | BIT(6) | BIT(4) | WIFI_CTRL_TYPE),
-    WIFI_CFEND          = (BIT(7) | BIT(6) | BIT(5) | WIFI_CTRL_TYPE),
-    WIFI_CFEND_CFACK    = (BIT(7) | BIT(6) | BIT(5) | BIT(4) |
-			   WIFI_CTRL_TYPE),
+	/*  below is for control frame */
+	WIFI_PSPOLL         = (BIT(7) | BIT(5) | WIFI_CTRL_TYPE),
+	WIFI_RTS            = (BIT(7) | BIT(5) | BIT(4) | WIFI_CTRL_TYPE),
+	WIFI_CTS            = (BIT(7) | BIT(6) | WIFI_CTRL_TYPE),
+	WIFI_ACK            = (BIT(7) | BIT(6) | BIT(4) | WIFI_CTRL_TYPE),
+	WIFI_CFEND          = (BIT(7) | BIT(6) | BIT(5) | WIFI_CTRL_TYPE),
+	WIFI_CFEND_CFACK    = (BIT(7) | BIT(6) | BIT(5) | BIT(4) |
+	WIFI_CTRL_TYPE),
 
-    /*  below is for data frame */
-    WIFI_DATA           = (0 | WIFI_DATA_TYPE),
-    WIFI_DATA_CFACK     = (BIT(4) | WIFI_DATA_TYPE),
-    WIFI_DATA_CFPOLL    = (BIT(5) | WIFI_DATA_TYPE),
-    WIFI_DATA_CFACKPOLL = (BIT(5) | BIT(4) | WIFI_DATA_TYPE),
-    WIFI_DATA_NULL      = (BIT(6) | WIFI_DATA_TYPE),
-    WIFI_CF_ACK         = (BIT(6) | BIT(4) | WIFI_DATA_TYPE),
-    WIFI_CF_POLL        = (BIT(6) | BIT(5) | WIFI_DATA_TYPE),
-    WIFI_CF_ACKPOLL     = (BIT(6) | BIT(5) | BIT(4) | WIFI_DATA_TYPE),
-    WIFI_QOS_DATA_NULL	= (BIT(6) | WIFI_QOS_DATA_TYPE),
+	/*  below is for data frame */
+	WIFI_DATA           = (0 | WIFI_DATA_TYPE),
+	WIFI_DATA_CFACK     = (BIT(4) | WIFI_DATA_TYPE),
+	WIFI_DATA_CFPOLL    = (BIT(5) | WIFI_DATA_TYPE),
+	WIFI_DATA_CFACKPOLL = (BIT(5) | BIT(4) | WIFI_DATA_TYPE),
+	WIFI_DATA_NULL      = (BIT(6) | WIFI_DATA_TYPE),
+	WIFI_CF_ACK         = (BIT(6) | BIT(4) | WIFI_DATA_TYPE),
+	WIFI_CF_POLL        = (BIT(6) | BIT(5) | WIFI_DATA_TYPE),
+	WIFI_CF_ACKPOLL     = (BIT(6) | BIT(5) | BIT(4) | WIFI_DATA_TYPE),
+	WIFI_QOS_DATA_NULL	= (BIT(6) | WIFI_QOS_DATA_TYPE),
 };
 
 enum WIFI_REASON_CODE	{
@@ -245,92 +245,64 @@ enum WIFI_REG_DOMAIN {
 #define _ORDER_		BIT(15)
 
 #define SetToDs(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_TO_DS_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_TO_DS_)
 
 #define GetToDs(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_TO_DS_)) != 0)
 
 #define ClearToDs(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_TO_DS_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_TO_DS_))
 
 #define SetFrDs(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_FROM_DS_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_FROM_DS_)
 
 #define GetFrDs(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_FROM_DS_)) != 0)
 
 #define ClearFrDs(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_FROM_DS_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_FROM_DS_))
 
 #define get_tofr_ds(pframe)	((GetToDs(pframe) << 1) | GetFrDs(pframe))
 
 
 #define SetMFrag(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_FRAG_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_FRAG_)
 
 #define GetMFrag(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_MORE_FRAG_)) != 0)
 
 #define ClearMFrag(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_FRAG_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_FRAG_))
 
 #define SetRetry(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_RETRY_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_RETRY_)
 
 #define GetRetry(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_RETRY_)) != 0)
 
 #define ClearRetry(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_RETRY_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_RETRY_))
 
 #define SetPwrMgt(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_PWRMGT_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_PWRMGT_)
 
 #define GetPwrMgt(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_PWRMGT_)) != 0)
 
 #define ClearPwrMgt(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_PWRMGT_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_PWRMGT_))
 
 #define SetMData(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_DATA_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_DATA_)
 
 #define GetMData(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_MORE_DATA_)) != 0)
 
 #define ClearMData(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_DATA_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_DATA_))
 
 #define SetPrivacy(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_PRIVACY_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_PRIVACY_)
 
 #define GetPrivacy(pbuf)					\
 	(((*(__le16 *)(pbuf)) & cpu_to_le16(_PRIVACY_)) != 0)
 
 #define ClearPrivacy(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_PRIVACY_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_PRIVACY_))
 
 
 #define GetOrder(pbuf)					\
@@ -339,16 +311,16 @@ enum WIFI_REG_DOMAIN {
 #define GetFrameType(pbuf)				\
 	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(3) | BIT(2)))
 
-#define SetFrameType(pbuf,type)	\
+#define SetFrameType(pbuf, type)	\
 	do {	\
 		*(unsigned short *)(pbuf) &= __constant_cpu_to_le16(~(BIT(3) | BIT(2))); \
 		*(unsigned short *)(pbuf) |= __constant_cpu_to_le16(type); \
 	} while (0)
 
-#define GetFrameSubType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) |	\
+#define GetFrameSubType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) |\
 	 BIT(6) | BIT(5) | BIT(4) | BIT(3) | BIT(2)))
 
-#define SetFrameSubType(pbuf,type) \
+#define SetFrameSubType(pbuf, type) \
 	do {    \
 		*(__le16 *)(pbuf) &= cpu_to_le16(~(BIT(7) | BIT(6) |	\
 		 BIT(5) | BIT(4) | BIT(3) | BIT(2))); \
@@ -380,36 +352,26 @@ enum WIFI_REG_DOMAIN {
 	} while (0)
 
 #define SetDuration(pbuf, dur) \
-	do {    \
-		*(__le16 *)((size_t)(pbuf) + 2) = cpu_to_le16(0xffff & (dur)); \
-	} while (0)
+	*(__le16 *)((size_t)(pbuf) + 2) = cpu_to_le16(0xffff & (dur))
 
 
 #define SetPriority(pbuf, tid)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(tid & 0xf); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(tid & 0xf)
 
 #define GetPriority(pbuf)	((le16_to_cpu(*(__le16 *)(pbuf))) & 0xf)
 
 #define SetEOSP(pbuf, eosp)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16( (eosp & 1) << 4); \
-	} while (0)
+		*(__le16 *)(pbuf) |= cpu_to_le16((eosp & 1) << 4)
 
 #define SetAckpolicy(pbuf, ack)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16( (ack & 3) << 5); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16((ack & 3) << 5)
 
 #define GetAckpolicy(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 5) & 0x3)
 
 #define GetAMsdu(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 7) & 0x1)
 
 #define SetAMsdu(pbuf, amsdu)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16( (amsdu & 1) << 7); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16((amsdu & 1) << 7)
 
 #define GetAid(pbuf)	(le16_to_cpu(*(__le16 *)((size_t)(pbuf) + 2)) & 0x3fff)
 
@@ -503,13 +465,11 @@ static inline unsigned char *get_hdr_bssid(unsigned char *pframe)
 		sa = GetAddr1Ptr(pframe);
 		break;
 	default:
-		sa =NULL; /*  */
+		sa = NULL; /*  */
 		break;
 	}
-
 	return sa;
 }
-
 
 static inline int IsFrameTypeCtrl(unsigned char *pframe)
 {
@@ -828,10 +788,10 @@ enum ht_cap_ampdu_factor {
 #define HT_INFO_STBC_PARAM_PCO_ACTIVE		((u16) BIT(10))
 #define HT_INFO_STBC_PARAM_PCO_PHASE		((u16) BIT(11))
 
-/* 	===============WPS Section=============== */
-/* 	For WPSv1.0 */
+/*	===============WPS Section=============== */
+/*	For WPSv1.0 */
 #define WPSOUI					0x0050f204
-/* 	WPS attribute ID */
+/*	WPS attribute ID */
 #define WPS_ATTR_VER1				0x104A
 #define WPS_ATTR_SIMPLE_CONF_STATE		0x1044
 #define WPS_ATTR_RESP_TYPE			0x103B
@@ -852,29 +812,29 @@ enum ht_cap_ampdu_factor {
 #define WPS_ATTR_VENDOR_EXT			0x1049
 #define WPS_ATTR_SELECTED_REGISTRAR		0x1041
 
-/* 	Value of WPS attribute "WPS_ATTR_DEVICE_NAME */
+/*	Value of WPS attribute "WPS_ATTR_DEVICE_NAME */
 #define WPS_MAX_DEVICE_NAME_LEN			32
 
-/* 	Value of WPS Request Type Attribute */
+/*	Value of WPS Request Type Attribute */
 #define WPS_REQ_TYPE_ENROLLEE_INFO_ONLY		0x00
 #define WPS_REQ_TYPE_ENROLLEE_OPEN_8021X	0x01
 #define WPS_REQ_TYPE_REGISTRAR			0x02
 #define WPS_REQ_TYPE_WLAN_MANAGER_REGISTRAR	0x03
 
-/* 	Value of WPS Response Type Attribute */
+/*	Value of WPS Response Type Attribute */
 #define WPS_RESPONSE_TYPE_INFO_ONLY	0x00
 #define WPS_RESPONSE_TYPE_8021X		0x01
 #define WPS_RESPONSE_TYPE_REGISTRAR	0x02
 #define WPS_RESPONSE_TYPE_AP		0x03
 
-/* 	Value of WPS WiFi Simple Configuration State Attribute */
+/*	Value of WPS WiFi Simple Configuration State Attribute */
 #define WPS_WSC_STATE_NOT_CONFIG	0x01
 #define WPS_WSC_STATE_CONFIG		0x02
 
-/* 	Value of WPS Version Attribute */
+/*	Value of WPS Version Attribute */
 #define WPS_VERSION_1			0x10
 
-/* 	Value of WPS Configuration Method Attribute */
+/*	Value of WPS Configuration Method Attribute */
 #define WPS_CONFIG_METHOD_FLASH		0x0001
 #define WPS_CONFIG_METHOD_ETHERNET	0x0002
 #define WPS_CONFIG_METHOD_LABEL		0x0004
@@ -889,16 +849,16 @@ enum ht_cap_ampdu_factor {
 #define WPS_CONFIG_METHOD_VDISPLAY	0x2008
 #define WPS_CONFIG_METHOD_PDISPLAY	0x4008
 
-/* 	Value of Category ID of WPS Primary Device Type Attribute */
+/*	Value of Category ID of WPS Primary Device Type Attribute */
 #define WPS_PDT_CID_DISPLAYS		0x0007
 #define WPS_PDT_CID_MULIT_MEDIA		0x0008
 #define WPS_PDT_CID_RTK_WIDI		WPS_PDT_CID_MULIT_MEDIA
 
-/* 	Value of Sub Category ID of WPS Primary Device Type Attribute */
+/*	Value of Sub Category ID of WPS Primary Device Type Attribute */
 #define WPS_PDT_SCID_MEDIA_SERVER	0x0005
 #define WPS_PDT_SCID_RTK_DMP		WPS_PDT_SCID_MEDIA_SERVER
 
-/* 	Value of Device Password ID */
+/*	Value of Device Password ID */
 #define WPS_DPID_P			0x0000
 #define WPS_DPID_USER_SPEC		0x0001
 #define WPS_DPID_MACHINE_SPEC		0x0002
@@ -906,22 +866,22 @@ enum ht_cap_ampdu_factor {
 #define WPS_DPID_PBC			0x0004
 #define WPS_DPID_REGISTRAR_SPEC		0x0005
 
-/* 	Value of WPS RF Bands Attribute */
+/*	Value of WPS RF Bands Attribute */
 #define WPS_RF_BANDS_2_4_GHZ		0x01
 #define WPS_RF_BANDS_5_GHZ		0x02
 
-/* 	Value of WPS Association State Attribute */
+/*	Value of WPS Association State Attribute */
 #define WPS_ASSOC_STATE_NOT_ASSOCIATED		0x00
 #define WPS_ASSOC_STATE_CONNECTION_SUCCESS	0x01
 #define WPS_ASSOC_STATE_CONFIGURATION_FAILURE	0x02
 #define WPS_ASSOC_STATE_ASSOCIATION_FAILURE	0x03
 #define WPS_ASSOC_STATE_IP_FAILURE		0x04
 
-/* 	=====================P2P Section===================== */
-/* 	For P2P */
+/*	=====================P2P Section===================== */
+/*	For P2P */
 #define	P2POUI					0x506F9A09
 
-/* 	P2P Attribute ID */
+/*	P2P Attribute ID */
 #define	P2P_ATTR_STATUS				0x00
 #define	P2P_ATTR_MINOR_REASON_CODE		0x01
 #define	P2P_ATTR_CAPABILITY			0x02
@@ -942,7 +902,7 @@ enum ht_cap_ampdu_factor {
 #define	P2P_ATTR_OPERATING_CH			0x11
 #define	P2P_ATTR_INVITATION_FLAGS		0x12
 
-/* 	Value of Status Attribute */
+/*	Value of Status Attribute */
 #define	P2P_STATUS_SUCCESS				0x00
 #define	P2P_STATUS_FAIL_INFO_UNAVAILABLE		0x01
 #define	P2P_STATUS_FAIL_INCOMPATIBLE_PARAM		0x02
@@ -956,7 +916,7 @@ enum ht_cap_ampdu_factor {
 #define	P2P_STATUS_FAIL_INCOMPATIBLE_PROVSION		0x0A
 #define	P2P_STATUS_FAIL_USER_REJECT			0x0B
 
-/* 	Value of Inviation Flags Attribute */
+/*	Value of Inviation Flags Attribute */
 #define	P2P_INVITATION_FLAGS_PERSISTENT			BIT(0)
 
 #define	DMP_P2P_DEVCAP_SUPPORT	(P2P_DEVCAP_SERVICE_DISCOVERY | \
@@ -966,7 +926,7 @@ enum ht_cap_ampdu_factor {
 
 #define	DMP_P2P_GRPCAP_SUPPORT	(P2P_GRPCAP_INTRABSS)
 
-/* 	Value of Device Capability Bitmap */
+/*	Value of Device Capability Bitmap */
 #define	P2P_DEVCAP_SERVICE_DISCOVERY		BIT(0)
 #define	P2P_DEVCAP_CLIENT_DISCOVERABILITY	BIT(1)
 #define	P2P_DEVCAP_CONCURRENT_OPERATION		BIT(2)
@@ -974,7 +934,7 @@ enum ht_cap_ampdu_factor {
 #define	P2P_DEVCAP_DEVICE_LIMIT			BIT(4)
 #define	P2P_DEVCAP_INVITATION_PROC		BIT(5)
 
-/* 	Value of Group Capability Bitmap */
+/*	Value of Group Capability Bitmap */
 #define	P2P_GRPCAP_GO				BIT(0)
 #define	P2P_GRPCAP_PERSISTENT_GROUP		BIT(1)
 #define	P2P_GRPCAP_GROUP_LIMIT			BIT(2)
@@ -983,10 +943,10 @@ enum ht_cap_ampdu_factor {
 #define	P2P_GRPCAP_PERSISTENT_RECONN		BIT(5)
 #define	P2P_GRPCAP_GROUP_FORMATION		BIT(6)
 
-/* 	P2P Public Action Frame ( Management Frame ) */
+/*	P2P Public Action Frame (Management Frame) */
 #define	P2P_PUB_ACTION_ACTION			0x09
 
-/* 	P2P Public Action Frame Type */
+/*	P2P Public Action Frame Type */
 #define	P2P_GO_NEGO_REQ				0
 #define	P2P_GO_NEGO_RESP			1
 #define	P2P_GO_NEGO_CONF			2
@@ -997,7 +957,7 @@ enum ht_cap_ampdu_factor {
 #define	P2P_PROVISION_DISC_REQ			7
 #define	P2P_PROVISION_DISC_RESP			8
 
-/* 	P2P Action Frame Type */
+/*	P2P Action Frame Type */
 #define	P2P_NOTICE_OF_ABSENCE			0
 #define	P2P_PRESENCE_REQUEST			1
 #define	P2P_PRESENCE_RESPONSE			2
@@ -1034,13 +994,13 @@ enum ht_cap_ampdu_factor {
 #define	P2P_INVITE_TIMEOUT		5000
 /* 3 seconds timeout for sending the invitation request under concurrent mode */
 #define	P2P_CONCURRENT_INVITE_TIME	3000
-/* 25 seconds timeout to reset the scan channel ( based on channel plan ) */
+/* 25 seconds timeout to reset the scan channel (based on channel plan) */
 #define	P2P_RESET_SCAN_CH		25000
 #define	P2P_MAX_INTENT			15
 
 #define	P2P_MAX_NOA_NUM			2
 
-/* 	WPS Configuration Method */
+/*	WPS Configuration Method */
 #define	WPS_CM_NONE			0x0000
 #define	WPS_CM_LABEL			0x0004
 #define	WPS_CM_DISPLYA			0x0008
@@ -1139,8 +1099,8 @@ enum P2P_PS_MODE {
 	P2P_PS_MIX = 3, /*  CTWindow and NoA */
 };
 
-/* 	=====================WFD Section===================== */
-/* 	For Wi-Fi Display */
+/*	=====================WFD Section===================== */
+/*	For Wi-Fi Display */
 #define	WFD_ATTR_DEVICE_INFO		0x00
 #define	WFD_ATTR_ASSOC_BSSID		0x01
 #define	WFD_ATTR_COUPLED_SINK_INFO	0x06
@@ -1148,7 +1108,7 @@ enum P2P_PS_MODE {
 #define	WFD_ATTR_SESSION_INFO		0x09
 #define	WFD_ATTR_ALTER_MAC		0x0a
 
-/* 	For WFD Device Information Attribute */
+/*	For WFD Device Information Attribute */
 #define	WFD_DEVINFO_SOURCE			0x0000
 #define	WFD_DEVINFO_PSINK			0x0001
 #define	WFD_DEVINFO_SSINK			0x0002
