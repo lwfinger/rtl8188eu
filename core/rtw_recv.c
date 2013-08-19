@@ -2067,7 +2067,8 @@ int process_recv_indicatepkts(struct adapter *padapter, union recv_frame *prfram
 			return retval;
 		}
 
-		if ((!padapter->bDriverStopped) && (!padapter)) {
+		if ((!padapter->bDriverStopped) &&
+		    (!padapter->bSurpriseRemoved)) {
 			/* indicate this recv_frame */
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_, ("@@@@ process_recv_indicatepkts- recv_func recv_indicatepkt\n"));
 			rtw_recv_indicatepkt(padapter, prframe);
