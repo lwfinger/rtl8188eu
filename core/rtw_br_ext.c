@@ -19,14 +19,12 @@
  ******************************************************************************/
 #define _RTW_BR_EXT_C_
 
-#ifdef __KERNEL__
 #include <linux/if_arp.h>
 #include <net/ip.h>
 #include <net/ipx.h>
 #include <linux/atalk.h>
 #include <linux/udp.h>
 #include <linux/if_pppox.h>
-#endif
 
 #include <drv_types.h>
 #include "rtw_br_ext.h"
@@ -37,12 +35,10 @@
 #include <net/ip6_checksum.h>
 #endif
 
-#ifdef __KERNEL__
 #include <linux/ipv6.h>
 #include <linux/icmpv6.h>
 #include <net/ndisc.h>
 #include <net/checksum.h>
-#endif
 
 #define NAT25_IPV4		01
 #define NAT25_IPV6		02

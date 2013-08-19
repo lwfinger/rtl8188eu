@@ -858,14 +858,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 	struct	mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 	struct mlme_ext_priv *pmlmeext;
 
-#ifdef CONFIG_MLME_EXT
-
-	mlmeext_surveydone_event_callback(adapter);
-
-#endif
-
 _func_enter_;
-
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
 	if (pmlmepriv->wps_probe_req_ie) {
