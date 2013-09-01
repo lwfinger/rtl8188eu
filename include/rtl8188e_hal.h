@@ -205,11 +205,6 @@ struct txpowerinfo24g {
 	s8 BW40_Diff[MAX_RF_PATH][MAX_TX_COUNT];
 };
 
-#define EFUSE_REAL_CONTENT_LEN		512
-#define EFUSE_MAP_LEN			128
-#define EFUSE_MAX_SECTION		16
-#define EFUSE_IC_ID_OFFSET		506 /* For some inferior IC purpose*/
-#define AVAILABLE_EFUSE_ADDR(addr)	(addr < EFUSE_REAL_CONTENT_LEN)
 /*  To prevent out of boundary programming case, */
 /*  leave 1byte and program full section */
 /*  9bytes + 1byt + 5bytes and pre 1byte. */
@@ -238,6 +233,11 @@ struct txpowerinfo24g {
 #define		EFUSE_OOB_PROTECT_BYTES_88E	18
 #define		EFUSE_PROTECT_BYTES_BANK_88E	16
 
+#define EFUSE_REAL_CONTENT_LEN		EFUSE_REAL_CONTENT_LEN_88E
+#define EFUSE_MAP_LEN			EFUSE_MAP_LEN_88E
+#define EFUSE_MAX_SECTION		EFUSE_MAX_SECTION_88E
+#define EFUSE_IC_ID_OFFSET		EFUSE_IC_ID_OFFSET_88E
+#define AVAILABLE_EFUSE_ADDR(addr)	(addr < EFUSE_REAL_CONTENT_LEN)
 /* 			EFUSE for BT definition */
 #define EFUSE_BT_REAL_CONTENT_LEN	1536	/*  512*3 */
 #define EFUSE_BT_MAP_LEN		1024	/*  1k bytes */
