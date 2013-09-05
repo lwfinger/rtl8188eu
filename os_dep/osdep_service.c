@@ -663,12 +663,13 @@ RETURN:
 int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 {
 	struct net_device *pnetdev;
-	struct net_device *cur_pnetdev = padapter->pnetdev;
+	struct net_device *cur_pnetdev;
 	struct rereg_nd_name_data *rereg_priv;
 	int ret;
 
 	if (!padapter)
 		goto error;
+	cur_pnetdev = padapter->pnetdev;
 
 	rereg_priv = &padapter->rereg_nd_name_priv;
 
