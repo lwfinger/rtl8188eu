@@ -56,7 +56,7 @@ do {\
 	pattrib_iv[1] = dot11txpn._byte_.TSC1;\
 	pattrib_iv[2] = dot11txpn._byte_.TSC2;\
 	pattrib_iv[3] = ((keyidx & 0x3)<<6);\
-	dot11txpn.val = (dot11txpn.val == 0xffffff) ? 0i : (dot11txpn.val+1);\
+	dot11txpn.val = (dot11txpn.val == 0xffffff) ? 0 : (dot11txpn.val+1);\
 } while (0)
 
 
