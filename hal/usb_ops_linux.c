@@ -614,6 +614,11 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 
 _func_enter_;
 
+	if (!precvbuf) {
+		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
+			 ("usb_read_port:precvbuf ==NULL\n"));
+		return _FAIL;
+	}
 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||
 	    adapter->pwrctrlpriv.pnp_bstop_trx) {
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
@@ -627,66 +632,60 @@ _func_enter_;
 			precvbuf->reuse = true;
 	}
 
-	if (precvbuf != NULL) {
-		rtl8188eu_init_recvbuf(adapter, precvbuf);
+	rtl8188eu_init_recvbuf(adapter, precvbuf);
 
-		/* re-assign for linux based on skb */
-		if ((!precvbuf->reuse) || (precvbuf->pskb == NULL)) {
+	/* re-assign for linux based on skb */
+	if ((!precvbuf->reuse) || (precvbuf->pskb == NULL)) {
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18))
-			precvbuf->pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
+		precvbuf->pskb = dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 #else
-			precvbuf->pskb = netdev_alloc_skb(adapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
+		precvbuf->pskb = netdev_alloc_skb(adapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 #endif
-			if (precvbuf->pskb == NULL) {
-				RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("init_recvbuf(): alloc_skb fail!\n"));
-				DBG_88E("#### usb_read_port() alloc_skb fail!#####\n");
-				return _FAIL;
-			}
-
-			tmpaddr = (size_t)precvbuf->pskb->data;
-			alignment = tmpaddr & (RECVBUFF_ALIGN_SZ-1);
-			skb_reserve(precvbuf->pskb, (RECVBUFF_ALIGN_SZ - alignment));
-
-			precvbuf->phead = precvbuf->pskb->head;
-			precvbuf->pdata = precvbuf->pskb->data;
-			precvbuf->ptail = skb_tail_pointer(precvbuf->pskb);
-			precvbuf->pend = skb_end_pointer(precvbuf->pskb);
-			precvbuf->pbuf = precvbuf->pskb->data;
-		} else { /* reuse skb */
-			precvbuf->phead = precvbuf->pskb->head;
-			precvbuf->pdata = precvbuf->pskb->data;
-			precvbuf->ptail = skb_tail_pointer(precvbuf->pskb);
-			precvbuf->pend = skb_end_pointer(precvbuf->pskb);
-			precvbuf->pbuf = precvbuf->pskb->data;
-
-			precvbuf->reuse = false;
+		if (precvbuf->pskb == NULL) {
+			RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("init_recvbuf(): alloc_skb fail!\n"));
+			DBG_88E("#### usb_read_port() alloc_skb fail!#####\n");
+			return _FAIL;
 		}
 
-		precvpriv->rx_pending_cnt++;
+		tmpaddr = (size_t)precvbuf->pskb->data;
+		alignment = tmpaddr & (RECVBUFF_ALIGN_SZ-1);
+		skb_reserve(precvbuf->pskb, (RECVBUFF_ALIGN_SZ - alignment));
 
-		purb = precvbuf->purb;
+		precvbuf->phead = precvbuf->pskb->head;
+		precvbuf->pdata = precvbuf->pskb->data;
+		precvbuf->ptail = skb_tail_pointer(precvbuf->pskb);
+		precvbuf->pend = skb_end_pointer(precvbuf->pskb);
+		precvbuf->pbuf = precvbuf->pskb->data;
+	} else { /* reuse skb */
+		precvbuf->phead = precvbuf->pskb->head;
+		precvbuf->pdata = precvbuf->pskb->data;
+		precvbuf->ptail = skb_tail_pointer(precvbuf->pskb);
+		precvbuf->pend = skb_end_pointer(precvbuf->pskb);
+		precvbuf->pbuf = precvbuf->pskb->data;
 
-		/* translate DMA FIFO addr to pipehandle */
-		pipe = ffaddr2pipehdl(pdvobj, addr);
+		precvbuf->reuse = false;
+	}
 
-		usb_fill_bulk_urb(purb, pusbd, pipe,
-				  precvbuf->pbuf,
-				  MAX_RECVBUF_SZ,
-				  usb_read_port_complete,
-				  precvbuf);/* context is precvbuf */
+	precvpriv->rx_pending_cnt++;
 
-		err = usb_submit_urb(purb, GFP_ATOMIC);
-		if ((err) && (err != (-EPERM))) {
-			RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
-				 ("cannot submit rx in-token(err=0x%.8x), URB_STATUS =0x%.8x",
-				 err, purb->status));
-			DBG_88E("cannot submit rx in-token(err = 0x%08x),urb_status = %d\n",
-				err, purb->status);
-			ret = _FAIL;
-		}
-	} else {
+	purb = precvbuf->purb;
+
+	/* translate DMA FIFO addr to pipehandle */
+	pipe = ffaddr2pipehdl(pdvobj, addr);
+
+	usb_fill_bulk_urb(purb, pusbd, pipe,
+			  precvbuf->pbuf,
+			  MAX_RECVBUF_SZ,
+			  usb_read_port_complete,
+			  precvbuf);/* context is precvbuf */
+
+	err = usb_submit_urb(purb, GFP_ATOMIC);
+	if ((err) && (err != (-EPERM))) {
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
-			 ("usb_read_port:precvbuf ==NULL\n"));
+			 ("cannot submit rx in-token(err=0x%.8x), URB_STATUS =0x%.8x",
+			 err, purb->status));
+		DBG_88E("cannot submit rx in-token(err = 0x%08x),urb_status = %d\n",
+			err, purb->status);
 		ret = _FAIL;
 	}
 
