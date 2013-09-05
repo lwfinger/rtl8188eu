@@ -717,12 +717,12 @@ int rtw_resume_process(struct adapter *padapter)
 
 	ret = 0;
 exit:
-	pwrpriv->bInSuspend = false;
+	if (pwrpriv)
+		pwrpriv->bInSuspend = false;
 	DBG_88E("<===  %s return %d.............. in %dms\n", __func__
 		, ret, rtw_get_passing_time_ms(start_time));
 
 	_func_exit_;
-
 	return ret;
 }
 
