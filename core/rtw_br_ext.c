@@ -690,7 +690,6 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				if (!memcmp(skb->data+ETH_ALEN, ipx->ipx_source.node, ETH_ALEN))
 				DEBUG_INFO("NAT25: Check IPX skb_copy\n");
 				return 0;
-				return -1;
 			case NAT25_INSERT:
 				DEBUG_INFO("NAT25: Insert IPX, Dest =%08x,%02x%02x%02x%02x%02x%02x,%04x Source =%08x,%02x%02x%02x%02x%02x%02x,%04x\n",
 					ipx->ipx_dest.net,
