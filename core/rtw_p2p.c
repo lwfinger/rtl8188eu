@@ -304,7 +304,6 @@ static void issue_p2p_provision_resp(struct wifidirect_info *pwdinfo, u8 *raddr,
 	unsigned short				*fctrl;
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 	if (pmgntframe == NULL)
@@ -1195,7 +1194,6 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
 		u8	peer_ch_num = 0;
 		u8	ch_list_inclusioned[50] = { 0x00 };
 		u8	ch_num_inclusioned = 0;
-		__le16 le_tmp;
 
 		rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_ING);
 
@@ -1306,14 +1304,11 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
 		u8	attr_content = 0x00;
 		u32	attr_contentlen = 0;
 		u8	operatingch_info[5] = { 0x00 };
-		uint	ch_cnt = 0;
-		u8	ch_content[50] = { 0x00 };
 		u8	groupid[38];
 		u8	peer_ch_list[50] = { 0x00 };
 		u8	peer_ch_num = 0;
 		u8	ch_list_inclusioned[50] = { 0x00 };
 		u8	ch_num_inclusioned = 0;
-		__le16 le_tmp;
 
 		while (p2p_ie) {	/*	Found the P2P IE. */
 			rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_STATUS, &attr_content, &attr_contentlen);
@@ -1556,7 +1551,6 @@ void p2p_concurrent_handler(struct adapter *padapter);
 static void restore_p2p_state_handler(struct adapter *padapter)
 {
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
-	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 
 _func_enter_;
 
@@ -1616,8 +1610,6 @@ _func_exit_;
 
 void p2p_protocol_wk_hdl(struct adapter *padapter, int intCmdType)
 {
-	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-
 _func_enter_;
 
 	switch (intCmdType) {
@@ -1875,7 +1867,6 @@ static void pre_tx_scan_timer_process(void *FunctionContext)
 	struct	wifidirect_info *pwdinfo = &adapter->wdinfo;
 	unsigned long irqL;
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
-	u8 _status = 0;
 
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		return;
@@ -2045,12 +2036,8 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role)
 {
 	int ret = _SUCCESS;
 	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
-	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 
 	if (role == P2P_ROLE_DEVICE || role == P2P_ROLE_CLIENT || role == P2P_ROLE_GO) {
-		u8 channel, ch_offset;
-		u16 bwmode;
-
 		/* leave IPS/Autosuspend */
 		if (_FAIL == rtw_pwr_wakeup(padapter)) {
 			ret = _FAIL;

@@ -26,8 +26,6 @@ int proc_get_drv_version(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data)
 {
-	struct net_device *dev = data;
-
 	int len = 0;
 
 	len += snprintf(page + len, count - len, "%s\n", DRIVERVERSION);
@@ -557,7 +555,6 @@ int proc_get_rx_signal(char *page, char **start,
 {
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
 	int len = 0;
 
@@ -641,8 +638,6 @@ int proc_set_ht_enable(struct file *file, const char __user *buffer,
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		int num = sscanf(tmp, "%d ", &mode);
-
 		if (pregpriv && mode >= 0 && mode < 2) {
 			pregpriv->ht_enable = mode;
 			pr_info("ht_enable=%d\n", pregpriv->ht_enable);
@@ -685,8 +680,6 @@ int proc_set_cbw40_enable(struct file *file, const char __user *buffer,
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		int num = sscanf(tmp, "%d ", &mode);
-
 		if (pregpriv && mode >= 0 && mode < 2) {
 			pregpriv->cbw40_enable = mode;
 			pr_info("cbw40_enable=%d\n", mode);
@@ -728,8 +721,6 @@ int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		int num = sscanf(tmp, "%d ", &mode);
-
 		if (pregpriv && mode >= 0 && mode < 3) {
 			pregpriv->ampdu_enable = mode;
 			pr_info("ampdu_enable=%d\n", mode);
@@ -791,8 +782,6 @@ int proc_set_rx_stbc(struct file *file, const char __user *buffer,
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		int num = sscanf(tmp, "%d ", &mode);
-
 		if (pregpriv && (mode == 0 || mode == 1 || mode == 2 || mode == 3)) {
 			pregpriv->rx_stbc = mode;
 			printk("rx_stbc=%d\n", mode);

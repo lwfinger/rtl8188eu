@@ -342,8 +342,6 @@ void GetPowerTracking(struct adapter *padapter, u8 *enable)
 static void disable_dm(struct adapter *padapter)
 {
 	u8 v8;
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 
 	/* 3 1. disable firmware dynamic mechanism */
@@ -783,7 +781,7 @@ void fill_txdesc_for_mp(struct adapter *padapter, struct tx_desc *ptxdesc)
 void SetPacketTx(struct adapter *padapter)
 {
 	u8 *ptr, *pkt_start, *pkt_end;
-	u32 pkt_size, offset;
+	u32 pkt_size;
 	struct tx_desc *desc;
 	struct rtw_ieee80211_hdr *hdr;
 	u8 payload;
@@ -1057,7 +1055,6 @@ void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv)
 {
 	   int i, res;
 	  struct adapter *padapter = pxmitpriv->adapter;
-	struct xmit_frame	*pxmitframe = (struct xmit_frame *) pxmitpriv->pxmit_frame_buf;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
 
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
