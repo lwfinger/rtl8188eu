@@ -1201,7 +1201,6 @@ int validate_recv_data_frame(struct adapter *adapter, union recv_frame *precv_fr
 	struct sta_info *psta = NULL;
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	struct rx_pkt_attrib	*pattrib = &precv_frame->u.hdr.attrib;
-	struct sta_priv		*pstapriv = &adapter->stapriv;
 	struct security_priv	*psecuritypriv = &adapter->securitypriv;
 	int ret = _SUCCESS;
 
@@ -1785,7 +1784,6 @@ static int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
 		/* Indicat the packets to upper layer */
 		if (sub_skb) {
 			/*  Insert NAT2.5 RX here! */
-			struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
 			rcu_read_lock();
@@ -2088,7 +2086,6 @@ static int recv_func_prehandle(struct adapter *padapter, union recv_frame *rfram
 {
 	int ret = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = &rframe->u.hdr.attrib;
-	struct recv_priv *precvpriv = &padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
@@ -2124,7 +2121,6 @@ static int recv_func_posthandle(struct adapter *padapter, union recv_frame *prfr
 {
 	int ret = _SUCCESS;
 	union recv_frame *orig_prframe = prframe;
-	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 	struct __queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
 
@@ -2172,14 +2168,12 @@ int recv_func(struct adapter *padapter, union recv_frame *rframe)
 {
 	int ret;
 	struct rx_pkt_attrib *prxattrib = &rframe->u.hdr.attrib;
-	struct recv_priv *recvpriv = &padapter->recvpriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 
 	/* check if need to handle uc_swdec_pending_queue*/
 	if (check_fwstate(mlmepriv, WIFI_STATION_STATE) && psecuritypriv->busetkipkey) {
 		union recv_frame *pending_frame;
-		unsigned long irqL;
 
 		while ((pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue))) {
 			if (recv_func_posthandle(padapter, pending_frame) == _SUCCESS)

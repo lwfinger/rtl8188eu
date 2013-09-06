@@ -28,7 +28,6 @@
 
 void init_mlme_ap_info(struct adapter *padapter)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
@@ -687,7 +686,6 @@ static void update_hw_ht_param(struct adapter *padapter)
 {
 	unsigned char		max_AMPDU_len;
 	unsigned char		min_MPDU_spacing;
-	struct registry_priv	 *pregpriv = &padapter->registrypriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -863,13 +861,11 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 	u8	channel, network_type, supportRate[NDIS_802_11_LENGTH_RATES_EX];
 	int supportRateNum = 0;
 	u8 OUI1[] = {0x00, 0x50, 0xf2, 0x01};
-	u8 wps_oui[4] = {0x0, 0x50, 0xf2, 0x04};
 	u8 WMM_PARA_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x01, 0x01};
 	struct registry_priv *pregistrypriv = &padapter->registrypriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct wlan_bssid_ex *pbss_network = (struct wlan_bssid_ex *)&pmlmepriv->cur_network.network;
-	struct sta_priv *pstapriv = &padapter->stapriv;
 	u8 *ie = pbss_network->IEs;
 
 
@@ -1202,7 +1198,7 @@ int rtw_acl_remove_sta(struct adapter *padapter, u8 *addr)
 {
 	unsigned long irqL;
 	struct list_head *plist, *phead;
-	int i, ret = 0;
+	int ret = 0;
 	struct rtw_wlan_acl_node *paclnode;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
@@ -1733,8 +1729,6 @@ u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
 {
 	unsigned long irqL;
 	u8 beacon_updated = false;
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
 	if (!psta)

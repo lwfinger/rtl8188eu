@@ -31,7 +31,6 @@
 void ips_enter(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct xmit_priv *pxmit_priv = &padapter->xmitpriv;
 
 	if (padapter->registrypriv.mp_mode == 1)
@@ -170,9 +169,6 @@ exit:
 
 void rtw_ps_processor(struct adapter *padapter)
 {
-#ifdef CONFIG_P2P
-	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P */
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	enum rt_rf_power_state rfpwrstate;
@@ -427,8 +423,6 @@ s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
 void LPS_Enter(struct adapter *padapter)
 {
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
-	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	struct adapter *buddy = padapter->pbuddy_adapter;
 
 _func_enter_;
 
@@ -461,8 +455,6 @@ void LPS_Leave(struct adapter *padapter)
 #define LPS_LEAVE_TIMEOUT_MS 100
 
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
-	u32 start_time;
-	u8 bAwake = false;
 
 _func_enter_;
 

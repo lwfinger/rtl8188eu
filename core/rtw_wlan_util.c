@@ -354,8 +354,6 @@ inline void rtw_set_oper_choffset(struct adapter *adapter, u8 offset)
 
 void SelectChannel(struct adapter *padapter, unsigned char channel)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-
 	/* saved channel info */
 	rtw_set_oper_ch(padapter, channel);
 
@@ -364,8 +362,6 @@ void SelectChannel(struct adapter *padapter, unsigned char channel)
 
 void SetBWMode(struct adapter *padapter, unsigned short bwmode, unsigned char channel_offset)
 {
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-
 	/* saved bw info */
 	rtw_set_oper_bw(padapter, bwmode);
 	rtw_set_oper_choffset(padapter, channel_offset);
@@ -376,7 +372,6 @@ void SetBWMode(struct adapter *padapter, unsigned short bwmode, unsigned char ch
 void set_channel_bwmode(struct adapter *padapter, unsigned char channel, unsigned char channel_offset, unsigned short bwmode)
 {
 	u8 center_ch;
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
 	if (padapter->bNotifyChannelChange)
 		DBG_88E("[%s] ch = %d, offset = %d, bwmode = %d\n", __func__, channel, channel_offset, bwmode);
@@ -766,7 +761,6 @@ void HT_caps_handler(struct adapter *padapter, struct ndis_802_11_var_ie *pIE)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct ht_priv			*phtpriv = &pmlmepriv->htpriv;
-	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
 
 	if (pIE == NULL)
 		return;
@@ -925,7 +919,6 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
 	u32 wpa_ielen = 0;
 	u8 *pbssid = GetAddr3Ptr(pframe);
 	u32 hidden_ssid = 0;
-	u8 cur_network_type, network_type = 0;
 	struct HT_info_element *pht_info = NULL;
 	struct rtw_ieee80211_ht_cap *pht_cap = NULL;
 	u32 bcn_channel;
@@ -1695,7 +1688,6 @@ static struct adapter *pbuddy_padapter;
 int rtw_handle_dualmac(struct adapter *adapter, bool init)
 {
 	int status = _SUCCESS;
-	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 
 	if (init) {
 		if (pbuddy_padapter == NULL) {
