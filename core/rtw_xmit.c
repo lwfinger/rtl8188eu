@@ -1567,8 +1567,6 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 		ptxservq->qcnt--;
 
 		break;
-
-		pxmitframe = NULL;
 	}
 
 	return pxmitframe;
