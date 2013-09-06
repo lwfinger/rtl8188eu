@@ -44,9 +44,6 @@ void PHY_IQCalibrate_8188E(struct adapter *Adapter, bool ReCovery);
 /*  LC calibrate */
 void PHY_LCCalibrate_8188E(struct adapter *pAdapter);
 
-/*  AP calibrate */
-void PHY_APCalibrate_8188E(struct adapter *pAdapter, s8 delta);
-
 void PHY_DigitalPredistortion_8188E(struct adapter *pAdapter);
 
 void _PHY_SaveADDARegisters(struct adapter *pAdapter, u32 *ADDAReg,

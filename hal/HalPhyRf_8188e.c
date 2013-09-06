@@ -1869,28 +1869,6 @@ void PHY_LCCalibrate_8188E(struct adapter *adapt)
 		     ("LCK:Finish!!!interface %d\n", dm_odm->InterfaceIndex));
 }
 
-void PHY_APCalibrate_8188E(struct adapter *adapt, s8 delta)
-{
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(adapt);
-	struct odm_dm_struct *dm_odm = &pHalData->odmpriv;
-
-	return;
-	if (!(dm_odm->SupportAbility & ODM_RF_CALIBRATION))
-		return;
-
-#if FOR_BRAZIL_PRETEST != 1
-	if (dm_odm->RFCalibrateInfo.bAPKdone)
-#endif
-		return;
-
-	if (dm_odm->RFType == ODM_2T2R) {
-		phy_APCalibrate_8188E(adapt, delta, true);
-	} else {
-		/*  For 88C 1T1R */
-		phy_APCalibrate_8188E(adapt, delta, false);
-	}
-}
-
 static void phy_setrfpathswitch_8188e(struct adapter *adapt, bool main, bool is2t)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(adapt);
