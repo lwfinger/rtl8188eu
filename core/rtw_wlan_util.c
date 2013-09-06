@@ -1102,13 +1102,13 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
 	}
 
 	rtw_mfree((u8 *)bssid, sizeof(struct wlan_bssid_ex));
+	_func_exit_;
 	return _SUCCESS;
 
 _mismatch:
 	rtw_mfree((u8 *)bssid, sizeof(struct wlan_bssid_ex));
-	return _FAIL;
-
 	_func_exit_;
+	return _FAIL;
 }
 
 void update_beacon_info(struct adapter *padapter, u8 *pframe, uint pkt_len, struct sta_info *psta)
