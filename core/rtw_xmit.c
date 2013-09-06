@@ -672,7 +672,6 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 	u8	*pframe, *payload, mic[8];
 	struct	mic_data micdata;
 	struct	sta_info *stainfo;
-	struct	qos_priv  *pqospriv = &(padapter->mlmepriv.qospriv);
 	struct	pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct	security_priv	*psecuritypriv = &padapter->securitypriv;
 	struct	xmit_priv *pxmitpriv = &padapter->xmitpriv;
@@ -1428,7 +1427,6 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)/* _queue *pf
 	struct xmit_frame *pxframe = NULL;
 	struct list_head *plist, *phead;
 	struct __queue *pfree_xmit_queue = &pxmitpriv->free_xmit_queue;
-	struct adapter *padapter = pxmitpriv->adapter;
 
 _func_enter_;
 
@@ -1593,7 +1591,7 @@ _func_enter_;
 	inx[0] = 0; inx[1] = 1; inx[2] = 2; inx[3] = 3;
 
 	if (pregpriv->wifi_spec == 1) {
-		int j, tmp, acirp_cnt[4];
+		int j;
 
 		for (j = 0; j < 4; j++)
 			inx[j] = pxmitpriv->wmm_para_seq[j];
@@ -1763,7 +1761,6 @@ _func_exit_;
 static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
 {
 	struct sk_buff *skb = *pskb;
-	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	unsigned long irql;
 	int res, is_vlan_tag = 0, i, do_nat25 = 1;
 	unsigned short vlan_hdr = 0;

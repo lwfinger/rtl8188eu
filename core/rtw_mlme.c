@@ -562,13 +562,9 @@ _func_exit_;
 void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src,
 	struct adapter *padapter, bool update_ie)
 {
-	u8 ss_ori = dst->PhyInfo.SignalStrength;
-	u8 sq_ori = dst->PhyInfo.SignalQuality;
 	long rssi_ori = dst->Rssi;
 
-	u8 ss_smp = src->PhyInfo.SignalStrength;
 	u8 sq_smp = src->PhyInfo.SignalQuality;
-	long rssi_smp = src->Rssi;
 
 	u8 ss_final;
 	u8 sq_final;
@@ -722,9 +718,6 @@ _func_exit_;
 
 void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork)
 {
-	unsigned long irqL;
-	struct	mlme_priv	*pmlmepriv = &(((struct adapter *)adapter)->mlmepriv);
-
 _func_enter_;
 
 	#if defined(CONFIG_P2P)
@@ -1055,7 +1048,6 @@ _func_exit_;
 void rtw_indicate_connect(struct adapter *padapter)
 {
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 
 _func_enter_;
 
@@ -1085,11 +1077,6 @@ _func_exit_;
 void rtw_indicate_disconnect(struct adapter *padapter)
 {
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
-	struct wlan_bssid_ex	*cur_network = &(pmlmeinfo->network);
-	struct sta_info *psta;
-	struct sta_priv *pstapriv = &padapter->stapriv;
 
 _func_enter_;
 
@@ -1126,7 +1113,6 @@ inline void rtw_indicate_scan_done(struct adapter *padapter, bool aborted)
 
 void rtw_scan_abort(struct adapter *adapter)
 {
-	u32 cnt = 0;
 	u32 start;
 	struct mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
@@ -1693,7 +1679,6 @@ void rtw_scan_timeout_handler (struct adapter *adapter)
 static void rtw_auto_scan_handler(struct adapter *padapter)
 {
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
 
 	/* auto site survey per 60sec */
 	if (pmlmepriv->scan_interval > 0) {
@@ -2105,10 +2090,8 @@ static int rtw_append_pmkid(struct adapter *Adapter, int iEntry, u8 *ie, uint ie
 
 int rtw_restruct_sec_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie, uint in_len)
 {
-	u8 authmode, securitytype, match;
-	u8 sec_ie[255], uncst_oui[4], bkup_ie[255];
-	u8 wpa_oui[4] = {0x0, 0x50, 0xf2, 0x01};
-	uint	ielength, cnt, remove_cnt;
+	u8 authmode;
+	uint	ielength;
 	int iEntry;
 
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;

@@ -185,9 +185,7 @@ static void SwLedBlink(struct LED_871x *pLed)
 static void SwLedBlink1(struct LED_871x *pLed)
 {
 	struct adapter *padapter = pLed->padapter;
-	struct led_priv *ledpriv = &(padapter->ledpriv);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	struct LED_871x *pLed1 = &(ledpriv->SwLed1);
 	u8 bStopBlinking = false;
 
 	/*  Change LED according to BlinkingLedState specified. */
@@ -525,7 +523,6 @@ static void SwLedBlink4(struct LED_871x *pLed)
 {
 	struct adapter *padapter = pLed->padapter;
 	struct led_priv *ledpriv = &(padapter->ledpriv);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct LED_871x *pLed1 = &(ledpriv->SwLed1);
 	u8 bStopBlinking = false;
 
@@ -667,7 +664,6 @@ static void SwLedBlink4(struct LED_871x *pLed)
 static void SwLedBlink5(struct LED_871x *pLed)
 {
 	struct adapter *padapter = pLed->padapter;
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	u8 bStopBlinking = false;
 
 	/*  Change LED according to BlinkingLedState specified. */
@@ -753,8 +749,6 @@ static void SwLedBlink5(struct LED_871x *pLed)
 static void SwLedBlink6(struct LED_871x *pLed)
 {
 	struct adapter *padapter = pLed->padapter;
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-	u8 bStopBlinking = false;
 
 	/*  Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON) {
@@ -1671,7 +1665,6 @@ SwLedControlMode6(
 )
 {
 	struct led_priv *ledpriv = &(padapter->ledpriv);
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct LED_871x *pLed0 = &(ledpriv->SwLed0);
 
 	switch (LedAction) {
