@@ -334,6 +334,6 @@ s32 mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv);
 #define GEN_HANDLER(sz, hdl, oid) {sz, hdl, oid},
 
 #define EXT_MP_IOCTL_HANDLER(sz, subcode, oid)			\
-	 {sz, mp_ioctl_ ## subcode ## _hdl, oid},
+	 {sz, mp_ioctl_##subcode##_hdl, oid},
 
 #endif
