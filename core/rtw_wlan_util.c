@@ -1430,7 +1430,7 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 				return HT_IOT_PEER_ATHEROS;
 			} else if ((_rtw_memcmp(pIE->data, BROADCOM_OUI1, 3)) ||
 				   (_rtw_memcmp(pIE->data, BROADCOM_OUI2, 3)) ||
-				   (_rtw_memcmp(pIE->data, BROADCOM_OUI2, 3))) {
+				   (_rtw_memcmp(pIE->data, BROADCOM_OUI3, 3))) {
 				DBG_88E("link to Broadcom AP\n");
 				return HT_IOT_PEER_BROADCOM;
 			} else if (_rtw_memcmp(pIE->data, MARVELL_OUI, 3)) {
