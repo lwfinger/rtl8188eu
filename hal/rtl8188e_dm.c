@@ -86,7 +86,9 @@ static void dm_CheckPbcGPIO(struct adapter *padapter)
 /*  */
 static void dm_InitGPIOSetting(struct adapter *Adapter)
 {
+#ifdef CONFIG_BT_COEXIST
 	struct hal_data_8188e *hal_data = GET_HAL_DATA(Adapter);
+#endif
 	u8	tmp1byte;
 
 	tmp1byte = rtw_read8(Adapter, REG_GPIO_MUXCFG);
@@ -204,7 +206,6 @@ void rtl8188e_InitHalDm(struct adapter *Adapter)
 	struct hal_data_8188e *hal_data = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &hal_data->dmpriv;
 	struct odm_dm_struct *dm_odm = &(hal_data->odmpriv);
-	u8	i;
 
 	dm_InitGPIOSetting(Adapter);
 	pdmpriv->DM_Type = DM_Type_ByDriver;
@@ -220,8 +221,6 @@ void rtl8188e_HalDmWatchDog(struct adapter *Adapter)
 	bool fw_ps_awake = true;
 	u8 hw_init_completed = false;
 	struct hal_data_8188e *hal_data = GET_HAL_DATA(Adapter);
-	struct dm_priv	*pdmpriv = &hal_data->dmpriv;
-	struct odm_dm_struct *dm_odm = &(hal_data->odmpriv);
 
 	_func_enter_;
 	hw_init_completed = Adapter->hw_init_completed;

@@ -28,7 +28,6 @@
 s32	rtl8188eu_init_xmit_priv(struct adapter *adapt)
 {
 	struct xmit_priv	*pxmitpriv = &adapt->xmitpriv;
-	struct hal_data_8188e	*haldata = GET_HAL_DATA(adapt);
 
 	tasklet_init(&pxmitpriv->xmit_tasklet,
 		     (void(*)(unsigned long))rtl8188eu_xmit_tasklet,
@@ -183,17 +182,12 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	uint	qsel;
 	u8 data_rate, pwr_status, offset;
 	struct adapter		*adapt = pxmitframe->padapter;
-	struct mlme_priv	*pmlmepriv = &adapt->mlmepriv;
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
 	struct hal_data_8188e	*haldata = GET_HAL_DATA(adapt);
 	struct tx_desc	*ptxdesc = (struct tx_desc *)pmem;
 	struct mlme_ext_priv	*pmlmeext = &adapt->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	int	bmcst = IS_MCAST(pattrib->ra);
-
-#ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &adapt->wdinfo;
-#endif /* CONFIG_P2P */
 
 	if (adapt->registrypriv.mp_mode == 0) {
 		if ((!bagg_pkt) && (urb_zero_packet_chk(adapt, sz) == 0)) {

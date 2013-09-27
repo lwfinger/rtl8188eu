@@ -93,7 +93,6 @@ rtl8188e_PHY_QueryBBReg(
 	)
 {
 	u32 ReturnValue = 0, OriginalValue, BitShift;
-	u16	BBWaitCounter = 0;
 
 	OriginalValue = rtw_read32(Adapter, RegAddr);
 	BitShift = phy_CalculateBitShift(BitMask);
@@ -122,7 +121,6 @@ rtl8188e_PHY_QueryBBReg(
 
 void rtl8188e_PHY_SetBBReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u32 Data)
 {
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u32 OriginalValue, BitShift;
 
 	if (BitMask != bMaskDWord) { /* if not "double word" write */
@@ -378,8 +376,6 @@ rtl8188e_PHY_SetRFReg(
  *---------------------------------------------------------------------------*/
 static	int phy_ConfigMACWithParaFile(struct adapter *Adapter, u8 *pFileName)
 {
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-
 	int		rtStatus = _FAIL;
 
 	return rtStatus;
@@ -405,7 +401,6 @@ s32 PHY_MACConfig8188E(struct adapter *Adapter)
 {
 	int		rtStatus = _SUCCESS;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	s8			sz8188EMACRegFile[] = RTL8188E_PHY_MACREG;
 
 	/*  */
 	/*  Config MAC */
@@ -665,11 +660,6 @@ phy_BB8188E_Config_ParaFile(
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
 	int			rtStatus = _SUCCESS;
 
-	u8 sz8188EBBRegFile[] = RTL8188E_PHY_REG;
-	u8 sz8188EAGCTableFile[] = RTL8188E_AGC_TAB;
-	u8 sz8188EBBRegPgFile[] = RTL8188E_PHY_REG_PG;
-	u8 sz8188EBBRegMpFile[] = RTL8188E_PHY_REG_MP;
-
 	/*  */
 	/*  1. Read PHY_REG.TXT BB INIT!! */
 	/*  We will seperate as 88C / 92C according to chip version */
@@ -710,8 +700,7 @@ PHY_BBConfig8188E(
 	int	rtStatus = _SUCCESS;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	u32 RegVal;
-	u8 TmpU1B = 0;
-	u8 value8, CrystalCap;
+	u8 CrystalCap;
 
 	phy_InitBBRFRegisterDefinition(Adapter);
 
@@ -738,7 +727,6 @@ PHY_BBConfig8188E(
 
 int PHY_RFConfig8188E(struct adapter *Adapter)
 {
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 	int		rtStatus = _SUCCESS;
 
 	/*  RF config */
@@ -1024,11 +1012,8 @@ PHY_SetTxPowerLevel8188E(
 		u8 channel
 	)
 {
-	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
-
 	u8 cckPowerLevel[MAX_TX_COUNT], ofdmPowerLevel[MAX_TX_COUNT];/*  [0]:RF-A, [1]:RF-B */
 	u8 BW20PowerLevel[MAX_TX_COUNT], BW40PowerLevel[MAX_TX_COUNT];
-	u8 i = 0;
 
 	getTxPowerIndex88E(Adapter, channel, &cckPowerLevel[0], &ofdmPowerLevel[0], &BW20PowerLevel[0], &BW40PowerLevel[0]);
 

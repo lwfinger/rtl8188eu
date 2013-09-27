@@ -163,8 +163,6 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 
 	u32     hex         = 0;
 	u32     i           = 0;
-	u16     count       = 0;
-	u32    *ptr_array   = NULL;
 	u8     platform    = pDM_Odm->SupportPlatform;
 	u8     interfaceValue   = pDM_Odm->SupportInterface;
 	u8     board       = pDM_Odm->BoardType;

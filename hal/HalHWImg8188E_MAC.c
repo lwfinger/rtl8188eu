@@ -151,8 +151,6 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 
 	u32     hex         = 0;
 	u32     i;
-	u16     count       = 0;
-	u32    *ptr_array   = NULL;
 	u8     platform    = dm_odm->SupportPlatform;
 	u8     interface_val   = dm_odm->SupportInterface;
 	u8     board       = dm_odm->BoardType;

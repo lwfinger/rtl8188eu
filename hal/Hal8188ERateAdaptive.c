@@ -43,8 +43,6 @@ static u8 RETRY_PENALTY[PERENTRY][RETRYSIZE+1] = {
 		{49, 16, 16, 0, 0, 48}
 	}; /* 3, idx = 0x16 */
 
-static u8 RETRY_PENALTY_UP[RETRYSIZE+1] = {49, 44, 16, 16, 0, 48};  /*  12% for rate up */
-
 static u8 PT_PENALTY[RETRYSIZE+1] = {34, 31, 30, 24, 0, 32};
 
 /*  wilson modify */
@@ -80,36 +78,12 @@ static u16 N_THRESHOLD_LOW[RATESIZE] = {
 		12, 18, 24, 36, 48, 72, 96, 108,
 		30, 40, 50, 80, 120, 200, 280, 320,
 		150, 160, 240, 360, 500, 600, 800, 1000};
-static u8  TRYING_NECESSARY[RATESIZE] = {
-		2, 2, 2, 2,
-		2, 2, 3, 3, 4, 4, 5, 7,
-		4, 4, 7, 10, 10, 12, 12, 18,
-		5, 7, 7, 8, 11, 18, 36, 60};  /*  0329  1207 */
 
 static u8 DROPING_NECESSARY[RATESIZE] = {
 		1, 1, 1, 1,
 		1, 2, 3, 4, 5, 6, 7, 8,
 		1, 2, 3, 4, 5, 6, 7, 8,
 		5, 6, 7, 8, 9, 10, 11, 12};
-
-static u32 INIT_RATE_FALLBACK_TABLE[16] = {
-		0x0f8ff015,  /*  0: 40M BGN mode */
-		0x0f8ff010,   /*  1: 40M GN mode */
-		0x0f8ff005,   /*  2: BN mode/ 40M BGN mode */
-		0x0f8ff000,   /*  3: N mode */
-		0x00000ff5,   /*  4: BG mode */
-		0x00000ff0,   /*  5: G mode */
-		0x0000000d,   /*  6: B mode */
-		0,		/*  7: */
-		0,		/*  8: */
-		0,		/*  9: */
-		0,		/*  10: */
-		0,		/*  11: */
-		0,		/*  12: */
-		0,		/*  13: */
-		0,		/*  14: */
-		0,		/*  15: */
-	};
 
 static u8 PendingForRateUpFail[5] = {2, 10, 24, 40, 60};
 static u16 DynamicTxRPTTiming[6] = {

@@ -34,11 +34,9 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 
 	unsigned int pipe;
 	int status = 0;
-	u32 tmp_buflen = 0;
 	u8 reqtype;
 	u8 *pIo_buf;
 	int vendorreq_times = 0;
-	u8 tmp_buf[MAX_USB_IO_CTL_SIZE];
 
 	if ((adapt->bSurpriseRemoved) || (adapt->pwrctrlpriv.pnp_bstop_trx)) {
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usbctrl_vendorreq:(adapt->bSurpriseRemoved ||adapter->pwrctrlpriv.pnp_bstop_trx)!!!\n"));
@@ -298,7 +296,6 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 static void interrupt_handler_8188eu(struct adapter *adapt, u16 pkt_len, u8 *pbuf)
 {
 	struct hal_data_8188e	*haldata = GET_HAL_DATA(adapt);
-	struct reportpwrstate_parm pwr_rpt;
 
 	if (pkt_len != INTERRUPT_MSG_FORMAT_LEN) {
 		DBG_88E("%s Invalid interrupt content length (%d)!\n", __func__, pkt_len);
@@ -515,8 +512,6 @@ void rtl8188eu_recv_tasklet(void *priv)
 
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	unsigned long irql;
-	uint isevt, *pbuf;
 	struct recv_buf	*precvbuf = (struct recv_buf *)purb->context;
 	struct adapter	*adapt = (struct adapter *)precvbuf->adapter;
 	struct recv_priv *precvpriv = &adapt->recvpriv;
@@ -599,7 +594,6 @@ _func_exit_;
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {
-	unsigned long irql;
 	int err;
 	unsigned int pipe;
 	size_t tmpaddr = 0;

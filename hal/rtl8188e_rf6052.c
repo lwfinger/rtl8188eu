@@ -46,33 +46,6 @@
 
 #include <rtl8188e_hal.h>
 
-/*---------------------------Define Local Constant---------------------------*/
-/*  Define local structure for debug!!!!! */
-struct rf_shadow {
-	/*  Shadow register value */
-	u32 Value;
-	/*  Compare or not flag */
-	u8 Compare;
-	/*  Record If it had ever modified unpredicted */
-	u8 ErrorOrNot;
-	/*  Recorver Flag */
-	u8 Recorver;
-	/*  */
-	u8 Driver_Write;
-};
-
-/*---------------------------Define Local Constant---------------------------*/
-
-
-/*------------------------Define global variable-----------------------------*/
-/*------------------------Define global variable-----------------------------*/
-
-
-/*------------------------Define local variable------------------------------*/
-/*  2008/11/20 MH For Debug only, RF */
-static	struct rf_shadow	RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
-/*------------------------Define local variable------------------------------*/
-
 
 /*-----------------------------------------------------------------------------
  * Function:	RF_ChangeTxPath
@@ -153,7 +126,6 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 		u8 *pPowerlevel)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
-	struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
 	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
 	struct mlme_ext_priv		*pmlmeext = &Adapter->mlmeextpriv;
 	u32 TxAGC[2] = {0, 0}, tmpval = 0, pwrtrac_value;
@@ -254,8 +226,6 @@ static void getpowerbase88e(struct adapter *Adapter, u8 *pPowerLevelOFDM,
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
 	u32 powerBase0, powerBase1;
-	u8 Legacy_pwrdiff = 0;
-	s8	HT20_pwrdiff = 0;
 	u8 i, powerlevel[2];
 
 	for (i = 0; i < 2; i++) {
@@ -491,8 +461,6 @@ static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
 	struct bb_reg_def *pPhyReg;
 	int rtStatus = _SUCCESS;
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
-	static char sz88eRadioAFile[] = RTL8188E_PHY_RADIO_A;
-	static char sz88eRadioBFile[] = RTL8188E_PHY_RADIO_B;
 
 	/* 3----------------------------------------------------------------- */
 	/* 3 <2> Initialize RF */

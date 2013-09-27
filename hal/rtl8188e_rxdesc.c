@@ -36,7 +36,6 @@ static s32  translate2dbm(u8 signal_strength_idx)
 
 static void process_rssi(struct adapter *padapter, union recv_frame *prframe)
 {
-	u32	last_rssi, tmp_val;
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
 	struct signal_stat *signal_stat = &padapter->recvpriv.signal_strength_data;
 
@@ -53,7 +52,6 @@ static void process_rssi(struct adapter *padapter, union recv_frame *prframe)
 
 static void process_link_qual(struct adapter *padapter, union recv_frame *prframe)
 {
-	u32	last_evm = 0, tmpVal;
 	struct rx_pkt_attrib *pattrib;
 	struct signal_stat *signal_stat;
 

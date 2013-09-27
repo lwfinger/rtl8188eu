@@ -28,7 +28,6 @@ s32 Hal_SetPowerTracking(struct adapter *padapter, u8 enable)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
 
 
@@ -56,7 +55,6 @@ void Hal_GetPowerTracking(struct adapter *padapter, u8 *enable)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
 
 
@@ -68,7 +66,6 @@ static void Hal_disable_dm(struct adapter *padapter)
 	u8 v8;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
 
 
@@ -110,10 +107,6 @@ void Hal_mpt_SwitchRfSetting(struct adapter *pAdapter)
 {
 	/* struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter); */
 	struct mp_priv	*pmp = &pAdapter->mppriv;
-	u8				ChannelToSw = pmp->channel;
-	u32				ulRateIdx = pmp->rateidx;
-	u32				ulbandwidth = pmp->bandwidth;
-	struct hal_data_8188e		*pHalData = GET_HAL_DATA(pAdapter);
 
 	/*  <20120525, Kordan> Dynamic mechanism for APK, asked by Dennis. */
 		pmp->MptCtx.backup0x52_RF_A = (u8)PHY_QueryRFReg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
@@ -131,7 +124,6 @@ void Hal_MPT_CCKTxPowerAdjust(struct adapter *Adapter, bool bInCH14)
 	u32		TempVal = 0, TempVal2 = 0, TempVal3 = 0;
 	u32		CurrCCKSwingVal = 0, CCKSwingIndex = 12;
 	u8		i;
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
 
 	/*  get current cck swing value and check 0xa22 & 0xa23 later to match the table. */
 	CurrCCKSwingVal = read_bbreg(Adapter, rCCK0_TxFilter1, bMaskHWord);
@@ -199,12 +191,10 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(struct adapter *pAdapter, bool beven)
 	s32		TempCCk;
 	u8		CCK_index, CCK_index_old;
 	u8		Action = 0;	/* 0: no action, 1: even->odd, 2:odd->even */
-	u8		TimeOut = 100;
 	s32		i = 0;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
 
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
 
 
@@ -278,12 +268,9 @@ void Hal_SetChannel(struct adapter *pAdapter)
 
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct mp_priv	*pmp = &pAdapter->mppriv;
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
 
 	u8		channel = pmp->channel;
-	u8		bandwidth = pmp->bandwidth;
-	u8		rate = pmp->rateidx;
 
 
 	/*  set RF channel register */
@@ -343,9 +330,6 @@ void Hal_SetOFDMTxPower(struct adapter *pAdapter, u8 *TxPower)
 {
 	u32 TxAGC = 0;
 	u8 tmpval = 0;
-	struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-
 
 	/*  HT Tx-rf(A) */
 	tmpval = TxPower[RF_PATH_A];
@@ -458,7 +442,7 @@ void Hal_SetAntenna(struct adapter *pAdapter)
 	struct ant_sel_cck *p_cck_txrx;
 	u8	r_rx_antenna_ofdm = 0, r_ant_select_cck_val = 0;
 	u8	chgTx = 0, chgRx = 0;
-	u32	r_ant_sel_cck_val = 0, r_ant_select_ofdm_val = 0, r_ofdm_tx_en_val = 0;
+	u32	r_ant_select_ofdm_val = 0, r_ofdm_tx_en_val = 0;
 
 
 	p_ofdm_tx = (struct ant_sel_ofdm *)&r_ant_select_ofdm_val;
@@ -641,8 +625,6 @@ void Hal_GetThermalMeter(struct adapter *pAdapter, u8 *value)
 
 void Hal_SetSingleCarrierTx(struct adapter *pAdapter, u8 bStart)
 {
-	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
-
 	pAdapter->mppriv.MptCtx.bSingleCarrier = bStart;
 	if (bStart) {
 		/*  Start Single Carrier. */
@@ -862,8 +844,6 @@ void Hal_SetCCKContinuousTx(struct adapter *pAdapter, u8 bStart)
 
 void Hal_SetOFDMContinuousTx(struct adapter *pAdapter, u8 bStart)
 {
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
-
 	if (bStart) {
 		RT_TRACE(_module_mp_, _drv_info_, ("SetOFDMContinuousTx: test start\n"));
 		/*  1. if OFDM block on? */

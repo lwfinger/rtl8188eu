@@ -139,7 +139,6 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	s8 OFDM_index_old[2] = {0, 0}, CCK_index_old = 0;
 	u32 i = 0, j = 0;
 	bool is2t = false;
-	bool bInteralPA = false;
 
 	u8 OFDM_min_index = 6, rf; /* OFDM BB Swing should be less than +3.0dB, which is required by Arthur */
 	u8 Indexforchannel = 0/*GetRightChnlPlaceforIQK(pHalData->CurrentChannel)*/;

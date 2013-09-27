@@ -35,7 +35,6 @@ void ODM_DIG_LowerBound_88E(struct odm_dm_struct *dm_odm)
 static void odm_RX_HWAntDivInit(struct odm_dm_struct *dm_odm)
 {
 	u32	value32;
-	struct adapter *Adapter = dm_odm->Adapter;
 
 	if (*(dm_odm->mp_mode) == 1) {
 		dm_odm->AntDivType = CGCS_RX_SW_ANTDIV;
@@ -65,7 +64,6 @@ static void odm_RX_HWAntDivInit(struct odm_dm_struct *dm_odm)
 static void odm_TRX_HWAntDivInit(struct odm_dm_struct *dm_odm)
 {
 	u32	value32;
-	struct adapter *Adapter = dm_odm->Adapter;
 
 	if (*(dm_odm->mp_mode) == 1) {
 		dm_odm->AntDivType = CGCS_RX_SW_ANTDIV;
@@ -106,7 +104,6 @@ static void odm_FastAntTrainingInit(struct odm_dm_struct *dm_odm)
 	u32	value32, i;
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
 	u32	AntCombination = 2;
-	struct adapter *Adapter = dm_odm->Adapter;
 
 	ODM_RT_TRACE(dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit()\n"));
 
@@ -289,8 +286,6 @@ static void odm_HWAntDiv(struct odm_dm_struct *dm_odm)
 	u8	RxIdleAnt = 0, TargetAnt = 7;
 	struct fast_ant_train *dm_fat_tbl = &dm_odm->DM_FatTable;
 	struct rtw_dig *pDM_DigTable = &dm_odm->DM_DigTable;
-	bool	bMatchBSSID;
-	bool	bPktFilterMacth = false;
 	struct sta_info *pEntry;
 
 	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {

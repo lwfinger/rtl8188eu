@@ -270,7 +270,6 @@ static void _InitQueueReservedPage(struct adapter *Adapter)
 {
 	struct hal_data_8188e		*haldata = GET_HAL_DATA(Adapter);
 	struct registry_priv	*pregistrypriv = &Adapter->registrypriv;
-	u32 outEPNum	= (u32)haldata->OutEpNumber;
 	u32 numHQ	= 0;
 	u32 numLQ	= 0;
 	u32 numNQ	= 0;
@@ -310,8 +309,6 @@ _InitTxBufferBoundary(
 	u8 txpktbuf_bndy
 	)
 {
-	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
-
 	rtw_write8(Adapter, REG_TXPKTBUF_BCNQ_BDNY, txpktbuf_bndy);
 	rtw_write8(Adapter, REG_TXPKTBUF_MGQ_BDNY, txpktbuf_bndy);
 	rtw_write8(Adapter, REG_TXPKTBUF_WMAC_LBK_BF_HD, txpktbuf_bndy);
@@ -786,7 +783,6 @@ static void _InitBeaconParameters(struct adapter *Adapter)
 
 static void _InitRFType(struct adapter *Adapter)
 {
-	struct registry_priv	 *pregpriv = &Adapter->registrypriv;
 	struct hal_data_8188e	*haldata	= GET_HAL_DATA(Adapter);
 	bool			is92CU		= IS_92C_SERIAL(haldata->VersionID);
 
@@ -883,7 +879,6 @@ HalDetectSelectiveSuspendMode(
  *---------------------------------------------------------------------------*/
 enum rt_rf_power_state RfOnOffDetect(struct adapter *adapt)
 {
-	struct hal_data_8188e		*haldata = GET_HAL_DATA(adapt);
 	u8 val8;
 	enum rt_rf_power_state rfpowerstate = rf_off;
 
@@ -909,10 +904,6 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	struct hal_data_8188e		*haldata = GET_HAL_DATA(Adapter);
 	struct pwrctrl_priv		*pwrctrlpriv = &Adapter->pwrctrlpriv;
 	struct registry_priv	*pregistrypriv = &Adapter->registrypriv;
-	enum rt_rf_power_state	eRfPowerStateToSet;
-#ifdef CONFIG_BT_COEXIST
-	struct btcoexist_priv	*pbtpriv = &(haldata->bt_coexist);
-#endif
 	u32 init_start_time = rtw_get_current_time();
 
 	#define HAL_INIT_PROFILE_TAG(stage) do {} while (0)
@@ -1230,8 +1221,6 @@ static void _ps_close_RF(struct adapter *adapt)
 static void CardDisableRTL8188EU(struct adapter *Adapter)
 {
 	u8 val8;
-	u16 val16;
-	u32 val32;
 	struct hal_data_8188e	*haldata	= GET_HAL_DATA(Adapter);
 
 	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("CardDisableRTL8188EU\n"));
@@ -1298,8 +1287,6 @@ static void rtl8192cu_hw_power_down(struct adapter *adapt)
 
 static u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
 {
-
-	struct hal_data_8188e	*haldata = GET_HAL_DATA(Adapter);
 	DBG_88E("==> %s\n", __func__);
 
 	rtw_write32(Adapter, REG_HIMR_88E, IMR_DISABLED_88E);
@@ -1326,7 +1313,6 @@ static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 	u8 i;
 	struct recv_buf *precvbuf;
 	uint	status;
-	struct dvobj_priv *pdev = adapter_to_dvobj(Adapter);
 	struct intf_hdl *pintfhdl = &Adapter->iopriv.intf;
 	struct recv_priv *precvpriv = &(Adapter->recvpriv);
 	u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
@@ -1425,7 +1411,7 @@ static void Hal_EfuseParsePIDVID_8188EU(struct adapter *adapt, u8 *hwinfo, bool 
 
 static void Hal_EfuseParseMACAddr_8188EU(struct adapter *adapt, u8 *hwinfo, bool AutoLoadFail)
 {
-	u16 i, usValue;
+	u16 i;
 	u8 sMacAddr[6] = {0x00, 0xE0, 0x4C, 0x81, 0x88, 0x02};
 	struct eeprom_priv *eeprom = GET_EEPROM_EFUSE_PRIV(adapt);
 
@@ -2074,7 +2060,9 @@ _func_enter_;
 	case HW_VAR_AMPDU_FACTOR:
 		{
 			u8 RegToSet_Normal[4] = {0x41, 0xa8, 0x72, 0xb9};
+#ifdef CONFIG_BT_COEXIST
 			u8 RegToSet_BT[4] = {0x31, 0x74, 0x42, 0x97};
+#endif
 			u8 FactorToSet;
 			u8 *pRegToSet;
 			u8 index = 0;
@@ -2472,7 +2460,6 @@ GetHalDefVar8188EUsb(
 		break;
 	case HW_DEF_ODM_DBG_FLAG:
 		{
-			u64	DebugComponents = *((u32 *)pValue);
 			struct odm_dm_struct *dm_ocm = &(haldata->odmpriv);
 			pr_info("dm_ocm->DebugComponents = 0x%llx\n", dm_ocm->DebugComponents);
 		}
@@ -2504,7 +2491,6 @@ static u8 SetHalDefVar8188EUsb(struct adapter *Adapter, enum hal_def_variable eV
 	case HAL_DEF_DBG_DM_FUNC:
 		{
 			u8 dm_func = *((u8 *)pValue);
-			struct dm_priv	*pdmpriv = &haldata->dmpriv;
 			struct odm_dm_struct *podmpriv = &haldata->odmpriv;
 
 			if (dm_func == 0) { /* disable all dynamic func */

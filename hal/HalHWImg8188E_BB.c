@@ -195,8 +195,6 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 {
 	u32     hex         = 0;
 	u32     i           = 0;
-	u16     count       = 0;
-	u32    *ptr_array   = NULL;
 	u8     platform    = dm_odm->SupportPlatform;
 	u8     interfaceValue   = dm_odm->SupportInterface;
 	u8     board       = dm_odm->BoardType;
@@ -477,8 +475,6 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 {
 	u32     hex         = 0;
 	u32     i           = 0;
-	u16     count       = 0;
-	u32    *ptr_array   = NULL;
 	u8     platform    = dm_odm->SupportPlatform;
 	u8     interfaceValue   = dm_odm->SupportInterface;
 	u8     board       = dm_odm->BoardType;
@@ -688,14 +684,11 @@ void ODM_ReadAndConfig_PHY_REG_PG_8188E(struct odm_dm_struct *dm_odm)
 {
 	u32  hex;
 	u32  i           = 0;
-	u16  count       = 0;
-	u32 *ptr_array   = NULL;
 	u8  platform    = dm_odm->SupportPlatform;
 	u8  interfaceValue   = dm_odm->SupportInterface;
 	u8  board       = dm_odm->BoardType;
 	u32  arraylen    = sizeof(array_phy_reg_pg_8188e) / sizeof(u32);
 	u32 *array       = array_phy_reg_pg_8188e;
-	bool	biol = false;
 
 	hex = board + (interfaceValue << 8);
 	hex += (platform << 16) + 0xFF000000;

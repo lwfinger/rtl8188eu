@@ -362,7 +362,6 @@ static void ConstructPSPoll(struct adapter *adapt, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16 *fctrl;
-	u32 pktlen;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -513,7 +512,7 @@ static void SetFwRsvdPagePkt(struct adapter *adapt, bool bDLFinished)
 	struct mlme_ext_priv *pmlmeext;
 	struct mlme_ext_info	*pmlmeinfo;
 	u32 BeaconLength, ProbeRspLength, PSPollLength;
-	u32 NullDataLength, QosNullLength, BTQosNullLength;
+	u32 NullDataLength, QosNullLength;
 	u8 *ReservedPagePacket;
 	u8 PageNum, PageNeed, TxDescLen;
 	u16 BufIndex;
@@ -613,7 +612,6 @@ exit:
 
 void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *adapt, u8 mstatus)
 {
-	struct joinbssrpt_parm JoinBssRptParm;
 	struct hal_data_8188e *haldata = GET_HAL_DATA(adapt);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -722,7 +720,6 @@ _func_exit_;
 void rtl8188e_set_p2p_ps_offload_cmd(struct adapter *adapt, u8 p2p_ps_state)
 {
 	struct hal_data_8188e *haldata = GET_HAL_DATA(adapt);
-	struct pwrctrl_priv *pwrpriv = &adapt->pwrctrlpriv;
 	struct wifidirect_info	*pwdinfo = &(adapt->wdinfo);
 	struct P2P_PS_Offload_t	*p2p_ps_offload = &haldata->p2p_ps_offload;
 	u8 i;

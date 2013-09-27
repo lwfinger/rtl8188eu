@@ -646,7 +646,6 @@ void ODM_Write_DIG(struct odm_dm_struct *pDM_Odm, u8 CurrentIGI)
 void odm_DIGbyRSSI_LPS(struct odm_dm_struct *pDM_Odm)
 {
 	struct adapter *pAdapter = pDM_Odm->Adapter;
-	struct rtw_dig *pDM_DigTable = &pDM_Odm->DM_DigTable;
 	struct false_alarm_stats *pFalseAlmCnt = &pDM_Odm->FalseAlmCnt;
 
 	u8 RSSI_Lower = DM_DIG_MIN_NIC;   /* 0x1E or 0x1C */
@@ -727,7 +726,6 @@ void odm_DIG(struct odm_dm_struct *pDM_Odm)
 {
 	struct rtw_dig *pDM_DigTable = &pDM_Odm->DM_DigTable;
 	struct false_alarm_stats *pFalseAlmCnt = &pDM_Odm->FalseAlmCnt;
-	struct rx_hpc *pRX_HP_Table  = &pDM_Odm->DM_RXHP_Table;
 	u8 DIG_Dynamic_MIN;
 	u8 DIG_MaxOfMin;
 	bool FirstConnect, FirstDisConnect;
@@ -1070,7 +1068,6 @@ void odm_FalseAlarmCounterStatistics(struct odm_dm_struct *pDM_Odm)
 
 void odm_CCKPacketDetectionThresh(struct odm_dm_struct *pDM_Odm)
 {
-	struct rtw_dig *pDM_DigTable = &pDM_Odm->DM_DigTable;
 	u8 CurCCK_CCAThres;
 	struct false_alarm_stats *FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
 
@@ -1563,13 +1560,6 @@ static void odm_RSSIMonitorInit(struct odm_dm_struct *pDM_Odm)
 
 void odm_RSSIMonitorCheck(struct odm_dm_struct *pDM_Odm)
 {
-	/*  */
-	/*  For AP/ADSL use struct rtl8192cd_priv * */
-	/*  For CE/NIC use struct adapter * */
-	/*  */
-	struct adapter *pAdapter = pDM_Odm->Adapter;
-	struct rtl8192cd_priv *priv		= pDM_Odm->priv;
-
 	if (!(pDM_Odm->SupportAbility & ODM_BB_RSSI_MONITOR))
 		return;
 
@@ -1632,7 +1622,6 @@ void odm_RSSIMonitorCheckCE(struct odm_dm_struct *pDM_Odm)
 	u8	sta_cnt = 0;
 	u32 PWDB_rssi[NUM_STA] = {0};/* 0~15]:MACID, [16~31]:PWDB_rssi */
 	struct sta_info *psta;
-	struct sta_priv *pstapriv = &Adapter->stapriv;
 	u8 bcast_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 	if (!check_fwstate(&Adapter->mlmepriv, _FW_LINKED))
@@ -1724,11 +1713,6 @@ void odm_TXPowerTrackingThermalMeterInit(struct odm_dm_struct *pDM_Odm)
 
 void ODM_TXPowerTrackingCheck(struct odm_dm_struct *pDM_Odm)
 {
-	/*  For AP/ADSL use struct rtl8192cd_priv * */
-	/*  For CE/NIC use struct adapter * */
-	struct adapter *pAdapter = pDM_Odm->Adapter;
-	struct rtl8192cd_priv *priv = pDM_Odm->priv;
-
 	/*  2011/09/29 MH In HW integration first stage, we provide 4 different handle to operate */
 	/*  at the same time. In the stage2/3, we need to prive universal interface and merge all */
 	/*  HW dynamic mechanism. */
@@ -2069,11 +2053,6 @@ void ODM_EdcaTurboInit(struct odm_dm_struct *pDM_Odm)
 
 void odm_EdcaTurboCheck(struct odm_dm_struct *pDM_Odm)
 {
-	/*  For AP/ADSL use struct rtl8192cd_priv * */
-	/*  For CE/NIC use struct adapter * */
-	struct adapter *pAdapter = pDM_Odm->Adapter;
-	struct rtl8192cd_priv *priv = pDM_Odm->priv;
-
 	/*  2011/09/29 MH In HW integration first stage, we provide 4 different handle to operate */
 	/*  at the same time. In the stage2/3, we need to prive universal interface and merge all */
 	/*  HW dynamic mechanism. */

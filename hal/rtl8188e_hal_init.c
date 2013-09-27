@@ -52,7 +52,7 @@ static void iol_mode_enable(struct adapter *padapter, u8 enable)
 static s32 iol_execute(struct adapter *padapter, u8 control)
 {
 	s32 status = _FAIL;
-	u8 reg_0x88 = 0, reg_1c7 = 0;
+	u8 reg_0x88 = 0;
 	u32 start = 0, passing_time = 0;
 
 	control = control&0x0f;
@@ -218,7 +218,6 @@ static void efuse_read_phymap_from_txpktbuf(
 	u16 dbg_addr = 0;
 	u32 start  = 0, passing_time = 0;
 	u8 reg_0x143 = 0;
-	u8 reg_0x106 = 0;
 	u32 lo32 = 0, hi32 = 0;
 	u16 len = 0, count = 0;
 	int i = 0;
@@ -293,10 +292,8 @@ static void efuse_read_phymap_from_txpktbuf(
 static s32 iol_read_efuse(struct adapter *padapter, u8 txpktbuf_bndy, u16 offset, u16 size_byte, u8 *logical_map)
 {
 	s32 status = _FAIL;
-	u8 reg_0x106 = 0;
 	u8 physical_map[512];
 	u16 size = 512;
-	int i;
 
 	rtw_write8(padapter, REG_TDECTRL+1, txpktbuf_bndy);
 	_rtw_memset(physical_map, 0xFF, 512);
@@ -335,9 +332,7 @@ static s32 iol_ioconfig(struct adapter *padapter, u8 iocfg_bndy)
 
 static int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {
-	u32 start_time = rtw_get_current_time();
-	u32 passing_time_ms;
-	u8 polling_ret, i;
+	u8 i;
 	int ret = _FAIL;
 	struct pkt_attrib *pattrib = &xmit_frame->attrib;
 
@@ -566,7 +561,6 @@ static s32 _FWFreeToGo(struct adapter *padapter)
 {
 	u32	counter = 0;
 	u32	value32;
-	u8 value8;
 
 	/*  polling CheckSum report */
 	do {
@@ -623,12 +617,10 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 
 	u8 *FwImage;
 	u32			FwImageLen;
-	u8 *pFwImageFileName;
 #ifdef CONFIG_WOWLAN
 	u8 *FwImageWoWLAN;
 	u32			FwImageWoWLANLen;
 #endif
-	u8 *pucMappedFile = NULL;
 	struct rt_firmware *pFirmware = NULL;
 	struct rt_firmware_hdr *pFwHdr = NULL;
 	u8 *pFirmwareBuf;
@@ -1573,7 +1565,7 @@ static bool hal_EfuseFixHeaderProcess(struct adapter *pAdapter, u8 efuseType, st
 
 static bool hal_EfusePgPacketWrite2ByteHeader(struct adapter *pAdapter, u8 efuseType, u16 *pAddr, struct pgpkt *pTargetPkt, bool bPseudoTest)
 {
-	bool bRet = false, bContinual = true;
+	bool bRet = false;
 	u16	efuse_addr = *pAddr, efuse_max_available_len = 0;
 	u8 pg_header = 0, tmp_header = 0, pg_header_temp = 0;
 	u8 repeatcnt = 0;
@@ -1719,7 +1711,6 @@ wordEnMatched(
 )
 {
 	u8 match_word_en = 0x0F;	/*  default all words are disabled */
-	u8 i;
 
 	/*  check if the same words are enabled both target and current PG packet */
 	if (((pTargetPkt->word_en & BIT0) == 0) &&
@@ -1759,7 +1750,7 @@ static bool hal_EfusePartialWriteCheck(struct adapter *pAdapter, u8 efuseType, u
 {
 	bool bRet = false;
 	u8 i, efuse_data = 0, cur_header = 0;
-	u8 new_wden = 0, matched_wden = 0, badworden = 0;
+	u8 matched_wden = 0, badworden = 0;
 	u16	startAddr = 0, efuse_max_available_len = 0, efuse_max = 0;
 	struct pgpkt curPkt;
 
@@ -1990,8 +1981,6 @@ static void rtl8188e_read_chip_version(struct adapter *padapter)
 
 static void rtl8188e_GetHalODMVar(struct adapter *Adapter, enum hal_odm_variable eVariable, void *pValue1, bool bSet)
 {
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	struct odm_dm_struct *podmpriv = &pHalData->odmpriv;
 	switch (eVariable) {
 	case HAL_ODM_STA_INFO:
 		break;
@@ -2150,7 +2139,6 @@ s32 InitLLTTable(struct adapter *padapter, u8 txpktbuf_bndy)
 	s32	status = _FAIL;
 	u32	i;
 	u32	Last_Entry_Of_TxPktBuf = LAST_ENTRY_OF_TX_PKT_BUFFER;/*  176, 22k */
-	struct hal_data_8188e *pHalData	= GET_HAL_DATA(padapter);
 
 	if (rtw_IOL_applied(padapter)) {
 		status = iol_InitLLTTable(padapter, txpktbuf_bndy);
@@ -2189,8 +2177,6 @@ void
 Hal_InitPGData88E(struct adapter *padapter)
 {
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
-	u32			i;
-	u16			value16;
 
 	if (!pEEPROM->bautoload_fail_flag) { /*  autoload OK. */
 		if (!is_boot_from_eeprom(padapter)) {
@@ -2419,10 +2405,6 @@ static u8 Hal_GetChnlGroup88E(u8 chnl, u8 *pGroup)
 
 void Hal_ReadPowerSavingMode88E(struct adapter *padapter, u8 *hwinfo, bool AutoLoadFail)
 {
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
-	u8 tmpvalue;
-
 	if (AutoLoadFail) {
 		padapter->pwrctrlpriv.bHWPowerdown = false;
 		padapter->pwrctrlpriv.bSupportRemoteWakeup = false;
@@ -2449,8 +2431,8 @@ void Hal_ReadTxPowerInfo88E(struct adapter *padapter, u8 *PROMContent, bool Auto
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
 	struct txpowerinfo24g pwrInfo24G;
-	u8 rfPath, ch, group, rfPathMax = 1;
-	u8 pwr, diff, bIn24G, TxCount;
+	u8 rfPath, ch, group;
+	u8 bIn24G, TxCount;
 
 	Hal_ReadPowerValueFromPROM_8188E(&pwrInfo24G, PROMContent, AutoLoadFail);
 
@@ -2598,7 +2580,6 @@ void Hal_ReadAntennaDiversity88E(struct adapter *pAdapter, u8 *PROMContent, bool
 void Hal_ReadThermalMeter_88E(struct adapter *Adapter, u8 *PROMContent, bool AutoloadFail)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	u8			tempval;
 
 	/*  ThermalMeter from EEPROM */
 	if (!AutoloadFail)
