@@ -775,8 +775,6 @@ SetFwRelatedForWoWLAN8188ES(
 )
 {
 		int				status = _FAIL;
-		struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-		u8 bRecover = false;
 	/*  */
 	/*  1. Before WoWLAN we need to re-download WoWLAN Fw. */
 	/*  */
