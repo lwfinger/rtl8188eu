@@ -612,6 +612,9 @@ exit:
 
 void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *adapt, u8 mstatus)
 {
+#ifdef CONFIG_WOWLAN
+	struct joinbssrpt_parm JoinBssRptParm;
+#endif /* CONFIG_WOWLAN */
 	struct hal_data_8188e *haldata = GET_HAL_DATA(adapt);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -793,8 +796,6 @@ _func_exit_;
 void rtl8188es_set_wowlan_cmd(struct adapter *adapt, u8 enable)
 {
 	u8 res = _SUCCESS;
-	u32 test = 0;
-	struct recv_priv *precvpriv = &adapt->recvpriv;
 	struct setwowlan_parm pwowlan_parm;
 	struct setaoac_glocal_info paoac_global_info_parm;
 	struct pwrctrl_priv *pwrpriv = &adapt->pwrctrlpriv;

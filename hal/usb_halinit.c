@@ -2216,13 +2216,8 @@ _func_enter_;
 	case HW_VAR_WOWLAN:
 		{
 		struct wowlan_ioctl_param *poidparam;
-		struct recv_buf *precvbuf;
-		int res, i;
-		u32 tmp;
-		u16 len = 0;
 		u8 mstatus = (*(u8 *)val);
 		u8 trycnt = 100;
-		u8 data[4];
 
 		poidparam = (struct wowlan_ioctl_param *)val;
 		switch (poidparam->subcode) {
