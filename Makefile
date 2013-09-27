@@ -61,10 +61,6 @@ OUTSRC_FILES :=				\
 
 RTL871X = rtl8188e
 
-ifeq ($(CONFIG_WOWLAN), y)
-OUTSRC_FILES += hal/HalHWImg8188E_FW.o
-endif
-
 HCI_NAME = usb
 
 _OS_INTFS_FILES :=				\
