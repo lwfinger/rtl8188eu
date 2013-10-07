@@ -555,6 +555,8 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 		}
 	} else {
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usb_read_port_complete : purb->status(%d) != 0\n", purb->status));
+		skb_put(precvbuf->pskb, purb->actual_length);
+		precvbuf->pskb = NULL;
 
 		DBG_88E("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
