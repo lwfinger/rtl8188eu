@@ -359,29 +359,6 @@ rtl8188e_PHY_SetRFReg(
 /*  */
 
 /*-----------------------------------------------------------------------------
- * Function:    phy_ConfigMACWithParaFile()
- *
- * Overview:    This function read BB parameters from general file format, and do register
- *			  Read/Write
- *
- * Input:	struct adapter *Adapter
- *			ps8				pFileName
- *
- * Output:      NONE
- *
- * Return:      RT_STATUS_SUCCESS: configuration file exist
- *
- * Note:		The format of MACPHY_REG.txt is different from PHY and RF.
- *			[Register][Mask][Value]
- *---------------------------------------------------------------------------*/
-static	int phy_ConfigMACWithParaFile(struct adapter *Adapter, u8 *pFileName)
-{
-	int		rtStatus = _FAIL;
-
-	return rtStatus;
-}
-
-/*-----------------------------------------------------------------------------
  * Function:    PHY_MACConfig8192C
  *
  * Overview:	Condig MAC by header file or parameter file.
@@ -399,8 +376,8 @@ static	int phy_ConfigMACWithParaFile(struct adapter *Adapter, u8 *pFileName)
  *---------------------------------------------------------------------------*/
 s32 PHY_MACConfig8188E(struct adapter *Adapter)
 {
-	int		rtStatus = _SUCCESS;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
+	int rtStatus = _SUCCESS;
 
 	/*  */
 	/*  Config MAC */
@@ -530,32 +507,6 @@ phy_InitBBRFRegisterDefinition(
 	pHalData->PHYRegDef[RF_PATH_B].rfLSSIReadBackPi = TransceiverB_HSPI_Readback;
 }
 
-/*-----------------------------------------------------------------------------
- * Function:    phy_ConfigBBWithParaFile()
- *
- * Overview:    This function read BB parameters from general file format, and do register
- *			  Read/Write
- *
- * Input:	struct adapter *Adapter
- *			ps8				pFileName
- *
- * Output:      NONE
- *
- * Return:      RT_STATUS_SUCCESS: configuration file exist
- *	2008/11/06	MH	For 92S we do not support silent reset now. Disable
- *					parameter file compare!!!!!!??
- *
- *---------------------------------------------------------------------------*/
-static int phy_ConfigBBWithParaFile(struct adapter *Adapter, u8 *pFileName)
-{
-	return _SUCCESS;
-}
-
-/*  The following is for High Power PA */
-static void phy_ConfigBBExternalPA(struct adapter *Adapter)
-{
-}
-
 void storePwrIndexDiffRateOffset(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u32 Data)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
@@ -599,62 +550,8 @@ void storePwrIndexDiffRateOffset(struct adapter *Adapter, u32 RegAddr, u32 BitMa
 			pHalData->pwrGroupCnt++;
 	}
 }
-/*-----------------------------------------------------------------------------
- * Function:	phy_ConfigBBWithPgParaFile
- *
- * Overview:
- *
- * Input:       NONE
- *
- * Output:      NONE
- *
- * Return:      NONE
- *
- * Revised History:
- * When			Who		Remark
- * 11/06/2008	MHC		Create Version 0.
- * 2009/07/29	tynli		(porting from 92SE branch)2009/03/11 Add copy parameter file to buffer for silent reset
- *---------------------------------------------------------------------------*/
-static	int phy_ConfigBBWithPgParaFile(struct adapter *Adapter, u8 *pFileName)
-{
-	return _SUCCESS;
-}
 
-static void phy_BB8192C_Config_1T(struct adapter *Adapter)
-{
-	/* for path - B */
-	PHY_SetBBReg(Adapter, rFPGA0_TxInfo, 0x3, 0x2);
-	PHY_SetBBReg(Adapter, rFPGA1_TxInfo, 0x300033, 0x200022);
-
-	/*  20100519 Joseph: Add for 1T2R config. Suggested by Kevin, Jenyu and Yunan. */
-	PHY_SetBBReg(Adapter, rCCK0_AFESetting, bMaskByte3, 0x45);
-	PHY_SetBBReg(Adapter, rOFDM0_TRxPathEnable, bMaskByte0, 0x23);
-	PHY_SetBBReg(Adapter, rOFDM0_AGCParameter1, 0x30, 0x1);	/*  B path first AGC */
-
-	PHY_SetBBReg(Adapter, 0xe74, 0x0c000000, 0x2);
-	PHY_SetBBReg(Adapter, 0xe78, 0x0c000000, 0x2);
-	PHY_SetBBReg(Adapter, 0xe7c, 0x0c000000, 0x2);
-	PHY_SetBBReg(Adapter, 0xe80, 0x0c000000, 0x2);
-	PHY_SetBBReg(Adapter, 0xe88, 0x0c000000, 0x2);
-
-
-}
-
-/*  Joseph test: new initialize order!! */
-/*  Test only!! This part need to be re-organized. */
-/*  Now it is just for 8256. */
-static	int
-phy_BB8190_Config_HardCode(
-		struct adapter *Adapter
-	)
-{
-	return _SUCCESS;
-}
-
-static	int
-phy_BB8188E_Config_ParaFile(
-		struct adapter *Adapter
-	)
+static	int phy_BB8188E_Config_ParaFile(struct adapter *Adapter)
 {
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
 	struct hal_data_8188e		*pHalData = GET_HAL_DATA(Adapter);
@@ -751,11 +648,6 @@ int PHY_RFConfig8188E(struct adapter *Adapter)
  * Note:		Delay may be required for RF configuration
  *---------------------------------------------------------------------------*/
 int rtl8188e_PHY_ConfigRFWithParaFile(struct adapter *Adapter, u8 *pFileName, enum rf_radio_path eRFPath)
-{
-	return _SUCCESS;
-}
-
-static int PHY_ConfigRFExternalPA(struct adapter *Adapter, enum rf_radio_path eRFPath)
 {
 	return _SUCCESS;
 }
@@ -1012,8 +904,10 @@ PHY_SetTxPowerLevel8188E(
 		u8 channel
 	)
 {
-	u8 cckPowerLevel[MAX_TX_COUNT], ofdmPowerLevel[MAX_TX_COUNT];/*  [0]:RF-A, [1]:RF-B */
-	u8 BW20PowerLevel[MAX_TX_COUNT], BW40PowerLevel[MAX_TX_COUNT];
+	u8 cckPowerLevel[MAX_TX_COUNT] = {0};
+	u8 ofdmPowerLevel[MAX_TX_COUNT] = {0};/*  [0]:RF-A, [1]:RF-B */
+	u8 BW20PowerLevel[MAX_TX_COUNT] = {0};
+	u8 BW40PowerLevel[MAX_TX_COUNT] = {0};
 
 	getTxPowerIndex88E(Adapter, channel, &cckPowerLevel[0], &ofdmPowerLevel[0], &BW20PowerLevel[0], &BW40PowerLevel[0]);
 
@@ -1229,22 +1123,7 @@ void PHY_SwChnl8188E(struct adapter *Adapter, u8 channel)
 	bool  bResult = true;
 
 	if (pHalData->rf_chip == RF_PSEUDO_11N)
-		return;									/* return immediately if it is peudo-phy */
-
-	/*  */
-	switch (pHalData->CurrentWirelessMode) {
-	case WIRELESS_MODE_A:
-	case WIRELESS_MODE_N_5G:
-		break;
-	case WIRELESS_MODE_B:
-		break;
-	case WIRELESS_MODE_G:
-	case WIRELESS_MODE_N_24G:
-		break;
-	default:
-		break;
-	}
-	/*  */
+		return;		/* return immediately if it is peudo-phy */
 
 	if (channel == 0)
 		channel = 1;
@@ -1262,157 +1141,4 @@ void PHY_SwChnl8188E(struct adapter *Adapter, u8 channel)
 	} else {
 		pHalData->CurrentChannel = tmpchannel;
 	}
-}
-
-static	bool
-phy_SwChnlStepByStep(
-		struct adapter *Adapter,
-		u8 channel,
-		u8 *stage,
-		u8 *step,
-	u32 *delay
-	)
-{
-	return true;
-}
-
-
-static	bool
-phy_SetSwChnlCmdArray(
-	struct sw_chnl_cmd *CmdTable,
-	u32 CmdTableIdx,
-	u32 CmdTableSz,
-	enum sw_chnl_cmd_id	CmdID,
-	u32 Para1,
-	u32 Para2,
-	u32 msDelay
-	)
-{
-	struct sw_chnl_cmd *pCmd;
-
-	if (CmdTable == NULL)
-		return false;
-	if (CmdTableIdx >= CmdTableSz)
-		return false;
-
-	pCmd = CmdTable + CmdTableIdx;
-	pCmd->CmdID = CmdID;
-	pCmd->Para1 = Para1;
-	pCmd->Para2 = Para2;
-	pCmd->msDelay = msDelay;
-
-	return true;
-}
-
-static	void phy_FinishSwChnlNow(struct adapter *Adapter, u8 channel)
-{
-	/*  We should not call this function directly */
-}
-
-/*  */
-/*  Description: */
-/*	Switch channel synchronously. Called by SwChnlByDelayHandler. */
-/*  */
-/*  Implemented by Bruce, 2008-02-14. */
-/*  The following procedure is operted according to SwChanlCallback8190Pci(). */
-/*  However, this procedure is performed synchronously  which should be running under */
-/*  passive level. */
-/*  Only called during initialize */
-void PHY_SwChnlPhy8192C(struct adapter *Adapter, u8 channel)
-{
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-
-	/* return immediately if it is peudo-phy */
-	if (pHalData->rf_chip == RF_PSEUDO_11N)
-		return;
-
-	if (channel == 0)
-		channel = 1;
-
-	pHalData->CurrentChannel = channel;
-
-	phy_FinishSwChnlNow(Adapter, channel);
-}
-
-/*  */
-/*	Description: */
-/*		Configure H/W functionality to enable/disable Monitor mode. */
-/*		Note, because we possibly need to configure BB and RF in this function, */
-/*		so caller should in PASSIVE_LEVEL. 080118, by rcnjko. */
-/*  */
-void
-PHY_SetMonitorMode8192C(
-		struct adapter *pAdapter,
-		bool				bEnableMonitorMode
-	)
-{
-}
-
-
-/*-----------------------------------------------------------------------------
- * Function:	PHYCheckIsLegalRfPath8190Pci()
- *
- * Overview:	Check different RF type to execute legal judgement. If RF Path is illegal
- *			We will return false.
- *
- * Input:		NONE
- *
- * Output:		NONE
- *
- * Return:		NONE
- *
- * Revised History:
- *	When		Who		Remark
- *	11/15/2007	MHC		Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-bool PHY_CheckIsLegalRfPath8192C(struct adapter *pAdapter, u32 eRFPath)
-{
-	return	true;
-}	/* PHY_CheckIsLegalRfPath8192C */
-
-static void _PHY_SetRFPathSwitch(struct adapter *pAdapter, bool bMain, bool is2T)
-{
-	u8 u1bTmp;
-
-	if (!pAdapter->hw_init_completed) {
-		u1bTmp = rtw_read8(pAdapter, REG_LEDCFG2) | BIT7;
-		rtw_write8(pAdapter, REG_LEDCFG2, u1bTmp);
-		PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT13, 0x01);
-	}
-	if (is2T) {
-		if (bMain)
-			PHY_SetBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT5|BIT6, 0x1);	/* 92C_Path_A */
-		else
-			PHY_SetBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT5|BIT6, 0x2);	/* BT */
-	} else {
-		if (bMain)
-			PHY_SetBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300, 0x2);	/* Main */
-		else
-			PHY_SetBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300, 0x1);	/* Aux */
-	}
-}
-
-static bool _PHY_QueryRFPathSwitch(struct adapter *pAdapter, bool is2T)
-{
-	if (!pAdapter->hw_init_completed) {
-		PHY_SetBBReg(pAdapter, REG_LEDCFG0, BIT23, 0x01);
-		PHY_SetBBReg(pAdapter, rFPGA0_XAB_RFParameter, BIT13, 0x01);
-	}
-
-	if (is2T) {
-		if (PHY_QueryBBReg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT5|BIT6) == 0x01)
-			return true;
-		else
-			return false;
-	} else {
-		if (PHY_QueryBBReg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300) == 0x02)
-			return true;
-		else
-			return false;
-	}
-}
-
-static void _PHY_DumpRFReg(struct adapter *pAdapter)
-{
 }

@@ -19,6 +19,7 @@
  ******************************************************************************/
 #define _XMIT_OSDEP_C_
 
+#include <linux/version.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 
@@ -92,8 +93,6 @@ void rtw_set_tx_chksum_offload(struct sk_buff *pkt, struct pkt_attrib *pattrib)
 int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitbuf, u32 alloc_sz)
 {
 	int i;
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
 
 	pxmitbuf->pallocated_buf = rtw_zmalloc(alloc_sz);
 	if (pxmitbuf->pallocated_buf == NULL)
@@ -116,15 +115,11 @@ void rtw_os_xmit_resource_free(struct adapter *padapter,
 			       struct xmit_buf *pxmitbuf, u32 free_sz)
 {
 	int i;
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
-
 
 	for (i = 0; i < 8; i++)
 		usb_free_urb(pxmitbuf->pxmit_urb[i]);
 
-	if (pxmitbuf->pallocated_buf)
-		rtw_mfree(pxmitbuf->pallocated_buf, free_sz);
+	kfree(pxmitbuf->pallocated_buf);
 }
 
 #define WMM_XMIT_THRESHOLD	(NR_XMITFRAME*2/5)
@@ -161,9 +156,7 @@ void rtw_os_xmit_complete(struct adapter *padapter, struct xmit_frame *pxframe)
 
 void rtw_os_xmit_schedule(struct adapter *padapter)
 {
-	struct adapter *pri_adapter = padapter;
-
-	unsigned long  irqL;
+	unsigned long  irql;
 	struct xmit_priv *pxmitpriv;
 
 	if (!padapter)
@@ -171,18 +164,17 @@ void rtw_os_xmit_schedule(struct adapter *padapter)
 
 	pxmitpriv = &padapter->xmitpriv;
 
-	_enter_critical_bh(&pxmitpriv->lock, &irqL);
+	_enter_critical_bh(&pxmitpriv->lock, &irql);
 
 	if (rtw_txframes_pending(padapter))
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
 
-	_exit_critical_bh(&pxmitpriv->lock, &irqL);
+	_exit_critical_bh(&pxmitpriv->lock, &irql);
 }
 
 static void rtw_check_xmit_resource(struct adapter *padapter, struct sk_buff *pkt)
 {
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 	u16	queue;
 
 	queue = skb_get_queue_mapping(pkt);
@@ -196,25 +188,19 @@ static void rtw_check_xmit_resource(struct adapter *padapter, struct sk_buff *pk
 				netif_stop_subqueue(padapter->pnetdev, queue);
 		}
 	}
-#else
-	if (pxmitpriv->free_xmitframe_cnt <= 4) {
-		if (!rtw_netif_queue_stopped(padapter->pnetdev))
-			rtw_netif_stop_queue(padapter->pnetdev);
-	}
-#endif
 }
 
 static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 {
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	unsigned long	irqL;
+	unsigned long	irql;
 	struct list_head *phead, *plist;
 	struct sk_buff *newskb;
 	struct sta_info *psta = NULL;
 	s32	res;
 
-	_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	_enter_critical_bh(&pstapriv->asoc_list_lock, &irql);
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
 
@@ -244,12 +230,12 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 			DBG_88E("%s-%d: skb_copy() failed!\n", __func__, __LINE__);
 			pxmitpriv->tx_drop++;
 
-			_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+			_exit_critical_bh(&pstapriv->asoc_list_lock, &irql);
 			return false;	/*  Caller shall tx this multicast frame via normal way. */
 		}
 	}
 
-	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	_exit_critical_bh(&pstapriv->asoc_list_lock, &irql);
 	dev_kfree_skb_any(skb);
 	return true;
 }
@@ -261,9 +247,6 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct  net_device *pnetdev)
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	s32 res = 0;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
-	u16 queue;
-#endif
 
 _func_enter_;
 

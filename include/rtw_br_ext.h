@@ -22,9 +22,9 @@
 
 #define MACADDRLEN		6
 #define _DEBUG_ERR		DBG_88E
-#define _DEBUG_INFO		/* DBG_88E */
+#define _DEBUG_INFO		DBG_88E
 #define DEBUG_WARN		DBG_88E
-#define DEBUG_INFO		/* DBG_88E */
+#define DEBUG_INFO		DBG_88E
 #define DEBUG_ERR		DBG_88E
 #define GET_MY_HWADDR(padapter)		((padapter)->eeprompriv.mac_addr)
 

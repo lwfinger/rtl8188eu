@@ -93,11 +93,6 @@ u8 *_rtw_zmalloc(u32 sz)
 	return pbuf;
 }
 
-void	_rtw_mfree(u8 *pbuf, u32 sz)
-{
-		kfree(pbuf);
-}
-
 void *rtw_malloc2d(int h, int w, int size)
 {
 	int j;
@@ -116,12 +111,7 @@ void *rtw_malloc2d(int h, int w, int size)
 
 void rtw_mfree2d(void *pbuf, int h, int w, int size)
 {
-	rtw_mfree((u8 *)pbuf, h*sizeof(void *) + w*h*size);
-}
-
-void _rtw_memcpy(void *dst, void *src, u32 sz)
-{
-	memcpy(dst, src, sz);
+	kfree(pbuf);
 }
 
 int _rtw_memcmp(void *dst, void *src, u32 sz)
@@ -195,18 +185,12 @@ u32 _rtw_down_sema(struct semaphore *sema)
 
 void	_rtw_mutex_init(struct mutex *pmutex)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37))
 	mutex_init(pmutex);
-#else
-	init_MUTEX(pmutex);
-#endif
 }
 
 void	_rtw_mutex_free(struct mutex *pmutex)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37))
 	mutex_destroy(pmutex);
-#endif
 }
 
 void	_rtw_spinlock_init(spinlock_t *plock)
@@ -321,12 +305,6 @@ inline void rtw_lock_suspend(void)
 inline void rtw_unlock_suspend(void)
 {
 }
-
-#ifdef CONFIG_WOWLAN
-inline void rtw_lock_suspend_timeout(long timeout)
-{
-}
-#endif /* CONFIG_WOWLAN */
 
 inline void ATOMIC_SET(ATOMIC_T *v, int i)
 {
@@ -592,12 +570,7 @@ struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv,
 	struct net_device *pnetdev;
 	struct rtw_netdev_priv_indicator *pnpi;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
-	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator),
-				    4);
-#else
-	pnetdev = alloc_etherdev(sizeof(struct rtw_netdev_priv_indicator));
-#endif
+	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator), 4);
 	if (!pnetdev)
 		goto RETURN;
 
@@ -614,12 +587,7 @@ struct net_device *rtw_alloc_etherdev(int sizeof_priv)
 	struct net_device *pnetdev;
 	struct rtw_netdev_priv_indicator *pnpi;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
-	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator),
-				    4);
-#else
-	pnetdev = alloc_etherdev(sizeof(struct rtw_netdev_priv_indicator));
-#endif
+	pnetdev = alloc_etherdev_mq(sizeof(struct rtw_netdev_priv_indicator), 4);
 	if (!pnetdev)
 		goto RETURN;
 
@@ -656,20 +624,15 @@ RETURN:
 	return;
 }
 
-/*
-* this function should be called under ioctl (rtnl_lock is accquired) while
-* LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26)
-*/
 int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 {
 	struct net_device *pnetdev;
-	struct net_device *cur_pnetdev;
+	struct net_device *cur_pnetdev = padapter->pnetdev;
 	struct rereg_nd_name_data *rereg_priv;
 	int ret;
 
 	if (!padapter)
 		goto error;
-	cur_pnetdev = padapter->pnetdev;
 
 	rereg_priv = &padapter->rereg_nd_name_priv;
 
@@ -679,11 +642,9 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 		rereg_priv->old_pnetdev = NULL;
 	}
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26))
 	if (!rtnl_is_locked())
 		unregister_netdev(cur_pnetdev);
 	else
-#endif
 		unregister_netdevice(cur_pnetdev);
 
 	rtw_proc_remove_one(cur_pnetdev);
@@ -700,13 +661,11 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 
 	rtw_init_netdev_name(pnetdev, ifname);
 
-	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26))
 	if (!rtnl_is_locked())
 		ret = register_netdev(pnetdev);
 	else
-#endif
 		ret = register_netdevice(pnetdev);
 	if (ret != 0) {
 		RT_TRACE(_module_hci_intfs_c_, _drv_err_,
@@ -732,14 +691,9 @@ u64 rtw_division64(u64 x, u64 y)
 
 void rtw_buf_free(u8 **buf, u32 *buf_len)
 {
-	if (!buf || !buf_len)
-		return;
-
-	if (*buf) {
-		*buf_len = 0;
-		_rtw_mfree(*buf, *buf_len);
-		*buf = NULL;
-	}
+	*buf_len = 0;
+	kfree(*buf);
+	*buf = NULL;
 }
 
 void rtw_buf_update(u8 **buf, u32 *buf_len, u8 *src, u32 src_len)
@@ -758,7 +712,7 @@ void rtw_buf_update(u8 **buf, u32 *buf_len, u8 *src, u32 src_len)
 	dup = rtw_malloc(src_len);
 	if (dup) {
 		dup_len = src_len;
-		_rtw_memcpy(dup, src, dup_len);
+		memcpy(dup, src, dup_len);
 	}
 
 keep_ori:
@@ -771,8 +725,7 @@ keep_ori:
 	*buf_len = dup_len;
 
 	/* free ori */
-	if (ori && ori_len > 0)
-		_rtw_mfree(ori, ori_len);
+	kfree(ori);
 }
 
 
@@ -859,13 +812,4 @@ struct rtw_cbuf *rtw_cbuf_alloc(u32 size)
 		cbuf->size = size;
 	}
 	return cbuf;
-}
-
-/**
- * rtw_cbuf_free - free the given rtw_cbuf
- * @cbuf: pointer of struct rtw_cbuf to free
- */
-void rtw_cbuf_free(struct rtw_cbuf *cbuf)
-{
-	rtw_mfree((u8 *)cbuf, sizeof(*cbuf) + sizeof(void *)*cbuf->size);
 }

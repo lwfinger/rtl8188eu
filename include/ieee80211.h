@@ -31,7 +31,7 @@
 #define ETH_TYPE_LEN		2
 #define PAYLOAD_TYPE_LEN	1
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 
 #define RTL_IOCTL_HOSTAPD (SIOCIWFIRSTPRIV + 28)
 
@@ -239,7 +239,7 @@ struct ieee_param {
 			u16 key_len;
 			u8 key[0];
 		} crypt;
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 		struct {
 			u16 aid;
 			u16 capability;
@@ -256,7 +256,7 @@ struct ieee_param {
 	} u;
 };
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 struct ieee_param_ex {
 	u32 cmd;
 	u8 sta_addr[ETH_ALEN];
@@ -278,15 +278,6 @@ struct sta_data {
 	u64	tx_bytes;
 	u64	tx_drops;
 };
-#endif
-
-#if WIRELESS_EXT < 17
-#define IW_QUAL_QUAL_INVALID   0x10
-#define IW_QUAL_LEVEL_INVALID  0x20
-#define IW_QUAL_NOISE_INVALID  0x40
-#define IW_QUAL_QUAL_UPDATED   0x1
-#define IW_QUAL_LEVEL_UPDATED  0x2
-#define IW_QUAL_NOISE_UPDATED  0x4
 #endif
 
 #define IEEE80211_DATA_LEN		2304
@@ -315,8 +306,8 @@ struct ieee_ibss_seq {
 };
 
 struct rtw_ieee80211_hdr {
-	u16 frame_ctl;
-	u16 duration_id;
+	__le16 frame_ctl;
+	__le16 duration_id;
 	u8 addr1[ETH_ALEN];
 	u8 addr2[ETH_ALEN];
 	u8 addr3[ETH_ALEN];
@@ -325,8 +316,8 @@ struct rtw_ieee80211_hdr {
 } __packed;
 
 struct rtw_ieee80211_hdr_3addr {
-	u16 frame_ctl;
-	u16 duration_id;
+	__le16 frame_ctl;
+	__le16 duration_id;
 	u8 addr1[ETH_ALEN];
 	u8 addr2[ETH_ALEN];
 	u8 addr3[ETH_ALEN];
@@ -334,8 +325,8 @@ struct rtw_ieee80211_hdr_3addr {
 } __packed;
 
 struct rtw_ieee80211_hdr_qos {
-	u16 frame_ctl;
-	u16 duration_id;
+	__le16 frame_ctl;
+	__le16 duration_id;
 	u8 addr1[ETH_ALEN];
 	u8 addr2[ETH_ALEN];
 	u8 addr3[ETH_ALEN];
@@ -345,8 +336,8 @@ struct rtw_ieee80211_hdr_qos {
 }  __packed;
 
 struct rtw_ieee80211_hdr_3addr_qos {
-	u16 frame_ctl;
-	u16 duration_id;
+	__le16 frame_ctl;
+	__le16 duration_id;
 	u8 addr1[ETH_ALEN];
 	u8 addr2[ETH_ALEN];
 	u8 addr3[ETH_ALEN];
@@ -1242,7 +1233,7 @@ u8 *rtw_get_wps_attr_content(u8 *wps_ie, uint wps_ielen, u16 target_attr_id,
 void dump_ies(u8 *buf, u32 buf_len);
 void dump_wps_ie(u8 *ie, u32 ie_len);
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 void dump_p2p_ie(u8 *ie, u32 ie_len);
 u8 *rtw_get_p2p_ie(u8 *in_ie, int in_len, u8 *p2p_ie, uint *p2p_ielen);
 u8 *rtw_get_p2p_attr(u8 *p2p_ie, uint p2p_ielen, u8 target_attr_id,

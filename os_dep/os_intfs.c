@@ -35,6 +35,10 @@ MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
 MODULE_AUTHOR("Realtek Semiconductor Corp.");
 MODULE_VERSION(DRIVERVERSION);
+MODULE_FIRMWARE("rtlwifi/rtl8188eufw.bin");
+
+#define CONFIG_BR_EXT_BRNAME "br0"
+#define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 
 /* module param defaults */
 static int rtw_chip_version = 0x00;
@@ -93,14 +97,6 @@ static int rtw_rf_config = RF_819X_MAX_TYPE;  /* auto */
 static int rtw_low_power;
 static int rtw_wifi_spec;
 static int rtw_channel_plan = RT_CHANNEL_DOMAIN_MAX;
-
-#ifdef CONFIG_BT_COEXIST
-int rtw_btcoex_enable = 1;
-int rtw_bt_iso = 2;/*  0:Low, 1:High, 2:From Efuse */
-int rtw_bt_sco = 3;/*  0:Idle, 1:None-SCO, 2:SCO, 3:From Counter, 4.Busy, 5.OtherBusy */
-int rtw_bt_ampdu = 1 ;/*  0:Disable BT control A-MPDU, 1:Enable BT control A-MPDU. */
-#endif
-
 static int rtw_AcceptAddbaReq = true;/*  0:Reject AP's Add BA req, 1:Accept AP's Add BA req. */
 
 static int rtw_antdiv_cfg = 2; /*  0:OFF , 1:ON, 2:decide by Efuse config */
@@ -171,25 +167,12 @@ module_param(rtw_mc2u_disable, int, 0644);
 module_param(rtw_80211d, int, 0644);
 MODULE_PARM_DESC(rtw_80211d, "Enable 802.11d mechanism");
 
-#ifdef CONFIG_BT_COEXIST
-module_param(rtw_btcoex_enable, int, 0644);
-MODULE_PARM_DESC(rtw_btcoex_enable, "Enable BT co-existence mechanism");
-#endif
-
 static uint rtw_notch_filter = RTW_NOTCH_FILTER;
 module_param(rtw_notch_filter, uint, 0644);
 MODULE_PARM_DESC(rtw_notch_filter, "0:Disable, 1:Enable, 2:Enable only for P2P");
 module_param_named(debug, rtw_debug, int, 0444);
 MODULE_PARM_DESC(debug, "Set debug level (1-9) (default 1)");
 
-
-static char rtw_proc_name[IFNAMSIZ];
-static struct proc_dir_entry *rtw_proc;
-static int	rtw_proc_cnt;
-
-#define RTW_PROC_NAME DRV_NAME
-
-#ifndef create_proc_entry
 /* dummy routines */
 void rtw_proc_remove_one(struct net_device *dev)
 {
@@ -199,7 +182,7 @@ void rtw_proc_init_one(struct net_device *dev)
 {
 }
 
-#else	/* create_proc_entry not defined */
+#if 0	/* TODO: Convert these to /sys */
 void rtw_proc_init_one(struct net_device *dev)
 {
 	struct proc_dir_entry *dir_dev = NULL;
@@ -208,13 +191,9 @@ void rtw_proc_init_one(struct net_device *dev)
 	u8 rf_type;
 
 	if (rtw_proc == NULL) {
-		_rtw_memcpy(rtw_proc_name, RTW_PROC_NAME, sizeof(RTW_PROC_NAME));
+		memcpy(rtw_proc_name, DRV_NAME, sizeof(DRV_NAME));
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
-		rtw_proc = create_proc_entry(rtw_proc_name, S_IFDIR, proc_net);
-#else
 		rtw_proc = create_proc_entry(rtw_proc_name, S_IFDIR, init_net.proc_net);
-#endif
 		if (rtw_proc == NULL) {
 			DBG_88E(KERN_ERR "Unable to create rtw_proc directory\n");
 			return;
@@ -235,11 +214,7 @@ void rtw_proc_init_one(struct net_device *dev)
 		if (dir_dev == NULL) {
 			if (rtw_proc_cnt == 0) {
 				if (rtw_proc) {
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
-					remove_proc_entry(rtw_proc_name, proc_net);
-#else
 					remove_proc_entry(rtw_proc_name, init_net.proc_net);
-#endif
 					rtw_proc = NULL;
 				}
 			}
@@ -406,7 +381,7 @@ void rtw_proc_init_one(struct net_device *dev)
 		}
 	}
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 
 	entry = create_proc_read_entry("all_sta_info", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_all_sta_info, dev);
@@ -475,15 +450,6 @@ void rtw_proc_init_one(struct net_device *dev)
 		return;
 	}
 	entry->write_proc = proc_set_rssi_disp;
-#ifdef CONFIG_BT_COEXIST
-	entry = create_proc_read_entry("btcoex_dbg", S_IFREG | S_IRUGO,
-				   dir_dev, proc_get_btcoex_dbg, dev);
-	if (!entry) {
-		pr_info("Unable to create_proc_read_entry!\n");
-		return;
-	}
-	entry->write_proc = proc_set_btcoex_dbg;
-#endif /*CONFIG_BT_COEXIST*/
 }
 
 void rtw_proc_remove_one(struct net_device *dev)
@@ -520,7 +486,7 @@ void rtw_proc_remove_one(struct net_device *dev)
 			remove_proc_entry("rf_reg_dump3", dir_dev);
 			remove_proc_entry("rf_reg_dump4", dir_dev);
 		}
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 		remove_proc_entry("all_sta_info", dir_dev);
 #endif
 
@@ -532,9 +498,6 @@ void rtw_proc_remove_one(struct net_device *dev)
 		remove_proc_entry("rx_stbc", dir_dev);
 		remove_proc_entry("path_rssi", dir_dev);
 		remove_proc_entry("rssi_disp", dir_dev);
-#ifdef CONFIG_BT_COEXIST
-		remove_proc_entry("btcoex_dbg", dir_dev);
-#endif /* CONFIG_BT_COEXIST */
 		remove_proc_entry(dev->name, rtw_proc);
 		dir_dev = NULL;
 	} else {
@@ -546,11 +509,7 @@ void rtw_proc_remove_one(struct net_device *dev)
 		if (rtw_proc) {
 			remove_proc_entry("ver_info", rtw_proc);
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
-			remove_proc_entry(rtw_proc_name, proc_net);
-#else
 			remove_proc_entry(rtw_proc_name, init_net.proc_net);
-#endif
 			rtw_proc = NULL;
 		}
 	}
@@ -570,7 +529,7 @@ _func_enter_;
 	registry_par->lbkmode = (u8)rtw_lbkmode;
 	registry_par->network_mode  = (u8)rtw_network_mode;
 
-	_rtw_memcpy(registry_par->ssid.Ssid, "ANY", 3);
+	memcpy(registry_par->ssid.Ssid, "ANY", 3);
 	registry_par->ssid.SsidLength = 3;
 
 	registry_par->channel = (u8)rtw_channel;
@@ -615,12 +574,6 @@ _func_enter_;
 	registry_par->low_power = (u8)rtw_low_power;
 	registry_par->wifi_spec = (u8)rtw_wifi_spec;
 	registry_par->channel_plan = (u8)rtw_channel_plan;
-#ifdef CONFIG_BT_COEXIST
-	registry_par->btcoex = (u8)rtw_btcoex_enable;
-	registry_par->bt_iso = (u8)rtw_bt_iso;
-	registry_par->bt_sco = (u8)rtw_bt_sco;
-	registry_par->bt_ampdu = (u8)rtw_bt_ampdu;
-#endif
 	registry_par->bAcceptAddbaReq = (u8)rtw_AcceptAddbaReq;
 	registry_par->antdiv_cfg = (u8)rtw_antdiv_cfg;
 	registry_par->antdiv_type = (u8)rtw_antdiv_type;
@@ -646,7 +599,7 @@ static int rtw_net_set_mac_address(struct net_device *pnetdev, void *p)
 	struct sockaddr *addr = p;
 
 	if (!padapter->bup)
-		_rtw_memcpy(padapter->eeprompriv.mac_addr, addr->sa_data, ETH_ALEN);
+		memcpy(padapter->eeprompriv.mac_addr, addr->sa_data, ETH_ALEN);
 
 	return 0;
 }
@@ -666,7 +619,6 @@ static struct net_device_stats *rtw_net_get_stats(struct net_device *pnetdev)
 	return &padapter->stats;
 }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 /*
  * AC to queue mapping
  *
@@ -722,7 +674,7 @@ u16 rtw_recv_select_queue(struct sk_buff *skb)
 	u32 priority;
 	u8 *pdata = skb->data;
 
-	_rtw_memcpy(&eth_type, pdata+(ETH_ALEN<<1), 2);
+	memcpy(&eth_type, pdata+(ETH_ALEN<<1), 2);
 
 	switch (eth_type) {
 	case htons(ETH_P_IP):
@@ -737,26 +689,18 @@ u16 rtw_recv_select_queue(struct sk_buff *skb)
 	return rtw_1d_to_queue[priority];
 }
 
-#endif
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29))
 static const struct net_device_ops rtw_netdev_ops = {
 	.ndo_open = netdev_open,
 	.ndo_stop = netdev_close,
 	.ndo_start_xmit = rtw_xmit_entry,
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 	.ndo_select_queue	= rtw_select_queue,
-#endif
 	.ndo_set_mac_address = rtw_net_set_mac_address,
 	.ndo_get_stats = rtw_net_get_stats,
 	.ndo_do_ioctl = rtw_ioctl,
 };
-#endif
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 {
-	struct adapter *padapter = rtw_netdev_priv(pnetdev);
-
 	if (dev_alloc_name(pnetdev, ifname) < 0)
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("dev_alloc_name, fail!\n"));
 
@@ -786,26 +730,10 @@ struct net_device *rtw_init_netdev(struct adapter *old_padapter)
 	pnetdev->dev.type = &wlan_type;
 	padapter = rtw_netdev_priv(pnetdev);
 	padapter->pnetdev = pnetdev;
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24)
-	SET_MODULE_OWNER(pnetdev);
-#endif
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29))
 	DBG_88E("register rtw_netdev_ops to netdev_ops\n");
 	pnetdev->netdev_ops = &rtw_netdev_ops;
-#else
-	pnetdev->open = netdev_open;
-	pnetdev->stop = netdev_close;
-	pnetdev->hard_start_xmit = rtw_xmit_entry;
-	pnetdev->set_mac_address = rtw_net_set_mac_address;
-	pnetdev->get_stats = rtw_net_get_stats;
-	pnetdev->do_ioctl = rtw_ioctl;
-#endif
 	pnetdev->watchdog_timeo = HZ*3; /* 3 second timeout */
-#ifdef CONFIG_WIRELESS_EXT
 	pnetdev->wireless_handlers = (struct iw_handler_def *)&rtw_handlers_def;
-#endif
 
 	/* step 2. */
 	loadparam(padapter, pnetdev);
@@ -886,7 +814,7 @@ static u8 rtw_init_default_value(struct adapter *padapter)
 	padapter->bWritePortCancel = false;
 	padapter->bRxRSSIDisplay = 0;
 	padapter->bNotifyChannelChange = 0;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 	padapter->bShowGetP2PState = 1;
 #endif
 	return ret;
@@ -951,11 +879,11 @@ _func_enter_;
 		goto exit;
 	}
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 	rtw_init_wifidirect_timers(padapter);
 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
 	reset_global_wifidirect_info(padapter);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_88EU_P2P */
 
 	if (init_mlme_ext_priv(padapter) == _FAIL) {
 		RT_TRACE(_module_os_intfs_c_, _drv_err_, ("\n Can't init mlme_ext_priv\n"));
@@ -1007,14 +935,6 @@ exit:
 	return ret8;
 }
 
-#ifdef CONFIG_WOWLAN
-void rtw_cancel_dynamic_chk_timer(struct adapter *padapter)
-{
-	_cancel_timer_ex(&padapter->mlmepriv.dynamic_chk_timer);
-	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("rtw_cancel_all_timer:cancel dynamic_chk_timer!\n"));
-}
-#endif
-
 void rtw_cancel_all_timer(struct adapter *padapter)
 {
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("+rtw_cancel_all_timer\n"));
@@ -1041,14 +961,12 @@ void rtw_cancel_all_timer(struct adapter *padapter)
 
 u8 rtw_free_drv_sw(struct adapter *padapter)
 {
-	struct net_device *pnetdev = (struct net_device *)padapter->pnetdev;
-
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("==>rtw_free_drv_sw"));
 
 	/* we can call rtw_p2p_enable here, but: */
 	/*  1. rtw_p2p_enable may have IO operation */
 	/*  2. rtw_p2p_enable is bundled with wext interface */
-	#ifdef CONFIG_P2P
+	#ifdef CONFIG_88EU_P2P
 	{
 		struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 		if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
@@ -1101,45 +1019,25 @@ void netdev_br_init(struct net_device *netdev)
 {
 	struct adapter *adapter = (struct adapter *)rtw_netdev_priv(netdev);
 
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
 	rcu_read_lock();
-#endif	/*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
 
-	{
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-		if (netdev->br_port)
-#else   /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-		if (rcu_dereference(adapter->pnetdev->rx_handler_data))
-#endif  /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
-		{
-			struct net_device *br_netdev;
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
-			br_netdev = dev_get_by_name(CONFIG_BR_EXT_BRNAME);
-#else	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24)) */
-			struct net *devnet = NULL;
+	if (rcu_dereference(adapter->pnetdev->rx_handler_data)) {
+		struct net_device *br_netdev;
+		struct net *devnet = NULL;
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26))
-			devnet = netdev->nd_net;
-#else	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26)) */
-			devnet = dev_net(netdev);
-#endif	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26)) */
-
-			br_netdev = dev_get_by_name(devnet, CONFIG_BR_EXT_BRNAME);
-#endif	/*  (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24)) */
-
-			if (br_netdev) {
-				memcpy(adapter->br_mac, br_netdev->dev_addr, ETH_ALEN);
-				dev_put(br_netdev);
-			} else {
-				pr_info("%s()-%d: dev_get_by_name(%s) failed!", __func__, __LINE__, CONFIG_BR_EXT_BRNAME);
-			}
+		devnet = dev_net(netdev);
+		br_netdev = dev_get_by_name(devnet, CONFIG_BR_EXT_BRNAME);
+		if (br_netdev) {
+			memcpy(adapter->br_mac, br_netdev->dev_addr, ETH_ALEN);
+			dev_put(br_netdev);
+		} else {
+			pr_info("%s()-%d: dev_get_by_name(%s) failed!",
+				__func__, __LINE__, CONFIG_BR_EXT_BRNAME);
 		}
-		adapter->ethBrExtInfo.addPPPoETag = 1;
 	}
+	adapter->ethBrExtInfo.addPPPoETag = 1;
 
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35))
 	rcu_read_unlock();
-#endif	/*  (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 35)) */
 }
 
 int _netdev_open(struct net_device *pnetdev)
@@ -1167,7 +1065,7 @@ int _netdev_open(struct net_device *pnetdev)
 			goto netdev_open_error;
 		}
 
-		pr_info("MAC Address = %pM\n", pnetdev->dev_addr);
+		pr_info("%sMAC Address = %pM\n", DRIVER_PREFIX, pnetdev->dev_addr);
 
 		status = rtw_start_drv_threads(padapter);
 		if (status == _FAIL) {
@@ -1289,8 +1187,6 @@ void rtw_ips_pwr_down(struct adapter *padapter)
 
 void rtw_ips_dev_unload(struct adapter *padapter)
 {
-	struct net_device *pnetdev = (struct net_device *)padapter->pnetdev;
-	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	DBG_88E("====> %s...\n", __func__);
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_FIFO_CLEARN_UP, NULL);
@@ -1314,7 +1210,7 @@ int pm_netdev_open(struct net_device *pnetdev, u8 bnormal)
 	return status;
 }
 
-static int netdev_close(struct net_device *pnetdev)
+int netdev_close(struct net_device *pnetdev)
 {
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(pnetdev);
 
@@ -1351,9 +1247,9 @@ static int netdev_close(struct net_device *pnetdev)
 
 	nat25_db_cleanup(padapter);
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 	rtw_p2p_enable(padapter, P2P_ROLE_DISABLE);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_88EU_P2P */
 
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("-88eu_drv - drv_close\n"));
 	DBG_88E("-88eu_drv - drv_close, bup =%d\n", padapter->bup);

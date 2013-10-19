@@ -131,110 +131,6 @@ static u32 rtl8188eu_InitPowerOn(struct adapter *adapt)
 	return _SUCCESS;
 }
 
-static void _dbg_dump_macreg(struct adapter *adapt)
-{
-	u32 offset = 0;
-	u32 val32 = 0;
-	u32 index = 0;
-	for (index = 0; index < 64; index++) {
-		offset = index*4;
-		val32 = rtw_read32(adapt, offset);
-		DBG_88E("offset : 0x%02x ,val:0x%08x\n", offset, val32);
-	}
-}
-
-static void _InitPABias(struct adapter *adapt)
-{
-	struct hal_data_8188e	*haldata = GET_HAL_DATA(adapt);
-	u8 pa_setting;
-	bool	is92C = IS_92C_SERIAL(haldata->VersionID);
-
-	/* FIXED PA current issue */
-	pa_setting = EFUSE_Read1Byte(adapt, 0x1FA);
-
-	if (!(pa_setting & BIT0)) {
-		PHY_SetRFReg(adapt, RF_PATH_A, 0x15, 0x0FFFFF, 0x0F406);
-		PHY_SetRFReg(adapt, RF_PATH_A, 0x15, 0x0FFFFF, 0x4F406);
-		PHY_SetRFReg(adapt, RF_PATH_A, 0x15, 0x0FFFFF, 0x8F406);
-		PHY_SetRFReg(adapt, RF_PATH_A, 0x15, 0x0FFFFF, 0xCF406);
-	}
-
-	if (!(pa_setting & BIT1) && is92C) {
-		PHY_SetRFReg(adapt, RF_PATH_B, 0x15, 0x0FFFFF, 0x0F406);
-		PHY_SetRFReg(adapt, RF_PATH_B, 0x15, 0x0FFFFF, 0x4F406);
-		PHY_SetRFReg(adapt, RF_PATH_B, 0x15, 0x0FFFFF, 0x8F406);
-		PHY_SetRFReg(adapt, RF_PATH_B, 0x15, 0x0FFFFF, 0xCF406);
-	}
-
-	if (!(pa_setting & BIT4)) {
-		pa_setting = rtw_read8(adapt, 0x16);
-		pa_setting &= 0x0F;
-		rtw_write8(adapt, 0x16, pa_setting | 0x80);
-		rtw_write8(adapt, 0x16, pa_setting | 0x90);
-	}
-}
-#ifdef CONFIG_BT_COEXIST
-static void _InitBTCoexist(struct adapter *adapt)
-{
-	struct hal_data_8188e	*haldata = GET_HAL_DATA(adapt);
-	struct btcoexist_priv	*pbtpriv = &(haldata->bt_coexist);
-	u8 u1Tmp;
-
-	if (pbtpriv->BT_Coexist && pbtpriv->BT_CoexistType == BT_CSR_BC4) {
-		if (adapt->registrypriv.mp_mode == 0) {
-			if (pbtpriv->BT_Ant_isolation) {
-				rtw_write8(adapt, REG_GPIO_MUXCFG, 0xa0);
-				DBG_88E("BT write 0x%x = 0x%x\n", REG_GPIO_MUXCFG, 0xa0);
-			}
-		}
-
-		u1Tmp = rtw_read8(adapt, 0x4fd) & BIT0;
-		u1Tmp = u1Tmp |
-				((pbtpriv->BT_Ant_isolation == 1) ? 0 : BIT1) |
-				((pbtpriv->BT_Service == BT_SCO) ? 0 : BIT2);
-		rtw_write8(adapt, 0x4fd, u1Tmp);
-		DBG_88E("BT write 0x%x = 0x%x for non-isolation\n", 0x4fd, u1Tmp);
-
-		rtw_write32(adapt, REG_BT_COEX_TABLE+4, 0xaaaa9aaa);
-		DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+4, 0xaaaa9aaa);
-
-		rtw_write32(adapt, REG_BT_COEX_TABLE+8, 0xffbd0040);
-		DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+8, 0xffbd0040);
-
-		rtw_write32(adapt,  REG_BT_COEX_TABLE+0xc, 0x40000010);
-		DBG_88E("BT write 0x%x = 0x%x\n", REG_BT_COEX_TABLE+0xc, 0x40000010);
-
-		/* Config to 1T1R */
-		u1Tmp =  rtw_read8(adapt, rOFDM0_TRxPathEnable);
-		u1Tmp &= ~(BIT1);
-		rtw_write8(adapt, rOFDM0_TRxPathEnable, u1Tmp);
-		DBG_88E("BT write 0xC04 = 0x%x\n", u1Tmp);
-
-		u1Tmp = rtw_read8(adapt, rOFDM1_TRxPathEnable);
-		u1Tmp &= ~(BIT1);
-		rtw_write8(adapt, rOFDM1_TRxPathEnable, u1Tmp);
-		DBG_88E("BT write 0xD04 = 0x%x\n", u1Tmp);
-	}
-}
-#endif
-
-/*	MAC init functions */
-static void _SetMacID(struct adapter *Adapter, u8 *MacID)
-{
-	u32 i;
-
-	for (i = 0; i < MAC_ADDR_LEN; i++)
-		rtw_write32(Adapter, REG_MACID+i, MacID[i]);
-}
-
-static void _SetBSSID(struct adapter *Adapter, u8 *BSSID)
-{
-	u32 i;
-
-	for (i = 0; i < MAC_ADDR_LEN; i++)
-		rtw_write32(Adapter, REG_BSSID+i, BSSID[i]);
-}
-
 /*  Shall USB interface init this? */
 static void _InitInterrupt(struct adapter *Adapter)
 {
@@ -276,7 +172,7 @@ static void _InitQueueReservedPage(struct adapter *Adapter)
 	u32 numPubQ;
 	u32 value32;
 	u8 value8;
-	bool			bWiFiConfig	= pregistrypriv->wifi_spec;
+	bool bWiFiConfig = pregistrypriv->wifi_spec;
 
 	if (bWiFiConfig) {
 		if (haldata->OutEpQueueSel & TX_SELE_HQ)
@@ -303,11 +199,7 @@ static void _InitQueueReservedPage(struct adapter *Adapter)
 	}
 }
 
-static void
-_InitTxBufferBoundary(
-	struct adapter *Adapter,
-	u8 txpktbuf_bndy
-	)
+static void _InitTxBufferBoundary(struct adapter *Adapter, u8 txpktbuf_bndy)
 {
 	rtw_write8(Adapter, REG_TXPKTBUF_BCNQ_BDNY, txpktbuf_bndy);
 	rtw_write8(Adapter, REG_TXPKTBUF_MGQ_BDNY, txpktbuf_bndy);
@@ -316,10 +208,7 @@ _InitTxBufferBoundary(
 	rtw_write8(Adapter, REG_TDECTRL+1, txpktbuf_bndy);
 }
 
-static void
-_InitPageBoundary(
-	struct adapter *Adapter
-	)
+static void _InitPageBoundary(struct adapter *Adapter)
 {
 	/*  RX Page Boundary */
 	/*  */
@@ -328,8 +217,9 @@ _InitPageBoundary(
 	rtw_write16(Adapter, (REG_TRXFF_BNDY + 2), rxff_bndy);
 }
 
-static void _InitNormalChipRegPriority(struct adapter *Adapter, u16 beQ, u16 bkQ, u16 viQ, u16 voQ, u16 mgtQ, u16 hiQ
-	)
+static void _InitNormalChipRegPriority(struct adapter *Adapter, u16 beQ,
+				       u16 bkQ, u16 viQ, u16 voQ, u16 mgtQ,
+				       u16 hiQ)
 {
 	u16 value16	= (rtw_read16(Adapter, REG_TRXDMA_CTRL) & 0x7);
 
@@ -447,13 +337,6 @@ static void _InitQueuePriority(struct adapter *Adapter)
 	}
 }
 
-static void _InitHardwareDropIncorrectBulkOut(struct adapter *Adapter)
-{
-	u32 value32 = rtw_read32(Adapter, REG_TXDMA_OFFSET_CHK);
-	value32 |= DROP_DATA_EN;
-	rtw_write32(Adapter, REG_TXDMA_OFFSET_CHK, value32);
-}
-
 static void _InitNetworkType(struct adapter *Adapter)
 {
 	u32 value32;
@@ -516,15 +399,6 @@ static void _InitAdaptiveCtrl(struct adapter *Adapter)
 	/*  Retry Limit */
 	value16 = _LRL(0x30) | _SRL(0x30);
 	rtw_write16(Adapter, REG_RL, value16);
-}
-
-static void _InitRateFallback(struct adapter *Adapter)
-{
-	/*  Set Data Auto Rate Fallback Retry Count register. */
-	rtw_write32(Adapter, REG_DARFRC, 0x00000000);
-	rtw_write32(Adapter, REG_DARFRC+4, 0x10080404);
-	rtw_write32(Adapter, REG_RARFRC, 0x04030201);
-	rtw_write32(Adapter, REG_RARFRC+4, 0x08070605);
 }
 
 static void _InitEDCA(struct adapter *Adapter)
@@ -724,36 +598,6 @@ static void InitUsbAggregationSetting(struct adapter *Adapter)
 	/*  201/12/10 MH Add for USB agg mode dynamic switch. */
 	haldata->UsbRxHighSpeedMode = false;
 }
-static void
-HalRxAggr8188EUsb(
-	struct adapter *Adapter,
-	bool	Value
-	)
-{
-}
-
-/*-----------------------------------------------------------------------------
- * Function:	USB_AggModeSwitch()
- *
- * Overview:	When RX traffic is more than 40M, we need to adjust some parameters to increase
- *			RX speed by increasing batch indication size. This will decrease TCP ACK speed, we
- *			need to monitor the influence of FTP/network share.
- *			For TX mode, we are still ubder investigation.
- *
- * Input:		struct adapter *
- *
- * Output:		NONE
- *
- * Return:		NONE
- *
- * Revised History:
- *	When		Who		Remark
- *	12/10/2010	MHC		Create Version 0.
- *
- *---------------------------------------------------------------------------*/
-static void USB_AggModeSwitch(struct adapter *Adapter)
-{
-}	/*  USB_AggModeSwitch */
 
 static void _InitOperationMode(struct adapter *Adapter)
 {
@@ -781,30 +625,8 @@ static void _InitBeaconParameters(struct adapter *Adapter)
 	haldata->RegCR_1 = rtw_read8(Adapter, REG_CR+1);
 }
 
-static void _InitRFType(struct adapter *Adapter)
-{
-	struct hal_data_8188e	*haldata	= GET_HAL_DATA(Adapter);
-	bool			is92CU		= IS_92C_SERIAL(haldata->VersionID);
-
-	haldata->rf_chip	= RF_6052;
-
-	if (false == is92CU) {
-		haldata->rf_type = RF_1T1R;
-		DBG_88E("Set RF Chip ID to RF_6052 and RF type to 1T1R.\n");
-		return;
-	}
-
-	/*  TODO: Consider that EEPROM set 92CU to 1T1R later. */
-	/*  Force to overwrite setting according to chip version. Ignore EEPROM setting. */
-	MSG_88E("Set RF Chip ID to RF_6052 and RF type to %d.\n", haldata->rf_type);
-}
-
-static void
-_BeaconFunctionEnable(
-		struct adapter *Adapter,
-		bool			Enable,
-		bool			Linked
-	)
+static void _BeaconFunctionEnable(struct adapter *Adapter,
+				  bool Enable, bool Linked)
 {
 	rtw_write8(Adapter, REG_BCN_CTRL, (BIT4 | BIT3 | BIT1));
 
@@ -812,18 +634,10 @@ _BeaconFunctionEnable(
 }
 
 /*  Set CCK and OFDM Block "ON" */
-static void _BBTurnOnBlock(
-		struct adapter *Adapter
-	)
+static void _BBTurnOnBlock(struct adapter *Adapter)
 {
 	PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bCCKEn, 0x1);
 	PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
-}
-
-static void _RfPowerSave(
-		struct adapter *Adapter
-	)
-{
 }
 
 enum {
@@ -831,10 +645,8 @@ enum {
 	Antenna_Right = 2,
 };
 
-static void
-_InitAntenna_Selection(struct adapter *Adapter)
+static void _InitAntenna_Selection(struct adapter *Adapter)
 {
-
 	struct hal_data_8188e	*haldata	= GET_HAL_DATA(Adapter);
 
 	if (haldata->AntDivCfg == 0)
@@ -851,17 +663,6 @@ _InitAntenna_Selection(struct adapter *Adapter)
 	DBG_88E("%s,Cur_ant:(%x)%s\n", __func__, haldata->CurAntenna, (haldata->CurAntenna == Antenna_A) ? "Antenna_A" : "Antenna_B");
 }
 
-/*  */
-/*  2010/08/26 MH Add for selective suspend mode check. */
-/*  If Efuse 0x0e bit1 is not enabled, we can not support selective suspend for Minicard and */
-/*  slim card. */
-/*  */
-static void
-HalDetectSelectiveSuspendMode(
-	struct adapter *Adapter
-	)
-{
-}	/*  HalDetectSelectiveSuspendMode */
 /*-----------------------------------------------------------------------------
  * Function:	HwSuspendModeEnable92Cu()
  *
@@ -911,37 +712,6 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 _func_enter_;
 
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
-
-#ifdef CONFIG_WOWLAN
-
-	Adapter->pwrctrlpriv.wowlan_wake_reason = rtw_read8(Adapter, REG_WOWLAN_WAKE_REASON);
-	DBG_88E("%s wowlan_wake_reason: 0x%02x\n",
-		__func__, Adapter->pwrctrlpriv.wowlan_wake_reason);
-
-	if (rtw_read8(Adapter, REG_MCUFWDL)&BIT7) { /*&&
-		(Adapter->pwrctrlpriv.wowlan_wake_reason & FWDecisionDisconnect)) {*/
-		u8 reg_val = 0;
-		DBG_88E("+Reset Entry+\n");
-		rtw_write8(Adapter, REG_MCUFWDL, 0x00);
-		_8051Reset88E(Adapter);
-		/* reset BB */
-		reg_val = rtw_read8(Adapter, REG_SYS_FUNC_EN);
-		reg_val &= ~(BIT(0) | BIT(1));
-		rtw_write8(Adapter, REG_SYS_FUNC_EN, reg_val);
-		/* reset RF */
-		rtw_write8(Adapter, REG_RF_CTRL, 0);
-		/* reset TRX path */
-		rtw_write16(Adapter, REG_CR, 0);
-		/* reset MAC, Digital Core */
-		reg_val = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		reg_val &= ~(BIT(4) | BIT(7));
-		rtw_write8(Adapter, REG_SYS_FUNC_EN+1, reg_val);
-		reg_val = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		reg_val |= BIT(4) | BIT(7);
-		rtw_write8(Adapter, REG_SYS_FUNC_EN+1, reg_val);
-		DBG_88E("-Reset Entry-\n");
-	}
-#endif /* CONFIG_WOWLAN */
 
 	if (Adapter->pwrctrlpriv.bkeepfwalive) {
 		_ps_open_RF(Adapter);
@@ -998,11 +768,7 @@ _func_enter_;
 		Adapter->bFWReady = false;
 		haldata->fw_ractrl = false;
 	} else {
-#ifdef CONFIG_WOWLAN
-		status = rtl8188e_FirmwareDownload(Adapter, false);
-#else
 		status = rtl8188e_FirmwareDownload(Adapter);
-#endif /* CONFIG_WOWLAN */
 
 		if (status != _SUCCESS) {
 			DBG_88E("%s: Download Firmware failed!!\n", __func__);
@@ -1287,6 +1053,7 @@ static void rtl8192cu_hw_power_down(struct adapter *adapt)
 
 static u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
 {
+
 	DBG_88E("==> %s\n", __func__);
 
 	rtw_write32(Adapter, REG_HIMR_88E, IMR_DISABLED_88E);
@@ -1376,14 +1143,6 @@ static void _ReadLEDSetting(struct adapter *Adapter, u8 *PROMContent, bool Autol
 	haldata->bLedOpenDrain = true;/*  Support Open-drain arrangement for controlling the LED. */
 }
 
-static void readAntennaDiversity(struct adapter *adapt, u8 *hwinfo, bool AutoLoadFail)
-{
-	struct hal_data_8188e	*haldata = GET_HAL_DATA(adapt);
-	struct registry_priv	*registry_par = &adapt->registrypriv;
-
-	haldata->AntDivCfg = registry_par->antdiv_cfg;  /*  0:OFF , 1:ON, */
-}
-
 static void Hal_EfuseParsePIDVID_8188EU(struct adapter *adapt, u8 *hwinfo, bool AutoLoadFail)
 {
 	struct hal_data_8188e	*haldata = GET_HAL_DATA(adapt);
@@ -1420,7 +1179,7 @@ static void Hal_EfuseParseMACAddr_8188EU(struct adapter *adapt, u8 *hwinfo, bool
 			eeprom->mac_addr[i] = sMacAddr[i];
 	} else {
 		/* Read Permanent MAC address */
-		_rtw_memcpy(eeprom->mac_addr, &hwinfo[EEPROM_MAC_ADDR_88EU], ETH_ALEN);
+		memcpy(eeprom->mac_addr, &hwinfo[EEPROM_MAC_ADDR_88EU], ETH_ALEN);
 	}
 	RT_TRACE(_module_hci_hal_init_c_, _drv_notice_,
 		 ("Hal_EfuseParseMACAddr_8188EU: Permanent Address = %02x-%02x-%02x-%02x-%02x-%02x\n",
@@ -1430,11 +1189,6 @@ static void Hal_EfuseParseMACAddr_8188EU(struct adapter *adapt, u8 *hwinfo, bool
 }
 
 static void Hal_CustomizeByCustomerID_8188EU(struct adapter *adapt)
-{
-}
-
-/*  Read HW power down mode selection */
-static void _ReadPSSetting(struct adapter *Adapter, u8 *PROMContent, u8 AutoloadFail)
 {
 }
 
@@ -1534,30 +1288,6 @@ static void ResumeTxBeacon(struct adapter *adapt)
 	rtw_write8(adapt, REG_TBTT_PROHIBIT+1, 0xff);
 	haldata->RegReg542 |= BIT0;
 	rtw_write8(adapt, REG_TBTT_PROHIBIT+2, haldata->RegReg542);
-}
-
-static void UpdateInterruptMask8188EU(struct adapter *adapt, u8 bHIMR0 , u32 AddMSR, u32 RemoveMSR)
-{
-	struct hal_data_8188e *haldata;
-
-	u32 *himr;
-	haldata = GET_HAL_DATA(adapt);
-
-	if (bHIMR0)
-		himr = &(haldata->IntrMask[0]);
-	else
-		himr = &(haldata->IntrMask[1]);
-
-	if (AddMSR)
-		*himr |= AddMSR;
-
-	if (RemoveMSR)
-		*himr &= (~RemoveMSR);
-
-	if (bHIMR0)
-		rtw_write32(adapt, REG_HIMR_88E, *himr);
-	else
-		rtw_write32(adapt, REG_HIMRE_88E, *himr);
 }
 
 static void StopTxBeacon(struct adapter *adapt)
@@ -1665,22 +1395,6 @@ static void hw_var_set_bcn_func(struct adapter *Adapter, u8 variable, u8 *val)
 		rtw_write8(Adapter, bcn_ctrl_reg, (EN_BCN_FUNCTION | EN_TXBCN_RPT));
 	else
 		rtw_write8(Adapter, bcn_ctrl_reg, rtw_read8(Adapter, bcn_ctrl_reg)&(~(EN_BCN_FUNCTION | EN_TXBCN_RPT)));
-}
-
-static void hw_var_set_correct_tsf(struct adapter *Adapter, u8 variable, u8 *val)
-{
-}
-
-static void hw_var_set_mlme_disconnect(struct adapter *Adapter, u8 variable, u8 *val)
-{
-}
-
-static void hw_var_set_mlme_sitesurvey(struct adapter *Adapter, u8 variable, u8 *val)
-{
-}
-
-static void hw_var_set_mlme_join(struct adapter *Adapter, u8 variable, u8 *val)
-{
 }
 
 static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
@@ -2060,21 +1774,11 @@ _func_enter_;
 	case HW_VAR_AMPDU_FACTOR:
 		{
 			u8 RegToSet_Normal[4] = {0x41, 0xa8, 0x72, 0xb9};
-#ifdef CONFIG_BT_COEXIST
-			u8 RegToSet_BT[4] = {0x31, 0x74, 0x42, 0x97};
-#endif
 			u8 FactorToSet;
 			u8 *pRegToSet;
 			u8 index = 0;
 
-#ifdef CONFIG_BT_COEXIST
-			if ((haldata->bt_coexist.BT_Coexist) &&
-			    (haldata->bt_coexist.BT_CoexistType == BT_CSR_BC4))
-				pRegToSet = RegToSet_BT; /*  0x97427431; */
-			else
-#endif
-				pRegToSet = RegToSet_Normal; /*  0xb972a841; */
-
+			pRegToSet = RegToSet_Normal; /*  0xb972a841; */
 			FactorToSet = *((u8 *)val);
 			if (FactorToSet <= 3) {
 				FactorToSet = (1<<(FactorToSet + 2));
@@ -2120,12 +1824,14 @@ _func_enter_;
 			rtl8188e_set_FwJoinBssReport_cmd(Adapter, mstatus);
 		}
 		break;
+#ifdef CONFIG_88EU_P2P
 	case HW_VAR_H2C_FW_P2P_PS_OFFLOAD:
 		{
 			u8 p2p_ps_state = (*(u8 *)val);
 			rtl8188e_set_p2p_ps_offload_cmd(Adapter, p2p_ps_state);
 		}
 		break;
+#endif
 	case HW_VAR_INITIAL_GAIN:
 		{
 			struct rtw_dig *pDigTable = &podmpriv->DM_DigTable;
@@ -2142,20 +1848,6 @@ _func_enter_;
 	case HW_VAR_TRIGGER_GPIO_0:
 		rtl8192cu_trigger_gpio_0(Adapter);
 		break;
-#ifdef CONFIG_BT_COEXIST
-	case HW_VAR_BT_SET_COEXIST:
-		{
-			u8 bStart = (*(u8 *)val);
-			rtl8192c_set_dm_bt_coexist(Adapter, bStart);
-		}
-		break;
-	case HW_VAR_BT_ISSUE_DELBA:
-		{
-			u8 dir = (*(u8 *)val);
-			rtl8192c_issue_delete_ba(Adapter, dir);
-		}
-		break;
-#endif
 	case HW_VAR_RPT_TIMER_SETTING:
 		{
 			u16 min_rpt_time = (*(u16 *)val);
@@ -2212,89 +1904,6 @@ _func_enter_;
 		haldata->bMacPwrCtrlOn = *val;
 		DBG_88E("%s: bMacPwrCtrlOn=%d\n", __func__, haldata->bMacPwrCtrlOn);
 		break;
-#ifdef CONFIG_WOWLAN
-	case HW_VAR_WOWLAN:
-		{
-		struct wowlan_ioctl_param *poidparam;
-		u8 mstatus = (*(u8 *)val);
-		u8 trycnt = 100;
-
-		poidparam = (struct wowlan_ioctl_param *)val;
-		switch (poidparam->subcode) {
-		case WOWLAN_ENABLE:
-			DBG_88E_LEVEL(_drv_always_, "WOWLAN_ENABLE\n");
-
-			SetFwRelatedForWoWLAN8188ES(Adapter, true);
-
-			/* RX DMA stop */
-			DBG_88E_LEVEL(_drv_always_, "Pause DMA\n");
-			rtw_write32(Adapter, REG_RXPKT_NUM, (rtw_read32(Adapter, REG_RXPKT_NUM)|RW_RELEASE_EN));
-			do {
-				if ((rtw_read32(Adapter, REG_RXPKT_NUM)&RXDMA_IDLE)) {
-					DBG_88E_LEVEL(_drv_always_, "RX_DMA_IDLE is true\n");
-					break;
-				} else {
-					/*  If RX_DMA is not idle, receive one pkt from DMA */
-					DBG_88E_LEVEL(_drv_always_, "RX_DMA_IDLE is not true\n");
-				}
-			} while (trycnt--);
-			if (trycnt == 0)
-				DBG_88E_LEVEL(_drv_always_, "Stop RX DMA failed......\n");
-
-			/* Set WOWLAN H2C command. */
-			DBG_88E_LEVEL(_drv_always_, "Set WOWLan cmd\n");
-			rtl8188es_set_wowlan_cmd(Adapter, 1);
-
-			mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-			trycnt = 10;
-
-			while (!(mstatus&BIT1) && trycnt > 1) {
-				mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-				DBG_88E_LEVEL(_drv_info_, "Loop index: %d :0x%02x\n", trycnt, mstatus);
-				trycnt--;
-				rtw_msleep_os(2);
-			}
-
-			Adapter->pwrctrlpriv.wowlan_wake_reason = rtw_read8(Adapter, REG_WOWLAN_WAKE_REASON);
-			DBG_88E_LEVEL(_drv_always_, "wowlan_wake_reason: 0x%02x\n",
-				      Adapter->pwrctrlpriv.wowlan_wake_reason);
-
-			/* Invoid SE0 reset signal during suspending*/
-			rtw_write8(Adapter, REG_RSV_CTRL, 0x20);
-			rtw_write8(Adapter, REG_RSV_CTRL, 0x60);
-
-			/* rtw_msleep_os(10); */
-			break;
-		case WOWLAN_DISABLE:
-			DBG_88E_LEVEL(_drv_always_, "WOWLAN_DISABLE\n");
-			trycnt = 10;
-			rtl8188es_set_wowlan_cmd(Adapter, 0);
-			mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-			DBG_88E_LEVEL(_drv_info_, "%s mstatus:0x%02x\n", __func__, mstatus);
-
-			while (mstatus&BIT1 && trycnt > 1) {
-				mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-				DBG_88E_LEVEL(_drv_always_, "Loop index: %d :0x%02x\n", trycnt, mstatus);
-				trycnt--;
-				rtw_msleep_os(2);
-			}
-
-			if (mstatus & BIT1)
-				printk("System did not release RX_DMA\n");
-			else
-				SetFwRelatedForWoWLAN8188ES(Adapter, false);
-
-			rtw_msleep_os(2);
-			if (!(Adapter->pwrctrlpriv.wowlan_wake_reason & FWDecisionDisconnect))
-				rtl8188e_set_FwJoinBssReport_cmd(Adapter, 1);
-			break;
-		default:
-			break;
-		}
-		}
-		break;
-#endif /* CONFIG_WOWLAN */
-
 	case HW_VAR_TX_RPT_MAX_MACID:
 		{
 			u8 maxMacid = *val;
@@ -2540,21 +2149,6 @@ static u8 SetHalDefVar8188EUsb(struct adapter *Adapter, enum hal_def_variable eV
 	}
 
 	return bResult;
-}
-
-static void _update_response_rate(struct adapter *adapt, unsigned int mask)
-{
-	u8 RateIndex = 0;
-	/*  Set RRSR rate table. */
-	rtw_write8(adapt, REG_RRSR, mask&0xff);
-	rtw_write8(adapt, REG_RRSR+1, (mask>>8)&0xff);
-
-	/*  Set RTS initial rate */
-	while (mask > 0x1) {
-		mask = (mask >> 1);
-		RateIndex++;
-	}
-	rtw_write8(adapt, REG_INIRTS_RATE_SEL, RateIndex);
 }
 
 static void UpdateHalRAMask8188EUsb(struct adapter *adapt, u32 mac_id, u8 rssi_level)

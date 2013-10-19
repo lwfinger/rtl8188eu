@@ -95,11 +95,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 		skb_queue_head_init(&precvpriv->free_recv_skb_queue);
 
 		for (i = 0; i < NR_PREALLOC_RECV_SKB; i++) {
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18))
-			pskb = __dev_alloc_skb(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ, GFP_KERNEL);
-#else
 			pskb = __netdev_alloc_skb(padapter->pnetdev, MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ, GFP_KERNEL);
-#endif
 			if (pskb) {
 				pskb->dev = padapter->pnetdev;
 				tmpaddr = (size_t)pskb->data;
@@ -128,8 +124,7 @@ void rtl8188eu_free_recv_priv(struct adapter *padapter)
 		precvbuf++;
 	}
 
-	if (precvpriv->pallocated_recv_buf)
-		rtw_mfree(precvpriv->pallocated_recv_buf, NR_RECVBUFF * sizeof(struct recv_buf) + 4);
+	kfree(precvpriv->pallocated_recv_buf);
 
 	if (skb_queue_len(&precvpriv->rx_skb_queue))
 		DBG_88E(KERN_WARNING "rx_skb_queue not empty\n");

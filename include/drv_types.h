@@ -27,13 +27,13 @@
 #ifndef __DRV_TYPES_H__
 #define __DRV_TYPES_H__
 
-#include <autoconf.h>
+#define DRV_NAME "r8188eu"
+
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
 #include <drv_types_linux.h>
 #include <rtw_ht.h>
 #include <rtw_cmd.h>
-#include <wlan_bssdef.h>
 #include <rtw_xmit.h>
 #include <rtw_recv.h>
 #include <hal_intf.h>
@@ -128,12 +128,6 @@ struct registry_priv {
 	u8	wifi_spec;/*  !turbo_mode */
 
 	u8	channel_plan;
-#ifdef CONFIG_BT_COEXIST
-	u8	btcoex;
-	u8	bt_iso;
-	u8	bt_sco;
-	u8	bt_ampdu;
-#endif
 	bool	bAcceptAddbaReq;
 
 	u8	antdiv_cfg;
@@ -200,12 +194,12 @@ struct dvobj_priv {
 	ATOMIC_T continual_urb_error;
 };
 
-static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
+static inline struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {
 	/* todo: get interface type from dvobj and the return
 	 * the dev accordingly */
 	return &dvobj->pusbintf->dev;
-}
+};
 
 enum _IFACE_TYPE {
 	IFACE_PORT0, /* mapping to port0 for C/D series chips */
@@ -250,13 +244,11 @@ struct adapter {
 	struct	led_priv	ledpriv;
 	struct	mp_priv	mppriv;
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 	struct	hostapd_priv	*phostapdpriv;
 #endif
 
-#ifdef CONFIG_P2P
 	struct wifidirect_info	wdinfo;
-#endif /* CONFIG_P2P */
 
 	void *HalData;
 	u32 hal_data_sz;
@@ -305,7 +297,7 @@ struct adapter {
 	/* The driver will show up the desired channel number
 	 * when this flag is 1. */
 	u8 bNotifyChannelChange;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 	/* The driver will show the current P2P status when the
 	 * upper application reads it. */
 	u8 bShowGetP2PState;

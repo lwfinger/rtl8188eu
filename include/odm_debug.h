@@ -91,7 +91,6 @@
 	#define ASSERT(expr)
 #endif
 
-#if DBG
 #define ODM_RT_TRACE(pDM_Odm, comp, level, fmt)				\
 	if (((comp) & pDM_Odm->DebugComponents) &&			\
 	    (level <= pDM_Odm->DebugLevel)) {				\
@@ -140,15 +139,6 @@
 			DbgPrint("%02X%s", __ptr[__i], (__i==5)?"":"-");\
 		DbgPrint("\n");						\
 	}
-#else
-#define ODM_RT_TRACE(pDM_Odm, comp, level, fmt)
-#define ODM_RT_TRACE_F(pDM_Odm, comp, level, fmt)
-#define ODM_RT_ASSERT(pDM_Odm, expr, fmt)
-#define ODM_dbg_enter()
-#define ODM_dbg_exit()
-#define ODM_dbg_trace(str)
-#define ODM_PRINT_ADDR(pDM_Odm, comp, level, title_str, ptr)
-#endif
 
 void ODM_InitDebugSetting(struct odm_dm_struct *pDM_Odm);
 

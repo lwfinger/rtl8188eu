@@ -46,65 +46,6 @@ struct zero_bulkout_context {
 	void *padapter;
 };
 
-static void usb_bulkout_zero_complete(struct urb *purb, struct pt_regs *regs)
-{
-	struct zero_bulkout_context *pcontext = (struct zero_bulkout_context *)purb->context;
-
-	if (pcontext) {
-		if (pcontext->pbuf)
-			rtw_mfree(pcontext->pbuf, sizeof(int));
-
-		if (pcontext->purb && (pcontext->purb == purb))
-			usb_free_urb(pcontext->purb);
-
-		rtw_mfree((u8 *)pcontext, sizeof(struct zero_bulkout_context));
-	}
-}
-
-static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
-{
-	int pipe, status, len;
-	u32 ret;
-	unsigned char *pbuf;
-	struct zero_bulkout_context *pcontext;
-	struct urb *purb = NULL;
-	struct adapter *padapter = (struct adapter *)pintfhdl->padapter;
-	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
-	struct usb_device *pusbd = pdvobj->pusbdev;
-
-	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||
-	    (padapter->pwrctrlpriv.pnp_bstop_trx))
-		return _FAIL;
-
-	pcontext = (struct zero_bulkout_context *)rtw_zmalloc(sizeof(struct zero_bulkout_context));
-
-	pbuf = (unsigned char *)rtw_zmalloc(sizeof(int));
-	purb = usb_alloc_urb(0, GFP_ATOMIC);
-
-	len = 0;
-	pcontext->pbuf = pbuf;
-	pcontext->purb = purb;
-	pcontext->pirp = NULL;
-	pcontext->padapter = padapter;
-
-	/* translate DMA FIFO addr to pipehandle */
-
-	usb_fill_bulk_urb(purb, pusbd, pipe,
-			  pbuf,
-			  len,
-			  usb_bulkout_zero_complete,
-			  pcontext);/* context is pcontext */
-
-	status = usb_submit_urb(purb, GFP_ATOMIC);
-
-	if (!status)
-		ret = _SUCCESS;
-	else
-		ret = _FAIL;
-
-	return ret;
-}
-
 void usb_read_mem(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {
 }
@@ -134,8 +75,6 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 
 static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	unsigned long irqL;
-	int i;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)purb->context;
 	struct adapter	*padapter = pxmitbuf->padapter;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
@@ -157,7 +96,7 @@ _func_enter_;
 		pxmitpriv->bkq_cnt--;
 		break;
 	case HIGH_QUEUE_INX:
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 		rtw_chk_hi_queue_cmd(padapter);
 #endif
 		break;
@@ -226,7 +165,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	unsigned long irqL;
 	unsigned int pipe;
 	int status;
-	u32 ret = _FAIL, bwritezero = false;
+	u32 ret = _FAIL;
 	struct urb *purb = NULL;
 	struct adapter *padapter = (struct adapter *)pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
@@ -234,7 +173,6 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)wmem;
 	struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data;
 	struct usb_device *pusbd = pdvobj->pusbdev;
-	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 
 _func_enter_;
 

@@ -26,10 +26,9 @@
 #include <mlme_osdep.h>
 #include <sta_info.h>
 
-void _rtw_init_stainfo(struct sta_info *psta)
+static void _rtw_init_stainfo(struct sta_info *psta)
 {
 _func_enter_;
-
 	_rtw_memset((u8 *)psta, 0, sizeof (struct sta_info));
 
 	 _rtw_spinlock_init(&psta->lock);
@@ -41,7 +40,7 @@ _func_enter_;
 	_rtw_init_sta_xmit_priv(&psta->sta_xmitpriv);
 	_rtw_init_sta_recv_priv(&psta->sta_recvpriv);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 
 	_rtw_init_listhead(&psta->asoc_list);
 
@@ -55,7 +54,7 @@ _func_enter_;
 
 	psta->bpairwise_key_installed = false;
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 	psta->nonerp_set = 0;
 	psta->no_short_slot_time_set = 0;
 	psta->no_short_preamble_set = 0;
@@ -68,7 +67,7 @@ _func_enter_;
 
 	psta->keep_alive_trycnt = 0;
 
-#endif	/*  CONFIG_AP_MODE */
+#endif	/*  CONFIG_88EU_AP_MODE */
 
 _func_exit_;
 }
@@ -108,7 +107,7 @@ _func_enter_;
 		psta++;
 	}
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 
 	pstapriv->sta_dz_bitmap = 0;
 	pstapriv->tim_bitmap = 0;
@@ -215,9 +214,9 @@ _func_enter_;
 _func_exit_;
 }
 
-void rtw_mfree_sta_priv_lock(struct sta_priv *pstapriv)
+static void rtw_mfree_sta_priv_lock(struct sta_priv *pstapriv)
 {
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
 #endif
 
@@ -229,7 +228,7 @@ void rtw_mfree_sta_priv_lock(struct sta_priv *pstapriv)
 	_rtw_spinlock_free(&pstapriv->wakeup_q.lock);
 	_rtw_spinlock_free(&pstapriv->sleep_q.lock);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 	_rtw_spinlock_free(&pstapriv->asoc_list_lock);
 	_rtw_spinlock_free(&pstapriv->auth_list_lock);
 	_rtw_spinlock_free(&pacl_list->acl_node_q.lock);
@@ -302,7 +301,7 @@ _func_enter_;
 		rtw_list_delete(&(psta->list));
 		_exit_critical_bh(&(pfree_sta_queue->lock), &irql);
 		_rtw_init_stainfo(psta);
-		_rtw_memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
+		memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
 		index = wifi_mac_hash(hwaddr);
 		RT_TRACE(_module_rtl871x_sta_mgt_c_, _drv_info_, ("rtw_alloc_stainfo: index=%x", index));
 		if (index >= NUM_STA) {
@@ -326,7 +325,7 @@ _func_enter_;
 /*  So, we initialize the tid_rxseq variable as the 0xffff. */
 
 		for (i = 0; i < 16; i++)
-			_rtw_memcpy(&psta->sta_recvpriv.rxcache.tid_rxseq[i], &wRxSeqInitialValue, 2);
+			memcpy(&psta->sta_recvpriv.rxcache.tid_rxseq[i], &wRxSeqInitialValue, 2);
 
 		RT_TRACE(_module_rtl871x_sta_mgt_c_, _drv_info_,
 			 ("alloc number_%d stainfo  with hwaddr = %pM\n",
@@ -454,7 +453,7 @@ _func_enter_;
 	if (!(psta->state & WIFI_AP_STATE))
 		rtw_hal_set_odm_var(padapter, HAL_ODM_STA_INFO, psta, false);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 
 	_enter_critical_bh(&pstapriv->auth_list_lock, &irql0);
 	if (!rtw_is_list_empty(&psta->auth_list)) {
@@ -485,7 +484,7 @@ _func_enter_;
 
 	psta->under_exist_checking = 0;
 
-#endif	/*  CONFIG_AP_MODE */
+#endif	/*  CONFIG_88EU_AP_MODE */
 
 	_enter_critical_bh(&(pfree_sta_queue->lock), &irql0);
 	rtw_list_insert_tail(&psta->list, get_list_head(pfree_sta_queue));
@@ -618,7 +617,7 @@ _func_exit_;
 u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 {
 	u8 res = true;
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 	unsigned long irql;
 	struct list_head *plist, *phead;
 	struct rtw_wlan_acl_node *paclnode;

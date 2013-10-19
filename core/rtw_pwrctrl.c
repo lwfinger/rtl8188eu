@@ -24,10 +24,6 @@
 #include <osdep_intf.h>
 #include <linux/usb.h>
 
-#ifdef CONFIG_BT_COEXIST
-#include <rtl8723a_hal.h>
-#endif
-
 void ips_enter(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
@@ -53,9 +49,6 @@ void ips_enter(struct adapter *padapter)
 
 	pwrpriv->ips_enter_cnts++;
 	DBG_88E("==>ips_enter cnts:%d\n", pwrpriv->ips_enter_cnts);
-#ifdef CONFIG_BT_COEXIST
-	BTDM_TurnOffBtCoexistBeforeEnterIPS(padapter);
-#endif
 	if (rf_off == pwrpriv->change_rfpwrstate) {
 		pwrpriv->bpower_saving = true;
 		DBG_88E_LEVEL(_drv_info_, "nolinked power save enter\n");
@@ -123,7 +116,7 @@ static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 {
 	struct adapter *buddy = adapter->pbuddy_adapter;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 	struct wifidirect_info	*pwdinfo = &(adapter->wdinfo);
 #endif
 
@@ -136,7 +129,7 @@ static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 	    check_fwstate(pmlmepriv, WIFI_UNDER_LINKING|WIFI_UNDER_WPS) ||
 	    check_fwstate(pmlmepriv, WIFI_AP_STATE) ||
 	    check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE|WIFI_ADHOC_STATE) ||
-#if defined(CONFIG_P2P)
+#if defined(CONFIG_88EU_P2P)
 	    !rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 #else
 	    0)
@@ -146,7 +139,7 @@ static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 	/* consider buddy, if exist */
 	if (buddy) {
 		struct mlme_priv *b_pmlmepriv = &(buddy->mlmepriv);
-		#ifdef CONFIG_P2P
+		#ifdef CONFIG_88EU_P2P
 		struct wifidirect_info *b_pwdinfo = &(buddy->wdinfo);
 		#endif
 
@@ -154,7 +147,7 @@ static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 		    check_fwstate(b_pmlmepriv, WIFI_UNDER_LINKING|WIFI_UNDER_WPS) ||
 		    check_fwstate(b_pmlmepriv, WIFI_AP_STATE) ||
 		    check_fwstate(b_pmlmepriv, WIFI_ADHOC_MASTER_STATE|WIFI_ADHOC_STATE) ||
-#if defined(CONFIG_P2P)
+#if defined(CONFIG_88EU_P2P)
 		    !rtw_p2p_chk_state(b_pwdinfo, P2P_STATE_NONE))
 #else
 		    0)
@@ -215,7 +208,7 @@ exit:
 	return;
 }
 
-void pwr_state_check_handler(void *FunctionContext)
+static void pwr_state_check_handler(void *FunctionContext)
 {
 	struct adapter *padapter = (struct adapter *)FunctionContext;
 	rtw_ps_cmd(padapter);
@@ -285,7 +278,7 @@ _func_enter_;
 _func_exit_;
 }
 
-u8 PS_RDY_CHECK(struct adapter *padapter)
+static u8 PS_RDY_CHECK(struct adapter *padapter)
 {
 	u32 curr_time, delta_time;
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
@@ -304,15 +297,8 @@ u8 PS_RDY_CHECK(struct adapter *padapter)
 	    (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)) ||
 	    (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)))
 		return false;
-#ifdef CONFIG_WOWLAN
-	if (pwrpriv->bInSuspend && pwrpriv->wowlan_mode)
-		return true;
-	else
-		return false;
-#else
 	if (pwrpriv->bInSuspend)
 		return false;
-#endif
 	if ((padapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X) && (padapter->securitypriv.binstallGrpkey == false)) {
 		DBG_88E("Group handshake still in progress !!!\n");
 		return false;
@@ -323,9 +309,9 @@ u8 PS_RDY_CHECK(struct adapter *padapter)
 void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode)
 {
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_88EU_P2P */
 
 _func_enter_;
 
@@ -349,6 +335,7 @@ _func_enter_;
 
 	/* if (pwrpriv->pwr_mode == PS_MODE_ACTIVE) */
 	if (ps_mode == PS_MODE_ACTIVE) {
+#ifdef CONFIG_88EU_P2P
 		if (pwdinfo->opp_ps == 0) {
 			DBG_88E("rtw_set_ps_mode: Leave 802.11 power save\n");
 			pwrpriv->pwr_mode = ps_mode;
@@ -357,11 +344,8 @@ _func_enter_;
 			pwrpriv->bFwCurrentInPSMode = false;
 		}
 	} else {
-#ifdef CONFIG_BT_COEXIST
-		if (PS_RDY_CHECK(padapter) || (BT_1Ant(padapter))) {
-#else
+#endif /* CONFIG_88EU_P2P */
 		if (PS_RDY_CHECK(padapter)) {
-#endif
 			DBG_88E("%s: Enter 802.11 power save\n", __func__);
 			pwrpriv->bFwCurrentInPSMode = true;
 			pwrpriv->pwr_mode = ps_mode;
@@ -369,9 +353,11 @@ _func_enter_;
 			pwrpriv->bcn_ant_mode = bcn_ant_mode;
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&ps_mode));
 
+#ifdef CONFIG_88EU_P2P
 			/*  Set CTWindow after LPS */
 			if (pwdinfo->opp_ps == 1)
 				p2p_ps_wk_cmd(padapter, P2P_PS_ENABLE, 0);
+#endif /* CONFIG_88EU_P2P */
 
 			rtw_set_rpwm(padapter, PS_STATE_S2);
 		}
@@ -446,14 +432,12 @@ _func_enter_;
 _func_exit_;
 }
 
-/*  */
-/*	Description: */
-/*		Leave the leisure power save mode. */
-/*  */
-void LPS_Leave(struct adapter *padapter)
-{
 #define LPS_LEAVE_TIMEOUT_MS 100
 
+/*	Description: */
+/*		Leave the leisure power save mode. */
+void LPS_Leave(struct adapter *padapter)
+{
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
 
 _func_enter_;

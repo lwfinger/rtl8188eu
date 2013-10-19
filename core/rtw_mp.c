@@ -125,51 +125,10 @@ static void _init_mp_priv_(struct mp_priv *pmp_priv)
 	pmp_priv->network_macaddr[5] = 0x55;
 
 	pnetwork = &pmp_priv->mp_network.network;
-	_rtw_memcpy(pnetwork->MacAddress, pmp_priv->network_macaddr, ETH_ALEN);
+	memcpy(pnetwork->MacAddress, pmp_priv->network_macaddr, ETH_ALEN);
 
 	pnetwork->Ssid.SsidLength = 8;
-	_rtw_memcpy(pnetwork->Ssid.Ssid, "mp_871x", pnetwork->Ssid.SsidLength);
-}
-
-static int init_mp_priv_by_os(struct mp_priv *pmp_priv)
-{
-	int i, res;
-	struct mp_xmit_frame *pmp_xmitframe;
-
-	if (pmp_priv == NULL)
-		return _FAIL;
-
-	_rtw_init_queue(&pmp_priv->free_mp_xmitqueue);
-
-	pmp_priv->pallocated_mp_xmitframe_buf = NULL;
-	pmp_priv->pallocated_mp_xmitframe_buf = rtw_zmalloc(NR_MP_XMITFRAME * sizeof(struct mp_xmit_frame) + 4);
-	if (pmp_priv->pallocated_mp_xmitframe_buf == NULL) {
-		res = _FAIL;
-		goto _exit_init_mp_priv;
-	}
-
-	pmp_priv->pmp_xmtframe_buf = pmp_priv->pallocated_mp_xmitframe_buf + 4 - ((size_t)(pmp_priv->pallocated_mp_xmitframe_buf) & 3);
-
-	pmp_xmitframe = (struct mp_xmit_frame *)pmp_priv->pmp_xmtframe_buf;
-
-	for (i = 0; i < NR_MP_XMITFRAME; i++) {
-		_rtw_init_listhead(&pmp_xmitframe->list);
-		rtw_list_insert_tail(&pmp_xmitframe->list, &pmp_priv->free_mp_xmitqueue.queue);
-
-		pmp_xmitframe->pkt = NULL;
-		pmp_xmitframe->frame_tag = MP_FRAMETAG;
-		pmp_xmitframe->padapter = pmp_priv->papdater;
-
-		pmp_xmitframe++;
-	}
-
-	pmp_priv->free_mp_xmitframe_cnt = NR_MP_XMITFRAME;
-
-	res = _SUCCESS;
-
-_exit_init_mp_priv:
-
-	return res;
+	memcpy(pnetwork->Ssid.Ssid, "mp_871x", pnetwork->Ssid.SsidLength);
 }
 
 static void mp_init_xmit_attrib(struct mp_tx *pmptx, struct adapter *padapter)
@@ -232,10 +191,8 @@ s32 init_mp_priv(struct adapter *padapter)
 
 void free_mp_priv(struct mp_priv *pmp_priv)
 {
-	if (pmp_priv->pallocated_mp_xmitframe_buf) {
-		rtw_mfree(pmp_priv->pallocated_mp_xmitframe_buf, 0);
-		pmp_priv->pallocated_mp_xmitframe_buf = NULL;
-	}
+	kfree(pmp_priv->pallocated_mp_xmitframe_buf);
+	pmp_priv->pallocated_mp_xmitframe_buf = NULL;
 	pmp_priv->pmp_xmtframe_buf = NULL;
 }
 
@@ -343,7 +300,6 @@ static void disable_dm(struct adapter *padapter)
 {
 	u8 v8;
 
-
 	/* 3 1. disable firmware dynamic mechanism */
 	/*  disable Power Training, Rate Adaptive */
 	v8 = rtw_read8(padapter, REG_BCN_CTRL);
@@ -410,9 +366,9 @@ s32 mp_start_test(struct adapter *padapter)
 
 	/* 3 1. initialize a new struct wlan_bssid_ex */
 /*	_rtw_memset(&bssid, 0, sizeof(struct wlan_bssid_ex)); */
-	_rtw_memcpy(bssid.MacAddress, pmppriv->network_macaddr, ETH_ALEN);
+	memcpy(bssid.MacAddress, pmppriv->network_macaddr, ETH_ALEN);
 	bssid.Ssid.SsidLength = strlen("mp_pseudo_adhoc");
-	_rtw_memcpy(bssid.Ssid.Ssid, (u8 *)"mp_pseudo_adhoc", bssid.Ssid.SsidLength);
+	memcpy(bssid.Ssid.Ssid, (u8 *)"mp_pseudo_adhoc", bssid.Ssid.SsidLength);
 	bssid.InfrastructureMode = Ndis802_11IBSS;
 	bssid.NetworkTypeInUse = Ndis802_11DS;
 	bssid.IELength = 0;
@@ -457,7 +413,7 @@ s32 mp_start_test(struct adapter *padapter)
 	tgt_network->join_res = 1;
 	tgt_network->aid = 1;
 	psta->aid = 1;
-	_rtw_memcpy(&tgt_network->network, &bssid, length);
+	memcpy(&tgt_network->network, &bssid, length);
 
 	rtw_indicate_connect(padapter);
 	_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
@@ -512,43 +468,8 @@ end_of_mp_stop_test:
 		_exit_critical_bh(&pmlmepriv->lock, &irqL);
 	}
 }
-/*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
-/*-----------------------------------------------------------------------------
- * Function:	mpt_SwitchRfSetting
- *
- * Overview:	Change RF Setting when we siwthc channel/rate/BW for MP.
- *
- * Input:	struct adapter *				pAdapter
- *
- * Output:      NONE
- *
- * Return:      NONE
- *
- * Revised History:
- * When			Who		Remark
- * 01/08/2009	MHC		Suggestion from SD3 Willis for 92S series.
- * 01/09/2009	MHC		Add CCK modification for 40MHZ. Suggestion from SD3.
- *
- *---------------------------------------------------------------------------*/
-static void mpt_SwitchRfSetting(struct adapter *pAdapter)
-{
-	Hal_mpt_SwitchRfSetting(pAdapter);
-    }
-
-/*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
-/*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-static void MPT_CCKTxPowerAdjust(struct adapter *Adapter, bool bInCH14)
-{
-	Hal_MPT_CCKTxPowerAdjust(Adapter, bInCH14);
-}
-
-static void MPT_CCKTxPowerAdjustbyIndex(struct adapter *pAdapter, bool beven)
-{
-	Hal_MPT_CCKTxPowerAdjustbyIndex(pAdapter, beven);
-	}
 
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-
 /*
  * SetChannel
  * Description
@@ -569,17 +490,6 @@ void SetBandwidth(struct adapter *pAdapter)
 	Hal_SetBandwidth(pAdapter);
 }
 
-static void SetCCKTxPower(struct adapter *pAdapter, u8 *TxPower)
-{
-	Hal_SetCCKTxPower(pAdapter, TxPower);
-}
-
-static void SetOFDMTxPower(struct adapter *pAdapter, u8 *TxPower)
-{
-	Hal_SetOFDMTxPower(pAdapter, TxPower);
-	}
-
-
 void SetAntenna(struct adapter *pAdapter)
 {
 	Hal_SetAntenna(pAdapter);
@@ -595,19 +505,6 @@ void SetTxPower(struct adapter *pAdapter)
 	Hal_SetTxPower(pAdapter);
 	}
 
-static void SetTxAGCOffset(struct adapter *pAdapter, u32 ulTxAGCOffset)
-{
-	u32 TxAGCOffset_B, TxAGCOffset_C, TxAGCOffset_D, tmpAGC;
-
-	TxAGCOffset_B = (ulTxAGCOffset&0x000000ff);
-	TxAGCOffset_C = ((ulTxAGCOffset&0x0000ff00)>>8);
-	TxAGCOffset_D = ((ulTxAGCOffset&0x00ff0000)>>16);
-
-	tmpAGC = (TxAGCOffset_D<<8 | TxAGCOffset_C<<4 | TxAGCOffset_B);
-	write_bbreg(pAdapter, rFPGA0_TxGainStage,
-		    (bXBTxAGC|bXCTxAGC|bXDTxAGC), tmpAGC);
-}
-
 void SetDataRate(struct adapter *pAdapter)
 {
 	Hal_SetDataRate(pAdapter);
@@ -621,16 +518,6 @@ void MP_PHY_SetRFPathSwitch(struct adapter *pAdapter , bool bMain)
 s32 SetThermalMeter(struct adapter *pAdapter, u8 target_ther)
 {
 	return Hal_SetThermalMeter(pAdapter, target_ther);
-}
-
-static void TriggerRFThermalMeter(struct adapter *pAdapter)
-{
-	Hal_TriggerRFThermalMeter(pAdapter);
-}
-
-static u8 ReadRFThermalMeter(struct adapter *pAdapter)
-{
-	return Hal_ReadRFThermalMeter(pAdapter);
 }
 
 void GetThermalMeter(struct adapter *pAdapter, u8 *value)
@@ -655,18 +542,6 @@ void SetCarrierSuppressionTx(struct adapter *pAdapter, u8 bStart)
 	PhySetTxPowerLevel(pAdapter);
 	Hal_SetCarrierSuppressionTx(pAdapter, bStart);
 }
-
-static void SetCCKContinuousTx(struct adapter *pAdapter, u8 bStart)
-{
-	PhySetTxPowerLevel(pAdapter);
-	Hal_SetCCKContinuousTx(pAdapter, bStart);
-}
-
-static void SetOFDMContinuousTx(struct adapter *pAdapter, u8 bStart)
-{
-	PhySetTxPowerLevel(pAdapter);
-	Hal_SetOFDMContinuousTx(pAdapter, bStart);
-} /* mpt_StartOfdmContTx */
 
 void SetContinuousTx(struct adapter *pAdapter, u8 bStart)
 {
@@ -744,8 +619,8 @@ static int mp_xmit_packet_thread(void *context)
 			}
 		}
 
-		_rtw_memcpy((u8 *)(pxmitframe->buf_addr+TXDESC_OFFSET), pmptx->buf, pmptx->write_size);
-		_rtw_memcpy(&(pxmitframe->attrib), &(pmptx->attrib), sizeof(struct pkt_attrib));
+		memcpy((u8 *)(pxmitframe->buf_addr+TXDESC_OFFSET), pmptx->buf, pmptx->write_size);
+		memcpy(&(pxmitframe->attrib), &(pmptx->attrib), sizeof(struct pkt_attrib));
 
 		dump_mpframe(padapter, pxmitframe);
 
@@ -764,8 +639,7 @@ static int mp_xmit_packet_thread(void *context)
 	}
 
 exit:
-	/* DBG_88E("%s:pkTx Exit\n", __func__); */
-	rtw_mfree(pmptx->pallocated_buf, pmptx->buf_size);
+	kfree(pmptx->pallocated_buf);
 	pmptx->pallocated_buf = NULL;
 	pmptx->stop = 1;
 
@@ -775,7 +649,7 @@ exit:
 void fill_txdesc_for_mp(struct adapter *padapter, struct tx_desc *ptxdesc)
 {
 	struct mp_priv *pmp_priv = &padapter->mppriv;
-	_rtw_memcpy(ptxdesc, &(pmp_priv->tx.desc), TXDESC_SIZE);
+	memcpy(ptxdesc, &(pmp_priv->tx.desc), TXDESC_SIZE);
 }
 
 void SetPacketTx(struct adapter *padapter)
@@ -799,9 +673,9 @@ void SetPacketTx(struct adapter *padapter)
 
 	/* 3 1. update_attrib() */
 	pattrib = &pmp_priv->tx.attrib;
-	_rtw_memcpy(pattrib->src, padapter->eeprompriv.mac_addr, ETH_ALEN);
-	_rtw_memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
-	_rtw_memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
+	memcpy(pattrib->src, padapter->eeprompriv.mac_addr, ETH_ALEN);
+	memcpy(pattrib->ta, pattrib->src, ETH_ALEN);
+	memcpy(pattrib->ra, pattrib->dst, ETH_ALEN);
 	bmcast = IS_MCAST(pattrib->ra);
 	if (bmcast) {
 		pattrib->mac_id = 1;
@@ -816,8 +690,7 @@ void SetPacketTx(struct adapter *padapter)
 	/* 3 2. allocate xmit buffer */
 	pkt_size = pattrib->last_txcmdsz;
 
-	if (pmp_priv->tx.pallocated_buf)
-		rtw_mfree(pmp_priv->tx.pallocated_buf, pmp_priv->tx.buf_size);
+	kfree(pmp_priv->tx.pallocated_buf);
 	pmp_priv->tx.write_size = pkt_size;
 	pmp_priv->tx.buf_size = pkt_size + XMITBUF_ALIGN_SZ;
 	pmp_priv->tx.pallocated_buf = rtw_zmalloc(pmp_priv->tx.buf_size);
@@ -877,9 +750,9 @@ void SetPacketTx(struct adapter *padapter)
 	/* 3 4. make wlan header, make_wlanhdr() */
 	hdr = (struct rtw_ieee80211_hdr *)pkt_start;
 	SetFrameSubType(&hdr->frame_ctl, pattrib->subtype);
-	_rtw_memcpy(hdr->addr1, pattrib->dst, ETH_ALEN); /*  DA */
-	_rtw_memcpy(hdr->addr2, pattrib->src, ETH_ALEN); /*  SA */
-	_rtw_memcpy(hdr->addr3, get_bssid(&padapter->mlmepriv), ETH_ALEN); /*  RA, BSSID */
+	memcpy(hdr->addr1, pattrib->dst, ETH_ALEN); /*  DA */
+	memcpy(hdr->addr2, pattrib->src, ETH_ALEN); /*  SA */
+	memcpy(hdr->addr3, get_bssid(&padapter->mlmepriv), ETH_ALEN); /*  RA, BSSID */
 
 	/* 3 5. make payload */
 	ptr = pkt_start + pattrib->hdrlen;
@@ -1034,7 +907,7 @@ u32 mp_query_psd(struct adapter *pAdapter, u8 *data)
 		sscanf(data, "pts =%d, start =%d, stop =%d", &psd_pts, &psd_start, &psd_stop);
 	}
 
-	_rtw_memset(data, '\0', sizeof(data));
+	_rtw_memset(data, '\0', sizeof(*data));
 
 	i = psd_start;
 	while (i < psd_stop) {

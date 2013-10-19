@@ -107,12 +107,10 @@ static int rtw_android_get_link_speed(struct net_device *net, char *command,
 				      int total_len)
 {
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(net);
-	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
-	int bytes_written = 0;
-	u16 link_speed = 0;
+	int bytes_written;
+	u16 link_speed;
 
-	link_speed = rtw_get_cur_max_rate(padapter)/10;
+	link_speed = rtw_get_cur_max_rate(padapter) / 10;
 	bytes_written = snprintf(command, total_len, "LinkSpeed %d",
 				 link_speed);
 	return bytes_written;
@@ -121,8 +119,7 @@ static int rtw_android_get_link_speed(struct net_device *net, char *command,
 static int rtw_android_get_macaddr(struct net_device *net, char *command,
 				   int total_len)
 {
-	struct adapter *adapter = (struct adapter *)rtw_netdev_priv(net);
-	int bytes_written = 0;
+	int bytes_written;
 
 	bytes_written = snprintf(command, total_len, "Macaddr = %pM",
 				 net->dev_addr);
@@ -143,37 +140,15 @@ static int android_set_cntry(struct net_device *net, char *command,
 static int android_get_p2p_addr(struct net_device *net, char *command,
 					int total_len)
 {
-	int ret;
-	int bytes_written = 0;
-
 	/* We use the same address as our HW MAC address */
-	_rtw_memcpy(command, net->dev_addr, ETH_ALEN);
-	bytes_written = ETH_ALEN;
-	return bytes_written;
+	memcpy(command, net->dev_addr, ETH_ALEN);
+	return ETH_ALEN;
 }
 
 static int rtw_android_set_block(struct net_device *net, char *command,
 				 int total_len)
 {
-	int ret;
-	struct adapter *adapter = (struct adapter *)rtw_netdev_priv(net);
-	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
-
 	return 0;
-}
-
-static int get_int_from_command(char *pcmd)
-{
-	int i;
-
-	for (i = 0; i < strlen(pcmd); i++) {
-		if (pcmd[i] == '=') {
-			/* Skip the '=' and space characters. */
-			i += 2;
-			break;
-		}
-	}
-	return rtw_atoi(pcmd + i);
 }
 
 int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)

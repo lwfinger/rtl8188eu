@@ -61,7 +61,4 @@ enum ANDROID_WIFI_CMD {
 int rtw_android_cmdstr_to_num(char *cmdstr);
 int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd);
 
-static int rtw_android_wifictrl_func_add(void) { return 0; }
-static void rtw_android_wifictrl_func_del(void) {}
-
 #endif /* __RTW_ANDROID_H__ */

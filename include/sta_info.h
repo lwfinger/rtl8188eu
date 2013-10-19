@@ -139,9 +139,8 @@ struct sta_info {
 	/* curr_network(mlme_priv/security_priv/qos/ht) : AP CAP/INFO */
 	/* sta_info: (AP & STA) CAP/INFO */
 
-#ifdef CONFIG_AP_MODE
-
 	struct list_head asoc_list;
+#ifdef CONFIG_88EU_AP_MODE
 	struct list_head auth_list;
 
 	unsigned int expire_to;
@@ -161,7 +160,6 @@ struct sta_info {
 
 	u8 bpairwise_key_installed;
 
-#ifdef CONFIG_AP_MODE
 	u8 wpa_ie[32];
 
 	u8 nonerp_set;
@@ -170,7 +168,6 @@ struct sta_info {
 	u8 no_ht_gf_set;
 	u8 no_ht_set;
 	u8 ht_20mhz_set;
-#endif	/*  CONFIG_AP_MODE */
 
 	unsigned int tx_ra_bitmap;
 	u8 qos_info;
@@ -183,8 +180,9 @@ struct sta_info {
 
 	u8 has_legacy_ac;
 	unsigned int sleepq_ac_len;
+#endif	/*  CONFIG_88EU_AP_MODE */
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 	/* p2p priv data */
 	u8 is_p2p_device;
 	u8 p2p_status_code;
@@ -198,10 +196,9 @@ struct sta_info {
 	u8 secdev_types_list[32];/*  32/8 == 4; */
 	u16 dev_name_len;
 	u8 dev_name[32];
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_88EU_P2P */
 	u8 under_exist_checking;
 	u8 keep_alive_trycnt;
-#endif	/*  CONFIG_AP_MODE */
 
 	/* for DM */
 	struct rssi_sta rssi_stat;
@@ -322,11 +319,11 @@ struct	sta_priv {
 
 	struct adapter *padapter;
 
-
-#ifdef CONFIG_AP_MODE
-	struct list_head asoc_list;
-	struct list_head auth_list;
 	spinlock_t asoc_list_lock;
+	struct list_head asoc_list;
+
+#ifdef CONFIG_88EU_AP_MODE
+	struct list_head auth_list;
 	spinlock_t auth_list_lock;
 	u8 asoc_list_cnt;
 	u8 auth_list_cnt;

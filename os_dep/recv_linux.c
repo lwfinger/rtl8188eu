@@ -55,8 +55,6 @@ int rtw_os_recvbuf_resource_alloc(struct adapter *padapter,
 				  struct recv_buf *precvbuf)
 {
 	int res = _SUCCESS;
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
-	struct usb_device	*pusbd = pdvobjpriv->pusbdev;
 
 	precvbuf->irp_pending = false;
 	precvbuf->purb = usb_alloc_urb(0, GFP_KERNEL);
@@ -113,7 +111,7 @@ void rtw_handle_tkip_mic_err(struct adapter *padapter, u8 bgroup)
 		ev.flags |= IW_MICFAILURE_PAIRWISE;
 
 	ev.src_addr.sa_family = ARPHRD_ETHER;
-	_rtw_memcpy(ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
+	memcpy(ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[0], ETH_ALEN);
 	_rtw_memset(&wrqu, 0x00, sizeof(wrqu));
 	wrqu.data.length = sizeof(ev);
 	wireless_send_event(padapter->pnetdev, IWEVMICHAELMICFAILURE,
@@ -132,7 +130,6 @@ int rtw_recv_indicatepkt(struct adapter *padapter,
 	struct __queue *pfree_recv_queue;
 	struct sk_buff *skb;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	void *br_port = NULL;
 
 _func_enter_;
 
@@ -188,9 +185,7 @@ _func_enter_;
 
 				pnetdev = (struct net_device *)padapter->pnetdev;
 				skb->dev = pnetdev;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 				skb_set_queue_mapping(skb, rtw_recv_select_queue(skb));
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35) */
 
 				rtw_xmit_entry(skb, pnetdev);
 
@@ -202,13 +197,9 @@ _func_enter_;
 		}
 	}
 
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
-	br_port = padapter->pnetdev->br_port;
-#else   /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 	rcu_read_lock();
-	br_port = rcu_dereference(padapter->pnetdev->rx_handler_data);
+	rcu_dereference(padapter->pnetdev->rx_handler_data);
 	rcu_read_unlock();
-#endif  /*  (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 
 	skb->ip_summed = CHECKSUM_NONE;
 	skb->dev = padapter->pnetdev;
@@ -232,8 +223,9 @@ _func_exit_;
 
 _recv_indicatepkt_drop:
 
-	/* enqueue back to free_recv_queue */
-	rtw_free_recvframe(precv_frame, pfree_recv_queue);
+	 /* enqueue back to free_recv_queue */
+	if (precv_frame)
+		rtw_free_recvframe(precv_frame, pfree_recv_queue);
 
 _func_exit_;
 	 return _FAIL;
@@ -253,7 +245,7 @@ void rtw_os_read_port(struct adapter *padapter, struct recv_buf *precvbuf)
 			      (unsigned char *)precvbuf);
 }
 
-void _rtw_reordering_ctrl_timeout_handler(void *func_context)
+static void _rtw_reordering_ctrl_timeout_handler(void *func_context)
 {
 	struct recv_reorder_ctrl *preorder_ctrl;
 

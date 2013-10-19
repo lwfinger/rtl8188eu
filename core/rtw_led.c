@@ -762,91 +762,6 @@ static void SwLedBlink6(struct LED_871x *pLed)
 	RT_TRACE(_module_rtl8712_led_c_, _drv_info_, ("<==== blink6\n"));
 }
 
-static void SwLedControlMode0(struct adapter *padapter, enum LED_CTL_MODE LedAction)
-{
-	struct led_priv *ledpriv = &(padapter->ledpriv);
-	struct LED_871x *pLed = &(ledpriv->SwLed1);
-
-	/*  Decide led state */
-	switch (LedAction) {
-	case LED_CTL_TX:
-	case LED_CTL_RX:
-		if (!pLed->bLedBlinkInProgress) {
-			pLed->bLedBlinkInProgress = true;
-
-			pLed->CurrLedState = LED_BLINK_NORMAL;
-			pLed->BlinkTimes = 2;
-
-			if (pLed->bLedOn)
-				pLed->BlinkingLedState = RTW_LED_OFF;
-			else
-				pLed->BlinkingLedState = RTW_LED_ON;
-			_set_timer(&(pLed->BlinkTimer), LED_BLINK_NORMAL_INTERVAL);
-		}
-		break;
-	case LED_CTL_START_TO_LINK:
-		if (!pLed->bLedBlinkInProgress) {
-			pLed->bLedBlinkInProgress = true;
-
-			pLed->CurrLedState = LED_BLINK_StartToBlink;
-			pLed->BlinkTimes = 24;
-
-			if (pLed->bLedOn)
-				pLed->BlinkingLedState = RTW_LED_OFF;
-			else
-				pLed->BlinkingLedState = RTW_LED_ON;
-			_set_timer(&(pLed->BlinkTimer), LED_BLINK_SLOWLY_INTERVAL);
-		} else {
-			pLed->CurrLedState = LED_BLINK_StartToBlink;
-		}
-		break;
-	case LED_CTL_LINK:
-		pLed->CurrLedState = RTW_LED_ON;
-		if (!pLed->bLedBlinkInProgress)
-			SwLedOn(padapter, pLed);
-		break;
-	case LED_CTL_NO_LINK:
-		pLed->CurrLedState = RTW_LED_OFF;
-		if (!pLed->bLedBlinkInProgress)
-			SwLedOff(padapter, pLed);
-		break;
-	case LED_CTL_POWER_OFF:
-		pLed->CurrLedState = RTW_LED_OFF;
-		if (pLed->bLedBlinkInProgress) {
-			_cancel_timer_ex(&(pLed->BlinkTimer));
-			pLed->bLedBlinkInProgress = false;
-		}
-		SwLedOff(padapter, pLed);
-		break;
-	case LED_CTL_START_WPS:
-		if (!pLed->bLedBlinkInProgress || pLed->CurrLedState == RTW_LED_ON) {
-			pLed->bLedBlinkInProgress = true;
-
-			pLed->CurrLedState = LED_BLINK_WPS;
-			pLed->BlinkTimes = 20;
-
-			if (pLed->bLedOn) {
-				pLed->BlinkingLedState = RTW_LED_OFF;
-				_set_timer(&(pLed->BlinkTimer), LED_BLINK_LONG_INTERVAL);
-			} else {
-				pLed->BlinkingLedState = RTW_LED_ON;
-				_set_timer(&(pLed->BlinkTimer), LED_BLINK_LONG_INTERVAL);
-			}
-		}
-		break;
-	case LED_CTL_STOP_WPS:
-		if (pLed->bLedBlinkInProgress) {
-			pLed->CurrLedState = RTW_LED_OFF;
-			_cancel_timer_ex(&(pLed->BlinkTimer));
-			pLed->bLedBlinkInProgress = false;
-		}
-		break;
-	default:
-		break;
-	}
-	RT_TRACE(_module_rtl8712_led_c_, _drv_info_, ("Led %d\n", pLed->CurrLedState));
-}
-
  /* ALPHA, added by chiyoko, 20090106 */
 static void SwLedControlMode1(struct adapter *padapter, enum LED_CTL_MODE LedAction)
 {
@@ -1726,7 +1641,7 @@ void BlinkHandler(struct LED_871x *pLed)
 	}
 }
 
-void LedControl871x(struct adapter *padapter, enum LED_CTL_MODE LedAction)
+void LedControl8188eu(struct adapter *padapter, enum LED_CTL_MODE LedAction)
 {
 	struct led_priv *ledpriv = &(padapter->ledpriv);
 

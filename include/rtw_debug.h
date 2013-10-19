@@ -68,54 +68,48 @@
 #define _module_rtl8712_recv_c_		BIT(30)
 #define _module_rtl8712_led_c_		BIT(31)
 
-#ifdef pr_info
-#define _dbgdump	pr_info
-#else
-#define _dbgdump	printk
-#endif
-
-#define DRIVER_PREFIX	"RTL8188: "
+#define DRIVER_PREFIX	"r8188eu: "
 
 extern u32 GlobalDebugLevel;
 
 #define DBG_88E_LEVEL(_level, fmt, arg...)				\
 	do {								\
 		if (_level <= GlobalDebugLevel)				\
-			_dbgdump(DRIVER_PREFIX"ERROR " fmt, ##arg);	\
+			pr_info(DRIVER_PREFIX"ERROR " fmt, ##arg);	\
 	} while (0)
 
 #define DBG_88E(...)							\
 	do {								\
 		if (_drv_err_ <= GlobalDebugLevel)			\
-			_dbgdump(DRIVER_PREFIX __VA_ARGS__);		\
+			pr_info(DRIVER_PREFIX __VA_ARGS__);		\
 	} while (0)
 
 #define MSG_88E(...)							\
 	do {								\
 		if (_drv_err_ <= GlobalDebugLevel)			\
-			_dbgdump(DRIVER_PREFIX __VA_ARGS__);			\
+			pr_info(DRIVER_PREFIX __VA_ARGS__);			\
 	} while (0)
 
 #define RT_TRACE(_comp, _level, fmt)					\
 	do {								\
 		if (_level <= GlobalDebugLevel) {			\
-			_dbgdump("%s [0x%08x,%d]", DRIVER_PREFIX,	\
+			pr_info("%s [0x%08x,%d]", DRIVER_PREFIX,	\
 				 (unsigned int)_comp, _level);		\
-			_dbgdump fmt;					\
+			pr_info fmt;					\
 		}							\
 	} while (0)
 
 #define _func_enter_							\
 	do {								\
 		if (GlobalDebugLevel >= _drv_debug_)			\
-			_dbgdump("%s : %s enters at %d\n",		\
+			pr_info("%s : %s enters at %d\n",		\
 				 DRIVER_PREFIX, __func__, __LINE__);	\
 	} while (0)
 
 #define _func_exit_							\
 	do {								\
 		if (GlobalDebugLevel >= _drv_debug_)			\
-			_dbgdump("%s : %s exits at %d\n",		\
+			pr_info("%s : %s exits at %d\n",		\
 				 DRIVER_PREFIX, __func__, __LINE__);	\
 	} while (0)
 
@@ -124,10 +118,10 @@ extern u32 GlobalDebugLevel;
 		if (_level <= GlobalDebugLevel) {			\
 			int __i;					\
 			u8	*ptr = (u8 *)_hexdata;			\
-			_dbgdump("%s", DRIVER_PREFIX);			\
-			_dbgdump(_titlestring);				\
+			pr_info("%s", DRIVER_PREFIX);			\
+			pr_info(_titlestring);				\
 			for (__i = 0; __i < (int)_hexdatalen; __i++ ) {	\
-				_dbgdump("%02X%s", ptr[__i],		\
+				pr_info("%02X%s", ptr[__i],		\
 					 (((__i + 1) % 4) == 0) ?	\
 					 "  " : " ");	\
 				if (((__i + 1) % 16) == 0)		\
@@ -225,7 +219,7 @@ int proc_get_rf_reg_dump4(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 
 int proc_get_all_sta_info(char *page, char **start,
 			  off_t offset, int count,

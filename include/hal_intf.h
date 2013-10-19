@@ -107,9 +107,6 @@ enum hw_variables {
 	/*  The valid upper nav range for the HW updating, if the true value is
 	 *  larger than the upper range, the HW won't update it. */
 	/*  Unit in microsecond. 0 means disable this function. */
-#ifdef CONFIG_WOWLAN
-	HW_VAR_WOWLAN,
-#endif
 	HW_VAR_NAV_UPPER,
 	HW_VAR_RPT_TIMER_SETTING,
 	HW_VAR_TX_RPT_MAX_MACID,
@@ -311,33 +308,6 @@ enum hardware_type {
 	HARDWARE_TYPE_MAX,
 };
 
-/*  RTL8192C Series */
-#define IS_HARDWARE_TYPE_8192CE(_Adapter)			\
-(((struct adapter *)_Adapter)->HardwareType == HARDWARE_TYPE_RTL8192CE)
-#define IS_HARDWARE_TYPE_8192CU(_Adapter)			\
-(((struct adapter *)_Adapter)->HardwareType == HARDWARE_TYPE_RTL8192CU)
-#define	IS_HARDWARE_TYPE_8192C(_Adapter)			\
-(IS_HARDWARE_TYPE_8192CE(_Adapter) || IS_HARDWARE_TYPE_8192CU(_Adapter))
-
-/*  RTL8192D Series */
-#define IS_HARDWARE_TYPE_8192DE(_Adapter)			\
-	(((struct adapter *)_Adapter)->HardwareType == HARDWARE_TYPE_RTL8192DE)
-#define IS_HARDWARE_TYPE_8192DU(_Adapter)			\
-	(((struct adapter *)_Adapter)->HardwareType == HARDWARE_TYPE_RTL8192DU)
-#define	IS_HARDWARE_TYPE_8192D(_Adapter)			\
-(IS_HARDWARE_TYPE_8192DE(_Adapter) || IS_HARDWARE_TYPE_8192DU(_Adapter))
-
-/*  RTL8723A Series */
-#define IS_HARDWARE_TYPE_8723AE(_Adapter)			\
-(((struct adapter *)_Adapter)->HardwareType == HARDWARE_TYPE_RTL8723AE)
-#define IS_HARDWARE_TYPE_8723AU(_Adapter)			\
-(((struct adapter *)_Adapter)->HardwareType == HARDWARE_TYPE_RTL8723AU)
-#define IS_HARDWARE_TYPE_8723AS(_Adapter)			\
-(((struct adapter *)_Adapter)->HardwareType == HARDWARE_TYPE_RTL8723AS)
-#define	IS_HARDWARE_TYPE_8723A(_Adapter)	\
-(IS_HARDWARE_TYPE_8723AE(_Adapter) || IS_HARDWARE_TYPE_8723AU(_Adapter) || \
-IS_HARDWARE_TYPE_8723AS(_Adapter))
-
 /*  RTL8188E Series */
 #define IS_HARDWARE_TYPE_8188EE(_Adapter)			\
 (((struct adapter *)_Adapter)->HardwareType == HARDWARE_TYPE_RTL8188EE)
@@ -352,39 +322,6 @@ IS_HARDWARE_TYPE_8723AS(_Adapter))
 #define GET_EEPROM_EFUSE_PRIV(adapter) (&adapter->eeprompriv)
 
 #define is_boot_from_eeprom(adapter) (adapter->eeprompriv.EepromOrEfuse)
-
-#ifdef CONFIG_WOWLAN
-enum wowlan_subcode {
-	WOWLAN_PATTERN_MATCH	= 1,
-	WOWLAN_MAGIC_PACKET	= 2,
-	WOWLAN_UNICAST		= 3,
-	WOWLAN_SET_PATTERN	= 4,
-	WOWLAN_DUMP_REG		= 5,
-	WOWLAN_ENABLE		= 6,
-	WOWLAN_DISABLE		= 7,
-	WOWLAN_STATUS		= 8,
-	WOWLAN_DEBUG_RELOAD_FW	= 9,
-	WOWLAN_DEBUG_1		= 10,
-	WOWLAN_DEBUG_2		= 11
-};
-
-struct wowlan_ioctl_param {
-	unsigned int subcode;
-	unsigned int subcode_value;
-	unsigned int wakeup_reason;
-	unsigned int len;
-	unsigned char pattern[0];
-};
-
-#define Rx_Pairwisekey			0x01
-#define Rx_GTK				0x02
-#define Rx_DisAssoc			0x04
-#define Rx_DeAuth			0x08
-#define FWDecisionDisconnect		0x10
-#define Rx_MagicPkt			0x21
-#define Rx_UnicastPkt			0x22
-#define Rx_PatternPkt			0x23
-#endif /*  CONFIG_WOWLAN */
 
 void rtw_hal_def_value_init(struct adapter *padapter);
 
@@ -483,5 +420,7 @@ void rtw_hal_reset_security_engine(struct adapter *adapter);
 s32 rtw_hal_c2h_handler(struct adapter *adapter,
 			struct c2h_evt_hdr *c2h_evt);
 c2h_id_filter rtw_hal_c2h_id_filter_ccx(struct adapter *adapter);
+void indicate_wx_scan_complete_event(struct adapter *padapter);
+u8 rtw_do_join(struct adapter *padapter);
 
 #endif /* __HAL_INTF_H__ */

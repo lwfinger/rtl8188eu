@@ -540,51 +540,6 @@ void odm_CmnInfoUpdate_Debug(struct odm_dm_struct *pDM_Odm)
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_COMMON, ODM_DBG_LOUD, ("RSSI_Min=%d\n", pDM_Odm->RSSI_Min));
 }
 
-/* 3============================================================ */
-/* 3 DIG */
-/* 3============================================================ */
-/*-----------------------------------------------------------------------------
- * Function:	odm_DIGInit()
- *
- * Overview:	Set DIG scheme init value.
- *
- * Input:		NONE
- *
- * Output:		NONE
- *
- * Return:		NONE
- *
- * Revised History:
- *	When		Who		Remark
- *
- *---------------------------------------------------------------------------*/
-static void ODM_ChangeDynamicInitGainThresh(struct odm_dm_struct *pDM_Odm, u32 DM_Type, u32 DM_Value)
-{
-	struct rtw_dig *pDM_DigTable = &pDM_Odm->DM_DigTable;
-
-	if (DM_Type == DM_DIG_THRESH_HIGH) {
-		pDM_DigTable->RssiHighThresh = DM_Value;
-	} else if (DM_Type == DM_DIG_THRESH_LOW) {
-		pDM_DigTable->RssiLowThresh = DM_Value;
-	} else if (DM_Type == RT_TYPE_ENABLE) {
-		pDM_DigTable->Dig_Enable_Flag	= true;
-	} else if (DM_Type == RT_TYPE_DISABLE) {
-		pDM_DigTable->Dig_Enable_Flag = false;
-	} else if (DM_Type == RT_TYPE_BACKOFF) {
-		if (DM_Value > 30)
-			DM_Value = 30;
-		pDM_DigTable->BackoffVal = (u8)DM_Value;
-	} else if (DM_Type == RT_TYPE_RX_GAIN_MIN) {
-		if (DM_Value == 0)
-			DM_Value = 0x1;
-		pDM_DigTable->rx_gain_range_min = (u8)DM_Value;
-	} else if (DM_Type == RT_TYPE_RX_GAIN_MAX) {
-		if (DM_Value > 0x50)
-			DM_Value = 0x50;
-		pDM_DigTable->rx_gain_range_max = (u8)DM_Value;
-	}
-}	/* DM_ChangeDynamicInitGainThresh */
-
 static int getIGIForDiff(int value_IGI)
 {
 	#define ONERCCA_LOW_TH		0x30
@@ -1470,39 +1425,6 @@ void odm_DynamicTxPowerInit(struct odm_dm_struct *pDM_Odm)
 	pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
 }
 
-static void odm_DynamicTxPowerSavePowerIndex(struct odm_dm_struct *pDM_Odm)
-{
-	u8 index;
-	u32 Power_Index_REG[6] = {0xc90, 0xc91, 0xc92, 0xc98, 0xc99, 0xc9a};
-
-	struct adapter *Adapter = pDM_Odm->Adapter;
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	for (index = 0; index < 6; index++)
-		pdmpriv->PowerIndex_backup[index] = rtw_read8(Adapter, Power_Index_REG[index]);
-}
-
-static void odm_DynamicTxPowerRestorePowerIndex(struct odm_dm_struct *pDM_Odm)
-{
-	u8 index;
-	struct adapter *Adapter = pDM_Odm->Adapter;
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(Adapter);
-	u32 Power_Index_REG[6] = {0xc90, 0xc91, 0xc92, 0xc98, 0xc99, 0xc9a};
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-
-	for (index = 0; index < 6; index++)
-		rtw_write8(Adapter, Power_Index_REG[index], pdmpriv->PowerIndex_backup[index]);
-}
-
-static void odm_DynamicTxPowerWritePowerIndex(struct odm_dm_struct *pDM_Odm, u8 Value)
-{
-	u8 index;
-	u32 Power_Index_REG[6] = {0xc90, 0xc91, 0xc92, 0xc98, 0xc99, 0xc9a};
-
-	for (index = 0; index < 6; index++)
-		ODM_Write1Byte(pDM_Odm, Power_Index_REG[index], Value);
-}
-
 void odm_DynamicTxPower(struct odm_dm_struct *pDM_Odm)
 {
 	/*  For AP/ADSL use struct rtl8192cd_priv * */
@@ -1546,17 +1468,9 @@ void odm_DynamicTxPowerAP(struct odm_dm_struct *pDM_Odm)
 {
 }
 
-static void odm_DynamicTxPower_92C(struct odm_dm_struct *pDM_Odm)
-{
-}
-
 /* 3============================================================ */
 /* 3 RSSI Monitor */
 /* 3============================================================ */
-
-static void odm_RSSIMonitorInit(struct odm_dm_struct *pDM_Odm)
-{
-}
 
 void odm_RSSIMonitorCheck(struct odm_dm_struct *pDM_Odm)
 {
@@ -1586,13 +1500,6 @@ void odm_RSSIMonitorCheck(struct odm_dm_struct *pDM_Odm)
 }	/*  odm_RSSIMonitorCheck */
 
 void odm_RSSIMonitorCheckMP(struct odm_dm_struct *pDM_Odm)
-{
-}
-
-/*  */
-/* sherry move from DUSC to here 20110517 */
-/*  */
-static void FindMinimumRSSI_Dmsp(struct adapter *pAdapter)
 {
 }
 
@@ -1780,10 +1687,6 @@ void odm_SwAntDivChkAntSwitch(struct odm_dm_struct *pDM_Odm, u8 Step)
 {
 }
 
-static void ODM_SwAntDivResetBeforeLink(struct odm_dm_struct *pDM_Odm)
-{
-}
-
 void ODM_SwAntDivRestAfterLink(struct odm_dm_struct *pDM_Odm)
 {
 }
@@ -1796,67 +1699,6 @@ void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
 /* 3 SW Antenna Diversity */
 /* 3============================================================ */
 
-static void odm_InitHybridAntDiv_88C_92D(struct odm_dm_struct *pDM_Odm)
-{
-	struct sw_ant_switch *pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-	u8 bTxPathSel = 0;		/* 0:Path-A   1:Path-B */
-	u8 i;
-
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_InitHybridAntDiv==============>\n"));
-
-	/* whether to do antenna diversity or not */
-	if ((pDM_Odm->SupportICType != ODM_RTL8192C) && (pDM_Odm->SupportICType != ODM_RTL8192D))
-		return;
-
-	bTxPathSel = (pDM_Odm->RFType == ODM_1T1R) ? false : true;
-
-	ODM_SetBBReg(pDM_Odm, ODM_REG_BB_PWR_SAV1_11N, BIT23, 0); /* No update ANTSEL during GNT_BT=1 */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_TX_ANT_CTRL_11N, BIT21, 1); /* TX atenna selection from tx_info */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_ANTSEL_PIN_11N, BIT23, 1);	/* enable LED[1:0] pin as ANTSEL */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_ANTSEL_CTRL_11N, BIT8|BIT9, 0x01);	/*  0x01: left antenna, 0x02: right antenna */
-	/*  check HW setting: ANTSEL pin connection */
-
-	/*  only AP support different path selection temperarly */
-	if (!bTxPathSel) {	         /* PATH-A */
-		ODM_SetBBReg(pDM_Odm, ODM_REG_PIN_CTRL_11N, BIT8|BIT9, 0); /*  ANTSEL as HW control */
-		ODM_SetBBReg(pDM_Odm, ODM_REG_ANTSEL_PATH_11N, BIT13, 1);	 /* select TX ANTESEL from path A */
-	} else {
-		ODM_SetBBReg(pDM_Odm, ODM_REG_PIN_CTRL_11N, BIT24|BIT25, 0); /*  ANTSEL as HW control */
-		ODM_SetBBReg(pDM_Odm, ODM_REG_ANTSEL_PATH_11N, BIT13, 0);		 /* select ANTESEL from path B */
-	}
-
-	/* Set OFDM HW RX Antenna Diversity */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_ANTDIV_PARA1_11N, 0x7FF, 0x0c0); /* Pwdb threshold=8dB */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_ANTDIV_PARA1_11N, BIT11, 0); /* Switch to another antenna by checking pwdb threshold */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_ANTDIV_PARA3_11N, BIT23, 1);	/*  Decide final antenna by comparing 2 antennas' pwdb */
-
-	/* Set CCK HW RX Antenna Diversity */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA2_11N, BIT4, 0); /* Antenna diversity decision period = 32 sample */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA2_11N, 0xf, 0xf); /* Threshold for antenna diversity. Check another antenna power if input power < ANT_lim*4 */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA3_11N, BIT13, 1); /* polarity ana_A=1 and ana_B=0 */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA4_11N, 0x1f, 0x8); /* default antenna power = inpwr*(0.5 + r_ant_step/16) */
-
-
-	/* Enable HW Antenna Diversity */
-	if (!bTxPathSel)	         /* PATH-A */
-		ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N, BIT7, 1);	/*  Enable Hardware antenna switch */
-	else
-		ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_B_11N, BIT7, 1);	/*  Enable Hardware antenna switch */
-	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA1_11N, BIT15, 1);/* Enable antenna diversity */
-
-	pDM_SWAT_Table->CurAntenna = 0;			/* choose left antenna as default antenna */
-	pDM_SWAT_Table->PreAntenna = 0;
-	for (i = 0; i < ASSOCIATE_ENTRY_NUM; i++) {
-		pDM_SWAT_Table->CCK_Ant1_Cnt[i] = 0;
-		pDM_SWAT_Table->CCK_Ant2_Cnt[i] = 0;
-		pDM_SWAT_Table->OFDM_Ant1_Cnt[i] = 0;
-		pDM_SWAT_Table->OFDM_Ant2_Cnt[i] = 0;
-		pDM_SWAT_Table->RSSI_Ant1_Sum[i] = 0;
-		pDM_SWAT_Table->RSSI_Ant2_Sum[i] = 0;
-	}
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("<==============odm_InitHybridAntDiv\n"));
-}
-
 void odm_InitHybridAntDiv(struct odm_dm_struct *pDM_Odm)
 {
 	if (!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV)) {
@@ -1868,69 +1710,6 @@ void odm_InitHybridAntDiv(struct odm_dm_struct *pDM_Odm)
 		;
 	else if (pDM_Odm->SupportICType == ODM_RTL8188E)
 		ODM_AntennaDiversityInit_88E(pDM_Odm);
-}
-
-
-static bool odm_StaDefAntSel(struct odm_dm_struct *pDM_Odm, u32 OFDM_Ant1_Cnt,
-			     u32 OFDM_Ant2_Cnt, u32 CCK_Ant1_Cnt, u32 CCK_Ant2_Cnt, u8 *pDefAnt)
-{
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_StaDefAntSelect==============>\n"));
-
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("OFDM_Ant1_Cnt:%d, OFDM_Ant2_Cnt:%d\n", OFDM_Ant1_Cnt, OFDM_Ant2_Cnt));
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("CCK_Ant1_Cnt:%d, CCK_Ant2_Cnt:%d\n", CCK_Ant1_Cnt, CCK_Ant2_Cnt));
-
-
-	if (((OFDM_Ant1_Cnt+OFDM_Ant2_Cnt) == 0) && ((CCK_Ant1_Cnt + CCK_Ant2_Cnt) < 10)) {
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_StaDefAntSelect Fail: No enough packet info!\n"));
-		return	false;
-	}
-
-	if (OFDM_Ant1_Cnt || OFDM_Ant2_Cnt) {
-		/* if RX OFDM packet number larger than 0 */
-		if (OFDM_Ant1_Cnt > OFDM_Ant2_Cnt)
-			(*pDefAnt) = 1;
-		else
-			(*pDefAnt) = 0;
-	} else if ((CCK_Ant1_Cnt + CCK_Ant2_Cnt) >= 10) {
-		/*  else if RX CCK packet number larger than 10 */
-		if (CCK_Ant1_Cnt > (5*CCK_Ant2_Cnt))
-			(*pDefAnt) = 1;
-		else if (CCK_Ant2_Cnt > (5*CCK_Ant1_Cnt))
-			(*pDefAnt) = 0;
-		else if (CCK_Ant1_Cnt > CCK_Ant2_Cnt)
-			(*pDefAnt) = 0;
-		else
-			(*pDefAnt) = 1;
-	}
-
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("TxAnt = %s\n", ((*pDefAnt) == 1) ? "Ant1" : "Ant2"));
-
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("<==============odm_StaDefAntSelect\n"));
-
-	return true;
-}
-
-static void odm_SetRxIdleAnt(struct odm_dm_struct *pDM_Odm, u8 Ant, bool bDualPath)
-{
-	struct sw_ant_switch *pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-
-	if (Ant != pDM_SWAT_Table->RxIdleAnt) {
-		/* for path-A */
-		if (Ant == 1)
-			ODM_SetBBReg(pDM_Odm, ODM_REG_RX_DEFUALT_A_11N, 0xFFFF, 0x65a9);   /* right-side antenna */
-		else
-			ODM_SetBBReg(pDM_Odm, ODM_REG_RX_DEFUALT_A_11N, 0xFFFF, 0x569a);   /* left-side antenna */
-
-		/* for path-B */
-		if (bDualPath) {
-			if (Ant == 0)
-				ODM_SetBBReg(pDM_Odm, ODM_REG_RX_DEFUALT_A_11N, 0xFFFF0000, 0x65a9);   /* right-side antenna */
-			else
-				ODM_SetBBReg(pDM_Odm, ODM_REG_RX_DEFUALT_A_11N, 0xFFFF0000, 0x569a);  /* left-side antenna */
-		}
-	}
-	pDM_SWAT_Table->RxIdleAnt = Ant;
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("RxIdleAnt: %s  Reg858=0x%x\n", (Ant == 1) ? "Ant1" : "Ant2", (Ant == 1) ? 0x65a9 : 0x569a));
 }
 
 void ODM_AntselStatistics_88C(struct odm_dm_struct *pDM_Odm, u8 MacId, u32 PWDBAll, bool isCCKrate)
@@ -1952,78 +1731,6 @@ void ODM_AntselStatistics_88C(struct odm_dm_struct *pDM_Odm, u8 MacId, u32 PWDBA
 			pDM_SWAT_Table->RSSI_Ant2_Sum[MacId] += PWDBAll;
 		}
 	}
-}
-
-static void ODM_SetTxAntByTxInfo_88C_92D(struct odm_dm_struct *pDM_Odm)
-{
-}
-
-static void odm_HwAntDiv_92C_92D(struct odm_dm_struct *pDM_Odm)
-{
-	struct sw_ant_switch *pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-	u32 RSSI_Min = 0xFF, RSSI, RSSI_Ant1, RSSI_Ant2;
-	u8 RxIdleAnt, i;
-	bool bRet = false;
-	struct sta_info *pEntry;
-
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_HwAntDiv==============>\n"));
-
-	if (!(pDM_Odm->SupportAbility&ODM_BB_ANT_DIV)) {
-		/* if don't support antenna diveristy */
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_HwAntDiv: Not supported!\n"));
-		return;
-	}
-
-	if ((pDM_Odm->SupportICType != ODM_RTL8192C) && (pDM_Odm->SupportICType != ODM_RTL8192D)) {
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Return: IC Type is not 92C or 92D\n"));
-		return;
-	}
-
-	if (!pDM_Odm->bLinked) {
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Return: bLinked is false\n"));
-		return;
-	}
-
-	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
-		pEntry = pDM_Odm->pODM_StaInfo[i];
-		if (IS_STA_VALID(pEntry)) {
-			RSSI_Ant1 = (pDM_SWAT_Table->OFDM_Ant1_Cnt[i] == 0) ? 0 : (pDM_SWAT_Table->RSSI_Ant1_Sum[i]/pDM_SWAT_Table->OFDM_Ant1_Cnt[i]);
-			RSSI_Ant2 = (pDM_SWAT_Table->OFDM_Ant2_Cnt[i] == 0) ? 0 : (pDM_SWAT_Table->RSSI_Ant2_Sum[i]/pDM_SWAT_Table->OFDM_Ant2_Cnt[i]);
-
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("RSSI_Ant1=%d,  RSSI_Ant2=%d\n", RSSI_Ant1, RSSI_Ant2));
-
-			if (RSSI_Ant1 || RSSI_Ant2) {
-				RSSI = (RSSI_Ant1 < RSSI_Ant2) ? RSSI_Ant1 : RSSI_Ant2;
-				if ((!RSSI) || (RSSI < RSSI_Min)) {
-					pDM_SWAT_Table->TargetSTA = i;
-					RSSI_Min = RSSI;
-				}
-			}
-			/* STA: found out default antenna */
-			bRet = odm_StaDefAntSel(pDM_Odm,
-						pDM_SWAT_Table->OFDM_Ant1_Cnt[i],
-						pDM_SWAT_Table->OFDM_Ant2_Cnt[i],
-						pDM_SWAT_Table->CCK_Ant1_Cnt[i],
-						pDM_SWAT_Table->CCK_Ant2_Cnt[i],
-						&pDM_SWAT_Table->TxAnt[i]);
-
-			/* if Tx antenna selection: successful */
-			if (bRet) {
-				pDM_SWAT_Table->RSSI_Ant1_Sum[i] = 0;
-				pDM_SWAT_Table->RSSI_Ant2_Sum[i] = 0;
-				pDM_SWAT_Table->OFDM_Ant1_Cnt[i] = 0;
-				pDM_SWAT_Table->OFDM_Ant2_Cnt[i] = 0;
-				pDM_SWAT_Table->CCK_Ant1_Cnt[i] = 0;
-				pDM_SWAT_Table->CCK_Ant2_Cnt[i] = 0;
-			}
-		}
-	}
-
-	/* set RX Idle Ant */
-	RxIdleAnt = pDM_SWAT_Table->TxAnt[pDM_SWAT_Table->TargetSTA];
-	odm_SetRxIdleAnt(pDM_Odm, RxIdleAnt, false);
-
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("<==============odm_HwAntDiv\n"));
 }
 
 void odm_HwAntDiv(struct odm_dm_struct *pDM_Odm)
@@ -2094,11 +1801,6 @@ void odm_EdcaTurboCheckCE(struct odm_dm_struct *pDM_Odm)
 
 	if (pmlmeinfo->assoc_AP_vendor >=  HT_IOT_PEER_MAX)
 		goto dm_CheckEdcaTurbo_EXIT;
-
-#ifdef CONFIG_BT_COEXIST
-	if (BT_DisableEDCATurbo(Adapter))
-		goto dm_CheckEdcaTurbo_EXIT;
-#endif
 
 	/*  Check if the status needs to be changed. */
 	if ((bbtchange) || (!precvpriv->bIsAnyNonBEPkts)) {

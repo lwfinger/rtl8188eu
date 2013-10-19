@@ -27,9 +27,7 @@
 s32 Hal_SetPowerTracking(struct adapter *padapter, u8 enable)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
-
 
 	if (!netif_running(padapter->pnetdev)) {
 		RT_TRACE(_module_mp_, _drv_warning_,
@@ -54,36 +52,9 @@ s32 Hal_SetPowerTracking(struct adapter *padapter, u8 enable)
 void Hal_GetPowerTracking(struct adapter *padapter, u8 *enable)
 {
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
-
 
 	*enable = pDM_Odm->RFCalibrateInfo.TxPowerTrackControl;
-}
-
-static void Hal_disable_dm(struct adapter *padapter)
-{
-	u8 v8;
-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
-
-	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
-
-
-	/* 3 1. disable firmware dynamic mechanism */
-	/*  disable Power Training, Rate Adaptive */
-	v8 = rtw_read8(padapter, REG_BCN_CTRL);
-	v8 &= ~EN_BCN_FUNCTION;
-	rtw_write8(padapter, REG_BCN_CTRL, v8);
-
-	/* 3 2. disable driver dynamic mechanism */
-	/*  disable Dynamic Initial Gain */
-	/*  disable High Power */
-	/*  disable Power Tracking */
-	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false);
-
-	/*  enable APK, LCK and IQK but disable power tracking */
-	pDM_Odm->RFCalibrateInfo.TxPowerTrackControl = false;
-	Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, true);
 }
 
 /*-----------------------------------------------------------------------------
@@ -105,7 +76,6 @@ static void Hal_disable_dm(struct adapter *padapter)
  *---------------------------------------------------------------------------*/
 void Hal_mpt_SwitchRfSetting(struct adapter *pAdapter)
 {
-	/* struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter); */
 	struct mp_priv	*pmp = &pAdapter->mppriv;
 
 	/*  <20120525, Kordan> Dynamic mechanism for APK, asked by Dennis. */
@@ -188,14 +158,13 @@ void Hal_MPT_CCKTxPowerAdjust(struct adapter *Adapter, bool bInCH14)
 
 void Hal_MPT_CCKTxPowerAdjustbyIndex(struct adapter *pAdapter, bool beven)
 {
-	s32		TempCCk;
-	u8		CCK_index, CCK_index_old;
-	u8		Action = 0;	/* 0: no action, 1: even->odd, 2:odd->even */
-	s32		i = 0;
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
-
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
+	s32		TempCCk;
+	u8		CCK_index, CCK_index_old = 0;
+	u8		Action = 0;	/* 0: no action, 1: even->odd, 2:odd->even */
+	s32		i = 0;
 
 
 	if (!IS_92C_SERIAL(pHalData->VersionID))
@@ -264,22 +233,15 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(struct adapter *pAdapter, bool beven)
  */
 void Hal_SetChannel(struct adapter *pAdapter)
 {
-	u8		eRFPath;
-
 	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
 	struct mp_priv	*pmp = &pAdapter->mppriv;
 	struct odm_dm_struct *pDM_Odm = &(pHalData->odmpriv);
-
+	u8		eRFPath;
 	u8		channel = pmp->channel;
 
-
 	/*  set RF channel register */
-	for (eRFPath = 0; eRFPath < pHalData->NumTotalRFPath; eRFPath++) {
-		if (IS_HARDWARE_TYPE_8192D(pAdapter))
-			_write_rfreg(pAdapter, (enum rf_radio_path)eRFPath, ODM_CHANNEL, 0xFF, channel);
-		else
-			_write_rfreg(pAdapter, eRFPath, ODM_CHANNEL, 0x3FF, channel);
-	}
+	for (eRFPath = 0; eRFPath < pHalData->NumTotalRFPath; eRFPath++)
+		_write_rfreg(pAdapter, eRFPath, ODM_CHANNEL, 0x3FF, channel);
 	Hal_mpt_SwitchRfSetting(pAdapter);
 
 	SelectChannel(pAdapter, channel);

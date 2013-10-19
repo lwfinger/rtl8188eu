@@ -31,75 +31,18 @@
 
 #include <rtl8188e_hal.h>
 
-static void dm_CheckProtection(struct adapter *Adapter)
-{
-}
-
 static void dm_CheckStatistics(struct adapter *Adapter)
 {
 }
 
-static void dm_CheckPbcGPIO(struct adapter *padapter)
-{
-	u8	tmp1byte;
-	u8	bPbcPressed = false;
-
-	if (!padapter->registrypriv.hw_wps_pbc)
-		return;
-
-	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
-	tmp1byte |= (HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as output mode */
-
-	tmp1byte &= ~(HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter,  GPIO_IN, tmp1byte);		/* reset the floating voltage level */
-
-	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
-	tmp1byte &= ~(HAL_8192C_HW_GPIO_WPS_BIT);
-	rtw_write8(padapter, GPIO_IO_SEL, tmp1byte);	/* enable GPIO[2] as input mode */
-
-	tmp1byte = rtw_read8(padapter, GPIO_IN);
-
-	if (tmp1byte == 0xff)
-		return;
-
-	if (tmp1byte&HAL_8192C_HW_GPIO_WPS_BIT)
-		bPbcPressed = true;
-
-	if (bPbcPressed) {
-		/*  Here we only set bPbcPressed to true */
-		/*  After trigger PBC, the variable will be set to false */
-		DBG_88E("CheckPbcGPIO - PBC is pressed\n");
-
-		if (padapter->pid[0] == 0) {
-			/* 0 is the default value and it means the application
-			 * monitors the HW PBC doesn't privde its pid to driver. */
-			return;
-		}
-
-		rtw_signal_process(padapter->pid[0], SIGUSR1);
-	}
-}
-
-/*  */
 /*  Initialize GPIO setting registers */
-/*  */
 static void dm_InitGPIOSetting(struct adapter *Adapter)
 {
-#ifdef CONFIG_BT_COEXIST
-	struct hal_data_8188e *hal_data = GET_HAL_DATA(Adapter);
-#endif
 	u8	tmp1byte;
 
 	tmp1byte = rtw_read8(Adapter, REG_GPIO_MUXCFG);
 	tmp1byte &= (GPIOSEL_GPIO | ~GPIOSEL_ENBT);
 
-#ifdef CONFIG_BT_COEXIST
-	/*  UMB-B cut bug. We need to support the modification. */
-	if (IS_81xxC_VENDOR_UMC_B_CUT(hal_data->VersionID) &&
-	    hal_data->bt_coexist.BT_Coexist)
-		tmp1byte |= BIT5;
-#endif
 	rtw_write8(Adapter, REG_GPIO_MUXCFG, tmp1byte);
 }
 
@@ -114,7 +57,7 @@ static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
 	u8 cut_ver, fab_ver;
 
 	/*  Init Value */
-	_rtw_memset(dm_odm, 0, sizeof(dm_odm));
+	_rtw_memset(dm_odm, 0, sizeof(*dm_odm));
 
 	dm_odm->Adapter = Adapter;
 
@@ -240,7 +183,6 @@ void rtl8188e_HalDmWatchDog(struct adapter *Adapter)
 		/*  Calculate Tx/Rx statistics. */
 		dm_CheckStatistics(Adapter);
 
-_record_initrate:
 	_func_exit_;
 	}
 

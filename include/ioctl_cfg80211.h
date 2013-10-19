@@ -77,13 +77,13 @@ void rtw_cfg80211_indicate_disconnect(struct adapter *padapter);
 void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv,
 				     bool aborted);
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 void rtw_cfg80211_indicate_sta_assoc(struct adapter *padapter,
 				     u8 *pmgmt_frame, uint frame_len);
 void rtw_cfg80211_indicate_sta_disassoc(struct adapter *padapter,
 					unsigned char *da,
 					unsigned short reason);
-#endif /* CONFIG_AP_MODE */
+#endif /* CONFIG_88EU_AP_MODE */
 
 void rtw_cfg80211_issue_p2p_provision_request(struct adapter *padapter,
 					      const u8 *buf, size_t len);
@@ -99,17 +99,9 @@ int rtw_cfg80211_set_mgnt_wpsp2pie(struct net_device *net,
 
 bool rtw_cfg80211_pwr_mgmt(struct adapter *adapter);
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 4, 0))  &&	\
-	!defined(COMPAT_KERNEL_RELEASE)
-#define rtw_cfg80211_rx_mgmt(dev, freq, sig_dbm, buf, len, gfp)		\
-	cfg80211_rx_mgmt(dev, freq, buf, len, gfp)
-#define rtw_cfg80211_send_rx_assoc(dev, bss, buf, len)			\
-	cfg80211_send_rx_assoc(dev, buf, len)
-#else
 #define rtw_cfg80211_rx_mgmt(dev, freq, sig_dbm, buf, len, gfp)		\
 	cfg80211_rx_mgmt(dev, freq, sig_dbm, buf, len, gfp)
 #define rtw_cfg80211_send_rx_assoc(dev, bss, buf, len)			\
 	cfg80211_send_rx_assoc(dev, bss, buf, len)
-#endif
 
 #endif /* __IOCTL_CFG80211_H__ */

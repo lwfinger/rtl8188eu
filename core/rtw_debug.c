@@ -555,10 +555,9 @@ int proc_get_rx_signal(char *page, char **start,
 {
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-
 	int len = 0;
 
-	len += snprintf(page + len, count - len,
+	len = snprintf(page + len, count,
 		"rssi:%d\n"
 		"rxpwdb:%d\n"
 		"signal_strength:%u\n"
@@ -632,13 +631,13 @@ int proc_set_ht_enable(struct file *file, const char __user *buffer,
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	s32 mode;
+	s32 mode = 0;
 
 	if (count < 1)
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		if (pregpriv && mode >= 0 && mode < 2) {
+		if (pregpriv) {
 			pregpriv->ht_enable = mode;
 			pr_info("ht_enable=%d\n", pregpriv->ht_enable);
 		}
@@ -674,13 +673,13 @@ int proc_set_cbw40_enable(struct file *file, const char __user *buffer,
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	s32 mode;
+	s32 mode = 0;
 
 	if (count < 1)
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		if (pregpriv && mode >= 0 && mode < 2) {
+		if (pregpriv) {
 			pregpriv->cbw40_enable = mode;
 			pr_info("cbw40_enable=%d\n", mode);
 		}
@@ -715,13 +714,13 @@ int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	s32 mode;
+	s32 mode = 0;
 
 	if (count < 1)
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		if (pregpriv && mode >= 0 && mode < 3) {
+		if (pregpriv) {
 			pregpriv->ampdu_enable = mode;
 			pr_info("ampdu_enable=%d\n", mode);
 		}
@@ -776,13 +775,13 @@ int proc_set_rx_stbc(struct file *file, const char __user *buffer,
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	char tmp[32];
-	u32 mode;
+	u32 mode = 0;
 
 	if (count < 1)
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		if (pregpriv && (mode == 0 || mode == 1 || mode == 2 || mode == 3)) {
+		if (pregpriv) {
 			pregpriv->rx_stbc = mode;
 			printk("rx_stbc=%d\n", mode);
 		}
@@ -830,7 +829,7 @@ int proc_set_rssi_disp(struct file *file, const char __user *buffer,
 	return count;
 }
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 
 int proc_get_all_sta_info(char *page, char **start,
 			  off_t offset, int count,
@@ -947,52 +946,3 @@ int proc_get_best_channel(char *page, char **start,
 	*eof = 1;
 	return len;
 }
-#ifdef CONFIG_BT_COEXIST
-#define _bt_dbg_off_		0
-#define _bt_dbg_on_		1
-
-extern u32 BTCoexDbgLevel;
-int proc_get_btcoex_dbg(char *page, char **start,
-			  off_t offset, int count,
-			  int *eof, void *data)
-{
-	struct net_device *dev = data;
-	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct registry_priv	*pregpriv = &padapter->registrypriv;
-
-	int len = 0;
-
-	if (pregpriv)
-		len += snprintf(page + len, count - len,
-			"%d\n",
-			BTCoexDbgLevel
-			);
-
-	*eof = 1;
-	return len;
-}
-
-int proc_set_btcoex_dbg(struct file *file, const char __user *buffer,
-		unsigned long count, void *data)
-{
-	struct net_device *dev = (struct net_device *)data;
-	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
-	u32 mode;
-
-	if (count < 1)
-		return -EFAULT;
-
-	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp))) {
-		int num = sscanf(tmp, "%d ", &mode);
-
-		if (pregpriv && (mode == 0 || mode == 1 || mode == 2 || mode == 3)) {
-			BTCoexDbgLevel = mode;
-			pr_info("btcoex_dbg=%d\n", BTCoexDbgLevel);
-		}
-	}
-	return count;
-}
-
-#endif /* CONFIG_BT_COEXIST */

@@ -173,32 +173,6 @@ enum RT_CHANNEL_DOMAIN_2G {
 	RT_CHANNEL_DOMAIN_2G_MAX,
 };
 
-enum RT_CHANNEL_DOMAIN_5G {
-	RT_CHANNEL_DOMAIN_5G_NULL = 0x00,
-	RT_CHANNEL_DOMAIN_5G_ETSI1 = 0x01,		/* Europe */
-	RT_CHANNEL_DOMAIN_5G_ETSI2 = 0x02,		/* Australia, NZ */
-	RT_CHANNEL_DOMAIN_5G_ETSI3 = 0x03,		/* Russia */
-	RT_CHANNEL_DOMAIN_5G_FCC1 = 0x04,		/* US */
-	RT_CHANNEL_DOMAIN_5G_FCC2 = 0x05,		/* FCC o/w DFS Chan */
-	RT_CHANNEL_DOMAIN_5G_FCC3 = 0x06,		/* India, Mexico */
-	RT_CHANNEL_DOMAIN_5G_FCC4 = 0x07,		/* Venezuela */
-	RT_CHANNEL_DOMAIN_5G_FCC5 = 0x08,		/* China */
-	RT_CHANNEL_DOMAIN_5G_FCC6 = 0x09,		/* Israel */
-	RT_CHANNEL_DOMAIN_5G_FCC7_IC1 = 0x0A,		/* US, Canada */
-	RT_CHANNEL_DOMAIN_5G_KCC1 = 0x0B,		/* Korea */
-	RT_CHANNEL_DOMAIN_5G_MKK1 = 0x0C,		/* Japan */
-	RT_CHANNEL_DOMAIN_5G_MKK2 = 0x0D,		/* Japan (W52, W53) */
-	RT_CHANNEL_DOMAIN_5G_MKK3 = 0x0E,		/* Japan (W56) */
-	RT_CHANNEL_DOMAIN_5G_NCC1 = 0x0F,		/* Taiwan */
-	RT_CHANNEL_DOMAIN_5G_NCC2 = 0x10,		/* Taiwan o/w DFS */
-	/*  Add new channel plan above this line=============== */
-	/*  Driver Self Defined ===== */
-	RT_CHANNEL_DOMAIN_5G_FCC = 0x11,
-	RT_CHANNEL_DOMAIN_5G_JAPAN_NO_DFS = 0x12,
-	RT_CHANNEL_DOMAIN_5G_FCC4_NO_DFS = 0x13,
-	RT_CHANNEL_DOMAIN_5G_MAX,
-};
-
 #define rtw_is_channel_plan_valid(chplan)			\
 	(chplan < RT_CHANNEL_DOMAIN_MAX ||			\
 	 chplan == RT_CHANNEL_DOMAIN_REALTEK_DEFINE)
@@ -416,7 +390,7 @@ struct p2p_channels {
 };
 
 struct p2p_oper_class_map {
-	enum hw_mode {IEEE80211G,IEEE80211A} mode;
+	enum hw_mode {IEEE80211G} mode;
 	u8 op_class;
 	u8 min_chan;
 	u8 max_chan;
@@ -462,7 +436,7 @@ struct mlme_ext_priv {
 
 	u64 TSFValue;
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 	unsigned char bstart_bss;
 #endif
 	u8 update_channel_plan_by_ap_done;
@@ -514,8 +488,6 @@ void CAM_empty_entry(struct adapter * Adapter, u8 ucIndex);
 
 int allocate_fw_sta_entry(struct adapter *padapter);
 void flush_all_cam_entry(struct adapter *padapter);
-
-bool IsLegal5GChannel(struct adapter * Adapter, u8 channel);
 
 void site_survey(struct adapter *padapter);
 u8 collect_bss_info(struct adapter *padapter, union recv_frame *precv_frame,
@@ -592,7 +564,7 @@ s32 dump_mgntframe_and_wait(struct adapter *padapter,
 s32 dump_mgntframe_and_wait_ack(struct adapter *padapter,
 				struct xmit_frame *pmgntframe);
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 void issue_probersp_p2p(struct adapter *padapter, unsigned char *da);
 void issue_p2p_provision_request(struct adapter *padapter, u8 *pssid,
 				 u8 ussidlen, u8 *pdev_raddr);
@@ -603,7 +575,7 @@ int issue_probereq_p2p_ex(struct adapter *adapter, u8 *da, int try_cnt,
 void issue_p2p_invitation_response(struct adapter *padapter, u8 *raddr,
 				   u8 dialogToken, u8 success);
 void issue_p2p_invitation_request(struct adapter *padapter, u8* raddr);
-#endif /* CONFIG_P2P */
+#endif /* CONFIG_88EU_P2P */
 void issue_beacon(struct adapter *padapter, int timeout_ms);
 void issue_probersp(struct adapter *padapter, unsigned char *da,
 		    u8 is_valid_p2p_probereq);
@@ -901,6 +873,6 @@ static struct fwevent wlanevents[] = {
 	{0, NULL},
 };
 
-#endif/* _RTL8192C_CMD_C_ */
+#endif/* _RTL_MLME_EXT_C_ */
 
-#endif
+#endif /* __RTW_MLME_EXT_H_ */

@@ -108,9 +108,7 @@ static int oid_null_function(struct oid_par_priv *poid_par_priv) {
 }
 #endif
 
-#if defined(CONFIG_WIRELESS_EXT)
 extern struct iw_handler_def  rtw_handlers_def;
-#endif
 
 int drv_query_info(struct  net_device *miniportadaptercontext, NDIS_OID oid,
 		   void *informationbuffer, u32 informationbufferlength,

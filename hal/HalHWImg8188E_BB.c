@@ -202,7 +202,7 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 	u32    *array       = array_agc_tab_1t_8188e;
 	bool		biol = false;
 	struct adapter *adapter =  dm_odm->Adapter;
-	struct xmit_frame	*pxmit_frame;
+	struct xmit_frame *pxmit_frame = NULL;
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 
@@ -480,9 +480,9 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 	u8     board       = dm_odm->BoardType;
 	u32     arraylen    = sizeof(array_phy_reg_1t_8188e)/sizeof(u32);
 	u32    *array       = array_phy_reg_1t_8188e;
-	bool		biol = false;
+	bool	biol = false;
 	struct adapter *adapter =  dm_odm->Adapter;
-	struct xmit_frame	*pxmit_frame;
+	struct xmit_frame *pxmit_frame = NULL;
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 	hex += board;

@@ -159,7 +159,7 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 	bool	biol = false;
 
 	struct adapter *adapt =  dm_odm->Adapter;
-	struct xmit_frame	*pxmit_frame;
+	struct xmit_frame	*pxmit_frame = NULL;
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 	hex += board;

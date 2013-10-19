@@ -179,9 +179,6 @@
 #define REG_C2HEVT_MSG_NORMAL		0x01A0
 #define REG_C2HEVT_CLEAR		0x01AF
 #define REG_MCUTST_1			0x01c0
-#ifdef CONFIG_WOWLAN
-#define REG_WOWLAN_WAKE_REASON		0x01c7
-#endif
 #define REG_FMETHR			0x01C8
 #define REG_HMETFR			0x01CC
 #define REG_HMEBOX_0			0x01D0
@@ -443,8 +440,6 @@
 #define REG_NORMAL_SIE_MAC_ADDR		0xFE70		/*  0xFE70~0xFE75 */
 #define REG_NORMAL_SIE_STRING		0xFE80		/*  0xFE80~0xFEDF */
 
-/* 	Redifine 8192C register definition for compatibility */
-
 /*  TODO: use these definition when using REG_xxx naming rule. */
 /*  NOTE: DO NOT Remove these definition. Use later. */
 
@@ -485,7 +480,6 @@
 #define	MAX_MSS_DENSITY_2T		0x13
 #define	MAX_MSS_DENSITY_1T		0x0A
 
-/*        8192C Cmd9346CR bits		(Offset 0xA, 16bit) */
 /*  EEPROM enable when set 1 */
 #define	CmdEEPROM_En			BIT5
 /*  System EEPROM select, 0: boot from E-FUSE, 1: The EEPROM used is 9346 */

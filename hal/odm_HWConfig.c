@@ -41,20 +41,17 @@ static u8 odm_QueryRxPwrPercentage(s8 AntPower)
 /*  IF other SW team do not support the feature, remove this section.?? */
 static s32 odm_sig_patch_lenove(struct odm_dm_struct *dm_odm, s32 CurrSig)
 {
-	s32 RetSig;
-
-	return RetSig;
+	return 0;
 }
 
 static s32 odm_sig_patch_netcore(struct odm_dm_struct *dm_odm, s32 CurrSig)
 {
-	s32 RetSig;
-	return RetSig;
+	return 0;
 }
 
 static s32 odm_SignalScaleMapping_92CSeries(struct odm_dm_struct *dm_odm, s32 CurrSig)
 {
-	s32 RetSig;
+	s32 RetSig = 0;
 
 	if ((dm_odm->SupportInterface  == ODM_ITRF_USB) ||
 	    (dm_odm->SupportInterface  == ODM_ITRF_SDIO)) {
@@ -96,8 +93,7 @@ static s32 odm_SignalScaleMapping(struct odm_dm_struct *dm_odm, s32 CurrSig)
 static u8 odm_SQ_process_patch_RT_CID_819x_Lenovo(struct odm_dm_struct *dm_odm,
 	u8 isCCKrate, u8 PWDB_ALL, u8 path, u8 RSSI)
 {
-	u8 SQ;
-	return SQ;
+	return 0;
 }
 
 static u8 odm_EVMdbToPercentage(s8 Value)

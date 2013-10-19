@@ -26,30 +26,6 @@
 
 void ODM_ResetIQKResult(struct odm_dm_struct *pDM_Odm)
 {
-	u8		i;
-	struct adapter *adapt = pDM_Odm->Adapter;
-
-	if (!IS_HARDWARE_TYPE_8192D(adapt))
-		return;
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_CALIBRATION, ODM_DBG_LOUD,
-		     ("PHY_ResetIQKResult:: settings regs %d default regs %d\n",
-		     (u32)(sizeof(pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting) /
-		     sizeof(struct ijk_matrix_regs_set)), IQK_Matrix_Settings_NUM));
-	/* 0xe94, 0xe9c, 0xea4, 0xeac, 0xeb4, 0xebc, 0xec4, 0xecc */
-
-	for (i = 0; i < IQK_Matrix_Settings_NUM; i++) {
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][0] = 0x100;
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][2] = 0x100;
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][4] = 0x100;
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][6] = 0x100;
-
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][1] = 0;
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][3] = 0;
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][5] = 0;
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][7] = 0;
-
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].bIQKDone = false;
-	}
 }
 
 u8 ODM_GetRightChnlPlaceforIQK(u8 chnl)

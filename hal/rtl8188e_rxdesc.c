@@ -23,17 +23,6 @@
 #include <drv_types.h>
 #include <rtl8188e_hal.h>
 
-static s32  translate2dbm(u8 signal_strength_idx)
-{
-	s32	signal_power; /*  in dBm. */
-
-	/*  Translate to dBm (x=0.5y-95). */
-	signal_power = (s32)((signal_strength_idx + 1) >> 1);
-	signal_power -= 95;
-
-	return signal_power;
-}
-
 static void process_rssi(struct adapter *padapter, union recv_frame *prframe)
 {
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
@@ -157,7 +146,7 @@ void update_recvframe_phyinfo_88e(union recv_frame *precvframe, struct phy_stat 
 	struct odm_phy_status_info *pPHYInfo  = (struct odm_phy_status_info *)(&pattrib->phy_info);
 	u8 *wlanhdr;
 	struct odm_per_pkt_info	pkt_info;
-	u8 *sa;
+	u8 *sa = NULL;
 	struct sta_priv *pstapriv;
 	struct sta_info *psta;
 

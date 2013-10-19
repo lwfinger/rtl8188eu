@@ -26,7 +26,6 @@
 #define _SUCCESS	1
 #define RTW_RX_HANDLED 2
 
-#include <linux/version.h>
 #include <linux/spinlock.h>
 #include <linux/compiler.h>
 #include <linux/kernel.h>
@@ -34,9 +33,7 @@
 #include <linux/init.h>
 #include <linux/slab.h>
 #include <linux/module.h>
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 5))
 #include <linux/kref.h>
-#endif
 #include <linux/netdevice.h>
 #include <linux/skbuff.h>
 #include <linux/circ_buf.h>
@@ -59,44 +56,14 @@
 #include <linux/kthread.h>
 
 #include <linux/usb.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 21))
-#include <linux/usb_ch9.h>
-#else
 #include <linux/usb/ch9.h>
-#endif
+
 struct	__queue	{
 	struct	list_head	queue;
 	spinlock_t lock;
 };
 
 #define thread_exit() complete_and_exit(NULL, 0)
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
-	#define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-#endif
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 22))
-/*  Porting from linux kernel, for compatible with old kernel. */
-static inline unsigned char *skb_tail_pointer(const struct sk_buff *skb)
-{
-	return skb->tail;
-}
-
-static inline void skb_reset_tail_pointer(struct sk_buff *skb)
-{
-	skb->tail = skb->data;
-}
-
-static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
-{
-	skb->tail = skb->data + offset;
-}
-
-static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
-{
-	return skb->end;
-}
-#endif
 
 static inline struct list_head *get_next(struct list_head *list)
 {
@@ -145,23 +112,16 @@ static inline void _exit_critical_bh(spinlock_t *plock, unsigned long *pirqL)
 
 static inline int _enter_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {
-	int ret = 0;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
+	int ret;
+
 	ret = mutex_lock_interruptible(pmutex);
-#else
-	ret = down_interruptible(pmutex);
-#endif
 	return ret;
 }
 
 
 static inline void _exit_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 		mutex_unlock(pmutex);
-#else
-		up(pmutex);
-#endif
 }
 
 static inline void rtw_list_delete(struct list_head *plist)
@@ -193,11 +153,7 @@ static inline void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
 
 static inline void _init_workitem(struct work_struct *pwork, void *pfunc, void * cntx)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20))
 	INIT_WORK(pwork, pfunc);
-#else
-	INIT_WORK(pwork, pfunc,pwork);
-#endif
 }
 
 static inline void _set_workitem(struct work_struct *pwork)
@@ -207,11 +163,7 @@ static inline void _set_workitem(struct work_struct *pwork)
 
 static inline void _cancel_workitem_sync(struct work_struct *pwork)
 {
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
 	cancel_work_sync(pwork);
-#else
-	flush_scheduled_work();
-#endif
 }
 /*  */
 /*  Global Mutex: can only be used at PASSIVE level. */
@@ -233,41 +185,25 @@ static inline void _cancel_workitem_sync(struct work_struct *pwork)
 
 static inline int rtw_netif_queue_stopped(struct net_device *pnetdev)
 {
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
-	return (netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 0)) &&
+	return  netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 0)) &&
 		netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 1)) &&
 		netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 2)) &&
-		netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 3)) );
-#else
-	return netif_queue_stopped(pnetdev);
-#endif
+		netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 3));
 }
 
 static inline void rtw_netif_wake_queue(struct net_device *pnetdev)
 {
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 	netif_tx_wake_all_queues(pnetdev);
-#else
-	netif_wake_queue(pnetdev);
-#endif
 }
 
 static inline void rtw_netif_start_queue(struct net_device *pnetdev)
 {
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 	netif_tx_start_all_queues(pnetdev);
-#else
-	netif_start_queue(pnetdev);
-#endif
 }
 
 static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 {
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 	netif_tx_stop_all_queues(pnetdev);
-#else
-	netif_stop_queue(pnetdev);
-#endif
 }
 
 #ifndef BIT
@@ -339,12 +275,12 @@ extern unsigned char WPA_TKIP_CIPHER[4];
 extern unsigned char RSN_TKIP_CIPHER[4];
 
 #define rtw_update_mem_stat(flag, sz) do {} while (0)
-extern u8 *_rtw_vmalloc(u32 sz);
-extern u8 *_rtw_zvmalloc(u32 sz);
-extern void _rtw_vmfree(u8 *pbuf, u32 sz);
-extern u8 *_rtw_zmalloc(u32 sz);
-extern u8 *_rtw_malloc(u32 sz);
-extern void _rtw_mfree(u8 *pbuf, u32 sz);
+u8 *_rtw_vmalloc(u32 sz);
+u8 *_rtw_zvmalloc(u32 sz);
+void _rtw_vmfree(u8 *pbuf, u32 sz);
+u8 *_rtw_zmalloc(u32 sz);
+u8 *_rtw_malloc(u32 sz);
+void _rtw_mfree(u8 *pbuf, u32 sz);
 #define rtw_vmalloc(sz)			_rtw_vmalloc((sz))
 #define rtw_zvmalloc(sz)			_rtw_zvmalloc((sz))
 #define rtw_vmfree(pbuf, sz)		_rtw_vmfree((pbuf), (sz))
@@ -352,49 +288,49 @@ extern void _rtw_mfree(u8 *pbuf, u32 sz);
 #define rtw_zmalloc(sz)			_rtw_zmalloc((sz))
 #define rtw_mfree(pbuf, sz)		_rtw_mfree((pbuf), (sz))
 
-extern void *rtw_malloc2d(int h, int w, int size);
-extern void rtw_mfree2d(void *pbuf, int h, int w, int size);
+void *rtw_malloc2d(int h, int w, int size);
+void rtw_mfree2d(void *pbuf, int h, int w, int size);
 
-extern void _rtw_memcpy(void *dec, void *sour, u32 sz);
-extern int  _rtw_memcmp(void *dst, void *src, u32 sz);
-extern void _rtw_memset(void *pbuf, int c, u32 sz);
+void _rtw_memcpy(void *dec, void *sour, u32 sz);
+int  _rtw_memcmp(void *dst, void *src, u32 sz);
+void _rtw_memset(void *pbuf, int c, u32 sz);
 
-extern void _rtw_init_listhead(struct list_head *list);
-extern u32  rtw_is_list_empty(struct list_head *phead);
-extern void rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
-extern void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
-extern void rtw_list_delete(struct list_head *plist);
+void _rtw_init_listhead(struct list_head *list);
+u32  rtw_is_list_empty(struct list_head *phead);
+void rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
+void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
+void rtw_list_delete(struct list_head *plist);
 
-extern void _rtw_init_sema(struct semaphore *sema, int init_val);
-extern void _rtw_free_sema(struct semaphore *sema);
-extern void _rtw_up_sema(struct semaphore *sema);
-extern u32  _rtw_down_sema(struct semaphore *sema);
-extern void _rtw_mutex_init(struct mutex *pmutex);
-extern void _rtw_mutex_free(struct mutex *pmutex);
-extern void _rtw_spinlock_init(spinlock_t *plock);
-extern void _rtw_spinlock_free(spinlock_t *plock);
+void _rtw_init_sema(struct semaphore *sema, int init_val);
+void _rtw_free_sema(struct semaphore *sema);
+void _rtw_up_sema(struct semaphore *sema);
+u32  _rtw_down_sema(struct semaphore *sema);
+void _rtw_mutex_init(struct mutex *pmutex);
+void _rtw_mutex_free(struct mutex *pmutex);
+void _rtw_spinlock_init(spinlock_t *plock);
+void _rtw_spinlock_free(spinlock_t *plock);
 
-extern void _rtw_init_queue(struct __queue *pqueue);
-extern u32  _rtw_queue_empty(struct __queue *pqueue);
-extern u32  rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
+void _rtw_init_queue(struct __queue *pqueue);
+u32  _rtw_queue_empty(struct __queue *pqueue);
+u32  rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
 
-extern u32  rtw_get_current_time(void);
-extern u32  rtw_systime_to_ms(u32 systime);
-extern u32  rtw_ms_to_systime(u32 ms);
-extern s32  rtw_get_passing_time_ms(u32 start);
-extern s32  rtw_get_time_interval_ms(u32 start, u32 end);
+u32  rtw_get_current_time(void);
+u32  rtw_systime_to_ms(u32 systime);
+u32  rtw_ms_to_systime(u32 ms);
+s32  rtw_get_passing_time_ms(u32 start);
+s32  rtw_get_time_interval_ms(u32 start, u32 end);
 
-extern void rtw_sleep_schedulable(int ms);
+void rtw_sleep_schedulable(int ms);
 
-extern void rtw_msleep_os(int ms);
-extern void rtw_usleep_os(int us);
+void rtw_msleep_os(int ms);
+void rtw_usleep_os(int us);
 
-extern u32  rtw_atoi(u8 *s);
+u32  rtw_atoi(u8 *s);
 
-extern void rtw_mdelay_os(int ms);
-extern void rtw_udelay_os(int us);
+void rtw_mdelay_os(int ms);
+void rtw_udelay_os(int us);
 
-extern void rtw_yield_os(void);
+void rtw_yield_os(void);
 
 static inline unsigned char _cancel_timer_ex(struct timer_list *ptimer)
 {
@@ -479,9 +415,6 @@ void rtw_suspend_lock_init(void);
 void rtw_suspend_lock_uninit(void);
 void rtw_lock_suspend(void);
 void rtw_unlock_suspend(void);
-#ifdef CONFIG_WOWLAN
-void rtw_lock_suspend_timeout(long timeout);
-#endif /* CONFIG_WOWLAN */
 
 /* Atomic integer operations */
 #define ATOMIC_T atomic_t
@@ -523,11 +456,7 @@ void rtw_free_netdev(struct net_device *netdev);
 #define FUNC_ADPT_FMT "%s(%s)"
 #define FUNC_ADPT_ARG(adapter) __func__, adapter->pnetdev->name
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
 #define rtw_signal_process(pid, sig) kill_pid(find_vpid((pid)),(sig), 1)
-#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)) */
-#define rtw_signal_process(pid, sig) kill_proc((pid), (sig), 1)
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)) */
 
 u64 rtw_modular64(u64 x, u64 y);
 u64 rtw_division64(u64 x, u64 y);
@@ -613,6 +542,6 @@ bool rtw_cbuf_empty(struct rtw_cbuf *cbuf);
 bool rtw_cbuf_push(struct rtw_cbuf *cbuf, void *buf);
 void *rtw_cbuf_pop(struct rtw_cbuf *cbuf);
 struct rtw_cbuf *rtw_cbuf_alloc(u32 size);
-void rtw_cbuf_free(struct rtw_cbuf *cbuf);
+int wifirate2_ratetbl_inx(unsigned char rate);
 
 #endif

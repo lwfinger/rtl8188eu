@@ -29,8 +29,6 @@
 
 #define RTW_USB_BULKOUT_TIME	5000/* ms */
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 5, 0)) || \
-    (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 18))
 #define _usbctrl_vendorreq_async_callback(urb, regs)	\
 	_usbctrl_vendorreq_async_callback(urb)
 #define usb_bulkout_zero_complete(purb, regs)		\
@@ -43,7 +41,6 @@
 	usb_read_port_complete(purb)
 #define usb_read_interrupt_complete(purb, regs)		\
 	usb_read_interrupt_complete(purb)
-#endif
 
 unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr);
 

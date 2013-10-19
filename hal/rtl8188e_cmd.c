@@ -44,9 +44,6 @@ static u8 _is_fw_read_cmd_down(struct adapter *adapt, u8 msgbox_num)
 		valid = rtw_read8(adapt, REG_HMETFR) & BIT(msgbox_num);
 		if (0 == valid)
 			read_down = true;
-#ifdef CONFIG_WOWLAN
-		rtw_msleep_os(2);
-#endif
 	} while ((!read_down) && (retry_cnts--));
 
 	return read_down;
@@ -101,11 +98,11 @@ _func_enter_;
 		*(u8 *)(&h2c_cmd) = ElementID;
 
 		if (CmdLen <= 3) {
-			_rtw_memcpy((u8 *)(&h2c_cmd)+1, pCmdBuffer, CmdLen);
+			memcpy((u8 *)(&h2c_cmd)+1, pCmdBuffer, CmdLen);
 		} else {
-			_rtw_memcpy((u8 *)(&h2c_cmd)+1, pCmdBuffer, 3);
+			memcpy((u8 *)(&h2c_cmd)+1, pCmdBuffer, 3);
 			ext_cmd_len = CmdLen-3;
-			_rtw_memcpy((u8 *)(&h2c_cmd_ex), pCmdBuffer+3, ext_cmd_len);
+			memcpy((u8 *)(&h2c_cmd_ex), pCmdBuffer+3, ext_cmd_len);
 
 			/* Write Ext command */
 			msgbox_ex_addr = REG_HMEBOX_EXT_0 + (h2c_box_num * RTL88E_EX_MESSAGE_BOX_SIZE);
@@ -163,7 +160,7 @@ _func_enter_;
 
 		_rtw_memset(buf, 0, 3);
 		lmask = cpu_to_le32(mask);
-		_rtw_memcpy(buf, &lmask, 3);
+		memcpy(buf, &lmask, 3);
 
 		FillH2CCmd_88E(adapt, H2C_DM_MACID_CFG, 3, buf);
 	} else {
@@ -276,7 +273,7 @@ void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, __le16 mstatus_rpt)
 static void ConstructBeacon(struct adapter *adapt, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16 *fctrl;
+	__le16 *fctrl;
 	u32 rate_len, pktlen;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -288,9 +285,9 @@ static void ConstructBeacon(struct adapter *adapt, u8 *pframe, u32 *pLength)
 	fctrl = &(pwlanhdr->frame_ctl);
 	*(fctrl) = 0;
 
-	_rtw_memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(cur_network), ETH_ALEN);
+	memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
+	memcpy(pwlanhdr->addr3, get_my_bssid(cur_network), ETH_ALEN);
 
 	SetSeqNum(pwlanhdr, 0/*pmlmeext->mgnt_seq*/);
 	SetFrameSubType(pframe, WIFI_BEACON);
@@ -303,20 +300,20 @@ static void ConstructBeacon(struct adapter *adapt, u8 *pframe, u32 *pLength)
 	pktlen += 8;
 
 	/*  beacon interval: 2 bytes */
-	_rtw_memcpy(pframe, (unsigned char *)(rtw_get_beacon_interval_from_ie(cur_network->IEs)), 2);
+	memcpy(pframe, (unsigned char *)(rtw_get_beacon_interval_from_ie(cur_network->IEs)), 2);
 
 	pframe += 2;
 	pktlen += 2;
 
 	/*  capability info: 2 bytes */
-	_rtw_memcpy(pframe, (unsigned char *)(rtw_get_capability_from_ie(cur_network->IEs)), 2);
+	memcpy(pframe, (unsigned char *)(rtw_get_capability_from_ie(cur_network->IEs)), 2);
 
 	pframe += 2;
 	pktlen += 2;
 
 	if ((pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE) {
 		pktlen += cur_network->IELength - sizeof(struct ndis_802_11_fixed_ie);
-		_rtw_memcpy(pframe, cur_network->IEs+sizeof(struct ndis_802_11_fixed_ie), pktlen);
+		memcpy(pframe, cur_network->IEs+sizeof(struct ndis_802_11_fixed_ie), pktlen);
 
 		goto _ConstructBeacon;
 	}
@@ -361,9 +358,9 @@ _ConstructBeacon:
 static void ConstructPSPoll(struct adapter *adapt, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16 *fctrl;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	__le16 *fctrl;
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -377,10 +374,10 @@ static void ConstructPSPoll(struct adapter *adapt, u8 *pframe, u32 *pLength)
 	SetDuration(pframe, (pmlmeinfo->aid | 0xc000));
 
 	/*  BSSID. */
-	_rtw_memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
 
 	/*  TA. */
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
 
 	*pLength = 16;
 }
@@ -394,7 +391,7 @@ static void ConstructNullFunctionData(struct adapter *adapt, u8 *pframe,
 	u8 bForcePowerSave)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16 *fctrl;
+	__le16 *fctrl;
 	u32 pktlen;
 	struct mlme_priv *pmlmepriv = &adapt->mlmepriv;
 	struct wlan_network		*cur_network = &pmlmepriv->cur_network;
@@ -411,21 +408,21 @@ static void ConstructNullFunctionData(struct adapter *adapt, u8 *pframe,
 	switch (cur_network->network.InfrastructureMode) {
 	case Ndis802_11Infrastructure:
 		SetToDs(fctrl);
-		_rtw_memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
-		_rtw_memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
-		_rtw_memcpy(pwlanhdr->addr3, StaAddr, ETH_ALEN);
+		memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+		memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
+		memcpy(pwlanhdr->addr3, StaAddr, ETH_ALEN);
 		break;
 	case Ndis802_11APMode:
 		SetFrDs(fctrl);
-		_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-		_rtw_memcpy(pwlanhdr->addr2, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
-		_rtw_memcpy(pwlanhdr->addr3, myid(&(adapt->eeprompriv)), ETH_ALEN);
+		memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
+		memcpy(pwlanhdr->addr2, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+		memcpy(pwlanhdr->addr3, myid(&(adapt->eeprompriv)), ETH_ALEN);
 		break;
 	case Ndis802_11IBSS:
 	default:
-		_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-		_rtw_memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
-		_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+		memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
+		memcpy(pwlanhdr->addr2, myid(&(adapt->eeprompriv)), ETH_ALEN);
+		memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
 		break;
 	}
 
@@ -453,7 +450,7 @@ static void ConstructNullFunctionData(struct adapter *adapt, u8 *pframe,
 static void ConstructProbeRsp(struct adapter *adapt, u8 *pframe, u32 *pLength, u8 *StaAddr, bool bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16 *fctrl;
+	__le16 *fctrl;
 	u8 *mac, *bssid;
 	u32 pktlen;
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
@@ -467,9 +464,9 @@ static void ConstructProbeRsp(struct adapter *adapt, u8 *pframe, u32 *pLength, u
 
 	fctrl = &(pwlanhdr->frame_ctl);
 	*(fctrl) = 0;
-	_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, mac, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, bssid, ETH_ALEN);
+	memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
+	memcpy(pwlanhdr->addr2, mac, ETH_ALEN);
+	memcpy(pwlanhdr->addr3, bssid, ETH_ALEN);
 
 	SetSeqNum(pwlanhdr, 0);
 	SetFrameSubType(fctrl, WIFI_PROBERSP);
@@ -480,7 +477,7 @@ static void ConstructProbeRsp(struct adapter *adapt, u8 *pframe, u32 *pLength, u
 	if (cur_network->IELength > MAX_IE_SZ)
 		return;
 
-	_rtw_memcpy(pframe, cur_network->IEs, cur_network->IELength);
+	memcpy(pframe, cur_network->IEs, cur_network->IELength);
 	pframe += cur_network->IELength;
 	pktlen += cur_network->IELength;
 
@@ -511,7 +508,7 @@ static void SetFwRsvdPagePkt(struct adapter *adapt, bool bDLFinished)
 	struct xmit_priv *pxmitpriv;
 	struct mlme_ext_priv *pmlmeext;
 	struct mlme_ext_info	*pmlmeinfo;
-	u32 BeaconLength, ProbeRspLength, PSPollLength;
+	u32 BeaconLength = 0, ProbeRspLength = 0, PSPollLength;
 	u32 NullDataLength, QosNullLength;
 	u8 *ReservedPagePacket;
 	u8 PageNum, PageNeed, TxDescLen;
@@ -599,7 +596,7 @@ static void SetFwRsvdPagePkt(struct adapter *adapt, bool bDLFinished)
 	pattrib->qsel = 0x10;
 	pattrib->last_txcmdsz = TotalPacketLen - TXDESC_OFFSET;
 	pattrib->pktlen = pattrib->last_txcmdsz;
-	_rtw_memcpy(pmgntframe->buf_addr, ReservedPagePacket, TotalPacketLen);
+	memcpy(pmgntframe->buf_addr, ReservedPagePacket, TotalPacketLen);
 
 	rtw_hal_mgnt_xmit(adapt, pmgntframe);
 
@@ -607,14 +604,11 @@ static void SetFwRsvdPagePkt(struct adapter *adapt, bool bDLFinished)
 	FillH2CCmd_88E(adapt, H2C_COM_RSVD_PAGE, sizeof(RsvdPageLoc), (u8 *)&RsvdPageLoc);
 
 exit:
-	rtw_mfree(ReservedPagePacket, 1000);
+	kfree(ReservedPagePacket);
 }
 
 void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *adapt, u8 mstatus)
 {
-#ifdef CONFIG_WOWLAN
-	struct joinbssrpt_parm JoinBssRptParm;
-#endif /* CONFIG_WOWLAN */
 	struct hal_data_8188e *haldata = GET_HAL_DATA(adapt);
 	struct mlme_ext_priv *pmlmeext = &(adapt->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -707,21 +701,12 @@ _func_enter_;
 		haldata->RegCR_1 &= (~BIT0);
 		rtw_write8(adapt,  REG_CR+1, haldata->RegCR_1);
 	}
-#ifdef CONFIG_WOWLAN
-	if (adapt->pwrctrlpriv.wowlan_mode) {
-		JoinBssRptParm.OpMode = mstatus;
-		JoinBssRptParm.MacID = 0;
-		FillH2CCmd_88E(adapt, H2C_COM_MEDIA_STATUS_RPT, sizeof(JoinBssRptParm), (u8 *)&JoinBssRptParm);
-		DBG_88E_LEVEL(_drv_info_, "%s opmode:%d MacId:%d\n", __func__, JoinBssRptParm.OpMode, JoinBssRptParm.MacID);
-	} else {
-		DBG_88E_LEVEL(_drv_info_, "%s wowlan_mode is off\n", __func__);
-	}
-#endif /* CONFIG_WOWLAN */
 _func_exit_;
 }
 
 void rtl8188e_set_p2p_ps_offload_cmd(struct adapter *adapt, u8 p2p_ps_state)
 {
+#ifdef CONFIG_88EU_P2P
 	struct hal_data_8188e *haldata = GET_HAL_DATA(adapt);
 	struct wifidirect_info	*pwdinfo = &(adapt->wdinfo);
 	struct P2P_PS_Offload_t	*p2p_ps_offload = &haldata->p2p_ps_offload;
@@ -788,94 +773,7 @@ _func_enter_;
 	}
 
 	FillH2CCmd_88E(adapt, H2C_PS_P2P_OFFLOAD, 1, (u8 *)p2p_ps_offload);
+#endif
 
 _func_exit_;
 }
-
-#ifdef CONFIG_WOWLAN
-void rtl8188es_set_wowlan_cmd(struct adapter *adapt, u8 enable)
-{
-	u8 res = _SUCCESS;
-	struct setwowlan_parm pwowlan_parm;
-	struct setaoac_glocal_info paoac_global_info_parm;
-	struct pwrctrl_priv *pwrpriv = &adapt->pwrctrlpriv;
-
-_func_enter_;
-	DBG_88E_LEVEL(_drv_info_, "+%s+\n", __func__);
-
-	pwowlan_parm.mode = 0;
-	pwowlan_parm.gpio_index = 0;
-	pwowlan_parm.gpio_duration = 0;
-	pwowlan_parm.second_mode = 0;
-	pwowlan_parm.reserve = 0;
-
-	if (enable) {
-		pwowlan_parm.mode |= FW_WOWLAN_FUN_EN;
-		pwrpriv->wowlan_magic = true;
-		pwrpriv->wowlan_unicast = true;
-
-		if (pwrpriv->wowlan_pattern) {
-			pwowlan_parm.mode |= FW_WOWLAN_PATTERN_MATCH;
-			DBG_88E_LEVEL(_drv_info_, "%s 2.pwowlan_parm.mode=0x%x\n", __func__, pwowlan_parm.mode);
-		}
-		if (pwrpriv->wowlan_magic) {
-			pwowlan_parm.mode |= FW_WOWLAN_MAGIC_PKT;
-			DBG_88E_LEVEL(_drv_info_, "%s 3.pwowlan_parm.mode=0x%x\n", __func__, pwowlan_parm.mode);
-		}
-		if (pwrpriv->wowlan_unicast) {
-			pwowlan_parm.mode |= FW_WOWLAN_UNICAST;
-			DBG_88E_LEVEL(_drv_info_, "%s 4.pwowlan_parm.mode=0x%x\n", __func__, pwowlan_parm.mode);
-		}
-
-		if (!(adapt->pwrctrlpriv.wowlan_wake_reason & FWDecisionDisconnect))
-			rtl8188e_set_FwJoinBssReport_cmd(adapt, 1);
-		else
-			DBG_88E_LEVEL(_drv_info_, "%s, disconnected, no FwJoinBssReport\n", __func__);
-		rtw_msleep_os(2);
-
-		/* WOWLAN_GPIO_ACTIVE means GPIO high active */
-		pwowlan_parm.mode |= FW_WOWLAN_REKEY_WAKEUP;
-		pwowlan_parm.mode |= FW_WOWLAN_DEAUTH_WAKEUP;
-
-		/* DataPinWakeUp */
-		pwowlan_parm.gpio_index = 0x0;
-		DBG_88E_LEVEL(_drv_info_, "%s 5.pwowlan_parm.mode=0x%x\n", __func__, pwowlan_parm.mode);
-		DBG_88E_LEVEL(_drv_info_, "%s 6.pwowlan_parm.index=0x%x\n", __func__, pwowlan_parm.gpio_index);
-		res = FillH2CCmd_88E(adapt, H2C_COM_WWLAN, 2, (u8 *)&pwowlan_parm);
-
-		rtw_msleep_os(2);
-
-		/* disconnect decision */
-		pwowlan_parm.mode = 1;
-		pwowlan_parm.gpio_index = 0;
-		pwowlan_parm.gpio_duration = 0;
-		FillH2CCmd_88E(adapt, H2C_COM_DISCNT_DECISION, 3, (u8 *)&pwowlan_parm);
-
-		/* keep alive period = 10 * 10 BCN interval */
-		pwowlan_parm.mode = 1;
-		pwowlan_parm.gpio_index = 10;
-		res = FillH2CCmd_88E(adapt, H2C_COM_KEEP_ALIVE, 2, (u8 *)&pwowlan_parm);
-
-		rtw_msleep_os(2);
-		/* Configure STA security information for GTK rekey wakeup event. */
-		paoac_global_info_parm.pairwiseEncAlg = adapt->securitypriv.dot11PrivacyAlgrthm;
-		paoac_global_info_parm.groupEncAlg = adapt->securitypriv.dot118021XGrpPrivacy;
-		res = FillH2CCmd_88E(adapt, H2C_COM_AOAC_GLOBAL_INFO, 2, (u8 *)&paoac_global_info_parm);
-
-		rtw_msleep_os(2);
-		/* enable Remote wake ctrl */
-		pwowlan_parm.mode = 1;
-		pwowlan_parm.gpio_index = 0;
-		pwowlan_parm.gpio_duration = 0;
-		res = FillH2CCmd_88E(adapt, H2C_COM_REMOTE_WAKE_CTRL, 3, (u8 *)&pwowlan_parm);
-	} else {
-		pwrpriv->wowlan_magic = false;
-		res = FillH2CCmd_88E(adapt, H2C_COM_WWLAN, 2, (u8 *)&pwowlan_parm);
-		rtw_msleep_os(2);
-		res = FillH2CCmd_88E(adapt, H2C_COM_REMOTE_WAKE_CTRL, 3, (u8 *)&pwowlan_parm);
-	}
-_func_exit_;
-	DBG_88E_LEVEL(_drv_info_, "-%s res:%d-\n", __func__, res);
-	return;
-}
-#endif  /* CONFIG_WOWLAN */

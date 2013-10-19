@@ -46,6 +46,27 @@
 
 #include <rtl8188e_hal.h>
 
+/*---------------------------Define Local Constant---------------------------*/
+/*  Define local structure for debug!!!!! */
+struct rf_shadow {
+	/*  Shadow register value */
+	u32 Value;
+	/*  Compare or not flag */
+	u8 Compare;
+	/*  Record If it had ever modified unpredicted */
+	u8 ErrorOrNot;
+	/*  Recorver Flag */
+	u8 Recorver;
+	/*  */
+	u8 Driver_Write;
+};
+
+/*---------------------------Define Local Constant---------------------------*/
+
+
+/*------------------------Define global variable-----------------------------*/
+
+/*------------------------Define local variable------------------------------*/
 
 /*-----------------------------------------------------------------------------
  * Function:	RF_ChangeTxPath
@@ -126,8 +147,8 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 		u8 *pPowerlevel)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
-	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
-	struct mlme_ext_priv		*pmlmeext = &Adapter->mlmeextpriv;
+	struct dm_priv *pdmpriv = &pHalData->dmpriv;
+	struct mlme_ext_priv *pmlmeext = &Adapter->mlmeextpriv;
 	u32 TxAGC[2] = {0, 0}, tmpval = 0, pwrtrac_value;
 	bool TurboScanOff = false;
 	u8 idx1, idx2;
@@ -456,11 +477,11 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 
 static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
 {
-	u32 u4RegValue;
-	u8 eRFPath;
 	struct bb_reg_def *pPhyReg;
-	int rtStatus = _SUCCESS;
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(Adapter);
+	u32 u4RegValue = 0;
+	u8 eRFPath;
+	int rtStatus = _SUCCESS;
 
 	/* 3----------------------------------------------------------------- */
 	/* 3 <2> Initialize RF */

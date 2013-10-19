@@ -36,13 +36,9 @@
 
 #include "odm_precomp.h"
 
-	/*  Fw Array */
-	#define Rtl8188E_FwImageArray		Rtl8188EFwImgArray
-	#define Rtl8188E_FWImgArrayLength	Rtl8188EFWImgArrayLength
-#ifdef CONFIG_WOWLAN
-	#define Rtl8188E_FwWoWImageArray	Array_8188E_FW_WoWLAN
-	#define Rtl8188E_FwWoWImgArrayLength	ArrayLength_8188E_FW_WoWLAN
-#endif /* CONFIG_WOWLAN */
+/*  Fw Array */
+#define Rtl8188E_FwImageArray		Rtl8188EFwImgArray
+#define Rtl8188E_FWImgArrayLength	Rtl8188EFWImgArrayLength
 
 #define RTL8188E_FW_UMC_IMG			"rtl8188E\\rtl8188efw.bin"
 #define RTL8188E_PHY_REG			"rtl8188E\\PHY_REG_1T.txt"
@@ -89,11 +85,6 @@ struct rt_firmware {
 	enum firmware_source	eFWSource;
 	u8			*szFwBuffer;
 	u32			ulFwLength;
-
-#ifdef CONFIG_WOWLAN
-	u8			*szWoWLANFwBuffer;
-	u32			ulWoWLANFwLength;
-#endif /* CONFIG_WOWLAN */
 };
 
 /*  This structure must be careful with byte-ordering */
@@ -205,6 +196,10 @@ struct txpowerinfo24g {
 	s8 BW40_Diff[MAX_RF_PATH][MAX_TX_COUNT];
 };
 
+#define EFUSE_REAL_CONTENT_LEN		512
+#define EFUSE_MAX_SECTION		16
+#define EFUSE_IC_ID_OFFSET		506 /* For some inferior IC purpose*/
+#define AVAILABLE_EFUSE_ADDR(addr)	(addr < EFUSE_REAL_CONTENT_LEN)
 /*  To prevent out of boundary programming case, */
 /*  leave 1byte and program full section */
 /*  9bytes + 1byt + 5bytes and pre 1byte. */
@@ -219,6 +214,7 @@ struct txpowerinfo24g {
 
 #define		EFUSE_REAL_CONTENT_LEN_88E	256
 #define		EFUSE_MAP_LEN_88E		512
+#define EFUSE_MAP_LEN			EFUSE_MAP_LEN_88E
 #define		EFUSE_MAX_SECTION_88E		64
 #define		EFUSE_MAX_WORD_UNIT_88E		4
 #define		EFUSE_IC_ID_OFFSET_88E		506
@@ -233,15 +229,10 @@ struct txpowerinfo24g {
 #define		EFUSE_OOB_PROTECT_BYTES_88E	18
 #define		EFUSE_PROTECT_BYTES_BANK_88E	16
 
-#define EFUSE_REAL_CONTENT_LEN		EFUSE_REAL_CONTENT_LEN_88E
-#define EFUSE_MAP_LEN			EFUSE_MAP_LEN_88E
-#define EFUSE_MAX_SECTION		EFUSE_MAX_SECTION_88E
-#define EFUSE_IC_ID_OFFSET		EFUSE_IC_ID_OFFSET_88E
-#define AVAILABLE_EFUSE_ADDR(addr)	(addr < EFUSE_REAL_CONTENT_LEN)
 /* 			EFUSE for BT definition */
 #define EFUSE_BT_REAL_CONTENT_LEN	1536	/*  512*3 */
 #define EFUSE_BT_MAP_LEN		1024	/*  1k bytes */
-#define EFUSE_BT_MAX_SECTION		128		/*  1024/8 */
+#define EFUSE_BT_MAX_SECTION		128	/*  1024/8 */
 
 #define EFUSE_PROTECT_BYTES_BANK	16
 
@@ -253,13 +244,7 @@ enum rt_multi_func {
 	RT_MULTI_FUNC_GPS = 0x04,
 };
 
-/*  For RTL8723 WiFi PDn/GPIO polarity control configuration. */
-enum rt_polarity_ctl {
-	RT_POLARITY_LOW_ACT = 0,
-	RT_POLARITY_HIGH_ACT = 1,
-};
-
-/*  For RTL8723 regulator mode. by tynli. 2011.01.14. */
+/*  For RTL8723 regulator mode. */
 enum rt_regulator_mode {
 	RT_SWITCHING_REGULATOR = 0,
 	RT_LDO_REGULATOR = 1,
@@ -268,7 +253,6 @@ enum rt_regulator_mode {
 struct hal_data_8188e {
 	struct HAL_VERSION	VersionID;
 	enum rt_multi_func MultiFunc; /*  For multi-function consideration. */
-	enum rt_polarity_ctl PolarityCtl; /*  For Wifi PDn Polarity control. */
 	enum rt_regulator_mode RegulatorMode; /*  switching regulator or LDO */
 	u16	CustomerID;
 
@@ -385,10 +369,6 @@ struct hal_data_8188e {
 	struct odm_dm_struct odmpriv;
 	struct sreset_priv srestpriv;
 
-#ifdef CONFIG_BT_COEXIST
-	struct btcoexist_priv	bt_coexist;
-#endif
-
 	u8	CurAntenna;
 	u8	AntDivCfg;
 	u8	TRxAntDivType;
@@ -418,7 +398,7 @@ struct hal_data_8188e {
 
 	u16	EfuseUsedBytes;
 
-#ifdef CONFIG_P2P
+#ifdef CONFIG_88EU_P2P
 	struct P2P_PS_Offload_t	p2p_ps_offload;
 #endif
 
@@ -456,11 +436,7 @@ struct hal_data_8188e {
 	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_GPS)
 
 /*  rtl8188e_hal_init.c */
-#ifdef CONFIG_WOWLAN
-s32 rtl8188e_FirmwareDownload(struct adapter *padapter, bool  bUsedWoWLANFw);
-#else
 s32 rtl8188e_FirmwareDownload(struct adapter *padapter);
-#endif
 void _8051Reset88E(struct adapter *padapter);
 void rtl8188e_InitializeFirmwareVars(struct adapter *padapter);
 
@@ -492,10 +468,6 @@ void Hal_ReadPowerSavingMode88E(struct adapter *pAdapter, u8 *hwinfo,
 				bool AutoLoadFail);
 
 bool HalDetectPwrDownMode88E(struct adapter *Adapter);
-
-#ifdef CONFIG_WOWLAN
-void Hal_DetectWoWMode(struct adapter *pAdapter);
-#endif /* CONFIG_WOWLAN */
 
 void Hal_InitChannelPlan(struct adapter *padapter);
 void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc);

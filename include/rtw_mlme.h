@@ -383,7 +383,12 @@ struct mlme_priv {
 	u8 *wps_probe_req_ie;
 	u32 wps_probe_req_ie_len;
 
-#if defined (CONFIG_AP_MODE)
+	u8 *assoc_req;
+	u32 assoc_req_len;
+	u8 *assoc_rsp;
+	u32 assoc_rsp_len;
+
+#if defined (CONFIG_88EU_AP_MODE)
 	/* Number of associated Non-ERP stations (i.e., stations using 802.11b
 	 * in 802.11g BSS) */
 	int num_sta_non_erp;
@@ -410,11 +415,6 @@ struct mlme_priv {
 
 	u16 ht_op_mode;
 
-	u8 *assoc_req;
-	u32 assoc_req_len;
-	u8 *assoc_rsp;
-	u32 assoc_rsp_len;
-
 	u8 *wps_beacon_ie;
 	/* u8 *wps_probe_req_ie; */
 	u8 *wps_probe_resp_ie;
@@ -437,10 +437,10 @@ struct mlme_priv {
 	u32 p2p_assoc_req_ie_len;
 	spinlock_t bcn_update_lock;
 	u8		update_bcn;
-#endif /* if defined (CONFIG_AP_MODE) */
+#endif /* if defined (CONFIG_88EU_AP_MODE) */
 };
 
-#ifdef CONFIG_AP_MODE
+#ifdef CONFIG_88EU_AP_MODE
 
 struct hostapd_priv {
 	struct adapter *padapter;

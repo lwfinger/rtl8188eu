@@ -63,20 +63,13 @@ u8 rtw_reset_drv_sw(struct adapter *padapter);
 
 u32 rtw_start_drv_threads(struct adapter *padapter);
 void rtw_stop_drv_threads (struct adapter *padapter);
-#ifdef CONFIG_WOWLAN
-void rtw_cancel_dynamic_chk_timer(struct adapter *padapter);
-#endif
 void rtw_cancel_all_timer(struct adapter *padapter);
 
 int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname);
 struct net_device *rtw_init_netdev(struct adapter *padapter);
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 u16 rtw_recv_select_queue(struct sk_buff *skb);
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35) */
-
 void rtw_proc_init_one(struct net_device *dev);
 void rtw_proc_remove_one(struct net_device *dev);
 

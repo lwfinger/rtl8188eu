@@ -75,7 +75,7 @@ enum rf_radio_path {
 
 #define MAX_PG_GROUP 13
 
-#define	RF_PATH_MAX			3
+#define	RF_PATH_MAX			2
 #define		MAX_RF_PATH		RF_PATH_MAX
 #define		MAX_TX_COUNT		4 /* path numbers */
 
@@ -232,21 +232,12 @@ void PHY_ScanOperationBackup8188E(struct adapter *Adapter, u8 Operation);
 void PHY_SetBWMode8188E(struct adapter *adapter,
 			enum ht_channel_width chnlwidth, unsigned char offset);
 
-/*  Set A2 entry to fw for 8192S */
-void FillA2Entry8192C(struct adapter *adapter, u8 index, u8 *val);
-
 /*  channel switch related funciton */
 void PHY_SwChnl8188E(struct adapter *adapter, u8 channel);
 /*  Call after initialization */
-void PHY_SwChnlPhy8192C(struct adapter *adapter, u8 channel);
-
 void ChkFwCmdIoDone(struct adapter *adapter);
 
 /*  BB/MAC/RF other monitor API */
-void PHY_SetMonitorMode8192C(struct adapter *adapter, bool enablemonitormode);
-
-bool PHY_CheckIsLegalRfPath8192C(struct adapter *adapter, u32 rfpath);
-
 void PHY_SetRFPathSwitch_8188E(struct adapter *adapter,	bool main);
 
 void PHY_SwitchEphyParameter(struct adapter *adapter);

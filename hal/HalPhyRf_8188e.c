@@ -1661,9 +1661,8 @@ static void phy_APCalibrate_8188E(struct adapter *adapt, s8 delta, bool is2t)
 		else
 			ODM_SetRFReg(dm_odm, path, 0x4, bMaskDWord,
 				     ((APK_result[path][1] << 15) | (APK_result[path][1] << 10) | (0x02 << 5) | 0x05));
-		if (!IS_HARDWARE_TYPE_8723A(adapt))
-			ODM_SetRFReg(dm_odm, path, RF_BS_PA_APSET_G9_G11, bMaskDWord,
-				     ((0x08 << 15) | (0x08 << 10) | (0x08 << 5) | 0x08));
+		ODM_SetRFReg(dm_odm, path, RF_BS_PA_APSET_G9_G11, bMaskDWord,
+			     ((0x08 << 15) | (0x08 << 10) | (0x08 << 5) | 0x08));
 	}
 
 	dm_odm->RFCalibrateInfo.bAPKdone = true;
@@ -1866,6 +1865,28 @@ void PHY_LCCalibrate_8188E(struct adapter *adapt)
 
 	ODM_RT_TRACE(dm_odm, ODM_COMP_CALIBRATION, ODM_DBG_LOUD,
 		     ("LCK:Finish!!!interface %d\n", dm_odm->InterfaceIndex));
+}
+
+void PHY_APCalibrate_8188E(struct adapter *adapt, s8 delta)
+{
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(adapt);
+	struct odm_dm_struct *dm_odm = &pHalData->odmpriv;
+
+	return;
+	if (!(dm_odm->SupportAbility & ODM_RF_CALIBRATION))
+		return;
+
+#if FOR_BRAZIL_PRETEST != 1
+	if (dm_odm->RFCalibrateInfo.bAPKdone)
+#endif
+		return;
+
+	if (dm_odm->RFType == ODM_2T2R) {
+		phy_APCalibrate_8188E(adapt, delta, true);
+	} else {
+		/*  For 88C 1T1R */
+		phy_APCalibrate_8188E(adapt, delta, false);
+	}
 }
 
 static void phy_setrfpathswitch_8188e(struct adapter *adapt, bool main, bool is2t)

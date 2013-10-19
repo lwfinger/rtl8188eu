@@ -201,8 +201,7 @@ efuse_phymap_to_logical(u8 *phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	/*  */
 
 exit:
-	if (efuseTbl)
-		rtw_mfree(efuseTbl, EFUSE_MAP_LEN_88E);
+	kfree(efuseTbl);
 
 	if (eFuseWord)
 		rtw_mfree2d((void *)eFuseWord, EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
@@ -264,18 +263,18 @@ static void efuse_read_phymap_from_txpktbuf(
 
 			DBG_88E("%s len:%u, lenbak:%u, aaa:%u, aaabak:%u\n", __func__, len, lenbak, aaa, aaabak);
 
-			_rtw_memcpy(pos, ((u8 *)&lo32)+2, (limit >= count+2) ? 2 : limit-count);
+			memcpy(pos, ((u8 *)&lo32)+2, (limit >= count+2) ? 2 : limit-count);
 			count += (limit >= count+2) ? 2 : limit-count;
 			pos = content+count;
 
 		} else {
-			_rtw_memcpy(pos, ((u8 *)&lo32), (limit >= count+4) ? 4 : limit-count);
+			memcpy(pos, ((u8 *)&lo32), (limit >= count+4) ? 4 : limit-count);
 			count += (limit >= count+4) ? 4 : limit-count;
 			pos = content+count;
 		}
 
 		if (limit > count && len-2 > count) {
-			_rtw_memcpy(pos, (u8 *)&hi32, (limit >= count+4) ? 4 : limit-count);
+			memcpy(pos, (u8 *)&hi32, (limit >= count+4) ? 4 : limit-count);
 			count += (limit >= count+4) ? 4 : limit-count;
 			pos = content+count;
 		}
@@ -332,9 +331,9 @@ static s32 iol_ioconfig(struct adapter *padapter, u8 iocfg_bndy)
 
 static int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {
+	struct pkt_attrib *pattrib = &xmit_frame->attrib;
 	u8 i;
 	int ret = _FAIL;
-	struct pkt_attrib *pattrib = &xmit_frame->attrib;
 
 	if (rtw_IOL_append_END_cmd(xmit_frame) != _SUCCESS)
 		goto exit;
@@ -378,10 +377,10 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter, int data_len)
 				rstatus = (reg_140 = rtw_read32(Adapter, REG_PKTBUF_DBG_CTRL)&BIT24);
 				if (rstatus) {
 					fifo_data = rtw_read32(Adapter, REG_PKTBUF_DBG_DATA_L);
-					_rtw_memcpy(pbuf+(addr*8), &fifo_data, 4);
+					memcpy(pbuf+(addr*8), &fifo_data, 4);
 
 					fifo_data = rtw_read32(Adapter, REG_PKTBUF_DBG_DATA_H);
-					_rtw_memcpy(pbuf+(addr*8+4), &fifo_data, 4);
+					memcpy(pbuf+(addr*8+4), &fifo_data, 4);
 				}
 				rtw_usleep_os(2);
 			} while (!rstatus && (loop++ < 10));
@@ -499,22 +498,6 @@ static int _PageWrite(struct adapter *padapter, u32 page, void *buffer, u32 size
 	return _BlockWrite(padapter, buffer, size);
 }
 
-static void _FillDummy(u8 *pFwBuf, u32 *pFwLen)
-{
-	u32	FwLen = *pFwLen;
-	u8 remain = (u8)(FwLen%4);
-
-	remain = (remain == 0) ? 0 : (4 - remain);
-
-	while (remain > 0) {
-		pFwBuf[FwLen] = 0;
-		FwLen++;
-		remain--;
-	}
-
-	*pFwLen = FwLen;
-}
-
 static int _WriteFW(struct adapter *padapter, void *buffer, u32 size)
 {
 	/*  Since we need dynamic decide method of dwonload fw, so we call this function to get chip version. */
@@ -599,16 +582,7 @@ static s32 _FWFreeToGo(struct adapter *padapter)
 
 #define IS_FW_81xxC(padapter)	(((GET_HAL_DATA(padapter))->FirmwareSignature & 0xFFF0) == 0x88C0)
 
-#ifdef CONFIG_WOWLAN
-/*  */
-/*	Description: */
-/*		Download 8192C firmware code. */
-/*  */
-/*  */
-s32 rtl8188e_FirmwareDownload(struct adapter *padapter, bool  bUsedWoWLANFw)
-#else
 s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
-#endif
 {
 	s32	rtStatus = _SUCCESS;
 	u8 writeFW_retry = 0;
@@ -617,10 +591,6 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 
 	u8 *FwImage;
 	u32			FwImageLen;
-#ifdef CONFIG_WOWLAN
-	u8 *FwImageWoWLAN;
-	u32			FwImageWoWLANLen;
-#endif
 	struct rt_firmware *pFirmware = NULL;
 	struct rt_firmware_hdr *pFwHdr = NULL;
 	u8 *pFirmwareBuf;
@@ -636,11 +606,6 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 	FwImage = (u8 *)Rtl8188E_FwImageArray;
 	FwImageLen = Rtl8188E_FWImgArrayLength;
 
-#ifdef CONFIG_WOWLAN
-	FwImageWoWLAN = (u8 *)Rtl8188E_FwWoWImageArray;
-	FwImageWoWLANLen = Rtl8188E_FwWoWImgArrayLength;
-#endif /* CONFIG_WOWLAN */
-
 	pFirmware->eFWSource = FW_SOURCE_HEADER_FILE;
 
 	switch (pFirmware->eFWSource) {
@@ -655,36 +620,22 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 
 		pFirmware->szFwBuffer = FwImage;
 		pFirmware->ulFwLength = FwImageLen;
-#ifdef CONFIG_WOWLAN
-		if (bUsedWoWLANFw) {
-			pFirmware->szWoWLANFwBuffer = FwImageWoWLAN;
-			pFirmware->ulWoWLANFwLength = FwImageWoWLANLen;
-		}
-#endif /* CONFIG_WOWLAN */
 		break;
 	}
-#ifdef CONFIG_WOWLAN
-	if (bUsedWoWLANFw) {
-		pFirmwareBuf = pFirmware->szWoWLANFwBuffer;
-		FirmwareLen = pFirmware->ulWoWLANFwLength;
-		pFwHdr = (struct rt_firmware_hdr *)pFirmware->szWoWLANFwBuffer;
-	} else
-#endif
-	{
 	pFirmwareBuf = pFirmware->szFwBuffer;
 	FirmwareLen = pFirmware->ulFwLength;
 	DBG_88E_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, FirmwareLen);
 
 	/*  To Check Fw header. Added by tynli. 2009.12.04. */
 	pFwHdr = (struct rt_firmware_hdr *)pFirmware->szFwBuffer;
-	}
 
 	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->Version);
 	pHalData->FirmwareSubVersion = pFwHdr->Subversion;
 	pHalData->FirmwareSignature = le16_to_cpu(pFwHdr->Signature);
 
-	DBG_88E("%s: fw_ver =%d fw_subver =%d sig = 0x%x\n",
-		__func__, pHalData->FirmwareVersion, pHalData->FirmwareSubVersion, pHalData->FirmwareSignature);
+	pr_info("%sFirmware Version %d, SubVersion %d, Signature 0x%x\n",
+		DRIVER_PREFIX, pHalData->FirmwareVersion,
+		pHalData->FirmwareSubVersion, pHalData->FirmwareSignature);
 
 	if (IS_FW_HEADER_EXIST(pFwHdr)) {
 		/*  Shift 32 bytes for FW header */
@@ -730,67 +681,10 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 
 Exit:
 
-	if (pFirmware)
-		rtw_mfree((u8 *)pFirmware, sizeof(struct rt_firmware));
-
-#ifdef CONFIG_WOWLAN
-	if (padapter->pwrctrlpriv.wowlan_mode)
-		rtl8188e_InitializeFirmwareVars(padapter);
-	else
-		DBG_88E_LEVEL(_drv_always_, "%s: wowland_mode:%d wowlan_wake_reason:%d\n",
-			      __func__, padapter->pwrctrlpriv.wowlan_mode,
-			      padapter->pwrctrlpriv.wowlan_wake_reason);
-#endif
-
+	kfree(pFirmware);
 	return rtStatus;
 }
 
-#ifdef CONFIG_WOWLAN
-void rtl8188e_InitializeFirmwareVars(struct adapter *padapter)
-{
-	struct hal_data_8188e *pHalData = GET_HAL_DATA(padapter);
-	struct pwrctrl_priv *pwrpriv;
-	pwrpriv = &padapter->pwrctrlpriv;
-
-	/*  Init Fw LPS related. */
-	padapter->pwrctrlpriv.bFwCurrentInPSMode = false;
-	/*  Init H2C counter. by tynli. 2009.12.09. */
-	pHalData->LastHMEBoxNum = 0;
-}
-
-/*  */
-
-/*  */
-/*  Description: Prepare some information to Fw for WoWLAN. */
-/*					(1) Download wowlan Fw. */
-/*					(2) Download RSVD page packets. */
-/*					(3) Enable AP offload if needed. */
-/*  */
-/*  2011.04.12 by tynli. */
-/*  */
-void
-SetFwRelatedForWoWLAN8188ES(
-				struct adapter *padapter,
-				u8	bHostIsGoingtoSleep
-)
-{
-		int				status = _FAIL;
-	/*  */
-	/*  1. Before WoWLAN we need to re-download WoWLAN Fw. */
-	/*  */
-	status = rtl8188e_FirmwareDownload(padapter, bHostIsGoingtoSleep);
-	if (status != _SUCCESS) {
-		DBG_88E("ConfigFwRelatedForWoWLAN8188ES(): Re-Download Firmware failed!!\n");
-		return;
-	} else {
-		DBG_88E("ConfigFwRelatedForWoWLAN8188ES(): Re-Download Firmware Success !!\n");
-	}
-	/*  */
-	/*  2. Re-Init the variables about Fw related setting. */
-	/*  */
-	rtl8188e_InitializeFirmwareVars(padapter);
-}
-#else
 void rtl8188e_InitializeFirmwareVars(struct adapter *padapter)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(padapter);
@@ -801,15 +695,12 @@ void rtl8188e_InitializeFirmwareVars(struct adapter *padapter)
 	/*  Init H2C counter. by tynli. 2009.12.09. */
 	pHalData->LastHMEBoxNum = 0;
 }
-#endif /* CONFIG_WOWLAN */
 
 static void rtl8188e_free_hal_data(struct adapter *padapter)
 {
 _func_enter_;
-	if (padapter->HalData) {
-		rtw_mfree(padapter->HalData, sizeof(struct hal_data_8188e));
-		padapter->HalData = NULL;
-	}
+	kfree(padapter->HalData);
+	padapter->HalData = NULL;
 _func_exit_;
 }
 
@@ -903,42 +794,7 @@ rtl8188e_EfusePowerSwitch(
 }
 
 
-static bool efuse_read_phymap(
-	struct adapter *Adapter,
-	u8 *pbuf,	/* buffer to store efuse physical map */
-	u16			*size	/* the max byte to read. will update to byte read */
-	)
-{
-	u8 *pos = pbuf;
-	u16 limit = *size;
-	u16 addr = 0;
-	bool reach_end = false;
-
-	/*  */
-	/*  Refresh efuse init map as all 0xFF. */
-	/*  */
-	_rtw_memset(pbuf, 0xFF, limit);
-
-	/*  */
-	/*  Read physical efuse content. */
-	/*  */
-	while (addr < limit) {
-		ReadEFuseByte(Adapter, addr, pos, false);
-		if (*pos != 0xFF) {
-			pos++;
-			addr++;
-		} else {
-			reach_end = true;
-			break;
-		}
-	}
-	*size = addr;
-	return reach_end;
-}
-
-static void
-Hal_EfuseReadEFuse88E(
-	struct adapter *Adapter,
+static void Hal_EfuseReadEFuse88E(struct adapter *Adapter,
 	u16			_offset,
 	u16			_size_byte,
 	u8 *pbuf,
@@ -1067,50 +923,10 @@ Hal_EfuseReadEFuse88E(
 	rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&eFuse_Addr);
 
 exit:
-	if (efuseTbl)
-		rtw_mfree(efuseTbl, EFUSE_MAP_LEN_88E);
+	kfree(efuseTbl);
 
 	if (eFuseWord)
 		rtw_mfree2d((void *)eFuseWord, EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
-}
-
-static bool Hal_EfuseSwitchToBank(struct adapter *pAdapter, u8 bank, bool bPseudoTest)
-{
-	bool bRet = false;
-	u32 value32 = 0;
-
-	if (bPseudoTest) {
-		fakeEfuseBank = bank;
-		bRet = true;
-	} else {
-		if (IS_HARDWARE_TYPE_8723A(pAdapter) &&
-		    INCLUDE_MULTI_FUNC_BT(pAdapter)) {
-			value32 = rtw_read32(pAdapter, EFUSE_TEST);
-			bRet = true;
-			switch (bank) {
-			case 0:
-				value32 = (value32 & ~EFUSE_SEL_MASK) | EFUSE_SEL(EFUSE_WIFI_SEL_0);
-				break;
-			case 1:
-				value32 = (value32 & ~EFUSE_SEL_MASK) | EFUSE_SEL(EFUSE_BT_SEL_0);
-				break;
-			case 2:
-				value32 = (value32 & ~EFUSE_SEL_MASK) | EFUSE_SEL(EFUSE_BT_SEL_1);
-				break;
-			case 3:
-				value32 = (value32 & ~EFUSE_SEL_MASK) | EFUSE_SEL(EFUSE_BT_SEL_2);
-				break;
-			default:
-				value32 = (value32 & ~EFUSE_SEL_MASK) | EFUSE_SEL(EFUSE_WIFI_SEL_0);
-				bRet = false;
-				break;
-			}
-			rtw_write32(pAdapter, EFUSE_TEST, value32);
-		} else {
-			bRet = true;
-		}
-	}
-	return bRet;
 }
 
 static void ReadEFuseByIC(struct adapter *Adapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest)
@@ -1664,6 +1480,7 @@ static bool hal_EfusePgPacketWrite1ByteHeader(struct adapter *pAdapter, u8 efuse
 
 static bool hal_EfusePgPacketWriteData(struct adapter *pAdapter, u8 efuseType, u16 *pAddr, struct pgpkt *pTargetPkt, bool bPseudoTest)
 {
+	bool bRet = false;
 	u16	efuse_addr = *pAddr;
 	u8 badworden = 0;
 	u32	PgWriteSuccess = 0;
@@ -1681,6 +1498,7 @@ static bool hal_EfusePgPacketWriteData(struct adapter *pAdapter, u8 efuseType, u
 		else
 			return true;
 	}
+	return bRet;
 }
 
 static bool
@@ -1701,12 +1519,8 @@ hal_EfusePgPacketWriteHeader(
 	return bRet;
 }
 
-static bool
-wordEnMatched(
-		struct pgpkt *pTargetPkt,
-		struct pgpkt *pCurPkt,
-		u8 *pWden
-)
+static bool wordEnMatched(struct pgpkt *pTargetPkt, struct pgpkt *pCurPkt,
+			  u8 *pWden)
 {
 	u8 match_word_en = 0x0F;	/*  default all words are disabled */
 
@@ -1857,29 +1671,6 @@ static void hal_EfuseConstructPGPkt(u8 offset, u8 word_en, u8 *pData, struct pgp
 	pTargetPkt->word_cnts = Efuse_CalculateWordCnts(pTargetPkt->word_en);
 }
 
-static bool hal_EfusePgPacketWrite_BT(struct adapter *pAdapter, u8 offset, u8 word_en, u8 *pData, bool bPseudoTest)
-{
-	struct pgpkt	targetPkt;
-	u16	startAddr = 0;
-	u8 efuseType = EFUSE_BT;
-
-	if (!hal_EfusePgCheckAvailableAddr(pAdapter, efuseType, bPseudoTest))
-		return false;
-
-	hal_EfuseConstructPGPkt(offset, word_en, pData, &targetPkt);
-
-	if (!hal_EfusePartialWriteCheck(pAdapter, efuseType, &startAddr, &targetPkt, bPseudoTest))
-		return false;
-
-	if (!hal_EfusePgPacketWriteHeader(pAdapter, efuseType, &startAddr, &targetPkt, bPseudoTest))
-		return false;
-
-	if (!hal_EfusePgPacketWriteData(pAdapter, efuseType, &startAddr, &targetPkt, bPseudoTest))
-		return false;
-
-	return true;
-}
-
 static bool hal_EfusePgPacketWrite_8188e(struct adapter *pAdapter, u8 offset, u8 word_en, u8 *pData, bool bPseudoTest)
 {
 	struct pgpkt	targetPkt;
@@ -1979,12 +1770,6 @@ static void rtl8188e_read_chip_version(struct adapter *padapter)
 
 static void rtl8188e_GetHalODMVar(struct adapter *Adapter, enum hal_odm_variable eVariable, void *pValue1, bool bSet)
 {
-	switch (eVariable) {
-	case HAL_ODM_STA_INFO:
-		break;
-	default:
-		break;
-	}
 }
 
 static void rtl8188e_SetHalODMVar(struct adapter *Adapter, enum hal_odm_variable eVariable, void *pValue1, bool bSet)
@@ -2018,7 +1803,7 @@ static void rtl8188e_SetHalODMVar(struct adapter *Adapter, enum hal_odm_variable
 
 void rtl8188e_clone_haldata(struct adapter *dst_adapter, struct adapter *src_adapter)
 {
-	_rtw_memcpy(dst_adapter->HalData, src_adapter->HalData, dst_adapter->hal_data_sz);
+	memcpy(dst_adapter->HalData, src_adapter->HalData, dst_adapter->hal_data_sz);
 }
 
 void rtl8188e_start_thread(struct adapter *padapter)
@@ -2210,33 +1995,6 @@ Hal_EfuseParseIDCode88E(
 	DBG_88E("EEPROM ID = 0x%04x\n", EEPROMId);
 }
 
-static void
-Hal_EEValueCheck(
-			u8 EEType,
-			void *pInValue,
-			void *pOutValue
-	)
-{
-	switch (EEType) {
-	case EETYPE_TX_PWR:
-		{
-			s8	*pIn, *pOut;
-			pIn = (u8 *)pInValue;
-			pOut = (u8 *)pOutValue;
-			if (*pIn >= 0 && *pIn <= 63) {
-				*pOut = *pIn;
-			} else {
-				RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("EETYPE_TX_PWR, value =%d is invalid, set to default = 0x%x\n",
-					 *pIn, EEPROM_Default_TxPowerLevel));
-				*pOut = EEPROM_Default_TxPowerLevel;
-			}
-		}
-		break;
-	default:
-		break;
-	}
-}
-
 static void Hal_ReadPowerValueFromPROM_8188E(struct txpowerinfo24g *pwrInfo24G, u8 *PROMContent, bool AutoLoadFail)
 {
 	u32 rfPath, eeAddr = EEPROM_TX_PWR_INX_88E, group, TxCount = 0;
@@ -2336,19 +2094,6 @@ static void Hal_ReadPowerValueFromPROM_8188E(struct txpowerinfo24g *pwrInfo24G, 
 	}
 }
 
-static u8 Hal_GetChnlGroup(u8 chnl)
-{
-	u8 group = 0;
-
-	if (chnl < 3)			/*  Cjanel 1-3 */
-		group = 0;
-	else if (chnl < 9)		/*  Channel 4-9 */
-		group = 1;
-	else					/*  Channel 10-14 */
-		group = 2;
-
-	return group;
-}
 static u8 Hal_GetChnlGroup88E(u8 chnl, u8 *pGroup)
 {
 	u8 bIn24G = true;
@@ -2438,7 +2183,7 @@ void Hal_ReadTxPowerInfo88E(struct adapter *padapter, u8 *PROMContent, bool Auto
 		pHalData->bTXPowerDataReadFromEEPORM = true;
 
 	for (rfPath = 0; rfPath < pHalData->NumTotalRFPath; rfPath++) {
-		for (ch = 0; ch < CHANNEL_MAX_NUMBER; ch++) {
+		for (ch = 0; ch <= CHANNEL_MAX_NUMBER; ch++) {
 			bIn24G = Hal_GetChnlGroup88E(ch, &group);
 			if (bIn24G) {
 				pHalData->Index24G_CCK_Base[rfPath][ch] = pwrInfo24G.IndexCCK_Base[rfPath][group];
@@ -2614,14 +2359,6 @@ bool HalDetectPwrDownMode88E(struct adapter *Adapter)
 
 	return pHalData->pwrdown;
 }	/*  HalDetectPwrDownMode */
-
-#ifdef CONFIG_WOWLAN
-void Hal_DetectWoWMode(struct adapter *pAdapter)
-{
-	pAdapter->pwrctrlpriv.bSupportRemoteWakeup = true;
-	DBG_88E("%s\n", __func__);
-}
-#endif
 
 /*  This function is used only for 92C to set REG_BCN_CTRL(0x550) register. */
 /*  We just reserve the value of the register in variable pHalData->RegBcnCtrlVal and then operate */

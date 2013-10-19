@@ -181,8 +181,8 @@ _func_enter_;
 
 		for (curfragnum = 0; curfragnum < pattrib->nr_frags; curfragnum++) {
 			iv = pframe+pattrib->hdrlen;
-			_rtw_memcpy(&wepkey[0], iv, 3);
-			_rtw_memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[psecuritypriv->dot11PrivacyKeyIndex].skey[0], keylength);
+			memcpy(&wepkey[0], iv, 3);
+			memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[psecuritypriv->dot11PrivacyKeyIndex].skey[0], keylength);
 			payload = pframe+pattrib->iv_len+pattrib->hdrlen;
 
 			if ((curfragnum+1) == pattrib->nr_frags) {	/* the last fragment */
@@ -230,8 +230,8 @@ _func_enter_;
 		iv = pframe+prxattrib->hdrlen;
 		keyindex = prxattrib->key_index;
 		keylength = psecuritypriv->dot11DefKeylen[keyindex];
-		_rtw_memcpy(&wepkey[0], iv, 3);
-		_rtw_memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[keyindex].skey[0], keylength);
+		memcpy(&wepkey[0], iv, 3);
+		memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[keyindex].skey[0], keylength);
 		length = ((union recv_frame *)precvframe)->u.hdr.len-prxattrib->hdrlen-prxattrib->iv_len;
 
 		payload = pframe+prxattrib->iv_len+prxattrib->hdrlen;
@@ -811,7 +811,6 @@ static void next_key(u8 *key, int round);
 static void byte_sub(u8 *in, u8 *out);
 static void shift_row(u8 *in, u8 *out);
 static void mix_column(u8 *in, u8 *out);
-static void add_round_key(u8 *shiftrow_in, u8 *mcol_in, u8 *block_in, int round, u8 *out);
 static void aes128k128d(u8 *key, u8 *data, u8 *ciphertext);
 
 /****************************************/
@@ -1418,7 +1417,7 @@ _func_enter_;
 
 	/* start to calculate the mic */
 	if ((hdrlen+plen+8) <= MAX_MSG_SIZE)
-		_rtw_memcpy((void *)message, pframe, (hdrlen + plen+8)); /* 8 is for ext iv len */
+		memcpy(message, pframe, (hdrlen + plen+8)); /* 8 is for ext iv len */
 
 	pn_vector[0] = pframe[hdrlen];
 	pn_vector[1] = pframe[hdrlen+1];
@@ -1563,319 +1562,6 @@ _func_enter_;
 _func_exit_;
 exit:
 	return res;
-}
-
-/* compress 512-bits */
-static int sha256_compress(struct sha256_state *md, unsigned char *buf)
-{
-	u32 S[8], W[64], t0, t1;
-	u32 t;
-	int i;
-
-	/* copy state into S */
-	for (i = 0; i < 8; i++)
-		S[i] = md->state[i];
-
-	/* copy the state into 512-bits into W[0..15] */
-	for (i = 0; i < 16; i++)
-		W[i] = WPA_GET_BE32(buf + (4 * i));
-
-	/* fill W[16..63] */
-	for (i = 16; i < 64; i++) {
-		W[i] = Gamma1(W[i - 2]) + W[i - 7] + Gamma0(W[i - 15]) +
-			W[i - 16];
-	}
-
-	/* Compress */
-#define RND(a, b, c, d, e, f, g, h, i)			\
-do {							\
-	t0 = h + Sigma1(e) + Ch(e, f, g) + K[i] + W[i];	\
-	t1 = Sigma0(a) + Maj(a, b, c);			\
-	d += t0;					\
-	h  = t0 + t1;					\
-} while (0)
-
-	for (i = 0; i < 64; ++i) {
-		RND(S[0], S[1], S[2], S[3], S[4], S[5], S[6], S[7], i);
-		t = S[7]; S[7] = S[6]; S[6] = S[5]; S[5] = S[4];
-		S[4] = S[3]; S[3] = S[2]; S[2] = S[1]; S[1] = S[0]; S[0] = t;
-	}
-
-	/* feedback */
-	for (i = 0; i < 8; i++)
-		md->state[i] = md->state[i] + S[i];
-	return 0;
-}
-
-/* Initialize the hash state */
-static void sha256_init(struct sha256_state *md)
-{
-	md->curlen = 0;
-	md->length = 0;
-	md->state[0] = 0x6A09E667UL;
-	md->state[1] = 0xBB67AE85UL;
-	md->state[2] = 0x3C6EF372UL;
-	md->state[3] = 0xA54FF53AUL;
-	md->state[4] = 0x510E527FUL;
-	md->state[5] = 0x9B05688CUL;
-	md->state[6] = 0x1F83D9ABUL;
-	md->state[7] = 0x5BE0CD19UL;
-}
-
-/**
-	Process a block of memory though the hash
-	@param md     The hash state
-	@param in     The data to hash
-	@param inlen  The length of the data (octets)
-	@return CRYPT_OK if successful
-*/
-static int sha256_process(struct sha256_state *md, unsigned char *in,
-			  unsigned long inlen)
-{
-	unsigned long n;
-#define block_size 64
-
-	if (md->curlen > sizeof(md->buf))
-		return -1;
-
-	while (inlen > 0) {
-		if (md->curlen == 0 && inlen >= block_size) {
-			if (sha256_compress(md, (unsigned char *)in) < 0)
-				return -1;
-			md->length += block_size * 8;
-			in += block_size;
-			inlen -= block_size;
-		} else {
-			n = MIN(inlen, (block_size - md->curlen));
-			_rtw_memcpy(md->buf + md->curlen, in, n);
-			md->curlen += n;
-			in += n;
-			inlen -= n;
-			if (md->curlen == block_size) {
-				if (sha256_compress(md, md->buf) < 0)
-					return -1;
-				md->length += 8 * block_size;
-				md->curlen = 0;
-			}
-		}
-	}
-
-	return 0;
-}
-
-/**
-   Terminate the hash to get the digest
-   @param md  The hash state
-   @param out [out] The destination of the hash (32 bytes)
-   @return CRYPT_OK if successful
-*/
-static int sha256_done(struct sha256_state *md, unsigned char *out)
-{
-	int i;
-
-	if (md->curlen >= sizeof(md->buf))
-		return -1;
-
-	/* increase the length of the message */
-	md->length += md->curlen * 8;
-
-	/* append the '1' bit */
-	md->buf[md->curlen++] = (unsigned char) 0x80;
-
-	/* if the length is currently above 56 bytes we append zeros
-	 * then compress.  Then we can fall back to padding zeros and length
-	 * encoding like normal.
-	 */
-	if (md->curlen > 56) {
-		while (md->curlen < 64)
-			md->buf[md->curlen++] = (unsigned char) 0;
-		sha256_compress(md, md->buf);
-		md->curlen = 0;
-	}
-
-	/* pad upto 56 bytes of zeroes */
-	while (md->curlen < 56)
-		md->buf[md->curlen++] = (unsigned char) 0;
-
-	/* store length */
-	WPA_PUT_BE64(md->buf + 56, md->length);
-	sha256_compress(md, md->buf);
-
-	/* copy output */
-	for (i = 0; i < 8; i++)
-		WPA_PUT_BE32(out + (4 * i), md->state[i]);
-
-	return 0;
-}
-
-/**
- * sha256_vector - SHA256 hash for data vector
- * @num_elem: Number of elements in the data vector
- * @addr: Pointers to the data areas
- * @len: Lengths of the data blocks
- * @mac: Buffer for the hash
- * Returns: 0 on success, -1 of failure
- */
-static int sha256_vector(size_t num_elem, u8 *addr[], size_t *len,
-		  u8 *mac)
-{
-	struct sha256_state ctx;
-	size_t i;
-
-	sha256_init(&ctx);
-	for (i = 0; i < num_elem; i++)
-		if (sha256_process(&ctx, addr[i], len[i]))
-			return -1;
-	if (sha256_done(&ctx, mac))
-		return -1;
-	return 0;
-}
-
-static u8 os_strlen(const char *s)
-{
-	const char *p = s;
-	while (*p)
-		p++;
-	return p - s;
-}
-
-static int os_memcmp(void *s1, void *s2, u8 n)
-{
-	unsigned char *p1 = s1, *p2 = s2;
-
-	if (n == 0)
-		return 0;
-
-	while (*p1 == *p2) {
-		p1++;
-		p2++;
-		n--;
-		if (n == 0)
-			return 0;
-	}
-
-	return *p1 - *p2;
-}
-
-/**
- * hmac_sha256_vector - HMAC-SHA256 over data vector (RFC 2104)
- * @key: Key for HMAC operations
- * @key_len: Length of the key in bytes
- * @num_elem: Number of elements in the data vector
- * @addr: Pointers to the data areas
- * @len: Lengths of the data blocks
- * @mac: Buffer for the hash (32 bytes)
- */
-static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
-			u8 *addr[], size_t *len, u8 *mac)
-{
-	unsigned char k_pad[64]; /* padding - key XORd with ipad/opad */
-	unsigned char tk[32];
-	u8 *_addr[6];
-	size_t _len[6], i;
-
-	if (num_elem > 5) {
-		/*
-		 * Fixed limit on the number of fragments to avoid having to
-		 * allocate memory (which could fail).
-		 */
-		return;
-	}
-
-	/* if key is longer than 64 bytes reset it to key = SHA256(key) */
-	if (key_len > 64) {
-		sha256_vector(1, &key, &key_len, tk);
-		key = tk;
-		key_len = 32;
-	}
-
-	/* the HMAC_SHA256 transform looks like:
-	 *
-	 * SHA256(K XOR opad, SHA256(K XOR ipad, text))
-	 *
-	 * where K is an n byte key
-	 * ipad is the byte 0x36 repeated 64 times
-	 * opad is the byte 0x5c repeated 64 times
-	 * and text is the data being protected */
-
-	/* start out by storing key in ipad */
-	_rtw_memset(k_pad, 0, sizeof(k_pad));
-	_rtw_memcpy(k_pad, key, key_len);
-	/* XOR key with ipad values */
-	for (i = 0; i < 64; i++)
-		k_pad[i] ^= 0x36;
-
-	/* perform inner SHA256 */
-	_addr[0] = k_pad;
-	_len[0] = 64;
-	for (i = 0; i < num_elem; i++) {
-		_addr[i + 1] = addr[i];
-		_len[i + 1] = len[i];
-	}
-	sha256_vector(1 + num_elem, _addr, _len, mac);
-
-	_rtw_memset(k_pad, 0, sizeof(k_pad));
-	_rtw_memcpy(k_pad, key, key_len);
-	/* XOR key with opad values */
-	for (i = 0; i < 64; i++)
-		k_pad[i] ^= 0x5c;
-
-	/* perform outer SHA256 */
-	_addr[0] = k_pad;
-	_len[0] = 64;
-	_addr[1] = mac;
-	_len[1] = 32;
-	sha256_vector(2, _addr, _len, mac);
-}
-/**
- * sha256_prf - SHA256-based Pseudo-Random Function (IEEE 802.11r, 8.5.1.5.2)
- * @key: Key for PRF
- * @key_len: Length of the key in bytes
- * @label: A unique label for each purpose of the PRF
- * @data: Extra data to bind into the key
- * @data_len: Length of the data
- * @buf: Buffer for the generated pseudo-random key
- * @buf_len: Number of bytes of key to generate
- *
- * This function is used to derive new, cryptographically separate keys from a
- * given key.
- */
-
-static void sha256_prf(u8 *key, size_t key_len, char *label,
-		       u8 *data, size_t data_len, u8 *buf, size_t buf_len)
-{
-	u16 counter = 1;
-	size_t pos, plen;
-	u8 hash[SHA256_MAC_LEN];
-	u8 *addr[4];
-	size_t len[4];
-	u8 counter_le[2], length_le[2];
-
-	addr[0] = counter_le;
-	len[0] = 2;
-	addr[1] = (u8 *)label;
-	len[1] = os_strlen(label);
-	addr[2] = data;
-	len[2] = data_len;
-	addr[3] = length_le;
-	len[3] = sizeof(length_le);
-
-	WPA_PUT_LE16(length_le, buf_len * 8);
-	pos = 0;
-	while (pos < buf_len) {
-		plen = buf_len - pos;
-		WPA_PUT_LE16(counter_le, counter);
-		if (plen >= SHA256_MAC_LEN) {
-			hmac_sha256_vector(key, key_len, 4, addr, len,
-					   &buf[pos]);
-			pos += SHA256_MAC_LEN;
-		} else {
-			hmac_sha256_vector(key, key_len, 4, addr, len, hash);
-			_rtw_memcpy(&buf[pos], hash, plen);
-			break;
-		}
-		counter++;
-	}
 }
 
 /* AES tables*/
@@ -2052,6 +1738,31 @@ const u8 rcons[] = {
 	/* for 128-bit blocks, Rijndael never uses more than 10 rcon values */
 };
 
+/**
+ * Expand the cipher key into the encryption key schedule.
+ *
+ * @return	the number of rounds for the given cipher key size.
+ */
+#define ROUND(i, d, s) \
+do {									\
+	d##0 = TE0(s##0) ^ TE1(s##1) ^ TE2(s##2) ^ TE3(s##3) ^ rk[4 * i]; \
+	d##1 = TE0(s##1) ^ TE1(s##2) ^ TE2(s##3) ^ TE3(s##0) ^ rk[4 * i + 1]; \
+	d##2 = TE0(s##2) ^ TE1(s##3) ^ TE2(s##0) ^ TE3(s##1) ^ rk[4 * i + 2]; \
+	d##3 = TE0(s##3) ^ TE1(s##0) ^ TE2(s##1) ^ TE3(s##2) ^ rk[4 * i + 3]; \
+} while (0);
+
+/**
+ * omac1_aes_128 - One-Key CBC MAC (OMAC1) hash with AES-128 (aka AES-CMAC)
+ * @key: 128-bit key for the hash operation
+ * @data: Data buffer for which a MAC is determined
+ * @data_len: Length of data buffer in bytes
+ * @mac: Buffer for MAC (128 bits, i.e., 16 bytes)
+ * Returns: 0 on success, -1 on failure
+ *
+ * This is a mode for using block cipher (AES in this case) for authentication.
+ * OMAC1 was standardized with the name CMAC by NIST in a Special Publication
+ * (SP) 800-38B.
+ */
 void rtw_use_tkipkey_handler(void *FunctionContext)
 {
 	struct adapter *padapter = (struct adapter *)FunctionContext;
