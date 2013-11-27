@@ -6,14 +6,16 @@ Repository for the stand-alone RTL8188EU driver.
 Compiling & Building
 ---------
 ### Dependencies
-To compile the driver, you need to have make and a compiler installed
+To compile the driver, you need to have make and a compiler installed. In addition,
+you must have the kernel headers installed. If you do not understand what this means,
+consult your distro.
 ### Compiling
 
 > make all
 
 ### Installing
 
-> make install
+> sudo make install
 
 Submitting Issues
 ---------
