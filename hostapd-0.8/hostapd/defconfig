@@ -10,7 +10,8 @@
 # to override previous values of the variables.
 
 # Driver interface for Host AP driver
-CONFIG_DRIVER_HOSTAP=y
+#CONFIG_DRIVER_HOSTAP=y
+CONFIG_DRIVER_RTW=y
 
 # Driver interface for wired authenticator
 #CONFIG_DRIVER_WIRED=y
@@ -33,13 +34,13 @@ CONFIG_DRIVER_HOSTAP=y
 #CONFIG_DRIVER_NONE=y
 
 # IEEE 802.11F/IAPP
-CONFIG_IAPP=y
+#CONFIG_IAPP=y
 
 # WPA2/IEEE 802.11i RSN pre-authentication
-CONFIG_RSN_PREAUTH=y
+#CONFIG_RSN_PREAUTH=y
 
 # PeerKey handshake for Station to Station Link (IEEE 802.11e DLS)
-CONFIG_PEERKEY=y
+#CONFIG_PEERKEY=y
 
 # IEEE 802.11w (management frame protection)
 # This version is an experimental implementation based on IEEE 802.11w/D1.0
@@ -51,22 +52,22 @@ CONFIG_PEERKEY=y
 CONFIG_EAP=y
 
 # EAP-MD5 for the integrated EAP server
-CONFIG_EAP_MD5=y
+#CONFIG_EAP_MD5=y
 
 # EAP-TLS for the integrated EAP server
-CONFIG_EAP_TLS=y
+#CONFIG_EAP_TLS=y
 
 # EAP-MSCHAPv2 for the integrated EAP server
-CONFIG_EAP_MSCHAPV2=y
+#CONFIG_EAP_MSCHAPV2=y
 
 # EAP-PEAP for the integrated EAP server
-CONFIG_EAP_PEAP=y
+#CONFIG_EAP_PEAP=y
 
 # EAP-GTC for the integrated EAP server
-CONFIG_EAP_GTC=y
+#CONFIG_EAP_GTC=y
 
 # EAP-TTLS for the integrated EAP server
-CONFIG_EAP_TTLS=y
+#CONFIG_EAP_TTLS=y
 
 # EAP-SIM for the integrated EAP server
 #CONFIG_EAP_SIM=y
@@ -100,11 +101,14 @@ CONFIG_EAP_TTLS=y
 #CONFIG_EAP_FAST=y
 
 # Wi-Fi Protected Setup (WPS)
-#CONFIG_WPS=y
+CONFIG_WPS=y
 # Enable WSC 2.0 support
-#CONFIG_WPS2=y
+CONFIG_WPS2=y
 # Enable UPnP support for external WPS Registrars
 #CONFIG_WPS_UPNP=y
+
+CONFIG_TLS=internal
+CONFIG_INTERNAL_LIBTOMMATH=y
 
 # EAP-IKEv2
 #CONFIG_EAP_IKEV2=y
@@ -114,14 +118,14 @@ CONFIG_EAP_TTLS=y
 
 # PKCS#12 (PFX) support (used to read private key and certificate file from
 # a file that usually has extension .p12 or .pfx)
-CONFIG_PKCS12=y
+#CONFIG_PKCS12=y
 
 # RADIUS authentication server. This provides access to the integrated EAP
 # server from external hosts using RADIUS.
 #CONFIG_RADIUS_SERVER=y
 
 # Build IPv6 support for RADIUS operations
-CONFIG_IPV6=y
+#CONFIG_IPV6=y
 
 # IEEE Std 802.11r-2008 (Fast BSS Transition)
 #CONFIG_IEEE80211R=y
@@ -131,7 +135,7 @@ CONFIG_IPV6=y
 #CONFIG_DRIVER_RADIUS_ACL=y
 
 # IEEE 802.11n (High Throughput) support
-#CONFIG_IEEE80211N=y
+CONFIG_IEEE80211N=y
 
 # Remove debugging code that is printing out debug messages to stdout.
 # This can be used to reduce the size of the hostapd considerably if debugging
