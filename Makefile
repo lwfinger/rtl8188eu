@@ -151,8 +151,8 @@ strip:
 install:
 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
 	/sbin/depmod -a ${KVER}
-	mkdir -p /lib/modules/rtlwifi
-	cp rtl8188eufw.bin /lib/modules/rtlwifi/.
+	mkdir -p /lib/firmware/rtlwifi
+	cp rtl8188eufw.bin /lib/firmware/rtlwifi/.
 
 uninstall:
 	rm -f $(MODDESTDIR)/8188eu.ko
