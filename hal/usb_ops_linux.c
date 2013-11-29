@@ -267,54 +267,28 @@ static int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 
 static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata)
 {
-	struct adapter	*adapt = pintfhdl->padapter;
-	struct dvobj_priv  *dvobjpriv = adapter_to_dvobj(adapt);
-	struct usb_device *udev = dvobjpriv->pusbdev;
-	u8 request = REALTEK_USB_VENQT_CMD_REQ;
-	u8 reqtype =  REALTEK_USB_VENQT_WRITE;
-	u16 value = (u16)(addr & 0x0000ffff);
-	u16 index = REALTEK_USB_VENQT_CMD_IDX;
-	int pipe = usb_sndctrlpipe(udev, 0); /* write_out */
-	u8 *buffer;
+	u8 request;
+	u8 requesttype;
+	u16 wvalue;
+	u16 index;
+	u16 len;
+	u8 buf[VENDOR_CMD_MAX_DATA_LEN] = {0};
 	int ret;
-	int vendorreq_times = 0;
 
-	buffer = kmemdup(pdata, length, GFP_ATOMIC);
-	if (!buffer)
-		return -ENOMEM;
-	while (++vendorreq_times <= MAX_USBCTRL_VENDORREQ_TIMES) {
-		pipe = usb_sndctrlpipe(udev, 0);/* write_out */
+	_func_enter_;
 
-		ret = rtw_usb_control_msg(udev, pipe, request, reqtype,
-					  value, index, buffer, length,
-					  RTW_USB_CONTROL_MSG_TIMEOUT);
+	request = 0x05;
+	requesttype = 0x00;/* write_out */
+	index = 0;/* n/a */
 
-		if (ret == length) {   /*  Success this control transfer. */
-			rtw_reset_continual_urb_error(dvobjpriv);
-		} else { /*  error cases */
-			DBG_88E("reg 0x%x, usb %u write fail, status:%d value=0x%x, vendorreq_times:%d\n",
-				value, length, ret, *(u32 *)pdata, vendorreq_times);
+	wvalue = (u16)(addr&0x0000ffff);
+	len = length;
+	 memcpy(buf, pdata, len);
 
-			if (ret < 0) {
-				if (ret == (-ESHUTDOWN) || ret == -ENODEV) {
-					adapt->bSurpriseRemoved = true;
-				} else {
-					struct hal_data_8188e	*haldata = GET_HAL_DATA(adapt);
-					haldata->srestpriv.Wifi_Error_Status = USB_VEN_REQ_CMD_FAIL;
-				}
-			}
-			if (rtw_inc_and_chk_continual_urb_error(dvobjpriv)) {
-				adapt->bSurpriseRemoved = true;
-				break;
-			}
-		}
+	ret = usbctrl_vendorreq(pintfhdl, request, wvalue, index, buf, len, requesttype);
 
-		/*  firmware download is checksumed, don't retry */
-		if ((value >= FW_8188E_START_ADDRESS &&
-		    value <= FW_8188E_END_ADDRESS) || ret == length)
-			break;
-	}
-	kfree(buffer);
+	_func_exit_;
+
 	return ret;
 }
 
@@ -573,6 +547,8 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("usb_read_port_complete : purb->status(%d) != 0\n", purb->status));
 
 		DBG_88E("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
+		skb_put(precvbuf->pskb, purb->actual_length);
+		precvbuf->pskb = NULL;
 
 		if (rtw_inc_and_chk_continual_urb_error(adapter_to_dvobj(adapt)))
 			adapt->bSurpriseRemoved = true;
@@ -631,13 +607,18 @@ _func_enter_;
 		return _FAIL;
 	}
 
+	if (!precvbuf) {
+		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
+			 ("usb_read_port:precvbuf==NULL\n"));
+		return _FAIL;
+	}
+
 	if ((!precvbuf->reuse) || (precvbuf->pskb == NULL)) {
 		precvbuf->pskb = skb_dequeue(&precvpriv->free_recv_skb_queue);
 		if (NULL != precvbuf->pskb)
 			precvbuf->reuse = true;
 	}
 
-	if (precvbuf != NULL) {
 		rtl8188eu_init_recvbuf(adapter, precvbuf);
 
 		/* re-assign for linux based on skb */
@@ -690,11 +671,6 @@ _func_enter_;
 				err, purb->status);
 			ret = _FAIL;
 		}
-	} else {
-		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
-			 ("usb_read_port:precvbuf ==NULL\n"));
-		ret = _FAIL;
-	}
 
 _func_exit_;
 	return ret;

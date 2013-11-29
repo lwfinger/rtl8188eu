@@ -610,6 +610,26 @@ static inline int IsFrameTypeCtrl(unsigned char *pframe)
 #define GetOrderBit(pbuf)			\
 	(((*(unsigned short *)(pbuf)) & le16_to_cpu(_ORDER_)) != 0)
 
+
+/**
+ * struct rtw_ieee80211_bar - HT Block Ack Request
+ *
+ * This structure refers to "HT BlockAckReq" as
+ * described in 802.11n draft section 7.2.1.7.1
+ */
+struct rtw_ieee80211_bar {
+	unsigned short frame_control;
+	unsigned short duration;
+	unsigned char ra[6];
+	unsigned char ta[6];
+	unsigned short control;
+	unsigned short start_seq_num;
+} __packed;
+
+/* 802.11 BAR control masks */
+#define IEEE80211_BAR_CTRL_ACK_POLICY_NORMAL     0x0000
+#define IEEE80211_BAR_CTRL_CBMTID_COMPRESSED_BA  0x0004
+
  /**
  * struct rtw_ieee80211_ht_cap - HT capabilities
  *
@@ -674,9 +694,9 @@ struct WMM_para_element {
 
 struct ADDBA_request {
 	unsigned char	dialog_token;
-	__le16	BA_para_set;
-	__le16	BA_timeout_value;
-	__le16	BA_starting_seqctrl;
+	unsigned short	BA_para_set;
+	unsigned short	BA_timeout_value;
+	unsigned short	BA_starting_seqctrl;
 } __packed;
 
 enum ht_cap_ampdu_factor {
@@ -964,7 +984,7 @@ enum ht_cap_ampdu_factor {
 #define	P2P_PROVISION_TIMEOUT		5000
 /* 3 seconds timeout for sending the prov disc request concurrent mode */
 #define	P2P_CONCURRENT_PROVISION_TIME	3000
-/* 5 seconds timeout for receiving the group negotation response */
+/* 5 seconds timeout for receiving the group negotiation response */
 #define	P2P_GO_NEGO_TIMEOUT		5000
 /* 3 seconds timeout for sending the negotiation request under concurrent mode */
 #define	P2P_CONCURRENT_GO_NEGO_TIME	3000

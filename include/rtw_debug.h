@@ -68,7 +68,7 @@
 #define _module_rtl8712_recv_c_		BIT(30)
 #define _module_rtl8712_led_c_		BIT(31)
 
-#define DRIVER_PREFIX	"r8188eu: "
+#define DRIVER_PREFIX	"R8188EU: "
 
 extern u32 GlobalDebugLevel;
 

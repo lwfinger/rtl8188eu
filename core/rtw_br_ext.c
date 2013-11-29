@@ -89,7 +89,7 @@ static inline int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *t
 	struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
 	int data_len;
 
-	data_len = be16_to_cpu(tag->tag_len) + TAG_HDR_LEN;
+	data_len = tag->tag_len + TAG_HDR_LEN;
 	if (skb_tailroom(skb) < data_len) {
 		_DEBUG_ERR("skb_tailroom() failed in add SID tag!\n");
 		return -1;
@@ -155,53 +155,44 @@ static inline void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr
 
 
 static inline void __nat25_generate_ipx_network_addr_with_node(unsigned char *networkAddr,
-				__be32 *ipxNetAddr, unsigned char *ipxNodeAddr)
+				unsigned int *ipxNetAddr, unsigned char *ipxNodeAddr)
 {
-	u32 cpu_netaddr = be32_to_cpu(*ipxNetAddr);
-
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
 	networkAddr[0] = NAT25_IPX;
-	memcpy(networkAddr+1, &cpu_netaddr, 4);
+	memcpy(networkAddr+1, (unsigned char *)ipxNetAddr, 4);
 	memcpy(networkAddr+5, ipxNodeAddr, 6);
 }
 
 
 static inline void __nat25_generate_ipx_network_addr_with_socket(unsigned char *networkAddr,
-				__be32 *ipxNetAddr, __be16 *ipxSocketAddr)
+				unsigned int *ipxNetAddr, unsigned short *ipxSocketAddr)
 {
-	u32 cpu_netaddr = be32_to_cpu(*ipxNetAddr);
-	u16 cpu_sockaddr = be16_to_cpu(*ipxSocketAddr);
-
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
 	networkAddr[0] = NAT25_IPX;
-	memcpy(networkAddr+1, &cpu_netaddr, 4);
-	memcpy(networkAddr+5, &cpu_sockaddr, 2);
+	memcpy(networkAddr+1, (unsigned char *)ipxNetAddr, 4);
+	memcpy(networkAddr+5, (unsigned char *)ipxSocketAddr, 2);
 }
 
 
 static inline void __nat25_generate_apple_network_addr(unsigned char *networkAddr,
-				__be16 *network, unsigned char *node)
+				unsigned short *network, unsigned char *node)
 {
-	u16 cpu_net = be16_to_cpu(*network);
-
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
 	networkAddr[0] = NAT25_APPLE;
-	memcpy(networkAddr+1, &cpu_net, 2);
+	memcpy(networkAddr+1, (unsigned char *)network, 2);
 	networkAddr[3] = *node;
 }
 
 static inline void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
-				unsigned char *ac_mac, __be16 *sid)
+				unsigned char *ac_mac, unsigned short *sid)
 {
-	u16 cpu_sid = be16_to_cpu(*sid);
-
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
 	networkAddr[0] = NAT25_PPPOE;
-	memcpy(networkAddr+1, &cpu_sid, 2);
+	memcpy(networkAddr+1, (unsigned char *)sid, 2);
 	memcpy(networkAddr+3, (unsigned char *)ac_mac, 6);
 }
 
@@ -536,7 +527,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		case NAT25_CHECK:
 			return -1;
 		case NAT25_INSERT:
-			/* some muticast with source IP is all zero, maybe other case is illegal */
+			/* some multicast with source IP is all zero, maybe other case is illegal */
 			/* in class A, B, C, host address is all zero or all one is illegal */
 			if (iph->saddr == 0)
 				return 0;
@@ -688,7 +679,6 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				if (!memcmp(skb->data+ETH_ALEN, ipx->ipx_source.node, ETH_ALEN))
 				DEBUG_INFO("NAT25: Check IPX skb_copy\n");
 				return 0;
-				return -1;
 			case NAT25_INSERT:
 				DEBUG_INFO("NAT25: Insert IPX, Dest =%08x,%02x%02x%02x%02x%02x%02x,%04x Source =%08x,%02x%02x%02x%02x%02x%02x,%04x\n",
 					ipx->ipx_dest.net,
@@ -821,7 +811,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		/*                Handle PPPoE frame                 */
 		/*---------------------------------------------------*/
 		struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
-		__be16 *pMagic;
+		unsigned short *pMagic;
 
 		switch (method) {
 		case NAT25_CHECK:
@@ -859,7 +849,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						tag->tag_len = htons(MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN+old_tag_len);
 
 						/*  insert the magic_code+client mac in relay tag */
-						pMagic = (__be16  *)tag->tag_data;
+						pMagic = (unsigned short *)tag->tag_data;
 						*pMagic = htons(MAGIC_CODE);
 						memcpy(tag->tag_data+MAGIC_CODE_LEN, skb->data+ETH_ALEN, ETH_ALEN);
 
@@ -922,8 +912,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						return -1;
 					}
 
-					pMagic = (__be16 *)tag->tag_data;
-					if (be16_to_cpu(*pMagic) != MAGIC_CODE) {
+					pMagic = (unsigned short *)tag->tag_data;
+					if (ntohs(*pMagic) != MAGIC_CODE) {
 						DEBUG_ERR("Can't find MAGIC_CODE in %s packet!\n",
 							(ph->code == PADO_CODE ? "PADO" : "PADS"));
 						return -1;
@@ -1028,12 +1018,11 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 					if (update_nd_link_layer_addr(skb->data + ETH_HLEN + sizeof(*iph),
 								      skb->len - ETH_HLEN - sizeof(*iph), GET_MY_HWADDR(priv))) {
 						struct icmp6hdr  *hdr = (struct icmp6hdr *)(skb->data + ETH_HLEN + sizeof(*iph));
-						u32 len = __be16_to_cpu(iph->payload_len);
 						hdr->icmp6_cksum = 0;
 						hdr->icmp6_cksum = csum_ipv6_magic(&iph->saddr, &iph->daddr,
-										len,
+										iph->payload_len,
 										IPPROTO_ICMPV6,
-										csum_partial((__u8 *)hdr, len, 0));
+										csum_partial((__u8 *)hdr, iph->payload_len, 0));
 					}
 				}
 			}
@@ -1128,7 +1117,7 @@ struct dhcpMessage {
 	u_int8_t hops;
 	u_int32_t xid;
 	u_int16_t secs;
-	__be16 flags;
+	u_int16_t flags;
 	u_int32_t ciaddr;
 	u_int32_t yiaddr;
 	u_int32_t siaddr;
@@ -1136,7 +1125,7 @@ struct dhcpMessage {
 	u_int8_t chaddr[16];
 	u_int8_t sname[64];
 	u_int8_t file[128];
-	__be32 cookie;
+	u_int32_t cookie;
 	u_int8_t options[308]; /* 312 - cookie */
 };
 
@@ -1163,17 +1152,17 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 					if (cookie == DHCP_MAGIC) { /*  match magic word */
 						if (!(dhcph->flags & htons(BROADCAST_FLAG))) {
 							/*  if not broadcast */
-							register int sum;
+							register int sum = 0;
 
 							DEBUG_INFO("DHCP: change flag of DHCP request to broadcast.\n");
 							/*  or BROADCAST flag */
 							dhcph->flags |= htons(BROADCAST_FLAG);
 							/*  recalculate checksum */
-							sum = (__force int)(~(udph->check)) & 0xffff;
+							sum = ~(udph->check) & 0xffff;
 							sum += be16_to_cpu(dhcph->flags);
 							while (sum >> 16)
 								sum = (sum & 0xffff) + (sum >> 16);
-							udph->check = (__force __sum16)~sum;
+							udph->check = ~sum;
 						}
 					}
 				}

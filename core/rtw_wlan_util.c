@@ -1096,13 +1096,13 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
 	}
 
 	kfree(bssid);
+	_func_exit_;
 	return _SUCCESS;
 
 _mismatch:
 	kfree(bssid);
-	return _FAIL;
-
 	_func_exit_;
+	return _FAIL;
 }
 
 void update_beacon_info(struct adapter *padapter, u8 *pframe, uint pkt_len, struct sta_info *psta)
@@ -1376,13 +1376,13 @@ void update_tx_basic_rate(struct adapter *padapter, u8 wirelessmode)
 #endif /* CONFIG_88EU_P2P */
 	_rtw_memset(supported_rates, 0, NDIS_802_11_LENGTH_RATES_EX);
 
-	if ((wirelessmode & WIRELESS_11B) && (wirelessmode == WIRELESS_11B)) {
+	if ((wirelessmode & WIRELESS_11B) && (wirelessmode == WIRELESS_11B))
 		memcpy(supported_rates, rtw_basic_rate_cck, 4);
-	} else if (wirelessmode & WIRELESS_11B) {
+	else if (wirelessmode & WIRELESS_11B)
 		memcpy(supported_rates, rtw_basic_rate_mix, 7);
-	} else {
+	else
 		memcpy(supported_rates, rtw_basic_rate_ofdm, 3);
-	}
+
 
 	if (wirelessmode & WIRELESS_11B)
 		update_mgnt_tx_rate(padapter, IEEE80211_CCK_RATE_1MB);

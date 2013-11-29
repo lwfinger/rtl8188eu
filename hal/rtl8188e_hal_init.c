@@ -1489,7 +1489,6 @@ static bool hal_EfusePgPacketWrite1ByteHeader(struct adapter *pAdapter, u8 efuse
 
 static bool hal_EfusePgPacketWriteData(struct adapter *pAdapter, u8 efuseType, u16 *pAddr, struct pgpkt *pTargetPkt, bool bPseudoTest)
 {
-	bool bRet = false;
 	u16	efuse_addr = *pAddr;
 	u8 badworden = 0;
 	u32	PgWriteSuccess = 0;
@@ -1507,7 +1506,6 @@ static bool hal_EfusePgPacketWriteData(struct adapter *pAdapter, u8 efuseType, u
 		else
 			return true;
 	}
-	return bRet;
 }
 
 static bool
@@ -1663,7 +1661,7 @@ hal_EfusePgCheckAvailableAddr(
 {
 	u16	efuse_max_available_len = 0;
 
-	/* Change to check TYPE_EFUSE_MAP_LEN , beacuse 8188E raw 256, logic map over 256. */
+	/* Change to check TYPE_EFUSE_MAP_LEN , because 8188E raw 256, logic map over 256. */
 	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&efuse_max_available_len, false);
 
 	if (Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest) >= efuse_max_available_len)
@@ -2110,7 +2108,7 @@ static u8 Hal_GetChnlGroup88E(u8 chnl, u8 *pGroup)
 	if (chnl <= 14) {
 		bIn24G = true;
 
-		if (chnl < 3)			/*  Chanel 1-2 */
+		if (chnl < 3)			/*  Channel 1-2 */
 			*pGroup = 0;
 		else if (chnl < 6)		/*  Channel 3-5 */
 			*pGroup = 1;
@@ -2192,7 +2190,7 @@ void Hal_ReadTxPowerInfo88E(struct adapter *padapter, u8 *PROMContent, bool Auto
 		pHalData->bTXPowerDataReadFromEEPORM = true;
 
 	for (rfPath = 0; rfPath < pHalData->NumTotalRFPath; rfPath++) {
-		for (ch = 0; ch <= CHANNEL_MAX_NUMBER; ch++) {
+		for (ch = 0; ch < CHANNEL_MAX_NUMBER; ch++) {
 			bIn24G = Hal_GetChnlGroup88E(ch, &group);
 			if (bIn24G) {
 				pHalData->Index24G_CCK_Base[rfPath][ch] = pwrInfo24G.IndexCCK_Base[rfPath][group];
