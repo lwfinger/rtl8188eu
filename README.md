@@ -17,6 +17,8 @@ consult your distro.
 
 > sudo make install
 
+> sudo make install_firmware
+
 Submitting Issues
 ---------
 
@@ -24,5 +26,5 @@ Frequently asked Questions
 ---------
 
 ### The network manager says: "Device is not ready"!
-Make sure you copied the firmware (rtl8188eufw.bin) to /lib/firmware/rtlwifi/
+Make sure you ran `sudo make install_firmware`
 
