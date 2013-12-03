@@ -149,10 +149,11 @@ strip:
 	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
 
 install:
-	install -p -m 644 8188eu.ko  $(MODDESTDIR)
+	install -p -D -m 644 8188eu.ko $(MODDESTDIR)/8188eu.ko
 	/sbin/depmod -a ${KVER}
-	mkdir -p /lib/firmware/rtlwifi
-	cp rtl8188eufw.bin /lib/firmware/rtlwifi/.
+
+install_firmware:
+	install -p -D -m 644 rtl8188eufw.bin /lib/firmware/rtlwifi/rtl8188eufw.bin
 
 uninstall:
 	rm -f $(MODDESTDIR)/8188eu.ko
