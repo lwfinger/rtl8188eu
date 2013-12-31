@@ -119,7 +119,8 @@ static u8 odm_EVMdbToPercentage(s8 Value)
 static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
 			struct odm_phy_status_info *pPhyInfo,
 			u8 *pPhyStatus,
-			struct odm_per_pkt_info *pPktinfo)
+			struct odm_per_pkt_info *pPktinfo,
+			struct adapter *adapt)
 {
 	struct sw_ant_switch *pDM_SWAT_Table = &dm_odm->DM_SWAT_Table;
 	u8 i, Max_spatial_stream;
@@ -298,6 +299,8 @@ static void odm_RxPhyStatus92CSeries_Parsing(struct odm_dm_struct *dm_odm,
 				rf_rx_num++;
 
 			rx_pwr[i] = ((pPhyStaRpt->path_agc[i].gain & 0x3F)*2) - 110;
+			if (i == RF_PATH_A)
+				adapt->signal_strength = rx_pwr[i];
 
 			pPhyInfo->RxPwr[i] = rx_pwr[i];
 
@@ -526,10 +529,11 @@ static void odm_Process_RSSIForDM(struct odm_dm_struct *dm_odm,
 static void ODM_PhyStatusQuery_92CSeries(struct odm_dm_struct *dm_odm,
 					 struct odm_phy_status_info *pPhyInfo,
 					 u8 *pPhyStatus,
-					 struct odm_per_pkt_info *pPktinfo)
+					 struct odm_per_pkt_info *pPktinfo,
+					 struct adapter *adapt)
 {
 	odm_RxPhyStatus92CSeries_Parsing(dm_odm, pPhyInfo, pPhyStatus,
-					 pPktinfo);
+					 pPktinfo, adapt);
 	if (dm_odm->RSSI_test) {
 		/*  Select the packets to do RSSI checking for antenna switching. */
 		if (pPktinfo->bPacketToSelf || pPktinfo->bPacketBeacon)
@@ -541,9 +545,10 @@ static void ODM_PhyStatusQuery_92CSeries(struct odm_dm_struct *dm_odm,
 
 void ODM_PhyStatusQuery(struct odm_dm_struct *dm_odm,
 			struct odm_phy_status_info *pPhyInfo,
-			u8 *pPhyStatus, struct odm_per_pkt_info *pPktinfo)
+			u8 *pPhyStatus, struct odm_per_pkt_info *pPktinfo,
+			struct adapter *adapt)
 {
-	ODM_PhyStatusQuery_92CSeries(dm_odm, pPhyInfo, pPhyStatus, pPktinfo);
+	ODM_PhyStatusQuery_92CSeries(dm_odm, pPhyInfo, pPhyStatus, pPktinfo, adapt);
 }
 
 /*  For future use. */

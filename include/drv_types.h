@@ -192,6 +192,7 @@ struct dvobj_priv {
 	struct usb_device *pusbdev;
 
 	ATOMIC_T continual_urb_error;
+	u8 signal_strength;
 };
 
 static inline struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
@@ -266,6 +267,7 @@ struct adapter {
 	u8	bDriverIsGoingToUnload;
 	u8	init_adpt_in_progress;
 	u8	bHaltInProgress;
+	s8	signal_strength;
 
 	void *cmdThread;
 	void *evtThread;

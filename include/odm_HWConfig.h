@@ -111,7 +111,8 @@ void odm_Init_RSSIForDM(struct odm_dm_struct *pDM_Odm);
 void ODM_PhyStatusQuery(struct odm_dm_struct *pDM_Odm,
 			struct odm_phy_status_info *pPhyInfo,
 			u8 *pPhyStatus,
-			struct odm_per_pkt_info *pPktinfo);
+			struct odm_per_pkt_info *pPktinfo,
+			struct adapter *adapt);
 
 void ODM_MacStatusQuery(struct odm_dm_struct *pDM_Odm,
 			u8 *pMacStatus,

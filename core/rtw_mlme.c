@@ -548,20 +548,20 @@ _func_enter_;
 		sq_final = padapter->recvpriv.signal_qual;
 		/* the rssi value here is undecorated, and will be used for antenna diversity */
 		if (sq_smp != 101) /* from the right channel */
-			rssi_final = (src->Rssi+dst->Rssi*4)/5;
+			rssi_final = dst->Rssi; //(src->Rssi+dst->Rssi*4)/5;
 		else
 			rssi_final = rssi_ori;
 	} else {
-		if (sq_smp != 101) { /* from the right channel */
-			ss_final = ((u32)(src->PhyInfo.SignalStrength)+(u32)(dst->PhyInfo.SignalStrength)*4)/5;
-			sq_final = ((u32)(src->PhyInfo.SignalQuality)+(u32)(dst->PhyInfo.SignalQuality)*4)/5;
-			rssi_final = (src->Rssi+dst->Rssi*4)/5;
-		} else {
-			/* bss info not receiving from the right channel, use the original RX signal infos */
-			ss_final = dst->PhyInfo.SignalStrength;
-			sq_final = dst->PhyInfo.SignalQuality;
-			rssi_final = dst->Rssi;
-		}
+//		if (sq_smp != 101) { /* from the right channel */
+			ss_final = (u32)dst->PhyInfo.SignalStrength; //((u32)(src->PhyInfo.SignalStrength)+(u32)(dst->PhyInfo.SignalStrength)*4)/5;
+			sq_final = (u32)dst->PhyInfo.SignalQuality; //((u32)(src->PhyInfo.SignalQuality)+(u32)(dst->PhyInfo.SignalQuality)*4)/5;
+			rssi_final = dst->Rssi; //(src->Rssi+dst->Rssi*4)/5;
+//		} else {
+//			/* bss info not receiving from the right channel, use the original RX signal infos */
+//			ss_final = dst->PhyInfo.SignalStrength;
+//			sq_final = dst->PhyInfo.SignalQuality;
+//			rssi_final = dst->Rssi;
+//		}
 	}
 	if (update_ie)
 		memcpy((u8 *)dst, (u8 *)src, get_wlan_bssid_ex_sz(src));
