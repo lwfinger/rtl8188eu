@@ -28,6 +28,8 @@
 #define __DRV_TYPES_H__
 
 #define DRV_NAME "r8188eu"
+#define CONFIG_88EU_AP_MODE
+#define CONFIG_88EU_P2P
 
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
