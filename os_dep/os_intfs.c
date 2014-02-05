@@ -30,6 +30,7 @@
 #include <usb_osintf.h>
 #include <usb_hal.h>
 #include <rtw_br_ext.h>
+#include <linux/version.h>
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
@@ -652,7 +653,11 @@ static unsigned int rtw_classify8021d(struct sk_buff *skb)
 	return dscp >> 5;
 }
 
-static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb)
+static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0))
+			    ,void *unused
+#endif
+)
 {
 	struct adapter	*padapter = rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
