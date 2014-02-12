@@ -19,6 +19,7 @@
  ******************************************************************************/
 #define _OS_INTFS_C_
 
+#include <linux/version.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <xmit_osdep.h>
@@ -1025,7 +1026,11 @@ void netdev_br_init(struct net_device *netdev)
 
 	rcu_read_lock();
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)
 	if (rcu_dereference(adapter->pnetdev->rx_handler_data)) {
+#else
+	if (rcu_dereference(adapter->pnetdev->br_port)) {
+#endif
 		struct net_device *br_netdev;
 		struct net *devnet = NULL;
 

@@ -20,6 +20,7 @@
 #define _RTW_MLME_C_
 
 
+#include <linux/version.h>
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <recv_osdep.h>
@@ -1680,7 +1681,11 @@ void rtw_dynamic_check_timer_handlder(struct adapter *adapter)
 
 	rcu_read_lock();
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)
 	if (rcu_dereference(adapter->pnetdev->rx_handler_data) &&
+#else
+	if (rcu_dereference(adapter->pnetdev->br_port) &&
+#endif
 	    (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true)) {
 		/*  expire NAT2.5 entry */
 		nat25_db_expire(adapter);

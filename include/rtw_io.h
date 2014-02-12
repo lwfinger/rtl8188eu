@@ -28,7 +28,7 @@
 #include <linux/semaphore.h>
 #include <linux/list.h>
 #include <linux/spinlock.h>
-#include <linux/atomic.h>
+#include <asm/atomic.h>
 
 #include <linux/usb.h>
 #include <linux/usb/ch9.h>

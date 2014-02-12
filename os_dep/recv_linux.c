@@ -197,7 +197,11 @@ _func_enter_;
 	}
 
 	rcu_read_lock();
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)
 	rcu_dereference(padapter->pnetdev->rx_handler_data);
+#else
+	rcu_dereference(padapter->pnetdev->br_port);
+#endif
 	rcu_read_unlock();
 
 	skb->ip_summed = CHECKSUM_NONE;

@@ -39,7 +39,7 @@
 #include <linux/circ_buf.h>
 #include <linux/uaccess.h>
 #include <asm/byteorder.h>
-#include <linux/atomic.h>
+#include <asm/atomic.h>
 #include <linux/io.h>
 #include <linux/semaphore.h>
 #include <linux/sem.h>
