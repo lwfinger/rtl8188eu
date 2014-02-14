@@ -161,13 +161,7 @@ struct registry_priv {
 
 #define MAX_CONTINUAL_URB_ERR		4
 
-enum firmware_source {
-	FW_SOURCE_IMG_FILE = 0,
-	FW_SOURCE_HEADER_FILE = 1,		/* from header file */
-};
-
 struct rt_firmware {
-	enum firmware_source	eFWSource;
 	u8			*szFwBuffer;
 	u32			ulFwLength;
 };
