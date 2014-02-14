@@ -161,6 +161,17 @@ struct registry_priv {
 
 #define MAX_CONTINUAL_URB_ERR		4
 
+enum firmware_source {
+	FW_SOURCE_IMG_FILE = 0,
+	FW_SOURCE_HEADER_FILE = 1,		/* from header file */
+};
+
+struct rt_firmware {
+	enum firmware_source	eFWSource;
+	u8			*szFwBuffer;
+	u32			ulFwLength;
+};
+
 struct dvobj_priv {
 	struct adapter *if1;
 	struct adapter *if2;
@@ -175,6 +186,8 @@ struct dvobj_priv {
 	u8	Queue2Pipe[HW_QUEUE_ENTRY];/* for out pipe mapping */
 
 	u8	irq_alloc;
+
+	struct rt_firmware firmware;
 
 /*-------- below is for USB INTERFACE --------*/
 

@@ -583,29 +583,11 @@ static s32 _FWFreeToGo(struct adapter *padapter)
 
 #define IS_FW_81xxC(padapter)	(((GET_HAL_DATA(padapter))->FirmwareSignature & 0xFFF0) == 0x88C0)
 
-s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
+static int load_firmware(struct rt_firmware *pFirmware, struct device *device)
 {
 	s32	rtStatus = _SUCCESS;
-	u8 writeFW_retry = 0;
-	u32 fwdl_start_time;
-	struct hal_data_8188e *pHalData = GET_HAL_DATA(padapter);
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-	struct device *device = dvobj_to_dev(dvobj);
-	struct rt_firmware *pFirmware = NULL;
 	const struct firmware *fw;
-	struct rt_firmware_hdr *pFwHdr = NULL;
-	u8 *pFirmwareBuf;
-	u32 FirmwareLen;
-	char fw_name[] = "rtlwifi/rtl8188eufw.bin";
-	static int log_version;
-
-	RT_TRACE(_module_hal_init_c_, _drv_info_, ("+%s\n", __func__));
-	pFirmware = (struct rt_firmware *)rtw_zmalloc(sizeof(struct rt_firmware));
-	if (!pFirmware) {
-		rtStatus = _FAIL;
-		goto Exit;
-	}
-
+	const char *fw_name = "rtlwifi/rtl8188eufw.bin";
 	if (request_firmware(&fw, fw_name, device)) {
 		rtStatus = _FAIL;
 		goto Exit;
@@ -628,14 +610,38 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 	}
 	memcpy(pFirmware->szFwBuffer, fw->data, fw->size);
 	pFirmware->ulFwLength = fw->size;
-	pFirmwareBuf = pFirmware->szFwBuffer;
-	FirmwareLen = pFirmware->ulFwLength;
 	release_firmware(fw);
+	DBG_88E_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, pFirmware->ulFwLength);
 
-	DBG_88E_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, FirmwareLen);
+Exit:
+	return rtStatus;
+}
+
+s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
+{
+	s32	rtStatus = _SUCCESS;
+	u8 writeFW_retry = 0;
+	u32 fwdl_start_time;
+	struct hal_data_8188e *pHalData = GET_HAL_DATA(padapter);
+	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
+	struct device *device = dvobj_to_dev(dvobj);
+	struct rt_firmware_hdr *pFwHdr = NULL;
+	u8 *pFirmwareBuf;
+	u32 FirmwareLen;
+	static int log_version;
+
+	RT_TRACE(_module_hal_init_c_, _drv_info_, ("+%s\n", __func__));
+	if (!dvobj->firmware.szFwBuffer)
+		rtStatus = load_firmware(&dvobj->firmware, device);
+	if (rtStatus == _FAIL) {
+		dvobj->firmware.szFwBuffer = NULL;
+		goto Exit;
+	}
+	pFirmwareBuf = dvobj->firmware.szFwBuffer;
+	FirmwareLen = dvobj->firmware.ulFwLength;
 
 	/*  To Check Fw header. Added by tynli. 2009.12.04. */
-	pFwHdr = (struct rt_firmware_hdr *)pFirmware->szFwBuffer;
+	pFwHdr = (struct rt_firmware_hdr *)dvobj->firmware.szFwBuffer;
 
 	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->Version);
 	pHalData->FirmwareSubVersion = pFwHdr->Subversion;
@@ -687,10 +693,8 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 		goto Exit;
 	}
 	RT_TRACE(_module_hal_init_c_, _drv_info_, ("Firmware is ready to run!\n"));
-	kfree(pFirmware->szFwBuffer);
-Exit:
 
-	kfree(pFirmware);
+Exit:
 	return rtStatus;
 }
 
