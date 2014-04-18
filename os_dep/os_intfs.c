@@ -713,9 +713,15 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 	return 0;
 }
 
+#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,39)
 static const struct device_type wlan_type = {
 	.name = "wlan",
 };
+#else
+static struct device_type wlan_type = {
+	.name = "wlan",
+};
+#endif
 
 struct net_device *rtw_init_netdev(struct adapter *old_padapter)
 {
