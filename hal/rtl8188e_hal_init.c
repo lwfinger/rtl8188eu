@@ -588,7 +588,10 @@ static int load_firmware(struct rt_firmware *pFirmware, struct device *device)
 	s32	rtStatus = _SUCCESS;
 	const struct firmware *fw;
 	const char *fw_name = "rtlwifi/rtl8188eufw.bin";
-	if (request_firmware(&fw, fw_name, device)) {
+	int err = request_firmware(&fw, fw_name, device);
+
+	if (err) {
+		pr_err("Request firmware failed with error 0x%x\n", err);
 		rtStatus = _FAIL;
 		goto Exit;
 	}
@@ -605,6 +608,7 @@ static int load_firmware(struct rt_firmware *pFirmware, struct device *device)
 
 	pFirmware->szFwBuffer = kzalloc(FW_8188E_SIZE, GFP_KERNEL);
 	if (!pFirmware->szFwBuffer) {
+		pr_err("Failed to allocate pFirmware->szFwBuffer\n");
 		rtStatus = _FAIL;
 		goto Exit;
 	}
