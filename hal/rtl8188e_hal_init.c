@@ -1998,16 +1998,16 @@ Hal_EfuseParseIDCode88E(
 	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 	u16			EEPROMId;
 
-	/*  Checl 0x8129 again for making sure autoload status!! */
+	/*  Check 0x8129 again for making sure autoload status!! */
 	EEPROMId = le16_to_cpu(*((__le16 *)hwinfo));
 	if (EEPROMId != RTL_EEPROM_ID) {
-		DBG_88E("EEPROM ID(%#x) is invalid!!\n", EEPROMId);
+		pr_err("EEPROM ID(%#x) is invalid!!\n", EEPROMId);
 		pEEPROM->bautoload_fail_flag = true;
 	} else {
 		pEEPROM->bautoload_fail_flag = false;
 	}
 
-	DBG_88E("EEPROM ID = 0x%04x\n", EEPROMId);
+	pr_info("EEPROM ID = 0x%04x\n", EEPROMId);
 }
 
 static void Hal_ReadPowerValueFromPROM_8188E(struct txpowerinfo24g *pwrInfo24G, u8 *PROMContent, bool AutoLoadFail)
