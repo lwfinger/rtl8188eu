@@ -118,7 +118,7 @@ struct eeprom_priv {
 	u8		mac_addr[6];	/* PermanentAddress */
 	u16		channel_plan;
 	u8		EepromOrEfuse;
-	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512];
+	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512] __aligned(4);
 };
 
 void eeprom_write16(struct adapter *padapter, u16 reg, u16 data);
