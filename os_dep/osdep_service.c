@@ -356,6 +356,10 @@ inline int ATOMIC_DEC_RETURN(ATOMIC_T *v)
 	return atomic_dec_return(v);
 }
 
+static const struct device_type wlan_type = {
+	.name = "wlan",
+};
+
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv,
 						    void *old_priv)
 {
@@ -366,6 +370,7 @@ struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv,
 	if (!pnetdev)
 		goto RETURN;
 
+	pnetdev->dev.type = &wlan_type;
 	pnpi = netdev_priv(pnetdev);
 	pnpi->priv = old_priv;
 	pnpi->sizeof_priv = sizeof_priv;
