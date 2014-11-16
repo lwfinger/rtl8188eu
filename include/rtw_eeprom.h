@@ -108,7 +108,7 @@ enum RT_CUSTOMER_ID {
 	RT_CID_CC_C = 38,
 	RT_CID_819x_Xavi = 39,
 	RT_CID_819x_FUNAI_TV = 40,
-	RT_CID_819x_ALPHA_WD=41,
+	RT_CID_819x_ALPHA_WD = 41,
 };
 
 struct eeprom_priv {
@@ -118,7 +118,7 @@ struct eeprom_priv {
 	u8		mac_addr[6];	/* PermanentAddress */
 	u16		channel_plan;
 	u8		EepromOrEfuse;
-	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512] __aligned(4);
+	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512];
 };
 
 void eeprom_write16(struct adapter *padapter, u16 reg, u16 data);
