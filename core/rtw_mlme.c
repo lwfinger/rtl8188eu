@@ -36,6 +36,18 @@
 extern unsigned char	MCS_rate_2R[16];
 extern unsigned char	MCS_rate_1R[16];
 
+void rtw_set_roaming(struct adapter *adapter, u8 to_roaming)
+{
+	if (to_roaming == 0)
+		adapter->mlmepriv.to_join = false;
+	adapter->mlmepriv.to_roaming = to_roaming;
+}
+
+u8 rtw_to_roaming(struct adapter *adapter)
+{
+	return adapter->mlmepriv.to_roaming;
+}
+
 int	_rtw_init_mlme_priv (struct adapter *padapter)
 {
 	int	i;
@@ -564,8 +576,11 @@ _func_enter_;
 //			rssi_final = dst->Rssi;
 //		}
 	}
-	if (update_ie)
+	if (update_ie) {
+		dst->Reserved[0] = src->Reserved[0];
+		dst->Reserved[1] = src->Reserved[1];
 		memcpy((u8 *)dst, (u8 *)src, get_wlan_bssid_ex_sz(src));
+	}
 	dst->PhyInfo.SignalStrength = ss_final;
 	dst->PhyInfo.SignalQuality = sq_final;
 	dst->Rssi = rssi_final;
@@ -672,9 +687,12 @@ _func_enter_;
 		pnetwork->last_scanned = rtw_get_current_time();
 
 		/* target.Reserved[0]== 1, means that scanned network is a bcn frame. */
-		if ((pnetwork->network.IELength > target->IELength) && (target->Reserved[0] == 1))
+		/* probe resp(3) > beacon(1) > probe req(2) */
+		if ((target->Reserved[0] != 2) &&
+		    (target->Reserved[0] >= pnetwork->network.Reserved[0]))
+			update_ie = true;
+		else
 			update_ie = false;
-
 		update_network(&(pnetwork->network), target, adapter, update_ie);
 	}
 
@@ -1309,6 +1327,7 @@ _func_enter_;
 
 			/* s4. indicate connect */
 				if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) == true) {
+					pmlmepriv->cur_network_scanned = ptarget_wlan;
 					rtw_indicate_connect(adapter);
 				} else {
 					/* adhoc mode will rtw_indicate_connect when rtw_stassoc_event_callback */
@@ -1390,9 +1409,10 @@ static u8 search_max_mac_id(struct adapter *padapter)
 }
 
 /* FOR AP , AD-HOC mode */
-void rtw_stassoc_hw_rpt(struct adapter *adapter, struct sta_info *psta)
+void rtw_sta_media_status_rpt(struct adapter *adapter,struct sta_info *psta,
+			      u32 mstatus)
 {
-	u16 media_status;
+	u16 media_status_rpt;
 	u8 macid;
 
 	if (psta == NULL)
@@ -1400,8 +1420,10 @@ void rtw_stassoc_hw_rpt(struct adapter *adapter, struct sta_info *psta)
 
 	macid = search_max_mac_id(adapter);
 	rtw_hal_set_hwreg(adapter, HW_VAR_TX_RPT_MAX_MACID, (u8 *)&macid);
-	media_status = (psta->mac_id<<8)|1; /*   MACID|OPMODE:1 connect */
-	rtw_hal_set_hwreg(adapter, HW_VAR_H2C_MEDIA_STATUS_RPT, (u8 *)&media_status);
+	/* MACID|OPMODE:1 connect */
+	media_status_rpt = (u16)((psta->mac_id<<8) | mstatus);
+	rtw_hal_set_hwreg(adapter,HW_VAR_H2C_MEDIA_STATUS_RPT,
+			  (u8 *)&media_status_rpt);
 }
 
 void rtw_stassoc_event_callback(struct adapter *adapter, u8 *pbuf)
@@ -1421,10 +1443,8 @@ _func_enter_;
 #if defined (CONFIG_88EU_AP_MODE)
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 		psta = rtw_get_stainfo(&adapter->stapriv, pstassoc->macaddr);
-		if (psta) {
-			ap_sta_info_defer_update(adapter, psta);
-			rtw_stassoc_hw_rpt(adapter, psta);
-		}
+		if (psta)
+			rtw_indicate_sta_assoc_event(adapter, psta);
 		goto exit;
 	}
 #endif
@@ -1446,7 +1466,7 @@ _func_enter_;
 	DBG_88E("%s\n", __func__);
 	/* for ad-hoc mode */
 	rtw_hal_set_odm_var(adapter, HAL_ODM_STA_INFO, psta, true);
-	rtw_stassoc_hw_rpt(adapter, psta);
+	rtw_sta_media_status_rpt(adapter, psta, 1);
 	if (adapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X)
 		psta->dot118021XPrivacy = adapter->securitypriv.dot11PrivacyAlgrthm;
 	psta->ieee8021x_blocked = false;
@@ -1456,6 +1476,7 @@ _func_enter_;
 		if (adapter->stapriv.asoc_sta_count == 2) {
 			_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irql);
 			ptarget_wlan = rtw_find_network(&pmlmepriv->scanned_queue, cur_network->network.MacAddress);
+			pmlmepriv->cur_network_scanned = ptarget_wlan;
 			if (ptarget_wlan)
 				ptarget_wlan->fixed = true;
 			_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irql);
@@ -1507,13 +1528,16 @@ _func_enter_;
 	_enter_critical_bh(&pmlmepriv->lock, &irql2);
 
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
-		if (pmlmepriv->to_roaming > 0)
-			pmlmepriv->to_roaming--; /*  this stadel_event is caused by roaming, decrease to_roaming */
-		else if (pmlmepriv->to_roaming == 0)
-			pmlmepriv->to_roaming = adapter->registrypriv.max_roaming_times;
+		if(adapter->registrypriv.wifi_spec == 1)
+			rtw_set_roaming(adapter, 0); /* don't roam */
+		else if (rtw_to_roaming(adapter) > 0)
+			pmlmepriv->to_roaming--; /* this stadel_event is caused by roaming, decrease to_roaming */
+		else if (rtw_to_roaming(adapter) == 0)
+			rtw_set_roaming(adapter,
+					adapter->registrypriv.max_roaming_times);
 
 		if (*((unsigned short *)(pstadel->rsvd)) != WLAN_REASON_EXPIRATION_CHK)
-			pmlmepriv->to_roaming = 0; /*  don't roam */
+			rtw_set_roaming(adapter, 0); /* don't roam */
 
 		rtw_free_uc_swdec_pending_queue(adapter);
 
@@ -1597,10 +1621,10 @@ _func_enter_;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irql);
 
-	if (pmlmepriv->to_roaming > 0) { /*  join timeout caused by roaming */
+	if (rtw_to_roaming(adapter) > 0) { /* join timeout caused by roaming */
 		while (1) {
 			pmlmepriv->to_roaming--;
-			if (pmlmepriv->to_roaming != 0) { /* try another , */
+			if (rtw_to_roaming(adapter) != 0) { /* try another */
 				DBG_88E("%s try another roaming\n", __func__);
 				do_join_r = rtw_do_join(adapter);
 				if (_SUCCESS != do_join_r) {
@@ -1733,7 +1757,7 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 	if (rtw_is_desired_network(adapter, competitor)  == false)
 		goto exit;
 
-	if (pmlmepriv->to_roaming) {
+	if(rtw_to_roaming(adapter) > 0) {
 		if (rtw_get_passing_time_ms((u32)competitor->last_scanned) >= RTW_SCAN_RESULT_EXPIRE ||
 		    is_same_ess(&competitor->network, &pmlmepriv->cur_network.network) == false)
 			goto exit;
@@ -1750,7 +1774,7 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 			(*candidate)->network.Ssid.Ssid,
 			(*candidate)->network.MacAddress,
 			(int)(*candidate)->network.Rssi);
-		DBG_88E("[to_roaming:%u]\n", pmlmepriv->to_roaming);
+		DBG_88E("[to_roaming:%u]\n",rtw_to_roaming(adapter));
 	}
 
 exit:
@@ -2418,7 +2442,7 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
 	else
 		pnetwork = &pmlmepriv->cur_network;
 
-	if (0 < pmlmepriv->to_roaming) {
+	if (0 < rtw_to_roaming(padapter)) {
 		DBG_88E("roaming from %s(%pM length:%d\n",
 			pnetwork->network.Ssid.Ssid, pnetwork->network.MacAddress,
 			pnetwork->network.Ssid.SsidLength);

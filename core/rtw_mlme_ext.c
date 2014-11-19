@@ -6656,14 +6656,6 @@ u8 collect_bss_info(struct adapter *padapter, union recv_frame *precv_frame, str
 		}
 	}
 
-	if (subtype == WIFI_PROBEREQ) {
-		/*  FIXME */
-		bssid->InfrastructureMode = Ndis802_11Infrastructure;
-		memcpy(bssid->MacAddress, GetAddr2Ptr(pframe), ETH_ALEN);
-		bssid->Privacy = 1;
-		return _SUCCESS;
-	}
-
 	memcpy(&le32_tmp, rtw_get_beacon_interval_from_ie(bssid->IEs), 2);
 	bssid->Configuration.BeaconPeriod = le32_to_cpu(le32_tmp);
 
@@ -6749,11 +6741,14 @@ void start_create_ibss(struct adapter *padapter)
 
 			report_join_res(padapter, 1);
 			pmlmeinfo->state |= WIFI_FW_ASSOC_SUCCESS;
+			rtw_indicate_connect(padapter);
 		}
 	} else {
 		DBG_88E("start_create_ibss, invalid cap:%x\n", caps);
 		return;
 	}
+	/* update bc/mc sta_info */
+	update_bmc_sta(padapter);
 }
 
 void start_clnt_join(struct adapter *padapter)

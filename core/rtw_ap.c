@@ -533,7 +533,7 @@ void add_RATid(struct adapter *padapter, struct sta_info *psta, u8 rssi_level)
 	}
 }
 
-static void update_bmc_sta(struct adapter *padapter)
+void update_bmc_sta(struct adapter *padapter)
 {
 	unsigned long	irqL;
 	u32 init_rate = 0;
@@ -602,7 +602,7 @@ static void update_bmc_sta(struct adapter *padapter)
 		psta->raid = raid;
 		psta->init_rate = init_rate;
 
-		rtw_stassoc_hw_rpt(padapter, psta);
+		rtw_sta_media_status_rpt(padapter, psta, 1);
 
 		_enter_critical_bh(&psta->lock, &irqL);
 		psta->state = _FW_LINKED;

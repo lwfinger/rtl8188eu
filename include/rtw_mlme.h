@@ -349,6 +349,7 @@ struct mlme_priv {
 	u8	assoc_bssid[6];
 
 	struct wlan_network	cur_network;
+	struct wlan_network *cur_network_scanned;
 
 	u32	scan_interval;
 
@@ -649,7 +650,10 @@ int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst);
 
 void rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network);
 void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network);
+void rtw_set_roaming(struct adapter *adapter, u8 to_roaming);
+u8 rtw_to_roaming(struct adapter *adapter);
 
-void rtw_stassoc_hw_rpt(struct adapter *adapter,struct sta_info *psta);
+void rtw_sta_media_status_rpt(struct adapter *adapter, struct sta_info *psta,
+			      u32 mstatus);
 
 #endif /* __RTL871X_MLME_H_ */
