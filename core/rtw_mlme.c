@@ -615,6 +615,9 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 	struct __queue *queue	= &(pmlmepriv->scanned_queue);
 	struct wlan_network	*pnetwork = NULL;
 	struct wlan_network	*oldest = NULL;
+	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
+	struct wifidirect_info *pwdinfo= &(adapter->wdinfo);
+	int target_find = 0;
 
 _func_enter_;
 
@@ -628,8 +631,10 @@ _func_enter_;
 
 		pnetwork	= LIST_CONTAINOR(plist, struct wlan_network, list);
 
-		if (is_same_network(&(pnetwork->network), target))
+		if (is_same_network(&(pnetwork->network), target)) {
+			target_find = 1;
 			break;
+		}
 		if ((oldest == ((struct wlan_network *)0)) ||
 		    time_after(oldest->last_scanned, pnetwork->last_scanned))
 			oldest = pnetwork;
@@ -637,7 +642,7 @@ _func_enter_;
 	}
 	/* If we didn't find a match, then get a new network slot to initialize
 	 * with this beacon's information */
-	if (rtw_end_of_queue_search(phead, plist) == true) {
+	if (!target_find) {
 		if (_rtw_queue_empty(&(pmlmepriv->free_bss_pool)) == true) {
 			/* If there are no more slots, expire the oldest */
 			pnetwork = oldest;
@@ -742,8 +747,21 @@ static int rtw_is_desired_network(struct adapter *adapter, struct wlan_network *
 			return false;
 	}
 	if (adapter->registrypriv.wifi_spec == 1) { /* for  correct flow of 8021X  to do.... */
+		u8 *p = NULL;
+		uint ie_len = 0;
+
 		if ((desired_encmode == Ndis802_11EncryptionDisabled) && (privacy != 0))
 			bselected = false;
+		if (psecuritypriv->ndisauthtype == Ndis802_11AuthModeWPA2PSK) {
+			p = rtw_get_ie(pnetwork->network.IEs + _BEACON_IE_OFFSET_,
+				       _RSN_IE_2_, &ie_len,
+				       (pnetwork->network.IELength -
+				       _BEACON_IE_OFFSET_));
+			if (p && ie_len > 0)
+				bselected = true;
+			else
+				bselected = false;
+		}
 	}
 
 
@@ -832,6 +850,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 	unsigned long  irql;
 	struct	mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 	struct mlme_ext_priv *pmlmeext;
+	u8 timer_cancelled = 0;
 
 _func_enter_;
 	_enter_critical_bh(&pmlmepriv->lock, &irql);
@@ -845,15 +864,19 @@ _func_enter_;
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_surveydone_event_callback: fw_state:%x\n\n", get_fwstate(pmlmepriv)));
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY)) {
-		u8 timer_cancelled;
-
-		_cancel_timer(&pmlmepriv->scan_to_timer, &timer_cancelled);
+		timer_cancelled = 1;
 
 		_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY);
 	} else {
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("nic status=%x, survey done event comes too late!\n", get_fwstate(pmlmepriv)));
 	}
 
+	_exit_critical_bh(&pmlmepriv->lock, &irql);
+
+	if (timer_cancelled)
+		_cancel_timer(&pmlmepriv->scan_to_timer, &timer_cancelled);
+
+	_enter_critical_bh(&pmlmepriv->lock, &irql);
 	rtw_set_signal_stat_timer(&adapter->recvpriv);
 
 	if (pmlmepriv->to_join) {
@@ -895,16 +918,19 @@ _func_enter_;
 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 				rtw_indicate_connect(adapter);
 			} else {
-				DBG_88E("try_to_join, but select scanning queue fail, to_roaming:%d\n", pmlmepriv->to_roaming);
-				if (pmlmepriv->to_roaming != 0) {
+				DBG_88E("try_to_join, but select scanning queue fail, to_roaming:%d\n",
+					pmlmepriv->to_roaming);
+				if (rtw_to_roaming(adapter) != 0) {
 					if (--pmlmepriv->to_roaming == 0 ||
 					    _SUCCESS != rtw_sitesurvey_cmd(adapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) {
-						pmlmepriv->to_roaming = 0;
+						rtw_set_roaming(adapter, 0);
 						rtw_free_assoc_resources(adapter, 1);
 						rtw_indicate_disconnect(adapter);
 					} else {
 						pmlmepriv->to_join = true;
 					}
+				} else {
+					rtw_indicate_disconnect(adapter);
 				}
 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 			}
@@ -921,8 +947,6 @@ _func_enter_;
 	rtw_os_xmit_schedule(adapter);
 
 	pmlmeext = &adapter->mlmeextpriv;
-	if (pmlmeext->sitesurvey_res.bss_cnt == 0)
-		rtw_hal_sreset_reset(adapter);
 _func_exit_;
 }
 

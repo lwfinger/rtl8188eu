@@ -343,6 +343,7 @@ struct mlme_priv {
 	struct __queue free_bss_pool;
 	struct __queue scanned_queue;
 	u8 *free_bss_buf;
+	u8	key_mask; /* use to restore wep key after hal_init */
 	u32	num_of_scanned;
 
 	struct ndis_802_11_ssid	assoc_ssid;
@@ -374,7 +375,6 @@ struct mlme_priv {
 	struct rt_link_detect LinkDetectInfo;
 	struct timer_list dynamic_chk_timer; /* dynamic/periodic check timer */
 
-	u8	key_mask; /* use for ips to set wep key after ips_leave */
 	u8	acm_mask; /*  for wmm acm mask */
 	u8	ChannelPlan;
 	enum rt_scan_type scan_mode; /*  active: 1, passive: 0 */
