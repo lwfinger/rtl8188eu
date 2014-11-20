@@ -548,6 +548,8 @@ _func_enter_;
 	if (res == _FAIL) {
 		rtw_free_recvframe(return_packet, &padapter->recvpriv.free_recv_queue);
 		return_packet = NULL;
+	} else {
+		prxattrib->bdecrypted = true;
 	}
 
 _func_exit_;
@@ -572,7 +574,6 @@ static union recv_frame *portctrl(struct adapter *adapter, union recv_frame *pre
 _func_enter_;
 
 	pstapriv = &adapter->stapriv;
-	psta = rtw_get_stainfo(pstapriv, psta_addr);
 
 	auth_alg = adapter->securitypriv.dot11AuthAlgrthm;
 
@@ -583,7 +584,10 @@ _func_enter_;
 
 	prtnframe = NULL;
 
-	RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("########portctrl:adapter->securitypriv.dot11AuthAlgrthm=%d\n", adapter->securitypriv.dot11AuthAlgrthm));
+	psta = rtw_get_stainfo(pstapriv, psta_addr);
+	RT_TRACE(_module_rtl871x_recv_c_, _drv_info_,
+		 ("########portctrl:adapter->securitypriv.dot11AuthAlgrthm=%d\n",
+		 adapter->securitypriv.dot11AuthAlgrthm));
 
 	if (auth_alg == 2) {
 		if ((psta != NULL) && (psta->ieee8021x_blocked)) {
@@ -1111,8 +1115,9 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
 			unsigned long irqL;
 			struct list_head *xmitframe_plist, *xmitframe_phead;
 			struct xmit_frame *pxmitframe = NULL;
+			struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
-			_enter_critical_bh(&psta->sleep_q.lock, &irqL);
+			_enter_critical_bh(&pxmitpriv->lock, &irqL);
 
 			xmitframe_phead = get_list_head(&psta->sleep_q);
 			xmitframe_plist = get_next(xmitframe_phead);
@@ -1133,10 +1138,7 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
 
 				pxmitframe->attrib.triggered = 1;
 
-				_exit_critical_bh(&psta->sleep_q.lock, &irqL);
-				if (rtw_hal_xmit(padapter, pxmitframe) == true)
-					rtw_os_xmit_complete(padapter, pxmitframe);
-				_enter_critical_bh(&psta->sleep_q.lock, &irqL);
+				rtw_hal_xmitframe_enqueue(padapter, pxmitframe);
 
 				if (psta->sleepq_len == 0) {
 					pstapriv->tim_bitmap &= ~BIT(psta->aid);
@@ -1164,8 +1166,7 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
 					update_beacon(padapter, _TIM_IE_, NULL, false);
 				}
 			}
-
-			_exit_critical_bh(&psta->sleep_q.lock, &irqL);
+			_exit_critical_bh(&pxmitpriv->lock, &irqL);
 		}
 	}
 
@@ -1953,11 +1954,11 @@ static int recv_indicatepkt_reorder(struct adapter *padapter, union recv_frame *
 		/* s1. */
 		wlanhdr_to_ethhdr(prframe);
 
-		if ((pattrib->qos != 1) || (pattrib->eth_type == 0x0806) ||
-		    (pattrib->ack_policy != 0)) {
-			if ((!padapter->bDriverStopped) &&
-			    (!padapter->bSurpriseRemoved)) {
-				RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_, ("@@@@  recv_indicatepkt_reorder -recv_func recv_indicatepkt\n"));
+		if (pattrib->qos != 1) {
+			if (!padapter->bDriverStopped &&
+			    !padapter->bSurpriseRemoved) {
+				RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_,
+					 ("@@@@  recv_indicatepkt_reorder -recv_func recv_indicatepkt\n"));
 
 				rtw_recv_indicatepkt(padapter, prframe);
 				return _SUCCESS;
@@ -1991,13 +1992,8 @@ static int recv_indicatepkt_reorder(struct adapter *padapter, union recv_frame *
 		  preorder_ctrl->indicate_seq, pattrib->seq_num));
 
 	/* s2. check if winstart_b(indicate_seq) needs to been updated */
-	if (!check_indicate_seq(preorder_ctrl, pattrib->seq_num)) {
-		rtw_recv_indicatepkt(padapter, prframe);
-
-		_exit_critical_bh(&ppending_recvframe_queue->lock, &irql);
-
-		goto _success_exit;
-	}
+	if (!check_indicate_seq(preorder_ctrl, pattrib->seq_num))
+		goto _err_exit;
 
 	/* s3. Insert all packet into Reorder Queue to maintain its ordering. */
 	if (!enqueue_reorder_recvframe(preorder_ctrl, prframe))
@@ -2102,18 +2098,16 @@ static int recv_func_prehandle(struct adapter *padapter, union recv_frame *rfram
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	if (padapter->registrypriv.mp_mode == 1) {
-		if ((check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)) { /* padapter->mppriv.check_mp_pkt == 0)) */
-			if (pattrib->crc_err == 1)
-				padapter->mppriv.rx_crcerrpktcount++;
-			else
-				padapter->mppriv.rx_pktcount++;
+		if (pattrib->crc_err == 1)
+			padapter->mppriv.rx_crcerrpktcount++;
+		else
+			padapter->mppriv.rx_pktcount++;
 
-			if (check_fwstate(pmlmepriv, WIFI_MP_LPBK_STATE) == false) {
-				RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("MP - Not in loopback mode , drop pkt\n"));
-				ret = _FAIL;
-				rtw_free_recvframe(rframe, pfree_recv_queue);/* free this recv_frame */
-				goto exit;
-			}
+		if (check_fwstate(pmlmepriv, WIFI_MP_LPBK_STATE) == false) {
+			RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("MP - Not in loopback mode , drop pkt\n"));
+			ret = _FAIL;
+			rtw_free_recvframe(rframe, pfree_recv_queue);/* free this recv_frame */
+			goto exit;
 		}
 	}
 
@@ -2180,14 +2174,18 @@ static int recv_func(struct adapter *padapter, union recv_frame *rframe)
 	struct rx_pkt_attrib *prxattrib = &rframe->u.hdr.attrib;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
+	struct recv_priv *recvpriv = &padapter->recvpriv;
 
 	/* check if need to handle uc_swdec_pending_queue*/
-	if (check_fwstate(mlmepriv, WIFI_STATION_STATE) && psecuritypriv->busetkipkey) {
+	if (check_fwstate(mlmepriv, WIFI_STATION_STATE) &&
+	    psecuritypriv->busetkipkey) {
 		union recv_frame *pending_frame;
+		int cnt = 0;
 
-		while ((pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue))) {
-			if (recv_func_posthandle(padapter, pending_frame) == _SUCCESS)
-				DBG_88E("%s: dequeue uc_swdec_pending_queue\n", __func__);
+		pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue);
+		while (pending_frame) {
+			cnt++;
+			recv_func_posthandle(padapter, pending_frame);
 		}
 	}
 
@@ -2198,13 +2196,21 @@ static int recv_func(struct adapter *padapter, union recv_frame *rframe)
 		if (check_fwstate(mlmepriv, WIFI_STATION_STATE) &&
 		    !IS_MCAST(prxattrib->ra) && prxattrib->encrypt > 0 &&
 		    (prxattrib->bdecrypted == 0 || psecuritypriv->sw_decrypt) &&
-		    !is_wep_enc(psecuritypriv->dot11PrivacyAlgrthm) &&
-		    !psecuritypriv->busetkipkey) {
+		     psecuritypriv->ndisauthtype == Ndis802_11AuthModeWPAPSK &&
+		     !psecuritypriv->busetkipkey) {
 			rtw_enqueue_recvframe(rframe, &padapter->recvpriv.uc_swdec_pending_queue);
 			DBG_88E("%s: no key, enqueue uc_swdec_pending_queue\n", __func__);
+			if (recvpriv->free_recvframe_cnt < NR_RECVFRAME/4) {
+				/* to prevent from recvframe starvation,
+				 * get recvframe from uc_swdec_pending_queue to
+				 * free_recvframe_cnt  */
+				rframe = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue);
+				if (rframe)
+					goto do_posthandle;
+			}
 			goto exit;
 		}
-
+do_posthandle:
 		ret = recv_func_posthandle(padapter, rframe);
 	}
 

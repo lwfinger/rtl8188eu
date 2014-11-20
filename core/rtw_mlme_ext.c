@@ -227,9 +227,6 @@ static void init_mlme_ext_priv_value(struct adapter *padapter)
 	pmlmeext->cur_channel = padapter->registrypriv.channel;
 	pmlmeext->cur_bwmode = HT_CHANNEL_WIDTH_20;
 	pmlmeext->cur_ch_offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
-	pmlmeext->oper_channel = pmlmeext->cur_channel ;
-	pmlmeext->oper_bwmode = pmlmeext->cur_bwmode;
-	pmlmeext->oper_ch_offset = pmlmeext->cur_ch_offset;
 	pmlmeext->retry = 0;
 
 	pmlmeext->cur_wireless_mode = padapter->registrypriv.wireless_mode;
@@ -603,7 +600,8 @@ _continue:
 _issue_probersp:
 
 		if (check_fwstate(pmlmepriv, _FW_LINKED) &&
-		    pmlmepriv->cur_network.join_res)
+		    (pmlmepriv->cur_network.join_res ||
+		    check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)))
 			issue_probersp(padapter, get_sa(pframe), is_valid_p2p_probereq);
 	}
 	return _SUCCESS;
@@ -711,7 +709,7 @@ unsigned int OnBeacon(struct adapter *padapter, union recv_frame *precv_frame)
 				ret = rtw_check_bcn_info(padapter, pframe, len);
 				if (!ret) {
 						DBG_88E_LEVEL(_drv_info_, "ap has changed, disconnect now\n ");
-						receive_disconnect(padapter, pmlmeinfo->network.MacAddress , 65535);
+						receive_disconnect(padapter, pmlmeinfo->network.MacAddress, 0);
 						return _SUCCESS;
 				}
 				/* update WMM, ERP in the beacon */
@@ -1617,10 +1615,28 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
 	} else
 #endif
 	{
-		DBG_88E_LEVEL(_drv_always_, "sta recv deauth reason code(%d) sta:%pM\n",
-			      reason, GetAddr3Ptr(pframe));
+		int	ignore_received_deauth = 0;
 
-		receive_disconnect(padapter, GetAddr3Ptr(pframe) , reason);
+		/* Before sending the auth frame to start the STA/GC mode connection with AP/GO,
+		 *	we will send the deauth first.
+		 *	However, the Win8.1 with BRCM Wi-Fi will send the deauth with reason code 6 to us after receieving our deauth.
+		 *	Added the following code to avoid this case.
+		 */
+		if ((pmlmeinfo->state & WIFI_FW_AUTH_STATE) ||
+		    (pmlmeinfo->state & WIFI_FW_ASSOC_STATE )) {
+			if (reason == WLAN_REASON_CLASS2_FRAME_FROM_NONAUTH_STA) {
+				ignore_received_deauth = 1;
+			} else if (WLAN_REASON_PREV_AUTH_NOT_VALID == reason) {
+				// TODO: 802.11r
+				ignore_received_deauth = 1;
+			}
+		}
+
+		DBG_88E_LEVEL(_drv_always_, "sta recv deauth reason code(%d) sta:%pM, ignore = %d\n",
+			      reason, GetAddr3Ptr(pframe), ignore_received_deauth);
+
+		if (!ignore_received_deauth)
+			receive_disconnect(padapter, GetAddr3Ptr(pframe), reason);
 	}
 	pmlmepriv->LinkDetectInfo.bBusyTraffic = false;
 	return _SUCCESS;

@@ -789,9 +789,11 @@ void SetPacketRx(struct adapter *pAdapter, u8 bStartRx)
 
 	if (bStartRx) {
 		/*  Accept CRC error and destination address */
-		pHalData->ReceiveConfig = AAP | APM | AM | AB | APP_ICV | ADF | AMF | HTC_LOC_CTRL | APP_MIC | APP_PHYSTS;
+		pHalData->ReceiveConfig = AAP | APM | AM | AB | APP_ICV |
+					  AMF | ADF | APP_FCS | HTC_LOC_CTRL |
+					  APP_MIC | APP_PHYSTS;
 
-		pHalData->ReceiveConfig |= ACRC32;
+		pHalData->ReceiveConfig |= (RCR_ACRC32 | RCR_AAP);
 
 		rtw_write32(pAdapter, REG_RCR, pHalData->ReceiveConfig);
 
@@ -881,7 +883,6 @@ static u32 rtw_GetPSDData(struct adapter *pAdapter, u32 point)
  * 256	128			128 + 256 = 384
  * 512	256			256 + 512 = 768
  * 1024	512			512 + 1024 = 1536
- *
  */
 u32 mp_query_psd(struct adapter *pAdapter, u8 *data)
 {
@@ -926,8 +927,8 @@ u32 mp_query_psd(struct adapter *pAdapter, u8 *data)
 
 void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv)
 {
-	   int i, res;
-	  struct adapter *padapter = pxmitpriv->adapter;
+	int i, res;
+	 struct adapter *padapter = pxmitpriv->adapter;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
 
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
@@ -936,8 +937,8 @@ void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv)
 		max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 		num_xmit_extbuf = NR_XMIT_EXTBUFF;
 	} else {
-		max_xmit_extbuf_size = 20000;
-		num_xmit_extbuf = 1;
+		max_xmit_extbuf_size = 6000;
+		num_xmit_extbuf = 8;
 	}
 
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
@@ -951,8 +952,8 @@ void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv)
 		rtw_vmfree(pxmitpriv->pallocated_xmit_extbuf, num_xmit_extbuf * sizeof(struct xmit_buf) + 4);
 
 	if (padapter->registrypriv.mp_mode == 0) {
-		max_xmit_extbuf_size = 20000;
-		num_xmit_extbuf = 1;
+		max_xmit_extbuf_size = 6000;
+		num_xmit_extbuf = 8;
 	} else {
 		max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 		num_xmit_extbuf = NR_XMIT_EXTBUFF;
@@ -995,3 +996,15 @@ void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv)
 exit:
 	;
 }
+
+void Hal_ProSetCrystalCap (struct adapter *pAdapter, u32 CrystalCapVal)
+{
+	struct hal_data_8188e	*pHalData = GET_HAL_DATA(pAdapter);
+
+	CrystalCapVal = CrystalCapVal & 0x3F;
+
+	// write 0x24[16:11] = 0x24[22:17] = CrystalCap
+	PHY_SetBBReg(pAdapter, REG_AFE_XTAL_CTRL, 0x7FF800,
+		     (CrystalCapVal | (CrystalCapVal << 6)));
+}
+

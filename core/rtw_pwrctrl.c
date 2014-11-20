@@ -127,6 +127,7 @@ static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 
 	if (check_fwstate(pmlmepriv, WIFI_ASOC_STATE|WIFI_SITE_MONITOR) ||
 	    check_fwstate(pmlmepriv, WIFI_UNDER_LINKING|WIFI_UNDER_WPS) ||
+	    check_fwstate(pmlmepriv, WIFI_UNDER_WPS) ||
 	    check_fwstate(pmlmepriv, WIFI_AP_STATE) ||
 	    check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE|WIFI_ADHOC_STATE) ||
 #if defined(CONFIG_88EU_P2P)
@@ -422,7 +423,8 @@ _func_enter_;
 				pwrpriv->bpower_saving = true;
 				DBG_88E("%s smart_ps:%d\n", __func__, pwrpriv->smart_ps);
 				/* For Tenda W311R IOT issue */
-				rtw_set_ps_mode(padapter, pwrpriv->power_mgnt, pwrpriv->smart_ps, 0);
+				rtw_set_ps_mode(padapter, pwrpriv->power_mgnt,
+						pwrpriv->smart_ps, 0x40);
 			}
 		} else {
 			pwrpriv->LpsIdleCount++;
@@ -444,7 +446,7 @@ _func_enter_;
 
 	if (pwrpriv->bLeisurePs) {
 		if (pwrpriv->pwr_mode != PS_MODE_ACTIVE) {
-			rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0);
+			rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0x40);
 
 			if (pwrpriv->pwr_mode == PS_MODE_ACTIVE)
 				LPS_RF_ON_check(padapter, LPS_LEAVE_TIMEOUT_MS);
@@ -560,12 +562,11 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	int ret = _SUCCESS;
+	u32 start = rtw_get_current_time();
 
 	if (pwrpriv->ips_deny_time < rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms))
 		pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms);
 
-{
-	u32 start = rtw_get_current_time();
 	if (pwrpriv->ps_processing) {
 		DBG_88E("%s wait ps_processing...\n", __func__);
 		while (pwrpriv->ps_processing && rtw_get_passing_time_ms(start) <= 3000)
@@ -575,12 +576,17 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 		else
 			DBG_88E("%s wait ps_processing done\n", __func__);
 	}
-}
 
 	/* System suspend is not allowed to wakeup */
-	if ((!pwrpriv->bInternalAutoSuspend) && (pwrpriv->bInSuspend)) {
-		ret = _FAIL;
-		goto exit;
+	if ((!pwrpriv->bInternalAutoSuspend) && pwrpriv->bInSuspend) {
+		while (pwrpriv->bInSuspend &&
+		       (rtw_get_passing_time_ms(start) <= 3000 ||
+		       (rtw_get_passing_time_ms(start) <= 500)))
+				rtw_msleep_os(10);
+		if (pwrpriv->bInSuspend)
+			DBG_88E("%s wait bInSuspend timeout\n", __func__);
+		else
+			DBG_88E("%s wait bInSuspend done\n", __func__);
 	}
 
 	/* block??? */
