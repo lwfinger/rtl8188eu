@@ -245,8 +245,8 @@ static void efuse_read_phymap_from_txpktbuf(
 			rtw_usleep_os(100);
 		}
 
-		lo32 = rtw_read32(adapter, REG_PKTBUF_DBG_DATA_L);
-		hi32 = rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H);
+		lo32 = le32_to_cpu((__le32)rtw_read32(adapter, REG_PKTBUF_DBG_DATA_L));
+		hi32 = le32_to_cpu((__le32)rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H));
 
 		if (i == 0) {
 			u8 lenc[2];
