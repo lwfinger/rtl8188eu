@@ -866,6 +866,7 @@ u8 rtw_reset_drv_sw(struct adapter *padapter)
 u8 rtw_init_drv_sw(struct adapter *padapter)
 {
 	u8	ret8 = _SUCCESS;
+	unsigned long flags;
 
 _func_enter_;
 

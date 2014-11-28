@@ -40,7 +40,6 @@ static int rtw_p2p_is_channel_list_ok(u8 desired_ch, u8 *ch_list, u8 ch_cnt)
 
 static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	unsigned long irqL;
 	struct list_head *phead, *plist;
 	u32 len = 0;
 	u16 attr_len = 0;
@@ -56,7 +55,7 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	pstart = pdata_attr;
 	pcur = pdata_attr;
 
-	_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_lock(&pstapriv->asoc_list_lock);
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
 
@@ -120,7 +119,7 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 			pstart = pcur;
 		}
 	}
-	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_unlock(&pstapriv->asoc_list_lock);
 
 	if (attr_len > 0)
 		len = rtw_set_p2p_attr_content(pbuf, P2P_ATTR_GROUP_INFO, attr_len, pdata_attr);
@@ -977,10 +976,9 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 			    _rtw_memcmp(pwdinfo->p2p_group_ssid, groupid+ETH_ALEN, pwdinfo->p2p_group_ssid_len)) {
 				attr_contentlen = 0;
 				if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_DEVICE_ID, dev_addr, &attr_contentlen)) {
-					unsigned long irqL;
 					struct list_head *phead, *plist;
 
-					_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+					spin_lock(&pstapriv->asoc_list_lock);
 					phead = &pstapriv->asoc_list;
 					plist = get_next(phead);
 
@@ -1000,7 +998,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 							status = P2P_STATUS_FAIL_INFO_UNAVAILABLE;
 						}
 					}
-					_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+					spin_unlock(&pstapriv->asoc_list_lock);
 				} else {
 					status = P2P_STATUS_FAIL_INVALID_PARAM;
 				}
@@ -1499,7 +1497,6 @@ static void find_phase_handler(struct adapter *padapter)
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct ndis_802_11_ssid	ssid;
-	unsigned long				irqL;
 
 _func_enter_;
 
@@ -1509,8 +1506,8 @@ _func_enter_;
 
 	rtw_p2p_set_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH);
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock(&pmlmepriv->lock);
+	spin_unlock(&pmlmepriv->lock);
 
 
 _func_exit_;
@@ -1833,13 +1830,12 @@ static void pre_tx_scan_timer_process(void *FunctionContext)
 {
 	struct adapter *adapter = (struct adapter *)FunctionContext;
 	struct	wifidirect_info *pwdinfo = &adapter->wdinfo;
-	unsigned long irqL;
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		return;
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock(&pmlmepriv->lock);
 
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_PROVISION_DIS_REQ)) {
 		if (pwdinfo->tx_prov_disc_info.benable) {	/*	the provision discovery request frame is trigger to send or not */
@@ -1857,7 +1853,7 @@ static void pre_tx_scan_timer_process(void *FunctionContext)
 		DBG_88E("[%s] p2p_state is %d, ignore!!\n", __func__, rtw_p2p_state(pwdinfo));
 	}
 
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock(&pmlmepriv->lock);
 }
 
 static void find_phase_timer_process(void *FunctionContext)

@@ -323,10 +323,7 @@ s32 mp_start_test(struct adapter *padapter)
 	struct sta_info *psta;
 	u32 length;
 	u8 val8;
-
-	unsigned long irqL;
 	s32 res = _SUCCESS;
-
 	struct mp_priv *pmppriv = &padapter->mppriv;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct wlan_network *tgt_network = &pmlmepriv->cur_network;
@@ -379,7 +376,7 @@ s32 mp_start_test(struct adapter *padapter)
 	else
 		bssid.Length = length;
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock(&pmlmepriv->lock);
 
 	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
 		goto end_of_mp_start_test;
@@ -420,7 +417,7 @@ s32 mp_start_test(struct adapter *padapter)
 
 end_of_mp_start_test:
 
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock(&pmlmepriv->lock);
 
 	if (res == _SUCCESS) {
 		/*  set MSR to WIFI_FW_ADHOC_STATE */
@@ -439,11 +436,9 @@ void mp_stop_test(struct adapter *padapter)
 	struct wlan_network *tgt_network = &pmlmepriv->cur_network;
 	struct sta_info *psta;
 
-	unsigned long irqL;
-
 	if (pmppriv->mode == MP_ON) {
 		pmppriv->bSetTxPower = 0;
-		_enter_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_lock(&pmlmepriv->lock);
 		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == false)
 			goto end_of_mp_stop_test;
 
@@ -465,7 +460,7 @@ void mp_stop_test(struct adapter *padapter)
 
 end_of_mp_stop_test:
 
-		_exit_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_unlock(&pmlmepriv->lock);
 	}
 }
 

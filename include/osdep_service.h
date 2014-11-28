@@ -80,36 +80,6 @@ static inline struct list_head *get_list_head(struct __queue *queue)
         ((type *)((char *)(ptr)-(size_t)(&((type *)0)->member)))
 
 
-static inline void _enter_critical(spinlock_t *plock, unsigned long *pirqL)
-{
-	spin_lock_irqsave(plock, *pirqL);
-}
-
-static inline void _exit_critical(spinlock_t *plock, unsigned long *pirqL)
-{
-	spin_unlock_irqrestore(plock, *pirqL);
-}
-
-static inline void _enter_critical_ex(spinlock_t *plock, unsigned long *pirqL)
-{
-	spin_lock_irqsave(plock, *pirqL);
-}
-
-static inline void _exit_critical_ex(spinlock_t *plock, unsigned long *pirqL)
-{
-	spin_unlock_irqrestore(plock, *pirqL);
-}
-
-static inline void _enter_critical_bh(spinlock_t *plock, unsigned long *pirqL)
-{
-	spin_lock_bh(plock);
-}
-
-static inline void _exit_critical_bh(spinlock_t *plock, unsigned long *pirqL)
-{
-	spin_unlock_bh(plock);
-}
-
 static inline int _enter_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {
 	int ret;

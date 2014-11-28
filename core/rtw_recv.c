@@ -181,14 +181,13 @@ _func_exit_;
 
 union recv_frame *rtw_alloc_recvframe (struct __queue *pfree_recv_queue)
 {
-	unsigned long irqL;
 	union recv_frame  *precvframe;
 
-	_enter_critical_bh(&pfree_recv_queue->lock, &irqL);
+	spin_lock(&pfree_recv_queue->lock);
 
 	precvframe = _rtw_alloc_recvframe(pfree_recv_queue);
 
-	_exit_critical_bh(&pfree_recv_queue->lock, &irqL);
+	spin_unlock(&pfree_recv_queue->lock);
 
 	return precvframe;
 }
@@ -203,7 +202,6 @@ void rtw_init_recvframe(union recv_frame *precvframe, struct recv_priv *precvpri
 
 int rtw_free_recvframe(union recv_frame *precvframe, struct __queue *pfree_recv_queue)
 {
-	unsigned long irqL;
 	struct adapter *padapter;
 	struct recv_priv *precvpriv;
 
@@ -217,7 +215,7 @@ _func_enter_;
 		precvframe->u.hdr.pkt = NULL;
 	}
 
-	_enter_critical_bh(&pfree_recv_queue->lock, &irqL);
+	spin_lock(&pfree_recv_queue->lock);
 
 	rtw_list_delete(&(precvframe->u.hdr.list));
 
@@ -230,7 +228,7 @@ _func_enter_;
 				precvpriv->free_recvframe_cnt++;
 	}
 
-      _exit_critical_bh(&pfree_recv_queue->lock, &irqL);
+      spin_unlock(&pfree_recv_queue->lock);
 
 _func_exit_;
 
@@ -260,11 +258,10 @@ _func_exit_;
 int rtw_enqueue_recvframe(union recv_frame *precvframe, struct __queue *queue)
 {
 	int ret;
-	unsigned long irqL;
 
-	_enter_critical_bh(&queue->lock, &irqL);
+	spin_lock(&queue->lock);
 	ret = _rtw_enqueue_recvframe(precvframe, queue);
-	_exit_critical_bh(&queue->lock, &irqL);
+	spin_unlock(&queue->lock);
 
 	return ret;
 }
@@ -316,37 +313,36 @@ u32 rtw_free_uc_swdec_pending_queue(struct adapter *adapter)
 
 int rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, struct __queue *queue)
 {
-	unsigned long irqL;
-
-	_enter_critical_bh(&queue->lock, &irqL);
+	spin_lock(&queue->lock);
 
 	rtw_list_delete(&precvbuf->list);
 	rtw_list_insert_head(&precvbuf->list, get_list_head(queue));
 
-	_exit_critical_bh(&queue->lock, &irqL);
+	spin_unlock(&queue->lock);
 
 	return _SUCCESS;
 }
 
 int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, struct __queue *queue)
 {
-	unsigned long irqL;
-	_enter_critical_ex(&queue->lock, &irqL);
+	unsigned long flags;
+
+	spin_lock_irqsave(&queue->lock, flags);
 
 	rtw_list_delete(&precvbuf->list);
 
 	rtw_list_insert_tail(&precvbuf->list, get_list_head(queue));
-	_exit_critical_ex(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, flags);
 	return _SUCCESS;
 }
 
 struct recv_buf *rtw_dequeue_recvbuf (struct __queue *queue)
 {
-	unsigned long irqL;
 	struct recv_buf *precvbuf;
 	struct list_head *plist, *phead;
+	unsigned long flags;
 
-	_enter_critical_ex(&queue->lock, &irqL);
+	spin_lock_irqsave(&queue->lock, flags);
 
 	if (_rtw_queue_empty(queue)) {
 		precvbuf = NULL;
@@ -360,7 +356,7 @@ struct recv_buf *rtw_dequeue_recvbuf (struct __queue *queue)
 		rtw_list_delete(&precvbuf->list);
 	}
 
-	_exit_critical_ex(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, flags);
 
 	return precvbuf;
 }
@@ -1112,12 +1108,11 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
 		}
 
 		if ((psta->state&WIFI_SLEEP_STATE) && (pstapriv->sta_dz_bitmap&BIT(psta->aid))) {
-			unsigned long irqL;
 			struct list_head *xmitframe_plist, *xmitframe_phead;
 			struct xmit_frame *pxmitframe = NULL;
 			struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
-			_enter_critical_bh(&pxmitpriv->lock, &irqL);
+			spin_lock(&pxmitpriv->lock);
 
 			xmitframe_phead = get_list_head(&psta->sleep_q);
 			xmitframe_plist = get_next(xmitframe_phead);
@@ -1166,7 +1161,7 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
 					update_beacon(padapter, _TIM_IE_, NULL, false);
 				}
 			}
-			_exit_critical_bh(&pxmitpriv->lock, &irqL);
+			spin_unlock(&pxmitpriv->lock);
 		}
 	}
 
@@ -1944,7 +1939,6 @@ static int recv_indicatepkts_in_order(struct adapter *padapter, struct recv_reor
 
 static int recv_indicatepkt_reorder(struct adapter *padapter, union recv_frame *prframe)
 {
-	unsigned long irql;
 	int retval = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
 	struct recv_reorder_ctrl *preorder_ctrl = prframe->u.hdr.preorder_ctrl;
@@ -1985,7 +1979,7 @@ static int recv_indicatepkt_reorder(struct adapter *padapter, union recv_frame *
 		}
 	}
 
-	_enter_critical_bh(&ppending_recvframe_queue->lock, &irql);
+	spin_lock(&ppending_recvframe_queue->lock);
 
 	RT_TRACE(_module_rtl871x_recv_c_, _drv_notice_,
 		 ("recv_indicatepkt_reorder: indicate=%d seq=%d\n",
@@ -2012,9 +2006,9 @@ static int recv_indicatepkt_reorder(struct adapter *padapter, union recv_frame *
 	/* recv_indicatepkts_in_order(padapter, preorder_ctrl, true); */
 	if (recv_indicatepkts_in_order(padapter, preorder_ctrl, false)) {
 		_set_timer(&preorder_ctrl->reordering_ctrl_timer, REORDER_WAIT_TIME);
-		_exit_critical_bh(&ppending_recvframe_queue->lock, &irql);
+		spin_unlock(&ppending_recvframe_queue->lock);
 	} else {
-		_exit_critical_bh(&ppending_recvframe_queue->lock, &irql);
+		spin_unlock(&ppending_recvframe_queue->lock);
 		_cancel_timer_ex(&preorder_ctrl->reordering_ctrl_timer);
 	}
 
@@ -2024,14 +2018,13 @@ _success_exit:
 
 _err_exit:
 
-	_exit_critical_bh(&ppending_recvframe_queue->lock, &irql);
+	spin_unlock(&ppending_recvframe_queue->lock);
 
 	return _FAIL;
 }
 
 void rtw_reordering_ctrl_timeout_handler(void *pcontext)
 {
-	unsigned long irql;
 	struct recv_reorder_ctrl *preorder_ctrl = (struct recv_reorder_ctrl *)pcontext;
 	struct adapter *padapter = preorder_ctrl->padapter;
 	struct __queue *ppending_recvframe_queue = &preorder_ctrl->pending_recvframe_queue;
@@ -2039,12 +2032,12 @@ void rtw_reordering_ctrl_timeout_handler(void *pcontext)
 	if (padapter->bDriverStopped || padapter->bSurpriseRemoved)
 		return;
 
-	_enter_critical_bh(&ppending_recvframe_queue->lock, &irql);
+	spin_lock(&ppending_recvframe_queue->lock);
 
 	if (recv_indicatepkts_in_order(padapter, preorder_ctrl, true) == true)
 		_set_timer(&preorder_ctrl->reordering_ctrl_timer, REORDER_WAIT_TIME);
 
-	_exit_critical_bh(&ppending_recvframe_queue->lock, &irql);
+	spin_unlock(&ppending_recvframe_queue->lock);
 }
 
 static int process_recv_indicatepkts(struct adapter *padapter, union recv_frame *prframe)
