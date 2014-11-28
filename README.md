@@ -17,6 +17,14 @@ consult your distro.
 
 > sudo make install
 
+DKMS
+---------
+The module can also be installed with DKMS. Make sure to install the `dkms` package first.
+
+    sudo dkms add ./rtl8188eu
+    sudo dkms build 8188eu/1.0
+    sudo dkms install 8188eu/1.0
+
 Submitting Issues
 ---------
 
