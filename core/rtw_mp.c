@@ -376,7 +376,7 @@ s32 mp_start_test(struct adapter *padapter)
 	else
 		bssid.Length = length;
 
-	spin_lock(&pmlmepriv->lock);
+	spin_lock_bh(&pmlmepriv->lock);
 
 	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
 		goto end_of_mp_start_test;
@@ -417,7 +417,7 @@ s32 mp_start_test(struct adapter *padapter)
 
 end_of_mp_start_test:
 
-	spin_unlock(&pmlmepriv->lock);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 	if (res == _SUCCESS) {
 		/*  set MSR to WIFI_FW_ADHOC_STATE */
@@ -438,7 +438,7 @@ void mp_stop_test(struct adapter *padapter)
 
 	if (pmppriv->mode == MP_ON) {
 		pmppriv->bSetTxPower = 0;
-		spin_lock(&pmlmepriv->lock);
+		spin_lock_bh(&pmlmepriv->lock);
 		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == false)
 			goto end_of_mp_stop_test;
 
@@ -460,7 +460,7 @@ void mp_stop_test(struct adapter *padapter)
 
 end_of_mp_stop_test:
 
-		spin_unlock(&pmlmepriv->lock);
+		spin_unlock_bh(&pmlmepriv->lock);
 	}
 }
 

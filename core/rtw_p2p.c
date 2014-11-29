@@ -55,7 +55,7 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	pstart = pdata_attr;
 	pcur = pdata_attr;
 
-	spin_lock(&pstapriv->asoc_list_lock);
+	spin_lock_bh(&pstapriv->asoc_list_lock);
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
 
@@ -119,7 +119,7 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 			pstart = pcur;
 		}
 	}
-	spin_unlock(&pstapriv->asoc_list_lock);
+	spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 	if (attr_len > 0)
 		len = rtw_set_p2p_attr_content(pbuf, P2P_ATTR_GROUP_INFO, attr_len, pdata_attr);
@@ -978,7 +978,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 				if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_DEVICE_ID, dev_addr, &attr_contentlen)) {
 					struct list_head *phead, *plist;
 
-					spin_lock(&pstapriv->asoc_list_lock);
+					spin_lock_bh(&pstapriv->asoc_list_lock);
 					phead = &pstapriv->asoc_list;
 					plist = get_next(phead);
 
@@ -998,7 +998,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 							status = P2P_STATUS_FAIL_INFO_UNAVAILABLE;
 						}
 					}
-					spin_unlock(&pstapriv->asoc_list_lock);
+					spin_unlock_bh(&pstapriv->asoc_list_lock);
 				} else {
 					status = P2P_STATUS_FAIL_INVALID_PARAM;
 				}
@@ -1506,8 +1506,8 @@ _func_enter_;
 
 	rtw_p2p_set_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH);
 
-	spin_lock(&pmlmepriv->lock);
-	spin_unlock(&pmlmepriv->lock);
+	spin_lock_bh(&pmlmepriv->lock);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 
 _func_exit_;
@@ -1835,7 +1835,7 @@ static void pre_tx_scan_timer_process(void *FunctionContext)
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		return;
 
-	spin_lock(&pmlmepriv->lock);
+	spin_lock_bh(&pmlmepriv->lock);
 
 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_PROVISION_DIS_REQ)) {
 		if (pwdinfo->tx_prov_disc_info.benable) {	/*	the provision discovery request frame is trigger to send or not */
@@ -1853,7 +1853,7 @@ static void pre_tx_scan_timer_process(void *FunctionContext)
 		DBG_88E("[%s] p2p_state is %d, ignore!!\n", __func__, rtw_p2p_state(pwdinfo));
 	}
 
-	spin_unlock(&pmlmepriv->lock);
+	spin_unlock_bh(&pmlmepriv->lock);
 }
 
 static void find_phase_timer_process(void *FunctionContext)

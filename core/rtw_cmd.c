@@ -2200,9 +2200,9 @@ void rtw_disassoc_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
 _func_enter_;
 
 	if (pcmd->res != H2C_SUCCESS) {
-		spin_lock(&pmlmepriv->lock);
+		spin_lock_bh(&pmlmepriv->lock);
 		set_fwstate(pmlmepriv, _FW_LINKED);
-		spin_unlock(&pmlmepriv->lock);
+		spin_unlock_bh(&pmlmepriv->lock);
 
 		RT_TRACE(_module_rtl871x_cmd_c_, _drv_err_, ("\n ***Error: disconnect_cmd_callback Fail ***\n."));
 
@@ -2256,7 +2256,7 @@ _func_enter_;
 
 	_cancel_timer(&pmlmepriv->assoc_timer, &timer_cancelled);
 
-	spin_lock(&pmlmepriv->lock);
+	spin_lock_bh(&pmlmepriv->lock);
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 		psta = rtw_get_stainfo(&padapter->stapriv, pnetwork->MacAddress);
@@ -2272,12 +2272,12 @@ _func_enter_;
 	} else {
 
 		pwlan = _rtw_alloc_network(pmlmepriv);
-		spin_lock(&(pmlmepriv->scanned_queue.lock));
+		spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
 		if (pwlan == NULL) {
 			pwlan = rtw_get_oldest_wlan_network(&pmlmepriv->scanned_queue);
 			if (pwlan == NULL) {
 				RT_TRACE(_module_rtl871x_cmd_c_, _drv_err_, ("\n Error:  can't get pwlan in rtw_joinbss_event_callback\n"));
-				spin_unlock(&(pmlmepriv->scanned_queue.lock));
+				spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 				goto createbss_cmd_fail;
 			}
 			pwlan->last_scanned = rtw_get_current_time();
@@ -2292,13 +2292,13 @@ _func_enter_;
 
 		_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 
-		spin_unlock(&(pmlmepriv->scanned_queue.lock));
+		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 		/*  we will set _FW_LINKED when there is one more sat to join us (rtw_stassoc_event_callback) */
 	}
 
 createbss_cmd_fail:
 
-	spin_unlock(&pmlmepriv->lock);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 	rtw_free_cmd_obj(pcmd);
 
@@ -2340,13 +2340,13 @@ _func_enter_;
 	psta->aid = passocsta_rsp->cam_id;
 	psta->mac_id = passocsta_rsp->cam_id;
 
-	spin_lock(&pmlmepriv->lock);
+	spin_lock_bh(&pmlmepriv->lock);
 
 	if ((check_fwstate(pmlmepriv, WIFI_MP_STATE) == true) && (check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == true))
 		_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 
 	set_fwstate(pmlmepriv, _FW_LINKED);
-	spin_unlock(&pmlmepriv->lock);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 exit:
 	rtw_free_cmd_obj(pcmd);

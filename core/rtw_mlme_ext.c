@@ -814,24 +814,24 @@ unsigned int OnAuth(struct adapter *padapter, union recv_frame *precv_frame)
 		pstat->state = WIFI_FW_AUTH_NULL;
 		pstat->auth_seq = 0;
 	} else {
-		spin_lock(&pstapriv->asoc_list_lock);
+		spin_lock_bh(&pstapriv->asoc_list_lock);
 		if (!rtw_is_list_empty(&pstat->asoc_list)) {
 			rtw_list_delete(&pstat->asoc_list);
 			pstapriv->asoc_list_cnt--;
 		}
-		spin_unlock(&pstapriv->asoc_list_lock);
+		spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 		if (seq == 1) {
 			/* TODO: STA re_auth and auth timeout */
 		}
 	}
 
-	spin_lock(&pstapriv->auth_list_lock);
+	spin_lock_bh(&pstapriv->auth_list_lock);
 	if (rtw_is_list_empty(&pstat->auth_list)) {
 		rtw_list_insert_tail(&pstat->auth_list, &pstapriv->auth_list);
 		pstapriv->auth_list_cnt++;
 	}
-	spin_unlock(&pstapriv->auth_list_lock);
+	spin_unlock_bh(&pstapriv->auth_list_lock);
 
 	if (pstat->auth_seq == 0)
 		pstat->expire_to = pstapriv->auth_to;
@@ -1404,20 +1404,20 @@ unsigned int OnAssocReq(struct adapter *padapter, union recv_frame *precv_frame)
 	pstat->state &= (~WIFI_FW_ASSOC_STATE);
 	pstat->state |= WIFI_FW_ASSOC_SUCCESS;
 
-	spin_lock(&pstapriv->auth_list_lock);
+	spin_lock_bh(&pstapriv->auth_list_lock);
 	if (!rtw_is_list_empty(&pstat->auth_list)) {
 		rtw_list_delete(&pstat->auth_list);
 		pstapriv->auth_list_cnt--;
 	}
-	spin_unlock(&pstapriv->auth_list_lock);
+	spin_unlock_bh(&pstapriv->auth_list_lock);
 
-	spin_lock(&pstapriv->asoc_list_lock);
+	spin_lock_bh(&pstapriv->asoc_list_lock);
 	if (rtw_is_list_empty(&pstat->asoc_list)) {
 		pstat->expire_to = pstapriv->expire_to;
 		rtw_list_insert_tail(&pstat->asoc_list, &pstapriv->asoc_list);
 		pstapriv->asoc_list_cnt++;
 	}
-	spin_unlock(&pstapriv->asoc_list_lock);
+	spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 	/*  now the station is qualified to join our BSS... */
 	if (pstat && (pstat->state & WIFI_FW_ASSOC_SUCCESS) && (_STATS_SUCCESSFUL_ == status)) {
@@ -1596,13 +1596,13 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
 		if (psta) {
 			u8 updated = 0;
 
-			spin_lock(&pstapriv->asoc_list_lock);
+			spin_lock_bh(&pstapriv->asoc_list_lock);
 			if (!rtw_is_list_empty(&psta->asoc_list)) {
 				rtw_list_delete(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated = ap_free_sta(padapter, psta, false, reason);
 			}
-			spin_unlock(&pstapriv->asoc_list_lock);
+			spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 			associated_clients_update(padapter, updated);
 		}
@@ -1677,13 +1677,13 @@ unsigned int OnDisassoc(struct adapter *padapter, union recv_frame *precv_frame)
 		if (psta) {
 			u8 updated = 0;
 
-			spin_lock(&pstapriv->asoc_list_lock);
+			spin_lock_bh(&pstapriv->asoc_list_lock);
 			if (!rtw_is_list_empty(&psta->asoc_list)) {
 				rtw_list_delete(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated = ap_free_sta(padapter, psta, false, reason);
 			}
-			spin_unlock(&pstapriv->asoc_list_lock);
+			spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 			associated_clients_update(padapter, updated);
 		}
@@ -4510,7 +4510,7 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
 		return;
 	}
 #if defined (CONFIG_88EU_AP_MODE)
-	spin_lock(&pmlmepriv->bcn_update_lock);
+	spin_lock_bh(&pmlmepriv->bcn_update_lock);
 #endif /* if defined (CONFIG_88EU_AP_MODE) */
 
 	/* update attribute */
@@ -4695,7 +4695,7 @@ _issue_bcn:
 #if defined (CONFIG_88EU_AP_MODE)
 	pmlmepriv->update_bcn = false;
 
-	spin_unlock(&pmlmepriv->bcn_update_lock);
+	spin_unlock_bh(&pmlmepriv->bcn_update_lock);
 #endif /* if defined (CONFIG_88EU_AP_MODE) */
 
 	if ((pattrib->pktlen + TXDESC_SIZE) > 512) {
@@ -6235,7 +6235,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 	if (pmlmepriv->num_sta_no_ht > 0) {
 		int i;
 
-		spin_lock(&pmlmepriv->scanned_queue.lock);
+		spin_lock_bh(&pmlmepriv->scanned_queue.lock);
 
 		phead = get_list_head(queue);
 		plist = get_next(phead);
@@ -6265,7 +6265,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 					ICS[0][0] = 1;
 			}
 		}
-		spin_unlock(&pmlmepriv->scanned_queue.lock);
+		spin_unlock_bh(&pmlmepriv->scanned_queue.lock);
 
 		for (i = 0; i < 8; i++) {
 			if (ICS[i][0] == 1) {
@@ -8376,7 +8376,7 @@ u8 tx_beacon_hdl(struct adapter *padapter, unsigned char *pbuf)
 
 		if ((pstapriv->tim_bitmap&BIT(0)) && (psta_bmc->sleepq_len > 0)) {
 			rtw_msleep_os(10);/*  10ms, ATIM(HIQ) Windows */
-			spin_lock(&psta_bmc->sleep_q.lock);
+			spin_lock_bh(&psta_bmc->sleep_q.lock);
 
 			xmitframe_phead = get_list_head(&psta_bmc->sleep_q);
 			xmitframe_plist = get_next(xmitframe_phead);
@@ -8398,12 +8398,12 @@ u8 tx_beacon_hdl(struct adapter *padapter, unsigned char *pbuf)
 
 				pxmitframe->attrib.qsel = 0x11;/* HIQ */
 
-				spin_unlock(&psta_bmc->sleep_q.lock);
+				spin_unlock_bh(&psta_bmc->sleep_q.lock);
 				if (rtw_hal_xmit(padapter, pxmitframe))
 					rtw_os_xmit_complete(padapter, pxmitframe);
-				spin_lock(&psta_bmc->sleep_q.lock);
+				spin_lock_bh(&psta_bmc->sleep_q.lock);
 			}
-			spin_unlock(&psta_bmc->sleep_q.lock);
+			spin_unlock_bh(&psta_bmc->sleep_q.lock);
 		}
 	}
 #endif

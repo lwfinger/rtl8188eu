@@ -847,7 +847,7 @@ int proc_get_all_sta_info(char *page, char **start,
 
 	len += snprintf(page + len, count - len, "sta_dz_bitmap=0x%x, tim_bitmap=0x%x\n", pstapriv->sta_dz_bitmap, pstapriv->tim_bitmap);
 
-	spin_lock(&pstapriv->sta_hash_lock);
+	spin_lock_bh(&pstapriv->sta_hash_lock);
 
 	for (i = 0; i < NUM_STA; i++) {
 		phead = &(pstapriv->sta_hash[i]);
@@ -881,7 +881,7 @@ int proc_get_all_sta_info(char *page, char **start,
 			}
 		}
 	}
-	spin_unlock(&pstapriv->sta_hash_lock);
+	spin_unlock_bh(&pstapriv->sta_hash_lock);
 
 	*eof = 1;
 	return len;

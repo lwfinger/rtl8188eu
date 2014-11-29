@@ -163,12 +163,12 @@ void rtw_os_xmit_schedule(struct adapter *padapter)
 
 	pxmitpriv = &padapter->xmitpriv;
 
-	spin_lock(&pxmitpriv->lock);
+	spin_lock_bh(&pxmitpriv->lock);
 
 	if (rtw_txframes_pending(padapter))
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
 
-	spin_unlock(&pxmitpriv->lock);
+	spin_unlock_bh(&pxmitpriv->lock);
 }
 
 static void rtw_check_xmit_resource(struct adapter *padapter, struct sk_buff *pkt)
@@ -198,7 +198,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 	struct sta_info *psta = NULL;
 	s32	res;
 
-	spin_lock(&pstapriv->asoc_list_lock);
+	spin_lock_bh(&pstapriv->asoc_list_lock);
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
 
@@ -228,12 +228,12 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 			DBG_88E("%s-%d: skb_copy() failed!\n", __func__, __LINE__);
 			pxmitpriv->tx_drop++;
 
-			spin_unlock(&pstapriv->asoc_list_lock);
+			spin_unlock_bh(&pstapriv->asoc_list_lock);
 			return false;	/*  Caller shall tx this multicast frame via normal way. */
 		}
 	}
 
-	spin_unlock(&pstapriv->asoc_list_lock);
+	spin_unlock_bh(&pstapriv->asoc_list_lock);
 	dev_kfree_skb_any(skb);
 	return true;
 }
