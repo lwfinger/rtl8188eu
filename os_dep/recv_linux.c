@@ -130,7 +130,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter,
 	struct sk_buff *skb;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
-_func_enter_;
+
 
 	precvpriv = &(padapter->recvpriv);
 	pfree_recv_queue = &(precvpriv->free_recv_queue);
@@ -220,7 +220,7 @@ _recv_indicatepkt_end:
 	RT_TRACE(_module_recv_osdep_c_, _drv_info_,
 		 ("\n rtw_recv_indicatepkt :after netif_rx!!!!\n"));
 
-_func_exit_;
+
 
 	return _SUCCESS;
 
@@ -229,7 +229,7 @@ _recv_indicatepkt_drop:
 	 /* enqueue back to free_recv_queue */
 		rtw_free_recvframe(precv_frame, pfree_recv_queue);
 
-_func_exit_;
+
 	 return _FAIL;
 }
 

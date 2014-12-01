@@ -116,7 +116,7 @@ uint rtw_hal_deinit(struct adapter *adapt)
 {
 	uint	status = _SUCCESS;
 
-_func_enter_;
+
 
 	status = adapt->HalFunc.hal_deinit(adapt);
 
@@ -125,7 +125,7 @@ _func_enter_;
 	else
 		DBG_88E("\n rtw_hal_deinit: hal_init fail\n");
 
-_func_exit_;
+
 
 	return status;
 }

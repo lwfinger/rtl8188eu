@@ -8272,7 +8272,7 @@ u8 set_tx_beacon_cmd(struct adapter *padapter)
 	u8 res = _SUCCESS;
 	int len_diff = 0;
 
-_func_enter_;
+
 
 	ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
 	if (ph2c == NULL) {
@@ -8301,7 +8301,7 @@ _func_enter_;
 
 exit:
 
-_func_exit_;
+
 
 	return res;
 }

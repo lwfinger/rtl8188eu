@@ -1096,12 +1096,12 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
 	}
 
 	kfree(bssid);
-	_func_exit_;
+	
 	return _SUCCESS;
 
 _mismatch:
 	kfree(bssid);
-	_func_exit_;
+	
 	return _FAIL;
 }
 
