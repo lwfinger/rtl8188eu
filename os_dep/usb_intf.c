@@ -161,7 +161,6 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	struct usb_config_descriptor	*pconf_desc;
 	struct usb_host_interface	*phost_iface;
 	struct usb_interface_descriptor	*piface_desc;
-	struct usb_host_endpoint	*phost_endp;
 	struct usb_endpoint_descriptor	*pendp_desc;
 	struct usb_device	*pusbd;
 
@@ -190,44 +189,24 @@ _func_enter_;
 	pdvobjpriv->nr_endpoint = piface_desc->bNumEndpoints;
 
 	for (i = 0; i < pdvobjpriv->nr_endpoint; i++) {
-		phost_endp = phost_iface->endpoint + i;
-		if (phost_endp) {
-			pendp_desc = &phost_endp->desc;
+		int ep_num;
+		pendp_desc = &phost_iface->endpoint[i].desc;
 
-			DBG_88E("\nusb_endpoint_descriptor(%d):\n", i);
-			DBG_88E("bLength=%x\n", pendp_desc->bLength);
-			DBG_88E("bDescriptorType=%x\n",
-				pendp_desc->bDescriptorType);
-			DBG_88E("bEndpointAddress=%x\n",
-				pendp_desc->bEndpointAddress);
-			DBG_88E("wMaxPacketSize=%d\n",
-				le16_to_cpu(pendp_desc->wMaxPacketSize));
-			DBG_88E("bInterval=%x\n", pendp_desc->bInterval);
+		ep_num = usb_endpoint_num(pendp_desc);
 
-			if (RT_usb_endpoint_is_bulk_in(pendp_desc)) {
-				DBG_88E("RT_usb_endpoint_is_bulk_in = %x\n",
-					RT_usb_endpoint_num(pendp_desc));
-				pdvobjpriv->RtInPipe[pdvobjpriv->RtNumInPipes] = RT_usb_endpoint_num(pendp_desc);
-				pdvobjpriv->RtNumInPipes++;
-			} else if (usb_endpoint_is_int(pendp_desc)) {
-				DBG_88E("usb_endpoint_is_int = %x, Interval = %x\n",
-					RT_usb_endpoint_num(pendp_desc),
-					pendp_desc->bInterval);
-				pdvobjpriv->RtInPipe[pdvobjpriv->RtNumInPipes] = RT_usb_endpoint_num(pendp_desc);
-				pdvobjpriv->RtNumInPipes++;
-			} else if (RT_usb_endpoint_is_bulk_out(pendp_desc)) {
-				DBG_88E("RT_usb_endpoint_is_bulk_out = %x\n",
-					RT_usb_endpoint_num(pendp_desc));
-				pdvobjpriv->RtOutPipe[pdvobjpriv->RtNumOutPipes] = RT_usb_endpoint_num(pendp_desc);
-				pdvobjpriv->RtNumOutPipes++;
-			}
-			pdvobjpriv->ep_num[i] = RT_usb_endpoint_num(pendp_desc);
+		if (usb_endpoint_is_bulk_in(pendp_desc)) {
+			pdvobjpriv->RtInPipe[pdvobjpriv->RtNumInPipes] = ep_num;
+			pdvobjpriv->RtNumInPipes++;
+		} else if (usb_endpoint_is_int_in(pendp_desc)) {
+			pdvobjpriv->RtInPipe[pdvobjpriv->RtNumInPipes] = ep_num;
+			pdvobjpriv->RtNumInPipes++;
+		} else if (usb_endpoint_is_bulk_out(pendp_desc)) {
+			pdvobjpriv->RtOutPipe[pdvobjpriv->RtNumOutPipes] =
+				ep_num;
+			pdvobjpriv->RtNumOutPipes++;
 		}
+		pdvobjpriv->ep_num[i] = ep_num;
 	}
-
-	DBG_88E("nr_endpoint=%d, in_num=%d, out_num=%d\n\n",
-		pdvobjpriv->nr_endpoint, pdvobjpriv->RtNumInPipes,
-		pdvobjpriv->RtNumOutPipes);
 
 	if (pusbd->speed == USB_SPEED_HIGH) {
 		pdvobjpriv->ishighspeed = true;
