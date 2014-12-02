@@ -72,8 +72,6 @@ static s32 FillH2CCmd_88E(struct adapter *adapt, u8 ElementID, u32 CmdLen, u8 *p
 	u32 h2c_cmd_ex = 0;
 	s32 ret = _FAIL;
 
-
-
 	if (!adapt->bFWReady) {
 		DBG_88E("FillH2CCmd_88E(): return H2C cmd because fw is not ready\n");
 		return ret;
@@ -125,8 +123,6 @@ static s32 FillH2CCmd_88E(struct adapter *adapt, u8 ElementID, u32 CmdLen, u8 *p
 
 exit:
 
-
-
 	return ret;
 }
 
@@ -135,15 +131,12 @@ u8 rtl8188e_set_rssi_cmd(struct adapter *adapt, u8 *param)
 	u8 res = _SUCCESS;
 	struct hal_data_8188e *haldata = GET_HAL_DATA(adapt);
 
-
 	if (haldata->fw_ractrl) {
 		;
 	} else {
 		DBG_88E("==>%s fw dont support RA\n", __func__);
 		res = _FAIL;
 	}
-
-
 
 	return res;
 }
@@ -153,7 +146,6 @@ u8 rtl8188e_set_raid_cmd(struct adapter *adapt, u32 mask)
 	u8 buf[3];
 	u8 res = _SUCCESS;
 	struct hal_data_8188e *haldata = GET_HAL_DATA(adapt);
-
 
 	if (haldata->fw_ractrl) {
 		__le32 lmask;
@@ -167,8 +159,6 @@ u8 rtl8188e_set_raid_cmd(struct adapter *adapt, u32 mask)
 		DBG_88E("==>%s fw dont support RA\n", __func__);
 		res = _FAIL;
 	}
-
-
 
 	return res;
 }
@@ -216,7 +206,6 @@ void rtl8188e_set_FwPwrMode_cmd(struct adapter *adapt, u8 Mode)
 	struct pwrctrl_priv *pwrpriv = &adapt->pwrctrlpriv;
 	u8 RLBM = 0; /*  0:Min, 1:Max, 2:User define */
 
-
 	DBG_88E("%s: Mode=%d SmartPS=%d UAPSD=%d\n", __func__,
 		Mode, pwrpriv->smart_ps, adapt->registrypriv.uapsd_enable);
 
@@ -255,7 +244,6 @@ void rtl8188e_set_FwPwrMode_cmd(struct adapter *adapt, u8 Mode)
 		H2CSetPwrMode.PwrState = 0x0C;/*  AllON(0x0C), RFON(0x04), RFOFF(0x00) */
 
 	FillH2CCmd_88E(adapt, H2C_PS_PWR_MODE, sizeof(H2CSetPwrMode), (u8 *)&H2CSetPwrMode);
-
 
 }
 
@@ -617,8 +605,6 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *adapt, u8 mstatus)
 	u8 DLBcnCount = 0;
 	u32 poll = 0;
 
-
-
 	DBG_88E("%s mstatus(%x)\n", __func__, mstatus);
 
 	if (mstatus == 1) {
@@ -712,8 +698,6 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter *adapt, u8 p2p_ps_state)
 	struct P2P_PS_Offload_t	*p2p_ps_offload = &haldata->p2p_ps_offload;
 	u8 i;
 
-
-
 	switch (p2p_ps_state) {
 	case P2P_PS_DISABLE:
 		DBG_88E("P2P_PS_DISABLE\n");
@@ -774,6 +758,5 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter *adapt, u8 p2p_ps_state)
 
 	FillH2CCmd_88E(adapt, H2C_PS_P2P_OFFLOAD, 1, (u8 *)p2p_ps_offload);
 #endif
-
 
 }

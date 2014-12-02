@@ -245,7 +245,6 @@ void rtw_proc_init_one(struct net_device *dev)
 	}
 	entry->write_proc = proc_set_read_reg;
 
-
 	entry = create_proc_read_entry("fwstate", S_IFREG | S_IRUGO,
 				   dir_dev, proc_get_fwstate, dev);
 	if (!entry) {
@@ -521,8 +520,6 @@ static uint loadparam(struct adapter *padapter,  struct  net_device *pnetdev)
 {
 	uint status = _SUCCESS;
 	struct registry_priv  *registry_par = &padapter->registrypriv;
-
-
 
 	GlobalDebugLevel = rtw_debug;
 	registry_par->chip_version = (u8)rtw_chip_version;
@@ -868,8 +865,6 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 	u8	ret8 = _SUCCESS;
 	unsigned long flags;
 
-
-
 	RT_TRACE(_module_os_intfs_c_, _drv_info_, ("+rtw_init_drv_sw\n"));
 
 	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL) {
@@ -990,7 +985,6 @@ u8 rtw_free_drv_sw(struct adapter *padapter)
 		}
 	}
 	#endif
-
 
 	_rtw_spinlock_free(&padapter->br_ext_lock);
 
@@ -1170,7 +1164,6 @@ netdev_open_error:
 
 	return _FAIL;
 }
-
 
 int rtw_ips_pwr_up(struct adapter *padapter)
 {

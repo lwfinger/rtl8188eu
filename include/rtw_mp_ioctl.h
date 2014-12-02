@@ -336,5 +336,4 @@ s32 rtl8188eu_mp_ioctl_xmit_packet_hdl(struct oid_par_priv *poid_par_priv);
 #define EXT_MP_IOCTL_HANDLER(sz, subcode, oid)			\
 	 {sz, rtl8188eu_mp_ioctl_##subcode##_hdl, oid},
 
-
 #endif

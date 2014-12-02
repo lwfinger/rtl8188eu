@@ -150,7 +150,6 @@
 #include "HalVerDef.h"
 void dump_chip_info(struct HAL_VERSION	ChipVersion);
 
-
 /* return the final channel plan decision */
 u8 hal_com_get_channel_plan(struct adapter *padapter,
 			    u8 hw_channel_plan,

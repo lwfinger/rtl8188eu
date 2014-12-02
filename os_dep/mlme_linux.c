@@ -18,7 +18,6 @@
  *
  ******************************************************************************/
 
-
 #define _MLME_OSDEP_C_
 
 #include <osdep_service.h>
@@ -31,7 +30,6 @@ void rtw_join_timeout_handler (void *FunctionContext)
 
 	_rtw_join_timeout_handler(adapter);
 }
-
 
 void _rtw_scan_timeout_handler (void *FunctionContext)
 {
@@ -206,7 +204,6 @@ void rtw_indicate_sta_assoc_event(struct adapter *padapter, struct sta_info *pst
 	if (pstapriv->sta_aid[psta->aid - 1] != psta)
 		return;
 
-
 	wrqu.addr.sa_family = ARPHRD_ETHER;
 
 	memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
@@ -229,7 +226,6 @@ void rtw_indicate_sta_disassoc_event(struct adapter *padapter, struct sta_info *
 
 	if (pstapriv->sta_aid[psta->aid - 1] != psta)
 		return;
-
 
 	wrqu.addr.sa_family = ARPHRD_ETHER;
 

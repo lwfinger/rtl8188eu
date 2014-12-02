@@ -151,14 +151,12 @@ static u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
 	u16 len;
 	__le32 data;
 
-
 	request = 0x05;
 	requesttype = 0x01;/* read_in */
 	index = 0;/* n/a */
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 2;
 	usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
-
 
 	return (u16)(le32_to_cpu(data)&0xffff);
 }
@@ -172,8 +170,6 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 	u16 len;
 	__le32 data;
 
-
-
 	request = 0x05;
 	requesttype = 0x01;/* read_in */
 	index = 0;/* n/a */
@@ -182,8 +178,6 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 	len = 4;
 
 	usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
-
-
 
 	return le32_to_cpu(data);
 }
@@ -595,8 +589,6 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	size_t alignment = 0;
 	u32 ret = _SUCCESS;
 
-
-
 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||
 	    adapter->pwrctrlpriv.pnp_bstop_trx) {
 		RT_TRACE(_module_hci_ops_os_c_, _drv_err_,
@@ -668,7 +660,6 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 				err, purb->status);
 			ret = _FAIL;
 		}
-
 
 	return ret;
 }

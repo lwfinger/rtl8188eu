@@ -70,7 +70,6 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 
 	precvpriv->precv_buf = (u8 *)N_BYTE_ALIGMENT((size_t)(precvpriv->pallocated_recv_buf), 4);
 
-
 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
 
 	for (i = 0; i < NR_RECVBUFF; i++) {
@@ -129,7 +128,6 @@ void rtl8188eu_free_recv_priv(struct adapter *padapter)
 	if (skb_queue_len(&precvpriv->rx_skb_queue))
 		DBG_88E(KERN_WARNING "rx_skb_queue not empty\n");
 	skb_queue_purge(&precvpriv->rx_skb_queue);
-
 
 	if (skb_queue_len(&precvpriv->free_recv_skb_queue))
 		DBG_88E(KERN_WARNING "free_recv_skb_queue not empty, %d\n", skb_queue_len(&precvpriv->free_recv_skb_queue));

@@ -23,8 +23,6 @@
 #include <drv_types.h>
 #include <rtw_efuse.h>
 
-
-
 /*------------------------Define local variable------------------------------*/
 u8 fakeEfuseBank;
 u32 fakeEfuseUsedBytes;
@@ -376,7 +374,6 @@ int Efuse_PgPacketWrite(struct adapter *pAdapter, u8 offset, u8 word_en, u8 *dat
 
 	return ret;
 }
-
 
 static int Efuse_PgPacketWrite_BT(struct adapter *pAdapter, u8 offset, u8 word_en, u8 *data, bool pseudo)
 {

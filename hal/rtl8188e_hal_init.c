@@ -810,7 +810,6 @@ rtl8188e_EfusePowerSwitch(
 	hal_EfusePowerSwitch_RTL8188E(pAdapter, bWrite, PwrState);
 }
 
-
 static void Hal_EfuseReadEFuse88E(struct adapter *Adapter,
 	u16			_offset,
 	u16			_size_byte,

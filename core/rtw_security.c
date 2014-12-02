@@ -162,8 +162,6 @@ void rtw_wep_encrypt(struct adapter *padapter, u8 *pxmitframe)
 	struct	security_priv	*psecuritypriv = &padapter->securitypriv;
 	struct	xmit_priv		*pxmitpriv = &padapter->xmitpriv;
 
-
-
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return;
 
@@ -203,7 +201,6 @@ void rtw_wep_encrypt(struct adapter *padapter, u8 *pxmitframe)
 		}
 	}
 
-
 }
 
 void rtw_wep_decrypt(struct adapter  *padapter, u8 *precvframe)
@@ -217,8 +214,6 @@ void rtw_wep_decrypt(struct adapter  *padapter, u8 *precvframe)
 	u8	 keyindex;
 	struct	rx_pkt_attrib	 *prxattrib = &(((union recv_frame *)precvframe)->u.hdr.attrib);
 	struct	security_priv	*psecuritypriv = &padapter->securitypriv;
-
-
 
 	pframe = (unsigned char *)((union recv_frame *)precvframe)->u.hdr.rx_data;
 
@@ -385,8 +380,6 @@ void rtw_seccalctkipmic(u8 *key, u8 *header, u8 *data, u32 data_len, u8 *mic_cod
 	rtw_secgetmic(&micdata, mic_code);
 
 }
-
-
 
 /* macros for extraction/creation of unsigned char/unsigned short values  */
 #define RotR1(v16)   ((((v16) >> 1) & 0x7FFF) ^ (((v16) & 1) << 15))
@@ -610,7 +603,6 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 	struct	xmit_priv		*pxmitpriv = &padapter->xmitpriv;
 	u32	res = _SUCCESS;
 
-
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return _FAIL;
 
@@ -691,8 +683,6 @@ u32 rtw_tkip_decrypt(struct adapter *padapter, u8 *precvframe)
 	struct	security_priv	*psecuritypriv = &padapter->securitypriv;
 	u32		res = _SUCCESS;
 
-
-
 	pframe = (unsigned char *)((union recv_frame *)precvframe)->u.hdr.rx_data;
 
 	/* 4 start to decrypt recvframe */
@@ -750,7 +740,6 @@ exit:
 }
 
 /* 3			===== AES related ===== */
-
 
 #define MAX_MSG_SIZE	2048
 /*****************************/
@@ -1076,7 +1065,6 @@ static void construct_mic_header2(u8 *mic_header2, u8 *mpdu, int a4_exists, int 
 		mic_header2[15] = mpdu[31] & 0x00;
 	}
 
-
 }
 
 /************************************************/
@@ -1138,7 +1126,6 @@ static int aes_cipher(u8 *key, uint hdrlen, u8 *pframe, uint plen)
 	u8 mic[8];
 	uint	frtype  = GetFrameType(pframe);
 	uint	frsubtype  = GetFrameSubType(pframe);
-
 
 	frsubtype = frsubtype>>4;
 
@@ -1272,7 +1259,6 @@ u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 /*	uint	offset = 0; */
 	u32 res = _SUCCESS;
 
-
 	if (((struct xmit_frame *)pxmitframe)->buf_addr == NULL)
 		return _FAIL;
 
@@ -1313,8 +1299,6 @@ u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 			res = _FAIL;
 		}
 	}
-
-
 
 		return res;
 }
@@ -1764,13 +1748,10 @@ void rtw_use_tkipkey_handler(void *FunctionContext)
 {
 	struct adapter *padapter = (struct adapter *)FunctionContext;
 
-
-
 	RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("^^^rtw_use_tkipkey_handler ^^^\n"));
 
 	padapter->securitypriv.busetkipkey = true;
 
 	RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("^^^rtw_use_tkipkey_handler padapter->securitypriv.busetkipkey=%d^^^\n", padapter->securitypriv.busetkipkey));
-
 
 }

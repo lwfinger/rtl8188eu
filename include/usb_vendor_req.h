@@ -33,7 +33,6 @@
 #define	RT_USB_SYSCLK_40MHZ		1
 #define	RT_USB_SYSCLK_60MHZ		2
 
-
 enum bt_usb_request {
 	RT_USB_SET_REGISTER		= 1,
 	RT_USB_SET_SYSCLK		= 2,

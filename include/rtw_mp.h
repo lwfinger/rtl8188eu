@@ -99,7 +99,6 @@ enum antenna_path {
 	ANTENNA_ABCD
 };
 
-
 #define MAX_MP_XMITBUF_SZ	2048
 #define NR_MP_XMITFRAME		8
 

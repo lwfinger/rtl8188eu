@@ -64,7 +64,6 @@
   PPPoE |type|   SID   |           AC MAC            |
 -----------------------------------------------------------------*/
 
-
 /* Find a tag in pppoe frame and return the pointer */
 static inline unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
 {
@@ -82,7 +81,6 @@ static inline unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsign
 	}
 	return NULL;
 }
-
 
 static inline int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
 {
@@ -133,7 +131,6 @@ static inline unsigned long __nat25_timeout(struct adapter *priv)
 	return timeout;
 }
 
-
 static inline int  __nat25_has_expired(struct adapter *priv,
 				struct nat25_network_db_entry *fdb)
 {
@@ -143,7 +140,6 @@ static inline int  __nat25_has_expired(struct adapter *priv,
 	return 0;
 }
 
-
 static inline void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
 				unsigned int *ipAddr)
 {
@@ -152,7 +148,6 @@ static inline void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr
 	networkAddr[0] = NAT25_IPV4;
 	memcpy(networkAddr+7, (unsigned char *)ipAddr, 4);
 }
-
 
 static inline void __nat25_generate_ipx_network_addr_with_node(unsigned char *networkAddr,
 				unsigned int *ipxNetAddr, unsigned char *ipxNodeAddr)
@@ -164,7 +159,6 @@ static inline void __nat25_generate_ipx_network_addr_with_node(unsigned char *ne
 	memcpy(networkAddr+5, ipxNodeAddr, 6);
 }
 
-
 static inline void __nat25_generate_ipx_network_addr_with_socket(unsigned char *networkAddr,
 				unsigned int *ipxNetAddr, unsigned short *ipxSocketAddr)
 {
@@ -174,7 +168,6 @@ static inline void __nat25_generate_ipx_network_addr_with_socket(unsigned char *
 	memcpy(networkAddr+1, (unsigned char *)ipxNetAddr, 4);
 	memcpy(networkAddr+5, (unsigned char *)ipxSocketAddr, 2);
 }
-
 
 static inline void __nat25_generate_apple_network_addr(unsigned char *networkAddr,
 				unsigned short *network, unsigned char *node)
@@ -1168,7 +1161,6 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 		}
 	}
 }
-
 
 void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
 				unsigned char *ipAddr)

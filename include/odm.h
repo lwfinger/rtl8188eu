@@ -18,7 +18,6 @@
  *
  ******************************************************************************/
 
-
 #ifndef	__HALDMOUTSRC_H__
 #define __HALDMOUTSRC_H__
 
@@ -52,7 +51,6 @@
 /* 3============================================================ */
 #define		DPK_DELTA_MAPPING_NUM	13
 #define		index_mapping_HP_NUM	15
-
 
 /*  */
 /* 3 PSD Handler */
@@ -1004,7 +1002,6 @@ enum dm_dig_op {
 
 #define		DM_SCAN_RSSI_TH		0x14 /* scan return issue for LC */
 
-
 #define		DM_false_ALARM_THRESH_LOW	400
 #define		DM_false_ALARM_THRESH_HIGH	1000
 
@@ -1082,7 +1079,6 @@ enum dm_dig_op {
 /* 3 BB Power Save */
 /* 3=========================================================== */
 
-
 enum dm_1r_cca {
 	CCA_1R = 0,
 	CCA_2R = 1,
@@ -1132,7 +1128,6 @@ void ODM_Write_DIG(struct odm_dm_struct *pDM_Odm, u8 CurrentIGI);
 void ODM_Write_CCK_CCA_Thres(struct odm_dm_struct *pDM_Odm, u8 CurCCK_CCAThres);
 
 void ODM_SetAntenna(struct odm_dm_struct *pDM_Odm, u8 Antenna);
-
 
 #define dm_RF_Saving	ODM_RF_Saving
 void ODM_RF_Saving(struct odm_dm_struct *pDM_Odm, u8 bForceInNormal);

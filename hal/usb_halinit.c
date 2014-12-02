@@ -709,8 +709,6 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 
 	#define HAL_INIT_PROFILE_TAG(stage) do {} while (0)
 
-
-
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 
 	if (Adapter->pwrctrlpriv.bkeepfwalive) {
@@ -967,8 +965,6 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 
 	DBG_88E("%s in %dms\n", __func__, rtw_get_passing_time_ms(init_start_time));
 
-
-
 	return status;
 }
 
@@ -1084,8 +1080,6 @@ static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 	struct recv_priv *precvpriv = &(Adapter->recvpriv);
 	u32 (*_read_port)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
 
-
-
 	_read_port = pintfhdl->io_ops._read_port;
 
 	status = _SUCCESS;
@@ -1111,8 +1105,6 @@ static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 exit:
 
 	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("<=== usb_inirp_init\n"));
-
-
 
 	return status;
 }
@@ -1402,7 +1394,6 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
 	struct hal_data_8188e	*haldata = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &haldata->dmpriv;
 	struct odm_dm_struct *podmpriv = &haldata->odmpriv;
-
 
 	switch (variable) {
 	case HW_VAR_MEDIA_STATUS:
@@ -1929,7 +1920,6 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
 	struct hal_data_8188e	*haldata = GET_HAL_DATA(Adapter);
 	struct odm_dm_struct *podmpriv = &haldata->odmpriv;
 
-
 	switch (variable) {
 	case HW_VAR_BASIC_RATE:
 		*((u16 *)(val)) = haldata->BasicRateSet;
@@ -1979,7 +1969,6 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
 	default:
 		break;
 	}
-
 
 }
 
@@ -2301,8 +2290,6 @@ static u8 rtl8188eu_ps_func(struct adapter *Adapter, enum hal_intf_ps_func efunc
 void rtl8188eu_set_hal_ops(struct adapter *adapt)
 {
 	struct hal_ops	*halfunc = &adapt->HalFunc;
-
-
 
 	adapt->HalData = rtw_zmalloc(sizeof(struct hal_data_8188e));
 	if (adapt->HalData == NULL)

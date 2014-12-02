@@ -23,8 +23,6 @@
 
 /* 2 RF REG LIST */
 
-
-
 /* 2 BB REG LIST */
 /* PAGE 8 */
 /* PAGE 9 */
@@ -40,15 +38,9 @@
 /* PAGE F */
 #define	ODM_REG_OFDM_FA_11AC			0xF48
 
-
 /* 2 MAC REG LIST */
-
-
-
 
 /* DIG Related */
 #define	ODM_BIT_IGI_11AC				0xFFFFFFFF
-
-
 
 #endif

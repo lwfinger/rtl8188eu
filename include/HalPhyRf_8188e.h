@@ -26,16 +26,13 @@
 #define	index_mapping_NUM_88E	15
 #define AVG_THERMAL_NUM_88E	4
 
-
 void ODM_TxPwrTrackAdjust88E(struct odm_dm_struct *pDM_Odm,
 			     u8 Type,	/* 0 = OFDM, 1 = CCK */
 			     u8 *pDirection,/* 1 = +(incr) 2 = -(decr) */
 			     u32 *pOutWriteVal); /* Tx tracking CCK/OFDM BB
 						     * swing index adjust */
 
-
 void odm_TXPowerTrackingCallback_ThermalMeter_8188E(struct adapter *Adapter);
-
 
 /* 1 7.	IQK */
 

@@ -83,7 +83,6 @@ void InitLed871x(struct adapter *padapter, struct LED_871x *pLed, enum LED_PIN_8
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
 }
 
-
 /*  */
 /*	Description: */
 /*		DeInitialize an LED_871x object. */
@@ -1500,8 +1499,6 @@ static void SwLedControlMode4(struct adapter *padapter, enum LED_CTL_MODE LedAct
 
 	RT_TRACE(_module_rtl8712_led_c_, _drv_info_, ("Led %d\n", pLed->CurrLedState));
 }
-
-
 
  /* Sercomm-Belkin, added by chiyoko, 20090415 */
 static void

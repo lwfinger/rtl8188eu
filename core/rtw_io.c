@@ -27,7 +27,6 @@ b. provides the protocol engine
 
 c. provides the software interface between caller and the hardware interface
 
-
 Compiler Flag Option:
 
 USB:
@@ -50,7 +49,6 @@ jackson@realtek.com.tw
 #define rtw_le32_to_cpu(val)		le32_to_cpu(val)
 #define rtw_cpu_to_le16(val)		cpu_to_le16(val)
 #define rtw_cpu_to_le32(val)		cpu_to_le32(val)
-
 
 u8 _rtw_read8(struct adapter *adapter, u32 addr)
 {
@@ -174,10 +172,8 @@ int _rtw_write16_async(struct adapter *adapter, u32 addr, u16 val)
 	int (*_write16_async)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
 	int ret;
 
-
 	_write16_async = pintfhdl->io_ops._write16_async;
 	ret = _write16_async(pintfhdl, addr, val);
-
 
 	return RTW_STATUS_CODE(ret);
 }
@@ -189,10 +185,8 @@ int _rtw_write32_async(struct adapter *adapter, u32 addr, u32 val)
 	int (*_write32_async)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
 	int ret;
 
-
 	_write32_async = pintfhdl->io_ops._write32_async;
 	ret = _write32_async(pintfhdl, addr, val);
-
 
 	return RTW_STATUS_CODE(ret);
 }

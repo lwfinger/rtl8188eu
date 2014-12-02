@@ -34,11 +34,9 @@
 
 /*---------------------------Define Local Constant---------------------------*/
 
-
 /*------------------------Define global variable-----------------------------*/
 
 /*------------------------Define local variable------------------------------*/
-
 
 /*--------------------Define export function prototype-----------------------*/
 /*  Please refer to header file */
@@ -100,7 +98,6 @@ rtl8188e_PHY_QueryBBReg(
 	return ReturnValue;
 }
 
-
 /**
 * Function:	PHY_SetBBReg
 *
@@ -131,7 +128,6 @@ void rtl8188e_PHY_SetBBReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u3
 
 	rtw_write32(Adapter, RegAddr, Data);
 }
-
 
 /*  */
 /*  2. RF register R/W API */
@@ -265,7 +261,6 @@ phy_RFSerialWrite(
 	struct hal_data_8188e				*pHalData = GET_HAL_DATA(Adapter);
 	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32 NewOffset;
-
 
 	/*  2009/06/17 MH We can not execute IO for power save or other accident mode. */
 
@@ -601,7 +596,6 @@ PHY_BBConfig8188E(
 
 	phy_InitBBRFRegisterDefinition(Adapter);
 
-
 	/*  Enable BB and RF */
 	RegVal = rtw_read16(Adapter, REG_SYS_FUNC_EN);
 	rtw_write16(Adapter, REG_SYS_FUNC_EN, (u16)(RegVal|BIT13|BIT0|BIT1));
@@ -630,7 +624,6 @@ int PHY_RFConfig8188E(struct adapter *Adapter)
 	rtStatus = PHY_RF6052_Config8188E(Adapter);
 	return rtStatus;
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:    PHY_ConfigRFWithParaFile()
@@ -681,7 +674,6 @@ static	u8 phy_DbmToTxPwrIdx(struct adapter *Adapter, enum wireless_mode Wireless
 {
 	u8 TxPwrIdx = 0;
 	int				Offset = 0;
-
 
 	/*  */
 	/*  Tested by MP, we found that CCK Index 0 equals to 8dbm, OFDM legacy equals to */
@@ -747,7 +739,6 @@ static int phy_TxPwrIdxToDbm(struct adapter *Adapter, enum wireless_mode Wireles
 
 	return PwrOutDbm;
 }
-
 
 /*-----------------------------------------------------------------------------
  * Function:    GetTxPowerLevel8190()

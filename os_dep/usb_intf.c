@@ -39,10 +39,8 @@ int ui_pid[3] = {0, 0, 0};
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
 
-
 static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device_id *pdid);
 static void rtw_dev_remove(struct usb_interface *pusb_intf);
-
 
 #define USB_VENDER_ID_REALTEK		0x0bda
 
@@ -164,7 +162,6 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	struct usb_endpoint_descriptor	*pendp_desc;
 	struct usb_device	*pusbd;
 
-
 	pdvobjpriv = (struct dvobj_priv *)rtw_zmalloc(sizeof(*pdvobjpriv));
 	if (pdvobjpriv == NULL)
 		goto exit;
@@ -242,7 +239,6 @@ exit:
 static void usb_dvobj_deinit(struct usb_interface *usb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(usb_intf);
-
 
 	usb_set_intfdata(usb_intf, NULL);
 	if (dvobj) {

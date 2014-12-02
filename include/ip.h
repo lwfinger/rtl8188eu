@@ -40,7 +40,6 @@
 #define IPTOS_PREC_PRIORITY             0x20
 #define IPTOS_PREC_ROUTINE              0x00
 
-
 /* IP options */
 #define IPOPT_COPY		0x80
 #define IPOPT_CLASS_MASK	0x60

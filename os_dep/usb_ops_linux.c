@@ -80,8 +80,6 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	struct hal_data_8188e	*haldata;
 
-
-
 	switch (pxmitbuf->flags) {
 	case VO_QUEUE_INX:
 		pxmitpriv->voq_cnt--;
@@ -157,7 +155,6 @@ check_completion:
 
 	tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
 
-
 }
 
 u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
@@ -173,8 +170,6 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)wmem;
 	struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data;
 	struct usb_device *pusbd = pdvobj->pusbdev;
-
-
 
 	RT_TRACE(_module_hci_ops_os_c_, _drv_err_, ("+usb_write_port\n"));
 

@@ -115,7 +115,6 @@ struct HAL_VERSION {
 #define IS_E_CUT(version)				\
 	((GET_CVID_CUT_VERSION(version) == E_CUT_VERSION) ? true : false)
 
-
 /* HAL_VENDOR_E */
 #define IS_CHIP_VENDOR_TSMC(version)			\
 	((GET_CVID_MANUFACTUER(version) == CHIP_VENDOR_TSMC) ? true : false)

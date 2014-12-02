@@ -30,7 +30,7 @@
 #define REALTEK_USB_VENQT_CMD_REQ	0x05
 #define REALTEK_USB_VENQT_CMD_IDX	0x00
 
-enum{
+enum {
 	VENDOR_WRITE = 0x00,
 	VENDOR_READ = 0x01,
 };

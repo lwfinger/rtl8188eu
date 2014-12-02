@@ -21,7 +21,6 @@
 #ifndef	__ODM_REGDEFINE11N_H__
 #define __ODM_REGDEFINE11N_H__
 
-
 /* 2 RF REG LIST */
 #define	ODM_REG_RF_MODE_11N				0x00
 #define	ODM_REG_RF_0B_11N				0x0B
@@ -35,8 +34,6 @@
 #define	ODM_REG_RXRF_A3_11N				0x3C
 #define	ODM_REG_T_METER_92D_11N			0x42
 #define	ODM_REG_T_METER_88E_11N			0x42
-
-
 
 /* 2 BB REG LIST */
 /* PAGE 8 */
@@ -143,12 +140,6 @@
 #define	ODM_REG_SLEEP_11N				0xEE0
 #define	ODM_REG_PMPD_ANAEN_11N			0xEEC
 
-
-
-
-
-
-
 /* 2 MAC REG LIST */
 #define	ODM_REG_BB_RST_11N				0x02
 #define	ODM_REG_ANTSEL_PIN_11N			0x4C
@@ -163,9 +154,7 @@
 #define	ODM_REG_ANT_TRAIN_PARA1_11N	0x7b0
 #define	ODM_REG_ANT_TRAIN_PARA2_11N	0x7b4
 
-
 /* DIG Related */
 #define	ODM_BIT_IGI_11N					0x0000007F
-
 
 #endif

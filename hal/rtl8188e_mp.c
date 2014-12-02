@@ -113,7 +113,6 @@ void Hal_MPT_CCKTxPowerAdjust(struct adapter *Adapter, bool bInCH14)
 		TempVal = CCKSwingTable_Ch1_Ch13[CCKSwingIndex][0] +
 				(CCKSwingTable_Ch1_Ch13[CCKSwingIndex][1]<<8);
 
-
 		/* Write 0xa24 ~ 0xa27 */
 		TempVal2 = 0;
 		TempVal2 = CCKSwingTable_Ch1_Ch13[CCKSwingIndex][2] +
@@ -165,7 +164,6 @@ void Hal_MPT_CCKTxPowerAdjustbyIndex(struct adapter *pAdapter, bool beven)
 	u8		CCK_index, CCK_index_old = 0;
 	u8		Action = 0;	/* 0: no action, 1: even->odd, 2:odd->even */
 	s32		i = 0;
-
 
 	if (!IS_92C_SERIAL(pHalData->VersionID))
 		return;
@@ -263,7 +261,6 @@ void Hal_SetBandwidth(struct adapter *pAdapter)
 {
 	struct mp_priv *pmp = &pAdapter->mppriv;
 
-
 	SetBWMode(pAdapter, pmp->bandwidth, pmp->prime_channel_offset);
 	Hal_mpt_SwitchRfSetting(pAdapter);
 }
@@ -271,7 +268,6 @@ void Hal_SetBandwidth(struct adapter *pAdapter)
 void Hal_SetCCKTxPower(struct adapter *pAdapter, u8 *TxPower)
 {
 	u32 tmpval = 0;
-
 
 	/*  rf-A cck tx power */
 	write_bbreg(pAdapter, rTxAGC_A_CCK1_Mcs32, bMaskByte1, TxPower[RF_PATH_A]);
@@ -405,7 +401,6 @@ void Hal_SetAntenna(struct adapter *pAdapter)
 	u8	r_rx_antenna_ofdm = 0, r_ant_select_cck_val = 0;
 	u8	chgTx = 0, chgRx = 0;
 	u32	r_ant_select_ofdm_val = 0, r_ofdm_tx_en_val = 0;
-
 
 	p_ofdm_tx = (struct ant_sel_ofdm *)&r_ant_select_ofdm_val;
 	p_cck_txrx = (struct ant_sel_cck *)&r_ant_select_cck_val;
@@ -543,7 +538,6 @@ s32 Hal_SetThermalMeter(struct adapter *pAdapter, u8 target_ther)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 
-
 	if (!netif_running(pAdapter->pnetdev)) {
 		RT_TRACE(_module_mp_, _drv_warning_, ("SetThermalMeter! Fail: interface not opened!\n"));
 		return _FAIL;
@@ -625,7 +619,6 @@ void Hal_SetSingleCarrierTx(struct adapter *pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
 	}
 }
-
 
 void Hal_SetSingleToneTx(struct adapter *pAdapter, u8 bStart)
 {
@@ -712,8 +705,6 @@ void Hal_SetSingleToneTx(struct adapter *pAdapter, u8 bStart)
 		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
 	}
 }
-
-
 
 void Hal_SetCarrierSuppressionTx(struct adapter *pAdapter, u8 bStart)
 {

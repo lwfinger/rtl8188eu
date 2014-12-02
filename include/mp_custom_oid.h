@@ -96,7 +96,6 @@
 #define OID_RT_PRO_SET_SINGLE_TONE_TX			0xFF818043
 /*  */
 
-
 /*  by Owen for RTL8185 Phy Status Report Utility */
 #define OID_RT_UTILITY_false_ALARM_COUNTERS		0xFF818580
 #define OID_RT_UTILITY_SELECT_DEBUG_MODE		0xFF818581
@@ -254,7 +253,6 @@
 #define OID_RT_RD_ATTRIB_MEM				0xFF87110C/* Q */
 #define OID_RT_WR_ATTRIB_MEM				0xFF87110D/* S */
 
-
 /* Method 2 for H2C/C2H */
 #define OID_RT_PRO_H2C_CMD_MODE				0xFF871110 /* S */
 #define OID_RT_PRO_H2C_CMD_RSP_MODE			0xFF871111 /* Q */
@@ -281,7 +279,6 @@
 #define OID_RT_PRO_SET_BASIC_RATE			0xFF871122/* S */
 #define OID_RT_PRO_READ_TSSI				0xFF871123/* S */
 #define OID_RT_PRO_SET_POWER_TRACKING			0xFF871124/* S */
-
 
 #define OID_RT_PRO_QRY_PWRSTATE				0xFF871150 /* Q */
 #define OID_RT_PRO_SET_PWRSTATE				0xFF871151 /* S */

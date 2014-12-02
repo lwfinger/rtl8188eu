@@ -18,7 +18,6 @@
  *
  ******************************************************************************/
 
-
 #ifndef __NIC_SPEC_H__
 #define __NIC_SPEC_H__
 
@@ -35,10 +34,8 @@
 #define RTL8711_SYSCTRL_	(0x620000)
 #define RTL8711_MCCTRL_		(0x020000)
 
-
 #include <rtl8711_regdef.h>
 
 #include <rtl8711_bitdef.h>
-
 
 #endif /*  __RTL8711_SPEC_H__ */

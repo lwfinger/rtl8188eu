@@ -18,7 +18,6 @@
  *
  ******************************************************************************/
 
-
 #define _OSDEP_SERVICE_C_
 
 #include <osdep_service.h>
@@ -520,7 +519,6 @@ keep_ori:
 	/* free ori */
 	kfree(ori);
 }
-
 
 /**
  * rtw_cbuf_full - test if cbuf is full

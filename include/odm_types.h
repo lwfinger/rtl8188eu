@@ -58,5 +58,4 @@ enum RT_SPINLOCK_TYPE {
 #define	BT_30_SUPPORT			0
 #define   FPGA_TWO_MAC_VERIFICATION	0
 
-
 #endif /*  __ODM_TYPES_H__ */

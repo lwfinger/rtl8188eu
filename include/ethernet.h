@@ -38,5 +38,4 @@
 		((u8 *)(_addr))[4] == 0xff &&		\
 		((u8 *)(_addr))[5] == 0xff)	/*  Is Broadcast Address? */
 
-
 #endif /*  #ifndef __INC_ETHERNET_H */

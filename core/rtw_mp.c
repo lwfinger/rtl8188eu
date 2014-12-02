@@ -544,7 +544,6 @@ void SetContinuousTx(struct adapter *pAdapter, u8 bStart)
 	Hal_SetContinuousTx(pAdapter, bStart);
 }
 
-
 void PhySetTxPowerLevel(struct adapter *pAdapter)
 {
 	struct mp_priv *pmp_priv = &pAdapter->mppriv;
@@ -657,7 +656,6 @@ void SetPacketTx(struct adapter *padapter)
 	s32 bmcast;
 	struct pkt_attrib *pattrib;
 	struct mp_priv *pmp_priv;
-
 
 	pmp_priv = &padapter->mppriv;
 	if (pmp_priv->tx.stop)
@@ -854,7 +852,6 @@ static u32 rtw_GetPSDData(struct adapter *pAdapter, u32 point)
 {
 	int psd_val;
 
-
 	psd_val = rtw_read32(pAdapter, 0x808);
 	psd_val &= 0xFFBFFC00;
 	psd_val |= point;
@@ -883,7 +880,6 @@ u32 mp_query_psd(struct adapter *pAdapter, u8 *data)
 {
 	u32 i, psd_pts = 0, psd_start = 0, psd_stop = 0;
 	u32 psd_data = 0;
-
 
 	if (!netif_running(pAdapter->pnetdev)) {
 		RT_TRACE(_module_mp_, _drv_warning_, ("mp_query_psd: Fail! interface not opened!\n"));

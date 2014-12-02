@@ -472,8 +472,6 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 #endif /* CONFIG_88EU_P2P */
 
-
-
 	param->u.crypt.err = 0;
 	param->u.crypt.alg[IEEE_CRYPT_ALG_NAME_LEN - 1] = '\0';
 
@@ -614,8 +612,6 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 exit:
 
 	kfree(pwep);
-
-
 
 	return ret;
 }
@@ -1252,7 +1248,6 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 #endif /* CONFIG_88EU_P2P */
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_set_scan\n"));
 
-
 	if (padapter->registrypriv.mp_mode == 1) {
 		if (check_fwstate(pmlmepriv, WIFI_MP_STATE)) {
 			ret = -1;
@@ -1382,7 +1377,6 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 		ret = -1;
 
 exit:
-
 
 	return ret;
 }
@@ -1634,8 +1628,6 @@ static int rtw_wx_set_rate(struct net_device *dev,
 	u32	ratevalue = 0;
 	 u8 mpdatarate[NumRates] = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0xff};
 
-
-
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, (" rtw_wx_set_rate\n"));
 	RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_info_, ("target_rate = %d, fixed = %d\n", target_rate, fixed));
 
@@ -1705,8 +1697,6 @@ set_rate:
 		RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_err_, ("rtw_wx_set_rate Fail!!!\n"));
 		ret = -1;
 	}
-
-
 
 	return ret;
 }

@@ -75,10 +75,8 @@ static inline struct list_head *get_list_head(struct __queue *queue)
 	return (&(queue->queue));
 }
 
-
 #define LIST_CONTAINOR(ptr, type, member) \
         ((type *)((char *)(ptr)-(size_t)(&((type *)0)->member)))
-
 
 static inline int _enter_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {
@@ -87,7 +85,6 @@ static inline int _enter_critical_mutex(struct mutex *pmutex, unsigned long *pir
 	ret = mutex_lock_interruptible(pmutex);
 	return ret;
 }
-
 
 static inline void _exit_critical_mutex(struct mutex *pmutex, unsigned long *pirqL)
 {

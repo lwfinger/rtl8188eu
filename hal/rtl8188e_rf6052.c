@@ -63,7 +63,6 @@ struct rf_shadow {
 
 /*---------------------------Define Local Constant---------------------------*/
 
-
 /*------------------------Define global variable-----------------------------*/
 
 /*------------------------Define local variable------------------------------*/
@@ -89,7 +88,6 @@ void rtl8188e_RF_ChangeTxPath(struct adapter *Adapter, u16 DataRate)
 {
 /*  We do not support gain table change inACUT now !!!! Delete later !!! */
 }	/* RF_ChangeTxPath */
-
 
 /*-----------------------------------------------------------------------------
  * Function:    PHY_RF6052SetBandwidth()
@@ -156,7 +154,6 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 	u8 direction;
 	/* FOR CE ,must disable turbo scan */
 	TurboScanOff = true;
-
 
 	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
 		TxAGC[RF_PATH_A] = 0x3f3f3f3f;

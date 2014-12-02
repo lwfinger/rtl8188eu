@@ -72,7 +72,6 @@ int ips_leave(struct adapter *padapter)
 	int result = _SUCCESS;
 	int keyid;
 
-
 	_enter_pwrlock(&pwrpriv->lock);
 
 	if ((pwrpriv->rf_pwrstate == rf_off) && (!pwrpriv->bips_processing)) {
@@ -227,10 +226,7 @@ void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 	u8	rpwm;
 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
 
-
-
 	pslv = PS_STATE(pslv);
-
 
 	if (pwrpriv->btcoex_rfon) {
 		if (pslv < PS_STATE_S4)
@@ -276,7 +272,6 @@ void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 	pwrpriv->tog += 0x80;
 	pwrpriv->cpwm = pslv;
 
-
 }
 
 static u8 PS_RDY_CHECK(struct adapter *padapter)
@@ -284,7 +279,6 @@ static u8 PS_RDY_CHECK(struct adapter *padapter)
 	u32 curr_time, delta_time;
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-
 
 	curr_time = rtw_get_current_time();
 	delta_time = curr_time - pwrpriv->DelayLPSLastTimeStamp;
@@ -313,8 +307,6 @@ void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_a
 #ifdef CONFIG_88EU_P2P
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 #endif /* CONFIG_88EU_P2P */
-
-
 
 	RT_TRACE(_module_rtl871x_pwrctrl_c_, _drv_notice_,
 		 ("%s: PowerMode=%d Smart_PS=%d\n",
@@ -364,7 +356,6 @@ void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_a
 		}
 	}
 
-
 }
 
 /*
@@ -378,7 +369,6 @@ s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
 	u32 start_time;
 	u8 bAwake = false;
 	s32 err = 0;
-
 
 	start_time = rtw_get_current_time();
 	while (1) {
@@ -411,8 +401,6 @@ void LPS_Enter(struct adapter *padapter)
 {
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
 
-
-
 	if (PS_RDY_CHECK(padapter) == false)
 		return;
 
@@ -431,7 +419,6 @@ void LPS_Enter(struct adapter *padapter)
 		}
 	}
 
-
 }
 
 #define LPS_LEAVE_TIMEOUT_MS 100
@@ -441,8 +428,6 @@ void LPS_Enter(struct adapter *padapter)
 void LPS_Leave(struct adapter *padapter)
 {
 	struct pwrctrl_priv	*pwrpriv = &padapter->pwrctrlpriv;
-
-
 
 	if (pwrpriv->bLeisurePs) {
 		if (pwrpriv->pwr_mode != PS_MODE_ACTIVE) {
@@ -455,7 +440,6 @@ void LPS_Leave(struct adapter *padapter)
 
 	pwrpriv->bpower_saving = false;
 
-
 }
 
 /*  */
@@ -467,22 +451,17 @@ void LeaveAllPowerSaveMode(struct adapter *Adapter)
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 	u8	enqueue = 0;
 
-
-
 	if (check_fwstate(pmlmepriv, _FW_LINKED)) { /* connect */
 		p2p_ps_wk_cmd(Adapter, P2P_PS_DISABLE, enqueue);
 
 		rtw_lps_ctrl_wk_cmd(Adapter, LPS_CTRL_LEAVE, enqueue);
 	}
 
-
 }
 
 void rtw_init_pwrctrl_priv(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = &padapter->pwrctrlpriv;
-
-
 
 	_init_pwrlock(&pwrctrlpriv->lock);
 	pwrctrlpriv->rf_pwrstate = rf_on;
@@ -521,17 +500,13 @@ void rtw_init_pwrctrl_priv(struct adapter *padapter)
 
 	_init_timer(&(pwrctrlpriv->pwr_state_check_timer), padapter->pnetdev, pwr_state_check_handler, (u8 *)padapter);
 
-
 }
 
 void rtw_free_pwrctrl_priv(struct adapter *adapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = &adapter->pwrctrlpriv;
 
-
-
 	_free_pwrlock(&pwrctrlpriv->lock);
-
 
 }
 
@@ -542,7 +517,6 @@ u8 rtw_interface_ps_func(struct adapter *padapter, enum hal_intf_ps_func efunc_i
 
 	return bResult;
 }
-
 
 inline void rtw_set_ips_deny(struct adapter *padapter, u32 ms)
 {
