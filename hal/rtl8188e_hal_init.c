@@ -218,7 +218,7 @@ static void efuse_read_phymap_from_txpktbuf(
 	u16 dbg_addr = 0;
 	u32 start  = 0, passing_time = 0;
 	u8 reg_0x143 = 0;
-	u32 lo32 = 0, hi32 = 0;
+	__le32 lo32 = 0, hi32 = 0;
 	u16 len = 0, count = 0;
 	int i = 0;
 	u16 limit = *size;
@@ -245,8 +245,8 @@ static void efuse_read_phymap_from_txpktbuf(
 			rtw_usleep_os(100);
 		}
 
-		lo32 = le32_to_cpu((__le32)rtw_read32(adapter, REG_PKTBUF_DBG_DATA_L));
-		hi32 = le32_to_cpu((__le32)rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H));
+		lo32 = cpu_to_le32(rtw_read32(adapter, REG_PKTBUF_DBG_DATA_L));
+		hi32 = cpu_to_le32(rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H));
 
 		if (i == 0) {
 			u8 lenc[2];
