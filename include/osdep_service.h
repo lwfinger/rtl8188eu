@@ -250,7 +250,6 @@ void _rtw_mfree(u8 *pbuf, u32 sz);
 void *rtw_malloc2d(int h, int w, int size);
 void rtw_mfree2d(void *pbuf, int h, int w, int size);
 
-void _rtw_free_sema(struct semaphore *sema);
 u32  _rtw_down_sema(struct semaphore *sema);
 void _rtw_mutex_init(struct mutex *pmutex);
 void _rtw_mutex_free(struct mutex *pmutex);
