@@ -245,29 +245,26 @@ static void efuse_read_phymap_from_txpktbuf(
 			rtw_usleep_os(100);
 		}
 
+		/* data from EEPROM needs to be in LE */
 		lo32 = cpu_to_le32(rtw_read32(adapter, REG_PKTBUF_DBG_DATA_L));
 		hi32 = cpu_to_le32(rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H));
 
 		if (i == 0) {
-			u8 lenc[2];
-			u16 lenbak, aaabak;
-			u16 aaa;
-			lenc[0] = rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L);
-			lenc[1] = rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L+1);
+			/* Although lenc is only used in a debug statement,
+			 * do not remove it as the rtw_read16() call consumes
+			 * 2 bytes from the EEPROM source.
+			 */
+			u16 lenc = rtw_read16(adapter, REG_PKTBUF_DBG_DATA_L);
 
-			aaabak = le16_to_cpup((__le16 *)lenc);
-			lenbak = le16_to_cpu(*((__le16 *)lenc));
-			aaa = le16_to_cpup((__le16 *)&lo32);
-			len = le16_to_cpu(*((__le16 *)&lo32));
+			len = le32_to_cpu(lo32) & 0x0000ffff;
 
 			limit = (len-2 < limit) ? len-2 : limit;
 
-			DBG_88E("%s len:%u, lenbak:%u, aaa:%u, aaabak:%u\n", __func__, len, lenbak, aaa, aaabak);
+			DBG_88E("%s len:%u, lenc:%u\n", __func__, len, lenc);
 
 			memcpy(pos, ((u8 *)&lo32)+2, (limit >= count+2) ? 2 : limit-count);
 			count += (limit >= count+2) ? 2 : limit-count;
 			pos = content+count;
-
 		} else {
 			memcpy(pos, ((u8 *)&lo32), (limit >= count+4) ? 4 : limit-count);
 			count += (limit >= count+4) ? 4 : limit-count;
