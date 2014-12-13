@@ -268,7 +268,6 @@ void rtw_list_delete(struct list_head *plist);
 
 void _rtw_init_sema(struct semaphore *sema, int init_val);
 void _rtw_free_sema(struct semaphore *sema);
-void _rtw_up_sema(struct semaphore *sema);
 u32  _rtw_down_sema(struct semaphore *sema);
 void _rtw_mutex_init(struct mutex *pmutex);
 void _rtw_mutex_free(struct mutex *pmutex);
