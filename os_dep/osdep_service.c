@@ -123,11 +123,6 @@ int _rtw_memcmp(void *dst, void *src, u32 sz)
 		return false;
 }
 
-void _rtw_init_listhead(struct list_head *list)
-{
-	INIT_LIST_HEAD(list);
-}
-
 /*
 For the following list_xxx operations,
 caller must guarantee the atomic context.
@@ -188,7 +183,7 @@ void	_rtw_spinlock_free(spinlock_t *plock)
 
 void	_rtw_init_queue(struct __queue *pqueue)
 {
-	_rtw_init_listhead(&(pqueue->queue));
+	INIT_LIST_HEAD(&(pqueue->queue));
 	spin_lock_init(&(pqueue->lock));
 }
 

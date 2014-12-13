@@ -340,7 +340,7 @@ static int recvbuf2recvframe(struct adapter *adapt, struct sk_buff *pskb)
 			goto _exit_recvbuf2recvframe;
 		}
 
-		_rtw_init_listhead(&precvframe->u.hdr.list);
+		INIT_LIST_HEAD(&precvframe->u.hdr.list);
 		precvframe->u.hdr.precvbuf = NULL;	/* can't access the precvbuf for new arch. */
 		precvframe->u.hdr.len = 0;
 
