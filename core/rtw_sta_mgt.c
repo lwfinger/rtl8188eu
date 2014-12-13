@@ -525,7 +525,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 	while ((!rtw_end_of_queue_search(phead, plist))) {
 		psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 
-		if ((_rtw_memcmp(psta->hwaddr, addr, ETH_ALEN)) == true) {
+		if ((!memcmp(psta->hwaddr, addr, ETH_ALEN))) {
 			/*  if found the matched address */
 			break;
 		}
@@ -590,7 +590,7 @@ u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 		paclnode = LIST_CONTAINOR(plist, struct rtw_wlan_acl_node, list);
 		plist = get_next(plist);
 
-		if (_rtw_memcmp(paclnode->addr, mac_addr, ETH_ALEN)) {
+		if (!memcmp(paclnode->addr, mac_addr, ETH_ALEN)) {
 			if (paclnode->valid) {
 				match = true;
 				break;

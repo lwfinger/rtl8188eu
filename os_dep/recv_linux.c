@@ -168,7 +168,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter,
 		struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 		int bmcast = IS_MCAST(pattrib->dst);
 
-		if (!_rtw_memcmp(pattrib->dst, myid(&padapter->eeprompriv),
+		if (memcmp(pattrib->dst, myid(&padapter->eeprompriv),
 				 ETH_ALEN)) {
 			if (bmcast) {
 				psta = rtw_get_bcmc_stainfo(padapter);

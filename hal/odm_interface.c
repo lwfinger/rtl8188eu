@@ -107,7 +107,7 @@ void ODM_FreeMemory(struct odm_dm_struct *pDM_Odm, void *pPtr, u32 length)
 
 s32 ODM_CompareMemory(struct odm_dm_struct *pDM_Odm, void *pBuf1, void *pBuf2, u32 length)
 {
-	return _rtw_memcmp(pBuf1, pBuf2, length);
+	return !memcmp(pBuf1, pBuf2, length);
 }
 
 /*  ODM MISC relative API. */
