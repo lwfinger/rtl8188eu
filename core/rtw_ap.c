@@ -621,6 +621,8 @@ void update_sta_info_apmode(struct adapter *padapter, struct sta_info *psta)
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct ht_priv	*phtpriv_ap = &pmlmepriv->htpriv;
 	struct ht_priv	*phtpriv_sta = &psta->htpriv;
+	u16 sta_cap_info;
+	u16 ap_cap_info;
 
 	psta->mac_id = psta->aid+1;
 	DBG_88E("%s\n", __func__);
@@ -641,17 +643,16 @@ void update_sta_info_apmode(struct adapter *padapter, struct sta_info *psta)
 	if (phtpriv_sta->ht_option) {
 		/* check if sta supports rx ampdu */
 		phtpriv_sta->ampdu_enable = phtpriv_ap->ampdu_enable;
+		sta_cap_info = le16_to_cpu(phtpriv_sta->ht_cap.cap_info);
+		ap_cap_info = le16_to_cpu(phtpriv_ap->ht_cap.cap_info);
 
 		/* check if sta support s Short GI */
-		if ((le16_to_cpu(phtpriv_sta->ht_cap.cap_info) &
-		     le16_to_cpu(phtpriv_ap->ht_cap.cap_info)) &
+		if ((sta_cap_info & ap_cap_info) &
 		    (IEEE80211_HT_CAP_SGI_20 | IEEE80211_HT_CAP_SGI_40))
 			phtpriv_sta->sgi = true;
 
 		/*  bwmode */
-		if ((le16_to_cpu(phtpriv_sta->ht_cap.cap_info) &
-		     le16_to_cpu(phtpriv_ap->ht_cap.cap_info)) &
-		    IEEE80211_HT_CAP_SUP_WIDTH) {
+		if ((sta_cap_info & ap_cap_info) & IEEE80211_HT_CAP_SUP_WIDTH) {
 			phtpriv_sta->bwmode = pmlmeext->cur_bwmode;
 			phtpriv_sta->ch_offset = pmlmeext->cur_ch_offset;
 		}
