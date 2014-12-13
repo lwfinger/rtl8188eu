@@ -123,11 +123,6 @@ int _rtw_memcmp(void *dst, void *src, u32 sz)
 		return false;
 }
 
-void _rtw_memset(void *pbuf, int c, u32 sz)
-{
-	memset(pbuf, c, sz);
-}
-
 void _rtw_init_listhead(struct list_head *list)
 {
 	INIT_LIST_HEAD(list);

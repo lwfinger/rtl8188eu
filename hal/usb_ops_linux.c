@@ -61,7 +61,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	}
 
 	while (++vendorreq_times <= MAX_USBCTRL_VENDORREQ_TIMES) {
-		_rtw_memset(pIo_buf, 0, len);
+		memset(pIo_buf, 0, len);
 
 		if (requesttype == 0x01) {
 			pipe = usb_rcvctrlpipe(udev, 0);/* read_in */
@@ -691,7 +691,7 @@ void rtl8188eu_xmit_tasklet(void *priv)
 void rtl8188eu_set_intf_ops(struct _io_ops	*pops)
 {
 	
-	_rtw_memset((u8 *)pops, 0, sizeof(struct _io_ops));
+	memset((u8 *)pops, 0, sizeof(struct _io_ops));
 	pops->_read8 = &usb_read8;
 	pops->_read16 = &usb_read16;
 	pops->_read32 = &usb_read32;
