@@ -65,11 +65,6 @@ struct	__queue	{
 
 #define thread_exit() complete_and_exit(NULL, 0)
 
-static inline struct list_head *get_next(struct list_head *list)
-{
-	return list->next;
-}
-
 static inline struct list_head *get_list_head(struct __queue *queue)
 {
 	return (&(queue->queue));
@@ -256,8 +251,6 @@ void *rtw_malloc2d(int h, int w, int size);
 void rtw_mfree2d(void *pbuf, int h, int w, int size);
 
 u32  rtw_is_list_empty(struct list_head *phead);
-void rtw_list_insert_head(struct list_head *plist, struct list_head *phead);
-void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead);
 void rtw_list_delete(struct list_head *plist);
 
 void _rtw_init_sema(struct semaphore *sema, int init_val);

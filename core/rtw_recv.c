@@ -88,7 +88,7 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
 	for (i = 0; i < NR_RECVFRAME; i++) {
 		INIT_LIST_HEAD(&(precvframe->list));
 
-		rtw_list_insert_tail(&(precvframe->list), &(precvpriv->free_recv_queue.queue));
+		list_add_tail(&(precvframe->list), &(precvpriv->free_recv_queue.queue));
 
 		res = rtw_os_recv_resource_alloc(padapter, precvframe);
 
@@ -209,7 +209,7 @@ int rtw_free_recvframe(struct recv_frame *precvframe, struct __queue *pfree_recv
 
 	precvframe->len = 0;
 
-	rtw_list_insert_tail(&(precvframe->list), get_list_head(pfree_recv_queue));
+	list_add_tail(&(precvframe->list), get_list_head(pfree_recv_queue));
 
 	if (padapter != NULL) {
 		if (pfree_recv_queue == &precvpriv->free_recv_queue)
@@ -227,7 +227,7 @@ int _rtw_enqueue_recvframe(struct recv_frame *precvframe, struct __queue *queue)
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 
 	rtw_list_delete(&(precvframe->list));
-	rtw_list_insert_tail(&(precvframe->list), get_list_head(queue));
+	list_add_tail(&(precvframe->list), get_list_head(queue));
 
 	if (padapter != NULL) {
 		if (queue == &precvpriv->free_recv_queue)
@@ -296,7 +296,7 @@ int rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, struct __queue *queue
 	spin_lock_bh(&queue->lock);
 
 	rtw_list_delete(&precvbuf->list);
-	rtw_list_insert_head(&precvbuf->list, get_list_head(queue));
+	list_add(&precvbuf->list, get_list_head(queue));
 
 	spin_unlock_bh(&queue->lock);
 
@@ -311,7 +311,7 @@ int rtw_enqueue_recvbuf(struct recv_buf *precvbuf, struct __queue *queue)
 
 	rtw_list_delete(&precvbuf->list);
 
-	rtw_list_insert_tail(&precvbuf->list, get_list_head(queue));
+	list_add_tail(&precvbuf->list, get_list_head(queue));
 	spin_unlock_irqrestore(&queue->lock, flags);
 	return _SUCCESS;
 }
@@ -1594,7 +1594,7 @@ struct recv_frame *recvframe_chk_defrag(struct adapter *padapter, struct recv_fr
 			/* Then enqueue the 0~(n-1) fragment into the defrag_q */
 
 			phead = get_list_head(pdefrag_q);
-			rtw_list_insert_tail(&pfhdr->list, phead);
+			list_add_tail(&pfhdr->list, phead);
 
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("Enqueuq: ismfrag=%d, fragnum=%d\n", ismfrag, fragnum));
 
@@ -1612,7 +1612,7 @@ struct recv_frame *recvframe_chk_defrag(struct adapter *padapter, struct recv_fr
 		/* enqueue the last fragment */
 		if (pdefrag_q != NULL) {
 			phead = get_list_head(pdefrag_q);
-			rtw_list_insert_tail(&pfhdr->list, phead);
+			list_add_tail(&pfhdr->list, phead);
 
 			/* call recvframe_defrag to defrag */
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("defrag: ismfrag=%d, fragnum=%d\n", ismfrag, fragnum));
@@ -1812,7 +1812,7 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, struct re
 
 	rtw_list_delete(&(prframe->list));
 
-	rtw_list_insert_tail(&(prframe->list), plist);
+	list_add_tail(&(prframe->list), plist);
 	return true;
 }
 
