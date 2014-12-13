@@ -250,9 +250,6 @@ void _rtw_mfree(u8 *pbuf, u32 sz);
 void *rtw_malloc2d(int h, int w, int size);
 void rtw_mfree2d(void *pbuf, int h, int w, int size);
 
-u32  rtw_is_list_empty(struct list_head *phead);
-void rtw_list_delete(struct list_head *plist);
-
 void _rtw_init_sema(struct semaphore *sema, int init_val);
 void _rtw_free_sema(struct semaphore *sema);
 u32  _rtw_down_sema(struct semaphore *sema);
@@ -261,8 +258,6 @@ void _rtw_mutex_free(struct mutex *pmutex);
 void _rtw_spinlock_free(spinlock_t *plock);
 
 void _rtw_init_queue(struct __queue *pqueue);
-u32  _rtw_queue_empty(struct __queue *pqueue);
-u32  rtw_end_of_queue_search(struct list_head *queue, struct list_head *pelement);
 
 u32  rtw_get_current_time(void);
 u32  rtw_systime_to_ms(u32 systime);

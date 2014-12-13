@@ -118,14 +118,6 @@ For the following list_xxx operations,
 caller must guarantee the atomic context.
 Otherwise, there will be racing condition.
 */
-u32	rtw_is_list_empty(struct list_head *phead)
-{
-	if (list_empty(phead))
-		return true;
-	else
-		return false;
-}
-
 /*
 Caller must check if the list is empty before calling rtw_list_delete
 */
@@ -165,19 +157,6 @@ void	_rtw_init_queue(struct __queue *pqueue)
 {
 	INIT_LIST_HEAD(&(pqueue->queue));
 	spin_lock_init(&(pqueue->lock));
-}
-
-u32	  _rtw_queue_empty(struct __queue *pqueue)
-{
-	return rtw_is_list_empty(&(pqueue->queue));
-}
-
-u32 rtw_end_of_queue_search(struct list_head *head, struct list_head *plist)
-{
-	if (head == plist)
-		return true;
-	else
-		return false;
 }
 
 u32	rtw_get_current_time(void)

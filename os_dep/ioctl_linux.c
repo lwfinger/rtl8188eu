@@ -2590,10 +2590,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		pnetwork = container_of(plist, struct wlan_network, list);
 
 		if (hwaddr_aton_i(data, bssid)) {
@@ -3093,10 +3090,7 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN)) {
 			u8 *wpsie;
@@ -3165,10 +3159,7 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN)) {
 			/*	Commented by Albert 2011/05/18 */
@@ -3249,10 +3240,7 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN)) {
 			u8 *wpsie;
@@ -3328,10 +3316,7 @@ static int rtw_p2p_get_device_name(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN)) {
 			u8 *wpsie;
@@ -3399,10 +3384,7 @@ static int rtw_p2p_get_invitation_procedure(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN)) {
 			/*	Commented by Albert 20121226 */
@@ -3481,10 +3463,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		pnetwork = container_of(plist, struct wlan_network, list);
 		if (!memcmp(pnetwork->network.MacAddress, peerMAC, ETH_ALEN)) {
 			uintPeerChannel = pnetwork->network.Configuration.DSConfig;
@@ -3576,10 +3555,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		pnetwork = container_of(plist, struct wlan_network, list);
 
 		/*	Commented by Albert 2011/05/18 */
@@ -3726,10 +3702,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = phead->next;
 
-	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == true)
-			break;
-
+	while (phead != plist) {
 		if (uintPeerChannel != 0)
 			break;
 
@@ -4421,7 +4394,7 @@ static int rtw_dbg_port(struct net_device *dev,
 					phead = &(pstapriv->sta_hash[i]);
 					plist = phead->next;
 
-					while ((rtw_end_of_queue_search(phead, plist)) == false) {
+					while (phead != plist) {
 						psta = container_of(plist, struct sta_info, hash_list);
 
 						plist = plist->next;
@@ -5238,8 +5211,8 @@ static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
 	psta = rtw_get_stainfo(pstapriv, param->sta_addr);
 	if (psta) {
 		spin_lock_bh(&pstapriv->asoc_list_lock);
-		if (!rtw_is_list_empty(&psta->asoc_list)) {
-			rtw_list_delete(&psta->asoc_list);
+		if (!list_empty(&psta->asoc_list)) {
+			list_del_init(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
 			updated = ap_free_sta(padapter, psta, true, WLAN_REASON_DEAUTH_LEAVING);
 		}

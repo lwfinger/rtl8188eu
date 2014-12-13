@@ -811,8 +811,8 @@ unsigned int OnAuth(struct adapter *padapter, struct recv_frame *precv_frame)
 		pstat->auth_seq = 0;
 	} else {
 		spin_lock_bh(&pstapriv->asoc_list_lock);
-		if (!rtw_is_list_empty(&pstat->asoc_list)) {
-			rtw_list_delete(&pstat->asoc_list);
+		if (!list_empty(&pstat->asoc_list)) {
+			list_del_init(&pstat->asoc_list);
 			pstapriv->asoc_list_cnt--;
 		}
 		spin_unlock_bh(&pstapriv->asoc_list_lock);
@@ -823,7 +823,7 @@ unsigned int OnAuth(struct adapter *padapter, struct recv_frame *precv_frame)
 	}
 
 	spin_lock_bh(&pstapriv->auth_list_lock);
-	if (rtw_is_list_empty(&pstat->auth_list)) {
+	if (list_empty(&pstat->auth_list)) {
 		list_add_tail(&pstat->auth_list, &pstapriv->auth_list);
 		pstapriv->auth_list_cnt++;
 	}
@@ -1395,14 +1395,14 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
 	pstat->state |= WIFI_FW_ASSOC_SUCCESS;
 
 	spin_lock_bh(&pstapriv->auth_list_lock);
-	if (!rtw_is_list_empty(&pstat->auth_list)) {
-		rtw_list_delete(&pstat->auth_list);
+	if (!list_empty(&pstat->auth_list)) {
+		list_del_init(&pstat->auth_list);
 		pstapriv->auth_list_cnt--;
 	}
 	spin_unlock_bh(&pstapriv->auth_list_lock);
 
 	spin_lock_bh(&pstapriv->asoc_list_lock);
-	if (rtw_is_list_empty(&pstat->asoc_list)) {
+	if (list_empty(&pstat->asoc_list)) {
 		pstat->expire_to = pstapriv->expire_to;
 		list_add_tail(&pstat->asoc_list, &pstapriv->asoc_list);
 		pstapriv->asoc_list_cnt++;
@@ -1585,8 +1585,8 @@ unsigned int OnDeAuth(struct adapter *padapter, struct recv_frame *precv_frame)
 			u8 updated = 0;
 
 			spin_lock_bh(&pstapriv->asoc_list_lock);
-			if (!rtw_is_list_empty(&psta->asoc_list)) {
-				rtw_list_delete(&psta->asoc_list);
+			if (!list_empty(&psta->asoc_list)) {
+				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated = ap_free_sta(padapter, psta, false, reason);
 			}
@@ -1665,8 +1665,8 @@ unsigned int OnDisassoc(struct adapter *padapter, struct recv_frame *precv_frame
 			u8 updated = 0;
 
 			spin_lock_bh(&pstapriv->asoc_list_lock);
-			if (!rtw_is_list_empty(&psta->asoc_list)) {
-				rtw_list_delete(&psta->asoc_list);
+			if (!list_empty(&psta->asoc_list)) {
+				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated = ap_free_sta(padapter, psta, false, reason);
 			}
@@ -6188,19 +6188,16 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 		spin_lock_bh(&pmlmepriv->scanned_queue.lock);
 
 		phead = get_list_head(queue);
-		plist = get_next(phead);
+		plist = phead->next;
 
-		while (1) {
+		while (phead != plist) {
 			int len;
 			u8 *p;
 			struct wlan_bssid_ex *pbss_network;
 
-			if (rtw_end_of_queue_search(phead, plist))
-				break;
-
 			pnetwork = container_of(plist, struct wlan_network, list);
 
-			plist = get_next(plist);
+			plist = plist->next;
 
 			pbss_network = (struct wlan_bssid_ex *)&pnetwork->network;
 
@@ -8309,14 +8306,14 @@ u8 tx_beacon_hdl(struct adapter *padapter, unsigned char *pbuf)
 			spin_lock_bh(&psta_bmc->sleep_q.lock);
 
 			xmitframe_phead = get_list_head(&psta_bmc->sleep_q);
-			xmitframe_plist = get_next(xmitframe_phead);
+			xmitframe_plist = xmitframe_phead->next;
 
-			while (!rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist)) {
+			while (xmitframe_phead != xmitframe_plist) {
 				pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
 
-				xmitframe_plist = get_next(xmitframe_plist);
+				xmitframe_plist = xmitframe_plist->next;
 
-				rtw_list_delete(&pxmitframe->list);
+				list_del_init(&pxmitframe->list);
 
 				psta_bmc->sleepq_len--;
 				if (psta_bmc->sleepq_len > 0)
