@@ -99,7 +99,7 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
 	}
 	precvpriv->rx_pending_cnt = 1;
 
-	_rtw_init_sema(&precvpriv->allrxreturnevt, 0);
+	sema_init(&precvpriv->allrxreturnevt, 0);
 
 	res = rtw_hal_init_recv_priv(padapter);
 
