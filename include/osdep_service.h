@@ -431,7 +431,6 @@ u64 rtw_division64(u64 x, u64 y);
 		(a)[1] = ((u16) (val)) & 0xff;	\
 	} while (0)
 
-#define RTW_GET_LE16(a) ((u16) (((a)[1] << 8) | (a)[0]))
 #define RTW_PUT_LE16(a, val)			\
 	do {					\
 		(a)[1] = ((u16) (val)) >> 8;	\
