@@ -154,7 +154,7 @@ struct recv_frame *_rtw_alloc_recvframe (struct __queue *pfree_recv_queue)
 
 		plist = get_next(phead);
 
-		precvframe = LIST_CONTAINOR(plist, struct recv_frame, list);
+		precvframe = container_of(plist, struct recv_frame, list);
 
 		rtw_list_delete(&precvframe->list);
 		padapter = precvframe->adapter;
@@ -267,7 +267,7 @@ void rtw_free_recvframe_queue(struct __queue *pframequeue,  struct __queue *pfre
 	plist = get_next(phead);
 
 	while (rtw_end_of_queue_search(phead, plist) == false) {
-		precvframe = LIST_CONTAINOR(plist, struct recv_frame, list);
+		precvframe = container_of(plist, struct recv_frame, list);
 
 		plist = get_next(plist);
 
@@ -331,7 +331,7 @@ struct recv_buf *rtw_dequeue_recvbuf (struct __queue *queue)
 
 		plist = get_next(phead);
 
-		precvbuf = LIST_CONTAINOR(plist, struct recv_buf, list);
+		precvbuf = container_of(plist, struct recv_buf, list);
 
 		rtw_list_delete(&precvbuf->list);
 	}
@@ -1074,7 +1074,7 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
 			xmitframe_plist = get_next(xmitframe_phead);
 
 			if ((rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist)) == false) {
-				pxmitframe = LIST_CONTAINOR(xmitframe_plist, struct xmit_frame, list);
+				pxmitframe = container_of(xmitframe_plist, struct xmit_frame, list);
 
 				xmitframe_plist = get_next(xmitframe_plist);
 
@@ -1473,7 +1473,7 @@ static struct recv_frame *recvframe_defrag(struct adapter *adapter, struct __que
 
 	phead = get_list_head(defrag_q);
 	plist = phead->next;
-	prframe = LIST_CONTAINOR(plist, struct recv_frame, list);
+	prframe = container_of(plist, struct recv_frame, list);
 	prframe = (struct recv_frame *)pfhdr;
 	rtw_list_delete(&(prframe->list));
 
@@ -1799,7 +1799,7 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, struct re
 	plist = get_next(phead);
 
 	while (rtw_end_of_queue_search(phead, plist) == false) {
-		pnextrframe = LIST_CONTAINOR(plist, struct recv_frame, list);
+		pnextrframe = container_of(plist, struct recv_frame, list);
 		pnextattrib = &pnextrframe->attrib;
 
 		if (SN_LESS(pnextattrib->seq_num, pattrib->seq_num))
@@ -1833,7 +1833,7 @@ static int recv_indicatepkts_in_order(struct adapter *padapter, struct recv_reor
 		if (rtw_is_list_empty(phead))
 			return true;
 
-		prframe = LIST_CONTAINOR(plist, struct recv_frame, list);
+		prframe = container_of(plist, struct recv_frame, list);
 		pattrib = &prframe->attrib;
 		preorder_ctrl->indicate_seq = pattrib->seq_num;
 	}
@@ -1841,7 +1841,7 @@ static int recv_indicatepkts_in_order(struct adapter *padapter, struct recv_reor
 	/*  Prepare indication list and indication. */
 	/*  Check if there is any packet need indicate. */
 	while (!rtw_is_list_empty(phead)) {
-		prframe = LIST_CONTAINOR(plist, struct recv_frame, list);
+		prframe = container_of(plist, struct recv_frame, list);
 		pattrib = &prframe->attrib;
 
 		if (!SN_LESS(preorder_ctrl->indicate_seq, pattrib->seq_num)) {

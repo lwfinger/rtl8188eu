@@ -162,7 +162,7 @@ struct	cmd_obj	*_rtw_dequeue_cmd(struct __queue *queue)
 	if (rtw_is_list_empty(&(queue->queue))) {
 		obj = NULL;
 	} else {
-		obj = LIST_CONTAINOR(get_next(&(queue->queue)), struct cmd_obj, list);
+		obj = container_of(get_next(&(queue->queue)), struct cmd_obj, list);
 		rtw_list_delete(&obj->list);
 	}
 
