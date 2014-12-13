@@ -144,7 +144,7 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 	}
 
 	haldata = GET_HAL_DATA(padapter);
-	haldata->srestpriv.last_tx_complete_time = rtw_get_current_time();
+	haldata->srestpriv.last_tx_complete_time = jiffies;
 
 check_completion:
 	rtw_sctx_done_err(&pxmitbuf->sctx,
@@ -225,7 +225,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	if (!status) {
 		struct hal_data_8188e	*haldata = GET_HAL_DATA(padapter);
 
-		haldata->srestpriv.last_tx_time = rtw_get_current_time();
+		haldata->srestpriv.last_tx_time = jiffies;
 	} else {
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_WRITE_PORT_ERR);
 		DBG_88E("usb_write_port, status =%d\n", status);

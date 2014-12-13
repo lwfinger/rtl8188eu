@@ -219,7 +219,7 @@ handle_tkip_countermeasure:
 	/* should we add something here...? */
 
 	if (padapter->securitypriv.btkip_countermeasure) {
-		cur_time = rtw_get_current_time();
+		cur_time = jiffies;
 
 		if ((cur_time - padapter->securitypriv.btkip_countermeasure_time) > 60 * HZ) {
 			padapter->securitypriv.btkip_countermeasure = false;
@@ -327,7 +327,7 @@ u8 rtw_set_802_11_ssid(struct adapter *padapter, struct ndis_802_11_ssid *ssid)
 handle_tkip_countermeasure:
 
 	if (padapter->securitypriv.btkip_countermeasure) {
-		cur_time = rtw_get_current_time();
+		cur_time = jiffies;
 
 		if ((cur_time - padapter->securitypriv.btkip_countermeasure_time) > 60 * HZ) {
 			padapter->securitypriv.btkip_countermeasure = false;
