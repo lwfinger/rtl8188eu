@@ -449,25 +449,6 @@ void rtl8188es_fill_default_txdesc(
 	{
 		RT_TRACE(_module_hal_xmit_c_, _drv_warning_, ("%s: TXAGG_FRAMETAG\n", __FUNCTION__));
 	}
-#ifdef CONFIG_MP_INCLUDED
-	else if (pxmitframe->frame_tag == MP_FRAMETAG)
-	{
-		struct tx_desc *pdesc;
-
-		pdesc = (struct tx_desc*)ptxdesc;
-		RT_TRACE(_module_hal_xmit_c_, _drv_notice_, ("%s: MP_FRAMETAG\n", __FUNCTION__));
-		fill_txdesc_for_mp(padapter, pdesc);
-
-		pdesc->txdw0 = le32_to_cpu(pdesc->txdw0);
-		pdesc->txdw1 = le32_to_cpu(pdesc->txdw1);
-		pdesc->txdw2 = le32_to_cpu(pdesc->txdw2);
-		pdesc->txdw3 = le32_to_cpu(pdesc->txdw3);
-		pdesc->txdw4 = le32_to_cpu(pdesc->txdw4);
-		pdesc->txdw5 = le32_to_cpu(pdesc->txdw5);
-		pdesc->txdw6 = le32_to_cpu(pdesc->txdw6);
-		pdesc->txdw7 = le32_to_cpu(pdesc->txdw7);
-	}
-#endif // CONFIG_MP_INCLUDED
 	else
 	{
 		RT_TRACE(_module_hal_xmit_c_, _drv_warning_, ("%s: frame_tag=0x%x\n", __FUNCTION__, pxmitframe->frame_tag));

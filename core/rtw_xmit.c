@@ -86,13 +86,6 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 	u32 num_xmit_extbuf = NR_XMIT_EXTBUFF;
 
-#if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_RTL8723A)
-		if (padapter->registrypriv.mp_mode) {
-			max_xmit_extbuf_size = 6000;
-			num_xmit_extbuf = 8;
-		}
-#endif
-
 _func_enter_;   	
 
 	// We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc().
@@ -387,13 +380,6 @@ void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
 	u32 num_xmit_extbuf = NR_XMIT_EXTBUFF;
 	
-#if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_RTL8723A)
-	if (padapter->registrypriv.mp_mode) {
-			max_xmit_extbuf_size = 6000;
-			num_xmit_extbuf = 8;
-	}
-#endif
-
  _func_enter_;   
 
 	rtw_hal_free_xmit_priv(padapter);

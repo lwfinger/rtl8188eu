@@ -496,13 +496,6 @@ if (padapter->registrypriv.mp_mode == 0)
 	{
 		DBG_8192C("pxmitframe->frame_tag == TXAGG_FRAMETAG\n");
 	}
-#ifdef CONFIG_MP_INCLUDED
-	else if(((pxmitframe->frame_tag&0x0f) == MP_FRAMETAG) &&
-			(padapter->registrypriv.mp_mode == 1))
-	{
-		fill_txdesc_for_mp(padapter, ptxdesc);
-	}
-#endif
 	else
 	{
 		DBG_8192C("pxmitframe->frame_tag = %d\n", pxmitframe->frame_tag);

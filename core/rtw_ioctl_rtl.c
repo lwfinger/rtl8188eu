@@ -29,10 +29,6 @@
 #include <rtw_ioctl_query.h>
 #include <rtw_ioctl_rtl.h>
 #include <mp_custom_oid.h>
-#ifdef CONFIG_MP_INCLUDED
-#include <rtw_mp.h>
-#include <rtw_mp_ioctl.h>
-#endif
 
 struct oid_obj_priv oid_rtl_seg_01_01[] =
 {
