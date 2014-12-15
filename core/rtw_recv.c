@@ -35,12 +35,6 @@
 #include <rtl8723a_hal.h>
 #endif
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #include <wifi.h>
 #include <circ_buf.h>
 
@@ -136,8 +130,6 @@ _func_enter_;
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	#ifdef PLATFORM_LINUX
 	_init_timer(&precvpriv->signal_stat_timer, padapter->pnetdev, RTW_TIMER_HDL_NAME(signal_stat), padapter);
-	#elif defined(PLATFORM_OS_CE) || defined(PLATFORM_WINDOWS)
-	_init_timer(&precvpriv->signal_stat_timer, padapter->hndis_adapter, RTW_TIMER_HDL_NAME(signal_stat), padapter);
 	#endif
 
 	precvpriv->signal_stat_sampling_interval = 1000; //ms
@@ -271,10 +263,6 @@ _func_enter_;
 	}	
 #endif
 
-
-#ifdef PLATFORM_WINDOWS
-	rtw_os_read_port(padapter, precvframe->u.hdr.precvbuf);
-#endif
 
 #if defined(PLATFORM_LINUX) || defined(PLATFORM_FREEBSD)
 
@@ -3112,9 +3100,6 @@ exit:
 	
 	return ret;
 #else  // || defined (PLATFORM_LINUX) || defined (PLATFORM_FREEBSD) 
-#ifdef PLATFORM_WINDOWS
-	_irqL irql;
-#endif //PLATFORM_WINDOWS
 	unsigned char *ptr, *pdata, *pbuf, *psnap_type;
 	union recv_frame *pnrframe, *pnrframe_new;
 	int a_len, mv_len, padding_len;
@@ -3125,9 +3110,6 @@ exit:
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 	_queue *pfree_recv_queue = &(precvpriv->free_recv_queue);
 	int ret = _SUCCESS;
-#ifdef PLATFORM_WINDOWS
-	struct recv_buf *precvbuf = prframe->u.hdr.precvbuf;
-#endif //PLATFORM_WINDOWS
 	a_len = prframe->u.hdr.len - prframe->u.hdr.attrib.hdrlen;
 
 	recvframe_pull(prframe, prframe->u.hdr.attrib.hdrlen);
@@ -3363,14 +3345,6 @@ exit:
 				pdata += (type_len + ETH_HLEN + padding_len);
 				pnrframe_new->u.hdr.rx_head = pnrframe_new->u.hdr.rx_data = pnrframe_new->u.hdr.rx_tail = pdata;
 				pnrframe_new->u.hdr.rx_end = pdata + a_len + padding_len;//
-
-#ifdef PLATFORM_WINDOWS
-				pnrframe_new->u.hdr.precvbuf=precvbuf;
-				_enter_critical_bh(&precvbuf->recvbuf_lock, &irql);
-				precvbuf->ref_cnt++;
-				_exit_critical_bh(&precvbuf->recvbuf_lock, &irql);
-#endif //PLATFORM_WINDOWS
-
 			}
 			else
 			{

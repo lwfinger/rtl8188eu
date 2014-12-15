@@ -21,12 +21,6 @@
 
 #include <drv_conf.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <xmit_osdep.h>

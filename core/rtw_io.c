@@ -54,10 +54,6 @@ jackson@realtek.com.tw
 #include <rtw_io.h>
 #include <osdep_intf.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-#error "Shall be Linux or Windows, but not both!\n"
-#endif
-
 #ifdef CONFIG_SDIO_HCI
 #include <sdio_ops.h>
 #endif

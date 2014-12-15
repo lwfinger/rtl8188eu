@@ -3079,14 +3079,6 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 }
 #endif //CONFIG_TDLS
 
-#ifdef PLATFORM_WINDOWS
-void rtw_use_tkipkey_handler (
-	IN	PVOID					SystemSpecific1,
-	IN	PVOID					FunctionContext,
-	IN	PVOID					SystemSpecific2,
-	IN	PVOID					SystemSpecific3
-	)
-#endif
 #ifdef PLATFORM_LINUX
 void rtw_use_tkipkey_handler(void *FunctionContext)
 #endif

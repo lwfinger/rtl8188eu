@@ -21,10 +21,6 @@
 
 #include <drv_conf.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-#error "Shall be Linux or Windows, but not both!\n"
-#endif
-
 #include <drv_types.h>
 #include <recv_osdep.h>
 #include <rtl8188e_hal.h>

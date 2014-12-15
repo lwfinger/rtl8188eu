@@ -40,12 +40,6 @@
 #include <asm/io.h>
 #endif
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #ifdef CONFIG_80211N_HT
 extern int rtw_ht_enable;
 extern int rtw_cbw40_enable;

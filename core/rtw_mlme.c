@@ -279,17 +279,6 @@ _func_enter_;
 
 	if(!isfreeall)
 	{
-#ifdef PLATFORM_WINDOWS
-
-		delta_time = (curr_time -pnetwork->last_scanned)/10;
-
-		if(delta_time  < lifetime*1000000)// unit:usec
-		{
-			goto exit;
-		}
-
-#endif
-
 #ifdef PLATFORM_LINUX
 
 		delta_time = (curr_time -pnetwork->last_scanned)/HZ;	

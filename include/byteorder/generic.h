@@ -97,8 +97,6 @@
  *
  */
 
-
-#if defined(PLATFORM_LINUX) || defined(PLATFORM_WINDOWS) || defined(PLATFORM_MPIXEL) || defined(PLATFORM_FREEBSD)
 /*
  * inside the kernel, we can use nicknames;
  * outside of it, we must avoid POSIX namespace pollution...
@@ -139,8 +137,6 @@
 #define be32_to_cpus __be32_to_cpus
 #define cpu_to_be16s __cpu_to_be16s
 #define be16_to_cpus __be16_to_cpus
-#endif
-
 
 /*
  * Handle ntohl and suches. These have various compatibility
@@ -198,16 +194,4 @@ extern unsigned short int	htons(unsigned short int);
 
 #endif /* OPTIMIZE */
 
-
-#if defined (PLATFORM_WINDOWS)
-
-#define htonl(x) __cpu_to_be32(x)
-#define ntohl(x) __be32_to_cpu(x)
-#define htons(x) __cpu_to_be16(x)
-#define ntohs(x) __be16_to_cpu(x)
-
-
-#endif
-
 #endif /* _LINUX_BYTEORDER_GENERIC_H */
-

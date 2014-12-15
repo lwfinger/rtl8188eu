@@ -103,10 +103,6 @@ inline u8* _rtw_vmalloc(u32 sz)
 	pbuf = malloc(sz,M_DEVBUF,M_NOWAIT);	
 #endif	
 	
-#ifdef PLATFORM_WINDOWS
-	NdisAllocateMemoryWithTag(&pbuf,sz, RT_TAG);	
-#endif
-
 #ifdef DBG_MEMORY_LEAK
 #ifdef PLATFORM_LINUX
 	if ( pbuf != NULL) {
@@ -130,12 +126,6 @@ inline u8* _rtw_zvmalloc(u32 sz)
 #ifdef PLATFORM_FREEBSD
 	pbuf = malloc(sz,M_DEVBUF,M_ZERO|M_NOWAIT);	
 #endif	
-#ifdef PLATFORM_WINDOWS
-	NdisAllocateMemoryWithTag(&pbuf,sz, RT_TAG);
-	if (pbuf != NULL)
-		NdisFillMemory(pbuf, sz, 0);
-#endif
-
 	return pbuf;	
 }
 
@@ -147,10 +137,6 @@ inline void _rtw_vmfree(u8 *pbuf, u32 sz)
 #ifdef PLATFORM_FREEBSD
 	free(pbuf,M_DEVBUF);	
 #endif	
-#ifdef PLATFORM_WINDOWS
-	NdisFreeMemory(pbuf,sz, 0);
-#endif
-
 #ifdef DBG_MEMORY_LEAK
 #ifdef PLATFORM_LINUX
 	atomic_dec(&_malloc_cnt);
@@ -176,12 +162,6 @@ u8* _rtw_malloc(u32 sz)
 #ifdef PLATFORM_FREEBSD
 	pbuf = malloc(sz,M_DEVBUF,M_NOWAIT);	
 #endif		
-#ifdef PLATFORM_WINDOWS
-
-	NdisAllocateMemoryWithTag(&pbuf,sz, RT_TAG);
-
-#endif
-
 #ifdef DBG_MEMORY_LEAK
 #ifdef PLATFORM_LINUX
 	if ( pbuf != NULL) {
@@ -208,11 +188,6 @@ u8* _rtw_zmalloc(u32 sz)
 #ifdef PLATFORM_LINUX
 		memset(pbuf, 0, sz);
 #endif	
-	
-#ifdef PLATFORM_WINDOWS
-		NdisFillMemory(pbuf, sz, 0);
-#endif
-
 	}
 
 	return pbuf;	
@@ -234,12 +209,7 @@ void	_rtw_mfree(u8 *pbuf, u32 sz)
 #ifdef PLATFORM_FREEBSD
 	free(pbuf,M_DEVBUF);	
 #endif		
-#ifdef PLATFORM_WINDOWS
 
-	NdisFreeMemory(pbuf,sz, 0);
-
-#endif
-	
 #ifdef DBG_MEMORY_LEAK
 #ifdef PLATFORM_LINUX
 	atomic_dec(&_malloc_cnt);
@@ -799,12 +769,6 @@ void _rtw_memcpy(void* dst, void* src, u32 sz)
 
 #endif	
 
-#ifdef PLATFORM_WINDOWS
-
-	NdisMoveMemory(dst, src, sz);
-
-#endif
-
 }
 
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
@@ -820,18 +784,6 @@ int	_rtw_memcmp(void *dst, void *src, u32 sz)
 #endif
 
 
-#ifdef PLATFORM_WINDOWS
-//under Windows, the return value of NdisEqualMemory for two same mem. chunk is 1
-	
-	if (NdisEqualMemory (dst, src, sz))
-		return _TRUE;
-	else
-		return _FALSE;
-
-#endif	
-	
-	
-	
 }
 
 void _rtw_memset(void *pbuf, int c, u32 sz)
@@ -841,15 +793,6 @@ void _rtw_memset(void *pbuf, int c, u32 sz)
 
         memset(pbuf, c, sz);
 
-#endif
-
-#ifdef PLATFORM_WINDOWS
-#if 0
-	NdisZeroMemory(pbuf, sz);
-	if (c != 0) memset(pbuf, c, sz);
-#else
-	NdisFillMemory(pbuf, sz, c);
-#endif
 #endif
 
 }
@@ -877,12 +820,6 @@ void _rtw_init_listhead(_list *list)
          list->next = list;
          list->prev = list;
 #endif
-#ifdef PLATFORM_WINDOWS
-
-        NdisInitializeListHead(list);
-
-#endif
-
 }
 
 
@@ -910,18 +847,6 @@ u32	rtw_is_list_empty(_list *phead)
 		return _FALSE;
 
 #endif
-
-
-#ifdef PLATFORM_WINDOWS
-
-	if (IsListEmpty(phead))
-		return _TRUE;
-	else
-		return _FALSE;
-
-#endif
-
-	
 }
 
 void rtw_list_insert_head(_list *plist, _list *phead)
@@ -935,9 +860,6 @@ void rtw_list_insert_head(_list *plist, _list *phead)
 	__list_add(plist, phead, phead->next);
 #endif
 
-#ifdef PLATFORM_WINDOWS
-	InsertHeadList(phead, plist);
-#endif
 }
 
 void rtw_list_insert_tail(_list *plist, _list *phead)
@@ -953,12 +875,6 @@ void rtw_list_insert_tail(_list *plist, _list *phead)
 	__list_add(plist, phead->prev, phead);
 	
 #endif	
-#ifdef PLATFORM_WINDOWS
-
-  InsertTailList(phead, plist);
-
-#endif		
-	
 }
 
 
@@ -1120,12 +1036,6 @@ void	_rtw_spinlock_init(_lock *plock)
 #ifdef PLATFORM_FREEBSD
 		mtx_init(plock, "", NULL, MTX_DEF|MTX_RECURSE);
 #endif
-#ifdef PLATFORM_WINDOWS
-
-	NdisAllocateSpinLock(plock);
-
-#endif
-	
 }
 
 void	_rtw_spinlock_free(_lock *plock)
@@ -1133,13 +1043,7 @@ void	_rtw_spinlock_free(_lock *plock)
 #ifdef PLATFORM_FREEBSD
 	 mtx_destroy(plock);
 #endif
-	
-#ifdef PLATFORM_WINDOWS
 
-	NdisFreeSpinLock(plock);
-
-#endif
-	
 }
 #ifdef PLATFORM_FREEBSD
 extern PADAPTER prtw_lock;
@@ -1175,12 +1079,7 @@ void	_rtw_spinlock(_lock	*plock)
 #ifdef PLATFORM_FREEBSD
 	mtx_lock(plock);
 #endif
-#ifdef PLATFORM_WINDOWS
 
-	NdisAcquireSpinLock(plock);
-
-#endif
-	
 }
 
 void	_rtw_spinunlock(_lock *plock)
@@ -1194,11 +1093,6 @@ void	_rtw_spinunlock(_lock *plock)
 #ifdef PLATFORM_FREEBSD
 	mtx_unlock(plock);
 #endif	
-#ifdef PLATFORM_WINDOWS
-
-	NdisReleaseSpinLock(plock);
-
-#endif
 }
 
 
@@ -1213,12 +1107,6 @@ void	_rtw_spinlock_ex(_lock	*plock)
 #ifdef PLATFORM_FREEBSD
 	mtx_lock(plock);
 #endif	
-#ifdef PLATFORM_WINDOWS
-
-	NdisDprAcquireSpinLock(plock);
-
-#endif
-	
 }
 
 void	_rtw_spinunlock_ex(_lock *plock)
@@ -1232,11 +1120,6 @@ void	_rtw_spinunlock_ex(_lock *plock)
 #ifdef PLATFORM_FREEBSD
 	mtx_unlock(plock);
 #endif	
-#ifdef PLATFORM_WINDOWS
-
-	NdisDprReleaseSpinLock(plock);
-
-#endif
 }
 
 
@@ -1276,11 +1159,6 @@ u32	rtw_get_current_time(void)
 	getmicrotime(&tvp);
 	return tvp.tv_sec;
 #endif
-#ifdef PLATFORM_WINDOWS
-	LARGE_INTEGER	SystemTime;
-	NdisGetCurrentSystemTime(&SystemTime);
-	return (u32)(SystemTime.LowPart);// count of 100-nanosecond intervals 
-#endif
 }
 
 inline u32 rtw_systime_to_ms(u32 systime)
@@ -1291,9 +1169,6 @@ inline u32 rtw_systime_to_ms(u32 systime)
 #ifdef PLATFORM_FREEBSD
 	return systime * 1000;
 #endif	
-#ifdef PLATFORM_WINDOWS
-	return systime / 10000 ; 
-#endif
 }
 
 inline u32 rtw_ms_to_systime(u32 ms)
@@ -1304,9 +1179,6 @@ inline u32 rtw_ms_to_systime(u32 ms)
 #ifdef PLATFORM_FREEBSD
 	return ms /1000;
 #endif	
-#ifdef PLATFORM_WINDOWS
-	return ms * 10000 ; 
-#endif
 }
 
 // the input parameter start use the same unit as returned by rtw_get_current_time
@@ -1318,11 +1190,6 @@ inline s32 rtw_get_passing_time_ms(u32 start)
 #ifdef PLATFORM_FREEBSD
 	return rtw_systime_to_ms(rtw_get_current_time());
 #endif	
-#ifdef PLATFORM_WINDOWS
-	LARGE_INTEGER	SystemTime;
-	NdisGetCurrentSystemTime(&SystemTime);
-	return rtw_systime_to_ms((u32)(SystemTime.LowPart) - start) ;
-#endif
 }
 
 inline s32 rtw_get_time_interval_ms(u32 start, u32 end)
@@ -1333,9 +1200,6 @@ inline s32 rtw_get_time_interval_ms(u32 start, u32 end)
 #ifdef PLATFORM_FREEBSD
 	return rtw_systime_to_ms(rtw_get_current_time());
 #endif	
-#ifdef PLATFORM_WINDOWS
-	return rtw_systime_to_ms(end-start);
-#endif
 }
 	
 
@@ -1361,13 +1225,6 @@ void rtw_sleep_schedulable(int ms)
 	DELAY(ms*1000);
 	return ;
 #endif	
-	
-#ifdef PLATFORM_WINDOWS
-
-	NdisMSleep(ms*1000); //(us)*1000=(ms)
-
-#endif
-
 }
 
 
@@ -1384,14 +1241,8 @@ void rtw_msleep_os(int ms)
 	DELAY(ms*1000);
 	return ;
 #endif	
-#ifdef PLATFORM_WINDOWS
-
-	NdisMSleep(ms*1000); //(us)*1000=(ms)
-
-#endif
-
-
 }
+
 void rtw_usleep_os(int us)
 {
 
@@ -1410,66 +1261,20 @@ void rtw_usleep_os(int us)
 
 	return ;
 #endif	
-#ifdef PLATFORM_WINDOWS
-
-	NdisMSleep(us); //(us)
-
-#endif
-
-
 }
 
 
 #ifdef DBG_DELAY_OS
 void _rtw_mdelay_os(int ms, const char *func, const int line)
 {
-	#if 0
-	if(ms>10)
-		DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, ms);
-		rtw_msleep_os(ms);
-	return;
-	#endif
-
-
 	DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, ms);
-
-#if defined(PLATFORM_LINUX)
-
    	mdelay((unsigned long)ms); 
-
-#elif defined(PLATFORM_WINDOWS)
-
-	NdisStallExecution(ms*1000); //(us)*1000=(ms)
-
-#endif
-
-
 }
+
 void _rtw_udelay_os(int us, const char *func, const int line)
 {
-
-	#if 0
-	if(us > 1000) {
 	DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, us);
-		rtw_usleep_os(us);
-		return;
-	}
-	#endif 
-
-
-	DBG_871X("%s:%d %s(%d)\n", func, line, __FUNCTION__, us);
-	
-	
-#if defined(PLATFORM_LINUX)
-
-      udelay((unsigned long)us); 
-
-#elif defined(PLATFORM_WINDOWS)
-
-	NdisStallExecution(us); //(us)
-
-#endif
-
+	udelay((unsigned long)us); 
 }
 #else
 void rtw_mdelay_os(int ms)
@@ -1484,12 +1289,6 @@ void rtw_mdelay_os(int ms)
 	DELAY(ms*1000);
 	return ;
 #endif	
-#ifdef PLATFORM_WINDOWS
-
-	NdisStallExecution(ms*1000); //(us)*1000=(ms)
-
-#endif
-
 
 }
 void rtw_udelay_os(int us)
@@ -1505,12 +1304,6 @@ void rtw_udelay_os(int us)
 	DELAY(us);
 	return ;
 #endif		
-#ifdef PLATFORM_WINDOWS
-
-	NdisStallExecution(us); //(us)
-
-#endif
-
 }
 #endif
 
@@ -1521,9 +1314,6 @@ void rtw_yield_os()
 #endif
 #ifdef PLATFORM_FREEBSD
 	yield();
-#endif
-#ifdef PLATFORM_WINDOWS
-	SwitchToThread();
 #endif
 }
 
@@ -1613,8 +1403,6 @@ inline void ATOMIC_SET(ATOMIC_T *v, int i)
 {
 	#ifdef PLATFORM_LINUX
 	atomic_set(v,i);
-	#elif defined(PLATFORM_WINDOWS)
-	*v=i;// other choice????
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_set_int(v,i);
 	#endif
@@ -1624,8 +1412,6 @@ inline int ATOMIC_READ(ATOMIC_T *v)
 {
 	#ifdef PLATFORM_LINUX
 	return atomic_read(v);
-	#elif defined(PLATFORM_WINDOWS)
-	return *v; // other choice????
 	#elif defined(PLATFORM_FREEBSD)
 	return atomic_load_acq_32(v);
 	#endif
@@ -1635,8 +1421,6 @@ inline void ATOMIC_ADD(ATOMIC_T *v, int i)
 {
 	#ifdef PLATFORM_LINUX
 	atomic_add(i,v);
-	#elif defined(PLATFORM_WINDOWS)
-	InterlockedAdd(v,i);
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_add_int(v,i);
 	#endif
@@ -1645,8 +1429,6 @@ inline void ATOMIC_SUB(ATOMIC_T *v, int i)
 {
 	#ifdef PLATFORM_LINUX
 	atomic_sub(i,v);
-	#elif defined(PLATFORM_WINDOWS)
-	InterlockedAdd(v,-i);
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_subtract_int(v,i);
 	#endif
@@ -1656,8 +1438,6 @@ inline void ATOMIC_INC(ATOMIC_T *v)
 {
 	#ifdef PLATFORM_LINUX
 	atomic_inc(v);
-	#elif defined(PLATFORM_WINDOWS)
-	InterlockedIncrement(v);
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_add_int(v,1);
 	#endif
@@ -1667,8 +1447,6 @@ inline void ATOMIC_DEC(ATOMIC_T *v)
 {
 	#ifdef PLATFORM_LINUX
 	atomic_dec(v);
-	#elif defined(PLATFORM_WINDOWS)
-	InterlockedDecrement(v);
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_subtract_int(v,1);
 	#endif
@@ -1678,8 +1456,6 @@ inline int ATOMIC_ADD_RETURN(ATOMIC_T *v, int i)
 {
 	#ifdef PLATFORM_LINUX
 	return atomic_add_return(i,v);
-	#elif defined(PLATFORM_WINDOWS)
-	return InterlockedAdd(v,i);
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_add_int(v,i);
 	return atomic_load_acq_32(v);
@@ -1690,8 +1466,6 @@ inline int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i)
 {
 	#ifdef PLATFORM_LINUX
 	return atomic_sub_return(i,v);
-	#elif defined(PLATFORM_WINDOWS)
-	return InterlockedAdd(v,-i);
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_subtract_int(v,i);
 	return atomic_load_acq_32(v);
@@ -1702,8 +1476,6 @@ inline int ATOMIC_INC_RETURN(ATOMIC_T *v)
 {
 	#ifdef PLATFORM_LINUX
 	return atomic_inc_return(v);
-	#elif defined(PLATFORM_WINDOWS)
-	return InterlockedIncrement(v);
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_add_int(v,1);
 	return atomic_load_acq_32(v);
@@ -1714,8 +1486,6 @@ inline int ATOMIC_DEC_RETURN(ATOMIC_T *v)
 {
 	#ifdef PLATFORM_LINUX
 	return atomic_dec_return(v);
-	#elif defined(PLATFORM_WINDOWS)
-	return InterlockedDecrement(v);
 	#elif defined(PLATFORM_FREEBSD)
 	atomic_subtract_int(v,1);
 	return atomic_load_acq_32(v);
@@ -2170,8 +1940,6 @@ u64 rtw_modular64(u64 x, u64 y)
 {
 #ifdef PLATFORM_LINUX
 	return do_div(x, y);
-#elif defined(PLATFORM_WINDOWS)
-	return (x % y);
 #elif defined(PLATFORM_FREEBSD)
 	return (x %y);
 #endif
@@ -2182,8 +1950,6 @@ u64 rtw_division64(u64 x, u64 y)
 #ifdef PLATFORM_LINUX
 	do_div(x, y);
 	return x;
-#elif defined(PLATFORM_WINDOWS)
-	return (x / y);
 #elif defined(PLATFORM_FREEBSD)
 	return (x / y);
 #endif

@@ -28,14 +28,6 @@
 #include <circ_buf.h>
 #include <ip.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-#error "Shall be Linux or Windows, but not both!\n"
-#endif
-
-#ifdef PLATFORM_WINDOWS
-#include <if_ether.h>
-#endif
-
 #ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
 #endif

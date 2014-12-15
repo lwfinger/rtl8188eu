@@ -29,12 +29,6 @@
 
 #include <usb_ops.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #include <wifi.h>
 #include <circ_buf.h>
 

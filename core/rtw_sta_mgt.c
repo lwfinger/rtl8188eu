@@ -27,12 +27,6 @@
 #include <mlme_osdep.h>
 
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 #include <sta_info.h>
 
 void _rtw_init_stainfo(struct sta_info *psta);

@@ -29,23 +29,6 @@
 #include <sdio_ops_linux.h>
 #endif
 
-#ifdef PLATFORM_WINDOWS
-#ifdef PLATFORM_OS_XP
-#include <sdio_ops_xp.h>
-struct async_context
-{
-	PMDL pmdl;
-	PSDBUS_REQUEST_PACKET sdrp;
-	unsigned char* r_buf;
-	unsigned char* padapter;
-};
-#endif
-#ifdef PLATFORM_OS_CE
-#include <sdio_ops_ce.h>
-#endif
-#endif
-
-
 extern void sdio_set_intf_ops(struct _io_ops *pops);
 	
 //extern void sdio_func1cmd52_read(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem);

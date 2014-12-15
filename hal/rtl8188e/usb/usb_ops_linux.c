@@ -28,12 +28,6 @@
 #include <recv_osdep.h>
 #include <rtl8188e_hal.h>
 
-#if defined (PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
 static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u16 index, void *pdata, u16 len, u8 requesttype)
 {
 	_adapter	*padapter = pintfhdl->padapter;
