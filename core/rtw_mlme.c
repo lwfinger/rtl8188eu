@@ -289,17 +289,6 @@ _func_enter_;
 		}
 
 #endif
-
-#ifdef PLATFORM_FREEBSD
-        //i think needs to check again
-		delta_time = (curr_time -pnetwork->last_scanned)/hz;	
-
-		if(delta_time < lifetime)// unit:sec
-		{		
-			goto exit;
-		}
-
-#endif
 	}
 
 	_enter_critical_bh(&free_queue->lock, &irqL);
@@ -525,7 +514,6 @@ _func_exit_;
 }
 
 
-#ifndef PLATFORM_FREEBSD //Baron
 static struct	wlan_network *rtw_dequeue_network(_queue *queue)
 {
 	struct wlan_network *pnetwork;
@@ -534,7 +522,6 @@ _func_enter_;
 _func_exit_;		
 	return pnetwork;
 }
-#endif //PLATFORM_FREEBSD
 
 struct	wlan_network *rtw_alloc_network(struct	mlme_priv *pmlmepriv );
 struct	wlan_network *rtw_alloc_network(struct	mlme_priv *pmlmepriv )//(_queue	*free_queue)
@@ -2458,25 +2445,6 @@ void _rtw_join_timeout_handler (_adapter *adapter)
 #endif	
 
 _func_enter_;		
-#ifdef PLATFORM_FREEBSD
-		rtw_mtx_lock(NULL);
-		 if (callout_pending(&adapter->mlmepriv.assoc_timer.callout)) {
-			 /* callout was reset */
-			 //mtx_unlock(&sc->sc_mtx);
-			 rtw_mtx_unlock(NULL);
-			 return;
-		 }
-		 if (!callout_active(&adapter->mlmepriv.assoc_timer.callout)) {
-			 /* callout was stopped */
-			 //mtx_unlock(&sc->sc_mtx);
-			 rtw_mtx_unlock(NULL);
-			 return;
-		 }
-		 callout_deactivate(&adapter->mlmepriv.assoc_timer.callout);
-	
-	
-#endif
-
 	DBG_871X("%s, fw_state=%x\n", __FUNCTION__, get_fwstate(pmlmepriv));
 	
 	if(adapter->bDriverStopped ||adapter->bSurpriseRemoved)
@@ -2530,9 +2498,6 @@ _func_enter_;
 #ifdef CONFIG_DRVEXT_MODULE_WSC	
 	drvext_assoc_fail_indicate(&adapter->drvextpriv);	
 #endif	
-#ifdef PLATFORM_FREEBSD
-		rtw_mtx_unlock(NULL);
-#endif
 	
 _func_exit_;
 
@@ -2769,7 +2734,6 @@ void rtw_event_polling_timer_hdl(_adapter *adapter)
 #define RTW_SCAN_RESULT_EXPIRE 2000
 #endif
 
-#ifndef PLATFORM_FREEBSD
 /*
 * Select a new join candidate from the original @param candidate and @param competitor
 * @return _TRUE: candidate is updated
@@ -2813,46 +2777,6 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 		*candidate = competitor;
 		updated = _TRUE;
 	}
-
-#if 0
-	if(pmlmepriv->assoc_by_bssid==_TRUE) { // associate with bssid
-		if(	(*candidate == NULL ||(*candidate)->network.Rssi<competitor->network.Rssi )
-			&& _rtw_memcmp(competitor->network.MacAddress, pmlmepriv->assoc_bssid, ETH_ALEN)==_TRUE
-		) {
-			*candidate = competitor;
-			updated = _TRUE;
-		}
-	} else  if (pmlmepriv->assoc_ssid.SsidLength == 0 ) { // associate with ssid, but ssidlength is 0
-		if(	(*candidate == NULL ||(*candidate)->network.Rssi<competitor->network.Rssi ) ) {
-			*candidate = competitor;
-			updated = _TRUE;
-		}
-	} else
-#ifdef  CONFIG_LAYER2_ROAMING
-	if(rtw_to_roaming(adapter)) { // roaming
-		if(	(*candidate == NULL ||(*candidate)->network.Rssi<competitor->network.Rssi )
-			&& is_same_ess(&competitor->network, &pmlmepriv->cur_network.network) 
-			//&&(!is_same_network(&competitor->network, &pmlmepriv->cur_network.network))
-			&& rtw_get_passing_time_ms((u32)competitor->last_scanned) < RTW_SCAN_RESULT_EXPIRE
-			&& rtw_is_desired_network(adapter, competitor)
-		) {
-			*candidate = competitor;
-			updated = _TRUE;
-		}
-		
-	} else
-#endif
-	{ // associate with ssid
-		if(	(*candidate == NULL ||(*candidate)->network.Rssi<competitor->network.Rssi )
-			&& (competitor->network.Ssid.SsidLength==pmlmepriv->assoc_ssid.SsidLength)
-			&&((_rtw_memcmp(competitor->network.Ssid.Ssid, pmlmepriv->assoc_ssid.Ssid, pmlmepriv->assoc_ssid.SsidLength)) == _TRUE)
-			&& rtw_is_desired_network(adapter, competitor)
-		) {
-			*candidate = competitor;
-			updated = _TRUE;
-		}
-	}
-#endif
 
 	if(updated){
 		DBG_871X("[by_bssid:%u][assoc_ssid:%s]"
@@ -2984,200 +2908,6 @@ _func_exit_;
 
 	return ret;
 }
-#else
-int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv )
-{	
-	_irqL	irqL;
-	_list	*phead;
-#ifdef CONFIG_ANTENNA_DIVERSITY
-	u8 CurrentAntenna;
-#endif
-	unsigned char *dst_ssid, *src_ssid;
-	_adapter *adapter;	
-	_queue	*queue	= &(pmlmepriv->scanned_queue);
-	struct	wlan_network	*pnetwork = NULL;
-	struct	wlan_network	*pnetwork_max_rssi = NULL;
-	#ifdef CONFIG_LAYER2_ROAMING
-	struct wlan_network * roaming_candidate=NULL;
-	u32 cur_time=rtw_get_current_time();
-	#endif
-
-_func_enter_;
-	_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-	phead = get_list_head(queue);		
-	adapter = (_adapter *)pmlmepriv->nic_hdl;
-
-	pmlmepriv->pscanned = get_next( phead );
-
-	while (!rtw_end_of_queue_search(phead, pmlmepriv->pscanned)) {
-
-		pnetwork = LIST_CONTAINOR(pmlmepriv->pscanned, struct wlan_network, list);
-		if(pnetwork==NULL){
-			RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("(2)rtw_select_and_join_from_scanned_queue return _FAIL:(pnetwork==NULL)\n"));
-			_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-			return _FAIL;	
-		}
-
-		dst_ssid = pnetwork->network.Ssid.Ssid;
-		src_ssid = pmlmepriv->assoc_ssid.Ssid;
-		
-		pmlmepriv->pscanned = get_next(pmlmepriv->pscanned);
-
-		#if 0
-		DBG_871X("MacAddress:"MAC_FMT" ssid:%s\n", MAC_ARG(pnetwork->network.MacAddress), pnetwork->network.Ssid.Ssid);
-		#endif
-
-		if(pmlmepriv->assoc_by_bssid==_TRUE)
-		{
-			if(_rtw_memcmp(pnetwork->network.MacAddress, pmlmepriv->assoc_bssid, ETH_ALEN)==_TRUE)
-			{
-				//remove the condition @ 20081125
-				//if((pmlmepriv->cur_network.network.InfrastructureMode==Ndis802_11AutoUnknown)||
-				//	pmlmepriv->cur_network.network.InfrastructureMode == pnetwork->network.InfrastructureMode)
-				//		goto ask_for_joinbss;
-				
-				if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
-				{
-					if(is_same_network(&pmlmepriv->cur_network.network, &pnetwork->network), 0)
-					{
-						//DBG_871X("select_and_join(1): _FW_LINKED and is same network, it needn't join again\n");
-
-						rtw_indicate_connect(adapter);//rtw_indicate_connect again
-						_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);	
-						return 2;
-					}
-					else
-					{
-						rtw_disassoc_cmd(adapter, 0, _TRUE);
-						rtw_indicate_disconnect(adapter);
-						rtw_free_assoc_resources(adapter, 0);
-						_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-						goto ask_for_joinbss;
-						
-					}
-				}
-				else
-				{
-					_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-					goto ask_for_joinbss;
-				}
-							
-			}
-			
-		} else if (pmlmepriv->assoc_ssid.SsidLength == 0) {			
-			goto ask_for_joinbss;//anyway, join first selected(dequeued) pnetwork if ssid_len=0				
-	
-		#ifdef CONFIG_LAYER2_ROAMING
-		} else if (rtw_to_roaming(adapter) > 0) {
-		
-			if(	(roaming_candidate == NULL ||roaming_candidate->network.Rssi<pnetwork->network.Rssi )
-				&& is_same_ess(&pnetwork->network, &pmlmepriv->cur_network.network)
-				//&&(!is_same_network(&pnetwork->network, &pmlmepriv->cur_network.network, 0))
-				&&  rtw_get_time_interval_ms((u32)pnetwork->last_scanned,cur_time) < 5000
-				) {
-				roaming_candidate = pnetwork;
-				//RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,
-				DBG_871X
-					("roaming_candidate???: %s("MAC_FMT")\n",
-					roaming_candidate->network.Ssid.Ssid, MAC_ARG(roaming_candidate->network.MacAddress) )
-					//)
-					;
-			}
-			continue;
-		#endif
-
-		} else if ( (pnetwork->network.Ssid.SsidLength==pmlmepriv->assoc_ssid.SsidLength)
-			&&((_rtw_memcmp(dst_ssid, src_ssid, pmlmepriv->assoc_ssid.SsidLength)) == _TRUE)
-			)
-		{
-			RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("dst_ssid=%s, src_ssid=%s \n", dst_ssid, src_ssid));
-#ifdef CONFIG_ANTENNA_DIVERSITY
-			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(CurrentAntenna));			
-			DBG_871X("#### dst_ssid=(%s) Opt_Ant_(%s) , cur_Ant(%s)\n", dst_ssid,
-				(2==pnetwork->network.PhyInfo.Optimum_antenna)?"A":"B",
-				(2==CurrentAntenna)?"A":"B");
-#endif
-			//remove the condition @ 20081125
-			//if((pmlmepriv->cur_network.network.InfrastructureMode==Ndis802_11AutoUnknown)||
-			//	pmlmepriv->cur_network.network.InfrastructureMode == pnetwork->network.InfrastructureMode)
-			//{
-			//	_rtw_memcpy(pmlmepriv->assoc_bssid, pnetwork->network.MacAddress, ETH_ALEN);
-			//	goto ask_for_joinbss;
-			//}
-
-			if(pmlmepriv->assoc_by_rssi==_TRUE)//if the ssid is the same, select the bss which has the max rssi
-			{
-				if( NULL==pnetwork_max_rssi|| pnetwork->network.Rssi > pnetwork_max_rssi->network.Rssi)
-						pnetwork_max_rssi = pnetwork;					
-			}
-			else if(rtw_is_desired_network(adapter, pnetwork) == _TRUE)
-			{
-				if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
-				{
-#if 0				
-					if(is_same_network(&pmlmepriv->cur_network.network, &pnetwork->network, 0))
-					{
-						DBG_871X("select_and_join(2): _FW_LINKED and is same network, it needn't join again\n");
-						
-						rtw_indicate_connect(adapter);//rtw_indicate_connect again
-						
-						return 2;
-					}
-					else
-#endif						
-					{
-						rtw_disassoc_cmd(adapter, 0, _TRUE);
-						//rtw_indicate_disconnect(adapter);//
-						rtw_free_assoc_resources(adapter, 0);
-						_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-						goto ask_for_joinbss;						
-					}
-				}
-				else
-				{
-					_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-					goto ask_for_joinbss;
-				}				
-
-			}
-		
-			
-		}
- 	
- 	}
-	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
-	#ifdef CONFIG_LAYER2_ROAMING
-	if(rtw_to_roaming(adapter) > 0 && roaming_candidate ){
-		pnetwork=roaming_candidate;
-		DBG_871X("select_and_join_from_scanned_queue: roaming_candidate: %s("MAC_FMT")\n",
-			pnetwork->network.Ssid.Ssid, MAC_ARG(pnetwork->network.MacAddress));
-		goto ask_for_joinbss;
-	}
-	#endif
-
-	if((pmlmepriv->assoc_by_rssi==_TRUE)  && (pnetwork_max_rssi!=NULL))
-	{
-		pnetwork = pnetwork_max_rssi;
-		DBG_871X("select_and_join_from_scanned_queue: pnetwork_max_rssi: %s("MAC_FMT")\n",
-			pnetwork->network.Ssid.Ssid, MAC_ARG(pnetwork->network.MacAddress));
-		goto ask_for_joinbss;
-	}
-
-	DBG_871X("(1)rtw_select_and_join_from_scanned_queue return _FAIL\n");
-	
-_func_exit_;	
-
-     return _FAIL;
-
-ask_for_joinbss:
-	
-_func_exit_;
-
-	return rtw_joinbss_cmd(adapter, pnetwork);
-
-}
-#endif //PLATFORM_FREEBSD
-
 
 sint rtw_set_auth(_adapter * adapter,struct security_priv *psecuritypriv)
 {

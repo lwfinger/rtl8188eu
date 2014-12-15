@@ -10981,26 +10981,6 @@ void survey_timer_hdl(_adapter *padapter)
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 #endif
 
-	//DBG_871X("marc: survey timer\n");
-#ifdef PLATFORM_FREEBSD
-	rtw_mtx_lock(NULL);
-	 if (callout_pending(&padapter->mlmeextpriv.survey_timer.callout)) {
-		 /* callout was reset */
-		 //mtx_unlock(&sc->sc_mtx);
-		 rtw_mtx_unlock(NULL);
-		 return;
-	 }
-	 if (!callout_active(&padapter->mlmeextpriv.survey_timer.callout)) {
-		 /* callout was stopped */
-		 //mtx_unlock(&sc->sc_mtx);
-		 rtw_mtx_unlock(NULL);
-		 return;
-	 }
-	 callout_deactivate(&padapter->mlmeextpriv.survey_timer.callout);
-
-
-#endif
-
 	//issue rtw_sitesurvey_cmd
 	if (pmlmeext->sitesurvey_res.state > SCAN_START)
 	{
@@ -11053,10 +11033,6 @@ void survey_timer_hdl(_adapter *padapter)
 
 
 exit_survey_timer_hdl:
-#ifdef PLATFORM_FREEBSD
-		rtw_mtx_unlock(NULL);
-#endif
-
 	return;
 }
 
@@ -11068,25 +11044,6 @@ void link_timer_hdl(_adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	//struct sta_priv		*pstapriv = &padapter->stapriv;
-
-#ifdef PLATFORM_FREEBSD
-	rtw_mtx_lock(NULL);
-	 if (callout_pending(&padapter->mlmeextpriv.survey_timer.callout)) {
-		 /* callout was reset */
-		 //mtx_unlock(&sc->sc_mtx);
-		 rtw_mtx_unlock(NULL);
-		 return;
-	 }
-	 if (!callout_active(&padapter->mlmeextpriv.survey_timer.callout)) {
-		 /* callout was stopped */
-		 //mtx_unlock(&sc->sc_mtx);
-		 rtw_mtx_unlock(NULL);
-		 return;
-	 }
-	 callout_deactivate(&padapter->mlmeextpriv.survey_timer.callout);
-
-	
-#endif
 
 	if (pmlmeinfo->state & WIFI_FW_AUTH_NULL)
 	{
@@ -11192,10 +11149,6 @@ void link_timer_hdl(_adapter *padapter)
 
 		set_link_timer(pmlmeext, DISCONNECT_TO);
 	}
-#endif
-
-#ifdef PLATFORM_FREEBSD
-	rtw_mtx_unlock(NULL);
 #endif
 
 	return;

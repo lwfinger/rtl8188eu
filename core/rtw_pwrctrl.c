@@ -204,7 +204,6 @@ exit:
 	return ret;
 }
 
-#if defined (PLATFORM_LINUX)||defined (PLATFORM_FREEBSD)
 void rtw_ps_processor(_adapter*padapter)
 {
 #ifdef CONFIG_P2P
@@ -333,15 +332,11 @@ exit:
 	return;
 }
 
-void pwr_state_check_handler(void *FunctionContext);
 void pwr_state_check_handler(void *FunctionContext)
 {
 	_adapter *padapter = (_adapter *)FunctionContext;
 	rtw_ps_cmd(padapter);
 }
-#endif
-
-
 
 #ifdef CONFIG_LPS
 /*

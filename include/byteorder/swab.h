@@ -108,19 +108,12 @@ __inline static __u64 __arch__swab64(__u64 x)
 #define __swab64(x) __fswab64(x)
 #endif	// __swab16
 
-#ifdef PLATFORM_FREEBSD
-__inline static __u16 __fswab16(__u16 x)
-#else
 __inline static const __u16 __fswab16(__u16 x)
-#endif //PLATFORM_FREEBSD
 {
 	return __arch__swab16(x);
 }
-#ifdef PLATFORM_FREEBSD
-__inline static __u32 __fswab32(__u32 x)
-#else
+
 __inline static const __u32 __fswab32(__u32 x)
-#endif //PLATFORM_FREEBSD
 {
 	return __arch__swab32(x);
 }

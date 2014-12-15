@@ -630,11 +630,9 @@ extern void rtw_stadel_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_atimdone_event_callback(_adapter *adapter, u8 *pbuf);
 extern void rtw_cpwm_event_callback(_adapter *adapter, u8 *pbuf);
 
-#if defined (PLATFORM_LINUX)|| defined (PLATFORM_FREEBSD)
 extern int event_thread(void *context);
 extern void rtw_join_timeout_handler(void* FunctionContext);
 extern void _rtw_scan_timeout_handler(void* FunctionContext);
-#endif
 
 extern void rtw_free_network_queue(_adapter *adapter,u8 isfreeall);
 extern int rtw_init_mlme_priv(_adapter *adapter);// (struct mlme_priv *pmlmepriv);

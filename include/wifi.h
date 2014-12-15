@@ -678,11 +678,6 @@ struct rtw_ieee80211_bar {
 #define IEEE80211_BAR_CTRL_ACK_POLICY_NORMAL     0x0000
 #define IEEE80211_BAR_CTRL_CBMTID_COMPRESSED_BA  0x0004
 
-
- #if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8712FW) || defined(PLATFORM_FREEBSD)
-
-
-
  /**
  * struct rtw_ieee80211_ht_cap - HT capabilities
  *
@@ -759,8 +754,6 @@ struct ADDBA_request
 	__le16	BA_timeout_value;
 	__le16	BA_starting_seqctrl;
 }  __attribute__ ((packed));
-
-#endif
 
 typedef enum _HT_CAP_AMPDU_FACTOR {
 	MAX_AMPDU_FACTOR_8K	= 0,

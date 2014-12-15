@@ -315,8 +315,6 @@ struct ieee_ibss_seq {
 	_list	list;
 };
 
-#if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8711FW)||defined(PLATFORM_FREEBSD) 
-
 struct rtw_ieee80211_hdr {
 	u16 frame_ctl;
 	u16 duration_id;
@@ -365,8 +363,6 @@ struct eapol {
 	u8 type;
 	u16 length;
 } __attribute__ ((packed));
-
-#endif
 
 enum eap_type {
 	EAP_PACKET = 0,
@@ -476,8 +472,6 @@ enum eap_type {
 
 #define P80211_OUI_LEN 3
 
-#if defined(PLATFORM_LINUX) || defined(CONFIG_RTL8711FW) || defined(PLATFORM_FREEBSD)
-
 struct ieee80211_snap_hdr {
 
         u8    dsap;   /* always 0xAA */
@@ -486,8 +480,6 @@ struct ieee80211_snap_hdr {
         u8    oui[P80211_OUI_LEN];    /* organizational universal id */
 
 } __attribute__ ((packed));
-
-#endif
 
 #define SNAP_SIZE sizeof(struct ieee80211_snap_hdr)
 
@@ -693,7 +685,6 @@ struct ieee80211_frag_entry {
 	u8 dst_addr[ETH_ALEN];
 };
 
-#ifndef PLATFORM_FREEBSD //Baron BSD has already defined
 struct ieee80211_stats {
 	uint tx_unicast_frames;
 	uint tx_multicast_frames;
@@ -717,7 +708,7 @@ struct ieee80211_stats {
 	uint rx_message_in_msg_fragments;
 	uint rx_message_in_bad_msg_fragments;
 };
-#endif //PLATFORM_FREEBSD
+
 struct ieee80211_softmac_stats{
 	uint rx_ass_ok;
 	uint rx_ass_err;
@@ -989,8 +980,6 @@ join_res:
 > 0: TID
 */
 
-#ifndef PLATFORM_FREEBSD //Baron BSD has already defined
-
 enum ieee80211_state {
 
 	/* the card is not linked at all */
@@ -1029,7 +1018,6 @@ enum ieee80211_state {
 	IEEE80211_LINKED_SCANNING,
 	
 };
-#endif //PLATFORM_FREEBSD
 
 #define DEFAULT_MAX_SCAN_AGE (15 * HZ)
 #define DEFAULT_FTS 2346
@@ -1038,12 +1026,6 @@ enum ieee80211_state {
 #define IP_FMT "%d.%d.%d.%d"
 #define IP_ARG(x) ((u8*)(x))[0],((u8*)(x))[1],((u8*)(x))[2],((u8*)(x))[3]
 
-#ifdef PLATFORM_FREEBSD //Baron change func to macro
-#define is_multicast_mac_addr(Addr) ((((Addr[0]) & 0x01) == 0x01) && ((Addr[0]) != 0xff))
-#define is_broadcast_mac_addr(Addr) ((((Addr[0]) & 0xff) == 0xff) && (((Addr[1]) & 0xff) == 0xff) && \
-(((Addr[2]) & 0xff) == 0xff) && (((Addr[3]) & 0xff) == 0xff) && (((Addr[4]) & 0xff) == 0xff) && \
-(((Addr[5]) & 0xff) == 0xff))
-#else
 extern __inline int is_multicast_mac_addr(const u8 *addr)
 {
         return ((addr[0] != 0xff) && (0x01 & addr[0]));
@@ -1060,7 +1042,6 @@ extern __inline int is_zero_mac_addr(const u8 *addr)
 	return ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) &&   \
 		(addr[3] == 0x00) && (addr[4] == 0x00) && (addr[5] == 0x00));
 }
-#endif //PLATFORM_FREEBSD
 
 #define CFG_IEEE80211_RESERVE_FCS (1<<0)
 #define CFG_IEEE80211_COMPUTE_FCS (1<<1)
@@ -1194,9 +1175,7 @@ enum rtw_ieee80211_back_parties {
 
 #define OUI_MICROSOFT 0x0050f2 /* Microsoft (also used in Wi-Fi specs)
 				* 00:50:F2 */
-#ifndef PLATFORM_FREEBSD //Baron BSD has defined
 #define WME_OUI_TYPE 2
-#endif //PLATFORM_FREEBSD
 #define WME_OUI_SUBTYPE_INFORMATION_ELEMENT 0
 #define WME_OUI_SUBTYPE_PARAMETER_ELEMENT 1
 #define WME_OUI_SUBTYPE_TSPEC_ELEMENT 2
