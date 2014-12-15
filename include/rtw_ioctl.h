@@ -103,16 +103,6 @@ struct oid_obj_priv {
 	NDIS_STATUS (*oidfuns)(struct oid_par_priv *poid_par_priv);	
 };
 
-#if (defined(CONFIG_MP_INCLUDED) && defined(_RTW_MP_IOCTL_C_)) || \
-	(defined(PLATFORM_WINDOWS) && defined(_RTW_IOCTL_RTL_C_))
-static NDIS_STATUS oid_null_function(struct oid_par_priv* poid_par_priv)
-{
-	_func_enter_;
-	_func_exit_;
-	return NDIS_STATUS_SUCCESS;
-}
-#endif
-
 #ifdef PLATFORM_WINDOWS
 
 int TranslateNdisPsToRtPs(IN NDIS_802_11_POWER_MODE	ndisPsMode);

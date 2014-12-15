@@ -2211,17 +2211,6 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	}
 #endif //CONFIG_CONCURRENT_MODE
 
-#ifdef CONFIG_MP_INCLUDED
-if (padapter->registrypriv.mp_mode == 1)
-{
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == _TRUE)
-	{
-		ret = -EPERM;
-		goto exit;
-	}
-}
-#endif
-
 	_enter_critical_bh(&pwdev_priv->scan_req_lock, &irqL);
 	pwdev_priv->scan_request = request;
 	_exit_critical_bh(&pwdev_priv->scan_req_lock, &irqL);

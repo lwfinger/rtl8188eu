@@ -2001,10 +2001,6 @@ _func_enter_;
 		//DBG_871X("r871xu_dev_remove():module removed\n");
 		padapter->hw_init_completed = _FALSE;
 	}*/
-#ifdef CONFIG_MP_INCLUDED
-	if (padapter->registrypriv.mp_mode == 1)
-		MPT_DeInitAdapter(padapter);
-#endif
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	rtw_unregister_early_suspend(dvobj_to_pwrctl(dvobj));
 #endif

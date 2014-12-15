@@ -85,7 +85,6 @@
 //#define CONFIG_USB_INTERRUPT_IN_PIPE	
 #endif
 
-//#ifndef CONFIG_MP_INCLUDED
 	#define CONFIG_IPS	
 	#ifdef CONFIG_IPS
 	//#define CONFIG_IPS_LEVEL_2	 //enable this to set default IPS mode to IPS_LEVEL_2
@@ -120,9 +119,6 @@
 	#endif
 
 	#define CONFIG_IOL
-//#else 	//#ifndef CONFIG_MP_INCLUDED
-	
-//#endif 	//#ifndef CONFIG_MP_INCLUDED
 
 #define CONFIG_AP_MODE	
 #ifdef CONFIG_AP_MODE
@@ -269,14 +265,7 @@
 
 //#define RTL8191C_FPGA_NETWORKTYPE_ADHOC 0
 
-#ifdef CONFIG_MP_INCLUDED
-	#define MP_DRIVER 1
-	#define CONFIG_MP_IWPRIV_SUPPORT	
-	//#undef CONFIG_USB_TX_AGGREGATION
-	//#undef CONFIG_USB_RX_AGGREGATION
-#else
 	#define MP_DRIVER 0
-#endif
 
 
 /*
