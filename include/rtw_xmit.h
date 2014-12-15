@@ -168,46 +168,16 @@ do{\
 
 
 struct tx_desc{
-
-	//DWORD 0
-	unsigned int txdw0;
-
-	unsigned int txdw1;
-
-	unsigned int txdw2;
-
-	unsigned int txdw3;
-
-	unsigned int txdw4;
-
-	unsigned int txdw5;
-
-	unsigned int txdw6;
-
-	unsigned int txdw7;
-#ifdef CONFIG_PCI_HCI
-	unsigned int txdw8;
-
-	unsigned int txdw9;
-
-	unsigned int txdw10;
-
-	unsigned int txdw11;
-
-	// 2008/05/15 MH Because PCIE HW memory R/W 4K limit. And now,  our descriptor
-	// size is 40 bytes. If you use more than 102 descriptor( 103*40>4096), HW will execute
-	// memoryR/W CRC error. And then all DMA fetch will fail. We must decrease descriptor
-	// number or enlarge descriptor size as 64 bytes.
-	unsigned int txdw12;
-
-	unsigned int txdw13;
-
-	unsigned int txdw14;
-
-	unsigned int txdw15;
-#endif
+	/* DWORD 0 */
+	__le32 txdw0;
+	__le32 txdw1;
+	__le32 txdw2;
+	__le32 txdw3;
+	__le32 txdw4;
+	__le32 txdw5;
+	__le32 txdw6;
+	__le32 txdw7;
 };
-
 
 union txdesc {
 	struct tx_desc txdesc;

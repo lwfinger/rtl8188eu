@@ -102,7 +102,7 @@ extern u8 key_2char2num(u8 hch, u8 lch);
 extern u8 str_2char2num(u8 hch, u8 lch);
 extern u8 convert_ip_addr(u8 hch, u8 mch, u8 lch);
 
-u32 rtw_rates[] = {1000000,2000000,5500000,11000000,
+static u32 rtw_rates[] = {1000000,2000000,5500000,11000000,
 	6000000,9000000,12000000,18000000,24000000,36000000,48000000,54000000};
 
 static const char * const iw_operation_mode[] = 
@@ -315,6 +315,7 @@ static char *translate_scan(_adapter *padapter,
 {
 	struct iw_event iwe;
 	u16 cap;
+	__le16 le_cap;
 	u32 ht_ielen = 0;
 	char custom[MAX_CUSTOM_LEN];
 	char *p;
@@ -484,10 +485,10 @@ static char *translate_scan(_adapter *padapter,
 
 	  /* Add mode */
         iwe.cmd = SIOCGIWMODE;
-	_rtw_memcpy((u8 *)&cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
+	_rtw_memcpy((u8 *)&le_cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
 
 
-	cap = le16_to_cpu(cap);
+	cap = le16_to_cpu(le_cap);
 
 	if(cap & (WLAN_CAPABILITY_IBSS |WLAN_CAPABILITY_BSS)){
 		if (cap & WLAN_CAPABILITY_BSS)
@@ -1953,7 +1954,7 @@ struct	iw_mlme
 #endif
 
 	int ret=0;
-	u16 reason;
+	__le16 reason;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct iw_mlme *mlme = (struct iw_mlme *) extra;
 
@@ -1965,25 +1966,19 @@ struct	iw_mlme
 
 	reason = cpu_to_le16(mlme->reason_code);
 
-
 	DBG_871X("%s, cmd=%d, reason=%d\n", __FUNCTION__, mlme->cmd, reason);
 	
-
-	switch (mlme->cmd) 
-	{
-		case IW_MLME_DEAUTH:
-				if(!rtw_set_802_11_disassociate(padapter))
+	switch (mlme->cmd) {
+	case IW_MLME_DEAUTH:
+		if(!rtw_set_802_11_disassociate(padapter))
+			ret = -1;
+		break;
+	case IW_MLME_DISASSOC:
+		if(!rtw_set_802_11_disassociate(padapter))
 				ret = -1;
-				break;
-
-		case IW_MLME_DISASSOC:
-				if(!rtw_set_802_11_disassociate(padapter))
-						ret = -1;
-
-				break;
-
-		default:
-			return -EOPNOTSUPP;
+		break;
+	default:
+		return -EOPNOTSUPP;
 	}
 
 	return ret;
@@ -3907,7 +3902,7 @@ static void rtw_dbg_mode_hdl(_adapter *padapter, u32 id, u8 *pdata, u32 len)
 			break;			
                 case GEN_MP_IOCTL_SUBCODE(TRIGGER_GPIO):
 			DBG_871X("==> trigger gpio 0\n");
-			rtw_hal_set_hwreg(padapter, HW_VAR_TRIGGER_GPIO_0, 0);
+			rtw_hal_set_hwreg(padapter, HW_VAR_TRIGGER_GPIO_0, NULL);
 			break;	
 #ifdef CONFIG_BT_COEXIST
 		case GEN_MP_IOCTL_SUBCODE(SET_DM_BT):			
@@ -4730,6 +4725,7 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 	_queue *queue = &(pmlmepriv->scanned_queue);
 	struct wlan_network *pnetwork = NULL;
 	u8 blnMatch = 0;
+	__be16	be_attr_content = 0;
 	u16	attr_content = 0;
 	uint attr_contentlen = 0;
 	u8	attr_content_str[P2P_PRIVATE_IOCTL_SET_LEN] = { 0x00 };
@@ -4762,10 +4758,9 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 
 			if ( (wpsie=rtw_get_wps_ie_from_scan_queue( &pnetwork->network.IEs[0], pnetwork->network.IELength, NULL, &wpsie_len, pnetwork->network.Reserved[0])) )
 			{
-				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_CONF_METHOD, (u8 *)&attr_content, &attr_contentlen);
-				if (attr_contentlen)
-				{
-					attr_content = be16_to_cpu(attr_content);
+				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_CONF_METHOD, (u8 *)&be_attr_content, &attr_contentlen);
+				if (attr_contentlen) {
+					attr_content = be16_to_cpu(be_attr_content);
 					sprintf(attr_content_str, "\n\nM=%.4d", attr_content);
 					blnMatch = 1;
 				}
@@ -4992,12 +4987,12 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
 			if ( (wpsie=rtw_get_wps_ie_from_scan_queue( &pnetwork->network.IEs[0], pnetwork->network.IELength, NULL, &wpsie_len, pnetwork->network.Reserved[0])) )
 			{
 				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_PRIMARY_DEV_TYPE, dev_type, &dev_type_len);
-				if (dev_type_len)
-				{
-					u16	type = 0;
+				if (dev_type_len) {
+					__be16 be_type;
+					u16 type;
 
-					_rtw_memcpy(&type, dev_type, 2);
-					type = be16_to_cpu(type);
+					_rtw_memcpy(&be_type, dev_type, 2);
+					type = be16_to_cpu(be_type);
 					sprintf(dev_type_str, "\n\nN=%.2d", type);
 					blnMatch = 1;
 				}
@@ -6727,7 +6722,7 @@ void rf_reg_dump(_adapter *padapter)
 
 #endif
 
-void mac_reg_dump(_adapter *padapter)
+static void mac_reg_dump(_adapter *padapter)
 {
 	int i,j=1;		
 	printk("\n======= MAC REG =======\n");
@@ -9205,7 +9200,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	
 	u8 *data = NULL;
 	u8 *rawdata = NULL;
-	char *pch, *ptmp, *token, *tmp[3]={0x00,0x00,0x00};
+	char *pch, *ptmp, *token, *tmp[3]={NULL, NULL, NULL};
 	u8 ips_mode,lps_mode;
 	u16 i=0, j=0, mapLen=0, addr=0, cnts=0;
 	u16 max_available_size=0, raw_cursize=0, raw_maxsize=0;
@@ -9779,7 +9774,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	u8 *ShadowMapBT = NULL;
 	u8 *ShadowMapWiFi = NULL;
 	u8 *setrawdata = NULL;
-	char *pch, *ptmp, *token, *tmp[3]={0x00,0x00,0x00};
+	char *pch, *ptmp, *token, *tmp[3]={NULL, NULL, NULL};
 	u16 addr=0, cnts=0, max_available_size=0;
 	int err;
 

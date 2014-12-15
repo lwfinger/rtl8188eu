@@ -55,7 +55,7 @@
 #define WEXT_CSCAN_HOME_DWELL_SECTION	'H'
 #define WEXT_CSCAN_TYPE_SECTION		'T'
 
-static struct mp_ioctl_handler mp_ioctl_hdl[] = {
+struct mp_ioctl_handler mp_ioctl_hdl[] = {
 /*0*/	GEN_HANDLER(sizeof(u32), rtl8188eu_oid_rt_pro_start_test_hdl, OID_RT_PRO_START_TEST)
 	GEN_HANDLER(sizeof(u32), rtl8188eu_oid_rt_pro_stop_test_hdl, OID_RT_PRO_STOP_TEST)
 

@@ -47,7 +47,7 @@
 #include <linux/irq.h>
 #endif
 
-const char *android_wifi_cmd_str[ANDROID_WIFI_CMD_MAX] = {
+static const char *android_wifi_cmd_str[ANDROID_WIFI_CMD_MAX] = {
 	"START",
 	"STOP",
 	"SCAN-ACTIVE",
@@ -128,7 +128,7 @@ typedef struct android_wifi_priv_cmd {
  */
 static int g_wifi_on = _TRUE;
 
-unsigned int oob_irq;
+static unsigned int oob_irq;
 
 #ifdef PNO_SUPPORT
 static int wl_android_set_pno_setup(struct net_device *dev, char *command, int total_len)
@@ -248,7 +248,7 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
 	return cmd_num;
 }
 
-int rtw_android_get_rssi(struct net_device *net, char *command, int total_len)
+static int rtw_android_get_rssi(struct net_device *net, char *command, int total_len)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(net);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);	
@@ -263,7 +263,7 @@ int rtw_android_get_rssi(struct net_device *net, char *command, int total_len)
 	return bytes_written;
 }
 
-int rtw_android_get_link_speed(struct net_device *net, char *command, int total_len)
+static int rtw_android_get_link_speed(struct net_device *net, char *command, int total_len)
 {
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(net);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);	
@@ -277,7 +277,7 @@ int rtw_android_get_link_speed(struct net_device *net, char *command, int total_
 	return bytes_written;
 }
 
-int rtw_android_get_macaddr(struct net_device *net, char *command, int total_len)
+static int rtw_android_get_macaddr(struct net_device *net, char *command, int total_len)
 {
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
 	int bytes_written = 0;
@@ -286,7 +286,7 @@ int rtw_android_get_macaddr(struct net_device *net, char *command, int total_len
 	return bytes_written;
 }
 
-int rtw_android_set_country(struct net_device *net, char *command, int total_len)
+static int rtw_android_set_country(struct net_device *net, char *command, int total_len)
 {
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
 	char *country_code = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_COUNTRY]) + 1;
@@ -297,7 +297,7 @@ int rtw_android_set_country(struct net_device *net, char *command, int total_len
 	return (ret==_SUCCESS)?0:-1;
 }
 
-int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, int total_len)
+static int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, int total_len)
 {
 	int bytes_written = 0;
 
@@ -308,7 +308,7 @@ int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, int tota
 	return bytes_written;
 }
 
-int rtw_android_set_block(struct net_device *net, char *command, int total_len)
+static int rtw_android_set_block(struct net_device *net, char *command, int total_len)
 {
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
 	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
@@ -320,7 +320,7 @@ int rtw_android_set_block(struct net_device *net, char *command, int total_len)
 	return 0;
 }
 
-int get_int_from_command( char* pcmd )
+static int get_int_from_command(char *pcmd)
 {
 	int i = 0;
 
@@ -526,7 +526,6 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 
 #ifdef CONFIG_WFD
 	case ANDROID_WIFI_CMD_WFD_ENABLE:
-	{
 		//	Commented by Albert 2012/07/24
 		//	We can enable the WFD function by using the following command:
 		//	wpa_cli driver wfd-enable
@@ -535,10 +534,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
 			pwfd_info->wfd_enable = _TRUE;
 		break;
-	}
-
 	case ANDROID_WIFI_CMD_WFD_DISABLE:
-	{
 		//	Commented by Albert 2012/07/24
 		//	We can disable the WFD function by using the following command:
 		//	wpa_cli driver wfd-disable
@@ -547,22 +543,17 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
 			pwfd_info->wfd_enable = _FALSE;
 		break;
-	}
 	case ANDROID_WIFI_CMD_WFD_SET_TCPPORT:
-	{
 		//	Commented by Albert 2012/07/24
 		//	We can set the tcp port number by using the following command:
 		//	wpa_cli driver wfd-set-tcpport = 554
 
 		pwfd_info = &padapter->wfd_info;
 		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
-			pwfd_info->rtsp_ctrlport = ( u16 ) get_int_from_command( priv_cmd.buf );
+			pwfd_info->rtsp_ctrlport = (u16)get_int_from_command(priv_cmd.buf);
 		break;
-	}
 	case ANDROID_WIFI_CMD_WFD_SET_MAX_TPUT:
-	{
 		break;
-	}
 	case ANDROID_WIFI_CMD_WFD_SET_DEVTYPE:
 	{
 		//	Commented by Albert 2012/08/28
@@ -572,9 +563,8 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
 	
 		pwfd_info = &padapter->wfd_info;
-		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
-		{
-			pwfd_info->wfd_device_type = ( u8 ) get_int_from_command( priv_cmd.buf );
+		if (padapter->wdinfo.driver_interface == DRIVER_CFG80211) {
+			pwfd_info->wfd_device_type = (u8)get_int_from_command(priv_cmd.buf);
 		
 			pwfd_info->wfd_device_type &= WFD_DEVINFO_DUAL;
 		}

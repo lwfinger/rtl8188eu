@@ -306,7 +306,7 @@ static void rtw_check_xmit_resource(_adapter *padapter, _pkt *pkt)
 }
 
 #ifdef CONFIG_TX_MCAST2UNI
-int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
+static int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 {
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;

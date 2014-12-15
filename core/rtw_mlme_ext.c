@@ -115,8 +115,6 @@ unsigned char	WMM_PARA_OUI[] = {0x00, 0x50, 0xf2, 0x02, 0x01, 0x01};
 unsigned char WPA_TKIP_CIPHER[4] = {0x00, 0x50, 0xf2, 0x02};
 unsigned char RSN_TKIP_CIPHER[4] = {0x00, 0x0f, 0xac, 0x02};
 
-extern unsigned char REALTEK_96B_IE[];
-
 /********************************************************
 MCS rate definitions
 *********************************************************/
@@ -3980,39 +3978,37 @@ void issue_p2p_invitation_request(_adapter *padapter, u8* raddr )
 {
 
 	unsigned char category = RTW_WLAN_CATEGORY_PUBLIC;
-	u8			action = P2P_PUB_ACTION_ACTION;
-	u32			p2poui = cpu_to_be32(P2POUI);
-	u8			oui_subtype = P2P_INVIT_REQ;
-	u8			p2pie[ 255 ] = { 0x00 };
-	u8			p2pielen = 0, i;
-	u8			dialogToken = 3;
-	u8			channel_cnt_24g = 0, channel_cnt_5gl = 0, channel_cnt_5gh = 0;
-	u16			len_channellist_attr = 0;	
+	u8	action = P2P_PUB_ACTION_ACTION;
+	u32	p2poui = cpu_to_be32(P2POUI);
+	u8	oui_subtype = P2P_INVIT_REQ;
+	u8	p2pie[ 255 ] = { 0x00 };
+	u8	p2pielen = 0, i;
+	u8	dialogToken = 3;
+	u8	channel_cnt_24g = 0, channel_cnt_5gl = 0, channel_cnt_5gh = 0;
+	u16	len_channellist_attr = 0;	
 #ifdef CONFIG_WFD
-	u32					wfdielen = 0;
+	u32	wfdielen = 0;
 #endif //CONFIG_WFD
 #ifdef CONFIG_CONCURRENT_MODE
-	_adapter				*pbuddy_adapter = padapter->pbuddy_adapter;
+	_adapter	*pbuddy_adapter = padapter->pbuddy_adapter;
 	struct wifidirect_info	*pbuddy_wdinfo = &pbuddy_adapter->wdinfo;
 	struct mlme_priv		*pbuddy_mlmepriv = &pbuddy_adapter->mlmepriv;
 	struct mlme_ext_priv	*pbuddy_mlmeext = &pbuddy_adapter->mlmeextpriv;
 #endif
 
-	struct xmit_frame			*pmgntframe;
-	struct pkt_attrib			*pattrib;
-	unsigned char					*pframe;
+	struct xmit_frame	*pmgntframe;
+	struct pkt_attrib	*pattrib;
+	unsigned char		*pframe;
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	unsigned short				*fctrl;
-	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
+	unsigned short		*fctrl;
+	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wifidirect_info	*pwdinfo = &( padapter->wdinfo);
 
 
 	if ((pmgntframe = alloc_mgtxmitframe(pxmitpriv)) == NULL)
-	{
 		return;
-	}
 
 	//update attribute
 	pattrib = &pmgntframe->attrib;

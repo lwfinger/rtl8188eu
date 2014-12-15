@@ -116,7 +116,7 @@ extern unsigned char P2P_OUI[];
 
 extern unsigned char WMM_INFO_OUI[];
 extern unsigned char WMM_PARA_OUI[];
-
+extern unsigned char REALTEK_96B_IE[];
 
 //
 // Channel Plan Type.
@@ -557,7 +557,6 @@ struct mlme_ext_priv
 #ifdef DBG_FIXED_CHAN
 	u8 fixed_chan;
 #endif
-	
 };
 
 int init_mlme_ext_priv(_adapter* padapter);

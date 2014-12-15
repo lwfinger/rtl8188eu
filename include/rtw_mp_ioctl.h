@@ -204,7 +204,7 @@ NDIS_STATUS oid_rt_pro_trigger_gpio_hdl(struct oid_par_priv *poid_par_priv);
 
 #ifdef _RTW_MP_IOCTL_C_
 
-const struct oid_obj_priv oid_rtl_seg_81_80_00[] =
+static const struct oid_obj_priv oid_rtl_seg_81_80_00[] =
 {
 	{1, &oid_null_function},			//0x00	OID_RT_PRO_RESET_DUT
 	{1, &oid_rt_pro_set_data_rate_hdl},		//0x01
@@ -241,7 +241,7 @@ const struct oid_obj_priv oid_rtl_seg_81_80_00[] =
 
 };
 
-const struct oid_obj_priv oid_rtl_seg_81_80_20[] =
+static const struct oid_obj_priv oid_rtl_seg_81_80_20[] =
 {
 	{1, &oid_null_function},			//0x20	OID_RT_PRO_READ_POWER_CONTROL
 	{1, &oid_null_function},			//0x21	OID_RT_PRO_WRITE_EEPROM
@@ -262,7 +262,7 @@ const struct oid_obj_priv oid_rtl_seg_81_80_20[] =
 
 };
 
-const struct oid_obj_priv oid_rtl_seg_81_80_40[] =
+static const struct oid_obj_priv oid_rtl_seg_81_80_40[] =
 {
 	{1, &oid_null_function},			//0x40
 	{1, &oid_null_function},			//0x41
@@ -272,7 +272,7 @@ const struct oid_obj_priv oid_rtl_seg_81_80_40[] =
 	{1, &oid_null_function}				//0x45
 };
 
-const struct oid_obj_priv oid_rtl_seg_81_80_80[] =
+static const struct oid_obj_priv oid_rtl_seg_81_80_80[] =
 {
 	{1, &oid_null_function},			//0x80	OID_RT_DRIVER_OPTION
 	{1, &oid_null_function},			//0x81	OID_RT_RF_OFF
@@ -280,12 +280,12 @@ const struct oid_obj_priv oid_rtl_seg_81_80_80[] =
 
 };
 
-const struct oid_obj_priv oid_rtl_seg_81_85[] =
+static const struct oid_obj_priv oid_rtl_seg_81_85[] =
 {
 	{1, &oid_rt_wireless_mode_hdl}			//0x00	OID_RT_WIRELESS_MODE
 };
 
-struct oid_obj_priv oid_rtl_seg_81_87[] =
+static struct oid_obj_priv oid_rtl_seg_81_87[] =
 {
 	{1, &oid_null_function},			//0x80	OID_RT_PRO8187_WI_POLL
 	{1, &oid_rt_pro_write_bb_reg_hdl},		//0x81
@@ -294,7 +294,7 @@ struct oid_obj_priv oid_rtl_seg_81_87[] =
 	{1, &oid_rt_pro_read_rf_reg_hdl}		//0x83
 };
 
-struct oid_obj_priv oid_rtl_seg_87_11_00[] =
+static struct oid_obj_priv oid_rtl_seg_87_11_00[] =
 {
 	{1, &oid_rt_pro8711_join_bss_hdl},		//0x00  //S
 	{1, &oid_rt_pro_read_register_hdl},		//0x01
@@ -330,7 +330,7 @@ struct oid_obj_priv oid_rtl_seg_87_11_00[] =
 	{1, &oid_rt_poll_rx_status_hdl}			//0X1F
 };
 
-struct oid_obj_priv oid_rtl_seg_87_11_20[] =
+static struct oid_obj_priv oid_rtl_seg_87_11_20[] =
 {
 	{1, &oid_rt_pro_cfg_debug_message_hdl},		//0x20
 	{1, &oid_rt_pro_set_data_rate_ex_hdl},		//0x21
@@ -340,23 +340,23 @@ struct oid_obj_priv oid_rtl_seg_87_11_20[] =
 };
 
 
-struct oid_obj_priv oid_rtl_seg_87_11_50[] =
+static struct oid_obj_priv oid_rtl_seg_87_11_50[] =
 {
 	{1, &oid_rt_pro_qry_pwrstate_hdl},		//0x50
 	{1, &oid_rt_pro_set_pwrstate_hdl}		//0x51
 };
 
-struct oid_obj_priv oid_rtl_seg_87_11_80[] =
+static struct oid_obj_priv oid_rtl_seg_87_11_80[] =
 {
 	{1, &oid_null_function}				//0x80
 };
 
-struct oid_obj_priv oid_rtl_seg_87_11_B0[] =
+static struct oid_obj_priv oid_rtl_seg_87_11_B0[] =
 {
 	{1, &oid_null_function}				//0xB0
 };
 
-struct oid_obj_priv oid_rtl_seg_87_11_F0[] =
+static struct oid_obj_priv oid_rtl_seg_87_11_F0[] =
 {
 	{1, &oid_null_function},			//0xF0
 	{1, &oid_null_function},			//0xF1
@@ -377,7 +377,7 @@ struct oid_obj_priv oid_rtl_seg_87_11_F0[] =
 
 };
 
-struct oid_obj_priv oid_rtl_seg_87_12_00[]=
+static struct oid_obj_priv oid_rtl_seg_87_12_00[]=
 {
 	{1, &oid_rt_pro_encryption_ctrl_hdl},		//0x00	Q&S
 	{1, &oid_rt_pro_add_sta_info_hdl},		//0x01	S
@@ -542,7 +542,6 @@ u32 mp_ioctl_xmit_packet_hdl(struct oid_par_priv* poid_par_priv);
 
 
 struct mp_ioctl_handler mp_ioctl_hdl[] = {
-
 /*0*/	GEN_MP_IOCTL_HANDLER(sizeof(u32), oid_rt_pro_start_test_hdl, OID_RT_PRO_START_TEST)
 	GEN_MP_IOCTL_HANDLER(sizeof(u32), oid_rt_pro_stop_test_hdl, OID_RT_PRO_STOP_TEST)
 

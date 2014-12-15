@@ -18,6 +18,8 @@ EXTRA_CFLAGS += -Wno-uninitialized
 
 EXTRA_CFLAGS += -I$(src)/include
 
+ccflags-y += -D__CHECK_ENDIAN__
+
 CONFIG_AUTOCFG_CP = y
 
 CONFIG_RTL8192C = n
@@ -305,11 +307,11 @@ _HAL_INTFS_FILES += $(CHIP_FILES)
 
 ifeq ($(CONFIG_AUTOCFG_CP), y)
 
-ifeq ($(CONFIG_RTL8188E)$(CONFIG_SDIO_HCI),yy) 
-$(shell cp $(TopDIR)/autoconf_rtl8189e_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
-else
-$(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
-endif
+#ifeq ($(CONFIG_RTL8188E)$(CONFIG_SDIO_HCI),yy) 
+#$(shell cp $(TopDIR)/autoconf_rtl8189e_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
+#else
+#$(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
+#endif
 endif
 
 

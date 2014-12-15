@@ -23,24 +23,25 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <wifi.h>
+#include <rtw_mlme_ext.h>
 
 #ifdef CONFIG_WOWLAN
 #include <linux/inetdevice.h>
 #endif
 
-unsigned char ARTHEROS_OUI1[] = {0x00, 0x03, 0x7f};
-unsigned char ARTHEROS_OUI2[] = {0x00, 0x13, 0x74};
+static unsigned char ARTHEROS_OUI1[] = {0x00, 0x03, 0x7f};
+static unsigned char ARTHEROS_OUI2[] = {0x00, 0x13, 0x74};
 
-unsigned char BROADCOM_OUI1[] = {0x00, 0x10, 0x18};
-unsigned char BROADCOM_OUI2[] = {0x00, 0x0a, 0xf7};
-unsigned char BROADCOM_OUI3[] = {0x00, 0x05, 0xb5};
+static unsigned char BROADCOM_OUI1[] = {0x00, 0x10, 0x18};
+static unsigned char BROADCOM_OUI2[] = {0x00, 0x0a, 0xf7};
+static unsigned char BROADCOM_OUI3[] = {0x00, 0x05, 0xb5};
 
-unsigned char CISCO_OUI[] = {0x00, 0x40, 0x96};
-unsigned char MARVELL_OUI[] = {0x00, 0x50, 0x43};
-unsigned char RALINK_OUI[] = {0x00, 0x0c, 0x43};
-unsigned char REALTEK_OUI[] = {0x00, 0xe0, 0x4c};
-unsigned char AIRGOCAP_OUI[] = {0x00, 0x0a, 0xf5};
-unsigned char EPIGRAM_OUI[] = {0x00, 0x90, 0x4c};
+static unsigned char CISCO_OUI[] = {0x00, 0x40, 0x96};
+static unsigned char MARVELL_OUI[] = {0x00, 0x50, 0x43};
+static unsigned char RALINK_OUI[] = {0x00, 0x0c, 0x43};
+static unsigned char REALTEK_OUI[] = {0x00, 0xe0, 0x4c};
+static unsigned char AIRGOCAP_OUI[] = {0x00, 0x0a, 0xf5};
+static unsigned char EPIGRAM_OUI[] = {0x00, 0x90, 0x4c};
 
 unsigned char REALTEK_96B_IE[] = {0x00, 0xe0, 0x4c, 0x02, 0x01, 0x20};
 
@@ -577,11 +578,10 @@ __inline u8 *get_my_bssid(WLAN_BSSID_EX *pnetwork)
 
 u16 get_beacon_interval(WLAN_BSSID_EX *bss)
 {
-	unsigned short val;
-	_rtw_memcpy((unsigned char *)&val, rtw_get_beacon_interval_from_ie(bss->IEs), 2);
+	__le16 le_val;
 
-	return le16_to_cpu(val);	
-
+	memcpy(&le_val, rtw_get_beacon_interval_from_ie(bss->IEs), 2);
+	return le16_to_cpu(le_val);	
 }
 
 int is_client_associated_to_ap(_adapter *padapter)
@@ -664,7 +664,7 @@ void CAM_empty_entry(
 
 void invalidate_cam_all(_adapter *padapter)
 {
-	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, 0);
+	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, NULL);
 }
 #if 0
 static u32 _ReadCAM(_adapter *padapter ,u32 addr)
@@ -838,7 +838,7 @@ void flush_all_cam_entry(_adapter *padapter)
 	}
 #else //CONFIG_CONCURRENT_MODE
 
-	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, 0);	
+	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, NULL);	
 
 #endif //CONFIG_CONCURRENT_MODE
 
