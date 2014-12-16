@@ -144,14 +144,12 @@ __inline static__ void __swahb32s(__u32 *addr)
  */
 #endif /* __BYTEORDER_HAS_U64__ */
 
-#if defined(PLATFORM_LINUX)
 #define swahw32 __swahw32
 #define swahb32 __swahb32
 #define swahw32p __swahw32p
 #define swahb32p __swahb32p
 #define swahw32s __swahw32s
 #define swahb32s __swahb32s
-#endif
 
 #endif /* _LINUX_BYTEORDER_SWABB_H */
 

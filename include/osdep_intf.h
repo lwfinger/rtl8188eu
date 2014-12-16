@@ -51,7 +51,6 @@ The protection mechanism is through the pending queue.
 	_mutex ioctl_mutex;
 
 	
-#ifdef PLATFORM_LINUX	
 	#ifdef CONFIG_USB_HCI	
 	// when in USB, IO is through interrupt in/out endpoints
 	struct usb_device 	*udev;
@@ -63,30 +62,7 @@ The protection mechanism is through the pending queue.
 	u8 bio_irp_timeout;
 	u8 bio_timer_cancel;
 	#endif
-#endif
-
-#ifdef PLATFORM_OS_XP
-	#ifdef CONFIG_SDIO_HCI
-		// below is for io_rwmem...	
-		PMDL pmdl;
-		PSDBUS_REQUEST_PACKET  sdrp;
-		PSDBUS_REQUEST_PACKET  recv_sdrp;
-		PSDBUS_REQUEST_PACKET  xmit_sdrp;
-
-			PIRP		piorw_irp;
-
-	#endif
-	#ifdef CONFIG_USB_HCI
-		PURB	piorw_urb;
-		PIRP		piorw_irp;
-		u8 io_irp_cnt;
-		u8 bio_irp_pending;
-		_sema io_retevt;	
-	#endif	
-#endif
-
 };	
-
 
 #ifdef CONFIG_R871X_TEST
 int rtw_start_pseudo_adhoc(_adapter *padapter);
@@ -104,7 +80,6 @@ void rtw_cancel_dynamic_chk_timer(_adapter *padapter);
 #endif
 void rtw_cancel_all_timer(_adapter *padapter);
 
-#ifdef PLATFORM_LINUX
 int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname);
@@ -121,7 +96,6 @@ void rtw_proc_remove_one(struct net_device *dev);
 static void rtw_proc_init_one(struct net_device *dev){}
 static void rtw_proc_remove_one(struct net_device *dev){}
 #endif //!CONFIG_PROC_DEBUG
-#endif //PLATFORM_LINUX
 
 void rtw_ips_dev_unload(_adapter *padapter);
 

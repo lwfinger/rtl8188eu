@@ -125,12 +125,9 @@ s32 rtl8188es_init_recv_priv(PADAPTER padapter)
 		goto initbuferror;
 
 	//3 2. init tasklet
-#ifdef PLATFORM_LINUX
 	tasklet_init(&precvpriv->recv_tasklet,
 	     (void(*)(unsigned long))rtl8188es_recv_tasklet,
 	     (unsigned long)padapter);
-#endif
-
 	goto exit;
 
 initbuferror:
@@ -174,9 +171,7 @@ void rtl8188es_free_recv_priv(PADAPTER padapter)
 	precvpriv = &padapter->recvpriv;
 
 	//3 1. kill tasklet
-#ifdef PLATFORM_LINUX
 	tasklet_kill(&precvpriv->recv_tasklet);
-#endif
 
 	//3 2. free all recv buffers
 	precvbuf = (struct recv_buf*)precvpriv->precv_buf;
@@ -347,9 +342,7 @@ static void rtl8188es_recv_tasklet(void *priv)
 
 				// The case of can't allocte recvframe should be temporary,
 				// schedule again and hope recvframe is available next time.
-#ifdef PLATFORM_LINUX
 				tasklet_schedule(&precvpriv->recv_tasklet);
-#endif
 				return;
 			}
 
@@ -599,9 +592,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_buf	*precvbu
 			// The case of can't allocte skb is serious and may never be recovered,
 			// once bDriverStopped is enable, this task should be stopped.
 			if (secondary_padapter->bDriverStopped == _FALSE)
-#ifdef PLATFORM_LINUX
 				tasklet_schedule(&precvpriv->recv_tasklet);
-#endif
 			return ret;
 		}
 		pkt_copy->dev = secondary_padapter->pnetdev;
@@ -690,9 +681,7 @@ static void rtl8188es_recv_tasklet(void *priv)
 
 				// The case of can't allocte recvframe should be temporary,
 				// schedule again and hope recvframe is available next time.
-#ifdef PLATFORM_LINUX
 				tasklet_schedule(&precvpriv->recv_tasklet);
-#endif
 				return;
 			}
 
@@ -738,9 +727,7 @@ static void rtl8188es_recv_tasklet(void *priv)
 					// The case of can't allocte skb is serious and may never be recovered,
 					// once bDriverStopped is enable, this task should be stopped.
 					if (padapter->bDriverStopped == _FALSE) {
-#ifdef PLATFORM_LINUX
 						tasklet_schedule(&precvpriv->recv_tasklet);
-#endif
 					}
 
 					return;

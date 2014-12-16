@@ -324,9 +324,7 @@ struct  submit_ctx{
 	u32 submit_time; /* */
 	u32 timeout_ms; /* <0: not synchronous, 0: wait forever, >0: up to ms waiting */
 	int status; /* status for operation */
-#ifdef PLATFORM_LINUX
 	struct completion done;
-#endif
 };
 
 enum {
@@ -558,9 +556,7 @@ struct	xmit_priv	{
 	USB_TRANSFER	usb_transfer_write_port;
 //	USB_TRANSFER	usb_transfer_write_mem;
 #endif
-#ifdef PLATFORM_LINUX
 	struct tasklet_struct xmit_tasklet;
-#endif
 	//per AC pending irp
 	int beq_cnt;
 	int bkq_cnt;
@@ -574,16 +570,12 @@ struct	xmit_priv	{
 	struct rtw_tx_ring	tx_ring[PCI_MAX_TX_QUEUE_COUNT];
 	int	txringcount[PCI_MAX_TX_QUEUE_COUNT];
 	u8 	beaconDMAing;		//flag of indicating beacon is transmiting to HW by DMA
-#ifdef PLATFORM_LINUX
 	struct tasklet_struct xmit_tasklet;
-#endif
 #endif
 
 #ifdef CONFIG_SDIO_HCI
 #ifdef CONFIG_SDIO_TX_TASKLET
-	#ifdef PLATFORM_LINUX
 	struct tasklet_struct xmit_tasklet;
-	#endif /* PLATFORM_LINUX */
 #else
 	_thread_hdl_	SdioXmitThread;
 	_sema		SdioXmitSema;

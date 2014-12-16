@@ -149,10 +149,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 		{	//	0 is the default value and it means the application monitors the HW PBC doesn't privde its pid to driver.
 			return;
 		}
-
-#ifdef PLATFORM_LINUX
 		rtw_signal_process(padapter->pid[0], SIGUSR1);
-#endif
 #endif
 	}
 }

@@ -1672,11 +1672,9 @@ s32 rtl8188es_init_xmit_priv(PADAPTER padapter)
 	struct xmit_priv 	*pxmitpriv = &padapter->xmitpriv;
 
 #ifdef CONFIG_SDIO_TX_TASKLET
-#ifdef PLATFORM_LINUX
 	tasklet_init(&pxmitpriv->xmit_tasklet,
 	     (void(*)(unsigned long))rtl8188es_xmit_tasklet,
 	     (unsigned long)padapter);
-#endif
 #else //CONFIG_SDIO_TX_TASKLET
 
 	_rtw_init_sema(&pxmitpriv->SdioXmitSema, 0);

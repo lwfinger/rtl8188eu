@@ -290,9 +290,7 @@ struct recv_priv
 	u8	rx_pending_cnt;
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-#ifdef PLATFORM_LINUX
 	PURB	int_in_urb;
-#endif
 
 	u8	*int_in_buf;
 #endif //CONFIG_USB_INTERRUPT_IN_PIPE
@@ -403,10 +401,8 @@ struct recv_buf
 
 #endif
 
-#ifdef PLATFORM_LINUX
 	_pkt	*pskb;
 	u8	reuse;
-#endif
 };
 
 

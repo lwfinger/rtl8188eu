@@ -24,10 +24,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <osdep_intf.h>
-
-#ifdef PLATFORM_LINUX
 #include <sdio_ops_linux.h>
-#endif
 
 extern void sdio_set_intf_ops(struct _io_ops *pops);
 	

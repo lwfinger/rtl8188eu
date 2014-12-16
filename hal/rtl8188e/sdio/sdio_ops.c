@@ -1583,9 +1583,7 @@ static void sd_rxhandler(PADAPTER padapter, struct recv_buf *precvbuf)
 	rtw_enqueue_recvbuf(precvbuf, ppending_queue);
 	
 	//3 2. schedule tasklet
-#ifdef PLATFORM_LINUX
 	tasklet_schedule(&precvpriv->recv_tasklet);
-#endif
 }
 
 void sd_int_dpc(PADAPTER padapter)

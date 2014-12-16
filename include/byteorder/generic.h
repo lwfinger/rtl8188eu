@@ -161,13 +161,8 @@
  * Do the prototypes. Somebody might want to take the
  * address or some such sick thing..
  */
-#if defined(PLATFORM_LINUX) || (defined (__GLIBC__) && __GLIBC__ >= 2)
 extern __u32			ntohl(__u32);
 extern __u32			htonl(__u32);
-#else //defined(PLATFORM_LINUX) || (defined (__GLIBC__) && __GLIBC__ >= 2)
-extern unsigned long int	ntohl(unsigned long int);
-extern unsigned long int	htonl(unsigned long int);
-#endif
 extern unsigned short int	ntohs(unsigned short int);
 extern unsigned short int	htons(unsigned short int);
 
@@ -178,13 +173,8 @@ extern unsigned short int	htons(unsigned short int);
 #define ___ntohl(x) __be32_to_cpu(x)
 #define ___ntohs(x) __be16_to_cpu(x)
 
-#if defined(PLATFORM_LINUX) || (defined (__GLIBC__) && __GLIBC__ >= 2)
 #define htonl(x) ___htonl(x)
 #define ntohl(x) ___ntohl(x)
-#else
-#define htonl(x) ((unsigned long)___htonl(x))
-#define ntohl(x) ((unsigned long)___ntohl(x))
-#endif
 #define htons(x) ___htons(x)
 #define ntohs(x) ___ntohs(x)
 

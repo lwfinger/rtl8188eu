@@ -25,7 +25,6 @@
 #include <osdep_service.h>
 #include <osdep_intf.h>
 
-#ifdef PLATFORM_LINUX
 #include <asm/byteorder.h>
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
 #include <asm/semaphore.h>
@@ -47,14 +46,9 @@
 
 #endif //CONFIG_USB_HCI
 
-#endif //PLATFORM_LINUX
-
-
 #define NUM_IOREQ		8
 
-#ifdef PLATFORM_LINUX
 #define MAX_PROT_SZ	(64-16)
-#endif
 
 #define _IOREADY			0
 #define _IO_WAIT_COMPLETE   1

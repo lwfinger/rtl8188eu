@@ -440,9 +440,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 						u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie);
 #endif //CONFIG_TDLS
 
-#ifdef PLATFORM_LINUX
 void rtw_use_tkipkey_handler(void* FunctionContext);
-#endif
 
 void rtw_sec_restore_wep_key(_adapter *adapter);
 u8 rtw_handle_tkip_countermeasure(_adapter* adapter, const char *caller);

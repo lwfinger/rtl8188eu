@@ -33,8 +33,6 @@ struct pkt_file {
 	SIZE_T buf_len;
 };
 
-#ifdef PLATFORM_LINUX
-
 #define NR_XMITFRAME	256
 
 struct xmit_priv;
@@ -45,8 +43,6 @@ struct xmit_buf;
 
 extern int _rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev);
 extern int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev);
-
-#endif
 
 void rtw_os_xmit_schedule(_adapter *padapter);
 

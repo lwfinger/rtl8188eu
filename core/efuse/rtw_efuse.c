@@ -1222,7 +1222,6 @@ Efuse_InitSomeVar(
 	_rtw_memset((PVOID)&fakeBTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 }
 
-#ifdef PLATFORM_LINUX
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
 //#include <rtw_eeprom.h>
 
@@ -1278,6 +1277,3 @@ int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv)
 	return ret;
 }
 #endif //CONFIG_ADAPTOR_INFO_CACHING_FILE
-#endif //PLATFORM_LINUX
-
-

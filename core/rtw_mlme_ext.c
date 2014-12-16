@@ -9930,7 +9930,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		chplan_ap.Len = i;
 
 #ifdef CONFIG_DEBUG_RTL871X
-#ifdef PLATFORM_LINUX
 		i = 0;
 		DBG_871X("%s: AP[%s] channel plan {", __func__, bssid->Ssid.Ssid);
 		while ((i < chplan_ap.Len) && (chplan_ap.Channel[i] != 0))
@@ -9940,11 +9939,9 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		}
 		DBG_871X("}\n");
 #endif
-#endif
 
 		_rtw_memcpy(chplan_sta, pmlmeext->channel_set, sizeof(chplan_sta));
 #ifdef CONFIG_DEBUG_RTL871X
-#ifdef PLATFORM_LINUX
 		i = 0;
 		DBG_871X("%s: STA channel plan {", __func__);
 		while ((i < MAX_CHANNEL_NUM) && (chplan_sta[i].ChannelNum != 0))
@@ -9953,7 +9950,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 			i++;
 		}
 		DBG_871X("}\n");
-#endif
 #endif
 
 		_rtw_memset(pmlmeext->channel_set, 0, sizeof(pmlmeext->channel_set));
@@ -10106,7 +10102,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 		pmlmeext->update_channel_plan_by_ap_done = 1;
 
 #ifdef CONFIG_DEBUG_RTL871X
-#ifdef PLATFORM_LINUX
 		k = 0;
 		DBG_871X("%s: new STA channel plan {", __func__);
 		while ((k < MAX_CHANNEL_NUM) && (chplan_new[k].ChannelNum != 0))
@@ -10115,24 +10110,6 @@ static void process_80211d(PADAPTER padapter, WLAN_BSSID_EX *bssid)
 			k++;
 		}
 		DBG_871X("}\n");
-#endif
-#endif
-
-#if 0
-		// recover the right channel index
-		channel = chplan_sta[pmlmeext->sitesurvey_res.channel_idx].ChannelNum;
-		k = 0;
-		while ((k < MAX_CHANNEL_NUM) && (chplan_new[k].ChannelNum != 0))
-		{
-			if (chplan_new[k].ChannelNum == channel) {
-				RT_TRACE(_module_rtl871x_mlme_c_, _drv_notice_,
-						 ("%s: change mlme_ext sitesurvey channel index from %d to %d\n",
-						  __FUNCTION__, pmlmeext->sitesurvey_res.channel_idx, k));
-				pmlmeext->sitesurvey_res.channel_idx = k;
-				break;
-			}
-			k++;
-		}
 #endif
 	}
 

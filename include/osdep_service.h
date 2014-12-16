@@ -36,7 +36,6 @@
 #define _FALSE		0
 	
 
-#ifdef PLATFORM_LINUX
 	#include <linux/version.h>
 	#include <linux/spinlock.h>
 	#include <linux/compiler.h>
@@ -264,9 +263,7 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 	*bcancelled=  _TRUE;//TRUE ==1; FALSE==0
 }
 
-#ifdef PLATFORM_LINUX
 #define RTW_TIMER_HDL_ARGS void *FunctionContext
-#endif
 
 #define RTW_TIMER_HDL_NAME(name) rtw_##name##_timer_hdl
 #define RTW_DECLARE_TIMER_HDL(name) void RTW_TIMER_HDL_NAME(name)(RTW_TIMER_HDL_ARGS)
@@ -350,176 +347,6 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 	netif_stop_queue(pnetdev);
 #endif
 }
-
-#endif	// PLATFORM_LINUX
-
-
-#ifdef PLATFORM_OS_XP
-
-	#include <ndis.h>
-	#include <ntddk.h>
-	#include <ntddndis.h>
-	#include <ntdef.h>
-
-#ifdef CONFIG_USB_HCI
-	#include <usb.h>
-	#include <usbioctl.h>
-	#include <usbdlib.h>
-#endif
-
-	typedef KSEMAPHORE 	_sema;
-	typedef	LIST_ENTRY	_list;
-	typedef NDIS_STATUS _OS_STATUS;
-	
-
-	typedef NDIS_SPIN_LOCK	_lock;
-
-	typedef KMUTEX 			_mutex;
-
-	typedef KIRQL	_irqL;
-
-	// USB_PIPE for WINCE , but handle can be use just integer under windows
-	typedef NDIS_HANDLE  _nic_hdl;
-
-
-	typedef NDIS_MINIPORT_TIMER    _timer;
-
-	struct	__queue	{
-		LIST_ENTRY	queue;	
-		_lock	lock;
-	};
-
-	typedef	NDIS_PACKET	_pkt;
-	typedef NDIS_BUFFER	_buffer;
-	typedef struct	__queue	_queue;
-	
-	typedef PKTHREAD _thread_hdl_;
-	typedef void	thread_return;
-	typedef void* thread_context;
-
-	typedef NDIS_WORK_ITEM _workitem;
-
-	#define thread_exit() PsTerminateSystemThread(STATUS_SUCCESS);
-
-	#define HZ			10000000
-	#define SEMA_UPBND	(0x7FFFFFFF)   //8192
-	
-__inline static _list *get_next(_list	*list)
-{
-	return list->Flink;
-}	
-
-__inline static _list	*get_list_head(_queue	*queue)
-{
-	return (&(queue->queue));
-}
-	
-
-#define LIST_CONTAINOR(ptr, type, member) CONTAINING_RECORD(ptr, type, member)
-     
-
-__inline static _enter_critical(_lock *plock, _irqL *pirqL)
-{
-	NdisAcquireSpinLock(plock);	
-}
-
-__inline static _exit_critical(_lock *plock, _irqL *pirqL)
-{
-	NdisReleaseSpinLock(plock);	
-}
-
-
-__inline static _enter_critical_ex(_lock *plock, _irqL *pirqL)
-{
-	NdisDprAcquireSpinLock(plock);	
-}
-
-__inline static _exit_critical_ex(_lock *plock, _irqL *pirqL)
-{
-	NdisDprReleaseSpinLock(plock);	
-}
-
-__inline static void _enter_critical_bh(_lock *plock, _irqL *pirqL)
-{
-	NdisDprAcquireSpinLock(plock);
-}
-
-__inline static void _exit_critical_bh(_lock *plock, _irqL *pirqL)
-{
-	NdisDprReleaseSpinLock(plock);
-}
-
-__inline static _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
-{
-	KeWaitForSingleObject(pmutex, Executive, KernelMode, FALSE, NULL);
-}
-
-
-__inline static _exit_critical_mutex(_mutex *pmutex, _irqL *pirqL)
-{
-	KeReleaseMutex(pmutex, FALSE);
-}
-
-
-__inline static void rtw_list_delete(_list *plist)
-{
-	RemoveEntryList(plist);
-	InitializeListHead(plist);	
-}
-
-__inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,PVOID cntx)
-{
-	NdisMInitializeTimer(ptimer, nic_hdl, pfunc, cntx);
-}
-
-__inline static void _set_timer(_timer *ptimer,u32 delay_time)
-{	
- 	NdisMSetTimer(ptimer,delay_time);	
-}
-
-__inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
-{
-	NdisMCancelTimer(ptimer,bcancelled);
-}
-
-__inline static void _init_workitem(_workitem *pwork, void *pfunc, PVOID cntx)
-{
-
-	NdisInitializeWorkItem(pwork, pfunc, cntx);
-}
-
-__inline static void _set_workitem(_workitem *pwork)
-{
-	NdisScheduleWorkItem(pwork);
-}
-
-
-#define ATOMIC_INIT(i)  { (i) }
-
-//
-// Global Mutex: can only be used at PASSIVE level.
-//
-
-#define ACQUIRE_GLOBAL_MUTEX(_MutexCounter)                              \
-{                                                               \
-    while (NdisInterlockedIncrement((PULONG)&(_MutexCounter)) != 1)\
-    {                                                           \
-        NdisInterlockedDecrement((PULONG)&(_MutexCounter));        \
-        NdisMSleep(10000);                          \
-    }                                                           \
-}
-
-#define RELEASE_GLOBAL_MUTEX(_MutexCounter)                              \
-{                                                               \
-    NdisInterlockedDecrement((PULONG)&(_MutexCounter));              \
-}
-
-#endif // PLATFORM_OS_XP
-
-
-#ifdef PLATFORM_OS_CE
-#include <osdep_ce_service.h>
-#endif
 
 #include <rtw_byteorder.h>
 
@@ -779,29 +606,23 @@ extern void rtw_yield_os(void);
 
 __inline static unsigned char _cancel_timer_ex(_timer *ptimer)
 {
-#ifdef PLATFORM_LINUX
 	return del_timer_sync(ptimer);
-#endif
 }
 
 static __inline void thread_enter(char *name)
 {
-#ifdef PLATFORM_LINUX
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 8, 0))
 	daemonize("%s", name);
 	#endif
 	allow_signal(SIGTERM);
-#endif
 }
 
 __inline static void flush_signals_thread(void) 
 {
-#ifdef PLATFORM_LINUX
 	if (signal_pending (current)) 
 	{
 		flush_signals(current);
 	}
-#endif
 }
 
 __inline static _OS_STATUS res_to_status(sint res)
@@ -811,16 +632,10 @@ __inline static _OS_STATUS res_to_status(sint res)
 
 __inline static void rtw_dump_stack(void)
 {
-#ifdef PLATFORM_LINUX
 	dump_stack();
-#endif
 }
 
-#ifdef PLATFORM_LINUX
 #define rtw_warn_on(condition) WARN_ON(condition)
-#else
-#define rtw_warn_on(condition) do {} while (0)
-#endif
 
 #define _RND(sz, r) ((((sz)+((r)-1))/(r))*(r))
 #define RND4(x)	(((x >> 2) + (((x & 3) == 0) ?  0: 1)) << 2)
@@ -898,17 +713,10 @@ __inline static u32 bitshift(u32 bitmask)
 #endif
 
 //#ifdef __GNUC__
-#ifdef PLATFORM_LINUX
 #define STRUCT_PACKED __attribute__ ((packed))
-#else
-#define STRUCT_PACKED
-#endif
-
 
 // limitation of path length
-#ifdef PLATFORM_LINUX
 	#define PATH_LENGTH_MAX PATH_MAX
-#endif
 
 
 // Suspend lock prevent system from going suspend
@@ -957,7 +765,6 @@ extern struct net_device * rtw_alloc_etherdev(int sizeof_priv);
 
 extern void rtw_free_netdev(struct net_device * netdev);
 
-#ifdef PLATFORM_LINUX
 #define NDEV_FMT "%s"
 #define NDEV_ARG(ndev) ndev->name
 #define ADPT_FMT "%s"
@@ -966,24 +773,12 @@ extern void rtw_free_netdev(struct net_device * netdev);
 #define FUNC_NDEV_ARG(ndev) __func__, ndev->name
 #define FUNC_ADPT_FMT "%s(%s)"
 #define FUNC_ADPT_ARG(adapter) __func__, adapter->pnetdev->name
-#else
-#define NDEV_FMT "%s"
-#define NDEV_ARG(ndev) ""
-#define ADPT_FMT "%s"
-#define ADPT_ARG(adapter) ""
-#define FUNC_NDEV_FMT "%s"
-#define FUNC_NDEV_ARG(ndev) __func__
-#define FUNC_ADPT_FMT "%s"
-#define FUNC_ADPT_ARG(adapter) __func__
-#endif
 
-#ifdef PLATFORM_LINUX
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 #define rtw_signal_process(pid, sig) kill_pid(find_vpid((pid)),(sig), 1)
 #else //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 #define rtw_signal_process(pid, sig) kill_proc((pid), (sig), 1)
 #endif //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
-#endif //PLATFORM_LINUX
 
 extern u64 rtw_modular64(u64 x, u64 y);
 extern u64 rtw_division64(u64 x, u64 y);

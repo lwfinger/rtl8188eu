@@ -3071,9 +3071,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 }
 #endif //CONFIG_TDLS
 
-#ifdef PLATFORM_LINUX
 void rtw_use_tkipkey_handler(void *FunctionContext)
-#endif
 {
         _adapter *padapter = (_adapter *)FunctionContext;
 

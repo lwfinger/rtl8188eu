@@ -123,13 +123,7 @@ struct mp_xmit_frame
 	u8 *mem_addr;
 	u32 sz[8];
 
-#if defined(PLATFORM_OS_XP) || defined(PLATFORM_LINUX)
 	PURB pxmit_urb[8];
-#endif
-
-#ifdef PLATFORM_OS_XP
-	PIRP pxmit_irp[8];
-#endif
 
 	u8 bpending[8];
 	sint ac_tag[8];

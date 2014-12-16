@@ -277,18 +277,11 @@ _func_enter_;
 		(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==_TRUE ) )
 		lifetime = 1;
 
-	if(!isfreeall)
-	{
-#ifdef PLATFORM_LINUX
-
+	if (!isfreeall) {
 		delta_time = (curr_time -pnetwork->last_scanned)/HZ;	
 
-		if(delta_time < lifetime)// unit:sec
-		{		
+		if (delta_time < lifetime)// unit:sec
 			goto exit;
-		}
-
-#endif
 	}
 
 	_enter_critical_bh(&free_queue->lock, &irqL);

@@ -20,11 +20,7 @@
 #ifndef __WLAN_BSSDEF_H__
 #define __WLAN_BSSDEF_H__
 
-
 #define MAX_IE_SZ	768
-
-
-#ifdef PLATFORM_LINUX
 
 #define NDIS_802_11_LENGTH_SSID         32
 #define NDIS_802_11_LENGTH_RATES        8
@@ -292,9 +288,6 @@ typedef struct _NDIS_802_11_TEST
         NDIS_802_11_RSSI RssiTrigger;
     }tt;
 } NDIS_802_11_TEST, *PNDIS_802_11_TEST;
-
-
-#endif //end of #ifdef PLATFORM_LINUX
 
 #ifndef Ndis802_11APMode
 #define Ndis802_11APMode (Ndis802_11InfrastructureMax+1)

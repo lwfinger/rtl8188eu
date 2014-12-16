@@ -103,7 +103,7 @@ struct oid_obj_priv {
 	NDIS_STATUS (*oidfuns)(struct oid_par_priv *poid_par_priv);	
 };
 
-#if defined(PLATFORM_LINUX) && defined(CONFIG_WIRELESS_EXT)
+#if defined(CONFIG_WIRELESS_EXT)
 extern struct iw_handler_def  rtw_handlers_def;
 #endif
 

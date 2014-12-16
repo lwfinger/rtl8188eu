@@ -1109,9 +1109,6 @@ typedef enum _ANT_DIV_TYPE
 // 2011/09/22 MH Copy from SD4 defined structure. We use to support PHY DM integration.
 //
 #if(DM_ODM_SUPPORT_TYPE & ODM_MP)
-#if (RT_PLATFORM != PLATFORM_LINUX)
-typedef 
-#endif
 struct DM_Out_Source_Dynamic_Mechanism_Structure
 #else// for AP,ADSL,CE Team
 typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
@@ -1414,11 +1411,7 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 
 #if(DM_ODM_SUPPORT_TYPE & ODM_MP)
 	
-#if (RT_PLATFORM != PLATFORM_LINUX)
-} DM_ODM_T, *PDM_ODM_T;		// DM_Dynamic_Mechanism_Structure
-#else
 };
-#endif	
 
 #else// for AP,ADSL,CE Team
 } DM_ODM_T, *PDM_ODM_T;		// DM_Dynamic_Mechanism_Structure

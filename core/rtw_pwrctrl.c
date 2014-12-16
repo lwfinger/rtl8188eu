@@ -1487,9 +1487,7 @@ _func_enter_;
 #endif // CONFIG_LPS_RPWM_TIMER
 #endif // CONFIG_LPS_LCLK
 
-#ifdef PLATFORM_LINUX
 	_init_timer(&(pwrctrlpriv->pwr_state_check_timer), padapter->pnetdev, pwr_state_check_handler, (u8 *)padapter);
-#endif
 
 	#ifdef CONFIG_RESUME_IN_WORKQUEUE
 	_init_workitem(&pwrctrlpriv->resume_work, resume_workitem_callback, NULL);
