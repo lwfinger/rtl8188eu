@@ -9228,12 +9228,16 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 //			DBG_871X("0x%02x\t", i);
 			sprintf(extra, "%s0x%02x\t", extra, i);
 			for (j=0; j<8; j++) {
+				if (i + j >= EFUSE_MAX_MAP_LEN)
+					continue;
 //				DBG_871X("%02X ", data[i+j]);
 				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseInitMap[i+j]);
 			}
 //			DBG_871X("\t");
 			sprintf(extra, "%s\t", extra);
 			for (; j<16; j++) {
+				if (i + j >= EFUSE_MAX_MAP_LEN)
+					continue;
 //				DBG_871X("%02X ", data[i+j]);
 				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseInitMap[i+j]);
 			}
@@ -9564,12 +9568,16 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 //			DBG_871X("0x%03x\t", i);
 			sprintf(extra, "%s0x%03x\t", extra, i);
 			for (j=0; j<8; j++) {
+				if (i + j >= EFUSE_BT_MAX_MAP_LEN)
+					continue;
 //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
 				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
 			}
 //			DBG_871X("\t");
 			sprintf(extra, "%s\t", extra);
 			for (; j<16; j++) {
+				if (i + j >= EFUSE_BT_MAX_MAP_LEN)
+					continue;
 //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
 				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
 			}
@@ -9582,17 +9590,20 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	{
 //		DBG_871X("OFFSET\tVALUE(hex)\n");
 		sprintf(extra, "\n");
-		for (i=0; i<EFUSE_MAP_SIZE; i+=16)
-		{
+		for (i = 0; i < EFUSE_MAP_SIZE; i += 16) {
 //			DBG_871X("\t0x%02x\t", i);
 			sprintf(extra, "%s0x%02x\t", extra, i);
 			for (j=0; j<8; j++) {
+				if (i + j >= EFUSE_MAX_MAP_LEN)
+					continue;
 //				DBG_871X("%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
 				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[i+j]);
 			}
 //			DBG_871X("\t");
 			sprintf(extra, "%s\t", extra);
 			for (; j<16; j++) {
+				if (i + j >= EFUSE_MAX_MAP_LEN)
+					continue;
 //				DBG_871X("%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
 				sprintf(extra, "%s %02X", extra, pEfuseHal->fakeEfuseModifiedMap[i+j]);
 			}
