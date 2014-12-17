@@ -36,7 +36,7 @@
 #endif
 #include "rtw_efuse.h"
 
-#include "../hal/OUTSRC/odm_precomp.h"
+#include "../hal/odm_precomp.h"
 
 	// Fw Array
 	#define Rtl8188E_FwImageArray				Rtl8188EFwImgArray

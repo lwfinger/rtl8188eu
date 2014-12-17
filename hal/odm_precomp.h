@@ -120,7 +120,7 @@
 	#elif(RTL8723AU_SUPPORT==1)
 	#include "rtl8723a/Hal8723UHWImg_CE.h"	 
 	#elif(RTL8188E_SUPPORT==1)
-	#include "rtl8188e/Hal8188EFWImg_CE.h"	
+	#include "Hal8188EFWImg_CE.h"	
 	#endif
 #elif (DM_ODM_SUPPORT_TYPE == ODM_MP)
 
@@ -161,8 +161,8 @@
 		#include "rtl8192c/HalDMOutSrc8192C_CE.h" //for IQK,LCK,Power-tracking
 		#include "rtl8723a_hal.h"  
 	#elif (RTL8188E_SUPPORT==1)		
-		#include "rtl8188e/HalPhyRf_8188e.h"//for IQK,LCK,Power-tracking
-		#include "rtl8188e/Hal8188ERateAdaptive.h"//for  RA,Power training
+		#include "HalPhyRf_8188e.h"//for IQK,LCK,Power-tracking
+		#include "Hal8188ERateAdaptive.h"//for  RA,Power training
 		#include "rtl8188e_hal.h"  	
 	#endif
 
@@ -171,52 +171,29 @@
 #include "odm_interface.h"
 #include "odm_reg.h"
 
-#if (RTL8192C_SUPPORT==1) 
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-#include "rtl8192c/Hal8192CHWImg_MAC.h"
-#include "rtl8192c/Hal8192CHWImg_RF.h"
-#include "rtl8192c/Hal8192CHWImg_BB.h"
-#include "rtl8192c/Hal8192CHWImg_FW.h"
-#endif
-#include "rtl8192c/odm_RTL8192C.h"
-#endif
-#if (RTL8192D_SUPPORT==1) 
-#include "rtl8192d/odm_RTL8192D.h"
-#endif
-
-#if (RTL8723A_SUPPORT==1) 
-#include "rtl8723a/HalHWImg8723A_MAC.h"
-#include "rtl8723a/HalHWImg8723A_RF.h"
-#include "rtl8723a/HalHWImg8723A_BB.h"
-#include "rtl8723a/HalHWImg8723A_FW.h"
-#include "rtl8723a/odm_RegConfig8723A.h"
-#endif
-
-#if (RTL8188E_SUPPORT==1) 
-#include "rtl8188e/HalHWImg8188E_MAC.h"
-#include "rtl8188e/HalHWImg8188E_RF.h"
-#include "rtl8188e/HalHWImg8188E_BB.h"
-#include "rtl8188e/Hal8188EReg.h"
+#include "HalHWImg8188E_MAC.h"
+#include "HalHWImg8188E_RF.h"
+#include "HalHWImg8188E_BB.h"
+#include "Hal8188EReg.h"
 
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-#include "rtl8188e/HalPhyRf_8188e.h"
+#include "HalPhyRf_8188e.h"
 #endif
 
 #if (RTL8188E_FOR_TEST_CHIP >= 1) 
-#include "rtl8188e/HalHWImg8188E_TestChip_MAC.h"
-#include "rtl8188e/HalHWImg8188E_TestChip_RF.h"
-#include "rtl8188e/HalHWImg8188E_TestChip_BB.h"
+#include "HalHWImg8188E_TestChip_MAC.h"
+#include "HalHWImg8188E_TestChip_RF.h"
+#include "HalHWImg8188E_TestChip_BB.h"
 #endif
 
 #ifdef CONFIG_WOWLAN
 #if (RTL8188E_SUPPORT==1)
-#include "rtl8188e/HalHWImg8188E_FW.h"
+#include "HalHWImg8188E_FW.h"
 #endif
 #endif //CONFIG_WOWLAN
 
-#include "rtl8188e/odm_RegConfig8188E.h"
-#include "rtl8188e/odm_RTL8188E.h"
-#endif
+#include "odm_RegConfig8188E.h"
+#include "odm_RTL8188E.h"
 
 #endif	// __ODM_PRECOMP_H__
 

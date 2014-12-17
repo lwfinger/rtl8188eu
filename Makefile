@@ -77,15 +77,15 @@ CONFIG_DRVEXT_MODULE = n
 export TopDIR ?= $(shell pwd)
 
 
-OUTSRC_FILES := hal/OUTSRC/odm_debug.o	\
-								hal/OUTSRC/odm_interface.o\
-								hal/OUTSRC/odm_HWConfig.o\
-								hal/OUTSRC/odm.o\
-		hal/OUTSRC/HalPhyRf.o
+OUTSRC_FILES := hal/odm_debug.o	\
+		hal/odm_interface.o\
+		hal/odm_HWConfig.o\
+		hal/odm.o\
+		hal/HalPhyRf.o
 										
 RTL871X = rtl8188e
-HAL_COMM_FILES := hal/$(RTL871X)/$(RTL871X)_xmit.o\
-									hal/$(RTL871X)/$(RTL871X)_sreset.o
+HAL_COMM_FILES := hal/rtl8188e_xmit.o\
+		hal/rtl8188e_sreset.o
 
 ifeq ($(CONFIG_SDIO_HCI), y)
 MODULE_NAME = 8189es
@@ -99,24 +99,23 @@ ifeq ($(CONFIG_PCI_HCI), y)
 MODULE_NAME = 8188ee
 endif
 
-#hal/OUTSRC/$(RTL871X)/HalHWImg8188E_FW.o
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/HalHWImg8188E_MAC.o\
-		hal/OUTSRC/$(RTL871X)/HalHWImg8188E_BB.o\
-		hal/OUTSRC/$(RTL871X)/HalHWImg8188E_RF.o\
-		hal/OUTSRC/$(RTL871X)/Hal8188EFWImg_CE.o\
-		hal/OUTSRC/$(RTL871X)/HalPhyRf_8188e.o\
-		hal/OUTSRC/$(RTL871X)/odm_RegConfig8188E.o\
-		hal/OUTSRC/$(RTL871X)/Hal8188ERateAdaptive.o\
-		hal/OUTSRC/$(RTL871X)/odm_RTL8188E.o
+OUTSRC_FILES += hal/HalHWImg8188E_MAC.o\
+		hal/HalHWImg8188E_BB.o\
+		hal/HalHWImg8188E_RF.o\
+		hal/Hal8188EFWImg_CE.o\
+		hal/HalPhyRf_8188e.o\
+		hal/odm_RegConfig8188E.o\
+		hal/Hal8188ERateAdaptive.o\
+		hal/odm_RTL8188E.o
 
 ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_WOWLAN), y)
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/HalHWImg8188E_FW.o
+OUTSRC_FILES += hal/HalHWImg8188E_FW.o
 endif
 endif
 
 PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
-				hal/$(RTL871X)/Hal8188EPwrSeq.o
+		hal/Hal8188EPwrSeq.o
 
 CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES) 
 
@@ -160,39 +159,20 @@ endif
 
 _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/hal_com.o \
-			hal/$(RTL871X)/$(RTL871X)_hal_init.o \
-			hal/$(RTL871X)/$(RTL871X)_phycfg.o \
-			hal/$(RTL871X)/$(RTL871X)_rf6052.o \
-			hal/$(RTL871X)/$(RTL871X)_dm.o \
-			hal/$(RTL871X)/$(RTL871X)_rxdesc.o \
-			hal/$(RTL871X)/$(RTL871X)_cmd.o \
-			hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_halinit.o \
-			hal/$(RTL871X)/$(HCI_NAME)/rtl$(MODULE_NAME)_led.o \
-			hal/$(RTL871X)/$(HCI_NAME)/rtl$(MODULE_NAME)_xmit.o \
-			hal/$(RTL871X)/$(HCI_NAME)/rtl$(MODULE_NAME)_recv.o
+			hal/rtl8188e_hal_init.o \
+			hal/rtl8188e_phycfg.o \
+			hal/rtl8188e_rf6052.o \
+			hal/rtl8188e_dm.o \
+			hal/rtl8188e_rxdesc.o \
+			hal/rtl8188e_cmd.o \
+			hal/$(HCI_NAME)_halinit.o \
+			hal/rtl$(MODULE_NAME)_led.o \
+			hal//rtl$(MODULE_NAME)_xmit.o \
+			hal/rtl$(MODULE_NAME)_recv.o
 
-ifeq ($(CONFIG_SDIO_HCI), y)
-_HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops.o
-else
-ifeq ($(CONFIG_GSPI_HCI), y)
-_HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops.o
-else
-_HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops_linux.o
-endif
-endif
+_HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
 
 _HAL_INTFS_FILES += $(CHIP_FILES)
-
-
-ifeq ($(CONFIG_AUTOCFG_CP), y)
-
-#ifeq ($(CONFIG_RTL8188E)$(CONFIG_SDIO_HCI),yy) 
-#$(shell cp $(TopDIR)/autoconf_rtl8189e_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
-#else
-#$(shell cp $(TopDIR)/autoconf_$(RTL871X)_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
-#endif
-endif
-
 
 ifeq ($(CONFIG_USB_HCI), y)
 ifeq ($(CONFIG_USB_AUTOSUSPEND), y)
@@ -663,7 +643,7 @@ $(MODULE_NAME)-y += $(rtk_core)
 $(MODULE_NAME)-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
 
 $(MODULE_NAME)-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
-					core/rtw_wapi_sms4.o
+		core/rtw_wapi_sms4.o
 
 $(MODULE_NAME)-y += core/efuse/rtw_efuse.o
 
@@ -699,21 +679,13 @@ config_r:
 
 .PHONY: modules clean clean_odm-8192c
 
-clean_odm-8192c:
-	cd hal/OUTSRC/rtl8192c ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-
 clean: $(clean_more)
 	rm -fr *.mod.c *.mod *.o .*.cmd *.ko *~
 	rm -fr .tmp_versions
 	rm -fr Module.symvers ; rm -fr Module.markers ; rm -fr modules.order
 	cd core/efuse ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd core ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-	cd hal/$(RTL871X)/$(HCI_NAME) ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-	cd hal/$(RTL871X) ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-	cd hal/OUTSRC/$(RTL871X) ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko 
-	cd hal/OUTSRC/ ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko 
 	cd hal ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-	cd os_dep/linux ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd os_dep ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 endif
 

@@ -17,7 +17,7 @@
 * 
 * 
 ******************************************************************************/
-#include "../odm_precomp.h"
+#include "odm_precomp.h"
  
 const u8 Rtl8188EFwImgArray[Rtl8188EFWImgArrayLength] = {
 0xE1, 0x88, 0x10, 0x00, 0x0B, 0x00, 0x01, 0x00, 0x01, 0x21, 0x11, 0x27, 0x30, 0x36, 0x00, 0x00, 
