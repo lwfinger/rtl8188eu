@@ -158,20 +158,8 @@ static inline void NdisRawReadPortUlong(u32 port, u32 *pval)
 	//*pval = readl((u8 *)RegAddr(port));
 }
 
-#ifdef CONFIG_RTL8192C
-void rtl8192ce_set_hal_ops(_adapter * padapter);
-#define hal_set_hal_ops	rtl8192ce_set_hal_ops
-#endif
-#ifdef CONFIG_RTL8192D
-void rtl8192de_set_hal_ops(_adapter * padapter);
-#define hal_set_hal_ops	rtl8192de_set_hal_ops
-#endif
-
-
-#ifdef CONFIG_RTL8188E
 void rtl8188ee_set_hal_ops(_adapter * padapter);
 #define hal_set_hal_ops	rtl8188ee_set_hal_ops
-#endif
 
 #endif //__PCIE_HAL_H__
 

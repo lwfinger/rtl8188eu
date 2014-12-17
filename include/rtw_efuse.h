@@ -51,24 +51,9 @@ enum _EFUSE_DEF_TYPE {
 };
 
 /* E-Fuse */
-#ifdef CONFIG_RTL8192D
-#define EFUSE_MAP_SIZE      256
-#endif
-#ifdef CONFIG_RTL8192C
-#define EFUSE_MAP_SIZE      128
-#endif
-#ifdef CONFIG_RTL8723A
-#define EFUSE_MAP_SIZE      256
-#endif
-#ifdef CONFIG_RTL8188E
 #define EFUSE_MAP_SIZE      512
-#endif
 
-#ifdef CONFIG_RTL8188E
 #define EFUSE_MAX_SIZE      256
-#else
-#define EFUSE_MAX_SIZE      512
-#endif
 /* end of E-Fuse */
 
 #define		EFUSE_MAX_MAP_LEN		256

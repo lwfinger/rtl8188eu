@@ -429,10 +429,6 @@ struct xmit_frame
 	u8	agg_num;
 #endif
 	s8	pkt_offset;
-#ifdef CONFIG_RTL8192D
-	u8	EMPktNum;
-	u16	EMPktLen[5];//The max value by HW
-#endif
 #endif
 
 #ifdef CONFIG_XMIT_ACK

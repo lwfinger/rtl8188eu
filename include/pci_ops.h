@@ -26,7 +26,6 @@
 #include <osdep_intf.h>
 
 
-#ifdef CONFIG_RTL8188E
 u32	rtl8188ee_init_desc_ring(_adapter * padapter);
 u32	rtl8188ee_free_desc_ring(_adapter * padapter);
 void	rtl8188ee_reset_desc_ring(_adapter * padapter);
@@ -39,40 +38,6 @@ void	rtl8188ee_recv_tasklet(void *priv);
 void	rtl8188ee_prepare_bcn_tasklet(void *priv);
 void	rtl8188ee_set_intf_ops(struct _io_ops	*pops);
 #define pci_set_intf_ops	rtl8188ee_set_intf_ops
-#endif
-
-
-#ifdef CONFIG_RTL8192C
-u32	rtl8192ce_init_desc_ring(_adapter * padapter);
-u32	rtl8192ce_free_desc_ring(_adapter * padapter);
-void	rtl8192ce_reset_desc_ring(_adapter * padapter);
-#ifdef CONFIG_64BIT_DMA
-u8	PlatformEnable92CEDMA64(PADAPTER Adapter);
-#endif
-int	rtl8192ce_interrupt(PADAPTER Adapter);
-void	rtl8192ce_xmit_tasklet(void *priv);
-void	rtl8192ce_recv_tasklet(void *priv);
-void	rtl8192ce_prepare_bcn_tasklet(void *priv);
-void	rtl8192ce_set_intf_ops(struct _io_ops	*pops);
-#define pci_set_intf_ops	rtl8192ce_set_intf_ops
-#endif
-
-#ifdef CONFIG_RTL8192D
-u32	rtl8192de_init_desc_ring(_adapter * padapter);
-u32	rtl8192de_free_desc_ring(_adapter * padapter);
-void	rtl8192de_reset_desc_ring(_adapter * padapter);
-#ifdef CONFIG_64BIT_DMA
-u8	PlatformEnable92DEDMA64(PADAPTER Adapter);
-#endif
-int	rtl8192de_interrupt(PADAPTER Adapter);
-void	rtl8192de_xmit_tasklet(void *priv);
-void	rtl8192de_recv_tasklet(void *priv);
-void	rtl8192de_prepare_bcn_tasklet(void *priv);
-void	rtl8192de_set_intf_ops(struct _io_ops	*pops);
-#define pci_set_intf_ops	rtl8192de_set_intf_ops
-u32	MpReadPCIDwordDBI8192D(IN PADAPTER Adapter, IN u16 Offset, IN u8 Direct);
-void	MpWritePCIDwordDBI8192D(IN PADAPTER Adapter, IN u16 Offset, IN u32 Value, IN u8 Direct);
-#endif
 
 #endif
 

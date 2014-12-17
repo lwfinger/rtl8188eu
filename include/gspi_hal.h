@@ -20,18 +20,10 @@
 #ifndef __GSPI_HAL_H__
 #define __GSPI_HAL_H__
 
-
 void spi_int_dpc(PADAPTER padapter);
 
-#ifdef CONFIG_RTL8723A
-void rtl8723as_set_hal_ops(PADAPTER padapter);
-#define hal_set_hal_ops rtl8723as_set_hal_ops
-#endif
-
-#ifdef CONFIG_RTL8188E
 void rtl8188es_set_hal_ops(PADAPTER padapter);
 #define hal_set_hal_ops rtl8188es_set_hal_ops
-#endif
 
 #endif //__GSPI_HAL_H__
 
