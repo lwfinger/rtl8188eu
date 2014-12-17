@@ -196,7 +196,7 @@ typedef enum _BT_REPORT_TYPE{
 
 VOID
 MPTBT_Test(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u1Byte		opCode,
 	IN	u1Byte		byte1,
 	IN	u1Byte		byte2,
@@ -205,7 +205,7 @@ MPTBT_Test(
 
 NDIS_STATUS
 MPTBT_SendOidBT(
-	IN	PADAPTER		pAdapter,
+	IN	struct adapter *	pAdapter,
 	IN	PVOID			InformationBuffer,
 	IN	ULONG			InformationBufferLength,
 	OUT	PULONG			BytesRead,
@@ -214,7 +214,7 @@ MPTBT_SendOidBT(
 
 VOID
 MPTBT_FwC2hBtMpCtrl(
-	PADAPTER	Adapter,
+	struct adapter *Adapter,
 	pu1Byte 	tmpBuf,
 	u1Byte		length
 	);
@@ -222,7 +222,7 @@ MPTBT_FwC2hBtMpCtrl(
 void MPh2c_timeout_handle(void *FunctionContext);
 
 VOID mptbt_BtControlProcess(
-	PADAPTER	Adapter,
+	struct adapter *Adapter,
 	PVOID		pInBuf
 	);
 

@@ -173,11 +173,11 @@ struct 	dm_priv
 //============================================================
 // function prototype
 //============================================================
-void rtl8192d_init_dm_priv(IN PADAPTER Adapter);
-void rtl8192d_deinit_dm_priv(IN PADAPTER Adapter);
+void rtl8192d_init_dm_priv(IN struct adapter *Adapter);
+void rtl8192d_deinit_dm_priv(IN struct adapter *Adapter);
 
-void	rtl8192d_InitHalDm(IN PADAPTER Adapter);
-void	rtl8192d_HalDmWatchDog(IN PADAPTER Adapter);
+void	rtl8192d_InitHalDm(IN struct adapter *Adapter);
+void	rtl8192d_HalDmWatchDog(IN struct adapter *Adapter);
 
 #endif	//__HAL8190PCIDM_H__
 

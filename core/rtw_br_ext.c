@@ -142,7 +142,7 @@ static int skb_pull_and_merge(struct sk_buff *skb, unsigned char *src, int len)
 	return 0;
 }
 
-static __inline__ unsigned long __nat25_timeout(_adapter *priv)
+static __inline__ unsigned long __nat25_timeout(struct adapter *priv)
 {
 	unsigned long timeout;
 
@@ -152,7 +152,7 @@ static __inline__ unsigned long __nat25_timeout(_adapter *priv)
 }
 
 
-static __inline__ int  __nat25_has_expired(_adapter *priv,
+static __inline__ int  __nat25_has_expired(struct adapter *priv,
 				struct nat25_network_db_entry *fdb)
 {
 	if(time_before_eq(fdb->ageing_timer, __nat25_timeout(priv)))
@@ -389,7 +389,7 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 }
 
 
-static __inline__ void __network_hash_link(_adapter *priv,
+static __inline__ void __network_hash_link(struct adapter *priv,
 				struct nat25_network_db_entry *ent, int hash)
 {
 	// Caller must _enter_critical_bh already!
@@ -422,7 +422,7 @@ static __inline__ void __network_hash_unlink(struct nat25_network_db_entry *ent)
 }
 
 
-static int __nat25_db_network_lookup_and_replace(_adapter *priv,
+static int __nat25_db_network_lookup_and_replace(struct adapter *priv,
 				struct sk_buff *skb, unsigned char *networkAddr)
 {
 	struct nat25_network_db_entry *db;
@@ -499,7 +499,7 @@ static int __nat25_db_network_lookup_and_replace(_adapter *priv,
 }
 
 
-static void __nat25_db_network_insert(_adapter *priv,
+static void __nat25_db_network_insert(struct adapter *priv,
 				unsigned char *macAddr, unsigned char *networkAddr)
 {
 	struct nat25_network_db_entry *db;
@@ -539,7 +539,7 @@ static void __nat25_db_network_insert(_adapter *priv,
 }
 
 
-static void __nat25_db_print(_adapter *priv)
+static void __nat25_db_print(struct adapter *priv)
 {
 	_irqL irqL;
 	_enter_critical_bh(&priv->br_ext_lock, &irqL);
@@ -628,7 +628,7 @@ static void __nat25_db_print(_adapter *priv)
  *	NAT2.5 interface
  */
 
-void nat25_db_cleanup(_adapter *priv)
+void nat25_db_cleanup(struct adapter *priv)
 {
 	int i;
 	_irqL irqL;
@@ -659,7 +659,7 @@ void nat25_db_cleanup(_adapter *priv)
 }
 
 
-void nat25_db_expire(_adapter *priv)
+void nat25_db_expire(struct adapter *priv)
 {
 	int i;
 	_irqL irqL;
@@ -753,7 +753,7 @@ void nat25_db_expire(_adapter *priv)
 
 
 #ifdef SUPPORT_TX_MCAST2UNI
-static int checkIPMcAndReplace(_adapter *priv, struct sk_buff *skb, unsigned int *dst_ip)
+static int checkIPMcAndReplace(struct adapter *priv, struct sk_buff *skb, unsigned int *dst_ip)
 {
 	struct stat_info	*pstat;
 	struct list_head	*phead, *plist;
@@ -780,7 +780,7 @@ static int checkIPMcAndReplace(_adapter *priv, struct sk_buff *skb, unsigned int
 }
 #endif
 
-int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
+int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 {
 	unsigned short protocol;
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
@@ -1484,7 +1484,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 }
 
 
-int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
+int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 {
 #ifdef BR_EXT_DEBUG
 	if((!priv->ethBrExtInfo.nat25_disable) && (!(skb->data[0] & 1)))
@@ -1567,38 +1567,6 @@ int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
 	return 0;
 }
 
-#if 0
-void mac_clone(_adapter *priv, unsigned char *addr)
-{
-	struct sockaddr sa;
-
-	memcpy(sa.sa_data, addr, ETH_ALEN);
-	DEBUG_INFO("MAC Clone: Addr=%02x%02x%02x%02x%02x%02x\n",
-		addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]);
-	rtl8192cd_set_hwaddr(priv->dev, &sa);
-}
-
-
-int mac_clone_handle_frame(_adapter *priv, struct sk_buff *skb)
-{
-	if(priv->ethBrExtInfo.macclone_enable && !priv->macclone_completed)
-	{
-		if(!(skb->data[ETH_ALEN] & 1))	//// check any other particular MAC add
-		{
-                        if(memcmp(skb->data+ETH_ALEN, GET_MY_HWADDR(priv), ETH_ALEN) &&
-				((priv->dev->br_port) &&
-				 memcmp(skb->data+ETH_ALEN, priv->br_mac, ETH_ALEN)))
-			{
-				mac_clone(priv, skb->data+ETH_ALEN);
-				priv->macclone_completed = 1;
-			}
-		}
-	}
-
-	return 0;
-}
-#endif // 0
-
 #define SERVER_PORT			67
 #define CLIENT_PORT			68
 #define DHCP_MAGIC			0x63825363
@@ -1623,7 +1591,7 @@ struct dhcpMessage {
 	u_int8_t options[308]; /* 312 - cookie */
 };
 
-void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb)
+void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 {
 	if(skb == NULL)
 		return;
@@ -1670,7 +1638,7 @@ void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb)
 }
 
 
-void *scdb_findEntry(_adapter *priv, unsigned char *macAddr,
+void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
 				unsigned char *ipAddr)
 {
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];

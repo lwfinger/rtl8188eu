@@ -52,12 +52,12 @@ u8	fakeBTEfuseModifiedMap[EFUSE_BT_MAX_MAP_LEN]={0};
 
 BOOLEAN
 Efuse_Read1ByteFromFakeContent(
-	IN		PADAPTER	pAdapter,
+	IN		struct adapter *pAdapter,
 	IN		u16		Offset,
 	IN OUT	u8		*Value	);
 BOOLEAN
 Efuse_Read1ByteFromFakeContent(
-	IN		PADAPTER	pAdapter,
+	IN		struct adapter *pAdapter,
 	IN		u16		Offset,
 	IN OUT	u8		*Value	)
 {
@@ -75,12 +75,12 @@ Efuse_Read1ByteFromFakeContent(
 
 BOOLEAN
 Efuse_Write1ByteToFakeContent(
-	IN		PADAPTER	pAdapter,
+	IN		struct adapter *pAdapter,
 	IN		u16		Offset,
 	IN 		u8		Value	);
 BOOLEAN
 Efuse_Write1ByteToFakeContent(
-	IN		PADAPTER	pAdapter,
+	IN		struct adapter *pAdapter,
 	IN		u16		Offset,
 	IN 		u8		Value	)
 {
@@ -117,7 +117,7 @@ Efuse_Write1ByteToFakeContent(
  *---------------------------------------------------------------------------*/
 VOID
 Efuse_PowerSwitch(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8		bWrite,
 	IN	u8		PwrState)
 {
@@ -142,7 +142,7 @@ Efuse_PowerSwitch(
  *---------------------------------------------------------------------------*/
 u16
 Efuse_GetCurrentSize(
-	IN PADAPTER		pAdapter,
+	IN struct adapter *	pAdapter,
 	IN u8			efuseType,
 	IN BOOLEAN		bPseudoTest)
 {
@@ -178,7 +178,7 @@ Efuse_CalculateWordCnts(IN u8	word_en)
 //
 VOID
 ReadEFuseByte(
-		PADAPTER	Adapter,
+		struct adapter *Adapter,
 		u16 			_offset, 
 		u8 			*pbuf, 
 		IN BOOLEAN	bPseudoTest) 
@@ -246,7 +246,7 @@ ReadEFuseByte(
 
 VOID
 efuse_ReadEFuse(
-	PADAPTER	Adapter,
+	struct adapter *Adapter,
 	u8		efuseType,
 	u16		_offset,
 	u16 		_size_byte,
@@ -255,7 +255,7 @@ efuse_ReadEFuse(
 	);
 VOID
 efuse_ReadEFuse(
-	PADAPTER	Adapter,
+	struct adapter *Adapter,
 	u8		efuseType,
 	u16		_offset,
 	u16 		_size_byte,
@@ -268,7 +268,7 @@ efuse_ReadEFuse(
 
 VOID
 EFUSE_GetEfuseDefinition(
-	IN		PADAPTER	pAdapter,
+	IN		struct adapter *pAdapter,
 	IN		u8		efuseType,
 	IN		u8		type,
 	OUT		void		*pOut,
@@ -296,7 +296,7 @@ EFUSE_GetEfuseDefinition(
  *---------------------------------------------------------------------------*/
 u8
 EFUSE_Read1Byte(	
-	IN	PADAPTER	Adapter, 
+	IN	struct adapter *Adapter, 
 	IN	u16		Address)
 {
 	u8	data;
@@ -361,12 +361,12 @@ EFUSE_Read1Byte(
 
 void	
 EFUSE_Write1Byte(	
-	IN	PADAPTER	Adapter, 
+	IN	struct adapter *Adapter, 
 	IN	u16		Address,
 	IN	u8		Value);
 void	
 EFUSE_Write1Byte(	
-	IN	PADAPTER	Adapter, 
+	IN	struct adapter *Adapter, 
 	IN	u16		Address,
 	IN	u8		Value)
 {
@@ -414,7 +414,7 @@ EFUSE_Write1Byte(
 /*  11/16/2008 MH Read one byte from real Efuse. */
 u8
 efuse_OneByteRead(
-	IN	PADAPTER	pAdapter, 
+	IN	struct adapter *pAdapter, 
 	IN	u16			addr,
 	IN	u8			*data,
 	IN	BOOLEAN		bPseudoTest)
@@ -455,7 +455,7 @@ efuse_OneByteRead(
 /*  11/16/2008 MH Write one byte to reald Efuse. */
 u8
 efuse_OneByteWrite(
-	IN	PADAPTER	pAdapter,  
+	IN	struct adapter *pAdapter,  
 	IN	u16			addr, 
 	IN	u8			data,
 	IN	BOOLEAN		bPseudoTest)
@@ -498,7 +498,7 @@ efuse_OneByteWrite(
 }
 
 int
-Efuse_PgPacketRead(	IN	PADAPTER	pAdapter,
+Efuse_PgPacketRead(	IN	struct adapter *pAdapter,
 					IN	u8			offset,
 					IN	u8			*data,
 					IN	BOOLEAN		bPseudoTest)
@@ -511,7 +511,7 @@ Efuse_PgPacketRead(	IN	PADAPTER	pAdapter,
 }
 
 int 
-Efuse_PgPacketWrite(IN	PADAPTER	pAdapter, 
+Efuse_PgPacketWrite(IN	struct adapter *pAdapter, 
 					IN	u8 			offset,
 					IN	u8			word_en,
 					IN	u8			*data,
@@ -526,7 +526,7 @@ Efuse_PgPacketWrite(IN	PADAPTER	pAdapter,
 
 
 int 
-Efuse_PgPacketWrite_BT(IN	PADAPTER	pAdapter, 
+Efuse_PgPacketWrite_BT(IN	struct adapter *pAdapter, 
 					IN	u8 			offset,
 					IN	u8			word_en,
 					IN	u8			*data,
@@ -585,7 +585,7 @@ efuse_WordEnableDataRead(IN	u8	word_en,
 
 
 u8
-Efuse_WordEnableDataWrite(	IN	PADAPTER	pAdapter,
+Efuse_WordEnableDataWrite(	IN	struct adapter *pAdapter,
 							IN	u16		efuse_addr,
 							IN	u8		word_en, 
 							IN	u8		*data,
@@ -598,12 +598,12 @@ Efuse_WordEnableDataWrite(	IN	PADAPTER	pAdapter,
 	return ret;
 }
 
-static u8 efuse_read8(PADAPTER padapter, u16 address, u8 *value)
+static u8 efuse_read8(struct adapter *padapter, u16 address, u8 *value)
 {
 	return efuse_OneByteRead(padapter,address, value, _FALSE);
 }
 
-static u8 efuse_write8(PADAPTER padapter, u16 address, u8 *value)
+static u8 efuse_write8(struct adapter *padapter, u16 address, u8 *value)
 {
 	return efuse_OneByteWrite(padapter,address, *value, _FALSE);
 }
@@ -611,12 +611,12 @@ static u8 efuse_write8(PADAPTER padapter, u16 address, u8 *value)
 /*
  * read/wirte raw efuse data
  */
-u8 rtw_efuse_access(PADAPTER padapter, u8 bWrite, u16 start_addr, u16 cnts, u8 *data)
+u8 rtw_efuse_access(struct adapter *padapter, u8 bWrite, u16 start_addr, u16 cnts, u8 *data)
 {
 	int i = 0;
 	u16	real_content_len = 0, max_available_size = 0;
 	u8 res = _FAIL ;
-	u8 (*rw8)(PADAPTER, u16, u8*);
+	u8 (*rw8)(struct adapter *, u16, u8*);
 
 	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_REAL_CONTENT_LEN, (PVOID)&real_content_len, _FALSE);
 	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
@@ -649,14 +649,14 @@ u8 rtw_efuse_access(PADAPTER padapter, u8 bWrite, u16 start_addr, u16 cnts, u8 *
 	return res;
 }
 //------------------------------------------------------------------------------
-u16 efuse_GetMaxSize(PADAPTER padapter)
+u16 efuse_GetMaxSize(struct adapter *padapter)
 {
 	u16	max_size;
 	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI , TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_size, _FALSE);
 	return max_size;
 }
 //------------------------------------------------------------------------------
-u8 efuse_GetCurrentSize(PADAPTER padapter, u16 *size)
+u8 efuse_GetCurrentSize(struct adapter *padapter, u16 *size)
 {
 	Efuse_PowerSwitch(padapter, _FALSE, _TRUE);
 	*size = Efuse_GetCurrentSize(padapter, EFUSE_WIFI, _FALSE);
@@ -665,7 +665,7 @@ u8 efuse_GetCurrentSize(PADAPTER padapter, u16 *size)
 	return _SUCCESS;
 }
 //------------------------------------------------------------------------------
-u8 rtw_efuse_map_read(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
+u8 rtw_efuse_map_read(struct adapter *padapter, u16 addr, u16 cnts, u8 *data)
 {
 	u16	mapLen=0;
 
@@ -683,7 +683,7 @@ u8 rtw_efuse_map_read(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 	return _SUCCESS;
 }
 
-u8 rtw_BT_efuse_map_read(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
+u8 rtw_BT_efuse_map_read(struct adapter *padapter, u16 addr, u16 cnts, u8 *data)
 {
 	u16	mapLen=0;
 
@@ -701,7 +701,7 @@ u8 rtw_BT_efuse_map_read(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 	return _SUCCESS;
 }
 //------------------------------------------------------------------------------
-u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
+u8 rtw_efuse_map_write(struct adapter *padapter, u16 addr, u16 cnts, u8 *data)
 {
 	u8	offset, word_en;
 	u8	*map;
@@ -799,7 +799,7 @@ exit:
 
 
 //------------------------------------------------------------------------------
-u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
+u8 rtw_BT_efuse_map_write(struct adapter *padapter, u16 addr, u16 cnts, u8 *data)
 {
 	u8	offset, word_en;
 	u8	*map;
@@ -916,13 +916,13 @@ exit:
  *---------------------------------------------------------------------------*/
 VOID 
 Efuse_ReadAllMap(
-	IN		PADAPTER	pAdapter, 
+	IN		struct adapter *pAdapter, 
 	IN		u8		efuseType,
 	IN OUT	u8		*Efuse,
 	IN		BOOLEAN		bPseudoTest);
 VOID 
 Efuse_ReadAllMap(
-	IN		PADAPTER	pAdapter, 
+	IN		struct adapter *pAdapter, 
 	IN		u8		efuseType,
 	IN OUT	u8		*Efuse,
 	IN		BOOLEAN		bPseudoTest)
@@ -958,7 +958,7 @@ Efuse_ReadAllMap(
  *---------------------------------------------------------------------------*/
 static VOID
 efuse_ShadowRead1Byte(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u16		Offset,
 	IN OUT	u8		*Value)
 {
@@ -971,7 +971,7 @@ efuse_ShadowRead1Byte(
 //---------------Read Two Bytes
 static VOID
 efuse_ShadowRead2Byte(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u16		Offset,
 	IN OUT	u16		*Value)
 {
@@ -985,7 +985,7 @@ efuse_ShadowRead2Byte(
 //---------------Read Four Bytes
 static VOID
 efuse_ShadowRead4Byte(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u16		Offset,
 	IN OUT	u32		*Value)
 {
@@ -1020,13 +1020,13 @@ efuse_ShadowRead4Byte(
 #ifdef PLATFORM
 static VOID
 efuse_ShadowWrite1Byte(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u16		Offset,
 	IN 	u8		Value);
 #endif //PLATFORM
 static VOID
 efuse_ShadowWrite1Byte(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u16		Offset,
 	IN 	u8		Value)
 {
@@ -1039,7 +1039,7 @@ efuse_ShadowWrite1Byte(
 //---------------Write Two Bytes
 static VOID
 efuse_ShadowWrite2Byte(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u16		Offset,
 	IN 	u16		Value)
 {
@@ -1053,7 +1053,7 @@ efuse_ShadowWrite2Byte(
 //---------------Write Four Bytes
 static VOID
 efuse_ShadowWrite4Byte(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u16		Offset,
 	IN	u32		Value)
 {
@@ -1083,7 +1083,7 @@ efuse_ShadowWrite4Byte(
  *
  *---------------------------------------------------------------------------*/
 void EFUSE_ShadowMapUpdate(
-	IN PADAPTER	pAdapter,
+	IN struct adapter *pAdapter,
 	IN u8		efuseType,
 	IN BOOLEAN	bPseudoTest)
 {
@@ -1133,7 +1133,7 @@ void EFUSE_ShadowMapUpdate(
  *---------------------------------------------------------------------------*/
 void
 EFUSE_ShadowRead(
-	IN		PADAPTER	pAdapter,
+	IN		struct adapter *pAdapter,
 	IN		u8		Type,
 	IN		u16		Offset,
 	IN OUT	u32		*Value	)
@@ -1165,13 +1165,13 @@ EFUSE_ShadowRead(
  *---------------------------------------------------------------------------*/
 VOID
 EFUSE_ShadowWrite(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8		Type,
 	IN	u16		Offset,
 	IN OUT	u32		Value);
 VOID
 EFUSE_ShadowWrite(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8		Type,
 	IN	u16		Offset,
 	IN OUT	u32		Value)
@@ -1194,11 +1194,11 @@ EFUSE_ShadowWrite(
 
 VOID
 Efuse_InitSomeVar(
-	IN		PADAPTER	pAdapter
+	IN		struct adapter *pAdapter
 	);
 VOID
 Efuse_InitSomeVar(
-	IN		PADAPTER	pAdapter
+	IN		struct adapter *pAdapter
 	)
 {
 	u8 i;

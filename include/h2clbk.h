@@ -26,11 +26,11 @@
 #include <TypeDef.h>
 
 
-void _lbk_cmd(PADAPTER Adapter);
+void _lbk_cmd(struct adapter *Adapter);
 
-void _lbk_rsp(PADAPTER Adapter);
+void _lbk_rsp(struct adapter *Adapter);
 
-void _lbk_evt(IN PADAPTER Adapter);
+void _lbk_evt(IN struct adapter *Adapter);
 
 void h2c_event_callback(unsigned char *dev, unsigned char *pbuf);
 

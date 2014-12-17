@@ -25,8 +25,8 @@
 #include <drv_types.h>
 
 
-void rtw_pci_disable_aspm(_adapter *padapter);
-void rtw_pci_enable_aspm(_adapter *padapter);
+void rtw_pci_disable_aspm(struct adapter *padapter);
+void rtw_pci_enable_aspm(struct adapter *padapter);
 
 
 #endif

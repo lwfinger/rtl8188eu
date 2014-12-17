@@ -369,11 +369,11 @@ odm_Adaptivity(
 //============================================================
 // Function predefine.
 //============================================================
-VOID	odm_PathDiversityInit_92C(	IN	PADAPTER	Adapter);
-VOID	odm_2TPathDiversityInit_92C(	IN	PADAPTER	Adapter);
-VOID	odm_1TPathDiversityInit_92C(	IN	PADAPTER	Adapter);
-BOOLEAN	odm_IsConnected_92C(IN	PADAPTER	Adapter);
-VOID	odm_PathDiversityAfterLink_92C(	IN	PADAPTER	Adapter);
+VOID	odm_PathDiversityInit_92C(	IN	struct adapter *Adapter);
+VOID	odm_2TPathDiversityInit_92C(	IN	struct adapter *Adapter);
+VOID	odm_1TPathDiversityInit_92C(	IN	struct adapter *Adapter);
+BOOLEAN	odm_IsConnected_92C(IN	struct adapter *Adapter);
+VOID	odm_PathDiversityAfterLink_92C(	IN	struct adapter *Adapter);
 
 VOID
 odm_CCKTXPathDiversityCallback(
@@ -395,10 +395,10 @@ odm_PathDivChkAntSwitchWorkitemCallback(
     IN PVOID            pContext
     );
 
-VOID	odm_SetRespPath_92C(		IN	PADAPTER	Adapter, 	IN	u1Byte	DefaultRespPath);
-VOID	odm_OFDMTXPathDiversity_92C(	IN	PADAPTER	Adapter);
-VOID	odm_CCKTXPathDiversity_92C(	IN	PADAPTER	Adapter);
-VOID	odm_ResetPathDiversity_92C(		IN	PADAPTER	Adapter);
+VOID	odm_SetRespPath_92C(		IN	struct adapter *Adapter, 	IN	u1Byte	DefaultRespPath);
+VOID	odm_OFDMTXPathDiversity_92C(	IN	struct adapter *Adapter);
+VOID	odm_CCKTXPathDiversity_92C(	IN	struct adapter *Adapter);
+VOID	odm_ResetPathDiversity_92C(		IN	struct adapter *Adapter);
 
 //Start-------------------- RX High Power------------------------//
 VOID	odm_RXHPInit(	IN		PDM_ODM_T		pDM_Odm);
@@ -415,7 +415,7 @@ odm_PathDivInit(	IN	PDM_ODM_T 	pDM_Odm);
 
 VOID
 odm_SetRespPath_92C(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u1Byte	DefaultRespPath 
 	);
 
@@ -608,33 +608,33 @@ odm_TXPowerTrackingCheckCE(
 
 VOID
 ODM_RateAdaptiveStateApInit(
-	IN	PADAPTER	Adapter	,
+	IN	struct adapter *Adapter	,
 	IN	PRT_WLAN_STA  pEntry
 	);
 
 VOID 
 odm_TXPowerTrackingCallbackThermalMeter92C(
-            IN PADAPTER	Adapter
+            IN struct adapter *Adapter
             );
 
 VOID
 odm_TXPowerTrackingCallbackRXGainThermalMeter92D(
-	IN PADAPTER 	Adapter
+	IN struct adapter *	Adapter
 	);
 
 VOID
 odm_TXPowerTrackingCallbackThermalMeter92D(
-            IN PADAPTER	Adapter
+            IN struct adapter *Adapter
             );
 
 VOID
 odm_TXPowerTrackingDirectCall92C(
-            IN	PADAPTER		Adapter
+            IN	struct adapter *	Adapter
             );
 
 VOID
 odm_TXPowerTrackingThermalMeterCheck(
-	IN	PADAPTER		Adapter
+	IN	struct adapter *	Adapter
 	);
 
 #endif
@@ -1065,7 +1065,7 @@ ODM_CmnInfoHook(
 			break;
 
 		case	ODM_CMNINFO_BUDDY_ADAPTOR:
-			pDM_Odm->pBuddyAdapter = (PADAPTER *)pValue;
+			pDM_Odm->pBuddyAdapter = (struct adapter **)pValue;
 			break;
 
 		case	ODM_CMNINFO_DMSP_IS_MASTER:
@@ -1277,7 +1277,7 @@ odm_CommonInfoSelfUpdate(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 
-	PADAPTER	Adapter =  pDM_Odm->Adapter;
+	struct adapter *Adapter =  pDM_Odm->Adapter;
 	PMGNT_INFO	pMgntInfo = &Adapter->MgntInfo;
 
 	pEntry = pDM_Odm->pODM_StaInfo[0];
@@ -1392,7 +1392,7 @@ VOID
 ODM_InitAllWorkItems(IN PDM_ODM_T	pDM_Odm )
 {
 #if USE_WORKITEM
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
+	struct adapter *	pAdapter = pDM_Odm->Adapter;
 
 	ODM_InitializeWorkItem(	pDM_Odm, 
 							&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchWorkitem, 
@@ -1588,7 +1588,7 @@ odm_EnableEDCCA(
 {
 
 	// This should be moved out of OUTSRC
-	PADAPTER		pAdapter	= pDM_Odm->Adapter;
+	struct adapter *	pAdapter	= pDM_Odm->Adapter;
 	// Enable EDCCA. The value is suggested by SD3 Wilson.
 
 	//
@@ -1631,7 +1631,7 @@ odm_DynamicEDCCA(
 	IN		PDM_ODM_T		pDM_Odm
 )
 {
-	PADAPTER		pAdapter	= pDM_Odm->Adapter;
+	struct adapter *	pAdapter	= pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	u1Byte	RegC50, RegC58;
 	BOOLEAN	bEDCCAenable = FALSE;
@@ -1730,7 +1730,7 @@ odm_DIGbyRSSI_LPS(
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
-	PADAPTER					pAdapter =pDM_Odm->Adapter;
+	struct adapter *				pAdapter =pDM_Odm->Adapter;
 	pDIG_T						pDM_DigTable = &pDM_Odm->DM_DigTable;
 	PFALSE_ALARM_STATISTICS		pFalseAlmCnt = &pDM_Odm->FalseAlmCnt;
 
@@ -1835,7 +1835,7 @@ odm_Adaptivity(
 	BOOLEAN EDCCA_State = 0;
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER		pAdapter	= pDM_Odm->Adapter;
+	struct adapter *	pAdapter	= pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	BOOLEAN		bFwCurrentInPSMode=FALSE;	
 	PMGNT_INFO				pMgntInfo = &(pAdapter->MgntInfo);
@@ -2043,7 +2043,7 @@ odm_DIG(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 // This should be moved out of OUTSRC
-	PADAPTER		pAdapter	= pDM_Odm->Adapter;
+	struct adapter *	pAdapter	= pDM_Odm->Adapter;
 #if OS_WIN_FROM_WIN7(OS_VERSION)
 	if(IsAPModeExist( pAdapter) && pAdapter->bInHctTest)
 	{
@@ -2673,7 +2673,7 @@ odm_DigAbort(
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 // This should be moved out of OUTSRC
-	PADAPTER		pAdapter	= pDM_Odm->Adapter;
+	struct adapter *	pAdapter	= pDM_Odm->Adapter;
 	pRXHP_T			pRX_HP_Table  = &pDM_Odm->DM_RXHP_Table;
 	
 #if OS_WIN_FROM_WIN7(OS_VERSION)
@@ -2763,7 +2763,7 @@ odm_DIG(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 // This should be moved out of OUTSRC
-	PADAPTER		pAdapter	= pDM_Odm->Adapter;
+	struct adapter *	pAdapter	= pDM_Odm->Adapter;
 #if OS_WIN_FROM_WIN7(OS_VERSION)
 	if(IsAPModeExist( pAdapter) && pAdapter->bInHctTest)
 	{
@@ -3713,7 +3713,7 @@ odm_RateAdaptiveMaskInit(
 #if (DM_ODM_SUPPORT_TYPE & ODM_MP) 
 VOID
 ODM_RateAdaptiveStateApInit(
-	IN	PADAPTER	Adapter	,
+	IN	struct adapter *Adapter	,
 	IN	PRT_WLAN_STA  pEntry
 	)
 {
@@ -3878,8 +3878,8 @@ odm_RefreshRateAdaptiveMaskMP(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER	pAdapter	 =  pDM_Odm->Adapter;
-	PADAPTER 				pTargetAdapter = NULL;
+	struct adapter *pAdapter	 =  pDM_Odm->Adapter;
+	struct adapter *				pTargetAdapter = NULL;
 	HAL_DATA_TYPE			*pHalData = GET_HAL_DATA(pAdapter);
 	PMGNT_INFO				pMgntInfo = GetDefaultMgntInfo(pAdapter);
 	//PRATE_ADAPTIVE			pRA = (PRATE_ADAPTIVE)&pMgntInfo->RateAdaptive;
@@ -3996,7 +3996,7 @@ odm_RefreshRateAdaptiveMaskCE(
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	u1Byte	i;
-	PADAPTER	pAdapter	 =  pDM_Odm->Adapter;	
+	struct adapter *pAdapter	 =  pDM_Odm->Adapter;	
 
 	if(pAdapter->bDriverStopped)
 	{
@@ -4131,7 +4131,7 @@ odm_DynamicTxPowerInit(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	PMGNT_INFO			pMgntInfo = &Adapter->MgntInfo;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 
@@ -4154,7 +4154,7 @@ odm_DynamicTxPowerInit(
 	pHalData->LastDTPLvl = TxHighPwrLevel_Normal;
 	pHalData->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	pdmpriv->bDynamicTxPowerEnable = _FALSE;
@@ -4195,12 +4195,12 @@ odm_DynamicTxPowerSavePowerIndex(
 	u4Byte		Power_Index_REG[6] = {0xc90, 0xc91, 0xc92, 0xc98, 0xc99, 0xc9a};
 	
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)	
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);	
 	for(index = 0; index< 6; index++)
 		pHalData->PowerIndex_backup[index] = PlatformEFIORead1Byte(Adapter, Power_Index_REG[index]);
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)	
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	for(index = 0; index< 6; index++)
@@ -4214,7 +4214,7 @@ odm_DynamicTxPowerRestorePowerIndex(
 	)
 {
 	u1Byte			index;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -4255,7 +4255,7 @@ odm_DynamicTxPower(
 	// For AP/ADSL use prtl8192cd_priv
 	// For CE/NIC use PADAPTER
 	//
-	//PADAPTER		pAdapter = pDM_Odm->Adapter;
+	//struct adapter *	pAdapter = pDM_Odm->Adapter;
 //	prtl8192cd_priv	priv		= pDM_Odm->priv;
 
 	if (!(pDM_Odm->SupportAbility & ODM_BB_DYNAMIC_TXPWR))
@@ -4364,7 +4364,7 @@ odm_DynamicTxPower_92C(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	PMGNT_INFO			pMgntInfo = &Adapter->MgntInfo;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	s4Byte				UndecoratedSmoothedPWDB;
@@ -4481,7 +4481,7 @@ odm_DynamicTxPower_92C(
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 
 	#if (RTL8192C_SUPPORT==1) 
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
@@ -4611,12 +4611,12 @@ odm_DynamicTxPower_92D(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	PMGNT_INFO			pMgntInfo = &Adapter->MgntInfo;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	s4Byte				UndecoratedSmoothedPWDB;
 
-	PADAPTER	BuddyAdapter = Adapter->BuddyAdapter;
+	struct adapter *BuddyAdapter = Adapter->BuddyAdapter;
 	BOOLEAN		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(Adapter);
 	u1Byte		HighPowerLvlBackForMac0 = TxHighPwrLevel_Level1;
 
@@ -4769,7 +4769,7 @@ odm_DynamicTxPower_92D(
 	pHalData->LastDTPLvl = pHalData->DynamicTxHighPowerLvl;
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 #if (RTL8192D_SUPPORT==1) 
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 
@@ -4777,7 +4777,7 @@ odm_DynamicTxPower_92D(
 	DM_ODM_T 		*podmpriv = &pHalData->odmpriv;
 	int	UndecoratedSmoothedPWDB;
 	#if (RTL8192D_EASY_SMART_CONCURRENT == 1)
-	PADAPTER	BuddyAdapter = Adapter->BuddyAdapter;
+	struct adapter *BuddyAdapter = Adapter->BuddyAdapter;
 	BOOLEAN		bGetValueFromBuddyAdapter = DualMacGetParameterFromBuddyAdapter(Adapter);
 	u8		HighPowerLvlBackForMac0 = TxHighPwrLevel_Level1;
 	#endif
@@ -4952,7 +4952,7 @@ odm_RSSIMonitorCheck(
 	// For AP/ADSL use prtl8192cd_priv
 	// For CE/NIC use PADAPTER
 	//
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
+	struct adapter *	pAdapter = pDM_Odm->Adapter;
 	prtl8192cd_priv	priv		= pDM_Odm->priv;
 
 	if (!(pDM_Odm->SupportAbility & ODM_BB_RSSI_MONITOR))
@@ -4991,7 +4991,7 @@ odm_RSSIMonitorCheckMP(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PRT_WLAN_STA	pEntry;
 	u1Byte			i;
@@ -5077,7 +5077,7 @@ odm_RSSIMonitorCheckMP(
 //
 static VOID
 FindMinimumRSSI_Dmsp(
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 )
 {
 #if 0
@@ -5086,7 +5086,7 @@ FindMinimumRSSI_Dmsp(
 	s32	Rssi_val_min_back_for_mac0;
 	BOOLEAN		bGetValueFromBuddyAdapter = dm_DualMacGetParameterFromBuddyAdapter(pAdapter);
 	BOOLEAN		bRestoreRssi = _FALSE;
-	PADAPTER	BuddyAdapter = pAdapter->BuddyAdapter;
+	struct adapter *BuddyAdapter = pAdapter->BuddyAdapter;
 
 	if(pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY)
 	{
@@ -5121,7 +5121,7 @@ FindMinimumRSSI_Dmsp(
 
 static void
 FindMinimumRSSI(
-IN	PADAPTER	pAdapter
+IN	struct adapter *pAdapter
 	)
 {	
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -5152,7 +5152,7 @@ odm_RSSIMonitorCheckCE(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	int	i;
@@ -5421,7 +5421,7 @@ odm_TXPowerTrackingThermalMeterInit(
 	)
 {	
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PMGNT_INFO      	pMgntInfo = &Adapter->MgntInfo;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 
@@ -5482,7 +5482,7 @@ ODM_TXPowerTrackingCheck(
 	// For AP/ADSL use prtl8192cd_priv
 	// For CE/NIC use PADAPTER
 	//
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
+	struct adapter *	pAdapter = pDM_Odm->Adapter;
 	prtl8192cd_priv	priv		= pDM_Odm->priv;
 
 	//if (!(pDM_Odm->SupportAbility & ODM_RF_TX_PWR_TRACK))
@@ -5520,7 +5520,7 @@ odm_TXPowerTrackingCheckCE(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	#if( (RTL8192C_SUPPORT==1) ||  (RTL8723A_SUPPORT==1) )
 	rtl8192c_odm_CheckTXPowerTracking(Adapter);
 	#endif
@@ -5567,7 +5567,7 @@ odm_TXPowerTrackingCheckMP(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 
 	if (ODM_CheckPowerStatus(Adapter) == FALSE)
 		return;
@@ -5609,7 +5609,7 @@ odm_TXPowerTrackingCheckAP(
 
 VOID
 odm_TXPowerTrackingThermalMeterCheck(
-	IN	PADAPTER		Adapter
+	IN	struct adapter *	Adapter
 	)
 {
 #ifndef AP_BUILD_WORKAROUND
@@ -5673,7 +5673,7 @@ odm_SwAntDivInit_NIC_8723A(
 	IN	PDM_ODM_T		pDM_Odm)
 {
 	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	u1Byte 			btAntNum=BT_GetPGAntNum(Adapter);
 
 
@@ -5805,7 +5805,7 @@ odm_SwAntDivChkAntSwitch(
 	// For AP/ADSL use prtl8192cd_priv
 	// For CE/NIC use PADAPTER
 	//
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
+	struct adapter *	pAdapter = pDM_Odm->Adapter;
 	prtl8192cd_priv	priv		= pDM_Odm->priv;
 
 	//
@@ -5946,7 +5946,7 @@ odm_SwAntDivChkAntSwitchNIC(
                 }
 		#elif (DM_ODM_SUPPORT_TYPE & ODM_MP) 
 		{
-			PADAPTER	pAdapter	 =  pDM_Odm->Adapter;
+			struct adapter *pAdapter	 =  pDM_Odm->Adapter;
 			PMGNT_INFO	pMgntInfo=&pAdapter->MgntInfo;
 			
 			// Select RSSI checking target
@@ -5960,7 +5960,7 @@ odm_SwAntDivChkAntSwitchNIC(
 			{
 				u1Byte			index = 0;
 				PSTA_INFO_T		pEntry = NULL;
-				PADAPTER		pTargetAdapter = NULL;
+				struct adapter *	pTargetAdapter = NULL;
 			
 				if(pMgntInfo->mIbss )
 				{
@@ -6014,7 +6014,7 @@ odm_SwAntDivChkAntSwitchNIC(
 	else
 	{
 #if (DM_ODM_SUPPORT_TYPE &( ODM_MP))
-		//PADAPTER	Adapter = pDM_Odm->Adapter;
+		//struct adapter *Adapter = pDM_Odm->Adapter;
 		curTxOkCnt = pAdapter->TxStats.NumTxBytesUnicast - pDM_SWAT_Table->lastTxOkCnt;
 		curRxOkCnt =pAdapter->RxStats.NumRxBytesUnicast - pDM_SWAT_Table->lastRxOkCnt;
 		pDM_SWAT_Table->lastTxOkCnt = pAdapter->TxStats.NumTxBytesUnicast;
@@ -6252,7 +6252,7 @@ odm_SwAntDivChkAntSwitchNIC(
 
 	//1 6.Set next timer
 	{
-		PADAPTER		pAdapter = pDM_Odm->Adapter;
+		struct adapter *	pAdapter = pDM_Odm->Adapter;
 		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	
 
@@ -6309,7 +6309,7 @@ odm_SwAntDivChkAntSwitchNIC(
 
 u1Byte
 odm_SwAntDivSelectChkChnl(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 	)
 {
 #if (RT_MEM_SIZE_LEVEL != RT_MEM_SIZE_MINIMUM)
@@ -6355,7 +6355,7 @@ odm_SwAntDivSelectChkChnl(
 
 VOID
 odm_SwAntDivConsructChkScanChnl(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u1Byte		ChkChnl
 	)
 {
@@ -6401,7 +6401,7 @@ odm_SwAntDivChkAntSwitchCallback(
 	PRT_TIMER		pTimer
 )
 {
-	PADAPTER		Adapter = (PADAPTER)pTimer->Adapter;
+	struct adapter *	Adapter = (PADAPTER)pTimer->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	pSWAT_T		pDM_SWAT_Table = &pHalData->DM_OutSrc.DM_SWAT_Table;
 
@@ -6422,7 +6422,7 @@ odm_SwAntDivChkAntSwitchWorkitemCallback(
     )
 {
 
-	PADAPTER		pAdapter = (PADAPTER)pContext;
+	struct adapter *	pAdapter = (PADAPTER)pContext;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
 	odm_SwAntDivChkAntSwitch(&pHalData->DM_OutSrc, SWAW_STEP_DETERMINE);
@@ -6432,7 +6432,7 @@ odm_SwAntDivChkAntSwitchWorkitemCallback(
 VOID odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
 {
 	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
-	PADAPTER	padapter = pDM_Odm->Adapter;
+	struct adapter *padapter = pDM_Odm->Adapter;
 	if(padapter->net_closed == _TRUE)
 	    return;
 	odm_SwAntDivChkAntSwitch(pDM_Odm, SWAW_STEP_DETERMINE);	
@@ -6460,10 +6460,10 @@ VOID odm_SwAntDivChkAntSwitch(
 VOID ODM_SwAntDivResetBeforeLink(	IN		PDM_ODM_T		pDM_Odm	){}
 VOID ODM_SwAntDivRestAfterLink(	IN		PDM_ODM_T		pDM_Odm	){}
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-u1Byte odm_SwAntDivSelectChkChnl(	IN	PADAPTER	Adapter	){	return 0;}
+u1Byte odm_SwAntDivSelectChkChnl(	IN	struct adapter *Adapter	){	return 0;}
 VOID
 odm_SwAntDivConsructChkScanChnl(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u1Byte		ChkChnl
 	){}
 #endif
@@ -6487,7 +6487,7 @@ ODM_SwAntDivCheckBeforeLink8192C(
 {
 
 #if (RT_MEM_SIZE_LEVEL != RT_MEM_SIZE_MINIMUM)
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData=NULL;
 	PMGNT_INFO		pMgntInfo = NULL;
 	//pSWAT_T			pDM_SWAT_Table = &Adapter->DM_SWAT_Table;
@@ -7358,7 +7358,7 @@ ODM_EdcaTurboInit(
 #if ((DM_ODM_SUPPORT_TYPE == ODM_AP)||(DM_ODM_SUPPORT_TYPE==ODM_ADSL))
 	odm_EdcaParaInit(pDM_Odm);
 #elif (DM_ODM_SUPPORT_TYPE==ODM_MP)
-	PADAPTER	Adapter = NULL;
+	struct adapter *Adapter = NULL;
 	HAL_DATA_TYPE	*pHalData = NULL;
 
 	if(pDM_Odm->Adapter==NULL)	{
@@ -7374,7 +7374,7 @@ ODM_EdcaTurboInit(
 	pHalData->bIsAnyNonBEPkts = FALSE;
 	
 #elif(DM_ODM_SUPPORT_TYPE==ODM_CE)
-	PADAPTER	Adapter = pDM_Odm->Adapter;	
+	struct adapter *Adapter = pDM_Odm->Adapter;	
 	pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = FALSE;	
 	pDM_Odm->DM_EDCA_Table.bIsCurRDLState = FALSE;
 	Adapter->recvpriv.bIsAnyNonBEPkts =FALSE;
@@ -7397,7 +7397,7 @@ odm_EdcaTurboCheck(
 	// For AP/ADSL use prtl8192cd_priv
 	// For CE/NIC use PADAPTER
 	//
-	PADAPTER		pAdapter = pDM_Odm->Adapter;
+	struct adapter *	pAdapter = pDM_Odm->Adapter;
 	prtl8192cd_priv	priv		= pDM_Odm->priv;
 
 	//
@@ -7448,7 +7448,7 @@ odm_EdcaTurboCheckCE(
 
 #if(DM_ODM_SUPPORT_TYPE==ODM_CE)
 
-	PADAPTER		       Adapter = pDM_Odm->Adapter;
+	struct adapter *	       Adapter = pDM_Odm->Adapter;
 	
 	u32 	trafficIndex;
 	u32	edca_param;
@@ -7575,12 +7575,12 @@ odm_EdcaTurboCheckMP(
 {
 
 
-	PADAPTER		       Adapter = pDM_Odm->Adapter;
+	struct adapter *	       Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 
 #if(DM_ODM_SUPPORT_TYPE==ODM_MP)
-	PADAPTER 			pDefaultAdapter = GetDefaultAdapter(Adapter);
-	PADAPTER 			pExtAdapter = GetFirstExtAdapter(Adapter);//NULL;
+	struct adapter *			pDefaultAdapter = GetDefaultAdapter(Adapter);
+	struct adapter *			pExtAdapter = GetFirstExtAdapter(Adapter);//NULL;
 	PMGNT_INFO			pMgntInfo = &Adapter->MgntInfo;
 	PSTA_QOS			pStaQos = Adapter->MgntInfo.pStaQos;
 	//[Win7 Count Tx/Rx statistic for Extension Port] odm_CheckEdcaTurbo's Adapter is always Default. 2009.08.20, by Bohn
@@ -7750,7 +7750,7 @@ odm_IsEdcaTurboDisable(
 	IN 	PDM_ODM_T 	pDM_Odm
 )
 {
-	PADAPTER		       Adapter = pDM_Odm->Adapter;
+	struct adapter *	       Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 
 #if(DM_ODM_SUPPORT_TYPE==ODM_MP)
@@ -7834,7 +7834,7 @@ ODM_EdcaParaSelByIot(
 	)
 {
 
-	PADAPTER		       Adapter = pDM_Odm->Adapter;
+	struct adapter *	       Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	u4Byte                         IOTPeer=0;
 	u4Byte                         ICType=pDM_Odm->SupportICType;
@@ -7842,8 +7842,8 @@ ODM_EdcaParaSelByIot(
 	u4Byte				RFType=pDM_Odm->RFType;
 
 #if(DM_ODM_SUPPORT_TYPE==ODM_MP)
-	PADAPTER 			pDefaultAdapter = GetDefaultAdapter(Adapter);
-	PADAPTER 			pExtAdapter = GetFirstExtAdapter(Adapter);//NULL;
+	struct adapter *			pDefaultAdapter = GetDefaultAdapter(Adapter);
+	struct adapter *			pExtAdapter = GetFirstExtAdapter(Adapter);//NULL;
 	PMGNT_INFO			pMgntInfo = &Adapter->MgntInfo;
 	u1Byte 				TwoPortStatus = (u1Byte)TWO_PORT_STATUS__WITHOUT_ANY_ASSOCIATE;
 
@@ -8807,7 +8807,7 @@ odm_IotEngine(
 //
 BOOLEAN
 ODM_CheckPowerStatus(
-	IN	PADAPTER		Adapter)
+	IN	struct adapter *	Adapter)
 {
 
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -8994,7 +8994,7 @@ PatchDCTone(
 )
 {
 	//HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-	//PADAPTER	pAdapter;
+	//struct adapter *pAdapter;
 	
 	u4Byte	psd_report;
 
@@ -9293,7 +9293,7 @@ odm_PSD_Monitor(
 	u4Byte			ReScan, Interval, Is40MHz;
 	u8Byte			curTxOkCnt, curRxOkCnt;
 	int 				cur_byte_idx, cur_bit_idx;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PMGNT_INFO      	pMgntInfo = &Adapter->MgntInfo;
 	//--------------2G band synthesizer for 92D switch RF channel using----------------- 
 	u1Byte			group_idx=0;
@@ -9839,7 +9839,7 @@ odm_PSDMonitorCallback(
 	PRT_TIMER		pTimer
 )
 {
-	PADAPTER		Adapter = (PADAPTER)pTimer->Adapter;
+	struct adapter *	Adapter = (PADAPTER)pTimer->Adapter;
        HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->DM_OutSrc;
 
@@ -9856,7 +9856,7 @@ odm_PSDMonitorWorkItemCallback(
     IN PVOID            pContext
     )
 {
-	PADAPTER	Adapter = (PADAPTER)pContext;
+	struct adapter *Adapter = (PADAPTER)pContext;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->DM_OutSrc;
 
@@ -9870,7 +9870,7 @@ odm_PSDMonitorWorkItemCallback(
 
 VOID
 ODM_PSDDbgControl(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u4Byte		mode,
 	IN	u4Byte		btRssi
 	)
@@ -9924,7 +9924,7 @@ void odm_RXHP(
 {
 #if( DM_ODM_SUPPORT_TYPE & (ODM_MP))
 #if (DEV_BUS_TYPE == RT_PCI_INTERFACE) | (DEV_BUS_TYPE == RT_USB_INTERFACE)
-	PADAPTER	Adapter =  pDM_Odm->Adapter;
+	struct adapter *Adapter =  pDM_Odm->Adapter;
 	PMGNT_INFO	pMgntInfo = &(Adapter->MgntInfo);
 	pDIG_T		pDM_DigTable = &pDM_Odm->DM_DigTable;
 	pRXHP_T		pRX_HP_Table  = &pDM_Odm->DM_RXHP_Table;
@@ -10308,7 +10308,7 @@ odm_PSD_RXHP(
 )
 {
 	pRXHP_T			pRX_HP_Table  = &pDM_Odm->DM_RXHP_Table;
-	PADAPTER		Adapter =  pDM_Odm->Adapter;
+	struct adapter *	Adapter =  pDM_Odm->Adapter;
 	PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
 	unsigned int 		pts, start_point, stop_point, initial_gain ;
 	static u1Byte		PSD_bitmap_memory[80], init_memory = 0;
@@ -10604,7 +10604,7 @@ odm_PSD_RXHPCallback(
 	PRT_TIMER		pTimer
 )
 {
-	PADAPTER		Adapter = (PADAPTER)pTimer->Adapter;
+	struct adapter *	Adapter = (PADAPTER)pTimer->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->DM_OutSrc;
 	pRXHP_T			pRX_HP_Table  = &pDM_Odm->DM_RXHP_Table;
@@ -10626,7 +10626,7 @@ odm_PSD_RXHPWorkitemCallback(
     IN PVOID            pContext
     )
 {
-	PADAPTER	pAdapter = (PADAPTER)pContext;
+	struct adapter *pAdapter = (PADAPTER)pContext;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->DM_OutSrc;
 	
@@ -10671,7 +10671,7 @@ odm_GlobalAdapterCheck(
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 VOID
 odm_OFDMTXPathDiversity_92C(
-	IN	PADAPTER	Adapter)
+	IN	struct adapter *Adapter)
 {
 //	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
@@ -10753,7 +10753,7 @@ odm_OFDMTXPathDiversity_92C(
 
 BOOLEAN
 odm_IsConnected_92C(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 )
 {
 	PRT_WLAN_STA	pEntry;
@@ -10794,7 +10794,7 @@ odm_IsConnected_92C(
 
 VOID
 odm_ResetPathDiversity_92C(
-		IN	PADAPTER	Adapter
+		IN	struct adapter *Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -10841,7 +10841,7 @@ odm_ResetPathDiversity_92C(
 
 VOID
 odm_CCKTXPathDiversity_92C(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -10990,7 +10990,7 @@ odm_CCKTXPathDiversity_92C(
 
 VOID
 odm_PathDiversityAfterLink_92C(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -11086,11 +11086,11 @@ odm_CCKTXPathDiversityCallback(
 )
 {
 #if USE_WORKITEM
-       PADAPTER	Adapter = (PADAPTER)pTimer->Adapter;
+       struct adapter *Adapter = (PADAPTER)pTimer->Adapter;
        HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	   PDM_ODM_T		pDM_Odm = &pHalData->DM_OutSrc;
 #else
-	PADAPTER	Adapter = (PADAPTER)pTimer->Adapter;
+	struct adapter *Adapter = (PADAPTER)pTimer->Adapter;
 #endif
 
 #if DEV_BUS_TYPE==RT_PCI_INTERFACE
@@ -11111,7 +11111,7 @@ odm_CCKTXPathDiversityWorkItemCallback(
     IN PVOID            pContext
     )
 {
-	PADAPTER	Adapter = (PADAPTER)pContext;
+	struct adapter *Adapter = (PADAPTER)pContext;
 
 	odm_CCKTXPathDiversity_92C(Adapter);
 }
@@ -11119,7 +11119,7 @@ odm_CCKTXPathDiversityWorkItemCallback(
 
 VOID
 ODM_CCKPathDiversityChkPerPktRssi(
-	PADAPTER		Adapter,
+	struct adapter *	Adapter,
 	BOOLEAN			bIsDefPort,
 	BOOLEAN			bMatchBSSID,
 	PRT_WLAN_STA	pEntry,
@@ -11183,12 +11183,12 @@ ODM_CCKPathDiversityChkPerPktRssi(
 
 BOOLEAN
 ODM_PathDiversityBeforeLink92C(
-	//IN	PADAPTER	Adapter
+	//IN	struct adapter *Adapter
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
 #if (RT_MEM_SIZE_LEVEL != RT_MEM_SIZE_MINIMUM)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE*	pHalData = NULL;
 	PMGNT_INFO		pMgntInfo = NULL;
 	//pSWAT_T		pDM_SWAT_Table = &Adapter->DM_SWAT_Table;
@@ -11407,7 +11407,7 @@ ODM_PathDiversityBeforeLink92C(
 //
 VOID
 ODM_PathDivChkPerPktRssi(
-	PADAPTER		Adapter,
+	struct adapter *	Adapter,
 	BOOLEAN			bIsDefPort,
 	BOOLEAN			bMatchBSSID,
 	PRT_WLAN_STA	pEntry,
@@ -11452,7 +11452,7 @@ ODM_PathDivRestAfterLink(
 	IN	PDM_ODM_T		pDM_Odm
 	)
 {
-	PADAPTER		Adapter=pDM_Odm->Adapter;
+	struct adapter *	Adapter=pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	pSWAT_T			pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 
@@ -11475,7 +11475,7 @@ odm_PathDivChkAntSwitchCallback(
 	PRT_TIMER		pTimer
 )
 {
-	PADAPTER		Adapter = (PADAPTER)pTimer->Adapter;
+	struct adapter *	Adapter = (PADAPTER)pTimer->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->DM_OutSrc;
 
@@ -11500,7 +11500,7 @@ odm_PathDivChkAntSwitchWorkitemCallback(
     IN PVOID            pContext
     )
 {
-	PADAPTER	pAdapter = (PADAPTER)pContext;
+	struct adapter *pAdapter = (PADAPTER)pContext;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->DM_OutSrc;
 
@@ -11518,11 +11518,11 @@ odm_PathDivChkAntSwitchWorkitemCallback(
 VOID
 odm_PathDivChkAntSwitch(
 	PDM_ODM_T		pDM_Odm
-	//PADAPTER		Adapter,
+	//struct adapter *	Adapter,
 	//u1Byte			Step
 )
 {
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PMGNT_INFO		pMgntInfo = &Adapter->MgntInfo;
 
@@ -11549,7 +11549,7 @@ odm_PathDivChkAntSwitch(
 	u1Byte                 n=0;
        static u8Byte		lastTxOkCnt_tmp=0, lastRxOkCnt_tmp=0;
 	//u8Byte			curTxOkCnt_tmp, curRxOkCnt_tmp;
-       PADAPTER            BuddyAdapter = Adapter->BuddyAdapter;     // another adapter MAC
+       struct adapter *           BuddyAdapter = Adapter->BuddyAdapter;     // another adapter MAC
         // Path Diversity   //Neil Chen--2011--06--22
 
 	//u1Byte                 PathDiv_Trigger = (u1Byte) PHY_QueryBBReg(Adapter, 0xBA0,BIT31);
@@ -11608,7 +11608,7 @@ odm_PathDivChkAntSwitch(
 		{
 			u1Byte			index = 0;
 			PRT_WLAN_STA	pEntry = NULL;
-			PADAPTER		pTargetAdapter = NULL;
+			struct adapter *	pTargetAdapter = NULL;
 		
 			if(	pMgntInfo->mIbss || ACTING_AS_AP(Adapter) )
 			{
@@ -11986,7 +11986,7 @@ odm_PathDivChkAntSwitch(
 
 VOID
 odm_SetRespPath_92C(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u1Byte	DefaultRespPath
 	)
 {
@@ -12010,7 +12010,7 @@ odm_SetRespPath_92C(
 
 VOID
 ODM_FillTXPathInTXDESC(
-		IN	PADAPTER	Adapter,
+		IN	struct adapter *Adapter,
 		IN	PRT_TCB		pTcb,
 		IN	pu1Byte		pDesc
 )

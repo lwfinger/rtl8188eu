@@ -140,7 +140,7 @@ typedef		struct _ADAPTER{
 	HAL_DATA_TYPE*		temp2;
 	prtl8192cd_priv		priv;
 	#endif
-}ADAPTER, *PADAPTER;
+}ADAPTER, *struct adapter *;
 #endif
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_AP)
@@ -1118,7 +1118,7 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	//
 	//	Add for different team use temporarily
 	//
-	PADAPTER		Adapter;		// For CE/NIC team
+	struct adapter *		Adapter;		// For CE/NIC team
 	prtl8192cd_priv	priv;			// For AP/ADSL team
 	// WHen you use Adapter or priv pointer, you must make sure the pointer is ready.
 	BOOLEAN			odm_ready;
@@ -1196,7 +1196,7 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 
 	u1Byte			u1Byte_temp;
 	BOOLEAN			BOOLEAN_temp;
-	PADAPTER		PADAPTER_temp;
+	struct adapter *_temp;
 	
 	// MAC PHY Mode SMSP/DMSP/DMDP = 0/1/2
 	u1Byte			*pMacPhyMode;
@@ -1219,7 +1219,7 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	// Common info for 92D DMSP
 	
 	BOOLEAN			*pbGetValueFromOtherMac;
-	PADAPTER		*pBuddyAdapter;
+	struct adapter *		*pBuddyAdapter;
 	BOOLEAN			*pbMasterOfDMSP; //MAC0: master, MAC1: slave
 	// Common info for Status
 	BOOLEAN			*pbScanInProcess;
@@ -1709,7 +1709,7 @@ ODM_RAStateCheck(
 // function prototype
 //============================================================
 //#define DM_ChangeDynamicInitGainThresh		ODM_ChangeDynamicInitGainThresh
-//void	ODM_ChangeDynamicInitGainThresh(IN	PADAPTER	pAdapter,
+//void	ODM_ChangeDynamicInitGainThresh(IN	struct adapter *	pAdapter,
 //											IN	INT32		DM_Type,
 //											IN	INT32		DM_Value);
 VOID
@@ -1721,14 +1721,14 @@ ODM_ChangeDynamicInitGainThresh(
 
 BOOLEAN
 ODM_CheckPowerStatus(
-	IN	PADAPTER		Adapter
+	IN	struct adapter *		Adapter
 	);
 
 
 #if (DM_ODM_SUPPORT_TYPE != ODM_ADSL) 
 VOID
 ODM_RateAdaptiveStateApInit(
-	IN	PADAPTER	Adapter	,
+	IN	struct adapter *	Adapter	,
 	IN	PRT_WLAN_STA  pEntry
 	);
 #endif
@@ -1833,7 +1833,7 @@ VOID	odm_PSDMonitorInit(PDM_ODM_T 	pDM_Odm);
 
 VOID
 ODM_PSDDbgControl(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *	Adapter,
 	IN	u4Byte		mode,
 	IN	u4Byte		btRssi
 	);
@@ -1922,13 +1922,13 @@ VOID ODM_PathDivRestAfterLink(
 
 //#define   PATHDIV_ENABLE 	 1
 
-//VOID odm_PathDivChkAntSwitch(PADAPTER	Adapter,u1Byte	Step);
+//VOID odm_PathDivChkAntSwitch(struct adapter *	Adapter,u1Byte	Step);
 VOID ODM_PathDivRestAfterLink(
 	IN	PDM_ODM_T	pDM_Odm
 	);
 
 #define dm_PathDiv_RSSI_Check	ODM_PathDivChkPerPktRssi
-VOID ODM_PathDivChkPerPktRssi(PADAPTER		Adapter,
+VOID ODM_PathDivChkPerPktRssi(struct adapter *		Adapter,
 										BOOLEAN			bIsDefPort,
 										BOOLEAN			bMatchBSSID,
 										PRT_WLAN_STA	pEntry,
@@ -1956,12 +1956,12 @@ PlatformDivision64(
 #define PathDivCheckBeforeLink8192C	ODM_PathDiversityBeforeLink92C
 BOOLEAN 
 ODM_PathDiversityBeforeLink92C(
-	//IN	PADAPTER	Adapter
+	//IN	struct adapter *	Adapter
 	IN		PDM_ODM_T		pDM_Odm
 	);
 
 #define DM_ChangeDynamicInitGainThresh		ODM_ChangeDynamicInitGainThresh
-//void	ODM_ChangeDynamicInitGainThresh(IN	PADAPTER	pAdapter,
+//void	ODM_ChangeDynamicInitGainThresh(IN	struct adapter *	pAdapter,
 //											IN	INT32		DM_Type,
 //											IN	INT32		DM_Value);
 //
@@ -1969,7 +1969,7 @@ ODM_PathDiversityBeforeLink92C(
 
 VOID
 ODM_CCKPathDiversityChkPerPktRssi(
-	PADAPTER		Adapter,
+	struct adapter *		Adapter,
 	BOOLEAN			bIsDefPort,
 	BOOLEAN			bMatchBSSID,
 	PRT_WLAN_STA	pEntry,
@@ -1991,7 +1991,7 @@ typedef enum tag_DIG_Connect_Definition
 
 VOID
 ODM_FillTXPathInTXDESC(
-		IN	PADAPTER	Adapter,
+		IN	struct adapter *	Adapter,
 		IN	PRT_TCB		pTcb,
 		IN	pu1Byte		pDesc
 );

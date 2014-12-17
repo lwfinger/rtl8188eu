@@ -146,19 +146,19 @@ struct spi_more_data {
 	unsigned long len;
 };
 
-void rtl8188es_set_hal_ops(PADAPTER padapter);
+void rtl8188es_set_hal_ops(struct adapter *padapter);
 #define set_hal_ops rtl8188es_set_hal_ops
-extern void spi_set_chip_endian(PADAPTER padapter);
+extern void spi_set_chip_endian(struct adapter *padapter);
 extern void spi_set_intf_ops(struct _io_ops *pops);
-extern void spi_set_chip_endian(PADAPTER padapter);
-extern void InitInterrupt8723ASdio(PADAPTER padapter);
-extern void InitSysInterrupt8723ASdio(PADAPTER padapter);
-extern void EnableInterrupt8723ASdio(PADAPTER padapter);
-extern void DisableInterrupt8723ASdio(PADAPTER padapter);
-extern void spi_int_hdl(PADAPTER padapter);
-extern u8 HalQueryTxBufferStatus8723ASdio(PADAPTER padapter);
-extern void InitInterrupt8188ESdio(PADAPTER padapter);
-extern void EnableInterrupt8188ESdio(PADAPTER padapter);
-extern void DisableInterrupt8188ESdio(PADAPTER padapter);
+extern void spi_set_chip_endian(struct adapter *padapter);
+extern void InitInterrupt8723ASdio(struct adapter *padapter);
+extern void InitSysInterrupt8723ASdio(struct adapter *padapter);
+extern void EnableInterrupt8723ASdio(struct adapter *padapter);
+extern void DisableInterrupt8723ASdio(struct adapter *padapter);
+extern void spi_int_hdl(struct adapter *padapter);
+extern u8 HalQueryTxBufferStatus8723ASdio(struct adapter *padapter);
+extern void InitInterrupt8188ESdio(struct adapter *padapter);
+extern void EnableInterrupt8188ESdio(struct adapter *padapter);
+extern void DisableInterrupt8188ESdio(struct adapter *padapter);
 
 #endif //__GSPI_OPS_H__

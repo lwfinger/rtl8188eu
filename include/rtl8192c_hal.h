@@ -629,8 +629,8 @@ typedef struct hal_data_8192ce HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define RT_IS_FUNC_DISABLED(__pAdapter, __FuncBits) ( (__pAdapter)->DisabledFunctions & (__FuncBits) )
 #define IS_MULTI_FUNC_CHIP(_Adapter)	(((((PHAL_DATA_TYPE)(_Adapter->HalData))->MultiFunc) & (RT_MULTI_FUNC_BT|RT_MULTI_FUNC_GPS)) ? _TRUE : _FALSE)
 
-void InterruptRecognized8192CE(PADAPTER Adapter, PRT_ISR_CONTENT pIsrContent);
-VOID UpdateInterruptMask8192CE(PADAPTER Adapter, u32 AddMSR, u32 AddMSR1, u32 RemoveMSR, u32 RemoveMSR1);
+void InterruptRecognized8192CE(struct adapter *Adapter, PRT_ISR_CONTENT pIsrContent);
+VOID UpdateInterruptMask8192CE(struct adapter *Adapter, u32 AddMSR, u32 AddMSR1, u32 RemoveMSR, u32 RemoveMSR1);
 #endif
 
 #ifdef CONFIG_USB_HCI
@@ -832,16 +832,16 @@ typedef struct hal_data_8192cu HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define INCLUDE_MULTI_FUNC_BT(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_BT)
 #define INCLUDE_MULTI_FUNC_GPS(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_GPS)
 
-VOID rtl8192c_FirmwareSelfReset(IN PADAPTER Adapter);
-int FirmwareDownload92C(IN PADAPTER Adapter);
-VOID InitializeFirmwareVars92C(PADAPTER Adapter);
-u8 GetEEPROMSize8192C(PADAPTER Adapter);
-void rtl8192c_EfuseParseChnlPlan(PADAPTER padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
+VOID rtl8192c_FirmwareSelfReset(IN struct adapter *Adapter);
+int FirmwareDownload92C(IN struct adapter *Adapter);
+VOID InitializeFirmwareVars92C(struct adapter *Adapter);
+u8 GetEEPROMSize8192C(struct adapter *Adapter);
+void rtl8192c_EfuseParseChnlPlan(struct adapter *padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
 
-HAL_VERSION rtl8192c_ReadChipVersion(IN PADAPTER Adapter);
-void rtl8192c_ReadBluetoothCoexistInfo(PADAPTER Adapter, u8 *PROMContent, BOOLEAN AutoloadFail);
-//void rtl8192c_free_hal_data(_adapter * padapter);
-VOID rtl8192c_EfuseParseIDCode(PADAPTER pAdapter, u8 *hwinfo);
+HAL_VERSION rtl8192c_ReadChipVersion(IN struct adapter *Adapter);
+void rtl8192c_ReadBluetoothCoexistInfo(struct adapter *Adapter, u8 *PROMContent, BOOLEAN AutoloadFail);
+//void rtl8192c_free_hal_data(struct adapter * padapter);
+VOID rtl8192c_EfuseParseIDCode(struct adapter *pAdapter, u8 *hwinfo);
 void rtl8192c_set_hal_ops(struct hal_ops *pHalFunc);
 
 s32 c2h_id_filter_ccx_8192c(u8 id);

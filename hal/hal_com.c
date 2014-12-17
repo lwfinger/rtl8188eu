@@ -74,7 +74,7 @@ void dump_chip_info(HAL_VERSION	ChipVersion)
 
 u8	//return the final channel plan decision
 hal_com_get_channel_plan(
-	IN	PADAPTER	padapter,
+	IN	struct adapter *padapter,
 	IN	u8			hw_channel_plan,	//channel plan from HW (efuse/eeprom)
 	IN	u8			sw_channel_plan,	//channel plan from SW (registry/module param)
 	IN	u8			def_channel_plan,	//channel plan used when the former two is invalid
@@ -141,7 +141,7 @@ u8	MRateToHwRate(u8 rate)
 }
 
 void	HalSetBrateCfg(
-	IN PADAPTER		Adapter,
+	IN struct adapter *	Adapter,
 	IN u8			*mBratesOS,
 	OUT u16			*pBrateCfg)
 {
@@ -175,7 +175,7 @@ void	HalSetBrateCfg(
 
 static VOID
 _OneOutPipeMapping(
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 	)
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
@@ -193,7 +193,7 @@ _OneOutPipeMapping(
 
 static VOID
 _TwoOutPipeMapping(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	BOOLEAN	 	bWIFICfg
 	)
 {
@@ -238,7 +238,7 @@ _TwoOutPipeMapping(
 }
 
 static VOID _ThreeOutPipeMapping(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	BOOLEAN	 	bWIFICfg
 	)
 {
@@ -283,7 +283,7 @@ static VOID _ThreeOutPipeMapping(
 
 BOOLEAN
 Hal_MappingOutPipe(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8		NumOutPipe
 	)
 {
@@ -313,7 +313,7 @@ Hal_MappingOutPipe(
 	
 }
 
-void hal_init_macaddr(_adapter *adapter)
+void hal_init_macaddr(struct adapter *adapter)
 {
 	rtw_hal_set_hwreg(adapter, HW_VAR_MAC_ADDR, adapter->eeprompriv.mac_addr);
 #ifdef  CONFIG_CONCURRENT_MODE
@@ -328,12 +328,12 @@ void hal_init_macaddr(_adapter *adapter)
 * BITS	 [127:120]	[119:16]      [15:8]		  [7:4]	 	   [3:0]
 */
 
-void c2h_evt_clear(_adapter *adapter)
+void c2h_evt_clear(struct adapter *adapter)
 {
 	rtw_write8(adapter, REG_C2HEVT_CLEAR, C2H_EVT_HOST_CLOSE);
 }
 
-s32 c2h_evt_read(_adapter *adapter, u8 *buf)
+s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 {
 	s32 ret = _FAIL;
 	struct c2h_evt_hdr *c2h_evt;
@@ -386,7 +386,7 @@ exit:
 }
 
 u8
-SetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
+SetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	PDM_ODM_T pDM_Odm = &(pHalData->odmpriv);
@@ -415,7 +415,7 @@ SetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 }
 
 u8
-GetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
+GetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	PDM_ODM_T pDM_Odm = &(pHalData->odmpriv);

@@ -139,7 +139,7 @@ void doIQK(
 	)
 {
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
-	PADAPTER 		Adapter = pDM_Odm->Adapter;
+	struct adapter *		Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 #endif
 
@@ -290,7 +290,7 @@ odm_TxPwrTrackSetPwr88E(
 		u1Byte	BW20PowerLevel[MAX_TX_COUNT], BW40PowerLevel[MAX_TX_COUNT];
 		u1Byte	rf = 0;
 		u4Byte 	pwr = 0, TxAGC = 0;
-		PADAPTER Adapter = pDM_Odm->Adapter;
+		struct adapter *Adapter = pDM_Odm->Adapter;
 		//printk("odm_TxPwrTrackSetPwr88E CH=%d, modify TXAGC \n", *(pDM_Odm->pChannel));
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("odm_TxPwrTrackSetPwr88E CH=%d\n", *(pDM_Odm->pChannel)));
 #if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE ))
@@ -384,7 +384,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN PADAPTER	Adapter
+	IN struct adapter *Adapter
 #endif
 	)
 {
@@ -643,7 +643,7 @@ phy_PathA_IQK_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	BOOLEAN		configPathB
 	)
@@ -719,7 +719,7 @@ phy_PathA_RxIQK(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	BOOLEAN		configPathB
 	)
@@ -880,7 +880,7 @@ phy_PathB_IQK_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 #endif
 	)
 {
@@ -943,7 +943,7 @@ _PHY_PathAFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN  BOOLEAN    	bIQKOK,
 	IN	s4Byte		result[][8],
@@ -1018,7 +1018,7 @@ _PHY_PathBFillIQKMatrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN  BOOLEAN   	bIQKOK,
 	IN	s4Byte		result[][8],
@@ -1087,7 +1087,7 @@ _PHY_PathBFillIQKMatrix(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_MP) 
 BOOLEAN
 ODM_CheckPowerStatus(
-	IN	PADAPTER		Adapter)
+	IN	struct adapter *	Adapter)
 {
 /*
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -1122,7 +1122,7 @@ _PHY_SaveADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	pu4Byte		ADDAReg,
 	IN	pu4Byte		ADDABackup,
@@ -1155,7 +1155,7 @@ _PHY_SaveMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	pu4Byte		MACReg,
 	IN	pu4Byte		MACBackup
@@ -1185,7 +1185,7 @@ _PHY_ReloadADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	pu4Byte		ADDAReg,
 	IN	pu4Byte		ADDABackup,
@@ -1215,7 +1215,7 @@ _PHY_ReloadMACRegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	pu4Byte		MACReg,
 	IN	pu4Byte		MACBackup
@@ -1244,7 +1244,7 @@ _PHY_PathADDAOn(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	pu4Byte		ADDAReg,
 	IN	BOOLEAN		isPathAOn,
@@ -1284,7 +1284,7 @@ _PHY_MACSettingCalibration(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	pu4Byte		MACReg,
 	IN	pu4Byte		MACBackup	
@@ -1316,7 +1316,7 @@ _PHY_PathAStandBy(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN PADAPTER	pAdapter
+	IN struct adapter *pAdapter
 #endif
 	)
 {
@@ -1341,7 +1341,7 @@ _PHY_PIModeSwitch(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	BOOLEAN		PIMode
 	)
@@ -1368,7 +1368,7 @@ phy_SimularityCompare_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	s4Byte 		result[][8],
 	IN	u1Byte		 c1,
@@ -1503,7 +1503,7 @@ phy_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	s4Byte 		result[][8],
 	IN	u1Byte		t,
@@ -1796,7 +1796,7 @@ phy_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	BOOLEAN		is2T
 	)
@@ -1887,7 +1887,7 @@ phy_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	s1Byte 		delta,
 	IN	BOOLEAN		is2T
@@ -2380,7 +2380,7 @@ PHY_IQCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	BOOLEAN 	bReCovery
 	)
@@ -2675,7 +2675,7 @@ PHY_LCCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 #endif
 	)
 {
@@ -2764,7 +2764,7 @@ PHY_APCalibrate_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	s1Byte 		delta	
 	)
@@ -2814,7 +2814,7 @@ VOID phy_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	BOOLEAN		bMain,
 	IN	BOOLEAN		is2T
@@ -2863,7 +2863,7 @@ VOID PHY_SetRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	BOOLEAN		bMain
 	)
@@ -2905,7 +2905,7 @@ VOID PHY_SetRFPathSwitch_8188E(
 VOID	
 phy_DigitalPredistortion(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #else
 	IN PDM_ODM_T	pDM_Odm,
 #endif
@@ -2917,7 +2917,7 @@ phy_DigitalPredistortion(
 VOID
 PHY_DigitalPredistortion_8188E(
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 #else
 	IN PDM_ODM_T	pDM_Odm
 #endif		
@@ -2961,7 +2961,7 @@ BOOLEAN phy_QueryRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
 #else
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 #endif
 	IN	BOOLEAN		is2T
 	)
@@ -3007,7 +3007,7 @@ BOOLEAN PHY_QueryRFPathSwitch_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
 #else
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 #endif
 	)
 {

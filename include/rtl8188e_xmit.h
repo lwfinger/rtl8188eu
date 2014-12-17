@@ -254,15 +254,15 @@ struct txrpt_ccx_88e {
 #define txrpt_ccx_sw_88e(txrpt_ccx) ((txrpt_ccx)->sw0 + ((txrpt_ccx)->sw1<<8))
 #define txrpt_ccx_qtime_88e(txrpt_ccx) ((txrpt_ccx)->ccx_qtime0+((txrpt_ccx)->ccx_qtime1<<8))
 
-void rtl8188e_fill_fake_txdesc(PADAPTER	padapter,u8*pDesc,u32 BufferLen,u8 IsPsPoll,u8	IsBTQosNull);
+void rtl8188e_fill_fake_txdesc(struct adapter *padapter,u8*pDesc,u32 BufferLen,u8 IsPsPoll,u8	IsBTQosNull);
 #ifdef CONFIG_SDIO_HCI
-s32 rtl8188es_init_xmit_priv(PADAPTER padapter);
-void rtl8188es_free_xmit_priv(PADAPTER padapter);
-s32 rtl8188es_hal_xmit(PADAPTER padapter, struct xmit_frame *pxmitframe);
-s32 rtl8188es_mgnt_xmit(PADAPTER padapter, struct xmit_frame *pmgntframe);
-s32	rtl8188es_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe);
+s32 rtl8188es_init_xmit_priv(struct adapter *padapter);
+void rtl8188es_free_xmit_priv(struct adapter *padapter);
+s32 rtl8188es_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe);
+s32 rtl8188es_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe);
+s32	rtl8188es_hal_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitframe);
 thread_return rtl8188es_xmit_thread(thread_context context);
-s32 rtl8188es_xmit_buf_handler(PADAPTER padapter);
+s32 rtl8188es_xmit_buf_handler(struct adapter *padapter);
 #define hal_xmit_handler rtl8188es_xmit_buf_handler
 
 #ifdef CONFIG_SDIO_TX_TASKLET
@@ -271,24 +271,24 @@ void rtl8188es_xmit_tasklet(void *priv);
 #endif
 
 #ifdef CONFIG_USB_HCI
-s32 rtl8188eu_init_xmit_priv(PADAPTER padapter);
-void rtl8188eu_free_xmit_priv(PADAPTER padapter);
-s32 rtl8188eu_hal_xmit(PADAPTER padapter, struct xmit_frame *pxmitframe);
-s32 rtl8188eu_mgnt_xmit(PADAPTER padapter, struct xmit_frame *pmgntframe);
-s32	rtl8188eu_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe);
-s32 rtl8188eu_xmit_buf_handler(PADAPTER padapter);
+s32 rtl8188eu_init_xmit_priv(struct adapter *padapter);
+void rtl8188eu_free_xmit_priv(struct adapter *padapter);
+s32 rtl8188eu_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe);
+s32 rtl8188eu_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe);
+s32	rtl8188eu_hal_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitframe);
+s32 rtl8188eu_xmit_buf_handler(struct adapter *padapter);
 #define hal_xmit_handler rtl8188eu_xmit_buf_handler
 void rtl8188eu_xmit_tasklet(void *priv);
-s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
+s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
 #endif
 
 #ifdef CONFIG_PCI_HCI
-s32 rtl8188ee_init_xmit_priv(PADAPTER padapter);
-void rtl8188ee_free_xmit_priv(PADAPTER padapter);
+s32 rtl8188ee_init_xmit_priv(struct adapter *padapter);
+void rtl8188ee_free_xmit_priv(struct adapter *padapter);
 struct xmit_buf *rtl8188ee_dequeue_xmitbuf(struct rtw_tx_ring *ring);
-void	rtl8188ee_xmitframe_resume(_adapter *padapter);
-s32 rtl8188ee_hal_xmit(PADAPTER padapter, struct xmit_frame *pxmitframe);
-s32 rtl8188ee_mgnt_xmit(PADAPTER padapter, struct xmit_frame *pmgntframe);
+void	rtl8188ee_xmitframe_resume(struct adapter *padapter);
+s32 rtl8188ee_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe);
+s32 rtl8188ee_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe);
 void rtl8188ee_xmit_tasklet(void *priv);
 #endif
 
@@ -300,12 +300,12 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 
 #ifdef CONFIG_XMIT_ACK
 void dump_txrpt_ccx_88e(void *buf);
-void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf);
+void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf);
 #else
 #define dump_txrpt_ccx_88e(buf) do {} while(0)
 #define handle_txrpt_ccx_88e(adapter, buf) do {} while(0)
 #endif //CONFIG_XMIT_ACK
 
-void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
+void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
 #endif //__RTL8188E_XMIT_H__
 

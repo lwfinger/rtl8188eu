@@ -34,7 +34,7 @@
 #endif
 
 //init os related resource in struct recv_priv
-int rtw_os_recv_resource_init(struct recv_priv *precvpriv, _adapter *padapter)
+int rtw_os_recv_resource_init(struct recv_priv *precvpriv, struct adapter *padapter)
 {
 	int	res=_SUCCESS;
 
@@ -42,7 +42,7 @@ int rtw_os_recv_resource_init(struct recv_priv *precvpriv, _adapter *padapter)
 }
 
 //alloc os related resource in union recv_frame
-int rtw_os_recv_resource_alloc(_adapter *padapter, union recv_frame *precvframe)
+int rtw_os_recv_resource_alloc(struct adapter *padapter, union recv_frame *precvframe)
 {
 	int	res=_SUCCESS;
 	
@@ -73,7 +73,7 @@ void rtw_os_recv_resource_free(struct recv_priv *precvpriv)
 
 
 //alloc os related resource in struct recv_buf
-int rtw_os_recvbuf_resource_alloc(_adapter *padapter, struct recv_buf *precvbuf)
+int rtw_os_recvbuf_resource_alloc(struct adapter *padapter, struct recv_buf *precvbuf)
 {
 	int res=_SUCCESS;
 
@@ -112,7 +112,7 @@ int rtw_os_recvbuf_resource_alloc(_adapter *padapter, struct recv_buf *precvbuf)
 }
 
 //free os related resource in struct recv_buf
-int rtw_os_recvbuf_resource_free(_adapter *padapter, struct recv_buf *precvbuf)
+int rtw_os_recvbuf_resource_free(struct adapter *padapter, struct recv_buf *precvbuf)
 {
 	int ret = _SUCCESS;
 
@@ -146,7 +146,7 @@ int rtw_os_recvbuf_resource_free(_adapter *padapter, struct recv_buf *precvbuf)
 
 }
 
-void rtw_handle_tkip_mic_err(_adapter *padapter,u8 bgroup)
+void rtw_handle_tkip_mic_err(struct adapter *padapter,u8 bgroup)
 {
 #ifdef CONFIG_IOCTL_CFG80211
 	enum nl80211_key_type key_type;
@@ -212,7 +212,7 @@ void rtw_handle_tkip_mic_err(_adapter *padapter,u8 bgroup)
 #endif
 }
 
-void rtw_hostapd_mlme_rx(_adapter *padapter, union recv_frame *precv_frame)
+void rtw_hostapd_mlme_rx(struct adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_HOSTAPD_MLME
 	_pkt *skb;
@@ -253,7 +253,7 @@ void rtw_hostapd_mlme_rx(_adapter *padapter, union recv_frame *precv_frame)
 #endif
 }
 
-int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
+int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame)
 {
 	struct recv_priv *precvpriv;
 	_queue	*pfree_recv_queue;
@@ -369,7 +369,7 @@ _func_enter_;
 
 	if( br_port	&& (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == _TRUE) )	 	
 	{
-		int nat25_handle_frame(_adapter *priv, struct sk_buff *skb);
+		int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb);
 		if (nat25_handle_frame(padapter, skb) == -1) {
 			//priv->ext_stats.rx_data_drops++;
 			//DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n");
@@ -469,7 +469,7 @@ _func_exit_;
 
 }
 
-void rtw_os_read_port(_adapter *padapter, struct recv_buf *precvbuf)
+void rtw_os_read_port(struct adapter *padapter, struct recv_buf *precvbuf)
 {
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 
@@ -504,7 +504,7 @@ void _rtw_reordering_ctrl_timeout_handler (void *FunctionContext)
 
 void rtw_init_recv_timer(struct recv_reorder_ctrl *preorder_ctrl)
 {
-	_adapter *padapter = preorder_ctrl->padapter;
+	struct adapter *padapter = preorder_ctrl->padapter;
 
 	_init_timer(&(preorder_ctrl->reordering_ctrl_timer), padapter->pnetdev, _rtw_reordering_ctrl_timeout_handler, preorder_ctrl);
 

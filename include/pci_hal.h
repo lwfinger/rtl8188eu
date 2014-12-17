@@ -158,7 +158,7 @@ static inline void NdisRawReadPortUlong(u32 port, u32 *pval)
 	//*pval = readl((u8 *)RegAddr(port));
 }
 
-void rtl8188ee_set_hal_ops(_adapter * padapter);
+void rtl8188ee_set_hal_ops(struct adapter * padapter);
 #define hal_set_hal_ops	rtl8188ee_set_hal_ops
 
 #endif //__PCIE_HAL_H__

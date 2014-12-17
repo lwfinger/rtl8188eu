@@ -46,7 +46,7 @@ void dump_txrpt_ccx_88e(void *buf)
 	);
 }
 
-void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf)
+void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf)
 {
 	struct txrpt_ccx_88e *txrpt_ccx = (struct txrpt_ccx_88e *)buf;
 
@@ -63,7 +63,7 @@ void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf)
 }
 #endif //CONFIG_XMIT_ACK
 
-void _dbg_dump_tx_info(_adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
+void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
 {
 	u8 bDumpTxPkt;
 	u8 bDumpTxDesc = _FALSE;
@@ -214,7 +214,7 @@ InsertEMContent_8188E(
 
 void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmitbuf )
 {
-	//_adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq
+	//struct adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq
 	int index,j;
 	u16 offset,pktlen;
 	PTXDESC ptxdesc;

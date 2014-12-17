@@ -215,18 +215,18 @@ typedef struct _R_ANTENNA_SELECT_CCK{
 //
 // BB and RF register read/write
 //
-u32	rtl8188e_PHY_QueryBBReg(	IN	PADAPTER	Adapter,
+u32	rtl8188e_PHY_QueryBBReg(	IN	struct adapter *Adapter,
 								IN	u32		RegAddr,
 								IN	u32		BitMask	);
-void	rtl8188e_PHY_SetBBReg(	IN	PADAPTER	Adapter,
+void	rtl8188e_PHY_SetBBReg(	IN	struct adapter *Adapter,
 								IN	u32		RegAddr,
 								IN	u32		BitMask,
 								IN	u32		Data	);
-u32	rtl8188e_PHY_QueryRFReg(	IN	PADAPTER			Adapter,
+u32	rtl8188e_PHY_QueryRFReg(	IN	struct adapter *		Adapter,
 								IN	RF_RADIO_PATH_E	eRFPath,
 								IN	u32				RegAddr,
 								IN	u32				BitMask	);
-void	rtl8188e_PHY_SetRFReg(	IN	PADAPTER			Adapter,
+void	rtl8188e_PHY_SetRFReg(	IN	struct adapter *		Adapter,
 								IN	RF_RADIO_PATH_E	eRFPath,
 								IN	u32				RegAddr,
 								IN	u32				BitMask,
@@ -236,57 +236,57 @@ void	rtl8188e_PHY_SetRFReg(	IN	PADAPTER			Adapter,
 // Initialization related function
 //
 /* MAC/BB/RF HAL config */
-int	PHY_MACConfig8188E(IN	PADAPTER	Adapter	);
-int	PHY_BBConfig8188E(IN	PADAPTER	Adapter	);
-int	PHY_RFConfig8188E(IN	PADAPTER	Adapter	);
+int	PHY_MACConfig8188E(IN	struct adapter *Adapter	);
+int	PHY_BBConfig8188E(IN	struct adapter *Adapter	);
+int	PHY_RFConfig8188E(IN	struct adapter *Adapter	);
 
 /* RF config */
-int	rtl8188e_PHY_ConfigRFWithParaFile(IN PADAPTER Adapter, IN u8 * pFileName, RF_RADIO_PATH_E eRFPath);
-int	rtl8188e_PHY_ConfigRFWithHeaderFile(	IN	PADAPTER			Adapter,
+int	rtl8188e_PHY_ConfigRFWithParaFile(IN struct adapter *Adapter, IN u8 * pFileName, RF_RADIO_PATH_E eRFPath);
+int	rtl8188e_PHY_ConfigRFWithHeaderFile(	IN	struct adapter *		Adapter,
 													IN	RF_RADIO_PATH_E		eRFPath);
 
 /* Read initi reg value for tx power setting. */
-void	rtl8192c_PHY_GetHWRegOriginalValue(	IN	PADAPTER		Adapter	);
+void	rtl8192c_PHY_GetHWRegOriginalValue(	IN	struct adapter *	Adapter	);
 
 //
 // RF Power setting
 //
-//extern	BOOLEAN	PHY_SetRFPowerState(IN	PADAPTER			Adapter, 
+//extern	BOOLEAN	PHY_SetRFPowerState(IN	struct adapter *		Adapter, 
 //									IN	RT_RF_POWER_STATE	eRFPowerState);
 
 //
 // BB TX Power R/W
 //
-void	PHY_GetTxPowerLevel8188E(	IN	PADAPTER		Adapter,
+void	PHY_GetTxPowerLevel8188E(	IN	struct adapter *	Adapter,
 											OUT u32*    		powerlevel	);
-void	PHY_SetTxPowerLevel8188E(	IN	PADAPTER		Adapter,
+void	PHY_SetTxPowerLevel8188E(	IN	struct adapter *	Adapter,
 											IN	u8			channel	);
-BOOLEAN	PHY_UpdateTxPowerDbm8188E(	IN	PADAPTER	Adapter,
+BOOLEAN	PHY_UpdateTxPowerDbm8188E(	IN	struct adapter *Adapter,
 											IN	int		powerInDbm	);
 
 //
 VOID 
-PHY_ScanOperationBackup8188E(IN	PADAPTER	Adapter,
+PHY_ScanOperationBackup8188E(IN	struct adapter *Adapter,
 										IN	u8		Operation	);
 
 //
 // Switch bandwidth for 8192S
 //
 //extern	void	PHY_SetBWModeCallback8192C(	IN	PRT_TIMER		pTimer	);
-void	PHY_SetBWMode8188E(	IN	PADAPTER			pAdapter,
+void	PHY_SetBWMode8188E(	IN	struct adapter *		pAdapter,
 									IN	HT_CHANNEL_WIDTH	ChnlWidth,
 									IN	unsigned char	Offset	);
 
 //
 // Set FW CMD IO for 8192S.
 //
-//extern	BOOLEAN HalSetIO8192C(	IN	PADAPTER			Adapter,
+//extern	BOOLEAN HalSetIO8192C(	IN	struct adapter *		Adapter,
 //									IN	IO_TYPE				IOType);
 
 //
 // Set A2 entry to fw for 8192S
 //
-extern	void FillA2Entry8192C(		IN	PADAPTER			Adapter,
+extern	void FillA2Entry8192C(		IN	struct adapter *		Adapter,
 										IN	u8				index,
 										IN	u8*				val);
 
@@ -295,45 +295,45 @@ extern	void FillA2Entry8192C(		IN	PADAPTER			Adapter,
 // channel switch related funciton
 //
 //extern	void	PHY_SwChnlCallback8192C(	IN	PRT_TIMER		pTimer	);
-void	PHY_SwChnl8188E(	IN	PADAPTER		pAdapter,
+void	PHY_SwChnl8188E(	IN	struct adapter *	pAdapter,
 									IN	u8			channel	);
 				// Call after initialization
-void	PHY_SwChnlPhy8192C(	IN	PADAPTER		pAdapter,
+void	PHY_SwChnlPhy8192C(	IN	struct adapter *	pAdapter,
 									IN	u8			channel	);
 
-void ChkFwCmdIoDone(	IN	PADAPTER	Adapter);
+void ChkFwCmdIoDone(	IN	struct adapter *Adapter);
 
 //
 // BB/MAC/RF other monitor API
 //
-void	PHY_SetMonitorMode8192C(IN	PADAPTER	pAdapter,
+void	PHY_SetMonitorMode8192C(IN	struct adapter *pAdapter,
 										IN	BOOLEAN		bEnableMonitorMode	);
 
-BOOLEAN	PHY_CheckIsLegalRfPath8192C(IN	PADAPTER	pAdapter,
+BOOLEAN	PHY_CheckIsLegalRfPath8192C(IN	struct adapter *pAdapter,
 											IN	u32		eRFPath	);
 
-VOID PHY_SetRFPathSwitch_8188E(IN	PADAPTER	pAdapter, IN	BOOLEAN		bMain);
+VOID PHY_SetRFPathSwitch_8188E(IN	struct adapter *pAdapter, IN	BOOLEAN		bMain);
 
 extern	VOID
 PHY_SwitchEphyParameter(
-	IN	PADAPTER			Adapter
+	IN	struct adapter *		Adapter
 	);
 
 extern	VOID
 PHY_EnableHostClkReq(
-	IN	PADAPTER			Adapter
+	IN	struct adapter *		Adapter
 	);
 
 BOOLEAN
 SetAntennaConfig92C(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u8		DefaultAnt	
 	);
 
 #ifdef CONFIG_PHY_SETTING_WITH_ODM
 VOID
 storePwrIndexDiffRateOffset(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u32		RegAddr,
 	IN	u32		BitMask,
 	IN	u32		Data
@@ -354,9 +354,9 @@ storePwrIndexDiffRateOffset(
 // Initialization related function
 //
 /* MAC/BB/RF HAL config */
-//extern s32 PHY_MACConfig8723(PADAPTER padapter);
-//s32 PHY_BBConfig8723(PADAPTER padapter);
-//s32 PHY_RFConfig8723(PADAPTER padapter);
+//extern s32 PHY_MACConfig8723(struct adapter *padapter);
+//s32 PHY_BBConfig8723(struct adapter *padapter);
+//s32 PHY_RFConfig8723(struct adapter *padapter);
 
 
 
@@ -421,7 +421,7 @@ storePwrIndexDiffRateOffset(
 #endif
 
 #if(SIC_ENABLE == 1)
-VOID SIC_Init(IN PADAPTER Adapter);
+VOID SIC_Init(IN struct adapter *Adapter);
 #endif
 
 

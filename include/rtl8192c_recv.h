@@ -130,14 +130,14 @@ typedef struct _INTERRUPT_MSG_FORMAT_EX{
 	unsigned int  MSG_EX;
 }INTERRUPT_MSG_FORMAT_EX,*PINTERRUPT_MSG_FORMAT_EX;
 
-void rtl8192cu_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf);
-int	rtl8192cu_init_recv_priv(_adapter * padapter);
-void rtl8192cu_free_recv_priv(_adapter * padapter);
+void rtl8192cu_init_recvbuf(struct adapter *padapter, struct recv_buf *precvbuf);
+int	rtl8192cu_init_recv_priv(struct adapter * padapter);
+void rtl8192cu_free_recv_priv(struct adapter * padapter);
 #endif
 
 #ifdef CONFIG_PCI_HCI
-int	rtl8192ce_init_recv_priv(_adapter * padapter);
-void rtl8192ce_free_recv_priv(_adapter * padapter);
+int	rtl8192ce_init_recv_priv(struct adapter * padapter);
+void rtl8192ce_free_recv_priv(struct adapter * padapter);
 #endif
 
 void rtl8192c_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy_stat *pphy_status);

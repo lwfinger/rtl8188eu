@@ -21,7 +21,7 @@
 #include<rtw_iol.h>
 
 #ifdef CONFIG_IOL
-struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
+struct xmit_frame	*rtw_IOL_accquire_xmit_frame(struct adapter *adapter)
 {
 	struct xmit_frame	*xmit_frame;
 	struct xmit_buf	*xmitbuf;
@@ -96,7 +96,7 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 	
 	return _SUCCESS;
 }
-bool rtw_IOL_applied(ADAPTER *adapter)
+bool rtw_IOL_applied(struct adapter *adapter)
 {	
 	if(1 == adapter->registrypriv.fw_iol)
 		return _TRUE;
@@ -109,7 +109,7 @@ bool rtw_IOL_applied(ADAPTER *adapter)
 	return _FALSE;
 }
 /*
-bool rtw_IOL_applied(ADAPTER *adapter)
+bool rtw_IOL_applied(struct adapter *adapter)
 {
 	if(adapter->registrypriv.fw_iol)
 		return _TRUE;
@@ -123,7 +123,7 @@ bool rtw_IOL_applied(ADAPTER *adapter)
 }
 */
 
-int rtw_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
+int rtw_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {
 	return rtw_hal_iol_cmd(adapter, xmit_frame, max_wating_ms,bndy_cnt);
 }
@@ -262,7 +262,7 @@ u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame)
 	return is_cmd_bndy;
 }
 
-void rtw_IOL_cmd_buf_dump(ADAPTER *Adapter,int buf_len,u8 *pbuf)
+void rtw_IOL_cmd_buf_dump(struct adapter *Adapter,int buf_len,u8 *pbuf)
 {
 	int i;
 	int j=1;
@@ -376,7 +376,7 @@ int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame)
 
 }
 
-int rtw_IOL_exec_cmd_array_sync(PADAPTER adapter, u8 *IOL_cmds, u32 cmd_num, u32 max_wating_ms)
+int rtw_IOL_exec_cmd_array_sync(Pstruct adapter adapter, u8 *IOL_cmds, u32 cmd_num, u32 max_wating_ms)
 {
 	struct xmit_frame	*xmit_frame;
 
@@ -389,7 +389,7 @@ int rtw_IOL_exec_cmd_array_sync(PADAPTER adapter, u8 *IOL_cmds, u32 cmd_num, u32
 	return rtw_IOL_exec_cmds_sync(adapter, xmit_frame, max_wating_ms,0);
 }
 
-int rtw_IOL_exec_empty_cmds_sync(ADAPTER *adapter, u32 max_wating_ms)
+int rtw_IOL_exec_empty_cmds_sync(struct adapter *adapter, u32 max_wating_ms)
 {
 	IOL_CMD end_cmd = {0x0, IOL_CMD_END, 0x0, 0x0};
 	return rtw_IOL_exec_cmd_array_sync(adapter, (u8*)&end_cmd, 1, max_wating_ms);

@@ -1270,7 +1270,7 @@ RETURN:
 * Jeff: this function should be called under ioctl (rtnl_lock is accquired) while 
 * LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26)
 */
-int rtw_change_ifname(_adapter *padapter, const char *ifname)
+int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 {
 	struct net_device *pnetdev;
 	struct net_device *cur_pnetdev = padapter->pnetdev;

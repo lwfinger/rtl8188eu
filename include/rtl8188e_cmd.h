@@ -153,24 +153,24 @@ struct P2P_PS_CTWPeriod_t {
 
 
 // host message to firmware cmd
-void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode);
-void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus);
-u8 rtl8188e_set_rssi_cmd(PADAPTER padapter, u8 *param);
-u8 rtl8188e_set_raid_cmd(PADAPTER padapter, u32 mask);
-void rtl8188e_Add_RateATid(PADAPTER padapter, u32 bitmap, u8 arg, u8 rssi_level);
-//u8 rtl8192c_set_FwSelectSuspend_cmd(PADAPTER padapter, u8 bfwpoll, u16 period);
+void rtl8188e_set_FwPwrMode_cmd(struct adapter *padapter, u8 Mode);
+void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus);
+u8 rtl8188e_set_rssi_cmd(struct adapter *padapter, u8 *param);
+u8 rtl8188e_set_raid_cmd(struct adapter *padapter, u32 mask);
+void rtl8188e_Add_RateATid(struct adapter *padapter, u32 bitmap, u8 arg, u8 rssi_level);
+//u8 rtl8192c_set_FwSelectSuspend_cmd(struct adapter *padapter, u8 bfwpoll, u16 period);
 
 
 #ifdef CONFIG_P2P
-void rtl8188e_set_p2p_ps_offload_cmd(PADAPTER padapter, u8 p2p_ps_state);
+void rtl8188e_set_p2p_ps_offload_cmd(struct adapter *padapter, u8 p2p_ps_state);
 #endif //CONFIG_P2P
 
-void CheckFwRsvdPageContent(PADAPTER padapter);
-void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, u16 mstatus_rpt );
+void CheckFwRsvdPageContent(struct adapter *padapter);
+void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, u16 mstatus_rpt );
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
-//u8 rtl8188e_reset_tsf(_adapter *padapter, u8 reset_port);
-int reset_tsf(PADAPTER Adapter, u8 reset_port );
+//u8 rtl8188e_reset_tsf(struct adapter *padapter, u8 reset_port);
+int reset_tsf(struct adapter *Adapter, u8 reset_port );
 #endif	// CONFIG_TSF_RESET_OFFLOAD
 
 #define H2C_8188E_RSVDPAGE_LOC_LEN      5
@@ -236,8 +236,8 @@ typedef struct _SETAOAC_GLOBAL_INFO{
 #define FW_WOW_FW_UNICAST_EN			BIT(7)
 
 #define FW_ADOPT_USER					BIT(1)
-void rtl8188es_set_wowlan_cmd(_adapter* padapter, u8 enable);
-void SetFwRelatedForWoWLAN8188ES(_adapter* padapter, u8 bHostIsGoingtoSleep);
+void rtl8188es_set_wowlan_cmd(struct adapter* padapter, u8 enable);
+void SetFwRelatedForWoWLAN8188ES(struct adapter* padapter, u8 bHostIsGoingtoSleep);
 #endif//CONFIG_WOWLAN
 
 //---------------------------------------------------------------------------------------------------------//

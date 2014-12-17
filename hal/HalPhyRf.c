@@ -25,7 +25,7 @@
 
 VOID
 phy_PathAStandBy(
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 	)
 {
 	RTPRINT(FINIT, INIT_IQK, ("Path-A standby mode!\n"));
@@ -41,7 +41,7 @@ phy_PathAStandBy(
 
 u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_8192C(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		configPathB
 	)
 {
@@ -129,7 +129,7 @@ phy_PathA_IQK_8192C(
 
 u1Byte				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK_8192C(
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 	)
 {
 	u4Byte regEAC, regEB4, regEBC, regEC4, regECC;
@@ -178,7 +178,7 @@ phy_PathB_IQK_8192C(
 
 VOID
 phy_PathAFillIQKMatrix(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN  BOOLEAN    	bIQKOK,
 	IN	s4Byte		result[][8],
 	IN	u1Byte		final_candidate,
@@ -245,7 +245,7 @@ phy_PathAFillIQKMatrix(
 
 VOID
 phy_PathBFillIQKMatrix(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN  BOOLEAN   	bIQKOK,
 	IN	s4Byte		result[][8],
 	IN	u1Byte		final_candidate,
@@ -307,7 +307,7 @@ phy_PathBFillIQKMatrix(
 
 BOOLEAN							
 phy_SimularityCompare_92C(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	s4Byte 		result[][8],
 	IN	u1Byte		 c1,
 	IN	u1Byte		 c2
@@ -379,7 +379,7 @@ return FALSE => do IQK again
 */
 BOOLEAN							
 phy_SimularityCompare(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	s4Byte 		result[][8],
 	IN	u1Byte		 c1,
 	IN	u1Byte		 c2
@@ -394,7 +394,7 @@ phy_SimularityCompare(
 
 VOID	
 phy_IQCalibrate_8192C(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	s4Byte 		result[][8],
 	IN	u1Byte		t,
 	IN	BOOLEAN		is2T
@@ -650,7 +650,7 @@ phy_IQCalibrate_8192C(
 
 VOID	
 phy_LCCalibrate92C(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		is2T
 	)
 {
@@ -714,7 +714,7 @@ phy_LCCalibrate92C(
 
 VOID	
 phy_LCCalibrate(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		is2T
 	)
 {
@@ -741,7 +741,7 @@ phy_LCCalibrate(
 
 VOID	
 phy_APCalibrate_8192C(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	s1Byte 		delta,
 	IN	BOOLEAN		is2T
 	)
@@ -1186,7 +1186,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 VOID
 PHY_IQCalibrate_8192C(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	BOOLEAN 	bReCovery
 	)
 {
@@ -1396,7 +1396,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 VOID
 PHY_LCCalibrate_8192C(
-	IN	PADAPTER	pAdapter
+	IN	struct adapter *pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1404,7 +1404,7 @@ PHY_LCCalibrate_8192C(
 	PMGNT_INFO		pMgntInfo=&pAdapter->MgntInfo;
 	PMGNT_INFO		pMgntInfoBuddyAdapter;
 	u4Byte			timeout = 2000, timecount = 0;
-	PADAPTER	BuddyAdapter = pAdapter->BuddyAdapter;
+	struct adapter *BuddyAdapter = pAdapter->BuddyAdapter;
 
 #if MP_DRIVER == 1	
 if (pAdapter->registrypriv.mp_mode == 1)
@@ -1464,7 +1464,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 VOID
 PHY_APCalibrate_8192C(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	s1Byte 		delta	
 	)
 {
@@ -1509,7 +1509,7 @@ ODM_ResetIQKResult(
 {
 	u1Byte		i;
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP || DM_ODM_SUPPORT_TYPE == ODM_CE)
-	PADAPTER	Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 
 	if (!IS_HARDWARE_TYPE_8192D(Adapter))
 		return;

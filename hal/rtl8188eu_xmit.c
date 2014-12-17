@@ -28,7 +28,7 @@
 #include <usb_ops.h>
 #include <rtl8188e_hal.h>
 
-s32	rtl8188eu_init_xmit_priv(_adapter *padapter)
+s32	rtl8188eu_init_xmit_priv(struct adapter *padapter)
 {
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -43,11 +43,11 @@ s32	rtl8188eu_init_xmit_priv(_adapter *padapter)
 	return _SUCCESS;
 }
 
-void	rtl8188eu_free_xmit_priv(_adapter *padapter)
+void	rtl8188eu_free_xmit_priv(struct adapter *padapter)
 {
 }
 
-u8 urb_zero_packet_chk(_adapter *padapter, int sz)
+u8 urb_zero_packet_chk(struct adapter *padapter, int sz)
 {
 	u8 blnSetTxDescOffset;
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
@@ -79,7 +79,7 @@ void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 //			Fw can tell Hw to send these packet derectly.
 //
 void rtl8188e_fill_fake_txdesc(
-	PADAPTER	padapter,
+	struct adapter *padapter,
 	u8*			pDesc,
 	u32			BufferLen,
 	u8			IsPsPoll,
@@ -227,7 +227,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
       int	pull=0;
 	uint	qsel;
 	u8 data_rate,pwr_status,offset;
-	_adapter			*padapter = pxmitframe->padapter;
+	struct adapter			*padapter = pxmitframe->padapter;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;		
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -524,7 +524,7 @@ if (padapter->registrypriv.mp_mode == 0)
  *	_SUCCESS	ok
  *	_FAIL		something error
  */
-s32 rtl8188eu_xmit_buf_handler(PADAPTER padapter)
+s32 rtl8188eu_xmit_buf_handler(struct adapter *padapter)
 {
 	//PHAL_DATA_TYPE phal;
 	struct xmit_priv *pxmitpriv;
@@ -582,7 +582,7 @@ s32 rtl8188eu_xmit_buf_handler(PADAPTER padapter)
 #include <rtw_iol.h>
 #endif
 //for non-agg data frame or  management frame
-static s32 rtw_dump_xframe(_adapter *padapter, struct xmit_frame *pxmitframe)
+static s32 rtw_dump_xframe(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 ret = _SUCCESS;
 	s32 inner_ret = _SUCCESS;
@@ -691,7 +691,7 @@ static u32 xmitframe_need_length(struct xmit_frame *pxmitframe)
 }
 
 #define IDEA_CONDITION 1	// check all packets before enqueue
-s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
+s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct xmit_frame *pxmitframe = NULL;
@@ -995,7 +995,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 
 #else
 
-s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
+s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 {		
 
 	struct hw_xmit *phwxmits;
@@ -1074,7 +1074,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 
 
 
-static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
+static s32 xmitframe_direct(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 res = _SUCCESS;
 //DBG_8192C("==> %s \n",__FUNCTION__);
@@ -1095,7 +1095,7 @@ static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
  *	_TRUE	dump packet directly
  *	_FALSE	enqueue packet
  */
-static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
+static s32 pre_xmitframe(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {
         _irqL irqL;
 	s32 res;
@@ -1104,7 +1104,7 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 #ifdef CONFIG_CONCURRENT_MODE	
-	PADAPTER pbuddy_adapter = padapter->pbuddy_adapter;
+	struct adapter *pbuddy_adapter = padapter->pbuddy_adapter;
 	struct mlme_priv *pbuddy_mlmepriv = &(pbuddy_adapter->mlmepriv);	
 #endif
 	
@@ -1161,7 +1161,7 @@ enqueue:
 	return _FALSE;
 }
 
-s32 rtl8188eu_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe)
+s32 rtl8188eu_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe)
 {
 	return rtw_dump_xframe(padapter, pmgntframe);
 }
@@ -1171,12 +1171,12 @@ s32 rtl8188eu_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe)
  *	_TRUE	dump packet directly ok
  *	_FALSE	temporary can't transmit packets to hardware
  */
-s32 rtl8188eu_hal_xmit(_adapter *padapter, struct xmit_frame *pxmitframe)
+s32 rtl8188eu_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	return pre_xmitframe(padapter, pxmitframe);
 }
 
-s32	rtl8188eu_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe)
+s32	rtl8188eu_hal_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	struct xmit_priv 	*pxmitpriv = &padapter->xmitpriv;
 	s32 err;
@@ -1210,7 +1210,7 @@ static void rtl8188eu_hostap_mgnt_xmit_cb(struct urb *urb)
 	rtw_skb_free(skb);
 }
 
-s32 rtl8188eu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
+s32 rtl8188eu_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt)
 {
 	u16 fc;
 	int rc, len, pipe;	

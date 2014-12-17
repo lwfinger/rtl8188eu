@@ -93,7 +93,7 @@ static	RF_SHADOW_T	RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
  *						Firmwaer support the utility later.
  *
  *---------------------------------------------------------------------------*/
-void rtl8188e_RF_ChangeTxPath(	IN	PADAPTER	Adapter,
+void rtl8188e_RF_ChangeTxPath(	IN	struct adapter *Adapter,
 										IN	u16		DataRate)
 {
 // We do not support gain table change inACUT now !!!! Delete later !!!
@@ -149,7 +149,7 @@ void rtl8188e_RF_ChangeTxPath(	IN	PADAPTER	Adapter,
  *
  * Overview:    This function is called by SetBWModeCallback8190Pci() only
  *
- * Input:       PADAPTER				Adapter
+ * Input:       struct adapter *			Adapter
  *			WIRELESS_BANDWIDTH_E	Bandwidth	//20M or 40M
  *
  * Output:      NONE
@@ -160,7 +160,7 @@ void rtl8188e_RF_ChangeTxPath(	IN	PADAPTER	Adapter,
  *---------------------------------------------------------------------------*/
 VOID
 rtl8188e_PHY_RF6052SetBandwidth(
-	IN	PADAPTER				Adapter,
+	IN	struct adapter *			Adapter,
 	IN	HT_CHANNEL_WIDTH		Bandwidth)	//20M or 40M
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -204,7 +204,7 @@ rtl8188e_PHY_RF6052SetBandwidth(
 
 VOID
 rtl8188e_PHY_RF6052SetCckTxPower(
-	IN	PADAPTER		Adapter,
+	IN	struct adapter *	Adapter,
 	IN	u8*			pPowerlevel)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -336,7 +336,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 // powerbase1 for HT MCS rates
 //
 static void getPowerBase(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u8*		pPowerLevel,
 	IN	u8		Channel,
 	IN OUT u32*	OfdmBase,
@@ -379,7 +379,7 @@ static void getPowerBase(
 // powerbase1 for HT MCS rates
 //
 void getPowerBase88E(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u8*			pPowerLevelOFDM,
 	IN	u8*			pPowerLevelBW20,
 	IN	u8*			pPowerLevelBW40,
@@ -422,7 +422,7 @@ void getPowerBase88E(
 }
 #if 0
 static void getTxPowerWriteValByRegulatory(
-	IN		PADAPTER	Adapter,
+	IN		struct adapter *Adapter,
 	IN		u8			Channel,
 	IN		u8			index,
 	IN		u32*		powerBase0,
@@ -554,7 +554,7 @@ static void getTxPowerWriteValByRegulatory(
 }
 #endif
 void getTxPowerWriteValByRegulatory88E(
-	IN		PADAPTER	Adapter,
+	IN		struct adapter *Adapter,
 	IN		u8			Channel,
 	IN		u8			index,
 	IN		u32*		powerBase0,
@@ -734,7 +734,7 @@ void getTxPowerWriteValByRegulatory88E(
 }
 
 static void writeOFDMPowerReg88E(
-	IN		PADAPTER	Adapter,
+	IN		struct adapter *Adapter,
 	IN		u8		index,
 	IN 		u32*		pValue
 	)
@@ -818,7 +818,7 @@ static void writeOFDMPowerReg88E(
 
 VOID 
 rtl8188e_PHY_RF6052SetOFDMTxPower(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u8*		pPowerLevelOFDM,
 	IN	u8*		pPowerLevelBW20,
 	IN	u8*		pPowerLevelBW40,	
@@ -863,7 +863,7 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 
 static VOID
 phy_RF6052_Config_HardCode(
-	IN	PADAPTER		Adapter
+	IN	struct adapter *	Adapter
 	)
 {
 
@@ -876,7 +876,7 @@ phy_RF6052_Config_HardCode(
 
 static int
 phy_RF6052_Config_ParaFile(
-	IN	PADAPTER		Adapter
+	IN	struct adapter *	Adapter
 	)
 {
 	u32					u4RegValue;
@@ -996,7 +996,7 @@ phy_RF6052_Config_ParaFile_Fail:
 
 int
 PHY_RF6052_Config8188E(
-	IN	PADAPTER		Adapter)
+	IN	struct adapter *	Adapter)
 {
 	HAL_DATA_TYPE				*pHalData = GET_HAL_DATA(Adapter);
 	int					rtStatus = _SUCCESS;
@@ -1071,7 +1071,7 @@ PHY_RF6052_Config8188E(
  *---------------------------------------------------------------------------*/
 u32
 PHY_RFShadowRead(
-	IN	PADAPTER			Adapter,
+	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
 	IN	u32				Offset)
 {
@@ -1082,7 +1082,7 @@ PHY_RFShadowRead(
 
 VOID
 PHY_RFShadowWrite(
-	IN	PADAPTER			Adapter,
+	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
 	IN	u32				Offset,
 	IN	u32				Data)
@@ -1095,7 +1095,7 @@ PHY_RFShadowWrite(
 
 BOOLEAN
 PHY_RFShadowCompare(
-	IN	PADAPTER			Adapter,
+	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
 	IN	u32				Offset)
 {
@@ -1121,7 +1121,7 @@ PHY_RFShadowCompare(
 
 VOID
 PHY_RFShadowRecorver(
-	IN	PADAPTER			Adapter,
+	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
 	IN	u32				Offset)
 {
@@ -1144,7 +1144,7 @@ PHY_RFShadowRecorver(
 
 VOID
 PHY_RFShadowCompareAll(
-	IN	PADAPTER			Adapter)
+	IN	struct adapter *		Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1162,7 +1162,7 @@ PHY_RFShadowCompareAll(
 
 VOID
 PHY_RFShadowRecorverAll(
-	IN	PADAPTER			Adapter)
+	IN	struct adapter *		Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1180,7 +1180,7 @@ PHY_RFShadowRecorverAll(
 
 VOID
 PHY_RFShadowCompareFlagSet(
-	IN	PADAPTER			Adapter,
+	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
 	IN	u32				Offset,
 	IN	u8				Type)
@@ -1193,7 +1193,7 @@ PHY_RFShadowCompareFlagSet(
 
 VOID
 PHY_RFShadowRecorverFlagSet(
-	IN	PADAPTER			Adapter,
+	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
 	IN	u32				Offset,
 	IN	u8				Type)
@@ -1206,7 +1206,7 @@ PHY_RFShadowRecorverFlagSet(
 
 VOID
 PHY_RFShadowCompareFlagSetAll(
-	IN	PADAPTER			Adapter)
+	IN	struct adapter *		Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1228,7 +1228,7 @@ PHY_RFShadowCompareFlagSetAll(
 
 VOID
 PHY_RFShadowRecorverFlagSetAll(
-	IN	PADAPTER			Adapter)
+	IN	struct adapter *		Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;
@@ -1249,7 +1249,7 @@ PHY_RFShadowRecorverFlagSetAll(
 
 VOID
 PHY_RFShadowRefresh(
-	IN	PADAPTER			Adapter)
+	IN	struct adapter *		Adapter)
 {
 	u32		eRFPath;
 	u32		Offset;

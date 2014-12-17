@@ -153,7 +153,7 @@ void dump_chip_info(HAL_VERSION	ChipVersion);
 
 u8	//return the final channel plan decision
 hal_com_get_channel_plan(
-	IN	PADAPTER	padapter,
+	IN	struct adapter *padapter,
 	IN	u8			hw_channel_plan,	//channel plan from HW (efuse/eeprom)
 	IN	u8			sw_channel_plan,	//channel plan from SW (registry/module param)
 	IN	u8			def_channel_plan,	//channel plan used when the former two is invalid
@@ -163,23 +163,23 @@ hal_com_get_channel_plan(
 u8	MRateToHwRate(u8 rate);
 
 void	HalSetBrateCfg(
-	IN PADAPTER		Adapter,
+	IN struct adapter *	Adapter,
 	IN u8			*mBratesOS,
 	OUT u16			*pBrateCfg);
 
 BOOLEAN
 Hal_MappingOutPipe(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8		NumOutPipe
 	);
 
-void hal_init_macaddr(_adapter *adapter);
+void hal_init_macaddr(struct adapter *adapter);
 
-void c2h_evt_clear(_adapter *adapter);
-s32 c2h_evt_read(_adapter *adapter, u8 *buf);
+void c2h_evt_clear(struct adapter *adapter);
+s32 c2h_evt_read(struct adapter *adapter, u8 *buf);
 
-u8 SetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
-u8 GetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
+u8 SetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
+u8 GetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
 
 #endif //__HAL_COMMON_H__
 

@@ -81,7 +81,7 @@ typedef struct _DR_VARIABLE_STRUCT_ {
 	u32 variable;
 }DR_VARIABLE_STRUCT;
 
-//int mp_start_joinbss(_adapter *padapter, NDIS_802_11_SSID *pssid);
+//int mp_start_joinbss(struct adapter *padapter, NDIS_802_11_SSID *pssid);
 
 //void _irqlevel_changed_(_irqL *irqlevel, /*BOOLEAN*/unsigned char bLower);
 #ifdef PLATFORM_OS_XP

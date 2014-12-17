@@ -29,7 +29,7 @@
 #endif
 
 #ifdef CONFIG_IPS
-void _ips_enter(_adapter * padapter)
+void _ips_enter(struct adapter * padapter)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 
@@ -64,7 +64,7 @@ void _ips_enter(_adapter * padapter)
 	
 }
 
-void ips_enter(_adapter * padapter)
+void ips_enter(struct adapter * padapter)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 
@@ -73,7 +73,7 @@ void ips_enter(_adapter * padapter)
 	_exit_pwrlock(&pwrpriv->lock);
 }
 
-int _ips_leave(_adapter * padapter)
+int _ips_leave(struct adapter * padapter)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	int result = _SUCCESS;
@@ -100,7 +100,7 @@ int _ips_leave(_adapter * padapter)
 	return result;
 }
 
-int ips_leave(_adapter * padapter)
+int ips_leave(struct adapter * padapter)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	int ret;
@@ -114,18 +114,18 @@ int ips_leave(_adapter * padapter)
 #endif /* CONFIG_IPS */
 
 #ifdef CONFIG_AUTOSUSPEND
-extern void autosuspend_enter(_adapter* padapter);	
-extern int autoresume_enter(_adapter* padapter);
+extern void autosuspend_enter(struct adapter* padapter);	
+extern int autoresume_enter(struct adapter* padapter);
 #endif
 
 #ifdef SUPPORT_HW_RFOFF_DETECTED
-int rtw_hw_suspend(_adapter *padapter );
-int rtw_hw_resume(_adapter *padapter);
+int rtw_hw_suspend(struct adapter *padapter );
+int rtw_hw_resume(struct adapter *padapter);
 #endif
 
-bool rtw_pwr_unassociated_idle(_adapter *adapter)
+bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 {
-	_adapter *buddy = adapter->pbuddy_adapter;
+	struct adapter *buddy = adapter->pbuddy_adapter;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 	struct xmit_priv *pxmit_priv = &adapter->xmitpriv;
 #ifdef CONFIG_P2P
@@ -204,7 +204,7 @@ exit:
 	return ret;
 }
 
-void rtw_ps_processor(_adapter*padapter)
+void rtw_ps_processor(struct adapter*padapter)
 {
 #ifdef CONFIG_P2P
 	struct wifidirect_info	*pwdinfo = &( padapter->wdinfo );
@@ -334,7 +334,7 @@ exit:
 
 void pwr_state_check_handler(void *FunctionContext)
 {
-	_adapter *padapter = (_adapter *)FunctionContext;
+	struct adapter *padapter = (struct adapter *)FunctionContext;
 	rtw_ps_cmd(padapter);
 }
 
@@ -346,7 +346,7 @@ void pwr_state_check_handler(void *FunctionContext)
  *	pslv			power state level, only could be PS_STATE_S0 ~ PS_STATE_S4
  *
  */
-void rtw_set_rpwm(PADAPTER padapter, u8 pslv)
+void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 {
 	u8	rpwm;
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
@@ -477,8 +477,8 @@ _func_enter_;
 _func_exit_;
 }
 
-u8 PS_RDY_CHECK(_adapter * padapter);
-u8 PS_RDY_CHECK(_adapter * padapter)
+u8 PS_RDY_CHECK(struct adapter * padapter);
+u8 PS_RDY_CHECK(struct adapter * padapter)
 {
 	u32 curr_time, delta_time;
 	struct pwrctrl_priv	*pwrpriv = adapter_to_pwrctl(padapter);
@@ -524,7 +524,7 @@ u8 PS_RDY_CHECK(_adapter * padapter)
 	return _TRUE;
 }
 
-void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode)
+void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 #ifdef CONFIG_P2P
@@ -688,7 +688,7 @@ _func_exit_;
  *	-1:	Timeout
  *	-2:	Other error
  */
-s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms)
+s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
 {
 	u32 start_time;
 	u8 bAwake = _FALSE;
@@ -725,11 +725,11 @@ s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms)
 //	Description:
 //		Enter the leisure power save mode.
 //
-void LPS_Enter(PADAPTER padapter)
+void LPS_Enter(struct adapter *padapter)
 {
 	struct pwrctrl_priv	*pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	_adapter *buddy = padapter->pbuddy_adapter;
+	struct adapter *buddy = padapter->pbuddy_adapter;
 
 _func_enter_;
 
@@ -794,7 +794,7 @@ _func_exit_;
 //	Description:
 //		Leave the leisure power save mode.
 //
-void LPS_Leave(PADAPTER padapter)
+void LPS_Leave(struct adapter *padapter)
 {
 #define LPS_LEAVE_TIMEOUT_MS 100
 
@@ -834,7 +834,7 @@ _func_exit_;
 // Description: Leave all power save mode: LPS, FwLPS, IPS if needed.
 // Move code to function by tynli. 2010.03.26. 
 //
-void LeaveAllPowerSaveMode(IN PADAPTER Adapter)
+void LeaveAllPowerSaveMode(IN struct adapter *Adapter)
 {
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 	u8	enqueue = 0;
@@ -893,7 +893,7 @@ _func_exit_;
 
 #ifdef CONFIG_LPS_LCLK
 void LPS_Leave_check(
-	PADAPTER padapter)
+	struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrpriv;
 	u32	start_time;
@@ -947,7 +947,7 @@ _func_exit_;
  * using to update cpwn of drv; and drv willl make a decision to up or down pwr level
  */
 void cpwm_int_hdl(
-	PADAPTER padapter,
+	struct adapter *padapter,
 	struct reportpwrstate_parm *preportpwrstate)
 {
 	struct pwrctrl_priv *pwrpriv;
@@ -1000,7 +1000,7 @@ static void cpwm_event_callback(struct work_struct *work)
 {
 	struct pwrctrl_priv *pwrpriv = container_of(work, struct pwrctrl_priv, cpwm_event);
 	struct dvobj_priv *dvobj = pwrctl_to_dvobj(pwrpriv);
-	_adapter *adapter = dvobj->if1;
+	struct adapter *adapter = dvobj->if1;
 	struct reportpwrstate_parm report;
 
 	//DBG_871X("%s\n",__FUNCTION__);
@@ -1012,7 +1012,7 @@ static void cpwm_event_callback(struct work_struct *work)
 #ifdef CONFIG_LPS_RPWM_TIMER
 static void rpwmtimeout_workitem_callback(struct work_struct *work)
 {
-	PADAPTER padapter;
+	struct adapter *padapter;
 	struct dvobj_priv *dvobj;
 	struct pwrctrl_priv *pwrpriv;
 
@@ -1065,7 +1065,7 @@ exit:
  */
 static void pwr_rpwm_timeout_handler(void *FunctionContext)
 {
-	PADAPTER padapter;
+	struct adapter *padapter;
 	struct pwrctrl_priv *pwrpriv;
 
 
@@ -1106,7 +1106,7 @@ __inline static void unregister_task_alive(struct pwrctrl_priv *pwrctrl, u32 tag
  *	 _SUCCESS	rtw_xmit_thread can write fifo/txcmd afterwards.
  *	 _FAIL		rtw_xmit_thread can not do anything.
  */
-s32 rtw_register_tx_alive(PADAPTER padapter)
+s32 rtw_register_tx_alive(struct adapter *padapter)
 {
 	s32 res;
 	struct pwrctrl_priv *pwrctrl;
@@ -1172,7 +1172,7 @@ _func_exit_;
  *	_SUCCESS	rtw_cmd_thread can issue cmds to firmware afterwards.
  *	_FAIL		rtw_cmd_thread can not do anything.
  */
-s32 rtw_register_cmd_alive(PADAPTER padapter)
+s32 rtw_register_cmd_alive(struct adapter *padapter)
 {
 	s32 res;
 	struct pwrctrl_priv *pwrctrl;
@@ -1234,7 +1234,7 @@ _func_exit_;
  *	_SUCCESS
  *	_FAIL
  */
-s32 rtw_register_rx_alive(PADAPTER padapter)
+s32 rtw_register_rx_alive(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
 
@@ -1265,7 +1265,7 @@ _func_exit_;
  *	_SUCCESS
  *	_FAIL
  */
-s32 rtw_register_evt_alive(PADAPTER padapter)
+s32 rtw_register_evt_alive(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
 
@@ -1294,7 +1294,7 @@ _func_exit_;
  * No more pkts for TX,
  * Then driver shall call this fun. to power down firmware again.
  */
-void rtw_unregister_tx_alive(PADAPTER padapter)
+void rtw_unregister_tx_alive(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
 
@@ -1332,7 +1332,7 @@ _func_exit_;
  * and no more command to do,
  * then driver shall call this fun. to power down firmware again.
  */
-void rtw_unregister_cmd_alive(PADAPTER padapter)
+void rtw_unregister_cmd_alive(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
 
@@ -1366,7 +1366,7 @@ _func_exit_;
 /*
  * Caller: ISR
  */
-void rtw_unregister_rx_alive(PADAPTER padapter)
+void rtw_unregister_rx_alive(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
 
@@ -1387,7 +1387,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void rtw_unregister_evt_alive(PADAPTER padapter)
+void rtw_unregister_evt_alive(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrl;
 
@@ -1411,7 +1411,7 @@ _func_exit_;
 static void resume_workitem_callback(struct work_struct *work);
 #endif //CONFIG_RESUME_IN_WORKQUEUE
 
-void rtw_init_pwrctrl_priv(PADAPTER padapter)
+void rtw_init_pwrctrl_priv(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 
@@ -1494,7 +1494,7 @@ _func_exit_;
 }
 
 
-void rtw_free_pwrctrl_priv(PADAPTER adapter)
+void rtw_free_pwrctrl_priv(struct adapter *adapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(adapter);
 
@@ -1527,13 +1527,13 @@ _func_exit_;
 
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 #if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-extern int rtw_resume_process(_adapter *padapter);
+extern int rtw_resume_process(struct adapter *padapter);
 #endif
 static void resume_workitem_callback(struct work_struct *work)
 {
 	struct pwrctrl_priv *pwrpriv = container_of(work, struct pwrctrl_priv, resume_work);
 	struct dvobj_priv *dvobj = pwrctl_to_dvobj(pwrpriv);
-	_adapter *adapter = dvobj->if1;
+	struct adapter *adapter = dvobj->if1;
 
 	DBG_871X("%s\n",__FUNCTION__);
 
@@ -1575,7 +1575,7 @@ inline void rtw_set_do_late_resume(struct pwrctrl_priv *pwrpriv, bool enable)
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 #if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-extern int rtw_resume_process(_adapter *padapter);
+extern int rtw_resume_process(struct adapter *padapter);
 #endif
 static void rtw_early_suspend(struct early_suspend *h)
 {
@@ -1589,7 +1589,7 @@ static void rtw_late_resume(struct early_suspend *h)
 {
 	struct pwrctrl_priv *pwrpriv = container_of(h, struct pwrctrl_priv, early_suspend);
 	struct dvobj_priv *dvobj = pwrctl_to_dvobj(pwrpriv);
-	_adapter *adapter = dvobj->if1;
+	struct adapter *adapter = dvobj->if1;
 
 	DBG_871X("%s\n",__FUNCTION__);
 	if(pwrpriv->do_late_resume) {
@@ -1627,7 +1627,7 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv)
 
 #ifdef CONFIG_ANDROID_POWER
 #if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-extern int rtw_resume_process(PADAPTER padapter);
+extern int rtw_resume_process(struct adapter *padapter);
 #endif
 static void rtw_early_suspend(android_early_suspend_t *h)
 {
@@ -1641,7 +1641,7 @@ static void rtw_late_resume(android_early_suspend_t *h)
 {
 	struct pwrctrl_priv *pwrpriv = container_of(h, struct pwrctrl_priv, early_suspend);
 	struct dvobj_priv *dvobj = pwrctl_to_dvobj(pwrpriv);
-	_adapter *adapter = dvobj->if1;
+	struct adapter *adapter = dvobj->if1;
 
 	DBG_871X("%s\n",__FUNCTION__);
 	if(pwrpriv->do_late_resume) {
@@ -1677,7 +1677,7 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv)
 }
 #endif //CONFIG_ANDROID_POWER
 
-u8 rtw_interface_ps_func(_adapter *padapter,HAL_INTF_PS_FUNC efunc_id,u8* val)
+u8 rtw_interface_ps_func(struct adapter *padapter,HAL_INTF_PS_FUNC efunc_id,u8* val)
 {
 	u8 bResult = _TRUE;
 	rtw_hal_intf_ps_func(padapter,efunc_id,val);
@@ -1686,7 +1686,7 @@ u8 rtw_interface_ps_func(_adapter *padapter,HAL_INTF_PS_FUNC efunc_id,u8* val)
 }
 
 
-inline void rtw_set_ips_deny(_adapter *padapter, u32 ms)
+inline void rtw_set_ips_deny(struct adapter *padapter, u32 ms)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ms);
@@ -1694,12 +1694,12 @@ inline void rtw_set_ips_deny(_adapter *padapter, u32 ms)
 
 /*
 * rtw_pwr_wakeup - Wake the NIC up from: 1)IPS. 2)USB autosuspend
-* @adapter: pointer to _adapter structure
+* @adapter: pointer to struct adapter structure
 * @ips_deffer_ms: the ms wiil prevent from falling into IPS after wakeup
 * Return _SUCCESS or _FAIL
 */
 
-int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
+int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *caller)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;	
@@ -1851,7 +1851,7 @@ exit:
 
 }
 
-int rtw_pm_set_lps(_adapter *padapter, u8 mode)
+int rtw_pm_set_lps(struct adapter *padapter, u8 mode)
 {
 	int	ret = 0;	
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
@@ -1880,7 +1880,7 @@ int rtw_pm_set_lps(_adapter *padapter, u8 mode)
 	return ret;
 }
 
-int rtw_pm_set_ips(_adapter *padapter, u8 mode)
+int rtw_pm_set_ips(struct adapter *padapter, u8 mode)
 {
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 

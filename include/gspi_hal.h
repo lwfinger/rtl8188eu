@@ -20,9 +20,9 @@
 #ifndef __GSPI_HAL_H__
 #define __GSPI_HAL_H__
 
-void spi_int_dpc(PADAPTER padapter);
+void spi_int_dpc(struct adapter *padapter);
 
-void rtl8188es_set_hal_ops(PADAPTER padapter);
+void rtl8188es_set_hal_ops(struct adapter *padapter);
 #define hal_set_hal_ops rtl8188es_set_hal_ops
 
 #endif //__GSPI_HAL_H__

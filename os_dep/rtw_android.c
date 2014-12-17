@@ -244,7 +244,7 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
 
 static int rtw_android_get_rssi(struct net_device *net, char *command, int total_len)
 {
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(net);
+	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(net);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);	
 	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
@@ -259,7 +259,7 @@ static int rtw_android_get_rssi(struct net_device *net, char *command, int total
 
 static int rtw_android_get_link_speed(struct net_device *net, char *command, int total_len)
 {
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(net);
+	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(net);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);	
 	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
@@ -273,7 +273,7 @@ static int rtw_android_get_link_speed(struct net_device *net, char *command, int
 
 static int rtw_android_get_macaddr(struct net_device *net, char *command, int total_len)
 {
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
+	struct adapter *adapter = (struct adapter *)rtw_netdev_priv(net);
 	int bytes_written = 0;
 	
 	bytes_written = snprintf(command, total_len, "Macaddr = "MAC_FMT, MAC_ARG(net->dev_addr));
@@ -282,7 +282,7 @@ static int rtw_android_get_macaddr(struct net_device *net, char *command, int to
 
 static int rtw_android_set_country(struct net_device *net, char *command, int total_len)
 {
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
+	struct adapter *adapter = (struct adapter *)rtw_netdev_priv(net);
 	char *country_code = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_COUNTRY]) + 1;
 	int ret = _FAIL;
 	
@@ -304,7 +304,7 @@ static int rtw_android_get_p2p_dev_addr(struct net_device *net, char *command, i
 
 static int rtw_android_set_block(struct net_device *net, char *command, int total_len)
 {
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(net);
+	struct adapter *adapter = (struct adapter *)rtw_netdev_priv(net);
 	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
 
 	#ifdef CONFIG_IOCTL_CFG80211
@@ -337,7 +337,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	int cmd_num;
 	int bytes_written = 0;
 	android_wifi_priv_cmd priv_cmd;
-	_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
+	struct adapter*	padapter = ( struct adapter * ) rtw_netdev_priv(net);
 #ifdef CONFIG_WFD
 	struct wifi_display_info		*pwfd_info;
 #endif
@@ -399,7 +399,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		break;
 		
 	case ANDROID_WIFI_CMD_SCAN_ACTIVE:
-		//rtw_set_scan_mode((_adapter *)rtw_netdev_priv(net), SCAN_ACTIVE);
+		//rtw_set_scan_mode((struct adapter *)rtw_netdev_priv(net), SCAN_ACTIVE);
 #ifdef CONFIG_PLATFORM_MSTAR		
 #ifdef CONFIG_IOCTL_CFG80211
 		(wdev_to_priv(net->ieee80211_ptr))->bandroid_scan = _TRUE;	
@@ -407,7 +407,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 #endif //CONFIG_PLATFORM_MSTAR
 		break;
 	case ANDROID_WIFI_CMD_SCAN_PASSIVE:
-		//rtw_set_scan_mode((_adapter *)rtw_netdev_priv(net), SCAN_PASSIVE);
+		//rtw_set_scan_mode((struct adapter *)rtw_netdev_priv(net), SCAN_PASSIVE);
 		break;
 		
 	case ANDROID_WIFI_CMD_RSSI:
@@ -466,7 +466,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	case ANDROID_WIFI_CMD_SETBAND:
 	{
 		uint band = *(command + strlen("SETBAND") + 1) - '0';
-		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
+		struct adapter*	padapter = ( struct adapter * ) rtw_netdev_priv(net);
 
 		if (padapter->chip_type == RTL8192D)
 			padapter->setband = band;
@@ -554,7 +554,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//	Specify the WFD device type ( WFD source/primary sink )
 		
 		struct wifi_display_info		*pwfd_info;
-		_adapter*	padapter = ( _adapter * ) rtw_netdev_priv(net);
+		struct adapter*	padapter = ( struct adapter * ) rtw_netdev_priv(net);
 	
 		pwfd_info = &padapter->wfd_info;
 		if (padapter->wdinfo.driver_interface == DRIVER_CFG80211) {

@@ -39,7 +39,7 @@
 #define RTL88E_EX_MESSAGE_BOX_SIZE	4
 #define RTL88E_RSVDPAGE_SIZE		1024
 
-static u8 _is_fw_read_cmd_down(_adapter* padapter, u8 msgbox_num)
+static u8 _is_fw_read_cmd_down(struct adapter* padapter, u8 msgbox_num)
 {
 	u8	read_down = _FALSE;
 	int 	retry_cnts = 100;
@@ -73,7 +73,7 @@ static u8 _is_fw_read_cmd_down(_adapter* padapter, u8 msgbox_num)
 *|31 - 0	  |
 *|ext_msg|
 ******************************************/
-static s32 FillH2CCmd_88E(PADAPTER padapter, u8 ElementID, u32 CmdLen, u8 *pCmdBuffer)
+static s32 FillH2CCmd_88E(struct adapter *padapter, u8 ElementID, u32 CmdLen, u8 *pCmdBuffer)
 {
 	u8 bcmd_down = _FALSE;
 	s32 retry_cnts = 100;
@@ -170,7 +170,7 @@ _func_exit_;
 	return ret;
 }
 
-u8 rtl8192c_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
+u8 rtl8192c_h2c_msg_hdl(struct adapter *padapter, unsigned char *pbuf)
 {
 	u8 ElementID, CmdLen;
 	u8 *pCmdBuffer;
@@ -190,7 +190,7 @@ u8 rtl8192c_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
 }
 /*
 #if defined(CONFIG_AUTOSUSPEND) && defined(SUPPORT_HW_RFOFF_DETECTED)
-u8 rtl8192c_set_FwSelectSuspend_cmd(_adapter *padapter ,u8 bfwpoll, u16 period)
+u8 rtl8192c_set_FwSelectSuspend_cmd(struct adapter *padapter ,u8 bfwpoll, u16 period)
 {
 	u8	res=_SUCCESS;
 	struct H2C_SS_RFOFF_PARAM param;
@@ -202,7 +202,7 @@ u8 rtl8192c_set_FwSelectSuspend_cmd(_adapter *padapter ,u8 bfwpoll, u16 period)
 }
 #endif //CONFIG_AUTOSUSPEND && SUPPORT_HW_RFOFF_DETECTED
 */
-u8 rtl8188e_set_rssi_cmd(_adapter*padapter, u8 *param)
+u8 rtl8188e_set_rssi_cmd(struct adapter*padapter, u8 *param)
 {
 	u8	res=_SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -224,7 +224,7 @@ _func_exit_;
 	return res;
 }
 
-u8 rtl8188e_set_raid_cmd(_adapter*padapter, u32 mask)
+u8 rtl8188e_set_raid_cmd(struct adapter*padapter, u32 mask)
 {
 	u8	buf[3];
 	u8	res=_SUCCESS;
@@ -251,7 +251,7 @@ _func_exit_;
 //bitmap[28:31]= Rate Adaptive id
 //arg[0:4] = macid
 //arg[5] = Short GI
-void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
+void rtl8188e_Add_RateATid(struct adapter *pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	//struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -301,7 +301,7 @@ void rtl8188e_Add_RateATid(PADAPTER pAdapter, u32 bitmap, u8 arg, u8 rssi_level)
 
 }
 
-void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode)
+void rtl8188e_set_FwPwrMode_cmd(struct adapter *padapter, u8 Mode)
 {
 	SETPWRMODE_PARM H2CSetPwrMode;
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
@@ -359,7 +359,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, u16 mstatus_rpt )
+void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, u16 mstatus_rpt )
 {
 	u8 opmode,macid;
 	u16 mst_rpt = cpu_to_le16 (mstatus_rpt);
@@ -388,7 +388,7 @@ void rtl8188e_set_FwMediaStatus_cmd(PADAPTER padapter, u16 mstatus_rpt )
 	
 }
 
-void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
+void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -490,7 +490,7 @@ _ConstructBeacon:
 
 }
 
-void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
+void ConstructPSPoll(struct adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -521,7 +521,7 @@ void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 }
 
 void ConstructNullFunctionData(
-	PADAPTER padapter,
+	struct adapter *padapter,
 	u8		*pframe,
 	u32		*pLength,
 	u8		*StaAddr,
@@ -593,7 +593,7 @@ void ConstructNullFunctionData(
 	*pLength = pktlen;
 }
 
-void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, BOOLEAN bHideSSID)
+void ConstructProbeRsp(struct adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, BOOLEAN bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	u16					*fctrl;
@@ -639,7 +639,7 @@ void ConstructProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr
 //	Construct the ARP response packet to support ARP offload.
 //
 static void ConstructARPResponse(
-	PADAPTER padapter,
+	struct adapter *padapter,
 	u8			*pframe,
 	u32			*pLength,
 	u8			*pIPAddress
@@ -802,7 +802,7 @@ static void ConstructARPResponse(
 }
 #endif
 
-void rtl8188e_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
+void rtl8188e_set_FwRsvdPage_cmd(struct adapter *padapter, PRSVDPAGE_LOC rsvdpageloc)
 {
     u8 u1H2CRsvdPageParm[H2C_8188E_RSVDPAGE_LOC_LEN]={0};
     u8 u1H2CAoacRsvdPageParm[H2C_8188E_AOAC_RSVDPAGE_LOC_LEN]={0};
@@ -829,7 +829,7 @@ void rtl8188e_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
 // 2010.06.23. Added by tynli.
 VOID
 CheckFwRsvdPageContent(
-	IN	PADAPTER		Adapter
+	IN	struct adapter *	Adapter
 )
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
@@ -855,7 +855,7 @@ CheckFwRsvdPageContent(
 //			      TRUE: At the second time, we should send the first packet (default:beacon)
 //						to Hw again and set the lengh in descriptor to the real beacon lengh.
 // 2009.10.15 by tynli.
-static void SetFwRsvdPagePkt(PADAPTER padapter, BOOLEAN bDLFinished)
+static void SetFwRsvdPagePkt(struct adapter *padapter, BOOLEAN bDLFinished)
 {
 	PHAL_DATA_TYPE pHalData;
 	struct xmit_frame	*pmgntframe;
@@ -1019,7 +1019,7 @@ exit:
 	rtw_mfree(ReservedPagePacket, RTL88E_RSVDPAGE_SIZE);
 }
 
-void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
+void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus)
 {
 	JOINBSSRPT_PARM	JoinBssRptParm;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -1193,7 +1193,7 @@ _func_exit_;
 }
 
 #ifdef CONFIG_P2P_PS
-void rtl8188e_set_p2p_ps_offload_cmd(_adapter* padapter, u8 p2p_ps_state)
+void rtl8188e_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct pwrctrl_priv		*pwrpriv = adapter_to_pwrctl(padapter);
@@ -1288,7 +1288,7 @@ _func_exit_;
 /*
 	ask FW to Reset sync register at Beacon early interrupt
 */
-u8 rtl8188e_reset_tsf(_adapter *padapter, u8 reset_port )
+u8 rtl8188e_reset_tsf(struct adapter *padapter, u8 reset_port )
 {	
 	u8	buf[2];
 	u8	res=_SUCCESS;
@@ -1308,7 +1308,7 @@ _func_exit_;
 	return res;
 }
 
-int reset_tsf(PADAPTER Adapter, u8 reset_port )
+int reset_tsf(struct adapter *Adapter, u8 reset_port )
 {
 	u8 reset_cnt_before = 0, reset_cnt_after = 0, loop_cnt = 0;
 	u32 reg_reset_tsf_cnt = (IFACE_PORT0==reset_port) ?
@@ -1334,7 +1334,7 @@ int reset_tsf(PADAPTER Adapter, u8 reset_port )
 
 #ifdef CONFIG_WOWLAN
 #ifdef CONFIG_GPIO_WAKEUP
-void rtl8188es_set_output_gpio(_adapter* padapter, u8 index, u8 outputval)
+void rtl8188es_set_output_gpio(struct adapter* padapter, u8 index, u8 outputval)
 {
 	if ( index <= 7 ) {
 		/* config GPIO mode */
@@ -1376,7 +1376,7 @@ void rtl8188es_set_output_gpio(_adapter* padapter, u8 index, u8 outputval)
 }
 #endif //CONFIG_GPIO_WAKEUP
 
-void rtl8188es_set_wowlan_cmd(_adapter* padapter, u8 enable)
+void rtl8188es_set_wowlan_cmd(struct adapter* padapter, u8 enable)
 {
 	u8		res=_SUCCESS;
 	u32		test=0;

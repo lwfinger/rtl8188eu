@@ -101,7 +101,7 @@ const char *odm_dbg_level_str[] = {
 
 #define RTW_ODM_DBG_LEVEL_NUM 6
 
-int _rtw_odm_dbg_comp_msg(_adapter *adapter, char *buf, int len)
+int _rtw_odm_dbg_comp_msg(struct adapter *adapter, char *buf, int len)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	DM_ODM_T *odm = &pHalData->odmpriv;
@@ -120,7 +120,7 @@ int _rtw_odm_dbg_comp_msg(_adapter *adapter, char *buf, int len)
 	return cnt;
 }
 
-void rtw_odm_dbg_comp_msg(_adapter *adapter)
+void rtw_odm_dbg_comp_msg(struct adapter *adapter)
 {
 	char buf[768] = {0};
 
@@ -128,12 +128,12 @@ void rtw_odm_dbg_comp_msg(_adapter *adapter)
 	DBG_871X_LEVEL(_drv_always_, "\n%s", buf);
 }
 
-inline void rtw_odm_dbg_comp_set(_adapter *adapter, u64 comps)
+inline void rtw_odm_dbg_comp_set(struct adapter *adapter, u64 comps)
 {
 	rtw_hal_set_def_var(adapter, HW_DEF_ODM_DBG_FLAG, &comps);
 }
 
-int _rtw_odm_dbg_level_msg(_adapter *adapter, char *buf, int len)
+int _rtw_odm_dbg_level_msg(struct adapter *adapter, char *buf, int len)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	DM_ODM_T *odm = &pHalData->odmpriv;
@@ -151,7 +151,7 @@ int _rtw_odm_dbg_level_msg(_adapter *adapter, char *buf, int len)
 	return cnt;
 }
 
-void rtw_odm_dbg_level_msg(_adapter *adapter)
+void rtw_odm_dbg_level_msg(struct adapter *adapter)
 {
 	char buf[100] = {0};
 
@@ -159,12 +159,12 @@ void rtw_odm_dbg_level_msg(_adapter *adapter)
 	DBG_871X_LEVEL(_drv_always_, "\n%s", buf);
 }
 
-inline void rtw_odm_dbg_level_set(_adapter *adapter, u32 level)
+inline void rtw_odm_dbg_level_set(struct adapter *adapter, u32 level)
 {
 	rtw_hal_set_def_var(adapter, HW_DEF_ODM_DBG_LEVEL, &level);
 }
 
-int _rtw_odm_adaptivity_parm_msg(_adapter *adapter, char *buf, int len)
+int _rtw_odm_adaptivity_parm_msg(struct adapter *adapter, char *buf, int len)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	DM_ODM_T *odm = &pHalData->odmpriv;
@@ -182,7 +182,7 @@ int _rtw_odm_adaptivity_parm_msg(_adapter *adapter, char *buf, int len)
 	);
 }
 
-void rtw_odm_adaptivity_parm_msg(_adapter *adapter)
+void rtw_odm_adaptivity_parm_msg(struct adapter *adapter)
 {
 	char buf[256] = {0};
 
@@ -190,7 +190,7 @@ void rtw_odm_adaptivity_parm_msg(_adapter *adapter)
 	DBG_871X_LEVEL(_drv_always_, "\n%s", buf);
 }
 
-void rtw_odm_adaptivity_parm_set(_adapter *adapter, s8 TH_L2H_ini, s8 TH_EDCCA_HL_diff,
+void rtw_odm_adaptivity_parm_set(struct adapter *adapter, s8 TH_L2H_ini, s8 TH_EDCCA_HL_diff,
 	s8 IGI_Base, bool ForceEDCCA, u8 AdapEn_RSSI, u8 IGI_LowerBound)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);

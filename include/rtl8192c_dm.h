@@ -249,15 +249,15 @@ struct 	dm_priv
 // function prototype
 //============================================================
 #ifdef CONFIG_BT_COEXIST
-void rtl8192c_set_dm_bt_coexist(_adapter *padapter, u8 bStart);
-void rtl8192c_issue_delete_ba(_adapter *padapter, u8 dir);
+void rtl8192c_set_dm_bt_coexist(struct adapter *padapter, u8 bStart);
+void rtl8192c_issue_delete_ba(struct adapter *padapter, u8 dir);
 #endif
 
-void rtl8192c_init_dm_priv(IN PADAPTER Adapter);
-void rtl8192c_deinit_dm_priv(IN PADAPTER Adapter);
+void rtl8192c_init_dm_priv(IN struct adapter *Adapter);
+void rtl8192c_deinit_dm_priv(IN struct adapter *Adapter);
 
-void rtl8192c_InitHalDm(	IN	PADAPTER	Adapter);
-void rtl8192c_HalDmWatchDog(IN PADAPTER Adapter);
+void rtl8192c_InitHalDm(	IN	struct adapter *Adapter);
+void rtl8192c_HalDmWatchDog(IN struct adapter *Adapter);
 
 #endif	//__HAL8190PCIDM_H__
 

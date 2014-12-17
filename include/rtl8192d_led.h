@@ -29,14 +29,14 @@
 // Interface to manipulate LED objects.
 //================================================================================
 #ifdef CONFIG_USB_HCI
-void rtl8192du_InitSwLeds(_adapter *padapter);
-void rtl8192du_DeInitSwLeds(_adapter *padapter);
+void rtl8192du_InitSwLeds(struct adapter *padapter);
+void rtl8192du_DeInitSwLeds(struct adapter *padapter);
 #endif
 
 #ifdef CONFIG_PCI_HCI
-void rtl8192de_gen_RefreshLedState(PADAPTER Adapter);
-void rtl8192de_InitSwLeds(_adapter *padapter);
-void rtl8192de_DeInitSwLeds(_adapter *padapter);
+void rtl8192de_gen_RefreshLedState(struct adapter *Adapter);
+void rtl8192de_InitSwLeds(struct adapter *padapter);
+void rtl8192de_DeInitSwLeds(struct adapter *padapter);
 #endif
 
 #endif

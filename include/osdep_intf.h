@@ -65,25 +65,25 @@ The protection mechanism is through the pending queue.
 };	
 
 #ifdef CONFIG_R871X_TEST
-int rtw_start_pseudo_adhoc(_adapter *padapter);
-int rtw_stop_pseudo_adhoc(_adapter *padapter);
+int rtw_start_pseudo_adhoc(struct adapter *padapter);
+int rtw_stop_pseudo_adhoc(struct adapter *padapter);
 #endif
 
-u8 rtw_init_drv_sw(_adapter *padapter);
-u8 rtw_free_drv_sw(_adapter *padapter);
-u8 rtw_reset_drv_sw(_adapter *padapter);
+u8 rtw_init_drv_sw(struct adapter *padapter);
+u8 rtw_free_drv_sw(struct adapter *padapter);
+u8 rtw_reset_drv_sw(struct adapter *padapter);
 
-u32 rtw_start_drv_threads(_adapter *padapter);
-void rtw_stop_drv_threads (_adapter *padapter);
+u32 rtw_start_drv_threads(struct adapter *padapter);
+void rtw_stop_drv_threads (struct adapter *padapter);
 #ifdef CONFIG_WOWLAN
-void rtw_cancel_dynamic_chk_timer(_adapter *padapter);
+void rtw_cancel_dynamic_chk_timer(struct adapter *padapter);
 #endif
-void rtw_cancel_all_timer(_adapter *padapter);
+void rtw_cancel_all_timer(struct adapter *padapter);
 
 int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname);
-struct net_device *rtw_init_netdev(_adapter *padapter);
+struct net_device *rtw_init_netdev(struct adapter *padapter);
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 u16 rtw_recv_select_queue(struct sk_buff *skb);
@@ -97,32 +97,32 @@ static void rtw_proc_init_one(struct net_device *dev){}
 static void rtw_proc_remove_one(struct net_device *dev){}
 #endif //!CONFIG_PROC_DEBUG
 
-void rtw_ips_dev_unload(_adapter *padapter);
+void rtw_ips_dev_unload(struct adapter *padapter);
 
 #ifdef CONFIG_RF_GAIN_OFFSET
-void rtw_bb_rf_gain_offset(_adapter *padapter);
+void rtw_bb_rf_gain_offset(struct adapter *padapter);
 #endif //CONFIG_RF_GAIN_OFFSET
 
 #ifdef CONFIG_IPS
-int rtw_ips_pwr_up(_adapter *padapter);
-void rtw_ips_pwr_down(_adapter *padapter);
+int rtw_ips_pwr_up(struct adapter *padapter);
+void rtw_ips_pwr_down(struct adapter *padapter);
 #endif
 
 #ifdef CONFIG_CONCURRENT_MODE
 struct _io_ops;
-_adapter *rtw_drv_if2_init(_adapter *primary_padapter, void (*set_intf_ops)(struct _io_ops *pops));
-void rtw_drv_if2_free(_adapter *if2);
-void rtw_drv_if2_stop(_adapter *if2);
+struct adapter *rtw_drv_if2_init(struct adapter *primary_padapter, void (*set_intf_ops)(struct _io_ops *pops));
+void rtw_drv_if2_free(struct adapter *if2);
+void rtw_drv_if2_stop(struct adapter *if2);
 #endif
 
-int rtw_drv_register_netdev(_adapter *padapter);
+int rtw_drv_register_netdev(struct adapter *padapter);
 void rtw_ndev_destructor(_nic_hdl ndev);
 
-int rtw_suspend_common(_adapter *padapter);
-int rtw_resume_common(_adapter *padapter);
+int rtw_suspend_common(struct adapter *padapter);
+int rtw_resume_common(struct adapter *padapter);
 
 #ifdef CONFIG_ARP_KEEP_ALIVE
-int	rtw_gw_addr_query(_adapter *padapter);
+int	rtw_gw_addr_query(struct adapter *padapter);
 #endif
 
 #endif	//_OSDEP_INTF_H_

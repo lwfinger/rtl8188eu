@@ -43,7 +43,7 @@
 //
 void
 SwLedOn(
-	_adapter			*padapter, 
+	struct adapter			*padapter, 
 	PLED_871x		pLed
 )
 {
@@ -80,7 +80,7 @@ SwLedOn(
 //
 void
 SwLedOff(
-	_adapter			*padapter, 
+	struct adapter			*padapter, 
 	PLED_871x		pLed
 )
 {
@@ -140,7 +140,7 @@ exit:
 //
 void
 rtl8188eu_InitSwLeds(
-	_adapter	*padapter
+	struct adapter	*padapter
 	)
 {
 	struct led_priv *pledpriv = &(padapter->ledpriv);
@@ -159,7 +159,7 @@ rtl8188eu_InitSwLeds(
 //
 void
 rtl8188eu_DeInitSwLeds(
-	_adapter	*padapter
+	struct adapter	*padapter
 	)
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);

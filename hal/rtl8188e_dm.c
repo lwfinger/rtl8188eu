@@ -43,7 +43,7 @@
 
 static VOID
 dm_CheckProtection(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 	)
 {
 #if 0
@@ -70,7 +70,7 @@ dm_CheckProtection(
 
 static VOID
 dm_CheckStatistics(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 	)
 {
 #if 0
@@ -89,7 +89,7 @@ dm_CheckStatistics(
 #endif
 }
 
-static void dm_CheckPbcGPIO(_adapter *padapter)
+static void dm_CheckPbcGPIO(struct adapter *padapter)
 {
 	u8	tmp1byte;
 	u8	bPbcPressed = _FALSE;
@@ -166,7 +166,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 //
 VOID
 dm_InterruptMigration(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -244,7 +244,7 @@ dm_InterruptMigration(
 //
 static void
 dm_InitGPIOSetting(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(Adapter);
@@ -269,7 +269,7 @@ dm_InitGPIOSetting(
 //============================================================
 // functions
 //============================================================
-static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
+static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
 {
 
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
@@ -340,7 +340,7 @@ static void Init_ODM_ComInfo_88E(PADAPTER	Adapter)
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,pdmpriv->InitODMFlag);
 	
 }
-static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
+static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 {
 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 	struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
@@ -426,7 +426,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 
 void
 rtl8188e_InitHalDm(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
@@ -451,7 +451,7 @@ rtl8188e_InitHalDm(
 
 VOID
 rtl8188e_HalDmWatchDog(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	BOOLEAN		bFwCurrentInPSMode = _FALSE;
@@ -461,7 +461,7 @@ rtl8188e_HalDmWatchDog(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
 #ifdef CONFIG_CONCURRENT_MODE
-	PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
+	struct adapter *pbuddy_adapter = Adapter->pbuddy_adapter;
 #endif //CONFIG_CONCURRENT_MODE
 
 	_func_enter_;
@@ -554,7 +554,7 @@ skip_dm:
 	return;
 }
 
-void rtl8188e_init_dm_priv(IN PADAPTER Adapter)
+void rtl8188e_init_dm_priv(IN struct adapter *Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -569,7 +569,7 @@ void rtl8188e_init_dm_priv(IN PADAPTER Adapter)
 	ODM_InitDebugSetting(podmpriv);	
 }
 
-void rtl8188e_deinit_dm_priv(IN PADAPTER Adapter)
+void rtl8188e_deinit_dm_priv(IN struct adapter *Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -586,9 +586,9 @@ void rtl8188e_deinit_dm_priv(IN PADAPTER Adapter)
 // Add new function to reset the state of antenna diversity before link.
 //
 // Compare RSSI for deciding antenna
-void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src)
+void	AntDivCompare8188E(struct adapter *Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src)
 {
-	//PADAPTER Adapter = pDM_Odm->Adapter ;
+	//struct adapter *Adapter = pDM_Odm->Adapter ;
 	
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	if(0 != pHalData->AntDivCfg )
@@ -605,7 +605,7 @@ void	AntDivCompare8188E(PADAPTER Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src
 }
 
 // Add new function to reset the state of antenna diversity before link.
-u8 AntDivBeforeLink8188E(PADAPTER Adapter )
+u8 AntDivBeforeLink8188E(struct adapter *Adapter )
 {
 	
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);	

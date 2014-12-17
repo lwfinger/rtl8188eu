@@ -112,7 +112,7 @@ struct txrpt_ccx_8192c {
 
 #ifdef CONFIG_XMIT_ACK
 void dump_txrpt_ccx_8192c(void *buf);
-void handle_txrpt_ccx_8192c(_adapter *adapter, void *buf);
+void handle_txrpt_ccx_8192c(struct adapter *adapter, void *buf);
 #else
 #define dump_txrpt_ccx_8192c(buf) do {} while(0)
 #define handle_txrpt_ccx_8192c(adapter, buf) do {} while(0)
@@ -124,39 +124,39 @@ void handle_txrpt_ccx_8192c(_adapter *adapter, void *buf);
 #define MAX_TX_AGG_PACKET_NUMBER 0xFF
 #endif
 
-s32	rtl8192cu_init_xmit_priv(_adapter * padapter);
+s32	rtl8192cu_init_xmit_priv(struct adapter * padapter);
 
-void	rtl8192cu_free_xmit_priv(_adapter * padapter);
+void	rtl8192cu_free_xmit_priv(struct adapter * padapter);
 
 void rtl8192cu_cal_txdesc_chksum(struct tx_desc	*ptxdesc);
 
-s32 rtl8192cu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
+s32 rtl8192cu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
 
-s32 rtl8192cu_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe);
+s32 rtl8192cu_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe);
 
-s32 rtl8192cu_hal_xmit(_adapter *padapter, struct xmit_frame *pxmitframe);
+s32 rtl8192cu_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe);
 
 #ifdef CONFIG_HOSTAPD_MLME
-s32 rtl8192cu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt);
+s32 rtl8192cu_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt);
 #endif
 
 #endif
 
 #ifdef CONFIG_PCI_HCI
-s32	rtl8192ce_init_xmit_priv(_adapter * padapter);
-void	rtl8192ce_free_xmit_priv(_adapter * padapter);
+s32	rtl8192ce_init_xmit_priv(struct adapter * padapter);
+void	rtl8192ce_free_xmit_priv(struct adapter * padapter);
 
 s32	rtl8192ce_enqueue_xmitbuf(struct rtw_tx_ring *ring, struct xmit_buf *pxmitbuf);
 struct xmit_buf *rtl8192ce_dequeue_xmitbuf(struct rtw_tx_ring *ring);
 
-void	rtl8192ce_xmitframe_resume(_adapter *padapter);
+void	rtl8192ce_xmitframe_resume(struct adapter *padapter);
 
-s32	rtl8192ce_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe);
+s32	rtl8192ce_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe);
 
-s32	rtl8192ce_hal_xmit(_adapter *padapter, struct xmit_frame *pxmitframe);
+s32	rtl8192ce_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe);
 
 #ifdef CONFIG_HOSTAPD_MLME
-s32	rtl8192ce_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt);
+s32	rtl8192ce_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt);
 #endif
 
 #endif

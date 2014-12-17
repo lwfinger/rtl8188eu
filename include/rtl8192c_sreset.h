@@ -26,8 +26,8 @@
 #include <rtw_sreset.h>
 
 #ifdef DBG_CONFIG_ERROR_DETECT
-extern void rtl8192c_sreset_xmit_status_check(_adapter *padapter);
-extern void rtl8192c_sreset_linked_status_check(_adapter *padapter);
+extern void rtl8192c_sreset_xmit_status_check(struct adapter *padapter);
+extern void rtl8192c_sreset_linked_status_check(struct adapter *padapter);
 #endif
 #endif
 

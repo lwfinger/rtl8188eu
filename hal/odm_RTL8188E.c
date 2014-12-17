@@ -51,7 +51,7 @@ odm_RX_HWAntDivInit(
 )
 {
 	u4Byte	value32;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
         #if (MP_DRIVER == 1)
         if (*(pDM_Odm->mp_mode) == 1)
        	{
@@ -89,7 +89,7 @@ odm_TRX_HWAntDivInit(
 )
 {
 	u4Byte	value32;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	
         #if (MP_DRIVER == 1)
 	if (*(pDM_Odm->mp_mode) == 1)
@@ -142,7 +142,7 @@ odm_FastAntTrainingInit(
 	u4Byte	value32, i;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u4Byte	AntCombination = 2;
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit() \n"));
     
 #if (MP_DRIVER == 1)
@@ -254,7 +254,7 @@ ODM_AntennaDiversityInit_88E(
 	//2012.03.27 LukeLee: For temp use, should be removed later
 	//pDM_Odm->AntDivType = CG_TRX_HW_ANTDIV;
 	//{
-		PADAPTER		Adapter = pDM_Odm->Adapter;
+		struct adapter *	Adapter = pDM_Odm->Adapter;
 		HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
 		//pHalData->AntDivCfg = 1;
 	//}
@@ -537,7 +537,7 @@ odm_SetNextMACAddrTarget(
 	//
 	#if( DM_ODM_SUPPORT_TYPE & ODM_MP)
 	{		
-		PADAPTER	Adapter =  pDM_Odm->Adapter;
+		struct adapter *Adapter =  pDM_Odm->Adapter;
 		PMGNT_INFO	pMgntInfo = &Adapter->MgntInfo;
 
 		for (i=0; i<6; i++)
@@ -696,7 +696,7 @@ odm_FastAntTrainingCallback(
 {
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	PADAPTER	padapter = pDM_Odm->Adapter;
+	struct adapter *padapter = pDM_Odm->Adapter;
 	if(padapter->net_closed == _TRUE)
 	    return;
 	//if(*pDM_Odm->pbNet_closed == TRUE)
@@ -815,7 +815,7 @@ odm_FastAntTrainingCallback(
 	PRT_TIMER		pTimer
 )
 {
-	PADAPTER		Adapter = (PADAPTER)pTimer->Adapter;
+	struct adapter *	Adapter = (PADAPTER)pTimer->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
 	//#if DEV_BUS_TYPE==RT_PCI_INTERFACE
@@ -833,7 +833,7 @@ odm_FastAntTrainingCallback(
 VOID odm_FastAntTrainingCallback(void *FunctionContext)
 {
 	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
-	PADAPTER	padapter = pDM_Odm->Adapter;
+	struct adapter *padapter = pDM_Odm->Adapter;
 	if(padapter->net_closed == _TRUE)
 	    return;
 	odm_FastAntTraining(pDM_Odm);
@@ -898,7 +898,7 @@ odm_DynamicPrimaryCCA(
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
-	PADAPTER	Adapter =  pDM_Odm->Adapter;	// for NIC
+	struct adapter *Adapter =  pDM_Odm->Adapter;	// for NIC
 	prtl8192cd_priv	priv		= pDM_Odm->priv;	// for AP
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

@@ -37,10 +37,10 @@ ODM_Read1Byte(
 	prtl8192cd_priv	priv	= pDM_Odm->priv;
 	return	RTL_R8(RegAddr);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return rtw_read8(Adapter,RegAddr);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return	PlatformEFIORead1Byte(Adapter, RegAddr);
 #endif	
 
@@ -57,10 +57,10 @@ ODM_Read2Byte(
 	prtl8192cd_priv	priv	= pDM_Odm->priv;
 	return	RTL_R16(RegAddr);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return rtw_read16(Adapter,RegAddr);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return	PlatformEFIORead2Byte(Adapter, RegAddr);
 #endif	
 
@@ -77,10 +77,10 @@ ODM_Read4Byte(
 	prtl8192cd_priv	priv	= pDM_Odm->priv;
 	return	RTL_R32(RegAddr);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return rtw_read32(Adapter,RegAddr);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return	PlatformEFIORead4Byte(Adapter, RegAddr);
 #endif	
 
@@ -98,10 +98,10 @@ ODM_Write1Byte(
 	prtl8192cd_priv	priv	= pDM_Odm->priv;
 	RTL_W8(RegAddr, Data);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	rtw_write8(Adapter,RegAddr, Data);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PlatformEFIOWrite1Byte(Adapter, RegAddr, Data);
 #endif
 	
@@ -119,10 +119,10 @@ ODM_Write2Byte(
 	prtl8192cd_priv	priv	= pDM_Odm->priv;
 	RTL_W16(RegAddr, Data);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	rtw_write16(Adapter,RegAddr, Data);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PlatformEFIOWrite2Byte(Adapter, RegAddr, Data);
 #endif	
 
@@ -140,10 +140,10 @@ ODM_Write4Byte(
 	prtl8192cd_priv	priv	= pDM_Odm->priv;
 	RTL_W32(RegAddr, Data);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	rtw_write32(Adapter,RegAddr, Data);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PlatformEFIOWrite4Byte(Adapter, RegAddr, Data);
 #endif	
 
@@ -161,7 +161,7 @@ ODM_SetMACReg(
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	PHY_SetBBReg(pDM_Odm->priv, RegAddr, BitMask, Data);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
 #endif	
 }
@@ -177,7 +177,7 @@ ODM_GetMACReg(
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	return PHY_QueryBBReg(pDM_Odm->priv, RegAddr, BitMask);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
 #endif	
 }
@@ -194,7 +194,7 @@ ODM_SetBBReg(
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	PHY_SetBBReg(pDM_Odm->priv, RegAddr, BitMask, Data);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
 #endif	
 }
@@ -210,7 +210,7 @@ ODM_GetBBReg(
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	return PHY_QueryBBReg(pDM_Odm->priv, RegAddr, BitMask);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
 #endif	
 }
@@ -228,7 +228,7 @@ ODM_SetRFReg(
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	PHY_SetRFReg(pDM_Odm->priv, eRFPath, RegAddr, BitMask, Data);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PHY_SetRFReg(Adapter, eRFPath, RegAddr, BitMask, Data);
 #endif	
 }
@@ -245,7 +245,7 @@ ODM_GetRFReg(
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	return PHY_QueryRFReg(pDM_Odm->priv, eRFPath, RegAddr, BitMask, 1);
 #elif(DM_ODM_SUPPORT_TYPE & (ODM_CE|ODM_MP))
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	return PHY_QueryRFReg(Adapter, eRFPath, RegAddr, BitMask);
 #endif	
 }
@@ -268,7 +268,7 @@ ODM_AllocateMemory(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE )
 	*pPtr = rtw_zvmalloc(length);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PlatformAllocateMemory(Adapter, pPtr, length);
 #endif	
 }
@@ -286,7 +286,7 @@ ODM_FreeMemory(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE )	
 	rtw_vmfree(pPtr, length);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	//PADAPTER    Adapter = pDM_Odm->Adapter;
+	//struct adapter *   Adapter = pDM_Odm->Adapter;
 	PlatformFreeMemory(pPtr, length);
 #endif	
 }
@@ -322,7 +322,7 @@ ODM_AcquireSpinLock(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE )
 	
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PlatformAcquireSpinLock(Adapter, type);
 #endif	
 }
@@ -337,7 +337,7 @@ ODM_ReleaseSpinLock(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE )
 	
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PlatformReleaseSpinLock(Adapter, type);
 #endif	
 }
@@ -359,7 +359,7 @@ ODM_InitializeWorkItem(
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
 	
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PlatformInitializeWorkItem(Adapter, pRtWorkItem, RtWorkItemCallback, pContext, szID);
 #endif	
 }
@@ -516,7 +516,7 @@ ODM_SetTimer(
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
 	_set_timer(pTimer,msDelay ); //ms
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER		Adapter = pDM_Odm->Adapter;
+	struct adapter *	Adapter = pDM_Odm->Adapter;
 	PlatformSetTimer(Adapter, pTimer, msDelay);
 #endif	
 
@@ -536,10 +536,10 @@ ODM_InitializeTimer(
 	pTimer->data = (unsigned long)pDM_Odm;
 	init_timer(pTimer);	
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	_init_timer(pTimer,Adapter->pnetdev,CallBackFunc,pDM_Odm);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	PlatformInitializeTimer(Adapter, pTimer, CallBackFunc,pContext,szID);
 #endif	
 }
@@ -556,7 +556,7 @@ ODM_CancelTimer(
 #elif(DM_ODM_SUPPORT_TYPE & ODM_CE)
 	_cancel_timer_ex(pTimer);
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 	PlatformCancelTimer(Adapter, pTimer);
 #endif
 }
@@ -574,7 +574,7 @@ ODM_ReleaseTimer(
 
 #elif(DM_ODM_SUPPORT_TYPE & ODM_MP)
 
-	PADAPTER Adapter = pDM_Odm->Adapter;
+	struct adapter *Adapter = pDM_Odm->Adapter;
 
     // <20120301, Kordan> If the initilization fails, InitializeAdapterXxx will return regardless of InitHalDm. 
     // Hence, uninitialized timers cause BSOD when the driver releases resources since the init fail.
@@ -595,7 +595,7 @@ ODM_ReleaseTimer(
 #if (DM_ODM_SUPPORT_TYPE & ODM_MP)
 VOID
 ODM_FillH2CCmd(
-	IN	PADAPTER		Adapter,
+	IN	struct adapter *	Adapter,
 	IN	u1Byte 	ElementID,
 	IN	u4Byte 	CmdLen,
 	IN	pu1Byte	pCmdBuffer

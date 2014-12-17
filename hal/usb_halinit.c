@@ -59,7 +59,7 @@
 
 static VOID
 _ConfigNormalChipOutEP_8188E(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8		NumOutPipe
 	)
 {	
@@ -87,7 +87,7 @@ _ConfigNormalChipOutEP_8188E(
 }
 
 static BOOLEAN HalUsbSetQueuePipeMapping8188EUsb(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8		NumInPipe,
 	IN	u8		NumOutPipe
 	)
@@ -115,7 +115,7 @@ static BOOLEAN HalUsbSetQueuePipeMapping8188EUsb(
 
 }
 
-void rtl8188eu_interface_configure(_adapter *padapter)
+void rtl8188eu_interface_configure(struct adapter *padapter)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
@@ -149,7 +149,7 @@ void rtl8188eu_interface_configure(_adapter *padapter)
 
 }
 
-static u32 InitPowerOn_rtl8188eu(_adapter *padapter)
+static u32 InitPowerOn_rtl8188eu(struct adapter *padapter)
 {
 	u16 value16;
 	u8 bMacPwrCtrlOn=_FALSE;
@@ -186,7 +186,7 @@ static u32 InitPowerOn_rtl8188eu(_adapter *padapter)
 }
 
 
-static void _dbg_dump_macreg(_adapter *padapter)
+static void _dbg_dump_macreg(struct adapter *padapter)
 {
 	u32 offset = 0;
 	u32 val32 = 0;
@@ -200,7 +200,7 @@ static void _dbg_dump_macreg(_adapter *padapter)
 }
 
 
-static void _InitPABias(_adapter *padapter)
+static void _InitPABias(struct adapter *padapter)
 {
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(padapter);
 	u8			pa_setting;
@@ -239,7 +239,7 @@ static void _InitPABias(_adapter *padapter)
 	}
 }
 #ifdef CONFIG_BT_COEXIST
-static void _InitBTCoexist(_adapter *padapter)
+static void _InitBTCoexist(struct adapter *padapter)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 	struct btcoexist_priv	*pbtpriv = &(pHalData->bt_coexist);
@@ -300,7 +300,7 @@ static void _InitBTCoexist(_adapter *padapter)
 //---------------------------------------------------------------
 static VOID
 _SetMacID(
-	IN  PADAPTER Adapter, u8* MacID
+	IN  struct adapter *Adapter, u8* MacID
 	)
 {
 	u32 i;
@@ -316,7 +316,7 @@ _SetMacID(
 
 static VOID
 _SetBSSID(
-	IN  PADAPTER Adapter, u8* BSSID
+	IN  struct adapter *Adapter, u8* BSSID
 	)
 {
 	u32 i;
@@ -334,7 +334,7 @@ _SetBSSID(
 // Shall USB interface init this?
 static VOID
 _InitInterrupt(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	u32	imr,imr_ex;
@@ -377,7 +377,7 @@ _InitInterrupt(
 
 static VOID
 _InitQueueReservedPage(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -426,7 +426,7 @@ _InitQueueReservedPage(
 
 static VOID
 _InitTxBufferBoundary(
-	IN PADAPTER Adapter,
+	IN struct adapter *Adapter,
 	IN u8 txpktbuf_bndy
 	)
 {	
@@ -445,7 +445,7 @@ _InitTxBufferBoundary(
 
 static VOID
 _InitPageBoundary(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	// RX Page Boundary	
@@ -471,7 +471,7 @@ _InitPageBoundary(
 
 static VOID
 _InitNormalChipRegPriority(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u16		beQ,
 	IN	u16		bkQ,
 	IN	u16		viQ,
@@ -491,7 +491,7 @@ _InitNormalChipRegPriority(
 
 static VOID
 _InitNormalChipOneOutEpPriority(
-	IN	PADAPTER Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -526,7 +526,7 @@ _InitNormalChipOneOutEpPriority(
 
 static VOID
 _InitNormalChipTwoOutEpPriority(
-	IN	PADAPTER Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -579,7 +579,7 @@ _InitNormalChipTwoOutEpPriority(
 
 static VOID
 _InitNormalChipThreeOutEpPriority(
-	IN	PADAPTER Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -606,7 +606,7 @@ _InitNormalChipThreeOutEpPriority(
 
 static VOID
 _InitQueuePriority(
-	IN	PADAPTER Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -634,7 +634,7 @@ _InitQueuePriority(
 
 static VOID
 _InitHardwareDropIncorrectBulkOut(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 #ifdef ENABLE_USB_DROP_INCORRECT_OUT
@@ -646,7 +646,7 @@ _InitHardwareDropIncorrectBulkOut(
 
 static VOID
 _InitNetworkType(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	u32	value32;
@@ -661,7 +661,7 @@ _InitNetworkType(
 
 static VOID
 _InitTransferPageSize(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	// Tx page size is always 128.
@@ -673,7 +673,7 @@ _InitTransferPageSize(
 
 static VOID
 _InitDriverInfoSize(
-	IN  PADAPTER	Adapter,
+	IN  struct adapter *Adapter,
 	IN	u8		drvInfoSize
 	)
 {
@@ -682,7 +682,7 @@ _InitDriverInfoSize(
 
 static VOID
 _InitWMACSetting(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	//u4Byte			value32;
@@ -728,7 +728,7 @@ _InitWMACSetting(
 
 static VOID
 _InitAdaptiveCtrl(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	u16	value16;
@@ -755,7 +755,7 @@ _InitAdaptiveCtrl(
 
 static VOID
 _InitRateFallback(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	// Set Data Auto Rate Fallback Retry Count register.
@@ -769,7 +769,7 @@ _InitRateFallback(
 
 static VOID
 _InitEDCA(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	// Set Spec SIFS (used in NAV)
@@ -792,7 +792,7 @@ _InitEDCA(
 
 static VOID
 _InitBeaconMaxError(
-	IN  PADAPTER	Adapter,
+	IN  struct adapter *Adapter,
 	IN	BOOLEAN		InfraMode
 	)
 {
@@ -801,7 +801,7 @@ _InitBeaconMaxError(
 
 
 #ifdef CONFIG_LED
-static void _InitHWLed(PADAPTER Adapter)
+static void _InitHWLed(struct adapter *Adapter)
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
 	
@@ -817,7 +817,7 @@ static void _InitHWLed(PADAPTER Adapter)
 
 static VOID
 _InitRDGSetting(
-	IN	PADAPTER Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	rtw_write8(Adapter,REG_RD_CTRL,0xFF);
@@ -827,7 +827,7 @@ _InitRDGSetting(
 
 static VOID
 _InitRxSetting(
-	IN	PADAPTER Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	rtw_write32(Adapter, REG_MACID, 0x87654321);
@@ -836,7 +836,7 @@ _InitRxSetting(
 
 static VOID
 _InitRetryFunction(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	u8	value8;
@@ -866,7 +866,7 @@ _InitRetryFunction(
  *---------------------------------------------------------------------------*/
 static VOID
 usb_AggSettingTxUpdate(
-	IN	PADAPTER			Adapter
+	IN	struct adapter *		Adapter
 	)
 {
 #ifdef CONFIG_USB_TX_AGGREGATION
@@ -906,7 +906,7 @@ usb_AggSettingTxUpdate(
  *---------------------------------------------------------------------------*/
 static VOID
 usb_AggSettingRxUpdate(
-	IN	PADAPTER			Adapter
+	IN	struct adapter *		Adapter
 	)
 {
 #ifdef CONFIG_USB_RX_AGGREGATION
@@ -992,7 +992,7 @@ usb_AggSettingRxUpdate(
 
 static VOID
 InitUsbAggregationSetting(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1008,7 +1008,7 @@ InitUsbAggregationSetting(
 }
 VOID
 HalRxAggr8188EUsb(
-	IN  PADAPTER Adapter,
+	IN  struct adapter *Adapter,
 	IN BOOLEAN	Value
 	)
 {
@@ -1065,14 +1065,14 @@ HalRxAggr8188EUsb(
  *---------------------------------------------------------------------------*/
 VOID
 USB_AggModeSwitch(
-	IN	PADAPTER			Adapter
+	IN	struct adapter *		Adapter
 	)
 {
 }	// USB_AggModeSwitch
 
 static VOID
 _InitOperationMode(
-	IN	PADAPTER			Adapter
+	IN	struct adapter *		Adapter
 	)
 {
 }
@@ -1080,7 +1080,7 @@ _InitOperationMode(
 
  static VOID
 _InitBeaconParameters(
-	IN  PADAPTER Adapter
+	IN  struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1105,7 +1105,7 @@ _InitBeaconParameters(
 
 static VOID
 _InitRFType(
-	IN	PADAPTER Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	struct registry_priv	 *pregpriv = &Adapter->registrypriv;
@@ -1135,7 +1135,7 @@ _InitRFType(
 
 static VOID
 _BeaconFunctionEnable(
-	IN	PADAPTER		Adapter,
+	IN	struct adapter *	Adapter,
 	IN	BOOLEAN			Enable,
 	IN	BOOLEAN			Linked
 	)
@@ -1150,7 +1150,7 @@ _BeaconFunctionEnable(
 
 // Set CCK and OFDM Block "ON"
 static VOID _BBTurnOnBlock(
-	IN	PADAPTER		Adapter
+	IN	struct adapter *	Adapter
 	)
 {
 #if (DISABLE_BB_RF)
@@ -1162,7 +1162,7 @@ static VOID _BBTurnOnBlock(
 }
 
 static VOID _RfPowerSave(
-	IN	PADAPTER		Adapter
+	IN	struct adapter *	Adapter
 	)
 {
 #if 0
@@ -1201,7 +1201,7 @@ enum {
 };
 
 static VOID
-_InitAntenna_Selection(IN	PADAPTER Adapter)
+_InitAntenna_Selection(IN	struct adapter *Adapter)
 {
 
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1229,7 +1229,7 @@ _InitAntenna_Selection(IN	PADAPTER Adapter)
 //
 static VOID
 HalDetectSelectiveSuspendMode(
-	IN PADAPTER				Adapter
+	IN struct adapter *			Adapter
 	)
 {
 #if 0
@@ -1283,7 +1283,7 @@ HalDetectSelectiveSuspendMode(
  *---------------------------------------------------------------------------*/
 static VOID 
 HwSuspendModeEnable_88eu(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8			Type
 	)
 {
@@ -1323,7 +1323,7 @@ HwSuspendModeEnable_88eu(
 	}
 	
 }	// HwSuspendModeEnable92Cu
-rt_rf_power_state RfOnOffDetect(IN	PADAPTER pAdapter )
+rt_rf_power_state RfOnOffDetect(IN	struct adapter *pAdapter )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
 	u8	val8;
@@ -1345,9 +1345,9 @@ rt_rf_power_state RfOnOffDetect(IN	PADAPTER pAdapter )
 	return rfpowerstate;
 }	// HalDetectPwrDownMode
 
-void _ps_open_RF(_adapter *padapter);
+void _ps_open_RF(struct adapter *padapter);
 
-u32 rtl8188eu_hal_init(PADAPTER Adapter)
+u32 rtl8188eu_hal_init(struct adapter *Adapter)
 {
 	u8	value8 = 0;
 	u16  value16;
@@ -1949,19 +1949,19 @@ _func_exit_;
 	return status;
 }
 
-void _ps_open_RF(_adapter *padapter) {
+void _ps_open_RF(struct adapter *padapter) {
 	//here call with bRegSSPwrLvl 1, bRegSSPwrLvl 2 needs to be verified
 	//phy_SsPwrSwitch92CU(padapter, rf_on, 1);
 }
 
-void _ps_close_RF(_adapter *padapter){
+void _ps_close_RF(struct adapter *padapter){
 	//here call with bRegSSPwrLvl 1, bRegSSPwrLvl 2 needs to be verified
 	//phy_SsPwrSwitch92CU(padapter, rf_off, 1);
 }
 
 
 VOID hal_poweroff_rtl8188eu(
-	IN	PADAPTER			Adapter 
+	IN	struct adapter *		Adapter 
 )
 {
 //	PMGNT_INFO	pMgntInfo	= &(Adapter->MgntInfo);
@@ -2045,7 +2045,7 @@ VOID hal_poweroff_rtl8188eu(
 	rtw_hal_set_hwreg(Adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 	Adapter->bFWReady = _FALSE;
 }
-static void rtl8188eu_hw_power_down(_adapter *padapter)
+static void rtl8188eu_hw_power_down(struct adapter *padapter)
 {
 	// 2010/-8/09 MH For power down module, we need to enable register block contrl reg at 0x1c.
 	// Then enable power down control bit of register 0x04 BIT4 and BIT15 as 1.
@@ -2055,7 +2055,7 @@ static void rtl8188eu_hw_power_down(_adapter *padapter)
 	rtw_write16(padapter, REG_APS_FSMCO, 0x8812);
 }
 
-u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
+u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
  {
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(Adapter);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2089,7 +2089,7 @@ u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
  }
 
 
-unsigned int rtl8188eu_inirp_init(PADAPTER Adapter)
+unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 {	
 	u8 i;	
 	struct recv_buf *precvbuf;
@@ -2153,7 +2153,7 @@ _func_exit_;
 
 }
 
-unsigned int rtl8188eu_inirp_deinit(PADAPTER Adapter)
+unsigned int rtl8188eu_inirp_deinit(struct adapter *Adapter)
 {	
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit \n"));
 	
@@ -2264,7 +2264,7 @@ _GetChannelGroup(
 
 static VOID
 ReadTxPowerInfo(
-	IN	PADAPTER 		Adapter,
+	IN	struct adapter *		Adapter,
 	IN	u8*			PROMContent,
 	IN	BOOLEAN			AutoLoadFail
 	)
@@ -2349,7 +2349,7 @@ ReadTxPowerInfo(
 //-------------------------------------------------------------------
 static void
 _ReadIDs(
-	IN	PADAPTER	Adapter,
+	IN	struct adapter *Adapter,
 	IN	u8*		PROMContent,
 	IN	BOOLEAN		AutoloadFail
 	)
@@ -2426,7 +2426,7 @@ _ReadIDs(
 
 static VOID
 _ReadMACAddress(
-	IN	PADAPTER	Adapter,	
+	IN	struct adapter *Adapter,	
 	IN	u8*		PROMContent,
 	IN	BOOLEAN		AutoloadFail
 	)
@@ -2453,7 +2453,7 @@ _ReadMACAddress(
 
 static VOID
 _ReadBoardType(
-	IN	PADAPTER	Adapter,	
+	IN	struct adapter *Adapter,	
 	IN	u8*		PROMContent,
 	IN	BOOLEAN		AutoloadFail
 	)
@@ -2464,7 +2464,7 @@ _ReadBoardType(
 
 static VOID
 _ReadLEDSetting(
-	IN	PADAPTER	Adapter,	
+	IN	struct adapter *Adapter,	
 	IN	u8*		PROMContent,
 	IN	BOOLEAN		AutoloadFail
 	)
@@ -2488,7 +2488,7 @@ _ReadLEDSetting(
 
 static VOID
 _ReadThermalMeter(
-	IN	PADAPTER	Adapter,	
+	IN	struct adapter *Adapter,	
 	IN	u8* 	PROMContent,
 	IN	BOOLEAN 	AutoloadFail
 	)
@@ -2524,7 +2524,7 @@ _ReadThermalMeter(
 
 static VOID
 _ReadRFSetting(
-	IN	PADAPTER	Adapter,	
+	IN	struct adapter *Adapter,	
 	IN	u8* 	PROMContent,
 	IN	BOOLEAN 	AutoloadFail
 	)
@@ -2533,7 +2533,7 @@ _ReadRFSetting(
 
 static void
 _ReadPROMVersion(
-	IN	PADAPTER	Adapter,	
+	IN	struct adapter *Adapter,	
 	IN	u8* 	PROMContent,
 	IN	BOOLEAN 	AutoloadFail
 	)
@@ -2552,7 +2552,7 @@ _ReadPROMVersion(
 
 static VOID
 readAntennaDiversity(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	u8			*hwinfo,
 	IN	BOOLEAN		AutoLoadFail
 	)
@@ -2587,7 +2587,7 @@ readAntennaDiversity(
 
 static VOID
 hal_InitPGData(
-	IN	PADAPTER	pAdapter,
+	IN	struct adapter *pAdapter,
 	IN	OUT	u8		*PROMContent
 	)
 {
@@ -2627,7 +2627,7 @@ hal_InitPGData(
 }
 static void
 Hal_EfuseParsePIDVID_8188EU(
-	IN	PADAPTER		pAdapter,
+	IN	struct adapter *	pAdapter,
 	IN	u8*				hwinfo,
 	IN	BOOLEAN			AutoLoadFail
 	)
@@ -2663,7 +2663,7 @@ Hal_EfuseParsePIDVID_8188EU(
 
 static void
 Hal_EfuseParseMACAddr_8188EU(
-	IN	PADAPTER		padapter,
+	IN	struct adapter *	padapter,
 	IN	u8*			hwinfo,
 	IN	BOOLEAN			AutoLoadFail
 	)
@@ -2696,7 +2696,7 @@ Hal_EfuseParseMACAddr_8188EU(
 
 static void
 Hal_CustomizeByCustomerID_8188EU(
-	IN	PADAPTER		padapter
+	IN	struct adapter *	padapter
 	)
 {
 #if 0
@@ -2745,7 +2745,7 @@ Hal_CustomizeByCustomerID_8188EU(
 }
 
 // Read HW power down mode selection 
-static void _ReadPSSetting(IN PADAPTER Adapter,IN u8*PROMContent,IN u8	AutoloadFail)
+static void _ReadPSSetting(IN struct adapter *Adapter,IN u8*PROMContent,IN u8	AutoloadFail)
 {
 #if 0
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(Adapter);
@@ -2786,7 +2786,7 @@ static void _ReadPSSetting(IN PADAPTER Adapter,IN u8*PROMContent,IN u8	AutoloadF
 
 #ifdef CONFIG_EFUSE_CONFIG_FILE
 static u32 Hal_readPGDataFromConfigFile(
-	PADAPTER	padapter)
+	struct adapter *padapter)
 {
 	u32 i;
 	struct file *fp;
@@ -2828,7 +2828,7 @@ static u32 Hal_readPGDataFromConfigFile(
 
 static void
 Hal_ReadMACAddrFromFile_8188EU(
-	PADAPTER		padapter
+	struct adapter *	padapter
 	)
 {
 	u32 i;
@@ -2899,7 +2899,7 @@ Hal_ReadMACAddrFromFile_8188EU(
 
 static VOID
 readAdapterInfo_8188EU(
-	IN	PADAPTER	padapter
+	IN	struct adapter *padapter
 	)
 {
 #if 1
@@ -2953,7 +2953,7 @@ readAdapterInfo_8188EU(
 }
 
 static void _ReadPROMContent(
-	IN PADAPTER 		Adapter
+	IN struct adapter *		Adapter
 	)
 {	
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
@@ -2981,7 +2981,7 @@ static void _ReadPROMContent(
 
 static VOID
 _ReadRFType(
-	IN	PADAPTER	Adapter
+	IN	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2993,7 +2993,7 @@ _ReadRFType(
 #endif
 }
 
-static int _ReadAdapterInfo8188EU(PADAPTER	Adapter)
+static int _ReadAdapterInfo8188EU(struct adapter *Adapter)
 {
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u32 start=rtw_get_current_time();
@@ -3016,7 +3016,7 @@ static int _ReadAdapterInfo8188EU(PADAPTER	Adapter)
 }
 
 
-static void ReadAdapterInfo8188EU(PADAPTER Adapter)
+static void ReadAdapterInfo8188EU(struct adapter *Adapter)
 {
 	// Read EEPROM size before call any EEPROM function	
 	Adapter->EepromAddressSize = GetEEPROMSize8188E(Adapter);
@@ -3026,7 +3026,7 @@ static void ReadAdapterInfo8188EU(PADAPTER Adapter)
 
 
 #define GPIO_DEBUG_PORT_NUM 0
-static void rtl8192cu_trigger_gpio_0(_adapter *padapter)
+static void rtl8192cu_trigger_gpio_0(struct adapter *padapter)
 {
 #ifdef CONFIG_USB_SUPPORT_ASYNC_VDN_REQ	
 	u32 gpioctrl;
@@ -3041,7 +3041,7 @@ static void rtl8192cu_trigger_gpio_0(_adapter *padapter)
 #endif
 }
 
-static void ResumeTxBeacon(_adapter *padapter)
+static void ResumeTxBeacon(struct adapter *padapter)
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(padapter);	
 
@@ -3054,7 +3054,7 @@ static void ResumeTxBeacon(_adapter *padapter)
 	pHalData->RegReg542 |= BIT0;
 	rtw_write8(padapter, REG_TBTT_PROHIBIT+2, pHalData->RegReg542);
 }
-void UpdateInterruptMask8188EU(PADAPTER padapter,u8 bHIMR0 ,u32 AddMSR, u32 RemoveMSR)
+void UpdateInterruptMask8188EU(struct adapter *padapter,u8 bHIMR0 ,u32 AddMSR, u32 RemoveMSR)
 {
 	HAL_DATA_TYPE *pHalData;
 
@@ -3079,7 +3079,7 @@ void UpdateInterruptMask8188EU(PADAPTER padapter,u8 bHIMR0 ,u32 AddMSR, u32 Remo
 
 }
 
-static void StopTxBeacon(_adapter *padapter)
+static void StopTxBeacon(struct adapter *padapter)
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(padapter);
 
@@ -3097,7 +3097,7 @@ static void StopTxBeacon(_adapter *padapter)
 }
 
 
-static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_opmode(struct adapter *Adapter, u8 variable, u8* val)
 {
 	u8	val8;
 	u8	mode = *((u8 *)val);
@@ -3329,7 +3329,7 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8* val)
 
 }
 
-static void hw_var_set_macaddr(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_macaddr(struct adapter *Adapter, u8 variable, u8* val)
 {
 	u8 idx = 0;
 	u32 reg_macid;
@@ -3352,7 +3352,7 @@ static void hw_var_set_macaddr(PADAPTER Adapter, u8 variable, u8* val)
 	
 }
 
-static void hw_var_set_bssid(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_bssid(struct adapter *Adapter, u8 variable, u8* val)
 {
 	u8	idx = 0;
 	u32 reg_bssid;
@@ -3375,7 +3375,7 @@ static void hw_var_set_bssid(PADAPTER Adapter, u8 variable, u8* val)
 
 }
 
-static void hw_var_set_bcn_func(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_bcn_func(struct adapter *Adapter, u8 variable, u8* val)
 {
 	u32 bcn_ctrl_reg;
 
@@ -3402,13 +3402,13 @@ static void hw_var_set_bcn_func(PADAPTER Adapter, u8 variable, u8* val)
 
 }
 
-static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_correct_tsf(struct adapter *Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u64	tsf;
 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
+	struct adapter *pbuddy_adapter = Adapter->pbuddy_adapter;
 
 	//tsf = pmlmeext->TSFValue - ((u32)pmlmeext->TSFValue % (pmlmeinfo->bcn_interval*1024)) -1024; //us
 	tsf = pmlmeext->TSFValue - rtw_modular64(pmlmeext->TSFValue, (pmlmeinfo->bcn_interval*1024)) -1024; //us
@@ -3498,11 +3498,11 @@ static void hw_var_set_correct_tsf(PADAPTER Adapter, u8 variable, u8* val)
 #endif
 }
 
-static void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_mlme_disconnect(struct adapter *Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
+	struct adapter *pbuddy_adapter = Adapter->pbuddy_adapter;
 			
 				
 	if(check_buddy_mlmeinfo_state(Adapter, _HW_STATE_NOLINK_))	
@@ -3531,7 +3531,7 @@ static void hw_var_set_mlme_disconnect(PADAPTER Adapter, u8 variable, u8* val)
 #endif
 }
 
-static void hw_var_set_mlme_sitesurvey(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_mlme_sitesurvey(struct adapter *Adapter, u8 variable, u8* val)
 {	
 #ifdef CONFIG_CONCURRENT_MODE	
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
@@ -3588,7 +3588,7 @@ static void hw_var_set_mlme_sitesurvey(PADAPTER Adapter, u8 variable, u8* val)
 #endif			
 }
 
-static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
+static void hw_var_set_mlme_join(struct adapter *Adapter, u8 variable, u8* val)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u8	RetryLimit = 0x30;
@@ -3671,7 +3671,7 @@ static void hw_var_set_mlme_join(PADAPTER Adapter, u8 variable, u8* val)
 #endif
 }
 
-void SetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
+void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -4545,7 +4545,7 @@ _func_enter_;
 _func_exit_;
 }
 
-void GetHwReg8188EU(PADAPTER Adapter, u8 variable, u8* val)
+void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	DM_ODM_T 		*podmpriv = &pHalData->odmpriv;
@@ -4636,7 +4636,7 @@ _func_exit_;
 //
 u8
 GetHalDefVar8188EUsb(
-	IN	PADAPTER				Adapter,
+	IN	struct adapter *			Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
 	IN	PVOID					pValue
 	)
@@ -4725,7 +4725,7 @@ GetHalDefVar8188EUsb(
 				u8 i;
 				u8 			bLinked = _FALSE;
 #ifdef CONFIG_CONCURRENT_MODE
-				PADAPTER pbuddy_adapter = Adapter->pbuddy_adapter;
+				struct adapter *pbuddy_adapter = Adapter->pbuddy_adapter;
 #endif //CONFIG_CONCURRENT_MODE
 
 				//if(check_fwstate(&Adapter->mlmepriv, _FW_LINKED)== _TRUE)
@@ -4783,7 +4783,7 @@ GetHalDefVar8188EUsb(
 //
 u8
 SetHalDefVar8188EUsb(
-	IN	PADAPTER				Adapter,
+	IN	struct adapter *			Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
 	IN	PVOID					pValue
 	)
@@ -4846,7 +4846,7 @@ SetHalDefVar8188EUsb(
 	return bResult;
 }
 /*
-u32  _update_92cu_basic_rate(_adapter *padapter, unsigned int mask)
+u32  _update_92cu_basic_rate(struct adapter *padapter, unsigned int mask)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);
 #ifdef CONFIG_BT_COEXIST
@@ -4874,7 +4874,7 @@ u32  _update_92cu_basic_rate(_adapter *padapter, unsigned int mask)
 	return BrateCfg;
 }
 */
-void _update_response_rate(_adapter *padapter,unsigned int mask)
+void _update_response_rate(struct adapter *padapter,unsigned int mask)
 {
 	u8	RateIndex = 0;
 	// Set RRSR rate table.
@@ -4890,7 +4890,7 @@ void _update_response_rate(_adapter *padapter,unsigned int mask)
 	rtw_write8(padapter, REG_INIRTS_RATE_SEL, RateIndex);
 }
 
-void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level)
+void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rssi_level)
 {
 	//volatile unsigned int result;
 	u8	init_rate=0;
@@ -5033,7 +5033,7 @@ void UpdateHalRAMask8188EUsb(PADAPTER padapter, u32 mac_id, u8 rssi_level)
 }
 
 
-void SetBeaconRelatedRegisters8188EUsb(PADAPTER padapter)
+void SetBeaconRelatedRegisters8188EUsb(struct adapter *padapter)
 {
 	u32	value32;
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -5090,7 +5090,7 @@ void SetBeaconRelatedRegisters8188EUsb(PADAPTER padapter)
 
 }
 
-static void rtl8188eu_init_default_value(_adapter * padapter)
+static void rtl8188eu_init_default_value(struct adapter * padapter)
 {
 	PHAL_DATA_TYPE pHalData;
 	struct pwrctrl_priv *pwrctrlpriv;
@@ -5120,7 +5120,7 @@ static void rtl8188eu_init_default_value(_adapter * padapter)
 		pHalData->odmpriv.RFCalibrateInfo.ThermalValue_HP[i] = 0;
 }
 
-static u8 rtl8188eu_ps_func(PADAPTER Adapter,HAL_INTF_PS_FUNC efunc_id, u8 *val)
+static u8 rtl8188eu_ps_func(struct adapter *Adapter,HAL_INTF_PS_FUNC efunc_id, u8 *val)
 {	
 	u8 bResult = _TRUE;
 	switch(efunc_id){
@@ -5140,7 +5140,7 @@ static u8 rtl8188eu_ps_func(PADAPTER Adapter,HAL_INTF_PS_FUNC efunc_id, u8 *val)
 	return bResult;
 }
 
-void rtl8188eu_set_hal_ops(_adapter * padapter)
+void rtl8188eu_set_hal_ops(struct adapter * padapter)
 {
 	struct hal_ops	*pHalFunc = &padapter->HalFunc;
 

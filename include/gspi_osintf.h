@@ -26,9 +26,9 @@
 #include <drv_types.h>
 
 #ifdef PLATFORM_OS_CE
-extern NDIS_STATUS ce_sd_get_dev_hdl(PADAPTER padapter);
-SD_API_STATUS ce_sd_int_callback(SD_DEVICE_HANDLE hDevice, PADAPTER padapter);
-extern void sd_setup_irs(PADAPTER padapter);
+extern NDIS_STATUS ce_sd_get_dev_hdl(struct adapter *padapter);
+SD_API_STATUS ce_sd_int_callback(SD_DEVICE_HANDLE hDevice, struct adapter *padapter);
+extern void sd_setup_irs(struct adapter *padapter);
 #endif
 
 #endif

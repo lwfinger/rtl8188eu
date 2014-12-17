@@ -37,7 +37,7 @@ static s32  translate2dbm(u8 signal_strength_idx)
 }
 
 
-static void process_rssi(_adapter *padapter,union recv_frame *prframe)
+static void process_rssi(struct adapter *padapter,union recv_frame *prframe)
 {
 	u32	last_rssi, tmp_val;
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
@@ -93,7 +93,7 @@ static void process_rssi(_adapter *padapter,union recv_frame *prframe)
 
 
 
-static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
+static void process_link_qual(struct adapter *padapter,union recv_frame *prframe)
 {
 	u32	last_evm=0, tmpVal;
  	struct rx_pkt_attrib *pattrib;
@@ -156,8 +156,8 @@ static void process_link_qual(_adapter *padapter,union recv_frame *prframe)
 
 }
 
-//void rtl8188e_process_phy_info(_adapter *padapter, union recv_frame *prframe)
-void rtl8188e_process_phy_info(_adapter *padapter, void *prframe)
+//void rtl8188e_process_phy_info(struct adapter *padapter, union recv_frame *prframe)
+void rtl8188e_process_phy_info(struct adapter *padapter, void *prframe)
 {
 	union recv_frame *precvframe = (union recv_frame *)prframe;
 
@@ -267,7 +267,7 @@ void update_recvframe_phyinfo_88e(
 	union recv_frame	*precvframe,
 	struct phy_stat *pphy_status)
 {
-	PADAPTER 			padapter = precvframe->u.hdr.adapter;
+	struct adapter *			padapter = precvframe->u.hdr.adapter;
 	struct rx_pkt_attrib	*pattrib = &precvframe->u.hdr.attrib;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(padapter);	
 	PODM_PHY_INFO_T 	pPHYInfo  = (PODM_PHY_INFO_T)(&pattrib->phy_info);
