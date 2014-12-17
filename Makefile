@@ -604,20 +604,20 @@ rtk_core :=	core/rtw_cmd.o \
 		core/rtw_sreset.o \
 		core/rtw_odm.o
 
-8188e-y += $(rtk_core)
+8188eu-y += $(rtk_core)
 
-8188e-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
+8188eu-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
 
-8188e-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
+8188eu-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
 		core/rtw_wapi_sms4.o
 
-8188e-y += core/rtw_efuse.o
+8188eu-y += core/rtw_efuse.o
 
-8188e-y += $(_HAL_INTFS_FILES)
+8188eu-y += $(_HAL_INTFS_FILES)
 
-8188e-y += $(_OS_INTFS_FILES)
+8188eu-y += $(_OS_INTFS_FILES)
 
-obj-$(CONFIG_RTL8188EU) := 8188e.o
+obj-$(CONFIG_RTL8188EU) := 8188eu.o
 
 else
 
