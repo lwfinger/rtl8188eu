@@ -1,11 +1,5 @@
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
 EXTRA_CFLAGS += -O1
-#EXTRA_CFLAGS += -O3
-#EXTRA_CFLAGS += -Wall
-#EXTRA_CFLAGS += -Wextra
-#EXTRA_CFLAGS += -Werror
-#EXTRA_CFLAGS += -pedantic
-#EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
 
 EXTRA_CFLAGS += -Wno-unused-variable
 EXTRA_CFLAGS += -Wno-unused-value
@@ -20,11 +14,6 @@ EXTRA_CFLAGS += -I$(src)/include
 
 ccflags-y += -D__CHECK_ENDIAN__
 
-CONFIG_AUTOCFG_CP = y
-
-CONFIG_RTL8192C = n
-CONFIG_RTL8192D = n
-CONFIG_RTL8723A = n
 CONFIG_RTL8188E = y
 
 CONFIG_USB_HCI = y
@@ -37,7 +26,6 @@ CONFIG_USB_AUTOSUSPEND = n
 CONFIG_HW_PWRP_DETECTION = n
 CONFIG_WIFI_TEST = n
 CONFIG_BT_COEXIST = n
-CONFIG_RTL8192CU_REDEFINE_1X1 = n
 CONFIG_INTEL_WIDI = n
 CONFIG_WAPI_SUPPORT = n
 CONFIG_EFUSE_CONFIG_FILE = n
@@ -95,107 +83,6 @@ OUTSRC_FILES := hal/OUTSRC/odm_debug.o	\
 								hal/OUTSRC/odm.o\
 		hal/OUTSRC/HalPhyRf.o
 										
-ifeq ($(CONFIG_RTL8192C), y)
-RTL871X = rtl8192c
-
-ifeq ($(CONFIG_USB_HCI), y)
-MODULE_NAME = 8192cu
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/Hal8192CUFWImg_CE.o	\
-								hal/OUTSRC/$(RTL871X)/Hal8192CUPHYImg_CE.o	\
-								hal/OUTSRC/$(RTL871X)/Hal8192CUMACImg_CE.o
-endif
-
-ifeq ($(CONFIG_PCI_HCI), y)
-MODULE_NAME = 8192ce
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/Hal8192CEFWImg_CE.o	\
-								hal/OUTSRC/$(RTL871X)/Hal8192CEPHYImg_CE.o	\
-								hal/OUTSRC/$(RTL871X)/Hal8192CEMACImg_CE.o
-endif
-
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/odm_RTL8192C.o\
-								hal/OUTSRC/$(RTL871X)/HalDMOutSrc8192C_CE.o
-
-CHIP_FILES := \
-	hal/$(RTL871X)/$(RTL871X)_sreset.o \
-	hal/$(RTL871X)/$(RTL871X)_xmit.o
-CHIP_FILES += $(OUTSRC_FILES)
-
-endif
-
-ifeq ($(CONFIG_RTL8192D), y)
-RTL871X = rtl8192d
-
-ifeq ($(CONFIG_USB_HCI), y)
-MODULE_NAME = 8192du
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/Hal8192DUFWImg_CE.o \
-								hal/OUTSRC/$(RTL871X)/Hal8192DUPHYImg_CE.o \
-								hal/OUTSRC/$(RTL871X)/Hal8192DUMACImg_CE.o
-endif
-
-ifeq ($(CONFIG_PCI_HCI), y)
-MODULE_NAME = 8192de
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/Hal8192DEFWImg_CE.o \
-								hal/OUTSRC/$(RTL871X)/Hal8192DEPHYImg_CE.o \
-								hal/OUTSRC/$(RTL871X)/Hal8192DEMACImg_CE.o
-endif
-
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/odm_RTL8192D.o\
-								hal/OUTSRC/$(RTL871X)/HalDMOutSrc8192D_CE.o
-CHIP_FILES := \
-	hal/$(RTL871X)/$(RTL871X)_xmit.o
-CHIP_FILES += $(OUTSRC_FILES)
-endif
-
-ifeq ($(CONFIG_RTL8723A), y)
-
-RTL871X = rtl8723a
-
-HAL_COMM_FILES := hal/$(RTL871X)/$(RTL871X)_xmit.o \
-								hal/$(RTL871X)/$(RTL871X)_sreset.o
-
-ifeq ($(CONFIG_GSPI_HCI), y)
-MODULE_NAME = 8723as
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/Hal8723SHWImg_CE.o
-endif
-
-ifeq ($(CONFIG_SDIO_HCI), y)
-MODULE_NAME = 8723as
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/Hal8723SHWImg_CE.o
-endif
-
-ifeq ($(CONFIG_USB_HCI), y)
-MODULE_NAME = 8723au
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/Hal8723UHWImg_CE.o
-endif
-
-ifeq ($(CONFIG_PCI_HCI), y)
-MODULE_NAME = 8723ae
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/Hal8723EHWImg_CE.o
-endif
-
-#hal/OUTSRC/$(RTL871X)/HalHWImg8723A_FW.o
-OUTSRC_FILES += hal/OUTSRC/$(RTL871X)/HalHWImg8723A_BB.o\
-								hal/OUTSRC/$(RTL871X)/HalHWImg8723A_MAC.o\
-								hal/OUTSRC/$(RTL871X)/HalHWImg8723A_RF.o\
-								hal/OUTSRC/$(RTL871X)/odm_RegConfig8723A.o
-
-OUTSRC_FILES += hal/OUTSRC/rtl8192c/HalDMOutSrc8192C_CE.o
-clean_more ?=
-clean_more += clean_odm-8192c
-
-PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
-				hal/$(RTL871X)/Hal8723PwrSeq.o
-
-CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES)
-
-ifeq ($(CONFIG_BT_COEXIST), y)
-CHIP_FILES += hal/$(RTL871X)/rtl8723a_bt-coexist.o
-endif
-
-endif
-
-ifeq ($(CONFIG_RTL8188E), y)
-
 RTL871X = rtl8188e
 HAL_COMM_FILES := hal/$(RTL871X)/$(RTL871X)_xmit.o\
 									hal/$(RTL871X)/$(RTL871X)_sreset.o
@@ -232,9 +119,6 @@ PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
 				hal/$(RTL871X)/Hal8188EPwrSeq.o
 
 CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES) 
-
-endif
-
 
 ifeq ($(CONFIG_GSPI_HCI), y)
 HCI_NAME = gspi

@@ -42,15 +42,9 @@
 #endif //CONFIG_BR_EXT
 
 #ifdef CONFIG_RF_GAIN_OFFSET
-#ifdef CONFIG_RTL8723A
-#define	RF_GAIN_OFFSET_ON			BIT0
-#define		REG_RF_BB_GAIN_OFFSET	0x7f
-#define		RF_GAIN_OFFSET_MASK		0xfffff
-#else
 #define	RF_GAIN_OFFSET_ON			BIT4
 #define		REG_RF_BB_GAIN_OFFSET	0x55
 #define		RF_GAIN_OFFSET_MASK		0xfffff
-#endif  //CONFIG_RTL8723A
 #endif //CONFIG_RF_GAIN_OFFSET
 
 MODULE_LICENSE("GPL");
@@ -2390,32 +2384,12 @@ void rtw_bb_rf_gain_offset(_adapter *padapter)
 		//DBG_871X("Offset RF Gain.\n");
 		//DBG_871X("Offset RF Gain.  padapter->eeprompriv.EEPROMRFGainVal=0x%x\n",padapter->eeprompriv.EEPROMRFGainVal);
 		if(padapter->eeprompriv.EEPROMRFGainVal != 0xff){
-#ifdef CONFIG_RTL8723A
-			res = rtw_hal_read_rfreg(padapter, RF_PATH_A, 0xd, 0xffffffff);
-			//DBG_871X("Offset RF Gain. reg 0xd=0x%x\n",res);
-			res &= 0xfff87fff;
-
-			res |= (padapter->eeprompriv.EEPROMRFGainVal & 0x0f)<< 15;
-			//DBG_871X("Offset RF Gain.    reg 0xd=0x%x\n",res);
-
-			rtw_hal_write_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, RF_GAIN_OFFSET_MASK, res);
-
-			res = rtw_hal_read_rfreg(padapter, RF_PATH_A, 0xe, 0xffffffff);
-			DBG_871X("Offset RF Gain. reg 0xe=0x%x\n",res);
-			res &= 0xfffffff0;
-
-			res |= (padapter->eeprompriv.EEPROMRFGainVal & 0x0f);
-			//DBG_871X("Offset RF Gain.    reg 0xe=0x%x\n",res);
-
-			rtw_hal_write_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, RF_GAIN_OFFSET_MASK, res);
-#else
 			res = rtw_hal_read_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, 0xffffffff);
 			DBG_871X("REG_RF_BB_GAIN_OFFSET=%x \n",res);
 			res &= 0xfff87fff;
 			res |= (padapter->eeprompriv.EEPROMRFGainVal & 0x0f)<< 15;
 			DBG_871X("write REG_RF_BB_GAIN_OFFSET=%x \n",res);
 			rtw_hal_write_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, RF_GAIN_OFFSET_MASK, res);
-#endif
 		}
 		else
 		{
