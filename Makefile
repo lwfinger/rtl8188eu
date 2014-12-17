@@ -83,21 +83,10 @@ OUTSRC_FILES := hal/odm_debug.o	\
 		hal/odm.o\
 		hal/HalPhyRf.o
 										
-RTL871X = rtl8188e
 HAL_COMM_FILES := hal/rtl8188e_xmit.o\
 		hal/rtl8188e_sreset.o
 
-ifeq ($(CONFIG_SDIO_HCI), y)
-MODULE_NAME = 8189es
-endif
-
-ifeq ($(CONFIG_USB_HCI), y)
 MODULE_NAME = 8188eu
-endif
-
-ifeq ($(CONFIG_PCI_HCI), y)
-MODULE_NAME = 8188ee
-endif
 
 OUTSRC_FILES += hal/HalHWImg8188E_MAC.o\
 		hal/HalHWImg8188E_BB.o\
@@ -108,10 +97,8 @@ OUTSRC_FILES += hal/HalHWImg8188E_MAC.o\
 		hal/Hal8188ERateAdaptive.o\
 		hal/odm_RTL8188E.o
 
-ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_WOWLAN), y)
 OUTSRC_FILES += hal/HalHWImg8188E_FW.o
-endif
 endif
 
 PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
@@ -119,27 +106,12 @@ PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
 
 CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES) 
 
-ifeq ($(CONFIG_GSPI_HCI), y)
-HCI_NAME = gspi
-endif
-
-ifeq ($(CONFIG_SDIO_HCI), y)
-HCI_NAME = sdio
-endif
-
-ifeq ($(CONFIG_USB_HCI), y)
 HCI_NAME = usb
-endif
-
-ifeq ($(CONFIG_PCI_HCI), y)
-HCI_NAME = pci
-endif
-
 
 _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/os_intfs.o \
-			os_dep/$(HCI_NAME)_intf.o \
-			os_dep/$(HCI_NAME)_ops_linux.o \
+			os_dep/usb_intf.o \
+			os_dep/usb_ops_linux.o \
 			os_dep/ioctl_linux.o \
 			os_dep/xmit_linux.o \
 			os_dep/mlme_linux.o \
@@ -149,12 +121,12 @@ _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 
 ifeq ($(CONFIG_SDIO_HCI), y)
 _OS_INTFS_FILES += os_dep/custom_gpio_linux.o
-_OS_INTFS_FILES += os_dep/$(HCI_NAME)_ops_linux.o
+_OS_INTFS_FILES += os_dep/usb_ops_linux.o
 endif
 
 ifeq ($(CONFIG_GSPI_HCI), y)
 _OS_INTFS_FILES += os_dep/custom_gpio_linux.o
-_OS_INTFS_FILES += os_dep/$(HCI_NAME)_ops_linux.o
+_OS_INTFS_FILES += os_dep/usb_ops_linux.o
 endif
 
 _HAL_INTFS_FILES :=	hal/hal_intf.o \
@@ -165,19 +137,17 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/rtl8188e_dm.o \
 			hal/rtl8188e_rxdesc.o \
 			hal/rtl8188e_cmd.o \
-			hal/$(HCI_NAME)_halinit.o \
-			hal/rtl$(MODULE_NAME)_led.o \
-			hal//rtl$(MODULE_NAME)_xmit.o \
-			hal/rtl$(MODULE_NAME)_recv.o
+			hal/usb_halinit.o \
+			hal/rtl8188eu_led.o \
+			hal//rtl8188eu_xmit.o \
+			hal/rtl8188eu_recv.o
 
-_HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
+_HAL_INTFS_FILES += hal/usb_ops_linux.o
 
 _HAL_INTFS_FILES += $(CHIP_FILES)
 
-ifeq ($(CONFIG_USB_HCI), y)
 ifeq ($(CONFIG_USB_AUTOSUSPEND), y)
 EXTRA_CFLAGS += -DCONFIG_USB_AUTOSUSPEND
-endif
 endif
 
 ifeq ($(CONFIG_POWER_SAVING), y)
@@ -228,7 +198,6 @@ ifeq ($(CONFIG_MMC_PM_KEEP_POWER), y)
 EXTRA_CFLAGS += -DCONFIG_MMC_PM_KEEP_POWER
 endif
 
-ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_WOWLAN), y)
 EXTRA_CFLAGS += -DCONFIG_WOWLAN
 EXTRA_CFLAGS += -DCONFIG_MMC_PM_KEEP_POWER
@@ -236,12 +205,9 @@ endif
 ifeq ($(CONFIG_GPIO_WAKEUP), y)
 EXTRA_CFLAGS += -DCONFIG_GPIO_WAKEUP
 endif
-endif
 
-ifeq ($(CONFIG_RTL8188E), y)
 ifeq ($(CONFIG_EFUSE_CONFIG_FILE), y)
 EXTRA_CFLAGS += -DCONFIG_RF_GAIN_OFFSET
-endif
 endif
 
 ifeq ($(CONFIG_PLATFORM_I386_PC), y)
@@ -638,20 +604,20 @@ rtk_core :=	core/rtw_cmd.o \
 		core/rtw_sreset.o \
 		core/rtw_odm.o
 
-$(MODULE_NAME)-y += $(rtk_core)
+8188e-y += $(rtk_core)
 
-$(MODULE_NAME)-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
+8188e-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
 
-$(MODULE_NAME)-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
+8188e-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
 		core/rtw_wapi_sms4.o
 
-$(MODULE_NAME)-y += core/efuse/rtw_efuse.o
+8188e-y += core/rtw_efuse.o
 
-$(MODULE_NAME)-y += $(_HAL_INTFS_FILES)
+8188e-y += $(_HAL_INTFS_FILES)
 
-$(MODULE_NAME)-y += $(_OS_INTFS_FILES)
+8188e-y += $(_OS_INTFS_FILES)
 
-obj-$(CONFIG_RTL8188EU) := $(MODULE_NAME).o
+obj-$(CONFIG_RTL8188EU) := 8188e.o
 
 else
 
@@ -663,14 +629,14 @@ modules:
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
 
 strip:
-	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded
+	$(CROSS_COMPILE)strip rtl8188e.ko --strip-unneeded
 
 install:
-	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+	install -p -m 644 rtl8188e.ko  $(MODDESTDIR)
 	/sbin/depmod -a ${KVER}
 
 uninstall:
-	rm -f $(MODDESTDIR)/$(MODULE_NAME).ko
+	rm -f $(MODDESTDIR)/rtl8188e.ko
 	/sbin/depmod -a ${KVER}
 
 config_r:
