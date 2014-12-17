@@ -22,6 +22,7 @@
 #include <drv_conf.h>
 
 #include <osdep_service.h>
+#include <osdep_intf.h>
 #include <drv_types.h>
 #include <xmit_osdep.h>
 #include <recv_osdep.h>
@@ -91,6 +92,7 @@ int rtw_early_mode=1;
 module_param(rtw_ips_mode, int, 0644);
 MODULE_PARM_DESC(rtw_ips_mode,"The default IPS mode");
 
+static int rtw_debug = 1;
 int rtw_radio_enable = 1;
 int rtw_long_retry_lmt = 7;
 int rtw_short_retry_lmt = 7;
@@ -295,6 +297,8 @@ MODULE_PARM_DESC(rtw_btcoex_enable, "Enable BT co-existence mechanism");
 uint rtw_notch_filter = RTW_NOTCH_FILTER;
 module_param(rtw_notch_filter, uint, 0644);
 MODULE_PARM_DESC(rtw_notch_filter, "0:Disable, 1:Enable, 2:Enable only for P2P");
+module_param_named(debug, rtw_debug, int, 0444);
+MODULE_PARM_DESC(debug, "Set debug level (1-9) (default 1)");
 
 static uint loadparam(PADAPTER padapter, _nic_hdl pnetdev);
 int _netdev_open(struct net_device *pnetdev);
@@ -827,7 +831,6 @@ void rtw_proc_remove_one(struct net_device *dev)
 #endif
 #endif
 
-uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev);
 uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev)
 {
        
@@ -836,6 +839,7 @@ uint loadparam( _adapter *padapter,  _nic_hdl	pnetdev)
 
 _func_enter_;
 
+	GlobalDebugLevel = rtw_debug;
 	registry_par->chip_version = (u8)rtw_chip_version;
 	registry_par->rfintfs = (u8)rtw_rfintfs;
 	registry_par->lbkmode = (u8)rtw_lbkmode;	
@@ -858,6 +862,7 @@ _func_enter_;
 	registry_par->smart_ps =  (u8)rtw_smart_ps;  
 	registry_par->power_mgnt = (u8)rtw_power_mgnt;
 	registry_par->ips_mode = (u8)rtw_ips_mode;
+	registry_par->radio_enable = (u8)rtw_radio_enable;
 	registry_par->radio_enable = (u8)rtw_radio_enable;
 	registry_par->long_retry_lmt = (u8)rtw_long_retry_lmt;
 	registry_par->short_retry_lmt = (u8)rtw_short_retry_lmt;
@@ -893,7 +898,6 @@ _func_enter_;
 	registry_par->rf_config = (u8)rtw_rf_config;
 	registry_par->low_power = (u8)rtw_low_power;
 
-	
 	registry_par->wifi_spec = (u8)rtw_wifi_spec;
 
 	registry_par->channel_plan = (u8)rtw_channel_plan;
