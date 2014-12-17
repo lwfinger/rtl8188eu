@@ -2864,7 +2864,6 @@ _func_exit_;
 	return pxmitframe;
 }
 
-#if 1
 struct tx_servq *rtw_get_sta_pending(_adapter *padapter, struct sta_info *psta, sint up, u8 *ac)
 {
 	struct tx_servq *ptxservq=NULL;
@@ -2908,69 +2907,6 @@ _func_exit_;
 
 	return ptxservq;			
 }
-#else
-__inline static struct tx_servq *rtw_get_sta_pending
-	(_adapter *padapter, _queue **ppstapending, struct sta_info *psta, sint up)
-{
-	struct tx_servq *ptxservq;
-	struct hw_xmit *phwxmits =  padapter->xmitpriv.hwxmits;
-	
-_func_enter_;	
-
-#ifdef CONFIG_RTL8711
-
-	if(IS_MCAST(psta->hwaddr))
-	{
-		ptxservq = &(psta->sta_xmitpriv.be_q); // we will use be_q to queue bc/mc frames in BCMC_stainfo
-		*ppstapending = &padapter->xmitpriv.bm_pending; 
-	}
-	else
-#endif		
-	{
-		switch (up) 
-		{
-			case 1:
-			case 2:
-				ptxservq = &(psta->sta_xmitpriv.bk_q);
-				*ppstapending = &padapter->xmitpriv.bk_pending;
-				(phwxmits+3)->accnt++;
-				RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : BK \n"));
-				break;
-
-			case 4:
-			case 5:
-				ptxservq = &(psta->sta_xmitpriv.vi_q);
-				*ppstapending = &padapter->xmitpriv.vi_pending;
-				(phwxmits+1)->accnt++;
-				RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : VI\n"));
-				break;
-
-			case 6:
-			case 7:
-				ptxservq = &(psta->sta_xmitpriv.vo_q);
-				*ppstapending = &padapter->xmitpriv.vo_pending;
-				(phwxmits+0)->accnt++;
-				RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : VO \n"));			
-				break;
-
-			case 0:
-			case 3:
-			default:
-				ptxservq = &(psta->sta_xmitpriv.be_q);
-				*ppstapending = &padapter->xmitpriv.be_pending;
-				(phwxmits+2)->accnt++;
-				RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_get_sta_pending : BE \n"));				
-			break;
-			
-		}
-
-	}
-
-_func_exit_;
-
-	return ptxservq;			
-}
-#endif
 
 /*
  * Will enqueue pxmitframe to the proper queue,

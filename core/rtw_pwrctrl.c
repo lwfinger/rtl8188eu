@@ -376,14 +376,7 @@ _func_enter_;
 	else
 #endif // CONFIG_LPS_RPWM_TIMER
 	{
-	if ( (pwrpriv->rpwm == pslv)
-#ifdef CONFIG_LPS_LCLK
-#ifndef CONFIG_RTL8723A
-		|| ((pwrpriv->rpwm >= PS_STATE_S2)&&(pslv >= PS_STATE_S2))
-#endif
-#endif
-		)
-	{
+	if ((pwrpriv->rpwm == pslv)) {
 		RT_TRACE(_module_rtl871x_pwrctrl_c_,_drv_err_,
 			("%s: Already set rpwm[0x%02X], new=0x%02X!\n", __FUNCTION__, pwrpriv->rpwm, pslv));
 		return;
@@ -463,11 +456,7 @@ _func_enter_;
 			if ((cpwm_orig ^ cpwm_now) & 0x80)
 			{
 #ifdef CONFIG_LPS_LCLK
-				#ifdef CONFIG_RTL8723A
-				pwrpriv->cpwm = PS_STATE(cpwm_now);
-				#else // !CONFIG_RTL8723A
 				pwrpriv->cpwm = PS_STATE_S4;
-				#endif // !CONFIG_RTL8723A
                           pwrpriv->cpwm_tog = cpwm_now & PS_TOGGLE;
 #endif
 				pollingRes = _SUCCESS;
@@ -887,14 +876,14 @@ _func_enter_;
 			else
 			#endif
 			{
-#if defined(CONFIG_PLATFORM_SPRD) && defined(CONFIG_RTL8188E)
+#if defined(CONFIG_PLATFORM_SPRD)
 				#ifdef CONFIG_IPS
 				if(_FALSE == ips_leave(Adapter))
 				{
 					DBG_871X("======> ips_leave fail.............\n");			
 				}
 				#endif
-#endif //CONFIG_PLATFORM_SPRD && CONFIG_RTL8188E
+#endif //CONFIG_PLATFORM_SPRD
 			}				
 		}	
 	}

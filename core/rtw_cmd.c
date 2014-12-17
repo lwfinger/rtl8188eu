@@ -1126,13 +1126,6 @@ _func_enter_;
 	
 	pdev_network->Length = pcmd->cmdsz;	
 
-#ifdef CONFIG_RTL8712
-	//notes: translate IELength & Length after assign the Length to cmdsz;
-	pdev_network->Length = cpu_to_le32(pcmd->cmdsz);
-	pdev_network->IELength = cpu_to_le32(pdev_network->IELength);
-	pdev_network->Ssid.SsidLength = cpu_to_le32(pdev_network->Ssid.SsidLength);
-#endif
-
 	res = rtw_enqueue_cmd(pcmdpriv, pcmd);	
 
 exit:
@@ -1340,25 +1333,6 @@ _func_enter_;
 	#endif
 	
 	pcmd->cmdsz = get_WLAN_BSSID_EX_sz(psecnetwork);//get cmdsz before endian conversion
-
-#ifdef CONFIG_RTL8712
-	//wlan_network endian conversion	
-	psecnetwork->Length = cpu_to_le32(psecnetwork->Length);
-	psecnetwork->Ssid.SsidLength= cpu_to_le32(psecnetwork->Ssid.SsidLength);
-	psecnetwork->Privacy = cpu_to_le32(psecnetwork->Privacy);
-	psecnetwork->Rssi = cpu_to_le32(psecnetwork->Rssi);
-	psecnetwork->NetworkTypeInUse = cpu_to_le32(psecnetwork->NetworkTypeInUse);
-	psecnetwork->Configuration.ATIMWindow = cpu_to_le32(psecnetwork->Configuration.ATIMWindow);
-	psecnetwork->Configuration.BeaconPeriod = cpu_to_le32(psecnetwork->Configuration.BeaconPeriod);
-	psecnetwork->Configuration.DSConfig = cpu_to_le32(psecnetwork->Configuration.DSConfig);
-	psecnetwork->Configuration.FHConfig.DwellTime=cpu_to_le32(psecnetwork->Configuration.FHConfig.DwellTime);
-	psecnetwork->Configuration.FHConfig.HopPattern=cpu_to_le32(psecnetwork->Configuration.FHConfig.HopPattern);
-	psecnetwork->Configuration.FHConfig.HopSet=cpu_to_le32(psecnetwork->Configuration.FHConfig.HopSet);
-	psecnetwork->Configuration.FHConfig.Length=cpu_to_le32(psecnetwork->Configuration.FHConfig.Length);	
-	psecnetwork->Configuration.Length = cpu_to_le32(psecnetwork->Configuration.Length);
-	psecnetwork->InfrastructureMode = cpu_to_le32(psecnetwork->InfrastructureMode);
-	psecnetwork->IELength = cpu_to_le32(psecnetwork->IELength);      
-#endif
 
 	_rtw_init_listhead(&pcmd->list);
 	pcmd->cmdcode = _JoinBss_CMD_;//GEN_CMD_CODE(_JoinBss)

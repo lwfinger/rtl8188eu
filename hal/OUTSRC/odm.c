@@ -4050,16 +4050,9 @@ odm_RefreshRateAdaptiveMaskAPADSL(
 			ODM_PRINT_ADDR(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target STA addr : "), pstat->hwaddr);
 			ODM_RT_TRACE(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RSSI:%d, RSSI_LEVEL:%d\n", pstat->rssi, pstat->rssi_level));
 
-#ifdef CONFIG_RTL_88E_SUPPORT
 			if (GET_CHIP_VER(priv)==VERSION_8188E) {
 #ifdef TXREPORT
 				add_RATid(priv, pstat);
-#endif
-			} else
-#endif
-			{
-#if defined(CONFIG_RTL_92D_SUPPORT) || defined(CONFIG_RTL_92C_SUPPORT)			
-			add_update_RATid(priv, pstat);
 #endif
 		        }
 	        }
@@ -5307,27 +5300,6 @@ odm_RSSIMonitorCheckAP(
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-#ifdef CONFIG_RTL_92C_SUPPORT || defined(CONFIG_RTL_92D_SUPPORT)
-
-	u4Byte i;
-	PSTA_INFO_T pstat;
-
-	for(i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++)
-	{
-		pstat = pDM_Odm->pODM_StaInfo[i];
-		if(IS_STA_VALID(pstat) )
-		{			
-#ifdef STA_EXT
-			if (REMAP_AID(pstat) < (FW_NUM_STAT - 1))
-#endif
-				add_update_rssi(pDM_Odm->priv, pstat);
-
-		}		
-	}
-#endif
-#endif
-
 }
 
 
@@ -5461,7 +5433,6 @@ odm_TXPowerTrackingThermalMeterInit(
 	#endif//#if	(MP_DRIVER != 1)
 	ODM_RT_TRACE(pDM_Odm,COMP_POWER_TRACKING, DBG_LOUD, ("pMgntInfo->bTXPowerTracking = %d\n", pMgntInfo->bTXPowerTracking));
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	#ifdef CONFIG_RTL8188E
 	{
 		pDM_Odm->RFCalibrateInfo.bTXPowerTracking = _TRUE;
 		pDM_Odm->RFCalibrateInfo.TXPowercount = 0;
@@ -5472,27 +5443,6 @@ odm_TXPowerTrackingThermalMeterInit(
 		//#endif//#if	(MP_DRIVER != 1)
 		MSG_8192C("pDM_Odm TxPowerTrackControl = %d\n", pDM_Odm->RFCalibrateInfo.TxPowerTrackControl);
 	}
-	#else
-	{
-		PADAPTER		Adapter = pDM_Odm->Adapter;
-		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-		struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-
-		//if(IS_HARDWARE_TYPE_8192C(pHalData))
-		{
-			pdmpriv->bTXPowerTracking = _TRUE;
-			pdmpriv->TXPowercount = 0;
-			pdmpriv->bTXPowerTrackingInit = _FALSE;
-			//#if	(MP_DRIVER != 1)		//for mp driver, turn off txpwrtracking as default
-
-			if (*(pDM_Odm->mp_mode) != 1)
-				pdmpriv->TxPowerTrackControl = _TRUE;
-			//#endif//#if	(MP_DRIVER != 1)
-		}
-		MSG_8192C("pdmpriv->TxPowerTrackControl = %d\n", pdmpriv->TxPowerTrackControl);
-	
-	}	
-	#endif//endif (CONFIG_RTL8188E==1)	
 #elif (DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 	#ifdef RTL8188E_SUPPORT
 	{
@@ -5640,17 +5590,6 @@ odm_TXPowerTrackingCheckAP(
 #if (DM_ODM_SUPPORT_TYPE == ODM_AP)
 	prtl8192cd_priv	priv		= pDM_Odm->priv;
 
-	if ( (priv->pmib->dot11RFEntry.ther) && ((priv->up_time % priv->pshare->rf_ft_var.tpt_period) == 0)){
-#ifdef CONFIG_RTL_92D_SUPPORT
-		if (GET_CHIP_VER(priv)==VERSION_8192D){
-			tx_power_tracking_92D(priv);
-		} else 
-#endif
-		{
-#ifdef CONFIG_RTL_92C_SUPPORT			
-			tx_power_tracking(priv);
-#endif
-		}
 	}
 #endif	
 
@@ -8462,12 +8401,7 @@ ODM_IotEdcaSwitch(
  #if((DM_ODM_SUPPORT_TYPE==ODM_AP)&&(defined LOW_TP_TXOP))
 			 ODM_Write4Byte(pDM_Odm, ODM_EDCA_BE_PARAM, (BE_TXOP << 16) | (cw_max << 12) | (4 << 8) | (sifs_time + 3 * slot_time));
  #else
- 		#if defined(CONFIG_RTL_8196D) || defined(CONFIG_RTL_8196E) || (defined(CONFIG_RTL_8197D) && !defined(CONFIG_PORT0_EXT_GIGA))
-			ODM_Write4Byte(pDM_Odm, ODM_EDCA_BE_PARAM,  (BE_TXOP*2 << 16) | (cw_max << 12) | (5 << 8) | (sifs_time + 3 * slot_time));
-		#else
 			ODM_Write4Byte(pDM_Odm, ODM_EDCA_BE_PARAM,  (BE_TXOP*2 << 16) | (cw_max << 12) | (4 << 8) | (sifs_time + 3 * slot_time));
-		#endif
-		
  #endif
               }
 
@@ -8799,25 +8733,6 @@ odm_IotEngine(
 		switch_turbo--;
 	}
     }
-#if ((DM_ODM_SUPPORT_TYPE==ODM_AP)&&(defined CONFIG_RTL_819XD))
-    else if( (priv->assoc_num == 1) && (AMPDU_ENABLE)) {		
-        if (pstat) {
-			int en_thd = 14417920>>(priv->up_time % 2);
-            if ((priv->swq_en == 0) && (pstat->current_tx_bytes > en_thd) && (pstat->current_rx_bytes > en_thd) )  { //50Mbps
-                priv->swq_en = 1;
-				priv->swqen_keeptime = priv->up_time;
-            }
-            else if ((priv->swq_en == 1) && ((pstat->tx_avarage < 4587520) || (pstat->rx_avarage < 4587520))) { //35Mbps
-                priv->swq_en = 0;
-				priv->swqen_keeptime = 0;
-            }
-        }
-        else {
-            priv->swq_en = 0;
-			priv->swqen_keeptime = 0;
-        }
-    }
-#endif
 #endif
 
 #ifdef WIFI_WMM

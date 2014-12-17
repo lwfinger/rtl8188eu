@@ -19,18 +19,7 @@
  ******************************************************************************/
 
 #include <rtw_odm.h>
-#ifdef CONFIG_RTL8192C
-#include <rtl8192c_hal.h>
-#endif
-#ifdef CONFIG_RTL8192D
-#include <rtl8192d_hal.h>
-#endif
-#ifdef CONFIG_RTL8723A
-#include <rtl8723a_hal.h>
-#endif
-#ifdef CONFIG_RTL8188E
 #include <rtl8188e_hal.h>
-#endif
 
 const char *odm_comp_str[] = {
 	"ODM_COMP_DIG",

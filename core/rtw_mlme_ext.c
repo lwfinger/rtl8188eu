@@ -8555,11 +8555,7 @@ void issue_action_BA(_adapter *padapter, unsigned char *raddr, unsigned char act
 				else
 #endif
 				{
-					#if defined(CONFIG_RTL8188E) && defined(CONFIG_SDIO_HCI)
-					BA_para_set = (0x0802 | ((status & 0xf) << 2)); //immediate ack & 16 buffer size
-					#else
 					BA_para_set = (0x1002 | ((status & 0xf) << 2)); //immediate ack & 64 buffer size
-					#endif
 				}
 				//sys_mib.BA_para_set = 0x0802; //immediate ack & 32 buffer size
 				BA_para_set = cpu_to_le16(BA_para_set);
@@ -8589,14 +8585,6 @@ void issue_action_BA(_adapter *padapter, unsigned char *raddr, unsigned char act
 			case 1: //ADDBA rsp
 				pframe = rtw_set_fixed_ie(pframe, 1, &(pmlmeinfo->ADDBA_req.dialog_token), &(pattrib->pktlen));
 				pframe = rtw_set_fixed_ie(pframe, 2, (unsigned char *)(&status), &(pattrib->pktlen));
-				/*
-				//BA_para_set = cpu_to_le16((le16_to_cpu(pmlmeinfo->ADDBA_req.BA_para_set) & 0x3f) | 0x1000); //64 buffer size
-				#if defined(CONFIG_RTL8188E )&& defined (CONFIG_SDIO_HCI)
-				BA_para_set = ((le16_to_cpu(pmlmeinfo->ADDBA_req.BA_para_set) & 0x3f) | 0x0800); //32buffer size
-				#else
-				BA_para_set = ((le16_to_cpu(pmlmeinfo->ADDBA_req.BA_para_set) & 0x3f) | 0x1000); //64 buffer size
-				#endif
-				*/
 				rtw_hal_get_def_var(padapter, HW_VAR_MAX_RX_AMPDU_FACTOR, &max_rx_ampdu_factor);
 				if(MAX_AMPDU_FACTOR_64K == max_rx_ampdu_factor)
 					BA_para_set = ((le16_to_cpu(pmlmeinfo->ADDBA_req.BA_para_set) & 0x3f) | 0x1000); //64 buffer size
@@ -9328,18 +9316,7 @@ void site_survey(_adapter *padapter)
 
 			report_surveydone_event(padapter);
 
-#if defined(CONFIG_BT_COEXIST) && defined(CONFIG_RTL8723A)
-			if ((BT_1Ant(padapter) == _TRUE) && (BT_GetBtState(padapter) > BT_INFO_STATE_NO_CONNECTION))
-			{
-				pmlmeext->chan_scan_time = SURVEY_TO * 2;
-			}
-			else
-			{
-				pmlmeext->chan_scan_time = SURVEY_TO;
-			}
-#else
 			pmlmeext->chan_scan_time = SURVEY_TO;
-#endif
 
 			pmlmeext->sitesurvey_res.state = SCAN_DISABLE;
 

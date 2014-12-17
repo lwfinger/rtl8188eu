@@ -185,21 +185,6 @@ _func_exit_;
 void eeprom_write16(_adapter * padapter, u16 reg, u16 data)
 {
 	u8 x;
-#ifdef CONFIG_RTL8712
-	u8	tmp8_ori,tmp8_new,tmp8_clk_ori,tmp8_clk_new;
-	tmp8_ori=rtw_read8(padapter, 0x102502f1);
-	tmp8_new=tmp8_ori & 0xf7;
-	if(tmp8_ori != tmp8_new){	
-		rtw_write8(padapter, 0x102502f1, tmp8_new);
-		RT_TRACE(_module_rtl871x_mp_ioctl_c_,_drv_err_,("====write 0x102502f1=====\n"));
-	}
-	tmp8_clk_ori=rtw_read8(padapter,0x10250003);
-	tmp8_clk_new=tmp8_clk_ori|0x20;
-	if(tmp8_clk_new!=tmp8_clk_ori){
-		RT_TRACE(_module_rtl871x_mp_ioctl_c_,_drv_err_,("====write 0x10250003=====\n"));
-		rtw_write8(padapter, 0x10250003, tmp8_clk_new);
-	}	
-#endif
 _func_enter_;		
 	
 	x = rtw_read8(padapter, EE_9346CR);
@@ -255,13 +240,6 @@ _func_enter_;
 
 	eeprom_clean(padapter );
 exit:	
-#ifdef CONFIG_RTL8712
-	if(tmp8_clk_new!=tmp8_clk_ori)
-		rtw_write8(padapter, 0x10250003, tmp8_clk_ori);
-	if(tmp8_new!=tmp8_ori)
-		rtw_write8(padapter, 0x102502f1, tmp8_ori);
-
-#endif
 _func_exit_;	
 	return;
 }
@@ -271,21 +249,6 @@ u16 eeprom_read16(_adapter * padapter, u16 reg) //ReadEEprom
 
 	u16 x;
 	u16 data=0;
-#ifdef CONFIG_RTL8712
-	u8	tmp8_ori,tmp8_new,tmp8_clk_ori,tmp8_clk_new;
-	tmp8_ori= rtw_read8(padapter, 0x102502f1);
-	tmp8_new = tmp8_ori & 0xf7;
-	if(tmp8_ori != tmp8_new){	
-		rtw_write8(padapter, 0x102502f1, tmp8_new);
-		RT_TRACE(_module_rtl871x_mp_ioctl_c_,_drv_err_,("====write 0x102502f1=====\n"));
-	}
-	tmp8_clk_ori=rtw_read8(padapter,0x10250003);
-	tmp8_clk_new=tmp8_clk_ori|0x20;
-	if(tmp8_clk_new!=tmp8_clk_ori){
-		RT_TRACE(_module_rtl871x_mp_ioctl_c_,_drv_err_,("====write 0x10250003=====\n"));
-		rtw_write8(padapter, 0x10250003, tmp8_clk_new);
-	}	
-#endif
 _func_enter_;		
 
 	if(padapter->bSurpriseRemoved==_TRUE){
@@ -314,17 +277,8 @@ _func_enter_;
 
 	eeprom_clean(padapter);
 out:	
-#ifdef CONFIG_RTL8712
-	if(tmp8_clk_new!=tmp8_clk_ori)
-		rtw_write8(padapter, 0x10250003, tmp8_clk_ori);
-	if(tmp8_new!=tmp8_ori)
-		rtw_write8(padapter, 0x102502f1, tmp8_ori);
-
-#endif
 _func_exit_;		
 	return data;
-
-
 }
 
 
