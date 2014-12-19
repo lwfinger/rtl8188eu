@@ -21,7 +21,7 @@
 #define __RTL8188E_DM_H__
 enum{
 	UP_LINK,
-	DOWN_LINK,	
+	DOWN_LINK,
 };
 //###### duplicate code,will move to ODM #########
 #define IQK_MAC_REG_NUM		4
@@ -29,7 +29,7 @@ enum{
 #define IQK_BB_REG_NUM			9
 #define HP_THERMAL_NUM		8
 //###### duplicate code,will move to ODM #########
-struct 	dm_priv	
+struct	dm_priv
 {
 	u8	DM_Type;
 	u8	DMFlag;
@@ -54,7 +54,7 @@ struct 	dm_priv
 	PS_T	DM_PSTable;
 
 	FALSE_ALARM_STATISTICS FalseAlmCnt;
-	
+
 	//for rate adaptive, in fact,  88c/92c fw will handle this
 	u8 bUseRAMask;
 	RATE_ADAPTIVE RateAdaptive;
@@ -65,11 +65,11 @@ struct 	dm_priv
 	u8 DynamicTxHighPowerLvl;//Add by Jacken Tx Power Control for Near/Far Range 2008/03/06
 	u8	PowerIndex_backup[6];
 	u8	TxPowerTrackControl;	//for mp mode, turn off txpwrtracking as default
-#if 0		
+#if 0
 	//for tx power tracking
 	u8	bTXPowerTracking;
 	u8	TXPowercount;
-	u8	bTXPowerTrackingInit;	
+	u8	bTXPowerTrackingInit;
 
 
 	u8	TM_Trigger;
@@ -89,7 +89,7 @@ struct 	dm_priv
 	u8	bDPdone;
 	u8	bDPPathAOK;
 	u8	bDPPathBOK;
-	
+
 	//for IQK
 	u32	RegC04;
 	u32	Reg874;
@@ -103,7 +103,7 @@ struct 	dm_priv
 	u32	IQK_MAC_backup[IQK_MAC_REG_NUM];
 	u32	IQK_BB_backup_recover[9];
 	u32	IQK_BB_backup[IQK_BB_REG_NUM];
-	
+
 
 	u8	bCCKinCH14;
 
@@ -137,10 +137,10 @@ struct 	dm_priv
 	//for Antenna diversity
 #ifdef CONFIG_ANTENNA_DIVERSITY
 //	SWAT_T DM_SWAT_Table;
-#endif	
+#endif
 #ifdef CONFIG_SW_ANTENNA_DIVERSITY
 //	_timer SwAntennaSwitchTimer;
-/*	
+/*
 	u64	lastTxOkCnt;
 	u64	lastRxOkCnt;
 	u64	TXByteCnt_A;
@@ -154,7 +154,7 @@ struct 	dm_priv
 
 	s32	OFDM_Pkt_Cnt;
 	u8	RSSI_Select;
-//	u8 	DIG_Dynamic_MIN ;
+//	u8	DIG_Dynamic_MIN ;
 //###### duplicate code,will move to ODM #########
 #endif
 	// Add for Reading Initial Data Rate SEL Register 0x484 during watchdog. Using for fill tx desc. 2011.3.21 by Thomas
@@ -176,4 +176,3 @@ void	AntDivCompare8188E(struct adapter *Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_
 u8 AntDivBeforeLink8188E(struct adapter *Adapter );
 #endif
 #endif
-

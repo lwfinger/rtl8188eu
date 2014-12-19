@@ -20,7 +20,7 @@
 #ifndef __RTL8188E_XMIT_H__
 #define __RTL8188E_XMIT_H__
 
-#define 	MAX_TX_AGG_PACKET_NUMBER 	0xFF
+#define		MAX_TX_AGG_PACKET_NUMBER	0xFF
 //
 // Queue Select Value in TxDesc
 //
@@ -54,7 +54,7 @@
 #define BMC		BIT(24)
 #define LSG		BIT(26)
 #define FSG		BIT(27)
-#define OWN 		BIT(31)
+#define OWN		BIT(31)
 
 
 //OFFSET 4
@@ -62,7 +62,7 @@
 #define QSEL_SHT			8
 #define RATE_ID_SHT			16
 #define NAVUSEHDR			BIT(20)
-#define SEC_TYPE_SHT 		22
+#define SEC_TYPE_SHT		22
 #define PKT_OFFSET_SHT		26
 
 //OFFSET 8
@@ -80,24 +80,24 @@
 #define EN_HWSEQ			BIT(31)
 
 //OFFSET 16
-#define 	QOS                          BIT(6)
+#define		QOS                          BIT(6)
 #define	HW_SSN				BIT(7)
-#define 	USERATE			BIT(8)
-#define 	DISDATAFB			BIT(10)
+#define		USERATE			BIT(8)
+#define		DISDATAFB			BIT(10)
 #define   CTS_2_SELF			BIT(11)
 #define	RTS_EN				BIT(12)
 #define	HW_RTS_EN			BIT(13)
-#define 	DATA_SHORT			BIT(24)
-#define 	PWR_STATUS_SHT	15
-#define 	DATA_SC_SHT		20
-#define 	DATA_BW			BIT(25)
+#define		DATA_SHORT			BIT(24)
+#define		PWR_STATUS_SHT	15
+#define		DATA_SC_SHT		20
+#define		DATA_BW			BIT(25)
 
 //OFFSET 20
 #define	RTY_LMT_EN			BIT(17)
 
 enum TXDESC_SC{
 	SC_DONT_CARE = 0x00,
-	SC_UPPER= 0x01,	
+	SC_UPPER= 0x01,
 	SC_LOWER=0x02,
 	SC_DUPLICATE=0x03
 };
@@ -121,7 +121,7 @@ typedef struct txdesc_88e
 
 	//Offset 4
 	u32 macid:6;
-	u32 rsvd0406:2;	
+	u32 rsvd0406:2;
 	u32 qsel:5;
 	u32 rd_nav_ext:1;
 	u32 lsig_txop_en:1;
@@ -171,7 +171,7 @@ typedef struct txdesc_88e
 	u32 cts2self:1;
 	u32 rtsen:1;
 	u32 hw_rts_en:1;
-	u32 port_id:1;	
+	u32 port_id:1;
 	u32 pwr_status:3;
 	u32 wait_dcts:1;
 	u32 cts2ap_en:1;
@@ -308,4 +308,3 @@ void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf);
 
 void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
 #endif //__RTL8188E_XMIT_H__
-

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -91,14 +91,14 @@
 #define REG_SYS_CFG					0x00F0
 #define REG_MAC_PHY_CTRL_NORMAL	0x00f8
 
-#define  REG_MAC0                                	0x0081
-#define  REG_MAC1                                	0x0053
-#define  FW_MAC0_ready                      	0x18
-#define  FW_MAC1_ready                      	0x1A
-#define  MAC0_ON                                  	BIT7
-#define  MAC1_ON                                  	BIT0
-#define  mac0_ready                             	BIT0
-#define  mac1_ready                             	BIT0
+#define  REG_MAC0					0x0081
+#define  REG_MAC1					0x0053
+#define  FW_MAC0_ready				0x18
+#define  FW_MAC1_ready				0x1A
+#define  MAC0_ON					BIT7
+#define  MAC1_ON					BIT0
+#define  mac0_ready					BIT0
+#define  mac1_ready					BIT0
 
 
 //-----------------------------------------------------
@@ -177,7 +177,7 @@
 //
 //-----------------------------------------------------
 #define	REG_PCIE_CTRL_REG			0x0300
-#define	REG_INT_MIG				0x0304	// Interrupt Migration 
+#define	REG_INT_MIG				0x0304	// Interrupt Migration
 #define	REG_BCNQ_DESA				0x0308	// TX Beacon Descriptor Address
 #define	REG_HQ_DESA				0x0310	// TX High Queue Descriptor Address
 #define	REG_MGQ_DESA				0x0318	// TX Manage Queue Descriptor Address
@@ -189,7 +189,7 @@
 #define	REG_DBI					0x0348	// Backdoor REG for Access Configuration
 //sherry added for DBI Read/Write  20091126
 #define	REG_DBI_WDATA				0x0348	// Backdoor REG for Access Configuration
-#define  	REG_DBI_RDATA				0x034C //Backdoor REG for Access Configuration
+#define		REG_DBI_RDATA				0x034C //Backdoor REG for Access Configuration
 #define	REG_DBI_CTRL				0x0350  //Backdoor REG for Access Configuration
 #define	REG_DBI_FLAG				0x0352 //Backdoor REG for Access Configuration#define	REG_MDIO					0x0354	// MDIO for Access PCIE PHY
 #define	REG_MDIO					0x0354	// MDIO for Access PCIE PHY
@@ -300,7 +300,7 @@
 #define REG_USTIME_TSF				0x055C
 #define REG_BCN_MAX_ERR			0x055D
 #define REG_RXTSF_OFFSET_CCK		0x055E
-#define REG_RXTSF_OFFSET_OFDM		0x055F	
+#define REG_RXTSF_OFFSET_OFDM		0x055F
 #define REG_TSFTR					0x0560
 #define REG_TSFTR1					0x0568
 #define REG_INIT_TSFTR				0x0564
@@ -394,7 +394,7 @@
 #define REG_USB_AGG_TO				0xFE5C
 #define REG_USB_AGG_TH				0xFE5D
 
-// for 92DU high_Queue low_Queue Normal_Queue select 
+// for 92DU high_Queue low_Queue Normal_Queue select
 #define REG_USB_High_NORMAL_Queue_Select_MAC0  0xFE44
 //#define REG_USB_LOW_Queue_Select_MAC0       0xFE45
 #define REG_USB_High_NORMAL_Queue_Select_MAC1  0xFE47
@@ -443,7 +443,7 @@
 #define	MACIDR0					REG_MACID			// MAC ID Register, Offset 0x0050-0x0053
 #define	MACIDR4					(REG_MACID + 4)		// MAC ID Register, Offset 0x0054-0x0055
 
-#define 	PBP							REG_PBP
+#define		PBP							REG_PBP
 
 // Redifine MACID register, to compatible prior ICs.
 #define	IDR0						MACIDR0
@@ -463,20 +463,20 @@
 #define	UnusedRegister				0x1BF
 #define	DCAM						UnusedRegister
 #define	PSR							UnusedRegister
-#define 	BBAddr						UnusedRegister
+#define		BBAddr						UnusedRegister
 #define	PhyDataR					UnusedRegister
 
 #define	InvalidBBRFValue			0x12345678
 
 // Min Spacing related settings.
-#define	MAX_MSS_DENSITY_2T 			0x13
-#define	MAX_MSS_DENSITY_1T 			0x0A
+#define	MAX_MSS_DENSITY_2T			0x13
+#define	MAX_MSS_DENSITY_1T			0x0A
 
 //----------------------------------------------------------------------------
 //       8192C Cmd9346CR bits					(Offset 0xA, 16bit)
 //----------------------------------------------------------------------------
 #define	CmdEEPROM_En				BIT5	 // EEPROM enable when set 1
-#define	CmdEERPOMSEL				BIT4 	// System EEPROM select, 0: boot from E-FUSE, 1: The EEPROM used is 9346
+#define	CmdEERPOMSEL				BIT4	// System EEPROM select, 0: boot from E-FUSE, 1: The EEPROM used is 9346
 #define	Cmd9346CR_9356SEL			BIT4
 #define	AutoLoadEEPROM			(CmdEEPROM_En|CmdEERPOMSEL)
 #define	AutoLoadEFUSE				CmdEEPROM_En
@@ -496,7 +496,7 @@
 
 
 //----------------------------------------------------------------------------
-//       8192C (MSR) Media Status Register	(Offset 0x4C, 8 bits)  
+//       8192C (MSR) Media Status Register	(Offset 0x4C, 8 bits)
 //----------------------------------------------------------------------------
 /*
 Network Type
@@ -524,16 +524,16 @@ Default: 00b.
 #define	RRSR_RSC_LOWSUBCHNL		0x200000
 #define	RRSR_SHORT					0x800000
 #define	RRSR_1M					BIT0
-#define	RRSR_2M					BIT1 
-#define	RRSR_5_5M					BIT2 
-#define	RRSR_11M					BIT3 
-#define	RRSR_6M					BIT4 
-#define	RRSR_9M					BIT5 
-#define	RRSR_12M					BIT6 
-#define	RRSR_18M					BIT7 
-#define	RRSR_24M					BIT8 
-#define	RRSR_36M					BIT9 
-#define	RRSR_48M					BIT10 
+#define	RRSR_2M					BIT1
+#define	RRSR_5_5M					BIT2
+#define	RRSR_11M					BIT3
+#define	RRSR_6M					BIT4
+#define	RRSR_9M					BIT5
+#define	RRSR_12M					BIT6
+#define	RRSR_18M					BIT7
+#define	RRSR_24M					BIT8
+#define	RRSR_36M					BIT9
+#define	RRSR_48M					BIT10
 #define	RRSR_54M					BIT11
 #define	RRSR_MCS0					BIT12
 #define	RRSR_MCS1					BIT13
@@ -543,7 +543,7 @@ Default: 00b.
 #define	RRSR_MCS5					BIT17
 #define	RRSR_MCS6					BIT18
 #define	RRSR_MCS7					BIT19
-#define	BRSR_AckShortPmb			BIT23	
+#define	BRSR_AckShortPmb			BIT23
 // CCK ACK: use Short Preamble or not
 
 //----------------------------------------------------------------------------
@@ -561,7 +561,7 @@ Default: 00b.
 #define	CAM_NOTVALID				0x0000
 #define	CAM_USEDK					BIT5
 
-#define	CAM_CONTENT_COUNT 		8
+#define	CAM_CONTENT_COUNT		8
 
 #define	CAM_NONE					0x0
 #define	CAM_WEP40					0x01
@@ -572,11 +572,11 @@ Default: 00b.
 
 
 #define	TOTAL_CAM_ENTRY			32
-#define	HALF_CAM_ENTRY			16	
-       		
+#define	HALF_CAM_ENTRY			16
+
 #define	CAM_CONFIG_USEDK			_TRUE
 #define	CAM_CONFIG_NO_USEDK		_FALSE
-       		
+
 #define	CAM_WRITE					BIT16
 #define	CAM_READ					0x00000000
 #define	CAM_POLLINIG				BIT31
@@ -611,7 +611,7 @@ Default: 00b.
 #define	IMR_TIMEOUT2				BIT17		// Timeout interrupt 2
 #define	IMR_TIMEOUT1				BIT16		// Timeout interrupt 1
 #define	IMR_TXFOVW				BIT15		// Transmit FIFO Overflow
-#define	IMR_PSTIMEOUT				BIT14		// Power save time out interrupt 
+#define	IMR_PSTIMEOUT				BIT14		// Power save time out interrupt
 #define	IMR_BcnInt					BIT13		// Beacon DMA Interrupt 0
 #define	IMR_RXFOVW				BIT12		// Receive FIFO Overflow
 #define	IMR_RDU					BIT11		// Receive Descriptor Unavailable
@@ -651,10 +651,10 @@ Default: 00b.
 // Default Value for EEPROM or EFUSE!!!
 //
 #define	EEPROM_Default_TSSI					0x0
-#define 	EEPROM_Default_TxPowerDiff				0x0
-#define 	EEPROM_Default_CrystalCap				0x0		//92D default 0x0
-#define 	EEPROM_Default_BoardType				0x02 // Default: 2X2, RTL8192CE(QFPN68)
-#define 	EEPROM_Default_TxPower				0x1010
+#define		EEPROM_Default_TxPowerDiff				0x0
+#define		EEPROM_Default_CrystalCap				0x0		//92D default 0x0
+#define		EEPROM_Default_BoardType				0x02 // Default: 2X2, RTL8192CE(QFPN68)
+#define		EEPROM_Default_TxPower				0x1010
 #define	EEPROM_Default_HT2T_TxPwr				0x10
 
 #define	EEPROM_Default_LegacyHTTxPowerDiff	0x4
@@ -666,17 +666,17 @@ Default: 00b.
 #define	EEPROM_Default_TxPowerLevel_5G		0x22
 
 #define	EEPROM_Default_HT40_2SDiff				0x0
-#define 	EEPROM_Default_HT20_Diff				2	// HT20<->40 default Tx Power Index Difference
+#define		EEPROM_Default_HT20_Diff				2	// HT20<->40 default Tx Power Index Difference
 #define	EEPROM_Default_LegacyHTTxPowerDiff	0x4	//OFDM Tx Power index diff
-#define 	EEPROM_Default_HT40_PwrMaxOffset		0
-#define 	EEPROM_Default_HT20_PwrMaxOffset		0
+#define		EEPROM_Default_HT40_PwrMaxOffset		0
+#define		EEPROM_Default_HT20_PwrMaxOffset		0
 
 // For debug
-#define 	EEPROM_Default_PID						0x1234
-#define 	EEPROM_Default_VID						0x5678
-#define 	EEPROM_Default_CustomerID				0xAB
-#define 	EEPROM_Default_SubCustomerID			0xCD
-#define 	EEPROM_Default_Version					0
+#define		EEPROM_Default_PID						0x1234
+#define		EEPROM_Default_VID						0x5678
+#define		EEPROM_Default_CustomerID				0xAB
+#define		EEPROM_Default_SubCustomerID			0xCD
+#define		EEPROM_Default_Version					0
 
 #define	EEPROM_Default_externalPA_C9		0x00
 #define	EEPROM_Default_externalPA_CC		0xFF
@@ -704,11 +704,11 @@ Default: 00b.
 #define	EEPROM_CHANNEL_PLAN_BY_HW_MASK	0x80
 
 
-#define 	EEPROM_CID_DEFAULT					0x0
-#define 	EEPROM_CID_TOSHIBA					0x4
+#define		EEPROM_CID_DEFAULT					0x0
+#define		EEPROM_CID_TOSHIBA					0x4
 #define	EEPROM_CID_CCX						0x10 // CCX test. By Bruce, 2009-02-25.
 #define	EEPROM_CID_QMI						0x0D
-#define 	EEPROM_CID_WHQL 						0xFE // added by chiyoko for dtm, 20090108
+#define		EEPROM_CID_WHQL							0xFE // added by chiyoko for dtm, 20090108
 
 
 #define	RTL8192_EEPROM_ID						0x8129
@@ -767,7 +767,7 @@ Default: 00b.
 #define EEPROM_HT40_MAX_PWR_OFFSET_5GH		0xB5
 #define EEPROM_HT20_MAX_PWR_OFFSET_5GH		0xB8
 
-#define EEPROM_CHANNEL_PLAN					0xBB // Map of supported channels.	
+#define EEPROM_CHANNEL_PLAN					0xBB // Map of supported channels.
 #define EEPROM_IQK_DELTA						0xBC
 #define EEPROM_LCK_DELTA						0xBC
 #define EEPROM_XTAL_K							0xBD	//[7:5]
@@ -792,7 +792,7 @@ Default: 00b.
 #define EEPROM_DEF_PART_NO					0x3FD  //Byte
 #define EEPROME_CHIP_VERSION_L				0x3FF
 #define EEPROME_CHIP_VERSION_H				0x3FE
-#endif 
+#endif
 
 #ifdef CONFIG_USB_HCI
 #define RTL8190_EEPROM_ID						0x8129	// 0-1
@@ -846,7 +846,7 @@ Default: 00b.
 #define EEPROM_HT40_MAX_PWR_OFFSET_5GH		0xB5
 #define EEPROM_HT20_MAX_PWR_OFFSET_5GH		0xB8
 
-#define EEPROM_CHANNEL_PLAN					0xBB // Map of supported channels.	
+#define EEPROM_CHANNEL_PLAN					0xBB // Map of supported channels.
 #define EEPROM_TEST_CHANNEL_PLAN				0xBB
 #define EEPROM_IQK_DELTA						0xBC
 #define EEPROM_LCK_DELTA						0xBC
@@ -946,7 +946,7 @@ Default: 00b.
 
 #define	EEPROM_CID_DEFAULT						0x0
 
-#define	EEPROM_CID_WHQL 						0xFE // added by chiyoko for dtm, 20090108
+#define	EEPROM_CID_WHQL							0xFE // added by chiyoko for dtm, 20090108
 
 
 #define	EEPROM_CID_CCX							0x10 // CCX test. By Bruce, 2009-02-25.
@@ -957,7 +957,7 @@ Default: 00b.
 
 /*===================================================================
 =====================================================================
-Here the register defines are for 92C. When the define is as same with 92C, 
+Here the register defines are for 92C. When the define is as same with 92C,
 we will use the 92C's define for the consistency
 So the following defines for 92C is not entire!!!!!!
 =====================================================================
@@ -993,23 +993,23 @@ Current IOREG MAP
 #define	RCR_ACF					BIT12		//Accept control type frame
 #define	RCR_ADF					BIT11		//Accept data type frame
 #define	RCR_AICV					BIT9		//Accept ICV error packet
-#define	RCR_ACRC32					BIT8		//Accept CRC32 error packet 
+#define	RCR_ACRC32					BIT8		//Accept CRC32 error packet
 #define	RCR_CBSSID_BCN			BIT7		//Accept BSSID match packet (Rx beacon, probe rsp)
 #define	RCR_CBSSID_DATA			BIT6		//Accept BSSID match packet (Data)
 #define	RCR_CBSSID					RCR_CBSSID_DATA		//Accept BSSID match packet
 #define	RCR_APWRMGT				BIT5		//Accept power management packet
 #define	RCR_ADD3					BIT4		//Accept address 3 match packet
-#define	RCR_AB						BIT3		//Accept broadcast packet 
-#define	RCR_AM						BIT2		//Accept multicast packet 
+#define	RCR_AB						BIT3		//Accept broadcast packet
+#define	RCR_AM						BIT2		//Accept multicast packet
 #define	RCR_APM					BIT1		//Accept physical match packet
-#define	RCR_AAP					BIT0		//Accept all unicast packet 
+#define	RCR_AAP					BIT0		//Accept all unicast packet
 #define	RCR_MXDMA_OFFSET			8
 #define	RCR_FIFO_OFFSET			13
 
 
 
 //============================================================================
-//       8192c USB specific Regsiter Offset and Content definition, 
+//       8192c USB specific Regsiter Offset and Content definition,
 //       2009.08.18, added by vivi. for merge 92c and 92C into one driver
 //============================================================================
 //#define APS_FSMCO				0x0004  same with 92Ce
@@ -1040,7 +1040,7 @@ Current IOREG MAP
 #define InvalidBBRFValue			0x12345678
 
 //============================================================================
-//       8192C Regsiter Bit and Content definition 
+//       8192C Regsiter Bit and Content definition
 //============================================================================
 //-----------------------------------------------------
 //
@@ -1230,11 +1230,11 @@ Current IOREG MAP
 #define EF_PD						BIT(19)
 #define EF_FLAG						BIT(31)
 
-//2 EFUSE_TEST 
+//2 EFUSE_TEST
 #define EF_TRPT						BIT(7)
 #define LDOE25_EN					BIT(31)
 
-//2 PWR_DATA 
+//2 PWR_DATA
 
 //2 CAL_TIMER
 
@@ -1264,8 +1264,8 @@ Current IOREG MAP
 //2 GPIO_INTM
 
 //2 LEDCFG
-#define LED0PL 					BIT(4)  
-#define LED1PL 					BIT(12)
+#define LED0PL					BIT(4)
+#define LED1PL					BIT(12)
 #define LED0DIS					BIT(7)
 
 #define  SECCAM_CLR				BIT(30)
@@ -1387,12 +1387,12 @@ Current IOREG MAP
 #define HQSEL_HIQ					BIT(5)
 
 // For normal driver, 0x10C
-#define _TXDMA_HIQ_MAP(x) 	 		(((x)&0x3) << 14)
-#define _TXDMA_MGQ_MAP(x) 	 		(((x)&0x3) << 12)
-#define _TXDMA_BKQ_MAP(x) 	 		(((x)&0x3) << 10)		
-#define _TXDMA_BEQ_MAP(x) 	 		(((x)&0x3) << 8 )
-#define _TXDMA_VIQ_MAP(x) 	 		(((x)&0x3) << 6 )
-#define _TXDMA_VOQ_MAP(x) 	 		(((x)&0x3) << 4 )
+#define _TXDMA_HIQ_MAP(x)			(((x)&0x3) << 14)
+#define _TXDMA_MGQ_MAP(x)			(((x)&0x3) << 12)
+#define _TXDMA_BKQ_MAP(x)			(((x)&0x3) << 10)
+#define _TXDMA_BEQ_MAP(x)			(((x)&0x3) << 8 )
+#define _TXDMA_VIQ_MAP(x)			(((x)&0x3) << 6 )
+#define _TXDMA_VOQ_MAP(x)			(((x)&0x3) << 4 )
 
 #define QUEUE_LOW					1
 #define QUEUE_NORMAL				2
@@ -1695,8 +1695,8 @@ Current IOREG MAP
 #define	SCR_RxDecEnable				BIT(3)			//Enable Rx Decryption
 #define	SCR_SKByA2						BIT(4)			//Search kEY BY A2
 #define	SCR_NoSKMC						BIT(5)			//No Key Search Multicast
-#define 	SCR_TXBCUSEDK					BIT(6)			// Force Tx Broadcast packets Use Default Key
-#define 	SCR_RXBCUSEDK					BIT(7)			// Force Rx Broadcast packets Use Default Key
+#define		SCR_TXBCUSEDK					BIT(6)			// Force Tx Broadcast packets Use Default Key
+#define		SCR_RXBCUSEDK					BIT(7)			// Force Rx Broadcast packets Use Default Key
 
 //vivi added for new cam search flow, 20091028
 #ifdef HW_EN_DE_CRYPTION_FOR_NEW_CAM_SEARCH_FLOW
@@ -1758,4 +1758,3 @@ Current IOREG MAP
 #include "basic_types.h"
 
 #endif
-

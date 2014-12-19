@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -34,7 +34,7 @@
 	#if defined(CONFIG_GSPI_HCI)
 		#define NR_RECVBUFF (32)
 	#elif defined(CONFIG_SDIO_HCI)
-		#define NR_RECVBUFF (8)	
+		#define NR_RECVBUFF (8)
 	#else
 	#ifdef CONFIG_SINGLE_RECV_BUF
 		#define NR_RECVBUFF (1)
@@ -144,4 +144,3 @@ void rtl8192c_translate_rx_signal_stuff(union recv_frame *precvframe, struct phy
 void rtl8192c_query_rx_desc_status(union recv_frame *precvframe, struct recv_stat *pdesc);
 
 #endif
-

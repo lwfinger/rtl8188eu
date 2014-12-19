@@ -66,24 +66,24 @@ struct recv_reorder_ctrl
 };
 
 struct	stainfo_rxcache	{
-	u16 	tid_rxseq[16];
+	u16	tid_rxseq[16];
 /*
-	unsigned short 	tid0_rxseq;
-	unsigned short 	tid1_rxseq;
-	unsigned short 	tid2_rxseq;
-	unsigned short 	tid3_rxseq;
-	unsigned short 	tid4_rxseq;
-	unsigned short 	tid5_rxseq;
-	unsigned short 	tid6_rxseq;
-	unsigned short 	tid7_rxseq;
-	unsigned short 	tid8_rxseq;
-	unsigned short 	tid9_rxseq;
-	unsigned short 	tid10_rxseq;
-	unsigned short 	tid11_rxseq;
-	unsigned short 	tid12_rxseq;
-	unsigned short 	tid13_rxseq;
-	unsigned short 	tid14_rxseq;
-	unsigned short 	tid15_rxseq;
+	unsigned short	tid0_rxseq;
+	unsigned short	tid1_rxseq;
+	unsigned short	tid2_rxseq;
+	unsigned short	tid3_rxseq;
+	unsigned short	tid4_rxseq;
+	unsigned short	tid5_rxseq;
+	unsigned short	tid6_rxseq;
+	unsigned short	tid7_rxseq;
+	unsigned short	tid8_rxseq;
+	unsigned short	tid9_rxseq;
+	unsigned short	tid10_rxseq;
+	unsigned short	tid11_rxseq;
+	unsigned short	tid12_rxseq;
+	unsigned short	tid13_rxseq;
+	unsigned short	tid14_rxseq;
+	unsigned short	tid15_rxseq;
 */
 };
 
@@ -96,46 +96,46 @@ struct smooth_rssi_data {
 };
 
 struct signal_stat {
-	u8	update_req;		//used to indicate 
+	u8	update_req;		//used to indicate
 	u8	avg_val;		//avg of valid elements
 	u32	total_num;		//num of valid elements
-	u32	total_val;		//sum of valid elements	
+	u32	total_val;		//sum of valid elements
 };
 /*
 #define MAX_PATH_NUM_92CS		2
 
 typedef struct _ODM_Phy_Status_Info_
-{	
-	u1Byte		RxPWDBAll;	
-	u1Byte		SignalQuality;	 // in 0-100 index. 
+{
+	u1Byte		RxPWDBAll;
+	u1Byte		SignalQuality;	 // in 0-100 index.
 	u1Byte		RxMIMOSignalQuality[MAX_PATH_NUM_92CS]; //EVM
 	u1Byte		RxMIMOSignalStrength[MAX_PATH_NUM_92CS];// in 0~100 index
 #if (DM_ODM_SUPPORT_TYPE &  (ODM_MP|ODM_CE))
 	s1Byte		RxPower; // in dBm Translate from PWdB
 	s1Byte		RecvSignalPower;// Real power in dBm for this packet, no beautification and aggregation. Keep this raw info to be used for the other procedures.
-	u1Byte		BTRxRSSIPercentage;	
+	u1Byte		BTRxRSSIPercentage;
 	u1Byte		SignalStrength; // in 0-100 index.
 	u1Byte		RxPwr[MAX_PATH_NUM_92CS];//per-path's pwdb
 #endif
-	u1Byte		RxSNR[MAX_PATH_NUM_92CS];//per-path's SNR	
+	u1Byte		RxSNR[MAX_PATH_NUM_92CS];//per-path's SNR
 }ODM_PHY_INFO_T,*PODM_PHY_INFO_T;
 */
 
 #define MAX_PATH_NUM_92CS		2
 struct phy_info //ODM_PHY_INFO_T
-{	
-	u8		RxPWDBAll;	
-	u8		SignalQuality;	 // in 0-100 index. 
+{
+	u8		RxPWDBAll;
+	u8		SignalQuality;	 // in 0-100 index.
 	u8		RxMIMOSignalQuality[MAX_PATH_NUM_92CS]; //EVM
 	u8		RxMIMOSignalStrength[MAX_PATH_NUM_92CS];// in 0~100 index
 //#if (DM_ODM_SUPPORT_TYPE &  (ODM_MP|ODM_CE))
 	s8		RxPower; // in dBm Translate from PWdB
 	s8		RecvSignalPower;// Real power in dBm for this packet, no beautification and aggregation. Keep this raw info to be used for the other procedures.
-	u8		BTRxRSSIPercentage;	
+	u8		BTRxRSSIPercentage;
 	u8		SignalStrength; // in 0-100 index.
 	u8		RxPwr[MAX_PATH_NUM_92CS];//per-path's pwdb
 	u8		RxSNR[MAX_PATH_NUM_92CS];//per-path's SNR
-//#endif	
+//#endif
 };
 
 
@@ -145,8 +145,8 @@ struct rx_pkt_attrib	{
 	u8	drvinfo_sz;
 	u8	shift_sz;
 	u8	hdrlen; //the WLAN Header Len
-	u8 	to_fr_ds;
-	u8 	amsdu;
+	u8	to_fr_ds;
+	u8	amsdu;
 	u8	qos;
 	u8	priority;
 	u8	pw_save;
@@ -165,35 +165,35 @@ struct rx_pkt_attrib	{
 
 	u16 eth_type;
 
-	u8 	dst[ETH_ALEN];
-	u8 	src[ETH_ALEN];
-	u8 	ta[ETH_ALEN];
-	u8 	ra[ETH_ALEN];
-	u8 	bssid[ETH_ALEN];
-	
+	u8	dst[ETH_ALEN];
+	u8	src[ETH_ALEN];
+	u8	ta[ETH_ALEN];
+	u8	ra[ETH_ALEN];
+	u8	bssid[ETH_ALEN];
+
 	u8 ack_policy;
-	
+
 //#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	u8	tcpchk_valid; // 0: invalid, 1: valid
 	u8	ip_chkrpt; //0: incorrect, 1: correct
 	u8	tcp_chkrpt; //0: incorrect, 1: correct
 //#endif
-	u8 	key_index;
+	u8	key_index;
 
 	u8	mcs_rate;
 	u8	rxht;
-	u8 	sgi;
-	u8 	pkt_rpt_type;
+	u8	sgi;
+	u8	pkt_rpt_type;
 	u32	MacIDValidEntry[2];	// 64 bits present 64 entry.
 
 /*
 	u8	signal_qual;
 	s8	rx_mimo_signal_qual[2];
 	u8	signal_strength;
-	u32	RxPWDBAll;	
+	u32	RxPWDBAll;
 	s32	RecvSignalPower;
 */
-	struct phy_info phy_info;	
+	struct phy_info phy_info;
 };
 
 
@@ -321,7 +321,7 @@ struct recv_priv
 #ifdef CONFIG_PCI_HCI
 	// Rx
 	struct rtw_rx_ring	rx_ring[PCI_MAX_RX_QUEUE];
-	int 	rxringcount;
+	int	rxringcount;
 	u16	rxbuffersize;
 #endif
 
@@ -583,7 +583,7 @@ __inline static u8 *recvframe_put(union recv_frame *precvframe, sint sz)
 
 	//used for append sz bytes from ptr to rx_tail, update rx_tail and return the updated rx_tail to the caller
 	//after putting, rx_tail must be still larger than rx_end.
- 	unsigned char * prev_rx_tail;
+	unsigned char * prev_rx_tail;
 
 	if(precvframe==NULL)
 		return NULL;
@@ -668,7 +668,7 @@ __inline static u8 *pkt_to_recvmem(_pkt *pkt)
 
 	union recv_frame * precv_frame = pkt_to_recvframe(pkt);
 
-	return 	precv_frame->u.hdr.rx_head;
+	return	precv_frame->u.hdr.rx_head;
 
 }
 
@@ -678,7 +678,7 @@ __inline static u8 *pkt_to_recvdata(_pkt *pkt)
 
 	union recv_frame * precv_frame =pkt_to_recvframe(pkt);
 
-	return 	precv_frame->u.hdr.rx_data;
+	return	precv_frame->u.hdr.rx_data;
 
 }
 
@@ -694,8 +694,8 @@ __inline static s32 translate_percentage_to_dbm(u32 SignalStrengthIndex)
 	s32	SignalPower; // in dBm.
 
 	// Translate to dBm (x=0.5y-95).
-	SignalPower = (s32)((SignalStrengthIndex + 1) >> 1); 
-	SignalPower -= 95; 
+	SignalPower = (s32)((SignalStrengthIndex + 1) >> 1);
+	SignalPower -= 95;
 
 	return SignalPower;
 }
@@ -708,4 +708,3 @@ extern void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv);
 extern void  mgt_dispatcher(struct adapter *padapter, union recv_frame *precv_frame);
 
 #endif
-

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -29,7 +29,7 @@
 typedef struct sdio_data
 {
 	u8  func_number;
- 
+
 	u8  tx_block_mode;
 	u8  rx_block_mode;
 	u32 block_transfer_len;
@@ -39,4 +39,3 @@ typedef struct sdio_data
 } SDIO_DATA, *PSDIO_DATA;
 
 #endif
-

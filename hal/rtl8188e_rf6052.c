@@ -34,7 +34,7 @@
  * Data			Who		Remark
  *
  * 09/25/2008	MHC		Create initial version.
- * 11/05/2008 	MHC		Add API for tw power setting.
+ * 11/05/2008	MHC		Add API for tw power setting.
  *
  *
 ******************************************************************************/
@@ -89,7 +89,7 @@ static	RF_SHADOW_T	RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
  *
  * Revised History:
  * When			Who		Remark
- * 09/25/2008 	MHC		Create Version 0.
+ * 09/25/2008	MHC		Create Version 0.
  *						Firmwaer support the utility later.
  *
  *---------------------------------------------------------------------------*/
@@ -198,7 +198,7 @@ rtl8188e_PHY_RF6052SetBandwidth(
  *
  * Revised History:
  * When			Who		Remark
- * 11/05/2008 	MHC		Simulate 8192series..
+ * 11/05/2008	MHC		Simulate 8192series..
  *
  *---------------------------------------------------------------------------*/
 
@@ -210,7 +210,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
 	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
-	struct mlme_ext_priv 		*pmlmeext = &Adapter->mlmeextpriv;
+	struct mlme_ext_priv		*pmlmeext = &Adapter->mlmeextpriv;
 	//PMGNT_INFO		pMgntInfo=&Adapter->MgntInfo;
 	u32			TxAGC[2]={0, 0}, tmpval=0,pwrtrac_value;
 	BOOLEAN		TurboScanOff = _FALSE;
@@ -219,7 +219,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 	u8			direction;
 	//FOR CE ,must disable turbo scan
 	TurboScanOff = _TRUE;
-	
+
 
 	if(pmlmeext->sitesurvey_res.state == SCAN_PROCESS)
 	{
@@ -280,16 +280,16 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 		}
 	}
 
-	
+
 	ODM_TxPwrTrackAdjust88E(&pHalData->odmpriv, 1, &direction, &pwrtrac_value);
 	//printk("ODM_TxPwrTrackAdjust88E => direction:%02x, pwrtrac_value:%d \n", direction, pwrtrac_value);
 	//printk(" ==> TxAGC:0x%08x \n",TxAGC[0] );
-	
+
 	if (direction == 1)			// Increase TX pwoer
 	{
 		TxAGC[0] += pwrtrac_value;
 		TxAGC[1] += pwrtrac_value;
-		
+
 	}
 	else if (direction == 2)	// Decrease TX pwoer
 	{
@@ -314,7 +314,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 	PHY_SetBBReg(Adapter, rTxAGC_A_CCK1_Mcs32, bMaskByte1, tmpval);
 	//printk("CCK PWR 1M (rf-A) = 0x%x (reg 0x%x)\n", tmpval, rTxAGC_A_CCK1_Mcs32);
 
-	
+
 	tmpval = TxAGC[RF_PATH_A]>>8;
 	PHY_SetBBReg(Adapter, rTxAGC_B_CCK11_A_CCK2_11, 0xffffff00, tmpval);
 	//printk("CCK PWR 2~11M (rf-A) = 0x%x (reg 0x%x)\n", tmpval, rTxAGC_B_CCK11_A_CCK2_11);
@@ -413,7 +413,7 @@ void getPowerBase88E(
 		else
 		{
 			powerlevel[i] = pPowerLevelBW40[i];
-		}	
+		}
 		powerBase1 = powerlevel[i];
 		powerBase1 = (powerBase1<<24) | (powerBase1<<16) |(powerBase1<<8) |powerBase1;
 		*(MCSBase+i) = powerBase1;
@@ -433,7 +433,7 @@ static void getTxPowerWriteValByRegulatory(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u8	i, chnlGroup, pwr_diff_limit[4];
-	u32 	writeVal, customer_limit, rf;
+	u32	writeVal, customer_limit, rf;
 
 	//
 	// Index 0 & 1= legacy OFDM, 2-5=HT_MCS rate
@@ -562,12 +562,12 @@ void getTxPowerWriteValByRegulatory88E(
 	OUT		u32*		pOutWriteVal
 	)
 {
-	
+
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u1Byte			i, chnlGroup=0, pwr_diff_limit[4], customer_pwr_limit;
 	s1Byte			pwr_diff=0;
-	u4Byte 			writeVal, customer_limit, rf;
+	u4Byte			writeVal, customer_limit, rf;
 	u1Byte			Regulatory = pHalData->EEPROMRegulatory;
 
 	//
@@ -585,9 +585,9 @@ void getTxPowerWriteValByRegulatory88E(
 			case 0:	// Realtek better performance
 					// increase power diff defined by Realtek for large power
 				chnlGroup = 0;
-				//RTPRINT(FPHY, PHY_TXPWR, ("MCSTxPowerLevelOriginalOffset[%d][%d] = 0x%x\n", 
+				//RTPRINT(FPHY, PHY_TXPWR, ("MCSTxPowerLevelOriginalOffset[%d][%d] = 0x%x\n",
 				//	chnlGroup, index, pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]));
-				writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] + 
+				writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] +
 					((index<2)?powerBase0[rf]:powerBase1[rf]);
 				//RTPRINT(FPHY, PHY_TXPWR, ("RTK better performance, writeVal(%c) = 0x%x\n", ((rf==0)?'A':'B'), writeVal));
 				break;
@@ -609,13 +609,13 @@ void getTxPowerWriteValByRegulatory88E(
 						else if(Channel <14)		// Channel 12-13
 							chnlGroup = 4;
 						else if(Channel ==14)		// Channel 14
-							chnlGroup = 4;	
-						
+							chnlGroup = 4;
+
 						if(pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
 							chnlGroup++;
 						else
 							chnlGroup+=6;
-				
+
 /*
 						if(Channel <= 3)
 							chnlGroup = 0;
@@ -623,17 +623,17 @@ void getTxPowerWriteValByRegulatory88E(
 							chnlGroup = 1;
 						else if(Channel > 9)
 							chnlGroup = 2;
-						
-						
+
+
 						if(pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
 							chnlGroup++;
 						else
 							chnlGroup+=4;
-*/							
+*/
 					}
-					//RTPRINT(FPHY, PHY_TXPWR, ("MCSTxPowerLevelOriginalOffset[%d][%d] = 0x%x\n", 
+					//RTPRINT(FPHY, PHY_TXPWR, ("MCSTxPowerLevelOriginalOffset[%d][%d] = 0x%x\n",
 					//chnlGroup, index, pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]));
-					writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] + 
+					writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] +
 							((index<2)?powerBase0[rf]:powerBase1[rf]);
 					//RTPRINT(FPHY, PHY_TXPWR, ("Realtek regulatory, 20MHz, writeVal(%c) = 0x%x\n", ((rf==0)?'A':'B'), writeVal));
 				}
@@ -646,18 +646,18 @@ void getTxPowerWriteValByRegulatory88E(
 			case 3:	// Customer defined power diff.
 					// increase power diff defined by customer.
 				chnlGroup = 0;
-				//RTPRINT(FPHY, PHY_TXPWR, ("MCSTxPowerLevelOriginalOffset[%d][%d] = 0x%x\n", 
+				//RTPRINT(FPHY, PHY_TXPWR, ("MCSTxPowerLevelOriginalOffset[%d][%d] = 0x%x\n",
 				//	chnlGroup, index, pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]));
 
 				/*
 				if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20_40)
 				{
-					RTPRINT(FPHY, PHY_TXPWR, ("customer's limit, 40MHz rf(%c) = 0x%x\n", 
+					RTPRINT(FPHY, PHY_TXPWR, ("customer's limit, 40MHz rf(%c) = 0x%x\n",
 						((rf==0)?'A':'B'), pHalData->PwrGroupHT40[rf][Channel-1]));
 				}
 				else
 				{
-					RTPRINT(FPHY, PHY_TXPWR, ("customer's limit, 20MHz rf(%c) = 0x%x\n", 
+					RTPRINT(FPHY, PHY_TXPWR, ("customer's limit, 20MHz rf(%c) = 0x%x\n",
 						((rf==0)?'A':'B'), pHalData->PwrGroupHT20[rf][Channel-1]));
 				}*/
 
@@ -679,11 +679,11 @@ void getTxPowerWriteValByRegulatory88E(
 					pwr_diff = 0;
 				else
 					pwr_diff = customer_pwr_limit - pwr_diff;
-				
+
 				for (i=0; i<4; i++)
 					{
 					pwr_diff_limit[i] = (u1Byte)((pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]&(0x7f<<(i*8)))>>(i*8));
-					
+
 					if(pwr_diff_limit[i] > pwr_diff)
 						pwr_diff_limit[i] = pwr_diff;
 				}
@@ -695,7 +695,7 @@ void getTxPowerWriteValByRegulatory88E(
 				break;
 			default:
 				chnlGroup = 0;
-				writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] + 
+				writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] +
 						((index<2)?powerBase0[rf]:powerBase1[rf]);
 				//RTPRINT(FPHY, PHY_TXPWR, ("RTK better performance, writeVal rf(%c) = 0x%x\n", ((rf==0)?'A':'B'), writeVal));
 				break;
@@ -720,12 +720,12 @@ void getTxPowerWriteValByRegulatory88E(
 		else if(pdmpriv->DynamicTxHighPowerLvl == TxHighPwrLevel_BT2)
 		{
 			//RTPRINT(FBT, BT_TRACE, ("Tx Power (-0)\n"));
-			writeVal = writeVal ;		
+			writeVal = writeVal ;
 		}
 		/*
 		if(pMgntInfo->bDisableTXPowerByRate)
 		{
-		// add for  OID_RT_11N_TX_POWER_BY_RATE ,disable tx powre change by rate                                  
+		// add for  OID_RT_11N_TX_POWER_BY_RATE ,disable tx powre change by rate
 			writeVal = 0x2c2c2c2c;
 		}
 		*/
@@ -736,7 +736,7 @@ void getTxPowerWriteValByRegulatory88E(
 static void writeOFDMPowerReg88E(
 	IN		struct adapter *Adapter,
 	IN		u8		index,
-	IN 		u32*		pValue
+	IN		u32*		pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -808,7 +808,7 @@ static void writeOFDMPowerReg88E(
  *
  * Revised History:
  * When			Who		Remark
- * 11/05/2008 	MHC		Simulate 8192 series method.
+ * 11/05/2008	MHC		Simulate 8192 series method.
  * 01/06/2009	MHC		1. Prevent Path B tx power overflow or underflow dure to
  *						A/B pwr difference or legacy/HT pwr diff.
  *						2. We concern with path B legacy/HT OFDM difference.
@@ -816,19 +816,19 @@ static void writeOFDMPowerReg88E(
  *
  *---------------------------------------------------------------------------*/
 
-VOID 
+VOID
 rtl8188e_PHY_RF6052SetOFDMTxPower(
 	IN	struct adapter *Adapter,
 	IN	u8*		pPowerLevelOFDM,
 	IN	u8*		pPowerLevelBW20,
-	IN	u8*		pPowerLevelBW40,	
+	IN	u8*		pPowerLevelBW40,
 	IN	u8		Channel)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u32 writeVal[2], powerBase0[2], powerBase1[2], pwrtrac_value;
 	u8 direction;
-	u8 index = 0;	
-	
+	u8 index = 0;
+
 
 	//DBG_871X("PHY_RF6052SetOFDMTxPower, channel(%d) \n", Channel);
 
@@ -839,10 +839,10 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 	// This is ued to fix unstable power tracking mode.
 	//
 	ODM_TxPwrTrackAdjust88E(&pHalData->odmpriv, 0, &direction, &pwrtrac_value);
-	
+
 	for(index=0; index<6; index++)
 	{
-		getTxPowerWriteValByRegulatory88E(Adapter, Channel, index, 
+		getTxPowerWriteValByRegulatory88E(Adapter, Channel, index,
 			&powerBase0[0], &powerBase1[0], &writeVal[0]);
 
 		if (direction == 1)
@@ -855,7 +855,7 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 			writeVal[0] -= pwrtrac_value;
 			writeVal[1] -= pwrtrac_value;
 		}
-		
+
 		writeOFDMPowerReg88E(Adapter, index, &writeVal[0]);
 	}
 }
@@ -927,7 +927,7 @@ phy_RF6052_Config_ParaFile(
 		rtw_udelay_os(1);//PlatformStallExecution(1);
 
 		/* Set bit number of Address and Data for RF register */
-		PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, b3WireAddressLength, 0x0); 	// Set 1 to 4 bits for 8255
+		PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, b3WireAddressLength, 0x0);	// Set 1 to 4 bits for 8255
 		rtw_udelay_os(1);//PlatformStallExecution(1);
 
 		PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, b3WireDataLength, 0x0);	// Set 0 to 12  bits for 8255
@@ -952,7 +952,7 @@ phy_RF6052_Config_ParaFile(
 #ifdef CONFIG_EMBEDDED_FWIMG
 			#ifdef CONFIG_PHY_SETTING_WITH_ODM
 			if(HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
-				rtStatus= _FAIL;	
+				rtStatus= _FAIL;
 			#else
 				rtStatus = rtl8188e_PHY_ConfigRFWithHeaderFile(Adapter,(RF_RADIO_PATH_E)eRFPath);
 			#endif //#ifdef CONFIG_PHY_SETTING_WITH_ODM
@@ -1066,7 +1066,7 @@ PHY_RF6052_Config8188E(
  *
  * Revised History:
  * When			Who		Remark
- * 11/20/2008 	MHC		Create Version 0.
+ * 11/20/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
 u32
@@ -1269,4 +1269,3 @@ PHY_RFShadowRefresh(
 }	/* PHY_RFShadowRead */
 
 /* End of HalRf6052.c */
-

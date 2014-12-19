@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -22,7 +22,7 @@
 
 
 //--------------------------------------------
-//3				Host Message Box 
+//3				Host Message Box
 //--------------------------------------------
 
 // User Define Message [31:8]
@@ -63,7 +63,7 @@ struct P2P_PS_Offload_t {
 
 // Description: Determine the types of H2C commands that are the same in driver and Fw.
 // Fisrt constructed by tynli. 2009.10.09.
-typedef enum _RTL8192D_H2C_CMD 
+typedef enum _RTL8192D_H2C_CMD
 {
 	H2C_AP_OFFLOAD = 0,		/*0*/
 	H2C_SETPWRMODE = 1,		/*1*/
@@ -99,5 +99,3 @@ void	rtl8192d_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state);
 #endif //CONFIG_P2P
 
 #endif
-
-

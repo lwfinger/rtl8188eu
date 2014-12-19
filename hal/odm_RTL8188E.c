@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -39,7 +39,7 @@ ODM_DIG_LowerBound_88E(
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("ODM_DIG_LowerBound_88E(): pDM_DigTable->AntDiv_RSSI_max=%d \n",pDM_DigTable->AntDiv_RSSI_max));
 	}
 	//If only one Entry connected
-	
+
 
 
 }
@@ -54,31 +54,31 @@ odm_RX_HWAntDivInit(
 	struct adapter *	Adapter = pDM_Odm->Adapter;
         #if (MP_DRIVER == 1)
         if (*(pDM_Odm->mp_mode) == 1)
-       	{
-        	pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
-        	ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0); // disable HW AntDiv 
-        	ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT31, 1);  // 1:CG, 0:CS
+	{
+		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
+		ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0); // disable HW AntDiv
+		ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT31, 1);  // 1:CG, 0:CS
 		return;
         }
         #endif
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_RX_HWAntDivInit() \n"));
-	
+
 	//MAC Setting
 	value32 = ODM_GetMACReg(pDM_Odm, ODM_REG_ANTSEL_PIN_11N, bMaskDWord);
 	ODM_SetMACReg(pDM_Odm, ODM_REG_ANTSEL_PIN_11N, bMaskDWord, value32|(BIT23|BIT25)); //Reg4C[25]=1, Reg4C[23]=1 for pin output
 	//Pin Settings
-	ODM_SetBBReg(pDM_Odm, ODM_REG_PIN_CTRL_11N , BIT9|BIT8, 0);//Reg870[8]=1'b0, Reg870[9]=1'b0 		//antsel antselb by HW
-	ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT10, 0);	//Reg864[10]=1'b0 	//antsel2 by HW
-	ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT22, 1);	//Regb2c[22]=1'b0 	//disable CS/CG switch
+	ODM_SetBBReg(pDM_Odm, ODM_REG_PIN_CTRL_11N , BIT9|BIT8, 0);//Reg870[8]=1'b0, Reg870[9]=1'b0		//antsel antselb by HW
+	ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT10, 0);	//Reg864[10]=1'b0	//antsel2 by HW
+	ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT22, 1);	//Regb2c[22]=1'b0	//disable CS/CG switch
 	ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT31, 1);	//Regb2c[31]=1'b1	//output at CG only
 	//OFDM Settings
 	ODM_SetBBReg(pDM_Odm, ODM_REG_ANTDIV_PARA1_11N , bMaskDWord, 0x000000a0);
 	//CCK Settings
 	ODM_SetBBReg(pDM_Odm, ODM_REG_BB_PWR_SAV4_11N , BIT7, 1); //Fix CCK PHY status report issue
-	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA2_11N , BIT4, 1); //CCK complete HW AntDiv within 64 samples	
+	ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA2_11N , BIT4, 1); //CCK complete HW AntDiv within 64 samples
 	ODM_UpdateRxIdleAnt_88E(pDM_Odm, MAIN_ANT);
 	ODM_SetBBReg(pDM_Odm, ODM_REG_ANT_MAPPING1_11N , 0xFFFF, 0x0201);	//antenna mapping table
-	
+
 	//ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 1);	//Enable HW AntDiv
 	//ODM_SetBBReg(pDM_Odm, 0xa00 , BIT15, 1); //Enable CCK AntDiv
 }
@@ -90,27 +90,27 @@ odm_TRX_HWAntDivInit(
 {
 	u4Byte	value32;
 	struct adapter *	Adapter = pDM_Odm->Adapter;
-	
+
         #if (MP_DRIVER == 1)
 	if (*(pDM_Odm->mp_mode) == 1)
         {
-        	pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
-        	ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0); // disable HW AntDiv 
-        	ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT5|BIT4|BIT3, 0); //Default RX   (0/1)
-        	return;
-        	}
-			
+		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
+		ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0); // disable HW AntDiv
+		ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT5|BIT4|BIT3, 0); //Default RX   (0/1)
+		return;
+		}
+
         #endif
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_TRX_HWAntDivInit() \n"));
-	
+
 	//MAC Setting
 	value32 = ODM_GetMACReg(pDM_Odm, ODM_REG_ANTSEL_PIN_11N, bMaskDWord);
 	ODM_SetMACReg(pDM_Odm, ODM_REG_ANTSEL_PIN_11N, bMaskDWord, value32|(BIT23|BIT25)); //Reg4C[25]=1, Reg4C[23]=1 for pin output
 	//Pin Settings
-	ODM_SetBBReg(pDM_Odm, ODM_REG_PIN_CTRL_11N , BIT9|BIT8, 0);//Reg870[8]=1'b0, Reg870[9]=1'b0 		//antsel antselb by HW
-	ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT10, 0);	//Reg864[10]=1'b0 	//antsel2 by HW
-	ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT22, 0);	//Regb2c[22]=1'b0 	//disable CS/CG switch
+	ODM_SetBBReg(pDM_Odm, ODM_REG_PIN_CTRL_11N , BIT9|BIT8, 0);//Reg870[8]=1'b0, Reg870[9]=1'b0		//antsel antselb by HW
+	ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT10, 0);	//Reg864[10]=1'b0	//antsel2 by HW
+	ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT22, 0);	//Regb2c[22]=1'b0	//disable CS/CG switch
 	ODM_SetBBReg(pDM_Odm, ODM_REG_LNA_SWITCH_11N , BIT31, 1);	//Regb2c[31]=1'b1	//output at CG only
 	//OFDM Settings
 	ODM_SetBBReg(pDM_Odm, ODM_REG_ANTDIV_PARA1_11N , bMaskDWord, 0x000000a0);
@@ -144,12 +144,12 @@ odm_FastAntTrainingInit(
 	u4Byte	AntCombination = 2;
 	struct adapter *	Adapter = pDM_Odm->Adapter;
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit() \n"));
-    
+
 #if (MP_DRIVER == 1)
 	if (*(pDM_Odm->mp_mode) == 1)
-  	{	  
-  		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("pDM_Odm->AntDivType: %d\n", pDM_Odm->AntDivType));
-  	 	 return;
+	{
+		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("pDM_Odm->AntDivType: %d\n", pDM_Odm->AntDivType));
+		 return;
 	}
 #endif
 
@@ -174,13 +174,13 @@ odm_FastAntTrainingInit(
 	//Match MAC ADDR
 	ODM_SetMACReg(pDM_Odm, 0x7b4, 0xFFFF, 0);
 	ODM_SetMACReg(pDM_Odm, 0x7b0, bMaskDWord, 0);
-	
-	ODM_SetBBReg(pDM_Odm, 0x870 , BIT9|BIT8, 0);//Reg870[8]=1'b0, Reg870[9]=1'b0 		//antsel antselb by HW
-	ODM_SetBBReg(pDM_Odm, 0x864 , BIT10, 0);	//Reg864[10]=1'b0 	//antsel2 by HW
-	ODM_SetBBReg(pDM_Odm, 0xb2c , BIT22, 0);	//Regb2c[22]=1'b0 	//disable CS/CG switch
+
+	ODM_SetBBReg(pDM_Odm, 0x870 , BIT9|BIT8, 0);//Reg870[8]=1'b0, Reg870[9]=1'b0		//antsel antselb by HW
+	ODM_SetBBReg(pDM_Odm, 0x864 , BIT10, 0);	//Reg864[10]=1'b0	//antsel2 by HW
+	ODM_SetBBReg(pDM_Odm, 0xb2c , BIT22, 0);	//Regb2c[22]=1'b0	//disable CS/CG switch
 	ODM_SetBBReg(pDM_Odm, 0xb2c , BIT31, 1);	//Regb2c[31]=1'b1	//output at CG only
 	ODM_SetBBReg(pDM_Odm, 0xca4 , bMaskDWord, 0x000000a0);
-	
+
 	//antenna mapping table
 	if(AntCombination == 2)
 	{
@@ -205,14 +205,14 @@ odm_FastAntTrainingInit(
 			ODM_SetBBReg(pDM_Odm, 0x858 , BIT15|BIT14, 2);	//(Reg878[0],Reg858[14:15])=3'b010
 			ODM_SetBBReg(pDM_Odm, 0x878 , BIT19|BIT18|BIT17, 3);//Reg878[3:1]=3b'011
 			ODM_SetBBReg(pDM_Odm, 0x878 , BIT22|BIT21|BIT20, 4);//Reg878[6:4]=3b'100
-			ODM_SetBBReg(pDM_Odm, 0x878 , BIT25|BIT24|BIT23, 5);//Reg878[9:7]=3b'101 
-			ODM_SetBBReg(pDM_Odm, 0x878 , BIT28|BIT27|BIT26, 6);//Reg878[12:10]=3b'110 
+			ODM_SetBBReg(pDM_Odm, 0x878 , BIT25|BIT24|BIT23, 5);//Reg878[9:7]=3b'101
+			ODM_SetBBReg(pDM_Odm, 0x878 , BIT28|BIT27|BIT26, 6);//Reg878[12:10]=3b'110
 			ODM_SetBBReg(pDM_Odm, 0x878 , BIT31|BIT30|BIT29, 7);//Reg878[15:13]=3b'111
 		}
 		else //MPchip
 		{
 			ODM_SetBBReg(pDM_Odm, 0x914 , bMaskByte0, 0);
-			ODM_SetBBReg(pDM_Odm, 0x914 , bMaskByte1, 1);	
+			ODM_SetBBReg(pDM_Odm, 0x914 , bMaskByte1, 1);
 			ODM_SetBBReg(pDM_Odm, 0x914 , bMaskByte2, 2);
 			ODM_SetBBReg(pDM_Odm, 0x914 , bMaskByte3, 3);
 			ODM_SetBBReg(pDM_Odm, 0x918 , bMaskByte0, 4);
@@ -233,9 +233,9 @@ odm_FastAntTrainingInit(
 	//ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 0); //RegC50[7]=1'b0		//disable HW AntDiv
 	//ODM_SetBBReg(pDM_Odm,  0xe08 , BIT16, 0); //RegE08[16]=1'b0		//disable fast training
 	//ODM_SetBBReg(pDM_Odm, 0xe08 , BIT16, 1);	//RegE08[16]=1'b1		//enable fast training
-	ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 1);	//RegC50[7]=1'b1 		//enable HW AntDiv
+	ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 1);	//RegC50[7]=1'b1		//enable HW AntDiv
 
-		
+
 	//SW Control
 	//PHY_SetBBReg(Adapter, 0x864 , BIT10, 1);
 	//PHY_SetBBReg(Adapter, 0x870 , BIT9, 1);
@@ -302,7 +302,7 @@ ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 			ODM_SetBBReg(pDM_Odm, ODM_REG_RX_ANT_CTRL_11N , BIT8|BIT7|BIT6, OptionalAnt);		//Optional RX
 			ODM_SetBBReg(pDM_Odm, ODM_REG_ANTSEL_CTRL_11N , BIT14|BIT13|BIT12, DefaultAnt);	//Default TX
 			ODM_SetMACReg(pDM_Odm, ODM_REG_RESP_TX_11N , BIT6|BIT7, DefaultAnt);	//Resp Tx
-			
+
 		}
 		else if(pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV)
 		{
@@ -326,12 +326,12 @@ odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u4Byte MacId)
 		TargetAnt = MAIN_ANT_CG_TRX;
 	else
 		TargetAnt = AUX_ANT_CG_TRX;
-	
+
 	pDM_FatTable->antsel_a[MacId] = TargetAnt&BIT0;
 	pDM_FatTable->antsel_b[MacId] = (TargetAnt&BIT1)>>1;
 	pDM_FatTable->antsel_c[MacId] = (TargetAnt&BIT2)>>2;
 
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Tx from TxInfo, TargetAnt=%s\n", 
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Tx from TxInfo, TargetAnt=%s\n",
 						(Ant==MAIN_ANT)?"MAIN_ANT":"AUX_ANT"));
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD,("antsel_tr_mux=3'b%d%d%d\n",
 							pDM_FatTable->antsel_c[MacId] , pDM_FatTable->antsel_b[MacId] , pDM_FatTable->antsel_a[MacId] ));
@@ -342,7 +342,7 @@ VOID
 ODM_SetTxAntByTxInfo_88E(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		pu1Byte			pDesc,
-	IN		u1Byte			macId	
+	IN		u1Byte			macId
 	)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -352,7 +352,7 @@ ODM_SetTxAntByTxInfo_88E(
 		SET_TX_DESC_ANTSEL_A_88E(pDesc, pDM_FatTable->antsel_a[macId]);
 		SET_TX_DESC_ANTSEL_B_88E(pDesc, pDM_FatTable->antsel_b[macId]);
 		SET_TX_DESC_ANTSEL_C_88E(pDesc, pDM_FatTable->antsel_c[macId]);
-		//ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("ODM_SetTxAntByTxInfo_88E_WIN(): MacID=%d, antsel_tr_mux=3'b%d%d%d\n", 
+		//ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("ODM_SetTxAntByTxInfo_88E_WIN(): MacID=%d, antsel_tr_mux=3'b%d%d%d\n",
 		//	macId, pDM_FatTable->antsel_c[macId], pDM_FatTable->antsel_b[macId], pDM_FatTable->antsel_a[macId]));
 	}
 }
@@ -419,7 +419,7 @@ odm_HWAntDiv(
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
 	BOOLEAN	bMatchBSSID;
 	BOOLEAN	bPktFilterMacth = FALSE;
-	PSTA_INFO_T   	pEntry;
+	PSTA_INFO_T	pEntry;
 
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++)
 	{
@@ -446,20 +446,20 @@ odm_HWAntDiv(
 				Main_RSSI = Aux_RSSI;
 			else if((pDM_FatTable->RxIdleAnt == AUX_ANT) && (Aux_RSSI == 0))
 				Aux_RSSI = Main_RSSI;
-		
+
 			LocalMinRSSI = (Main_RSSI>Aux_RSSI)?Aux_RSSI:Main_RSSI;
 			if(LocalMinRSSI < MinRSSI)
 			{
 				MinRSSI = LocalMinRSSI;
 				RxIdleAnt = TargetAnt;
-			}	
+			}
 #if TX_BY_REG
-			
+
 #else
 			//2 Select TRX Antenna
 			if(pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
 				odm_UpdateTxAnt_88E(pDM_Odm, TargetAnt, i);
-#endif			
+#endif
 		}
 		pDM_FatTable->MainAnt_Sum[i] = 0;
 		pDM_FatTable->AuxAnt_Sum[i] = 0;
@@ -482,7 +482,7 @@ odm_SetNextMACAddrTarget(
 )
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
-	PSTA_INFO_T   	pEntry;
+	PSTA_INFO_T	pEntry;
 	//u1Byte	Bssid[6];
 	u4Byte	value32, i;
 
@@ -498,7 +498,7 @@ odm_SetNextMACAddrTarget(
 				pDM_FatTable->TrainIdx = 0;
 			else
 				pDM_FatTable->TrainIdx++;
-			
+
 			pEntry = pDM_Odm->pODM_StaInfo[pDM_FatTable->TrainIdx];
 			if(IS_STA_VALID(pEntry))
 			{
@@ -528,7 +528,7 @@ odm_SetNextMACAddrTarget(
 				break;
 			}
 		}
-		
+
 	}
 
 #if 0
@@ -536,7 +536,7 @@ odm_SetNextMACAddrTarget(
 	//2012.03.26 LukeLee: This should be removed later, the MAC address is changed according to MACID in turn
 	//
 	#if( DM_ODM_SUPPORT_TYPE & ODM_MP)
-	{		
+	{
 		struct adapter *Adapter =  pDM_Odm->Adapter;
 		PMGNT_INFO	pMgntInfo = &Adapter->MgntInfo;
 
@@ -549,7 +549,7 @@ odm_SetNextMACAddrTarget(
 	#endif
 
 	//odm_SetNextMACAddrTarget(pDM_Odm);
-	
+
 	//1 Select MAC Address Filter
 	for (i=0; i<6; i++)
 	{
@@ -570,7 +570,7 @@ odm_SetNextMACAddrTarget(
 
 	return bMatchBSSID;
 #endif
-				
+
 }
 
 VOID
@@ -582,7 +582,7 @@ odm_FastAntTraining(
 	u1Byte	TargetAnt=2;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	BOOLEAN	bPktFilterMacth = FALSE;
-	PSTA_INFO_T   	pEntry;
+	PSTA_INFO_T	pEntry;
 
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("==>odm_FastAntTraining()\n"));
@@ -617,14 +617,14 @@ odm_FastAntTraining(
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("None Packet is matched\n"));
 
 			ODM_SetBBReg(pDM_Odm, 0xe08 , BIT16, 0);	//RegE08[16]=1'b0		//disable fast training
-			ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 0);		//RegC50[7]=1'b0 		//disable HW AntDiv
+			ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 0);		//RegC50[7]=1'b0		//disable HW AntDiv
 		}
 		else
 		{
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("TargetAnt=%d, MaxRSSI=%d\n",TargetAnt,MaxRSSI));
 
 			ODM_SetBBReg(pDM_Odm, 0xe08 , BIT16, 0);	//RegE08[16]=1'b0		//disable fast training
-			//ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 0);		//RegC50[7]=1'b0 		//disable HW AntDiv
+			//ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 0);		//RegC50[7]=1'b0		//disable HW AntDiv
 			ODM_SetBBReg(pDM_Odm, 0x864 , BIT8|BIT7|BIT6, TargetAnt);	//Default RX is Omni, Optional RX is the best decision by FAT
 			//ODM_SetBBReg(pDM_Odm, 0x860 , BIT14|BIT13|BIT12, TargetAnt);	//Default TX
 			ODM_SetBBReg(pDM_Odm, 0x80c , BIT21, 1); //Reg80c[21]=1'b1		//from TX Info
@@ -646,7 +646,7 @@ odm_FastAntTraining(
 
 
 			if(TargetAnt == 0)
-				ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 0);		//RegC50[7]=1'b0 		//disable HW AntDiv
+				ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 0);		//RegC50[7]=1'b0		//disable HW AntDiv
 
 		}
 
@@ -656,7 +656,7 @@ odm_FastAntTraining(
 			pDM_FatTable->antSumRSSI[i] = 0;
 			pDM_FatTable->antRSSIcnt[i] = 0;
 		}
-		
+
 		pDM_FatTable->FAT_State = FAT_NORMAL_STATE;
 		return;
 	}
@@ -681,12 +681,12 @@ odm_FastAntTraining(
 		//2 Prepare Training
 		pDM_FatTable->FAT_State = FAT_TRAINING_STATE;
 		ODM_SetBBReg(pDM_Odm, 0xe08 , BIT16, 1);	//RegE08[16]=1'b1		//enable fast training
-		ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 1);	//RegC50[7]=1'b1 		//enable HW AntDiv
+		ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 1);	//RegC50[7]=1'b1		//enable HW AntDiv
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Start FAT_TRAINING_STATE\n"));
 		ODM_SetTimer(pDM_Odm,&pDM_Odm->FastAntTrainingTimer, 500 ); //ms
-		
+
 	}
-		
+
 }
 
 VOID
@@ -728,7 +728,7 @@ ODM_AntennaDiversity_88E(
 	if((pDM_Odm->SupportICType != ODM_RTL8188E) || (!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV)))
 	{
 		//ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("ODM_AntennaDiversity_88E: Not Support 88E AntDiv\n"));
-		return;	
+		return;
 	}
 #ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
 	if(pDM_Odm->bLinked){
@@ -738,14 +738,14 @@ ODM_AntennaDiversity_88E(
 			u8 i=0;
 			Main_RSSI = (pDM_FatTable->MainAnt_Cnt[i]!=0)?(pDM_FatTable->MainAnt_Sum[i]/pDM_FatTable->MainAnt_Cnt[i]):0;
 			Aux_RSSI = (pDM_FatTable->AuxAnt_Cnt[i]!=0)?(pDM_FatTable->AuxAnt_Sum[i]/pDM_FatTable->AuxAnt_Cnt[i]):0;
-			
+
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("MacID=%d, MainAnt_Sum=%d, MainAnt_Cnt=%d\n", i, pDM_FatTable->MainAnt_Sum[i], pDM_FatTable->MainAnt_Cnt[i]));
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("MacID=%d, AuxAnt_Sum=%d, AuxAnt_Cnt=%d\n",i, pDM_FatTable->AuxAnt_Sum[i], pDM_FatTable->AuxAnt_Cnt[i]));
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("MacID=%d, Main_RSSI= %d, Aux_RSSI= %d\n", i, Main_RSSI, Aux_RSSI));
 			pDM_FatTable->MainAnt_Sum[i] = 0;
 			pDM_FatTable->AuxAnt_Sum[i] = 0;
 			pDM_FatTable->MainAnt_Cnt[i] = 0;
-			pDM_FatTable->AuxAnt_Cnt[i] = 0;	
+			pDM_FatTable->AuxAnt_Cnt[i] = 0;
 		}
 		if(pDM_Odm->Adapter->registrypriv.force_ant==1){
 			ODM_UpdateRxIdleAnt_88E(pDM_Odm, MAIN_ANT);
@@ -753,13 +753,13 @@ ODM_AntennaDiversity_88E(
 			return;
 		}
 		else if(pDM_Odm->Adapter->registrypriv.force_ant==2){
-			ODM_UpdateRxIdleAnt_88E(pDM_Odm, AUX_ANT);	
+			ODM_UpdateRxIdleAnt_88E(pDM_Odm, AUX_ANT);
 			printk("%s fixed antenna in AUX ant\n",__FUNCTION__);
 			return;
-		}		
+		}
 	}
 #endif
-	
+
 
 
 	if(!pDM_Odm->bLinked)
@@ -768,7 +768,7 @@ ODM_AntennaDiversity_88E(
 		if(pDM_FatTable->bBecomeLinked == TRUE)
 		{
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Need to Turn off HW AntDiv\n"));
-			ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0);	//RegC50[7]=1'b1 		//enable HW AntDiv
+			ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0);	//RegC50[7]=1'b1		//enable HW AntDiv
 			ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA1_11N , BIT15, 0); //Enable CCK AntDiv
 			if(pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
 				ODM_SetBBReg(pDM_Odm, ODM_REG_TX_ANT_CTRL_11N , BIT21, 0); //Reg80c[21]=1'b0		//from TX Reg
@@ -782,7 +782,7 @@ ODM_AntennaDiversity_88E(
 		{
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Need to Turn on HW AntDiv\n"));
 			//Because HW AntDiv is disabled before Link, we enable HW AntDiv after link
-			ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 1);	//RegC50[7]=1'b1 		//enable HW AntDiv
+			ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 1);	//RegC50[7]=1'b1		//enable HW AntDiv
 			ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_ANTDIV_PARA1_11N , BIT15, 1); //Enable CCK AntDiv
 			//ODM_SetMACReg(pDM_Odm, 0x7B4 , BIT18, 1); //Response Tx by current HW antdiv
 	if(pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
@@ -827,7 +827,7 @@ odm_FastAntTrainingCallback(
 	//#else
 	//PlatformScheduleWorkItem(&pHalData->SwAntennaSwitchWorkitem);
 	//#endif
-	
+
 }
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 VOID odm_FastAntTrainingCallback(void *FunctionContext)
@@ -854,7 +854,7 @@ VOID
 ODM_SetTxAntByTxInfo_88E(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		pu1Byte			pDesc,
-	IN		u1Byte			macId	
+	IN		u1Byte			macId
 	)
 {
 }
@@ -875,7 +875,7 @@ VOID
 odm_PrimaryCCA_Init(
 	IN		PDM_ODM_T		pDM_Odm)
 {
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);  
+	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 	PrimaryCCA->DupRTS_flag = 0;
 	PrimaryCCA->intf_flag = 0;
 	PrimaryCCA->intf_type = 0;
@@ -888,8 +888,8 @@ ODM_DynamicPrimaryCCA_DupRTS(
 	IN		PDM_ODM_T		pDM_Odm
 	)
 {
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);  
-	
+	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
+
 	return	PrimaryCCA->DupRTS_flag;
 }
 
@@ -902,16 +902,16 @@ odm_DynamicPrimaryCCA(
 	prtl8192cd_priv	priv		= pDM_Odm->priv;	// for AP
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-#if (DM_ODM_SUPPORT_TYPE & (ODM_MP))	
+#if (DM_ODM_SUPPORT_TYPE & (ODM_MP))
 	PMGNT_INFO	pMgntInfo = &(Adapter->MgntInfo);
 	PRT_WLAN_STA	pEntry;
-#endif	
+#endif
 
 	PFALSE_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);  
-	
+	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
+
 	BOOLEAN		Is40MHz;
-	BOOLEAN		Client_40MHz = FALSE, Client_tmp = FALSE;      // connected client BW  
+	BOOLEAN		Client_40MHz = FALSE, Client_tmp = FALSE;      // connected client BW
 	BOOLEAN		bConnected = FALSE;		// connected or not
 	static u1Byte	Client_40MHz_pre = 0;
 	static u8Byte	lastTxOkCnt = 0;
@@ -922,18 +922,18 @@ odm_DynamicPrimaryCCA(
 	u8Byte		curRxOkCnt;
 	u1Byte		SecCHOffset;
 	u1Byte		i;
-	
+
 #if((DM_ODM_SUPPORT_TYPE==ODM_ADSL) ||( DM_ODM_SUPPORT_TYPE==ODM_CE))
 	return;
 #endif
 
-	if(pDM_Odm->SupportICType != ODM_RTL8188E) 
+	if(pDM_Odm->SupportICType != ODM_RTL8188E)
 		return;
 
 	Is40MHz = *(pDM_Odm->pBandWidth);
 	SecCHOffset = *(pDM_Odm->pSecChOffset);
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("Second CH Offset = %d\n", SecCHOffset));
-	
+
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 	if(Is40MHz==1)
 		SecCHOffset = SecCHOffset%2+1;     // NIC's definition is reverse to AP   1:secondary below,  2: secondary above
@@ -942,7 +942,7 @@ odm_DynamicPrimaryCCA(
 	curTxOkCnt = Adapter->TxStats.NumTxBytesUnicast - lastTxOkCnt;
 	curRxOkCnt = Adapter->RxStats.NumRxBytesUnicast - lastRxOkCnt;
 	lastTxOkCnt = Adapter->TxStats.NumTxBytesUnicast;
-	lastRxOkCnt = Adapter->RxStats.NumRxBytesUnicast;	
+	lastRxOkCnt = Adapter->RxStats.NumRxBytesUnicast;
 #elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
 	//3 Check Current WLAN Traffic
 	curTxOkCnt = *(pDM_Odm->pNumTxBytesUnicast)-lastTxOkCnt;
@@ -961,15 +961,15 @@ odm_DynamicPrimaryCCA(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("OFDM FA = %d\n", FalseAlmCnt->Cnt_Ofdm_fail));
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("CCK FA = %d\n", FalseAlmCnt->Cnt_Cck_fail));
 	//================================================
-	
+
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 	if (ACTING_AS_AP(Adapter))   // primary cca process only do at AP mode
 #endif
 	{
-		
+
 	#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("ACTING as AP mode=%d\n", ACTING_AS_AP(Adapter)));
-		//3 To get entry's connection and BW infomation status. 
+		//3 To get entry's connection and BW infomation status.
 		for(i=0;i<ASSOCIATE_ENTRY_NUM;i++)
 		{
 			if(IsAPModeExist(Adapter)&&GetFirstExtAdapter(Adapter)!=NULL)
@@ -982,7 +982,7 @@ odm_DynamicPrimaryCCA(
 				ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("Client_BW=%d\n", Client_tmp));
 				if(Client_tmp>Client_40MHz)
 					Client_40MHz = Client_tmp;     // 40M/20M coexist => 40M priority is High
-				
+
 				if(pEntry->bAssociated)
 				{
 					bConnected=TRUE;    // client is connected or not
@@ -995,7 +995,7 @@ odm_DynamicPrimaryCCA(
 			}
 		}
 #elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-		//3 To get entry's connection and BW infomation status. 
+		//3 To get entry's connection and BW infomation status.
 
 		PSTA_INFO_T pstat;
 
@@ -1003,18 +1003,18 @@ odm_DynamicPrimaryCCA(
 		{
 			pstat = pDM_Odm->pODM_StaInfo[i];
 			if(IS_STA_VALID(pstat) )
-			{			
-				Client_tmp = pstat->tx_bw;  
+			{
+				Client_tmp = pstat->tx_bw;
 				if(Client_tmp>Client_40MHz)
 					Client_40MHz = Client_tmp;     // 40M/20M coexist => 40M priority is High
-				
+
 				bConnected = TRUE;
 			}
 		}
 #endif
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("bConnected=%d\n", bConnected));
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("Is Client 40MHz=%d\n", Client_40MHz));
-		//1 Monitor whether the interference exists or not 
+		//1 Monitor whether the interference exists or not
 		if(PrimaryCCA->Monitor_flag == 1)
 		{
 			if(SecCHOffset == 1)       // secondary channel is below the primary channel
@@ -1035,7 +1035,7 @@ odm_DynamicPrimaryCCA(
 						if(PrimaryCCA->DupRTS_flag == 0)
 							PrimaryCCA->DupRTS_flag = 1;
 					}
-				
+
 				}
 				else   // interferecne disappear
 				{
@@ -1062,7 +1062,7 @@ odm_DynamicPrimaryCCA(
 						if(PrimaryCCA->DupRTS_flag == 0)
 							PrimaryCCA->DupRTS_flag = 1;
 					}
-				
+
 				}
 				else   // interferecne disappear
 				{
@@ -1079,13 +1079,13 @@ odm_DynamicPrimaryCCA(
 		//1 Dynamic Primary CCA Main Function
 		if(PrimaryCCA->Monitor_flag == 0)
 		{
-			if(Is40MHz)    		// if RFBW==40M mode which require to process primary cca
+			if(Is40MHz)		// if RFBW==40M mode which require to process primary cca
 			{
 				//2 STA is NOT Connected
 				if(!bConnected)
 				{
 					ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("STA NOT Connected!!!!\n"));
-			
+
 					if(PrimaryCCA->PriCCA_flag == 1)		// reset primary cca when STA is disconnected
 					{
 						PrimaryCCA->PriCCA_flag = 0;
@@ -1100,14 +1100,14 @@ odm_DynamicPrimaryCCA(
 						{
 							PrimaryCCA->intf_flag = 1;    // secondary channel interference is detected!!!
 							if(FalseAlmCnt->Cnt_Ofdm_fail > FalseAlmCnt->Cnt_OFDM_CCA>>1)
-								PrimaryCCA->intf_type = 1;    	// interference is shift
+								PrimaryCCA->intf_type = 1;	// interference is shift
 							else
-								PrimaryCCA->intf_type = 2;    	// interference is in-band
+								PrimaryCCA->intf_type = 2;	// interference is in-band
 						}
-						else    
+						else
 						{
 							PrimaryCCA->intf_flag = 0;
-							PrimaryCCA->intf_type = 0;  
+							PrimaryCCA->intf_type = 0;
 						}
 					}
 					else if(SecCHOffset == 2)    // secondary channel is above the primary channel
@@ -1116,14 +1116,14 @@ odm_DynamicPrimaryCCA(
 						{
 							PrimaryCCA->intf_flag = 1;    // secondary channel interference is detected!!!
 							if(FalseAlmCnt->Cnt_Ofdm_fail > FalseAlmCnt->Cnt_OFDM_CCA>>1)
-								PrimaryCCA->intf_type = 1;    	// interference is shift
+								PrimaryCCA->intf_type = 1;	// interference is shift
 							else
-								PrimaryCCA->intf_type = 2;    	// interference is in-band
+								PrimaryCCA->intf_type = 2;	// interference is in-band
 						}
-						else    
+						else
 						{
 							PrimaryCCA->intf_flag = 0;
-							PrimaryCCA->intf_type = 0;  
+							PrimaryCCA->intf_type = 0;
 						}
 					}
 					ODM_RT_TRACE(pDM_Odm,ODM_COMP_DYNAMIC_PRICCA, ODM_DBG_LOUD, ("PrimaryCCA=%d\n",PrimaryCCA->PriCCA_flag));
@@ -1174,10 +1174,10 @@ odm_DynamicPrimaryCCA(
 									if((FalseAlmCnt->Cnt_OFDM_CCA > 800)&&(FalseAlmCnt->Cnt_BW_LSC*5 > FalseAlmCnt->Cnt_BW_USC*9))
 									{
 										PrimaryCCA->intf_flag = 1;
-										if(FalseAlmCnt->Cnt_Ofdm_fail > FalseAlmCnt->Cnt_OFDM_CCA>>1)		
-											PrimaryCCA->intf_type = 1;    	// interference is shift
+										if(FalseAlmCnt->Cnt_Ofdm_fail > FalseAlmCnt->Cnt_OFDM_CCA>>1)
+											PrimaryCCA->intf_type = 1;	// interference is shift
 										else
-											PrimaryCCA->intf_type = 2;    	// interference is in-band
+											PrimaryCCA->intf_type = 2;	// interference is in-band
 									}
 								}
 								else if(SecCHOffset == 2)
@@ -1185,10 +1185,10 @@ odm_DynamicPrimaryCCA(
 									if((FalseAlmCnt->Cnt_OFDM_CCA > 800)&&(FalseAlmCnt->Cnt_BW_USC*5 > FalseAlmCnt->Cnt_BW_LSC*9))
 									{
 										PrimaryCCA->intf_flag = 1;
-										if(FalseAlmCnt->Cnt_Ofdm_fail > FalseAlmCnt->Cnt_OFDM_CCA>>1)		
-											PrimaryCCA->intf_type = 1;    	// interference is shift
+										if(FalseAlmCnt->Cnt_Ofdm_fail > FalseAlmCnt->Cnt_OFDM_CCA>>1)
+											PrimaryCCA->intf_type = 1;	// interference is shift
 										else
-											PrimaryCCA->intf_type = 2;    	// interference is in-band
+											PrimaryCCA->intf_type = 2;	// interference is in-band
 									}
 
 								}
@@ -1198,36 +1198,36 @@ odm_DynamicPrimaryCCA(
 								if(SecCHOffset == 1)
 								{
 									if(FalseAlmCnt->Cnt_BW_LSC > (FalseAlmCnt->Cnt_BW_USC+500))
-									{	
+									{
 										if(Delay == 0)    // add delay to avoid interference occurring abruptly, jump one time
 										{
 											PrimaryCCA->intf_flag = 1;
 											if(FalseAlmCnt->Cnt_Ofdm_fail > FalseAlmCnt->Cnt_OFDM_CCA>>1)
-												PrimaryCCA->intf_type = 1;    	// interference is shift
+												PrimaryCCA->intf_type = 1;	// interference is shift
 											else
-												PrimaryCCA->intf_type = 2;    	// interference is in-band
+												PrimaryCCA->intf_type = 2;	// interference is in-band
 											Delay = 1;
 										}
 										else
 											Delay = 0;
-									}	
-								}	
+									}
+								}
 								else if(SecCHOffset == 2)
 								{
 									if(FalseAlmCnt->Cnt_BW_USC > (FalseAlmCnt->Cnt_BW_LSC+500))
-									{	
+									{
 										if(Delay == 0)    // add delay to avoid interference occurring abruptly
 										{
 											PrimaryCCA->intf_flag = 1;
 											if(FalseAlmCnt->Cnt_Ofdm_fail > FalseAlmCnt->Cnt_OFDM_CCA>>1)
-												PrimaryCCA->intf_type = 1;    	// interference is shift
+												PrimaryCCA->intf_type = 1;	// interference is shift
 											else
-												PrimaryCCA->intf_type = 2;    	// interference is in-band
+												PrimaryCCA->intf_type = 2;	// interference is in-band
 											Delay = 1;
 										}
 										else
 											Delay = 0;
-									}	
+									}
 								}
 							}
 						}
@@ -1241,7 +1241,7 @@ odm_DynamicPrimaryCCA(
 		//1 Dynamic Primary CCA Monitor Counter
 		if((PrimaryCCA->PriCCA_flag == 1)||(PrimaryCCA->DupRTS_flag == 1))
 		{
-			if(Client_40MHz == 0)     // client=20M no need to monitor primary cca flag  
+			if(Client_40MHz == 0)     // client=20M no need to monitor primary cca flag
 			{
 				Client_40MHz_pre = Client_40MHz;
 				return;
@@ -1287,4 +1287,3 @@ ODM_DynamicPrimaryCCA_DupRTS(
 	return FALSE;
 }
 #endif //#if (RTL8188E_SUPPORT == 1)
-

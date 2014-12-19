@@ -172,7 +172,7 @@ extern u32 GlobalDebugLevel;
 
 #define DRIVER_PREFIX	"R8188EU: "
 #define DEBUG_LEVEL	(_drv_err_)
-#if 	defined (_dbgdump)
+#if	defined (_dbgdump)
 	#undef DBG_871X_LEVEL
 	#define DBG_871X_LEVEL(level, fmt, arg...)     \
 	do {\
@@ -279,7 +279,7 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
- 	int proc_set_write_reg(struct file *file, const char *buffer,
+	int proc_set_write_reg(struct file *file, const char *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_read_reg(char *page, char **start,
@@ -399,7 +399,7 @@ extern u32 GlobalDebugLevel;
 	int proc_get_ht_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
-			  
+
 	int proc_set_ht_enable(struct file *file, const char *buffer,
 		unsigned long count, void *data);
 
@@ -409,18 +409,18 @@ extern u32 GlobalDebugLevel;
 
 	int proc_set_cbw40_enable(struct file *file, const char *buffer,
 		unsigned long count, void *data);
-	
+
 	int proc_get_ampdu_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
-			  
+
 	int proc_set_ampdu_enable(struct file *file, const char *buffer,
 		unsigned long count, void *data);
-	
+
 	int proc_get_rx_stbc(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
-		
+
 	int proc_set_rx_stbc(struct file *file, const char *buffer,
 		unsigned long count, void *data);
 #endif //CONFIG_80211N_HT
@@ -462,4 +462,3 @@ int proc_set_odm_adaptivity(struct file *file, const char *buffer, unsigned long
 #endif //CONFIG_PROC_DEBUG
 
 #endif	//__RTW_DEBUG_H__
-

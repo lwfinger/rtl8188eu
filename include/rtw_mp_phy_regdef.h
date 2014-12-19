@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -27,18 +27,18 @@
  *			3. PMAC/BB register bit mask.
  *			4. RF reg bit mask.
  *			5. Other BB/RF relative definition.
- *			
+ *
  *
  * Export:	Constants, macro, functions(API), global variables(None).
  *
- * Abbrev:	
+ * Abbrev:
  *
  * History:
- *	Data			Who		Remark 
+ *	Data			Who		Remark
  *	08/07/2007	MHC		1. Porting from 9x series PHYCFG.h.
  *						2. Reorganize code architecture.
  *	09/25/2008	MH		1. Add RL6052 register definition
- * 
+ *
  *****************************************************************************/
 #ifndef __RTW_MP_PHY_REGDEF_H_
 #define __RTW_MP_PHY_REGDEF_H_
@@ -111,8 +111,8 @@
 
 #define		rFPGA0_RFTiming1			0x810	// Useless now
 #define		rFPGA0_RFTiming2			0x814
-//#define rFPGA0_XC_RFTiming        		0x818
-//#define rFPGA0_XD_RFTiming        		0x81c
+//#define rFPGA0_XC_RFTiming			0x818
+//#define rFPGA0_XD_RFTiming			0x81c
 
 #define		rFPGA0_XA_HSSIParameter1		0x820	// RF 3 wire register
 #define		rFPGA0_XA_HSSIParameter2		0x824
@@ -176,8 +176,8 @@
 #define		rCCK0_AFESetting			0xa04	// Disable init gain now // Select RX path by RSSI
 #define		rCCK0_CCA					0xa08	// Disable init gain now // Init gain
 
-#define		rCCK0_RxAGC1				0xa0c 	//AGC default value, saturation level // Antenna Diversity, RX AGC, LNA Threshold, RX LNA Threshold useless now. Not the same as 90 series
-#define		rCCK0_RxAGC2				0xa10 	//AGC & DAGC
+#define		rCCK0_RxAGC1				0xa0c	//AGC default value, saturation level // Antenna Diversity, RX AGC, LNA Threshold, RX LNA Threshold useless now. Not the same as 90 series
+#define		rCCK0_RxAGC2				0xa10	//AGC & DAGC
 
 #define		rCCK0_RxHP					0xa14
 
@@ -188,10 +188,10 @@
 #define		rCCK0_TxFilter2				0xa24
 #define		rCCK0_DebugPort			0xa28	//debug port and Tx filter3
 #define		rCCK0_FalseAlarmReport		0xa2c	//0xa2d	useless now 0xa30-a4f channel report
-#define		rCCK0_TRSSIReport         		0xa50
-#define		rCCK0_RxReport            		0xa54  //0xa57
-#define		rCCK0_FACounterLower      	0xa5c  //0xa5b
-#define		rCCK0_FACounterUpper      	0xa58  //0xa5c
+#define		rCCK0_TRSSIReport			0xa50
+#define		rCCK0_RxReport				0xa54  //0xa57
+#define		rCCK0_FACounterLower		0xa5c  //0xa5b
+#define		rCCK0_FACounterUpper		0xa58  //0xa5c
 
 //
 // 6. PageC(0xC00)
@@ -203,16 +203,16 @@
 #define		rOFDM0_TRSWIsolation		0xc0c
 
 #define		rOFDM0_XARxAFE			0xc10  //RxIQ DC offset, Rx digital filter, DC notch filter
-#define		rOFDM0_XARxIQImbalance    	0xc14  //RxIQ imblance matrix
-#define		rOFDM0_XBRxAFE            		0xc18
-#define		rOFDM0_XBRxIQImbalance    	0xc1c
-#define		rOFDM0_XCRxAFE            		0xc20
-#define		rOFDM0_XCRxIQImbalance    	0xc24
-#define		rOFDM0_XDRxAFE            		0xc28
-#define		rOFDM0_XDRxIQImbalance    	0xc2c
+#define		rOFDM0_XARxIQImbalance		0xc14  //RxIQ imblance matrix
+#define		rOFDM0_XBRxAFE				0xc18
+#define		rOFDM0_XBRxIQImbalance		0xc1c
+#define		rOFDM0_XCRxAFE				0xc20
+#define		rOFDM0_XCRxIQImbalance		0xc24
+#define		rOFDM0_XDRxAFE				0xc28
+#define		rOFDM0_XDRxIQImbalance		0xc2c
 
 #define		rOFDM0_RxDetector1			0xc30  //PD,BW & SBD	// DM tune init gain
-#define		rOFDM0_RxDetector2			0xc34  //SBD & Fame Sync. 
+#define		rOFDM0_RxDetector2			0xc34  //SBD & Fame Sync.
 #define		rOFDM0_RxDetector3			0xc38  //Frame Sync.
 #define		rOFDM0_RxDetector4			0xc3c  //PD, SBD, Frame Sync & Short-GI
 
@@ -221,7 +221,7 @@
 #define		rOFDM0_CCADropThreshold	0xc48 //CCA Drop threshold
 #define		rOFDM0_ECCAThreshold		0xc4c // energy CCA
 
-#define		rOFDM0_XAAGCCore1			0xc50	// DIG  
+#define		rOFDM0_XAAGCCore1			0xc50	// DIG
 #define		rOFDM0_XAAGCCore2			0xc54
 #define		rOFDM0_XBAGCCore1			0xc58
 #define		rOFDM0_XBAGCCore2			0xc5c
@@ -240,7 +240,7 @@
 #define		rOFDM0_XBTxIQImbalance		0xc88
 #define		rOFDM0_XBTxAFE				0xc8c
 #define		rOFDM0_XCTxIQImbalance		0xc90
-#define		rOFDM0_XCTxAFE            			0xc94
+#define		rOFDM0_XCTxAFE					0xc94
 #define		rOFDM0_XDTxIQImbalance		0xc98
 #define		rOFDM0_XDTxAFE				0xc9c
 #define		rOFDM0_RxIQExtAnta			0xca0
@@ -285,8 +285,8 @@
 #define		rOFDM_LongCFOCD				0xdb8
 #define		rOFDM_TailCFOAB				0xdbc
 #define		rOFDM_TailCFOCD				0xdc0
-#define		rOFDM_PWMeasure1          		0xdc4
-#define		rOFDM_PWMeasure2          		0xdc8
+#define		rOFDM_PWMeasure1			0xdc4
+#define		rOFDM_PWMeasure2			0xdc8
 #define		rOFDM_BWReport				0xdcc
 #define		rOFDM_AGCReport				0xdd0
 #define		rOFDM_RxSNR					0xdd4
@@ -306,7 +306,7 @@
 #define		rTxAGC_Mcs15_Mcs12			0xe1c
 
 // Analog- control in RX_WAIT_CCA : REG: EE0 [Analog- Power & Control Register]
-#define 		rRx_Wait_CCCA					0xe70
+#define			rRx_Wait_CCCA					0xe70
 #define		rAnapar_Ctrl_BB					0xee0
 
 //
@@ -343,48 +343,48 @@
 //
 // RL6052 Register definition
 //
-#define		RF_AC						0x00	// 
+#define		RF_AC						0x00	//
 
-#define		RF_IQADJ_G1				0x01	// 
-#define		RF_IQADJ_G2				0x02	// 
-#define		RF_POW_TRSW				0x05	// 
+#define		RF_IQADJ_G1				0x01	//
+#define		RF_IQADJ_G2				0x02	//
+#define		RF_POW_TRSW				0x05	//
 
-#define		RF_GAIN_RX					0x06	// 
-#define		RF_GAIN_TX					0x07	// 
+#define		RF_GAIN_RX					0x06	//
+#define		RF_GAIN_TX					0x07	//
 
-#define		RF_TXM_IDAC				0x08	// 
-#define		RF_BS_IQGEN				0x0F	// 
+#define		RF_TXM_IDAC				0x08	//
+#define		RF_BS_IQGEN				0x0F	//
 
-#define		RF_MODE1					0x10	// 
-#define		RF_MODE2					0x11	// 
+#define		RF_MODE1					0x10	//
+#define		RF_MODE2					0x11	//
 
-#define		RF_RX_AGC_HP				0x12	// 
-#define		RF_TX_AGC					0x13	// 
-#define		RF_BIAS						0x14	// 
-#define		RF_IPA						0x15	// 
+#define		RF_RX_AGC_HP				0x12	//
+#define		RF_TX_AGC					0x13	//
+#define		RF_BIAS						0x14	//
+#define		RF_IPA						0x15	//
 #define		RF_TXBIAS					0x16 //
-#define		RF_POW_ABILITY			0x17	// 
-#define		RF_MODE_AG				0x18	// 
+#define		RF_POW_ABILITY			0x17	//
+#define		RF_MODE_AG				0x18	//
 #define		rRfChannel					0x18	// RF channel and BW switch
 #define		RF_CHNLBW					0x18	// RF channel and BW switch
-#define		RF_TOP						0x19	// 
+#define		RF_TOP						0x19	//
 
-#define		RF_RX_G1					0x1A	// 
-#define		RF_RX_G2					0x1B	// 
+#define		RF_RX_G1					0x1A	//
+#define		RF_RX_G2					0x1B	//
 
-#define		RF_RX_BB2					0x1C	// 
-#define		RF_RX_BB1					0x1D	// 
+#define		RF_RX_BB2					0x1C	//
+#define		RF_RX_BB1					0x1D	//
 
-#define		RF_RCK1					0x1E	// 
-#define		RF_RCK2					0x1F	// 
+#define		RF_RCK1					0x1E	//
+#define		RF_RCK2					0x1F	//
 
-#define		RF_TX_G1					0x20	// 
-#define		RF_TX_G2					0x21	// 
-#define		RF_TX_G3					0x22	// 
+#define		RF_TX_G1					0x20	//
+#define		RF_TX_G2					0x21	//
+#define		RF_TX_G3					0x22	//
 
-#define		RF_TX_BB1					0x23	// 
+#define		RF_TX_BB1					0x23	//
 
-#define		RF_T_METER					0x24	// 
+#define		RF_T_METER					0x24	//
 
 #define		RF_SYN_G1					0x25	// RF TX Power control
 #define		RF_SYN_G2					0x26	// RF TX Power control
@@ -450,7 +450,7 @@
 #define		bCCKTxStatus					0x1
 #define		bOFDMTxStatus					0x2
 
-#define 		IS_BB_REG_OFFSET_92S(_Offset)		((_Offset >= 0x800) && (_Offset <= 0xfff))
+#define			IS_BB_REG_OFFSET_92S(_Offset)		((_Offset >= 0x800) && (_Offset <= 0xfff))
 
 // 2. Page8(0x800)
 #define		bRFMOD							0x1	// Reg 0x800 rFPGA0_RFMOD
@@ -459,317 +459,317 @@
 #define		bCCKEn							0x1000000
 #define		bOFDMEn						0x2000000
 
-#define		bOFDMRxADCPhase           		0x10000	// Useless now
-#define		bOFDMTxDACPhase           		0x40000
-#define		bXATxAGC                  			0x3f
+#define		bOFDMRxADCPhase				0x10000	// Useless now
+#define		bOFDMTxDACPhase				0x40000
+#define		bXATxAGC					0x3f
 
-#define		bXBTxAGC                  			0xf00	// Reg 80c rFPGA0_TxGainStage
-#define		bXCTxAGC                  			0xf000
-#define		bXDTxAGC                  			0xf0000
-       		
-#define		bPAStart                  			0xf0000000	// Useless now
-#define		bTRStart                  			0x00f00000
-#define		bRFStart                  			0x0000f000
-#define		bBBStart                  			0x000000f0
-#define		bBBCCKStart               		0x0000000f
-#define		bPAEnd                    			0xf          //Reg0x814
-#define		bTREnd                    			0x0f000000
-#define		bRFEnd                    			0x000f0000
-#define		bCCAMask                  			0x000000f0   //T2R
-#define		bR2RCCAMask               		0x00000f00
-#define		bHSSI_R2TDelay            		0xf8000000
-#define		bHSSI_T2RDelay            		0xf80000
-#define		bContTxHSSI               		0x400     //chane gain at continue Tx
-#define		bIGFromCCK                		0x200
-#define		bAGCAddress               		0x3f
-#define		bRxHPTx                   			0x7000
-#define		bRxHPT2R                  			0x38000
-#define		bRxHPCCKIni               		0xc0000
-#define		bAGCTxCode                		0xc00000
-#define		bAGCRxCode                		0x300000
+#define		bXBTxAGC					0xf00	// Reg 80c rFPGA0_TxGainStage
+#define		bXCTxAGC					0xf000
+#define		bXDTxAGC					0xf0000
 
-#define		b3WireDataLength          		0x800	// Reg 0x820~84f rFPGA0_XA_HSSIParameter1
-#define		b3WireAddressLength       		0x400
+#define		bPAStart					0xf0000000	// Useless now
+#define		bTRStart					0x00f00000
+#define		bRFStart					0x0000f000
+#define		bBBStart					0x000000f0
+#define		bBBCCKStart				0x0000000f
+#define		bPAEnd						0xf          //Reg0x814
+#define		bTREnd						0x0f000000
+#define		bRFEnd						0x000f0000
+#define		bCCAMask					0x000000f0   //T2R
+#define		bR2RCCAMask				0x00000f00
+#define		bHSSI_R2TDelay				0xf8000000
+#define		bHSSI_T2RDelay				0xf80000
+#define		bContTxHSSI				0x400     //chane gain at continue Tx
+#define		bIGFromCCK				0x200
+#define		bAGCAddress				0x3f
+#define		bRxHPTx						0x7000
+#define		bRxHPT2R					0x38000
+#define		bRxHPCCKIni				0xc0000
+#define		bAGCTxCode				0xc00000
+#define		bAGCRxCode				0x300000
 
-#define		b3WireRFPowerDown         		0x1	// Useless now
-//#define bHWSISelect               		0x8
-#define		b5GPAPEPolarity           		0x40000000
-#define		b2GPAPEPolarity           		0x80000000
-#define		bRFSW_TxDefaultAnt        		0x3
-#define		bRFSW_TxOptionAnt         		0x30
-#define		bRFSW_RxDefaultAnt        		0x300
-#define		bRFSW_RxOptionAnt         		0x3000
-#define		bRFSI_3WireData           		0x1
-#define		bRFSI_3WireClock          		0x2
-#define		bRFSI_3WireLoad           		0x4
-#define		bRFSI_3WireRW             		0x8
-#define		bRFSI_3Wire               			0xf
+#define		b3WireDataLength			0x800	// Reg 0x820~84f rFPGA0_XA_HSSIParameter1
+#define		b3WireAddressLength			0x400
 
-#define		bRFSI_RFENV               		0x10	// Reg 0x870 rFPGA0_XAB_RFInterfaceSW
+#define		b3WireRFPowerDown			0x1	// Useless now
+//#define bHWSISelect				0x8
+#define		b5GPAPEPolarity				0x40000000
+#define		b2GPAPEPolarity				0x80000000
+#define		bRFSW_TxDefaultAnt			0x3
+#define		bRFSW_TxOptionAnt			0x30
+#define		bRFSW_RxDefaultAnt			0x300
+#define		bRFSW_RxOptionAnt			0x3000
+#define		bRFSI_3WireData				0x1
+#define		bRFSI_3WireClock			0x2
+#define		bRFSI_3WireLoad				0x4
+#define		bRFSI_3WireRW				0x8
+#define		bRFSI_3Wire					0xf
 
-#define		bRFSI_TRSW                		0x20	// Useless now
-#define		bRFSI_TRSWB               		0x40
-#define		bRFSI_ANTSW               		0x100
-#define		bRFSI_ANTSWB              		0x200
-#define		bRFSI_PAPE                			0x400
-#define		bRFSI_PAPE5G              		0x800 
-#define		bBandSelect               			0x1
-#define		bHTSIG2_GI                			0x80
-#define		bHTSIG2_Smoothing         		0x01
-#define		bHTSIG2_Sounding          		0x02
-#define		bHTSIG2_Aggreaton         		0x08
-#define		bHTSIG2_STBC              		0x30
-#define		bHTSIG2_AdvCoding         		0x40
-#define		bHTSIG2_NumOfHTLTF        	0x300
-#define		bHTSIG2_CRC8              		0x3fc
-#define		bHTSIG1_MCS               		0x7f
-#define		bHTSIG1_BandWidth         		0x80
-#define		bHTSIG1_HTLength          		0xffff
-#define		bLSIG_Rate                			0xf
-#define		bLSIG_Reserved            		0x10
-#define		bLSIG_Length              		0x1fffe
-#define		bLSIG_Parity              			0x20
-#define		bCCKRxPhase               		0x4
+#define		bRFSI_RFENV				0x10	// Reg 0x870 rFPGA0_XAB_RFInterfaceSW
+
+#define		bRFSI_TRSW				0x20	// Useless now
+#define		bRFSI_TRSWB				0x40
+#define		bRFSI_ANTSW				0x100
+#define		bRFSI_ANTSWB				0x200
+#define		bRFSI_PAPE					0x400
+#define		bRFSI_PAPE5G				0x800
+#define		bBandSelect					0x1
+#define		bHTSIG2_GI					0x80
+#define		bHTSIG2_Smoothing			0x01
+#define		bHTSIG2_Sounding			0x02
+#define		bHTSIG2_Aggreaton			0x08
+#define		bHTSIG2_STBC				0x30
+#define		bHTSIG2_AdvCoding			0x40
+#define		bHTSIG2_NumOfHTLTF		0x300
+#define		bHTSIG2_CRC8				0x3fc
+#define		bHTSIG1_MCS				0x7f
+#define		bHTSIG1_BandWidth			0x80
+#define		bHTSIG1_HTLength			0xffff
+#define		bLSIG_Rate					0xf
+#define		bLSIG_Reserved				0x10
+#define		bLSIG_Length				0x1fffe
+#define		bLSIG_Parity					0x20
+#define		bCCKRxPhase				0x4
 #if (RTL92SE_FPGA_VERIFY == 1)
-#define		bLSSIReadAddress          		0x3f000000   //LSSI "Read" Address	// Reg 0x824 rFPGA0_XA_HSSIParameter2
+#define		bLSSIReadAddress			0x3f000000   //LSSI "Read" Address	// Reg 0x824 rFPGA0_XA_HSSIParameter2
 #else
-#define		bLSSIReadAddress          		0x7f800000   // T65 RF
+#define		bLSSIReadAddress			0x7f800000   // T65 RF
 #endif
-#define		bLSSIReadEdge             		0x80000000   //LSSI "Read" edge signal
+#define		bLSSIReadEdge				0x80000000   //LSSI "Read" edge signal
 #if (RTL92SE_FPGA_VERIFY == 1)
-#define		bLSSIReadBackData         		0xfff		// Reg 0x8a0 rFPGA0_XA_LSSIReadBack
+#define		bLSSIReadBackData			0xfff		// Reg 0x8a0 rFPGA0_XA_LSSIReadBack
 #else
-#define		bLSSIReadBackData         		0xfffff		// T65 RF
+#define		bLSSIReadBackData			0xfffff		// T65 RF
 #endif
-#define		bLSSIReadOKFlag           		0x1000	// Useless now
-#define		bCCKSampleRate            		0x8       //0: 44MHz, 1:88MHz       		
-#define		bRegulator0Standby        		0x1
-#define		bRegulatorPLLStandby      		0x2
-#define		bRegulator1Standby        		0x4
-#define		bPLLPowerUp               		0x8
-#define		bDPLLPowerUp              		0x10
-#define		bDA10PowerUp              		0x20
-#define		bAD7PowerUp               		0x200
-#define		bDA6PowerUp               		0x2000
-#define		bXtalPowerUp              		0x4000
-#define		b40MDClkPowerUP           		0x8000
-#define		bDA6DebugMode             		0x20000
-#define		bDA6Swing                 			0x380000
+#define		bLSSIReadOKFlag				0x1000	// Useless now
+#define		bCCKSampleRate				0x8       //0: 44MHz, 1:88MHz
+#define		bRegulator0Standby			0x1
+#define		bRegulatorPLLStandby			0x2
+#define		bRegulator1Standby			0x4
+#define		bPLLPowerUp				0x8
+#define		bDPLLPowerUp				0x10
+#define		bDA10PowerUp				0x20
+#define		bAD7PowerUp				0x200
+#define		bDA6PowerUp				0x2000
+#define		bXtalPowerUp				0x4000
+#define		b40MDClkPowerUP				0x8000
+#define		bDA6DebugMode				0x20000
+#define		bDA6Swing					0x380000
 
-#define		bADClkPhase               		0x4000000	// Reg 0x880 rFPGA0_AnalogParameter1 20/40 CCK support switch 40/80 BB MHZ
+#define		bADClkPhase				0x4000000	// Reg 0x880 rFPGA0_AnalogParameter1 20/40 CCK support switch 40/80 BB MHZ
 
-#define		b80MClkDelay              		0x18000000	// Useless
-#define		bAFEWatchDogEnable        		0x20000000
+#define		b80MClkDelay				0x18000000	// Useless
+#define		bAFEWatchDogEnable			0x20000000
 
-#define		bXtalCap01                			0xc0000000	// Reg 0x884 rFPGA0_AnalogParameter2 Crystal cap
-#define		bXtalCap23                			0x3
+#define		bXtalCap01					0xc0000000	// Reg 0x884 rFPGA0_AnalogParameter2 Crystal cap
+#define		bXtalCap23					0x3
 #define		bXtalCap92x					0x0f000000
-#define 		bXtalCap                			0x0f000000
+#define			bXtalCap					0x0f000000
 
-#define		bIntDifClkEnable          		0x400	// Useless
-#define		bExtSigClkEnable         	 	0x800
-#define		bBandgapMbiasPowerUp      	0x10000
-#define		bAD11SHGain               		0xc0000
-#define		bAD11InputRange           		0x700000
-#define		bAD11OPCurrent            		0x3800000
-#define		bIPathLoopback            		0x4000000
-#define		bQPathLoopback            		0x8000000
-#define		bAFELoopback              		0x10000000
-#define		bDA10Swing                		0x7e0
-#define		bDA10Reverse              		0x800
-#define		bDAClkSource              		0x1000
-#define		bAD7InputRange            		0x6000
-#define		bAD7Gain                  			0x38000
-#define		bAD7OutputCMMode          		0x40000
-#define		bAD7InputCMMode           		0x380000
-#define		bAD7Current               			0xc00000
-#define		bRegulatorAdjust          		0x7000000
-#define		bAD11PowerUpAtTx          		0x1
-#define		bDA10PSAtTx               		0x10
-#define		bAD11PowerUpAtRx          		0x100
-#define		bDA10PSAtRx               		0x1000       		
-#define		bCCKRxAGCFormat           		0x200       		
-#define		bPSDFFTSamplepPoint       		0xc000
-#define		bPSDAverageNum            		0x3000
-#define		bIQPathControl            		0xc00
-#define		bPSDFreq                  			0x3ff
-#define		bPSDAntennaPath           		0x30
-#define		bPSDIQSwitch              		0x40
-#define		bPSDRxTrigger             		0x400000
-#define		bPSDTxTrigger             		0x80000000
-#define		bPSDSineToneScale        		0x7f000000
-#define		bPSDReport                			0xffff
+#define		bIntDifClkEnable			0x400	// Useless
+#define		bExtSigClkEnable			0x800
+#define		bBandgapMbiasPowerUp		0x10000
+#define		bAD11SHGain				0xc0000
+#define		bAD11InputRange				0x700000
+#define		bAD11OPCurrent				0x3800000
+#define		bIPathLoopback				0x4000000
+#define		bQPathLoopback				0x8000000
+#define		bAFELoopback				0x10000000
+#define		bDA10Swing				0x7e0
+#define		bDA10Reverse				0x800
+#define		bDAClkSource				0x1000
+#define		bAD7InputRange				0x6000
+#define		bAD7Gain					0x38000
+#define		bAD7OutputCMMode			0x40000
+#define		bAD7InputCMMode				0x380000
+#define		bAD7Current					0xc00000
+#define		bRegulatorAdjust			0x7000000
+#define		bAD11PowerUpAtTx			0x1
+#define		bDA10PSAtTx				0x10
+#define		bAD11PowerUpAtRx			0x100
+#define		bDA10PSAtRx				0x1000
+#define		bCCKRxAGCFormat				0x200
+#define		bPSDFFTSamplepPoint			0xc000
+#define		bPSDAverageNum				0x3000
+#define		bIQPathControl				0xc00
+#define		bPSDFreq					0x3ff
+#define		bPSDAntennaPath				0x30
+#define		bPSDIQSwitch				0x40
+#define		bPSDRxTrigger				0x400000
+#define		bPSDTxTrigger				0x80000000
+#define		bPSDSineToneScale			0x7f000000
+#define		bPSDReport					0xffff
 
 // 3. Page9(0x900)
-#define		bOFDMTxSC                 		0x30000000	// Useless
-#define		bCCKTxOn                  			0x1
-#define		bOFDMTxOn                 		0x2
-#define		bDebugPage                		0xfff  //reset debug page and also HWord, LWord
-#define		bDebugItem                		0xff   //reset debug page and LWord
-#define		bAntL              	       		0x10
-#define		bAntNonHT           	      			0x100
-#define		bAntHT1               			0x1000
-#define		bAntHT2                   			0x10000
-#define		bAntHT1S1                 			0x100000
-#define		bAntNonHTS1               		0x1000000
+#define		bOFDMTxSC				0x30000000	// Useless
+#define		bCCKTxOn					0x1
+#define		bOFDMTxOn				0x2
+#define		bDebugPage				0xfff  //reset debug page and also HWord, LWord
+#define		bDebugItem				0xff   //reset debug page and LWord
+#define		bAntL					0x10
+#define		bAntNonHT					0x100
+#define		bAntHT1					0x1000
+#define		bAntHT2						0x10000
+#define		bAntHT1S1					0x100000
+#define		bAntNonHTS1				0x1000000
 
 // 4. PageA(0xA00)
-#define		bCCKBBMode                		0x3	// Useless
-#define		bCCKTxPowerSaving         		0x80
-#define		bCCKRxPowerSaving         		0x40
+#define		bCCKBBMode				0x3	// Useless
+#define		bCCKTxPowerSaving			0x80
+#define		bCCKRxPowerSaving			0x40
 
-#define		bCCKSideBand              		0x10	// Reg 0xa00 rCCK0_System 20/40 switch
+#define		bCCKSideBand				0x10	// Reg 0xa00 rCCK0_System 20/40 switch
 
-#define		bCCKScramble              		0x8	// Useless
-#define		bCCKAntDiversity    		      	0x8000
-#define		bCCKCarrierRecovery   	    	0x4000
-#define		bCCKTxRate           		     	0x3000
-#define		bCCKDCCancel             	 	0x0800
-#define		bCCKISICancel             		0x0400
-#define		bCCKMatchFilter           		0x0200
-#define		bCCKEqualizer             		0x0100
-#define		bCCKPreambleDetect       	 	0x800000
-#define		bCCKFastFalseCCA          		0x400000
-#define		bCCKChEstStart            		0x300000
-#define		bCCKCCACount              		0x080000
-#define		bCCKcs_lim                			0x070000
-#define		bCCKBistMode              		0x80000000
-#define		bCCKCCAMask             	  	0x40000000
-#define		bCCKTxDACPhase         	   	0x4
-#define		bCCKRxADCPhase         	   	0x20000000   //r_rx_clk
-#define		bCCKr_cp_mode0         	   	0x0100
-#define		bCCKTxDCOffset           	 	0xf0
-#define		bCCKRxDCOffset           	 	0xf
-#define		bCCKCCAMode              	 	0xc000
-#define		bCCKFalseCS_lim           		0x3f00
-#define		bCCKCS_ratio              		0xc00000
-#define		bCCKCorgBit_sel           		0x300000
-#define		bCCKPD_lim                			0x0f0000
-#define		bCCKNewCCA                		0x80000000
-#define		bCCKRxHPofIG              		0x8000
-#define		bCCKRxIG                  			0x7f00
-#define		bCCKLNAPolarity           		0x800000
-#define		bCCKRx1stGain             		0x7f0000
-#define		bCCKRFExtend              		0x20000000 //CCK Rx Iinital gain polarity
-#define		bCCKRxAGCSatLevel        	 	0x1f000000
-#define		bCCKRxAGCSatCount       	  	0xe0
-#define		bCCKRxRFSettle            		0x1f       //AGCsamp_dly
-#define		bCCKFixedRxAGC           	 	0x8000
-//#define bCCKRxAGCFormat         	 	0x4000   //remove to HSSI register 0x824
-#define		bCCKAntennaPolarity      	 	0x2000
-#define		bCCKTxFilterType          		0x0c00
-#define		bCCKRxAGCReportType   	   	0x0300
-#define		bCCKRxDAGCEn              		0x80000000
-#define		bCCKRxDAGCPeriod        	  	0x20000000
-#define		bCCKRxDAGCSatLevel     	   	0x1f000000
-#define		bCCKTimingRecovery       	 	0x800000
-#define		bCCKTxC0                  			0x3f0000
-#define		bCCKTxC1                  			0x3f000000
-#define		bCCKTxC2                  			0x3f
-#define		bCCKTxC3                  			0x3f00
-#define		bCCKTxC4                  			0x3f0000
-#define		bCCKTxC5                  			0x3f000000
-#define		bCCKTxC6                  			0x3f
-#define		bCCKTxC7                  			0x3f00
-#define		bCCKDebugPort             		0xff0000
-#define		bCCKDACDebug              		0x0f000000
-#define		bCCKFalseAlarmEnable      		0x8000
-#define		bCCKFalseAlarmRead        		0x4000
-#define		bCCKTRSSI                 			0x7f
-#define		bCCKRxAGCReport           		0xfe
-#define		bCCKRxReport_AntSel       		0x80000000
-#define		bCCKRxReport_MFOff        		0x40000000
-#define		bCCKRxRxReport_SQLoss     	0x20000000
-#define		bCCKRxReport_Pktloss      		0x10000000
-#define		bCCKRxReport_Lockedbit    	0x08000000
-#define		bCCKRxReport_RateError    	0x04000000
-#define		bCCKRxReport_RxRate       		0x03000000
-#define		bCCKRxFACounterLower      	0xff
-#define		bCCKRxFACounterUpper      	0xff000000
-#define		bCCKRxHPAGCStart          		0xe000
-#define		bCCKRxHPAGCFinal          		0x1c00       		
-#define		bCCKRxFalseAlarmEnable    	0x8000
-#define		bCCKFACounterFreeze       		0x4000       		
-#define		bCCKTxPathSel             		0x10000000
-#define		bCCKDefaultRxPath         		0xc000000
-#define		bCCKOptionRxPath          		0x3000000
+#define		bCCKScramble				0x8	// Useless
+#define		bCCKAntDiversity			0x8000
+#define		bCCKCarrierRecovery		0x4000
+#define		bCCKTxRate				0x3000
+#define		bCCKDCCancel				0x0800
+#define		bCCKISICancel				0x0400
+#define		bCCKMatchFilter				0x0200
+#define		bCCKEqualizer				0x0100
+#define		bCCKPreambleDetect			0x800000
+#define		bCCKFastFalseCCA			0x400000
+#define		bCCKChEstStart				0x300000
+#define		bCCKCCACount				0x080000
+#define		bCCKcs_lim					0x070000
+#define		bCCKBistMode				0x80000000
+#define		bCCKCCAMask				0x40000000
+#define		bCCKTxDACPhase			0x4
+#define		bCCKRxADCPhase			0x20000000   //r_rx_clk
+#define		bCCKr_cp_mode0			0x0100
+#define		bCCKTxDCOffset				0xf0
+#define		bCCKRxDCOffset				0xf
+#define		bCCKCCAMode				0xc000
+#define		bCCKFalseCS_lim				0x3f00
+#define		bCCKCS_ratio				0xc00000
+#define		bCCKCorgBit_sel				0x300000
+#define		bCCKPD_lim					0x0f0000
+#define		bCCKNewCCA				0x80000000
+#define		bCCKRxHPofIG				0x8000
+#define		bCCKRxIG					0x7f00
+#define		bCCKLNAPolarity				0x800000
+#define		bCCKRx1stGain				0x7f0000
+#define		bCCKRFExtend				0x20000000 //CCK Rx Iinital gain polarity
+#define		bCCKRxAGCSatLevel			0x1f000000
+#define		bCCKRxAGCSatCount			0xe0
+#define		bCCKRxRFSettle				0x1f       //AGCsamp_dly
+#define		bCCKFixedRxAGC				0x8000
+//#define bCCKRxAGCFormat			0x4000   //remove to HSSI register 0x824
+#define		bCCKAntennaPolarity			0x2000
+#define		bCCKTxFilterType			0x0c00
+#define		bCCKRxAGCReportType		0x0300
+#define		bCCKRxDAGCEn				0x80000000
+#define		bCCKRxDAGCPeriod			0x20000000
+#define		bCCKRxDAGCSatLevel		0x1f000000
+#define		bCCKTimingRecovery			0x800000
+#define		bCCKTxC0					0x3f0000
+#define		bCCKTxC1					0x3f000000
+#define		bCCKTxC2					0x3f
+#define		bCCKTxC3					0x3f00
+#define		bCCKTxC4					0x3f0000
+#define		bCCKTxC5					0x3f000000
+#define		bCCKTxC6					0x3f
+#define		bCCKTxC7					0x3f00
+#define		bCCKDebugPort				0xff0000
+#define		bCCKDACDebug				0x0f000000
+#define		bCCKFalseAlarmEnable			0x8000
+#define		bCCKFalseAlarmRead			0x4000
+#define		bCCKTRSSI					0x7f
+#define		bCCKRxAGCReport				0xfe
+#define		bCCKRxReport_AntSel			0x80000000
+#define		bCCKRxReport_MFOff			0x40000000
+#define		bCCKRxRxReport_SQLoss		0x20000000
+#define		bCCKRxReport_Pktloss			0x10000000
+#define		bCCKRxReport_Lockedbit		0x08000000
+#define		bCCKRxReport_RateError		0x04000000
+#define		bCCKRxReport_RxRate			0x03000000
+#define		bCCKRxFACounterLower		0xff
+#define		bCCKRxFACounterUpper		0xff000000
+#define		bCCKRxHPAGCStart			0xe000
+#define		bCCKRxHPAGCFinal			0x1c00
+#define		bCCKRxFalseAlarmEnable		0x8000
+#define		bCCKFACounterFreeze			0x4000
+#define		bCCKTxPathSel				0x10000000
+#define		bCCKDefaultRxPath			0xc000000
+#define		bCCKOptionRxPath			0x3000000
 
 // 5. PageC(0xC00)
-#define		bNumOfSTF                			0x3	// Useless
-#define		bShift_L                 			0xc0
-#define		bGI_TH                   			0xc
-#define		bRxPathA                 			0x1
-#define		bRxPathB                 			0x2
-#define		bRxPathC                 			0x4
-#define		bRxPathD                 			0x8
-#define		bTxPathA                 			0x1
-#define		bTxPathB                 			0x2
-#define		bTxPathC                 			0x4
-#define		bTxPathD                 			0x8
-#define		bTRSSIFreq               			0x200
-#define		bADCBackoff              			0x3000
-#define		bDFIRBackoff             			0xc000
-#define		bTRSSILatchPhase         		0x10000
-#define		bRxIDCOffset             			0xff
-#define		bRxQDCOffset             			0xff00
-#define		bRxDFIRMode              		0x1800000
-#define		bRxDCNFType              		0xe000000
-#define		bRXIQImb_A               			0x3ff
-#define		bRXIQImb_B               			0xfc00
-#define		bRXIQImb_C               			0x3f0000
-#define		bRXIQImb_D               			0xffc00000
-#define		bDC_dc_Notch             		0x60000
-#define		bRxNBINotch              			0x1f000000
-#define		bPD_TH                   			0xf
-#define		bPD_TH_Opt2              		0xc000
-#define		bPWED_TH                 			0x700
-#define		bIfMF_Win_L              			0x800
-#define		bPD_Option               			0x1000
-#define		bMF_Win_L                			0xe000
-#define		bBW_Search_L             		0x30000
-#define		bwin_enh_L               			0xc0000
-#define		bBW_TH                   			0x700000
-#define		bED_TH2                  			0x3800000
-#define		bBW_option               			0x4000000
-#define		bRatio_TH                			0x18000000
-#define		bWindow_L                			0xe0000000
-#define		bSBD_Option              			0x1
-#define		bFrame_TH                			0x1c
-#define		bFS_Option               			0x60
-#define		bDC_Slope_check          		0x80
-#define		bFGuard_Counter_DC_L     		0xe00
-#define		bFrame_Weight_Short      		0x7000
-#define		bSub_Tune                			0xe00000
-#define		bFrame_DC_Length         		0xe000000
-#define		bSBD_start_offset        		0x30000000
-#define		bFrame_TH_2              		0x7
-#define		bFrame_GI2_TH            		0x38
-#define		bGI2_Sync_en             		0x40
-#define		bSarch_Short_Early       		0x300
-#define		bSarch_Short_Late        		0xc00
-#define		bSarch_GI2_Late          		0x70000
-#define		bCFOAntSum               		0x1
-#define		bCFOAcc                  			0x2
-#define		bCFOStartOffset          		0xc
-#define		bCFOLookBack             		0x70
-#define		bCFOSumWeight            		0x80
-#define		bDAGCEnable              			0x10000
-#define		bTXIQImb_A               			0x3ff
-#define		bTXIQImb_B               			0xfc00
-#define		bTXIQImb_C               			0x3f0000
-#define		bTXIQImb_D               			0xffc00000
-#define		bTxIDCOffset             			0xff
-#define		bTxQDCOffset             			0xff00
-#define		bTxDFIRMode              		0x10000
-#define		bTxPesudoNoiseOn         		0x4000000
-#define		bTxPesudoNoise_A         		0xff
-#define		bTxPesudoNoise_B         		0xff00
-#define		bTxPesudoNoise_C         		0xff0000
-#define		bTxPesudoNoise_D         		0xff000000
-#define		bCCADropOption           		0x20000
-#define		bCCADropThres            		0xfff00000
-#define		bEDCCA_H                 			0xf
-#define		bEDCCA_L                 			0xf0
+#define		bNumOfSTF					0x3	// Useless
+#define		bShift_L					0xc0
+#define		bGI_TH						0xc
+#define		bRxPathA					0x1
+#define		bRxPathB					0x2
+#define		bRxPathC					0x4
+#define		bRxPathD					0x8
+#define		bTxPathA					0x1
+#define		bTxPathB					0x2
+#define		bTxPathC					0x4
+#define		bTxPathD					0x8
+#define		bTRSSIFreq					0x200
+#define		bADCBackoff					0x3000
+#define		bDFIRBackoff					0xc000
+#define		bTRSSILatchPhase			0x10000
+#define		bRxIDCOffset					0xff
+#define		bRxQDCOffset					0xff00
+#define		bRxDFIRMode				0x1800000
+#define		bRxDCNFType				0xe000000
+#define		bRXIQImb_A					0x3ff
+#define		bRXIQImb_B					0xfc00
+#define		bRXIQImb_C					0x3f0000
+#define		bRXIQImb_D					0xffc00000
+#define		bDC_dc_Notch				0x60000
+#define		bRxNBINotch					0x1f000000
+#define		bPD_TH						0xf
+#define		bPD_TH_Opt2				0xc000
+#define		bPWED_TH					0x700
+#define		bIfMF_Win_L					0x800
+#define		bPD_Option					0x1000
+#define		bMF_Win_L					0xe000
+#define		bBW_Search_L				0x30000
+#define		bwin_enh_L					0xc0000
+#define		bBW_TH						0x700000
+#define		bED_TH2						0x3800000
+#define		bBW_option					0x4000000
+#define		bRatio_TH					0x18000000
+#define		bWindow_L					0xe0000000
+#define		bSBD_Option					0x1
+#define		bFrame_TH					0x1c
+#define		bFS_Option					0x60
+#define		bDC_Slope_check				0x80
+#define		bFGuard_Counter_DC_L			0xe00
+#define		bFrame_Weight_Short			0x7000
+#define		bSub_Tune					0xe00000
+#define		bFrame_DC_Length			0xe000000
+#define		bSBD_start_offset			0x30000000
+#define		bFrame_TH_2				0x7
+#define		bFrame_GI2_TH				0x38
+#define		bGI2_Sync_en				0x40
+#define		bSarch_Short_Early			0x300
+#define		bSarch_Short_Late			0xc00
+#define		bSarch_GI2_Late				0x70000
+#define		bCFOAntSum				0x1
+#define		bCFOAcc						0x2
+#define		bCFOStartOffset				0xc
+#define		bCFOLookBack				0x70
+#define		bCFOSumWeight				0x80
+#define		bDAGCEnable					0x10000
+#define		bTXIQImb_A					0x3ff
+#define		bTXIQImb_B					0xfc00
+#define		bTXIQImb_C					0x3f0000
+#define		bTXIQImb_D					0xffc00000
+#define		bTxIDCOffset					0xff
+#define		bTxQDCOffset					0xff00
+#define		bTxDFIRMode				0x10000
+#define		bTxPesudoNoiseOn			0x4000000
+#define		bTxPesudoNoise_A			0xff
+#define		bTxPesudoNoise_B			0xff00
+#define		bTxPesudoNoise_C			0xff0000
+#define		bTxPesudoNoise_D			0xff000000
+#define		bCCADropOption				0x20000
+#define		bCCADropThres				0xfff00000
+#define		bEDCCA_H					0xf
+#define		bEDCCA_L					0xf0
 #define		bLambda_ED               0x300
 #define		bRxInitialGain           0x7f
 #define		bRxAntDivEn              0x80
@@ -841,16 +841,16 @@
 #define		bRxSGI_TH                0xc0000000
 #define		bDFSCnt0                 0xff
 #define		bDFSCnt1                 0xff00
-#define		bDFSFlag                 0xf0000       		
+#define		bDFSFlag                 0xf0000
 #define		bMFWeightSum             0x300000
-#define		bMinIdxTH                0x7f000000       		
-#define		bDAFormat                0x40000       		
-#define		bTxChEmuEnable           0x01000000       		
+#define		bMinIdxTH                0x7f000000
+#define		bDAFormat                0x40000
+#define		bTxChEmuEnable           0x01000000
 #define		bTRSWIsolation_A         0x7f
 #define		bTRSWIsolation_B         0x7f00
 #define		bTRSWIsolation_C         0x7f0000
-#define		bTRSWIsolation_D         0x7f000000       		
-#define		bExtLNAGain              0x7c00          
+#define		bTRSWIsolation_D         0x7f000000
+#define		bExtLNAGain              0x7c00
 
 // 6. PageE(0xE00)
 #define		bSTBCEn                  0x4	// Useless
@@ -887,7 +887,7 @@
 #define		bLongCFOFLength          11
 #define		bTailCFO                 0x1fff
 #define		bTailCFOTLength          13
-#define		bTailCFOFLength          12       		
+#define		bTailCFOFLength          12
 #define		bmax_en_pwdB             0xffff
 #define		bCC_power_dB             0xffff0000
 #define		bnoise_pwdB              0xffff
@@ -895,27 +895,27 @@
 #define		bPowerMeasFLength        3
 #define		bRx_HT_BW                0x1
 #define		bRxSC                    0x6
-#define		bRx_HT                   0x8       		
+#define		bRx_HT                   0x8
 #define		bNB_intf_det_on          0x1
 #define		bIntf_win_len_cfg        0x30
-#define		bNB_Intf_TH_cfg          0x1c0       		
+#define		bNB_Intf_TH_cfg          0x1c0
 #define		bRFGain                  0x3f
 #define		bTableSel                0x40
-#define		bTRSW                    0x80       		
+#define		bTRSW                    0x80
 #define		bRxSNR_A                 0xff
 #define		bRxSNR_B                 0xff00
 #define		bRxSNR_C                 0xff0000
 #define		bRxSNR_D                 0xff000000
 #define		bSNREVMTLength           8
-#define		bSNREVMFLength           1       		
+#define		bSNREVMFLength           1
 #define		bCSI1st                  0xff
 #define		bCSI2nd                  0xff00
 #define		bRxEVM1st                0xff0000
-#define		bRxEVM2nd                0xff000000       		
+#define		bRxEVM2nd                0xff000000
 #define		bSIGEVM                  0xff
 #define		bPWDB                    0xff00
 #define		bSGIEN                   0x10000
-       		
+
 #define		bSFactorQAM1             0xf	// Useless
 #define		bSFactorQAM2             0xf0
 #define		bSFactorQAM3             0xf00
@@ -926,7 +926,7 @@
 #define		bSFactorQAM8             0xf000000
 #define		bSFactorQAM9             0xf0000000
 #define		bCSIScheme               0x100000
-       		
+
 #define		bNoiseLvlTopSet          0x3	// Useless
 #define		bChSmooth                0x4
 #define		bChSmoothCfg1            0x38
@@ -935,7 +935,7 @@
 #define		bChSmoothCfg4            0x7000
 #define		bMRCMode                 0x800000
 #define		bTHEVMCfg                0x7000000
-       		
+
 #define		bLoopFitType             0x1	// Useless
 #define		bUpdCFO                  0x40
 #define		bUpdCFOOffData           0x80
@@ -1017,8 +1017,8 @@
 #define		bMaskHWord		0xffff0000
 #define		bMaskLWord		0x0000ffff
 #define		bMaskDWord		0xffffffff
-#define		bMaskH4Bits		0xf0000000	
-#define 	bMaskOFDM_D		0xffc00000
+#define		bMaskH4Bits		0xf0000000
+#define		bMaskOFDM_D		0xffc00000
 #define		bMaskCCK		0x3f3f3f3f
 #define		bMask12Bits		0xfff
 
@@ -1026,21 +1026,21 @@
 #if (RTL92SE_FPGA_VERIFY == 1)
 //#define		bMask12Bits               0xfff	// RF Reg mask bits
 //#define		bMask20Bits               0xfff	// RF Reg mask bits T65 RF
-#define 		bRFRegOffsetMask	0xfff		
+#define			bRFRegOffsetMask	0xfff
 #else
 //#define		bMask12Bits               0xfffff	// RF Reg mask bits
 //#define		bMask20Bits               0xfffff	// RF Reg mask bits T65 RF
-#define 		bRFRegOffsetMask	0xfffff		
-#endif       		
+#define			bRFRegOffsetMask	0xfffff
+#endif
 #define		bEnable                   0x1	// Useless
 #define		bDisable                  0x0
-       		
+
 #define		LeftAntenna               0x0	// Useless
 #define		RightAntenna              0x1
-       		
+
 #define		tCheckTxStatus            500   //500ms // Useless
 #define		tUpdateRxCounter          100   //100ms
-       		
+
 #define		rateCCK     0	// Useless
 #define		rateOFDM    1
 #define		rateHT      2
@@ -1096,4 +1096,3 @@
 
 
 #endif	//__INC_HAL8192SPHYREG_H
-

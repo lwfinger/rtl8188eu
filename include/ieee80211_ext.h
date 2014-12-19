@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -64,24 +64,24 @@ struct rsn_ie_hdr {
 struct wme_ac_parameter {
 #if defined(CONFIG_LITTLE_ENDIAN)
 	/* byte 1 */
-	u8 	aifsn:4,
+	u8	aifsn:4,
 		acm:1,
-	 	aci:2,
-	 	reserved:1;
+		aci:2,
+		reserved:1;
 
 	/* byte 2 */
-	u8 	eCWmin:4,
-	 	eCWmax:4;
+	u8	eCWmin:4,
+		eCWmax:4;
 #elif defined(CONFIG_BIG_ENDIAN)
 	/* byte 1 */
-	u8 	reserved:1,
-	 	aci:2,
-	 	acm:1,
-	 	aifsn:4;
+	u8	reserved:1,
+		aci:2,
+		acm:1,
+		aifsn:4;
 
 	/* byte 2 */
-	u8 	eCWmax:4,
-	 	eCWmin:4;
+	u8	eCWmax:4,
+		eCWmin:4;
 #else
 #error	"Please fix <endian.h>"
 #endif
@@ -308,4 +308,3 @@ struct ieee80211_mgmt {
 
 
 #endif
-

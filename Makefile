@@ -82,7 +82,7 @@ OUTSRC_FILES := hal/odm_debug.o	\
 		hal/odm_HWConfig.o\
 		hal/odm.o\
 		hal/HalPhyRf.o
-										
+
 HAL_COMM_FILES := hal/rtl8188e_xmit.o\
 		hal/rtl8188e_sreset.o
 
@@ -104,7 +104,7 @@ endif
 PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
 		hal/Hal8188EPwrSeq.o
 
-CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES) 
+CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES)
 
 HCI_NAME = usb
 
@@ -481,7 +481,7 @@ endif
 ifeq ($(CONFIG_PLATFORM_SZEBOOK), y)
 EXTRA_CFLAGS += -DCONFIG_BIG_ENDIAN
 ARCH:=arm
-CROSS_COMPILE:=/opt/crosstool2/bin/armeb-unknown-linux-gnueabi- 
+CROSS_COMPILE:=/opt/crosstool2/bin/armeb-unknown-linux-gnueabi-
 KVER:= 2.6.31.6
 KSRC:= ../code/linux-2.6.31.6-2020/
 endif
@@ -654,4 +654,3 @@ clean: $(clean_more)
 	cd hal ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd os_dep ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 endif
-

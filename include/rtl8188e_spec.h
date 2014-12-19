@@ -145,7 +145,7 @@
 #define REG_HPON_FSM					0x00EC
 #define REG_SYS_CFG					0x00F0
 #define REG_GPIO_OUTSTS				0x00F4	// For RTL8723 only.
-#define REG_TYPE_ID					0x00FC	
+#define REG_TYPE_ID					0x00FC
 
 #define REG_MAC_PHY_CTRL_NORMAL		0x00f8
 
@@ -170,7 +170,7 @@
 #define REG_FTIMR						0x0138
 #define REG_FWISR						0x0134
 #define REG_PKTBUF_DBG_CTRL			0x0140
-#define REG_PKTBUF_DBG_ADDR 			(REG_PKTBUF_DBG_CTRL)
+#define REG_PKTBUF_DBG_ADDR			(REG_PKTBUF_DBG_CTRL)
 #define REG_RXPKTBUF_DBG				(REG_PKTBUF_DBG_CTRL+2)
 #define REG_TXPKTBUF_DBG				(REG_PKTBUF_DBG_CTRL+3)
 #define REG_RXPKTBUF_CTRL			(REG_PKTBUF_DBG_CTRL+2)
@@ -220,9 +220,9 @@
 //	0x0280h ~ 0x02FFh	RXDMA Configuration
 //
 //-----------------------------------------------------
-#define 	REG_RXDMA_AGG_PG_TH			0x0280
-#define	REG_RXPKT_NUM					0x0284 	
-#define 	REG_RXDMA_STATUS				0x0288
+#define		REG_RXDMA_AGG_PG_TH			0x0280
+#define	REG_RXPKT_NUM					0x0284
+#define		REG_RXDMA_STATUS				0x0288
 
 //-----------------------------------------------------
 //
@@ -230,7 +230,7 @@
 //
 //-----------------------------------------------------
 #define	REG_PCIE_CTRL_REG			0x0300
-#define	REG_INT_MIG					0x0304	// Interrupt Migration 
+#define	REG_INT_MIG					0x0304	// Interrupt Migration
 #define	REG_BCNQ_DESA				0x0308	// TX Beacon Descriptor Address
 #define	REG_HQ_DESA					0x0310	// TX High Queue Descriptor Address
 #define	REG_MGQ_DESA				0x0318	// TX Manage Queue Descriptor Address
@@ -283,7 +283,7 @@
 #define REG_AMPDU_MIN_SPACE			0x045C
 #define REG_TXPKTBUF_WMAC_LBK_BF_HD	0x045D
 #define REG_FAST_EDCA_CTRL			0x0460
-#define REG_RD_RESP_PKT_TH			0x0463	
+#define REG_RD_RESP_PKT_TH			0x0463
 #define REG_INIRTS_RATE_SEL				0x0480
 //#define REG_INIDATA_RATE_SEL			0x0484
 #define REG_MACID_NO_LINK_0			0x0484
@@ -364,7 +364,7 @@
 #define REG_ATIMWND					0x055A
 #define REG_BCN_MAX_ERR				0x055D
 #define REG_RXTSF_OFFSET_CCK			0x055E
-#define REG_RXTSF_OFFSET_OFDM			0x055F	
+#define REG_RXTSF_OFFSET_OFDM			0x055F
 #define REG_TSFTR						0x0560
 #define REG_TSFTR1					0x0568
 #define REG_ATIMWND_1				0x0570
@@ -409,10 +409,10 @@
 
 //RXERR_RPT
 #define RXERR_TYPE_OFDM_PPDU			0
-#define RXERR_TYPE_OFDM_FALSE_ALARM 	1
-#define RXERR_TYPE_OFDM_MPDU_OK 		2
+#define RXERR_TYPE_OFDM_FALSE_ALARM	1
+#define RXERR_TYPE_OFDM_MPDU_OK			2
 #define RXERR_TYPE_OFDM_MPDU_FAIL		3
-#define RXERR_TYPE_CCK_PPDU 			4
+#define RXERR_TYPE_CCK_PPDU			4
 #define RXERR_TYPE_CCK_FALSE_ALARM		5
 #define RXERR_TYPE_CCK_MPDU_OK			6
 #define RXERR_TYPE_CCK_MPDU_FAIL		7
@@ -420,8 +420,8 @@
 #define RXERR_TYPE_HT_FALSE_ALARM		9
 #define RXERR_TYPE_HT_MPDU_TOTAL		10
 #define RXERR_TYPE_HT_MPDU_OK			11
-#define RXERR_TYPE_HT_MPDU_FAIL 		12
-#define RXERR_TYPE_RX_FULL_DROP 		15
+#define RXERR_TYPE_HT_MPDU_FAIL			12
+#define RXERR_TYPE_RX_FULL_DROP			15
 
 #define RXERR_COUNTER_MASK				0xFFFFF
 #define RXERR_RPT_RST						BIT(27)
@@ -512,7 +512,7 @@
 #define	ISR							REG_HISR_88E
 #define	TSFR						REG_TSFTR			// Timing Sync Function Timer Register.
 
-#define 	PBP							REG_PBP
+#define		PBP							REG_PBP
 
 // Redifine MACID register, to compatible prior ICs.
 #define	IDR0						REG_MACID			// MAC ID Register, Offset 0x0050-0x0053
@@ -532,18 +532,18 @@
 #define	UnusedRegister				0x1BF
 #define	DCAM						UnusedRegister
 #define	PSR							UnusedRegister
-#define 	BBAddr						UnusedRegister
+#define		BBAddr						UnusedRegister
 #define	PhyDataR					UnusedRegister
 
 // Min Spacing related settings.
-#define	MAX_MSS_DENSITY_2T 			0x13
-#define	MAX_MSS_DENSITY_1T 			0x0A
+#define	MAX_MSS_DENSITY_2T			0x13
+#define	MAX_MSS_DENSITY_1T			0x0A
 
 //----------------------------------------------------------------------------
 //       8192C Cmd9346CR bits					(Offset 0xA, 16bit)
 //----------------------------------------------------------------------------
 #define	CmdEEPROM_En				BIT5	 // EEPROM enable when set 1
-#define	CmdEERPOMSEL				BIT4 	// System EEPROM select, 0: boot from E-FUSE, 1: The EEPROM used is 9346
+#define	CmdEERPOMSEL				BIT4	// System EEPROM select, 0: boot from E-FUSE, 1: The EEPROM used is 9346
 #define	Cmd9346CR_9356SEL			BIT4
 
 //----------------------------------------------------------------------------
@@ -580,7 +580,7 @@
 #define	HSISR_GPIO9_INT			BIT25
 
 //----------------------------------------------------------------------------
-//       8192C (MSR) Media Status Register	(Offset 0x4C, 8 bits)  
+//       8192C (MSR) Media Status Register	(Offset 0x4C, 8 bits)
 //----------------------------------------------------------------------------
 /*
 Network Type
@@ -596,7 +596,7 @@ Default: 00b.
 #define	MSR_AP						0x03
 
 //----------------------------------------------------------------------------
-//       88EU (MSR) Media Status Register	(Offset 0x4C, 8 bits)  
+//       88EU (MSR) Media Status Register	(Offset 0x4C, 8 bits)
 //----------------------------------------------------------------------------
 #define	USB_INTR_CONTENT_C2H_OFFSET		0
 #define	USB_INTR_CONTENT_CPWM1_OFFSET	16
@@ -606,7 +606,7 @@ Default: 00b.
 
 
 //----------------------------------------------------------------------------
-//       88E Driver Initialization Offload REG_FDHM0(Offset 0x88, 8 bits)  
+//       88E Driver Initialization Offload REG_FDHM0(Offset 0x88, 8 bits)
 //----------------------------------------------------------------------------
 //IOL config for REG_FDHM0(Reg0x88)
 #define CMD_INIT_LLT					BIT0
@@ -625,16 +625,16 @@ Default: 00b.
 //       8192C Response Rate Set Register	(offset 0x181, 24bits)
 //----------------------------------------------------------------------------
 #define	RRSR_1M						BIT0
-#define	RRSR_2M						BIT1 
-#define	RRSR_5_5M					BIT2 
-#define	RRSR_11M					BIT3 
-#define	RRSR_6M						BIT4 
-#define	RRSR_9M						BIT5 
-#define	RRSR_12M					BIT6 
-#define	RRSR_18M					BIT7 
-#define	RRSR_24M					BIT8 
-#define	RRSR_36M					BIT9 
-#define	RRSR_48M					BIT10 
+#define	RRSR_2M						BIT1
+#define	RRSR_5_5M					BIT2
+#define	RRSR_11M					BIT3
+#define	RRSR_6M						BIT4
+#define	RRSR_9M						BIT5
+#define	RRSR_12M					BIT6
+#define	RRSR_18M					BIT7
+#define	RRSR_24M					BIT8
+#define	RRSR_36M					BIT9
+#define	RRSR_48M					BIT10
 #define	RRSR_54M					BIT11
 #define	RRSR_MCS0					BIT12
 #define	RRSR_MCS1					BIT13
@@ -666,21 +666,21 @@ Default: 00b.
 #define	CAM_NOTVALID				0x0000
 #define	CAM_USEDK					BIT5
 
-#define	CAM_CONTENT_COUNT 		8
-       	       		
+#define	CAM_CONTENT_COUNT		8
+
 #define	CAM_NONE					0x0
 #define	CAM_WEP40					0x01
 #define	CAM_TKIP					0x02
 #define	CAM_AES					0x04
 #define	CAM_WEP104				0x05
 #define	CAM_SMS4					0x6
-        		
+
 #define	TOTAL_CAM_ENTRY			32
-#define	HALF_CAM_ENTRY			16	
-       		
+#define	HALF_CAM_ENTRY			16
+
 #define	CAM_CONFIG_USEDK			_TRUE
 #define	CAM_CONFIG_NO_USEDK		_FALSE
-       		
+
 #define	CAM_WRITE					BIT16
 #define	CAM_READ					0x00000000
 #define	CAM_POLLINIG				BIT31
@@ -693,7 +693,7 @@ Default: 00b.
 // 10. Power Save Control Registers	 (Offset: 0x0260 - 0x02DF)
 //
 #define	WOW_PMEN				BIT0 // Power management Enable.
-#define	WOW_WOMEN			BIT1 // WoW function on or off. 
+#define	WOW_WOMEN			BIT1 // WoW function on or off.
 #define	WOW_MAGIC				BIT2 // Magic packet
 #define	WOW_UWF				BIT3 // Unicast Wakeup frame.
 
@@ -702,33 +702,33 @@ Default: 00b.
 //
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-//       8188 IMR/ISR bits						
+//       8188 IMR/ISR bits
 //----------------------------------------------------------------------------
 #define	IMR_DISABLED_88E					0x0
 // IMR DW0(0x0060-0063) Bit 0-31
-#define	IMR_TXCCK_88E						BIT30		// TXRPT interrupt when CCX bit of the packet is set	
+#define	IMR_TXCCK_88E						BIT30		// TXRPT interrupt when CCX bit of the packet is set
 #define	IMR_PSTIMEOUT_88E					BIT29		// Power Save Time Out Interrupt
-#define	IMR_GTINT4_88E						BIT28		// When GTIMER4 expires, this bit is set to 1	
-#define	IMR_GTINT3_88E						BIT27		// When GTIMER3 expires, this bit is set to 1	
-#define	IMR_TBDER_88E						BIT26		// Transmit Beacon0 Error			
-#define	IMR_TBDOK_88E						BIT25		// Transmit Beacon0 OK			
-#define	IMR_TSF_BIT32_TOGGLE_88E			BIT24		// TSF Timer BIT32 toggle indication interrupt			
-#define	IMR_BCNDMAINT0_88E				BIT20		// Beacon DMA Interrupt 0			
-#define	IMR_BCNDERR0_88E					BIT16		// Beacon Queue DMA Error 0			
-#define	IMR_HSISR_IND_ON_INT_88E			BIT15		// HSISR Indicator (HSIMR & HSISR is true, this bit is set to 1)			
-#define	IMR_BCNDMAINT_E_88E				BIT14		// Beacon DMA Interrupt Extension for Win7			
+#define	IMR_GTINT4_88E						BIT28		// When GTIMER4 expires, this bit is set to 1
+#define	IMR_GTINT3_88E						BIT27		// When GTIMER3 expires, this bit is set to 1
+#define	IMR_TBDER_88E						BIT26		// Transmit Beacon0 Error
+#define	IMR_TBDOK_88E						BIT25		// Transmit Beacon0 OK
+#define	IMR_TSF_BIT32_TOGGLE_88E			BIT24		// TSF Timer BIT32 toggle indication interrupt
+#define	IMR_BCNDMAINT0_88E				BIT20		// Beacon DMA Interrupt 0
+#define	IMR_BCNDERR0_88E					BIT16		// Beacon Queue DMA Error 0
+#define	IMR_HSISR_IND_ON_INT_88E			BIT15		// HSISR Indicator (HSIMR & HSISR is true, this bit is set to 1)
+#define	IMR_BCNDMAINT_E_88E				BIT14		// Beacon DMA Interrupt Extension for Win7
 #define	IMR_ATIMEND_88E					BIT12		// CTWidnow End or ATIM Window End
 #define	IMR_HISR1_IND_INT_88E				BIT11		// HISR1 Indicator (HISR1 & HIMR1 is true, this bit is set to 1)
-#define	IMR_C2HCMD_88E					BIT10		// CPU to Host Command INT Status, Write 1 clear	
-#define	IMR_CPWM2_88E						BIT9			// CPU power Mode exchange INT Status, Write 1 clear	
-#define	IMR_CPWM_88E						BIT8			// CPU power Mode exchange INT Status, Write 1 clear	
-#define	IMR_HIGHDOK_88E					BIT7			// High Queue DMA OK	
-#define	IMR_MGNTDOK_88E					BIT6			// Management Queue DMA OK	
-#define	IMR_BKDOK_88E						BIT5			// AC_BK DMA OK		
-#define	IMR_BEDOK_88E						BIT4			// AC_BE DMA OK	
-#define	IMR_VIDOK_88E						BIT3			// AC_VI DMA OK		
-#define	IMR_VODOK_88E						BIT2			// AC_VO DMA OK	
-#define	IMR_RDU_88E						BIT1			// Rx Descriptor Unavailable	
+#define	IMR_C2HCMD_88E					BIT10		// CPU to Host Command INT Status, Write 1 clear
+#define	IMR_CPWM2_88E						BIT9			// CPU power Mode exchange INT Status, Write 1 clear
+#define	IMR_CPWM_88E						BIT8			// CPU power Mode exchange INT Status, Write 1 clear
+#define	IMR_HIGHDOK_88E					BIT7			// High Queue DMA OK
+#define	IMR_MGNTDOK_88E					BIT6			// Management Queue DMA OK
+#define	IMR_BKDOK_88E						BIT5			// AC_BK DMA OK
+#define	IMR_BEDOK_88E						BIT4			// AC_BE DMA OK
+#define	IMR_VIDOK_88E						BIT3			// AC_VI DMA OK
+#define	IMR_VODOK_88E						BIT2			// AC_VO DMA OK
+#define	IMR_RDU_88E						BIT1			// Rx Descriptor Unavailable
 #define	IMR_ROK_88E						BIT0			// Receive DMA OK
 
 // IMR DW1(0x00B4-00B7) Bit 0-31
@@ -779,7 +779,7 @@ Default: 00b.
 
 /*===================================================================
 =====================================================================
-Here the register defines are for 92C. When the define is as same with 92C, 
+Here the register defines are for 92C. When the define is as same with 92C,
 we will use the 92C's define for the consistency
 So the following defines for 92C is not entire!!!!!!
 =====================================================================
@@ -799,7 +799,7 @@ Current IOREG MAP
 0x2000h ~ 0x3FFFh   8051 FW Download Region (8196 Bytes)
 */
 	//----------------------------------------------------------------------------
-	//		 8192C (TXPAUSE) transmission pause 	(Offset 0x522, 8 bits)
+	//		 8192C (TXPAUSE) transmission pause	(Offset 0x522, 8 bits)
 	//----------------------------------------------------------------------------
 // Note:
 //	The the bits of stoping AC(VO/VI/BE/BK) queue in datasheet RTL8192S/RTL8192C are wrong,
@@ -831,16 +831,16 @@ Current IOREG MAP
 #define	RCR_ACF					BIT12		//Accept control type frame
 #define	RCR_ADF					BIT11		//Accept data type frame
 #define	RCR_AICV					BIT9		//Accept ICV error packet
-#define	RCR_ACRC32					BIT8		//Accept CRC32 error packet 
+#define	RCR_ACRC32					BIT8		//Accept CRC32 error packet
 #define	RCR_CBSSID_BCN			BIT7		//Accept BSSID match packet (Rx beacon, probe rsp)
 #define	RCR_CBSSID_DATA			BIT6		//Accept BSSID match packet (Data)
 #define	RCR_CBSSID					RCR_CBSSID_DATA		//Accept BSSID match packet
 #define	RCR_APWRMGT				BIT5		//Accept power management packet
 #define	RCR_ADD3					BIT4		//Accept address 3 match packet
-#define	RCR_AB						BIT3		//Accept broadcast packet 
-#define	RCR_AM						BIT2		//Accept multicast packet 
+#define	RCR_AB						BIT3		//Accept broadcast packet
+#define	RCR_AM						BIT2		//Accept multicast packet
 #define	RCR_APM					BIT1		//Accept physical match packet
-#define	RCR_AAP					BIT0		//Accept all unicast packet 
+#define	RCR_AAP					BIT0		//Accept all unicast packet
 #define	RCR_MXDMA_OFFSET			8
 #define	RCR_FIFO_OFFSET			13
 
@@ -859,7 +859,7 @@ Current IOREG MAP
 #define REG_USB_HCPWM				0xFE57
 
 //============================================================================
-//       8192C Regsiter Bit and Content definition 
+//       8192C Regsiter Bit and Content definition
 //============================================================================
 //-----------------------------------------------------
 //
@@ -1025,7 +1025,7 @@ Current IOREG MAP
 //2REG_GPIO_OUTSTS (For RTL8723 only)
 #define	EFS_HCI_SEL				(BIT(0)|BIT(1))
 #define	PAD_HCI_SEL				(BIT(2)|BIT(3))
-#define	HCI_SEL						(BIT(4)|BIT(5)) 
+#define	HCI_SEL						(BIT(4)|BIT(5))
 #define	PKG_SEL_HCI				BIT(6)
 #define	FEN_GPS					BIT(7)
 #define	FEN_BT						BIT(8)
@@ -1116,12 +1116,12 @@ Current IOREG MAP
 #define HQSEL_HIQ						BIT(5)
 
 // For normal driver, 0x10C
-#define _TXDMA_HIQ_MAP(x) 	 		(((x)&0x3) << 14)
-#define _TXDMA_MGQ_MAP(x) 	 		(((x)&0x3) << 12)
-#define _TXDMA_BKQ_MAP(x) 	 		(((x)&0x3) << 10)		
-#define _TXDMA_BEQ_MAP(x) 	 		(((x)&0x3) << 8 )
-#define _TXDMA_VIQ_MAP(x) 	 		(((x)&0x3) << 6 )
-#define _TXDMA_VOQ_MAP(x) 	 		(((x)&0x3) << 4 )
+#define _TXDMA_HIQ_MAP(x)			(((x)&0x3) << 14)
+#define _TXDMA_MGQ_MAP(x)			(((x)&0x3) << 12)
+#define _TXDMA_BKQ_MAP(x)			(((x)&0x3) << 10)
+#define _TXDMA_BEQ_MAP(x)			(((x)&0x3) << 8 )
+#define _TXDMA_VIQ_MAP(x)			(((x)&0x3) << 6 )
+#define _TXDMA_VOQ_MAP(x)			(((x)&0x3) << 4 )
 
 #define QUEUE_LOW					1
 #define QUEUE_NORMAL					2
@@ -1187,15 +1187,15 @@ Current IOREG MAP
 // Write only. When this bit is set, RXDMA will decrease RX PKT counter by one. Before
 // this bit is polled, FW shall update RXFF_RD_PTR first. This register is write pulse and auto clear.
 //#define	RXPKT_RELEASE_POLL			BIT(0)
-// Read only. When RXMA finishes on-going DMA operation, RXMDA will report idle state in 
+// Read only. When RXMA finishes on-going DMA operation, RXMDA will report idle state in
 // this bit. FW can start releasing packets after RXDMA entering idle mode.
-//#define	RXDMA_IDLE					BIT(1)	
-// When this bit is set, RXDMA will enter this mode after on-going RXDMA packet to host 
+//#define	RXDMA_IDLE					BIT(1)
+// When this bit is set, RXDMA will enter this mode after on-going RXDMA packet to host
 // completed, and stop DMA packet to host. RXDMA will then report Default: 0;
 //#define	RW_RELEASE_EN				BIT(2)
 
 //2 REG_RXPKT_NUM, 0x0284
-#define 	RXPKT_RELEASE_POLL	BIT(16)
+#define		RXPKT_RELEASE_POLL	BIT(16)
 #define	RXDMA_IDLE				BIT(17)
 #define	RW_RELEASE_EN			BIT(18)
 
@@ -1325,8 +1325,8 @@ Current IOREG MAP
 #define	SCR_RxDecEnable					BIT(3)			//Enable Rx Decryption
 #define	SCR_SKByA2						BIT(4)			//Search kEY BY A2
 #define	SCR_NoSKMC						BIT(5)			//No Key Search Multicast
-#define 	SCR_TXBCUSEDK					BIT(6)			// Force Tx Broadcast packets Use Default Key
-#define 	SCR_RXBCUSEDK					BIT(7)			// Force Rx Broadcast packets Use Default Key
+#define		SCR_TXBCUSEDK					BIT(6)			// Force Tx Broadcast packets Use Default Key
+#define		SCR_RXBCUSEDK					BIT(7)			// Force Rx Broadcast packets Use Default Key
 
 
 //-----------------------------------------------------
@@ -1347,8 +1347,8 @@ Current IOREG MAP
 // SDIO host local register space mapping.
 #define SDIO_LOCAL_MSK				0x0FFF
 #define WLAN_IOREG_MSK				0x7FFF
-#define WLAN_FIFO_MSK		      		0x1FFF	// Aggregation Length[12:0]
-#define WLAN_RX0FF_MSK			      	0x0003
+#define WLAN_FIFO_MSK				0x1FFF	// Aggregation Length[12:0]
+#define WLAN_RX0FF_MSK				0x0003
 
 #define SDIO_WITHOUT_REF_DEVICE_ID		0	// Without reference to the SDIO Device ID
 #define SDIO_LOCAL_DEVICE_ID			0	// 0b[16], 000b[15:13]
@@ -1458,13 +1458,13 @@ Current IOREG MAP
 
 // SDIO Tx FIFO related
 #define SDIO_TX_FREE_PG_QUEUE			4	// The number of Tx FIFO free page
-#define SDIO_TX_FIFO_PAGE_SZ 			128
+#define SDIO_TX_FIFO_PAGE_SZ			128
 
 /* move to rtl8188e_xmit.h
 #if DEV_BUS_TYPE == RT_SDIO_INTERFACE
-	#define 	MAX_TX_AGG_PACKET_NUMBER 	0x8
+	#define		MAX_TX_AGG_PACKET_NUMBER	0x8
 #else
-	#define 	MAX_TX_AGG_PACKET_NUMBER 	0xFF
+	#define		MAX_TX_AGG_PACKET_NUMBER	0xFF
 #endif
 */
 
@@ -1536,7 +1536,7 @@ Current IOREG MAP
 //#if RTL8188E_FOR_MP_TEST == 1
 //#define POLLING_READY_TIMEOUT_COUNT		3000
 //#else
-#define POLLING_READY_TIMEOUT_COUNT		1000 
+#define POLLING_READY_TIMEOUT_COUNT		1000
 //#endif
 // GPIO BIT
 #define	HAL_8188E_HW_GPIO_WPS_BIT		BIT7
@@ -1548,33 +1548,33 @@ Current IOREG MAP
 //	Host Interrupt Mask Registers (Offset: 0x00B0-00B3, 0x00B8-00BB)
 //
 //----------------------------------------------------------------------------
-//       8188 IMR/ISR bits						
+//       8188 IMR/ISR bits
 //----------------------------------------------------------------------------
 #define	IMR_DISABLED_88E					0x0
 // IMR DW0(0x00B0-00B3) Bit 0-31
-#define	IMR_TXCCK_88E					BIT30		// TXRPT interrupt when CCX bit of the packet is set	
+#define	IMR_TXCCK_88E					BIT30		// TXRPT interrupt when CCX bit of the packet is set
 #define	IMR_PSTIMEOUT_88E				BIT29		// Power Save Time Out Interrupt
-#define	IMR_GTINT4_88E					BIT28		// When GTIMER4 expires, this bit is set to 1	
-#define	IMR_GTINT3_88E					BIT27		// When GTIMER3 expires, this bit is set to 1	
-#define	IMR_TBDER_88E					BIT26		// Transmit Beacon0 Error			
-#define	IMR_TBDOK_88E					BIT25		// Transmit Beacon0 OK			
-#define	IMR_TSF_BIT32_TOGGLE_88E		BIT24		// TSF Timer BIT32 toggle indication interrupt			
-#define	IMR_BcnInt_88E					BIT20		// Beacon DMA Interrupt 0			
-#define	IMR_BDOK_88E						BIT16		// Beacon Queue DMA OK0			
-#define	IMR_HSISR_IND_ON_INT_88E		BIT15		// HSISR Indicator (HSIMR & HSISR is true, this bit is set to 1)			
-#define	IMR_BCNDMAINT_E_88E				BIT14		// Beacon DMA Interrupt Extension for Win7			
+#define	IMR_GTINT4_88E					BIT28		// When GTIMER4 expires, this bit is set to 1
+#define	IMR_GTINT3_88E					BIT27		// When GTIMER3 expires, this bit is set to 1
+#define	IMR_TBDER_88E					BIT26		// Transmit Beacon0 Error
+#define	IMR_TBDOK_88E					BIT25		// Transmit Beacon0 OK
+#define	IMR_TSF_BIT32_TOGGLE_88E		BIT24		// TSF Timer BIT32 toggle indication interrupt
+#define	IMR_BcnInt_88E					BIT20		// Beacon DMA Interrupt 0
+#define	IMR_BDOK_88E						BIT16		// Beacon Queue DMA OK0
+#define	IMR_HSISR_IND_ON_INT_88E		BIT15		// HSISR Indicator (HSIMR & HSISR is true, this bit is set to 1)
+#define	IMR_BCNDMAINT_E_88E				BIT14		// Beacon DMA Interrupt Extension for Win7
 #define	IMR_ATIMEND_88E					BIT12		// CTWidnow End or ATIM Window End
 #define	IMR_HISR1_IND_INT_88E			BIT11		// HISR1 Indicator (HISR1 & HIMR1 is true, this bit is set to 1)
-#define	IMR_C2HCMD_88E					BIT10		// CPU to Host Command INT Status, Write 1 clear	
-#define	IMR_CPWM2_88E					BIT9			// CPU power Mode exchange INT Status, Write 1 clear	
-#define	IMR_CPWM_88E						BIT8			// CPU power Mode exchange INT Status, Write 1 clear	
-#define	IMR_HIGHDOK_88E					BIT7			// High Queue DMA OK	
-#define	IMR_MGNTDOK_88E					BIT6			// Management Queue DMA OK	
-#define	IMR_BKDOK_88E					BIT5			// AC_BK DMA OK		
-#define	IMR_BEDOK_88E					BIT4			// AC_BE DMA OK	
-#define	IMR_VIDOK_88E					BIT3			// AC_VI DMA OK		
-#define	IMR_VODOK_88E					BIT2			// AC_VO DMA OK	
-#define	IMR_RDU_88E						BIT1			// Rx Descriptor Unavailable	
+#define	IMR_C2HCMD_88E					BIT10		// CPU to Host Command INT Status, Write 1 clear
+#define	IMR_CPWM2_88E					BIT9			// CPU power Mode exchange INT Status, Write 1 clear
+#define	IMR_CPWM_88E						BIT8			// CPU power Mode exchange INT Status, Write 1 clear
+#define	IMR_HIGHDOK_88E					BIT7			// High Queue DMA OK
+#define	IMR_MGNTDOK_88E					BIT6			// Management Queue DMA OK
+#define	IMR_BKDOK_88E					BIT5			// AC_BK DMA OK
+#define	IMR_BEDOK_88E					BIT4			// AC_BE DMA OK
+#define	IMR_VIDOK_88E					BIT3			// AC_VI DMA OK
+#define	IMR_VODOK_88E					BIT2			// AC_VO DMA OK
+#define	IMR_RDU_88E						BIT1			// Rx Descriptor Unavailable
 #define	IMR_ROK_88E						BIT0			// Receive DMA OK
 
 // IMR DW1(0x00B8-00BB) Bit 0-31
@@ -1646,7 +1646,7 @@ Current IOREG MAP
 // RTL88ES
 #define	EEPROM_MAC_ADDR_88ES				0x11A
 
- 
+
 
 
 //====================================================
@@ -1669,7 +1669,7 @@ Current IOREG MAP
 
 #define EEPROM_Default_AntTxPowerDiff		0x0
 #define EEPROM_Default_TxPwDiff_CrystalCap	0x5
-#if (RTL8188ES_SUPPORT==1) //for SDIO 
+#if (RTL8188ES_SUPPORT==1) //for SDIO
 #define EEPROM_Default_TxPowerLevel			0x25
 #else	//for USB/PCIE
 #define EEPROM_Default_TxPowerLevel			0x2A
@@ -1689,15 +1689,15 @@ Current IOREG MAP
 #endif //CONFIG_RF_GAIN_OFFSET
 
 //New EFUSE deafult value
-#define 	EEPROM_DEFAULT_24G_INDEX		0x2D
-#define 	EEPROM_DEFAULT_24G_HT20_DIFF	0X02
-#define 	EEPROM_DEFAULT_24G_OFDM_DIFF	0X04
+#define		EEPROM_DEFAULT_24G_INDEX		0x2D
+#define		EEPROM_DEFAULT_24G_HT20_DIFF	0X02
+#define		EEPROM_DEFAULT_24G_OFDM_DIFF	0X04
 
-#define 	EEPROM_DEFAULT_5G_INDEX			0X2A
-#define 	EEPROM_DEFAULT_5G_HT20_DIFF		0X00
-#define 	EEPROM_DEFAULT_5G_OFDM_DIFF		0X04
+#define		EEPROM_DEFAULT_5G_INDEX			0X2A
+#define		EEPROM_DEFAULT_5G_HT20_DIFF		0X00
+#define		EEPROM_DEFAULT_5G_OFDM_DIFF		0X04
 
-#define 	EEPROM_DEFAULT_DIFF				0XFE
+#define		EEPROM_DEFAULT_DIFF				0XFE
 #define	EEPROM_DEFAULT_CHANNEL_PLAN	0x7F
 #define	EEPROM_DEFAULT_BOARD_OPTION	0x00
 #define	EEPROM_DEFAULT_FEATURE_OPTION	0x00
@@ -1732,10 +1732,9 @@ Current IOREG MAP
 #define EEPROM_CID_TOSHIBA					0x4
 #define EEPROM_CID_CCX						0x10 // CCX test. By Bruce, 2009-02-25.
 #define EEPROM_CID_QMI						0x0D
-#define EEPROM_CID_WHQL 					0xFE // added by chiyoko for dtm, 20090108
+#define EEPROM_CID_WHQL						0xFE // added by chiyoko for dtm, 20090108
 
 
 #define	RTL_EEPROM_ID						0x8129
 
 #endif //__RTL8188E_SPEC_H__
-

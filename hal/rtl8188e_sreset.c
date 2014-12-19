@@ -33,9 +33,9 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	unsigned int diff_time;
 	u32 txdma_status;
-	
+
 	if( (txdma_status=rtw_read32(padapter, REG_TXDMA_STATUS)) !=0x00){
-		DBG_871X("%s REG_TXDMA_STATUS:0x%08x\n", __FUNCTION__, txdma_status);	
+		DBG_871X("%s REG_TXDMA_STATUS:0x%08x\n", __FUNCTION__, txdma_status);
 		rtw_hal_sreset_reset(padapter);
 	}
 #ifdef CONFIG_USB_HCI
@@ -89,10 +89,10 @@ void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
 	if(rx_dma_status!= 0x00){
 		DBG_8192C("%s REG_RXDMA_STATUS:0x%08x \n",__FUNCTION__,rx_dma_status);
 		rtw_write32(padapter,REG_RXDMA_STATUS,rx_dma_status);
-	}	
+	}
 	fw_status = rtw_read8(padapter,REG_FMETHR);
 	if(fw_status != 0x00)
-	{		
+	{
 		if(fw_status == 1)
 			DBG_8192C("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!   \n",__FUNCTION__,fw_status);
 		else if(fw_status == 2)
@@ -122,4 +122,3 @@ void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
 	}
 }
 #endif
-

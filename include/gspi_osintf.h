@@ -32,4 +32,3 @@ extern void sd_setup_irs(struct adapter *padapter);
 #endif
 
 #endif
-

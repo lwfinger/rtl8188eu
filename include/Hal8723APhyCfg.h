@@ -27,4 +27,3 @@ int	PHY_RFConfig8723A(	IN	struct adapter *Adapter	);
 s32 PHY_MACConfig8723A(struct adapter *padapter);
 
 #endif
-

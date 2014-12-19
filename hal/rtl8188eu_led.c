@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -34,7 +34,7 @@
 
 
 //================================================================================
-// LED_819xUsb routines. 
+// LED_819xUsb routines.
 //================================================================================
 
 //
@@ -43,7 +43,7 @@
 //
 void
 SwLedOn(
-	struct adapter			*padapter, 
+	struct adapter			*padapter,
 	PLED_871x		pLed
 )
 {
@@ -57,7 +57,7 @@ SwLedOn(
 
 	LedCfg = rtw_read8(padapter, REG_LEDCFG2);
 	switch(pLed->LedPin)
-	{	
+	{
 		case LED_PIN_LED0:
 			rtw_write8(padapter, REG_LEDCFG2, (LedCfg&0xf0)|BIT5|BIT6); // SW control led0 on.
 			break;
@@ -69,7 +69,7 @@ SwLedOn(
 		default:
 			break;
 	}
-	
+
 	pLed->bLedOn = _TRUE;
 }
 
@@ -80,14 +80,14 @@ SwLedOn(
 //
 void
 SwLedOff(
-	struct adapter			*padapter, 
+	struct adapter			*padapter,
 	PLED_871x		pLed
 )
 {
 	u8	LedCfg;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
-	if((padapter->bSurpriseRemoved == _TRUE) || ( padapter->bDriverStopped == _TRUE))	
+	if((padapter->bSurpriseRemoved == _TRUE) || ( padapter->bDriverStopped == _TRUE))
 	{
 		goto exit;
 	}
@@ -100,11 +100,11 @@ SwLedOff(
 		case LED_PIN_LED0:
 			if(pHalData->bLedOpenDrain == _TRUE) // Open-drain arrangement for controlling the LED)
 			{
-				LedCfg &= 0x90; // Set to software control.				
-				rtw_write8(padapter, REG_LEDCFG2, (LedCfg|BIT3));				
+				LedCfg &= 0x90; // Set to software control.
+				rtw_write8(padapter, REG_LEDCFG2, (LedCfg|BIT3));
 				LedCfg = rtw_read8(padapter, REG_MAC_PINMUX_CFG);
 				LedCfg &= 0xFE;
-				rtw_write8(padapter, REG_MAC_PINMUX_CFG, LedCfg);									
+				rtw_write8(padapter, REG_MAC_PINMUX_CFG, LedCfg);
 			}
 			else
 			{
@@ -122,7 +122,7 @@ SwLedOff(
 	}
 exit:
 	pLed->bLedOn = _FALSE;
-	
+
 }
 
 //================================================================================
@@ -167,4 +167,3 @@ rtl8188eu_DeInitSwLeds(
 	DeInitLed871x( &(ledpriv->SwLed0) );
 	DeInitLed871x( &(ledpriv->SwLed1) );
 }
-

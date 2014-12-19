@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -34,15 +34,15 @@
 
 enum{
 	UP_LINK,
-	DOWN_LINK,	
+	DOWN_LINK,
 };
 typedef	enum _BT_Ant_NUM{
-	Ant_x2	= 0,		
+	Ant_x2	= 0,
 	Ant_x1	= 1
 } BT_Ant_NUM, *PBT_Ant_NUM;
 
 typedef	enum _BT_CoType{
-	BT_2Wire		= 0,		
+	BT_2Wire		= 0,
 	BT_ISSC_3Wire	= 1,
 	BT_Accel		= 2,
 	BT_CSR_BC4		= 3,
@@ -51,12 +51,12 @@ typedef	enum _BT_CoType{
 } BT_CoType, *PBT_CoType;
 
 typedef	enum _BT_CurState{
-	BT_OFF		= 0,	
+	BT_OFF		= 0,
 	BT_ON		= 1,
 } BT_CurState, *PBT_CurState;
 
 typedef	enum _BT_ServiceType{
-	BT_SCO		= 0,	
+	BT_SCO		= 0,
 	BT_A2DP		= 1,
 	BT_HID		= 2,
 	BT_HID_Idle	= 3,
@@ -69,7 +69,7 @@ typedef	enum _BT_ServiceType{
 } BT_ServiceType, *PBT_ServiceType;
 
 typedef	enum _BT_RadioShared{
-	BT_Radio_Shared 	= 0,	
+	BT_Radio_Shared		= 0,
 	BT_Radio_Individual	= 1,
 } BT_RadioShared, *PBT_RadioShared;
 
@@ -116,7 +116,7 @@ struct btcoexist_priv	{
 #define IQK_BB_REG_NUM			9
 #define HP_THERMAL_NUM		8
 //###### duplicate code,will move to ODM #########
-struct 	dm_priv	
+struct	dm_priv
 {
 	u8	DM_Type;
 	u8	DMFlag;
@@ -141,7 +141,7 @@ struct 	dm_priv
 	PS_T	DM_PSTable;
 
 	FALSE_ALARM_STATISTICS FalseAlmCnt;
-	
+
 	//for rate adaptive, in fact,  88c/92c fw will handle this
 	u8 bUseRAMask;
 	RATE_ADAPTIVE RateAdaptive;
@@ -150,11 +150,11 @@ struct 	dm_priv
 	u8 bDynamicTxPowerEnable;
 	u8 LastDTPLvl;
 	u8 DynamicTxHighPowerLvl;//Add by Jacken Tx Power Control for Near/Far Range 2008/03/06
-		
+
 	//for tx power tracking
 	u8	bTXPowerTracking;
 	u8	TXPowercount;
-	u8	bTXPowerTrackingInit;	
+	u8	bTXPowerTrackingInit;
 	u8	TxPowerTrackControl;	//for mp mode, turn off txpwrtracking as default
 	u8	TM_Trigger;
 
@@ -173,7 +173,7 @@ struct 	dm_priv
 	u8	bDPdone;
 	u8	bDPPathAOK;
 	u8	bDPPathBOK;
-	
+
 	//for IQK
 	u32	RegC04;
 	u32	Reg874;
@@ -221,10 +221,10 @@ struct 	dm_priv
 	//for Antenna diversity
 #ifdef CONFIG_ANTENNA_DIVERSITY
 //	SWAT_T DM_SWAT_Table;
-#endif	
+#endif
 #ifdef CONFIG_SW_ANTENNA_DIVERSITY
 //	_timer SwAntennaSwitchTimer;
-/*	
+/*
 	u64	lastTxOkCnt;
 	u64	lastRxOkCnt;
 	u64	TXByteCnt_A;
@@ -238,7 +238,7 @@ struct 	dm_priv
 
 	s32	OFDM_Pkt_Cnt;
 	u8	RSSI_Select;
-//	u8 	DIG_Dynamic_MIN ;
+//	u8	DIG_Dynamic_MIN ;
 //###### duplicate code,will move to ODM #########
 	// Add for Reading Initial Data Rate SEL Register 0x484 during watchdog. Using for fill tx desc. 2011.3.21 by Thomas
 	u8	INIDATA_RATE[32];
@@ -260,4 +260,3 @@ void rtl8192c_InitHalDm(	IN	struct adapter *Adapter);
 void rtl8192c_HalDmWatchDog(IN struct adapter *Adapter);
 
 #endif	//__HAL8190PCIDM_H__
-

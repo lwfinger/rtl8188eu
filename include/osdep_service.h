@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -34,7 +34,7 @@
 
 #undef _FALSE
 #define _FALSE		0
-	
+
 
 	#include <linux/version.h>
 	#include <linux/spinlock.h>
@@ -77,10 +77,10 @@
 	#include <net/flow.h>
 	#include <net/arp.h>
 
-#ifdef CONFIG_IOCTL_CFG80211	
-//	#include <linux/ieee80211.h>        
+#ifdef CONFIG_IOCTL_CFG80211
+//	#include <linux/ieee80211.h>
         #include <net/ieee80211_radiotap.h>
-	#include <net/cfg80211.h>	
+	#include <net/cfg80211.h>
 #endif //CONFIG_IOCTL_CFG80211
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
@@ -103,7 +103,7 @@
 
 #ifdef CONFIG_TX_MCAST2UNI
 extern int rtw_mc2u_disable;
-#endif	// CONFIG_TX_MCAST2UNI	
+#endif	// CONFIG_TX_MCAST2UNI
 
 extern char* rtw_initmac;
 
@@ -139,30 +139,30 @@ extern int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 #endif
 #endif
 
-	typedef struct 	semaphore _sema;
+	typedef struct	semaphore _sema;
 	typedef	spinlock_t	_lock;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
-	typedef struct mutex 		_mutex;
+	typedef struct mutex		_mutex;
 #else
 	typedef struct semaphore	_mutex;
 #endif
 	typedef struct timer_list _timer;
 
 	struct	__queue	{
-		struct	list_head	queue;	
+		struct	list_head	queue;
 		_lock	lock;
 	};
 
 	typedef	struct sk_buff	_pkt;
 	typedef unsigned char	_buffer;
-	
+
 	typedef struct	__queue	_queue;
 	typedef struct	list_head	_list;
 	typedef	int	_OS_STATUS;
 	//typedef u32	_irqL;
 	typedef unsigned long _irqL;
 	typedef	struct	net_device * _nic_hdl;
-	
+
 	typedef void*		_thread_hdl_;
 	typedef int		thread_return;
 	typedef void*	thread_context;
@@ -203,18 +203,18 @@ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
 __inline static _list *get_next(_list	*list)
 {
 	return list->next;
-}	
+}
 
 __inline static _list	*get_list_head(_queue	*queue)
 {
 	return (&(queue->queue));
 }
 
-	
-#define LIST_CONTAINOR(ptr, type, member) \
-        ((type *)((char *)(ptr)-(SIZE_T)(&((type *)0)->member)))	
 
-        
+#define LIST_CONTAINOR(ptr, type, member) \
+        ((type *)((char *)(ptr)-(SIZE_T)(&((type *)0)->member)))
+
+
 __inline static void _enter_critical(_lock *plock, _irqL *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
@@ -274,20 +274,20 @@ __inline static void rtw_list_delete(_list *plist)
 
 __inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
 {
-	//setup_timer(ptimer, pfunc,(u32)cntx);	
+	//setup_timer(ptimer, pfunc,(u32)cntx);
 	ptimer->function = pfunc;
 	ptimer->data = (unsigned long)cntx;
 	init_timer(ptimer);
 }
 
 __inline static void _set_timer(_timer *ptimer,u32 delay_time)
-{	
-	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));	
+{
+	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));
 }
 
 __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 {
-	del_timer_sync(ptimer); 	
+	del_timer_sync(ptimer);
 	*bcancelled=  _TRUE;//TRUE ==1; FALSE==0
 }
 
@@ -617,7 +617,7 @@ extern void	rtw_sleep_schedulable(int ms);
 extern void	rtw_msleep_os(int ms);
 extern void	rtw_usleep_os(int us);
 
-extern u32 	rtw_atoi(u8* s);
+extern u32	rtw_atoi(u8* s);
 
 #ifdef DBG_DELAY_OS
 #define rtw_mdelay_os(ms) _rtw_mdelay_os((ms), __FUNCTION__, __LINE__)
@@ -645,9 +645,9 @@ static __inline void thread_enter(char *name)
 	allow_signal(SIGTERM);
 }
 
-__inline static void flush_signals_thread(void) 
+__inline static void flush_signals_thread(void)
 {
-	if (signal_pending (current)) 
+	if (signal_pending (current))
 	{
 		flush_signals(current);
 	}
@@ -674,7 +674,7 @@ __inline static u32 _RND4(u32 sz)
 	u32	val;
 
 	val = ((sz >> 2) + ((sz & 3) ? 1: 0)) << 2;
-	
+
 	return val;
 
 }
@@ -685,7 +685,7 @@ __inline static u32 _RND8(u32 sz)
 	u32	val;
 
 	val = ((sz >> 3) + ((sz & 7) ? 1: 0)) << 3;
-	
+
 	return val;
 
 }
@@ -696,7 +696,7 @@ __inline static u32 _RND128(u32 sz)
 	u32	val;
 
 	val = ((sz >> 7) + ((sz & 127) ? 1: 0)) << 7;
-	
+
 	return val;
 
 }
@@ -707,7 +707,7 @@ __inline static u32 _RND256(u32 sz)
 	u32	val;
 
 	val = ((sz >> 8) + ((sz & 255) ? 1: 0)) << 8;
-	
+
 	return val;
 
 }
@@ -718,7 +718,7 @@ __inline static u32 _RND512(u32 sz)
 	u32	val;
 
 	val = ((sz >> 9) + ((sz & 511) ? 1: 0)) << 9;
-	
+
 	return val;
 
 }
@@ -829,7 +829,7 @@ extern u64 rtw_division64(u64 x, u64 y);
 	} while (0)
 
 #define RTW_GET_BE24(a) ((((u32) (a)[0]) << 16) | (((u32) (a)[1]) << 8) | \
-			 ((u32) (a)[2]))			 
+			 ((u32) (a)[2]))
 #define RTW_PUT_BE24(a, val)					\
 	do {							\
 		(a)[0] = (u8) ((((u32) (val)) >> 16) & 0xff);	\
@@ -838,7 +838,7 @@ extern u64 rtw_division64(u64 x, u64 y);
 	} while (0)
 
 #define RTW_GET_BE32(a) ((((u32) (a)[0]) << 24) | (((u32) (a)[1]) << 16) | \
-			 (((u32) (a)[2]) << 8) | ((u32) (a)[3]))			 
+			 (((u32) (a)[2]) << 8) | ((u32) (a)[3]))
 #define RTW_PUT_BE32(a, val)					\
 	do {							\
 		(a)[0] = (u8) ((((u32) (val)) >> 24) & 0xff);	\
@@ -848,7 +848,7 @@ extern u64 rtw_division64(u64 x, u64 y);
 	} while (0)
 
 #define RTW_GET_LE32(a) ((((u32) (a)[3]) << 24) | (((u32) (a)[2]) << 16) | \
-			 (((u32) (a)[1]) << 8) | ((u32) (a)[0]))			 
+			 (((u32) (a)[1]) << 8) | ((u32) (a)[0]))
 #define RTW_PUT_LE32(a, val)					\
 	do {							\
 		(a)[3] = (u8) ((((u32) (val)) >> 24) & 0xff);	\
@@ -860,7 +860,7 @@ extern u64 rtw_division64(u64 x, u64 y);
 #define RTW_GET_BE64(a) ((((u64) (a)[0]) << 56) | (((u64) (a)[1]) << 48) | \
 			 (((u64) (a)[2]) << 40) | (((u64) (a)[3]) << 32) | \
 			 (((u64) (a)[4]) << 24) | (((u64) (a)[5]) << 16) | \
-			 (((u64) (a)[6]) << 8) | ((u64) (a)[7]))			 
+			 (((u64) (a)[6]) << 8) | ((u64) (a)[7]))
 #define RTW_PUT_BE64(a, val)				\
 	do {						\
 		(a)[0] = (u8) (((u64) (val)) >> 56);	\
@@ -896,5 +896,3 @@ struct rtw_cbuf *rtw_cbuf_alloc(u32 size);
 void rtw_cbuf_free(struct rtw_cbuf *cbuf);
 
 #endif
-
-

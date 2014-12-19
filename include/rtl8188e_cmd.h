@@ -35,7 +35,7 @@ enum cmd_msg_element_id
 	P2P_PS_OFFLOAD_EID = 8,
 	SELECTIVE_SUSPEND_ROF_CMD = 9,
 	P2P_PS_CTW_CMD_EID = 32,
-	MAX_CMDMSG_EID	 
+	MAX_CMDMSG_EID
 };
 #else
 typedef enum _RTL8188E_H2C_CMD_ID
@@ -43,8 +43,8 @@ typedef enum _RTL8188E_H2C_CMD_ID
 	//Class Common
 	H2C_COM_RSVD_PAGE			=0x00,
 	H2C_COM_MEDIA_STATUS_RPT	=0x01,
-	H2C_COM_SCAN					=0x02,	
-	H2C_COM_KEEP_ALIVE			=0x03,	
+	H2C_COM_SCAN					=0x02,
+	H2C_COM_KEEP_ALIVE			=0x03,
 	H2C_COM_DISCNT_DECISION		=0x04,
 #ifndef CONFIG_WOWLAN
 	H2C_COM_WWLAN				=0x05,
@@ -71,7 +71,7 @@ typedef enum _RTL8188E_H2C_CMD_ID
 	H2C_BT_COEX_GPIO_MODE		=0x61,
 	H2C_BT_DAC_SWING_VAL			=0x62,
 	H2C_BT_PSD_RST				=0x63,
-	
+
 	//Class Remote WakeUp
 #ifdef CONFIG_WOWLAN
 	H2C_COM_WWLAN				=0x80,
@@ -80,10 +80,10 @@ typedef enum _RTL8188E_H2C_CMD_ID
 	H2C_COM_AOAC_RSVD_PAGE		=0x83,
 #endif
 
-	//Class 
+	//Class
 	 H2C_RESET_TSF				=0xc0,
 }RTL8188E_H2C_CMD_ID;
-	
+
 #endif
 
 
@@ -209,11 +209,11 @@ typedef struct _SETAOAC_GLOBAL_INFO{
 #define SET_ARP_PKT_PROTOCOL(__pHeader, __Value)			WriteEF2Byte( ((u8*)(__pHeader)) + 2, __Value)
 #define SET_ARP_PKT_HW_ADDR_LEN(__pHeader, __Value)			WriteEF1Byte( ((u8*)(__pHeader)) + 4, __Value)
 #define SET_ARP_PKT_PROTOCOL_ADDR_LEN(__pHeader, __Value)	WriteEF1Byte( ((u8*)(__pHeader)) + 5, __Value)
-#define SET_ARP_PKT_OPERATION(__pHeader, __Value) 			WriteEF2Byte( ((u8*)(__pHeader)) + 6, __Value)
-#define SET_ARP_PKT_SENDER_MAC_ADDR(__pHeader, _val) 		cpMacAddr(((u8*)(__pHeader))+8, (u8*)(_val))
-#define SET_ARP_PKT_SENDER_IP_ADDR(__pHeader, _val) 		cpIpAddr(((u8*)(__pHeader))+14, (u8*)(_val))
-#define SET_ARP_PKT_TARGET_MAC_ADDR(__pHeader, _val) 		cpMacAddr(((u8*)(__pHeader))+18, (u8*)(_val))
-#define SET_ARP_PKT_TARGET_IP_ADDR(__pHeader, _val) 		cpIpAddr(((u8*)(__pHeader))+24, (u8*)(_val))
+#define SET_ARP_PKT_OPERATION(__pHeader, __Value)			WriteEF2Byte( ((u8*)(__pHeader)) + 6, __Value)
+#define SET_ARP_PKT_SENDER_MAC_ADDR(__pHeader, _val)		cpMacAddr(((u8*)(__pHeader))+8, (u8*)(_val))
+#define SET_ARP_PKT_SENDER_IP_ADDR(__pHeader, _val)		cpIpAddr(((u8*)(__pHeader))+14, (u8*)(_val))
+#define SET_ARP_PKT_TARGET_MAC_ADDR(__pHeader, _val)		cpMacAddr(((u8*)(__pHeader))+18, (u8*)(_val))
+#define SET_ARP_PKT_TARGET_IP_ADDR(__pHeader, _val)		cpIpAddr(((u8*)(__pHeader))+24, (u8*)(_val))
 
 #define FW_WOWLAN_FUN_EN				BIT(0)
 #define FW_WOWLAN_PATTERN_MATCH			BIT(1)
@@ -254,5 +254,3 @@ void SetFwRelatedForWoWLAN8188ES(struct adapter* padapter, u8 bHostIsGoingtoSlee
 #define SET_8188E_H2CCMD_AOAC_RSVDPAGE_LOC_ARP_RSP(__pH2CCmd, __Value)					SET_BITS_TO_LE_1BYTE((__pH2CCmd)+1, 0, 8, __Value)
 
 #endif//__RTL8188E_CMD_H__
-
-

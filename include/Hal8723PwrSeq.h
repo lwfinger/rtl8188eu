@@ -35,7 +35,7 @@
 #define	RTL8723A_TRANS_END_STEPS	1
 
 
-#define RTL8723A_TRANS_CARDEMU_TO_ACT 														\
+#define RTL8723A_TRANS_CARDEMU_TO_ACT														\
 	/* format */																\
 	/* { offset, cut_msk, fab_msk|interface_msk, base|cmd, msk, value }, // comments here*/								\
 	{0x0020, PWR_CUT_ALL_MSK, PWR_FAB_ALL_MSK, PWR_INTF_USB_MSK|PWR_INTF_SDIO_MSK,PWR_BASEADDR_MAC,PWR_CMD_WRITE, BIT0, BIT0}, /*0x20[0] = 1b'1 enable LDOA12 MACRO block for all interface*/   \
@@ -168,4 +168,3 @@ extern WLAN_PWR_CFG rtl8723A_enter_lps_flow[RTL8723A_TRANS_ACT_TO_LPS_STEPS+RTL8
 extern WLAN_PWR_CFG rtl8723A_leave_lps_flow[RTL8723A_TRANS_LPS_TO_ACT_STEPS+RTL8723A_TRANS_END_STEPS];
 
 #endif
-

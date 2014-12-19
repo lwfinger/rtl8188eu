@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -107,7 +107,7 @@ hal_com_get_channel_plan(
 u8	MRateToHwRate(u8 rate)
 {
 	u8	ret = DESC_RATE1M;
-		
+
 	switch(rate)
 	{
 		// CCK and OFDM non-HT rates
@@ -151,9 +151,9 @@ void	HalSetBrateCfg(
 	{
 		is_brate = mBratesOS[i] & IEEE80211_BASIC_RATE_MASK;
 		brate = mBratesOS[i] & 0x7f;
-		
+
 		if( is_brate )
-		{		
+		{
 			switch(brate)
 			{
 				case IEEE80211_CCK_RATE_1MB:	*pBrateCfg |= RATE_1M;	break;
@@ -184,7 +184,7 @@ _OneOutPipeMapping(
 	pdvobjpriv->Queue2Pipe[1] = pdvobjpriv->RtOutPipe[0];//VI
 	pdvobjpriv->Queue2Pipe[2] = pdvobjpriv->RtOutPipe[0];//BE
 	pdvobjpriv->Queue2Pipe[3] = pdvobjpriv->RtOutPipe[0];//BK
-	
+
 	pdvobjpriv->Queue2Pipe[4] = pdvobjpriv->RtOutPipe[0];//BCN
 	pdvobjpriv->Queue2Pipe[5] = pdvobjpriv->RtOutPipe[0];//MGT
 	pdvobjpriv->Queue2Pipe[6] = pdvobjpriv->RtOutPipe[0];//HIGH
@@ -194,89 +194,89 @@ _OneOutPipeMapping(
 static VOID
 _TwoOutPipeMapping(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN	 	bWIFICfg
+	IN	BOOLEAN		bWIFICfg
 	)
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
 
 	if(bWIFICfg){ //WMM
-		
-		//	BK, 	BE, 	VI, 	VO, 	BCN,	CMD,MGT,HIGH,HCCA 
-		//{  0, 	1, 	0, 	1, 	0, 	0, 	0, 	0, 		0	};
-		//0:H, 1:L 
-		
+
+		//	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA
+		//{  0,		1,	0,	1,	0,	0,	0,	0,		0	};
+		//0:H, 1:L
+
 		pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[1];//VO
 		pdvobjpriv->Queue2Pipe[1] = pdvobjpriv->RtOutPipe[0];//VI
 		pdvobjpriv->Queue2Pipe[2] = pdvobjpriv->RtOutPipe[1];//BE
 		pdvobjpriv->Queue2Pipe[3] = pdvobjpriv->RtOutPipe[0];//BK
-		
+
 		pdvobjpriv->Queue2Pipe[4] = pdvobjpriv->RtOutPipe[0];//BCN
 		pdvobjpriv->Queue2Pipe[5] = pdvobjpriv->RtOutPipe[0];//MGT
 		pdvobjpriv->Queue2Pipe[6] = pdvobjpriv->RtOutPipe[0];//HIGH
 		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];//TXCMD
-		
+
 	}
 	else{//typical setting
 
-		
-		//BK, 	BE, 	VI, 	VO, 	BCN,	CMD,MGT,HIGH,HCCA 
-		//{  1, 	1, 	0, 	0, 	0, 	0, 	0, 	0, 		0	};			
-		//0:H, 1:L 
-		
+
+		//BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA
+		//{  1,		1,	0,	0,	0,	0,	0,	0,		0	};
+		//0:H, 1:L
+
 		pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[0];//VO
 		pdvobjpriv->Queue2Pipe[1] = pdvobjpriv->RtOutPipe[0];//VI
 		pdvobjpriv->Queue2Pipe[2] = pdvobjpriv->RtOutPipe[1];//BE
 		pdvobjpriv->Queue2Pipe[3] = pdvobjpriv->RtOutPipe[1];//BK
-		
+
 		pdvobjpriv->Queue2Pipe[4] = pdvobjpriv->RtOutPipe[0];//BCN
 		pdvobjpriv->Queue2Pipe[5] = pdvobjpriv->RtOutPipe[0];//MGT
 		pdvobjpriv->Queue2Pipe[6] = pdvobjpriv->RtOutPipe[0];//HIGH
-		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];//TXCMD	
-		
+		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];//TXCMD
+
 	}
-	
+
 }
 
 static VOID _ThreeOutPipeMapping(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN	 	bWIFICfg
+	IN	BOOLEAN		bWIFICfg
 	)
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
 
 	if(bWIFICfg){//for WMM
-		
-		//	BK, 	BE, 	VI, 	VO, 	BCN,	CMD,MGT,HIGH,HCCA 
-		//{  1, 	2, 	1, 	0, 	0, 	0, 	0, 	0, 		0	};
-		//0:H, 1:N, 2:L 
-		
+
+		//	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA
+		//{  1,		2,	1,	0,	0,	0,	0,	0,		0	};
+		//0:H, 1:N, 2:L
+
 		pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[0];//VO
 		pdvobjpriv->Queue2Pipe[1] = pdvobjpriv->RtOutPipe[1];//VI
 		pdvobjpriv->Queue2Pipe[2] = pdvobjpriv->RtOutPipe[2];//BE
 		pdvobjpriv->Queue2Pipe[3] = pdvobjpriv->RtOutPipe[1];//BK
-		
+
 		pdvobjpriv->Queue2Pipe[4] = pdvobjpriv->RtOutPipe[0];//BCN
 		pdvobjpriv->Queue2Pipe[5] = pdvobjpriv->RtOutPipe[0];//MGT
 		pdvobjpriv->Queue2Pipe[6] = pdvobjpriv->RtOutPipe[0];//HIGH
 		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];//TXCMD
-		
+
 	}
 	else{//typical setting
 
-		
-		//	BK, 	BE, 	VI, 	VO, 	BCN,	CMD,MGT,HIGH,HCCA 
-		//{  2, 	2, 	1, 	0, 	0, 	0, 	0, 	0, 		0	};			
-		//0:H, 1:N, 2:L 
-		
+
+		//	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA
+		//{  2,		2,	1,	0,	0,	0,	0,	0,		0	};
+		//0:H, 1:N, 2:L
+
 		pdvobjpriv->Queue2Pipe[0] = pdvobjpriv->RtOutPipe[0];//VO
 		pdvobjpriv->Queue2Pipe[1] = pdvobjpriv->RtOutPipe[1];//VI
 		pdvobjpriv->Queue2Pipe[2] = pdvobjpriv->RtOutPipe[2];//BE
 		pdvobjpriv->Queue2Pipe[3] = pdvobjpriv->RtOutPipe[2];//BK
-		
+
 		pdvobjpriv->Queue2Pipe[4] = pdvobjpriv->RtOutPipe[0];//BCN
 		pdvobjpriv->Queue2Pipe[5] = pdvobjpriv->RtOutPipe[0];//MGT
 		pdvobjpriv->Queue2Pipe[6] = pdvobjpriv->RtOutPipe[0];//HIGH
-		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];//TXCMD	
+		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];//TXCMD
 	}
 
 }
@@ -290,7 +290,7 @@ Hal_MappingOutPipe(
 	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
 
 	BOOLEAN	 bWIFICfg = (pregistrypriv->wifi_spec) ?_TRUE:_FALSE;
-	
+
 	BOOLEAN result = _TRUE;
 
 	switch(NumOutPipe)
@@ -310,7 +310,7 @@ Hal_MappingOutPipe(
 	}
 
 	return result;
-	
+
 }
 
 void hal_init_macaddr(struct adapter *adapter)
@@ -322,10 +322,10 @@ void hal_init_macaddr(struct adapter *adapter)
 #endif
 }
 
-/* 
+/*
 * C2H event format:
-* Field	 TRIGGER		CONTENT	   CMD_SEQ 	CMD_LEN		 CMD_ID
-* BITS	 [127:120]	[119:16]      [15:8]		  [7:4]	 	   [3:0]
+* Field	 TRIGGER		CONTENT	   CMD_SEQ	CMD_LEN		 CMD_ID
+* BITS	 [127:120]	[119:16]      [15:8]		  [7:4]		   [3:0]
 */
 
 void c2h_evt_clear(struct adapter *adapter)
@@ -356,7 +356,7 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 	_rtw_memset(c2h_evt, 0, 16);
 
 	*buf = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL);
-	*(buf+1) = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1);	
+	*(buf+1) = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1);
 
 	RT_PRINT_DATA(_module_hal_init_c_, _drv_info_, "c2h_evt_read(): ",
 		&c2h_evt , sizeof(c2h_evt));
@@ -376,7 +376,7 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 	ret = _SUCCESS;
 
 clear_evt:
-	/* 
+	/*
 	* Clear event to notify FW we have read the command.
 	* If this field isn't clear, the FW won't update the next command message.
 	*/
@@ -439,4 +439,3 @@ GetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 
 	return bResult;
 }
-

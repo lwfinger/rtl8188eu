@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of version 2 of the GNU General Public License as
  * published by the Free Software Foundation.
@@ -27,7 +27,7 @@
 #include <sdio_ops_linux.h>
 
 extern void sdio_set_intf_ops(struct _io_ops *pops);
-	
+
 //extern void sdio_func1cmd52_read(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem);
 //extern void sdio_func1cmd52_write(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem);
 extern u8 SdioLocalCmd52Read1Byte(struct adapter *padapter, u32 addr);
@@ -56,4 +56,3 @@ extern u8 RecvOnePkt(struct adapter *padapter, u32 size);
 extern void ClearInterrupt8189ESdio(struct adapter *padapter);
 #endif //CONFIG_WOWLAN
 #endif
-

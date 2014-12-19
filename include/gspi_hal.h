@@ -26,4 +26,3 @@ void rtl8188es_set_hal_ops(struct adapter *padapter);
 #define hal_set_hal_ops rtl8188es_set_hal_ops
 
 #endif //__GSPI_HAL_H__
-
