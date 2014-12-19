@@ -706,7 +706,6 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
 int issue_deauth(struct adapter *padapter, unsigned char *da, unsigned short reason);
 int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason, int try_cnt, int wait_ms);
 void issue_action_spct_ch_switch(struct adapter *padapter, u8 *ra, u8 new_ch, u8 ch_offset);
-void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned char action, unsigned short status);
 #ifdef CONFIG_IEEE80211W
 void issue_action_SA_Query(struct adapter *padapter, unsigned char *raddr, unsigned char action, unsigned short tid);
 #endif //CONFIG_IEEE80211W
@@ -851,8 +850,7 @@ u8 tdls_hdl(struct adapter *padapter, unsigned char *pbuf);
 
 #ifdef _RTW_CMD_C_
 
-struct cmd_hdl wlancmds[] = 
-{
+static struct cmd_hdl wlancmds[] = {
 	GEN_DRV_CMD_HANDLER(0, NULL) /*0*/
 	GEN_DRV_CMD_HANDLER(0, NULL)
 	GEN_DRV_CMD_HANDLER(0, NULL)

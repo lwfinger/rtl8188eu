@@ -22,6 +22,7 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
+#include <recv_osdep.h>
 #include <osdep_intf.h>
 
 #ifdef CONFIG_BT_COEXIST
@@ -116,11 +117,6 @@ int ips_leave(struct adapter * padapter)
 #ifdef CONFIG_AUTOSUSPEND
 extern void autosuspend_enter(struct adapter* padapter);	
 extern int autoresume_enter(struct adapter* padapter);
-#endif
-
-#ifdef SUPPORT_HW_RFOFF_DETECTED
-int rtw_hw_suspend(struct adapter *padapter );
-int rtw_hw_resume(struct adapter *padapter);
 #endif
 
 bool rtw_pwr_unassociated_idle(struct adapter *adapter)

@@ -45,15 +45,6 @@ static unsigned char EPIGRAM_OUI[] = {0x00, 0x90, 0x4c};
 
 unsigned char REALTEK_96B_IE[] = {0x00, 0xe0, 0x4c, 0x02, 0x01, 0x20};
 
-extern unsigned char	MCS_rate_2R[16];
-#ifdef CONFIG_DISABLE_MCS13TO15
-extern unsigned char	MCS_rate_2R_MCS13TO15_OFF[16];
-#endif //CONFIG_DISABLE_MCS13TO15
-extern unsigned char	MCS_rate_1R[16];
-extern unsigned char RTW_WPA_OUI[];
-extern unsigned char WPA_TKIP_CIPHER[4];
-extern unsigned char RSN_TKIP_CIPHER[4];
-
 #define R2T_PHY_DELAY	(0)
 
 //#define WAIT_FOR_BCN_TO_MIN	(3000)

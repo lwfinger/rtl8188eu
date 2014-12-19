@@ -26,7 +26,6 @@
 #include <drv_types.h>
 #include <mlme_osdep.h>
 
-
 #ifdef RTK_DMP_PLATFORM
 void Linkup_workitem_callback(struct work_struct *work)
 {
@@ -91,7 +90,7 @@ void _rtw_scan_timeout_handler (void *FunctionContext)
 }
 
 
-void _dynamic_check_timer_handlder (void *FunctionContext)
+static void _dynamic_check_timer_handlder (void *FunctionContext)
 {
 	struct adapter *adapter = (struct adapter *)FunctionContext;
 /* remove for MP power tracking DM.
@@ -333,20 +332,20 @@ _func_exit_;
 
 }
 
-void _survey_timer_hdl (void *FunctionContext)
+static void _survey_timer_hdl (void *FunctionContext)
 {
 	struct adapter *padapter = (struct adapter *)FunctionContext;
 	
 	survey_timer_hdl(padapter);
 }
 
-void _link_timer_hdl (void *FunctionContext)
+static void _link_timer_hdl (void *FunctionContext)
 {
 	struct adapter *padapter = (struct adapter *)FunctionContext;
 	link_timer_hdl(padapter);
 }
 
-void _addba_timer_hdl(void *FunctionContext)
+static void _addba_timer_hdl(void *FunctionContext)
 {
 	struct sta_info *psta = (struct sta_info *)FunctionContext;
 	addba_timer_hdl(psta);

@@ -101,7 +101,35 @@
 	#include <linux/pci.h>
 #endif
 
-	
+#ifdef CONFIG_TX_MCAST2UNI
+extern int rtw_mc2u_disable;
+#endif	// CONFIG_TX_MCAST2UNI	
+
+extern char* rtw_initmac;
+
+#ifdef CONFIG_80211N_HT
+extern int rtw_ht_enable;
+extern int rtw_cbw40_enable;
+extern int rtw_ampdu_enable;//for enable tx_ampdu
+#endif
+
+#ifdef CONFIG_GLOBAL_UI_PID
+extern int ui_pid[3];
+#endif
+
+extern unsigned char	MCS_rate_2R[16];
+#ifdef CONFIG_DISABLE_MCS13TO15
+extern unsigned char	MCS_rate_2R_MCS13TO15_OFF[16];
+#endif //CONFIG_DISABLE_MCS13TO15
+extern unsigned char	MCS_rate_1R[16];
+extern unsigned char RTW_WPA_OUI[];
+extern unsigned char WPA_TKIP_CIPHER[4];
+extern unsigned char RSN_TKIP_CIPHER[4];
+
+struct dvobj_priv;
+extern void rtw_unregister_netdevs(struct dvobj_priv *dvobj);
+extern int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
+
 #ifdef CONFIG_USB_HCI
 	typedef struct urb *  PURB;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))

@@ -71,6 +71,7 @@ struct br_ext_info {
 };
 
 void nat25_db_cleanup(struct adapter *priv);
+void netdev_br_init(struct net_device *netdev);
 
 #endif // _RTW_BR_EXT_H_
 

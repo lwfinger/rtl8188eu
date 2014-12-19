@@ -253,180 +253,153 @@ enum WIFI_REG_DOMAIN {
 #define _ORDER_			BIT(15)
 
 #define SetToDs(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_TO_DS_); \
-	} while(0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_TO_DS_)
 
 #define GetToDs(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_TO_DS_)) != 0)
 
 #define ClearToDs(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_TO_DS_)); \
-	} while(0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_TO_DS_))
 
 #define SetFrDs(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_FROM_DS_); \
-	} while(0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_FROM_DS_)
 
 #define GetFrDs(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_FROM_DS_)) != 0)
 
 #define ClearFrDs(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_FROM_DS_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_FROM_DS_))
 
 #define get_tofr_ds(pframe)	((GetToDs(pframe) << 1) | GetFrDs(pframe))
 
 
 #define SetMFrag(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_FRAG_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_FRAG_)
 
 #define GetMFrag(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_MORE_FRAG_)) != 0)
 
 #define ClearMFrag(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_FRAG_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_FRAG_))
 
 #define SetRetry(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_RETRY_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_RETRY_)
 
 #define GetRetry(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_RETRY_)) != 0)
 
 #define ClearRetry(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_RETRY_)); \
-	} while (0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_RETRY_))
 
 #define SetPwrMgt(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_PWRMGT_); \
-	} while (0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_PWRMGT_)
 
 #define GetPwrMgt(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_PWRMGT_)) != 0)
 
 #define ClearPwrMgt(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_PWRMGT_)); \
-	} while(0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_PWRMGT_))
 
 #define SetMData(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_DATA_); \
-	} while(0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_DATA_)
 
 #define GetMData(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_MORE_DATA_)) != 0)
 
 #define ClearMData(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_DATA_)); \
-	} while(0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_DATA_))
 
 #define SetPrivacy(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) |= cpu_to_le16(_PRIVACY_); \
-	} while(0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(_PRIVACY_)
 
-#define GetPrivacy(pbuf) (((*(__le16 *)(pbuf)) & cpu_to_le16(_PRIVACY_)) != 0)
+#define GetPrivacy(pbuf)					\
+	(((*(__le16 *)(pbuf)) & cpu_to_le16(_PRIVACY_)) != 0)
 
 #define ClearPrivacy(pbuf)	\
-	do	{	\
-		*(__le16 *)(pbuf) &= (~cpu_to_le16(_PRIVACY_)); \
-	} while(0)
+	*(__le16 *)(pbuf) &= (~cpu_to_le16(_PRIVACY_))
 
 
-#define GetOrder(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_ORDER_)) != 0)
+#define GetOrder(pbuf)					\
+	(((*(__le16 *)(pbuf)) & cpu_to_le16(_ORDER_)) != 0)
 
-#define GetFrameType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(3) | BIT(2)))
+#define GetFrameType(pbuf)				\
+	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(3) | BIT(2)))
 
-#define SetFrameType(pbuf,type)	\
+#define SetFrameType(pbuf, type)	\
 	do {	\
 		*(unsigned short *)(pbuf) &= __constant_cpu_to_le16(~(BIT(3) | BIT(2))); \
 		*(unsigned short *)(pbuf) |= __constant_cpu_to_le16(type); \
 	} while (0)
 
-#define GetFrameSubType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) | BIT(6) | BIT(5) | BIT(4) | BIT(3) | BIT(2)))
+#define GetFrameSubType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) |\
+	 BIT(6) | BIT(5) | BIT(4) | BIT(3) | BIT(2)))
 
-#define SetFrameSubType(pbuf,type) \
+#define SetFrameSubType(pbuf, type) \
 	do {    \
-		*(__le16 *)(pbuf) &= cpu_to_le16(~(BIT(7) | BIT(6) | BIT(5) | BIT(4) | BIT(3) | BIT(2))); \
+		*(__le16 *)(pbuf) &= cpu_to_le16(~(BIT(7) | BIT(6) |	\
+		 BIT(5) | BIT(4) | BIT(3) | BIT(2))); \
 		*(__le16 *)(pbuf) |= cpu_to_le16(type); \
-	} while(0)
+	} while (0)
 
-#define GetSequence(pbuf)	(le16_to_cpu(*(__le16 *)((SIZE_PTR)(pbuf) + 22)) >> 4)
+#define GetSequence(pbuf)			\
+	(le16_to_cpu(*(__le16 *)((size_t)(pbuf) + 22)) >> 4)
 
-#define GetFragNum(pbuf)	(le16_to_cpu(*(__le16 *)((SIZE_PTR)(pbuf) + 22)) & 0x0f)
+#define GetFragNum(pbuf)			\
+	(le16_to_cpu(*(__le16 *)((size_t)(pbuf) + 22)) & 0x0f)
 
-#define GetTupleCache(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + 22)))
+#define GetTupleCache(pbuf)			\
+	(cpu_to_le16(*(unsigned short *)((size_t)(pbuf) + 22)))
 
 #define SetFragNum(pbuf, num) \
 	do {    \
-		*(unsigned short *)((SIZE_PTR)(pbuf) + 22) = \
-			((*(unsigned short *)((SIZE_PTR)(pbuf) + 22)) & le16_to_cpu(~(0x000f))) | \
+		*(unsigned short *)((size_t)(pbuf) + 22) = \
+			((*(unsigned short *)((size_t)(pbuf) + 22)) &	\
+			le16_to_cpu(~(0x000f))) | \
 			cpu_to_le16(0x0f & (num));     \
 	} while (0)
 
 #define SetSeqNum(pbuf, num) \
 	do {    \
-		*(unsigned short *)((SIZE_PTR)(pbuf) + 22) = \
-			((*(unsigned short *)((SIZE_PTR)(pbuf) + 22)) & le16_to_cpu((unsigned short)~0xfff0)) | \
-			le16_to_cpu((unsigned short)(0xfff0 & (num << 4))); \
-	} while(0)
+		*(__le16 *)((size_t)(pbuf) + 22) = \
+			((*(__le16 *)((size_t)(pbuf) + 22)) & cpu_to_le16((unsigned short)0x000f)) | \
+			cpu_to_le16((unsigned short)(0xfff0 & (num << 4))); \
+	} while (0)
 
 #define SetDuration(pbuf, dur) \
-	do {    \
-		*(unsigned short *)((SIZE_PTR)(pbuf) + 2) = cpu_to_le16(0xffff & (dur)); \
-	} while(0)
+	*(__le16 *)((size_t)(pbuf) + 2) = cpu_to_le16(0xffff & (dur))
 
 
 #define SetPriority(pbuf, tid)	\
-	do	{	\
-		*(unsigned short *)(pbuf) |= cpu_to_le16(tid & 0xf); \
-	} while(0)
+	*(__le16 *)(pbuf) |= cpu_to_le16(tid & 0xf)
 
-#define GetPriority(pbuf)	((le16_to_cpu(*(unsigned short *)(pbuf))) & 0xf)
+#define GetPriority(pbuf)	((le16_to_cpu(*(__le16 *)(pbuf))) & 0xf)
 
 #define SetEOSP(pbuf, eosp)	\
-	do	{	\
-		*(unsigned short *)(pbuf) |= cpu_to_le16( (eosp & 1) << 4); \
-	} while(0)
+		*(__le16 *)(pbuf) |= cpu_to_le16((eosp & 1) << 4)
 
 #define SetAckpolicy(pbuf, ack)	\
-	do	{	\
-		*(unsigned short *)(pbuf) |= cpu_to_le16( (ack & 3) << 5); \
-	} while(0)
+	*(__le16 *)(pbuf) |= cpu_to_le16((ack & 3) << 5)
 
-#define GetAckpolicy(pbuf) (((le16_to_cpu(*(unsigned short *)pbuf)) >> 5) & 0x3)
+#define GetAckpolicy(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 5) & 0x3)
 
-#define GetAMsdu(pbuf) (((le16_to_cpu(*(unsigned short *)pbuf)) >> 7) & 0x1)
+#define GetAMsdu(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 7) & 0x1)
 
 #define SetAMsdu(pbuf, amsdu)	\
-	do	{	\
-		*(unsigned short *)(pbuf) |= cpu_to_le16( (amsdu & 1) << 7); \
-	} while(0)	
+	*(__le16 *)(pbuf) |= cpu_to_le16((amsdu & 1) << 7)
 
-#define GetAid(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + 2)) & 0x3fff)
+#define GetAid(pbuf)	(le16_to_cpu(*(__le16 *)((size_t)(pbuf) + 2)) & 0x3fff)
 
-#define GetTid(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + (((GetToDs(pbuf)<<1)|GetFrDs(pbuf))==3?30:24))) & 0x000f)
+#define GetTid(pbuf)	(le16_to_cpu(*(__le16 *)((size_t)(pbuf) +	\
+			(((GetToDs(pbuf)<<1) | GetFrDs(pbuf)) == 3 ?	\
+			30 : 24))) & 0x000f)
 
-#define GetAddr1Ptr(pbuf)	((unsigned char *)((SIZE_PTR)(pbuf) + 4))
+#define GetAddr1Ptr(pbuf)	((unsigned char *)((size_t)(pbuf) + 4))
 
-#define GetAddr2Ptr(pbuf)	((unsigned char *)((SIZE_PTR)(pbuf) + 10))
+#define GetAddr2Ptr(pbuf)	((unsigned char *)((size_t)(pbuf) + 10))
 
-#define GetAddr3Ptr(pbuf)	((unsigned char *)((SIZE_PTR)(pbuf) + 16))
+#define GetAddr3Ptr(pbuf)	((unsigned char *)((size_t)(pbuf) + 16))
 
-#define GetAddr4Ptr(pbuf)	((unsigned char *)((SIZE_PTR)(pbuf) + 24))
+#define GetAddr4Ptr(pbuf)	((unsigned char *)((size_t)(pbuf) + 24))
 
 #define MacAddr_isBcst(addr) \
-( \
-	( (addr[0] == 0xff) && (addr[1] == 0xff) && \
-		(addr[2] == 0xff) && (addr[3] == 0xff) && \
-		(addr[4] == 0xff) && (addr[5] == 0xff) )  ? _TRUE : _FALSE \
+	( \
+	((addr[0] == 0xff) && (addr[1] == 0xff) && \
+	(addr[2] == 0xff) && (addr[3] == 0xff) && \
+	(addr[4] == 0xff) && (addr[5] == 0xff))  ? true : false \
 )
 
 __inline static int IS_MCAST(unsigned char *da)
@@ -664,12 +637,12 @@ __inline static int IsFrameTypeCtrl(unsigned char *pframe)
  * described in 802.11n draft section 7.2.1.7.1
  */
 struct rtw_ieee80211_bar {
-	unsigned short frame_control;
-	unsigned short duration;
-	unsigned char ra[6];
-	unsigned char ta[6];
-	unsigned short control;
-	unsigned short start_seq_num;
+	__le16 frame_control;
+	u8 duration;
+	u8 ra[6];
+	u8 ta[6];
+	__le16 control;
+	__le16 start_seq_num;
 } __attribute__((packed));
 
 /* 802.11 BAR control masks */
@@ -684,12 +657,12 @@ struct rtw_ieee80211_bar {
  */
  
 struct rtw_ieee80211_ht_cap {
-	unsigned short 	cap_info;
-	unsigned char 	ampdu_params_info;
-	unsigned char 	supp_mcs_set[16];
-	unsigned short 	extended_ht_cap_info;
-	unsigned int		tx_BF_cap_info;
-	unsigned char	       antenna_selection_info;
+	__le16 	cap_info;
+	u8 	ampdu_params_info;
+	u8 	supp_mcs_set[16];
+	__le16 	extended_ht_cap_info;
+	__le32		tx_BF_cap_info;
+	u8	       antenna_selection_info;
 } __attribute__ ((packed));
 
 /**
@@ -699,54 +672,47 @@ struct rtw_ieee80211_ht_cap {
  * described in 802.11n draft section 7.3.2.53
  */
 struct ieee80211_ht_addt_info {
-	unsigned char 	control_chan;
-	unsigned char		ht_param;
-	unsigned short	operation_mode;
-	unsigned short	stbc_param;
-	unsigned char		basic_set[16];
+	u8 	control_chan;
+	u8	ht_param;
+	__le16	operation_mode;
+	__le16	stbc_param;
+	u8	basic_set[16];
 } __attribute__ ((packed));
 
 
-struct HT_caps_element
-{
-	union
-	{ 
-		struct 
-		{ 	
-			unsigned short	HT_caps_info;
-			unsigned char	AMPDU_para;
-			unsigned char	MCS_rate[16];
-			unsigned short	HT_ext_caps;
-			unsigned int	Beamforming_caps;
-			unsigned char	ASEL_caps;
+struct HT_caps_element {
+	union { 
+		struct { 	
+			__le16	HT_caps_info;
+			u8	AMPDU_para;
+			u8	MCS_rate[16];
+			__le16	HT_ext_caps;
+			__le32	Beamforming_caps;
+			u8	ASEL_caps;
 		} HT_cap_element;
-		unsigned char HT_cap[26];
-	}u;
+		u8 HT_cap[26];
+	} u;
 } __attribute__ ((packed));
 
-struct HT_info_element
-{
-	unsigned char	primary_channel;
-	unsigned char	infos[5];
-	unsigned char	MCS_rate[16];
+struct HT_info_element {
+	u8	primary_channel;
+	u8	infos[5];
+	u8	MCS_rate[16];
 }  __attribute__ ((packed));
 
-struct AC_param
-{
+struct AC_param {
 	u8	ACI_AIFSN;
 	u8 	CW;
 	__le16	TXOP_limit;
 }  __attribute__ ((packed));
 
-struct WMM_para_element
-{
-	unsigned char		QoS_info;
-	unsigned char		reserved;
+struct WMM_para_element {
+	u8		QoS_info;
+	u8		reserved;
 	struct AC_param	ac_param[4];
 }  __attribute__ ((packed));
 
-struct ADDBA_request
-{
+struct ADDBA_request {
 	u8	dialog_token;
 	__le16	BA_para_set;
 	__le16	BA_timeout_value;
@@ -766,7 +732,7 @@ typedef enum _HT_CAP_AMPDU_FACTOR {
 #define IEEE80211_HT_CAP_GRN_FLD		0x0010
 #define IEEE80211_HT_CAP_SGI_20			0x0020
 #define IEEE80211_HT_CAP_SGI_40			0x0040
-#define IEEE80211_HT_CAP_TX_STBC			0x0080
+#define IEEE80211_HT_CAP_TX_STBC		0x0080
 #define IEEE80211_HT_CAP_RX_STBC		0x0300
 #define IEEE80211_HT_CAP_DELAY_BA		0x0400
 #define IEEE80211_HT_CAP_MAX_AMSDU		0x0800
@@ -794,11 +760,11 @@ typedef enum _HT_CAP_AMPDU_FACTOR {
 #define IEEE80211_HT_IE_NON_HT_STA_PRSNT	0x0010
 
 /* block-ack parameters */
-#define IEEE80211_ADDBA_PARAM_POLICY_MASK 0x0002
-#define IEEE80211_ADDBA_PARAM_TID_MASK 0x003C
+#define IEEE80211_ADDBA_PARAM_POLICY_MASK	0x0002
+#define IEEE80211_ADDBA_PARAM_TID_MASK		0x003C
 #define RTW_IEEE80211_ADDBA_PARAM_BUF_SIZE_MASK 0xFFC0
-#define IEEE80211_DELBA_PARAM_TID_MASK 0xF000
-#define IEEE80211_DELBA_PARAM_INITIATOR_MASK 0x0800
+#define IEEE80211_DELBA_PARAM_TID_MASK		0xF000
+#define IEEE80211_DELBA_PARAM_INITIATOR_MASK	0x0800
 
 /*
  * A-PMDU buffer sizes
@@ -978,51 +944,51 @@ typedef enum _HT_CAP_AMPDU_FACTOR {
 #define	P2P_INVITATION_FLAGS_PERSISTENT			BIT(0)
 
 #define	DMP_P2P_DEVCAP_SUPPORT	(P2P_DEVCAP_SERVICE_DISCOVERY | \
-									P2P_DEVCAP_CLIENT_DISCOVERABILITY | \
-									P2P_DEVCAP_CONCURRENT_OPERATION | \
-									P2P_DEVCAP_INVITATION_PROC)
+				P2P_DEVCAP_CLIENT_DISCOVERABILITY | \
+				P2P_DEVCAP_CONCURRENT_OPERATION | \
+				P2P_DEVCAP_INVITATION_PROC)
 
 #define	DMP_P2P_GRPCAP_SUPPORT	(P2P_GRPCAP_INTRABSS)
 
 //	Value of Device Capability Bitmap
-#define	P2P_DEVCAP_SERVICE_DISCOVERY		BIT(0)
-#define	P2P_DEVCAP_CLIENT_DISCOVERABILITY	BIT(1)
+#define	P2P_DEVCAP_SERVICE_DISCOVERY			BIT(0)
+#define	P2P_DEVCAP_CLIENT_DISCOVERABILITY		BIT(1)
 #define	P2P_DEVCAP_CONCURRENT_OPERATION	BIT(2)
 #define	P2P_DEVCAP_INFRA_MANAGED			BIT(3)
 #define	P2P_DEVCAP_DEVICE_LIMIT				BIT(4)
 #define	P2P_DEVCAP_INVITATION_PROC			BIT(5)
 
 //	Value of Group Capability Bitmap
-#define	P2P_GRPCAP_GO							BIT(0)
+#define	P2P_GRPCAP_GO					BIT(0)
 #define	P2P_GRPCAP_PERSISTENT_GROUP			BIT(1)
 #define	P2P_GRPCAP_GROUP_LIMIT				BIT(2)
-#define	P2P_GRPCAP_INTRABSS					BIT(3)
+#define	P2P_GRPCAP_INTRABSS				BIT(3)
 #define	P2P_GRPCAP_CROSS_CONN				BIT(4)
-#define	P2P_GRPCAP_PERSISTENT_RECONN		BIT(5)
+#define	P2P_GRPCAP_PERSISTENT_RECONN			BIT(5)
 #define	P2P_GRPCAP_GROUP_FORMATION			BIT(6)
 
 //	P2P Public Action Frame ( Management Frame )
 #define	P2P_PUB_ACTION_ACTION				0x09
 
 //	P2P Public Action Frame Type
-#define	P2P_GO_NEGO_REQ						0
-#define	P2P_GO_NEGO_RESP						1
-#define	P2P_GO_NEGO_CONF						2
-#define	P2P_INVIT_REQ							3
-#define	P2P_INVIT_RESP							4
-#define	P2P_DEVDISC_REQ						5
-#define	P2P_DEVDISC_RESP						6
+#define	P2P_GO_NEGO_REQ					0
+#define	P2P_GO_NEGO_RESP				1
+#define	P2P_GO_NEGO_CONF				2
+#define	P2P_INVIT_REQ					3
+#define	P2P_INVIT_RESP					4
+#define	P2P_DEVDISC_REQ					5
+#define	P2P_DEVDISC_RESP				6
 #define	P2P_PROVISION_DISC_REQ				7
 #define	P2P_PROVISION_DISC_RESP				8
 
 //	P2P Action Frame Type
-#define	P2P_NOTICE_OF_ABSENCE	0
-#define	P2P_PRESENCE_REQUEST		1
-#define	P2P_PRESENCE_RESPONSE	2
-#define	P2P_GO_DISC_REQUEST		3
+#define	P2P_NOTICE_OF_ABSENCE				0
+#define	P2P_PRESENCE_REQUEST				1
+#define	P2P_PRESENCE_RESPONSE				2
+#define	P2P_GO_DISC_REQUEST				3
 
 
-#define	P2P_MAX_PERSISTENT_GROUP_NUM		10
+#define	P2P_MAX_PERSISTENT_GROUP_NUM			10
 
 #define	P2P_PROVISIONING_SCAN_CNT			3
 
@@ -1031,30 +997,30 @@ typedef enum _HT_CAP_AMPDU_FACTOR {
 #define	P2P_FINDPHASE_EX_NONE				0	// default value, used when: (1)p2p disabed or (2)p2p enabled but only do 1 scan phase
 #define	P2P_FINDPHASE_EX_FULL				1	// used when p2p enabled and want to do 1 scan phase and P2P_FINDPHASE_EX_MAX-1 find phase
 #define	P2P_FINDPHASE_EX_SOCIAL_FIRST		(P2P_FINDPHASE_EX_FULL+1) 
-#define	P2P_FINDPHASE_EX_MAX					4
+#define	P2P_FINDPHASE_EX_MAX				4
 #define	P2P_FINDPHASE_EX_SOCIAL_LAST		P2P_FINDPHASE_EX_MAX
 
 #define	P2P_PROVISION_TIMEOUT				5000	//	5 seconds timeout for sending the provision discovery request
-#define	P2P_CONCURRENT_PROVISION_TIMEOUT	3000	//	3 seconds timeout for sending the provision discovery request under concurrent mode
-#define	P2P_GO_NEGO_TIMEOUT					5000	//	5 seconds timeout for receiving the group negotation response
-#define	P2P_CONCURRENT_GO_NEGO_TIMEOUT		3000	//	3 seconds timeout for sending the negotiation request under concurrent mode
+#define	P2P_CONCURRENT_PROVISION_TIMEOUT		3000	//	3 seconds timeout for sending the provision discovery request under concurrent mode
+#define	P2P_GO_NEGO_TIMEOUT				5000	//	5 seconds timeout for receiving the group negotation response
+#define	P2P_CONCURRENT_GO_NEGO_TIMEOUT			3000	//	3 seconds timeout for sending the negotiation request under concurrent mode
 #define	P2P_TX_PRESCAN_TIMEOUT				100		//	100ms
-#define	P2P_INVITE_TIMEOUT					5000	//	5 seconds timeout for sending the invitation request
-#define	P2P_CONCURRENT_INVITE_TIMEOUT		3000	//	3 seconds timeout for sending the invitation request under concurrent mode
-#define	P2P_RESET_SCAN_CH						25000	//	25 seconds timeout to reset the scan channel ( based on channel plan )
-#define	P2P_MAX_INTENT						15
+#define	P2P_INVITE_TIMEOUT				5000	//	5 seconds timeout for sending the invitation request
+#define	P2P_CONCURRENT_INVITE_TIMEOUT			3000	//	3 seconds timeout for sending the invitation request under concurrent mode
+#define	P2P_RESET_SCAN_CH				25000	//	25 seconds timeout to reset the scan channel ( based on channel plan )
+#define	P2P_MAX_INTENT					15
 
-#define	P2P_MAX_NOA_NUM						2
+#define	P2P_MAX_NOA_NUM					2
 
 //	WPS Configuration Method
-#define	WPS_CM_NONE							0x0000
-#define	WPS_CM_LABEL							0x0004
-#define	WPS_CM_DISPLYA						0x0008
+#define	WPS_CM_NONE					0x0000
+#define	WPS_CM_LABEL					0x0004
+#define	WPS_CM_DISPLYA					0x0008
 #define	WPS_CM_EXTERNAL_NFC_TOKEN			0x0010
-#define	WPS_CM_INTEGRATED_NFC_TOKEN		0x0020
-#define	WPS_CM_NFC_INTERFACE					0x0040
-#define	WPS_CM_PUSH_BUTTON					0x0080
-#define	WPS_CM_KEYPAD						0x0100
+#define	WPS_CM_INTEGRATED_NFC_TOKEN			0x0020
+#define	WPS_CM_NFC_INTERFACE				0x0040
+#define	WPS_CM_PUSH_BUTTON				0x0080
+#define	WPS_CM_KEYPAD					0x0100
 #define	WPS_CM_SW_PUHS_BUTTON				0x0280
 #define	WPS_CM_HW_PUHS_BUTTON				0x0480
 #define	WPS_CM_SW_DISPLAY_PIN				0x2008
@@ -1068,42 +1034,41 @@ enum P2P_ROLE {
 };
 
 enum P2P_STATE {
-	P2P_STATE_NONE = 0,							//	P2P disable
-	P2P_STATE_IDLE = 1,								//	P2P had enabled and do nothing
-	P2P_STATE_LISTEN = 2,							//	In pure listen state
-	P2P_STATE_SCAN = 3,							//	In scan phase
-	P2P_STATE_FIND_PHASE_LISTEN = 4,				//	In the listen state of find phase
-	P2P_STATE_FIND_PHASE_SEARCH = 5,				//	In the search state of find phase
-	P2P_STATE_TX_PROVISION_DIS_REQ = 6,			//	In P2P provisioning discovery
+	P2P_STATE_NONE = 0,				//	P2P disable
+	P2P_STATE_IDLE = 1,				//	P2P had enabled and do nothing
+	P2P_STATE_LISTEN = 2,				//	In pure listen state
+	P2P_STATE_SCAN = 3,				//	In scan phase
+	P2P_STATE_FIND_PHASE_LISTEN = 4,		//	In the listen state of find phase
+	P2P_STATE_FIND_PHASE_SEARCH = 5,		//	In the search state of find phase
+	P2P_STATE_TX_PROVISION_DIS_REQ = 6,		//	In P2P provisioning discovery
 	P2P_STATE_RX_PROVISION_DIS_RSP = 7,
 	P2P_STATE_RX_PROVISION_DIS_REQ = 8,	
-	P2P_STATE_GONEGO_ING = 9,						//	Doing the group owner negoitation handshake
-	P2P_STATE_GONEGO_OK = 10,						//	finish the group negoitation handshake with success
-	P2P_STATE_GONEGO_FAIL = 11,					//	finish the group negoitation handshake with failure
+	P2P_STATE_GONEGO_ING = 9,			//	Doing the group owner negoitation handshake
+	P2P_STATE_GONEGO_OK = 10,			//	finish the group negoitation handshake with success
+	P2P_STATE_GONEGO_FAIL = 11,			//	finish the group negoitation handshake with failure
 	P2P_STATE_RECV_INVITE_REQ_MATCH = 12,		//	receiving the P2P Inviation request and match with the profile.
-	P2P_STATE_PROVISIONING_ING = 13,				//	Doing the P2P WPS
-	P2P_STATE_PROVISIONING_DONE = 14,			//	Finish the P2P WPS
-	P2P_STATE_TX_INVITE_REQ = 15,					//	Transmit the P2P Invitation request
-	P2P_STATE_RX_INVITE_RESP_OK = 16,				//	Receiving the P2P Invitation response
+	P2P_STATE_PROVISIONING_ING = 13,		//	Doing the P2P WPS
+	P2P_STATE_PROVISIONING_DONE = 14,		//	Finish the P2P WPS
+	P2P_STATE_TX_INVITE_REQ = 15,			//	Transmit the P2P Invitation request
+	P2P_STATE_RX_INVITE_RESP_OK = 16,		//	Receiving the P2P Invitation response
 	P2P_STATE_RECV_INVITE_REQ_DISMATCH = 17,	//	receiving the P2P Inviation request and dismatch with the profile.
-	P2P_STATE_RECV_INVITE_REQ_GO = 18,			//	receiving the P2P Inviation request and this wifi is GO.
-	P2P_STATE_RECV_INVITE_REQ_JOIN = 19,			//	receiving the P2P Inviation request to join an existing P2P Group.
-	P2P_STATE_RX_INVITE_RESP_FAIL = 20,			//	recveing the P2P Inviation response with failure
-	P2P_STATE_RX_INFOR_NOREADY = 21, 			// receiving p2p negoitation response with information is not available
-	P2P_STATE_TX_INFOR_NOREADY = 22, 			// sending p2p negoitation response with information is not available
+	P2P_STATE_RECV_INVITE_REQ_GO = 18,		//	receiving the P2P Inviation request and this wifi is GO.
+	P2P_STATE_RECV_INVITE_REQ_JOIN = 19,		//	receiving the P2P Inviation request to join an existing P2P Group.
+	P2P_STATE_RX_INVITE_RESP_FAIL = 20,		//	recveing the P2P Inviation response with failure
+	P2P_STATE_RX_INFOR_NOREADY = 21, 		// receiving p2p negoitation response with information is not available
+	P2P_STATE_TX_INFOR_NOREADY = 22, 		// sending p2p negoitation response with information is not available
 };
 
 enum P2P_WPSINFO {
-	P2P_NO_WPSINFO						= 0,
+	P2P_NO_WPSINFO				= 0,
 	P2P_GOT_WPSINFO_PEER_DISPLAY_PIN	= 1,
 	P2P_GOT_WPSINFO_SELF_DISPLAY_PIN	= 2,
-	P2P_GOT_WPSINFO_PBC					= 3,
+	P2P_GOT_WPSINFO_PBC			= 3,
 };
 
 #define	P2P_PRIVATE_IOCTL_SET_LEN		64
 
-enum P2P_PROTO_WK_ID
-{
+enum P2P_PROTO_WK_ID {
 	P2P_FIND_PHASE_WK = 0,
 	P2P_RESTORE_STATE_WK = 1,
 	P2P_PRE_TX_PROVDISC_PROCESS_WK = 2,
@@ -1114,8 +1079,7 @@ enum P2P_PROTO_WK_ID
 };
 
 #ifdef CONFIG_P2P_PS
-enum P2P_PS_STATE
-{
+enum P2P_PS_STATE {
 	P2P_PS_DISABLE = 0,
 	P2P_PS_ENABLE = 1,
 	P2P_PS_SCAN = 2,
@@ -1123,8 +1087,7 @@ enum P2P_PS_STATE
 	P2P_PS_ALLSTASLEEP = 4, // for P2P GO
 };
 
-enum P2P_PS_MODE
-{
+enum P2P_PS_MODE {
 	P2P_PS_NONE = 0,
 	P2P_PS_CTWINDOW = 1,
 	P2P_PS_NOA	 = 2,
@@ -1134,30 +1097,28 @@ enum P2P_PS_MODE
 
 //	=====================WFD Section=====================
 //	For Wi-Fi Display
-#define	WFD_ATTR_DEVICE_INFO			0x00
-#define	WFD_ATTR_ASSOC_BSSID			0x01
+#define	WFD_ATTR_DEVICE_INFO		0x00
+#define	WFD_ATTR_ASSOC_BSSID		0x01
 #define	WFD_ATTR_COUPLED_SINK_INFO	0x06
 #define	WFD_ATTR_LOCAL_IP_ADDR		0x08
 #define	WFD_ATTR_SESSION_INFO		0x09
-#define	WFD_ATTR_ALTER_MAC			0x0a
+#define	WFD_ATTR_ALTER_MAC		0x0a
 
 //	For WFD Device Information Attribute
-#define	WFD_DEVINFO_SOURCE					0x0000
-#define	WFD_DEVINFO_PSINK					0x0001
-#define	WFD_DEVINFO_SSINK					0x0002
-#define	WFD_DEVINFO_DUAL 					0x0003
+#define	WFD_DEVINFO_SOURCE		0x0000
+#define	WFD_DEVINFO_PSINK		0x0001
+#define	WFD_DEVINFO_SSINK		0x0002
+#define	WFD_DEVINFO_DUAL 		0x0003
 
-#define	WFD_DEVINFO_SESSION_AVAIL			0x0010
-#define	WFD_DEVINFO_WSD						0x0040
-#define	WFD_DEVINFO_PC_TDLS					0x0080
-#define	WFD_DEVINFO_HDCP_SUPPORT			0x0100
+#define	WFD_DEVINFO_SESSION_AVAIL	0x0010
+#define	WFD_DEVINFO_WSD			0x0040
+#define	WFD_DEVINFO_PC_TDLS		0x0080
+#define	WFD_DEVINFO_HDCP_SUPPORT	0x0100
 
 #ifdef  CONFIG_TX_MCAST2UNI
 #define IP_MCAST_MAC(mac)		((mac[0]==0x01)&&(mac[1]==0x00)&&(mac[2]==0x5e))
 #define ICMPV6_MCAST_MAC(mac)	((mac[0]==0x33)&&(mac[1]==0x33)&&(mac[2]!=0xff))
 #endif	// CONFIG_TX_MCAST2UNI
-
-
 
 #ifdef CONFIG_WAPI_SUPPORT
 #ifndef IW_AUTH_WAPI_VERSION_1
@@ -1170,9 +1131,8 @@ enum P2P_PS_MODE
 #define IW_AUTH_WAPI_ENABLED		0x20
 #endif
 #ifndef IW_ENCODE_ALG_SM4
-#define IW_ENCODE_ALG_SM4			0x20
+#define IW_ENCODE_ALG_SM4		0x20
 #endif
 #endif
 
 #endif // _WIFI_H_
-

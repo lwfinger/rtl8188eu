@@ -55,10 +55,6 @@
 #define MAX_CUSTOM_LEN 64
 #define RATE_COUNT 4
 
-#ifdef CONFIG_GLOBAL_UI_PID
-extern int ui_pid[3];
-#endif
-
 // combo scan
 #define WEXT_CSCAN_AMOUNT 9
 #define WEXT_CSCAN_BUF_LEN		360

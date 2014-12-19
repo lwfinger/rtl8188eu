@@ -40,18 +40,11 @@
 #include <asm/io.h>
 #endif
 
-#ifdef CONFIG_80211N_HT
-extern int rtw_ht_enable;
-extern int rtw_cbw40_enable;
-extern int rtw_ampdu_enable;//for enable tx_ampdu
-#endif
-
 #ifdef CONFIG_GLOBAL_UI_PID
 int ui_pid[3] = {0, 0, 0};
 #endif
 
 
-extern int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);
 int rtw_resume_process(struct adapter *padapter);
@@ -147,7 +140,6 @@ static struct usb_device_id rtw_usb_id_tbl[] ={
 };
 MODULE_DEVICE_TABLE(usb, rtw_usb_id_tbl);
 
-int const rtw_usb_id_len = sizeof(rtw_usb_id_tbl) / sizeof(struct usb_device_id);
 
 static struct specific_device_id specific_device_id_tbl[] = {
 	{.idVendor=USB_VENDER_ID_REALTEK, .idProduct=0x8177, .flags=SPEC_DEV_ID_DISABLE_HT},//8188cu 1*1 dongole, (b/g mode only)
@@ -172,7 +164,7 @@ static struct usb_device_id rtl8188e_usb_id_tbl[] ={
 	{}	/* Terminating entry */
 };
 
-struct rtw_usb_drv rtl8188e_usb_drv = {
+static struct rtw_usb_drv rtl8188e_usb_drv = {
 	.usbdrv.name = (char*)"rtl8188eu",
 	.usbdrv.probe = rtw_drv_init,
 	.usbdrv.disconnect = rtw_dev_remove,
@@ -1293,9 +1285,9 @@ static script_item_u item;
  *        We accept the new device by returning 0.
 */
 
-struct adapter  *rtw_sw_export = NULL;
+static struct adapter  *rtw_sw_export = NULL;
 
-struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
+static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 	struct usb_interface *pusb_intf, const struct usb_device_id *pdid)
 {
 	struct adapter *padapter = NULL;
@@ -1436,7 +1428,7 @@ struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 
 free_hal_data:
 	if(status != _SUCCESS && padapter->HalData)
-		rtw_mfree(padapter->HalData, sizeof(*(padapter->HalData)));
+		kfree(padapter->HalData);
 free_wdev:
 	if(status != _SUCCESS) {
 		#ifdef CONFIG_IOCTL_CFG80211
@@ -1730,7 +1722,6 @@ free_dvobj:
 exit:
 	return status == _SUCCESS?0:-ENODEV;
 }
-extern void rtw_unregister_netdevs(struct dvobj_priv *dvobj);
 /*
  * dev_remove() - our device is being removed
 */

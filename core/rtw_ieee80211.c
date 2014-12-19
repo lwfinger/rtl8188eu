@@ -1313,7 +1313,6 @@ u8 convert_ip_addr(u8 hch, u8 mch, u8 lch)
     return ((key_char2num(hch) * 100) + (key_char2num(mch) * 10 ) + key_char2num(lch));
 }
 
-extern char* rtw_initmac;
 void rtw_macaddr_cfg(u8 *mac_addr)
 {
 	u8 mac[ETH_ALEN];
