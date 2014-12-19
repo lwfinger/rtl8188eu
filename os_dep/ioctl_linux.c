@@ -30,6 +30,7 @@
 #include <rtw_ioctl.h>
 #include <rtw_ioctl_set.h>
 #include <rtw_ioctl_query.h>
+#include <mlme_osdep.h>
 
 #include <rtw_mp_ioctl.h>
 
@@ -408,43 +409,34 @@ static char *translate_scan(struct adapter *padapter,
 	//parsing HT_CAP_IE
 	p = rtw_get_ie(&pnetwork->network.IEs[12], _HT_CAPABILITY_IE_, &ht_ielen, pnetwork->network.IELength-12);
 
-	if(p && ht_ielen>0)
-	{
+	if(p && ht_ielen>0) {
 		struct rtw_ieee80211_ht_cap *pht_capie;
 		ht_cap = _TRUE;
 		pht_capie = (struct rtw_ieee80211_ht_cap *)(p+2);
 		_rtw_memcpy(&mcs_rate , pht_capie->supp_mcs_set, 2);
-		bw_40MHz = (pht_capie->cap_info&IEEE80211_HT_CAP_SUP_WIDTH) ? 1:0;
-		short_GI = (pht_capie->cap_info&(IEEE80211_HT_CAP_SGI_20|IEEE80211_HT_CAP_SGI_40)) ? 1:0;
+		bw_40MHz = (le16_to_cpu(pht_capie->cap_info) & IEEE80211_HT_CAP_SUP_WIDTH) ? 1 : 0;
+		short_GI = (le16_to_cpu(pht_capie->cap_info) & (IEEE80211_HT_CAP_SGI_20 | IEEE80211_HT_CAP_SGI_40)) ? 1 : 0;
 	}
 
 	/* Add the protocol name */
 	iwe.cmd = SIOCGIWNAME;
-	if ((rtw_is_cckratesonly_included((u8*)&pnetwork->network.SupportedRates)) == _TRUE)
-	{
+	if ((rtw_is_cckratesonly_included((u8*)&pnetwork->network.SupportedRates)) == _TRUE) {
 		if(ht_cap == _TRUE)
 			snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11bn");
 		else
-		snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11b");
-	}
-	else if ((rtw_is_cckrates_included((u8*)&pnetwork->network.SupportedRates)) == _TRUE)
-	{
+			snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11b");
+	} else if ((rtw_is_cckrates_included((u8*)&pnetwork->network.SupportedRates)) == _TRUE) {
 		if(ht_cap == _TRUE)
 			snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11bgn");
 		else
 			snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11bg");
-	}
-	else
-	{
-		if(pnetwork->network.Configuration.DSConfig > 14)
-		{
+	} else {
+		if(pnetwork->network.Configuration.DSConfig > 14) {
 			if(ht_cap == _TRUE)
 				snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11an");
 			else
 				snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11a");
-		}
-		else
-		{
+		} else {
 			if(ht_cap == _TRUE)
 				snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11gn");
 			else
@@ -493,8 +485,7 @@ static char *translate_scan(struct adapter *padapter,
 	max_rate = 0;
 	p = custom;
 	p += snprintf(p, MAX_CUSTOM_LEN - (p - custom), " Rates (Mb/s): ");
-	while(pnetwork->network.SupportedRates[i]!=0)
-	{
+	while(pnetwork->network.SupportedRates[i]!=0) {
 		rate = pnetwork->network.SupportedRates[i]&0x7F;
 		if (rate > max_rate)
 			max_rate = rate;
@@ -503,19 +494,13 @@ static char *translate_scan(struct adapter *padapter,
 		i++;
 	}
 
-	if(ht_cap == _TRUE)
-	{
-		if(mcs_rate&0x8000)//MCS15
-		{
+	if(ht_cap == _TRUE) {
+		if(mcs_rate&0x8000) { //MCS15
 			max_rate = (bw_40MHz) ? ((short_GI)?300:270):((short_GI)?144:130);
 
-		}
-		else if(mcs_rate&0x0080)//MCS7
-		{
+		} else if(mcs_rate&0x0080) { //MCS7
 			max_rate = (bw_40MHz) ? ((short_GI)?150:135):((short_GI)?72:65);
-		}
-		else//default MCS7
-		{
+		} else { //default MCS7
 			//DBG_871X("wx_get_scan, mcs_rate_bitmap=0x%x\n", mcs_rate);
 			max_rate = (bw_40MHz) ? ((short_GI)?150:135):((short_GI)?72:65);
 		}
@@ -4042,10 +4027,8 @@ static int rtw_get_ap_info(struct net_device *dev,
 
 	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 
-	if(pdata->length>=34)
-	{
-		if(copy_to_user((u8*)pdata->pointer+32, (u8*)&pdata->flags, 1))
-		{
+	if(pdata->length>=34) {
+		if(copy_to_user((u8 __user *)pdata->pointer+32, (u8*)&pdata->flags, 1)) {
 			ret= -EINVAL;
 			goto exit;
 		}
@@ -6349,55 +6332,33 @@ static int rtw_p2p_get(struct net_device *dev,
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 
 	if ( padapter->bShowGetP2PState )
-	{
-		DBG_871X( "[%s] extra = %s\n", __FUNCTION__, (char*) wrqu->data.pointer );
-	}
+		DBG_871X( "[%s] extra = %s\n", __FUNCTION__, (char *)wrqu->data.pointer );
 
-	if ( _rtw_memcmp( wrqu->data.pointer, "status", 6 ) )
-	{
+	if ( _rtw_memcmp( wrqu->data.pointer, "status", 6 ) ) {
 		rtw_p2p_get_status( dev, info, wrqu, extra );
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "role", 4 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "role", 4 ) ) {
 		rtw_p2p_get_role( dev, info, wrqu, extra);
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "peer_ifa", 8 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "peer_ifa", 8 ) ) {
 		rtw_p2p_get_peer_ifaddr( dev, info, wrqu, extra);
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "req_cm", 6 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "req_cm", 6 ) ) {
 		rtw_p2p_get_req_cm( dev, info, wrqu, extra);
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "peer_deva", 9 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "peer_deva", 9 ) ) {
 		//	Get the P2P device address when receiving the provision discovery request frame.
 		rtw_p2p_get_peer_devaddr( dev, info, wrqu, extra);
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "group_id", 8 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "group_id", 8 ) ) {
 		rtw_p2p_get_groupid( dev, info, wrqu, extra);
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "inv_peer_deva", 13 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "inv_peer_deva", 13 ) ) {
 		//	Get the P2P device address when receiving the P2P Invitation request frame.
 		rtw_p2p_get_peer_devaddr_by_invitation( dev, info, wrqu, extra);
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "op_ch", 5 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "op_ch", 5 ) ) {
 		rtw_p2p_get_op_ch( dev, info, wrqu, extra);
 	}
 #ifdef CONFIG_WFD
-	else if ( _rtw_memcmp( wrqu->data.pointer, "peer_port", 9 ) )
-	{
+	else if ( _rtw_memcmp( wrqu->data.pointer, "peer_port", 9 ) ) {
 		rtw_p2p_get_peer_wfd_port( dev, info, wrqu, extra );
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "wfd_sa", 6 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "wfd_sa", 6 ) ) {
 		rtw_p2p_get_peer_wfd_session_available( dev, info, wrqu, extra );
-	}
-	else if ( _rtw_memcmp( wrqu->data.pointer, "wfd_pc", 6 ) )
-	{
+	} else if ( _rtw_memcmp( wrqu->data.pointer, "wfd_pc", 6 ) ) {
 		rtw_p2p_get_peer_wfd_preferred_connection( dev, info, wrqu, extra );
 	}
 #endif // CONFIG_WFD
@@ -6569,56 +6530,6 @@ exit:
 
 }
 
-#if 0
-void mac_reg_dump(struct adapter *padapter)
-{
-	int i,j=1;
-	DBG_871X("\n======= MAC REG =======\n");
-	for(i=0x0;i<0x300;i+=4)
-	{
-		if(j%4==1)	DBG_871X("0x%02x",i);
-		DBG_871X(" 0x%08x ",rtw_read32(padapter,i));
-		if((j++)%4 == 0)	DBG_871X("\n");
-	}
-	for(i=0x400;i<0x800;i+=4)
-	{
-		if(j%4==1)	DBG_871X("0x%02x",i);
-		DBG_871X(" 0x%08x ",rtw_read32(padapter,i));
-		if((j++)%4 == 0)	DBG_871X("\n");
-	}
-}
-void bb_reg_dump(struct adapter *padapter)
-{
-	int i,j=1;
-	DBG_871X("\n======= BB REG =======\n");
-	for(i=0x800;i<0x1000;i+=4)
-	{
-		if(j%4==1) DBG_871X("0x%02x",i);
-
-		DBG_871X(" 0x%08x ",rtw_read32(padapter,i));
-		if((j++)%4 == 0)	DBG_871X("\n");
-	}
-}
-void rf_reg_dump(struct adapter *padapter)
-{
-	int i,j=1,path;
-	u32 value;
-	DBG_871X("\n======= RF REG =======\n");
-	for(path=0;path<2;path++)
-	{
-		DBG_871X("\nRF_Path(%x)\n",path);
-		for(i=0;i<0x100;i++)
-		{
-			value = PHY_QueryRFReg(padapter, (RF_RADIO_PATH_E)path,i, bMaskDWord);
-			if(j%4==1)	DBG_871X("0x%02x ",i);
-			DBG_871X(" 0x%08x ",value);
-			if((j++)%4==0)	DBG_871X("\n");
-		}
-	}
-}
-
-#endif
-
 static void mac_reg_dump(struct adapter *padapter)
 {
 	int i,j=1;
@@ -6636,7 +6547,8 @@ static void mac_reg_dump(struct adapter *padapter)
 		if((j++)%4 == 0)	printk("\n");
 	}
 }
-void bb_reg_dump(struct adapter *padapter)
+
+static void bb_reg_dump(struct adapter *padapter)
 {
 	int i,j=1;
 	printk("\n======= BB REG =======\n");
@@ -6648,7 +6560,8 @@ void bb_reg_dump(struct adapter *padapter)
 		if((j++)%4 == 0)	printk("\n");
 	}
 }
-void rf_reg_dump(struct adapter *padapter)
+
+static void rf_reg_dump(struct adapter *padapter)
 {
 	int i,j=1,path;
 	u32 value;
@@ -10734,7 +10647,7 @@ static int rtw_tdls_get(struct net_device *dev,
 	{
 		rtw_tdls_dis_result( dev, info, wrqu, extra );
 	}
-	if ( _rtw_memcmp( wrqu->data.pointer, "status", 6 ) )
+	if ( _rtw_memcmp(wrqu->data.pointer, "status", 6 ) )
 	{
 		rtw_wfd_tdls_status( dev, info, wrqu, extra );
 	}

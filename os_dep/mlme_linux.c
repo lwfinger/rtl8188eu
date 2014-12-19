@@ -151,9 +151,6 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 #endif
 }
 
-extern void rtw_indicate_wx_assoc_event(struct adapter *padapter);
-extern void rtw_indicate_wx_disassoc_event(struct adapter *padapter);
-
 void rtw_os_indicate_connect(struct adapter *adapter)
 {
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
@@ -183,7 +180,6 @@ _func_exit_;
 
 }
 
-extern void indicate_wx_scan_complete_event(struct adapter *padapter);
 void rtw_os_indicate_scan_done( struct adapter *padapter, bool aborted)
 {
 #ifdef CONFIG_IOCTL_CFG80211
