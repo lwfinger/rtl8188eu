@@ -3768,7 +3768,7 @@ static bool rtw_chk_p2pie_op_ch_with_buddy(struct adapter *padapter, const u8 *f
 	return fit;
 }
 
-static void rtw_cfg80211_adjust_p2pie_channel(_adapter *padapter, const u8 *frame_body, u32 len)
+static void rtw_cfg80211_adjust_p2pie_channel(struct adapter *padapter, const u8 *frame_body, u32 len)
 {
 #ifdef CONFIG_CONCURRENT_MODE
 	u8 *ies, *p2p_ie;
