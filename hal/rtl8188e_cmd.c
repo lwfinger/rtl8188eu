@@ -1423,14 +1423,7 @@ _func_enter_;
 			pwowlan_parm.mode |=FW_WOWLAN_DEAUTH_WAKEUP;
 
 			//DataPinWakeUp
-#ifdef CONFIG_USB_HCI
 			pwowlan_parm.gpio_index=0x0;
-#endif //CONFIG_USB_HCI
-
-#ifdef CONFIG_SDIO_HCI
-			pwowlan_parm.gpio_index = 0x80;
-#endif //CONFIG_SDIO_HCI
-
 #ifdef CONFIG_GPIO_WAKEUP
 			pwowlan_parm.gpio_index = gpio_wake_pin;
 

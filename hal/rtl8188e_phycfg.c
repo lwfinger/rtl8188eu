@@ -692,30 +692,10 @@ rtl8188e_PHY_QueryRFReg(
 	return 0;
 #endif
 
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("--->PHY_QueryRFReg(): RegAddr(%#lx), eRFPath(%#x), BitMask(%#lx)\n", RegAddr, eRFPath,BitMask));
-
-#ifdef CONFIG_USB_HCI
-	//PlatformAcquireMutex(&pHalData->mxRFOperate);
-#else
-	//_enter_critical(&pHalData->rf_lock, &irqL);
-#endif
-
-
 	Original_Value = phy_RFSerialRead(Adapter, eRFPath, RegAddr);
 
 	BitShift =  phy_CalculateBitShift(BitMask);
 	Readback_Value = (Original_Value & BitMask) >> BitShift;
-
-#ifdef CONFIG_USB_HCI
-	//PlatformReleaseMutex(&pHalData->mxRFOperate);
-#else
-	//_exit_critical(&pHalData->rf_lock, &irqL);
-#endif
-
-
-	//RTPRINT(FPHY, PHY_RFR, ("RFR-%d MASK=0x%lx Addr[0x%lx]=0x%lx\n", eRFPath, BitMask, RegAddr, Original_Value));//BitMask(%#lx),BitMask,
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("<---PHY_QueryRFReg(): RegAddr(%#lx), eRFPath(%#x),  Original_Value(%#lx)\n",
-	//				RegAddr, eRFPath, Original_Value));
 
 	return (Readback_Value);
 }
@@ -757,19 +737,6 @@ rtl8188e_PHY_SetRFReg(
 	return;
 #endif
 
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("--->PHY_SetRFReg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx), eRFPath(%#x)\n",
-	//	RegAddr, BitMask, Data, eRFPath));
-	//RTPRINT(FINIT, INIT_RF, ("PHY_SetRFReg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx), eRFPath(%#x)\n",
-	//	RegAddr, BitMask, Data, eRFPath));
-
-
-#ifdef CONFIG_USB_HCI
-	//PlatformAcquireMutex(&pHalData->mxRFOperate);
-#else
-	//_enter_critical(&pHalData->rf_lock, &irqL);
-#endif
-
-
 	// RF data is 12 bits only
 	if (BitMask != bRFRegOffsetMask)
 	{
@@ -779,18 +746,6 @@ rtl8188e_PHY_SetRFReg(
 	}
 
 	phy_RFSerialWrite(Adapter, eRFPath, RegAddr, Data);
-
-
-#ifdef CONFIG_USB_HCI
-	//PlatformReleaseMutex(&pHalData->mxRFOperate);
-#else
-	//_exit_critical(&pHalData->rf_lock, &irqL);
-#endif
-
-	//PHY_QueryRFReg(Adapter,eRFPath,RegAddr,BitMask);
-	//RT_TRACE(COMP_RF, DBG_TRACE, ("<---PHY_SetRFReg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx), eRFPath(%#x)\n",
-	//		RegAddr, BitMask, Data, eRFPath));
-
 }
 
 
@@ -1093,29 +1048,6 @@ phy_ConfigBBExternalPA(
 	IN	struct adapter *		Adapter
 )
 {
-#ifdef CONFIG_USB_HCI
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u16 i=0;
-	u32 temp=0;
-
-	if(!pHalData->ExternalPA)
-	{
-		return;
-	}
-
-	// 2010/10/19 MH According to Jenyu/EEChou 's opinion, we need not to execute the
-	// same code as SU. It is already updated in PHY_REG_1T_HP.txt.
-#if 0
-	PHY_SetBBReg(Adapter, 0xee8, BIT28, 1);
-	temp = PHY_QueryBBReg(Adapter, 0x860, bMaskDWord);
-	temp |= (BIT26|BIT21|BIT10|BIT5);
-	PHY_SetBBReg(Adapter, 0x860, bMaskDWord, temp);
-	PHY_SetBBReg(Adapter, 0x870, BIT10, 0);
-	PHY_SetBBReg(Adapter, 0xc80, bMaskDWord, 0x20000080);
-	PHY_SetBBReg(Adapter, 0xc88, bMaskDWord, 0x40000100);
-#endif
-
-#endif
 }
 
 /*-----------------------------------------------------------------------------
@@ -1662,36 +1594,7 @@ PHY_BBConfig8188E(
 
 	rtw_write8(Adapter, REG_RF_CTRL, RF_EN|RF_RSTB|RF_SDMRSTB);
 
-#ifdef CONFIG_USB_HCI
 	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_USBA | FEN_USBD | FEN_BB_GLB_RSTn | FEN_BBRSTB);
-#else
-	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_PPLL|FEN_PCIEA|FEN_DIO_PCIE|FEN_BB_GLB_RSTn|FEN_BBRSTB);
-#endif
-
-#if 0
-#ifdef CONFIG_USB_HCI
-	//To Fix MAC loopback mode fail. Suggested by SD4 Johnny. 2010.03.23.
-	rtw_write8(Adapter, REG_LDOHCI12_CTRL, 0x0f);
-	rtw_write8(Adapter, 0x15, 0xe9);
-#endif
-
-	rtw_write8(Adapter, REG_AFE_XTAL_CTRL+1, 0x80);
-#endif
-
-#ifdef CONFIG_USB_HCI
-		//rtw_write8(Adapter, 0x15, 0xe9);
-#endif
-
-
-#ifdef CONFIG_PCI_HCI
-	// Force use left antenna by default for 88C.
-	//	if(!IS_92C_SERIAL(pHalData->VersionID) || IS_92C_1T2R(pHalData->VersionID))
-	if(Adapter->ledpriv.LedStrategy != SW_LED_MODE10)
-	{
-		RegVal = rtw_read32(Adapter, REG_LEDCFG0);
-		rtw_write32(Adapter, REG_LEDCFG0, RegVal|BIT23);
-	}
-#endif
 
 	//
 	// Config BB and AGC
@@ -1801,27 +1704,11 @@ PHY_ConfigRFExternalPA(
 )
 {
 	int	rtStatus = _SUCCESS;
-#ifdef CONFIG_USB_HCI
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u16 i=0;
 
 	if(!pHalData->ExternalPA)
-	{
 		return rtStatus;
-	}
-
-	// 2010/10/19 MH According to Jenyu/EEChou 's opinion, we need not to execute the
-	// same code as SU. It is already updated in radio_a_1T_HP.txt.
-#if 0
-	//add for SU High Power PA
-	for(i = 0;i<HighPowerRadioAArrayLen; i=i+2)
-	{
-		RT_TRACE(COMP_INIT, DBG_LOUD, ("External PA, write RF 0x%lx=0x%lx\n", Rtl8192S_HighPower_RadioA_Array[i], Rtl8192S_HighPower_RadioA_Array[i+1]));
-		PHY_SetRFReg(Adapter, eRFPath, Rtl8192S_HighPower_RadioA_Array[i], bRFRegOffsetMask, Rtl8192S_HighPower_RadioA_Array[i+1]);
-	}
-#endif
-
-#endif
 	return rtStatus;
 }
 //****************************************
@@ -1973,19 +1860,11 @@ rtl8188e_PHY_ConfigRFWithHeaderFile(
 			{
 				if(Rtl819XRadioB_Array_Table[i] == 0xfe)
 				{ // Deay specific ms. Only RF configuration require delay.
-#if 0//#ifdef CONFIG_USB_HCI
-					#ifdef CONFIG_LONG_DELAY_ISSUE
-					rtw_msleep_os(1000);
-					#else
-					rtw_mdelay_os(1000);
-					#endif
-#else
 					#ifdef CONFIG_LONG_DELAY_ISSUE
 					rtw_msleep_os(50);
 					#else
 					rtw_mdelay_os(50);
 					#endif
-#endif
 				}
 				else if (Rtl819XRadioB_Array_Table[i] == 0xfd)
 					rtw_mdelay_os(5);
@@ -3505,7 +3384,6 @@ _PHY_DumpRFReg(IN	struct adapter *pAdapter)
 // Move from phycfg.c to gen.c to be code independent later
 //
 //-------------------------Move to other DIR later----------------------------*/
-#ifdef CONFIG_USB_HCI
 
 //
 //	Description:
@@ -3517,35 +3395,12 @@ DumpBBDbgPort_92CU(
 	IN	struct adapter *		Adapter
 	)
 {
-
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("BaseBand Debug Ports:\n"));
-
 	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0000);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
 	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0803);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
 	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0a06);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
 	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0007);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
 	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0100);
 	PHY_SetBBReg(Adapter, 0x0a28, 0x00ff0000, 0x000f0000);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
 	PHY_SetBBReg(Adapter, 0x0908, 0xffff, 0x0100);
 	PHY_SetBBReg(Adapter, 0x0a28, 0x00ff0000, 0x00150000);
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xdf4, PHY_QueryBBReg(Adapter, 0x0df4, bMaskDWord)));
-
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0x800, PHY_QueryBBReg(Adapter, 0x0800, bMaskDWord)));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0x900, PHY_QueryBBReg(Adapter, 0x0900, bMaskDWord)));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xa00, PHY_QueryBBReg(Adapter, 0x0a00, bMaskDWord)));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xa54, PHY_QueryBBReg(Adapter, 0x0a54, bMaskDWord)));
-	//RT_TRACE(COMP_SEND, DBG_WARNING, ("Offset[%x]: %x\n", 0xa58, PHY_QueryBBReg(Adapter, 0x0a58, bMaskDWord)));
-
 }
-#endif

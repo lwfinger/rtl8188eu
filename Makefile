@@ -17,9 +17,6 @@ ccflags-y += -D__CHECK_ENDIAN__
 CONFIG_RTL8188E = y
 
 CONFIG_USB_HCI = y
-CONFIG_PCI_HCI = n
-CONFIG_SDIO_HCI = n
-CONFIG_GSPI_HCI = n
 
 CONFIG_POWER_SAVING = y
 CONFIG_USB_AUTOSUSPEND = n
@@ -106,8 +103,6 @@ PWRSEQ_FILES := hal/HalPwrSeqCmd.o \
 
 CHIP_FILES += $(HAL_COMM_FILES) $(OUTSRC_FILES) $(PWRSEQ_FILES)
 
-HCI_NAME = usb
-
 _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/os_intfs.o \
 			os_dep/usb_intf.o \
@@ -118,16 +113,6 @@ _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/recv_linux.o \
 			os_dep/ioctl_cfg80211.o \
 			os_dep/rtw_android.o
-
-ifeq ($(CONFIG_SDIO_HCI), y)
-_OS_INTFS_FILES += os_dep/custom_gpio_linux.o
-_OS_INTFS_FILES += os_dep/usb_ops_linux.o
-endif
-
-ifeq ($(CONFIG_GSPI_HCI), y)
-_OS_INTFS_FILES += os_dep/custom_gpio_linux.o
-_OS_INTFS_FILES += os_dep/usb_ops_linux.o
-endif
 
 _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/hal_com.o \
@@ -445,9 +430,6 @@ endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_RK2818), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID -DCONFIG_PLATFORM_ROCKCHIPS -DCONFIG_MINIMAL_MEMORY_USAGE
-ifeq ($(CONFIG_SDIO_HCI), y)
-EXTRA_CFLAGS += -DCONFIG_DETECT_CPWM_BY_POLLING -DCONFIG_DETECT_C2H_BY_POLLING
-endif
 ARCH := arm
 CROSS_COMPILE := /usr/src/release_fae_version/toolchain/arm-eabi-4.4.0/bin/arm-eabi-
 KSRC := /usr/src/release_fae_version/kernel25_A7_281x
@@ -499,17 +481,12 @@ endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_SUNxI), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ARM_SUNxI
-ifeq ($(CONFIG_USB_HCI), y)
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-endif
 # default setting for Android 4.1, 4.2
 EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 EXTRA_CFLAGS += -DDCONFIG_P2P_IPS
 # default setting for A10-EVB mmc0
-ifeq ($(CONFIG_SDIO_HCI), y)
-#EXTRA_CFLAGS += -DCONFIG_WITS_EVB_V13
-endif
 ARCH := arm
 #CROSS_COMPILE := arm-none-linux-gnueabi-
 CROSS_COMPILE=/home/android_sdk/Allwinner/a10/android-jb42/lichee-jb42/buildroot/output/external-toolchain/bin/arm-none-linux-gnueabi-
@@ -521,13 +498,8 @@ endif
 ifeq ($(CONFIG_PLATFORM_ARM_SUN6I), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_ARM_SUN6I
-ifeq ($(CONFIG_USB_HCI), y)
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-endif
 # default setting for A31-EVB mmc0
-ifeq ($(CONFIG_SDIO_HCI), y)
-EXTRA_CFLAGS += -DCONFIG_A31_EVB
-endif
 
 EXTRA_CFLAGS += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2
@@ -539,17 +511,13 @@ CROSS_COMPILE := /home/android_sdk/Allwinner/a31/android-jb42/lichee/buildroot/o
 KVER  := 3.3.0
 #KSRC:= ../lichee/linux-3.3/
 KSRC :=/home/android_sdk/Allwinner/a31/android-jb42/lichee/linux-3.3
-ifeq ($(CONFIG_USB_HCI), y)
 MODULE_NAME := 8188eu_sw
-endif
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_SUN7I), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_ARM_SUN7I
-ifeq ($(CONFIG_USB_HCI), y)
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-endif
 EXTRA_CFLAGS += -DCONFIG_TRAFFIC_PROTECT
 # default setting for Android 4.1, 4.2
 EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE

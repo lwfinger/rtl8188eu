@@ -88,17 +88,11 @@
 	#include <linux/udp.h>
 #endif
 
-#ifdef CONFIG_USB_HCI
 	#include <linux/usb.h>
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,21))
 	#include <linux/usb_ch9.h>
 #else
 	#include <linux/usb/ch9.h>
-#endif
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	#include <linux/pci.h>
 #endif
 
 #ifdef CONFIG_TX_MCAST2UNI
@@ -130,12 +124,10 @@ struct dvobj_priv;
 extern void rtw_unregister_netdevs(struct dvobj_priv *dvobj);
 extern int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 
-#ifdef CONFIG_USB_HCI
-	typedef struct urb *  PURB;
+typedef struct urb *  PURB;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
 #ifdef CONFIG_USB_SUSPEND
 #define CONFIG_AUTOSUSPEND	1
-#endif
 #endif
 #endif
 
@@ -470,10 +462,8 @@ struct sk_buff *dbg_rtw_skb_clone(struct sk_buff *skb, const enum mstat_f flags,
 int dbg_rtw_netif_rx(_nic_hdl ndev, struct sk_buff *skb, const enum mstat_f flags, const char *func, int line);
 void dbg_rtw_skb_queue_purge(struct sk_buff_head *list, enum mstat_f flags, const char *func, int line);
 
-#ifdef CONFIG_USB_HCI
 void *dbg_rtw_usb_buffer_alloc(struct usb_device *dev, size_t size, dma_addr_t *dma, const enum mstat_f flags, const char *func, const int line);
 void dbg_rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dma_addr_t dma, const enum mstat_f flags, const char *func, const int line);
-#endif /* CONFIG_USB_HCI */
 
 #ifdef CONFIG_USE_VMALLOC
 #define rtw_vmalloc(sz)			dbg_rtw_vmalloc((sz), MSTAT_TYPE_VIR, __FUNCTION__, __LINE__)
@@ -507,12 +497,10 @@ void dbg_rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dm
 #define rtw_skb_clone_f(skb, mstat_f)	dbg_rtw_skb_clone((skb), ((mstat_f)&0xff00)|MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
 #define rtw_netif_rx(ndev, skb)	dbg_rtw_netif_rx(ndev, skb, MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
 #define rtw_skb_queue_purge(sk_buff_head) dbg_rtw_skb_queue_purge(sk_buff_head, MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#ifdef CONFIG_USB_HCI
 #define rtw_usb_buffer_alloc(dev, size, dma)		dbg_rtw_usb_buffer_alloc((dev), (size), (dma), MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
 #define rtw_usb_buffer_free(dev, size, addr, dma)	dbg_rtw_usb_buffer_free((dev), (size), (addr), (dma), MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
 #define rtw_usb_buffer_alloc_f(dev, size, dma, mstat_f)			dbg_rtw_usb_buffer_alloc((dev), (size), (dma), ((mstat_f)&0xff00)|MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
 #define rtw_usb_buffer_free_f(dev, size, addr, dma, mstat_f)	dbg_rtw_usb_buffer_free((dev), (size), (addr), (dma), ((mstat_f)&0xff00)|MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
-#endif /* CONFIG_USB_HCI */
 
 #else /* DBG_MEM_ALLOC */
 #define rtw_mstat_update(flag, status, sz) do {} while(0)
@@ -531,10 +519,8 @@ struct sk_buff *_rtw_skb_clone(struct sk_buff *skb);
 int _rtw_netif_rx(_nic_hdl ndev, struct sk_buff *skb);
 void _rtw_skb_queue_purge(struct sk_buff_head *list);
 
-#ifdef CONFIG_USB_HCI
 void *_rtw_usb_buffer_alloc(struct usb_device *dev, size_t size, dma_addr_t *dma);
 void _rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dma_addr_t dma);
-#endif /* CONFIG_USB_HCI */
 
 #ifdef CONFIG_USE_VMALLOC
 #define rtw_vmalloc(sz)			_rtw_vmalloc((sz))
@@ -568,12 +554,10 @@ void _rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dma_a
 #define rtw_skb_clone_f(skb, mstat_f)	_rtw_skb_clone((skb))
 #define rtw_netif_rx(ndev, skb) _rtw_netif_rx(ndev, skb)
 #define rtw_skb_queue_purge(sk_buff_head) _rtw_skb_queue_purge(sk_buff_head)
-#ifdef CONFIG_USB_HCI
 #define rtw_usb_buffer_alloc(dev, size, dma) _rtw_usb_buffer_alloc((dev), (size), (dma))
 #define rtw_usb_buffer_free(dev, size, addr, dma) _rtw_usb_buffer_free((dev), (size), (addr), (dma))
 #define rtw_usb_buffer_alloc_f(dev, size, dma, mstat_f) _rtw_usb_buffer_alloc((dev), (size), (dma))
 #define rtw_usb_buffer_free_f(dev, size, addr, dma, mstat_f) _rtw_usb_buffer_free((dev), (size), (addr), (dma))
-#endif /* CONFIG_USB_HCI */
 #endif /* DBG_MEM_ALLOC */
 
 extern void*	rtw_malloc2d(int h, int w, int size);

@@ -28,18 +28,7 @@
 //================================================================================
 // Interface to manipulate LED objects.
 //================================================================================
-#ifdef CONFIG_USB_HCI
 void rtl8188eu_InitSwLeds(struct adapter *padapter);
 void rtl8188eu_DeInitSwLeds(struct adapter *padapter);
-#endif
-#ifdef CONFIG_PCI_HCI
-void rtl8188ee_gen_RefreshLedState(struct adapter *Adapter);
-void rtl8188ee_InitSwLeds(struct adapter *padapter);
-void rtl8188ee_DeInitSwLeds(struct adapter *padapter);
-#endif
-#ifdef CONFIG_SDIO_HCI
-void rtl8188es_InitSwLeds(struct adapter *padapter);
-void rtl8188es_DeInitSwLeds(struct adapter *padapter);
-#endif
 
 #endif

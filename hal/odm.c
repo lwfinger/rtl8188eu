@@ -4160,7 +4160,6 @@ odm_DynamicTxPowerInit(
 	pdmpriv->bDynamicTxPowerEnable = _FALSE;
 
 	#if (RTL8192C_SUPPORT==1)
-	#ifdef CONFIG_USB_HCI
 
 	#ifdef CONFIG_INTEL_PROXIM
 	if((pHalData->BoardType == BOARD_USB_High_PA)||(Adapter->proximity.proxim_support==_TRUE))
@@ -4174,9 +4173,6 @@ odm_DynamicTxPowerInit(
 		pdmpriv->bDynamicTxPowerEnable = _TRUE;
 	}
 	else
-	#else
-		pdmpriv->bDynamicTxPowerEnable = _FALSE;
-	#endif
 	#endif
 
 	pdmpriv->LastDTPLvl = TxHighPwrLevel_Normal;
@@ -7528,25 +7524,17 @@ odm_EdcaTurboCheckCE(
 			}
 #endif
 
-#ifdef CONFIG_PCI_HCI
 			if(IS_92C_SERIAL(pHalData->VersionID))
-			{
 				edca_param = 0x60a42b;
-			}
 			else
-			{
 				edca_param = 0x6ea42b;
-			}
-#endif
 			rtw_write32(Adapter, REG_EDCA_BE_PARAM, edca_param);
 
 			pDM_Odm->DM_EDCA_Table.prv_traffic_idx = trafficIndex;
 		}
 
 		pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = _TRUE;
-	}
-	else
-	{
+	} else {
 		//
 		// Turn Off EDCA turbo here.
 		// Restore original EDCA according to the declaration of AP.

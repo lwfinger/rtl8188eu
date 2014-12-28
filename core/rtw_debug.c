@@ -406,10 +406,7 @@ int proc_get_trx_info(char *page, char **start,
 		len += snprintf(page + len, count - len, "%d, hwq.accnt=%d\n", i, phwxmit->accnt);
 	}
 
-#ifdef CONFIG_USB_HCI
 	len += snprintf(page + len, count - len, "rx_urb_pending_cn=%d\n", precvpriv->rx_pending_cnt);
-#endif
-
 	*eof = 1;
 	return len;
 

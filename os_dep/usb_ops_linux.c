@@ -522,46 +522,35 @@ _func_enter_;
 		int bmcast = IS_MCAST(pattrib->dst);
 		u8 agg_num = 1;
 
-		#ifdef CONFIG_USB_HCI
 		#ifdef CONFIG_USB_TX_AGGREGATION
-			if(pxmitframe->agg_num>1)
-				agg_num = pxmitframe->agg_num;
-		#endif
-		#endif
-
-		#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 			if(pxmitframe->agg_num>1)
 				agg_num = pxmitframe->agg_num;
 		#endif
 
 		if(bmcast)
-		{
 			psta = rtw_get_bcmc_stainfo(padapter);
 
-		} else {
+		else
 			psta = rtw_get_stainfo(pstapriv, pattrib->dst);
-		}
-		if(psta)
-		{
-			switch(pattrib->priority)
-			{
-				case 1:
-				case 2:
-					psta->tx_bk_cnt += agg_num;
-					break;
-				case 4:
-				case 5:
-					psta->tx_vi_cnt += agg_num;
-					break;
-				case 6:
-				case 7:
-					psta->tx_vo_cnt += agg_num;
-					break;
-				case 0:
-				case 3:
-				default:
-					psta->tx_be_cnt += agg_num;
-					break;
+		if(psta) {
+			switch(pattrib->priority) {
+			case 1:
+			case 2:
+				psta->tx_bk_cnt += agg_num;
+				break;
+			case 4:
+			case 5:
+				psta->tx_vi_cnt += agg_num;
+				break;
+			case 6:
+			case 7:
+				psta->tx_vo_cnt += agg_num;
+				break;
+			case 0:
+			case 3:
+			default:
+				psta->tx_be_cnt += agg_num;
+				break;
 			}
 		}
 	}

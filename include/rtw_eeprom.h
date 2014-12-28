@@ -44,11 +44,6 @@
 #define EUROPE						0x1 //temp, should be provided later
 #define JAPAN						0x2 //temp, should be provided later
 
-#ifdef CONFIG_SDIO_HCI
-#define eeprom_cis0_sz	17
-#define eeprom_cis1_sz	50
-#endif
-
 #define	EEPROM_CID_DEFAULT			0x0
 #define	EEPROM_CID_ALPHA				0x1
 #define	EEPROM_CID_Senao				0x3
@@ -140,15 +135,7 @@ struct eeprom_priv
 	u8		EEPROMRFGainOffset;
 	u8		EEPROMRFGainVal;
 #endif //CONFIG_RF_GAIN_OFFSET
-
-#ifdef CONFIG_SDIO_HCI
-	u8		sdio_setting;
-	u32		ocr;
-	u8		cis0[eeprom_cis0_sz];
-	u8		cis1[eeprom_cis1_sz];
-#endif
 };
-
 
 extern void eeprom_write16(struct adapter *padapter, u16 reg, u16 data);
 extern u16 eeprom_read16(struct adapter *padapter, u16 reg);

@@ -47,34 +47,7 @@
 #define Reset_Cnt_Limit			3
 
 
-#ifdef CONFIG_PCI_HCI
-#define MAX_AGGR_NUM	0x0A0A
-#else
 #define MAX_AGGR_NUM	0x0909
-#endif
-
-#ifdef CONFIG_PCI_HCI
-#define	SET_RTL8192SE_RF_SLEEP(_pAdapter)							\
-{																	\
-	u1Byte		u1bTmp;												\
-	u1bTmp = PlatformEFIORead1Byte(_pAdapter, REG_LDOV12D_CTRL);		\
-	u1bTmp |= BIT0;													\
-	PlatformEFIOWrite1Byte(_pAdapter, REG_LDOV12D_CTRL, u1bTmp);		\
-	PlatformEFIOWrite1Byte(_pAdapter, REG_SPS_OCP_CFG, 0x0);				\
-	PlatformEFIOWrite1Byte(_pAdapter, TXPAUSE, 0xFF);				\
-	PlatformEFIOWrite2Byte(_pAdapter, CMDR, 0x57FC);				\
-	delay_us(100);													\
-	PlatformEFIOWrite2Byte(_pAdapter, CMDR, 0x77FC);				\
-	PlatformEFIOWrite1Byte(_pAdapter, PHY_CCA, 0x0);				\
-	delay_us(10);													\
-	PlatformEFIOWrite2Byte(_pAdapter, CMDR, 0x37FC);				\
-	delay_us(10);													\
-	PlatformEFIOWrite2Byte(_pAdapter, CMDR, 0x77FC);				\
-	delay_us(10);													\
-	PlatformEFIOWrite2Byte(_pAdapter, CMDR, 0x57FC);				\
-}
-#endif
-
 
 /*--------------------------Define Parameters-------------------------------*/
 

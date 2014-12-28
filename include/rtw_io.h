@@ -36,15 +36,12 @@
 #include <linux/spinlock.h>
 #include <asm/atomic.h>
 
-#ifdef CONFIG_USB_HCI
 #include <linux/usb.h>
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,21))
 #include <linux/usb_ch9.h>
 #else
 #include <linux/usb/ch9.h>
 #endif
-
-#endif //CONFIG_USB_HCI
 
 #define NUM_IOREQ		8
 
@@ -155,48 +152,12 @@ struct io_req {
 	u8	*pbuf;
 	_sema	sema;
 
-#ifdef PLATFORM_OS_CE
-#ifdef CONFIG_USB_HCI
-	// URB handler for rtw_write_mem
-	USB_TRANSFER usb_transfer_write_mem;
-#endif
-#endif
-
 	void (*_async_io_callback)(struct adapter *padater, struct io_req *pio_req, u8 *cnxt);
 	u8 *cnxt;
-
-#ifdef PLATFORM_OS_XP
-	PMDL pmdl;
-	PIRP  pirp;
-
-#ifdef CONFIG_SDIO_HCI
-	PSDBUS_REQUEST_PACKET sdrp;
-#endif
-
-#endif
-
-
 };
 
 struct	intf_hdl {
 
-/*
-	u32	intf_option;
-	u32	bus_status;
-	u32	do_flush;
-	u8	*adapter;
-	u8	*intf_dev;
-	struct intf_priv	*pintfpriv;
-	u8	cnt;
-	void (*intf_hdl_init)(u8 *priv);
-	void (*intf_hdl_unload)(u8 *priv);
-	void (*intf_hdl_open)(u8 *priv);
-	void (*intf_hdl_close)(u8 *priv);
-	struct	_io_ops	io_ops;
-	//u8 intf_status;//moved to struct intf_priv
-	u16 len;
-	u16 done_len;
-*/
 	struct adapter *padapter;
 	struct dvobj_priv *pintf_dev;//	pointer to &(padapter->dvobjpriv);
 
@@ -315,19 +276,7 @@ struct reg_protocol_wt {
 #endif
 
 };
-#ifdef CONFIG_PCI_HCI
 #define MAX_CONTINUAL_IO_ERR 4
-#endif
-
-#ifdef CONFIG_USB_HCI
-#define MAX_CONTINUAL_IO_ERR 4
-#endif
-
-#ifdef CONFIG_SDIO_HCI
-#define SD_IO_TRY_CNT (8)
-#define MAX_CONTINUAL_IO_ERR SD_IO_TRY_CNT
-#endif
-
 
 int rtw_inc_and_chk_continual_io_error(struct dvobj_priv *dvobj);
 void rtw_reset_continual_io_error(struct dvobj_priv *dvobj);

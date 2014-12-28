@@ -60,33 +60,15 @@ typedef struct _MP_REG_ENTRY
 	u32			Max;		// maximum value allowed
 } MP_REG_ENTRY, *PMP_REG_ENTRY;
 
-#ifdef CONFIG_USB_HCI
 typedef struct _USB_EXTENSION {
     LPCUSB_FUNCS    _lpUsbFuncs;
 	USB_HANDLE	    _hDevice;
     PVOID		    pAdapter;
-
-#if 0
-	USB_ENDPOINT_DESCRIPTOR		_endpACLIn;
-    USB_ENDPOINT_DESCRIPTOR		_endpACLOutHigh;
-	USB_ENDPOINT_DESCRIPTOR		_endpACLOutNormal;
-
-	USB_PIPE        pPipeIn;
-    USB_PIPE        pPipeOutNormal;
-    USB_PIPE        pPipeOutHigh;
-#endif
-
 } USB_EXTENSION, *PUSB_EXTENSION;
-#endif
-
 
 typedef struct _OCTET_STRING{
 	u8      *Octet;
 	u16      Length;
 } OCTET_STRING, *POCTET_STRING;
-
-
-
-
 
 #endif

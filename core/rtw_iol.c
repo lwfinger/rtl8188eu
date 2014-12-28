@@ -101,27 +101,10 @@ bool rtw_IOL_applied(struct adapter *adapter)
 	if(1 == adapter->registrypriv.fw_iol)
 		return _TRUE;
 
-#ifdef CONFIG_USB_HCI
 	if((2 == adapter->registrypriv.fw_iol) && (!adapter_to_dvobj(adapter)->ishighspeed))
 		return _TRUE;
-#endif
-
 	return _FALSE;
 }
-/*
-bool rtw_IOL_applied(struct adapter *adapter)
-{
-	if(adapter->registrypriv.fw_iol)
-		return _TRUE;
-
-#ifdef CONFIG_USB_HCI
-	if(!adapter_to_dvobj(adapter)->ishighspeed)
-		return _TRUE;
-#endif
-
-	return _FALSE;
-}
-*/
 
 int rtw_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {

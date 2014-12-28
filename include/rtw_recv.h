@@ -209,40 +209,16 @@ struct rx_pkt_attrib	{
 #define RXDESC_SIZE	24
 #define RXDESC_OFFSET RXDESC_SIZE
 
-struct recv_stat
-{
+struct recv_stat {
 	unsigned int rxdw0;
-
 	unsigned int rxdw1;
-
 	unsigned int rxdw2;
-
 	unsigned int rxdw3;
-
 	unsigned int rxdw4;
-
 	unsigned int rxdw5;
-
-#ifdef CONFIG_PCI_HCI
-	unsigned int rxdw6;
-
-	unsigned int rxdw7;
-#endif
 };
 
 #define EOR BIT(30)
-
-#ifdef CONFIG_PCI_HCI
-#define PCI_MAX_RX_QUEUE		1// MSDU packet queue, Rx Command Queue
-#define PCI_MAX_RX_COUNT		128
-
-struct rtw_rx_ring {
-	struct recv_stat	*desc;
-	dma_addr_t		dma;
-	unsigned int		idx;
-	struct sk_buff	*rx_buf[PCI_MAX_RX_COUNT];
-};
-#endif
 
 /*
 accesser of recv_priv: rtw_recv_entry(dispatch / passive level); recv_thread(passive) ; returnpkt(dispatch)
@@ -283,7 +259,6 @@ struct recv_priv
 	uint  rx_smallpacket_crcerr;
 	uint  rx_middlepacket_crcerr;
 
-#ifdef CONFIG_USB_HCI
 	//u8 *pallocated_urb_buf;
 	_sema allrxreturnevt;
 	uint	ff_hwaddr;
@@ -295,7 +270,6 @@ struct recv_priv
 	u8	*int_in_buf;
 #endif //CONFIG_USB_INTERRUPT_IN_PIPE
 
-#endif
 	struct tasklet_struct irq_prepare_beacon_tasklet;
 	struct tasklet_struct recv_tasklet;
 	struct sk_buff_head free_recv_skb_queue;
@@ -314,18 +288,6 @@ struct recv_priv
 	_queue	free_recv_buf_queue;
 	u32	free_recv_buf_queue_cnt;
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	_queue	recv_buf_pending_queue;
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	// Rx
-	struct rtw_rx_ring	rx_ring[PCI_MAX_RX_QUEUE];
-	int	rxringcount;
-	u16	rxbuffersize;
-#endif
-
-	//For display the phy informatiom
 	u8 is_signal_dbg;	// for debug
 	u8 signal_strength_dbg;	// for debug
 	s8 rssi;
@@ -390,16 +352,12 @@ struct recv_buf
 	u8	*ptail;
 	u8	*pend;
 
-#ifdef CONFIG_USB_HCI
-
 	PURB	purb;
 	dma_addr_t dma_transfer_addr;	/* (in) dma addr for transfer_buffer */
 	u32 alloc_sz;
 
 	u8  irp_pending;
 	int  transfer_len;
-
-#endif
 
 	_pkt	*pskb;
 	u8	reuse;

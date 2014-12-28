@@ -34,15 +34,10 @@
 
 #include <rtw_mp_ioctl.h>
 
-#ifdef CONFIG_USB_HCI
 #include <usb_ops.h>
-#endif //CONFIG_USB_HCI
 #include <rtw_version.h>
 
 #include <rtl8188e_hal.h>
-#ifdef CONFIG_GSPI_HCI
-#include <gspi_ops.h>
-#endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27))
 #define  iwe_stream_add_event(a, b, c, d, e)  iwe_stream_add_event(b, c, d, e)
@@ -6955,9 +6950,7 @@ static int rtw_dbg_port(struct net_device *dev,
 							pxmitpriv->free_xmitbuf_cnt, pxmitpriv->free_xmitframe_cnt,
 							pxmitpriv->free_xmit_extbuf_cnt, pxmitpriv->free_xframe_ext_cnt,
 							precvpriv->free_recvframe_cnt);
-						#ifdef CONFIG_USB_HCI
 						DBG_871X("rx_urb_pending_cn=%d\n", precvpriv->rx_pending_cnt);
-						#endif
 					}
 					break;
 				case 0x09:
@@ -9210,11 +9203,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0], "mac") == 0)
 	{
-			#ifdef CONFIG_SDIO_HCI
-			addr = EEPROM_MAC_ADDR_88ES;
-			#else
-			addr = EEPROM_MAC_ADDR_88EU;
-		        #endif
+		addr = EEPROM_MAC_ADDR_88EU;
 
 		cnts = 6;
 
@@ -9232,7 +9221,6 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 			goto exit;
 		}
 
-//		DBG_871X("%s: MAC address={", __FUNCTION__);
 		*extra = 0;
 		for (i=0; i<cnts; i++)
 		{
@@ -9721,16 +9709,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 			goto exit;
 		}
 
-		//mac,00e04c871200
-			#ifdef CONFIG_USB_HCI
-			addr = EEPROM_MAC_ADDR_88EU;
-			#endif
-			#ifdef CONFIG_SDIO_HCI
-			addr = EEPROM_MAC_ADDR_88ES;
-			#endif
-			#ifdef CONFIG_PCI_HCI
-			addr = EEPROM_MAC_ADDR_88EE;
-			#endif
+		addr = EEPROM_MAC_ADDR_88EU;
 
 		cnts = strlen(tmp[1]);
 		if (cnts%2)
@@ -9783,21 +9762,14 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 			goto exit;
 		}
 
-			#ifdef CONFIG_USB_HCI
-			addr = EEPROM_VID_88EE;
-			#endif
-			#ifdef CONFIG_PCI_HCI
-			addr = EEPROM_VID_88EE;
-			#endif
+		addr = EEPROM_VID_88EE;
 		cnts = strlen(tmp[1]);
-		if (cnts%2)
-		{
+		if (cnts%2) {
 			err = -EINVAL;
 			goto exit;
 		}
 		cnts /= 2;
-		if (cnts == 0)
-		{
+		if (cnts == 0) {
 			err = -EINVAL;
 			goto exit;
 		}
@@ -10702,10 +10674,6 @@ static int rtw_widi_set_probe_request(struct net_device *dev,
 #include <rtl8188e_hal.h>
 extern void rtl8188e_cal_txdesc_chksum(struct tx_desc *ptxdesc);
 #define cal_txdesc_chksum rtl8188e_cal_txdesc_chksum
-#ifdef CONFIG_SDIO_HCI
-extern void rtl8188es_fill_default_txdesc(struct xmit_frame *pxmitframe, u8 *pbuf);
-#define fill_default_txdesc rtl8188es_fill_default_txdesc
-#endif // CONFIG_SDIO_HCI
 
 static s32 initLoopback(struct adapter *padapter)
 {
@@ -10926,16 +10894,6 @@ static struct xmit_frame* createloopbackpkt(struct adapter *padapter, u32 size)
 	desc->txdw5 = cpu_to_le32(desc->txdw5);
 	desc->txdw6 = cpu_to_le32(desc->txdw6);
 	desc->txdw7 = cpu_to_le32(desc->txdw7);
-#ifdef CONFIG_PCI_HCI
-	desc->txdw8 = cpu_to_le32(desc->txdw8);
-	desc->txdw9 = cpu_to_le32(desc->txdw9);
-	desc->txdw10 = cpu_to_le32(desc->txdw10);
-	desc->txdw11 = cpu_to_le32(desc->txdw11);
-	desc->txdw12 = cpu_to_le32(desc->txdw12);
-	desc->txdw13 = cpu_to_le32(desc->txdw13);
-	desc->txdw14 = cpu_to_le32(desc->txdw14);
-	desc->txdw15 = cpu_to_le32(desc->txdw15);
-#endif
 
 	cal_txdesc_chksum(desc);
 

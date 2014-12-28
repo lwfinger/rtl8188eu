@@ -683,11 +683,7 @@ Default: 00b.
 #define	EEPROM_Default_internalPA_SP3T_C9	0xAA
 #define	EEPROM_Default_internalPA_SP3T_CC	0xAF
 #define	EEPROM_Default_internalPA_SPDT_C9	0xAA
-#ifdef CONFIG_PCI_HCI
-#define	EEPROM_Default_internalPA_SPDT_CC	0xA0
-#else
 #define	EEPROM_Default_internalPA_SPDT_CC	0xFA
-#endif
 
 #define	EEPROM_CHANNEL_PLAN_FCC				0x0
 #define	EEPROM_CHANNEL_PLAN_IC				0x1
@@ -714,87 +710,6 @@ Default: 00b.
 #define	RTL8192_EEPROM_ID						0x8129
 #define	EEPROM_WAPI_SUPPORT					0x78
 
-
-#ifdef CONFIG_PCI_HCI
-#define RT_IBSS_INT_MASKS				(IMR_BcnInt | IMR_TBDOK | IMR_TBDER)
-#define RT_AC_INT_MASKS				(IMR_VIDOK | IMR_VODOK | IMR_BEDOK|IMR_BKDOK)
-#define RT_BSS_INT_MASKS				(RT_IBSS_INT_MASKS)
-
-#define RTL8190_EEPROM_ID						0x8129	// 0-1
-#define EEPROM_HPON							0x02 // LDO settings.2-5
-#define EEPROM_CLK								0x06 // Clock settings.6-7
-#define EEPROM_MAC_FUNCTION					0x08 // SE Test mode.8
-
-#define EEPROM_VID								0x28 // SE Vendor ID.A-B
-#define EEPROM_DID								0x2A // SE Device ID. C-D
-#define EEPROM_SVID								0x2C // SE Vendor ID.E-F
-#define EEPROM_SMID							0x2E // SE PCI Subsystem ID. 10-11
-
-#define EEPROM_MAC_ADDR						0x16 // SEMAC Address. 12-17
-#define EEPROM_MAC_ADDR_MAC0_92D			0x55
-#define EEPROM_MAC_ADDR_MAC1_92D			0x5B
-//----------------------------------------------------------------
-// 2.4G band Tx power index setting
-#define EEPROM_CCK_TX_PWR_INX_2G				0x61
-#define EEPROM_HT40_1S_TX_PWR_INX_2G		0x67
-#define EEPROM_HT40_2S_TX_PWR_INX_DIFF_2G	0x6D
-#define EEPROM_HT20_TX_PWR_INX_DIFF_2G		0x70
-#define EEPROM_OFDM_TX_PWR_INX_DIFF_2G		0x73
-#define EEPROM_HT40_MAX_PWR_OFFSET_2G		0x76
-#define EEPROM_HT20_MAX_PWR_OFFSET_2G		0x79
-
-//5GL channel 32-64
-#define EEPROM_HT40_1S_TX_PWR_INX_5GL		0x7C
-#define EEPROM_HT40_2S_TX_PWR_INX_DIFF_5GL	0x82
-#define EEPROM_HT20_TX_PWR_INX_DIFF_5GL		0x85
-#define EEPROM_OFDM_TX_PWR_INX_DIFF_5GL		0x88
-#define EEPROM_HT40_MAX_PWR_OFFSET_5GL		0x8B
-#define EEPROM_HT20_MAX_PWR_OFFSET_5GL		0x8E
-
-//5GM channel 100-140
-#define EEPROM_HT40_1S_TX_PWR_INX_5GM		0x91
-#define EEPROM_HT40_2S_TX_PWR_INX_DIFF_5GM	0x97
-#define EEPROM_HT20_TX_PWR_INX_DIFF_5GM		0x9A
-#define EEPROM_OFDM_TX_PWR_INX_DIFF_5GM	0x9D
-#define EEPROM_HT40_MAX_PWR_OFFSET_5GM		0xA0
-#define EEPROM_HT20_MAX_PWR_OFFSET_5GM		0xA3
-
-//5GH channel 149-165
-#define EEPROM_HT40_1S_TX_PWR_INX_5GH		0xA6
-#define EEPROM_HT40_2S_TX_PWR_INX_DIFF_5GH	0xAC
-#define EEPROM_HT20_TX_PWR_INX_DIFF_5GH		0xAF
-#define EEPROM_OFDM_TX_PWR_INX_DIFF_5GH		0xB2
-#define EEPROM_HT40_MAX_PWR_OFFSET_5GH		0xB5
-#define EEPROM_HT20_MAX_PWR_OFFSET_5GH		0xB8
-
-#define EEPROM_CHANNEL_PLAN					0xBB // Map of supported channels.
-#define EEPROM_IQK_DELTA						0xBC
-#define EEPROM_LCK_DELTA						0xBC
-#define EEPROM_XTAL_K							0xBD	//[7:5]
-#define EEPROM_TSSI_A_5G						0xBE
-#define EEPROM_TSSI_B_5G						0xBF
-#define EEPROM_TSSI_AB_5G						0xC0
-#define EEPROM_THERMAL_METER					0xC3	//[4:0]
-#define EEPROM_PATHDIV							0xC4
-#define EEPROM_RF_OPT1							0xC4
-#define EEPROM_RF_OPT2							0xC5
-#define EEPROM_RF_OPT3							0xC6
-#define EEPROM_RF_OPT4							0xC7
-#define EEPROM_RF_OPT5							0xC8
-#define EEPROM_RF_OPT6							0xC9
-#define EEPROM_VERSION							0xCA
-#define EEPROM_CUSTOMER_ID					0xCB
-#define EEPROM_RF_OPT7							0xCC
-
-#define EEPROM_WIDIPAIRING_ADDR				0xF0
-#define EEPROM_WIDIPAIRING_KEY				0xF6
-
-#define EEPROM_DEF_PART_NO					0x3FD  //Byte
-#define EEPROME_CHIP_VERSION_L				0x3FF
-#define EEPROME_CHIP_VERSION_H				0x3FE
-#endif
-
-#ifdef CONFIG_USB_HCI
 #define RTL8190_EEPROM_ID						0x8129	// 0-1
 #define EEPROM_HPON							0x02 // LDO settings.2-5
 #define EEPROM_CLK								0x06 // Clock settings.6-7
@@ -929,31 +844,6 @@ Default: 00b.
 #define	EEPROM_USB_REMOTE_WAKEUP			BIT(1)
 #define	EEPROM_USB_DEVICE_PWR				BIT(2)
 #define	EEPROM_EP_NUMBER						(BIT(3)|BIT(4))
-
-#if 0
-#define	EEPROM_CHANNEL_PLAN_FCC					0x0
-#define	EEPROM_CHANNEL_PLAN_IC					0x1
-#define	EEPROM_CHANNEL_PLAN_ETSI				0x2
-#define	EEPROM_CHANNEL_PLAN_SPAIN				0x3
-#define	EEPROM_CHANNEL_PLAN_FRANCE				0x4
-#define	EEPROM_CHANNEL_PLAN_MKK					0x5
-#define	EEPROM_CHANNEL_PLAN_MKK1				0x6
-#define	EEPROM_CHANNEL_PLAN_ISRAEL				0x7
-#define	EEPROM_CHANNEL_PLAN_TELEC				0x8
-#define	EEPROM_CHANNEL_PLAN_GLOBAL_DOMAIN		0x9
-#define	EEPROM_CHANNEL_PLAN_WORLD_WIDE_13		0xA
-#define	EEPROM_CHANNEL_PLAN_BY_HW_MASK			0x80
-
-#define	EEPROM_CID_DEFAULT						0x0
-
-#define	EEPROM_CID_WHQL							0xFE // added by chiyoko for dtm, 20090108
-
-
-#define	EEPROM_CID_CCX							0x10 // CCX test. By Bruce, 2009-02-25.
-
-#endif
-#endif
-
 
 /*===================================================================
 =====================================================================
