@@ -337,7 +337,12 @@ _func_enter_;
 				//skb->ip_summed = CHECKSUM_NONE;
 				skb->dev = pnetdev;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 16, 0))
 				skb_set_queue_mapping(skb, rtw_recv_select_queue(skb));
+#else
+				skb_set_queue_mapping(skb, rtw_recv_select_queue(skb,
+						      NULL, NULL));
+#endif
 #endif //LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35)
 
 				_rtw_xmit_entry(skb, pnetdev);
