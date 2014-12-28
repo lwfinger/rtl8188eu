@@ -671,7 +671,11 @@ void rtw_cfg80211_ibss_indicate_connect(struct adapter *padapter)
 	else
 		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
 	notify_channel = ieee80211_get_channel(wiphy, freq);
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(3, 14, 0))
 	cfg80211_ibss_joined(padapter->pnetdev, cur_network->network.MacAddress, notify_channel, GFP_ATOMIC);
+#else
+	cfg80211_ibss_joined(padapter->pnetdev, cur_network->network.MacAddress, GFP_ATOMIC);
+#endif
 }
 
 void rtw_cfg80211_indicate_connect(struct adapter *padapter)
