@@ -139,7 +139,7 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/rtl8188e_cmd.o \
 			hal/usb_halinit.o \
 			hal/rtl8188eu_led.o \
-			hal//rtl8188eu_xmit.o \
+			hal/rtl8188eu_xmit.o \
 			hal/rtl8188eu_recv.o
 
 _HAL_INTFS_FILES += hal/usb_ops_linux.o
@@ -630,14 +630,15 @@ modules:
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
 
 strip:
-	$(CROSS_COMPILE)strip rtl8188e.ko --strip-unneeded
+	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
 
 install:
-	install -p -m 644 rtl8188e.ko  $(MODDESTDIR)
+	install -p -m 644 8188eu.ko  $(MODDESTDIR)
+	cp rtl8188eufw.bin /lib/firmware/.
 	/sbin/depmod -a ${KVER}
 
 uninstall:
-	rm -f $(MODDESTDIR)/rtl8188e.ko
+	rm -f $(MODDESTDIR)/8188eu.ko
 	/sbin/depmod -a ${KVER}
 
 config_r:
