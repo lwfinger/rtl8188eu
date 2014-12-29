@@ -120,7 +120,7 @@ typedef struct android_wifi_priv_cmd {
  * time (only) in dhd_open, subsequential wifi on will be handled by
  * wl_android_wifi_on
  */
-static int g_wifi_on = _TRUE;
+static int g_wifi_on = true;
 
 static unsigned int oob_irq;
 
@@ -249,7 +249,7 @@ static int rtw_android_get_rssi(struct net_device *net, char *command, int total
 	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
 
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) {
+	if(check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 		bytes_written += snprintf(&command[bytes_written], total_len, "%s rssi %d",
 			pcur_network->network.Ssid.Ssid, padapter->recvpriv.rssi);
 	}
@@ -308,7 +308,7 @@ static int rtw_android_set_block(struct net_device *net, char *command, int tota
 	char *block_value = command + strlen(android_wifi_cmd_str[ANDROID_WIFI_CMD_BLOCK]) + 1;
 
 	#ifdef CONFIG_IOCTL_CFG80211
-	wdev_to_priv(adapter->rtw_wdev)->block = (*block_value=='0')?_FALSE:_TRUE;
+	wdev_to_priv(adapter->rtw_wdev)->block = (*block_value=='0')?false:true;
 	#endif
 
 	return 0;
@@ -402,7 +402,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		//rtw_set_scan_mode((struct adapter *)rtw_netdev_priv(net), SCAN_ACTIVE);
 #ifdef CONFIG_PLATFORM_MSTAR
 #ifdef CONFIG_IOCTL_CFG80211
-		(wdev_to_priv(net->ieee80211_ptr))->bandroid_scan = _TRUE;
+		(wdev_to_priv(net->ieee80211_ptr))->bandroid_scan = true;
 #endif //CONFIG_IOCTL_CFG80211
 #endif //CONFIG_PLATFORM_MSTAR
 		break;
@@ -514,7 +514,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 
 		pwfd_info = &padapter->wfd_info;
 		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
-			pwfd_info->wfd_enable = _TRUE;
+			pwfd_info->wfd_enable = true;
 		break;
 	case ANDROID_WIFI_CMD_WFD_DISABLE:
 		//	Commented by Albert 2012/07/24
@@ -523,7 +523,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 
 		pwfd_info = &padapter->wfd_info;
 		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
-			pwfd_info->wfd_enable = _FALSE;
+			pwfd_info->wfd_enable = false;
 		break;
 	case ANDROID_WIFI_CMD_WFD_SET_TCPPORT:
 		//	Commented by Albert 2012/07/24

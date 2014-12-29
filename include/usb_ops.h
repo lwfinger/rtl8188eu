@@ -63,13 +63,13 @@ void rtl8188eu_set_intf_ops(struct _io_ops *pops);
 
 static inline u8 rtw_usb_bulk_size_boundary(struct adapter * padapter,int buf_len)
 {
-	u8 rst = _TRUE;
+	u8 rst = true;
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
 
-	if (pdvobjpriv->ishighspeed == _TRUE)
-		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE)?_TRUE:_FALSE;
+	if (pdvobjpriv->ishighspeed == true)
+		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE)?true:false;
 	else
-		rst = (0 == (buf_len) % USB_FULL_SPEED_BULK_SIZE)?_TRUE:_FALSE;
+		rst = (0 == (buf_len) % USB_FULL_SPEED_BULK_SIZE)?true:false;
 	return rst;
 }
 

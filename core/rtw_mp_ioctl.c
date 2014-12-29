@@ -1160,7 +1160,7 @@ _func_enter_;
 		("+oid_rt_pro_read_efuse_hd: buf_len=%d addr=%d cnts=%d\n",
 		 poid_par_priv->information_buf_len, addr, cnts));
 
-	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, _FALSE);
+	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 
 	if ((addr + cnts) > max_available_size) {
 		RT_TRACE(_module_mp_, _drv_err_, ("!oid_rt_pro_read_efuse_hdl: parameter error!\n"));
@@ -1168,7 +1168,7 @@ _func_enter_;
 	}
 
 	_irqlevel_changed_(&oldirql, LOWER);
-	if (rtw_efuse_access(Adapter, _FALSE, addr, cnts, data) == _FAIL) {
+	if (rtw_efuse_access(Adapter, false, addr, cnts, data) == _FAIL) {
 		RT_TRACE(_module_mp_, _drv_err_, ("!oid_rt_pro_read_efuse_hdl: rtw_efuse_access FAIL!\n"));
 		status = NDIS_STATUS_FAILURE;
 	} else
@@ -1203,7 +1203,7 @@ _func_enter_;
 		 ("+oid_rt_pro_write_efuse_hdl: buf_len=%d addr=0x%04x cnts=%d\n",
 		  poid_par_priv->information_buf_len, addr, cnts));
 
-	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, _FALSE);
+	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, false);
 
 	if ((addr + cnts) > max_available_size) {
 		RT_TRACE(_module_mp_, _drv_err_, ("!oid_rt_pro_write_efuse_hdl: parameter error"));
@@ -1211,7 +1211,7 @@ _func_enter_;
 	}
 
 	_irqlevel_changed_(&oldirql, LOWER);
-	if (rtw_efuse_access(Adapter, _TRUE, addr, cnts, data) == _FAIL)
+	if (rtw_efuse_access(Adapter, true, addr, cnts, data) == _FAIL)
 		status = NDIS_STATUS_FAILURE;
 	_irqlevel_changed_(&oldirql, RAISE);
 
@@ -1243,23 +1243,23 @@ _func_enter_;
 			("oid_rt_pro_rw_efuse_pgpkt_hdl: Read offset=0x%x\n",\
 			ppgpkt->offset));
 
-		Efuse_PowerSwitch(Adapter, _FALSE, _TRUE);
-		if (Efuse_PgPacketRead(Adapter, ppgpkt->offset, ppgpkt->data, _FALSE) == _TRUE)
+		Efuse_PowerSwitch(Adapter, false, true);
+		if (Efuse_PgPacketRead(Adapter, ppgpkt->offset, ppgpkt->data, false) == true)
 			*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
 		else
 			status = NDIS_STATUS_FAILURE;
-		Efuse_PowerSwitch(Adapter, _FALSE, _FALSE);
+		Efuse_PowerSwitch(Adapter, false, false);
 	} else {
 		RT_TRACE(_module_mp_, _drv_notice_,
 			("oid_rt_pro_rw_efuse_pgpkt_hdl: Write offset=0x%x word_en=0x%x\n",\
 			ppgpkt->offset, ppgpkt->word_en));
 
-		Efuse_PowerSwitch(Adapter, _TRUE, _TRUE);
-		if (Efuse_PgPacketWrite(Adapter, ppgpkt->offset, ppgpkt->word_en, ppgpkt->data, _FALSE) == _TRUE)
+		Efuse_PowerSwitch(Adapter, true, true);
+		if (Efuse_PgPacketWrite(Adapter, ppgpkt->offset, ppgpkt->word_en, ppgpkt->data, false) == true)
 			*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
 		else
 			status = NDIS_STATUS_FAILURE;
-		Efuse_PowerSwitch(Adapter, _TRUE, _FALSE);
+		Efuse_PowerSwitch(Adapter, true, false);
 	}
 
 	_irqlevel_changed_(&oldirql, RAISE);
@@ -1357,7 +1357,7 @@ _func_enter_;
 
 	RT_TRACE(_module_mp_, _drv_notice_, ("+oid_rt_pro_efuse_map_hdl\n"));
 
-	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&mapLen, _FALSE);
+	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&mapLen, false);
 
 	*poid_par_priv->bytes_rw = 0;
 

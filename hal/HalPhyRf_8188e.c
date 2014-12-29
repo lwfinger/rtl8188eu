@@ -2771,7 +2771,7 @@ void phy_SetRFPathSwitch_8188E(
 	#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
 	if(!pAdapter->bHWInitReady)
 	#elif  (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	if(pAdapter->hw_init_completed == _FALSE)
+	if(pAdapter->hw_init_completed == false)
 	#endif
 	{
 		u1Byte	u1bTmp;

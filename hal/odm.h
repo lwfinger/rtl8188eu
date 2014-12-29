@@ -211,7 +211,7 @@ typedef struct _Dynamic_Power_Saving_
 	
 }PS_T,*pPS_T;
 
-typedef struct _FALSE_ALARM_STATISTICS{
+typedef struct false_ALARM_STATISTICS{
 	u4Byte	Cnt_Parity_Fail;
 	u4Byte	Cnt_Rate_Illegal;
 	u4Byte	Cnt_Crc8_fail;
@@ -1477,8 +1477,8 @@ typedef enum tag_DIG_Connect_Definition
 #define		DM_DIG_THRESH_HIGH			40
 #define		DM_DIG_THRESH_LOW			35
 
-#define		DM_FALSEALARM_THRESH_LOW	400
-#define		DM_FALSEALARM_THRESH_HIGH	1000
+#define		DMfalseALARM_THRESH_LOW	400
+#define		DMfalseALARM_THRESH_HIGH	1000
 
 #define		DM_DIG_MAX_NIC				0x4A
 #define		DM_DIG_MIN_NIC				0x1e //0x22//0x1c

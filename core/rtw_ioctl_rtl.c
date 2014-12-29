@@ -604,8 +604,8 @@ NDIS_STATUS oid_rt_get_channel_hdl(struct oid_par_priv* poid_par_priv)
 		return status;
 	}
 
-	if ( (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) ||
-		(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == _TRUE))
+	if ( (check_fwstate(pmlmepriv, _FW_LINKED) == true) ||
+		(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) == true))
 		pnic_Config = &pmlmepriv->cur_network.network.Configuration;
 	else
 		pnic_Config = &padapter->registrypriv.dev_network.Configuration;
@@ -860,11 +860,11 @@ NDIS_STATUS oid_rt_get_connect_state_hdl(struct oid_par_priv* poid_par_priv)
 	// nStatus==2	AdHocMode
 	// nStatus==3	NotAssociated
 
-	if(check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == _TRUE)
+	if(check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == true)
 		ulInfo = CHECKINGSTATUS;
-	else if(check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
+	else if(check_fwstate(pmlmepriv, _FW_LINKED) == true)
 		ulInfo = ASSOCIATED;
-	else if(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)== _TRUE)
+	else if(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)== true)
 		ulInfo = ADHOCMODE;
 	else
 		ulInfo = NOTASSOCIATED ;

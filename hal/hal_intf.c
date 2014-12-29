@@ -101,28 +101,28 @@ uint	 rtw_hal_init(struct adapter *padapter)
 	int i;
 
 #ifdef CONFIG_DUALMAC_CONCURRENT
-	if(padapter->hw_init_completed == _TRUE)
+	if(padapter->hw_init_completed == true)
 	{
-		DBG_871X("rtw_hal_init: hw_init_completed == _TRUE\n");
+		DBG_871X("rtw_hal_init: hw_init_completed == true\n");
 		return status;
 	}
 
 	// before init mac0, driver must init mac1 first to avoid usb rx error.
-	if((padapter->pbuddy_adapter != NULL) && (padapter->DualMacConcurrent == _TRUE)
+	if((padapter->pbuddy_adapter != NULL) && (padapter->DualMacConcurrent == true)
 		&& (padapter->adapter_type == PRIMARY_ADAPTER))
 	{
-		if(padapter->pbuddy_adapter->hw_init_completed == _TRUE)
+		if(padapter->pbuddy_adapter->hw_init_completed == true)
 		{
-			DBG_871X("rtw_hal_init: pbuddy_adapter hw_init_completed == _TRUE\n");
+			DBG_871X("rtw_hal_init: pbuddy_adapter hw_init_completed == true\n");
 		}
 		else
 		{
 			status =	padapter->HalFunc.hal_init(padapter->pbuddy_adapter);
 			if(status == _SUCCESS){
-				padapter->pbuddy_adapter->hw_init_completed = _TRUE;
+				padapter->pbuddy_adapter->hw_init_completed = true;
 			}
 			else{
-				padapter->pbuddy_adapter->hw_init_completed = _FALSE;
+				padapter->pbuddy_adapter->hw_init_completed = false;
 				RT_TRACE(_module_hal_init_c_,_drv_err_,("rtw_hal_init: hal__init fail(pbuddy_adapter)\n"));
 				DBG_871X("rtw_hal_init: hal__init fail(pbuddy_adapter)\n");
 				return status;
@@ -136,7 +136,7 @@ uint	 rtw_hal_init(struct adapter *padapter)
 	if(status == _SUCCESS){
 		for (i = 0; i<dvobj->iface_nums; i++) {
 			padapter = dvobj->padapters[i];
-			padapter->hw_init_completed = _TRUE;
+			padapter->hw_init_completed = true;
 		}
 
 		if (padapter->registrypriv.notch_filter == 1)
@@ -150,7 +150,7 @@ uint	 rtw_hal_init(struct adapter *padapter)
 	else{
 		for (i = 0; i<dvobj->iface_nums; i++) {
 			padapter = dvobj->padapters[i];
-			padapter->hw_init_completed = _FALSE;
+			padapter->hw_init_completed = false;
 		}
 		DBG_871X("rtw_hal_init: hal__init fail\n");
 	}
@@ -178,7 +178,7 @@ _func_enter_;
 	if(status == _SUCCESS){
 		for (i = 0; i<dvobj->iface_nums; i++) {
 			padapter = dvobj->padapters[i];
-			padapter->hw_init_completed = _FALSE;
+			padapter->hw_init_completed = false;
 		}
 	}
 	else
@@ -287,7 +287,7 @@ s32	rtw_hal_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmit
 	if(padapter->HalFunc.hal_xmitframe_enqueue)
 		return padapter->HalFunc.hal_xmitframe_enqueue(padapter, pxmitframe);
 
-	return _FALSE;
+	return false;
 }
 
 s32	rtw_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe)
@@ -295,7 +295,7 @@ s32	rtw_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe)
 	if(padapter->HalFunc.hal_xmit)
 		return padapter->HalFunc.hal_xmit(padapter, pxmitframe);
 
-	return _FALSE;
+	return false;
 }
 
 s32	rtw_hal_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe)
@@ -309,17 +309,17 @@ s32	rtw_hal_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe)
 	_rtw_memcpy(pmgntframe->attrib.ra, pwlanhdr->addr1, ETH_ALEN);
 
 #ifdef CONFIG_IEEE80211W
-	if(padapter->securitypriv.binstallBIPkey == _TRUE)
+	if(padapter->securitypriv.binstallBIPkey == true)
 	{
 		if(IS_MCAST(pmgntframe->attrib.ra))
 		{
 			pmgntframe->attrib.encrypt = _BIP_;
-			//pmgntframe->attrib.bswenc = _TRUE;
+			//pmgntframe->attrib.bswenc = true;
 		}
 		else
 		{
 			pmgntframe->attrib.encrypt = _AES_;
-			pmgntframe->attrib.bswenc = _TRUE;
+			pmgntframe->attrib.bswenc = true;
 		}
 		rtw_mgmt_xmitframe_coalesce(padapter, pmgntframe->pkt, pmgntframe);
 	}
@@ -367,7 +367,7 @@ void rtw_hal_update_ra_mask(struct sta_info *psta, u8 rssi_level)
 
 	pmlmepriv = &(padapter->mlmepriv);
 
-	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
+	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 	{
 		add_RATid(padapter, psta, rssi_level);
 	}
@@ -464,7 +464,7 @@ u8	rtw_hal_antdiv_before_linked(struct adapter *padapter)
 {
 	if(padapter->HalFunc.AntDivBeforeLinkHandler)
 		return padapter->HalFunc.AntDivBeforeLinkHandler(padapter);
-	return _FALSE;
+	return false;
 }
 void	rtw_hal_antdiv_rssi_compared(struct adapter *padapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src)
 {
@@ -528,7 +528,7 @@ u8   rtw_hal_sreset_get_wifi_status(struct adapter *padapter)
 
 bool rtw_hal_sreset_inprogress(struct adapter *padapter)
 {
-	bool inprogress = _FALSE;
+	bool inprogress = false;
 
 	padapter = GET_PRIMARY_ADAPTER(padapter);
 

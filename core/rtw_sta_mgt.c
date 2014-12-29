@@ -62,7 +62,7 @@ _func_enter_;
 
 	psta->capability = 0;
 
-	psta->bpairwise_key_installed = _FALSE;
+	psta->bpairwise_key_installed = false;
 
 
 #ifdef CONFIG_NATIVEAP_MLME
@@ -245,7 +245,7 @@ _func_enter_;
 	phead = get_list_head(&pstapriv->free_sta_queue);
 	plist = get_next(phead);
 
-	while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
 		psta = LIST_CONTAINOR(plist, struct sta_info ,list);
 		plist = get_next(plist);
@@ -300,7 +300,7 @@ _func_enter_;
 			phead = &(pstapriv->sta_hash[index]);
 			plist = get_next(phead);
 
-			while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+			while ((rtw_end_of_queue_search(phead, plist)) == false)
 			{
 				int i;
 				psta = LIST_CONTAINOR(plist, struct sta_info ,hash_list);
@@ -348,7 +348,7 @@ _func_enter_;
 	//_enter_critical_bh(&(pfree_sta_queue->lock), &irqL);
 	_enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL2);
 
-	if (_rtw_queue_empty(pfree_sta_queue) == _TRUE)
+	if (_rtw_queue_empty(pfree_sta_queue) == true)
 	{
 		//_exit_critical_bh(&(pfree_sta_queue->lock), &irqL);
 		_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL2);
@@ -421,7 +421,7 @@ _func_enter_;
 
 			preorder_ctrl->padapter = pstapriv->padapter;
 
-			preorder_ctrl->enable = _FALSE;
+			preorder_ctrl->enable = false;
 
 			preorder_ctrl->indicate_seq = 0xffff;
 			#ifdef DBG_RX_SEQ
@@ -592,7 +592,7 @@ _func_enter_;
 	}
 
 	if (!(psta->state & WIFI_AP_STATE))
-		rtw_hal_set_odm_var(padapter, HAL_ODM_STA_INFO, psta, _FALSE);
+		rtw_hal_set_odm_var(padapter, HAL_ODM_STA_INFO, psta, false);
 
 #ifdef CONFIG_AP_MODE
 
@@ -680,7 +680,7 @@ _func_enter_;
 		phead = &(pstapriv->sta_hash[index]);
 		plist = get_next(phead);
 
-		while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+		while ((rtw_end_of_queue_search(phead, plist)) == false)
 		{
 			psta = LIST_CONTAINOR(plist, struct sta_info ,hash_list);
 
@@ -738,12 +738,12 @@ _func_enter_;
 	plist = get_next(phead);
 
 
-	while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
 
 		psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 
-		if ((_rtw_memcmp(psta->hwaddr, addr, ETH_ALEN))== _TRUE)
+		if ((_rtw_memcmp(psta->hwaddr, addr, ETH_ALEN))== true)
 		{ // if found the matched address
 			break;
 		}
@@ -813,12 +813,12 @@ _func_exit_;
 
 u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 {
-	u8 res = _TRUE;
+	u8 res = true;
 #ifdef  CONFIG_AP_MODE
 	_irqL irqL;
 	_list	*plist, *phead;
 	struct rtw_wlan_acl_node *paclnode;
-	u8 match = _FALSE;
+	u8 match = false;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
 	_queue	*pacl_node_q =&pacl_list->acl_node_q;
@@ -826,16 +826,16 @@ u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 	_enter_critical_bh(&(pacl_node_q->lock), &irqL);
 	phead = get_list_head(pacl_node_q);
 	plist = get_next(phead);
-	while ((rtw_end_of_queue_search(phead, plist)) == _FALSE)
+	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
 		paclnode = LIST_CONTAINOR(plist, struct rtw_wlan_acl_node, list);
 		plist = get_next(plist);
 
 		if(_rtw_memcmp(paclnode->addr, mac_addr, ETH_ALEN))
 		{
-			if(paclnode->valid == _TRUE)
+			if(paclnode->valid == true)
 			{
-				match = _TRUE;
+				match = true;
 				break;
 			}
 		}
@@ -845,15 +845,15 @@ u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 
 	if(pacl_list->mode == 1)//accept unless in deny list
 	{
-		res = (match == _TRUE) ?  _FALSE:_TRUE;
+		res = (match == true) ?  false:true;
 	}
 	else if(pacl_list->mode == 2)//deny unless in accept list
 	{
-		res = (match == _TRUE) ?  _TRUE:_FALSE;
+		res = (match == true) ?  true:false;
 	}
 	else
 	{
-		 res = _TRUE;
+		 res = true;
 	}
 
 #endif

@@ -805,7 +805,7 @@ _func_enter_;
 				static u32 no_gkey_bc_cnt = 0;
 				static u32 no_gkey_mc_cnt = 0;
 
-				if(psecuritypriv->binstallGrpkey==_FALSE)
+				if(psecuritypriv->binstallGrpkey==false)
 				{
 					res=_FAIL;
 
@@ -2005,7 +2005,7 @@ _func_enter_;
 				//in concurrent we should use sw descrypt in group key, so we remove this message
 				//DBG_871X("rx bc/mc packets, to perform sw rtw_aes_decrypt\n");
 				//prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey;
-				if(psecuritypriv->binstallGrpkey==_FALSE)
+				if(psecuritypriv->binstallGrpkey==false)
 				{
 					res=_FAIL;
 
@@ -3080,7 +3080,7 @@ _func_enter_;
 
 	RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("^^^rtw_use_tkipkey_handler ^^^\n"));
 
-	padapter->securitypriv.busetkipkey=_TRUE;
+	padapter->securitypriv.busetkipkey=true;
 
 	RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("^^^rtw_use_tkipkey_handler padapter->securitypriv.busetkipkey=%d^^^\n",padapter->securitypriv.busetkipkey));
 
@@ -3098,9 +3098,9 @@ void rtw_sec_restore_wep_key(struct adapter *adapter)
 		for(keyid=0;keyid<4;keyid++){
 			if(securitypriv->key_mask & BIT(keyid)){
 				if(keyid == securitypriv->dot11PrivacyKeyIndex)
-					rtw_set_key(adapter,securitypriv, keyid, 1, _TRUE);
+					rtw_set_key(adapter,securitypriv, keyid, 1, true);
 				else
-					rtw_set_key(adapter,securitypriv, keyid, 0, _TRUE);
+					rtw_set_key(adapter,securitypriv, keyid, 0, true);
 			}
 		}
 	}
@@ -3111,12 +3111,12 @@ u8 rtw_handle_tkip_countermeasure(struct adapter* adapter, const char *caller)
 	struct security_priv* securitypriv=&(adapter->securitypriv);
 	u8 status = _SUCCESS;
 
-	if (securitypriv->btkip_countermeasure == _TRUE) {
+	if (securitypriv->btkip_countermeasure == true) {
 		u32 passing_ms = rtw_get_passing_time_ms(securitypriv->btkip_countermeasure_time);
 		if (passing_ms > 60*1000) {
 			DBG_871X_LEVEL(_drv_always_, "%s("ADPT_FMT") countermeasure time:%ds > 60s \n",
 				caller, ADPT_ARG(adapter), passing_ms/1000);
-			securitypriv->btkip_countermeasure = _FALSE;
+			securitypriv->btkip_countermeasure = false;
 			securitypriv->btkip_countermeasure_time = 0;
 		} else {
 			DBG_871X_LEVEL(_drv_always_, "%s("ADPT_FMT") countermeasure time:%ds < 60s \n",

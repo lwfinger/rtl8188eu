@@ -140,8 +140,8 @@ typedef enum _RT_SPINLOCK_TYPE{
 	
 	#define 	DEV_BUS_TYPE  		RT_PCI_INTERFACE
 	
-	#define _TRUE				1
-	#define _FALSE				0
+	#define true				1
+	#define false				0
 	
 #elif (DM_ODM_SUPPORT_TYPE == ODM_ADSL)
 
@@ -167,8 +167,8 @@ typedef enum _RT_SPINLOCK_TYPE{
 	
 	#define DEV_BUS_TYPE  	RT_PCI_INTERFACE
 	
-	#define _TRUE				1
-	#define _FALSE				0
+	#define true				1
+	#define false				0
 
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	#include <basic_types.h>
@@ -212,8 +212,8 @@ typedef enum _RT_SPINLOCK_TYPE{
 		
 
 
-	#define TRUE 	_TRUE	
-	#define FALSE	_FALSE
+	#define TRUE 	true	
+	#define FALSE	false
 	
 
 	#define SET_TX_DESC_ANTSEL_A_88E(__pTxDesc, __Value) SET_BITS_TO_LE_4BYTE(__pTxDesc+8, 24, 1, __Value)
