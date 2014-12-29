@@ -25,14 +25,6 @@
 	#undef CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER
 #endif
 
-#if 0
-enum {
-	CFG80211_SME_IDLE,
-	CFG80211_SME_CONNECTING,
-	CFG80211_SME_CONNECTED,
-} sme_state;
-#endif
-
 struct rtw_wdev_invit_info {
 	u8 state; /* 0: req, 1:rep */
 	u8 peer_mac[ETH_ALEN];

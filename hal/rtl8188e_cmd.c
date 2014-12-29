@@ -209,11 +209,6 @@ u8 rtl8188e_set_rssi_cmd(struct adapter*padapter, u8 *param)
 _func_enter_;
 
 	if(pHalData->fw_ractrl == _TRUE){
-		#if 0
-	*((u32*) param ) = cpu_to_le32( *((u32*) param ) );
-
-		FillH2CCmd_88E(padapter, RSSI_SETTING_EID, 3, param);
-		#endif
 	}else{
 		DBG_8192C("==>%s fw dont support RA \n",__FUNCTION__);
 		res=_FAIL;
@@ -689,17 +684,6 @@ static void ConstructARPResponse(
 	*pLength = 24;
 
 //YJ,del,120503
-#if 0
-	//-------------------------------------------------------------------------
-	// Qos Header: leave space for it if necessary.
-	//-------------------------------------------------------------------------
-	if(pStaQos->CurrentQosMode > QOS_DISABLE)
-	{
-		SET_80211_HDR_QOS_EN(pARPRspPkt, 1);
-		PlatformZeroMemory(&(Buffer[*pLength]), sQoSCtlLng);
-		*pLength += sQoSCtlLng;
-	}
-#endif
 	//-------------------------------------------------------------------------
 	// Security Header: leave space for it if necessary.
 	//-------------------------------------------------------------------------

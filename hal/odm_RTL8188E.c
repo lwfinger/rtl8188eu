@@ -524,53 +524,10 @@ odm_SetNextMACAddrTarget(
 				ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Training MAC Addr = %x:%x:%x:%x:%x:%x\n",
 					pEntry->MacAddr[5],pEntry->MacAddr[4],pEntry->MacAddr[3],pEntry->MacAddr[2],pEntry->MacAddr[1],pEntry->MacAddr[0]));
 #endif
-
 				break;
 			}
 		}
-
 	}
-
-#if 0
-	//
-	//2012.03.26 LukeLee: This should be removed later, the MAC address is changed according to MACID in turn
-	//
-	#if( DM_ODM_SUPPORT_TYPE & ODM_MP)
-	{
-		struct adapter *Adapter =  pDM_Odm->Adapter;
-		PMGNT_INFO	pMgntInfo = &Adapter->MgntInfo;
-
-		for (i=0; i<6; i++)
-		{
-			Bssid[i] = pMgntInfo->Bssid[i];
-			//DbgPrint("Bssid[%d]=%x\n", i, Bssid[i]);
-		}
-	}
-	#endif
-
-	//odm_SetNextMACAddrTarget(pDM_Odm);
-
-	//1 Select MAC Address Filter
-	for (i=0; i<6; i++)
-	{
-		if(Bssid[i] != pDM_FatTable->Bssid[i])
-		{
-			bMatchBSSID = FALSE;
-			break;
-		}
-	}
-	if(bMatchBSSID == FALSE)
-	{
-		//Match MAC ADDR
-		value32 = (Bssid[5]<<8)|Bssid[4];
-		ODM_SetMACReg(pDM_Odm, 0x7b4, 0xFFFF, value32);
-		value32 = (Bssid[3]<<24)|(Bssid[2]<<16) |(Bssid[1]<<8) |Bssid[0];
-		ODM_SetMACReg(pDM_Odm, 0x7b0, bMaskDWord, value32);
-	}
-
-	return bMatchBSSID;
-#endif
-
 }
 
 VOID
@@ -629,25 +586,12 @@ odm_FastAntTraining(
 			//ODM_SetBBReg(pDM_Odm, 0x860 , BIT14|BIT13|BIT12, TargetAnt);	//Default TX
 			ODM_SetBBReg(pDM_Odm, 0x80c , BIT21, 1); //Reg80c[21]=1'b1		//from TX Info
 
-#if 0
-			pEntry = pDM_Odm->pODM_StaInfo[pDM_FatTable->TrainIdx];
-
-			if(IS_STA_VALID(pEntry))
-			{
-				pEntry->antsel_a = TargetAnt&BIT0;
-				pEntry->antsel_b = (TargetAnt&BIT1)>>1;
-				pEntry->antsel_c = (TargetAnt&BIT2)>>2;
-			}
-#else
 			pDM_FatTable->antsel_a[pDM_FatTable->TrainIdx] = TargetAnt&BIT0;
 			pDM_FatTable->antsel_b[pDM_FatTable->TrainIdx] = (TargetAnt&BIT1)>>1;
 			pDM_FatTable->antsel_c[pDM_FatTable->TrainIdx] = (TargetAnt&BIT2)>>2;
-#endif
-
 
 			if(TargetAnt == 0)
 				ODM_SetBBReg(pDM_Odm, 0xc50 , BIT7, 0);		//RegC50[7]=1'b0		//disable HW AntDiv
-
 		}
 
 		//2 Reset Counter
@@ -667,16 +611,6 @@ odm_FastAntTraining(
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Enter FAT_NORMAL_STATE\n"));
 
 		odm_SetNextMACAddrTarget(pDM_Odm);
-
-#if 0
-				pEntry = pDM_Odm->pODM_StaInfo[pDM_FatTable->TrainIdx];
-				if(IS_STA_VALID(pEntry))
-				{
-					pEntry->antsel_a = TargetAnt&BIT0;
-					pEntry->antsel_b = (TargetAnt&BIT1)>>1;
-					pEntry->antsel_c = (TargetAnt&BIT2)>>2;
-				}
-#endif
 
 		//2 Prepare Training
 		pDM_FatTable->FAT_State = FAT_TRAINING_STATE;

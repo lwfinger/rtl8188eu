@@ -1541,69 +1541,6 @@ Current IOREG MAP
 // GPIO BIT
 #define	HAL_8188E_HW_GPIO_WPS_BIT		BIT7
 
-#if 0//(RTL8188E_SUPPORT == 1)
-////////////////////////////////ONLY for 88EE/////////////////////////////////
-//
-//	Host Interrupt Status Registers	 (Offset: 0x00B4-00B7, 0x00BC-00BF)
-//	Host Interrupt Mask Registers (Offset: 0x00B0-00B3, 0x00B8-00BB)
-//
-//----------------------------------------------------------------------------
-//       8188 IMR/ISR bits
-//----------------------------------------------------------------------------
-#define	IMR_DISABLED_88E					0x0
-// IMR DW0(0x00B0-00B3) Bit 0-31
-#define	IMR_TXCCK_88E					BIT30		// TXRPT interrupt when CCX bit of the packet is set
-#define	IMR_PSTIMEOUT_88E				BIT29		// Power Save Time Out Interrupt
-#define	IMR_GTINT4_88E					BIT28		// When GTIMER4 expires, this bit is set to 1
-#define	IMR_GTINT3_88E					BIT27		// When GTIMER3 expires, this bit is set to 1
-#define	IMR_TBDER_88E					BIT26		// Transmit Beacon0 Error
-#define	IMR_TBDOK_88E					BIT25		// Transmit Beacon0 OK
-#define	IMR_TSF_BIT32_TOGGLE_88E		BIT24		// TSF Timer BIT32 toggle indication interrupt
-#define	IMR_BcnInt_88E					BIT20		// Beacon DMA Interrupt 0
-#define	IMR_BDOK_88E						BIT16		// Beacon Queue DMA OK0
-#define	IMR_HSISR_IND_ON_INT_88E		BIT15		// HSISR Indicator (HSIMR & HSISR is true, this bit is set to 1)
-#define	IMR_BCNDMAINT_E_88E				BIT14		// Beacon DMA Interrupt Extension for Win7
-#define	IMR_ATIMEND_88E					BIT12		// CTWidnow End or ATIM Window End
-#define	IMR_HISR1_IND_INT_88E			BIT11		// HISR1 Indicator (HISR1 & HIMR1 is true, this bit is set to 1)
-#define	IMR_C2HCMD_88E					BIT10		// CPU to Host Command INT Status, Write 1 clear
-#define	IMR_CPWM2_88E					BIT9			// CPU power Mode exchange INT Status, Write 1 clear
-#define	IMR_CPWM_88E						BIT8			// CPU power Mode exchange INT Status, Write 1 clear
-#define	IMR_HIGHDOK_88E					BIT7			// High Queue DMA OK
-#define	IMR_MGNTDOK_88E					BIT6			// Management Queue DMA OK
-#define	IMR_BKDOK_88E					BIT5			// AC_BK DMA OK
-#define	IMR_BEDOK_88E					BIT4			// AC_BE DMA OK
-#define	IMR_VIDOK_88E					BIT3			// AC_VI DMA OK
-#define	IMR_VODOK_88E					BIT2			// AC_VO DMA OK
-#define	IMR_RDU_88E						BIT1			// Rx Descriptor Unavailable
-#define	IMR_ROK_88E						BIT0			// Receive DMA OK
-
-// IMR DW1(0x00B8-00BB) Bit 0-31
-#define	IMR_BCNDMAINT7_88E				BIT27		// Beacon DMA Interrupt 7
-#define	IMR_BCNDMAINT6_88E				BIT26		// Beacon DMA Interrupt 6
-#define	IMR_BCNDMAINT5_88E				BIT25		// Beacon DMA Interrupt 5
-#define	IMR_BCNDMAINT4_88E				BIT24		// Beacon DMA Interrupt 4
-#define	IMR_BCNDMAINT3_88E				BIT23		// Beacon DMA Interrupt 3
-#define	IMR_BCNDMAINT2_88E				BIT22		// Beacon DMA Interrupt 2
-#define	IMR_BCNDMAINT1_88E				BIT21		// Beacon DMA Interrupt 1
-#define	IMR_BCNDOK7_88E					BIT20		// Beacon Queue DMA OK Interrup 7
-#define	IMR_BCNDOK6_88E					BIT19		// Beacon Queue DMA OK Interrup 6
-#define	IMR_BCNDOK5_88E					BIT18		// Beacon Queue DMA OK Interrup 5
-#define	IMR_BCNDOK4_88E					BIT17		// Beacon Queue DMA OK Interrup 4
-#define	IMR_BCNDOK3_88E					BIT16		// Beacon Queue DMA OK Interrup 3
-#define	IMR_BCNDOK2_88E					BIT15		// Beacon Queue DMA OK Interrup 2
-#define	IMR_BCNDOK1_88E					BIT14		// Beacon Queue DMA OK Interrup 1
-#define	IMR_ATIMEND_E_88E				BIT13		// ATIM Window End Extension for Win7
-#define	IMR_TXERR_88E					BIT11		// Tx Error Flag Interrupt Status, write 1 clear.
-#define	IMR_RXERR_88E					BIT10		// Rx Error Flag INT Status, Write 1 clear
-#define	IMR_TXFOVW_88E					BIT9			// Transmit FIFO Overflow
-#define	IMR_RXFOVW_88E					BIT8			// Receive FIFO Overflow
-
-
-
-////////////////////////////////ONLY for 88EE/////////////////////////////////
-#endif //(RTL8188E_SUPPORT == 1)
-
-
 //----------------------------------------------------------------------------
 //       8192C EEPROM/EFUSE share register definition.
 //----------------------------------------------------------------------------

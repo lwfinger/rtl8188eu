@@ -699,20 +699,8 @@ phy_PathA_IQK_8188E(
 		result |= 0x01;
 	else							//if Tx not OK, ignore Rx
 		return result;
-
-#if 0
-	if(!(regEAC & BIT27) &&		//if Tx is OK, check whether Rx is OK
-		(((regEA4 & 0x03FF0000)>>16) != 0x132) &&
-		(((regEAC & 0x03FF0000)>>16) != 0x36))
-		result |= 0x02;
-	else
-		RTPRINT(FINIT, INIT_IQK, ("Path A Rx IQK fail!!\n"));
-#endif
-
 	return result;
-
-
-	}
+}
 
 u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_RxIQK(
@@ -852,15 +840,6 @@ phy_PathA_RxIQK(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_IQK, bMaskDWord, 0x00000000);
 	ODM_SetRFReg(pDM_Odm, RF_PATH_A, 0xdf, bRFRegOffsetMask, 0x180 );
 
-#if 0
-	if(!(regEAC & BIT28) &&
-		(((regE94 & 0x03FF0000)>>16) != 0x142) &&
-		(((regE9C & 0x03FF0000)>>16) != 0x42) )
-		result |= 0x01;
-	else							//if Tx not OK, ignore Rx
-		return result;
-#endif
-
 	if(!(regEAC & BIT27) &&		//if Tx is OK, check whether Rx is OK
 		(((regEA4 & 0x03FF0000)>>16) != 0x132) &&
 		(((regEAC & 0x03FF0000)>>16) != 0x36))
@@ -869,10 +848,6 @@ phy_PathA_RxIQK(
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Path A Rx IQK fail!!\n"));
 
 	return result;
-
-
-
-
 }
 
 u1Byte				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
@@ -1665,15 +1640,6 @@ else
 				result[t][1] = (ODM_GetBBReg(pDM_Odm, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;
 			break;
 		}
-#if 0
-		else if (i == (retryCount-1) && PathAOK == 0x01)	//Tx IQK OK
-		{
-			RTPRINT(FINIT, INIT_IQK, ("Path A IQK Only  Tx Success!!\n"));
-
-			result[t][0] = (ODM_GetBBReg(pDM_Odm, rTx_Power_Before_IQK_A, bMaskDWord)&0x3FF0000)>>16;
-			result[t][1] = (ODM_GetBBReg(pDM_Odm, rTx_Power_After_IQK_A, bMaskDWord)&0x3FF0000)>>16;
-		}
-#endif
 	}
 
 	for(i = 0 ; i < retryCount ; i++){
@@ -2479,22 +2445,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 	}
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK:Start!!!\n"));
 
-#if 0//Suggested by Edlu,120413
-
-    // IQK on channel 7, should switch back when completed.
-	//originChannel = pHalData->CurrentChannel;
-	originChannel = *(pDM_Odm->pChannel);
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	pAdapter->HalFunc.SwChnlByTimerHandler(pAdapter, channelToIQK);
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	pAdapter->HalFunc.set_channel_handler(pAdapter, channelToIQK);
-#endif
-
-#endif
-
-	for(i = 0; i < 8; i++)
-	{
+	for(i = 0; i < 8; i++) {
 		result[0][i] = 0;
 		result[1][i] = 0;
 		result[2][i] = 0;
@@ -2657,18 +2608,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 #endif
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK finished\n"));
-#if 0 //Suggested by Edlu,120413
-
-	#if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-	pAdapter->HalFunc.SwChnlByTimerHandler(pAdapter, originChannel);
-	#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	pAdapter->HalFunc.set_channel_handler(pAdapter, originChannel);
-	#endif
-
-#endif
-
 }
-
 
 VOID
 PHY_LCCalibrate_8188E(

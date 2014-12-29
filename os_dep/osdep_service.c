@@ -257,29 +257,12 @@ int _rtw_mstat_dump(char *buf, int len)
 		value_t[2][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].alloc_cnt));
 		value_t[3][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].alloc_err_cnt));
 	}
-
-	#if 0
-	for(i=0;i<mstat_ff_idx(MSTAT_FUNC_MAX);i++) {
-		value_f[0][i] = ATOMIC_READ(&(rtw_mem_func_stat[i].alloc));
-		value_f[1][i] = ATOMIC_READ(&(rtw_mem_func_stat[i].peak));
-		value_f[2][i] = ATOMIC_READ(&(rtw_mem_func_stat[i].alloc_cnt));
-		value_f[3][i] = ATOMIC_READ(&(rtw_mem_func_stat[i].alloc_err_cnt));
-	}
-	#endif
-
 	cnt += snprintf(buf+cnt, len-cnt, "===================== MSTAT =====================\n");
 	cnt += snprintf(buf+cnt, len-cnt, "%4s %10s %10s %10s %10s\n", "TAG", "alloc", "peak", "aloc_cnt", "err_cnt");
 	cnt += snprintf(buf+cnt, len-cnt, "-------------------------------------------------\n");
 	for(i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
 		cnt += snprintf(buf+cnt, len-cnt, "%4s %10d %10d %10d %10d\n", MSTAT_TYPE_str[i], value_t[0][i], value_t[1][i], value_t[2][i], value_t[3][i]);
 	}
-	#if 0
-	cnt += snprintf(buf+cnt, len-cnt, "-------------------------------------------------\n");
-	for(i=0;i<mstat_ff_idx(MSTAT_FUNC_MAX);i++) {
-		cnt += snprintf(buf+cnt, len-cnt, "%4s %10d %10d %10d %10d\n", MSTAT_FUNC_str[i], value_f[0][i], value_f[1][i], value_f[2][i], value_f[3][i]);
-	}
-	#endif
-
 	return cnt;
 }
 

@@ -413,30 +413,9 @@ struct bb_reg_param {
 #define RAISE	_FALSE
 
 /* Hardware Registers */
-#if 0
-#if 0
-#define IOCMD_CTRL_REG			0x102502C0
-#define IOCMD_DATA_REG			0x102502C4
-#else
-#define IOCMD_CTRL_REG			0x10250370
-#define IOCMD_DATA_REG			0x10250374
-#endif
-
-#define IOCMD_GET_THERMAL_METER		0xFD000028
-
-#define IOCMD_CLASS_BB_RF		0xF0
-#define IOCMD_BB_READ_IDX		0x00
-#define IOCMD_BB_WRITE_IDX		0x01
-#define IOCMD_RF_READ_IDX		0x02
-#define IOCMD_RF_WRIT_IDX		0x03
-#endif
 #define BB_REG_BASE_ADDR		0x800
 
 /* MP variables */
-#if 0
-#define _2MAC_MODE_	0
-#define _LOOPBOOK_MODE_	1
-#endif
 typedef enum _MP_MODE_ {
 	MP_OFF,
 	MP_ON,
@@ -494,14 +473,6 @@ typedef enum _MPT_RATE_INDEX
 	MPT_RATE_LAST
 }MPT_RATE_E, *PMPT_RATE_E;
 
-#if 0
-// Represent Channel Width in HT Capabilities
-typedef enum _HT_CHANNEL_WIDTH {
-	HT_CHANNEL_WIDTH_20 = 0,
-	HT_CHANNEL_WIDTH_40 = 1,
-}HT_CHANNEL_WIDTH, *PHT_CHANNEL_WIDTH;
-#endif
-
 #define MAX_TX_PWR_INDEX_N_MODE 64	// 0x3F
 
 typedef enum _POWER_MODE_ {
@@ -513,42 +484,6 @@ typedef enum _POWER_MODE_ {
 #define RX_PKT_BROADCAST	1
 #define RX_PKT_DEST_ADDR	2
 #define RX_PKT_PHY_MATCH	3
-
-#if 0
-#define RPTMaxCount 0x000FFFFF;
-
-// parameter 1 : BitMask
-//	bit 0  : OFDM PPDU
-//	bit 1  : OFDM False Alarm
-//	bit 2  : OFDM MPDU OK
-//	bit 3  : OFDM MPDU Fail
-//	bit 4  : CCK PPDU
-//	bit 5  : CCK False Alarm
-//	bit 6  : CCK MPDU ok
-//	bit 7  : CCK MPDU fail
-//	bit 8  : HT PPDU counter
-//	bit 9  : HT false alarm
-//	bit 10 : HT MPDU total
-//	bit 11 : HT MPDU OK
-//	bit 12 : HT MPDU fail
-//	bit 15 : RX full drop
-typedef enum _RXPHY_BITMASK_
-{
-	OFDM_PPDU_BIT = 0,
-	OFDM_FALSE_BIT,
-	OFDM_MPDU_OK_BIT,
-	OFDM_MPDU_FAIL_BIT,
-	CCK_PPDU_BIT,
-	CCK_FALSE_BIT,
-	CCK_MPDU_OK_BIT,
-	CCK_MPDU_FAIL_BIT,
-	HT_PPDU_BIT,
-	HT_FALSE_BIT,
-	HT_MPDU_BIT,
-	HT_MPDU_OK_BIT,
-	HT_MPDU_FAIL_BIT,
-} RXPHY_BITMASK;
-#endif
 
 typedef enum _ENCRY_CTRL_STATE_ {
 	HW_CONTROL,		//hw encryption& decryption

@@ -17,9 +17,6 @@
 *
 *
 ******************************************************************************/
-#if 0
-#include "Mp_Precomp.h"
-#endif
 #include "../odm_precomp.h"
 
 #if (RTL8188E_SUPPORT == 1)
@@ -45,25 +42,6 @@ ODM_ReadFirmware_8188E_FW_AP(
 
 
 #else
-
-#if 0
-u1Byte Array_8188E_FW_NIC[] = {
-
-};
-u4Byte ArrayLength_8188E_FW_NIC = 0;
-
-
-void
-ODM_ReadFirmware_8188E_FW_NIC(
-     IN   PDM_ODM_T    pDM_Odm,
-     OUT  u1Byte       *pFirmware,
-     OUT  u4Byte       *pFirmwareSize
-)
-{
-     ODM_MoveMemory(pDM_Odm, pFirmware, Array_8188E_FW_NIC, ArrayLength_8188E_FW_NIC);
-     *pFirmwareSize = ArrayLength_8188E_FW_NIC;
-}
-#endif
 
 const u8 Array_8188E_FW_WoWLAN[] = {
 0xE1, 0x88, 0x30, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x06, 0x27, 0x15, 0x23, 0xC8, 0x3A, 0x00, 0x00,
@@ -1010,24 +988,7 @@ const u8 Array_8188E_FW_WoWLAN[] = {
 0x13, 0x01, 0x75, 0x14, 0x82, 0x75, 0x15, 0xFD, 0x75, 0x16, 0x03, 0x90, 0x82, 0xF9, 0x12, 0x42,
 0x4A, 0x12, 0x2B, 0xED, 0x22, 0x00, 0xDB, 0x90,
 };
-#if 0
-u4Byte ArrayLength_8188E_FW_WoWLAN = 15554;
-
-
-void
-ODM_ReadFirmware_8188E_FW_WoWLAN(
-     IN   PDM_ODM_T    pDM_Odm,
-     OUT  u1Byte       *pFirmware,
-     OUT  u4Byte       *pFirmwareSize
-)
-{
-     ODM_MoveMemory(pDM_Odm, pFirmware, Array_8188E_FW_WoWLAN, ArrayLength_8188E_FW_WoWLAN);
-     *pFirmwareSize = ArrayLength_8188E_FW_WoWLAN;
-}
-
-#endif
 
 #endif // end of DM_ODM_SUPPORT_TYPE & (ODM_AP)
-
 
 #endif // end of HWIMG_SUPPORT

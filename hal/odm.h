@@ -504,7 +504,6 @@ typedef enum tag_Dynamic_ODM_Support_Ability_Type
 // 2011/20/20 MH For MP driver RT_WLAN_STA =  STA_INFO_T
 // Please declare below ODM relative info in your STA info structure.
 //
-#if 1
 typedef		struct _ODM_STA_INFO{
 	// Driver Write
 	BOOLEAN		bUsed;				// record the sta status link or not?
@@ -517,52 +516,7 @@ typedef		struct _ODM_STA_INFO{
 	u1Byte		RSSI_Ave;
 	u1Byte		RXEVM[4];
 	u1Byte		RXSNR[4];
-
-	// ODM Write
-	//1 TX_INFO (may changed by IC)
-	//TX_INFO_T		pTxInfo;				// Define in IC folder. Move lower layer.
-#if 0
-	u1Byte		ANTSEL_A;			//in Jagar: 4bit; others: 2bit
-	u1Byte		ANTSEL_B;			//in Jagar: 4bit; others: 2bit
-	u1Byte		ANTSEL_C;			//only in Jagar: 4bit
-	u1Byte		ANTSEL_D;			//only in Jagar: 4bit
-	u1Byte		TX_ANTL;			//not in Jagar: 2bit
-	u1Byte		TX_ANT_HT;			//not in Jagar: 2bit
-	u1Byte		TX_ANT_CCK;			//not in Jagar: 2bit
-	u1Byte		TXAGC_A;			//not in Jagar: 4bit
-	u1Byte		TXAGC_B;			//not in Jagar: 4bit
-	u1Byte		TXPWR_OFFSET;		//only in Jagar: 3bit
-	u1Byte		TX_ANT;				//only in Jagar: 4bit for TX_ANTL/TX_ANTHT/TX_ANT_CCK
-#endif
-
-	//
-	// 	Please use compile flag to disabe the strcutrue for other IC except 88E.
-	//	Move To lower layer.
-	//
-	// ODM Write Wilson will handle this part(said by Luke.Lee)
-	//TX_RPT_T		pTxRpt;				// Define in IC folder. Move lower layer.
-#if 0	
-	//1 For 88E RA (don't redefine the naming)
-	u1Byte		rate_id;
-	u1Byte		rate_SGI;
-	u1Byte		rssi_sta_ra;
-	u1Byte		SGI_enable;
-	u1Byte		Decision_rate;
-	u1Byte		Pre_rate;
-	u1Byte		Active;
-
-	// Driver write Wilson handle.
-	//1 TX_RPT (don't redefine the naming)
-	u2Byte		RTY[4];				// ???
-	u2Byte		TOTAL;				// ???
-	u2Byte		DROP;				// ???
-	//
-	// Please use compile flag to disabe the strcutrue for other IC except 88E.
-	//
-#endif
-
-}ODM_STA_INFO_T, *PODM_STA_INFO_T;
-#endif
+} ODM_STA_INFO_T, *PODM_STA_INFO_T;
 
 //
 // 2011/10/20 MH Define Common info enum for all team.
@@ -1595,12 +1549,6 @@ typedef enum tag_DIG_Connect_Definition
 //3===========================================================
 //3 Tx Power Tracking
 //3===========================================================
-#if 0 //mask this, since these have been defined in typdef.h, vivi
-#define	OFDM_TABLE_SIZE 	37
-#define	OFDM_TABLE_SIZE_92D 	43
-#define	CCK_TABLE_SIZE		33
-#endif	
-
 
 //3===========================================================
 //3 Rate Adaptive

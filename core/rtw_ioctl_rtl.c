@@ -159,34 +159,6 @@ struct oid_obj_priv oid_rtl_seg_03_00[] =
 NDIS_STATUS oid_rt_pro_set_fw_dig_state_hdl(struct oid_par_priv* poid_par_priv)
 {
 	NDIS_STATUS		status = NDIS_STATUS_SUCCESS;
-#if 0
-	PADAPTER		Adapter = (PADAPTER)(poid_par_priv->adapter_context);
-	_irqL			oldirql;
-
-	_func_enter_;
-
-	if(poid_par_priv->type_of_oid != SET_OID)
-	{
-		status = NDIS_STATUS_NOT_ACCEPTED;
-		return status;
-	}
-
-	_irqlevel_changed_(&oldirql,LOWER);
-	if(poid_par_priv->information_buf_len >= sizeof(struct setdig_parm))
-	{
-		//DEBUG_ERR(("===> oid_rt_pro_set_fw_dig_state_hdl. type:0x%02x.\n",*((unsigned char*)poid_par_priv->information_buf )));
-		if(!rtw_setfwdig_cmd(Adapter,*((unsigned char*)poid_par_priv->information_buf )))
-		{
-			status = NDIS_STATUS_NOT_ACCEPTED;
-		}
-
-	}
-	else{
-		status = NDIS_STATUS_NOT_ACCEPTED;
-	}
-	_irqlevel_changed_(&oldirql,RAISE);
-	_func_exit_;
-#endif
 	return status;
 }
 //-----------------------------------------------------------------------------
@@ -194,35 +166,6 @@ NDIS_STATUS oid_rt_pro_set_fw_ra_state_hdl(struct oid_par_priv* poid_par_priv)
 {
 
 	NDIS_STATUS		status = NDIS_STATUS_SUCCESS;
-#if 0
-	PADAPTER		Adapter = (PADAPTER)(poid_par_priv->adapter_context);
-	_irqL			oldirql;
-
-	_func_enter_;
-	if(poid_par_priv->type_of_oid != SET_OID)
-	{
-		status = NDIS_STATUS_NOT_ACCEPTED;
-		return status;
-	}
-
-
-	_irqlevel_changed_(&oldirql,LOWER);
-
-	if(poid_par_priv->information_buf_len >= sizeof(struct setra_parm))
-	{
-		//DEBUG_ERR(("===> oid_rt_pro_set_fw_ra_state_hdl. type:0x%02x.\n",*((unsigned char*)poid_par_priv->information_buf )));
-		if(!rtw_setfwra_cmd(Adapter,*((unsigned char*)poid_par_priv->information_buf )))
-		{
-			status = NDIS_STATUS_NOT_ACCEPTED;
-		}
-
-	}
-	else{
-		status = NDIS_STATUS_NOT_ACCEPTED;
-	}
-	_irqlevel_changed_(&oldirql,RAISE);
-	_func_exit_;
-#endif
 	return status;
 }
 //-----------------------------------------------------------------------------
@@ -237,20 +180,6 @@ NDIS_STATUS oid_rt_get_signal_quality_hdl(struct oid_par_priv* poid_par_priv)
 		status = NDIS_STATUS_NOT_ACCEPTED;
 		return status;
 	}
-
-#if 0
-		if(pMgntInfo->mAssoc || pMgntInfo->mIbss)
-		{
-			ulInfo = pAdapter->RxStats.SignalQuality;
-			*poid_par_priv->bytes_rw = poid_par_priv->information_buf_len;
-		}
-		else
-		{
-			ulInfo = 0xffffffff; // It stands for -1 in 4-byte integer.
-		}
-		break;
-#endif
-
 	return status;
 }
 
@@ -897,56 +826,6 @@ NDIS_STATUS oid_rt_pro_rf_write_registry_hdl(struct oid_par_priv* poid_par_priv)
 NDIS_STATUS oid_rt_pro_rf_read_registry_hdl(struct oid_par_priv* poid_par_priv)
 {
 	NDIS_STATUS		status = NDIS_STATUS_SUCCESS;
-#if 0
-	PADAPTER		Adapter = (PADAPTER)(poid_par_priv->adapter_context);
-	_irqL	oldirql;
-	_func_enter_;
-
-	//DEBUG_ERR(("<**********************oid_rt_pro_rf_read_registry_hdl \n"));
-	if(poid_par_priv->type_of_oid != SET_OID) //QUERY_OID
-	{
-		status = NDIS_STATUS_NOT_ACCEPTED;
-		return status;
-	}
-
-	_irqlevel_changed_(&oldirql,LOWER);
-	if(poid_par_priv->information_buf_len== (sizeof(unsigned long)*3))
-	{
-		if(Adapter->mppriv.act_in_progress == _TRUE)
-		{
-			status = NDIS_STATUS_NOT_ACCEPTED;
-		}
-		else
-		{
-			//init workparam
-			Adapter->mppriv.act_in_progress = _TRUE;
-			Adapter->mppriv.workparam.bcompleted= _FALSE;
-			Adapter->mppriv.workparam.act_type = MPT_READ_RF;
-			Adapter->mppriv.workparam.io_offset = *(unsigned long*)poid_par_priv->information_buf;
-			Adapter->mppriv.workparam.io_value = 0xcccccccc;
-
-			//RegOffsetValue	- The offset of RF register to read.
-			//RegDataWidth	- The data width of RF register to read.
-			//RegDataValue	- The value to read.
-			//RegOffsetValue = *((unsigned long*)InformationBuffer);
-			//RegDataWidth = *((unsigned long*)InformationBuffer+1);
-			//RegDataValue =  *((unsigned long*)InformationBuffer+2);
-			if(!rtw_getrfreg_cmd(Adapter,
-							*(unsigned char*)poid_par_priv->information_buf,
-							(unsigned char*)&Adapter->mppriv.workparam.io_value))
-			{
-				status = NDIS_STATUS_NOT_ACCEPTED;
-			}
-		}
-
-
-	}
-	else	{
-		status = NDIS_STATUS_INVALID_LENGTH;
-	}
-	_irqlevel_changed_(&oldirql,RAISE);
-	_func_exit_;
-#endif
 	return status;
 }
 
@@ -992,21 +871,6 @@ NDIS_STATUS oid_rt_get_connect_state_hdl(struct oid_par_priv* poid_par_priv)
 
 	*(ULONG *)poid_par_priv->information_buf = ulInfo;
 	*poid_par_priv->bytes_rw =  poid_par_priv->information_buf_len;
-
-#if 0
-	// Rearrange the order to let the UI still shows connection when scan is in progress
-	RT_TRACE(COMP_OID_QUERY, DBG_LOUD, ("===> Query OID_RT_GET_CONNECT_STATE.\n"));
-	if(pMgntInfo->mAssoc)
-		ulInfo = 1;
-	else if(pMgntInfo->mIbss)
-		ulInfo = 2;
-	else if(pMgntInfo->bScanInProgress)
-		ulInfo = 0;
-	else
-		ulInfo = 3;
-	ulInfoLen = sizeof(ULONG);
-	RT_TRACE(COMP_OID_QUERY, DBG_LOUD, ("<=== Query OID_RT_GET_CONNECT_STATE: %d\n", ulInfo));
-#endif
 
 	return status;
 }

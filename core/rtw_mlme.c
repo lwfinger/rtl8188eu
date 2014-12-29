@@ -754,41 +754,6 @@ _func_enter_;
 	}
 	#endif
 
-#if 0 // old codes, may be useful one day...
-//	DBG_871X("update_network: rssi=0x%lx dst->Rssi=%d ,dst->Rssi=0x%lx , src->Rssi=0x%lx",(dst->Rssi+src->Rssi)/2,dst->Rssi,dst->Rssi,src->Rssi);
-	if (check_fwstate(&padapter->mlmepriv, _FW_LINKED) && is_same_network(&(padapter->mlmepriv.cur_network.network), src, 0))
-	{
-
-		//DBG_871X("b:ssid=%s update_network: src->rssi=0x%d padapter->recvpriv.ui_rssi=%d\n",src->Ssid.Ssid,src->Rssi,padapter->recvpriv.signal);
-		if(padapter->recvpriv.signal_qual_data.total_num++ >= PHY_LINKQUALITY_SLID_WIN_MAX)
-	        {
-	              padapter->recvpriv.signal_qual_data.total_num = PHY_LINKQUALITY_SLID_WIN_MAX;
-	              last_evm = padapter->recvpriv.signal_qual_data.elements[padapter->recvpriv.signal_qual_data.index];
-	              padapter->recvpriv.signal_qual_data.total_val -= last_evm;
-	        }
-		padapter->recvpriv.signal_qual_data.total_val += query_rx_pwr_percentage(src->Rssi);
-
-		padapter->recvpriv.signal_qual_data.elements[padapter->recvpriv.signal_qual_data.index++] = query_rx_pwr_percentage(src->Rssi);
-                if(padapter->recvpriv.signal_qual_data.index >= PHY_LINKQUALITY_SLID_WIN_MAX)
-                       padapter->recvpriv.signal_qual_data.index = 0;
-
-		//DBG_871X("Total SQ=%d  pattrib->signal_qual= %d\n", padapter->recvpriv.signal_qual_data.total_val, src->Rssi);
-
-		// <1> Showed on UI for user,in percentage.
-		tmpVal = padapter->recvpriv.signal_qual_data.total_val/padapter->recvpriv.signal_qual_data.total_num;
-                padapter->recvpriv.signal=(u8)tmpVal;//Link quality
-
-		src->Rssi= translate_percentage_to_dbm(padapter->recvpriv.signal) ;
-	}
-	else{
-//	DBG_871X("ELSE:ssid=%s update_network: src->rssi=0x%d dst->rssi=%d\n",src->Ssid.Ssid,src->Rssi,dst->Rssi);
-		src->Rssi=(src->Rssi +dst->Rssi)/2;//dBM
-	}
-
-//	DBG_871X("a:update_network: src->rssi=0x%d padapter->recvpriv.ui_rssi=%d\n",src->Rssi,padapter->recvpriv.signal);
-
-#endif
-
 _func_exit_;
 }
 
@@ -798,23 +763,11 @@ static void update_current_network(struct adapter *adapter, WLAN_BSSID_EX *pnetw
 
 _func_enter_;
 
-#ifdef PLATFORM_OS_XP
-	if ((unsigned long)(&(pmlmepriv->cur_network.network)) < 0x7ffffff)
-	{
-		KeBugCheckEx(0x87111c1c, (ULONG_PTR)(&(pmlmepriv->cur_network.network)), 0, 0,0);
-	}
-#endif
-
 	if ( (check_fwstate(pmlmepriv, _FW_LINKED)== _TRUE) && (is_same_network(&(pmlmepriv->cur_network.network), pnetwork, 0)))
 	{
-		//RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,"Same Network\n");
-
-		//if(pmlmepriv->cur_network.network.IELength<= pnetwork->IELength)
-		{
-			update_network(&(pmlmepriv->cur_network.network), pnetwork,adapter, _TRUE);
-			rtw_update_protection(adapter, (pmlmepriv->cur_network.network.IEs) + sizeof (NDIS_802_11_FIXED_IEs),
-									pmlmepriv->cur_network.network.IELength);
-		}
+		update_network(&(pmlmepriv->cur_network.network), pnetwork,adapter, _TRUE);
+		rtw_update_protection(adapter, (pmlmepriv->cur_network.network.IEs) + sizeof (NDIS_802_11_FIXED_IEs),
+								pmlmepriv->cur_network.network.IELength);
 	}
 
 _func_exit_;
@@ -2384,13 +2337,6 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
 	int do_join_r;
 #endif //CONFIG_LAYER2_ROAMING
 
-#if 0
-	if (adapter->bDriverStopped == _TRUE){
-		_rtw_up_sema(&pmlmepriv->assoc_terminate);
-		return;
-	}
-#endif
-
 _func_enter_;
 	DBG_871X("%s, fw_state=%x\n", __FUNCTION__, get_fwstate(pmlmepriv));
 
@@ -2787,10 +2733,6 @@ _func_enter_;
 
 		pmlmepriv->pscanned = get_next(pmlmepriv->pscanned);
 
-		#if 0
-		DBG_871X("MacAddress:"MAC_FMT" ssid:%s\n", MAC_ARG(pnetwork->network.MacAddress), pnetwork->network.Ssid.Ssid);
-		#endif
-
 		rtw_check_join_candidate(pmlmepriv, &candidate, pnetwork);
 
 	}
@@ -2810,27 +2752,12 @@ _func_enter_;
 
 
 	// check for situation of  _FW_LINKED
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)
-	{
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) {
 		DBG_871X("%s: _FW_LINKED while ask_for_joinbss!!!\n", __FUNCTION__);
 
-		#if 0 // for WPA/WPA2 authentication, wpa_supplicant will expect authentication from AP, it is needed to reconnect AP...
-		if(is_same_network(&pmlmepriv->cur_network.network, &candidate->network))
-		{
-			DBG_871X("%s: _FW_LINKED and is same network, it needn't join again\n", __FUNCTION__);
-
-			rtw_indicate_connect(adapter);//rtw_indicate_connect again
-
-			ret = 2;
-			goto exit;
-		}
-		else
-		#endif
-		{
-			rtw_disassoc_cmd(adapter, 0, _TRUE);
-			rtw_indicate_disconnect(adapter);
-			rtw_free_assoc_resources(adapter, 0);
-		}
+		rtw_disassoc_cmd(adapter, 0, _TRUE);
+		rtw_indicate_disconnect(adapter);
+		rtw_free_assoc_resources(adapter, 0);
 	}
 
 	#ifdef CONFIG_ANTENNA_DIVERSITY
@@ -3219,45 +3146,34 @@ void rtw_update_registrypriv_dev_network(struct adapter* adapter)
 
 _func_enter_;
 
-#if 0
-	pxmitpriv->vcs_setting = pregistrypriv->vrtl_carrier_sense;
-	pxmitpriv->vcs = pregistrypriv->vcs_type;
-	pxmitpriv->vcs_type = pregistrypriv->vcs_type;
-	//pxmitpriv->rts_thresh = pregistrypriv->rts_thresh;
-	pxmitpriv->frag_len = pregistrypriv->frag_thresh;
-
-	adapter->qospriv.qos_option = pregistrypriv->wmm_enable;
-#endif
-
 	pdev_network->Privacy = (psecuritypriv->dot11PrivacyAlgrthm > 0 ? 1 : 0) ; // adhoc no 802.1x
 
 	pdev_network->Rssi = 0;
 
-	switch(pregistrypriv->wireless_mode)
-	{
-		case WIRELESS_11B:
-			pdev_network->NetworkTypeInUse = (Ndis802_11DS);
-			break;
-		case WIRELESS_11G:
-		case WIRELESS_11BG:
-		case WIRELESS_11_24N:
-		case WIRELESS_11G_24N:
-		case WIRELESS_11BG_24N:
-			pdev_network->NetworkTypeInUse = (Ndis802_11OFDM24);
-			break;
-		case WIRELESS_11A:
-		case WIRELESS_11A_5N:
+	switch(pregistrypriv->wireless_mode) {
+	case WIRELESS_11B:
+		pdev_network->NetworkTypeInUse = (Ndis802_11DS);
+		break;
+	case WIRELESS_11G:
+	case WIRELESS_11BG:
+	case WIRELESS_11_24N:
+	case WIRELESS_11G_24N:
+	case WIRELESS_11BG_24N:
+		pdev_network->NetworkTypeInUse = (Ndis802_11OFDM24);
+		break;
+	case WIRELESS_11A:
+	case WIRELESS_11A_5N:
+		pdev_network->NetworkTypeInUse = (Ndis802_11OFDM5);
+		break;
+	case WIRELESS_11ABGN:
+		if(pregistrypriv->channel > 14)
 			pdev_network->NetworkTypeInUse = (Ndis802_11OFDM5);
-			break;
-		case WIRELESS_11ABGN:
-			if(pregistrypriv->channel > 14)
-				pdev_network->NetworkTypeInUse = (Ndis802_11OFDM5);
-			else
-				pdev_network->NetworkTypeInUse = (Ndis802_11OFDM24);
-			break;
-		default :
-			// TODO
-			break;
+		else
+			pdev_network->NetworkTypeInUse = (Ndis802_11OFDM24);
+		break;
+	default :
+		// TODO
+		break;
 	}
 
 	pdev_network->Configuration.DSConfig = (pregistrypriv->channel);
@@ -3549,50 +3465,6 @@ void rtw_update_ht_cap(struct adapter *padapter, u8 *pie, uint ie_len)
 	// Config current HT Protection mode.
 	//
 	pmlmeinfo->HT_protection = pmlmeinfo->HT_info.infos[1] & 0x3;
-
-
-
-#if 0 //move to rtw_update_sta_info_client()
-	//for A-MPDU Rx reordering buffer control for bmc_sta & sta_info
-	//if A-MPDU Rx is enabled, reseting  rx_ordering_ctrl wstart_b(indicate_seq) to default value=0xffff
-	//todo: check if AP can send A-MPDU packets
-	bmc_sta = rtw_get_bcmc_stainfo(padapter);
-	if(bmc_sta)
-	{
-		for(i=0; i < 16 ; i++)
-		{
-			//preorder_ctrl = &precvpriv->recvreorder_ctrl[i];
-			preorder_ctrl = &bmc_sta->recvreorder_ctrl[i];
-			preorder_ctrl->enable = _FALSE;
-			preorder_ctrl->indicate_seq = 0xffff;
-			#ifdef DBG_RX_SEQ
-			DBG_871X("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __FUNCTION__, __LINE__,
-				preorder_ctrl->indicate_seq);
-			#endif
-			preorder_ctrl->wend_b= 0xffff;
-			preorder_ctrl->wsize_b = 64;//max_ampdu_sz;//ex. 32(kbytes) -> wsize_b=32
-		}
-	}
-
-	psta = rtw_get_stainfo(&padapter->stapriv, pcur_network->network.MacAddress);
-	if(psta)
-	{
-		for(i=0; i < 16 ; i++)
-		{
-			//preorder_ctrl = &precvpriv->recvreorder_ctrl[i];
-			preorder_ctrl = &psta->recvreorder_ctrl[i];
-			preorder_ctrl->enable = _FALSE;
-			preorder_ctrl->indicate_seq = 0xffff;
-			#ifdef DBG_RX_SEQ
-			DBG_871X("DBG_RX_SEQ %s:%d indicate_seq:%u \n", __FUNCTION__, __LINE__,
-				preorder_ctrl->indicate_seq);
-			#endif
-			preorder_ctrl->wend_b= 0xffff;
-			preorder_ctrl->wsize_b = 64;//max_ampdu_sz;//ex. 32(kbytes) -> wsize_b=32
-		}
-	}
-#endif
-
 }
 
 void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitframe)

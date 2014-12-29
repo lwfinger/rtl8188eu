@@ -20,24 +20,6 @@
 #ifndef __RTL8188E_CMD_H__
 #define __RTL8188E_CMD_H__
 
-#if 0
-enum cmd_msg_element_id
-{
-	NONE_CMDMSG_EID,
-	AP_OFFLOAD_EID = 0,
-	SET_PWRMODE_EID = 1,
-	JOINBSS_RPT_EID = 2,
-	RSVD_PAGE_EID = 3,
-	RSSI_4_EID = 4,
-	RSSI_SETTING_EID = 5,
-	MACID_CONFIG_EID = 6,
-	MACID_PS_MODE_EID = 7,
-	P2P_PS_OFFLOAD_EID = 8,
-	SELECTIVE_SUSPEND_ROF_CMD = 9,
-	P2P_PS_CTW_CMD_EID = 32,
-	MAX_CMDMSG_EID
-};
-#else
 typedef enum _RTL8188E_H2C_CMD_ID
 {
 	//Class Common
@@ -83,9 +65,6 @@ typedef enum _RTL8188E_H2C_CMD_ID
 	//Class
 	 H2C_RESET_TSF				=0xc0,
 }RTL8188E_H2C_CMD_ID;
-
-#endif
-
 
 struct cmd_msg_parm {
 	u8 eid; //element id

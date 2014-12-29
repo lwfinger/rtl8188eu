@@ -46,26 +46,6 @@ dm_CheckProtection(
 	IN	struct adapter *Adapter
 	)
 {
-#if 0
-	PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
-	u1Byte			CurRate, RateThreshold;
-
-	if(pMgntInfo->pHTInfo->bCurBW40MHz)
-		RateThreshold = MGN_MCS1;
-	else
-		RateThreshold = MGN_MCS3;
-
-	if(Adapter->TxStats.CurrentInitTxRate <= RateThreshold)
-	{
-		pMgntInfo->bDmDisableProtect = TRUE;
-		DbgPrint("Forced disable protect: %x\n", Adapter->TxStats.CurrentInitTxRate);
-	}
-	else
-	{
-		pMgntInfo->bDmDisableProtect = FALSE;
-		DbgPrint("Enable protect: %x\n", Adapter->TxStats.CurrentInitTxRate);
-	}
-#endif
 }
 
 static VOID
@@ -73,20 +53,6 @@ dm_CheckStatistics(
 	IN	struct adapter *Adapter
 	)
 {
-#if 0
-	if(!Adapter->MgntInfo.bMediaConnect)
-		return;
-
-	//2008.12.10 tynli Add for getting Current_Tx_Rate_Reg flexibly.
-	rtw_hal_get_hwreg( Adapter, HW_VAR_INIT_TX_RATE, (pu1Byte)(&Adapter->TxStats.CurrentInitTxRate) );
-
-	// Calculate current Tx Rate(Successful transmited!!)
-
-	// Calculate current Rx Rate(Successful received!!)
-
-	//for tx tx retry count
-	rtw_hal_get_hwreg( Adapter, HW_VAR_RETRY_COUNT, (pu1Byte)(&Adapter->TxStats.NumTxRetryCount) );
-#endif
 }
 
 static void dm_CheckPbcGPIO(struct adapter *padapter)
