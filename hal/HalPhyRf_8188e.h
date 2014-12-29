@@ -33,7 +33,7 @@ typedef enum _PWRTRACK_CONTROL_METHOD {
 } PWRTRACK_METHOD;
 
 
-VOID
+void
 ODM_TxPwrTrackAdjust88E(
 	PDM_ODM_T	pDM_Odm,
 	u1Byte		Type,				// 0 = OFDM, 1 = CCK
@@ -42,7 +42,7 @@ ODM_TxPwrTrackAdjust88E(
 	);
 
 
-VOID
+void
 odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm
@@ -91,7 +91,7 @@ void
 PHY_DigitalPredistortion_8188E(		IN	struct adapter *	pAdapter);
 
 
-VOID
+void
 _PHY_SaveADDARegisters(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -103,7 +103,7 @@ _PHY_SaveADDARegisters(
 	IN	u4Byte		RegisterNum
 	);
 
-VOID
+void
 _PHY_PathADDAOn(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -115,7 +115,7 @@ _PHY_PathADDAOn(
 	IN	BOOLEAN		is2T
 	);
 
-VOID
+void
 _PHY_MACSettingCalibration(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm,
@@ -127,7 +127,7 @@ _PHY_MACSettingCalibration(
 	);
 
 
-VOID
+void
 _PHY_PathAStandBy(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	IN PDM_ODM_T		pDM_Odm

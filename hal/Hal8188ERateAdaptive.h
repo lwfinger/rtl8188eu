@@ -40,7 +40,7 @@ Major Change History:
 
 // End rate adaptive define
 
-VOID
+void
 ODM_RASupport_Init(
 	IN	PDM_ODM_T	pDM_Odm
 	);
@@ -73,7 +73,7 @@ ODM_RA_GetHwPwrStatus_8188E(
 	IN 	PDM_ODM_T 	pDM_Odm, 
 	IN 	u1Byte 		MacID
 	);
-VOID 
+void 
 ODM_RA_UpdateRateInfo_8188E(
 	IN PDM_ODM_T pDM_Odm,
 	IN u1Byte MacID,
@@ -82,14 +82,14 @@ ODM_RA_UpdateRateInfo_8188E(
 	IN u1Byte SGIEnable
 	);
 
-VOID 
+void 
 ODM_RA_SetRSSI_8188E(
 	IN 	PDM_ODM_T 		pDM_Odm, 
 	IN 	u1Byte 			MacID, 
 	IN 	u1Byte 			Rssi
 	);
 
-VOID
+void
 ODM_RA_TxRPT2Handle_8188E(	
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,
@@ -99,7 +99,7 @@ ODM_RA_TxRPT2Handle_8188E(
 	);
 	
 
-VOID 
+void 
 ODM_RA_Set_TxRPT_Time(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u2Byte 			minRptTime

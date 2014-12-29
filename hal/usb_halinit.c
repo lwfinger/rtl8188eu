@@ -51,7 +51,7 @@
 #endif
 
 
-static VOID
+static void
 _ConfigNormalChipOutEP_8188E(
 	IN	struct adapter *pAdapter,
 	IN	u8		NumOutPipe
@@ -292,7 +292,7 @@ static void _InitBTCoexist(struct adapter *padapter)
 //	MAC init functions
 //
 //---------------------------------------------------------------
-static VOID
+static void
 _SetMacID(
 	IN  struct adapter *Adapter, u8* MacID
 	)
@@ -308,7 +308,7 @@ _SetMacID(
 	}
 }
 
-static VOID
+static void
 _SetBSSID(
 	IN  struct adapter *Adapter, u8* BSSID
 	)
@@ -326,7 +326,7 @@ _SetBSSID(
 
 
 // Shall USB interface init this?
-static VOID
+static void
 _InitInterrupt(
 	IN  struct adapter *Adapter
 	)
@@ -369,7 +369,7 @@ _InitInterrupt(
 }
 
 
-static VOID
+static void
 _InitQueueReservedPage(
 	IN  struct adapter *Adapter
 	)
@@ -418,7 +418,7 @@ _InitQueueReservedPage(
 	}
 }
 
-static VOID
+static void
 _InitTxBufferBoundary(
 	IN struct adapter *Adapter,
 	IN u8 txpktbuf_bndy
@@ -437,7 +437,7 @@ _InitTxBufferBoundary(
 
 }
 
-static VOID
+static void
 _InitPageBoundary(
 	IN  struct adapter *Adapter
 	)
@@ -450,7 +450,7 @@ _InitPageBoundary(
 }
 
 
-static VOID
+static void
 _InitNormalChipRegPriority(
 	IN	struct adapter *Adapter,
 	IN	u16		beQ,
@@ -470,7 +470,7 @@ _InitNormalChipRegPriority(
 	rtw_write16(Adapter, REG_TRXDMA_CTRL, value16);
 }
 
-static VOID
+static void
 _InitNormalChipOneOutEpPriority(
 	IN	struct adapter *Adapter
 	)
@@ -505,7 +505,7 @@ _InitNormalChipOneOutEpPriority(
 
 }
 
-static VOID
+static void
 _InitNormalChipTwoOutEpPriority(
 	IN	struct adapter *Adapter
 	)
@@ -558,7 +558,7 @@ _InitNormalChipTwoOutEpPriority(
 
 }
 
-static VOID
+static void
 _InitNormalChipThreeOutEpPriority(
 	IN	struct adapter *Adapter
 	)
@@ -585,7 +585,7 @@ _InitNormalChipThreeOutEpPriority(
 	_InitNormalChipRegPriority(Adapter,beQ,bkQ,viQ,voQ,mgtQ,hiQ);
 }
 
-static VOID
+static void
 _InitQueuePriority(
 	IN	struct adapter *Adapter
 	)
@@ -613,7 +613,7 @@ _InitQueuePriority(
 
 
 
-static VOID
+static void
 _InitHardwareDropIncorrectBulkOut(
 	IN  struct adapter *Adapter
 	)
@@ -625,7 +625,7 @@ _InitHardwareDropIncorrectBulkOut(
 #endif
 }
 
-static VOID
+static void
 _InitNetworkType(
 	IN  struct adapter *Adapter
 	)
@@ -640,7 +640,7 @@ _InitNetworkType(
 //	RASSERT(pIoBase->rtw_read8(REG_CR + 2) == 0x2);
 }
 
-static VOID
+static void
 _InitTransferPageSize(
 	IN  struct adapter *Adapter
 	)
@@ -652,7 +652,7 @@ _InitTransferPageSize(
 	rtw_write8(Adapter, REG_PBP, value8);
 }
 
-static VOID
+static void
 _InitDriverInfoSize(
 	IN  struct adapter *Adapter,
 	IN	u8		drvInfoSize
@@ -661,7 +661,7 @@ _InitDriverInfoSize(
 	rtw_write8(Adapter,REG_RX_DRVINFO_SZ, drvInfoSize);
 }
 
-static VOID
+static void
 _InitWMACSetting(
 	IN  struct adapter *Adapter
 	)
@@ -707,7 +707,7 @@ _InitWMACSetting(
 
 }
 
-static VOID
+static void
 _InitAdaptiveCtrl(
 	IN  struct adapter *Adapter
 	)
@@ -734,7 +734,7 @@ _InitAdaptiveCtrl(
 
 }
 
-static VOID
+static void
 _InitRateFallback(
 	IN  struct adapter *Adapter
 	)
@@ -748,7 +748,7 @@ _InitRateFallback(
 }
 
 
-static VOID
+static void
 _InitEDCA(
 	IN  struct adapter *Adapter
 	)
@@ -771,7 +771,7 @@ _InitEDCA(
 }
 
 
-static VOID
+static void
 _InitBeaconMaxError(
 	IN  struct adapter *Adapter,
 	IN	BOOLEAN		InfraMode
@@ -796,7 +796,7 @@ static void _InitHWLed(struct adapter *Adapter)
 }
 #endif //CONFIG_LED
 
-static VOID
+static void
 _InitRDGSetting(
 	IN	struct adapter *Adapter
 	)
@@ -806,7 +806,7 @@ _InitRDGSetting(
 	rtw_write8(Adapter,REG_RD_RESP_PKT_TH,0x05);
 }
 
-static VOID
+static void
 _InitRxSetting(
 	IN	struct adapter *Adapter
 	)
@@ -815,7 +815,7 @@ _InitRxSetting(
 	rtw_write32(Adapter, 0x0700, 0x87654321);
 }
 
-static VOID
+static void
 _InitRetryFunction(
 	IN  struct adapter *Adapter
 	)
@@ -843,7 +843,7 @@ _InitRetryFunction(
  *	12/10/2010	MHC		Seperate to smaller function.
  *
  *---------------------------------------------------------------------------*/
-static VOID
+static void
 usb_AggSettingTxUpdate(
 	IN	struct adapter *		Adapter
 	)
@@ -883,7 +883,7 @@ usb_AggSettingTxUpdate(
  *	12/10/2010	MHC		Seperate to smaller function.
  *
  *---------------------------------------------------------------------------*/
-static VOID
+static void
 usb_AggSettingRxUpdate(
 	IN	struct adapter *		Adapter
 	)
@@ -969,7 +969,7 @@ usb_AggSettingRxUpdate(
 #endif
 }	// usb_AggSettingRxUpdate
 
-static VOID
+static void
 InitUsbAggregationSetting(
 	IN  struct adapter *Adapter
 	)
@@ -985,7 +985,7 @@ InitUsbAggregationSetting(
 	// 201/12/10 MH Add for USB agg mode dynamic switch.
 	pHalData->UsbRxHighSpeedMode = _FALSE;
 }
-VOID
+void
 HalRxAggr8188EUsb(
 	IN  struct adapter *Adapter,
 	IN BOOLEAN	Value
@@ -1012,14 +1012,14 @@ HalRxAggr8188EUsb(
  *	12/10/2010	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 USB_AggModeSwitch(
 	IN	struct adapter *		Adapter
 	)
 {
 }	// USB_AggModeSwitch
 
-static VOID
+static void
 _InitOperationMode(
 	IN	struct adapter *		Adapter
 	)
@@ -1027,7 +1027,7 @@ _InitOperationMode(
 }
 
 
- static VOID
+ static void
 _InitBeaconParameters(
 	IN  struct adapter *Adapter
 	)
@@ -1052,7 +1052,7 @@ _InitBeaconParameters(
 	pHalData->RegCR_1 = rtw_read8(Adapter, REG_CR+1);
 }
 
-static VOID
+static void
 _InitRFType(
 	IN	struct adapter *Adapter
 	)
@@ -1082,7 +1082,7 @@ _InitRFType(
 }
 
 
-static VOID
+static void
 _BeaconFunctionEnable(
 	IN	struct adapter *	Adapter,
 	IN	BOOLEAN			Enable,
@@ -1098,7 +1098,7 @@ _BeaconFunctionEnable(
 
 
 // Set CCK and OFDM Block "ON"
-static VOID _BBTurnOnBlock(
+static void _BBTurnOnBlock(
 	IN	struct adapter *	Adapter
 	)
 {
@@ -1110,7 +1110,7 @@ static VOID _BBTurnOnBlock(
 	PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
 }
 
-static VOID _RfPowerSave(
+static void _RfPowerSave(
 	IN	struct adapter *	Adapter
 	)
 {
@@ -1121,7 +1121,7 @@ enum {
 	Antenna_Right = 2,
 };
 
-static VOID
+static void
 _InitAntenna_Selection(IN	struct adapter *Adapter)
 {
 
@@ -1148,7 +1148,7 @@ _InitAntenna_Selection(IN	struct adapter *Adapter)
 // If Efuse 0x0e bit1 is not enabled, we can not support selective suspend for Minicard and
 // slim card.
 //
-static VOID
+static void
 HalDetectSelectiveSuspendMode(
 	IN struct adapter *			Adapter
 	)
@@ -1169,7 +1169,7 @@ HalDetectSelectiveSuspendMode(
  *	When		Who		Remark
  *	08/23/2010	MHC		HW suspend mode switch test..
  *---------------------------------------------------------------------------*/
-static VOID
+static void
 HwSuspendModeEnable_88eu(
 	IN	struct adapter *pAdapter,
 	IN	u8			Type
@@ -1746,7 +1746,7 @@ void _ps_close_RF(struct adapter *padapter){
 }
 
 
-VOID hal_poweroff_rtl8188eu(
+void hal_poweroff_rtl8188eu(
 	IN	struct adapter *		Adapter
 )
 {
@@ -1960,7 +1960,7 @@ _ReadIDs(
 }
 
 
-static VOID
+static void
 _ReadMACAddress(
 	IN	struct adapter *Adapter,
 	IN	u8*		PROMContent,
@@ -1969,7 +1969,7 @@ _ReadMACAddress(
 {
 }
 
-static VOID
+static void
 _ReadBoardType(
 	IN	struct adapter *Adapter,
 	IN	u8*		PROMContent,
@@ -1980,7 +1980,7 @@ _ReadBoardType(
 }
 
 
-static VOID
+static void
 _ReadLEDSetting(
 	IN	struct adapter *Adapter,
 	IN	u8*		PROMContent,
@@ -2004,7 +2004,7 @@ _ReadLEDSetting(
 #endif //CONFIG_SW_LED
 }
 
-static VOID
+static void
 _ReadThermalMeter(
 	IN	struct adapter *Adapter,
 	IN	u8*	PROMContent,
@@ -2013,7 +2013,7 @@ _ReadThermalMeter(
 {
 }
 
-static VOID
+static void
 _ReadRFSetting(
 	IN	struct adapter *Adapter,
 	IN	u8*	PROMContent,
@@ -2031,7 +2031,7 @@ _ReadPROMVersion(
 {
 }
 
-static VOID
+static void
 readAntennaDiversity(
 	IN	struct adapter *pAdapter,
 	IN	u8			*hwinfo,
@@ -2044,7 +2044,7 @@ readAntennaDiversity(
 	pHalData->AntDivCfg = registry_par->antdiv_cfg ;  // 0:OFF , 1:ON,
 }
 
-static VOID
+static void
 hal_InitPGData(
 	IN	struct adapter *pAdapter,
 	IN	OUT	u8		*PROMContent
@@ -2245,7 +2245,7 @@ Hal_ReadMACAddrFromFile_8188EU(
 }
 #endif //CONFIG_EFUSE_CONFIG_FILE
 
-static VOID
+static void
 readAdapterInfo_8188EU(
 	IN	struct adapter *padapter
 	)
@@ -2307,7 +2307,7 @@ static void _ReadPROMContent(
 
 
 
-static VOID
+static void
 _ReadRFType(
 	IN	struct adapter *Adapter
 	)
@@ -3935,7 +3935,7 @@ u8
 GetHalDefVar8188EUsb(
 	IN	struct adapter *			Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	PVOID					pValue
+	IN	void *					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -4082,7 +4082,7 @@ u8
 SetHalDefVar8188EUsb(
 	IN	struct adapter *			Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	PVOID					pValue
+	IN	void *					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

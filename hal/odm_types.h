@@ -121,7 +121,7 @@ typedef enum _RT_SPINLOCK_TYPE{
 	#ifdef AP_BUILD_WORKAROUND
 	#include "../typedef.h"
 	#else
-	typedef void					VOID,*PVOID;
+	typedef void					void,*void *;
 	typedef unsigned char			BOOLEAN,*PBOOLEAN;
 	typedef unsigned char			u1Byte,*pu1Byte;
 	typedef unsigned short			u2Byte,*pu2Byte;

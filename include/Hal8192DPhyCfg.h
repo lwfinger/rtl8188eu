@@ -335,7 +335,7 @@ BOOLEAN	PHY_UpdateTxPowerDbm8192D(	IN	struct adapter *Adapter,
 											IN	int		powerInDbm	);
 
 //
-VOID
+void
 PHY_ScanOperationBackup8192D(IN	struct adapter *Adapter,
 										IN	u8		Operation	);
 
@@ -392,12 +392,12 @@ rtl8192d_PHY_SetBeaconHwReg(	IN	struct adapter *	Adapter,
 					IN	u16			BeaconInterval	);
 
 
-extern	VOID
+extern	void
 PHY_SwitchEphyParameter(
 	IN	struct adapter *		Adapter
 	);
 
-extern	VOID
+extern	void
 PHY_EnableHostClkReq(
 	IN	struct adapter *		Adapter
 	);
@@ -408,45 +408,45 @@ SetAntennaConfig92C(
 	IN	u8		DefaultAnt
 	);
 
-VOID
+void
 PHY_UpdateBBRFConfiguration8192D(
 	IN struct adapter *Adapter,
 	IN BOOLEAN bisBandSwitch
 );
 
-VOID PHY_ReadMacPhyMode92D(
+void PHY_ReadMacPhyMode92D(
 	IN struct adapter *Adapter,
 	IN BOOLEAN	AutoloadFail
 );
 
-VOID PHY_ConfigMacPhyMode92D(
+void PHY_ConfigMacPhyMode92D(
 	IN struct adapter *Adapter
 );
 
-VOID PHY_ConfigMacPhyModeInfo92D(
+void PHY_ConfigMacPhyModeInfo92D(
 	IN struct adapter *Adapter
 );
 
-VOID PHY_ConfigMacCoexist_RFPage92D(
+void PHY_ConfigMacCoexist_RFPage92D(
 	IN struct adapter *Adapter
 );
 
-VOID
+void
 rtl8192d_PHY_InitRxSetting(
 	IN	struct adapter *Adapter
 );
 
 
-VOID
+void
 rtl8192d_PHY_SetRFPathSwitch(IN	struct adapter *pAdapter, IN	BOOLEAN		bMain);
 
-VOID
+void
 HalChangeCCKStatus8192D(
 	IN	struct adapter *Adapter,
 	IN	BOOLEAN		bCCKDisable
 );
 
-VOID
+void
 PHY_InitPABias92D(IN	struct adapter *Adapter);
 
 /*--------------------------Exported Function prototype---------------------*/

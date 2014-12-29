@@ -619,7 +619,7 @@ odm_PTDecision_8188E(
 }
 #endif
 
-static VOID
+static void
 odm_RATxRPTTimerSetting(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u2Byte			minRptTime
@@ -642,7 +642,7 @@ odm_RATxRPTTimerSetting(
 }
 
 
-VOID
+void
 ODM_RASupport_Init(
 	IN	PDM_ODM_T	pDM_Odm
 	)
@@ -790,7 +790,7 @@ ODM_RA_GetHwPwrStatus_8188E(
 	return PTStage;
 }
 
-VOID
+void
 ODM_RA_UpdateRateInfo_8188E(
 	IN PDM_ODM_T pDM_Odm,
 	IN u1Byte MacID,
@@ -814,7 +814,7 @@ ODM_RA_UpdateRateInfo_8188E(
 	odm_ARFBRefresh_8188E(pDM_Odm, pRaInfo);
 }
 
-VOID
+void
 ODM_RA_SetRSSI_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u1Byte			MacID,
@@ -832,7 +832,7 @@ ODM_RA_SetRSSI_8188E(
 	pRaInfo->RssiStaRA = Rssi;
 }
 
-VOID
+void
 ODM_RA_Set_TxRPT_Time(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u2Byte			minRptTime
@@ -845,7 +845,7 @@ ODM_RA_Set_TxRPT_Time(
 }
 
 
-VOID
+void
 ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,
@@ -982,7 +982,7 @@ ODM_RA_TxRPT2Handle_8188E(
 
 #else
 
-static VOID
+static void
 odm_RATxRPTTimerSetting(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u2Byte			minRptTime
@@ -992,7 +992,7 @@ odm_RATxRPTTimerSetting(
 }
 
 
-VOID
+void
 ODM_RASupport_Init(
 	IN	PDM_ODM_T	pDM_Odm
 	)
@@ -1043,7 +1043,7 @@ ODM_RA_GetHwPwrStatus_8188E(
 	return 0;
 }
 
-VOID
+void
 ODM_RA_UpdateRateInfo_8188E(
 	IN PDM_ODM_T pDM_Odm,
 	IN u1Byte MacID,
@@ -1055,7 +1055,7 @@ ODM_RA_UpdateRateInfo_8188E(
 	return;
 }
 
-VOID
+void
 ODM_RA_SetRSSI_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u1Byte			MacID,
@@ -1065,7 +1065,7 @@ ODM_RA_SetRSSI_8188E(
 	return;
 }
 
-VOID
+void
 ODM_RA_Set_TxRPT_Time(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u2Byte			minRptTime
@@ -1074,7 +1074,7 @@ ODM_RA_Set_TxRPT_Time(
 	return;
 }
 
-VOID
+void
 ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,

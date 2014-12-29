@@ -1622,10 +1622,10 @@ extern	u1Byte CCKSwingTable_Ch14 [CCK_TABLE_SIZE][8];
 #define SWAW_STEP_PEAK		0
 #define SWAW_STEP_DETERMINE	1
 
-VOID ODM_Write_DIG(IN	PDM_ODM_T	pDM_Odm, 	IN	u1Byte	CurrentIGI);
-VOID ODM_Write_CCK_CCA_Thres(IN	PDM_ODM_T	pDM_Odm, IN	u1Byte	CurCCK_CCAThres);
+void ODM_Write_DIG(IN	PDM_ODM_T	pDM_Odm, 	IN	u1Byte	CurrentIGI);
+void ODM_Write_CCK_CCA_Thres(IN	PDM_ODM_T	pDM_Odm, IN	u1Byte	CurCCK_CCAThres);
 
-VOID
+void
 ODM_SetAntenna(
 	IN 	PDM_ODM_T	pDM_Odm,
 	IN	u1Byte		Antenna);
@@ -1636,10 +1636,10 @@ void ODM_RF_Saving(	IN	PDM_ODM_T	pDM_Odm,
 							IN	u1Byte		bForceInNormal );
 
 #define SwAntDivRestAfterLink	ODM_SwAntDivRestAfterLink
-VOID ODM_SwAntDivRestAfterLink(	IN	PDM_ODM_T	pDM_Odm);
+void ODM_SwAntDivRestAfterLink(	IN	PDM_ODM_T	pDM_Odm);
 
 #define dm_CheckTXPowerTracking 	ODM_TXPowerTrackingCheck
-VOID	
+void	
 ODM_TXPowerTrackingCheck(
 	IN		PDM_ODM_T		pDM_Odm
 	);
@@ -1660,7 +1660,7 @@ ODM_RAStateCheck(
 //void	ODM_ChangeDynamicInitGainThresh(IN	struct adapter *	pAdapter,
 //											IN	INT32		DM_Type,
 //											IN	INT32		DM_Value);
-VOID
+void
 ODM_ChangeDynamicInitGainThresh(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	u4Byte  DM_Type,
@@ -1674,7 +1674,7 @@ ODM_CheckPowerStatus(
 
 
 #if (DM_ODM_SUPPORT_TYPE != ODM_ADSL) 
-VOID
+void
 ODM_RateAdaptiveStateApInit(
 	IN	struct adapter *	Adapter	,
 	IN	PRT_WLAN_STA  pEntry
@@ -1685,7 +1685,7 @@ ODM_RateAdaptiveStateApInit(
 
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
 #ifdef WIFI_WMM
-VOID
+void
 ODM_IotEdcaSwitch(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	unsigned char		enable
@@ -1710,7 +1710,7 @@ ODM_Diversity_AntennaSelect(
 #endif
 
 #define SwAntDivResetBeforeLink		ODM_SwAntDivResetBeforeLink
-VOID ODM_SwAntDivResetBeforeLink(IN	PDM_ODM_T	pDM_Odm);
+void ODM_SwAntDivResetBeforeLink(IN	PDM_ODM_T	pDM_Odm);
 
 //#define SwAntDivCheckBeforeLink8192C	ODM_SwAntDivCheckBeforeLink8192C
 #define SwAntDivCheckBeforeLink	ODM_SwAntDivCheckBeforeLink8192C
@@ -1723,7 +1723,7 @@ ODM_SwAntDivCheckBeforeLink8192C(
 #endif
 
 #define dm_SWAW_RSSI_Check	ODM_SwAntDivChkPerPktRssi
-VOID ODM_SwAntDivChkPerPktRssi(	
+void ODM_SwAntDivChkPerPktRssi(	
 	IN PDM_ODM_T		pDM_Odm,
 	IN u1Byte			StationID,
 	IN PODM_PHY_INFO_T pPhyInfo
@@ -1743,7 +1743,7 @@ GetPSDData(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 
-VOID
+void
 odm_DIGbyRSSI_LPS(
 	IN		PDM_ODM_T		pDM_Odm
 	);
@@ -1758,28 +1758,28 @@ u4Byte ODM_Get_Rate_Bitmap(
 
 #if(DM_ODM_SUPPORT_TYPE & (ODM_MP))
 #define	dm_PSDMonitorCallback	odm_PSDMonitorCallback
-VOID	odm_PSDMonitorCallback(PRT_TIMER		pTimer);
+void	odm_PSDMonitorCallback(PRT_TIMER		pTimer);
 
-VOID
+void
 odm_PSDMonitorWorkItemCallback(
-    IN PVOID            pContext
+    IN void *            pContext
     );
 
 
-VOID
+void
 PatchDCTone(
 	IN	PDM_ODM_T	pDM_Odm,
 	pu4Byte		PSD_report,
 	u1Byte 		initial_gain_psd
 );
-VOID
+void
 ODM_PSDMonitor(
 	IN	PDM_ODM_T	pDM_Odm
 	);
-VOID	odm_PSD_Monitor(PDM_ODM_T	pDM_Odm);
-VOID	odm_PSDMonitorInit(PDM_ODM_T 	pDM_Odm);
+void	odm_PSD_Monitor(PDM_ODM_T	pDM_Odm);
+void	odm_PSDMonitorInit(PDM_ODM_T 	pDM_Odm);
 
-VOID
+void
 ODM_PSDDbgControl(
 	IN	struct adapter *	Adapter,
 	IN	u4Byte		mode,
@@ -1790,69 +1790,69 @@ ODM_PSDDbgControl(
 
 
 
-VOID ODM_DMInit( IN	PDM_ODM_T	pDM_Odm);
+void ODM_DMInit( IN	PDM_ODM_T	pDM_Odm);
 
-VOID
+void
 ODM_DMWatchdog(
 	IN		PDM_ODM_T			pDM_Odm			// For common use in the future
 	);
 
-VOID
+void
 ODM_CmnInfoInit(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		ODM_CMNINFO_E	CmnInfo,
 	IN		u4Byte			Value	
 	);
 
-VOID
+void
 ODM_CmnInfoHook(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		ODM_CMNINFO_E	CmnInfo,
-	IN		PVOID			pValue	
+	IN		void *			pValue	
 	);
 
-VOID
+void
 ODM_CmnInfoPtrArrayHook(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		ODM_CMNINFO_E	CmnInfo,
 	IN		u2Byte			Index,
-	IN		PVOID			pValue	
+	IN		void *			pValue	
 	);
 
-VOID
+void
 ODM_CmnInfoUpdate(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		u4Byte			CmnInfo,
 	IN		u8Byte			Value	
 	);
 
-VOID 
+void 
 ODM_InitAllTimers(
     IN PDM_ODM_T	pDM_Odm 
     );
 
-VOID 
+void 
 ODM_CancelAllTimers(
     IN PDM_ODM_T    pDM_Odm 
     );
 
-VOID
+void
 ODM_ReleaseAllTimers(
     IN PDM_ODM_T	pDM_Odm 
     );
 
-VOID
+void
 ODM_ResetIQKResult(
     IN PDM_ODM_T pDM_Odm 
     );
 
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-VOID ODM_InitAllWorkItems(IN PDM_ODM_T	pDM_Odm );
-VOID ODM_FreeAllWorkItems(IN PDM_ODM_T	pDM_Odm );
+void ODM_InitAllWorkItems(IN PDM_ODM_T	pDM_Odm );
+void ODM_FreeAllWorkItems(IN PDM_ODM_T	pDM_Odm );
 
-VOID odm_PathDivChkAntSwitch(PDM_ODM_T pDM_Odm);
-VOID ODM_PathDivRestAfterLink(
+void odm_PathDivChkAntSwitch(PDM_ODM_T pDM_Odm);
+void ODM_PathDivRestAfterLink(
 	IN	PDM_ODM_T		pDM_Odm
 	);
 
@@ -1870,13 +1870,13 @@ VOID ODM_PathDivRestAfterLink(
 
 //#define   PATHDIV_ENABLE 	 1
 
-//VOID odm_PathDivChkAntSwitch(struct adapter *	Adapter,u1Byte	Step);
-VOID ODM_PathDivRestAfterLink(
+//void odm_PathDivChkAntSwitch(struct adapter *	Adapter,u1Byte	Step);
+void ODM_PathDivRestAfterLink(
 	IN	PDM_ODM_T	pDM_Odm
 	);
 
 #define dm_PathDiv_RSSI_Check	ODM_PathDivChkPerPktRssi
-VOID ODM_PathDivChkPerPktRssi(struct adapter *		Adapter,
+void ODM_PathDivChkPerPktRssi(struct adapter *		Adapter,
 										BOOLEAN			bIsDefPort,
 										BOOLEAN			bMatchBSSID,
 										PRT_WLAN_STA	pEntry,
@@ -1915,7 +1915,7 @@ ODM_PathDiversityBeforeLink92C(
 //
 
 
-VOID
+void
 ODM_CCKPathDiversityChkPerPktRssi(
 	struct adapter *		Adapter,
 	BOOLEAN			bIsDefPort,
@@ -1937,7 +1937,7 @@ typedef enum tag_DIG_Connect_Definition
 }DM_DIG_CONNECT_E;
 
 
-VOID
+void
 ODM_FillTXPathInTXDESC(
 		IN	struct adapter *	Adapter,
 		IN	PRT_TCB		pTcb,
@@ -1966,14 +1966,14 @@ ODM_FillTXPathInTXDESC(
 	IS_HARDWARE_TYPE_8723A(_Adapter) ? odm_TXPowerTrackingCallback_ThermalMeter_8723A(_Adapter) :\
 	odm_TXPowerTrackingCallback_ThermalMeter_8188E(_Adapter)
 
-VOID
+void
 ODM_SetTxAntByTxInfo_88C_92D(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		pu1Byte			pDesc,
 	IN		u1Byte			macId	
 	);
 #endif	// #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-VOID
+void
 ODM_AntselStatistics_88C(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		u1Byte			MacId,
@@ -1983,7 +1983,7 @@ ODM_AntselStatistics_88C(
 
 #if( DM_ODM_SUPPORT_TYPE & (ODM_MP |ODM_CE))
 
-VOID
+void
 ODM_SingleDualAntennaDefaultSetting(
 	IN		PDM_ODM_T		pDM_Odm
 	);

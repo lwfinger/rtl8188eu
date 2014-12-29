@@ -87,7 +87,7 @@ ODM_Read4Byte(
 }
 
 
-VOID
+void
 ODM_Write1Byte(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr,
@@ -108,7 +108,7 @@ ODM_Write1Byte(
 }
 
 
-VOID
+void
 ODM_Write2Byte(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr,
@@ -129,7 +129,7 @@ ODM_Write2Byte(
 }
 
 
-VOID
+void
 ODM_Write4Byte(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	u4Byte			RegAddr,
@@ -150,7 +150,7 @@ ODM_Write4Byte(
 }
 
 
-VOID
+void
 ODM_SetMACReg(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	u4Byte		RegAddr,
@@ -183,7 +183,7 @@ ODM_GetMACReg(
 }
 
 
-VOID
+void
 ODM_SetBBReg(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	u4Byte		RegAddr,
@@ -216,7 +216,7 @@ ODM_GetBBReg(
 }
 
 
-VOID
+void
 ODM_SetRFReg(
 	IN	PDM_ODM_T			pDM_Odm,
 	IN	ODM_RF_RADIO_PATH_E	eRFPath,
@@ -256,10 +256,10 @@ ODM_GetRFReg(
 //
 // ODM Memory relative API.
 //
-VOID
+void
 ODM_AllocateMemory(
 	IN	PDM_ODM_T	pDM_Odm,
-	OUT	PVOID		*pPtr,
+	OUT	void *		*pPtr,
 	IN	u4Byte		length
 	)
 {
@@ -274,10 +274,10 @@ ODM_AllocateMemory(
 }
 
 // length could be ignored, used to detect memory leakage.
-VOID
+void
 ODM_FreeMemory(
 	IN	PDM_ODM_T	pDM_Odm,
-	OUT	PVOID		pPtr,
+	OUT	void *		pPtr,
 	IN	u4Byte		length
 	)
 {
@@ -292,8 +292,8 @@ ODM_FreeMemory(
 }
 s4Byte ODM_CompareMemory(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	PVOID           pBuf1,
-      IN	PVOID           pBuf2,
+	IN	void *           pBuf1,
+      IN	void *           pBuf2,
       IN	u4Byte          length
        )
 {
@@ -311,7 +311,7 @@ s4Byte ODM_CompareMemory(
 //
 // ODM MISC relative API.
 //
-VOID
+void
 ODM_AcquireSpinLock(
 	IN	PDM_ODM_T			pDM_Odm,
 	IN	RT_SPINLOCK_TYPE	type
@@ -326,7 +326,7 @@ ODM_AcquireSpinLock(
 	PlatformAcquireSpinLock(Adapter, type);
 #endif
 }
-VOID
+void
 ODM_ReleaseSpinLock(
 	IN	PDM_ODM_T			pDM_Odm,
 	IN	RT_SPINLOCK_TYPE	type
@@ -345,12 +345,12 @@ ODM_ReleaseSpinLock(
 //
 // Work item relative API. FOr MP driver only~!
 //
-VOID
+void
 ODM_InitializeWorkItem(
 	IN	PDM_ODM_T					pDM_Odm,
 	IN	PRT_WORK_ITEM				pRtWorkItem,
 	IN	RT_WORKITEM_CALL_BACK		RtWorkItemCallback,
-	IN	PVOID						pContext,
+	IN	void *						pContext,
 	IN	const char*					szID
 	)
 {
@@ -365,7 +365,7 @@ ODM_InitializeWorkItem(
 }
 
 
-VOID
+void
 ODM_StartWorkItem(
 	IN	PRT_WORK_ITEM	pRtWorkItem
 	)
@@ -380,7 +380,7 @@ ODM_StartWorkItem(
 }
 
 
-VOID
+void
 ODM_StopWorkItem(
 	IN	PRT_WORK_ITEM	pRtWorkItem
 	)
@@ -395,7 +395,7 @@ ODM_StopWorkItem(
 }
 
 
-VOID
+void
 ODM_FreeWorkItem(
 	IN	PRT_WORK_ITEM	pRtWorkItem
 	)
@@ -410,7 +410,7 @@ ODM_FreeWorkItem(
 }
 
 
-VOID
+void
 ODM_ScheduleWorkItem(
 	IN	PRT_WORK_ITEM	pRtWorkItem
 	)
@@ -425,7 +425,7 @@ ODM_ScheduleWorkItem(
 }
 
 
-VOID
+void
 ODM_IsWorkItemScheduled(
 	IN	PRT_WORK_ITEM	pRtWorkItem
 	)
@@ -444,7 +444,7 @@ ODM_IsWorkItemScheduled(
 //
 // ODM Timer relative API.
 //
-VOID
+void
 ODM_StallExecution(
 	IN	u4Byte	usDelay
 	)
@@ -458,7 +458,7 @@ ODM_StallExecution(
 #endif
 }
 
-VOID
+void
 ODM_delay_ms(IN u4Byte	ms)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -470,7 +470,7 @@ ODM_delay_ms(IN u4Byte	ms)
 #endif
 }
 
-VOID
+void
 ODM_delay_us(IN u4Byte	us)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -482,7 +482,7 @@ ODM_delay_us(IN u4Byte	us)
 #endif
 }
 
-VOID
+void
 ODM_sleep_ms(IN u4Byte	ms)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -493,7 +493,7 @@ ODM_sleep_ms(IN u4Byte	ms)
 #endif
 }
 
-VOID
+void
 ODM_sleep_us(IN u4Byte	us)
 {
 #if(DM_ODM_SUPPORT_TYPE & (ODM_AP|ODM_ADSL))
@@ -504,7 +504,7 @@ ODM_sleep_us(IN u4Byte	us)
 #endif
 }
 
-VOID
+void
 ODM_SetTimer(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	PRT_TIMER		pTimer,
@@ -522,12 +522,12 @@ ODM_SetTimer(
 
 }
 
-VOID
+void
 ODM_InitializeTimer(
 	IN	PDM_ODM_T			pDM_Odm,
 	IN	PRT_TIMER			pTimer,
 	IN	RT_TIMER_CALL_BACK	CallBackFunc,
-	IN	PVOID				pContext,
+	IN	void *				pContext,
 	IN	const char*			szID
 	)
 {
@@ -545,7 +545,7 @@ ODM_InitializeTimer(
 }
 
 
-VOID
+void
 ODM_CancelTimer(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	PRT_TIMER		pTimer
@@ -562,7 +562,7 @@ ODM_CancelTimer(
 }
 
 
-VOID
+void
 ODM_ReleaseTimer(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	PRT_TIMER		pTimer
@@ -593,7 +593,7 @@ ODM_ReleaseTimer(
 // ODM FW relative API.
 //
 #if (DM_ODM_SUPPORT_TYPE & ODM_MP)
-VOID
+void
 ODM_FillH2CCmd(
 	IN	struct adapter *	Adapter,
 	IN	u1Byte	ElementID,

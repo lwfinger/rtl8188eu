@@ -811,7 +811,7 @@ void rtl8188e_set_FwRsvdPage_cmd(struct adapter *padapter, PRSVDPAGE_LOC rsvdpag
 
 // To check if reserved page content is destroyed by beacon beacuse beacon is too large.
 // 2010.06.23. Added by tynli.
-VOID
+void
 CheckFwRsvdPageContent(
 	IN	struct adapter *	Adapter
 )

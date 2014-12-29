@@ -520,16 +520,16 @@ typedef struct hal_data_8192cu HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define INCLUDE_MULTI_FUNC_BT(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_BT)
 #define INCLUDE_MULTI_FUNC_GPS(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_GPS)
 
-VOID rtl8192c_FirmwareSelfReset(IN struct adapter *Adapter);
+void rtl8192c_FirmwareSelfReset(IN struct adapter *Adapter);
 int FirmwareDownload92C(IN struct adapter *Adapter);
-VOID InitializeFirmwareVars92C(struct adapter *Adapter);
+void InitializeFirmwareVars92C(struct adapter *Adapter);
 u8 GetEEPROMSize8192C(struct adapter *Adapter);
 void rtl8192c_EfuseParseChnlPlan(struct adapter *padapter, u8 *hwinfo, BOOLEAN AutoLoadFail);
 
 HAL_VERSION rtl8192c_ReadChipVersion(IN struct adapter *Adapter);
 void rtl8192c_ReadBluetoothCoexistInfo(struct adapter *Adapter, u8 *PROMContent, BOOLEAN AutoloadFail);
 //void rtl8192c_free_hal_data(struct adapter * padapter);
-VOID rtl8192c_EfuseParseIDCode(struct adapter *pAdapter, u8 *hwinfo);
+void rtl8192c_EfuseParseIDCode(struct adapter *pAdapter, u8 *hwinfo);
 void rtl8192c_set_hal_ops(struct hal_ops *pHalFunc);
 
 s32 c2h_id_filter_ccx_8192c(u8 id);

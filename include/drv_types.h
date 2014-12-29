@@ -420,7 +420,7 @@ struct adapter {
 	struct wifi_display_info wfd_info;
 #endif //CONFIG_WFD
 
-	PVOID			HalData;
+	void *			HalData;
 	u32 hal_data_sz;
 	struct hal_ops	HalFunc;
 

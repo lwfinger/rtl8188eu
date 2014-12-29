@@ -41,14 +41,14 @@
 //============================================================
 
 
-static VOID
+static void
 dm_CheckProtection(
 	IN	struct adapter *Adapter
 	)
 {
 }
 
-static VOID
+static void
 dm_CheckStatistics(
 	IN	struct adapter *Adapter
 	)
@@ -305,7 +305,7 @@ rtl8188e_InitHalDm(
 }
 
 
-VOID
+void
 rtl8188e_HalDmWatchDog(
 	IN	struct adapter *Adapter
 	)

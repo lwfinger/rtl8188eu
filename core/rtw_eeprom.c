@@ -366,7 +366,7 @@ _func_exit_;
 
 
 
-VOID read_eeprom_content(_adapter *	padapter)
+void read_eeprom_content(_adapter *	padapter)
 {
 
 _func_enter_;

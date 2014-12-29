@@ -26,7 +26,7 @@
 
 #if (RTL8188E_SUPPORT == 1)
 
-VOID
+void
 ODM_DIG_LowerBound_88E(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -45,7 +45,7 @@ ODM_DIG_LowerBound_88E(
 }
 
 #if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
-VOID
+void
 odm_RX_HWAntDivInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -83,7 +83,7 @@ odm_RX_HWAntDivInit(
 	//ODM_SetBBReg(pDM_Odm, 0xa00 , BIT15, 1); //Enable CCK AntDiv
 }
 
-VOID
+void
 odm_TRX_HWAntDivInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -134,7 +134,7 @@ odm_TRX_HWAntDivInit(
 	//ODM_SetBBReg(pDM_Odm, 0xa00 , BIT15, 1); //Enable CCK AntDiv
 }
 
-VOID
+void
 odm_FastAntTrainingInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -245,7 +245,7 @@ odm_FastAntTrainingInit(
 	//PHY_SetBBReg(Adapter, 0x860 , BIT8, 0);
 }
 
-VOID
+void
 ODM_AntennaDiversityInit_88E(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -276,7 +276,7 @@ ODM_AntennaDiversityInit_88E(
 }
 
 
-VOID
+void
 ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -316,7 +316,7 @@ ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 }
 
 
-VOID
+void
 odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u4Byte MacId)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -338,7 +338,7 @@ odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u4Byte MacId)
 }
 
 #if (DM_ODM_SUPPORT_TYPE  & (ODM_MP|ODM_CE))
-VOID
+void
 ODM_SetTxAntByTxInfo_88E(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		pu1Byte			pDesc,
@@ -357,7 +357,7 @@ ODM_SetTxAntByTxInfo_88E(
 	}
 }
 #else// (DM_ODM_SUPPORT_TYPE == ODM_AP)
-VOID
+void
 ODM_SetTxAntByTxInfo_88E(
 	IN		PDM_ODM_T		pDM_Odm
 		)
@@ -365,7 +365,7 @@ ODM_SetTxAntByTxInfo_88E(
 }
 #endif
 
-VOID
+void
 ODM_AntselStatistics_88E(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		u1Byte			antsel_tr_mux,
@@ -407,7 +407,7 @@ ODM_AntselStatistics_88E(
 }
 
 #define	TX_BY_REG	0
-VOID
+void
 odm_HWAntDiv(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -476,7 +476,7 @@ odm_HWAntDiv(
 
 
 #if (!(DM_ODM_SUPPORT_TYPE == ODM_CE))
-VOID
+void
 odm_SetNextMACAddrTarget(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -530,7 +530,7 @@ odm_SetNextMACAddrTarget(
 	}
 }
 
-VOID
+void
 odm_FastAntTraining(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -623,7 +623,7 @@ odm_FastAntTraining(
 
 }
 
-VOID
+void
 odm_FastAntTrainingCallback(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -644,7 +644,7 @@ odm_FastAntTrainingCallback(
 #endif
 }
 
-VOID
+void
 odm_FastAntTrainingWorkItemCallback(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -653,7 +653,7 @@ odm_FastAntTrainingWorkItemCallback(
 }
 #endif
 
-VOID
+void
 ODM_AntennaDiversity_88E(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -744,7 +744,7 @@ ODM_AntennaDiversity_88E(
 
 /*
 #if (DM_ODM_SUPPORT_TYPE == ODM_MP)
-VOID
+void
 odm_FastAntTrainingCallback(
 	PRT_TIMER		pTimer
 )
@@ -764,7 +764,7 @@ odm_FastAntTrainingCallback(
 
 }
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-VOID odm_FastAntTrainingCallback(void *FunctionContext)
+void odm_FastAntTrainingCallback(void *FunctionContext)
 {
 	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
 	struct adapter *padapter = pDM_Odm->Adapter;
@@ -773,7 +773,7 @@ VOID odm_FastAntTrainingCallback(void *FunctionContext)
 	odm_FastAntTraining(pDM_Odm);
 }
 #elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-VOID odm_FastAntTrainingCallback(void *FunctionContext)
+void odm_FastAntTrainingCallback(void *FunctionContext)
 {
 	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
 	odm_FastAntTraining(pDM_Odm);
@@ -784,7 +784,7 @@ VOID odm_FastAntTrainingCallback(void *FunctionContext)
 
 #else //#if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
 #if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE))
-VOID
+void
 ODM_SetTxAntByTxInfo_88E(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		pu1Byte			pDesc,
@@ -793,7 +793,7 @@ ODM_SetTxAntByTxInfo_88E(
 {
 }
 #else// (DM_ODM_SUPPORT_TYPE == ODM_AP)
-VOID
+void
 ODM_SetTxAntByTxInfo_88E(
 	IN		PDM_ODM_T		pDM_Odm
 		)
@@ -805,7 +805,7 @@ ODM_SetTxAntByTxInfo_88E(
 //3 Dynamic Primary CCA
 //3============================================================
 
-VOID
+void
 odm_PrimaryCCA_Init(
 	IN		PDM_ODM_T		pDM_Odm)
 {
@@ -827,7 +827,7 @@ ODM_DynamicPrimaryCCA_DupRTS(
 	return	PrimaryCCA->DupRTS_flag;
 }
 
-VOID
+void
 odm_DynamicPrimaryCCA(
 	IN		PDM_ODM_T		pDM_Odm
 	)
@@ -1198,16 +1198,16 @@ odm_DynamicPrimaryCCA(
 	Client_40MHz_pre = Client_40MHz;
 }
 #else //#if (RTL8188E_SUPPORT == 1)
-VOID
+void
 ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 {
 }
-VOID
+void
 odm_PrimaryCCA_Init(
 	IN		PDM_ODM_T		pDM_Odm)
 {
 }
-VOID
+void
 odm_DynamicPrimaryCCA(
 	IN		PDM_ODM_T		pDM_Odm
 	)

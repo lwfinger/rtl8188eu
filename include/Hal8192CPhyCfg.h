@@ -278,7 +278,7 @@ BOOLEAN	PHY_UpdateTxPowerDbm8192C(	IN	struct adapter *Adapter,
 											IN	int		powerInDbm	);
 
 //
-VOID
+void
 PHY_ScanOperationBackup8192C(IN	struct adapter *Adapter,
 										IN	u8		Operation	);
 
@@ -326,7 +326,7 @@ BOOLEAN	PHY_CheckIsLegalRfPath8192C(IN	struct adapter *pAdapter,
 											IN	u32		eRFPath	);
 
 
-VOID rtl8192c_PHY_SetRFPathSwitch(IN	struct adapter *pAdapter, IN	BOOLEAN		bMain);
+void rtl8192c_PHY_SetRFPathSwitch(IN	struct adapter *pAdapter, IN	BOOLEAN		bMain);
 
 //
 // Modify the value of the hw register when beacon interval be changed.
@@ -336,12 +336,12 @@ rtl8192c_PHY_SetBeaconHwReg(	IN	struct adapter *	Adapter,
 					IN	u16			BeaconInterval	);
 
 
-extern	VOID
+extern	void
 PHY_SwitchEphyParameter(
 	IN	struct adapter *		Adapter
 	);
 
-extern	VOID
+extern	void
 PHY_EnableHostClkReq(
 	IN	struct adapter *		Adapter
 	);

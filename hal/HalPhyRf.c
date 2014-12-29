@@ -23,7 +23,7 @@
 #if(DM_ODM_SUPPORT_TYPE & ODM_MP)
 #include "Mp_Precomp.h"
 
-VOID
+void
 phy_PathAStandBy(
 	IN	struct adapter *pAdapter
 	)
@@ -176,7 +176,7 @@ phy_PathB_IQK_8192C(
 
 }
 
-VOID
+void
 phy_PathAFillIQKMatrix(
 	IN	struct adapter *pAdapter,
 	IN  BOOLEAN	bIQKOK,
@@ -243,7 +243,7 @@ phy_PathAFillIQKMatrix(
 	}
 }
 
-VOID
+void
 phy_PathBFillIQKMatrix(
 	IN	struct adapter *pAdapter,
 	IN  BOOLEAN	bIQKOK,
@@ -392,7 +392,7 @@ phy_SimularityCompare(
 
 }
 
-VOID
+void
 phy_IQCalibrate_8192C(
 	IN	struct adapter *pAdapter,
 	IN	s4Byte		result[][8],
@@ -648,7 +648,7 @@ phy_IQCalibrate_8192C(
 }
 
 
-VOID
+void
 phy_LCCalibrate92C(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		is2T
@@ -712,7 +712,7 @@ phy_LCCalibrate92C(
 }
 
 
-VOID
+void
 phy_LCCalibrate(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		is2T
@@ -739,7 +739,7 @@ phy_LCCalibrate(
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
 
-VOID
+void
 phy_APCalibrate_8192C(
 	IN	struct adapter *pAdapter,
 	IN	s1Byte		delta,
@@ -1178,7 +1178,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 }
 
 
-VOID
+void
 PHY_IQCalibrate_8192C(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		bReCovery
@@ -1388,7 +1388,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 }
 
 
-VOID
+void
 PHY_LCCalibrate_8192C(
 	IN	struct adapter *pAdapter
 	)
@@ -1456,7 +1456,7 @@ if (pAdapter->registrypriv.mp_mode == 1)
 
 }
 
-VOID
+void
 PHY_APCalibrate_8192C(
 	IN	struct adapter *pAdapter,
 	IN	s1Byte		delta
@@ -1496,7 +1496,7 @@ PHY_APCalibrate_8192C(
 //3 IQ Calibration
 //3============================================================
 
-VOID
+void
 ODM_ResetIQKResult(
 	IN PDM_ODM_T	pDM_Odm
 )

@@ -104,7 +104,7 @@ static s32 iol_InitLLTTable(
 	return rst;
 }
 
-static VOID
+static void
 efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 {
 	u8	*efuseTbl = NULL;
@@ -533,7 +533,7 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter,int data_len)
 #endif /* defined(CONFIG_IOL) */
 
 
-static VOID
+static void
 _FWDownloadEnable(
 	IN	struct adapter *	padapter,
 	IN	BOOLEAN			enable
@@ -566,7 +566,7 @@ _FWDownloadEnable(
 static int
 _BlockWrite(
 	IN		struct adapter *	padapter,
-	IN		PVOID		buffer,
+	IN		void *		buffer,
 	IN		u32			buffSize
 	)
 {
@@ -647,7 +647,7 @@ static int
 _PageWrite(
 	IN		struct adapter *padapter,
 	IN		u32			page,
-	IN		PVOID		buffer,
+	IN		void *		buffer,
 	IN		u32			size
 	)
 {
@@ -660,7 +660,7 @@ _PageWrite(
 	return _BlockWrite(padapter,buffer,size);
 }
 
-static VOID
+static void
 _FillDummy(
 	u8*		pFwBuf,
 	u32*	pFwLen
@@ -683,7 +683,7 @@ _FillDummy(
 static int
 _WriteFW(
 	IN		struct adapter *	padapter,
-	IN		PVOID			buffer,
+	IN		void *			buffer,
 	IN		u32			size
 	)
 {
@@ -992,7 +992,7 @@ void rtl8188e_InitializeFirmwareVars(struct adapter *padapter)
 //
 // 2011.04.12 by tynli.
 //
-VOID
+void
 SetFwRelatedForWoWLAN8188ES(
 		IN		struct adapter *		padapter,
 		IN		u8					bHostIsGoingtoSleep
@@ -1075,7 +1075,7 @@ hal_EfusePgPacketWriteData(
 	IN	PPGPKT_STRUCT	pTargetPkt,
 	IN	BOOLEAN			bPseudoTest);
 
-static VOID
+static void
 hal_EfusePowerSwitch_RTL8188E(
 	IN	struct adapter *pAdapter,
 	IN	u8		bWrite,
@@ -1129,7 +1129,7 @@ hal_EfusePowerSwitch_RTL8188E(
 	}
 }
 
-static VOID
+static void
 rtl8188e_EfusePowerSwitch(
 	IN	struct adapter *pAdapter,
 	IN	u8		bWrite,
@@ -1181,7 +1181,7 @@ static bool efuse_read_phymap(
 
 }
 
-static VOID
+static void
 Hal_EfuseReadEFuse88E(
 	struct adapter *	Adapter,
 	u16			_offset,
@@ -1428,7 +1428,7 @@ Hal_EfuseSwitchToBank(
 
 
 
-static VOID
+static void
 ReadEFuseByIC(
 	struct adapter *Adapter,
 	u8		efuseType,
@@ -1487,7 +1487,7 @@ exit:
 	return;
 }
 
-static VOID
+static void
 ReadEFuse_Pseudo(
 	struct adapter *Adapter,
 	u8		efuseType,
@@ -1500,7 +1500,7 @@ ReadEFuse_Pseudo(
 	Hal_EfuseReadEFuse88E(Adapter, _offset, _size_byte, pbuf, bPseudoTest);
 }
 
-static VOID
+static void
 rtl8188e_ReadEFuse(
 	struct adapter *Adapter,
 	u8		efuseType,
@@ -1521,12 +1521,12 @@ rtl8188e_ReadEFuse(
 }
 
 //Do not support BT
-VOID
+void
 Hal_EFUSEGetEfuseDefinition88E(
 	IN		struct adapter *pAdapter,
 	IN		u1Byte		efuseType,
 	IN		u1Byte		type,
-	OUT		PVOID		pOut
+	OUT		void *		pOut
 	)
 {
 	switch(type)
@@ -1589,12 +1589,12 @@ Hal_EFUSEGetEfuseDefinition88E(
 			break;
 	}
 }
-VOID
+void
 Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 	IN		struct adapter *pAdapter,
 	IN		u8			efuseType,
 	IN		u8			type,
-	OUT		PVOID		pOut
+	OUT		void *		pOut
 	)
 {
 	switch(type)
@@ -1659,7 +1659,7 @@ Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 }
 
 
-static VOID
+static void
 rtl8188e_EFUSE_GetEfuseDefinition(
 	IN		struct adapter *pAdapter,
 	IN		u8		efuseType,
@@ -1690,7 +1690,7 @@ Hal_EfuseWordEnableDataWrite(	IN	struct adapter *pAdapter,
 	u8	badworden = 0x0F;
 	u8	tmpdata[8];
 
-	_rtw_memset((PVOID)tmpdata, 0xff, PGPKT_DATA_SIZE);
+	_rtw_memset((void *)tmpdata, 0xff, PGPKT_DATA_SIZE);
 	//RT_TRACE(COMP_EFUSE, DBG_LOUD, ("word_en = %x efuse_addr=%x\n", word_en, efuse_addr));
 
 	if(!(word_en&BIT0))
@@ -1905,15 +1905,15 @@ hal_EfusePgPacketRead_8188e(
 	u8	max_section = 0;
 	u8	tmp_header = 0;
 
-	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAX_SECTION, (PVOID)&max_section, bPseudoTest);
+	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAX_SECTION, (void *)&max_section, bPseudoTest);
 
 	if(data==NULL)
 		return _FALSE;
 	if(offset>max_section)
 		return _FALSE;
 
-	_rtw_memset((PVOID)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
-	_rtw_memset((PVOID)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
+	_rtw_memset((void *)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
+	_rtw_memset((void *)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
 
 
 	//
@@ -2061,7 +2061,7 @@ hal_EfuseFixHeaderProcess(
 	u16	efuse_addr=*pAddr;
 	u32	PgWriteSuccess=0;
 
-	_rtw_memset((PVOID)originaldata, 0xff, 8);
+	_rtw_memset((void *)originaldata, 0xff, 8);
 
 	if(Efuse_PgPacketRead(pAdapter, pFixPkt->offset, originaldata, bPseudoTest))
 	{	//check if data exist
@@ -2103,7 +2103,7 @@ hal_EfusePgPacketWrite2ByteHeader(
 	u8	repeatcnt=0;
 
 	//RTPRINT(FEEPROM, EFUSE_PG, ("Wirte 2byte header\n"));
-	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (PVOID)&efuse_max_available_len, bPseudoTest);
+	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (void *)&efuse_max_available_len, bPseudoTest);
 
 	while(efuse_addr < efuse_max_available_len)
 	{
@@ -2368,8 +2368,8 @@ hal_EfusePartialWriteCheck(
 	u16	startAddr=0, efuse_max_available_len=0, efuse_max=0;
 	PGPKT_STRUCT	curPkt;
 
-	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (PVOID)&efuse_max_available_len, bPseudoTest);
-	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_EFUSE_REAL_CONTENT_LEN, (PVOID)&efuse_max, bPseudoTest);
+	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (void *)&efuse_max_available_len, bPseudoTest);
+	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_EFUSE_REAL_CONTENT_LEN, (void *)&efuse_max, bPseudoTest);
 
 	if(efuseType == EFUSE_WIFI)
 	{
@@ -2488,9 +2488,9 @@ hal_EfusePgCheckAvailableAddr(
 	u16	efuse_max_available_len=0;
 
 	//Change to check TYPE_EFUSE_MAP_LEN ,beacuse 8188E raw 256,logic map over 256.
-	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (PVOID)&efuse_max_available_len, _FALSE);
+	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&efuse_max_available_len, _FALSE);
 
-	//EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&efuse_max_available_len, bPseudoTest);
+	//EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&efuse_max_available_len, bPseudoTest);
 	//RTPRINT(FEEPROM, EFUSE_PG, ("efuse_max_available_len = %d\n", efuse_max_available_len));
 
 	if(Efuse_GetCurrentSize(pAdapter, efuseType, bPseudoTest) >= efuse_max_available_len)
@@ -2501,7 +2501,7 @@ hal_EfusePgCheckAvailableAddr(
 	return _TRUE;
 }
 
-static VOID
+static void
 hal_EfuseConstructPGPkt(
 					IN	u8				offset,
 					IN	u8				word_en,
@@ -2510,7 +2510,7 @@ hal_EfuseConstructPGPkt(
 
 )
 {
-	_rtw_memset((PVOID)pTargetPkt->data, 0xFF, sizeof(u8)*8);
+	_rtw_memset((void *)pTargetPkt->data, 0xFF, sizeof(u8)*8);
 	pTargetPkt->offset = offset;
 	pTargetPkt->word_en= word_en;
 	efuse_WordEnableDataRead(word_en, pData, pTargetPkt->data);
@@ -2687,7 +2687,7 @@ static void rtl8188e_read_chip_version(struct adapter *padapter)
 void rtl8188e_GetHalODMVar(
 	struct adapter *			Adapter,
 	HAL_ODM_VARIABLE		eVariable,
-	PVOID					pValue1,
+	void *					pValue1,
 	BOOLEAN					bSet)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2702,7 +2702,7 @@ void rtl8188e_GetHalODMVar(
 void rtl8188e_SetHalODMVar(
 	struct adapter *			Adapter,
 	HAL_ODM_VARIABLE		eVariable,
-	PVOID					pValue1,
+	void *					pValue1,
 	BOOLEAN					bSet)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3018,8 +3018,8 @@ Hal_EfuseParseIDCode88E(
 static void
 Hal_EEValueCheck(
 	IN		u8		EEType,
-	IN		PVOID		pInValue,
-	OUT		PVOID		pOutValue
+	IN		void *		pInValue,
+	OUT		void *		pOutValue
 	)
 {
 	switch(EEType)
@@ -3390,7 +3390,7 @@ Hal_ReadTxPowerInfo88E(
 }
 
 
-VOID
+void
 Hal_EfuseParseXtal_8188E(
 	IN	struct adapter *	pAdapter,
 	IN	u8*			hwinfo,

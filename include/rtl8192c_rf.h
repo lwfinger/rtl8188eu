@@ -76,10 +76,10 @@ void		rtl8192c_RF_ChangeTxPath(	IN	struct adapter *Adapter,
 void		rtl8192c_PHY_RF6052SetBandwidth(
 										IN	struct adapter *			Adapter,
 										IN	HT_CHANNEL_WIDTH		Bandwidth);
-VOID	rtl8192c_PHY_RF6052SetCckTxPower(
+void	rtl8192c_PHY_RF6052SetCckTxPower(
 										IN	struct adapter *Adapter,
 										IN	u8*		pPowerlevel);
-VOID	rtl8192c_PHY_RF6052SetOFDMTxPower(
+void	rtl8192c_PHY_RF6052SetOFDMTxPower(
 										IN	struct adapter *Adapter,
 										IN	u8*		pPowerLevel,
 										IN	u8		Channel);
