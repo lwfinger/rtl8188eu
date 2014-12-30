@@ -139,28 +139,20 @@ odm_ConfigBB_PHY_REG_PG_8188E(
 		#else
 		ODM_delay_ms(50);
 		#endif
-	}
-	else if (Addr == 0xfd){
+	} else if (Addr == 0xfd){
 		ODM_delay_ms(5);
-	}
-	else if (Addr == 0xfc){
+	} else if (Addr == 0xfc){
 		ODM_delay_ms(1);
-	}
-	else if (Addr == 0xfb){
+	} else if (Addr == 0xfb){
 		ODM_delay_us(50);
-	}
-	else if (Addr == 0xfa){
+	} else if (Addr == 0xfa){
 		ODM_delay_us(5);
-	}
-	else if (Addr == 0xf9){
+	} else if (Addr == 0xf9){
 		ODM_delay_us(1);
-	}
-	else{
+	} else{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_LOUD, ("===> @@@@@@@ ODM_ConfigBBWithHeaderFile: [PHY_REG] %08X %08X %08X\n", Addr, Bitmask, Data));
 
-	#if	!(DM_ODM_SUPPORT_TYPE&ODM_AP)
 		storePwrIndexDiffRateOffset(pDM_Odm->Adapter, Addr, Bitmask, Data);
-	#endif
 	}
 
 }

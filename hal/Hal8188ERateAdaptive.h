@@ -21,7 +21,6 @@ Major Change History:
 #define	RATESIZE	28
 #define	TX_RPT2_ITEM_SIZE 	8
 
-#if (DM_ODM_SUPPORT_TYPE  != ODM_MP)
 //
 // TX report 2 format in Rx desc
 //
@@ -36,7 +35,6 @@ Major Change History:
 #define GET_TX_REPORT_TYPE1_RERTY_4(__pAddr)						LE_BITS_TO_1BYTE( __pAddr+4+1, 0, 8)
 #define GET_TX_REPORT_TYPE1_DROP_0(__pAddr)						LE_BITS_TO_1BYTE( __pAddr+4+2, 0, 8)
 #define GET_TX_REPORT_TYPE1_DROP_1(__pAddr)						LE_BITS_TO_1BYTE( __pAddr+4+3, 0, 8)
-#endif
 
 // End rate adaptive define
 

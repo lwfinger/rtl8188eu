@@ -18,53 +18,13 @@
  *
  ******************************************************************************/
  
- #ifndef __HAL_PHY_RF_H__
- #define __HAL_PHY_RF_H__
+#ifndef __HAL_PHY_RF_H__
+#define __HAL_PHY_RF_H__
  
- #if(DM_ODM_SUPPORT_TYPE & ODM_MP)
- #define MAX_TOLERANCE		5
- #define IQK_DELAY_TIME		1		//ms
- 
- //
-// BB/MAC/RF other monitor API
-//
-
-void	PHY_SetMonitorMode8192C(IN	PADAPTER	pAdapter,
-										IN	BOOLEAN		bEnableMonitorMode	);
-										
-//
-// IQ calibrate
-//
-void	
-PHY_IQCalibrate_8192C(		IN	PADAPTER	pAdapter,	
-							IN	BOOLEAN 	bReCovery);
-							
-//
-// LC calibrate
-//
-void	
-PHY_LCCalibrate_8192C(		IN	PADAPTER	pAdapter);
-
-//
-// AP calibrate
-//
-void	
-PHY_APCalibrate_8192C(		IN	PADAPTER	pAdapter,
-								IN 	s1Byte		delta);
-#endif
-
 #define ODM_TARGET_CHNL_NUM_2G_5G	59
 
-
-void
-ODM_ResetIQKResult(
-	IN PDM_ODM_T	pDM_Odm 
-);
-u1Byte 
-ODM_GetRightChnlPlaceforIQK(
-    IN u1Byte chnl
-);
-
+void ODM_ResetIQKResult(PDM_ODM_T	pDM_Odm );
+u1Byte ODM_GetRightChnlPlaceforIQK(u1Byte chnl);
 
 #endif	// #ifndef __HAL_PHY_RF_H__
 

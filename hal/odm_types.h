@@ -28,8 +28,6 @@
 #define	ODM_CE		 	0x04	//BIT2
 #define	ODM_MP		 	0x08	//BIT3
 
-#define	DM_ODM_SUPPORT_TYPE			ODM_CE
-
 // Deifne HW endian support
 #define	ODM_ENDIAN_BIG	0
 #define	ODM_ENDIAN_LITTLE	1	
