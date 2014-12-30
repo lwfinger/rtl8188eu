@@ -20,8 +20,6 @@
 #ifndef __INC_ODM_REGCONFIG_H_8188E
 #define __INC_ODM_REGCONFIG_H_8188E
  
-#if (RTL8188E_SUPPORT == 1)
-
 void
 odm_ConfigRFReg_8188E(
 	IN 	PDM_ODM_T 				pDM_Odm,
@@ -75,6 +73,6 @@ odm_ConfigBB_PHY_8188E(
     IN 	u4Byte 		Bitmask,
     IN 	u4Byte 		Data
     );
-#endif
+
 #endif // end of SUPPORT
 

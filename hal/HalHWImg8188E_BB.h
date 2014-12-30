@@ -18,7 +18,6 @@
 * 
 ******************************************************************************/
 
-#if (RTL8188E_SUPPORT == 1)
 #ifndef __INC_BB_8188E_HW_IMG_H
 #define __INC_BB_8188E_HW_IMG_H
 
@@ -66,6 +65,4 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 	IN   PDM_ODM_T  pDM_Odm
 );
 
-#endif
 #endif // end of HWIMG_SUPPORT
-

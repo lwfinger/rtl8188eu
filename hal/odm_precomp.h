@@ -36,29 +36,7 @@
 
 //2 Hardware Parameter Files
 
-	#if(RTL8192CE_SUPPORT ==1)
-	#include "rtl8192c/Hal8192CEFWImg_CE.h"
-	#include "rtl8192c/Hal8192CEPHYImg_CE.h"
-	#include "rtl8192c/Hal8192CEMACImg_CE.h"	
-	#elif(RTL8192CU_SUPPORT ==1)
-	#include "rtl8192c/Hal8192CUFWImg_CE.h"
-	#include "rtl8192c/Hal8192CUPHYImg_CE.h"
-	#include "rtl8192c/Hal8192CUMACImg_CE.h"
-	#elif(RTL8192DE_SUPPORT ==1)
-	#include "rtl8192d/Hal8192DEFWImg_CE.h"
-	#include "rtl8192d/Hal8192DEPHYImg_CE.h"
-	#include "rtl8192d/Hal8192DEMACImg_CE.h"	
-	#elif(RTL8192DU_SUPPORT ==1)
-	#include "rtl8192d/Hal8192DUFWImg_CE.h"
-	#include "rtl8192d/Hal8192DUPHYImg_CE.h"
-	#include "rtl8192d/Hal8192DUMACImg_CE.h"	
-	#elif(RTL8723AS_SUPPORT==1)
-	#include "rtl8723a/Hal8723SHWImg_CE.h"
-	#elif(RTL8723AU_SUPPORT==1)
-	#include "rtl8723a/Hal8723UHWImg_CE.h"	 
-	#elif(RTL8188E_SUPPORT==1)
-	#include "Hal8188EFWImg_CE.h"	
-	#endif
+#include "Hal8188EFWImg_CE.h"	
 
 //2 OutSrc Header Files
 
@@ -68,24 +46,10 @@
 #include "odm_RegDefine11AC.h"
 #include "odm_RegDefine11N.h"
 
-	#include "HalPhyRf.h"
-	#if (RTL8192C_SUPPORT==1) 
-		#ifdef CONFIG_INTEL_PROXIM
-		#include "../proxim/intel_proxim.h"	
-		#endif	
-		#include  "rtl8192c/HalDMOutSrc8192C_CE.h"
-		#include <rtl8192c_hal.h>
-	#elif (RTL8192D_SUPPORT==1)
-		#include  "rtl8192d/HalDMOutSrc8192D_CE.h"
-		#include  "rtl8192d_hal.h"
-	#elif (RTL8723A_SUPPORT==1)
-		#include "rtl8192c/HalDMOutSrc8192C_CE.h" //for IQK,LCK,Power-tracking
-		#include "rtl8723a_hal.h"  
-	#elif (RTL8188E_SUPPORT==1)		
-		#include "HalPhyRf_8188e.h"//for IQK,LCK,Power-tracking
-		#include "Hal8188ERateAdaptive.h"//for  RA,Power training
-		#include "rtl8188e_hal.h"  	
-	#endif
+#include "HalPhyRf.h"
+#include "HalPhyRf_8188e.h"//for IQK,LCK,Power-tracking
+#include "Hal8188ERateAdaptive.h"//for  RA,Power training
+#include "rtl8188e_hal.h"  	
 
 #include "odm_interface.h"
 #include "odm_reg.h"
@@ -102,9 +66,7 @@
 #endif
 
 #ifdef CONFIG_WOWLAN
-#if (RTL8188E_SUPPORT==1)
 #include "HalHWImg8188E_FW.h"
-#endif
 #endif //CONFIG_WOWLAN
 
 #include "odm_RegConfig8188E.h"

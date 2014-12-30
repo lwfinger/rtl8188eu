@@ -560,16 +560,12 @@ ODM_DMInit(
 	}
 	else if(pDM_Odm->SupportICType & ODM_IC_11N_SERIES)
 	{
-		#if (RTL8188E_SUPPORT == 1)
 		odm_PrimaryCCA_Init(pDM_Odm);    // Gary
-		#endif
 		odm_DynamicBBPowerSavingInit(pDM_Odm);
 		odm_DynamicTxPowerInit(pDM_Odm);
 		odm_TXPowerTrackingInit(pDM_Odm);
 		ODM_EdcaTurboInit(pDM_Odm);
-		#if (RTL8188E_SUPPORT == 1)
 		ODM_RAInfo_Init_all(pDM_Odm);
-		#endif
 		if(	( pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV )	||
 			( pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV )	||
 			( pDM_Odm->AntDivType == CG_TRX_SMART_ANTDIV ))
@@ -628,13 +624,8 @@ ODM_DMWatchdog(
 
 	odm_RefreshRateAdaptiveMask(pDM_Odm);
 
-	#if (RTL8192D_SUPPORT == 1)
-	ODM_DynamicEarlyMode(pDM_Odm);
-	#endif
 	odm_DynamicBBPowerSaving(pDM_Odm);
-	#if (RTL8188E_SUPPORT == 1)
 	odm_DynamicPrimaryCCA(pDM_Odm);
-	#endif
 	if(	( pDM_Odm->AntDivType ==  CG_TRX_HW_ANTDIV )	||
 		( pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV )	||
 		( pDM_Odm->AntDivType == CG_TRX_SMART_ANTDIV ))
@@ -1076,18 +1067,6 @@ odm_CmnInfoHook_Debug(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pBandWidth=%d\n",*(pDM_Odm->pBandWidth)) );
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pChannel=%d\n",*(pDM_Odm->pChannel)) );
 
-#if (RTL8192D_SUPPORT==1)
-	if(pDM_Odm->pBandType)
-	    ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pBandType=%d\n",*(pDM_Odm->pBandType)) );
-	if(pDM_Odm->pMacPhyMode)
-	    ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pMacPhyMode=%d\n",*(pDM_Odm->pMacPhyMode)) );
-	if(pDM_Odm->pBuddyAdapter)
-	    ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pbGetValueFromOtherMac=%d\n",*(pDM_Odm->pbGetValueFromOtherMac)) );
-	if(pDM_Odm->pBuddyAdapter)
-	    ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pBuddyAdapter=%p\n",*(pDM_Odm->pBuddyAdapter)) );
-	if(pDM_Odm->pbMasterOfDMSP)
-	    ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pbMasterOfDMSP=%d\n",*(pDM_Odm->pbMasterOfDMSP)) );
-#endif
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pbScanInProcess=%d\n",*(pDM_Odm->pbScanInProcess)) );
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("pbPowerSaving=%d\n",*(pDM_Odm->pbPowerSaving)) );
 
@@ -1668,7 +1647,6 @@ odm_DIG(
 
 
 			//1 Lower Bound for 88E AntDiv
-#if (RTL8188E_SUPPORT == 1)
 			if((pDM_Odm->SupportICType == ODM_RTL8188E)&&(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
 			{
 				if((pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV) ||(pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV))
@@ -1678,7 +1656,6 @@ odm_DIG(
 				}
 			}
 			else
-#endif
 			{
 				if(pDM_Odm->SupportICType != ODM_RTL8723B)
 					offset = 0;
@@ -1879,41 +1856,6 @@ odm_DIG(
 
 	//2 High power RSSI threshold
 
-#if (RTL8192D_SUPPORT==1)
-	if(pDM_Odm->SupportICType == ODM_RTL8192D)
-	{
-		//sherry  delete DualMacSmartConncurrent 20110517
-		if(*(pDM_Odm->pMacPhyMode) == ODM_DMSP)
-		{
-			ODM_Write_DIG_DMSP(pDM_Odm, (u1Byte)CurrentIGI);//ODM_Write_DIG_DMSP(pDM_Odm, pDM_DigTable->CurIGValue);
-			if(*(pDM_Odm->pbMasterOfDMSP))
-			{
-				pDM_DigTable->bMediaConnect_0 = pDM_Odm->bLinked;
-				pDM_DigTable->DIG_Dynamic_MIN_0 = DIG_Dynamic_MIN;
-			}
-			else
-			{
-				pDM_DigTable->bMediaConnect_1 = pDM_Odm->bLinked;
-				pDM_DigTable->DIG_Dynamic_MIN_1 = DIG_Dynamic_MIN;
-			}
-		}
-		else
-		{
-			ODM_Write_DIG(pDM_Odm, CurrentIGI);//ODM_Write_DIG(pDM_Odm, pDM_DigTable->CurIGValue);
-			if(*(pDM_Odm->pBandType) == ODM_BAND_5G)
-			{
-				pDM_DigTable->bMediaConnect_0 = pDM_Odm->bLinked;
-				pDM_DigTable->DIG_Dynamic_MIN_0 = DIG_Dynamic_MIN;
-			}
-			else
-			{
-				pDM_DigTable->bMediaConnect_1 = pDM_Odm->bLinked;
-				pDM_DigTable->DIG_Dynamic_MIN_1 = DIG_Dynamic_MIN;
-			}
-		}
-	}
-	else
-#endif
 	{
 	#if(BT_30_SUPPORT == 1)
 		if(pDM_Odm->bBtHsOperation)
@@ -2193,7 +2135,6 @@ odm_DIG(
 				ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_DIG() : pDM_Odm->RSSI_Min=%d\n",pDM_Odm->RSSI_Min));
 			}
 			//1 Lower Bound for 88E AntDiv
-#if (RTL8188E_SUPPORT == 1)
 			else if((pDM_Odm->SupportICType == ODM_RTL8188E)&&(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
 			{
 				if(pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
@@ -2202,7 +2143,6 @@ odm_DIG(
 					ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_DIG(): pDM_DigTable->AntDiv_RSSI_max=%d \n",pDM_DigTable->AntDiv_RSSI_max));
 				}
 			}
-#endif
 			else
 			{
 				DIG_Dynamic_MIN=dm_dig_min;
@@ -2356,41 +2296,6 @@ odm_DIG(
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_DIG(): CurIGValue=0x%x\n", CurrentIGI));
 
 	//2 High power RSSI threshold
-#if (RTL8192D_SUPPORT==1)
-	if(pDM_Odm->SupportICType == ODM_RTL8192D)
-	{
-		//sherry  delete DualMacSmartConncurrent 20110517
-		if(*(pDM_Odm->pMacPhyMode) == ODM_DMSP)
-		{
-			ODM_Write_DIG_DMSP(pDM_Odm, CurrentIGI);//ODM_Write_DIG_DMSP(pDM_Odm, pDM_DigTable->CurIGValue);
-			if(*(pDM_Odm->pbMasterOfDMSP))
-			{
-				pDM_DigTable->bMediaConnect_0 = pDM_Odm->bLinked;
-				pDM_DigTable->DIG_Dynamic_MIN_0 = DIG_Dynamic_MIN;
-			}
-			else
-			{
-				pDM_DigTable->bMediaConnect_1 = pDM_Odm->bLinked;
-				pDM_DigTable->DIG_Dynamic_MIN_1 = DIG_Dynamic_MIN;
-			}
-		}
-		else
-		{
-			ODM_Write_DIG(pDM_Odm, CurrentIGI);//ODM_Write_DIG(pDM_Odm, pDM_DigTable->CurIGValue);
-			if(*(pDM_Odm->pBandType) == ODM_BAND_5G)
-			{
-				pDM_DigTable->bMediaConnect_0 = pDM_Odm->bLinked;
-				pDM_DigTable->DIG_Dynamic_MIN_0 = DIG_Dynamic_MIN;
-			}
-			else
-			{
-				pDM_DigTable->bMediaConnect_1 = pDM_Odm->bLinked;
-				pDM_DigTable->DIG_Dynamic_MIN_1 = DIG_Dynamic_MIN;
-			}
-		}
-	}
-	else
-#endif
 	{
 		ODM_Write_DIG(pDM_Odm, CurrentIGI);//ODM_Write_DIG(pDM_Odm, pDM_DigTable->CurIGValue);
 		pDM_DigTable->bMediaConnect_0 = pDM_Odm->bLinked;
@@ -2437,22 +2342,13 @@ odm_FalseAlarmCounterStatistics(
 								FalseAlmCnt->Cnt_Crc8_fail + FalseAlmCnt->Cnt_Mcs_fail +
 								FalseAlmCnt->Cnt_Fast_Fsync + FalseAlmCnt->Cnt_SB_Search_fail;
 
-#if (RTL8188E_SUPPORT==1)
 	if(pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 			ret_value = ODM_GetBBReg(pDM_Odm, ODM_REG_SC_CNT_11N, bMaskDWord);
 		FalseAlmCnt->Cnt_BW_LSC = (ret_value&0xffff);
 		FalseAlmCnt->Cnt_BW_USC = ((ret_value&0xffff0000)>>16);
 	}
-#endif
 
-#if (RTL8192D_SUPPORT==1)
-	if(pDM_Odm->SupportICType == ODM_RTL8192D)
-	{
-		odm_GetCCKFalseAlarm_92D(pDM_Odm);
-	}
-	else
-#endif
 	{
 		//hold cck counter
 			ODM_SetBBReg(pDM_Odm, ODM_REG_CCK_FA_RST_11N, BIT12, 1);
@@ -2476,16 +2372,6 @@ odm_FalseAlarmCounterStatistics(
 						FalseAlmCnt->Cnt_Cck_fail);
 
 	FalseAlmCnt->Cnt_CCA_all = FalseAlmCnt->Cnt_OFDM_CCA + FalseAlmCnt->Cnt_CCK_CCA;
-
-#if (RTL8192C_SUPPORT==1)
-	if(pDM_Odm->SupportICType == ODM_RTL8192C)
-		odm_ResetFACounter_92C(pDM_Odm);
-#endif
-
-#if (RTL8192D_SUPPORT==1)
-	if(pDM_Odm->SupportICType == ODM_RTL8192D)
-		odm_ResetFACounter_92D(pDM_Odm);
-#endif
 
 	if(pDM_Odm->SupportICType >=ODM_RTL8723A)
 	{
@@ -2575,12 +2461,7 @@ odm_CCKPacketDetectionThresh(
 			CurCCK_CCAThres = 0x40;
 	}
 
-#if (RTL8192D_SUPPORT==1)
-	if(pDM_Odm->SupportICType == ODM_RTL8192D)
-		ODM_Write_CCK_CCA_Thres_92D(pDM_Odm, CurCCK_CCAThres);
-	else
-#endif
-		ODM_Write_CCK_CCA_Thres(pDM_Odm, CurCCK_CCAThres);
+	ODM_Write_CCK_CCA_Thres(pDM_Odm, CurCCK_CCAThres);
 }
 
 void
@@ -3083,22 +2964,6 @@ odm_DynamicTxPowerInit(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	pdmpriv->bDynamicTxPowerEnable = false;
 
-	#if (RTL8192C_SUPPORT==1)
-
-	#ifdef CONFIG_INTEL_PROXIM
-	if((pHalData->BoardType == BOARD_USB_High_PA)||(Adapter->proximity.proxim_support==true))
-	#else
-	if(pHalData->BoardType == BOARD_USB_High_PA)
-	#endif
-
-	{
-		//odm_SavePowerIndex(Adapter);
-		odm_DynamicTxPowerSavePowerIndex(pDM_Odm);
-		pdmpriv->bDynamicTxPowerEnable = true;
-	}
-	else
-	#endif
-
 	pdmpriv->LastDTPLvl = TxHighPwrLevel_Normal;
 	pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
 }
@@ -3233,111 +3098,6 @@ odm_DynamicTxPower_92C(
 	IN	PDM_ODM_T	pDM_Odm
 	)
 {
-	#if (RTL8192C_SUPPORT==1)
-	struct adapter *Adapter = pDM_Odm->Adapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
-	int	UndecoratedSmoothedPWDB;
-
-	if(!pdmpriv->bDynamicTxPowerEnable)
-		return;
-
-#ifdef CONFIG_INTEL_PROXIM
-	if(Adapter->proximity.proxim_on== true){
-		struct proximity_priv *prox_priv=Adapter->proximity.proximity_priv;
-		// Intel set fixed tx power
-		printk("\n %s  Adapter->proximity.proxim_on=%d prox_priv->proxim_modeinfo->power_output=%d \n",__FUNCTION__,Adapter->proximity.proxim_on,prox_priv->proxim_modeinfo->power_output);
-		if(prox_priv!=NULL){
-			if(prox_priv->proxim_modeinfo->power_output> 0)
-			{
-				switch(prox_priv->proxim_modeinfo->power_output)
-				{
-					case 1:
-						pdmpriv->DynamicTxHighPowerLvl  = TxHighPwrLevel_100;
-						printk("TxHighPwrLevel_100\n");
-						break;
-					case 2:
-						pdmpriv->DynamicTxHighPowerLvl  = TxHighPwrLevel_70;
-						printk("TxHighPwrLevel_70\n");
-						break;
-					case 3:
-						pdmpriv->DynamicTxHighPowerLvl  = TxHighPwrLevel_50;
-						printk("TxHighPwrLevel_50\n");
-						break;
-					case 4:
-						pdmpriv->DynamicTxHighPowerLvl  = TxHighPwrLevel_35;
-						printk("TxHighPwrLevel_35\n");
-						break;
-					case 5:
-						pdmpriv->DynamicTxHighPowerLvl  = TxHighPwrLevel_15;
-						printk("TxHighPwrLevel_15\n");
-						break;
-					default:
-						pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_100;
-						printk("TxHighPwrLevel_100\n");
-						break;
-				}
-			}
-		}
-	}
-	else
-#endif
-	{
-		// STA not connected and AP not connected
-		if((check_fwstate(pmlmepriv, _FW_LINKED) != true) &&
-			(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
-		{
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("Not connected to any \n"));
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
-
-			//the LastDTPlvl should reset when disconnect,
-			//otherwise the tx power level wouldn't change when disconnect and connect again.
-			// Maddest 20091220.
-			pdmpriv->LastDTPLvl=TxHighPwrLevel_Normal;
-			return;
-		}
-
-		if(check_fwstate(pmlmepriv, _FW_LINKED) == true)	// Default port
-		{
-		UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-		}
-		else // associated entry pwdb
-		{
-			UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("AP Ext Port PWDB = 0x%x \n", UndecoratedSmoothedPWDB));
-		}
-
-		if(UndecoratedSmoothedPWDB >= TX_POWER_NEAR_FIELD_THRESH_LVL2)
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Level2;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("TxHighPwrLevel_Level1 (TxPwr=0x0)\n"));
-		}
-		else if((UndecoratedSmoothedPWDB < (TX_POWER_NEAR_FIELD_THRESH_LVL2-3)) &&
-			(UndecoratedSmoothedPWDB >= TX_POWER_NEAR_FIELD_THRESH_LVL1) )
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Level1;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("TxHighPwrLevel_Level1 (TxPwr=0x10)\n"));
-		}
-		else if(UndecoratedSmoothedPWDB < (TX_POWER_NEAR_FIELD_THRESH_LVL1-5))
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("TxHighPwrLevel_Normal\n"));
-		}
-	}
-	if( (pdmpriv->DynamicTxHighPowerLvl != pdmpriv->LastDTPLvl) )
-	{
-		PHY_SetTxPowerLevel8192C(Adapter, pHalData->CurrentChannel);
-		if(pdmpriv->DynamicTxHighPowerLvl == TxHighPwrLevel_Normal) // HP1 -> Normal  or HP2 -> Normal
-			odm_DynamicTxPowerRestorePowerIndex(pDM_Odm);
-		else if(pdmpriv->DynamicTxHighPowerLvl == TxHighPwrLevel_Level1)
-			odm_DynamicTxPowerWritePowerIndex(pDM_Odm, 0x14);
-		else if(pdmpriv->DynamicTxHighPowerLvl == TxHighPwrLevel_Level2)
-			odm_DynamicTxPowerWritePowerIndex(pDM_Odm, 0x10);
-	}
-	pdmpriv->LastDTPLvl = pdmpriv->DynamicTxHighPowerLvl;
-	#endif
 }
 
 void
@@ -3345,149 +3105,6 @@ odm_DynamicTxPower_92D(
 	IN	PDM_ODM_T	pDM_Odm
 	)
 {
-#if (RTL8192D_SUPPORT==1)
-	struct adapter *Adapter = pDM_Odm->Adapter;
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-
-	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
-	int	UndecoratedSmoothedPWDB;
-	#if (RTL8192D_EASY_SMART_CONCURRENT == 1)
-	struct adapter *BuddyAdapter = Adapter->BuddyAdapter;
-	BOOLEAN		bGetValueFromBuddyAdapter = DualMacGetParameterFromBuddyAdapter(Adapter);
-	u8		HighPowerLvlBackForMac0 = TxHighPwrLevel_Level1;
-	#endif
-
-	// If dynamic high power is disabled.
-	if( (pdmpriv->bDynamicTxPowerEnable != true) ||
-		(!(podmpriv->SupportAbility& ODM_BB_DYNAMIC_TXPWR)) )
-	{
-		pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
-		return;
-	}
-
-	// STA not connected and AP not connected
-	if((check_fwstate(pmlmepriv, _FW_LINKED) != true) &&
-		(pdmpriv->EntryMinUndecoratedSmoothedPWDB == 0))
-	{
-		//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("Not connected to any \n"));
-		pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
-		//the LastDTPlvl should reset when disconnect,
-		//otherwise the tx power level wouldn't change when disconnect and connect again.
-		// Maddest 20091220.
-		pdmpriv->LastDTPLvl=TxHighPwrLevel_Normal;
-		return;
-	}
-
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == true)	// Default port
-	{
-		UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-	}
-	else // associated entry pwdb
-	{
-		UndecoratedSmoothedPWDB = pdmpriv->EntryMinUndecoratedSmoothedPWDB;
-	}
-#if TX_POWER_FOR_5G_BAND == 1
-	if(pHalData->CurrentBandType92D == BAND_ON_5G){
-		if(UndecoratedSmoothedPWDB >= 0x33)
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Level2;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("5G:TxHighPwrLevel_Level2 (TxPwr=0x0)\n"));
-		}
-		else if((UndecoratedSmoothedPWDB <0x33) &&
-			(UndecoratedSmoothedPWDB >= 0x2b) )
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Level1;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("5G:TxHighPwrLevel_Level1 (TxPwr=0x10)\n"));
-		}
-		else if(UndecoratedSmoothedPWDB < 0x2b)
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("5G:TxHighPwrLevel_Normal\n"));
-		}
-	}
-	else
-#endif
-	{
-		if(UndecoratedSmoothedPWDB >= TX_POWER_NEAR_FIELD_THRESH_LVL2)
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Level2;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("TxHighPwrLevel_Level1 (TxPwr=0x0)\n"));
-		}
-		else if((UndecoratedSmoothedPWDB < (TX_POWER_NEAR_FIELD_THRESH_LVL2-3)) &&
-			(UndecoratedSmoothedPWDB >= TX_POWER_NEAR_FIELD_THRESH_LVL1) )
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Level1;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("TxHighPwrLevel_Level1 (TxPwr=0x10)\n"));
-		}
-		else if(UndecoratedSmoothedPWDB < (TX_POWER_NEAR_FIELD_THRESH_LVL1-5))
-		{
-			pdmpriv->DynamicTxHighPowerLvl = TxHighPwrLevel_Normal;
-			//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("TxHighPwrLevel_Normal\n"));
-		}
-	}
-#if (RTL8192D_EASY_SMART_CONCURRENT == 1)
-	if(bGetValueFromBuddyAdapter)
-	{
-		//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() mac 0 for mac 1 \n"));
-		if(Adapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP)
-		{
-			//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() change value \n"));
-			HighPowerLvlBackForMac0 = pHalData->DynamicTxHighPowerLvl;
-			pHalData->DynamicTxHighPowerLvl = Adapter->DualMacDMSPControl.CurTxHighLvlForAnotherMacOfDMSP;
-			PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
-			pHalData->DynamicTxHighPowerLvl = HighPowerLvlBackForMac0;
-			Adapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP = false;
-		}
-	}
-#endif
-
-	if( (pdmpriv->DynamicTxHighPowerLvl != pdmpriv->LastDTPLvl) )
-	{
-		//ODM_RT_TRACE(pDM_Odm,COMP_HIPWR, DBG_LOUD, ("PHY_SetTxPowerLevel8192S() Channel = %d \n" , pHalData->CurrentChannel));
-#if (RTL8192D_EASY_SMART_CONCURRENT == 1)
-		if(BuddyAdapter == NULL)
-		{
-			//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() BuddyAdapter == NULL case \n"));
-			if(!Adapter->bSlaveOfDMSP)
-			{
-				PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
-			}
-		}
-		else
-		{
-			if(pHalData->MacPhyMode92D == DUALMAC_SINGLEPHY)
-			{
-				//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() BuddyAdapter DMSP \n"));
-				if(Adapter->bSlaveOfDMSP)
-				{
-					//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() bslave case  \n"));
-					BuddyAdapter->DualMacDMSPControl.bChangeTxHighPowerLvlForAnotherMacOfDMSP = true;
-					BuddyAdapter->DualMacDMSPControl.CurTxHighLvlForAnotherMacOfDMSP = pHalData->DynamicTxHighPowerLvl;
-				}
-				else
-				{
-					//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() master case  \n"));
-					if(!bGetValueFromBuddyAdapter)
-					{
-						//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() mac 0 for mac 0 \n"));
-						PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
-					}
-				}
-			}
-			else
-			{
-				//ODM_RT_TRACE(pDM_Odm,COMP_MLME,DBG_LOUD,("dm_DynamicTxPower() BuddyAdapter DMDP\n"));
-				PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
-			}
-		}
-#else
-		PHY_SetTxPowerLevel8192D(Adapter, pHalData->CurrentChannel);
-#endif
-	}
-	pdmpriv->LastDTPLvl = pdmpriv->DynamicTxHighPowerLvl;
-#endif
 }
 
 
@@ -3610,11 +3227,7 @@ odm_RSSIMonitorCheckCE(
 					tmpEntryMaxPWDB = psta->rssi_stat.UndecoratedSmoothedPWDB;
 
 				if(psta->rssi_stat.UndecoratedSmoothedPWDB != (-1)) {
-					#if(RTL8192D_SUPPORT==1)
-					PWDB_rssi[sta_cnt++] = (psta->mac_id | (psta->rssi_stat.UndecoratedSmoothedPWDB<<16) | ((Adapter->stapriv.asoc_sta_count+1) << 8));
-					#else
 					PWDB_rssi[sta_cnt++] = (psta->mac_id | (psta->rssi_stat.UndecoratedSmoothedPWDB<<16) );
-					#endif
 				}
 			}
 		}
@@ -3624,14 +3237,9 @@ odm_RSSIMonitorCheckCE(
 			if(PWDB_rssi[i] != (0)){
 				if(pHalData->fw_ractrl == true)// Report every sta's RSSI to FW
 				{
-					#if(RTL8192D_SUPPORT==1)
-					FillH2CCmd92D(Adapter, H2C_RSSI_REPORT, 3, (u8 *)(&PWDB_rssi[i]));
-					#elif((RTL8192C_SUPPORT==1)||(RTL8723A_SUPPORT==1))
-					rtl8192c_set_rssi_cmd(Adapter, (u8*)&PWDB_rssi[i]);
-					#endif
 				}
 				else{
-					#if((RTL8188E_SUPPORT==1)&&(RATE_ADAPTIVE_SUPPORT == 1))
+					#if(RATE_ADAPTIVE_SUPPORT == 1)
 					ODM_RA_SetRSSI_8188E(
 					&(pHalData->odmpriv), (PWDB_rssi[i]&0xFF), (u8)((PWDB_rssi[i]>>16) & 0xFF));
 					#endif
@@ -3660,9 +3268,6 @@ odm_RSSIMonitorCheckCE(
 
 	FindMinimumRSSI(Adapter);//get pdmpriv->MinUndecoratedPWDBForDM
 
-	#if(RTL8192D_SUPPORT==1)
-	FindMinimumRSSI_Dmsp(Adapter);
-	#endif
 	pDM_Odm->RSSI_Min = pdmpriv->MinUndecoratedPWDBForDM;
 }
 void
@@ -3698,10 +3303,7 @@ ODM_ReleaseAllTimers(
 	)
 {
 	ODM_ReleaseTimer(pDM_Odm,&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchTimer);
-
-#if (RTL8188E_SUPPORT == 1)
 	ODM_ReleaseTimer(pDM_Odm,&pDM_Odm->FastAntTrainingTimer);
-#endif
 }
 
 //3============================================================
@@ -3798,19 +3400,7 @@ odm_TXPowerTrackingCheckCE(
 	)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
-	#if( (RTL8192C_SUPPORT==1) ||  (RTL8723A_SUPPORT==1) )
-	rtl8192c_odm_CheckTXPowerTracking(Adapter);
-	#endif
 
-	#if (RTL8192D_SUPPORT==1)
-	#if (RTL8192D_EASY_SMART_CONCURRENT == 1)
-	if(!Adapter->bSlaveOfDMSP)
-	#endif
-		rtl8192d_odm_CheckTXPowerTracking(Adapter);
-	#endif
-	#if(RTL8188E_SUPPORT==1)
-
-	//if(!pMgntInfo->bTXPowerTracking /*|| (!pdmpriv->TxPowerTrackControl && pdmpriv->bAPKdone)*/)
 	if(!(pDM_Odm->SupportAbility & ODM_RF_TX_PWR_TRACK))
 	{
 		return;
@@ -3818,22 +3408,15 @@ odm_TXPowerTrackingCheckCE(
 
 	if(!pDM_Odm->RFCalibrateInfo.TM_Trigger)		//at least delay 1 sec
 	{
-		//pHalData->TxPowerCheckCnt++;	//cosa add for debug
-		//ODM_SetRFReg(pDM_Odm, RF_PATH_A, RF_T_METER, bRFRegOffsetMask, 0x60);
 		PHY_SetRFReg(Adapter, RF_PATH_A, RF_T_METER_88E, BIT17 | BIT16, 0x03);
-		//DBG_8192C("Trigger 92C Thermal Meter!!\n");
-
 		pDM_Odm->RFCalibrateInfo.TM_Trigger = 1;
 		return;
-
 	}
 	else
 	{
-		//DBG_8192C("Schedule TxPowerTracking direct call!!\n");
 		odm_TXPowerTrackingCallback_ThermalMeter_8188E(Adapter);
 		pDM_Odm->RFCalibrateInfo.TM_Trigger = 0;
 	}
-	#endif
 }
 
 void
@@ -3869,32 +3452,7 @@ odm_SwAntDivInit(
 {
 	odm_SwAntDivInit_NIC(pDM_Odm);
 }
-#if (RTL8723A_SUPPORT==1)
-// Only for 8723A SW ANT DIV INIT--2012--07--17
-void
-odm_SwAntDivInit_NIC_8723A(
-	IN	PDM_ODM_T		pDM_Odm)
-{
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-	struct adapter *	Adapter = pDM_Odm->Adapter;
-	u1Byte			btAntNum=BT_GetPGAntNum(Adapter);
 
-
-	if(IS_HARDWARE_TYPE_8723A(Adapter))
-	{
-		pDM_SWAT_Table->ANTA_ON =TRUE;
-
-		// Set default antenna B status by PG
-		if(btAntNum == Ant_x2)
-			pDM_SWAT_Table->ANTB_ON = TRUE;
-		else if(btAntNum ==Ant_x1)
-			pDM_SWAT_Table->ANTB_ON = FALSE;
-		else
-			pDM_SWAT_Table->ANTB_ON = TRUE;
-	}
-
-}
-#endif
 void
 odm_SwAntDivInit_NIC(
 	IN		PDM_ODM_T		pDM_Odm
@@ -3903,12 +3461,6 @@ odm_SwAntDivInit_NIC(
 	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 // Init SW ANT DIV mechanism for 8723AE/AU/AS// Neil Chen--2012--07--17---
 // CE/AP/ADSL no using SW ANT DIV for 8723A Series IC
-#if (RTL8723A_SUPPORT==1)
-	if(pDM_Odm->SupportICType == ODM_RTL8723A)
-	{
-		odm_SwAntDivInit_NIC_8723A(pDM_Odm);
-	}
-#endif
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS:Init SW Antenna Switch\n"));
 	pDM_SWAT_Table->RSSI_sum_A = 0;
 	pDM_SWAT_Table->RSSI_cnt_A = 0;
@@ -4057,369 +3609,6 @@ odm_SwAntDivChkAntSwitchNIC(
 	IN		u1Byte		Step
 	)
 {
-#if ((RTL8192C_SUPPORT==1)||(RTL8723A_SUPPORT==1))
-	//PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
-	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-	s4Byte			curRSSI=100, RSSI_A, RSSI_B;
-	u1Byte			nextAntenna=Antenna_B;
-	//static u8Byte		lastTxOkCnt=0, lastRxOkCnt=0;
-	u8Byte			curTxOkCnt, curRxOkCnt;
-	//static u8Byte		TXByteCnt_A=0, TXByteCnt_B=0, RXByteCnt_A=0, RXByteCnt_B=0;
-	u8Byte			CurByteCnt=0, PreByteCnt=0;
-	//static u1Byte		TrafficLoad = TRAFFIC_LOW;
-	u1Byte			Score_A=0, Score_B=0;
-	u1Byte			i;
-
-	if(!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
-		return;
-
-	if (pDM_Odm->SupportICType & (ODM_RTL8192D|ODM_RTL8188E))
-		return;
-
-	if((pDM_Odm->SupportICType == ODM_RTL8192C) &&(pDM_Odm->RFType == ODM_2T2R))
-		return;
-
-	if(pDM_Odm->SupportPlatform & ODM_MP)
-	{
-		if(*(pDM_Odm->pAntennaTest))
-			return;
-	}
-
-	if((pDM_SWAT_Table->ANTA_ON == FALSE) ||(pDM_SWAT_Table->ANTB_ON == FALSE))
-	{
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,
-				("odm_SwAntDivChkAntSwitch(): No AntDiv Mechanism, Antenna A or B is off\n"));
-		return;
-	}
-
-	// Radio off: Status reset to default and return.
-	if(*(pDM_Odm->pbPowerSaving)==TRUE) //pHalData->eRFPowerState==eRfOff
-	{
-		ODM_SwAntDivRestAfterLink(pDM_Odm);
-		return;
-	}
-
-
-	// Handling step mismatch condition.
-	// Peak step is not finished at last time. Recover the variable and check again.
-	if(	Step != pDM_SWAT_Table->try_flag	)
-	{
-		ODM_SwAntDivRestAfterLink(pDM_Odm);
-	}
-
-	if(pDM_SWAT_Table->try_flag == 0xff)
-	{
-		pDM_SWAT_Table->RSSI_target = 0xff;
-
-		{
-			u1Byte			index = 0;
-			PSTA_INFO_T		pEntry = NULL;
-
-
-			for(index=0; index<ODM_ASSOCIATE_ENTRY_NUM; index++)
-			{
-				pEntry =  pDM_Odm->pODM_StaInfo[index];
-				if(IS_STA_VALID(pEntry) ) {
-					break;
-				}
-			}
-			if(pEntry == NULL)
-			{
-				ODM_SwAntDivRestAfterLink(pDM_Odm);
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_SwAntDivChkAntSwitch(): No Link.\n"));
-				return;
-			}
-			else
-			{
-				pDM_SWAT_Table->RSSI_target = index;
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_SwAntDivChkAntSwitch(): RSSI_target is PEER STA\n"));
-			}
-                }
-
-		pDM_SWAT_Table->RSSI_cnt_A = 0;
-		pDM_SWAT_Table->RSSI_cnt_B = 0;
-		pDM_SWAT_Table->try_flag = 0;
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,("odm_SwAntDivChkAntSwitch(): Set try_flag to 0 prepare for peak!\n"));
-		return;
-	}
-	else
-	{
-		curTxOkCnt = *(pDM_Odm->pNumTxBytesUnicast) - pDM_SWAT_Table->lastTxOkCnt;
-		curRxOkCnt = *(pDM_Odm->pNumRxBytesUnicast) - pDM_SWAT_Table->lastRxOkCnt;
-		pDM_SWAT_Table->lastTxOkCnt = *(pDM_Odm->pNumTxBytesUnicast);
-		pDM_SWAT_Table->lastRxOkCnt = *(pDM_Odm->pNumRxBytesUnicast);
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("curTxOkCnt = %lld\n",curTxOkCnt));
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("curRxOkCnt = %lld\n",curRxOkCnt));
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("lastTxOkCnt = %lld\n",pDM_SWAT_Table->lastTxOkCnt));
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("lastRxOkCnt = %lld\n",pDM_SWAT_Table->lastRxOkCnt));
-
-		if(pDM_SWAT_Table->try_flag == 1)
-		{
-			if(pDM_SWAT_Table->CurAntenna == Antenna_A)
-			{
-				pDM_SWAT_Table->TXByteCnt_A += curTxOkCnt;
-				pDM_SWAT_Table->RXByteCnt_A += curRxOkCnt;
-			}
-			else
-			{
-				pDM_SWAT_Table->TXByteCnt_B += curTxOkCnt;
-				pDM_SWAT_Table->RXByteCnt_B += curRxOkCnt;
-			}
-
-			nextAntenna = (pDM_SWAT_Table->CurAntenna == Antenna_A)? Antenna_B : Antenna_A;
-			pDM_SWAT_Table->RSSI_Trying--;
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("RSSI_Trying = %d\n",pDM_SWAT_Table->RSSI_Trying));
-			if(pDM_SWAT_Table->RSSI_Trying == 0)
-			{
-				CurByteCnt = (pDM_SWAT_Table->CurAntenna == Antenna_A)? (pDM_SWAT_Table->TXByteCnt_A+pDM_SWAT_Table->RXByteCnt_A) : (pDM_SWAT_Table->TXByteCnt_B+pDM_SWAT_Table->RXByteCnt_B);
-				PreByteCnt = (pDM_SWAT_Table->CurAntenna == Antenna_A)? (pDM_SWAT_Table->TXByteCnt_B+pDM_SWAT_Table->RXByteCnt_B) : (pDM_SWAT_Table->TXByteCnt_A+pDM_SWAT_Table->RXByteCnt_A);
-
-				if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-					//CurByteCnt = PlatformDivision64(CurByteCnt, 9);
-					PreByteCnt = PreByteCnt*9;
-				else if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_LOW)
-					//CurByteCnt = PlatformDivision64(CurByteCnt, 2);
-					PreByteCnt = PreByteCnt*2;
-
-				if(pDM_SWAT_Table->RSSI_cnt_A > 0)
-					RSSI_A = pDM_SWAT_Table->RSSI_sum_A/pDM_SWAT_Table->RSSI_cnt_A;
-				else
-					RSSI_A = 0;
-				if(pDM_SWAT_Table->RSSI_cnt_B > 0)
-					RSSI_B = pDM_SWAT_Table->RSSI_sum_B/pDM_SWAT_Table->RSSI_cnt_B;
-				else
-					RSSI_B = 0;
-				curRSSI = (pDM_SWAT_Table->CurAntenna == Antenna_A)? RSSI_A : RSSI_B;
-				pDM_SWAT_Table->PreRSSI =  (pDM_SWAT_Table->CurAntenna == Antenna_A)? RSSI_B : RSSI_A;
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Luke:PreRSSI = %d, CurRSSI = %d\n",pDM_SWAT_Table->PreRSSI, curRSSI));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: preAntenna= %s, curAntenna= %s \n",
-				(pDM_SWAT_Table->PreAntenna == Antenna_A?"A":"B"), (pDM_SWAT_Table->CurAntenna == Antenna_A?"A":"B")));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Luke:RSSI_A= %d, RSSI_cnt_A = %d, RSSI_B= %d, RSSI_cnt_B = %d\n",
-					RSSI_A, pDM_SWAT_Table->RSSI_cnt_A, RSSI_B, pDM_SWAT_Table->RSSI_cnt_B));
-			}
-
-		}
-		else
-		{
-
-			if(pDM_SWAT_Table->RSSI_cnt_A > 0)
-				RSSI_A = pDM_SWAT_Table->RSSI_sum_A/pDM_SWAT_Table->RSSI_cnt_A;
-			else
-				RSSI_A = 0;
-			if(pDM_SWAT_Table->RSSI_cnt_B > 0)
-				RSSI_B = pDM_SWAT_Table->RSSI_sum_B/pDM_SWAT_Table->RSSI_cnt_B;
-			else
-				RSSI_B = 0;
-			curRSSI = (pDM_SWAT_Table->CurAntenna == Antenna_A)? RSSI_A : RSSI_B;
-			pDM_SWAT_Table->PreRSSI =  (pDM_SWAT_Table->PreAntenna == Antenna_A)? RSSI_A : RSSI_B;
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Ekul:PreRSSI = %d, CurRSSI = %d\n", pDM_SWAT_Table->PreRSSI, curRSSI));
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: preAntenna= %s, curAntenna= %s \n",
-			(pDM_SWAT_Table->PreAntenna == Antenna_A?"A":"B"), (pDM_SWAT_Table->CurAntenna == Antenna_A?"A":"B")));
-
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Ekul:RSSI_A= %d, RSSI_cnt_A = %d, RSSI_B= %d, RSSI_cnt_B = %d\n",
-				RSSI_A, pDM_SWAT_Table->RSSI_cnt_A, RSSI_B, pDM_SWAT_Table->RSSI_cnt_B));
-			//RT_TRACE(COMP_SWAS, DBG_LOUD, ("Ekul:curTxOkCnt = %d\n", curTxOkCnt));
-			//RT_TRACE(COMP_SWAS, DBG_LOUD, ("Ekul:curRxOkCnt = %d\n", curRxOkCnt));
-		}
-
-		//1 Trying State
-		if((pDM_SWAT_Table->try_flag == 1)&&(pDM_SWAT_Table->RSSI_Trying == 0))
-		{
-
-			if(pDM_SWAT_Table->TestMode == TP_MODE)
-			{
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: TestMode = TP_MODE"));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("TRY:CurByteCnt = %lld,", CurByteCnt));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("TRY:PreByteCnt = %lld\n",PreByteCnt));
-				if(CurByteCnt < PreByteCnt)
-				{
-					if(pDM_SWAT_Table->CurAntenna == Antenna_A)
-						pDM_SWAT_Table->SelectAntennaMap=pDM_SWAT_Table->SelectAntennaMap<<1;
-					else
-						pDM_SWAT_Table->SelectAntennaMap=(pDM_SWAT_Table->SelectAntennaMap<<1)+1;
-				}
-				else
-				{
-					if(pDM_SWAT_Table->CurAntenna == Antenna_A)
-						pDM_SWAT_Table->SelectAntennaMap=(pDM_SWAT_Table->SelectAntennaMap<<1)+1;
-					else
-						pDM_SWAT_Table->SelectAntennaMap=pDM_SWAT_Table->SelectAntennaMap<<1;
-				}
-				for (i= 0; i<8; i++)
-				{
-					if(((pDM_SWAT_Table->SelectAntennaMap>>i)&BIT0) == 1)
-						Score_A++;
-					else
-						Score_B++;
-				}
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SelectAntennaMap=%x\n ",pDM_SWAT_Table->SelectAntennaMap));
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Score_A=%d, Score_B=%d\n", Score_A, Score_B));
-
-				if(pDM_SWAT_Table->CurAntenna == Antenna_A)
-				{
-					nextAntenna = (Score_A > Score_B)?Antenna_A:Antenna_B;
-				}
-				else
-				{
-					nextAntenna = (Score_B > Score_A)?Antenna_B:Antenna_A;
-				}
-				//RT_TRACE(COMP_SWAS, DBG_LOUD, ("nextAntenna=%s\n",(nextAntenna==Antenna_A)?"A":"B"));
-				//RT_TRACE(COMP_SWAS, DBG_LOUD, ("preAntenna= %s, curAntenna= %s \n",
-				//(DM_SWAT_Table.PreAntenna == Antenna_A?"A":"B"), (DM_SWAT_Table.CurAntenna == Antenna_A?"A":"B")));
-
-				if(nextAntenna != pDM_SWAT_Table->CurAntenna)
-				{
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: Switch back to another antenna"));
-				}
-				else
-				{
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: current anntena is good\n"));
-				}
-			}
-
-			if(pDM_SWAT_Table->TestMode == RSSI_MODE)
-			{
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: TestMode = RSSI_MODE"));
-				pDM_SWAT_Table->SelectAntennaMap=0xAA;
-				if(curRSSI < pDM_SWAT_Table->PreRSSI) //Current antenna is worse than previous antenna
-				{
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: Switch back to another antenna"));
-					nextAntenna = (pDM_SWAT_Table->CurAntenna == Antenna_A)? Antenna_B : Antenna_A;
-				}
-				else // current anntena is good
-				{
-					nextAntenna =pDM_SWAT_Table->CurAntenna;
-					ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: current anntena is good\n"));
-				}
-			}
-			pDM_SWAT_Table->try_flag = 0;
-			pDM_Odm->RSSI_test = FALSE;
-			pDM_SWAT_Table->RSSI_sum_A = 0;
-			pDM_SWAT_Table->RSSI_cnt_A = 0;
-			pDM_SWAT_Table->RSSI_sum_B = 0;
-			pDM_SWAT_Table->RSSI_cnt_B = 0;
-			pDM_SWAT_Table->TXByteCnt_A = 0;
-			pDM_SWAT_Table->TXByteCnt_B = 0;
-			pDM_SWAT_Table->RXByteCnt_A = 0;
-			pDM_SWAT_Table->RXByteCnt_B = 0;
-
-		}
-
-		//1 Normal State
-		else if(pDM_SWAT_Table->try_flag == 0)
-		{
-			if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-			{
-				if ((curTxOkCnt+curRxOkCnt) > 3750000)//if(PlatformDivision64(curTxOkCnt+curRxOkCnt, 2) > 1875000)
-					pDM_SWAT_Table->TrafficLoad = TRAFFIC_HIGH;
-				else
-					pDM_SWAT_Table->TrafficLoad = TRAFFIC_LOW;
-			}
-			else if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_LOW)
-				{
-				if ((curTxOkCnt+curRxOkCnt) > 3750000) //if(PlatformDivision64(curTxOkCnt+curRxOkCnt, 2) > 1875000)
-					pDM_SWAT_Table->TrafficLoad = TRAFFIC_HIGH;
-				else
-					pDM_SWAT_Table->TrafficLoad = TRAFFIC_LOW;
-			}
-			if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-				pDM_SWAT_Table->bTriggerAntennaSwitch = 0;
-			//RT_TRACE(COMP_SWAS, DBG_LOUD, ("Normal:TrafficLoad = %llu\n", curTxOkCnt+curRxOkCnt));
-
-			//Prepare To Try Antenna
-					nextAntenna = (pDM_SWAT_Table->CurAntenna == Antenna_A)? Antenna_B : Antenna_A;
-					pDM_SWAT_Table->try_flag = 1;
-					pDM_Odm->RSSI_test = TRUE;
-			if((curRxOkCnt+curTxOkCnt) > 1000)
-			{
-				pDM_SWAT_Table->RSSI_Trying = 4;
-				pDM_SWAT_Table->TestMode = TP_MODE;
-				}
-				else
-				{
-				pDM_SWAT_Table->RSSI_Trying = 2;
-				pDM_SWAT_Table->TestMode = RSSI_MODE;
-
-			}
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: Normal State -> Begin Trying!\n"));
-
-
-			pDM_SWAT_Table->RSSI_sum_A = 0;
-			pDM_SWAT_Table->RSSI_cnt_A = 0;
-			pDM_SWAT_Table->RSSI_sum_B = 0;
-			pDM_SWAT_Table->RSSI_cnt_B = 0;
-		}
-	}
-
-	//1 4.Change TRX antenna
-	if(nextAntenna != pDM_SWAT_Table->CurAntenna)
-	{
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS: Change TX Antenna!\n "));
-		//PHY_SetBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300, nextAntenna);
-		{
-			BOOLEAN bEnqueue;
-			bEnqueue = (pDM_Odm->SupportInterface ==  ODM_ITRF_PCIE)?FALSE :TRUE;
-			rtw_antenna_select_cmd(pDM_Odm->Adapter, nextAntenna, bEnqueue);
-		}
-	}
-
-	//1 5.Reset Statistics
-	pDM_SWAT_Table->PreAntenna = pDM_SWAT_Table->CurAntenna;
-	pDM_SWAT_Table->CurAntenna = nextAntenna;
-	pDM_SWAT_Table->PreRSSI = curRSSI;
-
-	//1 6.Set next timer
-	{
-		struct adapter *	pAdapter = pDM_Odm->Adapter;
-		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-
-
-	if(pDM_SWAT_Table->RSSI_Trying == 0)
-		return;
-
-	if(pDM_SWAT_Table->RSSI_Trying%2 == 0)
-	{
-		if(pDM_SWAT_Table->TestMode == TP_MODE)
-		{
-			if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-			{
-				//PlatformSetTimer( pAdapter, &pHalData->SwAntennaSwitchTimer, 10 ); //ms
-				ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 10 ); //ms
-
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("dm_SW_AntennaSwitch(): Test another antenna for 10 ms\n"));
-			}
-			else if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_LOW)
-			{
-				//PlatformSetTimer( pAdapter, &pHalData->SwAntennaSwitchTimer, 50 ); //ms
-				ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 50 ); //ms
-				ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("dm_SW_AntennaSwitch(): Test another antenna for 50 ms\n"));
-			}
-		}
-		else
-		{
-			//PlatformSetTimer( pAdapter, &pHalData->SwAntennaSwitchTimer, 500 ); //ms
-			ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 500 ); //ms
-			ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("dm_SW_AntennaSwitch(): Test another antenna for 500 ms\n"));
-		}
-	}
-	else
-	{
-		if(pDM_SWAT_Table->TestMode == TP_MODE)
-		{
-			if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_HIGH)
-				//PlatformSetTimer( pAdapter, &pHalData->SwAntennaSwitchTimer, 90 ); //ms
-				ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 90 ); //ms
-			else if(pDM_SWAT_Table->TrafficLoad == TRAFFIC_LOW)
-				//PlatformSetTimer( pAdapter, &pHalData->SwAntennaSwitchTimer, 100 ); //ms
-				ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 100 ); //ms
-		}
-		else
-			//PlatformSetTimer( pAdapter, &pHalData->SwAntennaSwitchTimer, 500 ); //ms
-			ODM_SetTimer(pDM_Odm,&pDM_SWAT_Table->SwAntennaSwitchTimer, 500 ); //ms
-	}
-	}
-#endif	// #if (RTL8192C_SUPPORT==1)
 }
 
 //
@@ -4537,15 +3726,10 @@ odm_InitHybridAntDiv(
 
 	if(pDM_Odm->SupportICType & (ODM_RTL8192C | ODM_RTL8192D))
 	{
-#if ((RTL8192C_SUPPORT == 1)||(RTL8192D_SUPPORT == 1))
-		odm_InitHybridAntDiv_88C_92D(pDM_Odm);
-#endif
 	}
 	else if(pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
-#if (RTL8188E_SUPPORT == 1)
 		ODM_AntennaDiversityInit_88E(pDM_Odm);
-#endif
 	}
 
 }
@@ -4775,15 +3959,10 @@ odm_HwAntDiv(
 
 	if(pDM_Odm->SupportICType & (ODM_RTL8192C | ODM_RTL8192D))
 	{
-#if ((RTL8192C_SUPPORT == 1)||(RTL8192D_SUPPORT == 1))
-		odm_HwAntDiv_92C_92D(pDM_Odm);
-#endif
 	}
 	else if(pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
-#if (RTL8188E_SUPPORT == 1)
 		ODM_AntennaDiversity_88E(pDM_Odm);
-#endif
 	}
 
 }

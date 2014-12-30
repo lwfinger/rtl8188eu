@@ -630,21 +630,7 @@ odm_Process_RSSIForDM(
 
 	pDM_Odm->RxRate = pPktinfo->Rate;
 #if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
-#if ((RTL8192C_SUPPORT == 1) ||(RTL8192D_SUPPORT == 1))
-	if(pDM_Odm->SupportICType & ODM_RTL8192C|ODM_RTL8192D)
-	{
-			if(pPktinfo->bPacketToSelf || pPktinfo->bPacketBeacon)
-			{
-				//if(pPktinfo->bPacketBeacon)
-				//{
-				//	DbgPrint("This is beacon, isCCKrate=%d\n", isCCKrate);
-				//}
-				ODM_AntselStatistics_88C(pDM_Odm, pPktinfo->StationID,  pPhyInfo->RxPWDBAll, isCCKrate);
-			}
-	}
-#endif
 	//-----------------Smart Antenna Debug Message------------------//
-#if (RTL8188E_SUPPORT == 1)
 	if(pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 		u1Byte	antsel_tr_mux;
@@ -679,7 +665,6 @@ odm_Process_RSSIForDM(
 		}
 
 	}
-#endif
 #endif //#if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
 	//-----------------Smart Antenna Debug Message------------------//
 
@@ -896,20 +881,6 @@ ODM_ConfigRFWithHeaderFile(
 
 
     ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("===>ODM_ConfigRFWithHeaderFile\n"));
-#if (RTL8723A_SUPPORT == 1)
-	if (pDM_Odm->SupportICType == ODM_RTL8723A)
-	{
-		if(eRFPath == ODM_RF_PATH_A)
-			READ_AND_CONFIG_MP(8723A,_RadioA_1T_);
-
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> ODM_ConfigRFWithHeaderFile() Radio_A:Rtl8723RadioA_1TArray\n"));
-		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> ODM_ConfigRFWithHeaderFile() Radio_B:Rtl8723RadioB_1TArray\n"));
-	}
-
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_TRACE, ("ODM_ConfigRFWithHeaderFile: Radio No %x\n", eRFPath));
-	//rtStatus = RT_STATUS_SUCCESS;
-#endif
-#if (RTL8188E_SUPPORT == 1)
 	if (pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 		if(IS_VENDOR_8188E_I_CUT_SERIES(pDM_Odm->Adapter))
@@ -924,7 +895,6 @@ ODM_ConfigRFWithHeaderFile(
 
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_TRACE, ("ODM_ConfigRFWithHeaderFile: Radio No %x\n", eRFPath));
 	//rtStatus = RT_STATUS_SUCCESS;
-#endif
 	return HAL_STATUS_SUCCESS;
 }
 
@@ -935,24 +905,6 @@ ODM_ConfigBBWithHeaderFile(
 	IN	ODM_BB_Config_Type		ConfigType
 	)
 {
-#if (RTL8723A_SUPPORT == 1)
-    if(pDM_Odm->SupportICType == ODM_RTL8723A)
-	{
-
-		if(ConfigType == CONFIG_BB_PHY_REG)
-		{
-			READ_AND_CONFIG_MP(8723A,_PHY_REG_1T_);
-		}
-		else if(ConfigType == CONFIG_BB_AGC_TAB)
-		{
-			READ_AND_CONFIG_MP(8723A,_AGC_TAB_1T_);
-		}
-		ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> phy_ConfigBBWithHeaderFile() phy:Rtl8723AGCTAB_1TArray\n"));
-		ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> phy_ConfigBBWithHeaderFile() agc:Rtl8723PHY_REG_1TArray\n"));
-	}
-#endif
-
-#if (RTL8188E_SUPPORT == 1)
     if(pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 
@@ -976,8 +928,6 @@ ODM_ConfigBBWithHeaderFile(
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> phy_ConfigBBWithHeaderFile() agc:Rtl8188EPHY_REG_PGArray\n"));
 		}
 	}
-#endif
-
 	return HAL_STATUS_SUCCESS;
 }
 
@@ -987,13 +937,6 @@ ODM_ConfigMACWithHeaderFile(
 	)
 {
 	u1Byte result = HAL_STATUS_SUCCESS;
-#if (RTL8723A_SUPPORT == 1)
-	if (pDM_Odm->SupportICType == ODM_RTL8723A)
-	{
-		READ_AND_CONFIG_MP(8723A,_MAC_REG_);
-	}
-#endif
-#if (RTL8188E_SUPPORT == 1)
 	if (pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
 		if(IS_VENDOR_8188E_I_CUT_SERIES(pDM_Odm->Adapter))
@@ -1001,7 +944,5 @@ ODM_ConfigMACWithHeaderFile(
 		else
 			result =READ_AND_CONFIG(8188E,_MAC_REG_);
 	}
-#endif
-
 	return result;
 }

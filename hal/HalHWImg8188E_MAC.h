@@ -18,7 +18,6 @@
 * 
 ******************************************************************************/
 
-#if (RTL8188E_SUPPORT == 1)
 #ifndef __INC_MAC_8188E_HW_IMG_H
 #define __INC_MAC_8188E_HW_IMG_H
 
@@ -43,5 +42,3 @@ ODM_ReadAndConfig_MAC_REG_ICUT_8188E( // TC: Test Chip, MP: MP Chip
 );
 
 #endif
-#endif // end of HWIMG_SUPPORT
-

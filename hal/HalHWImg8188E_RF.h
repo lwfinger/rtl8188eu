@@ -18,7 +18,6 @@
 * 
 ******************************************************************************/
 
-#if (RTL8188E_SUPPORT == 1)
 #ifndef __INC_RF_8188E_HW_IMG_H
 #define __INC_RF_8188E_HW_IMG_H
 
@@ -40,6 +39,5 @@ void
 ODM_ReadAndConfig_RadioA_1T_ICUT_8188E( // TC: Test Chip, MP: MP Chip
 	IN   PDM_ODM_T  pDM_Odm
 );
-#endif
-#endif // end of HWIMG_SUPPORT
 
+#endif

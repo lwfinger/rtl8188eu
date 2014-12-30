@@ -147,9 +147,7 @@ sic_Read4Byte(
 	)
 {
 	u32	u4ret=0xffffffff;
-#if RTL8188E_SUPPORT == 1
 	u8	retry = 0;
-#endif
 
 	//RTPRINT(FPHY, PHY_SICR, ("[SIC], sic_Read4Byte(): read offset(%#x)\n", offset));
 
@@ -170,17 +168,11 @@ sic_Read4Byte(
 		//PlatformEFIOWrite1Byte(Adapter, SIC_CMD_REG, SIC_CMD_READ);
 		//RTPRINT(FPHY, PHY_SICR, ("write cmdreg 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_READ));
 
-#if RTL8188E_SUPPORT == 1
 		retry = 4;
 		while(retry--){
 			rtw_udelay_os(50);
 			//PlatformStallExecution(50);
 		}
-#else
-		rtw_udelay_os(200);
-		//PlatformStallExecution(200);
-#endif
-
 		if(sic_IsSICReady(Adapter))
 		{
 			u4ret = rtw_read32(Adapter, SIC_DATA_REG);
@@ -200,40 +192,20 @@ sic_Write4Byte(
 	u32		data
 	)
 {
-#if RTL8188E_SUPPORT == 1
 	u8	retry = 6;
-#endif
-	//DbgPrint("=>Write 0x%x = 0x%x\n", offset, data);
-	//RTPRINT(FPHY, PHY_SICW, ("[SIC], sic_Write4Byte(): write offset(%#x)=0x%x\n", offset, data));
+
 	if(sic_IsSICReady(Adapter))
 	{
 #if(SIC_HW_SUPPORT == 1)
 		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_PREWRITE);
-		//PlatformEFIOWrite1Byte(Adapter, SIC_CMD_REG, SIC_CMD_PREWRITE);
-		//RTPRINT(FPHY, PHY_SICW, ("write data 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_PREWRITE));
 #endif
 		rtw_write8(Adapter, SIC_ADDR_REG, (u8)(offset&0xff));
-		//PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG, (u1Byte)(offset&0xff));
-		//RTPRINT(FPHY, PHY_SICW, ("write 0x%x=0x%x\n", SIC_ADDR_REG, (u1Byte)(offset&0xff)));
 		rtw_write8(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8));
-		//PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG+1, (u1Byte)((offset&0xff00)>>8));
-		//RTPRINT(FPHY, PHY_SICW, ("write 0x%x=0x%x\n", (SIC_ADDR_REG+1), (u1Byte)((offset&0xff00)>>8)));
 		rtw_write32(Adapter, SIC_DATA_REG, (u32)data);
-		//PlatformEFIOWrite4Byte(Adapter, SIC_DATA_REG, (u4Byte)data);
-		//RTPRINT(FPHY, PHY_SICW, ("write data 0x%x = 0x%x\n", SIC_DATA_REG, data));
 		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_WRITE);
-		//PlatformEFIOWrite1Byte(Adapter, SIC_CMD_REG, SIC_CMD_WRITE);
-		//RTPRINT(FPHY, PHY_SICW, ("write data 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_WRITE));
-#if RTL8188E_SUPPORT == 1
 		while(retry--){
 			rtw_udelay_os(50);
-			//PlatformStallExecution(50);
 		}
-#else
-		rtw_udelay_os(150);
-		//PlatformStallExecution(150);
-#endif
-
 	}
 }
 //============================================================

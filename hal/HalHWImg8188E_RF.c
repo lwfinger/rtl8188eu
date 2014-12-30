@@ -24,7 +24,6 @@
 #include <rtw_iol.h>
 #endif
 
-#if (RTL8188E_SUPPORT == 1)
 static BOOLEAN
 CheckCondition(
     const u4Byte  Condition,
@@ -563,6 +562,3 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 	}
 
 }
-
-
-#endif // end of HWIMG_SUPPORT

@@ -22,7 +22,6 @@
 #ifdef CONFIG_IOL_IOREG_CFG
 #include <rtw_iol.h>
 #endif
-#if (RTL8188E_SUPPORT == 1)
 static BOOLEAN
 CheckCondition(
     const u4Byte  Condition,
@@ -497,5 +496,3 @@ ODM_ReadAndConfig_MAC_REG_ICUT_8188E(
 	}
 
 }
-
-#endif // end of HWIMG_SUPPORT

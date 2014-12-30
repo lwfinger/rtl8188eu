@@ -24,8 +24,6 @@
 
 #include "odm_precomp.h"
 
-#if (RTL8188E_SUPPORT == 1)
-
 void
 ODM_DIG_LowerBound_88E(
 	IN		PDM_ODM_T		pDM_Odm
@@ -609,29 +607,5 @@ odm_DynamicPrimaryCCA(
 	u1Byte		SecCHOffset;
 	u1Byte		i;
 
-	return;
+		return;
 }
-#else //#if (RTL8188E_SUPPORT == 1)
-void
-ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
-{
-}
-void
-odm_PrimaryCCA_Init(
-	IN		PDM_ODM_T		pDM_Odm)
-{
-}
-void
-odm_DynamicPrimaryCCA(
-	IN		PDM_ODM_T		pDM_Odm
-	)
-{
-}
-BOOLEAN
-ODM_DynamicPrimaryCCA_DupRTS(
-	IN		PDM_ODM_T		pDM_Odm
-	)
-{
-	return FALSE;
-}
-#endif //#if (RTL8188E_SUPPORT == 1)
