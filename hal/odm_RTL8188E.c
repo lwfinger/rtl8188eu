@@ -598,12 +598,12 @@ odm_DynamicPrimaryCCA(
 	BOOLEAN		Client_40MHz = FALSE, Client_tmp = FALSE;      // connected client BW
 	BOOLEAN		bConnected = FALSE;		// connected or not
 	static u8	Client_40MHz_pre = 0;
-	static u8Byte	lastTxOkCnt = 0;
-	static u8Byte	lastRxOkCnt = 0;
+	static u64	lastTxOkCnt = 0;
+	static u64	lastRxOkCnt = 0;
 	static u32	Counter = 0;
 	static u8	Delay = 1;
-	u8Byte		curTxOkCnt;
-	u8Byte		curRxOkCnt;
+	u64		curTxOkCnt;
+	u64		curRxOkCnt;
 	u8		SecCHOffset;
 	u8		i;
 

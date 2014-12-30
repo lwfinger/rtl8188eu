@@ -400,7 +400,7 @@ SetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 			pDM_Odm->DebugComponents &= ~(ODM_COMP_DIG |ODM_COMP_FA_CNT);
 		break;
 	case HW_DEF_ODM_DBG_FLAG:
-		ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_DBG_COMP, *((u8Byte*)value));
+		ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_DBG_COMP, *((u64*)value));
 		break;
 	case HW_DEF_ODM_DBG_LEVEL:
 		ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_DBG_LEVEL, *((u32*)value));
@@ -423,7 +423,7 @@ GetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 
 	switch(variable) {
 	case HW_DEF_ODM_DBG_FLAG:
-		*((u8Byte*)value) = pDM_Odm->DebugComponents;
+		*((u64*)value) = pDM_Odm->DebugComponents;
 		break;
 	case HW_DEF_ODM_DBG_LEVEL:
 		*((u32*)value) = pDM_Odm->DebugLevel;

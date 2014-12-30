@@ -2311,7 +2311,7 @@ _PHY_SetBWMode92C(
 
 	// Added it for 20/40 mhz switch time evaluation by guangan 070531
 	//u32				NowL, NowH;
-	//u8Byte				BeginTime, EndTime;
+	//u64				BeginTime, EndTime;
 
 	/*RT_TRACE(COMP_SCAN, DBG_LOUD, ("==>PHY_SetBWModeCallback8192C()  Switch to %s bandwidth\n", \
 					pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20?"20MHz":"40MHz"))*/
@@ -2332,7 +2332,7 @@ _PHY_SetBWMode92C(
 	// Added it for 20/40 mhz switch time evaluation by guangan 070531
 	//NowL = PlatformEFIORead4Byte(Adapter, TSFR);
 	//NowH = PlatformEFIORead4Byte(Adapter, TSFR+4);
-	//BeginTime = ((u8Byte)NowH << 32) + NowL;
+	//BeginTime = ((u64)NowH << 32) + NowL;
 
 	//3//
 	//3//<1>Set MAC register
@@ -2407,7 +2407,7 @@ _PHY_SetBWMode92C(
 	// Added it for 20/40 mhz switch time evaluation by guangan 070531
 	//NowL = PlatformEFIORead4Byte(Adapter, TSFR);
 	//NowH = PlatformEFIORead4Byte(Adapter, TSFR+4);
-	//EndTime = ((u8Byte)NowH << 32) + NowL;
+	//EndTime = ((u64)NowH << 32) + NowL;
 	//RT_TRACE(COMP_SCAN, DBG_LOUD, ("SetBWModeCallback8190Pci: time of SetBWMode = %I64d us!\n", (EndTime - BeginTime)));
 
 	//3<3>Set RF related register

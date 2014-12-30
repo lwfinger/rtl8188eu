@@ -767,11 +767,11 @@ ODM_CmnInfoHook(
 			break;
 
 		case	ODM_CMNINFO_TX_UNI:
-			pDM_Odm->pNumTxBytesUnicast = (u8Byte *)pValue;
+			pDM_Odm->pNumTxBytesUnicast = (u64 *)pValue;
 			break;
 
 		case	ODM_CMNINFO_RX_UNI:
-			pDM_Odm->pNumRxBytesUnicast = (u8Byte *)pValue;
+			pDM_Odm->pNumRxBytesUnicast = (u64 *)pValue;
 			break;
 
 		case	ODM_CMNINFO_WM_MODE:
@@ -904,7 +904,7 @@ void
 ODM_CmnInfoUpdate(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		u32			CmnInfo,
-	IN		u8Byte			Value
+	IN		u64			Value
 	)
 {
 	//
