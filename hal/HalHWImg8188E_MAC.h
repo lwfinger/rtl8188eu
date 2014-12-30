@@ -21,7 +21,7 @@
 #ifndef __INC_MAC_8188E_HW_IMG_H
 #define __INC_MAC_8188E_HW_IMG_H
 
-//static BOOLEAN CheckCondition(const u4Byte Condition, const u4Byte Hex);
+//static BOOLEAN CheckCondition(const u32 Condition, const u32 Hex);
 
 /******************************************************************************
 *                           MAC_REG.TXT

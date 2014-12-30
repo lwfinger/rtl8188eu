@@ -38,7 +38,7 @@ ODM_TxPwrTrackAdjust88E(
 	PDM_ODM_T	pDM_Odm,
 	u1Byte		Type,				// 0 = OFDM, 1 = CCK
 	pu1Byte		pDirection,			// 1 = +(increase) 2 = -(decrease)
-	pu4Byte		pOutWriteVal		// Tx tracking CCK/OFDM BB swing index adjust
+	u32 *		pOutWriteVal		// Tx tracking CCK/OFDM BB swing index adjust
 	);
 
 
@@ -79,15 +79,15 @@ PHY_DigitalPredistortion_8188E(		IN	struct adapter *	pAdapter);
 void
 _PHY_SaveADDARegisters(
 	IN	struct adapter *	pAdapter,
-	IN	pu4Byte		ADDAReg,
-	IN	pu4Byte		ADDABackup,
-	IN	u4Byte		RegisterNum
+	IN	u32 *		ADDAReg,
+	IN	u32 *		ADDABackup,
+	IN	u32		RegisterNum
 	);
 
 void
 _PHY_PathADDAOn(
 	IN	struct adapter *	pAdapter,
-	IN	pu4Byte		ADDAReg,
+	IN	u32 *		ADDAReg,
 	IN	BOOLEAN		isPathAOn,
 	IN	BOOLEAN		is2T
 	);
@@ -95,8 +95,8 @@ _PHY_PathADDAOn(
 void
 _PHY_MACSettingCalibration(
 	IN	struct adapter *	pAdapter,
-	IN	pu4Byte		MACReg,
-	IN	pu4Byte		MACBackup	
+	IN	u32 *		MACReg,
+	IN	u32 *		MACBackup	
 	);
 
 

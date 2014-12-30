@@ -23,10 +23,10 @@
 void
 odm_ConfigRFReg_8188E(
 	IN	PDM_ODM_T				pDM_Odm,
-	IN	u4Byte					Addr,
-	IN	u4Byte					Data,
+	IN	u32					Addr,
+	IN	u32					Data,
 	IN  ODM_RF_RADIO_PATH_E     RF_PATH,
-	IN	u4Byte				    RegAddr
+	IN	u32				    RegAddr
 	)
 {
     if(Addr == 0xffe)
@@ -69,12 +69,12 @@ odm_ConfigRFReg_8188E(
 void
 odm_ConfigRF_RadioA_8188E(
 	IN	PDM_ODM_T				pDM_Odm,
-	IN	u4Byte					Addr,
-	IN	u4Byte					Data
+	IN	u32					Addr,
+	IN	u32					Data
 	)
 {
-	u4Byte  content = 0x1000; // RF_Content: radioa_txt
-	u4Byte	maskforPhySet= (u4Byte)(content&0xE000);
+	u32  content = 0x1000; // RF_Content: radioa_txt
+	u32	maskforPhySet= (u32)(content&0xE000);
 
     odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, ODM_RF_PATH_A, Addr|maskforPhySet);
 
@@ -84,12 +84,12 @@ odm_ConfigRF_RadioA_8188E(
 void
 odm_ConfigRF_RadioB_8188E(
 	IN	PDM_ODM_T				pDM_Odm,
-	IN	u4Byte					Addr,
-	IN	u4Byte					Data
+	IN	u32					Addr,
+	IN	u32					Data
 	)
 {
-	u4Byte  content = 0x1001; // RF_Content: radiob_txt
-	u4Byte	maskforPhySet= (u4Byte)(content&0xE000);
+	u32  content = 0x1001; // RF_Content: radiob_txt
+	u32	maskforPhySet= (u32)(content&0xE000);
 
     odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, ODM_RF_PATH_B, Addr|maskforPhySet);
 
@@ -100,7 +100,7 @@ odm_ConfigRF_RadioB_8188E(
 void
 odm_ConfigMAC_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		Addr,
+	IN	u32		Addr,
 	IN	u1Byte		Data
 	)
 {
@@ -111,9 +111,9 @@ odm_ConfigMAC_8188E(
 void
 odm_ConfigBB_AGC_8188E(
     IN	PDM_ODM_T	pDM_Odm,
-    IN	u4Byte		Addr,
-    IN	u4Byte		Bitmask,
-    IN	u4Byte		Data
+    IN	u32		Addr,
+    IN	u32		Bitmask,
+    IN	u32		Data
     )
 {
 	ODM_SetBBReg(pDM_Odm, Addr, Bitmask, Data);
@@ -126,9 +126,9 @@ odm_ConfigBB_AGC_8188E(
 void
 odm_ConfigBB_PHY_REG_PG_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-    IN	u4Byte		Addr,
-    IN	u4Byte		Bitmask,
-    IN	u4Byte		Data
+    IN	u32		Addr,
+    IN	u32		Bitmask,
+    IN	u32		Data
     )
 {
 	if (Addr == 0xfe){
@@ -158,9 +158,9 @@ odm_ConfigBB_PHY_REG_PG_8188E(
 void
 odm_ConfigBB_PHY_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-    IN	u4Byte		Addr,
-    IN	u4Byte		Bitmask,
-    IN	u4Byte		Data
+    IN	u32		Addr,
+    IN	u32		Bitmask,
+    IN	u32		Data
     )
 {
 	if (Addr == 0xfe){

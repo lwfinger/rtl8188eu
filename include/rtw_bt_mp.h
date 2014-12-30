@@ -47,12 +47,12 @@ typedef enum _MP_BT_MODE{
 // definition for BT_UP_OP_BT_SET_TX_RX_PARAMETER
 typedef struct _BT_TXRX_PARAMETERS{
     u1Byte		txrxChannel;
-    u4Byte		txrxTxPktCnt;
+    u32		txrxTxPktCnt;
     u1Byte		txrxTxPktInterval;
 	u1Byte		txrxPayloadType;
 	u1Byte		txrxPktType;
 	u16		txrxPayloadLen;
-	u4Byte		txrxPktHeader;
+	u32		txrxPktHeader;
 	u1Byte		txrxWhitenCoeff;
 	u1Byte		txrxBdaddr[6];
 	u1Byte		txrxTxGainIndex;

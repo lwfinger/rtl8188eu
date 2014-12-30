@@ -81,7 +81,7 @@ static u1Byte	DROPING_NECESSARY[RATESIZE] = {1,1,1,1,
 	1,2,3,4,5,6,7,8,
 	1,2,3,4,5,6,7,8,
 	5,6,7,8,9,10,11,12};
-static u4Byte	INIT_RATE_FALLBACK_TABLE[16]={0x0f8ff015,  // 0: 40M BGN mode
+static u32	INIT_RATE_FALLBACK_TABLE[16]={0x0f8ff015,  // 0: 40M BGN mode
 	0x0f8ff010,   // 1: 40M GN mode
 	0x0f8ff005,   // 2: BN mode/ 40M BGN mode
 	0x0f8ff000,   // 3: N mode
@@ -287,7 +287,7 @@ odm_RateDecision_8188E(
 	)
 {
 	u1Byte RateID = 0, RtyPtID = 0, PenaltyID1 = 0, PenaltyID2 = 0;
-	//u4Byte pool_retry;
+	//u32 pool_retry;
 	static u1Byte DynamicTxRPTTimingCounter=0;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateDecision_8188E() \n"));
@@ -378,7 +378,7 @@ odm_ARFBRefresh_8188E(
 	IN	PODM_RA_INFO_T  pRaInfo
 	)
 {  // Wilson 2011/10/26
-	u4Byte MaskFromReg;
+	u32 MaskFromReg;
 	s1Byte i;
 
 	switch(pRaInfo->RateID){
@@ -544,8 +544,8 @@ odm_PTDecision_8188E(
 	u1Byte stage_BUF;
 	u1Byte j;
 	u1Byte temp_stage;
-	u4Byte numsc;
-	u4Byte num_total;
+	u32 numsc;
+	u32 num_total;
 	u1Byte stage_id;
 
 	stage_BUF=pRaInfo->PTStage;
@@ -751,7 +751,7 @@ ODM_RA_UpdateRateInfo_8188E(
 	IN PDM_ODM_T pDM_Odm,
 	IN u1Byte MacID,
 	IN u1Byte RateID,
-	IN u4Byte RateMask,
+	IN u32 RateMask,
 	IN u1Byte SGIEnable
 	)
 {
@@ -803,14 +803,14 @@ ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,
 	IN	u16			TxRPT_Len,
-	IN	u4Byte			MacIDValidEntry0,
-	IN	u4Byte			MacIDValidEntry1
+	IN	u32			MacIDValidEntry0,
+	IN	u32			MacIDValidEntry1
 	)
 {
 	PODM_RA_INFO_T pRAInfo = NULL;
 	u1Byte			MacId = 0;
 	pu1Byte			pBuffer = NULL;
-	u4Byte			valid = 0, ItemNum = 0;
+	u32			valid = 0, ItemNum = 0;
 	u16			minRptTime = 0x927c;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>ODM_RA_TxRPT2Handle_8188E(): valid0=%d valid1=%d BufferLength=%d\n",
@@ -982,7 +982,7 @@ ODM_RA_UpdateRateInfo_8188E(
 	IN PDM_ODM_T pDM_Odm,
 	IN u1Byte MacID,
 	IN u1Byte RateID,
-	IN u4Byte RateMask,
+	IN u32 RateMask,
 	IN u1Byte SGIEnable
 	)
 {
@@ -1013,8 +1013,8 @@ ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,
 	IN	u16			TxRPT_Len,
-	IN	u4Byte			MacIDValidEntry0,
-	IN	u4Byte			MacIDValidEntry1
+	IN	u32			MacIDValidEntry0,
+	IN	u32			MacIDValidEntry1
 	)
 {
 	return;

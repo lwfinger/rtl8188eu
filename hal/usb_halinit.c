@@ -666,7 +666,7 @@ _InitWMACSetting(
 	IN  struct adapter *Adapter
 	)
 {
-	//u4Byte			value32;
+	//u32			value32;
 	//u16			value16;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -4299,7 +4299,7 @@ void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rssi_level
 
 		//to do
 		/*
-		*(pu4Byte)&RateMask=EF4Byte((ratr_bitmap&0x0fffffff) | (ratr_index<<28));
+		*(u32 *)&RateMask=EF4Byte((ratr_bitmap&0x0fffffff) | (ratr_index<<28));
 		RateMask[4] = macId | (bShortGI?0x20:0x00) | 0x80;
 		*/
 		rtl8188e_set_raid_cmd(padapter, mask);

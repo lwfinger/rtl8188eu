@@ -26,14 +26,14 @@
 
 static BOOLEAN
 CheckCondition(
-    const u4Byte  Condition,
-    const u4Byte  Hex
+    const u32  Condition,
+    const u32  Hex
     )
 {
-    u4Byte _board     = (Hex & 0x000000FF);
-    u4Byte _interface = (Hex & 0x0000FF00) >> 8;
-    u4Byte _platform  = (Hex & 0x00FF0000) >> 16;
-    u4Byte cond = Condition;
+    u32 _board     = (Hex & 0x000000FF);
+    u32 _interface = (Hex & 0x0000FF00) >> 8;
+    u32 _platform  = (Hex & 0x00FF0000) >> 16;
+    u32 cond = Condition;
 
     if ( Condition == 0xCDCDCDCD )
         return TRUE;
@@ -59,7 +59,7 @@ CheckCondition(
 *                           AGC_TAB_1T.TXT
 ******************************************************************************/
 
-u4Byte Array_AGC_TAB_1T_8188E[] = {
+u32 Array_AGC_TAB_1T_8188E[] = {
 0xFF0F0718, 0xABCD,
 		0xC78, 0xF7000001,
 		0xC78, 0xF6010001,
@@ -334,15 +334,15 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
 
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
+	u32     hex         = 0;
+	u32     i           = 0;
 	u16     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	u32 *    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_AGC_TAB_1T_8188E)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_AGC_TAB_1T_8188E;
+	u32     ArrayLen    = sizeof(Array_AGC_TAB_1T_8188E)/sizeof(u32);
+	u32 *    Array       = Array_AGC_TAB_1T_8188E;
 	BOOLEAN		biol = FALSE;
 #ifdef CONFIG_IOL_IOREG_CFG
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
@@ -368,8 +368,8 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
-		u4Byte v1 = Array[i];
-		u4Byte v2 = Array[i+1];
+		u32 v1 = Array[i];
+		u32 v2 = Array[i+1];
 
 		// This (offset, data) pair meets the condition.
 		if ( v1 < 0xCDCDCDCD )
@@ -463,7 +463,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 *                           AGC_TAB_1T_ICUT.TXT
 ******************************************************************************/
 
-u4Byte Array_MP_8188E_AGC_TAB_1T_ICUT[] = {
+u32 Array_MP_8188E_AGC_TAB_1T_ICUT[] = {
 		0xC78, 0xFB000001,
 		0xC78, 0xFB010001,
 		0xC78, 0xFB020001,
@@ -604,15 +604,15 @@ ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E(
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
 
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
+	u32     hex         = 0;
+	u32     i           = 0;
 	u16     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	u32 *    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_MP_8188E_AGC_TAB_1T_ICUT)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_MP_8188E_AGC_TAB_1T_ICUT;
+	u32     ArrayLen    = sizeof(Array_MP_8188E_AGC_TAB_1T_ICUT)/sizeof(u32);
+	u32 *    Array       = Array_MP_8188E_AGC_TAB_1T_ICUT;
 
 
 	hex += board;
@@ -623,8 +623,8 @@ ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E(
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
+	    u32 v1 = Array[i];
+	    u32 v2 = Array[i+1];
 
 	    // This (offset, data) pair meets the condition.
 	    if ( v1 < 0xCDCDCDCD )
@@ -671,7 +671,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E(
 *                           PHY_REG_1T.TXT
 ******************************************************************************/
 
-u4Byte Array_PHY_REG_1T_8188E[] = {
+u32 Array_PHY_REG_1T_8188E[] = {
 		0x800, 0x80040000,
 		0x804, 0x00000003,
 		0x808, 0x0000FC00,
@@ -896,15 +896,15 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
 
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
+	u32     hex         = 0;
+	u32     i           = 0;
 	u16     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	u32 *    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_PHY_REG_1T_8188E)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_PHY_REG_1T_8188E;
+	u32     ArrayLen    = sizeof(Array_PHY_REG_1T_8188E)/sizeof(u32);
+	u32 *    Array       = Array_PHY_REG_1T_8188E;
 	BOOLEAN		biol = FALSE;
 #ifdef CONFIG_IOL_IOREG_CFG
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
@@ -912,7 +912,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 	u8 bndy_cnt=1;
 	#ifdef CONFIG_IOL_IOREG_CFG_DBG
 	struct cmd_cmp cmpdata[ArrayLen];
-	u4Byte	cmpdata_idx=0;
+	u32	cmpdata_idx=0;
 	#endif
 #endif//#ifdef CONFIG_IOL_IOREG_CFG
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
@@ -934,8 +934,8 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
+	    u32 v1 = Array[i];
+	    u32 v2 = Array[i+1];
 
 
 	    // This (offset, data) pair meets the condition.
@@ -1062,8 +1062,8 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			printk("~~~ %s IOL_exec_cmds Success !!! \n",__FUNCTION__);
 			{
-				u4Byte idx;
-				u4Byte cdata;
+				u32 idx;
+				u32 cdata;
 				printk("  %s data compare => array_len:%d \n",__FUNCTION__,cmpdata_idx);
 				printk("### %s data compared !!###\n",__FUNCTION__);
 				for(idx=0;idx< cmpdata_idx;idx++)
@@ -1103,7 +1103,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 *                           PHY_REG_1T_ICUT.TXT
 ******************************************************************************/
 
-u4Byte Array_MP_8188E_PHY_REG_1T_ICUT[] = {
+u32 Array_MP_8188E_PHY_REG_1T_ICUT[] = {
 		0x800, 0x80040000,
 		0x804, 0x00000003,
 		0x808, 0x0000FC00,
@@ -1305,15 +1305,15 @@ ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E(
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
 
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
+	u32     hex         = 0;
+	u32     i           = 0;
 	u16     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	u32 *    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_MP_8188E_PHY_REG_1T_ICUT)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_MP_8188E_PHY_REG_1T_ICUT;
+	u32     ArrayLen    = sizeof(Array_MP_8188E_PHY_REG_1T_ICUT)/sizeof(u32);
+	u32 *    Array       = Array_MP_8188E_PHY_REG_1T_ICUT;
 
 
 	hex += board;
@@ -1324,8 +1324,8 @@ ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E(
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
+	    u32 v1 = Array[i];
+	    u32 v2 = Array[i+1];
 
 	    // This (offset, data) pair meets the condition.
 	    if ( v1 < 0xCDCDCDCD )
@@ -1373,7 +1373,7 @@ ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E(
 *                           PHY_REG_PG.TXT
 ******************************************************************************/
 
-u4Byte Array_PHY_REG_PG_8188E[] = {
+u32 Array_PHY_REG_PG_8188E[] = {
 	0, 0, 0, 0x00000e08, 0x0000ff00, 0x00004000,
 	0, 0, 0, 0x0000086c, 0xffffff00, 0x34363800,
 	0, 0, 0, 0x00000e00, 0xffffffff, 0x42444646,
@@ -1388,15 +1388,15 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 	IN   PDM_ODM_T  pDM_Odm
 	)
 {
-	u4Byte     hex = 0;
-	u4Byte     i           = 0;
+	u32     hex = 0;
+	u32     i           = 0;
 	u16     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	u32 *    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_PHY_REG_PG_8188E)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_PHY_REG_PG_8188E;
+	u32     ArrayLen    = sizeof(Array_PHY_REG_PG_8188E)/sizeof(u32);
+	u32 *    Array       = Array_PHY_REG_PG_8188E;
 	BOOLEAN		biol = FALSE;
 
 	hex += board;
@@ -1405,12 +1405,12 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 	hex += 0xFF000000;
 	for (i = 0; i < ArrayLen; i += 6 )
 	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
-	    u4Byte v3 = Array[i+2];
-	    u4Byte v4 = Array[i+3];
-	    u4Byte v5 = Array[i+4];
-	    u4Byte v6 = Array[i+5];
+	    u32 v1 = Array[i];
+	    u32 v2 = Array[i+1];
+	    u32 v3 = Array[i+2];
+	    u32 v4 = Array[i+3];
+	    u32 v5 = Array[i+4];
+	    u32 v6 = Array[i+5];
 
 	    // this line is a line of pure_body
 	    if ( v1 < 0xCDCDCDCD )

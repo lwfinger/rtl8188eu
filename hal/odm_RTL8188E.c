@@ -48,7 +48,7 @@ odm_RX_HWAntDivInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
 {
-	u4Byte	value32;
+	u32	value32;
 	struct adapter *	Adapter = pDM_Odm->Adapter;
         #if (MP_DRIVER == 1)
         if (*(pDM_Odm->mp_mode) == 1)
@@ -86,7 +86,7 @@ odm_TRX_HWAntDivInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
 {
-	u4Byte	value32;
+	u32	value32;
 	struct adapter *	Adapter = pDM_Odm->Adapter;
 
         #if (MP_DRIVER == 1)
@@ -137,9 +137,9 @@ odm_FastAntTrainingInit(
 	IN		PDM_ODM_T		pDM_Odm
 )
 {
-	u4Byte	value32, i;
+	u32	value32, i;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
-	u4Byte	AntCombination = 2;
+	u32	AntCombination = 2;
 	struct adapter *	Adapter = pDM_Odm->Adapter;
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit() \n"));
 
@@ -278,7 +278,7 @@ void
 ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
-	u4Byte	DefaultAnt, OptionalAnt;
+	u32	DefaultAnt, OptionalAnt;
 
 	if(pDM_FatTable->RxIdleAnt != Ant)
 	{
@@ -315,7 +315,7 @@ ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 
 
 void
-odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u4Byte MacId)
+odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u32 MacId)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u1Byte	TargetAnt;
@@ -358,7 +358,7 @@ void
 ODM_AntselStatistics_88E(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		u1Byte			antsel_tr_mux,
-	IN		u4Byte			MacId,
+	IN		u32			MacId,
 	IN		u1Byte			RxPWDBAll
 )
 {
@@ -401,8 +401,8 @@ odm_HWAntDiv(
 	IN		PDM_ODM_T		pDM_Odm
 )
 {
-	u4Byte	i, MinRSSI=0xFF, AntDivMaxRSSI=0, MaxRSSI=0, LocalMinRSSI, LocalMaxRSSI;
-	u4Byte	Main_RSSI, Aux_RSSI;
+	u32	i, MinRSSI=0xFF, AntDivMaxRSSI=0, MaxRSSI=0, LocalMinRSSI, LocalMaxRSSI;
+	u32	Main_RSSI, Aux_RSSI;
 	u1Byte	RxIdleAnt=0, TargetAnt=7;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
@@ -478,7 +478,7 @@ ODM_AntennaDiversity_88E(
 	if(pDM_Odm->bLinked){
 		if(pDM_Odm->Adapter->registrypriv.force_ant != 0)
 		{
-			u4Byte	Main_RSSI, Aux_RSSI;
+			u32	Main_RSSI, Aux_RSSI;
 			u8 i=0;
 			Main_RSSI = (pDM_FatTable->MainAnt_Cnt[i]!=0)?(pDM_FatTable->MainAnt_Sum[i]/pDM_FatTable->MainAnt_Cnt[i]):0;
 			Aux_RSSI = (pDM_FatTable->AuxAnt_Cnt[i]!=0)?(pDM_FatTable->AuxAnt_Sum[i]/pDM_FatTable->AuxAnt_Cnt[i]):0;
@@ -600,7 +600,7 @@ odm_DynamicPrimaryCCA(
 	static u1Byte	Client_40MHz_pre = 0;
 	static u8Byte	lastTxOkCnt = 0;
 	static u8Byte	lastRxOkCnt = 0;
-	static u4Byte	Counter = 0;
+	static u32	Counter = 0;
 	static u1Byte	Delay = 1;
 	u8Byte		curTxOkCnt;
 	u8Byte		curRxOkCnt;

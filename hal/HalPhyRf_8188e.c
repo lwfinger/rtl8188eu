@@ -127,7 +127,7 @@ void setIqkMatrix(
 	}
 
     ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("TxPwrTracking path B: X = 0x%x, Y = 0x%x ele_A = 0x%x ele_C = 0x%x ele_D = 0x%x 0xeb4 = 0x%x 0xebc = 0x%x\n",
-    (u4Byte)IqkResult_X, (u4Byte)IqkResult_Y, (u4Byte)ele_A, (u4Byte)ele_C, (u4Byte)ele_D, (u4Byte)IqkResult_X, (u4Byte)IqkResult_Y));
+    (u32)IqkResult_X, (u32)IqkResult_Y, (u32)ele_A, (u32)ele_C, (u32)ele_D, (u32)IqkResult_X, (u32)IqkResult_Y));
 }
 
 
@@ -170,7 +170,7 @@ ODM_TxPwrTrackAdjust88E(
 	PDM_ODM_T	pDM_Odm,
 	u1Byte		Type,				// 0 = OFDM, 1 = CCK
 	pu1Byte		pDirection,			// 1 = +(increase) 2 = -(decrease)
-	pu4Byte		pOutWriteVal		// Tx tracking CCK/OFDM BB swing index adjust
+	u32 *		pOutWriteVal		// Tx tracking CCK/OFDM BB swing index adjust
 	)
 {
 	u1Byte	pwr_value = 0;
@@ -260,7 +260,7 @@ odm_TxPwrTrackSetPwr88E(
 		u1Byte	cckPowerLevel[MAX_TX_COUNT], ofdmPowerLevel[MAX_TX_COUNT];
 		u1Byte	BW20PowerLevel[MAX_TX_COUNT], BW40PowerLevel[MAX_TX_COUNT];
 		u1Byte	rf = 0;
-		u4Byte	pwr = 0, TxAGC = 0;
+		u32	pwr = 0, TxAGC = 0;
 		struct adapter *Adapter = pDM_Odm->Adapter;
 		//printk("odm_TxPwrTrackSetPwr88E CH=%d, modify TXAGC \n", *(pDM_Odm->pChannel));
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("odm_TxPwrTrackSetPwr88E CH=%d\n", *(pDM_Odm->pChannel)));
@@ -347,12 +347,12 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u1Byte			ThermalValue = 0, delta, delta_LCK, delta_IQK, offset;
 	u1Byte			ThermalValue_AVG_count = 0;
-	u4Byte			ThermalValue_AVG = 0;
+	u32			ThermalValue_AVG = 0;
 	s4Byte			ele_A=0, ele_D, TempCCk, X, value32;
 	s4Byte			Y, ele_C=0;
 	s1Byte			OFDM_index[2], CCK_index=0, OFDM_index_old[2]={0,0}, CCK_index_old=0, index;
 	s1Byte			deltaPowerIndex = 0;
-	u4Byte			i = 0, j = 0;
+	u32			i = 0, j = 0;
 	BOOLEAN			is2T = FALSE;
 	BOOLEAN			bInteralPA = FALSE;
 
@@ -572,7 +572,7 @@ phy_PathA_IQK_8188E(
 	IN	BOOLEAN		configPathB
 	)
 {
-	u4Byte regEAC, regE94, regE9C, regEA4;
+	u32 regEAC, regE94, regE9C, regEA4;
 	u1Byte result = 0x00;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -625,7 +625,7 @@ phy_PathA_RxIQK(
 	IN	BOOLEAN		configPathB
 	)
 {
-	u4Byte regEAC, regE94, regE9C, regEA4, u4tmp;
+	u32 regEAC, regE94, regE9C, regEA4, u4tmp;
 	u1Byte result = 0x00;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -761,7 +761,7 @@ phy_PathB_IQK_8188E(
 	IN	struct adapter *pAdapter
 	)
 {
-	u4Byte regEAC, regEB4, regEBC, regEC4, regECC;
+	u32 regEAC, regEB4, regEBC, regEC4, regECC;
 	u1Byte	result = 0x00;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -817,7 +817,7 @@ _PHY_PathAFillIQKMatrix(
 	IN  BOOLEAN		bTxOnly
 	)
 {
-	u4Byte	Oldval_0, X, TX0_A, reg;
+	u32	Oldval_0, X, TX0_A, reg;
 	s4Byte	Y, TX0_C;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -877,7 +877,7 @@ _PHY_PathBFillIQKMatrix(
 	IN	BOOLEAN		bTxOnly			//do Tx only
 	)
 {
-	u4Byte	Oldval_1, X, TX1_A, reg;
+	u32	Oldval_1, X, TX1_A, reg;
 	s4Byte	Y, TX1_C;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -938,12 +938,12 @@ ODM_CheckPowerStatus(
 void
 _PHY_SaveADDARegisters(
 	IN	struct adapter *pAdapter,
-	IN	pu4Byte		ADDAReg,
-	IN	pu4Byte		ADDABackup,
-	IN	u4Byte		RegisterNum
+	IN	u32 *		ADDAReg,
+	IN	u32 *		ADDABackup,
+	IN	u32		RegisterNum
 	)
 {
-	u4Byte	i;
+	u32	i;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
@@ -959,11 +959,11 @@ _PHY_SaveADDARegisters(
 void
 _PHY_SaveMACRegisters(
 	IN	struct adapter *pAdapter,
-	IN	pu4Byte		MACReg,
-	IN	pu4Byte		MACBackup
+	IN	u32 *		MACReg,
+	IN	u32 *		MACBackup
 	)
 {
-	u4Byte	i;
+	u32	i;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
@@ -979,12 +979,12 @@ _PHY_SaveMACRegisters(
 void
 _PHY_ReloadADDARegisters(
 	IN	struct adapter *pAdapter,
-	IN	pu4Byte		ADDAReg,
-	IN	pu4Byte		ADDABackup,
-	IN	u4Byte		RegiesterNum
+	IN	u32 *		ADDAReg,
+	IN	u32 *		ADDABackup,
+	IN	u32		RegiesterNum
 	)
 {
-	u4Byte	i;
+	u32	i;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
@@ -998,11 +998,11 @@ _PHY_ReloadADDARegisters(
 void
 _PHY_ReloadMACRegisters(
 	IN	struct adapter *pAdapter,
-	IN	pu4Byte		MACReg,
-	IN	pu4Byte		MACBackup
+	IN	u32 *		MACReg,
+	IN	u32 *		MACBackup
 	)
 {
-	u4Byte	i;
+	u32	i;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
@@ -1017,13 +1017,13 @@ _PHY_ReloadMACRegisters(
 void
 _PHY_PathADDAOn(
 	IN	struct adapter *pAdapter,
-	IN	pu4Byte		ADDAReg,
+	IN	u32 *		ADDAReg,
 	IN	BOOLEAN		isPathAOn,
 	IN	BOOLEAN		is2T
 	)
 {
-	u4Byte	pathOn;
-	u4Byte	i;
+	u32	pathOn;
+	u32	i;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
@@ -1047,11 +1047,11 @@ _PHY_PathADDAOn(
 void
 _PHY_MACSettingCalibration(
 	IN	struct adapter *pAdapter,
-	IN	pu4Byte		MACReg,
-	IN	pu4Byte		MACBackup
+	IN	u32 *		MACReg,
+	IN	u32 *		MACBackup
 	)
 {
-	u4Byte	i = 0;
+	u32	i = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
@@ -1087,7 +1087,7 @@ _PHY_PIModeSwitch(
 	IN	BOOLEAN		PIMode
 	)
 {
-	u4Byte	mode;
+	u32	mode;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
@@ -1106,7 +1106,7 @@ phy_SimularityCompare_8188E(
 	IN	u1Byte		 c2
 	)
 {
-	u4Byte		i, j, diff, SimularityBitMap, bound = 0;
+	u32		i, j, diff, SimularityBitMap, bound = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	u1Byte		final_candidate[2] = {0xFF, 0xFF};	//for path A and path B
@@ -1232,9 +1232,9 @@ phy_IQCalibrate_8188E(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
-	u4Byte			i;
+	u32			i;
 	u1Byte			PathAOK, PathBOK;
-	u4Byte			ADDA_REG[IQK_ADDA_REG_NUM] = {
+	u32			ADDA_REG[IQK_ADDA_REG_NUM] = {
 						rFPGA0_XCD_SwitchControl,	rBlue_Tooth,
 						rRx_Wait_CCA,		rTx_CCK_RFON,
 						rTx_CCK_BBON,	rTx_OFDM_RFON,
@@ -1243,12 +1243,12 @@ phy_IQCalibrate_8188E(
 						rRx_OFDM,		rRx_Wait_RIFS,
 						rRx_TO_Rx,		rStandby,
 						rSleep,				rPMPD_ANAEN };
-	u4Byte			IQK_MAC_REG[IQK_MAC_REG_NUM] = {
+	u32			IQK_MAC_REG[IQK_MAC_REG_NUM] = {
 						REG_TXPAUSE,		REG_BCN_CTRL,
 						REG_BCN_CTRL_1,	REG_GPIO_MUXCFG};
 
 	//since 92C & 92D have the different define in IQK_BB_REG
-	u4Byte	IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
+	u32	IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 							rOFDM0_TRxPathEnable,		rOFDM0_TRMuxPar,
 							rFPGA0_XCD_RFInterfaceSW,	rConfig_AntA,	rConfig_AntB,
 							rFPGA0_XAB_RFInterfaceSW,	rFPGA0_XA_RFInterfaceOE,
@@ -1256,9 +1256,9 @@ phy_IQCalibrate_8188E(
 							};
 
 #if MP_DRIVER
-	u4Byte	retryCount = 9;
+	u32	retryCount = 9;
 #else
-	u4Byte	retryCount = 2;
+	u32	retryCount = 2;
 #endif
 if ( *(pDM_Odm->mp_mode) == 1)
 	retryCount = 9;
@@ -1423,7 +1423,7 @@ phy_LCCalibrate_8188E(
 	)
 {
 	u1Byte	tmpReg;
-	u4Byte	RF_Amode=0, RF_Bmode=0, LC_Cal;
+	u32	RF_Amode=0, RF_Bmode=0, LC_Cal;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
@@ -1494,24 +1494,24 @@ phy_APCalibrate_8188E(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
-	u4Byte			regD[PATH_NUM];
-	u4Byte			tmpReg, index, offset,  apkbound;
+	u32			regD[PATH_NUM];
+	u32			tmpReg, index, offset,  apkbound;
 	u1Byte			path, i, pathbound = PATH_NUM;
-	u4Byte			BB_backup[APK_BB_REG_NUM];
-	u4Byte			BB_REG[APK_BB_REG_NUM] = {
+	u32			BB_backup[APK_BB_REG_NUM];
+	u32			BB_REG[APK_BB_REG_NUM] = {
 						rFPGA1_TxBlock,		rOFDM0_TRxPathEnable,
 						rFPGA0_RFMOD,	rOFDM0_TRMuxPar,
 						rFPGA0_XCD_RFInterfaceSW,	rFPGA0_XAB_RFInterfaceSW,
 						rFPGA0_XA_RFInterfaceOE,	rFPGA0_XB_RFInterfaceOE	};
-	u4Byte			BB_AP_MODE[APK_BB_REG_NUM] = {
+	u32			BB_AP_MODE[APK_BB_REG_NUM] = {
 						0x00000020, 0x00a05430, 0x02040000,
 						0x000800e4, 0x00204000 };
-	u4Byte			BB_normal_AP_MODE[APK_BB_REG_NUM] = {
+	u32			BB_normal_AP_MODE[APK_BB_REG_NUM] = {
 						0x00000020, 0x00a05430, 0x02040000,
 						0x000800e4, 0x22204000 };
 
-	u4Byte			AFE_backup[IQK_ADDA_REG_NUM];
-	u4Byte			AFE_REG[IQK_ADDA_REG_NUM] = {
+	u32			AFE_backup[IQK_ADDA_REG_NUM];
+	u32			AFE_REG[IQK_ADDA_REG_NUM] = {
 						rFPGA0_XCD_SwitchControl,	rBlue_Tooth,
 						rRx_Wait_CCA,		rTx_CCK_RFON,
 						rTx_CCK_BBON,	rTx_OFDM_RFON,
@@ -1521,44 +1521,44 @@ phy_APCalibrate_8188E(
 						rRx_TO_Rx,		rStandby,
 						rSleep,				rPMPD_ANAEN };
 
-	u4Byte			MAC_backup[IQK_MAC_REG_NUM];
-	u4Byte			MAC_REG[IQK_MAC_REG_NUM] = {
+	u32			MAC_backup[IQK_MAC_REG_NUM];
+	u32			MAC_REG[IQK_MAC_REG_NUM] = {
 						REG_TXPAUSE,		REG_BCN_CTRL,
 						REG_BCN_CTRL_1,	REG_GPIO_MUXCFG};
 
-	u4Byte			APK_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
+	u32			APK_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
 					{0x0852c, 0x1852c, 0x5852c, 0x1852c, 0x5852c},
 					{0x2852e, 0x0852e, 0x3852e, 0x0852e, 0x0852e}
 					};
 
-	u4Byte			APK_normal_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
+	u32			APK_normal_RF_init_value[PATH_NUM][APK_BB_REG_NUM] = {
 					{0x0852c, 0x0a52c, 0x3a52c, 0x5a52c, 0x5a52c},	//path settings equal to path b settings
 					{0x0852c, 0x0a52c, 0x5a52c, 0x5a52c, 0x5a52c}
 					};
 
-	u4Byte			APK_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
+	u32			APK_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
 					{0x52019, 0x52014, 0x52013, 0x5200f, 0x5208d},
 					{0x5201a, 0x52019, 0x52016, 0x52033, 0x52050}
 					};
 
-	u4Byte			APK_normal_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
+	u32			APK_normal_RF_value_0[PATH_NUM][APK_BB_REG_NUM] = {
 					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a},	//path settings equal to path b settings
 					{0x52019, 0x52017, 0x52010, 0x5200d, 0x5206a}
 					};
 
-	u4Byte			AFE_on_off[PATH_NUM] = {
+	u32			AFE_on_off[PATH_NUM] = {
 					0x04db25a4, 0x0b1b25a4};	//path A on path B off / path A off path B on
 
-	u4Byte			APK_offset[PATH_NUM] = {
+	u32			APK_offset[PATH_NUM] = {
 					rConfig_AntA, rConfig_AntB};
 
-	u4Byte			APK_normal_offset[PATH_NUM] = {
+	u32			APK_normal_offset[PATH_NUM] = {
 					rConfig_Pmpd_AntA, rConfig_Pmpd_AntB};
 
-	u4Byte			APK_value[PATH_NUM] = {
+	u32			APK_value[PATH_NUM] = {
 					0x92fc0000, 0x12fc0000};
 
-	u4Byte			APK_normal_value[PATH_NUM] = {
+	u32			APK_normal_value[PATH_NUM] = {
 					0x92680000, 0x12680000};
 
 	s1Byte			APK_delta_mapping[APK_BB_REG_NUM][13] = {
@@ -1569,21 +1569,21 @@ phy_APCalibrate_8188E(
 					{-11, -9, -7, -5, -3, -1, 0, 0, 0, 0, 0, 0, 0}
 					};
 
-	u4Byte			APK_normal_setting_value_1[13] = {
+	u32			APK_normal_setting_value_1[13] = {
 					0x01017018, 0xf7ed8f84, 0x1b1a1816, 0x2522201e, 0x322e2b28,
 					0x433f3a36, 0x5b544e49, 0x7b726a62, 0xa69a8f84, 0xdfcfc0b3,
 					0x12680000, 0x00880000, 0x00880000
 					};
 
-	u4Byte			APK_normal_setting_value_2[16] = {
+	u32			APK_normal_setting_value_2[16] = {
 					0x01c7021d, 0x01670183, 0x01000123, 0x00bf00e2, 0x008d00a3,
 					0x0068007b, 0x004d0059, 0x003a0042, 0x002b0031, 0x001f0025,
 					0x0017001b, 0x00110014, 0x000c000f, 0x0009000b, 0x00070008,
 					0x00050006
 					};
 
-	u4Byte			APK_result[PATH_NUM][APK_BB_REG_NUM];	//val_1_1a, val_1_2a, val_2a, val_3a, val_4a
-//	u4Byte			AP_curve[PATH_NUM][APK_CURVE_REG_NUM];
+	u32			APK_result[PATH_NUM][APK_BB_REG_NUM];	//val_1_1a, val_1_2a, val_2a, val_3a, val_4a
+//	u32			AP_curve[PATH_NUM][APK_CURVE_REG_NUM];
 
 	s4Byte			BB_offset, delta_V, delta_offset;
 
@@ -1947,7 +1947,7 @@ PHY_IQCalibrate_8188E(
 	s4Byte			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
 	BOOLEAN			is12simular, is13simular, is23simular;
 	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
-	u4Byte			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
+	u32			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 					rOFDM0_XARxIQImbalance,		rOFDM0_XBRxIQImbalance,
 					rOFDM0_ECCAThreshold,	rOFDM0_AGCRSSITable,
 					rOFDM0_XATxIQImbalance,		rOFDM0_XBTxIQImbalance,
@@ -2117,7 +2117,7 @@ PHY_LCCalibrate_8188E(
 	)
 {
 	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
-	u4Byte			timeout = 2000, timecount = 0;
+	u32			timeout = 2000, timecount = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 

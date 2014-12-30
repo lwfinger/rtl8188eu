@@ -26,14 +26,14 @@
 
 static BOOLEAN
 CheckCondition(
-    const u4Byte  Condition,
-    const u4Byte  Hex
+    const u32  Condition,
+    const u32  Hex
     )
 {
-    u4Byte _board     = (Hex & 0x000000FF);
-    u4Byte _interface = (Hex & 0x0000FF00) >> 8;
-    u4Byte _platform  = (Hex & 0x00FF0000) >> 16;
-    u4Byte cond = Condition;
+    u32 _board     = (Hex & 0x000000FF);
+    u32 _interface = (Hex & 0x0000FF00) >> 8;
+    u32 _platform  = (Hex & 0x00FF0000) >> 16;
+    u32 cond = Condition;
 
     if ( Condition == 0xCDCDCDCD )
         return TRUE;
@@ -59,7 +59,7 @@ CheckCondition(
 *                           RadioA_1T.TXT
 ******************************************************************************/
 
-u4Byte Array_RadioA_1T_8188E[] = {
+u32 Array_RadioA_1T_8188E[] = {
 		0x000, 0x00030000,
 		0x008, 0x00084000,
 		0x018, 0x00000407,
@@ -183,15 +183,15 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
 
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
+	u32     hex         = 0;
+	u32     i           = 0;
 	u16     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	u32 *    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_RadioA_1T_8188E;
+	u32     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u32);
+	u32 *    Array       = Array_RadioA_1T_8188E;
 	BOOLEAN		biol = FALSE;
 #ifdef CONFIG_IOL_IOREG_CFG
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
@@ -199,7 +199,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 	u8 bndy_cnt = 1;
 	#ifdef CONFIG_IOL_IOREG_CFG_DBG
 	struct cmd_cmp cmpdata[ArrayLen];
-	u4Byte	cmpdata_idx=0;
+	u32	cmpdata_idx=0;
 	#endif
 #endif//#ifdef CONFIG_IOL_IOREG_CFG
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
@@ -222,8 +222,8 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
+	    u32 v1 = Array[i];
+	    u32 v2 = Array[i+1];
 
 	    // This (offset, data) pair meets the condition.
 	    if ( v1 < 0xCDCDCDCD )
@@ -348,8 +348,8 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			printk("~~~ %s Success !!! \n",__FUNCTION__);
 			{
-				u4Byte idx;
-				u4Byte cdata;
+				u32 idx;
+				u32 cdata;
 				printk("  %s data compare => array_len:%d \n",__FUNCTION__,cmpdata_idx);
 				printk("### %s data compared !!###\n",__FUNCTION__);
 				for(idx=0;idx< cmpdata_idx;idx++)
@@ -390,7 +390,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 *                           RadioA_1T_ICUT.TXT
 ******************************************************************************/
 
-u4Byte Array_MP_8188E_RadioA_1T_ICUT[] = {
+u32 Array_MP_8188E_RadioA_1T_ICUT[] = {
 		0x000, 0x00030000,
 		0x008, 0x00084000,
 		0x018, 0x00000407,
@@ -500,15 +500,15 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
 
-	u4Byte     hex         = 0;
-	u4Byte     i           = 0;
+	u32     hex         = 0;
+	u32     i           = 0;
 	u16     count       = 0;
-	pu4Byte    ptr_array   = NULL;
+	u32 *    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;
 	u1Byte     board       = pDM_Odm->BoardType;
-	u4Byte     ArrayLen    = sizeof(Array_MP_8188E_RadioA_1T_ICUT)/sizeof(u4Byte);
-	pu4Byte    Array       = Array_MP_8188E_RadioA_1T_ICUT;
+	u32     ArrayLen    = sizeof(Array_MP_8188E_RadioA_1T_ICUT)/sizeof(u32);
+	u32 *    Array       = Array_MP_8188E_RadioA_1T_ICUT;
 
 
 	hex += board;
@@ -519,8 +519,8 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
-	    u4Byte v1 = Array[i];
-	    u4Byte v2 = Array[i+1];
+	    u32 v1 = Array[i];
+	    u32 v2 = Array[i+1];
 
 	    // This (offset, data) pair meets the condition.
 	    if ( v1 < 0xCDCDCDCD )

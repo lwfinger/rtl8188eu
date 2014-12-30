@@ -343,7 +343,7 @@ void getTxPowerWriteValByRegulatory88E(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u1Byte			i, chnlGroup=0, pwr_diff_limit[4], customer_pwr_limit;
 	s1Byte			pwr_diff=0;
-	u4Byte			writeVal, customer_limit, rf;
+	u32			writeVal, customer_limit, rf;
 	u1Byte			Regulatory = pHalData->EEPROMRegulatory;
 
 	//

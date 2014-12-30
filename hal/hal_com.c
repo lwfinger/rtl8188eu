@@ -403,7 +403,7 @@ SetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 		ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_DBG_COMP, *((u8Byte*)value));
 		break;
 	case HW_DEF_ODM_DBG_LEVEL:
-		ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_DBG_LEVEL, *((u4Byte*)value));
+		ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_DBG_LEVEL, *((u32*)value));
 		break;
 	default:
 		DBG_871X_LEVEL(_drv_always_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
@@ -426,7 +426,7 @@ GetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 		*((u8Byte*)value) = pDM_Odm->DebugComponents;
 		break;
 	case HW_DEF_ODM_DBG_LEVEL:
-		*((u4Byte*)value) = pDM_Odm->DebugLevel;
+		*((u32*)value) = pDM_Odm->DebugLevel;
 		break;
 	case HAL_DEF_DBG_DM_FUNC:
 		*((u32*)value) = pHalData->odmpriv.SupportAbility;

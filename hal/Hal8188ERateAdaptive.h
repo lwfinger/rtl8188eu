@@ -76,7 +76,7 @@ ODM_RA_UpdateRateInfo_8188E(
 	IN PDM_ODM_T pDM_Odm,
 	IN u1Byte MacID,
 	IN u1Byte RateID, 
-	IN u4Byte RateMask,
+	IN u32 RateMask,
 	IN u1Byte SGIEnable
 	);
 
@@ -92,8 +92,8 @@ ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,
 	IN	u16			TxRPT_Len,
-	IN	u4Byte			MacIDValidEntry0,
-	IN	u4Byte			MacIDValidEntry1
+	IN	u32			MacIDValidEntry0,
+	IN	u32			MacIDValidEntry1
 	);
 	
 

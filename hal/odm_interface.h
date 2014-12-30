@@ -94,87 +94,87 @@ typedef void (*RT_WORKITEM_CALL_BACK)(void * pContext);
 u1Byte
 ODM_Read1Byte(
 	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr
+	IN	u32			RegAddr
 	);
 
 u16
 ODM_Read2Byte(
 	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr
+	IN	u32			RegAddr
 	);
 
-u4Byte
+u32
 ODM_Read4Byte(
 	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr
+	IN	u32			RegAddr
 	);
 
 void
 ODM_Write1Byte(
 	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr,
+	IN	u32			RegAddr,
 	IN	u1Byte			Data
 	);
 
 void
 ODM_Write2Byte(
 	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr,
+	IN	u32			RegAddr,
 	IN	u16			Data
 	);
 
 void
 ODM_Write4Byte(
 	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u4Byte			RegAddr,
-	IN	u4Byte			Data
+	IN	u32			RegAddr,
+	IN	u32			Data
 	);
 
 void
 ODM_SetMACReg(	
 	IN 	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		RegAddr,
-	IN	u4Byte		BitMask,
-	IN	u4Byte		Data
+	IN	u32		RegAddr,
+	IN	u32		BitMask,
+	IN	u32		Data
 	);
 
-u4Byte 
+u32 
 ODM_GetMACReg(	
 	IN 	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		RegAddr,
-	IN	u4Byte		BitMask
+	IN	u32		RegAddr,
+	IN	u32		BitMask
 	);
 
 void
 ODM_SetBBReg(	
 	IN 	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		RegAddr,
-	IN	u4Byte		BitMask,
-	IN	u4Byte		Data
+	IN	u32		RegAddr,
+	IN	u32		BitMask,
+	IN	u32		Data
 	);
 
-u4Byte 
+u32 
 ODM_GetBBReg(	
 	IN 	PDM_ODM_T	pDM_Odm,
-	IN	u4Byte		RegAddr,
-	IN	u4Byte		BitMask
+	IN	u32		RegAddr,
+	IN	u32		BitMask
 	);
 
 void
 ODM_SetRFReg(	
 	IN 	PDM_ODM_T				pDM_Odm,
 	IN	ODM_RF_RADIO_PATH_E	eRFPath,
-	IN	u4Byte					RegAddr,
-	IN	u4Byte					BitMask,
-	IN	u4Byte					Data
+	IN	u32					RegAddr,
+	IN	u32					BitMask,
+	IN	u32					Data
 	);
 
-u4Byte 
+u32 
 ODM_GetRFReg(	
 	IN 	PDM_ODM_T				pDM_Odm,
 	IN	ODM_RF_RADIO_PATH_E	eRFPath,
-	IN	u4Byte					RegAddr,
-	IN	u4Byte					BitMask
+	IN	u32					RegAddr,
+	IN	u32					BitMask
 	);
 
 
@@ -185,20 +185,20 @@ void
 ODM_AllocateMemory(	
 	IN 	PDM_ODM_T	pDM_Odm,
 	OUT	void *		*pPtr,
-	IN	u4Byte		length
+	IN	u32		length
 	);
 void
 ODM_FreeMemory(	
 	IN 	PDM_ODM_T	pDM_Odm,
 	OUT	void *		pPtr,
-	IN	u4Byte		length
+	IN	u32		length
 	);
 
 s4Byte ODM_CompareMemory(
 	IN 	PDM_ODM_T	pDM_Odm,
 	IN	void *           pBuf1,
       IN	void *           pBuf2,
-      IN	u4Byte          length
+      IN	u32          length
        );
 	
 //
@@ -259,27 +259,27 @@ ODM_IsWorkItemScheduled(
 //
 void
 ODM_StallExecution(	
-	IN	u4Byte	usDelay
+	IN	u32	usDelay
 	);
 
 void
-ODM_delay_ms(IN u4Byte	ms);
+ODM_delay_ms(IN u32	ms);
 
 
 void
-ODM_delay_us(IN u4Byte	us);
+ODM_delay_us(IN u32	us);
 
 void
-ODM_sleep_ms(IN u4Byte	ms);
+ODM_sleep_ms(IN u32	ms);
 
 void
-ODM_sleep_us(IN u4Byte	us);
+ODM_sleep_us(IN u32	us);
 
 void
 ODM_SetTimer(	
 	IN 	PDM_ODM_T		pDM_Odm,
 	IN	PRT_TIMER 		pTimer, 
-	IN	u4Byte 			msDelay
+	IN	u32 			msDelay
 	);
 
 void
@@ -307,13 +307,13 @@ ODM_ReleaseTimer(
 //
 // ODM FW relative API.
 //
-u4Byte
+u32
 ODM_FillH2CCmd(	
 	IN	pu1Byte		pH2CBuffer,
-	IN	u4Byte		H2CBufferLen,
-	IN	u4Byte		CmdNum,
-	IN	pu4Byte		pElementID,
-	IN	pu4Byte		pCmdLen,
+	IN	u32		H2CBufferLen,
+	IN	u32		CmdNum,
+	IN	u32 *		pElementID,
+	IN	u32 *		pCmdLen,
 	IN	pu1Byte*		pCmbBuffer,
 	IN	pu1Byte		CmdStartSeq
 	);
