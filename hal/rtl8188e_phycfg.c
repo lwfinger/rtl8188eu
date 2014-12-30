@@ -703,7 +703,7 @@ rtl8188e_PHY_SetRFReg(
  *			  Read/Write
  *
  * Input:	struct adapter *	Adapter
- *			ps1Byte				pFileName
+ *			s8 *				pFileName
  *
  * Output:      NONE
  *
@@ -732,7 +732,7 @@ phy_ConfigMACWithParaFile(
  *			  Read/Write
  *
  * Input:	struct adapter *	Adapter
- *			ps1Byte				pFileName
+ *			s8 *				pFileName
  *
  * Output:      NONE
  *
@@ -959,7 +959,7 @@ phy_InitBBRFRegisterDefinition(
  *			  Read/Write
  *
  * Input:	struct adapter *	Adapter
- *			ps1Byte				pFileName
+ *			s8 *				pFileName
  *
  * Output:      NONE
  *
@@ -1535,7 +1535,7 @@ PHY_RFConfig8188E(
  * Overview:    This function read RF parameters from general file format, and do RF 3-wire
  *
  * Input:	struct adapter *		Adapter
- *			ps1Byte					pFileName
+ *			s8 *					pFileName
  *			RF_RADIO_PATH_E	eRFPath
  *
  * Output:      NONE
@@ -1600,7 +1600,7 @@ PHY_ConfigRFExternalPA(
  * Overview:    This function read RF parameters from general file format, and do RF 3-wire
  *
  * Input:	struct adapter *		Adapter
- *			ps1Byte					pFileName
+ *			s8 *					pFileName
  *			RF_RADIO_PATH_E	eRFPath
  *
  * Output:      NONE

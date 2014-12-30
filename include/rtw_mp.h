@@ -159,25 +159,6 @@ struct mp_tx
 
 #define MP_MAX_LINES		1000
 #define MP_MAX_LINES_BYTES	256
-#define u8 u8
-#define s1Byte s8
-#define u32 u32
-#define s4Byte s32
-#define u8		u8
-
-#define u64		u64
-
-#define s1Byte		s8
-#define ps1Byte			s8*
-
-#define s2Byte		s16
-#define ps2Byte			s16*
-
-#define s4Byte		s32
-#define ps4Byte			s32*
-
-#define s8Byte		s64
-#define ps8Byte			s64*
 
 #define UCHAR u8
 #define USHORT u16
@@ -267,9 +248,9 @@ typedef struct _MPT_CONTEXT
 	ULONG			MptAckCounter;
 
 	// SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~!
-	//s1Byte		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT];
-	//s1Byte			BufOfLines[2][MP_MAX_LINES][MP_MAX_LINES_BYTES];
-	//s4Byte			RfReadLine[2];
+	//s8		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT];
+	//s8			BufOfLines[2][MP_MAX_LINES][MP_MAX_LINES_BYTES];
+	//s32			RfReadLine[2];
 
 	u8		APK_bound[2];	//for APK	path A/path B
 	BOOLEAN		bMptIndexEven;

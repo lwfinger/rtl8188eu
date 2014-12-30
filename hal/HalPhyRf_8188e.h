@@ -70,7 +70,7 @@ PHY_LCCalibrate_8188E(
 void	
 PHY_APCalibrate_8188E(		
 	IN	struct adapter *	pAdapter,
-	IN 	s1Byte		delta);
+	IN 	s8		delta);
 
 void	
 PHY_DigitalPredistortion_8188E(		IN	struct adapter *	pAdapter);

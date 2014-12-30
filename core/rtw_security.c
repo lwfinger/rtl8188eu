@@ -294,7 +294,7 @@ _func_exit_;
 //3		=====TKIP related=====
 
 static u32 secmicgetuint32( u8 * p )
-// Convert from Byte[] to Us4Byte32 in a portable way
+// Convert from Byte[] to Us3232 in a portable way
 {
 	s32 i;
 	u32 res = 0;
@@ -308,7 +308,7 @@ _func_exit_;
 }
 
 static void secmicputuint32( u8 * p, u32 val )
-// Convert from Us4Byte32 to Byte[] in a portable way
+// Convert from Us3232 to Byte[] in a portable way
 {
 	long i;
 _func_enter_;

@@ -42,7 +42,7 @@
 
 u8
 odm_QueryRxPwrPercentage(
-	IN		s1Byte		AntPower
+	IN		s8		AntPower
 	)
 {
 	if ((AntPower <= -100) || (AntPower >= 20))
@@ -64,34 +64,34 @@ odm_QueryRxPwrPercentage(
 // 2012/01/12 MH MOve some signal strength smooth method to MP HAL layer.
 // IF other SW team do not support the feature, remove this section.??
 //
-s4Byte
+s32
 odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
 	IN OUT PDM_ODM_T pDM_Odm,
-	s4Byte CurrSig
+	s32 CurrSig
 )
 {
-	s4Byte RetSig;
+	s32 RetSig;
 	return RetSig;
 }
 
-s4Byte
+s32
 odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
 	IN OUT PDM_ODM_T pDM_Odm,
-	s4Byte CurrSig
+	s32 CurrSig
 )
 {
-	s4Byte RetSig;
+	s32 RetSig;
 	return RetSig;
 }
 
 
-s4Byte
+s32
 odm_SignalScaleMapping_92CSeries(
 	IN OUT PDM_ODM_T pDM_Odm,
-	IN s4Byte CurrSig
+	IN s32 CurrSig
 )
 {
-	s4Byte RetSig;
+	s32 RetSig;
 #if (DEV_BUS_TYPE == RT_PCI_INTERFACE)
 	if(pDM_Odm->SupportInterface  == ODM_ITRF_PCIE)
 	{
@@ -178,10 +178,10 @@ odm_SignalScaleMapping_92CSeries(
 #endif
 	return RetSig;
 }
-s4Byte
+s32
 odm_SignalScaleMapping(
 	IN OUT PDM_ODM_T pDM_Odm,
-	IN	s4Byte CurrSig
+	IN	s32 CurrSig
 )
 {
 	if(	(pDM_Odm->SupportPlatform == ODM_MP) &&
@@ -217,13 +217,13 @@ static u8 odm_SQ_process_patch_RT_CID_819x_Lenovo(
 
 static u8
 odm_EVMdbToPercentage(
-    IN		s1Byte Value
+    IN		s8 Value
     )
 {
 	//
 	// -33dB~0dB to 0%~99%
 	//
-	s1Byte ret_val;
+	s8 ret_val;
 
 	ret_val = Value;
 	//ret_val /= 2;
@@ -256,7 +256,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 {
 	SWAT_T				*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
 	u8				i, Max_spatial_stream;
-	s1Byte				rx_pwr[4], rx_pwr_all=0;
+	s8				rx_pwr[4], rx_pwr_all=0;
 	u8				EVM, PWDB_ALL = 0, PWDB_ALL_BT;
 	u8				RSSI, total_rssi=0;
 	u8				isCCKrate=0;
@@ -498,7 +498,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			pPhyInfo->RxMIMOSignalStrength[i] =(u8) RSSI;
 
 			//Get Rx snr value in DB
-			pPhyInfo->RxSNR[i] = pDM_Odm->PhyDbgInfo.RxSNRdB[i] = (s4Byte)(pPhyStaRpt->path_rxsnr[i]/2);
+			pPhyInfo->RxSNR[i] = pDM_Odm->PhyDbgInfo.RxSNRdB[i] = (s32)(pPhyStaRpt->path_rxsnr[i]/2);
 
 			/* Record Signal Strength for next packet */
 			if(pPktinfo->bPacketMatchBSSID)
@@ -598,7 +598,7 @@ odm_Process_RSSIForDM(
 	)
 {
 
-	s4Byte			UndecoratedSmoothedPWDB, UndecoratedSmoothedCCK, UndecoratedSmoothedOFDM, RSSI_Ave;
+	s32			UndecoratedSmoothedPWDB, UndecoratedSmoothedCCK, UndecoratedSmoothedOFDM, RSSI_Ave;
 	u8			isCCKrate=0;
 	u8			RSSI_max, RSSI_min, i;
 	u32			OFDM_pkt=0;

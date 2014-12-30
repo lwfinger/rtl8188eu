@@ -1307,8 +1307,8 @@ odm_Adaptivity(
 	IN		u8			IGI
 )
 {
-	s1Byte TH_L2H_dmc, TH_H2L_dmc;
-	s1Byte TH_L2H, TH_H2L, Diff, IGI_target;
+	s8 TH_L2H_dmc, TH_H2L_dmc;
+	s8 TH_L2H, TH_H2L, Diff, IGI_target;
 	u32 value32;
 	BOOLEAN EDCCA_State = 0;
 
@@ -1362,7 +1362,7 @@ odm_Adaptivity(
 
 	if(EDCCA_State == 1)
 	{
-		Diff = IGI_target -(s1Byte)IGI;
+		Diff = IGI_target -(s8)IGI;
 		TH_L2H_dmc = pDM_Odm->TH_L2H_ini + Diff;
 		if(TH_L2H_dmc > 10)	TH_L2H_dmc = 10;
 		TH_H2L_dmc = TH_L2H_dmc - pDM_Odm->TH_EDCCA_HL_diff;
@@ -2894,7 +2894,7 @@ odm_RefreshRateAdaptiveMaskAPADSL(
 BOOLEAN
 ODM_RAStateCheck(
 	IN		PDM_ODM_T		pDM_Odm,
-	IN		s4Byte			RSSI,
+	IN		s32			RSSI,
 	IN		BOOLEAN			bForceUpdate,
 	OUT		u8 *			pRATRState
 	)

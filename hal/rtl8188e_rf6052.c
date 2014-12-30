@@ -342,7 +342,7 @@ void getTxPowerWriteValByRegulatory88E(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	u8			i, chnlGroup=0, pwr_diff_limit[4], customer_pwr_limit;
-	s1Byte			pwr_diff=0;
+	s8			pwr_diff=0;
 	u32			writeVal, customer_limit, rf;
 	u8			Regulatory = pHalData->EEPROMRegulatory;
 

@@ -379,7 +379,7 @@ odm_ARFBRefresh_8188E(
 	)
 {  // Wilson 2011/10/26
 	u32 MaskFromReg;
-	s1Byte i;
+	s8 i;
 
 	switch(pRaInfo->RateID){
 		case RATR_INX_WIRELESS_NGB:

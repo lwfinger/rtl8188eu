@@ -53,22 +53,6 @@ typedef enum _RT_SPINLOCK_TYPE{
 
 #include <basic_types.h>
 
-#define u8 		u8
-
-#define u64 		u64
-
-#define s1Byte 		s8
-#define ps1Byte 		s8*	
-
-#define s2Byte 		s16
-#define ps2Byte 		s16*	
-
-#define s4Byte 		s32
-#define ps4Byte 		s32*	
-
-#define s8Byte 		s64
-#define ps8Byte 		s64*	
-
 #define DEV_BUS_TYPE  	RT_USB_INTERFACE
 
 #if defined(CONFIG_LITTLE_ENDIAN)	

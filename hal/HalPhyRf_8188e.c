@@ -49,11 +49,11 @@ void setIqkMatrix(
 	PDM_ODM_T	pDM_Odm,
 	u8		OFDM_index,
 	u8		RFPath,
-	s4Byte		IqkResult_X,
-	s4Byte		IqkResult_Y
+	s32		IqkResult_X,
+	s32		IqkResult_Y
 	)
 {
-	s4Byte	ele_A=0, ele_D, ele_C=0, TempCCk, value32;
+	s32	ele_A=0, ele_D, ele_C=0, TempCCk, value32;
 
 	//printk("%s==> OFDM_index:%d \n",__FUNCTION__,OFDM_index);
 
@@ -348,10 +348,10 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	u8			ThermalValue = 0, delta, delta_LCK, delta_IQK, offset;
 	u8			ThermalValue_AVG_count = 0;
 	u32			ThermalValue_AVG = 0;
-	s4Byte			ele_A=0, ele_D, TempCCk, X, value32;
-	s4Byte			Y, ele_C=0;
-	s1Byte			OFDM_index[2], CCK_index=0, OFDM_index_old[2]={0,0}, CCK_index_old=0, index;
-	s1Byte			deltaPowerIndex = 0;
+	s32			ele_A=0, ele_D, TempCCk, X, value32;
+	s32			Y, ele_C=0;
+	s8			OFDM_index[2], CCK_index=0, OFDM_index_old[2]={0,0}, CCK_index_old=0, index;
+	s8			deltaPowerIndex = 0;
 	u32			i = 0, j = 0;
 	BOOLEAN			is2T = FALSE;
 	BOOLEAN			bInteralPA = FALSE;
@@ -363,7 +363,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
 	//4 0.1 The following TWO tables decide the final index of OFDM/CCK swing table.
-	s1Byte			deltaSwingTableIdx[2][index_mapping_NUM_88E] = {
+	s8			deltaSwingTableIdx[2][index_mapping_NUM_88E] = {
                         // {{Power decreasing(lower temperature)}, {Power increasing(higher temperature)}}
                         {0,0,2,3,4,4,5,6,7,7,8,9,10,10,11}, {0,0,-1,-2,-3,-4,-4,-4,-4,-5,-7,-8,-9,-9,-10}
                     };
@@ -812,13 +812,13 @@ void
 _PHY_PathAFillIQKMatrix(
 	IN	struct adapter *pAdapter,
 	IN  BOOLEAN	bIQKOK,
-	IN	s4Byte		result[][8],
+	IN	s32		result[][8],
 	IN	u8		final_candidate,
 	IN  BOOLEAN		bTxOnly
 	)
 {
 	u32	Oldval_0, X, TX0_A, reg;
-	s4Byte	Y, TX0_C;
+	s32	Y, TX0_C;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Path A IQ Calibration %s !\n",(bIQKOK)?"Success":"Failed"));
@@ -872,13 +872,13 @@ void
 _PHY_PathBFillIQKMatrix(
 	IN	struct adapter *pAdapter,
 	IN  BOOLEAN	bIQKOK,
-	IN	s4Byte		result[][8],
+	IN	s32		result[][8],
 	IN	u8		final_candidate,
 	IN	BOOLEAN		bTxOnly			//do Tx only
 	)
 {
 	u32	Oldval_1, X, TX1_A, reg;
-	s4Byte	Y, TX1_C;
+	s32	Y, TX1_C;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Path B IQ Calibration %s !\n",(bIQKOK)?"Success":"Failed"));
@@ -1101,7 +1101,7 @@ _PHY_PIModeSwitch(
 BOOLEAN
 phy_SimularityCompare_8188E(
 	IN	struct adapter *pAdapter,
-	IN	s4Byte		result[][8],
+	IN	s32		result[][8],
 	IN	u8		 c1,
 	IN	u8		 c2
 	)
@@ -1112,7 +1112,7 @@ phy_SimularityCompare_8188E(
 	u8		final_candidate[2] = {0xFF, 0xFF};	//for path A and path B
 	BOOLEAN		bResult = TRUE;
 	BOOLEAN		is2T;
-	s4Byte tmp1 = 0,tmp2 = 0;
+	s32 tmp1 = 0,tmp2 = 0;
 
 	if( (pDM_Odm->RFType ==ODM_2T2R )||(pDM_Odm->RFType ==ODM_2T3R )||(pDM_Odm->RFType ==ODM_2T4R ))
 		is2T = TRUE;
@@ -1225,7 +1225,7 @@ phy_SimularityCompare_8188E(
 void
 phy_IQCalibrate_8188E(
 	IN	struct adapter *pAdapter,
-	IN	s4Byte		result[][8],
+	IN	s32		result[][8],
 	IN	u8		t,
 	IN	BOOLEAN		is2T
 	)
@@ -1488,7 +1488,7 @@ phy_LCCalibrate_8188E(
 void
 phy_APCalibrate_8188E(
 	IN	struct adapter *pAdapter,
-	IN	s1Byte		delta,
+	IN	s8		delta,
 	IN	BOOLEAN		is2T
 	)
 {
@@ -1561,7 +1561,7 @@ phy_APCalibrate_8188E(
 	u32			APK_normal_value[PATH_NUM] = {
 					0x92680000, 0x12680000};
 
-	s1Byte			APK_delta_mapping[APK_BB_REG_NUM][13] = {
+	s8			APK_delta_mapping[APK_BB_REG_NUM][13] = {
 					{-4, -3, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
 					{-4, -3, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
 					{-6, -4, -2, -2, -1, -1, 0, 1, 2, 3, 4, 5, 6},
@@ -1585,7 +1585,7 @@ phy_APCalibrate_8188E(
 	u32			APK_result[PATH_NUM][APK_BB_REG_NUM];	//val_1_1a, val_1_2a, val_2a, val_3a, val_4a
 //	u32			AP_curve[PATH_NUM][APK_CURVE_REG_NUM];
 
-	s4Byte			BB_offset, delta_V, delta_offset;
+	s32			BB_offset, delta_V, delta_offset;
 
 #if MP_DRIVER == 1
 if ( *(pDM_Odm->mp_mode) == 1)
@@ -1940,11 +1940,11 @@ PHY_IQCalibrate_8188E(
 		PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.MptCtx);
 	#endif//(MP_DRIVER == 1)
 
-	s4Byte			result[4][8];	//last is final result
+	s32			result[4][8];	//last is final result
 	u8			i, final_candidate, Indexforchannel;
 	u8          channelToIQK = 7;
 	BOOLEAN			bPathAOK, bPathBOK;
-	s4Byte			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
+	s32			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
 	BOOLEAN			is12simular, is13simular, is23simular;
 	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
 	u32			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
@@ -2179,7 +2179,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 void
 PHY_APCalibrate_8188E(
 	IN	struct adapter *pAdapter,
-	IN	s1Byte		delta
+	IN	s8		delta
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);

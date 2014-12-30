@@ -187,7 +187,7 @@ ODM_FreeMemory(
 	rtw_vmfree(pPtr, length);
 }
 
-s4Byte ODM_CompareMemory(
+s32 ODM_CompareMemory(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	void *           pBuf1,
       IN	void *           pBuf2,

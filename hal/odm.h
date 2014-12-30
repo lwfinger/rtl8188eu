@@ -150,9 +150,9 @@ typedef struct _Dynamic_Initial_Gain_Threshold_
 	u8		BT30_CurIGI;
 	u8		BackupIGValue;
 
-	s1Byte		BackoffVal;
-	s1Byte		BackoffVal_range_max;
-	s1Byte		BackoffVal_range_min;
+	s8		BackoffVal;
+	s8		BackoffVal_range_max;
+	s8		BackoffVal_range_min;
 	u8		rx_gain_range_max;
 	u8		rx_gain_range_min;
 	u8		Rssi_val_min;
@@ -249,7 +249,7 @@ typedef struct _RX_High_Power_
 typedef struct _SW_Antenna_Switch_
 {
 	u8		try_flag;
-	s4Byte		PreRSSI;
+	s32		PreRSSI;
 	u8		CurAntenna;
 	u8		PreAntenna;
 	u8		RSSI_Trying;
@@ -264,10 +264,10 @@ typedef struct _SW_Antenna_Switch_
 	BOOLEAN		ANTA_ON;	//To indicate Ant A is or not
 	BOOLEAN		ANTB_ON;	//To indicate Ant B is on or not
 
-	s4Byte		RSSI_sum_A;
-	s4Byte		RSSI_sum_B;
-	s4Byte		RSSI_cnt_A;
-	s4Byte		RSSI_cnt_B;
+	s32		RSSI_sum_A;
+	s32		RSSI_sum_B;
+	s32		RSSI_cnt_A;
+	s32		RSSI_cnt_B;
 
 	u64		lastTxOkCnt;
 	u64		lastRxOkCnt;
@@ -340,8 +340,8 @@ typedef struct _ODM_Phy_Status_Info_
 	u8		SignalQuality;	 // in 0-100 index. 
 	u8		RxMIMOSignalQuality[MAX_PATH_NUM_92CS]; //EVM
 	u8		RxMIMOSignalStrength[MAX_PATH_NUM_92CS];// in 0~100 index
-	s1Byte		RxPower; // in dBm Translate from PWdB
-	s1Byte		RecvSignalPower;// Real power in dBm for this packet, no beautification and aggregation. Keep this raw info to be used for the other procedures.
+	s8		RxPower; // in dBm Translate from PWdB
+	s8		RecvSignalPower;// Real power in dBm for this packet, no beautification and aggregation. Keep this raw info to be used for the other procedures.
 	u8		BTRxRSSIPercentage;	
 	u8		SignalStrength; // in 0-100 index.
 	u8		RxPwr[MAX_PATH_NUM_92CS];//per-path's pwdb
@@ -352,13 +352,13 @@ typedef struct _ODM_Phy_Status_Info_
 typedef struct _ODM_Phy_Dbg_Info_
 {
 	//ODM Write,debug info
-	s1Byte		RxSNRdB[MAX_PATH_NUM_92CS];
+	s8		RxSNRdB[MAX_PATH_NUM_92CS];
 	u64		NumQryPhyStatus;
 	u64		NumQryPhyStatusCCK;
 	u64		NumQryPhyStatusOFDM;
 	u8		NumQryBeaconPkt;
 	//Others
-	s4Byte		RxEVM[MAX_PATH_NUM_92CS];	
+	s32		RxEVM[MAX_PATH_NUM_92CS];	
 	
 }ODM_PHY_DBG_INFO_T;
 
@@ -793,7 +793,7 @@ typedef struct _ODM_RA_Info_
 
 typedef struct _IQK_MATRIX_REGS_SETTING{
 	BOOLEAN 	bIQKDone;
-	s4Byte		Value[1][IQK_Matrix_REG_NUM];
+	s32		Value[1][IQK_Matrix_REG_NUM];
 }IQK_MATRIX_REGS_SETTING,*PIQK_MATRIX_REGS_SETTING;
 
 typedef struct ODM_RF_Calibration_Structure
@@ -801,10 +801,10 @@ typedef struct ODM_RF_Calibration_Structure
 	//for tx power tracking
 	
 	u32	RegA24; // for TempCCK
-	s4Byte	RegE94;
-	s4Byte 	RegE9C;
-	s4Byte	RegEB4;
-	s4Byte	RegEBC;	
+	s32	RegE94;
+	s32 	RegE9C;
+	s32	RegEB4;
+	s32	RegEBC;	
 
 	//u8 bTXPowerTracking;
 	u8  	TXPowercount;
@@ -836,9 +836,9 @@ typedef struct ODM_RF_Calibration_Structure
 	u8 	CCK_index;
 	u8 	OFDM_index[2];
 	BOOLEAN bDoneTxpower;
-	s1Byte	PowerIndexOffset;
-	s1Byte	DeltaPowerIndex;
-	s1Byte	DeltaPowerIndexLast;	
+	s8	PowerIndexOffset;
+	s8	DeltaPowerIndex;
+	s8	DeltaPowerIndexLast;	
 	BOOLEAN bTxPowerChanged;
 		
 	u8 	ThermalValue_HP[HP_THERMAL_NUM];
@@ -1086,8 +1086,8 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	BOOLEAN			IsBbSwingOffsetPositiveA;
 	u32			BbSwingOffsetB;
 	BOOLEAN			IsBbSwingOffsetPositiveB;
-	s1Byte			TH_L2H_ini;
-	s1Byte			TH_EDCCA_HL_diff;
+	s8			TH_L2H_ini;
+	s8			TH_EDCCA_HL_diff;
 	u32			IGI_Base;
 	u32			IGI_target;
 	BOOLEAN			ForceEDCCA;
@@ -1456,7 +1456,7 @@ ODM_TXPowerTrackingCheck(
 BOOLEAN 
 ODM_RAStateCheck(
 		PDM_ODM_T		pDM_Odm,
-		s4Byte			RSSI,
+		s32			RSSI,
 		BOOLEAN			bForceUpdate,
 	OUT		u8 *			pRATRState
 	);
