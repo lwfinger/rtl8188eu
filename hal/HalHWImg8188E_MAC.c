@@ -166,9 +166,9 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	u32     i           = 0;
 	u16     count       = 0;
 	u32 *    ptr_array   = NULL;
-	u1Byte     platform    = pDM_Odm->SupportPlatform;
-	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
-	u1Byte     board       = pDM_Odm->BoardType;
+	u8     platform    = pDM_Odm->SupportPlatform;
+	u8     interfaceValue   = pDM_Odm->SupportInterface;
+	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_MAC_REG_8188E)/sizeof(u32);
 	u32 *    Array       = Array_MAC_REG_8188E;
 	BOOLEAN		biol = FALSE;
@@ -215,7 +215,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 
 					if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
 						bndy_cnt++;
-					rtw_IOL_append_WB_cmd(pxmit_frame,(u16)v1, (u1Byte)v2,0xFF);
+					rtw_IOL_append_WB_cmd(pxmit_frame,(u16)v1, (u8)v2,0xFF);
 					#ifdef CONFIG_IOL_IOREG_CFG_DBG
 						cmpdata[cmpdata_idx].addr = v1;
 						cmpdata[cmpdata_idx].value= v2;
@@ -225,7 +225,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 				else
 			#endif	//endif CONFIG_IOL_IOREG_CFG
 				{
-					odm_ConfigMAC_8188E(pDM_Odm, v1, (u1Byte)v2);
+					odm_ConfigMAC_8188E(pDM_Odm, v1, (u8)v2);
 				}
 				continue;
 		}
@@ -253,7 +253,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 					if(biol){
 						if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
 							bndy_cnt++;
-						rtw_IOL_append_WB_cmd(pxmit_frame,(u16)v1, (u1Byte)v2,0xFF);
+						rtw_IOL_append_WB_cmd(pxmit_frame,(u16)v1, (u8)v2,0xFF);
 						#ifdef CONFIG_IOL_IOREG_CFG_DBG
 							cmpdata[cmpdata_idx].addr = v1;
 							cmpdata[cmpdata_idx].value= v2;
@@ -263,7 +263,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 					else
 					#endif //#ifdef CONFIG_IOL_IOREG_CFG
 					{
-						odm_ConfigMAC_8188E(pDM_Odm, v1, (u1Byte)v2);
+						odm_ConfigMAC_8188E(pDM_Odm, v1, (u8)v2);
 					}
 
 					READ_NEXT_PAIR(v1, v2, i);
@@ -289,7 +289,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 			//compare writed data
 			{
 				u32 idx;
-				u1Byte cdata;
+				u8 cdata;
 				// HAL_STATUS_FAILURE;
 				printk("  MAC data compare => array_len:%d \n",cmpdata_idx);
 				for(idx=0;idx< cmpdata_idx;idx++)
@@ -438,9 +438,9 @@ ODM_ReadAndConfig_MAC_REG_ICUT_8188E(
 	u32     i           = 0;
 	u16     count       = 0;
 	u32 *    ptr_array   = NULL;
-	u1Byte     platform    = pDM_Odm->SupportPlatform;
-	u1Byte     _interface   = pDM_Odm->SupportInterface;
-	u1Byte     board       = pDM_Odm->BoardType;
+	u8     platform    = pDM_Odm->SupportPlatform;
+	u8     _interface   = pDM_Odm->SupportInterface;
+	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_MP_8188E_MAC_REG_ICUT)/sizeof(u32);
 	u32 *    Array       = Array_MP_8188E_MAC_REG_ICUT;
 
@@ -459,7 +459,7 @@ ODM_ReadAndConfig_MAC_REG_ICUT_8188E(
 	    // This (offset, data) pair meets the condition.
 	    if ( v1 < 0xCDCDCDCD )
 	    {
-			odm_ConfigMAC_8188E(pDM_Odm, v1, (u1Byte)v2);
+			odm_ConfigMAC_8188E(pDM_Odm, v1, (u8)v2);
 		    continue;
 		}
 		else
@@ -482,7 +482,7 @@ ODM_ReadAndConfig_MAC_REG_ICUT_8188E(
 		               v2 != 0xCDEF &&
 		               v2 != 0xCDCD && i < ArrayLen -2)
 		        {
-					odm_ConfigMAC_8188E(pDM_Odm, v1, (u1Byte)v2);
+					odm_ConfigMAC_8188E(pDM_Odm, v1, (u8)v2);
 		            READ_NEXT_PAIR(v1, v2, i);
 		        }
 

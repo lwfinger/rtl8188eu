@@ -36,8 +36,8 @@ typedef enum _PWRTRACK_CONTROL_METHOD {
 void
 ODM_TxPwrTrackAdjust88E(
 	PDM_ODM_T	pDM_Odm,
-	u1Byte		Type,				// 0 = OFDM, 1 = CCK
-	pu1Byte		pDirection,			// 1 = +(increase) 2 = -(decrease)
+	u8		Type,				// 0 = OFDM, 1 = CCK
+	u8 *		pDirection,			// 1 = +(increase) 2 = -(decrease)
 	u32 *		pOutWriteVal		// Tx tracking CCK/OFDM BB swing index adjust
 	);
 

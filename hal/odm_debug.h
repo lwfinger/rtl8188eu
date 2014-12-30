@@ -142,7 +142,7 @@
 			if(((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
 			{																		\
 				int __i;																\
-				pu1Byte	__ptr = (pu1Byte)ptr;											\
+				u8 *	__ptr = (u8 *)ptr;											\
 				DbgPrint("[ODM] ");													\
 				DbgPrint(title_str);												\
 				DbgPrint(" ");														\

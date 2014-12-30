@@ -34,11 +34,11 @@ void ODM_AntennaDiversityInit_88E(PDM_ODM_T pDM_Odm);
 
 void ODM_AntennaDiversity_88E(PDM_ODM_T pDM_Odm);
 
-void ODM_SetTxAntByTxInfo_88E(PDM_ODM_T pDM_Odm, pu1Byte pDesc, u1Byte macId);
+void ODM_SetTxAntByTxInfo_88E(PDM_ODM_T pDM_Odm, u8 * pDesc, u8 macId);
 
-void ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant);
+void ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u8 Ant);
 
-void ODM_AntselStatistics_88E(PDM_ODM_T pDM_Odm, u1Byte antsel_tr_mux, u32 MacId, u1Byte RxPWDBAll);
+void ODM_AntselStatistics_88E(PDM_ODM_T pDM_Odm, u8 antsel_tr_mux, u32 MacId, u8 RxPWDBAll);
 
 void odm_FastAntTraining(PDM_ODM_T pDM_Odm);
 

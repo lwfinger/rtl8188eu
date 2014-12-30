@@ -47,8 +47,8 @@
 //3============================================================
 void setIqkMatrix(
 	PDM_ODM_T	pDM_Odm,
-	u1Byte		OFDM_index,
-	u1Byte		RFPath,
+	u8		OFDM_index,
+	u8		RFPath,
 	s4Byte		IqkResult_X,
 	s4Byte		IqkResult_Y
 	)
@@ -133,9 +133,9 @@ void setIqkMatrix(
 
 void doIQK(
 	PDM_ODM_T	pDM_Odm,
-	u1Byte		DeltaThermalIndex,
-	u1Byte		ThermalValue,
-	u1Byte		Threshold
+	u8		DeltaThermalIndex,
+	u8		ThermalValue,
+	u8		Threshold
 	)
 {
 	struct adapter *		Adapter = pDM_Odm->Adapter;
@@ -168,12 +168,12 @@ void doIQK(
 void
 ODM_TxPwrTrackAdjust88E(
 	PDM_ODM_T	pDM_Odm,
-	u1Byte		Type,				// 0 = OFDM, 1 = CCK
-	pu1Byte		pDirection,			// 1 = +(increase) 2 = -(decrease)
+	u8		Type,				// 0 = OFDM, 1 = CCK
+	u8 *		pDirection,			// 1 = +(increase) 2 = -(decrease)
 	u32 *		pOutWriteVal		// Tx tracking CCK/OFDM BB swing index adjust
 	)
 {
-	u1Byte	pwr_value = 0;
+	u8	pwr_value = 0;
 	//
 	// Tx power tracking BB swing table.
 	// The base index = 12. +((12-n)/2)dB 13~?? = decrease tx pwr by -((n-12)/2)dB
@@ -252,14 +252,14 @@ void
 odm_TxPwrTrackSetPwr88E(
 	PDM_ODM_T			pDM_Odm,
 	PWRTRACK_METHOD		Method,
-	u1Byte				RFPath,
-	u1Byte				ChannelMappedIndex
+	u8				RFPath,
+	u8				ChannelMappedIndex
 	)
 {
 	if (Method == TXAGC) {
-		u1Byte	cckPowerLevel[MAX_TX_COUNT], ofdmPowerLevel[MAX_TX_COUNT];
-		u1Byte	BW20PowerLevel[MAX_TX_COUNT], BW40PowerLevel[MAX_TX_COUNT];
-		u1Byte	rf = 0;
+		u8	cckPowerLevel[MAX_TX_COUNT], ofdmPowerLevel[MAX_TX_COUNT];
+		u8	BW20PowerLevel[MAX_TX_COUNT], BW40PowerLevel[MAX_TX_COUNT];
+		u8	rf = 0;
 		u32	pwr = 0, TxAGC = 0;
 		struct adapter *Adapter = pDM_Odm->Adapter;
 		//printk("odm_TxPwrTrackSetPwr88E CH=%d, modify TXAGC \n", *(pDM_Odm->pChannel));
@@ -345,8 +345,8 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 {
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u1Byte			ThermalValue = 0, delta, delta_LCK, delta_IQK, offset;
-	u1Byte			ThermalValue_AVG_count = 0;
+	u8			ThermalValue = 0, delta, delta_LCK, delta_IQK, offset;
+	u8			ThermalValue_AVG_count = 0;
 	u32			ThermalValue_AVG = 0;
 	s4Byte			ele_A=0, ele_D, TempCCk, X, value32;
 	s4Byte			Y, ele_C=0;
@@ -356,8 +356,8 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	BOOLEAN			is2T = FALSE;
 	BOOLEAN			bInteralPA = FALSE;
 
-	u1Byte			OFDM_min_index = 6, rf = (is2T) ? 2 : 1; //OFDM BB Swing should be less than +3.0dB, which is required by Arthur
-	u1Byte			Indexforchannel = 0;/*GetRightChnlPlaceforIQK(pHalData->CurrentChannel)*/
+	u8			OFDM_min_index = 6, rf = (is2T) ? 2 : 1; //OFDM BB Swing should be less than +3.0dB, which is required by Arthur
+	u8			Indexforchannel = 0;/*GetRightChnlPlaceforIQK(pHalData->CurrentChannel)*/
     enum            _POWER_DEC_INC { POWER_DEC, POWER_INC };
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -367,7 +367,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
                         // {{Power decreasing(lower temperature)}, {Power increasing(higher temperature)}}
                         {0,0,2,3,4,4,5,6,7,7,8,9,10,10,11}, {0,0,-1,-2,-3,-4,-4,-4,-4,-5,-7,-8,-9,-9,-10}
                     };
-	u1Byte			thermalThreshold[2][index_mapping_NUM_88E]={
+	u8			thermalThreshold[2][index_mapping_NUM_88E]={
                         // {{Power decreasing(lower temperature)}, {Power increasing(higher temperature)}}
 					    {0,2,4,6,8,10,12,14,16,18,20,22,24,26,27}, {0,2,4,6,8,10,12,14,16,18,20,22,25,25,25}
                     };
@@ -383,7 +383,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #endif
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("===>odm_TXPowerTrackingCallback_ThermalMeter_8188E, pDM_Odm->BbSwingIdxCckBase: %d, pDM_Odm->BbSwingIdxOfdmBase: %d \n", pDM_Odm->BbSwingIdxCckBase, pDM_Odm->BbSwingIdxOfdmBase));
-	ThermalValue = (u1Byte)ODM_GetRFReg(pDM_Odm, RF_PATH_A, RF_T_METER_88E, 0xfc00);	//0x42: RF Reg[15:10] 88E
+	ThermalValue = (u8)ODM_GetRFReg(pDM_Odm, RF_PATH_A, RF_T_METER_88E, 0xfc00);	//0x42: RF Reg[15:10] 88E
 	if( ! ThermalValue || ! pDM_Odm->RFCalibrateInfo.TxPowerTrackControl)
         return;
 
@@ -418,7 +418,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 
 	if(ThermalValue_AVG_count)
 	{
-		ThermalValue = (u1Byte)(ThermalValue_AVG / ThermalValue_AVG_count);
+		ThermalValue = (u8)(ThermalValue_AVG / ThermalValue_AVG_count);
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("AVG Thermal Meter = 0x%x \n", ThermalValue));
 	}
 
@@ -566,14 +566,14 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #define MAX_TOLERANCE		5
 #define IQK_DELAY_TIME		1		//ms
 
-u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_8188E(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		configPathB
 	)
 {
 	u32 regEAC, regE94, regE9C, regEA4;
-	u1Byte result = 0x00;
+	u8 result = 0x00;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Path A IQK!\n"));
@@ -619,14 +619,14 @@ phy_PathA_IQK_8188E(
 	return result;
 }
 
-u1Byte			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_RxIQK(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		configPathB
 	)
 {
 	u32 regEAC, regE94, regE9C, regEA4, u4tmp;
-	u1Byte result = 0x00;
+	u8 result = 0x00;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Path A Rx IQK!\n"));
@@ -756,13 +756,13 @@ phy_PathA_RxIQK(
 	return result;
 }
 
-u1Byte				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+u8				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK_8188E(
 	IN	struct adapter *pAdapter
 	)
 {
 	u32 regEAC, regEB4, regEBC, regEC4, regECC;
-	u1Byte	result = 0x00;
+	u8	result = 0x00;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Path B IQK!\n"));
@@ -813,7 +813,7 @@ _PHY_PathAFillIQKMatrix(
 	IN	struct adapter *pAdapter,
 	IN  BOOLEAN	bIQKOK,
 	IN	s4Byte		result[][8],
-	IN	u1Byte		final_candidate,
+	IN	u8		final_candidate,
 	IN  BOOLEAN		bTxOnly
 	)
 {
@@ -873,7 +873,7 @@ _PHY_PathBFillIQKMatrix(
 	IN	struct adapter *pAdapter,
 	IN  BOOLEAN	bIQKOK,
 	IN	s4Byte		result[][8],
-	IN	u1Byte		final_candidate,
+	IN	u8		final_candidate,
 	IN	BOOLEAN		bTxOnly			//do Tx only
 	)
 {
@@ -1008,7 +1008,7 @@ _PHY_ReloadMACRegisters(
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("Reload MAC parameters !\n"));
 	for(i = 0 ; i < (IQK_MAC_REG_NUM - 1); i++){
-		ODM_Write1Byte(pDM_Odm, MACReg[i], (u1Byte)MACBackup[i]);
+		ODM_Write1Byte(pDM_Odm, MACReg[i], (u8)MACBackup[i]);
 	}
 	ODM_Write4Byte(pDM_Odm, MACReg[i], MACBackup[i]);
 }
@@ -1060,9 +1060,9 @@ _PHY_MACSettingCalibration(
 	ODM_Write1Byte(pDM_Odm, MACReg[i], 0x3F);
 
 	for(i = 1 ; i < (IQK_MAC_REG_NUM - 1); i++){
-		ODM_Write1Byte(pDM_Odm, MACReg[i], (u1Byte)(MACBackup[i]&(~BIT3)));
+		ODM_Write1Byte(pDM_Odm, MACReg[i], (u8)(MACBackup[i]&(~BIT3)));
 	}
-	ODM_Write1Byte(pDM_Odm, MACReg[i], (u1Byte)(MACBackup[i]&(~BIT5)));
+	ODM_Write1Byte(pDM_Odm, MACReg[i], (u8)(MACBackup[i]&(~BIT5)));
 
 }
 
@@ -1102,14 +1102,14 @@ BOOLEAN
 phy_SimularityCompare_8188E(
 	IN	struct adapter *pAdapter,
 	IN	s4Byte		result[][8],
-	IN	u1Byte		 c1,
-	IN	u1Byte		 c2
+	IN	u8		 c1,
+	IN	u8		 c2
 	)
 {
 	u32		i, j, diff, SimularityBitMap, bound = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
-	u1Byte		final_candidate[2] = {0xFF, 0xFF};	//for path A and path B
+	u8		final_candidate[2] = {0xFF, 0xFF};	//for path A and path B
 	BOOLEAN		bResult = TRUE;
 	BOOLEAN		is2T;
 	s4Byte tmp1 = 0,tmp2 = 0;
@@ -1226,14 +1226,14 @@ void
 phy_IQCalibrate_8188E(
 	IN	struct adapter *pAdapter,
 	IN	s4Byte		result[][8],
-	IN	u1Byte		t,
+	IN	u8		t,
 	IN	BOOLEAN		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	u32			i;
-	u1Byte			PathAOK, PathBOK;
+	u8			PathAOK, PathBOK;
 	u32			ADDA_REG[IQK_ADDA_REG_NUM] = {
 						rFPGA0_XCD_SwitchControl,	rBlue_Tooth,
 						rRx_Wait_CCA,		rTx_CCK_RFON,
@@ -1281,7 +1281,7 @@ else
 	_PHY_PathADDAOn(pAdapter, ADDA_REG, TRUE, is2T);
 
 	if(t==0) {
-		pDM_Odm->RFCalibrateInfo.bRfPiEnable = (u1Byte)ODM_GetBBReg(pDM_Odm, rFPGA0_XA_HSSIParameter1, BIT(8));
+		pDM_Odm->RFCalibrateInfo.bRfPiEnable = (u8)ODM_GetBBReg(pDM_Odm, rFPGA0_XA_HSSIParameter1, BIT(8));
 	}
 
 	if(!pDM_Odm->RFCalibrateInfo.bRfPiEnable){
@@ -1422,7 +1422,7 @@ phy_LCCalibrate_8188E(
 	IN	BOOLEAN		is2T
 	)
 {
-	u1Byte	tmpReg;
+	u8	tmpReg;
 	u32	RF_Amode=0, RF_Bmode=0, LC_Cal;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -1496,7 +1496,7 @@ phy_APCalibrate_8188E(
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	u32			regD[PATH_NUM];
 	u32			tmpReg, index, offset,  apkbound;
-	u1Byte			path, i, pathbound = PATH_NUM;
+	u8			path, i, pathbound = PATH_NUM;
 	u32			BB_backup[APK_BB_REG_NUM];
 	u32			BB_REG[APK_BB_REG_NUM] = {
 						rFPGA1_TxBlock,		rOFDM0_TRxPathEnable,
@@ -1941,8 +1941,8 @@ PHY_IQCalibrate_8188E(
 	#endif//(MP_DRIVER == 1)
 
 	s4Byte			result[4][8];	//last is final result
-	u1Byte			i, final_candidate, Indexforchannel;
-	u1Byte          channelToIQK = 7;
+	u8			i, final_candidate, Indexforchannel;
+	u8          channelToIQK = 7;
 	BOOLEAN			bPathAOK, bPathBOK;
 	s4Byte			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
 	BOOLEAN			is12simular, is13simular, is23simular;
@@ -2217,7 +2217,7 @@ void phy_SetRFPathSwitch_8188E(
 
 	if(pAdapter->hw_init_completed == false)
 	{
-		u1Byte	u1bTmp;
+		u8	u1bTmp;
 		u1bTmp = ODM_Read1Byte(pDM_Odm, REG_LEDCFG2) | BIT7;
 		ODM_Write1Byte(pDM_Odm, REG_LEDCFG2, u1bTmp);
 		//ODM_SetBBReg(pDM_Odm, REG_LEDCFG0, BIT23, 0x01);

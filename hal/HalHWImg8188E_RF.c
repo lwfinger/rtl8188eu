@@ -187,9 +187,9 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 	u32     i           = 0;
 	u16     count       = 0;
 	u32 *    ptr_array   = NULL;
-	u1Byte     platform    = pDM_Odm->SupportPlatform;
-	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
-	u1Byte     board       = pDM_Odm->BoardType;
+	u8     platform    = pDM_Odm->SupportPlatform;
+	u8     interfaceValue   = pDM_Odm->SupportInterface;
+	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u32);
 	u32 *    Array       = Array_RadioA_1T_8188E;
 	BOOLEAN		biol = FALSE;
@@ -504,9 +504,9 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 	u32     i           = 0;
 	u16     count       = 0;
 	u32 *    ptr_array   = NULL;
-	u1Byte     platform    = pDM_Odm->SupportPlatform;
-	u1Byte     _interface   = pDM_Odm->SupportInterface;
-	u1Byte     board       = pDM_Odm->BoardType;
+	u8     platform    = pDM_Odm->SupportPlatform;
+	u8     _interface   = pDM_Odm->SupportInterface;
+	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_MP_8188E_RadioA_1T_ICUT)/sizeof(u32);
 	u32 *    Array       = Array_MP_8188E_RadioA_1T_ICUT;
 

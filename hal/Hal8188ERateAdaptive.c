@@ -19,7 +19,7 @@ Major Change History:
 // Rate adaptive parameters
 
 
-static u1Byte RETRY_PENALTY[PERENTRY][RETRYSIZE+1] = {{5,4,3,2,0,3},//92 , idx=0
+static u8 RETRY_PENALTY[PERENTRY][RETRYSIZE+1] = {{5,4,3,2,0,3},//92 , idx=0
 	{6,5,4,3,0,4},//86 , idx=1
 	{6,5,4,2,0,4},//81 , idx=2
 	{8,7,6,4,0,6},//75 , idx=3
@@ -43,24 +43,24 @@ static u1Byte RETRY_PENALTY[PERENTRY][RETRYSIZE+1] = {{5,4,3,2,0,3},//92 , idx=0
 	{49,22,18,14,0,48},//6 , idx=0x15
 	{49,16,16,0,0,48}};//3 //3, idx=0x16
 
-static u1Byte	RETRY_PENALTY_UP[RETRYSIZE+1]={49,44,16,16,0,48};  // 12% for rate up
+static u8	RETRY_PENALTY_UP[RETRYSIZE+1]={49,44,16,16,0,48};  // 12% for rate up
 
-static u1Byte PT_PENALTY[RETRYSIZE+1]={34,31,30,24,0,32};
+static u8 PT_PENALTY[RETRYSIZE+1]={34,31,30,24,0,32};
 
 
 // wilson modify
-static u1Byte	RETRY_PENALTY_IDX[2][RATESIZE] = {{4,4,4,5,4,4,5,7,7,7,8,0x0a,	       // SS>TH
+static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{4,4,4,5,4,4,5,7,7,7,8,0x0a,	       // SS>TH
 	4,4,4,4,6,0x0a,0x0b,0x0d,
 	5,5,7,7,8,0x0b,0x0d,0x0f},			   // 0329 R01
 	{0x0a,0x0a,0x0b,0x0c,0x0a,0x0a,0x0b,0x0c,0x0d,0x10,0x13,0x14,	   // SS<TH
 	0x0b,0x0c,0x0d,0x0e,0x0f,0x11,0x13,0x15,
 	9,9,9,9,0x0c,0x0e,0x11,0x13}};
 
-static u1Byte	RETRY_PENALTY_UP_IDX[RATESIZE] = {0x0c,0x0d,0x0d,0x0f,0x0d,0x0e,0x0f,0x0f,0x10,0x12,0x13,0x14,	       // SS>TH
+static u8	RETRY_PENALTY_UP_IDX[RATESIZE] = {0x0c,0x0d,0x0d,0x0f,0x0d,0x0e,0x0f,0x0f,0x10,0x12,0x13,0x14,	       // SS>TH
 	0x0f,0x10,0x10,0x12,0x12,0x13,0x14,0x15,
 	0x11,0x11,0x12,0x13,0x13,0x13,0x14,0x15};
 
-static u1Byte	RSSI_THRESHOLD[RATESIZE] = {0,0,0,0,
+static u8	RSSI_THRESHOLD[RATESIZE] = {0,0,0,0,
 	0,0,0,0,0,0x24,0x26,0x2a,
 	0x18,0x1a,0x1d,0x1f,0x21,0x27,0x29,0x2a,
 	0,0,0,0x1f,0x23,0x28,0x2a,0x2c};
@@ -73,11 +73,11 @@ static u16	N_THRESHOLD_LOW[RATESIZE] = {2,2,4,8,
 	12,18,24,36,48,72,96,108,
 	30,40,50,80,120,200,280,320,
 	150,160,240,360,500,600,800,1000};
-static u1Byte	 TRYING_NECESSARY[RATESIZE] = {2,2,2,2,
+static u8	 TRYING_NECESSARY[RATESIZE] = {2,2,2,2,
 	2,2,3,3,4,4,5,7,
 	4,4,7,10,10,12,12,18,
 	5,7,7,8,11,18,36,60};  // 0329 // 1207
-static u1Byte	DROPING_NECESSARY[RATESIZE] = {1,1,1,1,
+static u8	DROPING_NECESSARY[RATESIZE] = {1,1,1,1,
 	1,2,3,4,5,6,7,8,
 	1,2,3,4,5,6,7,8,
 	5,6,7,8,9,10,11,12};
@@ -98,7 +98,7 @@ static u32	INIT_RATE_FALLBACK_TABLE[16]={0x0f8ff015,  // 0: 40M BGN mode
 	0,			// 14:
 	0,			// 15:
 	};
-static u1Byte PendingForRateUpFail[5]={2,10,24,40,60};
+static u8 PendingForRateUpFail[5]={2,10,24,40,60};
 static u16 DynamicTxRPTTiming[6]={0x186a, 0x30d4, 0x493e, 0x61a8, 0x7a12 ,0x927c}; // 200ms-1200ms
 
 // End Rate adaptive parameters
@@ -107,10 +107,10 @@ static void
 odm_SetTxRPTTiming_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	PODM_RA_INFO_T		pRaInfo,
-	IN	u1Byte				extend
+	IN	u8				extend
 	)
 {
-	u1Byte idx = 0;
+	u8 idx = 0;
 
 	for(idx=0; idx<5; idx++)
 		if(DynamicTxRPTTiming[idx] == pRaInfo->RptTime)
@@ -138,8 +138,8 @@ odm_RateDown_8188E(
 	IN	PODM_RA_INFO_T  pRaInfo
 	)
 {
-	u1Byte RateID, LowestRate, HighestRate;
-	u1Byte i;
+	u8 RateID, LowestRate, HighestRate;
+	u8 i;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateDown_8188E()\n"));
 	if(NULL == pRaInfo)
@@ -211,8 +211,8 @@ odm_RateUp_8188E(
 	IN	PODM_RA_INFO_T  pRaInfo
 	)
 {
-	u1Byte RateID, HighestRate;
-	u1Byte i;
+	u8 RateID, HighestRate;
+	u8 i;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateUp_8188E() \n"));
 	if(NULL == pRaInfo)
@@ -274,7 +274,7 @@ RateUpfinish:
 }
 
 static void odm_ResetRaCounter_8188E( IN PODM_RA_INFO_T  pRaInfo){
-	u1Byte RateID;
+	u8 RateID;
 	RateID=pRaInfo->DecisionRate;
 	pRaInfo->NscUp=(N_THRESHOLD_HIGH[RateID]+N_THRESHOLD_LOW[RateID])>>1;
 	pRaInfo->NscDown=(N_THRESHOLD_HIGH[RateID]+N_THRESHOLD_LOW[RateID])>>1;
@@ -286,9 +286,9 @@ odm_RateDecision_8188E(
 	IN	PODM_RA_INFO_T  pRaInfo
 	)
 {
-	u1Byte RateID = 0, RtyPtID = 0, PenaltyID1 = 0, PenaltyID2 = 0;
+	u8 RateID = 0, RtyPtID = 0, PenaltyID1 = 0, PenaltyID2 = 0;
 	//u32 pool_retry;
-	static u1Byte DynamicTxRPTTimingCounter=0;
+	static u8 DynamicTxRPTTimingCounter=0;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateDecision_8188E() \n"));
 
@@ -541,12 +541,12 @@ odm_PTDecision_8188E(
 	IN	PODM_RA_INFO_T		pRaInfo
 	)
 {
-	u1Byte stage_BUF;
-	u1Byte j;
-	u1Byte temp_stage;
+	u8 stage_BUF;
+	u8 j;
+	u8 temp_stage;
 	u32 numsc;
 	u32 num_total;
-	u1Byte stage_id;
+	u8 stage_id;
 
 	stage_BUF=pRaInfo->PTStage;
 	numsc  = 0;
@@ -616,13 +616,13 @@ ODM_RASupport_Init(
 int
 ODM_RAInfo_Init(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		MacID
+	IN	u8		MacID
 	)
 {
 	PODM_RA_INFO_T pRaInfo = &pDM_Odm->RAInfo[MacID];
 	#if 1
-	u1Byte WirelessMode=0xFF; //invalid value
-	u1Byte max_rate_idx = 0x13; //MCS7
+	u8 WirelessMode=0xFF; //invalid value
+	u8 max_rate_idx = 0x13; //MCS7
 	if(pDM_Odm->pWirelessMode!=NULL){
 		WirelessMode=*(pDM_Odm->pWirelessMode);
 	}
@@ -690,7 +690,7 @@ ODM_RAInfo_Init_all(
 	IN    PDM_ODM_T		pDM_Odm
 	)
 {
-	u1Byte MacID = 0;
+	u8 MacID = 0;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>\n"));
 	pDM_Odm->CurrminRptTime = 0;
@@ -702,10 +702,10 @@ ODM_RAInfo_Init_all(
 }
 
 
-u1Byte
+u8
 ODM_RA_GetShortGI_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		MacID
+	IN	u8		MacID
 )
 {
 	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
@@ -715,13 +715,13 @@ ODM_RA_GetShortGI_8188E(
 	return pDM_Odm->RAInfo[MacID].RateSGI;
 }
 
-u1Byte
+u8
 ODM_RA_GetDecisionRate_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		MacID
+	IN	u8		MacID
 	)
 {
-	u1Byte DecisionRate = 0;
+	u8 DecisionRate = 0;
 
 	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return 0;
@@ -731,13 +731,13 @@ ODM_RA_GetDecisionRate_8188E(
 	return DecisionRate;
 }
 
-u1Byte
+u8
 ODM_RA_GetHwPwrStatus_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		MacID
+	IN	u8		MacID
 	)
 {
-	u1Byte PTStage = 5;
+	u8 PTStage = 5;
 	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return 0;
 	PTStage = (pDM_Odm->RAInfo[MacID].PTStage);
@@ -749,10 +749,10 @@ ODM_RA_GetHwPwrStatus_8188E(
 void
 ODM_RA_UpdateRateInfo_8188E(
 	IN PDM_ODM_T pDM_Odm,
-	IN u1Byte MacID,
-	IN u1Byte RateID,
+	IN u8 MacID,
+	IN u8 RateID,
 	IN u32 RateMask,
-	IN u1Byte SGIEnable
+	IN u8 SGIEnable
 	)
 {
 	PODM_RA_INFO_T pRaInfo = NULL;
@@ -773,8 +773,8 @@ ODM_RA_UpdateRateInfo_8188E(
 void
 ODM_RA_SetRSSI_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	u1Byte			MacID,
-	IN	u1Byte			Rssi
+	IN	u8			MacID,
+	IN	u8			Rssi
 	)
 {
 	PODM_RA_INFO_T pRaInfo = NULL;
@@ -801,15 +801,15 @@ ODM_RA_Set_TxRPT_Time(
 void
 ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	pu1Byte			TxRPT_Buf,
+	IN	u8 *			TxRPT_Buf,
 	IN	u16			TxRPT_Len,
 	IN	u32			MacIDValidEntry0,
 	IN	u32			MacIDValidEntry1
 	)
 {
 	PODM_RA_INFO_T pRAInfo = NULL;
-	u1Byte			MacId = 0;
-	pu1Byte			pBuffer = NULL;
+	u8			MacId = 0;
+	u8 *			pBuffer = NULL;
 	u32			valid = 0, ItemNum = 0;
 	u16			minRptTime = 0x927c;
 
@@ -937,7 +937,7 @@ ODM_RASupport_Init(
 int
 ODM_RAInfo_Init(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		MacID
+	IN	u8		MacID
 	)
 {
 	return 0;
@@ -951,27 +951,27 @@ ODM_RAInfo_Init_all(
 	return 0;
 }
 
-u1Byte
+u8
 ODM_RA_GetShortGI_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		MacID
+	IN	u8		MacID
 	)
 {
 	return 0;
 }
 
-u1Byte
+u8
 ODM_RA_GetDecisionRate_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		MacID
+	IN	u8		MacID
 	)
 {
 	return 0;
 }
-u1Byte
+u8
 ODM_RA_GetHwPwrStatus_8188E(
 	IN	PDM_ODM_T	pDM_Odm,
-	IN	u1Byte		MacID
+	IN	u8		MacID
 	)
 {
 	return 0;
@@ -980,10 +980,10 @@ ODM_RA_GetHwPwrStatus_8188E(
 void
 ODM_RA_UpdateRateInfo_8188E(
 	IN PDM_ODM_T pDM_Odm,
-	IN u1Byte MacID,
-	IN u1Byte RateID,
+	IN u8 MacID,
+	IN u8 RateID,
 	IN u32 RateMask,
-	IN u1Byte SGIEnable
+	IN u8 SGIEnable
 	)
 {
 	return;
@@ -992,8 +992,8 @@ ODM_RA_UpdateRateInfo_8188E(
 void
 ODM_RA_SetRSSI_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	u1Byte			MacID,
-	IN	u1Byte			Rssi
+	IN	u8			MacID,
+	IN	u8			Rssi
 	)
 {
 	return;
@@ -1011,7 +1011,7 @@ ODM_RA_Set_TxRPT_Time(
 void
 ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	pu1Byte			TxRPT_Buf,
+	IN	u8 *			TxRPT_Buf,
 	IN	u16			TxRPT_Len,
 	IN	u32			MacIDValidEntry0,
 	IN	u32			MacIDValidEntry1

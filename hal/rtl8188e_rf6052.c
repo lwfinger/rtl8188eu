@@ -341,10 +341,10 @@ void getTxPowerWriteValByRegulatory88E(
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	u1Byte			i, chnlGroup=0, pwr_diff_limit[4], customer_pwr_limit;
+	u8			i, chnlGroup=0, pwr_diff_limit[4], customer_pwr_limit;
 	s1Byte			pwr_diff=0;
 	u32			writeVal, customer_limit, rf;
-	u1Byte			Regulatory = pHalData->EEPROMRegulatory;
+	u8			Regulatory = pHalData->EEPROMRegulatory;
 
 	//
 	// Index 0 & 1= legacy OFDM, 2-5=HT_MCS rate
@@ -451,7 +451,7 @@ void getTxPowerWriteValByRegulatory88E(
 
 				for (i=0; i<4; i++)
 					{
-					pwr_diff_limit[i] = (u1Byte)((pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]&(0x7f<<(i*8)))>>(i*8));
+					pwr_diff_limit[i] = (u8)((pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]&(0x7f<<(i*8)))>>(i*8));
 
 					if(pwr_diff_limit[i] > pwr_diff)
 						pwr_diff_limit[i] = pwr_diff;

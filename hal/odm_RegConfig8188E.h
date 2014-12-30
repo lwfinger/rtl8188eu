@@ -47,7 +47,7 @@ void
 odm_ConfigMAC_8188E(
  	IN 	PDM_ODM_T 	pDM_Odm,
  	IN 	u32 		Addr,
- 	IN 	u1Byte 		Data
+ 	IN 	u8 		Data
  	);
 
 void 

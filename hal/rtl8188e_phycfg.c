@@ -159,11 +159,11 @@ sic_Read4Byte(
 		//RTPRINT(FPHY, PHY_SICR, ("write cmdreg 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_PREREAD));
 #endif
 		rtw_write8(Adapter, SIC_ADDR_REG, (u8)(offset&0xff));
-		//PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG, (u1Byte)(offset&0xff));
-		//RTPRINT(FPHY, PHY_SICR, ("write 0x%x = 0x%x\n", SIC_ADDR_REG, (u1Byte)(offset&0xff)));
+		//PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG, (u8)(offset&0xff));
+		//RTPRINT(FPHY, PHY_SICR, ("write 0x%x = 0x%x\n", SIC_ADDR_REG, (u8)(offset&0xff)));
 		rtw_write8(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8));
-		//PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG+1, (u1Byte)((offset&0xff00)>>8));
-		//RTPRINT(FPHY, PHY_SICR, ("write 0x%x = 0x%x\n", SIC_ADDR_REG+1, (u1Byte)((offset&0xff00)>>8)));
+		//PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8));
+		//RTPRINT(FPHY, PHY_SICR, ("write 0x%x = 0x%x\n", SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8)));
 		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_READ);
 		//PlatformEFIOWrite1Byte(Adapter, SIC_CMD_REG, SIC_CMD_READ);
 		//RTPRINT(FPHY, PHY_SICR, ("write cmdreg 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_READ));
@@ -672,7 +672,7 @@ rtl8188e_PHY_SetRFReg(
 {
 
 	//HAL_DATA_TYPE	*pHalData		= GET_HAL_DATA(Adapter);
-	//u1Byte			RFWaitCounter	= 0;
+	//u8			RFWaitCounter	= 0;
 	u32		Original_Value, BitShift;
 	//_irqL	irqL;
 
@@ -1000,7 +1000,7 @@ phy_ConfigBBExternalPA(
  *			  Read/Write
  *
  * Input:	struct adapter *	Adapter
- *			u1Byte			ConfigType     0 => PHY_CONFIG
+ *			u8			ConfigType     0 => PHY_CONFIG
  *										 1 =>AGC_TAB
  *
  * Output:      NONE
@@ -2166,7 +2166,7 @@ void phy_PowerIndexCheck88E(
  *			We must consider RF path later!!!!!!!
  *
  * Input:       struct adapter *	Adapter
- *			u1Byte		channel
+ *			u8		channel
  *
  * Output:      NONE
  *
@@ -2341,7 +2341,7 @@ _PHY_SetBWMode92C(
 
 	regBwOpMode = rtw_read8(Adapter, REG_BWOPMODE);
 	regRRSR_RSC = rtw_read8(Adapter, REG_RRSR+2);
-	//regBwOpMode = rtw_hal_get_hwreg(Adapter,HW_VAR_BWMODE,(pu1Byte)&regBwOpMode);
+	//regBwOpMode = rtw_hal_get_hwreg(Adapter,HW_VAR_BWMODE,(u8 *)&regBwOpMode);
 
 	switch(pHalData->CurrentChannelBW)
 	{

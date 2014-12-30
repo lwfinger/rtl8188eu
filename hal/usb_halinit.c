@@ -2100,7 +2100,7 @@ Hal_EfuseParseMACAddr_8188EU(
 
 	if (AutoLoadFail)
 	{
-//		sMacAddr[5] = (u1Byte)GetRandomNumber(1, 254);
+//		sMacAddr[5] = (u8)GetRandomNumber(1, 254);
 		for (i=0; i<6; i++)
 			pEEPROM->mac_addr[i] = sMacAddr[i];
 	}

@@ -33,7 +33,7 @@ ODM_DIG_LowerBound_88E(
 
 	if(pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV)
 	{
-		pDM_DigTable->rx_gain_range_min = (u1Byte) pDM_DigTable->AntDiv_RSSI_max;
+		pDM_DigTable->rx_gain_range_min = (u8) pDM_DigTable->AntDiv_RSSI_max;
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("ODM_DIG_LowerBound_88E(): pDM_DigTable->AntDiv_RSSI_max=%d \n",pDM_DigTable->AntDiv_RSSI_max));
 	}
 	//If only one Entry connected
@@ -275,7 +275,7 @@ ODM_AntennaDiversityInit_88E(
 
 
 void
-ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
+ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u8 Ant)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u32	DefaultAnt, OptionalAnt;
@@ -315,10 +315,10 @@ ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant)
 
 
 void
-odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u32 MacId)
+odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u8 Ant, IN u32 MacId)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
-	u1Byte	TargetAnt;
+	u8	TargetAnt;
 
 	if(Ant == MAIN_ANT)
 		TargetAnt = MAIN_ANT_CG_TRX;
@@ -338,8 +338,8 @@ odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u1Byte Ant, IN u32 MacId)
 void
 ODM_SetTxAntByTxInfo_88E(
 	IN		PDM_ODM_T		pDM_Odm,
-	IN		pu1Byte			pDesc,
-	IN		u1Byte			macId
+	IN		u8 *			pDesc,
+	IN		u8			macId
 	)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -357,9 +357,9 @@ ODM_SetTxAntByTxInfo_88E(
 void
 ODM_AntselStatistics_88E(
 	IN		PDM_ODM_T		pDM_Odm,
-	IN		u1Byte			antsel_tr_mux,
+	IN		u8			antsel_tr_mux,
 	IN		u32			MacId,
-	IN		u1Byte			RxPWDBAll
+	IN		u8			RxPWDBAll
 )
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -403,7 +403,7 @@ odm_HWAntDiv(
 {
 	u32	i, MinRSSI=0xFF, AntDivMaxRSSI=0, MaxRSSI=0, LocalMinRSSI, LocalMaxRSSI;
 	u32	Main_RSSI, Aux_RSSI;
-	u1Byte	RxIdleAnt=0, TargetAnt=7;
+	u8	RxIdleAnt=0, TargetAnt=7;
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
 	BOOLEAN	bMatchBSSID;
@@ -552,8 +552,8 @@ ODM_AntennaDiversity_88E(
 void
 ODM_SetTxAntByTxInfo_88E(
 	IN		PDM_ODM_T		pDM_Odm,
-	IN		pu1Byte			pDesc,
-	IN		u1Byte			macId
+	IN		u8 *			pDesc,
+	IN		u8			macId
 	)
 {
 }
@@ -597,15 +597,15 @@ odm_DynamicPrimaryCCA(
 	BOOLEAN		Is40MHz;
 	BOOLEAN		Client_40MHz = FALSE, Client_tmp = FALSE;      // connected client BW
 	BOOLEAN		bConnected = FALSE;		// connected or not
-	static u1Byte	Client_40MHz_pre = 0;
+	static u8	Client_40MHz_pre = 0;
 	static u8Byte	lastTxOkCnt = 0;
 	static u8Byte	lastRxOkCnt = 0;
 	static u32	Counter = 0;
-	static u1Byte	Delay = 1;
+	static u8	Delay = 1;
 	u8Byte		curTxOkCnt;
 	u8Byte		curRxOkCnt;
-	u1Byte		SecCHOffset;
-	u1Byte		i;
+	u8		SecCHOffset;
+	u8		i;
 
 		return;
 }

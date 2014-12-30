@@ -271,7 +271,7 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	//
 	// 5. Calculate Efuse utilization.
 	//
-	efuse_usage = (u1Byte)((efuse_utilized*100)/EFUSE_REAL_CONTENT_LEN_88E);
+	efuse_usage = (u8)((efuse_utilized*100)/EFUSE_REAL_CONTENT_LEN_88E);
 	//Adapter->HalFunc.SetHwRegHandler(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&efuse_utilized);
 
 exit:
@@ -1364,7 +1364,7 @@ Hal_EfuseReadEFuse88E(
 	//
 	// 5. Calculate Efuse utilization.
 	//
-	efuse_usage = (u1Byte)((eFuse_Addr*100)/EFUSE_REAL_CONTENT_LEN_88E);
+	efuse_usage = (u8)((eFuse_Addr*100)/EFUSE_REAL_CONTENT_LEN_88E);
 	rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&eFuse_Addr);
 
 exit:
@@ -1524,8 +1524,8 @@ rtl8188e_ReadEFuse(
 void
 Hal_EFUSEGetEfuseDefinition88E(
 	IN		struct adapter *pAdapter,
-	IN		u1Byte		efuseType,
-	IN		u1Byte		type,
+	IN		u8		efuseType,
+	IN		u8		type,
 	OUT		void *		pOut
 	)
 {
@@ -1602,7 +1602,7 @@ Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 		case TYPE_EFUSE_MAX_SECTION:
 			{
 				u8*		pMax_section;
-				pMax_section = (pu1Byte)pOut;
+				pMax_section = (u8 *)pOut;
 				*pMax_section = EFUSE_MAX_SECTION_88E;
 			}
 			break;
@@ -3547,7 +3547,7 @@ Hal_ReadThermalMeter_88E(
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u1Byte			tempval;
+	u8			tempval;
 
 	//
 	// ThermalMeter from EEPROM

@@ -53,8 +53,7 @@ typedef enum _RT_SPINLOCK_TYPE{
 
 #include <basic_types.h>
 
-#define u1Byte 		u8
-#define pu1Byte 		u8*	
+#define u8 		u8
 
 #define u8Byte 		u64
 #define pu8Byte 		u64*

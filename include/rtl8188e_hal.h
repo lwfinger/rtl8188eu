@@ -234,8 +234,8 @@ typedef struct _TxPowerInfo
 } TxPowerInfo, *PTxPowerInfo;
 
 typedef struct _TxPowerInfo24G{
-	u1Byte IndexCCK_Base[MAX_RF_PATH][MAX_CHNL_GROUP_24G];
-	u1Byte IndexBW40_Base[MAX_RF_PATH][MAX_CHNL_GROUP_24G-1];
+	u8 IndexCCK_Base[MAX_RF_PATH][MAX_CHNL_GROUP_24G];
+	u8 IndexBW40_Base[MAX_RF_PATH][MAX_CHNL_GROUP_24G-1];
 	//If only one tx, only BW20 and OFDM are used.
 	s1Byte CCK_Diff[MAX_RF_PATH][MAX_TX_COUNT];
 	s1Byte OFDM_Diff[MAX_RF_PATH][MAX_TX_COUNT];
