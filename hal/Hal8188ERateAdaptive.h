@@ -91,7 +91,7 @@ void
 ODM_RA_TxRPT2Handle_8188E(	
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,
-	IN	u2Byte			TxRPT_Len,
+	IN	u16			TxRPT_Len,
 	IN	u4Byte			MacIDValidEntry0,
 	IN	u4Byte			MacIDValidEntry1
 	);
@@ -100,7 +100,7 @@ ODM_RA_TxRPT2Handle_8188E(
 void 
 ODM_RA_Set_TxRPT_Time(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	u2Byte 			minRptTime
+	IN	u16 			minRptTime
 	);	
 #endif
 

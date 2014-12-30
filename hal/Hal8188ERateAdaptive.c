@@ -65,11 +65,11 @@ static u1Byte	RSSI_THRESHOLD[RATESIZE] = {0,0,0,0,
 	0x18,0x1a,0x1d,0x1f,0x21,0x27,0x29,0x2a,
 	0,0,0,0x1f,0x23,0x28,0x2a,0x2c};
 
-static u2Byte	N_THRESHOLD_HIGH[RATESIZE] = {4,4,8,16,
+static u16	N_THRESHOLD_HIGH[RATESIZE] = {4,4,8,16,
 	24,36,48,72,96,144,192,216,
 	60,80,100,160,240,400,560,640,
 	300,320,480,720,1000,1200,1600,2000};
-static u2Byte	N_THRESHOLD_LOW[RATESIZE] = {2,2,4,8,
+static u16	N_THRESHOLD_LOW[RATESIZE] = {2,2,4,8,
 	12,18,24,36,48,72,96,108,
 	30,40,50,80,120,200,280,320,
 	150,160,240,360,500,600,800,1000};
@@ -99,7 +99,7 @@ static u4Byte	INIT_RATE_FALLBACK_TABLE[16]={0x0f8ff015,  // 0: 40M BGN mode
 	0,			// 15:
 	};
 static u1Byte PendingForRateUpFail[5]={2,10,24,40,60};
-static u2Byte DynamicTxRPTTiming[6]={0x186a, 0x30d4, 0x493e, 0x61a8, 0x7a12 ,0x927c}; // 200ms-1200ms
+static u16 DynamicTxRPTTiming[6]={0x186a, 0x30d4, 0x493e, 0x61a8, 0x7a12 ,0x927c}; // 200ms-1200ms
 
 // End Rate adaptive parameters
 
@@ -582,7 +582,7 @@ odm_PTDecision_8188E(
 static void
 odm_RATxRPTTimerSetting(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	u2Byte			minRptTime
+	IN	u16			minRptTime
 )
 {
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,(" =====>odm_RATxRPTTimerSetting()\n"));
@@ -791,7 +791,7 @@ ODM_RA_SetRSSI_8188E(
 void
 ODM_RA_Set_TxRPT_Time(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	u2Byte			minRptTime
+	IN	u16			minRptTime
 	)
 {
 	ODM_Write2Byte(pDM_Odm, REG_TX_RPT_TIME, minRptTime);
@@ -802,7 +802,7 @@ void
 ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,
-	IN	u2Byte			TxRPT_Len,
+	IN	u16			TxRPT_Len,
 	IN	u4Byte			MacIDValidEntry0,
 	IN	u4Byte			MacIDValidEntry1
 	)
@@ -811,7 +811,7 @@ ODM_RA_TxRPT2Handle_8188E(
 	u1Byte			MacId = 0;
 	pu1Byte			pBuffer = NULL;
 	u4Byte			valid = 0, ItemNum = 0;
-	u2Byte			minRptTime = 0x927c;
+	u16			minRptTime = 0x927c;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>ODM_RA_TxRPT2Handle_8188E(): valid0=%d valid1=%d BufferLength=%d\n",
 		MacIDValidEntry0, MacIDValidEntry1, TxRPT_Len));
@@ -832,13 +832,13 @@ ODM_RA_TxRPT2Handle_8188E(
 		if(valid)
 		{
 
-			pRAInfo->RTY[0] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_0(pBuffer);
-			pRAInfo->RTY[1] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_1(pBuffer);
-			pRAInfo->RTY[2] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_2(pBuffer);
-			pRAInfo->RTY[3] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_3(pBuffer);
-			pRAInfo->RTY[4] = (u2Byte)GET_TX_REPORT_TYPE1_RERTY_4(pBuffer);
-			pRAInfo->DROP =   (u2Byte)GET_TX_REPORT_TYPE1_DROP_0(pBuffer);
-			pRAInfo->DROP1=   (u2Byte)GET_TX_REPORT_TYPE1_DROP_1(pBuffer);
+			pRAInfo->RTY[0] = (u16)GET_TX_REPORT_TYPE1_RERTY_0(pBuffer);
+			pRAInfo->RTY[1] = (u16)GET_TX_REPORT_TYPE1_RERTY_1(pBuffer);
+			pRAInfo->RTY[2] = (u16)GET_TX_REPORT_TYPE1_RERTY_2(pBuffer);
+			pRAInfo->RTY[3] = (u16)GET_TX_REPORT_TYPE1_RERTY_3(pBuffer);
+			pRAInfo->RTY[4] = (u16)GET_TX_REPORT_TYPE1_RERTY_4(pBuffer);
+			pRAInfo->DROP =   (u16)GET_TX_REPORT_TYPE1_DROP_0(pBuffer);
+			pRAInfo->DROP1=   (u16)GET_TX_REPORT_TYPE1_DROP_1(pBuffer);
 			pRAInfo->TOTAL = pRAInfo->RTY[0] + \
 							  pRAInfo->RTY[1] + \
 							  pRAInfo->RTY[2] + \
@@ -919,7 +919,7 @@ ODM_RA_TxRPT2Handle_8188E(
 static void
 odm_RATxRPTTimerSetting(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	u2Byte			minRptTime
+	IN	u16			minRptTime
 )
 {
 	return;
@@ -1002,7 +1002,7 @@ ODM_RA_SetRSSI_8188E(
 void
 ODM_RA_Set_TxRPT_Time(
 	IN	PDM_ODM_T		pDM_Odm,
-	IN	u2Byte			minRptTime
+	IN	u16			minRptTime
 	)
 {
 	return;
@@ -1012,7 +1012,7 @@ void
 ODM_RA_TxRPT2Handle_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	pu1Byte			TxRPT_Buf,
-	IN	u2Byte			TxRPT_Len,
+	IN	u16			TxRPT_Len,
 	IN	u4Byte			MacIDValidEntry0,
 	IN	u4Byte			MacIDValidEntry1
 	)

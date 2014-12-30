@@ -225,7 +225,7 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8));
 
 					efuse_utilized++;
-					eFuseWord[offset][i] |= (((u2Byte)rtemp8 << 8) & 0xff00);
+					eFuseWord[offset][i] |= (((u16)rtemp8 << 8) & 0xff00);
 
 					if(eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
@@ -1318,7 +1318,7 @@ Hal_EfuseReadEFuse88E(
 					//RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8));
 
 					efuse_utilized++;
-					eFuseWord[offset][i] |= (((u2Byte)*rtemp8 << 8) & 0xff00);
+					eFuseWord[offset][i] |= (((u16)*rtemp8 << 8) & 0xff00);
 
 					if(eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
@@ -1609,36 +1609,36 @@ Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 		case TYPE_EFUSE_REAL_CONTENT_LEN:
 			{
 				u16* pu2Tmp;
-				pu2Tmp = (pu2Byte)pOut;
+				pu2Tmp = (u16 *)pOut;
 				*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
 			}
 			break;
 		case TYPE_EFUSE_CONTENT_LEN_BANK:
 			{
 				u16* pu2Tmp;
-				pu2Tmp = (pu2Byte)pOut;
+				pu2Tmp = (u16 *)pOut;
 				*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
 			}
 			break;
 		case TYPE_AVAILABLE_EFUSE_BYTES_BANK:
 			{
 				u16* pu2Tmp;
-				pu2Tmp = (pu2Byte)pOut;
-				*pu2Tmp = (u2Byte)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+				pu2Tmp = (u16 *)pOut;
+				*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
 			}
 			break;
 		case TYPE_AVAILABLE_EFUSE_BYTES_TOTAL:
 			{
 				u16* pu2Tmp;
-				pu2Tmp = (pu2Byte)pOut;
-				*pu2Tmp = (u2Byte)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+				pu2Tmp = (u16 *)pOut;
+				*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
 			}
 			break;
 		case TYPE_EFUSE_MAP_LEN:
 			{
 				u16* pu2Tmp;
-				pu2Tmp = (pu2Byte)pOut;
-				*pu2Tmp = (u2Byte)EFUSE_MAP_LEN_88E;
+				pu2Tmp = (u16 *)pOut;
+				*pu2Tmp = (u16)EFUSE_MAP_LEN_88E;
 			}
 			break;
 		case TYPE_EFUSE_PROTECT_BYTES_BANK:
@@ -2969,7 +2969,7 @@ Hal_InitPGData88E(struct adapter *padapter)
 			// Read all Content from EEPROM or EFUSE.
 			for(i = 0; i < HWSET_MAX_SIZE_88E; i += 2)
 			{
-//				value16 = EF2Byte(ReadEEprom(pAdapter, (u2Byte) (i>>1)));
+//				value16 = EF2Byte(ReadEEprom(pAdapter, (u16) (i>>1)));
 //				*((u16*)(&PROMContent[i])) = value16;
 			}
 		}

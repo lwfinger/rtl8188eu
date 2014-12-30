@@ -81,7 +81,7 @@ static	RF_SHADOW_T	RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
  *
  * Overview:	For RL6052, we must change some RF settign for 1T or 2T.
  *
- * Input:		u2Byte DataRate		// 0x80-8f, 0x90-9f
+ * Input:		u16 DataRate		// 0x80-8f, 0x90-9f
  *
  * Output:      NONE
  *

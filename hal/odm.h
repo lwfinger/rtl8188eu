@@ -770,12 +770,12 @@ typedef struct _ODM_RA_Info_
 	u1Byte LowestRate;
 	u4Byte NscUp;
 	u4Byte NscDown;
-	u2Byte RTY[5];
+	u16 RTY[5];
 	u4Byte TOTAL;
-	u2Byte DROP;//Retry over or drop
-	u2Byte DROP1;//LifeTime over
+	u16 DROP;//Retry over or drop
+	u16 DROP1;//LifeTime over
 	u1Byte Active;
-	u2Byte RptTime;
+	u16 RptTime;
 	u1Byte RAWaitingCounter;
 	u1Byte RAPendingCounter;	
 #if 1 //POWER_TRAINING_ACTIVE == 1 // For compile  pass only~!
@@ -1105,7 +1105,7 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	PSTA_INFO_T		pODM_StaInfo[ODM_ASSOCIATE_ENTRY_NUM];
 
 #if (RATE_ADAPTIVE_SUPPORT == 1)
-	u2Byte 			CurrminRptTime;
+	u16 			CurrminRptTime;
 	ODM_RA_INFO_T   RAInfo[ODM_ASSOCIATE_ENTRY_NUM]; //Use MacID as array index. STA MacID=0, VWiFi Client MacID={1, ODM_ASSOCIATE_ENTRY_NUM-1} //YJ,add,120119
 #endif
 	//
@@ -1512,7 +1512,7 @@ void
 ODM_CmnInfoPtrArrayHook(
 		PDM_ODM_T		pDM_Odm,
 		ODM_CMNINFO_E	CmnInfo,
-		u2Byte			Index,
+		u16			Index,
 		void *			pValue	
 	);
 

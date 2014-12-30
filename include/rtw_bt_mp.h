@@ -51,7 +51,7 @@ typedef struct _BT_TXRX_PARAMETERS{
     u1Byte		txrxTxPktInterval;
 	u1Byte		txrxPayloadType;
 	u1Byte		txrxPktType;
-	u2Byte		txrxPayloadLen;
+	u16		txrxPayloadLen;
 	u4Byte		txrxPktHeader;
 	u1Byte		txrxWhitenCoeff;
 	u1Byte		txrxBdaddr[6];

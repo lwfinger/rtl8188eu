@@ -185,7 +185,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
+	u16     count       = 0;
 	pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
@@ -253,7 +253,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,1);
 				}
 				else{
-					rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u2Byte)v1, v2,bRFRegOffsetMask) ;
+					rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u16)v1, v2,bRFRegOffsetMask) ;
 					#ifdef CONFIG_IOL_IOREG_CFG_DBG
 					cmpdata[cmpdata_idx].addr = v1;
 					cmpdata[cmpdata_idx].value= v2;
@@ -314,7 +314,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,1);
 					}
 					else{
-						rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u2Byte)v1, v2,bRFRegOffsetMask) ;
+						rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u16)v1, v2,bRFRegOffsetMask) ;
 						#ifdef CONFIG_IOL_IOREG_CFG_DBG
 						cmpdata[cmpdata_idx].addr = v1;
 						cmpdata[cmpdata_idx].value= v2;
@@ -502,7 +502,7 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
+	u16     count       = 0;
 	pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;

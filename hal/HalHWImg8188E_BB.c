@@ -336,7 +336,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
+	u16     count       = 0;
 	pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
@@ -378,7 +378,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 			if(biol){
 				if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
 					bndy_cnt++;
-				rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);
+				rtw_IOL_append_WD_cmd(pxmit_frame,(u16)v1, v2,bMaskDWord);
 			}
 			else
 			#endif	//#ifdef CONFIG_IOL_IOREG_CFG
@@ -411,7 +411,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 					if(biol){
 						if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
 							bndy_cnt++;
-						rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);
+						rtw_IOL_append_WD_cmd(pxmit_frame,(u16)v1, v2,bMaskDWord);
 					}
 					else
 					#endif	//#ifdef CONFIG_IOL_IOREG_CFG
@@ -606,7 +606,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E(
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
+	u16     count       = 0;
 	pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;
@@ -898,7 +898,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
+	u16     count       = 0;
 	pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
@@ -969,7 +969,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 					if (v1 == 0xa24)
 						pDM_Odm->RFCalibrateInfo.RegA24 = v2;
 
-					rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);
+					rtw_IOL_append_WD_cmd(pxmit_frame,(u16)v1, v2,bMaskDWord);
 					#ifdef CONFIG_IOL_IOREG_CFG_DBG
 							cmpdata[cmpdata_idx].addr = v1;
 							cmpdata[cmpdata_idx].value= v2;
@@ -1030,7 +1030,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 						if (v1 == 0xa24)
 							pDM_Odm->RFCalibrateInfo.RegA24 = v2;
 
-						rtw_IOL_append_WD_cmd(pxmit_frame,(u2Byte)v1, v2,bMaskDWord);
+						rtw_IOL_append_WD_cmd(pxmit_frame,(u16)v1, v2,bMaskDWord);
 						#ifdef CONFIG_IOL_IOREG_CFG_DBG
 								cmpdata[cmpdata_idx].addr = v1;
 								cmpdata[cmpdata_idx].value= v2;
@@ -1307,7 +1307,7 @@ ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E(
 
 	u4Byte     hex         = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
+	u16     count       = 0;
 	pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     _interface   = pDM_Odm->SupportInterface;
@@ -1390,7 +1390,7 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 {
 	u4Byte     hex = 0;
 	u4Byte     i           = 0;
-	u2Byte     count       = 0;
+	u16     count       = 0;
 	pu4Byte    ptr_array   = NULL;
 	u1Byte     platform    = pDM_Odm->SupportPlatform;
 	u1Byte     interfaceValue   = pDM_Odm->SupportInterface;
