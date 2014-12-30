@@ -60,7 +60,6 @@ odm_QueryRxPwrPercentage(
 
 }
 
-#if (DM_ODM_SUPPORT_TYPE != ODM_MP)
 //
 // 2012/01/12 MH MOve some signal strength smooth method to MP HAL layer.
 // IF other SW team do not support the feature, remove this section.??
@@ -298,7 +297,6 @@ odm_SignalScaleMapping(
 	}
 
 }
-#endif
 
 //pMgntInfo->CustomerID == RT_CID_819x_Lenovo
 static u1Byte odm_SQ_process_patch_RT_CID_819x_Lenovo(
@@ -1041,8 +1039,6 @@ ODM_MacStatusQuery(
 
 }
 
-#if (DM_ODM_SUPPORT_TYPE &  (ODM_MP|ODM_CE|ODM_AP))
-
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
 	IN	PDM_ODM_T			pDM_Odm,
@@ -1163,6 +1159,3 @@ ODM_ConfigMACWithHeaderFile(
 
 	return result;
 }
-
-
-#endif // end of (#if DM_ODM_SUPPORT_TYPE)

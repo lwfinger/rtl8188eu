@@ -27,83 +27,28 @@
 #define	MAIN_ANT_CGCS_RX	0
 #define	AUX_ANT_CGCS_RX	1
 
-void
-ODM_DIG_LowerBound_88E(
-	IN		PDM_ODM_T		pDM_Odm
-);
-#if ( !(DM_ODM_SUPPORT_TYPE == ODM_CE))
-void
-odm_FastAntTrainingInit(
-	IN		PDM_ODM_T		pDM_Odm
-);
-#endif
+void ODM_DIG_LowerBound_88E(PDM_ODM_T pDM_Odm);
+void odm_FastAntTrainingInit(PDM_ODM_T pDM_Odm);
 
-void
-ODM_AntennaDiversityInit_88E(
-	IN		PDM_ODM_T		pDM_Odm
-);
+void ODM_AntennaDiversityInit_88E(PDM_ODM_T pDM_Odm);
 
-void
-ODM_AntennaDiversity_88E
-(
-	IN		PDM_ODM_T		pDM_Odm
-);
+void ODM_AntennaDiversity_88E(PDM_ODM_T pDM_Odm);
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_MP|ODM_CE))
-void
-ODM_SetTxAntByTxInfo_88E(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		pu1Byte			pDesc,
-	IN		u1Byte			macId	
-);
-#else// (DM_ODM_SUPPORT_TYPE == ODM_AP)
-void
-ODM_SetTxAntByTxInfo_88E(
-	IN		PDM_ODM_T		pDM_Odm	
-);
-#endif
+void ODM_SetTxAntByTxInfo_88E(PDM_ODM_T pDM_Odm, pu1Byte pDesc, u1Byte macId);
 
-void
-ODM_UpdateRxIdleAnt_88E(
-	IN PDM_ODM_T pDM_Odm, 
-	IN u1Byte Ant
-);
+void ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u1Byte Ant);
 
-void
-ODM_AntselStatistics_88E(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u1Byte			antsel_tr_mux,
-	IN		u4Byte			MacId,
-	IN		u1Byte			RxPWDBAll
-);
+void ODM_AntselStatistics_88E(PDM_ODM_T pDM_Odm, u1Byte antsel_tr_mux, u4Byte MacId, u1Byte RxPWDBAll);
 
-#if ( !(DM_ODM_SUPPORT_TYPE == ODM_CE))
-void
-odm_FastAntTraining(
-	IN		PDM_ODM_T		pDM_Odm
-);
+void odm_FastAntTraining(PDM_ODM_T pDM_Odm);
 
-void
-odm_FastAntTrainingCallback(
-	IN		PDM_ODM_T		pDM_Odm
-);
+void odm_FastAntTrainingCallback(PDM_ODM_T pDM_Odm);
 
-void
-odm_FastAntTrainingWorkItemCallback(
-	IN		PDM_ODM_T		pDM_Odm
-);
-#endif
-void
-odm_PrimaryCCA_Init(
-	IN		PDM_ODM_T		pDM_Odm);
+void odm_FastAntTrainingWorkItemCallback(PDM_ODM_T pDM_Odm);
+void odm_PrimaryCCA_Init(PDM_ODM_T pDM_Odm);
 
-BOOLEAN
-ODM_DynamicPrimaryCCA_DupRTS(
-	IN		PDM_ODM_T		pDM_Odm);
+BOOLEAN ODM_DynamicPrimaryCCA_DupRTS(PDM_ODM_T pDM_Odm);
 
-void
-odm_DynamicPrimaryCCA(
-	IN		PDM_ODM_T		pDM_Odm);
+void odm_DynamicPrimaryCCA(PDM_ODM_T pDM_Odm);
 
 #endif
-
