@@ -160,9 +160,6 @@ struct mp_tx
 #define MP_MAX_LINES		1000
 #define MP_MAX_LINES_BYTES	256
 
-#define UCHAR u8
-#define USHORT u16
-#define UINT u32
 #define ULONG u32
 #define PULONG u32*
 

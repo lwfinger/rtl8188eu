@@ -39,7 +39,7 @@ typedef unsigned long long NDIS_802_11_KEY_RSC;
 typedef struct _NDIS_802_11_SSID
 {
   ULONG  SsidLength;
-  UCHAR  Ssid[32];
+  u8  Ssid[32];
 } NDIS_802_11_SSID, *PNDIS_802_11_SSID;
 
 typedef enum _NDIS_802_11_NETWORK_TYPE
@@ -90,18 +90,18 @@ typedef enum _NDIS_802_11_NETWORK_INFRASTRUCTURE
 
 typedef struct _NDIS_802_11_FIXED_IEs
 {
-  UCHAR  Timestamp[8];
-  USHORT  BeaconInterval;
-  USHORT  Capabilities;
+  u8  Timestamp[8];
+  u16  BeaconInterval;
+  u16  Capabilities;
 } NDIS_802_11_FIXED_IEs, *PNDIS_802_11_FIXED_IEs;
 
 
 
 typedef struct _NDIS_802_11_VARIABLE_IEs
 {
-  UCHAR  ElementID;
-  UCHAR  Length;
-  UCHAR  data[1];
+  u8  ElementID;
+  u8  Length;
+  u8  data[1];
 } NDIS_802_11_VARIABLE_IEs, *PNDIS_802_11_VARIABLE_IEs;
 
 
@@ -161,26 +161,26 @@ typedef enum _NDIS_802_11_WEP_STATUS
 
 typedef struct _NDIS_802_11_AI_REQFI
 {
-    USHORT Capabilities;
-    USHORT ListenInterval;
+    u16 Capabilities;
+    u16 ListenInterval;
     NDIS_802_11_MAC_ADDRESS  CurrentAPAddress;
 } NDIS_802_11_AI_REQFI, *PNDIS_802_11_AI_REQFI;
 
 typedef struct _NDIS_802_11_AI_RESFI
 {
-    USHORT Capabilities;
-    USHORT StatusCode;
-    USHORT AssociationId;
+    u16 Capabilities;
+    u16 StatusCode;
+    u16 AssociationId;
 } NDIS_802_11_AI_RESFI, *PNDIS_802_11_AI_RESFI;
 
 typedef struct _NDIS_802_11_ASSOCIATION_INFORMATION
 {
     ULONG                   Length;
-    USHORT                  AvailableRequestFixedIEs;
+    u16                  AvailableRequestFixedIEs;
     NDIS_802_11_AI_REQFI    RequestFixedIEs;
     ULONG                   RequestIELength;
     ULONG                   OffsetRequestIEs;
-    USHORT                  AvailableResponseFixedIEs;
+    u16                  AvailableResponseFixedIEs;
     NDIS_802_11_AI_RESFI    ResponseFixedIEs;
     ULONG                   ResponseIELength;
     ULONG                   OffsetResponseIEs;
@@ -200,7 +200,7 @@ typedef struct _NDIS_802_11_KEY
     ULONG           KeyLength;          // length of key in bytes
     NDIS_802_11_MAC_ADDRESS BSSID;
     NDIS_802_11_KEY_RSC KeyRSC;
-    UCHAR           KeyMaterial[32];     // variable length depending on above field
+    u8           KeyMaterial[32];     // variable length depending on above field
 } NDIS_802_11_KEY, *PNDIS_802_11_KEY;
 
 typedef struct _NDIS_802_11_REMOVE_KEY
@@ -215,7 +215,7 @@ typedef struct _NDIS_802_11_WEP
     ULONG     Length;        // Length of this structure
     ULONG     KeyIndex;      // 0 is the per-client key, 1-N are the global keys
     ULONG     KeyLength;     // length of key in bytes
-    UCHAR     KeyMaterial[16];// variable length depending on above field
+    u8     KeyMaterial[16];// variable length depending on above field
 } NDIS_802_11_WEP, *PNDIS_802_11_WEP;
 
 typedef struct _NDIS_802_11_AUTHENTICATION_REQUEST
@@ -298,7 +298,7 @@ typedef struct _WLAN_BSSID_EX
 {
   ULONG  Length;
   NDIS_802_11_MAC_ADDRESS  MacAddress;
-  UCHAR  Reserved[2];//[0]: IS beacon frame
+  u8  Reserved[2];//[0]: IS beacon frame
   NDIS_802_11_SSID  Ssid;
   ULONG  Privacy;
   NDIS_802_11_RSSI  Rssi;//(in dBM,raw data ,get from PHY)
@@ -308,7 +308,7 @@ typedef struct _WLAN_BSSID_EX
   NDIS_802_11_RATES_EX  SupportedRates;
   WLAN_PHY_INFO	PhyInfo;
   ULONG  IELength;
-  UCHAR  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)
+  u8  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)
 }
 __attribute__((packed))
 WLAN_BSSID_EX, *PWLAN_BSSID_EX;

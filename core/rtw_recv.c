@@ -2424,8 +2424,8 @@ _func_enter_;
 	{
 #ifdef PLATFORM_OS_XP
 		NDIS_PACKET_8021Q_INFO VlanPriInfo;
-		UINT32 UserPriority = precvframe->u.hdr.attrib.priority;
-		UINT32 VlanID = (pvlan!=NULL ? get_vlan_id(pvlan) : 0 );
+		u3232 UserPriority = precvframe->u.hdr.attrib.priority;
+		u3232 VlanID = (pvlan!=NULL ? get_vlan_id(pvlan) : 0 );
 
 		VlanPriInfo.Value =          // Get current value.
 				NDIS_PER_PACKET_INFO_FROM_PACKET(precvframe->u.hdr.pkt, Ieee8021QInfo);
