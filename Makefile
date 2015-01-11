@@ -602,12 +602,15 @@ strip:
 
 install:
 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
+	@modprobe -r r8188eu
+	@echo "blacklist r8188eu" > /etc/modprobe.d/50-8188eu.conf
 	cp rtl8188eufw.bin /lib/firmware/.
 	/sbin/depmod -a ${KVER}
 
 uninstall:
 	rm -f $(MODDESTDIR)/8188eu.ko
 	/sbin/depmod -a ${KVER}
+	@rm /etc/modprobe.d/50-8188eu.conf
 
 config_r:
 	@echo "make config"
