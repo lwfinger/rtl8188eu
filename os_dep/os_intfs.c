@@ -321,7 +321,7 @@ static uint loadparam( struct adapter *padapter,  _nic_hdl	pnetdev)
 	uint status = _SUCCESS;
 	struct registry_priv  *registry_par = &padapter->registrypriv;
 
-_func_enter_;
+;
 
 	GlobalDebugLevel = rtw_debug;
 	registry_par->chip_version = (u8)rtw_chip_version;
@@ -445,7 +445,7 @@ _func_enter_;
 	registry_par->regulatory_tid = (u8)rtw_regulatory_id;
 
 
-_func_exit_;
+;
 
 	return status;
 }
@@ -928,7 +928,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 
 	u8	ret8=_SUCCESS;
 
-_func_enter_;
+;
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+rtw_init_drv_sw\n"));
 
@@ -1051,7 +1051,7 @@ exit:
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-rtw_init_drv_sw\n"));
 
-	_func_exit_;
+	;
 
 	return ret8;
 
@@ -2327,7 +2327,7 @@ int rtw_suspend_common(struct adapter *padapter)
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	int ret = 0;
-	_func_enter_;
+	;
 	LeaveAllPowerSaveMode(padapter);
 
 	rtw_suspend_free_assoc_resource(padapter);
@@ -2348,7 +2348,7 @@ int rtw_suspend_common(struct adapter *padapter)
 
 exit:
 
-	_func_exit_;
+	;
 	return ret;
 }
 
@@ -2359,7 +2359,7 @@ int rtw_resume_common(struct adapter *padapter)
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 
-	_func_enter_;
+	;
 
 	#ifdef CONFIG_CONCURRENT_MODE
 	rtw_reset_drv_sw(padapter->pbuddy_adapter);
@@ -2426,6 +2426,6 @@ int rtw_resume_common(struct adapter *padapter)
 	}
 	#endif
 
-	_func_exit_;
+	;
 	return ret;
 }

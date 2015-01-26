@@ -1528,7 +1528,7 @@ _mismatch:
 	rtw_mfree((u8 *)bssid, sizeof(WLAN_BSSID_EX));
 	return _FAIL;
 
-	_func_exit_;
+	;
 }
 
 void update_beacon_info(struct adapter *padapter, u8 *pframe, uint pkt_len, struct sta_info *psta)

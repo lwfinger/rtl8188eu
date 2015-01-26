@@ -33,7 +33,7 @@ void _rtw_init_stainfo(struct sta_info *psta);
 void _rtw_init_stainfo(struct sta_info *psta)
 {
 
-_func_enter_;
+;
 
 	_rtw_memset((u8 *)psta, 0, sizeof (struct sta_info));
 
@@ -93,7 +93,7 @@ _func_enter_;
 	psta->rx_vi_cnt = 0;
 	psta->rx_vo_cnt = 0;
 #endif
-_func_exit_;
+;
 
 }
 
@@ -102,7 +102,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 	struct sta_info *psta;
 	s32 i;
 
-_func_enter_;
+;
 
 	pstapriv->pallocated_stainfo_buf = rtw_zvmalloc (sizeof(struct sta_info) * NUM_STA+ 4);
 
@@ -165,7 +165,7 @@ _func_enter_;
 
 #endif
 
-_func_exit_;
+;
 
 	return _SUCCESS;
 
@@ -192,7 +192,7 @@ inline struct sta_info *rtw_get_stainfo_by_offset(struct sta_priv *stapriv, int 
 void	_rtw_free_sta_xmit_priv_lock(struct sta_xmit_priv *psta_xmitpriv);
 void	_rtw_free_sta_xmit_priv_lock(struct sta_xmit_priv *psta_xmitpriv)
 {
-_func_enter_;
+;
 
 	_rtw_spinlock_free(&psta_xmitpriv->lock);
 
@@ -200,25 +200,25 @@ _func_enter_;
 	_rtw_spinlock_free(&(psta_xmitpriv->bk_q.sta_pending.lock));
 	_rtw_spinlock_free(&(psta_xmitpriv->vi_q.sta_pending.lock));
 	_rtw_spinlock_free(&(psta_xmitpriv->vo_q.sta_pending.lock));
-_func_exit_;
+;
 }
 
 static void	_rtw_free_sta_recv_priv_lock(struct sta_recv_priv *psta_recvpriv)
 {
-_func_enter_;
+;
 
 	_rtw_spinlock_free(&psta_recvpriv->lock);
 
 	_rtw_spinlock_free(&(psta_recvpriv->defrag_q.lock));
 
-_func_exit_;
+;
 
 }
 
 void rtw_mfree_stainfo(struct sta_info *psta);
 void rtw_mfree_stainfo(struct sta_info *psta)
 {
-_func_enter_;
+;
 
 	if(&psta->lock != NULL)
 		 _rtw_spinlock_free(&psta->lock);
@@ -226,7 +226,7 @@ _func_enter_;
 	_rtw_free_sta_xmit_priv_lock(&psta->sta_xmitpriv);
 	_rtw_free_sta_recv_priv_lock(&psta->sta_recvpriv);
 
-_func_exit_;
+;
 }
 
 
@@ -238,7 +238,7 @@ void rtw_mfree_all_stainfo(struct sta_priv *pstapriv )
 	_list	*plist, *phead;
 	struct sta_info *psta = NULL;
 
-_func_enter_;
+;
 
 	_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 
@@ -255,7 +255,7 @@ _func_enter_;
 
 	_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 
-_func_exit_;
+;
 
 }
 
@@ -290,7 +290,7 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 	struct recv_reorder_ctrl *preorder_ctrl;
 	int	index;
 
-_func_enter_;
+;
 	if(pstapriv){
 
 		/*	delete all reordering_ctrl_timer		*/
@@ -323,7 +323,7 @@ _func_enter_;
 		}
 	}
 
-_func_exit_;
+;
 	return _SUCCESS;
 }
 
@@ -341,7 +341,7 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 	int i = 0;
 	u16  wRxSeqInitialValue = 0xffff;
 
-_func_enter_;
+;
 
 	pfree_sta_queue = &pstapriv->free_sta_queue;
 
@@ -452,7 +452,7 @@ exit:
 
 	_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL2);
 
-_func_exit_;
+;
 
 	return psta;
 
@@ -473,7 +473,7 @@ u32	rtw_free_stainfo(struct adapter *padapter , struct sta_info *psta)
 	struct hw_xmit *phwxmit;
 
 
-_func_enter_;
+;
 
 	if (psta == NULL)
 		goto exit;
@@ -652,7 +652,7 @@ _func_enter_;
 
 exit:
 
-_func_exit_;
+;
 
 	return _SUCCESS;
 
@@ -668,7 +668,7 @@ void rtw_free_all_stainfo(struct adapter *padapter)
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct sta_info* pbcmc_stainfo =rtw_get_bcmc_stainfo( padapter);
 
-_func_enter_;
+;
 
 	if(pstapriv->asoc_sta_count==1)
 		goto exit;
@@ -696,7 +696,7 @@ _func_enter_;
 
 exit:
 
-_func_exit_;
+;
 
 }
 
@@ -716,7 +716,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 
 	u8 bc_addr[ETH_ALEN] = {0xff,0xff,0xff,0xff,0xff,0xff};
 
-_func_enter_;
+;
 
 	if(hwaddr==NULL)
 		return NULL;
@@ -752,7 +752,7 @@ _func_enter_;
 	}
 
 	_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
-_func_exit_;
+;
 	return psta;
 
 }
@@ -768,7 +768,7 @@ u32 rtw_init_bcmc_stainfo(struct adapter* padapter)
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	//_queue	*pstapending = &padapter->xmitpriv.bm_pending;
 
-_func_enter_;
+;
 
 	psta = rtw_alloc_stainfo(pstapriv, bcast_addr);
 
@@ -793,7 +793,7 @@ _func_enter_;
 */
 
 exit:
-_func_exit_;
+;
 	return _SUCCESS;
 
 }
@@ -804,9 +804,9 @@ struct sta_info* rtw_get_bcmc_stainfo(struct adapter* padapter)
 	struct sta_info		*psta;
 	struct sta_priv		*pstapriv = &padapter->stapriv;
 	u8 bc_addr[ETH_ALEN] = {0xff,0xff,0xff,0xff,0xff,0xff};
-_func_enter_;
+;
 	 psta = rtw_get_stainfo(pstapriv, bc_addr);
-_func_exit_;
+;
 	return psta;
 
 }

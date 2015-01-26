@@ -1327,7 +1327,7 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
 
 
 
-_func_enter_;
+;
 
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 
@@ -1730,7 +1730,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 	#endif
 
 
-_func_exit_;
+;
 
 	return status;
 }
@@ -1884,7 +1884,7 @@ unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 	u32 (*_read_interrupt)(struct intf_hdl *pintfhdl, u32 addr);
 #endif
 
-_func_enter_;
+;
 
 	_read_port = pintfhdl->io_ops._read_port;
 
@@ -1928,7 +1928,7 @@ exit:
 
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init \n"));
 
-_func_exit_;
+;
 
 	return status;
 
@@ -3004,7 +3004,7 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
-_func_enter_;
+;
 
 	switch(variable)
 	{
@@ -3839,14 +3839,14 @@ _func_enter_;
 			break;
 	}
 
-_func_exit_;
+;
 }
 
 void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
-_func_enter_;
+;
 
 	switch(variable)
 	{
@@ -3924,7 +3924,7 @@ _func_enter_;
 			break;
 	}
 
-_func_exit_;
+;
 }
 
 //
@@ -4441,7 +4441,7 @@ void rtl8188eu_set_hal_ops(struct adapter * padapter)
 {
 	struct hal_ops	*pHalFunc = &padapter->HalFunc;
 
-_func_enter_;
+;
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if(padapter->isprimary)
@@ -4511,6 +4511,6 @@ _func_enter_;
 	pHalFunc->interface_ps_func = &rtl8188eu_ps_func;
 
 	rtl8188e_set_hal_ops(pHalFunc);
-_func_exit_;
+;
 
 }

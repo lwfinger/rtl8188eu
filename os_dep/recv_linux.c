@@ -254,7 +254,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 	void *br_port = NULL;
 #endif
 
-_func_enter_;
+;
 
 	precvpriv = &(padapter->recvpriv);
 	pfree_recv_queue = &(precvpriv->free_recv_queue);
@@ -445,7 +445,7 @@ _recv_indicatepkt_end:
 
 	RT_TRACE(_module_recv_osdep_c_,_drv_info_,("\n rtw_recv_indicatepkt :after rtw_netif_rx!!!!\n"));
 
-_func_exit_;
+;
 
         return _SUCCESS;
 
@@ -457,7 +457,7 @@ _recv_indicatepkt_drop:
 
 	 return _FAIL;
 
-_func_exit_;
+;
 
 }
 

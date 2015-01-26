@@ -187,7 +187,7 @@ static u8 usb_read8(struct intf_hdl *pintfhdl, u32 addr)
 	u16 len;
 	u8 data=0;
 
-	_func_enter_;
+	;
 
 	request = 0x05;
 	requesttype = 0x01;//read_in
@@ -198,7 +198,7 @@ static u8 usb_read8(struct intf_hdl *pintfhdl, u32 addr)
 
 	usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
 
-	_func_exit_;
+	;
 
 	return data;
 
@@ -213,7 +213,7 @@ static u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
 	u16 len;
 	u16 data=0;
 
-	_func_enter_;
+	;
 
 	request = 0x05;
 	requesttype = 0x01;//read_in
@@ -224,7 +224,7 @@ static u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
 
 	usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
 
-	_func_exit_;
+	;
 
 	return data;
 
@@ -239,7 +239,7 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 	u16 len;
 	u32 data=0;
 
-	_func_enter_;
+	;
 
 	request = 0x05;
 	requesttype = 0x01;//read_in
@@ -250,7 +250,7 @@ static u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 
 	usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
 
-	_func_exit_;
+	;
 
 	return data;
 
@@ -266,7 +266,7 @@ static int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
 	u8 data;
 	int ret;
 
-	_func_enter_;
+	;
 
 	request = 0x05;
 	requesttype = 0x00;//write_out
@@ -279,7 +279,7 @@ static int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
 
 	 ret = usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
 
-	_func_exit_;
+	;
 
 	return ret;
 
@@ -295,7 +295,7 @@ static int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 	u16 data;
 	int ret;
 
-	_func_enter_;
+	;
 
 	request = 0x05;
 	requesttype = 0x00;//write_out
@@ -308,7 +308,7 @@ static int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 
 	ret = usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
 
-	_func_exit_;
+	;
 
 	return ret;
 
@@ -324,7 +324,7 @@ static int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 	u32 data;
 	int ret;
 
-	_func_enter_;
+	;
 
 	request = 0x05;
 	requesttype = 0x00;//write_out
@@ -336,7 +336,7 @@ static int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
 
 	ret =usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
 
-	_func_exit_;
+	;
 
 	return ret;
 
@@ -352,7 +352,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 	u8 buf[VENDOR_CMD_MAX_DATA_LEN]={0};
 	int ret;
 
-	_func_enter_;
+	;
 
 	request = 0x05;
 	requesttype = 0x00;//write_out
@@ -364,7 +364,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 
 	ret = usbctrl_vendorreq(pintfhdl, request, wvalue, index, buf, len, requesttype);
 
-	_func_exit_;
+	;
 
 	return ret;
 
@@ -523,7 +523,7 @@ static u32 usb_read_interrupt(struct intf_hdl *pintfhdl, u32 addr)
 	struct recv_priv	*precvpriv = &adapter->recvpriv;
 	struct usb_device	*pusbd = pdvobj->pusbdev;
 
-_func_enter_;
+;
 
 	//translate DMA FIFO addr to pipehandle
 	pipe = ffaddr2pipehdl(pdvobj, addr);
@@ -542,7 +542,7 @@ _func_enter_;
 		ret = _FAIL;
 	}
 
-_func_exit_;
+;
 
 	return ret;
 }
@@ -995,7 +995,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 
 exit:
 
-_func_exit_;
+;
 
 }
 
@@ -1011,7 +1011,7 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	struct recv_priv	*precvpriv = &adapter->recvpriv;
 	struct usb_device	*pusbd = pdvobj->pusbdev;
 
-_func_enter_;
+;
 
 	if(adapter->bDriverStopped || adapter->bSurpriseRemoved ||dvobj_to_pwrctl(pdvobj)->pnp_bstop_trx)
 	{
@@ -1058,7 +1058,7 @@ _func_enter_;
 		ret = _FAIL;
 	}
 
-_func_exit_;
+;
 
 	return ret;
 }
@@ -1433,7 +1433,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 
 exit:
 
-_func_exit_;
+;
 
 }
 
@@ -1453,7 +1453,7 @@ static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 	struct usb_device	*pusbd = pdvobj->pusbdev;
 
 
-_func_enter_;
+;
 
 	if(adapter->bDriverStopped || adapter->bSurpriseRemoved ||dvobj_to_pwrctl(pdvobj)->pnp_bstop_trx)
 	{
@@ -1541,7 +1541,7 @@ _func_enter_;
 		ret = _FAIL;
 	}
 
-_func_exit_;
+;
 
 	return ret;
 }
@@ -1575,7 +1575,7 @@ void rtl8188eu_xmit_tasklet(void *priv)
 
 void rtl8188eu_set_intf_ops(struct _io_ops	*pops)
 {
-	_func_enter_;
+	;
 
 	_rtw_memset((u8 *)pops, 0, sizeof(struct _io_ops));
 
@@ -1605,7 +1605,7 @@ void rtl8188eu_set_intf_ops(struct _io_ops	*pops)
 	pops->_read_interrupt = &usb_read_interrupt;
 #endif
 
-	_func_exit_;
+	;
 
 }
 

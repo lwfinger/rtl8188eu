@@ -1214,7 +1214,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 	struct wifidirect_info* pwdinfo = &padapter->wdinfo;
 #endif //CONFIG_P2P
 
-_func_enter_;
+;
 
 	DBG_8192C("%s\n", __func__);
 
@@ -1486,7 +1486,7 @@ exit:
 
 	DBG_8192C("%s, ret=%d\n", __func__, ret);
 
-	_func_exit_;
+	;
 
 	return ret;
 }

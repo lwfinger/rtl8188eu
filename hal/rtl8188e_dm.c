@@ -320,7 +320,7 @@ rtl8188e_HalDmWatchDog(
 	struct adapter *pbuddy_adapter = Adapter->pbuddy_adapter;
 #endif //CONFIG_CONCURRENT_MODE
 
-	_func_enter_;
+	;
 
 	hw_init_completed = Adapter->hw_init_completed;
 

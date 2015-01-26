@@ -278,7 +278,7 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	struct usb_endpoint_descriptor	*pendp_desc;
 	struct usb_device				*pusbd;
 
-_func_enter_;
+;
 
 	if ((pdvobjpriv = (struct dvobj_priv*)rtw_zmalloc(sizeof(*pdvobjpriv))) == NULL) {
 		goto exit;
@@ -377,7 +377,7 @@ free_dvobj:
 		pdvobjpriv = NULL;
 	}
 exit:
-_func_exit_;
+;
 	return pdvobjpriv;
 }
 
@@ -385,7 +385,7 @@ static void usb_dvobj_deinit(struct usb_interface *usb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(usb_intf);
 
-_func_enter_;
+;
 
 	usb_set_intfdata(usb_intf, NULL);
 	if (dvobj) {
@@ -410,7 +410,7 @@ _func_enter_;
 	//DBG_871X("%s %d\n", __func__, ATOMIC_READ(&usb_intf->dev.kobj.kref.refcount));
 	usb_put_dev(interface_to_usbdev(usb_intf));
 
-_func_exit_;
+;
 }
 
 static void decide_chip_type_by_usb_device_id(struct adapter *padapter, const struct usb_device_id *pdid)
@@ -557,7 +557,7 @@ int rtw_hw_suspend(struct adapter *padapter )
 	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
 	struct net_device *pnetdev = padapter->pnetdev;
 
-	_func_enter_;
+	;
 
 	if((!padapter->bup) || (padapter->bDriverStopped)||(padapter->bSurpriseRemoved))
 	{
@@ -620,7 +620,7 @@ int rtw_hw_suspend(struct adapter *padapter )
 	else
 		goto error_exit;
 
-	_func_exit_;
+	;
 	return 0;
 
 error_exit:
@@ -635,7 +635,7 @@ int rtw_hw_resume(struct adapter *padapter)
 	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
 	struct net_device *pnetdev = padapter->pnetdev;
 
-	_func_enter_;
+	;
 
 	if(padapter)//system resume
 	{
@@ -671,7 +671,7 @@ int rtw_hw_resume(struct adapter *padapter)
 		goto error_exit;
 	}
 
-	_func_exit_;
+	;
 
 	return 0;
 error_exit:
@@ -767,7 +767,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	int ret = 0;
 	u32 start_time = rtw_get_current_time();
 
-	_func_enter_;
+	;
 
 	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
 
@@ -823,7 +823,7 @@ exit:
 	DBG_871X("<===  %s return %d.............. in %dms\n", __FUNCTION__
 		, ret, rtw_get_passing_time_ms(start_time));
 
-	_func_exit_;
+	;
 	return ret;
 }
 #else
@@ -842,7 +842,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	int ret = 0;
 	u32 start_time = rtw_get_current_time();
 
-	_func_enter_;
+	;
 
 	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
 
@@ -943,7 +943,7 @@ exit:
 	DBG_871X("<===  %s return %d.............. in %dms\n", __FUNCTION__
 		, ret, rtw_get_passing_time_ms(start_time));
 
-	_func_exit_;
+	;
 	return ret;
 }
 
@@ -988,7 +988,7 @@ int rtw_resume_process(struct adapter *padapter)
 #ifdef CONFIG_BT_COEXIST
 	u8 pm_cnt;
 #endif	//#ifdef CONFIG_BT_COEXIST
-	_func_enter_;
+	;
 
 	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
 
@@ -1072,7 +1072,7 @@ exit:
 	DBG_871X("<===  %s return %d.............. in %dms\n", __FUNCTION__
 		, ret, rtw_get_passing_time_ms(start_time));
 
-	_func_exit_;
+	;
 
 	return ret;
 }
@@ -1673,7 +1673,7 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	struct net_device *pnetdev = padapter->pnetdev;
 	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
 
-_func_enter_;
+;
 
 	DBG_871X("+rtw_dev_remove\n");
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+dev_remove()\n"));
@@ -1719,7 +1719,7 @@ _func_enter_;
 	rtw_sw_export=NULL;
 #endif
 
-_func_exit_;
+;
 
 	return;
 

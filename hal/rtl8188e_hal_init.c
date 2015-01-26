@@ -1034,7 +1034,7 @@ void rtl8188e_InitializeFirmwareVars(struct adapter *padapter)
 
 static void rtl8188e_free_hal_data(struct adapter *padapter)
 {
-_func_enter_;
+;
 
 	if(padapter->HalData)
 	{
@@ -1042,7 +1042,7 @@ _func_enter_;
 		padapter->HalData = NULL;
 	}
 
-_func_exit_;
+;
 }
 
 //===========================================================

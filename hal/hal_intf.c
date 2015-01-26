@@ -167,7 +167,7 @@ uint rtw_hal_deinit(struct adapter *padapter)
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	int i;
 
-_func_enter_;
+;
 	if (!is_primary_adapter(padapter)){
 		DBG_871X(" rtw_hal_deinit: Secondary adapter return l\n");
 		return status;
@@ -186,7 +186,7 @@ _func_enter_;
 		DBG_871X("\n rtw_hal_deinit: hal_init fail\n");
 	}
 
-_func_exit_;
+;
 
 	return status;
 }

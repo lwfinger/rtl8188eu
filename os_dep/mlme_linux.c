@@ -32,7 +32,7 @@ void Linkup_workitem_callback(struct work_struct *work)
 	struct mlme_priv *pmlmepriv = container_of(work, struct mlme_priv, Linkup_workitem);
 	struct adapter *padapter = container_of(pmlmepriv, struct adapter, mlmepriv);
 
-_func_enter_;
+;
 
 	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+ Linkup_workitem_callback\n"));
 
@@ -42,7 +42,7 @@ _func_enter_;
 	kobject_hotplug(&padapter->pnetdev->class_dev.kobj, KOBJ_LINKUP);
 #endif
 
-_func_exit_;
+;
 }
 
 void Linkdown_workitem_callback(struct work_struct *work)
@@ -50,7 +50,7 @@ void Linkdown_workitem_callback(struct work_struct *work)
 	struct mlme_priv *pmlmepriv = container_of(work, struct mlme_priv, Linkdown_workitem);
 	struct adapter *padapter = container_of(pmlmepriv, struct adapter, mlmepriv);
 
-_func_enter_;
+;
 
 	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+ Linkdown_workitem_callback\n"));
 
@@ -60,7 +60,7 @@ _func_enter_;
 	kobject_hotplug(&padapter->pnetdev->class_dev.kobj, KOBJ_LINKDOWN);
 #endif
 
-_func_exit_;
+;
 }
 #endif
 
@@ -154,7 +154,7 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 void rtw_os_indicate_connect(struct adapter *adapter)
 {
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
-_func_enter_;
+;
 
 #ifdef CONFIG_IOCTL_CFG80211
 	if ( (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)==true ) ||
@@ -176,7 +176,7 @@ _func_enter_;
 	_set_workitem(&adapter->mlmepriv.Linkup_workitem);
 #endif
 
-_func_exit_;
+;
 
 }
 
@@ -257,7 +257,7 @@ void rtw_os_indicate_disconnect( struct adapter *adapter )
 {
 	//RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ];
 
-_func_enter_;
+;
 
 	netif_carrier_off(adapter->pnetdev); // Do it first for tx broadcast pkt after disconnection issue!
 
@@ -273,7 +273,7 @@ _func_enter_;
 	 //modify for CONFIG_IEEE80211W, none 11w also can use the same command
 	 rtw_reset_securitypriv_cmd(adapter);
 
-_func_exit_;
+;
 
 }
 
@@ -283,7 +283,7 @@ void rtw_report_sec_ie(struct adapter *adapter,u8 authmode,u8 *sec_ie)
 	u8	*buff,*p,i;
 	union iwreq_data wrqu;
 
-_func_enter_;
+;
 
 	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+rtw_report_sec_ie, authmode=%d\n", authmode));
 
@@ -324,7 +324,7 @@ _func_enter_;
 
 	}
 
-_func_exit_;
+;
 
 }
 
