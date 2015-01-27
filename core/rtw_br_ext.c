@@ -26,6 +26,7 @@
 #include <linux/atalk.h>
 #include <linux/udp.h>
 #include <linux/if_pppox.h>
+#include <net/ip6_checksum.h>
 #endif
 
 #if 1	// rtw_wifi_driver
