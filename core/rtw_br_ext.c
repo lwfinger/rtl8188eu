@@ -785,6 +785,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 {
 	unsigned short protocol;
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
+	u32 tmp;
 
 	if(skb == NULL)
 		return -1;
@@ -792,7 +793,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	if((method <= NAT25_MIN) || (method >= NAT25_MAX))
 		return -1;
 
-	protocol = *((unsigned short *)(skb->data + 2 * ETH_ALEN));
+	protocol = be16_to_cpu(*((__be16 *)(skb->data + 2 * ETH_ALEN)));
 
 	/*---------------------------------------------------*/
 	/*                 Handle IP frame                   */
@@ -807,61 +808,61 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 			return -1;
 		}
 
-		switch(method)
-		{
-			case NAT25_CHECK:
-				return -1;
+		switch(method) {
+		case NAT25_CHECK:
+			return -1;
 
-			case NAT25_INSERT:
-				{
-					//some muticast with source IP is all zero, maybe other case is illegal
-					//in class A, B, C, host address is all zero or all one is illegal
-					if (iph->saddr == 0)
-						return 0;
-					DEBUG_INFO("NAT25: Insert IP, SA=%08x, DA=%08x\n", iph->saddr, iph->daddr);
-					__nat25_generate_ipv4_network_addr(networkAddr, &iph->saddr);
-					//record source IP address and , source mac address into db
-					__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
+		case NAT25_INSERT:
+			{
+				tmp = be32_to_cpu(iph->saddr);
+				//some muticast with source IP is all zero, maybe other case is illegal
+				//in class A, B, C, host address is all zero or all one is illegal
+				if (iph->saddr == 0)
+					return 0;
+				DEBUG_INFO("NAT25: Insert IP, SA=%08x, DA=%08x\n", iph->saddr, iph->daddr);
+				__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
+				//record source IP address and , source mac address into db
+				__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
 
-					__nat25_db_print(priv);
-				}
-				return 0;
+				__nat25_db_print(priv);
+			}
+			return 0;
 
-			case NAT25_LOOKUP:
-				{
-					DEBUG_INFO("NAT25: Lookup IP, SA=%08x, DA=%08x\n", iph->saddr, iph->daddr);
+		case NAT25_LOOKUP:
+			{
+				DEBUG_INFO("NAT25: Lookup IP, SA=%08x, DA=%08x\n", iph->saddr, iph->daddr);
 #ifdef SUPPORT_TX_MCAST2UNI
-					if (priv->pshare->rf_ft_var.mc2u_disable ||
-							((((OPMODE & (WIFI_STATION_STATE|WIFI_ASOC_STATE))
-							== (WIFI_STATION_STATE|WIFI_ASOC_STATE)) &&
-							!checkIPMcAndReplace(priv, skb, &iph->daddr)) ||
-							(OPMODE & WIFI_ADHOC_STATE)))
+				if (priv->pshare->rf_ft_var.mc2u_disable ||
+				    ((((OPMODE & (WIFI_STATION_STATE|WIFI_ASOC_STATE)) ==
+				       (WIFI_STATION_STATE|WIFI_ASOC_STATE)) &&
+				      !checkIPMcAndReplace(priv, skb, &iph->daddr)) ||
+				     (OPMODE & WIFI_ADHOC_STATE)))
 #endif
-					{
-						__nat25_generate_ipv4_network_addr(networkAddr, &iph->daddr);
+				{
+					tmp = be32_to_cpu(iph->daddr);
+					__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
 
-						if (!__nat25_db_network_lookup_and_replace(priv, skb, networkAddr)) {
-							if (*((unsigned char *)&iph->daddr + 3) == 0xff) {
-								// L2 is unicast but L3 is broadcast, make L2 bacome broadcast
-								DEBUG_INFO("NAT25: Set DA as boardcast\n");
-								memset(skb->data, 0xff, ETH_ALEN);
+					if (!__nat25_db_network_lookup_and_replace(priv, skb, networkAddr)) {
+						if (*((unsigned char *)&iph->daddr + 3) == 0xff) {
+							// L2 is unicast but L3 is broadcast, make L2 bacome broadcast
+							DEBUG_INFO("NAT25: Set DA as boardcast\n");
+							memset(skb->data, 0xff, ETH_ALEN);
+						} else {
+							// forward unknow IP packet to upper TCP/IP
+							DEBUG_INFO("NAT25: Replace DA with BR's MAC\n");
+							if ( (*(u32 *)priv->br_mac) == 0 && (*(u16 *)(priv->br_mac+4)) == 0 ) {
+								printk("Re-init netdev_br_init() due to br_mac==0!\n");
+								netdev_br_init(priv->pnetdev);
 							}
-							else {
-								// forward unknow IP packet to upper TCP/IP
-								DEBUG_INFO("NAT25: Replace DA with BR's MAC\n");
-								if ( (*(u32 *)priv->br_mac) == 0 && (*(u16 *)(priv->br_mac+4)) == 0 ) {
-									printk("Re-init netdev_br_init() due to br_mac==0!\n");
-									netdev_br_init(priv->pnetdev);
-								}
-								memcpy(skb->data, priv->br_mac, ETH_ALEN);
-							}
+							memcpy(skb->data, priv->br_mac, ETH_ALEN);
 						}
 					}
 				}
-				return 0;
+			}
+			return 0;
 
-			default:
-				return -1;
+		default:
+			return -1;
 		}
 	}
 
@@ -1598,7 +1599,7 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 
 	if(!priv->ethBrExtInfo.dhcp_bcst_disable)
 	{
-		unsigned short protocol = *((unsigned short *)(skb->data + 2 * ETH_ALEN));
+		__be16 protocol = *((__be16 *)(skb->data + 2 * ETH_ALEN));
 
 		if(protocol == __constant_htons(ETH_P_IP)) // IP
 		{

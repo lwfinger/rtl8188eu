@@ -145,7 +145,7 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter *padapter, u8 p2p_ps_state);
 #endif //CONFIG_P2P
 
 void CheckFwRsvdPageContent(struct adapter *padapter);
-void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, u16 mstatus_rpt );
+void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, __le16 mstatus_rpt );
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 //u8 rtl8188e_reset_tsf(struct adapter *padapter, u8 reset_port);

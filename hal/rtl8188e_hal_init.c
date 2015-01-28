@@ -2987,14 +2987,11 @@ Hal_EfuseParseIDCode88E(
 
 
 	// Checl 0x8129 again for making sure autoload status!!
-	EEPROMId = le16_to_cpu(*((u16*)hwinfo));
-	if (EEPROMId != RTL_EEPROM_ID)
-	{
+	EEPROMId = le16_to_cpu(*((__le16*)hwinfo));
+	if (EEPROMId != RTL_EEPROM_ID) {
 		DBG_8192C("EEPROM ID(%#x) is invalid!!\n", EEPROMId);
 		pEEPROM->bautoload_fail_flag = true;
-	}
-	else
-	{
+	} else {
 		pEEPROM->bautoload_fail_flag = false;
 	}
 

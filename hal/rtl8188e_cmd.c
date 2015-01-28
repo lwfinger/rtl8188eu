@@ -30,6 +30,7 @@
 #include <rtw_ioctl_set.h>
 
 #include <rtl8188e_hal.h>
+#include <rtl8188e_cmd.h>
 
 #define CONFIG_H2C_EF
 
@@ -170,38 +171,6 @@ exit:
 	return ret;
 }
 
-u8 rtl8192c_h2c_msg_hdl(struct adapter *padapter, unsigned char *pbuf)
-{
-	u8 ElementID, CmdLen;
-	u8 *pCmdBuffer;
-	struct cmd_msg_parm  *pcmdmsg;
-
-	if(!pbuf)
-		return H2C_PARAMETERS_ERROR;
-
-	pcmdmsg = (struct cmd_msg_parm*)pbuf;
-	ElementID = pcmdmsg->eid;
-	CmdLen = pcmdmsg->sz;
-	pCmdBuffer = pcmdmsg->buf;
-
-	FillH2CCmd_88E(padapter, ElementID, CmdLen, pCmdBuffer);
-
-	return H2C_SUCCESS;
-}
-/*
-#if defined(CONFIG_AUTOSUSPEND) && defined(SUPPORT_HW_RFOFF_DETECTED)
-u8 rtl8192c_set_FwSelectSuspend_cmd(struct adapter *padapter ,u8 bfwpoll, u16 period)
-{
-	u8	res=_SUCCESS;
-	struct H2C_SS_RFOFF_PARAM param;
-	DBG_8192C("==>%s bfwpoll(%x)\n",__FUNCTION__,bfwpoll);
-	param.gpio_period = period;//Polling GPIO_11 period time
-	param.ROFOn = (true == bfwpoll)?1:0;
-	FillH2CCmd_88E(padapter, SELECTIVE_SUSPEND_ROF_CMD, sizeof(param), (u8*)(&param));
-	return res;
-}
-#endif //CONFIG_AUTOSUSPEND && SUPPORT_HW_RFOFF_DETECTED
-*/
 u8 rtl8188e_set_rssi_cmd(struct adapter*padapter, u8 *param)
 {
 	u8	res=_SUCCESS;
@@ -213,9 +182,6 @@ u8 rtl8188e_set_rssi_cmd(struct adapter*padapter, u8 *param)
 		DBG_8192C("==>%s fw dont support RA \n",__FUNCTION__);
 		res=_FAIL;
 	}
-
-;
-
 	return res;
 }
 
@@ -226,20 +192,18 @@ u8 rtl8188e_set_raid_cmd(struct adapter*padapter, u32 mask)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 ;
 	if(pHalData->fw_ractrl == true){
+		__le32 lmask;
+
 		_rtw_memset(buf, 0, 3);
-		mask = cpu_to_le32( mask );
-		_rtw_memcpy(buf, &mask, 3);
+		lmask = cpu_to_le32( mask );
+		_rtw_memcpy(buf, &lmask, 3);
 
 		FillH2CCmd_88E(padapter, H2C_DM_MACID_CFG, 3, buf);
 	}else{
 		DBG_8192C("==>%s fw dont support RA \n",__FUNCTION__);
 		res=_FAIL;
 	}
-
-;
-
 	return res;
-
 }
 
 //bitmap[0:27] = tx_rate_bitmap
@@ -354,10 +318,10 @@ void rtl8188e_set_FwPwrMode_cmd(struct adapter *padapter, u8 Mode)
 ;
 }
 
-void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, u16 mstatus_rpt )
+void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, __le16 mstatus_rpt )
 {
 	u8 opmode,macid;
-	u16 mst_rpt = cpu_to_le16 (mstatus_rpt);
+	u16 mst_rpt = le16_to_cpu(mstatus_rpt);
 	u32 reg_macid_no_link = REG_MACID_NO_LINK_0;
 	opmode = (u8) mst_rpt;
 	macid = (u8)(mst_rpt >> 8)  ;
@@ -383,11 +347,11 @@ void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, u16 mstatus_rpt )
 
 }
 
-void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
+static void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16					*fctrl;
-	u32					rate_len, pktlen;
+	__le16 	*fctrl;
+	u32	rate_len, pktlen;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
@@ -485,11 +449,11 @@ _ConstructBeacon:
 
 }
 
-void ConstructPSPoll(struct adapter *padapter, u8 *pframe, u32 *pLength)
+static void ConstructPSPoll(struct adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16					*fctrl;
-	u32					pktlen;
+	__le16	*fctrl;
+	u32	pktlen;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -515,7 +479,7 @@ void ConstructPSPoll(struct adapter *padapter, u8 *pframe, u32 *pLength)
 	*pLength = 16;
 }
 
-void ConstructNullFunctionData(
+static void ConstructNullFunctionData(
 	struct adapter *padapter,
 	u8		*pframe,
 	u32		*pLength,
@@ -526,8 +490,8 @@ void ConstructNullFunctionData(
 	u8		bForcePowerSave)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16						*fctrl;
-	u32						pktlen;
+	__le16	*fctrl;
+	u32	pktlen;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct wlan_network		*cur_network = &pmlmepriv->cur_network;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -584,46 +548,6 @@ void ConstructNullFunctionData(
 
 		pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
 	}
-
-	*pLength = pktlen;
-}
-
-void ConstructProbeRsp(struct adapter *padapter, u8 *pframe, u32 *pLength, u8 *StaAddr, BOOLEAN bHideSSID)
-{
-	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16					*fctrl;
-	u8					*mac, *bssid;
-	u32					pktlen;
-	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
-
-
-	//DBG_871X("%s\n", __FUNCTION__);
-
-	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
-
-	mac = myid(&(padapter->eeprompriv));
-	bssid = cur_network->MacAddress;
-
-	fctrl = &(pwlanhdr->frame_ctl);
-	*(fctrl) = 0;
-	_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, mac, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, bssid, ETH_ALEN);
-
-	SetSeqNum(pwlanhdr, 0);
-	SetFrameSubType(fctrl, WIFI_PROBERSP);
-
-	pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
-	pframe += pktlen;
-
-	if(cur_network->IELength>MAX_IE_SZ)
-		return;
-
-	_rtw_memcpy(pframe, cur_network->IEs, cur_network->IELength);
-	pframe += cur_network->IELength;
-	pktlen += cur_network->IELength;
 
 	*pLength = pktlen;
 }
@@ -786,7 +710,7 @@ static void ConstructARPResponse(
 }
 #endif
 
-void rtl8188e_set_FwRsvdPage_cmd(struct adapter *padapter, PRSVDPAGE_LOC rsvdpageloc)
+static void rtl8188e_set_FwRsvdPage_cmd(struct adapter *padapter, PRSVDPAGE_LOC rsvdpageloc)
 {
     u8 u1H2CRsvdPageParm[H2C_8188E_RSVDPAGE_LOC_LEN]={0};
     u8 u1H2CAoacRsvdPageParm[H2C_8188E_AOAC_RSVDPAGE_LOC_LEN]={0};

@@ -72,5 +72,7 @@ struct br_ext_info {
 
 void nat25_db_cleanup(struct adapter *priv);
 void netdev_br_init(struct net_device *netdev);
+void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
+		     unsigned char *ipAddr);
 
 #endif // _RTW_BR_EXT_H_

@@ -47,7 +47,7 @@ void	rtl8188eu_free_xmit_priv(struct adapter *padapter)
 {
 }
 
-u8 urb_zero_packet_chk(struct adapter *padapter, int sz)
+static u8 urb_zero_packet_chk(struct adapter *padapter, int sz)
 {
 	u8 blnSetTxDescOffset;
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
@@ -56,7 +56,7 @@ u8 urb_zero_packet_chk(struct adapter *padapter, int sz)
 	return blnSetTxDescOffset;
 }
 
-void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
+static void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 {
 		u16	*usPtr = (u16*)ptxdesc;
 		u32 count = 16;		// (32 bytes / 2 bytes per XOR) => 16 times
@@ -67,7 +67,7 @@ void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 		ptxdesc->txdw7 &= cpu_to_le32(0xffff0000);
 
 		for(index = 0 ; index < count ; index++){
-			checksum = checksum ^ le16_to_cpu(*(usPtr + index));
+			checksum = checksum ^ le16_to_cpu(*(__le16 *)(usPtr + index));
 		}
 
 		ptxdesc->txdw7 |= cpu_to_le32(0x0000ffff&checksum);
@@ -126,44 +126,39 @@ void rtl8188e_fill_fake_txdesc(
 	rtl8188eu_cal_txdesc_chksum(ptxdesc);
 }
 
-void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
+static void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 {
-	if ((pattrib->encrypt > 0) && !pattrib->bswenc)
-	{
-		switch (pattrib->encrypt)
-		{
-			//SEC_TYPE : 0:NO_ENC,1:WEP40/TKIP,2:WAPI,3:AES
-			case _WEP40_:
-			case _WEP104_:
-					ptxdesc->txdw1 |= cpu_to_le32((0x01<<SEC_TYPE_SHT)&0x00c00000);
-					ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
-					break;
-			case _TKIP_:
-			case _TKIP_WTMIC_:
-					ptxdesc->txdw1 |= cpu_to_le32((0x01<<SEC_TYPE_SHT)&0x00c00000);
-					ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
-					break;
+	if ((pattrib->encrypt > 0) && !pattrib->bswenc) {
+		switch (pattrib->encrypt) {
+		//SEC_TYPE : 0:NO_ENC,1:WEP40/TKIP,2:WAPI,3:AES
+		case _WEP40_:
+		case _WEP104_:
+			ptxdesc->txdw1 |= cpu_to_le32((0x01<<SEC_TYPE_SHT)&0x00c00000);
+			ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
+			break;
+		case _TKIP_:
+		case _TKIP_WTMIC_:
+			ptxdesc->txdw1 |= cpu_to_le32((0x01<<SEC_TYPE_SHT)&0x00c00000);
+			ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
+			break;
 #ifdef CONFIG_WAPI_SUPPORT
-			case _SMS4_:
-					ptxdesc->txdw1 |= cpu_to_le32((0x02<<SEC_TYPE_SHT)&0x00c00000);
-					ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
-				break;
+		case _SMS4_:
+			ptxdesc->txdw1 |= cpu_to_le32((0x02<<SEC_TYPE_SHT)&0x00c00000);
+			ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
+			break;
 #endif
-			case _AES_:
-					ptxdesc->txdw1 |= cpu_to_le32((0x03<<SEC_TYPE_SHT)&0x00c00000);
-					ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
-					break;
-			case _NO_PRIVACY_:
-			default:
-					break;
-
+		case _AES_:
+			ptxdesc->txdw1 |= cpu_to_le32((0x03<<SEC_TYPE_SHT)&0x00c00000);
+			ptxdesc->txdw2 |= cpu_to_le32(0x7 << AMPDU_DENSITY_SHT);
+			break;
+		case _NO_PRIVACY_:
+		default:
+			break;
 		}
-
 	}
-
 }
 
-void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
+static void fill_txdesc_vcs(struct pkt_attrib *pattrib, __le32 *pdw)
 {
 	//DBG_8192C("cvs_mode=%d\n", pattrib->vcs_mode);
 
@@ -200,7 +195,7 @@ void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 	}
 }
 
-void fill_txdesc_phy(struct pkt_attrib *pattrib, u32 *pdw)
+static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
 {
 	//DBG_8192C("bwmode=%d, ch_off=%d\n", pattrib->bwmode, pattrib->ch_offset);
 
@@ -307,15 +302,8 @@ if (padapter->registrypriv.mp_mode == 0)
 
 		if(pattrib->ampdu_en==true){
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_EN);//AGG EN
-
-			//SET_TX_DESC_MAX_AGG_NUM_88E(pDesc, 0x1F);
-			//SET_TX_DESC_MCSG1_MAX_LEN_88E(pDesc, 0x6);
-			//SET_TX_DESC_MCSG2_MAX_LEN_88E(pDesc, 0x6);
-			//SET_TX_DESC_MCSG3_MAX_LEN_88E(pDesc, 0x6);
-			//SET_TX_DESC_MCS7_SGI_MAX_LEN_88E(pDesc, 0x6);
-			ptxdesc->txdw6 = 0x6666f800;
-		}
-		else{
+			ptxdesc->txdw6 = cpu_to_le32(0x6666f800);
+		} else{
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_BK);//AGG BK
 		}
 

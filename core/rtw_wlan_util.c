@@ -1150,8 +1150,8 @@ void HT_caps_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 	//	Commented by Albert 2010/07/12
 	//	Have to handle the endian issue after copying.
 	//	HT_ext_caps didn't be used yet.
-	pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info = le16_to_cpu( pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info );
-	pmlmeinfo->HT_caps.u.HT_cap_element.HT_ext_caps = le16_to_cpu( pmlmeinfo->HT_caps.u.HT_cap_element.HT_ext_caps );
+	pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info = pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info;
+	pmlmeinfo->HT_caps.u.HT_cap_element.HT_ext_caps = pmlmeinfo->HT_caps.u.HT_cap_element.HT_ext_caps;
 
 	rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
 
@@ -1378,7 +1378,7 @@ int rtw_check_bcn_info(struct adapter *Adapter, u8 *pframe, u32 packet_len)
 	p = rtw_get_ie(bssid->IEs + _FIXED_IE_LENGTH_, _HT_CAPABILITY_IE_, &len, bssid->IELength - _FIXED_IE_LENGTH_);
 	if(p && len>0) {
 			pht_cap = (struct rtw_ieee80211_ht_cap *)(p + 2);
-			ht_cap_info = pht_cap->cap_info;
+			ht_cap_info = le16_to_cpu(pht_cap->cap_info);
 	} else {
 			ht_cap_info = 0;
 	}
@@ -1845,14 +1845,10 @@ int support_short_GI(struct adapter *padapter, struct HT_caps_element *pHT_caps)
 
 	bit_offset = (pmlmeext->cur_bwmode & HT_CHANNEL_WIDTH_40)? 6: 5;
 
-	if (pHT_caps->u.HT_cap_element.HT_caps_info & (0x1 << bit_offset))
-	{
+	if (le16_to_cpu(pHT_caps->u.HT_cap_element.HT_caps_info) & (0x1 << bit_offset))
 		return _SUCCESS;
-	}
 	else
-	{
 		return _FAIL;
-	}
 }
 
 unsigned char get_highest_rate_idx(u32 mask)
@@ -2202,10 +2198,6 @@ void update_wireless_mode(struct adapter *padapter)
 		update_mgnt_tx_rate(padapter, IEEE80211_OFDM_RATE_6MB);
 }
 
-void fire_write_MAC_cmd(struct adapter *padapter, unsigned int addr, unsigned int value)
-{
-}
-
 void update_bmc_sta_support_rate(struct adapter *padapter, u32 mac_id)
 {
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -2288,10 +2280,10 @@ void process_addba_req(struct adapter *padapter, u8 *paddba_req, u8 *addr)
 void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len)
 {
 	u8* pIE;
-	u32 *pbuf;
+	__le32 *pbuf;
 
 	pIE = pframe + sizeof(struct rtw_ieee80211_hdr_3addr);
-	pbuf = (u32*)pIE;
+	pbuf = (__le32 *)pIE;
 
 	pmlmeext->TSFValue = le32_to_cpu(*(pbuf+1));
 
@@ -2302,7 +2294,7 @@ void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len)
 
 void correct_TSF(struct adapter *padapter, struct mlme_ext_priv *pmlmeext)
 {
-	rtw_hal_set_hwreg(padapter, HW_VAR_CORRECT_TSF, 0);
+	rtw_hal_set_hwreg(padapter, HW_VAR_CORRECT_TSF, NULL);
 }
 
 void beacon_timing_control(struct adapter *padapter)

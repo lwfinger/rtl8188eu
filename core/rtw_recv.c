@@ -693,7 +693,6 @@ union recv_frame * decryptor(struct adapter *padapter,union recv_frame *precv_fr
 
 }
 //###set the security information in the recv_frame
-union recv_frame * portctrl(struct adapter *adapter,union recv_frame * precv_frame);
 union recv_frame * portctrl(struct adapter *adapter,union recv_frame * precv_frame)
 {
 	u8   *psta_addr, *ptr;
@@ -705,7 +704,7 @@ union recv_frame * portctrl(struct adapter *adapter,union recv_frame * precv_fra
 	u16	ether_type=0;
 	u16  eapol_type = 0x888e;//for Funia BD's WPA issue
 	struct rx_pkt_attrib *pattrib;
-
+	__be16 be_tmp;
 ;
 
 	pstapriv = &adapter->stapriv;
@@ -735,8 +734,8 @@ union recv_frame * portctrl(struct adapter *adapter,union recv_frame * precv_fra
 
 			//get ether_type
 			ptr=ptr+pfhdr->attrib.hdrlen+pfhdr->attrib.iv_len+LLC_HEADER_SIZE;
-			_rtw_memcpy(&ether_type,ptr, 2);
-			ether_type= ntohs((unsigned short )ether_type);
+			memcpy(&be_tmp, ptr, 2);
+			ether_type= ntohs(be_tmp);
 
 		        if (ether_type == eapol_type) {
 				prtnframe=precv_frame;
@@ -2261,7 +2260,7 @@ sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 	u8	bsnaphdr;
 	u8	*psnap_type;
 	struct ieee80211_snap_hdr	*psnap;
-
+	__be16 be_tmp;
 	sint ret=_SUCCESS;
 	struct adapter			*adapter =precvframe->u.hdr.adapter;
 	struct mlme_priv	*pmlmepriv = &adapter->mlmepriv;
@@ -2297,8 +2296,8 @@ sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 
 	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("\n===pattrib->hdrlen: %x,  pattrib->iv_len:%x ===\n\n", pattrib->hdrlen,  pattrib->iv_len));
 
-	_rtw_memcpy(&eth_type, ptr+rmv_len, 2);
-	eth_type= ntohs((unsigned short )eth_type); //pattrib->ether_type
+	memcpy(&be_tmp, ptr+rmv_len, 2);
+	eth_type= ntohs(be_tmp); //pattrib->ether_type
 	pattrib->eth_type = eth_type;
 
 	if ((check_fwstate(pmlmepriv, WIFI_MP_STATE) == true))
@@ -2310,7 +2309,7 @@ sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 		eth_type = 0x8712;
 		// append rx status for mp test packets
 		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2)-24);
-		_rtw_memcpy(ptr, get_rxmem(precvframe), 24);
+		memcpy(ptr, get_rxmem(precvframe), 24);
 		ptr+=24;
 	}
 	else {
@@ -2321,8 +2320,8 @@ sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 	_rtw_memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
 
 	if(!bsnaphdr) {
-		len = htons(len);
-		_rtw_memcpy(ptr+12, &len, 2);
+		be_tmp = htons(len);
+		_rtw_memcpy(ptr+12, &be_tmp, 2);
 	}
 
 ;
@@ -2799,12 +2798,12 @@ int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
 			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
 			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
 		} else {
-			u16 len;
+			__be16 len;
 			/* Leave Ethernet header part of hdr and full payload */
 			len = htons(sub_skb->len);
-			_rtw_memcpy(skb_push(sub_skb, 2), &len, 2);
-			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
-			_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
+			memcpy(skb_push(sub_skb, 2), &len, 2);
+			memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
+			memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
 		}
 
 		/* Indicat the packets to upper layer */

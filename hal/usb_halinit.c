@@ -2064,23 +2064,19 @@ Hal_EfuseParsePIDVID_8188EU(
 	if( !AutoLoadFail )
 	{
 		// VID, PID
-		pHalData->EEPROMVID = EF2Byte( *(u16 *)&hwinfo[EEPROM_VID_88EU] );
-		pHalData->EEPROMPID = EF2Byte( *(u16 *)&hwinfo[EEPROM_PID_88EU] );
+		pHalData->EEPROMVID = EF2BYTE(*(__le16 *)&hwinfo[EEPROM_VID_88EU]);
+		pHalData->EEPROMPID = EF2BYTE(*(__le16 *)&hwinfo[EEPROM_PID_88EU]);
 
 		// Customer ID, 0x00 and 0xff are reserved for Realtek.
 		pHalData->EEPROMCustomerID = *(u8 *)&hwinfo[EEPROM_CUSTOMERID_88E];
 		pHalData->EEPROMSubCustomerID = EEPROM_Default_SubCustomerID;
-
-	}
-	else
-	{
+	} else {
 		pHalData->EEPROMVID			= EEPROM_Default_VID;
 		pHalData->EEPROMPID			= EEPROM_Default_PID;
 
 		// Customer ID, 0x00 and 0xff are reserved for Realtek.
 		pHalData->EEPROMCustomerID		= EEPROM_Default_CustomerID;
 		pHalData->EEPROMSubCustomerID	= EEPROM_Default_SubCustomerID;
-
 	}
 
 	DBG_871X("VID = 0x%04X, PID = 0x%04X\n", pHalData->EEPROMVID, pHalData->EEPROMPID);
@@ -3736,80 +3732,80 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 
 			poidparam = (struct wowlan_ioctl_param *)val;
 			switch (poidparam->subcode){
-				case WOWLAN_ENABLE:
-					DBG_871X_LEVEL(_drv_always_, "WOWLAN_ENABLE\n");
+			case WOWLAN_ENABLE:
+				DBG_871X_LEVEL(_drv_always_, "WOWLAN_ENABLE\n");
 
-					SetFwRelatedForWoWLAN8188ES(Adapter, true);
+				SetFwRelatedForWoWLAN8188ES(Adapter, true);
 
-					//Set Pattern
-					//if(adapter_to_pwrctl(Adapter)->wowlan_pattern==true)
-					//	rtw_wowlan_reload_pattern(Adapter);
+				//Set Pattern
+				//if(adapter_to_pwrctl(Adapter)->wowlan_pattern==true)
+				//	rtw_wowlan_reload_pattern(Adapter);
 
-					//RX DMA stop
-					DBG_871X_LEVEL(_drv_always_, "Pause DMA\n");
-					rtw_write32(Adapter,REG_RXPKT_NUM,(rtw_read32(Adapter,REG_RXPKT_NUM)|RW_RELEASE_EN));
-					do{
-						if((rtw_read32(Adapter, REG_RXPKT_NUM)&RXDMA_IDLE)) {
-							DBG_871X_LEVEL(_drv_always_, "RX_DMA_IDLE is true\n");
-							break;
-						} else {
-							// If RX_DMA is not idle, receive one pkt from DMA
-							DBG_871X_LEVEL(_drv_always_, "RX_DMA_IDLE is not true\n");
-						}
-					}while(trycnt--);
-					if(trycnt ==0)
-						DBG_871X_LEVEL(_drv_always_, "Stop RX DMA failed...... \n");
-
-					//Set WOWLAN H2C command.
-					DBG_871X_LEVEL(_drv_always_, "Set WOWLan cmd\n");
-					rtl8188es_set_wowlan_cmd(Adapter, 1);
-
-					mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-					trycnt = 10;
-
-					while(!(mstatus&BIT1) && trycnt>1) {
-						mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-						DBG_871X_LEVEL(_drv_always_, "Loop index: %d :0x%02x\n", trycnt, mstatus);
-						trycnt --;
-						rtw_msleep_os(2);
+				//RX DMA stop
+				DBG_871X_LEVEL(_drv_always_, "Pause DMA\n");
+				rtw_write32(Adapter,REG_RXPKT_NUM,(rtw_read32(Adapter,REG_RXPKT_NUM)|RW_RELEASE_EN));
+				do{
+					if((rtw_read32(Adapter, REG_RXPKT_NUM)&RXDMA_IDLE)) {
+						DBG_871X_LEVEL(_drv_always_, "RX_DMA_IDLE is true\n");
+						break;
+					} else {
+						// If RX_DMA is not idle, receive one pkt from DMA
+						DBG_871X_LEVEL(_drv_always_, "RX_DMA_IDLE is not true\n");
 					}
+				}while(trycnt--);
+				if(trycnt ==0)
+					DBG_871X_LEVEL(_drv_always_, "Stop RX DMA failed...... \n");
 
-					adapter_to_pwrctl(Adapter)->wowlan_wake_reason = rtw_read8(Adapter, REG_WOWLAN_WAKE_REASON);
-					DBG_871X_LEVEL(_drv_always_, "wowlan_wake_reason: 0x%02x\n",
-										adapter_to_pwrctl(Adapter)->wowlan_wake_reason);
+				//Set WOWLAN H2C command.
+				DBG_871X_LEVEL(_drv_always_, "Set WOWLan cmd\n");
+				rtl8188es_set_wowlan_cmd(Adapter, 1);
 
-					/* Invoid SE0 reset signal during suspending*/
-					rtw_write8(Adapter, REG_RSV_CTRL, 0x20);
-					rtw_write8(Adapter, REG_RSV_CTRL, 0x60);
+				mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
+				trycnt = 10;
 
-					//rtw_msleep_os(10);
-					break;
-				case WOWLAN_DISABLE:
-					DBG_871X_LEVEL(_drv_always_, "WOWLAN_DISABLE\n");
-					trycnt = 10;
-					rtl8188es_set_wowlan_cmd(Adapter, 0);
+				while(!(mstatus&BIT1) && trycnt>1) {
 					mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-					DBG_871X_LEVEL(_drv_info_, "%s mstatus:0x%02x\n", __func__, mstatus);
-
-					while(mstatus&BIT1 && trycnt>1) {
-						mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-						DBG_871X_LEVEL(_drv_always_, "Loop index: %d :0x%02x\n", trycnt, mstatus);
-						trycnt --;
-						rtw_msleep_os(2);
-					}
-
-					if (mstatus & BIT1)
-						printk("System did not release RX_DMA\n");
-					else
-						SetFwRelatedForWoWLAN8188ES(Adapter, false);
-
+					DBG_871X_LEVEL(_drv_always_, "Loop index: %d :0x%02x\n", trycnt, mstatus);
+					trycnt --;
 					rtw_msleep_os(2);
-					if(!(adapter_to_pwrctl(Adapter)->wowlan_wake_reason & FWDecisionDisconnect))
-						rtl8188e_set_FwJoinBssReport_cmd(Adapter, 1);
-					//rtw_msleep_os(10);
-					break;
-				default:
-					break;
+				}
+
+				adapter_to_pwrctl(Adapter)->wowlan_wake_reason = rtw_read8(Adapter, REG_WOWLAN_WAKE_REASON);
+				DBG_871X_LEVEL(_drv_always_, "wowlan_wake_reason: 0x%02x\n",
+									adapter_to_pwrctl(Adapter)->wowlan_wake_reason);
+
+				/* Invoid SE0 reset signal during suspending*/
+				rtw_write8(Adapter, REG_RSV_CTRL, 0x20);
+				rtw_write8(Adapter, REG_RSV_CTRL, 0x60);
+
+				//rtw_msleep_os(10);
+				break;
+			case WOWLAN_DISABLE:
+				DBG_871X_LEVEL(_drv_always_, "WOWLAN_DISABLE\n");
+				trycnt = 10;
+				rtl8188es_set_wowlan_cmd(Adapter, 0);
+				mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
+				DBG_871X_LEVEL(_drv_info_, "%s mstatus:0x%02x\n", __func__, mstatus);
+
+				while(mstatus&BIT1 && trycnt>1) {
+					mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
+					DBG_871X_LEVEL(_drv_always_, "Loop index: %d :0x%02x\n", trycnt, mstatus);
+					trycnt --;
+					rtw_msleep_os(2);
+				}
+
+				if (mstatus & BIT1)
+					printk("System did not release RX_DMA\n");
+				else
+					SetFwRelatedForWoWLAN8188ES(Adapter, false);
+
+				rtw_msleep_os(2);
+				if(!(adapter_to_pwrctl(Adapter)->wowlan_wake_reason & FWDecisionDisconnect))
+					rtl8188e_set_FwJoinBssReport_cmd(Adapter, 1);
+				//rtw_msleep_os(10);
+				break;
+			default:
+				break;
 			}
 		}
 		break;
@@ -3827,7 +3823,7 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 	#endif
 		case HW_VAR_H2C_MEDIA_STATUS_RPT:
 			{
-				rtl8188e_set_FwMediaStatus_cmd(Adapter , (*(u16 *)val));
+				rtl8188e_set_FwMediaStatus_cmd(Adapter, (*(__le16 *)val));
 			}
 			break;
 		case HW_VAR_BCN_VALID:

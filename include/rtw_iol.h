@@ -39,9 +39,9 @@ int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame);
 struct ioreg_cfg{
 	u8	length;
 	u8	cmd_id;
-	u16	address;
-	u32	data;
-	u32  mask;
+	__le16	address;
+	__le32	data;
+	__le32  mask;
 };
 enum ioreg_cmd{
 	IOREG_CMD_LLT			= 0x01,

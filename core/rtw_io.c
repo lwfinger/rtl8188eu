@@ -68,7 +68,7 @@ u16 _rtw_read16(struct adapter *adapter, u32 addr)
 	_read16 = pintfhdl->io_ops._read16;
 
 	r_val = _read16(pintfhdl, addr);
-	return le16_to_cpu(r_val);
+	return r_val;
 }
 
 u32 _rtw_read32(struct adapter *adapter, u32 addr)
@@ -80,7 +80,7 @@ u32 _rtw_read32(struct adapter *adapter, u32 addr)
 	_read32 = pintfhdl->io_ops._read32;
 
 	r_val = _read32(pintfhdl, addr);
-	return le32_to_cpu(r_val);
+	return r_val;
 }
 
 int _rtw_write8(struct adapter *adapter, u32 addr, u8 val)
@@ -106,7 +106,6 @@ int _rtw_write16(struct adapter *adapter, u32 addr, u16 val)
 
 	_write16 = pintfhdl->io_ops._write16;
 
-	val = cpu_to_le16(val);
 	ret = _write16(pintfhdl, addr, val);
 
 	return RTW_STATUS_CODE(ret);
@@ -120,7 +119,6 @@ int _rtw_write32(struct adapter *adapter, u32 addr, u32 val)
 	int ret;
 	_write32 = pintfhdl->io_ops._write32;
 
-	val = cpu_to_le32(val);
 	ret = _write32(pintfhdl, addr, val);
 
 	return RTW_STATUS_CODE(ret);
@@ -161,7 +159,6 @@ int _rtw_write16_async(struct adapter *adapter, u32 addr, u16 val)
 	int ret;
 
 	_write16_async = pintfhdl->io_ops._write16_async;
-	val = cpu_to_le16(val);
 	ret = _write16_async(pintfhdl, addr, val);
 
 	return RTW_STATUS_CODE(ret);
@@ -175,7 +172,6 @@ int _rtw_write32_async(struct adapter *adapter, u32 addr, u32 val)
 	int ret;
 	
 	_write32_async = pintfhdl->io_ops._write32_async;
-	val = cpu_to_le32(val);
 	ret = _write32_async(pintfhdl, addr, val);
 
 	return RTW_STATUS_CODE(ret);
