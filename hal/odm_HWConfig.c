@@ -40,7 +40,7 @@
 #define READ_AND_CONFIG_MP(ic, txt) (ODM_ReadAndConfig##txt##ic(pDM_Odm))
 #define READ_AND_CONFIG_TC(ic, txt) (ODM_ReadAndConfig_TC##txt##ic(pDM_Odm))
 
-u8
+static u8
 odm_QueryRxPwrPercentage(
 	IN		s8		AntPower
 	)
@@ -64,7 +64,7 @@ odm_QueryRxPwrPercentage(
 // 2012/01/12 MH MOve some signal strength smooth method to MP HAL layer.
 // IF other SW team do not support the feature, remove this section.??
 //
-s32
+static s32
 odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
 	IN OUT PDM_ODM_T pDM_Odm,
 	s32 CurrSig
@@ -74,7 +74,7 @@ odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(
 	return RetSig;
 }
 
-s32
+static s32
 odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
 	IN OUT PDM_ODM_T pDM_Odm,
 	s32 CurrSig
@@ -85,7 +85,7 @@ odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(
 }
 
 
-s32
+static s32
 odm_SignalScaleMapping_92CSeries(
 	IN OUT PDM_ODM_T pDM_Odm,
 	IN s32 CurrSig
@@ -178,7 +178,7 @@ odm_SignalScaleMapping_92CSeries(
 #endif
 	return RetSig;
 }
-s32
+static s32
 odm_SignalScaleMapping(
 	IN OUT PDM_ODM_T pDM_Odm,
 	IN	s32 CurrSig
@@ -246,7 +246,7 @@ odm_EVMdbToPercentage(
 
 
 
-void
+static void
 odm_RxPhyStatus92CSeries_Parsing(
 	IN OUT	PDM_ODM_T					pDM_Odm,
 	OUT		PODM_PHY_INFO_T			pPhyInfo,
@@ -590,7 +590,7 @@ odm_Init_RSSIForDM(
 
 }
 
-void
+static void
 odm_Process_RSSIForDM(
 	IN OUT	PDM_ODM_T					pDM_Odm,
 	IN		PODM_PHY_INFO_T			pPhyInfo,
@@ -804,7 +804,7 @@ odm_Process_RSSIForDM(
 //
 // Endianness before calling this API
 //
-void
+static void
 ODM_PhyStatusQuery_92CSeries(
 	IN OUT	PDM_ODM_T					pDM_Odm,
 	OUT		PODM_PHY_INFO_T				pPhyInfo,
@@ -832,7 +832,7 @@ ODM_PhyStatusQuery_92CSeries(
 //
 // Endianness before calling this API
 //
-void
+static void
 ODM_PhyStatusQuery_JaguarSeries(
 	IN OUT	PDM_ODM_T					pDM_Odm,
 	OUT		PODM_PHY_INFO_T			pPhyInfo,

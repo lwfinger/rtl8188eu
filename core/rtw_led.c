@@ -120,9 +120,6 @@ DeInitLed871x(
 //		It toggle off LED and schedule corresponding timer if necessary.
 //
 
-void SwLedOn(struct adapter *padapter, PLED_871x pLed);
-void SwLedOff(struct adapter	*padapter, PLED_871x	pLed);
-
 #define CONFIG_LED_REMOVE_HAL
 
 void

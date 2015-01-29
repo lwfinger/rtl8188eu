@@ -148,7 +148,7 @@ ODM_SetRFReg(
 	)
 {
 	struct adapter *	Adapter = pDM_Odm->Adapter;
-	PHY_SetRFReg(Adapter, eRFPath, RegAddr, BitMask, Data);
+	PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, RegAddr, BitMask, Data);
 }
 
 u32
@@ -160,7 +160,9 @@ ODM_GetRFReg(
 	)
 {
 	struct adapter *	Adapter = pDM_Odm->Adapter;
-	return PHY_QueryRFReg(Adapter, eRFPath, RegAddr, BitMask);
+
+	return PHY_QueryRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath,
+			      RegAddr, BitMask);
 }
 
 //

@@ -45,7 +45,7 @@
 //3============================================================
 //3 Tx Power Tracking
 //3============================================================
-void setIqkMatrix(
+static void setIqkMatrix(
 	PDM_ODM_T	pDM_Odm,
 	u8		OFDM_index,
 	u8		RFPath,
@@ -131,7 +131,7 @@ void setIqkMatrix(
 }
 
 
-void doIQK(
+static void doIQK(
 	PDM_ODM_T	pDM_Odm,
 	u8		DeltaThermalIndex,
 	u8		ThermalValue,
@@ -248,7 +248,7 @@ ODM_TxPwrTrackAdjust88E(
  *	04/23/2012	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-void
+static void
 odm_TxPwrTrackSetPwr88E(
 	PDM_ODM_T			pDM_Odm,
 	PWRTRACK_METHOD		Method,
@@ -566,7 +566,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 #define MAX_TOLERANCE		5
 #define IQK_DELAY_TIME		1		//ms
 
-u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+static u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_IQK_8188E(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		configPathB
@@ -619,7 +619,7 @@ phy_PathA_IQK_8188E(
 	return result;
 }
 
-u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+static u8			//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathA_RxIQK(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		configPathB
@@ -756,7 +756,7 @@ phy_PathA_RxIQK(
 	return result;
 }
 
-u8				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
+static u8				//bit0 = 1 => Tx OK, bit1 = 1 => Rx OK
 phy_PathB_IQK_8188E(
 	IN	struct adapter *pAdapter
 	)
@@ -808,7 +808,7 @@ phy_PathB_IQK_8188E(
 
 }
 
-void
+static void
 _PHY_PathAFillIQKMatrix(
 	IN	struct adapter *pAdapter,
 	IN  BOOLEAN	bIQKOK,
@@ -868,7 +868,7 @@ _PHY_PathAFillIQKMatrix(
 	}
 }
 
-void
+static void
 _PHY_PathBFillIQKMatrix(
 	IN	struct adapter *pAdapter,
 	IN  BOOLEAN	bIQKOK,
@@ -928,7 +928,7 @@ _PHY_PathBFillIQKMatrix(
 // 2011/07/26 MH Add an API for testing IQK fail case.
 //
 // MP Already declare in odm.c
-BOOLEAN
+static BOOLEAN
 ODM_CheckPowerStatus(
 	IN	struct adapter *	Adapter)
 {
@@ -956,7 +956,7 @@ _PHY_SaveADDARegisters(
 }
 
 
-void
+static void
 _PHY_SaveMACRegisters(
 	IN	struct adapter *pAdapter,
 	IN	u32 *		MACReg,
@@ -976,7 +976,7 @@ _PHY_SaveMACRegisters(
 }
 
 
-void
+static void
 _PHY_ReloadADDARegisters(
 	IN	struct adapter *pAdapter,
 	IN	u32 *		ADDAReg,
@@ -995,7 +995,7 @@ _PHY_ReloadADDARegisters(
 	}
 }
 
-void
+static void
 _PHY_ReloadMACRegisters(
 	IN	struct adapter *pAdapter,
 	IN	u32 *		MACReg,
@@ -1081,7 +1081,7 @@ _PHY_PathAStandBy(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_IQK, bMaskDWord, 0x80800000);
 }
 
-void
+static void
 _PHY_PIModeSwitch(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		PIMode
@@ -1098,7 +1098,7 @@ _PHY_PIModeSwitch(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_XB_HSSIParameter1, bMaskDWord, mode);
 }
 
-BOOLEAN
+static BOOLEAN
 phy_SimularityCompare_8188E(
 	IN	struct adapter *pAdapter,
 	IN	s32		result[][8],
@@ -1220,9 +1220,7 @@ phy_SimularityCompare_8188E(
 
 }
 
-
-
-void
+static void
 phy_IQCalibrate_8188E(
 	IN	struct adapter *pAdapter,
 	IN	s32		result[][8],
@@ -1416,7 +1414,7 @@ else
 
 }
 
-void
+static void
 phy_LCCalibrate_8188E(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		is2T
@@ -1485,7 +1483,7 @@ phy_LCCalibrate_8188E(
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
 
-void
+static void
 phy_APCalibrate_8188E(
 	IN	struct adapter *pAdapter,
 	IN	s8		delta,
@@ -2206,7 +2204,8 @@ PHY_APCalibrate_8188E(
 		phy_APCalibrate_8188E(pAdapter, delta, FALSE);
 	}
 }
-void phy_SetRFPathSwitch_8188E(
+
+static void phy_SetRFPathSwitch_8188E(
 	IN	struct adapter *pAdapter,
 	IN	BOOLEAN		bMain,
 	IN	BOOLEAN		is2T

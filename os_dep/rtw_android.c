@@ -362,12 +362,12 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		goto exit;
 	}
 
-	if (!access_ok(VERIFY_READ, priv_cmd.buf, priv_cmd.total_len)){
+	if (!access_ok(VERIFY_READ, (const void __user *)priv_cmd.buf, priv_cmd.total_len)){
 		DBG_871X("%s: failed to access memory\n", __FUNCTION__);
 		ret = -EFAULT;
 		goto exit;
 	 }
-	if (copy_from_user(command, (void *)priv_cmd.buf, priv_cmd.total_len)) {
+	if (copy_from_user(command, (const void __user *)priv_cmd.buf, priv_cmd.total_len)) {
 		ret = -EFAULT;
 		goto exit;
 	}
@@ -570,7 +570,7 @@ response:
 			bytes_written++;
 		}
 		priv_cmd.used_len = bytes_written;
-		if (copy_to_user((void *)priv_cmd.buf, command, bytes_written)) {
+		if (copy_to_user((void __user *)priv_cmd.buf, command, bytes_written)) {
 			DBG_871X("%s: failed to copy data to user buffer\n", __FUNCTION__);
 			ret = -EFAULT;
 		}

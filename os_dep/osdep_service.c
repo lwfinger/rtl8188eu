@@ -25,6 +25,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <recv_osdep.h>
+#include <rtw_ioctl_set.h>
 #include <linux/vmalloc.h>
 #ifdef RTK_DMP_PLATFORM
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
@@ -704,27 +705,6 @@ void	_rtw_spinlock_free(_lock *plock)
 {
 }
 
-void	_rtw_spinlock(_lock	*plock)
-{
-	spin_lock(plock);
-}
-
-void	_rtw_spinunlock(_lock *plock)
-{
-	spin_unlock(plock);
-}
-
-
-void	_rtw_spinlock_ex(_lock	*plock)
-{
-	spin_lock(plock);
-}
-
-void	_rtw_spinunlock_ex(_lock *plock)
-{
-	spin_unlock(plock);
-}
-
 void	_rtw_init_queue(_queue	*pqueue)
 {
 
@@ -828,7 +808,7 @@ void rtw_udelay_os(int us)
 }
 #endif
 
-void rtw_yield_os()
+void rtw_yield_os(void)
 {
 	yield();
 }
@@ -849,7 +829,7 @@ static android_suspend_lock_t rtw_suspend_ext_lock ={
 };
 #endif
 
-inline void rtw_suspend_lock_init()
+inline void rtw_suspend_lock_init(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock_init(&rtw_suspend_lock, WAKE_LOCK_SUSPEND, RTW_SUSPEND_LOCK_NAME);
@@ -860,7 +840,7 @@ inline void rtw_suspend_lock_init()
 	#endif
 }
 
-inline void rtw_suspend_lock_uninit()
+inline void rtw_suspend_lock_uninit(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock_destroy(&rtw_suspend_lock);
@@ -871,7 +851,7 @@ inline void rtw_suspend_lock_uninit()
 	#endif
 }
 
-inline void rtw_lock_suspend()
+inline void rtw_lock_suspend(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_lock(&rtw_suspend_lock);
@@ -884,7 +864,7 @@ inline void rtw_lock_suspend()
 	#endif
 }
 
-inline void rtw_unlock_suspend()
+inline void rtw_unlock_suspend(void)
 {
 	#ifdef CONFIG_WAKELOCK
 	wake_unlock(&rtw_suspend_lock);
@@ -1007,7 +987,7 @@ static int readFile(struct file *fp,char *buf,int len)
 		return -EPERM;
 
 	while(sum<len) {
-		rlen=fp->f_op->read(fp,buf+sum,len-sum, &fp->f_pos);
+		rlen=fp->f_op->read(fp,(char __user *)buf+sum,len-sum, &fp->f_pos);
 		if(rlen>0)
 			sum+=rlen;
 		else if(0 != rlen)
@@ -1028,7 +1008,7 @@ static int writeFile(struct file *fp,char *buf,int len)
 		return -EPERM;
 
 	while(sum<len) {
-		wlen=fp->f_op->write(fp,buf+sum,len-sum, &fp->f_pos);
+		wlen=fp->f_op->write(fp,(char __user *)buf+sum,len-sum, &fp->f_pos);
 		if(wlen>0)
 			sum+=wlen;
 		else if(0 != wlen)

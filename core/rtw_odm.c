@@ -21,7 +21,7 @@
 #include <rtw_odm.h>
 #include <rtl8188e_hal.h>
 
-const char *odm_comp_str[] = {
+static const char *odm_comp_str[] = {
 	"ODM_COMP_DIG",
 	"ODM_COMP_RA_MASK",
 	"ODM_COMP_DYNAMIC_TXPWR",
@@ -58,7 +58,7 @@ const char *odm_comp_str[] = {
 
 #define RTW_ODM_COMP_MAX 32
 
-const char *odm_ability_str[] = {
+static const char *odm_ability_str[] = {
 	"ODM_BB_DIG",
 	"ODM_BB_RA_MASK",
 	"ODM_BB_DYNAMIC_TXPWR",
@@ -90,7 +90,7 @@ const char *odm_ability_str[] = {
 
 #define RTW_ODM_ABILITY_MAX 27
 
-const char *odm_dbg_level_str[] = {
+static const char *odm_dbg_level_str[] = {
 	NULL,
 	"ODM_DBG_OFF",
 	"ODM_DBG_SERIOUS",

@@ -4219,13 +4219,12 @@ void rtw_cfg80211_issue_p2p_provision_request(struct adapter *padapter, const u8
 	u8	devinfo_content[64] = { 0x00 };
 	u16	capability = 0;
 	uint capability_len = 0;
-
 	unsigned char category = RTW_WLAN_CATEGORY_PUBLIC;
-	u8			action = P2P_PUB_ACTION_ACTION;
-	u8			dialogToken = 1;
-	u32			p2poui = cpu_to_be32(P2POUI);
-	u8			oui_subtype = P2P_PROVISION_DISC_REQ;
-	u32			p2pielen = 0;
+	u8	action = P2P_PUB_ACTION_ACTION;
+	u8	dialogToken = 1;
+	__be32	p2poui = cpu_to_be32(P2POUI);
+	u8	oui_subtype = P2P_PROVISION_DISC_REQ;
+	u32	p2pielen = 0;
 #ifdef CONFIG_WFD
 	u32					wfdielen = 0;
 #endif //CONFIG_WFD
@@ -5109,7 +5108,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 			}
 
 			//add PUSH_BUTTON config_method by driver self in wpsie of probe_resp at GO Mode
-			if ( (puconfig_method = (u16*)rtw_get_wps_attr_content( wps_ie, wps_ielen, WPS_ATTR_CONF_METHOD , NULL, &attr_contentlen)) != NULL )
+			if ( (puconfig_method = (__be16*)rtw_get_wps_attr_content( wps_ie, wps_ielen, WPS_ATTR_CONF_METHOD , NULL, &attr_contentlen)) != NULL )
 			{
 				#ifdef CONFIG_DEBUG_CFG80211
 				//printk("config_method in wpsie of probe_resp = 0x%x\n", be16_to_cpu(*puconfig_method));

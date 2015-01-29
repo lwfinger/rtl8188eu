@@ -59,7 +59,7 @@ CheckCondition(
 *                           AGC_TAB_1T.TXT
 ******************************************************************************/
 
-u32 Array_AGC_TAB_1T_8188E[] = {
+static u32 Array_AGC_TAB_1T_8188E[] = {
 0xFF0F0718, 0xABCD,
 		0xC78, 0xF7000001,
 		0xC78, 0xF6010001,
@@ -463,7 +463,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 *                           AGC_TAB_1T_ICUT.TXT
 ******************************************************************************/
 
-u32 Array_MP_8188E_AGC_TAB_1T_ICUT[] = {
+static u32 Array_MP_8188E_AGC_TAB_1T_ICUT[] = {
 		0xC78, 0xFB000001,
 		0xC78, 0xFB010001,
 		0xC78, 0xFB020001,
@@ -671,7 +671,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E(
 *                           PHY_REG_1T.TXT
 ******************************************************************************/
 
-u32 Array_PHY_REG_1T_8188E[] = {
+static u32 Array_PHY_REG_1T_8188E[] = {
 		0x800, 0x80040000,
 		0x804, 0x00000003,
 		0x808, 0x0000FC00,
@@ -1103,7 +1103,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 *                           PHY_REG_1T_ICUT.TXT
 ******************************************************************************/
 
-u32 Array_MP_8188E_PHY_REG_1T_ICUT[] = {
+static u32 Array_MP_8188E_PHY_REG_1T_ICUT[] = {
 		0x800, 0x80040000,
 		0x804, 0x00000003,
 		0x808, 0x0000FC00,
@@ -1373,7 +1373,7 @@ ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E(
 *                           PHY_REG_PG.TXT
 ******************************************************************************/
 
-u32 Array_PHY_REG_PG_8188E[] = {
+static u32 Array_PHY_REG_PG_8188E[] = {
 	0, 0, 0, 0x00000e08, 0x0000ff00, 0x00004000,
 	0, 0, 0, 0x0000086c, 0xffffff00, 0x34363800,
 	0, 0, 0, 0x00000e00, 0xffffffff, 0x42444646,

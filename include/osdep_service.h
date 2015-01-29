@@ -112,8 +112,8 @@ extern unsigned char WPA_TKIP_CIPHER[4];
 extern unsigned char RSN_TKIP_CIPHER[4];
 
 struct dvobj_priv;
-extern void rtw_unregister_netdevs(struct dvobj_priv *dvobj);
-extern int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
+void rtw_unregister_netdevs(struct dvobj_priv *dvobj);
+int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 
 typedef struct urb *  PURB;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
@@ -401,7 +401,7 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 #define BIT35	0x0800000000
 #define BIT36	0x1000000000
 
-extern int RTW_STATUS_CODE(int error_code);
+int RTW_STATUS_CODE(int error_code);
 
 //#define CONFIG_USE_VMALLOC
 
@@ -549,60 +549,77 @@ void _rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dma_a
 #define rtw_usb_buffer_free_f(dev, size, addr, dma, mstat_f) _rtw_usb_buffer_free((dev), (size), (addr), (dma))
 #endif /* DBG_MEM_ALLOC */
 
-extern void*	rtw_malloc2d(int h, int w, int size);
-extern void	rtw_mfree2d(void *pbuf, int h, int w, int size);
+static inline void	_rtw_spinlock(_lock	*plock)
+{
+	spin_lock(plock);
+}
 
-extern void	_rtw_memcpy(void* dec, void* sour, u32 sz);
-extern int	_rtw_memcmp(void *dst, void *src, u32 sz);
-extern void	_rtw_memset(void *pbuf, int c, u32 sz);
+static inline void	_rtw_spinunlock(_lock *plock)
+{
+	spin_unlock(plock);
+}
 
-extern void	_rtw_init_listhead(_list *list);
-extern u32	rtw_is_list_empty(_list *phead);
-extern void	rtw_list_insert_head(_list *plist, _list *phead);
-extern void	rtw_list_insert_tail(_list *plist, _list *phead);
-extern void	rtw_list_delete(_list *plist);
 
-extern void	_rtw_init_sema(_sema *sema, int init_val);
-extern void	_rtw_free_sema(_sema	*sema);
-extern void	_rtw_up_sema(_sema	*sema);
-extern u32	_rtw_down_sema(_sema *sema);
-extern void	_rtw_mutex_init(_mutex *pmutex);
-extern void	_rtw_mutex_free(_mutex *pmutex);
-extern void	_rtw_spinlock_init(_lock *plock);
-extern void	_rtw_spinlock_free(_lock *plock);
-extern void	_rtw_spinlock(_lock	*plock);
-extern void	_rtw_spinunlock(_lock	*plock);
-extern void	_rtw_spinlock_ex(_lock	*plock);
-extern void	_rtw_spinunlock_ex(_lock	*plock);
+static inline void	_rtw_spinlock_ex(_lock	*plock)
+{
+	spin_lock(plock);
+}
 
-extern void	_rtw_init_queue(_queue	*pqueue);
-extern u32	_rtw_queue_empty(_queue	*pqueue);
-extern u32	rtw_end_of_queue_search(_list *queue, _list *pelement);
+static inline void	_rtw_spinunlock_ex(_lock *plock)
+{
+	spin_unlock(plock);
+}
 
-extern u32	rtw_get_current_time(void);
-extern u32	rtw_systime_to_ms(u32 systime);
-extern u32	rtw_ms_to_systime(u32 ms);
-extern s32	rtw_get_passing_time_ms(u32 start);
-extern s32	rtw_get_time_interval_ms(u32 start, u32 end);
+void*	rtw_malloc2d(int h, int w, int size);
+void	rtw_mfree2d(void *pbuf, int h, int w, int size);
 
-extern void	rtw_sleep_schedulable(int ms);
+void	_rtw_memcpy(void* dec, void* sour, u32 sz);
+int	_rtw_memcmp(void *dst, void *src, u32 sz);
+void	_rtw_memset(void *pbuf, int c, u32 sz);
 
-extern void	rtw_msleep_os(int ms);
-extern void	rtw_usleep_os(int us);
+void	_rtw_init_listhead(_list *list);
+u32	rtw_is_list_empty(_list *phead);
+void	rtw_list_insert_head(_list *plist, _list *phead);
+void	rtw_list_insert_tail(_list *plist, _list *phead);
+void	rtw_list_delete(_list *plist);
 
-extern u32	rtw_atoi(u8* s);
+void	_rtw_init_sema(_sema *sema, int init_val);
+void	_rtw_free_sema(_sema	*sema);
+void	_rtw_up_sema(_sema	*sema);
+u32	_rtw_down_sema(_sema *sema);
+void	_rtw_mutex_init(_mutex *pmutex);
+void	_rtw_mutex_free(_mutex *pmutex);
+void	_rtw_spinlock_init(_lock *plock);
+void	_rtw_spinlock_free(_lock *plock);
+
+void	_rtw_init_queue(_queue	*pqueue);
+u32	_rtw_queue_empty(_queue	*pqueue);
+u32	rtw_end_of_queue_search(_list *queue, _list *pelement);
+
+u32	rtw_get_current_time(void);
+u32	rtw_systime_to_ms(u32 systime);
+u32	rtw_ms_to_systime(u32 ms);
+s32	rtw_get_passing_time_ms(u32 start);
+s32	rtw_get_time_interval_ms(u32 start, u32 end);
+
+void	rtw_sleep_schedulable(int ms);
+
+void	rtw_msleep_os(int ms);
+void	rtw_usleep_os(int us);
+
+u32	rtw_atoi(u8* s);
 
 #ifdef DBG_DELAY_OS
 #define rtw_mdelay_os(ms) _rtw_mdelay_os((ms), __FUNCTION__, __LINE__)
 #define rtw_udelay_os(ms) _rtw_udelay_os((ms), __FUNCTION__, __LINE__)
-extern void _rtw_mdelay_os(int ms, const char *func, const int line);
-extern void _rtw_udelay_os(int us, const char *func, const int line);
+void _rtw_mdelay_os(int ms, const char *func, const int line);
+void _rtw_udelay_os(int us, const char *func, const int line);
 #else
-extern void	rtw_mdelay_os(int ms);
-extern void	rtw_udelay_os(int us);
+void	rtw_mdelay_os(int ms);
+void	rtw_udelay_os(int us);
 #endif
 
-extern void rtw_yield_os(void);
+void rtw_yield_os(void);
 
 
 __inline static unsigned char _cancel_timer_ex(_timer *ptimer)
@@ -727,32 +744,32 @@ __inline static u32 bitshift(u32 bitmask)
 #include <linux/android_power.h>
 #endif
 
-extern void rtw_suspend_lock_init(void);
-extern void rtw_suspend_lock_uninit(void);
-extern void rtw_lock_suspend(void);
-extern void rtw_unlock_suspend(void);
-extern void rtw_lock_suspend_timeout(u32 timeout_ms);
-extern void rtw_lock_ext_suspend_timeout(u32 timeout_ms);
+void rtw_suspend_lock_init(void);
+void rtw_suspend_lock_uninit(void);
+void rtw_lock_suspend(void);
+void rtw_unlock_suspend(void);
+void rtw_lock_suspend_timeout(u32 timeout_ms);
+void rtw_lock_ext_suspend_timeout(u32 timeout_ms);
 
 
 //Atomic integer operations
 	#define ATOMIC_T atomic_t
 
-extern void ATOMIC_SET(ATOMIC_T *v, int i);
-extern int ATOMIC_READ(ATOMIC_T *v);
-extern void ATOMIC_ADD(ATOMIC_T *v, int i);
-extern void ATOMIC_SUB(ATOMIC_T *v, int i);
-extern void ATOMIC_INC(ATOMIC_T *v);
-extern void ATOMIC_DEC(ATOMIC_T *v);
-extern int ATOMIC_ADD_RETURN(ATOMIC_T *v, int i);
-extern int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i);
-extern int ATOMIC_INC_RETURN(ATOMIC_T *v);
-extern int ATOMIC_DEC_RETURN(ATOMIC_T *v);
+void ATOMIC_SET(ATOMIC_T *v, int i);
+int ATOMIC_READ(ATOMIC_T *v);
+void ATOMIC_ADD(ATOMIC_T *v, int i);
+void ATOMIC_SUB(ATOMIC_T *v, int i);
+void ATOMIC_INC(ATOMIC_T *v);
+void ATOMIC_DEC(ATOMIC_T *v);
+int ATOMIC_ADD_RETURN(ATOMIC_T *v, int i);
+int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i);
+int ATOMIC_INC_RETURN(ATOMIC_T *v);
+int ATOMIC_DEC_RETURN(ATOMIC_T *v);
 
 //File operation APIs, just for linux now
-extern int rtw_is_file_readable(char *path);
-extern int rtw_retrive_from_file(char *path, u8* buf, u32 sz);
-extern int rtw_store_to_file(char *path, u8* buf, u32 sz);
+int rtw_is_file_readable(char *path);
+int rtw_retrive_from_file(char *path, u8* buf, u32 sz);
+int rtw_store_to_file(char *path, u8* buf, u32 sz);
 
 
 struct rtw_netdev_priv_indicator {
@@ -760,11 +777,11 @@ struct rtw_netdev_priv_indicator {
 	u32 sizeof_priv;
 };
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv);
-extern struct net_device * rtw_alloc_etherdev(int sizeof_priv);
+struct net_device * rtw_alloc_etherdev(int sizeof_priv);
 
 #define rtw_netdev_priv(netdev) ( ((struct rtw_netdev_priv_indicator *)netdev_priv(netdev))->priv )
 
-extern void rtw_free_netdev(struct net_device * netdev);
+void rtw_free_netdev(struct net_device * netdev);
 
 #define NDEV_FMT "%s"
 #define NDEV_ARG(ndev) ndev->name
@@ -781,8 +798,8 @@ extern void rtw_free_netdev(struct net_device * netdev);
 #define rtw_signal_process(pid, sig) kill_proc((pid), (sig), 1)
 #endif //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 
-extern u64 rtw_modular64(u64 x, u64 y);
-extern u64 rtw_division64(u64 x, u64 y);
+u64 rtw_modular64(u64 x, u64 y);
+u64 rtw_division64(u64 x, u64 y);
 
 
 /* Macros for handling unaligned memory accesses */

@@ -26,7 +26,7 @@
 
 u32 GlobalDebugLevel;
 
-const u16 dB_Invert_Table[8][12] = {
+static const u16 dB_Invert_Table[8][12] = {
 	{	1,		1,		1,		2,		2,		2,		2,		3,		3,		3,		4,		4},
 	{	4,		5,		6,		6,		7,		8,		9,		10,		11,		13,		14,		16},
 	{	18,		20,		22,		25,		28,		32,		35,		40,		45,		50,		56,		63},
@@ -43,7 +43,7 @@ const u16 dB_Invert_Table[8][12] = {
 //============================================================
 
 //avoid to warn in FreeBSD ==> To DO modify
-u32 EDCAParam[HT_IOT_PEER_MAX][3] =
+static u32 EDCAParam[HT_IOT_PEER_MAX][3] =
 {          // UL			DL
 	{0x5ea42b, 0x5ea42b, 0x5ea42b}, //0:unknown AP
 	{0xa44f, 0x5ea44f, 0x5e431c}, // 1:realtek AP
@@ -1104,7 +1104,7 @@ odm_CmnInfoUpdate_Debug(
  *	When		Who		Remark
  *
  *---------------------------------------------------------------------------*/
-void
+static void
 ODM_ChangeDynamicInitGainThresh(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	u32		DM_Type,
@@ -1149,7 +1149,7 @@ ODM_ChangeDynamicInitGainThresh(
 	}
 }	/* DM_ChangeDynamicInitGainThresh */
 
-int getIGIForDiff(int value_IGI)
+static int getIGIForDiff(int value_IGI)
 {
 	#define ONERCCA_LOW_TH		0x30
 	#define ONERCCA_LOW_DIFF	8
@@ -1433,7 +1433,7 @@ odm_DIGInit(
 
 }
 
-void
+static void
 odm_DigForBtHsMode(
 	IN		PDM_ODM_T		pDM_Odm
 	)
@@ -1901,7 +1901,7 @@ odm_DIG(
 }
 
 
-BOOLEAN
+static BOOLEAN
 odm_DigAbort(
 	IN		PDM_ODM_T		pDM_Odm
 	)
@@ -3636,7 +3636,7 @@ void odm_SwAntDivChkAntSwitch(
 	IN		PDM_ODM_T		pDM_Odm,
 	IN		u8			Step
 	) {}
-void ODM_SwAntDivResetBeforeLink(	IN		PDM_ODM_T		pDM_Odm	){}
+static void ODM_SwAntDivResetBeforeLink(	IN		PDM_ODM_T		pDM_Odm	){}
 void ODM_SwAntDivRestAfterLink(	IN		PDM_ODM_T		pDM_Odm	){}
 void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
 
@@ -3647,7 +3647,7 @@ void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
 //3============================================================
 
 #if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
-void
+static void
 odm_InitHybridAntDiv_88C_92D(
 	IN PDM_ODM_T	pDM_Odm
 	)
@@ -3863,7 +3863,7 @@ ODM_AntselStatistics_88C(
 
 }
 
-void
+static void
 ODM_SetTxAntByTxInfo_88C_92D(
 	IN		PDM_ODM_T		pDM_Odm
 )
@@ -3871,7 +3871,7 @@ ODM_SetTxAntByTxInfo_88C_92D(
 
 }
 
-void
+static void
 odm_HwAntDiv_92C_92D(
 	IN	PDM_ODM_T	pDM_Odm
 )
@@ -4223,7 +4223,7 @@ ODM_SingleDualAntennaDefaultSetting(
 //2 8723A ANT DETECT
 
 
-void
+static void
 odm_PHY_SaveAFERegisters(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	u32 *		AFEReg,
@@ -4239,7 +4239,7 @@ odm_PHY_SaveAFERegisters(
 	}
 }
 
-void
+static void
 odm_PHY_ReloadAFERegisters(
 	IN	PDM_ODM_T	pDM_Odm,
 	IN	u32 *		AFEReg,

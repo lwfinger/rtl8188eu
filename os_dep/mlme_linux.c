@@ -105,7 +105,7 @@ if (adapter->registrypriv.mp_mode == 1)
 }
 
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
-void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
+static void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 {
 	struct adapter *adapter = (struct adapter *)FunctionContext;
 	rtw_set_scan_deny_timer_hdl(adapter);

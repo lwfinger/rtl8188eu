@@ -1542,9 +1542,9 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 			}
 		}
 		else {
-			if (((*((unsigned short *)(skb->data+ETH_ALEN*2)) == __constant_htons(ETH_P_IP)) &&
+			if (((*((__be16 *)(skb->data+ETH_ALEN*2)) == __constant_htons(ETH_P_IP)) &&
 					!memcmp(priv->br_ip, skb->data+ETH_HLEN+16, 4)) ||
-				((*((unsigned short *)(skb->data+ETH_ALEN*2)) == __constant_htons(ETH_P_ARP)) &&
+				((*((__be16 *)(skb->data+ETH_ALEN*2)) == __constant_htons(ETH_P_ARP)) &&
 					!memcmp(priv->br_ip, skb->data+ETH_HLEN+24, 4))) {
 				// for traffic to upper TCP/IP
 				retval = nat25_db_handle(priv, skb, NAT25_LOOKUP);
@@ -1554,9 +1554,9 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 		if (is_vlan_tag) {
 			skb_push(skb, 4);
 			for (i=0; i<6; i++)
-				*((unsigned short *)(skb->data+i*2)) = *((unsigned short *)(skb->data+4+i*2));
-			*((unsigned short *)(skb->data+ETH_ALEN*2)) = __constant_htons(ETH_P_8021Q);
-			*((unsigned short *)(skb->data+ETH_ALEN*2+2)) = vlan_hdr;
+				*((__be16 *)(skb->data+i*2)) = *((unsigned short *)(skb->data+4+i*2));
+			*((__be16 *)(skb->data+ETH_ALEN*2)) = __constant_htons(ETH_P_8021Q);
+			*((__be16 *)(skb->data+ETH_ALEN*2+2)) = vlan_hdr;
 		}
 
 		if(retval == -1) {

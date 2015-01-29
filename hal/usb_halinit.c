@@ -4326,7 +4326,7 @@ void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rssi_level
 }
 
 
-void SetBeaconRelatedRegisters8188EUsb(struct adapter *padapter)
+static void SetBeaconRelatedRegisters8188EUsb(struct adapter *padapter)
 {
 	u32	value32;
 	//HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);

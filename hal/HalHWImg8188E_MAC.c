@@ -57,7 +57,7 @@ CheckCondition(
 *                           MAC_REG.TXT
 ******************************************************************************/
 
-u32 Array_MAC_REG_8188E[] = {
+static u32 Array_MAC_REG_8188E[] = {
 		0x026, 0x00000041,
 		0x027, 0x00000035,
 	0xFF0F0718, 0xABCD,
@@ -333,7 +333,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 *                           MAC_REG_ICUT.TXT
 ******************************************************************************/
 
-u32 Array_MP_8188E_MAC_REG_ICUT[] = {
+static u32 Array_MP_8188E_MAC_REG_ICUT[] = {
 		0x026, 0x00000041,
 		0x027, 0x00000035,
 		0x428, 0x0000000A,

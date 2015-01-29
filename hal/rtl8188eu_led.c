@@ -22,6 +22,8 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <rtl8188e_hal.h>
+#include <rtw_led.h>
+#include <rtl8188e_led.h>
 
 //================================================================================
 // LED object.

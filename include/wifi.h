@@ -280,8 +280,8 @@ enum WIFI_REG_DOMAIN {
 
 #define SetFrameType(pbuf, type)	\
 	do {	\
-		*(unsigned short *)(pbuf) &= __constant_cpu_to_le16(~(BIT(3) | BIT(2))); \
-		*(unsigned short *)(pbuf) |= __constant_cpu_to_le16(type); \
+		*(__le16 *)(pbuf) &= __constant_cpu_to_le16(~(BIT(3) | BIT(2))); \
+		*(__le16 *)(pbuf) |= __constant_cpu_to_le16(type); \
 	} while (0)
 
 #define GetFrameSubType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) |\
@@ -597,7 +597,7 @@ __inline static int IsFrameTypeCtrl(unsigned char *pframe)
  */
 struct rtw_ieee80211_bar {
 	__le16 frame_control;
-	u8 duration;
+	__le16 duration;
 	u8 ra[6];
 	u8 ta[6];
 	__le16 control;
@@ -646,7 +646,7 @@ struct HT_caps_element {
 			u8	AMPDU_para;
 			u8	MCS_rate[16];
 			__le16	HT_ext_caps;
-			__le32	Beamforming_caps;
+			__le16	Beamforming_caps;
 			u8	ASEL_caps;
 		} HT_cap_element;
 		u8 HT_cap[26];

@@ -6168,33 +6168,33 @@ static int rtw_p2p_get(struct net_device *dev,
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 
 	if ( padapter->bShowGetP2PState )
-		DBG_871X( "[%s] extra = %s\n", __FUNCTION__, (char *)wrqu->data.pointer );
+		DBG_871X( "[%s] extra = %s\n", __FUNCTION__, (__force char *)wrqu->data.pointer );
 
-	if ( _rtw_memcmp( wrqu->data.pointer, "status", 6 ) ) {
+	if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "status", 6 ) ) {
 		rtw_p2p_get_status( dev, info, wrqu, extra );
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "role", 4 ) ) {
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "role", 4 ) ) {
 		rtw_p2p_get_role( dev, info, wrqu, extra);
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "peer_ifa", 8 ) ) {
-		rtw_p2p_get_peer_ifaddr( dev, info, wrqu, extra);
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "req_cm", 6 ) ) {
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "peer_ifa", 8 ) ) {
+		rtw_p2p_get_peer_ifaddr(dev, info, wrqu, extra);
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "req_cm", 6 ) ) {
 		rtw_p2p_get_req_cm( dev, info, wrqu, extra);
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "peer_deva", 9 ) ) {
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "peer_deva", 9 ) ) {
 		//	Get the P2P device address when receiving the provision discovery request frame.
-		rtw_p2p_get_peer_devaddr( dev, info, wrqu, extra);
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "group_id", 8 ) ) {
+		rtw_p2p_get_peer_devaddr((__force void *)dev, info, wrqu, extra);
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "group_id", 8 ) ) {
 		rtw_p2p_get_groupid( dev, info, wrqu, extra);
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "inv_peer_deva", 13 ) ) {
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "inv_peer_deva", 13 ) ) {
 		//	Get the P2P device address when receiving the P2P Invitation request frame.
 		rtw_p2p_get_peer_devaddr_by_invitation( dev, info, wrqu, extra);
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "op_ch", 5 ) ) {
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "op_ch", 5 ) ) {
 		rtw_p2p_get_op_ch( dev, info, wrqu, extra);
 	}
 #ifdef CONFIG_WFD
-	else if ( _rtw_memcmp( wrqu->data.pointer, "peer_port", 9 ) ) {
+	else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "peer_port", 9 ) ) {
 		rtw_p2p_get_peer_wfd_port( dev, info, wrqu, extra );
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "wfd_sa", 6 ) ) {
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "wfd_sa", 6 ) ) {
 		rtw_p2p_get_peer_wfd_session_available( dev, info, wrqu, extra );
-	} else if ( _rtw_memcmp( wrqu->data.pointer, "wfd_pc", 6 ) ) {
+	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "wfd_pc", 6 ) ) {
 		rtw_p2p_get_peer_wfd_preferred_connection( dev, info, wrqu, extra );
 	}
 #endif // CONFIG_WFD
@@ -10354,25 +10354,23 @@ static int rtw_tdls_get(struct net_device *dev,
 
 #ifdef CONFIG_WFD
 
-	DBG_871X( "[%s] extra = %s\n", __FUNCTION__, (char*) wrqu->data.pointer );
+	DBG_871X( "[%s] extra = %s\n", __FUNCTION__, (__force char *)wrqu->data.pointer );
 
-	if ( _rtw_memcmp( wrqu->data.pointer, "ip", 2 ) )
+	if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "ip", 2 ) )
 	{
 		rtw_tdls_getip( dev, info, wrqu, extra );
 	}
-	if ( _rtw_memcmp( wrqu->data.pointer, "port", 4 ) )
+	if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "port", 4 ) )
 	{
 		rtw_tdls_getport( dev, info, wrqu, extra );
 	}
 	//WFDTDLS, for sigma test
-	if ( _rtw_memcmp( wrqu->data.pointer, "dis", 3 ) )
+	if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "dis", 3 ) )
 	{
 		rtw_tdls_dis_result( dev, info, wrqu, extra );
 	}
-	if ( _rtw_memcmp(wrqu->data.pointer, "status", 6 ) )
-	{
+	if (_rtw_memcmp((__force void *)wrqu->data.pointer, "status", 6))
 		rtw_wfd_tdls_status( dev, info, wrqu, extra );
-	}
 
 #endif //CONFIG_WFD
 
