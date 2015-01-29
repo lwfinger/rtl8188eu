@@ -25,7 +25,6 @@
 #include <recv_osdep.h>
 #include <cmd_osdep.h>
 #include <mlme_osdep.h>
-#include <rtw_byteorder.h>
 #ifdef CONFIG_BR_EXT
 #include <rtw_br_ext.h>
 #endif //CONFIG_BR_EXT

@@ -22,7 +22,6 @@
 
 #include <drv_conf.h>
 #include <basic_types.h>
-//#include <rtl871x_byteorder.h>
 
 #define _FAIL		0
 #define _SUCCESS	1
@@ -45,7 +44,6 @@
 	#include <linux/skbuff.h>
 	#include <linux/circ_buf.h>
 	#include <asm/uaccess.h>
-	#include <asm/byteorder.h>
 	#include <asm/atomic.h>
 	#include <asm/io.h>
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
@@ -360,8 +358,6 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 	netif_stop_queue(pnetdev);
 #endif
 }
-
-#include <rtw_byteorder.h>
 
 #ifndef BIT
 	#define BIT(x)	( 1 << (x))

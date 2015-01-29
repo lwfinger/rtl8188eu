@@ -25,7 +25,6 @@
 
 #include <if_ether.h>
 #include <ip.h>
-#include <rtw_byteorder.h>
 #include <wifi.h>
 #include <mlme_osdep.h>
 #include <xmit_osdep.h>

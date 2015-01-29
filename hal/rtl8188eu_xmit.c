@@ -21,7 +21,6 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-#include <rtw_byteorder.h>
 #include <wifi.h>
 #include <osdep_intf.h>
 #include <circ_buf.h>

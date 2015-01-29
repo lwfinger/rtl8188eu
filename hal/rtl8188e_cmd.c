@@ -25,7 +25,6 @@
 #include <recv_osdep.h>
 #include <cmd_osdep.h>
 #include <mlme_osdep.h>
-#include <rtw_byteorder.h>
 #include <circ_buf.h>
 #include <rtw_ioctl_set.h>
 
