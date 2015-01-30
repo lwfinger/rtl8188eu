@@ -525,7 +525,7 @@ Efuse_PgPacketWrite(IN	struct adapter *pAdapter,
 }
 
 
-int
+static int
 Efuse_PgPacketWrite_BT(IN	struct adapter *pAdapter,
 					IN	u8			offset,
 					IN	u8			word_en,

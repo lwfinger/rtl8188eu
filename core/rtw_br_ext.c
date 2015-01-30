@@ -29,22 +29,10 @@
 #include <net/ip6_checksum.h>
 #endif
 
-#if 1	// rtw_wifi_driver
 #include <drv_conf.h>
 #include <drv_types.h>
 #include "rtw_br_ext.h"
-#else	// rtw_wifi_driver
-#include "./8192cd_cfg.h"
-
-#ifndef __KERNEL__
-#include "./sys-support.h"
-#endif
-
-#include "./8192cd.h"
-#include "./8192cd_headers.h"
-#include "./8192cd_br_ext.h"
-#include "./8192cd_debug.h"
-#endif	// rtw_wifi_driver
+#include <usb_osintf.h>
 
 #ifdef CL_IPV6_PASS
 #ifdef __KERNEL__
@@ -99,7 +87,7 @@ static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, un
 			return cur_ptr;
 		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
 	}
-	return 0;
+	return NULL;
 }
 
 
@@ -1296,7 +1284,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						unsigned short tagType, tagLen;
 						int offset=0;
 
-						if((ptr = __nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID))) == 0) {
+						if((ptr = __nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID))) == NULL) {
 							DEBUG_ERR("Fail to find PTT_RELAY_SID in FADO!\n");
 							return -1;
 						}

@@ -67,7 +67,6 @@
 
 extern u8 key_2char2num(u8 hch, u8 lch);
 extern u8 str_2char2num(u8 hch, u8 lch);
-extern u8 convert_ip_addr(u8 hch, u8 mch, u8 lch);
 
 static u32 rtw_rates[] = {1000000,2000000,5500000,11000000,
 	6000000,9000000,12000000,18000000,24000000,36000000,48000000,54000000};

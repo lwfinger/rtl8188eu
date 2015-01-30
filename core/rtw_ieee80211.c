@@ -1933,7 +1933,7 @@ int ieee80211_get_hdrlen(u16 fc)
 	return hdrlen;
 }
 
-int rtw_get_cipher_info(struct wlan_network *pnetwork)
+static int rtw_get_cipher_info(struct wlan_network *pnetwork)
 {
 	u32 wpa_ielen;
 	unsigned char *pbuf;

@@ -32,6 +32,9 @@
 //void usb_dvobj_deinit(struct adapter * adapter);
 
 u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, RT_USB_BREQUEST brequest, RT_USB_WVALUE wvalue, u8 windex, void* data, u8 datalen, u8 isdirectionin);
-
+void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb);
+int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method);
+int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb);
+void nat25_db_expire(struct adapter *priv);
 
 #endif

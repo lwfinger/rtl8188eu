@@ -281,7 +281,7 @@ exit:
 		rtw_mfree2d((void *)eFuseWord, EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
 }
 
-void efuse_read_phymap_from_txpktbuf(
+static void efuse_read_phymap_from_txpktbuf(
 	struct adapter *adapter,
 	int bcnhead,	//beacon head, where FW store len(2-byte) and efuse physical map.
 	u8 *content,	//buffer to store efuse physical map
@@ -433,7 +433,7 @@ static s32 iol_ioconfig(
 	return rst;
 }
 
-int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms,u32 bndy_cnt)
+static int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms,u32 bndy_cnt)
 {
 
 	u32 start_time = rtw_get_current_time();
@@ -704,7 +704,7 @@ exit:
 	return ret;
 }
 
-void _MCUIO_Reset88E(struct adapter *padapter,u8 bReset)
+static void _MCUIO_Reset88E(struct adapter *padapter,u8 bReset)
 {
 	u8 u1bTmp;
 
@@ -1506,76 +1506,74 @@ rtl8188e_ReadEFuse(
 }
 
 //Do not support BT
-void
-Hal_EFUSEGetEfuseDefinition88E(
+static void Hal_EFUSEGetEfuseDefinition88E(
 	IN		struct adapter *pAdapter,
 	IN		u8		efuseType,
 	IN		u8		type,
 	OUT		void *		pOut
 	)
 {
-	switch(type)
-	{
-		case TYPE_EFUSE_MAX_SECTION:
-			{
-				u8*	pMax_section;
-				pMax_section = (u8*)pOut;
-				*pMax_section = EFUSE_MAX_SECTION_88E;
-			}
-			break;
-		case TYPE_EFUSE_REAL_CONTENT_LEN:
-			{
-				u16* pu2Tmp;
-				pu2Tmp = (u16*)pOut;
-				*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
-			}
-			break;
-		case TYPE_EFUSE_CONTENT_LEN_BANK:
-			{
-				u16* pu2Tmp;
-				pu2Tmp = (u16*)pOut;
-				*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
-			}
-			break;
-		case TYPE_AVAILABLE_EFUSE_BYTES_BANK:
-			{
-				u16* pu2Tmp;
-				pu2Tmp = (u16*)pOut;
-				*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
-			}
-			break;
-		case TYPE_AVAILABLE_EFUSE_BYTES_TOTAL:
-			{
-				u16* pu2Tmp;
-				pu2Tmp = (u16*)pOut;
-				*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
-			}
-			break;
-		case TYPE_EFUSE_MAP_LEN:
-			{
-				u16* pu2Tmp;
-				pu2Tmp = (u16*)pOut;
-				*pu2Tmp = (u16)EFUSE_MAP_LEN_88E;
-			}
-			break;
-		case TYPE_EFUSE_PROTECT_BYTES_BANK:
-			{
-				u8* pu1Tmp;
-				pu1Tmp = (u8*)pOut;
-				*pu1Tmp = (u8)(EFUSE_OOB_PROTECT_BYTES_88E);
-			}
-			break;
-		default:
-			{
-				u8* pu1Tmp;
-				pu1Tmp = (u8*)pOut;
-				*pu1Tmp = 0;
-			}
-			break;
+	switch(type) {
+	case TYPE_EFUSE_MAX_SECTION:
+		{
+			u8*	pMax_section;
+			pMax_section = (u8*)pOut;
+			*pMax_section = EFUSE_MAX_SECTION_88E;
+		}
+		break;
+	case TYPE_EFUSE_REAL_CONTENT_LEN:
+		{
+			u16* pu2Tmp;
+			pu2Tmp = (u16*)pOut;
+			*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
+		}
+		break;
+	case TYPE_EFUSE_CONTENT_LEN_BANK:
+		{
+			u16* pu2Tmp;
+			pu2Tmp = (u16*)pOut;
+			*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
+		}
+		break;
+	case TYPE_AVAILABLE_EFUSE_BYTES_BANK:
+		{
+			u16* pu2Tmp;
+			pu2Tmp = (u16*)pOut;
+			*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+		}
+		break;
+	case TYPE_AVAILABLE_EFUSE_BYTES_TOTAL:
+		{
+			u16* pu2Tmp;
+			pu2Tmp = (u16*)pOut;
+			*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+		}
+		break;
+	case TYPE_EFUSE_MAP_LEN:
+		{
+			u16* pu2Tmp;
+			pu2Tmp = (u16*)pOut;
+			*pu2Tmp = (u16)EFUSE_MAP_LEN_88E;
+		}
+		break;
+	case TYPE_EFUSE_PROTECT_BYTES_BANK:
+		{
+			u8* pu1Tmp;
+			pu1Tmp = (u8*)pOut;
+			*pu1Tmp = (u8)(EFUSE_OOB_PROTECT_BYTES_88E);
+		}
+		break;
+	default:
+		{
+			u8* pu1Tmp;
+			pu1Tmp = (u8*)pOut;
+			*pu1Tmp = 0;
+		}
+		break;
 	}
 }
-void
-Hal_EFUSEGetEfuseDefinition_Pseudo88E(
+
+static void Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 	IN		struct adapter *pAdapter,
 	IN		u8			efuseType,
 	IN		u8			type,
@@ -2669,7 +2667,8 @@ static void rtl8188e_read_chip_version(struct adapter *padapter)
 {
 	ReadChipVersion8188E(padapter);
 }
-void rtl8188e_GetHalODMVar(
+
+static void rtl8188e_GetHalODMVar(
 	struct adapter *			Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
@@ -2684,7 +2683,8 @@ void rtl8188e_GetHalODMVar(
 			break;
 	}
 }
-void rtl8188e_SetHalODMVar(
+
+static void rtl8188e_SetHalODMVar(
 	struct adapter *			Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
@@ -2732,7 +2732,7 @@ void rtl8188e_stop_thread(struct adapter *padapter)
 {
 }
 
-void hal_notch_filter_8188e(struct adapter *adapter, bool enable)
+static void hal_notch_filter_8188e(struct adapter *adapter, bool enable)
 {
 	if (enable) {
 		DBG_871X("Enable notch filter\n");
@@ -2742,6 +2742,7 @@ void hal_notch_filter_8188e(struct adapter *adapter, bool enable)
 		rtw_write8(adapter, rOFDM0_RxDSP+1, rtw_read8(adapter, rOFDM0_RxDSP+1) & ~BIT1);
 	}
 }
+
 void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc)
 {
 	pHalFunc->free_hal_data = &rtl8188e_free_hal_data;
@@ -2825,7 +2826,7 @@ u8 GetEEPROMSize8188E(struct adapter *padapter)
 // LLT R/W/Init function
 //
 //-------------------------------------------------------------------------
-s32 _LLTWrite(struct adapter *padapter, u32 address, u32 data)
+static s32 _LLTWrite(struct adapter *padapter, u32 address, u32 data)
 {
 	s32	status = _SUCCESS;
 	s32	count = 0;
@@ -2852,7 +2853,7 @@ s32 _LLTWrite(struct adapter *padapter, u32 address, u32 data)
 	return status;
 }
 
-u8 _LLTRead(struct adapter *padapter, u32 address)
+static u8 _LLTRead(struct adapter *padapter, u32 address)
 {
 	s32	count = 0;
 	u32	value = _LLT_INIT_ADDR(address) | _LLT_OP(_LLT_READ_ACCESS);

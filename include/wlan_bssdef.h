@@ -401,6 +401,7 @@ typedef struct _NDIS_802_11_CAPABILITY
 
 } NDIS_802_11_CAPABILITY, *PNDIS_802_11_CAPABILITY;
 #endif
+u8 convert_ip_addr(u8 hch, u8 mch, u8 lch);
 
 
 #endif //#ifndef WLAN_BSSDEF_H_

@@ -1971,42 +1971,27 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 
 u32	rtw_aes_decrypt(struct adapter *padapter, u8 *precvframe)
 {	// exclude ICV
-
-
-	/*static*/
-//	unsigned char	message[MAX_MSG_SIZE];
-
-
-	/* Intermediate Buffers */
-
-
-	sint		length;
+	int		length;
 	u8	*pframe,*prwskey;	//, *payload,*iv
 	struct	sta_info		*stainfo;
 	struct	rx_pkt_attrib	 *prxattrib = &((union recv_frame *)precvframe)->u.hdr.attrib;
 	struct	security_priv	*psecuritypriv=&padapter->securitypriv;
-//	struct	recv_priv		*precvpriv=&padapter->recvpriv;
 	u32	res=_SUCCESS;
 ;
 	pframe=(unsigned char *)((union recv_frame*)precvframe)->u.hdr.rx_data;
 	//4 start to encrypt each fragment
 	if((prxattrib->encrypt==_AES_)){
-
 		stainfo=rtw_get_stainfo(&padapter->stapriv ,&prxattrib->ta[0] );
 		if (stainfo!=NULL){
 			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("rtw_aes_decrypt: stainfo!=NULL!!!\n"));
 
-			if(IS_MCAST(prxattrib->ra))
-			{
+			if(IS_MCAST(prxattrib->ra)) {
 				static u32 start = 0;
 				static u32 no_gkey_bc_cnt = 0;
 				static u32 no_gkey_mc_cnt = 0;
 
 				//in concurrent we should use sw descrypt in group key, so we remove this message
-				//DBG_871X("rx bc/mc packets, to perform sw rtw_aes_decrypt\n");
-				//prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey;
-				if(psecuritypriv->binstallGrpkey==false)
-				{
+				if (!psecuritypriv->binstallGrpkey) {
 					res=_FAIL;
 
 					if (start == 0)
@@ -2039,54 +2024,25 @@ u32	rtw_aes_decrypt(struct adapter *padapter, u8 *precvframe)
 				no_gkey_mc_cnt = 0;
 
 				prwskey = psecuritypriv->dot118021XGrpKey[prxattrib->key_index].skey;
-				if(psecuritypriv->dot118021XGrpKeyid != prxattrib->key_index)
-				{
+				if(psecuritypriv->dot118021XGrpKeyid != prxattrib->key_index) {
 					DBG_871X("not match packet_index=%d, install_index=%d \n"
 					, prxattrib->key_index, psecuritypriv->dot118021XGrpKeyid);
 					res=_FAIL;
 					goto exit;
 				}
-			}
-			else
-			{
+			} else {
 				prwskey=&stainfo->dot118021x_UncstKey.skey[0];
 			}
 
 			length= ((union recv_frame *)precvframe)->u.hdr.len-prxattrib->hdrlen-prxattrib->iv_len;
-			/*// add for CONFIG_IEEE80211W, debug
-			if(0)
-			printk("@@@@@@@@@@@@@@@@@@ length=%d, prxattrib->hdrlen=%d, prxattrib->pkt_len=%d \n"
-			, length, prxattrib->hdrlen, prxattrib->pkt_len);
-			if(0)
-			{
-				int no;
-				//test print PSK
-				printk("PSK key below:\n");
-				for(no=0;no<16;no++)
-					printk(" %02x ", prwskey[no]);
-				printk("\n");
-			}
-			if(0)
-			{
-				int no;
-				//test print PSK
-				printk("frame:\n");
-				for(no=0;no<prxattrib->pkt_len;no++)
-					printk(" %02x ", pframe[no]);
-				printk("\n");
-			}*/
 
 			res= aes_decipher(prwskey,prxattrib->hdrlen,pframe, length);
-
-
-		}
-		else{
+		} else {
 			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("rtw_aes_encrypt: stainfo==NULL!!!\n"));
 			res=_FAIL;
 		}
 
 	}
-;
 exit:
 	return res;
 }

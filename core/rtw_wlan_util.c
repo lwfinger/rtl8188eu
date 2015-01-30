@@ -680,43 +680,29 @@ void read_cam(struct adapter *padapter ,u8 entry)
 void write_cam(struct adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *key)
 {
 	unsigned int	i, val, addr;
-	//unsigned int    cmd;
 	int j;
 	u32	cam_val[2];
 
 	addr = entry << 3;
 
-	for (j = 5; j >= 0; j--)
-	{
-		switch (j)
-		{
-			case 0:
-				val = (ctrl | (mac[0] << 16) | (mac[1] << 24) );
-				break;
-
-			case 1:
-				val = (mac[2] | ( mac[3] << 8) | (mac[4] << 16) | (mac[5] << 24));
-				break;
-
-			default:
-				i = (j - 2) << 2;
-				val = (key[i] | (key[i+1] << 8) | (key[i+2] << 16) | (key[i+3] << 24));
-				break;
-
+	for (j = 5; j >= 0; j--) {
+		switch (j) {
+		case 0:
+			val = (ctrl | (mac[0] << 16) | (mac[1] << 24) );
+			break;
+		case 1:
+			val = (mac[2] | ( mac[3] << 8) | (mac[4] << 16) | (mac[5] << 24));
+			break;
+		default:
+			i = (j - 2) << 2;
+			val = (key[i] | (key[i+1] << 8) | (key[i+2] << 16) | (key[i+3] << 24));
+			break;
 		}
 
 		cam_val[0] = val;
 		cam_val[1] = addr + (unsigned int)j;
 
 		rtw_hal_set_hwreg(padapter, HW_VAR_CAM_WRITE, (u8 *)cam_val);
-
-		//rtw_write32(padapter, WCAMI, val);
-
-		//cmd = CAM_POLLINIG | CAM_WRITE | (addr + j);
-		//rtw_write32(padapter, RWCAM, cmd);
-
-		//DBG_871X("%s=> cam write: %x, %x\n",__FUNCTION__, cmd, val);
-
 	}
 
 }
@@ -724,7 +710,6 @@ void write_cam(struct adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *key)
 void clear_cam_entry(struct adapter *padapter, u8 entry)
 {
 	unsigned char null_sta[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
 	unsigned char null_key[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,0x00, 0x00, 0x00, 0x00,0x00, 0x00, 0x00, 0x00};
 
 	write_cam(padapter, entry, 0, null_sta, null_key);
@@ -736,10 +721,8 @@ int allocate_fw_sta_entry(struct adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	for (mac_id = IBSS_START_MAC_ID; mac_id < NUM_STA; mac_id++)
-	{
-		if (pmlmeinfo->FW_sta_info[mac_id].status == 0)
-		{
+	for (mac_id = IBSS_START_MAC_ID; mac_id < NUM_STA; mac_id++) {
+		if (pmlmeinfo->FW_sta_info[mac_id].status == 0) {
 			pmlmeinfo->FW_sta_info[mac_id].status = 1;
 			pmlmeinfo->FW_sta_info[mac_id].retry = 0;
 			break;
@@ -759,14 +742,10 @@ void flush_all_cam_entry(struct adapter *padapter)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
 	//if(check_buddy_mlmeinfo_state(padapter, _HW_STATE_NOLINK_))
-	if(check_buddy_fwstate(padapter, _FW_LINKED) == false)
-	{
+	if(check_buddy_fwstate(padapter, _FW_LINKED) == false) {
 		rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, 0);
-	}
-	else
-	{
-		if(check_fwstate(pmlmepriv, WIFI_STATION_STATE))
-		{
+	} else {
+		if(check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
 			struct sta_priv	*pstapriv = &padapter->stapriv;
 			struct sta_info	*psta;
 			u8 cam_id;//cam_entry
@@ -784,9 +763,7 @@ void flush_all_cam_entry(struct adapter *padapter)
 				//clear_cam_entry(padapter, cam_id);
 				rtw_clearstakey_cmd(padapter, (u8*)psta, cam_id, false);
 			}
-		}
-		else if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
-		{
+		} else if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 			//clear cam when ap free per sta_info
 		}
 	}
@@ -796,8 +773,7 @@ void flush_all_cam_entry(struct adapter *padapter)
 
 #endif //CONFIG_CONCURRENT_MODE
 
-	_rtw_memset((u8 *)(pmlmeinfo->FW_sta_info), 0, sizeof(pmlmeinfo->FW_sta_info));
-
+	memset((u8 *)(pmlmeinfo->FW_sta_info), 0, sizeof(pmlmeinfo->FW_sta_info));
 }
 
 #if defined(CONFIG_P2P) && defined(CONFIG_WFD)

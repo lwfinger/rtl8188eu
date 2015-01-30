@@ -122,10 +122,7 @@ DeInitLed871x(
 
 #define CONFIG_LED_REMOVE_HAL
 
-void
-SwLedBlink(
-	PLED_871x			pLed
-	)
+static void SwLedBlink(PLED_871x pLed)
 {
 	struct adapter			*padapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -240,10 +237,7 @@ SwLedBlink(
 	}
 }
 
-void
-SwLedBlink1(
-	PLED_871x			pLed
-	)
+static void SwLedBlink1(PLED_871x pLed)
 {
 	struct adapter				*padapter = pLed->padapter;
 #ifndef CONFIG_LED_REMOVE_HAL
@@ -449,13 +443,9 @@ SwLedBlink1(
 		default:
 			break;
 	}
-
 }
 
-void
-SwLedBlink2(
-	PLED_871x			pLed
-	)
+static void SwLedBlink2(PLED_871x pLed)
 {
 	struct adapter				*padapter = pLed->padapter;
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
@@ -574,10 +564,7 @@ SwLedBlink2(
 
 }
 
-void
-SwLedBlink3(
-	PLED_871x			pLed
-	)
+static void SwLedBlink3(PLED_871x pLed)
 {
 	struct adapter			*padapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -741,14 +728,9 @@ SwLedBlink3(
 		default:
 			break;
 	}
-
 }
 
-
-void
-SwLedBlink4(
-	PLED_871x			pLed
-	)
+static void SwLedBlink4(PLED_871x pLed)
 {
 	struct adapter			*padapter = pLed->padapter;
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
@@ -940,14 +922,9 @@ SwLedBlink4(
 	}
 
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("SwLedBlink4 CurrLedState %d\n", pLed->CurrLedState));
-
-
 }
 
-void
-SwLedBlink5(
-	PLED_871x			pLed
-	)
+static void SwLedBlink5(PLED_871x pLed)
 {
 	struct adapter			*padapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -1058,14 +1035,9 @@ SwLedBlink5(
 	}
 
 	RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("SwLedBlink5 CurrLedState %d\n", pLed->CurrLedState));
-
-
 }
 
-void
-SwLedBlink6(
-	PLED_871x			pLed
-	)
+static void SwLedBlink6(PLED_871x pLed)
 {
 	struct adapter			*padapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);

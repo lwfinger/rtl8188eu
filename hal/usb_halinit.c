@@ -109,7 +109,7 @@ static BOOLEAN HalUsbSetQueuePipeMapping8188EUsb(
 
 }
 
-void rtl8188eu_interface_configure(struct adapter *padapter)
+static void rtl8188eu_interface_configure(struct adapter *padapter)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
@@ -985,8 +985,7 @@ InitUsbAggregationSetting(
 	// 201/12/10 MH Add for USB agg mode dynamic switch.
 	pHalData->UsbRxHighSpeedMode = false;
 }
-void
-HalRxAggr8188EUsb(
+static void HalRxAggr8188EUsb(
 	IN  struct adapter *Adapter,
 	IN BOOLEAN	Value
 	)
@@ -1012,8 +1011,7 @@ HalRxAggr8188EUsb(
  *	12/10/2010	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-void
-USB_AggModeSwitch(
+static void USB_AggModeSwitch(
 	IN	struct adapter *		Adapter
 	)
 {
@@ -1235,7 +1233,7 @@ rt_rf_power_state RfOnOffDetect(IN	struct adapter *pAdapter )
 
 void _ps_open_RF(struct adapter *padapter);
 
-u32 rtl8188eu_hal_init(struct adapter *Adapter)
+static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 {
 	u8	value8 = 0;
 	u16  value16;
@@ -1740,13 +1738,7 @@ void _ps_open_RF(struct adapter *padapter) {
 	//phy_SsPwrSwitch92CU(padapter, rf_on, 1);
 }
 
-void _ps_close_RF(struct adapter *padapter){
-	//here call with bRegSSPwrLvl 1, bRegSSPwrLvl 2 needs to be verified
-	//phy_SsPwrSwitch92CU(padapter, rf_off, 1);
-}
-
-
-void hal_poweroff_rtl8188eu(
+static void hal_poweroff_rtl8188eu(
 	IN	struct adapter *		Adapter
 )
 {
@@ -1836,7 +1828,7 @@ static void rtl8188eu_hw_power_down(struct adapter *padapter)
 	rtw_write16(padapter, REG_APS_FSMCO, 0x8812);
 }
 
-u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
+static u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
  {
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(Adapter);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1851,7 +1843,6 @@ u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
 	DBG_8192C("bkeepfwalive(%x)\n", pwrctl->bkeepfwalive);
 	if(pwrctl->bkeepfwalive)
 	{
-		_ps_close_RF(Adapter);
 		if((pwrctl->bHWPwrPindetect) && (pwrctl->bHWPowerdown))
 			rtl8188eu_hw_power_down(Adapter);
 	}
@@ -1870,7 +1861,7 @@ u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
  }
 
 
-unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
+static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 {
 	u8 i;
 	struct recv_buf *precvbuf;
@@ -1934,7 +1925,7 @@ exit:
 
 }
 
-unsigned int rtl8188eu_inirp_deinit(struct adapter *Adapter)
+static unsigned int rtl8188eu_inirp_deinit(struct adapter *Adapter)
 {
 	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit \n"));
 
@@ -2378,7 +2369,8 @@ static void ResumeTxBeacon(struct adapter *padapter)
 	pHalData->RegReg542 |= BIT0;
 	rtw_write8(padapter, REG_TBTT_PROHIBIT+2, pHalData->RegReg542);
 }
-void UpdateInterruptMask8188EU(struct adapter *padapter,u8 bHIMR0 ,u32 AddMSR, u32 RemoveMSR)
+
+static void UpdateInterruptMask8188EU(struct adapter *padapter,u8 bHIMR0 ,u32 AddMSR, u32 RemoveMSR)
 {
 	HAL_DATA_TYPE *pHalData;
 
@@ -2995,7 +2987,7 @@ static void hw_var_set_mlme_join(struct adapter *Adapter, u8 variable, u8* val)
 #endif
 }
 
-void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
+static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -3838,7 +3830,7 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 ;
 }
 
-void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
+static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
@@ -3927,8 +3919,7 @@ void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 //	Description:
 //		Query setting of specified variable.
 //
-u8
-GetHalDefVar8188EUsb(
+static u8 GetHalDefVar8188EUsb(
 	IN	struct adapter *			Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
 	IN	void *					pValue
@@ -4074,8 +4065,7 @@ GetHalDefVar8188EUsb(
 //	Description:
 //		Change default setting of specified variable.
 //
-u8
-SetHalDefVar8188EUsb(
+static u8 SetHalDefVar8188EUsb(
 	IN	struct adapter *			Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
 	IN	void *					pValue
@@ -4167,7 +4157,7 @@ u32  _update_92cu_basic_rate(struct adapter *padapter, unsigned int mask)
 	return BrateCfg;
 }
 */
-void _update_response_rate(struct adapter *padapter,unsigned int mask)
+static void _update_response_rate(struct adapter *padapter,unsigned int mask)
 {
 	u8	RateIndex = 0;
 	// Set RRSR rate table.
@@ -4183,7 +4173,7 @@ void _update_response_rate(struct adapter *padapter,unsigned int mask)
 	rtw_write8(padapter, REG_INIRTS_RATE_SEL, RateIndex);
 }
 
-void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rssi_level)
+static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rssi_level)
 {
 	//volatile unsigned int result;
 	u8	init_rate=0;

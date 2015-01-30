@@ -485,17 +485,6 @@ s32 mp_start_test(struct adapter *padapter);
 void mp_stop_test(struct adapter *padapter);
 
 //=======================================================================
-//void	IQCalibrateBcut(struct adapter *pAdapter);
-
-//u32	bb_reg_read(struct adapter *Adapter, u16 offset);
-//u8	bb_reg_write(struct adapter *Adapter, u16 offset, u32 value);
-//u32	rf_reg_read(struct adapter *Adapter, u8 path, u8 offset);
-//u8	rf_reg_write(struct adapter *Adapter, u8 path, u8 offset, u32 value);
-
-//u32	get_bb_reg(struct adapter *Adapter, u16 offset, u32 bitmask);
-//u8	set_bb_reg(struct adapter *Adapter, u16 offset, u32 bitmask, u32 value);
-//u32	get_rf_reg(struct adapter *Adapter, u8 path, u8 offset, u32 bitmask);
-//u8	set_rf_reg(struct adapter *Adapter, u8 path, u8 offset, u32 bitmask, u32 value);
 
 u32 _read_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 bitmask);
 void _write_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
@@ -504,7 +493,7 @@ u32 read_macreg(struct adapter *padapter, u32 addr, u32 sz);
 void write_macreg(struct adapter *padapter, u32 addr, u32 val, u32 sz);
 u32 read_bbreg(struct adapter *padapter, u32 addr, u32 bitmask);
 void write_bbreg(struct adapter *padapter, u32 addr, u32 bitmask, u32 val);
-u32 read_rfreg(struct adapter *padapter, u8 rfpath, u32 addr);
+u32 read_rfreg(struct adapter *padapter, RF_RADIO_PATH_E rfpath, u32 addr);
 void write_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 val);
 
 void	SetChannel(struct adapter *pAdapter);

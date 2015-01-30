@@ -119,7 +119,7 @@ extern void autosuspend_enter(struct adapter* padapter);
 extern int autoresume_enter(struct adapter* padapter);
 #endif
 
-bool rtw_pwr_unassociated_idle(struct adapter *adapter)
+static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 {
 	struct adapter *buddy = adapter->pbuddy_adapter;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
@@ -328,7 +328,7 @@ exit:
 	return;
 }
 
-void pwr_state_check_handler(void *FunctionContext)
+static void pwr_state_check_handler(void *FunctionContext)
 {
 	struct adapter *padapter = (struct adapter *)FunctionContext;
 	rtw_ps_cmd(padapter);

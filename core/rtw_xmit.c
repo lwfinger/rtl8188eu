@@ -28,6 +28,7 @@
 #include <ip.h>
 #include <usb_ops.h>
 #include "rtw_br_ext.h"
+#include <usb_osintf.h>
 
 static u8 P802_1H_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0xf8 };
 static u8 RFC1042_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0x00 };
@@ -2984,7 +2985,6 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
 	_irqL irqL;
 	//if(check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true)
 	{
-		void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb);
 		int res, is_vlan_tag=0, i, do_nat25=1;
 		unsigned short vlan_hdr=0;
 		void *br_port = NULL;
@@ -3052,7 +3052,6 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
 #endif // 1
 			if (do_nat25)
 			{
-				int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method);
 				if (nat25_db_handle(padapter, skb, NAT25_CHECK) == 0) {
 					struct sk_buff *newskb;
 

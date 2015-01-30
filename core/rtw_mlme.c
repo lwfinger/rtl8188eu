@@ -31,6 +31,7 @@
 #include <wifi.h>
 #include <wlan_bssdef.h>
 #include <rtw_ioctl_set.h>
+#include <usb_osintf.h>
 
 extern void indicate_wx_scan_complete_event(struct adapter *padapter);
 extern u8 rtw_do_join(struct adapter * padapter);
@@ -2468,7 +2469,6 @@ void rtw_dynamic_check_timer_handlder(struct adapter *adapter)
 		&& (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) == true) )
 	{
 		// expire NAT2.5 entry
-		void nat25_db_expire(struct adapter *priv);
 		nat25_db_expire(adapter);
 
 		if (adapter->pppoe_connection_in_progress > 0) {

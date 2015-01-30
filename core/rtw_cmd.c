@@ -2423,7 +2423,7 @@ exit:
 #endif
 
 #if (RATE_ADAPTIVE_SUPPORT==1)
-void rpt_timer_setting_wk_hdl(struct adapter *padapter, u16 minRptTime)
+static void rpt_timer_setting_wk_hdl(struct adapter *padapter, u16 minRptTime)
 {
 	rtw_hal_set_hwreg(padapter, HW_VAR_RPT_TIMER_SETTING, (u8 *)(&minRptTime));
 }
@@ -2466,7 +2466,7 @@ exit:
 #endif
 
 #ifdef CONFIG_ANTENNA_DIVERSITY
-void antenna_select_wk_hdl(struct adapter *padapter, u8 antenna)
+static void antenna_select_wk_hdl(struct adapter *padapter, u8 antenna)
 {
 	rtw_hal_set_hwreg(padapter, HW_VAR_ANTENNA_DIVERSITY_SELECT, (u8 *)(&antenna));
 }
@@ -2524,12 +2524,12 @@ void power_saving_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz)
 }
 
 //add for CONFIG_IEEE80211W, none 11w can use it
-void reset_securitypriv_hdl(struct adapter *padapter)
+static void reset_securitypriv_hdl(struct adapter *padapter)
 {
 	 rtw_reset_securitypriv(padapter);
 }
 
-void free_assoc_resources_hdl(struct adapter *padapter)
+static void free_assoc_resources_hdl(struct adapter *padapter)
 {
 	 rtw_free_assoc_resources(padapter, 1);
 }
@@ -2738,7 +2738,7 @@ exit:
 	return res;
 }
 
-s32 c2h_evt_hdl(struct adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter)
+static s32 c2h_evt_hdl(struct adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter)
 {
 	s32 ret = _FAIL;
 	u8 buf[16];

@@ -285,7 +285,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 
 // powerbase0 for OFDM rates
 // powerbase1 for HT MCS rates
-void getPowerBase88E(
+static void getPowerBase88E(
 	IN	struct adapter *Adapter,
 	IN	u8*			pPowerLevelOFDM,
 	IN	u8*			pPowerLevelBW20,
@@ -328,7 +328,7 @@ void getPowerBase88E(
 	}
 }
 
-void getTxPowerWriteValByRegulatory88E(
+static void getTxPowerWriteValByRegulatory88E(
 	IN		struct adapter *Adapter,
 	IN		u8			Channel,
 	IN		u8			index,
@@ -814,7 +814,7 @@ PHY_RF6052_Config8188E(
  * 11/20/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-u32
+static u32
 PHY_RFShadowRead(
 	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -825,7 +825,7 @@ PHY_RFShadowRead(
 }	/* PHY_RFShadowRead */
 
 
-void
+static void
 PHY_RFShadowWrite(
 	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -838,7 +838,7 @@ PHY_RFShadowWrite(
 }	/* PHY_RFShadowWrite */
 
 
-BOOLEAN
+static BOOLEAN
 PHY_RFShadowCompare(
 	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -864,7 +864,7 @@ PHY_RFShadowCompare(
 }	/* PHY_RFShadowCompare */
 
 
-void
+static void
 PHY_RFShadowRecorver(
 	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -887,7 +887,7 @@ PHY_RFShadowRecorver(
 }	/* PHY_RFShadowRecorver */
 
 
-void
+static void
 PHY_RFShadowCompareAll(
 	IN	struct adapter *		Adapter)
 {
@@ -905,7 +905,7 @@ PHY_RFShadowCompareAll(
 }	/* PHY_RFShadowCompareAll */
 
 
-void
+static void
 PHY_RFShadowRecorverAll(
 	IN	struct adapter *		Adapter)
 {
@@ -923,7 +923,7 @@ PHY_RFShadowRecorverAll(
 }	/* PHY_RFShadowRecorverAll */
 
 
-void
+static void
 PHY_RFShadowCompareFlagSet(
 	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -936,7 +936,7 @@ PHY_RFShadowCompareFlagSet(
 }	/* PHY_RFShadowCompareFlagSet */
 
 
-void
+static void
 PHY_RFShadowRecorverFlagSet(
 	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,
@@ -949,7 +949,7 @@ PHY_RFShadowRecorverFlagSet(
 }	/* PHY_RFShadowRecorverFlagSet */
 
 
-void
+static void
 PHY_RFShadowCompareFlagSetAll(
 	IN	struct adapter *		Adapter)
 {
@@ -971,7 +971,7 @@ PHY_RFShadowCompareFlagSetAll(
 }	/* PHY_RFShadowCompareFlagSetAll */
 
 
-void
+static void
 PHY_RFShadowRecorverFlagSetAll(
 	IN	struct adapter *		Adapter)
 {
@@ -992,7 +992,7 @@ PHY_RFShadowRecorverFlagSetAll(
 
 }	/* PHY_RFShadowCompareFlagSetAll */
 
-void
+static void
 PHY_RFShadowRefresh(
 	IN	struct adapter *		Adapter)
 {

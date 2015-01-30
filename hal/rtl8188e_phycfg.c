@@ -617,18 +617,9 @@ phy_RFSerialWrite(
 * Return:		u32			Readback value
 * Note:		This function is equal to "GetRFRegSetting" in PHY programming guide
 */
-u32
-rtl8188e_PHY_QueryRFReg(
-	IN	struct adapter *		Adapter,
-	IN	RF_RADIO_PATH_E	eRFPath,
-	IN	u32				RegAddr,
-	IN	u32				BitMask
-	)
+u32 rtl8188e_PHY_QueryRFReg(struct adapter *Adapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask)
 {
 	u32 Original_Value, Readback_Value, BitShift;
-	//HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-	//u8	RFWaitCounter = 0;
-	//_irqL	irqL;
 
 #if (DISABLE_BB_RF == 1)
 	return 0;
@@ -985,7 +976,7 @@ phy_ConfigBBWithParaFile(
 //****************************************
 // The following is for High Power PA
 //****************************************
-void
+static void
 phy_ConfigBBExternalPA(
 	IN	struct adapter *		Adapter
 )
@@ -1564,7 +1555,7 @@ rtl8188e_PHY_ConfigRFWithParaFile(
 //****************************************
 #define HighPowerRadioAArrayLen 22
 //This is for High power PA
-u32 Rtl8192S_HighPower_RadioA_Array[HighPowerRadioAArrayLen] = {
+static u32 Rtl8192S_HighPower_RadioA_Array[HighPowerRadioAArrayLen] = {
 0x013,0x00029ea4,
 0x013,0x00025e74,
 0x013,0x00020ea4,
@@ -1578,7 +1569,7 @@ u32 Rtl8192S_HighPower_RadioA_Array[HighPowerRadioAArrayLen] = {
 0x013,0x00000240,
 };
 
-int
+static int
 PHY_ConfigRFExternalPA(
 	IN	struct adapter *		Adapter,
 	RF_RADIO_PATH_E		eRFPath
@@ -1794,7 +1785,7 @@ exit:
  *
  * Note:		This function may be removed in the ASIC
  *---------------------------------------------------------------------------*/
-int
+static int
 PHY_CheckBBAndRFOK(
 	IN	struct adapter *		Adapter,
 	IN	HW90_BLOCK_E		CheckBlock,
@@ -1957,7 +1948,7 @@ phy_DbmToTxPwrIdx(
 //		current wireless mode.
 //	By Bruce, 2008-01-29.
 //
-int
+static int
 phy_TxPwrIdxToDbm(
 	IN	struct adapter *	Adapter,
 	IN	WIRELESS_MODE	WirelessMode,
@@ -2042,7 +2033,7 @@ PHY_GetTxPowerLevel8188E(
 	*powerlevel = TxPwrDbm;
 }
 
-void getTxPowerIndex88E(
+static void getTxPowerIndex88E(
 	IN	struct adapter *	Adapter,
 	IN	u8				channel,
 	IN OUT u8*			cckPowerLevel,
@@ -2140,7 +2131,7 @@ void getTxPowerIndex88E(
 	}
 }
 
-void phy_PowerIndexCheck88E(
+static void phy_PowerIndexCheck88E(
 	IN	struct adapter *Adapter,
 	IN	u8			channel,
 	IN OUT u8 *		cckPowerLevel,
@@ -2263,7 +2254,7 @@ PHY_UpdateTxPowerDbm8188E(
 */
 
 
-void
+static void
 rtl8192c_PHY_SetBeaconHwReg(
 	IN	struct adapter *	Adapter,
 	IN	u16			BeaconInterval
@@ -2535,8 +2526,7 @@ static void _PHY_SwChnl8192C(struct adapter *Adapter, u8 channel)
 
 }
 // <20130708, James> A workaround to eliminate the 2480MHz spur for 8188E I-Cut
-void
-phy_SpurCalibration_8188E(
+static void phy_SpurCalibration_8188E(
 	IN	struct adapter *		Adapter
 	)
 {
@@ -2882,8 +2872,7 @@ _PHY_DumpRFReg(IN	struct adapter *pAdapter)
 //		To dump all Tx FIFO LLT related link-list table.
 //		Added by Roger, 2009.03.10.
 //
-void
-DumpBBDbgPort_92CU(
+static void DumpBBDbgPort_92CU(
 	IN	struct adapter *		Adapter
 	)
 {

@@ -279,14 +279,14 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_write_reg(struct file *file, const char *buffer,
+	int proc_set_write_reg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_read_reg(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_read_reg(struct file *file, const char *buffer,
+	int proc_set_read_reg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 
@@ -384,7 +384,7 @@ extern u32 GlobalDebugLevel;
 	int proc_get_best_channel(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
-	int proc_set_best_channel(struct file *file, const char *buffer,
+	int proc_set_best_channel(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 #endif
 
@@ -392,7 +392,7 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_rx_signal(struct file *file, const char *buffer,
+	int proc_set_rx_signal(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 #ifdef CONFIG_80211N_HT
 
@@ -400,28 +400,28 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_ht_enable(struct file *file, const char *buffer,
+	int proc_set_ht_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_cbw40_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_cbw40_enable(struct file *file, const char *buffer,
+	int proc_set_cbw40_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_ampdu_enable(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_ampdu_enable(struct file *file, const char *buffer,
+	int proc_set_ampdu_enable(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 	int proc_get_rx_stbc(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_rx_stbc(struct file *file, const char *buffer,
+	int proc_set_rx_stbc(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 #endif //CONFIG_80211N_HT
 
@@ -433,7 +433,7 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_rssi_disp(struct file *file, const char *buffer,
+	int proc_set_rssi_disp(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 #ifdef CONFIG_BT_COEXIST
@@ -441,23 +441,23 @@ extern u32 GlobalDebugLevel;
 			  off_t offset, int count,
 			  int *eof, void *data);
 
-	int proc_set_btcoex_dbg(struct file *file, const char *buffer,
+	int proc_set_btcoex_dbg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
 #endif //CONFIG_BT_COEXIST
 
 #if defined(DBG_CONFIG_ERROR_DETECT)
 int proc_get_sreset(char *page, char **start, off_t offset, int count, int *eof, void *data);
-int proc_set_sreset(struct file *file, const char *buffer, unsigned long count, void *data);
+int proc_set_sreset(struct file *file, const char __user *buffer, unsigned long count, void *data);
 #endif /* DBG_CONFIG_ERROR_DETECT */
 
 int proc_get_odm_dbg_comp(char *page, char **start, off_t offset, int count, int *eof, void *data);
-int proc_set_odm_dbg_comp(struct file *file, const char *buffer, unsigned long count, void *data);
+int proc_set_odm_dbg_comp(struct file *file, const char __user *buffer, unsigned long count, void *data);
 int proc_get_odm_dbg_level(char *page, char **start, off_t offset, int count, int *eof, void *data);
-int proc_set_odm_dbg_level(struct file *file, const char *buffer, unsigned long count, void *data);
+int proc_set_odm_dbg_level(struct file *file, const char __user *buffer, unsigned long count, void *data);
 
 int proc_get_odm_adaptivity(char *page, char **start, off_t offset, int count, int *eof, void *data);
-int proc_set_odm_adaptivity(struct file *file, const char *buffer, unsigned long count, void *data);
+int proc_set_odm_adaptivity(struct file *file, const char __user *buffer, unsigned long count, void *data);
 
 #endif //CONFIG_PROC_DEBUG
 
