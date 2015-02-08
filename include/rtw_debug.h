@@ -171,12 +171,11 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 extern u32 GlobalDebugLevel;
 
 #define DRIVER_PREFIX	"R8188EU: "
-#define DEBUG_LEVEL	(_drv_err_)
 #if	defined (_dbgdump)
 	#undef DBG_871X_LEVEL
 	#define DBG_871X_LEVEL(level, fmt, arg...)     \
 	do {\
-		if (level <= DEBUG_LEVEL) {\
+		if (level <= GlobalDebugLevel) {\
 			if (level <= _drv_err_ && level > _drv_always_) \
 				_dbgdump(DRIVER_PREFIX"ERROR " fmt, ##arg);\
 			else \
