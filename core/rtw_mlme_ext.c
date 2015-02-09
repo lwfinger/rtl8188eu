@@ -3769,7 +3769,7 @@ static void issue_p2p_GO_confirm(struct adapter *padapter, u8* raddr, u8 result)
 	//	Type:
 	p2pie[ p2pielen++ ] = P2P_ATTR_CH_LIST;
 
-	*(u16*) ( p2pie + p2pielen ) = 6;
+	*(__le16 *) ( p2pie + p2pielen ) = cpu_to_le16(6);
 	p2pielen += 2;
 
 	//	Country String
