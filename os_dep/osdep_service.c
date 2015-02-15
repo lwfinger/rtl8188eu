@@ -35,12 +35,6 @@
 
 #define RT_TAG	'1178'
 
-#ifdef DBG_MEMORY_LEAK
-#include <asm/atomic.h>
-atomic_t _malloc_cnt = ATOMIC_INIT(0);
-atomic_t _malloc_size = ATOMIC_INIT(0);
-#endif /* DBG_MEMORY_LEAK */
-
 /*
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
 * @return: one of RTW_STATUS_CODE
@@ -83,13 +77,6 @@ inline u8* _rtw_vmalloc(u32 sz)
 {
 	u8	*pbuf;
 	pbuf = vmalloc(sz);
-#ifdef DBG_MEMORY_LEAK
-	if ( pbuf != NULL) {
-		atomic_inc(&_malloc_cnt);
-		atomic_add(sz, &_malloc_size);
-	}
-#endif /* DBG_MEMORY_LEAK */
-
 	return pbuf;
 }
 
@@ -105,10 +92,6 @@ inline u8* _rtw_zvmalloc(u32 sz)
 inline void _rtw_vmfree(u8 *pbuf, u32 sz)
 {
 	vfree(pbuf);
-#ifdef DBG_MEMORY_LEAK
-	atomic_dec(&_malloc_cnt);
-	atomic_sub(sz, &_malloc_size);
-#endif /* DBG_MEMORY_LEAK */
 }
 
 u8* _rtw_malloc(u32 sz)
@@ -123,15 +106,7 @@ u8* _rtw_malloc(u32 sz)
 #endif
 		pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 
-#ifdef DBG_MEMORY_LEAK
-	if ( pbuf != NULL) {
-		atomic_inc(&_malloc_cnt);
-		atomic_add(sz, &_malloc_size);
-	}
-#endif /* DBG_MEMORY_LEAK */
-
 	return pbuf;
-
 }
 
 
@@ -156,11 +131,6 @@ void	_rtw_mfree(u8 *pbuf, u32 sz)
 	else
 #endif
 		kfree(pbuf);
-#ifdef DBG_MEMORY_LEAK
-	atomic_dec(&_malloc_cnt);
-	atomic_sub(sz, &_malloc_size);
-#endif /* DBG_MEMORY_LEAK */
-
 }
 
 inline struct sk_buff *_rtw_skb_alloc(u32 sz)
