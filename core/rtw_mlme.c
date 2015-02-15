@@ -1214,9 +1214,6 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 #endif // CONFIG_P2P_PS
 
 	rtw_os_xmit_schedule(adapter);
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	dc_resume_xmit(adapter);
-#endif
 
 #ifdef CONFIG_DRVEXT_MODULE_WSC
 	drvext_surveydone_callback(&adapter->drvextpriv);
@@ -1876,10 +1873,6 @@ void rtw_joinbss_event_callback(struct adapter *adapter, u8 *pbuf)
 	mlmeext_joinbss_event_callback(adapter, pnetwork->join_res);
 
 	rtw_os_xmit_schedule(adapter);
-
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	dc_resume_xmit(adapter);
-#endif
 }
 
 static u8 search_max_mac_id(struct adapter *padapter)

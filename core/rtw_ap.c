@@ -1078,9 +1078,6 @@ static void start_bss_network(struct adapter *padapter, u8 *pbuf)
 
 	}
 #endif //CONFIG_80211N_HT
-#ifdef CONFIG_DUALMAC_CONCURRENT
-	dc_set_ap_channel_bandwidth(padapter, cur_channel, cur_ch_offset, cur_bwmode);
-#else
 	//TODO: need to judge the phy parameters on concurrent mode for single phy
 	//set_channel_bwmode(padapter, pmlmeext->cur_channel, pmlmeext->cur_ch_offset, pmlmeext->cur_bwmode);
 	set_channel_bwmode(padapter, cur_channel, cur_ch_offset, cur_bwmode);
@@ -1091,7 +1088,6 @@ static void start_bss_network(struct adapter *padapter, u8 *pbuf)
 	pmlmeext->cur_channel = cur_channel;
 	pmlmeext->cur_bwmode = cur_bwmode;
 	pmlmeext->cur_ch_offset = cur_ch_offset;
-#endif //CONFIG_DUALMAC_CONCURRENT
 	pmlmeext->cur_wireless_mode = pmlmepriv->cur_network.network_type;
 
 	//let pnetwork_mlmeext == pnetwork_mlme.
