@@ -241,19 +241,6 @@ int rtw_free_recvframe(union recv_frame *precvframe, _queue *pfree_recv_queue)
 	struct adapter *padapter=precvframe->u.hdr.adapter;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 
-;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if(padapter->adapter_type > PRIMARY_ADAPTER)
-	{
-		padapter = padapter->pbuddy_adapter;//get primary_padapter
-		precvpriv = &padapter->recvpriv;
-		pfree_recv_queue = &precvpriv->free_recv_queue;
-		precvframe->u.hdr.adapter = padapter;
-	}
-#endif
-
-
 	if(precvframe->u.hdr.pkt)
 	{
 #ifdef CONFIG_BSD_RX_USE_MBUF
@@ -625,10 +612,6 @@ static union recv_frame *decryptor(struct adapter *padapter,union recv_frame *pr
 
 	if((prxattrib->encrypt>0) && ((prxattrib->bdecrypted==0) ||(psecuritypriv->sw_decrypt==true)))
 	{
-
-#ifdef CONFIG_CONCURRENT_MODE
-		if(!IS_MCAST(prxattrib->ra))//bc/mc packets use sw decryption for concurrent mode
-#endif
 		psecuritypriv->hw_decrypted=false;
 
 		#ifdef DBG_RX_DECRYPTOR
@@ -3674,11 +3657,6 @@ void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
 		) {
 			goto set_timer;
 		}
-
-		#ifdef CONFIG_CONCURRENT_MODE
-		if (check_buddy_fwstate(adapter, _FW_UNDER_SURVEY) == true)
-			goto set_timer;
-		#endif
 
 		//update value of signal_strength, rssi, signal_qual
 		tmp_s = (avg_signal_strength+(_alpha-1)*recvpriv->signal_strength);

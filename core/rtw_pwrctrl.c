@@ -727,45 +727,10 @@ void LPS_Enter(struct adapter *padapter)
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct adapter *buddy = padapter->pbuddy_adapter;
 
-;
-
-//	DBG_871X("+LeisurePSEnter\n");
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->iface_type != IFACE_PORT0)
-		return; /* Skip power saving for concurrent mode port 1*/
-
-	/* consider buddy, if exist */
-	if (buddy) {
-		struct mlme_priv *b_pmlmepriv = &(buddy->mlmepriv);
-		#ifdef CONFIG_P2P
-		struct wifidirect_info *b_pwdinfo = &(buddy->wdinfo);
-		#ifdef CONFIG_IOCTL_CFG80211
-		struct cfg80211_wifidirect_info *b_pcfg80211_wdinfo = &buddy->cfg80211_wdinfo;
-		#endif
-		#endif
-
-		if (check_fwstate(b_pmlmepriv, WIFI_ASOC_STATE|WIFI_SITE_MONITOR)
-			|| check_fwstate(b_pmlmepriv, WIFI_UNDER_LINKING|WIFI_UNDER_WPS)
-			|| check_fwstate(b_pmlmepriv, WIFI_AP_STATE)
-			|| check_fwstate(b_pmlmepriv, WIFI_ADHOC_MASTER_STATE|WIFI_ADHOC_STATE)
-			#if defined(CONFIG_P2P) && defined(CONFIG_IOCTL_CFG80211) && defined(CONFIG_P2P_IPS)
-			|| b_pcfg80211_wdinfo->is_ro_ch
-			#elif defined(CONFIG_P2P)
-			|| !rtw_p2p_chk_state(b_pwdinfo, P2P_STATE_NONE)
-			#endif
-			|| rtw_is_scan_deny(buddy)
-		) {
-			return;
-		}
-	}
-#endif
-
 	if (PS_RDY_CHECK(padapter) == false)
 		return;
 
-	if (true == pwrpriv->bLeisurePs)
-	{
+	if (pwrpriv->bLeisurePs) {
 		// Idle for a while if we connect to AP a while ago.
 		if(pwrpriv->LpsIdleCount >= 2) //  4 Sec
 		{
@@ -780,10 +745,6 @@ void LPS_Enter(struct adapter *padapter)
 		else
 			pwrpriv->LpsIdleCount++;
 	}
-
-//	DBG_871X("-LeisurePSEnter\n");
-
-;
 }
 
 //
@@ -798,19 +759,8 @@ void LPS_Leave(struct adapter *padapter)
 	u32 start_time;
 	u8 bAwake = false;
 
-;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->iface_type != IFACE_PORT0)
-		return; /* Skip power saving for concurrent mode port 1*/
-#endif
-
-//	DBG_871X("+LeisurePSLeave\n");
-
-	if (pwrpriv->bLeisurePs)
-	{
-		if(pwrpriv->pwr_mode != PS_MODE_ACTIVE)
-		{
+	if (pwrpriv->bLeisurePs) {
+		if(pwrpriv->pwr_mode != PS_MODE_ACTIVE) {
 			rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0x40);
 
 			if(pwrpriv->pwr_mode == PS_MODE_ACTIVE)
@@ -1400,13 +1350,6 @@ void rtw_init_pwrctrl_priv(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 
-#if defined(CONFIG_CONCURRENT_MODE)
-	if (padapter->adapter_type != PRIMARY_ADAPTER)
-		return;
-#endif
-
-;
-
 	_init_pwrlock(&pwrctrlpriv->lock);
 	pwrctrlpriv->rf_pwrstate = rf_on;
 	pwrctrlpriv->ips_enter_cnts=0;
@@ -1483,16 +1426,6 @@ void rtw_free_pwrctrl_priv(struct adapter *adapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(adapter);
 
-#if defined(CONFIG_CONCURRENT_MODE)
-	if (adapter->adapter_type != PRIMARY_ADAPTER)
-		return;
-#endif
-
-;
-
-	//_rtw_memset((unsigned char *)pwrctrlpriv, 0, sizeof(struct pwrctrl_priv));
-
-
 	#ifdef CONFIG_RESUME_IN_WORKQUEUE
 	if (pwrctrlpriv->rtw_workqueue) {
 		flush_workqueue(pwrctrlpriv->rtw_workqueue);
@@ -1506,8 +1439,6 @@ void rtw_free_pwrctrl_priv(struct adapter *adapter)
 	#endif //CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER
 
 	_free_pwrlock(&pwrctrlpriv->lock);
-
-;
 }
 
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
@@ -1677,16 +1608,6 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	int ret = _SUCCESS;
 	u32 start = rtw_get_current_time();
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->pbuddy_adapter)
-		LeaveAllPowerSaveMode(padapter->pbuddy_adapter);
-
-	if ((padapter->isprimary == false) && padapter->pbuddy_adapter){
-		padapter = padapter->pbuddy_adapter;
-		pmlmepriv = &padapter->mlmepriv;
-	}
-#endif
 
 	if (pwrpriv->ips_deny_time < rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms))
 		pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms);

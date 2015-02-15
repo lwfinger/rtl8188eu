@@ -336,12 +336,6 @@ u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 
 	cmd_obj->padapter = padapter;
 
-#ifdef CONFIG_CONCURRENT_MODE
-	//change pcmdpriv to primary's pcmdpriv
-	if (padapter->adapter_type != PRIMARY_ADAPTER && padapter->pbuddy_adapter)
-		pcmdpriv = &(padapter->pbuddy_adapter->cmdpriv);
-#endif
-
 	if( _FAIL == (res=rtw_cmd_filter(pcmdpriv, cmd_obj)) ) {
 		rtw_free_cmd_obj(cmd_obj);
 		goto exit;
@@ -353,9 +347,6 @@ u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 		_rtw_up_sema(&pcmdpriv->cmd_queue_sema);
 
 exit:
-
-;
-
 	return res;
 }
 
@@ -1781,13 +1772,6 @@ u8 rtw_dynamic_chk_wk_cmd(struct adapter*padapter)
 	struct cmd_priv	*pcmdpriv=&padapter->cmdpriv;
 	u8	res=_SUCCESS;
 
-;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->adapter_type != PRIMARY_ADAPTER && padapter->pbuddy_adapter)
-		pcmdpriv = &(padapter->pbuddy_adapter->cmdpriv);
-#endif
-
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
 	if(ph2c==NULL){
 		res= _FAIL;
@@ -2060,15 +2044,6 @@ u8 rtw_event_polling_cmd(struct adapter*padapter)
 	struct drvextra_cmd_parm  *pdrvextra_cmd_parm;
 	struct cmd_priv	*pcmdpriv=&padapter->cmdpriv;
 	u8	res=_SUCCESS;
-
-;
-
-#if defined(CONFIG_CONCURRENT_MODE)
-	if (padapter->adapter_type != PRIMARY_ADAPTER)
-	{
-		return _FAIL;
-	}
-#endif
 
 	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
 	if(ph2c==NULL){
@@ -2371,21 +2346,9 @@ u8 rtw_lps_ctrl_wk_cmd(struct adapter*padapter, u8 lps_ctrl_type, u8 enqueue)
 	struct cmd_obj	*ph2c;
 	struct drvextra_cmd_parm	*pdrvextra_cmd_parm;
 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
-	//struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 	u8	res = _SUCCESS;
 
-;
-
-	//if(!pwrctrlpriv->bLeisurePs)
-	//	return res;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->iface_type != IFACE_PORT0)
-		return res;
-#endif
-
-	if(enqueue)
-	{
+	if(enqueue) {
 		ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
 		if(ph2c==NULL){
 			res= _FAIL;
@@ -2587,12 +2550,6 @@ u8 rtw_ps_cmd(struct adapter*padapter)
 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
 
 	u8	res = _SUCCESS;
-;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (padapter->adapter_type != PRIMARY_ADAPTER)
-		goto exit;
-#endif
 
 	ppscmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
 	if(ppscmd==NULL){

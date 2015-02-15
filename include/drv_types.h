@@ -218,11 +218,7 @@ struct registry_priv
 #define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(WLAN_BSSID_EX,field))
 #define BSSID_SZ(field)   sizeof(((PWLAN_BSSID_EX) 0)->field)
 
-#ifdef CONFIG_CONCURRENT_MODE
-#define is_primary_adapter(adapter) (adapter->adapter_type == PRIMARY_ADAPTER)
-#else
 #define is_primary_adapter(adapter) (1)
-#endif
 #define GET_PRIMARY_ADAPTER(padapter) (((struct adapter *)padapter)->dvobj->if1)
 
 #define GET_IFACE_NUMS(padapter) (((struct adapter *)padapter)->dvobj->iface_nums)
@@ -486,7 +482,7 @@ struct adapter {
 
 	struct adapter *pbuddy_adapter;
 
-#if defined(CONFIG_CONCURRENT_MODE) || defined(CONFIG_DUALMAC_CONCURRENT)
+#if defined(CONFIG_DUALMAC_CONCURRENT)
 	u8 isprimary; //is primary adapter or not
 	//notes:
 	// if isprimary is true, the adapter_type value is 0, iface_id is IFACE_ID0 for PRIMARY_ADAPTER

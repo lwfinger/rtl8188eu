@@ -315,11 +315,6 @@ rtl8188e_HalDmWatchDog(
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
-#ifdef CONFIG_CONCURRENT_MODE
-	struct adapter *pbuddy_adapter = Adapter->pbuddy_adapter;
-#endif //CONFIG_CONCURRENT_MODE
-
-	;
 
 	hw_init_completed = Adapter->hw_init_completed;
 
@@ -361,19 +356,11 @@ rtl8188e_HalDmWatchDog(
 		if(rtw_linked_check(Adapter))
 			bLinked = true;
 
-#ifdef CONFIG_CONCURRENT_MODE
-		if(pbuddy_adapter && rtw_linked_check(pbuddy_adapter))
-			bLinked = true;
-#endif //CONFIG_CONCURRENT_MODE
 		ODM_CmnInfoUpdate(&pHalData->odmpriv ,ODM_CMNINFO_LINK, bLinked);
 
 
 		if (check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE))
 			bsta_state = true;
-#ifdef CONFIG_CONCURRENT_MODE
-		if(pbuddy_adapter && check_fwstate(&pbuddy_adapter->mlmepriv, WIFI_STATION_STATE))
-			bsta_state = true;
-#endif //CONFIG_CONCURRENT_MODE
 		ODM_CmnInfoUpdate(&pHalData->odmpriv ,ODM_CMNINFO_STATION_STATE, bsta_state);
 
 		ODM_DMWatchdog(&pHalData->odmpriv);

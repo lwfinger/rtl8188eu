@@ -1088,29 +1088,14 @@ static s32 pre_xmitframe(struct adapter *padapter, struct xmit_frame *pxmitframe
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-#ifdef CONFIG_CONCURRENT_MODE
-	struct adapter *pbuddy_adapter = padapter->pbuddy_adapter;
-	struct mlme_priv *pbuddy_mlmepriv = &(pbuddy_adapter->mlmepriv);
-#endif
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL);
 
-//DBG_8192C("==> %s \n",__FUNCTION__);
-
 	if (rtw_txframes_sta_ac_pending(padapter, pattrib) > 0)
-	{
-		//DBG_8192C("enqueue AC(%d)\n",pattrib->priority);
 		goto enqueue;
-	}
-
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
 		goto enqueue;
-
-#ifdef CONFIG_CONCURRENT_MODE
-	if (check_fwstate(pbuddy_mlmepriv, _FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true)
-		goto enqueue;
-#endif
 
 	pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
 	if (pxmitbuf == NULL)

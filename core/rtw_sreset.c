@@ -291,9 +291,6 @@ void sreset_reset(struct adapter *padapter)
 	pwrpriv->change_rfpwrstate = rf_off;
 
 	sreset_stop_adapter(padapter);
-	#ifdef CONFIG_CONCURRENT_MODE
-	sreset_stop_adapter(padapter->pbuddy_adapter);
-	#endif
 
 	#ifdef CONFIG_IPS
 	_ips_enter(padapter);
@@ -301,9 +298,6 @@ void sreset_reset(struct adapter *padapter)
 	#endif
 
 	sreset_start_adapter(padapter);
-	#ifdef CONFIG_CONCURRENT_MODE
-	sreset_start_adapter(padapter->pbuddy_adapter);
-	#endif
 
 	psrtpriv->silent_reset_inprogress = false;
 

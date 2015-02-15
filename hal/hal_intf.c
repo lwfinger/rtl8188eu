@@ -443,10 +443,6 @@ void	rtw_hal_set_chan(struct adapter *padapter, u8 channel)
 
 void	rtw_hal_dm_watchdog(struct adapter *padapter)
 {
-#if defined(CONFIG_CONCURRENT_MODE)
-	if (padapter->adapter_type != PRIMARY_ADAPTER)
-		return;
-#endif
 	if(padapter->HalFunc.hal_dm_watchdog)
 		padapter->HalFunc.hal_dm_watchdog(padapter);
 }
