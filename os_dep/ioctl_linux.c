@@ -1829,7 +1829,7 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 			     union iwreq_data *wrqu, char *extra)
 {
 	int ret=0;
-	__le16 reason;
+	u16 reason;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct iw_mlme *mlme = (struct iw_mlme *) extra;
 
@@ -1839,7 +1839,7 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 
 	DBG_871X("%s\n", __FUNCTION__);
 
-	reason = cpu_to_le16(mlme->reason_code);
+	reason = mlme->reason_code;
 
 	DBG_871X("%s, cmd=%d, reason=%d\n", __FUNCTION__, mlme->cmd, reason);
 

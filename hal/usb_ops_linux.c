@@ -259,7 +259,7 @@ static int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 	u16 wvalue;
 	u16 index;
 	u16 len;
-	__le16 data;
+	__le32 data;
 	int ret;
 
 	request = 0x05;
@@ -269,7 +269,7 @@ static int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 	wvalue = (u16)(addr&0x0000ffff);
 	len = 2;
 
-	data = cpu_to_le16(val);
+	data = cpu_to_le32(val & 0x0000ffff);
 
 	ret = usbctrl_vendorreq(pintfhdl, request, wvalue, index, &data, len, requesttype);
 

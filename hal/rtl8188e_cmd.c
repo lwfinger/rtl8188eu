@@ -571,7 +571,7 @@ static void ConstructARPResponse(
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
 	static u8				ARPLLCHeader[8] = {0xAA, 0xAA, 0x03, 0x00, 0x00, 0x00, 0x08, 0x06};
 
-	u16		*fctrl;
+	__le16		*fctrl;
 	u32		pktlen;
 	u8		*pARPRspPkt = pframe;
 	//for TKIP Cal MIC
