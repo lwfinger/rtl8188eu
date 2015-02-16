@@ -1736,18 +1736,21 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 			goto exit;
 		}
 
-		sinfo->filled |= STATION_INFO_SIGNAL;
+//#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 20, 0))
+//		sinfo->filled |= STATION_INFO_SIGNAL;
+//		sinfo->filled |= STATION_INFO_TX_BITRATE;
+//		sinfo->filled |= STATION_INFO_RX_PACKETS;
+//		sinfo->filled |= STATION_INFO_TX_PACKETS;
+//#else		sinfo->filled |= BIT(NL80211_STA_INFO_SIGNAL);
+		sinfo->filled |= BIT(NL80211_STA_INFO_TX_BITRATE);
+		sinfo->filled |= BIT(NL80211_STA_INFO_RX_BYTES);
+		sinfo->filled |= BIT(NL80211_STA_INFO_TX_BYTES);
+//#endif
+
 		sinfo->signal = translate_percentage_to_dbm(padapter->recvpriv.signal_strength);
-
-		sinfo->filled |= STATION_INFO_TX_BITRATE;
 		sinfo->txrate.legacy = rtw_get_cur_max_rate(padapter);
-
-		sinfo->filled |= STATION_INFO_RX_PACKETS;
 		sinfo->rx_packets = sta_rx_data_pkts(psta);
-
-		sinfo->filled |= STATION_INFO_TX_PACKETS;
 		sinfo->tx_packets = psta->sta_stats.tx_pkts;
-
 	}
 
 	//for Ad-Hoc/AP mode
@@ -3177,7 +3180,9 @@ void rtw_cfg80211_indicate_sta_assoc(struct adapter *padapter, u8 *pmgmt_frame, 
 			ie_offset = _REASOCREQ_IE_OFFSET_;
 
 		sinfo.filled = 0;
-		sinfo.filled = STATION_INFO_ASSOC_REQ_IES;
+//#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 20, 0))
+//		sinfo.filled = STATION_INFO_ASSOC_REQ_IES;
+//#endif
 		sinfo.assoc_req_ies = pmgmt_frame + WLAN_HDR_A3_LEN + ie_offset;
 		sinfo.assoc_req_ies_len = frame_len - WLAN_HDR_A3_LEN - ie_offset;
 		cfg80211_new_sta(ndev, GetAddr2Ptr(pmgmt_frame), &sinfo, GFP_ATOMIC);
