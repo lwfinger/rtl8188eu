@@ -45,8 +45,6 @@
 
 #ifdef CONFIG_BR_EXT
 
-//#define BR_EXT_DEBUG
-
 #define NAT25_IPV4		01
 #define NAT25_IPV6		02
 #define NAT25_IPX		03
@@ -530,88 +528,7 @@ static void __nat25_db_network_insert(struct adapter *priv,
 
 static void __nat25_db_print(struct adapter *priv)
 {
-	_irqL irqL;
-	_enter_critical_bh(&priv->br_ext_lock, &irqL);
-
-#ifdef BR_EXT_DEBUG
-	static int counter = 0;
-	int i, j;
-	struct nat25_network_db_entry *db;
-
-	counter++;
-	if((counter % 16) != 0)
-		return;
-
-	for(i=0, j=0; i<NAT25_HASH_SIZE; i++)
-	{
-		db = priv->nethash[i];
-
-		while (db != NULL)
-		{
-#ifdef CL_IPV6_PASS
-			panic_printk("NAT25: DB(%d) H(%02d) C(%d) M:%02x%02x%02x%02x%02x%02x N:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
-					"%02x%02x%02x%02x%02x%02x\n",
-				j,
-				i,
-				atomic_read(&db->use_count),
-				db->macAddr[0],
-				db->macAddr[1],
-				db->macAddr[2],
-				db->macAddr[3],
-				db->macAddr[4],
-				db->macAddr[5],
-				db->networkAddr[0],
-				db->networkAddr[1],
-				db->networkAddr[2],
-				db->networkAddr[3],
-				db->networkAddr[4],
-				db->networkAddr[5],
-				db->networkAddr[6],
-				db->networkAddr[7],
-				db->networkAddr[8],
-				db->networkAddr[9],
-				db->networkAddr[10],
-				db->networkAddr[11],
-				db->networkAddr[12],
-				db->networkAddr[13],
-				db->networkAddr[14],
-				db->networkAddr[15],
-				db->networkAddr[16]);
-#else
-			panic_printk("NAT25: DB(%d) H(%02d) C(%d) M:%02x%02x%02x%02x%02x%02x N:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x\n",
-				j,
-				i,
-				atomic_read(&db->use_count),
-				db->macAddr[0],
-				db->macAddr[1],
-				db->macAddr[2],
-				db->macAddr[3],
-				db->macAddr[4],
-				db->macAddr[5],
-				db->networkAddr[0],
-				db->networkAddr[1],
-				db->networkAddr[2],
-				db->networkAddr[3],
-				db->networkAddr[4],
-				db->networkAddr[5],
-				db->networkAddr[6],
-				db->networkAddr[7],
-				db->networkAddr[8],
-				db->networkAddr[9],
-				db->networkAddr[10]);
-#endif
-			j++;
-
-			db = db->next_hash;
-		}
-	}
-#endif
-
-	_exit_critical_bh(&priv->br_ext_lock, &irqL);
 }
-
-
-
 
 /*
  *	NAT2.5 interface
@@ -670,57 +587,6 @@ void nat25_db_expire(struct adapter *priv)
 				{
 					if(atomic_dec_and_test(&f->use_count))
 					{
-#ifdef BR_EXT_DEBUG
-#ifdef CL_IPV6_PASS
-						panic_printk("NAT25 Expire H(%02d) M:%02x%02x%02x%02x%02x%02x N:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
-								"%02x%02x%02x%02x%02x%02x\n",
-							i,
-							f->macAddr[0],
-							f->macAddr[1],
-							f->macAddr[2],
-							f->macAddr[3],
-							f->macAddr[4],
-							f->macAddr[5],
-							f->networkAddr[0],
-							f->networkAddr[1],
-							f->networkAddr[2],
-							f->networkAddr[3],
-							f->networkAddr[4],
-							f->networkAddr[5],
-							f->networkAddr[6],
-							f->networkAddr[7],
-							f->networkAddr[8],
-							f->networkAddr[9],
-							f->networkAddr[10],
-							f->networkAddr[11],
-							f->networkAddr[12],
-							f->networkAddr[13],
-							f->networkAddr[14],
-							f->networkAddr[15],
-							f->networkAddr[16]);
-#else
-
-						panic_printk("NAT25 Expire H(%02d) M:%02x%02x%02x%02x%02x%02x N:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x\n",
-							i,
-							f->macAddr[0],
-							f->macAddr[1],
-							f->macAddr[2],
-							f->macAddr[3],
-							f->macAddr[4],
-							f->macAddr[5],
-							f->networkAddr[0],
-							f->networkAddr[1],
-							f->networkAddr[2],
-							f->networkAddr[3],
-							f->networkAddr[4],
-							f->networkAddr[5],
-							f->networkAddr[6],
-							f->networkAddr[7],
-							f->networkAddr[8],
-							f->networkAddr[9],
-							f->networkAddr[10]);
-#endif
-#endif
 						if(priv->scdb_entry == f)
 						{
 							memset(priv->scdb_mac, 0, ETH_ALEN);
@@ -1474,25 +1340,6 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 {
-#ifdef BR_EXT_DEBUG
-	if((!priv->ethBrExtInfo.nat25_disable) && (!(skb->data[0] & 1)))
-	{
-		panic_printk("NAT25: Input Frame: DA=%02x%02x%02x%02x%02x%02x SA=%02x%02x%02x%02x%02x%02x\n",
-			skb->data[0],
-			skb->data[1],
-			skb->data[2],
-			skb->data[3],
-			skb->data[4],
-			skb->data[5],
-			skb->data[6],
-			skb->data[7],
-			skb->data[8],
-			skb->data[9],
-			skb->data[10],
-			skb->data[11]);
-	}
-#endif
-
 	if(!(skb->data[0] & 1))
 	{
 		int is_vlan_tag=0, i, retval=0;
