@@ -7708,6 +7708,7 @@ static int _issue_deauth(struct adapter *padapter, unsigned char *da, unsigned s
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	int ret = _FAIL;
+	__le16 le_tmp;
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
 #endif //CONFIG_P2P
@@ -7751,7 +7752,8 @@ static int _issue_deauth(struct adapter *padapter, unsigned char *da, unsigned s
 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
 
-	pframe = rtw_set_fixed_ie(pframe, _RSON_CODE_ , (unsigned char *)&reason, &(pattrib->pktlen));
+	le_tmp = cpu_to_le16(reason);
+	pframe = rtw_set_fixed_ie(pframe, _RSON_CODE_ , (unsigned char *)&le_tmp, &(pattrib->pktlen));
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
