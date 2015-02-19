@@ -88,7 +88,7 @@ int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len
 		return _FAIL;
 	}
 
-	_rtw_memcpy(xmit_frame->buf_addr + buf_offset + pattrib->pktlen, IOL_cmds, cmd_len);
+	memcpy(xmit_frame->buf_addr + buf_offset + pattrib->pktlen, IOL_cmds, cmd_len);
 	pattrib->pktlen += cmd_len;
 	pattrib->last_txcmdsz += cmd_len;
 

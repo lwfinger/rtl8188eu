@@ -151,7 +151,7 @@ static void update_BCNTIM(struct adapter *padapter)
 		{
 			pbackup_remainder_ie = rtw_malloc(remainder_ielen);
 			if(pbackup_remainder_ie && premainder_ie)
-				_rtw_memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
+				memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
 		}
 
 		*dst_ie++=_TIM_IE_;
@@ -177,14 +177,14 @@ static void update_BCNTIM(struct adapter *padapter)
 		}
 		else if(tim_ielen==5)
 		{
-			_rtw_memcpy(dst_ie, &tim_bitmap_le, 2);
+			memcpy(dst_ie, &tim_bitmap_le, 2);
 			dst_ie+=2;
 		}
 
 		//copy remainder IE
 		if(pbackup_remainder_ie)
 		{
-			_rtw_memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
+			memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
 
 			rtw_mfree(pbackup_remainder_ie, remainder_ielen);
 		}
@@ -248,19 +248,19 @@ void rtw_add_bcn_ie(struct adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 index,
 	{
 		pbackup_remainder_ie = rtw_malloc(remainder_ielen);
 		if(pbackup_remainder_ie && premainder_ie)
-			_rtw_memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
+			memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
 	}
 
 	*dst_ie++=index;
 	*dst_ie++=len;
 
-	_rtw_memcpy(dst_ie, data, len);
+	memcpy(dst_ie, data, len);
 	dst_ie+=len;
 
 	//copy remainder IE
 	if(pbackup_remainder_ie)
 	{
-		_rtw_memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
+		memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
 
 		rtw_mfree(pbackup_remainder_ie, remainder_ielen);
 	}
@@ -296,13 +296,13 @@ void rtw_remove_bcn_ie(struct adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 ind
 	{
 		pbackup_remainder_ie = rtw_malloc(remainder_ielen);
 		if(pbackup_remainder_ie && premainder_ie)
-			_rtw_memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
+			memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
 	}
 
 	//copy remainder IE
 	if(pbackup_remainder_ie)
 	{
-		_rtw_memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
+		memcpy(dst_ie, pbackup_remainder_ie, remainder_ielen);
 
 		rtw_mfree(pbackup_remainder_ie, remainder_ielen);
 	}
@@ -739,7 +739,7 @@ void update_bmc_sta(struct adapter *padapter)
 		supportRateNum = rtw_get_rateset_len((u8*)&pcur_network->SupportedRates);
 		network_type = rtw_check_network_type((u8*)&pcur_network->SupportedRates, supportRateNum, 1);
 
-		_rtw_memcpy(psta->bssrateset, &pcur_network->SupportedRates, supportRateNum);
+		memcpy(psta->bssrateset, &pcur_network->SupportedRates, supportRateNum);
 		psta->bssratelen = supportRateNum;
 
 		//b/g mode ra_bitmap
@@ -1091,7 +1091,7 @@ static void start_bss_network(struct adapter *padapter, u8 *pbuf)
 	pmlmeext->cur_wireless_mode = pmlmepriv->cur_network.network_type;
 
 	//let pnetwork_mlmeext == pnetwork_mlme.
-	_rtw_memcpy(pnetwork_mlmeext, pnetwork, pnetwork->Length);
+	memcpy(pnetwork_mlmeext, pnetwork, pnetwork->Length);
 
 	//update cur_wireless_mode
 	update_wireless_mode(padapter);
@@ -1100,7 +1100,7 @@ static void start_bss_network(struct adapter *padapter, u8 *pbuf)
 	update_capinfo(padapter, rtw_get_capability((WLAN_BSSID_EX *)pnetwork));
 
 #ifdef CONFIG_P2P
-	_rtw_memcpy(pwdinfo->p2p_group_ssid, pnetwork->Ssid.Ssid, pnetwork->Ssid.SsidLength);
+	memcpy(pwdinfo->p2p_group_ssid, pnetwork->Ssid.Ssid, pnetwork->Ssid.SsidLength);
 	pwdinfo->p2p_group_ssid_len = pnetwork->Ssid.SsidLength;
 #endif //CONFIG_P2P
 
@@ -1171,7 +1171,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 
 	_rtw_memset(ie, 0, MAX_IE_SZ);
 
-	_rtw_memcpy(ie, pbuf, pbss_network->IELength);
+	memcpy(ie, pbuf, pbss_network->IELength);
 
 
 	if(pbss_network->InfrastructureMode!=Ndis802_11APMode)
@@ -1179,7 +1179,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 
 	pbss_network->Rssi = 0;
 
-	_rtw_memcpy(pbss_network->MacAddress, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pbss_network->MacAddress, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
 	//beacon interval
 	p = rtw_get_beacon_interval_from_ie(ie);//ie + 8;	// 8: TimeStamp, 2: Beacon Interval 2:Capability
@@ -1196,7 +1196,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 	if(p && ie_len>0)
 	{
 		_rtw_memset(&pbss_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
-		_rtw_memcpy(pbss_network->Ssid.Ssid, (p + 2), ie_len);
+		memcpy(pbss_network->Ssid.Ssid, (p + 2), ie_len);
 		pbss_network->Ssid.SsidLength = ie_len;
 	}
 
@@ -1215,7 +1215,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 	p = rtw_get_ie(ie + _BEACON_IE_OFFSET_, _SUPPORTEDRATES_IE_, &ie_len, (pbss_network->IELength - _BEACON_IE_OFFSET_));
 	if (p !=  NULL)
 	{
-		_rtw_memcpy(supportRate, p+2, ie_len);
+		memcpy(supportRate, p+2, ie_len);
 		supportRateNum = ie_len;
 	}
 
@@ -1223,7 +1223,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 	p = rtw_get_ie(ie + _BEACON_IE_OFFSET_, _EXT_SUPPORTEDRATES_IE_, &ie_len, pbss_network->IELength - _BEACON_IE_OFFSET_);
 	if (p !=  NULL)
 	{
-		_rtw_memcpy(supportRate+supportRateNum, p+2, ie_len);
+		memcpy(supportRate+supportRateNum, p+2, ie_len);
 		supportRateNum += ie_len;
 
 	}
@@ -1367,7 +1367,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 			pht_cap->supp_mcs_set[1] = 0x0;
 		}
 
-		_rtw_memcpy(&pmlmepriv->htpriv.ht_cap, p+2, ie_len);
+		memcpy(&pmlmepriv->htpriv.ht_cap, p+2, ie_len);
 
 	}
 
@@ -1520,7 +1520,7 @@ int rtw_acl_add_sta(struct adapter *padapter, u8 *addr)
 		{
 			_rtw_init_listhead(&paclnode->list);
 
-			_rtw_memcpy(paclnode->addr, addr, ETH_ALEN);
+			memcpy(paclnode->addr, addr, ETH_ALEN);
 
 			paclnode->valid = true;
 
@@ -1684,7 +1684,7 @@ static void update_bcn_wps_ie(struct adapter *padapter)
 	{
 		pbackup_remainder_ie = rtw_malloc(remainder_ielen);
 		if(pbackup_remainder_ie)
-			_rtw_memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
+			memcpy(pbackup_remainder_ie, premainder_ie, remainder_ielen);
 	}
 
 
@@ -1696,11 +1696,11 @@ static void update_bcn_wps_ie(struct adapter *padapter)
 	wps_ielen = (uint)pwps_ie_src[1];//to get ie data len
 	if((wps_offset+wps_ielen+2+remainder_ielen)<=MAX_IE_SZ)
 	{
-		_rtw_memcpy(pwps_ie, pwps_ie_src, wps_ielen+2);
+		memcpy(pwps_ie, pwps_ie_src, wps_ielen+2);
 		pwps_ie += (wps_ielen+2);
 
 		if(pbackup_remainder_ie)
-			_rtw_memcpy(pwps_ie, pbackup_remainder_ie, remainder_ielen);
+			memcpy(pwps_ie, pbackup_remainder_ie, remainder_ielen);
 
 		//update IELength
 		pnetwork->IELength = wps_offset + (wps_ielen+2) + remainder_ielen;

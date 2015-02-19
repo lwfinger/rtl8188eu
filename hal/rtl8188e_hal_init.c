@@ -498,11 +498,11 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter,int data_len)
 				if(rstatus){
 					fifo_data = rtw_read32(Adapter,REG_PKTBUF_DBG_DATA_L);
 					//printk("fifo_data_144:0x%08x\n",fifo_data);
-					_rtw_memcpy(pbuf+(addr*8),&fifo_data , 4);
+					memcpy(pbuf+(addr*8),&fifo_data , 4);
 
 					fifo_data = rtw_read32(Adapter,REG_PKTBUF_DBG_DATA_H);
 					//printk("fifo_data_148:0x%08x\n",fifo_data);
-					_rtw_memcpy(pbuf+(addr*8+4), &fifo_data, 4);
+					memcpy(pbuf+(addr*8+4), &fifo_data, 4);
 
 				}
 				rtw_usleep_os(2);

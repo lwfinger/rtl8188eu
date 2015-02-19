@@ -100,7 +100,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		{
 			pipe = usb_sndctrlpipe(udev, 0);//write_out
 			reqtype =  REALTEK_USB_VENQT_WRITE;
-			_rtw_memcpy( pIo_buf, pdata, len);
+			memcpy( pIo_buf, pdata, len);
 		}
 
 		status = rtw_usb_control_msg(udev, pipe, request, reqtype, value, index, pIo_buf, len, RTW_USB_CONTROL_MSG_TIMEOUT);
@@ -110,7 +110,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 			rtw_reset_continual_io_error(pdvobjpriv);
 			if ( requesttype == 0x01 )
 			{   // For Control read transfer, we have to copy the read data from pIo_buf to pdata.
-				_rtw_memcpy( pdata, pIo_buf,  len );
+				memcpy( pdata, pIo_buf,  len );
 			}
 		}
 		else { // error cases
@@ -135,7 +135,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 				if (status > 0) {
 					if ( requesttype == 0x01 )
 					{   // For Control read transfer, we have to copy the read data from pIo_buf to pdata.
-						_rtw_memcpy( pdata, pIo_buf,  len );
+						memcpy( pdata, pIo_buf,  len );
 					}
 				}
 			}
@@ -314,7 +314,7 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 
 	wvalue = (u16)(addr&0x0000ffff);
 	len = length;
-	 _rtw_memcpy(buf, pdata, len );
+	 memcpy(buf, pdata, len );
 
 	return usbctrl_vendorreq(pintfhdl, request, wvalue, index, buf, len, requesttype);
 }
@@ -331,12 +331,12 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 	}
 
 	// HISR
-	_rtw_memcpy(&(pHalData->IntArray[0]), &(pbuf[USB_INTR_CONTENT_HISR_OFFSET]), 4);
-	_rtw_memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
+	memcpy(&(pHalData->IntArray[0]), &(pbuf[USB_INTR_CONTENT_HISR_OFFSET]), 4);
+	memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
 
 #ifdef CONFIG_LPS_LCLK
 	if (  pHalData->IntArray[0]  & IMR_CPWM_88E ) {
-		_rtw_memcpy(&pwr_rpt.state, &(pbuf[USB_INTR_CONTENT_CPWM1_OFFSET]), 1);
+		memcpy(&pwr_rpt.state, &(pbuf[USB_INTR_CONTENT_CPWM1_OFFSET]), 1);
 
 		//88e's cpwm value only change BIT0, so driver need to add PS_STATE_S2 for LPS flow.
 		pwr_rpt.state |= PS_STATE_S2;
@@ -376,7 +376,7 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 
 	// C2H Event
 	if (pbuf[0]!= 0){
-		_rtw_memcpy(&(pHalData->C2hArray[0]), &(pbuf[USB_INTR_CONTENT_C2H_OFFSET]), 16);
+		memcpy(&(pHalData->C2hArray[0]), &(pbuf[USB_INTR_CONTENT_C2H_OFFSET]), 16);
 		//rtw_c2h_wk_cmd(padapter); to do..
 	}
 
@@ -591,7 +591,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct recv_buf *precvbuf
 			precvframe->u.hdr.rx_end = pkt_copy->data + alloc_sz;
 			skb_reserve( pkt_copy, 8 - ((SIZE_PTR)( pkt_copy->data ) & 7 ));//force pkt_copy->data at 8-byte alignment address
 			skb_reserve( pkt_copy, shift_sz );//force ip_hdr at 8-byte alignment address according to shift_sz.
-			_rtw_memcpy(pkt_copy->data, (pbuf + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
+			memcpy(pkt_copy->data, (pbuf + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
 			precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pkt_copy->data;
 		}
 		else
@@ -966,7 +966,7 @@ static int recvbuf2recvframe(struct adapter *padapter, _pkt *pskb)
 			precvframe->u.hdr.rx_end = pkt_copy->data + alloc_sz;
 			skb_reserve( pkt_copy, 8 - ((SIZE_PTR)( pkt_copy->data ) & 7 ));//force pkt_copy->data at 8-byte alignment address
 			skb_reserve( pkt_copy, shift_sz );//force ip_hdr at 8-byte alignment address according to shift_sz.
-			_rtw_memcpy(pkt_copy->data, (pbuf + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
+			memcpy(pkt_copy->data, (pbuf + pattrib->drvinfo_sz + RXDESC_SIZE), skb_len);
 			precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pkt_copy->data;
 		}
 		else

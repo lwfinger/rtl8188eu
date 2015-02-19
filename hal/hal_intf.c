@@ -274,7 +274,7 @@ s32	rtw_hal_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe)
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
-	_rtw_memcpy(pmgntframe->attrib.ra, pwlanhdr->addr1, ETH_ALEN);
+	memcpy(pmgntframe->attrib.ra, pwlanhdr->addr1, ETH_ALEN);
 
 #ifdef CONFIG_IEEE80211W
 	if(padapter->securitypriv.binstallBIPkey == true)

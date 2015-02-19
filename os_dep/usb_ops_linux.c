@@ -77,7 +77,7 @@ static int _usbctrl_vendorreq_async_write(struct usb_device *udev, u8 request,
 	dr->wIndex = cpu_to_le16(index);
 	dr->wLength = cpu_to_le16(len);
 
-	_rtw_memcpy(buf, pdata, len);
+	memcpy(buf, pdata, len);
 
 	usb_fill_control_urb(urb, udev, pipe, (unsigned char *)dr, buf, len,
 		_usbctrl_vendorreq_async_callback, buf);

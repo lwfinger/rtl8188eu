@@ -210,7 +210,7 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 
 		_rtw_memset( &backupPMKIDList[ 0 ], 0x00, sizeof( RT_PMKID_LIST ) * NUM_PMKID_CACHE );
 
-		_rtw_memcpy( &backupPMKIDList[ 0 ], &adapter->securitypriv.PMKIDList[ 0 ], sizeof( RT_PMKID_LIST ) * NUM_PMKID_CACHE );
+		memcpy( &backupPMKIDList[ 0 ], &adapter->securitypriv.PMKIDList[ 0 ], sizeof( RT_PMKID_LIST ) * NUM_PMKID_CACHE );
 		backupPMKIDIndex = adapter->securitypriv.PMKIDIndex;
 		backupTKIPCountermeasure = adapter->securitypriv.btkip_countermeasure;
 		backupTKIPcountermeasure_time = adapter->securitypriv.btkip_countermeasure_time;
@@ -223,7 +223,7 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 
 		// Added by Albert 2009/02/18
 		// Restore the PMK information to securitypriv structure for the following connection.
-		_rtw_memcpy( &adapter->securitypriv.PMKIDList[ 0 ], &backupPMKIDList[ 0 ], sizeof( RT_PMKID_LIST ) * NUM_PMKID_CACHE );
+		memcpy( &adapter->securitypriv.PMKIDList[ 0 ], &backupPMKIDList[ 0 ], sizeof( RT_PMKID_LIST ) * NUM_PMKID_CACHE );
 		adapter->securitypriv.PMKIDIndex = backupPMKIDIndex;
 		adapter->securitypriv.btkip_countermeasure = backupTKIPCountermeasure;
 		adapter->securitypriv.btkip_countermeasure_time = backupTKIPcountermeasure_time;
@@ -409,7 +409,7 @@ void rtw_indicate_sta_assoc_event(struct adapter *padapter, struct sta_info *pst
 
 	wrqu.addr.sa_family = ARPHRD_ETHER;
 
-	_rtw_memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
+	memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
 
 	DBG_871X("+rtw_indicate_sta_assoc_event\n");
 
@@ -436,7 +436,7 @@ void rtw_indicate_sta_disassoc_event(struct adapter *padapter, struct sta_info *
 
 	wrqu.addr.sa_family = ARPHRD_ETHER;
 
-	_rtw_memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
+	memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
 
 	DBG_871X("+rtw_indicate_sta_disassoc_event\n");
 
@@ -579,7 +579,7 @@ int hostapd_mode_init(struct adapter *padapter)
 	mac[4]=0x11;
 	mac[5]=0x12;
 
-	_rtw_memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
+	memcpy(pnetdev->dev_addr, mac, ETH_ALEN);
 
 
 	netif_carrier_off(pnetdev);

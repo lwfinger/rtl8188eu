@@ -121,12 +121,12 @@ static s32 FillH2CCmd_88E(struct adapter *padapter, u8 ElementID, u32 CmdLen, u8
 
 		if(CmdLen<=3)
 		{
-			_rtw_memcpy((u8*)(&h2c_cmd)+1, pCmdBuffer, CmdLen );
+			memcpy((u8*)(&h2c_cmd)+1, pCmdBuffer, CmdLen );
 		}
 		else{
-			_rtw_memcpy((u8*)(&h2c_cmd)+1, pCmdBuffer,3);
+			memcpy((u8*)(&h2c_cmd)+1, pCmdBuffer,3);
 			ext_cmd_len = CmdLen-3;
-			_rtw_memcpy((u8*)(&h2c_cmd_ex), pCmdBuffer+3,ext_cmd_len );
+			memcpy((u8*)(&h2c_cmd_ex), pCmdBuffer+3,ext_cmd_len );
 
 			//Write Ext command
 			msgbox_ex_addr = REG_HMEBOX_EXT_0 + (h2c_box_num *RTL88E_EX_MESSAGE_BOX_SIZE);
@@ -195,7 +195,7 @@ u8 rtl8188e_set_raid_cmd(struct adapter*padapter, u32 mask)
 
 		_rtw_memset(buf, 0, 3);
 		lmask = cpu_to_le32( mask );
-		_rtw_memcpy(buf, &lmask, 3);
+		memcpy(buf, &lmask, 3);
 
 		FillH2CCmd_88E(padapter, H2C_DM_MACID_CFG, 3, buf);
 	}else{
@@ -364,9 +364,9 @@ static void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
 	fctrl = &(pwlanhdr->frame_ctl);
 	*(fctrl) = 0;
 
-	_rtw_memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(cur_network), ETH_ALEN);
+	memcpy(pwlanhdr->addr1, bc_addr, ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pwlanhdr->addr3, get_my_bssid(cur_network), ETH_ALEN);
 
 	SetSeqNum(pwlanhdr, 0/*pmlmeext->mgnt_seq*/);
 	//pmlmeext->mgnt_seq++;
@@ -380,13 +380,13 @@ static void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
 	pktlen += 8;
 
 	// beacon interval: 2 bytes
-	_rtw_memcpy(pframe, (unsigned char *)(rtw_get_beacon_interval_from_ie(cur_network->IEs)), 2);
+	memcpy(pframe, (unsigned char *)(rtw_get_beacon_interval_from_ie(cur_network->IEs)), 2);
 
 	pframe += 2;
 	pktlen += 2;
 
 	// capability info: 2 bytes
-	_rtw_memcpy(pframe, (unsigned char *)(rtw_get_capability_from_ie(cur_network->IEs)), 2);
+	memcpy(pframe, (unsigned char *)(rtw_get_capability_from_ie(cur_network->IEs)), 2);
 
 	pframe += 2;
 	pktlen += 2;
@@ -395,7 +395,7 @@ static void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
 	{
 		//DBG_871X("ie len=%d\n", cur_network->IELength);
 		pktlen += cur_network->IELength - sizeof(NDIS_802_11_FIXED_IEs);
-		_rtw_memcpy(pframe, cur_network->IEs+sizeof(NDIS_802_11_FIXED_IEs), pktlen);
+		memcpy(pframe, cur_network->IEs+sizeof(NDIS_802_11_FIXED_IEs), pktlen);
 
 		goto _ConstructBeacon;
 	}
@@ -470,10 +470,10 @@ static void ConstructPSPoll(struct adapter *padapter, u8 *pframe, u32 *pLength)
 	SetDuration(pframe, (pmlmeinfo->aid | 0xc000));
 
 	// BSSID.
-	_rtw_memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
 
 	// TA.
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
 
 	*pLength = 16;
 }
@@ -512,21 +512,21 @@ static void ConstructNullFunctionData(
 	{
 		case Ndis802_11Infrastructure:
 			SetToDs(fctrl);
-			_rtw_memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, StaAddr, ETH_ALEN);
+			memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+			memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+			memcpy(pwlanhdr->addr3, StaAddr, ETH_ALEN);
 			break;
 		case Ndis802_11APMode:
 			SetFrDs(fctrl);
-			_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, myid(&(padapter->eeprompriv)), ETH_ALEN);
+			memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
+			memcpy(pwlanhdr->addr2, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+			memcpy(pwlanhdr->addr3, myid(&(padapter->eeprompriv)), ETH_ALEN);
 			break;
 		case Ndis802_11IBSS:
 		default:
-			_rtw_memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-			_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+			memcpy(pwlanhdr->addr1, StaAddr, ETH_ALEN);
+			memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+			memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
 			break;
 	}
 
@@ -589,9 +589,9 @@ static void ConstructARPResponse(
 	SetFrameType(fctrl, WIFI_DATA);
 	//SetFrameSubType(fctrl, 0);
 	SetToDs(fctrl);
-	_rtw_memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	memcpy(pwlanhdr->addr1, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
+	memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
 
 	SetSeqNum(pwlanhdr, 0);
 	SetDuration(pwlanhdr, 0);
@@ -645,7 +645,7 @@ static void ConstructARPResponse(
 	//-------------------------------------------------------------------------
 	pARPRspPkt =  (u8*)(pframe+ *pLength);
 	// LLC header
-	_rtw_memcpy(pARPRspPkt, ARPLLCHeader, 8);
+	memcpy(pARPRspPkt, ARPLLCHeader, 8);
 	*pLength += 8;
 
 	// ARP element
@@ -702,7 +702,7 @@ static void ConstructARPResponse(
 		rtw_secgetmic(&micdata,&(mic[0]));
 
 		pARPRspPkt += 28;
-		_rtw_memcpy(pARPRspPkt, &(mic[0]),8);
+		memcpy(pARPRspPkt, &(mic[0]),8);
 
 		*pLength += 8;
 	}
@@ -894,7 +894,7 @@ static void SetFwRsvdPagePkt(struct adapter *padapter, BOOLEAN bDLFinished)
 	//3(8) sec IV
 	rtw_get_sec_iv(padapter, cur_dot11txpn, get_my_bssid(&pmlmeinfo->network));
 	RsvdPageLoc.LocRemoteCtrlInfo = PageNum;
-	_rtw_memcpy(ReservedPagePacket+BufIndex-TxDescLen, cur_dot11txpn, 8);
+	memcpy(ReservedPagePacket+BufIndex-TxDescLen, cur_dot11txpn, 8);
 
 	TotalPacketLen = BufIndex-TxDescLen + sizeof (union pn48); //IV len
 #else
@@ -912,7 +912,7 @@ static void SetFwRsvdPagePkt(struct adapter *padapter, BOOLEAN bDLFinished)
 	pattrib->pktlen = pattrib->last_txcmdsz = TotalPacketLen - TXDESC_OFFSET;
 
 	if (TotalPacketLen < RTL88E_RSVDPAGE_SIZE)
-		_rtw_memcpy(pmgntframe->buf_addr, ReservedPagePacket, TotalPacketLen);
+		memcpy(pmgntframe->buf_addr, ReservedPagePacket, TotalPacketLen);
 	else
 		DBG_871X("%s: memory copy fail at Line: %d\n", __FUNCTION__, __LINE__);
 

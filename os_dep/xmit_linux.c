@@ -319,7 +319,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 		newskb = rtw_skb_copy(skb);
 
 		if (newskb) {
-			_rtw_memcpy(newskb->data, psta->hwaddr, 6);
+			memcpy(newskb->data, psta->hwaddr, 6);
 			res = rtw_xmit(padapter, &newskb);
 			if (res < 0) {
 				DBG_871X("%s()-%d: rtw_xmit() return error!\n", __FUNCTION__, __LINE__);

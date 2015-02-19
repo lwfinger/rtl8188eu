@@ -2084,7 +2084,7 @@ Hal_EfuseParseMACAddr_8188EU(
 	else
 	{
 		//Read Permanent MAC address
-		_rtw_memcpy(pEEPROM->mac_addr, &hwinfo[EEPROM_MAC_ADDR_88EU], ETH_ALEN);
+		memcpy(pEEPROM->mac_addr, &hwinfo[EEPROM_MAC_ADDR_88EU], ETH_ALEN);
 
 	}
 //	NicIFSetMacAddress(pAdapter, pAdapter->PermanentAddress);
