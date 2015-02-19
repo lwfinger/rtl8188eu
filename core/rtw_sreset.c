@@ -39,7 +39,7 @@ void sreset_reset_value(struct adapter *padapter)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
 
-	//psrtpriv->silent_reset_inprogress = false;
+	/* psrtpriv->silent_reset_inprogress = false; */
 	psrtpriv->Wifi_Error_Status = WIFI_STATUS_SUCCESS;
 	psrtpriv->last_tx_time =0;
 	psrtpriv->last_tx_complete_time =0;
@@ -75,7 +75,7 @@ u8 sreset_get_wifi_status(struct adapter *padapter)
 	}
 	DBG_8192C("==> %s wifi_status(0x%x)\n",__FUNCTION__,status);
 
-	//status restore
+	/* status restore */
 	psrtpriv->Wifi_Error_Status = WIFI_STATUS_SUCCESS;
 
 	return status;
@@ -126,7 +126,7 @@ static void sreset_restore_security_station(struct adapter *padapter)
 			val8 = 0xcc;
 		#ifdef CONFIG_WAPI_SUPPORT
 		} else if (padapter->wapiInfo.bWapiEnable && pmlmeinfo->auth_algo == dot11AuthAlgrthm_WAPI) {
-			//Disable TxUseDefaultKey, RxUseDefaultKey, RxBroadcastUseDefaultKey.
+			/* Disable TxUseDefaultKey, RxUseDefaultKey, RxBroadcastUseDefaultKey. */
 			val8 = 0x4c;
 		#endif
 		} else {
@@ -140,13 +140,13 @@ static void sreset_restore_security_station(struct adapter *padapter)
 	{
 		psta = rtw_get_stainfo(pstapriv, get_bssid(mlmepriv));
 		if (psta == NULL) {
-			//DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail \n"));
+			/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail \n")); */
 		}
 		else
 		{
-			//pairwise key
+			/* pairwise key */
 			rtw_setstakey_cmd(padapter, (unsigned char *)psta, true,false);
-			//group key
+			/* group key */
 			rtw_set_key(padapter,&padapter->securitypriv,padapter->securitypriv.dot118021XGrpKeyid, 0,false);
 		}
 	}
@@ -162,8 +162,8 @@ static void sreset_restore_network_station(struct adapter *padapter)
 
 	{
 		u8 threshold;
-		// TH=1 => means that invalidate usb rx aggregation
-		// TH=0 => means that validate usb rx aggregation, use init value.
+		/*  TH=1 => means that invalidate usb rx aggregation */
+		/*  TH=0 => means that validate usb rx aggregation, use init value. */
 		if(mlmepriv->htpriv.ht_option) {
 			if(padapter->registrypriv.wifi_spec==1)
 				threshold = 1;
@@ -178,8 +178,8 @@ static void sreset_restore_network_station(struct adapter *padapter)
 
 	set_channel_bwmode(padapter, pmlmeext->cur_channel, pmlmeext->cur_ch_offset, pmlmeext->cur_bwmode);
 
-	//disable dynamic functions, such as high power, DIG
-	//Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false);
+	/* disable dynamic functions, such as high power, DIG */
+	/* Switch_DM_Func(padapter, DYNAMIC_FUNC_DISABLE, false); */
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_BSSID, pmlmeinfo->network.MacAddress);
 
@@ -191,7 +191,7 @@ static void sreset_restore_network_station(struct adapter *padapter)
 	Set_MSR(padapter, (pmlmeinfo->state & 0x3));
 
 	mlmeext_joinbss_event_callback(padapter, 1);
-	//restore Sequence No.
+	/* restore Sequence No. */
 	rtw_write8(padapter,0x4dc,padapter->xmitpriv.nqos_ssn);
 
 	sreset_restore_security_station(padapter);

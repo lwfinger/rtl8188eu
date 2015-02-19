@@ -49,7 +49,7 @@ jackson@realtek.com.tw
 u8 _rtw_read8(struct adapter *adapter, u32 addr)
 {
 	u8 r_val;
-	//struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue;
+	/* struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
 	u8 (*_read8)(struct intf_hdl *pintfhdl, u32 addr);
@@ -85,7 +85,7 @@ u32 _rtw_read32(struct adapter *adapter, u32 addr)
 
 int _rtw_write8(struct adapter *adapter, u32 addr, u8 val)
 {
-	//struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue;
+	/* struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
 	int (*_write8)(struct intf_hdl *pintfhdl, u32 addr, u8 val);
@@ -112,7 +112,7 @@ int _rtw_write16(struct adapter *adapter, u32 addr, u16 val)
 }
 int _rtw_write32(struct adapter *adapter, u32 addr, u32 val)
 {
-	//struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue;
+	/* struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
 	int (*_write32)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
@@ -126,7 +126,7 @@ int _rtw_write32(struct adapter *adapter, u32 addr, u32 val)
 
 int _rtw_writeN(struct adapter *adapter, u32 addr ,u32 length , u8 *pdata)
 {
-	//struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue;
+	/* struct	io_queue	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
         struct	intf_hdl	*pintfhdl = (struct intf_hdl*)(&(pio_priv->intf));
 	int (*_writeN)(struct intf_hdl *pintfhdl, u32 addr,u32 length, u8 *pdata);
@@ -309,7 +309,7 @@ int rtw_inc_and_chk_continual_io_error(struct dvobj_priv *dvobj)
 		DBG_871X("[dvobj:%p][ERROR] continual_io_error:%d > %d\n", dvobj, value, MAX_CONTINUAL_IO_ERR);
 		ret = true;
 	} else {
-		//DBG_871X("[dvobj:%p] continual_io_error:%d\n", dvobj, value);
+		/* DBG_871X("[dvobj:%p] continual_io_error:%d\n", dvobj, value); */
 	}
 	return ret;
 }
@@ -325,12 +325,12 @@ void rtw_reset_continual_io_error(struct dvobj_priv *dvobj)
 #ifdef DBG_IO
 
 u16 read_sniff_ranges[][2] = {
-	//{0x550, 0x551},
+	/* 0x550, 0x551}, */
 };
 
 u16 write_sniff_ranges[][2] = {
-	//{0x550, 0x551},
-	//{0x4c, 0x4c},
+	/* 0x550, 0x551}, */
+	/* 0x4c, 0x4c}, */
 };
 
 int read_sniff_num = sizeof(read_sniff_ranges)/sizeof(u16)/2;
