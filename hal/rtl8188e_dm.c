@@ -146,7 +146,7 @@ static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
 	//
 	// Init Value
 	//
-	_rtw_memset(pDM_Odm,0,sizeof(pDM_Odm));
+	memset(pDM_Odm, 0, sizeof(*pDM_Odm));
 
 	pDM_Odm->Adapter = Adapter;
 
@@ -379,7 +379,7 @@ void rtl8188e_init_dm_priv(IN struct adapter *Adapter)
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
-	_rtw_memset(pdmpriv, 0, sizeof(struct dm_priv));
+	memset(pdmpriv, 0, sizeof(struct dm_priv));
 	//_rtw_spinlock_init(&(pHalData->odm_stainfo_lock));
 	Init_ODM_ComInfo_88E(Adapter);
 #ifdef CONFIG_SW_ANTENNA_DIVERSITY

@@ -89,7 +89,7 @@ void rtl8188e_fill_fake_txdesc(
 
 	// Clear all status
 	ptxdesc = (struct tx_desc*)pDesc;
-	_rtw_memset(pDesc, 0, TXDESC_SIZE);
+	memset(pDesc, 0, TXDESC_SIZE);
 
 	//offset 0
 	ptxdesc->txdw0 |= cpu_to_le32( OWN | FSG | LSG); //own, bFirstSeg, bLastSeg;
@@ -246,7 +246,7 @@ if (padapter->registrypriv.mp_mode == 0)
 }
 #endif	// CONFIG_USE_USB_BUFFER_ALLOC_TX
 
-	_rtw_memset(ptxdesc, 0, sizeof(struct tx_desc));
+	memset(ptxdesc, 0, sizeof(struct tx_desc));
 
         //4 offset 0
 	ptxdesc->txdw0 |= cpu_to_le32(OWN | FSG | LSG);
@@ -1222,7 +1222,7 @@ s32 rtl8188eu_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt)
 
 	// ----- fill tx desc -----
 	ptxdesc = (struct tx_desc *)pxmitbuf;
-	_rtw_memset(ptxdesc, 0, sizeof(*ptxdesc));
+	memset(ptxdesc, 0, sizeof(*ptxdesc));
 
 	//offset 0
 	ptxdesc->txdw0 |= cpu_to_le32(len&0x0000ffff);

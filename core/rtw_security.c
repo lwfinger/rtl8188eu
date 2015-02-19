@@ -1404,13 +1404,13 @@ static sint aes_cipher(u8 *key, uint	hdrlen,
 	frsubtype=frsubtype>>4;
 
 
-	_rtw_memset((void *)mic_iv, 0, 16);
-	_rtw_memset((void *)mic_header1, 0, 16);
-	_rtw_memset((void *)mic_header2, 0, 16);
-	_rtw_memset((void *)ctr_preload, 0, 16);
-	_rtw_memset((void *)chain_buffer, 0, 16);
-	_rtw_memset((void *)aes_out, 0, 16);
-	_rtw_memset((void *)padded_buffer, 0, 16);
+	memset((void *)mic_iv, 0, 16);
+	memset((void *)mic_header1, 0, 16);
+	memset((void *)mic_header2, 0, 16);
+	memset((void *)ctr_preload, 0, 16);
+	memset((void *)chain_buffer, 0, 16);
+	memset((void *)aes_out, 0, 16);
+	memset((void *)padded_buffer, 0, 16);
 
 	if ((hdrlen == WLAN_HDR_A3_LEN )||(hdrlen ==  WLAN_HDR_A3_QOS_LEN))
 		a4_exists = 0;
@@ -1722,13 +1722,13 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 	frsubtype=frsubtype>>4;
 
 
-	_rtw_memset((void *)mic_iv, 0, 16);
-	_rtw_memset((void *)mic_header1, 0, 16);
-	_rtw_memset((void *)mic_header2, 0, 16);
-	_rtw_memset((void *)ctr_preload, 0, 16);
-	_rtw_memset((void *)chain_buffer, 0, 16);
-	_rtw_memset((void *)aes_out, 0, 16);
-	_rtw_memset((void *)padded_buffer, 0, 16);
+	memset((void *)mic_iv, 0, 16);
+	memset((void *)mic_header1, 0, 16);
+	memset((void *)mic_header2, 0, 16);
+	memset((void *)ctr_preload, 0, 16);
+	memset((void *)chain_buffer, 0, 16);
+	memset((void *)aes_out, 0, 16);
+	memset((void *)padded_buffer, 0, 16);
 
 	//start to decrypt the payload
 
@@ -2097,7 +2097,7 @@ u32	rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
 			goto BIP_exit;
 		}
 		//clear the MIC field of MME to zero
-		_rtw_memset(p+2+len-8, 0, 8);
+		memset(p+2+len-8, 0, 8);
 
 		//conscruct AAD, copy frame control field
 		memcpy(BIP_AAD, &pwlanhdr->frame_ctl, 2);
@@ -2386,7 +2386,7 @@ static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
 	 * and text is the data being protected */
 
 	/* start out by storing key in ipad */
-	_rtw_memset(k_pad, 0, sizeof(k_pad));
+	memset(k_pad, 0, sizeof(k_pad));
 	memcpy(k_pad, key, key_len);
 	/* XOR key with ipad values */
 	for (i = 0; i < 64; i++)
@@ -2401,7 +2401,7 @@ static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
 	}
 	sha256_vector(1 + num_elem, _addr, _len, mac);
 
-	_rtw_memset(k_pad, 0, sizeof(k_pad));
+	memset(k_pad, 0, sizeof(k_pad));
 	memcpy(k_pad, key, key_len);
 	/* XOR key with opad values */
 	for (i = 0; i < 64; i++)
@@ -2761,7 +2761,7 @@ static void gf_mulx(u8 *pad)
 
 static void aes_encrypt_deinit(void *ctx)
 {
-	_rtw_memset(ctx, 0, AES_PRIV_SIZE);
+	memset(ctx, 0, AES_PRIV_SIZE);
 	rtw_mfree(ctx, AES_PRIV_SIZE);
 }
 
@@ -2790,7 +2790,7 @@ static int omac1_aes_128_vector(u8 *key, size_t num_elem,
 	ctx = aes_encrypt_init(key, 16);
 	if (ctx == NULL)
 		return -1;
-	_rtw_memset(cbc, 0, AES_BLOCK_SIZE);
+	memset(cbc, 0, AES_BLOCK_SIZE);
 
 	total_len = 0;
 	for (e = 0; e < num_elem; e++)
@@ -2815,7 +2815,7 @@ static int omac1_aes_128_vector(u8 *key, size_t num_elem,
 		left -= AES_BLOCK_SIZE;
 	}
 
-	_rtw_memset(pad, 0, AES_BLOCK_SIZE);
+	memset(pad, 0, AES_BLOCK_SIZE);
 	aes_128_encrypt(ctx, pad, pad);
 	gf_mulx(pad);
 
@@ -2955,7 +2955,7 @@ int wpa_tdls_ftie_mic(u8 *kck, u8 trans_seq,
 	/* 7) FTIE, with the MIC field of the FTIE set to 0 */
 	memcpy(pos, ftie, 2 + ftie[1]);
 	_ftie = (struct wpa_tdls_ftie *) pos;
-	_rtw_memset(_ftie->mic, 0, TDLS_MIC_LEN);
+	memset(_ftie->mic, 0, TDLS_MIC_LEN);
 	pos += 2 + ftie[1];
 
 	ret = omac1_aes_128(kck, buf, pos - buf, mic);
@@ -3006,7 +3006,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 	memcpy(pos, ftie, 2 + *(ftie+1));
 	pos += 2;
 	tmp_ftie = (u8 *) (pos+2);
-	_rtw_memset(tmp_ftie, 0, 16);
+	memset(tmp_ftie, 0, 16);
 	pos += *(ftie+1);
 
 	ret = omac1_aes_128(kck, buf, pos - buf, mic);

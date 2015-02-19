@@ -299,7 +299,7 @@ void get_rate_set(struct adapter *padapter, unsigned char *pbssrate, int *bssrat
 {
 	unsigned char supportedrates[NumRates];
 
-	_rtw_memset(supportedrates, 0, NumRates);
+	memset(supportedrates, 0, NumRates);
 	*bssrate_len = ratetbl2rateset(padapter, supportedrates);
 	memcpy(pbssrate, supportedrates, *bssrate_len);
 }
@@ -1824,7 +1824,7 @@ void update_tx_basic_rate(struct adapter *padapter, u8 wirelessmode)
 		return;
 #endif //CONFIG_INTEL_WIDI
 
-	_rtw_memset(supported_rates, 0, NDIS_802_11_LENGTH_RATES_EX);
+	memset(supported_rates, 0, NDIS_802_11_LENGTH_RATES_EX);
 
 	if ((wirelessmode & WIRELESS_11B) && (wirelessmode == WIRELESS_11B)) {
 		memcpy(supported_rates, rtw_basic_rate_cck, 4);
@@ -2257,7 +2257,7 @@ void rtw_get_sec_iv(struct adapter *padapter, u8*pcur_dot11txpn, u8 *StaAddr)
 	struct sta_info		*psta;
 	struct security_priv *psecpriv = &padapter->securitypriv;
 
-	_rtw_memset(pcur_dot11txpn, 0, 8);
+	memset(pcur_dot11txpn, 0, 8);
 	if(NULL == StaAddr)
 		return;
 	psta = rtw_get_stainfo(&padapter->stapriv, StaAddr);

@@ -386,7 +386,7 @@ static s32 iol_read_efuse(
 
 
 	rtw_write8(padapter, REG_TDECTRL+1, txpktbuf_bndy);
-	_rtw_memset(physical_map, 0xFF, 512);
+	memset(physical_map, 0xFF, 512);
 
 	///reg_0x106 = rtw_read8(padapter, REG_PKT_BUFF_ACCESS_CTRL);
 	//DBG_871X("%s reg_0x106:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0x106, 0x69);
@@ -1139,7 +1139,7 @@ static bool efuse_read_phymap(
 	//
 	// Refresh efuse init map as all 0xFF.
 	//
-	_rtw_memset(pbuf, 0xFF, limit);
+	memset(pbuf, 0xFF, limit);
 
 
 	//
@@ -1673,7 +1673,7 @@ Hal_EfuseWordEnableDataWrite(	IN	struct adapter *pAdapter,
 	u8	badworden = 0x0F;
 	u8	tmpdata[8];
 
-	_rtw_memset((void *)tmpdata, 0xff, PGPKT_DATA_SIZE);
+	memset((void *)tmpdata, 0xff, PGPKT_DATA_SIZE);
 	//RT_TRACE(COMP_EFUSE, DBG_LOUD, ("word_en = %x efuse_addr=%x\n", word_en, efuse_addr));
 
 	if(!(word_en&BIT0))
@@ -1895,8 +1895,8 @@ hal_EfusePgPacketRead_8188e(
 	if(offset>max_section)
 		return false;
 
-	_rtw_memset((void *)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
-	_rtw_memset((void *)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
+	memset((void *)data, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
+	memset((void *)tmpdata, 0xff, sizeof(u8)*PGPKT_DATA_SIZE);
 
 
 	//
@@ -2044,7 +2044,7 @@ hal_EfuseFixHeaderProcess(
 	u16	efuse_addr=*pAddr;
 	u32	PgWriteSuccess=0;
 
-	_rtw_memset((void *)originaldata, 0xff, 8);
+	memset((void *)originaldata, 0xff, 8);
 
 	if(Efuse_PgPacketRead(pAdapter, pFixPkt->offset, originaldata, bPseudoTest))
 	{	//check if data exist
@@ -2493,7 +2493,7 @@ hal_EfuseConstructPGPkt(
 
 )
 {
-	_rtw_memset((void *)pTargetPkt->data, 0xFF, sizeof(u8)*8);
+	memset((void *)pTargetPkt->data, 0xFF, sizeof(u8)*8);
 	pTargetPkt->offset = offset;
 	pTargetPkt->word_en= word_en;
 	efuse_WordEnableDataRead(word_en, pData, pTargetPkt->data);
@@ -3040,7 +3040,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 	u32 rfPath, eeAddr=EEPROM_TX_PWR_INX_88E, group,TxCount=0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
-	_rtw_memset(pwrInfo24G, 0, sizeof(TxPowerInfo24G));
+	memset(pwrInfo24G, 0, sizeof(TxPowerInfo24G));
 
 	if(AutoLoadFail)
 	{

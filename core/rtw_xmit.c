@@ -48,7 +48,7 @@ void	_rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv)
 
 ;
 
-	_rtw_memset((unsigned char *)psta_xmitpriv, 0, sizeof (struct sta_xmit_priv));
+	memset((unsigned char *)psta_xmitpriv, 0, sizeof (struct sta_xmit_priv));
 
 	_rtw_spinlock_init(&psta_xmitpriv->lock);
 
@@ -78,7 +78,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
 ;
 
 	// We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc().
-	//_rtw_memset((unsigned char *)pxmitpriv, 0, sizeof(struct xmit_priv));
+	//memset((unsigned char *)pxmitpriv, 0, sizeof(struct xmit_priv));
 
 	_rtw_spinlock_init(&pxmitpriv->lock);
 	_rtw_spinlock_init(&pxmitpriv->lock_sctx);
@@ -1147,7 +1147,7 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 		return _FAIL;
 	}
 
-	_rtw_memset(hdr, 0, WLANHDR_OFFSET);
+	memset(hdr, 0, WLANHDR_OFFSET);
 
 	SetFrameSubType(fctrl, pattrib->subtype);
 
@@ -1451,7 +1451,7 @@ s32 rtw_make_tdls_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib
 
 ;
 
-	_rtw_memset(hdr, 0, WLANHDR_OFFSET);
+	memset(hdr, 0, WLANHDR_OFFSET);
 
 	SetFrameSubType(fctrl, pattrib->subtype);
 
@@ -1946,7 +1946,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, _pkt *pkt, struct xmit
 		int frame_body_len;
 		u8 mic[16];
 
-		_rtw_memset(MME, 0, 18);
+		memset(MME, 0, 18);
 
 		//other types doesn't need the BIP
 		if(GetFrameSubType(pframe) != WIFI_DEAUTH && GetFrameSubType(pframe) != WIFI_DISASSOC)
@@ -2424,7 +2424,7 @@ static void rtw_init_xmitframe(struct xmit_frame *pxframe)
 		pxframe->buf_addr = NULL;
 		pxframe->pxmitbuf = NULL;
 
-		_rtw_memset(&pxframe->attrib, 0, sizeof(struct pkt_attrib));
+		memset(&pxframe->attrib, 0, sizeof(struct pkt_attrib));
 		//pxframe->attrib.psta = NULL;
 
 		pxframe->frame_tag = DATA_FRAMETAG;

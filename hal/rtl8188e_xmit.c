@@ -138,7 +138,7 @@ InsertEMContent_8188E(
 	u32	dwtmp=0;
 #endif
 
-	_rtw_memset(VirtualAddress, 0, EARLY_MODE_INFO_SIZE);
+	memset(VirtualAddress, 0, EARLY_MODE_INFO_SIZE);
 	if(pEMInfo->EMPktNum==0)
 		return;
 
@@ -247,7 +247,7 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 		offset = pxmitpriv->agg_pkt[index].offset;
 		pktlen = pxmitpriv->agg_pkt[index].pkt_len;
 
-		_rtw_memset(&eminfo,0,sizeof(struct EMInfo));
+		memset(&eminfo,0,sizeof(struct EMInfo));
 		if( pframe->agg_num > EARLY_MODE_MAX_PKT_NUM){
 			if(node_num_0 > EARLY_MODE_MAX_PKT_NUM){
 				eminfo.EMPktNum = EARLY_MODE_MAX_PKT_NUM;
@@ -284,7 +284,7 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 
 
 	}
-	_rtw_memset(pxmitpriv->agg_pkt,0,sizeof(struct agg_pkt_info)*MAX_AGG_PKT_NUM);
+	memset(pxmitpriv->agg_pkt,0,sizeof(struct agg_pkt_info)*MAX_AGG_PKT_NUM);
 
 }
 #endif

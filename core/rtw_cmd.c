@@ -1213,7 +1213,7 @@ u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network* pnetwork)
 		goto exit;
 	}
 
-	_rtw_memset(psecnetwork, 0, t_len);
+	memset(psecnetwork, 0, t_len);
 
 	memcpy(psecnetwork, &pnetwork->network, get_WLAN_BSSID_EX_sz(&pnetwork->network));
 

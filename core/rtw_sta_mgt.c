@@ -35,7 +35,7 @@ void _rtw_init_stainfo(struct sta_info *psta)
 
 ;
 
-	_rtw_memset((u8 *)psta, 0, sizeof (struct sta_info));
+	memset((u8 *)psta, 0, sizeof (struct sta_info));
 
 	 _rtw_spinlock_init(&psta->lock);
 	_rtw_init_listhead(&psta->list);
@@ -159,7 +159,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 	pstapriv->expire_to = 60;// 60*2 = 120 sec = 2 min, expire after no any traffic.
 #endif
 #ifdef CONFIG_ATMEL_RC_PATCH
-	_rtw_memset(  pstapriv->atmel_rc_pattern, 0, ETH_ALEN);
+	memset(  pstapriv->atmel_rc_pattern, 0, ETH_ALEN);
 #endif
 	pstapriv->max_num_sta = NUM_STA;
 

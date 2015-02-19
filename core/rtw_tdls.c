@@ -71,7 +71,7 @@ void rtw_free_tdls_info(struct tdls_info *ptdlsinfo)
 	_rtw_spinlock_free(&ptdlsinfo->cmd_lock);
 	_rtw_spinlock_free(&ptdlsinfo->hdl_lock);
 
-	_rtw_memset(ptdlsinfo, 0, sizeof(struct tdls_info) );
+	memset(ptdlsinfo, 0, sizeof(struct tdls_info) );
 
 }
 
@@ -95,7 +95,7 @@ void issue_nulldata_to_TDLS_peer_STA(_adapter *padapter, struct sta_info *ptdls_
 	pattrib = &pmgntframe->attrib;
 	update_mgntframe_attrib(padapter, pattrib);
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
@@ -258,7 +258,7 @@ void free_tdls_sta(_adapter *padapter, struct sta_info *ptdls_sta)
 	if( ptdlsinfo->sta_cnt < (NUM_STA - 2) )	// -2: AP + BC/MC sta
 	{
 		ptdlsinfo->sta_maximum = false;
-		_rtw_memset( &ptdlsinfo->ss_record, 0x00, sizeof(struct tdls_ss_record) );
+		memset( &ptdlsinfo->ss_record, 0x00, sizeof(struct tdls_ss_record) );
 	}
 	//ready to clear cam
 	if(ptdls_sta->mac_id!=0){
@@ -301,7 +301,7 @@ void rtw_tdls_set_key(_adapter *adapter, struct rx_pkt_attrib *prx_pkt_attrib, s
 void rtw_tdls_process_ht_cap(_adapter *adapter, struct sta_info *ptdls_sta, u8 *data, u8 Length)
 {
 	/* save HT capabilities in the sta object */
-	_rtw_memset(&ptdls_sta->htpriv.ht_cap, 0, sizeof(struct rtw_ieee80211_ht_cap));
+	memset(&ptdls_sta->htpriv.ht_cap, 0, sizeof(struct rtw_ieee80211_ht_cap));
 	if (data && Length >= sizeof(struct rtw_ieee80211_ht_cap) )
 	{
 		ptdls_sta->flags |= WLAN_STA_HT;
@@ -354,7 +354,7 @@ u8 *rtw_tdls_set_ht_cap(_adapter *padapter, u8 *pframe, struct pkt_attrib *pattr
 	u8 rf_type;
 
 	//HT capabilities
-	_rtw_memset(&ht_capie, 0, sizeof(struct rtw_ieee80211_ht_cap));
+	memset(&ht_capie, 0, sizeof(struct rtw_ieee80211_ht_cap));
 
 	ht_capie.cap_info = IEEE80211_HT_CAP_SUP_WIDTH |IEEE80211_HT_CAP_SGI_20 |IEEE80211_HT_CAP_SM_PS |
 						IEEE80211_HT_CAP_SGI_40 | IEEE80211_HT_CAP_TX_STBC |IEEE80211_HT_CAP_DSSSCCK40;
@@ -435,7 +435,7 @@ void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 			DBG_871X( "[%s] Peer PORT NUM = %d\n", __FUNCTION__, ptdlsinfo->wfd_info->peer_rtsp_ctrlport );
 		}
 
-		_rtw_memset( attr_content, 0x00, 10);
+		memset( attr_content, 0x00, 10);
 		attr_contentlen = 0;
 		rtw_get_wfd_attr_content( wfd_ie, wfd_ielen, WFD_ATTR_LOCAL_IP_ADDR, attr_content, &attr_contentlen);
 		if ( attr_contentlen )
@@ -838,7 +838,7 @@ void issue_tdls_dis_rsp(_adapter *padapter, union recv_frame *precv_frame, u8 di
 	pattrib = &pmgntframe->attrib;
 	update_mgntframe_attrib(padapter, pattrib);
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
@@ -1993,7 +1993,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen )
 	}
 	else
 	{
-		_rtw_memset( wfdie + wfdielen, 0x00, ETH_ALEN );
+		memset( wfdie + wfdielen, 0x00, ETH_ALEN );
 	}
 
 	//	Local IP Address ATTR
@@ -2102,9 +2102,9 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 
 	if(pattrib->encrypt){
 		//FTIE
-		_rtw_memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
-		_rtw_memset(pframe, _FTIE_, 1);	//version
-		_rtw_memset((pframe+1), 82, 1);	//length
+		memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
+		memset(pframe, _FTIE_, 1);	//version
+		memset((pframe+1), 82, 1);	//length
 		memcpy((pframe+52), ptdls_sta->SNonce, 32);
 		pframe += 84;
 		pattrib->pktlen += 84;
@@ -2244,9 +2244,9 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 		//FTIE
 		pftie = pframe;
 		pftie_mic = pframe+4;
-		_rtw_memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
-		_rtw_memset(pframe, _FTIE_, 1);	//version
-		_rtw_memset((pframe+1), 82, 1);	//length
+		memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
+		memset(pframe, _FTIE_, 1);	//version
+		memset((pframe+1), 82, 1);	//length
 		memcpy((pframe+20), ptdls_sta->ANonce, 32);
 		memcpy((pframe+52), ptdls_sta->SNonce, 32);
 		pframe += 84;
@@ -2326,9 +2326,9 @@ void rtw_build_tdls_setup_cfm_ies(_adapter * padapter, struct xmit_frame * pxmit
 		//FTIE
 		pftie = pframe;
 		pftie_mic = pframe+4;
-		_rtw_memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
-		_rtw_memset(pframe, _FTIE_, 1);	//version
-		_rtw_memset((pframe+1), 82, 1);	//length
+		memset(pframe, 0, 84);	//All fields except SNonce shall be set to 0
+		memset(pframe, _FTIE_, 1);	//version
+		memset((pframe+1), 82, 1);	//length
 		memcpy((pframe+20), ptdls_sta->ANonce, 32);
 		memcpy((pframe+52), ptdls_sta->SNonce, 32);
 		pframe += 84;
@@ -2479,9 +2479,9 @@ void rtw_build_tdls_dis_rsp_ies(_adapter * padapter, struct xmit_frame * pxmitfr
 
 	if(pattrib->encrypt){
 		//FTIE
-		_rtw_memset(pframe, 0, 84);	//All fields shall be set to 0
-		_rtw_memset(pframe, _FTIE_, 1);	//version
-		_rtw_memset((pframe+1), 82, 1);	//length
+		memset(pframe, 0, 84);	//All fields shall be set to 0
+		memset(pframe, _FTIE_, 1);	//version
+		memset((pframe+1), 82, 1);	//length
 		pframe += 84;
 		pattrib->pktlen += 84;
 

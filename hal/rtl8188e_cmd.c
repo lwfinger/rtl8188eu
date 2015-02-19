@@ -193,7 +193,7 @@ u8 rtl8188e_set_raid_cmd(struct adapter*padapter, u32 mask)
 	if(pHalData->fw_ractrl == true){
 		__le32 lmask;
 
-		_rtw_memset(buf, 0, 3);
+		memset(buf, 0, 3);
 		lmask = cpu_to_le32( mask );
 		memcpy(buf, &lmask, 3);
 
@@ -634,7 +634,7 @@ static void ConstructARPResponse(
 
 	if(EncryptionHeadOverhead > 0)
 	{
-		_rtw_memset(&(pframe[*pLength]), 0,EncryptionHeadOverhead);
+		memset(&(pframe[*pLength]), 0,EncryptionHeadOverhead);
 		*pLength += EncryptionHeadOverhead;
 		//SET_80211_HDR_WEP(pARPRspPkt, 1);  //Suggested by CCW.
 		SetPrivacy(fctrl);
@@ -1115,7 +1115,7 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
 			DBG_8192C("P2P_PS_DISABLE \n");
-			_rtw_memset(p2p_ps_offload, 0 ,1);
+			memset(p2p_ps_offload, 0 ,1);
 			break;
 		case P2P_PS_ENABLE:
 			DBG_8192C("P2P_PS_ENABLE \n");
