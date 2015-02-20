@@ -414,7 +414,6 @@ if (padapter->registrypriv.mp_mode == 0)
 		/* fill_txdesc_sectype(pattrib, ptxdesc); */
 
 		/* offset 8 */
-#ifdef CONFIG_XMIT_ACK
 		/* CCX-TXRPT ack for xmit mgmt frames. */
 		if (pxmitframe->ack_report) {
 			#ifdef DBG_CCX
@@ -425,7 +424,6 @@ if (padapter->registrypriv.mp_mode == 0)
 			#endif
 			ptxdesc->txdw2 |= cpu_to_le32(BIT(19));
 		}
-#endif /* CONFIG_XMIT_ACK */
 
 		/* offset 12 */
 		ptxdesc->txdw3 |= cpu_to_le32((pattrib->seqnum<<SEQ_SHT)&0x0FFF0000);

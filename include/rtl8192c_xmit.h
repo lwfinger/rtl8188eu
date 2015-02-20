@@ -110,13 +110,8 @@ struct txrpt_ccx_8192c {
 
 #define txrpt_ccx_qtime_8192c(txrpt_ccx) ((txrpt_ccx)->ccx_qtime0+((txrpt_ccx)->ccx_qtime1<<8))
 
-#ifdef CONFIG_XMIT_ACK
 void dump_txrpt_ccx_8192c(void *buf);
 void handle_txrpt_ccx_8192c(struct adapter *adapter, void *buf);
-#else
-#define dump_txrpt_ccx_8192c(buf) do {} while(0)
-#define handle_txrpt_ccx_8192c(adapter, buf) do {} while(0)
-#endif
 
 #ifdef CONFIG_USB_TX_AGGREGATION
 #define MAX_TX_AGG_PACKET_NUMBER 0xFF

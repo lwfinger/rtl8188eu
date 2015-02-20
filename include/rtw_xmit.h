@@ -289,9 +289,7 @@ struct xmit_frame
 #endif
 	s8	pkt_offset;
 
-#ifdef CONFIG_XMIT_ACK
 	u8 ack_report;
-#endif
 
 	u8 *alloc_addr; /* the actual address this xmitframe allocated */
 	u8 ext_tag; /* 0:data, 1:mgmt */
@@ -431,11 +429,9 @@ struct	xmit_priv	{
 	struct agg_pkt_info agg_pkt[MAX_AGG_PKT_NUM];
 	#endif
 
-#ifdef CONFIG_XMIT_ACK
 	int	ack_tx;
 	_mutex ack_tx_mutex;
 	struct submit_ctx ack_tx_ops;
-#endif
 	_lock lock_sctx;
 };
 
@@ -507,10 +503,8 @@ thread_return	rtw_xmit_thread(thread_context context);
 
 u32	rtw_get_ff_hwaddr(struct xmit_frame	*pxmitframe);
 
-#ifdef CONFIG_XMIT_ACK
 int rtw_ack_tx_wait(struct xmit_priv *pxmitpriv, u32 timeout_ms);
 void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status);
-#endif //CONFIG_XMIT_ACK
 
 
 //include after declaring struct xmit_buf, in order to avoid warning
