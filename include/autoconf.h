@@ -19,9 +19,6 @@
  ******************************************************************************/
 //***** temporarily flag *******
 
-//#define CONFIG_DISABLE_ODM
-//#define CONFIG_ATMEL_RC_PATCH
-
 #define CONFIG_ODM_REFRESH_RAMASK
 #define CONFIG_PHY_SETTING_WITH_ODM
 //for FPGA VERIFICATION config

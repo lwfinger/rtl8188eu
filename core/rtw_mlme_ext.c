@@ -770,15 +770,6 @@ unsigned int OnProbeReq(struct adapter *padapter, union recv_frame *precv_frame)
 	uint len = precv_frame->u.hdr.len;
 	u8 is_valid_p2p_probereq = false;
 
-#ifdef CONFIG_ATMEL_RC_PATCH
-	u8 *target_ie=NULL, *wps_ie=NULL;
-	u8 *start;
-	uint search_len = 0, wps_ielen = 0, target_ielen = 0;
-	struct sta_info	*psta;
-	struct sta_priv *pstapriv = &padapter->stapriv;
-#endif
-
-
 #ifdef CONFIG_P2P
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 	struct rx_pkt_attrib	*pattrib = &precv_frame->u.hdr.attrib;
@@ -840,44 +831,18 @@ _continue:
 		return _SUCCESS;
 	}
 
-
-	/* DBG_871X("+OnProbeReq\n"); */
-
-
-#ifdef CONFIG_ATMEL_RC_PATCH
-		if ((wps_ie = rtw_get_wps_ie(
-			pframe + WLAN_HDR_A3_LEN + _PROBEREQ_IE_OFFSET_,
-			len - WLAN_HDR_A3_LEN - _PROBEREQ_IE_OFFSET_,
-			 NULL, &wps_ielen))) {
-
-			target_ie = rtw_get_wps_attr_content( wps_ie, wps_ielen, WPS_ATTR_MANUFACTURER, NULL, &target_ielen);
-		}
-		if ((target_ie && (target_ielen == 4)) && (true ==_rtw_memcmp((void *)target_ie, "Ozmo",4 ))) {
-			/* psta->flag_atmel_rc = 1; */
-			unsigned char *sa_addr = get_sa(pframe);
-			DBG_871X("%s: Find Ozmo RC -- %02x:%02x:%02x:%02x:%02x:%02x  \n\n",
-				__func__, *sa_addr, *(sa_addr+1), *(sa_addr+2), *(sa_addr+3), *(sa_addr+4), *(sa_addr+5));
-			memcpy(  pstapriv->atmel_rc_pattern, get_sa(pframe), ETH_ALEN);
-		}
-#endif
 	p = rtw_get_ie(pframe + WLAN_HDR_A3_LEN + _PROBEREQ_IE_OFFSET_, _SSID_IE_, (int *)&ielen,
 			len - WLAN_HDR_A3_LEN - _PROBEREQ_IE_OFFSET_);
 
-
 	/* check (wildcard) SSID */
-	if (p != NULL)
-	{
+	if (p != NULL) {
 		if(is_valid_p2p_probereq == true)
-		{
 			goto _issue_probersp;
-		}
 
 		if ( (ielen != 0 && false ==_rtw_memcmp((void *)(p+2), (void *)cur->Ssid.Ssid, cur->Ssid.SsidLength))
 			|| (ielen == 0 && pmlmeinfo->hidden_ssid_mode)
 		)
-		{
 			return _SUCCESS;
-		}
 
 _issue_probersp:
 
@@ -8394,30 +8359,6 @@ void site_survey(struct adapter *padapter)
 				}
 			}
 		}
-#ifdef CONFIG_ATMEL_RC_PATCH
-	#ifdef CONFIG_P2P
-		if( !rtw_p2p_chk_state(pwdinfo, P2P_STATE_SCAN)  &&
-			!rtw_p2p_chk_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH)
-			)
-	#endif/* CONFIG_P2P */
-		{
-			if(ScanType == SCAN_ACTIVE){
-				if( check_fwstate(pmlmepriv, _FW_LINKED) == true){
-					if(survey_channel == pmlmeext->cur_channel )
-						set_survey_timer(pmlmeext, 200);
-					else
-						set_survey_timer(pmlmeext, 20);
-				}
-				else{
-					set_survey_timer(pmlmeext, 40);
-				}
-			}
-			else{/* SCAN_PASSIVE */
-				set_survey_timer(pmlmeext, pmlmeext->chan_scan_time);
-			}
-		}
-		else
-#endif /* CONFIG_ATMEL_RC_PATCH */
 		{
 #ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
 		if( stay_buddy_ch == 1 )

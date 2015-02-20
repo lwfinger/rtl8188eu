@@ -369,13 +369,6 @@ void	expire_timeout_chk(struct adapter *padapter)
 		psta = LIST_CONTAINOR(plist, struct sta_info, auth_list);
 		plist = get_next(plist);
 
-
-#ifdef CONFIG_ATMEL_RC_PATCH
-		if (true == _rtw_memcmp((void *)(pstapriv->atmel_rc_pattern), (void *)(psta->hwaddr), ETH_ALEN))
-			continue;
-		if (psta->flag_atmel_rc)
-			continue;
-#endif
 		if(psta->expire_to>0)
 		{
 			psta->expire_to--;
@@ -420,15 +413,6 @@ void	expire_timeout_chk(struct adapter *padapter)
 	{
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 		plist = get_next(plist);
-#ifdef CONFIG_ATMEL_RC_PATCH
-		DBG_871X("%s:%d  psta=%p, %02x,%02x||%02x,%02x  \n\n", __func__,  __LINE__,
-			psta,pstapriv->atmel_rc_pattern[0], pstapriv->atmel_rc_pattern[5], psta->hwaddr[0], psta->hwaddr[5]);
-		if (true == _rtw_memcmp((void *)pstapriv->atmel_rc_pattern, (void *)(psta->hwaddr), ETH_ALEN))
-			continue;
-		if (psta->flag_atmel_rc)
-			continue;
-		DBG_871X("%s: debug line:%d \n", __func__, __LINE__);
-#endif
 		if (chk_sta_is_alive(psta) || !psta->expire_to) {
 			psta->expire_to = pstapriv->expire_to;
 			psta->keep_alive_trycnt = 0;
@@ -543,12 +527,6 @@ if (chk_alive_num) {
 		int ret = _FAIL;
 
 		psta = rtw_get_stainfo_by_offset(pstapriv, chk_alive_list[i]);
-#ifdef CONFIG_ATMEL_RC_PATCH
-		if (true == _rtw_memcmp(  pstapriv->atmel_rc_pattern, psta->hwaddr, ETH_ALEN))
-			continue;
-		if (psta->flag_atmel_rc)
-			continue;
-#endif
 		if(!(psta->state &_FW_LINKED))
 			continue;
 
