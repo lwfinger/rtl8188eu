@@ -61,7 +61,7 @@ void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf)
 			rtw_ack_tx_done(&adapter->xmitpriv, RTW_SCTX_DONE_CCX_PKT_FAIL);
 	}
 }
-#endif //CONFIG_XMIT_ACK
+#endif /* CONFIG_XMIT_ACK */
 
 void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc)
 {
@@ -69,24 +69,22 @@ void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *pt
 	u8 bDumpTxDesc = false;
 	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DUMP_TXPKT, &(bDumpTxPkt));
 
-	if(bDumpTxPkt ==1){//dump txdesc for data frame
+	if(bDumpTxPkt ==1){/* dump txdesc for data frame */
 		DBG_871X("dump tx_desc for data frame\n");
 		if((frame_tag&0x0f) == DATA_FRAMETAG){
 			bDumpTxDesc = true;
 		}
 	}
-	else if(bDumpTxPkt ==2){//dump txdesc for mgnt frame
+	else if(bDumpTxPkt ==2){/* dump txdesc for mgnt frame */
 		DBG_871X("dump tx_desc for mgnt frame\n");
 		if((frame_tag&0x0f) == MGNT_FRAMETAG){
 			bDumpTxDesc = true;
 		}
 	}
-	else if(bDumpTxPkt ==3){//dump early info
+	else if(bDumpTxPkt ==3){/* dump early info */
 	}
 
 	if(bDumpTxDesc){
-		//	ptxdesc->txdw4 = cpu_to_le32(0x00001006);//RTS Rate=24M
-		//	ptxdesc->txdw6 = 0x6666f800;
 		DBG_8192C("=====================================\n");
 		DBG_8192C("txdw0(0x%08x)\n",ptxdesc->txdw0);
 		DBG_8192C("txdw1(0x%08x)\n",ptxdesc->txdw1);
@@ -112,7 +110,7 @@ void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *pt
  */
 #ifdef CONFIG_TX_EARLY_MODE
 
-//#define DBG_EMINFO
+/* define DBG_EMINFO */
 
 #if RTL8188E_EARLY_MODE_PKT_NUM_10 == 1
 	#define EARLY_MODE_MAX_PKT_NUM	10
@@ -206,7 +204,7 @@ InsertEMContent_8188E(
 	SET_EARLYMODE_LEN3(VirtualAddress, pEMInfo->EMPktLen[3]);
 	SET_EARLYMODE_LEN4(VirtualAddress, pEMInfo->EMPktLen[4]);
 #endif
-	//RT_PRINT_DATA(COMP_SEND, DBG_LOUD, "EMHdr:", VirtualAddress, 8);
+	/* RT_PRINT_DATA(COMP_SEND, DBG_LOUD, "EMHdr:", VirtualAddress, 8); */
 
 }
 
@@ -214,7 +212,7 @@ InsertEMContent_8188E(
 
 void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmitbuf )
 {
-	//struct adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq
+	/* struct adapter *padapter, struct xmit_frame *pxmitframe,struct tx_servq	*ptxservq */
 	int index,j;
 	u16 offset,pktlen;
 	PTXDESC ptxdesc;
@@ -262,7 +260,7 @@ void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmit
 			eminfo.EMPktNum = pframe->agg_num-(index+1);
 		}
 		for(j=0;j< eminfo.EMPktNum ;j++){
-			eminfo.EMPktLen[j] = pxmitpriv->agg_pkt[index+1+j].pkt_len+4;// 4 bytes CRC
+			eminfo.EMPktLen[j] = pxmitpriv->agg_pkt[index+1+j].pkt_len+4;/*  4 bytes CRC */
 		}
 
 		if(pmem){

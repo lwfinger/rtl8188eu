@@ -25,7 +25,7 @@
 
 #define		TEST_FALG___		1
 
-//2 Config Flags and Structs - defined by each ODM Type
+/* 2 Config Flags and Structs - defined by each ODM Type */
 
 	#include <drv_conf.h>
 	#include <osdep_service.h>
@@ -33,11 +33,11 @@
 	#include <hal_intf.h>	
 		
 
-//2 Hardware Parameter Files
+/* 2 Hardware Parameter Files */
 
 #include "Hal8188EFWImg_CE.h"	
 
-//2 OutSrc Header Files
+/* 2 OutSrc Header Files */
 
 #include "odm.h"
 #include "odm_HWConfig.h"
@@ -46,8 +46,8 @@
 #include "odm_RegDefine11N.h"
 
 #include "HalPhyRf.h"
-#include "HalPhyRf_8188e.h"//for IQK,LCK,Power-tracking
-#include "Hal8188ERateAdaptive.h"//for  RA,Power training
+#include "HalPhyRf_8188e.h"/* for IQK,LCK,Power-tracking */
+#include "Hal8188ERateAdaptive.h"/* for  RA,Power training */
 #include "rtl8188e_hal.h"  	
 
 #include "odm_interface.h"
@@ -66,10 +66,10 @@
 
 #ifdef CONFIG_WOWLAN
 #include "HalHWImg8188E_FW.h"
-#endif //CONFIG_WOWLAN
+#endif /* CONFIG_WOWLAN */
 
 #include "odm_RegConfig8188E.h"
 #include "odm_RTL8188E.h"
 
-#endif	// __ODM_PRECOMP_H__
+#endif	/*  __ODM_PRECOMP_H__ */
 

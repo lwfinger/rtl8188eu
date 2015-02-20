@@ -59,8 +59,8 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 	struct recv_buf *precvbuf;
 
 #ifdef CONFIG_RECV_THREAD_MODE
-	_rtw_init_sema(&precvpriv->recv_sema, 0);//will be removed
-	_rtw_init_sema(&precvpriv->terminate_recvthread_sema, 0);//will be removed
+	_rtw_init_sema(&precvpriv->recv_sema, 0);/* will be removed */
+	_rtw_init_sema(&precvpriv->terminate_recvthread_sema, 0);/* will be removed */
 #endif
 
 	tasklet_init(&precvpriv->recv_tasklet,
@@ -82,12 +82,12 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 	}
 #endif
 
-	//init recv_buf
+	/* init recv_buf */
 	_rtw_init_queue(&precvpriv->free_recv_buf_queue);
 
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
 	_rtw_init_queue(&precvpriv->recv_buf_pending_queue);
-#endif	// CONFIG_USE_USB_BUFFER_ALLOC_RX
+#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_RX */
 
 	precvpriv->pallocated_recv_buf = rtw_zmalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4);
 	if(precvpriv->pallocated_recv_buf==NULL){
@@ -98,8 +98,8 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 	memset(precvpriv->pallocated_recv_buf, 0, NR_RECVBUFF *sizeof(struct recv_buf) + 4);
 
 	precvpriv->precv_buf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(precvpriv->pallocated_recv_buf), 4);
-	//precvpriv->precv_buf = precvpriv->pallocated_recv_buf + 4 -
-	//						((uint) (precvpriv->pallocated_recv_buf) &(4-1));
+	/* precvpriv->precv_buf = precvpriv->pallocated_recv_buf + 4 - */
+	/* 						((uint) (precvpriv->pallocated_recv_buf) &(4-1)); */
 
 
 	precvbuf = (struct recv_buf*)precvpriv->precv_buf;
@@ -120,7 +120,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 		precvbuf->adapter =padapter;
 
 
-		//rtw_list_insert_tail(&precvbuf->list, &(precvpriv->free_recv_buf_queue.queue));
+		/* rtw_list_insert_tail(&precvbuf->list, &(precvpriv->free_recv_buf_queue.queue)); */
 
 		precvbuf++;
 
@@ -189,7 +189,7 @@ void rtl8188eu_free_recv_priv (struct adapter *padapter)
 
 	if(precvpriv->int_in_buf)
 		rtw_mfree(precvpriv->int_in_buf, INTERRUPT_MSG_FORMAT_LEN);
-#endif//CONFIG_USB_INTERRUPT_IN_PIPE
+#endif/* CONFIG_USB_INTERRUPT_IN_PIPE */
 
 	if (skb_queue_len(&precvpriv->rx_skb_queue)) {
 		DBG_8192C(KERN_WARNING "rx_skb_queue not empty\n");

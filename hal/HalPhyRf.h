@@ -26,5 +26,5 @@
 void ODM_ResetIQKResult(PDM_ODM_T	pDM_Odm );
 u8 ODM_GetRightChnlPlaceforIQK(u8 chnl);
 
-#endif	// #ifndef __HAL_PHY_RF_H__
+#endif	/*  #ifndef __HAL_PHY_RF_H__ */
 

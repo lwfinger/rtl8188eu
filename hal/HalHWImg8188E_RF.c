@@ -201,7 +201,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 	struct cmd_cmp cmpdata[ArrayLen];
 	u32	cmpdata_idx=0;
 	#endif
-#endif//#ifdef CONFIG_IOL_IOREG_CFG
+#endif/* ifdef CONFIG_IOL_IOREG_CFG */
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 
 	hex += board;
@@ -218,14 +218,14 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 			return HAL_STATUS_FAILURE;
 		}
 	}
-#endif//#ifdef CONFIG_IOL_IOREG_CFG
+#endif/* ifdef CONFIG_IOL_IOREG_CFG */
 
 	for (i = 0; i < ArrayLen; i += 2 )
 	{
 	    u32 v1 = Array[i];
 	    u32 v2 = Array[i+1];
 
-	    // This (offset, data) pair meets the condition.
+	    /*  This (offset, data) pair meets the condition. */
 	    if ( v1 < 0xCDCDCDCD )
 	    {
 			#ifdef CONFIG_IOL_IOREG_CFG
@@ -263,16 +263,16 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 
 			}
 			else
-			#endif	//#ifdef CONFIG_IOL_IOREG_CFG
+			#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
 			{
 				odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 			}
 		    continue;
 		}
 		else
-		{ // This line is the start line of branch.
+		{ /*  This line is the start line of branch. */
 		    if ( !CheckCondition(Array[i], hex) )
-		    { // Discard the following (offset, data) pairs.
+		    { /*  Discard the following (offset, data) pairs. */
 		        READ_NEXT_PAIR(v1, v2, i);
 		        while (v2 != 0xDEAD &&
 		               v2 != 0xCDEF &&
@@ -280,9 +280,9 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 		        {
 		            READ_NEXT_PAIR(v1, v2, i);
 		        }
-		        i -= 2; // prevent from for-loop += 2
+		        i -= 2; /*  prevent from for-loop += 2 */
 		    }
-		    else // Configure matched pairs and skip to end of if-else.
+		    else /*  Configure matched pairs and skip to end of if-else. */
 		    {
 		        READ_NEXT_PAIR(v1, v2, i);
 		        while (v2 != 0xDEAD &&
@@ -325,7 +325,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 
 				}
 				else
-				#endif	//#ifdef CONFIG_IOL_IOREG_CFG
+				#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
 				{
 					odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 				}
@@ -342,7 +342,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 	}
 #ifdef CONFIG_IOL_IOREG_CFG
 	if(biol){
-		//printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__FUNCTION__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt);
+		/* printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__FUNCTION__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt); */
 		if(rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
 		{
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
@@ -362,12 +362,12 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 					}
 				}
 				printk("### %s data compared !!###\n",__FUNCTION__);
-				//if(rst == HAL_STATUS_FAILURE)
-				{//dump data from TX packet buffer
+				/* if(rst == HAL_STATUS_FAILURE) */
+				{/* dump data from TX packet buffer */
 					rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
 				}
 			}
-			#endif //CONFIG_IOL_IOREG_CFG_DBG
+			#endif /* CONFIG_IOL_IOREG_CFG_DBG */
 
 		}
 		else{
@@ -375,15 +375,15 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 			printk("~~~ IOL Config %s Failed !!! \n",__FUNCTION__);
 			#ifdef CONFIG_IOL_IOREG_CFG_DBG
 			{
-				//dump data from TX packet buffer
+				/* dump data from TX packet buffer */
 				rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
 			}
-			#endif //CONFIG_IOL_IOREG_CFG_DBG
+			#endif /* CONFIG_IOL_IOREG_CFG_DBG */
 		}
 	}
 
 
-#endif	//#ifdef CONFIG_IOL_IOREG_CFG
+#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
 	return rst;
 }
 /******************************************************************************
@@ -522,16 +522,16 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 	    u32 v1 = Array[i];
 	    u32 v2 = Array[i+1];
 
-	    // This (offset, data) pair meets the condition.
+	    /*  This (offset, data) pair meets the condition. */
 	    if ( v1 < 0xCDCDCDCD )
 	    {
 		    odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 		    continue;
 		}
 		else
-		{ // This line is the start line of branch.
+		{ /*  This line is the start line of branch. */
 		    if ( !CheckCondition(Array[i], hex) )
-		    { // Discard the following (offset, data) pairs.
+		    { /*  Discard the following (offset, data) pairs. */
 		        READ_NEXT_PAIR(v1, v2, i);
 		        while (v2 != 0xDEAD &&
 		               v2 != 0xCDEF &&
@@ -539,9 +539,9 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 		        {
 		            READ_NEXT_PAIR(v1, v2, i);
 		        }
-		        i -= 2; // prevent from for-loop += 2
+		        i -= 2; /*  prevent from for-loop += 2 */
 		    }
-		    else // Configure matched pairs and skip to end of if-else.
+		    else /*  Configure matched pairs and skip to end of if-else. */
 		    {
 		        READ_NEXT_PAIR(v1, v2, i);
 		        while (v2 != 0xDEAD &&

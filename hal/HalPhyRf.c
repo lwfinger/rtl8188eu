@@ -20,9 +20,9 @@
 
  #include "odm_precomp.h"
 
-//3============================================================
-//3 IQ Calibration
-//3============================================================
+/* 3============================================================ */
+/* 3 IQ Calibration */
+/* 3============================================================ */
 
 void
 ODM_ResetIQKResult(
@@ -35,7 +35,7 @@ ODM_ResetIQKResult(
 	if (!IS_HARDWARE_TYPE_8192D(Adapter))
 		return;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("PHY_ResetIQKResult:: settings regs %d default regs %d\n", (u32)(sizeof(pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting)/sizeof(IQK_MATRIX_REGS_SETTING)), IQK_Matrix_Settings_NUM));
-	//0xe94, 0xe9c, 0xea4, 0xeac, 0xeb4, 0xebc, 0xec4, 0xecc
+	/* 0xe94, 0xe9c, 0xea4, 0xeac, 0xeb4, 0xebc, 0xec4, 0xecc */
 
 	for(i = 0; i < IQK_Matrix_Settings_NUM; i++)
 	{

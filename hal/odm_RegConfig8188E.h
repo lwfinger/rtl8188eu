@@ -74,5 +74,5 @@ odm_ConfigBB_PHY_8188E(
     IN 	u32 		Data
     );
 
-#endif // end of SUPPORT
+#endif /*  end of SUPPORT */
 

@@ -21,7 +21,7 @@
 #ifndef __INC_MAC_8188E_HW_IMG_H
 #define __INC_MAC_8188E_HW_IMG_H
 
-//static BOOLEAN CheckCondition(const u32 Condition, const u32 Hex);
+/* static BOOLEAN CheckCondition(const u32 Condition, const u32 Hex); */
 
 /******************************************************************************
 *                           MAC_REG.TXT
@@ -37,7 +37,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 ******************************************************************************/
 
 void
-ODM_ReadAndConfig_MAC_REG_ICUT_8188E( // TC: Test Chip, MP: MP Chip
+ODM_ReadAndConfig_MAC_REG_ICUT_8188E( /*  TC: Test Chip, MP: MP Chip */
 	IN   PDM_ODM_T  pDM_Odm
 );
 

@@ -24,15 +24,15 @@
 
 
 
-//
-// =========== Constant/Structure/Enum/... Define
-//
+/*  */
+/*  =========== Constant/Structure/Enum/... Define */
+/*  */
 
 
 
-//
-// =========== Macro Define
-//
+/*  */
+/*  =========== Macro Define */
+/*  */
 
 #define _reg_all(_name)			ODM_##_name
 #define _reg_ic(_name, _ic)		ODM_##_name##_ic
@@ -58,9 +58,9 @@ ODM_REG(DIG,_pDM_Odm)
 		_func##_11AC(_name)									\
 	)
 
-// _name: name of register or bit.
-// Example: "ODM_REG(R_A_AGC_CORE1, pDM_Odm)" 
-//        gets "ODM_R_A_AGC_CORE1" or "ODM_R_A_AGC_CORE1_8192C", depends on SupportICType.
+/*  _name: name of register or bit. */
+/*  Example: "ODM_REG(R_A_AGC_CORE1, pDM_Odm)"  */
+/*         gets "ODM_R_A_AGC_CORE1" or "ODM_R_A_AGC_CORE1_8192C", depends on SupportICType. */
 #define ODM_REG(_name, _pDM_Odm)	_cat(_name, _pDM_Odm->SupportICType, _reg)
 #define ODM_BIT(_name, _pDM_Odm)	_cat(_name, _pDM_Odm->SupportICType, _bit)
 
@@ -73,22 +73,22 @@ typedef enum _ODM_H2C_CMD
 }ODM_H2C_CMD;
 
 
-//
-// 2012/02/17 MH For non-MP compile pass only. Linux does not support workitem.
-// Suggest HW team to use thread instead of workitem. Windows also support the feature.
-//
+/*  */
+/*  2012/02/17 MH For non-MP compile pass only. Linux does not support workitem. */
+/*  Suggest HW team to use thread instead of workitem. Windows also support the feature. */
+/*  */
 typedef  void *PRT_WORK_ITEM ;
 typedef  void RT_WORKITEM_HANDLE,*PRT_WORKITEM_HANDLE;
 typedef void (*RT_WORKITEM_CALL_BACK)(void * pContext);
 
-//
-// =========== Extern Variable ??? It should be forbidden.
-//
+/*  */
+/*  =========== Extern Variable ??? It should be forbidden. */
+/*  */
 
 
-//
-// =========== EXtern Function Prototype
-//
+/*  */
+/*  =========== EXtern Function Prototype */
+/*  */
 
 
 u8
@@ -178,9 +178,9 @@ ODM_GetRFReg(
 	);
 
 
-//
-// Memory Relative Function.
-//
+/*  */
+/*  Memory Relative Function. */
+/*  */
 void
 ODM_AllocateMemory(	
 	IN 	PDM_ODM_T	pDM_Odm,
@@ -201,9 +201,9 @@ s32 ODM_CompareMemory(
       IN	u32          length
        );
 	
-//
-// ODM MISC-spin lock relative API.
-//
+/*  */
+/*  ODM MISC-spin lock relative API. */
+/*  */
 void
 ODM_AcquireSpinLock(	
 	IN 	PDM_ODM_T			pDM_Odm,
@@ -217,9 +217,9 @@ ODM_ReleaseSpinLock(
 	);
 
 
-//
-// ODM MISC-workitem relative API.
-//
+/*  */
+/*  ODM MISC-workitem relative API. */
+/*  */
 void
 ODM_InitializeWorkItem(	
 	IN 	PDM_ODM_T					pDM_Odm,
@@ -254,9 +254,9 @@ ODM_IsWorkItemScheduled(
 	IN	PRT_WORK_ITEM	pRtWorkItem
 	);
 
-//
-// ODM Timer relative API.
-//
+/*  */
+/*  ODM Timer relative API. */
+/*  */
 void
 ODM_StallExecution(	
 	IN	u32	usDelay
@@ -304,9 +304,9 @@ ODM_ReleaseTimer(
 	);
 
 
-//
-// ODM FW relative API.
-//
+/*  */
+/*  ODM FW relative API. */
+/*  */
 u32
 ODM_FillH2CCmd(	
 	IN	u8 *		pH2CBuffer,
@@ -318,4 +318,4 @@ ODM_FillH2CCmd(
 	IN	u8 *		CmdStartSeq
 	);
 
-#endif	// __ODM_INTERFACE_H__
+#endif	/*  __ODM_INTERFACE_H__ */

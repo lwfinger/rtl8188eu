@@ -16,47 +16,47 @@ Major Change History:
 #include "odm_precomp.h"
 
 #if (RATE_ADAPTIVE_SUPPORT == 1)
-// Rate adaptive parameters
+/*  Rate adaptive parameters */
 
 
-static u8 RETRY_PENALTY[PERENTRY][RETRYSIZE+1] = {{5,4,3,2,0,3},//92 , idx=0
-	{6,5,4,3,0,4},//86 , idx=1
-	{6,5,4,2,0,4},//81 , idx=2
-	{8,7,6,4,0,6},//75 , idx=3
-	{10,9,8,6,0,8},//71	, idx=4
-	{10,9,8,4,0,8},//66	, idx=5
-	{10,9,8,2,0,8},//62	, idx=6
-	{10,9,8,0,0,8},//59	, idx=7
-	{18,17,16,8,0,16},//53 , idx=8
-	{26,25,24,16,0,24},//50	, idx=9
-	{34,33,32,24,0,32},//47	, idx=0x0a
-	{34,31,28,20,0,32},//43	, idx=0x0b
-	{34,31,27,18,0,32},//40 , idx=0x0c
-	{34,31,26,16,0,32},//37 , idx=0x0d
-	{34,30,22,16,0,32},//32 , idx=0x0e
-	{34,30,24,16,0,32},//26 , idx=0x0f
-	{49,46,40,16,0,48},//20	, idx=0x10
-	{49,45,32,0,0,48},//17 , idx=0x11
-	{49,45,22,18,0,48},//15	, idx=0x12
-	{49,40,24,16,0,48},//12	, idx=0x13
-	{49,32,18,12,0,48},//9 , idx=0x14
-	{49,22,18,14,0,48},//6 , idx=0x15
-	{49,16,16,0,0,48}};//3 //3, idx=0x16
+static u8 RETRY_PENALTY[PERENTRY][RETRYSIZE+1] = {{5,4,3,2,0,3},/* 92 , idx=0 */
+	{6,5,4,3,0,4},/* 86 , idx=1 */
+	{6,5,4,2,0,4},/* 81 , idx=2 */
+	{8,7,6,4,0,6},/* 75 , idx=3 */
+	{10,9,8,6,0,8},/* 71	, idx=4 */
+	{10,9,8,4,0,8},/* 66	, idx=5 */
+	{10,9,8,2,0,8},/* 62	, idx=6 */
+	{10,9,8,0,0,8},/* 59	, idx=7 */
+	{18,17,16,8,0,16},/* 53 , idx=8 */
+	{26,25,24,16,0,24},/* 50	, idx=9 */
+	{34,33,32,24,0,32},/* 47	, idx=0x0a */
+	{34,31,28,20,0,32},/* 43	, idx=0x0b */
+	{34,31,27,18,0,32},/* 40 , idx=0x0c */
+	{34,31,26,16,0,32},/* 37 , idx=0x0d */
+	{34,30,22,16,0,32},/* 32 , idx=0x0e */
+	{34,30,24,16,0,32},/* 26 , idx=0x0f */
+	{49,46,40,16,0,48},/* 20	, idx=0x10 */
+	{49,45,32,0,0,48},/* 17 , idx=0x11 */
+	{49,45,22,18,0,48},/* 15	, idx=0x12 */
+	{49,40,24,16,0,48},/* 12	, idx=0x13 */
+	{49,32,18,12,0,48},/* 9 , idx=0x14 */
+	{49,22,18,14,0,48},/* 6 , idx=0x15 */
+	{49,16,16,0,0,48}};/* 3  idx=0x16 */
 
-static u8	RETRY_PENALTY_UP[RETRYSIZE+1]={49,44,16,16,0,48};  // 12% for rate up
+static u8	RETRY_PENALTY_UP[RETRYSIZE+1]={49,44,16,16,0,48};  /*  12% for rate up */
 
 static u8 PT_PENALTY[RETRYSIZE+1]={34,31,30,24,0,32};
 
 
-// wilson modify
-static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{4,4,4,5,4,4,5,7,7,7,8,0x0a,	       // SS>TH
+/*  wilson modify */
+static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{4,4,4,5,4,4,5,7,7,7,8,0x0a,	       /*  SS>TH */
 	4,4,4,4,6,0x0a,0x0b,0x0d,
-	5,5,7,7,8,0x0b,0x0d,0x0f},			   // 0329 R01
-	{0x0a,0x0a,0x0b,0x0c,0x0a,0x0a,0x0b,0x0c,0x0d,0x10,0x13,0x14,	   // SS<TH
+	5,5,7,7,8,0x0b,0x0d,0x0f},			   /*  0329 R01 */
+	{0x0a,0x0a,0x0b,0x0c,0x0a,0x0a,0x0b,0x0c,0x0d,0x10,0x13,0x14,	   /*  SS<TH */
 	0x0b,0x0c,0x0d,0x0e,0x0f,0x11,0x13,0x15,
 	9,9,9,9,0x0c,0x0e,0x11,0x13}};
 
-static u8	RETRY_PENALTY_UP_IDX[RATESIZE] = {0x0c,0x0d,0x0d,0x0f,0x0d,0x0e,0x0f,0x0f,0x10,0x12,0x13,0x14,	       // SS>TH
+static u8	RETRY_PENALTY_UP_IDX[RATESIZE] = {0x0c,0x0d,0x0d,0x0f,0x0d,0x0e,0x0f,0x0f,0x10,0x12,0x13,0x14,	       /*  SS>TH */
 	0x0f,0x10,0x10,0x12,0x12,0x13,0x14,0x15,
 	0x11,0x11,0x12,0x13,0x13,0x13,0x14,0x15};
 
@@ -76,32 +76,32 @@ static u16	N_THRESHOLD_LOW[RATESIZE] = {2,2,4,8,
 static u8	 TRYING_NECESSARY[RATESIZE] = {2,2,2,2,
 	2,2,3,3,4,4,5,7,
 	4,4,7,10,10,12,12,18,
-	5,7,7,8,11,18,36,60};  // 0329 // 1207
+	5,7,7,8,11,18,36,60};  /*  0329 */
 static u8	DROPING_NECESSARY[RATESIZE] = {1,1,1,1,
 	1,2,3,4,5,6,7,8,
 	1,2,3,4,5,6,7,8,
 	5,6,7,8,9,10,11,12};
-static u32	INIT_RATE_FALLBACK_TABLE[16]={0x0f8ff015,  // 0: 40M BGN mode
-	0x0f8ff010,   // 1: 40M GN mode
-	0x0f8ff005,   // 2: BN mode/ 40M BGN mode
-	0x0f8ff000,   // 3: N mode
-	0x00000ff5,   // 4: BG mode
-	0x00000ff0,   // 5: G mode
-	0x0000000d,   // 6: B mode
-	0,			// 7:
-	0,			// 8:
-	0,			// 9:
-	0,			// 10:
-	0,			// 11:
-	0,			// 12:
-	0,			// 13:
-	0,			// 14:
-	0,			// 15:
+static u32	INIT_RATE_FALLBACK_TABLE[16]={0x0f8ff015,  /*  0: 40M BGN mode */
+	0x0f8ff010,   /*  1: 40M GN mode */
+	0x0f8ff005,   /*  2: BN mode/ 40M BGN mode */
+	0x0f8ff000,   /*  3: N mode */
+	0x00000ff5,   /*  4: BG mode */
+	0x00000ff0,   /*  5: G mode */
+	0x0000000d,   /*  6: B mode */
+	0,			/*  7: */
+	0,			/*  8: */
+	0,			/*  9: */
+	0,			/*  10: */
+	0,			/*  11: */
+	0,			/*  12: */
+	0,			/*  13: */
+	0,			/*  14: */
+	0,			/*  15: */
 	};
 static u8 PendingForRateUpFail[5]={2,10,24,40,60};
-static u16 DynamicTxRPTTiming[6]={0x186a, 0x30d4, 0x493e, 0x61a8, 0x7a12 ,0x927c}; // 200ms-1200ms
+static u16 DynamicTxRPTTiming[6]={0x186a, 0x30d4, 0x493e, 0x61a8, 0x7a12 ,0x927c}; /*  200ms-1200ms */
 
-// End Rate adaptive parameters
+/*  End Rate adaptive parameters */
 
 static void
 odm_SetTxRPTTiming_8188E(
@@ -116,14 +116,14 @@ odm_SetTxRPTTiming_8188E(
 		if(DynamicTxRPTTiming[idx] == pRaInfo->RptTime)
 			break;
 
-	if (extend==0) // back to default timing
-		idx=0;  //200ms
-	else if (extend==1) {// increase the timing
+	if (extend==0) /*  back to default timing */
+		idx=0;  /* 200ms */
+	else if (extend==1) {/*  increase the timing */
 		idx+=1;
 		if (idx>5)
 			idx=5;
 	}
-	else if (extend==2) {// decrease the timing
+	else if (extend==2) {/*  decrease the timing */
 		if(idx!=0)
 			idx-=1;
 	}
@@ -254,13 +254,13 @@ odm_RateUp_8188E(
 		else if((pRaInfo->SGIEnable) !=1 )
 			pRaInfo->RateSGI = 0;
 	}
-	else //if((sta_info_ra->Decision_rate) > (sta_info_ra->Highest_rate))
+	else /* if((sta_info_ra->Decision_rate) > (sta_info_ra->Highest_rate)) */
 	{
 		RateID = HighestRate;
 
 	}
 RateUpfinish:
-	//if(pRaInfo->RAWaitingCounter==10)
+	/* if(pRaInfo->RAWaitingCounter==10) */
 	if(pRaInfo->RAWaitingCounter==(4+PendingForRateUpFail[pRaInfo->RAPendingCounter]))
 		pRaInfo->RAWaitingCounter=0;
 	else
@@ -287,18 +287,18 @@ odm_RateDecision_8188E(
 	)
 {
 	u8 RateID = 0, RtyPtID = 0, PenaltyID1 = 0, PenaltyID2 = 0;
-	//u32 pool_retry;
+	/* u32 pool_retry; */
 	static u8 DynamicTxRPTTimingCounter=0;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_RateDecision_8188E() \n"));
 
-	if (pRaInfo->Active && (pRaInfo->TOTAL > 0)) // STA used and data packet exits
+	if (pRaInfo->Active && (pRaInfo->TOTAL > 0)) /*  STA used and data packet exits */
 	{
 		if ( (pRaInfo->RssiStaRA<(pRaInfo->PreRssiStaRA-3))|| (pRaInfo->RssiStaRA>(pRaInfo->PreRssiStaRA+3))){
 			pRaInfo->RAWaitingCounter=0;
 			pRaInfo->RAPendingCounter=0;
 		}
-		// Start RA decision
+		/*  Start RA decision */
 		if (pRaInfo->PreRate > pRaInfo->HighestRate)
 			RateID = pRaInfo->HighestRate;
 		else
@@ -307,11 +307,11 @@ odm_RateDecision_8188E(
 			RtyPtID=0;
 		else
 			RtyPtID=1;
-		PenaltyID1 = RETRY_PENALTY_IDX[RtyPtID][RateID]; //TODO by page
+		PenaltyID1 = RETRY_PENALTY_IDX[RtyPtID][RateID]; /* TODO by page */
 
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,
 					(" NscDown init is %d\n", pRaInfo->NscDown));
-		//pool_retry=pRaInfo->RTY[2]+pRaInfo->RTY[3]+pRaInfo->RTY[4]+pRaInfo->DROP;
+		/* pool_retry=pRaInfo->RTY[2]+pRaInfo->RTY[3]+pRaInfo->RTY[4]+pRaInfo->DROP; */
 		pRaInfo->NscDown += pRaInfo->RTY[0] * RETRY_PENALTY[PenaltyID1][0];
 		pRaInfo->NscDown += pRaInfo->RTY[1] * RETRY_PENALTY[PenaltyID1][1];
 		pRaInfo->NscDown += pRaInfo->RTY[2] * RETRY_PENALTY[PenaltyID1][2];
@@ -325,7 +325,7 @@ odm_RateDecision_8188E(
 		else
 			pRaInfo->NscDown=0;
 
-		// rate up
+		/*  rate up */
 		PenaltyID2 = RETRY_PENALTY_UP_IDX[RateID];
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,
 					(" NscUp init is %d\n", pRaInfo->NscUp));
@@ -347,7 +347,7 @@ odm_RateDecision_8188E(
 					pRaInfo->RssiStaRA,RtyPtID, PenaltyID1,PenaltyID2, RateID, pRaInfo->NscDown, pRaInfo->NscUp, pRaInfo->RateSGI));
 		if ((pRaInfo->NscDown < N_THRESHOLD_LOW[RateID]) ||(pRaInfo->DROP>DROPING_NECESSARY[RateID]))
 			odm_RateDown_8188E(pDM_Odm,pRaInfo);
-		//else if ((pRaInfo->NscUp > N_THRESHOLD_HIGH[RateID])&&(pool_retry<POOL_RETRY_TH[RateID]))
+		/* else if ((pRaInfo->NscUp > N_THRESHOLD_HIGH[RateID])&&(pool_retry<POOL_RETRY_TH[RateID])) */
 		else if (pRaInfo->NscUp > N_THRESHOLD_HIGH[RateID])
 			odm_RateUp_8188E(pDM_Odm,pRaInfo);
 
@@ -365,7 +365,7 @@ odm_RateDecision_8188E(
 			DynamicTxRPTTimingCounter=0;
 		}
 
-		pRaInfo->PreRate = pRaInfo->DecisionRate;  //YJ,add,120120
+		pRaInfo->PreRate = pRaInfo->DecisionRate;  /* YJ,add,120120 */
 
 		odm_ResetRaCounter_8188E(  pRaInfo);
 	}
@@ -377,7 +377,7 @@ odm_ARFBRefresh_8188E(
 	IN	PDM_ODM_T		pDM_Odm,
 	IN	PODM_RA_INFO_T  pRaInfo
 	)
-{  // Wilson 2011/10/26
+{  /*  Wilson 2011/10/26 */
 	u32 MaskFromReg;
 	s8 i;
 
@@ -424,7 +424,7 @@ odm_ARFBRefresh_8188E(
 			pRaInfo->RAUseRate=(pRaInfo->RateMask);
 			break;
 	}
-	// Highest rate
+	/*  Highest rate */
 	if (pRaInfo->RAUseRate){
 		for (i=RATESIZE;i>=0;i--)
 		{
@@ -437,7 +437,7 @@ odm_ARFBRefresh_8188E(
 	else{
 		pRaInfo->HighestRate=0;
 	}
-	// Lowest rate
+	/*  Lowest rate */
 	if (pRaInfo->RAUseRate){
 		for (i=0;i<RATESIZE;i++)
 		{
@@ -605,7 +605,7 @@ ODM_RASupport_Init(
 {
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>ODM_RASupport_Init()\n"));
 
-	// 2012/02/14 MH Be noticed, the init must be after IC type is recognized!!!!!
+	/*  2012/02/14 MH Be noticed, the init must be after IC type is recognized!!!!! */
 	if (pDM_Odm->SupportICType == ODM_RTL8188E)
 		pDM_Odm->RaSupport88E = TRUE;
 
@@ -621,8 +621,8 @@ ODM_RAInfo_Init(
 {
 	PODM_RA_INFO_T pRaInfo = &pDM_Odm->RAInfo[MacID];
 	#if 1
-	u8 WirelessMode=0xFF; //invalid value
-	u8 max_rate_idx = 0x13; //MCS7
+	u8 WirelessMode=0xFF; /* invalid value */
+	u8 max_rate_idx = 0x13; /* MCS7 */
 	if(pDM_Odm->pWirelessMode!=NULL){
 		WirelessMode=*(pDM_Odm->pWirelessMode);
 	}
@@ -636,7 +636,7 @@ ODM_RAInfo_Init(
 			max_rate_idx = 0x03;
 	}
 
-	//printk("%s ==>WirelessMode:0x%08x ,max_raid_idx:0x%02x\n ",__FUNCTION__,WirelessMode,max_rate_idx);
+	/* printk("%s ==>WirelessMode:0x%08x ,max_raid_idx:0x%02x\n ",__FUNCTION__,WirelessMode,max_rate_idx); */
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD,
 				("ODM_RAInfo_Init(): WirelessMode:0x%08x ,max_raid_idx:0x%02x \n",
 				WirelessMode,max_rate_idx));
@@ -659,7 +659,7 @@ ODM_RAInfo_Init(
 	pRaInfo->NscDown=(N_THRESHOLD_HIGH[0x13]+N_THRESHOLD_LOW[0x13])/2;
 	pRaInfo->NscUp=(N_THRESHOLD_HIGH[0x13]+N_THRESHOLD_LOW[0x13])/2;
 	pRaInfo->RateSGI=0;
-	pRaInfo->Active=1;	//Active is not used at present. by page, 110819
+	pRaInfo->Active=1;	/* Active is not used at present. by page, 110819 */
 	pRaInfo->RptTime = 0x927c;
 	pRaInfo->DROP=0;
 	pRaInfo->DROP1=0;
@@ -672,9 +672,9 @@ ODM_RAInfo_Init(
 	pRaInfo->RAWaitingCounter=0;
 	pRaInfo->RAPendingCounter=0;
 #if POWER_TRAINING_ACTIVE == 1
-	pRaInfo->PTActive=1;   // Active when this STA is use
+	pRaInfo->PTActive=1;   /*  Active when this STA is use */
 	pRaInfo->PTTryState=0;
-	pRaInfo->PTStage=5; // Need to fill into HW_PWR_STATUS
+	pRaInfo->PTStage=5; /*  Need to fill into HW_PWR_STATUS */
 	pRaInfo->PTSmoothFactor=192;
 	pRaInfo->PTStopCount=0;
 	pRaInfo->PTPreRate=0;
@@ -864,14 +864,14 @@ ODM_RA_TxRPT2Handle_8188E(
 					if(pRAInfo->RAstage<5){
 						odm_RateDecision_8188E(pDM_Odm,pRAInfo);
 					}
-					else if(pRAInfo->RAstage==5){  // Power training try state
+					else if(pRAInfo->RAstage==5){  /*  Power training try state */
 						odm_PTTryState_8188E(pRAInfo);
 					}
-					else {// RAstage==6
+					else {/*  RAstage==6 */
 						odm_PTDecision_8188E(pRAInfo);
 					}
 
-					// Stage_RA counter
+					/*  Stage_RA counter */
 					if (pRAInfo->RAstage<=5)
 						pRAInfo->RAstage++;
 					else

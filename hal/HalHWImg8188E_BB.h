@@ -21,7 +21,7 @@
 #ifndef __INC_BB_8188E_HW_IMG_H
 #define __INC_BB_8188E_HW_IMG_H
 
-//static BOOLEAN CheckCondition(const u32 Condition, const u32 Hex);
+/* static BOOLEAN CheckCondition(const u32 Condition, const u32 Hex); */
 
 /******************************************************************************
 *                           AGC_TAB_1T.TXT
@@ -36,7 +36,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 ******************************************************************************/
 
 void
-ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E( // TC: Test Chip, MP: MP Chip
+ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E( /*  TC: Test Chip, MP: MP Chip */
 	IN   PDM_ODM_T  pDM_Odm
 );
 /******************************************************************************
@@ -52,7 +52,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 ******************************************************************************/
 
 void
-ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E( // TC: Test Chip, MP: MP Chip
+ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E( /*  TC: Test Chip, MP: MP Chip */
 	IN   PDM_ODM_T  pDM_Odm
 );
 
@@ -65,4 +65,4 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 	IN   PDM_ODM_T  pDM_Odm
 );
 
-#endif // end of HWIMG_SUPPORT
+#endif /*  end of HWIMG_SUPPORT */

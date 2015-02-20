@@ -15,15 +15,15 @@ Major Change History:
 	2011-08-12 Page            Create.	
 --*/
 
-// Rate adaptive define
+/*  Rate adaptive define */
 #define	PERENTRY	23
 #define	RETRYSIZE	5
 #define	RATESIZE	28
 #define	TX_RPT2_ITEM_SIZE 	8
 
-//
-// TX report 2 format in Rx desc
-//
+/*  */
+/*  TX report 2 format in Rx desc */
+/*  */
 #define GET_TX_RPT2_DESC_PKT_LEN_88E(__pRxStatusDesc)				LE_BITS_TO_4BYTE( __pRxStatusDesc, 0, 9)
 #define GET_TX_RPT2_DESC_MACID_VALID_1_88E(__pRxStatusDesc)		LE_BITS_TO_4BYTE( __pRxStatusDesc+16, 0, 32)
 #define GET_TX_RPT2_DESC_MACID_VALID_2_88E(__pRxStatusDesc)		LE_BITS_TO_4BYTE( __pRxStatusDesc+20, 0, 32)
@@ -36,7 +36,7 @@ Major Change History:
 #define GET_TX_REPORT_TYPE1_DROP_0(__pAddr)						LE_BITS_TO_1BYTE( __pAddr+4+2, 0, 8)
 #define GET_TX_REPORT_TYPE1_DROP_1(__pAddr)						LE_BITS_TO_1BYTE( __pAddr+4+3, 0, 8)
 
-// End rate adaptive define
+/*  End rate adaptive define */
 
 void
 ODM_RASupport_Init(

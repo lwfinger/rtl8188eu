@@ -22,18 +22,18 @@
 #ifndef	__HALHWOUTSRC_H__
 #define __HALHWOUTSRC_H__
 
-//============================================================
-// Definition 
-//============================================================
-//
-//-----------------------------------------------------------
-// CCK Rates, TxHT = 0
+/*  */
+/*  Definition  */
+/*  */
+/*  */
+/*  */
+/*  CCK Rates, TxHT = 0 */
 #define DESC92C_RATE1M					0x00
 #define DESC92C_RATE2M					0x01
 #define DESC92C_RATE5_5M				0x02
 #define DESC92C_RATE11M				0x03
 
-// OFDM Rates, TxHT = 0
+/*  OFDM Rates, TxHT = 0 */
 #define DESC92C_RATE6M					0x04
 #define DESC92C_RATE9M					0x05
 #define DESC92C_RATE12M				0x06
@@ -43,7 +43,7 @@
 #define DESC92C_RATE48M				0x0a
 #define DESC92C_RATE54M				0x0b
 
-// MCS Rates, TxHT = 1
+/*  MCS Rates, TxHT = 1 */
 #define DESC92C_RATEMCS0				0x0c
 #define DESC92C_RATEMCS1				0x0d
 #define DESC92C_RATEMCS2				0x0e
@@ -64,9 +64,9 @@
 #define DESC92C_RATEMCS32				0x20
 
 
-//============================================================
-// structure and define
-//============================================================
+/*  */
+/*  structure and define */
+/*  */
 
 typedef struct _Phy_Rx_AGC_Info
 {
@@ -84,7 +84,7 @@ typedef struct _Phy_Status_Rpt_8192cd
 	u8	cck_sig_qual_ofdm_pwdb_all;
 	u8	cck_agc_rpt_ofdm_cfosho_a;
 	u8	cck_rpt_b_ofdm_cfosho_b;
-	u8 	rsvd_1;//ch_corr_msb;
+	u8 	rsvd_1;/* ch_corr_msb; */
 	u8 	noise_power_db_msb;
 	u8	path_cfotail[2];	
 	u8	pcts_mask[2];	
@@ -98,21 +98,21 @@ typedef struct _Phy_Status_Rpt_8192cd
 	u8 	rsvd_3;	
 
 #ifdef __LITTLE_ENDIAN
-	u8 	antsel_rx_keep_2:1;	//ex_intf_flg:1;
+	u8 	antsel_rx_keep_2:1;	/* ex_intf_flg:1; */
 	u8 	sgi_en:1;
 	u8 	rxsc:2;	
 	u8 	idle_long:1;
 	u8 	r_ant_train_en:1;
 	u8 	ant_sel_b:1;
 	u8 	ant_sel:1;	
-#else	// _BIG_ENDIAN_	
+#else	/*  _BIG_ENDIAN_	 */
 	u8 	ant_sel:1;	
 	u8 	ant_sel_b:1;
 	u8 	r_ant_train_en:1;
 	u8 	idle_long:1;
 	u8 	rxsc:2;
 	u8 	sgi_en:1;
-	u8 	antsel_rx_keep_2:1;	//ex_intf_flg:1;
+	u8 	antsel_rx_keep_2:1;	/* ex_intf_flg:1; */
 #endif
 } PHY_STATUS_RPT_8192CD_T,*PPHY_STATUS_RPT_8192CD_T;
 
@@ -124,7 +124,7 @@ typedef struct _Phy_Status_Rpt_8195
 	u8	cck_sig_qual_ofdm_pwdb_all;
 	u8	cck_agc_rpt_ofdm_cfosho_a;
 	u8	cck_bb_pwr_ofdm_cfosho_b;
-	u8    cck_rx_path;	//CCK_RX_PATH [3:0] (with regA07[3:0] definition)	
+	u8    cck_rx_path;	/* CCK_RX_PATH [3:0] (with regA07[3:0] definition)	 */
 	u8 	rsvd_1;	
 	u8	path_cfotail[2];	
 	u8	pcts_mask[2];	
@@ -140,7 +140,7 @@ typedef struct _Phy_Status_Rpt_8195
 	u8 	antidx_anta:3;
 	u8 	antidx_antb:3;
 	u8 	rsvd_5:2;
-#else	// _BIG_ENDIAN_	
+#else	/*  _BIG_ENDIAN_	 */
 	u8 	rsvd_5:2;
 	u8 	antidx_antb:3;
 	u8 	antidx_anta:3;	

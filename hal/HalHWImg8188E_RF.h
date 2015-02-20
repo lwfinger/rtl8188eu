@@ -21,7 +21,7 @@
 #ifndef __INC_RF_8188E_HW_IMG_H
 #define __INC_RF_8188E_HW_IMG_H
 
-//static BOOLEAN CheckCondition(const u32 Condition, const u32 Hex);
+/* static BOOLEAN CheckCondition(const u32 Condition, const u32 Hex); */
 
 /******************************************************************************
 *                           RadioA_1T.TXT
@@ -36,7 +36,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 ******************************************************************************/
 
 void
-ODM_ReadAndConfig_RadioA_1T_ICUT_8188E( // TC: Test Chip, MP: MP Chip
+ODM_ReadAndConfig_RadioA_1T_ICUT_8188E( /*  TC: Test Chip, MP: MP Chip */
 	IN   PDM_ODM_T  pDM_Odm
 );
 

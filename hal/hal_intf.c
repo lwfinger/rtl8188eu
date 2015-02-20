@@ -63,7 +63,7 @@ void	rtw_hal_dm_init(struct adapter *padapter)
 }
 void rtw_hal_dm_deinit(struct adapter *padapter)
 {
-	// cancel dm  timer
+	/*  cancel dm  timer */
 	if (is_primary_adapter(padapter))
 		if(padapter->HalFunc.dm_deinit)
 			padapter->HalFunc.dm_deinit(padapter);
@@ -282,7 +282,7 @@ s32	rtw_hal_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe)
 		if(IS_MCAST(pmgntframe->attrib.ra))
 		{
 			pmgntframe->attrib.encrypt = _BIP_;
-			//pmgntframe->attrib.bswenc = true;
+			/* pmgntframe->attrib.bswenc = true; */
 		}
 		else
 		{
@@ -291,7 +291,7 @@ s32	rtw_hal_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe)
 		}
 		rtw_mgmt_xmitframe_coalesce(padapter, pmgntframe->pkt, pmgntframe);
 	}
-#endif //CONFIG_IEEE80211W
+#endif /* CONFIG_IEEE80211W */
 
 	if(padapter->HalFunc.mgnt_xmit)
 		ret = padapter->HalFunc.mgnt_xmit(padapter, pmgntframe);
@@ -444,7 +444,7 @@ s32	rtw_hal_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt)
 		return padapter->HalFunc.hostap_mgnt_xmit_entry(padapter, pkt);
 	return _FAIL;
 }
-#endif //CONFIG_HOSTAPD_MLME
+#endif /* CONFIG_HOSTAPD_MLME */
 
 #ifdef DBG_CONFIG_ERROR_DETECT
 void	rtw_hal_sreset_init(struct adapter *padapter)
@@ -500,7 +500,7 @@ bool rtw_hal_sreset_inprogress(struct adapter *padapter)
 		inprogress = padapter->HalFunc.sreset_inprogress(padapter);
 	return inprogress;
 }
-#endif	//DBG_CONFIG_ERROR_DETECT
+#endif	/* DBG_CONFIG_ERROR_DETECT */
 
 #ifdef CONFIG_IOL
 int rtw_hal_iol_cmd(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)

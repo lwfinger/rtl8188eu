@@ -17,29 +17,29 @@
  *
  *
  ******************************************************************************/
-//============================================================
-// File Name: Hal8188EReg.h
-//
-// Description:
-//
-// This file is for RTL8188E register definition.
-//
-//
-//============================================================
+/*  */
+/*  File Name: Hal8188EReg.h */
+/*  */
+/*  Description: */
+/*  */
+/*  This file is for RTL8188E register definition. */
+/*  */
+/*  */
+/*  */
 #ifndef	__HAL_8188E_REG_H__
 #define __HAL_8188E_REG_H__
 
-//
-// Register Definition
-//
+/*  */
+/*  Register Definition */
+/*  */
 #define TRX_ANTDIV_PATH             0x860
 #define RX_ANTDIV_PATH              0xb2c
 #define	ODM_R_A_AGC_CORE1_8188E		0xc50
 
 
-//
-// Bitmap Definition
-//
+/*  */
+/*  Bitmap Definition */
+/*  */
 #define	BIT_FA_RESET_8188E			BIT0
 
 

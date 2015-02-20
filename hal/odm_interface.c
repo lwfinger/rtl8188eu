@@ -18,14 +18,14 @@
  *
  ******************************************************************************/
 
-//============================================================
-// include files
-//============================================================
+/*  */
+/*  include files */
+/*  */
 
 #include "odm_precomp.h"
-//
-// ODM IO Relative API.
-//
+/*  */
+/*  ODM IO Relative API. */
+/*  */
 
 u8
 ODM_Read1Byte(
@@ -165,9 +165,9 @@ ODM_GetRFReg(
 			      RegAddr, BitMask);
 }
 
-//
-// ODM Memory relative API.
-//
+/*  */
+/*  ODM Memory relative API. */
+/*  */
 void
 ODM_AllocateMemory(
 	IN	PDM_ODM_T	pDM_Odm,
@@ -178,7 +178,7 @@ ODM_AllocateMemory(
 	*pPtr = rtw_zvmalloc(length);
 }
 
-// length could be ignored, used to detect memory leakage.
+/*  length could be ignored, used to detect memory leakage. */
 void
 ODM_FreeMemory(
 	IN	PDM_ODM_T	pDM_Odm,
@@ -199,9 +199,9 @@ s32 ODM_CompareMemory(
 	return _rtw_memcmp(pBuf1,pBuf2,length);
 }
 
-//
-// ODM MISC relative API.
-//
+/*  */
+/*  ODM MISC relative API. */
+/*  */
 void
 ODM_AcquireSpinLock(
 	IN	PDM_ODM_T			pDM_Odm,
@@ -218,9 +218,9 @@ ODM_ReleaseSpinLock(
 {
 }
 
-//
-// Work item relative API. FOr MP driver only~!
-//
+/*  */
+/*  Work item relative API. FOr MP driver only~! */
+/*  */
 void
 ODM_InitializeWorkItem(
 	IN	PDM_ODM_T					pDM_Odm,
@@ -267,9 +267,9 @@ ODM_IsWorkItemScheduled(
 {
 }
 
-//
-// ODM Timer relative API.
-//
+/*  */
+/*  ODM Timer relative API. */
+/*  */
 void
 ODM_StallExecution(
 	IN	u32	usDelay
@@ -309,7 +309,7 @@ ODM_SetTimer(
 	IN	u32			msDelay
 	)
 {
-	_set_timer(pTimer,msDelay ); //ms
+	_set_timer(pTimer,msDelay ); /* ms */
 }
 
 void
@@ -342,9 +342,9 @@ ODM_ReleaseTimer(
 {
 }
 
-//
-// ODM FW relative API.
-//
+/*  */
+/*  ODM FW relative API. */
+/*  */
 u32
 ODM_FillH2CCmd(
 	IN	u8 *		pH2CBuffer,
