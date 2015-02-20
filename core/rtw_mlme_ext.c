@@ -56,29 +56,6 @@ static struct mlme_handler mlme_sta_tbl[]={
 	{WIFI_ACTION,		"OnAction",		&OnAction},
 };
 
-#ifdef _CONFIG_NATIVEAP_MLME_
-struct mlme_handler mlme_ap_tbl[]={
-	{WIFI_ASSOCREQ,		"OnAssocReq",	&OnAssocReq},
-	{WIFI_ASSOCRSP,		"OnAssocRsp",	&OnAssocRsp},
-	{WIFI_REASSOCREQ,	"OnReAssocReq",	&OnAssocReq},
-	{WIFI_REASSOCRSP,	"OnReAssocRsp",	&OnAssocRsp},
-	{WIFI_PROBEREQ,		"OnProbeReq",	&OnProbeReq},
-	{WIFI_PROBERSP,		"OnProbeRsp",		&OnProbeRsp},
-
-	/*----------------------------------------------------------
-					below 2 are reserved
-	-----------------------------------------------------------*/
-	{0,					"DoReserved",		&DoReserved},
-	{0,					"DoReserved",		&DoReserved},
-	{WIFI_BEACON,		"OnBeacon",		&OnBeacon},
-	{WIFI_ATIM,			"OnATIM",		&OnAtim},
-	{WIFI_DISASSOC,		"OnDisassoc",		&OnDisassoc},
-	{WIFI_AUTH,			"OnAuth",		&OnAuth},
-	{WIFI_DEAUTH,		"OnDeAuth",		&OnDeAuth},
-	{WIFI_ACTION,		"OnAction",		&OnAction},
-};
-#endif
-
 static struct action_handler OnAction_tbl[]={
 	{RTW_WLAN_CATEGORY_SPECTRUM_MGMT,	 "ACTION_SPECTRUM_MGMT", on_action_spct},
 	{RTW_WLAN_CATEGORY_QOS, "ACTION_QOS", &OnAction_qos},
@@ -1313,9 +1290,7 @@ unsigned int OnAuth(struct adapter *padapter, union recv_frame *precv_frame)
 	/*  Now, we are going to issue_auth... */
 	pstat->auth_seq = seq + 1;
 
-#ifdef CONFIG_NATIVEAP_MLME
 	issue_auth(padapter, pstat, (unsigned short)(_STATS_SUCCESSFUL_));
-#endif
 
 	if (pstat->state & WIFI_FW_AUTH_SUCCESS)
 		pstat->auth_seq = 0;
@@ -1333,9 +1308,7 @@ auth_fail:
 	pstat->auth_seq = 2;
 	memcpy(pstat->hwaddr, sa, 6);
 
-#ifdef CONFIG_NATIVEAP_MLME
 	issue_auth(padapter, pstat, (unsigned short)status);
-#endif
 
 #endif
 	return _FAIL;
@@ -1959,7 +1932,6 @@ unsigned int OnAssocReq(struct adapter *padapter, union recv_frame *precv_frame)
 	/*  now the station is qualified to join our BSS... */
 	if(pstat && (pstat->state & WIFI_FW_ASSOC_SUCCESS) && (_STATS_SUCCESSFUL_==status))
 	{
-#ifdef CONFIG_NATIVEAP_MLME
 		/* 1 bss_cap_update & sta_info_update */
 		bss_cap_update_on_sta_join(padapter, pstat);
 		sta_info_update(padapter, pstat);
@@ -1988,31 +1960,24 @@ unsigned int OnAssocReq(struct adapter *padapter, union recv_frame *precv_frame)
 
 		/* 3-(1) report sta add event */
 		report_add_sta_event(padapter, pstat->hwaddr, pstat->aid);
-
-#endif /* CONFIG_NATIVEAP_MLME */
 	}
 
 	return _SUCCESS;
 
 asoc_class2_error:
 
-#ifdef CONFIG_NATIVEAP_MLME
 	issue_deauth(padapter, (void *)GetAddr2Ptr(pframe), status);
-#endif
 
 	return _FAIL;
 
 OnAssocReqFail:
 
 
-#ifdef CONFIG_NATIVEAP_MLME
 	pstat->aid = 0;
 	if (frame_type == WIFI_ASSOCREQ)
 		issue_asocrsp(padapter, status, pstat, WIFI_ASSOCRSP);
 	else
 		issue_asocrsp(padapter, status, pstat, WIFI_REASSOCRSP);
-#endif
-
 
 #endif /* CONFIG_AP_MODE */
 
@@ -5893,10 +5858,10 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
 	__le16 *fctrl;
 	unsigned int	rate_len;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_AP_MODE)
 	_irqL irqL;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-#endif /* if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_AP_MODE) */
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
@@ -5913,9 +5878,9 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
 		DBG_871X("%s, alloc mgnt frame fail\n", __FUNCTION__);
 		return;
 	}
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_AP_MODE)
 	_enter_critical_bh(&pmlmepriv->bcn_update_lock, &irqL);
-#endif /* if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_AP_MODE) */
 
 	/* update attribute */
 	pattrib = &pmgntframe->attrib;
@@ -6162,11 +6127,11 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
 
 _issue_bcn:
 
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_AP_MODE)
 	pmlmepriv->update_bcn = false;
 
 	_exit_critical_bh(&pmlmepriv->bcn_update_lock, &irqL);
-#endif /* if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_AP_MODE) */
 
 	if ((pattrib->pktlen + TXDESC_SIZE) > 512)
 	{
@@ -6193,11 +6158,11 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
 	__le16				*fctrl;
 	unsigned char					*mac, *bssid;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_AP_MODE)
 	u8 *pwps_ie;
 	uint wps_ielen;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-#endif /* if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
+#endif /* if defined (CONFIG_AP_MODE) */
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
@@ -6248,7 +6213,7 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
 	if(cur_network->IELength>MAX_IE_SZ)
 		return;
 
-#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
+#if defined (CONFIG_AP_MODE)
 	if( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
 		pwps_ie = rtw_get_wps_ie(cur_network->IEs+_FIXED_IE_LENGTH_, cur_network->IELength-_FIXED_IE_LENGTH_, NULL, &wps_ielen);
@@ -6621,7 +6586,6 @@ void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short 
 
 
 	if(psta) { /*  for AP mode */
-#ifdef CONFIG_NATIVEAP_MLME
 		memcpy(pwlanhdr->addr1, psta->hwaddr, ETH_ALEN);
 		memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN);
 		memcpy(pwlanhdr->addr3, myid(&(padapter->eeprompriv)), ETH_ALEN);
@@ -6654,7 +6618,6 @@ void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short 
 		/*  added challenging text... */
 		if ((psta->auth_seq == 2) && (psta->state & WIFI_FW_AUTH_STATE) && (use_shared_key==1))
 			pframe = rtw_set_ie(pframe, _CHLGETXT_IE_, 128, psta->chg_txt, &(pattrib->pktlen));
-#endif
 	} else {
 		__le32 le_tmp32;
 		__le16 le_tmp16;
@@ -10245,9 +10208,6 @@ u8 setopmode_hdl(struct adapter *padapter, u8 *pbuf)
 	{
 		pmlmeinfo->state = WIFI_FW_AP_STATE;
 		type = _HW_STATE_AP_;
-#ifdef CONFIG_NATIVEAP_MLME
-		/* start_ap_mode(padapter); */
-#endif
 	}
 	else if(psetop->mode == Ndis802_11Infrastructure)
 	{

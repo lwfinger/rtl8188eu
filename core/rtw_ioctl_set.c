@@ -512,14 +512,11 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,(" change mode!"));
 		/* DBG_871X("change mode, old_mode=%d, new_mode=%d, fw_state=0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv)); */
 
-		if(*pold_state==Ndis802_11APMode)
-		{
+		if(*pold_state==Ndis802_11APMode) {
 			/* change to other mode from Ndis802_11APMode */
 			cur_network->join_res = -1;
 
-#ifdef CONFIG_NATIVEAP_MLME
 			stop_ap_mode(padapter);
-#endif
 		}
 
 		if((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||(*pold_state==Ndis802_11IBSS))
@@ -541,28 +538,21 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
 
 		_clr_fwstate_(pmlmepriv, ~WIFI_NULL_STATE);
 
-		switch(networktype)
-		{
-			case Ndis802_11IBSS:
-				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
-				break;
-
-			case Ndis802_11Infrastructure:
-				set_fwstate(pmlmepriv, WIFI_STATION_STATE);
-				break;
-
-			case Ndis802_11APMode:
-				set_fwstate(pmlmepriv, WIFI_AP_STATE);
-#ifdef CONFIG_NATIVEAP_MLME
-				start_ap_mode(padapter);
-				/* rtw_indicate_connect(padapter); */
-#endif
-
-				break;
-
-			case Ndis802_11AutoUnknown:
-			case Ndis802_11InfrastructureMax:
-				break;
+		switch(networktype) {
+		case Ndis802_11IBSS:
+			set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
+			break;
+		case Ndis802_11Infrastructure:
+			set_fwstate(pmlmepriv, WIFI_STATION_STATE);
+			break;
+		case Ndis802_11APMode:
+			set_fwstate(pmlmepriv, WIFI_AP_STATE);
+			start_ap_mode(padapter);
+			/* rtw_indicate_connect(padapter); */
+			break;
+		case Ndis802_11AutoUnknown:
+		case Ndis802_11InfrastructureMax:
+			break;
 		}
 
 		/* SecClearAllKeys(adapter); */
