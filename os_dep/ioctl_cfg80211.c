@@ -3151,7 +3151,6 @@ void rtw_cfg80211_indicate_sta_assoc(struct adapter *padapter, u8 *pmgmt_frame, 
 
 	DBG_871X(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 
-#if defined(RTW_USE_CFG80211_STA_EVENT) || defined(COMPAT_KERNEL_RELEASE)
 	{
 		struct station_info sinfo;
 		u8 ie_offset;
@@ -3161,39 +3160,10 @@ void rtw_cfg80211_indicate_sta_assoc(struct adapter *padapter, u8 *pmgmt_frame, 
 			ie_offset = _REASOCREQ_IE_OFFSET_;
 
 		sinfo.filled = 0;
-/* if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 20, 0)) */
-/* 		sinfo.filled = STATION_INFO_ASSOC_REQ_IES; */
-/* endif */
 		sinfo.assoc_req_ies = pmgmt_frame + WLAN_HDR_A3_LEN + ie_offset;
 		sinfo.assoc_req_ies_len = frame_len - WLAN_HDR_A3_LEN - ie_offset;
 		cfg80211_new_sta(ndev, GetAddr2Ptr(pmgmt_frame), &sinfo, GFP_ATOMIC);
 	}
-#else /* defined(RTW_USE_CFG80211_STA_EVENT) */
-	channel = pmlmeext->cur_channel;
-	if (channel <= RTW_CH_MAX_2G_CHANNEL)
-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
-	else
-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
-
-	#ifdef COMPAT_KERNEL_RELEASE
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
-	#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
-	#else /* COMPAT_KERNEL_RELEASE */
-	{
-		/* to avoid WARN_ON(wdev->iftype != NL80211_IFTYPE_STATION)  when calling cfg80211_send_rx_assoc() */
-		#ifndef CONFIG_PLATFORM_MSTAR
-		pwdev->iftype = NL80211_IFTYPE_STATION;
-		#endif /* CONFIG_PLATFORM_MSTAR */
-		DBG_8192C("iftype=%d before call cfg80211_send_rx_assoc()\n", pwdev->iftype);
-		rtw_cfg80211_send_rx_assoc(padapter, NULL, pmgmt_frame, frame_len);
-		DBG_8192C("iftype=%d after call cfg80211_send_rx_assoc()\n", pwdev->iftype);
-		pwdev->iftype = NL80211_IFTYPE_AP;
-		/* cfg80211_rx_action(padapter->pnetdev, freq, pmgmt_frame, frame_len, GFP_ATOMIC); */
-	}
-	#endif /* COMPAT_KERNEL_RELEASE */
-#endif /* defined(RTW_USE_CFG80211_STA_EVENT) */
-
 }
 
 void rtw_cfg80211_indicate_sta_disassoc(struct adapter *padapter, unsigned char *da, unsigned short reason)
@@ -3211,46 +3181,7 @@ void rtw_cfg80211_indicate_sta_disassoc(struct adapter *padapter, unsigned char 
 
 	DBG_871X(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 
-#if defined(RTW_USE_CFG80211_STA_EVENT) || defined(COMPAT_KERNEL_RELEASE)
 	cfg80211_del_sta(ndev, da, GFP_ATOMIC);
-#else /* defined(RTW_USE_CFG80211_STA_EVENT) */
-	channel = pmlmeext->cur_channel;
-	if (channel <= RTW_CH_MAX_2G_CHANNEL)
-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
-	else
-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
-
-	pmgmt_frame = mgmt_buf;
-	pwlanhdr = (struct rtw_ieee80211_hdr *)pmgmt_frame;
-
-	fctrl = &(pwlanhdr->frame_ctl);
-	*(fctrl) = 0;
-
-	/* memcpy(pwlanhdr->addr1, da, ETH_ALEN); */
-	/* memcpy(pwlanhdr->addr2, myid(&(padapter->eeprompriv)), ETH_ALEN); */
-	memcpy(pwlanhdr->addr1, myid(&(padapter->eeprompriv)), ETH_ALEN);
-	memcpy(pwlanhdr->addr2, da, ETH_ALEN);
-	memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
-
-	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
-	pmlmeext->mgnt_seq++;
-	SetFrameSubType(pmgmt_frame, WIFI_DEAUTH);
-
-	pmgmt_frame += sizeof(struct rtw_ieee80211_hdr_3addr);
-	frame_len = sizeof(struct rtw_ieee80211_hdr_3addr);
-
-	reason = cpu_to_le16(reason);
-	pmgmt_frame = rtw_set_fixed_ie(pmgmt_frame, _RSON_CODE_ , (unsigned char *)&reason, &frame_len);
-
-	#ifdef COMPAT_KERNEL_RELEASE
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, mgmt_buf, frame_len, GFP_ATOMIC);
-	#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) && !defined(CONFIG_CFG80211_FORCE_COMPATIBLE_2_6_37_UNDER)
-	rtw_cfg80211_rx_mgmt(padapter, freq, 0, mgmt_buf, frame_len, GFP_ATOMIC);
-	#else /* COMPAT_KERNEL_RELEASE */
-	cfg80211_send_disassoc(padapter->pnetdev, mgmt_buf, frame_len);
-	/* cfg80211_rx_action(padapter->pnetdev, freq, mgmt_buf, frame_len, GFP_ATOMIC); */
-	#endif /* COMPAT_KERNEL_RELEASE */
-#endif /* defined(RTW_USE_CFG80211_STA_EVENT) */
 }
 
 static int rtw_cfg80211_monitor_if_open(struct net_device *ndev)
