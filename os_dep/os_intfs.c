@@ -741,10 +741,7 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 			rtw_proc_remove_one(pnetdev);
 		}
 
-#ifdef CONFIG_IOCTL_CFG80211
 		rtw_wdev_unregister(padapter->rtw_wdev);
-#endif
-
 	}
 
 }
@@ -935,9 +932,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 	rtw_init_wifidirect_timers(padapter);
 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
 	reset_global_wifidirect_info(padapter);
-	#ifdef CONFIG_IOCTL_CFG80211
 	rtw_init_cfg80211_wifidirect_info(padapter);
-	#endif
 #ifdef CONFIG_WFD
 	if(rtw_init_wifi_display_info(padapter) == _FAIL)
 		RT_TRACE(_module_os_intfs_c_,_drv_err_,("\n Can't init init_wifi_display_info\n"));
@@ -1062,11 +1057,9 @@ void rtw_cancel_all_timer(struct adapter *padapter)
 
 	_cancel_timer_ex(&(adapter_to_pwrctl(padapter)->pwr_state_check_timer));
 
-#ifdef CONFIG_IOCTL_CFG80211
 #ifdef CONFIG_P2P
 	_cancel_timer_ex(&padapter->cfg80211_wdinfo.remain_on_ch_timer);
 #endif /* CONFIG_P2P */
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
 	_cancel_timer_ex(&padapter->mlmepriv.set_scan_deny_timer);
@@ -1346,9 +1339,7 @@ int _netdev_open(struct net_device *pnetdev)
 		rtw_proc_init_one(pnetdev);
 #endif
 
-#ifdef CONFIG_IOCTL_CFG80211
 		rtw_cfg80211_init_wiphy(padapter);
-#endif
 
 		rtw_led_control(padapter, LED_CTL_NO_LINK);
 
@@ -1608,11 +1599,9 @@ static int netdev_close(struct net_device *pnetdev)
 	rtw_p2p_enable(padapter, P2P_ROLE_DISABLE);
 #endif /* CONFIG_P2P */
 
-#ifdef CONFIG_IOCTL_CFG80211
 	rtw_scan_abort(padapter);
 	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
 	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; /* set this at the end */
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 #ifdef CONFIG_WAPI_SUPPORT
 	rtw_wapi_disable_tx(padapter);
@@ -1629,10 +1618,8 @@ void rtw_ndev_destructor(struct net_device *ndev)
 {
 	DBG_871X(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
-#ifdef CONFIG_IOCTL_CFG80211
 	if (ndev->ieee80211_ptr)
 		rtw_mfree((u8 *)ndev->ieee80211_ptr, sizeof(struct wireless_dev));
-#endif
 	free_netdev(ndev);
 }
 

@@ -68,11 +68,8 @@
 	#include <net/flow.h>
 	#include <net/arp.h>
 
-#ifdef CONFIG_IOCTL_CFG80211
-//	#include <linux/ieee80211.h>
         #include <net/ieee80211_radiotap.h>
 	#include <net/cfg80211.h>
-#endif //CONFIG_IOCTL_CFG80211
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
 	#include <linux/in.h>

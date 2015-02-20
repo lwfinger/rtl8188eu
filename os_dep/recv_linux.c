@@ -135,68 +135,46 @@ int rtw_os_recvbuf_resource_free(struct adapter *padapter, struct recv_buf *prec
 
 void rtw_handle_tkip_mic_err(struct adapter *padapter,u8 bgroup)
 {
-#ifdef CONFIG_IOCTL_CFG80211
 	enum nl80211_key_type key_type;
-#endif
 	union iwreq_data wrqu;
 	struct iw_michaelmicfailure    ev;
 	struct mlme_priv*              pmlmepriv  = &padapter->mlmepriv;
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
 	u32 cur_time = 0;
 
-	if( psecuritypriv->last_mic_err_time == 0 )
-	{
+	if( psecuritypriv->last_mic_err_time == 0 ) {
 		psecuritypriv->last_mic_err_time = rtw_get_current_time();
-	}
-	else
-	{
+	} else {
 		cur_time = rtw_get_current_time();
 
-		if( cur_time - psecuritypriv->last_mic_err_time < 60*HZ )
-		{
+		if( cur_time - psecuritypriv->last_mic_err_time < 60*HZ ) {
 			psecuritypriv->btkip_countermeasure = true;
 			psecuritypriv->last_mic_err_time = 0;
 			psecuritypriv->btkip_countermeasure_time = cur_time;
-		}
-		else
-		{
+		} else {
 			psecuritypriv->last_mic_err_time = rtw_get_current_time();
 		}
 	}
 
-#ifdef CONFIG_IOCTL_CFG80211
 	if ( bgroup )
-	{
 		key_type |= NL80211_KEYTYPE_GROUP;
-	}
 	else
-	{
 		key_type |= NL80211_KEYTYPE_PAIRWISE;
-	}
 
 	cfg80211_michael_mic_failure(padapter->pnetdev, (u8 *)&pmlmepriv->assoc_bssid[ 0 ], key_type, -1,
 		NULL, GFP_ATOMIC);
-#endif
 
 	memset( &ev, 0x00, sizeof( ev ) );
 	if ( bgroup )
-	{
 	    ev.flags |= IW_MICFAILURE_GROUP;
-	}
 	else
-	{
 	    ev.flags |= IW_MICFAILURE_PAIRWISE;
-	}
 
 	ev.src_addr.sa_family = ARPHRD_ETHER;
 	memcpy( ev.src_addr.sa_data, &pmlmepriv->assoc_bssid[ 0 ], ETH_ALEN );
 
 	memset( &wrqu, 0x00, sizeof( wrqu ) );
 	wrqu.data.length = sizeof( ev );
-
-#ifndef CONFIG_IOCTL_CFG80211
-	wireless_send_event( padapter->pnetdev, IWEVMICHAELMICFAILURE, &wrqu, (char*) &ev );
-#endif
 }
 
 void rtw_hostapd_mlme_rx(struct adapter *padapter, union recv_frame *precv_frame)
@@ -223,15 +201,10 @@ void rtw_hostapd_mlme_rx(struct adapter *padapter, union recv_frame *precv_frame
 	skb->dev = pmgnt_netdev;
 	skb->ip_summed = CHECKSUM_NONE;
 	skb->pkt_type = PACKET_OTHERHOST;
-	/* skb->protocol = __constant_htons(0x0019); /*ETH_P_80211_RAW*/ */
 	skb->protocol = __constant_htons(0x0003); /*ETH_P_80211_RAW*/
 
-	/* DBG_871X("(1)data=0x%x, head=0x%x, tail=0x%x, mac_header=0x%x, len=%d\n", skb->data, skb->head, skb->tail, skb->mac_header, skb->len); */
-
-	/* skb->mac.raw = skb->data; */
 	skb_reset_mac_header(skb);
 
-       /* skb_pull(skb, 24); */
        memset(skb->cb, 0, sizeof(skb->cb));
 
 	rtw_netif_rx(pmgnt_netdev, skb);

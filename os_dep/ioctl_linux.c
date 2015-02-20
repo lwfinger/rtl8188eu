@@ -146,14 +146,9 @@ static void indicate_wx_custom_event(struct adapter *padapter, char *msg)
 	wrqu.data.length = strlen(msg);
 
 	DBG_871X("%s %s\n", __FUNCTION__, buff);
-#ifndef CONFIG_IOCTL_CFG80211
-	wireless_send_event(padapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
-#endif
 
 	rtw_mfree(buff, IW_CUSTOM_MAX+1);
-
 }
-
 
 static void request_wps_pbc_event(struct adapter *padapter)
 {
@@ -179,10 +174,6 @@ static void request_wps_pbc_event(struct adapter *padapter)
 
 	DBG_871X("%s\n", __FUNCTION__);
 
-#ifndef CONFIG_IOCTL_CFG80211
-	wireless_send_event(padapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
-#endif
-
 	if(buff)
 	{
 		rtw_mfree(buff, IW_CUSTOM_MAX);
@@ -199,9 +190,6 @@ void indicate_wx_scan_complete_event(struct adapter *padapter)
 	memset(&wrqu, 0, sizeof(union iwreq_data));
 
 	/* DBG_871X("+rtw_indicate_wx_scan_complete_event\n"); */
-#ifndef CONFIG_IOCTL_CFG80211
-	wireless_send_event(padapter->pnetdev, SIOCGIWSCAN, &wrqu, NULL);
-#endif
 }
 
 
@@ -223,9 +211,6 @@ void rtw_indicate_wx_assoc_event(struct adapter *padapter)
 		memcpy(wrqu.ap_addr.sa_data, pmlmepriv->cur_network.network.MacAddress, ETH_ALEN);
 
 	DBG_871X_LEVEL(_drv_always_, "assoc success\n");
-#ifndef CONFIG_IOCTL_CFG80211
-	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
-#endif
 }
 
 void rtw_indicate_wx_disassoc_event(struct adapter *padapter)
@@ -236,11 +221,6 @@ void rtw_indicate_wx_disassoc_event(struct adapter *padapter)
 
 	wrqu.ap_addr.sa_family = ARPHRD_ETHER;
 	memset(wrqu.ap_addr.sa_data, 0, ETH_ALEN);
-
-#ifndef CONFIG_IOCTL_CFG80211
-	DBG_871X_LEVEL(_drv_always_, "indicate disassoc\n");
-	wireless_send_event(padapter->pnetdev, SIOCGIWAP, &wrqu, NULL);
-#endif
 }
 
 /*
@@ -2845,21 +2825,6 @@ static int rtw_wx_set_auth(struct net_device *dev,
 	switch (param->flags & IW_AUTH_INDEX) {
 
 	case IW_AUTH_WPA_VERSION:
-#ifdef CONFIG_WAPI_SUPPORT
-#ifndef CONFIG_IOCTL_CFG80211
-		 padapter->wapiInfo.bWapiEnable = false;
-		 if(value == IW_AUTH_WAPI_VERSION_1)
-		 {
-			padapter->wapiInfo.bWapiEnable = true;
-			psecuritypriv->dot11PrivacyAlgrthm = _SMS4_;
-			psecuritypriv->dot118021XGrpPrivacy = _SMS4_;
-			psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_WAPI;
-			pmlmeinfo->auth_algo = psecuritypriv->dot11AuthAlgrthm;
-			padapter->wapiInfo.extra_prefix_len = WAPI_EXT_LEN;
-			padapter->wapiInfo.extra_postfix_len = SMS4_MIC_LEN;
-		}
-#endif
-#endif
 		break;
 	case IW_AUTH_CIPHER_PAIRWISE:
 
@@ -2868,16 +2833,6 @@ static int rtw_wx_set_auth(struct net_device *dev,
 
 		break;
 	case IW_AUTH_KEY_MGMT:
-#ifdef CONFIG_WAPI_SUPPORT
-#ifndef CONFIG_IOCTL_CFG80211
-		DBG_871X("rtw_wx_set_auth: IW_AUTH_KEY_MGMT case \n");
-		if(value == IW_AUTH_KEY_MGMT_WAPI_PSK)
-			padapter->wapiInfo.bWapiPSK = true;
-		else
-			padapter->wapiInfo.bWapiPSK = false;
-		DBG_871X("rtw_wx_set_auth: IW_AUTH_KEY_MGMT bwapipsk %d \n",padapter->wapiInfo.bWapiPSK);
-#endif
-#endif
 		/*
 		 *  ??? does not use these parameters
 		 */
@@ -2952,21 +2907,10 @@ static int rtw_wx_set_auth(struct net_device *dev,
 		break;
 	case IW_AUTH_PRIVACY_INVOKED:
 		break;
-
-#ifdef CONFIG_WAPI_SUPPORT
-#ifndef CONFIG_IOCTL_CFG80211
-	case IW_AUTH_WAPI_ENABLED:
-		break;
-#endif
-#endif
-
 	default:
 		return -EOPNOTSUPP;
-
 	}
-
 	return ret;
-
 }
 
 static int rtw_wx_set_enc_ext(struct net_device *dev,
@@ -3011,15 +2955,6 @@ static int rtw_wx_set_enc_ext(struct net_device *dev,
 		alg_name = "BIP";
 		break;
 #endif /* CONFIG_IEEE80211W */
-#ifdef CONFIG_WAPI_SUPPORT
-#ifndef CONFIG_IOCTL_CFG80211
-	case IW_ENCODE_ALG_SM4:
-		alg_name= "SMS4";
-		memcpy(param->sta_addr, pext->addr.sa_data, ETH_ALEN);
-		DBG_871X("rtw_wx_set_enc_ext: SMS4 case \n");
-		break;
-#endif
-#endif
 	default:
 		return -1;
 	}
@@ -3047,19 +2982,9 @@ static int rtw_wx_set_enc_ext(struct net_device *dev,
 	param->u.crypt.idx = (pencoding->flags&0x00FF) -1 ;
 
 	if (pext->ext_flags & IW_ENCODE_EXT_RX_SEQ_VALID)
-	{
-#ifdef CONFIG_WAPI_SUPPORT
-#ifndef CONFIG_IOCTL_CFG80211
-		if(pext->alg == IW_ENCODE_ALG_SM4)
-			memcpy(param->u.crypt.seq, pext->rx_seq, 16);
-		else
-#endif /* CONFIG_IOCTL_CFG80211 */
-#endif /* CONFIG_WAPI_SUPPORT */
 		memcpy(param->u.crypt.seq, pext->rx_seq, 8);
-	}
 
-	if(pext->key_len)
-	{
+	if(pext->key_len) {
 		param->u.crypt.key_len = pext->key_len;
 		/* memcpy(param + 1, pext + 1, pext->key_len); */
 		memcpy(param->u.crypt.key, pext + 1, pext->key_len);

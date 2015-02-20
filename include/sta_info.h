@@ -263,10 +263,8 @@ struct sta_info {
 
 #endif	// CONFIG_AP_MODE
 
-#ifdef CONFIG_IOCTL_CFG80211
 	u8 *passoc_req;
 	u32 assoc_req_len;
-#endif
 
 #ifdef DBG_TRX_STA_PKTS
 	//per AC dbg irp cnts

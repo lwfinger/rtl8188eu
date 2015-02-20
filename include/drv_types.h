@@ -82,9 +82,7 @@ enum _NIC_VERSION {
 #include <rtw_br_ext.h>
 #endif	// CONFIG_BR_EXT
 
-#ifdef CONFIG_IOCTL_CFG80211
-	#include "ioctl_cfg80211.h"
-#endif //CONFIG_IOCTL_CFG80211
+#include "ioctl_cfg80211.h"
 
 #define SPEC_DEV_ID_NONE BIT(0)
 #define SPEC_DEV_ID_DISABLE_HT BIT(1)
@@ -388,11 +386,9 @@ struct adapter {
 	struct	hostapd_priv	*phostapdpriv;
 #endif
 
-#ifdef CONFIG_IOCTL_CFG80211
 #ifdef CONFIG_P2P
 	struct cfg80211_wifidirect_info	cfg80211_wdinfo;
 #endif //CONFIG_P2P
-#endif //CONFIG_IOCTL_CFG80211
 	u32	setband;
 #ifdef CONFIG_P2P
 	struct wifidirect_info	wdinfo;
@@ -453,9 +449,7 @@ struct adapter {
 	struct proc_dir_entry *dir_dev;// for proc directory
 	struct proc_dir_entry *dir_odm;
 
-#ifdef CONFIG_IOCTL_CFG80211
 	struct wireless_dev *rtw_wdev;
-#endif //CONFIG_IOCTL_CFG80211
 
 	int net_closed;
 

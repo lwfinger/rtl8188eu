@@ -3311,7 +3311,6 @@ static void pre_tx_negoreq_handler( struct adapter*	padapter )
 	_set_timer( &pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT );
 }
 
-#ifdef CONFIG_IOCTL_CFG80211
 static void ro_ch_handler(struct adapter *padapter)
 {
 	struct cfg80211_wifidirect_info *pcfg80211_wdinfo = &padapter->cfg80211_wdinfo;
@@ -3929,7 +3928,6 @@ void rtw_init_cfg80211_wifidirect_info( struct adapter*	padapter)
 
 	_init_timer( &pcfg80211_wdinfo->remain_on_ch_timer, padapter->pnetdev, ro_ch_timer_process, padapter );
 }
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 void p2p_protocol_wk_hdl(struct adapter *padapter, int intCmdType)
 {
@@ -3957,14 +3955,11 @@ void p2p_protocol_wk_hdl(struct adapter *padapter, int intCmdType)
 		case P2P_PRE_TX_NEGOREQ_PROCESS_WK:
 			pre_tx_negoreq_handler( padapter );
 			break;
-#ifdef CONFIG_IOCTL_CFG80211
 		case P2P_RO_CH_WK:
 		{
 			ro_ch_handler( padapter );
 			break;
 		}
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 	}
 
 }
@@ -4441,12 +4436,7 @@ void init_wifidirect_info( struct adapter* padapter, enum P2P_ROLE role)
 
 /*  Commented by Kurt 20130319 */
 /*  For WiDi purpose: Use CFG80211 interface but controled WFD/RDS frame by driver itself. */
-#ifdef CONFIG_IOCTL_CFG80211
 	pwdinfo->driver_interface = DRIVER_CFG80211;
-#else
-	pwdinfo->driver_interface = DRIVER_WEXT;
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 	pwdinfo->wfd_tdls_enable = 0;
 	memset( pwdinfo->p2p_peer_interface_addr, 0x00, ETH_ALEN );
 	memset( pwdinfo->p2p_peer_device_addr, 0x00, ETH_ALEN );
@@ -4634,10 +4624,8 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role)
 			return ret;
 #endif /* CONFIG_INTEL_WIDI */
 
-#ifdef CONFIG_IOCTL_CFG80211
 		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
 			wdev_to_priv(padapter->rtw_wdev)->p2p_enabled = false;
-#endif /* CONFIG_IOCTL_CFG80211 */
 
 		if (_FAIL == rtw_pwr_wakeup(padapter)) {
 			ret = _FAIL;
@@ -4673,14 +4661,8 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role)
 #endif /* CONFIG_INTEL_WIDI */
 
 		/* For WiDi purpose. */
-#ifdef CONFIG_IOCTL_CFG80211
 		pwdinfo->driver_interface = DRIVER_CFG80211;
-#else
-		pwdinfo->driver_interface = DRIVER_WEXT;
-#endif /* CONFIG_IOCTL_CFG80211 */
-
 	}
-
 exit:
 	return ret;
 }

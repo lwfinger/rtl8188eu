@@ -254,7 +254,6 @@ struct scan_limit_info{
 #endif //P2P_OP_CHECK_SOCIAL_CH
 };
 
-#ifdef CONFIG_IOCTL_CFG80211
 struct cfg80211_wifidirect_info{
 	_timer					remain_on_ch_timer;
 	u8						restore_channel;
@@ -263,7 +262,6 @@ struct cfg80211_wifidirect_info{
 	u64						remain_on_ch_cookie;
 	bool is_ro_ch;
 };
-#endif //CONFIG_IOCTL_CFG80211
 
 struct wifidirect_info{
 	struct adapter*				padapter;
@@ -498,14 +496,13 @@ struct mlme_priv {
 	u32 assoc_rsp_len;
 
 	u8 *wps_beacon_ie;
-	//u8 *wps_probe_req_ie;
 	u8 *wps_probe_resp_ie;
-	u8 *wps_assoc_resp_ie; // for CONFIG_IOCTL_CFG80211, this IE could include p2p ie / wfd ie
+	u8 *wps_assoc_resp_ie; // this IE includes p2p ie / wfd ie
 
 	u32 wps_beacon_ie_len;
 	//u32 wps_probe_req_ie_len;
 	u32 wps_probe_resp_ie_len;
-	u32 wps_assoc_resp_ie_len; // for CONFIG_IOCTL_CFG80211, this IE len could include p2p ie / wfd ie
+	u32 wps_assoc_resp_ie_len; // this IE len includes p2p ie / wfd ie
 
 	u8 *p2p_beacon_ie;
 	u8 *p2p_probe_req_ie;
@@ -518,26 +515,13 @@ struct mlme_priv {
 	u32 p2p_probe_resp_ie_len;
 	u32 p2p_go_probe_resp_ie_len; //for GO
 	u32 p2p_assoc_req_ie_len;
-/*
-#if defined(CONFIG_P2P) && defined(CONFIG_IOCTL_CFG80211)
-	//u8 *wps_p2p_beacon_ie;
-	u8 *p2p_beacon_ie;
-	u8 *wps_p2p_probe_resp_ie;
-	u8 *wps_p2p_assoc_resp_ie;
-	//u32 wps_p2p_beacon_ie_len;
-	u32 p2p_beacon_ie_len;
-	u32 wps_p2p_probe_resp_ie_len;
-	u32 wps_p2p_assoc_resp_ie_len;
-#endif
-*/
-
 	_lock	bcn_update_lock;
 	u8		update_bcn;
 
 
 #endif //#if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
 
-#if defined(CONFIG_WFD) && defined(CONFIG_IOCTL_CFG80211)
+#if defined(CONFIG_WFD)
 
 	u8 *wfd_beacon_ie;
 	u8 *wfd_probe_req_ie;
