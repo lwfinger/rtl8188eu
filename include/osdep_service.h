@@ -83,9 +83,7 @@
 	#include <linux/usb/ch9.h>
 #endif
 
-#ifdef CONFIG_TX_MCAST2UNI
 extern int rtw_mc2u_disable;
-#endif	// CONFIG_TX_MCAST2UNI
 
 extern char* rtw_initmac;
 

@@ -72,9 +72,7 @@ void _rtw_init_stainfo(struct sta_info *psta)
 	psta->no_ht_set = 0;
 	psta->ht_20mhz_set = 0;
 
-#ifdef CONFIG_TX_MCAST2UNI
 	psta->under_exist_checking = 0;
-#endif	/*  CONFIG_TX_MCAST2UNI */
 
 	psta->keep_alive_trycnt = 0;
 
@@ -588,9 +586,7 @@ u32	rtw_free_stainfo(struct adapter *padapter , struct sta_info *psta)
 		psta->aid = 0;
 	}
 
-#ifdef CONFIG_TX_MCAST2UNI
 	psta->under_exist_checking = 0;
-#endif	/*  CONFIG_TX_MCAST2UNI */
 
 #endif	/*  CONFIG_AP_MODE */
 

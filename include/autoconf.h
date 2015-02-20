@@ -159,9 +159,6 @@
 #define CONFIG_BR_EXT_BRNAME	"br0"
 #endif	// CONFIG_BR_EXT
 
-#define CONFIG_TX_MCAST2UNI		// Support IP multicast->unicast
-//#define CONFIG_CHECK_AC_LIFETIME	// Check packet lifetime of 4 ACs.
-
 /*
  * Interface  Related Config
  */
