@@ -2408,21 +2408,9 @@ static void hw_var_set_opmode(struct adapter *Adapter, u8 variable, u8* val)
 
 		if((mode == _HW_STATE_STATION_) || (mode == _HW_STATE_NOLINK_))
 		{
-		#ifdef CONFIG_INTERRUPT_BASED_TXBCN
-			#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-			rtw_write8(Adapter, REG_DRVERLYINT, 0x05);/* restore early int time to 5ms */
-			UpdateInterruptMask8188EU(Adapter,true, 0, IMR_BCNDMAINT0_88E);
-			#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-
-			#ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-			UpdateInterruptMask8188EU(Adapter,true ,0, (IMR_TBDER_88E|IMR_TBDOK_88E));
-			#endif /* CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR */
-
-		#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
 			StopTxBeacon(Adapter);
 
 			rtw_write8(Adapter,REG_BCN_CTRL, 0x19);/* disable atim wnd */
-			/* rtw_write8(Adapter,REG_BCN_CTRL, 0x18); */
 		}
 		else if((mode == _HW_STATE_ADHOC_) /*|| (mode == _HW_STATE_AP_)*/)
 		{
@@ -2433,19 +2421,6 @@ static void hw_var_set_opmode(struct adapter *Adapter, u8 variable, u8* val)
 		}
 		else if(mode == _HW_STATE_AP_)
 		{
-
-#ifdef CONFIG_INTERRUPT_BASED_TXBCN
-			#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-			UpdateInterruptMask8188EU(Adapter,true ,IMR_BCNDMAINT0_88E, 0);
-			#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-
-			#ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-			UpdateInterruptMask8188EU(Adapter,true ,(IMR_TBDER_88E|IMR_TBDOK_88E), 0);
-			#endif/* CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR */
-
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
-
-
 			ResumeTxBeacon(Adapter);
 
 			rtw_write8(Adapter, REG_BCN_CTRL, 0x12);
@@ -2474,11 +2449,7 @@ static void hw_var_set_opmode(struct adapter *Adapter, u8 variable, u8* val)
 
 		        /* enable BCN0 Function for if1 */
 			/* don't enable update TSF0 for if1 (due to TSF update when beacon/probe rsp are received) */
-			#if defined(CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR)
-			rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT0_NORMAL_CHIP|EN_BCN_FUNCTION | EN_TXBCN_RPT|BIT(1)));
-			#else
 			rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT0_NORMAL_CHIP|EN_BCN_FUNCTION |BIT(1)));
-			#endif
 
 			/* dis BCN1 ATIM  WND if if2 is station */
 			rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1)|BIT(0));
@@ -2799,18 +2770,6 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
                         break;
 		case HW_VAR_BEACON_INTERVAL:
 			rtw_write16(Adapter, REG_BCN_INTERVAL, *((u16 *)val));
-#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-			{
-				struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
-				struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-				u16 bcn_interval =	*((u16 *)val);
-				if((pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE){
-					DBG_8192C("%s==> bcn_interval:%d, eraly_int:%d \n",__FUNCTION__,bcn_interval,bcn_interval>>1);
-					rtw_write8(Adapter, REG_DRVERLYINT, bcn_interval>>1);/*  50ms for sdio */
-				}
-			}
-#endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
-
 			break;
 		case HW_VAR_SLOT_TIME:
 			{

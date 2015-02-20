@@ -344,25 +344,6 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 	}
 #endif/* CONFIG_LPS_LCLK */
 
-#ifdef CONFIG_INTERRUPT_BASED_TXBCN
-
-	#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-	if (pHalData->IntArray[0] & IMR_BCNDMAINT0_88E)
-	#endif
-	#ifdef  CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-	if (pHalData->IntArray[0] & (IMR_TBDER_88E|IMR_TBDOK_88E))
-	#endif
-	{
-		struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-		if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
-			/* send_beacon(padapter); */
-			if (pmlmepriv->update_bcn == true)
-				set_tx_beacon_cmd(padapter);
-		}
-	}
-#endif /* CONFIG_INTERRUPT_BASED_TXBCN */
-
 #ifdef DBG_CONFIG_ERROR_DETECT_INT
 	if (  pHalData->IntArray[1]  & IMR_TXERR_88E )
 		DBG_871X("===> %s Tx Error Flag Interrupt Status \n",__FUNCTION__);
