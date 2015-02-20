@@ -128,7 +128,7 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	_init_timer(&(pmlmepriv->assoc_timer), padapter->pnetdev, rtw_join_timeout_handler, padapter);
-	//_init_timer(&(pmlmepriv->sitesurveyctrl.sitesurvey_ctrl_timer), padapter->pnetdev, sitesurvey_ctrl_handler, padapter);
+	/* _init_timer(&(pmlmepriv->sitesurveyctrl.sitesurvey_ctrl_timer), padapter->pnetdev, sitesurvey_ctrl_handler, padapter); */
 	_init_timer(&(pmlmepriv->scan_to_timer), padapter->pnetdev, _rtw_scan_timeout_handler, padapter);
 
 	_init_timer(&(pmlmepriv->dynamic_chk_timer), padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
@@ -164,7 +164,7 @@ void rtw_os_indicate_connect(struct adapter *adapter)
 	}
 	else
 		rtw_cfg80211_indicate_connect(adapter);
-#endif //CONFIG_IOCTL_CFG80211
+#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_indicate_wx_assoc_event(adapter);
 	netif_carrier_on(adapter->pnetdev);
@@ -194,19 +194,19 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 	u8	backupPMKIDIndex = 0;
 	u8	backupTKIPCountermeasure = 0x00;
 	u32	backupTKIPcountermeasure_time = 0;
-	// add for CONFIG_IEEE80211W, none 11w also can use
+	/*  add for CONFIG_IEEE80211W, none 11w also can use */
 	_irqL irqL;
 	struct mlme_ext_priv	*pmlmeext = &adapter->mlmeextpriv;
 
 	_enter_critical_bh(&adapter->security_key_mutex, &irqL);
 
-	if(adapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X)//802.1x
+	if(adapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X)/* 802.1x */
 	{
-		// Added by Albert 2009/02/18
-		// We have to backup the PMK information for WiFi PMK Caching test item.
-		//
-		// Backup the btkip_countermeasure information.
-		// When the countermeasure is trigger, the driver have to disconnect with AP for 60 seconds.
+		/*  Added by Albert 2009/02/18 */
+		/*  We have to backup the PMK information for WiFi PMK Caching test item. */
+		/*  */
+		/*  Backup the btkip_countermeasure information. */
+		/*  When the countermeasure is trigger, the driver have to disconnect with AP for 60 seconds. */
 
 		memset( &backupPMKIDList[ 0 ], 0x00, sizeof( RT_PMKID_LIST ) * NUM_PMKID_CACHE );
 
@@ -215,14 +215,14 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 		backupTKIPCountermeasure = adapter->securitypriv.btkip_countermeasure;
 		backupTKIPcountermeasure_time = adapter->securitypriv.btkip_countermeasure_time;
 #ifdef CONFIG_IEEE80211W
-		//reset RX BIP packet number
+		/* reset RX BIP packet number */
 		pmlmeext->mgnt_80211w_IPN_rx = 0;
-#endif //CONFIG_IEEE80211W
+#endif /* CONFIG_IEEE80211W */
 		memset((unsigned char *)&adapter->securitypriv, 0, sizeof (struct security_priv));
-		//_init_timer(&(adapter->securitypriv.tkip_timer),adapter->pnetdev, rtw_use_tkipkey_handler, adapter);
+		/* _init_timer(&(adapter->securitypriv.tkip_timer),adapter->pnetdev, rtw_use_tkipkey_handler, adapter); */
 
-		// Added by Albert 2009/02/18
-		// Restore the PMK information to securitypriv structure for the following connection.
+		/*  Added by Albert 2009/02/18 */
+		/*  Restore the PMK information to securitypriv structure for the following connection. */
 		memcpy( &adapter->securitypriv.PMKIDList[ 0 ], &backupPMKIDList[ 0 ], sizeof( RT_PMKID_LIST ) * NUM_PMKID_CACHE );
 		adapter->securitypriv.PMKIDIndex = backupPMKIDIndex;
 		adapter->securitypriv.btkip_countermeasure = backupTKIPCountermeasure;
@@ -232,13 +232,13 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 		adapter->securitypriv.ndisencryptstatus = Ndis802_11WEPDisabled;
 
 	}
-	else //reset values in securitypriv
+	else /* reset values in securitypriv */
 	{
-		//if(adapter->mlmepriv.fw_state & WIFI_STATION_STATE)
-		//{
+		/* if(adapter->mlmepriv.fw_state & WIFI_STATION_STATE) */
+		/*  */
 		struct security_priv *psec_priv=&adapter->securitypriv;
 
-		psec_priv->dot11AuthAlgrthm =dot11AuthAlgrthm_Open;  //open system
+		psec_priv->dot11AuthAlgrthm =dot11AuthAlgrthm_Open;  /* open system */
 		psec_priv->dot11PrivacyAlgrthm = _NO_PRIVACY_;
 		psec_priv->dot11PrivacyKeyIndex = 0;
 
@@ -247,30 +247,30 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 
 		psec_priv->ndisauthtype = Ndis802_11AuthModeOpen;
 		psec_priv->ndisencryptstatus = Ndis802_11WEPDisabled;
-		//}
+		/*  */
 	}
-	// add for CONFIG_IEEE80211W, none 11w also can use
+	/*  add for CONFIG_IEEE80211W, none 11w also can use */
 	_exit_critical_bh(&adapter->security_key_mutex, &irqL);
 }
 
 void rtw_os_indicate_disconnect( struct adapter *adapter )
 {
-	//RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ];
+	/* RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ]; */
 
 ;
 
-	netif_carrier_off(adapter->pnetdev); // Do it first for tx broadcast pkt after disconnection issue!
+	netif_carrier_off(adapter->pnetdev); /*  Do it first for tx broadcast pkt after disconnection issue! */
 
 #ifdef CONFIG_IOCTL_CFG80211
 	rtw_cfg80211_indicate_disconnect(adapter);
-#endif //CONFIG_IOCTL_CFG80211
+#endif /* CONFIG_IOCTL_CFG80211 */
 
 	rtw_indicate_wx_disassoc_event(adapter);
 
 #ifdef RTK_DMP_PLATFORM
 	_set_workitem(&adapter->mlmepriv.Linkdown_workitem);
 #endif
-	 //modify for CONFIG_IEEE80211W, none 11w also can use the same command
+	 /* modify for CONFIG_IEEE80211W, none 11w also can use the same command */
 	 rtw_reset_securitypriv_cmd(adapter);
 
 ;
@@ -353,7 +353,7 @@ void _sa_query_timer_hdl (void *FunctionContext)
 	struct adapter *padapter = (struct adapter *)FunctionContext;
 	sa_query_timer_hdl(padapter);
 }
-#endif //CONFIG_IEEE80211W
+#endif /* CONFIG_IEEE80211W */
 
 void init_addba_retry_timer(struct adapter *padapter, struct sta_info *psta)
 {
@@ -383,11 +383,11 @@ void init_mlme_ext_timer(struct adapter *padapter)
 	_init_timer(&pmlmeext->link_timer, padapter->pnetdev, _link_timer_hdl, padapter);
 #ifdef CONFIG_IEEE80211W
 	_init_timer(&pmlmeext->sa_query_timer, padapter->pnetdev, _sa_query_timer_hdl, padapter);
-#endif //CONFIG_IEEE80211W
-	//_init_timer(&pmlmeext->ADDBA_timer, padapter->pnetdev, _addba_timer_hdl, padapter);
+#endif /* CONFIG_IEEE80211W */
+	/* _init_timer(&pmlmeext->ADDBA_timer, padapter->pnetdev, _addba_timer_hdl, padapter); */
 
-	//_init_timer(&pmlmeext->reauth_timer, padapter->pnetdev, _reauth_timer_hdl, padapter);
-	//_init_timer(&pmlmeext->reassoc_timer, padapter->pnetdev, _reassoc_timer_hdl, padapter);
+	/* _init_timer(&pmlmeext->reauth_timer, padapter->pnetdev, _reauth_timer_hdl, padapter); */
+	/* _init_timer(&pmlmeext->reassoc_timer, padapter->pnetdev, _reassoc_timer_hdl, padapter); */
 }
 
 #ifdef CONFIG_AP_MODE
@@ -454,7 +454,7 @@ static int mgnt_xmit_entry(struct sk_buff *skb, struct net_device *pnetdev)
 	struct hostapd_priv *phostapdpriv = rtw_netdev_priv(pnetdev);
 	struct adapter *padapter = (struct adapter *)phostapdpriv->padapter;
 
-	//DBG_871X("%s\n", __FUNCTION__);
+	/* DBG_871X("%s\n", __FUNCTION__); */
 
 	return rtw_hal_hostap_mgnt_xmit_entry(padapter, skb);
 }
@@ -473,10 +473,7 @@ static int mgnt_netdev_open(struct net_device *pnetdev)
 	else
 		rtw_netif_wake_queue(pnetdev);
 
-
 	netif_carrier_on(pnetdev);
-
-	//rtw_write16(phostapdpriv->padapter, 0x0116, 0x0100);//only excluding beacon
 
 	return 0;
 }
@@ -493,7 +490,7 @@ static int mgnt_netdev_close(struct net_device *pnetdev)
 	if (!rtw_netif_queue_stopped(pnetdev))
 		rtw_netif_stop_queue(pnetdev);
 
-	//rtw_write16(phostapdpriv->padapter, 0x0116, 0x3f3f);
+	/* rtw_write16(phostapdpriv->padapter, 0x0116, 0x3f3f); */
 
 	return 0;
 }
@@ -503,9 +500,9 @@ static const struct net_device_ops rtl871x_mgnt_netdev_ops = {
 	.ndo_open = mgnt_netdev_open,
        .ndo_stop = mgnt_netdev_close,
        .ndo_start_xmit = mgnt_xmit_entry,
-       //.ndo_set_mac_address = r871x_net_set_mac_address,
-       //.ndo_get_stats = r871x_net_get_stats,
-       //.ndo_do_ioctl = r871x_mp_ioctl,
+       /* ndo_set_mac_address = r871x_net_set_mac_address, */
+       /* ndo_get_stats = r871x_net_get_stats, */
+       /* ndo_do_ioctl = r871x_mp_ioctl, */
 };
 #endif
 
@@ -519,17 +516,17 @@ int hostapd_mode_init(struct adapter *padapter)
 	if (!pnetdev)
 	   return -ENOMEM;
 
-	//SET_MODULE_OWNER(pnetdev);
+	/* SET_MODULE_OWNER(pnetdev); */
        ether_setup(pnetdev);
 
-	//pnetdev->type = ARPHRD_IEEE80211;
+	/* pnetdev->type = ARPHRD_IEEE80211; */
 
 	phostapdpriv = rtw_netdev_priv(pnetdev);
 	phostapdpriv->pmgnt_netdev = pnetdev;
 	phostapdpriv->padapter= padapter;
 	padapter->phostapdpriv = phostapdpriv;
 
-	//pnetdev->init = NULL;
+	/* pnetdev->init = NULL; */
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
 
@@ -545,17 +542,17 @@ int hostapd_mode_init(struct adapter *padapter)
 
 	pnetdev->hard_start_xmit = mgnt_xmit_entry;
 
-	//pnetdev->set_mac_address = r871x_net_set_mac_address;
+	/* pnetdev->set_mac_address = r871x_net_set_mac_address; */
 
-	//pnetdev->get_stats = r871x_net_get_stats;
+	/* pnetdev->get_stats = r871x_net_get_stats; */
 
-	//pnetdev->do_ioctl = r871x_mp_ioctl;
+	/* pnetdev->do_ioctl = r871x_mp_ioctl; */
 
 #endif
 
 	pnetdev->watchdog_timeo = HZ; /* 1 second timeout */
 
-	//pnetdev->wireless_handlers = NULL;
+	/* pnetdev->wireless_handlers = NULL; */
 
 #ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
 	pnetdev->features |= NETIF_F_IP_CSUM;
@@ -569,7 +566,7 @@ int hostapd_mode_init(struct adapter *padapter)
 	}
 
 
-	//SET_NETDEV_DEV(pnetdev, pintfpriv->udev);
+	/* SET_NETDEV_DEV(pnetdev, pintfpriv->udev); */
 
 
 	mac[0]=0x00;

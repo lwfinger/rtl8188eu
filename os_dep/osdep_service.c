@@ -44,8 +44,8 @@ inline int RTW_STATUS_CODE(int error_code){
 		return _SUCCESS;
 
 	switch(error_code) {
-		//case -ETIMEDOUT:
-		//	return RTW_STATUS_TIMEDOUT;
+		/* case -ETIMEDOUT: */
+		/* 	return RTW_STATUS_TIMEDOUT; */
 		default:
 			return _FAIL;
 	}
@@ -187,10 +187,10 @@ inline void _rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr
 #ifdef DBG_MEM_ALLOC
 
 struct rtw_mem_stat {
-	ATOMIC_T alloc; // the memory bytes we allocate currently
-	ATOMIC_T peak; // the peak memory bytes we allocate
-	ATOMIC_T alloc_cnt; // the alloc count for alloc currently
-	ATOMIC_T alloc_err_cnt; // the error times we fail to allocate memory
+	ATOMIC_T alloc; /*  the memory bytes we allocate currently */
+	ATOMIC_T peak; /*  the peak memory bytes we allocate */
+	ATOMIC_T alloc_cnt; /*  the alloc count for alloc currently */
+	ATOMIC_T alloc_err_cnt; /*  the error times we fail to allocate memory */
 };
 
 struct rtw_mem_stat rtw_mem_type_stat[mstat_tf_idx(MSTAT_TYPE_MAX)];
@@ -297,10 +297,10 @@ void rtw_mstat_update(const enum mstat_f flags, const MSTAT_STATUS status, u32 s
 			break;
 	};
 
-	//if (rtw_get_passing_time_ms(update_time) > 5000) {
-	//	rtw_mstat_dump();
+	/* if (rtw_get_passing_time_ms(update_time) > 5000) { */
+	/* 	rtw_mstat_dump(); */
 		update_time=rtw_get_current_time();
-	//}
+	/*  */
 }
 
 
@@ -308,7 +308,7 @@ void rtw_mstat_update(const enum mstat_f flags, const MSTAT_STATUS status, u32 s
 inline u8* dbg_rtw_vmalloc(u32 sz, const enum mstat_f flags, const char *func, const int line)
 {
 	u8  *p;
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func,  line, __FUNCTION__, (sz));
+	/* DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func,  line, __FUNCTION__, (sz)); */
 
 	p=_rtw_vmalloc((sz));
 
@@ -324,7 +324,7 @@ inline u8* dbg_rtw_vmalloc(u32 sz, const enum mstat_f flags, const char *func, c
 inline u8* dbg_rtw_zvmalloc(u32 sz, const enum mstat_f flags, const char *func, const int line)
 {
 	u8 *p;
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+	/* DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
 	p=_rtw_zvmalloc((sz));
 
@@ -339,7 +339,7 @@ inline u8* dbg_rtw_zvmalloc(u32 sz, const enum mstat_f flags, const char *func, 
 
 inline void dbg_rtw_vmfree(u8 *pbuf, u32 sz, const enum mstat_f flags, const char *func, const int line)
 {
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n",  func, line, __FUNCTION__, (pbuf), (sz));
+	/* DBG_871X("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n",  func, line, __FUNCTION__, (pbuf), (sz)); */
 
 	_rtw_vmfree((pbuf), (sz));
 
@@ -354,11 +354,11 @@ inline u8* dbg_rtw_malloc(u32 sz, const enum mstat_f flags, const char *func, co
 {
 	u8 *p;
 
-	//if(sz>=153 && sz<=306)
-	//	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+	/* if(sz>=153 && sz<=306) */
+	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
-	//if((sz)>4096)
-	//	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+	/* if((sz)>4096) */
+	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
 	p=_rtw_malloc((sz));
 
@@ -375,11 +375,11 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const enum mstat_f flags, const char *func, c
 {
 	u8 *p;
 
-	//if(sz>=153 && sz<=306)
-	//	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+	/* if(sz>=153 && sz<=306) */
+	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
-	//if((sz)>4096)
-	//	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+	/* if((sz)>4096) */
+	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
 	p = _rtw_zmalloc((sz));
 
@@ -394,11 +394,11 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const enum mstat_f flags, const char *func, c
 
 inline void dbg_rtw_mfree(u8 *pbuf, u32 sz, const enum mstat_f flags, const char *func, const int line)
 {
-	//if(sz>=153 && sz<=306)
-	//	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz));
+	/* if(sz>=153 && sz<=306) */
+	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
-	//if((sz)>4096)
-	//	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n", func, line, __FUNCTION__, (pbuf), (sz));
+	/* if((sz)>4096) */
+	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n", func, line, __FUNCTION__, (pbuf), (sz)); */
 
 	_rtw_mfree((pbuf), (sz));
 
@@ -435,8 +435,8 @@ inline void dbg_rtw_skb_free(struct sk_buff *skb, const enum mstat_f flags, cons
 {
 	unsigned int truesize = skb->truesize;
 
-	//if(truesize > 4096)
-	//	DBG_871X("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize);
+	/* if(truesize > 4096) */
+	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize); */
 
 	_rtw_skb_free(skb);
 
@@ -496,8 +496,8 @@ inline int dbg_rtw_netif_rx(_nic_hdl ndev, struct sk_buff *skb, const enum mstat
 	int ret;
 	unsigned int truesize = skb->truesize;
 
-	//if(truesize > 4096)
-	//	DBG_871X("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize);
+	/* if(truesize > 4096) */
+	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize); */
 
 	ret = _rtw_netif_rx(ndev, skb);
 
@@ -521,7 +521,7 @@ inline void dbg_rtw_skb_queue_purge(struct sk_buff_head *list, enum mstat_f flag
 inline void *dbg_rtw_usb_buffer_alloc(struct usb_device *dev, size_t size, dma_addr_t *dma, const enum mstat_f flags, const char *func, int line)
 {
 	void *p;
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, size);
+	/* DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, size); */
 
 	p = _rtw_usb_buffer_alloc(dev, size, dma);
 
@@ -536,7 +536,7 @@ inline void *dbg_rtw_usb_buffer_alloc(struct usb_device *dev, size_t size, dma_a
 
 inline void dbg_rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dma_addr_t dma, const enum mstat_f flags, const char *func, int line)
 {
-	//DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, size);
+	/* DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, size); */
 
 	_rtw_usb_buffer_free(dev, size, addr, dma);
 
@@ -572,7 +572,7 @@ void rtw_mfree2d(void *pbuf, int h, int w, int size)
 
 int	_rtw_memcmp(void *dst, void *src, u32 sz)
 {
-//under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0
+/* under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0 */
 	if (!(memcmp(dst, src, sz)))
 		return true;
 	else
@@ -704,7 +704,7 @@ inline u32 rtw_ms_to_systime(u32 ms)
 	return ms * HZ / 1000;
 }
 
-// the input parameter start use the same unit as returned by rtw_get_current_time
+/*  the input parameter start use the same unit as returned by rtw_get_current_time */
 inline s32 rtw_get_passing_time_ms(u32 start)
 {
 	return rtw_systime_to_ms(jiffies-start);
@@ -720,9 +720,9 @@ void rtw_sleep_schedulable(int ms)
 {
     u32 delta;
 
-    delta = (ms * HZ)/1000;//(ms)
+    delta = (ms * HZ)/1000;/* ms) */
     if (delta == 0) {
-        delta = 1;// 1 ms
+        delta = 1;/*  1 ms */
     }
     set_current_state(TASK_INTERRUPTIBLE);
     if (schedule_timeout(delta) != 0) {
@@ -820,7 +820,7 @@ inline void rtw_lock_suspend(void)
 	#endif
 
 	#if  defined(CONFIG_WAKELOCK) || defined(CONFIG_ANDROID_POWER)
-	//DBG_871X("####%s: suspend_lock_count:%d####\n", __FUNCTION__, rtw_suspend_lock.stat.count);
+	/* DBG_871X("####%s: suspend_lock_count:%d####\n", __FUNCTION__, rtw_suspend_lock.stat.count); */
 	#endif
 }
 
@@ -833,7 +833,7 @@ inline void rtw_unlock_suspend(void)
 	#endif
 
 	#if  defined(CONFIG_WAKELOCK) || defined(CONFIG_ANDROID_POWER)
-	//DBG_871X("####%s: suspend_lock_count:%d####\n", __FUNCTION__, rtw_suspend_lock.stat.count);
+	/* DBG_871X("####%s: suspend_lock_count:%d####\n", __FUNCTION__, rtw_suspend_lock.stat.count); */
 	#endif
 }
 
@@ -1116,7 +1116,7 @@ int rtw_store_to_file(char *path, u8* buf, u32 sz)
 	return ret>=0?ret:0;
 }
 
-#if 1 //#ifdef MEM_ALLOC_REFINE_ADAPTOR
+#if 1 /* ifdef MEM_ALLOC_REFINE_ADAPTOR */
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv)
 {
 	struct net_device *pnetdev;
@@ -1200,7 +1200,7 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 
 	rereg_priv = &padapter->rereg_nd_name_priv;
 
-	//free the old_pnetdev
+	/* free the old_pnetdev */
 	if(rereg_priv->old_pnetdev) {
 		free_netdev(rereg_priv->old_pnetdev);
 		rereg_priv->old_pnetdev = NULL;
@@ -1250,7 +1250,7 @@ error:
 	return -1;
 
 }
-#endif //MEM_ALLOC_REFINE_ADAPTOR
+#endif /* MEM_ALLOC_REFINE_ADAPTOR */
 
 #ifdef CONFIG_PLATFORM_SPRD
 #ifdef do_div
