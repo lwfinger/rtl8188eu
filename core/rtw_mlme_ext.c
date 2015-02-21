@@ -514,17 +514,13 @@ int	init_mlme_ext_priv(struct adapter* padapter)
 	pmlmeext->chan_scan_time = SURVEY_TO;
 	pmlmeext->mlmeext_init = true;
 
-
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 	pmlmeext->active_keep_alive_check = true;
-#endif
 
 #ifdef DBG_FIXED_CHAN
 	pmlmeext->fixed_chan = 0xFF;
 #endif
 
 	return res;
-
 }
 
 void free_mlme_ext_priv (struct mlme_ext_priv *pmlmeext)
@@ -9826,20 +9822,13 @@ void linked_status_chk(struct adapter *padapter)
 	rtw_hal_sreset_linked_status_check(padapter);
 	#endif
 
-	if (is_client_associated_to_ap(padapter))
-	{
+	if (is_client_associated_to_ap(padapter)) {
 		/* linked infrastructure client mode */
 
 		int tx_chk = _SUCCESS, rx_chk = _SUCCESS;
 		int rx_chk_limit;
 
-		#if defined(DBG_ROAMING_TEST)
-		rx_chk_limit = 1;
-		#elif defined(CONFIG_ACTIVE_KEEP_ALIVE_CHECK)
 		rx_chk_limit = 4;
-		#else
-		rx_chk_limit = 8;
-		#endif
 
 		/*  Marked by Kurt 20130715 */
 		/*  For WiDi 3.5 and latered on, they don't ask WiDi sink to do roaming, so we could not check rx limit that strictly. */
@@ -9862,7 +9851,6 @@ void linked_status_chk(struct adapter *padapter)
 			if (pxmitpriv->last_tx_pkts == pxmitpriv->tx_pkts)
 				tx_chk = _FAIL;
 
-			#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 			if (pmlmeext->active_keep_alive_check && (rx_chk == _FAIL || tx_chk == _FAIL)) {
 				u8 backup_oper_channel=0;
 
@@ -9885,11 +9873,7 @@ void linked_status_chk(struct adapter *padapter)
 				/* back to the original operation channel */
 				if(backup_oper_channel>0)
 					SelectChannel(padapter, backup_oper_channel);
-
-			}
-			else
-			#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-			{
+			} else {
 				if (rx_chk != _SUCCESS) {
 					if (pmlmeext->retry == 0) {
 						#ifdef DBG_EXPIRATION_CHK

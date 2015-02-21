@@ -532,9 +532,7 @@ struct mlme_ext_priv
 	u8 action_public_dialog_token;
 	u16	 action_public_rxseq;
 
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 	u8 active_keep_alive_check;
-#endif
 #ifdef DBG_FIXED_CHAN
 	u8 fixed_chan;
 #endif

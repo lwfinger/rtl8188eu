@@ -43,36 +43,18 @@
  * Internal  General Config
  */
 
-//#define CONFIG_H2CLBK
-
 #define CONFIG_EMBEDDED_FWIMG
 
-#define CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 #define CONFIG_80211N_HT
 
 #define CONFIG_RECV_REORDERING_CTRL
 
-//#define CONFIG_TCP_CSUM_OFFLOAD_RX
-
-//#define CONFIG_DRVEXT_MODULE
-
  #define CONFIG_SUPPORT_USB_INT
- #ifdef	CONFIG_SUPPORT_USB_INT
-//#define CONFIG_USB_INTERRUPT_IN_PIPE
-#endif
 
 	#define CONFIG_IPS
-	#ifdef CONFIG_IPS
-	//#define CONFIG_IPS_LEVEL_2	 //enable this to set default IPS mode to IPS_LEVEL_2
-	#endif
 	#define SUPPORT_HW_RFOFF_DETECTED
 
 	#define CONFIG_LPS
-	#if defined(CONFIG_LPS) && defined(CONFIG_SUPPORT_USB_INT)
-
-
-	//#define CONFIG_LPS_LCLK
-	#endif
 
 	#ifdef CONFIG_LPS_LCLK
 	#define CONFIG_XMIT_THREAD_MODE
@@ -101,42 +83,22 @@
 	#ifndef CONFIG_WIFI_TEST
 		#define CONFIG_P2P_REMOVE_GROUP_INFO
 	#endif
-	//#define CONFIG_DBG_P2P
 
 	#define CONFIG_P2P_PS
-	//#define CONFIG_P2P_IPS
 	#define P2P_OP_CHECK_SOCIAL_CH
 #endif
-
-//	Added by Kurt 20110511
-//#define CONFIG_TDLS
-#ifdef CONFIG_TDLS
-//	#ifndef CONFIG_WFD
-//		#define CONFIG_WFD
-//	#endif
-//	#define CONFIG_TDLS_AUTOSETUP
-//	#define CONFIG_TDLS_AUTOCHECKALIVE
-#endif
-
 
 #define CONFIG_SKB_COPY	//for amsdu
 
 //#define CONFIG_LED
 #ifdef CONFIG_LED
 	#define CONFIG_SW_LED
-	#ifdef CONFIG_SW_LED
-		//#define CONFIG_LED_HANDLED_BY_CMD_THREAD
-	#endif
 #endif // CONFIG_LED
 
 #ifdef CONFIG_IOL
 	#define CONFIG_IOL_NEW_GENERATION
 	#define CONFIG_IOL_READ_EFUSE_MAP
-	//#define DBG_IOL_READ_EFUSE_MAP
-	//#define CONFIG_IOL_LLT
 	#define CONFIG_IOL_EFUSE_PATCH
-	//#define CONFIG_IOL_IOREG_CFG
-	//#define CONFIG_IOL_IOREG_CFG_DBG
 #endif
 
 
@@ -145,12 +107,8 @@
 
 #define CONFIG_LAYER2_ROAMING
 #define CONFIG_LAYER2_ROAMING_RESUME
-//#define CONFIG_ADAPTOR_INFO_CACHING_FILE // now just applied on 8192cu only, should make it general...
-//#define CONFIG_RESUME_IN_WORKQUEUE
-//#define CONFIG_SET_SCAN_DENY_TIMER
 #define CONFIG_LONG_DELAY_ISSUE
 #define CONFIG_NEW_SIGNAL_STAT_PROCESS
-//#define CONFIG_SIGNAL_DISPLAY_DBM //display RX signal with dbm
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 #define CONFIG_DEAUTH_BEFORE_CONNECT
 
@@ -169,14 +127,10 @@
 #endif
 
 #define CONFIG_PREALLOC_RECV_SKB
-//#define CONFIG_REDUCE_USB_TX_INT		// Trade-off: Improve performance, but may cause TX URBs blocked by USB Host/Bus driver on few platforms.
-//#define CONFIG_EASY_REPLACEMENT
 
 /*
  * CONFIG_USE_USB_BUFFER_ALLOC_XX uses Linux USB Buffer alloc API and is for Linux platform only now!
  */
-//#define CONFIG_USE_USB_BUFFER_ALLOC_TX	// Trade-off: For TX path, improve stability on some platforms, but may cause performance degrade on other platforms.
-//#define CONFIG_USE_USB_BUFFER_ALLOC_RX	// For RX path
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
 #undef CONFIG_PREALLOC_RECV_SKB
 #endif
@@ -185,14 +139,10 @@
  * USB VENDOR REQ BUFFER ALLOCATION METHOD
  * if not set we'll use function local variable (stack memory)
  */
-//#define CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
 #define CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 
 #define CONFIG_USB_VENDOR_REQ_MUTEX
 #define CONFIG_VENDOR_REQ_RETRY
-
-//#define CONFIG_USB_SUPPORT_ASYNC_VDN_REQ
-
 
 /*
  * HAL  Related Config
@@ -203,20 +153,13 @@
 #define SUPPORTED_BLOCK_IO
 #define CONFIG_REGULATORY_CTRL
 
-//#define CONFIG_ONLY_ONE_OUT_EP_TO_LOW	0
-
 #define CONFIG_OUT_EP_WIFI_MODE	0
 
 #define ENABLE_USB_DROP_INCORRECT_OUT
 
-
-//#define RTL8192CU_ADHOC_WORKAROUND_SETTING
-
 #define DISABLE_BB_RF	0
 
-//#define RTL8191C_FPGA_NETWORKTYPE_ADHOC 0
-
-	#define MP_DRIVER 0
+#define MP_DRIVER 0
 
 
 /*
@@ -304,40 +247,7 @@
  */
 #define DBG	1
 
-//#define CONFIG_DEBUG /* DBG_871X, etc... */
-//#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
-
 #define CONFIG_PROC_DEBUG
 
 #define DBG_CONFIG_ERROR_DETECT
-//#define DBG_CONFIG_ERROR_DETECT_INT
 #define DBG_CONFIG_ERROR_RESET
-
-//#define DBG_IO
-//#define DBG_DELAY_OS
-//#define DBG_MEM_ALLOC
-//#define DBG_IOCTL
-
-//#define DBG_TX
-//#define DBG_XMIT_BUF
-//#define DBG_XMIT_BUF_EXT
-//#define DBG_TX_DROP_FRAME
-
-//#define DBG_TRX_STA_PKTS
-
-//#define DBG_RX_DROP_FRAME
-//#define DBG_RX_SEQ
-//#define DBG_RX_SIGNAL_DISPLAY_PROCESSING
-//#define DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED "jeff-ap"
-
-
-
-//#define DBG_SHOW_MCUFWDL_BEFORE_51_ENABLE
-//#define DBG_ROAMING_TEST
-
-//#define DBG_HAL_INIT_PROFILING
-
-//TX use 1 urb
-//#define CONFIG_SINGLE_XMIT_BUF
-//RX use 1 urb
-//#define CONFIG_SINGLE_RECV_BUF

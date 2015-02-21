@@ -147,11 +147,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 	pstapriv->auth_to = 3; /*  3*2 = 6 sec */
 	pstapriv->assoc_to = 3;
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 	pstapriv->expire_to = 3; /*  3*2 = 6 sec */
-#else
-	pstapriv->expire_to = 60;/*  60*2 = 120 sec = 2 min, expire after no any traffic. */
-#endif
 	pstapriv->max_num_sta = NUM_STA;
 #endif
 

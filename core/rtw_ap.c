@@ -421,32 +421,8 @@ void	expire_timeout_chk(struct adapter *padapter)
 			psta->expire_to--;
 		}
 
-#ifndef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-#ifdef CONFIG_80211N_HT
-		if ( (psta->flags & WLAN_STA_HT) && (psta->htpriv.agg_enable_bitmap || psta->under_exist_checking) ) {
-			/*  check sta by delba(addba) for 11n STA */
-			/*  ToDo: use CCX report to check for all STAs */
-			/* DBG_871X("asoc check by DELBA/ADDBA! (pstapriv->expire_to=%d s)(psta->expire_to=%d s), [%02x, %d]\n", pstapriv->expire_to*2, psta->expire_to*2, psta->htpriv.agg_enable_bitmap, psta->under_exist_checking); */
-
-				if ( psta->expire_to <= (pstapriv->expire_to - 50 ) ) {
-				DBG_871X("asoc expire by DELBA/ADDBA! (%d s)\n", (pstapriv->expire_to-psta->expire_to)*2);
-				psta->under_exist_checking = 0;
-				psta->expire_to = 0;
-			} else if ( psta->expire_to <= (pstapriv->expire_to - 3) && (psta->under_exist_checking==0)) {
-				DBG_871X("asoc check by DELBA/ADDBA! (%d s)\n", (pstapriv->expire_to-psta->expire_to)*2);
-				psta->under_exist_checking = 1;
-				/* tear down TX AMPDU */
-				send_delba(padapter, 1, psta->hwaddr);/*  originator */
-				psta->htpriv.agg_enable_bitmap = 0x0;/* reset */
-				psta->htpriv.candidate_tid_bitmap = 0x0;/* reset */
-			}
-		}
-#endif /* CONFIG_80211N_HT */
-#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-
 		if (psta->expire_to <= 0)
 		{
-			#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
 			struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
 			if (padapter->registrypriv.wifi_spec == 1)
@@ -482,8 +458,6 @@ void	expire_timeout_chk(struct adapter *padapter)
 
 				continue;
 			}
-			#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-
 			rtw_list_delete(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
 
@@ -506,64 +480,59 @@ void	expire_timeout_chk(struct adapter *padapter)
 
 	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
 
-#ifdef CONFIG_ACTIVE_KEEP_ALIVE_CHECK
-if (chk_alive_num) {
+	if (chk_alive_num) {
+		u8 backup_oper_channel=0;
+		struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+		/* switch to correct channel of current network  before issue keep-alive frames */
+		if (rtw_get_oper_ch(padapter) != pmlmeext->cur_channel) {
+			backup_oper_channel = rtw_get_oper_ch(padapter);
+			SelectChannel(padapter, pmlmeext->cur_channel);
+		}
 
-	u8 backup_oper_channel=0;
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-	/* switch to correct channel of current network  before issue keep-alive frames */
-	if (rtw_get_oper_ch(padapter) != pmlmeext->cur_channel) {
-		backup_oper_channel = rtw_get_oper_ch(padapter);
-		SelectChannel(padapter, pmlmeext->cur_channel);
-	}
+		/* issue null data to check sta alive*/
+		for (i = 0; i < chk_alive_num; i++) {
+			int ret = _FAIL;
 
-	/* issue null data to check sta alive*/
-	for (i = 0; i < chk_alive_num; i++) {
+			psta = rtw_get_stainfo_by_offset(pstapriv, chk_alive_list[i]);
+			if(!(psta->state &_FW_LINKED))
+				continue;
 
-		int ret = _FAIL;
+			if (psta->state & WIFI_SLEEP_STATE)
+				ret = issue_nulldata(padapter, psta->hwaddr, 0, 1, 50);
+			else
+				ret = issue_nulldata(padapter, psta->hwaddr, 0, 3, 50);
 
-		psta = rtw_get_stainfo_by_offset(pstapriv, chk_alive_list[i]);
-		if(!(psta->state &_FW_LINKED))
-			continue;
+			psta->keep_alive_trycnt++;
+			if (ret == _SUCCESS)
+			{
+				DBG_871X("asoc check, sta(" MAC_FMT ") is alive\n", MAC_ARG(psta->hwaddr));
+				psta->expire_to = pstapriv->expire_to;
+				psta->keep_alive_trycnt = 0;
+				continue;
+			}
+			else if (psta->keep_alive_trycnt <= 3)
+			{
+				DBG_871X("ack check for asoc expire, keep_alive_trycnt=%d\n", psta->keep_alive_trycnt);
+				psta->expire_to = 1;
+				continue;
+			}
 
-		if (psta->state & WIFI_SLEEP_STATE)
-			ret = issue_nulldata(padapter, psta->hwaddr, 0, 1, 50);
-		else
-			ret = issue_nulldata(padapter, psta->hwaddr, 0, 3, 50);
-
-		psta->keep_alive_trycnt++;
-		if (ret == _SUCCESS)
-		{
-			DBG_871X("asoc check, sta(" MAC_FMT ") is alive\n", MAC_ARG(psta->hwaddr));
-			psta->expire_to = pstapriv->expire_to;
 			psta->keep_alive_trycnt = 0;
-			continue;
-		}
-		else if (psta->keep_alive_trycnt <= 3)
-		{
-			DBG_871X("ack check for asoc expire, keep_alive_trycnt=%d\n", psta->keep_alive_trycnt);
-			psta->expire_to = 1;
-			continue;
+
+			DBG_871X("asoc expire "MAC_FMT", state=0x%x\n", MAC_ARG(psta->hwaddr), psta->state);
+			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+			if (rtw_is_list_empty(&psta->asoc_list)==false) {
+				rtw_list_delete(&psta->asoc_list);
+				pstapriv->asoc_list_cnt--;
+				updated = ap_free_sta(padapter, psta, false, WLAN_REASON_DEAUTH_LEAVING);
+			}
+			_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+
 		}
 
-		psta->keep_alive_trycnt = 0;
-
-		DBG_871X("asoc expire "MAC_FMT", state=0x%x\n", MAC_ARG(psta->hwaddr), psta->state);
-		_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-		if (rtw_is_list_empty(&psta->asoc_list)==false) {
-			rtw_list_delete(&psta->asoc_list);
-			pstapriv->asoc_list_cnt--;
-			updated = ap_free_sta(padapter, psta, false, WLAN_REASON_DEAUTH_LEAVING);
-		}
-		_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-
+		if (backup_oper_channel>0) /* back to the original operation channel */
+			SelectChannel(padapter, backup_oper_channel);
 	}
-
-	if (backup_oper_channel>0) /* back to the original operation channel */
-		SelectChannel(padapter, backup_oper_channel);
-}
-#endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-
 	associated_clients_update(padapter, updated);
 }
 
