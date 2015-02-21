@@ -87,11 +87,9 @@ extern int rtw_mc2u_disable;
 
 extern char* rtw_initmac;
 
-#ifdef CONFIG_80211N_HT
 extern int rtw_ht_enable;
 extern int rtw_cbw40_enable;
 extern int rtw_ampdu_enable;//for enable tx_ampdu
-#endif
 
 #ifdef CONFIG_GLOBAL_UI_PID
 extern int ui_pid[3];

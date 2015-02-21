@@ -387,7 +387,6 @@ extern u32 GlobalDebugLevel;
 
 	int proc_set_rx_signal(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
-#ifdef CONFIG_80211N_HT
 
 	int proc_get_ht_enable(char *page, char **start,
 			  off_t offset, int count,
@@ -416,7 +415,6 @@ extern u32 GlobalDebugLevel;
 
 	int proc_set_rx_stbc(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
-#endif //CONFIG_80211N_HT
 
 	int proc_get_two_path_rssi(char *page, char **start,
 			  off_t offset, int count,

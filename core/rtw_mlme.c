@@ -1693,15 +1693,9 @@ static void rtw_joinbss_update_network(struct adapter *padapter, struct wlan_net
 				RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("Invalid network_mode\n"));
 				break;
 	}
-
 	rtw_update_protection(padapter, (cur_network->network.IEs) + sizeof (NDIS_802_11_FIXED_IEs),
 									(cur_network->network.IELength));
-
-#ifdef CONFIG_80211N_HT
 	rtw_update_ht_cap(padapter, cur_network->network.IEs, cur_network->network.IELength);
-#endif
-
-
 }
 
 /* Notes: the fucntion could be > passive_level (the same context as Rx tasklet) */
@@ -3005,17 +2999,9 @@ void rtw_joinbss_reset(struct adapter *padapter)
 {
 	u8	threshold;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
-
-#ifdef CONFIG_80211N_HT
 	struct ht_priv		*phtpriv = &pmlmepriv->htpriv;
-#endif
 
 	/* todo: if you want to do something io/reg/hw setting before join_bss, please add code here */
-
-
-
-
-#ifdef CONFIG_80211N_HT
 
 	pmlmepriv->num_FortyMHzIntolerant = 0;
 
@@ -3038,11 +3024,7 @@ void rtw_joinbss_reset(struct adapter *padapter)
 		threshold = 1;
 		rtw_hal_set_hwreg(padapter, HW_VAR_RXDMA_AGG_PG_TH, (u8 *)(&threshold));
 	}
-#endif
 }
-
-
-#ifdef CONFIG_80211N_HT
 
 /* the fucntion is >= passive_level */
 unsigned int rtw_restructure_ht_ie(struct adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len)
@@ -3302,8 +3284,6 @@ void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitfr
 	}
 
 }
-
-#endif
 
 #ifdef CONFIG_LAYER2_ROAMING
 inline void rtw_set_roaming(struct adapter *adapter, u8 to_roaming)

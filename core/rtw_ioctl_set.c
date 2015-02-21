@@ -1223,19 +1223,16 @@ u16 rtw_get_cur_max_rate(struct adapter *adapter)
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
 	struct mlme_priv	*pmlmepriv = &adapter->mlmepriv;
 	WLAN_BSSID_EX  *pcur_bss = &pmlmepriv->cur_network.network;
-#ifdef CONFIG_80211N_HT
 	struct rtw_ieee80211_ht_cap *pht_capie;
 	u8	rf_type = 0;
 	u8	bw_40MHz=0, short_GI_20=0, short_GI_40=0;
 	u16	mcs_rate=0;
 	u32	ht_ielen = 0;
-#endif
 
 	if((check_fwstate(pmlmepriv, _FW_LINKED) != true)
 		&& (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) != true))
 		return 0;
 
-#ifdef CONFIG_80211N_HT
 	if (pmlmeext->cur_wireless_mode & (WIRELESS_11_24N|WIRELESS_11_5N)) {
 		p = rtw_get_ie(&pcur_bss->IEs[12], _HT_CAPABILITY_IE_, &ht_ielen, pcur_bss->IELength-12);
 		if(p && ht_ielen>0)
@@ -1263,7 +1260,6 @@ u16 rtw_get_cur_max_rate(struct adapter *adapter)
 		}
 	}
 	else
-#endif /* CONFIG_80211N_HT */
 	{
 		while( (pcur_bss->SupportedRates[i]!=0) && (pcur_bss->SupportedRates[i]!=0xFF))
 		{

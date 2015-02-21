@@ -571,16 +571,12 @@ static s32 rtw_dump_xframe(struct adapter *padapter, struct xmit_frame *pxmitfra
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-#ifdef CONFIG_80211N_HT
 	if ((pxmitframe->frame_tag == DATA_FRAMETAG) &&
 	    (pxmitframe->attrib.ether_type != 0x0806) &&
 	    (pxmitframe->attrib.ether_type != 0x888e) &&
 	    (pxmitframe->attrib.ether_type != 0x88b4) &&
 	    (pxmitframe->attrib.dhcp_pkt != 1))
-	{
 		rtw_issue_addbareq_cmd(padapter, pxmitframe);
-	}
-#endif /* CONFIG_80211N_HT */
 	mem_addr = pxmitframe->buf_addr;
 
        RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_dump_xframe()\n"));
@@ -920,7 +916,6 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		rtw_list_delete(&ptxservq->tx_pending);
 
 	_exit_critical_bh(&pxmitpriv->lock, &irqL);
-#ifdef CONFIG_80211N_HT
 	if ((pfirstframe->attrib.ether_type != 0x0806) &&
 	    (pfirstframe->attrib.ether_type != 0x888e) &&
 	    (pfirstframe->attrib.ether_type != 0x88b4) &&
@@ -928,7 +923,6 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	{
 		rtw_issue_addbareq_cmd(padapter, pfirstframe);
 	}
-#endif /* CONFIG_80211N_HT */
 #ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
 	/* 3 3. update first frame txdesc */
 	if ((pbuf_tail % bulkSize) == 0) {

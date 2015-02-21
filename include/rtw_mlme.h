@@ -434,8 +434,6 @@ struct mlme_priv {
 
 	struct qos_priv qospriv;
 
-#ifdef CONFIG_80211N_HT
-
 	/* Number of non-HT AP/stations */
 	int num_sta_no_ht;
 
@@ -446,8 +444,6 @@ struct mlme_priv {
 	int num_FortyMHzIntolerant;
 
 	struct ht_priv	htpriv;
-
-#endif
 
 	RT_LINK_DETECT_T	LinkDetectInfo;
 	_timer	dynamic_chk_timer; //dynamic/periodic check timer
@@ -486,9 +482,7 @@ struct mlme_priv {
 	/* Overlapping BSS information */
 	int olbc_ht;
 
-#ifdef CONFIG_80211N_HT
 	u16 ht_op_mode;
-#endif /* CONFIG_80211N_HT */
 
 	u8 *assoc_req;
 	u32 assoc_req_len;
@@ -783,11 +777,9 @@ u8 *rtw_get_beacon_interval_from_ie(u8 *ie);
 
 void rtw_joinbss_reset(struct adapter *padapter);
 
-#ifdef CONFIG_80211N_HT
 unsigned int rtw_restructure_ht_ie(struct adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len);
 void rtw_update_ht_cap(struct adapter *padapter, u8 *pie, uint ie_len);
 void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitframe);
-#endif
 
 int rtw_is_same_ibss(struct adapter *adapter, struct wlan_network *pnetwork);
 int is_same_network(WLAN_BSSID_EX *src, WLAN_BSSID_EX *dst, u8 feature);

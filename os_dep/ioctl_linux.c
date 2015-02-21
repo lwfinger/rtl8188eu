@@ -6295,9 +6295,7 @@ static int rtw_dbg_port(struct net_device *dev,
 					break;
 				case 0x03:
 					DBG_871X("qos_option=%d\n", pmlmepriv->qospriv.qos_option);
-#ifdef CONFIG_80211N_HT
 					DBG_871X("ht_option=%d\n", pmlmepriv->htpriv.ht_option);
-#endif /* CONFIG_80211N_HT */
 					break;
 				case 0x04:
 					DBG_871X("cur_ch=%d\n", pmlmeext->cur_channel);
@@ -6316,12 +6314,10 @@ static int rtw_dbg_port(struct net_device *dev,
 						DBG_871X("cur_channel=%d, cur_bwmode=%d, cur_ch_offset=%d\n", pmlmeext->cur_channel, pmlmeext->cur_bwmode, pmlmeext->cur_ch_offset);
 						DBG_871X("rtsen=%d, cts2slef=%d\n", psta->rtsen, psta->cts2self);
 						DBG_871X("state=0x%x, aid=%d, macid=%d, raid=%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
-#ifdef CONFIG_80211N_HT
 						DBG_871X("qos_en=%d, ht_en=%d, init_rate=%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
 						DBG_871X("bwmode=%d, ch_offset=%d, sgi=%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
 						DBG_871X("ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
 						DBG_871X("agg_enable_bitmap=%x, candidate_tid_bitmap=%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
-#endif /* CONFIG_80211N_HT */
 
 						for(i=0;i<16;i++)
 						{
@@ -6393,12 +6389,10 @@ static int rtw_dbg_port(struct net_device *dev,
 									DBG_871X("sta's macaddr:" MAC_FMT "\n", MAC_ARG(psta->hwaddr));
 									DBG_871X("rtsen=%d, cts2slef=%d\n", psta->rtsen, psta->cts2self);
 									DBG_871X("state=0x%x, aid=%d, macid=%d, raid=%d\n", psta->state, psta->aid, psta->mac_id, psta->raid);
-#ifdef CONFIG_80211N_HT
 									DBG_871X("qos_en=%d, ht_en=%d, init_rate=%d\n", psta->qos_option, psta->htpriv.ht_option, psta->init_rate);
 									DBG_871X("bwmode=%d, ch_offset=%d, sgi=%d\n", psta->htpriv.bwmode, psta->htpriv.ch_offset, psta->htpriv.sgi);
 									DBG_871X("ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
 									DBG_871X("agg_enable_bitmap=%x, candidate_tid_bitmap=%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
-#endif /* CONFIG_80211N_HT */
 
 #ifdef CONFIG_AP_MODE
 									DBG_871X("capability=0x%x\n", psta->capability);
@@ -7422,7 +7416,6 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 			psta->qos_option = 0;
 
 
-#ifdef CONFIG_80211N_HT
 		/* chec 802.11n ht cap. */
 		if(WLAN_STA_HT&flags)
 		{
@@ -7437,12 +7430,8 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 
 		if(pmlmepriv->htpriv.ht_option == false)
 			psta->htpriv.ht_option = false;
-#endif
-
 
 		update_sta_info_apmode(padapter, psta);
-
-
 	}
 	else
 	{
@@ -7549,9 +7538,7 @@ static int rtw_ioctl_get_sta_data(struct net_device *dev, struct ieee_param *par
 
 		psta_data->tx_supp_rates_len =  psta->bssratelen;
 		memcpy(psta_data->tx_supp_rates, psta->bssrateset, psta->bssratelen);
-#ifdef CONFIG_80211N_HT
 		memcpy(&psta_data->ht_cap, &psta->htpriv.ht_cap, sizeof(struct rtw_ieee80211_ht_cap));
-#endif /* CONFIG_80211N_HT */
 		psta_data->rx_pkts = psta->sta_stats.rx_data_pkts;
 		psta_data->rx_bytes = psta->sta_stats.rx_bytes;
 		psta_data->rx_drops = psta->sta_stats.rx_drops;

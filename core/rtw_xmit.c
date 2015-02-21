@@ -546,22 +546,12 @@ static void update_attrib_phy_info(struct pkt_attrib *pattrib, struct sta_info *
 	pattrib->qos_en = psta->qos_option;
 
 	pattrib->raid = psta->raid;
-#ifdef CONFIG_80211N_HT
 	pattrib->ht_en = psta->htpriv.ht_option;
 	pattrib->bwmode = psta->htpriv.bwmode;
 	pattrib->ch_offset = psta->htpriv.ch_offset;
 	pattrib->sgi= psta->htpriv.sgi;
 	pattrib->ampdu_en = false;
-#endif /* CONFIG_80211N_HT */
-	/* if(pattrib->ht_en && psta->htpriv.ampdu_enable) */
-	/*  */
-	/* 	if(psta->htpriv.agg_enable_bitmap & BIT(pattrib->priority)) */
-	/* 		pattrib->ampdu_en = true; */
-	/*  */
-
-
 	pattrib->retry_ctrl = false;
-
 }
 
 u8	qos_acm(u8 acm_mask, u8 priority)
@@ -1221,7 +1211,6 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 
 				SetSeqNum(hdr, pattrib->seqnum);
 
-#ifdef CONFIG_80211N_HT
 				/* check if enable ampdu */
 				if(pattrib->ht_en && psta->htpriv.ampdu_enable)
 				{
@@ -1256,7 +1245,6 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 					}
 
 				}
-#endif /* CONFIG_80211N_HT */
 #ifdef CONFIG_TDLS
 				if(direct_link==1)
 				{
@@ -1270,12 +1258,10 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 					/* pattrib->qos_en = ptdls_sta->qos_option; */
 
 					pattrib->raid = ptdls_sta->raid;
-#ifdef CONFIG_80211N_HT
 					pattrib->bwmode = ptdls_sta->htpriv.bwmode;
 					pattrib->ht_en = ptdls_sta->htpriv.ht_option;
 					pattrib->ch_offset = ptdls_sta->htpriv.ch_offset;
 					pattrib->sgi= ptdls_sta->htpriv.sgi;
-#endif /* CONFIG_80211N_HT */
 					pattrib->mac_id = ptdls_sta->mac_id;
 
 					psta = psta_backup;

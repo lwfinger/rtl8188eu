@@ -3239,9 +3239,6 @@ int process_recv_indicatepkts(struct adapter *padapter, union recv_frame *prfram
 #ifdef CONFIG_TDLS
 	struct sta_info *psta = prframe->u.hdr.psta;
 #endif /* CONFIG_TDLS */
-
-#ifdef CONFIG_80211N_HT
-
 	struct ht_priv	*phtpriv = &pmlmepriv->htpriv;
 
 #ifdef CONFIG_TDLS
@@ -3270,7 +3267,6 @@ int process_recv_indicatepkts(struct adapter *padapter, union recv_frame *prfram
 		}
 	}
 	else /* B/G mode */
-#endif
 	{
 		retval=wlanhdr_to_ethhdr (prframe);
 		if(retval != _SUCCESS)
@@ -3398,7 +3394,6 @@ static int recv_func_posthandle(struct adapter *padapter, union recv_frame *prfr
 	rtw_wapi_update_info(padapter, prframe);
 #endif
 
-#ifdef CONFIG_80211N_HT
 	ret = process_recv_indicatepkts(padapter, prframe);
 	if (ret != _SUCCESS)
 	{
@@ -3409,68 +3404,6 @@ static int recv_func_posthandle(struct adapter *padapter, union recv_frame *prfr
 		rtw_free_recvframe(orig_prframe, pfree_recv_queue);/* free this recv_frame */
 		goto _recv_data_drop;
 	}
-#else /*  CONFIG_80211N_HT */
-	if (!pattrib->amsdu)
-	{
-		ret = wlanhdr_to_ethhdr (prframe);
-		if (ret != _SUCCESS)
-		{
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("wlanhdr_to_ethhdr: drop pkt \n"));
-			#ifdef DBG_RX_DROP_FRAME
-			DBG_871X("DBG_RX_DROP_FRAME %s wlanhdr_to_ethhdr: drop pkt\n", __FUNCTION__);
-			#endif
-			rtw_free_recvframe(orig_prframe, pfree_recv_queue);/* free this recv_frame */
-			goto _recv_data_drop;
-		}
-
-		if ((padapter->bDriverStopped == false) && (padapter->bSurpriseRemoved == false))
-		{
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("@@@@ recv_func: recv_func rtw_recv_indicatepkt\n" ));
-			/* indicate this recv_frame */
-			ret = rtw_recv_indicatepkt(padapter, prframe);
-			if (ret != _SUCCESS)
-			{
-				#ifdef DBG_RX_DROP_FRAME
-				DBG_871X("DBG_RX_DROP_FRAME %s rtw_recv_indicatepkt fail!\n", __FUNCTION__);
-				#endif
-				goto _recv_data_drop;
-			}
-		}
-		else
-		{
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_alert_, ("@@@@  recv_func: rtw_free_recvframe\n" ));
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_debug_, ("recv_func:bDriverStopped(%d) OR bSurpriseRemoved(%d)", padapter->bDriverStopped, padapter->bSurpriseRemoved));
-			#ifdef DBG_RX_DROP_FRAME
-			DBG_871X("DBG_RX_DROP_FRAME %s ecv_func:bDriverStopped(%d) OR bSurpriseRemoved(%d)\n", __FUNCTION__,
-				padapter->bDriverStopped, padapter->bSurpriseRemoved);
-			#endif
-			ret = _FAIL;
-			rtw_free_recvframe(orig_prframe, pfree_recv_queue); /* free this recv_frame */
-		}
-
-	}
-	else if(pattrib->amsdu==1)
-	{
-
-		ret = amsdu_to_msdu(padapter, prframe);
-		if(ret != _SUCCESS)
-		{
-			#ifdef DBG_RX_DROP_FRAME
-			DBG_871X("DBG_RX_DROP_FRAME %s amsdu_to_msdu fail\n", __FUNCTION__);
-			#endif
-			rtw_free_recvframe(orig_prframe, pfree_recv_queue);
-			goto _recv_data_drop;
-		}
-	}
-	else
-	{
-		#ifdef DBG_RX_DROP_FRAME
-		DBG_871X("DBG_RX_DROP_FRAME %s what is this condition??\n", __FUNCTION__);
-		#endif
-		goto _recv_data_drop;
-	}
-#endif /*  CONFIG_80211N_HT */
-
 _exit_recv_func:
 	return ret;
 

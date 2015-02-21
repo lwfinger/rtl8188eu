@@ -525,14 +525,12 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 		pid = specific_device_id_tbl[i].idProduct;
 		flags = specific_device_id_tbl[i].flags;
 
-#ifdef CONFIG_80211N_HT
 		if((pdid->idVendor==vid) && (pdid->idProduct==pid) && (flags&SPEC_DEV_ID_DISABLE_HT))
 		{
 			 rtw_ht_enable = 0;
 			 rtw_cbw40_enable = 0;
 			 rtw_ampdu_enable = 0;
 		}
-#endif
 
 #ifdef RTK_DMP_PLATFORM
 		/*  Change the ifname to wlan10 when PC side WFD dongle plugin on DMP platform. */

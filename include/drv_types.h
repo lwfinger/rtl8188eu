@@ -42,10 +42,7 @@ enum _NIC_VERSION {
 
 };
 
-
-#ifdef CONFIG_80211N_HT
 #include <rtw_ht.h>
-#endif
 
 #include <rtw_cmd.h>
 #include <wlan_bssdef.h>
@@ -144,13 +141,11 @@ struct registry_priv
 
 	WLAN_BSSID_EX    dev_network;
 
-#ifdef CONFIG_80211N_HT
 	u8	ht_enable;
 	u8	cbw40_enable;
 	u8	ampdu_enable;//for tx
 	u8	rx_stbc;
 	u8	ampdu_amsdu;//A-MPDU Supports A-MSDU is permitted
-#endif
 	u8	lowrate_two_xmit;
 
 	u8	rf_config ;
