@@ -209,9 +209,7 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 
 	pdmpriv->InitODMFlag = 0
 		| ODM_BB_DIG
-#ifdef CONFIG_ODM_REFRESH_RAMASK
 		| ODM_BB_RA_MASK
-#endif
 		| ODM_BB_DYNAMIC_TXPWR
 		| ODM_BB_FA_CNT
 		| ODM_BB_RSSI_MONITOR
