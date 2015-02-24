@@ -326,7 +326,6 @@ SetAntennaConfig92C(
 	IN	u8		DefaultAnt
 	);
 
-#ifdef CONFIG_PHY_SETTING_WITH_ODM
 void
 storePwrIndexDiffRateOffset(
 	IN	struct adapter *Adapter,
@@ -334,7 +333,7 @@ storePwrIndexDiffRateOffset(
 	IN	u32		BitMask,
 	IN	u32		Data
 	);
-#endif //CONFIG_PHY_SETTING_WITH_ODM
+
 /*--------------------------Exported Function prototype---------------------*/
 
 #define PHY_QueryBBReg(Adapter, RegAddr, BitMask) rtl8188e_PHY_QueryBBReg((Adapter), (RegAddr), (BitMask))

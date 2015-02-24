@@ -687,24 +687,16 @@ phy_RF6052_Config_ParaFile(
 		{
 		case RF_PATH_A:
 #ifdef CONFIG_EMBEDDED_FWIMG
-			#ifdef CONFIG_PHY_SETTING_WITH_ODM
 			if(HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
 				rtStatus= _FAIL;
-			#else
-				rtStatus= rtl8188e_PHY_ConfigRFWithHeaderFile(Adapter,(RF_RADIO_PATH_E)eRFPath);
-			#endif/* ifdef CONFIG_PHY_SETTING_WITH_ODM */
 #else
 			rtStatus = rtl8188e_PHY_ConfigRFWithParaFile(Adapter, pszRadioAFile, (RF_RADIO_PATH_E)eRFPath);
 #endif/* ifdef CONFIG_EMBEDDED_FWIMG */
 			break;
 		case RF_PATH_B:
 #ifdef CONFIG_EMBEDDED_FWIMG
-			#ifdef CONFIG_PHY_SETTING_WITH_ODM
 			if(HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
 				rtStatus= _FAIL;
-			#else
-				rtStatus = rtl8188e_PHY_ConfigRFWithHeaderFile(Adapter,(RF_RADIO_PATH_E)eRFPath);
-			#endif /* ifdef CONFIG_PHY_SETTING_WITH_ODM */
 #else
 			rtStatus =rtl8188e_PHY_ConfigRFWithParaFile(Adapter, pszRadioBFile, (RF_RADIO_PATH_E)eRFPath);
 #endif

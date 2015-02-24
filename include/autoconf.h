@@ -19,8 +19,6 @@
  ******************************************************************************/
 //***** temporarily flag *******
 
-#define CONFIG_PHY_SETTING_WITH_ODM
-//for FPGA VERIFICATION config
 #define RTL8188E_FPGAtrue_PHY_VERIFICATION 0
 
 //***** temporarily flag *******
