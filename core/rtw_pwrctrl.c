@@ -352,19 +352,10 @@ void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 			pslv = PS_STATE_S3;
 	}
 
-#ifdef CONFIG_LPS_RPWM_TIMER
-	if (pwrpriv->brpwmtimeout == true)
-	{
-		DBG_871X("%s: RPWM timeout, force to set RPWM(0x%02X) again!\n", __FUNCTION__, pslv);
-	}
-	else
-#endif /*  CONFIG_LPS_RPWM_TIMER */
-	{
 	if ((pwrpriv->rpwm == pslv)) {
 		RT_TRACE(_module_rtl871x_pwrctrl_c_,_drv_err_,
 			("%s: Already set rpwm[0x%02X], new=0x%02X!\n", __FUNCTION__, pwrpriv->rpwm, pslv));
 		return;
-	}
 	}
 
 	if ((padapter->bSurpriseRemoved == true) ||
@@ -410,10 +401,6 @@ void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 	}
 #endif
 
-#if defined(CONFIG_LPS_RPWM_TIMER) && !defined(CONFIG_DETECT_CPWM_BY_POLLING)
-	if (rpwm & PS_ACK)
-		_set_timer(&pwrpriv->pwr_rpwm_timer, LPS_RPWM_WAIT_MS);
-#endif /*  CONFIG_LPS_RPWM_TIMER && !CONFIG_DETECT_CPWM_BY_POLLING */
 	rtw_hal_set_hwreg(padapter, HW_VAR_SET_RPWM, (u8 *)(&rpwm));
 
 	pwrpriv->tog += 0x80;
@@ -449,12 +436,7 @@ void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 		}while (rtw_get_passing_time_ms(cpwm_polling_start_time) < LPS_RPWM_WAIT_MS);
 
 		if (pollingRes == _FAIL)
-		{
-#ifdef CONFIG_LPS_RPWM_TIMER
-			_set_timer(&pwrpriv->pwr_rpwm_timer, 1);
-#endif
 			DBG_871X("%s polling cpwm timeout!!!!!!!!!!\n", __FUNCTION__);
-		}
 	}
 #endif
 
@@ -882,15 +864,6 @@ void cpwm_int_hdl(
 	pwrpriv = adapter_to_pwrctl(padapter);
 	_enter_pwrlock(&pwrpriv->lock);
 
-#ifdef CONFIG_LPS_RPWM_TIMER
-	if (pwrpriv->rpwm < PS_STATE_S2)
-	{
-		DBG_871X("%s: Redundant CPWM Int. RPWM=0x%02X CPWM=0x%02x\n", __func__, pwrpriv->rpwm, pwrpriv->cpwm);
-		_exit_pwrlock(&pwrpriv->lock);
-		goto exit;
-	}
-#endif /*  CONFIG_LPS_RPWM_TIMER */
-
 	pwrpriv->cpwm = PS_STATE(preportpwrstate->state);
 	pwrpriv->cpwm_tog = preportpwrstate->state & PS_TOGGLE;
 
@@ -924,80 +897,6 @@ static void cpwm_event_callback(struct work_struct *work)
 	report.state = PS_STATE_S2;
 	cpwm_int_hdl(adapter, &report);
 }
-
-#ifdef CONFIG_LPS_RPWM_TIMER
-static void rpwmtimeout_workitem_callback(struct work_struct *work)
-{
-	struct adapter *padapter;
-	struct dvobj_priv *dvobj;
-	struct pwrctrl_priv *pwrpriv;
-
-
-	pwrpriv = container_of(work, struct pwrctrl_priv, rpwmtimeoutwi);
-	dvobj = pwrctl_to_dvobj(pwrpriv);
-	padapter = dvobj->if1;
-/* 	DBG_871X("+%s: rpwm=0x%02X cpwm=0x%02X\n", __func__, pwrpriv->rpwm, pwrpriv->cpwm); */
-
-	_enter_pwrlock(&pwrpriv->lock);
-	if ((pwrpriv->rpwm == pwrpriv->cpwm) || (pwrpriv->cpwm >= PS_STATE_S2))
-	{
-		DBG_871X("%s: rpwm=0x%02X cpwm=0x%02X CPWM done!\n", __func__, pwrpriv->rpwm, pwrpriv->cpwm);
-		goto exit;
-	}
-	_exit_pwrlock(&pwrpriv->lock);
-
-	if (rtw_read8(padapter, 0x100) != 0xEA)
-	{
-#if 1
-		struct reportpwrstate_parm report;
-
-		report.state = PS_STATE_S2;
-		DBG_871X("\n%s: FW already leave 32K!\n\n", __func__);
-		cpwm_int_hdl(padapter, &report);
-#else
-		DBG_871X("\n%s: FW already leave 32K!\n\n", __func__);
-		cpwm_event_callback(&pwrpriv->cpwm_event);
-#endif
-		return;
-	}
-
-	_enter_pwrlock(&pwrpriv->lock);
-
-	if ((pwrpriv->rpwm == pwrpriv->cpwm) || (pwrpriv->cpwm >= PS_STATE_S2))
-	{
-		DBG_871X("%s: cpwm=%d, nothing to do!\n", __func__, pwrpriv->cpwm);
-		goto exit;
-	}
-	pwrpriv->brpwmtimeout = true;
-	rtw_set_rpwm(padapter, pwrpriv->rpwm);
-	pwrpriv->brpwmtimeout = false;
-
-exit:
-	_exit_pwrlock(&pwrpriv->lock);
-}
-
-/*
- * This function is a timer handler, can't do any IO in it.
- */
-static void pwr_rpwm_timeout_handler(void *FunctionContext)
-{
-	struct adapter *padapter;
-	struct pwrctrl_priv *pwrpriv;
-
-
-	padapter = (PADAPTER)FunctionContext;
-	pwrpriv = adapter_to_pwrctl(padapter);
-/* 	DBG_871X("+%s: rpwm=0x%02X cpwm=0x%02X\n", __func__, pwrpriv->rpwm, pwrpriv->cpwm); */
-
-	if ((pwrpriv->rpwm == pwrpriv->cpwm) || (pwrpriv->cpwm >= PS_STATE_S2))
-	{
-		DBG_871X("+%s: cpwm=%d, nothing to do!\n", __func__, pwrpriv->cpwm);
-		return;
-	}
-
-	_set_workitem(&pwrpriv->rpwmtimeoutwi);
-}
-#endif /*  CONFIG_LPS_RPWM_TIMER */
 
 __inline static void register_task_alive(struct pwrctrl_priv *pwrctrl, u32 tag)
 {
@@ -1374,12 +1273,6 @@ void rtw_init_pwrctrl_priv(struct adapter *padapter)
 	rtw_hal_set_hwreg(padapter, HW_VAR_SET_RPWM, (u8 *)(&pwrctrlpriv->rpwm));
 
 	_init_workitem(&pwrctrlpriv->cpwm_event, cpwm_event_callback, NULL);
-
-#ifdef CONFIG_LPS_RPWM_TIMER
-	pwrctrlpriv->brpwmtimeout = false;
-	_init_workitem(&pwrctrlpriv->rpwmtimeoutwi, rpwmtimeout_workitem_callback, NULL);
-	_init_timer(&pwrctrlpriv->pwr_rpwm_timer, padapter->pnetdev, pwr_rpwm_timeout_handler, padapter);
-#endif /*  CONFIG_LPS_RPWM_TIMER */
 #endif /*  CONFIG_LPS_LCLK */
 
 	_init_timer(&(pwrctrlpriv->pwr_state_check_timer), padapter->pnetdev, pwr_state_check_handler, (u8 *)padapter);
