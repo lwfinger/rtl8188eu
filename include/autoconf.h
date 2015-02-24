@@ -18,19 +18,11 @@
  *
  ******************************************************************************/
 
-//***** temporarily flag *******
 /*
  * Public  General Config
  */
-#define AUTOCONF_INCLUDED
 #define RTL871X_MODULE_NAME "88EU"
 #define DRV_NAME "rtl8188eu"
-
-#define CONFIG_USB_HCI
-
-#define CONFIG_RTL8188E
-
-#define CONFIG_SET_SCAN_DENY_TIMER
 
 /*
  * Internal  General Config

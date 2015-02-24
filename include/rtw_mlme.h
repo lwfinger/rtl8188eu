@@ -423,10 +423,8 @@ struct mlme_priv {
 	_timer scan_to_timer; // driver itself handles scan_timeout status.
 	u32 scan_start_time; // used to evaluate the time spent in scanning
 
-	#ifdef CONFIG_SET_SCAN_DENY_TIMER
 	_timer set_scan_deny_timer;
 	ATOMIC_T set_scan_deny; //0: allowed, 1: deny
-	#endif
 
 	#ifdef CONFIG_DETECT_C2H_BY_POLLING
 	_timer event_polling_timer;
@@ -729,17 +727,10 @@ extern void _rtw_join_timeout_handler(struct adapter *adapter);
 extern void rtw_scan_timeout_handler(struct adapter *adapter);
 
 extern void rtw_dynamic_check_timer_handlder(struct adapter *adapter);
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
 bool rtw_is_scan_deny(struct adapter *adapter);
 void rtw_clear_scan_deny(struct adapter *adapter);
 void rtw_set_scan_deny_timer_hdl(struct adapter *adapter);
 void rtw_set_scan_deny(struct adapter *adapter, u32 ms);
-#else
-#define rtw_is_scan_deny(adapter) false
-#define rtw_clear_scan_deny(adapter) do {} while (0)
-#define rtw_set_scan_deny_timer_hdl(adapter) do {} while (0)
-#define rtw_set_scan_deny(adapter, ms) do {} while (0)
-#endif
 
 #ifdef CONFIG_DETECT_C2H_BY_POLLING
 extern void rtw_event_polling_timer_hdl(struct adapter *adapter);

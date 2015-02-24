@@ -104,13 +104,11 @@ if (adapter->registrypriv.mp_mode == 1)
 	_set_timer(&adapter->mlmepriv.dynamic_chk_timer, 2000);
 }
 
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
 static void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 {
 	struct adapter *adapter = (struct adapter *)FunctionContext;
 	rtw_set_scan_deny_timer_hdl(adapter);
 }
-#endif
 
 #ifdef CONFIG_DETECT_C2H_BY_POLLING
 void _rtw_event_polling_timer_hdl(void *FunctionContext)
@@ -133,9 +131,7 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 
 	_init_timer(&(pmlmepriv->dynamic_chk_timer), padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
 
-	#ifdef CONFIG_SET_SCAN_DENY_TIMER
 	_init_timer(&(pmlmepriv->set_scan_deny_timer), padapter->pnetdev, _rtw_set_scan_deny_timer_hdl, padapter);
-	#endif
 
 #ifdef CONFIG_DETECT_C2H_BY_POLLING
 	_init_timer(&(pmlmepriv->event_polling_timer), padapter->pnetdev, _rtw_event_polling_timer_hdl, padapter);

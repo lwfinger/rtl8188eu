@@ -2379,7 +2379,6 @@ void rtw_dynamic_check_timer_handlder(struct adapter *adapter)
 }
 
 
-#ifdef CONFIG_SET_SCAN_DENY_TIMER
 inline bool rtw_is_scan_deny(struct adapter *adapter)
 {
 	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
@@ -2407,7 +2406,6 @@ void rtw_set_scan_deny(struct adapter *adapter, u32 ms)
 	_set_timer(&mlmepriv->set_scan_deny_timer, ms);
 
 }
-#endif
 
 #ifdef CONFIG_DETECT_C2H_BY_POLLING
 void rtw_event_polling_timer_hdl(struct adapter *adapter)
