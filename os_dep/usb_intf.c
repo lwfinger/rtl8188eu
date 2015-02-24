@@ -546,7 +546,6 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 	}
 }
 
-#ifdef SUPPORT_HW_RFOFF_DETECTED
 int rtw_hw_suspend(struct adapter *padapter )
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
@@ -672,9 +671,7 @@ error_exit:
 	DBG_871X("%s, Open net dev failed \n",__FUNCTION__);
 	return (-1);
 }
-#endif
 
-#if 1
 #ifdef CONFIG_WOWLAN
 static void rtw_suspend_wow(struct adapter *padapter)
 {
@@ -785,14 +782,12 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	if(pwrpriv->bInternalAutoSuspend )
 	{
 	#ifdef CONFIG_AUTOSUSPEND
-	#ifdef SUPPORT_HW_RFOFF_DETECTED
 		/*  The FW command register update must after MAC and FW init ready. */
 		if((padapter->bFWReady) && (pwrpriv->bHWPwrPindetect ) && (padapter->registrypriv.usbss_enable ))
 		{
 			u8 bOpen = true;
 			rtw_interface_ps_func(padapter,HAL_USB_SELECT_SUSPEND,&bOpen);
 		}
-	#endif
 	#endif
 	}
 
@@ -819,7 +814,6 @@ exit:
 	;
 	return ret;
 }
-#endif
 static int rtw_resume(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
@@ -903,14 +897,12 @@ int rtw_resume_process(struct adapter *padapter)
 	if(pwrpriv->bInternalAutoSuspend )
 	{
 		#ifdef CONFIG_AUTOSUSPEND
-		#ifdef SUPPORT_HW_RFOFF_DETECTED
 			/*  The FW command register update must after MAC and FW init ready. */
 		if((padapter->bFWReady) && (pwrpriv->bHWPwrPindetect) && (padapter->registrypriv.usbss_enable ))
 		{
 			u8 bOpen = false;
 			rtw_interface_ps_func(padapter,HAL_USB_SELECT_SUSPEND,&bOpen);
 		}
-		#endif
 		#endif
 #ifdef CONFIG_BT_COEXIST
 		DBG_871X("pwrpriv->bAutoResume (%x)\n",pwrpriv->bAutoResume );

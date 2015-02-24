@@ -274,18 +274,14 @@ void rtw_free_evt_priv (struct	evt_priv *pevtpriv)
 
 void rtw_free_cmd_priv (struct	cmd_priv *pcmdpriv)
 {
-;
 	RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("rtw_free_cmd_priv\n"));
 	_rtw_free_cmd_priv(pcmdpriv);
-;
 }
 
-int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj);
 int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {
 	u8 bAllow = false; /* set to true to allow enqueuing cmd when hw_init_completed is false */
 
-	#ifdef SUPPORT_HW_RFOFF_DETECTED
 	/* To decide allow or not */
 	if(	(adapter_to_pwrctl(pcmdpriv->padapter)->bHWPwrPindetect)
 		&&(!pcmdpriv->padapter->registrypriv.usbss_enable)
@@ -301,7 +297,6 @@ int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 			}
 		}
 	}
-	#endif
 
 	if(cmd_obj->cmdcode == GEN_CMD_CODE(_SetChannelPlan))
 		bAllow = true;

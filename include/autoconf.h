@@ -32,8 +32,6 @@
 
  #define CONFIG_SUPPORT_USB_INT
 
-	#define SUPPORT_HW_RFOFF_DETECTED
-
 	#define CONFIG_LPS
 
 	#ifdef CONFIG_LPS_LCLK

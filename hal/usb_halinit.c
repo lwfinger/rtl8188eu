@@ -1810,16 +1810,12 @@ static u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
 	rtw_write32(Adapter, REG_HIMRE_88E, IMR_DISABLED_88E);
 #endif
 
- #ifdef SUPPORT_HW_RFOFF_DETECTED
 	DBG_8192C("bkeepfwalive(%x)\n", pwrctl->bkeepfwalive);
 	if(pwrctl->bkeepfwalive)
 	{
 		if((pwrctl->bHWPwrPindetect) && (pwrctl->bHWPowerdown))
 			rtl8188eu_hw_power_down(Adapter);
-	}
-	else
-#endif
-	{
+	} else {
 		if(Adapter->hw_init_completed == true){
 			hal_poweroff_rtl8188eu(Adapter);
 
@@ -3826,11 +3822,11 @@ static u8 rtl8188eu_ps_func(struct adapter *Adapter,HAL_INTF_PS_FUNC efunc_id, u
 	u8 bResult = true;
 	switch(efunc_id){
 
-		#if defined(CONFIG_AUTOSUSPEND) && defined(SUPPORT_HW_RFOFF_DETECTED)
+		#if defined(CONFIG_AUTOSUSPEND)
 		case HAL_USB_SELECT_SUSPEND:
 			u8 bfwpoll = *(( u8*)val);
 			break;
-		#endif /* CONFIG_AUTOSUSPEND && SUPPORT_HW_RFOFF_DETECTED */
+		#endif /* CONFIG_AUTOSUSPEND */
 
 		default:
 			break;

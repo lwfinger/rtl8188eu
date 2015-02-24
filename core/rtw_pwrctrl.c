@@ -201,13 +201,10 @@ void rtw_ps_processor(struct adapter*padapter)
 #endif /* CONFIG_P2P */
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-#ifdef SUPPORT_HW_RFOFF_DETECTED
 	rt_rf_power_state rfpwrstate;
-#endif /* SUPPORT_HW_RFOFF_DETECTED */
 
 	pwrpriv->ps_processing = true;
 
-#ifdef SUPPORT_HW_RFOFF_DETECTED
 	if(pwrpriv->bips_processing == true)
 		goto exit;
 
@@ -263,7 +260,6 @@ void rtw_ps_processor(struct adapter*padapter)
 		}
 		pwrpriv->pwr_state_check_cnts ++;
 	}
-#endif /* SUPPORT_HW_RFOFF_DETECTED */
 
 	if (pwrpriv->ips_mode_req == IPS_NONE)
 		goto exit;
@@ -1351,9 +1347,7 @@ void rtw_init_pwrctrl_priv(struct adapter *padapter)
 	pwrctrlpriv->bkeepfwalive = false;
 
 #ifdef CONFIG_AUTOSUSPEND
-#ifdef SUPPORT_HW_RFOFF_DETECTED
 	pwrctrlpriv->pwr_state_check_interval = (pwrctrlpriv->bHWPwrPindetect) ?1000:2000;
-#endif
 #endif
 
 	pwrctrlpriv->LpsIdleCount = 0;

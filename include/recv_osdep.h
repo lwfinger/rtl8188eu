@@ -24,11 +24,8 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-
-#ifdef SUPPORT_HW_RFOFF_DETECTED
 int rtw_hw_suspend(struct adapter *padapter );
 int rtw_hw_resume(struct adapter *padapter);
-#endif
 
 extern void rtw_dev_unload(struct adapter *padapter);
 extern sint _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter);
