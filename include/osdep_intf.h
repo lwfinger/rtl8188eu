@@ -105,10 +105,8 @@ void rtw_ips_dev_unload(struct adapter *padapter);
 void rtw_bb_rf_gain_offset(struct adapter *padapter);
 #endif //CONFIG_RF_GAIN_OFFSET
 
-#ifdef CONFIG_IPS
 int rtw_ips_pwr_up(struct adapter *padapter);
 void rtw_ips_pwr_down(struct adapter *padapter);
-#endif
 
 int rtw_drv_register_netdev(struct adapter *padapter);
 void rtw_ndev_destructor(_nic_hdl ndev);

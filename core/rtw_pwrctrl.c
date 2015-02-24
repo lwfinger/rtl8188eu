@@ -29,7 +29,6 @@
 #include <rtl8723a_hal.h>
 #endif
 
-#ifdef CONFIG_IPS
 void _ips_enter(struct adapter * padapter)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
@@ -112,7 +111,6 @@ int ips_leave(struct adapter * padapter)
 
 	return ret;
 }
-#endif /* CONFIG_IPS */
 
 #ifdef CONFIG_AUTOSUSPEND
 extern void autosuspend_enter(struct adapter* padapter);
@@ -313,9 +311,7 @@ void rtw_ps_processor(struct adapter*padapter)
 			pwrpriv->change_rfpwrstate = rf_off;
 			#endif	/* defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND) */
 
-			#ifdef CONFIG_IPS
 			ips_enter(padapter);
-			#endif
 		}
 	}
 exit:
@@ -816,12 +812,8 @@ void LeaveAllPowerSaveMode(IN struct adapter *Adapter)
 			#endif
 			{
 #if defined(CONFIG_PLATFORM_SPRD)
-				#ifdef CONFIG_IPS
 				if(false == ips_leave(Adapter))
-				{
 					DBG_871X("======> ips_leave fail.............\n");
-				}
-				#endif
 #endif /* CONFIG_PLATFORM_SPRD */
 			}
 		}
@@ -1701,7 +1693,6 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 		else
 #endif
 		{
-#ifdef CONFIG_IPS
 			DBG_8192C("%s call ips_leave....\n",__FUNCTION__);
 			if(_FAIL ==  ips_leave(padapter))
 			{
@@ -1709,7 +1700,6 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 				ret = _FAIL;
 				goto exit;
 			}
-#endif
 		}
 	}
 

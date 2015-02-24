@@ -32,7 +32,6 @@
 
  #define CONFIG_SUPPORT_USB_INT
 
-	#define CONFIG_IPS
 	#define SUPPORT_HW_RFOFF_DETECTED
 
 	#define CONFIG_LPS

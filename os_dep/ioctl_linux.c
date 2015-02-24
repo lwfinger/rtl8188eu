@@ -8349,10 +8349,8 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	rtw_pm_set_lps(padapter,PS_MODE_ACTIVE);
 	#endif
 
-	#ifdef CONFIG_IPS
 	ips_mode = pwrctrlpriv->ips_mode;/* keep org value */
 	rtw_pm_set_ips(padapter,IPS_NONE);
-	#endif
 
 	pch = extra;
 	DBG_871X("%s: in=%s\n", __FUNCTION__, extra);
@@ -8835,9 +8833,7 @@ exit:
 	if (!err)
 		wrqu->length = strlen(extra);
 
-	#ifdef CONFIG_IPS
 	rtw_pm_set_ips(padapter, ips_mode);
-	#endif
 	#ifdef CONFIG_LPS
 	rtw_pm_set_lps(padapter, lps_mode);
 	#endif
@@ -8904,10 +8900,8 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	rtw_pm_set_lps(padapter,PS_MODE_ACTIVE);
 	#endif
 
-	#ifdef CONFIG_IPS
 	ips_mode = pwrctrlpriv->ips_mode;/* keep org value */
 	rtw_pm_set_ips(padapter,IPS_NONE);
-	#endif
 
 	pch = extra;
 	DBG_871X("%s: in=%s\n", __FUNCTION__, extra);
@@ -9284,9 +9278,7 @@ exit:
 	if (setrawdata)
 		rtw_mfree(setrawdata, EFUSE_MAX_SIZE);
 
-	#ifdef CONFIG_IPS
 	rtw_pm_set_ips(padapter, ips_mode);
-	#endif
 	#ifdef CONFIG_LPS
 	rtw_pm_set_lps(padapter, lps_mode);
 	#endif

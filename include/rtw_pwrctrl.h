@@ -317,15 +317,13 @@ extern void cpwm_int_hdl(struct adapter *padapter, struct reportpwrstate_parm *p
 extern void LPS_Leave_check(struct adapter *padapter);
 #endif
 
-extern void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode);
-extern void rtw_set_rpwm(struct adapter * padapter, u8 val8);
-extern void LeaveAllPowerSaveMode(struct adapter *Adapter);
-#ifdef CONFIG_IPS
+void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode);
+void rtw_set_rpwm(struct adapter * padapter, u8 val8);
+void LeaveAllPowerSaveMode(struct adapter *Adapter);
 void _ips_enter(struct adapter * padapter);
 void ips_enter(struct adapter * padapter);
 int _ips_leave(struct adapter * padapter);
 int ips_leave(struct adapter * padapter);
-#endif
 
 void rtw_ps_processor(struct adapter*padapter);
 

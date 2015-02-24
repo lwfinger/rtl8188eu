@@ -292,10 +292,8 @@ void sreset_reset(struct adapter *padapter)
 
 	sreset_stop_adapter(padapter);
 
-	#ifdef CONFIG_IPS
 	_ips_enter(padapter);
 	_ips_leave(padapter);
-	#endif
 
 	sreset_start_adapter(padapter);
 
