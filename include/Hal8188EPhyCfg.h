@@ -344,30 +344,14 @@ storePwrIndexDiffRateOffset(
 #define PHY_SetMacReg	PHY_SetBBReg
 #define PHY_QueryMacReg PHY_QueryBBReg
 
-
-//
-// Initialization related function
-//
-/* MAC/BB/RF HAL config */
-//extern s32 PHY_MACConfig8723(struct adapter *padapter);
-//s32 PHY_BBConfig8723(struct adapter *padapter);
-//s32 PHY_RFConfig8723(struct adapter *padapter);
-
-
-
 //==================================================================
 // Note: If SIC_ENABLE under PCIE, because of the slow operation
 //	you should
 //	2) "#define RTL8723_FPGA_VERIFICATION	1"				in Precomp.h.WlanE.Windows
 //	3) "#define RTL8190_Download_Firmware_From_Header	0"	in Precomp.h.WlanE.Windows if needed.
 //
-#if (RTL8188E_SUPPORT == 1) && (RTL8188E_FPGAtrue_PHY_VERIFICATION == 1)
-#define	SIC_ENABLE				1
-#define	SIC_HW_SUPPORT		1
-#else
-#define	SIC_ENABLE				0
+#define	SIC_ENABLE		0
 #define	SIC_HW_SUPPORT		0
-#endif
 //==================================================================
 
 

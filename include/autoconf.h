@@ -17,9 +17,6 @@
  *
  *
  ******************************************************************************/
-//***** temporarily flag *******
-
-#define RTL8188E_FPGAtrue_PHY_VERIFICATION 0
 
 //***** temporarily flag *******
 /*
