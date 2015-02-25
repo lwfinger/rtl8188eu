@@ -334,16 +334,6 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 	memcpy(&(pHalData->IntArray[0]), &(pbuf[USB_INTR_CONTENT_HISR_OFFSET]), 4);
 	memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
 
-#ifdef CONFIG_LPS_LCLK
-	if (  pHalData->IntArray[0]  & IMR_CPWM_88E ) {
-		memcpy(&pwr_rpt.state, &(pbuf[USB_INTR_CONTENT_CPWM1_OFFSET]), 1);
-
-		/* 88e's cpwm value only change BIT0, so driver need to add PS_STATE_S2 for LPS flow. */
-		pwr_rpt.state |= PS_STATE_S2;
-		_set_workitem(&(adapter_to_pwrctl(padapter)->cpwm_event));
-	}
-#endif/* CONFIG_LPS_LCLK */
-
 #ifdef DBG_CONFIG_ERROR_DETECT_INT
 	if (  pHalData->IntArray[1]  & IMR_TXERR_88E )
 		DBG_871X("===> %s Tx Error Flag Interrupt Status \n",__FUNCTION__);

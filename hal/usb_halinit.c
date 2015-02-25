@@ -3010,19 +3010,6 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			#endif
 			break;
 		case HW_VAR_SET_RPWM:
-#ifdef CONFIG_LPS_LCLK
-			{
-				u8	ps_state = *((u8 *)val);
-				/* rpwm value only use BIT0(clock bit) ,BIT6(Ack bit), and BIT7(Toggle bit) for 88e. */
-				/* BIT0 value - 1: 32k, 0:40MHz. */
-				/* BIT6 value - 1: report cpwm value after success set, 0:do not report. */
-				/* BIT7 value - Toggle bit change. */
-				/* modify by Thomas. 2012/4/2. */
-				ps_state = ps_state & 0xC1;
-				/* DBG_871X("##### Change RPWM value to = %x for switch clk #####\n",ps_state); */
-				rtw_write8(Adapter, REG_USB_HRPWM, ps_state);
-			}
-#endif
 			break;
 		case HW_VAR_H2C_FW_PWRMODE:
 			{
@@ -3364,11 +3351,6 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			}
 			break;
 		case HW_VAR_GET_CPWM:
-#ifdef CONFIG_LPS_LCLK
-			{
-				*val =  rtw_read8(Adapter, REG_USB_HCPWM);
-			}
-#endif
 			break;
 		case HW_VAR_C2HEVT_CLEAR:
 			*val =  rtw_read8(Adapter, REG_C2HEVT_CLEAR);

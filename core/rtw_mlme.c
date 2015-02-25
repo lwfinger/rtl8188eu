@@ -2179,21 +2179,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 
 void rtw_cpwm_event_callback(struct adapter *padapter, u8 *pbuf)
 {
-#ifdef CONFIG_LPS_LCLK
-	struct reportpwrstate_parm *preportpwrstate;
-#endif
-
-;
-
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("+rtw_cpwm_event_callback !!!\n"));
-#ifdef CONFIG_LPS_LCLK
-	preportpwrstate = (struct reportpwrstate_parm*)pbuf;
-	preportpwrstate->state |= (u8)(adapter_to_pwrctl(padapter)->cpwm_tog + 0x80);
-	cpwm_int_hdl(padapter, preportpwrstate);
-#endif
-
-;
-
 }
 
 /*
