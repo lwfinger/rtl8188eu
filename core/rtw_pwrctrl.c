@@ -322,7 +322,6 @@ static void pwr_state_check_handler(void *FunctionContext)
 	rtw_ps_cmd(padapter);
 }
 
-#ifdef CONFIG_LPS
 /*
  *
  * Parameters
@@ -704,12 +703,7 @@ void LPS_Leave(struct adapter *padapter)
 	}
 
 	pwrpriv->bpower_saving = false;
-
-/* 	DBG_871X("-LeisurePSLeave\n"); */
-
-;
 }
-#endif
 
 /*  */
 /*  Description: Leave all power save mode: LPS, FwLPS, IPS if needed. */
@@ -729,9 +723,7 @@ void LeaveAllPowerSaveMode(IN struct adapter *Adapter)
 		p2p_ps_wk_cmd(Adapter, P2P_PS_DISABLE, enqueue);
 #endif /* CONFIG_P2P_PS */
 
-#ifdef CONFIG_LPS
 		rtw_lps_ctrl_wk_cmd(Adapter, LPS_CTRL_LEAVE, enqueue);
-#endif
 	} else {
 		if(adapter_to_pwrctl(Adapter)->rf_pwrstate== rf_off)
 		{

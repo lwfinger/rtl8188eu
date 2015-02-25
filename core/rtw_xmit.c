@@ -683,7 +683,6 @@ static s32 update_attrib(struct adapter *padapter, _pkt *pkt, struct pkt_attrib 
 		rtw_set_scan_deny(padapter, 3000);
 	}
 
-#ifdef CONFIG_LPS
 	/*  If EAPOL , ARP , OR DHCP packet, driver must be in active mode. */
 #ifdef CONFIG_WAPI_SUPPORT
 	if ( (pattrib->ether_type == 0x88B4) || (pattrib->ether_type == 0x0806) || (pattrib->ether_type == 0x888e) || (pattrib->dhcp_pkt == 1) )
@@ -693,7 +692,6 @@ static s32 update_attrib(struct adapter *padapter, _pkt *pkt, struct pkt_attrib 
 	{
 		rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_SPECIAL_PACKET, 1);
 	}
-#endif
 
 	bmcast = IS_MCAST(pattrib->ra);
 

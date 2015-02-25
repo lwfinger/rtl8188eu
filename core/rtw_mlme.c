@@ -1488,11 +1488,7 @@ void rtw_indicate_disconnect( struct adapter *padapter )
 	p2p_ps_wk_cmd(padapter, P2P_PS_DISABLE, 1);
 #endif /*  CONFIG_P2P_PS */
 
-#ifdef CONFIG_LPS
 	rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 1);
-#endif
-
-;
 }
 
 inline void rtw_indicate_scan_done( struct adapter *padapter, bool aborted)

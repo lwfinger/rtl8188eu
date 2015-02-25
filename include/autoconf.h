@@ -32,8 +32,6 @@
 
  #define CONFIG_SUPPORT_USB_INT
 
-	#define CONFIG_LPS
-
 	//befor link
 	#define CONFIG_ANTENNA_DIVERSITY
 

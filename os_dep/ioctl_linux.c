@@ -8213,9 +8213,7 @@ static int rtw_wowlan_ctrl(struct net_device *dev,
 		rtw_stop_drv_threads(padapter);
 		padapter->bDriverStopped = false;	/* for 32k command */
 
-#ifdef CONFIG_LPS
 		rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0);
-#endif
 		rtw_hal_disable_interrupt(padapter); /*  It need wait for leaving 32K. */
 
 		/*  2.1 clean interupt */
@@ -8226,9 +8224,7 @@ static int rtw_wowlan_ctrl(struct net_device *dev,
 
 		rtw_hal_set_hwreg(padapter,HW_VAR_WOWLAN,(u8 *)&poidparam);
 	} else if (_rtw_memcmp( extra, "disable", 6 )) {
-#ifdef CONFIG_LPS
 		rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0);
-#endif /* CONFIG_LPS */
 		pwrctrlpriv->bFwCurrentInPSMode = false;
 
 		rtw_hal_disable_interrupt(padapter);
@@ -8344,10 +8340,8 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		err = -EFAULT;
 		goto exit;
 	}
-	#ifdef CONFIG_LPS
 	lps_mode = pwrctrlpriv->power_mgnt;/* keep org value */
 	rtw_pm_set_lps(padapter,PS_MODE_ACTIVE);
-	#endif
 
 	ips_mode = pwrctrlpriv->ips_mode;/* keep org value */
 	rtw_pm_set_ips(padapter,IPS_NONE);
@@ -8834,9 +8828,7 @@ exit:
 		wrqu->length = strlen(extra);
 
 	rtw_pm_set_ips(padapter, ips_mode);
-	#ifdef CONFIG_LPS
 	rtw_pm_set_lps(padapter, lps_mode);
-	#endif
 	#ifdef CONFIG_IOL
 	padapter->registrypriv.fw_iol = org_fw_iol;/*  0:Disable, 1:enable, 2:by usb speed */
 	#endif
@@ -8895,10 +8887,8 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		goto exit;
 	}
 
-	#ifdef CONFIG_LPS
 	lps_mode = pwrctrlpriv->power_mgnt;/* keep org value */
 	rtw_pm_set_lps(padapter,PS_MODE_ACTIVE);
-	#endif
 
 	ips_mode = pwrctrlpriv->ips_mode;/* keep org value */
 	rtw_pm_set_ips(padapter,IPS_NONE);
@@ -9279,10 +9269,7 @@ exit:
 		rtw_mfree(setrawdata, EFUSE_MAX_SIZE);
 
 	rtw_pm_set_ips(padapter, ips_mode);
-	#ifdef CONFIG_LPS
 	rtw_pm_set_lps(padapter, lps_mode);
-	#endif
-
 	return err;
 }
 

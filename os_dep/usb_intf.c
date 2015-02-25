@@ -592,10 +592,8 @@ int rtw_hw_suspend(struct adapter *padapter )
 
 				rtw_os_indicate_disconnect(padapter);
 
-				#ifdef CONFIG_LPS
 				/* donnot enqueue cmd */
 				rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 0);
-				#endif
 			}
 
 		}
