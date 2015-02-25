@@ -367,10 +367,6 @@ void rtl8188e_init_dm_priv(IN struct adapter *Adapter)
 	memset(pdmpriv, 0, sizeof(struct dm_priv));
 	/* _rtw_spinlock_init(&(pHalData->odm_stainfo_lock)); */
 	Init_ODM_ComInfo_88E(Adapter);
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-	/* _init_timer(&(pdmpriv->SwAntennaSwitchTimer),  Adapter->pnetdev , odm_SW_AntennaSwitchCallback, Adapter); */
-	ODM_InitAllTimers(podmpriv );
-#endif
 	ODM_InitDebugSetting(podmpriv);
 }
 
@@ -379,15 +375,8 @@ void rtl8188e_deinit_dm_priv(IN struct adapter *Adapter)
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
-	/* _rtw_spinlock_free(&pHalData->odm_stainfo_lock); */
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-	/* _cancel_timer_ex(&pdmpriv->SwAntennaSwitchTimer); */
-	ODM_CancelAllTimers(podmpriv);
-#endif
 }
 
-
-#ifdef CONFIG_ANTENNA_DIVERSITY
 /*  Add new function to reset the state of antenna diversity before link. */
 /*  */
 /*  Compare RSSI for deciding antenna */
@@ -448,4 +437,3 @@ u8 AntDivBeforeLink8188E(struct adapter *Adapter )
 	}
 
 }
-#endif

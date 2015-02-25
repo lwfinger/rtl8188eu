@@ -3101,14 +3101,6 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			}
 			break;
 #endif
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-
-		case HW_VAR_ANTENNA_DIVERSITY_LINK:
-			/* odm_SwAntDivRestAfterLink8192C(Adapter); */
-			ODM_SwAntDivRestAfterLink(podmpriv);
-			break;
-#endif
-#ifdef CONFIG_ANTENNA_DIVERSITY
 		case HW_VAR_ANTENNA_DIVERSITY_SELECT:
 			{
 				u8	Optimum_antenna = (*(u8 *)val);
@@ -3125,7 +3117,6 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				}
 			}
 			break;
-#endif
 		case HW_VAR_EFUSE_BYTES: /*  To set EFUE total used bytes, added by Roger, 2008.12.22. */
 			pHalData->EfuseUsedBytes = *((u16 *)val);
 			break;
@@ -3330,11 +3321,9 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				}
 			}
 			break;
-#ifdef CONFIG_ANTENNA_DIVERSITY
 		case HW_VAR_CURRENT_ANTENNA:
 			val[0] = pHalData->CurAntenna;
 			break;
-#endif
 		case HW_VAR_EFUSE_BYTES: /*  To get EFUE total used bytes, added by Roger, 2008.12.22. */
 			*((u16 *)(val)) = pHalData->EfuseUsedBytes;
 			break;
@@ -3344,11 +3333,8 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 		case HW_VAR_CHK_HI_QUEUE_EMPTY:
 			*val = ((rtw_read32(Adapter, REG_HGQ_INFORMATION)&0x0000ff00)==0) ? true:false;
 			break;
-
 		case HW_VAR_READ_LLT_TAB:
-			{
-				Read_LLT_Tab(Adapter);
-			}
+			Read_LLT_Tab(Adapter);
 			break;
 		case HW_VAR_GET_CPWM:
 			break;
@@ -3405,14 +3391,10 @@ static u8 GetHalDefVar8188EUsb(
 #endif
 			break;
 		case HAL_DEF_IS_SUPPORT_ANT_DIV:
-#ifdef CONFIG_ANTENNA_DIVERSITY
 			*((u8 *)pValue) = (pHalData->AntDivCfg==0)?false:true;
-#endif
 			break;
 		case HAL_DEF_CURRENT_ANTENNA:
-#ifdef CONFIG_ANTENNA_DIVERSITY
 			*(( u8*)pValue) = pHalData->CurAntenna;
-#endif
 			break;
 		case HAL_DEF_DRVINFO_SZ:
 			*(( u32*)pValue) = DRVINFO_SZ;

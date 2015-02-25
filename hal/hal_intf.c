@@ -423,7 +423,6 @@ void rtw_hal_bcn_related_reg_setting(struct adapter *padapter)
 }
 
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 u8	rtw_hal_antdiv_before_linked(struct adapter *padapter)
 {
 	if(padapter->HalFunc.AntDivBeforeLinkHandler)
@@ -435,7 +434,6 @@ void	rtw_hal_antdiv_rssi_compared(struct adapter *padapter, WLAN_BSSID_EX *dst, 
 	if(padapter->HalFunc.AntDivCompareHandler)
 		padapter->HalFunc.AntDivCompareHandler(padapter, dst, src);
 }
-#endif
 
 #ifdef CONFIG_HOSTAPD_MLME
 s32	rtw_hal_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt)

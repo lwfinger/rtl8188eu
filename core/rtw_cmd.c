@@ -2377,7 +2377,6 @@ exit:
 
 #endif
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 static void antenna_select_wk_hdl(struct adapter *padapter, u8 antenna)
 {
 	rtw_hal_set_hwreg(padapter, HW_VAR_ANTENNA_DIVERSITY_SELECT, (u8 *)(&antenna));
@@ -2427,9 +2426,7 @@ exit:
 	return res;
 
 }
-#endif
 
-void power_saving_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz);
 void power_saving_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz)
 {
 	 rtw_ps_processor(padapter);
@@ -2783,11 +2780,9 @@ u8 rtw_drvextra_cmd_hdl(struct adapter *padapter, unsigned char *pbuf)
 			rpt_timer_setting_wk_hdl(padapter, pdrvextra_cmd->type_size);
 			break;
 #endif
-#ifdef CONFIG_ANTENNA_DIVERSITY
 		case ANT_SELECT_WK_CID:
 			antenna_select_wk_hdl(padapter, pdrvextra_cmd->type_size);
 			break;
-#endif
 #ifdef CONFIG_P2P_PS
 		case P2P_PS_WK_CID:
 			p2p_ps_wk_hdl(padapter, pdrvextra_cmd->type_size);

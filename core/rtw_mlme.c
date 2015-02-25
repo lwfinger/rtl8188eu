@@ -673,11 +673,7 @@ void update_network(WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src,
 	u8 sq_final;
 	long rssi_final;
 
-;
-
-#ifdef CONFIG_ANTENNA_DIVERSITY
 	rtw_hal_antdiv_rssi_compared(padapter, dst, src); /* this will update src.Rssi, need consider again */
-#endif
 
 	#if defined(DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) && 1
 	if(strcmp(dst->Ssid.Ssid, DBG_RX_SIGNAL_DISPLAY_SSID_MONITORED) == 0) {
@@ -732,8 +728,6 @@ void update_network(WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src,
 			, dst->Ssid.Ssid, MAC_ARG(dst->MacAddress), dst->PhyInfo.SignalStrength, dst->PhyInfo.SignalQuality, dst->Rssi);
 	}
 	#endif
-
-;
 }
 
 static void update_current_network(struct adapter *adapter, WLAN_BSSID_EX *pnetwork)
@@ -823,9 +817,7 @@ void rtw_update_scanned_network(struct adapter *adapter, WLAN_BSSID_EX *target)
 			/* list_del_init(&oldest->list); */
 			pnetwork = oldest;
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(target->PhyInfo.Optimum_antenna));
-#endif
 			memcpy(&(pnetwork->network), target,  get_WLAN_BSSID_EX_sz(target));
 			/* pnetwork->last_scanned = rtw_get_current_time(); */
 			/*  variable initialize */
@@ -852,10 +844,7 @@ void rtw_update_scanned_network(struct adapter *adapter, WLAN_BSSID_EX *target)
 
 			bssid_ex_sz = get_WLAN_BSSID_EX_sz(target);
 			target->Length = bssid_ex_sz;
-#ifdef CONFIG_ANTENNA_DIVERSITY
-			/* target->PhyInfo.Optimum_antenna = pHalData->CurAntenna; */
 			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(target->PhyInfo.Optimum_antenna));
-#endif
 			memcpy(&(pnetwork->network), target, bssid_ex_sz );
 
 			pnetwork->last_scanned = rtw_get_current_time();
@@ -1389,11 +1378,6 @@ void rtw_indicate_connect(struct adapter *padapter)
 
 	if(!check_fwstate(&padapter->mlmepriv, _FW_LINKED))
 	{
-
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-		rtw_hal_set_hwreg(padapter, HW_VAR_ANTENNA_DIVERSITY_LINK, 0);
-#endif
-
 		set_fwstate(pmlmepriv, _FW_LINKED);
 
 		rtw_led_control(padapter, LED_CTL_LINK);
@@ -2542,7 +2526,6 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv )
 		rtw_free_assoc_resources(adapter, 0);
 	}
 
-	#ifdef CONFIG_ANTENNA_DIVERSITY
 	rtw_hal_get_def_var(adapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &(bSupportAntDiv));
 	if(true == bSupportAntDiv)
 	{
@@ -2553,7 +2536,6 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv )
 			(2==CurrentAntenna)?"A":"B"
 		);
 	}
-	#endif
 	set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
 	ret = rtw_joinbss_cmd(adapter, candidate);
 

@@ -233,7 +233,6 @@ typedef struct _RX_High_Power_
 #define ASSOCIATE_ENTRY_NUM					32 /*  Max size of AsocEntry[]. */
 #define	ODM_ASSOCIATE_ENTRY_NUM				ASSOCIATE_ENTRY_NUM
 
-/* ifdef CONFIG_ANTENNA_DIVERSITY */
 /*  This indicates two different the steps.  */
 /*  In SWAW_STEP_PEAK, driver needs to switch antenna and listen to the signal on the air. */
 /*  In SWAW_STEP_DETERMINE, driver just compares the signal captured in SWAW_STEP_PEAK */
@@ -277,7 +276,6 @@ typedef struct _SW_Antenna_Switch_
 	u64 		RXByteCnt_B;
 	u8 		TrafficLoad;
 	RT_TIMER 	SwAntennaSwitchTimer;
-#ifdef CONFIG_HW_ANTENNA_DIVERSITY
 	/* Hybrid Antenna Diversity */
 	u32		CCK_Ant1_Cnt[ASSOCIATE_ENTRY_NUM];
 	u32		CCK_Ant2_Cnt[ASSOCIATE_ENTRY_NUM];
@@ -289,8 +287,6 @@ typedef struct _SW_Antenna_Switch_
 	u8		TargetSTA;
 	u8		antsel;
 	u8		RxIdleAnt;
-
-#endif
 }SWAT_T, *pSWAT_T;
 
 typedef struct _EDCA_TURBO_ {

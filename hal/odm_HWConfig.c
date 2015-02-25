@@ -571,13 +571,11 @@ odm_RxPhyStatus92CSeries_Parsing(
 	}
 
 	/* For 92C/92D HW (Hybrid) Antenna Diversity */
-#if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
 	pDM_SWAT_Table->antsel = pPhyStaRpt->ant_sel;
 	/* For 88E HW Antenna Diversity */
 	pDM_Odm->DM_FatTable.antsel_rx_keep_0 = pPhyStaRpt->ant_sel;
 	pDM_Odm->DM_FatTable.antsel_rx_keep_1 = pPhyStaRpt->ant_sel_b;
 	pDM_Odm->DM_FatTable.antsel_rx_keep_2 = pPhyStaRpt->antsel_rx_keep_2;
-#endif
 }
 
 void
@@ -627,7 +625,6 @@ odm_Process_RSSIForDM(
 	    pDM_Odm->PhyDbgInfo.NumQryBeaconPkt++;
 
 	pDM_Odm->RxRate = pPktinfo->Rate;
-#if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
 	/* Smart Antenna Debug Message------------------ */
 	if(pDM_Odm->SupportICType == ODM_RTL8188E)
 	{
@@ -653,7 +650,6 @@ odm_Process_RSSIForDM(
 		}
 
 	}
-#endif /* if(defined(CONFIG_HW_ANTENNA_DIVERSITY)) */
 	/* Smart Antenna Debug Message------------------ */
 
 	UndecoratedSmoothedCCK =  pEntry->rssi_stat.UndecoratedSmoothedCCK;

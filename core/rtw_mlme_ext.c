@@ -8374,7 +8374,6 @@ void site_survey(struct adapter *padapter)
 			pmlmeinfo->scan_cnt = 0;
 #endif /* CONFIG_DMP_STA_NODE_SCAN_UNDER_AP_MODE */
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 			/*  20100721:Interrupt scan operation here. */
 			/*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
 			/*  It compares the scan result and select beter one to do connection. */
@@ -8386,7 +8385,6 @@ void site_survey(struct adapter *padapter)
 				set_survey_timer(pmlmeext, pmlmeext->chan_scan_time);
 				return;
 			}
-#endif
 
 #ifdef CONFIG_P2P
 			if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_SCAN) || rtw_p2p_chk_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH))
@@ -8502,10 +8500,7 @@ u8 collect_bss_info(struct adapter *padapter, union recv_frame *precv_frame, WLA
 	bssid->Rssi = precv_frame->u.hdr.attrib.phy_info.RecvSignalPower; /*  in dBM.raw data */
 	bssid->PhyInfo.SignalQuality = precv_frame->u.hdr.attrib.phy_info.SignalQuality;/* in percentage */
 	bssid->PhyInfo.SignalStrength = precv_frame->u.hdr.attrib.phy_info.SignalStrength;/* in percentage */
-#ifdef CONFIG_ANTENNA_DIVERSITY
-	/* rtw_hal_get_hwreg(padapter, HW_VAR_CURRENT_ANTENNA, (u8 *)(&bssid->PhyInfo.Optimum_antenna)); */
 	rtw_hal_get_def_var(padapter, HAL_DEF_CURRENT_ANTENNA,  &bssid->PhyInfo.Optimum_antenna);
-#endif
 
 	/*  checking SSID */
 	if ((p = rtw_get_ie(bssid->IEs + ie_offset, _SSID_IE_, &len, bssid->IELength - ie_offset)) == NULL)
@@ -10188,21 +10183,16 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX		*pnetwork = (WLAN_BSSID_EX*)(&(pmlmeinfo->network));
-#ifdef CONFIG_ANTENNA_DIVERSITY
 	struct joinbss_parm	*pparm = (struct joinbss_parm *)pbuf;
-#endif /* CONFIG_ANTENNA_DIVERSITY */
 	u32 i;
         /* u32	initialgain; */
 	/* u32	acparm; */
 	u8 ch, bw, offset;
 
 	/* check already connecting to AP or not */
-	if (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS)
-	{
+	if (pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) {
 		if (pmlmeinfo->state & WIFI_FW_STATION_STATE)
-		{
 			issue_deauth_ex(padapter, pnetwork->MacAddress, WLAN_REASON_DEAUTH_LEAVING, 5, 100);
-		}
 
 		pmlmeinfo->state = WIFI_FW_NULL_STATE;
 
@@ -10219,9 +10209,7 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 		rtw_hal_set_hwreg(padapter, HW_VAR_MLME_DISCONNECT, NULL);
 	}
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 	rtw_antenna_select_cmd(padapter, pparm->network.PhyInfo.Optimum_antenna, false);
-#endif
 
 #ifdef CONFIG_WAPI_SUPPORT
 	rtw_wapi_clear_all_cam_entry(padapter);

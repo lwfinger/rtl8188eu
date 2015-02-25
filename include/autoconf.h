@@ -32,14 +32,6 @@
 
  #define CONFIG_SUPPORT_USB_INT
 
-	//befor link
-	#define CONFIG_ANTENNA_DIVERSITY
-
-	//after link
-	#ifdef CONFIG_ANTENNA_DIVERSITY
-	#define CONFIG_HW_ANTENNA_DIVERSITY
-	#endif
-
 	#define CONFIG_IOL
 
 #define CONFIG_AP_MODE
@@ -132,44 +124,6 @@
 #define DISABLE_BB_RF	0
 
 #define MP_DRIVER 0
-
-
-/*
- * Platform  Related Config
- */
-#ifdef CONFIG_PLATFORM_MN10300
-	#define CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
-	#define CONFIG_USE_USB_BUFFER_ALLOC_RX
-
-	#if	defined (CONFIG_SW_ANTENNA_DIVERSITY)
-		#undef CONFIG_SW_ANTENNA_DIVERSITY
-		#define CONFIG_HW_ANTENNA_DIVERSITY
-	#endif
-
-	#if	defined (CONFIG_POWER_SAVING)
-		#undef CONFIG_POWER_SAVING
-	#endif
-
-#endif//CONFIG_PLATFORM_MN10300
-
-
-
-#ifdef CONFIG_PLATFORM_TI_DM365
-#define CONFIG_USE_USB_BUFFER_ALLOC_RX
-#endif
-
-
-#if defined(CONFIG_PLATFORM_ACTIONS_ATM702X)
-	#ifdef CONFIG_USB_TX_AGGREGATION
-		#undef CONFIG_USB_TX_AGGREGATION
-	#endif
-	#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
-		#define CONFIG_USE_USB_BUFFER_ALLOC_TX
-	#endif
-	#ifndef CONFIG_USE_USB_BUFFER_ALLOC_RX
-		#define CONFIG_USE_USB_BUFFER_ALLOC_RX
-	#endif
-#endif
 
 
 /*

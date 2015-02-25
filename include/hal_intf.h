@@ -214,10 +214,8 @@ struct hal_ops {
 	void	(*run_thread)(struct adapter *padapter);
 	void	(*cancel_thread)(struct adapter *padapter);
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 	u8	(*AntDivBeforeLinkHandler)(struct adapter *padapter);
 	void	(*AntDivCompareHandler)(struct adapter *padapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
-#endif
 	u8	(*interface_ps_func)(struct adapter *padapter,HAL_INTF_PS_FUNC efunc_id, u8* val);
 
 	s32	(*hal_xmit)(struct adapter *padapter, struct xmit_frame *pxmitframe);
@@ -444,10 +442,8 @@ void	rtw_hal_set_bwmode(struct adapter *padapter, HT_CHANNEL_WIDTH Bandwidth, u8
 void	rtw_hal_set_chan(struct adapter *padapter, u8 channel);
 void	rtw_hal_dm_watchdog(struct adapter *padapter);
 
-#ifdef CONFIG_ANTENNA_DIVERSITY
 u8	rtw_hal_antdiv_before_linked(struct adapter *padapter);
 void	rtw_hal_antdiv_rssi_compared(struct adapter *padapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
-#endif
 
 #ifdef CONFIG_HOSTAPD_MLME
 s32	rtw_hal_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt);

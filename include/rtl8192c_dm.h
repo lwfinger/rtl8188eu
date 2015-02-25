@@ -210,40 +210,10 @@ struct	dm_priv
 
 	u32	prv_traffic_idx; // edca turbo
 
-/*
-	// for dm_RF_Saving
-	u8	initialize;
-	u32	rf_saving_Reg874;
-	u32	rf_saving_RegC70;
-	u32	rf_saving_Reg85C;
-	u32	rf_saving_RegA74;
-*/
-	//for Antenna diversity
-#ifdef CONFIG_ANTENNA_DIVERSITY
-//	SWAT_T DM_SWAT_Table;
-#endif
-#ifdef CONFIG_SW_ANTENNA_DIVERSITY
-//	_timer SwAntennaSwitchTimer;
-/*
-	u64	lastTxOkCnt;
-	u64	lastRxOkCnt;
-	u64	TXByteCnt_A;
-	u64	TXByteCnt_B;
-	u64	RXByteCnt_A;
-	u64	RXByteCnt_B;
-	u8	DoubleComfirm;
-	u8	TrafficLoad;
-*/
-#endif
-
 	s32	OFDM_Pkt_Cnt;
 	u8	RSSI_Select;
-//	u8	DIG_Dynamic_MIN ;
-//###### duplicate code,will move to ODM #########
-	// Add for Reading Initial Data Rate SEL Register 0x484 during watchdog. Using for fill tx desc. 2011.3.21 by Thomas
 	u8	INIDATA_RATE[32];
 };
-
 
 //============================================================
 // function prototype

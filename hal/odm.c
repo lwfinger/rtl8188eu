@@ -984,13 +984,7 @@ odm_CommonInfoSelfInit(
 	pDM_Odm->bCckHighPower = (BOOLEAN) ODM_GetBBReg(pDM_Odm, 0x824, BIT9);
 	pDM_Odm->RFPathRxEnable = (u8) ODM_GetBBReg(pDM_Odm, 0xc04, 0x0F);
 	if(pDM_Odm->SupportICType & (ODM_RTL8192C|ODM_RTL8192D))
-	{
-#if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
 		pDM_Odm->AntDivType = CG_TRX_HW_ANTDIV;
-#elif (defined(CONFIG_SW_ANTENNA_DIVERSITY))
-		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
-#endif
-	}
 	if(pDM_Odm->SupportICType & (ODM_RTL8723A))
 		pDM_Odm->AntDivType = CGCS_RX_SW_ANTDIV;
 
@@ -3416,188 +3410,6 @@ odm_TXPowerTrackingCheckAP(
 /* 3============================================================ */
 /* 3 SW Antenna Diversity */
 /* 3============================================================ */
-#if(defined(CONFIG_SW_ANTENNA_DIVERSITY))
-void
-odm_SwAntDivInit(
-	IN		PDM_ODM_T		pDM_Odm
-	)
-{
-	odm_SwAntDivInit_NIC(pDM_Odm);
-}
-
-void
-odm_SwAntDivInit_NIC(
-	IN		PDM_ODM_T		pDM_Odm
-	)
-{
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-/*  Init SW ANT DIV mechanism for 8723AE/AU/AS*/
-/*  CE/AP/ADSL no using SW ANT DIV for 8723A Series IC */
-	ODM_RT_TRACE(pDM_Odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("SWAS:Init SW Antenna Switch\n"));
-	pDM_SWAT_Table->RSSI_sum_A = 0;
-	pDM_SWAT_Table->RSSI_cnt_A = 0;
-	pDM_SWAT_Table->RSSI_sum_B = 0;
-	pDM_SWAT_Table->RSSI_cnt_B = 0;
-	pDM_SWAT_Table->CurAntenna = Antenna_A;
-	pDM_SWAT_Table->PreAntenna = Antenna_A;
-	pDM_SWAT_Table->try_flag = 0xff;
-	pDM_SWAT_Table->PreRSSI = 0;
-	pDM_SWAT_Table->SWAS_NoLink_State = 0;
-	pDM_SWAT_Table->bTriggerAntennaSwitch = 0;
-	pDM_SWAT_Table->SelectAntennaMap=0xAA;
-	pDM_SWAT_Table->lastTxOkCnt = 0;
-	pDM_SWAT_Table->lastRxOkCnt = 0;
-	pDM_SWAT_Table->TXByteCnt_A = 0;
-	pDM_SWAT_Table->TXByteCnt_B = 0;
-	pDM_SWAT_Table->RXByteCnt_A = 0;
-	pDM_SWAT_Table->RXByteCnt_B = 0;
-	pDM_SWAT_Table->TrafficLoad = TRAFFIC_LOW;
-	pDM_SWAT_Table->SWAS_NoLink_BK_Reg860 = ODM_Read4Byte(pDM_Odm, 0x860);
-}
-
-/*  */
-/*  20100514 Joseph: */
-/*  Add new function to reset the state of antenna diversity before link. */
-/*  */
-void
-ODM_SwAntDivResetBeforeLink(
-	IN		PDM_ODM_T		pDM_Odm
-	)
-{
-
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-
-	pDM_SWAT_Table->SWAS_NoLink_State = 0;
-
-}
-
-/*  */
-/*  20100514 Luke/Joseph: */
-/*  Add new function to reset antenna diversity state after link. */
-/*  */
-void
-ODM_SwAntDivRestAfterLink(
-	IN PDM_ODM_T	pDM_Odm
-	)
-{
-	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-
-	pDM_SWAT_Table->RSSI_cnt_A = 0;
-	pDM_SWAT_Table->RSSI_cnt_B = 0;
-	pDM_Odm->RSSI_test = FALSE;
-	pDM_SWAT_Table->try_flag = 0xff;
-	pDM_SWAT_Table->RSSI_Trying = 0;
-	pDM_SWAT_Table->SelectAntennaMap=0xAA;
-}
-
-void
-ODM_SwAntDivChkPerPktRssi(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u8		StationID,
-	IN PODM_PHY_INFO_T pPhyInfo
-	)
-{
-	SWAT_T		*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-
-	if(!(pDM_Odm->SupportAbility & (ODM_BB_ANT_DIV)))
-		return;
-
-	if(StationID == pDM_SWAT_Table->RSSI_target)
-	{
-		/* 1 RSSI for SW Antenna Switch */
-		if(pDM_SWAT_Table->CurAntenna == Antenna_A)
-		{
-			pDM_SWAT_Table->RSSI_sum_A += pPhyInfo->RxPWDBAll;
-			pDM_SWAT_Table->RSSI_cnt_A++;
-		}
-		else
-		{
-			pDM_SWAT_Table->RSSI_sum_B += pPhyInfo->RxPWDBAll;
-			pDM_SWAT_Table->RSSI_cnt_B++;
-
-		}
-	}
-
-}
-
-/*  */
-void
-odm_SwAntDivChkAntSwitch(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8			Step
-	)
-{
-	/*  */
-	/*  For AP/ADSL use prtl8192cd_priv */
-	/*  For CE/NIC use PADAPTER */
-	/*  */
-	struct adapter *	pAdapter = pDM_Odm->Adapter;
-	prtl8192cd_priv	priv		= pDM_Odm->priv;
-
-	/*  */
-	/*  2011/09/29 MH In HW integration first stage, we provide 4 different handle to operate */
-	/*  at the same time. In the stage2/3, we need to prive universal interface and merge all */
-	/*  HW dynamic mechanism. */
-	/*  */
-	switch	(pDM_Odm->SupportPlatform) {
-	case	ODM_MP:
-	case	ODM_CE:
-		odm_SwAntDivChkAntSwitchNIC(pDM_Odm, Step);
-		break;
-	case	ODM_AP:
-	case	ODM_ADSL:
-		break;
-	}
-}
-
-/*  */
-/*  20100514 Luke/Joseph: */
-/*  Add new function for antenna diversity after link. */
-/*  This is the main function of antenna diversity after link. */
-/*  This function is called in HalDmWatchDog() and ODM_SwAntDivChkAntSwitchCallback(). */
-/*  HalDmWatchDog() calls this function with SWAW_STEP_PEAK to initialize the antenna test. */
-/*  In SWAW_STEP_PEAK, another antenna and a 500ms timer will be set for testing. */
-/*  After 500ms, ODM_SwAntDivChkAntSwitchCallback() calls this function to compare the signal just */
-/*  listened on the air with the RSSI of original antenna. */
-/*  It chooses the antenna with better RSSI. */
-/*  There is also a aged policy for error trying. Each error trying will cost more 5 seconds waiting */
-/*  penalty to get next try. */
-
-
-void
-ODM_SetAntenna(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		Antenna)
-{
-	ODM_SetBBReg(pDM_Odm, 0x860, BIT8|BIT9, Antenna);
-}
-/* 2012--09--06-- */
-/* Note: Antenna_Main--> Antenna_A */
-/*         Antenna_Aux---> Antenna_B */
-/*  */
-void
-odm_SwAntDivChkAntSwitchNIC(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8		Step
-	)
-{
-}
-
-/*  */
-/*  20100514 Luke/Joseph: */
-/*  Callback function for 500ms antenna test trying. */
-/*  */
-void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext)
-{
-	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
-	struct adapter *padapter = pDM_Odm->Adapter;
-	if(padapter->net_closed == true)
-	    return;
-	odm_SwAntDivChkAntSwitch(pDM_Odm, SWAW_STEP_DETERMINE);
-}
-
-#else /* if(defined(CONFIG_SW_ANTENNA_DIVERSITY)) */
-
 void odm_SwAntDivInit(	IN		PDM_ODM_T		pDM_Odm	) {}
 void ODM_SwAntDivChkPerPktRssi(
 	IN PDM_ODM_T	pDM_Odm,
@@ -3612,13 +3424,10 @@ static void ODM_SwAntDivResetBeforeLink(	IN		PDM_ODM_T		pDM_Odm	){}
 void ODM_SwAntDivRestAfterLink(	IN		PDM_ODM_T		pDM_Odm	){}
 void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
 
-#endif /* if(defined(CONFIG_SW_ANTENNA_DIVERSITY)) */
-
 /* 3============================================================ */
 /* 3 SW Antenna Diversity */
 /* 3============================================================ */
 
-#if(defined(CONFIG_HW_ANTENNA_DIVERSITY))
 static void
 odm_InitHybridAntDiv_88C_92D(
 	IN PDM_ODM_T	pDM_Odm
@@ -3938,16 +3747,6 @@ odm_HwAntDiv(
 	}
 
 }
-
-#else /* if(defined(CONFIG_HW_ANTENNA_DIVERSITY)) */
-
-void odm_InitHybridAntDiv(	IN PDM_ODM_T	pDM_Odm		){}
-void odm_HwAntDiv(	IN	PDM_ODM_T	pDM_Odm){}
-void ODM_SetTxAntByTxInfo_88C_92D(	IN		PDM_ODM_T		pDM_Odm){ }
-
-#endif /* if(defined(CONFIG_HW_ANTENNA_DIVERSITY)) */
-
-
 
 /*  */
 /* EDCA Turbo */
