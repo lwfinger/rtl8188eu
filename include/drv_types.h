@@ -274,9 +274,7 @@ struct dvobj_priv
 
 	_sema	usb_suspend_sema;
 
-#ifdef CONFIG_USB_VENDOR_REQ_MUTEX
 	_mutex  usb_vendor_req_mutex;
-#endif
 
 #ifdef CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 	u8 * usb_alloc_vendor_req_buf;
