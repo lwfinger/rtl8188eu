@@ -85,8 +85,6 @@
  * Interface  Related Config
  */
 
-#define CONFIG_USB_RX_AGGREGATION
-
 #define CONFIG_PREALLOC_RECV_SKB
 
 /*

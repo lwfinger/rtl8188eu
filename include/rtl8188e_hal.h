@@ -144,18 +144,12 @@ typedef struct _RT_8188E_FIRMWARE_HDR
 #define DRIVER_EARLY_INT_TIME		0x05
 #define BCN_DMA_ATIME_INT_TIME		0x02
 
-#ifdef CONFIG_USB_RX_AGGREGATION
-
 typedef enum _USB_RX_AGG_MODE{
 	USB_RX_AGG_DISABLE,
 	USB_RX_AGG_DMA,
 	USB_RX_AGG_USB,
 	USB_RX_AGG_MIX
 }USB_RX_AGG_MODE;
-
-//#define MAX_RX_DMA_BUFFER_SIZE	10240		// 10K for 8192C RX DMA buffer
-
-#endif
 
 
 #define MAX_RX_DMA_BUFFER_SIZE_88E	      0x2400 //9k for 88E nornal chip , //MaxRxBuff=10k-max(TxReportSize(64*8), WOLPattern(16*24))
@@ -483,7 +477,6 @@ typedef struct hal_data_8188e
 	u8	C2hArray[16];
 	u8	UsbTxAggMode;
 	u8	UsbTxAggDescNum;
-#ifdef CONFIG_USB_RX_AGGREGATION
 	u16	HwRxPageSize;				// Hardware setting
 	u32	MaxUsbRxAggBlock;
 
@@ -492,7 +485,6 @@ typedef struct hal_data_8188e
 	u8	UsbRxAggBlockTimeout;
 	u8	UsbRxAggPageCount;			// 8192C DMA page count
 	u8	UsbRxAggPageTimeout;
-#endif
 
 #ifdef CONFIG_TX_EARLY_MODE
 	u8			bEarlyModeEnable;

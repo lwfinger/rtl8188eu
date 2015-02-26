@@ -181,8 +181,6 @@ typedef struct _RT_8192C_FIRMWARE_HDR {//8-byte alinment required
 #define DRIVER_EARLY_INT_TIME		0x05
 #define BCN_DMA_ATIME_INT_TIME		0x02
 
-#ifdef CONFIG_USB_RX_AGGREGATION
-
 typedef enum _USB_RX_AGG_MODE{
 	USB_RX_AGG_DISABLE,
 	USB_RX_AGG_DMA,
@@ -191,9 +189,6 @@ typedef enum _USB_RX_AGG_MODE{
 }USB_RX_AGG_MODE;
 
 #define MAX_RX_DMA_BUFFER_SIZE	10240		// 10K for 8192C RX DMA buffer
-
-#endif
-
 
 #define TX_SELE_HQ			BIT(0)		// High Queue
 #define TX_SELE_LQ			BIT(1)		// Low Queue
@@ -479,7 +474,6 @@ struct hal_data_8192cu
 
 	u8	UsbTxAggMode;
 	u8	UsbTxAggDescNum;
-#ifdef CONFIG_USB_RX_AGGREGATION
 	u16	HwRxPageSize;				// Hardware setting
 	u32	MaxUsbRxAggBlock;
 
@@ -488,7 +482,6 @@ struct hal_data_8192cu
 	u8	UsbRxAggBlockTimeout;
 	u8	UsbRxAggPageCount;			// 8192C DMA page count
 	u8	UsbRxAggPageTimeout;
-#endif
 
 	// 2010/12/10 MH Add for USB aggreation mode dynamic shceme.
 	BOOLEAN		UsbRxHighSpeedMode;

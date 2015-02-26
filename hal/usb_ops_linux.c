@@ -585,21 +585,18 @@ static int recvbuf2recvframe(struct adapter *padapter, _pkt *pskb)
 		recvframe_put(precvframe, skb_len);
 		/* recvframe_pull(precvframe, drvinfo_sz + RXDESC_SIZE); */
 
-#ifdef CONFIG_USB_RX_AGGREGATION
-		switch(pHalData->UsbRxAggMode)
-		{
-			case USB_RX_AGG_DMA:
-			case USB_RX_AGG_MIX:
-				pkt_offset = (u16)_RND128(pkt_offset);
-				break;
-				case USB_RX_AGG_USB:
-				pkt_offset = (u16)_RND4(pkt_offset);
-				break;
-			case USB_RX_AGG_DISABLE:
-			default:
-				break;
+		switch(pHalData->UsbRxAggMode) {
+		case USB_RX_AGG_DMA:
+		case USB_RX_AGG_MIX:
+			pkt_offset = (u16)_RND128(pkt_offset);
+			break;
+			case USB_RX_AGG_USB:
+			pkt_offset = (u16)_RND4(pkt_offset);
+			break;
+		case USB_RX_AGG_DISABLE:
+		default:
+			break;
 		}
-#endif
 
 		if (pattrib->pkt_rpt_type == NORMAL_RX)/* Normal rx packet */
 		{
