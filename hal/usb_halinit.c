@@ -125,10 +125,8 @@ static void rtl8188eu_interface_configure(struct adapter *padapter)
 
 	pHalData->interfaceIndex = pdvobjpriv->InterfaceNumber;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	pHalData->UsbTxAggMode		= 1;
 	pHalData->UsbTxAggDescNum	= 0x6;	/*  only 4 bits */
-#endif
 
 #ifdef CONFIG_USB_RX_AGGREGATION
 	pHalData->UsbRxAggMode		= USB_RX_AGG_DMA;/*  USB_RX_AGG_DMA; */
@@ -838,7 +836,6 @@ usb_AggSettingTxUpdate(
 	IN	struct adapter *		Adapter
 	)
 {
-#ifdef CONFIG_USB_TX_AGGREGATION
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	/* PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo); */
 	u32			value32;
@@ -853,8 +850,6 @@ usb_AggSettingTxUpdate(
 
 		rtw_write32(Adapter, REG_TDECTRL, value32);
 	}
-
-#endif
 }	/*  usb_AggSettingTxUpdate */
 
 

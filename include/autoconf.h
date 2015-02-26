@@ -85,7 +85,6 @@
  * Interface  Related Config
  */
 
-#define CONFIG_USB_TX_AGGREGATION
 #define CONFIG_USB_RX_AGGREGATION
 
 #define CONFIG_PREALLOC_RECV_SKB
@@ -143,10 +142,6 @@
 #define POWER_TRAINING_ACTIVE			1
 
 //#endif
-
-#ifdef CONFIG_USB_TX_AGGREGATION
-//#define	CONFIG_TX_EARLY_MODE
-#endif
 
 #ifdef CONFIG_TX_EARLY_MODE
 #define	RTL8188E_EARLY_MODE_PKT_NUM_10	0

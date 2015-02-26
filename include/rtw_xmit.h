@@ -24,17 +24,8 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 
-#ifdef CONFIG_USB_TX_AGGREGATION
-	#if defined(CONFIG_PLATFORM_ARM_SUNxI) || defined(CONFIG_PLATFORM_ARM_SUN6I) || defined(CONFIG_PLATFORM_ARM_SUN7I)
-		#define MAX_XMITBUF_SZ (12288)  //12k 1536*8
-	#elif defined (CONFIG_PLATFORM_MSTAR)
-		#define MAX_XMITBUF_SZ	7680	// 7.5k
-	#else
-		#define MAX_XMITBUF_SZ	(20480)	// 20k
-	#endif
-#else
-#define MAX_XMITBUF_SZ	(2048)
-#endif
+#define MAX_XMITBUF_SZ	(20480)	// 20k
+
 #ifdef CONFIG_SINGLE_XMIT_BUF
 #define NR_XMITBUFF	(1)
 #else
@@ -284,9 +275,7 @@ struct xmit_frame
 
 	struct xmit_buf *pxmitbuf;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	u8	agg_num;
-#endif
 	s8	pkt_offset;
 
 	u8 ack_report;

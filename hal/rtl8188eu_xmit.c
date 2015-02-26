@@ -318,12 +318,10 @@ if (padapter->registrypriv.mp_mode == 0)
 			ptxdesc->txdw4 |= cpu_to_le32(QOS);/* QoS */
 
 		/* offset 20 */
-	#ifdef CONFIG_USB_TX_AGGREGATION
 		if (pxmitframe->agg_num > 1){
 			/* DBG_8192C("%s agg_num:%d\n",__FUNCTION__,pxmitframe->agg_num ); */
 			ptxdesc->txdw5 |= cpu_to_le32((pxmitframe->agg_num << USB_TXAGG_NUM_SHT) & 0xFF000000);
 		}
-	#endif
 
 		if ((pattrib->ether_type != 0x888e) &&
 		    (pattrib->ether_type != 0x0806) &&
@@ -629,7 +627,6 @@ static s32 rtw_dump_xframe(struct adapter *padapter, struct xmit_frame *pxmitfra
 	return ret;
 }
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 static u32 xmitframe_need_length(struct xmit_frame *pxmitframe)
 {
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
@@ -946,87 +943,6 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 
 	return true;
 }
-
-#else
-
-s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
-{
-
-	struct hw_xmit *phwxmits;
-	sint hwentry;
-	struct xmit_frame *pxmitframe=NULL;
-	int res=_SUCCESS, xcnt = 0;
-
-	phwxmits = pxmitpriv->hwxmits;
-	hwentry = pxmitpriv->hwxmit_entry;
-
-	RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("xmitframe_complete()\n"));
-
-	if(pxmitbuf==NULL)
-	{
-		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
-		if(!pxmitbuf)
-		{
-			return false;
-		}
-	}
-
-
-	do
-	{
-		pxmitframe =  rtw_dequeue_xframe(pxmitpriv, phwxmits, hwentry);
-
-		if(pxmitframe)
-		{
-			pxmitframe->pxmitbuf = pxmitbuf;
-
-			pxmitframe->buf_addr = pxmitbuf->pbuf;
-
-			pxmitbuf->priv_data = pxmitframe;
-
-			if((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
-			{
-				if(pxmitframe->attrib.priority<=15)/* TID0~15 */
-				{
-					res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
-				}
-				/* DBG_8192C("==> pxmitframe->attrib.priority:%d\n",pxmitframe->attrib.priority); */
-				rtw_os_xmit_complete(padapter, pxmitframe);/* always return ndis_packet after rtw_xmitframe_coalesce */
-			}
-
-
-			RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("xmitframe_complete(): rtw_dump_xframe\n"));
-
-
-			if(res == _SUCCESS)
-			{
-				rtw_dump_xframe(padapter, pxmitframe);
-			}
-			else
-			{
-				rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
-				rtw_free_xmitframe(pxmitpriv, pxmitframe);
-			}
-
-			xcnt++;
-
-		}
-		else
-		{
-			rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
-			return false;
-		}
-
-		break;
-
-	}while(0/*xcnt < (NR_XMITFRAME >> 3)*/);
-
-	return true;
-
-}
-#endif
-
-
 
 static s32 xmitframe_direct(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {

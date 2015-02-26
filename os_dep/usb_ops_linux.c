@@ -480,10 +480,8 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 		int bmcast = IS_MCAST(pattrib->dst);
 		u8 agg_num = 1;
 
-		#ifdef CONFIG_USB_TX_AGGREGATION
-			if(pxmitframe->agg_num>1)
-				agg_num = pxmitframe->agg_num;
-		#endif
+		if(pxmitframe->agg_num>1)
+			agg_num = pxmitframe->agg_num;
 
 		if(bmcast)
 			psta = rtw_get_bcmc_stainfo(padapter);

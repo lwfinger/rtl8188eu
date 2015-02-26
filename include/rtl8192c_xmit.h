@@ -113,9 +113,7 @@ struct txrpt_ccx_8192c {
 void dump_txrpt_ccx_8192c(void *buf);
 void handle_txrpt_ccx_8192c(struct adapter *adapter, void *buf);
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 #define MAX_TX_AGG_PACKET_NUMBER 0xFF
-#endif
 
 s32	rtl8192cu_init_xmit_priv(struct adapter * padapter);
 

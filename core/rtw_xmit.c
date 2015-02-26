@@ -909,15 +909,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 
 ;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	hw_hdr_offset = TXDESC_SIZE + (pxmitframe->pkt_offset * PACKET_OFFSET_SZ);;
-#else
-	#ifdef CONFIG_TX_EARLY_MODE
-	hw_hdr_offset = TXDESC_OFFSET+ EARLY_MODE_INFO_SIZE;
-	#else
-	hw_hdr_offset = TXDESC_OFFSET;
-	#endif
-#endif
 
 	if(pattrib->encrypt ==_TKIP_)/* if(psecuritypriv->dot11PrivacyAlgrthm==_TKIP_PRIVACY_) */
 	{
@@ -1692,15 +1684,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, _pkt *pkt, struct xmit_fram
 
 	pbuf_start = pxmitframe->buf_addr;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	hw_hdr_offset =  TXDESC_SIZE + (pxmitframe->pkt_offset * PACKET_OFFSET_SZ);
-#else
-	#ifdef CONFIG_TX_EARLY_MODE /* for SDIO && Tx Agg */
-	hw_hdr_offset = TXDESC_OFFSET + EARLY_MODE_INFO_SIZE;
-	#else
-	hw_hdr_offset = TXDESC_OFFSET;
-	#endif
-#endif
 
 	mem_start = pbuf_start +	hw_hdr_offset;
 
@@ -2176,21 +2160,11 @@ void rtw_count_tx_stats(struct adapter *padapter, struct xmit_frame *pxmitframe,
 	if ((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
 	{
 		pxmitpriv->tx_bytes += sz;
-#if defined(CONFIG_USB_TX_AGGREGATION)
 		pmlmepriv->LinkDetectInfo.NumTxOkInPeriod += pxmitframe->agg_num;
-#else
-		pmlmepriv->LinkDetectInfo.NumTxOkInPeriod++;
-#endif
-
 		psta = pxmitframe->attrib.psta;
-		if (psta)
-		{
+		if (psta) {
 			pstats = &psta->sta_stats;
-#if defined(CONFIG_USB_TX_AGGREGATION)
 			pstats->tx_pkts += pxmitframe->agg_num;
-#else
-			pstats->tx_pkts++;
-#endif
 			pstats->tx_bytes += sz;
 		}
 	}
@@ -2388,10 +2362,7 @@ static void rtw_init_xmitframe(struct xmit_frame *pxframe)
 		pxframe->pkt = NULL;
 		pxframe->pkt_offset = 1;/* default use pkt_offset to fill tx desc */
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 		pxframe->agg_num = 1;
-#endif
-
 		pxframe->ack_report = 0;
 	}
 }
@@ -2625,25 +2596,9 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 
 		xmitframe_plist = get_next(xmitframe_plist);
 
-/*#ifdef RTK_DMP_PLATFORM
-#ifdef CONFIG_USB_TX_AGGREGATION
-		if((ptxservq->qcnt>0) && (ptxservq->qcnt<=2))
-		{
-			pxmitframe = NULL;
-
-			tasklet_schedule(&pxmitpriv->xmit_tasklet);
-
-			break;
-		}
-#endif
-#endif*/
 		rtw_list_delete(&pxmitframe->list);
 
 		ptxservq->qcnt--;
-
-		/* rtw_list_insert_tail(&pxmitframe->list, &phwxmit->pending); */
-
-		/* ptxservq->qcnt--; */
 
 		break;
 

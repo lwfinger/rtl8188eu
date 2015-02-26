@@ -477,10 +477,8 @@ struct hal_data_8192cu
 	u8	OutEpQueueSel;
 	u8	OutEpNumber;
 
-#ifdef CONFIG_USB_TX_AGGREGATION
 	u8	UsbTxAggMode;
 	u8	UsbTxAggDescNum;
-#endif
 #ifdef CONFIG_USB_RX_AGGREGATION
 	u16	HwRxPageSize;				// Hardware setting
 	u32	MaxUsbRxAggBlock;
