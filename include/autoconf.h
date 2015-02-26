@@ -93,13 +93,6 @@
 #define CONFIG_PREALLOC_RECV_SKB
 
 /*
- * CONFIG_USE_USB_BUFFER_ALLOC_XX uses Linux USB Buffer alloc API and is for Linux platform only now!
- */
-#ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
-#undef CONFIG_PREALLOC_RECV_SKB
-#endif
-
-/*
  * USB VENDOR REQ BUFFER ALLOCATION METHOD
  * if not set we'll use function local variable (stack memory)
  */
