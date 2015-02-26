@@ -105,8 +105,6 @@
  */
 #define CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
 
-#define CONFIG_VENDOR_REQ_RETRY
-
 /*
  * HAL  Related Config
  */
