@@ -20,6 +20,7 @@
 
 #include <linux/module.h>
 #include <linux/netdevice.h>
+#include <linux/version.h>
 
 #include <rtw_android.h>
 #include <osdep_service.h>
