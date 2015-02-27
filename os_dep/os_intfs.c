@@ -1890,7 +1890,6 @@ static int rtw_suspend_free_assoc_resource(struct adapter *padapter)
 		rtw_netif_stop_queue(pnetdev);
 	}
 
-	#ifdef CONFIG_LAYER2_ROAMING_RESUME
 	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) && rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 	{
 		DBG_871X("%s %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n",__FUNCTION__,
@@ -1900,7 +1899,6 @@ static int rtw_suspend_free_assoc_resource(struct adapter *padapter)
 				pmlmepriv->assoc_ssid.SsidLength);
 		rtw_set_roaming(padapter, 1);
 	}
-	#endif /* CONFIG_LAYER2_ROAMING_RESUME */
 
 	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED))
 	{
@@ -1976,11 +1974,7 @@ int rtw_resume_common(struct adapter *padapter)
 
 	if (check_fwstate(mlmepriv, WIFI_STATION_STATE)) {
 		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_STATION_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
-
-		#ifdef CONFIG_LAYER2_ROAMING_RESUME
 		rtw_roaming(padapter, NULL);
-		#endif /* CONFIG_LAYER2_ROAMING_RESUME */
-
 	} else if (check_fwstate(mlmepriv, WIFI_AP_STATE)) {
 		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_AP_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 		rtw_ap_restore_network(padapter);

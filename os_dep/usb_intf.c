@@ -705,7 +705,6 @@ static void rtw_suspend_wow(struct adapter *padapter)
 	}
 
 
-#ifdef CONFIG_LAYER2_ROAMING_RESUME
 	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED)&& rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 	{
 		/* DBG_871X("%s:%d assoc_ssid:%s\n", __FUNCTION__, __LINE__, pmlmepriv->assoc_ssid.Ssid); */
@@ -717,7 +716,6 @@ static void rtw_suspend_wow(struct adapter *padapter)
 
 		rtw_set_roaming(padapter, 1);
 	}
-#endif
 	/* s2-2.  indicate disconnect to os */
 	rtw_indicate_disconnect(padapter);
 	/* s2-3. */
