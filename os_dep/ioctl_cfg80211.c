@@ -697,7 +697,6 @@ check_bss:
 	if (!rtw_cfg80211_check_bss(padapter))
 		DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" BSS not found !!\n", FUNC_ADPT_ARG(padapter));
 
-	#ifdef CONFIG_LAYER2_ROAMING
 	if (rtw_to_roaming(padapter) > 0) {
 		#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
 		struct wiphy *wiphy = pwdev->wiphy;
@@ -724,10 +723,7 @@ check_bss:
 			, pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6
 			, pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6
 			, GFP_ATOMIC);
-	}
-	else
-	#endif
-	{
+	} else {
 		cfg80211_connect_result(padapter->pnetdev, cur_network->network.MacAddress
 			, pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2
 			, pmlmepriv->assoc_req_len-sizeof(struct rtw_ieee80211_hdr_3addr)-2

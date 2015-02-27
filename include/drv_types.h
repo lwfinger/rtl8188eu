@@ -175,9 +175,7 @@ struct registry_priv
 	char	adaptor_info_caching_file_path[PATH_LENGTH_MAX];
 #endif
 
-#ifdef CONFIG_LAYER2_ROAMING
 	u8	max_roaming_times; // the max number driver will try to roaming
-#endif
 
 #ifdef CONFIG_IOL
 	u8 fw_iol; //enable iol without other concern

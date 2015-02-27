@@ -69,7 +69,6 @@
 #define USB_INTERFERENCE_ISSUE // this should be checked in all usb interface
 #define CONFIG_GLOBAL_UI_PID
 
-#define CONFIG_LAYER2_ROAMING
 #define CONFIG_LONG_DELAY_ISSUE
 #define CONFIG_NEW_SIGNAL_STAT_PROCESS
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */

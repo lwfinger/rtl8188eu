@@ -1159,7 +1159,6 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 			else
 			{
 				DBG_871X("try_to_join, but select scanning queue fail, to_roaming:%d\n", rtw_to_roaming(adapter));
-				#ifdef CONFIG_LAYER2_ROAMING
 				if (rtw_to_roaming(adapter) != 0) {
 					if( --pmlmepriv->to_roaming == 0
 						|| _SUCCESS != rtw_sitesurvey_cmd(adapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)
@@ -1178,10 +1177,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 					} else {
 						pmlmepriv->to_join = true;
 					}
-				}
-				else
-				#endif
-				{
+				} else {
 					rtw_indicate_disconnect(adapter);
 				}
 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
@@ -2063,7 +2059,6 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 
 	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE) )
 	{
-		#ifdef CONFIG_LAYER2_ROAMING
 		if(adapter->registrypriv.wifi_spec==1)
 			rtw_set_roaming(adapter, 0); /* don't roam */
 		else if (rtw_to_roaming(adapter) > 0)
@@ -2075,7 +2070,6 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 #endif /*  CONFIG_INTEL_WIDI */
 		if(*((unsigned short *)(pstadel->rsvd)) != WLAN_REASON_EXPIRATION_CHK)
 			rtw_set_roaming(adapter, 0); /* don't roam */
-		#endif
 
 		rtw_free_uc_swdec_pending_queue(adapter);
 
@@ -2090,14 +2084,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 		}
 		_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 
-		#ifdef CONFIG_LAYER2_ROAMING
 		_rtw_roaming(adapter, tgt_network);
-		#else
-#ifdef CONFIG_INTEL_WIDI
-		process_intel_widi_disconnect(adapter, 1);
-#endif /*  CONFIG_INTEL_WIDI */
-		#endif /* CONFIG_LAYER2_ROAMING */
-
 	}
 
 	if ( check_fwstate(pmlmepriv,WIFI_ADHOC_MASTER_STATE) ||
@@ -2170,9 +2157,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
 {
 	_irqL irqL;
 	struct	mlme_priv *pmlmepriv = &adapter->mlmepriv;
-#ifdef CONFIG_LAYER2_ROAMING
 	int do_join_r;
-#endif /* CONFIG_LAYER2_ROAMING */
 
 ;
 	DBG_871X("%s, fw_state=%x\n", __FUNCTION__, get_fwstate(pmlmepriv));
@@ -2183,7 +2168,6 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
-	#ifdef CONFIG_LAYER2_ROAMING
 	if (rtw_to_roaming(adapter) > 0) { /* join timeout caused by roaming */
 		while(1) {
 			pmlmepriv->to_roaming--;
@@ -2208,10 +2192,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
 				break;
 			}
 		}
-
-	} else
-	#endif
-	{
+	} else {
 		rtw_indicate_disconnect(adapter);
 		free_scanqueue(pmlmepriv);/*  */
 
@@ -2415,14 +2396,12 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 	if(rtw_is_desired_network(adapter, competitor)  == false)
 		goto exit;
 
-#ifdef  CONFIG_LAYER2_ROAMING
 	if(rtw_to_roaming(adapter) > 0) {
 		if(	rtw_get_passing_time_ms((u32)competitor->last_scanned) >= RTW_SCAN_RESULT_EXPIRE
 			|| is_same_ess(&competitor->network, &pmlmepriv->cur_network.network) == false
 		)
 			goto exit;
 	}
-#endif
 
 	if(*candidate == NULL ||(*candidate)->network.Rssi<competitor->network.Rssi )
 	{
@@ -2431,7 +2410,6 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 	}
 
 	if(updated){
-#ifdef  CONFIG_LAYER2_ROAMING
 		DBG_871X("[by_bssid:%u][assoc_ssid:%s]"
 			"[to_roaming:%u] "
 			"new candidate: %s("MAC_FMT") rssi:%d\n",
@@ -2442,16 +2420,6 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 			MAC_ARG((*candidate)->network.MacAddress),
 			(int)(*candidate)->network.Rssi
 		);
-#else
-		DBG_871X("[by_bssid:%u][assoc_ssid:%s]"
-			"new candidate: %s("MAC_FMT") rssi:%d\n",
-			pmlmepriv->assoc_by_bssid,
-			pmlmepriv->assoc_ssid.Ssid,
-			(*candidate)->network.Ssid.Ssid,
-			MAC_ARG((*candidate)->network.MacAddress),
-			(int)(*candidate)->network.Rssi
-		);
-#endif
 	}
 
 exit:
@@ -3243,7 +3211,6 @@ void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitfr
 
 }
 
-#ifdef CONFIG_LAYER2_ROAMING
 inline void rtw_set_roaming(struct adapter *adapter, u8 to_roaming)
 {
 	if (to_roaming == 0)
@@ -3308,7 +3275,6 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
 	}
 
 }
-#endif
 
 sint rtw_linked_check(struct adapter *padapter)
 {
