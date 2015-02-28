@@ -77,12 +77,6 @@
 #endif	// CONFIG_BR_EXT
 
 /*
- * Interface  Related Config
- */
-
-#define CONFIG_PREALLOC_RECV_SKB
-
-/*
  * USB VENDOR REQ BUFFER ALLOCATION METHOD
  * if not set we'll use function local variable (stack memory)
  */
