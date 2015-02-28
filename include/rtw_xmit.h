@@ -98,11 +98,6 @@ do{\
 
 #define TXDESC_SIZE 32
 
-#ifdef CONFIG_TX_EARLY_MODE
-#define EARLY_MODE_INFO_SIZE	8
-#endif
-
-
 #define PACKET_OFFSET_SZ (8)
 #define TXDESC_OFFSET (TXDESC_SIZE + PACKET_OFFSET_SZ)
 
@@ -411,13 +406,6 @@ struct	xmit_priv	{
 	uint free_xmit_extbuf_cnt;
 
 	u16	nqos_ssn;
-	#ifdef CONFIG_TX_EARLY_MODE
-
-	#define MAX_AGG_PKT_NUM 256 //Max tx ampdu coounts
-
-	struct agg_pkt_info agg_pkt[MAX_AGG_PKT_NUM];
-	#endif
-
 	int	ack_tx;
 	_mutex ack_tx_mutex;
 	struct submit_ctx ack_tx_ops;

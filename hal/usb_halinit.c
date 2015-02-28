@@ -1529,26 +1529,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	}
 #endif
 
-#ifdef CONFIG_TX_EARLY_MODE
-	if( pHalData->bEarlyModeEnable)
-	{
-		RT_TRACE(_module_hci_hal_init_c_, _drv_info_,("EarlyMode Enabled!!!\n"));
-
-		value8 = rtw_read8(Adapter, REG_EARLY_MODE_CONTROL);
-		value8 = value8|0xf;
-		rtw_write8(Adapter, REG_EARLY_MODE_CONTROL, value8);
-
-		rtw_write8(Adapter, REG_EARLY_MODE_CONTROL+3, 0x80);
-
-		value8 = rtw_read8(Adapter, REG_TCR+1);
-		value8 = value8|0x40;
-		rtw_write8(Adapter,REG_TCR+1, value8);
-	}
-	else
-#endif
-	{
-		rtw_write8(Adapter, REG_EARLY_MODE_CONTROL, 0);
-	}
+	rtw_write8(Adapter, REG_EARLY_MODE_CONTROL, 0);
 
 	rtw_write32(Adapter,REG_MACID_NO_LINK_0,0xFFFFFFFF);
 	rtw_write32(Adapter,REG_MACID_NO_LINK_1,0xFFFFFFFF);

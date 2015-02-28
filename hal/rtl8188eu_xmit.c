@@ -35,9 +35,6 @@ s32	rtl8188eu_init_xmit_priv(struct adapter *padapter)
 	tasklet_init(&pxmitpriv->xmit_tasklet,
 	     (void(*)(unsigned long))rtl8188eu_xmit_tasklet,
 	     (unsigned long)padapter);
-#ifdef CONFIG_TX_EARLY_MODE
-	pHalData->bEarlyModeEnable = padapter->registrypriv.early_mode;
-#endif
 
 	return _SUCCESS;
 }
@@ -255,12 +252,6 @@ if (padapter->registrypriv.mp_mode == 0)
 
 	offset = TXDESC_SIZE + OFFSET_SZ;
 
-	#ifdef CONFIG_TX_EARLY_MODE
-	if(bagg_pkt){
-		offset += EARLY_MODE_INFO_SIZE ;/* 0x28 */
-	}
-	#endif
-	/* DBG_8192C("%s==>offset(0x%02x)  \n",__FUNCTION__,offset); */
 	ptxdesc->txdw0 |= cpu_to_le32(((offset) << OFFSET_SHT) & 0x00ff0000);/* 32 bytes for TX Desc */
 
 	if (bmcst) ptxdesc->txdw0 |= cpu_to_le32(BMC);
@@ -725,11 +716,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		pxmitbuf->priv_data = pxmitframe;
 
 		pxmitframe->agg_num = 1; /*  alloc xmitframe should assign to 1. */
-		#ifdef CONFIG_TX_EARLY_MODE
-		pxmitframe->pkt_offset = 2; /*  first frame of aggregation, reserve one offset for EM info ,another for usb bulk-out block check */
-		#else
 		pxmitframe->pkt_offset = 1; /*  first frame of aggregation, reserve offset */
-		#endif
 
 		if (rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe) == false) {
 			DBG_871X("%s coalesce 1st xmitframe failed \n",__FUNCTION__);
@@ -810,17 +797,12 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		pxmitframe = LIST_CONTAINOR(xmitframe_plist, struct xmit_frame, list);
 		xmitframe_plist = get_next(xmitframe_plist);
 
-             pxmitframe->agg_num = 0; /*  not first frame of aggregation */
-		#ifdef CONFIG_TX_EARLY_MODE
-		pxmitframe->pkt_offset = 1;/*  not first frame of aggregation,reserve offset for EM Info */
-		#else
+		pxmitframe->agg_num = 0; /*  not first frame of aggregation */
 		pxmitframe->pkt_offset = 0; /*  not first frame of aggregation, no need to reserve offset */
-		#endif
 
 		len = xmitframe_need_length(pxmitframe) + TXDESC_SIZE +(pxmitframe->pkt_offset*PACKET_OFFSET_SZ);
 
-		if (_RND8(pbuf + len) > MAX_XMITBUF_SZ)
-		{
+		if (_RND8(pbuf + len) > MAX_XMITBUF_SZ) {
 			pxmitframe->agg_num = 1;
 			pxmitframe->pkt_offset = 1;
 			break;
@@ -875,10 +857,6 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 
 
 		pfirstframe->agg_num++;
-#ifdef CONFIG_TX_EARLY_MODE
-		pxmitpriv->agg_pkt[pfirstframe->agg_num-1].offset = _RND8(len);
-		pxmitpriv->agg_pkt[pfirstframe->agg_num-1].pkt_len = pxmitframe->attrib.last_txcmdsz;
-#endif
 		if (MAX_TX_AGG_PACKET_NUMBER == pfirstframe->agg_num)
 			break;
 
@@ -911,23 +889,13 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		pbuf_tail -= PACKET_OFFSET_SZ;
 		pfirstframe->buf_addr += PACKET_OFFSET_SZ;
 		pfirstframe->pkt_offset--;
-		/* DBG_8192C("$$$$$ buf size equal to USB block size $$$$$$\n"); */
 	}
 #endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
 	update_txdesc(pfirstframe, pfirstframe->buf_addr, pfirstframe->attrib.last_txcmdsz,true);
 
-        #ifdef CONFIG_TX_EARLY_MODE
-	/* prepare EM info for first frame, agg_num value start from 1 */
-	pxmitpriv->agg_pkt[0].offset = _RND8(pfirstframe->attrib.last_txcmdsz +TXDESC_SIZE +(pfirstframe->pkt_offset*PACKET_OFFSET_SZ));
-	pxmitpriv->agg_pkt[0].pkt_len = pfirstframe->attrib.last_txcmdsz;/* get from rtw_xmitframe_coalesce */
-
-	UpdateEarlyModeInfo8188E(pxmitpriv,pxmitbuf );
-	#endif
-
 	/* 3 4. write xmit buffer to USB FIFO */
 	ff_hwaddr = rtw_get_ff_hwaddr(pfirstframe);
-/* DBG_8192C("%s ===================================== write port,buf_size(%d) \n",__FUNCTION__,pbuf_tail); */
 	/*  xmit address == ((xmit_frame*)pxmitbuf->priv_data)->buf_addr */
 	rtw_write_port(padapter, ff_hwaddr, pbuf_tail, (u8*)pxmitbuf);
 

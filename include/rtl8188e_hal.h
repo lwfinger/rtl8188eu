@@ -485,10 +485,6 @@ typedef struct hal_data_8188e
 	u8	UsbRxAggBlockTimeout;
 	u8	UsbRxAggPageCount;			// 8192C DMA page count
 	u8	UsbRxAggPageTimeout;
-
-#ifdef CONFIG_TX_EARLY_MODE
-	u8			bEarlyModeEnable;
-#endif
 } HAL_DATA_8188E, *PHAL_DATA_8188E;
 
 typedef struct hal_data_8188e HAL_DATA_TYPE, *PHAL_DATA_TYPE;
