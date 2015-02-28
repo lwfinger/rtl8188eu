@@ -36,9 +36,7 @@
 #include <wifi.h>
 #include <circ_buf.h>
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 
 void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
@@ -119,20 +117,14 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
 	_rtw_init_sema(&precvpriv->allrxreturnevt, 0);
 	res = rtw_hal_init_recv_priv(padapter);
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	_init_timer(&precvpriv->signal_stat_timer, padapter->pnetdev, RTW_TIMER_HDL_NAME(signal_stat), padapter);
 
 	precvpriv->signal_stat_sampling_interval = 1000; /* ms */
 
 	rtw_set_signal_stat_timer(precvpriv);
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 
 exit:
-
-;
-
 	return res;
-
 }
 
 void rtw_mfree_recv_priv_lock(struct recv_priv *precvpriv);
@@ -3495,7 +3487,6 @@ _recv_entry_drop:
 	return ret;
 }
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
 	struct adapter *adapter = (struct adapter *)FunctionContext;
 	struct recv_priv *recvpriv = &adapter->recvpriv;
@@ -3584,4 +3575,3 @@ set_timer:
 	rtw_set_signal_stat_timer(recvpriv);
 
 }
-#endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */

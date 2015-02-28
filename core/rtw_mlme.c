@@ -1100,9 +1100,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
-	#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&adapter->recvpriv);
-	#endif
 
 	if(pmlmepriv->to_join == true)
 	{
@@ -1630,9 +1628,7 @@ static void rtw_joinbss_update_network(struct adapter *padapter, struct wlan_net
 	cur_network->aid = pnetwork->join_res;
 
 
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
-#endif
 	padapter->recvpriv.signal_strength = ptarget_wlan->network.PhyInfo.SignalStrength;
 	padapter->recvpriv.signal_qual = ptarget_wlan->network.PhyInfo.SignalQuality;
 	/* the ptarget_wlan->network.Rssi is raw data, we use ptarget_wlan->network.PhyInfo.SignalStrength instead (has scaled) */
@@ -1646,9 +1642,7 @@ static void rtw_joinbss_update_network(struct adapter *padapter, struct wlan_net
 			, padapter->recvpriv.signal_qual
 	);
 	#endif
-#ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
 	rtw_set_signal_stat_timer(&padapter->recvpriv);
-#endif
 
 	/* update fw_state will clr _FW_UNDER_LINKING here indirectly */
 	switch(pnetwork->network.InfrastructureMode)
