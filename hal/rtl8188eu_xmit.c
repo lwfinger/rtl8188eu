@@ -529,9 +529,6 @@ s32 rtl8188eu_xmit_buf_handler(struct adapter *padapter)
 }
 #endif
 
-#ifdef CONFIG_IOL_IOREG_CFG_DBG
-#include <rtw_iol.h>
-#endif
 /* for non-agg data frame or  management frame */
 static s32 rtw_dump_xframe(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {
@@ -586,9 +583,6 @@ static s32 rtw_dump_xframe(struct adapter *padapter, struct xmit_frame *pxmitfra
 		{
 			w_sz = sz + TXDESC_SIZE + PACKET_OFFSET_SZ;
 		}
-#ifdef CONFIG_IOL_IOREG_CFG_DBG
-		rtw_IOL_cmd_buf_dump(padapter,w_sz,pxmitframe->buf_addr);
-#endif
 		ff_hwaddr = rtw_get_ff_hwaddr(pxmitframe);
 
 #ifdef CONFIG_XMIT_THREAD_MODE

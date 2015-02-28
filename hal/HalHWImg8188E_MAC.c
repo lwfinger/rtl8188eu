@@ -177,10 +177,6 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	PADAPTER	Adapter =  pDM_Odm->Adapter;
 	struct xmit_frame	*pxmit_frame;
 	u8 bndy_cnt = 1;
-	#ifdef CONFIG_IOL_IOREG_CFG_DBG
-	struct cmd_cmp cmpdata[ArrayLen];
-	u32	cmpdata_idx=0;
-	#endif
 #endif /* CONFIG_IOL_IOREG_CFG */
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 	hex += board;
@@ -216,11 +212,6 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 					if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
 						bndy_cnt++;
 					rtw_IOL_append_WB_cmd(pxmit_frame,(u16)v1, (u8)v2,0xFF);
-					#ifdef CONFIG_IOL_IOREG_CFG_DBG
-						cmpdata[cmpdata_idx].addr = v1;
-						cmpdata[cmpdata_idx].value= v2;
-						cmpdata_idx++;
-					#endif
 				}
 				else
 			#endif	/* endif CONFIG_IOL_IOREG_CFG */
@@ -254,11 +245,6 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 						if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
 							bndy_cnt++;
 						rtw_IOL_append_WB_cmd(pxmit_frame,(u16)v1, (u8)v2,0xFF);
-						#ifdef CONFIG_IOL_IOREG_CFG_DBG
-							cmpdata[cmpdata_idx].addr = v1;
-							cmpdata[cmpdata_idx].value= v2;
-							cmpdata_idx++;
-						#endif
 					}
 					else
 					#endif /* ifdef CONFIG_IOL_IOREG_CFG */
@@ -284,43 +270,9 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 
 		if(rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
 		{
-			#ifdef CONFIG_IOL_IOREG_CFG_DBG
-			printk("~~~ IOL Config MAC Success !!! \n");
-			/* compare writed data */
-			{
-				u32 idx;
-				u8 cdata;
-				/*  HAL_STATUS_FAILURE; */
-				printk("  MAC data compare => array_len:%d \n",cmpdata_idx);
-				for(idx=0;idx< cmpdata_idx;idx++)
-				{
-					cdata = ODM_Read1Byte(pDM_Odm, cmpdata[idx].addr);
-					if(cdata != cmpdata[idx].value){
-						printk("### MAC data compared failed !! addr:0x%04x, data:(0x%02x : 0x%02x) ###\n",
-							cmpdata[idx].addr,cmpdata[idx].value,cdata);
-						/* rst = HAL_STATUS_FAILURE; */
-					}
-				}
-
-
-				/* dump data from TX packet buffer */
-				/* if(rst == HAL_STATUS_FAILURE) */
-				{
-					rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
-				}
-
-			}
-			#endif /* CONFIG_IOL_IOREG_CFG_DBG */
-
 		}
 		else{
 			printk("~~~ MAC IOL_exec_cmds Failed !!! \n");
-			#ifdef CONFIG_IOL_IOREG_CFG_DBG
-			{
-				/* dump data from TX packet buffer */
-				rtw_IOL_cmd_tx_pkt_buf_dump(pDM_Odm->Adapter,pxmit_frame->attrib.pktlen+32);
-			}
-			#endif /* CONFIG_IOL_IOREG_CFG_DBG */
 			rst = HAL_STATUS_FAILURE;
 		}
 
