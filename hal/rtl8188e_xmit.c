@@ -110,12 +110,7 @@ void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *pt
 
 /* define DBG_EMINFO */
 
-#if RTL8188E_EARLY_MODE_PKT_NUM_10 == 1
-	#define EARLY_MODE_MAX_PKT_NUM	10
-#else
-	#define EARLY_MODE_MAX_PKT_NUM	5
-#endif
-
+#define EARLY_MODE_MAX_PKT_NUM	5
 
 struct EMInfo{
 	u8	EMPktNum;
@@ -128,12 +123,6 @@ InsertEMContent_8188E(
 	struct EMInfo *pEMInfo,
 	IN u8 *	VirtualAddress)
 {
-
-#if RTL8188E_EARLY_MODE_PKT_NUM_10 == 1
-	u8 index=0;
-	u32	dwtmp=0;
-#endif
-
 	memset(VirtualAddress, 0, EARLY_MODE_INFO_SIZE);
 	if(pEMInfo->EMPktNum==0)
 		return;
@@ -149,51 +138,6 @@ InsertEMContent_8188E(
 	}
 	#endif
 
-#if RTL8188E_EARLY_MODE_PKT_NUM_10 == 1
-	SET_EARLYMODE_PKTNUM(VirtualAddress, pEMInfo->EMPktNum);
-
-	if(pEMInfo->EMPktNum == 1){
-		dwtmp = pEMInfo->EMPktLen[0];
-	}else{
-		dwtmp = pEMInfo->EMPktLen[0];
-		dwtmp += ((dwtmp%4)?(4-dwtmp%4):0)+4;
-		dwtmp += pEMInfo->EMPktLen[1];
-	}
-	SET_EARLYMODE_LEN0(VirtualAddress, dwtmp);
-	if(pEMInfo->EMPktNum <= 3){
-		dwtmp = pEMInfo->EMPktLen[2];
-	}else{
-		dwtmp = pEMInfo->EMPktLen[2];
-		dwtmp += ((dwtmp%4)?(4-dwtmp%4):0)+4;
-		dwtmp += pEMInfo->EMPktLen[3];
-	}
-	SET_EARLYMODE_LEN1(VirtualAddress, dwtmp);
-	if(pEMInfo->EMPktNum <= 5){
-		dwtmp = pEMInfo->EMPktLen[4];
-	}else{
-		dwtmp = pEMInfo->EMPktLen[4];
-		dwtmp += ((dwtmp%4)?(4-dwtmp%4):0)+4;
-		dwtmp += pEMInfo->EMPktLen[5];
-	}
-	SET_EARLYMODE_LEN2_1(VirtualAddress, dwtmp&0xF);
-	SET_EARLYMODE_LEN2_2(VirtualAddress, dwtmp>>4);
-	if(pEMInfo->EMPktNum <= 7){
-		dwtmp = pEMInfo->EMPktLen[6];
-	}else{
-		dwtmp = pEMInfo->EMPktLen[6];
-		dwtmp += ((dwtmp%4)?(4-dwtmp%4):0)+4;
-		dwtmp += pEMInfo->EMPktLen[7];
-	}
-	SET_EARLYMODE_LEN3(VirtualAddress, dwtmp);
-	if(pEMInfo->EMPktNum <= 9){
-		dwtmp = pEMInfo->EMPktLen[8];
-	}else{
-		dwtmp = pEMInfo->EMPktLen[8];
-		dwtmp += ((dwtmp%4)?(4-dwtmp%4):0)+4;
-		dwtmp += pEMInfo->EMPktLen[9];
-	}
-	SET_EARLYMODE_LEN4(VirtualAddress, dwtmp);
-#else
 	SET_EARLYMODE_PKTNUM(VirtualAddress, pEMInfo->EMPktNum);
 	SET_EARLYMODE_LEN0(VirtualAddress, pEMInfo->EMPktLen[0]);
 	SET_EARLYMODE_LEN1(VirtualAddress, pEMInfo->EMPktLen[1]);
@@ -201,12 +145,7 @@ InsertEMContent_8188E(
 	SET_EARLYMODE_LEN2_2(VirtualAddress, pEMInfo->EMPktLen[2]>>4);
 	SET_EARLYMODE_LEN3(VirtualAddress, pEMInfo->EMPktLen[3]);
 	SET_EARLYMODE_LEN4(VirtualAddress, pEMInfo->EMPktLen[4]);
-#endif
-	/* RT_PRINT_DATA(COMP_SEND, DBG_LOUD, "EMHdr:", VirtualAddress, 8); */
-
 }
-
-
 
 void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv,struct xmit_buf *pxmitbuf )
 {

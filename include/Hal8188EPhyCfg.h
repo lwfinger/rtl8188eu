@@ -355,7 +355,6 @@ storePwrIndexDiffRateOffset(
 #if(SIC_HW_SUPPORT == 1)
 #define	SIC_CMD_READY			0
 #define	SIC_CMD_PREWRITE		0x1
-#if(RTL8188E_SUPPORT == 1)
 #define	SIC_CMD_WRITE			0x40
 #define	SIC_CMD_PREREAD		0x2
 #define	SIC_CMD_READ			0x80
@@ -367,36 +366,17 @@ storePwrIndexDiffRateOffset(
 #define	SIC_ADDR_REG			0x1E8		// 1b4~1b5, 2 bytes
 #define	SIC_DATA_REG			0x1EC		// 1b0~1b3
 #else
-#define	SIC_CMD_WRITE			0x11
-#define	SIC_CMD_PREREAD		0x2
-#define	SIC_CMD_READ			0x12
-#define	SIC_CMD_INIT			0x1f
-#define	SIC_INIT_VAL			0xff
-
-#define	SIC_INIT_REG			0x1b7
-#define	SIC_CMD_REG			0x1b6		// 1byte
-#define	SIC_ADDR_REG			0x1b4		// 1b4~1b5, 2 bytes
-#define	SIC_DATA_REG			0x1b0		// 1b0~1b3
-#endif
-#else
 #define	SIC_CMD_READY			0
 #define	SIC_CMD_WRITE			1
 #define	SIC_CMD_READ			2
 
-#if(RTL8188E_SUPPORT == 1)
 #define	SIC_CMD_REG			0x1EB		// 1byte
 #define	SIC_ADDR_REG			0x1E8		// 1b9~1ba, 2 bytes
 #define	SIC_DATA_REG			0x1EC		// 1bc~1bf
-#else
-#define	SIC_CMD_REG			0x1b8		// 1byte
-#define	SIC_ADDR_REG			0x1b9		// 1b9~1ba, 2 bytes
-#define	SIC_DATA_REG			0x1bc		// 1bc~1bf
-#endif
 #endif
 
 #if(SIC_ENABLE == 1)
 void SIC_Init(IN struct adapter *Adapter);
 #endif
-
 
 #endif	// __INC_HAL8192CPHYCFG_H

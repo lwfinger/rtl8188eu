@@ -662,10 +662,6 @@ _InitWMACSetting(
 	 /*  don't turn on AAP, it will allow all packets to driver */
         pHalData->ReceiveConfig = RCR_APM | RCR_AM | RCR_AB |RCR_CBSSID_DATA| RCR_CBSSID_BCN| RCR_APP_ICV | RCR_AMF | RCR_HTC_LOC_CTRL | RCR_APP_MIC | RCR_APP_PHYSTS;
 
-#if (1 == RTL8188E_RX_PACKET_INCLUDE_CRC)
-	pHalData->ReceiveConfig |= ACRC32;
-#endif
-
 	/*  some REG_RCR will be modified later by phy_ConfigMACWithHeaderFile() */
 	rtw_write32(Adapter, REG_RCR, pHalData->ReceiveConfig);
 
@@ -1539,11 +1535,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 		RT_TRACE(_module_hci_hal_init_c_, _drv_info_,("EarlyMode Enabled!!!\n"));
 
 		value8 = rtw_read8(Adapter, REG_EARLY_MODE_CONTROL);
-#if RTL8188E_EARLY_MODE_PKT_NUM_10 == 1
-		value8 = value8|0x1f;
-#else
 		value8 = value8|0xf;
-#endif
 		rtw_write8(Adapter, REG_EARLY_MODE_CONTROL, value8);
 
 		rtw_write8(Adapter, REG_EARLY_MODE_CONTROL+3, 0x80);

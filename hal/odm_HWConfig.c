@@ -24,18 +24,7 @@
 
 #include "odm_precomp.h"
 
-#if (RTL8188E_FOR_TEST_CHIP > 1)
-    #define READ_AND_CONFIG(ic, txt) do {\
-                                            if (pDM_Odm->bIsMPChip)\
-						    READ_AND_CONFIG_MP(ic,txt);\
-                                            else\
-                                                READ_AND_CONFIG_TC(ic,txt);\
-                                     } while(0)
-#elif (RTL8188E_FOR_TEST_CHIP == 1)
-    #define READ_AND_CONFIG     READ_AND_CONFIG_TC
-#else
-    #define READ_AND_CONFIG     READ_AND_CONFIG_MP
-#endif
+#define READ_AND_CONFIG     READ_AND_CONFIG_MP
 
 #define READ_AND_CONFIG_MP(ic, txt) (ODM_ReadAndConfig##txt##ic(pDM_Odm))
 #define READ_AND_CONFIG_TC(ic, txt) (ODM_ReadAndConfig_TC##txt##ic(pDM_Odm))
