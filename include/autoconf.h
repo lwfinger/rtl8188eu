@@ -77,12 +77,6 @@
 #endif	// CONFIG_BR_EXT
 
 /*
- * USB VENDOR REQ BUFFER ALLOCATION METHOD
- * if not set we'll use function local variable (stack memory)
- */
-#define CONFIG_USB_VENDOR_REQ_BUFFER_PREALLOC
-
-/*
  * HAL  Related Config
  */
 
