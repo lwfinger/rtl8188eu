@@ -345,11 +345,6 @@ storePwrIndexDiffRateOffset(
 #define PHY_QueryMacReg PHY_QueryBBReg
 
 //==================================================================
-// Note: If SIC_ENABLE under PCIE, because of the slow operation
-//	you should
-//	2) "#define RTL8723_FPGA_VERIFICATION	1"				in Precomp.h.WlanE.Windows
-//	3) "#define RTL8190_Download_Firmware_From_Header	0"	in Precomp.h.WlanE.Windows if needed.
-//
 #define	SIC_ENABLE		0
 #define	SIC_HW_SUPPORT		0
 //==================================================================
