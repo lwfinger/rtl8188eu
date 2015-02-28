@@ -44,9 +44,7 @@
 	//The CONFIG_WFD is for supporting the Wi-Fi display
 	#define CONFIG_WFD
 
-	#ifndef CONFIG_WIFI_TEST
-		#define CONFIG_P2P_REMOVE_GROUP_INFO
-	#endif
+	#define CONFIG_P2P_REMOVE_GROUP_INFO
 
 	#define CONFIG_P2P_PS
 	#define P2P_OP_CHECK_SOCIAL_CH
