@@ -58,7 +58,6 @@
 #endif // CONFIG_LED
 
 #ifdef CONFIG_IOL
-	#define CONFIG_IOL_NEW_GENERATION
 	#define CONFIG_IOL_READ_EFUSE_MAP
 	#define CONFIG_IOL_EFUSE_PATCH
 #endif

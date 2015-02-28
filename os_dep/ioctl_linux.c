@@ -5948,24 +5948,16 @@ static int rtw_dbg_port(struct net_device *dev,
 						}
 
 						for(i=0;i<blink_num;i++){
-							#ifdef CONFIG_IOL_NEW_GENERATION
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x00,0xff);
 							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x08,0xff);
 							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
-							#else
-							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x00);
-							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
-							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x08);
-							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
-							#endif
 						}
 						if(_SUCCESS != rtw_IOL_exec_cmds_sync(padapter, xmit_frame, (blink_delay_ms*blink_num*2)+200,0) )
 							ret = -EPERM;
 					}
 				}
 					break;
-
 				case 0x06: /* continuous wirte byte test */
 				{
 					u16 reg = arg;
@@ -5983,11 +5975,7 @@ static int rtw_dbg_port(struct net_device *dev,
 						}
 
 						for(i=0;i<write_num;i++){
-							#ifdef CONFIG_IOL_NEW_GENERATION
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, i+start_value,0xFF);
-							#else
-							rtw_IOL_append_WB_cmd(xmit_frame, reg, i+start_value);
-							#endif
 						}
 						if(_SUCCESS != rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
 							ret = -EPERM;
@@ -6019,11 +6007,7 @@ static int rtw_dbg_port(struct net_device *dev,
 						}
 
 						for(i=0;i<write_num;i++){
-							#ifdef CONFIG_IOL_NEW_GENERATION
 							rtw_IOL_append_WW_cmd(xmit_frame, reg, i+start_value,0xFFFF);
-							#else
-							rtw_IOL_append_WW_cmd(xmit_frame, reg, i+start_value);
-							#endif
 						}
 						if(_SUCCESS !=rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
 							ret = -EPERM;
@@ -6055,11 +6039,7 @@ static int rtw_dbg_port(struct net_device *dev,
 						}
 
 						for(i=0;i<write_num;i++){
-							#ifdef CONFIG_IOL_NEW_GENERATION
 							rtw_IOL_append_WD_cmd(xmit_frame, reg, i+start_value,0xFFFFFFFF);
-							#else
-							rtw_IOL_append_WD_cmd(xmit_frame, reg, i+start_value);
-							#endif
 						}
 						if(_SUCCESS !=rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
 							ret = -EPERM;
