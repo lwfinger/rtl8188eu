@@ -2888,42 +2888,33 @@ s32 InitLLTTable(struct adapter *padapter, u8 txpktbuf_bndy)
 	u32	Last_Entry_Of_TxPktBuf = LAST_ENTRY_OF_TX_PKT_BUFFER;/*  176, 22k */
 	HAL_DATA_TYPE *pHalData	= GET_HAL_DATA(padapter);
 
-#if defined(CONFIG_IOL_LLT)
-	if(rtw_IOL_applied(padapter))
-	{
-		status = iol_InitLLTTable(padapter, txpktbuf_bndy);
+	for (i = 0; i < (txpktbuf_bndy - 1); i++) {
+		status = _LLTWrite(padapter, i, i + 1);
+		if (_SUCCESS != status) {
+			return status;
+		}
 	}
-	else
-#endif
-	{
-		for (i = 0; i < (txpktbuf_bndy - 1); i++) {
-			status = _LLTWrite(padapter, i, i + 1);
-			if (_SUCCESS != status) {
-				return status;
-			}
-		}
 
-		/*  end of list */
-		status = _LLTWrite(padapter, (txpktbuf_bndy - 1), 0xFF);
+	/*  end of list */
+	status = _LLTWrite(padapter, (txpktbuf_bndy - 1), 0xFF);
+	if (_SUCCESS != status) {
+		return status;
+	}
+
+	/*  Make the other pages as ring buffer */
+	/*  This ring buffer is used as beacon buffer if we config this MAC as two MAC transfer. */
+	/*  Otherwise used as local loopback buffer. */
+	for (i = txpktbuf_bndy; i < Last_Entry_Of_TxPktBuf; i++) {
+		status = _LLTWrite(padapter, i, (i + 1));
 		if (_SUCCESS != status) {
 			return status;
 		}
+	}
 
-		/*  Make the other pages as ring buffer */
-		/*  This ring buffer is used as beacon buffer if we config this MAC as two MAC transfer. */
-		/*  Otherwise used as local loopback buffer. */
-		for (i = txpktbuf_bndy; i < Last_Entry_Of_TxPktBuf; i++) {
-			status = _LLTWrite(padapter, i, (i + 1));
-			if (_SUCCESS != status) {
-				return status;
-			}
-		}
-
-		/*  Let last entry point to the start entry of ring buffer */
-		status = _LLTWrite(padapter, Last_Entry_Of_TxPktBuf, txpktbuf_bndy);
-		if (_SUCCESS != status) {
-			return status;
-		}
+	/*  Let last entry point to the start entry of ring buffer */
+	status = _LLTWrite(padapter, Last_Entry_Of_TxPktBuf, txpktbuf_bndy);
+	if (_SUCCESS != status) {
+		return status;
 	}
 
 	return status;
