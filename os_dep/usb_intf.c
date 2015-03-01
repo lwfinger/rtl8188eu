@@ -748,7 +748,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
 
 
-#ifdef CONFIG_IOL_READ_EFUSE_MAP
+#ifdef CONFIG_IOL
 	if(!padapter->bup){
 		u8 bMacPwrCtrlOn = false;
 		rtw_hal_get_hwreg(padapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);

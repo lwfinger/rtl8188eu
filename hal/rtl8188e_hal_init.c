@@ -1427,7 +1427,7 @@ ReadEFuseByIC(
 	u8 logical_map[512];
 #endif
 
-#ifdef CONFIG_IOL_READ_EFUSE_MAP
+#ifdef CONFIG_IOL
 	if(!bPseudoTest )/*  rtw_IOL_applied(Adapter)) */
 	{
 		int ret = _FAIL;
