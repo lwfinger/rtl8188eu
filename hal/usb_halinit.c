@@ -1395,12 +1395,6 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC01);
 	_InitPageBoundary(Adapter);
 	_InitTransferPageSize(Adapter);
 
-#ifdef CONFIG_IOL_IOREG_CFG
-	_InitTxBufferBoundary(Adapter, 0);
-#endif
-
-
-
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
 #if (MP_DRIVER == 1)
 	if (Adapter->registrypriv.mp_mode == 1)

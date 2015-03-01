@@ -20,10 +20,6 @@
 
 #include "odm_precomp.h"
 
-#ifdef CONFIG_IOL_IOREG_CFG
-#include <rtw_iol.h>
-#endif
-
 static BOOLEAN
 CheckCondition(
     const u32  Condition,
@@ -193,75 +189,21 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 	u32     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u32);
 	u32 *    Array       = Array_RadioA_1T_8188E;
 	BOOLEAN		biol = FALSE;
-#ifdef CONFIG_IOL_IOREG_CFG
-	PADAPTER	Adapter =  pDM_Odm->Adapter;
-	struct xmit_frame	*pxmit_frame;
-	u8 bndy_cnt = 1;
-#endif/* ifdef CONFIG_IOL_IOREG_CFG */
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 
 	hex += board;
 	hex += interfaceValue << 8;
 	hex += platform << 16;
 	hex += 0xFF000000;
-#ifdef CONFIG_IOL_IOREG_CFG
-	biol = rtw_IOL_applied(Adapter);
+	for (i = 0; i < ArrayLen; i += 2 ) {
+		u32 v1 = Array[i];
+		u32 v2 = Array[i+1];
 
-	if(biol){
-		if((pxmit_frame=rtw_IOL_accquire_xmit_frame(Adapter)) == NULL)
-		{
-			printk("rtw_IOL_accquire_xmit_frame failed\n");
-			return HAL_STATUS_FAILURE;
-		}
-	}
-#endif/* ifdef CONFIG_IOL_IOREG_CFG */
-
-	for (i = 0; i < ArrayLen; i += 2 )
-	{
-	    u32 v1 = Array[i];
-	    u32 v2 = Array[i+1];
-
-	    /*  This (offset, data) pair meets the condition. */
-	    if ( v1 < 0xCDCDCDCD )
-	    {
-			#ifdef CONFIG_IOL_IOREG_CFG
-			if(biol){
-				if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
-					bndy_cnt++;
-
-				if(v1 == 0xffe)
-				{
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,50);
-				}
-				else if (v1 == 0xfd){
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,5);
-				}
-				else if (v1 == 0xfc){
-					rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,1);
-				}
-				else if (v1 == 0xfb){
-					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,50);
-				}
-				else if (v1 == 0xfa){
-					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,5);
-				}
-				else if (v1 == 0xf9){
-					rtw_IOL_append_DELAY_US_cmd(pxmit_frame,1);
-				}
-				else{
-					rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u16)v1, v2,bRFRegOffsetMask) ;
-				}
-
-			}
-			else
-			#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
-			{
-				odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
-			}
-		    continue;
-		}
-		else
-		{ /*  This line is the start line of branch. */
+		/*  This (offset, data) pair meets the condition. */
+		if ( v1 < 0xCDCDCDCD ) {
+			odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
+			continue;
+		} else { /*  This line is the start line of branch. */
 		    if ( !CheckCondition(Array[i], hex) )
 		    { /*  Discard the following (offset, data) pairs. */
 		        READ_NEXT_PAIR(v1, v2, i);
@@ -280,41 +222,8 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 		               v2 != 0xCDEF &&
 		               v2 != 0xCDCD && i < ArrayLen -2)
 		        {
-				#ifdef CONFIG_IOL_IOREG_CFG
-				if(biol){
-					if(rtw_IOL_cmd_boundary_handle(pxmit_frame))
-						bndy_cnt++;
-
-					if(v1 == 0xffe)
-					{
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,50);
-					}
-					else if (v1 == 0xfd){
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,5);
-					}
-					else if (v1 == 0xfc){
-						rtw_IOL_append_DELAY_MS_cmd(pxmit_frame,1);
-					}
-					else if (v1 == 0xfb){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,50);
-					}
-					else if (v1 == 0xfa){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,5);
-					}
-					else if (v1 == 0xf9){
-						rtw_IOL_append_DELAY_US_cmd(pxmit_frame,1);
-					}
-					else{
-						rtw_IOL_append_WRF_cmd(pxmit_frame, ODM_RF_PATH_A,(u16)v1, v2,bRFRegOffsetMask) ;
-					}
-
-				}
-				else
-				#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
-				{
-					odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
-				}
-		            READ_NEXT_PAIR(v1, v2, i);
+				odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
+				READ_NEXT_PAIR(v1, v2, i);
 		        }
 
 		        while (v2 != 0xDEAD && i < ArrayLen -2)
@@ -325,20 +234,6 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 		    }
 		}
 	}
-#ifdef CONFIG_IOL_IOREG_CFG
-	if(biol){
-		/* printk("==> %s, pktlen = %d,bndy_cnt = %d\n",__FUNCTION__,pxmit_frame->attrib.pktlen+4+32,bndy_cnt); */
-		if(rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt))
-		{
-		}
-		else{
-			rst = HAL_STATUS_FAILURE;
-			printk("~~~ IOL Config %s Failed !!! \n",__FUNCTION__);
-		}
-	}
-
-
-#endif	/* ifdef CONFIG_IOL_IOREG_CFG */
 	return rst;
 }
 /******************************************************************************
