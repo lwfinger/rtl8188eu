@@ -1461,7 +1461,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
 #endif
 
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
-#if defined(CONFIG_IOL_EFUSE_PATCH)
+#if defined(CONFIG_IOL)
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if(status == _FAIL){
 		DBG_871X("%s  rtl8188e_iol_efuse_patch failed \n",__FUNCTION__);

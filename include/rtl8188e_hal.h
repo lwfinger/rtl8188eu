@@ -548,8 +548,8 @@ void rtl8188e_start_thread(struct adapter *padapter);
 void rtl8188e_stop_thread(struct adapter *padapter);
 
 void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter,int data_len);
-#ifdef CONFIG_IOL_EFUSE_PATCH
+#ifdef CONFIG_IOL
 s32 rtl8188e_iol_efuse_patch(struct adapter *padapter);
-#endif//CONFIG_IOL_EFUSE_PATCH
+#endif//CONFIG_IOL
 
 #endif //__RTL8188E_HAL_H__

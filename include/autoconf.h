@@ -57,11 +57,6 @@
 	#define CONFIG_SW_LED
 #endif // CONFIG_LED
 
-#ifdef CONFIG_IOL
-	#define CONFIG_IOL_EFUSE_PATCH
-#endif
-
-
 #define USB_INTERFERENCE_ISSUE // this should be checked in all usb interface
 #define CONFIG_GLOBAL_UI_PID
 
