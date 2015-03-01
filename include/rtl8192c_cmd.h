@@ -96,12 +96,10 @@ u8	rtl8192c_set_FwSelectSuspend_cmd(struct adapter*padapter,u8 bfwpoll, u16 peri
 void	rtl8192c_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state);
 #endif //CONFIG_P2P
 
-#ifdef CONFIG_IOL
 typedef struct _IO_OFFLOAD_LOC{
 	u8	LocCmd;
 }IO_OFFLOAD_LOC, *PIO_OFFLOAD_LOC;
 int rtl8192c_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
-#endif //CONFIG_IOL
 
 #ifdef CONFIG_BEACON_DISABLE_OFFLOAD
 u8 rtl8192c_dis_beacon_fun_cmd(struct adapter* padapter);

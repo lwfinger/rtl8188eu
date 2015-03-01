@@ -250,9 +250,7 @@ struct hal_ops {
 	bool (*sreset_inprogress)(struct adapter *padapter);
 #endif
 
-#ifdef CONFIG_IOL
 	int (*IOL_exec_cmds_sync)(struct adapter *padapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
-#endif
 
 #ifdef CONFIG_XMIT_THREAD_MODE
 	s32 (*xmit_thread_handler)(struct adapter *padapter);
@@ -459,9 +457,7 @@ u8   rtw_hal_sreset_get_wifi_status(struct adapter *padapter);
 bool rtw_hal_sreset_inprogress(struct adapter *padapter);
 #endif
 
-#ifdef CONFIG_IOL
 int rtw_hal_iol_cmd(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
-#endif
 
 #ifdef CONFIG_XMIT_THREAD_MODE
 s32 rtw_hal_xmit_thread_handler(struct adapter *padapter);

@@ -20,7 +20,6 @@
 
 #include<rtw_iol.h>
 
-#ifdef CONFIG_IOL
 struct xmit_frame	*rtw_IOL_accquire_xmit_frame(struct adapter *adapter)
 {
 	struct xmit_frame	*xmit_frame;
@@ -259,5 +258,3 @@ void rtw_IOL_cmd_buf_dump(struct adapter *Adapter,int buf_len,u8 *pbuf)
 	printk("\n");
 	printk("============= ioreg_cmd len = %d =============== \n",buf_len);
 }
-
-#endif /* CONFIG_IOL */

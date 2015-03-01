@@ -26,7 +26,6 @@
 
 #include <rtw_iol.h>
 
-#if defined(CONFIG_IOL)
 #include <usb_ops.h>
 
 static void iol_mode_enable(struct adapter *padapter, u8 enable)
@@ -514,9 +513,6 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter,int data_len)
 	}
 	printk("###### %s ######\n",__FUNCTION__);
 }
-
-#endif /* defined(CONFIG_IOL) */
-
 
 static void
 _FWDownloadEnable(
@@ -1427,7 +1423,6 @@ ReadEFuseByIC(
 	u8 logical_map[512];
 #endif
 
-#ifdef CONFIG_IOL
 	if(!bPseudoTest )/*  rtw_IOL_applied(Adapter)) */
 	{
 		int ret = _FAIL;
@@ -1447,7 +1442,6 @@ ReadEFuseByIC(
 				goto exit;
 		}
 	}
-#endif
 	Hal_EfuseReadEFuse88E(Adapter, _offset, _size_byte, pbuf, bPseudoTest);
 
 exit:
@@ -2797,12 +2791,9 @@ void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc)
 	pHalFunc->xmit_thread_handler = &hal_xmit_handler;
 #endif
 
-#ifdef CONFIG_IOL
 	pHalFunc->IOL_exec_cmds_sync = &rtl8188e_IOL_exec_cmds_sync;
-#endif
 
 	pHalFunc->hal_notch_filter = &hal_notch_filter_8188e;
-
 }
 
 u8 GetEEPROMSize8188E(struct adapter *padapter)

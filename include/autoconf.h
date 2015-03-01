@@ -32,8 +32,6 @@
 
  #define CONFIG_SUPPORT_USB_INT
 
-	#define CONFIG_IOL
-
 #define CONFIG_AP_MODE
 #ifdef CONFIG_AP_MODE
 	#define CONFIG_FIND_BEST_CHANNEL

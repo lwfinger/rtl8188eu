@@ -22,13 +22,8 @@
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
-
-#ifdef CONFIG_IOL
 #include <rtw_iol.h>
-#endif
-
 #include <rtl8188e_hal.h>
-
 
 /*---------------------------Define Local Constant---------------------------*/
 /* Channel switch:The size of command tables for switch channel*/

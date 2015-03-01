@@ -220,11 +220,9 @@ static uint rtw_max_roaming_times=2;
 module_param(rtw_max_roaming_times, uint, 0644);
 MODULE_PARM_DESC(rtw_max_roaming_times,"The max roaming times to try");
 
-#ifdef CONFIG_IOL
 static int rtw_fw_iol=1;/*  0:Disable, 1:enable, 2:by usb speed */
 module_param(rtw_fw_iol, int, 0644);
 MODULE_PARM_DESC(rtw_fw_iol,"FW IOL");
-#endif /* CONFIG_IOL */
 
 #ifdef CONFIG_FILE_FWIMG
 static char *rtw_fw_file_path= "";
@@ -369,9 +367,7 @@ static uint loadparam( struct adapter *padapter,  _nic_hdl	pnetdev)
 	registry_par->max_roaming_times = (u8)rtw_max_roaming_times + 2;
 #endif /*  CONFIG_INTEL_WIDI */
 
-#ifdef CONFIG_IOL
 	registry_par->fw_iol = rtw_fw_iol;
-#endif
 
 #ifdef CONFIG_80211D
 	registry_par->enable80211d = (u8)rtw_80211d;

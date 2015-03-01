@@ -26,11 +26,7 @@
 
 #include <rtl8188e_hal.h>
 #include <rtl8188e_led.h>
-
-#ifdef CONFIG_IOL
 #include <rtw_iol.h>
-#endif
-
 #include <usb_ops.h>
 #include <usb_hal.h>
 #include <usb_osintf.h>
@@ -1461,13 +1457,11 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
 #endif
 
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
-#if defined(CONFIG_IOL)
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if(status == _FAIL){
 		DBG_871X("%s  rtl8188e_iol_efuse_patch failed \n",__FUNCTION__);
 		goto exit;
 	}
-#endif
 
 	_InitTxBufferBoundary(Adapter, txpktbuf_bndy);
 
