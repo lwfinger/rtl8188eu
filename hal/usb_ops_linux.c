@@ -300,7 +300,6 @@ static int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata
 	return usbctrl_vendorreq(pintfhdl, request, wvalue, index, buf, len, requesttype);
 }
 
-#ifdef CONFIG_SUPPORT_USB_INT
 static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pbuf)
 {
 	HAL_DATA_TYPE	*pHalData=GET_HAL_DATA(padapter);
@@ -333,7 +332,6 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 	}
 
 }
-#endif
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 static void usb_read_interrupt_complete(struct urb *purb, struct pt_regs *regs)
@@ -609,17 +607,10 @@ static int recvbuf2recvframe(struct adapter *padapter, _pkt *pskb)
 							pattrib->MacIDValidEntry[0],
 							pattrib->MacIDValidEntry[1]
 							);
-
-			}
-			else if (pattrib->pkt_rpt_type == HIS_REPORT)
-			{
-				/* DBG_8192C("%s , rx USB HISR \n",__FUNCTION__); */
-				#ifdef CONFIG_SUPPORT_USB_INT
+			} else if (pattrib->pkt_rpt_type == HIS_REPORT) {
 				interrupt_handler_8188eu(padapter,pattrib->pkt_len,precvframe->u.hdr.rx_data);
-				#endif
 			}
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
-
 		}
 
 		pkt_cnt--;
