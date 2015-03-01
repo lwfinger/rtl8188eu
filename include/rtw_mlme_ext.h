@@ -439,7 +439,7 @@ typedef struct _RT_CHANNEL_INFO
 	//u16				ScanPeriod;		// Listen time in millisecond in this channel.
 	//s32				MaxTxPwrDbm;	// Max allowed tx power.
 	//u32				ExInfo;			// Extended Information for this channel.
-#ifdef CONFIG_FIND_BEST_CHANNEL
+#ifdef CONFIG_AP_MODE
 	u32				rx_count;
 #endif
 }RT_CHANNEL_INFO, *PRT_CHANNEL_INFO;

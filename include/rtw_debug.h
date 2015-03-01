@@ -373,7 +373,7 @@ extern u32 GlobalDebugLevel;
 
 #endif
 
-#ifdef CONFIG_FIND_BEST_CHANNEL
+#ifdef CONFIG_AP_MODE
 	int proc_get_best_channel(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data);

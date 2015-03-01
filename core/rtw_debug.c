@@ -1042,7 +1042,7 @@ int proc_get_all_sta_info(char *page, char **start,
 
 #endif
 
-#ifdef CONFIG_FIND_BEST_CHANNEL
+#ifdef CONFIG_AP_MODE
 int proc_get_best_channel(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data)
@@ -1127,7 +1127,7 @@ int proc_set_best_channel(struct file *file, const char __user *buffer,
 
 	return count;
 }
-#endif /* CONFIG_FIND_BEST_CHANNEL */
+#endif /* CONFIG_AP_MODE */
 #ifdef CONFIG_BT_COEXIST
 #define _bt_dbg_off_		0
 #define _bt_dbg_on_		1

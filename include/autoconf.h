@@ -31,9 +31,6 @@
 #define CONFIG_EMBEDDED_FWIMG
 
 #define CONFIG_AP_MODE
-#ifdef CONFIG_AP_MODE
-	#define CONFIG_FIND_BEST_CHANNEL
-#endif
 
 #define CONFIG_P2P
 #ifdef CONFIG_P2P
