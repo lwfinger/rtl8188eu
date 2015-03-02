@@ -21,7 +21,6 @@ CONFIG_USB_HCI = y
 CONFIG_POWER_SAVING = y
 CONFIG_USB_AUTOSUSPEND = n
 CONFIG_BT_COEXIST = n
-CONFIG_INTEL_WIDI = n
 CONFIG_WAPI_SUPPORT = n
 CONFIG_EFUSE_CONFIG_FILE = n
 CONFIG_EXT_CLK = n
@@ -108,10 +107,6 @@ ifeq ($(CONFIG_RTL8192CU_REDEFINE_1X1), y)
 EXTRA_CFLAGS += -DRTL8192C_RECONFIG_TO_1T1R
 endif
 
-ifeq ($(CONFIG_INTEL_WIDI), y)
-EXTRA_CFLAGS += -DCONFIG_INTEL_WIDI
-endif
-
 ifeq ($(CONFIG_WAPI_SUPPORT), y)
 EXTRA_CFLAGS += -DCONFIG_WAPI_SUPPORT
 endif
@@ -183,8 +178,6 @@ rtk_core :=	core/rtw_cmd.o \
 		core/rtw_odm.o
 
 8188eu-y += $(rtk_core)
-
-8188eu-$(CONFIG_INTEL_WIDI) += core/rtw_intel_widi.o
 
 8188eu-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
 		core/rtw_wapi_sms4.o

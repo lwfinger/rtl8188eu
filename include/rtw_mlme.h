@@ -26,13 +26,7 @@
 #include <drv_types.h>
 #include <wlan_bssdef.h>
 
-#ifdef CONFIG_INTEL_WIDI
-#include <rtw_intel_widi.h>
-#endif
-
 #define	MAX_BSS_CNT	128
-//#define   MAX_JOIN_TIMEOUT	2000
-//#define   MAX_JOIN_TIMEOUT	2500
 #define   MAX_JOIN_TIMEOUT	6500
 
 //	Commented by Albert 20101105
@@ -532,33 +526,6 @@ struct mlme_priv {
 	_workitem	Linkup_workitem;
 	_workitem	Linkdown_workitem;
 #endif
-
-#ifdef CONFIG_INTEL_WIDI
-	int	widi_state;
-	int	listen_state;
-	_timer	listen_timer;
-	ATOMIC_T	rx_probe_rsp; // 1:receive probe respone from RDS source.
-	u8	*l2sdTaBuffer;
-	u8	channel_idx;
-	u8	group_cnt;	//In WiDi 3.5, they specified another scan algo. for WFD/RDS co-existed
-	u8	sa_ext[L2SDTA_SERVICE_VE_LEN];
-
-	u8	widi_enable;
-	/**
-	 * For WiDi 4; upper layer would set
-	 * p2p_primary_device_type_category_id
-	 * p2p_primary_device_type_sub_category_id
-	 * p2p_secondary_device_type_category_id
-	 * p2p_secondary_device_type_sub_category_id
-	 */
-	u16	p2p_pdt_cid;
-	u16	p2p_pdt_scid;
-	u8	num_p2p_sdt;
-	u16	p2p_sdt_cid[MAX_NUM_P2P_SDT];
-	u16	p2p_sdt_scid[MAX_NUM_P2P_SDT];
-	u8	p2p_reject_disable;	//When starting NL80211 wpa_supplicant/hostapd, it will call netdev_close
-							//such that it will cause p2p disabled. Use this flag to reject.
-#endif // CONFIG_INTEL_WIDI
 };
 
 #ifdef CONFIG_AP_MODE

@@ -3506,14 +3506,9 @@ static int rtw_wps_start(struct net_device *dev,
 		rtw_led_control(padapter, LED_CTL_STOP_WPS_FAIL);
 	}
 
-#ifdef CONFIG_INTEL_WIDI
-	process_intel_widi_wps_status(padapter, u32wps_start);
-#endif /* CONFIG_INTEL_WIDI */
-
 exit:
 
 	return ret;
-
 }
 
 #ifdef CONFIG_P2P
@@ -5168,20 +5163,10 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 
 	DBG_871X( "[%s] data = %s\n", __FUNCTION__, extra );
 
-	if ( pwdinfo->p2p_state == P2P_STATE_NONE )
-	{
+	if ( pwdinfo->p2p_state == P2P_STATE_NONE ) {
 		DBG_871X( "[%s] WiFi Direct is disable!\n", __FUNCTION__ );
 		return ret;
-	}
-	else
-	{
-#ifdef CONFIG_INTEL_WIDI
-		if(check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true){
-			DBG_871X( "[%s] WiFi is under survey!\n", __FUNCTION__ );
-			return ret;
-		}
-#endif /* CONFIG_INTEL_WIDI */
-
+	} else {
 		/* 	Reset the content of struct tx_provdisc_req_info excluded the wps_config_method_request. */
 		memset( pwdinfo->tx_prov_disc_info.peerDevAddr, 0x00, ETH_ALEN );
 		memset( pwdinfo->tx_prov_disc_info.peerIFAddr, 0x00, ETH_ALEN );
@@ -5192,9 +5177,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 	}
 
 	for( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
-	{
 		peerMAC[ jj ] = key_2char2num( extra[kk], extra[kk+ 1] );
-	}
 
 	if ( _rtw_memcmp( &extra[ 18 ], "display", 7 ) )
 	{
@@ -5272,23 +5255,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 				p2pie = rtw_get_p2p_ie(p2pie+p2pielen, pnetwork->network.IELength - ie_offset -(p2pie -&pnetwork->network.IEs[ie_offset] + p2pielen), NULL, &p2pielen);
 			}
 		}
-
-#ifdef CONFIG_INTEL_WIDI
-		/*  Some Intel WiDi source may not provide P2P IE, */
-		/*  so we could only compare mac addr by 802.11 Source Address */
-		if( pmlmepriv->widi_state == INTEL_WIDI_STATE_WFD_CONNECTION
-			&& uintPeerChannel == 0 )
-		{
-			if ( _rtw_memcmp( pnetwork->network.MacAddress, peerMAC, ETH_ALEN ) )
-			{
-				uintPeerChannel = pnetwork->network.Configuration.DSConfig;
-				break;
-			}
-		}
-#endif /* CONFIG_INTEL_WIDI */
-
 		plist = get_next(plist);
-
 	}
 
 	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
@@ -5358,14 +5325,6 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 		_set_timer( &pwdinfo->restore_p2p_state_timer, P2P_PROVISION_TIMEOUT );
 	} else {
 		DBG_871X( "[%s] NOT Found in the Scanning Queue!\n", __FUNCTION__ );
-#ifdef CONFIG_INTEL_WIDI
-		rtw_p2p_set_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH);
-		rtw_p2p_findphase_ex_set(pwdinfo, P2P_FINDPHASE_EX_NONE);
-		rtw_free_network_queue(padapter, true);
-		_enter_critical_bh(&pmlmepriv->lock, &irqL);
-		rtw_sitesurvey_cmd(padapter, NULL, 0, NULL, 0);
-		_exit_critical_bh(&pmlmepriv->lock, &irqL);
-#endif /* CONFIG_INTEL_WIDI */
 	}
 exit:
 
@@ -9703,42 +9662,6 @@ static int rtw_tdls_get(struct net_device *dev,
 
 
 
-#ifdef CONFIG_INTEL_WIDI
-static int rtw_widi_set(struct net_device *dev,
-                               struct iw_request_info *info,
-                               union iwreq_data *wrqu, char *extra)
-{
-	int ret = 0;
-	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-
-	process_intel_widi_cmd(padapter, extra);
-
-	return ret;
-}
-
-static int rtw_widi_set_probe_request(struct net_device *dev,
-                               struct iw_request_info *info,
-                               union iwreq_data *wrqu, char *extra)
-{
-	int	ret = 0;
-	u8	*pbuf = NULL;
-	struct adapter	*padapter = (struct adapter *)rtw_netdev_priv(dev);
-
-	pbuf = rtw_malloc(sizeof(l2_msg_t));
-	if(pbuf)
-	{
-		copy_from_user(pbuf, wrqu->data.pointer, wrqu->data.length);
-		/* memcpy(pbuf, wrqu->data.pointer, wrqu->data.length); */
-
-		if( wrqu->data.flags == 0 )
-		intel_widi_wk_cmd(padapter, INTEL_WIDI_ISSUE_PROB_WK, pbuf);
-		else if( wrqu->data.flags == 1 )
-			rtw_set_wfd_rds_sink_info( padapter, (l2_msg_t *)pbuf );
-	}
-	return ret;
-}
-#endif /*  CONFIG_INTEL_WIDI */
-
 #ifdef CONFIG_MAC_LOOPBACK_DRIVER
 
 #include <rtl8188e_hal.h>
@@ -10469,17 +10392,6 @@ static const struct iw_priv_args rtw_private_args[] = {
 		IW_PRIV_TYPE_CHAR | 40, IW_PRIV_TYPE_CHAR | 0x7FF, "test"
 	},
 
-#ifdef CONFIG_INTEL_WIDI
-	{
-		SIOCIWFIRSTPRIV + 0x1E,
-		IW_PRIV_TYPE_CHAR | 1024, 0, "widi_set"
-	},
-	{
-		SIOCIWFIRSTPRIV + 0x1F,
-		IW_PRIV_TYPE_CHAR | 128, 0, "widi_prob_req"
-	},
-#endif /*  CONFIG_INTEL_WIDI */
-
 #ifdef CONFIG_WOWLAN
 		{ MP_WOW_ENABLE , IW_PRIV_TYPE_CHAR | 1024, 0, "wow_enable" }, /* set */
 #endif
@@ -10530,10 +10442,6 @@ static iw_handler rtw_private_handler[] =
 	rtw_mp_efuse_get,				/* 0x1B */
 	NULL,							/*  0x1C is reserved for hostapd */
 	rtw_test,						/*  0x1D */
-#ifdef CONFIG_INTEL_WIDI
-	rtw_widi_set,					/* 0x1E */
-	rtw_widi_set_probe_request,		/* 0x1F */
-#endif /*  CONFIG_INTEL_WIDI */
 };
 
 #if WIRELESS_EXT >= 17
