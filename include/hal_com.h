@@ -157,7 +157,7 @@ hal_com_get_channel_plan(
 	IN	u8			hw_channel_plan,	//channel plan from HW (efuse/eeprom)
 	IN	u8			sw_channel_plan,	//channel plan from SW (registry/module param)
 	IN	u8			def_channel_plan,	//channel plan used when the former two is invalid
-	IN	BOOLEAN		AutoLoadFail
+	IN	bool		AutoLoadFail
 	);
 
 u8	MRateToHwRate(u8 rate);
@@ -167,7 +167,7 @@ void	HalSetBrateCfg(
 	IN u8			*mBratesOS,
 	OUT u16			*pBrateCfg);
 
-BOOLEAN
+bool
 Hal_MappingOutPipe(
 	IN	struct adapter *pAdapter,
 	IN	u8		NumOutPipe

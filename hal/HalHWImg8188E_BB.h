@@ -21,7 +21,7 @@
 #ifndef __INC_BB_8188E_HW_IMG_H
 #define __INC_BB_8188E_HW_IMG_H
 
-/* static BOOLEAN CheckCondition(const u32 Condition, const u32 Hex); */
+/* static bool CheckCondition(const u32 Condition, const u32 Hex); */
 
 /******************************************************************************
 *                           AGC_TAB_1T.TXT

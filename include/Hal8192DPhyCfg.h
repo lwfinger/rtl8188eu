@@ -321,7 +321,7 @@ void	rtl8192d_PHY_GetHWRegOriginalValue(	IN	struct adapter *	Adapter	);
 //
 // RF Power setting
 //
-//extern	BOOLEAN	PHY_SetRFPowerState(IN	struct adapter *		Adapter,
+//extern	bool	PHY_SetRFPowerState(IN	struct adapter *		Adapter,
 //									IN	RT_RF_POWER_STATE	eRFPowerState);
 
 //
@@ -331,7 +331,7 @@ void	PHY_GetTxPowerLevel8192D(	IN	struct adapter *	Adapter,
 											OUT u32*		powerlevel	);
 void	PHY_SetTxPowerLevel8192D(	IN	struct adapter *	Adapter,
 											IN	u8			channel	);
-BOOLEAN	PHY_UpdateTxPowerDbm8192D(	IN	struct adapter *Adapter,
+bool	PHY_UpdateTxPowerDbm8192D(	IN	struct adapter *Adapter,
 											IN	int		powerInDbm	);
 
 //
@@ -350,7 +350,7 @@ void	PHY_SetBWMode8192D(	IN	struct adapter *		pAdapter,
 //
 // Set FW CMD IO for 8192S.
 //
-//extern	BOOLEAN HalSetIO8192C(	IN	struct adapter *		Adapter,
+//extern	bool HalSetIO8192C(	IN	struct adapter *		Adapter,
 //									IN	IO_TYPE				IOType);
 
 //
@@ -378,9 +378,9 @@ extern void ChkFwCmdIoDone(	IN	struct adapter *Adapter);
 // BB/MAC/RF other monitor API
 //
 void	PHY_SetMonitorMode8192D(IN	struct adapter *pAdapter,
-										IN	BOOLEAN		bEnableMonitorMode	);
+										IN	bool		bEnableMonitorMode	);
 
-BOOLEAN	PHY_CheckIsLegalRfPath8192D(IN	struct adapter *pAdapter,
+bool	PHY_CheckIsLegalRfPath8192D(IN	struct adapter *pAdapter,
 											IN	u32		eRFPath	);
 
 
@@ -402,7 +402,7 @@ PHY_EnableHostClkReq(
 	IN	struct adapter *		Adapter
 	);
 
-BOOLEAN
+bool
 SetAntennaConfig92C(
 	IN	struct adapter *Adapter,
 	IN	u8		DefaultAnt
@@ -411,12 +411,12 @@ SetAntennaConfig92C(
 void
 PHY_UpdateBBRFConfiguration8192D(
 	IN struct adapter *Adapter,
-	IN BOOLEAN bisBandSwitch
+	IN bool bisBandSwitch
 );
 
 void PHY_ReadMacPhyMode92D(
 	IN struct adapter *Adapter,
-	IN BOOLEAN	AutoloadFail
+	IN bool	AutoloadFail
 );
 
 void PHY_ConfigMacPhyMode92D(
@@ -438,12 +438,12 @@ rtl8192d_PHY_InitRxSetting(
 
 
 void
-rtl8192d_PHY_SetRFPathSwitch(IN	struct adapter *pAdapter, IN	BOOLEAN		bMain);
+rtl8192d_PHY_SetRFPathSwitch(IN	struct adapter *pAdapter, IN	bool		bMain);
 
 void
 HalChangeCCKStatus8192D(
 	IN	struct adapter *Adapter,
-	IN	BOOLEAN		bCCKDisable
+	IN	bool		bCCKDisable
 );
 
 void

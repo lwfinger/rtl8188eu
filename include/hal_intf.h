@@ -197,8 +197,8 @@ struct hal_ops {
 	u8	(*GetHalDefVarHandler)(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
 	u8	(*SetHalDefVarHandler)(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
 
-	void	(*GetHalODMVarHandler)(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet);
-	void	(*SetHalODMVarHandler)(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet);
+	void	(*GetHalODMVarHandler)(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
+	void	(*SetHalODMVarHandler)(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
 
 	void	(*UpdateRAMaskHandler)(struct adapter *padapter, u32 mac_id, u8 rssi_level);
 	void	(*SetBeaconRelatedRegistersHandler)(struct adapter *padapter);
@@ -226,13 +226,13 @@ struct hal_ops {
 #endif
 
 	void (*EfusePowerSwitch)(struct adapter *padapter, u8 bWrite, u8 PwrState);
-	void (*ReadEFuse)(struct adapter *padapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, BOOLEAN bPseudoTest);
-	void (*EFUSEGetEfuseDefinition)(struct adapter *padapter, u8 efuseType, u8 type, void *pOut, BOOLEAN bPseudoTest);
-	u16	(*EfuseGetCurrentSize)(struct adapter *padapter, u8 efuseType, BOOLEAN bPseudoTest);
-	int	(*Efuse_PgPacketRead)(struct adapter *padapter, u8 offset, u8 *data, BOOLEAN bPseudoTest);
-	int	(*Efuse_PgPacketWrite)(struct adapter *padapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
-	u8	(*Efuse_WordEnableDataWrite)(struct adapter *padapter, u16 efuse_addr, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
-	BOOLEAN	(*Efuse_PgPacketWrite_BT)(struct adapter *padapter, u8 offset, u8 word_en, u8 *data, BOOLEAN bPseudoTest);
+	void (*ReadEFuse)(struct adapter *padapter, u8 efuseType, u16 _offset, u16 _size_byte, u8 *pbuf, bool bPseudoTest);
+	void (*EFUSEGetEfuseDefinition)(struct adapter *padapter, u8 efuseType, u8 type, void *pOut, bool bPseudoTest);
+	u16	(*EfuseGetCurrentSize)(struct adapter *padapter, u8 efuseType, bool bPseudoTest);
+	int	(*Efuse_PgPacketRead)(struct adapter *padapter, u8 offset, u8 *data, bool bPseudoTest);
+	int	(*Efuse_PgPacketWrite)(struct adapter *padapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
+	u8	(*Efuse_WordEnableDataWrite)(struct adapter *padapter, u16 efuse_addr, u8 word_en, u8 *data, bool bPseudoTest);
+	bool	(*Efuse_PgPacketWrite_BT)(struct adapter *padapter, u8 offset, u8 word_en, u8 *data, bool bPseudoTest);
 
 #ifdef DBG_CONFIG_ERROR_DETECT
 	void (*sreset_init_value)(struct adapter *padapter);
@@ -361,8 +361,8 @@ void rtw_hal_read_chip_version(struct adapter *padapter);
 u8 rtw_hal_set_def_var(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
 u8 rtw_hal_get_def_var(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
 
-void rtw_hal_set_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet);
-void	rtw_hal_get_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet);
+void rtw_hal_set_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
+void	rtw_hal_get_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
 
 void rtw_hal_enable_interrupt(struct adapter *padapter);
 void rtw_hal_disable_interrupt(struct adapter *padapter);

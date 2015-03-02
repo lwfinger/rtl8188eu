@@ -292,8 +292,8 @@ rtl8188e_HalDmWatchDog(
 	IN	struct adapter *Adapter
 	)
 {
-	BOOLEAN		bFwCurrentInPSMode = false;
-	BOOLEAN		bFwPSAwake = true;
+	bool		bFwCurrentInPSMode = false;
+	bool		bFwPSAwake = true;
 	u8 hw_init_completed = false;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

@@ -247,7 +247,7 @@ void	rtl8192c_PHY_GetHWRegOriginalValue(	IN	struct adapter *	Adapter	);
 //
 // RF Power setting
 //
-//extern	BOOLEAN	PHY_SetRFPowerState(IN	struct adapter *		Adapter,
+//extern	bool	PHY_SetRFPowerState(IN	struct adapter *		Adapter,
 //									IN	RT_RF_POWER_STATE	eRFPowerState);
 
 //
@@ -257,7 +257,7 @@ void	PHY_GetTxPowerLevel8188E(	IN	struct adapter *	Adapter,
 											OUT u32*		powerlevel	);
 void	PHY_SetTxPowerLevel8188E(	IN	struct adapter *	Adapter,
 											IN	u8			channel	);
-BOOLEAN	PHY_UpdateTxPowerDbm8188E(	IN	struct adapter *Adapter,
+bool	PHY_UpdateTxPowerDbm8188E(	IN	struct adapter *Adapter,
 											IN	int		powerInDbm	);
 
 //
@@ -276,7 +276,7 @@ void	PHY_SetBWMode8188E(	IN	struct adapter *		pAdapter,
 //
 // Set FW CMD IO for 8192S.
 //
-//extern	BOOLEAN HalSetIO8192C(	IN	struct adapter *		Adapter,
+//extern	bool HalSetIO8192C(	IN	struct adapter *		Adapter,
 //									IN	IO_TYPE				IOType);
 
 //
@@ -303,12 +303,12 @@ void ChkFwCmdIoDone(	IN	struct adapter *Adapter);
 // BB/MAC/RF other monitor API
 //
 void	PHY_SetMonitorMode8192C(IN	struct adapter *pAdapter,
-										IN	BOOLEAN		bEnableMonitorMode	);
+										IN	bool		bEnableMonitorMode	);
 
-BOOLEAN	PHY_CheckIsLegalRfPath8192C(IN	struct adapter *pAdapter,
+bool	PHY_CheckIsLegalRfPath8192C(IN	struct adapter *pAdapter,
 											IN	u32		eRFPath	);
 
-void PHY_SetRFPathSwitch_8188E(IN	struct adapter *pAdapter, IN	BOOLEAN		bMain);
+void PHY_SetRFPathSwitch_8188E(IN	struct adapter *pAdapter, IN	bool		bMain);
 
 extern	void
 PHY_SwitchEphyParameter(
@@ -320,7 +320,7 @@ PHY_EnableHostClkReq(
 	IN	struct adapter *		Adapter
 	);
 
-BOOLEAN
+bool
 SetAntennaConfig92C(
 	IN	struct adapter *Adapter,
 	IN	u8		DefaultAnt

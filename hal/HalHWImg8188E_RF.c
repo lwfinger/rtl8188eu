@@ -20,7 +20,7 @@
 
 #include "odm_precomp.h"
 
-static BOOLEAN
+static bool
 CheckCondition(
     const u32  Condition,
     const u32  Hex
@@ -188,7 +188,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u32);
 	u32 *    Array       = Array_RadioA_1T_8188E;
-	BOOLEAN		biol = FALSE;
+	bool		biol = FALSE;
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 
 	hex += board;

@@ -78,12 +78,12 @@ phy_CalculateBitShift(
 }
 
 #if(SIC_ENABLE == 1)
-static BOOLEAN
+static bool
 sic_IsSICReady(
 	IN	struct adapter *Adapter
 	)
 {
-	BOOLEAN		bRet=false;
+	bool		bRet=false;
 	u32		retryCnt=0;
 	u8		sic_cmd=0xff;
 
@@ -269,7 +269,7 @@ SIC_Init(
 #endif
 }
 
-static BOOLEAN
+static bool
 SIC_LedOff(
 	IN	struct adapter *Adapter
 	)
@@ -1698,7 +1698,7 @@ PHY_SetTxPowerLevel8188E(
 /* 		A mode. */
 /* 	By Bruce, 2008-02-04. */
 /*  */
-BOOLEAN
+bool
 PHY_UpdateTxPowerDbm8188E(
 	IN	struct adapter *Adapter,
 	IN	int		powerInDbm
@@ -1990,7 +1990,7 @@ PHY_SwChnl8188E(	/*  Call after initialization */
 	/* struct adapter *Adapter =  ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, true); */
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	tmpchannel = pHalData->CurrentChannel;
-	BOOLEAN  bResult = true;
+	bool  bResult = true;
 
 	if(pHalData->rf_chip == RF_PSEUDO_11N)
 	{
@@ -2068,7 +2068,7 @@ PHY_SwChnl8188E(	/*  Call after initialization */
 }
 
 
-static	BOOLEAN
+static	bool
 phy_SwChnlStepByStep(
 	IN	struct adapter *Adapter,
 	IN	u8		channel,
@@ -2081,7 +2081,7 @@ phy_SwChnlStepByStep(
 }
 
 
-static	BOOLEAN
+static	bool
 phy_SetSwChnlCmdArray(
 	SwChnlCmd*		CmdTable,
 	u32			CmdTableIdx,
@@ -2183,7 +2183,7 @@ PHY_SwChnlPhy8192C(	/*  Only called during initialize */
 void
 PHY_SetMonitorMode8192C(
 	IN	struct adapter *		pAdapter,
-	IN	BOOLEAN				bEnableMonitorMode
+	IN	bool				bEnableMonitorMode
 	)
 {
 }
@@ -2206,12 +2206,12 @@ PHY_SetMonitorMode8192C(
  *	11/15/2007	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-BOOLEAN
+bool
 PHY_CheckIsLegalRfPath8192C(
 	IN	struct adapter *pAdapter,
 	IN	u32	eRFPath)
 {
-	BOOLEAN				rtValue = true;
+	bool				rtValue = true;
 
 	/*  NOt check RF Path now.! */
 	return	rtValue;
@@ -2220,8 +2220,8 @@ PHY_CheckIsLegalRfPath8192C(
 
 static void _PHY_SetRFPathSwitch(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		bMain,
-	IN	BOOLEAN		is2T
+	IN	bool		bMain,
+	IN	bool		is2T
 	)
 {
 	u8	u1bTmp;
@@ -2254,9 +2254,9 @@ static void _PHY_SetRFPathSwitch(
 
 /* return value TRUE => Main; FALSE => Aux */
 
-static BOOLEAN _PHY_QueryRFPathSwitch(
+static bool _PHY_QueryRFPathSwitch(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 /* 	if(is2T) */

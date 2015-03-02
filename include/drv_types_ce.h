@@ -44,7 +44,7 @@ typedef struct _MP_REG_ENTRY
 {
 
 	NDIS_STRING		RegName;	// variable name text
-	BOOLEAN			bRequired;	// 1 -> required, 0 -> optional
+	bool			bRequired;	// 1 -> required, 0 -> optional
 
 	u8			Type;		// NdisParameterInteger/NdisParameterHexInteger/NdisParameterStringle/NdisParameterMultiString
 	uint			FieldOffset;	// offset to MP_ADAPTER field

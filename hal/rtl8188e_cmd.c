@@ -581,7 +581,7 @@ CheckFwRsvdPageContent(
 /* 			      TRUE: At the second time, we should send the first packet (default:beacon) */
 /* 						to Hw again and set the lengh in descriptor to the real beacon lengh. */
 /*  2009.10.15 by tynli. */
-static void SetFwRsvdPagePkt(struct adapter *padapter, BOOLEAN bDLFinished)
+static void SetFwRsvdPagePkt(struct adapter *padapter, bool bDLFinished)
 {
 	PHAL_DATA_TYPE pHalData;
 	struct xmit_frame	*pmgntframe;
@@ -701,8 +701,8 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	BOOLEAN		bSendBeacon=false;
-	BOOLEAN		bcn_valid = false;
+	bool		bSendBeacon=false;
+	bool		bcn_valid = false;
 	u8	DLBcnCount=0;
 	u32 poll = 0;
 

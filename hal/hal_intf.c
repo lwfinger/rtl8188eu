@@ -184,12 +184,12 @@ u8 rtw_hal_get_def_var(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, voi
 	return _FAIL;
 }
 
-void rtw_hal_set_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet)
+void rtw_hal_set_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet)
 {
 	if(padapter->HalFunc.SetHalODMVarHandler)
 		padapter->HalFunc.SetHalODMVarHandler(padapter,eVariable,pValue1,bSet);
 }
-void	rtw_hal_get_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,BOOLEAN bSet)
+void	rtw_hal_get_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet)
 {
 	if(padapter->HalFunc.GetHalODMVarHandler)
 		padapter->HalFunc.GetHalODMVarHandler(padapter,eVariable,pValue1,bSet);

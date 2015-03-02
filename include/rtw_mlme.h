@@ -159,12 +159,12 @@ typedef struct _RT_LINK_DETECT_T{
 	u32				NumTxOkInPeriod;
 	u32				NumRxOkInPeriod;
 	u32				NumRxUnicastOkInPeriod;
-	BOOLEAN			bBusyTraffic;
-	BOOLEAN			bTxBusyTraffic;
-	BOOLEAN			bRxBusyTraffic;
-	BOOLEAN			bHigherBusyTraffic; // For interrupt migration purpose.
-	BOOLEAN			bHigherBusyRxTraffic; // We may disable Tx interrupt according as Rx traffic.
-	BOOLEAN			bHigherBusyTxTraffic; // We may disable Tx interrupt according as Tx traffic.
+	bool			bBusyTraffic;
+	bool			bTxBusyTraffic;
+	bool			bRxBusyTraffic;
+	bool			bHigherBusyTraffic; // For interrupt migration purpose.
+	bool			bHigherBusyRxTraffic; // We may disable Tx interrupt according as Rx traffic.
+	bool			bHigherBusyTxTraffic; // We may disable Tx interrupt according as Tx traffic.
 }RT_LINK_DETECT_T, *PRT_LINK_DETECT_T;
 
 struct profile_info {

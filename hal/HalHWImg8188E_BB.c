@@ -20,7 +20,7 @@
 
 #include "odm_precomp.h"
 
-static BOOLEAN
+static bool
 CheckCondition(
     const u32  Condition,
     const u32  Hex
@@ -339,7 +339,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_AGC_TAB_1T_8188E)/sizeof(u32);
 	u32 *    Array       = Array_AGC_TAB_1T_8188E;
-	BOOLEAN		biol = FALSE;
+	bool		biol = FALSE;
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 
 	hex += board;
@@ -838,7 +838,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_PHY_REG_1T_8188E)/sizeof(u32);
 	u32 *    Array       = Array_PHY_REG_1T_8188E;
-	BOOLEAN		biol = FALSE;
+	bool		biol = FALSE;
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 	hex += board;
 	hex += interfaceValue << 8;
@@ -1190,7 +1190,7 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_PHY_REG_PG_8188E)/sizeof(u32);
 	u32 *    Array       = Array_PHY_REG_PG_8188E;
-	BOOLEAN		biol = FALSE;
+	bool		biol = FALSE;
 
 	hex += board;
 	hex += interfaceValue << 8;

@@ -166,7 +166,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 	struct dm_priv		*pdmpriv = &pHalData->dmpriv;
 	struct mlme_ext_priv		*pmlmeext = &Adapter->mlmeextpriv;
 	u32			TxAGC[2]={0, 0}, tmpval=0,pwrtrac_value;
-	BOOLEAN		TurboScanOff = false;
+	bool		TurboScanOff = false;
 	u8			idx1, idx2;
 	u8*			ptr;
 	u8			direction;
@@ -811,7 +811,7 @@ PHY_RFShadowWrite(
 }	/* PHY_RFShadowWrite */
 
 
-static BOOLEAN
+static bool
 PHY_RFShadowCompare(
 	IN	struct adapter *		Adapter,
 	IN	RF_RADIO_PATH_E	eRFPath,

@@ -77,7 +77,7 @@ hal_com_get_channel_plan(
 	IN	u8			hw_channel_plan,	/* channel plan from HW (efuse/eeprom) */
 	IN	u8			sw_channel_plan,	/* channel plan from SW (registry/module param) */
 	IN	u8			def_channel_plan,	/* channel plan used when the former two is invalid */
-	IN	BOOLEAN		AutoLoadFail
+	IN	bool		AutoLoadFail
 	)
 {
 	u8 swConfig;
@@ -193,7 +193,7 @@ _OneOutPipeMapping(
 static void
 _TwoOutPipeMapping(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		bWIFICfg
+	IN	bool		bWIFICfg
 	)
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
@@ -238,7 +238,7 @@ _TwoOutPipeMapping(
 
 static void _ThreeOutPipeMapping(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		bWIFICfg
+	IN	bool		bWIFICfg
 	)
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
@@ -280,7 +280,7 @@ static void _ThreeOutPipeMapping(
 
 }
 
-BOOLEAN
+bool
 Hal_MappingOutPipe(
 	IN	struct adapter *pAdapter,
 	IN	u8		NumOutPipe
@@ -288,9 +288,9 @@ Hal_MappingOutPipe(
 {
 	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
 
-	BOOLEAN	 bWIFICfg = (pregistrypriv->wifi_spec) ?true:false;
+	bool	 bWIFICfg = (pregistrypriv->wifi_spec) ?true:false;
 
-	BOOLEAN result = true;
+	bool result = true;
 
 	switch(NumOutPipe)
 	{

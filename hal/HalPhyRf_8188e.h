@@ -53,7 +53,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 void	
 PHY_IQCalibrate_8188E(	
 	IN struct adapter *	Adapter,
-	IN	BOOLEAN 	bReCovery);
+	IN	bool 	bReCovery);
 
 
 /*  */
@@ -88,8 +88,8 @@ void
 _PHY_PathADDAOn(
 	IN	struct adapter *	pAdapter,
 	IN	u32 *		ADDAReg,
-	IN	BOOLEAN		isPathAOn,
-	IN	BOOLEAN		is2T
+	IN	bool		isPathAOn,
+	IN	bool		is2T
 	);
 
 void

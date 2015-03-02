@@ -195,6 +195,4 @@ value to host byte ordering.*/
 // Get the N-bytes aligment offset from the current length
 #define N_BYTE_ALIGMENT(__Value, __Aligment) ((__Aligment == 1) ? (__Value) : (((__Value + __Aligment - 1) / __Aligment) * __Aligment))
 
-typedef unsigned char	BOOLEAN,*PBOOLEAN;
-
 #endif //__BASIC_TYPES_H__

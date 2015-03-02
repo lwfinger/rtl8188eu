@@ -166,9 +166,9 @@ ODM_MacStatusQuery(
 	PDM_ODM_T					pDM_Odm,
 	u8 *						pMacStatus,
 	u8						MacID,	
-	BOOLEAN						bPacketMatchBSSID,
-	BOOLEAN						bPacketToSelf,
-	BOOLEAN						bPacketBeacon
+	bool						bPacketMatchBSSID,
+	bool						bPacketToSelf,
+	bool						bPacketBeacon
 	);
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(

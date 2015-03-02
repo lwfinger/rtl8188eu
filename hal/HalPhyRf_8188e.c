@@ -353,8 +353,8 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	s8			OFDM_index[2], CCK_index=0, OFDM_index_old[2]={0,0}, CCK_index_old=0, index;
 	s8			deltaPowerIndex = 0;
 	u32			i = 0, j = 0;
-	BOOLEAN			is2T = FALSE;
-	BOOLEAN			bInteralPA = FALSE;
+	bool			is2T = FALSE;
+	bool			bInteralPA = FALSE;
 
 	u8			OFDM_min_index = 6, rf = (is2T) ? 2 : 1; /* OFDM BB Swing should be less than +3.0dB, which is required by Arthur */
 	u8			Indexforchannel = 0;/*GetRightChnlPlaceforIQK(pHalData->CurrentChannel)*/
@@ -569,7 +569,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 static u8			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_PathA_IQK_8188E(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		configPathB
+	IN	bool		configPathB
 	)
 {
 	u32 regEAC, regE94, regE9C, regEA4;
@@ -622,7 +622,7 @@ phy_PathA_IQK_8188E(
 static u8			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_PathA_RxIQK(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		configPathB
+	IN	bool		configPathB
 	)
 {
 	u32 regEAC, regE94, regE9C, regEA4, u4tmp;
@@ -811,10 +811,10 @@ phy_PathB_IQK_8188E(
 static void
 _PHY_PathAFillIQKMatrix(
 	IN	struct adapter *pAdapter,
-	IN  BOOLEAN	bIQKOK,
+	IN  bool	bIQKOK,
 	IN	s32		result[][8],
 	IN	u8		final_candidate,
-	IN  BOOLEAN		bTxOnly
+	IN  bool		bTxOnly
 	)
 {
 	u32	Oldval_0, X, TX0_A, reg;
@@ -871,10 +871,10 @@ _PHY_PathAFillIQKMatrix(
 static void
 _PHY_PathBFillIQKMatrix(
 	IN	struct adapter *pAdapter,
-	IN  BOOLEAN	bIQKOK,
+	IN  bool	bIQKOK,
 	IN	s32		result[][8],
 	IN	u8		final_candidate,
-	IN	BOOLEAN		bTxOnly			/* do Tx only */
+	IN	bool		bTxOnly			/* do Tx only */
 	)
 {
 	u32	Oldval_1, X, TX1_A, reg;
@@ -928,7 +928,7 @@ _PHY_PathBFillIQKMatrix(
 /*  2011/07/26 MH Add an API for testing IQK fail case. */
 /*  */
 /*  MP Already declare in odm.c */
-static BOOLEAN
+static bool
 ODM_CheckPowerStatus(
 	IN	struct adapter *	Adapter)
 {
@@ -1018,8 +1018,8 @@ void
 _PHY_PathADDAOn(
 	IN	struct adapter *pAdapter,
 	IN	u32 *		ADDAReg,
-	IN	BOOLEAN		isPathAOn,
-	IN	BOOLEAN		is2T
+	IN	bool		isPathAOn,
+	IN	bool		is2T
 	)
 {
 	u32	pathOn;
@@ -1084,7 +1084,7 @@ _PHY_PathAStandBy(
 static void
 _PHY_PIModeSwitch(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		PIMode
+	IN	bool		PIMode
 	)
 {
 	u32	mode;
@@ -1098,7 +1098,7 @@ _PHY_PIModeSwitch(
 	ODM_SetBBReg(pDM_Odm, rFPGA0_XB_HSSIParameter1, bMaskDWord, mode);
 }
 
-static BOOLEAN
+static bool
 phy_SimularityCompare_8188E(
 	IN	struct adapter *pAdapter,
 	IN	s32		result[][8],
@@ -1110,8 +1110,8 @@ phy_SimularityCompare_8188E(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	u8		final_candidate[2] = {0xFF, 0xFF};	/* for path A and path B */
-	BOOLEAN		bResult = TRUE;
-	BOOLEAN		is2T;
+	bool		bResult = TRUE;
+	bool		is2T;
 	s32 tmp1 = 0,tmp2 = 0;
 
 	if( (pDM_Odm->RFType ==ODM_2T2R )||(pDM_Odm->RFType ==ODM_2T3R )||(pDM_Odm->RFType ==ODM_2T4R ))
@@ -1225,7 +1225,7 @@ phy_IQCalibrate_8188E(
 	IN	struct adapter *pAdapter,
 	IN	s32		result[][8],
 	IN	u8		t,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1417,7 +1417,7 @@ else
 static void
 phy_LCCalibrate_8188E(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 	u8	tmpReg;
@@ -1487,7 +1487,7 @@ static void
 phy_APCalibrate_8188E(
 	IN	struct adapter *pAdapter,
 	IN	s8		delta,
-	IN	BOOLEAN		is2T
+	IN	bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1927,7 +1927,7 @@ if (*(pDM_Odm->mp_mode) != 1)
 void
 PHY_IQCalibrate_8188E(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		bReCovery
+	IN	bool		bReCovery
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1941,17 +1941,17 @@ PHY_IQCalibrate_8188E(
 	s32			result[4][8];	/* last is final result */
 	u8			i, final_candidate, Indexforchannel;
 	u8          channelToIQK = 7;
-	BOOLEAN			bPathAOK, bPathBOK;
+	bool			bPathAOK, bPathBOK;
 	s32			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
-	BOOLEAN			is12simular, is13simular, is23simular;
-	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			is12simular, is13simular, is23simular;
+	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
 	u32			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 					rOFDM0_XARxIQImbalance,		rOFDM0_XBRxIQImbalance,
 					rOFDM0_ECCAThreshold,	rOFDM0_AGCRSSITable,
 					rOFDM0_XATxIQImbalance,		rOFDM0_XBTxIQImbalance,
 					rOFDM0_XCTxAFE,			rOFDM0_XDTxAFE,
 					rOFDM0_RxIQExtAnta};
-	BOOLEAN		is2T;
+	bool		is2T;
 
 	is2T = (pDM_Odm->RFType == ODM_2T2R)?TRUE:FALSE;
 	if (ODM_CheckPowerStatus(pAdapter) == FALSE)
@@ -2114,7 +2114,7 @@ PHY_LCCalibrate_8188E(
 	IN	struct adapter *pAdapter
 	)
 {
-	BOOLEAN			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
 	u32			timeout = 2000, timecount = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -2207,8 +2207,8 @@ PHY_APCalibrate_8188E(
 
 static void phy_SetRFPathSwitch_8188E(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		bMain,
-	IN	BOOLEAN		is2T
+	IN	bool		bMain,
+	IN	bool		is2T
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -2240,7 +2240,7 @@ static void phy_SetRFPathSwitch_8188E(
 }
 void PHY_SetRFPathSwitch_8188E(
 	IN	struct adapter *pAdapter,
-	IN	BOOLEAN		bMain
+	IN	bool		bMain
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);

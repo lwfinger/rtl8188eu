@@ -47,7 +47,7 @@ void odm_FastAntTrainingCallback(PDM_ODM_T pDM_Odm);
 void odm_FastAntTrainingWorkItemCallback(PDM_ODM_T pDM_Odm);
 void odm_PrimaryCCA_Init(PDM_ODM_T pDM_Odm);
 
-BOOLEAN ODM_DynamicPrimaryCCA_DupRTS(PDM_ODM_T pDM_Odm);
+bool ODM_DynamicPrimaryCCA_DupRTS(PDM_ODM_T pDM_Odm);
 
 void odm_DynamicPrimaryCCA(PDM_ODM_T pDM_Odm);
 
