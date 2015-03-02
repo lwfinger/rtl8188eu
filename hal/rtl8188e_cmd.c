@@ -1086,7 +1086,7 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus)
 ;
 }
 
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 void rtl8188e_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -1176,7 +1176,7 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state)
 ;
 
 }
-#endif /* CONFIG_P2P_PS */
+#endif /* CONFIG_P2P */
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 /*

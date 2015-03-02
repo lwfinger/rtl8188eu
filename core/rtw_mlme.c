@@ -143,7 +143,7 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
 	rtw_free_mlme_ie_data(&pmlmepriv->p2p_assoc_req_ie, &pmlmepriv->p2p_assoc_req_ie_len);
 #endif
 
-#if defined(CONFIG_WFD)
+#if defined(CONFIG_P2P)
 	rtw_free_mlme_ie_data(&pmlmepriv->wfd_beacon_ie, &pmlmepriv->wfd_beacon_ie_len);
 	rtw_free_mlme_ie_data(&pmlmepriv->wfd_probe_req_ie, &pmlmepriv->wfd_probe_req_ie_len);
 	rtw_free_mlme_ie_data(&pmlmepriv->wfd_probe_resp_ie, &pmlmepriv->wfd_probe_resp_ie_len);
@@ -897,7 +897,7 @@ void rtw_add_network(struct adapter *adapter, WLAN_BSSID_EX *pnetwork)
 
 	/* _enter_critical_bh(&queue->lock, &irqL); */
 
-	#if defined(CONFIG_P2P) && defined(CONFIG_P2P_REMOVE_GROUP_INFO)
+	#if defined(CONFIG_P2P) && defined(CONFIG_P2P)
 	rtw_WLAN_BSSID_EX_remove_p2p_attr(pnetwork, P2P_ATTR_GROUP_INFO);
 	#endif
 
@@ -1188,11 +1188,11 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
 
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 		p2p_ps_wk_cmd(adapter, P2P_PS_SCAN_DONE, 0);
 	}
-#endif /*  CONFIG_P2P_PS */
+#endif /*  CONFIG_P2P */
 
 	rtw_os_xmit_schedule(adapter);
 
@@ -1462,9 +1462,9 @@ void rtw_indicate_disconnect( struct adapter *padapter )
 
 	}
 
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 	p2p_ps_wk_cmd(padapter, P2P_PS_DISABLE, 1);
-#endif /*  CONFIG_P2P_PS */
+#endif /*  CONFIG_P2P */
 
 	rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 1);
 }

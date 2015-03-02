@@ -33,15 +33,6 @@
 #define CONFIG_AP_MODE
 
 #define CONFIG_P2P
-#ifdef CONFIG_P2P
-	//The CONFIG_WFD is for supporting the Wi-Fi display
-	#define CONFIG_WFD
-
-	#define CONFIG_P2P_REMOVE_GROUP_INFO
-
-	#define CONFIG_P2P_PS
-	#define P2P_OP_CHECK_SOCIAL_CH
-#endif
 
 #define CONFIG_SKB_COPY	//for amsdu
 

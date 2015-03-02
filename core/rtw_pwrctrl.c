@@ -509,9 +509,9 @@ void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_a
 	/* if(pwrpriv->pwr_mode == PS_MODE_ACTIVE) */
 	if(ps_mode == PS_MODE_ACTIVE)
 	{
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 		if(pwdinfo->opp_ps == 0)
-#endif /* CONFIG_P2P_PS */
+#endif /* CONFIG_P2P */
 		{
 			DBG_871X("rtw_set_ps_mode: Leave 802.11 power save\n");
 
@@ -601,11 +601,11 @@ void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_a
 			pwrpriv->bcn_ant_mode = bcn_ant_mode;
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&ps_mode));
 
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 			/*  Set CTWindow after LPS */
 			if(pwdinfo->opp_ps == 1)
 				p2p_ps_wk_cmd(padapter, P2P_PS_ENABLE, 0);
-#endif /* CONFIG_P2P_PS */
+#endif /* CONFIG_P2P */
 
 			rtw_set_rpwm(padapter, PS_STATE_S2);
 		}
@@ -719,9 +719,9 @@ void LeaveAllPowerSaveMode(IN struct adapter *Adapter)
 	/* DBG_871X("%s.....\n",__FUNCTION__); */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{ /* connect */
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 		p2p_ps_wk_cmd(Adapter, P2P_PS_DISABLE, enqueue);
-#endif /* CONFIG_P2P_PS */
+#endif /* CONFIG_P2P */
 
 		rtw_lps_ctrl_wk_cmd(Adapter, LPS_CTRL_LEAVE, enqueue);
 	} else {

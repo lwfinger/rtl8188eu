@@ -1368,14 +1368,14 @@ int rtw_build_tdls_ies(struct adapter * padapter, struct xmit_frame * pxmitframe
 		case TDLS_CHANNEL_SWITCH_RESPONSE:
 			rtw_build_tdls_ch_switch_rsp_ies(padapter, pxmitframe, pframe);
 			break;
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 		case TUNNELED_PROBE_REQ:
 			rtw_build_tunneled_probe_req_ies(padapter, pxmitframe, pframe);
 			break;
 		case TUNNELED_PROBE_RSP:
 			rtw_build_tunneled_probe_rsp_ies(padapter, pxmitframe, pframe);
 			break;
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 		default:
 			res=_FAIL;
 			break;

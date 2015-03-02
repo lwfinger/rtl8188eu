@@ -2972,14 +2972,14 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				rtl8188e_set_FwJoinBssReport_cmd(Adapter, mstatus);
 			}
 			break;
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 		case HW_VAR_H2C_FW_P2P_PS_OFFLOAD:
 			{
 				u8	p2p_ps_state = (*(u8 *)val);
 				rtl8188e_set_p2p_ps_offload_cmd(Adapter, p2p_ps_state);
 			}
 			break;
-#endif /* CONFIG_P2P_PS */
+#endif /* CONFIG_P2P */
 #ifdef CONFIG_TDLS
 		case HW_VAR_TDLS_WRCR:
 			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)&(~RCR_CBSSID_DATA ));

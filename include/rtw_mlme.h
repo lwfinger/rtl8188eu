@@ -195,7 +195,7 @@ struct tx_invite_resp_info{
 	u8					token;	//	Used to record the dialog token of p2p invitation request frame.
 };
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 
 struct wifi_display_info{
 	u16							wfd_enable;			//	Eanble/Disable the WFD function.
@@ -217,7 +217,7 @@ struct wifi_display_info{
 													//	1 -> WFD Primary Sink Device
 	enum	SCAN_RESULT_TYPE	scan_result_type;	//	Used when P2P is enable. This parameter will impact the scan result.
 };
-#endif //CONFIG_WFD
+#endif //CONFIG_P2P
 
 struct tx_provdisc_req_info{
 	u16					wps_config_method_request;	//	Used when sending the provisioning request frame
@@ -247,11 +247,11 @@ struct group_id_info{
 
 struct scan_limit_info{
 	u8					scan_op_ch_only;			//	When this flag is set, the driver should just scan the operation channel
-#ifndef P2P_OP_CHECK_SOCIAL_CH
+#ifndef CONFIG_P2P
 	u8					operation_ch[2];				//	Store the operation channel of invitation request frame
 #else
 	u8					operation_ch[5];				//	Store additional channel 1,6,11  for Android 4.2 IOT & Nexus 4
-#endif //P2P_OP_CHECK_SOCIAL_CH
+#endif //CONFIG_P2P
 };
 
 struct cfg80211_wifidirect_info{
@@ -281,7 +281,7 @@ struct wifidirect_info{
 	struct group_id_info		groupid_info;	//	Store the group id information when doing the group negotiation handshake.
 	struct scan_limit_info		rx_invitereq_info;	//	Used for get the limit scan channel from the Invitation procedure
 	struct scan_limit_info		p2p_info;		//	Used for get the limit scan channel from the P2P negotiation handshake
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	struct wifi_display_info		*wfd_info;
 #endif
 	enum P2P_ROLE			role;
@@ -339,7 +339,7 @@ struct wifidirect_info{
 														//	We will use the channel_cnt and channel_list fields when constructing the group negotitation confirm frame.
 	u8						driver_interface; // Indicate DRIVER_WEXT or DRIVER_CFG80211
 
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 	enum P2P_PS_MODE		p2p_ps_mode; // indicate p2p ps mode
 	enum P2P_PS_STATE		p2p_ps_state; // indicate p2p ps state
 	u8						noa_index; // Identifies and instance of Notice of Absence timing.
@@ -350,7 +350,7 @@ struct wifidirect_info{
 	u32						noa_duration[P2P_MAX_NOA_NUM]; // Max duration for owner, preferred or min acceptable duration for client.
 	u32						noa_interval[P2P_MAX_NOA_NUM]; // Length of interval for owner, preferred or max acceptable interval of client.
 	u32						noa_start_time[P2P_MAX_NOA_NUM]; // schedule expressed in terms of the lower 4 bytes of the TSF timer.
-#endif // CONFIG_P2P_PS
+#endif // CONFIG_P2P
 };
 
 struct tdls_ss_record{	//signal strength record
@@ -376,7 +376,7 @@ struct tdls_info{
 	u8					watchdog_count;
 	u8					dev_discovered;		//WFD_TDLS: for sigma test
 	u8					enable;
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	struct wifi_display_info		*wfd_info;
 #endif
 };
@@ -511,7 +511,7 @@ struct mlme_priv {
 
 #endif //#if defined (CONFIG_AP_MODE)
 
-#if defined(CONFIG_WFD)
+#if defined(CONFIG_P2P)
 
 	u8 *wfd_beacon_ie;
 	u8 *wfd_probe_req_ie;

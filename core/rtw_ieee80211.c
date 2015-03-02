@@ -1358,7 +1358,7 @@ void dump_ies(u8 *buf, u32 buf_len)
 		dump_wps_ie(pos, len);
 		#ifdef CONFIG_P2P
 		dump_p2p_ie(pos, len);
-		#ifdef CONFIG_WFD
+		#ifdef CONFIG_P2P
 		dump_wfd_ie(pos, len);
 		#endif
 		#endif
@@ -1724,7 +1724,7 @@ void rtw_WLAN_BSSID_EX_remove_p2p_attr(WLAN_BSSID_EX *bss_ex, u8 attr_id)
 
 #endif /* CONFIG_P2P */
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 void dump_wfd_ie(u8 *ie, u32 ie_len)
 {
 	u8* pos = (u8*)ie;
@@ -1879,7 +1879,7 @@ int rtw_get_wfd_attr_content(u8 *wfd_ie, uint wfd_ielen, u8 target_attr_id ,u8 *
 	return match;
 
 }
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 /* Baron adds to avoid FreeBSD warning */
 int ieee80211_is_empty_essid(const char *essid, int essid_len)

@@ -46,9 +46,9 @@ void rtw_reset_tdls_info(_adapter* padapter)
 	ptdlsinfo->watchdog_count = 0;
 	ptdlsinfo->dev_discovered = 0;
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	ptdlsinfo->wfd_info = &padapter->wfd_info;
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 }
 
 int rtw_init_tdls_info(_adapter* padapter)
@@ -410,7 +410,7 @@ u8 *rtw_tdls_set_sup_ch(struct mlme_ext_priv *pmlmeext, u8 *pframe, struct pkt_a
 	return(rtw_set_ie(pframe, _SUPPORTED_CH_IE_, idx_5g, sup_ch, &(pattrib->pktlen)));
 }
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 void rtw_tdls_process_wfd_ie(struct tdls_info *ptdlsinfo, u8 *ptr, u8 length)
 {
 	u8	wfd_ie[ 128 ] = { 0x00 };
@@ -535,7 +535,7 @@ exit:
 
 	return;
 }
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 void issue_tdls_setup_req(_adapter *padapter, u8 *mac_addr)
 {
@@ -1251,7 +1251,7 @@ sint On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 				ptdls_sta->stat_code = 38;
 			}
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 			/* WFD test plan version 0.18.2 test item 5.1.5 */
 			/* SoUT does not use TDLS if AP uses weak security */
 			if ( adapter->wdinfo.wfd_tdls_enable )
@@ -1261,7 +1261,7 @@ sint On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 					ptdls_sta->stat_code = 5;
 				}
 			}
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 		}
 
 		ptdls_sta->tdls_sta_state|= TDLS_INITIATOR_STATE;
@@ -1278,9 +1278,9 @@ sint On_TDLS_Setup_Req(_adapter *adapter, union recv_frame *precv_frame)
 			ptdlsinfo->sta_maximum = true;
 		}
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 		rtw_tdls_process_wfd_ie(ptdlsinfo, ptr + FIXED_IE, parsing_length - FIXED_IE);
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 	}
 	else
@@ -1416,9 +1416,9 @@ sint On_TDLS_Setup_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	ptdls_sta->bssratelen = supportRateNum;
 	memcpy(ptdls_sta->bssrateset, supportRate, supportRateNum);
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	rtw_tdls_process_wfd_ie(ptdlsinfo, ptr + FIXED_IE, parsing_length - FIXED_IE);
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 	if(stat_code != 0)
 	{
@@ -1923,7 +1923,7 @@ sint On_TDLS_Ch_Switch_Rsp(_adapter *adapter, union recv_frame *precv_frame)
 	return _FAIL;
 }
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen )
 {
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -2011,7 +2011,7 @@ void wfd_ie_tdls(_adapter * padapter, u8 *pframe, u32 *pktlen )
 	pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, wfdielen, (unsigned char *) wfdie, pktlen);
 
 }
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmitframe, u8 *pframe)
 {
@@ -2126,9 +2126,9 @@ void rtw_build_tdls_setup_req_ies(_adapter * padapter, struct xmit_frame * pxmit
 	memcpy((link_id_addr+12), pattrib->dst, 6);
 	pframe = rtw_set_ie(pframe, _LINK_ID_IE_,  18, link_id_addr, &(pattrib->pktlen));
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	wfd_ie_tdls( padapter, pframe, &(pattrib->pktlen) );
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 }
 
@@ -2275,9 +2275,9 @@ void rtw_build_tdls_setup_rsp_ies(_adapter * padapter, struct xmit_frame * pxmit
 	if(pattrib->encrypt)
 		wpa_tdls_ftie_mic(ptdls_sta->tpk.kck, 2, plinkid_ie, prsnie, ptimeout_ie, pftie, pftie_mic);
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	wfd_ie_tdls( padapter, pframe, &(pattrib->pktlen) );
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 }
 
@@ -2617,7 +2617,7 @@ void rtw_build_tdls_ch_switch_rsp_ies(_adapter * padapter, struct xmit_frame * p
 
 }
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 void rtw_build_tunneled_probe_req_ies(_adapter * padapter, struct xmit_frame * pxmitframe, u8 *pframe)
 {
 
@@ -2685,7 +2685,7 @@ void rtw_build_tunneled_probe_rsp_ies(_adapter * padapter, struct xmit_frame * p
 	}
 
 }
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 void _TPK_timer_hdl(void *FunctionContext)
 {

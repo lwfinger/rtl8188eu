@@ -27,7 +27,7 @@ u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8* pssid, u8 ussidlen, u8* pdev_raddr );
 u32 build_assoc_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 status_code);
 u32 build_deauth_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 u32 build_probe_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_probe_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf, u8 tunneled);
 u32 build_beacon_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
@@ -40,7 +40,7 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
-#endif //CONFIG_WFD
+#endif //CONFIG_P2P
 
 u32 process_probe_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint len);
 u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint len, struct sta_info *psta);
@@ -55,11 +55,11 @@ u8 process_p2p_presence_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 
 void p2p_protocol_wk_hdl(struct adapter *padapter, int intCmdType);
 
-#ifdef CONFIG_P2P_PS
+#ifdef CONFIG_P2P
 void	process_p2p_ps_ie(struct adapter *padapter, u8 *IEs, u32 IELength);
 void	p2p_ps_wk_hdl(struct adapter *padapter, u8 p2p_ps_state);
 u8	p2p_ps_wk_cmd(struct adapter*padapter, u8 p2p_ps_state, u8 enqueue);
-#endif // CONFIG_P2P_PS
+#endif // CONFIG_P2P
 
 void rtw_init_cfg80211_wifidirect_info( struct adapter*	padapter);
 int rtw_p2p_check_frames(struct adapter *padapter, const u8 *buf, u32 len, u8 tx);

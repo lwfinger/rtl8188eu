@@ -881,7 +881,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
 	reset_global_wifidirect_info(padapter);
 	rtw_init_cfg80211_wifidirect_info(padapter);
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	if(rtw_init_wifi_display_info(padapter) == _FAIL)
 		RT_TRACE(_module_os_intfs_c_,_drv_err_,("\n Can't init init_wifi_display_info\n"));
 #endif

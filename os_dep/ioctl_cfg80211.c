@@ -2041,7 +2041,7 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(struct adapter *padapter, char *b
 		/* buf += p2p_ielen; */
 		/* len -= p2p_ielen; */
 
-		#ifdef CONFIG_WFD
+		#ifdef CONFIG_P2P
 		if(rtw_get_wfd_ie(buf, len, NULL, &wfd_ielen))
 		{
 			#ifdef CONFIG_DEBUG_CFG80211
@@ -2064,7 +2064,7 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(struct adapter *padapter, char *b
 			}
 			rtw_get_wfd_ie(buf, len, pmlmepriv->wfd_probe_req_ie, &pmlmepriv->wfd_probe_req_ie_len);
 		}
-		#endif /* CONFIG_WFD */
+		#endif /* CONFIG_P2P */
 
 	}
 
@@ -2606,7 +2606,7 @@ static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t iel
 	}
 	#endif /* CONFIG_P2P */
 
-	#ifdef CONFIG_WFD
+	#ifdef CONFIG_P2P
 	{/* check wfd_ie for assoc req; */
 		uint wfd_ielen=0;
 		u8 *wfd_ie;
@@ -2634,7 +2634,7 @@ static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t iel
 			rtw_get_wfd_ie(buf, ielen, pmlmepriv->wfd_assoc_req_ie, &pmlmepriv->wfd_assoc_req_ie_len);
 		}
 	}
-	#endif /* CONFIG_WFD */
+	#endif /* CONFIG_P2P */
 
 	/* TKIP and AES disallow multicast packets until installing group key */
 	if(padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_
@@ -3318,7 +3318,7 @@ dump:
 		pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
 		memcpy(pframe, (void*)buf, len);
-		#ifdef CONFIG_WFD
+		#ifdef CONFIG_P2P
 		if (type >= 0)
 		{
 			struct wifi_display_info		*pwfd_info;
@@ -3330,7 +3330,7 @@ dump:
 				rtw_append_wfd_ie( padapter, pframe, &len );
 			}
 		}
-		#endif /*  CONFIG_WFD */
+		#endif /*  CONFIG_P2P */
 		pattrib->pktlen = len;
 
 		pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
@@ -4055,9 +4055,9 @@ void rtw_cfg80211_issue_p2p_provision_request(struct adapter *padapter, const u8
 	__be32	p2poui = cpu_to_be32(P2POUI);
 	u8	oui_subtype = P2P_PROVISION_DISC_REQ;
 	u32	p2pielen = 0;
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	u32					wfdielen = 0;
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 	struct xmit_frame			*pmgntframe;
 	struct pkt_attrib			*pattrib;
@@ -4237,11 +4237,11 @@ void rtw_cfg80211_issue_p2p_provision_request(struct adapter *padapter, const u8
 	pframe = rtw_set_ie(pframe, _VENDOR_SPECIFIC_IE_, wpsielen, (unsigned char *) wpsie, &pattrib->pktlen );
 
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	wfdielen = build_provdisc_req_wfd_ie(pwdinfo, pframe);
 	pframe += wfdielen;
 	pattrib->pktlen += wfdielen;
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
@@ -4442,7 +4442,7 @@ static int _cfg80211_rtw_mgmt_tx(struct adapter *padapter, u8 tx_ch, const u8 *b
 	pattrib->seqnum = pmlmeext->mgnt_seq;
 	pmlmeext->mgnt_seq++;
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	{
 		struct wifi_display_info	*pwfd_info;
 
@@ -4453,7 +4453,7 @@ static int _cfg80211_rtw_mgmt_tx(struct adapter *padapter, u8 tx_ch, const u8 *b
 			rtw_append_wfd_ie( padapter, pframe, &pattrib->pktlen );
 		}
 	}
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
@@ -4715,7 +4715,7 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 		/* buf += p2p_ielen; */
 		/* len -= p2p_ielen; */
 
-		#ifdef CONFIG_WFD
+		#ifdef CONFIG_P2P
 		if(rtw_get_wfd_ie(buf, len, NULL, &wfd_ielen))
 		{
 			#ifdef CONFIG_DEBUG_CFG80211
@@ -4738,7 +4738,7 @@ static int rtw_cfg80211_set_beacon_wpsp2pie(struct net_device *ndev, char *buf, 
 			}
 			rtw_get_wfd_ie(buf, len, pmlmepriv->wfd_beacon_ie, &pmlmepriv->wfd_beacon_ie_len);
 		}
-		#endif /* CONFIG_WFD */
+		#endif /* CONFIG_P2P */
 
 		pmlmeext->bstart_bss = true;
 
@@ -4898,7 +4898,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 		/* buf += p2p_ielen; */
 		/* len -= p2p_ielen; */
 
-		#ifdef CONFIG_WFD
+		#ifdef CONFIG_P2P
 		if(rtw_get_wfd_ie(buf, len, NULL, &wfd_ielen))
 		{
 			#ifdef CONFIG_DEBUG_CFG80211
@@ -4921,7 +4921,7 @@ static int rtw_cfg80211_set_probe_resp_wpsp2pie(struct net_device *net, char *bu
 			}
 			rtw_get_wfd_ie(buf, len, pmlmepriv->wfd_probe_resp_ie, &pmlmepriv->wfd_probe_resp_ie_len);
 		}
-		#endif /* CONFIG_WFD */
+		#endif /* CONFIG_P2P */
 
 	}
 

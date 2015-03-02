@@ -341,7 +341,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 	int bytes_written = 0;
 	android_wifi_priv_cmd priv_cmd;
 	struct adapter*	padapter = ( struct adapter * ) rtw_netdev_priv(net);
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	struct wifi_display_info		*pwfd_info;
 #endif
 
@@ -505,7 +505,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		break;
 	}
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	case ANDROID_WIFI_CMD_WFD_ENABLE:
 		/* 	Commented by Albert 2012/07/24 */
 		/* 	We can enable the WFD function by using the following command: */

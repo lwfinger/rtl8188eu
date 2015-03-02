@@ -244,14 +244,14 @@ static char *translate_scan(struct adapter *padapter,
 #endif /* CONFIG_P2P */
 
 #ifdef CONFIG_P2P
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	if ( SCAN_RESULT_ALL == pwdinfo->wfd_info->scan_result_type )
 	{
 
 	}
 	else if ( ( SCAN_RESULT_P2P_ONLY == pwdinfo->wfd_info->scan_result_type ) ||
 		      ( SCAN_RESULT_WFD_TYPE == pwdinfo->wfd_info->scan_result_type ) )
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 	{
 		if(!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		{
@@ -282,7 +282,7 @@ static char *translate_scan(struct adapter *padapter,
 		}
 	}
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	if ( SCAN_RESULT_WFD_TYPE == pwdinfo->wfd_info->scan_result_type )
 	{
 		u32	blnGotWFD = false;
@@ -323,7 +323,7 @@ static char *translate_scan(struct adapter *padapter,
 			return start;
 		}
 	}
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 #endif /* CONFIG_P2P */
 
@@ -4032,7 +4032,7 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 
 }
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 static int rtw_p2p_get_peer_wfd_port(struct net_device *dev,
                                struct iw_request_info *info,
                                union iwreq_data *wrqu, char *extra)
@@ -4091,7 +4091,7 @@ static int rtw_p2p_get_peer_wfd_session_available(struct net_device *dev,
 
 }
 
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 static int rtw_p2p_get_go_device_address(struct net_device *dev,
 										 struct iw_request_info *info,
@@ -4543,9 +4543,9 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 	_irqL					irqL;
 	struct tx_invite_req_info*	pinvite_req_info = &pwdinfo->invitereq_info;
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	struct wifi_display_info*	pwfd_info = pwdinfo->wfd_info;
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 	/* 	Commented by Albert 20120321 */
 	/* 	The input data contains two informations. */
@@ -4632,7 +4632,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 
 	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	if ( uintPeerChannel )
 	{
 		u8	wfd_ie[ 128 ] = { 0x00 };
@@ -4669,7 +4669,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 			goto exit;
 		}
 	}
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 	if ( uintPeerChannel ) {
 		/* 	Store the GO's bssid */
@@ -4723,9 +4723,9 @@ static int rtw_p2p_set_persistent(struct net_device *dev,
 	_irqL					irqL;
 	struct tx_invite_req_info*	pinvite_req_info = &pwdinfo->invitereq_info;
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	struct wifi_display_info*	pwfd_info = pwdinfo->wfd_info;
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 	/* 	Commented by Albert 20120328 */
 	/* 	The input data is 0 or 1 */
@@ -4835,7 +4835,7 @@ static int rtw_p2p_set_wps_uuid(struct net_device *dev,
 	return ret;
 
 }
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 static int rtw_p2p_set_pc(struct net_device *dev,
                                struct iw_request_info *info,
                                union iwreq_data *wrqu, char *extra)
@@ -5133,7 +5133,7 @@ exit:
 	return ret;
 
 }
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 static int rtw_p2p_prov_disc(struct net_device *dev,
                                struct iw_request_info *info,
@@ -5156,9 +5156,9 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 	_irqL				irqL;
 	u8					ie_offset;
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	struct wifi_display_info*	pwfd_info = pwdinfo->wfd_info;
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 	/* 	Commented by Albert 20110301 */
 	/* 	The input data contains two informations. */
@@ -5298,7 +5298,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 
 	if ( uintPeerChannel )
 	{
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 		{
 			u8	wfd_ie[ 128 ] = { 0x00 };
 			uint	wfd_ielen = 0;
@@ -5334,7 +5334,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 				goto exit;
 			}
 		}
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 		DBG_871X( "[%s] peer channel: %d!\n", __FUNCTION__, uintPeerChannel );
 		memcpy( pwdinfo->tx_prov_disc_info.peerIFAddr, pnetwork->network.MacAddress, ETH_ALEN );
@@ -5513,7 +5513,7 @@ static int rtw_p2p_set(struct net_device *dev,
 		wrqu->data.length -= 5;
 		ret = rtw_p2p_set_wps_uuid( dev, info, wrqu, &extra[5] );
 	}
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	else if ( _rtw_memcmp( extra, "sa=", 3 ) )
 	{
 		/* 	sa: WFD Session Available information */
@@ -5547,7 +5547,7 @@ static int rtw_p2p_set(struct net_device *dev,
 		wrqu->data.length -= 13;
 		rtw_p2p_set_driver_iface( dev, info, wrqu, &extra[13] );
 	}
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 #endif /* CONFIG_P2P */
 
 	return ret;
@@ -5591,7 +5591,7 @@ static int rtw_p2p_get(struct net_device *dev,
 	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "op_ch", 5 ) ) {
 		rtw_p2p_get_op_ch( dev, info, wrqu, extra);
 	}
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "peer_port", 9 ) ) {
 		rtw_p2p_get_peer_wfd_port( dev, info, wrqu, extra );
 	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "wfd_sa", 6 ) ) {
@@ -5599,7 +5599,7 @@ static int rtw_p2p_get(struct net_device *dev,
 	} else if ( _rtw_memcmp((__force void *)wrqu->data.pointer, "wfd_pc", 6 ) ) {
 		rtw_p2p_get_peer_wfd_preferred_connection( dev, info, wrqu, extra );
 	}
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 #endif /* CONFIG_P2P */
 
@@ -9067,7 +9067,7 @@ static int rtw_wfd_tdls_enable(struct net_device *dev,
 	int ret = 0;
 
 #ifdef CONFIG_TDLS
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 
@@ -9082,7 +9082,7 @@ static int rtw_wfd_tdls_enable(struct net_device *dev,
 		padapter->wdinfo.wfd_tdls_enable = 1;
 	}
 
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 #endif /* CONFIG_TDLS */
 
 	return ret;
@@ -9196,9 +9196,9 @@ static int rtw_tdls_setup(struct net_device *dev,
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	u8 mac_addr[ETH_ALEN];
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 
 	printk( "[%s] %s %d\n", __FUNCTION__, extra, wrqu->data.length -1  );
 
@@ -9206,7 +9206,7 @@ static int rtw_tdls_setup(struct net_device *dev,
 		mac_addr[i]=key_2char2num(*(extra+j), *(extra+j+1));
 	}
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	if ( _AES_ != padapter->securitypriv.dot11PrivacyAlgrthm )
 	{
 		/* 	Weak Security situation with AP. */
@@ -9221,7 +9221,7 @@ static int rtw_tdls_setup(struct net_device *dev,
 		}
 	}
 	else
-#endif /*  CONFIG_WFD */
+#endif /*  CONFIG_P2P */
 	{
 		issue_tdls_setup_req(padapter, mac_addr);
 	}
@@ -9379,7 +9379,7 @@ static int rtw_tdls_setip(struct net_device *dev,
 	int ret = 0;
 
 #ifdef CONFIG_TDLS
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
@@ -9414,7 +9414,7 @@ static int rtw_tdls_setip(struct net_device *dev,
 		ptdlsinfo->wfd_info->ip_address[2], ptdlsinfo->wfd_info->ip_address[3]
 	);
 
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 #endif /* CONFIG_TDLS */
 
 	return ret;
@@ -9427,7 +9427,7 @@ static int rtw_tdls_getip(struct net_device *dev,
 	int ret = 0;
 
 #ifdef CONFIG_TDLS
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
@@ -9447,7 +9447,7 @@ static int rtw_tdls_getip(struct net_device *dev,
 
 	wrqu->data.length = strlen( extra );
 
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 #endif /* CONFIG_TDLS */
 
 	return ret;
@@ -9461,7 +9461,7 @@ static int rtw_tdls_getport(struct net_device *dev,
 	int ret = 0;
 
 #ifdef CONFIG_TDLS
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
@@ -9474,7 +9474,7 @@ static int rtw_tdls_getport(struct net_device *dev,
 
 	wrqu->data.length = strlen( extra );
 
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 #endif /* CONFIG_TDLS */
 
 	return ret;
@@ -9490,7 +9490,7 @@ static int rtw_tdls_dis_result(struct net_device *dev,
 	int ret = 0;
 
 #ifdef CONFIG_TDLS
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
@@ -9506,7 +9506,7 @@ static int rtw_tdls_dis_result(struct net_device *dev,
 
 	wrqu->data.length = strlen( extra );
 
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 #endif /* CONFIG_TDLS */
 
 	return ret;
@@ -9522,7 +9522,7 @@ static int rtw_wfd_tdls_status(struct net_device *dev,
 	int ret = 0;
 
 #ifdef CONFIG_TDLS
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
@@ -9541,7 +9541,7 @@ static int rtw_wfd_tdls_status(struct net_device *dev,
 
 	wrqu->data.length = strlen( extra );
 
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 #endif /* CONFIG_TDLS */
 
 	return ret;
@@ -9653,7 +9653,7 @@ static int rtw_tdls(struct net_device *dev,
 		wrqu->data.length -= 6;
 		rtw_tdls_psoff( dev, info, wrqu, &extra[6] );
 	}
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	else if (_rtw_memcmp( extra, "setip=", 6 ) )
 	{
 		wrqu->data.length -= 6;
@@ -9663,7 +9663,7 @@ static int rtw_tdls(struct net_device *dev,
 	{
 		issue_tunneled_probe_req((struct adapter *)rtw_netdev_priv(dev));
 	}
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 #endif /* CONFIG_TDLS */
 
@@ -9677,7 +9677,7 @@ static int rtw_tdls_get(struct net_device *dev,
 {
 	int ret = 0;
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 
 	DBG_871X( "[%s] extra = %s\n", __FUNCTION__, (__force char *)wrqu->data.pointer );
 
@@ -9697,7 +9697,7 @@ static int rtw_tdls_get(struct net_device *dev,
 	if (_rtw_memcmp((__force void *)wrqu->data.pointer, "status", 6))
 		rtw_wfd_tdls_status( dev, info, wrqu, extra );
 
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 
 	return ret;
 }

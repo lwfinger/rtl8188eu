@@ -903,9 +903,9 @@ sint OnTDLS(struct adapter *adapter, union recv_frame *precv_frame)
 	sint ret = _SUCCESS;
 	u8 *paction = get_recvframe_data(precv_frame);
 	u8 category_field = 1;
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	u8 WFA_OUI[3] = { 0x50, 0x6f, 0x9a };
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 	struct tdls_info *ptdlsinfo = &(adapter->tdlsinfo);
 
 	/* point to action field */
@@ -957,7 +957,7 @@ sint OnTDLS(struct adapter *adapter, union recv_frame *precv_frame)
 			DBG_871X("recv tdls channel switch response frame\n");
 			ret=On_TDLS_Ch_Switch_Rsp(adapter, precv_frame);
 			break;
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 		case 0x50:	/* First byte of WFA OUI */
 			if( _rtw_memcmp(WFA_OUI, (paction), 3) )
 			{
@@ -976,7 +976,7 @@ sint OnTDLS(struct adapter *adapter, union recv_frame *precv_frame)
 				}
 			}
 			break;
-#endif /* CONFIG_WFD */
+#endif /* CONFIG_P2P */
 		default:
 			DBG_871X("receive TDLS frame but not supported\n");
 			ret=_FAIL;

@@ -388,9 +388,9 @@ struct adapter {
 #endif
 
 
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 	struct wifi_display_info wfd_info;
-#endif //CONFIG_WFD
+#endif //CONFIG_P2P
 
 	void *			HalData;
 	u32 hal_data_sz;

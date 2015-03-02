@@ -703,7 +703,7 @@ void flush_all_cam_entry(struct adapter *padapter)
 	memset((u8 *)(pmlmeinfo->FW_sta_info), 0, sizeof(pmlmeinfo->FW_sta_info));
 }
 
-#if defined(CONFIG_P2P) && defined(CONFIG_WFD)
+#if defined(CONFIG_P2P) && defined(CONFIG_P2P)
 int WFD_info_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 {
 	struct registry_priv	*pregpriv = &padapter->registrypriv;

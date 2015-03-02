@@ -101,10 +101,10 @@ void init_off_ch_timer(struct adapter *padapter, struct sta_info *psta);
 void init_tdls_alive_timer(struct adapter *padapter, struct sta_info *psta);
 void init_handshake_timer(struct adapter *padapter, struct sta_info *psta);
 void free_tdls_sta(struct adapter *padapter, struct sta_info *ptdls_sta);
-#ifdef CONFIG_WFD
+#ifdef CONFIG_P2P
 void issue_tunneled_probe_req(struct adapter *padapter);
 void issue_tunneled_probe_rsp(struct adapter *padapter, union recv_frame *precv_frame);
-#endif //CONFIG_WFD
+#endif //CONFIG_P2P
 void issue_tdls_dis_req(struct adapter *padapter, u8 *mac_addr);
 void issue_tdls_setup_req(struct adapter *padapter, u8 *mac_addr);
 void issue_tdls_setup_rsp(struct adapter *padapter, union recv_frame *precv_frame);
