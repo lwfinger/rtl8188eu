@@ -37,12 +37,6 @@
 #include <rtw_br_ext.h>
 #endif /* CONFIG_BR_EXT */
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-#define	RF_GAIN_OFFSET_ON			BIT4
-#define		REG_RF_BB_GAIN_OFFSET	0x55
-#define		RF_GAIN_OFFSET_MASK		0xfffff
-#endif /* CONFIG_RF_GAIN_OFFSET */
-
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
 MODULE_AUTHOR("Realtek Semiconductor Corp.");
@@ -1233,10 +1227,6 @@ int _netdev_open(struct net_device *pnetdev)
 
 		DBG_871X("MAC Address = "MAC_FMT"\n", MAC_ARG(pnetdev->dev_addr));
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-		rtw_bb_rf_gain_offset(padapter);
-#endif /* CONFIG_RF_GAIN_OFFSET */
-
 		status=rtw_start_drv_threads(padapter);
 		if(status ==_FAIL)
 		{
@@ -1330,20 +1320,13 @@ static int  ips_netdrv_open(struct adapter *padapter)
 	/* padapter->bup = true; */
 
 	status = rtw_hal_init(padapter);
-	if (status ==_FAIL)
-	{
+	if (status ==_FAIL) {
 		RT_TRACE(_module_os_intfs_c_,_drv_err_,("ips_netdrv_open(): Can't init h/w!\n"));
 		goto netdev_open_error;
 	}
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-	rtw_bb_rf_gain_offset(padapter);
-#endif /* CONFIG_RF_GAIN_OFFSET */
-
 	if(padapter->intf_start)
-	{
 		padapter->intf_start(padapter);
-	}
 
 	rtw_set_pwr_state_check_timer(adapter_to_pwrctl(padapter));
 	_set_timer(&padapter->mlmepriv.dynamic_chk_timer,5000);
@@ -1409,37 +1392,6 @@ void rtw_ips_dev_unload(struct adapter *padapter)
 	}
 
 }
-
-#ifdef CONFIG_RF_GAIN_OFFSET
-void rtw_bb_rf_gain_offset(struct adapter *padapter)
-{
-	u8      value = padapter->eeprompriv.EEPROMRFGainOffset;
-	u8      tmp = 0x3e;
-	u32     res;
-
-	DBG_871X("+%s value: 0x%02x+\n", __func__, value);
-
-	if (value & RF_GAIN_OFFSET_ON) {
-		/* DBG_871X("Offset RF Gain.\n"); */
-		/* DBG_871X("Offset RF Gain.  padapter->eeprompriv.EEPROMRFGainVal=0x%x\n",padapter->eeprompriv.EEPROMRFGainVal); */
-		if(padapter->eeprompriv.EEPROMRFGainVal != 0xff){
-			res = rtw_hal_read_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, 0xffffffff);
-			DBG_871X("REG_RF_BB_GAIN_OFFSET=%x \n",res);
-			res &= 0xfff87fff;
-			res |= (padapter->eeprompriv.EEPROMRFGainVal & 0x0f)<< 15;
-			DBG_871X("write REG_RF_BB_GAIN_OFFSET=%x \n",res);
-			rtw_hal_write_rfreg(padapter, RF_PATH_A, REG_RF_BB_GAIN_OFFSET, RF_GAIN_OFFSET_MASK, res);
-		}
-		else
-		{
-			/* DBG_871X("Offset RF Gain.  padapter->eeprompriv.EEPROMRFGainVal=0x%x  != 0xff, didn't run Kfree\n",padapter->eeprompriv.EEPROMRFGainVal); */
-		}
-	} else {
-		/* DBG_871X("Using the default RF gain.\n"); */
-	}
-
-}
-#endif /* CONFIG_RF_GAIN_OFFSET */
 
 int pm_netdev_open(struct net_device *pnetdev,u8 bnormal)
 {

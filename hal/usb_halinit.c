@@ -31,11 +31,6 @@
 #include <usb_hal.h>
 #include <usb_osintf.h>
 
-#ifdef CONFIG_EFUSE_CONFIG_FILE
-#include <linux/fs.h>
-#include <asm/uaccess.h>
-#endif /* CONFIG_EFUSE_CONFIG_FILE */
-
 #if DISABLE_BB_RF
 	#define		HAL_MAC_ENABLE	0
 	#define		HAL_BB_ENABLE		0
@@ -2008,119 +2003,6 @@ static void _ReadPSSetting(IN struct adapter *Adapter,IN u8*PROMContent,IN u8	Au
 {
 }
 
-#ifdef CONFIG_EFUSE_CONFIG_FILE
-static u32 Hal_readPGDataFromConfigFile(
-	struct adapter *padapter)
-{
-	u32 i;
-	struct file *fp;
-	mm_segment_t fs;
-	u8 temp[3];
-	loff_t pos = 0;
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
-	u8	*PROMContent = pEEPROM->efuse_eeprom_data;
-
-
-	temp[2] = 0; /*  add end of string '\0' */
-
-	fp = filp_open("/system/etc/wifi/wifi_efuse.map", O_RDWR,  0644);
-	if (IS_ERR(fp)) {
-		pEEPROM->bloadfile_fail_flag = true;
-		DBG_871X("Error, Efuse configure file doesn't exist.\n");
-		return _FAIL;
-	}
-
-	fs = get_fs();
-	set_fs(KERNEL_DS);
-
-	DBG_871X("Efuse configure file:\n");
-	for (i=0; i<HWSET_MAX_SIZE_88E; i++) {
-		vfs_read(fp, temp, 2, &pos);
-		PROMContent[i] = simple_strtoul(temp, NULL, 16 );
-		pos += 1; /*  Filter the space character */
-		DBG_871X("%02X \n", PROMContent[i]);
-	}
-	DBG_871X("\n");
-	set_fs(fs);
-
-	filp_close(fp, NULL);
-
-	pEEPROM->bloadfile_fail_flag = false;
-
-	return _SUCCESS;
-}
-
-static void
-Hal_ReadMACAddrFromFile_8188EU(
-	struct adapter *	padapter
-	)
-{
-	u32 i;
-	struct file *fp;
-	mm_segment_t fs;
-	u8 source_addr[18];
-	loff_t pos = 0;
-	u32 curtime = rtw_get_current_time();
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
-	u8 *head, *end;
-
-	u8 null_mac_addr[ETH_ALEN] = {0, 0, 0,0, 0, 0};
-	u8 multi_mac_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-
-	memset(source_addr, 0, 18);
-	memset(pEEPROM->mac_addr, 0, ETH_ALEN);
-
-	fp = filp_open("/data/wifimac.txt", O_RDWR,  0644);
-	if (IS_ERR(fp)) {
-		pEEPROM->bloadmac_fail_flag = true;
-		DBG_871X("Error, wifi mac address file doesn't exist.\n");
-	} else {
-		fs = get_fs();
-		set_fs(KERNEL_DS);
-
-		DBG_871X("wifi mac address:\n");
-		vfs_read(fp, source_addr, 18, &pos);
-		source_addr[17] = ':';
-
-		head = end = source_addr;
-		for (i=0; i<ETH_ALEN; i++) {
-			while (end && (*end != ':') )
-				end++;
-
-			if (end && (*end == ':') )
-				*end = '\0';
-
-			pEEPROM->mac_addr[i] = simple_strtoul(head, NULL, 16 );
-
-			if (end) {
-				end++;
-				head = end;
-			}
-			DBG_871X("%02x \n", pEEPROM->mac_addr[i]);
-		}
-		DBG_871X("\n");
-		set_fs(fs);
-		pEEPROM->bloadmac_fail_flag = false;
-		filp_close(fp, NULL);
-	}
-
-	if ( (_rtw_memcmp(pEEPROM->mac_addr, null_mac_addr, ETH_ALEN)) ||
-		(_rtw_memcmp(pEEPROM->mac_addr, multi_mac_addr, ETH_ALEN)) ) {
-		pEEPROM->mac_addr[0] = 0x00;
-		pEEPROM->mac_addr[1] = 0xe0;
-		pEEPROM->mac_addr[2] = 0x4c;
-		pEEPROM->mac_addr[3] = (u8)(curtime & 0xff) ;
-		pEEPROM->mac_addr[4] = (u8)((curtime>>8) & 0xff) ;
-		pEEPROM->mac_addr[5] = (u8)((curtime>>16) & 0xff) ;
-	}
-
-	DBG_871X("Hal_ReadMACAddrFromFile_8188ES: Permanent Address = %02x-%02x-%02x-%02x-%02x-%02x\n",
-		  pEEPROM->mac_addr[0], pEEPROM->mac_addr[1],
-		  pEEPROM->mac_addr[2], pEEPROM->mac_addr[3],
-		  pEEPROM->mac_addr[4], pEEPROM->mac_addr[5]);
-}
-#endif /* CONFIG_EFUSE_CONFIG_FILE */
-
 static void
 readAdapterInfo_8188EU(
 	IN	struct adapter *padapter
@@ -2131,11 +2013,7 @@ readAdapterInfo_8188EU(
 	/* parse the eeprom/efuse content */
 	Hal_EfuseParseIDCode88E(padapter, pEEPROM->efuse_eeprom_data);
 	Hal_EfuseParsePIDVID_8188EU(padapter, pEEPROM->efuse_eeprom_data, pEEPROM->bautoload_fail_flag);
-#ifdef CONFIG_EFUSE_CONFIG_FILE
-	Hal_ReadMACAddrFromFile_8188EU(padapter);
-#else /* CONFIG_EFUSE_CONFIG_FILE */
 	Hal_EfuseParseMACAddr_8188EU(padapter, pEEPROM->efuse_eeprom_data, pEEPROM->bautoload_fail_flag);
-#endif /* CONFIG_EFUSE_CONFIG_FILE */
 
 	Hal_ReadPowerSavingMode88E(padapter, pEEPROM->efuse_eeprom_data, pEEPROM->bautoload_fail_flag);
 	Hal_ReadTxPowerInfo88E(padapter, pEEPROM->efuse_eeprom_data, pEEPROM->bautoload_fail_flag);
@@ -2173,15 +2051,9 @@ static void _ReadPROMContent(
 				(pEEPROM->bautoload_fail_flag ? "Fail" : "OK") );
 
 	/* pHalData->EEType = IS_BOOT_FROM_EEPROM(Adapter) ? EEPROM_93C46 : EEPROM_BOOT_EFUSE; */
-#ifdef CONFIG_EFUSE_CONFIG_FILE
-	Hal_readPGDataFromConfigFile(Adapter);
-#else /* CONFIG_EFUSE_CONFIG_FILE */
 	Hal_InitPGData88E(Adapter);
-#endif	/* CONFIG_EFUSE_CONFIG_FILE */
 	readAdapterInfo_8188EU(Adapter);
 }
-
-
 
 static void
 _ReadRFType(

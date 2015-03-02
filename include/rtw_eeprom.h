@@ -130,11 +130,6 @@ struct eeprom_priv
 	u8		EepromOrEfuse;
 
 	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
-
-#ifdef CONFIG_RF_GAIN_OFFSET
-	u8		EEPROMRFGainOffset;
-	u8		EEPROMRFGainVal;
-#endif //CONFIG_RF_GAIN_OFFSET
 };
 
 extern void eeprom_write16(struct adapter *padapter, u16 reg, u16 data);

@@ -3570,32 +3570,6 @@ void Hal_DetectWoWMode(struct adapter *pAdapter)
 }
 #endif
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-void Hal_ReadRFGainOffset(
-	IN		struct adapter *	Adapter,
-	IN		u8*				PROMContent,
-	IN		BOOLEAN			AutoloadFail)
-{
-	u8 buff[EFUSE_MAX_SIZE];
-	u32 res;
-	/*  */
-	/*  BB_RF Gain Offset from EEPROM */
-	/*  */
-	/* res = rtw_efuse_access(Adapter, false, 0, EFUSE_MAX_SIZE, buff); */
-	if(!AutoloadFail ){
-		Adapter->eeprompriv.EEPROMRFGainOffset = PROMContent[EEPROM_RF_GAIN_OFFSET_88E];
-		Adapter->eeprompriv.EEPROMRFGainVal=EFUSE_Read1Byte(Adapter, EEPROM_RF_GAIN_VAL_88E);
-	}
-	else{
-		Adapter->eeprompriv.EEPROMRFGainOffset = EEPROM_Default_RFGainOffset;
-		Adapter->eeprompriv.EEPROMRFGainVal=0xff;
-	}
-	DBG_871X("EEPRORFGainOffset = 0x%02x\n", Adapter->eeprompriv.EEPROMRFGainOffset);
-}
-#endif /* CONFIG_RF_GAIN_OFFSET */
-
-/*  */
-/*  */
 /*  20100209 Joseph: */
 /*  This function is used only for 92C to set REG_BCN_CTRL(0x550) register. */
 /*  We just reserve the value of the register in variable pHalData->RegBcnCtrlVal and then operate */

@@ -530,13 +530,6 @@ BOOLEAN HalDetectPwrDownMode88E(struct adapter *Adapter);
 void Hal_DetectWoWMode(struct adapter *pAdapter);
 #endif //CONFIG_WOWLAN
 
-#ifdef CONFIG_RF_GAIN_OFFSET
-void Hal_ReadRFGainOffset(struct adapter *pAdapter,u8* hwinfo,BOOLEAN AutoLoadFail);
-#endif //CONFIG_RF_GAIN_OFFSET
-
-//RT_CHANNEL_DOMAIN rtl8723a_HalMapChannelPlan(struct adapter *padapter, u8 HalChannelPlan);
-//VERSION_8192C rtl8723a_ReadChipVersion(struct adapter *padapter);
-//void rtl8723a_ReadBluetoothCoexistInfo(struct adapter *padapter, u8 *PROMContent, BOOLEAN AutoloadFail);
 void Hal_InitChannelPlan(struct adapter *padapter);
 
 void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc);
