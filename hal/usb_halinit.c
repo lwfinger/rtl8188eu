@@ -754,21 +754,6 @@ _InitBeaconMaxError(
 }
 
 
-#ifdef CONFIG_LED
-static void _InitHWLed(struct adapter *Adapter)
-{
-	struct led_priv *pledpriv = &(Adapter->ledpriv);
-
-	if( pledpriv->LedStrategy != HW_LED)
-		return;
-
-/*  HW led control */
-/*  to do .... */
-/* must consider cases of antenna diversity/ commbo card/solo card/mini card */
-
-}
-#endif /* CONFIG_LED */
-
 static void
 _InitRDGSetting(
 	IN	struct adapter *Adapter
@@ -1525,14 +1510,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	rtw_write16(Adapter, REG_PKT_VO_VI_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 	rtw_write16(Adapter, REG_PKT_BE_BK_LIFE_TIME, 0x0400);	/*  unit: 256us. 256ms */
 
-#ifdef CONFIG_LED
-	_InitHWLed(Adapter);
-#endif /* CONFIG_LED */
-
-
-	/*  */
 	/*  Joseph Note: Keep RfRegChnlVal for later use. */
-	/*  */
 	pHalData->RfRegChnlVal[0] = PHY_QueryRFReg(Adapter, (RF_RADIO_PATH_E)0, RF_CHNLBW, bRFRegOffsetMask);
 	pHalData->RfRegChnlVal[1] = PHY_QueryRFReg(Adapter, (RF_RADIO_PATH_E)1, RF_CHNLBW, bRFRegOffsetMask);
 
