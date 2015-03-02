@@ -27,10 +27,6 @@
 #include <ioctl_cfg80211.h>
 #include <rtw_ioctl_set.h>
 
-#ifdef CONFIG_GPIO_WAKEUP
-#include <linux/gpio.h>
-#endif
-
 #include <drv_types.h>
 
 #if defined(RTW_ENABLE_WIFI_CONTROL_FUNC)
@@ -41,11 +37,6 @@
 #include <linux/wifi_tiwlan.h>
 #endif
 #endif /* defined(RTW_ENABLE_WIFI_CONTROL_FUNC) */
-
-#ifdef CONFIG_GPIO_WAKEUP
-#include <linux/interrupt.h>
-#include <linux/irq.h>
-#endif
 
 static const char *android_wifi_cmd_str[ANDROID_WIFI_CMD_MAX] = {
 	"START",
@@ -722,17 +713,6 @@ static int wifi_probe(struct platform_device *pdev)
 	else
 		wifi_wake_gpio = wifi_irqres->start;
 
-#ifdef CONFIG_GPIO_WAKEUP
-	printk("%s: gpio:%d wifi_wake_gpio:%d\n", __func__,
-			wifi_irqres->start, wifi_wake_gpio);
-
-	if (wifi_wake_gpio > 0) {
-		gpio_request(wifi_wake_gpio, "oob_irq");
-		gpio_direction_input(wifi_wake_gpio);
-		oob_irq = gpio_to_irq(wifi_wake_gpio);
-		printk("%s oob_irq:%d\n", __func__, oob_irq);
-	}
-#endif
 	wifi_control_data = wifi_ctrl;
 
 	wifi_set_power(1, 0);	/* Power On */
