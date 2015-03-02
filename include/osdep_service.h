@@ -91,9 +91,7 @@ extern int rtw_ht_enable;
 extern int rtw_cbw40_enable;
 extern int rtw_ampdu_enable;//for enable tx_ampdu
 
-#ifdef CONFIG_GLOBAL_UI_PID
 extern int ui_pid[3];
-#endif
 
 extern unsigned char	MCS_rate_2R[16];
 #ifdef CONFIG_DISABLE_MCS13TO15

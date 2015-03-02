@@ -3456,14 +3456,11 @@ static int rtw_set_pid(struct net_device *dev,
 	selector = *pdata;
 	if(selector < 3 && selector >=0) {
 		padapter->pid[selector] = *(pdata+1);
-		#ifdef CONFIG_GLOBAL_UI_PID
 		ui_pid[selector] = *(pdata+1);
-		#endif
 		DBG_871X("%s set pid[%d]=%d\n", __FUNCTION__, selector ,padapter->pid[selector]);
-	}
-	else
+	} else {
 		DBG_871X("%s selector %d error\n", __FUNCTION__, selector);
-
+	}
 exit:
 
 	return ret;

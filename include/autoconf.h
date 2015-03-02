@@ -36,9 +36,6 @@
 
 #define CONFIG_SKB_COPY	//for amsdu
 
-#define USB_INTERFERENCE_ISSUE // this should be checked in all usb interface
-#define CONFIG_GLOBAL_UI_PID
-
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
 
 #define CONFIG_BR_EXT		// Enable NAT2.5 support for STA mode interface with a L2 Bridge
