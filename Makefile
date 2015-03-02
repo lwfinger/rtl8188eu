@@ -22,7 +22,6 @@ CONFIG_POWER_SAVING = y
 CONFIG_USB_AUTOSUSPEND = n
 CONFIG_BT_COEXIST = n
 CONFIG_EXT_CLK = n
-CONFIG_ODM_ADAPTIVITY = n
 
 CONFIG_DRVEXT_MODULE = n
 
@@ -96,10 +95,6 @@ endif
 
 ifeq ($(CONFIG_EXT_CLK), y)
 EXTRA_CFLAGS += -DCONFIG_EXT_CLK
-endif
-
-ifeq ($(CONFIG_ODM_ADAPTIVITY), y)
-EXTRA_CFLAGS += -DCONFIG_ODM_ADAPTIVITY
 endif
 
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/ | sed -e s/armv.l/arm/)
