@@ -248,7 +248,7 @@ ODM_AntennaDiversityInit_88E(
 	/* ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("pDM_Odm->AntDivType=%d, pHalData->AntDivCfg=%d\n", */
 	/* 	pDM_Odm->AntDivType, pHalData->AntDivCfg)); */
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("pDM_Odm->AntDivType=%d\n",pDM_Odm->AntDivType));
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("pDM_Odm->bIsMPChip=%s\n",(pDM_Odm->bIsMPChip?"TRUE":"FALSE")));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("pDM_Odm->bIsMPChip=%s\n",(pDM_Odm->bIsMPChip?"true":"false")));
 
 	if(pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV)
 		odm_RX_HWAntDivInit(pDM_Odm);
@@ -392,7 +392,7 @@ odm_HWAntDiv(
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
 	bool	bMatchBSSID;
-	bool	bPktFilterMacth = FALSE;
+	bool	bPktFilterMacth = false;
 	PSTA_INFO_T	pEntry;
 
 	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++)
@@ -494,7 +494,7 @@ ODM_AntennaDiversity_88E(
 	if(!pDM_Odm->bLinked)
 	{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("ODM_AntennaDiversity_88E(): No Link.\n"));
-		if(pDM_FatTable->bBecomeLinked == TRUE)
+		if(pDM_FatTable->bBecomeLinked == true)
 		{
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Need to Turn off HW AntDiv\n"));
 			ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 0);	/* RegC50[7]=1'b1	enable HW AntDiv */
@@ -505,7 +505,7 @@ ODM_AntennaDiversity_88E(
 		}
 		return;
 	} else {
-		if(pDM_FatTable->bBecomeLinked ==FALSE) {
+		if(pDM_FatTable->bBecomeLinked ==false) {
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Need to Turn on HW AntDiv\n"));
 			/* Because HW AntDiv is disabled before Link, we enable HW AntDiv after link */
 			ODM_SetBBReg(pDM_Odm, ODM_REG_IGI_A_11N , BIT7, 1);	/* RegC50[7]=1'b1	enable HW AntDiv */
@@ -561,11 +561,11 @@ odm_DynamicPrimaryCCA(
 	struct adapter *Adapter =  pDM_Odm->Adapter;	/*  for NIC */
 	prtl8192cd_priv	priv		= pDM_Odm->priv;	/*  for AP */
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	PFALSE_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
+	Pfalse_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
 	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 	bool		Is40MHz;
-	bool		Client_40MHz = FALSE, Client_tmp = FALSE;      /*  connected client BW */
-	bool		bConnected = FALSE;		/*  connected or not */
+	bool		Client_40MHz = false, Client_tmp = false;      /*  connected client BW */
+	bool		bConnected = false;		/*  connected or not */
 	static u8	Client_40MHz_pre = 0;
 	static u64	lastTxOkCnt = 0;
 	static u64	lastRxOkCnt = 0;

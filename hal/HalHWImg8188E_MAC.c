@@ -32,22 +32,22 @@ CheckCondition(
     u32 cond = Condition;
 
     if ( Condition == 0xCDCDCDCD )
-        return TRUE;
+        return true;
 
     cond = Condition & 0x000000FF;
     if ( (_board != cond) && (cond != 0xFF) )
-        return FALSE;
+        return false;
 
     cond = Condition & 0x0000FF00;
     cond = cond >> 8;
     if ( ((_interface & cond) == 0) && (cond != 0x07) )
-        return FALSE;
+        return false;
 
     cond = Condition & 0x00FF0000;
     cond = cond >> 16;
     if ( ((_platform & cond) == 0) && (cond != 0x0F) )
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 
@@ -169,7 +169,7 @@ ODM_ReadAndConfig_MAC_REG_8188E(
 	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_MAC_REG_8188E)/sizeof(u32);
 	u32 *    Array       = Array_MAC_REG_8188E;
-	bool		biol = FALSE;
+	bool		biol = false;
 	HAL_STATUS rst =HAL_STATUS_SUCCESS;
 	hex += board;
 	hex += interfaceValue << 8;

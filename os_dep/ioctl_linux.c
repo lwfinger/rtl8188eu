@@ -163,7 +163,7 @@ static void request_wps_pbc_event(struct adapter *padapter)
 
 	p=buff;
 
-	p+=sprintf(p, "WPS_PBC_START.request=TRUE");
+	p+=sprintf(p, "WPS_PBC_START.request=true");
 
 	memset(&wrqu,0,sizeof(wrqu));
 

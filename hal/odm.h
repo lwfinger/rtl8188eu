@@ -201,7 +201,7 @@ typedef struct false_ALARM_STATISTICS{
 	u32	Cnt_CCA_all;
 	u32	Cnt_BW_USC;	/* Gary */
 	u32	Cnt_BW_LSC;	/* Gary */
-}FALSE_ALARM_STATISTICS, *PFALSE_ALARM_STATISTICS;
+}false_ALARM_STATISTICS, *Pfalse_ALARM_STATISTICS;
 
 typedef struct _Dynamic_Primary_CCA{
 	u8		PriCCA_flag;
@@ -427,7 +427,7 @@ typedef enum _ODM_Common_Info_Definition
 	ODM_CMNINFO_FAB_VER,					/*  ODM_FAB_E */
 	ODM_CMNINFO_RF_TYPE,					/*  ODM_RF_PATH_E or ODM_RF_TYPE_E? */
 	ODM_CMNINFO_BOARD_TYPE,				/*  ODM_BOARD_TYPE_E */
-	ODM_CMNINFO_EXT_LNA,					/*  TRUE */
+	ODM_CMNINFO_EXT_LNA,					/*  true */
 	ODM_CMNINFO_EXT_PA,
 	ODM_CMNINFO_EXT_TRSW,
 	ODM_CMNINFO_PATCH_ID,				/* CUSTOMER ID */
@@ -1126,8 +1126,8 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	PS_T		DM_PSTable;
 	Pri_CCA_T	DM_PriCCA;
 	RXHP_T		DM_RXHP_Table;
-	FALSE_ALARM_STATISTICS	FalseAlmCnt;
-	FALSE_ALARM_STATISTICS	FlaseAlmCntBuddyAdapter;
+	false_ALARM_STATISTICS	FalseAlmCnt;
+	false_ALARM_STATISTICS	FlaseAlmCntBuddyAdapter;
 	SWAT_T		DM_SWAT_Table;
 	bool		RSSI_test;
 	

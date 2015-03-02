@@ -2951,7 +2951,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 
 		}
 
-		/* pHalData->bNOPG = TRUE; */
+		/* pHalData->bNOPG = true; */
 		return;
 	}
 
@@ -2966,7 +2966,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 			if(pwrInfo24G->IndexCCK_Base[rfPath][group] == 0xFF)
 			{
 				pwrInfo24G->IndexCCK_Base[rfPath][group] = EEPROM_DEFAULT_24G_INDEX;
-/* 				pHalData->bNOPG = TRUE; */
+/* 				pHalData->bNOPG = true; */
 			}
 		}
 		for(group = 0 ; group < MAX_CHNL_GROUP_24G-1; group++)
@@ -3187,7 +3187,7 @@ Hal_ReadTxPowerInfo88E(
 	Hal_ReadPowerValueFromPROM_8188E(padapter,&pwrInfo24G, PROMContent, AutoLoadFail);
 
 	if(!AutoLoadFail)
-		pHalData->bTXPowerDataReadFromEEPORM = TRUE;
+		pHalData->bTXPowerDataReadFromEEPORM = true;
 
 	/* for(rfPath = 0 ; rfPath < MAX_RF_PATH ; rfPath++) */
 	for(rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)

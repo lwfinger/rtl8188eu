@@ -255,7 +255,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 	PPHY_STATUS_RPT_8192CD_T pPhyStaRpt = (PPHY_STATUS_RPT_8192CD_T)pPhyStatus;
 
-	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M ) && (pPktinfo->Rate <= DESC92C_RATE11M ))?TRUE :FALSE;
+	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M ) && (pPktinfo->Rate <= DESC92C_RATE11M ))?true :false;
 
 	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_A] = -1;
 	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_B] = -1;
@@ -275,7 +275,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 		/* if(pHalData->eRFPowerState == eRfOn) */
 			cck_highpwr = pDM_Odm->bCckHighPower;
 		/* else */
-		/* 	cck_highpwr = FALSE; */
+		/* 	cck_highpwr = false; */
 
 		cck_agc_rpt =  pPhyStaRpt->cck_agc_rpt_ofdm_cfosho_a ;
 
@@ -323,7 +323,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			}
 			rx_pwr_all += 6;
 			PWDB_ALL = odm_QueryRxPwrPercentage(rx_pwr_all);
-			if(cck_highpwr == FALSE)
+			if(cck_highpwr == false)
 			{
 				if(PWDB_ALL >= 80)
 					PWDB_ALL = ((PWDB_ALL-80)<<1)+((PWDB_ALL-80)>>1)+80;
@@ -609,7 +609,7 @@ odm_Process_RSSIForDM(
 		return;
 	}
 
-	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M ) && (pPktinfo->Rate <= DESC92C_RATE11M ))?TRUE :FALSE;
+	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M ) && (pPktinfo->Rate <= DESC92C_RATE11M ))?true :false;
 	if(pPktinfo->bPacketBeacon)
 	    pDM_Odm->PhyDbgInfo.NumQryBeaconPkt++;
 
@@ -792,7 +792,7 @@ ODM_PhyStatusQuery_92CSeries(
 							pPhyStatus,
 							pPktinfo);
 
-	if( pDM_Odm->RSSI_test == TRUE) {
+	if( pDM_Odm->RSSI_test == true) {
 		/*  Select the packets to do RSSI checking for antenna switching. */
 		if(pPktinfo->bPacketToSelf || pPktinfo->bPacketBeacon )
 				ODM_SwAntDivChkPerPktRssi(pDM_Odm,pPktinfo->StationID,pPhyInfo);

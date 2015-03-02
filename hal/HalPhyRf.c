@@ -50,7 +50,7 @@ ODM_ResetIQKResult(
 				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][5] =
 				pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][7] = 0x0;
 
-			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].bIQKDone = FALSE;
+			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].bIQKDone = false;
 
 		}
 	}

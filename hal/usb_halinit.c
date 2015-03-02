@@ -462,7 +462,7 @@ _InitNormalChipOneOutEpPriority(
 			value = QUEUE_NORMAL;
 			break;
 		default:
-			/* RT_ASSERT(FALSE,("Shall not reach here!\n")); */
+			/* RT_ASSERT(false,("Shall not reach here!\n")); */
 			break;
 	}
 
@@ -505,7 +505,7 @@ _InitNormalChipTwoOutEpPriority(
 			valueLow = QUEUE_NORMAL;
 			break;
 		default:
-			/* RT_ASSERT(FALSE,("Shall not reach here!\n")); */
+			/* RT_ASSERT(false,("Shall not reach here!\n")); */
 			break;
 	}
 
@@ -576,7 +576,7 @@ _InitQueuePriority(
 			_InitNormalChipThreeOutEpPriority(Adapter);
 			break;
 		default:
-			/* RT_ASSERT(FALSE,("Shall not reach here!\n")); */
+			/* RT_ASSERT(false,("Shall not reach here!\n")); */
 			break;
 	}
 
@@ -912,7 +912,7 @@ usb_AggSettingRxUpdate(
 			pHalData->HwRxPageSize = 1024;
 			break;
 		default:
-			/* RT_ASSERT(FALSE, ("RX_PAGE_SIZE_REG_VALUE definition is incorrect!\n")); */
+			/* RT_ASSERT(false, ("RX_PAGE_SIZE_REG_VALUE definition is incorrect!\n")); */
 			break;
 	}
 }	/*  usb_AggSettingRxUpdate */

@@ -356,5 +356,5 @@ ODM_FillH2CCmd(
 	IN	u8 *		CmdStartSeq
 	)
 {
-	return	TRUE;
+	return	true;
 }

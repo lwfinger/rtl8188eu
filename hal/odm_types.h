@@ -68,8 +68,8 @@ typedef  void *				RT_TIMER_CALL_BACK;
 	
 
 
-#define TRUE 	true	
-#define FALSE	false
+#define true 	true	
+#define false	false
 
 
 #define SET_TX_DESC_ANTSEL_A_88E(__pTxDesc, __Value)			\

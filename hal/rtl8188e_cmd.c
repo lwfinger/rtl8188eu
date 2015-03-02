@@ -576,9 +576,9 @@ CheckFwRsvdPageContent(
 /* 			Now we just send 4 types packet to rsvd page. */
 /* 			(1)Beacon, (2)Ps-poll, (3)Null data, (4)ProbeRsp. */
 /* 	Input: */
-/* 	    bDLFinished - FALSE: At the first time we will send all the packets as a large packet to Hw, */
+/* 	    bDLFinished - false: At the first time we will send all the packets as a large packet to Hw, */
 /* 						so we need to set the packet length to total lengh. */
-/* 			      TRUE: At the second time, we should send the first packet (default:beacon) */
+/* 			      true: At the second time, we should send the first packet (default:beacon) */
 /* 						to Hw again and set the lengh in descriptor to the real beacon lengh. */
 /*  2009.10.15 by tynli. */
 static void SetFwRsvdPagePkt(struct adapter *padapter, bool bDLFinished)

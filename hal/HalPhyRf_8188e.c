@@ -144,7 +144,7 @@ static void doIQK(
 	ODM_ResetIQKResult(pDM_Odm);
 
 	pDM_Odm->RFCalibrateInfo.ThermalValue_IQK= ThermalValue;
-	PHY_IQCalibrate_8188E(Adapter, FALSE);
+	PHY_IQCalibrate_8188E(Adapter, false);
 }
 
 /*-----------------------------------------------------------------------------
@@ -353,8 +353,8 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	s8			OFDM_index[2], CCK_index=0, OFDM_index_old[2]={0,0}, CCK_index_old=0, index;
 	s8			deltaPowerIndex = 0;
 	u32			i = 0, j = 0;
-	bool			is2T = FALSE;
-	bool			bInteralPA = FALSE;
+	bool			is2T = false;
+	bool			bInteralPA = false;
 
 	u8			OFDM_min_index = 6, rf = (is2T) ? 2 : 1; /* OFDM BB Swing should be less than +3.0dB, which is required by Arthur */
 	u8			Indexforchannel = 0;/*GetRightChnlPlaceforIQK(pHalData->CurrentChannel)*/
@@ -375,7 +375,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	/* 4 0.1 Initilization ( 7 steps in total ) */
 
 	pDM_Odm->RFCalibrateInfo.TXPowerTrackingCallbackCnt++; /* cosa add for debug */
-	pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = TRUE;
+	pDM_Odm->RFCalibrateInfo.bTXPowerTrackingInit = true;
 
 #if (MP_DRIVER == 1)
     /*  <Kordan> RFCalibrateInfo.RegA24 will be initialized when ODM HW configuring, but MP configures with para files. */
@@ -508,7 +508,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	{
 		/* 4 7.2 Configure the Swing Table to adjust Tx Power. */
 
-			pDM_Odm->RFCalibrateInfo.bTxPowerChanged = TRUE; /*  Always TRUE after Tx Power is adjusted by power tracking. */
+			pDM_Odm->RFCalibrateInfo.bTxPowerChanged = true; /*  Always true after Tx Power is adjusted by power tracking. */
 			/*  */
 			/*  2012/04/23 MH According to Luke's suggestion, we can not write BB digital */
 			/*  to increase TX power. Otherwise, EVM will be bad. */
@@ -932,7 +932,7 @@ static bool
 ODM_CheckPowerStatus(
 	IN	struct adapter *	Adapter)
 {
-	return	TRUE;
+	return	true;
 }
 
 void
@@ -947,7 +947,7 @@ _PHY_SaveADDARegisters(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
-	if (ODM_CheckPowerStatus(pAdapter) == FALSE)
+	if (ODM_CheckPowerStatus(pAdapter) == false)
 		return;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("Save ADDA parameters.\n"));
 	for( i = 0 ; i < RegisterNum ; i++){
@@ -1030,7 +1030,7 @@ _PHY_PathADDAOn(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("ADDA ON.\n"));
 
 	pathOn = isPathAOn ? 0x04db25a4 : 0x0b1b25a4;
-	if(FALSE == is2T){
+	if(false == is2T){
 		pathOn = 0x0bdb25a0;
 		ODM_SetBBReg(pDM_Odm, ADDAReg[0], bMaskDWord, 0x0b1b25a0);
 	}
@@ -1110,14 +1110,14 @@ phy_SimularityCompare_8188E(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	u8		final_candidate[2] = {0xFF, 0xFF};	/* for path A and path B */
-	bool		bResult = TRUE;
+	bool		bResult = true;
 	bool		is2T;
 	s32 tmp1 = 0,tmp2 = 0;
 
 	if( (pDM_Odm->RFType ==ODM_2T2R )||(pDM_Odm->RFType ==ODM_2T3R )||(pDM_Odm->RFType ==ODM_2T4R ))
-		is2T = TRUE;
+		is2T = true;
 	else
-		is2T = FALSE;
+		is2T = false;
 
 	if(is2T)
 		bound = 8;
@@ -1182,7 +1182,7 @@ phy_SimularityCompare_8188E(
 			{
 				for( j = i*4; j < (i+1)*4-2; j++)
 					result[3][j] = result[final_candidate[i]][j];
-				bResult = FALSE;
+				bResult = false;
 			}
 		}
 		return bResult;
@@ -1215,7 +1215,7 @@ phy_SimularityCompare_8188E(
 			   result[3][i] = result[c1][i];
 	   }
 
-		   return FALSE;
+		   return false;
 	}
 
 }
@@ -1276,7 +1276,7 @@ else
 	}
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("IQ Calibration for %s for %d times\n", (is2T ? "2T2R" : "1T1R"), t));
 
-	_PHY_PathADDAOn(pAdapter, ADDA_REG, TRUE, is2T);
+	_PHY_PathADDAOn(pAdapter, ADDA_REG, true, is2T);
 
 	if(t==0) {
 		pDM_Odm->RFCalibrateInfo.bRfPiEnable = (u8)ODM_GetBBReg(pDM_Odm, rFPGA0_XA_HSSIParameter1, BIT(8));
@@ -1284,7 +1284,7 @@ else
 
 	if(!pDM_Odm->RFCalibrateInfo.bRfPiEnable){
 		/*  Switch BB to PI mode to do IQ Calibration. */
-		_PHY_PIModeSwitch(pAdapter, TRUE);
+		_PHY_PIModeSwitch(pAdapter, true);
 	}
 
 	/* BB setting */
@@ -1354,7 +1354,7 @@ else
 		_PHY_PathAStandBy(pAdapter);
 
 		/*  Turn Path B ADDA on */
-		_PHY_PathADDAOn(pAdapter, ADDA_REG, FALSE, is2T);
+		_PHY_PathADDAOn(pAdapter, ADDA_REG, false, is2T);
 
 		for(i = 0 ; i < retryCount ; i++){
 			PathBOK = phy_PathB_IQK_8188E(pAdapter);
@@ -1386,7 +1386,7 @@ else
 	if(t!=0) {
 		if(!pDM_Odm->RFCalibrateInfo.bRfPiEnable){
 			/*  Switch back BB to SI mode after finish IQ Calibration. */
-			_PHY_PIModeSwitch(pAdapter, FALSE);
+			_PHY_PIModeSwitch(pAdapter, false);
 		}
 
 		/*  Reload ADDA power saving parameters */
@@ -1906,7 +1906,7 @@ if (*(pDM_Odm->mp_mode) != 1)
 			((0x08 << 15) | (0x08 << 10) | (0x08 << 5) | 0x08));
 	}
 
-	pDM_Odm->RFCalibrateInfo.bAPKdone = TRUE;
+	pDM_Odm->RFCalibrateInfo.bAPKdone = true;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("<==phy_APCalibrate_8188E()\n"));
 }
@@ -1944,7 +1944,7 @@ PHY_IQCalibrate_8188E(
 	bool			bPathAOK, bPathBOK;
 	s32			RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC, RegTmp = 0;
 	bool			is12simular, is13simular, is23simular;
-	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
 	u32			IQK_BB_REG_92C[IQK_BB_REG_NUM] = {
 					rOFDM0_XARxIQImbalance,		rOFDM0_XBRxIQImbalance,
 					rOFDM0_ECCAThreshold,	rOFDM0_AGCRSSITable,
@@ -1953,8 +1953,8 @@ PHY_IQCalibrate_8188E(
 					rOFDM0_RxIQExtAnta};
 	bool		is2T;
 
-	is2T = (pDM_Odm->RFType == ODM_2T2R)?TRUE:FALSE;
-	if (ODM_CheckPowerStatus(pAdapter) == FALSE)
+	is2T = (pDM_Odm->RFType == ODM_2T2R)?true:false;
+	if (ODM_CheckPowerStatus(pAdapter) == false)
 		return;
 
 	if(!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION))
@@ -1997,11 +1997,11 @@ if (*(pDM_Odm->mp_mode) == 1)
 			result[3][i] = 0;
 	}
 	final_candidate = 0xff;
-	bPathAOK = FALSE;
-	bPathBOK = FALSE;
-	is12simular = FALSE;
-	is23simular = FALSE;
-	is13simular = FALSE;
+	bPathAOK = false;
+	bPathBOK = false;
+	is12simular = false;
+	is23simular = false;
+	is13simular = false;
 
 
 	/* ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK !!!interface %d currentband %d ishardwareD %d \n", pDM_Odm->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter))); */
@@ -2075,7 +2075,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 		RegECC = result[final_candidate][7];
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK: final_candidate is %x\n",final_candidate));
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK: RegE94=%x RegE9C=%x RegEA4=%x RegEAC=%x RegEB4=%x RegEBC=%x RegEC4=%x RegECC=%x\n ", RegE94, RegE9C, RegEA4, RegEAC, RegEB4, RegEBC, RegEC4, RegECC));
-		bPathAOK = bPathBOK = TRUE;
+		bPathAOK = bPathBOK = true;
 	} else {
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK: FAIL use default value\n"));
 
@@ -2099,7 +2099,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 	{
 		for(i = 0; i < IQK_Matrix_REG_NUM; i++)
 			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[Indexforchannel].Value[0][i] = result[final_candidate][i];
-		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[Indexforchannel].bIQKDone = TRUE;
+		pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[Indexforchannel].bIQKDone = true;
 	}
 	/* RTPRINT(FINIT, INIT_IQK, ("\nIQK OK Indexforchannel %d.\n", Indexforchannel)); */
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("\nIQK OK Indexforchannel %d.\n", Indexforchannel));
@@ -2114,7 +2114,7 @@ PHY_LCCalibrate_8188E(
 	IN	struct adapter *pAdapter
 	)
 {
-	bool			bStartContTx = FALSE, bSingleTone = FALSE, bCarrierSuppression = FALSE;
+	bool			bStartContTx = false, bSingleTone = false, bCarrierSuppression = false;
 	u32			timeout = 2000, timecount = 0;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
@@ -2154,21 +2154,21 @@ if (*(pDM_Odm->mp_mode) == 1)
 		timecount += 50;
 	}
 
-	pDM_Odm->RFCalibrateInfo.bLCKInProgress = TRUE;
+	pDM_Odm->RFCalibrateInfo.bLCKInProgress = true;
 
 	/* ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("LCK:Start!!!interface %d currentband %x delay %d ms\n", pDM_Odm->interfaceIndex, pHalData->CurrentBandType92D, timecount)); */
 
 	if(pDM_Odm->RFType == ODM_2T2R)
 	{
-		phy_LCCalibrate_8188E(pAdapter, TRUE);
+		phy_LCCalibrate_8188E(pAdapter, true);
 	}
 	else
 	{
 		/*  For 88C 1T1R */
-		phy_LCCalibrate_8188E(pAdapter, FALSE);
+		phy_LCCalibrate_8188E(pAdapter, false);
 	}
 
-	pDM_Odm->RFCalibrateInfo.bLCKInProgress = FALSE;
+	pDM_Odm->RFCalibrateInfo.bLCKInProgress = false;
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("LCK:Finish!!!interface %d\n", pDM_Odm->InterfaceIndex));
 
@@ -2196,12 +2196,12 @@ PHY_APCalibrate_8188E(
 		return;
 
 	if(pDM_Odm->RFType == ODM_2T2R){
-		phy_APCalibrate_8188E(pAdapter, delta, TRUE);
+		phy_APCalibrate_8188E(pAdapter, delta, true);
 	}
 	else
 	{
 		/*  For 88C 1T1R */
-		phy_APCalibrate_8188E(pAdapter, delta, FALSE);
+		phy_APCalibrate_8188E(pAdapter, delta, false);
 	}
 }
 
@@ -2252,11 +2252,11 @@ void PHY_SetRFPathSwitch_8188E(
 
 	if(pDM_Odm->RFType == ODM_2T2R)
 	{
-		phy_SetRFPathSwitch_8188E(pAdapter, bMain, TRUE);
+		phy_SetRFPathSwitch_8188E(pAdapter, bMain, true);
 	}
 	else
 	{
 		/*  For 88C 1T1R */
-		phy_SetRFPathSwitch_8188E(pAdapter, bMain, FALSE);
+		phy_SetRFPathSwitch_8188E(pAdapter, bMain, false);
 	}
 }

@@ -140,7 +140,7 @@ struct	dm_priv
 
 	PS_T	DM_PSTable;
 
-	FALSE_ALARM_STATISTICS FalseAlmCnt;
+	false_ALARM_STATISTICS FalseAlmCnt;
 
 	//for rate adaptive, in fact,  88c/92c fw will handle this
 	u8 bUseRAMask;
