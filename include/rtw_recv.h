@@ -378,30 +378,15 @@ struct recv_frame_hdr
 
 	//for A-MPDU Rx reordering buffer control
 	struct recv_reorder_ctrl *preorder_ctrl;
-
-#ifdef CONFIG_WAPI_SUPPORT
-	u8 UserPriority;
-	u8 WapiTempPN[16];
-	u8 WapiSrcAddr[6];
-	u8 bWapiCheckPNInDecrypt;
-	u8 bIsWaiPacket;
-#endif
-
 };
 
-
 union recv_frame{
-
 	union{
 		_list list;
 		struct recv_frame_hdr hdr;
 		uint mem[RECVFRAME_HDR_ALIGN>>2];
 	}u;
-
-	//uint mem[MAX_RXSZ>>2];
-
 };
-
 
 extern union recv_frame *_rtw_alloc_recvframe (_queue *pfree_recv_queue);  //get a free recv_frame from pfree_recv_queue
 extern union recv_frame *rtw_alloc_recvframe (_queue *pfree_recv_queue);  //get a free recv_frame from pfree_recv_queue

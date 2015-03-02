@@ -611,11 +611,6 @@ static void ConstructARPResponse(
 		case _AES_:
 			EncryptionHeadOverhead = 8;
 			break;
-#ifdef CONFIG_WAPI_SUPPORT
-		case _SMS4_:
-			EncryptionHeadOverhead = 18;
-			break;
-#endif
 		default:
 			EncryptionHeadOverhead = 0;
 	}
@@ -864,13 +859,8 @@ static void SetFwRsvdPagePkt(struct adapter *padapter, BOOLEAN bDLFinished)
 		case _AES_:
 			ReservedPagePacket[BufIndex-TxDescLen+6]  |= BIT(6)|BIT(7);
 			break;
-#ifdef CONFIG_WAPI_SUPPORT
-		case _SMS4_:
-			ReservedPagePacket[BufIndex-TxDescLen+6]  |= BIT(7);
-			break;
-#endif
 		default:
-			;
+			break;
 	}
 
 	PageNeed = (u8)PageNum_128(TxDescLen + ARPLegnth);

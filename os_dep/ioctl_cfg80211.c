@@ -37,30 +37,6 @@
 
 #define RTW_CH_MAX_2G_CHANNEL               14      /* Max channel in 2G band */
 
-
-
-#ifdef CONFIG_WAPI_SUPPORT
-
-#ifndef WLAN_CIPHER_SUITE_SMS4
-#define WLAN_CIPHER_SUITE_SMS4          0x00147201
-#endif
-
-#ifndef WLAN_AKM_SUITE_WAPI_PSK
-#define WLAN_AKM_SUITE_WAPI_PSK         0x000FAC04
-#endif
-
-#ifndef WLAN_AKM_SUITE_WAPI_CERT
-#define WLAN_AKM_SUITE_WAPI_CERT        0x000FAC12
-#endif
-
-#ifndef NL80211_WAPI_VERSION_1
-#define NL80211_WAPI_VERSION_1          (1 << 2)
-#endif
-
-#endif
-
-
-
 static const u32 rtw_cipher_suites[] = {
 	WLAN_CIPHER_SUITE_WEP40,
 	WLAN_CIPHER_SUITE_WEP104,
@@ -1235,13 +1211,8 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 			goto exit;
 		}
 	} else {
-#ifdef CONFIG_WAPI_SUPPORT
-		if (strcmp(param->u.crypt.alg, "SMS4"))
-#endif
-		{
 		ret = -EINVAL;
 		goto exit;
-	}
 	}
 
 	if (strcmp(param->u.crypt.alg, "WEP") == 0)
@@ -1402,78 +1373,9 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 		}
 	}
 
-#ifdef CONFIG_WAPI_SUPPORT
-	if (strcmp(param->u.crypt.alg, "SMS4") == 0)
-	{
-		PRT_WAPI_T			pWapiInfo = &padapter->wapiInfo;
-		PRT_WAPI_STA_INFO	pWapiSta;
-		u8					WapiASUEPNInitialValueSrc[16] = {0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C} ;
-		u8					WapiAEPNInitialValueSrc[16] = {0x37,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C} ;
-		u8					WapiAEMultiCastPNInitialValueSrc[16] = {0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C} ;
-
-		if(param->u.crypt.set_tx == 1)
-		{
-			list_for_each_entry(pWapiSta, &pWapiInfo->wapiSTAUsedList, list) {
-				if(_rtw_memcmp(pWapiSta->PeerMacAddr,param->sta_addr,6))
-				{
-					memcpy(pWapiSta->lastTxUnicastPN,WapiASUEPNInitialValueSrc,16);
-
-					pWapiSta->wapiUsk.bSet = true;
-					memcpy(pWapiSta->wapiUsk.dataKey,param->u.crypt.key,16);
-					memcpy(pWapiSta->wapiUsk.micKey,param->u.crypt.key+16,16);
-					pWapiSta->wapiUsk.keyId = param->u.crypt.idx ;
-					pWapiSta->wapiUsk.bTxEnable = true;
-
-					memcpy(pWapiSta->lastRxUnicastPNBEQueue,WapiAEPNInitialValueSrc,16);
-					memcpy(pWapiSta->lastRxUnicastPNBKQueue,WapiAEPNInitialValueSrc,16);
-					memcpy(pWapiSta->lastRxUnicastPNVIQueue,WapiAEPNInitialValueSrc,16);
-					memcpy(pWapiSta->lastRxUnicastPNVOQueue,WapiAEPNInitialValueSrc,16);
-					memcpy(pWapiSta->lastRxUnicastPN,WapiAEPNInitialValueSrc,16);
-					pWapiSta->wapiUskUpdate.bTxEnable = false;
-					pWapiSta->wapiUskUpdate.bSet = false;
-
-					if (psecuritypriv->sw_encrypt== false || psecuritypriv->sw_decrypt == false)
-					{
-						/* set unicast key for ASUE */
-						rtw_wapi_set_key(padapter, &pWapiSta->wapiUsk, pWapiSta, false, false);
-					}
-				}
-			}
-		}
-		else
-		{
-			list_for_each_entry(pWapiSta, &pWapiInfo->wapiSTAUsedList, list) {
-				if(_rtw_memcmp(pWapiSta->PeerMacAddr,get_bssid(pmlmepriv),6))
-				{
-					pWapiSta->wapiMsk.bSet = true;
-					memcpy(pWapiSta->wapiMsk.dataKey,param->u.crypt.key,16);
-					memcpy(pWapiSta->wapiMsk.micKey,param->u.crypt.key+16,16);
-					pWapiSta->wapiMsk.keyId = param->u.crypt.idx ;
-					pWapiSta->wapiMsk.bTxEnable = false;
-					if(!pWapiSta->bSetkeyOk)
-						pWapiSta->bSetkeyOk = true;
-					pWapiSta->bAuthenticateInProgress = false;
-
-					memcpy(pWapiSta->lastRxMulticastPN, WapiAEMultiCastPNInitialValueSrc, 16);
-
-					if (psecuritypriv->sw_decrypt == false)
-					{
-						/* set rx broadcast key for ASUE */
-						rtw_wapi_set_key(padapter, &pWapiSta->wapiMsk, pWapiSta, true, false);
-					}
-				}
-
-			}
-		}
-	}
-#endif
-
-
 exit:
 
 	DBG_8192C("%s, ret=%d\n", __func__, ret);
-
-	;
 
 	return ret;
 }
@@ -1534,22 +1436,6 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev,
 		alg_name = "BIP";
 		break;
 #endif /* CONFIG_IEEE80211W */
-#ifdef CONFIG_WAPI_SUPPORT
-	case WLAN_CIPHER_SUITE_SMS4:
-		alg_name= "SMS4";
-		if(pairwise == NL80211_KEYTYPE_PAIRWISE) {
-			if (key_index != 0 && key_index != 1) {
-				ret = -ENOTSUPP;
-				goto addkey_end;
-			}
-			memcpy((void*)param->sta_addr, (void*)mac_addr, ETH_ALEN);
-		} else {
-			DBG_871X("mac_addr is null \n");
-		}
-		DBG_871X("rtw_wx_set_enc_ext: SMS4 case \n");
-		break;
-#endif
-
 	default:
 		ret = -ENOTSUPP;
 		goto addkey_end;
@@ -2315,20 +2201,12 @@ static int rtw_cfg80211_set_auth_type(struct security_priv *psecuritypriv,
 
 		if(psecuritypriv->ndisauthtype>Ndis802_11AuthModeWPA)
 			psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
-
-#ifdef CONFIG_WAPI_SUPPORT
-		if(psecuritypriv->ndisauthtype == Ndis802_11AuthModeWAPI)
-			psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_WAPI;
-#endif
-
 		break;
 	case NL80211_AUTHTYPE_SHARED_KEY:
 
 		psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_Shared;
 
 		psecuritypriv->ndisencryptstatus = Ndis802_11Encryption1Enabled;
-
-
 		break;
 	default:
 		psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_Open;
@@ -2359,12 +2237,6 @@ static int rtw_cfg80211_set_cipher(struct security_priv *psecuritypriv, u32 ciph
 	case IW_AUTH_CIPHER_NONE:
 		*profile_cipher = _NO_PRIVACY_;
 		ndisencryptstatus = Ndis802_11EncryptionDisabled;
-#ifdef CONFIG_WAPI_SUPPORT
-		if(psecuritypriv->dot11PrivacyAlgrthm ==_SMS4_ )
-		{
-			*profile_cipher = _SMS4_;
-		}
-#endif
 		break;
 	case WLAN_CIPHER_SUITE_WEP40:
 		*profile_cipher = _WEP40_;
@@ -2382,12 +2254,6 @@ static int rtw_cfg80211_set_cipher(struct security_priv *psecuritypriv, u32 ciph
 		*profile_cipher = _AES_;
 		ndisencryptstatus = Ndis802_11Encryption3Enabled;
 		break;
-#ifdef CONFIG_WAPI_SUPPORT
-	case WLAN_CIPHER_SUITE_SMS4:
-		*profile_cipher = _SMS4_;
-		ndisencryptstatus = Ndis802_11_EncrypteionWAPI;
-		break;
-#endif
 	default:
 		DBG_8192C("Unsupported cipher: 0x%x\n", cipher);
 		return -ENOTSUPP;
@@ -2413,18 +2279,7 @@ static int rtw_cfg80211_set_key_mgt(struct security_priv *psecuritypriv, u32 key
 		psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
 	else if (key_mgt == WLAN_AKM_SUITE_PSK) {
 		psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
-	}
-#ifdef CONFIG_WAPI_SUPPORT
-	else if(key_mgt ==WLAN_AKM_SUITE_WAPI_PSK){
-		psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_WAPI;
-	}
-	else if(key_mgt ==WLAN_AKM_SUITE_WAPI_CERT){
-		psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_WAPI;
-	}
-#endif
-
-
-	else {
+	} else {
 		DBG_8192C("Invalid key mgt: 0x%x\n", key_mgt);
 		/* return -EINVAL; */
 	}
@@ -2815,30 +2670,11 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_Open; /* open system */
 	psecuritypriv->ndisauthtype = Ndis802_11AuthModeOpen;
 
-#ifdef CONFIG_WAPI_SUPPORT
-	 padapter->wapiInfo.bWapiEnable = false;
-#endif
-
 	ret = rtw_cfg80211_set_wpa_version(psecuritypriv, sme->crypto.wpa_versions);
 	if (ret < 0)
 		goto exit;
 
-#ifdef CONFIG_WAPI_SUPPORT
-	if(sme->crypto.wpa_versions & NL80211_WAPI_VERSION_1)
-	{
-		padapter->wapiInfo.bWapiEnable = true;
-		padapter->wapiInfo.extra_prefix_len = WAPI_EXT_LEN;
-		padapter->wapiInfo.extra_postfix_len = SMS4_MIC_LEN;
-	}
-#endif
-
 	ret = rtw_cfg80211_set_auth_type(psecuritypriv, sme->auth_type);
-
-#ifdef CONFIG_WAPI_SUPPORT
-	if(psecuritypriv->dot11AuthAlgrthm == dot11AuthAlgrthm_WAPI)
-		padapter->mlmeextpriv.mlmext_info.auth_algo = psecuritypriv->dot11AuthAlgrthm;
-#endif
-
 
 	if (ret < 0)
 		goto exit;
@@ -2926,15 +2762,6 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 		if (ret < 0)
 			goto exit;
 	}
-
-#ifdef CONFIG_WAPI_SUPPORT
-      if(sme->crypto.akm_suites[0] ==WLAN_AKM_SUITE_WAPI_PSK){
-		padapter->wapiInfo.bWapiPSK = true;
-	}
-	else if(sme->crypto.akm_suites[0] ==WLAN_AKM_SUITE_WAPI_CERT){
-	      padapter->wapiInfo.bWapiPSK = false;
-	}
-#endif
 
 	authmode = psecuritypriv->ndisauthtype;
 	rtw_set_802_11_authentication_mode(padapter, authmode);

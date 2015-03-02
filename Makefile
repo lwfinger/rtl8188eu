@@ -21,7 +21,6 @@ CONFIG_USB_HCI = y
 CONFIG_POWER_SAVING = y
 CONFIG_USB_AUTOSUSPEND = n
 CONFIG_BT_COEXIST = n
-CONFIG_WAPI_SUPPORT = n
 CONFIG_EFUSE_CONFIG_FILE = n
 CONFIG_EXT_CLK = n
 CONFIG_WOWLAN = n
@@ -103,14 +102,6 @@ ifeq ($(CONFIG_BT_COEXIST), y)
 EXTRA_CFLAGS += -DCONFIG_BT_COEXIST
 endif
 
-ifeq ($(CONFIG_RTL8192CU_REDEFINE_1X1), y)
-EXTRA_CFLAGS += -DRTL8192C_RECONFIG_TO_1T1R
-endif
-
-ifeq ($(CONFIG_WAPI_SUPPORT), y)
-EXTRA_CFLAGS += -DCONFIG_WAPI_SUPPORT
-endif
-
 ifeq ($(CONFIG_EFUSE_CONFIG_FILE), y)
 EXTRA_CFLAGS += -DCONFIG_EFUSE_CONFIG_FILE
 endif
@@ -178,9 +169,6 @@ rtk_core :=	core/rtw_cmd.o \
 		core/rtw_odm.o
 
 8188eu-y += $(rtk_core)
-
-8188eu-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
-		core/rtw_wapi_sms4.o
 
 8188eu-y += core/rtw_efuse.o
 

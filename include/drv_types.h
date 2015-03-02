@@ -67,10 +67,6 @@ enum _NIC_VERSION {
 #include <rtw_ap.h>
 #include <rtw_odm.h>
 
-#ifdef CONFIG_WAPI_SUPPORT
-#include <rtw_wapi.h>
-#endif
-
 #ifdef CONFIG_DRVEXT_MODULE
 #include <drvext_api.h>
 #endif
@@ -381,13 +377,6 @@ struct adapter {
 #ifdef CONFIG_TDLS
 	struct tdls_info	tdlsinfo;
 #endif //CONFIG_TDLS
-
-#ifdef CONFIG_WAPI_SUPPORT
-	u8	WapiSupport;
-	RT_WAPI_T	wapiInfo;
-#endif
-
-
 #ifdef CONFIG_P2P
 	struct wifi_display_info wfd_info;
 #endif //CONFIG_P2P
