@@ -90,20 +90,13 @@ sint	_rtw_init_mlme_priv (struct adapter* padapter)
 
 	rtw_clear_scan_deny(padapter);
 
-	#ifdef CONFIG_FTP_PROTECT
-	pmlmepriv->ftp_lock_flag = 0;
-	#endif /* CONFIG_FTP_PROTECT */
-
 	rtw_init_mlme_timer(padapter);
 
 exit:
 
-;
-
 	return res;
 }
 
-void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv);
 void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv)
 {
 	_rtw_spinlock_free(&pmlmepriv->lock);
@@ -113,8 +106,7 @@ void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv)
 
 static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
 {
-	if(*ppie)
-	{
+	if(*ppie) {
 		rtw_mfree(*ppie, *plen);
 		*plen = 0;
 		*ppie=NULL;

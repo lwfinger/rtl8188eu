@@ -559,10 +559,6 @@ struct mlme_priv {
 	u8	p2p_reject_disable;	//When starting NL80211 wpa_supplicant/hostapd, it will call netdev_close
 							//such that it will cause p2p disabled. Use this flag to reject.
 #endif // CONFIG_INTEL_WIDI
-
-#ifdef CONFIG_FTP_PROTECT
-	u8	ftp_lock_flag;
-#endif //CONFIG_FTP_PROTECT
 };
 
 #ifdef CONFIG_AP_MODE
