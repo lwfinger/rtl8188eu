@@ -7809,97 +7809,6 @@ FREE_EXT:
 
 }
 
-#ifdef CONFIG_WOWLAN
-static int rtw_wowlan_ctrl(struct net_device *dev,
-						struct iw_request_info *info,
-						union iwreq_data *wrqu, char *extra)
-{
-	struct adapter *padapter =  (struct adapter *)rtw_netdev_priv(dev);
-	struct wowlan_ioctl_param poidparam;
-	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct sta_info	*psta = NULL;
-	int ret = 0;
-	u32 start_time = rtw_get_current_time();
-	poidparam.subcode = 0;
-
-	DBG_871X("+rtw_wowlan_ctrl: %s\n", extra);
-
-	if(pwrctrlpriv->bSupportRemoteWakeup==false){
-		ret = -EPERM;
-		DBG_871X("+rtw_wowlan_ctrl: Device didn't support the remote wakeup!!\n");
-		goto _rtw_wowlan_ctrl_exit_free;
-	}
-
-	if (!check_fwstate(pmlmepriv, _FW_LINKED) &&
-			check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
-			DBG_871X("[%s] WARNING: Please Connect With AP First!!\n", __func__);
-			goto _rtw_wowlan_ctrl_exit_free;
-	}
-
-	if (_rtw_memcmp( extra, "enable", 6 )) {
-
-		while (pwrctrlpriv->bips_processing == true)
-			rtw_msleep_os(1);
-
-		rtw_cancel_all_timer(padapter);
-
-		padapter->bDriverStopped = true;	/* for stop thread */
-		rtw_stop_drv_threads(padapter);
-		padapter->bDriverStopped = false;	/* for 32k command */
-
-		rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0);
-		rtw_hal_disable_interrupt(padapter); /*  It need wait for leaving 32K. */
-
-		/*  2.1 clean interupt */
-		if (padapter->HalFunc.clear_interrupt)
-			padapter->HalFunc.clear_interrupt(padapter);
-
-		poidparam.subcode = WOWLAN_ENABLE;
-
-		rtw_hal_set_hwreg(padapter,HW_VAR_WOWLAN,(u8 *)&poidparam);
-	} else if (_rtw_memcmp( extra, "disable", 6 )) {
-		rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0);
-		pwrctrlpriv->bFwCurrentInPSMode = false;
-
-		rtw_hal_disable_interrupt(padapter);
-
-		if (padapter->HalFunc.clear_interrupt)
-			padapter->HalFunc.clear_interrupt(padapter);
-
-		poidparam.subcode = WOWLAN_DISABLE;
-
-		rtw_hal_set_hwreg(padapter,HW_VAR_WOWLAN,(u8 *)&poidparam);
-
-		psta = rtw_get_stainfo(&padapter->stapriv, get_bssid(&padapter->mlmepriv));
-		if (psta) {
-			set_sta_rate(padapter, psta);
-		}
-
-		padapter->bDriverStopped = false;
-		DBG_871X("%s: wowmode resuming, DriverStopped:%d\n", __func__, padapter->bDriverStopped);
-		rtw_start_drv_threads(padapter);
-
-		rtw_hal_enable_interrupt(padapter);
-
-		_set_timer(&padapter->mlmepriv.dynamic_chk_timer, 2000);
-		pwrctrlpriv->bips_processing = false;
-		rtw_set_pwr_state_check_timer(pwrctrlpriv);
-
-	} else {
-		DBG_871X("[%s] Invalid Parameter.\n", __func__);
-		goto _rtw_wowlan_ctrl_exit_free;
-	}
-	/* mutex_lock(&ioctl_mutex); */
-_rtw_wowlan_ctrl_exit_free:
-	DBG_871X("-rtw_wowlan_ctrl( subcode = %d)\n", poidparam.subcode);
-	DBG_871X_LEVEL(_drv_always_, "%s in %d ms\n", __func__,
-			rtw_get_passing_time_ms(start_time));
-_rtw_wowlan_ctrl_exit:
-	return ret;
-}
-#endif /* CONFIG_WOWLAN */
-
 static int rtw_pm_set(struct net_device *dev,
                                struct iw_request_info *info,
                                union iwreq_data *wrqu, char *extra)
@@ -10277,10 +10186,6 @@ static const struct iw_priv_args rtw_private_args[] = {
 		SIOCIWFIRSTPRIV + 0x1D,
 		IW_PRIV_TYPE_CHAR | 40, IW_PRIV_TYPE_CHAR | 0x7FF, "test"
 	},
-
-#ifdef CONFIG_WOWLAN
-		{ MP_WOW_ENABLE , IW_PRIV_TYPE_CHAR | 1024, 0, "wow_enable" }, /* set */
-#endif
 };
 
 static iw_handler rtw_private_handler[] =

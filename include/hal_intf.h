@@ -109,9 +109,6 @@ typedef enum _HW_VARIABLES{
 	HW_VAR_APFM_ON_MAC, //Auto FSM to Turn On, include clock, isolation, power control for MAC only
 	// The valid upper nav range for the HW updating, if the true value is larger than the upper range, the HW won't update it.
 	// Unit in microsecond. 0 means disable this function.
-#ifdef CONFIG_WOWLAN
-	HW_VAR_WOWLAN,
-#endif
 	HW_VAR_SYS_CLKR,
 	HW_VAR_NAV_UPPER,
 	HW_VAR_RPT_TIMER_SETTING,
@@ -189,9 +186,6 @@ struct hal_ops {
 	void	(*enable_interrupt)(struct adapter *padapter);
 	void	(*disable_interrupt)(struct adapter *padapter);
 	s32	(*interrupt_handler)(struct adapter *padapter);
-#ifdef CONFIG_WOWLAN
-    void    (*clear_interrupt)(struct adapter *padapter);
-#endif
 	void	(*set_bwmode_handler)(struct adapter *padapter, HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
 	void	(*set_channel_handler)(struct adapter *padapter, u8 channel);
 
@@ -342,39 +336,6 @@ typedef enum _HARDWARE_TYPE{
 typedef struct eeprom_priv EEPROM_EFUSE_PRIV, *PEEPROM_EFUSE_PRIV;
 #define GET_EEPROM_EFUSE_PRIV(adapter) (&adapter->eeprompriv)
 #define is_boot_from_eeprom(adapter) (adapter->eeprompriv.EepromOrEfuse)
-
-#ifdef CONFIG_WOWLAN
-typedef enum _wowlan_subcode{
-	WOWLAN_PATTERN_MATCH	= 1,
-	WOWLAN_MAGIC_PACKET		= 2,
-	WOWLAN_UNICAST			= 3,
-	WOWLAN_SET_PATTERN		= 4,
-	WOWLAN_DUMP_REG			= 5,
-	WOWLAN_ENABLE			= 6,
-	WOWLAN_DISABLE			= 7,
-	WOWLAN_STATUS			= 8,
-	WOWLAN_DEBUG_RELOAD_FW	= 9,
-	WOWLAN_DEBUG_1			=10,
-	WOWLAN_DEBUG_2			=11
-}wowlan_subcode;
-
-struct wowlan_ioctl_param{
-	unsigned int subcode;
-	unsigned int subcode_value;
-	unsigned int wakeup_reason;
-	unsigned int len;
-	unsigned char pattern[0];
-};
-
-#define Rx_Pairwisekey			0x01
-#define Rx_GTK					0x02
-#define Rx_DisAssoc				0x04
-#define Rx_DeAuth				0x08
-#define FWDecisionDisconnect	0x10
-#define Rx_MagicPkt				0x21
-#define Rx_UnicastPkt			0x22
-#define Rx_PatternPkt			0x23
-#endif // CONFIG_WOWLAN
 
 void rtw_hal_def_value_init(struct adapter *padapter);
 

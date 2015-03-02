@@ -942,22 +942,9 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 #endif	/*  CONFIG_BR_EXT */
 
 exit:
-
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-rtw_init_drv_sw\n"));
-
-	;
-
 	return ret8;
-
 }
-
-#ifdef CONFIG_WOWLAN
-void rtw_cancel_dynamic_chk_timer(struct adapter *padapter)
-{
-	_cancel_timer_ex(&padapter->mlmepriv.dynamic_chk_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel dynamic_chk_timer! \n"));
-}
-#endif
 
 void rtw_cancel_all_timer(struct adapter *padapter)
 {
@@ -965,9 +952,6 @@ void rtw_cancel_all_timer(struct adapter *padapter)
 
 	_cancel_timer_ex(&padapter->mlmepriv.assoc_timer);
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel association timer complete! \n"));
-
-	/* _cancel_timer_ex(&padapter->securitypriv.tkip_timer); */
-	/* RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel tkip_timer! \n")); */
 
 	_cancel_timer_ex(&padapter->mlmepriv.scan_to_timer);
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel scan_to_timer! \n"));

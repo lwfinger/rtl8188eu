@@ -1277,54 +1277,19 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 
 HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 
-#ifdef CONFIG_WOWLAN
-
-	pwrctrlpriv->wowlan_wake_reason = rtw_read8(Adapter, REG_WOWLAN_WAKE_REASON);
-	DBG_8192C("%s wowlan_wake_reason: 0x%02x\n",
-				__func__, pwrctrlpriv->wowlan_wake_reason);
-
-	if(rtw_read8(Adapter, REG_MCUFWDL)&BIT7){ /*&&
-		(pwrctrlpriv->wowlan_wake_reason & FWDecisionDisconnect)) {*/
-		u8 reg_val=0;
-		DBG_8192C("+Reset Entry+\n");
-		rtw_write8(Adapter, REG_MCUFWDL, 0x00);
-		_8051Reset88E(Adapter);
-		/* reset BB */
-		reg_val = rtw_read8(Adapter, REG_SYS_FUNC_EN);
-		reg_val &= ~(BIT(0) | BIT(1));
-		rtw_write8(Adapter, REG_SYS_FUNC_EN, reg_val);
-		/* reset RF */
-		rtw_write8(Adapter, REG_RF_CTRL, 0);
-		/* reset TRX path */
-		rtw_write16(Adapter, REG_CR, 0);
-		/* reset MAC, Digital Core */
-		reg_val = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		reg_val &= ~(BIT(4) | BIT(7));
-		rtw_write8(Adapter, REG_SYS_FUNC_EN+1, reg_val);
-		reg_val = rtw_read8(Adapter, REG_SYS_FUNC_EN+1);
-		reg_val |= BIT(4) | BIT(7);
-		rtw_write8(Adapter, REG_SYS_FUNC_EN+1, reg_val);
-		DBG_8192C("-Reset Entry-\n");
-	}
-#endif /* CONFIG_WOWLAN */
-
 	if(pwrctrlpriv->bkeepfwalive)
 	{
 		_ps_open_RF(Adapter);
 
 		if(pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized){
-/* 			PHY_IQCalibrate(padapter, true); */
 			PHY_IQCalibrate_8188E(Adapter,true);
 		}
 		else
 		{
-/* 			PHY_IQCalibrate(padapter, false); */
 			PHY_IQCalibrate_8188E(Adapter,false);
 			pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized = true;
 		}
 
-/* 		dm_CheckTXPowerTracking(padapter); */
-/* 		PHY_LCCalibrate(padapter); */
 		ODM_TXPowerTrackingCheck(&pHalData->odmpriv );
 		PHY_LCCalibrate_8188E(Adapter);
 
@@ -1374,13 +1339,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
 	}
 #endif  /* MP_DRIVER == 1 */
 	{
-
-#ifdef CONFIG_WOWLAN
-	status = rtl8188e_FirmwareDownload(Adapter, false);
-#else
 		status = rtl8188e_FirmwareDownload(Adapter);
-#endif /* CONFIG_WOWLAN */
-
 		if (status != _SUCCESS) {
 			DBG_871X("%s: Download Firmware failed!!\n", __FUNCTION__);
 			Adapter->bFWReady = false;
@@ -2948,101 +2907,6 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			pHalData->bMacPwrCtrlOn = *val;
 			DBG_871X("%s: bMacPwrCtrlOn=%d\n", __func__, pHalData->bMacPwrCtrlOn);
 			break;
-
-#ifdef CONFIG_WOWLAN
-		case HW_VAR_WOWLAN:
-		{
-			struct wowlan_ioctl_param *poidparam;
-			struct recv_buf *precvbuf;
-			int res, i;
-			u32 tmp;
-			u16 len = 0;
-			u8 mstatus = (*(u8 *)val);
-			u8 trycnt = 100;
-			u8 data[4];
-
-			poidparam = (struct wowlan_ioctl_param *)val;
-			switch (poidparam->subcode){
-			case WOWLAN_ENABLE:
-				DBG_871X_LEVEL(_drv_always_, "WOWLAN_ENABLE\n");
-
-				SetFwRelatedForWoWLAN8188ES(Adapter, true);
-
-				/* Set Pattern */
-				/* if(adapter_to_pwrctl(Adapter)->wowlan_pattern==true) */
-				/* 	rtw_wowlan_reload_pattern(Adapter); */
-
-				/* RX DMA stop */
-				DBG_871X_LEVEL(_drv_always_, "Pause DMA\n");
-				rtw_write32(Adapter,REG_RXPKT_NUM,(rtw_read32(Adapter,REG_RXPKT_NUM)|RW_RELEASE_EN));
-				do{
-					if((rtw_read32(Adapter, REG_RXPKT_NUM)&RXDMA_IDLE)) {
-						DBG_871X_LEVEL(_drv_always_, "RX_DMA_IDLE is true\n");
-						break;
-					} else {
-						/*  If RX_DMA is not idle, receive one pkt from DMA */
-						DBG_871X_LEVEL(_drv_always_, "RX_DMA_IDLE is not true\n");
-					}
-				}while(trycnt--);
-				if(trycnt ==0)
-					DBG_871X_LEVEL(_drv_always_, "Stop RX DMA failed...... \n");
-
-				/* Set WOWLAN H2C command. */
-				DBG_871X_LEVEL(_drv_always_, "Set WOWLan cmd\n");
-				rtl8188es_set_wowlan_cmd(Adapter, 1);
-
-				mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-				trycnt = 10;
-
-				while(!(mstatus&BIT1) && trycnt>1) {
-					mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-					DBG_871X_LEVEL(_drv_always_, "Loop index: %d :0x%02x\n", trycnt, mstatus);
-					trycnt --;
-					rtw_msleep_os(2);
-				}
-
-				adapter_to_pwrctl(Adapter)->wowlan_wake_reason = rtw_read8(Adapter, REG_WOWLAN_WAKE_REASON);
-				DBG_871X_LEVEL(_drv_always_, "wowlan_wake_reason: 0x%02x\n",
-									adapter_to_pwrctl(Adapter)->wowlan_wake_reason);
-
-				/* Invoid SE0 reset signal during suspending*/
-				rtw_write8(Adapter, REG_RSV_CTRL, 0x20);
-				rtw_write8(Adapter, REG_RSV_CTRL, 0x60);
-
-				/* rtw_msleep_os(10); */
-				break;
-			case WOWLAN_DISABLE:
-				DBG_871X_LEVEL(_drv_always_, "WOWLAN_DISABLE\n");
-				trycnt = 10;
-				rtl8188es_set_wowlan_cmd(Adapter, 0);
-				mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-				DBG_871X_LEVEL(_drv_info_, "%s mstatus:0x%02x\n", __func__, mstatus);
-
-				while(mstatus&BIT1 && trycnt>1) {
-					mstatus = rtw_read8(Adapter, REG_WOW_CTRL);
-					DBG_871X_LEVEL(_drv_always_, "Loop index: %d :0x%02x\n", trycnt, mstatus);
-					trycnt --;
-					rtw_msleep_os(2);
-				}
-
-				if (mstatus & BIT1)
-					printk("System did not release RX_DMA\n");
-				else
-					SetFwRelatedForWoWLAN8188ES(Adapter, false);
-
-				rtw_msleep_os(2);
-				if(!(adapter_to_pwrctl(Adapter)->wowlan_wake_reason & FWDecisionDisconnect))
-					rtl8188e_set_FwJoinBssReport_cmd(Adapter, 1);
-				/* rtw_msleep_os(10); */
-				break;
-			default:
-				break;
-			}
-		}
-		break;
-#endif /* CONFIG_WOWLAN */
-
-
 	#if (RATE_ADAPTIVE_SUPPORT == 1)
 		case HW_VAR_TX_RPT_MAX_MACID:
 			{

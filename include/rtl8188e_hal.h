@@ -41,11 +41,6 @@
 	// Fw Array
 	#define Rtl8188E_FwImageArray				Rtl8188EFwImgArray
 	#define Rtl8188E_FWImgArrayLength			Rtl8188EFWImgArrayLength
-#ifdef CONFIG_WOWLAN
-	#define Rtl8188E_FwWoWImageArray			Array_8188E_FW_WoWLAN
-	#define Rtl8188E_FwWoWImgArrayLength		ArrayLength_8188E_FW_WoWLAN
-#endif //CONFIG_WOWLAN
-
 #define RTL8188E_FW_UMC_IMG				"rtl8188E\\rtl8188efw.bin"
 #define RTL8188E_PHY_REG					"rtl8188E\\PHY_REG_1T.txt"
 #define RTL8188E_PHY_RADIO_A				"rtl8188E\\radio_a_1T.txt"
@@ -97,11 +92,6 @@ typedef struct _RT_FIRMWARE {
 	u8			szFwBuffer[FW_8188E_SIZE];
 #endif
 	u32			ulFwLength;
-
-#ifdef CONFIG_WOWLAN
-	u8*			szWoWLANFwBuffer;
-	u32			ulWoWLANFwLength;
-#endif //CONFIG_WOWLAN
 } RT_FIRMWARE, *PRT_FIRMWARE, RT_FIRMWARE_8188E, *PRT_FIRMWARE_8188E;
 
 //
@@ -497,11 +487,7 @@ typedef struct hal_data_8188e HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define INCLUDE_MULTI_FUNC_GPS(_Adapter)	(GET_HAL_DATA(_Adapter)->MultiFunc & RT_MULTI_FUNC_GPS)
 
 // rtl8188e_hal_init.c
-#ifdef CONFIG_WOWLAN
-s32 rtl8188e_FirmwareDownload(struct adapter *padapter, BOOLEAN  bUsedWoWLANFw);
-#else
 s32 rtl8188e_FirmwareDownload(struct adapter *padapter);
-#endif
 void _8051Reset88E(struct adapter *padapter);
 void rtl8188e_InitializeFirmwareVars(struct adapter *padapter);
 
@@ -525,10 +511,6 @@ void Hal_EfuseParseBoardType88E(struct adapter *pAdapter,u8* hwinfo,BOOLEAN Auto
 void Hal_ReadPowerSavingMode88E(struct adapter *pAdapter,u8* hwinfo,BOOLEAN AutoLoadFail);
 
 BOOLEAN HalDetectPwrDownMode88E(struct adapter *Adapter);
-
-#ifdef CONFIG_WOWLAN
-void Hal_DetectWoWMode(struct adapter *pAdapter);
-#endif //CONFIG_WOWLAN
 
 void Hal_InitChannelPlan(struct adapter *padapter);
 

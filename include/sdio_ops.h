@@ -51,8 +51,4 @@ extern void EnableInterrupt8188ESdio(struct adapter *padapter);
 extern void DisableInterrupt8188ESdio(struct adapter *padapter);
 extern void UpdateInterruptMask8188ESdio(struct adapter *padapter, u32 AddMSR, u32 RemoveMSR);
 
-#ifdef CONFIG_WOWLAN
-extern u8 RecvOnePkt(struct adapter *padapter, u32 size);
-extern void ClearInterrupt8189ESdio(struct adapter *padapter);
-#endif //CONFIG_WOWLAN
 #endif

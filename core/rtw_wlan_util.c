@@ -2104,8 +2104,7 @@ void process_addba_req(struct adapter *padapter, u8 *paddba_req, u8 *addr)
 
 	psta = rtw_get_stainfo(pstapriv, addr);
 
-	if(psta)
-	{
+	if(psta) {
 		start_seq = le16_to_cpu(preq->BA_starting_seqctrl) >> 4;
 
 		param = le16_to_cpu(preq->BA_para_set);
@@ -2125,7 +2124,6 @@ void process_addba_req(struct adapter *padapter, u8 *paddba_req, u8 *addr)
 
 		preorder_ctrl->enable =(pmlmeinfo->bAcceptAddbaReq == true)? true :false;
 	}
-
 }
 
 void update_TSF(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint len)
@@ -2177,72 +2175,3 @@ int rtw_handle_dualmac(struct adapter *adapter, bool init)
 exit:
 	return status;
 }
-#ifdef CONFIG_WOWLAN
-void rtw_get_current_ip_address(struct adapter *padapter, u8 *pcurrentip)
-{
-	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
-	struct in_device *my_ip_ptr = padapter->pnetdev->ip_ptr;
-	u8 ipaddress[4];
-
-	if ( (pmlmeinfo->state & WIFI_FW_LINKING_STATE) ) {
-		if ( my_ip_ptr != NULL ) {
-			struct in_ifaddr *my_ifa_list  = my_ip_ptr->ifa_list ;
-			if ( my_ifa_list != NULL ) {
-				ipaddress[0] = my_ifa_list->ifa_address & 0xFF;
-				ipaddress[1] = (my_ifa_list->ifa_address >> 8) & 0xFF;
-				ipaddress[2] = (my_ifa_list->ifa_address >> 16) & 0xFF;
-				ipaddress[3] = my_ifa_list->ifa_address >> 24;
-				DBG_871X("%s: %d.%d.%d.%d ==========\n", __func__,
-						ipaddress[0], ipaddress[1], ipaddress[2], ipaddress[3]);
-				memcpy(pcurrentip, ipaddress, 4);
-			}
-		}
-	}
-}
-void rtw_get_sec_iv(struct adapter *padapter, u8*pcur_dot11txpn, u8 *StaAddr)
-{
-	struct sta_info		*psta;
-	struct security_priv *psecpriv = &padapter->securitypriv;
-
-	memset(pcur_dot11txpn, 0, 8);
-	if(NULL == StaAddr)
-		return;
-	psta = rtw_get_stainfo(&padapter->stapriv, StaAddr);
-	DBG_871X("%s(): StaAddr: %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n",
-		__func__, StaAddr[0], StaAddr[1], StaAddr[2], StaAddr[3], StaAddr[4], StaAddr[5]);
-
-	if(psta)
-	{
-		if (psecpriv->dot11PrivacyAlgrthm != _NO_PRIVACY_ && psta->dot11txpn.val > 0)
-			psta->dot11txpn.val--;
-
-		memcpy(pcur_dot11txpn, (u8*)&psta->dot11txpn, 8);
-
-		DBG_871X("%s(): CurrentIV: 0x%016llx\n", __func__, psta->dot11txpn.val);
-	}
-}
-void rtw_set_sec_iv(struct adapter *padapter)
-{
-	struct sta_info         *psta;
-	struct mlme_ext_priv    *pmlmeext = &(padapter->mlmeextpriv);
-	struct mlme_ext_info    *pmlmeinfo = &(pmlmeext->mlmext_info);
-	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	struct security_priv *psecpriv = &padapter->securitypriv;
-
-	psta = rtw_get_stainfo(&padapter->stapriv, get_my_bssid(&pmlmeinfo->network));
-
-	if(psta)
-	{
-		if (pwrpriv->wowlan_fw_iv > psta->dot11txpn.val)
-		{
-			if (psecpriv->dot11PrivacyAlgrthm != _NO_PRIVACY_)
-				psta->dot11txpn.val = pwrpriv->wowlan_fw_iv + 2;
-			} else {
-				DBG_871X("%s(): FW IV is smaller than driver\n", __func__);
-				psta->dot11txpn.val += 2;
-			}
-			DBG_871X("%s: dot11txpn: 0x%016llx\n", __func__ ,psta->dot11txpn.val);
-		}
-}
-#endif /* CONFIG_WOWLAN */

@@ -190,9 +190,6 @@
 #define REG_C2HEVT_MSG_NORMAL		0x01A0
 #define REG_C2HEVT_CLEAR				0x01AF
 #define REG_MCUTST_1					0x01c0
-#ifdef CONFIG_WOWLAN
-#define REG_WOWLAN_WAKE_REASON			0x01c7
-#endif
 #define REG_FMETHR					0x01C8
 #define REG_HMETFR					0x01CC
 #define REG_HMEBOX_0					0x01D0
@@ -309,11 +306,6 @@
 #define REG_TX_RPT_CTRL				0x04EC
 #define REG_TX_RPT_TIME				0x04F0	// 2 byte
 #define REG_DUMMY					0x04FC
-
-#ifdef CONFIG_WOWLAN
-#define REG_TXPKTBUF_IV_LOW             0x0484
-#define REG_TXPKTBUF_IV_HIGH            0x0488
-#endif
 
 //-----------------------------------------------------
 //

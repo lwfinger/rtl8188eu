@@ -628,11 +628,6 @@ void update_tx_basic_rate(struct adapter *padapter, u8 modulation);
 void update_bmc_sta_support_rate(struct adapter *padapter, u32 mac_id);
 int update_sta_support_rate(struct adapter *padapter, u8* pvar_ie, uint var_ie_len, int cam_idx);
 
-#ifdef CONFIG_WOWLAN
-void rtw_get_current_ip_address(struct adapter *padapter, u8 *pcurrentip);
-void rtw_get_sec_iv(struct adapter *padapter, u8*pcur_dot11txpn, u8 *StaAddr);
-#endif
-
 //for sta/adhoc mode
 void update_sta_info(struct adapter *padapter, struct sta_info *psta);
 unsigned int update_basic_rate(unsigned char *ptn, unsigned int ptn_sz);

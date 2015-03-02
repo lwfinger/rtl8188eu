@@ -58,10 +58,6 @@
 #include "HalHWImg8188E_BB.h"
 #include "Hal8188EReg.h"
 
-#ifdef CONFIG_WOWLAN
-#include "HalHWImg8188E_FW.h"
-#endif /* CONFIG_WOWLAN */
-
 #include "odm_RegConfig8188E.h"
 #include "odm_RTL8188E.h"
 

@@ -433,15 +433,8 @@ u8 PS_RDY_CHECK(struct adapter * padapter)
 	struct pwrctrl_priv	*pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 
-#ifdef CONFIG_WOWLAN
-	if(true == pwrpriv->bInSuspend && pwrpriv->wowlan_mode)
-		return true;
-	else if (true == pwrpriv->bInSuspend)
-		return false;
-#else
 	if(true == pwrpriv->bInSuspend )
 		return false;
-#endif
 
 	curr_time = rtw_get_current_time();
 	delta_time = curr_time -pwrpriv->DelayLPSLastTimeStamp;
@@ -538,28 +531,6 @@ void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_a
 
 			pwrpriv->pwr_mode = ps_mode;
 			rtw_set_rpwm(padapter, PS_STATE_S4);
-#ifdef CONFIG_WOWLAN
-			if (pwrpriv->wowlan_mode == true)
-			{
-				u32 start_time, delay_ms;
-				u8 val8;
-				delay_ms = 20;
-				start_time = rtw_get_current_time();
-				do {
-					rtw_hal_get_hwreg(padapter, HW_VAR_SYS_CLKR, &val8);
-					if (!(val8 & BIT(4))){ /* 0x08 bit4 =1 --> in 32k, bit4 = 0 --> leave 32k */
-						pwrpriv->cpwm = PS_STATE_S4;
-						break;
-					}
-					if (rtw_get_passing_time_ms(start_time) > delay_ms)
-					{
-						DBG_871X("%s: Wait for FW 32K leave more than %u ms!!!\n", __FUNCTION__, delay_ms);
-						break;
-					}
-					rtw_usleep_os(100);
-				} while (1);
-			}
-#endif
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&ps_mode));
 			pwrpriv->bFwCurrentInPSMode = false;
 		}

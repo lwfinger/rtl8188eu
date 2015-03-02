@@ -776,16 +776,10 @@ static s32 _FWFreeToGo(struct adapter *padapter)
 extern char *rtw_fw_file_path;
 u8	FwBuffer8188E[FW_8188E_SIZE];
 #endif /* CONFIG_FILE_FWIMG */
-#ifdef CONFIG_WOWLAN
-/*  */
+
 /* 	Description: */
 /* 		Download 8192C firmware code. */
-/*  */
-/*  */
-s32 rtl8188e_FirmwareDownload(struct adapter *padapter, BOOLEAN  bUsedWoWLANFw)
-#else
 s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
-#endif
 {
 	s32	rtStatus = _SUCCESS;
 	u8 writeFW_retry = 0;
@@ -795,10 +789,6 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 	u8			*FwImage;
 	u32			FwImageLen;
 	u8			*pFwImageFileName;
-#ifdef CONFIG_WOWLAN
-	u8			*FwImageWoWLAN;
-	u32			FwImageWoWLANLen;
-#endif
 	u8			*pucMappedFile = NULL;
 	PRT_FIRMWARE_8188E	pFirmware = NULL;
 	PRT_8188E_FIRMWARE_HDR		pFwHdr = NULL;
@@ -817,13 +807,6 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 
 	FwImage = (u8*)Rtl8188E_FwImageArray;
 	FwImageLen = Rtl8188E_FWImgArrayLength;
-
-#ifdef CONFIG_WOWLAN
-	FwImageWoWLAN = (u8*)Rtl8188E_FwWoWImageArray;
-	FwImageWoWLANLen = Rtl8188E_FwWoWImgArrayLength;
-#endif /* CONFIG_WOWLAN */
-
-/* 	RT_TRACE(_module_hal_init_c_, _drv_err_, ("rtl8723a_FirmwareDownload: %s\n", pFwImageFileName)); */
 
 	#ifdef CONFIG_FILE_FWIMG
 	if(rtw_is_file_readable(rtw_fw_file_path) == true)
@@ -855,29 +838,14 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 
 			pFirmware->szFwBuffer = FwImage;
 			pFirmware->ulFwLength = FwImageLen;
-#ifdef CONFIG_WOWLAN
-			if(bUsedWoWLANFw){
-				pFirmware->szWoWLANFwBuffer = FwImageWoWLAN;
-				pFirmware->ulWoWLANFwLength = FwImageWoWLANLen;
-			}
-#endif /* CONFIG_WOWLAN */
 			break;
 	}
-#ifdef CONFIG_WOWLAN
-	if(bUsedWoWLANFw) {
-		pFirmwareBuf = pFirmware->szWoWLANFwBuffer;
-		FirmwareLen = pFirmware->ulWoWLANFwLength;
-		pFwHdr = (PRT_8188E_FIRMWARE_HDR)pFirmware->szWoWLANFwBuffer;
-	} else
-#endif
-	{
 	pFirmwareBuf = pFirmware->szFwBuffer;
 	FirmwareLen = pFirmware->ulFwLength;
 	DBG_871X_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, FirmwareLen);
 
 	/*  To Check Fw header. Added by tynli. 2009.12.04. */
 	pFwHdr = (PRT_8188E_FIRMWARE_HDR)pFirmware->szFwBuffer;
-	}
 
 	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->Version);
 	pHalData->FirmwareSubVersion = pFwHdr->Subversion;
@@ -938,66 +906,9 @@ Exit:
 	if (pFirmware)
 		rtw_mfree((u8*)pFirmware, sizeof(RT_FIRMWARE_8188E));
 
-	/* RT_TRACE(COMP_INIT, DBG_LOUD, (" <=== FirmwareDownload91C()\n")); */
-#ifdef CONFIG_WOWLAN
-	if (adapter_to_pwrctl(padapter)->wowlan_mode)
-		rtl8188e_InitializeFirmwareVars(padapter);
-	else
-		DBG_871X_LEVEL(_drv_always_, "%s: wowland_mode:%d wowlan_wake_reason:%d\n",
-			__func__, adapter_to_pwrctl(padapter)->wowlan_mode,
-			adapter_to_pwrctl(padapter)->wowlan_wake_reason);
-#endif
-
 	return rtStatus;
 }
 
-#ifdef CONFIG_WOWLAN
-void rtl8188e_InitializeFirmwareVars(struct adapter *padapter)
-{
-	PHAL_DATA_TYPE pHalData = GET_HAL_DATA(padapter);
-	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-
-	/*  Init Fw LPS related. */
-	pwrpriv->bFwCurrentInPSMode = false;
-	/*  Init H2C counter. by tynli. 2009.12.09. */
-	pHalData->LastHMEBoxNum = 0;
-}
-
-/*  */
-
-/*  */
-/*  Description: Prepare some information to Fw for WoWLAN. */
-/* 					(1) Download wowlan Fw. */
-/* 					(2) Download RSVD page packets. */
-/* 					(3) Enable AP offload if needed. */
-/*  */
-/*  2011.04.12 by tynli. */
-/*  */
-void
-SetFwRelatedForWoWLAN8188ES(
-		IN		struct adapter *		padapter,
-		IN		u8					bHostIsGoingtoSleep
-)
-{
-		int				status=_FAIL;
-		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-		u8				bRecover = false;
-	/*  */
-	/*  1. Before WoWLAN we need to re-download WoWLAN Fw. */
-	/*  */
-	status = rtl8188e_FirmwareDownload(padapter, bHostIsGoingtoSleep);
-	if(status != _SUCCESS) {
-		DBG_871X("ConfigFwRelatedForWoWLAN8188ES(): Re-Download Firmware failed!!\n");
-		return;
-	} else {
-		DBG_871X("ConfigFwRelatedForWoWLAN8188ES(): Re-Download Firmware Success !!\n");
-	}
-	/*  */
-	/*  2. Re-Init the variables about Fw related setting. */
-	/*  */
-	rtl8188e_InitializeFirmwareVars(padapter);
-}
-#else
 void rtl8188e_InitializeFirmwareVars(struct adapter *padapter)
 {
 	PHAL_DATA_TYPE pHalData = GET_HAL_DATA(padapter);
@@ -1007,28 +918,17 @@ void rtl8188e_InitializeFirmwareVars(struct adapter *padapter)
 
 	/*  Init H2C counter. by tynli. 2009.12.09. */
 	pHalData->LastHMEBoxNum = 0;
-/* 	pHalData->H2CQueueHead = 0; */
-/* 	pHalData->H2CQueueTail = 0; */
-/* 	pHalData->H2CStopInsertQueue = FALSE; */
 }
-#endif /* CONFIG_WOWLAN */
 
 static void rtl8188e_free_hal_data(struct adapter *padapter)
 {
-;
-
-	if(padapter->HalData)
-	{
+	if(padapter->HalData) {
 		rtw_mfree(padapter->HalData, sizeof(HAL_DATA_TYPE));
 		padapter->HalData = NULL;
 	}
-
-;
 }
 
-/*  */
 /* 				Efuse related code */
-/*  */
 enum{
 		VOLTAGE_V25						= 0x03,
 		LDOE25_SHIFT						= 28 ,
@@ -3561,14 +3461,6 @@ BOOLEAN HalDetectPwrDownMode88E(struct adapter *Adapter)
 
 	return pHalData->pwrdown;
 }	/*  HalDetectPwrDownMode */
-
-#ifdef CONFIG_WOWLAN
-void Hal_DetectWoWMode(struct adapter *pAdapter)
-{
-	adapter_to_pwrctl(pAdapter)->bSupportRemoteWakeup = true;
-	DBG_871X("%s\n", __func__);
-}
-#endif
 
 /*  20100209 Joseph: */
 /*  This function is used only for 92C to set REG_BCN_CTRL(0x550) register. */

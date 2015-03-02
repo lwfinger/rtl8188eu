@@ -469,26 +469,12 @@ void rtw_dev_unload(struct adapter *padapter)
 		/* s5. */
 		if(padapter->bSurpriseRemoved == false)
 		{
-			/* DBG_871X("r871x_dev_unload()->rtl871x_hal_deinit()\n"); */
-#ifdef CONFIG_WOWLAN
-			if((adapter_to_pwrctl(padapter)->bSupportRemoteWakeup==true)&&(adapter_to_pwrctl(padapter)->wowlan_mode==true)){
-				DBG_871X("%s bSupportWakeOnWlan==true  do not run rtw_hal_deinit()\n",__FUNCTION__);
-			}
-			else
-#endif /* CONFIG_WOWLAN */
-			{
-				rtw_hal_deinit(padapter);
-			}
+			rtw_hal_deinit(padapter);
 			padapter->bSurpriseRemoved = true;
 		}
 
 		padapter->bup = false;
-#ifdef CONFIG_WOWLAN
-		padapter->hw_init_completed=false;
-#endif /* CONFIG_WOWLAN */
-	}
-	else
-	{
+	} else {
 		RT_TRACE(_module_hci_intfs_c_,_drv_err_,("r871x_dev_unload():padapter->bup == false\n" ));
 	}
 
@@ -656,77 +642,6 @@ error_exit:
 	return (-1);
 }
 
-#ifdef CONFIG_WOWLAN
-static void rtw_suspend_wow(struct adapter *padapter)
-{
-	struct net_device *pnetdev = padapter->pnetdev;
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;
-	struct wowlan_ioctl_param poidparam;
-
-	if (check_fwstate(pmlmepriv, _FW_LINKED))
-		pwrpriv->wowlan_mode = true;
-	else
-		pwrpriv->wowlan_mode = false;
-
-	rtw_cancel_all_timer(padapter);
-	LeaveAllPowerSaveMode(padapter);
-
-	rtw_stop_cmd_thread(padapter);
-
-
-	/* padapter->net_closed = true; */
-	/* s1. */
-	if(pnetdev)
-	{
-		netif_carrier_off(pnetdev);
-		rtw_netif_stop_queue(pnetdev);
-	}
-
-	if(pwrpriv->bSupportRemoteWakeup==true && pwrpriv->wowlan_mode==true){
-		/* set H2C command */
-		poidparam.subcode=WOWLAN_ENABLE;
-		padapter->HalFunc.SetHwRegHandler(padapter,HW_VAR_WOWLAN,(u8 *)&poidparam);
-	}
-	else
-	{
-		/* s2. */
-		rtw_disassoc_cmd(padapter, 0, false);
-	}
-
-
-	if(check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED)&& rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
-	{
-		/* DBG_871X("%s:%d assoc_ssid:%s\n", __FUNCTION__, __LINE__, pmlmepriv->assoc_ssid.Ssid); */
-		DBG_871X("%s:%d %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n",__FUNCTION__, __LINE__,
-				pmlmepriv->cur_network.network.Ssid.Ssid,
-				MAC_ARG(pmlmepriv->cur_network.network.MacAddress),
-				pmlmepriv->cur_network.network.Ssid.SsidLength,
-				pmlmepriv->assoc_ssid.SsidLength);
-
-		rtw_set_roaming(padapter, 1);
-	}
-	/* s2-2.  indicate disconnect to os */
-	rtw_indicate_disconnect(padapter);
-	/* s2-3. */
-	rtw_free_assoc_resources(padapter, 1);
-#ifdef CONFIG_AUTOSUSPEND
-	if(!pwrpriv->bInternalAutoSuspend )
-#endif
-	/* s2-4. */
-	rtw_free_network_queue(padapter, true);
-
-	rtw_dev_unload(padapter);
-
-	if(check_fwstate(pmlmepriv, _FW_UNDER_SURVEY))
-		rtw_indicate_scan_done(padapter, 1);
-
-	/* if(check_fwstate(pmlmepriv, _FW_UNDER_LINKING)) */
-	/* 	rtw_indicate_disconnect(padapter); */
-
-}
-#endif
 static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
@@ -774,11 +689,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	pwrpriv->bInSuspend = true;
 
 	_enter_pwrlock(&pwrpriv->lock);
-#ifdef CONFIG_WOWLAN
-	rtw_suspend_wow(padapter);
-#else
 	rtw_suspend_common(padapter);
-#endif
 
 #ifdef CONFIG_AUTOSUSPEND
 	pwrpriv->rf_pwrstate = rf_off;
@@ -786,14 +697,13 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 #endif
 	_exit_pwrlock(&pwrpriv->lock);
 
-
 exit:
 	DBG_871X("<===  %s return %d.............. in %dms\n", __FUNCTION__
 		, ret, rtw_get_passing_time_ms(start_time));
 
-	;
 	return ret;
 }
+
 static int rtw_resume(struct usb_interface *pusb_intf)
 {
 	struct dvobj_priv *dvobj = usb_get_intfdata(pusb_intf);
@@ -808,11 +718,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 		rtw_resume_in_workqueue(pwrpriv);
 #else
-		if (rtw_is_earlysuspend_registered(pwrpriv)
-			#ifdef CONFIG_WOWLAN
-			&& !pwrpriv->wowlan_mode
-			#endif /* CONFIG_WOWLAN */
-		) {
+		if (rtw_is_earlysuspend_registered(pwrpriv)) {
 			/* jeff: bypass resume here, do in late_resume */
 			rtw_set_do_late_resume(pwrpriv, true);
 		} else {
@@ -1233,10 +1139,6 @@ static void rtw_usb_if1_deinit(struct adapter *if1)
 	#endif
 #endif
 	rtw_cancel_all_timer(if1);
-
-#ifdef CONFIG_WOWLAN
-	pwrctl->wowlan_mode=false;
-#endif /* CONFIG_WOWLAN */
 
 	rtw_dev_unload(if1);
 
