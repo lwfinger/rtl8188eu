@@ -2635,17 +2635,12 @@ int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
 		a_len -= ETH_HLEN;
 
 		/* Allocate new skb for releasing to upper layer */
-#ifdef CONFIG_SKB_COPY
 		sub_skb = rtw_skb_alloc(nSubframe_Length + 12);
-		if(sub_skb)
-		{
+		if(sub_skb) {
 			skb_reserve(sub_skb, 12);
 			data_ptr = (u8 *)skb_put(sub_skb, nSubframe_Length);
 			memcpy(data_ptr, pdata, nSubframe_Length);
-		}
-		else
-#endif /*  CONFIG_SKB_COPY */
-		{
+		} else {
 			sub_skb = rtw_skb_clone(prframe->u.hdr.pkt);
 			if(sub_skb)
 			{
