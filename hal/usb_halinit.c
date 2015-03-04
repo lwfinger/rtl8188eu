@@ -2788,30 +2788,6 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			}
 			break;
 #endif /* CONFIG_P2P */
-#ifdef CONFIG_TDLS
-		case HW_VAR_TDLS_WRCR:
-			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)&(~RCR_CBSSID_DATA ));
-			break;
-		case HW_VAR_TDLS_INIT_CH_SEN:
-			{
-				rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)&(~ RCR_CBSSID_DATA )&(~RCR_CBSSID_BCN ));
-				rtw_write16(Adapter, REG_RXFLTMAP2,0xffff);
-
-				/* disable update TSF */
-				rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL)|BIT(4));
-			}
-			break;
-		case HW_VAR_TDLS_DONE_CH_SEN:
-			{
-				/* enable update TSF */
-				rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL)&(~ BIT(4)));
-				rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)|(RCR_CBSSID_BCN ));
-			}
-			break;
-		case HW_VAR_TDLS_RS_RCR:
-			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)|(RCR_CBSSID_DATA));
-			break;
-#endif /* CONFIG_TDLS */
 		case HW_VAR_INITIAL_GAIN:
 			{
 				DIG_T	*pDigTable = &podmpriv->DM_DigTable;

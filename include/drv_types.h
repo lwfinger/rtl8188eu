@@ -374,9 +374,6 @@ struct adapter {
 	struct wifidirect_info	wdinfo;
 #endif //CONFIG_P2P
 
-#ifdef CONFIG_TDLS
-	struct tdls_info	tdlsinfo;
-#endif //CONFIG_TDLS
 #ifdef CONFIG_P2P
 	struct wifi_display_info wfd_info;
 #endif //CONFIG_P2P

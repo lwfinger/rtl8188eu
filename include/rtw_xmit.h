@@ -439,9 +439,6 @@ extern s32 rtw_xmitframe_coalesce(struct adapter *padapter, _pkt *pkt, struct xm
 #ifdef CONFIG_IEEE80211W
 extern s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, _pkt *pkt, struct xmit_frame *pxmitframe);
 #endif //CONFIG_IEEE80211W
-#ifdef CONFIG_TDLS
-s32 rtw_xmit_tdls_coalesce(struct adapter *padapter, struct xmit_frame *pxmitframe, u8 action);
-#endif
 s32 _rtw_init_hw_txqueue(struct hw_txqueue* phw_txqueue, u8 ac_tag);
 void _rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv);
 
@@ -461,7 +458,7 @@ void rtw_free_hwxmits(struct adapter *padapter);
 
 s32 rtw_xmit(struct adapter *padapter, _pkt **pkt);
 
-#if defined(CONFIG_AP_MODE) || defined(CONFIG_TDLS)
+#if defined(CONFIG_AP_MODE)
 sint xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_frame *pxmitframe);
 void stop_sta_xmit(struct adapter *padapter, struct sta_info *psta);
 void wakeup_sta_to_xmit(struct adapter *padapter, struct sta_info *psta);

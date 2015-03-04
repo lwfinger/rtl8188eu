@@ -1242,11 +1242,6 @@ void rtw_free_assoc_resources(struct adapter *adapter, int lock_scanned_queue)
 	struct	sta_priv *pstapriv = &adapter->stapriv;
 	struct wlan_network *tgt_network = &pmlmepriv->cur_network;
 
-#ifdef CONFIG_TDLS
-	struct tdls_info *ptdlsinfo = &adapter->tdlsinfo;
-#endif /* CONFIG_TDLS */
-;
-
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_notice_, ("+rtw_free_assoc_resources\n"));
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("tgt_network->network.MacAddress="MAC_FMT" ssid=%s\n",
 		MAC_ARG(tgt_network->network.MacAddress), tgt_network->network.Ssid.Ssid));
@@ -1256,18 +1251,8 @@ void rtw_free_assoc_resources(struct adapter *adapter, int lock_scanned_queue)
 
 		psta = rtw_get_stainfo(&adapter->stapriv, tgt_network->network.MacAddress);
 
-#ifdef CONFIG_TDLS
-		if(ptdlsinfo->setup_state != TDLS_STATE_NONE) {
-			rtw_tdls_cmd(adapter, myid(&(adapter->eeprompriv)), TDLS_RS_RCR);
-			rtw_reset_tdls_info(adapter);
-			rtw_free_all_stainfo(adapter);
-			_enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL);
-		} else
-#endif /* CONFIG_TDLS */
-		{
-			_enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL);
-			rtw_free_stainfo(adapter,  psta);
-		}
+		_enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL);
+		rtw_free_stainfo(adapter,  psta);
 
 		_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL);
 

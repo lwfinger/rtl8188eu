@@ -431,15 +431,6 @@ void rtw_wep_decrypt(struct adapter *padapter, u8  *precvframe);
 #ifdef CONFIG_IEEE80211W
 u32	rtw_BIP_verify(struct adapter *padapter, u8 *precvframe);
 #endif //CONFIG_IEEE80211W
-#ifdef CONFIG_TDLS
-void wpa_tdls_generate_tpk(struct adapter *padapter, struct sta_info *psta);
-int wpa_tdls_ftie_mic(u8 *kck, u8 trans_seq,
-						u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie,
-						u8 *mic);
-int tdls_verify_mic(u8 *kck, u8 trans_seq,
-						u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie);
-#endif //CONFIG_TDLS
-
 void rtw_use_tkipkey_handler(void* FunctionContext);
 
 void rtw_sec_restore_wep_key(struct adapter *adapter);
