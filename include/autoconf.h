@@ -61,8 +61,6 @@
 
 #define CONFIG_80211D
 
-#define CONFIG_ATTEMPT_TO_FIX_AP_BEACON_ERROR
-
 /*
  * Debug Related Config
  */

@@ -932,29 +932,29 @@ unsigned int OnBeacon(struct adapter *padapter, union recv_frame *precv_frame)
 	u8 *p = NULL;
 	u32 ielen = 0;
 
-#ifdef CONFIG_ATTEMPT_TO_FIX_AP_BEACON_ERROR
-	p = rtw_get_ie(pframe + sizeof(struct rtw_ieee80211_hdr_3addr) + _BEACON_IE_OFFSET_, _EXT_SUPPORTEDRATES_IE_, &ielen, precv_frame->u.hdr.len -sizeof(struct rtw_ieee80211_hdr_3addr) - _BEACON_IE_OFFSET_);
-	if ((p != NULL) && (ielen > 0))
-	{
-		if ((*(p + 1 + ielen) == 0x2D) && (*(p + 2 + ielen) != 0x2D))
-		{
-			/* Invalid value 0x2D is detected in Extended Supported Rates (ESR) IE. Try to fix the IE length to avoid failed Beacon parsing. */
-			DBG_871X("[WIFIDBG] Error in ESR IE is detected in Beacon of BSSID:"MAC_FMT". Fix the length of ESR IE to avoid failed Beacon parsing.\n", MAC_ARG(GetAddr3Ptr(pframe)));
+	p = rtw_get_ie(pframe + sizeof(struct rtw_ieee80211_hdr_3addr) +
+		       _BEACON_IE_OFFSET_, _EXT_SUPPORTEDRATES_IE_, &ielen,
+		       precv_frame->u.hdr.len -
+		       sizeof(struct rtw_ieee80211_hdr_3addr) -
+		       _BEACON_IE_OFFSET_);
+	if ((p != NULL) && (ielen > 0)) {
+		if ((*(p + 1 + ielen) == 0x2D) && (*(p + 2 + ielen) != 0x2D)) {
+			/* Invalid value 0x2D is detected in
+			 * Extended Supported Rates (ESR) IE. Try to fix the IE
+			 * length to avoid failed Beacon parsing. */
+			DBG_871X("[WIFIDBG] Error in ESR IE is detected in Beacon of BSSID:%pM. Fix the length of ESR IE to avoid failed Beacon parsing.\n",
+				 GetAddr3Ptr(pframe));
 			*(p + 1) = ielen - 1;
 		}
 	}
-#endif
 
-	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS)
-	{
+	if (pmlmeext->sitesurvey_res.state == SCAN_PROCESS) {
 		report_survey_event(padapter, precv_frame);
 		return _SUCCESS;
 	}
 
-	if (_rtw_memcmp(GetAddr3Ptr(pframe), get_my_bssid(&pmlmeinfo->network), ETH_ALEN))
-	{
-		if (pmlmeinfo->state & WIFI_FW_AUTH_NULL)
-		{
+	if (_rtw_memcmp(GetAddr3Ptr(pframe), get_my_bssid(&pmlmeinfo->network), ETH_ALEN)) {
+		if (pmlmeinfo->state & WIFI_FW_AUTH_NULL) {
 			/* we should update current network before auth, or some IE is wrong */
 			pbss = (WLAN_BSSID_EX*)rtw_malloc(sizeof(WLAN_BSSID_EX));
 			if (pbss) {
@@ -966,7 +966,10 @@ unsigned int OnBeacon(struct adapter *padapter, union recv_frame *precv_frame)
 			}
 
 			/* check the vendor of the assoc AP */
-			pmlmeinfo->assoc_AP_vendor = check_assoc_AP(pframe+sizeof(struct rtw_ieee80211_hdr_3addr), len-sizeof(struct rtw_ieee80211_hdr_3addr));
+			pmlmeinfo->assoc_AP_vendor =
+				check_assoc_AP(pframe +
+					       sizeof(struct rtw_ieee80211_hdr_3addr),
+					       len - sizeof(struct rtw_ieee80211_hdr_3addr));
 
 			/* update TSF Value */
 			update_TSF(pmlmeext, pframe, len);
