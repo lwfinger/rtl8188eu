@@ -590,11 +590,10 @@ _InitHardwareDropIncorrectBulkOut(
 	IN  struct adapter *Adapter
 	)
 {
-#ifdef ENABLE_USB_DROP_INCORRECT_OUT
 	u32	value32 = rtw_read32(Adapter, REG_TXDMA_OFFSET_CHK);
+
 	value32 |= DROP_DATA_EN;
 	rtw_write32(Adapter, REG_TXDMA_OFFSET_CHK, value32);
-#endif
 }
 
 static void

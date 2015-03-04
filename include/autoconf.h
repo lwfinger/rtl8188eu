@@ -47,8 +47,6 @@
 
 #define CONFIG_OUT_EP_WIFI_MODE	0
 
-#define ENABLE_USB_DROP_INCORRECT_OUT
-
 #define DISABLE_BB_RF	0
 
 #define MP_DRIVER 0
