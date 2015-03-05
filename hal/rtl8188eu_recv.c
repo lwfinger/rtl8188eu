@@ -100,7 +100,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 	for(i=0; i < NR_RECVBUFF ; i++) {
 		_rtw_init_listhead(&precvbuf->list);
 
-		_rtw_spinlock_init(&precvbuf->recvbuf_lock);
+		spin_lock_init(&precvbuf->recvbuf_lock);
 
 		precvbuf->alloc_sz = MAX_RECVBUF_SZ;
 

@@ -898,7 +898,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 		goto exit;
 	}
 	/*  add for CONFIG_IEEE80211W, none 11w also can use */
-	_rtw_spinlock_init(&padapter->security_key_mutex);
+	spin_lock_init(&padapter->security_key_mutex);
 
 	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
 	/* memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
@@ -929,7 +929,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 #endif
 
 #ifdef CONFIG_BR_EXT
-	_rtw_spinlock_init(&padapter->br_ext_lock);
+	spin_lock_init(&padapter->br_ext_lock);
 #endif	/*  CONFIG_BR_EXT */
 
 exit:

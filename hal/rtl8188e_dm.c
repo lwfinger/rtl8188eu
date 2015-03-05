@@ -361,7 +361,7 @@ void rtl8188e_init_dm_priv(IN struct adapter *Adapter)
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
 	memset(pdmpriv, 0, sizeof(struct dm_priv));
-	/* _rtw_spinlock_init(&(pHalData->odm_stainfo_lock)); */
+	/* spin_lock_init(&(pHalData->odm_stainfo_lock)); */
 	Init_ODM_ComInfo_88E(Adapter);
 	ODM_InitDebugSetting(podmpriv);
 }

@@ -37,7 +37,7 @@ void _rtw_init_stainfo(struct sta_info *psta)
 
 	memset((u8 *)psta, 0, sizeof (struct sta_info));
 
-	 _rtw_spinlock_init(&psta->lock);
+	 spin_lock_init(&psta->lock);
 	_rtw_init_listhead(&psta->list);
 	_rtw_init_listhead(&psta->hash_list);
 	/* _rtw_init_listhead(&psta->asoc_list); */
@@ -110,7 +110,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 	_rtw_init_queue(&pstapriv->free_sta_queue);
 
-	_rtw_spinlock_init(&pstapriv->sta_hash_lock);
+	spin_lock_init(&pstapriv->sta_hash_lock);
 
 	/* _rtw_init_queue(&pstapriv->asoc_q); */
 	pstapriv->asoc_sta_count = 0;
@@ -140,8 +140,8 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 	_rtw_init_listhead(&pstapriv->asoc_list);
 	_rtw_init_listhead(&pstapriv->auth_list);
-	_rtw_spinlock_init(&pstapriv->asoc_list_lock);
-	_rtw_spinlock_init(&pstapriv->auth_list_lock);
+	spin_lock_init(&pstapriv->asoc_list_lock);
+	spin_lock_init(&pstapriv->auth_list_lock);
 	pstapriv->asoc_list_cnt = 0;
 	pstapriv->auth_list_cnt = 0;
 
