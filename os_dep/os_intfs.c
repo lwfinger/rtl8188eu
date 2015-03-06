@@ -1001,11 +1001,6 @@ u8 rtw_free_drv_sw(struct adapter *padapter)
 	}
 	#endif
 	/*  add for CONFIG_IEEE80211W, none 11w also can use */
-	_rtw_spinlock_free(&padapter->security_key_mutex);
-
-#ifdef CONFIG_BR_EXT
-	_rtw_spinlock_free(&padapter->br_ext_lock);
-#endif	/*  CONFIG_BR_EXT */
 
 	free_mlme_ext_priv(&padapter->mlmeextpriv);
 

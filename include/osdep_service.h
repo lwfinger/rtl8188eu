@@ -565,7 +565,6 @@ void	_rtw_up_sema(_sema	*sema);
 u32	_rtw_down_sema(_sema *sema);
 void	_rtw_mutex_init(_mutex *pmutex);
 void	_rtw_mutex_free(_mutex *pmutex);
-void	_rtw_spinlock_free(_lock *plock);
 
 void	_rtw_init_queue(_queue	*pqueue);
 u32	_rtw_queue_empty(_queue	*pqueue);

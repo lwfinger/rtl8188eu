@@ -77,8 +77,6 @@ void free_mlme_ap_info(struct adapter *padapter)
 	spin_lock_bh(&(pstapriv->sta_hash_lock));
 	rtw_free_stainfo(padapter, psta);
 	spin_unlock_bh(&(pstapriv->sta_hash_lock));
-	_rtw_spinlock_free(&pmlmepriv->bcn_update_lock);
-
 }
 
 static void update_BCNTIM(struct adapter *padapter)
@@ -2340,8 +2338,6 @@ void stop_ap_mode(struct adapter *padapter)
 
 	pmlmepriv->update_bcn = false;
 	pmlmeext->bstart_bss = false;
-	/* _rtw_spinlock_free(&pmlmepriv->bcn_update_lock); */
-
 	/* reset and init security priv , this can refine with rtw_reset_securitypriv */
 	memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv));
 	padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeOpen;

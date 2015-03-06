@@ -656,10 +656,6 @@ void	_rtw_mutex_free(_mutex *pmutex)
 #endif
 }
 
-void	_rtw_spinlock_free(_lock *plock)
-{
-}
-
 void	_rtw_init_queue(_queue	*pqueue)
 {
 
