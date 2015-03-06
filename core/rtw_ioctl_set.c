@@ -95,7 +95,7 @@ u8 rtw_do_join(struct adapter * padapter)
 
 ;
 
-	_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
@@ -111,7 +111,7 @@ u8 rtw_do_join(struct adapter * padapter)
 
 	if(_rtw_queue_empty(queue)== true)
 	{
-		_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 		_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 
 		/* when set_ssid/set_bssid for rtw_do_join(), but scanning queue is empty */
@@ -139,7 +139,7 @@ u8 rtw_do_join(struct adapter * padapter)
 	else
 	{
 		int select_ret;
-		_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 		if((select_ret=rtw_select_and_join_from_scanned_queue(pmlmepriv))==_SUCCESS)
 		{
 			pmlmepriv->to_join = false;
@@ -229,7 +229,7 @@ u8 rtw_set_802_11_bssid(struct adapter* padapter, u8 *bssid)
 		goto exit;
 	}
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
 
 
 	DBG_871X("Set BSSID under fw_state=0x%08x\n", get_fwstate(pmlmepriv));
@@ -283,7 +283,7 @@ handle_tkip_countermeasure:
 	}
 
 release_mlme_lock:
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 exit:
 	RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
@@ -315,7 +315,7 @@ u8 rtw_set_802_11_ssid(struct adapter* padapter, NDIS_802_11_SSID *ssid)
 		goto exit;
 	}
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
 
 	DBG_871X("Set SSID under fw_state=0x%08x\n", get_fwstate(pmlmepriv));
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) {
@@ -398,7 +398,7 @@ handle_tkip_countermeasure:
 	}
 
 release_mlme_lock:
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 exit:
 	RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
@@ -441,7 +441,7 @@ u8 rtw_set_802_11_connect(struct adapter* padapter, u8 *bssid, NDIS_802_11_SSID 
 		goto exit;
 	}
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
 
 	DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT"  fw_state=0x%08x\n",
 		FUNC_ADPT_ARG(padapter), get_fwstate(pmlmepriv));
@@ -474,7 +474,7 @@ handle_tkip_countermeasure:
 	}
 
 release_mlme_lock:
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 exit:
 
@@ -499,7 +499,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
 
 	if(*pold_state != networktype)
 	{
-		_enter_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_lock_bh(&pmlmepriv->lock);
 
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,(" change mode!"));
 		/* DBG_871X("change mode, old_mode=%d, new_mode=%d, fw_state=0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv)); */
@@ -552,7 +552,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
 		/* RT_TRACE(COMP_OID_SET, DBG_LOUD, ("set_infrastructure: fw_state:%x after changing mode\n", */
 		/* 									get_fwstate(pmlmepriv) )); */
 
-		_exit_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_unlock_bh(&pmlmepriv->lock);
 	}
 
 ;
@@ -568,7 +568,7 @@ u8 rtw_set_802_11_disassociate(struct adapter *padapter)
 
 ;
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
@@ -581,7 +581,7 @@ u8 rtw_set_802_11_disassociate(struct adapter *padapter)
 		rtw_pwr_wakeup(padapter);
 	}
 
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 ;
 
@@ -627,15 +627,13 @@ u8 rtw_set_802_11_bssid_list_scan(struct adapter* padapter, NDIS_802_11_SSID *ps
 			return _SUCCESS;
 		}
 
-		_enter_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_lock_bh(&pmlmepriv->lock);
 
 		res = rtw_sitesurvey_cmd(padapter, pssid, ssid_max_num, NULL, 0);
 
-		_exit_critical_bh(&pmlmepriv->lock, &irqL);
+		spin_unlock_bh(&pmlmepriv->lock);
 	}
 exit:
-
-;
 
 	return res;
 }
@@ -645,8 +643,6 @@ u8 rtw_set_802_11_authentication_mode(struct adapter* padapter, NDIS_802_11_AUTH
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	int res;
 	u8 ret;
-
-;
 
 	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("set_802_11_auth.mode(): mode=%x\n", authmode));
 

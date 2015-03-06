@@ -1119,7 +1119,7 @@ unsigned int OnAuth(struct adapter *padapter, union recv_frame *precv_frame)
 	}
 	else
 	{
-		_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+		spin_lock_bh(&pstapriv->asoc_list_lock);
 		if(rtw_is_list_empty(&pstat->asoc_list)==false)
 		{
 			rtw_list_delete(&pstat->asoc_list);
@@ -1129,20 +1129,20 @@ unsigned int OnAuth(struct adapter *padapter, union recv_frame *precv_frame)
 				/* TODO: STA re_auth within expire_to */
 			}
 		}
-		_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+		spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 		if (seq==1) {
 			/* TODO: STA re_auth and auth timeout */
 		}
 	}
 
-	_enter_critical_bh(&pstapriv->auth_list_lock, &irqL);
+	spin_lock_bh(&pstapriv->auth_list_lock);
 	if (rtw_is_list_empty(&pstat->auth_list))
 	{
 		rtw_list_insert_tail(&pstat->auth_list, &pstapriv->auth_list);
 		pstapriv->auth_list_cnt++;
 	}
-	_exit_critical_bh(&pstapriv->auth_list_lock, &irqL);
+	spin_unlock_bh(&pstapriv->auth_list_lock);
 
 	if (pstat->auth_seq == 0)
 		pstat->expire_to = pstapriv->auth_to;
@@ -1844,22 +1844,22 @@ unsigned int OnAssocReq(struct adapter *padapter, union recv_frame *precv_frame)
 	pstat->state &= (~WIFI_FW_ASSOC_STATE);
 	pstat->state |= WIFI_FW_ASSOC_SUCCESS;
 
-	_enter_critical_bh(&pstapriv->auth_list_lock, &irqL);
+	spin_lock_bh(&pstapriv->auth_list_lock);
 	if (!rtw_is_list_empty(&pstat->auth_list))
 	{
 		rtw_list_delete(&pstat->auth_list);
 		pstapriv->auth_list_cnt--;
 	}
-	_exit_critical_bh(&pstapriv->auth_list_lock, &irqL);
+	spin_unlock_bh(&pstapriv->auth_list_lock);
 
-	_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_lock_bh(&pstapriv->asoc_list_lock);
 	if (rtw_is_list_empty(&pstat->asoc_list))
 	{
 		pstat->expire_to = pstapriv->expire_to;
 		rtw_list_insert_tail(&pstat->asoc_list, &pstapriv->asoc_list);
 		pstapriv->asoc_list_cnt++;
 	}
-	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 	/*  now the station is qualified to join our BSS... */
 	if(pstat && (pstat->state & WIFI_FW_ASSOC_SUCCESS) && (_STATS_SUCCESSFUL_==status))
@@ -1874,7 +1874,7 @@ unsigned int OnAssocReq(struct adapter *padapter, union recv_frame *precv_frame)
 		else
 			issue_asocrsp(padapter, status, pstat, WIFI_REASSOCRSP);
 
-		_enter_critical_bh(&pstat->lock, &irqL);
+		spin_lock_bh(&pstat->lock);
 		if(pstat->passoc_req)
 		{
 			rtw_mfree(pstat->passoc_req, pstat->assoc_req_len);
@@ -1888,7 +1888,7 @@ unsigned int OnAssocReq(struct adapter *padapter, union recv_frame *precv_frame)
 			memcpy(pstat->passoc_req, pframe, pkt_len);
 			pstat->assoc_req_len = pkt_len;
 		}
-		_exit_critical_bh(&pstat->lock, &irqL);
+		spin_unlock_bh(&pstat->lock);
 
 		/* 3-(1) report sta add event */
 		report_add_sta_event(padapter, pstat->hwaddr, pstat->aid);
@@ -2055,9 +2055,9 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 
-		/* _enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL); */
+		/* spin_lock_bh(&(pstapriv->sta_hash_lock)); */
 		/* rtw_free_stainfo(padapter, psta); */
-		/* _exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL); */
+		/* spin_unlock_bh(&(pstapriv->sta_hash_lock)); */
 
 		DBG_871X_LEVEL(_drv_always_, "ap recv deauth reason code(%d) sta:%pM\n",
 				reason, GetAddr2Ptr(pframe));
@@ -2067,7 +2067,7 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
 		{
 			u8 updated;
 
-			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+			spin_lock_bh(&pstapriv->asoc_list_lock);
 			if(rtw_is_list_empty(&psta->asoc_list)==false)
 			{
 				rtw_list_delete(&psta->asoc_list);
@@ -2075,7 +2075,7 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
 				updated = ap_free_sta(padapter, psta, false, reason);
 
 			}
-			_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+			spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 			associated_clients_update(padapter, updated);
 		}
@@ -2150,9 +2150,9 @@ unsigned int OnDisassoc(struct adapter *padapter, union recv_frame *precv_frame)
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 
-		/* _enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL); */
+		/* spin_lock_bh(&(pstapriv->sta_hash_lock)); */
 		/* rtw_free_stainfo(padapter, psta); */
-		/* _exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL); */
+		/* spin_unlock_bh(&(pstapriv->sta_hash_lock)); */
 
 		DBG_871X_LEVEL(_drv_always_, "ap recv disassoc reason code(%d) sta:%pM\n",
 				reason, GetAddr2Ptr(pframe));
@@ -2162,7 +2162,7 @@ unsigned int OnDisassoc(struct adapter *padapter, union recv_frame *precv_frame)
 		{
 			u8 updated;
 
-			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+			spin_lock_bh(&pstapriv->asoc_list_lock);
 			if(rtw_is_list_empty(&psta->asoc_list)==false)
 			{
 				rtw_list_delete(&psta->asoc_list);
@@ -2170,7 +2170,7 @@ unsigned int OnDisassoc(struct adapter *padapter, union recv_frame *precv_frame)
 				updated = ap_free_sta(padapter, psta, false, reason);
 
 			}
-			_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+			spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 			associated_clients_update(padapter, updated);
 		}
@@ -5719,7 +5719,7 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
 		return;
 	}
 #if defined (CONFIG_AP_MODE)
-	_enter_critical_bh(&pmlmepriv->bcn_update_lock, &irqL);
+	spin_lock_bh(&pmlmepriv->bcn_update_lock);
 #endif /* if defined (CONFIG_AP_MODE) */
 
 	/* update attribute */
@@ -5970,7 +5970,7 @@ _issue_bcn:
 #if defined (CONFIG_AP_MODE)
 	pmlmepriv->update_bcn = false;
 
-	_exit_critical_bh(&pmlmepriv->bcn_update_lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->bcn_update_lock);
 #endif /* if defined (CONFIG_AP_MODE) */
 
 	if ((pattrib->pktlen + TXDESC_SIZE) > 512)
@@ -7873,7 +7873,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 	{
 		int i;
 
-		_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+		spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
 
 		phead = get_list_head(queue);
 		plist = get_next(phead);
@@ -7905,7 +7905,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 			}
 		}
 
-		_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
+		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
 		for(i= 0;i<8;i++)
 		{
@@ -8631,7 +8631,7 @@ void start_clnt_join(struct adapter* padapter)
 			_irqL irqL;
 			bool has_p2p_ie = false;
 
-			_enter_critical_bh(&(padapter->mlmepriv.scanned_queue.lock), &irqL);
+			spin_lock_bh(&(padapter->mlmepriv.scanned_queue.lock));
 
 			for (pos = get_next(head);!rtw_end_of_queue_search(head, pos); pos = get_next(pos)) {
 
@@ -8649,7 +8649,7 @@ void start_clnt_join(struct adapter* padapter)
 				}
 			}
 
-			_exit_critical_bh(&(padapter->mlmepriv.scanned_queue.lock), &irqL);
+			spin_unlock_bh(&(padapter->mlmepriv.scanned_queue.lock));
 
 			if (scanned == NULL || rtw_end_of_queue_search(head, pos) || has_p2p_ie == false)
 			#endif /* CONFIG_P2P */
@@ -9904,7 +9904,7 @@ void sa_query_timer_hdl(struct adapter *padapter)
 	struct mlme_priv * pmlmepriv = &padapter->mlmepriv;
 	_irqL irqL;
 	/* disconnect */
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
@@ -9913,7 +9913,7 @@ void sa_query_timer_hdl(struct adapter *padapter)
 		rtw_free_assoc_resources(padapter, 1);
 	}
 
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->lock);
 	DBG_871X("SA query timeout disconnect\n");
 }
 #endif /* CONFIG_IEEE80211W */
@@ -10673,7 +10673,7 @@ u8 tx_beacon_hdl(struct adapter *padapter, unsigned char *pbuf)
 		if((pstapriv->tim_bitmap&BIT(0)) && (psta_bmc->sleepq_len>0))
 		{
 			rtw_msleep_os(10);/*  10ms, ATIM(HIQ) Windows */
-			_enter_critical_bh(&pxmitpriv->lock, &irqL);
+			spin_lock_bh(&pxmitpriv->lock);
 
 			xmitframe_phead = get_list_head(&psta_bmc->sleep_q);
 			xmitframe_plist = get_next(xmitframe_phead);
@@ -10699,7 +10699,7 @@ u8 tx_beacon_hdl(struct adapter *padapter, unsigned char *pbuf)
 				rtw_hal_xmitframe_enqueue(padapter, pxmitframe);
 			}
 
-			_exit_critical_bh(&pxmitpriv->lock, &irqL);
+			spin_unlock_bh(&pxmitpriv->lock);
 
 		}
 

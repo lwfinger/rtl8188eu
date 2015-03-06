@@ -206,16 +206,6 @@ __inline static void _exit_critical_ex(_lock *plock, _irqL *pirqL)
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static void _enter_critical_bh(_lock *plock, _irqL *pirqL)
-{
-	spin_lock_bh(plock);
-}
-
-__inline static void _exit_critical_bh(_lock *plock, _irqL *pirqL)
-{
-	spin_unlock_bh(plock);
-}
-
 __inline static int _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
 {
 	int ret = 0;

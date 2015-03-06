@@ -232,14 +232,12 @@ void rtw_os_xmit_schedule(struct adapter *padapter)
 
 	pxmitpriv = &padapter->xmitpriv;
 
-	_enter_critical_bh(&pxmitpriv->lock, &irqL);
+	spin_lock_bh(&pxmitpriv->lock);
 
 	if(rtw_txframes_pending(padapter))
-	{
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
-	}
 
-	_exit_critical_bh(&pxmitpriv->lock, &irqL);
+	spin_unlock_bh(&pxmitpriv->lock);
 }
 
 static void rtw_check_xmit_resource(struct adapter *padapter, _pkt *pkt)
@@ -286,7 +284,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 	int i;
 	s32	res;
 
-	_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_lock_bh(&pstapriv->asoc_list_lock);
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
 
@@ -301,7 +299,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 			chk_alive_list[chk_alive_num++] = stainfo_offset;
 		}
 	}
-	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 	for (i = 0; i < chk_alive_num; i++) {
 		psta = rtw_get_stainfo_by_offset(pstapriv, chk_alive_list[i]);

@@ -63,7 +63,7 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 	pstart = pdata_attr;
 	pcur = pdata_attr;
 
-	_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_lock_bh(&pstapriv->asoc_list_lock);
 	phead = &pstapriv->asoc_list;
 	plist = get_next(phead);
 
@@ -133,7 +133,7 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 
 
 	}
-	_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+	spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 	if(attr_len>0)
 	{
@@ -2398,7 +2398,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 					_irqL irqL;
 					_list	*phead, *plist;
 
-					_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+					spin_lock_bh(&pstapriv->asoc_list_lock);
 					phead = &pstapriv->asoc_list;
 					plist = get_next(phead);
 
@@ -2413,10 +2413,10 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 							_rtw_memcmp(psta->dev_addr, dev_addr, ETH_ALEN))
 						{
 
-							/* _exit_critical_bh(&pstapriv->asoc_list_lock, &irqL); */
+							/* spin_unlock_bh(&pstapriv->asoc_list_lock); */
 							/* issue GO Discoverability Request */
 							issue_group_disc_req(pwdinfo, psta->hwaddr);
-							/* _enter_critical_bh(&pstapriv->asoc_list_lock, &irqL); */
+							/* spin_lock_bh(&pstapriv->asoc_list_lock); */
 
 							status = P2P_STATUS_SUCCESS;
 
@@ -2428,7 +2428,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 						}
 
 					}
-					_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
+					spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 				}
 				else
@@ -3146,9 +3146,9 @@ static void find_phase_handler( struct adapter*	padapter )
 
 	rtw_p2p_set_state(pwdinfo, P2P_STATE_FIND_PHASE_SEARCH);
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
 	_status = rtw_sitesurvey_cmd(padapter, &ssid, 1, NULL, 0);
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->lock);
 
 
 }
@@ -4132,7 +4132,7 @@ static void pre_tx_scan_timer_process (void *FunctionContext)
 	if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 		return;
 
-	_enter_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_lock_bh(&pmlmepriv->lock);
 
 
 	if(rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_PROVISION_DIS_REQ))
@@ -4163,7 +4163,7 @@ static void pre_tx_scan_timer_process (void *FunctionContext)
 		DBG_8192C( "[%s] p2p_state is %d, ignore!!\n", __FUNCTION__, rtw_p2p_state(pwdinfo) );
 	}
 
-	_exit_critical_bh(&pmlmepriv->lock, &irqL);
+	spin_unlock_bh(&pmlmepriv->lock);
 }
 
 static void find_phase_timer_process (void *FunctionContext)

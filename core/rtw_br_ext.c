@@ -379,9 +379,9 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 static __inline__ void __network_hash_link(struct adapter *priv,
 				struct nat25_network_db_entry *ent, int hash)
 {
-	/*  Caller must _enter_critical_bh already! */
+	/*  Caller must spin_lock_bh already! */
 	/* _irqL irqL; */
-	/* _enter_critical_bh(&priv->br_ext_lock, &irqL); */
+	/* spin_lock_bh(&priv->br_ext_lock); */
 
 	ent->next_hash = priv->nethash[hash];
 	if(ent->next_hash != NULL)
@@ -389,15 +389,15 @@ static __inline__ void __network_hash_link(struct adapter *priv,
 	priv->nethash[hash] = ent;
 	ent->pprev_hash = &priv->nethash[hash];
 
-	/* _exit_critical_bh(&priv->br_ext_lock, &irqL); */
+	/* spin_unlock_bh(&priv->br_ext_lock); */
 }
 
 
 static __inline__ void __network_hash_unlink(struct nat25_network_db_entry *ent)
 {
-	/*  Caller must _enter_critical_bh already! */
+	/*  Caller must spin_lock_bh already! */
 	/* _irqL irqL; */
-	/* _enter_critical_bh(&priv->br_ext_lock, &irqL); */
+	/* spin_lock_bh(&priv->br_ext_lock); */
 
 	*(ent->pprev_hash) = ent->next_hash;
 	if(ent->next_hash != NULL)
@@ -405,7 +405,7 @@ static __inline__ void __network_hash_unlink(struct nat25_network_db_entry *ent)
 	ent->next_hash = NULL;
 	ent->pprev_hash = NULL;
 
-	/* _exit_critical_bh(&priv->br_ext_lock, &irqL); */
+	/* spin_unlock_bh(&priv->br_ext_lock); */
 }
 
 
@@ -414,7 +414,7 @@ static int __nat25_db_network_lookup_and_replace(struct adapter *priv,
 {
 	struct nat25_network_db_entry *db;
 	_irqL irqL;
-	_enter_critical_bh(&priv->br_ext_lock, &irqL);
+	spin_lock_bh(&priv->br_ext_lock);
 
 	db = priv->nethash[__nat25_network_hash(networkAddr)];
 	while (db != NULL)
@@ -474,14 +474,14 @@ static int __nat25_db_network_lookup_and_replace(struct adapter *priv,
 					db->networkAddr[10]);
 #endif
 			}
-			_exit_critical_bh(&priv->br_ext_lock, &irqL);
+			spin_unlock_bh(&priv->br_ext_lock);
 			return 1;
 		}
 
 		db = db->next_hash;
 	}
 
-	_exit_critical_bh(&priv->br_ext_lock, &irqL);
+	spin_unlock_bh(&priv->br_ext_lock);
 	return 0;
 }
 
@@ -492,7 +492,7 @@ static void __nat25_db_network_insert(struct adapter *priv,
 	struct nat25_network_db_entry *db;
 	int hash;
 	_irqL irqL;
-	_enter_critical_bh(&priv->br_ext_lock, &irqL);
+	spin_lock_bh(&priv->br_ext_lock);
 
 	hash = __nat25_network_hash(networkAddr);
 	db = priv->nethash[hash];
@@ -502,7 +502,7 @@ static void __nat25_db_network_insert(struct adapter *priv,
 		{
 			memcpy(db->macAddr, macAddr, ETH_ALEN);
 			db->ageing_timer = jiffies;
-			_exit_critical_bh(&priv->br_ext_lock, &irqL);
+			spin_unlock_bh(&priv->br_ext_lock);
 			return;
 		}
 
@@ -511,7 +511,7 @@ static void __nat25_db_network_insert(struct adapter *priv,
 
 	db = (struct nat25_network_db_entry *) rtw_malloc(sizeof(*db));
 	if(db == NULL) {
-		_exit_critical_bh(&priv->br_ext_lock, &irqL);
+		spin_unlock_bh(&priv->br_ext_lock);
 		return;
 	}
 
@@ -522,7 +522,7 @@ static void __nat25_db_network_insert(struct adapter *priv,
 
 	__network_hash_link(priv, db, hash);
 
-	_exit_critical_bh(&priv->br_ext_lock, &irqL);
+	spin_unlock_bh(&priv->br_ext_lock);
 }
 
 
@@ -538,7 +538,7 @@ void nat25_db_cleanup(struct adapter *priv)
 {
 	int i;
 	_irqL irqL;
-	_enter_critical_bh(&priv->br_ext_lock, &irqL);
+	spin_lock_bh(&priv->br_ext_lock);
 
 	for(i=0; i<NAT25_HASH_SIZE; i++)
 	{
@@ -561,7 +561,7 @@ void nat25_db_cleanup(struct adapter *priv)
 		}
 	}
 
-	_exit_critical_bh(&priv->br_ext_lock, &irqL);
+	spin_unlock_bh(&priv->br_ext_lock);
 }
 
 
@@ -569,7 +569,7 @@ void nat25_db_expire(struct adapter *priv)
 {
 	int i;
 	_irqL irqL;
-	_enter_critical_bh(&priv->br_ext_lock, &irqL);
+	spin_lock_bh(&priv->br_ext_lock);
 
 	/* if(!priv->ethBrExtInfo.nat25_disable) */
 	{
@@ -603,7 +603,7 @@ void nat25_db_expire(struct adapter *priv)
 		}
 	}
 
-	_exit_critical_bh(&priv->br_ext_lock, &irqL);
+	spin_unlock_bh(&priv->br_ext_lock);
 }
 
 
@@ -1356,7 +1356,7 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 		if (!priv->ethBrExtInfo.nat25_disable)
 		{
 			_irqL irqL;
-			_enter_critical_bh(&priv->br_ext_lock, &irqL);
+			spin_lock_bh(&priv->br_ext_lock);
 			/*
 			 *	This function look up the destination network address from
 			 *	the NAT2.5 database. Return value = -1 means that the
@@ -1367,10 +1367,10 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 				!memcmp(priv->scdb_ip, skb->data+ETH_HLEN+16, 4)) {
 				memcpy(skb->data, priv->scdb_mac, ETH_ALEN);
 
-				_exit_critical_bh(&priv->br_ext_lock, &irqL);
+				spin_unlock_bh(&priv->br_ext_lock);
 			}
 			else {
-				_exit_critical_bh(&priv->br_ext_lock, &irqL);
+				spin_unlock_bh(&priv->br_ext_lock);
 
 				retval = nat25_db_handle(priv, skb, NAT25_LOOKUP);
 			}
@@ -1394,7 +1394,6 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 		}
 
 		if(retval == -1) {
-			/* DEBUG_ERR("NAT25: Lookup fail!\n"); */
 			return -1;
 		}
 	}
@@ -1479,8 +1478,6 @@ void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
 	struct nat25_network_db_entry *db;
 	int hash;
-	/* _irqL irqL; */
-	/* _enter_critical_bh(&priv->br_ext_lock, &irqL); */
 
 	__nat25_generate_ipv4_network_addr(networkAddr, (unsigned int *)ipAddr);
 	hash = __nat25_network_hash(networkAddr);
@@ -1488,14 +1485,12 @@ void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
 	while (db != NULL)
 	{
 		if(!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
-			/* _exit_critical_bh(&priv->br_ext_lock, &irqL); */
+			/* spin_unlock_bh(&priv->br_ext_lock); */
 			return (void *)db;
 		}
 
 		db = db->next_hash;
 	}
-
-	/* _exit_critical_bh(&priv->br_ext_lock, &irqL); */
 	return NULL;
 }
 
