@@ -152,7 +152,7 @@ u8 rtw_do_join(struct adapter * padapter)
 				/*  submit createbss_cmd to change to a ADHOC_MASTER */
 
 				/* pmlmepriv->lock has been acquired by caller... */
-				WLAN_BSSID_EX    *pdev_network = &(padapter->registrypriv.dev_network);
+				struct wlan_bssid_ex    *pdev_network = &(padapter->registrypriv.dev_network);
 
 				pmlmepriv->fw_state = WIFI_ADHOC_MASTER_STATE;
 
@@ -1203,7 +1203,7 @@ u16 rtw_get_cur_max_rate(struct adapter *adapter)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct registry_priv *pregistrypriv = &adapter->registrypriv;
 	struct mlme_priv	*pmlmepriv = &adapter->mlmepriv;
-	WLAN_BSSID_EX  *pcur_bss = &pmlmepriv->cur_network.network;
+	struct wlan_bssid_ex  *pcur_bss = &pmlmepriv->cur_network.network;
 	struct rtw_ieee80211_ht_cap *pht_capie;
 	u8	rf_type = 0;
 	u8	bw_40MHz=0, short_GI_20=0, short_GI_40=0;

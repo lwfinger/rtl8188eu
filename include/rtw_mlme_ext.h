@@ -389,7 +389,7 @@ struct mlme_ext_info {
 	struct WMM_para_element	WMM_param;
 	struct HT_caps_element	HT_caps;
 	struct HT_info_element		HT_info;
-	WLAN_BSSID_EX			network;//join network or bss_network, if in ap mode, it is the same to cur_network.network
+	struct wlan_bssid_ex			network;//join network or bss_network, if in ap mode, it is the same to cur_network.network
 	struct FW_Sta_Info		FW_sta_info[NUM_STA];
 
 #ifdef CONFIG_STA_MODE_SCAN_UNDER_AP_MODE
@@ -556,12 +556,12 @@ void flush_all_cam_entry(struct adapter *padapter);
 bool IsLegal5GChannel(struct adapter *Adapter, u8 channel);
 
 void site_survey(struct adapter *padapter);
-u8 collect_bss_info(struct adapter *padapter, union recv_frame *precv_frame, WLAN_BSSID_EX *bssid);
-void update_network(WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src, struct adapter * padapter, bool update_ie);
+u8 collect_bss_info(struct adapter *padapter, union recv_frame *precv_frame, struct wlan_bssid_ex *bssid);
+void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src, struct adapter * padapter, bool update_ie);
 
 int get_bsstype(unsigned short capability);
-u8* get_my_bssid(WLAN_BSSID_EX *pnetwork);
-u16 get_beacon_interval(WLAN_BSSID_EX *bss);
+u8* get_my_bssid(struct wlan_bssid_ex *pnetwork);
+u16 get_beacon_interval(struct wlan_bssid_ex *bss);
 
 int is_client_associated_to_ap(struct adapter *padapter);
 int is_client_associated_to_ibss(struct adapter *padapter);

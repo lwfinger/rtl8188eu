@@ -442,7 +442,7 @@ u8 *rtw_get_capability_from_ie(u8 *ie)
 }
 
 
-u16 rtw_get_capability(WLAN_BSSID_EX *bss)
+u16 rtw_get_capability(struct wlan_bssid_ex *bss)
 {
 	__le16	val;
 
@@ -570,7 +570,7 @@ int rtw_is_same_ibss(struct adapter *adapter, struct wlan_network *pnetwork)
 
 }
 
-inline int is_same_ess(WLAN_BSSID_EX *a, WLAN_BSSID_EX *b)
+inline int is_same_ess(struct wlan_bssid_ex *a, struct wlan_bssid_ex *b)
 {
 	/* RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("(%s,%d)(%s,%d)\n", */
 	/* 		a->Ssid.Ssid,a->Ssid.SsidLength,b->Ssid.Ssid,b->Ssid.SsidLength)); */
@@ -578,7 +578,7 @@ inline int is_same_ess(WLAN_BSSID_EX *a, WLAN_BSSID_EX *b)
 		&&  _rtw_memcmp(a->Ssid.Ssid, b->Ssid.Ssid, a->Ssid.SsidLength)==true;
 }
 
-int is_same_network(WLAN_BSSID_EX *src, WLAN_BSSID_EX *dst, u8 feature)
+int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst, u8 feature)
 {
 	 __le16 ls_cap, ld_cap;
 	 u16 s_cap, d_cap;
@@ -642,7 +642,7 @@ struct	wlan_network	* rtw_get_oldest_wlan_network(_queue *scanned_queue)
 
 }
 
-void update_network(WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src,
+void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src,
 	struct adapter * padapter, bool update_ie)
 {
 	u8 ss_ori = dst->PhyInfo.SignalStrength;
@@ -714,7 +714,7 @@ void update_network(WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src,
 	#endif
 }
 
-static void update_current_network(struct adapter *adapter, WLAN_BSSID_EX *pnetwork)
+static void update_current_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork)
 {
 	struct	mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 
@@ -738,7 +738,7 @@ Caller must hold pmlmepriv->lock first.
 
 
 */
-void rtw_update_scanned_network(struct adapter *adapter, WLAN_BSSID_EX *target)
+void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *target)
 {
 	_irqL irqL;
 	_list	*plist, *phead;
@@ -870,8 +870,8 @@ exit:
 ;
 }
 
-void rtw_add_network(struct adapter *adapter, WLAN_BSSID_EX *pnetwork);
-void rtw_add_network(struct adapter *adapter, WLAN_BSSID_EX *pnetwork)
+void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork);
+void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork)
 {
 	_irqL irqL;
 	struct	mlme_priv	*pmlmepriv = &(((struct adapter *)adapter)->mlmepriv);
@@ -882,7 +882,7 @@ void rtw_add_network(struct adapter *adapter, WLAN_BSSID_EX *pnetwork)
 	/* spin_lock_bh(&queue->lock); */
 
 	#if defined(CONFIG_P2P) && defined(CONFIG_P2P)
-	rtw_WLAN_BSSID_EX_remove_p2p_attr(pnetwork, P2P_ATTR_GROUP_INFO);
+	rtw_wlan_bssid_ex_remove_p2p_attr(pnetwork, P2P_ATTR_GROUP_INFO);
 	#endif
 
 	update_current_network(adapter, pnetwork);
@@ -976,17 +976,17 @@ void rtw_survey_event_callback(struct adapter	*adapter, u8 *pbuf)
 {
 	_irqL  irqL;
 	u32 len;
-	WLAN_BSSID_EX *pnetwork;
+	struct wlan_bssid_ex *pnetwork;
 	struct	mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 
 ;
 
-	pnetwork = (WLAN_BSSID_EX *)pbuf;
+	pnetwork = (struct wlan_bssid_ex *)pbuf;
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_survey_event_callback, ssid=%s\n",  pnetwork->Ssid.Ssid));
 
 	len = get_wlan_bssid_ex_sz(pnetwork);
-	if(len > (sizeof(WLAN_BSSID_EX)))
+	if(len > (sizeof(struct wlan_bssid_ex)))
 	{
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("\n ****rtw_survey_event_callback: return a wrong bss ***\n"));
 		return;
@@ -1100,7 +1100,7 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 				}
 				else
 				{
-					WLAN_BSSID_EX    *pdev_network = &(adapter->registrypriv.dev_network);
+					struct wlan_bssid_ex    *pdev_network = &(adapter->registrypriv.dev_network);
 					u8 *pibss = adapter->registrypriv.dev_network.MacAddress;
 
 					_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY);
@@ -1359,7 +1359,7 @@ void rtw_indicate_disconnect( struct adapter *padapter )
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
-	WLAN_BSSID_EX	*cur_network = &(pmlmeinfo->network);
+	struct wlan_bssid_ex	*cur_network = &(pmlmeinfo->network);
 	struct sta_info *psta;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -1631,7 +1631,7 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
 	the_same_macaddr = _rtw_memcmp(pnetwork->network.MacAddress, cur_network->network.MacAddress, ETH_ALEN);
 
 	pnetwork->network.Length = get_wlan_bssid_ex_sz(&pnetwork->network);
-	if(pnetwork->network.Length > sizeof(WLAN_BSSID_EX)) {
+	if(pnetwork->network.Length > sizeof(struct wlan_bssid_ex)) {
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("\n\n ***joinbss_evt_callback return a wrong bss ***\n\n"));
 		goto ignore_joinbss_callback;
 	}
@@ -1945,7 +1945,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 	int mac_id=-1;
 	struct sta_info *psta;
 	struct wlan_network* pwlan = NULL;
-	WLAN_BSSID_EX    *pdev_network=NULL;
+	struct wlan_bssid_ex    *pdev_network=NULL;
 	u8* pibss = NULL;
 	struct	mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	struct	stadel_event *pstadel	= (struct stadel_event*)pbuf;
@@ -2741,7 +2741,7 @@ void rtw_init_registrypriv_dev_network(	struct adapter* adapter)
 {
 	struct registry_priv* pregistrypriv = &adapter->registrypriv;
 	struct eeprom_priv* peepriv = &adapter->eeprompriv;
-	WLAN_BSSID_EX    *pdev_network = &pregistrypriv->dev_network;
+	struct wlan_bssid_ex    *pdev_network = &pregistrypriv->dev_network;
 	u8 *myhwaddr = myid(peepriv);
 
 ;
@@ -2766,7 +2766,7 @@ void rtw_update_registrypriv_dev_network(struct adapter* adapter)
 {
 	int sz=0;
 	struct registry_priv* pregistrypriv = &adapter->registrypriv;
-	WLAN_BSSID_EX    *pdev_network = &pregistrypriv->dev_network;
+	struct wlan_bssid_ex    *pdev_network = &pregistrypriv->dev_network;
 	struct	security_priv*	psecuritypriv = &adapter->securitypriv;
 	struct	wlan_network	*cur_network = &adapter->mlmepriv.cur_network;
 	/* struct	xmit_priv	*pxmitpriv = &adapter->xmitpriv; */
@@ -2818,7 +2818,7 @@ void rtw_update_registrypriv_dev_network(struct adapter* adapter)
 
 	pdev_network->IELength = sz;
 
-	pdev_network->Length = get_wlan_bssid_ex_sz((WLAN_BSSID_EX  *)pdev_network);
+	pdev_network->Length = get_wlan_bssid_ex_sz((struct wlan_bssid_ex  *)pdev_network);
 }
 
 void rtw_get_encrypt_decrypt_from_registrypriv(struct adapter* adapter)

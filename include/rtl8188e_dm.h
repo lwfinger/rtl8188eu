@@ -59,7 +59,7 @@ void rtl8188e_deinit_dm_priv(IN struct adapter *Adapter);
 void rtl8188e_InitHalDm(IN struct adapter *Adapter);
 void rtl8188e_HalDmWatchDog(IN struct adapter *Adapter);
 
-void	AntDivCompare8188E(struct adapter *Adapter, WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src);
+void	AntDivCompare8188E(struct adapter *Adapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
 u8 AntDivBeforeLink8188E(struct adapter *Adapter );
 
 #endif

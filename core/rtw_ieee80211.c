@@ -407,7 +407,7 @@ int rtw_generate_ie(struct registry_priv *pregistrypriv)
 {
 	u8	wireless_mode;
 	int	sz = 0, rateLen;
-	WLAN_BSSID_EX*	pdev_network = &pregistrypriv->dev_network;
+	struct wlan_bssid_ex*	pdev_network = &pregistrypriv->dev_network;
 	u8*	ie = pdev_network->IEs;
 
 ;
@@ -1653,7 +1653,7 @@ static uint rtw_p2p_attr_remove(u8 *ie, uint ielen_ori, u8 attr_id)
 	return ielen;
 }
 
-void rtw_WLAN_BSSID_EX_remove_p2p_attr(WLAN_BSSID_EX *bss_ex, u8 attr_id)
+void rtw_wlan_bssid_ex_remove_p2p_attr(struct wlan_bssid_ex *bss_ex, u8 attr_id)
 {
 	u8 *p2p_ie;
 	uint p2p_ielen, p2p_ielen_ori;

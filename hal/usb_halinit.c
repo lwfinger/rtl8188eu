@@ -3210,7 +3210,7 @@ static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rss
 	/* struct dm_priv	*pdmpriv = &pHalData->dmpriv; */
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
+	struct wlan_bssid_ex		*cur_network = &(pmlmeinfo->network);
 
 	if (mac_id >= NUM_STA) /* CAM_SIZE */
 	{

@@ -131,7 +131,7 @@ struct registry_priv
 	u8	uapsd_acvi_en;
 	u8	uapsd_acvo_en;
 
-	WLAN_BSSID_EX    dev_network;
+	struct wlan_bssid_ex    dev_network;
 
 	u8	ht_enable;
 	u8	cbw40_enable;
@@ -192,8 +192,8 @@ struct registry_priv
 //For registry parameters
 #define RGTRY_OFT(field) ((ULONG)FIELD_OFFSET(struct registry_priv,field))
 #define RGTRY_SZ(field)   sizeof(((struct registry_priv*) 0)->field)
-#define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(WLAN_BSSID_EX,field))
-#define BSSID_SZ(field)   sizeof(((PWLAN_BSSID_EX) 0)->field)
+#define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(struct wlan_bssid_ex,field))
+#define BSSID_SZ(field)   sizeof(((struct wlan_bssid_ex *) 0)->field)
 
 #define is_primary_adapter(adapter) (1)
 #define GET_PRIMARY_ADAPTER(padapter) (((struct adapter *)padapter)->dvobj->if1)

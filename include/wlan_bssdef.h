@@ -292,10 +292,9 @@ typedef struct _WLAN_BCN_INFO
 }WLAN_BCN_INFO,*PWLAN_BCN_INFO;
 
 /* temporally add #pragma pack for structure alignment issue of
-*   WLAN_BSSID_EX and get_wlan_bssid_ex_sz()
+*   struct wlan_bssid_ex and get_wlan_bssid_ex_sz()
 */
-typedef struct _WLAN_BSSID_EX
-{
+struct wlan_bssid_ex {
   ULONG  Length;
   NDIS_802_11_MAC_ADDRESS  MacAddress;
   u8  Reserved[2];//[0]: IS beacon frame
@@ -309,13 +308,11 @@ typedef struct _WLAN_BSSID_EX
   WLAN_PHY_INFO	PhyInfo;
   ULONG  IELength;
   u8  IEs[MAX_IE_SZ];	//(timestamp, beacon interval, and capability information)
-}
-__attribute__((packed))
-WLAN_BSSID_EX, *PWLAN_BSSID_EX;
+} __packed;
 
-__inline  static uint get_wlan_bssid_ex_sz(WLAN_BSSID_EX *bss)
+__inline  static uint get_wlan_bssid_ex_sz(struct wlan_bssid_ex *bss)
 {
-	return (sizeof(WLAN_BSSID_EX) -MAX_IE_SZ + bss->IELength);
+	return (sizeof(struct wlan_bssid_ex) -MAX_IE_SZ + bss->IELength);
 }
 
 struct	wlan_network {
@@ -325,7 +322,7 @@ struct	wlan_network {
 	unsigned long	last_scanned; //timestamp for the network
 	int	aid;			//will only be valid when a BSS is joinned.
 	int	join_res;
-	WLAN_BSSID_EX	network; //must be the last item
+	struct wlan_bssid_ex	network; //must be the last item
 	WLAN_BCN_INFO	BcnInfo;
 };
 
