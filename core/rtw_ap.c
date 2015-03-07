@@ -1291,7 +1291,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 
 		HT_info_handler(padapter, (PNDIS_802_11_VARIABLE_IEs)pHT_info_ie);
 	}
-	pbss_network->Length = get_WLAN_BSSID_EX_sz((WLAN_BSSID_EX  *)pbss_network);
+	pbss_network->Length = get_wlan_bssid_ex_sz((WLAN_BSSID_EX  *)pbss_network);
 
 	/* issue beacon to start bss network */
 	start_bss_network(padapter, (u8*)pbss_network);

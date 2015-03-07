@@ -698,7 +698,7 @@ void update_network(WLAN_BSSID_EX *dst, WLAN_BSSID_EX *src,
 	if (update_ie) {
 		dst->Reserved[0] = src->Reserved[0];
 		dst->Reserved[1] = src->Reserved[1];
-		memcpy((u8 *)dst, (u8 *)src, get_WLAN_BSSID_EX_sz(src));
+		memcpy((u8 *)dst, (u8 *)src, get_wlan_bssid_ex_sz(src));
 	}
 
 	dst->PhyInfo.SignalStrength = ss_final;
@@ -802,7 +802,7 @@ void rtw_update_scanned_network(struct adapter *adapter, WLAN_BSSID_EX *target)
 			pnetwork = oldest;
 
 			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(target->PhyInfo.Optimum_antenna));
-			memcpy(&(pnetwork->network), target,  get_WLAN_BSSID_EX_sz(target));
+			memcpy(&(pnetwork->network), target,  get_wlan_bssid_ex_sz(target));
 			/* pnetwork->last_scanned = rtw_get_current_time(); */
 			/*  variable initialize */
 			pnetwork->fixed = false;
@@ -826,7 +826,7 @@ void rtw_update_scanned_network(struct adapter *adapter, WLAN_BSSID_EX *target)
 				goto exit;
 			}
 
-			bssid_ex_sz = get_WLAN_BSSID_EX_sz(target);
+			bssid_ex_sz = get_wlan_bssid_ex_sz(target);
 			target->Length = bssid_ex_sz;
 			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(target->PhyInfo.Optimum_antenna));
 			memcpy(&(pnetwork->network), target, bssid_ex_sz );
@@ -985,7 +985,7 @@ void rtw_survey_event_callback(struct adapter	*adapter, u8 *pbuf)
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_survey_event_callback, ssid=%s\n",  pnetwork->Ssid.Ssid));
 
-	len = get_WLAN_BSSID_EX_sz(pnetwork);
+	len = get_wlan_bssid_ex_sz(pnetwork);
 	if(len > (sizeof(WLAN_BSSID_EX)))
 	{
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("\n ****rtw_survey_event_callback: return a wrong bss ***\n"));
@@ -1630,7 +1630,7 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
 
 	the_same_macaddr = _rtw_memcmp(pnetwork->network.MacAddress, cur_network->network.MacAddress, ETH_ALEN);
 
-	pnetwork->network.Length = get_WLAN_BSSID_EX_sz(&pnetwork->network);
+	pnetwork->network.Length = get_wlan_bssid_ex_sz(&pnetwork->network);
 	if(pnetwork->network.Length > sizeof(WLAN_BSSID_EX)) {
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("\n\n ***joinbss_evt_callback return a wrong bss ***\n\n"));
 		goto ignore_joinbss_callback;
@@ -2030,7 +2030,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 			pdev_network = &(adapter->registrypriv.dev_network);
 			pibss = adapter->registrypriv.dev_network.MacAddress;
 
-			memcpy(pdev_network, &tgt_network->network, get_WLAN_BSSID_EX_sz(&tgt_network->network));
+			memcpy(pdev_network, &tgt_network->network, get_wlan_bssid_ex_sz(&tgt_network->network));
 
 			memset(&pdev_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
 			memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(NDIS_802_11_SSID));
@@ -2818,7 +2818,7 @@ void rtw_update_registrypriv_dev_network(struct adapter* adapter)
 
 	pdev_network->IELength = sz;
 
-	pdev_network->Length = get_WLAN_BSSID_EX_sz((WLAN_BSSID_EX  *)pdev_network);
+	pdev_network->Length = get_wlan_bssid_ex_sz((WLAN_BSSID_EX  *)pdev_network);
 }
 
 void rtw_get_encrypt_decrypt_from_registrypriv(struct adapter* adapter)

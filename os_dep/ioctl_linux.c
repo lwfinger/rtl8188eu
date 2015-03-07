@@ -9066,7 +9066,7 @@ static s32 createpseudoadhoc(struct adapter *padapter)
 	/* 3  join psudo AdHoc */
 	pcur_network->join_res = 1;
 	pcur_network->aid = psta->aid = 1;
-	memcpy(&pcur_network->network, pdev_network, get_WLAN_BSSID_EX_sz(pdev_network));
+	memcpy(&pcur_network->network, pdev_network, get_wlan_bssid_ex_sz(pdev_network));
 	{
 		u8 val8;
 

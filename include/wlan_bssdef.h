@@ -292,7 +292,7 @@ typedef struct _WLAN_BCN_INFO
 }WLAN_BCN_INFO,*PWLAN_BCN_INFO;
 
 /* temporally add #pragma pack for structure alignment issue of
-*   WLAN_BSSID_EX and get_WLAN_BSSID_EX_sz()
+*   WLAN_BSSID_EX and get_wlan_bssid_ex_sz()
 */
 typedef struct _WLAN_BSSID_EX
 {
@@ -313,7 +313,7 @@ typedef struct _WLAN_BSSID_EX
 __attribute__((packed))
 WLAN_BSSID_EX, *PWLAN_BSSID_EX;
 
-__inline  static uint get_WLAN_BSSID_EX_sz(WLAN_BSSID_EX *bss)
+__inline  static uint get_wlan_bssid_ex_sz(WLAN_BSSID_EX *bss)
 {
 	return (sizeof(WLAN_BSSID_EX) -MAX_IE_SZ + bss->IELength);
 }
