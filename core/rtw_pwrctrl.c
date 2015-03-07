@@ -770,11 +770,7 @@ void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv)
 	/*  accquire system's suspend lock preventing from falliing asleep while resume in workqueue */
 	rtw_lock_suspend();
 
-	#if 1
 	queue_work(pwrpriv->rtw_workqueue, &pwrpriv->resume_work);
-	#else
-	_set_workitem(&pwrpriv->resume_work);
-	#endif
 }
 #endif /* CONFIG_RESUME_IN_WORKQUEUE */
 

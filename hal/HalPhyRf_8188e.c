@@ -1790,7 +1790,6 @@ if (*(pDM_Odm->mp_mode) != 1)
 				continue;
 
 			tmpReg = APK_RF_init_value[path][index];
-#if 1
 			if(!pDM_Odm->RFCalibrateInfo.bAPKThermalMeterIgnore)
 			{
 				BB_offset = (tmpReg & 0xF0000) >> 16;
@@ -1817,7 +1816,6 @@ if (*(pDM_Odm->mp_mode) != 1)
 				}
 				tmpReg = (tmpReg & 0xFFF0FFFF) | (BB_offset << 16);
 			}
-#endif
 
 			ODM_SetRFReg(pDM_Odm, path, RF_IPA_A, bMaskDWord, 0x8992e);
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("phy_APCalibrate_8188E() offset 0xc %x\n", PHY_QueryRFReg(pAdapter, path, RF_IPA_A, bMaskDWord)));

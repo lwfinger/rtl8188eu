@@ -1107,7 +1107,6 @@ int rtw_store_to_file(char *path, u8* buf, u32 sz)
 	return ret>=0?ret:0;
 }
 
-#if 1 /* ifdef MEM_ALLOC_REFINE_ADAPTOR */
 struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv)
 {
 	struct net_device *pnetdev;
@@ -1241,7 +1240,6 @@ error:
 	return -1;
 
 }
-#endif /* MEM_ALLOC_REFINE_ADAPTOR */
 
 #ifdef CONFIG_PLATFORM_SPRD
 #ifdef do_div

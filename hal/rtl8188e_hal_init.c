@@ -2533,21 +2533,17 @@ ReadChipVersion8188E(
 
 
 /* if DBG */
-#if 1
 	dump_chip_info(ChipVersion);
-#endif
 
 	pHalData->VersionID = ChipVersion;
 
 	if (IS_1T2R(ChipVersion)){
 		pHalData->rf_type = RF_1T2R;
 		pHalData->NumTotalRFPath = 2;
-	}
-	else if (IS_2T2R(ChipVersion)){
+	} else if (IS_2T2R(ChipVersion)){
 		pHalData->rf_type = RF_2T2R;
 		pHalData->NumTotalRFPath = 2;
-	}
-	else{
+	} else{
 		pHalData->rf_type = RF_1T1R;
 		pHalData->NumTotalRFPath = 1;
 	}

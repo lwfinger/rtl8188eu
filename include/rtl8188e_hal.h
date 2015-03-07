@@ -66,8 +66,6 @@
 #define DRVINFO_SZ	4 // unit is 8bytes
 #define PageNum_128(_Len)		(u32)(((_Len)>>7) + ((_Len)&0x7F ? 1:0))
 
-
-#if 1 // download firmware related data structure
 #define FW_8188E_SIZE				0x4000 //16384,16k
 #define FW_8188E_START_ADDRESS	0x1000
 #define FW_8188E_END_ADDRESS		0x1FFF //0x5FFF
@@ -128,7 +126,6 @@ typedef struct _RT_8188E_FIRMWARE_HDR
 	u32		Rsvd4;
 	u32		Rsvd5;
 }RT_8188E_FIRMWARE_HDR, *PRT_8188E_FIRMWARE_HDR;
-#endif // download firmware related data structure
 
 
 #define DRIVER_EARLY_INT_TIME		0x05

@@ -101,13 +101,7 @@ void rtw_set_tx_chksum_offload(_pkt *pkt, struct pkt_attrib *pattrib)
                                 /* skb_checksum_help(skb); */
                         } else if (ip->protocol == IPPROTO_UDP) {
                                 /* DBG_871X("CHECKSUM_PARTIAL UDP\n"); */
-#if 1
                                 skb_checksum_help(skb);
-#else
-                                /*  Set UDP checksum = 0 to skip checksum check */
-                                struct udphdr *udp = skb_transport_header(skb);
-                                udp->check = 0;
-#endif
                         } else {
 				DBG_871X("%s-%d TCP CSUM offload Error!!\n", __FUNCTION__, __LINE__);
                                 WARN_ON(1);     /* we need a WARN() */

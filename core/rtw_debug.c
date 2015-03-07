@@ -1088,10 +1088,8 @@ int proc_get_best_channel(char *page, char **start,
 				best_channel_5G = pmlmeext->channel_set[i].ChannelNum;
 			}
 		}
-#if 1 /*  debug */
 		len += snprintf(page + len, count - len, "The rx cnt of channel %3d = %d\n",
 					pmlmeext->channel_set[i].ChannelNum, pmlmeext->channel_set[i].rx_count);
-#endif
 	}
 
 	len += snprintf(page + len, count - len, "best_channel_5G = %d\n", best_channel_5G);

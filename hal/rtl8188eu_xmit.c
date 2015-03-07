@@ -327,14 +327,11 @@ if (padapter->registrypriv.mp_mode == 0)
 
 			data_rate =ODM_RA_GetDecisionRate_8188E(&pHalData->odmpriv,pattrib->mac_id);
 			/* for debug */
-		#if 1
 			if(padapter->fix_rate!= 0xFF){
 
 				data_rate = padapter->fix_rate;
 				ptxdesc->txdw4 |= cpu_to_le32(DISDATAFB);
-				/* printk("==> fix data_rate:0x%02x\n",data_rate); */
 			}
-			#endif
 
 			ptxdesc->txdw5 |= cpu_to_le32(data_rate & 0x3F);
 

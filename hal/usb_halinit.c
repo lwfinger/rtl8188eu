@@ -3001,7 +3001,6 @@ static u8 GetHalDefVar8188EUsb(
 	switch(eVariable)
 	{
 		case HAL_DEF_UNDERCORATEDSMOOTHEDPWDB:
-#if 1 /* trunk */
 			{
 				struct mlme_priv *pmlmepriv = &Adapter->mlmepriv;
 				struct sta_priv * pstapriv = &Adapter->stapriv;
@@ -3012,14 +3011,6 @@ static u8 GetHalDefVar8188EUsb(
 					*((int *)pValue) = psta->rssi_stat.UndecoratedSmoothedPWDB;
 				}
 			}
-#else /* V4 branch */
-				if(check_fwstate(&Adapter->mlmepriv, WIFI_STATION_STATE) == true){
-						*((int *)pValue) = pHalData->dmpriv.UndecoratedSmoothedPWDB;
-				}
-				else{
-
-				}
-#endif
 			break;
 		case HAL_DEF_IS_SUPPORT_ANT_DIV:
 			*((u8 *)pValue) = (pHalData->AntDivCfg==0)?false:true;

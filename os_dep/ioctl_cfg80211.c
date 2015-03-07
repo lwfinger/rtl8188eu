@@ -444,16 +444,8 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 	/* endif */
 
 
-#if 1
 	bss = cfg80211_inform_bss_frame(wiphy, notify_channel, (struct ieee80211_mgmt *)buf,
 		len, notify_signal, GFP_ATOMIC);
-#else
-
-	bss = cfg80211_inform_bss(wiphy, notify_channel, (const u8 *)pnetwork->network.MacAddress,
-                notify_timestamp, notify_capability, notify_interval, notify_ie,
-                notify_ielen, notify_signal, GFP_ATOMIC/*GFP_KERNEL*/);
-#endif
-
 	if (unlikely(!bss)) {
 		DBG_8192C(FUNC_ADPT_FMT" bss NULL\n", FUNC_ADPT_ARG(padapter));
 		goto exit;

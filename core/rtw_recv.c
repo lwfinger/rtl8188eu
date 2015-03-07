@@ -1910,9 +1910,7 @@ exit:
 
 
 /* remove the wlanhdr and add the eth_hdr */
-#if 1
 
-sint wlanhdr_to_ethhdr ( union recv_frame *precvframe);
 sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 {
 	sint	rmv_len;
@@ -1988,136 +1986,6 @@ sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 	return ret;
 
 }
-
-#else
-
-sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
-{
-	sint rmv_len;
-	u16 eth_type;
-	u8	bsnaphdr;
-	u8	*psnap_type;
-	struct ieee80211_snap_hdr	*psnap;
-
-	sint ret=_SUCCESS;
-	struct adapter	*adapter =precvframe->u.hdr.adapter;
-	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
-
-	u8* ptr = get_recvframe_data(precvframe) ; /*  point to frame_ctrl field */
-	struct rx_pkt_attrib *pattrib = & precvframe->u.hdr.attrib;
-	struct _vlan *pvlan = NULL;
-
-;
-
-	psnap=(struct ieee80211_snap_hdr	*)(ptr+pattrib->hdrlen + pattrib->iv_len);
-	psnap_type=ptr+pattrib->hdrlen + pattrib->iv_len+SNAP_SIZE;
-	if (psnap->dsap==0xaa && psnap->ssap==0xaa && psnap->ctrl==0x03)
-	{
-		if (_rtw_memcmp(psnap->oui, oui_rfc1042, WLAN_IEEE_OUI_LEN))
-			bsnaphdr=true;/* wlan_pkt_format = WLAN_PKT_FORMAT_SNAP_RFC1042; */
-		else if (_rtw_memcmp(psnap->oui, SNAP_HDR_APPLETALK_DDP, WLAN_IEEE_OUI_LEN) &&
-			_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_APPLETALK_DDP, 2) )
-			bsnaphdr=true;	/* wlan_pkt_format = WLAN_PKT_FORMAT_APPLETALK; */
-		else if (_rtw_memcmp( psnap->oui, oui_8021h, WLAN_IEEE_OUI_LEN))
-			bsnaphdr=true;	/* wlan_pkt_format = WLAN_PKT_FORMAT_SNAP_TUNNEL; */
-		else {
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("drop pkt due to invalid frame format!\n"));
-			ret= _FAIL;
-			goto exit;
-		}
-
-	} else
-		bsnaphdr=false;/* wlan_pkt_format = WLAN_PKT_FORMAT_OTHERS; */
-
-	rmv_len = pattrib->hdrlen + pattrib->iv_len +(bsnaphdr?SNAP_SIZE:0);
-	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("===pattrib->hdrlen: %x,  pattrib->iv_len:%x ===\n", pattrib->hdrlen,  pattrib->iv_len));
-
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
-	{
-		ptr += rmv_len ;
-		*ptr = 0x87;
-		*(ptr+1) = 0x12;
-
-		/* back to original pointer */
-		ptr -= rmv_len;
-	}
-
-	ptr += rmv_len ;
-
-	memcpy(&eth_type, ptr, 2);
-	eth_type= ntohs((unsigned short )eth_type); /* pattrib->ether_type */
-	ptr +=2;
-
-	if(pattrib->encrypt){
-		recvframe_pull_tail(precvframe, pattrib->icv_len);
-	}
-
-	if(eth_type == 0x8100) /* vlan */
-	{
-		pvlan = (struct _vlan *) ptr;
-		rmv_len += 4;
-		ptr+=4;
-	}
-
-	if(eth_type==0x0800)/* ip */
-	{
-		/* struct iphdr*  piphdr = (struct iphdr*) ptr; */
-		/* __u8 tos = (unsigned char)(pattrib->priority & 0xff); */
-
-		/* piphdr->tos = tos; */
-
-		/* if (piphdr->protocol == 0x06) */
-		/*  */
-		/* 	RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("@@@===recv tcp len:%d @@@===\n", precvframe->u.hdr.len)); */
-		/*  */
-	}
-	else if(eth_type==0x8712)/*  append rx status for mp test packets */
-	{
-		/* ptr -= 16; */
-		/* memcpy(ptr, get_rxmem(precvframe), 16); */
-	}
-	else
-	{
-#ifdef PLATFORM_OS_XP
-		NDIS_PACKET_8021Q_INFO VlanPriInfo;
-		u3232 UserPriority = precvframe->u.hdr.attrib.priority;
-		u3232 VlanID = (pvlan!=NULL ? get_vlan_id(pvlan) : 0 );
-
-		VlanPriInfo.Value =          /*  Get current value. */
-				NDIS_PER_PACKET_INFO_FROM_PACKET(precvframe->u.hdr.pkt, Ieee8021QInfo);
-
-		VlanPriInfo.TagHeader.UserPriority = UserPriority;
-		VlanPriInfo.TagHeader.VlanId =  VlanID ;
-
-		VlanPriInfo.TagHeader.CanonicalFormatId = 0; /*  Should be zero. */
-		VlanPriInfo.TagHeader.Reserved = 0; /*  Should be zero. */
-		NDIS_PER_PACKET_INFO_FROM_PACKET(precvframe->u.hdr.pkt, Ieee8021QInfo) = VlanPriInfo.Value;
-#endif
-	}
-
-	if(eth_type==0x8712)/*  append rx status for mp test packets */
-	{
-		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2)-24);
-		memcpy(ptr, get_rxmem(precvframe), 24);
-		ptr+=24;
-	}
-	else
-		ptr = recvframe_pull(precvframe, (rmv_len-sizeof(struct ethhdr)+2));
-
-	memcpy(ptr, pattrib->dst, ETH_ALEN);
-	memcpy(ptr+ETH_ALEN, pattrib->src, ETH_ALEN);
-
-	eth_type = htons((unsigned short)eth_type) ;
-	memcpy(ptr+12, &eth_type, 2);
-
-exit:
-
-;
-
-	return ret;
-}
-#endif
-
 
 /* perform defrag */
 static union recv_frame * recvframe_defrag(struct adapter *adapter,_queue *defrag_q)
@@ -2483,12 +2351,7 @@ int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
 					/* DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n"); */
 					/* return FAIL; */
 
-#if 1
 					/*  bypass this frame to upper layer!! */
-#else
-					rtw_skb_free(sub_skb);
-					continue;
-#endif
 				}
 			}
 #endif	/*  CONFIG_BR_EXT */

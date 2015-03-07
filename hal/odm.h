@@ -706,7 +706,6 @@ typedef enum tag_Bandwidth_Definition
 /*  ODM_CMNINFO_CHNL */
 
 /*  ODM_CMNINFO_BOARD_TYPE */
-#if 1
 typedef enum tag_Board_Definition
 {
     ODM_BOARD_DEFAULT  	= 0, 	  /*  The DEFAULT case. */
@@ -719,19 +718,6 @@ typedef enum tag_Board_Definition
     ODM_BOARD_EXT_PA_5G	= BIT(6), /*  0 = no 5G ext-PA, 1 = existing 5G ext-PA */
     ODM_BOARD_EXT_LNA_5G	= BIT(7), /*  0 = no 5G ext-LNA, 1 = existing 5G ext-LNA */
 }ODM_BOARD_TYPE_E;
-#else
-typedef enum tag_Board_Definition
-{
-	ODM_BOARD_NORMAL 	= 0,
-	ODM_BOARD_HIGHPWR	= 1,
-	ODM_BOARD_MINICARD 	= 2,
-	ODM_BOARD_SLIM		= 3,
-	ODM_BOARD_COMBO		= 4,
-	
-}ODM_BOARD_TYPE_E;
-#endif
-
-
 
 /*  ODM_CMNINFO_ONE_PATH_CCA */
 typedef enum tag_CCA_Path
@@ -765,7 +751,6 @@ typedef struct _ODM_RA_Info_
 	u16 RptTime;
 	u8 RAWaitingCounter;
 	u8 RAPendingCounter;	
-#if 1 /* POWER_TRAINING_ACTIVE == 1  For compile  pass only~! */
 	u8 PTActive;  /*  on or off */
 	u8 PTTryState;  /*  0 trying state, 1 for decision state */
 	u8 PTStage;  /*  0~6 */
@@ -775,7 +760,6 @@ typedef struct _ODM_RA_Info_
 	u8 PTModeSS;  /*  decide whitch rate should do PT */
 	u8 RAstage;  /*  StageRA, decide how many times RA will be done between PT */
 	u8 PTSmoothFactor;
-#endif
 } ODM_RA_INFO_T,*PODM_RA_INFO_T;
 
 typedef struct _IQK_MATRIX_REGS_SETTING{

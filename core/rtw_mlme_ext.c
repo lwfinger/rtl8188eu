@@ -609,7 +609,6 @@ void mgt_dispatcher(struct adapter *padapter, union recv_frame *precv_frame)
 	}
 	ptable += index;
 
-#if 1
 	if (psta != NULL)
 	{
 		if (GetRetry(pframe))
@@ -623,14 +622,6 @@ void mgt_dispatcher(struct adapter *padapter, union recv_frame *precv_frame)
 		}
 		psta->RxMgmtFrameSeqNum = precv_frame->u.hdr.attrib.seq_num;
 	}
-#else
-
-	if(GetRetry(pframe))
-	{
-		/* RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("drop due to decache!\n")); */
-		/* return; */
-	}
-#endif
 
 #ifdef CONFIG_AP_MODE
 	switch (GetFrameSubType(pframe))

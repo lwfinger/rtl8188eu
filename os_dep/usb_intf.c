@@ -1192,7 +1192,6 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 	struct usb_host_endpoint		*host_endp;
 	struct usb_endpoint_descriptor	*endp_desc;
 
-#if 1 /* The usb device this usb interface belongs to */
 	DBG_871X("usb_interface:%p, usb_device:%p(num:%d, path:%s), usb_device_descriptor:%p\n", usb_intf, udev, udev->devnum, udev->devpath, dev_desc);
 	DBG_871X("bLength:%u\n", dev_desc->bLength);
 	DBG_871X("bDescriptorType:0x%02x\n", dev_desc->bDescriptorType);
@@ -1208,10 +1207,7 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 	DBG_871X("iProduct:0x%02x\n", dev_desc->iProduct);
 	DBG_871X("iSerialNumber:0x%02x\n", dev_desc->iSerialNumber);
 	DBG_871X("bNumConfigurations:%u\n", dev_desc->bNumConfigurations);
-#endif
 
-
-#if 1 /* The acting usb_config_descriptor */
 	DBG_871X("\nact_conf_desc:%p\n", act_conf_desc);
 	DBG_871X("bLength:%u\n", act_conf_desc->bLength);
 	DBG_871X("bDescriptorType:0x%02x\n", act_conf_desc->bDescriptorType);
@@ -1221,15 +1217,12 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 	DBG_871X("iConfiguration:0x%02x\n", act_conf_desc->iConfiguration);
 	DBG_871X("bmAttributes:0x%02x\n", act_conf_desc->bmAttributes);
 	DBG_871X("bMaxPower=%u\n", act_conf_desc->bMaxPower);
-#endif
-
 
 	DBG_871X("****** num of altsetting = (%d) ******/\n", usb_intf->num_altsetting);
 	/* Get he host side alternate setting (the current alternate setting) for this interface*/
 	host_iface = usb_intf->cur_altsetting;
 	iface_desc = &host_iface->desc;
 
-#if 1 /* The current alternate setting*/
 	DBG_871X("\nusb_interface_descriptor:%p:\n", iface_desc);
 	DBG_871X("bLength:%u\n", iface_desc->bLength);
 	DBG_871X("bDescriptorType:0x%02x\n", iface_desc->bDescriptorType);
@@ -1240,11 +1233,6 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 	DBG_871X("bInterfaceSubClass=%x\n", iface_desc->bInterfaceSubClass);
 	DBG_871X("bInterfaceProtocol=%x\n", iface_desc->bInterfaceProtocol);
 	DBG_871X("iInterface=%x\n", iface_desc->iInterface);
-#endif
-
-
-#if 1
-	/* DBG_871X("\ndump usb_endpoint_descriptor:\n"); */
 
 	for (i = 0; i < iface_desc->bNumEndpoints; i++)
 	{
@@ -1261,38 +1249,27 @@ static void dump_usb_interface(struct usb_interface *usb_intf)
 			DBG_871X("wMaxPacketSize=%x\n",endp_desc->wMaxPacketSize);
 			DBG_871X("wMaxPacketSize=%x\n",le16_to_cpu(endp_desc->wMaxPacketSize));
 			DBG_871X("bInterval=%x\n",endp_desc->bInterval);
-			/* DBG_871X("bRefresh=%x\n",pendp_desc->bRefresh); */
-			/* DBG_871X("bSynchAddress=%x\n",pendp_desc->bSynchAddress); */
 
 			if (RT_usb_endpoint_is_bulk_in(endp_desc))
 			{
 				DBG_871X("RT_usb_endpoint_is_bulk_in = %x\n", RT_usb_endpoint_num(endp_desc));
-				/* pdvobjpriv->RtNumInPipes++; */
 			}
 			else if (RT_usb_endpoint_is_int_in(endp_desc))
 			{
 				DBG_871X("RT_usb_endpoint_is_int_in = %x, Interval = %x\n", RT_usb_endpoint_num(endp_desc),endp_desc->bInterval);
-				/* pdvobjpriv->RtNumInPipes++; */
 			}
 			else if (RT_usb_endpoint_is_bulk_out(endp_desc))
 			{
 				DBG_871X("RT_usb_endpoint_is_bulk_out = %x\n", RT_usb_endpoint_num(endp_desc));
-				/* pdvobjpriv->RtNumOutPipes++; */
 			}
-			/* pdvobjpriv->ep_num[i] = RT_usb_endpoint_num(pendp_desc); */
 		}
 	}
-
-	/* DBG_871X("nr_endpoint=%d, in_num=%d, out_num=%d\n\n", pdvobjpriv->nr_endpoint, pdvobjpriv->RtNumInPipes, pdvobjpriv->RtNumOutPipes); */
-#endif
 
 	if (udev->speed == USB_SPEED_HIGH)
 		DBG_871X("USB_SPEED_HIGH\n");
 	else
 		DBG_871X("NON USB_SPEED_HIGH\n");
-
 }
-
 
 static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device_id *pdid)
 {
@@ -1302,7 +1279,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 	struct dvobj_priv *dvobj;
 
 	RT_TRACE(_module_hci_intfs_c_, _drv_err_, ("+rtw_drv_init\n"));
-	/* DBG_871X("+rtw_drv_init\n"); */
 
 	/* step 0. */
 	process_spec_devid(pdid);
