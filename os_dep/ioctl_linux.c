@@ -9745,13 +9745,7 @@ static struct iw_statistics *rtw_get_wireless_stats(struct net_device *dev)
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,14))
 	piwstats->qual.updated = IW_QUAL_ALL_UPDATED ;/* IW_QUAL_DBM; */
 #else
-#ifdef RTK_DMP_PLATFORM
-	/* IW_QUAL_DBM= 0x8, if driver use this flag, wireless extension will show value of dbm. */
-	/* remove this flag for show percentage 0~100 */
-	piwstats->qual.updated = 0x07;
-#else
 	piwstats->qual.updated = 0x0f;
-#endif
 #endif
 
 	return &padapter->iwstats;

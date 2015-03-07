@@ -27,11 +27,6 @@
 #include <recv_osdep.h>
 #include <rtw_ioctl_set.h>
 #include <linux/vmalloc.h>
-#ifdef RTK_DMP_PLATFORM
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
-#include <linux/pageremap.h>
-#endif
-#endif
 
 #define RT_TAG	'1178'
 
@@ -99,12 +94,7 @@ u8* _rtw_malloc(u32 sz)
 
 	u8	*pbuf=NULL;
 
-#ifdef RTK_DMP_PLATFORM
-	if(sz > 0x4000)
-		pbuf = (u8 *)dvr_malloc(sz);
-	else
-#endif
-		pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
+	pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 
 	return pbuf;
 }
@@ -125,12 +115,7 @@ u8* _rtw_zmalloc(u32 sz)
 void	_rtw_mfree(u8 *pbuf, u32 sz)
 {
 
-#ifdef RTK_DMP_PLATFORM
-	if(sz > 0x4000)
-		dvr_free(pbuf);
-	else
-#endif
-		kfree(pbuf);
+	kfree(pbuf);
 }
 
 inline struct sk_buff *_rtw_skb_alloc(u32 sz)

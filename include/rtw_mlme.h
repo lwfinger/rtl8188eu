@@ -518,13 +518,6 @@ struct mlme_priv {
 	u32 wfd_probe_resp_ie_len;
 	u32 wfd_go_probe_resp_ie_len; //for GO
 	u32 wfd_assoc_req_ie_len;
-
-#endif
-
-#ifdef RTK_DMP_PLATFORM
-	// DMP kobject_hotplug function  signal need in passive level
-	_workitem	Linkup_workitem;
-	_workitem	Linkdown_workitem;
 #endif
 };
 

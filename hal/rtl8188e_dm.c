@@ -88,26 +88,15 @@ static void dm_CheckPbcGPIO(struct adapter *padapter)
 		/*  After trigger PBC, the variable will be set to false */
 		DBG_8192C("CheckPbcGPIO - PBC is pressed\n");
 
-#ifdef RTK_DMP_PLATFORM
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12))
-		kobject_uevent(&padapter->pnetdev->dev.kobj, KOBJ_NET_PBC);
-#else
-		kobject_hotplug(&padapter->pnetdev->class_dev.kobj, KOBJ_NET_PBC);
-#endif
-#else
-
 		if ( padapter->pid[0] == 0 )
 		{	/* 	0 is the default value and it means the application monitors the HW PBC doesn't privde its pid to driver. */
 			return;
 		}
 		rtw_signal_process(padapter->pid[0], SIGUSR1);
-#endif
 	}
 }
 
-/*  */
 /*  Initialize GPIO setting registers */
-/*  */
 static void
 dm_InitGPIOSetting(
 	IN	struct adapter *Adapter

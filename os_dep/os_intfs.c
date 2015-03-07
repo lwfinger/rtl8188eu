@@ -247,7 +247,6 @@ int _netdev_open(struct net_device *pnetdev);
 int netdev_open (struct net_device *pnetdev);
 static int netdev_close (struct net_device *pnetdev);
 
-/* ifdef RTK_DMP_PLATFORM */
 #ifdef CONFIG_PROC_DEBUG
 #define RTL8192C_PROC_NAME "rtl819xC"
 #define RTL8192D_PROC_NAME "rtl819xD"
@@ -1209,9 +1208,7 @@ int _netdev_open(struct net_device *pnetdev)
 			padapter->intf_start(padapter);
 		}
 
-#ifndef RTK_DMP_PLATFORM
 		rtw_proc_init_one(pnetdev);
-#endif
 
 		rtw_cfg80211_init_wiphy(padapter);
 
