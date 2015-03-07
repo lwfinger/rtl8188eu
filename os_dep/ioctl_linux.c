@@ -593,13 +593,8 @@ static int wpa_set_auth_algs(struct net_device *dev, u32 value)
 		DBG_871X("wpa_set_auth_algs, AUTH_ALG_SHARED_KEY  [value:0x%x]\n",value);
 		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
 
-#ifdef CONFIG_PLATFORM_MT53XX
-		padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeAutoSwitch;
-		padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Auto;
-#else
 		padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeShared;
 		padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Shared;
-#endif
 	}
 	else if(value & AUTH_ALG_OPEN_SYSTEM)
 	{
@@ -607,13 +602,8 @@ static int wpa_set_auth_algs(struct net_device *dev, u32 value)
 		/* padapter->securitypriv.ndisencryptstatus = Ndis802_11EncryptionDisabled; */
 		if(padapter->securitypriv.ndisauthtype < Ndis802_11AuthModeWPAPSK)
 		{
-#ifdef CONFIG_PLATFORM_MT53XX
-			padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeAutoSwitch;
-			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Auto;
-#else
 			padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeOpen;
 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Open;
-#endif
 		}
 
 	}
@@ -2321,11 +2311,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
 		DBG_871X("rtw_wx_set_enc():IW_ENCODE_OPEN\n");
 		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;/* Ndis802_11EncryptionDisabled; */
 
-#ifdef CONFIG_PLATFORM_MT53XX
-		padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Auto;
-#else
 		padapter->securitypriv.dot11AuthAlgrthm= dot11AuthAlgrthm_Open;
-#endif
 
 		padapter->securitypriv.dot11PrivacyAlgrthm=_NO_PRIVACY_;
 		padapter->securitypriv.dot118021XGrpPrivacy=_NO_PRIVACY_;
@@ -2335,11 +2321,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
 		DBG_871X("rtw_wx_set_enc():IW_ENCODE_RESTRICTED\n");
 		padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
 
-#ifdef CONFIG_PLATFORM_MT53XX
-		padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_Auto;
-#else
 		padapter->securitypriv.dot11AuthAlgrthm= dot11AuthAlgrthm_Shared;
-#endif
 
 		padapter->securitypriv.dot11PrivacyAlgrthm=_WEP40_;
 		padapter->securitypriv.dot118021XGrpPrivacy=_WEP40_;
@@ -2864,14 +2846,6 @@ static int rtw_wx_set_mtk_wps_probe_ie(struct net_device *dev,
 		struct iw_request_info *a,
 		union iwreq_data *wrqu, char *b)
 {
-#ifdef CONFIG_PLATFORM_MT53XX
-	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-	RT_TRACE(_module_rtl871x_ioctl_os_c, _drv_notice_,
-		 ("WLAN IOCTL: cmd_code=%x, fwstate=0x%x\n",
-		  a->cmd, get_fwstate(pmlmepriv)));
-#endif
 	return 0;
 }
 
@@ -2879,14 +2853,6 @@ static int rtw_wx_get_sensitivity(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *buf)
 {
-#ifdef CONFIG_PLATFORM_MT53XX
-	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-
-	/* 	Modified by Albert 20110914 */
-	/* 	This is in dbm format for MTK platform. */
-	wrqu->qual.level = padapter->recvpriv.rssi;
-	DBG_871X(" level = %u\n",  wrqu->qual.level );
-#endif
 	return 0;
 }
 
@@ -2894,13 +2860,7 @@ static int rtw_wx_set_mtk_wps_ie(struct net_device *dev,
 				struct iw_request_info *info,
 				union iwreq_data *wrqu, char *extra)
 {
-#ifdef CONFIG_PLATFORM_MT53XX
-	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-
-	return rtw_set_wpa_ie(padapter, wrqu->data.pointer, wrqu->data.length);
-#else
 	return 0;
-#endif
 }
 
 /*
