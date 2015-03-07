@@ -2496,15 +2496,7 @@ int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
 			sub_skb->protocol = eth_type_trans(sub_skb, padapter->pnetdev);
 			sub_skb->dev = padapter->pnetdev;
 
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
-			if ( (pattrib->tcpchk_valid == 1) && (pattrib->tcp_chkrpt == 1) ) {
-				sub_skb->ip_summed = CHECKSUM_UNNECESSARY;
-			} else {
-				sub_skb->ip_summed = CHECKSUM_NONE;
-			}
-#else /* !CONFIG_TCP_CSUM_OFFLOAD_RX */
 			sub_skb->ip_summed = CHECKSUM_NONE;
-#endif /* CONFIG_TCP_CSUM_OFFLOAD_RX */
 
 			rtw_netif_rx(padapter->pnetdev, sub_skb);
 		}

@@ -152,11 +152,9 @@ struct rx_pkt_attrib	{
 
 	u8 ack_policy;
 
-//#ifdef CONFIG_TCP_CSUM_OFFLOAD_RX
 	u8	tcpchk_valid; // 0: invalid, 1: valid
 	u8	ip_chkrpt; //0: incorrect, 1: correct
 	u8	tcp_chkrpt; //0: incorrect, 1: correct
-//#endif
 	u8	key_index;
 
 	u8	mcs_rate;
@@ -165,13 +163,6 @@ struct rx_pkt_attrib	{
 	u8	pkt_rpt_type;
 	u32	MacIDValidEntry[2];	// 64 bits present 64 entry.
 
-/*
-	u8	signal_qual;
-	s8	rx_mimo_signal_qual[2];
-	u8	signal_strength;
-	u32	RxPWDBAll;
-	s32	RecvSignalPower;
-*/
 	struct phy_info phy_info;
 };
 
