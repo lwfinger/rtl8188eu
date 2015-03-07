@@ -27,17 +27,6 @@
 #define CONFIG_ANDROID
 #endif
 
-#ifdef CONFIG_ANDROID
-//Some Android build will restart the UI while non-printable ascii is passed
-//between java and c/c++ layer (JNI). We force CONFIG_VALIDATE_SSID
-//for Android here. If you are sure there is no risk on your system about this,
-//mask this macro define to support non-printable ascii ssid.
-//#define CONFIG_VALIDATE_SSID
-
-//Android expect dbm as the rx signal strength unit
-#define CONFIG_SIGNAL_DISPLAY_DBM
-#endif
-
 #if defined(CONFIG_HAS_EARLYSUSPEND) && defined (CONFIG_RESUME_IN_WORKQUEUE)
 	#warning "You have CONFIG_HAS_EARLYSUSPEND enabled in your system, we disable CONFIG_RESUME_IN_WORKQUEUE automatically"
 	#undef CONFIG_RESUME_IN_WORKQUEUE
