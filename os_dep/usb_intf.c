@@ -459,7 +459,7 @@ void rtw_dev_unload(struct adapter *padapter)
 
 		/* s4. */
 		if(!adapter_to_pwrctl(padapter)->bInternalAutoSuspend )
-		rtw_stop_drv_threads(padapter);
+			rtw_stop_drv_threads(padapter);
 
 
 		/* s5. */
@@ -508,8 +508,6 @@ int rtw_hw_suspend(struct adapter *padapter )
 	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
 	struct net_device *pnetdev = padapter->pnetdev;
 
-	;
-
 	if((!padapter->bup) || (padapter->bDriverStopped)||(padapter->bSurpriseRemoved))
 	{
 		DBG_871X("padapter->bup=%d bDriverStopped=%d bSurpriseRemoved = %d\n",
@@ -517,57 +515,49 @@ int rtw_hw_suspend(struct adapter *padapter )
 		goto error_exit;
 	}
 
-	if(padapter)/* system suspend */
+	LeaveAllPowerSaveMode(padapter);
+
+	DBG_871X("==> rtw_hw_suspend\n");
+	_enter_pwrlock(&pwrpriv->lock);
+	pwrpriv->bips_processing = true;
+	/* s1. */
+	if(pnetdev)
 	{
-		LeaveAllPowerSaveMode(padapter);
-
-		DBG_871X("==> rtw_hw_suspend\n");
-		_enter_pwrlock(&pwrpriv->lock);
-		pwrpriv->bips_processing = true;
-		/* padapter->net_closed = true; */
-		/* s1. */
-		if(pnetdev)
-		{
-			netif_carrier_off(pnetdev);
-			rtw_netif_stop_queue(pnetdev);
-		}
-
-		/* s2. */
-		rtw_disassoc_cmd(padapter, 500, false);
-
-		/* s2-2.  indicate disconnect to os */
-		/* rtw_indicate_disconnect(padapter); */
-		{
-			struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-			if(check_fwstate(pmlmepriv, _FW_LINKED))
-			{
-				_clr_fwstate_(pmlmepriv, _FW_LINKED);
-
-				rtw_led_control(padapter, LED_CTL_NO_LINK);
-
-				rtw_os_indicate_disconnect(padapter);
-
-				/* donnot enqueue cmd */
-				rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 0);
-			}
-
-		}
-		/* s2-3. */
-		rtw_free_assoc_resources(padapter, 1);
-
-		/* s2-4. */
-		rtw_free_network_queue(padapter,true);
-		rtw_ips_dev_unload(padapter);
-		pwrpriv->rf_pwrstate = rf_off;
-		pwrpriv->bips_processing = false;
-
-		_exit_pwrlock(&pwrpriv->lock);
+		netif_carrier_off(pnetdev);
+		rtw_netif_stop_queue(pnetdev);
 	}
-	else
-		goto error_exit;
 
-	;
+	/* s2. */
+	rtw_disassoc_cmd(padapter, 500, false);
+
+	/* s2-2.  indicate disconnect to os */
+	{
+		struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
+
+		if(check_fwstate(pmlmepriv, _FW_LINKED))
+		{
+			_clr_fwstate_(pmlmepriv, _FW_LINKED);
+
+			rtw_led_control(padapter, LED_CTL_NO_LINK);
+
+			rtw_os_indicate_disconnect(padapter);
+
+			/* donnot enqueue cmd */
+			rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_DISCONNECT, 0);
+		}
+
+	}
+	/* s2-3. */
+	rtw_free_assoc_resources(padapter, 1);
+
+	/* s2-4. */
+	rtw_free_network_queue(padapter,true);
+	rtw_ips_dev_unload(padapter);
+	pwrpriv->rf_pwrstate = rf_off;
+	pwrpriv->bips_processing = false;
+
+	_exit_pwrlock(&pwrpriv->lock);
+
 	return 0;
 
 error_exit:
@@ -578,21 +568,21 @@ error_exit:
 
 int rtw_hw_resume(struct adapter *padapter)
 {
-	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	struct usb_interface *pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
-	struct net_device *pnetdev = padapter->pnetdev;
-
-	;
+	struct pwrctrl_priv *pwrpriv;
+	struct usb_interface *pusb_intf;
+	struct net_device *pnetdev;
 
 	if(padapter)/* system resume */
 	{
+		pwrpriv = adapter_to_pwrctl(padapter);
+		pusb_intf = adapter_to_dvobj(padapter)->pusbintf;
+		pnetdev = padapter->pnetdev;
 		DBG_871X("==> rtw_hw_resume\n");
 		_enter_pwrlock(&pwrpriv->lock);
 		pwrpriv->bips_processing = true;
 		rtw_reset_drv_sw(padapter);
 
-		if(pm_netdev_open(pnetdev,false) != 0)
-		{
+		if(pm_netdev_open(pnetdev,false) != 0) {
 			_exit_pwrlock(&pwrpriv->lock);
 			goto error_exit;
 		}
@@ -612,13 +602,9 @@ int rtw_hw_resume(struct adapter *padapter)
 		pwrpriv->bips_processing = false;
 
 		_exit_pwrlock(&pwrpriv->lock);
-	}
-	else
-	{
+	} else {
 		goto error_exit;
 	}
-
-	;
 
 	return 0;
 error_exit:
@@ -694,7 +680,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	struct adapter *padapter = dvobj->if1;
 	struct net_device *pnetdev = padapter->pnetdev;
 	struct pwrctrl_priv *pwrpriv = dvobj_to_pwrctl(dvobj);
-	 int ret = 0;
+	int ret = 0;
 
 	if(pwrpriv->bInternalAutoSuspend ){
 		ret = rtw_resume_process(padapter);

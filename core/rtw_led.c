@@ -460,7 +460,7 @@ static void SwLedBlink2(PLED_871x pLed)
 				}
 				else
 				{
-					 if( pLed->bLedOn )
+					if( pLed->bLedOn )
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -506,7 +506,7 @@ static void SwLedBlink2(PLED_871x pLed)
 				}
 				else
 				{
-					 if( pLed->bLedOn )
+					if( pLed->bLedOn )
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -770,7 +770,7 @@ static void SwLedBlink4(PLED_871x pLed)
 				}
 				else
 				{
-					 if( pLed->bLedOn )
+					if( pLed->bLedOn )
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -811,7 +811,7 @@ static void SwLedBlink4(PLED_871x pLed)
 				}
 				else
 				{
-					 if( pLed->bLedOn )
+					if( pLed->bLedOn )
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -978,7 +978,7 @@ static void SwLedBlink5(PLED_871x pLed)
 				}
 				else
 				{
-					 if( pLed->bLedOn )
+					if( pLed->bLedOn )
 						pLed->BlinkingLedState = RTW_LED_OFF;
 					else
 						pLed->BlinkingLedState = RTW_LED_ON;
@@ -1215,7 +1215,7 @@ SwLedControlMode1(
 				if( pLed->bLedLinkBlinkInProgress == true )
 				{
 					_cancel_timer_ex(&(pLed->BlinkTimer));
-					 pLed->bLedLinkBlinkInProgress = false;
+					pLed->bLedLinkBlinkInProgress = false;
 				}
 				if(pLed->bLedBlinkInProgress ==true)
 				{
@@ -1274,7 +1274,7 @@ SwLedControlMode1(
 				if( pLed->bLedLinkBlinkInProgress == true )
 				{
 					_cancel_timer_ex(&(pLed->BlinkTimer));
-					 pLed->bLedLinkBlinkInProgress = false;
+					pLed->bLedLinkBlinkInProgress = false;
 				}
 				if(pLed->bLedBlinkInProgress ==true)
 				{
@@ -1306,7 +1306,7 @@ SwLedControlMode1(
 			if( pLed->bLedLinkBlinkInProgress == true )
 			{
 				_cancel_timer_ex(&(pLed->BlinkTimer));
-				 pLed->bLedLinkBlinkInProgress = false;
+				pLed->bLedLinkBlinkInProgress = false;
 			}
 			if(pLed->bLedBlinkInProgress ==true)
 			{
@@ -2251,21 +2251,12 @@ LedControl871x(
 {
 	struct led_priv	*ledpriv = &(padapter->ledpriv);
 
-       if( (padapter->bSurpriseRemoved == true) || ( padapter->bDriverStopped == true)
-		||(padapter->hw_init_completed == false) )
-       {
-             return;
-       }
-
+	if ((padapter->bSurpriseRemoved) || ( padapter->bDriverStopped) ||
+	    (padapter->hw_init_completed == false) )
+		return;
 
 	if( ledpriv->bRegUseLed == false)
 		return;
-
-	/* if (!priv->up) */
-	/* 	return; */
-
-	/* if(priv->bInHctTest) */
-	/* 	return; */
 
 	if( (adapter_to_pwrctl(padapter)->rf_pwrstate != rf_on &&
 		adapter_to_pwrctl(padapter)->rfoff_reason > RF_CHANGE_BY_PS) &&

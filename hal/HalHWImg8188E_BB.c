@@ -540,12 +540,12 @@ ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E(
 	u32     hex         = 0;
 	u32     i           = 0;
 	u16     count       = 0;
-	u32 *    ptr_array   = NULL;
+	u32 *ptr_array   = NULL;
 	u8     platform    = pDM_Odm->SupportPlatform;
 	u8     _interface   = pDM_Odm->SupportInterface;
 	u8     board       = pDM_Odm->BoardType;
 	u32     ArrayLen    = sizeof(Array_MP_8188E_AGC_TAB_1T_ICUT)/sizeof(u32);
-	u32 *    Array       = Array_MP_8188E_AGC_TAB_1T_ICUT;
+	u32 *Array       = Array_MP_8188E_AGC_TAB_1T_ICUT;
 
 
 	hex += board;
@@ -554,50 +554,38 @@ ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E(
 	hex += 0xFF000000;
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_TRACE, ("===> ODM_ReadAndConfig_MP_8188E_AGC_TAB_1T_ICUT, hex = 0x%X\n", hex));
 
-	for (i = 0; i < ArrayLen; i += 2 )
-	{
-	    u32 v1 = Array[i];
-	    u32 v2 = Array[i+1];
+	for (i = 0; i < ArrayLen; i += 2 ) {
+		u32 v1 = Array[i];
+		u32 v2 = Array[i+1];
 
-	    /*  This (offset, data) pair meets the condition. */
-	    if ( v1 < 0xCDCDCDCD )
-	    {
-		    odm_ConfigBB_AGC_8188E(pDM_Odm, v1, bMaskDWord, v2);
-		    continue;
-		}
-		else
-		{ /*  This line is the start line of branch. */
-		    if ( !CheckCondition(Array[i], hex) )
-		    { /*  Discard the following (offset, data) pairs. */
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-		        i -= 2; /*  prevent from for-loop += 2 */
-		    }
-		    else /*  Configure matched pairs and skip to end of if-else. */
-		    {
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-				odm_ConfigBB_AGC_8188E(pDM_Odm, v1, bMaskDWord, v2);
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
+		/*  This (offset, data) pair meets the condition. */
+		if ( v1 < 0xCDCDCDCD ) {
+			odm_ConfigBB_AGC_8188E(pDM_Odm, v1, bMaskDWord, v2);
+			continue;
+		} else { /*  This line is the start line of branch. */
+			if ( !CheckCondition(Array[i], hex) )
+			{ /*  Discard the following (offset, data) pairs. */
+				READ_NEXT_PAIR(v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < ArrayLen -2)
+					READ_NEXT_PAIR(v1, v2, i);
+				i -= 2; /*  prevent from for-loop += 2 */
+			} else /*  Configure matched pairs and skip to end of if-else. */
+			{
+				READ_NEXT_PAIR(v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < ArrayLen -2) {
+					odm_ConfigBB_AGC_8188E(pDM_Odm, v1, bMaskDWord, v2);
+					READ_NEXT_PAIR(v1, v2, i);
+				}
 
-		        while (v2 != 0xDEAD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-
-		    }
+				while (v2 != 0xDEAD && i < ArrayLen -2)
+					READ_NEXT_PAIR(v1, v2, i);
+			}
 		}
 	}
-
 }
 
 /******************************************************************************
@@ -845,53 +833,43 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 	hex += platform << 16;
 	hex += 0xFF000000;
 	for (i = 0; i < ArrayLen; i += 2 ) {
-	    u32 v1 = Array[i];
-	    u32 v2 = Array[i+1];
+		u32 v1 = Array[i];
+		u32 v2 = Array[i+1];
 
 
-	    /*  This (offset, data) pair meets the condition. */
-	    if ( v1 < 0xCDCDCDCD ) {
-			{
-				odm_ConfigBB_PHY_8188E(pDM_Odm, v1, bMaskDWord, v2);
-			}
+		/*  This (offset, data) pair meets the condition. */
+		if ( v1 < 0xCDCDCDCD ) {
+			odm_ConfigBB_PHY_8188E(pDM_Odm, v1, bMaskDWord, v2);
 			continue;
 		}
 		else
 		{ /*  This line is the start line of branch. */
-		    if ( !CheckCondition(Array[i], hex) )
-		    { /*  Discard the following (offset, data) pairs. */
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-		        i -= 2; /*  prevent from for-loop += 2 */
-		    }
-		    else /*  Configure matched pairs and skip to end of if-else. */
-		    {
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-				{
+			if ( !CheckCondition(Array[i], hex) )
+			{ /*  Discard the following (offset, data) pairs. */
+				READ_NEXT_PAIR(v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < ArrayLen -2)
+					READ_NEXT_PAIR(v1, v2, i);
+				i -= 2; /*  prevent from for-loop += 2 */
+			} else /*  Configure matched pairs and skip to end of if-else. */
+			{
+				READ_NEXT_PAIR(v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < ArrayLen -2) {
 					odm_ConfigBB_PHY_8188E(pDM_Odm, v1, bMaskDWord, v2);
+					READ_NEXT_PAIR(v1, v2, i);
 				}
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
 
-		        while (v2 != 0xDEAD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-
-		    }
+				while (v2 != 0xDEAD && i < ArrayLen -2)
+					READ_NEXT_PAIR(v1, v2, i);
+			}
 		}
 	}
 	return rst;
 }
+
 /******************************************************************************
 *                           PHY_REG_1T_ICUT.TXT
 ******************************************************************************/
@@ -1115,50 +1093,37 @@ ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E(
 	hex += 0xFF000000;
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_TRACE, ("===> ODM_ReadAndConfig_MP_8188E_PHY_REG_1T_ICUT, hex = 0x%X\n", hex));
 
-	for (i = 0; i < ArrayLen; i += 2 )
-	{
-	    u32 v1 = Array[i];
-	    u32 v2 = Array[i+1];
+	for (i = 0; i < ArrayLen; i += 2 ) {
+		u32 v1 = Array[i];
+		u32 v2 = Array[i+1];
 
-	    /*  This (offset, data) pair meets the condition. */
-	    if ( v1 < 0xCDCDCDCD )
-	    {
+		/*  This (offset, data) pair meets the condition. */
+		if ( v1 < 0xCDCDCDCD ) {
 			odm_ConfigBB_PHY_8188E(pDM_Odm, v1, bMaskDWord, v2);
-		    continue;
-		}
-		else
-		{ /*  This line is the start line of branch. */
-		    if ( !CheckCondition(Array[i], hex) )
-		    { /*  Discard the following (offset, data) pairs. */
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-		        i -= 2; /*  prevent from for-loop += 2 */
-		    }
-		    else /*  Configure matched pairs and skip to end of if-else. */
-		    {
-		        READ_NEXT_PAIR(v1, v2, i);
-		        while (v2 != 0xDEAD &&
-		               v2 != 0xCDEF &&
-		               v2 != 0xCDCD && i < ArrayLen -2)
-		        {
+			continue;
+		} else { /*  This line is the start line of branch. */
+			if ( !CheckCondition(Array[i], hex) )
+			{ /*  Discard the following (offset, data) pairs. */
+				READ_NEXT_PAIR(v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < ArrayLen -2)
+					READ_NEXT_PAIR(v1, v2, i);
+				i -= 2; /*  prevent from for-loop += 2 */
+			} else /*  Configure matched pairs and skip to end of if-else. */ {
+				READ_NEXT_PAIR(v1, v2, i);
+				while (v2 != 0xDEAD &&
+				       v2 != 0xCDEF &&
+				       v2 != 0xCDCD && i < ArrayLen -2) {
 					odm_ConfigBB_PHY_8188E(pDM_Odm, v1, bMaskDWord, v2);
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
+					READ_NEXT_PAIR(v1, v2, i);
+				}
 
-		        while (v2 != 0xDEAD && i < ArrayLen -2)
-		        {
-		            READ_NEXT_PAIR(v1, v2, i);
-		        }
-
-		    }
+				while (v2 != 0xDEAD && i < ArrayLen -2)
+					READ_NEXT_PAIR(v1, v2, i);
+			}
 		}
 	}
-
 }
 
 
@@ -1196,40 +1161,32 @@ ODM_ReadAndConfig_PHY_REG_PG_8188E(
 	hex += interfaceValue << 8;
 	hex += platform << 16;
 	hex += 0xFF000000;
-	for (i = 0; i < ArrayLen; i += 6 )
-	{
-	    u32 v1 = Array[i];
-	    u32 v2 = Array[i+1];
-	    u32 v3 = Array[i+2];
-	    u32 v4 = Array[i+3];
-	    u32 v5 = Array[i+4];
-	    u32 v6 = Array[i+5];
+	for (i = 0; i < ArrayLen; i += 6 ) {
+		u32 v1 = Array[i];
+		u32 v2 = Array[i+1];
+		u32 v3 = Array[i+2];
+		u32 v4 = Array[i+3];
+		u32 v5 = Array[i+4];
+		u32 v6 = Array[i+5];
 
-	    /*  this line is a line of pure_body */
-	    if ( v1 < 0xCDCDCDCD )
-	    {
-
+		/*  this line is a line of pure_body */
+		if ( v1 < 0xCDCDCDCD ) {
 			odm_ConfigBB_PHY_REG_PG_8188E(pDM_Odm, v1, v2, v3);
-
-			 continue;
-	    }
-	    else
-	    { /*  this line is the start of branch */
-	        if ( !CheckCondition(Array[i], hex) )
-	        { /*  don't need the hw_body */
-	            i += 2; /*  skip the pair of expression */
-	            v1 = Array[i];
-	            v2 = Array[i+1];
-	            v3 = Array[i+2];
-	            while (v2 != 0xDEAD)
-	            {
-	                i += 3;
-	                v1 = Array[i];
-	                v2 = Array[i+1];
-	                v3 = Array[i+1];
-	            }
-	        }
-	    }
+			continue;
+		} else { /*  this line is the start of branch */
+			if ( !CheckCondition(Array[i], hex) )
+			{ /*  don't need the hw_body */
+				i += 2; /*  skip the pair of expression */
+				v1 = Array[i];
+				v2 = Array[i+1];
+				v3 = Array[i+2];
+				while (v2 != 0xDEAD) {
+					i += 3;
+					v1 = Array[i];
+					v2 = Array[i+1];
+					v3 = Array[i+1];
+				}
+			}
+		}
 	}
-
 }

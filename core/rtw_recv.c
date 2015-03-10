@@ -243,16 +243,9 @@ int rtw_free_recvframe(union recv_frame *precvframe, _queue *pfree_recv_queue)
 				precvpriv->free_recvframe_cnt++;
 	}
 
-      spin_unlock_bh(&pfree_recv_queue->lock);
-
-;
-
+	spin_unlock_bh(&pfree_recv_queue->lock);
 	return _SUCCESS;
-
 }
-
-
-
 
 sint _rtw_enqueue_recvframe(union recv_frame *precvframe, _queue *queue)
 {
@@ -962,9 +955,8 @@ sint sta2sta_data_frame(
 				RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("bssid != TA under STATION_MODE; drop pkt\n"));
 				ret= _FAIL;
 				goto exit;
-		}
-
-		sta_addr = pattrib->bssid;
+			}
+			sta_addr = pattrib->bssid;
 		}
 
 	}
@@ -1784,7 +1776,7 @@ sint validate_recv_frame(struct adapter *adapter, union recv_frame *precv_frame)
 	u8 subtype;
 	sint retval = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = & precv_frame->u.hdr.attrib;
-
+	u8 bDumpRxPkt;
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	u8  ver =(unsigned char) (*ptr)&0x3 ;
 #ifdef CONFIG_AP_MODE
@@ -1820,8 +1812,6 @@ sint validate_recv_frame(struct adapter *adapter, union recv_frame *precv_frame)
 	pattrib->privacy = GetPrivacy(ptr);
 	pattrib->order = GetOrder(ptr);
 
-{
-	u8 bDumpRxPkt;
 	rtw_hal_get_def_var(adapter, HAL_DEF_DBG_DUMP_RXPKT, &(bDumpRxPkt));
 	if(bDumpRxPkt ==1){/* dump all rx packets */
 		int i;
@@ -1854,7 +1844,6 @@ sint validate_recv_frame(struct adapter *adapter, union recv_frame *precv_frame)
 			DBG_871X("############################# \n");
 		}
 	}
-}
 	switch (type)
 	{
 		case WIFI_MGT_TYPE: /* mgnt */
@@ -2327,7 +2316,7 @@ int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
 		}
 
 		/* Indicat the packets to upper layer */
-		if (sub_skb) {
+		{
 			/* memset(sub_skb->cb, 0, sizeof(sub_skb->cb)); */
 
 #ifdef CONFIG_BR_EXT
@@ -2511,7 +2500,7 @@ int recv_indicatepkts_in_order(struct adapter *padapter, struct recv_reorder_ctr
 			return true;
 		}
 
-		 prframe = LIST_CONTAINOR(plist, union recv_frame, u);
+		prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 	        pattrib = &prframe->u.hdr.attrib;
 		preorder_ctrl->indicate_seq = pattrib->seq_num;
 		#ifdef DBG_RX_SEQ

@@ -1120,42 +1120,9 @@ HwSuspendModeEnable_88eu(
 	IN	u8			Type
 	)
 {
-	/* PRT_USB_DEVICE		pDevice = GET_RT_USB_DEVICE(pAdapter); */
-	u16	reg = rtw_read16(pAdapter, REG_GPIO_MUXCFG);
-
-	/* if (!pDevice->RegUsbSS) */
-	{
-		return;
-	}
-
-	/*  */
-	/*  2010/08/23 MH According to Alfred's suggestion, we need to to prevent HW */
-	/*  to enter suspend mode automatically. Otherwise, it will shut down major power */
-	/*  domain and 8051 will stop. When we try to enter selective suspend mode, we */
-	/*  need to prevent HW to enter D2 mode aumotmatically. Another way, Host will */
-	/*  issue a S10 signal to power domain. Then it will cleat SIC setting(from Yngli). */
-	/*  We need to enable HW suspend mode when enter S3/S4 or disable. We need */
-	/*  to disable HW suspend mode for IPS/radio_off. */
-	/*  */
-	/* RT_TRACE(COMP_RF, DBG_LOUD, ("HwSuspendModeEnable92Cu = %d\n", Type)); */
-	if (Type == false)
-	{
-		reg |= BIT14;
-		/* RT_TRACE(COMP_RF, DBG_LOUD, ("REG_GPIO_MUXCFG = %x\n", reg)); */
-		rtw_write16(pAdapter, REG_GPIO_MUXCFG, reg);
-		reg |= BIT12;
-		/* RT_TRACE(COMP_RF, DBG_LOUD, ("REG_GPIO_MUXCFG = %x\n", reg)); */
-		rtw_write16(pAdapter, REG_GPIO_MUXCFG, reg);
-	}
-	else
-	{
-		reg &= (~BIT12);
-		rtw_write16(pAdapter, REG_GPIO_MUXCFG, reg);
-		reg &= (~BIT14);
-		rtw_write16(pAdapter, REG_GPIO_MUXCFG, reg);
-	}
-
+	return;
 }	/*  HwSuspendModeEnable92Cu */
+
 rt_rf_power_state RfOnOffDetect(IN	struct adapter *pAdapter )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
@@ -1270,11 +1237,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	#define HAL_INIT_PROFILE_TAG(stage) do {} while(0)
 #endif /* DBG_HAL_INIT_PROFILING */
 
-
-
-;
-
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 
 	if(pwrctrlpriv->bkeepfwalive)
 	{
@@ -1296,7 +1259,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
 	}
 
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_PW_ON);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_PW_ON);
 	status = InitPowerOn_rtl8188eu(Adapter);
 	if(status == _FAIL){
 		RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("Failed to init power on!\n"));
@@ -1324,38 +1287,33 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_PW_ON);
 		txpktbuf_bndy = WMM_NORMAL_TX_PAGE_BOUNDARY_88E;
 	}
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC01);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC01);
 	_InitQueueReservedPage(Adapter);
 	_InitQueuePriority(Adapter);
 	_InitPageBoundary(Adapter);
 	_InitTransferPageSize(Adapter);
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
 #if (MP_DRIVER == 1)
 	if (Adapter->registrypriv.mp_mode == 1)
 	{
 		_InitRxSetting(Adapter);
 	}
 #endif  /* MP_DRIVER == 1 */
-	{
-		status = rtl8188e_FirmwareDownload(Adapter);
-		if (status != _SUCCESS) {
-			DBG_871X("%s: Download Firmware failed!!\n", __FUNCTION__);
-			Adapter->bFWReady = false;
-			pHalData->fw_ractrl = false;
-			return status;
-		} else {
-			RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("Initializepadapter8192CSdio(): Download Firmware Success!!\n"));
-			Adapter->bFWReady = true;
-			pHalData->fw_ractrl = false;
-		}
+	status = rtl8188e_FirmwareDownload(Adapter);
+	if (status != _SUCCESS) {
+		DBG_871X("%s: Download Firmware failed!!\n", __FUNCTION__);
+		Adapter->bFWReady = false;
+		pHalData->fw_ractrl = false;
+		return status;
+	} else {
+		RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("Initializepadapter8192CSdio(): Download Firmware Success!!\n"));
+		Adapter->bFWReady = true;
+		pHalData->fw_ractrl = false;
 	}
-
-
 	rtl8188e_InitializeFirmwareVars(Adapter);
 
-
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MAC);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MAC);
 #if (HAL_MAC_ENABLE == 1)
 	status = PHY_MACConfig8188E(Adapter);
 	if(status == _FAIL)
@@ -1368,7 +1326,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MAC);
 	/*  */
 	/* d. Initialize BB related configurations. */
 	/*  */
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BB);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BB);
 #if (HAL_BB_ENABLE == 1)
 	status = PHY_BBConfig8188E(Adapter);
 	if(status == _FAIL)
@@ -1379,7 +1337,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BB);
 #endif
 
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
 #if (HAL_RF_ENABLE == 1)
 	status = PHY_RFConfig8188E(Adapter);
 	if(status == _FAIL)
@@ -1389,7 +1347,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_RF);
 	}
 #endif
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if(status == _FAIL){
 		DBG_871X("%s  rtl8188e_iol_efuse_patch failed \n",__FUNCTION__);
@@ -1398,14 +1356,14 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
 
 	_InitTxBufferBoundary(Adapter, txpktbuf_bndy);
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_LLTT);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_LLTT);
 	status =  InitLLTTable(Adapter, txpktbuf_bndy);
 	if(status == _FAIL){
 		RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("Failed to init LLT table\n"));
 		goto exit;
 	}
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	/*  Get Rx PHY status in order to report RSSI and others. */
 	_InitDriverInfoSize(Adapter, DRVINFO_SZ);
 
@@ -1439,15 +1397,14 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	}
 
 #if (RATE_ADAPTIVE_SUPPORT==1)
-	{/* Enable TX Report */
-		/* Enable Tx Report Timer */
-		value8 = rtw_read8(Adapter, REG_TX_RPT_CTRL);
-		rtw_write8(Adapter,  REG_TX_RPT_CTRL, (value8|BIT1|BIT0));
-		/* Set MAX RPT MACID */
-		rtw_write8(Adapter,  REG_TX_RPT_CTRL+1, 2);/* FOR sta mode ,0: bc/mc ,1:AP */
-		/* Tx RPT Timer. Unit: 32us */
-		rtw_write16(Adapter, REG_TX_RPT_TIME, 0xCdf0);
-	}
+	/* Enable TX Report */
+	/* Enable Tx Report Timer */
+	value8 = rtw_read8(Adapter, REG_TX_RPT_CTRL);
+	rtw_write8(Adapter,  REG_TX_RPT_CTRL, (value8|BIT1|BIT0));
+	/* Set MAX RPT MACID */
+	rtw_write8(Adapter,  REG_TX_RPT_CTRL+1, 2);/* FOR sta mode ,0: bc/mc ,1:AP */
+	/* Tx RPT Timer. Unit: 32us */
+	rtw_write16(Adapter, REG_TX_RPT_TIME, 0xCdf0);
 #endif
 
 	rtw_write8(Adapter, REG_EARLY_MODE_CONTROL, 0);
@@ -1467,14 +1424,14 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC02);
 	pHalData->RfRegChnlVal[0] = PHY_QueryRFReg(Adapter, (RF_RADIO_PATH_E)0, RF_CHNLBW, bRFRegOffsetMask);
 	pHalData->RfRegChnlVal[1] = PHY_QueryRFReg(Adapter, (RF_RADIO_PATH_E)1, RF_CHNLBW, bRFRegOffsetMask);
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_TURN_ON_BLOCK);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_TURN_ON_BLOCK);
 	_BBTurnOnBlock(Adapter);
 	/* NicIFSetMacAddress(padapter, padapter->PermanentAddress); */
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_SECURITY);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_SECURITY);
 	invalidate_cam_all(Adapter);
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC11);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC11);
 	/*  2010/12/17 MH We need to set TX power according to EFUSE content at first. */
 	PHY_SetTxPowerLevel8188E(Adapter, pHalData->CurrentChannel);
 
@@ -1499,7 +1456,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_MISC11);
 	/* Nav limit , suggest by scott */
 	rtw_write8(Adapter, 0x652, 0x0);
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_HAL_DM);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_HAL_DM);
 	rtl8188e_InitHalDm(Adapter);
 
 #if (MP_DRIVER == 1)
@@ -1535,25 +1492,23 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_HAL_DM);
 	/* enable tx DMA to drop the redundate data of packet */
 	rtw_write16(Adapter,REG_TXDMA_OFFSET_CHK, (rtw_read16(Adapter,REG_TXDMA_OFFSET_CHK) | DROP_DATA_EN));
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_IQK);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_IQK);
 	/*  2010/08/26 MH Merge from 8192CE. */
 	if(pwrctrlpriv->rf_pwrstate == rf_on)
 	{
 		if(pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized){
 			PHY_IQCalibrate_8188E(Adapter,true);
-		}
-		else
-		{
+		} else {
 			PHY_IQCalibrate_8188E(Adapter,false);
 			pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized = true;
 		}
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_PW_TRACK);
+		HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_PW_TRACK);
 
 		ODM_TXPowerTrackingCheck(&pHalData->odmpriv );
 
 
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_LCK);
+		HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_LCK);
 		PHY_LCCalibrate_8188E(Adapter);
 	}
 }
@@ -1566,7 +1521,7 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_LCK);
 	rtw_write32(Adapter, REG_FWHW_TXQ_CTRL, rtw_read32(Adapter, REG_FWHW_TXQ_CTRL)|BIT(12));
 
 exit:
-HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
+	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 
 	DBG_871X("%s in %dms\n", __FUNCTION__, rtw_get_passing_time_ms(init_start_time));
 
@@ -1582,10 +1537,6 @@ HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 		);
 	}
 	#endif
-
-
-;
-
 	return status;
 }
 
@@ -1598,11 +1549,10 @@ static void hal_poweroff_rtl8188eu(
 	IN	struct adapter *		Adapter
 )
 {
-/* 	PMGNT_INFO	pMgntInfo	= &(Adapter->MgntInfo); */
 	u8	val8;
 	u16	val16;
 	u32	val32;
-	 u8 bMacPwrCtrlOn=false;
+	u8 bMacPwrCtrlOn=false;
 
 	rtw_hal_get_hwreg(Adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 	if(bMacPwrCtrlOn == false)

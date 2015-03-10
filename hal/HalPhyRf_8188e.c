@@ -76,39 +76,35 @@ static void setIqkMatrix(
 		ele_C = ((IqkResult_Y * ele_D)>>8)&0x000003FF;
 
 		if (RFPath == RF_PATH_A)
-		switch (RFPath)
-		{
-		case RF_PATH_A:
-			/* wirte new elements A, C, D to regC80 and regC94, element B is always 0 */
-			value32 = (ele_D<<22)|((ele_C&0x3F)<<16)|ele_A;
-			ODM_SetBBReg(pDM_Odm, rOFDM0_XATxIQImbalance, bMaskDWord, value32);
+			switch (RFPath) {
+			case RF_PATH_A:
+				/* wirte new elements A, C, D to regC80 and regC94, element B is always 0 */
+				value32 = (ele_D<<22)|((ele_C&0x3F)<<16)|ele_A;
+				ODM_SetBBReg(pDM_Odm, rOFDM0_XATxIQImbalance, bMaskDWord, value32);
 
-			value32 = (ele_C&0x000003C0)>>6;
-			ODM_SetBBReg(pDM_Odm, rOFDM0_XCTxAFE, bMaskH4Bits, value32);
+				value32 = (ele_C&0x000003C0)>>6;
+				ODM_SetBBReg(pDM_Odm, rOFDM0_XCTxAFE, bMaskH4Bits, value32);
 
-			value32 = ((IqkResult_X * ele_D)>>7)&0x01;
-			ODM_SetBBReg(pDM_Odm, rOFDM0_ECCAThreshold, BIT24, value32);
-			break;
-		case RF_PATH_B:
-			/* wirte new elements A, C, D to regC88 and regC9C, element B is always 0 */
-			value32=(ele_D<<22)|((ele_C&0x3F)<<16) |ele_A;
-			ODM_SetBBReg(pDM_Odm, rOFDM0_XBTxIQImbalance, bMaskDWord, value32);
+				value32 = ((IqkResult_X * ele_D)>>7)&0x01;
+				ODM_SetBBReg(pDM_Odm, rOFDM0_ECCAThreshold, BIT24, value32);
+				break;
+			case RF_PATH_B:
+				/* wirte new elements A, C, D to regC88 and regC9C, element B is always 0 */
+				value32=(ele_D<<22)|((ele_C&0x3F)<<16) |ele_A;
+				ODM_SetBBReg(pDM_Odm, rOFDM0_XBTxIQImbalance, bMaskDWord, value32);
 
-			value32 = (ele_C&0x000003C0)>>6;
-			ODM_SetBBReg(pDM_Odm, rOFDM0_XDTxAFE, bMaskH4Bits, value32);
+				value32 = (ele_C&0x000003C0)>>6;
+				ODM_SetBBReg(pDM_Odm, rOFDM0_XDTxAFE, bMaskH4Bits, value32);
 
-			value32 = ((IqkResult_X * ele_D)>>7)&0x01;
-			ODM_SetBBReg(pDM_Odm, rOFDM0_ECCAThreshold, BIT28, value32);
+				value32 = ((IqkResult_X * ele_D)>>7)&0x01;
+				ODM_SetBBReg(pDM_Odm, rOFDM0_ECCAThreshold, BIT28, value32);
 
-			break;
-		default:
-			break;
-		}
-	}
-	else
-	{
-		switch (RFPath)
-		{
+				break;
+			default:
+				break;
+			}
+	} else {
+		switch (RFPath) {
 		case RF_PATH_A:
 			ODM_SetBBReg(pDM_Odm, rOFDM0_XATxIQImbalance, bMaskDWord, OFDMSwingTable[OFDM_index]);
 			ODM_SetBBReg(pDM_Odm, rOFDM0_XCTxAFE, bMaskH4Bits, 0x00);
@@ -126,8 +122,9 @@ static void setIqkMatrix(
 		}
 	}
 
-    ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("TxPwrTracking path B: X = 0x%x, Y = 0x%x ele_A = 0x%x ele_C = 0x%x ele_D = 0x%x 0xeb4 = 0x%x 0xebc = 0x%x\n",
-    (u32)IqkResult_X, (u32)IqkResult_Y, (u32)ele_A, (u32)ele_C, (u32)ele_D, (u32)IqkResult_X, (u32)IqkResult_Y));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,
+		     ("TxPwrTracking path B: X = 0x%x, Y = 0x%x ele_A = 0x%x ele_C = 0x%x ele_D = 0x%x 0xeb4 = 0x%x 0xebc = 0x%x\n",
+		     (u32)IqkResult_X, (u32)IqkResult_Y, (u32)ele_A, (u32)ele_C, (u32)ele_D, (u32)IqkResult_X, (u32)IqkResult_Y));
 }
 
 
@@ -358,7 +355,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 
 	u8			OFDM_min_index = 6, rf = (is2T) ? 2 : 1; /* OFDM BB Swing should be less than +3.0dB, which is required by Arthur */
 	u8			Indexforchannel = 0;/*GetRightChnlPlaceforIQK(pHalData->CurrentChannel)*/
-    enum            _POWER_DEC_INC { POWER_DEC, POWER_INC };
+	enum            _POWER_DEC_INC { POWER_DEC, POWER_INC };
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 
@@ -384,8 +381,8 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("===>odm_TXPowerTrackingCallback_ThermalMeter_8188E, pDM_Odm->BbSwingIdxCckBase: %d, pDM_Odm->BbSwingIdxOfdmBase: %d \n", pDM_Odm->BbSwingIdxCckBase, pDM_Odm->BbSwingIdxOfdmBase));
 	ThermalValue = (u8)ODM_GetRFReg(pDM_Odm, RF_PATH_A, RF_T_METER_88E, 0xfc00);	/* 0x42: RF Reg[15:10] 88E */
-	if( ! ThermalValue || ! pDM_Odm->RFCalibrateInfo.TxPowerTrackControl)
-        return;
+	if (!ThermalValue || ! pDM_Odm->RFCalibrateInfo.TxPowerTrackControl)
+		return;
 
 	/* 4 3. Initialize ThermalValues of RFCalibrateInfo */
 
@@ -462,8 +459,8 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 		else
 			pDM_Odm->RFCalibrateInfo.PowerIndexOffset = pDM_Odm->RFCalibrateInfo.DeltaPowerIndex - pDM_Odm->RFCalibrateInfo.DeltaPowerIndexLast;
 
-	    for(i = 0; i < rf; i++)
-		pDM_Odm->RFCalibrateInfo.OFDM_index[i] = pDM_Odm->BbSwingIdxOfdmBase + pDM_Odm->RFCalibrateInfo.PowerIndexOffset;
+		for(i = 0; i < rf; i++)
+			pDM_Odm->RFCalibrateInfo.OFDM_index[i] = pDM_Odm->BbSwingIdxOfdmBase + pDM_Odm->RFCalibrateInfo.PowerIndexOffset;
 		pDM_Odm->RFCalibrateInfo.CCK_index = pDM_Odm->BbSwingIdxCckBase + pDM_Odm->RFCalibrateInfo.PowerIndexOffset;
 
 		pDM_Odm->BbSwingIdxCck = pDM_Odm->RFCalibrateInfo.CCK_index;
@@ -475,8 +472,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 		/* 4 7.1 Handle boundary conditions of index. */
 
 
-		for(i = 0; i < rf; i++)
-		{
+		for(i = 0; i < rf; i++) {
 			if(pDM_Odm->RFCalibrateInfo.OFDM_index[i] > OFDM_TABLE_SIZE_92D-1)
 			{
 				pDM_Odm->RFCalibrateInfo.OFDM_index[i] = OFDM_TABLE_SIZE_92D-1;
@@ -489,11 +485,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 
 		if(pDM_Odm->RFCalibrateInfo.CCK_index > CCK_TABLE_SIZE-1)
 			pDM_Odm->RFCalibrateInfo.CCK_index = CCK_TABLE_SIZE-1;
-		else if (pDM_Odm->RFCalibrateInfo.CCK_index < 0)
-			pDM_Odm->RFCalibrateInfo.CCK_index = 0;
-	}
-	else
-	{
+	} else {
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,
 			("The thermal meter is unchanged or TxPowerTracking OFF: ThermalValue: %d , pDM_Odm->RFCalibrateInfo.ThermalValue: %d)\n", ThermalValue, pDM_Odm->RFCalibrateInfo.ThermalValue));
 		pDM_Odm->RFCalibrateInfo.PowerIndexOffset = 0;
@@ -1190,32 +1182,31 @@ phy_SimularityCompare_8188E(
 	else
 	{
 
-	   if (!(SimularityBitMap & 0x03))		   /* path A TX OK */
-	   {
-		   for(i = 0; i < 2; i++)
-			   result[3][i] = result[c1][i];
-	   }
+		if (!(SimularityBitMap & 0x03))		   /* path A TX OK */
+		{
+			for(i = 0; i < 2; i++)
+				result[3][i] = result[c1][i];
+		}
 
-	   if (!(SimularityBitMap & 0x0c))		   /* path A RX OK */
-	   {
-		   for(i = 2; i < 4; i++)
-			   result[3][i] = result[c1][i];
-	   }
+		if (!(SimularityBitMap & 0x0c))		   /* path A RX OK */
+		{
+			for(i = 2; i < 4; i++)
+				result[3][i] = result[c1][i];
+		}
 
-	   if (!(SimularityBitMap & 0x30)) /* path B TX OK */
-	   {
-		   for(i = 4; i < 6; i++)
-			   result[3][i] = result[c1][i];
+		if (!(SimularityBitMap & 0x30)) /* path B TX OK */
+		{
+			for(i = 4; i < 6; i++)
+				result[3][i] = result[c1][i];
+		}
 
-	   }
+		if (!(SimularityBitMap & 0xc0)) /* path B RX OK */
+		{
+			for(i = 6; i < 8; i++)
+				result[3][i] = result[c1][i];
+		}
 
-	   if (!(SimularityBitMap & 0xc0)) /* path B RX OK */
-	   {
-		   for(i = 6; i < 8; i++)
-			   result[3][i] = result[c1][i];
-	   }
-
-		   return false;
+		return false;
 	}
 
 }
@@ -1258,15 +1249,14 @@ phy_IQCalibrate_8188E(
 #else
 	u32	retryCount = 2;
 #endif
-if ( *(pDM_Odm->mp_mode) == 1)
-	retryCount = 9;
+	if ( *(pDM_Odm->mp_mode) == 1)
+		retryCount = 9;
 else
 	retryCount = 2;
 	/*  Note: IQ calibration must be performed after loading */
 	/* 		PHY_REG.txt , and radio_a, radio_b.txt */
 
-	if(t==0)
-	{
+	if(t==0) {
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("IQ Calibration for %s for %d times\n", (is2T ? "2T2R" : "1T1R"), t));
 
 		/*  Save ADDA parameters, turn Path A ADDA on */
@@ -1605,22 +1595,17 @@ if ( *(pDM_Odm->mp_mode) == 1)
 /*  and value will cause RF internal PA to be unpredictably disabled by HW, such that RF Tx signal */
 /*  will disappear after disable/enable card many times on 88CU. RF SD and DD have not find the */
 /*  root cause, so we remove these actions temporarily. Added by tynli and SD3 Allen. 2010.05.31. */
-/* if MP_DRIVER != 1 */
-if (*(pDM_Odm->mp_mode) != 1)
-	return;
-/* endif */
+	if (*(pDM_Odm->mp_mode) != 1)
+		return;
 	/* settings adjust for normal chip */
-	for(index = 0; index < PATH_NUM; index ++)
-	{
+	for(index = 0; index < PATH_NUM; index ++) {
 		APK_offset[index] = APK_normal_offset[index];
 		APK_value[index] = APK_normal_value[index];
 		AFE_on_off[index] = 0x6fdb25a4;
 	}
 
-	for(index = 0; index < APK_BB_REG_NUM; index ++)
-	{
-		for(path = 0; path < pathbound; path++)
-		{
+	for(index = 0; index < APK_BB_REG_NUM; index ++) {
+		for(path = 0; path < pathbound; path++) {
 			APK_RF_init_value[path][index] = APK_normal_RF_init_value[path][index];
 			APK_RF_value_0[path][index] = APK_normal_RF_value_0[path][index];
 		}
@@ -1630,8 +1615,7 @@ if (*(pDM_Odm->mp_mode) != 1)
 	apkbound = 6;
 
 	/* save BB default value */
-	for(index = 0; index < APK_BB_REG_NUM ; index++)
-	{
+	for(index = 0; index < APK_BB_REG_NUM ; index++) {
 		if(index == 0)		/* skip */
 			continue;
 		BB_backup[index] = ODM_GetBBReg(pDM_Odm, BB_REG[index], bMaskDWord);
@@ -2089,7 +2073,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 			_PHY_PathBFillIQKMatrix(pAdapter, bPathBOK, result, final_candidate, (RegEC4 == 0));
 	}
 
-    Indexforchannel = ODM_GetRightChnlPlaceforIQK(pHalData->CurrentChannel);
+	Indexforchannel = ODM_GetRightChnlPlaceforIQK(pHalData->CurrentChannel);
 
 /* To Fix BSOD when final_candidate is 0xff */
 /* by sherry 20120321 */
@@ -2178,29 +2162,6 @@ PHY_APCalibrate_8188E(
 	IN	s8		delta
 	)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
-	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
-#if DISABLE_BB_RF
-	return;
-#endif
-
-	return;
-	if(!(pDM_Odm->SupportAbility & ODM_RF_CALIBRATION))
-		return;
-
-#if FOR_BRAZIL_PRETEST != 1
-	if(pDM_Odm->RFCalibrateInfo.bAPKdone)
-#endif
-		return;
-
-	if(pDM_Odm->RFType == ODM_2T2R){
-		phy_APCalibrate_8188E(pAdapter, delta, true);
-	}
-	else
-	{
-		/*  For 88C 1T1R */
-		phy_APCalibrate_8188E(pAdapter, delta, false);
-	}
 }
 
 static void phy_SetRFPathSwitch_8188E(

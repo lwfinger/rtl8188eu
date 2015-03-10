@@ -453,14 +453,14 @@ odm_ARFBRefresh_8188E(
 	}
 
 #if POWER_TRAINING_ACTIVE == 1
-		if (pRaInfo->HighestRate >0x13)
-			pRaInfo->PTModeSS=3;
-		else if(pRaInfo->HighestRate >0x0b)
-			pRaInfo->PTModeSS=2;
-		else if(pRaInfo->HighestRate >0x0b)
-			pRaInfo->PTModeSS=1;
-		else
-			pRaInfo->PTModeSS=0;
+	if (pRaInfo->HighestRate >0x13)
+		pRaInfo->PTModeSS=3;
+	else if(pRaInfo->HighestRate >0x0b)
+		pRaInfo->PTModeSS=2;
+	else if(pRaInfo->HighestRate >0x0b)
+		pRaInfo->PTModeSS=1;
+	else
+		pRaInfo->PTModeSS=0;
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD,
 				("ODM_ARFBRefresh_8188E(): PTModeSS=%d\n", pRaInfo->PTModeSS));
 

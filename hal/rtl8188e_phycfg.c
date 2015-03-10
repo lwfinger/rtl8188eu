@@ -1454,15 +1454,12 @@ phy_TxPwrIdxToDbm(
 	/* 	The mapping may be different by different NICs. Do not use this formula for what needs accurate result. */
 	/*  By Bruce, 2008-01-29. */
 	/*  */
-	switch(WirelessMode)
-	{
+	switch(WirelessMode) {
 	case WIRELESS_MODE_B:
 		Offset = -7;
 		break;
-
 	case WIRELESS_MODE_G:
 	case WIRELESS_MODE_N_24G:
-		Offset = -8;
 	default:
 		Offset = -8;
 		break;
@@ -1576,47 +1573,6 @@ static void getTxPowerIndex88E(
 			pHalData->BW20_24G_Diff[TxCount][index];
 			/* 2. BW40 */
 			BW40PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[TxCount][index];
-		}
-		else if(TxCount==RF_PATH_C)
-		{
-	/*  1. CCK */
-			cckPowerLevel[TxCount]		= pHalData->Index24G_CCK_Base[TxCount][index];
-			/* 2. OFDM */
-			ofdmPowerLevel[TxCount]		= pHalData->Index24G_BW40_Base[RF_PATH_A][index]+
-			pHalData->BW20_24G_Diff[RF_PATH_A][index]+
-			pHalData->BW20_24G_Diff[RF_PATH_B][index]+
-			pHalData->BW20_24G_Diff[TxCount][index];
-			/*  1. BW20 */
-			BW20PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[RF_PATH_A][index]+
-			pHalData->BW20_24G_Diff[RF_PATH_A][index]+
-			pHalData->BW20_24G_Diff[RF_PATH_B][index]+
-			pHalData->BW20_24G_Diff[TxCount][index];
-			/* 2. BW40 */
-			BW40PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[TxCount][index];
-		}
-		else if(TxCount==RF_PATH_D)
-		{
-			/*  1. CCK */
-			cckPowerLevel[TxCount]		= pHalData->Index24G_CCK_Base[TxCount][index];
-			/* 2. OFDM */
-			ofdmPowerLevel[TxCount]		= pHalData->Index24G_BW40_Base[RF_PATH_A][index]+
-				pHalData->BW20_24G_Diff[RF_PATH_A][index]+
-				pHalData->BW20_24G_Diff[RF_PATH_B][index]+
-				pHalData->BW20_24G_Diff[RF_PATH_C][index]+
-				pHalData->BW20_24G_Diff[TxCount][index];
-
-			/*  1. BW20 */
-			BW20PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[RF_PATH_A][index]+
-				pHalData->BW20_24G_Diff[RF_PATH_A][index]+
-				pHalData->BW20_24G_Diff[RF_PATH_B][index]+
-				pHalData->BW20_24G_Diff[RF_PATH_C][index]+
-				pHalData->BW20_24G_Diff[TxCount][index];
-
-			/* 2. BW40 */
-			BW40PowerLevel[TxCount]	= pHalData->Index24G_BW40_Base[TxCount][index];
-		}
-		else
-		{
 		}
 	}
 }

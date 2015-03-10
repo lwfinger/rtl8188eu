@@ -3217,25 +3217,16 @@ static void ro_ch_handler(struct adapter *padapter)
 	u8 ch, bw, offset;
 
 	if (rtw_get_ch_setting_union(padapter, &ch, &bw, &offset) != 0) {
-		if (0)
-		DBG_871X(FUNC_ADPT_FMT" back to linked union - ch:%u, bw:%u, offset:%u\n",
-			FUNC_ADPT_ARG(padapter), ch, bw, offset);
 	}
 	else if (wdev_to_priv(padapter->rtw_wdev)->p2p_enabled && pwdinfo->listen_channel) {
 		ch = pwdinfo->listen_channel;
 		bw = HT_CHANNEL_WIDTH_20;
 		offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
-		if (0)
-		DBG_871X(FUNC_ADPT_FMT" back to listen ch - ch:%u, bw:%u, offset:%u\n",
-			FUNC_ADPT_ARG(padapter), ch, bw, offset);
 	}
 	else {
 		ch = pcfg80211_wdinfo->restore_channel;
 		bw = HT_CHANNEL_WIDTH_20;
 		offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
-		if (0)
-		DBG_871X(FUNC_ADPT_FMT" back to restore ch - ch:%u, bw:%u, offset:%u\n",
-			FUNC_ADPT_ARG(padapter), ch, bw, offset);
 	}
 
 	set_channel_bwmode(padapter, ch, offset, bw);

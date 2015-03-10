@@ -399,7 +399,7 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 		               v2 != 0xCDCD && i < ArrayLen -2)
 		        {
 				odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
-		            READ_NEXT_PAIR(v1, v2, i);
+				READ_NEXT_PAIR(v1, v2, i);
 		        }
 
 		        while (v2 != 0xDEAD && i < ArrayLen -2)

@@ -1295,9 +1295,9 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						__nat25_db_print(priv);
 
 						if (iph->nexthdr == IPPROTO_ICMPV6 &&
-								skb->len > (ETH_HLEN +  sizeof(*iph) + 4)) {
+						    skb->len > (ETH_HLEN +  sizeof(*iph) + 4)) {
 							if (update_nd_link_layer_addr(skb->data + ETH_HLEN + sizeof(*iph),
-                                                                skb->len - ETH_HLEN - sizeof(*iph), GET_MY_HWADDR(priv))) {
+                                                            skb->len - ETH_HLEN - sizeof(*iph), GET_MY_HWADDR(priv))) {
 								struct icmp6hdr  *hdr = (struct icmp6hdr *)(skb->data + ETH_HLEN + sizeof(*iph));
 								hdr->icmp6_cksum = 0;
 								hdr->icmp6_cksum = csum_ipv6_magic(&iph->saddr, &iph->daddr,
@@ -1430,8 +1430,7 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 	if(skb == NULL)
 		return;
 
-	if(!priv->ethBrExtInfo.dhcp_bcst_disable)
-	{
+	if(!priv->ethBrExtInfo.dhcp_bcst_disable) {
 		__be16 protocol = *((__be16 *)(skb->data + 2 * ETH_ALEN));
 
 		if(protocol == __constant_htons(ETH_P_IP)) /*  IP */

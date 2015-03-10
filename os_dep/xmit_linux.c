@@ -53,33 +53,22 @@ uint _rtw_pktfile_read (struct pkt_file *pfile, u8 *rmem, uint rlen)
 {
 	uint	len = 0;
 
-;
-
-       len =  rtw_remainder_len(pfile);
+	len =  rtw_remainder_len(pfile);
 	len = (rlen > len)? len: rlen;
 
-       if(rmem)
-	  skb_copy_bits(pfile->pkt, pfile->buf_len-pfile->pkt_len, rmem, len);
+	if (rmem)
+		skb_copy_bits(pfile->pkt, pfile->buf_len-pfile->pkt_len, rmem, len);
 
-       pfile->cur_addr += len;
-       pfile->pkt_len -= len;
-
-;
-
+	pfile->cur_addr += len;
+	pfile->pkt_len -= len;
 	return len;
 }
 
 sint rtw_endofpktfile(struct pkt_file *pfile)
 {
-;
-
 	if (pfile->pkt_len == 0) {
-;
 		return true;
 	}
-
-;
-
 	return false;
 }
 

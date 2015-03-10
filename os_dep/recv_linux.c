@@ -211,6 +211,8 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 	}
 #endif
 
+	if (!precv_frame)
+		goto _recv_indicatepkt_drop;
 	skb = precv_frame->u.hdr.pkt;
 	if(skb == NULL)
 	{

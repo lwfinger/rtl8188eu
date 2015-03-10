@@ -77,11 +77,9 @@ int cckrates_included(unsigned char *rate, int ratelen)
 	{
 		if  (  (((rate[i]) & 0x7f) == 2)	|| (((rate[i]) & 0x7f) == 4) ||
 			   (((rate[i]) & 0x7f) == 11)  || (((rate[i]) & 0x7f) == 22) )
-		return true;
+			return true;
 	}
-
 	return false;
-
 }
 
 int cckratesonly_included(unsigned char *rate, int ratelen)
@@ -92,9 +90,8 @@ int cckratesonly_included(unsigned char *rate, int ratelen)
 	{
 		if  ( (((rate[i]) & 0x7f) != 2) && (((rate[i]) & 0x7f) != 4) &&
 			   (((rate[i]) & 0x7f) != 11)  && (((rate[i]) & 0x7f) != 22) )
-		return false;
+			return false;
 	}
-
 	return true;
 }
 
@@ -1505,26 +1502,18 @@ unsigned int should_forbid_n_rate(struct adapter * padapter)
 					break;
 
 				case _RSN_IE_2_:
-					if  ((_rtw_memcmp((pIE->data + 8), RSN_CIPHER_SUITE_CCMP, 4))  ||
-					       (_rtw_memcmp((pIE->data + 12), RSN_CIPHER_SUITE_CCMP, 4)))
-					return false;
-
+					if ((_rtw_memcmp((pIE->data + 8), RSN_CIPHER_SUITE_CCMP, 4))  ||
+					    (_rtw_memcmp((pIE->data + 12), RSN_CIPHER_SUITE_CCMP, 4)))
+						return false;
 				default:
 					break;
 			}
-
 			i += (pIE->Length + 2);
 		}
-
 		return true;
 	}
-	else
-	{
-		return false;
-	}
-
+	return false;
 }
-
 
 unsigned int is_ap_in_wep(struct adapter *padapter)
 {
@@ -1828,10 +1817,10 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 				}
 				else if (_rtw_memcmp(pIE->data, EPIGRAM_OUI, 3))
 				{
-					 epigram_vendor_flag = 1;
+					epigram_vendor_flag = 1;
 					if(ralink_vendor_flag) {
 						DBG_871X("link to Tenda W311R AP\n");
-						 return HT_IOT_PEER_TENDA;
+						return HT_IOT_PEER_TENDA;
 					} else {
 						DBG_871X("Capture EPIGRAM_OUI\n");
 					}

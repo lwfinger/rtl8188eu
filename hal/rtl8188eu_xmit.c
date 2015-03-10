@@ -205,14 +205,13 @@ static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
 
 static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bagg_pkt)
 {
-      int	pull=0;
+	int	pull=0;
 	uint	qsel;
 	u8 data_rate,pwr_status,offset;
 	struct adapter			*padapter = pxmitframe->padapter;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct pkt_attrib	*pattrib = &pxmitframe->attrib;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	/* struct dm_priv	*pdmpriv = &pHalData->dmpriv; */
 	struct tx_desc	*ptxdesc = (struct tx_desc *)pmem;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -249,17 +248,15 @@ if (padapter->registrypriv.mp_mode == 0)
 	if (bmcst) ptxdesc->txdw0 |= cpu_to_le32(BMC);
 
 #ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
-if (padapter->registrypriv.mp_mode == 0)
-{
-	if(!bagg_pkt){
-		if((pull) && (pxmitframe->pkt_offset>0)) {
-			pxmitframe->pkt_offset = pxmitframe->pkt_offset -1;
+	if (padapter->registrypriv.mp_mode == 0)
+	{
+		if(!bagg_pkt){
+			if((pull) && (pxmitframe->pkt_offset>0)) {
+				pxmitframe->pkt_offset = pxmitframe->pkt_offset -1;
+			}
 		}
 	}
-}
 #endif
-	/* DBG_8192C("%s, pkt_offset=0x%02x\n",__FUNCTION__,pxmitframe->pkt_offset); */
-
 	/*  pkt_offset, unit:8 bytes padding */
 	if (pxmitframe->pkt_offset > 0)
 		ptxdesc->txdw1 |= cpu_to_le32((pxmitframe->pkt_offset << 26) & 0x7c000000);
@@ -538,10 +535,9 @@ static s32 rtw_dump_xframe(struct adapter *padapter, struct xmit_frame *pxmitfra
 		rtw_issue_addbareq_cmd(padapter, pxmitframe);
 	mem_addr = pxmitframe->buf_addr;
 
-       RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_dump_xframe()\n"));
+	RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("rtw_dump_xframe()\n"));
 
-	for (t = 0; t < pattrib->nr_frags; t++)
-	{
+	for (t = 0; t < pattrib->nr_frags; t++) {
 		if (inner_ret != _SUCCESS && ret == _SUCCESS)
 			ret = _FAIL;
 

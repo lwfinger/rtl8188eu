@@ -311,7 +311,7 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 	/* struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data; */
 	/* struct adapter			*padapter = pxmitframe->padapter; */
 	struct adapter	*padapter = pxmitbuf->padapter;
-       struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
+	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	/* struct pkt_attrib *pattrib = &pxmitframe->attrib; */
 
 ;

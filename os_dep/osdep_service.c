@@ -51,21 +51,19 @@ u32 rtw_atoi(u8* s)
 
 	int num=0,flag=0;
 	int i;
-	for(i=0;i<=strlen(s);i++)
-	{
-	  if(s[i] >= '0' && s[i] <= '9')
-		 num = num * 10 + s[i] -'0';
-	  else if(s[0] == '-' && i==0)
-		 flag =1;
-	  else
-		  break;
+	for(i=0;i<=strlen(s);i++) {
+		if(s[i] >= '0' && s[i] <= '9')
+			num = num * 10 + s[i] -'0';
+		else if(s[0] == '-' && i==0)
+			flag =1;
+		else
+			break;
 	 }
 
 	if(flag == 1)
-	   num = num * -1;
+		num = num * -1;
 
-	 return(num);
-
+	return num;
 }
 
 inline u8* _rtw_vmalloc(u32 sz)
@@ -1166,13 +1164,14 @@ RETURN:
 int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 {
 	struct net_device *pnetdev;
-	struct net_device *cur_pnetdev = padapter->pnetdev;
+	struct net_device *cur_pnetdev;
 	struct rereg_nd_name_data *rereg_priv;
 	int ret;
 
 	if(!padapter)
 		goto error;
 
+	cur_pnetdev = padapter->pnetdev;
 	rereg_priv = &padapter->rereg_nd_name_priv;
 
 	/* free the old_pnetdev */

@@ -140,18 +140,18 @@ odm_FastAntTrainingInit(
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u32	AntCombination = 2;
 	struct adapter *	Adapter = pDM_Odm->Adapter;
-    ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit() \n"));
+
+
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("odm_FastAntTrainingInit() \n"));
 
 #if (MP_DRIVER == 1)
-	if (*(pDM_Odm->mp_mode) == 1)
-	{
+	if (*(pDM_Odm->mp_mode) == 1) {
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("pDM_Odm->AntDivType: %d\n", pDM_Odm->AntDivType));
-		 return;
+		return;
 	}
 #endif
 
-	for(i=0; i<6; i++)
-	{
+	for(i=0; i<6; i++) {
 		pDM_FatTable->Bssid[i] = 0;
 		pDM_FatTable->antSumRSSI[i] = 0;
 		pDM_FatTable->antRSSIcnt[i] = 0;
@@ -576,5 +576,5 @@ odm_DynamicPrimaryCCA(
 	u8		SecCHOffset;
 	u8		i;
 
-		return;
+	return;
 }

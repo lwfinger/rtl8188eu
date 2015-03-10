@@ -23,9 +23,9 @@
 #define CL_IPV6_PASS		1
 #define MACADDRLEN		6
 #define _DEBUG_ERR		DBG_8192C
-#define _DEBUG_INFO		//DBG_8192C
+#define _DEBUG_INFO		DBG_8192C
 #define DEBUG_WARN		DBG_8192C
-#define DEBUG_INFO		//DBG_8192C
+#define DEBUG_INFO		DBG_8192C
 #define DEBUG_ERR		DBG_8192C
 #define GET_MY_HWADDR(padapter)		((padapter)->eeprompriv.mac_addr)
 

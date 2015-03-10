@@ -684,23 +684,24 @@ u8 rtw_set_802_11_add_wep(struct adapter* padapter, NDIS_802_11_WEP *wep){
 		goto exit;
 	}
 
-	switch(wep->KeyLength)
-	{
-		case 5:
-			psecuritypriv->dot11PrivacyAlgrthm=_WEP40_;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength=5\n"));
-			break;
-		case 13:
-			psecuritypriv->dot11PrivacyAlgrthm=_WEP104_;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength=13\n"));
-			break;
-		default:
-			psecuritypriv->dot11PrivacyAlgrthm=_NO_PRIVACY_;
-			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength!=5 or 13\n"));
-			break;
+	switch(wep->KeyLength) {
+	case 5:
+		psecuritypriv->dot11PrivacyAlgrthm=_WEP40_;
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength=5\n"));
+		break;
+	case 13:
+		psecuritypriv->dot11PrivacyAlgrthm=_WEP104_;
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength=13\n"));
+		break;
+	default:
+		psecuritypriv->dot11PrivacyAlgrthm=_NO_PRIVACY_;
+		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("MgntActrtw_set_802_11_add_wep:wep->KeyLength!=5 or 13\n"));
+		break;
 	}
 
-	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_add_wep:befor memcpy, wep->KeyLength=0x%x wep->KeyIndex=0x%x  keyid =%x\n",wep->KeyLength,wep->KeyIndex,keyid));
+	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,
+		 ("rtw_set_802_11_add_wep:befor memcpy, wep->KeyLength=0x%x wep->KeyIndex=0x%x  keyid =%x\n",
+		 wep->KeyLength,wep->KeyIndex,keyid));
 
 	memcpy(&(psecuritypriv->dot11DefKey[keyid].skey[0]),&(wep->KeyMaterial),wep->KeyLength);
 
@@ -856,7 +857,8 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, NDIS_802_11_KEY *key){
 		}
 
 		/*  Check key length for WEP. For NDTEST, 2005.01.27, by rcnjko. */
-		if(	(encryptionalgo== _WEP40_|| encryptionalgo== _WEP104_) && (key->KeyLength != 5 || key->KeyLength != 13)) {
+		if ((encryptionalgo == _WEP40_ && key->KeyLength != 5) ||
+		    (encryptionalgo== _WEP104_ && key->KeyLength != 13)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("WEP KeyLength:0x%x != 5 or 13\n", key->KeyLength));
 			ret=_FAIL;
 			goto exit;
@@ -871,13 +873,9 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, NDIS_802_11_KEY *key){
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("key index: 0x%8x(0x%8x)\n", key->KeyIndex,(key->KeyIndex&0x3)));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("key Length: %d\n", key->KeyLength));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("------------------------------------------\n"));
-
-	}
-	else
-	{
+	} else {
 		/*  Group key - KeyIndex(BIT30==0) */
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: +++++ Group key +++++\n"));
-
 
 		/*  when add wep key through add key and didn't assigned encryption type before */
 		if((padapter->securitypriv.ndisauthtype<=3)&&(padapter->securitypriv.dot118021XGrpPrivacy==0))
@@ -1160,32 +1158,24 @@ u8 rtw_set_802_11_remove_key(struct adapter*	padapter, NDIS_802_11_REMOVE_KEY *k
 		memset(&padapter->securitypriv.dot118021XGrpKey[keyIndex], 0, 16);
 
 		/*  \todo Send a H2C Command to Firmware for removing this Key in CAM Entry. */
-
 	} else {
-
 		pbssid=get_bssid(&padapter->mlmepriv);
 		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid );
 		if(stainfo !=NULL){
 			encryptionalgo=stainfo->dot118021XPrivacy;
 
-		/*  clear key by BSSID */
-		memset(&stainfo->dot118021x_UncstKey, 0, 16);
+			/*  clear key by BSSID */
+			memset(&stainfo->dot118021x_UncstKey, 0, 16);
 
-		/*  \todo Send a H2C Command to Firmware for disable this Key in CAM Entry. */
-
-		}
-		else{
+			/*  \todo Send a H2C Command to Firmware for disable this Key in CAM Entry. */
+		} else{
 			ret= _FAIL;
 			goto exit;
 		}
 	}
 
 exit:
-
-;
-
 	return true;
-
 }
 
 /*

@@ -178,21 +178,14 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 
 void rtw_os_indicate_disconnect( struct adapter *adapter )
 {
-	/* RT_PMKID_LIST   backupPMKIDList[ NUM_PMKID_CACHE ]; */
-
-;
-
 	netif_carrier_off(adapter->pnetdev); /*  Do it first for tx broadcast pkt after disconnection issue! */
 
 	rtw_cfg80211_indicate_disconnect(adapter);
 
 	rtw_indicate_wx_disassoc_event(adapter);
 
-	 /* modify for CONFIG_IEEE80211W, none 11w also can use the same command */
-	 rtw_reset_securitypriv_cmd(adapter);
-
-;
-
+	/* modify for CONFIG_IEEE80211W, none 11w also can use the same command */
+	rtw_reset_securitypriv_cmd(adapter);
 }
 
 void rtw_report_sec_ie(struct adapter *adapter,u8 authmode,u8 *sec_ie)
@@ -201,13 +194,10 @@ void rtw_report_sec_ie(struct adapter *adapter,u8 authmode,u8 *sec_ie)
 	u8	*buff,*p,i;
 	union iwreq_data wrqu;
 
-;
-
 	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+rtw_report_sec_ie, authmode=%d\n", authmode));
 
 	buff = NULL;
-	if(authmode==_WPA_IE_ID_)
-	{
+	if(authmode==_WPA_IE_ID_) {
 		RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("rtw_report_sec_ie, authmode=%d\n", authmode));
 
 		buff = rtw_malloc(IW_CUSTOM_MAX);

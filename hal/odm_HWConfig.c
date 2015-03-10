@@ -255,71 +255,63 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 	PPHY_STATUS_RPT_8192CD_T pPhyStaRpt = (PPHY_STATUS_RPT_8192CD_T)pPhyStatus;
 
-	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M ) && (pPktinfo->Rate <= DESC92C_RATE11M ))?true :false;
+	isCCKrate = (pPktinfo->Rate <= DESC92C_RATE11M) ? true : false;
 
 	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_A] = -1;
 	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_B] = -1;
 
 
-	if(isCCKrate)
-	{
+	if(isCCKrate) {
 		u8 report;
 		u8 cck_agc_rpt;
 
 		pDM_Odm->PhyDbgInfo.NumQryPhyStatusCCK++;
-		/*  */
 		/*  (1)Hardware does not provide RSSI for CCK */
 		/*  (2)PWDB, Average PWDB cacluated by hardware (for rate adaptive) */
-		/*  */
 
-		/* if(pHalData->eRFPowerState == eRfOn) */
-			cck_highpwr = pDM_Odm->bCckHighPower;
-		/* else */
-		/* 	cck_highpwr = false; */
+		cck_highpwr = pDM_Odm->bCckHighPower;
 
 		cck_agc_rpt =  pPhyStaRpt->cck_agc_rpt_ofdm_cfosho_a ;
 
 		/* 2011.11.28 LukeLee: 88E use different LNA & VGA gain table */
 		/* The RSSI formula should be modified according to the gain table */
 		/* In 88E, cck_highpwr is always set to 1 */
-		if(pDM_Odm->SupportICType & (ODM_RTL8188E|ODM_RTL8812))
-		{
+		if(pDM_Odm->SupportICType & (ODM_RTL8188E|ODM_RTL8812)) {
 			LNA_idx = ((cck_agc_rpt & 0xE0) >>5);
 			VGA_idx = (cck_agc_rpt & 0x1F);
-			switch(LNA_idx)
-			{
-				case 7:
-					if(VGA_idx <= 27)
-						rx_pwr_all = -100 + 2*(27-VGA_idx); /* VGA_idx = 27~2 */
-					else
-						rx_pwr_all = -100;
-					break;
-				case 6:
-					rx_pwr_all = -48 + 2*(2-VGA_idx); /* VGA_idx = 2~0 */
-					break;
-				case 5:
-					rx_pwr_all = -42 + 2*(7-VGA_idx); /* VGA_idx = 7~5 */
-					break;
-				case 4:
-					rx_pwr_all = -36 + 2*(7-VGA_idx); /* VGA_idx = 7~4 */
-					break;
-				case 3:
-					rx_pwr_all = -24 + 2*(7-VGA_idx); /* VGA_idx = 7~0 */
-					break;
-				case 2:
-					if(cck_highpwr)
-						rx_pwr_all = -12 + 2*(5-VGA_idx); /* VGA_idx = 5~0 */
-					else
-						rx_pwr_all = -6+ 2*(5-VGA_idx);
-					break;
-				case 1:
-					rx_pwr_all = 8-2*VGA_idx;
-					break;
-				case 0:
-					rx_pwr_all = 14-2*VGA_idx;
-					break;
-				default:
-					break;
+			switch(LNA_idx) {
+			case 7:
+				if(VGA_idx <= 27)
+					rx_pwr_all = -100 + 2*(27-VGA_idx); /* VGA_idx = 27~2 */
+				else
+					rx_pwr_all = -100;
+				break;
+			case 6:
+				rx_pwr_all = -48 + 2*(2-VGA_idx); /* VGA_idx = 2~0 */
+				break;
+			case 5:
+				rx_pwr_all = -42 + 2*(7-VGA_idx); /* VGA_idx = 7~5 */
+				break;
+			case 4:
+				rx_pwr_all = -36 + 2*(7-VGA_idx); /* VGA_idx = 7~4 */
+				break;
+			case 3:
+				rx_pwr_all = -24 + 2*(7-VGA_idx); /* VGA_idx = 7~0 */
+				break;
+			case 2:
+				if(cck_highpwr)
+					rx_pwr_all = -12 + 2*(5-VGA_idx); /* VGA_idx = 5~0 */
+				else
+					rx_pwr_all = -6+ 2*(5-VGA_idx);
+				break;
+			case 1:
+				rx_pwr_all = 8-2*VGA_idx;
+				break;
+			case 0:
+				rx_pwr_all = 14-2*VGA_idx;
+				break;
+			default:
+				break;
 			}
 			rx_pwr_all += 6;
 			PWDB_ALL = odm_QueryRxPwrPercentage(rx_pwr_all);
@@ -449,11 +441,8 @@ odm_RxPhyStatus92CSeries_Parsing(
 	{
 		pDM_Odm->PhyDbgInfo.NumQryPhyStatusOFDM++;
 
-		/*  */
 		/*  (1)Get RSSI for HT rate */
-		/*  */
-
-	 for(i = ODM_RF_PATH_A; i < ODM_RF_PATH_MAX; i++)
+		for(i = ODM_RF_PATH_A; i < ODM_RF_PATH_MAX; i++)
 		{
 			/*  2008/01/30 MH we will judge RF RX path now. */
 			if (pDM_Odm->RFPathRxEnable & BIT(i))
@@ -601,15 +590,12 @@ odm_Process_RSSIForDM(
 	}
 
 	pEntry = pDM_Odm->pODM_StaInfo[pPktinfo->StationID];
-	if(!IS_STA_VALID(pEntry) ){
+	if(!IS_STA_VALID(pEntry))
 		return;
-	}
 	if((!pPktinfo->bPacketMatchBSSID) )
-	{
 		return;
-	}
 
-	isCCKrate = ((pPktinfo->Rate >= DESC92C_RATE1M ) && (pPktinfo->Rate <= DESC92C_RATE11M ))?true :false;
+	isCCKrate = (pPktinfo->Rate <= DESC92C_RATE11M) ? true : false;
 	if(pPktinfo->bPacketBeacon)
 	    pDM_Odm->PhyDbgInfo.NumQryBeaconPkt++;
 
@@ -877,25 +863,18 @@ ODM_ConfigBBWithHeaderFile(
 	IN	ODM_BB_Config_Type		ConfigType
 	)
 {
-    if(pDM_Odm->SupportICType == ODM_RTL8188E)
-	{
-
-		if(ConfigType == CONFIG_BB_PHY_REG)
-		{
+	if(pDM_Odm->SupportICType == ODM_RTL8188E) {
+		if(ConfigType == CONFIG_BB_PHY_REG) {
 			if(IS_VENDOR_8188E_I_CUT_SERIES(pDM_Odm->Adapter))
 				READ_AND_CONFIG(8188E,_PHY_REG_1T_ICUT_);
 			else
 				READ_AND_CONFIG(8188E,_PHY_REG_1T_);
-		}
-		else if(ConfigType == CONFIG_BB_AGC_TAB)
-		{
+		} else if(ConfigType == CONFIG_BB_AGC_TAB) {
 			if(IS_VENDOR_8188E_I_CUT_SERIES(pDM_Odm->Adapter))
 				READ_AND_CONFIG(8188E,_AGC_TAB_1T_ICUT_);
 			else
 				READ_AND_CONFIG(8188E,_AGC_TAB_1T_);
-		}
-		else if(ConfigType == CONFIG_BB_PHY_REG_PG)
-		{
+		} else if(ConfigType == CONFIG_BB_PHY_REG_PG) {
 			READ_AND_CONFIG(8188E,_PHY_REG_PG_);
 			ODM_RT_TRACE(pDM_Odm,ODM_COMP_INIT, ODM_DBG_LOUD, (" ===> phy_ConfigBBWithHeaderFile() agc:Rtl8188EPHY_REG_PGArray\n"));
 		}
@@ -909,8 +888,7 @@ ODM_ConfigMACWithHeaderFile(
 	)
 {
 	u8 result = HAL_STATUS_SUCCESS;
-	if (pDM_Odm->SupportICType == ODM_RTL8188E)
-	{
+	if (pDM_Odm->SupportICType == ODM_RTL8188E) {
 		if(IS_VENDOR_8188E_I_CUT_SERIES(pDM_Odm->Adapter))
 			READ_AND_CONFIG(8188E,_MAC_REG_ICUT_);
 		else

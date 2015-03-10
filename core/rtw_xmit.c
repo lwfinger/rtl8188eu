@@ -316,8 +316,8 @@ void  rtw_mfree_xmit_priv_lock (struct xmit_priv *pxmitpriv)
 
 void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 {
-       int i;
-      struct adapter *padapter = pxmitpriv->adapter;
+	int i;
+	struct adapter *padapter = pxmitpriv->adapter;
 	struct xmit_frame	*pxmitframe = (struct xmit_frame*) pxmitpriv->pxmit_frame_buf;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
 	u32 max_xmit_extbuf_size = MAX_XMIT_EXTBUF_SZ;
@@ -905,8 +905,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 					rtw_secmicappend(&micdata, &pframe[24], 6);
 				else
 				rtw_secmicappend(&micdata, &pframe[10], 6);
-			}
-			else{	/* ToDS==0 */
+			} else{	/* ToDS==0 */
 				rtw_secmicappend(&micdata, &pframe[4], 6);   /* DA */
 				if(pframe[1]&2)  /* From Ds==1 */
 					rtw_secmicappend(&micdata, &pframe[16], 6);
@@ -915,8 +914,8 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 
 			}
 
-                    /* if(pqospriv->qos_option==1) */
-                    if(pattrib->qos_en)
+			/* if(pqospriv->qos_option==1) */
+			if(pattrib->qos_en)
 				priority[0]=(u8)pxmitframe->attrib.priority;
 
 
@@ -1126,7 +1125,7 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 				if(pattrib->ht_en && psta->htpriv.ampdu_enable)
 				{
 					if(psta->htpriv.agg_enable_bitmap & BIT(pattrib->priority))
-					pattrib->ampdu_en = true;
+						pattrib->ampdu_en = true;
 				}
 
 				/* re-check if enable ampdu by BA_starting_seqctrl */
@@ -2205,11 +2204,7 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 		ptxservq->qcnt--;
 
 		break;
-
-		pxmitframe = NULL;
-
 	}
-
 	return pxmitframe;
 }
 

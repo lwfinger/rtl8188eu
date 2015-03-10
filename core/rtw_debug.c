@@ -692,7 +692,6 @@ int proc_set_rx_signal(struct file *file, const char __user *buffer,
 			return count;
 
 		signal_strength = signal_strength>100?100:signal_strength;
-		signal_strength = signal_strength<0?0:signal_strength;
 
 		padapter->recvpriv.is_signal_dbg = is_signal_dbg;
 		padapter->recvpriv.signal_strength_dbg=signal_strength;

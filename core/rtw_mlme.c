@@ -580,8 +580,8 @@ inline int is_same_ess(struct wlan_bssid_ex *a, struct wlan_bssid_ex *b)
 
 int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst, u8 feature)
 {
-	 __le16 ls_cap, ld_cap;
-	 u16 s_cap, d_cap;
+	__le16 ls_cap, ld_cap;
+	u16 s_cap, d_cap;
 
 	memcpy((u8 *)&ls_cap, rtw_get_capability_from_ie(src->IEs), 2);
 	memcpy((u8 *)&ld_cap, rtw_get_capability_from_ie(dst->IEs), 2);
@@ -1383,7 +1383,7 @@ void rtw_indicate_disconnect( struct adapter *padapter )
 		/* set ips_deny_time to avoid enter IPS before LPS leave */
 		adapter_to_pwrctl(padapter)->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(3000);
 
-	      _clr_fwstate_(pmlmepriv, _FW_LINKED);
+		_clr_fwstate_(pmlmepriv, _FW_LINKED);
 
 		rtw_led_control(padapter, LED_CTL_NO_LINK);
 
@@ -1452,7 +1452,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, str
 		DBG_871X("%s\n", __FUNCTION__);
 
 		psta->aid  = pnetwork->join_res;
-			psta->mac_id=0;
+		psta->mac_id=0;
 
 		/* sta mode */
 		rtw_hal_set_odm_var(padapter,HAL_ODM_STA_INFO,psta,true);
@@ -2244,8 +2244,6 @@ inline void rtw_clear_scan_deny(struct adapter *adapter)
 {
 	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
 	ATOMIC_SET(&mlmepriv->set_scan_deny, 0);
-	if (0)
-	DBG_871X(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
 }
 
 void rtw_set_scan_deny_timer_hdl(struct adapter *adapter)
@@ -2294,10 +2292,9 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 	}
 
 	/* check ssid, if needed */
-	if(pmlmepriv->assoc_ssid.Ssid && pmlmepriv->assoc_ssid.SsidLength) {
-		if(	competitor->network.Ssid.SsidLength != pmlmepriv->assoc_ssid.SsidLength
-			|| _rtw_memcmp(competitor->network.Ssid.Ssid, pmlmepriv->assoc_ssid.Ssid, pmlmepriv->assoc_ssid.SsidLength) == false
-		)
+	if (pmlmepriv->assoc_ssid.SsidLength) {
+		if (competitor->network.Ssid.SsidLength != pmlmepriv->assoc_ssid.SsidLength ||
+		    _rtw_memcmp(competitor->network.Ssid.Ssid, pmlmepriv->assoc_ssid.Ssid, pmlmepriv->assoc_ssid.SsidLength) == false)
 			goto exit;
 	}
 

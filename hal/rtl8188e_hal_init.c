@@ -2762,16 +2762,15 @@ static u8 _LLTRead(struct adapter *padapter, u32 address)
 void Read_LLT_Tab(struct adapter *padapter)
 {
 	u32 addr,next_addr;
-      printk("############### %s ###################\n",__FUNCTION__);
-      for(addr=0;addr<176;addr++)
-      {
-		next_addr = _LLTRead(padapter,addr);
-             printk("%d->",next_addr);
-             if(((addr+1) %8) ==0)
-		printk("\n");
-      }
-       printk("\n##################################\n");
 
+	printk("############### %s ###################\n",__FUNCTION__);
+	for(addr=0;addr<176;addr++) {
+		next_addr = _LLTRead(padapter,addr);
+		printk("%d->",next_addr);
+		if(((addr+1) %8) ==0)
+			printk("\n");
+	}
+	printk("\n##################################\n");
 }
 
 s32 InitLLTTable(struct adapter *padapter, u8 txpktbuf_bndy)

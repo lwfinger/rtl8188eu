@@ -1294,7 +1294,7 @@ static int  ips_netdrv_open(struct adapter *padapter)
 	rtw_set_pwr_state_check_timer(adapter_to_pwrctl(padapter));
 	_set_timer(&padapter->mlmepriv.dynamic_chk_timer,5000);
 
-	 return _SUCCESS;
+	return _SUCCESS;
 
 netdev_open_error:
 	/* padapter->bup = false; */
