@@ -173,19 +173,12 @@ static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
 
 	ODM_CmnInfoInit(pDM_Odm, ODM_CMNINFO_RF_ANTENNA_TYPE, pHalData->TRxAntDivType);
 
-	#ifdef CONFIG_DISABLE_ODM
-	pdmpriv->InitODMFlag = 0;
-	#else
-	pdmpriv->InitODMFlag =	ODM_RF_CALIBRATION		|
-							ODM_RF_TX_PWR_TRACK	/*  */
-							;
-	/* if(pHalData->AntDivCfg) */
-	/* 	pdmpriv->InitODMFlag |= ODM_BB_ANT_DIV; */
-	#endif
-
+	pdmpriv->InitODMFlag =	ODM_RF_CALIBRATION |
+				ODM_RF_TX_PWR_TRACK ;
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,pdmpriv->InitODMFlag);
 
 }
+
 static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 {
 	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
@@ -222,10 +215,6 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 			;
 	}
 #endif/* MP_DRIVER==1) */
-
-#ifdef CONFIG_DISABLE_ODM
-	pdmpriv->InitODMFlag = 0;
-#endif/* CONFIG_DISABLE_ODM */
 
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,pdmpriv->InitODMFlag);
 
@@ -318,10 +307,6 @@ rtl8188e_HalDmWatchDog(
 	{
 		u8	bLinked=false;
 		u8   bsta_state = false;
-
-		#ifdef CONFIG_DISABLE_ODM
-		pHalData->odmpriv.SupportAbility = 0;
-		#endif
 
 		if(rtw_linked_check(Adapter))
 			bLinked = true;
