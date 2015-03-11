@@ -58,11 +58,6 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 	int	i, res = _SUCCESS;
 	struct recv_buf *precvbuf;
 
-#ifdef CONFIG_RECV_THREAD_MODE
-	_rtw_init_sema(&precvpriv->recv_sema, 0);/* will be removed */
-	_rtw_init_sema(&precvpriv->terminate_recvthread_sema, 0);/* will be removed */
-#endif
-
 	tasklet_init(&precvpriv->recv_tasklet,
 	     (void(*)(unsigned long))rtl8188eu_recv_tasklet,
 	     (unsigned long)padapter);
