@@ -36,16 +36,9 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 
 	unsigned int pipe;
 	int status = 0;
-	u32 tmp_buflen=0;
 	u8 reqtype;
 	u8 *pIo_buf;
 	int vendorreq_times = 0;
-
-	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
-	u8 *tmp_buf;
-	#else /*  use stack memory */
-	u8 tmp_buf[MAX_USB_IO_CTL_SIZE];
-	#endif
 
 	if ((padapter->bSurpriseRemoved) ||(dvobj_to_pwrctl(pdvobjpriv)->pnp_bstop_trx)){
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usbctrl_vendorreq:(padapter->bSurpriseRemoved ||pwrctl->pnp_bstop_trx)!!!\n"));
@@ -137,9 +130,6 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	}
 
 	/*  release IO memory used by vendorreq */
-	#ifdef CONFIG_USB_VENDOR_REQ_BUFFER_DYNAMIC_ALLOCATE
-	rtw_mfree(tmp_buf, tmp_buflen);
-	#endif
 
 release_mutex:
 	_exit_critical_mutex(&pdvobjpriv->usb_vendor_req_mutex, NULL);
