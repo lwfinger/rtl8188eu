@@ -245,10 +245,6 @@ struct hal_ops {
 #endif
 
 	int (*IOL_exec_cmds_sync)(struct adapter *padapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
-
-#ifdef CONFIG_XMIT_THREAD_MODE
-	s32 (*xmit_thread_handler)(struct adapter *padapter);
-#endif
 	void (*hal_notch_filter)(struct adapter * adapter, bool enable);
 	void (*hal_reset_security_engine)(struct adapter * adapter);
 	s32 (*c2h_handler)(struct adapter *padapter, struct c2h_evt_hdr *c2h_evt);
@@ -419,11 +415,6 @@ bool rtw_hal_sreset_inprogress(struct adapter *padapter);
 #endif
 
 int rtw_hal_iol_cmd(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt);
-
-#ifdef CONFIG_XMIT_THREAD_MODE
-s32 rtw_hal_xmit_thread_handler(struct adapter *padapter);
-#endif
-
 void rtw_hal_notch_filter(struct adapter * adapter, bool enable);
 void rtw_hal_reset_security_engine(struct adapter * adapter);
 

@@ -507,15 +507,6 @@ int rtw_hal_iol_cmd(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 
 	return _FAIL;
 }
 
-#ifdef CONFIG_XMIT_THREAD_MODE
-s32 rtw_hal_xmit_thread_handler(struct adapter *padapter)
-{
-	if(padapter->HalFunc.xmit_thread_handler)
-		return padapter->HalFunc.xmit_thread_handler(padapter);
-	return _FAIL;
-}
-#endif
-
 void rtw_hal_notch_filter(struct adapter *adapter, bool enable)
 {
 	if(adapter->HalFunc.hal_notch_filter)
