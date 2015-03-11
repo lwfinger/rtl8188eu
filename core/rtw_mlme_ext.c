@@ -6838,15 +6838,6 @@ void issue_assocreq(struct adapter *padapter)
 				memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_2R, 16);
 				break;
 			}
-#ifdef RTL8192C_RECONFIG_TO_1T1R
-			{
-				if(pregpriv->rx_stbc)
-					pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0100);/* RX STBC One spatial stream */
-
-				memcpy(pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate, MCS_rate_1R, 16);
-			}
-#endif
-
 #ifdef CONFIG_BT_COEXIST
 			if (BT_1Ant(padapter) == true)
 			{

@@ -2991,21 +2991,11 @@ void rtw_update_ht_cap(struct adapter *padapter, u8 *pie, uint ie_len)
 		padapter->HalFunc.GetHwRegHandler(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
 
 		/* update the MCS rates */
-		for (i = 0; i < 16; i++)
-		{
+		for (i = 0; i < 16; i++) {
 			if((rf_type == RF_1T1R) || (rf_type == RF_1T2R))
-			{
 				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-			}
 			else
-			{
 				pmlmeinfo->HT_caps.u.HT_cap_element.MCS_rate[i] &= MCS_rate_2R[i];
-			}
-			#ifdef RTL8192C_RECONFIG_TO_1T1R
-			{
-				pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-			}
-			#endif
 		}
 		/* switch to the 40M Hz mode accoring to the AP */
 		pmlmeext->cur_bwmode = HT_CHANNEL_WIDTH_40;
