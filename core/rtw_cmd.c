@@ -1939,45 +1939,6 @@ exit:
 	return res;
 }
 
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-u8 rtw_event_polling_cmd(struct adapter*padapter)
-{
-	struct cmd_obj*		ph2c;
-	struct drvextra_cmd_parm  *pdrvextra_cmd_parm;
-	struct cmd_priv	*pcmdpriv=&padapter->cmdpriv;
-	u8	res=_SUCCESS;
-
-	ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-	if(ph2c==NULL){
-		res= _FAIL;
-		goto exit;
-	}
-
-	pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
-	if(pdrvextra_cmd_parm==NULL){
-		rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
-		res= _FAIL;
-		goto exit;
-	}
-
-	pdrvextra_cmd_parm->ec_id = EVENT_POLLING_CID;
-	pdrvextra_cmd_parm->type_size = 0;
-	pdrvextra_cmd_parm->pbuf = (u8 *)padapter;
-
-	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
-
-
-	/* rtw_enqueue_cmd(pcmdpriv, ph2c); */
-	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
-
-exit:
-
-	;
-
-	return res;
-}
-#endif
-
 static void traffic_status_watchdog(struct adapter *padapter)
 {
 	u8	bEnterPS;
@@ -2616,51 +2577,6 @@ static void c2h_wk_callback(_workitem *work)
 }
 #endif
 
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-void event_polling_hdl(struct adapter *padapter, u8 *pbuf, int sz)
-{
-	c2h_id_filter ccx_id_filter = rtw_hal_c2h_id_filter_ccx(padapter);
-	u8 check_c2hcmd, check_ccx;
-
-	/* check_c2hcmd = rtw_read8(padapter, REG_C2HEVT_CLEAR); */
-	/* check_ccx= rtw_read8(padapter, REG_C2HEVT_MSG_NORMAL); */
-
-	rtw_hal_get_hwreg(padapter, HW_VAR_C2HEVT_CLEAR, (u8 *)(&check_c2hcmd));
-	rtw_hal_get_hwreg(padapter, HW_VAR_C2HEVT_MSG_NORMAL, (u8 *)(&check_ccx));
-
-	if (check_c2hcmd != 0)
-	{
-		struct c2h_evt_hdr *c2h_evt;
-
-		if (check_c2hcmd != 0xFF)
-		{
-			c2h_evt_clear(padapter);
-		}
-		else if (ccx_id_filter(check_ccx & 0x0F) == false)
-		{
-			if ((c2h_evt = (struct c2h_evt_hdr *)rtw_zmalloc(16)) != NULL) {
-				if (c2h_evt_read(padapter, (u8 *)c2h_evt) == _SUCCESS) {
-					rtw_hal_c2h_handler(padapter, c2h_evt);
-				}
-				rtw_mfree((u8*)c2h_evt, 16);
-			} else {
-				/* Error handling for malloc fail */
-				if (rtw_cbuf_push(padapter->evtpriv.c2h_queue, (void*)NULL) != _SUCCESS)
-					DBG_871X("%s rtw_cbuf_push fail\n", __func__);
-				_set_workitem(&padapter->evtpriv.c2h_wk);
-			}
-		}
-		else
-		{
-			if (padapter->xmitpriv.ack_tx == false)
-			{
-				c2h_evt_clear(padapter);
-			}
-		}
-	}
-}
-#endif
-
 u8 rtw_drvextra_cmd_hdl(struct adapter *padapter, unsigned char *pbuf)
 {
 	struct drvextra_cmd_parm *pdrvextra_cmd;
@@ -2714,11 +2630,6 @@ u8 rtw_drvextra_cmd_hdl(struct adapter *padapter, unsigned char *pbuf)
 		case C2H_WK_CID:
 			c2h_evt_hdl(padapter, (struct c2h_evt_hdr *)pdrvextra_cmd->pbuf, NULL);
 			break;
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-		case EVENT_POLLING_CID:
-			event_polling_hdl(padapter, pdrvextra_cmd->pbuf, pdrvextra_cmd->type_size);
-			break;
-#endif
 		default:
 			break;
 	}

@@ -965,10 +965,6 @@ void rtw_cancel_all_timer(struct adapter *padapter)
 
 	_cancel_timer_ex(&padapter->recvpriv.signal_stat_timer);
 
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-	_cancel_timer_ex(&padapter->mlmepriv.event_polling_timer);
-#endif
-
 #if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
 	if (padapter->HalFunc.hal_cancel_checkbthang_workqueue)
 		padapter->HalFunc.hal_cancel_checkbthang_workqueue(padapter);
@@ -1221,10 +1217,6 @@ int _netdev_open(struct net_device *pnetdev)
 	padapter->net_closed = false;
 
 	_set_timer(&padapter->mlmepriv.dynamic_chk_timer, 2000);
-
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-	_set_timer(&padapter->mlmepriv.event_polling_timer, 200);
-#endif
 
 	rtw_set_pwr_state_check_timer(pwrctrlpriv);
 

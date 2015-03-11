@@ -166,9 +166,6 @@ enum rtw_drvextra_cmd_id
 	RTP_TIMER_CFG_WK_CID,
 	RESET_SECURITYPRIV, // add for CONFIG_IEEE80211W, none 11w also can use
 	FREE_ASSOC_RESOURCES, // add for CONFIG_IEEE80211W, none 11w also can use
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-	EVENT_POLLING_CID,
-#endif
 	MAX_WK_CID
 };
 
@@ -970,22 +967,14 @@ u8 rtw_set_chplan_cmd(struct adapter*padapter, u8 chplan, u8 enqueue);
 u8 rtw_led_blink_cmd(struct adapter*padapter, PLED_871x pLed);
 u8 rtw_set_csa_cmd(struct adapter*padapter, u8 new_ch_no);
 u8 rtw_tdls_cmd(struct adapter*padapter, u8 *addr, u8 option);
-
 u8 rtw_c2h_wk_cmd(struct adapter *padapter, u8 *c2h_evt);
-
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-u8 rtw_event_polling_cmd(struct adapter*padapter);
-#endif
-
 u8 rtw_drvextra_cmd_hdl(struct adapter *padapter, unsigned char *pbuf);
-
 void rtw_survey_cmd_callback(struct adapter  *padapter, struct cmd_obj *pcmd);
 void rtw_disassoc_cmd_callback(struct adapter  *padapter, struct cmd_obj *pcmd);
 void rtw_joinbss_cmd_callback(struct adapter  *padapter, struct cmd_obj *pcmd);
 void rtw_createbss_cmd_callback(struct adapter  *padapter, struct cmd_obj *pcmd);
 void rtw_getbbrfreg_cmdrsp_callback(struct adapter  *padapter, struct cmd_obj *pcmd);
 void rtw_readtssi_cmdrsp_callback(struct adapter*	padapter,  struct cmd_obj *pcmd);
-
 void rtw_setstaKey_cmdrsp_callback(struct adapter  *padapter,  struct cmd_obj *pcmd);
 void rtw_setassocsta_cmdrsp_callback(struct adapter  *padapter,  struct cmd_obj *pcmd);
 void rtw_getrttbl_cmdrsp_callback(struct adapter  *padapter,  struct cmd_obj *pcmd);

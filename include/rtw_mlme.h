@@ -418,10 +418,6 @@ struct mlme_priv {
 	_timer set_scan_deny_timer;
 	ATOMIC_T set_scan_deny; //0: allowed, 1: deny
 
-	#ifdef CONFIG_DETECT_C2H_BY_POLLING
-	_timer event_polling_timer;
-	#endif
-
 	struct qos_priv qospriv;
 
 	/* Number of non-HT AP/stations */
@@ -685,10 +681,6 @@ bool rtw_is_scan_deny(struct adapter *adapter);
 void rtw_clear_scan_deny(struct adapter *adapter);
 void rtw_set_scan_deny_timer_hdl(struct adapter *adapter);
 void rtw_set_scan_deny(struct adapter *adapter, u32 ms);
-
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-extern void rtw_event_polling_timer_hdl(struct adapter *adapter);
-#endif
 
 extern int _rtw_init_mlme_priv(struct adapter *padapter);
 

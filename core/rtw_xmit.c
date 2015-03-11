@@ -3412,66 +3412,8 @@ void rtw_sctx_done(struct submit_ctx **sctx)
 	rtw_sctx_done_err(sctx, RTW_SCTX_DONE_SUCCESS);
 }
 
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-s32 c2h_evt_hdl(struct adapter *adapter, struct c2h_evt_hdr *c2h_evt, c2h_id_filter filter);
-#endif
-
 int rtw_ack_tx_wait(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 {
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-	struct adapter *adapter = container_of(pxmitpriv, struct adapter, xmitpriv);
-	c2h_id_filter ccx_id_filter = rtw_hal_c2h_id_filter_ccx(adapter);
-	struct submit_ctx *pack_tx_ops = &pxmitpriv->ack_tx_ops;
-	u8 check_c2hcmd;
-	u8 check_ccx;
-	int ret = _FAIL;
-
-	pack_tx_ops->submit_time = rtw_get_current_time();
-	pack_tx_ops->timeout_ms = timeout_ms;
-	pack_tx_ops->status = RTW_SCTX_SUBMITTED;
-
-	do {
-		rtw_msleep_os(10);
-		/* check_c2hcmd = rtw_read8(adapter, 0x1AF); */
-		/* check_ccx = rtw_read8(adapter, 0x1A0); */
-		rtw_hal_get_hwreg(adapter, HW_VAR_C2HEVT_CLEAR, (u8 *)(&check_c2hcmd));
-		rtw_hal_get_hwreg(adapter, HW_VAR_C2HEVT_MSG_NORMAL, (u8 *)(&check_ccx));
-
-
-		if (check_c2hcmd != 0)
-		{
-			if (check_c2hcmd != 0xFF)
-			{
-				c2h_evt_clear(adapter);
-			}
-			else if (ccx_id_filter(check_ccx & 0x0F) == true)
-			{
-				c2h_evt_hdl(adapter, NULL, ccx_id_filter);
-				if (pack_tx_ops->status != RTW_SCTX_SUBMITTED)
-					break;
-
-				if (adapter->bDriverStopped) {
-					pack_tx_ops->status = RTW_SCTX_DONE_DRV_STOP;
-					break;
-				}
-				if (adapter->bSurpriseRemoved) {
-					pack_tx_ops->status = RTW_SCTX_DONE_DEV_REMOVE;
-					break;
-				}
-			}
-		}
-	} while (rtw_get_passing_time_ms(pack_tx_ops->submit_time) < timeout_ms);
-
-	if (pack_tx_ops->status == RTW_SCTX_SUBMITTED) {
-		pack_tx_ops->status = RTW_SCTX_DONE_TIMEOUT;
-		DBG_871X("%s timeout\n", __func__);
-	}
-
-	if (pack_tx_ops->status == RTW_SCTX_DONE_SUCCESS)
-		ret = _SUCCESS;
-
-	return ret;
-#else
 	struct submit_ctx *pack_tx_ops = &pxmitpriv->ack_tx_ops;
 
 	pack_tx_ops->submit_time = rtw_get_current_time();
@@ -3479,7 +3421,6 @@ int rtw_ack_tx_wait(struct xmit_priv *pxmitpriv, u32 timeout_ms)
 	pack_tx_ops->status = RTW_SCTX_SUBMITTED;
 
 	return rtw_sctx_wait(pack_tx_ops);
-#endif
 }
 
 void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status)

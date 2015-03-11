@@ -2255,13 +2255,6 @@ void rtw_set_scan_deny(struct adapter *adapter, u32 ms)
 
 }
 
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-void rtw_event_polling_timer_hdl(struct adapter *adapter)
-{
-	rtw_event_polling_cmd(adapter);
-}
-#endif
-
 #if defined(IEEE80211_SCAN_RESULT_EXPIRE)
 #define RTW_SCAN_RESULT_EXPIRE IEEE80211_SCAN_RESULT_EXPIRE/HZ*1000 -1000 /* 3000 -1000 */
 #else

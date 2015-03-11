@@ -54,17 +54,6 @@ static void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 	rtw_set_scan_deny_timer_hdl(adapter);
 }
 
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-void _rtw_event_polling_timer_hdl(void *FunctionContext)
-{
-	struct adapter *adapter = (struct adapter *)FunctionContext;
-
-	rtw_event_polling_timer_hdl(adapter);
-
-	_set_timer(&adapter->mlmepriv.event_polling_timer, 200);
-}
-#endif
-
 void rtw_init_mlme_timer(struct adapter *padapter)
 {
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -76,10 +65,6 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 	_init_timer(&(pmlmepriv->dynamic_chk_timer), padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
 
 	_init_timer(&(pmlmepriv->set_scan_deny_timer), padapter->pnetdev, _rtw_set_scan_deny_timer_hdl, padapter);
-
-#ifdef CONFIG_DETECT_C2H_BY_POLLING
-	_init_timer(&(pmlmepriv->event_polling_timer), padapter->pnetdev, _rtw_event_polling_timer_hdl, padapter);
-#endif
 
 #if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
 	if (padapter->HalFunc.hal_init_checkbthang_workqueue)
