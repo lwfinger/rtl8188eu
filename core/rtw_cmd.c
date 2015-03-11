@@ -90,8 +90,6 @@ sint _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 {
 	sint res=_SUCCESS;
 
-;
-
 #ifdef CONFIG_H2CLBK
 	_rtw_init_sema(&(pevtpriv->lbkevt_done), 0);
 	pevtpriv->lbkevt_limit = 0;
@@ -103,49 +101,18 @@ sint _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 	ATOMIC_SET(&pevtpriv->event_seq, 0);
 	pevtpriv->evt_done_cnt = 0;
 
-#ifdef CONFIG_EVENT_THREAD_MODE
-
-	_rtw_init_sema(&(pevtpriv->evt_notify), 0);
-	_rtw_init_sema(&(pevtpriv->terminate_evtthread_sema), 0);
-
-	pevtpriv->evt_allocated_buf = rtw_zmalloc(MAX_EVTSZ + 4);
-	if (pevtpriv->evt_allocated_buf == NULL){
-		res= _FAIL;
-		goto exit;
-		}
-	pevtpriv->evt_buf = pevtpriv->evt_allocated_buf  +  4 - ((unsigned int)(pevtpriv->evt_allocated_buf) & 3);
-
-	_rtw_init_queue(&(pevtpriv->evt_queue));
-
-exit:
-
-#endif /* end of CONFIG_EVENT_THREAD_MODE */
-
 #ifdef CONFIG_C2H_WK
 	_init_workitem(&pevtpriv->c2h_wk, c2h_wk_callback, NULL);
 	pevtpriv->c2h_wk_alive = false;
 	pevtpriv->c2h_queue = rtw_cbuf_alloc(C2H_QUEUE_MAX_LEN+1);
 #endif
 
-;
-
 	return res;
 }
 
 void _rtw_free_evt_priv (struct	evt_priv *pevtpriv)
 {
-;
-
 	RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("+_rtw_free_evt_priv \n"));
-
-#ifdef CONFIG_EVENT_THREAD_MODE
-	_rtw_free_sema(&(pevtpriv->evt_notify));
-	_rtw_free_sema(&(pevtpriv->terminate_evtthread_sema));
-
-
-	if (pevtpriv->evt_allocated_buf)
-		rtw_mfree(pevtpriv->evt_allocated_buf, MAX_EVTSZ + 4);
-#endif
 
 #ifdef CONFIG_C2H_WK
 	_cancel_workitem_sync(&pevtpriv->c2h_wk);
@@ -532,87 +499,6 @@ post_process:
 
 }
 
-
-#ifdef CONFIG_EVENT_THREAD_MODE
-u32 rtw_enqueue_evt(struct evt_priv *pevtpriv, struct evt_obj *obj)
-{
-	_irqL irqL;
-	int	res;
-	_queue *queue = &pevtpriv->evt_queue;
-
-;
-
-	res = _SUCCESS;
-
-	if (obj == NULL) {
-		res = _FAIL;
-		goto exit;
-	}
-
-	spin_lock_bh(&queue->lock);
-
-	rtw_list_insert_tail(&obj->list, &queue->queue);
-
-	spin_unlock_bh(&queue->lock);
-
-	/* rtw_evt_notify_isr(pevtpriv); */
-
-exit:
-
-;
-
-	return res;
-}
-
-struct evt_obj *rtw_dequeue_evt(_queue *queue)
-{
-	_irqL irqL;
-	struct	evt_obj	*pevtobj;
-
-;
-
-	spin_lock_bh(&queue->lock);
-
-	if (rtw_is_list_empty(&(queue->queue)))
-		pevtobj = NULL;
-	else
-	{
-		pevtobj = LIST_CONTAINOR(get_next(&(queue->queue)), struct evt_obj, list);
-		rtw_list_delete(&pevtobj->list);
-	}
-
-	spin_unlock_bh(&queue->lock);
-
-;
-
-	return pevtobj;
-}
-
-void rtw_free_evt_obj(struct evt_obj *pevtobj)
-{
-;
-
-	if(pevtobj->parmbuf)
-		rtw_mfree((unsigned char*)pevtobj->parmbuf, pevtobj->evtsz);
-
-	rtw_mfree((unsigned char*)pevtobj, sizeof(struct evt_obj));
-
-;
-}
-
-void rtw_evt_notify_isr(struct evt_priv *pevtpriv)
-{
-;
-	pevtpriv->evt_done_cnt++;
-	_rtw_up_sema(&(pevtpriv->evt_notify));
-;
-}
-#endif
-
-
-/*
-u8 rtw_setstandby_cmd(unsigned char  *adapter)
-*/
 u8 rtw_setstandby_cmd(struct adapter *padapter, uint action)
 {
 	struct cmd_obj*			ph2c;

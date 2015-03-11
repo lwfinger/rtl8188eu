@@ -639,12 +639,6 @@ u32 rtw_start_drv_threads(struct adapter *padapter)
 	else
 		_rtw_down_sema(&padapter->cmdpriv.terminate_cmdthread_sema); /* wait for cmd_thread to run */
 
-#ifdef CONFIG_EVENT_THREAD_MODE
-	padapter->evtThread = kthread_run(event_thread, padapter, "RTW_EVENT_THREAD");
-	if(IS_ERR(padapter->evtThread))
-		_status = _FAIL;
-#endif
-
 	rtw_hal_start_thread(padapter);
 	return _status;
 
@@ -683,13 +677,6 @@ void rtw_stop_drv_threads (struct adapter *padapter)
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+rtw_stop_drv_threads\n"));
 
 	rtw_stop_cmd_thread(padapter);
-
-#ifdef CONFIG_EVENT_THREAD_MODE
-        _rtw_up_sema(&padapter->evtpriv.evt_notify);
-	if(padapter->evtThread){
-		_rtw_down_sema(&padapter->evtpriv.terminate_evtthread_sema);
-	}
-#endif
 
 	rtw_hal_stop_thread(padapter);
 }
