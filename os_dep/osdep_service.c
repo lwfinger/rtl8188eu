@@ -1225,13 +1225,6 @@ error:
 
 }
 
-#ifdef CONFIG_PLATFORM_SPRD
-#ifdef do_div
-#undef do_div
-#endif
-#include <asm-generic/div64.h>
-#endif
-
 u64 rtw_modular64(u64 x, u64 y)
 {
 	return do_div(x, y);

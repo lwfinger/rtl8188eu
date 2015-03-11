@@ -654,14 +654,7 @@ void LeaveAllPowerSaveMode(IN struct adapter *Adapter)
 				adapter_to_dvobj(Adapter)->pusbdev->autosuspend_disabled = Adapter->bDisableAutosuspend;/* autosuspend disabled by the user */
 				#endif
 			}
-			else
 			#endif
-			{
-#if defined(CONFIG_PLATFORM_SPRD)
-				if(false == ips_leave(Adapter))
-					DBG_871X("======> ips_leave fail.............\n");
-#endif /* CONFIG_PLATFORM_SPRD */
-			}
 		}
 	}
 

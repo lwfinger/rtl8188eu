@@ -21,12 +21,6 @@
 #define __DRV_CONF_H__
 #include "autoconf.h"
 
-//Older Android kernel doesn't has CONFIG_ANDROID defined,
-//add this to force CONFIG_ANDROID defined
-#ifdef CONFIG_PLATFORM_ANDROID
-#define CONFIG_ANDROID
-#endif
-
 #if defined(CONFIG_HAS_EARLYSUSPEND) && defined (CONFIG_RESUME_IN_WORKQUEUE)
 	#warning "You have CONFIG_HAS_EARLYSUSPEND enabled in your system, we disable CONFIG_RESUME_IN_WORKQUEUE automatically"
 	#undef CONFIG_RESUME_IN_WORKQUEUE

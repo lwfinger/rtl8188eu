@@ -31,9 +31,6 @@
 #include <usb_ops.h>
 #include <usb_osintf.h>
 #include <usb_hal.h>
-#ifdef CONFIG_PLATFORM_RTK_DMP
-#include <asm/io.h>
-#endif
 
 int ui_pid[3] = {0, 0, 0};
 
@@ -918,10 +915,6 @@ error_exit:
 }
 #endif
 
-#ifdef CONFIG_PLATFORM_RTD2880B
-extern void rtd2885_wlan_netlink_sendMsg(char *action_string, char *name);
-#endif
-
 /*
  * drv_init() - a device potentially for us
  *
@@ -1124,12 +1117,6 @@ static void rtw_usb_if1_deinit(struct adapter *if1)
 
 	if(pnetdev)
 		rtw_free_netdev(pnetdev);
-
-#ifdef CONFIG_PLATFORM_RTD2880B
-	DBG_871X("wlan link down\n");
-	rtd2885_wlan_netlink_sendMsg("linkdown", "8712");
-#endif
-
 }
 
 static void dump_usb_interface(struct usb_interface *usb_intf)
@@ -1272,11 +1259,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 	hostapd_mode_init(if1);
 #endif
 
-#ifdef CONFIG_PLATFORM_RTD2880B
-	DBG_871X("wlan link up\n");
-	rtd2885_wlan_netlink_sendMsg("linkup", "8712");
-#endif
-
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-871x_drv - drv_init, success!\n"));
 
 	status = _SUCCESS;
@@ -1347,13 +1329,6 @@ extern int console_suspend_enabled;
 
 static int __init rtw_drv_entry(void)
 {
-#ifdef CONFIG_PLATFORM_RTK_DMP
-	u32 tmp;
-	tmp=readl((volatile unsigned int*)0xb801a608);
-	tmp &= 0xffffff00;
-	tmp |= 0x55;
-	writel(tmp,(volatile unsigned int*)0xb801a608);/* write dummy register for 1055 */
-#endif
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("+rtw_drv_entry\n"));
 
 	DBG_871X(DRV_NAME " driver version=%s\n", DRIVERVERSION);

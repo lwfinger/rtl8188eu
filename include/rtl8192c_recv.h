@@ -45,11 +45,7 @@
 #define RECV_BLK_CNT 16
 #define RECV_BLK_TH RECV_BLK_CNT
 
-#ifdef CONFIG_PLATFORM_MSTAR
-	#define MAX_RECVBUF_SZ (8192) // 8K
-#else
 #define MAX_RECVBUF_SZ (15360) // 15k < 16k
-#endif
 
 #define RECV_BULK_IN_ADDR		0x80
 #define RECV_INT_IN_ADDR		0x81
