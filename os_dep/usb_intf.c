@@ -1043,8 +1043,9 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 
 	/*  set mac addr */
 	rtw_macaddr_cfg(padapter->eeprompriv.mac_addr);
+#ifdef CONFIG_P2P
 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr, padapter->eeprompriv.mac_addr);
-
+#endif
 	DBG_871X("bDriverStopped:%d, bSurpriseRemoved:%d, bup:%d, hw_init_completed:%d\n"
 		, padapter->bDriverStopped
 		, padapter->bSurpriseRemoved

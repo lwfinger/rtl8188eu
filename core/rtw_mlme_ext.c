@@ -4848,18 +4848,18 @@ static s32 rtw_action_public_decache(union recv_frame *recv_frame, s32 token)
 static unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 {
 	struct adapter *padapter = precv_frame->u.hdr.adapter;
+	struct	wifidirect_info	*pwdinfo = &( padapter->wdinfo );
 	u8 *pframe = precv_frame->u.hdr.rx_data;
 	uint len = precv_frame->u.hdr.len;
 	u8 *frame_body;
 	u8 dialogToken=0;
+	u8 *merged_p2pie = NULL;
+	u32 merged_p2p_ielen = 0;
 #ifdef CONFIG_P2P
 	u8 *p2p_ie;
 	u32	p2p_ielen, wps_ielen;
-	struct	wifidirect_info	*pwdinfo = &( padapter->wdinfo );
 	u8	result = P2P_STATUS_SUCCESS;
 	u8	empty_addr[ETH_ALEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-	u8 *merged_p2pie = NULL;
-	u32 merged_p2p_ielen = 0;
 #endif /* CONFIG_P2P */
 
 	frame_body = (unsigned char *)(pframe + sizeof(struct rtw_ieee80211_hdr_3addr));
@@ -8043,8 +8043,8 @@ void site_survey(struct adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u32 initialgain = 0;
-#ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
+#ifdef CONFIG_P2P
 	static unsigned char  prev_survey_channel = 0;
 	static unsigned int p2p_scan_count = 0;
 

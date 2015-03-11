@@ -2693,12 +2693,12 @@ u8 rtw_drvextra_cmd_hdl(struct adapter *padapter, unsigned char *pbuf)
 		case P2P_PS_WK_CID:
 			p2p_ps_wk_hdl(padapter, pdrvextra_cmd->type_size);
 			break;
-#endif /*  CONFIG_P2P */
 		case P2P_PROTO_WK_CID:
 			/* 	Commented by Albert 2011/07/01 */
 			/* 	I used the type_size as the type command */
 			p2p_protocol_wk_hdl( padapter, pdrvextra_cmd->type_size );
 			break;
+#endif /*  CONFIG_P2P */
 #ifdef CONFIG_AP_MODE
 		case CHECK_HIQ_WK_CID:
 			rtw_chk_hi_queue_hdl(padapter);
