@@ -661,10 +661,6 @@ void LeaveAllPowerSaveMode(IN struct adapter *Adapter)
 ;
 }
 
-#ifdef CONFIG_RESUME_IN_WORKQUEUE
-static void resume_workitem_callback(struct work_struct *work);
-#endif /* CONFIG_RESUME_IN_WORKQUEUE */
-
 void rtw_init_pwrctrl_priv(struct adapter *padapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
@@ -710,11 +706,6 @@ void rtw_init_pwrctrl_priv(struct adapter *padapter)
 
 	_init_timer(&(pwrctrlpriv->pwr_state_check_timer), padapter->pnetdev, pwr_state_check_handler, (u8 *)padapter);
 
-	#ifdef CONFIG_RESUME_IN_WORKQUEUE
-	_init_workitem(&pwrctrlpriv->resume_work, resume_workitem_callback, NULL);
-	pwrctrlpriv->rtw_workqueue = create_singlethread_workqueue("rtw_workqueue");
-	#endif /* CONFIG_RESUME_IN_WORKQUEUE */
-
 	#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	pwrctrlpriv->early_suspend.suspend = NULL;
 	rtw_register_early_suspend(pwrctrlpriv);
@@ -730,42 +721,12 @@ void rtw_free_pwrctrl_priv(struct adapter *adapter)
 {
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(adapter);
 
-	#ifdef CONFIG_RESUME_IN_WORKQUEUE
-	if (pwrctrlpriv->rtw_workqueue) {
-		flush_workqueue(pwrctrlpriv->rtw_workqueue);
-		destroy_workqueue(pwrctrlpriv->rtw_workqueue);
-	}
-	#endif
-
-
 	#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 	rtw_unregister_early_suspend(pwrctrlpriv);
 	#endif /* CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER */
 
 	_free_pwrlock(&pwrctrlpriv->lock);
 }
-
-#ifdef CONFIG_RESUME_IN_WORKQUEUE
-extern int rtw_resume_process(struct adapter *padapter);
-static void resume_workitem_callback(struct work_struct *work)
-{
-	struct pwrctrl_priv *pwrpriv = container_of(work, struct pwrctrl_priv, resume_work);
-	struct dvobj_priv *dvobj = pwrctl_to_dvobj(pwrpriv);
-	struct adapter *adapter = dvobj->if1;
-
-	DBG_871X("%s\n",__FUNCTION__);
-
-	rtw_resume_process(adapter);
-}
-
-void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv)
-{
-	/*  accquire system's suspend lock preventing from falliing asleep while resume in workqueue */
-	rtw_lock_suspend();
-
-	queue_work(pwrpriv->rtw_workqueue, &pwrpriv->resume_work);
-}
-#endif /* CONFIG_RESUME_IN_WORKQUEUE */
 
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 inline bool rtw_is_earlysuspend_registered(struct pwrctrl_priv *pwrpriv)
