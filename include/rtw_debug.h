@@ -203,65 +203,6 @@ extern u32 GlobalDebugLevel;
 #endif
 #endif /* CONFIG_DEBUG */
 
-#ifdef CONFIG_DEBUG_RTL871X
-#ifndef _RTL871X_DEBUG_C_
-	extern u32 GlobalDebugLevel;
-	extern u64 GlobalDebugComponents;
-#endif
-
-#if	defined (_dbgdump) && defined (_MODULE_DEFINE_)
-
-		#undef RT_TRACE
-		#define RT_TRACE(_Comp, _Level, Fmt)\
-		do {\
-			if((_Comp & GlobalDebugComponents) && (_Level <= GlobalDebugLevel)) {\
-				_dbgdump("%s [0x%08x,%d]", DRIVER_PREFIX, (unsigned int)_Comp, _Level);\
-				_dbgdump Fmt;\
-			}\
-		}while(0)
-
-#endif
-
-
-#if	defined (_dbgdump)
-
-		#undef  _func_enter_
-		#define _func_enter_ \
-		do {	\
-			if (GlobalDebugLevel >= _drv_debug_) \
-			{																	\
-				_dbgdump("\n %s : %s enters at %d\n", DRIVER_PREFIX, __FUNCTION__, __LINE__);\
-			}		\
-		} while(0)
-
-		#undef  _func_exit_
-		#define _func_exit_ \
-		do {	\
-			if (GlobalDebugLevel >= _drv_debug_) \
-			{																	\
-				_dbgdump("\n %s : %s exits at %d\n", DRIVER_PREFIX, __FUNCTION__, __LINE__); \
-			}	\
-		} while(0)
-
-		#undef RT_PRINT_DATA
-		#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen)			\
-			if(((_Comp) & GlobalDebugComponents) && (_Level <= GlobalDebugLevel))	\
-			{									\
-				int __i;								\
-				u8	*ptr = (u8 *)_HexData;				\
-				_dbgdump("%s", DRIVER_PREFIX);						\
-				_dbgdump(_TitleString);						\
-				for( __i=0; __i<(int)_HexDataLen; __i++ )				\
-				{								\
-					_dbgdump("%02X%s", ptr[__i], (((__i + 1) % 4) == 0)?"  ":" ");	\
-					if (((__i + 1) % 16) == 0)	_dbgdump("\n");			\
-				}								\
-				_dbgdump("\n");							\
-			}
-#endif
-#endif /* CONFIG_DEBUG_RTL871X */
-
-
 #ifdef CONFIG_PROC_DEBUG
 
 	int proc_get_drv_version(char *page, char **start,
