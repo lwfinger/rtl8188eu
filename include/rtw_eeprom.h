@@ -132,17 +132,11 @@ struct eeprom_priv
 	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
 };
 
-extern void eeprom_write16(struct adapter *padapter, u16 reg, u16 data);
-extern u16 eeprom_read16(struct adapter *padapter, u16 reg);
-extern void read_eeprom_content(struct adapter *padapter);
-extern void eeprom_read_sz(struct adapter * padapter, u16 reg,u8* data, u32 sz);
+void eeprom_write16(struct adapter *padapter, u16 reg, u16 data);
+u16 eeprom_read16(struct adapter *padapter, u16 reg);
+void read_eeprom_content(struct adapter *padapter);
+void eeprom_read_sz(struct adapter *padapter, u16 reg,u8 *data, u32 sz);
 
-extern void read_eeprom_content_by_attrib(struct adapter *	padapter	);
-
-#ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-extern int isAdaptorInfoFileValid(void);
-extern int storeAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv);
-extern int retriveAdaptorInfoFile(char *path, struct eeprom_priv * eeprom_priv);
-#endif //CONFIG_ADAPTOR_INFO_CACHING_FILE
+void read_eeprom_content_by_attrib(struct adapter *padapter);
 
 #endif  //__RTL871X_EEPROM_H__
