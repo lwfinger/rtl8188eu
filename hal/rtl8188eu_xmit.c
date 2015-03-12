@@ -216,29 +216,21 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	sint	bmcst = IS_MCAST(pattrib->ra);
-
 #ifdef CONFIG_P2P
 	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;
 #endif /* CONFIG_P2P */
 
-#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
-if (padapter->registrypriv.mp_mode == 0)
-{
-	if((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)==0))/* sz %512) != 0 */
-	/* if((!bagg_pkt) &&(rtw_usb_bulk_size_boundary(padapter,TXDESC_SIZE+sz)==false)) */
-	{
-		ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
-		/* DBG_8192C("==> non-agg-pkt,shift pointer...\n"); */
-		pull = 1;
+	if (padapter->registrypriv.mp_mode == 0) {
+		if((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)==0)) {
+			ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
+			pull = 1;
+		}
 	}
-}
-#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
 	memset(ptxdesc, 0, sizeof(struct tx_desc));
 
         /* 4 offset 0 */
 	ptxdesc->txdw0 |= cpu_to_le32(OWN | FSG | LSG);
-	/* DBG_8192C("%s==> pkt_len=%d,bagg_pkt=%02x\n",__FUNCTION__,sz,bagg_pkt); */
 	ptxdesc->txdw0 |= cpu_to_le32(sz & 0x0000ffff);/* update TXPKTSIZE */
 
 	offset = TXDESC_SIZE + OFFSET_SZ;
@@ -247,16 +239,12 @@ if (padapter->registrypriv.mp_mode == 0)
 
 	if (bmcst) ptxdesc->txdw0 |= cpu_to_le32(BMC);
 
-#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
-	if (padapter->registrypriv.mp_mode == 0)
-	{
-		if(!bagg_pkt){
-			if((pull) && (pxmitframe->pkt_offset>0)) {
+	if (padapter->registrypriv.mp_mode == 0) {
+		if(!bagg_pkt) {
+			if((pull) && (pxmitframe->pkt_offset>0))
 				pxmitframe->pkt_offset = pxmitframe->pkt_offset -1;
-			}
 		}
 	}
-#endif
 	/*  pkt_offset, unit:8 bytes padding */
 	if (pxmitframe->pkt_offset > 0)
 		ptxdesc->txdw1 |= cpu_to_le32((pxmitframe->pkt_offset << 26) & 0x7c000000);
@@ -789,7 +777,6 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	{
 		rtw_issue_addbareq_cmd(padapter, pfirstframe);
 	}
-#ifndef CONFIG_USE_USB_BUFFER_ALLOC_TX
 	/* 3 3. update first frame txdesc */
 	if ((pbuf_tail % bulkSize) == 0) {
 		/*  remove pkt_offset */
@@ -797,7 +784,6 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		pfirstframe->buf_addr += PACKET_OFFSET_SZ;
 		pfirstframe->pkt_offset--;
 	}
-#endif	/*  CONFIG_USE_USB_BUFFER_ALLOC_TX */
 
 	update_txdesc(pfirstframe, pfirstframe->buf_addr, pfirstframe->attrib.last_txcmdsz,true);
 
