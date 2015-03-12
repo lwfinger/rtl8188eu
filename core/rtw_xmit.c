@@ -822,12 +822,9 @@ static s32 update_attrib(struct adapter *padapter, _pkt *pkt, struct pkt_attrib 
 		pattrib->bswenc = false;
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("update_attrib: bswenc=false\n"));
 	}
-	rtw_set_tx_chksum_offload(pkt, pattrib);
-
 	update_attrib_phy_info(pattrib, psta);
 
 exit:
-
 	return res;
 }
 

@@ -594,26 +594,15 @@ struct net_device *rtw_init_netdev(struct adapter *old_padapter)
 	pnetdev->do_ioctl = rtw_ioctl;
 #endif
 
-
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-	pnetdev->features |= NETIF_F_IP_CSUM;
-#endif
-	/* pnetdev->tx_timeout = NULL; */
 	pnetdev->watchdog_timeo = HZ*3; /* 3 second timeout */
 #ifdef CONFIG_WIRELESS_EXT
 	pnetdev->wireless_handlers = (struct iw_handler_def *)&rtw_handlers_def;
-#endif
-
-#ifdef WIRELESS_SPY
-	/* priv->wireless_data.spy_data = &priv->spy_data; */
-	/* pnetdev->wireless_data = &priv->wireless_data; */
 #endif
 
 	/* step 2. */
 	loadparam(padapter, pnetdev);
 
 	return pnetdev;
-
 }
 
 u32 rtw_start_drv_threads(struct adapter *padapter)

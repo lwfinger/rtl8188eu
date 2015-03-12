@@ -67,15 +67,8 @@
 	#include <net/route.h>
 	#include <net/flow.h>
 	#include <net/arp.h>
-
         #include <net/ieee80211_radiotap.h>
 	#include <net/cfg80211.h>
-
-#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
-	#include <linux/in.h>
-	#include <linux/udp.h>
-#endif
-
 	#include <linux/usb.h>
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,21))
 	#include <linux/usb_ch9.h>
