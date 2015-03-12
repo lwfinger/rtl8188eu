@@ -955,18 +955,6 @@ unsigned int OnBeacon(struct adapter *padapter, union recv_frame *precv_frame)
 		{
 			if ((psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe))) != NULL)
 			{
-				#ifdef CONFIG_PATCH_JOIN_WRONG_CHANNEL
-				/* Merge from 8712 FW code */
-				if (cmp_pkt_chnl_diff(padapter,pframe,len) != 0)
-				{            /*  join wrong channel, deauth and reconnect */
-					issue_deauth(padapter, (&(pmlmeinfo->network))->MacAddress, WLAN_REASON_DEAUTH_LEAVING);
-
-					report_del_sta_event(padapter,(&(pmlmeinfo->network))->MacAddress, WLAN_REASON_JOIN_WRONG_CHANNEL);
-					pmlmeinfo->state &= (~WIFI_FW_ASSOC_SUCCESS);
-					return _SUCCESS;
-				}
-				#endif /* CONFIG_PATCH_JOIN_WRONG_CHANNEL */
-
 				ret = rtw_check_bcn_info(padapter, pframe, len);
 				if (!ret) {
 						DBG_871X_LEVEL(_drv_always_, "ap has changed, disconnect now\n ");
