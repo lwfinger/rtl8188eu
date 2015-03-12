@@ -1939,19 +1939,12 @@ void dynamic_chk_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz)
 	}
 #endif
 
-	#ifdef DBG_CONFIG_ERROR_DETECT
 	rtw_hal_sreset_xmit_status_check(padapter);
-	#endif
 
-	/* if(check_fwstate(pmlmepriv, _FW_UNDER_LINKING|_FW_UNDER_SURVEY)==false) */
-	{
-		linked_status_chk(padapter);
-		traffic_status_watchdog(padapter);
-	}
+	linked_status_chk(padapter);
+	traffic_status_watchdog(padapter);
 
 	rtw_hal_dm_watchdog(padapter);
-
-	/* check_hw_pbc(padapter, pdrvextra_cmd->pbuf, pdrvextra_cmd->type_size); */
 
 #ifdef CONFIG_BT_COEXIST
 	/*  */

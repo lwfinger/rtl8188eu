@@ -31,9 +31,7 @@
 #include "rtl8188e_xmit.h"
 #include "rtl8188e_cmd.h"
 #include "Hal8188EPwrSeq.h"
-#ifdef DBG_CONFIG_ERROR_DETECT
 #include "rtl8188e_sreset.h"
-#endif
 #include "rtw_efuse.h"
 
 #include "../hal/odm_precomp.h"
@@ -414,9 +412,7 @@ typedef struct hal_data_8188e
 	struct dm_priv	dmpriv;
 	DM_ODM_T		odmpriv;
 	//_lock			odm_stainfo_lock;
-#ifdef DBG_CONFIG_ERROR_DETECT
 	struct sreset_priv srestpriv;
-#endif
 
 #ifdef CONFIG_BT_COEXIST
 	struct btcoexist_priv	bt_coexist;

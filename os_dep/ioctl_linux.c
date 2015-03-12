@@ -3016,16 +3016,12 @@ static void rtw_dbg_mode_hdl(struct adapter *padapter, u32 id, u8 *pdata, u32 le
 			rtw_hal_set_hwreg(padapter, HW_VAR_BT_ISSUE_DELBA, pdata);
 			break;
 #endif
-#ifdef DBG_CONFIG_ERROR_DETECT
 		case GEN_MP_IOCTL_SUBCODE(GET_WIFI_STATUS):
 			*pdata = rtw_hal_sreset_get_wifi_status(padapter);
 			break;
-#endif
-
 		default:
 			break;
 	}
-
 }
 
 static int rtw_mp_ioctl_hdl(struct net_device *dev, struct iw_request_info *info,
@@ -5990,7 +5986,6 @@ static int rtw_dbg_port(struct net_device *dev,
 						}
 					}
 					break;
-		#ifdef DBG_CONFIG_ERROR_DETECT
 				case 0x0f:
 						{
 							if(extra_arg == 0){
@@ -6010,18 +6005,13 @@ static int rtw_dbg_port(struct net_device *dev,
 						DBG_871X("==>silent resete cnts:%d\n",pwrpriv->ips_enter_cnts);
 					}
 					break;
-
-		#endif
-
 				case 0x10:/*  driver version display */
 					DBG_871X("rtw driver version=%s\n", DRIVERVERSION);
 					break;
 				case 0x11:
-					{
-						DBG_871X("turn %s Rx RSSI display function\n",(extra_arg==1)?"on":"off");
-						padapter->bRxRSSIDisplay = extra_arg;
-						rtw_hal_set_def_var(padapter, HW_DEF_FA_CNT_DUMP, &(padapter->bRxRSSIDisplay));
-					}
+					DBG_871X("turn %s Rx RSSI display function\n",(extra_arg==1)?"on":"off");
+					padapter->bRxRSSIDisplay = extra_arg;
+					rtw_hal_set_def_var(padapter, HW_DEF_FA_CNT_DUMP, &(padapter->bRxRSSIDisplay));
 					break;
 				case 0x12: /* set rx_stbc */
 				{

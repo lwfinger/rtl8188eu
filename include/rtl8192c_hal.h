@@ -28,10 +28,7 @@
 #include "rtl8192c_recv.h"
 #include "rtl8192c_xmit.h"
 #include "rtl8192c_cmd.h"
-
-#ifdef DBG_CONFIG_ERROR_DETECT
 #include "rtl8192c_sreset.h"
-#endif
 #include "rtw_efuse.h"
 
 #include "../hal/OUTSRC/odm_precomp.h"
@@ -443,10 +440,7 @@ struct hal_data_8192cu
 
 	struct dm_priv	dmpriv;
 	DM_ODM_T		odmpriv;
-	//_lock			odm_stainfo_lock;
-#ifdef DBG_CONFIG_ERROR_DETECT
 	struct sreset_priv srestpriv;
-#endif
 
 #ifdef CONFIG_BT_COEXIST
 	struct btcoexist_priv	bt_coexist;

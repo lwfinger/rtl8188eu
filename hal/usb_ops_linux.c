@@ -98,12 +98,8 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 				{
 					padapter->bSurpriseRemoved = true;
 				} else {
-					#ifdef DBG_CONFIG_ERROR_DETECT
-					{
-						HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-						pHalData->srestpriv.Wifi_Error_Status = USB_VEN_REQ_CMD_FAIL;
-					}
-					#endif
+					HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+					pHalData->srestpriv.Wifi_Error_Status = USB_VEN_REQ_CMD_FAIL;
 				}
 			}
 			else /*  status != len && status >= 0 */
@@ -304,7 +300,6 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 	memcpy(&(pHalData->IntArray[0]), &(pbuf[USB_INTR_CONTENT_HISR_OFFSET]), 4);
 	memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
 
-#ifdef DBG_CONFIG_ERROR_DETECT_INT
 	if (  pHalData->IntArray[1]  & IMR_TXERR_88E )
 		DBG_871X("===> %s Tx Error Flag Interrupt Status \n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_RXERR_88E )
@@ -313,7 +308,6 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 		DBG_871X("===> %s Transmit FIFO Overflow \n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_RXFOVW_88E )
 		DBG_871X("===> %s Receive FIFO Overflow \n",__FUNCTION__);
-#endif/* DBG_CONFIG_ERROR_DETECT_INT */
 
 	/*  C2H Event */
 	if (pbuf[0]!= 0){
@@ -730,12 +724,10 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 			case -ETIME:
 			case -ECOMM:
 			case -EOVERFLOW:
-				#ifdef DBG_CONFIG_ERROR_DETECT
 				{
 					HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 					pHalData->srestpriv.Wifi_Error_Status = USB_READ_PORT_FAIL;
 				}
-				#endif
 				precvbuf->reuse = true;
 				rtw_read_port(padapter, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf);
 				break;

@@ -437,16 +437,12 @@ extern u32 GlobalDebugLevel;
 
 #endif //CONFIG_BT_COEXIST
 
-#if defined(DBG_CONFIG_ERROR_DETECT)
 int proc_get_sreset(char *page, char **start, off_t offset, int count, int *eof, void *data);
 int proc_set_sreset(struct file *file, const char __user *buffer, unsigned long count, void *data);
-#endif /* DBG_CONFIG_ERROR_DETECT */
-
 int proc_get_odm_dbg_comp(char *page, char **start, off_t offset, int count, int *eof, void *data);
 int proc_set_odm_dbg_comp(struct file *file, const char __user *buffer, unsigned long count, void *data);
 int proc_get_odm_dbg_level(char *page, char **start, off_t offset, int count, int *eof, void *data);
 int proc_set_odm_dbg_level(struct file *file, const char __user *buffer, unsigned long count, void *data);
-
 int proc_get_odm_adaptivity(char *page, char **start, off_t offset, int count, int *eof, void *data);
 int proc_set_odm_adaptivity(struct file *file, const char __user *buffer, unsigned long count, void *data);
 

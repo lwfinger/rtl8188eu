@@ -390,13 +390,10 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 		}
 	}
 
-	#ifdef DBG_CONFIG_ERROR_DETECT
 	{
 		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 		pHalData->srestpriv.last_tx_complete_time = rtw_get_current_time();
 	}
-	#endif
-
 check_completion:
 	_enter_critical(&pxmitpriv->lock_sctx, &irqL);
 	rtw_sctx_done_err(&pxmitbuf->sctx,
@@ -543,12 +540,8 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 	if (!status) {
-		#ifdef DBG_CONFIG_ERROR_DETECT
-		{
-			HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-			pHalData->srestpriv.last_tx_time = rtw_get_current_time();
-		}
-		#endif
+		HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
+		pHalData->srestpriv.last_tx_time = rtw_get_current_time();
 	} else {
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_WRITE_PORT_ERR);
 		DBG_871X("usb_write_port, status=%d\n", status);

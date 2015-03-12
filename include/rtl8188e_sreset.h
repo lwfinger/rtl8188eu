@@ -25,8 +25,7 @@
 #include <drv_types.h>
 #include <rtw_sreset.h>
 
-#ifdef DBG_CONFIG_ERROR_DETECT
-extern void rtl8188e_sreset_xmit_status_check(struct adapter *padapter);
-extern void rtl8188e_sreset_linked_status_check(struct adapter *padapter);
-#endif
+void rtl8188e_sreset_xmit_status_check(struct adapter *padapter);
+void rtl8188e_sreset_linked_status_check(struct adapter *padapter);
+
 #endif

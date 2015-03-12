@@ -22,8 +22,6 @@
 #include <rtl8188e_sreset.h>
 #include <rtl8188e_hal.h>
 
-#ifdef DBG_CONFIG_ERROR_DETECT
-
 void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
@@ -38,9 +36,6 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 		DBG_871X("%s REG_TXDMA_STATUS:0x%08x\n", __FUNCTION__, txdma_status);
 		rtw_hal_sreset_reset(padapter);
 	}
-	/* total xmit irp = 4 */
-	/* DBG_8192C("==>%s free_xmitbuf_cnt(%d),txirp_cnt(%d)\n",__FUNCTION__,pxmitpriv->free_xmitbuf_cnt,pxmitpriv->txirp_cnt); */
-	/* if(pxmitpriv->txirp_cnt == NR_XMITBUFF+1) */
 	current_time = rtw_get_current_time();
 
 	if(0 == pxmitpriv->free_xmitbuf_cnt || 0 == pxmitpriv->free_xmit_extbuf_cnt) {
@@ -56,7 +51,6 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 				if (diff_time > 4000) {
 					u32 ability;
 
-					/* padapter->Wifi_Error_Status = WIFI_TX_HANG; */
 					rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DM_FUNC, &ability);
 
 					DBG_871X("%s tx hang %s\n", __FUNCTION__,
@@ -101,4 +95,3 @@ void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
 		return;
 	}
 }
-#endif

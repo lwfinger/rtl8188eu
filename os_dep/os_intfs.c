@@ -778,9 +778,7 @@ u8 rtw_reset_drv_sw(struct adapter *padapter)
 	#endif
 #endif
 
-#ifdef DBG_CONFIG_ERROR_DETECT
 	rtw_hal_sreset_reset_value(padapter);
-#endif
 	pwrctrlpriv->pwr_state_check_cnts = 0;
 
 	/* mlmeextpriv */
@@ -882,9 +880,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 	rtw_hal_dm_init(padapter);
 	rtw_hal_sw_led_init(padapter);
 
-#ifdef DBG_CONFIG_ERROR_DETECT
 	rtw_hal_sreset_init(padapter);
-#endif
 
 #ifdef CONFIG_BR_EXT
 	spin_lock_init(&padapter->br_ext_lock);

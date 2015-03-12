@@ -9572,9 +9572,7 @@ void linked_status_chk(struct adapter *padapter)
 	if(padapter->bRxRSSIDisplay)
 		 _linked_rx_signal_strehgth_display(padapter);
 
-	#ifdef DBG_CONFIG_ERROR_DETECT
 	rtw_hal_sreset_linked_status_check(padapter);
-	#endif
 
 	if (is_client_associated_to_ap(padapter)) {
 		/* linked infrastructure client mode */

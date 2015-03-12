@@ -49,18 +49,21 @@ void rtw_hal_def_value_init(struct adapter *padapter)
 		if(padapter->HalFunc.init_default_value)
 			padapter->HalFunc.init_default_value(padapter);
 }
+
 void	rtw_hal_free_data(struct adapter *padapter)
 {
 	if (is_primary_adapter(padapter))
 		if(padapter->HalFunc.free_hal_data)
 			padapter->HalFunc.free_hal_data(padapter);
 }
+
 void	rtw_hal_dm_init(struct adapter *padapter)
 {
 	if (is_primary_adapter(padapter))
 		if(padapter->HalFunc.dm_init)
 			padapter->HalFunc.dm_init(padapter);
 }
+
 void rtw_hal_dm_deinit(struct adapter *padapter)
 {
 	/*  cancel dm  timer */
@@ -68,6 +71,7 @@ void rtw_hal_dm_deinit(struct adapter *padapter)
 		if(padapter->HalFunc.dm_deinit)
 			padapter->HalFunc.dm_deinit(padapter);
 }
+
 void	rtw_hal_sw_led_init(struct adapter *padapter)
 {
 	if(padapter->HalFunc.InitSwLeds)
@@ -86,12 +90,12 @@ u32 rtw_hal_power_on(struct adapter *padapter)
 		return padapter->HalFunc.hal_power_on(padapter);
 	return _FAIL;
 }
+
 void rtw_hal_power_off(struct adapter *padapter)
 {
 	if(padapter->HalFunc.hal_power_off)
 		padapter->HalFunc.hal_power_off(padapter);
 }
-
 
 uint	 rtw_hal_init(struct adapter *padapter)
 {
@@ -153,9 +157,6 @@ uint rtw_hal_deinit(struct adapter *padapter)
 	{
 		DBG_871X("\n rtw_hal_deinit: hal_init fail\n");
 	}
-
-;
-
 	return status;
 }
 
@@ -177,6 +178,7 @@ u8 rtw_hal_set_def_var(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, voi
 		return padapter->HalFunc.SetHalDefVarHandler(padapter,eVariable,pValue);
 	return _FAIL;
 }
+
 u8 rtw_hal_get_def_var(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue)
 {
 	if(padapter->HalFunc.GetHalDefVarHandler)
@@ -189,6 +191,7 @@ void rtw_hal_set_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, v
 	if(padapter->HalFunc.SetHalODMVarHandler)
 		padapter->HalFunc.SetHalODMVarHandler(padapter,eVariable,pValue1,bSet);
 }
+
 void	rtw_hal_get_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet)
 {
 	if(padapter->HalFunc.GetHalODMVarHandler)
@@ -208,6 +211,7 @@ void rtw_hal_enable_interrupt(struct adapter *padapter)
 		DBG_871X("%s: HalFunc.enable_interrupt is NULL!\n", __FUNCTION__);
 
 }
+
 void rtw_hal_disable_interrupt(struct adapter *padapter)
 {
 	if (!is_primary_adapter(padapter)){
@@ -221,7 +225,6 @@ void rtw_hal_disable_interrupt(struct adapter *padapter)
 		DBG_871X("%s: HalFunc.disable_interrupt is NULL!\n", __FUNCTION__);
 
 }
-
 
 u32	rtw_hal_inirp_init(struct adapter *padapter)
 {
@@ -304,6 +307,7 @@ s32	rtw_hal_init_xmit_priv(struct adapter *padapter)
 		return padapter->HalFunc.init_xmit_priv(padapter);
 	return _FAIL;
 }
+
 void	rtw_hal_free_xmit_priv(struct adapter *padapter)
 {
 	if(padapter->HalFunc.free_xmit_priv != NULL)
@@ -317,6 +321,7 @@ s32	rtw_hal_init_recv_priv(struct adapter *padapter)
 
 	return _FAIL;
 }
+
 void	rtw_hal_free_recv_priv(struct adapter *padapter)
 {
 	if(padapter->HalFunc.free_recv_priv)
@@ -372,6 +377,7 @@ u32	rtw_hal_read_bbreg(struct adapter *padapter, u32 RegAddr, u32 BitMask)
 		 data = padapter->HalFunc.read_bbreg(padapter, RegAddr, BitMask);
 	return data;
 }
+
 void	rtw_hal_write_bbreg(struct adapter *padapter, u32 RegAddr, u32 BitMask, u32 Data)
 {
 	if(padapter->HalFunc.write_bbreg)
@@ -385,6 +391,7 @@ u32	rtw_hal_read_rfreg(struct adapter *padapter, u32 eRFPath, u32 RegAddr, u32 B
 		data = padapter->HalFunc.read_rfreg(padapter, eRFPath, RegAddr, BitMask);
 	return data;
 }
+
 void	rtw_hal_write_rfreg(struct adapter *padapter, u32 eRFPath, u32 RegAddr, u32 BitMask, u32 Data)
 {
 	if(padapter->HalFunc.write_rfreg)
@@ -422,13 +429,13 @@ void rtw_hal_bcn_related_reg_setting(struct adapter *padapter)
 		padapter->HalFunc.SetBeaconRelatedRegistersHandler(padapter);
 }
 
-
 u8	rtw_hal_antdiv_before_linked(struct adapter *padapter)
 {
 	if(padapter->HalFunc.AntDivBeforeLinkHandler)
 		return padapter->HalFunc.AntDivBeforeLinkHandler(padapter);
 	return false;
 }
+
 void	rtw_hal_antdiv_rssi_compared(struct adapter *padapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src)
 {
 	if(padapter->HalFunc.AntDivCompareHandler)
@@ -444,7 +451,6 @@ s32	rtw_hal_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt)
 }
 #endif /* CONFIG_HOSTAPD_MLME */
 
-#ifdef DBG_CONFIG_ERROR_DETECT
 void	rtw_hal_sreset_init(struct adapter *padapter)
 {
 	if(padapter->HalFunc.sreset_init_value)
@@ -472,6 +478,7 @@ void rtw_hal_sreset_xmit_status_check(struct adapter *padapter)
 	if(padapter->HalFunc.sreset_xmit_status_check)
 		padapter->HalFunc.sreset_xmit_status_check(padapter);
 }
+
 void rtw_hal_sreset_linked_status_check(struct adapter *padapter)
 {
 	if (!is_primary_adapter(padapter))
@@ -480,6 +487,7 @@ void rtw_hal_sreset_linked_status_check(struct adapter *padapter)
 	if(padapter->HalFunc.sreset_linked_status_check)
 		padapter->HalFunc.sreset_linked_status_check(padapter);
 }
+
 u8   rtw_hal_sreset_get_wifi_status(struct adapter *padapter)
 {
 	u8 status = 0;
@@ -498,7 +506,6 @@ bool rtw_hal_sreset_inprogress(struct adapter *padapter)
 		inprogress = padapter->HalFunc.sreset_inprogress(padapter);
 	return inprogress;
 }
-#endif	/* DBG_CONFIG_ERROR_DETECT */
 
 int rtw_hal_iol_cmd(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {

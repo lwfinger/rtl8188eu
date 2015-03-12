@@ -2666,8 +2666,6 @@ void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc)
 	pHalFunc->Efuse_PgPacketRead = &rtl8188e_Efuse_PgPacketRead;
 	pHalFunc->Efuse_PgPacketWrite = &rtl8188e_Efuse_PgPacketWrite;
 	pHalFunc->Efuse_WordEnableDataWrite = &rtl8188e_Efuse_WordEnableDataWrite;
-
-#ifdef DBG_CONFIG_ERROR_DETECT
 	pHalFunc->sreset_init_value = &sreset_init_value;
 	pHalFunc->sreset_reset_value = &sreset_reset_value;
 	pHalFunc->silentreset = &sreset_reset;
@@ -2675,7 +2673,6 @@ void rtl8188e_set_hal_ops(struct hal_ops *pHalFunc)
 	pHalFunc->sreset_linked_status_check  = &rtl8188e_sreset_linked_status_check;
 	pHalFunc->sreset_get_wifi_status  = &sreset_get_wifi_status;
 	pHalFunc->sreset_inprogress= &sreset_inprogress;
-#endif /* DBG_CONFIG_ERROR_DETECT */
 
 	pHalFunc->GetHalODMVarHandler = &rtl8188e_GetHalODMVar;
 	pHalFunc->SetHalODMVarHandler = &rtl8188e_SetHalODMVar;

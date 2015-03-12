@@ -21,6 +21,7 @@
 
 
 #include <rtw_debug.h>
+#include <rtw_sreset.h>
 
 #ifdef CONFIG_DEBUG_RTL871X
 
@@ -1177,8 +1178,6 @@ int proc_set_btcoex_dbg(struct file *file, const char __user *buffer,
 }
 #endif /* CONFIG_BT_COEXIST */
 
-#if defined(DBG_CONFIG_ERROR_DETECT)
-#include <rtw_sreset.h>
 int proc_get_sreset(char *page, char **start, off_t offset, int count, int *eof, void *data)
 {
 	struct net_device *dev = data;
@@ -1214,7 +1213,6 @@ int proc_set_sreset(struct file *file, const char __user *buffer, unsigned long 
 	return count;
 
 }
-#endif /* DBG_CONFIG_ERROR_DETECT */
 
 int proc_get_odm_dbg_comp(char *page, char **start, off_t offset, int count, int *eof, void *data)
 {

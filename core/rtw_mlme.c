@@ -1175,15 +1175,6 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 	drvext_surveydone_callback(&adapter->drvextpriv);
 #endif
 
-#ifdef DBG_CONFIG_ERROR_DETECT
-	{
-		struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
-		if(pmlmeext->sitesurvey_res.bss_cnt == 0){
-			/* rtw_hal_sreset_reset(adapter); */
-		}
-	}
-#endif
-
 	rtw_cfg80211_surveydone_event_callback(adapter);
 }
 
