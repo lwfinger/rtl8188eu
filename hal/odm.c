@@ -1434,17 +1434,7 @@ odm_DIG(
 	u8						CurrentIGI = pDM_DigTable->CurIGValue;
 	u8						Adap_IGI_Upper = pDM_Odm->IGI_target + 30 + (u8) pDM_Odm->TH_L2H_ini -(u8) pDM_Odm->TH_EDCCA_HL_diff;
 
-#ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
-	if((pDM_Odm->bLinked) && (pDM_Odm->Adapter->registrypriv.force_igi !=0))
-	{
-		printk("pDM_Odm->RSSI_Min=%d \n",pDM_Odm->RSSI_Min);
-		ODM_Write_DIG(pDM_Odm,pDM_Odm->Adapter->registrypriv.force_igi);
-		return;
-	}
-#endif
-
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_DIG()==>\n"));
-	/* if(!(pDM_Odm->SupportAbility & (ODM_BB_DIG|ODM_BB_FA_CNT))) */
 	if((!(pDM_Odm->SupportAbility&ODM_BB_DIG)) ||(!(pDM_Odm->SupportAbility&ODM_BB_FA_CNT)))
 	{
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_DIG() Return: SupportAbility ODM_BB_DIG or ODM_BB_FA_CNT is disabled\n"));

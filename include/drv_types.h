@@ -92,8 +92,7 @@ struct specific_device_id{
 
 };
 
-struct registry_priv
-{
+struct registry_priv {
 	u8	chip_version;
 	u8	rfintfs;
 	u8	lbkmode;
@@ -130,21 +129,16 @@ struct registry_priv
 	u8	uapsd_acbe_en;
 	u8	uapsd_acvi_en;
 	u8	uapsd_acvo_en;
-
 	struct wlan_bssid_ex    dev_network;
-
 	u8	ht_enable;
 	u8	cbw40_enable;
 	u8	ampdu_enable;//for tx
 	u8	rx_stbc;
 	u8	ampdu_amsdu;//A-MPDU Supports A-MSDU is permitted
 	u8	lowrate_two_xmit;
-
 	u8	rf_config ;
 	u8	low_power ;
-
 	u8	wifi_spec;// !turbo_mode
-
 	u8	channel_plan;
 #ifdef CONFIG_BT_COEXIST
 	u8	btcoex;
@@ -153,33 +147,20 @@ struct registry_priv
 	u8	bt_ampdu;
 #endif
 	bool	bAcceptAddbaReq;
-
 	u8	antdiv_cfg;
 	u8	antdiv_type;
-
 	u8	usbss_enable;//0:disable,1:enable
 	u8	hwpdn_mode;//0:disable,1:enable,2:decide by EFUSE config
 	u8	hwpwrp_detect;//0:disable,1:enable
-
 	u8	hw_wps_pbc;//0:disable,1:enable
-
 	u8	max_roaming_times; // the max number driver will try to roaming
-
 	u8 fw_iol; //enable iol without other concern
-
 #ifdef CONFIG_80211D
 	u8 enable80211d;
 #endif
-
 	u8 ifname[16];
 	u8 if2name[16];
-
 	u8 notch_filter;
-
-#ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
-	u8 force_ant;//0 normal,1 main,2 aux
-	u8 force_igi;//0 normal
-#endif
 	u8 regulatory_tid;
 	u8 qos_opt_enable;
 };
