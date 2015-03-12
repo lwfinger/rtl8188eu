@@ -215,13 +215,8 @@ int rtw_free_recvframe(union recv_frame *precvframe, _queue *pfree_recv_queue)
 	struct adapter *padapter=precvframe->u.hdr.adapter;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 
-	if(precvframe->u.hdr.pkt)
-	{
-#ifdef CONFIG_BSD_RX_USE_MBUF
-		m_freem(precvframe->u.hdr.pkt);
-#else	/*  CONFIG_BSD_RX_USE_MBUF */
+	if(precvframe->u.hdr.pkt) {
 		rtw_skb_free(precvframe->u.hdr.pkt);/* free skb by driver */
-#endif	/*  CONFIG_BSD_RX_USE_MBUF */
 		precvframe->u.hdr.pkt = NULL;
 	}
 

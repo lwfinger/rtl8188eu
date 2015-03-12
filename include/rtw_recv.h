@@ -329,17 +329,10 @@ struct recv_buf
 	len = (unsigned int )(tail - data);
 
 */
-struct recv_frame_hdr
-{
+struct recv_frame_hdr {
 	_list	list;
-#ifndef CONFIG_BSD_RX_USE_MBUF
 	struct sk_buff	 *pkt;
 	struct sk_buff	 *pkt_newalloc;
-#else // CONFIG_BSD_RX_USE_MBUF
-	_pkt	*pkt;
-	_pkt *pkt_newalloc;
-#endif // CONFIG_BSD_RX_USE_MBUF
-
 	struct adapter  *adapter;
 
 	u8 fragcnt;
