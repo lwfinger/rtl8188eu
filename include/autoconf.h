@@ -28,8 +28,6 @@
  * Internal  General Config
  */
 
-#define CONFIG_EMBEDDED_FWIMG
-
 #define CONFIG_AP_MODE
 
 #define CONFIG_P2P
