@@ -186,8 +186,12 @@ enum _IFACE_ID {
 	IFACE_ID_MAX,
 };
 
-struct dvobj_priv
-{
+struct rt_firmware {
+	u8			*szFwBuffer;
+	u32			ulFwLength;
+};
+
+struct dvobj_priv {
 	struct adapter *if1; //PRIMARY_ADAPTER
 	struct adapter *if2; //SECONDARY_ADAPTER
 
@@ -218,6 +222,7 @@ struct dvobj_priv
 
 	u8	irq_alloc;
 	ATOMIC_T continual_io_error;
+	struct rt_firmware firmware;
 
 	struct pwrctrl_priv pwrctl_priv;
 

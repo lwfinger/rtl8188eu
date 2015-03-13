@@ -1281,6 +1281,7 @@ int pm_netdev_open(struct net_device *pnetdev,u8 bnormal)
 static int netdev_close(struct net_device *pnetdev)
 {
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(pnetdev);
+	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+871x_drv - drv_close\n"));
 
@@ -1292,15 +1293,6 @@ static int netdev_close(struct net_device *pnetdev)
 	}
 	padapter->net_closed = true;
 
-/*	if(!padapter->hw_init_completed)
-	{
-		DBG_871X("(1)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
-
-		padapter->bDriverStopped = true;
-
-		rtw_dev_unload(padapter);
-	}
-	else*/
 	if(adapter_to_pwrctl(padapter)->rf_pwrstate == rf_on){
 		DBG_871X("(2)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
 
@@ -1338,6 +1330,8 @@ static int netdev_close(struct net_device *pnetdev)
 	rtw_p2p_enable(padapter, P2P_ROLE_DISABLE);
 #endif /* CONFIG_P2P */
 
+	kfree(dvobj->firmware.szFwBuffer);
+	dvobj->firmware.szFwBuffer = NULL;
 	rtw_scan_abort(padapter);
 	wdev_to_priv(padapter->rtw_wdev)->bandroid_scan = false;
 	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; /* set this at the end */

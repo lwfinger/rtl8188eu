@@ -19,6 +19,7 @@
  ******************************************************************************/
 #define _HAL_INIT_C_
 
+#include <linux/firmware.h>
 #include <drv_types.h>
 #include <rtw_efuse.h>
 
@@ -771,11 +772,42 @@ static s32 _FWFreeToGo(struct adapter *padapter)
 
 #define IS_FW_81xxC(padapter)	(((GET_HAL_DATA(padapter))->FirmwareSignature & 0xFFF0) == 0x88C0)
 
+static int load_firmware(struct rt_firmware *pFirmware, struct device *device, const char *fw_name)
+{
+	s32	rtStatus = _SUCCESS;
+	const struct firmware *fw;
+	int err = request_firmware(&fw, fw_name, device);
 
-#ifdef CONFIG_FILE_FWIMG
-extern char *rtw_fw_file_path;
-u8	FwBuffer8188E[FW_8188E_SIZE];
-#endif /* CONFIG_FILE_FWIMG */
+	if (err) {
+		pr_err("Request firmware failed with error 0x%x\n", err);
+		rtStatus = _FAIL;
+		goto Exit;
+	}
+	if (!fw) {
+		pr_err("Firmware %s not available\n", fw_name);
+		rtStatus = _FAIL;
+		goto Exit;
+	}
+	if (fw->size > FW_8188E_SIZE) {
+		rtStatus = _FAIL;
+		RT_TRACE(_module_hal_init_c_, _drv_err_, ("Firmware size exceed 0x%X. Check it.\n", FW_8188E_SIZE));
+		goto Exit;
+	}
+
+	pFirmware->szFwBuffer = kzalloc(FW_8188E_SIZE, GFP_KERNEL);
+	if (!pFirmware->szFwBuffer) {
+		pr_err("Failed to allocate pFirmware->szFwBuffer\n");
+		rtStatus = _FAIL;
+		goto Exit;
+	}
+	memcpy(pFirmware->szFwBuffer, fw->data, fw->size);
+	pFirmware->ulFwLength = fw->size;
+	release_firmware(fw);
+	DBG_871X_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, pFirmware->ulFwLength);
+
+Exit:
+	return rtStatus;
+}
 
 /* 	Description: */
 /* 		Download 8192C firmware code. */
@@ -785,77 +817,38 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 	u8 writeFW_retry = 0;
 	u32 fwdl_start_time;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(padapter);
+	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
+	struct device *device = dvobj_to_dev(dvobj);
+	struct rt_firmware_hdr *pFwHdr = NULL;
+	u8 *pFirmwareBuf;
+	u32 FirmwareLen;
+	const char *fw_name = "rtlwifi/rtl8188eufw.bin";
+	static int log_version;
 
-	u8			*FwImage;
-	u32			FwImageLen;
-	u8			*pFwImageFileName;
-	u8			*pucMappedFile = NULL;
-	PRT_FIRMWARE_8188E	pFirmware = NULL;
-	PRT_8188E_FIRMWARE_HDR		pFwHdr = NULL;
-	u8			*pFirmwareBuf;
-	u32			FirmwareLen;
-
-
-	RT_TRACE(_module_hal_init_c_, _drv_info_, ("+%s\n", __FUNCTION__));
-	pFirmware = (PRT_FIRMWARE_8188E)rtw_zmalloc(sizeof(RT_FIRMWARE_8188E));
-	if(!pFirmware)
-	{
-
-		rtStatus = _FAIL;
+	RT_TRACE(_module_hal_init_c_, _drv_info_, ("+%s\n", __func__));
+	if (!dvobj->firmware.szFwBuffer)
+		rtStatus = load_firmware(&dvobj->firmware, device, fw_name);
+	if (rtStatus == _FAIL) {
+		dvobj->firmware.szFwBuffer = NULL;
 		goto Exit;
 	}
-
-	FwImage = (u8*)Rtl8188E_FwImageArray;
-	FwImageLen = Rtl8188E_FWImgArrayLength;
-
-	#ifdef CONFIG_FILE_FWIMG
-	if(rtw_is_file_readable(rtw_fw_file_path) == true)
-	{
-		DBG_871X("%s accquire FW from file:%s\n", __FUNCTION__, rtw_fw_file_path);
-		pFirmware->eFWSource = FW_SOURCE_IMG_FILE;
-	}
-	else
-	#endif /* CONFIG_FILE_FWIMG */
-	{
-		pFirmware->eFWSource = FW_SOURCE_HEADER_FILE;
-	}
-
-	switch(pFirmware->eFWSource)
-	{
-		case FW_SOURCE_IMG_FILE:
-			#ifdef CONFIG_FILE_FWIMG
-			rtStatus = rtw_retrive_from_file(rtw_fw_file_path, FwBuffer8188E, FW_8188E_SIZE);
-			pFirmware->ulFwLength = rtStatus>=0?rtStatus:0;
-			pFirmware->szFwBuffer = FwBuffer8188E;
-			#endif /* CONFIG_FILE_FWIMG */
-			break;
-		case FW_SOURCE_HEADER_FILE:
-			if (FwImageLen > FW_8188E_SIZE) {
-				rtStatus = _FAIL;
-				RT_TRACE(_module_hal_init_c_, _drv_err_, ("Firmware size exceed 0x%X. Check it.\n", FW_8188E_SIZE) );
-				goto Exit;
-			}
-
-			pFirmware->szFwBuffer = FwImage;
-			pFirmware->ulFwLength = FwImageLen;
-			break;
-	}
-	pFirmwareBuf = pFirmware->szFwBuffer;
-	FirmwareLen = pFirmware->ulFwLength;
-	DBG_871X_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, FirmwareLen);
+	pFirmwareBuf = dvobj->firmware.szFwBuffer;
+	FirmwareLen = dvobj->firmware.ulFwLength;
 
 	/*  To Check Fw header. Added by tynli. 2009.12.04. */
-	pFwHdr = (PRT_8188E_FIRMWARE_HDR)pFirmware->szFwBuffer;
+	pFwHdr = (struct rt_firmware_hdr *)dvobj->firmware.szFwBuffer;
 
 	pHalData->FirmwareVersion =  le16_to_cpu(pFwHdr->Version);
 	pHalData->FirmwareSubVersion = pFwHdr->Subversion;
 	pHalData->FirmwareSignature = le16_to_cpu(pFwHdr->Signature);
 
-	DBG_871X ("%s: fw_ver=%d fw_subver=%d sig=0x%x\n",
-		  __FUNCTION__, pHalData->FirmwareVersion, pHalData->FirmwareSubVersion, pHalData->FirmwareSignature);
-
-	if (IS_FW_HEADER_EXIST(pFwHdr))
-	{
+	if (!log_version++) {
+		pr_info("%sLoaded firmware file %s\n", DRIVER_PREFIX, fw_name);
+		pr_info("%sFirmware Version %d, SubVersion %d, Signature 0x%x\n",
+			DRIVER_PREFIX, pHalData->FirmwareVersion,
+			pHalData->FirmwareSubVersion, pHalData->FirmwareSignature);
+	}
+	if (IS_FW_HEADER_EXIST(pFwHdr)) {
 		/*  Shift 32 bytes for FW header */
 		pFirmwareBuf = pFirmwareBuf + 32;
 		FirmwareLen = FirmwareLen - 32;
@@ -863,33 +856,29 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 
 	/*  Suggested by Filen. If 8051 is running in RAM code, driver should inform Fw to reset by itself, */
 	/*  or it will cause download Fw fail. 2010.02.01. by tynli. */
-	if (rtw_read8(padapter, REG_MCUFWDL) & RAM_DL_SEL) /* 8051 RAM code */
-	{
+	if (rtw_read8(padapter, REG_MCUFWDL) & RAM_DL_SEL) { /* 8051 RAM code */
 		rtw_write8(padapter, REG_MCUFWDL, 0x00);
 		_8051Reset88E(padapter);
 	}
 
 	_FWDownloadEnable(padapter, true);
-	fwdl_start_time = rtw_get_current_time();
-	while(1) {
+	fwdl_start_time = jiffies;
+	while (1) {
 		/* reset the FWDL chksum */
-		rtw_write8(padapter, REG_MCUFWDL, rtw_read8(padapter, REG_MCUFWDL)|FWDL_ChkSum_rpt);
+		rtw_write8(padapter, REG_MCUFWDL, rtw_read8(padapter, REG_MCUFWDL) | FWDL_ChkSum_rpt);
 
 		rtStatus = _WriteFW(padapter, pFirmwareBuf, FirmwareLen);
 
-		if(rtStatus == _SUCCESS || padapter->bDriverStopped || padapter->bSurpriseRemoved
-			||(writeFW_retry++ >= 3 && rtw_get_passing_time_ms(fwdl_start_time) > 500)
-		)
+		if (rtStatus == _SUCCESS ||
+		    (rtw_get_passing_time_ms(fwdl_start_time) > 500 && writeFW_retry++ >= 3))
 			break;
+
+		DBG_871X("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n",
+			__func__, writeFW_retry, rtw_get_passing_time_ms(fwdl_start_time)
+		);
 	}
 	_FWDownloadEnable(padapter, false);
-
-	DBG_871X("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n", __FUNCTION__
-		, writeFW_retry
-		, rtw_get_passing_time_ms(fwdl_start_time)
-	);
-
-	if(_SUCCESS != rtStatus){
+	if (_SUCCESS != rtStatus) {
 		DBG_871X("DL Firmware failed!\n");
 		goto Exit;
 	}
@@ -902,10 +891,6 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 	RT_TRACE(_module_hal_init_c_, _drv_info_, ("Firmware is ready to run!\n"));
 
 Exit:
-
-	if (pFirmware)
-		rtw_mfree((u8*)pFirmware, sizeof(RT_FIRMWARE_8188E));
-
 	return rtStatus;
 }
 

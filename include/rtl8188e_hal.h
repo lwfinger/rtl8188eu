@@ -71,59 +71,44 @@
 #define MAX_PAGE_SIZE			4096	// @ page : 4k bytes
 
 #define IS_FW_HEADER_EXIST(_pFwHdr)	((le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x92C0 ||\
-									(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x88C0 ||\
-									(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x2300 ||\
-									(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x88E0)
+					(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x88C0 ||\
+					(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x2300 ||\
+					(le16_to_cpu(_pFwHdr->Signature)&0xFFF0) == 0x88E0)
 
-typedef enum _FIRMWARE_SOURCE {
-	FW_SOURCE_IMG_FILE = 0,
-	FW_SOURCE_HEADER_FILE = 1,		//from header file
-} FIRMWARE_SOURCE, *PFIRMWARE_SOURCE;
+// This structure must be careful with byte-ordering
 
-typedef struct _RT_FIRMWARE {
-	FIRMWARE_SOURCE	eFWSource;
-#ifdef CONFIG_EMBEDDED_FWIMG
-	u8*			szFwBuffer;
-#else
-	u8			szFwBuffer[FW_8188E_SIZE];
-#endif
-	u32			ulFwLength;
-} RT_FIRMWARE, *PRT_FIRMWARE, RT_FIRMWARE_8188E, *PRT_FIRMWARE_8188E;
-
-//
-// This structure must be cared byte-ordering
-//
-
-typedef struct _RT_8188E_FIRMWARE_HDR
-{
-	// 8-byte alinment required
-
-	//--- LONG WORD 0 ----
-	__le16		Signature;	// 92C0: test chip; 92C, 88C0: test chip; 88C1: MP A-cut; 92C1: MP A-cut
-	u8		Category;	// AP/NIC and USB/PCI
-	u8		Function;	// Reserved for different FW function indcation, for further use when driver needs to download different FW in different conditions
-	__le16		Version;		// FW Version
-	u8		Subversion;	// FW Subversion, default 0x00
+struct rt_firmware_hdr {
+	/*  8-byte alinment required */
+	/*  LONG WORD 0 ---- */
+	__le16		Signature;	/* 92C0: test chip; 92C,
+					 * 88C0: test chip; 88C1: MP A-cut;
+					 * 92C1: MP A-cut */
+	u8		Category;	/*  AP/NIC and USB/PCI */
+	u8		Function;	/*  Reserved for different FW function
+					 *  indcation, for further use when
+					 *  driver needs to download different
+					 *  FW for different conditions */
+	__le16		Version;	/*  FW Version */
+	u8		Subversion;	/*  FW Subversion, default 0x00 */
 	u16		Rsvd1;
 
-
-	//--- LONG WORD 1 ----
-	u8		Month;	// Release time Month field
-	u8		Date;	// Release time Date field
-	u8		Hour;	// Release time Hour field
-	u8		Minute;	// Release time Minute field
-	__le16		RamCodeSize;	// The size of RAM code
+	/*  LONG WORD 1 ---- */
+	u8		Month;	/*  Release time Month field */
+	u8		Date;	/*  Release time Date field */
+	u8		Hour;	/*  Release time Hour field */
+	u8		Minute;	/*  Release time Minute field */
+	__le16		RamCodeSize;	/*  The size of RAM code */
 	u8		Foundry;
 	u8		Rsvd2;
 
-	//--- LONG WORD 2 ----
-	__le32		SvnIdx;	// The SVN entry index
+	/*  LONG WORD 2 ---- */
+	__le32		SvnIdx;	/*  The SVN entry index */
 	u32		Rsvd3;
 
-	//--- LONG WORD 3 ----
+	/*  LONG WORD 3 ---- */
 	u32		Rsvd4;
 	u32		Rsvd5;
-}RT_8188E_FIRMWARE_HDR, *PRT_8188E_FIRMWARE_HDR;
+};
 
 
 #define DRIVER_EARLY_INT_TIME		0x05
