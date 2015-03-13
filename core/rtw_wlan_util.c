@@ -302,8 +302,8 @@ void get_rate_set(struct adapter *padapter, unsigned char *pbssrate, int *bssrat
 }
 
 void UpdateBrateTbl(
-	IN struct adapter *	Adapter,
-	IN u8			*mBratesOS
+	struct adapter *	Adapter,
+	u8			*mBratesOS
 )
 {
 	u8	i;

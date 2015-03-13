@@ -297,7 +297,7 @@ void rtw_ps_processor(struct adapter*padapter);
 #ifdef CONFIG_AUTOSUSPEND
 int autoresume_enter(struct adapter* padapter);
 #endif
-rt_rf_power_state RfOnOffDetect(IN	struct adapter *pAdapter );
+rt_rf_power_state RfOnOffDetect(struct adapter *pAdapter );
 
 s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms);
 void LPS_Enter(struct adapter *padapter);

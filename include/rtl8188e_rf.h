@@ -25,20 +25,20 @@
 #define		RF6052_MAX_PATH				2
 
 
-int	PHY_RF6052_Config8188E(	IN	struct adapter *	Adapter	);
-void		rtl8188e_RF_ChangeTxPath(	IN	struct adapter *Adapter,
-										IN	u16		DataRate);
+int	PHY_RF6052_Config8188E(	struct adapter *	Adapter	);
+void		rtl8188e_RF_ChangeTxPath(	struct adapter *Adapter,
+										u16		DataRate);
 void		rtl8188e_PHY_RF6052SetBandwidth(
-										IN	struct adapter *			Adapter,
-										IN	HT_CHANNEL_WIDTH		Bandwidth);
+										struct adapter *			Adapter,
+										HT_CHANNEL_WIDTH		Bandwidth);
 void	rtl8188e_PHY_RF6052SetCckTxPower(
-										IN	struct adapter *Adapter,
-										IN	u8*		pPowerlevel);
+										struct adapter *Adapter,
+										u8*		pPowerlevel);
 void	rtl8188e_PHY_RF6052SetOFDMTxPower(
-											IN	struct adapter *Adapter,
-											IN	u8*		pPowerLevelOFDM,
-											IN	u8*		pPowerLevelBW20,
-											IN	u8*		pPowerLevelBW40,
-											IN	u8		Channel);
+											struct adapter *Adapter,
+											u8*		pPowerLevelOFDM,
+											u8*		pPowerLevelBW20,
+											u8*		pPowerLevelBW40,
+											u8		Channel);
 
 #endif//__RTL8188E_RF_H__

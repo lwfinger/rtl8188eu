@@ -627,7 +627,7 @@ void LPS_Leave(struct adapter *padapter)
 /*  Description: Leave all power save mode: LPS, FwLPS, IPS if needed. */
 /*  Move code to function by tynli. 2010.03.26. */
 /*  */
-void LeaveAllPowerSaveMode(IN struct adapter *Adapter)
+void LeaveAllPowerSaveMode(struct adapter *Adapter)
 {
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 	u8	enqueue = 0;

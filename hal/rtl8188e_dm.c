@@ -42,14 +42,14 @@
 
 static void
 dm_CheckProtection(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 }
 
 static void
 dm_CheckStatistics(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 }
@@ -99,7 +99,7 @@ static void dm_CheckPbcGPIO(struct adapter *padapter)
 /*  Initialize GPIO setting registers */
 static void
 dm_InitGPIOSetting(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(Adapter);
@@ -244,7 +244,7 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 
 void
 rtl8188e_InitHalDm(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
@@ -267,7 +267,7 @@ rtl8188e_InitHalDm(
 
 void
 rtl8188e_HalDmWatchDog(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	bool		bFwCurrentInPSMode = false;
@@ -329,7 +329,7 @@ skip_dm:
 	return;
 }
 
-void rtl8188e_init_dm_priv(IN struct adapter *Adapter)
+void rtl8188e_init_dm_priv(struct adapter *Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
@@ -340,7 +340,7 @@ void rtl8188e_init_dm_priv(IN struct adapter *Adapter)
 	ODM_InitDebugSetting(podmpriv);
 }
 
-void rtl8188e_deinit_dm_priv(IN struct adapter *Adapter)
+void rtl8188e_deinit_dm_priv(struct adapter *Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;

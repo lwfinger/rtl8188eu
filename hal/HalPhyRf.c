@@ -26,7 +26,7 @@
 
 void
 ODM_ResetIQKResult(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 )
 {
 	u8		i;

@@ -185,7 +185,7 @@ ODM_ConfigBBWithHeaderFile(
 
 HAL_STATUS
 ODM_ConfigMACWithHeaderFile(
-	IN  	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
     );
 
 

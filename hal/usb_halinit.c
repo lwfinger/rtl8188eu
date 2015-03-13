@@ -44,8 +44,8 @@
 
 static void
 _ConfigNormalChipOutEP_8188E(
-	IN	struct adapter *pAdapter,
-	IN	u8		NumOutPipe
+	struct adapter *pAdapter,
+	u8		NumOutPipe
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
@@ -72,9 +72,9 @@ _ConfigNormalChipOutEP_8188E(
 }
 
 static bool HalUsbSetQueuePipeMapping8188EUsb(
-	IN	struct adapter *pAdapter,
-	IN	u8		NumInPipe,
-	IN	u8		NumOutPipe
+	struct adapter *pAdapter,
+	u8		NumInPipe,
+	u8		NumOutPipe
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
@@ -281,7 +281,7 @@ static void _InitBTCoexist(struct adapter *padapter)
 /*  */
 static void
 _SetMacID(
-	IN  struct adapter *Adapter, u8* MacID
+	struct adapter *Adapter, u8* MacID
 	)
 {
 	u32 i;
@@ -292,7 +292,7 @@ _SetMacID(
 
 static void
 _SetBSSID(
-	IN  struct adapter *Adapter, u8* BSSID
+	struct adapter *Adapter, u8* BSSID
 	)
 {
 	u32 i;
@@ -305,7 +305,7 @@ _SetBSSID(
 /*  Shall USB interface init this? */
 static void
 _InitInterrupt(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	u32	imr,imr_ex;
@@ -343,7 +343,7 @@ _InitInterrupt(
 
 static void
 _InitQueueReservedPage(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
@@ -392,8 +392,8 @@ _InitQueueReservedPage(
 
 static void
 _InitTxBufferBoundary(
-	IN struct adapter *Adapter,
-	IN u8 txpktbuf_bndy
+	struct adapter *Adapter,
+	u8 txpktbuf_bndy
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -411,7 +411,7 @@ _InitTxBufferBoundary(
 
 static void
 _InitPageBoundary(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	/*  RX Page Boundary */
@@ -424,13 +424,13 @@ _InitPageBoundary(
 
 static void
 _InitNormalChipRegPriority(
-	IN	struct adapter *Adapter,
-	IN	u16		beQ,
-	IN	u16		bkQ,
-	IN	u16		viQ,
-	IN	u16		voQ,
-	IN	u16		mgtQ,
-	IN	u16		hiQ
+	struct adapter *Adapter,
+	u16		beQ,
+	u16		bkQ,
+	u16		viQ,
+	u16		voQ,
+	u16		mgtQ,
+	u16		hiQ
 	)
 {
 	u16 value16	= (rtw_read16(Adapter, REG_TRXDMA_CTRL) & 0x7);
@@ -444,7 +444,7 @@ _InitNormalChipRegPriority(
 
 static void
 _InitNormalChipOneOutEpPriority(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -479,7 +479,7 @@ _InitNormalChipOneOutEpPriority(
 
 static void
 _InitNormalChipTwoOutEpPriority(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -532,7 +532,7 @@ _InitNormalChipTwoOutEpPriority(
 
 static void
 _InitNormalChipThreeOutEpPriority(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
@@ -559,7 +559,7 @@ _InitNormalChipThreeOutEpPriority(
 
 static void
 _InitQueuePriority(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -587,7 +587,7 @@ _InitQueuePriority(
 
 static void
 _InitHardwareDropIncorrectBulkOut(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	u32	value32 = rtw_read32(Adapter, REG_TXDMA_OFFSET_CHK);
@@ -598,7 +598,7 @@ _InitHardwareDropIncorrectBulkOut(
 
 static void
 _InitNetworkType(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	u32	value32;
@@ -613,7 +613,7 @@ _InitNetworkType(
 
 static void
 _InitTransferPageSize(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	/*  Tx page size is always 128. */
@@ -625,8 +625,8 @@ _InitTransferPageSize(
 
 static void
 _InitDriverInfoSize(
-	IN  struct adapter *Adapter,
-	IN	u8		drvInfoSize
+	struct adapter *Adapter,
+	u8		drvInfoSize
 	)
 {
 	rtw_write8(Adapter,REG_RX_DRVINFO_SZ, drvInfoSize);
@@ -634,7 +634,7 @@ _InitDriverInfoSize(
 
 static void
 _InitWMACSetting(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	/* u32			value32; */
@@ -676,7 +676,7 @@ _InitWMACSetting(
 
 static void
 _InitAdaptiveCtrl(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	u16	value16;
@@ -703,7 +703,7 @@ _InitAdaptiveCtrl(
 
 static void
 _InitRateFallback(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	/*  Set Data Auto Rate Fallback Retry Count register. */
@@ -717,7 +717,7 @@ _InitRateFallback(
 
 static void
 _InitEDCA(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	/*  Set Spec SIFS (used in NAV) */
@@ -740,8 +740,8 @@ _InitEDCA(
 
 static void
 _InitBeaconMaxError(
-	IN  struct adapter *Adapter,
-	IN	bool		InfraMode
+	struct adapter *Adapter,
+	bool		InfraMode
 	)
 {
 
@@ -750,7 +750,7 @@ _InitBeaconMaxError(
 
 static void
 _InitRDGSetting(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	rtw_write8(Adapter,REG_RD_CTRL,0xFF);
@@ -760,7 +760,7 @@ _InitRDGSetting(
 
 static void
 _InitRxSetting(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	rtw_write32(Adapter, REG_MACID, 0x87654321);
@@ -769,7 +769,7 @@ _InitRxSetting(
 
 static void
 _InitRetryFunction(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	u8	value8;
@@ -797,7 +797,7 @@ _InitRetryFunction(
  *---------------------------------------------------------------------------*/
 static void
 usb_AggSettingTxUpdate(
-	IN	struct adapter *		Adapter
+	struct adapter *		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -834,7 +834,7 @@ usb_AggSettingTxUpdate(
  *---------------------------------------------------------------------------*/
 static void
 usb_AggSettingRxUpdate(
-	IN	struct adapter *		Adapter
+	struct adapter *		Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -918,7 +918,7 @@ usb_AggSettingRxUpdate(
 
 static void
 InitUsbAggregationSetting(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -933,8 +933,8 @@ InitUsbAggregationSetting(
 	pHalData->UsbRxHighSpeedMode = false;
 }
 static void HalRxAggr8188EUsb(
-	IN  struct adapter *Adapter,
-	IN bool	Value
+	struct adapter *Adapter,
+	bool	Value
 	)
 {
 }
@@ -959,14 +959,14 @@ static void HalRxAggr8188EUsb(
  *
  *---------------------------------------------------------------------------*/
 static void USB_AggModeSwitch(
-	IN	struct adapter *		Adapter
+	struct adapter *		Adapter
 	)
 {
 }	/*  USB_AggModeSwitch */
 
 static void
 _InitOperationMode(
-	IN	struct adapter *		Adapter
+	struct adapter *		Adapter
 	)
 {
 }
@@ -974,7 +974,7 @@ _InitOperationMode(
 
  static void
 _InitBeaconParameters(
-	IN  struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -999,7 +999,7 @@ _InitBeaconParameters(
 
 static void
 _InitRFType(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	struct registry_priv	 *pregpriv = &Adapter->registrypriv;
@@ -1029,9 +1029,9 @@ _InitRFType(
 
 static void
 _BeaconFunctionEnable(
-	IN	struct adapter *	Adapter,
-	IN	bool			Enable,
-	IN	bool			Linked
+	struct adapter *	Adapter,
+	bool			Enable,
+	bool			Linked
 	)
 {
 	rtw_write8(Adapter, REG_BCN_CTRL, (BIT4 | BIT3 | BIT1));
@@ -1044,7 +1044,7 @@ _BeaconFunctionEnable(
 
 /*  Set CCK and OFDM Block "ON" */
 static void _BBTurnOnBlock(
-	IN	struct adapter *	Adapter
+	struct adapter *	Adapter
 	)
 {
 #if (DISABLE_BB_RF)
@@ -1056,7 +1056,7 @@ static void _BBTurnOnBlock(
 }
 
 static void _RfPowerSave(
-	IN	struct adapter *	Adapter
+	struct adapter *	Adapter
 	)
 {
 }
@@ -1067,7 +1067,7 @@ enum {
 };
 
 static void
-_InitAntenna_Selection(IN	struct adapter *Adapter)
+_InitAntenna_Selection(struct adapter *Adapter)
 {
 
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
@@ -1095,7 +1095,7 @@ _InitAntenna_Selection(IN	struct adapter *Adapter)
 /*  */
 static void
 HalDetectSelectiveSuspendMode(
-	IN struct adapter *			Adapter
+	struct adapter *			Adapter
 	)
 {
 }	/*  HalDetectSelectiveSuspendMode */
@@ -1116,14 +1116,14 @@ HalDetectSelectiveSuspendMode(
  *---------------------------------------------------------------------------*/
 static void
 HwSuspendModeEnable_88eu(
-	IN	struct adapter *pAdapter,
-	IN	u8			Type
+	struct adapter *pAdapter,
+	u8			Type
 	)
 {
 	return;
 }	/*  HwSuspendModeEnable92Cu */
 
-rt_rf_power_state RfOnOffDetect(IN	struct adapter *pAdapter )
+rt_rf_power_state RfOnOffDetect(struct adapter *pAdapter )
 {
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
 	u8	val8;
@@ -1546,7 +1546,7 @@ void _ps_open_RF(struct adapter *padapter) {
 }
 
 static void hal_poweroff_rtl8188eu(
-	IN	struct adapter *		Adapter
+	struct adapter *		Adapter
 )
 {
 	u8	val8;
@@ -1735,9 +1735,9 @@ static unsigned int rtl8188eu_inirp_deinit(struct adapter *Adapter)
 /*  */
 static void
 _ReadIDs(
-	IN	struct adapter *Adapter,
-	IN	u8*		PROMContent,
-	IN	bool		AutoloadFail
+	struct adapter *Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 }
@@ -1745,18 +1745,18 @@ _ReadIDs(
 
 static void
 _ReadMACAddress(
-	IN	struct adapter *Adapter,
-	IN	u8*		PROMContent,
-	IN	bool		AutoloadFail
+	struct adapter *Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 }
 
 static void
 _ReadBoardType(
-	IN	struct adapter *Adapter,
-	IN	u8*		PROMContent,
-	IN	bool		AutoloadFail
+	struct adapter *Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 
@@ -1765,9 +1765,9 @@ _ReadBoardType(
 
 static void
 _ReadLEDSetting(
-	IN	struct adapter *Adapter,
-	IN	u8*		PROMContent,
-	IN	bool		AutoloadFail
+	struct adapter *Adapter,
+	u8*		PROMContent,
+	bool		AutoloadFail
 	)
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
@@ -1789,36 +1789,36 @@ _ReadLEDSetting(
 
 static void
 _ReadThermalMeter(
-	IN	struct adapter *Adapter,
-	IN	u8*	PROMContent,
-	IN	bool		AutoloadFail
+	struct adapter *Adapter,
+	u8*	PROMContent,
+	bool		AutoloadFail
 	)
 {
 }
 
 static void
 _ReadRFSetting(
-	IN	struct adapter *Adapter,
-	IN	u8*	PROMContent,
-	IN	bool		AutoloadFail
+	struct adapter *Adapter,
+	u8*	PROMContent,
+	bool		AutoloadFail
 	)
 {
 }
 
 static void
 _ReadPROMVersion(
-	IN	struct adapter *Adapter,
-	IN	u8*	PROMContent,
-	IN	bool		AutoloadFail
+	struct adapter *Adapter,
+	u8*	PROMContent,
+	bool		AutoloadFail
 	)
 {
 }
 
 static void
 readAntennaDiversity(
-	IN	struct adapter *pAdapter,
-	IN	u8			*hwinfo,
-	IN	bool		AutoLoadFail
+	struct adapter *pAdapter,
+	u8			*hwinfo,
+	bool		AutoLoadFail
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -1829,16 +1829,16 @@ readAntennaDiversity(
 
 static void
 hal_InitPGData(
-	IN	struct adapter *pAdapter,
-	IN	OUT	u8		*PROMContent
+	struct adapter *pAdapter,
+	u8		*PROMContent
 	)
 {
 }
 static void
 Hal_EfuseParsePIDVID_8188EU(
-	IN	struct adapter *	pAdapter,
-	IN	u8*				hwinfo,
-	IN	bool			AutoLoadFail
+	struct adapter *	pAdapter,
+	u8*				hwinfo,
+	bool			AutoLoadFail
 	)
 {
 
@@ -1868,9 +1868,9 @@ Hal_EfuseParsePIDVID_8188EU(
 
 static void
 Hal_EfuseParseMACAddr_8188EU(
-	IN	struct adapter *	padapter,
-	IN	u8*			hwinfo,
-	IN	bool			AutoLoadFail
+	struct adapter *	padapter,
+	u8*			hwinfo,
+	bool			AutoLoadFail
 	)
 {
 	u16			i, usValue;
@@ -1901,19 +1901,19 @@ Hal_EfuseParseMACAddr_8188EU(
 
 static void
 Hal_CustomizeByCustomerID_8188EU(
-	IN	struct adapter *	padapter
+	struct adapter *	padapter
 	)
 {
 }
 
 /*  Read HW power down mode selection */
-static void _ReadPSSetting(IN struct adapter *Adapter,IN u8*PROMContent,IN u8	AutoloadFail)
+static void _ReadPSSetting(struct adapter *Adapter,u8*PROMContent,u8	AutoloadFail)
 {
 }
 
 static void
 readAdapterInfo_8188EU(
-	IN	struct adapter *padapter
+	struct adapter *padapter
 	)
 {
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
@@ -1943,7 +1943,7 @@ readAdapterInfo_8188EU(
 }
 
 static void _ReadPROMContent(
-	IN struct adapter *		Adapter
+	struct adapter *		Adapter
 	)
 {
 	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
@@ -1965,7 +1965,7 @@ static void _ReadPROMContent(
 
 static void
 _ReadRFType(
-	IN	struct adapter *Adapter
+	struct adapter *Adapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -2938,9 +2938,9 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 /* 		Query setting of specified variable. */
 /*  */
 static u8 GetHalDefVar8188EUsb(
-	IN	struct adapter *			Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	void *					pValue
+	struct adapter *			Adapter,
+	HAL_DEF_VARIABLE		eVariable,
+	void *					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -3063,9 +3063,9 @@ static u8 GetHalDefVar8188EUsb(
 /* 		Change default setting of specified variable. */
 /*  */
 static u8 SetHalDefVar8188EUsb(
-	IN	struct adapter *			Adapter,
-	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	void *					pValue
+	struct adapter *			Adapter,
+	HAL_DEF_VARIABLE		eVariable,
+	void *					pValue
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

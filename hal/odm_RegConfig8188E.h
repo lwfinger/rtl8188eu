@@ -22,56 +22,56 @@
  
 void
 odm_ConfigRFReg_8188E(
-	IN 	PDM_ODM_T 				pDM_Odm,
-	IN 	u32 					Addr,
-	IN 	u32 					Data,
-	IN  ODM_RF_RADIO_PATH_E     RF_PATH,
-	IN	u32				    RegAddr
+	PDM_ODM_T 				pDM_Odm,
+	u32 					Addr,
+	u32 					Data,
+	ODM_RF_RADIO_PATH_E     RF_PATH,
+	u32				    RegAddr
 	);
 
 void 
 odm_ConfigRF_RadioA_8188E(
-	IN 	PDM_ODM_T 				pDM_Odm,
-	IN 	u32 					Addr,
-	IN 	u32 					Data
+	PDM_ODM_T 				pDM_Odm,
+	u32 					Addr,
+	u32 					Data
 	);
 
 void 
 odm_ConfigRF_RadioB_8188E(
-	IN 	PDM_ODM_T 				pDM_Odm,
-	IN 	u32 					Addr,
-	IN 	u32 					Data
+	PDM_ODM_T 				pDM_Odm,
+	u32 					Addr,
+	u32 					Data
 	);
 
 void 
 odm_ConfigMAC_8188E(
- 	IN 	PDM_ODM_T 	pDM_Odm,
- 	IN 	u32 		Addr,
- 	IN 	u8 		Data
+ 	PDM_ODM_T 	pDM_Odm,
+ 	u32 		Addr,
+ 	u8 		Data
  	);
 
 void 
 odm_ConfigBB_AGC_8188E(
-    IN 	PDM_ODM_T 	pDM_Odm,
-    IN 	u32 		Addr,
-    IN 	u32 		Bitmask,
-    IN 	u32 		Data
+    PDM_ODM_T 	pDM_Odm,
+    u32 		Addr,
+    u32 		Bitmask,
+    u32 		Data
     );
 
 void
 odm_ConfigBB_PHY_REG_PG_8188E(
-	IN 	PDM_ODM_T 	pDM_Odm,
-    IN 	u32 		Addr,
-    IN 	u32 		Bitmask,
-    IN 	u32 		Data
+	PDM_ODM_T 	pDM_Odm,
+    u32 		Addr,
+    u32 		Bitmask,
+    u32 		Data
     );
 
 void 
 odm_ConfigBB_PHY_8188E(
-	IN 	PDM_ODM_T 	pDM_Odm,
-    IN 	u32 		Addr,
-    IN 	u32 		Bitmask,
-    IN 	u32 		Data
+	PDM_ODM_T 	pDM_Odm,
+    u32 		Addr,
+    u32 		Bitmask,
+    u32 		Data
     );
 
 #endif /*  end of SUPPORT */

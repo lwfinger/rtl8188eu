@@ -231,37 +231,37 @@ unsigned int TxPwrTrk_OFDM_SwingTbl[TxPwrTrk_OFDM_SwingTbl_Len] = {
 /* START------------COMMON INFO RELATED--------------- */
 void
 odm_CommonInfoSelfInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_CommonInfoSelfUpdate(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_CmnInfoInit_Debug(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_CmnInfoHook_Debug(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_CmnInfoUpdate_Debug(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 /*
 void
 odm_FindMinimumRSSI(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_IsLinked(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 */
 /* END------------COMMON INFO RELATED--------------- */
@@ -269,158 +269,158 @@ odm_IsLinked(
 /* START---------------DIG--------------------------- */
 void
 odm_FalseAlarmCounterStatistics(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_DIGInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_DIG(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_CCKPacketDetectionThresh(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 /* END---------------DIG--------------------------- */
 
 /* START-------BB POWER SAVE----------------------- */
 void
 odm_DynamicBBPowerSavingInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_DynamicBBPowerSaving(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_1R_CCA(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 void
 odm_AdaptivityInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 );
 
 void
 odm_Adaptivity(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8			IGI
+		PDM_ODM_T		pDM_Odm,
+		u8			IGI
 );
 /* END---------BB POWER SAVE----------------------- */
 
 void
 odm_RefreshRateAdaptiveMaskMP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_RefreshRateAdaptiveMaskCE(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_RefreshRateAdaptiveMaskAPADSL(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_DynamicTxPowerInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_DynamicTxPowerRestorePowerIndex(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_DynamicTxPowerNIC(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_DynamicTxPowerSavePowerIndex(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_DynamicTxPowerWritePowerIndex(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		Value);
+	PDM_ODM_T	pDM_Odm,
+	u8		Value);
 
 void
 odm_DynamicTxPower_92C(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_DynamicTxPower_92D(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_RSSIMonitorInit(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_RSSIMonitorCheckMP(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_RSSIMonitorCheckCE(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 void
 odm_RSSIMonitorCheckAP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 
 
 void
 odm_RSSIMonitorCheck(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 void
 odm_DynamicTxPower(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_DynamicTxPowerAP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 
 void
 odm_SwAntDivInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_SwAntDivInit_NIC(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_SwAntDivChkAntSwitch(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8			Step
+		PDM_ODM_T		pDM_Odm,
+		u8			Step
 	);
 
 void
 odm_SwAntDivChkAntSwitchNIC(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8		Step
+		PDM_ODM_T		pDM_Odm,
+		u8		Step
 	);
 
 
@@ -428,22 +428,22 @@ void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext);
 
 void
 odm_GlobalAdapterCheck(
-	IN		void
+		void
 	);
 
 void
 odm_RefreshRateAdaptiveMask(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 ODM_TXPowerTrackingCheck(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 void
 odm_TXPowerTrackingCheckAP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 
@@ -454,43 +454,43 @@ odm_TXPowerTrackingCheckAP(
 
 void
 odm_RateAdaptiveMaskInit(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_TXPowerTrackingThermalMeterInit(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 
 void
 odm_TXPowerTrackingInit(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_TXPowerTrackingCheckMP(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 
 void
 odm_TXPowerTrackingCheckCE(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 void
 odm_EdcaTurboCheck(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 void
 ODM_EdcaTurboInit(
-	IN	PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 );
 
 void
 odm_EdcaTurboCheckCE(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	);
 
 #define		RxDefaultAnt1		0x65a9
@@ -498,31 +498,31 @@ odm_EdcaTurboCheckCE(
 
 void
 odm_InitHybridAntDiv(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 bool
 odm_StaDefAntSel(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u32		OFDM_Ant1_Cnt,
-	IN u32		OFDM_Ant2_Cnt,
-	IN u32		CCK_Ant1_Cnt,
-	IN u32		CCK_Ant2_Cnt,
-	OUT u8		*pDefAnt
+	PDM_ODM_T	pDM_Odm,
+	u32		OFDM_Ant1_Cnt,
+	u32		OFDM_Ant2_Cnt,
+	u32		CCK_Ant1_Cnt,
+	u32		CCK_Ant2_Cnt,
+	u8		*pDefAnt
 	);
 
 void
 odm_SetRxIdleAnt(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8	Ant,
-	IN   bool   bDualPath
+	PDM_ODM_T	pDM_Odm,
+	u8	Ant,
+	bool   bDualPath
 );
 
 
 
 void
 odm_HwAntDiv(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 );
 
 /*  */
@@ -534,7 +534,7 @@ odm_HwAntDiv(
 /*  */
 void
 ODM_DMInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 
@@ -582,7 +582,7 @@ ODM_DMInit(
 /*  */
 void
 ODM_DMWatchdog(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	/* 2012.05.03 Luke: For all IC series */
@@ -653,9 +653,9 @@ ODM_DMWatchdog(
 /*  */
 void
 ODM_CmnInfoInit(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		ODM_CMNINFO_E	CmnInfo,
-	IN		u32			Value
+		PDM_ODM_T		pDM_Odm,
+		ODM_CMNINFO_E	CmnInfo,
+		u32			Value
 	)
 {
 	/* ODM_RT_TRACE(pDM_Odm,); */
@@ -745,9 +745,9 @@ ODM_CmnInfoInit(
 
 void
 ODM_CmnInfoHook(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		ODM_CMNINFO_E	CmnInfo,
-	IN		void *			pValue
+		PDM_ODM_T		pDM_Odm,
+		ODM_CMNINFO_E	CmnInfo,
+		void *			pValue
 	)
 {
 	/*  */
@@ -867,10 +867,10 @@ ODM_CmnInfoHook(
 
 void
 ODM_CmnInfoPtrArrayHook(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		ODM_CMNINFO_E	CmnInfo,
-	IN		u16			Index,
-	IN		void *			pValue
+		PDM_ODM_T		pDM_Odm,
+		ODM_CMNINFO_E	CmnInfo,
+		u16			Index,
+		void *			pValue
 	)
 {
 	/*  */
@@ -898,9 +898,9 @@ ODM_CmnInfoPtrArrayHook(
 /*  */
 void
 ODM_CmnInfoUpdate(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u32			CmnInfo,
-	IN		u64			Value
+		PDM_ODM_T		pDM_Odm,
+		u32			CmnInfo,
+		u64			Value
 	)
 {
 	/*  */
@@ -978,7 +978,7 @@ ODM_CmnInfoUpdate(
 
 void
 odm_CommonInfoSelfInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	pDM_Odm->bCckHighPower = (bool) ODM_GetBBReg(pDM_Odm, 0x824, BIT9);
@@ -993,7 +993,7 @@ odm_CommonInfoSelfInit(
 
 void
 odm_CommonInfoSelfUpdate(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	u8	EntryCnt=0;
@@ -1021,7 +1021,7 @@ odm_CommonInfoSelfUpdate(
 
 void
 odm_CmnInfoInit_Debug(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("odm_CmnInfoInit_Debug==>\n"));
@@ -1045,7 +1045,7 @@ odm_CmnInfoInit_Debug(
 
 void
 odm_CmnInfoHook_Debug(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("odm_CmnInfoHook_Debug==>\n"));
@@ -1066,7 +1066,7 @@ odm_CmnInfoHook_Debug(
 
 void
 odm_CmnInfoUpdate_Debug(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_COMMON, ODM_DBG_LOUD, ("odm_CmnInfoUpdate_Debug==>\n"));
@@ -1096,9 +1096,9 @@ odm_CmnInfoUpdate_Debug(
  *---------------------------------------------------------------------------*/
 static void
 ODM_ChangeDynamicInitGainThresh(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u32		DM_Type,
-	IN	u32		DM_Value
+	PDM_ODM_T	pDM_Odm,
+	u32		DM_Type,
+	u32		DM_Value
 	)
 {
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
@@ -1156,8 +1156,8 @@ static int getIGIForDiff(int value_IGI)
 
 void
 ODM_Write_DIG(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u8			CurrentIGI
+	PDM_ODM_T		pDM_Odm,
+	u8			CurrentIGI
 	)
 {
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
@@ -1202,7 +1202,7 @@ ODM_Write_DIG(
 
 void
 odm_DIGbyRSSI_LPS(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	struct adapter *				pAdapter =pDM_Odm->Adapter;
@@ -1257,7 +1257,7 @@ odm_DIGbyRSSI_LPS(
 
 void
 odm_AdaptivityInit(
-IN PDM_ODM_T pDM_Odm
+PDM_ODM_T pDM_Odm
 )
 {
 	if(pDM_Odm->SupportICType == ODM_RTL8723B)
@@ -1283,8 +1283,8 @@ IN PDM_ODM_T pDM_Odm
 
 void
 odm_Adaptivity(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8			IGI
+		PDM_ODM_T		pDM_Odm,
+		u8			IGI
 )
 {
 	s8 TH_L2H_dmc, TH_H2L_dmc;
@@ -1366,7 +1366,7 @@ odm_Adaptivity(
 
 void
 odm_DIGInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
@@ -1414,14 +1414,14 @@ odm_DIGInit(
 
 static void
 odm_DigForBtHsMode(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 }
 
 void
 odm_DIG(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	pDIG_T						pDM_DigTable = &pDM_Odm->DM_DigTable;
@@ -1605,15 +1605,6 @@ odm_DIG(
 				pDM_DigTable->rx_gain_range_max = pDM_Odm->RSSI_Min + offset;
 
 			}
-
-			/* 2 Modify DIG lower bound */
-		/*
-			if((pFalseAlmCnt->Cnt_all > 500)&&(DIG_Dynamic_MIN < 0x25))
-				DIG_Dynamic_MIN++;
-			else if(((pFalseAlmCnt->Cnt_all < 500)||(pDM_Odm->RSSI_Min < 8))&&(DIG_Dynamic_MIN > dm_dig_min))
-				DIG_Dynamic_MIN--;
-		*/
-
 
 			/* 1 Lower Bound for 88E AntDiv */
 			if((pDM_Odm->SupportICType == ODM_RTL8188E)&&(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
@@ -1869,7 +1860,7 @@ odm_DIG(
 
 static bool
 odm_DigAbort(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	return	false;
@@ -1881,7 +1872,7 @@ odm_DigAbort(
 
 void
 odm_FalseAlarmCounterStatistics(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	u32 ret_value;
@@ -1992,7 +1983,7 @@ odm_FalseAlarmCounterStatistics(
 
 void
 odm_CCKPacketDetectionThresh(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 
@@ -2033,8 +2024,8 @@ odm_CCKPacketDetectionThresh(
 
 void
 ODM_Write_CCK_CCA_Thres(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u8			CurCCK_CCAThres
+	PDM_ODM_T		pDM_Odm,
+	u8			CurCCK_CCAThres
 	)
 {
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
@@ -2053,7 +2044,7 @@ ODM_Write_CCK_CCA_Thres(
 /* 3============================================================ */
 void
 odm_DynamicBBPowerSavingInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	pPS_T	pDM_PSTable = &pDM_Odm->DM_PSTable;
@@ -2069,7 +2060,7 @@ odm_DynamicBBPowerSavingInit(
 
 void
 odm_DynamicBBPowerSaving(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	if ((pDM_Odm->SupportICType != ODM_RTL8192C) && (pDM_Odm->SupportICType != ODM_RTL8723A))
@@ -2096,7 +2087,7 @@ odm_DynamicBBPowerSaving(
 
 void
 odm_1R_CCA(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	pPS_T	pDM_PSTable = &pDM_Odm->DM_PSTable;
@@ -2138,8 +2129,8 @@ odm_1R_CCA(
 
 void
 ODM_RF_Saving(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		bForceInNormal
+	PDM_ODM_T	pDM_Odm,
+	u8		bForceInNormal
 	)
 {
 	pPS_T	pDM_PSTable = &pDM_Odm->DM_PSTable;
@@ -2233,7 +2224,7 @@ ODM_RF_Saving(
 
 void
 odm_RateAdaptiveMaskInit(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	PODM_RATE_ADAPTIVE	pOdmRA = &pDM_Odm->RateAdaptive;
@@ -2249,10 +2240,10 @@ odm_RateAdaptiveMaskInit(
 }
 
 u32 ODM_Get_Rate_Bitmap(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u32		macid,
-	IN	u32		ra_mask,
-	IN	u8		rssi_level)
+	PDM_ODM_T	pDM_Odm,
+	u32		macid,
+	u32		ra_mask,
+	u8		rssi_level)
 {
 	PSTA_INFO_T	pEntry;
 	u32	rate_bitmap = 0x0fffffff;
@@ -2368,7 +2359,7 @@ u32 ODM_Get_Rate_Bitmap(
  *---------------------------------------------------------------------------*/
 void
 odm_RefreshRateAdaptiveMask(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	if (!(pDM_Odm->SupportAbility & ODM_BB_RA_MASK))
@@ -2398,14 +2389,14 @@ odm_RefreshRateAdaptiveMask(
 
 void
 odm_RefreshRateAdaptiveMaskMP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 }
 
 void
 odm_RefreshRateAdaptiveMaskCE(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	u8	i;
@@ -2439,7 +2430,7 @@ odm_RefreshRateAdaptiveMaskCE(
 
 void
 odm_RefreshRateAdaptiveMaskAPADSL(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 }
@@ -2448,10 +2439,10 @@ odm_RefreshRateAdaptiveMaskAPADSL(
 /*  - true: RATRState is changed. */
 bool
 ODM_RAStateCheck(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		s32			RSSI,
-	IN		bool			bForceUpdate,
-	OUT		u8 *			pRATRState
+		PDM_ODM_T		pDM_Odm,
+		s32			RSSI,
+		bool			bForceUpdate,
+		u8 *			pRATRState
 	)
 {
 	PODM_RATE_ADAPTIVE pRA = &pDM_Odm->RateAdaptive;
@@ -2511,7 +2502,7 @@ ODM_RAStateCheck(
 
 void
 odm_DynamicTxPowerInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
@@ -2525,7 +2516,7 @@ odm_DynamicTxPowerInit(
 
 void
 odm_DynamicTxPowerSavePowerIndex(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	u8		index;
@@ -2540,7 +2531,7 @@ odm_DynamicTxPowerSavePowerIndex(
 
 void
 odm_DynamicTxPowerRestorePowerIndex(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	u8			index;
@@ -2555,8 +2546,8 @@ odm_DynamicTxPowerRestorePowerIndex(
 
 void
 odm_DynamicTxPowerWritePowerIndex(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		Value)
+	PDM_ODM_T	pDM_Odm,
+	u8		Value)
 {
 
 	u8			index;
@@ -2571,7 +2562,7 @@ odm_DynamicTxPowerWritePowerIndex(
 
 void
 odm_DynamicTxPower(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	/*  */
@@ -2615,7 +2606,7 @@ odm_DynamicTxPower(
 
 void
 odm_DynamicTxPowerNIC(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	if (!(pDM_Odm->SupportAbility & ODM_BB_DYNAMIC_TXPWR))
@@ -2642,7 +2633,7 @@ odm_DynamicTxPowerNIC(
 
 void
 odm_DynamicTxPowerAP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 
 	)
 {
@@ -2650,14 +2641,14 @@ odm_DynamicTxPowerAP(
 
 void
 odm_DynamicTxPower_92C(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 }
 
 void
 odm_DynamicTxPower_92D(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 }
@@ -2669,14 +2660,14 @@ odm_DynamicTxPower_92D(
 
 void
 odm_RSSIMonitorInit(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 }
 
 void
 odm_RSSIMonitorCheck(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	/*  */
@@ -2718,7 +2709,7 @@ odm_RSSIMonitorCheck(
 
 void
 odm_RSSIMonitorCheckMP(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 }
@@ -2728,14 +2719,14 @@ odm_RSSIMonitorCheckMP(
 /*  */
 static void
 FindMinimumRSSI_Dmsp(
-	IN	struct adapter *pAdapter
+	struct adapter *pAdapter
 )
 {
 }
 
 static void
 FindMinimumRSSI(
-IN	struct adapter *pAdapter
+struct adapter *pAdapter
 	)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -2753,7 +2744,7 @@ IN	struct adapter *pAdapter
 
 void
 odm_RSSIMonitorCheckCE(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
@@ -2827,7 +2818,7 @@ odm_RSSIMonitorCheckCE(
 }
 void
 odm_RSSIMonitorCheckAP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 }
@@ -2836,7 +2827,7 @@ odm_RSSIMonitorCheckAP(
 
 void
 ODM_InitAllTimers(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	ODM_InitializeTimer(pDM_Odm,&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchTimer,
@@ -2845,7 +2836,7 @@ ODM_InitAllTimers(
 
 void
 ODM_CancelAllTimers(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	ODM_CancelTimer(pDM_Odm,&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchTimer);
@@ -2854,7 +2845,7 @@ ODM_CancelAllTimers(
 
 void
 ODM_ReleaseAllTimers(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	ODM_ReleaseTimer(pDM_Odm,&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchTimer);
@@ -2867,7 +2858,7 @@ ODM_ReleaseAllTimers(
 
 void
 odm_TXPowerTrackingInit(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	odm_TXPowerTrackingThermalMeterInit(pDM_Odm);
@@ -2876,7 +2867,7 @@ odm_TXPowerTrackingInit(
 
 void
 odm_TXPowerTrackingThermalMeterInit(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	{
@@ -2908,7 +2899,7 @@ odm_TXPowerTrackingThermalMeterInit(
 
 void
 ODM_TXPowerTrackingCheck(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	/*  */
@@ -2949,7 +2940,7 @@ ODM_TXPowerTrackingCheck(
 
 void
 odm_TXPowerTrackingCheckCE(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
@@ -2974,14 +2965,14 @@ odm_TXPowerTrackingCheckCE(
 
 void
 odm_TXPowerTrackingCheckMP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 }
 
 void
 odm_TXPowerTrackingCheckAP(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 }
@@ -2997,18 +2988,18 @@ odm_TXPowerTrackingCheckAP(
 /* 3============================================================ */
 /* 3 SW Antenna Diversity */
 /* 3============================================================ */
-void odm_SwAntDivInit(	IN		PDM_ODM_T		pDM_Odm	) {}
+void odm_SwAntDivInit(		PDM_ODM_T		pDM_Odm	) {}
 void ODM_SwAntDivChkPerPktRssi(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u8		StationID,
-	IN PODM_PHY_INFO_T pPhyInfo
+	PDM_ODM_T	pDM_Odm,
+	u8		StationID,
+	PODM_PHY_INFO_T pPhyInfo
 	) {}
 void odm_SwAntDivChkAntSwitch(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8			Step
+		PDM_ODM_T		pDM_Odm,
+		u8			Step
 	) {}
-static void ODM_SwAntDivResetBeforeLink(	IN		PDM_ODM_T		pDM_Odm	){}
-void ODM_SwAntDivRestAfterLink(	IN		PDM_ODM_T		pDM_Odm	){}
+static void ODM_SwAntDivResetBeforeLink(		PDM_ODM_T		pDM_Odm	){}
+void ODM_SwAntDivRestAfterLink(		PDM_ODM_T		pDM_Odm	){}
 void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
 
 /* 3============================================================ */
@@ -3017,7 +3008,7 @@ void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
 
 static void
 odm_InitHybridAntDiv_88C_92D(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	SWAT_T			*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -3083,7 +3074,7 @@ odm_InitHybridAntDiv_88C_92D(
 
 void
 odm_InitHybridAntDiv(
-	IN PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	if(!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
@@ -3105,12 +3096,12 @@ odm_InitHybridAntDiv(
 
 bool
 odm_StaDefAntSel(
-	IN PDM_ODM_T	pDM_Odm,
-	IN u32		OFDM_Ant1_Cnt,
-	IN u32		OFDM_Ant2_Cnt,
-	IN u32		CCK_Ant1_Cnt,
-	IN u32		CCK_Ant2_Cnt,
-	OUT u8		*pDefAnt
+	PDM_ODM_T	pDM_Odm,
+	u32		OFDM_Ant1_Cnt,
+	u32		OFDM_Ant2_Cnt,
+	u32		CCK_Ant1_Cnt,
+	u32		CCK_Ant2_Cnt,
+	u8		*pDefAnt
 
 	)
 {
@@ -3155,9 +3146,9 @@ odm_StaDefAntSel(
 
 void
 odm_SetRxIdleAnt(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8	Ant,
-	IN   bool   bDualPath
+	PDM_ODM_T	pDM_Odm,
+	u8	Ant,
+	bool   bDualPath
 )
 {
 	SWAT_T			*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -3183,10 +3174,10 @@ odm_SetRxIdleAnt(
 
 void
 ODM_AntselStatistics_88C(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8			MacId,
-	IN		u32			PWDBAll,
-	IN		bool			isCCKrate
+		PDM_ODM_T		pDM_Odm,
+		u8			MacId,
+		u32			PWDBAll,
+		bool			isCCKrate
 )
 {
 	SWAT_T			*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -3216,7 +3207,7 @@ ODM_AntselStatistics_88C(
 
 static void
 ODM_SetTxAntByTxInfo_88C_92D(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 )
 {
 
@@ -3224,7 +3215,7 @@ ODM_SetTxAntByTxInfo_88C_92D(
 
 static void
 odm_HwAntDiv_92C_92D(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 )
 {
 	SWAT_T			*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -3299,7 +3290,7 @@ odm_HwAntDiv_92C_92D(
 
 void
 odm_HwAntDiv(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 )
 {
 	if(!(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
@@ -3323,7 +3314,7 @@ odm_HwAntDiv(
 /*  */
 void
 ODM_EdcaTurboInit(
-	IN    PDM_ODM_T		pDM_Odm)
+	PDM_ODM_T		pDM_Odm)
 {
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	pDM_Odm->DM_EDCA_Table.bCurrentTurboEDCA = false;
@@ -3337,7 +3328,7 @@ ODM_EdcaTurboInit(
 
 void
 odm_EdcaTurboCheck(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	/*  */
@@ -3373,7 +3364,7 @@ odm_EdcaTurboCheck(
 
 void
 odm_EdcaTurboCheckCE(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 
@@ -3482,7 +3473,7 @@ dm_CheckEdcaTurbo_EXIT:
 
 u32
 GetPSDData(
-	IN PDM_ODM_T	pDM_Odm,
+	PDM_ODM_T	pDM_Odm,
 	unsigned int	point,
 	u8 initial_gain_psd)
 {
@@ -3539,7 +3530,7 @@ ConvertTo_dB(
 /*  */
 void
 odm_GlobalAdapterCheck(
-	IN		void
+		void
 	)
 {
 }	/*  odm_GlobalAdapterCheck */
@@ -3552,7 +3543,7 @@ odm_GlobalAdapterCheck(
 /*  */
 void
 ODM_SingleDualAntennaDefaultSetting(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	pSWAT_T		pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
@@ -3566,10 +3557,10 @@ ODM_SingleDualAntennaDefaultSetting(
 
 static void
 odm_PHY_SaveAFERegisters(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u32 *		AFEReg,
-	IN	u32 *		AFEBackup,
-	IN	u32		RegisterNum
+	PDM_ODM_T	pDM_Odm,
+	u32 *		AFEReg,
+	u32 *		AFEBackup,
+	u32		RegisterNum
 	)
 {
 	u32	i;
@@ -3582,10 +3573,10 @@ odm_PHY_SaveAFERegisters(
 
 static void
 odm_PHY_ReloadAFERegisters(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u32 *		AFEReg,
-	IN	u32 *		AFEBackup,
-	IN	u32		RegiesterNum
+	PDM_ODM_T	pDM_Odm,
+	u32 *		AFEReg,
+	u32 *		AFEBackup,
+	u32		RegiesterNum
 	)
 {
 	u32	i;
@@ -3608,8 +3599,8 @@ odm_PHY_ReloadAFERegisters(
 /*  */
 bool
 ODM_SingleDualAntennaDetection(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8			mode
+		PDM_ODM_T		pDM_Odm,
+		u8			mode
 	)
 {
 

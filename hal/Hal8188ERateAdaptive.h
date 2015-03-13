@@ -40,67 +40,67 @@ Major Change History:
 
 void
 ODM_RASupport_Init(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	);
 
 int 
 ODM_RAInfo_Init_all(
-	IN    PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 	);
 
 int 
 ODM_RAInfo_Init(
-	IN 	PDM_ODM_T 	pDM_Odm,
-	IN 	u8 		MacID	
+	PDM_ODM_T 	pDM_Odm,
+	u8 		MacID	
 	);
 
 u8 
 ODM_RA_GetShortGI_8188E(
-	IN 	PDM_ODM_T 	pDM_Odm, 
-	IN 	u8 		MacID
+	PDM_ODM_T 	pDM_Odm, 
+	u8 		MacID
 	);
 
 u8 
 ODM_RA_GetDecisionRate_8188E(
-	IN 	PDM_ODM_T 	pDM_Odm, 
-	IN 	u8 		MacID
+	PDM_ODM_T 	pDM_Odm, 
+	u8 		MacID
 	);
 
 u8
 ODM_RA_GetHwPwrStatus_8188E(
-	IN 	PDM_ODM_T 	pDM_Odm, 
-	IN 	u8 		MacID
+	PDM_ODM_T 	pDM_Odm, 
+	u8 		MacID
 	);
 void 
 ODM_RA_UpdateRateInfo_8188E(
-	IN PDM_ODM_T pDM_Odm,
-	IN u8 MacID,
-	IN u8 RateID, 
-	IN u32 RateMask,
-	IN u8 SGIEnable
+	PDM_ODM_T pDM_Odm,
+	u8 MacID,
+	u8 RateID, 
+	u32 RateMask,
+	u8 SGIEnable
 	);
 
 void 
 ODM_RA_SetRSSI_8188E(
-	IN 	PDM_ODM_T 		pDM_Odm, 
-	IN 	u8 			MacID, 
-	IN 	u8 			Rssi
+	PDM_ODM_T 		pDM_Odm, 
+	u8 			MacID, 
+	u8 			Rssi
 	);
 
 void
 ODM_RA_TxRPT2Handle_8188E(	
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u8 *			TxRPT_Buf,
-	IN	u16			TxRPT_Len,
-	IN	u32			MacIDValidEntry0,
-	IN	u32			MacIDValidEntry1
+	PDM_ODM_T		pDM_Odm,
+	u8 *			TxRPT_Buf,
+	u16			TxRPT_Len,
+	u32			MacIDValidEntry0,
+	u32			MacIDValidEntry1
 	);
 	
 
 void 
 ODM_RA_Set_TxRPT_Time(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u16 			minRptTime
+	PDM_ODM_T		pDM_Odm,
+	u16 			minRptTime
 	);	
 #endif
 

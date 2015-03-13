@@ -163,7 +163,7 @@
 
 void 
 ODM_InitDebugSetting(
-	IN		PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 	);
 
 #endif	/*  __ODM_DBG_H__ */

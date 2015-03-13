@@ -1425,7 +1425,7 @@ ODM_RAStateCheck(
 		PDM_ODM_T		pDM_Odm,
 		s32			RSSI,
 		bool			bForceUpdate,
-	OUT		u8 *			pRATRState
+		u8 *			pRATRState
 	);
 
 #define dm_SWAW_RSSI_Check	ODM_SwAntDivChkPerPktRssi

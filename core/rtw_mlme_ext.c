@@ -5111,7 +5111,7 @@ static unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 									/* 	The peer interface address should be the address for WPS mac address */
 									memcpy( pwdinfo->p2p_peer_device_addr, group_id.go_device_addr , ETH_ALEN );
 									rtw_p2p_set_role( pwdinfo, P2P_ROLE_CLIENT );
-									rtw_p2p_set_state(pwdinfo, P2P_STATE_RECV_INVITE_REQ_JOIN );
+									rtw_p2p_set_state(pwdinfo, P2P_STATE_RECV_INVITE_REQ_JOIN);
 									status_code = P2P_STATUS_SUCCESS;
 								}
 							}
@@ -6956,8 +6956,8 @@ void issue_assocreq(struct adapter *padapter)
 
 			/* 	Config Method */
 			/* 	This field should be big endian. Noted by P2P specification. */
-			if ( ( pwdinfo->ui_got_wps_info == P2P_GOT_WPSINFO_PEER_DISPLAY_PIN ) ||
-				( pwdinfo->ui_got_wps_info == P2P_GOT_WPSINFO_SELF_DISPLAY_PIN ) )
+			if ( ( pwdinfo->ui_got_wps_info == P2P_GOT_WPSINFO_PEER_DISPLAY_PIN) ||
+				( pwdinfo->ui_got_wps_info == P2P_GOT_WPSINFO_SELF_DISPLAY_PIN) )
 			{
 				*(__be16*) ( p2pie + p2pielen ) = cpu_to_be16( WPS_CONFIG_METHOD_DISPLAY );
 			}
@@ -8000,8 +8000,8 @@ Following are some utitity fuctions for WiFi MLME
 *****************************************************************************/
 
 bool IsLegal5GChannel(
-	IN struct adapter *		Adapter,
-	IN u8			channel)
+	struct adapter *		Adapter,
+	u8			channel)
 {
 
 	int i=0;

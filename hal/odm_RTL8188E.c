@@ -26,7 +26,7 @@
 
 void
 ODM_DIG_LowerBound_88E(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 )
 {
 	pDIG_T		pDM_DigTable = &pDM_Odm->DM_DigTable;
@@ -44,7 +44,7 @@ ODM_DIG_LowerBound_88E(
 
 static void
 odm_RX_HWAntDivInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 )
 {
 	u32	value32;
@@ -82,7 +82,7 @@ odm_RX_HWAntDivInit(
 
 static void
 odm_TRX_HWAntDivInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 )
 {
 	u32	value32;
@@ -133,7 +133,7 @@ odm_TRX_HWAntDivInit(
 
 void
 odm_FastAntTrainingInit(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 )
 {
 	u32	value32, i;
@@ -239,7 +239,7 @@ odm_FastAntTrainingInit(
 
 void
 ODM_AntennaDiversityInit_88E(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 )
 {
 	if(pDM_Odm->SupportICType != ODM_RTL8188E)
@@ -260,7 +260,7 @@ ODM_AntennaDiversityInit_88E(
 
 
 void
-ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u8 Ant)
+ODM_UpdateRxIdleAnt_88E(PDM_ODM_T pDM_Odm, u8 Ant)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u32	DefaultAnt, OptionalAnt;
@@ -300,7 +300,7 @@ ODM_UpdateRxIdleAnt_88E(IN PDM_ODM_T pDM_Odm, IN u8 Ant)
 
 
 static void
-odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u8 Ant, IN u32 MacId)
+odm_UpdateTxAnt_88E(PDM_ODM_T pDM_Odm, u8 Ant, u32 MacId)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
 	u8	TargetAnt;
@@ -322,9 +322,9 @@ odm_UpdateTxAnt_88E(IN PDM_ODM_T pDM_Odm, IN u8 Ant, IN u32 MacId)
 
 void
 ODM_SetTxAntByTxInfo_88E(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8 *			pDesc,
-	IN		u8			macId
+		PDM_ODM_T		pDM_Odm,
+		u8 *			pDesc,
+		u8			macId
 	)
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -341,10 +341,10 @@ ODM_SetTxAntByTxInfo_88E(
 
 void
 ODM_AntselStatistics_88E(
-	IN		PDM_ODM_T		pDM_Odm,
-	IN		u8			antsel_tr_mux,
-	IN		u32			MacId,
-	IN		u8			RxPWDBAll
+		PDM_ODM_T		pDM_Odm,
+		u8			antsel_tr_mux,
+		u32			MacId,
+		u8			RxPWDBAll
 )
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -383,7 +383,7 @@ ODM_AntselStatistics_88E(
 #define	TX_BY_REG	0
 static void
 odm_HWAntDiv(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 )
 {
 	u32	i, MinRSSI=0xFF, AntDivMaxRSSI=0, MaxRSSI=0, LocalMinRSSI, LocalMaxRSSI;
@@ -450,7 +450,7 @@ odm_HWAntDiv(
 
 void
 ODM_AntennaDiversity_88E(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 )
 {
 	pFAT_T	pDM_FatTable = &pDM_Odm->DM_FatTable;
@@ -502,7 +502,7 @@ ODM_AntennaDiversity_88E(
 
 void
 odm_PrimaryCCA_Init(
-	IN		PDM_ODM_T		pDM_Odm)
+		PDM_ODM_T		pDM_Odm)
 {
 	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
 	PrimaryCCA->DupRTS_flag = 0;
@@ -514,7 +514,7 @@ odm_PrimaryCCA_Init(
 
 bool
 ODM_DynamicPrimaryCCA_DupRTS(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
@@ -524,7 +524,7 @@ ODM_DynamicPrimaryCCA_DupRTS(
 
 void
 odm_DynamicPrimaryCCA(
-	IN		PDM_ODM_T		pDM_Odm
+		PDM_ODM_T		pDM_Odm
 	)
 {
 	struct adapter *Adapter =  pDM_Odm->Adapter;	/*  for NIC */

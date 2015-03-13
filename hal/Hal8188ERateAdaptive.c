@@ -105,9 +105,9 @@ static u16 DynamicTxRPTTiming[6]={0x186a, 0x30d4, 0x493e, 0x61a8, 0x7a12 ,0x927c
 
 static void
 odm_SetTxRPTTiming_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	PODM_RA_INFO_T		pRaInfo,
-	IN	u8				extend
+	PDM_ODM_T		pDM_Odm,
+	PODM_RA_INFO_T		pRaInfo,
+	u8				extend
 	)
 {
 	u8 idx = 0;
@@ -134,8 +134,8 @@ odm_SetTxRPTTiming_8188E(
 
 static int
 odm_RateDown_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	PODM_RA_INFO_T  pRaInfo
+	PDM_ODM_T		pDM_Odm,
+	PODM_RA_INFO_T  pRaInfo
 	)
 {
 	u8 RateID, LowestRate, HighestRate;
@@ -207,8 +207,8 @@ RateDownFinish:
 
 static int
 odm_RateUp_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	PODM_RA_INFO_T  pRaInfo
+	PDM_ODM_T		pDM_Odm,
+	PODM_RA_INFO_T  pRaInfo
 	)
 {
 	u8 RateID, HighestRate;
@@ -273,7 +273,7 @@ RateUpfinish:
 	return 0;
 }
 
-static void odm_ResetRaCounter_8188E( IN PODM_RA_INFO_T  pRaInfo){
+static void odm_ResetRaCounter_8188E(PODM_RA_INFO_T  pRaInfo){
 	u8 RateID;
 	RateID=pRaInfo->DecisionRate;
 	pRaInfo->NscUp=(N_THRESHOLD_HIGH[RateID]+N_THRESHOLD_LOW[RateID])>>1;
@@ -282,8 +282,8 @@ static void odm_ResetRaCounter_8188E( IN PODM_RA_INFO_T  pRaInfo){
 
 static void
 odm_RateDecision_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	PODM_RA_INFO_T  pRaInfo
+	PDM_ODM_T		pDM_Odm,
+	PODM_RA_INFO_T  pRaInfo
 	)
 {
 	u8 RateID = 0, RtyPtID = 0, PenaltyID1 = 0, PenaltyID2 = 0;
@@ -374,8 +374,8 @@ odm_RateDecision_8188E(
 
 static int
 odm_ARFBRefresh_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	PODM_RA_INFO_T  pRaInfo
+	PDM_ODM_T		pDM_Odm,
+	PODM_RA_INFO_T  pRaInfo
 	)
 {  /*  Wilson 2011/10/26 */
 	u32 MaskFromReg;
@@ -478,7 +478,7 @@ odm_ARFBRefresh_8188E(
 #if POWER_TRAINING_ACTIVE == 1
 static void
 odm_PTTryState_8188E(
-	IN	PODM_RA_INFO_T	pRaInfo
+	PODM_RA_INFO_T	pRaInfo
 	)
 {
 	pRaInfo->PTTryState=0;
@@ -538,7 +538,7 @@ odm_PTTryState_8188E(
 
 static void
 odm_PTDecision_8188E(
-	IN	PODM_RA_INFO_T		pRaInfo
+	PODM_RA_INFO_T		pRaInfo
 	)
 {
 	u8 stage_BUF;
@@ -581,8 +581,8 @@ odm_PTDecision_8188E(
 
 static void
 odm_RATxRPTTimerSetting(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u16			minRptTime
+	PDM_ODM_T		pDM_Odm,
+	u16			minRptTime
 )
 {
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,(" =====>odm_RATxRPTTimerSetting()\n"));
@@ -600,7 +600,7 @@ odm_RATxRPTTimerSetting(
 
 void
 ODM_RASupport_Init(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>ODM_RASupport_Init()\n"));
@@ -615,8 +615,8 @@ ODM_RASupport_Init(
 
 int
 ODM_RAInfo_Init(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		MacID
+	PDM_ODM_T	pDM_Odm,
+	u8		MacID
 	)
 {
 	PODM_RA_INFO_T pRaInfo = &pDM_Odm->RAInfo[MacID];
@@ -681,7 +681,7 @@ ODM_RAInfo_Init(
 
 int
 ODM_RAInfo_Init_all(
-	IN    PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 	)
 {
 	u8 MacID = 0;
@@ -698,8 +698,8 @@ ODM_RAInfo_Init_all(
 
 u8
 ODM_RA_GetShortGI_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		MacID
+	PDM_ODM_T	pDM_Odm,
+	u8		MacID
 )
 {
 	if((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
@@ -711,8 +711,8 @@ ODM_RA_GetShortGI_8188E(
 
 u8
 ODM_RA_GetDecisionRate_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		MacID
+	PDM_ODM_T	pDM_Odm,
+	u8		MacID
 	)
 {
 	u8 DecisionRate = 0;
@@ -727,8 +727,8 @@ ODM_RA_GetDecisionRate_8188E(
 
 u8
 ODM_RA_GetHwPwrStatus_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		MacID
+	PDM_ODM_T	pDM_Odm,
+	u8		MacID
 	)
 {
 	u8 PTStage = 5;
@@ -742,11 +742,11 @@ ODM_RA_GetHwPwrStatus_8188E(
 
 void
 ODM_RA_UpdateRateInfo_8188E(
-	IN PDM_ODM_T pDM_Odm,
-	IN u8 MacID,
-	IN u8 RateID,
-	IN u32 RateMask,
-	IN u8 SGIEnable
+	PDM_ODM_T pDM_Odm,
+	u8 MacID,
+	u8 RateID,
+	u32 RateMask,
+	u8 SGIEnable
 	)
 {
 	PODM_RA_INFO_T pRaInfo = NULL;
@@ -766,9 +766,9 @@ ODM_RA_UpdateRateInfo_8188E(
 
 void
 ODM_RA_SetRSSI_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u8			MacID,
-	IN	u8			Rssi
+	PDM_ODM_T		pDM_Odm,
+	u8			MacID,
+	u8			Rssi
 	)
 {
 	PODM_RA_INFO_T pRaInfo = NULL;
@@ -784,8 +784,8 @@ ODM_RA_SetRSSI_8188E(
 
 void
 ODM_RA_Set_TxRPT_Time(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u16			minRptTime
+	PDM_ODM_T		pDM_Odm,
+	u16			minRptTime
 	)
 {
 	ODM_Write2Byte(pDM_Odm, REG_TX_RPT_TIME, minRptTime);
@@ -794,11 +794,11 @@ ODM_RA_Set_TxRPT_Time(
 
 void
 ODM_RA_TxRPT2Handle_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u8 *			TxRPT_Buf,
-	IN	u16			TxRPT_Len,
-	IN	u32			MacIDValidEntry0,
-	IN	u32			MacIDValidEntry1
+	PDM_ODM_T		pDM_Odm,
+	u8 *			TxRPT_Buf,
+	u16			TxRPT_Len,
+	u32			MacIDValidEntry0,
+	u32			MacIDValidEntry1
 	)
 {
 	PODM_RA_INFO_T pRAInfo = NULL;
@@ -912,8 +912,8 @@ ODM_RA_TxRPT2Handle_8188E(
 
 static void
 odm_RATxRPTTimerSetting(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u16			minRptTime
+	PDM_ODM_T		pDM_Odm,
+	u16			minRptTime
 )
 {
 	return;
@@ -922,7 +922,7 @@ odm_RATxRPTTimerSetting(
 
 void
 ODM_RASupport_Init(
-	IN	PDM_ODM_T	pDM_Odm
+	PDM_ODM_T	pDM_Odm
 	)
 {
 	return;
@@ -930,8 +930,8 @@ ODM_RASupport_Init(
 
 int
 ODM_RAInfo_Init(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		MacID
+	PDM_ODM_T	pDM_Odm,
+	u8		MacID
 	)
 {
 	return 0;
@@ -939,7 +939,7 @@ ODM_RAInfo_Init(
 
 int
 ODM_RAInfo_Init_all(
-	IN    PDM_ODM_T		pDM_Odm
+	PDM_ODM_T		pDM_Odm
 	)
 {
 	return 0;
@@ -947,8 +947,8 @@ ODM_RAInfo_Init_all(
 
 u8
 ODM_RA_GetShortGI_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		MacID
+	PDM_ODM_T	pDM_Odm,
+	u8		MacID
 	)
 {
 	return 0;
@@ -956,16 +956,16 @@ ODM_RA_GetShortGI_8188E(
 
 u8
 ODM_RA_GetDecisionRate_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		MacID
+	PDM_ODM_T	pDM_Odm,
+	u8		MacID
 	)
 {
 	return 0;
 }
 u8
 ODM_RA_GetHwPwrStatus_8188E(
-	IN	PDM_ODM_T	pDM_Odm,
-	IN	u8		MacID
+	PDM_ODM_T	pDM_Odm,
+	u8		MacID
 	)
 {
 	return 0;
@@ -973,11 +973,11 @@ ODM_RA_GetHwPwrStatus_8188E(
 
 void
 ODM_RA_UpdateRateInfo_8188E(
-	IN PDM_ODM_T pDM_Odm,
-	IN u8 MacID,
-	IN u8 RateID,
-	IN u32 RateMask,
-	IN u8 SGIEnable
+	PDM_ODM_T pDM_Odm,
+	u8 MacID,
+	u8 RateID,
+	u32 RateMask,
+	u8 SGIEnable
 	)
 {
 	return;
@@ -985,9 +985,9 @@ ODM_RA_UpdateRateInfo_8188E(
 
 void
 ODM_RA_SetRSSI_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u8			MacID,
-	IN	u8			Rssi
+	PDM_ODM_T		pDM_Odm,
+	u8			MacID,
+	u8			Rssi
 	)
 {
 	return;
@@ -995,8 +995,8 @@ ODM_RA_SetRSSI_8188E(
 
 void
 ODM_RA_Set_TxRPT_Time(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u16			minRptTime
+	PDM_ODM_T		pDM_Odm,
+	u16			minRptTime
 	)
 {
 	return;
@@ -1004,11 +1004,11 @@ ODM_RA_Set_TxRPT_Time(
 
 void
 ODM_RA_TxRPT2Handle_8188E(
-	IN	PDM_ODM_T		pDM_Odm,
-	IN	u8 *			TxRPT_Buf,
-	IN	u16			TxRPT_Len,
-	IN	u32			MacIDValidEntry0,
-	IN	u32			MacIDValidEntry1
+	PDM_ODM_T		pDM_Odm,
+	u8 *			TxRPT_Buf,
+	u16			TxRPT_Len,
+	u32			MacIDValidEntry0,
+	u32			MacIDValidEntry1
 	)
 {
 	return;

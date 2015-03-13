@@ -174,7 +174,7 @@ static u32 Array_RadioA_1T_8188E[] = {
 
 HAL_STATUS
 ODM_ReadAndConfig_RadioA_1T_8188E(
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 	)
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
@@ -345,7 +345,7 @@ static u32 Array_MP_8188E_RadioA_1T_ICUT[] = {
 
 void
 ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 	)
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)

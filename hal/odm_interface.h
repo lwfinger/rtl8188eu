@@ -93,88 +93,88 @@ typedef void (*RT_WORKITEM_CALL_BACK)(void * pContext);
 
 u8
 ODM_Read1Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u32			RegAddr
+	PDM_ODM_T		pDM_Odm,
+	u32			RegAddr
 	);
 
 u16
 ODM_Read2Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u32			RegAddr
+	PDM_ODM_T		pDM_Odm,
+	u32			RegAddr
 	);
 
 u32
 ODM_Read4Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u32			RegAddr
+	PDM_ODM_T		pDM_Odm,
+	u32			RegAddr
 	);
 
 void
 ODM_Write1Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u32			RegAddr,
-	IN	u8			Data
+	PDM_ODM_T		pDM_Odm,
+	u32			RegAddr,
+	u8			Data
 	);
 
 void
 ODM_Write2Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u32			RegAddr,
-	IN	u16			Data
+	PDM_ODM_T		pDM_Odm,
+	u32			RegAddr,
+	u16			Data
 	);
 
 void
 ODM_Write4Byte(
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	u32			RegAddr,
-	IN	u32			Data
+	PDM_ODM_T		pDM_Odm,
+	u32			RegAddr,
+	u32			Data
 	);
 
 void
 ODM_SetMACReg(	
-	IN 	PDM_ODM_T	pDM_Odm,
-	IN	u32		RegAddr,
-	IN	u32		BitMask,
-	IN	u32		Data
+	PDM_ODM_T	pDM_Odm,
+	u32		RegAddr,
+	u32		BitMask,
+	u32		Data
 	);
 
 u32 
 ODM_GetMACReg(	
-	IN 	PDM_ODM_T	pDM_Odm,
-	IN	u32		RegAddr,
-	IN	u32		BitMask
+	PDM_ODM_T	pDM_Odm,
+	u32		RegAddr,
+	u32		BitMask
 	);
 
 void
 ODM_SetBBReg(	
-	IN 	PDM_ODM_T	pDM_Odm,
-	IN	u32		RegAddr,
-	IN	u32		BitMask,
-	IN	u32		Data
+	PDM_ODM_T	pDM_Odm,
+	u32		RegAddr,
+	u32		BitMask,
+	u32		Data
 	);
 
 u32 
 ODM_GetBBReg(	
-	IN 	PDM_ODM_T	pDM_Odm,
-	IN	u32		RegAddr,
-	IN	u32		BitMask
+	PDM_ODM_T	pDM_Odm,
+	u32		RegAddr,
+	u32		BitMask
 	);
 
 void
 ODM_SetRFReg(	
-	IN 	PDM_ODM_T				pDM_Odm,
-	IN	ODM_RF_RADIO_PATH_E	eRFPath,
-	IN	u32					RegAddr,
-	IN	u32					BitMask,
-	IN	u32					Data
+	PDM_ODM_T				pDM_Odm,
+	ODM_RF_RADIO_PATH_E	eRFPath,
+	u32					RegAddr,
+	u32					BitMask,
+	u32					Data
 	);
 
 u32 
 ODM_GetRFReg(	
-	IN 	PDM_ODM_T				pDM_Odm,
-	IN	ODM_RF_RADIO_PATH_E	eRFPath,
-	IN	u32					RegAddr,
-	IN	u32					BitMask
+	PDM_ODM_T				pDM_Odm,
+	ODM_RF_RADIO_PATH_E	eRFPath,
+	u32					RegAddr,
+	u32					BitMask
 	);
 
 
@@ -183,22 +183,22 @@ ODM_GetRFReg(
 /*  */
 void
 ODM_AllocateMemory(	
-	IN 	PDM_ODM_T	pDM_Odm,
-	OUT	void *		*pPtr,
-	IN	u32		length
+	PDM_ODM_T	pDM_Odm,
+	void *		*pPtr,
+	u32		length
 	);
 void
 ODM_FreeMemory(	
-	IN 	PDM_ODM_T	pDM_Odm,
-	OUT	void *		pPtr,
-	IN	u32		length
+	PDM_ODM_T	pDM_Odm,
+	void *		pPtr,
+	u32		length
 	);
 
 s32 ODM_CompareMemory(
-	IN 	PDM_ODM_T	pDM_Odm,
-	IN	void *           pBuf1,
-      IN	void *           pBuf2,
-      IN	u32          length
+	PDM_ODM_T	pDM_Odm,
+	void *           pBuf1,
+      	void *           pBuf2,
+      	u32          length
        );
 	
 /*  */
@@ -206,14 +206,14 @@ s32 ODM_CompareMemory(
 /*  */
 void
 ODM_AcquireSpinLock(	
-	IN 	PDM_ODM_T			pDM_Odm,
-	IN	RT_SPINLOCK_TYPE	type
+	PDM_ODM_T			pDM_Odm,
+	RT_SPINLOCK_TYPE	type
 	);
 
 void
 ODM_ReleaseSpinLock(	
-	IN 	PDM_ODM_T			pDM_Odm,
-	IN	RT_SPINLOCK_TYPE	type
+	PDM_ODM_T			pDM_Odm,
+	RT_SPINLOCK_TYPE	type
 	);
 
 
@@ -222,36 +222,36 @@ ODM_ReleaseSpinLock(
 /*  */
 void
 ODM_InitializeWorkItem(	
-	IN 	PDM_ODM_T					pDM_Odm,
-	IN	PRT_WORK_ITEM				pRtWorkItem,
-	IN	RT_WORKITEM_CALL_BACK		RtWorkItemCallback,
-	IN	void *						pContext,
-	IN	const char*					szID
+	PDM_ODM_T					pDM_Odm,
+	PRT_WORK_ITEM				pRtWorkItem,
+	RT_WORKITEM_CALL_BACK		RtWorkItemCallback,
+	void *						pContext,
+	const char*					szID
 	);
 
 void
 ODM_StartWorkItem(	
-	IN	PRT_WORK_ITEM	pRtWorkItem
+	PRT_WORK_ITEM	pRtWorkItem
 	);
 
 void
 ODM_StopWorkItem(	
-	IN	PRT_WORK_ITEM	pRtWorkItem
+	PRT_WORK_ITEM	pRtWorkItem
 	);
 
 void
 ODM_FreeWorkItem(	
-	IN	PRT_WORK_ITEM	pRtWorkItem
+	PRT_WORK_ITEM	pRtWorkItem
 	);
 
 void
 ODM_ScheduleWorkItem(	
-	IN	PRT_WORK_ITEM	pRtWorkItem
+	PRT_WORK_ITEM	pRtWorkItem
 	);
 
 void
 ODM_IsWorkItemScheduled(	
-	IN	PRT_WORK_ITEM	pRtWorkItem
+	PRT_WORK_ITEM	pRtWorkItem
 	);
 
 /*  */
@@ -259,48 +259,48 @@ ODM_IsWorkItemScheduled(
 /*  */
 void
 ODM_StallExecution(	
-	IN	u32	usDelay
+	u32	usDelay
 	);
 
 void
-ODM_delay_ms(IN u32	ms);
-
+ODM_delay_ms(u32	ms);
+
 
 void
-ODM_delay_us(IN u32	us);
+ODM_delay_us(u32	us);
 
 void
-ODM_sleep_ms(IN u32	ms);
+ODM_sleep_ms(u32	ms);
 
 void
-ODM_sleep_us(IN u32	us);
+ODM_sleep_us(u32	us);
 
 void
-ODM_SetTimer(	
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	PRT_TIMER 		pTimer, 
-	IN	u32 			msDelay
+ODM_SetTimer(
+	PDM_ODM_T		pDM_Odm,
+	PRT_TIMER 		pTimer, 
+	u32 			msDelay
 	);
 
 void
 ODM_InitializeTimer(
-	IN 	PDM_ODM_T			pDM_Odm,
-	IN	PRT_TIMER 			pTimer, 
-	IN	RT_TIMER_CALL_BACK	CallBackFunc, 
-	IN	void *				pContext,
-	IN	const char*			szID
+	PDM_ODM_T			pDM_Odm,
+	PRT_TIMER 			pTimer, 
+	RT_TIMER_CALL_BACK	CallBackFunc, 
+	void *				pContext,
+	const char*			szID
 	);
 
 void
 ODM_CancelTimer(
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	PRT_TIMER		pTimer
+	PDM_ODM_T		pDM_Odm,
+	PRT_TIMER		pTimer
 	);
 
 void
 ODM_ReleaseTimer(
-	IN 	PDM_ODM_T		pDM_Odm,
-	IN	PRT_TIMER		pTimer
+	PDM_ODM_T		pDM_Odm,
+	PRT_TIMER		pTimer
 	);
 
 
@@ -309,13 +309,13 @@ ODM_ReleaseTimer(
 /*  */
 u32
 ODM_FillH2CCmd(	
-	IN	u8 *		pH2CBuffer,
-	IN	u32		H2CBufferLen,
-	IN	u32		CmdNum,
-	IN	u32 *		pElementID,
-	IN	u32 *		pCmdLen,
-	IN	u8 **		pCmbBuffer,
-	IN	u8 *		CmdStartSeq
+	u8 *		pH2CBuffer,
+	u32		H2CBufferLen,
+	u32		CmdNum,
+	u32 *		pElementID,
+	u32 *		pCmdLen,
+	u8 **		pCmbBuffer,
+	u8 *		CmdStartSeq
 	);
 
 #endif	/*  __ODM_INTERFACE_H__ */

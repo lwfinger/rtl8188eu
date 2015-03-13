@@ -29,7 +29,7 @@
 
 HAL_STATUS
 ODM_ReadAndConfig_AGC_TAB_1T_8188E(
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 );
 /******************************************************************************
 *                           AGC_TAB_1T_ICUT.TXT
@@ -37,7 +37,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_8188E(
 
 void
 ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E( /*  TC: Test Chip, MP: MP Chip */
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 );
 /******************************************************************************
 *                           PHY_REG_1T.TXT
@@ -45,7 +45,7 @@ ODM_ReadAndConfig_AGC_TAB_1T_ICUT_8188E( /*  TC: Test Chip, MP: MP Chip */
 
 HAL_STATUS
 ODM_ReadAndConfig_PHY_REG_1T_8188E(
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 );
 /******************************************************************************
 *                           PHY_REG_1T_ICUT.TXT
@@ -53,7 +53,7 @@ ODM_ReadAndConfig_PHY_REG_1T_8188E(
 
 void
 ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E( /*  TC: Test Chip, MP: MP Chip */
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 );
 
 /******************************************************************************
@@ -62,7 +62,7 @@ ODM_ReadAndConfig_PHY_REG_1T_ICUT_8188E( /*  TC: Test Chip, MP: MP Chip */
 
 void
 ODM_ReadAndConfig_PHY_REG_PG_8188E(
-	IN   PDM_ODM_T  pDM_Odm
+	PDM_ODM_T  pDM_Odm
 );
 
 #endif /*  end of HWIMG_SUPPORT */

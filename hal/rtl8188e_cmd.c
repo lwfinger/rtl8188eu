@@ -555,7 +555,7 @@ static void rtl8188e_set_FwRsvdPage_cmd(struct adapter *padapter, PRSVDPAGE_LOC 
 /*  2010.06.23. Added by tynli. */
 void
 CheckFwRsvdPageContent(
-	IN	struct adapter *	Adapter
+	struct adapter *	Adapter
 )
 {
 	HAL_DATA_TYPE*	pHalData = GET_HAL_DATA(Adapter);
