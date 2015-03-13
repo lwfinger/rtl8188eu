@@ -2837,7 +2837,7 @@ void rtw_joinbss_reset(struct adapter *padapter)
 unsigned int rtw_restructure_ht_ie(struct adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len)
 {
 	u32 ielen, out_len;
-	HT_CAP_AMPDU_FACTOR max_rx_ampdu_factor;
+	enum HT_CAP_AMPDU_FACTOR max_rx_ampdu_factor;
 	unsigned char *p, *pframe;
 	struct rtw_ieee80211_ht_cap ht_capie;
 	unsigned char WMM_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x00, 0x01, 0x00};
