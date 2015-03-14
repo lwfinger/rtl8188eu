@@ -701,7 +701,7 @@ void flush_all_cam_entry(struct adapter *padapter)
 }
 
 #if defined(CONFIG_P2P) && defined(CONFIG_P2P)
-int WFD_info_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
+int WFD_info_handler(struct adapter *padapter, struct ndis_802_11_variable_ies *	pIE)
 {
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -736,7 +736,7 @@ int WFD_info_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 }
 #endif
 
-int WMM_param_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
+int WMM_param_handler(struct adapter *padapter, struct ndis_802_11_variable_ies *	pIE)
 {
 	/* struct registry_priv	*pregpriv = &padapter->registrypriv; */
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -875,7 +875,7 @@ void WMMOnAssocRsp(struct adapter *padapter)
 	return;
 }
 
-static void bwmode_update_check(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
+static void bwmode_update_check(struct adapter *padapter, struct ndis_802_11_variable_ies * pIE)
 {
 	unsigned char	 new_bwmode;
 	unsigned char  new_ch_offset;
@@ -970,7 +970,7 @@ static void bwmode_update_check(struct adapter *padapter, PNDIS_802_11_VARIABLE_
 	}
 }
 
-void HT_caps_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
+void HT_caps_handler(struct adapter *padapter, struct ndis_802_11_variable_ies * pIE)
 {
 	unsigned int	i;
 	u8	rf_type;
@@ -1037,7 +1037,7 @@ void HT_caps_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 	}
 }
 
-void HT_info_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
+void HT_info_handler(struct adapter *padapter, struct ndis_802_11_variable_ies * pIE)
 {
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -1091,7 +1091,7 @@ void HTOnAssocRsp(struct adapter *padapter)
 	rtw_hal_set_hwreg(padapter, HW_VAR_AMPDU_FACTOR, (u8 *)(&max_AMPDU_len));
 }
 
-void ERP_IE_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
+void ERP_IE_handler(struct adapter *padapter, struct ndis_802_11_variable_ies * pIE)
 {
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -1368,13 +1368,13 @@ void update_beacon_info(struct adapter *padapter, u8 *pframe, uint pkt_len, stru
 {
 	unsigned int i;
 	unsigned int len;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 
 	len = pkt_len - (_BEACON_IE_OFFSET_ + WLAN_HDR_A3_LEN);
 
 	for (i = 0; i < len;)
 	{
-		pIE = (PNDIS_802_11_VARIABLE_IEs)(pframe + (_BEACON_IE_OFFSET_ + WLAN_HDR_A3_LEN) + i);
+		pIE = (struct ndis_802_11_variable_ies *)(pframe + (_BEACON_IE_OFFSET_ + WLAN_HDR_A3_LEN) + i);
 
 		switch (pIE->ElementID) {
 		case _HT_EXTRA_INFO_IE_:	/* HT info */
@@ -1399,14 +1399,14 @@ void process_csa_ie(struct adapter *padapter, u8 *pframe, uint pkt_len)
 {
 	unsigned int i;
 	unsigned int len;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	u8 new_ch_no = 0;
 
 	len = pkt_len - (_BEACON_IE_OFFSET_ + WLAN_HDR_A3_LEN);
 
 	for (i = 0; i < len;)
 	{
-		pIE = (PNDIS_802_11_VARIABLE_IEs)(pframe + (_BEACON_IE_OFFSET_ + WLAN_HDR_A3_LEN) + i);
+		pIE = (struct ndis_802_11_variable_ies *)(pframe + (_BEACON_IE_OFFSET_ + WLAN_HDR_A3_LEN) + i);
 
 		switch (pIE->ElementID)
 		{
@@ -1427,16 +1427,16 @@ void process_csa_ie(struct adapter *padapter, u8 *pframe, uint pkt_len)
 unsigned int is_ap_in_tkip(struct adapter *padapter)
 {
 	u32 i;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex		*cur_network = &(pmlmeinfo->network);
 
 	if (rtw_get_capability((struct wlan_bssid_ex *)cur_network) & WLAN_CAPABILITY_PRIVACY)
 	{
-		for (i = sizeof(NDIS_802_11_FIXED_IEs); i < pmlmeinfo->network.IELength;)
+		for (i = sizeof(struct ndis_802_11_fixed_ies); i < pmlmeinfo->network.IELength;)
 		{
-			pIE = (PNDIS_802_11_VARIABLE_IEs)(pmlmeinfo->network.IEs + i);
+			pIE = (struct ndis_802_11_variable_ies *)(pmlmeinfo->network.IEs + i);
 
 			switch (pIE->ElementID)
 			{
@@ -1472,15 +1472,15 @@ unsigned int is_ap_in_tkip(struct adapter *padapter)
 unsigned int should_forbid_n_rate(struct adapter * padapter)
 {
 	u32 i;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct wlan_bssid_ex  *cur_network = &pmlmepriv->cur_network.network;
 
 	if (rtw_get_capability((struct wlan_bssid_ex *)cur_network) & WLAN_CAPABILITY_PRIVACY)
 	{
-		for (i = sizeof(NDIS_802_11_FIXED_IEs); i < cur_network->IELength;)
+		for (i = sizeof(struct ndis_802_11_fixed_ies); i < cur_network->IELength;)
 		{
-			pIE = (PNDIS_802_11_VARIABLE_IEs)(cur_network->IEs + i);
+			pIE = (struct ndis_802_11_variable_ies *)(cur_network->IEs + i);
 
 			switch (pIE->ElementID)
 			{
@@ -1508,16 +1508,16 @@ unsigned int should_forbid_n_rate(struct adapter * padapter)
 unsigned int is_ap_in_wep(struct adapter *padapter)
 {
 	u32 i;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct wlan_bssid_ex		*cur_network = &(pmlmeinfo->network);
 
 	if (rtw_get_capability((struct wlan_bssid_ex *)cur_network) & WLAN_CAPABILITY_PRIVACY)
 	{
-		for (i = sizeof(NDIS_802_11_FIXED_IEs); i < pmlmeinfo->network.IELength;)
+		for (i = sizeof(struct ndis_802_11_fixed_ies); i < pmlmeinfo->network.IELength;)
 		{
-			pIE = (PNDIS_802_11_VARIABLE_IEs)(pmlmeinfo->network.IEs + i);
+			pIE = (struct ndis_802_11_variable_ies *)(pmlmeinfo->network.IEs + i);
 
 			switch (pIE->ElementID)
 			{
@@ -1720,7 +1720,7 @@ void set_sta_rate(struct adapter *padapter, struct sta_info *psta)
 /*  Update RRSR and Rate for USERATE */
 void update_tx_basic_rate(struct adapter *padapter, u8 wirelessmode)
 {
-	NDIS_802_11_RATES_EX	supported_rates;
+	u8	supported_rates[NDIS_802_11_LENGTH_RATES_EX];
 #ifdef CONFIG_P2P
 	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;
 
@@ -1751,15 +1751,15 @@ void update_tx_basic_rate(struct adapter *padapter, u8 wirelessmode)
 unsigned char check_assoc_AP(u8 *pframe, uint len)
 {
 	unsigned int	i;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	u8	epigram_vendor_flag;
 	u8	ralink_vendor_flag;
 	epigram_vendor_flag = 0;
 	ralink_vendor_flag = 0;
 
-	for (i = sizeof(NDIS_802_11_FIXED_IEs); i < len;)
+	for (i = sizeof(struct ndis_802_11_fixed_ies); i < len;)
 	{
-		pIE = (PNDIS_802_11_VARIABLE_IEs)(pframe + i);
+		pIE = (struct ndis_802_11_variable_ies *)(pframe + i);
 
 		switch (pIE->ElementID)
 		{
@@ -2018,12 +2018,12 @@ void update_bmc_sta_support_rate(struct adapter *padapter, u32 mac_id)
 int update_sta_support_rate(struct adapter *padapter, u8* pvar_ie, uint var_ie_len, int cam_idx)
 {
 	unsigned int	ie_len;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	int	supportRateNum = 0;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	pIE = (PNDIS_802_11_VARIABLE_IEs)rtw_get_ie(pvar_ie, _SUPPORTEDRATES_IE_, &ie_len, var_ie_len);
+	pIE = (struct ndis_802_11_variable_ies *)rtw_get_ie(pvar_ie, _SUPPORTEDRATES_IE_, &ie_len, var_ie_len);
 	if (pIE == NULL)
 	{
 		return _FAIL;
@@ -2032,7 +2032,7 @@ int update_sta_support_rate(struct adapter *padapter, u8* pvar_ie, uint var_ie_l
 	memcpy(pmlmeinfo->FW_sta_info[cam_idx].SupportedRates, pIE->data, ie_len);
 	supportRateNum = ie_len;
 
-	pIE = (PNDIS_802_11_VARIABLE_IEs)rtw_get_ie(pvar_ie, _EXT_SUPPORTEDRATES_IE_, &ie_len, var_ie_len);
+	pIE = (struct ndis_802_11_variable_ies *)rtw_get_ie(pvar_ie, _EXT_SUPPORTEDRATES_IE_, &ie_len, var_ie_len);
 	if (pIE)
 	{
 		memcpy((pmlmeinfo->FW_sta_info[cam_idx].SupportedRates + supportRateNum), pIE->data, ie_len);

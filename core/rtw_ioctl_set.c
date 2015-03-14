@@ -51,7 +51,7 @@ u8 rtw_validate_bssid(u8 *bssid)
 	return ret;
 }
 
-u8 rtw_validate_ssid(NDIS_802_11_SSID *ssid)
+u8 rtw_validate_ssid(struct ndis_802_11_ssid *ssid)
 {
 	u8	 i;
 	u8	ret=true;
@@ -158,8 +158,8 @@ u8 rtw_do_join(struct adapter * padapter)
 
 				pibss = padapter->registrypriv.dev_network.MacAddress;
 
-				memset(&pdev_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
-				memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(NDIS_802_11_SSID));
+				memset(&pdev_network->Ssid, 0, sizeof(struct ndis_802_11_ssid));
+				memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(struct ndis_802_11_ssid));
 
 				rtw_update_registrypriv_dev_network(padapter);
 
@@ -294,7 +294,7 @@ exit:
 	return status;
 }
 
-u8 rtw_set_802_11_ssid(struct adapter* padapter, NDIS_802_11_SSID *ssid)
+u8 rtw_set_802_11_ssid(struct adapter* padapter, struct ndis_802_11_ssid *ssid)
 {
 	_irqL irqL;
 	u8 status = _SUCCESS;
@@ -387,7 +387,7 @@ handle_tkip_countermeasure:
 		goto release_mlme_lock;
 	}
 
-	memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(NDIS_802_11_SSID));
+	memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(struct ndis_802_11_ssid));
 	pmlmepriv->assoc_by_bssid=false;
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) {
@@ -410,7 +410,7 @@ exit:
 
 }
 
-u8 rtw_set_802_11_connect(struct adapter* padapter, u8 *bssid, NDIS_802_11_SSID *ssid)
+u8 rtw_set_802_11_connect(struct adapter* padapter, u8 *bssid, struct ndis_802_11_ssid *ssid)
 {
 	_irqL irqL;
 	u8 status = _SUCCESS;
@@ -459,7 +459,7 @@ handle_tkip_countermeasure:
 	}
 
 	if (ssid && ssid_valid)
-		memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(NDIS_802_11_SSID));
+		memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(struct ndis_802_11_ssid));
 
 	if (bssid && bssid_valid) {
 		memcpy(&pmlmepriv->assoc_bssid, bssid, ETH_ALEN);
@@ -484,12 +484,12 @@ exit:
 }
 
 u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
-	NDIS_802_11_NETWORK_INFRASTRUCTURE networktype)
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE networktype)
 {
 	_irqL irqL;
 	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct	wlan_network	*cur_network = &pmlmepriv->cur_network;
-	NDIS_802_11_NETWORK_INFRASTRUCTURE* pold_state = &(cur_network->network.InfrastructureMode);
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE* pold_state = &(cur_network->network.InfrastructureMode);
 
 ;
 
@@ -588,7 +588,7 @@ u8 rtw_set_802_11_disassociate(struct adapter *padapter)
 	return true;
 }
 
-u8 rtw_set_802_11_bssid_list_scan(struct adapter* padapter, NDIS_802_11_SSID *pssid, int ssid_max_num)
+u8 rtw_set_802_11_bssid_list_scan(struct adapter* padapter, struct ndis_802_11_ssid *pssid, int ssid_max_num)
 {
 	_irqL	irqL;
 	struct	mlme_priv		*pmlmepriv= &padapter->mlmepriv;
@@ -638,7 +638,7 @@ exit:
 	return res;
 }
 
-u8 rtw_set_802_11_authentication_mode(struct adapter* padapter, NDIS_802_11_AUTHENTICATION_MODE authmode)
+u8 rtw_set_802_11_authentication_mode(struct adapter* padapter, enum NDIS_802_11_AUTHENTICATION_MODE authmode)
 {
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	int res;
@@ -663,7 +663,7 @@ u8 rtw_set_802_11_authentication_mode(struct adapter* padapter, NDIS_802_11_AUTH
 	return ret;
 }
 
-u8 rtw_set_802_11_add_wep(struct adapter* padapter, NDIS_802_11_WEP *wep){
+u8 rtw_set_802_11_add_wep(struct adapter* padapter, struct ndis_802_11_wep *wep){
 
 	u8		bdefaultkey;
 	u8		btransmitkey;
@@ -771,7 +771,7 @@ exit:
 
 }
 
-u8 rtw_set_802_11_add_key(struct adapter* padapter, NDIS_802_11_KEY *key){
+u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key){
 
 	uint	encryptionalgo;
 	u8 * pbssid;
@@ -963,8 +963,8 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, NDIS_802_11_KEY *key){
 	{
 		u8 ret;
 		u32 keyindex;
-		u32 len = FIELD_OFFSET(NDIS_802_11_KEY, KeyMaterial) + key->KeyLength;
-		NDIS_802_11_WEP *wep = &padapter->securitypriv.ndiswep;
+		u32 len = FIELD_OFFSET(struct ndis_802_11_key, KeyMaterial) + key->KeyLength;
+		struct ndis_802_11_wep *wep = &padapter->securitypriv.ndiswep;
 
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: +++++ WEP key +++++\n"));
 
@@ -992,12 +992,12 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, NDIS_802_11_KEY *key){
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: +++++ SetRSC+++++\n"));
 		if(bgroup == true)
 		{
-			NDIS_802_11_KEY_RSC keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
+			unsigned long long keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
 			memcpy(&padapter->securitypriv.dot11Grprxpn, &keysrc, 8);
 		}
 		else
 		{
-			NDIS_802_11_KEY_RSC keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
+			unsigned long long keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
 			memcpy(&padapter->securitypriv.dot11Grptxpn, &keysrc, 8);
 		}
 
@@ -1133,7 +1133,7 @@ exit:
 	return ret;
 }
 
-u8 rtw_set_802_11_remove_key(struct adapter*	padapter, NDIS_802_11_REMOVE_KEY *key){
+u8 rtw_set_802_11_remove_key(struct adapter*	padapter, struct ndis_802_11_remove_key *key){
 
 	uint				encryptionalgo;
 	u8 * pbssid;

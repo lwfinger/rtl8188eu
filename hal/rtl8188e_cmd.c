@@ -379,8 +379,8 @@ static void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
 	if( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
 		/* DBG_871X("ie len=%d\n", cur_network->IELength); */
-		pktlen += cur_network->IELength - sizeof(NDIS_802_11_FIXED_IEs);
-		memcpy(pframe, cur_network->IEs+sizeof(NDIS_802_11_FIXED_IEs), pktlen);
+		pktlen += cur_network->IELength - sizeof(struct ndis_802_11_fixed_ies);
+		memcpy(pframe, cur_network->IEs+sizeof(struct ndis_802_11_fixed_ies), pktlen);
 
 		goto _ConstructBeacon;
 	}

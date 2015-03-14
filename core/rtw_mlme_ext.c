@@ -1889,14 +1889,14 @@ unsigned int OnAssocRsp(struct adapter *padapter, union recv_frame *precv_frame)
 	uint i;
 	int res;
 	unsigned short	status;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	/* struct wlan_bssid_ex			*cur_network = &(pmlmeinfo->network); */
 	u8 *pframe = precv_frame->u.hdr.rx_data;
 	uint pkt_len = precv_frame->u.hdr.len;
-	PNDIS_802_11_VARIABLE_IEs	pWapiIE = NULL;
+	struct ndis_802_11_variable_ies *	pWapiIE = NULL;
 
 	DBG_871X("%s\n", __FUNCTION__);
 
@@ -1935,7 +1935,7 @@ unsigned int OnAssocRsp(struct adapter *padapter, union recv_frame *precv_frame)
 	/* for not to handle the synchronous IO in the tasklet */
 	for (i = (6 + WLAN_HDR_A3_LEN); i < pkt_len;)
 	{
-		pIE = (PNDIS_802_11_VARIABLE_IEs)(pframe + i);
+		pIE = (struct ndis_802_11_variable_ies *)(pframe + i);
 
 		switch (pIE->ElementID)
 		{
@@ -6202,7 +6202,7 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
 
 }
 
-static int _issue_probereq(struct adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da, int wait_ack)
+static int _issue_probereq(struct adapter *padapter, struct ndis_802_11_ssid *pssid, u8 *da, int wait_ack)
 {
 	int ret = _FAIL;
 	struct xmit_frame		*pmgntframe;
@@ -6303,12 +6303,12 @@ exit:
 	return ret;
 }
 
-inline void issue_probereq(struct adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da)
+inline void issue_probereq(struct adapter *padapter, struct ndis_802_11_ssid *pssid, u8 *da)
 {
 	_issue_probereq(padapter, pssid, da, false);
 }
 
-int issue_probereq_ex(struct adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da,
+int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid, u8 *da,
 	int try_cnt, int wait_ms)
 {
 	int ret;
@@ -6652,7 +6652,7 @@ void issue_assocreq(struct adapter *padapter)
 	__le16				val16;
 	unsigned int			i, j, ie_len, index=0;
 	unsigned char			rf_type, bssrate[NumRates], sta_bssrate[NumRates];
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	struct xmit_priv		*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
@@ -6785,13 +6785,13 @@ void issue_assocreq(struct adapter *padapter)
 	}
 
 	/* RSN */
-	p = rtw_get_ie((pmlmeinfo->network.IEs + sizeof(NDIS_802_11_FIXED_IEs)), _RSN_IE_2_, &ie_len, (pmlmeinfo->network.IELength - sizeof(NDIS_802_11_FIXED_IEs)));
+	p = rtw_get_ie((pmlmeinfo->network.IEs + sizeof(struct ndis_802_11_fixed_ies)), _RSN_IE_2_, &ie_len, (pmlmeinfo->network.IELength - sizeof(struct ndis_802_11_fixed_ies)));
 	if (p != NULL)
 		pframe = rtw_set_ie(pframe, _RSN_IE_2_, ie_len, (p + 2), &(pattrib->pktlen));
 
 	/* HT caps */
 	if(padapter->mlmepriv.htpriv.ht_option==true) {
-		p = rtw_get_ie((pmlmeinfo->network.IEs + sizeof(NDIS_802_11_FIXED_IEs)), _HT_CAPABILITY_IE_, &ie_len, (pmlmeinfo->network.IELength - sizeof(NDIS_802_11_FIXED_IEs)));
+		p = rtw_get_ie((pmlmeinfo->network.IEs + sizeof(struct ndis_802_11_fixed_ies)), _HT_CAPABILITY_IE_, &ie_len, (pmlmeinfo->network.IELength - sizeof(struct ndis_802_11_fixed_ies)));
 		if (p && (!is_ap_in_tkip(padapter))) {
 			memcpy(&(pmlmeinfo->HT_caps), (p + 2), sizeof(struct HT_caps_element));
 
@@ -6840,9 +6840,9 @@ void issue_assocreq(struct adapter *padapter)
 	}
 
 	/* vendor specific IE, such as WPA, WMM, WPS */
-	for (i = sizeof(NDIS_802_11_FIXED_IEs); i < pmlmeinfo->network.IELength;)
+	for (i = sizeof(struct ndis_802_11_fixed_ies); i < pmlmeinfo->network.IELength;)
 	{
-		pIE = (PNDIS_802_11_VARIABLE_IEs)(pmlmeinfo->network.IEs + i);
+		pIE = (struct ndis_802_11_variable_ies *)(pmlmeinfo->network.IEs + i);
 
 		switch (pIE->ElementID)
 		{
@@ -8565,8 +8565,8 @@ void start_clnt_join(struct adapter* padapter)
 					rtw_warn_on(1);
 					return;
 				}
-				if (_rtw_memcmp(&(scanned->network.Ssid), &(pnetwork->Ssid), sizeof(NDIS_802_11_SSID)) == true
-					&& _rtw_memcmp(scanned->network.MacAddress, pnetwork->MacAddress, sizeof(NDIS_802_11_MAC_ADDRESS)) == true
+				if (_rtw_memcmp(&(scanned->network.Ssid), &(pnetwork->Ssid), sizeof(struct ndis_802_11_ssid)) == true
+					&& _rtw_memcmp(scanned->network.MacAddress, pnetwork->MacAddress, sizeof(ETH_ALEN)) == true
 				) {
 					ie_offset = (scanned->network.Reserved[0] == 2? 0:12);
 					if (rtw_get_p2p_ie(scanned->network.IEs+ie_offset, scanned->network.IELength-ie_offset, NULL, NULL))
@@ -9882,7 +9882,7 @@ u8 createbss_hdl(struct adapter *padapter, u8 *pbuf)
 u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 {
 	u8	join_type;
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -9943,9 +9943,9 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 	/* Check AP vendor to move rtw_joinbss_cmd() */
 	/* pmlmeinfo->assoc_AP_vendor = check_assoc_AP(pnetwork->IEs, pnetwork->IELength); */
 
-	for (i = sizeof(NDIS_802_11_FIXED_IEs); i < pnetwork->IELength;)
+	for (i = sizeof(struct ndis_802_11_fixed_ies); i < pnetwork->IELength;)
 	{
-		pIE = (PNDIS_802_11_VARIABLE_IEs)(pnetwork->IEs + i);
+		pIE = (struct ndis_802_11_variable_ies *)(pnetwork->IEs + i);
 
 		switch (pIE->ElementID)
 		{

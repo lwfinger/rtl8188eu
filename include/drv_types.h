@@ -97,7 +97,7 @@ struct registry_priv {
 	u8	rfintfs;
 	u8	lbkmode;
 	u8	hci;
-	NDIS_802_11_SSID	ssid;
+	struct ndis_802_11_ssid	ssid;
 	u8	network_mode;	//infra, ad-hoc, auto
 	u8	channel;//ad-hoc support requirement
 	u8	wireless_mode;//A, B, G, auto

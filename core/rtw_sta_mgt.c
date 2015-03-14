@@ -623,7 +623,7 @@ u32 rtw_init_bcmc_stainfo(struct adapter* padapter)
 	struct sta_info		*psta;
 	struct tx_servq	*ptxservq;
 	u32 res=_SUCCESS;
-	NDIS_802_11_MAC_ADDRESS	bcast_addr= {0xff,0xff,0xff,0xff,0xff,0xff};
+	u8 bcast_addr[ETH_ALEN] = {0xff,0xff,0xff,0xff,0xff,0xff};
 
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	/* _queue	*pstapending = &padapter->xmitpriv.bm_pending; */

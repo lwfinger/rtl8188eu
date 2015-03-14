@@ -287,7 +287,7 @@ struct	ss_res
 	int	scan_mode;
 	u8 ssid_num;
 	u8 ch_num;
-	NDIS_802_11_SSID ssid[RTW_SSID_SCAN_AMOUNT];
+	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
 };
 
@@ -311,7 +311,7 @@ struct FW_Sta_Info
 	u32	status;
 	u32	rx_pkt;
 	u32	retry;
-	NDIS_802_11_RATES_EX  SupportedRates;
+	u8 SupportedRates[NDIS_802_11_LENGTH_RATES_EX];
 };
 
 /*
@@ -544,17 +544,17 @@ int is_IBSS_empty(struct adapter *padapter);
 
 unsigned char check_assoc_AP(u8 *pframe, uint len);
 
-int WMM_param_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE);
+int WMM_param_handler(struct adapter *padapter, struct ndis_802_11_variable_ies *	pIE);
 #ifdef CONFIG_P2P
-int WFD_info_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE);
+int WFD_info_handler(struct adapter *padapter, struct ndis_802_11_variable_ies *	pIE);
 #endif
 void WMMOnAssocRsp(struct adapter *padapter);
 
-void HT_caps_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
-void HT_info_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
+void HT_caps_handler(struct adapter *padapter, struct ndis_802_11_variable_ies * pIE);
+void HT_info_handler(struct adapter *padapter, struct ndis_802_11_variable_ies * pIE);
 void HTOnAssocRsp(struct adapter *padapter);
 
-void ERP_IE_handler(struct adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
+void ERP_IE_handler(struct adapter *padapter, struct ndis_802_11_variable_ies * pIE);
 void VCS_update(struct adapter *padapter, struct sta_info *psta);
 
 void update_beacon_info(struct adapter *padapter, u8 *pframe, uint len, struct sta_info *psta);
@@ -614,8 +614,8 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
 void issue_assocreq(struct adapter *padapter);
 void issue_asocrsp(struct adapter *padapter, unsigned short status, struct sta_info *pstat, int pkt_type);
 void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short status);
-void issue_probereq(struct adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da);
-s32 issue_probereq_ex(struct adapter *padapter, NDIS_802_11_SSID *pssid, u8* da, int try_cnt, int wait_ms);
+void issue_probereq(struct adapter *padapter, struct ndis_802_11_ssid *pssid, u8 *da);
+s32 issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid, u8* da, int try_cnt, int wait_ms);
 int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int try_cnt, int wait_ms);
 int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms);
 int issue_deauth(struct adapter *padapter, unsigned char *da, unsigned short reason);

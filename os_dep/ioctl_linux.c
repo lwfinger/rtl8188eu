@@ -622,7 +622,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 {
 	int ret = 0;
 	u32 wep_key_idx, wep_key_len,wep_total_len;
-	NDIS_802_11_WEP	 *pwep = NULL;
+	struct ndis_802_11_wep	 *pwep = NULL;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
@@ -682,8 +682,8 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		if (wep_key_len > 0)
 		{
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
-			wep_total_len = wep_key_len + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
-			pwep =(NDIS_802_11_WEP	 *) rtw_malloc(wep_total_len);
+			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
+			pwep =(struct ndis_802_11_wep	 *) rtw_malloc(wep_total_len);
 			if(pwep == NULL){
 				RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_err_,(" wpa_set_encryption: pwep allocate fail !!!\n"));
 				goto exit;
@@ -1017,64 +1017,43 @@ static int rtw_wx_get_name(struct net_device *dev,
 	u8 ht_cap=false;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct wlan_bssid_ex  *pcur_bss = &pmlmepriv->cur_network.network;
-	NDIS_802_11_RATES_EX* prates = NULL;
+	u8 *prates;
 
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("cmd_code=%x\n", info->cmd));
-
-	;
-
-	if (check_fwstate(pmlmepriv, _FW_LINKED|WIFI_ADHOC_MASTER_STATE) == true)
-	{
+	if (check_fwstate(pmlmepriv, _FW_LINKED|WIFI_ADHOC_MASTER_STATE)) {
 		/* parsing HT_CAP_IE */
 		p = rtw_get_ie(&pcur_bss->IEs[12], _HT_CAPABILITY_IE_, &ht_ielen, pcur_bss->IELength-12);
 		if(p && ht_ielen>0)
-		{
 			ht_cap = true;
-		}
 
-		prates = &pcur_bss->SupportedRates;
+		prates = pcur_bss->SupportedRates;
 
-		if (rtw_is_cckratesonly_included((u8*)prates) == true)
-		{
+		if (rtw_is_cckratesonly_included((u8*)prates)) {
 			if(ht_cap == true)
 				snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11bn");
 			else
 				snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11b");
-		}
-		else if ((rtw_is_cckrates_included((u8*)prates)) == true)
-		{
+		} else if ((rtw_is_cckrates_included((u8*)prates))) {
 			if(ht_cap == true)
 				snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11bgn");
 			else
 				snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11bg");
-		}
-		else
-		{
-			if(pcur_bss->Configuration.DSConfig > 14)
-			{
+		} else {
+			if(pcur_bss->Configuration.DSConfig > 14) {
 				if(ht_cap == true)
 					snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11an");
 				else
 					snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11a");
-			}
-			else
-			{
+			} else {
 				if(ht_cap == true)
 					snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11gn");
 				else
 					snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11g");
 			}
 		}
-	}
-	else
-	{
-		/* prates = &padapter->registrypriv.dev_network.SupportedRates; */
-		/* snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11g"); */
+	} else {
 		snprintf(wrqu->name, IFNAMSIZ, "unassociated");
 	}
-
-	;
-
 	return 0;
 }
 
@@ -1120,7 +1099,7 @@ static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
 			     union iwreq_data *wrqu, char *b)
 {
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	NDIS_802_11_NETWORK_INFRASTRUCTURE networkType ;
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE networkType ;
 	int ret = 0;
 
 	;
@@ -1407,7 +1386,7 @@ static int rtw_wx_set_wap(struct net_device *dev,
 	u8 *dst_bssid, *src_bssid;
 	_queue	*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
-	NDIS_802_11_AUTHENTICATION_MODE	authmode;
+	enum NDIS_802_11_AUTHENTICATION_MODE	authmode;
 
 	if(_FAIL == rtw_pwr_wakeup(padapter))
 	{
@@ -1550,7 +1529,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	int ret = 0;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
-	NDIS_802_11_SSID ssid[RTW_SSID_SCAN_AMOUNT];
+	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
 	_irqL	irqL;
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo= &(padapter->wdinfo);
@@ -1630,7 +1609,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 	}
 #endif /* CONFIG_P2P */
 
-	memset(ssid, 0, sizeof(NDIS_802_11_SSID)*RTW_SSID_SCAN_AMOUNT);
+	memset(ssid, 0, sizeof(struct ndis_802_11_ssid)*RTW_SSID_SCAN_AMOUNT);
 
 #if WIRELESS_EXT >= 17
 	if (wrqu->data.length == sizeof(struct iw_scan_req))
@@ -1861,8 +1840,8 @@ static int rtw_wx_set_essid(struct net_device *dev,
 	_list *phead;
 	s8 status = true;
 	struct wlan_network *pnetwork = NULL;
-	NDIS_802_11_AUTHENTICATION_MODE authmode;
-	NDIS_802_11_SSID ndis_ssid;
+	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
+	struct ndis_802_11_ssid ndis_ssid;
 	u8 *dst_ssid, *src_ssid;
 
 	uint ret = 0, len;
@@ -1921,7 +1900,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
 		if( wrqu->essid.length != 33 )
 			DBG_871X("ssid=%s, len=%d\n", extra, wrqu->essid.length);
 
-		memset(&ndis_ssid, 0, sizeof(NDIS_802_11_SSID));
+		memset(&ndis_ssid, 0, sizeof(struct ndis_802_11_ssid));
 		ndis_ssid.SsidLength = len;
 		memcpy(ndis_ssid.Ssid, extra, len);
 		src_ssid = ndis_ssid.Ssid;
@@ -2233,15 +2212,15 @@ static int rtw_wx_set_enc(struct net_device *dev,
 {
 	u32 key, ret = 0;
 	u32 keyindex_provided;
-	NDIS_802_11_WEP	 wep;
-	NDIS_802_11_AUTHENTICATION_MODE authmode;
+	struct ndis_802_11_wep	 wep;
+	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
 
 	struct iw_point *erq = &(wrqu->encoding);
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	DBG_871X("+rtw_wx_set_enc, flags=0x%x\n", erq->flags);
 
-	memset(&wep, 0, sizeof(NDIS_802_11_WEP));
+	memset(&wep, 0, sizeof(struct ndis_802_11_wep));
 
 	key = erq->flags & IW_ENCODE_INDEX;
 
@@ -2304,7 +2283,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
 	if (erq->length > 0) {
 		wep.KeyLength = erq->length <= 5 ? 5 : 13;
 
-		wep.Length = wep.KeyLength + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
+		wep.Length = wep.KeyLength + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
 	} else {
 		wep.KeyLength = 0 ;
 
@@ -4922,7 +4901,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 		/* 	Reset the content of struct tx_provdisc_req_info excluded the wps_config_method_request. */
 		memset( pwdinfo->tx_prov_disc_info.peerDevAddr, 0x00, ETH_ALEN );
 		memset( pwdinfo->tx_prov_disc_info.peerIFAddr, 0x00, ETH_ALEN );
-		memset( &pwdinfo->tx_prov_disc_info.ssid, 0x00, sizeof( NDIS_802_11_SSID ) );
+		memset( &pwdinfo->tx_prov_disc_info.ssid, 0x00, sizeof( struct ndis_802_11_ssid ) );
 		pwdinfo->tx_prov_disc_info.peer_channel_num[ 0 ] = 0;
 		pwdinfo->tx_prov_disc_info.peer_channel_num[ 1 ] = 0;
 		pwdinfo->tx_prov_disc_info.benable = false;
@@ -5062,7 +5041,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 
 		if(rtw_p2p_chk_role(pwdinfo, P2P_ROLE_CLIENT))
 		{
-			memcpy( &pwdinfo->tx_prov_disc_info.ssid, &pnetwork->network.Ssid, sizeof( NDIS_802_11_SSID ) );
+			memcpy( &pwdinfo->tx_prov_disc_info.ssid, &pnetwork->network.Ssid, sizeof( struct ndis_802_11_ssid ) );
 		}
 		else if(rtw_p2p_chk_role(pwdinfo, P2P_ROLE_DEVICE) || rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO))
 		{
@@ -6470,7 +6449,7 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 {
 	int ret = 0;
 	u32 wep_key_idx, wep_key_len,wep_total_len;
-	NDIS_802_11_WEP	 *pwep = NULL;
+	struct ndis_802_11_wep	 *pwep = NULL;
 	struct sta_info *psta = NULL, *pbcmc_sta = NULL;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
@@ -6540,8 +6519,8 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		if (wep_key_len > 0)
 		{
 			wep_key_len = wep_key_len <= 5 ? 5 : 13;
-			wep_total_len = wep_key_len + FIELD_OFFSET(NDIS_802_11_WEP, KeyMaterial);
-			pwep =(NDIS_802_11_WEP *)rtw_malloc(wep_total_len);
+			wep_total_len = wep_key_len + FIELD_OFFSET(struct ndis_802_11_wep, KeyMaterial);
+			pwep =(struct ndis_802_11_wep *)rtw_malloc(wep_total_len);
 			if(pwep == NULL){
 				DBG_871X(" r871x_set_encryption: pwep allocate fail !!!\n");
 				goto exit;
@@ -8744,7 +8723,7 @@ static void freeLoopback(struct adapter *padapter)
 
 static s32 initpseudoadhoc(struct adapter *padapter)
 {
-	NDIS_802_11_NETWORK_INFRASTRUCTURE networkType;
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE networkType;
 	s32 err;
 
 	networkType = Ndis802_11IBSS;
@@ -8759,9 +8738,9 @@ static s32 initpseudoadhoc(struct adapter *padapter)
 
 static s32 createpseudoadhoc(struct adapter *padapter)
 {
-	NDIS_802_11_AUTHENTICATION_MODE authmode;
+	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
 	struct mlme_priv *pmlmepriv;
-	NDIS_802_11_SSID *passoc_ssid;
+	struct ndis_802_11_ssid *passoc_ssid;
 	struct wlan_bssid_ex *pdev_network;
 	u8 *pibss;
 	u8 ssid[] = "pseduo_ad-hoc";
@@ -8776,13 +8755,13 @@ static s32 createpseudoadhoc(struct adapter *padapter)
 	if (err == false) return _FAIL;
 
 	passoc_ssid = &pmlmepriv->assoc_ssid;
-	memset(passoc_ssid, 0, sizeof(NDIS_802_11_SSID));
+	memset(passoc_ssid, 0, sizeof(struct ndis_802_11_ssid));
 	passoc_ssid->SsidLength = sizeof(ssid) - 1;
 	memcpy(passoc_ssid->Ssid, ssid, passoc_ssid->SsidLength);
 
 	pdev_network = &padapter->registrypriv.dev_network;
 	pibss = padapter->registrypriv.dev_network.MacAddress;
-	memcpy(&pdev_network->Ssid, passoc_ssid, sizeof(NDIS_802_11_SSID));
+	memcpy(&pdev_network->Ssid, passoc_ssid, sizeof(struct ndis_802_11_ssid));
 
 	rtw_update_registrypriv_dev_network(padapter);
 	rtw_generate_random_ibss(pibss);

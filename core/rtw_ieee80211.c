@@ -1345,14 +1345,14 @@ void dump_wps_ie(u8 *ie, u32 ie_len)
  */
 u32 rtw_get_p2p_merged_ies_len(u8 *in_ie, u32 in_len)
 {
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	u8 OUI[4] = { 0x50, 0x6f, 0x9a, 0x09 };
 	int i=0;
 	int j=0, len=0;
 
 	while( i < in_len)
 	{
-		pIE = (PNDIS_802_11_VARIABLE_IEs)(in_ie+ i);
+		pIE = (struct ndis_802_11_variable_ies *)(in_ie+ i);
 
 		if( pIE->ElementID == _VENDOR_SPECIFIC_IE_ && _rtw_memcmp(pIE->data, OUI, 4) )
 		{
@@ -1374,7 +1374,7 @@ u32 rtw_get_p2p_merged_ies_len(u8 *in_ie, u32 in_len)
  */
 int rtw_p2p_merge_ies(u8 *in_ie, u32 in_len, u8 *merge_ie)
 {
-	PNDIS_802_11_VARIABLE_IEs	pIE;
+	struct ndis_802_11_variable_ies *	pIE;
 	u8 len = 0;
 	u8 OUI[4] = { 0x50, 0x6f, 0x9a, 0x09 };
 	u8 ELOUI[6] = { 0xDD, 0x00, 0x50, 0x6f, 0x9a, 0x09 };	/* EID;Len;OUI, Len would copy at the end of function */
@@ -1388,7 +1388,7 @@ int rtw_p2p_merge_ies(u8 *in_ie, u32 in_len, u8 *merge_ie)
 
 		while( i < in_len)
 		{
-			pIE = (PNDIS_802_11_VARIABLE_IEs)(in_ie+ i);
+			pIE = (struct ndis_802_11_variable_ies *)(in_ie+ i);
 
 			/*  Take out the rest of P2P OUIs */
 			if( pIE->ElementID == _VENDOR_SPECIFIC_IE_ && _rtw_memcmp(pIE->data, OUI, 4) )
