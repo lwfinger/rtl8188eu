@@ -116,7 +116,7 @@ void rtl8188e_RF_ChangeTxPath(	struct adapter *Adapter,
 void
 rtl8188e_PHY_RF6052SetBandwidth(
 	struct adapter *			Adapter,
-	HT_CHANNEL_WIDTH		Bandwidth)	/* 20M or 40M */
+	enum HT_CHANNEL_WIDTH		Bandwidth)	/* 20M or 40M */
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -371,65 +371,27 @@ static void getTxPowerWriteValByRegulatory88E(
 							chnlGroup++;
 						else
 							chnlGroup+=6;
-
-/*
-						if(Channel <= 3)
-							chnlGroup = 0;
-						else if(Channel >= 4 && Channel <= 9)
-							chnlGroup = 1;
-						else if(Channel > 9)
-							chnlGroup = 2;
-
-
-						if(pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
-							chnlGroup++;
-						else
-							chnlGroup+=4;
-*/
 					}
-					/* RTPRINT(FPHY, PHY_TXPWR, ("MCSTxPowerLevelOriginalOffset[%d][%d] = 0x%x\n", */
-					/* chnlGroup, index, pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)])); */
 					writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] +
 							((index<2)?powerBase0[rf]:powerBase1[rf]);
-					/* RTPRINT(FPHY, PHY_TXPWR, ("Realtek regulatory, 20MHz, writeVal(%c) = 0x%x\n", ((rf==0)?'A':'B'), writeVal)); */
 				}
 				break;
 			case 2:	/*  Better regulatory */
 					/*  don't increase any power diff */
 				writeVal = ((index<2)?powerBase0[rf]:powerBase1[rf]);
-				/* RTPRINT(FPHY, PHY_TXPWR, ("Better regulatory, writeVal(%c) = 0x%x\n", ((rf==0)?'A':'B'), writeVal)); */
 				break;
 			case 3:	/*  Customer defined power diff. */
 					/*  increase power diff defined by customer. */
 				chnlGroup = 0;
-				/* RTPRINT(FPHY, PHY_TXPWR, ("MCSTxPowerLevelOriginalOffset[%d][%d] = 0x%x\n", */
-				/* 	chnlGroup, index, pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)])); */
-
-				/*
-				if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20_40)
-				{
-					RTPRINT(FPHY, PHY_TXPWR, ("customer's limit, 40MHz rf(%c) = 0x%x\n",
-						((rf==0)?'A':'B'), pHalData->PwrGroupHT40[rf][Channel-1]));
-				}
-				else
-				{
-					RTPRINT(FPHY, PHY_TXPWR, ("customer's limit, 20MHz rf(%c) = 0x%x\n",
-						((rf==0)?'A':'B'), pHalData->PwrGroupHT20[rf][Channel-1]));
-				}*/
-
 				if(index < 2)
 					pwr_diff = pHalData->TxPwrLegacyHtDiff[rf][Channel-1];
 				else if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
 					pwr_diff = pHalData->TxPwrHt20Diff[rf][Channel-1];
 
-				/* RTPRINT(FPHY, PHY_TXPWR, ("power diff rf(%c) = 0x%x\n", ((rf==0)?'A':'B'), pwr_diff)); */
-
 				if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_40)
 					customer_pwr_limit = pHalData->PwrGroupHT40[rf][Channel-1];
 				else
 					customer_pwr_limit = pHalData->PwrGroupHT20[rf][Channel-1];
-
-				/* RTPRINT(FPHY, PHY_TXPWR, ("customer pwr limit  rf(%c) = 0x%x\n", ((rf==0)?'A':'B'), customer_pwr_limit)); */
 
 				if(pwr_diff >= customer_pwr_limit)
 					pwr_diff = 0;
@@ -617,7 +579,7 @@ phy_RF6052_Config_HardCode(
 {
 
 	/*  Set Default Bandwidth to 20M */
-	/* Adapter->HalFunc	.SetBWModeHandler(Adapter, HT_CHANNEL_WIDTH_20); */
+	/* Adapter->HalFunc	.SetBWModeHandler(Adapter, enum HT_CHANNEL_WIDTH_20); */
 
 	/*  TODO: Set Default Channel to channel one for RTL8225 */
 

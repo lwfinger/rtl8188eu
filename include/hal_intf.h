@@ -186,7 +186,7 @@ struct hal_ops {
 	void	(*enable_interrupt)(struct adapter *padapter);
 	void	(*disable_interrupt)(struct adapter *padapter);
 	s32	(*interrupt_handler)(struct adapter *padapter);
-	void	(*set_bwmode_handler)(struct adapter *padapter, HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
+	void	(*set_bwmode_handler)(struct adapter *padapter, enum HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
 	void	(*set_channel_handler)(struct adapter *padapter, u8 channel);
 
 	void	(*hal_dm_watchdog)(struct adapter *padapter);
@@ -391,7 +391,7 @@ void	rtw_hal_write_rfreg(struct adapter *padapter, u32 eRFPath, u32 RegAddr, u32
 
 s32	rtw_hal_interrupt_handler(struct adapter *padapter);
 
-void	rtw_hal_set_bwmode(struct adapter *padapter, HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
+void	rtw_hal_set_bwmode(struct adapter *padapter, enum HT_CHANNEL_WIDTH Bandwidth, u8 Offset);
 void	rtw_hal_set_chan(struct adapter *padapter, u8 channel);
 void	rtw_hal_dm_watchdog(struct adapter *padapter);
 

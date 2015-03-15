@@ -258,7 +258,7 @@ PHY_ScanOperationBackup8188E(struct adapter *Adapter, u8 Operation);
 //
 // Switch bandwidth for 8192S
 //
-void	PHY_SetBWMode8188E(struct adapter *pAdapter, HT_CHANNEL_WIDTH ChnlWidth, unsigned char Offset);
+void	PHY_SetBWMode8188E(struct adapter *pAdapter, enum HT_CHANNEL_WIDTH ChnlWidth, unsigned char Offset);
 
 //
 // Set A2 entry to fw for 8192S

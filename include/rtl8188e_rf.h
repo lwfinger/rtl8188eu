@@ -28,17 +28,10 @@
 int	PHY_RF6052_Config8188E(	struct adapter *	Adapter	);
 void		rtl8188e_RF_ChangeTxPath(	struct adapter *Adapter,
 										u16		DataRate);
-void		rtl8188e_PHY_RF6052SetBandwidth(
-										struct adapter *			Adapter,
-										HT_CHANNEL_WIDTH		Bandwidth);
-void	rtl8188e_PHY_RF6052SetCckTxPower(
-										struct adapter *Adapter,
-										u8*		pPowerlevel);
-void	rtl8188e_PHY_RF6052SetOFDMTxPower(
-											struct adapter *Adapter,
-											u8*		pPowerLevelOFDM,
-											u8*		pPowerLevelBW20,
-											u8*		pPowerLevelBW40,
-											u8		Channel);
+void		rtl8188e_PHY_RF6052SetBandwidth(struct adapter *Adapter, enum HT_CHANNEL_WIDTH Bandwidth);
+void	rtl8188e_PHY_RF6052SetCckTxPower(struct adapter *Adapter, u8 *pPowerlevel);
+void	rtl8188e_PHY_RF6052SetOFDMTxPower(struct adapter *Adapter, u8 *pPowerLevelOFDM,
+					  u8 *pPowerLevelBW20, u8 *pPowerLevelBW40,
+					  u8 Channel);
 
 #endif//__RTL8188E_RF_H__

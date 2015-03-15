@@ -1834,7 +1834,7 @@ _PHY_SetBWMode92C(
  * Overview:  This function is export to "HalCommon" moudule
  *
  * Input:		struct adapter *		Adapter
- *			HT_CHANNEL_WIDTH	Bandwidth	20M or 40M
+ *			enum HT_CHANNEL_WIDTH	Bandwidth	20M or 40M
  *
  * Output:      NONE
  *
@@ -1845,12 +1845,12 @@ _PHY_SetBWMode92C(
 void
 PHY_SetBWMode8188E(
 	struct adapter *				Adapter,
-	HT_CHANNEL_WIDTH	Bandwidth,	/*  20M or 40M */
+	enum HT_CHANNEL_WIDTH	Bandwidth,	/*  20M or 40M */
 	unsigned char	Offset		/*  Upper, Lower, or Don't care */
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	HT_CHANNEL_WIDTH	tmpBW= pHalData->CurrentChannelBW;
+	enum HT_CHANNEL_WIDTH	tmpBW= pHalData->CurrentChannelBW;
 
 	pHalData->CurrentChannelBW = Bandwidth;
 
