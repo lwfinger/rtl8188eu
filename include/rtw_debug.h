@@ -64,7 +64,7 @@
 #define _module_hci_ops_os_c_			BIT(24)
 #define _module_rtl871x_ioctl_os_c		BIT(25)
 #define _module_rtl8712_cmd_c_		BIT(26)
-//#define _module_efuse_			BIT(27)
+/* define _module_efuse_			BIT(27) */
 #define	_module_rtl8192c_xmit_c_ BIT(28)
 #define _module_hal_xmit_c_	BIT(28)
 #define _module_efuse_			BIT(29)
@@ -376,7 +376,7 @@ extern u32 GlobalDebugLevel;
 	int proc_set_btcoex_dbg(struct file *file, const char __user *buffer,
 		unsigned long count, void *data);
 
-#endif //CONFIG_BT_COEXIST
+#endif /* CONFIG_BT_COEXIST */
 
 int proc_get_sreset(char *page, char **start, off_t offset, int count, int *eof, void *data);
 int proc_set_sreset(struct file *file, const char __user *buffer, unsigned long count, void *data);
@@ -387,6 +387,6 @@ int proc_set_odm_dbg_level(struct file *file, const char __user *buffer, unsigne
 int proc_get_odm_adaptivity(char *page, char **start, off_t offset, int count, int *eof, void *data);
 int proc_set_odm_adaptivity(struct file *file, const char __user *buffer, unsigned long count, void *data);
 
-#endif //CONFIG_PROC_DEBUG
+#endif /* CONFIG_PROC_DEBUG */
 
-#endif	//__RTW_DEBUG_H__
+#endif	/* __RTW_DEBUG_H__ */

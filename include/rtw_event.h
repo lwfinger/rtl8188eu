@@ -83,7 +83,7 @@ struct stassoc_event {
 
 struct stadel_event {
  unsigned char macaddr[6];
- unsigned char rsvd[2]; //for reason
+ unsigned char rsvd[2]; /* for reason */
  int mac_id;
 };
 
@@ -104,7 +104,7 @@ struct c2hlbk_event{
 	unsigned char	b1;
 	unsigned int	w1;
 };
-#endif//CONFIG_H2CLBK
+#endif/* CONFIG_H2CLBK */
 
 #define GEN_EVT_CODE(event)	event ## _EVT_
 
@@ -142,4 +142,4 @@ struct network_queue {
 };
 
 
-#endif // _WLANEVENT_H_
+#endif /*  _WLANEVENT_H_ */

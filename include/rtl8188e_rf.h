@@ -34,4 +34,4 @@ void	rtl8188e_PHY_RF6052SetOFDMTxPower(struct adapter *Adapter, u8 *pPowerLevelO
 					  u8 *pPowerLevelBW20, u8 *pPowerLevelBW40,
 					  u8 Channel);
 
-#endif//__RTL8188E_RF_H__
+#endif/* __RTL8188E_RF_H__ */

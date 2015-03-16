@@ -26,7 +26,7 @@
 #define _FAIL		0
 #define _SUCCESS	1
 #define RTW_RX_HANDLED 2
-//#define RTW_STATUS_TIMEDOUT -110
+/* define RTW_STATUS_TIMEDOUT -110 */
 
 	#include <linux/version.h>
 	#include <linux/spinlock.h>
@@ -39,7 +39,7 @@
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,5))
 	#include <linux/kref.h>
 #endif
-	//#include <linux/smp_lock.h>
+	/* include <linux/smp_lock.h> */
 	#include <linux/netdevice.h>
 	#include <linux/skbuff.h>
 	#include <linux/circ_buf.h>
@@ -59,8 +59,8 @@
 	#include <linux/if_arp.h>
 	#include <linux/rtnetlink.h>
 	#include <linux/delay.h>
-	#include <linux/proc_fs.h>	// Necessary because we use the proc fs
-	#include <linux/interrupt.h>	// for struct tasklet_struct
+	#include <linux/proc_fs.h>	/*  Necessary because we use the proc fs */
+	#include <linux/interrupt.h>	/*  for struct tasklet_struct */
 	#include <linux/ip.h>
 	#include <linux/kthread.h>
 	#include <linux/in.h>
@@ -82,7 +82,7 @@ extern char* rtw_initmac;
 
 extern int rtw_ht_enable;
 extern int rtw_cbw40_enable;
-extern int rtw_ampdu_enable;//for enable tx_ampdu
+extern int rtw_ampdu_enable;/* for enable tx_ampdu */
 
 extern int ui_pid[3];
 
@@ -119,7 +119,7 @@ int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 #endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22))
-// Porting from linux kernel, for compatible with old kernel.
+/*  Porting from linux kernel, for compatible with old kernel. */
 static inline unsigned char *skb_tail_pointer(const struct sk_buff *skb)
 {
 	return skb->tail;
@@ -217,7 +217,7 @@ __inline static void _set_timer(struct timer_list *ptimer,u32 delay_time)
 __inline static void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
 {
 	del_timer_sync(ptimer);
-	*bcancelled=  true;//true ==1; false==0
+	*bcancelled=  true;/* true ==1; false==0 */
 }
 
 #define RTW_TIMER_HDL_ARGS void *FunctionContext
@@ -248,9 +248,9 @@ __inline static void _cancel_workitem_sync(struct work_struct *pwork)
 	flush_scheduled_work();
 #endif
 }
-//
-// Global Mutex: can only be used at PASSIVE level.
-//
+/*  */
+/*  Global Mutex: can only be used at PASSIVE level. */
+/*  */
 
 #define ACQUIRE_GLOBAL_MUTEX(_MutexCounter)                              \
 {                                                               \
@@ -349,7 +349,7 @@ static inline void rtw_netif_stop_queue(struct net_device *pnetdev)
 
 int RTW_STATUS_CODE(int error_code);
 
-//#define CONFIG_USE_VMALLOC
+/* define CONFIG_USE_VMALLOC */
 
 /* flags used for rtw_mstat_update() */
 enum mstat_f {
@@ -667,14 +667,14 @@ __inline static u32 bitshift(u32 bitmask)
 #define MAC_ARG(x) ((u8*)(x))[0],((u8*)(x))[1],((u8*)(x))[2],((u8*)(x))[3],((u8*)(x))[4],((u8*)(x))[5]
 #endif
 
-//#ifdef __GNUC__
+/* ifdef __GNUC__ */
 #define STRUCT_PACKED __attribute__ ((packed))
 
-// limitation of path length
+/*  limitation of path length */
 	#define PATH_LENGTH_MAX PATH_MAX
 
 
-// Suspend lock prevent system from going suspend
+/*  Suspend lock prevent system from going suspend */
 #ifdef CONFIG_WAKELOCK
 #include <linux/wakelock.h>
 #elif defined(CONFIG_ANDROID_POWER)
@@ -689,7 +689,7 @@ void rtw_lock_suspend_timeout(u32 timeout_ms);
 void rtw_lock_ext_suspend_timeout(u32 timeout_ms);
 
 
-//Atomic integer operations
+/* Atomic integer operations */
 	#define ATOMIC_T atomic_t
 
 void ATOMIC_SET(ATOMIC_T *v, int i);
@@ -703,7 +703,7 @@ int ATOMIC_SUB_RETURN(ATOMIC_T *v, int i);
 int ATOMIC_INC_RETURN(ATOMIC_T *v);
 int ATOMIC_DEC_RETURN(ATOMIC_T *v);
 
-//File operation APIs, just for linux now
+/* File operation APIs, just for linux now */
 int rtw_is_file_readable(char *path);
 int rtw_retrive_from_file(char *path, u8* buf, u32 sz);
 int rtw_store_to_file(char *path, u8* buf, u32 sz);
@@ -731,9 +731,9 @@ void rtw_free_netdev(struct net_device * netdev);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 #define rtw_signal_process(pid, sig) kill_pid(find_vpid((pid)),(sig), 1)
-#else //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)) */
 #define rtw_signal_process(pid, sig) kill_proc((pid), (sig), 1)
-#endif //(LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)) */
 
 u64 rtw_modular64(u64 x, u64 y);
 u64 rtw_division64(u64 x, u64 y);

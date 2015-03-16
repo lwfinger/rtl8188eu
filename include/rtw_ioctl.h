@@ -34,7 +34,7 @@
 #endif
 
 
-// For DDK-defined OIDs
+/*  For DDK-defined OIDs */
 #define OID_NDIS_SEG1	0x00010100
 #define OID_NDIS_SEG2	0x00010200
 #define OID_NDIS_SEG3	0x00020100
@@ -57,7 +57,7 @@
 #define SZ_OID_NDIS_SEG9		  24
 #define SZ_OID_NDIS_SEG10		  19
 
-// For Realtek-defined OIDs
+/*  For Realtek-defined OIDs */
 #define OID_MP_SEG1		0xFF871100
 #define OID_MP_SEG2		0xFF818000
 
@@ -78,12 +78,12 @@ enum oid_type
 };
 
 struct oid_funs_node {
-	unsigned int oid_start; //the starting number for OID
-	unsigned int oid_end; //the ending number for OID
+	unsigned int oid_start; /* the starting number for OID */
+	unsigned int oid_end; /* the ending number for OID */
 	struct oid_obj_priv *node_array;
-	unsigned int array_sz; //the size of node_array
-	int query_counter; //count the number of query hits for this segment
-	int set_counter; //count the number of set hits for this segment
+	unsigned int array_sz; /* the size of node_array */
+	int query_counter; /* count the number of query hits for this segment */
+	int set_counter; /* count the number of set hits for this segment */
 };
 
 struct oid_par_priv
@@ -99,7 +99,7 @@ struct oid_par_priv
 };
 
 struct oid_obj_priv {
-	unsigned char	dbg; // 0: without OID debug message  1: with OID debug message
+	unsigned char	dbg; /*  0: without OID debug message  1: with OID debug message */
 	NDIS_STATUS (*oidfuns)(struct oid_par_priv *poid_par_priv);
 };
 
@@ -125,4 +125,4 @@ extern	NDIS_STATUS	drv_set_info(
 	u32*			BytesNeeded
 	);
 
-#endif // #ifndef __INC_CEINFO_
+#endif /*  #ifndef __INC_CEINFO_ */

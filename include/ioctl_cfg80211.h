@@ -81,8 +81,8 @@ struct rtw_wdev_priv
 	struct cfg80211_scan_request *scan_request;
 	spinlock_t scan_req_lock;
 
-	struct net_device *pmon_ndev;//for monitor interface
-	char ifname_mon[IFNAMSIZ + 1]; //interface name for monitor interface
+	struct net_device *pmon_ndev;/* for monitor interface */
+	char ifname_mon[IFNAMSIZ + 1]; /* interface name for monitor interface */
 
 	u8 p2p_enabled;
 
@@ -119,7 +119,7 @@ void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv, bool abor
 #ifdef CONFIG_AP_MODE
 void rtw_cfg80211_indicate_sta_assoc(struct adapter *padapter, u8 *pmgmt_frame, uint frame_len);
 void rtw_cfg80211_indicate_sta_disassoc(struct adapter *padapter, unsigned char *da, unsigned short reason);
-#endif //CONFIG_AP_MODE
+#endif /* CONFIG_AP_MODE */
 
 void rtw_cfg80211_issue_p2p_provision_request(struct adapter *padapter, const u8 *buf, size_t len);
 void rtw_cfg80211_rx_p2p_action_public(struct adapter *padapter, u8 *pmgmt_frame, uint frame_len);
@@ -138,7 +138,7 @@ bool rtw_cfg80211_pwr_mgmt(struct adapter *adapter);
 #define rtw_cfg80211_rx_mgmt(adapter, freq, sig_dbm, buf, len, gfp) cfg80211_rx_mgmt((adapter)->rtw_wdev, freq, sig_dbm, buf, len, gfp)
 #elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,18,0))
 #define rtw_cfg80211_rx_mgmt(adapter, freq, sig_dbm, buf, len, gfp) cfg80211_rx_mgmt((adapter)->rtw_wdev, freq, sig_dbm, buf, len, 0, gfp)
-#else // kernel >= 3.18
+#else /*  kernel >= 3.18 */
 #define rtw_cfg80211_rx_mgmt(adapter, freq, sig_dbm, buf, len, gfp) cfg80211_rx_mgmt((adapter)->rtw_wdev, freq, sig_dbm, buf, len, 0)
 #endif
 
@@ -165,4 +165,4 @@ bool rtw_cfg80211_pwr_mgmt(struct adapter *adapter);
 #define rtw_cfg80211_remain_on_channel_expired(adapter, cookie, chan, chan_type, gfp) cfg80211_remain_on_channel_expired((adapter)->rtw_wdev, cookie, chan, gfp)
 #endif
 
-#endif //__IOCTL_CFG80211_H__
+#endif /* __IOCTL_CFG80211_H__ */

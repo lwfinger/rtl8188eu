@@ -125,7 +125,7 @@ struct wme_parameter_element {
 	} while (0)
 
 #define RSN_SELECTOR_PUT(a, val) WPA_PUT_BE32((u8 *) (a), (val))
-//#define RSN_SELECTOR_PUT(a, val) WPA_PUT_LE32((u8 *) (a), (val))
+/* define RSN_SELECTOR_PUT(a, val) WPA_PUT_LE32((u8 *) (a), (val)) */
 
 
 

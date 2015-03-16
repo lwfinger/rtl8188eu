@@ -62,7 +62,7 @@ struct br_ext_info {
 	unsigned int	nat25_disable;
 	unsigned int	macclone_enable;
 	unsigned int	dhcp_bcst_disable;
-	int		addPPPoETag;		// 1: Add PPPoE relay-SID, 0: disable
+	int		addPPPoETag;		/*  1: Add PPPoE relay-SID, 0: disable */
 	unsigned char	nat25_dmzMac[MACADDRLEN];
 	unsigned int	nat25sc_disable;
 };
@@ -72,4 +72,4 @@ void netdev_br_init(struct net_device *netdev);
 void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
 		     unsigned char *ipAddr);
 
-#endif // _RTW_BR_EXT_H_
+#endif /*  _RTW_BR_EXT_H_ */

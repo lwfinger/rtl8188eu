@@ -57,4 +57,4 @@ void rtw_os_read_port(struct adapter *padapter, struct recv_buf *precvbuf);
 void rtw_init_recv_timer(struct recv_reorder_ctrl *preorder_ctrl);
 
 
-#endif //
+#endif /*  */

@@ -21,4 +21,4 @@
 #define __DRV_CONF_H__
 #include "autoconf.h"
 
-#endif // __DRV_CONF_H__
+#endif /*  __DRV_CONF_H__ */

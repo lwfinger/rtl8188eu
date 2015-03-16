@@ -22,9 +22,9 @@
 
 #include <Hal8192CPhyReg.h>
 
-//
-// PageB(0xB00)
-//
+/*  */
+/*  PageB(0xB00) */
+/*  */
 #define rPdp_AntA						0xb00
 #define rPdp_AntA_4						0xb04
 #define rPdp_AntA_8						0xb08

@@ -43,4 +43,4 @@
 #include <rtl8711_bitdef.h>
 
 
-#endif // __RTL8711_SPEC_H__
+#endif /*  __RTL8711_SPEC_H__ */

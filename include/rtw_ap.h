@@ -54,7 +54,7 @@ int rtw_ap_inform_ch_switch(struct adapter *padapter, u8 new_ch, u8 ch_offset);
 void start_ap_mode(struct adapter *padapter);
 void stop_ap_mode(struct adapter *padapter);
 
-#endif //end of CONFIG_AP_MODE
+#endif /* end of CONFIG_AP_MODE */
 
 void update_bmc_sta(struct adapter *padapter);
 

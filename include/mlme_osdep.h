@@ -39,4 +39,4 @@ void rtw_indicate_wx_assoc_event(struct adapter *padapter);
 void rtw_indicate_wx_disassoc_event(struct adapter *padapter);
 void indicate_wx_scan_complete_event(struct adapter *padapter);
 
-#endif	//_MLME_OSDEP_H_
+#endif	/* _MLME_OSDEP_H_ */

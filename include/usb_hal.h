@@ -25,5 +25,5 @@ void rtl8188eu_set_hal_ops(struct adapter * padapter);
 
 #ifdef CONFIG_INTEL_PROXIM
 extern struct adapter  *rtw_usb_get_sw_pointer(void);
-#endif	//CONFIG_INTEL_PROXIM
-#endif //__USB_HAL_H__
+#endif	/* CONFIG_INTEL_PROXIM */
+#endif /* __USB_HAL_H__ */

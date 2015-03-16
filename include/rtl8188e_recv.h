@@ -25,15 +25,15 @@
 #define TX_RPT1_PKT_LEN 8
 
 typedef enum _RX_PACKET_TYPE{
-	NORMAL_RX,//Normal rx packet
-	TX_REPORT1,//CCX
-	TX_REPORT2,//TX RPT
-	HIS_REPORT,// USB HISR RPT
+	NORMAL_RX,/* Normal rx packet */
+	TX_REPORT1,/* CCX */
+	TX_REPORT2,/* TX RPT */
+	HIS_REPORT,/*  USB HISR RPT */
 }RX_PACKET_TYPE, *PRX_PACKET_TYPE;
 
 typedef struct rxreport_8188e
 {
-	//Offset 0
+	/* Offset 0 */
 	u32 pktlen:14;
 	u32 crc32:1;
 	u32 icverr:1;
@@ -48,7 +48,7 @@ typedef struct rxreport_8188e
 	u32 eor:1;
 	u32 own:1;
 
-	//Offset 4
+	/* Offset 4 */
 	u32 macid:5;
 	u32 tid:4;
 	u32 hwrsvd:4;
@@ -65,14 +65,14 @@ typedef struct rxreport_8188e
 	u32 mc:1;
 	u32 bc:1;
 
-	//Offset 8
+	/* Offset 8 */
 	u32 seq:12;
 	u32 frag:4;
 	u32 nextpktlen:14;
 	u32 nextind:1;
 	u32 rsvd0831:1;
 
-	//Offset 12
+	/* Offset 12 */
 	u32 rxmcs:6;
 	u32 rxht:1;
 	u32 gf:1;
@@ -87,7 +87,7 @@ typedef struct rxreport_8188e
 	u32 unicastwake:1;
 	u32 magicwake:1;
 
-	//Offset 16
+	/* Offset 16 */
 	/*
 	u32 pattern0match:1;
 	u32 pattern1match:1;
@@ -106,10 +106,10 @@ typedef struct rxreport_8188e
 	*/
 	u32 rsvd16;
 
-	//Offset 20
+	/* Offset 20 */
 	u32 tsfl;
 
-	//Offset 24
+	/* Offset 24 */
 	u32 bassn:12;
 	u32 bavld:1;
 	u32 rsvd2413:19;

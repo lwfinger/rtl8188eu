@@ -86,4 +86,4 @@ static int rtw_android_wifictrl_func_add(void) { return 0; }
 static void rtw_android_wifictrl_func_del(void) {}
 #endif /* defined(RTW_ENABLE_WIFI_CONTROL_FUNC) */
 
-#endif //__RTW_ANDROID_H__
+#endif /* __RTW_ANDROID_H__ */

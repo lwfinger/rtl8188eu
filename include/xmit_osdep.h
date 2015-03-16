@@ -26,7 +26,7 @@
 
 struct pkt_file {
 	struct sk_buff *pkt;
-	SIZE_T pkt_len;	 //the remainder length of the open_file
+	SIZE_T pkt_len;	 /* the remainder length of the open_file */
 	unsigned char *cur_buffer;
 	u8 *buf_start;
 	u8 *cur_addr;
@@ -57,4 +57,4 @@ sint rtw_endofpktfile (struct pkt_file *pfile);
 void rtw_os_pkt_complete(struct adapter *padapter, struct sk_buff *pkt);
 void rtw_os_xmit_complete(struct adapter *padapter, struct xmit_frame *pxframe);
 
-#endif //__XMIT_OSDEP_H_
+#endif /* __XMIT_OSDEP_H_ */

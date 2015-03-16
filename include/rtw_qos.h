@@ -31,9 +31,9 @@
 
 struct	qos_priv	{
 
-	unsigned int	  qos_option;	//bit mask option: u-apsd, s-apsd, ts, block ack...
+	unsigned int	  qos_option;	/* bit mask option: u-apsd, s-apsd, ts, block ack... */
 
 };
 
 
-#endif	//_RTL871X_QOS_H_
+#endif	/* _RTL871X_QOS_H_ */

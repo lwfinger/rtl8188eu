@@ -47,8 +47,8 @@
 #define SIZE_PTR SIZE_T
 #define SSIZE_PTR SSIZE_T
 
-//port from fw by thomas
-// TODO: Belows are Sync from SD7-Driver. It is necessary to check correctness
+/* port from fw by thomas */
+/*  TODO: Belows are Sync from SD7-Driver. It is necessary to check correctness */
 
 /*
  *	Call endian free function when
@@ -190,7 +190,7 @@ value to host byte ordering.*/
 		((((u8)__val) & BIT_LEN_MASK_8(__bitlen)) << (__bitoffset)) \
 		)
 
-// Get the N-bytes aligment offset from the current length
+/*  Get the N-bytes aligment offset from the current length */
 #define N_BYTE_ALIGMENT(__Value, __Aligment) ((__Aligment == 1) ? (__Value) : (((__Value + __Aligment - 1) / __Aligment) * __Aligment))
 
-#endif //__BASIC_TYPES_H__
+#endif /* __BASIC_TYPES_H__ */

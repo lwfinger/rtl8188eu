@@ -25,9 +25,9 @@
 #include <drv_types.h>
 
 
-//================================================================================
-// Interface to manipulate LED objects.
-//================================================================================
+/*  */
+/*  Interface to manipulate LED objects. */
+/*  */
 void rtl8188eu_InitSwLeds(struct adapter *padapter);
 void rtl8188eu_DeInitSwLeds(struct adapter *padapter);
 

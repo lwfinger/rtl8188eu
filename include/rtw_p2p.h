@@ -40,7 +40,7 @@ u32 build_assoc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_assoc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_provdisc_req_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_provdisc_resp_wfd_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
-#endif //CONFIG_P2P
+#endif /* CONFIG_P2P */
 
 u32 process_probe_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint len);
 u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint len, struct sta_info *psta);
@@ -59,7 +59,7 @@ void p2p_protocol_wk_hdl(struct adapter *padapter, int intCmdType);
 void	process_p2p_ps_ie(struct adapter *padapter, u8 *IEs, u32 IELength);
 void	p2p_ps_wk_hdl(struct adapter *padapter, u8 p2p_ps_state);
 u8	p2p_ps_wk_cmd(struct adapter*padapter, u8 p2p_ps_state, u8 enqueue);
-#endif // CONFIG_P2P
+#endif /*  CONFIG_P2P */
 
 void rtw_init_cfg80211_wifidirect_info( struct adapter*	padapter);
 int rtw_p2p_check_frames(struct adapter *padapter, const u8 *buf, u32 len, u8 tx);
@@ -75,7 +75,7 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role);
 static inline void _rtw_p2p_set_state(struct wifidirect_info *wdinfo, enum P2P_STATE state)
 {
 	if(wdinfo->p2p_state != state) {
-		//wdinfo->pre_p2p_state = wdinfo->p2p_state;
+		/* wdinfo->pre_p2p_state = wdinfo->p2p_state; */
 		wdinfo->p2p_state = state;
 	}
 }
@@ -116,18 +116,18 @@ static inline bool _rtw_p2p_chk_role(struct wifidirect_info *wdinfo, enum P2P_RO
 #ifdef CONFIG_DBG_P2P
 void dbg_rtw_p2p_set_state(struct wifidirect_info *wdinfo, enum P2P_STATE state, const char *caller, int line);
 void dbg_rtw_p2p_set_pre_state(struct wifidirect_info *wdinfo, enum P2P_STATE state, const char *caller, int line);
-//void dbg_rtw_p2p_restore_state(struct wifidirect_info *wdinfo, const char *caller, int line);
+/* void dbg_rtw_p2p_restore_state(struct wifidirect_info *wdinfo, const char *caller, int line); */
 void dbg_rtw_p2p_set_role(struct wifidirect_info *wdinfo, enum P2P_ROLE role, const char *caller, int line);
 #define rtw_p2p_set_state(wdinfo, state) dbg_rtw_p2p_set_state(wdinfo, state, __FUNCTION__, __LINE__)
 #define rtw_p2p_set_pre_state(wdinfo, state) dbg_rtw_p2p_set_pre_state(wdinfo, state, __FUNCTION__, __LINE__)
 #define rtw_p2p_set_role(wdinfo, role) dbg_rtw_p2p_set_role(wdinfo, role, __FUNCTION__, __LINE__)
-//#define rtw_p2p_restore_state(wdinfo) dbg_rtw_p2p_restore_state(wdinfo, __FUNCTION__, __LINE__)
-#else //CONFIG_DBG_P2P
+/* define rtw_p2p_restore_state(wdinfo) dbg_rtw_p2p_restore_state(wdinfo, __FUNCTION__, __LINE__) */
+#else /* CONFIG_DBG_P2P */
 #define rtw_p2p_set_state(wdinfo, state) _rtw_p2p_set_state(wdinfo, state)
 #define rtw_p2p_set_pre_state(wdinfo, state) _rtw_p2p_set_pre_state(wdinfo, state)
 #define rtw_p2p_set_role(wdinfo, role) _rtw_p2p_set_role(wdinfo, role)
-//#define rtw_p2p_restore_state(wdinfo) _rtw_p2p_restore_state(wdinfo)
-#endif //CONFIG_DBG_P2P
+/* define rtw_p2p_restore_state(wdinfo) _rtw_p2p_restore_state(wdinfo) */
+#endif /* CONFIG_DBG_P2P */
 
 #define rtw_p2p_state(wdinfo) _rtw_p2p_state(wdinfo)
 #define rtw_p2p_pre_state(wdinfo) _rtw_p2p_pre_state(wdinfo)
@@ -138,11 +138,11 @@ void dbg_rtw_p2p_set_role(struct wifidirect_info *wdinfo, enum P2P_ROLE role, co
 #define rtw_p2p_findphase_ex_set(wdinfo, value) \
 	(wdinfo)->find_phase_state_exchange_cnt = (value)
 
-//is this find phase exchange for social channel scan?
+/* is this find phase exchange for social channel scan? */
 #define rtw_p2p_findphase_ex_is_social(wdinfo)   \
 	(wdinfo)->find_phase_state_exchange_cnt >= P2P_FINDPHASE_EX_SOCIAL_FIRST
 
-//should we need find phase exchange anymore?
+/* should we need find phase exchange anymore? */
 #define rtw_p2p_findphase_ex_is_needed(wdinfo) \
 	((wdinfo)->find_phase_state_exchange_cnt < P2P_FINDPHASE_EX_MAX && \
 	(wdinfo)->find_phase_state_exchange_cnt != P2P_FINDPHASE_EX_NONE)

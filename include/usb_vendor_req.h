@@ -20,7 +20,7 @@
 #ifndef _USB_VENDOR_REQUEST_H_
 #define _USB_VENDOR_REQUEST_H_
 
-//4	Set/Get Register related wIndex/Data
+/* 4	Set/Get Register related wIndex/Data */
 #define	RT_USB_RESET_MASK_OFF		0
 #define	RT_USB_RESET_MASK_ON		1
 #define	RT_USB_SLEEP_MASK_OFF		0
@@ -28,7 +28,7 @@
 #define	RT_USB_LDO_ON				1
 #define	RT_USB_LDO_OFF				0
 
-//4	Set/Get SYSCLK related	wValue or Data
+/* 4	Set/Get SYSCLK related	wValue or Data */
 #define	RT_USB_SYSCLK_32KHZ		0
 #define	RT_USB_SYSCLK_40MHZ		1
 #define	RT_USB_SYSCLK_60MHZ		2
@@ -51,9 +51,9 @@ typedef enum _RT_USB_WVALUE {
 } RT_USB_WVALUE;
 
 
-//bool usbvendorrequest(PCE_USB_DEVICE	CEdevice, RT_USB_BREQUEST bRequest, RT_USB_WVALUE wValue, u8 wIndex, void * Data, u8 DataLength, bool isDirectionIn);
-//bool CEusbGetStatusRequest(PCE_USB_DEVICE CEdevice, IN u16 Op, IN u16 Index, void * Data);
-//bool CEusbFeatureRequest(PCE_USB_DEVICE CEdevice, IN u16 Op, IN u16 FeatureSelector, IN u16 Index);
-//bool CEusbGetDescriptorRequest(PCE_USB_DEVICE CEdevice, IN short urbLength, IN u8 DescriptorType, IN u8 Index, IN u16 LanguageId, IN void *  TransferBuffer, IN ULONG TransferBufferLength);
+/* bool usbvendorrequest(PCE_USB_DEVICE	CEdevice, RT_USB_BREQUEST bRequest, RT_USB_WVALUE wValue, u8 wIndex, void * Data, u8 DataLength, bool isDirectionIn); */
+/* bool CEusbGetStatusRequest(PCE_USB_DEVICE CEdevice, IN u16 Op, IN u16 Index, void * Data); */
+/* bool CEusbFeatureRequest(PCE_USB_DEVICE CEdevice, IN u16 Op, IN u16 FeatureSelector, IN u16 Index); */
+/* bool CEusbGetDescriptorRequest(PCE_USB_DEVICE CEdevice, IN short urbLength, IN u8 DescriptorType, IN u8 Index, IN u16 LanguageId, IN void *  TransferBuffer, IN ULONG TransferBufferLength); */
 
 #endif

@@ -26,7 +26,7 @@
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 #include <linux/earlysuspend.h>
-#endif //CONFIG_HAS_EARLYSUSPEND
+#endif /* CONFIG_HAS_EARLYSUSPEND */
 
 
 #define FW_PWR0	0
@@ -106,7 +106,7 @@ enum Power_Mgnt
 
 struct reportpwrstate_parm {
 	unsigned char mode;
-	unsigned char state; //the CPWM value
+	unsigned char state; /* the CPWM value */
 	unsigned short rsvd;
 };
 
@@ -132,32 +132,32 @@ __inline static void _exit_pwrlock(struct  semaphore *plock)
 	_rtw_up_sema(plock);
 }
 
-#define LPS_DELAY_TIME	1*HZ // 1 sec
+#define LPS_DELAY_TIME	1*HZ /*  1 sec */
 
 #define EXE_PWR_NONE	0x01
 #define EXE_PWR_IPS		0x02
 #define EXE_PWR_LPS		0x04
 
-// RF state.
+/*  RF state. */
 typedef enum _rt_rf_power_state
 {
-	rf_on,		// RF is on after RFSleep or RFOff
-	rf_sleep,	// 802.11 Power Save mode
-	rf_off,		// HW/SW Radio OFF or Inactive Power Save
-	//=====Add the new RF state above this line=====//
+	rf_on,		/*  RF is on after RFSleep or RFOff */
+	rf_sleep,	/*  802.11 Power Save mode */
+	rf_off,		/*  HW/SW Radio OFF or Inactive Power Save */
+	/* Add the new RF state above this line===== */
 	rf_max
 }rt_rf_power_state;
 
-// RF Off Level for IPS or HW/SW radio off
-#define	RT_RF_OFF_LEVL_ASPM			BIT(0)	// PCI ASPM
-#define	RT_RF_OFF_LEVL_CLK_REQ		BIT(1)	// PCI clock request
-#define	RT_RF_OFF_LEVL_PCI_D3			BIT(2)	// PCI D3 mode
-#define	RT_RF_OFF_LEVL_HALT_NIC		BIT(3)	// NIC halt, re-initialize hw parameters
-#define	RT_RF_OFF_LEVL_FREE_FW		BIT(4)	// FW free, re-download the FW
-#define	RT_RF_OFF_LEVL_FW_32K		BIT(5)	// FW in 32k
-#define	RT_RF_PS_LEVEL_ALWAYS_ASPM	BIT(6)	// Always enable ASPM and Clock Req in initialization.
-#define	RT_RF_LPS_DISALBE_2R			BIT(30)	// When LPS is on, disable 2R if no packet is received or transmittd.
-#define	RT_RF_LPS_LEVEL_ASPM			BIT(31)	// LPS with ASPM
+/*  RF Off Level for IPS or HW/SW radio off */
+#define	RT_RF_OFF_LEVL_ASPM			BIT(0)	/*  PCI ASPM */
+#define	RT_RF_OFF_LEVL_CLK_REQ		BIT(1)	/*  PCI clock request */
+#define	RT_RF_OFF_LEVL_PCI_D3			BIT(2)	/*  PCI D3 mode */
+#define	RT_RF_OFF_LEVL_HALT_NIC		BIT(3)	/*  NIC halt, re-initialize hw parameters */
+#define	RT_RF_OFF_LEVL_FREE_FW		BIT(4)	/*  FW free, re-download the FW */
+#define	RT_RF_OFF_LEVL_FW_32K		BIT(5)	/*  FW in 32k */
+#define	RT_RF_PS_LEVEL_ALWAYS_ASPM	BIT(6)	/*  Always enable ASPM and Clock Req in initialization. */
+#define	RT_RF_LPS_DISALBE_2R			BIT(30)	/*  When LPS is on, disable 2R if no packet is received or transmittd. */
+#define	RT_RF_LPS_LEVEL_ASPM			BIT(31)	/*  LPS with ASPM */
 
 #define	RT_IN_PS_LEVEL(ppsc, _PS_FLAG)		((ppsc->cur_ps_level & _PS_FLAG) ? true : false)
 #define	RT_CLEAR_PS_LEVEL(ppsc, _PS_FLAG)	(ppsc->cur_ps_level &= (~(_PS_FLAG)))
@@ -172,7 +172,7 @@ enum _PS_BBRegBackup_ {
 	PSBBREG_TOTALCNT
 };
 
-enum { // for ips_mode
+enum { /*  for ips_mode */
 	IPS_NONE=0,
 	IPS_NORMAL,
 	IPS_LEVEL_2,
@@ -181,10 +181,10 @@ enum { // for ips_mode
 struct pwrctrl_priv
 {
 	struct  semaphore lock;
-	volatile u8 rpwm; // requested power state for fw
-	volatile u8 cpwm; // fw current power state. updated when 1. read from HCPWM 2. driver lowers power level
-	volatile u8 tog; // toggling
-	volatile u8 cpwm_tog; // toggling
+	volatile u8 rpwm; /*  requested power state for fw */
+	volatile u8 cpwm; /*  fw current power state. updated when 1. read from HCPWM 2. driver lowers power level */
+	volatile u8 tog; /*  toggling */
+	volatile u8 cpwm_tog; /*  toggling */
 
 	u8	pwr_mode;
 	u8	smart_ps;
@@ -196,10 +196,10 @@ struct pwrctrl_priv
 
 	u8	b_hw_radio_off;
 	u8	reg_rfoff;
-	u8	reg_pdnmode; //powerdown mode
+	u8	reg_pdnmode; /* powerdown mode */
 	u32	rfoff_reason;
 
-	//RF OFF Level
+	/* RF OFF Level */
 	u32	cur_ps_level;
 	u32	reg_rfps_level;
 
@@ -207,7 +207,7 @@ struct pwrctrl_priv
 	uint	ips_leave_cnts;
 
 	u8	ips_mode;
-	u8	ips_mode_req; // used to accept the mode setting request, will update to ipsmode later
+	u8	ips_mode_req; /*  used to accept the mode setting request, will update to ipsmode later */
 	uint bips_processing;
 	u32 ips_deny_time; /* will deny IPS when system time is smaller than this */
 	u8 ps_processing; /* temporarily used to mark whether in rtw_ps_processor */
@@ -235,11 +235,11 @@ struct pwrctrl_priv
 
 	int		ps_flag;
 
-	rt_rf_power_state	rf_pwrstate;//cur power state
-	//rt_rf_power_state	current_rfpwrstate;
+	rt_rf_power_state	rf_pwrstate;/* cur power state */
+	/* rt_rf_power_state	current_rfpwrstate; */
 	rt_rf_power_state	change_rfpwrstate;
 
-	u8		bHWPowerdown;//if support hw power down
+	u8		bHWPowerdown;/* if support hw power down */
 	u8		bHWPwrPindetect;
 	u8		bkeepfwalive;
 	u8		brfoffbyhw;
@@ -248,7 +248,7 @@ struct pwrctrl_priv
 	#ifdef CONFIG_HAS_EARLYSUSPEND
 	struct early_suspend early_suspend;
 	u8 do_late_resume;
-	#endif //CONFIG_HAS_EARLYSUSPEND
+	#endif /* CONFIG_HAS_EARLYSUSPEND */
 
 	#ifdef CONFIG_ANDROID_POWER
 	android_early_suspend_t early_suspend;
@@ -320,4 +320,4 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 int rtw_pm_set_ips(struct adapter *padapter, u8 mode);
 int rtw_pm_set_lps(struct adapter *padapter, u8 mode);
 
-#endif  //__RTL871X_PWRCTRL_H_
+#endif  /* __RTL871X_PWRCTRL_H_ */
