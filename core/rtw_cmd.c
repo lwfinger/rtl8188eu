@@ -84,7 +84,7 @@ exit:
 }
 
 #ifdef CONFIG_C2H_WK
-static void c2h_wk_callback(_workitem *work);
+static void c2h_wk_callback(struct work_struct *work);
 #endif
 sint _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 {
@@ -162,9 +162,9 @@ ISR/Call-Back functions can't call this sub-function.
 
 */
 
-sint	_rtw_enqueue_cmd(_queue *queue, struct cmd_obj *obj)
+sint	_rtw_enqueue_cmd(struct  __queue *queue, struct cmd_obj *obj)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 ;
 
@@ -181,9 +181,9 @@ exit:
 	return _SUCCESS;
 }
 
-struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
+struct	cmd_obj	*_rtw_dequeue_cmd(struct  __queue *queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct cmd_obj *obj;
 
 ;
@@ -357,7 +357,7 @@ void rtw_stop_cmd_thread(struct adapter *adapter)
 	}
 }
 
-thread_return rtw_cmd_thread(thread_context context)
+int rtw_cmd_thread(void * context)
 {
 	u8 ret;
 	struct cmd_obj *pcmd;
@@ -2406,7 +2406,7 @@ exit:
 }
 
 #ifdef CONFIG_C2H_WK
-static void c2h_wk_callback(_workitem *work)
+static void c2h_wk_callback(struct work_struct *work)
 {
 	struct evt_priv *evtpriv = container_of(work, struct evt_priv, c2h_wk);
 	struct adapter *adapter = container_of(evtpriv, struct adapter, evtpriv);
@@ -2537,7 +2537,7 @@ void rtw_survey_cmd_callback(struct adapter*	padapter ,  struct cmd_obj *pcmd)
 }
 void rtw_disassoc_cmd_callback(struct adapter*	padapter,  struct cmd_obj *pcmd)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 ;
@@ -2586,7 +2586,7 @@ void rtw_joinbss_cmd_callback(struct adapter*	padapter,  struct cmd_obj *pcmd)
 
 void rtw_createbss_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 timer_cancelled;
 	struct sta_info *psta = NULL;
 	struct wlan_network *pwlan = NULL;
@@ -2643,7 +2643,7 @@ void rtw_createbss_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
 	}
 	else
 	{
-		_irqL	irqL;
+		unsigned long	irqL;
 
 		pwlan = _rtw_alloc_network(pmlmepriv);
 		spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
@@ -2710,7 +2710,7 @@ exit:
 
 void rtw_setassocsta_cmdrsp_callback(struct adapter*	padapter,  struct cmd_obj *pcmd)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct sta_priv * pstapriv = &padapter->stapriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct set_assocsta_parm* passocsta_parm = (struct set_assocsta_parm*)(pcmd->parmbuf);

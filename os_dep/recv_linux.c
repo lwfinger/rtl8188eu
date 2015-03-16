@@ -158,7 +158,7 @@ void rtw_handle_tkip_mic_err(struct adapter *padapter,u8 bgroup)
 void rtw_hostapd_mlme_rx(struct adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_HOSTAPD_MLME
-	_pkt *skb;
+	struct sk_buff *skb;
 	struct hostapd_priv *phostapdpriv  = padapter->phostapdpriv;
 	struct net_device *pmgnt_netdev = phostapdpriv->pmgnt_netdev;
 
@@ -194,8 +194,8 @@ void rtw_hostapd_mlme_rx(struct adapter *padapter, union recv_frame *precv_frame
 int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame)
 {
 	struct recv_priv *precvpriv;
-	_queue	*pfree_recv_queue;
-	_pkt *skb;
+	struct  __queue	*pfree_recv_queue;
+	struct sk_buff *skb;
 	struct mlme_priv*pmlmepriv = &padapter->mlmepriv;
 #ifdef CONFIG_BR_EXT
 	void *br_port = NULL;
@@ -234,7 +234,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 
 	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 	{
-		_pkt *pskb2=NULL;
+		struct sk_buff *pskb2=NULL;
 		struct sta_info *psta = NULL;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 		struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;

@@ -380,7 +380,7 @@ static __inline__ void __network_hash_link(struct adapter *priv,
 				struct nat25_network_db_entry *ent, int hash)
 {
 	/*  Caller must spin_lock_bh already! */
-	/* _irqL irqL; */
+	/* unsigned long irqL; */
 	/* spin_lock_bh(&priv->br_ext_lock); */
 
 	ent->next_hash = priv->nethash[hash];
@@ -396,7 +396,7 @@ static __inline__ void __network_hash_link(struct adapter *priv,
 static __inline__ void __network_hash_unlink(struct nat25_network_db_entry *ent)
 {
 	/*  Caller must spin_lock_bh already! */
-	/* _irqL irqL; */
+	/* unsigned long irqL; */
 	/* spin_lock_bh(&priv->br_ext_lock); */
 
 	*(ent->pprev_hash) = ent->next_hash;
@@ -413,7 +413,7 @@ static int __nat25_db_network_lookup_and_replace(struct adapter *priv,
 				struct sk_buff *skb, unsigned char *networkAddr)
 {
 	struct nat25_network_db_entry *db;
-	_irqL irqL;
+	unsigned long irqL;
 	spin_lock_bh(&priv->br_ext_lock);
 
 	db = priv->nethash[__nat25_network_hash(networkAddr)];
@@ -491,7 +491,7 @@ static void __nat25_db_network_insert(struct adapter *priv,
 {
 	struct nat25_network_db_entry *db;
 	int hash;
-	_irqL irqL;
+	unsigned long irqL;
 	spin_lock_bh(&priv->br_ext_lock);
 
 	hash = __nat25_network_hash(networkAddr);
@@ -537,7 +537,7 @@ static void __nat25_db_print(struct adapter *priv)
 void nat25_db_cleanup(struct adapter *priv)
 {
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 	spin_lock_bh(&priv->br_ext_lock);
 
 	for(i=0; i<NAT25_HASH_SIZE; i++)
@@ -568,7 +568,7 @@ void nat25_db_cleanup(struct adapter *priv)
 void nat25_db_expire(struct adapter *priv)
 {
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 	spin_lock_bh(&priv->br_ext_lock);
 
 	/* if(!priv->ethBrExtInfo.nat25_disable) */
@@ -1355,7 +1355,7 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 
 		if (!priv->ethBrExtInfo.nat25_disable)
 		{
-			_irqL irqL;
+			unsigned long irqL;
 			spin_lock_bh(&priv->br_ext_lock);
 			/*
 			 *	This function look up the destination network address from

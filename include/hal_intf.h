@@ -222,7 +222,7 @@ struct hal_ops {
 	void	(*write_rfreg)(struct adapter *padapter, u32 eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
 
 #ifdef CONFIG_HOSTAPD_MLME
-	s32	(*hostap_mgnt_xmit_entry)(struct adapter *padapter, _pkt *pkt);
+	s32	(*hostap_mgnt_xmit_entry)(struct adapter *padapter, struct sk_buff *pkt);
 #endif
 
 	void (*EfusePowerSwitch)(struct adapter *padapter, u8 bWrite, u8 PwrState);
@@ -399,7 +399,7 @@ u8	rtw_hal_antdiv_before_linked(struct adapter *padapter);
 void	rtw_hal_antdiv_rssi_compared(struct adapter *padapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
 
 #ifdef CONFIG_HOSTAPD_MLME
-s32	rtw_hal_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt);
+s32	rtw_hal_hostap_mgnt_xmit_entry(struct adapter *padapter, struct sk_buff *pkt);
 #endif
 
 void rtw_hal_sreset_init(struct adapter *padapter);

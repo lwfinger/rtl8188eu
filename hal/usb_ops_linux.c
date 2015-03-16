@@ -414,7 +414,7 @@ static s32 pre_recv_entry(union recv_frame *precvframe, struct recv_stat *prxsta
 	return ret;
 }
 
-static int recvbuf2recvframe(struct adapter *padapter, _pkt *pskb)
+static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 {
 	u8	*pbuf;
 	u8	shift_sz = 0;
@@ -423,13 +423,12 @@ static int recvbuf2recvframe(struct adapter *padapter, _pkt *pskb)
 	s32	transfer_len;
 	struct recv_stat	*prxstat;
 	struct phy_stat	*pphy_status = NULL;
-	_pkt				*pkt_copy = NULL;
+	struct sk_buff *pkt_copy = NULL;
 	union recv_frame	*precvframe = NULL;
 	struct rx_pkt_attrib	*pattrib = NULL;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
-	_queue			*pfree_recv_queue = &precvpriv->free_recv_queue;
-
+	struct  __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
 
 	transfer_len = (s32)pskb->len;
 	pbuf = pskb->data;
@@ -615,7 +614,7 @@ _exit_recvbuf2recvframe:
 
 void rtl8188eu_recv_tasklet(void *priv)
 {
-	_pkt			*pskb;
+	struct sk_buff *pskb;
 	struct adapter		*padapter = (struct adapter*)priv;
 	struct recv_priv	*precvpriv = &padapter->recvpriv;
 
@@ -642,7 +641,7 @@ void rtl8188eu_recv_tasklet(void *priv)
 
 static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	uint isevt, *pbuf;
 	struct recv_buf	*precvbuf = (struct recv_buf *)purb->context;
 	struct adapter			*padapter =(struct adapter *)precvbuf->adapter;
@@ -748,13 +747,13 @@ exit:
 
 static u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	int err;
 	unsigned int pipe;
 	SIZE_PTR tmpaddr=0;
 	SIZE_PTR alignment=0;
 	u32 ret = _SUCCESS;
-	PURB purb = NULL;
+	struct urb *purb = NULL;
 	struct recv_buf	*precvbuf = (struct recv_buf *)rmem;
 	struct adapter		*adapter = pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(adapter);

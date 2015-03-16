@@ -153,9 +153,9 @@ void _rtw_free_mlme_priv (struct mlme_priv *pmlmepriv)
 ;
 }
 
-sint	_rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
+sint	_rtw_enqueue_network(struct  __queue *queue, struct wlan_network *pnetwork)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 ;
 
@@ -175,9 +175,9 @@ exit:
 	return _SUCCESS;
 }
 
-struct	wlan_network *_rtw_dequeue_network(_queue *queue)
+struct	wlan_network *_rtw_dequeue_network(struct  __queue *queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	struct wlan_network *pnetwork;
 
@@ -205,10 +205,10 @@ struct	wlan_network *_rtw_dequeue_network(_queue *queue)
 
 struct	wlan_network *_rtw_alloc_network(struct	mlme_priv *pmlmepriv )/* _queue *free_queue) */
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct	wlan_network	*pnetwork;
-	_queue *free_queue = &pmlmepriv->free_bss_pool;
-	_list* plist = NULL;
+	struct  __queue *free_queue = &pmlmepriv->free_bss_pool;
+	struct list_head *plist = NULL;
 
 ;
 
@@ -245,8 +245,8 @@ void _rtw_free_network(struct	mlme_priv *pmlmepriv ,struct wlan_network *pnetwor
 {
 	u32 curr_time, delta_time;
 	u32 lifetime = SCANQUEUE_LIFETIME;
-	_irqL irqL;
-	_queue *free_queue = &(pmlmepriv->free_bss_pool);
+	unsigned long irqL;
+	struct  __queue *free_queue = &(pmlmepriv->free_bss_pool);
 
 ;
 
@@ -291,7 +291,7 @@ exit:
 void _rtw_free_network_nolock(struct	mlme_priv *pmlmepriv, struct wlan_network *pnetwork)
 {
 
-	_queue *free_queue = &(pmlmepriv->free_bss_pool);
+	struct  __queue *free_queue = &(pmlmepriv->free_bss_pool);
 
 ;
 
@@ -323,11 +323,11 @@ exit:
 
 	Shall be calle under atomic context... to avoid possible racing condition...
 */
-struct wlan_network *_rtw_find_network(_queue *scanned_queue, u8 *addr)
+struct wlan_network *_rtw_find_network(struct  __queue *scanned_queue, u8 *addr)
 {
 
-	/* _irqL irqL; */
-	_list	*phead, *plist;
+	/* unsigned long irqL; */
+	struct list_head *phead, *plist;
 	struct	wlan_network *pnetwork = NULL;
 	u8 zero_addr[ETH_ALEN] = {0,0,0,0,0,0};
 
@@ -369,11 +369,11 @@ exit:
 
 void _rtw_free_network_queue(struct adapter *padapter, u8 isfreeall)
 {
-	_irqL irqL;
-	_list *phead, *plist;
+	unsigned long irqL;
+	struct list_head *phead, *plist;
 	struct wlan_network *pnetwork;
 	struct mlme_priv* pmlmepriv = &padapter->mlmepriv;
-	_queue *scanned_queue = &pmlmepriv->scanned_queue;
+	struct  __queue *scanned_queue = &pmlmepriv->scanned_queue;
 
 ;
 
@@ -478,8 +478,7 @@ void rtw_free_mlme_priv (struct mlme_priv *pmlmepriv)
 ;
 }
 
-int	rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork);
-int	rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
+int	rtw_enqueue_network(struct  __queue *queue, struct wlan_network *pnetwork)
 {
 	int	res;
 ;
@@ -489,7 +488,7 @@ int	rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
 }
 
 
-static struct	wlan_network *rtw_dequeue_network(_queue *queue)
+static struct	wlan_network *rtw_dequeue_network(struct  __queue *queue)
 {
 	struct wlan_network *pnetwork;
 ;
@@ -508,7 +507,6 @@ struct	wlan_network *rtw_alloc_network(struct	mlme_priv *pmlmepriv )/* _queue	*f
 	return pnetwork;
 }
 
-void rtw_free_network(struct mlme_priv *pmlmepriv, struct	wlan_network *pnetwork, u8 is_freeall);
 void rtw_free_network(struct mlme_priv *pmlmepriv, struct	wlan_network *pnetwork, u8 is_freeall)/* struct	wlan_network *pnetwork, _queue	*free_queue) */
 {
 ;
@@ -539,7 +537,7 @@ void rtw_free_network_queue(struct adapter* dev, u8 isfreeall)
 
 	Shall be calle under atomic context... to avoid possible racing condition...
 */
-struct	wlan_network *rtw_find_network(_queue *scanned_queue, u8 *addr)
+struct	wlan_network *rtw_find_network(struct  __queue *scanned_queue, u8 *addr)
 {
 	struct	wlan_network *pnetwork = _rtw_find_network(scanned_queue, addr);
 
@@ -609,11 +607,9 @@ int is_same_network(struct wlan_bssid_ex *src, struct wlan_bssid_ex *dst, u8 fea
 
 }
 
-struct	wlan_network	* rtw_get_oldest_wlan_network(_queue *scanned_queue)
+struct	wlan_network	* rtw_get_oldest_wlan_network(struct  __queue *scanned_queue)
 {
-	_list	*plist, *phead;
-
-
+	struct list_head *plist, *phead;
 	struct	wlan_network	*pwlan = NULL;
 	struct	wlan_network	*oldest = NULL;
 ;
@@ -740,13 +736,13 @@ Caller must hold pmlmepriv->lock first.
 */
 void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *target)
 {
-	_irqL irqL;
-	_list	*plist, *phead;
+	unsigned long irqL;
+	struct list_head *plist, *phead;
 	ULONG	bssid_ex_sz;
 	struct mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 	struct wifidirect_info *pwdinfo= &(adapter->wdinfo);
-	_queue	*queue	= &(pmlmepriv->scanned_queue);
+	struct  __queue *queue	= &(pmlmepriv->scanned_queue);
 	struct wlan_network	*pnetwork = NULL;
 	struct wlan_network	*oldest = NULL;
 	int target_find = 0;
@@ -873,13 +869,8 @@ exit:
 void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork);
 void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct	mlme_priv	*pmlmepriv = &(((struct adapter *)adapter)->mlmepriv);
-	/* _queue	*queue	= &(pmlmepriv->scanned_queue); */
-
-;
-
-	/* spin_lock_bh(&queue->lock); */
 
 	#if defined(CONFIG_P2P) && defined(CONFIG_P2P)
 	rtw_wlan_bssid_ex_remove_p2p_attr(pnetwork, P2P_ATTR_GROUP_INFO);
@@ -888,10 +879,6 @@ void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork)
 	update_current_network(adapter, pnetwork);
 
 	rtw_update_scanned_network(adapter, pnetwork);
-
-	/* spin_unlock_bh(&queue->lock); */
-
-;
 }
 
 /* select the desired network based on the capability of the (i)bss. */
@@ -974,7 +961,7 @@ void rtw_atimdone_event_callback(struct adapter	*adapter , u8 *pbuf)
 
 void rtw_survey_event_callback(struct adapter	*adapter, u8 *pbuf)
 {
-	_irqL  irqL;
+	unsigned long  irqL;
 	u32 len;
 	struct wlan_bssid_ex *pnetwork;
 	struct	mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
@@ -1002,7 +989,7 @@ void rtw_survey_event_callback(struct adapter	*adapter, u8 *pbuf)
 		if(_rtw_memcmp(&(pmlmepriv->cur_network.network.MacAddress), pnetwork->MacAddress, ETH_ALEN))
 		{
 			struct wlan_network* ibss_wlan = NULL;
-			_irqL	irqL;
+			unsigned long	irqL;
 
 			memcpy(pmlmepriv->cur_network.network.IEs, pnetwork->IEs, 8);
 			spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
@@ -1040,7 +1027,7 @@ exit:
 
 void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
 {
-	_irqL  irqL;
+	unsigned long  irqL;
 	u8 timer_cancelled = false;
 	struct	mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 
@@ -1190,9 +1177,9 @@ void rtw_fwdbg_event_callback(struct adapter *adapter , u8 *pbuf)
 
 static void free_scanqueue(struct	mlme_priv *pmlmepriv)
 {
-	_queue *free_queue = &pmlmepriv->free_bss_pool;
-	_queue *scan_queue = &pmlmepriv->scanned_queue;
-	_list	*plist, *phead, *ptemp;
+	struct  __queue *free_queue = &pmlmepriv->free_bss_pool;
+	struct  __queue *scan_queue = &pmlmepriv->scanned_queue;
+	struct list_head *plist, *phead, *ptemp;
 
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_notice_, ("+free_scanqueue\n"));
 	spin_lock_bh(&scan_queue->lock);
@@ -1219,7 +1206,7 @@ static void free_scanqueue(struct	mlme_priv *pmlmepriv)
 */
 void rtw_free_assoc_resources(struct adapter *adapter, int lock_scanned_queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct wlan_network* pwlan = NULL;
 	struct	mlme_priv *pmlmepriv = &adapter->mlmepriv;
 	struct	sta_priv *pstapriv = &adapter->stapriv;
@@ -1593,7 +1580,7 @@ static void rtw_joinbss_update_network(struct adapter *padapter, struct wlan_net
 /* define REJOIN */
 void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
 {
-	_irqL irqL,irqL2;
+	unsigned long irqL,irqL2;
 	static u8 retry=0;
 	u8 timer_cancelled;
 	struct sta_info *ptarget_sta= NULL, *pcur_sta = NULL;
@@ -1808,7 +1795,7 @@ void rtw_sta_media_status_rpt(struct adapter *adapter,struct sta_info *psta, u32
 
 void rtw_stassoc_event_callback(struct adapter *adapter, u8 *pbuf)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct sta_info *psta;
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 	struct stassoc_event	*pstassoc	= (struct stassoc_event*)pbuf;
@@ -1927,7 +1914,7 @@ exit:
 
 void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 {
-	_irqL irqL,irqL2;
+	unsigned long irqL,irqL2;
 	int mac_id=-1;
 	struct sta_info *psta;
 	struct wlan_network* pwlan = NULL;
@@ -2057,7 +2044,7 @@ void rtw_cpwm_event_callback(struct adapter *padapter, u8 *pbuf)
 */
 void _rtw_join_timeout_handler (struct adapter *adapter)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct	mlme_priv *pmlmepriv = &adapter->mlmepriv;
 	int do_join_r;
 
@@ -2111,7 +2098,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
 */
 void rtw_scan_timeout_handler (struct adapter *adapter)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct	mlme_priv *pmlmepriv = &adapter->mlmepriv;
 
 	DBG_871X(FUNC_ADPT_FMT" fw_state=%x\n", FUNC_ADPT_ARG(adapter), get_fwstate(pmlmepriv));
@@ -2323,11 +2310,11 @@ pmlmepriv->lock
 
 int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv )
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	int ret;
-	_list	*phead;
+	struct list_head *phead;
 	struct adapter *adapter;
-	_queue	*queue	= &(pmlmepriv->scanned_queue);
+	struct  __queue	*queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
 	struct	wlan_network	*candidate = NULL;
 	u8		bSupportAntDiv = false;

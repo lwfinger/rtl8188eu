@@ -32,7 +32,6 @@
 #include <linux/semaphore.h>
 #endif
 #include <linux/list.h>
-//#include <linux/smp_lock.h>
 #include <linux/spinlock.h>
 #include <asm/atomic.h>
 
@@ -144,13 +143,13 @@ struct _io_ops
 };
 
 struct io_req {
-	_list	list;
+	struct  list_head list;
 	u32	addr;
 	volatile u32	val;
 	u32	command;
 	u32	status;
 	u8	*pbuf;
-	_sema	sema;
+	struct  semaphore sema;
 
 	void (*_async_io_callback)(struct adapter *padater, struct io_req *pio_req, u8 *cnxt);
 	u8 *cnxt;
@@ -287,10 +286,10 @@ Below is the data structure used by _io_handler
 */
 
 struct io_queue {
-	_lock	lock;
-	_list	free_ioreqs;
-	_list		pending;		//The io_req list that will be served in the single protocol read/write.
-	_list		processing;
+	spinlock_t lock;
+	struct  list_head free_ioreqs;
+	struct  list_head pending;		//The io_req list that will be served in the single protocol read/write.
+	struct  list_head processing;
 	u8	*free_ioreqs_buf; // 4-byte aligned
 	u8	*pallocated_free_ioreqs_buf;
 	struct	intf_hdl	intf;

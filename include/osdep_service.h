@@ -96,46 +96,23 @@ struct dvobj_priv;
 void rtw_unregister_netdevs(struct dvobj_priv *dvobj);
 int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 
-typedef struct urb *  PURB;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
 #ifdef CONFIG_USB_SUSPEND
 #define CONFIG_AUTOSUSPEND	1
 #endif
 #endif
 
-	typedef struct	semaphore _sema;
-	typedef	spinlock_t	_lock;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 	typedef struct mutex		_mutex;
 #else
 	typedef struct semaphore	_mutex;
 #endif
-	typedef struct timer_list _timer;
-
 	struct	__queue	{
 		struct	list_head	queue;
-		_lock	lock;
+		spinlock_t	lock;
 	};
 
-	typedef	struct sk_buff	_pkt;
-	typedef unsigned char	_buffer;
-
-	typedef struct	__queue	_queue;
-	typedef struct	list_head	_list;
-	typedef	int	_OS_STATUS;
-	//typedef u32	_irqL;
-	typedef unsigned long _irqL;
-	typedef	struct	net_device * _nic_hdl;
-
-	typedef void*		_thread_hdl_;
-	typedef int		thread_return;
-	typedef void*	thread_context;
-
 	#define thread_exit() complete_and_exit(NULL, 0)
-
-	typedef void timer_hdl_return;
-	typedef void* timer_hdl_context;
-	typedef struct work_struct _workitem;
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24))
 	#define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
@@ -164,12 +141,12 @@ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
 }
 #endif
 
-__inline static _list *get_next(_list	*list)
+__inline static struct  list_head *get_next(struct  list_head *list)
 {
 	return list->next;
 }
 
-__inline static _list	*get_list_head(_queue	*queue)
+__inline static struct  list_head *get_list_head(struct  __queue *queue)
 {
 	return (&(queue->queue));
 }
@@ -179,31 +156,30 @@ __inline static _list	*get_list_head(_queue	*queue)
         ((type *)((char *)(ptr)-(SIZE_T)(&((type *)0)->member)))
 
 
-__inline static void _enter_critical(_lock *plock, _irqL *pirqL)
+__inline static void _enter_critical(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
 }
 
-__inline static void _exit_critical(_lock *plock, _irqL *pirqL)
+__inline static void _exit_critical(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static void _enter_critical_ex(_lock *plock, _irqL *pirqL)
+__inline static void _enter_critical_ex(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_lock_irqsave(plock, *pirqL);
 }
 
-__inline static void _exit_critical_ex(_lock *plock, _irqL *pirqL)
+__inline static void _exit_critical_ex(spinlock_t *plock, unsigned long *pirqL)
 {
 	spin_unlock_irqrestore(plock, *pirqL);
 }
 
-__inline static int _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
+__inline static int _enter_critical_mutex(_mutex *pmutex, unsigned long *pirqL)
 {
 	int ret = 0;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
-	//mutex_lock(pmutex);
 	ret = mutex_lock_interruptible(pmutex);
 #else
 	ret = down_interruptible(pmutex);
@@ -212,7 +188,7 @@ __inline static int _enter_critical_mutex(_mutex *pmutex, _irqL *pirqL)
 }
 
 
-__inline static void _exit_critical_mutex(_mutex *pmutex, _irqL *pirqL)
+__inline static void _exit_critical_mutex(_mutex *pmutex, unsigned long *pirqL)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
 		mutex_unlock(pmutex);
@@ -221,25 +197,24 @@ __inline static void _exit_critical_mutex(_mutex *pmutex, _irqL *pirqL)
 #endif
 }
 
-__inline static void rtw_list_delete(_list *plist)
+__inline static void rtw_list_delete(struct  list_head *plist)
 {
 	list_del_init(plist);
 }
 
-__inline static void _init_timer(_timer *ptimer,_nic_hdl nic_hdl,void *pfunc,void* cntx)
+__inline static void _init_timer(struct timer_list *ptimer,struct  net_device * nic_hdl,void *pfunc,void* cntx)
 {
-	//setup_timer(ptimer, pfunc,(u32)cntx);
 	ptimer->function = pfunc;
 	ptimer->data = (unsigned long)cntx;
 	init_timer(ptimer);
 }
 
-__inline static void _set_timer(_timer *ptimer,u32 delay_time)
+__inline static void _set_timer(struct timer_list *ptimer,u32 delay_time)
 {
 	mod_timer(ptimer , (jiffies+(delay_time*HZ/1000)));
 }
 
-__inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
+__inline static void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
 {
 	del_timer_sync(ptimer);
 	*bcancelled=  true;//true ==1; false==0
@@ -251,7 +226,7 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 #define RTW_DECLARE_TIMER_HDL(name) void RTW_TIMER_HDL_NAME(name)(RTW_TIMER_HDL_ARGS)
 
 
-__inline static void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
+__inline static void _init_workitem(struct work_struct *pwork, void *pfunc, void * cntx)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20))
 	INIT_WORK(pwork, pfunc);
@@ -260,12 +235,12 @@ __inline static void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
 #endif
 }
 
-__inline static void _set_workitem(_workitem *pwork)
+__inline static void _set_workitem(struct work_struct *pwork)
 {
 	schedule_work(pwork);
 }
 
-__inline static void _cancel_workitem_sync(_workitem *pwork)
+__inline static void _cancel_workitem_sync(struct work_struct *pwork)
 {
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,22))
 	cancel_work_sync(pwork);
@@ -398,11 +373,11 @@ enum mstat_f {
 #define mstat_tf_idx(flags) ((flags)&0xff)
 #define mstat_ff_idx(flags) (((flags)&0xff00) >> 8)
 
-typedef enum mstat_status{
+enum mstat_status {
 	MSTAT_ALLOC_SUCCESS = 0,
 	MSTAT_ALLOC_FAIL,
 	MSTAT_FREE
-} MSTAT_STATUS;
+};
 
 #ifdef DBG_MEM_ALLOC
 void rtw_mstat_update(const enum mstat_f flags, const MSTAT_STATUS status, u32 sz);
@@ -419,7 +394,7 @@ struct sk_buff * dbg_rtw_skb_alloc(unsigned int size, const enum mstat_f flags, 
 void dbg_rtw_skb_free(struct sk_buff *skb, const enum mstat_f flags, const char *func, const int line);
 struct sk_buff *dbg_rtw_skb_copy(const struct sk_buff *skb, const enum mstat_f flags, const char *func, const int line);
 struct sk_buff *dbg_rtw_skb_clone(struct sk_buff *skb, const enum mstat_f flags, const char *func, const int line);
-int dbg_rtw_netif_rx(_nic_hdl ndev, struct sk_buff *skb, const enum mstat_f flags, const char *func, int line);
+int dbg_rtw_netif_rx(struct  net_device * ndev, struct sk_buff *skb, const enum mstat_f flags, const char *func, int line);
 void dbg_rtw_skb_queue_purge(struct sk_buff_head *list, enum mstat_f flags, const char *func, int line);
 
 void *dbg_rtw_usb_buffer_alloc(struct usb_device *dev, size_t size, dma_addr_t *dma, const enum mstat_f flags, const char *func, const int line);
@@ -476,7 +451,7 @@ struct sk_buff *_rtw_skb_alloc(u32 sz);
 void _rtw_skb_free(struct sk_buff *skb);
 struct sk_buff *_rtw_skb_copy(const struct sk_buff *skb);
 struct sk_buff *_rtw_skb_clone(struct sk_buff *skb);
-int _rtw_netif_rx(_nic_hdl ndev, struct sk_buff *skb);
+int _rtw_netif_rx(struct  net_device * ndev, struct sk_buff *skb);
 void _rtw_skb_queue_purge(struct sk_buff_head *list);
 
 void *_rtw_usb_buffer_alloc(struct usb_device *dev, size_t size, dma_addr_t *dma);
@@ -520,23 +495,23 @@ void _rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dma_a
 #define rtw_usb_buffer_free_f(dev, size, addr, dma, mstat_f) _rtw_usb_buffer_free((dev), (size), (addr), (dma))
 #endif /* DBG_MEM_ALLOC */
 
-static inline void	_rtw_spinlock(_lock	*plock)
+static inline void	_rtw_spinlock(spinlock_t *plock)
 {
 	spin_lock(plock);
 }
 
-static inline void	_rtw_spinunlock(_lock *plock)
+static inline void	_rtw_spinunlock(spinlock_t *plock)
 {
 	spin_unlock(plock);
 }
 
 
-static inline void	_rtw_spinlock_ex(_lock	*plock)
+static inline void	_rtw_spinlock_ex(spinlock_t *plock)
 {
 	spin_lock(plock);
 }
 
-static inline void	_rtw_spinunlock_ex(_lock *plock)
+static inline void	_rtw_spinunlock_ex(spinlock_t *plock)
 {
 	spin_unlock(plock);
 }
@@ -546,22 +521,22 @@ void	rtw_mfree2d(void *pbuf, int h, int w, int size);
 
 int	_rtw_memcmp(void *dst, void *src, u32 sz);
 
-void	_rtw_init_listhead(_list *list);
-u32	rtw_is_list_empty(_list *phead);
-void	rtw_list_insert_head(_list *plist, _list *phead);
-void	rtw_list_insert_tail(_list *plist, _list *phead);
-void	rtw_list_delete(_list *plist);
+void	_rtw_init_listhead(struct  list_head *list);
+u32	rtw_is_list_empty(struct  list_head *phead);
+void	rtw_list_insert_head(struct  list_head *plist, struct  list_head *phead);
+void	rtw_list_insert_tail(struct  list_head *plist, struct  list_head *phead);
+void	rtw_list_delete(struct  list_head *plist);
 
-void	_rtw_init_sema(_sema *sema, int init_val);
-void	_rtw_free_sema(_sema	*sema);
-void	_rtw_up_sema(_sema	*sema);
-u32	_rtw_down_sema(_sema *sema);
+void	_rtw_init_sema(struct  semaphore *sema, int init_val);
+void	_rtw_free_sema(struct  semaphore *sema);
+void	_rtw_up_sema(struct  semaphore *sema);
+u32	_rtw_down_sema(struct  semaphore *sema);
 void	_rtw_mutex_init(_mutex *pmutex);
 void	_rtw_mutex_free(_mutex *pmutex);
 
-void	_rtw_init_queue(_queue	*pqueue);
-u32	_rtw_queue_empty(_queue	*pqueue);
-u32	rtw_end_of_queue_search(_list *queue, _list *pelement);
+void	_rtw_init_queue(struct  __queue	*pqueue);
+u32	_rtw_queue_empty(struct  __queue *pqueue);
+u32	rtw_end_of_queue_search(struct  list_head *queue, struct  list_head *pelement);
 
 u32	rtw_get_current_time(void);
 u32	rtw_systime_to_ms(u32 systime);
@@ -589,7 +564,7 @@ void	rtw_udelay_os(int us);
 void rtw_yield_os(void);
 
 
-__inline static unsigned char _cancel_timer_ex(_timer *ptimer)
+__inline static unsigned char _cancel_timer_ex(struct timer_list *ptimer)
 {
 	return del_timer_sync(ptimer);
 }
@@ -608,11 +583,6 @@ __inline static void flush_signals_thread(void)
 	{
 		flush_signals(current);
 	}
-}
-
-__inline static _OS_STATUS res_to_status(sint res)
-{
-	return res;
 }
 
 __inline static void rtw_dump_stack(void)

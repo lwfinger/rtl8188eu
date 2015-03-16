@@ -228,7 +228,7 @@ MODULE_PARM_DESC(rtw_notch_filter, "0:Disable, 1:Enable, 2:Enable only for P2P")
 module_param_named(debug, rtw_debug, int, 0444);
 MODULE_PARM_DESC(debug, "Set debug level (1-9) (default 1)");
 
-static uint loadparam(struct adapter *padapter, _nic_hdl pnetdev);
+static uint loadparam(struct adapter *padapter, struct  net_device * pnetdev);
 int _netdev_open(struct net_device *pnetdev);
 int netdev_open (struct net_device *pnetdev);
 static int netdev_close (struct net_device *pnetdev);
@@ -251,7 +251,7 @@ void rtw_proc_remove_one(struct net_device *dev)
 }
 #endif
 
-static uint loadparam( struct adapter *padapter,  _nic_hdl	pnetdev)
+static uint loadparam( struct adapter *padapter,  struct  net_device *	pnetdev)
 {
 
 	uint status = _SUCCESS;

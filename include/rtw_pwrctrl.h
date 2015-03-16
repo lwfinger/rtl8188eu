@@ -110,28 +110,24 @@ struct reportpwrstate_parm {
 	unsigned short rsvd;
 };
 
-
-typedef _sema _pwrlock;
-
-
-__inline static void _init_pwrlock(_pwrlock *plock)
+__inline static void _init_pwrlock(struct  semaphore *plock)
 {
 	_rtw_init_sema(plock, 1);
 }
 
-__inline static void _free_pwrlock(_pwrlock *plock)
+__inline static void _free_pwrlock(struct  semaphore *plock)
 {
 	_rtw_free_sema(plock);
 }
 
 
-__inline static void _enter_pwrlock(_pwrlock *plock)
+__inline static void _enter_pwrlock(struct  semaphore *plock)
 {
 	_rtw_down_sema(plock);
 }
 
 
-__inline static void _exit_pwrlock(_pwrlock *plock)
+__inline static void _exit_pwrlock(struct  semaphore *plock)
 {
 	_rtw_up_sema(plock);
 }
@@ -184,7 +180,7 @@ enum { // for ips_mode
 
 struct pwrctrl_priv
 {
-	_pwrlock	lock;
+	struct  semaphore lock;
 	volatile u8 rpwm; // requested power state for fw
 	volatile u8 cpwm; // fw current power state. updated when 1. read from HCPWM 2. driver lowers power level
 	volatile u8 tog; // toggling
@@ -195,7 +191,7 @@ struct pwrctrl_priv
 	u8	bcn_ant_mode;
 
 	u32	alives;
-	_workitem cpwm_event;
+	struct work_struct cpwm_event;
 	u8	bpower_saving;
 
 	u8	b_hw_radio_off;
@@ -233,7 +229,7 @@ struct pwrctrl_priv
 	u8		autopm_cnt;
 #endif
 	u8		bSupportRemoteWakeup;
-	_timer	pwr_state_check_timer;
+	struct timer_list pwr_state_check_timer;
 	int		pwr_state_check_interval;
 	u8		pwr_state_check_cnts;
 
@@ -274,7 +270,6 @@ struct pwrctrl_priv
 
 #define _rtw_set_pwr_state_check_timer(pwrctl, ms) \
 	do { \
-		/*DBG_871X("%s _rtw_set_pwr_state_check_timer(%p, %d)\n", __FUNCTION__, (pwrctl), (ms));*/ \
 		_set_timer(&(pwrctl)->pwr_state_check_timer, (ms)); \
 	} while(0)
 

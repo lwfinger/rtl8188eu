@@ -942,7 +942,7 @@ int proc_get_all_sta_info(char *page, char **start,
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	int i, j;
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	int len = 0;
 

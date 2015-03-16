@@ -396,7 +396,6 @@ typedef struct hal_data_8188e
 
 	struct dm_priv	dmpriv;
 	DM_ODM_T		odmpriv;
-	//_lock			odm_stainfo_lock;
 	struct sreset_priv srestpriv;
 
 #ifdef CONFIG_BT_COEXIST

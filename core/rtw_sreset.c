@@ -49,7 +49,7 @@ u8 sreset_get_wifi_status(struct adapter *padapter)
 
 	u8 status = WIFI_STATUS_SUCCESS;
 	u32 val32 = 0;
-	_irqL irqL;
+	unsigned long irqL;
 	if(psrtpriv->silent_reset_inprogress == true)
         {
 		return status;
@@ -257,7 +257,7 @@ void sreset_reset(struct adapter *padapter)
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
-	_irqL irqL;
+	unsigned long irqL;
 	u32 start = rtw_get_current_time();
 
 	DBG_871X("%s\n", __FUNCTION__);

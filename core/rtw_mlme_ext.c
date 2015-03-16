@@ -1025,7 +1025,7 @@ _END_ONBEACON_:
 unsigned int OnAuth(struct adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_AP_MODE
-	_irqL irqL;
+	unsigned long irqL;
 	unsigned int	auth_mode, seq, ie_len;
 	unsigned char	*sa, *p;
 	u16	algorithm;
@@ -1329,7 +1329,7 @@ authclnt_fail:
 unsigned int OnAssocReq(struct adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_AP_MODE
-	_irqL irqL;
+	unsigned long irqL;
 	u16 capab_info, listen_interval;
 	struct rtw_ieee802_11_elems elems;
 	struct sta_info	*pstat;
@@ -2018,7 +2018,7 @@ unsigned int OnDeAuth(struct adapter *padapter, union recv_frame *precv_frame)
 #ifdef CONFIG_AP_MODE
 	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 	{
-		_irqL irqL;
+		unsigned long irqL;
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -2113,7 +2113,7 @@ unsigned int OnDisassoc(struct adapter *padapter, union recv_frame *precv_frame)
 
 #ifdef CONFIG_AP_MODE
 	if(check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
-		_irqL irqL;
+		unsigned long irqL;
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -5562,7 +5562,7 @@ void dump_mgntframe(struct adapter *padapter, struct xmit_frame *pmgntframe)
 s32 dump_mgntframe_and_wait(struct adapter *padapter, struct xmit_frame *pmgntframe, int timeout_ms)
 {
 	s32 ret = _FAIL;
-	_irqL irqL;
+	unsigned long irqL;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct xmit_buf *pxmitbuf = pmgntframe->pxmitbuf;
 	struct submit_ctx sctx;
@@ -5664,7 +5664,7 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
 	unsigned int	rate_len;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 #if defined (CONFIG_AP_MODE)
-	_irqL irqL;
+	unsigned long irqL;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 #endif /* if defined (CONFIG_AP_MODE) */
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -7447,8 +7447,8 @@ exit:
 
 void issue_action_spct_ch_switch(struct adapter *padapter, u8 *ra, u8 new_ch, u8 ch_offset)
 {
-	_irqL	irqL;
-	_list		*plist, *phead;
+	unsigned long	irqL;
+	struct list_head *plist, *phead;
 	struct xmit_frame			*pmgntframe;
 	struct pkt_attrib			*pattrib;
 	unsigned char				*pframe;
@@ -7750,8 +7750,8 @@ static void issue_action_BA(struct adapter *padapter, unsigned char *raddr,
 
 static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 {
-	_irqL	irqL;
-	_list		*plist, *phead;
+	unsigned long	irqL;
+	struct list_head *plist, *phead;
 	unsigned char category, action;
 	struct xmit_frame			*pmgntframe;
 	struct pkt_attrib			*pattrib;
@@ -7763,7 +7763,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-	_queue		*queue	= &(pmlmepriv->scanned_queue);
+	struct  __queue *queue	= &(pmlmepriv->scanned_queue);
 	u8 InfoContent[16] = {0};
 	u8 ICS[8][15];
 	if((pmlmepriv->num_FortyMHzIntolerant==0) || (pmlmepriv->num_sta_no_ht==0))
@@ -8548,12 +8548,12 @@ void start_clnt_join(struct adapter* padapter)
 		/* 	For the Win8 P2P connection, it will be hard to have a successful connection if this Wi-Fi doesn't connect to it. */
 		{
 			#ifdef CONFIG_P2P
-			_queue *queue = &(padapter->mlmepriv.scanned_queue);
-			_list	*head = get_list_head(queue);
-			_list *pos = get_next(head);
+			struct  __queue *queue = &(padapter->mlmepriv.scanned_queue);
+			struct list_head *head = get_list_head(queue);
+			struct list_head *pos = get_next(head);
 			struct wlan_network *scanned = NULL;
 			u8 ie_offset = 0;
-			_irqL irqL;
+			unsigned long irqL;
 			bool has_p2p_ie = false;
 
 			spin_lock_bh(&(padapter->mlmepriv.scanned_queue.lock));
@@ -9758,7 +9758,7 @@ void sa_query_timer_hdl(struct adapter *padapter)
 {
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_priv * pmlmepriv = &padapter->mlmepriv;
-	_irqL irqL;
+	unsigned long irqL;
 	/* disconnect */
 	spin_lock_bh(&pmlmepriv->lock);
 
@@ -10507,9 +10507,9 @@ u8 tx_beacon_hdl(struct adapter *padapter, unsigned char *pbuf)
 #ifdef CONFIG_AP_MODE
 	else /* tx bc/mc frames after update TIM */
 	{
-		_irqL irqL;
+		unsigned long irqL;
 		struct sta_info *psta_bmc;
-		_list	*xmitframe_plist, *xmitframe_phead;
+		struct list_head *xmitframe_plist, *xmitframe_phead;
 		struct xmit_frame *pxmitframe=NULL;
 		struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 		struct sta_priv  *pstapriv = &padapter->stapriv;

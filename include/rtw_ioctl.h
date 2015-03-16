@@ -108,7 +108,7 @@ extern struct iw_handler_def  rtw_handlers_def;
 #endif
 
 extern	NDIS_STATUS drv_query_info(
-	_nic_hdl		MiniportAdapterContext,
+	struct  net_device *		MiniportAdapterContext,
 	NDIS_OID		Oid,
 	void *			InformationBuffer,
 	u32			InformationBufferLength,
@@ -117,7 +117,7 @@ extern	NDIS_STATUS drv_query_info(
 	);
 
 extern	NDIS_STATUS	drv_set_info(
-	_nic_hdl		MiniportAdapterContext,
+	struct  net_device *		MiniportAdapterContext,
 	NDIS_OID		Oid,
 	void *			InformationBuffer,
 	u32			InformationBufferLength,

@@ -105,11 +105,11 @@ typedef enum _ANTENNA_PATH{
 
 struct mp_xmit_frame
 {
-	_list	list;
+	struct  list_head list;
 
 	struct pkt_attrib attrib;
 
-	_pkt *pkt;
+	struct sk_buff *pkt;
 
 	int frame_tag;
 
@@ -121,7 +121,7 @@ struct mp_xmit_frame
 	u8 *mem_addr;
 	u32 sz[8];
 
-	PURB pxmit_urb[8];
+	struct urb * pxmit_urb[8];
 
 	u8 bpending[8];
 	sint ac_tag[8];
@@ -152,7 +152,7 @@ struct mp_tx
 	u8 *pallocated_buf;
 	u8 *buf;
 	u32 buf_size, write_size;
-	_thread_hdl_ PktTxThread;
+	void * PktTxThread;
 };
 
 #include <Hal8188EPhyCfg.h>
@@ -174,8 +174,8 @@ typedef struct _MPT_CONTEXT
 	// Indicate if the driver is unloading or unloaded.
 	bool			bMptDrvUnload;
 
-	_sema			MPh2c_Sema;
-	_timer			MPh2c_timeout_timer;
+	struct  semaphore MPh2c_Sema;
+	struct timer_list MPh2c_timeout_timer;
 // Event used to sync H2c for BT control
 
 	bool		MptH2cRspEvent;
@@ -343,7 +343,7 @@ struct mp_priv {
 
 	u8 *pallocated_mp_xmitframe_buf;
 	u8 *pmp_xmtframe_buf;
-	_queue free_mp_xmitqueue;
+	struct  __queue free_mp_xmitqueue;
 	u32 free_mp_xmitframe_cnt;
 	MPT_CONTEXT MptCtx;
 };

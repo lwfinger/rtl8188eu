@@ -232,7 +232,7 @@ __inline  static uint get_wlan_bssid_ex_sz(struct wlan_bssid_ex *bss)
 }
 
 struct	wlan_network {
-	_list	list;
+	struct  list_head	list;
 	int	network_type;	//refer to ieee80211.h for WIRELESS_11A/B/G
 	int	fixed;			// set to fixed when not to be removed as site-surveying
 	unsigned long	last_scanned; //timestamp for the network

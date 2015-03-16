@@ -152,7 +152,7 @@ struct sitesurvey_ctrl {
 	u64	last_tx_pkts;
 	uint	last_rx_pkts;
 	sint	traffic_busy;
-	_timer	sitesurvey_ctrl_timer;
+	struct timer_list	sitesurvey_ctrl_timer;
 };
 
 typedef struct _RT_LINK_DETECT_T{
@@ -249,7 +249,7 @@ struct scan_limit_info{
 };
 
 struct cfg80211_wifidirect_info{
-	_timer					remain_on_ch_timer;
+	struct timer_list remain_on_ch_timer;
 	u8						restore_channel;
 	struct ieee80211_channel	remain_on_ch_channel;
 	enum nl80211_channel_type	remain_on_ch_type;
@@ -259,13 +259,13 @@ struct cfg80211_wifidirect_info{
 
 struct wifidirect_info{
 	struct adapter*				padapter;
-	_timer					find_phase_timer;
-	_timer					restore_p2p_state_timer;
+	struct timer_list find_phase_timer;
+	struct timer_list restore_p2p_state_timer;
 
 	//	Used to do the scanning. After confirming the peer is availalble, the driver transmits the P2P frame to peer.
-	_timer					pre_tx_scan_timer;
-	_timer					reset_ch_sitesurvey;
-	_timer					reset_ch_sitesurvey2;	//	Just for resetting the scan limit function by using p2p nego
+	struct timer_list pre_tx_scan_timer;
+	struct timer_list reset_ch_sitesurvey;
+	struct timer_list reset_ch_sitesurvey2;	//	Just for resetting the scan limit function by using p2p nego
 	struct tx_provdisc_req_info	tx_prov_disc_info;
 	struct rx_provdisc_req_info rx_prov_disc_info;
 	struct tx_invite_req_info	invitereq_info;
@@ -359,17 +359,17 @@ struct tdls_info{
 	u8					sta_cnt;
 	u8					sta_maximum;	// 1:tdls sta is equal (NUM_STA-1), reach max direct link number; 0: else;
 	struct tdls_ss_record	ss_record;
-	u8					macid_index;	//macid entry that is ready to write
-	u8					clear_cam;	//cam entry that is trying to clear, using it in direct link teardown
-	u8					ch_sensing;
-	u8					cur_channel;
-	u8					candidate_ch;
-	u8					collect_pkt_num[MAX_CHANNEL_NUM];
-	_lock				cmd_lock;
-	_lock				hdl_lock;
-	u8					watchdog_count;
-	u8					dev_discovered;		//WFD_TDLS: for sigma test
-	u8					enable;
+	u8 macid_index;	//macid entry that is ready to write
+	u8 clear_cam;	//cam entry that is trying to clear, using it in direct link teardown
+	u8 ch_sensing;
+	u8 cur_channel;
+	u8 candidate_ch;
+	u8 collect_pkt_num[MAX_CHANNEL_NUM];
+	spinlock_t cmd_lock;
+	spinlock_t hdl_lock;
+	u8 watchdog_count;
+	u8 dev_discovered;		//WFD_TDLS: for sigma test
+	u8 enable;
 #ifdef CONFIG_P2P
 	struct wifi_display_info		*wfd_info;
 #endif
@@ -377,7 +377,7 @@ struct tdls_info{
 
 struct mlme_priv {
 
-	_lock	lock;
+	spinlock_t lock;
 	sint	fw_state;	//shall we protect this variable? maybe not necessarily...
 	u8 bScanInProcess;
 	u8	to_join; //flag
@@ -386,9 +386,9 @@ struct mlme_priv {
 	u8	*nic_hdl;
 
 	u8	not_indic_disco;
-	_list		*pscanned;
-	_queue	free_bss_pool;
-	_queue	scanned_queue;
+	struct list_head *pscanned;
+	struct  __queue	free_bss_pool;
+	struct  __queue	scanned_queue;
 	u8		*free_bss_buf;
 	u32	num_of_scanned;
 
@@ -407,15 +407,15 @@ struct mlme_priv {
 
 	u32	scan_interval;
 
-	_timer assoc_timer;
+	struct timer_list assoc_timer;
 
 	uint assoc_by_bssid;
 	uint assoc_by_rssi;
 
-	_timer scan_to_timer; // driver itself handles scan_timeout status.
+	struct timer_list scan_to_timer; // driver itself handles scan_timeout status.
 	u32 scan_start_time; // used to evaluate the time spent in scanning
 
-	_timer set_scan_deny_timer;
+	struct timer_list set_scan_deny_timer;
 	ATOMIC_T set_scan_deny; //0: allowed, 1: deny
 
 	struct qos_priv qospriv;
@@ -432,7 +432,7 @@ struct mlme_priv {
 	struct ht_priv	htpriv;
 
 	RT_LINK_DETECT_T	LinkDetectInfo;
-	_timer	dynamic_chk_timer; //dynamic/periodic check timer
+	struct timer_list	dynamic_chk_timer; //dynamic/periodic check timer
 
 	u8	acm_mask; // for wmm acm mask
 	u8	ChannelPlan;
@@ -495,7 +495,7 @@ struct mlme_priv {
 	u32 p2p_probe_resp_ie_len;
 	u32 p2p_go_probe_resp_ie_len; //for GO
 	u32 p2p_assoc_req_ie_len;
-	_lock	bcn_update_lock;
+	spinlock_t bcn_update_lock;
 	u8		update_bcn;
 
 
@@ -608,8 +608,6 @@ __inline static void _clr_fwstate_(struct mlme_priv *pmlmepriv, sint state)
  */
 __inline static void clr_fwstate(struct mlme_priv *pmlmepriv, sint state)
 {
-	_irqL irqL;
-
 	spin_lock_bh(&pmlmepriv->lock);
 	if (check_fwstate(pmlmepriv, state) == true)
 		pmlmepriv->fw_state ^= state;
@@ -618,8 +616,6 @@ __inline static void clr_fwstate(struct mlme_priv *pmlmepriv, sint state)
 
 __inline static void clr_fwstate_ex(struct mlme_priv *pmlmepriv, sint state)
 {
-	_irqL irqL;
-
 	spin_lock_bh(&pmlmepriv->lock);
 	_clr_fwstate_(pmlmepriv, state);
 	spin_unlock_bh(&pmlmepriv->lock);
@@ -627,8 +623,6 @@ __inline static void clr_fwstate_ex(struct mlme_priv *pmlmepriv, sint state)
 
 __inline static void up_scanned_network(struct mlme_priv *pmlmepriv)
 {
-	_irqL irqL;
-
 	spin_lock_bh(&pmlmepriv->lock);
 	pmlmepriv->num_of_scanned++;
 	spin_unlock_bh(&pmlmepriv->lock);
@@ -636,8 +630,6 @@ __inline static void up_scanned_network(struct mlme_priv *pmlmepriv)
 
 __inline static void down_scanned_network(struct mlme_priv *pmlmepriv)
 {
-	_irqL irqL;
-
 	spin_lock_bh(&pmlmepriv->lock);
 	pmlmepriv->num_of_scanned--;
 	spin_unlock_bh(&pmlmepriv->lock);
@@ -645,8 +637,6 @@ __inline static void down_scanned_network(struct mlme_priv *pmlmepriv)
 
 __inline static void set_scanned_network_val(struct mlme_priv *pmlmepriv, sint val)
 {
-	_irqL irqL;
-
 	spin_lock_bh(&pmlmepriv->lock);
 	pmlmepriv->num_of_scanned = val;
 	spin_unlock_bh(&pmlmepriv->lock);
@@ -656,8 +646,8 @@ extern u16 rtw_get_capability(struct wlan_bssid_ex *bss);
 extern void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *target);
 extern void rtw_disconnect_hdl_under_linked(struct adapter* adapter, struct sta_info *psta, u8 free_assoc);
 extern void rtw_generate_random_ibss(u8 *pibss);
-extern struct wlan_network* rtw_find_network(_queue *scanned_queue, u8 *addr);
-extern struct wlan_network* rtw_get_oldest_wlan_network(_queue *scanned_queue);
+extern struct wlan_network* rtw_find_network(struct  __queue *scanned_queue, u8 *addr);
+extern struct wlan_network* rtw_get_oldest_wlan_network(struct  __queue *scanned_queue);
 
 extern void rtw_free_assoc_resources(struct adapter* adapter, int lock_scanned_queue);
 extern void rtw_indicate_disconnect(struct adapter* adapter);
@@ -688,9 +678,9 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv);
 
 extern void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv);
 
-extern int _rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork);
+extern int _rtw_enqueue_network(struct  __queue *queue, struct wlan_network *pnetwork);
 
-extern struct wlan_network* _rtw_dequeue_network(_queue *queue);
+extern struct wlan_network* _rtw_dequeue_network(struct  __queue *queue);
 
 extern struct wlan_network* _rtw_alloc_network(struct mlme_priv *pmlmepriv);
 
@@ -699,7 +689,7 @@ extern void _rtw_free_network(struct mlme_priv *pmlmepriv, struct wlan_network *
 extern void _rtw_free_network_nolock(struct mlme_priv *pmlmepriv, struct wlan_network *pnetwork);
 
 
-extern struct wlan_network* _rtw_find_network(_queue *scanned_queue, u8 *addr);
+extern struct wlan_network* _rtw_find_network(struct  __queue *scanned_queue, u8 *addr);
 
 extern void _rtw_free_network_queue(struct adapter* padapter, u8 isfreeall);
 

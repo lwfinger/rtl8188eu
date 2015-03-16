@@ -300,7 +300,7 @@ struct ieee_ibss_seq {
 	u16 seq_num;
 	u16 frag_num;
 	unsigned long packet_time;
-	_list	list;
+	struct list_head list;
 };
 
 struct rtw_ieee80211_hdr {

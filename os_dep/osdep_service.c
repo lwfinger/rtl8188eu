@@ -136,7 +136,7 @@ inline struct sk_buff *_rtw_skb_clone(struct sk_buff *skb)
 	return skb_clone(skb, in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 }
 
-inline int _rtw_netif_rx(_nic_hdl ndev, struct sk_buff *skb)
+inline int _rtw_netif_rx(struct  net_device * ndev, struct sk_buff *skb)
 {
 	skb->dev = ndev;
 	return netif_rx(skb);
@@ -474,7 +474,7 @@ inline struct sk_buff *dbg_rtw_skb_clone(struct sk_buff *skb, const enum mstat_f
 	return skb_cl;
 }
 
-inline int dbg_rtw_netif_rx(_nic_hdl ndev, struct sk_buff *skb, const enum mstat_f flags, const char *func, int line)
+inline int dbg_rtw_netif_rx(struct  net_device * ndev, struct sk_buff *skb, const enum mstat_f flags, const char *func, int line)
 {
 	int ret;
 	unsigned int truesize = skb->truesize;
@@ -562,7 +562,7 @@ int	_rtw_memcmp(void *dst, void *src, u32 sz)
 		return false;
 }
 
-void _rtw_init_listhead(_list *list)
+void _rtw_init_listhead(struct list_head *list)
 {
         INIT_LIST_HEAD(list);
 }
@@ -573,7 +573,7 @@ For the following list_xxx operations,
 caller must guarantee the atomic context.
 Otherwise, there will be racing condition.
 */
-u32	rtw_is_list_empty(_list *phead)
+u32	rtw_is_list_empty(struct list_head *phead)
 {
 	if (list_empty(phead))
 		return true;
@@ -581,12 +581,12 @@ u32	rtw_is_list_empty(_list *phead)
 		return false;
 }
 
-void rtw_list_insert_head(_list *plist, _list *phead)
+void rtw_list_insert_head(struct list_head *plist, struct list_head *phead)
 {
 	list_add(plist, phead);
 }
 
-void rtw_list_insert_tail(_list *plist, _list *phead)
+void rtw_list_insert_tail(struct list_head *plist, struct list_head *phead)
 {
 	list_add_tail(plist, phead);
 }
@@ -599,21 +599,21 @@ Caller must check if the list is empty before calling rtw_list_delete
 */
 
 
-void _rtw_init_sema(_sema	*sema, int init_val)
+void _rtw_init_sema(struct  semaphore *sema, int init_val)
 {
 	sema_init(sema, init_val);
 }
 
-void _rtw_free_sema(_sema	*sema)
+void _rtw_free_sema(struct  semaphore *sema)
 {
 }
 
-void _rtw_up_sema(_sema	*sema)
+void _rtw_up_sema(struct  semaphore *sema)
 {
 	up(sema);
 }
 
-u32 _rtw_down_sema(_sema *sema)
+u32 _rtw_down_sema(struct  semaphore *sema)
 {
 	if (down_interruptible(sema))
 		return _FAIL;
@@ -639,7 +639,7 @@ void	_rtw_mutex_free(_mutex *pmutex)
 #endif
 }
 
-void	_rtw_init_queue(_queue	*pqueue)
+void	_rtw_init_queue(struct  __queue *pqueue)
 {
 
 	_rtw_init_listhead(&(pqueue->queue));
@@ -648,13 +648,13 @@ void	_rtw_init_queue(_queue	*pqueue)
 
 }
 
-u32	  _rtw_queue_empty(_queue	*pqueue)
+u32	  _rtw_queue_empty(struct  __queue *pqueue)
 {
 	return (rtw_is_list_empty(&(pqueue->queue)));
 }
 
 
-u32 rtw_end_of_queue_search(_list *head, _list *plist)
+u32 rtw_end_of_queue_search(struct list_head *head, struct list_head *plist)
 {
 	if (head == plist)
 		return true;

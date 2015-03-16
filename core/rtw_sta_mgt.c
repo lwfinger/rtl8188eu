@@ -105,7 +105,6 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 	spin_lock_init(&pstapriv->sta_hash_lock);
 
-	/* _rtw_init_queue(&pstapriv->asoc_q); */
 	pstapriv->asoc_sta_count = 0;
 	_rtw_init_queue(&pstapriv->sleep_q);
 	_rtw_init_queue(&pstapriv->wakeup_q);
@@ -113,8 +112,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 	psta = (struct sta_info *)(pstapriv->pstainfo_buf);
 
 
-	for(i = 0; i < NUM_STA; i++)
-	{
+	for(i = 0; i < NUM_STA; i++) {
 		_rtw_init_stainfo(psta);
 
 		_rtw_init_listhead(&(pstapriv->sta_hash[i]));
@@ -184,8 +182,8 @@ void rtw_mfree_stainfo(struct sta_info *psta)
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv );
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv )
 {
-	_irqL	 irqL;
-	_list	*plist, *phead;
+	unsigned long	 irqL;
+	struct list_head *plist, *phead;
 	struct sta_info *psta = NULL;
 
 ;
@@ -221,8 +219,8 @@ void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 
 u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 {
-	_irqL	irqL;
-	_list	*phead, *plist;
+	unsigned long	irqL;
+	struct list_head *phead, *plist;
 	struct sta_info *psta = NULL;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	int	index;
@@ -263,15 +261,14 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 }
 
 
-/* struct	sta_info *rtw_alloc_stainfo(_queue *pfree_sta_queue, unsigned char *hwaddr) */
 struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 {
-	_irqL irqL, irqL2;
+	unsigned long irqL, irqL2;
 	uint tmp_aid;
 	s32	index;
-	_list	*phash_list;
+	struct list_head *phash_list;
 	struct sta_info	*psta;
-	_queue *pfree_sta_queue;
+	struct  __queue *pfree_sta_queue;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	int i = 0;
 	u16  wRxSeqInitialValue = 0xffff;
@@ -362,8 +359,8 @@ exit:
 u32	rtw_free_stainfo(struct adapter *padapter , struct sta_info *psta)
 {
 	int i;
-	_irqL irqL0;
-	_queue *pfree_sta_queue;
+	unsigned long irqL0;
+	struct  __queue *pfree_sta_queue;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	struct	sta_xmit_priv	*pstaxmitpriv;
 	struct	xmit_priv	*pxmitpriv= &padapter->xmitpriv;
@@ -385,10 +382,6 @@ u32	rtw_free_stainfo(struct adapter *padapter , struct sta_info *psta)
 
 
 	pstaxmitpriv = &psta->sta_xmitpriv;
-
-	/* rtw_list_delete(&psta->sleep_list); */
-
-	/* rtw_list_delete(&psta->wakeup_list); */
 
 	spin_lock_bh(&pxmitpriv->lock);
 
@@ -441,11 +434,11 @@ u32	rtw_free_stainfo(struct adapter *padapter , struct sta_info *psta)
 	/* for A-MPDU Rx reordering buffer control, cancel reordering_ctrl_timer */
 	for(i=0; i < 16 ; i++)
 	{
-		_irqL irqL;
-		_list	*phead, *plist;
+		unsigned long irqL;
+		struct list_head *phead, *plist;
 		union recv_frame *prframe;
-		_queue *ppending_recvframe_queue;
-		_queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
+		struct  __queue *ppending_recvframe_queue;
+		struct  __queue *pfree_recv_queue = &padapter->recvpriv.free_recv_queue;
 
 		preorder_ctrl = &psta->recvreorder_ctrl[i];
 
@@ -521,8 +514,8 @@ exit:
 /*  free all stainfo which in sta_hash[all] */
 void rtw_free_all_stainfo(struct adapter *padapter)
 {
-	_irqL	 irqL;
-	_list	*plist, *phead;
+	unsigned long	 irqL;
+	struct list_head *plist, *phead;
 	s32	index;
 	struct sta_info *psta = NULL;
 	struct	sta_priv *pstapriv = &padapter->stapriv;
@@ -564,9 +557,9 @@ exit:
 struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 {
 
-	_irqL	 irqL;
+	unsigned long	 irqL;
 
-	_list	*plist, *phead;
+	struct list_head *plist, *phead;
 
 	struct sta_info *psta = NULL;
 
@@ -626,7 +619,6 @@ u32 rtw_init_bcmc_stainfo(struct adapter* padapter)
 	u8 bcast_addr[ETH_ALEN] = {0xff,0xff,0xff,0xff,0xff,0xff};
 
 	struct	sta_priv *pstapriv = &padapter->stapriv;
-	/* _queue	*pstapending = &padapter->xmitpriv.bm_pending; */
 
 ;
 
@@ -659,13 +651,13 @@ u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 {
 	u8 res = true;
 #ifdef  CONFIG_AP_MODE
-	_irqL irqL;
-	_list	*plist, *phead;
+	unsigned long irqL;
+	struct list_head *plist, *phead;
 	struct rtw_wlan_acl_node *paclnode;
 	u8 match = false;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct wlan_acl_pool *pacl_list = &pstapriv->acl_list;
-	_queue	*pacl_node_q =&pacl_list->acl_node_q;
+	struct  __queue	*pacl_node_q =&pacl_list->acl_node_q;
 
 	spin_lock_bh(&(pacl_node_q->lock));
 	phead = get_list_head(pacl_node_q);

@@ -47,15 +47,13 @@
 		u32	cmdsz;
 		u8	*rsp;
 		u32	rspsz;
-		//_sema		cmd_sem;
-		_list	list;
+		struct list_head list;
 	};
 
 	struct cmd_priv {
-		_sema	cmd_queue_sema;
-		//_sema	cmd_done_sema;
-		_sema	terminate_cmdthread_sema;
-		_queue	cmd_queue;
+		struct  semaphore cmd_queue_sema;
+		struct  semaphore terminate_cmdthread_sema;
+		struct  __queue	cmd_queue;
 		u8	cmd_seq;
 		u8	*cmd_buf;	//shall be non-paged, and 4 bytes aligned
 		u8	*cmd_allocated_buf;
@@ -72,14 +70,14 @@
 	struct	evt_priv {
 #define CONFIG_C2H_WK
 #ifdef CONFIG_C2H_WK
-		_workitem c2h_wk;
+		struct work_struct c2h_wk;
 		bool c2h_wk_alive;
 		struct rtw_cbuf *c2h_queue;
 		#define C2H_QUEUE_MAX_LEN 10
 #endif
 
 #ifdef CONFIG_H2CLBK
-		_sema	lbkevt_done;
+		struct  semaphore lbkevt_done;
 		u8	lbkevt_limit;
 		u8	lbkevt_num;
 		u8	*cmdevt_parm;
@@ -114,7 +112,7 @@ struct cmd_obj *rtw_dequeue_cmd(struct cmd_priv *pcmdpriv);
 void rtw_free_cmd_obj(struct cmd_obj *pcmd);
 
 void rtw_stop_cmd_thread(struct adapter *adapter);
-thread_return rtw_cmd_thread(thread_context context);
+int rtw_cmd_thread(void * context);
 
 u32 rtw_init_cmd_priv (struct cmd_priv *pcmdpriv);
 void rtw_free_cmd_priv (struct cmd_priv *pcmdpriv);

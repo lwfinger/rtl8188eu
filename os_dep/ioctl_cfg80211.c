@@ -1742,7 +1742,7 @@ exit:
 
 void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv, bool aborted)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 
 	spin_lock_bh(&pwdev_priv->scan_req_lock);
 	if(pwdev_priv->scan_request != NULL)
@@ -1776,10 +1776,10 @@ void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv, bool abor
 
 void rtw_cfg80211_surveydone_event_callback(struct adapter *padapter)
 {
-	_irqL	irqL;
-	_list					*plist, *phead;
+	unsigned long	irqL;
+	struct list_head *plist, *phead;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	_queue				*queue	= &(pmlmepriv->scanned_queue);
+	struct  __queue *queue	= &(pmlmepriv->scanned_queue);
 	struct	wlan_network	*pnetwork = NULL;
 	u32 cnt=0;
 	u32 wait_for_surveydone;
@@ -1956,7 +1956,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	struct mlme_priv *pmlmepriv= &padapter->mlmepriv;
 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
-	_irqL	irqL;
+	unsigned long	irqL;
 	u8 *wps_ie=NULL;
 	uint wps_ielen=0;
 	u8 *p2p_ie=NULL;
@@ -2522,8 +2522,8 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 				 struct cfg80211_connect_params *sme)
 {
 	int ret=0;
-	_irqL irqL;
-	_list *phead;
+	unsigned long irqL;
+	struct list_head *phead;
 	struct wlan_network *pnetwork = NULL;
 	enum NDIS_802_11_AUTHENTICATION_MODE authmode;
 	struct ndis_802_11_ssid ndis_ssid;
@@ -2535,7 +2535,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 	struct adapter *padapter = wiphy_to_adapter(wiphy);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-	_queue *queue = &pmlmepriv->scanned_queue;
+	struct  __queue *queue = &pmlmepriv->scanned_queue;
 
 	padapter->mlmepriv.not_indic_disco = true;
 
@@ -3525,8 +3525,8 @@ static int cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 #endif
 {
 	int ret=0;
-	_irqL irqL;
-	_list	*phead, *plist;
+	unsigned long irqL;
+	struct list_head *phead, *plist;
 	u8 updated;
 	struct sta_info *psta = NULL;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(ndev);

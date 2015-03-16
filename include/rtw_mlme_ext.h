@@ -447,12 +447,11 @@ struct mlme_ext_priv
 	struct ss_res		sitesurvey_res;
 	struct mlme_ext_info	mlmext_info;//for sta/adhoc mode, including current scanning/connecting/connected related info.
                                                      //for ap mode, network includes ap's cap_info
-	_timer		survey_timer;
-	_timer		link_timer;
+	struct timer_list survey_timer;
+	struct timer_list link_timer;
 #ifdef CONFIG_IEEE80211W
-	_timer		sa_query_timer;
+	struct timer_list sa_query_timer;
 #endif //CONFIG_IEEE80211W
-	//_timer		ADDBA_timer;
 	u16			chan_scan_time;
 
 	u8	scan_abort;
@@ -670,18 +669,14 @@ void addba_timer_hdl(struct sta_info *psta);
 #ifdef CONFIG_IEEE80211W
 void sa_query_timer_hdl(struct adapter *padapter);
 #endif //CONFIG_IEEE80211W
-//void reauth_timer_hdl(struct adapter *padapter);
-//void reassoc_timer_hdl(struct adapter *padapter);
 
 #define set_survey_timer(mlmeext, ms) \
 	do { \
-		/*DBG_871X("%s set_survey_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms));*/ \
 		_set_timer(&(mlmeext)->survey_timer, (ms)); \
 	} while(0)
 
 #define set_link_timer(mlmeext, ms) \
 	do { \
-		/*DBG_871X("%s set_link_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms));*/ \
 		_set_timer(&(mlmeext)->link_timer, (ms)); \
 	} while(0)
 #ifdef CONFIG_IEEE80211W

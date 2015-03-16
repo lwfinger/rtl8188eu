@@ -36,7 +36,7 @@ uint rtw_remainder_len(struct pkt_file *pfile)
 	return (pfile->buf_len - ((SIZE_PTR)(pfile->cur_addr) - (SIZE_PTR)(pfile->buf_start)));
 }
 
-void _rtw_open_pktfile (_pkt *pktptr, struct pkt_file *pfile)
+void _rtw_open_pktfile (struct sk_buff *pktptr, struct pkt_file *pfile)
 {
 ;
 
@@ -120,7 +120,7 @@ void rtw_os_xmit_resource_free(struct adapter *padapter, struct xmit_buf *pxmitb
 
 #define WMM_XMIT_THRESHOLD	(NR_XMITFRAME*2/5)
 
-void rtw_os_pkt_complete(struct adapter *padapter, _pkt *pkt)
+void rtw_os_pkt_complete(struct adapter *padapter, struct sk_buff *pkt)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
 	u16	queue;
@@ -157,7 +157,7 @@ void rtw_os_xmit_schedule(struct adapter *padapter)
 {
 	struct adapter *pri_adapter = padapter;
 
-	_irqL  irqL;
+	unsigned long  irqL;
 	struct xmit_priv *pxmitpriv;
 
 	if(!padapter)
@@ -173,7 +173,7 @@ void rtw_os_xmit_schedule(struct adapter *padapter)
 	spin_unlock_bh(&pxmitpriv->lock);
 }
 
-static void rtw_check_xmit_resource(struct adapter *padapter, _pkt *pkt)
+static void rtw_check_xmit_resource(struct adapter *padapter, struct sk_buff *pkt)
 {
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
@@ -205,15 +205,14 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 {
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	_irqL	irqL;
-	_list	*phead, *plist;
+	unsigned long	irqL;
+	struct list_head *phead, *plist;
 	struct sk_buff *newskb;
 	struct sta_info *psta = NULL;
 	u8 chk_alive_num = 0;
 	char chk_alive_list[NUM_STA];
 	u8 bc_addr[6]={0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	u8 null_addr[6]={0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
 	int i;
 	s32	res;
 
@@ -269,7 +268,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 	return true;
 }
 
-int _rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
+int _rtw_xmit_entry(struct sk_buff *pkt, struct  net_device * pnetdev)
 {
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(pnetdev);
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
@@ -332,7 +331,7 @@ exit:
 	return 0;
 }
 
-int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
+int rtw_xmit_entry(struct sk_buff *pkt, struct  net_device * pnetdev)
 {
 	if (pkt)
 		rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, pkt->truesize);

@@ -158,17 +158,13 @@ struct security_priv
 	u8	binstallBIPkey;
 #endif //CONFIG_IEEE80211W
 	u8	busetkipkey;
-	//_timer tkip_timer;
 	u8	bcheck_grpkey;
 	u8	bgrpkey_handshake;
-
-	//u8	packet_cnt;//unused, removed
 
 	s32	sw_encrypt;//from registry_priv
 	s32	sw_decrypt;//from registry_priv
 
 	s32	hw_decrypted;//if the rx packets is hw_decrypted==false, it means the hw has not been ready.
-
 
 	//keeps the auth_type & enc_status from upper layer ioctl(wpa_supplicant or wzc)
 	u32 ndisauthtype;	// enum NDIS_802_11_AUTHENTICATION_MODE
@@ -183,7 +179,6 @@ struct security_priv
 	u8 oidassociation[512]; //for wpa/wpa2 usage
 	u8 authenticator_ie[256];  //store ap security information element
 	u8 supplicant_ie[256];  //store sta security information element
-
 
 	//for tkip countermeasure
 	u32 last_mic_err_time;

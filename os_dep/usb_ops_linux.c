@@ -215,7 +215,7 @@ static u32 usb_bulkout_zero(struct intf_hdl *pintfhdl, u32 addr)
 	u32 ret;
 	unsigned char *pbuf;
 	struct zero_bulkout_context *pcontext;
-	PURB	purb = NULL;
+	struct urb *	purb = NULL;
 	struct adapter *padapter = (struct adapter *)pintfhdl->padapter;
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 	struct usb_device *pusbd = pdvobj->pusbdev;
@@ -305,7 +305,7 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 
 static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	int i;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)purb->context;
 	/* struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data; */
@@ -413,11 +413,11 @@ check_completion:
 
 u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	unsigned int pipe;
 	int status;
 	u32 ret = _FAIL, bwritezero = false;
-	PURB	purb = NULL;
+	struct urb *purb = NULL;
 	struct adapter *padapter = (struct adapter *)pintfhdl->padapter;
 	struct dvobj_priv	*pdvobj = adapter_to_dvobj(padapter);
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
@@ -425,8 +425,6 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data;
 	struct usb_device *pusbd = pdvobj->pusbdev;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
-
-;
 
 	RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("+usb_write_port\n"));
 

@@ -242,7 +242,7 @@ struct dvobj_priv {
 
 	int	RegUsbSS;
 
-	_sema	usb_suspend_sema;
+	struct  semaphore usb_suspend_sema;
 
 	_mutex  usb_vendor_req_mutex;
 
@@ -296,8 +296,8 @@ struct proxim {
 #ifdef CONFIG_MAC_LOOPBACK_DRIVER
 typedef struct loopbackdata
 {
-	_sema	sema;
-	_thread_hdl_ lbkthread;
+	struct  semaphore sema;
+	void * lbkthread;
 	u8 bstop;
 	u32 cnt;
 	u16 size;
@@ -329,7 +329,7 @@ struct adapter {
 	struct	recv_priv	recvpriv;
 	struct	sta_priv	stapriv;
 	struct	security_priv	securitypriv;
-	_lock   security_key_mutex; // add for CONFIG_IEEE80211W, none 11w also can use
+	spinlock_t security_key_mutex; // add for CONFIG_IEEE80211W, none 11w also can use
 	struct	registry_priv	registrypriv;
 	struct	eeprom_priv eeprompriv;
 	struct	led_priv	ledpriv;
@@ -373,19 +373,19 @@ struct adapter {
 	u8	init_adpt_in_progress;
 	u8	bHaltInProgress;
 
-	_thread_hdl_ cmdThread;
-	_thread_hdl_ evtThread;
-	_thread_hdl_ xmitThread;
-	_thread_hdl_ recvThread;
+	void * cmdThread;
+	void * evtThread;
+	void * xmitThread;
+	void * recvThread;
 
 	void (*intf_start)(struct adapter * adapter);
 	void (*intf_stop)(struct adapter * adapter);
 
-	_nic_hdl pnetdev;
+	struct  net_device * pnetdev;
 
 	// used by rtw_rereg_nd_name related function
 	struct rereg_nd_name_data {
-		_nic_hdl old_pnetdev;
+		struct  net_device * old_pnetdev;
 		char old_ifname[IFNAMSIZ];
 		u8 old_ips_mode;
 		u8 old_bRegUseLed;
@@ -426,7 +426,7 @@ struct adapter {
 	u8 iface_id;
 
 #ifdef CONFIG_BR_EXT
-	_lock					br_ext_lock;
+	spinlock_t br_ext_lock;
 	//unsigned int			macclone_completed;
 	struct nat25_network_db_entry	*nethash[NAT25_HASH_SIZE];
 	int				pppoe_connection_in_progress;
