@@ -31,8 +31,6 @@
 #include <osdep_service.h>
 #include <wlan_bssdef.h>
 
-#include <drv_types_linux.h>
-
 enum _NIC_VERSION {
 
 	RTL8711_NIC,
