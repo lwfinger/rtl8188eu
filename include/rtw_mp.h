@@ -80,39 +80,34 @@
 #define NDIS_STATUS_AAL_PARAMS_UNSUPPORTED	((NDIS_STATUS)0xC0010028L)  /*  cause 93 */
 #define NDIS_STATUS_NO_ROUTE_TO_DESTINATION	((NDIS_STATUS)0xC0010029L)  /*  cause 3 */
 
-typedef enum _ANTENNA_PATH{
-		ANTENNA_NONE	= 0x00,
-		ANTENNA_D		,
-		ANTENNA_C		,
-		ANTENNA_CD		,
-		ANTENNA_B		,
-		ANTENNA_BD		,
-		ANTENNA_BC		,
-		ANTENNA_BCD	,
-		ANTENNA_A		,
-		ANTENNA_AD		,
-		ANTENNA_AC		,
-		ANTENNA_ACD	,
-		ANTENNA_AB		,
-		ANTENNA_ABD	,
-		ANTENNA_ABC	,
-		ANTENNA_ABCD
-} ANTENNA_PATH;
+enum ANTENNA_PATH {
+	ANTENNA_NONE	= 0x00,
+	ANTENNA_D,
+	ANTENNA_C,
+	ANTENNA_CD,
+	ANTENNA_B,
+	ANTENNA_BD,
+	ANTENNA_BC,
+	ANTENNA_BCD,
+	ANTENNA_A,
+	ANTENNA_AD,
+	ANTENNA_AC,
+	ANTENNA_ACD,
+	ANTENNA_AB,
+	ANTENNA_ABD,
+	ANTENNA_ABC,
+	ANTENNA_ABCD
+};
 
 
 #define MAX_MP_XMITBUF_SZ	2048
 #define NR_MP_XMITFRAME		8
 
-struct mp_xmit_frame
-{
+struct mp_xmit_frame {
 	struct  list_head list;
-
 	struct pkt_attrib attrib;
-
 	struct sk_buff *pkt;
-
 	int frame_tag;
-
 	struct adapter *padapter;
 
 	/* insert urb, irp, and irpcnt info below... */
@@ -122,28 +117,22 @@ struct mp_xmit_frame
 	u32 sz[8];
 
 	struct urb * pxmit_urb[8];
-
 	u8 bpending[8];
 	sint ac_tag[8];
 	sint last[8];
 	uint irpcnt;
 	uint fragcnt;
-
 	uint mem[(MAX_MP_XMITBUF_SZ >> 2)];
 };
 
-struct mp_wiparam
-{
+struct mp_wiparam {
 	u32 bcompleted;
 	u32 act_type;
 	u32 io_offset;
 	u32 io_value;
 };
 
-typedef void(*wi_act_func)(void* padapter);
-
-struct mp_tx
-{
+struct mp_tx {
 	u8 stop;
 	u32 count, sended;
 	u8 payload;
@@ -163,11 +152,7 @@ struct mp_tx
 #define ULONG u32
 #define PULONG u32*
 
-
-
-typedef void (*MPT_WORK_ITEM_HANDLER)(void * Adapter);
-typedef struct _MPT_CONTEXT
-{
+struct mpt_context {
 	/*  Indicate if we have started Mass Production Test. */
 	bool			bMassProdTest;
 
@@ -182,18 +167,9 @@ typedef struct _MPT_CONTEXT
 	bool		MptBtC2hEvent;
 	bool		bMPh2c_timeout;
 
-	/* 8190 PCI does not support NDIS_WORK_ITEM. */
-	/*  Work Item for Mass Production Test. */
-	/* NDIS_WORK_ITEM	MptWorkItem; */
-/* 	RT_WORK_ITEM		MptWorkItem; */
-	/*  Event used to sync the case unloading driver and MptWorkItem is still in progress. */
-/* 	NDIS_EVENT		MptWorkItemEvent; */
-	/*  To protect the following variables. */
-/* 	NDIS_SPIN_LOCK		MptWorkItemSpinLock; */
-	/*  Indicate a MptWorkItem is scheduled and not yet finished. */
 	bool			bMptWorkItemInProgress;
 	/*  An instance which implements function and context of MptWorkItem. */
-	MPT_WORK_ITEM_HANDLER	CurrMptAct;
+	void (*CurrMptAct)(void * Adapter);
 
 	/*  1=Start, 0=Stop from UI. */
 	ULONG			MptTestStart;
@@ -260,11 +236,10 @@ typedef struct _MPT_CONTEXT
 	u8			h2cReqNum;
 	u8			c2hBuf[20];
 
-    u8          btInBuf[100];
+	u8          btInBuf[100];
 	ULONG			mptOutLen;
-    u8          mptOutBuf[100];
-
-}MPT_CONTEXT, *PMPT_CONTEXT;
+	u8          mptOutBuf[100];
+};
 
 enum {
 	WRITE_REG = 1,
@@ -344,14 +319,8 @@ struct mp_priv {
 	u8 *pmp_xmtframe_buf;
 	struct  __queue free_mp_xmitqueue;
 	u32 free_mp_xmitframe_cnt;
-	MPT_CONTEXT MptCtx;
+	struct mpt_context MptCtx;
 };
-
-typedef struct _IOCMD_STRUCT_ {
-	u8	cmdclass;
-	u16	value;
-	u8	index;
-}IOCMD_STRUCT;
 
 struct rf_reg_param {
 	u32 path;
@@ -372,7 +341,7 @@ struct bb_reg_param {
 #define BB_REG_BASE_ADDR		0x800
 
 /* MP variables */
-typedef enum _MP_MODE_ {
+enum MP_MODE {
 	MP_OFF,
 	MP_ON,
 	MP_ERR,
@@ -382,17 +351,14 @@ typedef enum _MP_MODE_ {
 	MP_SINGLE_TONE_TX,
 	MP_PACKET_TX,
 	MP_PACKET_RX
-} MP_MODE;
-
+};
 
 #define MAX_RF_PATH_NUMS	RF_PATH_MAX
-
 
 extern u8 mpdatarate[NumRates];
 
 /* MP set force data rate base on the definition. */
-typedef enum _MPT_RATE_INDEX
-{
+enum MPT_RATE_INDEX {
 	/* CCK rate. */
 	MPT_RATE_1M,	/* 0 */
 	MPT_RATE_2M,
@@ -427,26 +393,25 @@ typedef enum _MPT_RATE_INDEX
 	MPT_RATE_MCS14,
 	MPT_RATE_MCS15,	/* 27 */
 	MPT_RATE_LAST
-}MPT_RATE_E, *PMPT_RATE_E;
+};
 
 #define MAX_TX_PWR_INDEX_N_MODE 64	/*  0x3F */
 
-typedef enum _POWER_MODE_ {
+enum POWER_MODE {
 	POWER_LOW = 0,
 	POWER_NORMAL
-}POWER_MODE;
-
+};
 
 #define RX_PKT_BROADCAST	1
 #define RX_PKT_DEST_ADDR	2
 #define RX_PKT_PHY_MATCH	3
 
-typedef enum _ENCRY_CTRL_STATE_ {
+enum ENCRY_CTRL_STATE {
 	HW_CONTROL,		/* hw encryption& decryption */
 	SW_CONTROL,		/* sw encryption& decryption */
 	HW_ENCRY_SW_DECRY,	/* hw encryption & sw decryption */
 	SW_ENCRY_HW_DECRY	/* sw encryption & hw decryption */
-}ENCRY_CTRL_STATE;
+};
 
 #define Mac_OFDM_OK			0x00000000
 #define Mac_OFDM_Fail			0x10000000
@@ -459,18 +424,12 @@ typedef enum _ENCRY_CTRL_STATE_ {
 #define Mac_HT_FasleAlarm		0x90000000
 #define Mac_DropPacket			0xA0000000
 
-/*  */
-/* struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv); */
-/* int free_mp_xmitframe(struct xmit_priv *pxmitpriv, struct mp_xmit_frame *pmp_xmitframe); */
-
 s32 init_mp_priv(struct adapter *padapter);
 void free_mp_priv(struct mp_priv *pmp_priv);
 s32 MPT_InitializeAdapter(struct adapter *padapter, u8 Channel);
 void MPT_DeInitAdapter(struct adapter *padapter);
 s32 mp_start_test(struct adapter *padapter);
 void mp_stop_test(struct adapter *padapter);
-
-/*  */
 
 u32 _read_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 bitmask);
 void _write_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
@@ -490,8 +449,6 @@ void	SetTxAGCOffset(struct adapter *pAdapter, u32 ulTxAGCOffset);
 void	SetDataRate(struct adapter *pAdapter);
 
 void	SetAntenna(struct adapter *pAdapter);
-
-/* void	SetCrystalCap(struct adapter *pAdapter); */
 
 s32	SetThermalMeter(struct adapter *pAdapter, u8 target_ther);
 void	GetThermalMeter(struct adapter *pAdapter, u8 *value);
