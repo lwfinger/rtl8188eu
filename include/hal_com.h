@@ -148,7 +148,7 @@
 #define REG_NOA_DESC_COUNT			0x05EC
 
 #include "HalVerDef.h"
-void dump_chip_info(HAL_VERSION	ChipVersion);
+void dump_chip_info(struct hal_version	ChipVersion);
 
 
 u8	/* return the final channel plan decision */

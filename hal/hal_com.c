@@ -28,7 +28,7 @@
 
 #define _HAL_INIT_C_
 
-void dump_chip_info(HAL_VERSION	ChipVersion)
+void dump_chip_info(struct hal_version	ChipVersion)
 {
 	int cnt = 0;
 	u8 buf[128];
