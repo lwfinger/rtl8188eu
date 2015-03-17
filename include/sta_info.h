@@ -48,13 +48,13 @@ struct wlan_acl_pool {
 	struct  __queue	acl_node_q;
 };
 
-typedef struct _RSSI_STA{
+struct rssi_sta {
 	s32	UndecoratedSmoothedPWDB;
 	s32	UndecoratedSmoothedCCK;
 	s32	UndecoratedSmoothedOFDM;
 	u64	PacketMap;
 	u8	ValidBit;
-}RSSI_STA, *PRSSI_STA;
+};
 
 struct	stainfo_stats	{
 
@@ -232,7 +232,7 @@ struct sta_info {
 	int tx_vo_cnt;
 #endif
 	/* for DM */
-	RSSI_STA	 rssi_stat;
+	struct rssi_sta	 rssi_stat;
 
 	/* ODM_STA_INFO_T */
 	/*  ================ODM Relative Info======================= */
