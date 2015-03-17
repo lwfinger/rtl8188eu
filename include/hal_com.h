@@ -178,7 +178,7 @@ void hal_init_macaddr(struct adapter *adapter);
 void c2h_evt_clear(struct adapter *adapter);
 s32 c2h_evt_read(struct adapter *adapter, u8 *buf);
 
-u8 SetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
-u8 GetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
+u8 SetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *value);
+u8 GetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *value);
 
 #endif /* __HAL_COMMON_H__ */

@@ -7627,7 +7627,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 {
 
 	struct adapter *padapter = rtw_netdev_priv(dev);
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 	PHAL_DATA_TYPE pHalData = GET_HAL_DATA(padapter);
 	PEFUSE_HAL pEfuseHal;
 	struct iw_point *wrqu;

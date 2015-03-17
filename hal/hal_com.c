@@ -381,7 +381,7 @@ exit:
 }
 
 u8
-SetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
+SetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *value)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	PDM_ODM_T pDM_Odm = &(pHalData->odmpriv);
@@ -410,7 +410,7 @@ SetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 }
 
 u8
-GetHalDefVar(struct adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
+GetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *value)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	PDM_ODM_T pDM_Odm = &(pHalData->odmpriv);

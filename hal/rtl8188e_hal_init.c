@@ -2543,7 +2543,7 @@ static void rtl8188e_read_chip_version(struct adapter *padapter)
 
 static void rtl8188e_GetHalODMVar(
 	struct adapter *			Adapter,
-	HAL_ODM_VARIABLE		eVariable,
+	enum HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
 	bool					bSet)
 {
@@ -2559,7 +2559,7 @@ static void rtl8188e_GetHalODMVar(
 
 static void rtl8188e_SetHalODMVar(
 	struct adapter *			Adapter,
-	HAL_ODM_VARIABLE		eVariable,
+	enum HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
 	bool					bSet)
 {
@@ -2791,7 +2791,7 @@ s32 InitLLTTable(struct adapter *padapter, u8 txpktbuf_bndy)
 void
 Hal_InitPGData88E(struct adapter *padapter)
 {
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 /* 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter); */
 	u32			i;
 	u16			value16;
@@ -2829,7 +2829,7 @@ Hal_EfuseParseIDCode88E(
 	u8			*hwinfo
 	)
 {
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 /* 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter); */
 	u16			EEPROMId;
 

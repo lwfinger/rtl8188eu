@@ -841,7 +841,7 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv)
 }
 #endif /* CONFIG_ANDROID_POWER */
 
-u8 rtw_interface_ps_func(struct adapter *padapter,HAL_INTF_PS_FUNC efunc_id,u8* val)
+u8 rtw_interface_ps_func(struct adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id,u8* val)
 {
 	u8 bResult = true;
 	rtw_hal_intf_ps_func(padapter,efunc_id,val);

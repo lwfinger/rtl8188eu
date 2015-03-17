@@ -312,7 +312,7 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv);
 #define rtw_unregister_early_suspend(pwrpriv) do {} while (0)
 #endif /* CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER */
 
-u8 rtw_interface_ps_func(struct adapter *padapter,HAL_INTF_PS_FUNC efunc_id,u8* val);
+u8 rtw_interface_ps_func(struct adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id,u8* val);
 void rtw_set_ips_deny(struct adapter *padapter, u32 ms);
 int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *caller);
 #define rtw_pwr_wakeup(adapter) _rtw_pwr_wakeup(adapter, RTW_PWR_STATE_CHK_INTERVAL, __FUNCTION__)

@@ -42,7 +42,7 @@ enum _CHIP_TYPE {
 };
 
 
-typedef enum _HW_VARIABLES{
+enum HW_VARIABLES {
 	HW_VAR_MEDIA_STATUS,
 	HW_VAR_MEDIA_STATUS1,
 	HW_VAR_SET_OPMODE,
@@ -58,7 +58,7 @@ typedef enum _HW_VARIABLES{
 	HW_VAR_MLME_SITESURVEY,
 	HW_VAR_MLME_JOIN,
 	HW_VAR_ON_RCR_AM,
-       HW_VAR_OFF_RCR_AM,
+	HW_VAR_OFF_RCR_AM,
 	HW_VAR_BEACON_INTERVAL,
 	HW_VAR_SLOT_TIME,
 	HW_VAR_RESP_SIFS,
@@ -118,9 +118,9 @@ typedef enum _HW_VARIABLES{
 	HW_VAR_READ_LLT_TAB,
 	HW_VAR_C2HEVT_CLEAR,
 	HW_VAR_C2HEVT_MSG_NORMAL,
-}HW_VARIABLES;
+};
 
-typedef enum _HAL_DEF_VARIABLE{
+enum HAL_DEF_VARIABLE {
 	HAL_DEF_UNDERCORATEDSMOOTHEDPWDB,
 	HAL_DEF_IS_SUPPORT_ANT_DIV,
 	HAL_DEF_CURRENT_ANTENNA,
@@ -138,20 +138,19 @@ typedef enum _HAL_DEF_VARIABLE{
 	HW_DEF_FA_CNT_DUMP,
 	HW_DEF_ODM_DBG_FLAG,
 	HW_DEF_ODM_DBG_LEVEL,
-}HAL_DEF_VARIABLE;
+};
 
-typedef enum _HAL_ODM_VARIABLE{
+enum HAL_ODM_VARIABLE {
 	HAL_ODM_STA_INFO,
 	HAL_ODM_P2P_STATE,
 	HAL_ODM_WIFI_DISPLAY_STATE,
-}HAL_ODM_VARIABLE;
+};
 
-typedef enum _HAL_INTF_PS_FUNC{
+enum HAL_INTF_PS_FUNC {
 	HAL_USB_SELECT_SUSPEND,
 	HAL_MAX_ID,
-}HAL_INTF_PS_FUNC;
+};
 
-typedef s32 (*c2h_id_filter)(u8 id);
 
 struct hal_ops {
 	u32	(*hal_power_on)(struct adapter *padapter);
@@ -194,11 +193,11 @@ struct hal_ops {
 	void	(*SetHwRegHandler)(struct adapter *padapter, u8	variable,u8* val);
 	void	(*GetHwRegHandler)(struct adapter *padapter, u8	variable,u8* val);
 
-	u8	(*GetHalDefVarHandler)(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
-	u8	(*SetHalDefVarHandler)(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
+	u8	(*GetHalDefVarHandler)(struct adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
+	u8	(*SetHalDefVarHandler)(struct adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
 
-	void	(*GetHalODMVarHandler)(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
-	void	(*SetHalODMVarHandler)(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
+	void	(*GetHalODMVarHandler)(struct adapter *padapter, enum HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
+	void	(*SetHalODMVarHandler)(struct adapter *padapter, enum HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
 
 	void	(*UpdateRAMaskHandler)(struct adapter *padapter, u32 mac_id, u8 rssi_level);
 	void	(*SetBeaconRelatedRegistersHandler)(struct adapter *padapter);
@@ -210,7 +209,7 @@ struct hal_ops {
 
 	u8	(*AntDivBeforeLinkHandler)(struct adapter *padapter);
 	void	(*AntDivCompareHandler)(struct adapter *padapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
-	u8	(*interface_ps_func)(struct adapter *padapter,HAL_INTF_PS_FUNC efunc_id, u8* val);
+	u8	(*interface_ps_func)(struct adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val);
 
 	s32	(*hal_xmit)(struct adapter *padapter, struct xmit_frame *pxmitframe);
 	s32 (*mgnt_xmit)(struct adapter *padapter, struct xmit_frame *pmgntframe);
@@ -246,7 +245,7 @@ struct hal_ops {
 	void (*hal_notch_filter)(struct adapter * adapter, bool enable);
 	void (*hal_reset_security_engine)(struct adapter * adapter);
 	s32 (*c2h_handler)(struct adapter *padapter, struct c2h_evt_hdr *c2h_evt);
-	c2h_id_filter c2h_id_filter_ccx;
+	s32 (*c2h_id_filter_ccx)(u8 id);
 #if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
 	void (*hal_init_checkbthang_workqueue)(struct adapter * padapter);
 	void (*hal_free_checkbthang_workqueue)(struct adapter * padapter);
@@ -255,13 +254,11 @@ struct hal_ops {
 #endif
 };
 
-typedef	enum _RT_EEPROM_TYPE{
+enum RT_EEPROM_TYPE {
 	EEPROM_93C46,
 	EEPROM_93C56,
 	EEPROM_BOOT_EFUSE,
-}RT_EEPROM_TYPE,*PRT_EEPROM_TYPE;
-
-
+};
 
 #define RF_CHANGE_BY_INIT	0
 #define RF_CHANGE_BY_IPS	BIT28
@@ -269,7 +266,7 @@ typedef	enum _RT_EEPROM_TYPE{
 #define RF_CHANGE_BY_HW		BIT30
 #define RF_CHANGE_BY_SW		BIT31
 
-typedef enum _HARDWARE_TYPE{
+enum HARDWARE_TYPE {
 	HARDWARE_TYPE_RTL8180,
 	HARDWARE_TYPE_RTL8185,
 	HARDWARE_TYPE_RTL8187,
@@ -290,44 +287,34 @@ typedef enum _HARDWARE_TYPE{
 	HARDWARE_TYPE_RTL8188EU,
 	HARDWARE_TYPE_RTL8188ES,
 	HARDWARE_TYPE_MAX,
-}HARDWARE_TYPE;
+};
 
-/*  */
 /*  RTL8192C Series */
-/*  */
 #define IS_HARDWARE_TYPE_8192CE(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192CE)
 #define IS_HARDWARE_TYPE_8192CU(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192CU)
 #define	IS_HARDWARE_TYPE_8192C(_Adapter)			\
 (IS_HARDWARE_TYPE_8192CE(_Adapter) || IS_HARDWARE_TYPE_8192CU(_Adapter))
 
-/*  */
 /*  RTL8192D Series */
-/*  */
 #define IS_HARDWARE_TYPE_8192DE(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DE)
 #define IS_HARDWARE_TYPE_8192DU(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8192DU)
 #define	IS_HARDWARE_TYPE_8192D(_Adapter)			\
 (IS_HARDWARE_TYPE_8192DE(_Adapter) || IS_HARDWARE_TYPE_8192DU(_Adapter))
 
-/*  */
 /*  RTL8723A Series */
-/*  */
 #define IS_HARDWARE_TYPE_8723AE(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AE)
 #define IS_HARDWARE_TYPE_8723AU(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AU)
 #define IS_HARDWARE_TYPE_8723AS(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8723AS)
 #define	IS_HARDWARE_TYPE_8723A(_Adapter)	\
 (IS_HARDWARE_TYPE_8723AE(_Adapter) || IS_HARDWARE_TYPE_8723AU(_Adapter) || IS_HARDWARE_TYPE_8723AS(_Adapter))
 
-/*  */
 /*  RTL8188E Series */
-/*  */
 #define IS_HARDWARE_TYPE_8188EE(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188EE)
 #define IS_HARDWARE_TYPE_8188EU(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188EU)
 #define IS_HARDWARE_TYPE_8188ES(_Adapter)	(((struct adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8188ES)
 #define	IS_HARDWARE_TYPE_8188E(_Adapter)	\
 (IS_HARDWARE_TYPE_8188EE(_Adapter) || IS_HARDWARE_TYPE_8188EU(_Adapter) || IS_HARDWARE_TYPE_8188ES(_Adapter))
 
-
-typedef struct eeprom_priv EEPROM_EFUSE_PRIV, *PEEPROM_EFUSE_PRIV;
 #define GET_EEPROM_EFUSE_PRIV(adapter) (&adapter->eeprompriv)
 #define is_boot_from_eeprom(adapter) (adapter->eeprompriv.EepromOrEfuse)
 
@@ -352,11 +339,11 @@ void rtw_hal_chip_configure(struct adapter *padapter);
 void rtw_hal_read_chip_info(struct adapter *padapter);
 void rtw_hal_read_chip_version(struct adapter *padapter);
 
-u8 rtw_hal_set_def_var(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
-u8 rtw_hal_get_def_var(struct adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pValue);
+u8 rtw_hal_set_def_var(struct adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
+u8 rtw_hal_get_def_var(struct adapter *padapter, enum HAL_DEF_VARIABLE eVariable, void * pValue);
 
-void rtw_hal_set_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
-void	rtw_hal_get_odm_var(struct adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
+void rtw_hal_set_odm_var(struct adapter *padapter, enum HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
+void	rtw_hal_get_odm_var(struct adapter *padapter, enum HAL_ODM_VARIABLE eVariable, void * pValue1,bool bSet);
 
 void rtw_hal_enable_interrupt(struct adapter *padapter);
 void rtw_hal_disable_interrupt(struct adapter *padapter);
@@ -364,7 +351,7 @@ void rtw_hal_disable_interrupt(struct adapter *padapter);
 u32	rtw_hal_inirp_init(struct adapter *padapter);
 u32	rtw_hal_inirp_deinit(struct adapter *padapter);
 
-u8	rtw_hal_intf_ps_func(struct adapter *padapter,HAL_INTF_PS_FUNC efunc_id, u8* val);
+u8	rtw_hal_intf_ps_func(struct adapter *padapter, enum HAL_INTF_PS_FUNC efunc_id, u8* val);
 
 s32	rtw_hal_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitframe);
 s32	rtw_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe);
@@ -415,6 +402,7 @@ void rtw_hal_notch_filter(struct adapter * adapter, bool enable);
 void rtw_hal_reset_security_engine(struct adapter * adapter);
 
 s32 rtw_hal_c2h_handler(struct adapter *adapter, struct c2h_evt_hdr *c2h_evt);
+typedef s32 (*c2h_id_filter)(u8 id);
 c2h_id_filter rtw_hal_c2h_id_filter_ccx(struct adapter *adapter);
 
 #endif /* __HAL_INTF_H__ */

@@ -1040,7 +1040,7 @@ phy_BB8188E_Config_ParaFile(
 	struct adapter *Adapter
 	)
 {
-	EEPROM_EFUSE_PRIV	*pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
 	int			rtStatus = _SUCCESS;
 

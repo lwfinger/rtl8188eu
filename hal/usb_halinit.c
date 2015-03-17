@@ -1875,7 +1875,7 @@ Hal_EfuseParseMACAddr_8188EU(
 {
 	u16			i, usValue;
 	u8			sMacAddr[6] = {0x00, 0xE0, 0x4C, 0x81, 0x88, 0x02};
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 
 	if (AutoLoadFail)
 	{
@@ -1916,7 +1916,7 @@ readAdapterInfo_8188EU(
 	struct adapter *padapter
 	)
 {
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(padapter);
 
 	/* parse the eeprom/efuse content */
 	Hal_EfuseParseIDCode88E(padapter, pEEPROM->efuse_eeprom_data);
@@ -1946,7 +1946,7 @@ static void _ReadPROMContent(
 	struct adapter *		Adapter
 	)
 {
-	EEPROM_EFUSE_PRIV *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
+	struct eeprom_priv *pEEPROM = GET_EEPROM_EFUSE_PRIV(Adapter);
 	u8			eeValue;
 
 	/* check system boot selection */
@@ -2939,7 +2939,7 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 /*  */
 static u8 GetHalDefVar8188EUsb(
 	struct adapter *			Adapter,
-	HAL_DEF_VARIABLE		eVariable,
+	enum HAL_DEF_VARIABLE		eVariable,
 	void *					pValue
 	)
 {
@@ -3064,7 +3064,7 @@ static u8 GetHalDefVar8188EUsb(
 /*  */
 static u8 SetHalDefVar8188EUsb(
 	struct adapter *			Adapter,
-	HAL_DEF_VARIABLE		eVariable,
+	enum HAL_DEF_VARIABLE		eVariable,
 	void *					pValue
 	)
 {
@@ -3274,7 +3274,6 @@ static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rss
 static void SetBeaconRelatedRegisters8188EUsb(struct adapter *padapter)
 {
 	u32	value32;
-	/* HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter); */
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u32 bcn_ctrl_reg			= REG_BCN_CTRL;
@@ -3353,7 +3352,7 @@ static void rtl8188eu_init_default_value(struct adapter * padapter)
 		pHalData->odmpriv.RFCalibrateInfo.ThermalValue_HP[i] = 0;
 }
 
-static u8 rtl8188eu_ps_func(struct adapter *Adapter,HAL_INTF_PS_FUNC efunc_id, u8 *val)
+static u8 rtl8188eu_ps_func(struct adapter *Adapter, enum HAL_INTF_PS_FUNC efunc_id, u8 *val)
 {
 	u8 bResult = true;
 	switch(efunc_id){
