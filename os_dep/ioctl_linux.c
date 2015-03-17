@@ -2909,7 +2909,7 @@ _rtw_drvext_hdl_exit:
 
 static void rtw_dbg_mode_hdl(struct adapter *padapter, u32 id, u8 *pdata, u32 len)
 {
-	pRW_Reg		RegRWStruct;
+	struct mp_rw_reg *		RegRWStruct;
 	struct rf_reg_param *prfreg;
 	u8 path;
 	u8 offset;
@@ -2923,7 +2923,7 @@ static void rtw_dbg_mode_hdl(struct adapter *padapter, u32 id, u8 *pdata, u32 le
 			DBG_871X("871x_driver is only for normal mode, can't enter mp mode\n");
 			break;
 		case GEN_MP_IOCTL_SUBCODE(READ_REG):
-			RegRWStruct = (pRW_Reg)pdata;
+			RegRWStruct = (struct mp_rw_reg *)pdata;
 			switch (RegRWStruct->width)
 			{
 				case 1:
@@ -2941,7 +2941,7 @@ static void rtw_dbg_mode_hdl(struct adapter *padapter, u32 id, u8 *pdata, u32 le
 
 			break;
 		case GEN_MP_IOCTL_SUBCODE(WRITE_REG):
-			RegRWStruct = (pRW_Reg)pdata;
+			RegRWStruct = (struct mp_rw_reg *)pdata;
 			switch (RegRWStruct->width)
 			{
 				case 1:
