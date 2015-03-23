@@ -747,7 +747,6 @@ _InitBeaconMaxError(
 
 }
 
-
 static void
 _InitRDGSetting(
 	struct adapter *Adapter
@@ -1772,7 +1771,6 @@ _ReadLEDSetting(
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-#ifdef CONFIG_SW_LED
 	pledpriv->bRegUseLed = true;
 
 	switch(pHalData->CustomerID)
@@ -1782,9 +1780,6 @@ _ReadLEDSetting(
 			break;
 	}
 	pHalData->bLedOpenDrain = true;/*  Support Open-drain arrangement for controlling the LED. Added by Roger, 2009.10.16. */
-#else /*  HW LED */
-	pledpriv->LedStrategy = HW_LED;
-#endif /* CONFIG_SW_LED */
 }
 
 static void
@@ -3395,13 +3390,8 @@ void rtl8188eu_set_hal_ops(struct adapter * padapter)
 
 	pHalFunc->init_recv_priv = &rtl8188eu_init_recv_priv;
 	pHalFunc->free_recv_priv = &rtl8188eu_free_recv_priv;
-#ifdef CONFIG_SW_LED
 	pHalFunc->InitSwLeds = &rtl8188eu_InitSwLeds;
 	pHalFunc->DeInitSwLeds = &rtl8188eu_DeInitSwLeds;
-#else /* case of hw led or no led */
-	pHalFunc->InitSwLeds = NULL;
-	pHalFunc->DeInitSwLeds = NULL;
-#endif/* CONFIG_SW_LED */
 
 	pHalFunc->init_default_value = &rtl8188eu_init_default_value;
 	pHalFunc->intf_chip_configure = &rtl8188eu_interface_configure;
