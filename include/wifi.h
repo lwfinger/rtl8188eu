@@ -20,6 +20,8 @@
 #ifndef _WIFI_H_
 #define _WIFI_H_
 
+#include <linux/ieee80211.h>
+
 #ifdef BIT
 /* error	"BIT define occurred earlier elsewhere!\n" */
 #undef BIT
