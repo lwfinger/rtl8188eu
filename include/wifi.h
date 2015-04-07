@@ -631,11 +631,11 @@ struct rtw_ieee80211_bar {
 
 struct rtw_ieee80211_ht_cap {
 	__le16	cap_info;
-	unsigned char	ampdu_params_info;
-	unsigned char	supp_mcs_set[16];
+	u8	ampdu_params_info;
+	u8	supp_mcs_set[16];
 	__le16	extended_ht_cap_info;
-	__le16	tx_BF_cap_info;
-	unsigned char   antenna_selection_info;
+	__le32	tx_BF_cap_info;
+	u8   antenna_selection_info;
 } __packed;
 
 /**
