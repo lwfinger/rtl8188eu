@@ -606,27 +606,8 @@ struct rtw_ieee80211_bar {
 #define IEEE80211_BAR_CTRL_ACK_POLICY_NORMAL     0x0000
 #define IEEE80211_BAR_CTRL_CBMTID_COMPRESSED_BA  0x0004
 
- /**
- * struct rtw_ieee80211_ht_cap - HT capabilities
- *
- * This structure refers to "HT capabilities element" as
- * described in 802.11n draft section 7.3.2.52
- */
-
-struct rtw_ieee80211_ht_cap {
-	__le16	cap_info;
-	u8	ampdu_params_info;
-	union {
-		u8	supp_mcs_set[16];
-		struct ieee80211_mcs_info mcs;
-	};	
-	__le16	extended_ht_cap_info;
-	__le32	tx_BF_cap_info;
-	u8   antenna_selection_info;
-} __packed;
-
 /**
- * struct rtw_ieee80211_ht_cap - HT additional information
+ * struct ieee80211_ht_cap - HT additional information
  *
  * This structure refers to "HT information element" as
  * described in 802.11n draft section 7.3.2.53
