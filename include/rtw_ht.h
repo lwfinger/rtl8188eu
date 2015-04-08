@@ -38,7 +38,7 @@ struct ht_priv {
 	u8	agg_enable_bitmap;
 	u8	candidate_tid_bitmap;
 
-	struct rtw_ieee80211_ht_cap ht_cap;
+	struct ieee80211_ht_cap ht_cap;
 };
 
 #endif	/* _RTL871X_HT_H_ */
