@@ -969,7 +969,7 @@ u8 rtw_disassoc_cmd(struct adapter *padapter, u32 deauth_timeout_ms, bool enqueu
 	RT_TRACE(_module_rtl871x_cmd_c_, _drv_notice_, ("+rtw_disassoc_cmd\n"));
 
 	/* prepare cmd parameter */
-	param = kzalloc(sizeof(*param), GFP_KERNEL);
+	param = kzalloc(sizeof(*param), GFP_ATOMIC);
 	if (param == NULL) {
 		res = _FAIL;
 		goto exit;
@@ -978,7 +978,7 @@ u8 rtw_disassoc_cmd(struct adapter *padapter, u32 deauth_timeout_ms, bool enqueu
 
 	if (enqueue) {
 		/* need enqueue, prepare cmd_obj and enqueue */
-		cmdobj = kzalloc(sizeof(*cmdobj), GFP_KERNEL);
+		cmdobj = kzalloc(sizeof(*cmdobj), GFP_ATOMIC);
 		if (cmdobj == NULL) {
 			res = _FAIL;
 			kfree(param);
