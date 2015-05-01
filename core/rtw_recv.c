@@ -1601,7 +1601,8 @@ struct recv_frame *recvframe_chk_defrag(struct adapter *padapter, struct recv_fr
 			prtnframe = NULL;
 		} else {
 			/* can't find this ta's defrag_queue, so free this recv_frame */
-			rtw_free_recvframe(precv_frame, pfree_recv_queue);
+			if (precv_frame && pfree_recv_queue)
+				rtw_free_recvframe(precv_frame, pfree_recv_queue);
 			prtnframe = NULL;
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("Free because pdefrag_q==NULL: ismfrag=%d, fragnum=%d\n", ismfrag, fragnum));
 		}
@@ -1620,7 +1621,8 @@ struct recv_frame *recvframe_chk_defrag(struct adapter *padapter, struct recv_fr
 			prtnframe = precv_frame;
 		} else {
 			/* can't find this ta's defrag_queue, so free this recv_frame */
-			rtw_free_recvframe(precv_frame, pfree_recv_queue);
+			if (precv_frame && pfree_recv_queue)
+				rtw_free_recvframe(precv_frame, pfree_recv_queue);
 			prtnframe = NULL;
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("Free because pdefrag_q==NULL: ismfrag=%d, fragnum=%d\n", ismfrag, fragnum));
 		}
@@ -1630,7 +1632,8 @@ struct recv_frame *recvframe_chk_defrag(struct adapter *padapter, struct recv_fr
 		/* after defrag we must check tkip mic code */
 		if (recvframe_chkmic(padapter,  prtnframe) == _FAIL) {
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("recvframe_chkmic(padapter,  prtnframe)==_FAIL\n"));
-			rtw_free_recvframe(prtnframe, pfree_recv_queue);
+			if (precv_frame && pfree_recv_queue)
+				rtw_free_recvframe(prtnframe, pfree_recv_queue);
 			prtnframe = NULL;
 		}
 	}
