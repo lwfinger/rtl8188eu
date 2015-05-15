@@ -9571,6 +9571,8 @@ static int rtw_ioctl_wext_private(struct net_device *dev, union iwreq_data *wrq_
 	memcpy(&wdata, wrq_data, sizeof(wdata));
 
 	input_len = wdata.data.length;
+	if (input_len == 0)
+		return -EFAULT;
 	input = rtw_zmalloc(input_len);
 	if (NULL == input)
 		return -ENOMEM;
