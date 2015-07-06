@@ -160,7 +160,6 @@ install: firmware_install
 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
 	@if [ -a /lib/modules/$(KVER)/kernel/drivers/staging/rtl8188eu/r8188eu.ko ] ; then modprobe -r r8188eu; fi;
 	@echo "blacklist r8188eu" > /etc/modprobe.d/50-8188eu.conf
-	cp rtl8188eufw.bin /lib/firmware/.
 	/sbin/depmod -a ${KVER}
 
 uninstall:
