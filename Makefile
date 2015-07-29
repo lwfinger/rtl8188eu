@@ -17,7 +17,7 @@ ccflags-y += -D__CHECK_ENDIAN__
 
 CONFIG_AUTOCFG_CP = n
 
-CONFIG_RTL8188E = y
+CONFIG_RTL8188EU = m
 
 CONFIG_USB_HCI = y
 
@@ -141,6 +141,10 @@ else
 
 export CONFIG_RTL8188EU = m
 
+obj-$(CONFIG_RTL8188EU) := 8188eu.o
+
+endif
+
 all: modules
 
 modules:
@@ -179,5 +183,4 @@ clean: $(clean_more)
 	cd core ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd hal ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd os_dep ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-endif
 
