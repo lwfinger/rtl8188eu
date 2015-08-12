@@ -3237,6 +3237,9 @@ static int
 	#else
 		char *name,
 	#endif
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
+		unsigned char name_assign_type,
+	#endif
 		enum nl80211_iftype type, u32 *flags, struct vif_params *params)
 {
 	int ret = 0;
