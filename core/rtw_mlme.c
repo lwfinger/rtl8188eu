@@ -97,10 +97,6 @@ exit:
 	return res;
 }
 
-void rtw_mfree_mlme_priv_lock (struct mlme_priv *pmlmepriv)
-{
-}
-
 static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
 {
 	if(*ppie) {
@@ -139,18 +135,12 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
 
 void _rtw_free_mlme_priv (struct mlme_priv *pmlmepriv)
 {
-;
-
 	rtw_free_mlme_priv_ie_data(pmlmepriv);
 
-	if(pmlmepriv){
-		rtw_mfree_mlme_priv_lock (pmlmepriv);
-
-		if (pmlmepriv->free_bss_buf) {
+	if (pmlmepriv) {
+		if (pmlmepriv->free_bss_buf)
 			rtw_vmfree(pmlmepriv->free_bss_buf, MAX_BSS_CNT * sizeof(struct wlan_network));
-		}
 	}
-;
 }
 
 sint	_rtw_enqueue_network(struct  __queue *queue, struct wlan_network *pnetwork)
@@ -472,21 +462,9 @@ int	rtw_init_mlme_priv (struct adapter *padapter)/* struct	mlme_priv *pmlmepriv)
 
 void rtw_free_mlme_priv (struct mlme_priv *pmlmepriv)
 {
-;
 	RT_TRACE(_module_rtl871x_mlme_c_,_drv_err_,("rtw_free_mlme_priv\n"));
 	_rtw_free_mlme_priv (pmlmepriv);
-;
 }
-
-int	rtw_enqueue_network(struct  __queue *queue, struct wlan_network *pnetwork)
-{
-	int	res;
-;
-	res = _rtw_enqueue_network(queue, pnetwork);
-;
-	return res;
-}
-
 
 static struct	wlan_network *rtw_dequeue_network(struct  __queue *queue)
 {

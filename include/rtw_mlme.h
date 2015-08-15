@@ -665,6 +665,8 @@ extern int _rtw_init_mlme_priv(struct adapter *padapter);
 
 void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv);
 
+void rtw_free_network(struct mlme_priv *pmlmepriv,
+		      struct wlan_network *pnetwork, u8 is_freeall);
 extern void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv);
 
 extern int _rtw_enqueue_network(struct  __queue *queue, struct wlan_network *pnetwork);
