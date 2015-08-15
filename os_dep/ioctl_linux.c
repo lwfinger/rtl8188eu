@@ -3170,7 +3170,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 
 	}
 
-	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
+	spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	if(pdata->length>=34) {
 		if(copy_to_user((u8 __user *)pdata->pointer+32, (u8*)&pdata->flags, 1)) {
@@ -3904,7 +3904,7 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 
 	}
 
-	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
+	spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	if (!blnMatch) {
 		sprintf(go_devadd_str, "\n\ndev_add=NULL");
@@ -4055,7 +4055,7 @@ static int rtw_p2p_get_device_name(struct net_device *dev,
 
 	}
 
-	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
+	spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	if (!blnMatch)
 		sprintf(dev_name_str, "\n\nN=0000");
@@ -4132,7 +4132,7 @@ static int rtw_p2p_get_invitation_procedure(struct net_device *dev,
 
 	}
 
-	spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
+	spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	if (!blnMatch) {
 		sprintf(inv_proc_str, "\nIP=-1");
@@ -6911,7 +6911,7 @@ static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
 			pstapriv->asoc_list_cnt--;
 			updated = ap_free_sta(padapter, psta, true, WLAN_REASON_DEAUTH_LEAVING);
 		}
-		spin_lock_bh(&pstapriv->asoc_list_lock);
+		spin_unlock_bh(&pstapriv->asoc_list_lock);
 
 		associated_clients_update(padapter, updated);
 
