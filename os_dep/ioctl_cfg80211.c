@@ -760,7 +760,7 @@ static u8 set_pairwise_key(struct adapter *padapter, struct sta_info *psta)
 	}
 
 	psetstakey_para = (struct set_stakey_parm*)rtw_zmalloc(sizeof(struct set_stakey_parm));
-	if (psetstakey_para==NULL){
+	if (psetstakey_para== NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct cmd_obj));
 		res=_FAIL;
 		goto exit;
@@ -795,12 +795,12 @@ static int set_group_key(struct adapter *padapter, u8 *key, u8 alg, int keyid)
 	DBG_8192C("%s\n", __FUNCTION__);
 
 	pcmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-	if (pcmd==NULL){
+	if (pcmd== NULL){
 		res= _FAIL;
 		goto exit;
 	}
 	psetkeyparm=(struct setkey_parm*)rtw_zmalloc(sizeof(struct setkey_parm));
-	if (psetkeyparm==NULL){
+	if (psetkeyparm== NULL){
 		rtw_mfree((unsigned char *)pcmd, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -914,7 +914,7 @@ static int rtw_cfg80211_ap_set_encryption(struct net_device *dev, struct ieee_pa
 		}
 	}
 
-	if (strcmp(param->u.crypt.alg, "none") == 0 && (psta==NULL))
+	if (strcmp(param->u.crypt.alg, "none") == 0 && (psta== NULL))
 	{
 		/* todo:clear default encryption keys */
 
@@ -924,7 +924,7 @@ static int rtw_cfg80211_ap_set_encryption(struct net_device *dev, struct ieee_pa
 	}
 
 
-	if (strcmp(param->u.crypt.alg, "WEP") == 0 && (psta==NULL))
+	if (strcmp(param->u.crypt.alg, "WEP") == 0 && (psta== NULL))
 	{
 		DBG_8192C("r871x_set_encryption, crypt.alg = WEP\n");
 
@@ -1336,7 +1336,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 			}
 
 			pbcmc_sta=rtw_get_bcmc_stainfo(padapter);
-			if (pbcmc_sta==NULL)
+			if (pbcmc_sta== NULL)
 			{
 				/* DEBUG_ERR( ("Set OID_802_11_ADD_KEY: bcmc stainfo is null\n")); */
 			}

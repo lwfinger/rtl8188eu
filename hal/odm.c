@@ -3111,7 +3111,7 @@ odm_StaDefAntSel(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("CCK_Ant1_Cnt:%d, CCK_Ant2_Cnt:%d\n",CCK_Ant1_Cnt,CCK_Ant2_Cnt));
 
 
-	if (((OFDM_Ant1_Cnt+OFDM_Ant2_Cnt)==0)&&((CCK_Ant1_Cnt + CCK_Ant2_Cnt) <10)){
+	if (((OFDM_Ant1_Cnt+OFDM_Ant2_Cnt)== 0)&&((CCK_Ant1_Cnt + CCK_Ant2_Cnt) <10)){
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("odm_StaDefAntSelect Fail: No enough packet info!\n"));
 		return	false;
 	}
@@ -3162,7 +3162,7 @@ odm_SetRxIdleAnt(
 
 		/* for path-B */
 		if (bDualPath){
-			if (Ant==0)
+			if (Ant== 0)
 				ODM_SetBBReg(pDM_Odm,ODM_REG_RX_DEFUALT_A_11N, 0xFFFF0000, 0x65a9);   /* right-side antenna */
 			else
 				ODM_SetBBReg(pDM_Odm,ODM_REG_RX_DEFUALT_A_11N, 0xFFFF0000, 0x569a);  /* left-side antenna */

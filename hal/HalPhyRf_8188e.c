@@ -1256,7 +1256,7 @@ else
 	/*  Note: IQ calibration must be performed after loading */
 	/* 		PHY_REG.txt , and radio_a, radio_b.txt */
 
-	if (t==0) {
+	if (t== 0) {
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("IQ Calibration for %s for %d times\n", (is2T ? "2T2R" : "1T1R"), t));
 
 		/*  Save ADDA parameters, turn Path A ADDA on */
@@ -1268,7 +1268,7 @@ else
 
 	_PHY_PathADDAOn(pAdapter, ADDA_REG, true, is2T);
 
-	if (t==0) {
+	if (t== 0) {
 		pDM_Odm->RFCalibrateInfo.bRfPiEnable = (u8)ODM_GetBBReg(pDM_Odm, rFPGA0_XA_HSSIParameter1, BIT(8));
 	}
 
@@ -1973,7 +1973,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 		result[0][i] = 0;
 		result[1][i] = 0;
 		result[2][i] = 0;
-		if ((i==0) ||(i==2) || (i==4)  || (i==6))
+		if ((i== 0) ||(i==2) || (i==4)  || (i==6))
 			result[3][i] = 0x100;
 		else
 			result[3][i] = 0;

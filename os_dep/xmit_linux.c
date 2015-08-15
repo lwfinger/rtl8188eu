@@ -90,7 +90,7 @@ int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitb
 	for (i=0; i<8; i++) {
 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
 		if (pxmitbuf->pxmit_urb[i] == NULL) {
-			DBG_871X("pxmitbuf->pxmit_urb[i]==NULL");
+			DBG_871X("pxmitbuf->pxmit_urb[i]== NULL");
 			return _FAIL;
 		}
 

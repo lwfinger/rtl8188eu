@@ -553,7 +553,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 
 ;
 
-	if (hwaddr ==NULL)
+	if (hwaddr == NULL)
 		return NULL;
 
 	if (IS_MCAST(hwaddr))
@@ -606,7 +606,7 @@ u32 rtw_init_bcmc_stainfo(struct adapter* padapter)
 
 	psta = rtw_alloc_stainfo(pstapriv, bcast_addr);
 
-	if (psta ==NULL){
+	if (psta == NULL){
 		res =_FAIL;
 		RT_TRACE(_module_rtl871x_sta_mgt_c_, _drv_err_, ("rtw_alloc_stainfo fail"));
 		goto exit;

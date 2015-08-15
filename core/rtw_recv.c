@@ -82,7 +82,7 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
 
 	precvpriv->pallocated_frame_buf = rtw_zvmalloc(NR_RECVFRAME * sizeof(union recv_frame) + RXFRAME_ALIGN_SZ);
 
-	if (precvpriv->pallocated_frame_buf ==NULL){
+	if (precvpriv->pallocated_frame_buf == NULL){
 		res = _FAIL;
 		goto exit;
 	}
@@ -500,7 +500,7 @@ sint recvframe_chkmic(struct adapter *adapter,  union recv_frame *precvframe){
 		}
 		else
 		{
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("recvframe_chkmic: rtw_get_stainfo ==NULL!!!\n"));
+			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("recvframe_chkmic: rtw_get_stainfo == NULL!!!\n"));
 		}
 
 		recvframe_pull_tail(precvframe, 8);
@@ -547,7 +547,7 @@ static union recv_frame *decryptor(struct adapter *padapter, union recv_frame *p
 		}
 	}
 
-	if ((prxattrib->encrypt>0) && ((prxattrib->bdecrypted ==0) ||(psecuritypriv->sw_decrypt ==true)))
+	if ((prxattrib->encrypt>0) && ((prxattrib->bdecrypted == 0) ||(psecuritypriv->sw_decrypt ==true)))
 	{
 		psecuritypriv->hw_decrypted =false;
 
@@ -658,7 +658,7 @@ static union recv_frame * portctrl(struct adapter *adapter, union recv_frame * p
 		{
 			/* allowed */
 			/* check decryption status, and decrypt the frame if needed */
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("########portctrl:psta->ieee8021x_blocked ==0\n"));
+			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("########portctrl:psta->ieee8021x_blocked == 0\n"));
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("portctrl:precv_frame->hdr.attrib.privacy =%x\n", precv_frame->u.hdr.attrib.privacy));
 
 			if (pattrib->bdecrypted == 0)
@@ -1246,7 +1246,7 @@ sint validate_recv_ctrl_frame(struct adapter *padapter, union recv_frame *precv_
 		aid = GetAid(pframe);
 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
 
-		if ((psta ==NULL) || (psta->aid!=aid))
+		if ((psta == NULL) || (psta->aid!=aid))
 		{
 			return _FAIL;
 		}
@@ -1319,7 +1319,7 @@ sint validate_recv_ctrl_frame(struct adapter *padapter, union recv_frame *precv_
 
 				rtw_hal_xmitframe_enqueue(padapter, pxmitframe);
 
-				if (psta->sleepq_len ==0)
+				if (psta->sleepq_len == 0)
 				{
 					pstapriv->tim_bitmap &= ~BIT(psta->aid);
 
@@ -1340,7 +1340,7 @@ sint validate_recv_ctrl_frame(struct adapter *padapter, union recv_frame *precv_
 				/* DBG_871X("no buffered packets to xmit\n"); */
 				if (pstapriv->tim_bitmap&BIT(psta->aid))
 				{
-					if (psta->sleepq_len ==0)
+					if (psta->sleepq_len == 0)
 					{
 						DBG_871X("no buffered packets to xmit\n");
 
@@ -1536,8 +1536,8 @@ sint validate_recv_data_frame(struct adapter *adapter, union recv_frame *precv_f
 	}
 
 
-	if (psta ==NULL){
-		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, (" after to_fr_ds_chk; psta ==NULL\n"));
+	if (psta == NULL){
+		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, (" after to_fr_ds_chk; psta == NULL\n"));
 		#ifdef DBG_RX_DROP_FRAME
 		DBG_871X("DBG_RX_DROP_FRAME %s psta == NULL\n", __func__);
 		#endif
@@ -2068,7 +2068,7 @@ union recv_frame* recvframe_chk_defrag(struct adapter *padapter, union recv_fram
 	else
 		pdefrag_q = &psta->sta_recvpriv.defrag_q;
 
-	if ((ismfrag ==0) && (fragnum ==0))
+	if ((ismfrag == 0) && (fragnum == 0))
 	{
 		prtnframe = precv_frame;/* isn't a fragment frame */
 	}
@@ -2079,7 +2079,7 @@ union recv_frame* recvframe_chk_defrag(struct adapter *padapter, union recv_fram
 		/* enqueue to defraf_g */
 		if (pdefrag_q != NULL)
 		{
-			if (fragnum ==0)
+			if (fragnum == 0)
 			{
 				/* the first fragment */
 				if (_rtw_queue_empty(pdefrag_q) == false)
@@ -2107,12 +2107,12 @@ union recv_frame* recvframe_chk_defrag(struct adapter *padapter, union recv_fram
 			/* can't find this ta's defrag_queue, so free this recv_frame */
 			rtw_free_recvframe(precv_frame, pfree_recv_queue);
 			prtnframe =NULL;
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("Free because pdefrag_q ==NULL: ismfrag = %d, fragnum = %d\n", ismfrag, fragnum));
+			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("Free because pdefrag_q == NULL: ismfrag = %d, fragnum = %d\n", ismfrag, fragnum));
 		}
 
 	}
 
-	if ((ismfrag ==0)&&(fragnum!=0))
+	if ((ismfrag == 0)&&(fragnum!=0))
 	{
 		/* the last fragment frame */
 		/* enqueue the last fragment */
@@ -2134,7 +2134,7 @@ union recv_frame* recvframe_chk_defrag(struct adapter *padapter, union recv_fram
 			/* can't find this ta's defrag_queue, so free this recv_frame */
 			rtw_free_recvframe(precv_frame, pfree_recv_queue);
 			prtnframe =NULL;
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("Free because pdefrag_q ==NULL: ismfrag = %d, fragnum = %d\n", ismfrag, fragnum));
+			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("Free because pdefrag_q == NULL: ismfrag = %d, fragnum = %d\n", ismfrag, fragnum));
 		}
 
 	}
@@ -2784,7 +2784,7 @@ static int recv_func_posthandle(struct adapter *padapter, union recv_frame *prfr
 	}
 
 	prframe = recvframe_chk_defrag(padapter, prframe);
-	if (prframe ==NULL)	{
+	if (prframe == NULL)	{
 		RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("recvframe_chk_defrag: drop pkt\n"));
 		#ifdef DBG_RX_DROP_FRAME
 		DBG_871X("DBG_RX_DROP_FRAME %s recvframe_chk_defrag: drop pkt\n", __FUNCTION__);

@@ -812,7 +812,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 			}
 
 			pbcmc_sta=rtw_get_bcmc_stainfo(padapter);
-			if (pbcmc_sta==NULL)
+			if (pbcmc_sta== NULL)
 			{
 				/* DEBUG_ERR( ("Set OID_802_11_ADD_KEY: bcmc stainfo is null\n")); */
 			}
@@ -1497,7 +1497,7 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 	struct iw_mlme *mlme = (struct iw_mlme *) extra;
 
 
-	if (mlme==NULL)
+	if (mlme== NULL)
 		return -1;
 
 	DBG_871X("%s\n", __FUNCTION__);
@@ -2287,7 +2287,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
 	} else {
 		wep.KeyLength = 0 ;
 
-		if (keyindex_provided == 1)/*  set key_id only, no given KeyMaterial(erq->length==0). */
+		if (keyindex_provided == 1)/*  set key_id only, no given KeyMaterial(erq->length== 0). */
 		{
 			padapter->securitypriv.dot11PrivacyKeyIndex = key;
 
@@ -2883,7 +2883,7 @@ static  int rtw_drvext_hdl(struct net_device *dev, struct iw_request_info *info,
 
 	res = phandler->handler(&padapter->drvextpriv, bset, poidparam->data);
 
-	if (res==0)
+	if (res== 0)
 	{
 		ret = 0;
 
@@ -3093,7 +3093,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 
 	DBG_871X("+rtw_get_aplist_info\n");
 
-	if ((padapter->bDriverStopped) || (pdata==NULL))
+	if ((padapter->bDriverStopped) || (pdata== NULL))
 	{
 		ret= -EINVAL;
 		goto exit;
@@ -3195,7 +3195,7 @@ static int rtw_set_pid(struct net_device *dev,
 	int *pdata = (int *)wrqu;
 	int selector;
 
-	if ((padapter->bDriverStopped) || (pdata==NULL))
+	if ((padapter->bDriverStopped) || (pdata== NULL))
 	{
 		ret= -EINVAL;
 		goto exit;
@@ -3228,7 +3228,7 @@ static int rtw_wps_start(struct net_device *dev,
 
         uintRet = copy_from_user( ( void* ) &u32wps_start, pdata->pointer, 4 );
 
-	if ((padapter->bDriverStopped) || (pdata==NULL))
+	if ((padapter->bDriverStopped) || (pdata== NULL))
 	{
 		ret= -EINVAL;
 		goto exit;
@@ -5496,7 +5496,7 @@ static void rf_reg_dump(struct adapter *padapter)
 			value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
 			if (j%4==1)	printk("0x%02x ",i);
 			printk(" 0x%08x ",value);
-			if ((j++)%4==0)	printk("\n");
+			if ((j++)%4== 0)	printk("\n");
 		}
 	}
 }
@@ -6077,7 +6077,7 @@ static int rtw_dbg_port(struct net_device *dev,
 					break;
 				case 0xdd:/* registers dump , 0 for mac reg,1 for bb reg, 2 for rf reg */
 					{
-						if (extra_arg==0){
+						if (extra_arg== 0){
 							mac_reg_dump(padapter);
 						}
 						else if (extra_arg==1){
@@ -6334,7 +6334,7 @@ static u8 set_pairwise_key(struct adapter *padapter, struct sta_info *psta)
 	}
 
 	psetstakey_para = (struct set_stakey_parm*)rtw_zmalloc(sizeof(struct set_stakey_parm));
-	if (psetstakey_para==NULL){
+	if (psetstakey_para== NULL){
 		rtw_mfree((u8 *) ph2c, sizeof(struct cmd_obj));
 		res=_FAIL;
 		goto exit;
@@ -6369,12 +6369,12 @@ static int set_group_key(struct adapter *padapter, u8 *key, u8 alg, int keyid)
 	DBG_871X("%s\n", __FUNCTION__);
 
 	pcmd = (struct cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-	if (pcmd==NULL){
+	if (pcmd== NULL){
 		res= _FAIL;
 		goto exit;
 	}
 	psetkeyparm=(struct setkey_parm*)rtw_zmalloc(sizeof(struct setkey_parm));
-	if (psetkeyparm==NULL){
+	if (psetkeyparm== NULL){
 		rtw_mfree((unsigned char *)pcmd, sizeof(struct cmd_obj));
 		res= _FAIL;
 		goto exit;
@@ -6490,7 +6490,7 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		}
 	}
 
-	if (strcmp(param->u.crypt.alg, "none") == 0 && (psta==NULL))
+	if (strcmp(param->u.crypt.alg, "none") == 0 && (psta== NULL))
 	{
 		/* todo:clear default encryption keys */
 
@@ -6500,7 +6500,7 @@ static int rtw_set_encryption(struct net_device *dev, struct ieee_param *param, 
 	}
 
 
-	if (strcmp(param->u.crypt.alg, "WEP") == 0 && (psta==NULL))
+	if (strcmp(param->u.crypt.alg, "WEP") == 0 && (psta== NULL))
 	{
 		DBG_871X("r871x_set_encryption, crypt.alg = WEP\n");
 
@@ -7738,7 +7738,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0], "rmap") == 0)
 	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
+		if ((tmp[1]== NULL) || (tmp[2]== NULL))
 		{
 			DBG_871X("%s: rmap Fail!! Parameters error!\n", __FUNCTION__);
 			err = -EINVAL;
@@ -7910,7 +7910,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0],"btrmap") == 0)
 	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
+		if ((tmp[1]== NULL) || (tmp[2]== NULL))
 		{
 			err = -EINVAL;
 			goto exit;
@@ -8030,7 +8030,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 /* 		DBG_871X("\n"); */
 
 	} else if (strcmp(tmp[0],"wlrfkrmap")== 0) {
-		if ((tmp[1]==NULL) || (tmp[2]==NULL)) {
+		if ((tmp[1]== NULL) || (tmp[2]== NULL)) {
 			DBG_871X("%s: rmap Fail!! Parameters error!\n", __FUNCTION__);
 			err = -EINVAL;
 			goto exit;
@@ -8053,7 +8053,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 			sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[addr+i]);
 		}
 	} else if (strcmp(tmp[0],"btrfkrmap")== 0) {
-		if ((tmp[1]==NULL) || (tmp[2]==NULL)) {
+		if ((tmp[1]== NULL) || (tmp[2]== NULL)) {
 			DBG_871X("%s: rmap Fail!! Parameters error!\n", __FUNCTION__);
 			err = -EINVAL;
 			goto exit;
@@ -8166,7 +8166,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	/*  wmap,addr,00e04c871200 */
 	if (strcmp(tmp[0], "wmap") == 0)
 	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
+		if ((tmp[1]== NULL) || (tmp[2]== NULL))
 		{
 			err = -EINVAL;
 			goto exit;
@@ -8214,7 +8214,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0], "wraw") == 0)
 	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
+		if ((tmp[1]== NULL) || (tmp[2]== NULL))
 		{
 			err = -EINVAL;
 			goto exit;
@@ -8254,7 +8254,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0], "mac") == 0)
 	{
-		if (tmp[1]==NULL)
+		if (tmp[1]== NULL)
 		{
 			err = -EINVAL;
 			goto exit;
@@ -8307,7 +8307,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0], "vidpid") == 0)
 	{
-		if (tmp[1]==NULL)
+		if (tmp[1]== NULL)
 		{
 			err = -EINVAL;
 			goto exit;
@@ -8360,7 +8360,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0], "btwmap") == 0)
 	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
+		if ((tmp[1]== NULL) || (tmp[2]== NULL))
 		{
 			err = -EINVAL;
 			goto exit;
@@ -8408,7 +8408,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0], "btwfake") == 0)
 	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
+		if ((tmp[1]== NULL) || (tmp[2]== NULL))
 		{
 			err = -EINVAL;
 			goto exit;
@@ -8484,7 +8484,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	}
 	else if (strcmp(tmp[0], "wlwfake") == 0)
 	{
-		if ((tmp[1]==NULL) || (tmp[2]==NULL))
+		if ((tmp[1]== NULL) || (tmp[2]== NULL))
 		{
 			err = -EINVAL;
 			goto exit;

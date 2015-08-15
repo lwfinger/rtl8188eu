@@ -743,7 +743,7 @@ int WMM_param_handler(struct adapter *padapter, struct ndis_802_11_variable_ies 
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	if (pmlmepriv->qospriv.qos_option ==0)
+	if (pmlmepriv->qospriv.qos_option == 0)
 	{
 		pmlmeinfo->WMM_enable = 0;
 		return _FAIL;
@@ -981,7 +981,7 @@ void HT_caps_handler(struct adapter *padapter, struct ndis_802_11_variable_ies *
 	struct ht_priv			*phtpriv = &pmlmepriv->htpriv;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
 
-	if (pIE ==NULL) return;
+	if (pIE == NULL) return;
 
 	if (phtpriv->ht_option == false)	return;
 
@@ -1044,7 +1044,7 @@ void HT_info_handler(struct adapter *padapter, struct ndis_802_11_variable_ies *
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct ht_priv			*phtpriv = &pmlmepriv->htpriv;
 
-	if (pIE ==NULL) return;
+	if (pIE == NULL) return;
 
 	if (phtpriv->ht_option == false)	return;
 

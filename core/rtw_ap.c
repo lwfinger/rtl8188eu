@@ -1532,7 +1532,7 @@ static void update_bcn_wps_ie(struct adapter *padapter)
 
 	pwps_ie = rtw_get_wps_ie(ie+_FIXED_IE_LENGTH_, ielen-_FIXED_IE_LENGTH_, NULL, &wps_ielen);
 
-	if (pwps_ie ==NULL || wps_ielen ==0)
+	if (pwps_ie == NULL || wps_ielen == 0)
 		return;
 
 	wps_offset = (uint)(pwps_ie-ie);

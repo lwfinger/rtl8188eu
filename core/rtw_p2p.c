@@ -2322,7 +2322,7 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 				num_of_secdev_type = *pattr_content;
 				pattr_content += 1;
 
-				if (num_of_secdev_type ==0)
+				if (num_of_secdev_type == 0)
 				{
 					psta->num_of_secdev_type = 0;
 				}
@@ -4032,13 +4032,13 @@ u8 p2p_ps_wk_cmd(struct adapter*padapter, u8 p2p_ps_state, u8 enqueue)
 	if (enqueue)
 	{
 		ph2c = (struct cmd_obj*)rtw_zmalloc(sizeof(struct cmd_obj));
-		if (ph2c ==NULL){
+		if (ph2c == NULL){
 			res = _FAIL;
 			goto exit;
 		}
 
 		pdrvextra_cmd_parm = (struct drvextra_cmd_parm*)rtw_zmalloc(sizeof(struct drvextra_cmd_parm));
-		if (pdrvextra_cmd_parm ==NULL){
+		if (pdrvextra_cmd_parm == NULL){
 			rtw_mfree((unsigned char *)ph2c, sizeof(struct cmd_obj));
 			res = _FAIL;
 			goto exit;

@@ -795,7 +795,7 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 
 			pnetwork = rtw_alloc_network(pmlmepriv); /*  will update scan_time */
 
-			if (pnetwork ==NULL){
+			if (pnetwork == NULL){
 				RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("\n\n\nsomething wrong here\n\n\n"));
 				goto exit;
 			}
@@ -1394,7 +1394,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, str
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
 	psta = rtw_get_stainfo(pstapriv, pnetwork->network.MacAddress);
-	if (psta ==NULL) {
+	if (psta == NULL) {
 		psta = rtw_alloc_stainfo(pstapriv, pnetwork->network.MacAddress);
 	}
 
@@ -1638,7 +1638,7 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
 			/* s3. find ptarget_sta & update ptarget_sta after update cur_network only for station mode */
 			if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
 				ptarget_sta = rtw_joinbss_update_stainfo(adapter, pnetwork);
-				if (ptarget_sta ==NULL) {
+				if (ptarget_sta == NULL) {
 					RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("Can't update stainfo when joinbss_event callback\n"));
 					spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 					goto exit_unlock;
@@ -1759,7 +1759,7 @@ void rtw_sta_media_status_rpt(struct adapter *adapter, struct sta_info *psta, u3
 {
 	u16 media_status_rpt;
 
-	if (psta ==NULL)	return;
+	if (psta == NULL)	return;
 
 	#if (RATE_ADAPTIVE_SUPPORT ==1)	/* for 88E RA */
 	{
@@ -2100,7 +2100,7 @@ static void rtw_auto_scan_handler(struct adapter *padapter)
 	if (pmlmepriv->scan_interval >0)
 	{
 		pmlmepriv->scan_interval--;
-		if (pmlmepriv->scan_interval ==0)
+		if (pmlmepriv->scan_interval == 0)
 		{
 			DBG_871X("%s\n", __FUNCTION__);
 
@@ -2308,8 +2308,8 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv )
 	while (!rtw_end_of_queue_search(phead, pmlmepriv->pscanned)) {
 
 		pnetwork = LIST_CONTAINOR(pmlmepriv->pscanned, struct wlan_network, list);
-		if (pnetwork ==NULL){
-			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("%s return _FAIL:(pnetwork ==NULL)\n", __FUNCTION__));
+		if (pnetwork == NULL){
+			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("%s return _FAIL:(pnetwork == NULL)\n", __FUNCTION__));
 			ret = _FAIL;
 			goto exit;
 		}
@@ -2371,13 +2371,13 @@ sint rtw_set_auth(struct adapter * adapter, struct security_priv *psecuritypriv)
 ;
 
 	pcmd = (struct	cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-	if (pcmd ==NULL){
+	if (pcmd == NULL){
 		res = _FAIL;  /* try again */
 		goto exit;
 	}
 
 	psetauthparm =(struct setauth_parm*)rtw_zmalloc(sizeof(struct setauth_parm));
-	if (psetauthparm ==NULL){
+	if (psetauthparm == NULL){
 		rtw_mfree((unsigned char *)pcmd, sizeof(struct	cmd_obj));
 		res = _FAIL;
 		goto exit;
@@ -2420,7 +2420,7 @@ sint rtw_set_key(struct adapter * adapter, struct security_priv *psecuritypriv, 
 ;
 
 	psetkeyparm =(struct setkey_parm*)rtw_zmalloc(sizeof(struct setkey_parm));
-	if (psetkeyparm ==NULL){
+	if (psetkeyparm == NULL){
 		res = _FAIL;
 		goto exit;
 	}
@@ -2473,7 +2473,7 @@ sint rtw_set_key(struct adapter * adapter, struct security_priv *psecuritypriv, 
 
 	if (enqueue){
 		pcmd = (struct	cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-		if (pcmd ==NULL){
+		if (pcmd == NULL){
 			rtw_mfree((unsigned char *)psetkeyparm, sizeof(struct setkey_parm));
 			res = _FAIL;  /* try again */
 			goto exit;
@@ -3008,7 +3008,7 @@ void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitfr
 		psta = rtw_get_stainfo(&padapter->stapriv, pattrib->ra);
 	}
 
-	if (psta ==NULL)
+	if (psta == NULL)
 	{
 		DBG_871X("%s, psta ==NUL\n", __func__);
 		return;

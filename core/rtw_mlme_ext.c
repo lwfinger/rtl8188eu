@@ -1130,7 +1130,7 @@ unsigned int OnAuth(struct adapter *padapter, union recv_frame *precv_frame)
 		goto auth_fail;
 	}
 
-	if (algorithm ==0 && (auth_mode == 0 || auth_mode == 2))
+	if (algorithm == 0 && (auth_mode == 0 || auth_mode == 2))
 	{
 		if (seq == 1)
 		{
@@ -1166,7 +1166,7 @@ unsigned int OnAuth(struct adapter *padapter, union recv_frame *precv_frame)
 			p = rtw_get_ie(pframe + WLAN_HDR_A3_LEN + 4 + _AUTH_IE_OFFSET_ , _CHLGETXT_IE_, (int *)&ie_len,
 					len - WLAN_HDR_A3_LEN - _AUTH_IE_OFFSET_ - 4);
 
-			if ((p ==NULL) || (ie_len<=0))
+			if ((p == NULL) || (ie_len<=0))
 			{
 				DBG_871X("auth rejected because challenge failure!(1)\n");
 				status = _STATS_CHALLENGE_FAIL_;
@@ -2299,7 +2299,7 @@ unsigned int OnAction_back(struct adapter *padapter, union recv_frame *precv_fra
 	addr = GetAddr2Ptr(pframe);
 	psta = rtw_get_stainfo(pstapriv, addr);
 
-	if (psta ==NULL)
+	if (psta == NULL)
 		return _SUCCESS;
 
 	frame_body = (unsigned char *)(pframe + sizeof(struct rtw_ieee80211_hdr_3addr));
@@ -4774,7 +4774,7 @@ int issue_probereq_p2p_ex(struct adapter *adapter, u8 *da, int try_cnt, int wait
 		if (i < try_cnt && wait_ms > 0 && ret ==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms ==0)));
+	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -6327,7 +6327,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid, 
 		if (i < try_cnt && wait_ms > 0 && ret ==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms ==0)));
+	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7164,7 +7164,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
 		if (i < try_cnt && wait_ms > 0 && ret ==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms ==0)));
+	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7299,7 +7299,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
 		if (i < try_cnt && wait_ms > 0 && ret ==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms ==0)));
+	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7422,7 +7422,7 @@ int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason, int
 		if (i < try_cnt && wait_ms > 0 && ret ==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms ==0)));
+	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7719,7 +7719,7 @@ static void issue_action_BA(struct adapter *padapter, unsigned char *raddr,
 			}
 #endif
 
-			if (pregpriv->ampdu_amsdu ==0)/* disabled */
+			if (pregpriv->ampdu_amsdu == 0)/* disabled */
 				le_tmp = cpu_to_le16(BA_para_set & ~BIT(0));
 			else if (pregpriv->ampdu_amsdu ==1)/* enabled */
 				le_tmp = cpu_to_le16(BA_para_set | BIT(0));
@@ -7766,7 +7766,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 	struct  __queue *queue	= &(pmlmepriv->scanned_queue);
 	u8 InfoContent[16] = {0};
 	u8 ICS[8][15];
-	if ((pmlmepriv->num_FortyMHzIntolerant ==0) || (pmlmepriv->num_sta_no_ht ==0))
+	if ((pmlmepriv->num_FortyMHzIntolerant == 0) || (pmlmepriv->num_sta_no_ht == 0))
 		return;
 
 	if (true == pmlmeinfo->bwmode_updated)
@@ -7850,7 +7850,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 			pbss_network = (struct wlan_bssid_ex *)&pnetwork->network;
 
 			p = rtw_get_ie(pbss_network->IEs + _FIXED_IE_LENGTH_, _HT_CAPABILITY_IE_, &len, pbss_network->IELength - _FIXED_IE_LENGTH_);
-			if ((p ==NULL) || (len ==0))/* non-HT */
+			if ((p == NULL) || (len == 0))/* non-HT */
 			{
 				if ((pbss_network->Configuration.DSConfig<=0) || (pbss_network->Configuration.DSConfig>14))
 					continue;
@@ -7908,12 +7908,12 @@ unsigned int send_delba(struct adapter *padapter, u8 initiator, u8 *addr)
 			return _SUCCESS;
 
 	psta = rtw_get_stainfo(pstapriv, addr);
-	if (psta ==NULL)
+	if (psta == NULL)
 		return _SUCCESS;
 
-	/* DBG_871X("%s:%s\n", __FUNCTION__, (initiator ==0)?"RX_DIR":"TX_DIR"); */
+	/* DBG_871X("%s:%s\n", __FUNCTION__, (initiator == 0)?"RX_DIR":"TX_DIR"); */
 
-	if (initiator ==0) /*  recipient */
+	if (initiator == 0) /*  recipient */
 	{
 		for (tid = 0;tid<MAXTID;tid++)
 		{
@@ -8561,7 +8561,7 @@ void start_clnt_join(struct adapter* padapter)
 			for (pos = get_next(head);!rtw_end_of_queue_search(head, pos); pos = get_next(pos)) {
 
 				scanned = LIST_CONTAINOR(pos, struct wlan_network, list);
-				if (scanned ==NULL) {
+				if (scanned == NULL) {
 					spin_unlock_bh(&(padapter->mlmepriv.scanned_queue.lock));
 					rtw_warn_on(1);
 					return;

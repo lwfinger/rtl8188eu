@@ -222,8 +222,8 @@ u8 rtw_set_802_11_bssid(struct adapter* padapter, u8 *bssid)
 
 	DBG_871X_LEVEL(_drv_always_, "set bssid:%pM\n", bssid);
 
-	if ((bssid[0]==0x00 && bssid[1]==0x00 && bssid[2]==0x00 && bssid[3]==0x00 && bssid[4]==0x00 &&bssid[5]==0x00) ||
-	    (bssid[0]==0xFF && bssid[1]==0xFF && bssid[2]==0xFF && bssid[3]==0xFF && bssid[4]==0xFF &&bssid[5]==0xFF))
+	if ((bssid[0]== 0x00 && bssid[1]== 0x00 && bssid[2]== 0x00 && bssid[3]== 0x00 && bssid[4]== 0x00 &&bssid[5]== 0x00) ||
+	    (bssid[0]== 0xFF && bssid[1]== 0xFF && bssid[2]== 0xFF && bssid[3]== 0xFF && bssid[4]== 0xFF &&bssid[5]== 0xFF))
 	{
 		status = _FAIL;
 		goto exit;
@@ -807,7 +807,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 			encryptionalgo =stainfo->dot118021XPrivacy;
 		}
 		else{
-			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY: stainfo ==NULL)||(Adapter->securitypriv.dot11AuthAlgrthm!=dot11AuthAlgrthm_8021X)\n"));
+			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY: stainfo == NULL)||(Adapter->securitypriv.dot11AuthAlgrthm!=dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo =padapter->securitypriv.dot11PrivacyAlgrthm;
 		}
 
@@ -874,11 +874,11 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("key Length: %d\n", key->KeyLength));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("------------------------------------------\n"));
 	} else {
-		/*  Group key - KeyIndex(BIT30 ==0) */
+		/*  Group key - KeyIndex(BIT30 == 0) */
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY: +++++ Group key +++++\n"));
 
 		/*  when add wep key through add key and didn't assigned encryption type before */
-		if ((padapter->securitypriv.ndisauthtype<=3)&&(padapter->securitypriv.dot118021XGrpPrivacy ==0))
+		if ((padapter->securitypriv.ndisauthtype<=3)&&(padapter->securitypriv.dot118021XGrpPrivacy == 0))
 		{
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("keylen =%d( Adapter->securitypriv.dot11PrivacyAlgrthm =%x  )padapter->securitypriv.dot118021XGrpPrivacy(%x)\n", key->KeyLength, padapter->securitypriv.dot11PrivacyAlgrthm, padapter->securitypriv.dot118021XGrpPrivacy));
 

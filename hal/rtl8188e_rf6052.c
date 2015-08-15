@@ -217,7 +217,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 					(pPowerlevel[idx1]<<16) | (pPowerlevel[idx1]<<24);
 			}
 
-			if (pHalData->EEPROMRegulatory==0)
+			if (pHalData->EEPROMRegulatory== 0)
 			{
 				tmpval = (pHalData->MCSTxPowerLevelOriginalOffset[0][6]) +
 						(pHalData->MCSTxPowerLevelOriginalOffset[0][7]<<8);
@@ -295,7 +295,7 @@ static void getPowerBase88E(
 
 		powerBase0 = (powerBase0<<24) | (powerBase0<<16) |(powerBase0<<8) |powerBase0;
 		*(OfdmBase+i) = powerBase0;
-		/* DBG_871X(" [OFDM power base index rf(%c) = 0x%x]\n", ((i==0)?'A':'B'), *(OfdmBase+i)); */
+		/* DBG_871X(" [OFDM power base index rf(%c) = 0x%x]\n", ((i== 0)?'A':'B'), *(OfdmBase+i)); */
 	}
 
 	for (i=0; i<pHalData->NumTotalRFPath; i++)
@@ -312,7 +312,7 @@ static void getPowerBase88E(
 		powerBase1 = powerlevel[i];
 		powerBase1 = (powerBase1<<24) | (powerBase1<<16) |(powerBase1<<8) |powerBase1;
 		*(MCSBase+i) = powerBase1;
-		/* DBG_871X(" [MCS power base index rf(%c) = 0x%x]\n", ((i==0)?'A':'B'), *(MCSBase+i)); */
+		/* DBG_871X(" [MCS power base index rf(%c) = 0x%x]\n", ((i== 0)?'A':'B'), *(MCSBase+i)); */
 	}
 }
 
@@ -345,7 +345,7 @@ static void getTxPowerWriteValByRegulatory88E(
 				/* 	chnlGroup, index, pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)])); */
 				writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] +
 					((index<2)?powerBase0[rf]:powerBase1[rf]);
-				/* RTPRINT(FPHY, PHY_TXPWR, ("RTK better performance, writeVal(%c) = 0x%x\n", ((rf==0)?'A':'B'), writeVal)); */
+				/* RTPRINT(FPHY, PHY_TXPWR, ("RTK better performance, writeVal(%c) = 0x%x\n", ((rf== 0)?'A':'B'), writeVal)); */
 				break;
 			case 1:	/*  Realtek regulatory */
 					/*  increase power diff defined by Realtek for regulatory */
@@ -407,15 +407,15 @@ static void getTxPowerWriteValByRegulatory88E(
 				}
 				customer_limit = (pwr_diff_limit[3]<<24) | (pwr_diff_limit[2]<<16) |
 								(pwr_diff_limit[1]<<8) | (pwr_diff_limit[0]);
-				/* RTPRINT(FPHY, PHY_TXPWR, ("Customer's limit rf(%c) = 0x%x\n", ((rf==0)?'A':'B'), customer_limit)); */
+				/* RTPRINT(FPHY, PHY_TXPWR, ("Customer's limit rf(%c) = 0x%x\n", ((rf== 0)?'A':'B'), customer_limit)); */
 				writeVal = customer_limit + ((index<2)?powerBase0[rf]:powerBase1[rf]);
-				/* RTPRINT(FPHY, PHY_TXPWR, ("Customer, writeVal rf(%c)= 0x%x\n", ((rf==0)?'A':'B'), writeVal)); */
+				/* RTPRINT(FPHY, PHY_TXPWR, ("Customer, writeVal rf(%c)= 0x%x\n", ((rf== 0)?'A':'B'), writeVal)); */
 				break;
 			default:
 				chnlGroup = 0;
 				writeVal = pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)] +
 						((index<2)?powerBase0[rf]:powerBase1[rf]);
-				/* RTPRINT(FPHY, PHY_TXPWR, ("RTK better performance, writeVal rf(%c) = 0x%x\n", ((rf==0)?'A':'B'), writeVal)); */
+				/* RTPRINT(FPHY, PHY_TXPWR, ("RTK better performance, writeVal rf(%c) = 0x%x\n", ((rf== 0)?'A':'B'), writeVal)); */
 				break;
 		}
 

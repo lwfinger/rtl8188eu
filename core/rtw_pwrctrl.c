@@ -267,7 +267,7 @@ void rtw_ps_processor(struct adapter*padapter)
 	if (rtw_pwr_unassociated_idle(padapter) == false)
 		goto exit;
 
-	if ((pwrpriv->rf_pwrstate == rf_on) && ((pwrpriv->pwr_state_check_cnts%4) ==0))
+	if ((pwrpriv->rf_pwrstate == rf_on) && ((pwrpriv->pwr_state_check_cnts%4) == 0))
 	{
 		DBG_871X("==>%s .fw_state(%x)\n", __FUNCTION__, get_fwstate(pmlmepriv));
 		#if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND)
@@ -1039,7 +1039,7 @@ int rtw_pm_set_ips(struct adapter *padapter, u8 mode)
 	else if (mode ==IPS_NONE){
 		rtw_ips_mode_req(pwrctrlpriv, mode);
 		DBG_871X("%s %s\n", __FUNCTION__, "IPS_NONE");
-		if ((padapter->bSurpriseRemoved ==0)&&(_FAIL == rtw_pwr_wakeup(padapter)) )
+		if ((padapter->bSurpriseRemoved == 0)&&(_FAIL == rtw_pwr_wakeup(padapter)) )
 			return -EFAULT;
 	}
 	else {

@@ -282,7 +282,7 @@ void rtw_indicate_sta_assoc_event(struct adapter *padapter, struct sta_info *pst
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	if (psta==NULL)
+	if (psta== NULL)
 		return;
 
 	if (psta->aid > NUM_STA)
@@ -304,7 +304,7 @@ void rtw_indicate_sta_disassoc_event(struct adapter *padapter, struct sta_info *
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	if (psta==NULL)
+	if (psta== NULL)
 		return;
 
 	if (psta->aid > NUM_STA)

@@ -47,7 +47,7 @@ static u8 urb_zero_packet_chk(struct adapter *padapter, int sz)
 {
 	u8 blnSetTxDescOffset;
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
-	blnSetTxDescOffset = (((sz + TXDESC_SIZE) %  pHalData->UsbBulkOutSize) ==0)?1:0;
+	blnSetTxDescOffset = (((sz + TXDESC_SIZE) %  pHalData->UsbBulkOutSize) == 0)?1:0;
 
 	return blnSetTxDescOffset;
 }
@@ -221,7 +221,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 #endif /* CONFIG_P2P */
 
 	if (padapter->registrypriv.mp_mode == 0) {
-		if ((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)==0)) {
+		if ((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)== 0)) {
 			ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
 			pull = 1;
 		}

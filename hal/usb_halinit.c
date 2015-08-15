@@ -1071,7 +1071,7 @@ _InitAntenna_Selection(struct adapter *Adapter)
 
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
 
-	if (pHalData->AntDivCfg==0)
+	if (pHalData->AntDivCfg== 0)
 		return;
 	DBG_8192C("==>  %s ....\n",__FUNCTION__);
 
@@ -2810,7 +2810,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 						if (!(rtw_read32(Adapter,REG_RXPKT_NUM)&RXDMA_IDLE))
 							break;
 					}while (trycnt--);
-					if (trycnt ==0)
+					if (trycnt == 0)
 						DBG_8192C("Stop RX DMA failed......\n");
 
 					/* RQPN Load 0 */
@@ -2907,7 +2907,7 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			*val = pHalData->bMacPwrCtrlOn;
 			break;
 		case HW_VAR_CHK_HI_QUEUE_EMPTY:
-			*val = ((rtw_read32(Adapter, REG_HGQ_INFORMATION)&0x0000ff00)==0) ? true:false;
+			*val = ((rtw_read32(Adapter, REG_HGQ_INFORMATION)&0x0000ff00)== 0) ? true:false;
 			break;
 		case HW_VAR_READ_LLT_TAB:
 			Read_LLT_Tab(Adapter);
@@ -2958,7 +2958,7 @@ static u8 GetHalDefVar8188EUsb(
 			}
 			break;
 		case HAL_DEF_IS_SUPPORT_ANT_DIV:
-			*((u8 *)pValue) = (pHalData->AntDivCfg==0)?false:true;
+			*((u8 *)pValue) = (pHalData->AntDivCfg== 0)?false:true;
 			break;
 		case HAL_DEF_CURRENT_ANTENNA:
 			*(( u8*)pValue) = pHalData->CurAntenna;

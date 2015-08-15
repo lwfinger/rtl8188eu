@@ -217,7 +217,7 @@ __inline static void _set_timer(struct timer_list *ptimer,u32 delay_time)
 __inline static void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
 {
 	del_timer_sync(ptimer);
-	*bcancelled=  true;/* true ==1; false==0 */
+	*bcancelled=  true;/* true ==1; false== 0 */
 }
 
 #define RTW_TIMER_HDL_ARGS void *FunctionContext

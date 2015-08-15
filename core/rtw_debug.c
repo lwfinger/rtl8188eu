@@ -119,7 +119,7 @@ int proc_get_read_reg(char *page, char **start,
 
 	int len = 0;
 
-	if (proc_get_read_addr ==0xeeeeeeee)
+	if (proc_get_read_addr == 0xeeeeeeee)
 	{
 		*eof = 1;
 		return len;
@@ -520,7 +520,7 @@ int proc_get_rf_reg_dump1(char *page, char **start,
 		value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
 		if (j%4 ==1)	len += snprintf(page + len, count - len, "0x%02x ", i);
 		len += snprintf(page + len, count - len, " 0x%08x ", value);
-		if ((j++)%4 ==0)	len += snprintf(page + len, count - len, "\n");
+		if ((j++)%4 == 0)	len += snprintf(page + len, count - len, "\n");
 	}
 
 	*eof = 1;
@@ -547,7 +547,7 @@ int proc_get_rf_reg_dump2(char *page, char **start,
 		value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
 		if (j%4 ==1)	len += snprintf(page + len, count - len, "0x%02x ", i);
 		len += snprintf(page + len, count - len, " 0x%08x ", value);
-		if ((j++)%4 ==0)	len += snprintf(page + len, count - len, "\n");
+		if ((j++)%4 == 0)	len += snprintf(page + len, count - len, "\n");
 	}
 	*eof = 1;
 	return len;
@@ -573,7 +573,7 @@ int proc_get_rf_reg_dump3(char *page, char **start,
 		value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
 		if (j%4 ==1)	len += snprintf(page + len, count - len, "0x%02x ", i);
 		len += snprintf(page + len, count - len, " 0x%08x ", value);
-		if ((j++)%4 ==0)	len += snprintf(page + len, count - len, "\n");
+		if ((j++)%4 == 0)	len += snprintf(page + len, count - len, "\n");
 	}
 
 	*eof = 1;
@@ -600,7 +600,7 @@ int proc_get_rf_reg_dump4(char *page, char **start,
 		value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
 		if (j%4 ==1)	len += snprintf(page + len, count - len, "0x%02x ", i);
 		len += snprintf(page + len, count - len, " 0x%08x ", value);
-		if ((j++)%4 ==0)	len += snprintf(page + len, count - len, "\n");
+		if ((j++)%4 == 0)	len += snprintf(page + len, count - len, "\n");
 	}
 	*eof = 1;
 	return len;
@@ -650,7 +650,7 @@ int proc_set_rx_signal(struct file *file, const char __user *buffer,
 
 		int num = sscanf(tmp, "%u %u", &is_signal_dbg, &signal_strength);
 
-		is_signal_dbg = is_signal_dbg ==0?0:1;
+		is_signal_dbg = is_signal_dbg == 0?0:1;
 
 		if (is_signal_dbg && num!=2)
 			return count;

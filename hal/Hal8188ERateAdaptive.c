@@ -116,7 +116,7 @@ odm_SetTxRPTTiming_8188E(
 		if (DynamicTxRPTTiming[idx] == pRaInfo->RptTime)
 			break;
 
-	if (extend==0) /*  back to default timing */
+	if (extend== 0) /*  back to default timing */
 		idx=0;  /* 200ms */
 	else if (extend==1) {/*  increase the timing */
 		idx+=1;
@@ -186,7 +186,7 @@ RateDownFinish:
 		pRaInfo->RAWaitingCounter+=1;
 		pRaInfo->RAPendingCounter+=1;
 	}
-	else if (pRaInfo->RAWaitingCounter==0){
+	else if (pRaInfo->RAWaitingCounter== 0){
 	}
 	else{
 		pRaInfo->RAWaitingCounter=0;
@@ -513,7 +513,7 @@ odm_PTTryState_8188E(
 		if ((pRaInfo->PTStopCount>=10)||(pRaInfo->PTPreRssi>pRaInfo->RssiStaRA+5)
 			||(pRaInfo->PTPreRssi<pRaInfo->RssiStaRA-5)||(pRaInfo->DecisionRate!=pRaInfo->PTPreRate))
 		{
-			if (pRaInfo->PTStage==0)
+			if (pRaInfo->PTStage== 0)
 				pRaInfo->PTStage=1;
 			else if (pRaInfo->PTStage==1)
 				pRaInfo->PTStage=3;

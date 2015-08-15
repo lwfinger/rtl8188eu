@@ -650,7 +650,7 @@ _FillDummy(
 {
 	u32	FwLen = *pFwLen;
 	u8	remain = (u8)(FwLen%4);
-	remain = (remain==0)?0:(4-remain);
+	remain = (remain== 0)?0:(4-remain);
 
 	while (remain>0)
 	{
@@ -1338,7 +1338,7 @@ exit:
 		DBG_871X("%s compare first 0x130 byte fail\n", __FUNCTION__);
 		for (i=0;i<512;i++)
 		{
-			if (i%16==0)
+			if (i%16== 0)
 				DBG_871X("0x%03x: ", i);
 			DBG_871X("%02x ", logical_map[i]);
 			if (i%16==15)
@@ -1769,7 +1769,7 @@ hal_EfusePgPacketRead_8188e(
 
 	EFUSE_GetEfuseDefinition(pAdapter, EFUSE_WIFI, TYPE_EFUSE_MAX_SECTION, (void *)&max_section, bPseudoTest);
 
-	if (data==NULL)
+	if (data== NULL)
 		return false;
 	if (offset>max_section)
 		return false;
@@ -1855,8 +1855,8 @@ hal_EfusePgPacketRead_8188e(
 
 	}
 
-	if (	(data[0]==0xff) &&(data[1]==0xff) && (data[2]==0xff)  && (data[3]==0xff) &&
-		(data[4]==0xff) &&(data[5]==0xff) && (data[6]==0xff)  && (data[7]==0xff))
+	if (	(data[0]== 0xff) &&(data[1]== 0xff) && (data[2]== 0xff)  && (data[3]== 0xff) &&
+		(data[4]== 0xff) &&(data[5]== 0xff) && (data[6]== 0xff)  && (data[7]== 0xff))
 		return false;
 	else
 		return true;
@@ -2743,7 +2743,7 @@ void Read_LLT_Tab(struct adapter *padapter)
 	for (addr=0;addr<176;addr++) {
 		next_addr = _LLTRead(padapter,addr);
 		printk("%d->",next_addr);
-		if (((addr+1) %8) ==0)
+		if (((addr+1) %8) == 0)
 			printk("\n");
 	}
 	printk("\n##################################\n");
@@ -2902,7 +2902,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 			}
 			for (TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
 			{
-				if (TxCount==0)
+				if (TxCount== 0)
 				{
 					pwrInfo24G->BW20_Diff[rfPath][0] =	EEPROM_DEFAULT_24G_HT20_DIFF;
 					pwrInfo24G->OFDM_Diff[rfPath][0] =	EEPROM_DEFAULT_24G_OFDM_DIFF;
@@ -2947,7 +2947,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 		}
 		for (TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
 		{
-			if (TxCount==0)
+			if (TxCount== 0)
 			{
 				pwrInfo24G->BW40_Diff[rfPath][TxCount] = 0;
 				if (PROMContent[eeAddr] == 0xFF)

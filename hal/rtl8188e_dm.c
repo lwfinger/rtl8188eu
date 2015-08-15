@@ -378,7 +378,7 @@ u8 AntDivBeforeLink8188E(struct adapter *Adapter )
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 
 	/*  Condition that does not need to use antenna diversity. */
-	if (pHalData->AntDivCfg==0)
+	if (pHalData->AntDivCfg== 0)
 	{
 		/* DBG_8192C("odm_AntDivBeforeLink8192C(): No AntDiv Mechanism.\n"); */
 		return false;

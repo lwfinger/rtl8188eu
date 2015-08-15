@@ -331,7 +331,7 @@ static void usb_read_interrupt_complete(struct urb *purb, struct pt_regs *regs)
 		return;
 	}
 
-	if (purb->status==0)/* SUCCESS */
+	if (purb->status== 0)/* SUCCESS */
 	{
 		if (purb->actual_length > INTERRUPT_MSG_FORMAT_LEN)
 		{
@@ -444,9 +444,9 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 		prxstat = (struct recv_stat *)pbuf;
 
 		precvframe = rtw_alloc_recvframe(pfree_recv_queue);
-		if (precvframe==NULL)
+		if (precvframe== NULL)
 		{
-			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: precvframe==NULL\n"));
+			RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("recvbuf2recvframe: precvframe== NULL\n"));
 			DBG_8192C("%s()-%d: rtw_alloc_recvframe() failed! RX Drop!\n", __FUNCTION__, __LINE__);
 			goto _exit_recvbuf2recvframe;
 		}
@@ -602,7 +602,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 		precvframe = NULL;
 		pkt_copy = NULL;
 
-		if (transfer_len>0 && pkt_cnt==0)
+		if (transfer_len>0 && pkt_cnt== 0)
 			pkt_cnt = (le32_to_cpu(prxstat->rxdw2)>>16) & 0xff;
 
 	}while ((transfer_len>0) && (pkt_cnt>0));
@@ -672,7 +672,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 		goto exit;
 	}
 
-	if (purb->status==0)/* SUCCESS */
+	if (purb->status== 0)/* SUCCESS */
 	{
 		if ((purb->actual_length > MAX_RECVBUF_SZ) || (purb->actual_length < RXDESC_SIZE))
 		{

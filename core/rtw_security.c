@@ -179,7 +179,7 @@ void rtw_wep_encrypt(struct adapter *padapter, u8 *pxmitframe)
 ;
 
 
-	if (((struct xmit_frame*)pxmitframe)->buf_addr ==NULL)
+	if (((struct xmit_frame*)pxmitframe)->buf_addr == NULL)
 		return;
 
 	hw_hdr_offset = TXDESC_SIZE +
@@ -396,7 +396,7 @@ void rtw_seccalctkipmic(u8 * key, u8 *header, u8 *data, u32 data_len, u8 *mic_co
 			rtw_secmicappend(&micdata, &header[24], 6);
 		else
 			rtw_secmicappend(&micdata, &header[10], 6);
-	} else{	/* ToDS ==0 */
+	} else{	/* ToDS == 0 */
 		rtw_secmicappend(&micdata, &header[4], 6);   /* DA */
 		if (header[1]&2)  /* From Ds ==1 */
 			rtw_secmicappend(&micdata, &header[16], 6);
@@ -646,7 +646,7 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 	u32	res =_SUCCESS;
 ;
 
-	if (((struct xmit_frame*)pxmitframe)->buf_addr ==NULL)
+	if (((struct xmit_frame*)pxmitframe)->buf_addr == NULL)
 		return _FAIL;
 
 	hw_hdr_offset = TXDESC_SIZE +
@@ -725,7 +725,7 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 
 		}
 		else{
-			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_tkip_encrypt: stainfo ==NULL!!!\n"));
+			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_tkip_encrypt: stainfo == NULL!!!\n"));
 	                DBG_871X("%s, psta ==NUL\n", __func__);
 			res =_FAIL;
 		}
@@ -846,7 +846,7 @@ u32 rtw_tkip_decrypt(struct adapter *padapter, u8 *precvframe)
 
 		}
 		else{
-			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_tkip_decrypt: stainfo ==NULL!!!\n"));
+			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_tkip_decrypt: stainfo == NULL!!!\n"));
 			res =_FAIL;
 		}
 
@@ -1543,7 +1543,7 @@ u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 	struct	xmit_priv		*pxmitpriv =&padapter->xmitpriv;
 	u32 res =_SUCCESS;
 
-	if (((struct xmit_frame*)pxmitframe)->buf_addr ==NULL)
+	if (((struct xmit_frame*)pxmitframe)->buf_addr == NULL)
 		return _FAIL;
 
 	hw_hdr_offset = TXDESC_SIZE +
@@ -1589,7 +1589,7 @@ u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 				}
 			}
 		} else{
-			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_aes_encrypt: stainfo ==NULL!!!\n"));
+			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_aes_encrypt: stainfo == NULL!!!\n"));
 	                DBG_871X("%s, psta ==NUL\n", __func__);
 			res =_FAIL;
 		}
@@ -1931,7 +1931,7 @@ u32	rtw_aes_decrypt(struct adapter *padapter, u8 *precvframe)
 
 			res = aes_decipher(prwskey, prxattrib->hdrlen, pframe, length);
 		} else {
-			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_aes_encrypt: stainfo ==NULL!!!\n"));
+			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_aes_encrypt: stainfo == NULL!!!\n"));
 			res =_FAIL;
 		}
 
