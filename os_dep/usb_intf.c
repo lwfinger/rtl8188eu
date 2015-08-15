@@ -1304,7 +1304,7 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 
 
 #ifdef CONFIG_INTEL_PROXIM
-	rtw_sw_export=NULL;
+	rtw_sw_export= NULL;
 #endif
 
 ;

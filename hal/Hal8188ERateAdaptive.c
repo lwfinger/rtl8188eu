@@ -622,7 +622,7 @@ ODM_RAInfo_Init(
 	PODM_RA_INFO_T pRaInfo = &pDM_Odm->RAInfo[MacID];
 	u8 WirelessMode=0xFF; /* invalid value */
 	u8 max_rate_idx = 0x13; /* MCS7 */
-	if (pDM_Odm->pWirelessMode!=NULL) {
+	if (pDM_Odm->pWirelessMode!= NULL) {
 		WirelessMode=*(pDM_Odm->pWirelessMode);
 	}
 

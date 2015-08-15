@@ -858,7 +858,7 @@ u8 *rtw_get_wps_ie_from_scan_queue(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps
 u8 *rtw_get_wps_ie(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps_ielen)
 {
 	uint cnt;
-	u8 *wpsie_ptr =NULL;
+	u8 *wpsie_ptr = NULL;
 	u8 eid, wps_oui[4]={0x0, 0x50, 0xf2, 0x04};
 
 	if (wps_ielen)

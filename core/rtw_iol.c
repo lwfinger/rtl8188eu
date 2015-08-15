@@ -37,7 +37,7 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(struct adapter *adapter)
 	{
 		DBG_871X("%s rtw_alloc_xmitbuf return null\n", __FUNCTION__);
 		rtw_free_xmitframe(pxmitpriv, xmit_frame);
-		xmit_frame =NULL;
+		xmit_frame = NULL;
 		goto exit;
 	}
 

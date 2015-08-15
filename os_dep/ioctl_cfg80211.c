@@ -350,12 +350,12 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 	/* To reduce PBC Overlap rate */
 	if (wdev_to_priv(wdev)->scan_request != NULL)
 	{
-		u8 *psr=NULL, sr = 0;
+		u8 *psr= NULL, sr = 0;
 		struct ndis_802_11_ssid *pssid = &pnetwork->network.Ssid;
 		struct cfg80211_scan_request *request = wdev_to_priv(wdev)->scan_request;
 		struct cfg80211_ssid *ssids = request->ssids;
 		u32 wpsielen=0;
-		u8 *wpsie=NULL;
+		u8 *wpsie= NULL;
 
 		wpsie = rtw_get_wps_ie(pnetwork->network.IEs+_FIXED_IE_LENGTH_, pnetwork->network.IELength-_FIXED_IE_LENGTH_, NULL, &wpsielen);
 
@@ -377,7 +377,7 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 				}
 				else
 				{
-					if (psr !=NULL)
+					if (psr != NULL)
 						*psr = 0; /* clear sr */
 
 				}
@@ -521,7 +521,7 @@ int rtw_cfg80211_check_bss(struct adapter *padapter)
 			pnetwork->Ssid.SsidLength,
 			WLAN_CAPABILITY_ESS, WLAN_CAPABILITY_ESS);
 
-	return	(bss!=NULL);
+	return	(bss!= NULL);
 }
 
 void rtw_cfg80211_ibss_indicate_connect(struct adapter *padapter)
@@ -1957,9 +1957,9 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
 	unsigned long	irqL;
-	u8 *wps_ie=NULL;
+	u8 *wps_ie= NULL;
 	uint wps_ielen=0;
-	u8 *p2p_ie=NULL;
+	u8 *p2p_ie= NULL;
 	uint p2p_ielen=0;
 	u8 survey_times=3;
 	u8 survey_times_for_one_ch=6;
@@ -2234,7 +2234,7 @@ static int rtw_cfg80211_set_key_mgt(struct security_priv *psecuritypriv, u32 key
 
 static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t ielen)
 {
-	u8 *buf=NULL, *pos=NULL;
+	u8 *buf= NULL, *pos= NULL;
 	u32 left;
 	int group_cipher = 0, pairwise_cipher = 0;
 	int ret = 0;

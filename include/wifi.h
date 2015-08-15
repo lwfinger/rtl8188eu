@@ -436,7 +436,7 @@ __inline static unsigned char * get_hdr_bssid(unsigned char *pframe)
 			sa = GetAddr1Ptr(pframe);
 			break;
 		default:
-			sa =NULL; /*  */
+			sa = NULL; /*  */
 			break;
 	}
 

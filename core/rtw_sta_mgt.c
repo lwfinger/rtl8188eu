@@ -582,7 +582,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 		{ /*  if found the matched address */
 			break;
 		}
-		psta =NULL;
+		psta = NULL;
 		plist = get_next(plist);
 	}
 

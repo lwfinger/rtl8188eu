@@ -102,7 +102,7 @@ static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
 	if (*ppie) {
 		rtw_mfree(*ppie, *plen);
 		*plen = 0;
-		*ppie =NULL;
+		*ppie = NULL;
 	}
 }
 
@@ -205,7 +205,7 @@ struct	wlan_network *_rtw_alloc_network(struct	mlme_priv *pmlmepriv )/* _queue *
 	spin_lock_bh(&free_queue->lock);
 
 	if (_rtw_queue_empty(free_queue) == true) {
-		pnetwork =NULL;
+		pnetwork = NULL;
 		goto exit;
 	}
 	plist = get_next(&(free_queue->queue));
@@ -324,7 +324,7 @@ struct wlan_network *_rtw_find_network(struct  __queue *scanned_queue, u8 *addr)
 ;
 
 	if (_rtw_memcmp(zero_addr, addr, ETH_ALEN)) {
-		pnetwork =NULL;
+		pnetwork = NULL;
 		goto exit;
 	}
 
@@ -883,7 +883,7 @@ int rtw_is_desired_network(struct adapter *adapter, struct wlan_network *pnetwor
 
 	if (check_fwstate(pmlmepriv, WIFI_UNDER_WPS))
 	{
-		if (rtw_get_wps_ie(pnetwork->network.IEs+_FIXED_IE_LENGTH_, pnetwork->network.IELength-_FIXED_IE_LENGTH_, NULL, &wps_ielen)!=NULL)
+		if (rtw_get_wps_ie(pnetwork->network.IEs+_FIXED_IE_LENGTH_, pnetwork->network.IELength-_FIXED_IE_LENGTH_, NULL, &wps_ielen)!= NULL)
 		{
 			return true;
 		}
@@ -894,7 +894,7 @@ int rtw_is_desired_network(struct adapter *adapter, struct wlan_network *pnetwor
 	}
 	if (adapter->registrypriv.wifi_spec == 1) /* for  correct flow of 8021X  to do.... */
 	{
-		u8 *p =NULL;
+		u8 *p = NULL;
 		uint ie_len =0;
 
 		if ((desired_encmode == Ndis802_11EncryptionDisabled) && (privacy != 0))
@@ -1389,7 +1389,7 @@ void rtw_scan_abort(struct adapter *adapter)
 static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, struct wlan_network *pnetwork)
 {
 	int i;
-	struct sta_info *bmc_sta, *psta =NULL;
+	struct sta_info *bmc_sta, *psta = NULL;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -1553,7 +1553,7 @@ static void rtw_joinbss_update_network(struct adapter *padapter, struct wlan_net
 /* ptarget_wlan: found from scanned_queue */
 /* if join_res > 0, for (fw_state ==WIFI_STATION_STATE), we check if  "ptarget_sta" & "ptarget_wlan" exist. */
 /* if join_res > 0, for (fw_state ==WIFI_ADHOC_STATE), we only check if "ptarget_wlan" exist. */
-/* if join_res > 0, update "cur_network->network" from "pnetwork->network" if (ptarget_wlan !=NULL). */
+/* if join_res > 0, update "cur_network->network" from "pnetwork->network" if (ptarget_wlan != NULL). */
 /*  */
 /* define REJOIN */
 void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
@@ -1896,7 +1896,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 	int mac_id =-1;
 	struct sta_info *psta;
 	struct wlan_network* pwlan = NULL;
-	struct wlan_bssid_ex    *pdev_network =NULL;
+	struct wlan_bssid_ex    *pdev_network = NULL;
 	u8* pibss = NULL;
 	struct	mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	struct	stadel_event *pstadel	= (struct stadel_event*)pbuf;
@@ -2989,7 +2989,7 @@ void rtw_issue_addbareq_cmd(struct adapter *padapter, struct xmit_frame *pxmitfr
 {
 	u8 issued;
 	int priority;
-	struct sta_info *psta =NULL;
+	struct sta_info *psta = NULL;
 	struct ht_priv	*phtpriv;
 	struct pkt_attrib *pattrib =&pxmitframe->attrib;
 	s32 bmcst = IS_MCAST(pattrib->ra);

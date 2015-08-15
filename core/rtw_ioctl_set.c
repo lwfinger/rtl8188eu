@@ -802,8 +802,8 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		pbssid =get_bssid(&padapter->mlmepriv);
 		stainfo =rtw_get_stainfo(&padapter->stapriv, pbssid);
 
-		if ((stainfo!=NULL)&&(padapter->securitypriv.dot11AuthAlgrthm ==dot11AuthAlgrthm_8021X)) {
-			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY:( stainfo!=NULL)&&(Adapter->securitypriv.dot11AuthAlgrthm ==dot11AuthAlgrthm_8021X)\n"));
+		if ((stainfo!= NULL)&&(padapter->securitypriv.dot11AuthAlgrthm ==dot11AuthAlgrthm_8021X)) {
+			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY:( stainfo!= NULL)&&(Adapter->securitypriv.dot11AuthAlgrthm ==dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo =stainfo->dot118021XPrivacy;
 		}
 		else {
@@ -815,7 +815,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11PrivacyAlgrthm ==%d)!\n", padapter->securitypriv.dot11PrivacyAlgrthm));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11AuthAlgrthm ==%d)!\n", padapter->securitypriv.dot11AuthAlgrthm));
 
-		if ((stainfo!=NULL)) {
+		if ((stainfo!= NULL)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("rtw_set_802_11_add_key: (stainfo->dot118021XPrivacy ==%d)!\n", stainfo->dot118021XPrivacy));
 		}
 
@@ -1076,7 +1076,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		pbssid =get_bssid(&padapter->mlmepriv);
 		stainfo =rtw_get_stainfo(&padapter->stapriv , pbssid );
 
-		if (stainfo!=NULL)
+		if (stainfo!= NULL)
 		{
 			memset( &stainfo->dot118021x_UncstKey, 0, 16);/*  clear keybuffer */
 
@@ -1161,7 +1161,7 @@ u8 rtw_set_802_11_remove_key(struct adapter*	padapter, struct ndis_802_11_remove
 	} else {
 		pbssid =get_bssid(&padapter->mlmepriv);
 		stainfo =rtw_get_stainfo(&padapter->stapriv , pbssid );
-		if (stainfo !=NULL) {
+		if (stainfo != NULL) {
 			encryptionalgo =stainfo->dot118021XPrivacy;
 
 			/*  clear key by BSSID */

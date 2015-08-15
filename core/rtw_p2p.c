@@ -2243,7 +2243,7 @@ u32 process_probe_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint len, struct sta_info *psta)
 {
 	u8 status_code = P2P_STATUS_SUCCESS;
-	u8 *pbuf, *pattr_content =NULL;
+	u8 *pbuf, *pattr_content = NULL;
 	u32 attr_contentlen = 0;
 	u16 cap_attr =0;
 	unsigned short	frame_type, ie_offset =0;
@@ -3274,7 +3274,7 @@ static void rtw_change_p2pie_op_ch(struct adapter *padapter, const u8 *frame_bod
 		/* Check P2P_ATTR_OPERATING_CH */
 		attr_contentlen = 0;
 		pattr = NULL;
-		if ((pattr = rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_OPERATING_CH, NULL, (uint*)&attr_contentlen))!=NULL)
+		if ((pattr = rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_OPERATING_CH, NULL, (uint*)&attr_contentlen))!= NULL)
 		{
 			*(pattr+4) = ch;
 		}
@@ -3301,7 +3301,7 @@ static void rtw_change_p2pie_ch_list(struct adapter *padapter, const u8 *frame_b
 		u8 *pattr = NULL;
 
 		/* Check P2P_ATTR_CH_LIST */
-		if ((pattr =rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CH_LIST, NULL, (uint*)&attr_contentlen))!=NULL) {
+		if ((pattr =rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CH_LIST, NULL, (uint*)&attr_contentlen))!= NULL) {
 			int i;
 			u32 num_of_ch;
 			u8 *pattr_temp = pattr + 3 ;
@@ -3466,7 +3466,7 @@ static u8 *dump_p2p_attr_ch_list(u8 *p2p_ie, uint p2p_ielen, u8 *buf, u32 buf_le
 	u8 ch_list[40];
 	bool continuous = false;
 
-	if ((pattr =rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CH_LIST, NULL, &attr_contentlen))!=NULL) {
+	if ((pattr =rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CH_LIST, NULL, &attr_contentlen))!= NULL) {
 		int i, j;
 		u32 num_of_ch;
 		u8 *pattr_temp = pattr + 3 ;

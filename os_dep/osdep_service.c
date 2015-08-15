@@ -90,7 +90,7 @@ inline void _rtw_vmfree(u8 *pbuf, u32 sz)
 u8* _rtw_malloc(u32 sz)
 {
 
-	u8	*pbuf=NULL;
+	u8	*pbuf= NULL;
 
 	pbuf = kmalloc(sz,in_interrupt() ? GFP_ATOMIC : GFP_KERNEL);
 
@@ -893,7 +893,7 @@ static int openFile(struct file **fpp, char *path, int flag, int mode)
 
 	fp=filp_open(path, flag, mode);
 	if (IS_ERR(fp)) {
-		*fpp=NULL;
+		*fpp= NULL;
 		return PTR_ERR(fp);
 	}
 	else {

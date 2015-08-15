@@ -501,7 +501,7 @@ static char *translate_scan(struct adapter *padapter,
 
 	{ /* parsing WPS IE */
 		uint cnt = 0,total_ielen;
-		u8 *wpsie_ptr=NULL;
+		u8 *wpsie_ptr= NULL;
 		uint wps_ielen = 0;
 
 		u8 *ie_ptr = pnetwork->network.IEs +_FIXED_IE_LENGTH_;
@@ -840,7 +840,7 @@ exit:
 
 static int rtw_set_wpa_ie(struct adapter *padapter, char *pie, unsigned short ielen)
 {
-	u8 *buf=NULL, *pos=NULL;
+	u8 *buf= NULL, *pos= NULL;
 	u32 left;
 	int group_cipher = 0, pairwise_cipher = 0;
 	int ret = 0;
@@ -3907,7 +3907,7 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 	spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
 	if (!blnMatch) {
-		sprintf(go_devadd_str, "\n\ndev_add=NULL");
+		sprintf(go_devadd_str, "\n\ndev_add= NULL");
 	} else {
 		sprintf(go_devadd_str, "\n\ndev_add=%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",
 				attr_content[0], attr_content[1], attr_content[2], attr_content[3], attr_content[4], attr_content[5]);

@@ -234,7 +234,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 	{
-		struct sk_buff *pskb2=NULL;
+		struct sk_buff *pskb2= NULL;
 		struct sta_info *psta = NULL;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 		struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;

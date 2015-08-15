@@ -114,7 +114,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
 	pxmitpriv->pallocated_frame_buf = rtw_zvmalloc(NR_XMITFRAME * sizeof(struct xmit_frame) + 4);
 
 	if (pxmitpriv->pallocated_frame_buf  == NULL) {
-		pxmitpriv->pxmit_frame_buf =NULL;
+		pxmitpriv->pxmit_frame_buf = NULL;
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xmit_frame fail!\n"));
 		res = _FAIL;
 		goto exit;
@@ -1464,7 +1464,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 	struct pkt_file pktfile;
 	s32 frg_inx, frg_len, mpdu_len, llc_sz, mem_sz;
 	SIZE_PTR addr;
-	u8 *pframe, *mem_start = NULL, *tmp_buf =NULL;
+	u8 *pframe, *mem_start = NULL, *tmp_buf = NULL;
 	u8 hw_hdr_offset, subtype ;
 	struct sta_info		*psta = NULL;
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
@@ -1473,7 +1473,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 	s32 bmcst = IS_MCAST(pattrib->ra);
 	s32 res = _FAIL;
 	u8 *BIP_AAD;
-	u8 *MGMT_body =NULL;
+	u8 *MGMT_body = NULL;
 
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
@@ -2185,7 +2185,7 @@ s32 rtw_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitfram
 static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, struct hw_xmit *phwxmit, struct tx_servq *ptxservq, struct  __queue *pframe_queue)
 {
 	struct list_head *xmitframe_plist, *xmitframe_phead;
-	struct	xmit_frame	*pxmitframe =NULL;
+	struct	xmit_frame	*pxmitframe = NULL;
 
 	xmitframe_phead = get_list_head(pframe_queue);
 	xmitframe_plist = get_next(xmitframe_phead);
@@ -2270,7 +2270,7 @@ exit:
 
 struct tx_servq *rtw_get_sta_pending(struct adapter *padapter, struct sta_info *psta, sint up, u8 *ac)
 {
-	struct tx_servq *ptxservq =NULL;
+	struct tx_servq *ptxservq = NULL;
 
 ;
 
@@ -2751,7 +2751,7 @@ s32 rtw_xmit(struct adapter *padapter, struct sk_buff **ppkt)
 sint xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	sint ret =false;
-	struct sta_info *psta =NULL;
+	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -2982,7 +2982,7 @@ void wakeup_sta_to_xmit(struct adapter *padapter, struct sta_info *psta)
 	u8 update_mask =0, wmmps_ac =0;
 	struct sta_info *psta_bmc;
 	struct list_head *xmitframe_plist, *xmitframe_phead;
-	struct xmit_frame *pxmitframe =NULL;
+	struct xmit_frame *pxmitframe = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
@@ -3148,7 +3148,7 @@ void xmit_delivery_enabled_frames(struct adapter *padapter, struct sta_info *pst
 {
 	u8 wmmps_ac =0;
 	struct list_head *xmitframe_plist, *xmitframe_phead;
-	struct xmit_frame *pxmitframe =NULL;
+	struct xmit_frame *pxmitframe = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 

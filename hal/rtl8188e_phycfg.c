@@ -1049,7 +1049,7 @@ phy_BB8188E_Config_ParaFile(
 	u8	sz8188EBBRegPgFile[] = RTL8188E_PHY_REG_PG;
 	u8	sz8188EBBRegMpFile[] = RTL8188E_PHY_REG_MP;
 
-	u8	*pszBBRegFile = NULL, *pszAGCTableFile = NULL, *pszBBRegPgFile = NULL, *pszBBRegMpFile=NULL;
+	u8	*pszBBRegFile = NULL, *pszAGCTableFile = NULL, *pszBBRegPgFile = NULL, *pszBBRegMpFile= NULL;
 
 
 	/* RT_TRACE(COMP_INIT, DBG_TRACE, ("==>phy_BB8192S_Config_ParaFile\n")); */

@@ -1031,7 +1031,7 @@ unsigned int OnAuth(struct adapter *padapter, union recv_frame *precv_frame)
 	u16	algorithm;
 	int	status;
 	static struct sta_info stat;
-	struct	sta_info	*pstat =NULL;
+	struct	sta_info	*pstat = NULL;
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
@@ -2277,7 +2277,7 @@ unsigned int OnAction_dls(struct adapter *padapter, union recv_frame *precv_fram
 unsigned int OnAction_back(struct adapter *padapter, union recv_frame *precv_frame)
 {
 	u8 *addr;
-	struct sta_info *psta =NULL;
+	struct sta_info *psta = NULL;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	unsigned char		*frame_body;
 	unsigned char		category, action;
@@ -5718,7 +5718,7 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
 #ifdef CONFIG_P2P
 		/*  for P2P : Primary Device Type & Device Name */
 		u32 wpsielen =0, insert_len =0;
-		u8 *wpsie =NULL;
+		u8 *wpsie = NULL;
 		wpsie = rtw_get_wps_ie(cur_network->IEs+_FIXED_IE_LENGTH_, cur_network->IELength-_FIXED_IE_LENGTH_, NULL, &wpsielen);
 
 		if (rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO) && wpsie && wpsielen>0)
@@ -6024,7 +6024,7 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
 		pwps_ie = rtw_get_wps_ie(cur_network->IEs+_FIXED_IE_LENGTH_, cur_network->IELength-_FIXED_IE_LENGTH_, NULL, &wps_ielen);
 
 		/* inerset & update wps_probe_resp_ie */
-		if ((pmlmepriv->wps_probe_resp_ie!=NULL) && pwps_ie && (wps_ielen>0))
+		if ((pmlmepriv->wps_probe_resp_ie!= NULL) && pwps_ie && (wps_ielen>0))
 		{
 			uint wps_offset, remainder_ielen;
 			u8 *premainder_ie;
@@ -10511,7 +10511,7 @@ u8 tx_beacon_hdl(struct adapter *padapter, unsigned char *pbuf)
 		unsigned long irqL;
 		struct sta_info *psta_bmc;
 		struct list_head *xmitframe_plist, *xmitframe_phead;
-		struct xmit_frame *pxmitframe =NULL;
+		struct xmit_frame *pxmitframe = NULL;
 		struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 		struct sta_priv  *pstapriv = &padapter->stapriv;
 

@@ -165,7 +165,7 @@ union recv_frame *_rtw_alloc_recvframe (struct  __queue *pfree_recv_queue)
 
 		rtw_list_delete(&precvframe->u.hdr.list);
 		padapter =precvframe->u.hdr.adapter;
-		if (padapter !=NULL) {
+		if (padapter != NULL) {
 			precvpriv =&padapter->recvpriv;
 			if (pfree_recv_queue == &precvpriv->free_recv_queue)
 				precvpriv->free_recvframe_cnt--;
@@ -219,7 +219,7 @@ int rtw_free_recvframe(union recv_frame *precvframe, struct  __queue *pfree_recv
 
 	rtw_list_insert_tail(&(precvframe->u.hdr.list), get_list_head(pfree_recv_queue));
 
-	if (padapter !=NULL) {
+	if (padapter != NULL) {
 		if (pfree_recv_queue == &precvpriv->free_recv_queue)
 				precvpriv->free_recvframe_cnt++;
 	}
@@ -632,7 +632,7 @@ static union recv_frame * portctrl(struct adapter *adapter, union recv_frame * p
 
 	if (auth_alg ==2)
 	{
-		if ((psta!=NULL) && (psta->ieee8021x_blocked))
+		if ((psta!= NULL) && (psta->ieee8021x_blocked))
 		{
 			/* blocked */
 			/* only accept EAPOL frame */
@@ -651,7 +651,7 @@ static union recv_frame * portctrl(struct adapter *adapter, union recv_frame * p
 			else {
 				/* free this frame */
 				rtw_free_recvframe(precv_frame, &adapter->recvpriv.free_recv_queue);
-				prtnframe =NULL;
+				prtnframe = NULL;
 			}
 		}
 		else
@@ -734,7 +734,7 @@ void process_pwrbit_data(struct adapter *padapter, union recv_frame *precv_frame
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 	struct sta_priv *pstapriv = &padapter->stapriv;
-	struct sta_info *psta =NULL;
+	struct sta_info *psta = NULL;
 
 	psta = rtw_get_stainfo(pstapriv, pattrib->src);
 
@@ -778,7 +778,7 @@ void process_wmmps_data(struct adapter *padapter, union recv_frame *precv_frame)
 #ifdef CONFIG_AP_MODE
 	struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 	struct sta_priv *pstapriv = &padapter->stapriv;
-	struct sta_info *psta =NULL;
+	struct sta_info *psta = NULL;
 
 	psta = rtw_get_stainfo(pstapriv, pattrib->src);
 
@@ -1241,7 +1241,7 @@ sint validate_recv_ctrl_frame(struct adapter *padapter, union recv_frame *precv_
 	{
 		u16 aid;
 		u8 wmmps_ac =0;
-		struct sta_info *psta =NULL;
+		struct sta_info *psta = NULL;
 
 		aid = GetAid(pframe);
 		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
@@ -1289,7 +1289,7 @@ sint validate_recv_ctrl_frame(struct adapter *padapter, union recv_frame *precv_
 		{
 			unsigned long irqL;
 			struct list_head *xmitframe_plist, *xmitframe_phead;
-			struct xmit_frame *pxmitframe =NULL;
+			struct xmit_frame *pxmitframe = NULL;
 			struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 
 			/* spin_lock_bh(&psta->sleep_q.lock); */
@@ -2099,14 +2099,14 @@ union recv_frame* recvframe_chk_defrag(struct adapter *padapter, union recv_fram
 
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("Enqueuq: ismfrag = %d, fragnum = %d\n", ismfrag, fragnum));
 
-			prtnframe =NULL;
+			prtnframe = NULL;
 
 		}
 		else
 		{
 			/* can't find this ta's defrag_queue, so free this recv_frame */
 			rtw_free_recvframe(precv_frame, pfree_recv_queue);
-			prtnframe =NULL;
+			prtnframe = NULL;
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("Free because pdefrag_q == NULL: ismfrag = %d, fragnum = %d\n", ismfrag, fragnum));
 		}
 
@@ -2133,21 +2133,21 @@ union recv_frame* recvframe_chk_defrag(struct adapter *padapter, union recv_fram
 		{
 			/* can't find this ta's defrag_queue, so free this recv_frame */
 			rtw_free_recvframe(precv_frame, pfree_recv_queue);
-			prtnframe =NULL;
+			prtnframe = NULL;
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("Free because pdefrag_q == NULL: ismfrag = %d, fragnum = %d\n", ismfrag, fragnum));
 		}
 
 	}
 
 
-	if ((prtnframe!=NULL)&&(prtnframe->u.hdr.attrib.privacy))
+	if ((prtnframe!= NULL)&&(prtnframe->u.hdr.attrib.privacy))
 	{
 		/* after defrag we must check tkip mic code */
 		if (recvframe_chkmic(padapter,  prtnframe) ==_FAIL)
 		{
 			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("recvframe_chkmic(padapter,  prtnframe) ==_FAIL\n"));
 			rtw_free_recvframe(prtnframe, pfree_recv_queue);
-			prtnframe =NULL;
+			prtnframe = NULL;
 		}
 	}
 

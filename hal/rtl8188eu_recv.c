@@ -122,7 +122,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 		int i;
 		SIZE_PTR tmpaddr=0;
 		SIZE_PTR alignment=0;
-		struct sk_buff *pskb=NULL;
+		struct sk_buff *pskb= NULL;
 
 		skb_queue_head_init(&precvpriv->free_recv_skb_queue);
 
@@ -141,7 +141,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 				skb_queue_tail(&precvpriv->free_recv_skb_queue, pskb);
 			}
 
-			pskb=NULL;
+			pskb= NULL;
 
 		}
 	}

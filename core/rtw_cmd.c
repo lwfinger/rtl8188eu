@@ -330,7 +330,7 @@ void rtw_free_cmd_obj(struct cmd_obj *pcmd)
 		rtw_mfree((unsigned char*)pcmd->parmbuf, pcmd->cmdsz);
 	}
 
-	if (pcmd->rsp!=NULL)
+	if (pcmd->rsp!= NULL)
 	{
 		if (pcmd->rspsz!= 0)
 		{
@@ -461,7 +461,7 @@ post_process:
 			}
 			else
 			{
-				/* todo: !!! fill rsp_buf to pcmd->rsp if (pcmd->rsp!=NULL) */
+				/* todo: !!! fill rsp_buf to pcmd->rsp if (pcmd->rsp!= NULL) */
 				pcmd_callback(pcmd->padapter, pcmd);/* need conider that free cmd_obj in rtw_cmd_callback */
 			}
 		}
@@ -1029,7 +1029,7 @@ u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network* pnetwork)
 	psecnetwork =(struct wlan_bssid_ex *)&psecuritypriv->sec_bss;
 	if (psecnetwork == NULL)
 	{
-		if (pcmd !=NULL)
+		if (pcmd != NULL)
 			rtw_mfree((unsigned char *)pcmd, sizeof(struct	cmd_obj));
 
 		res =_FAIL;
