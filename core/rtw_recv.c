@@ -124,17 +124,11 @@ exit:
 	return res;
 }
 
-void rtw_mfree_recv_priv_lock(struct recv_priv *precvpriv)
-{
-}
-
 void _rtw_free_recv_priv (struct recv_priv *precvpriv)
 {
 	struct adapter	*padapter = precvpriv->adapter;
 
 	rtw_free_uc_swdec_pending_queue(padapter);
-
-	rtw_mfree_recv_priv_lock(precvpriv);
 
 	rtw_os_recv_resource_free(precvpriv);
 
@@ -842,7 +836,7 @@ void process_wmmps_data(struct adapter *padapter, union recv_frame *precv_frame)
 
 }
 
-void count_rx_stats(struct adapter *padapter, union recv_frame *prframe, struct sta_info*sta)
+static void count_rx_stats(struct adapter *padapter, union recv_frame *prframe, struct sta_info*sta)
 {
 	int	sz;
 	struct sta_info		*psta = NULL;
@@ -1875,7 +1869,7 @@ exit:
 
 /* remove the wlanhdr and add the eth_hdr */
 
-sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
+static sint wlanhdr_to_ethhdr ( union recv_frame *precvframe)
 {
 	sint	rmv_len;
 	u16	eth_type, len;
@@ -2165,7 +2159,7 @@ union recv_frame* recvframe_chk_defrag(struct adapter *padapter, union recv_fram
 
 #define ENDIAN_FREE 1
 
-int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
+static int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
 {
 	int	a_len, padding_len;
 	u16	eth_type, nSubframe_Length;
@@ -2690,7 +2684,7 @@ void rtw_reordering_ctrl_timeout_handler(void *pcontext)
 	spin_unlock_bh(&ppending_recvframe_queue->lock);
 }
 
-int process_recv_indicatepkts(struct adapter *padapter, union recv_frame *prframe)
+static int process_recv_indicatepkts(struct adapter *padapter, union recv_frame *prframe)
 {
 	int retval = _SUCCESS;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
