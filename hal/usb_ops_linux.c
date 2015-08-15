@@ -301,13 +301,13 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 	memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
 
 	if (  pHalData->IntArray[1]  & IMR_TXERR_88E )
-		DBG_871X("===> %s Tx Error Flag Interrupt Status\n",__FUNCTION__);
+		DBG_88E("===> %s Tx Error Flag Interrupt Status\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_RXERR_88E )
-		DBG_871X("===> %s Rx Error Flag INT Status\n",__FUNCTION__);
+		DBG_88E("===> %s Rx Error Flag INT Status\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_TXFOVW_88E )
-		DBG_871X("===> %s Transmit FIFO Overflow\n",__FUNCTION__);
+		DBG_88E("===> %s Transmit FIFO Overflow\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_RXFOVW_88E )
-		DBG_871X("===> %s Receive FIFO Overflow\n",__FUNCTION__);
+		DBG_88E("===> %s Receive FIFO Overflow\n",__FUNCTION__);
 
 	/*  C2H Event */
 	if (pbuf[0]!= 0) {
@@ -885,5 +885,5 @@ void rtl8188eu_set_hw_type(struct adapter *padapter)
 {
 	padapter->chip_type = RTL8188E;
 	padapter->HardwareType = HARDWARE_TYPE_RTL8188EU;
-	DBG_871X("CHIP TYPE: RTL8188E\n");
+	DBG_88E("CHIP TYPE: RTL8188E\n");
 }

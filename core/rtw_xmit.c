@@ -404,19 +404,19 @@ static void update_attrib_vcs_info(struct adapter *padapter, struct xmit_frame *
 	}
 	else
 	{
-		DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+		DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 		psta =rtw_get_stainfo(&padapter->stapriv ,&pattrib->ra[0] );
 	}
 
         if (psta == NULL)
 	{
-		DBG_871X("%s, psta ==NUL\n", __func__);
+		DBG_88E("%s, psta ==NUL\n", __func__);
 		return;
 	}
 
 	if (!(psta->state &_FW_LINKED))
 	{
-		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
+		DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 		return;
 	}
 
@@ -556,7 +556,7 @@ u8	qos_acm(u8 acm_mask, u8 priority)
 				change_priority = 5;
 			break;
 		default:
-			DBG_871X("qos_acm(): invalid pattrib->priority: %d!!!\n", priority);
+			DBG_88E("qos_acm(): invalid pattrib->priority: %d!!!\n", priority);
 			break;
 	}
 
@@ -650,7 +650,7 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
 			}
 		}
 	} else if (0x888e == pattrib->ether_type) {
-		DBG_871X_LEVEL(_drv_always_, "send eapol packet\n");
+		DBG_88E_LEVEL(_drv_always_, "send eapol packet\n");
 	}
 
 	if ( (pattrib->ether_type == 0x888e) || (pattrib->dhcp_pkt == 1) )
@@ -672,7 +672,7 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
 		if (psta == NULL)	{ /*  if we cannot get psta => drrp the pkt */
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:" MAC_FMT"\n", MAC_ARG(pattrib->ra)));
 			#ifdef DBG_TX_DROP_FRAME
-			DBG_871X("DBG_TX_DROP_FRAME %s get sta_info fail, ra:" MAC_FMT"\n", __FUNCTION__, MAC_ARG(pattrib->ra));
+			DBG_88E("DBG_TX_DROP_FRAME %s get sta_info fail, ra:" MAC_FMT"\n", __FUNCTION__, MAC_ARG(pattrib->ra));
 			#endif
 			res =_FAIL;
 			goto exit;
@@ -695,7 +695,7 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
 		/*  if we cannot get psta => drop the pkt */
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("\nupdate_attrib => get sta_info fail, ra:" MAC_FMT "\n", MAC_ARG(pattrib->ra)));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_871X("DBG_TX_DROP_FRAME %s get sta_info fail, ra:" MAC_FMT"\n", __FUNCTION__, MAC_ARG(pattrib->ra));
+		DBG_88E("DBG_TX_DROP_FRAME %s get sta_info fail, ra:" MAC_FMT"\n", __FUNCTION__, MAC_ARG(pattrib->ra));
 		#endif
 		res = _FAIL;
 		goto exit;
@@ -735,7 +735,7 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
 		{
 			RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("\npsta->ieee8021x_blocked == true,  pattrib->ether_type(%.4x) != 0x888e\n", pattrib->ether_type));
 			#ifdef DBG_TX_DROP_FRAME
-			DBG_871X("DBG_TX_DROP_FRAME %s psta->ieee8021x_blocked == true,  pattrib->ether_type(%04x) != 0x888e\n", __FUNCTION__, pattrib->ether_type);
+			DBG_88E("DBG_TX_DROP_FRAME %s psta->ieee8021x_blocked == true,  pattrib->ether_type(%04x) != 0x888e\n", __FUNCTION__, pattrib->ether_type);
 			#endif
 			res = _FAIL;
 			goto exit;
@@ -781,7 +781,7 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
 			{
 				RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("\npadapter->securitypriv.busetkipkey(%d) ==_FAIL drop packet\n", padapter->securitypriv.busetkipkey));
 				#ifdef DBG_TX_DROP_FRAME
-				DBG_871X("DBG_TX_DROP_FRAME %s padapter->securitypriv.busetkipkey(%d) ==_FAIL drop packet\n", __FUNCTION__, padapter->securitypriv.busetkipkey);
+				DBG_88E("DBG_TX_DROP_FRAME %s padapter->securitypriv.busetkipkey(%d) ==_FAIL drop packet\n", __FUNCTION__, padapter->securitypriv.busetkipkey);
 				#endif
 				res =_FAIL;
 				goto exit;
@@ -839,19 +839,19 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 	}
 	else
 	{
-		DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+		DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 		stainfo =rtw_get_stainfo(&padapter->stapriv ,&pattrib->ra[0]);
 	}
 
 	if (stainfo == NULL)
 	{
-		DBG_871X("%s, psta ==NUL\n", __func__);
+		DBG_88E("%s, psta ==NUL\n", __func__);
 		return _FAIL;
 	}
 
 	if (!(stainfo->state &_FW_LINKED))
 	{
-		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, stainfo->state);
+		DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, stainfo->state);
 		return _FAIL;
 	}
 
@@ -968,7 +968,7 @@ static s32 xmitframe_swencrypt(struct adapter *padapter, struct xmit_frame *pxmi
 	/* if ((psecuritypriv->sw_encrypt)||(pattrib->bswenc)) */
 	if (pattrib->bswenc)
 	{
-		/* DBG_871X("start xmitframe_swencrypt\n"); */
+		/* DBG_88E("start xmitframe_swencrypt\n"); */
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("### xmitframe_swencrypt\n"));
 		switch (pattrib->encrypt) {
 		case _WEP40_:
@@ -1015,7 +1015,7 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 	if (pattrib->psta) {
 		psta = pattrib->psta;
 	} else {
-		DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+		DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 		if (bmcst) {
 			psta = rtw_get_bcmc_stainfo(padapter);
 		} else {
@@ -1025,13 +1025,13 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 
 	if (psta == NULL)
 	{
-		DBG_871X("%s, psta ==NUL\n", __func__);
+		DBG_88E("%s, psta ==NUL\n", __func__);
 		return _FAIL;
 	}
 
 	if (!(psta->state &_FW_LINKED))
 	{
-		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
+		DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 		return _FAIL;
 	}
 
@@ -1126,7 +1126,7 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 					/* check BA_starting_seqctrl */
 					if (SN_LESS(pattrib->seqnum, tx_seq))
 					{
-						/* DBG_871X("tx ampdu seqnum(%d) < tx_seq(%d)\n", pattrib->seqnum, tx_seq); */
+						/* DBG_88E("tx ampdu seqnum(%d) < tx_seq(%d)\n", pattrib->seqnum, tx_seq); */
 						pattrib->ampdu_en = false;/* AGG BK */
 					}
 					else if (SN_EQUAL(pattrib->seqnum, tx_seq))
@@ -1137,7 +1137,7 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 					}
 					else
 					{
-						/* DBG_871X("tx ampdu over run\n"); */
+						/* DBG_88E("tx ampdu over run\n"); */
 						psta->BA_starting_seqctrl[pattrib->priority & 0x0f] = (pattrib->seqnum+1)&0xfff;
 						pattrib->ampdu_en = true;/* AGG EN */
 					}
@@ -1181,19 +1181,19 @@ s32 rtw_txframes_sta_ac_pending(struct adapter *padapter, struct pkt_attrib *pat
 	}
 	else
 	{
-		DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+		DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 		psta =rtw_get_stainfo(&padapter->stapriv ,&pattrib->ra[0]);
 	}
 
 	if (psta == NULL)
 	{
-		DBG_871X("%s, psta ==NUL\n", __func__);
+		DBG_88E("%s, psta ==NUL\n", __func__);
 		return 0;
 	}
 
 	if (!(psta->state &_FW_LINKED))
 	{
-		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
+		DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 		return 0;
 	}
 
@@ -1281,20 +1281,20 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
 		psta = pattrib->psta;
 	} else
 	{
-		DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+		DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 		psta = rtw_get_stainfo(&padapter->stapriv, pattrib->ra);
 	}
 
 	if (psta == NULL)
         {
 
-		DBG_871X("%s, psta ==NUL\n", __func__);
+		DBG_88E("%s, psta ==NUL\n", __func__);
 		return _FAIL;
 	}
 
 	if (!(psta->state &_FW_LINKED))
 	{
-		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
+		DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 		return _FAIL;
 	}
 
@@ -1491,7 +1491,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 	/* IGTK key is not install, it may not support 802.11w */
 	if (padapter->securitypriv.binstallBIPkey != true)
 	{
-		DBG_871X("no instll BIP key\n");
+		DBG_88E("no instll BIP key\n");
 		goto xmitframe_coalesce_success;
 	}
 	/* station mode doesn't need TX BIP, just ready the code */
@@ -1579,17 +1579,17 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 			if (psta == NULL)
 		    {
 
-				DBG_871X("%s, psta ==NUL\n", __func__);
+				DBG_88E("%s, psta ==NUL\n", __func__);
 				goto xmitframe_coalesce_fail;
 			}
 
 			if (!(psta->state & _FW_LINKED) || pxmitframe->buf_addr == NULL)
 			{
-				DBG_871X("%s, not _FW_LINKED or addr null\n", __func__);
+				DBG_88E("%s, not _FW_LINKED or addr null\n", __func__);
 				goto xmitframe_coalesce_fail;
 			}
 
-			/* DBG_871X("%s, action frame category =%d\n", __func__, pframe[WLAN_HDR_A3_LEN]); */
+			/* DBG_88E("%s, action frame category =%d\n", __func__, pframe[WLAN_HDR_A3_LEN]); */
 			/* according 802.11-2012 standard, these five types are not robust types */
 			if (subtype == WIFI_ACTION &&
 			(pframe[WLAN_HDR_A3_LEN] == RTW_WLAN_CATEGORY_PUBLIC ||
@@ -1810,14 +1810,14 @@ struct xmit_buf *rtw_alloc_xmitbuf_ext(struct xmit_priv *pxmitpriv)
 	{
 		pxmitpriv->free_xmit_extbuf_cnt--;
 		#ifdef DBG_XMIT_BUF_EXT
-		DBG_871X("DBG_XMIT_BUF_EXT ALLOC no =%d,  free_xmit_extbuf_cnt =%d\n", pxmitbuf->no, pxmitpriv->free_xmit_extbuf_cnt);
+		DBG_88E("DBG_XMIT_BUF_EXT ALLOC no =%d,  free_xmit_extbuf_cnt =%d\n", pxmitbuf->no, pxmitpriv->free_xmit_extbuf_cnt);
 		#endif
 
 		pxmitbuf->priv_data = NULL;
 		/* pxmitbuf->ext_tag = true; */
 
 		if (pxmitbuf->sctx) {
-			DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
+			DBG_88E("%s pxmitbuf->sctx is not NULL\n", __func__);
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
 		}
 
@@ -1843,7 +1843,7 @@ s32 rtw_free_xmitbuf_ext(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 	rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_queue));
 	pxmitpriv->free_xmit_extbuf_cnt++;
 	#ifdef DBG_XMIT_BUF_EXT
-	DBG_871X("DBG_XMIT_BUF_EXT FREE no =%d, free_xmit_extbuf_cnt =%d\n", pxmitbuf->no , pxmitpriv->free_xmit_extbuf_cnt);
+	DBG_88E("DBG_XMIT_BUF_EXT FREE no =%d, free_xmit_extbuf_cnt =%d\n", pxmitbuf->no , pxmitpriv->free_xmit_extbuf_cnt);
 	#endif
 
 	spin_unlock_irqrestore(&pfree_queue->lock, flags);
@@ -1860,7 +1860,7 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 
 ;
 
-	/* DBG_871X("+rtw_alloc_xmitbuf\n"); */
+	/* DBG_88E("+rtw_alloc_xmitbuf\n"); */
 
 	spin_lock_irqsave(&pfree_xmitbuf_queue->lock, flags);
 
@@ -1881,21 +1881,21 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 	{
 		pxmitpriv->free_xmitbuf_cnt--;
 		#ifdef DBG_XMIT_BUF
-		DBG_871X("DBG_XMIT_BUF ALLOC no =%d,  free_xmitbuf_cnt =%d\n", pxmitbuf->no, pxmitpriv->free_xmitbuf_cnt);
+		DBG_88E("DBG_XMIT_BUF ALLOC no =%d,  free_xmitbuf_cnt =%d\n", pxmitbuf->no, pxmitpriv->free_xmitbuf_cnt);
 		#endif
-		/* DBG_871X("alloc, free_xmitbuf_cnt =%d\n", pxmitpriv->free_xmitbuf_cnt); */
+		/* DBG_88E("alloc, free_xmitbuf_cnt =%d\n", pxmitpriv->free_xmitbuf_cnt); */
 
 		pxmitbuf->priv_data = NULL;
 		/* pxmitbuf->ext_tag = false; */
 		if (pxmitbuf->sctx) {
-			DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
+			DBG_88E("%s pxmitbuf->sctx is not NULL\n", __func__);
 			rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_ALLOC);
 		}
 	}
 	#ifdef DBG_XMIT_BUF
 	else
 	{
-		DBG_871X("DBG_XMIT_BUF rtw_alloc_xmitbuf return NULL\n");
+		DBG_88E("DBG_XMIT_BUF rtw_alloc_xmitbuf return NULL\n");
 	}
 	#endif
 
@@ -1913,7 +1913,7 @@ s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 		return _FAIL;
 
 	if (pxmitbuf->sctx) {
-		DBG_871X("%s pxmitbuf->sctx is not NULL\n", __func__);
+		DBG_88E("%s pxmitbuf->sctx is not NULL\n", __func__);
 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_BUF_FREE);
 	}
 
@@ -1927,9 +1927,9 @@ s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 		rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_xmitbuf_queue));
 
 		pxmitpriv->free_xmitbuf_cnt++;
-		/* DBG_871X("FREE, free_xmitbuf_cnt =%d\n", pxmitpriv->free_xmitbuf_cnt); */
+		/* DBG_88E("FREE, free_xmitbuf_cnt =%d\n", pxmitpriv->free_xmitbuf_cnt); */
 		#ifdef DBG_XMIT_BUF
-		DBG_871X("DBG_XMIT_BUF FREE no =%d, free_xmitbuf_cnt =%d\n", pxmitbuf->no , pxmitpriv->free_xmitbuf_cnt);
+		DBG_88E("DBG_XMIT_BUF FREE no =%d, free_xmitbuf_cnt =%d\n", pxmitbuf->no , pxmitpriv->free_xmitbuf_cnt);
 		#endif
 		spin_unlock_irqrestore(&pfree_xmitbuf_queue->lock, flags);
 	}
@@ -2066,7 +2066,7 @@ struct xmit_frame *rtw_alloc_xmitframe_once(struct xmit_priv *pxmitpriv)
 
 	rtw_init_xmitframe(pxframe);
 
-	DBG_871X("################## %s ##################\n", __func__);
+	DBG_88E("################## %s ##################\n", __func__);
 
 exit:
 	return pxframe;
@@ -2091,7 +2091,7 @@ s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitfram
 	}
 
 	if (pxmitframe->alloc_addr) {
-		DBG_871X("################## %s with alloc_addr ##################\n", __func__);
+		DBG_88E("################## %s with alloc_addr ##################\n", __func__);
 		rtw_mfree(pxmitframe->alloc_addr, sizeof(struct xmit_frame) + 4);
 		goto check_pkt_complete;
 	}
@@ -2319,7 +2319,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, struct xmit_frame *pxmitframe)
 	if (pattrib->psta) {
 		psta = pattrib->psta;
 	} else {
-		DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+		DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 		psta = rtw_get_stainfo(pstapriv, pattrib->ra);
 	}
 
@@ -2332,7 +2332,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, struct xmit_frame *pxmitframe)
 
 	if (!(psta->state &_FW_LINKED))
 	{
-		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
+		DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 		return _FAIL;
 	}
 
@@ -2666,7 +2666,7 @@ s32 rtw_xmit(struct adapter *padapter, struct sk_buff **ppkt)
 
 	if (rtw_get_passing_time_ms(start) > 2000) {
 		if (drop_cnt)
-			DBG_871X("DBG_TX_DROP_FRAME %s no more pxmitframe, drop_cnt:%u\n", __FUNCTION__, drop_cnt);
+			DBG_88E("DBG_TX_DROP_FRAME %s no more pxmitframe, drop_cnt:%u\n", __FUNCTION__, drop_cnt);
 		start = jiffies;
 		drop_cnt = 0;
 	}
@@ -2704,7 +2704,7 @@ s32 rtw_xmit(struct adapter *padapter, struct sk_buff **ppkt)
 	if (res == _FAIL) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit: update attrib fail\n"));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_871X("DBG_TX_DROP_FRAME %s update attrib fail\n", __FUNCTION__);
+		DBG_88E("DBG_TX_DROP_FRAME %s update attrib fail\n", __FUNCTION__);
 		#endif
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
 		return -1;
@@ -2751,25 +2751,25 @@ sint xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fr
 	}
 	else
 	{
-		DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+		DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 		psta =rtw_get_stainfo(pstapriv, pattrib->ra);
 	}
 
 	if (psta == NULL)
 	{
-		DBG_871X("%s, psta ==NUL\n", __func__);
+		DBG_88E("%s, psta ==NUL\n", __func__);
 		return false;
 	}
 
 	if (!(psta->state &_FW_LINKED))
 	{
-		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
+		DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 		return false;
 	}
 
 	if (pattrib->triggered ==1)
 	{
-		/* DBG_871X("directly xmit pspoll_triggered packet\n"); */
+		/* DBG_88E("directly xmit pspoll_triggered packet\n"); */
 
 		/* pattrib->triggered =0; */
 
@@ -2848,11 +2848,11 @@ sint xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fr
 			{
 				pstapriv->tim_bitmap |= BIT(psta->aid);
 
-				/* DBG_871X("enqueue, sq_len =%d, tim =%x\n", psta->sleepq_len, pstapriv->tim_bitmap); */
+				/* DBG_88E("enqueue, sq_len =%d, tim =%x\n", psta->sleepq_len, pstapriv->tim_bitmap); */
 
 				if (psta->sleepq_len ==1)
 				{
-					/* DBG_871X("sleepq_len ==1, update BCNTIM\n"); */
+					/* DBG_88E("sleepq_len ==1, update BCNTIM\n"); */
 					/* upate BCN for TIM IE */
 					update_beacon(padapter, _TIM_IE_, NULL, false);
 				}
@@ -2909,7 +2909,7 @@ static void dequeue_xmitframes_to_sleeping_queue(struct adapter *padapter, struc
 		}
 		else
 		{
-			/* DBG_871X("xmitframe_enqueue_for_sleeping_sta return false\n"); */
+			/* DBG_88E("xmitframe_enqueue_for_sleeping_sta return false\n"); */
 		}
 
 	}
@@ -3076,7 +3076,7 @@ void wakeup_sta_to_xmit(struct adapter *padapter, struct sta_info *psta)
 			pstapriv->tim_bitmap &= ~BIT(0);
 			pstapriv->sta_dz_bitmap &= ~BIT(0);
 
-			/* DBG_871X("wakeup to xmit, qlen == 0, update_BCNTIM, tim =%x\n", pstapriv->tim_bitmap); */
+			/* DBG_88E("wakeup to xmit, qlen == 0, update_BCNTIM, tim =%x\n", pstapriv->tim_bitmap); */
 			/* upate BCN for TIM IE */
 			/* update_BCNTIM(padapter); */
 			update_mask |= BIT(1);
@@ -3088,7 +3088,7 @@ void wakeup_sta_to_xmit(struct adapter *padapter, struct sta_info *psta)
 	{
 		pstapriv->tim_bitmap &= ~BIT(psta->aid);
 
-		/* DBG_871X("wakeup to xmit, qlen == 0, update_BCNTIM, tim =%x\n", pstapriv->tim_bitmap); */
+		/* DBG_88E("wakeup to xmit, qlen == 0, update_BCNTIM, tim =%x\n", pstapriv->tim_bitmap); */
 		/* upate BCN for TIM IE */
 		/* update_BCNTIM(padapter); */
 		update_mask = BIT(0);
@@ -3212,7 +3212,7 @@ int rtw_sctx_wait(struct submit_ctx *sctx)
 	if (!wait_for_completion_timeout(&sctx->done, expire)) {
 		/* timeout, do something?? */
 		status = RTW_SCTX_DONE_TIMEOUT;
-		DBG_871X("%s timeout\n", __func__);
+		DBG_88E("%s timeout\n", __func__);
 	} else {
 		status = sctx->status;
 	}
@@ -3243,7 +3243,7 @@ void rtw_sctx_done_err(struct submit_ctx **sctx, int status)
 {
 	if (*sctx) {
 		if (rtw_sctx_chk_waring_status(status))
-			DBG_871X("%s status:%d\n", __func__, status);
+			DBG_88E("%s status:%d\n", __func__, status);
 		(*sctx)->status = status;
 		complete(&((*sctx)->done));
 		*sctx = NULL;
@@ -3273,6 +3273,6 @@ void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status)
 	if (pxmitpriv->ack_tx) {
 		rtw_sctx_done_err(&pack_tx_ops, status);
 	} else {
-		DBG_871X("%s ack_tx not set\n", __func__);
+		DBG_88E("%s ack_tx not set\n", __func__);
 	}
 }

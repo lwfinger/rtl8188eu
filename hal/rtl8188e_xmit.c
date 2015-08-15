@@ -28,7 +28,7 @@ void dump_txrpt_ccx_88e(void *buf)
 {
 	struct txrpt_ccx_88e *txrpt_ccx = (struct txrpt_ccx_88e *)buf;
 
-	DBG_871X("%s:\n"
+	DBG_88E("%s:\n"
 		"tag1:%u, pkt_num:%u, txdma_underflow:%u, int_bt:%u, int_tri:%u, int_ccx:%u\n"
 		"mac_id:%u, pkt_ok:%u, bmc:%u\n"
 		"retry_cnt:%u, lifetime_over:%u, retry_over:%u\n"
@@ -68,13 +68,13 @@ void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *pt
 	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DUMP_TXPKT, &(bDumpTxPkt));
 
 	if (bDumpTxPkt ==1) {/* dump txdesc for data frame */
-		DBG_871X("dump tx_desc for data frame\n");
+		DBG_88E("dump tx_desc for data frame\n");
 		if ((frame_tag&0x0f) == DATA_FRAMETAG) {
 			bDumpTxDesc = true;
 		}
 	}
 	else if (bDumpTxPkt ==2) {/* dump txdesc for mgnt frame */
-		DBG_871X("dump tx_desc for mgnt frame\n");
+		DBG_88E("dump tx_desc for mgnt frame\n");
 		if ((frame_tag&0x0f) == MGNT_FRAMETAG) {
 			bDumpTxDesc = true;
 		}

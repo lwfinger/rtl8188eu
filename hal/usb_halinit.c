@@ -67,7 +67,7 @@ _ConfigNormalChipOutEP_8188E(
 				break;
 
 	}
-	DBG_871X("%s OutEpQueueSel(0x%02x), OutEpNumber(%d)\n",__FUNCTION__,pHalData->OutEpQueueSel,pHalData->OutEpNumber );
+	DBG_88E("%s OutEpQueueSel(0x%02x), OutEpNumber(%d)\n",__FUNCTION__,pHalData->OutEpQueueSel,pHalData->OutEpNumber );
 
 }
 
@@ -142,7 +142,7 @@ static u32 InitPowerOn_rtl8188eu(struct adapter *padapter)
 
 	if (!HalPwrSeqCmdParsing(padapter, PWR_CUT_ALL_MSK, PWR_FAB_ALL_MSK, PWR_INTF_USB_MSK, Rtl8188E_NIC_PWR_ON_FLOW))
 	{
-		DBG_871X(KERN_ERR "%s: run power on flow fail\n", __func__);
+		DBG_88E(KERN_ERR "%s: run power on flow fail\n", __func__);
 		return _FAIL;
 	}
 
@@ -1301,7 +1301,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 #endif  /* MP_DRIVER == 1 */
 	status = rtl8188e_FirmwareDownload(Adapter);
 	if (status != _SUCCESS) {
-		DBG_871X("%s: Download Firmware failed!!\n", __FUNCTION__);
+		DBG_88E("%s: Download Firmware failed!!\n", __FUNCTION__);
 		Adapter->bFWReady = false;
 		pHalData->fw_ractrl = false;
 		return status;
@@ -1317,7 +1317,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	status = PHY_MACConfig8188E(Adapter);
 	if (status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init MAC ......\n ");
+		DBG_88E(" ### Failed to init MAC ......\n ");
 		goto exit;
 	}
 #endif
@@ -1330,7 +1330,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	status = PHY_BBConfig8188E(Adapter);
 	if (status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init BB ......\n ");
+		DBG_88E(" ### Failed to init BB ......\n ");
 		goto exit;
 	}
 #endif
@@ -1341,7 +1341,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	status = PHY_RFConfig8188E(Adapter);
 	if (status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init RF ......\n ");
+		DBG_88E(" ### Failed to init RF ......\n ");
 		goto exit;
 	}
 #endif
@@ -1349,7 +1349,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if (status == _FAIL) {
-		DBG_871X("%s  rtl8188e_iol_efuse_patch failed\n",__FUNCTION__);
+		DBG_88E("%s  rtl8188e_iol_efuse_patch failed\n",__FUNCTION__);
 		goto exit;
 	}
 
@@ -1522,13 +1522,13 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 exit:
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 
-	DBG_871X("%s in %dms\n", __FUNCTION__, rtw_get_passing_time_ms(init_start_time));
+	DBG_88E("%s in %dms\n", __FUNCTION__, rtw_get_passing_time_ms(init_start_time));
 
 	#ifdef DBG_HAL_INIT_PROFILING
 	hal_init_stages_timestamp[HAL_INIT_STAGES_END]=jiffies;
 
 	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM-1;hal_init_profiling_i++) {
-		DBG_871X("DBG_HAL_INIT_PROFILING: %35s, %u, %5u, %5u\n"
+		DBG_88E("DBG_HAL_INIT_PROFILING: %35s, %u, %5u, %5u\n"
 			, hal_init_stages_str[hal_init_profiling_i]
 			, hal_init_stages_timestamp[hal_init_profiling_i]
 			, (hal_init_stages_timestamp[hal_init_profiling_i+1]-hal_init_stages_timestamp[hal_init_profiling_i])
@@ -1695,7 +1695,7 @@ static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 	if (pHalData->RtIntInPipe != 0x05)
 	{
 		status = _FAIL;
-		DBG_871X("%s =>Warning !! Have not USB Int-IN pipe,  pHalData->RtIntInPipe(%d)!!!\n",__FUNCTION__,pHalData->RtIntInPipe);
+		DBG_88E("%s =>Warning !! Have not USB Int-IN pipe,  pHalData->RtIntInPipe(%d)!!!\n",__FUNCTION__,pHalData->RtIntInPipe);
 		goto exit;
 	}
 	_read_interrupt = pintfhdl->io_ops._read_interrupt;
@@ -1857,8 +1857,8 @@ Hal_EfuseParsePIDVID_8188EU(
 		pHalData->EEPROMSubCustomerID	= EEPROM_Default_SubCustomerID;
 	}
 
-	DBG_871X("VID = 0x%04X, PID = 0x%04X\n", pHalData->EEPROMVID, pHalData->EEPROMPID);
-	DBG_871X("Customer ID: 0x%02X, SubCustomer ID: 0x%02X\n", pHalData->EEPROMCustomerID, pHalData->EEPROMSubCustomerID);
+	DBG_88E("VID = 0x%04X, PID = 0x%04X\n", pHalData->EEPROMVID, pHalData->EEPROMPID);
+	DBG_88E("Customer ID: 0x%02X, SubCustomer ID: 0x%02X\n", pHalData->EEPROMCustomerID, pHalData->EEPROMSubCustomerID);
 }
 
 static void
@@ -2088,7 +2088,7 @@ static void hw_var_set_opmode(struct adapter *Adapter, u8 variable, u8* val)
 		val8 |= mode;
 		rtw_write8(Adapter, MSR, val8);
 
-		DBG_871X("%s()-%d mode = %d\n", __FUNCTION__, __LINE__, mode);
+		DBG_88E("%s()-%d mode = %d\n", __FUNCTION__, __LINE__, mode);
 
 		if ((mode == _HW_STATE_STATION_) || (mode == _HW_STATE_NOLINK_))
 		{
@@ -2141,7 +2141,7 @@ static void hw_var_set_opmode(struct adapter *Adapter, u8 variable, u8* val)
 			/*  Reset TSF for STA+AP concurrent mode */
 			if ( check_buddy_fwstate(Adapter, (WIFI_STATION_STATE|WIFI_ASOC_STATE)) ) {
 				if (reset_tsf(Adapter, IFACE_PORT0) == false)
-					DBG_871X("ERROR! %s()-%d: Reset port0 TSF fail\n",
+					DBG_88E("ERROR! %s()-%d: Reset port0 TSF fail\n",
 						__FUNCTION__, __LINE__);
 			}
 #endif	/*  CONFIG_TSF_RESET_OFFLOAD */
@@ -2446,11 +2446,11 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			break;
 		case HW_VAR_ON_RCR_AM:
                         rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)|RCR_AM);
-                        DBG_871X("%s, %d, RCR= %x\n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
+                        DBG_88E("%s, %d, RCR= %x\n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
                         break;
               case HW_VAR_OFF_RCR_AM:
                         rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)& (~RCR_AM));
-                        DBG_871X("%s, %d, RCR= %x\n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
+                        DBG_88E("%s, %d, RCR= %x\n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
                         break;
 		case HW_VAR_BEACON_INTERVAL:
 			rtw_write16(Adapter, REG_BCN_INTERVAL, *((u16 *)val));
@@ -2507,7 +2507,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			break;
 		case HW_VAR_DM_FLAG:
 			podmpriv->SupportAbility = *((u8 *)val);
-			/* DBG_871X("HW_VAR_DM_FLAG ==> SupportAbility:0x%08x\n",podmpriv->SupportAbility ); */
+			/* DBG_88E("HW_VAR_DM_FLAG ==> SupportAbility:0x%08x\n",podmpriv->SupportAbility ); */
 			break;
 		case HW_VAR_DM_FUNC_OP:
 			if (val[0])
@@ -2518,7 +2518,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			{/*  restore dm flag */
 				podmpriv->SupportAbility = podmpriv->BK_SupportAbility;
 			}
-			/* DBG_871X("HW_VAR_DM_FUNC_OP ==> %s SupportAbility:0x%08x\n", */
+			/* DBG_88E("HW_VAR_DM_FUNC_OP ==> %s SupportAbility:0x%08x\n", */
 			/* 	(val[0]==1)?"Save":"Restore", */
 			/* 	podmpriv->SupportAbility */
 			/* 	); */
@@ -2531,7 +2531,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			else {
 				podmpriv->SupportAbility |= *((u32 *)val);
 			}
-			/* DBG_871X("HW_VAR_DM_FUNC_SET ==> SupportAbility:0x%08x\n",podmpriv->SupportAbility ); */
+			/* DBG_88E("HW_VAR_DM_FUNC_SET ==> SupportAbility:0x%08x\n",podmpriv->SupportAbility ); */
 			break;
 		case HW_VAR_DM_FUNC_CLR:
 			podmpriv->SupportAbility &= *((u32 *)val);
@@ -2617,7 +2617,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				else
 					AcmCtrl &= (~AcmHw_BeqEn);
 
-				DBG_871X("[HW_VAR_ACM_CTRL] Write 0x%X\n", AcmCtrl );
+				DBG_88E("[HW_VAR_ACM_CTRL] Write 0x%X\n", AcmCtrl );
 				rtw_write8(Adapter, REG_ACMHWCTRL, AcmCtrl );
 			}
 			break;
@@ -2825,13 +2825,13 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			break;
 	case HW_VAR_APFM_ON_MAC:
 			pHalData->bMacPwrCtrlOn = *val;
-			DBG_871X("%s: bMacPwrCtrlOn=%d\n", __func__, pHalData->bMacPwrCtrlOn);
+			DBG_88E("%s: bMacPwrCtrlOn=%d\n", __func__, pHalData->bMacPwrCtrlOn);
 			break;
 	#if (RATE_ADAPTIVE_SUPPORT == 1)
 		case HW_VAR_TX_RPT_MAX_MACID:
 			{
 				u8 maxMacid = *val;
-				DBG_871X("### MacID(%d),Set Max Tx RPT MID(%d)\n",maxMacid,maxMacid+1);
+				DBG_88E("### MacID(%d),Set Max Tx RPT MID(%d)\n",maxMacid,maxMacid+1);
 				rtw_write8(Adapter, REG_TX_RPT_CTRL+1, maxMacid+1);
 			}
 			break;
@@ -3015,7 +3015,7 @@ static u8 GetHalDefVar8188EUsb(
 					bLinked = true;
 
 				if (bLinked) {
-					DBG_871X("============ RA status check ===================\n");
+					DBG_88E("============ RA status check ===================\n");
 					if (Adapter->bRxRSSIDisplay >30)
 						Adapter->bRxRSSIDisplay = 1;
 					for (i=0;i< Adapter->bRxRSSIDisplay;i++) {
@@ -3221,7 +3221,7 @@ static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rss
 		if (shortGIrate==true)
 			arg |= BIT(5);
 		mask |= ((raid<<28)&0xf0000000);
-		DBG_871X("update raid entry, mask=0x%x, arg=0x%x\n", mask, arg);
+		DBG_88E("update raid entry, mask=0x%x, arg=0x%x\n", mask, arg);
 		psta->ra_mask=mask;
 #ifdef CONFIG_INTEL_PROXIM
 		if (padapter->proximity.proxim_on ==true) {

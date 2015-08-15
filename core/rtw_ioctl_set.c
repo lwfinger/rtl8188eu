@@ -185,7 +185,7 @@ u8 rtw_do_join(struct adapter * padapter)
 					|| rtw_to_roaming(padapter) > 0
 				)
 				{
-					/* DBG_871X("rtw_do_join() when   no desired bss in scanning queue\n"); */
+					/* DBG_88E("rtw_do_join() when   no desired bss in scanning queue\n"); */
 					if ( _SUCCESS!=(ret =rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ) {
 						pmlmepriv->to_join = false;
 						RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("do_join(): site survey return error\n."));
@@ -219,7 +219,7 @@ u8 rtw_set_802_11_bssid(struct adapter* padapter, u8 *bssid)
 
 ;
 
-	DBG_871X_LEVEL(_drv_always_, "set bssid:%pM\n", bssid);
+	DBG_88E_LEVEL(_drv_always_, "set bssid:%pM\n", bssid);
 
 	if ((bssid[0]== 0x00 && bssid[1]== 0x00 && bssid[2]== 0x00 && bssid[3]== 0x00 && bssid[4]== 0x00 &&bssid[5]== 0x00) ||
 	    (bssid[0]== 0xFF && bssid[1]== 0xFF && bssid[2]== 0xFF && bssid[3]== 0xFF && bssid[4]== 0xFF &&bssid[5]== 0xFF))
@@ -230,7 +230,7 @@ u8 rtw_set_802_11_bssid(struct adapter* padapter, u8 *bssid)
 
 	spin_lock_bh(&pmlmepriv->lock);
 
-	DBG_871X("Set BSSID under fw_state =0x%08x\n", get_fwstate(pmlmepriv));
+	DBG_88E("Set BSSID under fw_state =0x%08x\n", get_fwstate(pmlmepriv));
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) {
 		goto handle_tkip_countermeasure;
 	} else if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == true) {
@@ -303,7 +303,7 @@ u8 rtw_set_802_11_ssid(struct adapter* padapter, struct ndis_802_11_ssid *ssid)
 
 ;
 
-	DBG_871X_LEVEL(_drv_always_, "set ssid [%s] fw_state =0x%08x\n",
+	DBG_88E_LEVEL(_drv_always_, "set ssid [%s] fw_state =0x%08x\n",
 			ssid->Ssid, get_fwstate(pmlmepriv));
 
 	if (padapter->hw_init_completed ==false) {
@@ -315,7 +315,7 @@ u8 rtw_set_802_11_ssid(struct adapter* padapter, struct ndis_802_11_ssid *ssid)
 
 	spin_lock_bh(&pmlmepriv->lock);
 
-	DBG_871X("Set SSID under fw_state =0x%08x\n", get_fwstate(pmlmepriv));
+	DBG_88E("Set SSID under fw_state =0x%08x\n", get_fwstate(pmlmepriv));
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) {
 		goto handle_tkip_countermeasure;
 	} else if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == true) {
@@ -426,7 +426,7 @@ u8 rtw_set_802_11_connect(struct adapter* padapter, u8 *bssid, struct ndis_802_1
 		bssid_valid = false;
 
 	if (ssid_valid == false && bssid_valid == false) {
-		DBG_871X(FUNC_ADPT_FMT" ssid:%p, ssid_valid:%d, bssid:%p, bssid_valid:%d\n",
+		DBG_88E(FUNC_ADPT_FMT" ssid:%p, ssid_valid:%d, bssid:%p, bssid_valid:%d\n",
 			FUNC_ADPT_ARG(padapter), ssid, ssid_valid, bssid, bssid_valid);
 		status = _FAIL;
 		goto exit;
@@ -441,7 +441,7 @@ u8 rtw_set_802_11_connect(struct adapter* padapter, u8 *bssid, struct ndis_802_1
 
 	spin_lock_bh(&pmlmepriv->lock);
 
-	DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT"  fw_state =0x%08x\n",
+	DBG_88E_LEVEL(_drv_always_, FUNC_ADPT_FMT"  fw_state =0x%08x\n",
 		FUNC_ADPT_ARG(padapter), get_fwstate(pmlmepriv));
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) {
@@ -500,7 +500,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
 		spin_lock_bh(&pmlmepriv->lock);
 
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_info_, (" change mode!"));
-		/* DBG_871X("change mode, old_mode =%d, new_mode =%d, fw_state =0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv)); */
+		/* DBG_88E("change mode, old_mode =%d, new_mode =%d, fw_state =0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv)); */
 
 		if (*pold_state ==Ndis802_11APMode) {
 			/* change to other mode from Ndis802_11APMode */
@@ -619,7 +619,7 @@ u8 rtw_set_802_11_bssid_list_scan(struct adapter* padapter, struct ndis_802_11_s
 		}
 	} else {
 		if (rtw_is_scan_deny(padapter)) {
-			DBG_871X(FUNC_ADPT_FMT": scan deny\n", FUNC_ADPT_ARG(padapter));
+			DBG_88E(FUNC_ADPT_FMT": scan deny\n", FUNC_ADPT_ARG(padapter));
 			indicate_wx_scan_complete_event(padapter);
 			return _SUCCESS;
 		}
@@ -1286,7 +1286,7 @@ int rtw_set_country(struct adapter *adapter, const char *country_code)
 {
 	int channel_plan = RT_CHANNEL_DOMAIN_WORLD_WIDE_5G;
 
-	DBG_871X("%s country_code:%s\n", __func__, country_code);
+	DBG_88E("%s country_code:%s\n", __func__, country_code);
 
 	/* TODO: should have a table to match country code and RT_CHANNEL_DOMAIN */
 	/* TODO: should consider 2-character and 3-character country code */
@@ -1301,7 +1301,7 @@ int rtw_set_country(struct adapter *adapter, const char *country_code)
 	else if (0 == strcmp(country_code, "IN"))
 		channel_plan = RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN;
 	else
-		DBG_871X("%s unknown country_code:%s\n", __FUNCTION__, country_code);
+		DBG_88E("%s unknown country_code:%s\n", __FUNCTION__, country_code);
 
 	return rtw_set_channel_plan(adapter, channel_plan);
 }

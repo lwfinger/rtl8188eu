@@ -1872,7 +1872,7 @@ static void _PHY_SwChnl8192C(struct adapter *Adapter, u8 channel)
 
 	if ( Adapter->bNotifyChannelChange )
 	{
-		DBG_871X( "[%s] ch = %d\n", __FUNCTION__, channel );
+		DBG_88E( "[%s] ch = %d\n", __FUNCTION__, channel );
 	}
 
 	/* s1. pre common command - CmdID_SetTxPowerLevel */

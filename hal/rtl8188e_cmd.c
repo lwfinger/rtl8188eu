@@ -228,7 +228,7 @@ void rtl8188e_Add_RateATid(struct adapter *pAdapter, u32 bitmap, u8 arg, u8 rssi
 
 	bitmap &= 0x0fffffff;
 
-	DBG_871X("%s=> mac_id:%d , raid:%d , ra_bitmap=0x%x, shortGIrate=0x%02x\n",
+	DBG_88E("%s=> mac_id:%d , raid:%d , ra_bitmap=0x%x, shortGIrate=0x%02x\n",
 			__FUNCTION__,macid ,raid ,bitmap, shortGIrate);
 
 
@@ -251,7 +251,7 @@ void rtl8188e_set_FwPwrMode_cmd(struct adapter *padapter, u8 Mode)
 	u8	RLBM = 0; /*  0:Min, 1:Max , 2:User define */
 ;
 
-	DBG_871X("%s: Mode=%d SmartPS=%d UAPSD=%d\n", __FUNCTION__,
+	DBG_88E("%s: Mode=%d SmartPS=%d UAPSD=%d\n", __FUNCTION__,
 			Mode, pwrpriv->smart_ps, padapter->registrypriv.uapsd_enable);
 
 	H2CSetPwrMode.AwakeInterval = 2;	/* DTIM =1 */
@@ -309,7 +309,7 @@ void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, __le16 mstatus_rpt
 	u32 reg_macid_no_link = REG_MACID_NO_LINK_0;
 	opmode = (u8) mst_rpt;
 	macid = (u8)(mst_rpt >> 8)  ;
-	DBG_871X("### %s: MStatus=%x MACID=%d\n", __FUNCTION__,opmode,macid);
+	DBG_88E("### %s: MStatus=%x MACID=%d\n", __FUNCTION__,opmode,macid);
 	FillH2CCmd_88E(padapter, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
 
 	if (macid > 31) {
@@ -342,7 +342,7 @@ static void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 
-	/* DBG_871X("%s\n", __FUNCTION__); */
+	/* DBG_88E("%s\n", __FUNCTION__); */
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -378,7 +378,7 @@ static void ConstructBeacon(struct adapter *padapter, u8 *pframe, u32 *pLength)
 
 	if ( (pmlmeinfo->state&0x03) == WIFI_FW_AP_STATE)
 	{
-		/* DBG_871X("ie len=%d\n", cur_network->IELength); */
+		/* DBG_88E("ie len=%d\n", cur_network->IELength); */
 		pktlen += cur_network->IELength - sizeof(struct ndis_802_11_fixed_ies);
 		memcpy(pframe, cur_network->IEs+sizeof(struct ndis_802_11_fixed_ies), pktlen);
 
@@ -423,13 +423,13 @@ _ConstructBeacon:
 
 	if ((pktlen + TXDESC_SIZE) > 512)
 	{
-		DBG_871X("beacon frame too large\n");
+		DBG_88E("beacon frame too large\n");
 		return;
 	}
 
 	*pLength = pktlen;
 
-	/* DBG_871X("%s bcn_sz=%d\n", __FUNCTION__, pktlen); */
+	/* DBG_88E("%s bcn_sz=%d\n", __FUNCTION__, pktlen); */
 
 }
 
@@ -441,7 +441,7 @@ static void ConstructPSPoll(struct adapter *padapter, u8 *pframe, u32 *pLength)
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	/* DBG_871X("%s\n", __FUNCTION__); */
+	/* DBG_88E("%s\n", __FUNCTION__); */
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -482,7 +482,7 @@ static void ConstructNullFunctionData(
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 
-	/* DBG_871X("%s:%d\n", __FUNCTION__, bForcePowerSave); */
+	/* DBG_88E("%s:%d\n", __FUNCTION__, bForcePowerSave); */
 
 	pwlanhdr = (struct rtw_ieee80211_hdr*)pframe;
 
@@ -541,7 +541,7 @@ static void rtl8188e_set_FwRsvdPage_cmd(struct adapter *padapter, PRSVDPAGE_LOC 
     u8 u1H2CRsvdPageParm[H2C_8188E_RSVDPAGE_LOC_LEN]={0};
     u8 u1H2CAoacRsvdPageParm[H2C_8188E_AOAC_RSVDPAGE_LOC_LEN]={0};
 
-    /* DBG_871X("8188RsvdPageLoc: PsPoll=%d Null=%d QoSNull=%d\n", */
+    /* DBG_88E("8188RsvdPageLoc: PsPoll=%d Null=%d QoSNull=%d\n", */
 	/* 	rsvdpageloc->LocPsPoll, rsvdpageloc->LocNullData, rsvdpageloc->LocQosNull); */
 
     SET_8188E_H2CCMD_RSVDPAGE_LOC_PSPOLL(u1H2CRsvdPageParm, rsvdpageloc->LocPsPoll);
@@ -597,11 +597,11 @@ static void SetFwRsvdPagePkt(struct adapter *padapter, bool bDLFinished)
 	u32	TotalPacketLen;
 	RSVDPAGE_LOC	RsvdPageLoc;
 
-	DBG_871X("%s\n", __FUNCTION__);
+	DBG_88E("%s\n", __FUNCTION__);
 
 	ReservedPagePacket = (u8*)rtw_zmalloc(RTL88E_RSVDPAGE_SIZE);
 	if (ReservedPagePacket == NULL) {
-		DBG_871X("%s: alloc ReservedPagePacket fail!\n", __FUNCTION__);
+		DBG_88E("%s: alloc ReservedPagePacket fail!\n", __FUNCTION__);
 		return;
 	}
 
@@ -683,11 +683,11 @@ static void SetFwRsvdPagePkt(struct adapter *padapter, bool bDLFinished)
 	if (TotalPacketLen < RTL88E_RSVDPAGE_SIZE)
 		memcpy(pmgntframe->buf_addr, ReservedPagePacket, TotalPacketLen);
 	else
-		DBG_871X("%s: memory copy fail at Line: %d\n", __FUNCTION__, __LINE__);
+		DBG_88E("%s: memory copy fail at Line: %d\n", __FUNCTION__, __LINE__);
 
 	rtw_hal_mgnt_xmit(padapter, pmgntframe);
 
-	DBG_871X("%s: Set RSVD page location to Fw\n", __FUNCTION__);
+	DBG_88E("%s: Set RSVD page location to Fw\n", __FUNCTION__);
 	rtl8188e_set_FwRsvdPage_cmd(padapter, &RsvdPageLoc);
 	/* FillH2CCmd_88E(padapter, H2C_COM_RSVD_PAGE, sizeof(RsvdPageLoc), (u8*)&RsvdPageLoc); */
 
@@ -706,7 +706,7 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus)
 	u8	DLBcnCount=0;
 	u32 poll = 0;
 
-	DBG_871X("%s mstatus(%x)\n", __FUNCTION__,mstatus);
+	DBG_88E("%s mstatus(%x)\n", __FUNCTION__,mstatus);
 
 	if (mstatus == 1) {
 		/*  We should set AID, correct TSF, HW seq enable before set JoinBssReport to Fw in 88/92C. */
@@ -732,7 +732,7 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus)
 
 		if (pHalData->RegFwHwTxQCtrl&BIT6)
 		{
-			DBG_871X("HalDownloadRSVDPage(): There is an Adapter is sending beacon.\n");
+			DBG_88E("HalDownloadRSVDPage(): There is an Adapter is sending beacon.\n");
 			bSendBeacon = true;
 		}
 
@@ -765,9 +765,9 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus)
 		{
 		}
 		else if (!bcn_valid)
-			DBG_871X("%s: 1 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __FUNCTION__ ,DLBcnCount, poll);
+			DBG_88E("%s: 1 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __FUNCTION__ ,DLBcnCount, poll);
 		else
-			DBG_871X("%s: 1 Download RSVD success! DLBcnCount:%u, poll:%u\n", __FUNCTION__, DLBcnCount, poll);
+			DBG_88E("%s: 1 Download RSVD success! DLBcnCount:%u, poll:%u\n", __FUNCTION__, DLBcnCount, poll);
 		/*  */
 		/*  We just can send the reserved page twice during the time that Tx thread is stopped (e.g. pnpsetpower) */
 		/*  becuase we need to free the Tx BCN Desc which is used by the first reserved page packet. */
@@ -802,9 +802,9 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus)
 				{
 				}
 				else if (!bcn_valid)
-					DBG_871X("%s: 2 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __FUNCTION__ ,DLBcnCount, poll);
+					DBG_88E("%s: 2 Download RSVD page failed! DLBcnCount:%u, poll:%u\n", __FUNCTION__ ,DLBcnCount, poll);
 				else
-					DBG_871X("%s: 2 Download RSVD success! DLBcnCount:%u, poll:%u\n", __FUNCTION__, DLBcnCount, poll);
+					DBG_88E("%s: 2 Download RSVD success! DLBcnCount:%u, poll:%u\n", __FUNCTION__, DLBcnCount, poll);
 			}
 		}
 
@@ -831,7 +831,7 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *padapter, u8 mstatus)
 		if (bcn_valid)
 		{
 			rtw_hal_set_hwreg(padapter, HW_VAR_BCN_VALID, NULL);
-			DBG_871X("Set RSVD page location to Fw.\n");
+			DBG_88E("Set RSVD page location to Fw.\n");
 			/* FillH2CCmd88E(Adapter, H2C_88E_RSVDPAGE, H2C_RSVDPAGE_LOC_LENGTH, pMgntInfo->u1RsvdPageLoc); */
 		}
 

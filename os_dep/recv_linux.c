@@ -240,11 +240,11 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 		struct rx_pkt_attrib *pattrib = &precv_frame->u.hdr.attrib;
 		int bmcast = IS_MCAST(pattrib->dst);
 
-		/* DBG_871X("bmcast=%d\n", bmcast); */
+		/* DBG_88E("bmcast=%d\n", bmcast); */
 
 		if (_rtw_memcmp(pattrib->dst, myid(&padapter->eeprompriv), ETH_ALEN)==false)
 		{
-			/* DBG_871X("not ap psta=%p, addr=%pM\n", psta, pattrib->dst); */
+			/* DBG_88E("not ap psta=%p, addr=%pM\n", psta, pattrib->dst); */
 
 			if (bmcast)
 			{
@@ -258,7 +258,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 			{
 				struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
 
-				/* DBG_871X("directly forwarding to the rtw_xmit_entry\n"); */
+				/* DBG_88E("directly forwarding to the rtw_xmit_entry\n"); */
 
 				/* skb->ip_summed = CHECKSUM_NONE; */
 				skb->dev = pnetdev;
@@ -283,7 +283,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 		}
 		else/*  to APself */
 		{
-			/* DBG_871X("to APSelf\n"); */
+			/* DBG_88E("to APSelf\n"); */
 		}
 	}
 

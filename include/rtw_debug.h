@@ -160,10 +160,10 @@ extern void rtl871x_cedbg(const char *fmt, ...);
 #define _func_exit_ do{}while (0)
 #define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen) do{}while (0)
 
-#define DBG_871X(x, ...) do {} while (0)
+#define DBG_88E(x, ...) do {} while (0)
 #define MSG_8192C(x, ...) do {} while (0)
 #define DBG_8192C(x,...) do {} while (0)
-#define DBG_871X_LEVEL(x,...) do {} while (0)
+#define DBG_88E_LEVEL(x,...) do {} while (0)
 
 #undef	_dbgdump
 #define _dbgdump	printk
@@ -172,8 +172,8 @@ extern u32 GlobalDebugLevel;
 
 #define DRIVER_PREFIX	"R8188EU: "
 #if	defined (_dbgdump)
-	#undef DBG_871X_LEVEL
-	#define DBG_871X_LEVEL(level, fmt, arg...)     \
+	#undef DBG_88E_LEVEL
+	#define DBG_88E_LEVEL(level, fmt, arg...)     \
 	do {\
 		if (level <= GlobalDebugLevel) {\
 			if (level <= _drv_err_ && level > _drv_always_) \
@@ -186,8 +186,8 @@ extern u32 GlobalDebugLevel;
 
 #ifdef CONFIG_DEBUG
 #if	defined (_dbgdump)
-	#undef DBG_871X
-	#define DBG_871X(...)     do {\
+	#undef DBG_88E
+	#define DBG_88E(...)     do {\
 		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
 	}while (0)
 

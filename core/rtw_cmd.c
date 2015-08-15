@@ -248,7 +248,7 @@ static int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 
 	if ((pcmdpriv->padapter->hw_init_completed ==false && bAllow == false) ||
 	     pcmdpriv->cmdthd_running == false) {	/* com_thread not running */
-		/* DBG_871X("%s:%s: drop cmdcode:%u, hw_init_completed:%u, cmdthd_running:%u\n", caller_func, __FUNCTION__, */
+		/* DBG_88E("%s:%s: drop cmdcode:%u, hw_init_completed:%u, cmdthd_running:%u\n", caller_func, __FUNCTION__, */
 		/* 	cmd_obj->cmdcode, */
 		/* 	pcmdpriv->padapter->hw_init_completed, */
 		/* 	pcmdpriv->cmdthd_running */
@@ -359,32 +359,32 @@ int rtw_cmd_thread(void * context)
 
 	while (1) {
 		if (_rtw_down_sema(&pcmdpriv->cmd_queue_sema) == _FAIL) {
-			DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" _rtw_down_sema(&pcmdpriv->cmd_queue_sema) return _FAIL, break\n", FUNC_ADPT_ARG(padapter));
+			DBG_88E_LEVEL(_drv_always_, FUNC_ADPT_FMT" _rtw_down_sema(&pcmdpriv->cmd_queue_sema) return _FAIL, break\n", FUNC_ADPT_ARG(padapter));
 			break;
 		}
 
 		if ((padapter->bDriverStopped == true)||(padapter->bSurpriseRemoved == true))
 		{
-			DBG_871X_LEVEL(_drv_always_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
+			DBG_88E_LEVEL(_drv_always_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
 				__FUNCTION__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
 			break;
 		}
 
 		if (pcmdpriv->stop_req) {
-			DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" stop_req:%u, break\n", FUNC_ADPT_ARG(padapter), pcmdpriv->stop_req);
+			DBG_88E_LEVEL(_drv_always_, FUNC_ADPT_FMT" stop_req:%u, break\n", FUNC_ADPT_ARG(padapter), pcmdpriv->stop_req);
 			break;
 		}
 
 		if (rtw_is_list_empty(&(pcmdpriv->cmd_queue.queue)))
 		{
-			/* DBG_871X("%s: cmd queue is empty!\n", __func__); */
+			/* DBG_88E("%s: cmd queue is empty!\n", __func__); */
 			continue;
 		}
 
 _next:
 		if ((padapter->bDriverStopped == true)||(padapter->bSurpriseRemoved == true))
 		{
-			DBG_871X_LEVEL(_drv_always_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
+			DBG_88E_LEVEL(_drv_always_, "%s: DriverStopped(%d) SurpriseRemoved(%d) break at line %d\n",
 				__FUNCTION__, padapter->bDriverStopped, padapter->bSurpriseRemoved, __LINE__);
 			break;
 		}
@@ -461,7 +461,7 @@ post_process:
 			break;
 		}
 
-		/* DBG_871X("%s: leaving... drop cmdcode:%u\n", __FUNCTION__, pcmd->cmdcode); */
+		/* DBG_88E("%s: leaving... drop cmdcode:%u\n", __FUNCTION__, pcmd->cmdcode); */
 
 		rtw_free_cmd_obj(pcmd);
 	}while (1);
@@ -1067,7 +1067,7 @@ u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network* pnetwork)
 	else
 		adapter_to_pwrctl(padapter)->smart_ps = padapter->registrypriv.smart_ps;
 
-	DBG_871X("%s: smart_ps =%d\n", __func__, adapter_to_pwrctl(padapter)->smart_ps);
+	DBG_88E("%s: smart_ps =%d\n", __func__, adapter_to_pwrctl(padapter)->smart_ps);
 
 	pcmd->cmdsz = get_wlan_bssid_ex_sz(psecnetwork);/* get cmdsz before endian conversion */
 
@@ -1439,7 +1439,7 @@ u8 rtw_addbareq_cmd(struct adapter*padapter, u8 tid, u8 *addr)
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, paddbareq_parm, GEN_CMD_CODE(_AddBAReq));
 
-	/* DBG_871X("rtw_addbareq_cmd, tid =%d\n", tid); */
+	/* DBG_88E("rtw_addbareq_cmd, tid =%d\n", tid); */
 
 	/* rtw_enqueue_cmd(pcmdpriv, ph2c); */
 	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
@@ -1576,7 +1576,7 @@ u8 rtw_set_ch_cmd(struct adapter*padapter, u8 ch, u8 bw, u8 ch_offset, u8 enqueu
 
 ;
 
-	DBG_871X(FUNC_NDEV_FMT" ch:%u, bw:%u, ch_offset:%u\n",
+	DBG_88E(FUNC_NDEV_FMT" ch:%u, bw:%u, ch_offset:%u\n",
 		FUNC_NDEV_ARG(padapter->pnetdev), ch, bw, ch_offset);
 
 	/* check input parameter */
@@ -1614,7 +1614,7 @@ u8 rtw_set_ch_cmd(struct adapter*padapter, u8 ch, u8 bw, u8 ch_offset, u8 enqueu
 
 exit:
 
-	DBG_871X(FUNC_NDEV_FMT" res:%u\n", FUNC_NDEV_ARG(padapter->pnetdev), res);
+	DBG_88E(FUNC_NDEV_FMT" res:%u\n", FUNC_NDEV_ARG(padapter->pnetdev), res);
 
 ;
 
@@ -1811,7 +1811,7 @@ static void traffic_status_watchdog(struct adapter *padapter)
 	if (link_detect->NumTxOkInPeriod > TX_ACTIVE_TH
 		|| link_detect->NumRxUnicastOkInPeriod > RX_ACTIVE_TH) {
 
-		DBG_871X_LEVEL(_drv_info_, FUNC_ADPT_FMT" acqiure wake_lock for %u ms(tx:%d, rx_unicast:%d)\n",
+		DBG_88E_LEVEL(_drv_info_, FUNC_ADPT_FMT" acqiure wake_lock for %u ms(tx:%d, rx_unicast:%d)\n",
 			FUNC_ADPT_ARG(padapter),
 			TRAFFIC_PROTECT_PERIOD_MS,
 			link_detect->NumTxOkInPeriod,
@@ -1894,7 +1894,7 @@ static void lps_ctrl_wk_hdl(struct adapter *padapter, u8 lps_ctrl_type)
 
 	switch (lps_ctrl_type) {
 		case LPS_CTRL_SCAN:
-			/* DBG_871X("LPS_CTRL_SCAN\n"); */
+			/* DBG_88E("LPS_CTRL_SCAN\n"); */
 #ifdef CONFIG_BT_COEXIST
 			BT_WifiScanNotify(padapter, true);
 			if (BT_1Ant(padapter) == false)
@@ -1907,11 +1907,11 @@ static void lps_ctrl_wk_hdl(struct adapter *padapter, u8 lps_ctrl_type)
 			}
 			break;
 		case LPS_CTRL_JOINBSS:
-			/* DBG_871X("LPS_CTRL_JOINBSS\n"); */
+			/* DBG_88E("LPS_CTRL_JOINBSS\n"); */
 			LPS_Leave(padapter);
 			break;
 		case LPS_CTRL_CONNECT:
-			/* DBG_871X("LPS_CTRL_CONNECT\n"); */
+			/* DBG_88E("LPS_CTRL_CONNECT\n"); */
 			mstatus = 1;/* connect */
 			/*  Reset LPS Setting */
 			pwrpriv->LpsIdleCount = 0;
@@ -1921,7 +1921,7 @@ static void lps_ctrl_wk_hdl(struct adapter *padapter, u8 lps_ctrl_type)
 #endif
 			break;
 		case LPS_CTRL_DISCONNECT:
-			/* DBG_871X("LPS_CTRL_DISCONNECT\n"); */
+			/* DBG_88E("LPS_CTRL_DISCONNECT\n"); */
 			mstatus = 0;/* disconnect */
 #ifdef CONFIG_BT_COEXIST
 			BT_WifiMediaStatusNotify(padapter, mstatus);
@@ -1933,7 +1933,7 @@ static void lps_ctrl_wk_hdl(struct adapter *padapter, u8 lps_ctrl_type)
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_JOINBSSRPT, (u8 *)(&mstatus));
 			break;
 		case LPS_CTRL_SPECIAL_PACKET:
-			/* DBG_871X("LPS_CTRL_SPECIAL_PACKET\n"); */
+			/* DBG_88E("LPS_CTRL_SPECIAL_PACKET\n"); */
 			pwrpriv->DelayLPSLastTimeStamp = jiffies;
 #ifdef CONFIG_BT_COEXIST
 			BT_SpecialPacketNotify(padapter);
@@ -1942,7 +1942,7 @@ static void lps_ctrl_wk_hdl(struct adapter *padapter, u8 lps_ctrl_type)
 				LPS_Leave(padapter);
 			break;
 		case LPS_CTRL_LEAVE:
-			/* DBG_871X("LPS_CTRL_LEAVE\n"); */
+			/* DBG_88E("LPS_CTRL_LEAVE\n"); */
 #ifdef CONFIG_BT_COEXIST
 			BT_LpsLeave(padapter);
 			if (BT_1Ant(padapter) == false)

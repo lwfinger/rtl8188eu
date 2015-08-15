@@ -647,7 +647,7 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 		}
 		else
 		{
-			DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+			DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 			stainfo =rtw_get_stainfo(&padapter->stapriv ,&pattrib->ra[0] );
 		}
 
@@ -655,7 +655,7 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 
 			if (!(stainfo->state &_FW_LINKED))
 			{
-				DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, stainfo->state);
+				DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, stainfo->state);
 				return _FAIL;
 			}
 
@@ -710,7 +710,7 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 		}
 		else {
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_tkip_encrypt: stainfo == NULL!!!\n"));
-	                DBG_871X("%s, psta ==NUL\n", __func__);
+	                DBG_88E("%s, psta ==NUL\n", __func__);
 			res =_FAIL;
 		}
 
@@ -770,7 +770,7 @@ u32 rtw_tkip_decrypt(struct adapter *padapter, u8 *precvframe)
 
 					if (rtw_get_passing_time_ms(start) > 1000) {
 						if (no_gkey_bc_cnt || no_gkey_mc_cnt) {
-							DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
+							DBG_88E_LEVEL(_drv_always_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
 								FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
 						}
 						start = jiffies;
@@ -781,14 +781,14 @@ u32 rtw_tkip_decrypt(struct adapter *padapter, u8 *precvframe)
 				}
 
 				if (no_gkey_bc_cnt || no_gkey_mc_cnt) {
-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" gkey installed. no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
+					DBG_88E_LEVEL(_drv_always_, FUNC_ADPT_FMT" gkey installed. no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
 						FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
 				}
 				start = 0;
 				no_gkey_bc_cnt = 0;
 				no_gkey_mc_cnt = 0;
 
-				/* DBG_871X("rx bc/mc packets, to perform sw rtw_tkip_decrypt\n"); */
+				/* DBG_88E("rx bc/mc packets, to perform sw rtw_tkip_decrypt\n"); */
 				/* prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey; */
 				prwskey = psecuritypriv->dot118021XGrpKey[prxattrib->key_index].skey;
 				prwskeylen =16;
@@ -1519,13 +1519,13 @@ u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 		if (pattrib->psta) {
 			stainfo = pattrib->psta;
 		} else {
-			DBG_871X("%s, call rtw_get_stainfo()\n", __func__);
+			DBG_88E("%s, call rtw_get_stainfo()\n", __func__);
 			stainfo =rtw_get_stainfo(&padapter->stapriv ,&pattrib->ra[0] );
 		}
 
 		if (stainfo!= NULL) {
 			if (!(stainfo->state &_FW_LINKED)) {
-				DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, stainfo->state);
+				DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, stainfo->state);
 				return _FAIL;
 			}
 
@@ -1553,7 +1553,7 @@ u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 			}
 		} else {
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_aes_encrypt: stainfo == NULL!!!\n"));
-	                DBG_871X("%s, psta ==NUL\n", __func__);
+	                DBG_88E("%s, psta ==NUL\n", __func__);
 			res =_FAIL;
 		}
 
@@ -1810,7 +1810,7 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 		{
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x)\n",
 						i, pframe[hdrlen+8+plen-8+i], message[hdrlen+8+plen-8+i]));
-			DBG_871X("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x)\n",
+			DBG_88E("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x)\n",
 						i, pframe[hdrlen+8+plen-8+i], message[hdrlen+8+plen-8+i]);
 			res = _FAIL;
 		}
@@ -1854,7 +1854,7 @@ u32	rtw_aes_decrypt(struct adapter *padapter, u8 *precvframe)
 
 					if (rtw_get_passing_time_ms(start) > 1000) {
 						if (no_gkey_bc_cnt || no_gkey_mc_cnt) {
-							DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
+							DBG_88E_LEVEL(_drv_always_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
 								FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
 						}
 						start = jiffies;
@@ -1866,7 +1866,7 @@ u32	rtw_aes_decrypt(struct adapter *padapter, u8 *precvframe)
 				}
 
 				if (no_gkey_bc_cnt || no_gkey_mc_cnt) {
-					DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" gkey installed. no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
+					DBG_88E_LEVEL(_drv_always_, FUNC_ADPT_FMT" gkey installed. no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
 						FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
 				}
 				start = 0;
@@ -1875,7 +1875,7 @@ u32	rtw_aes_decrypt(struct adapter *padapter, u8 *precvframe)
 
 				prwskey = psecuritypriv->dot118021XGrpKey[prxattrib->key_index].skey;
 				if (psecuritypriv->dot118021XGrpKeyid != prxattrib->key_index) {
-					DBG_871X("not match packet_index =%d, install_index =%d\n"
+					DBG_88E("not match packet_index =%d, install_index =%d\n"
 					, prxattrib->key_index, psecuritypriv->dot118021XGrpKeyid);
 					res =_FAIL;
 					goto exit;
@@ -1913,7 +1913,7 @@ u32	rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
 
 	if (BIP_AAD == NULL)
 	{
-		DBG_871X("BIP AAD allocate fail\n");
+		DBG_88E("BIP AAD allocate fail\n");
 		return _FAIL;
 	}
 	/* PKT start */
@@ -1935,7 +1935,7 @@ u32	rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
 		/* BIP packet number should bigger than previous BIP packet */
 		if (temp_ipn <= pmlmeext->mgnt_80211w_IPN_rx)
 		{
-			DBG_871X("replay BIP packet\n");
+			DBG_88E("replay BIP packet\n");
 			goto BIP_exit;
 		}
 		/* copy key index */
@@ -1943,7 +1943,7 @@ u32	rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
 		keyid = le16_to_cpu(keyid);
 		if (keyid != padapter->securitypriv.dot11wBIPKeyid)
 		{
-			DBG_871X("BIP key index error!\n");
+			DBG_88E("BIP key index error!\n");
 			goto BIP_exit;
 		}
 		/* clear the MIC field of MME to zero */
@@ -1964,20 +1964,20 @@ u32	rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
 		/*/* management packet content */
 		{
 			int pp;
-			DBG_871X("pkt: ");
+			DBG_88E("pkt: ");
 			for (pp =0;pp< pattrib->pkt_len; pp++)
 				printk(" %02x ", pframe[pp]);
-			DBG_871X("\n");
+			DBG_88E("\n");
 			/* BIP AAD + management frame body + MME(MIC is zero) */
-			DBG_871X("AAD+PKT: ");
+			DBG_88E("AAD+PKT: ");
 			for (pp =0;pp< ori_len; pp++)
-				DBG_871X(" %02x ", BIP_AAD[pp]);
-			DBG_871X("\n");
+				DBG_88E(" %02x ", BIP_AAD[pp]);
+			DBG_88E("\n");
 			/* show the MIC result */
-			DBG_871X("mic: ");
+			DBG_88E("mic: ");
 			for (pp =0;pp<16; pp++)
-				DBG_871X(" %02x ", mic[pp]);
-			DBG_871X("\n");
+				DBG_88E(" %02x ", mic[pp]);
+			DBG_88E("\n");
 		}
 		*/
 		/* MIC field should be last 8 bytes of packet (packet without FCS) */
@@ -1987,7 +1987,7 @@ u32	rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
 			res =_SUCCESS;
 		}
 		else
-			DBG_871X("BIP MIC error!\n");
+			DBG_88E("BIP MIC error!\n");
 
 	}
 	else
@@ -2741,12 +2741,12 @@ u8 rtw_handle_tkip_countermeasure(struct adapter* adapter, const char *caller)
 	if (securitypriv->btkip_countermeasure == true) {
 		u32 passing_ms = rtw_get_passing_time_ms(securitypriv->btkip_countermeasure_time);
 		if (passing_ms > 60*1000) {
-			DBG_871X_LEVEL(_drv_always_, "%s("ADPT_FMT") countermeasure time:%ds > 60s\n",
+			DBG_88E_LEVEL(_drv_always_, "%s("ADPT_FMT") countermeasure time:%ds > 60s\n",
 				caller, ADPT_ARG(adapter), passing_ms/1000);
 			securitypriv->btkip_countermeasure = false;
 			securitypriv->btkip_countermeasure_time = 0;
 		} else {
-			DBG_871X_LEVEL(_drv_always_, "%s("ADPT_FMT") countermeasure time:%ds < 60s\n",
+			DBG_88E_LEVEL(_drv_always_, "%s("ADPT_FMT") countermeasure time:%ds < 60s\n",
 				caller, ADPT_ARG(adapter), passing_ms/1000);
 			status = _FAIL;
 		}

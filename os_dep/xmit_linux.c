@@ -90,7 +90,7 @@ int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitb
 	for (i=0; i<8; i++) {
 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
 		if (pxmitbuf->pxmit_urb[i] == NULL) {
-			DBG_871X("pxmitbuf->pxmit_urb[i]== NULL");
+			DBG_88E("pxmitbuf->pxmit_urb[i]== NULL");
 			return _FAIL;
 		}
 
@@ -183,7 +183,7 @@ static void rtw_check_xmit_resource(struct adapter *padapter, struct sk_buff *pk
 	if (padapter->registrypriv.wifi_spec) {
 		/* No free space for Tx, tx_worker is too slow */
 		if (pxmitpriv->hwxmits[queue].accnt > WMM_XMIT_THRESHOLD) {
-			/* DBG_871X("%s(): stop netif_subqueue[%d]\n", __FUNCTION__, queue); */
+			/* DBG_88E("%s(): stop netif_subqueue[%d]\n", __FUNCTION__, queue); */
 			netif_stop_subqueue(padapter->pnetdev, queue);
 		}
 	} else {
@@ -251,13 +251,13 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 			memcpy(newskb->data, psta->hwaddr, 6);
 			res = rtw_xmit(padapter, &newskb);
 			if (res < 0) {
-				DBG_871X("%s()-%d: rtw_xmit() return error!\n", __FUNCTION__, __LINE__);
+				DBG_88E("%s()-%d: rtw_xmit() return error!\n", __FUNCTION__, __LINE__);
 				pxmitpriv->tx_drop++;
 				rtw_skb_free(newskb);
 			} else
 				pxmitpriv->tx_pkts++;
 		} else {
-			DBG_871X("%s-%d: rtw_skb_copy() failed!\n", __FUNCTION__, __LINE__);
+			DBG_88E("%s-%d: rtw_skb_copy() failed!\n", __FUNCTION__, __LINE__);
 			pxmitpriv->tx_drop++;
 			/* rtw_skb_free(skb); */
 			return false;	/*  Caller shall tx this multicast frame via normal way. */
@@ -285,7 +285,7 @@ int _rtw_xmit_entry(struct sk_buff *pkt, struct  net_device * pnetdev)
 	if (rtw_if_up(padapter) == false) {
 		RT_TRACE(_module_xmit_osdep_c_, _drv_err_, ("rtw_xmit_entry: rtw_if_up fail\n"));
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_871X("DBG_TX_DROP_FRAME %s if_up fail\n", __FUNCTION__);
+		DBG_88E("DBG_TX_DROP_FRAME %s if_up fail\n", __FUNCTION__);
 		#endif
 		goto drop_packet;
 	}
@@ -310,7 +310,7 @@ int _rtw_xmit_entry(struct sk_buff *pkt, struct  net_device * pnetdev)
 	res = rtw_xmit(padapter, &pkt);
 	if (res < 0) {
 		#ifdef DBG_TX_DROP_FRAME
-		DBG_871X("DBG_TX_DROP_FRAME %s rtw_xmit fail\n", __FUNCTION__);
+		DBG_88E("DBG_TX_DROP_FRAME %s rtw_xmit fail\n", __FUNCTION__);
 		#endif
 		goto drop_packet;
 	}

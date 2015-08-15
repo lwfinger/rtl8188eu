@@ -367,7 +367,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			#ifdef DBG_CCX
 			static u16 ccx_sw = 0x123;
 			ptxdesc->txdw7 |= cpu_to_le32(((ccx_sw)<<16)&0x0fff0000);
-			DBG_871X("%s set ccx, sw:0x%03x\n", __func__, ccx_sw);
+			DBG_88E("%s set ccx, sw:0x%03x\n", __func__, ccx_sw);
 			ccx_sw = (ccx_sw+1)%0xfff;
 			#endif
 			ptxdesc->txdw2 |= cpu_to_le32(BIT(19));
@@ -385,7 +385,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 
 #ifdef CONFIG_INTEL_PROXIM
 		if ((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)) {
-			DBG_871X("\n %s pattrib->rate=%d\n",__FUNCTION__,pattrib->rate);
+			DBG_88E("\n %s pattrib->rate=%d\n",__FUNCTION__,pattrib->rate);
 			ptxdesc->txdw5 |= cpu_to_le32( pattrib->rate);
 		}
 		else
@@ -568,7 +568,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	if (pxmitbuf == NULL) {
 		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
 		if (pxmitbuf == NULL) {
-			/* DBG_871X("%s #1, connot alloc xmitbuf!!!!\n",__FUNCTION__); */
+			/* DBG_88E("%s #1, connot alloc xmitbuf!!!!\n",__FUNCTION__); */
 			return false;
 		}
 	}
@@ -614,7 +614,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		pxmitframe->pkt_offset = 1; /*  first frame of aggregation, reserve offset */
 
 		if (rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe) == false) {
-			DBG_871X("%s coalesce 1st xmitframe failed\n",__FUNCTION__);
+			DBG_88E("%s coalesce 1st xmitframe failed\n",__FUNCTION__);
 			continue;
 		}
 
@@ -644,13 +644,13 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	/* psta = pfirstframe->attrib.psta; */
 	psta = rtw_get_stainfo(&padapter->stapriv, pfirstframe->attrib.ra);
 	if (pfirstframe->attrib.psta != psta) {
-		DBG_871X("%s, pattrib->psta(%p) != psta(%p)\n", __func__, pfirstframe->attrib.psta, psta);
+		DBG_88E("%s, pattrib->psta(%p) != psta(%p)\n", __func__, pfirstframe->attrib.psta, psta);
 	}
 	if (psta == NULL) {
 		DBG_8192C("rtw_xmit_classifier: psta == NULL\n");
 	}
 	if (!(psta->state &_FW_LINKED)) {
-		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
+		DBG_88E("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 	}
 
 	switch (pfirstframe->attrib.priority) {
@@ -731,7 +731,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		pxmitframe->buf_addr = pxmitbuf->pbuf + pbuf;
 
 		if (rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe) == false) {
-			DBG_871X("%s coalesce failed\n",__FUNCTION__);
+			DBG_88E("%s coalesce failed\n",__FUNCTION__);
 			rtw_free_xmitframe(pxmitpriv, pxmitframe);
 			continue;
 		}

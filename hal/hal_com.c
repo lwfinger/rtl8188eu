@@ -65,7 +65,7 @@ void dump_chip_info(struct hal_version	ChipVersion)
 
 	cnt += sprintf((buf+cnt), "RomVer(%d)\n", ChipVersion.ROMVer);
 
-	DBG_871X("%s", buf);
+	DBG_88E("%s", buf);
 }
 
 
@@ -357,7 +357,7 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 		&c2h_evt , sizeof(c2h_evt));
 
 	if (0) {
-		DBG_871X("%s id:%u, len:%u, seq:%u, trigger:0x%02x\n", __func__
+		DBG_88E("%s id:%u, len:%u, seq:%u, trigger:0x%02x\n", __func__
 			, c2h_evt->id, c2h_evt->plen, c2h_evt->seq, trigger);
 	}
 
@@ -401,7 +401,7 @@ SetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *valu
 		ODM_CmnInfoUpdate(pDM_Odm, ODM_CMNINFO_DBG_LEVEL, *((u32*)value));
 		break;
 	default:
-		DBG_871X_LEVEL(_drv_always_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
+		DBG_88E_LEVEL(_drv_always_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
 		bResult = _FAIL;
 		break;
 	}
@@ -427,7 +427,7 @@ GetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *valu
 		*((u32*)value) = pHalData->odmpriv.SupportAbility;
 		break;
 	default:
-		DBG_871X_LEVEL(_drv_always_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
+		DBG_88E_LEVEL(_drv_always_, "%s: [WARNING] HAL_DEF_VARIABLE(%d) not defined!\n", __FUNCTION__, variable);
 		bResult = _FAIL;
 		break;
 	}

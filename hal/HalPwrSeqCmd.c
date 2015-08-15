@@ -112,7 +112,7 @@ u8 HalPwrSeqCmdParsing(
 							rtw_udelay_os(10);
 
 						if (pollingCount++ > maxPollingCnt) {
-							DBG_871X("Fail to polling Offset[%#x]\n", offset);
+							DBG_88E("Fail to polling Offset[%#x]\n", offset);
 							return false;
 						}
 					} while (!bPollingBit);

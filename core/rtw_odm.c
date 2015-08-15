@@ -125,7 +125,7 @@ void rtw_odm_dbg_comp_msg(struct adapter *adapter)
 	char buf[768] = {0};
 
 	_rtw_odm_dbg_comp_msg(adapter, buf, 768);
-	DBG_871X_LEVEL(_drv_always_, "\n%s", buf);
+	DBG_88E_LEVEL(_drv_always_, "\n%s", buf);
 }
 
 inline void rtw_odm_dbg_comp_set(struct adapter *adapter, u64 comps)
@@ -156,7 +156,7 @@ void rtw_odm_dbg_level_msg(struct adapter *adapter)
 	char buf[100] = {0};
 
 	_rtw_odm_dbg_comp_msg(adapter, buf, 100);
-	DBG_871X_LEVEL(_drv_always_, "\n%s", buf);
+	DBG_88E_LEVEL(_drv_always_, "\n%s", buf);
 }
 
 inline void rtw_odm_dbg_level_set(struct adapter *adapter, u32 level)
@@ -187,7 +187,7 @@ void rtw_odm_adaptivity_parm_msg(struct adapter *adapter)
 	char buf[256] = {0};
 
 	_rtw_odm_dbg_comp_msg(adapter, buf, 256);
-	DBG_871X_LEVEL(_drv_always_, "\n%s", buf);
+	DBG_88E_LEVEL(_drv_always_, "\n%s", buf);
 }
 
 void rtw_odm_adaptivity_parm_set(struct adapter *adapter, s8 TH_L2H_ini, s8 TH_EDCCA_HL_diff,

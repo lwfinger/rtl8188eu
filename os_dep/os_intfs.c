@@ -360,7 +360,7 @@ static int rtw_net_set_mac_address(struct net_device *pnetdev, void *p)
 
 	if (padapter->bup == false)
 	{
-		/* DBG_871X("r8711_net_set_mac_address(), MAC=%x:%x:%x:%x:%x:%x\n", addr->sa_data[0], addr->sa_data[1], addr->sa_data[2], addr->sa_data[3], */
+		/* DBG_88E("r8711_net_set_mac_address(), MAC=%x:%x:%x:%x:%x:%x\n", addr->sa_data[0], addr->sa_data[1], addr->sa_data[2], addr->sa_data[3], */
 		/* addr->sa_data[4], addr->sa_data[5]); */
 		memcpy(padapter->eeprompriv.mac_addr, addr->sa_data, ETH_ALEN);
 		/* memcpy(pnetdev->dev_addr, addr->sa_data, ETH_ALEN); */
@@ -513,7 +513,7 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 		TargetNetdev = dev_get_by_name(devnet, "wlan0");
 #endif
 		if (TargetNetdev) {
-			DBG_871X("Force onboard module driver disappear !!!\n");
+			DBG_88E("Force onboard module driver disappear !!!\n");
 			TargetAdapter = rtw_netdev_priv(TargetNetdev);
 			TargetAdapter->DriverState = DRIVER_DISAPPEAR;
 
@@ -568,7 +568,7 @@ struct net_device *rtw_init_netdev(struct adapter *old_padapter)
 	/* pnetdev->init = NULL; */
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
-	DBG_871X("register rtw_netdev_ops to netdev_ops\n");
+	DBG_88E("register rtw_netdev_ops to netdev_ops\n");
 	pnetdev->netdev_ops = &rtw_netdev_ops;
 #else
 	pnetdev->open = netdev_open;
@@ -805,14 +805,14 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 
 	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL)
 	{
-		DBG_871X("Can't _rtw_init_xmit_priv\n");
+		DBG_88E("Can't _rtw_init_xmit_priv\n");
 		ret8=_FAIL;
 		goto exit;
 	}
 
 	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL)
 	{
-		DBG_871X("Can't _rtw_init_recv_priv\n");
+		DBG_88E("Can't _rtw_init_recv_priv\n");
 		ret8=_FAIL;
 		goto exit;
 	}
@@ -826,7 +826,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 
 	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
 	{
-		DBG_871X("Can't _rtw_init_sta_priv\n");
+		DBG_88E("Can't _rtw_init_sta_priv\n");
 		ret8=_FAIL;
 		goto exit;
 	}
@@ -1000,7 +1000,7 @@ void netdev_br_init(struct net_device *netdev)
 				memcpy(adapter->br_mac, br_netdev->dev_addr, ETH_ALEN);
 				dev_put(br_netdev);
 			} else
-				DBG_871X("%s()-%d: dev_get_by_name(%s) failed!", __FUNCTION__, __LINE__, CONFIG_BR_EXT_BRNAME);
+				DBG_88E("%s()-%d: dev_get_by_name(%s) failed!", __FUNCTION__, __LINE__, CONFIG_BR_EXT_BRNAME);
 		}
 
 		adapter->ethBrExtInfo.addPPPoETag = 1;
@@ -1024,12 +1024,12 @@ static int _rtw_drv_register_netdev(struct adapter *padapter, char *name)
 
 	/* Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0) {
-		DBG_871X(FUNC_NDEV_FMT "Failed!\n", FUNC_NDEV_ARG(pnetdev));
+		DBG_88E(FUNC_NDEV_FMT "Failed!\n", FUNC_NDEV_ARG(pnetdev));
 		ret = _FAIL;
 		goto error_register_netdev;
 	}
 
-	DBG_871X("%s, MAC Address (if%d) = " MAC_FMT "\n", __FUNCTION__, (padapter->iface_id+1), MAC_ARG(pnetdev->dev_addr));
+	DBG_88E("%s, MAC Address (if%d) = " MAC_FMT "\n", __FUNCTION__, (padapter->iface_id+1), MAC_ARG(pnetdev->dev_addr));
 
 	return ret;
 
@@ -1084,7 +1084,7 @@ int _netdev_open(struct net_device *pnetdev)
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(padapter);
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+871x_drv - dev_open\n"));
-	DBG_871X("+871x_drv - drv_open, bup=%d\n", padapter->bup);
+	DBG_88E("+871x_drv - drv_open, bup=%d\n", padapter->bup);
 
 	if (pwrctrlpriv->ps_flag == true) {
 		padapter->net_closed = false;
@@ -1104,12 +1104,12 @@ int _netdev_open(struct net_device *pnetdev)
 			goto netdev_open_error;
 		}
 
-		DBG_871X("MAC Address = "MAC_FMT"\n", MAC_ARG(pnetdev->dev_addr));
+		DBG_88E("MAC Address = "MAC_FMT"\n", MAC_ARG(pnetdev->dev_addr));
 
 		status=rtw_start_drv_threads(padapter);
 		if (status ==_FAIL)
 		{
-			DBG_871X("Initialize driver software resource Failed!\n");
+			DBG_88E("Initialize driver software resource Failed!\n");
 			goto netdev_open_error;
 		}
 
@@ -1151,7 +1151,7 @@ int _netdev_open(struct net_device *pnetdev)
 netdev_open_normal_process:
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-871x_drv - dev_open\n"));
-	DBG_871X("-871x_drv - drv_open, bup=%d\n", padapter->bup);
+	DBG_88E("-871x_drv - drv_open, bup=%d\n", padapter->bup);
 
 	return 0;
 
@@ -1163,7 +1163,7 @@ netdev_open_error:
 	rtw_netif_stop_queue(pnetdev);
 
 	RT_TRACE(_module_os_intfs_c_,_drv_err_,("-871x_drv - dev_open, fail!\n"));
-	DBG_871X("-871x_drv - drv_open fail, bup=%d\n", padapter->bup);
+	DBG_88E("-871x_drv - drv_open fail, bup=%d\n", padapter->bup);
 
 	return (-1);
 
@@ -1185,7 +1185,7 @@ static int  ips_netdrv_open(struct adapter *padapter)
 {
 	int status = _SUCCESS;
 	padapter->net_closed = false;
-	DBG_871X("===> %s.........\n",__FUNCTION__);
+	DBG_88E("===> %s.........\n",__FUNCTION__);
 
 
 	padapter->bDriverStopped = false;
@@ -1208,7 +1208,7 @@ static int  ips_netdrv_open(struct adapter *padapter)
 
 netdev_open_error:
 	/* padapter->bup = false; */
-	DBG_871X("-ips_netdrv_open - drv_open failure, bup=%d\n", padapter->bup);
+	DBG_88E("-ips_netdrv_open - drv_open failure, bup=%d\n", padapter->bup);
 
 	return _FAIL;
 }
@@ -1218,14 +1218,14 @@ int rtw_ips_pwr_up(struct adapter *padapter)
 {
 	int result;
 	u32 start_time = jiffies;
-	DBG_871X("===>  rtw_ips_pwr_up..............\n");
+	DBG_88E("===>  rtw_ips_pwr_up..............\n");
 	rtw_reset_drv_sw(padapter);
 
 	result = ips_netdrv_open(padapter);
 
 	rtw_led_control(padapter, LED_CTL_NO_LINK);
 
-	DBG_871X("<===  rtw_ips_pwr_up.............. in %dms\n", rtw_get_passing_time_ms(start_time));
+	DBG_88E("<===  rtw_ips_pwr_up.............. in %dms\n", rtw_get_passing_time_ms(start_time));
 	return result;
 
 }
@@ -1233,7 +1233,7 @@ int rtw_ips_pwr_up(struct adapter *padapter)
 void rtw_ips_pwr_down(struct adapter *padapter)
 {
 	u32 start_time = jiffies;
-	DBG_871X("===> rtw_ips_pwr_down...................\n");
+	DBG_88E("===> rtw_ips_pwr_down...................\n");
 
 	padapter->bCardDisableWOHSM = true;
 	padapter->net_closed = true;
@@ -1242,14 +1242,14 @@ void rtw_ips_pwr_down(struct adapter *padapter)
 
 	rtw_ips_dev_unload(padapter);
 	padapter->bCardDisableWOHSM = false;
-	DBG_871X("<=== rtw_ips_pwr_down..................... in %dms\n", rtw_get_passing_time_ms(start_time));
+	DBG_88E("<=== rtw_ips_pwr_down..................... in %dms\n", rtw_get_passing_time_ms(start_time));
 }
 
 void rtw_ips_dev_unload(struct adapter *padapter)
 {
 	struct net_device *pnetdev= (struct net_device*)padapter->pnetdev;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
-	DBG_871X("====> %s...\n",__FUNCTION__);
+	DBG_88E("====> %s...\n",__FUNCTION__);
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_FIFO_CLEARN_UP, NULL);
 
@@ -1294,7 +1294,7 @@ static int netdev_close(struct net_device *pnetdev)
 	padapter->net_closed = true;
 
 	if (adapter_to_pwrctl(padapter)->rf_pwrstate == rf_on) {
-		DBG_871X("(2)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
+		DBG_88E("(2)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
 
 		/* s1. */
 		if (pnetdev)
@@ -1337,14 +1337,14 @@ static int netdev_close(struct net_device *pnetdev)
 	padapter->rtw_wdev->iftype = NL80211_IFTYPE_MONITOR; /* set this at the end */
 
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("-871x_drv - drv_close\n"));
-	DBG_871X("-871x_drv - drv_close, bup=%d\n", padapter->bup);
+	DBG_88E("-871x_drv - drv_close, bup=%d\n", padapter->bup);
 
 	return 0;
 }
 
 void rtw_ndev_destructor(struct net_device *ndev)
 {
-	DBG_871X(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
+	DBG_88E(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
 	if (ndev->ieee80211_ptr)
 		rtw_mfree((u8 *)ndev->ieee80211_ptr, sizeof(struct wireless_dev));
@@ -1576,7 +1576,7 @@ static int get_defaultgw(u32 *ip_addr ,char mac[])
 
 	if ( !(*ip_addr) || !gw_index )
 	{
-		/* DBG_871X("No default GW\n"); */
+		/* DBG_88E("No default GW\n"); */
 		return -1;
 	}
 
@@ -1584,13 +1584,13 @@ static int get_defaultgw(u32 *ip_addr ,char mac[])
 
 	if (gw_dev == NULL)
 	{
-		/* DBG_871X("get Oif Device Fail\n"); */
+		/* DBG_88E("get Oif Device Fail\n"); */
 		return -1;
 	}
 
 	if (!arp_query(mac, *ip_addr, gw_dev))
 	{
-		/* DBG_871X( "arp query failed\n"); */
+		/* DBG_88E( "arp query failed\n"); */
 		dev_put(gw_dev);
 		return -1;
 
@@ -1616,12 +1616,12 @@ int	rtw_gw_addr_query(struct adapter *padapter)
 		pmlmepriv->gw_ip[2] = (gw_addr&0xff0000)>>16;
 		pmlmepriv->gw_ip[3] = (gw_addr&0xff000000)>>24;
 		memcpy(pmlmepriv->gw_mac_addr, gw_mac, 6);
-		DBG_871X("%s Gateway Mac:\t" MAC_FMT "\n", __FUNCTION__, MAC_ARG(pmlmepriv->gw_mac_addr));
-		DBG_871X("%s Gateway IP:\t" IP_FMT "\n", __FUNCTION__, IP_ARG(pmlmepriv->gw_ip));
+		DBG_88E("%s Gateway Mac:\t" MAC_FMT "\n", __FUNCTION__, MAC_ARG(pmlmepriv->gw_mac_addr));
+		DBG_88E("%s Gateway IP:\t" IP_FMT "\n", __FUNCTION__, IP_ARG(pmlmepriv->gw_ip));
 	}
 	else
 	{
-		/* DBG_871X("Get Gateway IP/MAC fail!\n"); */
+		/* DBG_88E("Get Gateway IP/MAC fail!\n"); */
 	}
 
 	return res;
@@ -1634,7 +1634,7 @@ static int rtw_suspend_free_assoc_resource(struct adapter *padapter)
 	struct net_device *pnetdev = padapter->pnetdev;
 	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;
 
-	DBG_871X("==> "FUNC_ADPT_FMT" entry....\n", FUNC_ADPT_ARG(padapter));
+	DBG_88E("==> "FUNC_ADPT_FMT" entry....\n", FUNC_ADPT_ARG(padapter));
 
 	rtw_cancel_all_timer(padapter);
 	if (pnetdev) {
@@ -1644,7 +1644,7 @@ static int rtw_suspend_free_assoc_resource(struct adapter *padapter)
 
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) && check_fwstate(pmlmepriv, _FW_LINKED) && rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
 	{
-		DBG_871X("%s %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n",__FUNCTION__,
+		DBG_88E("%s %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n",__FUNCTION__,
 				pmlmepriv->cur_network.network.Ssid.Ssid,
 				MAC_ARG(pmlmepriv->cur_network.network.MacAddress),
 				pmlmepriv->cur_network.network.Ssid.SsidLength,
@@ -1679,7 +1679,7 @@ static int rtw_suspend_free_assoc_resource(struct adapter *padapter)
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY))
 		rtw_indicate_scan_done(padapter, 1);
 
-	DBG_871X("==> "FUNC_ADPT_FMT" exit....\n", FUNC_ADPT_ARG(padapter));
+	DBG_88E("==> "FUNC_ADPT_FMT" exit....\n", FUNC_ADPT_ARG(padapter));
 	return 0;
 }
 
@@ -1714,9 +1714,9 @@ int rtw_resume_common(struct adapter *padapter)
 	rtw_reset_drv_sw(padapter);
 	pwrpriv->bkeepfwalive = false;
 
-	DBG_871X("bkeepfwalive(%x)\n",pwrpriv->bkeepfwalive);
+	DBG_88E("bkeepfwalive(%x)\n",pwrpriv->bkeepfwalive);
 	if (pm_netdev_open(pnetdev,true) != 0) {
-		DBG_871X("%s ==> pm_netdev_open failed\n",__FUNCTION__);
+		DBG_88E("%s ==> pm_netdev_open failed\n",__FUNCTION__);
 		ret = -1;
 		return ret;
 	}
@@ -1725,15 +1725,15 @@ int rtw_resume_common(struct adapter *padapter)
 	netif_carrier_on(pnetdev);
 
 	if (check_fwstate(mlmepriv, WIFI_STATION_STATE)) {
-		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_STATION_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
+		DBG_88E(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_STATION_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 		rtw_roaming(padapter, NULL);
 	} else if (check_fwstate(mlmepriv, WIFI_AP_STATE)) {
-		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_AP_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
+		DBG_88E(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_AP_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 		rtw_ap_restore_network(padapter);
 	} else if (check_fwstate(mlmepriv, WIFI_ADHOC_STATE)) {
-		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_ADHOC_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
+		DBG_88E(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_ADHOC_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 	} else {
-		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - ???\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
+		DBG_88E(FUNC_ADPT_FMT" fwstate:0x%08x - ???\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 	}
 	return ret;
 }

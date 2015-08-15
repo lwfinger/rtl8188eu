@@ -184,15 +184,15 @@ static void sreset_restore_network_status(struct adapter *padapter)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 	if (check_fwstate(mlmepriv, WIFI_STATION_STATE)) {
-		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_STATION_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
+		DBG_88E(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_STATION_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 		sreset_restore_network_station(padapter);
 	} else if (check_fwstate(mlmepriv, WIFI_AP_STATE)) {
-		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_AP_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
+		DBG_88E(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_AP_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 		rtw_ap_restore_network(padapter);
 	} else if (check_fwstate(mlmepriv, WIFI_ADHOC_STATE)) {
-		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_ADHOC_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
+		DBG_88E(FUNC_ADPT_FMT" fwstate:0x%08x - WIFI_ADHOC_STATE\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 	} else {
-		DBG_871X(FUNC_ADPT_FMT" fwstate:0x%08x - ???\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
+		DBG_88E(FUNC_ADPT_FMT" fwstate:0x%08x - ???\n", FUNC_ADPT_ARG(padapter), get_fwstate(mlmepriv));
 	}
 }
 
@@ -204,7 +204,7 @@ static void sreset_stop_adapter(struct adapter *padapter)
 	if (padapter == NULL)
 		return;
 
-	DBG_871X(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
+	DBG_88E(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 
 	if (!rtw_netif_queue_stopped(padapter->pnetdev))
 		rtw_netif_stop_queue(padapter->pnetdev);
@@ -233,7 +233,7 @@ static void sreset_start_adapter(struct adapter *padapter)
 	if (padapter == NULL)
 		return;
 
-	DBG_871X(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
+	DBG_88E(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED)) {
 		sreset_restore_network_status(padapter);
@@ -259,7 +259,7 @@ void sreset_reset(struct adapter *padapter)
 	unsigned long irqL;
 	u32 start = jiffies;
 
-	DBG_871X("%s\n", __FUNCTION__);
+	DBG_88E("%s\n", __FUNCTION__);
 
 	psrtpriv->Wifi_Error_Status = WIFI_STATUS_SUCCESS;
 
@@ -279,5 +279,5 @@ void sreset_reset(struct adapter *padapter)
 
 	_exit_pwrlock(&pwrpriv->lock);
 
-	DBG_871X("%s done in %d ms\n", __FUNCTION__, rtw_get_passing_time_ms(start));
+	DBG_88E("%s done in %d ms\n", __FUNCTION__, rtw_get_passing_time_ms(start));
 }

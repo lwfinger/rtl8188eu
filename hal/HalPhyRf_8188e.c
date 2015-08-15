@@ -273,7 +273,7 @@ odm_TxPwrTrackSetPwr88E(
 		PHY_SetBBReg(Adapter, rTxAGC_A_CCK1_Mcs32, bMaskByte1, pwr);
 		TxAGC = (pwr<<16)|(pwr<<8)|(pwr);
 		PHY_SetBBReg(Adapter, rTxAGC_B_CCK11_A_CCK2_11, 0xffffff00, TxAGC);
-		DBG_871X("ODM_TxPwrTrackSetPwr88E: CCK Tx-rf(A) Power = 0x%x\n", TxAGC);
+		DBG_88E("ODM_TxPwrTrackSetPwr88E: CCK Tx-rf(A) Power = 0x%x\n", TxAGC);
 
 		pwr = PHY_QueryBBReg(Adapter, rTxAGC_A_Rate18_06, 0xFF);
 		pwr += (pDM_Odm->BbSwingIdxOfdm - pDM_Odm->BbSwingIdxOfdmBase);
@@ -284,7 +284,7 @@ odm_TxPwrTrackSetPwr88E(
 		PHY_SetBBReg(Adapter, rTxAGC_A_Mcs07_Mcs04, bMaskDWord, TxAGC);
 		PHY_SetBBReg(Adapter, rTxAGC_A_Mcs11_Mcs08, bMaskDWord, TxAGC);
 		PHY_SetBBReg(Adapter, rTxAGC_A_Mcs15_Mcs12, bMaskDWord, TxAGC);
-		DBG_871X("ODM_TxPwrTrackSetPwr88E: OFDM Tx-rf(A) Power = 0x%x\n", TxAGC);
+		DBG_88E("ODM_TxPwrTrackSetPwr88E: OFDM Tx-rf(A) Power = 0x%x\n", TxAGC);
 	}
 
 	}

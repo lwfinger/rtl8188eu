@@ -295,7 +295,7 @@ static void getPowerBase88E(
 
 		powerBase0 = (powerBase0<<24) | (powerBase0<<16) |(powerBase0<<8) |powerBase0;
 		*(OfdmBase+i) = powerBase0;
-		/* DBG_871X(" [OFDM power base index rf(%c) = 0x%x]\n", ((i== 0)?'A':'B'), *(OfdmBase+i)); */
+		/* DBG_88E(" [OFDM power base index rf(%c) = 0x%x]\n", ((i== 0)?'A':'B'), *(OfdmBase+i)); */
 	}
 
 	for (i=0; i<pHalData->NumTotalRFPath; i++)
@@ -312,7 +312,7 @@ static void getPowerBase88E(
 		powerBase1 = powerlevel[i];
 		powerBase1 = (powerBase1<<24) | (powerBase1<<16) |(powerBase1<<8) |powerBase1;
 		*(MCSBase+i) = powerBase1;
-		/* DBG_871X(" [MCS power base index rf(%c) = 0x%x]\n", ((i== 0)?'A':'B'), *(MCSBase+i)); */
+		/* DBG_88E(" [MCS power base index rf(%c) = 0x%x]\n", ((i== 0)?'A':'B'), *(MCSBase+i)); */
 	}
 }
 
@@ -541,7 +541,7 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 	u8 index = 0;
 
 
-	/* DBG_871X("PHY_RF6052SetOFDMTxPower, channel(%d)\n", Channel); */
+	/* DBG_88E("PHY_RF6052SetOFDMTxPower, channel(%d)\n", Channel); */
 
 	getPowerBase88E(Adapter, pPowerLevelOFDM,pPowerLevelBW20,pPowerLevelBW40, Channel, &powerBase0[0], &powerBase1[0]);
 

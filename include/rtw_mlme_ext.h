@@ -682,7 +682,7 @@ void sa_query_timer_hdl(struct adapter *padapter);
 #ifdef CONFIG_IEEE80211W
 #define set_sa_query_timer(mlmeext, ms) \
 	do { \
-		DBG_871X("%s set_sa_query_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms)); \
+		DBG_88E("%s set_sa_query_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms)); \
 		_set_timer(&(mlmeext)->sa_query_timer, (ms)); \
 	} while (0)
 #endif /* CONFIG_IEEE80211W */

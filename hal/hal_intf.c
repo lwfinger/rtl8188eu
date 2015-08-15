@@ -124,7 +124,7 @@ uint	 rtw_hal_init(struct adapter *padapter)
 			padapter = dvobj->padapters[i];
 			padapter->hw_init_completed = false;
 		}
-		DBG_871X("rtw_hal_init: hal__init fail\n");
+		DBG_88E("rtw_hal_init: hal__init fail\n");
 	}
 
 	RT_TRACE(_module_hal_init_c_,_drv_err_,("-rtl871x_hal_init:status=0x%x\n",status));
@@ -141,7 +141,7 @@ uint rtw_hal_deinit(struct adapter *padapter)
 
 ;
 	if (!is_primary_adapter(padapter)) {
-		DBG_871X(" rtw_hal_deinit: Secondary adapter return l\n");
+		DBG_88E(" rtw_hal_deinit: Secondary adapter return l\n");
 		return status;
 	}
 
@@ -155,7 +155,7 @@ uint rtw_hal_deinit(struct adapter *padapter)
 	}
 	else
 	{
-		DBG_871X("\n rtw_hal_deinit: hal_init fail\n");
+		DBG_88E("\n rtw_hal_deinit: hal_init fail\n");
 	}
 	return status;
 }
@@ -201,28 +201,28 @@ void	rtw_hal_get_odm_var(struct adapter *padapter, enum HAL_ODM_VARIABLE eVariab
 void rtw_hal_enable_interrupt(struct adapter *padapter)
 {
 	if (!is_primary_adapter(padapter)) {
-		DBG_871X(" rtw_hal_enable_interrupt: Secondary adapter return l\n");
+		DBG_88E(" rtw_hal_enable_interrupt: Secondary adapter return l\n");
 		return;
 	}
 
 	if (padapter->HalFunc.enable_interrupt)
 		padapter->HalFunc.enable_interrupt(padapter);
 	else
-		DBG_871X("%s: HalFunc.enable_interrupt is NULL!\n", __FUNCTION__);
+		DBG_88E("%s: HalFunc.enable_interrupt is NULL!\n", __FUNCTION__);
 
 }
 
 void rtw_hal_disable_interrupt(struct adapter *padapter)
 {
 	if (!is_primary_adapter(padapter)) {
-		DBG_871X(" rtw_hal_disable_interrupt: Secondary adapter return l\n");
+		DBG_88E(" rtw_hal_disable_interrupt: Secondary adapter return l\n");
 		return;
 	}
 
 	if (padapter->HalFunc.disable_interrupt)
 		padapter->HalFunc.disable_interrupt(padapter);
 	else
-		DBG_871X("%s: HalFunc.disable_interrupt is NULL!\n", __FUNCTION__);
+		DBG_88E("%s: HalFunc.disable_interrupt is NULL!\n", __FUNCTION__);
 
 }
 
@@ -232,7 +232,7 @@ u32	rtw_hal_inirp_init(struct adapter *padapter)
 	if (padapter->HalFunc.inirp_init)
 		rst = padapter->HalFunc.inirp_init(padapter);
 	else
-		DBG_871X(" %s HalFunc.inirp_init is NULL!!!\n",__FUNCTION__);
+		DBG_88E(" %s HalFunc.inirp_init is NULL!!!\n",__FUNCTION__);
 	return rst;
 }
 

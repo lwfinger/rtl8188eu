@@ -37,7 +37,7 @@ static void iol_mode_enable(struct adapter *padapter, u8 enable)
 	{
 		/* Enable initial offload */
 		reg_0xf0 = rtw_read8(padapter, REG_SYS_CFG);
-		/* DBG_871X("%s reg_0xf0:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0xf0, reg_0xf0|SW_OFFLOAD_EN); */
+		/* DBG_88E("%s reg_0xf0:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0xf0, reg_0xf0|SW_OFFLOAD_EN); */
 		rtw_write8(padapter, REG_SYS_CFG, reg_0xf0|SW_OFFLOAD_EN);
 
 		if (padapter->bFWReady == false)
@@ -51,7 +51,7 @@ static void iol_mode_enable(struct adapter *padapter, u8 enable)
 	{
 		/* disable initial offload */
 		reg_0xf0 = rtw_read8(padapter, REG_SYS_CFG);
-		/* DBG_871X("%s reg_0xf0:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0xf0, reg_0xf0& ~SW_OFFLOAD_EN); */
+		/* DBG_88E("%s reg_0xf0:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0xf0, reg_0xf0& ~SW_OFFLOAD_EN); */
 		rtw_write8(padapter, REG_SYS_CFG, reg_0xf0 & ~SW_OFFLOAD_EN);
 	}
 }
@@ -65,7 +65,7 @@ static s32 iol_execute(struct adapter *padapter, u8 control)
 	u32 t1,t2;
 	control = control&0x0f;
 	reg_0x88 = rtw_read8(padapter, REG_HMEBOX_E0);
-	/* DBG_871X("%s reg_0x88:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0x88, reg_0x88|control); */
+	/* DBG_88E("%s reg_0x88:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0x88, reg_0x88|control); */
 	rtw_write8(padapter, REG_HMEBOX_E0,  reg_0x88|control);
 
 	t1 = start = jiffies;
@@ -74,7 +74,7 @@ static s32 iol_execute(struct adapter *padapter, u8 control)
 		(reg_0x88=rtw_read8(padapter, REG_HMEBOX_E0)) & control
 		&& (passing_time=rtw_get_passing_time_ms(start))<1000
 	) {
-		/* DBG_871X("%s polling reg_0x88:0x%02x,reg_0x1c7:0x%02x\n", __FUNCTION__, reg_0x88,rtw_read8(padapter, 0x1c7) ); */
+		/* DBG_88E("%s polling reg_0x88:0x%02x,reg_0x1c7:0x%02x\n", __FUNCTION__, reg_0x88,rtw_read8(padapter, 0x1c7) ); */
 		/* rtw_udelay_os(100); */
 	}
 
@@ -84,7 +84,7 @@ static s32 iol_execute(struct adapter *padapter, u8 control)
 		status = _FAIL;
 	t2= jiffies;
 	/* printk("==> step iol_execute :  %5u reg-0x1c0= 0x%02x\n",rtw_get_time_interval_ms(t1,t2),rtw_read8(padapter, 0x1c0)); */
-	/* DBG_871X("%s in %u ms, reg_0x88:0x%02x\n", __FUNCTION__, passing_time, reg_0x88); */
+	/* DBG_88E("%s in %u ms, reg_0x88:0x%02x\n", __FUNCTION__, passing_time, reg_0x88); */
 
 	return status;
 }
@@ -96,7 +96,7 @@ static s32 iol_InitLLTTable(
 {
 	s32 rst = _SUCCESS;
 	iol_mode_enable(padapter, 1);
-	/* DBG_871X("%s txpktbuf_bndy:%u\n", __FUNCTION__, txpktbuf_bndy); */
+	/* DBG_88E("%s txpktbuf_bndy:%u\n", __FUNCTION__, txpktbuf_bndy); */
 	rtw_write8(padapter, REG_TDECTRL+1, txpktbuf_bndy);
 	rst = iol_execute(padapter, CMD_INIT_LLT);
 	iol_mode_enable(padapter, 0);
@@ -120,14 +120,14 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	efuseTbl = (u8*)rtw_zmalloc(EFUSE_MAP_LEN_88E);
 	if (efuseTbl == NULL)
 	{
-		DBG_871X("%s: alloc efuseTbl fail!\n", __FUNCTION__);
+		DBG_88E("%s: alloc efuseTbl fail!\n", __FUNCTION__);
 		goto exit;
 	}
 
 	eFuseWord= (u16 **)rtw_malloc2d(EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
 	if (eFuseWord == NULL)
 	{
-		DBG_871X("%s: alloc eFuseWord fail!\n", __FUNCTION__);
+		DBG_88E("%s: alloc eFuseWord fail!\n", __FUNCTION__);
 		goto exit;
 	}
 
@@ -149,7 +149,7 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	}
 	else
 	{
-		DBG_871X("EFUSE is empty efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, rtemp8);
+		DBG_88E("EFUSE is empty efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, rtemp8);
 		goto exit;
 	}
 
@@ -302,28 +302,28 @@ static void efuse_read_phymap_from_txpktbuf(
 	if (bcnhead<0) /* if not valid */
 		bcnhead = rtw_read8(adapter, REG_TDECTRL+1);
 
-	DBG_871X("%s bcnhead:%d\n", __FUNCTION__, bcnhead);
+	DBG_88E("%s bcnhead:%d\n", __FUNCTION__, bcnhead);
 
 	/* reg_0x106 = rtw_read8(adapter, REG_PKT_BUFF_ACCESS_CTRL); */
-	/* DBG_871X("%s reg_0x106:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0x106, 0x69); */
+	/* DBG_88E("%s reg_0x106:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0x106, 0x69); */
 	rtw_write8(adapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
-	/* DBG_871X("%s reg_0x106:0x%02x\n", __FUNCTION__, rtw_read8(adapter, 0x106)); */
+	/* DBG_88E("%s reg_0x106:0x%02x\n", __FUNCTION__, rtw_read8(adapter, 0x106)); */
 
 	dbg_addr = bcnhead*128/8; /* 8-bytes addressing */
 
 	while (1)
 	{
-		/* DBG_871X("%s dbg_addr:0x%x\n", __FUNCTION__, dbg_addr+i); */
+		/* DBG_88E("%s dbg_addr:0x%x\n", __FUNCTION__, dbg_addr+i); */
 		rtw_write16(adapter, REG_PKTBUF_DBG_ADDR, dbg_addr+i);
 
-		/* DBG_871X("%s write reg_0x143:0x00\n", __FUNCTION__); */
+		/* DBG_88E("%s write reg_0x143:0x00\n", __FUNCTION__); */
 		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
 		start = jiffies;
 		while (!(reg_0x143=rtw_read8(adapter, REG_TXPKTBUF_DBG))/* dbg */
 		/* while (rtw_read8(adapter, REG_TXPKTBUF_DBG) & BIT0 */
 			&& (passing_time=rtw_get_passing_time_ms(start))<1000
 		) {
-			DBG_871X("%s polling reg_0x143:0x%02x, reg_0x106:0x%02x\n", __FUNCTION__, reg_0x143, rtw_read8(adapter, 0x106));
+			DBG_88E("%s polling reg_0x143:0x%02x, reg_0x106:0x%02x\n", __FUNCTION__, reg_0x143, rtw_read8(adapter, 0x106));
 			rtw_usleep_os(100);
 		}
 
@@ -342,7 +342,7 @@ static void efuse_read_phymap_from_txpktbuf(
 			len = le32_to_cpu(lo32) & 0x0000ffff;
 			limit = (len - 2 < limit) ? len - 2 : limit;
 
-			DBG_871X("%s len:%u, lenc:%u\n", __func__, len, lenc);
+			DBG_88E("%s len:%u, lenc:%u\n", __func__, len, lenc);
 
 			memcpy(pos, ((u8*)&lo32)+2, (limit>=count+2)?2:limit-count);
 			count+= (limit>=count+2)?2:limit-count;
@@ -366,7 +366,7 @@ static void efuse_read_phymap_from_txpktbuf(
 
 	rtw_write8(adapter, REG_PKT_BUFF_ACCESS_CTRL, DISABLE_TRXPKT_BUF_ACCESS);
 
-	DBG_871X("%s read count:%u\n", __FUNCTION__, count);
+	DBG_88E("%s read count:%u\n", __FUNCTION__, count);
 	*size = count;
 }
 
@@ -389,9 +389,9 @@ static s32 iol_read_efuse(
 	memset(physical_map, 0xFF, 512);
 
 	/* reg_0x106 = rtw_read8(padapter, REG_PKT_BUFF_ACCESS_CTRL); */
-	/* DBG_871X("%s reg_0x106:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0x106, 0x69); */
+	/* DBG_88E("%s reg_0x106:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0x106, 0x69); */
 	rtw_write8(padapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
-	/* DBG_871X("%s reg_0x106:0x%02x\n", __FUNCTION__, rtw_read8(padapter, 0x106)); */
+	/* DBG_88E("%s reg_0x106:0x%02x\n", __FUNCTION__, rtw_read8(padapter, 0x106)); */
 
 	status = iol_execute(padapter, CMD_READ_EFUSE_MAP);
 
@@ -426,7 +426,7 @@ static s32 iol_ioconfig(
 {
 	s32 rst = _SUCCESS;
 
-	/* DBG_871X("%s iocfg_bndy:%u\n", __FUNCTION__, iocfg_bndy); */
+	/* DBG_88E("%s iocfg_bndy:%u\n", __FUNCTION__, iocfg_bndy); */
 	rtw_write8(padapter, REG_TDECTRL+1, iocfg_bndy);
 	rst = iol_execute(padapter, CMD_IOCONFIG);
 
@@ -726,7 +726,7 @@ void _8051Reset88E(struct adapter *padapter)
 	_MCUIO_Reset88E(padapter,false);
 	rtw_write8(padapter, REG_SYS_FUNC_EN+1, u1bTmp|(BIT2));
 
-	DBG_871X("=====> _8051Reset88E(): 8051 reset success .\n");
+	DBG_88E("=====> _8051Reset88E(): 8051 reset success .\n");
 }
 
 static s32 _FWFreeToGo(struct adapter *padapter)
@@ -742,10 +742,10 @@ static s32 _FWFreeToGo(struct adapter *padapter)
 	} while (counter++ < POLLING_READY_TIMEOUT_COUNT);
 
 	if (counter >= POLLING_READY_TIMEOUT_COUNT) {
-		DBG_871X("%s: chksum report fail! REG_MCUFWDL:0x%08x\n", __FUNCTION__, value32);
+		DBG_88E("%s: chksum report fail! REG_MCUFWDL:0x%08x\n", __FUNCTION__, value32);
 		return _FAIL;
 	}
-	DBG_871X("%s: Checksum report OK! REG_MCUFWDL:0x%08x\n", __FUNCTION__, value32);
+	DBG_88E("%s: Checksum report OK! REG_MCUFWDL:0x%08x\n", __FUNCTION__, value32);
 
 
 	value32 = rtw_read32(padapter, REG_MCUFWDL);
@@ -760,13 +760,13 @@ static s32 _FWFreeToGo(struct adapter *padapter)
 	do {
 		value32 = rtw_read32(padapter, REG_MCUFWDL);
 		if (value32 & WINTINI_RDY) {
-			DBG_871X("%s: Polling FW ready success!! REG_MCUFWDL:0x%08x\n", __FUNCTION__, value32);
+			DBG_88E("%s: Polling FW ready success!! REG_MCUFWDL:0x%08x\n", __FUNCTION__, value32);
 			return _SUCCESS;
 		}
 		rtw_udelay_os(5);
 	} while (counter++ < POLLING_READY_TIMEOUT_COUNT);
 
-	DBG_871X ("%s: Polling FW ready fail!! REG_MCUFWDL:0x%08x\n", __FUNCTION__, value32);
+	DBG_88E ("%s: Polling FW ready fail!! REG_MCUFWDL:0x%08x\n", __FUNCTION__, value32);
 	return _FAIL;
 }
 
@@ -803,7 +803,7 @@ static int load_firmware(struct rt_firmware *pFirmware, struct device *device, c
 	memcpy(pFirmware->szFwBuffer, fw->data, fw->size);
 	pFirmware->ulFwLength = fw->size;
 	release_firmware(fw);
-	DBG_871X_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, pFirmware->ulFwLength);
+	DBG_88E_LEVEL(_drv_info_, "+%s: !bUsedWoWLANFw, FmrmwareLen:%d+\n", __func__, pFirmware->ulFwLength);
 
 Exit:
 	return rtStatus;
@@ -873,19 +873,19 @@ s32 rtl8188e_FirmwareDownload(struct adapter *padapter)
 		    (rtw_get_passing_time_ms(fwdl_start_time) > 500 && writeFW_retry++ >= 3))
 			break;
 
-		DBG_871X("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n",
+		DBG_88E("%s writeFW_retry:%u, time after fwdl_start_time:%ums\n",
 			__func__, writeFW_retry, rtw_get_passing_time_ms(fwdl_start_time)
 		);
 	}
 	_FWDownloadEnable(padapter, false);
 	if (_SUCCESS != rtStatus) {
-		DBG_871X("DL Firmware failed!\n");
+		DBG_88E("DL Firmware failed!\n");
 		goto Exit;
 	}
 
 	rtStatus = _FWFreeToGo(padapter);
 	if (_SUCCESS != rtStatus) {
-		DBG_871X("DL Firmware failed!\n");
+		DBG_88E("DL Firmware failed!\n");
 		goto Exit;
 	}
 	RT_TRACE(_module_hal_init_c_, _drv_info_, ("Firmware is ready to run!\n"));
@@ -1080,14 +1080,14 @@ Hal_EfuseReadEFuse88E(
 	efuseTbl = (u8*)rtw_zmalloc(EFUSE_MAP_LEN_88E);
 	if (efuseTbl == NULL)
 	{
-		DBG_871X("%s: alloc efuseTbl fail!\n", __FUNCTION__);
+		DBG_88E("%s: alloc efuseTbl fail!\n", __FUNCTION__);
 		goto exit;
 	}
 
 	eFuseWord= (u16 **)rtw_malloc2d(EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
 	if (eFuseWord == NULL)
 	{
-		DBG_871X("%s: alloc eFuseWord fail!\n", __FUNCTION__);
+		DBG_88E("%s: alloc eFuseWord fail!\n", __FUNCTION__);
 		goto exit;
 	}
 
@@ -1109,7 +1109,7 @@ Hal_EfuseReadEFuse88E(
 	}
 	else
 	{
-		DBG_871X("EFUSE is empty efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, *rtemp8);
+		DBG_88E("EFUSE is empty efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, *rtemp8);
 		goto exit;
 	}
 
@@ -1335,16 +1335,16 @@ exit:
 	if (_rtw_memcmp(logical_map, Adapter->eeprompriv.efuse_eeprom_data, 0x130) == false)
 	{
 		int i;
-		DBG_871X("%s compare first 0x130 byte fail\n", __FUNCTION__);
+		DBG_88E("%s compare first 0x130 byte fail\n", __FUNCTION__);
 		for (i=0;i<512;i++)
 		{
 			if (i%16== 0)
-				DBG_871X("0x%03x: ", i);
-			DBG_871X("%02x ", logical_map[i]);
+				DBG_88E("0x%03x: ", i);
+			DBG_88E("%02x ", logical_map[i]);
 			if (i%16==15)
-				DBG_871X("\n");
+				DBG_88E("\n");
 		}
-		DBG_871X("\n");
+		DBG_88E("\n");
 	}
 #endif
 
@@ -2605,10 +2605,10 @@ void rtl8188e_stop_thread(struct adapter *padapter)
 static void hal_notch_filter_8188e(struct adapter *adapter, bool enable)
 {
 	if (enable) {
-		DBG_871X("Enable notch filter\n");
+		DBG_88E("Enable notch filter\n");
 		rtw_write8(adapter, rOFDM0_RxDSP+1, rtw_read8(adapter, rOFDM0_RxDSP+1) | BIT1);
 	} else {
-		DBG_871X("Disable notch filter\n");
+		DBG_88E("Disable notch filter\n");
 		rtw_write8(adapter, rOFDM0_RxDSP+1, rtw_read8(adapter, rOFDM0_RxDSP+1) & ~BIT1);
 	}
 }
@@ -2843,7 +2843,7 @@ Hal_EfuseParseIDCode88E(
 		pEEPROM->bautoload_fail_flag = false;
 	}
 
-	DBG_871X("EEPROM ID=0x%04x\n", EEPROMId);
+	DBG_88E("EEPROM ID=0x%04x\n", EEPROMId);
 }
 
 static void
@@ -3176,9 +3176,9 @@ Hal_ReadTxPowerInfo88E(
 
 			if (bIn24G)
 			{
-				DBG_871X("======= Path %d, Channel %d =======\n",rfPath,ch+1 );
-				DBG_871X("Index24G_CCK_Base[%d][%d] = 0x%x\n",rfPath,ch+1 ,pHalData->Index24G_CCK_Base[rfPath][ch]);
-				DBG_871X("Index24G_BW40_Base[%d][%d] = 0x%x\n",rfPath,ch+1 ,pHalData->Index24G_BW40_Base[rfPath][ch]);
+				DBG_88E("======= Path %d, Channel %d =======\n",rfPath,ch+1 );
+				DBG_88E("Index24G_CCK_Base[%d][%d] = 0x%x\n",rfPath,ch+1 ,pHalData->Index24G_CCK_Base[rfPath][ch]);
+				DBG_88E("Index24G_BW40_Base[%d][%d] = 0x%x\n",rfPath,ch+1 ,pHalData->Index24G_BW40_Base[rfPath][ch]);
 			}
 		}
 
@@ -3189,11 +3189,11 @@ Hal_ReadTxPowerInfo88E(
 			pHalData->BW20_24G_Diff[rfPath][TxCount]=pwrInfo24G.BW20_Diff[rfPath][TxCount];
 			pHalData->BW40_24G_Diff[rfPath][TxCount]=pwrInfo24G.BW40_Diff[rfPath][TxCount];
 #if DBG
-			DBG_871X("======= TxCount %d =======\n",TxCount );
-			DBG_871X("CCK_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->CCK_24G_Diff[rfPath][TxCount]);
-			DBG_871X("OFDM_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->OFDM_24G_Diff[rfPath][TxCount]);
-			DBG_871X("BW20_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->BW20_24G_Diff[rfPath][TxCount]);
-			DBG_871X("BW40_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->BW40_24G_Diff[rfPath][TxCount]);
+			DBG_88E("======= TxCount %d =======\n",TxCount );
+			DBG_88E("CCK_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->CCK_24G_Diff[rfPath][TxCount]);
+			DBG_88E("OFDM_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->OFDM_24G_Diff[rfPath][TxCount]);
+			DBG_88E("BW20_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->BW20_24G_Diff[rfPath][TxCount]);
+			DBG_88E("BW40_24G_Diff[%d][%d]= %d\n",rfPath,TxCount,pHalData->BW40_24G_Diff[rfPath][TxCount]);
 #endif
 		}
 	}
@@ -3216,7 +3216,7 @@ Hal_ReadTxPowerInfo88E(
 	{
 		pHalData->EEPROMRegulatory = 0;
 	}
-	DBG_871X("EEPROMRegulatory = 0x%x\n", pHalData->EEPROMRegulatory);
+	DBG_88E("EEPROMRegulatory = 0x%x\n", pHalData->EEPROMRegulatory);
 
 }
 
@@ -3240,7 +3240,7 @@ Hal_EfuseParseXtal_8188E(
 	{
 		pHalData->CrystalCap = EEPROM_Default_CrystalCap_88E;
 	}
-	DBG_871X("CrystalCap: 0x%2x\n", pHalData->CrystalCap);
+	DBG_88E("CrystalCap: 0x%2x\n", pHalData->CrystalCap);
 }
 
 void
@@ -3256,7 +3256,7 @@ Hal_EfuseParseBoardType88E(
 		pHalData->BoardType = ((hwinfo[EEPROM_RF_BOARD_OPTION_88E]&0xE0)>>5);
 	else
 		pHalData->BoardType = 0;
-	DBG_871X("Board Type: 0x%2x\n", pHalData->BoardType);
+	DBG_88E("Board Type: 0x%2x\n", pHalData->BoardType);
 }
 
 void
@@ -3295,7 +3295,7 @@ rtl8188e_EfuseParseChnlPlan(
 		, AutoLoadFail
 	);
 
-	DBG_871X("mlmepriv.ChannelPlan = 0x%02x\n", padapter->mlmepriv.ChannelPlan);
+	DBG_88E("mlmepriv.ChannelPlan = 0x%02x\n", padapter->mlmepriv.ChannelPlan);
 }
 
 void
@@ -3317,8 +3317,8 @@ Hal_EfuseParseCustomerID88E(
 		pHalData->EEPROMCustomerID = 0;
 		pHalData->EEPROMSubCustomerID = 0;
 	}
-	DBG_871X("EEPROM Customer ID: 0x%2x\n", pHalData->EEPROMCustomerID);
-	/* DBG_871X("EEPROM SubCustomer ID: 0x%02x\n", pHalData->EEPROMSubCustomerID); */
+	DBG_88E("EEPROM Customer ID: 0x%2x\n", pHalData->EEPROMCustomerID);
+	/* DBG_88E("EEPROM SubCustomer ID: 0x%02x\n", pHalData->EEPROMSubCustomerID); */
 }
 
 
@@ -3365,7 +3365,7 @@ Hal_ReadAntennaDiversity88E(
 		pHalData->TRxAntDivType = pHalData->TRxAntDivType; /*  The value in the driver setting of device manager. */
 	}
 
-	DBG_871X("EEPROM : AntDivCfg = %x, TRxAntDivType = %x\n",pHalData->AntDivCfg, pHalData->TRxAntDivType);
+	DBG_88E("EEPROM : AntDivCfg = %x, TRxAntDivType = %x\n",pHalData->AntDivCfg, pHalData->TRxAntDivType);
 
 
 }
@@ -3395,7 +3395,7 @@ Hal_ReadThermalMeter_88E(
 	}
 
 	/* pHalData->ThermalMeter[0] = pHalData->EEPROMThermalMeter; */
-	DBG_871X("ThermalMeter = 0x%x\n", pHalData->EEPROMThermalMeter);
+	DBG_88E("ThermalMeter = 0x%x\n", pHalData->EEPROMThermalMeter);
 
 }
 

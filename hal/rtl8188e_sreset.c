@@ -33,7 +33,7 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 	u32 txdma_status;
 
 	if ( (txdma_status=rtw_read32(padapter, REG_TXDMA_STATUS)) !=0x00) {
-		DBG_871X("%s REG_TXDMA_STATUS:0x%08x\n", __FUNCTION__, txdma_status);
+		DBG_88E("%s REG_TXDMA_STATUS:0x%08x\n", __FUNCTION__, txdma_status);
 		rtw_hal_sreset_reset(padapter);
 	}
 	current_time = jiffies;
@@ -53,7 +53,7 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 
 					rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DM_FUNC, &ability);
 
-					DBG_871X("%s tx hang %s\n", __FUNCTION__,
+					DBG_88E("%s tx hang %s\n", __FUNCTION__,
 						(ability & ODM_BB_ADAPTIVITY)? "ODM_BB_ADAPTIVITY" : "");
 
 					if (!(ability & ODM_BB_ADAPTIVITY))

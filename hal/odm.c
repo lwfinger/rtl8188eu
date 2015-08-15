@@ -3897,7 +3897,7 @@ void odm_dtc(PDM_ODM_T pDM_Odm)
 	resp_txagc = resp_txagc | (resp_txagc << 5);
 	ODM_Write1Byte(pDM_Odm, 0x06d9, resp_txagc);
 
-	DBG_871X("%s RSSI_Min:%u, set RESP_TXAGC to %s %u\n",
+	DBG_88E("%s RSSI_Min:%u, set RESP_TXAGC to %s %u\n",
 		__func__, pDM_Odm->RSSI_Min, sign?"minus":"plus", dtc_steps);
 #endif /* CONFIG_RESP_TXAGC_ADJUST */
 }
