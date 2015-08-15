@@ -442,7 +442,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 		pDM_Odm->PhyDbgInfo.NumQryPhyStatusOFDM++;
 
 		/*  (1)Get RSSI for HT rate */
-		for(i = ODM_RF_PATH_A; i < ODM_RF_PATH_MAX; i++)
+		for (i = ODM_RF_PATH_A; i < ODM_RF_PATH_MAX; i++)
 		{
 			/*  2008/01/30 MH we will judge RF RX path now. */
 			if (pDM_Odm->RFPathRxEnable & BIT(i))
@@ -513,7 +513,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			else
 				Max_spatial_stream = 1; /* only spatial stream 1 makes sense */
 
-			for(i=0; i<Max_spatial_stream; i++) {
+			for (i=0; i<Max_spatial_stream; i++) {
 				/*  Do not use shift operation like "rx_evmX >>= 1" because the compilor of free build environment */
 				/*  fill most significant bit to "zero" when doing shifting operation which may change a negative */
 				/*  value to positive one, then the dbm value (which is supposed to be negative)  is not correct anymore. */
@@ -731,7 +731,7 @@ odm_Process_RSSIForDM(
 			else
 				pEntry->rssi_stat.ValidBit++;
 
-			for(i=0; i<pEntry->rssi_stat.ValidBit; i++)
+			for (i=0; i<pEntry->rssi_stat.ValidBit; i++)
 				OFDM_pkt += (u8)(pEntry->rssi_stat.PacketMap>>i)&BIT0;
 
 			if (pEntry->rssi_stat.ValidBit == 64)

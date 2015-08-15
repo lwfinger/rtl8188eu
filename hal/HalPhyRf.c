@@ -37,7 +37,7 @@ ODM_ResetIQKResult(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,("PHY_ResetIQKResult:: settings regs %d default regs %d\n", (u32)(sizeof(pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting)/sizeof(IQK_MATRIX_REGS_SETTING)), IQK_Matrix_Settings_NUM));
 	/* 0xe94, 0xe9c, 0xea4, 0xeac, 0xeb4, 0xebc, 0xec4, 0xecc */
 
-	for(i = 0; i < IQK_Matrix_Settings_NUM; i++)
+	for (i = 0; i < IQK_Matrix_Settings_NUM; i++)
 	{
 		{
 			pDM_Odm->RFCalibrateInfo.IQKMatrixRegSetting[i].Value[0][0] =
@@ -65,7 +65,7 @@ u8 ODM_GetRightChnlPlaceforIQK(u8 chnl)
 
 	if (chnl > 14)
 	{
-		for(place = 14; place<sizeof(channel_all); place++)
+		for (place = 14; place<sizeof(channel_all); place++)
 		{
 			if (channel_all[place] == chnl)
 			{

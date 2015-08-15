@@ -1375,7 +1375,7 @@ int rtw_acl_add_sta(struct adapter *padapter, u8 *addr)
 
 	spin_lock_bh(&(pacl_node_q->lock));
 
-	for(i=0; i< NUM_ACL; i++)
+	for (i=0; i< NUM_ACL; i++)
 	{
 		paclnode = &pacl_list->aclnode[i];
 
@@ -2300,7 +2300,7 @@ void start_ap_mode(struct adapter *padapter)
 
 	pmlmepriv->ht_op_mode = 0;
 
-	for(i=0; i<NUM_STA; i++)
+	for (i=0; i<NUM_STA; i++)
 		pstapriv->sta_aid[i] = NULL;
 
 	pmlmepriv->wps_beacon_ie = NULL;
@@ -2315,7 +2315,7 @@ void start_ap_mode(struct adapter *padapter)
 	_rtw_init_listhead(&(pacl_list->acl_node_q.queue));
 	pacl_list->num = 0;
 	pacl_list->mode = 0;
-	for(i = 0; i < NUM_ACL; i++)
+	for (i = 0; i < NUM_ACL; i++)
 	{
 		_rtw_init_listhead(&pacl_list->aclnode[i].list);
 		pacl_list->aclnode[i].valid = false;

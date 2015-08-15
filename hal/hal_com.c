@@ -146,7 +146,7 @@ void	HalSetBrateCfg(
 {
 	u8	i, is_brate, brate;
 
-	for(i=0;i<NDIS_802_11_LENGTH_RATES_EX;i++)
+	for (i=0;i<NDIS_802_11_LENGTH_RATES_EX;i++)
 	{
 		is_brate = mBratesOS[i] & IEEE80211_BASIC_RATE_MASK;
 		brate = mBratesOS[i] & 0x7f;

@@ -226,7 +226,7 @@ exit_proc:
 int rtw_android_cmdstr_to_num(char *cmdstr)
 {
 	int cmd_num;
-	for(cmd_num=0 ; cmd_num<ANDROID_WIFI_CMD_MAX; cmd_num++)
+	for (cmd_num=0 ; cmd_num<ANDROID_WIFI_CMD_MAX; cmd_num++)
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 0, 0))
 		if (!strncasecmp(cmdstr, android_wifi_cmd_str[cmd_num],
 		    strlen(android_wifi_cmd_str[cmd_num])))
@@ -312,7 +312,7 @@ static int get_int_from_command(char *pcmd)
 {
 	int i = 0;
 
-	for( i = 0; i < strlen( pcmd ); i++ )
+	for ( i = 0; i < strlen( pcmd ); i++ )
 	{
 		if ( pcmd[ i ] == '=' )
 		{

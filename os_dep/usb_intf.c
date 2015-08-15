@@ -484,7 +484,7 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 	int i;
 	int num = sizeof(specific_device_id_tbl)/sizeof(struct specific_device_id);
 
-	for(i=0; i<num; i++)
+	for (i=0; i<num; i++)
 	{
 		vid = specific_device_id_tbl[i].idVendor;
 		pid = specific_device_id_tbl[i].idProduct;

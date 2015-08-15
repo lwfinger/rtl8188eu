@@ -305,7 +305,7 @@ int proc_get_ap_info(char *page, char **start,
 		len += snprintf(page + len, count - len, "ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
 		len += snprintf(page + len, count - len, "agg_enable_bitmap=%x, candidate_tid_bitmap=%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
 
-		for(i=0;i<16;i++)
+		for (i=0;i<16;i++)
 		{
 			preorder_ctrl = &psta->recvreorder_ctrl[i];
 			if (preorder_ctrl->enable)
@@ -360,7 +360,7 @@ int proc_get_trx_info(char *page, char **start,
 				pxmitpriv->free_xmit_extbuf_cnt, pxmitpriv->free_xframe_ext_cnt,
 				precvpriv->free_recvframe_cnt);
 
-	for(i = 0; i < 4; i++)
+	for (i = 0; i < 4; i++)
 	{
 		phwxmit = pxmitpriv->hwxmits + i;
 		len += snprintf(page + len, count - len, "%d, hwq.accnt=%d\n", i, phwxmit->accnt);
@@ -383,7 +383,7 @@ int proc_get_mac_reg_dump1(char *page, char **start,
 
 	len += snprintf(page + len, count - len, "\n======= MAC REG =======\n");
 
-	for(i=0x0;i<0x300;i+=4)
+	for (i=0x0;i<0x300;i+=4)
 	{
 		if (j%4==1)	len += snprintf(page + len, count - len,"0x%02x",i);
 		len += snprintf(page + len, count - len," 0x%08x ",rtw_read32(padapter,i));
@@ -406,7 +406,7 @@ int proc_get_mac_reg_dump2(char *page, char **start,
 
 	len += snprintf(page + len, count - len, "\n======= MAC REG =======\n");
 	memset(page, 0, count);
-	for(i=0x300;i<0x600;i+=4)
+	for (i=0x300;i<0x600;i+=4)
 	{
 		if (j%4==1)	len += snprintf(page + len, count - len,"0x%02x",i);
 		len += snprintf(page + len, count - len," 0x%08x ",rtw_read32(padapter,i));
@@ -429,7 +429,7 @@ int proc_get_mac_reg_dump3(char *page, char **start,
 
 	len += snprintf(page + len, count - len, "\n======= MAC REG =======\n");
 
-	for(i=0x600;i<0x800;i+=4)
+	for (i=0x600;i<0x800;i+=4)
 	{
 		if (j%4==1)	len += snprintf(page + len, count - len,"0x%02x",i);
 		len += snprintf(page + len, count - len," 0x%08x ",rtw_read32(padapter,i));
@@ -451,7 +451,7 @@ int proc_get_bb_reg_dump1(char *page, char **start,
 	int i,j=1;
 
 	len += snprintf(page + len, count - len, "\n======= BB REG =======\n");
-	for(i=0x800;i<0xB00;i+=4)
+	for (i=0x800;i<0xB00;i+=4)
 	{
 		if (j%4==1)	len += snprintf(page + len, count - len,"0x%02x",i);
 		len += snprintf(page + len, count - len," 0x%08x ",rtw_read32(padapter,i));
@@ -471,7 +471,7 @@ int proc_get_bb_reg_dump2(char *page, char **start,
 	int i,j=1;
 
 	len += snprintf(page + len, count - len, "\n======= BB REG =======\n");
-	for(i=0xB00;i<0xE00;i+=4)
+	for (i=0xB00;i<0xE00;i+=4)
 	{
 		if (j%4==1)	len += snprintf(page + len, count - len,"0x%02x",i);
 		len += snprintf(page + len, count - len," 0x%08x ",rtw_read32(padapter,i));
@@ -491,7 +491,7 @@ int proc_get_bb_reg_dump3(char *page, char **start,
 	int i,j=1;
 
 	len += snprintf(page + len, count - len, "\n======= BB REG =======\n");
-	for(i=0xE00;i<0x1000;i+=4)
+	for (i=0xE00;i<0x1000;i+=4)
 	{
 		if (j%4==1)	len += snprintf(page + len, count - len,"0x%02x",i);
 		len += snprintf(page + len, count - len," 0x%08x ",rtw_read32(padapter,i));
@@ -514,7 +514,7 @@ int proc_get_rf_reg_dump1(char *page, char **start,
 	len += snprintf(page + len, count - len, "\n======= RF REG =======\n");
 	path = 1;
 	len += snprintf(page + len, count - len, "\nRF_Path(%x)\n",path);
-	for(i=0;i<0xC0;i++)
+	for (i=0;i<0xC0;i++)
 	{
 		/* value = PHY_QueryRFReg(padapter, (RF90_RADIO_PATH_E)path,i, bMaskDWord); */
 		value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
@@ -541,7 +541,7 @@ int proc_get_rf_reg_dump2(char *page, char **start,
 	len += snprintf(page + len, count - len, "\n======= RF REG =======\n");
 	path = 1;
 	len += snprintf(page + len, count - len, "\nRF_Path(%x)\n",path);
-	for(i=0xC0;i<0x100;i++)
+	for (i=0xC0;i<0x100;i++)
 	{
 		/* value = PHY_QueryRFReg(padapter, (RF90_RADIO_PATH_E)path,i, bMaskDWord); */
 		value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
@@ -567,7 +567,7 @@ int proc_get_rf_reg_dump3(char *page, char **start,
 	len += snprintf(page + len, count - len, "\n======= RF REG =======\n");
 	path = 2;
 	len += snprintf(page + len, count - len, "\nRF_Path(%x)\n",path);
-	for(i=0;i<0xC0;i++)
+	for (i=0;i<0xC0;i++)
 	{
 		/* value = PHY_QueryRFReg(padapter, (RF90_RADIO_PATH_E)path,i, bMaskDWord); */
 		value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
@@ -594,7 +594,7 @@ int proc_get_rf_reg_dump4(char *page, char **start,
 	len += snprintf(page + len, count - len, "\n======= RF REG =======\n");
 	path = 2;
 	len += snprintf(page + len, count - len, "\nRF_Path(%x)\n",path);
-	for(i=0xC0;i<0x100;i++)
+	for (i=0xC0;i<0x100;i++)
 	{
 		/* value = PHY_QueryRFReg(padapter, (RF90_RADIO_PATH_E)path,i, bMaskDWord); */
 		value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
@@ -951,7 +951,7 @@ int proc_get_all_sta_info(char *page, char **start,
 
 	spin_lock_bh(&pstapriv->sta_hash_lock);
 
-	for(i=0; i< NUM_STA; i++)
+	for (i=0; i< NUM_STA; i++)
 	{
 		phead = &(pstapriv->sta_hash[i]);
 		plist = get_next(phead);
@@ -980,7 +980,7 @@ int proc_get_all_sta_info(char *page, char **start,
 				len += snprintf(page + len, count - len, "qos_info=0x%x\n", psta->qos_info);
 				len += snprintf(page + len, count - len, "dot118021XPrivacy=0x%x\n", psta->dot118021XPrivacy);
 
-				for(j=0;j<16;j++)
+				for (j=0;j<16;j++)
 				{
 					preorder_ctrl = &psta->recvreorder_ctrl[j];
 					if (preorder_ctrl->enable)
@@ -1077,7 +1077,7 @@ int proc_set_best_channel(struct file *file, const char __user *buffer,
 	if (buffer && !copy_from_user(tmp, buffer, sizeof(tmp)))
 	{
 		int i;
-		for(i = 0; pmlmeext->channel_set[i].ChannelNum != 0; i++)
+		for (i = 0; pmlmeext->channel_set[i].ChannelNum != 0; i++)
 		{
 			pmlmeext->channel_set[i].rx_count = 0;
 		}

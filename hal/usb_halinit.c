@@ -172,7 +172,7 @@ static void _dbg_dump_macreg(struct adapter *padapter)
 	u32 offset = 0;
 	u32 val32 = 0;
 	u32 index =0 ;
-	for(index=0;index<64;index++)
+	for (index=0;index<64;index++)
 	{
 		offset = index*4;
 		val32 = rtw_read32(padapter,offset);
@@ -285,7 +285,7 @@ _SetMacID(
 	)
 {
 	u32 i;
-	for(i=0 ; i< MAC_ADDR_LEN ; i++){
+	for (i=0 ; i< MAC_ADDR_LEN ; i++){
 		rtw_write32(Adapter, REG_MACID+i, MacID[i]);
 	}
 }
@@ -296,7 +296,7 @@ _SetBSSID(
 	)
 {
 	u32 i;
-	for(i=0 ; i< MAC_ADDR_LEN ; i++){
+	for (i=0 ; i< MAC_ADDR_LEN ; i++){
 		rtw_write32(Adapter, REG_BSSID+i, BSSID[i]);
 	}
 }
@@ -1228,7 +1228,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	int hal_init_profiling_i;
 	u32 hal_init_stages_timestamp[HAL_INIT_STAGES_NUM]; /* used to record the time of each stage's starting point */
 
-	for(hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM;hal_init_profiling_i++)
+	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM;hal_init_profiling_i++)
 		hal_init_stages_timestamp[hal_init_profiling_i]=0;
 
 	#define HAL_INIT_PROFILE_TAG(stage) hal_init_stages_timestamp[(stage)]=rtw_get_current_time();
@@ -1527,7 +1527,7 @@ exit:
 	#ifdef DBG_HAL_INIT_PROFILING
 	hal_init_stages_timestamp[HAL_INIT_STAGES_END]=rtw_get_current_time();
 
-	for(hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM-1;hal_init_profiling_i++) {
+	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM-1;hal_init_profiling_i++) {
 		DBG_871X("DBG_HAL_INIT_PROFILING: %35s, %u, %5u, %5u\n"
 			, hal_init_stages_str[hal_init_profiling_i]
 			, hal_init_stages_timestamp[hal_init_profiling_i]
@@ -1678,7 +1678,7 @@ static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 
 	/* issue Rx irp to receive data */
 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
-	for(i=0; i<NR_RECVBUFF; i++)
+	for (i=0; i<NR_RECVBUFF; i++)
 	{
 		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == false )
 		{
@@ -2157,7 +2157,7 @@ static void hw_var_set_macaddr(struct adapter *Adapter, u8 variable, u8* val)
 
 	reg_macid = REG_MACID;
 
-	for(idx = 0 ; idx < 6; idx++)
+	for (idx = 0 ; idx < 6; idx++)
 		rtw_write8(Adapter, (reg_macid+idx), val[idx]);
 }
 
@@ -2168,7 +2168,7 @@ static void hw_var_set_bssid(struct adapter *Adapter, u8 variable, u8* val)
 
 	reg_bssid = REG_BSSID;
 
-	for(idx = 0 ; idx < 6; idx++)
+	for (idx = 0 ; idx < 6; idx++)
 		rtw_write8(Adapter, (reg_bssid+idx), val[idx]);
 }
 
@@ -2545,7 +2545,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				u32	ulContent=0;
 				u32	ulEncAlgo=CAM_AES;
 
-				for(i=0;i<CAM_CONTENT_COUNT;i++)
+				for (i=0;i<CAM_CONTENT_COUNT;i++)
 				{
 					/*  filled id in CAM config 2 byte */
 					if ( i == 0)
@@ -2679,7 +2679,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 					if (FactorToSet>0xf)
 						FactorToSet = 0xf;
 
-					for(index=0; index<4; index++)
+					for (index=0; index<4; index++)
 					{
 						if ((pRegToSet[index] & 0xf0) > (FactorToSet<<4))
 							pRegToSet[index] = (pRegToSet[index] & 0x0f) | (FactorToSet<<4);
@@ -3018,7 +3018,7 @@ static u8 GetHalDefVar8188EUsb(
 					DBG_871X("============ RA status check ===================\n");
 					if (Adapter->bRxRSSIDisplay >30)
 						Adapter->bRxRSSIDisplay = 1;
-					for(i=0;i< Adapter->bRxRSSIDisplay;i++){
+					for (i=0;i< Adapter->bRxRSSIDisplay;i++){
 	DBG_8192C("Mac_id:%d ,RSSI:%d,RateID = %d,RAUseRate = 0x%08x,RateSGI = %d, DecisionRate = 0x%02x ,PTStage = %d, RetryOver drop:%d, LifeTimeOver drop:%d\n",
 						i,
 						podmpriv->RAInfo[i].RssiStaRA,
@@ -3343,7 +3343,7 @@ static void rtl8188eu_init_default_value(struct adapter * padapter)
 	pHalData->pwrGroupCnt = 0;
 	pHalData->PGMaxGroup= 13;
 	pHalData->odmpriv.RFCalibrateInfo.ThermalValue_HP_index = 0;
-	for(i = 0; i < HP_THERMAL_NUM; i++)
+	for (i = 0; i < HP_THERMAL_NUM; i++)
 		pHalData->odmpriv.RFCalibrateInfo.ThermalValue_HP[i] = 0;
 }
 

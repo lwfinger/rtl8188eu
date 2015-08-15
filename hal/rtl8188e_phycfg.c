@@ -68,7 +68,7 @@ phy_CalculateBitShift(
 {
 	u32 i;
 
-	for(i=0; i<=31; i++)
+	for (i=0; i<=31; i++)
 	{
 		if ( ((BitMask>>i) &  0x1 ) == 1)
 			break;
@@ -1267,7 +1267,7 @@ PHY_CheckBBAndRFOK(
 	WriteAddr[HW90_BLOCK_PHY1] = 0x800;
 	WriteAddr[HW90_BLOCK_RF] = 0x3;
 
-	for(i=0 ; i < CheckTimes ; i++)
+	for (i=0 ; i < CheckTimes ; i++)
 	{
 
 		/*  */
@@ -1512,7 +1512,7 @@ static void getTxPowerIndex88E(
 	else
 		path_nums = 2;
 
-	for(TxCount=0;TxCount< path_nums ;TxCount++)
+	for (TxCount=0;TxCount< path_nums ;TxCount++)
 	{
 		if (TxCount==RF_PATH_A)
 		{
@@ -1647,7 +1647,7 @@ PHY_UpdateTxPowerDbm8188E(
 
 	/* RT_TRACE(COMP_TXAGC, DBG_LOUD, ("PHY_UpdateTxPowerDbm8192S(): %ld dBm , CckTxPwrIdx = %d, OfdmTxPwrIdx = %d\n", powerInDbm, CckTxPwrIdx, OfdmTxPwrIdx)); */
 
-	for(idx = 0; idx < 14; idx++)
+	for (idx = 0; idx < 14; idx++)
 	{
 		for (rf_path = 0; rf_path < 2; rf_path++)
 		{
@@ -1881,7 +1881,7 @@ static void _PHY_SwChnl8192C(struct adapter *Adapter, u8 channel)
 	/* s2. RF dependent command - CmdID_RF_WriteReg, param1=RF_CHNLBW, param2=channel */
 	param1 = RF_CHNLBW;
 	param2 = channel;
-	for(eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
+	for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
 	{
 		pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffffc00) | param2);
 		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
@@ -2220,7 +2220,7 @@ _PHY_DumpRFReg(struct adapter *pAdapter)
 
 	/* RTPRINT(FINIT, INIT_RF, ("PHY_DumpRFReg()====>\n")); */
 
-	for(rfRegOffset = 0x00;rfRegOffset<=0x30;rfRegOffset++){
+	for (rfRegOffset = 0x00;rfRegOffset<=0x30;rfRegOffset++){
 		rfRegValue = PHY_QueryRFReg(pAdapter,RF_PATH_A, rfRegOffset, bMaskDWord);
 		/* RTPRINT(FINIT, INIT_RF, (" 0x%02x = 0x%08x\n",rfRegOffset,rfRegValue)); */
 	}

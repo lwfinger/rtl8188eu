@@ -52,7 +52,7 @@ void	_rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv)
 
 	spin_lock_init(&psta_xmitpriv->lock);
 
-	/* for(i = 0 ; i < MAX_NUMBLKS; i++) */
+	/* for (i = 0 ; i < MAX_NUMBLKS; i++) */
 	/* 	_init_txservq(&(psta_xmitpriv->blk_q[i])); */
 
 	_init_txservq(&psta_xmitpriv->be_q);
@@ -91,7 +91,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
 
 	pxmitpriv->adapter = padapter;
 
-	/* for(i = 0 ; i < MAX_NUMBLKS; i++) */
+	/* for (i = 0 ; i < MAX_NUMBLKS; i++) */
 	/* 	_rtw_init_queue(&pxmitpriv->blk_strms[i]); */
 
 	_rtw_init_queue(&pxmitpriv->be_pending);
@@ -332,14 +332,14 @@ void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 	if (pxmitpriv->pxmit_frame_buf==NULL)
 		goto out;
 
-	for(i=0; i<NR_XMITFRAME; i++)
+	for (i=0; i<NR_XMITFRAME; i++)
 	{
 		rtw_os_xmit_complete(padapter, pxmitframe);
 
 		pxmitframe++;
 	}
 
-	for(i=0; i<NR_XMITBUFF; i++)
+	for (i=0; i<NR_XMITBUFF; i++)
 	{
 		rtw_os_xmit_resource_free(padapter, pxmitbuf,(MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
 
@@ -370,7 +370,7 @@ void _rtw_free_xmit_priv (struct xmit_priv *pxmitpriv)
 
 	/*  free xmit extension buff */
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
-	for(i=0; i<num_xmit_extbuf; i++)
+	for (i=0; i<num_xmit_extbuf; i++)
 	{
 		rtw_os_xmit_resource_free(padapter, pxmitbuf,(max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
 
@@ -920,7 +920,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 
 			payload=pframe;
 
-			for(curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
+			for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
 				payload=(u8 *)RND4((SIZE_PTR)(payload));
 				RT_TRACE(_module_rtl871x_xmit_c_,_drv_err_,("===curfragnum=%d, pframe= 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x,!!!\n",
 					curfragnum,*payload, *(payload+1),*(payload+2),*(payload+3),*(payload+4),*(payload+5),*(payload+6),*(payload+7)));
@@ -952,7 +952,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 
 			RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,("\n ========last pkt========\n"));
 			payload=payload-pattrib->last_txcmdsz+8;
-			for(curfragnum=0;curfragnum<pattrib->last_txcmdsz;curfragnum=curfragnum+8)
+			for (curfragnum=0;curfragnum<pattrib->last_txcmdsz;curfragnum=curfragnum+8)
 					RT_TRACE(_module_rtl871x_xmit_c_,_drv_info_,(" %.2x,  %.2x,  %.2x,  %.2x,  %.2x,  %.2x,  %.2x,  %.2x ",
 					*(payload+curfragnum), *(payload+curfragnum+1), *(payload+curfragnum+2),*(payload+curfragnum+3),
 					*(payload+curfragnum+4),*(payload+curfragnum+5),*(payload+curfragnum+6),*(payload+curfragnum+7)));
@@ -1546,7 +1546,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 		{
 			int i;
 			printk("Total packet: ");
-			for(i=0; i < BIP_AAD_SIZE+frame_body_len; i++)
+			for (i=0; i < BIP_AAD_SIZE+frame_body_len; i++)
 				printk(" %02x ", BIP_AAD[i]);
 			printk("\n");
 		}*/
@@ -1559,7 +1559,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 		{
 			int i;
 			printk("Calculated mic result: ");
-			for(i=0; i<16; i++)
+			for (i=0; i<16; i++)
 				printk(" %02x ", mic[i]);
 			printk("\n");
 		}*/
@@ -1569,7 +1569,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 		{
 			int pp;
 			printk("pattrib->pktlen = %d\n", pattrib->pktlen);
-			for(pp=0;pp< pattrib->pktlen; pp++)
+			for (pp=0;pp< pattrib->pktlen; pp++)
 				printk(" %02x ", mem_start[pp]);
 			printk("\n");
 		}*/
@@ -1613,7 +1613,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 			{
 				int i;
 				printk("Management pkt: ");
-				for(i=0; i<pattrib->pktlen; i++)
+				for (i=0; i<pattrib->pktlen; i++)
 				printk(" %02x ", pframe[i]);
 				printk("=======\n");
 			}*/
@@ -1650,7 +1650,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 			{
 				int i;
 				printk("Management pkt + IV: ");
-				/* for(i=0; i<pattrib->pktlen; i++) */
+				/* for (i=0; i<pattrib->pktlen; i++) */
 				/* printk(" %02x ", mem_start[i]); */
 				printk("@@@@@@@@@@@@@\n");
 			}*/
@@ -1670,7 +1670,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 			{
 				int i;
 				printk("prepare to enc Management pkt + IV: ");
-				for(i=0; i<pattrib->pktlen; i++)
+				for (i=0; i<pattrib->pktlen; i++)
 				printk(" %02x ", mem_start[i]);
 				printk("@@@@@@@@@@@@@\n");
 			}*/
@@ -2223,13 +2223,13 @@ struct xmit_frame* rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
 	if (pregpriv->wifi_spec==1)
 	{
 		int j, tmp, acirp_cnt[4];
-		for(j=0; j<4; j++)
+		for (j=0; j<4; j++)
 			inx[j] = pxmitpriv->wmm_para_seq[j];
 	}
 
 	spin_lock_bh(&pxmitpriv->lock);
 
-	for(i = 0; i < entry; i++)
+	for (i = 0; i < entry; i++)
 	{
 		phwxmit = phwxmit_i + inx[i];
 
@@ -2439,7 +2439,7 @@ void rtw_init_hwxmits(struct hw_xmit *phwxmit, sint entry)
 {
 	sint i;
 ;
-	for(i = 0; i < entry; i++, phwxmit++)
+	for (i = 0; i < entry; i++, phwxmit++)
 	{
 		/* spin_lock_init(&phwxmit->xmit_lock); */
 		/* _rtw_init_listhead(&phwxmit->pending); */

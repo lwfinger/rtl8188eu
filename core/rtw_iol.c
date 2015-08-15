@@ -236,7 +236,7 @@ void rtw_IOL_cmd_buf_dump(struct adapter *Adapter,int buf_len,u8 *pbuf)
 	int j=1;
 
 	printk("###### %s ######\n",__FUNCTION__);
-	for(i=0;i< buf_len;i++){
+	for (i=0;i< buf_len;i++){
 		printk("%02x-",*(pbuf+i));
 
 		if (j%32 ==0) printk("\n");j++;

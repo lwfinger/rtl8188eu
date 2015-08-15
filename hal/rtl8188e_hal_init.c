@@ -202,7 +202,7 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 			/*  Get word enable value from PG header */
 			/* RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Offset-%d Worden=%x\n", offset, wren)); */
 
-			for(i=0; i<EFUSE_MAX_WORD_UNIT; i++)
+			for (i=0; i<EFUSE_MAX_WORD_UNIT; i++)
 			{
 				/*  Check word enable condition in the section */
 				if (!(wren & 0x01))
@@ -249,9 +249,9 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	/*  */
 	/*  3. Collect 16 sections and 4 word unit into Efuse map. */
 	/*  */
-	for(i=0; i<EFUSE_MAX_SECTION_88E; i++)
+	for (i=0; i<EFUSE_MAX_SECTION_88E; i++)
 	{
-		for(j=0; j<EFUSE_MAX_WORD_UNIT; j++)
+		for (j=0; j<EFUSE_MAX_WORD_UNIT; j++)
 		{
 			efuseTbl[(i*8)+(j*2)]=(eFuseWord[i][j] & 0xff);
 			efuseTbl[(i*8)+((j*2)+1)]=((eFuseWord[i][j] >> 8) & 0xff);
@@ -262,7 +262,7 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	/*  */
 	/*  4. Copy from Efuse map to output pointer memory!!! */
 	/*  */
-	for(i=0; i<_size_byte; i++)
+	for (i=0; i<_size_byte; i++)
 	{
 		pbuf[i] = efuseTbl[_offset+i];
 	}
@@ -458,7 +458,7 @@ static int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_fram
 
 	t1=	rtw_get_current_time();
 	iol_mode_enable(adapter, 1);
-	for(i=0;i<bndy_cnt;i++){
+	for (i=0;i<bndy_cnt;i++){
 		u8 page_no = 0;
 		page_no = i*2 ;
 		/* printk(" i = %d, page_no = %d\n",i,page_no); */
@@ -487,7 +487,7 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter,int data_len)
 
 	rtw_write8(Adapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
 	if (pbuf){
-		for(addr=0;addr< data_cnts;addr++){
+		for (addr=0;addr< data_cnts;addr++){
 			/* printk("==> addr:0x%02x\n",addr); */
 			rtw_write32(Adapter,0x140,addr);
 			rtw_usleep_os(2);
@@ -613,7 +613,7 @@ _BlockWrite(
 				("_BlockWrite: [P3] buffSize_p3(%d) blockSize_p3(%d) blockCount_p3(%d)\n",
 				(buffSize-offset), blockSize_p3, blockCount_p3));
 
-		for(i = 0 ; i < blockCount_p3 ; i++){
+		for (i = 0 ; i < blockCount_p3 ; i++){
 			ret =rtw_write8(padapter, (FW_8188E_START_ADDRESS + offset + i), *(bufferPtr + offset + i));
 
 			if (ret == _FAIL)
@@ -1162,7 +1162,7 @@ Hal_EfuseReadEFuse88E(
 			/*  Get word enable value from PG header */
 			/* RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Offset-%d Worden=%x\n", offset, wren)); */
 
-			for(i=0; i<EFUSE_MAX_WORD_UNIT; i++)
+			for (i=0; i<EFUSE_MAX_WORD_UNIT; i++)
 			{
 				/*  Check word enable condition in the section */
 				if (!(wren & 0x01))
@@ -1209,9 +1209,9 @@ Hal_EfuseReadEFuse88E(
 	/*  */
 	/*  3. Collect 16 sections and 4 word unit into Efuse map. */
 	/*  */
-	for(i=0; i<EFUSE_MAX_SECTION_88E; i++)
+	for (i=0; i<EFUSE_MAX_SECTION_88E; i++)
 	{
-		for(j=0; j<EFUSE_MAX_WORD_UNIT; j++)
+		for (j=0; j<EFUSE_MAX_WORD_UNIT; j++)
 		{
 			efuseTbl[(i*8)+(j*2)]=(eFuseWord[i][j] & 0xff);
 			efuseTbl[(i*8)+((j*2)+1)]=((eFuseWord[i][j] >> 8) & 0xff);
@@ -1222,7 +1222,7 @@ Hal_EfuseReadEFuse88E(
 	/*  */
 	/*  4. Copy from Efuse map to output pointer memory!!! */
 	/*  */
-	for(i=0; i<_size_byte; i++)
+	for (i=0; i<_size_byte; i++)
 	{
 		pbuf[i] = efuseTbl[_offset+i];
 	}
@@ -1336,7 +1336,7 @@ exit:
 	{
 		int i;
 		DBG_871X("%s compare first 0x130 byte fail\n", __FUNCTION__);
-		for(i=0;i<512;i++)
+		for (i=0;i<512;i++)
 		{
 			if (i%16==0)
 				DBG_871X("0x%03x: ", i);
@@ -1817,7 +1817,7 @@ hal_EfusePgPacketRead_8188e(
 
 				if (hoffset==offset)
 				{
-					for(tmpidx = 0;tmpidx< word_cnts*2 ;tmpidx++)
+					for (tmpidx = 0;tmpidx< word_cnts*2 ;tmpidx++)
 					{
 						if (efuse_OneByteRead(pAdapter, efuse_addr+1+tmpidx ,&efuse_data, bPseudoTest) )
 						{
@@ -2206,7 +2206,7 @@ hal_EfuseCheckIfDatafollowed(
 	bool		bRet=false;
 	u8	i, efuse_data;
 
-	for(i=0; i<(word_cnts*2) ; i++)
+	for (i=0; i<(word_cnts*2) ; i++)
 	{
 		if (efuse_OneByteRead(pAdapter, (startAddr+i) ,&efuse_data, bPseudoTest)&&(efuse_data != 0xFF))
 			bRet = true;
@@ -2316,7 +2316,7 @@ hal_EfusePartialWriteCheck(
 					}
 				}
 				/*  partial write ok, update the target packet for later use */
-				for(i=0; i<4; i++)
+				for (i=0; i<4; i++)
 				{
 					if ((matched_wden & (0x1<<i)) == 0)	/*  this word has been written */
 					{
@@ -2740,7 +2740,7 @@ void Read_LLT_Tab(struct adapter *padapter)
 	u32 addr,next_addr;
 
 	printk("############### %s ###################\n",__FUNCTION__);
-	for(addr=0;addr<176;addr++) {
+	for (addr=0;addr<176;addr++) {
 		next_addr = _LLTRead(padapter,addr);
 		printk("%d->",next_addr);
 		if (((addr+1) %8) ==0)
@@ -2801,7 +2801,7 @@ Hal_InitPGData88E(struct adapter *padapter)
 		if (is_boot_from_eeprom(padapter))
 		{
 			/*  Read all Content from EEPROM or EFUSE. */
-			for(i = 0; i < HWSET_MAX_SIZE_88E; i += 2)
+			for (i = 0; i < HWSET_MAX_SIZE_88E; i += 2)
 			{
 /* 				value16 = EF2Byte(ReadEEprom(pAdapter, (u16) (i>>1))); */
 /* 				*((u16*)(&PROMContent[i])) = value16; */
@@ -2892,15 +2892,15 @@ Hal_ReadPowerValueFromPROM_8188E(
 
 	if (AutoLoadFail)
 	{
-		for(rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)
+		for (rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)
 		{
 			/* 2.4G default value */
-			for(group = 0 ; group < MAX_CHNL_GROUP_24G; group++)
+			for (group = 0 ; group < MAX_CHNL_GROUP_24G; group++)
 			{
 				pwrInfo24G->IndexCCK_Base[rfPath][group] =	EEPROM_DEFAULT_24G_INDEX;
 				pwrInfo24G->IndexBW40_Base[rfPath][group] =	EEPROM_DEFAULT_24G_INDEX;
 			}
-			for(TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
+			for (TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
 			{
 				if (TxCount==0)
 				{
@@ -2923,10 +2923,10 @@ Hal_ReadPowerValueFromPROM_8188E(
 		return;
 	}
 
-	for(rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)
+	for (rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)
 	{
 		/* 2.4G default value */
-		for(group = 0 ; group < MAX_CHNL_GROUP_24G; group++)
+		for (group = 0 ; group < MAX_CHNL_GROUP_24G; group++)
 		{
 			/* printk(" IndexCCK_Base rfPath:%d group:%d,eeAddr:0x%02x ",rfPath,group,eeAddr); */
 			pwrInfo24G->IndexCCK_Base[rfPath][group] =	PROMContent[eeAddr++];
@@ -2937,7 +2937,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 /* 				pHalData->bNOPG = true; */
 			}
 		}
-		for(group = 0 ; group < MAX_CHNL_GROUP_24G-1; group++)
+		for (group = 0 ; group < MAX_CHNL_GROUP_24G-1; group++)
 		{
 			/* printk(" IndexBW40_Base rfPath:%d group:%d,eeAddr:0x%02x ",rfPath,group,eeAddr); */
 			pwrInfo24G->IndexBW40_Base[rfPath][group] =	PROMContent[eeAddr++];
@@ -2945,7 +2945,7 @@ Hal_ReadPowerValueFromPROM_8188E(
 			if (pwrInfo24G->IndexBW40_Base[rfPath][group] == 0xFF)
 				pwrInfo24G->IndexBW40_Base[rfPath][group] =	EEPROM_DEFAULT_24G_INDEX;
 		}
-		for(TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
+		for (TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
 		{
 			if (TxCount==0)
 			{
@@ -3157,10 +3157,10 @@ Hal_ReadTxPowerInfo88E(
 	if (!AutoLoadFail)
 		pHalData->bTXPowerDataReadFromEEPORM = true;
 
-	/* for(rfPath = 0 ; rfPath < MAX_RF_PATH ; rfPath++) */
-	for(rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)
+	/* for (rfPath = 0 ; rfPath < MAX_RF_PATH ; rfPath++) */
+	for (rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)
 	{
-		for(ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++)
+		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++)
 		{
 			bIn24G = Hal_GetChnlGroup88E(ch+1,&group);
 			if (bIn24G)
@@ -3182,7 +3182,7 @@ Hal_ReadTxPowerInfo88E(
 			}
 		}
 
-		for(TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
+		for (TxCount=0;TxCount<MAX_TX_COUNT;TxCount++)
 		{
 			pHalData->CCK_24G_Diff[rfPath][TxCount]=pwrInfo24G.CCK_Diff[rfPath][TxCount];
 			pHalData->OFDM_24G_Diff[rfPath][TxCount]=pwrInfo24G.OFDM_Diff[rfPath][TxCount];

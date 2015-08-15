@@ -151,7 +151,7 @@ odm_FastAntTrainingInit(
 	}
 #endif
 
-	for(i=0; i<6; i++) {
+	for (i=0; i<6; i++) {
 		pDM_FatTable->Bssid[i] = 0;
 		pDM_FatTable->antSumRSSI[i] = 0;
 		pDM_FatTable->antRSSIcnt[i] = 0;

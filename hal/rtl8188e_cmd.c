@@ -128,7 +128,7 @@ static s32 FillH2CCmd_88E(struct adapter *padapter, u8 ElementID, u32 CmdLen, u8
 			/* Write Ext command */
 			msgbox_ex_addr = REG_HMEBOX_EXT_0 + (h2c_box_num *RTL88E_EX_MESSAGE_BOX_SIZE);
 			#ifdef CONFIG_H2C_EF
-			for(cmd_idx=0;cmd_idx<ext_cmd_len;cmd_idx++ ){
+			for (cmd_idx=0;cmd_idx<ext_cmd_len;cmd_idx++ ){
 				rtw_write8(padapter,msgbox_ex_addr+cmd_idx,*((u8*)(&h2c_cmd_ex)+cmd_idx));
 			}
 			#else
@@ -139,7 +139,7 @@ static s32 FillH2CCmd_88E(struct adapter *padapter, u8 ElementID, u32 CmdLen, u8
 		/*  Write command */
 		msgbox_addr =REG_HMEBOX_0 + (h2c_box_num *RTL88E_MESSAGE_BOX_SIZE);
 		#ifdef CONFIG_H2C_EF
-		for(cmd_idx=0;cmd_idx<RTL88E_MESSAGE_BOX_SIZE;cmd_idx++ ){
+		for (cmd_idx=0;cmd_idx<RTL88E_MESSAGE_BOX_SIZE;cmd_idx++ ){
 			rtw_write8(padapter,msgbox_addr+cmd_idx,*((u8*)(&h2c_cmd)+cmd_idx));
 		}
 		#else
@@ -870,7 +870,7 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state)
 			}
 
 			/*  hw only support 2 set of NoA */
-			for( i=0 ; i<pwdinfo->noa_num ; i++)
+			for ( i=0 ; i<pwdinfo->noa_num ; i++)
 			{
 				/*  To control the register setting for which NOA */
 				rtw_write8(padapter, REG_NOA_DESC_SEL, (i << 4));

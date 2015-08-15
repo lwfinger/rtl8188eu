@@ -29,7 +29,7 @@ static int rtw_p2p_is_channel_list_ok( u8 desired_ch, u8* ch_list, u8 ch_cnt )
 {
 	int found = 0, i = 0;
 
-	for( i = 0; i < ch_cnt; i++ )
+	for ( i = 0; i < ch_cnt; i++ )
 	{
 		if ( ch_list[ i ] == desired_ch )
 		{
@@ -2174,7 +2174,7 @@ u32 process_probe_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
 	{
 		int i, g_rate =0;
 
-		for( i = 0; i < rate_cnt; i++ )
+		for ( i = 0; i < rate_cnt; i++ )
 		{
 			if ( ( ( *( p + 2 + i ) & 0xff ) != 0x02 ) &&
 				( ( *( p + 2 + i ) & 0xff ) != 0x04 ) &&
@@ -2525,7 +2525,7 @@ static u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_conte
 		ch_content += 1;
 		ch_cnt -= 1;
 		temp = *ch_content;
-		for( i = 0 ; i < temp ; i++, j++ )
+		for ( i = 0 ; i < temp ; i++, j++ )
 		{
 			peer_ch_list[j] = *( ch_content + 1 + i );
 		}
@@ -2541,7 +2541,7 @@ static u8 rtw_p2p_check_peer_oper_ch(struct mlme_ext_priv *pmlmeext, u8 ch)
 {
 	u8 i = 0;
 
-	for( i = 0; i < pmlmeext->max_chan_nums; i++ )
+	for ( i = 0; i < pmlmeext->max_chan_nums; i++ )
 	{
 		if ( pmlmeext->channel_set[ i ].ChannelNum == ch )
 		{
@@ -2557,9 +2557,9 @@ static u8 rtw_p2p_ch_inclusion(struct mlme_ext_priv *pmlmeext, u8 *peer_ch_list,
 	int	i = 0, j = 0, temp = 0;
 	u8 ch_no = 0;
 
-	for( i = 0; i < peer_ch_num; i++ )
+	for ( i = 0; i < peer_ch_num; i++ )
 	{
-		for( j = temp; j < pmlmeext->max_chan_nums; j++ )
+		for ( j = temp; j < pmlmeext->max_chan_nums; j++ )
 		{
 			if ( *( peer_ch_list + i ) == pmlmeext->channel_set[ j ].ChannelNum )
 			{
@@ -3311,7 +3311,7 @@ static void rtw_change_p2pie_ch_list(struct adapter *padapter, const u8 *frame_b
 			while (attr_contentlen>0) {
 				num_of_ch = *(pattr_temp+1);
 
-				for(i=0; i<num_of_ch; i++)
+				for (i=0; i<num_of_ch; i++)
 					*(pattr_temp+2+i) = ch;
 
 				pattr_temp += (2+num_of_ch);
@@ -3478,7 +3478,7 @@ static u8 *dump_p2p_attr_ch_list(u8 *p2p_ie, uint p2p_ielen, u8 *buf, u32 buf_le
 		while (attr_contentlen>0) {
 			num_of_ch = *(pattr_temp+1);
 
-			for(i=0; i<num_of_ch; i++) {
+			for (i=0; i<num_of_ch; i++) {
 				for (j=0;j<ch_cnt;j++) {
 					if (ch_list[j] == *(pattr_temp+2+i))
 						break;

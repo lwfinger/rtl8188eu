@@ -92,7 +92,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 
 	precvbuf = (struct recv_buf*)precvpriv->precv_buf;
 
-	for(i=0; i < NR_RECVBUFF ; i++) {
+	for (i=0; i < NR_RECVBUFF ; i++) {
 		_rtw_init_listhead(&precvbuf->list);
 
 		spin_lock_init(&precvbuf->recvbuf_lock);
@@ -126,7 +126,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 
 		skb_queue_head_init(&precvpriv->free_recv_skb_queue);
 
-		for(i=0; i<NR_PREALLOC_RECV_SKB; i++)
+		for (i=0; i<NR_PREALLOC_RECV_SKB; i++)
 		{
 			pskb = rtw_skb_alloc(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 
@@ -158,7 +158,7 @@ void rtl8188eu_free_recv_priv (struct adapter *padapter)
 
 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
 
-	for(i=0; i < NR_RECVBUFF ; i++)
+	for (i=0; i < NR_RECVBUFF ; i++)
 	{
 		rtw_os_recvbuf_resource_free(padapter, precvbuf);
 		precvbuf++;

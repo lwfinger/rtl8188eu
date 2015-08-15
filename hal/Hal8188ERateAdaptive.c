@@ -112,7 +112,7 @@ odm_SetTxRPTTiming_8188E(
 {
 	u8 idx = 0;
 
-	for(idx=0; idx<5; idx++)
+	for (idx=0; idx<5; idx++)
 		if (DynamicTxRPTTiming[idx] == pRaInfo->RptTime)
 			break;
 
@@ -551,7 +551,7 @@ odm_PTDecision_8188E(
 	stage_BUF=pRaInfo->PTStage;
 	numsc  = 0;
 	num_total= pRaInfo->TOTAL* PT_PENALTY[5];
-	for(j=0;j<=4;j++)
+	for (j=0;j<=4;j++)
 	{
 		numsc += pRaInfo->RTY[j] * PT_PENALTY[j];
 		if (numsc>num_total)
@@ -689,7 +689,7 @@ ODM_RAInfo_Init_all(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>\n"));
 	pDM_Odm->CurrminRptTime = 0;
 
-	for(MacID=0; MacID<ODM_ASSOCIATE_ENTRY_NUM; MacID++)
+	for (MacID=0; MacID<ODM_ASSOCIATE_ENTRY_NUM; MacID++)
 		ODM_RAInfo_Init(pDM_Odm,MacID);
 
 	return 0;

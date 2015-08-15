@@ -870,7 +870,7 @@ static int rtw_set_wpa_ie(struct adapter *padapter, char *pie, unsigned short ie
 		{
 			int i;
 			DBG_871X("\n wpa_ie(length:%d):\n", ielen);
-			for(i=0;i<ielen;i=i+8)
+			for (i=0;i<ielen;i=i+8)
 				DBG_871X("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
 		}
 
@@ -1200,7 +1200,7 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
 		blInserted = false;
 
 		/* overwrite PMKID */
-		for(j=0 ; j<NUM_PMKID_CACHE; j++) {
+		for (j=0 ; j<NUM_PMKID_CACHE; j++) {
 			if ( _rtw_memcmp( psecuritypriv->PMKIDList[j].Bssid, strIssueBssid, ETH_ALEN) ==true )
 			{ /*  BSSID is matched, the same AP => rewrite with new PMKID. */
 
@@ -1230,7 +1230,7 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
         } else if ( pPMK->cmd == IW_PMKSA_REMOVE ) {
                 DBG_871X( "[rtw_wx_set_pmkid] IW_PMKSA_REMOVE!\n" );
                 intReturn = true;
-		for(j=0 ; j<NUM_PMKID_CACHE; j++) {
+		for (j=0 ; j<NUM_PMKID_CACHE; j++) {
 			if ( _rtw_memcmp( psecuritypriv->PMKIDList[j].Bssid, strIssueBssid, ETH_ALEN) ==true )
 			{ /*  BSSID is matched, the same AP => Remove this PMKID information and reset it. */
                                 memset( psecuritypriv->PMKIDList[ j ].Bssid, 0x00, ETH_ALEN );
@@ -2076,7 +2076,7 @@ static int rtw_wx_set_rate(struct net_device *dev,
 
 set_rate:
 
-	for(i=0; i<NumRates; i++)
+	for (i=0; i<NumRates; i++)
 	{
 		if (ratevalue==mpdatarate[i])
 		{
@@ -3468,7 +3468,7 @@ static int rtw_p2p_profilefound(struct net_device *dev,
 
 				/* 	Add this profile information into pwdinfo->profileinfo */
 				/* 	Ex:  1XX:XX:XX:XX:XX:XXYYSSID */
-				for( jj = 0, kk = 1; jj < ETH_ALEN; jj++, kk += 3 )
+				for ( jj = 0, kk = 1; jj < ETH_ALEN; jj++, kk += 3 )
 				{
 					pwdinfo->profileinfo[ pwdinfo->profileindex ].peermac[ jj ] = key_2char2num(extra[ kk ], extra[ kk+ 1 ]);
 				}
@@ -4187,7 +4187,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 		return -1;
 	}
 
-	for( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
+	for ( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
 	{
 		peerMAC[ jj ] = key_2char2num( extra[kk], extra[kk+ 1] );
 	}
@@ -4302,7 +4302,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 		pinvite_req_info->token = 3;
 	}
 
-	for( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
+	for ( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
 	{
 		pinvite_req_info->peer_macaddr[ jj ] = key_2char2num( extra[kk], extra[kk+ 1] );
 	}
@@ -4396,7 +4396,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 
 	if ( uintPeerChannel ) {
 		/* 	Store the GO's bssid */
-		for( jj = 0, kk = 18; jj < ETH_ALEN; jj++, kk += 3 )
+		for ( jj = 0, kk = 18; jj < ETH_ALEN; jj++, kk += 3 )
 		{
 			pinvite_req_info->go_bssid[ jj ] = key_2char2num( extra[kk], extra[kk+ 1] );
 		}
@@ -4594,7 +4594,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 		return ret;
 	}
 
-	for( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
+	for ( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
 	{
 		peerMAC[ jj ] = key_2char2num( extra[kk], extra[kk+ 1] );
 	}
@@ -4907,7 +4907,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 		pwdinfo->tx_prov_disc_info.benable = false;
 	}
 
-	for( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
+	for ( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
 		peerMAC[ jj ] = key_2char2num( extra[kk], extra[kk+ 1] );
 
 	if ( _rtw_memcmp( &extra[ 18 ], "display", 7 ) )
@@ -5447,13 +5447,13 @@ static void mac_reg_dump(struct adapter *padapter)
 {
 	int i,j=1;
 	printk("\n======= MAC REG =======\n");
-	for(i=0x0;i<0x300;i+=4)
+	for (i=0x0;i<0x300;i+=4)
 	{
 		if (j%4==1)	printk("0x%02x",i);
 		printk(" 0x%08x ",rtw_read32(padapter,i));
 		if ((j++)%4 == 0)	printk("\n");
 	}
-	for(i=0x400;i<0x800;i+=4)
+	for (i=0x400;i<0x800;i+=4)
 	{
 		if (j%4==1)	printk("0x%02x",i);
 		printk(" 0x%08x ",rtw_read32(padapter,i));
@@ -5465,7 +5465,7 @@ static void bb_reg_dump(struct adapter *padapter)
 {
 	int i,j=1;
 	printk("\n======= BB REG =======\n");
-	for(i=0x800;i<0x1000;i+=4)
+	for (i=0x800;i<0x1000;i+=4)
 	{
 		if (j%4==1) printk("0x%02x",i);
 
@@ -5487,10 +5487,10 @@ static void rf_reg_dump(struct adapter *padapter)
 	else
 		path_nums = 2;
 
-	for(path=0;path<path_nums;path++)
+	for (path=0;path<path_nums;path++)
 	{
 		printk("\nRF_Path(%x)\n",path);
-		for(i=0;i<0x100;i++)
+		for (i=0;i<0x100;i++)
 		{
 			/* value = PHY_QueryRFReg(padapter, (RF_RADIO_PATH_E)path,i, bMaskDWord); */
 			value = rtw_hal_read_rfreg(padapter, path, i, 0xffffffff);
@@ -5625,7 +5625,7 @@ static int rtw_dbg_port(struct net_device *dev,
 							break;
 						}
 
-						for(i=0;i<blink_num;i++){
+						for (i=0;i<blink_num;i++){
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x00,0xff);
 							rtw_IOL_append_DELAY_MS_cmd(xmit_frame, blink_delay_ms);
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, 0x08,0xff);
@@ -5652,7 +5652,7 @@ static int rtw_dbg_port(struct net_device *dev,
 							break;
 						}
 
-						for(i=0;i<write_num;i++){
+						for (i=0;i<write_num;i++){
 							rtw_IOL_append_WB_cmd(xmit_frame, reg, i+start_value,0xFF);
 						}
 						if (_SUCCESS != rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
@@ -5684,7 +5684,7 @@ static int rtw_dbg_port(struct net_device *dev,
 							break;
 						}
 
-						for(i=0;i<write_num;i++){
+						for (i=0;i<write_num;i++){
 							rtw_IOL_append_WW_cmd(xmit_frame, reg, i+start_value,0xFFFF);
 						}
 						if (_SUCCESS !=rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
@@ -5716,7 +5716,7 @@ static int rtw_dbg_port(struct net_device *dev,
 							break;
 						}
 
-						for(i=0;i<write_num;i++){
+						for (i=0;i<write_num;i++){
 							rtw_IOL_append_WD_cmd(xmit_frame, reg, i+start_value,0xFFFFFFFF);
 						}
 						if (_SUCCESS !=rtw_IOL_exec_cmds_sync(padapter, xmit_frame, 5000,0))
@@ -5796,7 +5796,7 @@ static int rtw_dbg_port(struct net_device *dev,
 						DBG_871X("ampdu_enable = %d\n", psta->htpriv.ampdu_enable);
 						DBG_871X("agg_enable_bitmap=%x, candidate_tid_bitmap=%x\n", psta->htpriv.agg_enable_bitmap, psta->htpriv.candidate_tid_bitmap);
 
-						for(i=0;i<16;i++)
+						for (i=0;i<16;i++)
 						{
 							preorder_ctrl = &psta->recvreorder_ctrl[i];
 							if (preorder_ctrl->enable)
@@ -5850,7 +5850,7 @@ static int rtw_dbg_port(struct net_device *dev,
 #endif
 						spin_lock_bh(&pstapriv->sta_hash_lock);
 
-						for(i=0; i< NUM_STA; i++)
+						for (i=0; i< NUM_STA; i++)
 						{
 							phead = &(pstapriv->sta_hash[i]);
 							plist = get_next(phead);
@@ -5883,7 +5883,7 @@ static int rtw_dbg_port(struct net_device *dev,
 
 
 
-									for(j=0;j<16;j++)
+									for (j=0;j<16;j++)
 									{
 										preorder_ctrl = &psta->recvreorder_ctrl[j];
 										if (preorder_ctrl->enable)
@@ -5909,7 +5909,7 @@ static int rtw_dbg_port(struct net_device *dev,
 
 						spin_lock_bh(&pstapriv->sta_hash_lock);
 
-						for(i=0; i< NUM_STA; i++)
+						for (i=0; i< NUM_STA; i++)
 						{
 							phead = &(pstapriv->sta_hash[i]);
 							plist = get_next(phead);

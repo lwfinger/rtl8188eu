@@ -1313,7 +1313,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 						/* save the IGTK key, length 16 bytes */
 						memcpy(padapter->securitypriv.dot11wBIPKey[param->u.crypt.idx].skey,  param->u.crypt.key,(param->u.crypt.key_len>16 ?16:param->u.crypt.key_len));
 						/*DBG_871X("IGTK key below:\n");
-						for(no=0;no<16;no++)
+						for (no=0;no<16;no++)
 							printk(" %02x ", padapter->securitypriv.dot11wBIPKey[param->u.crypt.idx].skey[no]);
 						DBG_871X("\n");*/
 						padapter->securitypriv.dot11wBIPKeyid = param->u.crypt.idx;
@@ -2089,12 +2089,12 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 
 	spin_lock_bh(&pmlmepriv->lock);
 	if (request->n_channels == 1) {
-		for(i=1;i<survey_times_for_one_ch;i++)
+		for (i=1;i<survey_times_for_one_ch;i++)
 			memcpy(&ch[i], &ch[0], sizeof(struct rtw_ieee80211_channel));
 		_status = rtw_sitesurvey_cmd(padapter, ssid, RTW_SSID_SCAN_AMOUNT, ch, survey_times_for_one_ch);
 	} else if (request->n_channels <= 4) {
-		for(j=request->n_channels-1;j>=0;j--)
-			for(i=0;i<survey_times;i++)
+		for (j=request->n_channels-1;j>=0;j--)
+			for (i=0;i<survey_times;i++)
 				memcpy(&ch[j*survey_times+i], &ch[j], sizeof(struct rtw_ieee80211_channel));
 		_status = rtw_sitesurvey_cmd(padapter, ssid, RTW_SSID_SCAN_AMOUNT, ch, survey_times * request->n_channels);
 	} else {
@@ -2266,7 +2266,7 @@ static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t iel
 	{
 		int i;
 		DBG_8192C("set wpa_ie(length:%zu):\n", ielen);
-		for(i=0;i<ielen;i=i+8)
+		for (i=0;i<ielen;i=i+8)
 			DBG_8192C("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
 	}
 
@@ -2809,7 +2809,7 @@ static int cfg80211_rtw_set_pmksa(struct wiphy *wiphy,
 	blInserted = false;
 
 	/* overwrite PMKID */
-	for(index=0 ; index<NUM_PMKID_CACHE; index++)
+	for (index=0 ; index<NUM_PMKID_CACHE; index++)
 	{
 		if ( _rtw_memcmp( psecuritypriv->PMKIDList[index].Bssid, (void *)pmksa->bssid, ETH_ALEN) ==true )
 		{ /*  BSSID is matched, the same AP => rewrite with new PMKID. */
@@ -2853,7 +2853,7 @@ static int cfg80211_rtw_del_pmksa(struct wiphy *wiphy,
 
 	DBG_871X(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(netdev));
 
-	for(index=0 ; index<NUM_PMKID_CACHE; index++)
+	for (index=0 ; index<NUM_PMKID_CACHE; index++)
 	{
 		if ( _rtw_memcmp( psecuritypriv->PMKIDList[index].Bssid, (void *)pmksa->bssid, ETH_ALEN) ==true )
 		{ /*  BSSID is matched, the same AP => Remove this PMKID information and reset it. */
@@ -3652,7 +3652,7 @@ static int	cfg80211_rtw_change_bss(struct wiphy *wiphy, struct net_device *ndev,
 	DBG_8192C("ap_isolate=%d\n", params->ap_isolate);
 
 	DBG_8192C("basic_rates_len=%d\n", params->basic_rates_len);
-	for(i=0; i<params->basic_rates_len; i++)
+	for (i=0; i<params->basic_rates_len; i++)
 	{
 		DBG_8192C("basic_rates=%d\n", params->basic_rates[i]);
 

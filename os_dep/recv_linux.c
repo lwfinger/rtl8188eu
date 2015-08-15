@@ -56,7 +56,7 @@ void rtw_os_recv_resource_free(struct recv_priv *precvpriv)
 	union recv_frame *precvframe;
 	precvframe = (union recv_frame*) precvpriv->precv_frame_buf;
 
-	for(i=0; i < NR_RECVFRAME; i++)
+	for (i=0; i < NR_RECVFRAME; i++)
 	{
 		if (precvframe->u.hdr.pkt)
 		{

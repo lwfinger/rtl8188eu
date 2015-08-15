@@ -192,7 +192,7 @@ void rtw_wep_encrypt(struct adapter *padapter, u8 *pxmitframe)
 	{
 		keylength=psecuritypriv->dot11DefKeylen[psecuritypriv->dot11PrivacyKeyIndex];
 
-		for(curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++)
+		for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++)
 		{
 			iv=pframe+pattrib->hdrlen;
 			memcpy(&wepkey[0], iv, 3);
@@ -282,7 +282,7 @@ static u32 secmicgetuint32( u8 * p )
 	s32 i;
 	u32 res = 0;
 ;
-	for( i=0; i<4; i++ )
+	for ( i=0; i<4; i++ )
 	{
 		res |= ((u32)(*p++)) << (8*i);
 	}
@@ -295,7 +295,7 @@ static void secmicputuint32( u8 * p, u32 val )
 {
 	long i;
 ;
-	for( i=0; i<4; i++ )
+	for ( i=0; i<4; i++ )
 	{
 		*p++ = (u8) (val & 0xff);
 		val >>= 8;
@@ -687,7 +687,7 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 
 			prwskeylen=16;
 
-			for(curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
+			for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
 				iv=pframe+pattrib->hdrlen;
 				payload=pframe+pattrib->iv_len+pattrib->hdrlen;
 
@@ -1117,7 +1117,7 @@ static void aes128k128d(u8 *key, u8 *data, u8 *ciphertext)
 	u8 intermediateb[16];
 	u8 round_key[16];
 ;
-	for(i=0; i<16; i++) round_key[i] = key[i];
+	for (i=0; i<16; i++) round_key[i] = key[i];
 
 	for (round = 0; round < 11; round++)
 	{
@@ -1574,7 +1574,7 @@ u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 				prwskey=&stainfo->dot118021x_UncstKey.skey[0];
 			prwskeylen=16;
 
-			for(curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
+			for (curfragnum=0;curfragnum<pattrib->nr_frags;curfragnum++){
 
 				if ((curfragnum+1)==pattrib->nr_frags){	/* 4 the last fragment */
 					length=pattrib->last_txcmdsz-pattrib->hdrlen-pattrib->iv_len- pattrib->icv_len;
@@ -1848,7 +1848,7 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 	for (j=0; j<8;j++) message[payload_index++] = chain_buffer[j];
 
 	/* compare the mic */
-	for(i=0;i<8;i++){
+	for (i=0;i<8;i++){
 		if (pframe[hdrlen+8+plen-8+i] != message[hdrlen+8+plen-8+i])
 		{
 			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("aes_decipher:mic check error mic[%d]: pframe(%x) != message(%x)\n",
@@ -2008,17 +2008,17 @@ u32	rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
 		{
 			int pp;
 			DBG_871X("pkt: ");
-			for(pp=0;pp< pattrib->pkt_len; pp++)
+			for (pp=0;pp< pattrib->pkt_len; pp++)
 				printk(" %02x ", pframe[pp]);
 			DBG_871X("\n");
 			/* BIP AAD + management frame body + MME(MIC is zero) */
 			DBG_871X("AAD+PKT: ");
-			for(pp=0;pp< ori_len; pp++)
+			for (pp=0;pp< ori_len; pp++)
 				DBG_871X(" %02x ", BIP_AAD[pp]);
 			DBG_871X("\n");
 			/* show the MIC result */
 			DBG_871X("mic: ");
-			for(pp=0;pp<16; pp++)
+			for (pp=0;pp<16; pp++)
 				DBG_871X(" %02x ", mic[pp]);
 			DBG_871X("\n");
 		}
@@ -2769,7 +2769,7 @@ void rtw_sec_restore_wep_key(struct adapter *adapter)
 	sint keyid;
 
 	if ((_WEP40_ == securitypriv->dot11PrivacyAlgrthm) ||(_WEP104_ == securitypriv->dot11PrivacyAlgrthm)) {
-		for(keyid=0;keyid<4;keyid++){
+		for (keyid=0;keyid<4;keyid++){
 			if (securitypriv->key_mask & BIT(keyid)){
 				if (keyid == securitypriv->dot11PrivacyKeyIndex)
 					rtw_set_key(adapter,securitypriv, keyid, 1, true);

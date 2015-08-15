@@ -763,7 +763,7 @@ int rtw_get_sec_ie(u8 *in_ie,uint in_len,u8 *rsn_ie,u16 *rsn_len,u8 *wpa_ie,u16 
 				if (wpa_ie) {
 				memcpy(wpa_ie, &in_ie[cnt],in_ie[cnt+1]+2);
 
-				for(i=0;i<(in_ie[cnt+1]+2);i=i+8){
+				for (i=0;i<(in_ie[cnt+1]+2);i=i+8){
 						RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("\n %2x,%2x,%2x,%2x,%2x,%2x,%2x,%2x\n",
 									wpa_ie[i],wpa_ie[i+1],wpa_ie[i+2],wpa_ie[i+3],wpa_ie[i+4],
 									wpa_ie[i+5],wpa_ie[i+6],wpa_ie[i+7]));
@@ -782,7 +782,7 @@ int rtw_get_sec_ie(u8 *in_ie,uint in_len,u8 *rsn_ie,u16 *rsn_len,u8 *wpa_ie,u16 
 				if (rsn_ie) {
 				memcpy(rsn_ie, &in_ie[cnt],in_ie[cnt+1]+2);
 
-				for(i=0;i<(in_ie[cnt+1]+2);i=i+8){
+				for (i=0;i<(in_ie[cnt+1]+2);i=i+8){
 						RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("\n %2x,%2x,%2x,%2x,%2x,%2x,%2x,%2x\n",
 									rsn_ie[i],rsn_ie[i+1],rsn_ie[i+2],rsn_ie[i+3],rsn_ie[i+4],
 									rsn_ie[i+5],rsn_ie[i+6],rsn_ie[i+7]));
@@ -1260,7 +1260,7 @@ void rtw_macaddr_cfg(u8 *mac_addr)
 	{	/* 	Users specify the mac address */
 		int jj,kk;
 
-		for( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
+		for ( jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 3 )
 		{
 			mac[jj] = key_2char2num(rtw_initmac[kk], rtw_initmac[kk+ 1]);
 		}

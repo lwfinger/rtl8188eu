@@ -222,7 +222,7 @@ static struct rt_channel_plan_map	RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03,0x
 int rtw_ch_set_search_ch(struct rt_channel_info *ch_set, const u32 ch)
 {
 	int i;
-	for(i=0;ch_set[i].ChannelNum!=0;i++){
+	for (i=0;ch_set[i].ChannelNum!=0;i++){
 		if (ch == ch_set[i].ChannelNum)
 			break;
 	}
@@ -406,7 +406,7 @@ static u8 init_channel_set(struct adapter* padapter, u8 ChannelPlan, struct rt_c
 
 	if (b2_4GBand)
 	{
-		for(index=0;index<RTW_ChannelPlan2G[Index2G].Len;index++)
+		for (index=0;index<RTW_ChannelPlan2G[Index2G].Len;index++)
 		{
 			channel_set[chanset_size].ChannelNum = RTW_ChannelPlan2G[Index2G].Channel[index];
 
@@ -438,7 +438,7 @@ static u8 init_channel_set(struct adapter* padapter, u8 ChannelPlan, struct rt_c
 
 	if (b5GBand)
 	{
-		for(index=0;index<RTW_ChannelPlan5G[Index5G].Len;index++)
+		for (index=0;index<RTW_ChannelPlan5G[Index5G].Len;index++)
 		{
 #ifdef CONFIG_DFS
 			channel_set[chanset_size].ChannelNum = RTW_ChannelPlan5G[Index5G].Channel[index];
@@ -2404,7 +2404,7 @@ static void get_channel_cnt_24g_5gl_5gh(  struct mlme_ext_priv *pmlmeext, u8* p2
 	*p5gl_cnt = 0;
 	*p5gh_cnt = 0;
 
-	for( i = 0; i < pmlmeext->max_chan_nums; i++ )
+	for ( i = 0; i < pmlmeext->max_chan_nums; i++ )
 	{
 		if ( pmlmeext->channel_set[ i ].ChannelNum <= 14 )
 		{
@@ -4095,7 +4095,7 @@ static u8 is_matched_in_profilelist( u8* peermacaddr, struct profile_info* profi
 	DBG_871X( "[%s] peermac = %.2X %.2X %.2X %.2X %.2X %.2X\n", __FUNCTION__,
 		    peermacaddr[0], peermacaddr[1],peermacaddr[2],peermacaddr[3],peermacaddr[4],peermacaddr[5]);
 
-	for( i = 0; i < P2P_MAX_PERSISTENT_GROUP_NUM; i++, profileinfo++ )
+	for ( i = 0; i < P2P_MAX_PERSISTENT_GROUP_NUM; i++, profileinfo++ )
 	{
 		DBG_871X( "[%s] profileinfo_mac = %.2X %.2X %.2X %.2X %.2X %.2X\n", __FUNCTION__,
 			    profileinfo->peermac[0], profileinfo->peermac[1],profileinfo->peermac[2],profileinfo->peermac[3],profileinfo->peermac[4],profileinfo->peermac[5]);
@@ -5344,7 +5344,7 @@ unsigned int OnAction_sa_query(struct adapter *padapter, union recv_frame *precv
 	{
 		int pp;
 		printk("pattrib->pktlen = %d =>", pattrib->pkt_len);
-		for(pp=0;pp< pattrib->pkt_len; pp++)
+		for (pp=0;pp< pattrib->pkt_len; pp++)
 			printk(" %02x ", pframe[pp]);
 		printk("\n");
 	}
@@ -5435,7 +5435,7 @@ unsigned int OnAction(struct adapter *padapter, union recv_frame *precv_frame)
 
 	category = frame_body[0];
 
-	for(i = 0; i < sizeof(OnAction_tbl)/sizeof(struct action_handler); i++)
+	for (i = 0; i < sizeof(OnAction_tbl)/sizeof(struct action_handler); i++)
 	{
 		ptable = &OnAction_tbl[i];
 
@@ -7863,7 +7863,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 
 		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 
-		for(i= 0;i<8;i++)
+		for (i= 0;i<8;i++)
 		{
 			if (ICS[i][0] == 1)
 			{
@@ -7873,7 +7873,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 				/* SET_BSS_INTOLERANT_ELE_REG_CLASS(InfoContent,i); */
 				k++;
 
-				for(j=1;j<=14;j++)
+				for (j=1;j<=14;j++)
 				{
 					if (ICS[i][j]==1)
 					{
@@ -7915,7 +7915,7 @@ unsigned int send_delba(struct adapter *padapter, u8 initiator, u8 *addr)
 
 	if (initiator==0) /*  recipient */
 	{
-		for(tid = 0;tid<MAXTID;tid++)
+		for (tid = 0;tid<MAXTID;tid++)
 		{
 			if (psta->recvreorder_ctrl[tid].enable == true)
 			{
@@ -7934,7 +7934,7 @@ unsigned int send_delba(struct adapter *padapter, u8 initiator, u8 *addr)
 	else if (initiator == 1)/*  originator */
 	{
 		/* DBG_871X("tx agg_enable_bitmap(0x%08x)\n", psta->htpriv.agg_enable_bitmap); */
-		for(tid = 0;tid<MAXTID;tid++)
+		for (tid = 0;tid<MAXTID;tid++)
 		{
 			if (psta->htpriv.agg_enable_bitmap & BIT(tid))
 			{
@@ -8009,7 +8009,7 @@ bool IsLegal5GChannel(
 		60,62,64,100,102,104,106,108,110,112,114,116,118,120,122,
 		124,126,128,130,132,134,136,138,140,149,151,153,155,157,159,
 		161,163,165};
-	for(i=0;i<sizeof(Channel_5G);i++)
+	for (i=0;i<sizeof(Channel_5G);i++)
 		if (channel == Channel_5G[i])
 			return true;
 	return false;
@@ -8116,7 +8116,7 @@ void site_survey(struct adapter *padapter)
 			#endif /* CONFIG_P2P */
 			{
 				int i;
-				for(i=0;i<RTW_SSID_SCAN_AMOUNT;i++){
+				for (i=0;i<RTW_SSID_SCAN_AMOUNT;i++){
 					if (pmlmeext->sitesurvey_res.ssid[i].SsidLength) {
 						/* todo: to issue two probe req??? */
 						issue_probereq(padapter, &(pmlmeext->sitesurvey_res.ssid[i]), NULL);
@@ -10160,7 +10160,7 @@ u8 sitesurvey_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 		pmlmeext->sitesurvey_res.bss_cnt = 0;
 		pmlmeext->sitesurvey_res.channel_idx = 0;
 
-		for(i=0;i<RTW_SSID_SCAN_AMOUNT;i++){
+		for (i=0;i<RTW_SSID_SCAN_AMOUNT;i++){
 			if (pparm->ssid[i].SsidLength) {
 				memcpy(pmlmeext->sitesurvey_res.ssid[i].Ssid, pparm->ssid[i].Ssid, IW_ESSID_MAX_SIZE);
 				pmlmeext->sitesurvey_res.ssid[i].SsidLength= pparm->ssid[i].SsidLength;

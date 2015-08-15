@@ -2412,7 +2412,7 @@ odm_RefreshRateAdaptiveMaskCE(
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("<---- odm_RefreshRateAdaptiveMask(): driver does not control rate adaptive mask\n"));
 		return;
 	}
-	for(i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++){
+	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++){
 		PSTA_INFO_T pstat = pDM_Odm->pODM_StaInfo[i];
 		if (IS_STA_VALID(pstat) ) {
 			if (IS_MCAST( pstat->hwaddr))  /* if (psta->mac_id ==1) */
@@ -2525,7 +2525,7 @@ odm_DynamicTxPowerSavePowerIndex(
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	for(index = 0; index< 6; index++)
+	for (index = 0; index< 6; index++)
 		pdmpriv->PowerIndex_backup[index] = rtw_read8(Adapter, Power_Index_REG[index]);
 }
 
@@ -2540,7 +2540,7 @@ odm_DynamicTxPowerRestorePowerIndex(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u32			Power_Index_REG[6] = {0xc90, 0xc91, 0xc92, 0xc98, 0xc99, 0xc9a};
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	for(index = 0; index< 6; index++)
+	for (index = 0; index< 6; index++)
 		rtw_write8(Adapter, Power_Index_REG[index], pdmpriv->PowerIndex_backup[index]);
 }
 
@@ -2553,7 +2553,7 @@ odm_DynamicTxPowerWritePowerIndex(
 	u8			index;
 	u32			Power_Index_REG[6] = {0xc90, 0xc91, 0xc92, 0xc98, 0xc99, 0xc9a};
 
-	for(index = 0; index< 6; index++)
+	for (index = 0; index< 6; index++)
 		/* PlatformEFIOWrite1Byte(Adapter, Power_Index_REG[index], Value); */
 		ODM_Write1Byte(pDM_Odm, Power_Index_REG[index], Value);
 
@@ -2761,7 +2761,7 @@ odm_RSSIMonitorCheckCE(
 	{
 		struct sta_info *psta;
 
-		for(i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++) {
+		for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++) {
 			if (IS_STA_VALID(psta = pDM_Odm->pODM_StaInfo[i])) {
 				if (IS_MCAST( psta->hwaddr))  /* if (psta->mac_id ==1) */
 					 continue;
@@ -2778,7 +2778,7 @@ odm_RSSIMonitorCheckCE(
 			}
 		}
 
-		for(i=0; i< sta_cnt; i++)
+		for (i=0; i< sta_cnt; i++)
 		{
 			if (PWDB_rssi[i] != (0)){
 				if (pHalData->fw_ractrl == true)/*  Report every sta's RSSI to FW */
@@ -3059,7 +3059,7 @@ odm_InitHybridAntDiv_88C_92D(
 
 	pDM_SWAT_Table->CurAntenna=0;			/* choose left antenna as default antenna */
 	pDM_SWAT_Table->PreAntenna=0;
-	for(i=0; i<ASSOCIATE_ENTRY_NUM ; i++)
+	for (i=0; i<ASSOCIATE_ENTRY_NUM ; i++)
 	{
 		pDM_SWAT_Table->CCK_Ant1_Cnt[i] = 0;
 		pDM_SWAT_Table->CCK_Ant2_Cnt[i] = 0;
@@ -3566,7 +3566,7 @@ odm_PHY_SaveAFERegisters(
 	u32	i;
 
 	/* RTPRINT(FINIT, INIT_IQK, ("Save ADDA parameters.\n")); */
-	for( i = 0 ; i < RegisterNum ; i++){
+	for ( i = 0 ; i < RegisterNum ; i++){
 		AFEBackup[i] = ODM_GetBBReg(pDM_Odm, AFEReg[i], bMaskDWord);
 	}
 }
@@ -3582,7 +3582,7 @@ odm_PHY_ReloadAFERegisters(
 	u32	i;
 
 	/* RTPRINT(FINIT, INIT_IQK, ("Reload ADDA power saving parameters !\n")); */
-	for(i = 0 ; i < RegiesterNum; i++)
+	for (i = 0 ; i < RegiesterNum; i++)
 	{
 
 		ODM_SetBBReg(pDM_Odm, AFEReg[i], bMaskDWord, AFEBackup[i]);

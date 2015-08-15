@@ -182,7 +182,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 
 		if (TurboScanOff)
 		{
-			for(idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
+			for (idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 			{
 				TxAGC[idx1] =
 					pPowerlevel[idx1] | (pPowerlevel[idx1]<<8) |
@@ -210,7 +210,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 		}
 		else
 		{
-			for(idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
+			for (idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 			{
 				TxAGC[idx1] =
 					pPowerlevel[idx1] | (pPowerlevel[idx1]<<8) |
@@ -247,10 +247,10 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 		TxAGC[1] -=  pwrtrac_value;
 	}
 
-	for(idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
+	for (idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 	{
 		ptr = (u8*)(&(TxAGC[idx1]));
-		for(idx2=0; idx2<4; idx2++)
+		for (idx2=0; idx2<4; idx2++)
 		{
 			if (*ptr > RF6052_MAX_TX_PWR)
 				*ptr = RF6052_MAX_TX_PWR;
@@ -289,7 +289,7 @@ static void getPowerBase88E(
 	s8			HT20_pwrdiff=0;
 	u8			i, powerlevel[2];
 
-	for(i=0; i<2; i++)
+	for (i=0; i<2; i++)
 	{
 		powerBase0 = pPowerLevelOFDM[i];
 
@@ -298,7 +298,7 @@ static void getPowerBase88E(
 		/* DBG_871X(" [OFDM power base index rf(%c) = 0x%x]\n", ((i==0)?'A':'B'), *(OfdmBase+i)); */
 	}
 
-	for(i=0; i<pHalData->NumTotalRFPath; i++)
+	for (i=0; i<pHalData->NumTotalRFPath; i++)
 	{
 		/* Check HT20 to HT40 diff */
 		if (pHalData->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
@@ -336,7 +336,7 @@ static void getTxPowerWriteValByRegulatory88E(
 	/*  */
 	/*  Index 0 & 1= legacy OFDM, 2-5=HT_MCS rate */
 	/*  */
-	for(rf=0; rf<2; rf++) {
+	for (rf=0; rf<2; rf++) {
 		switch (Regulatory) {
 			case 0:	/*  Realtek better performance */
 					/*  increase power diff defined by Realtek for large power */
@@ -461,10 +461,10 @@ static void writeOFDMPowerReg88E(
 	u32 writeVal;
 	u16 RegOffset;
 
-	for(rf=0; rf<2; rf++)
+	for (rf=0; rf<2; rf++)
 	{
 		writeVal = pValue[rf];
-		for(i=0; i<4; i++)
+		for (i=0; i<4; i++)
 		{
 			pwr_val[i] = (u8)((writeVal & (0x7f<<(i*8)))>>(i*8));
 			if (pwr_val[i]  > RF6052_MAX_TX_PWR)
@@ -491,7 +491,7 @@ static void writeOFDMPowerReg88E(
 				RegOffset = 0xc90;
 			if (RegOffset == rTxAGC_B_Mcs15_Mcs12 || RegOffset == rTxAGC_B_Mcs07_Mcs04)
 				RegOffset = 0xc98;
-			for(i=0; i<3; i++)
+			for (i=0; i<3; i++)
 			{
 				if (i!=2)
 					writeVal = (writeVal>8)?(writeVal-8):0;
@@ -551,7 +551,7 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 	/*  */
 	ODM_TxPwrTrackAdjust88E(&pHalData->odmpriv, 0, &direction, &pwrtrac_value);
 
-	for(index=0; index<6; index++)
+	for (index=0; index<6; index++)
 	{
 		getTxPowerWriteValByRegulatory88E(Adapter, Channel, index,
 			&powerBase0[0], &powerBase1[0], &writeVal[0]);
@@ -610,8 +610,8 @@ phy_RF6052_Config_ParaFile(
 	/* 3----------------------------------------------------------------- */
 	/* 3 <2> Initialize RF */
 	/* 3----------------------------------------------------------------- */
-	/* for(eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++) */
-	for(eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
+	/* for (eRFPath = RF_PATH_A; eRFPath <pHalData->NumTotalRFPath; eRFPath++) */
+	for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
 	{
 
 		pPhyReg = &pHalData->PHYRegDef[eRFPath];

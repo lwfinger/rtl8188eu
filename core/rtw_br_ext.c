@@ -540,7 +540,7 @@ void nat25_db_cleanup(struct adapter *priv)
 	unsigned long irqL;
 	spin_lock_bh(&priv->br_ext_lock);
 
-	for(i=0; i<NAT25_HASH_SIZE; i++)
+	for (i=0; i<NAT25_HASH_SIZE; i++)
 	{
 		struct nat25_network_db_entry *f;
 		f = priv->nethash[i];

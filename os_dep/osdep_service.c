@@ -51,7 +51,7 @@ u32 rtw_atoi(u8* s)
 
 	int num=0,flag=0;
 	int i;
-	for(i=0;i<=strlen(s);i++) {
+	for (i=0;i<=strlen(s);i++) {
 		if (s[i] >= '0' && s[i] <= '9')
 			num = num * 10 + s[i] -'0';
 		else if (s[0] == '-' && i==0)
@@ -205,7 +205,7 @@ int _rtw_mstat_dump(char *buf, int len)
 	int vir_alloc, vir_peak, vir_alloc_err, phy_alloc, phy_peak, phy_alloc_err;
 	int tx_alloc, tx_peak, tx_alloc_err, rx_alloc, rx_peak, rx_alloc_err;
 
-	for(i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
+	for (i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
 		value_t[0][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].alloc));
 		value_t[1][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].peak));
 		value_t[2][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].alloc_cnt));
@@ -214,7 +214,7 @@ int _rtw_mstat_dump(char *buf, int len)
 	cnt += snprintf(buf+cnt, len-cnt, "===================== MSTAT =====================\n");
 	cnt += snprintf(buf+cnt, len-cnt, "%4s %10s %10s %10s %10s\n", "TAG", "alloc", "peak", "aloc_cnt", "err_cnt");
 	cnt += snprintf(buf+cnt, len-cnt, "-------------------------------------------------\n");
-	for(i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
+	for (i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
 		cnt += snprintf(buf+cnt, len-cnt, "%4s %10d %10d %10d %10d\n", MSTAT_TYPE_str[i], value_t[0][i], value_t[1][i], value_t[2][i], value_t[3][i]);
 	}
 	return cnt;
@@ -236,13 +236,13 @@ void rtw_mstat_update(const enum mstat_f flags, const MSTAT_STATUS status, u32 s
 
 	/* initialization */
 	if (!update_time) {
-		for(i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
+		for (i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
 			ATOMIC_SET(&(rtw_mem_type_stat[i].alloc), 0);
 			ATOMIC_SET(&(rtw_mem_type_stat[i].peak), 0);
 			ATOMIC_SET(&(rtw_mem_type_stat[i].alloc_cnt), 0);
 			ATOMIC_SET(&(rtw_mem_type_stat[i].alloc_err_cnt), 0);
 		}
-		for(i=0;i<mstat_ff_idx(MSTAT_FUNC_MAX);i++) {
+		for (i=0;i<mstat_ff_idx(MSTAT_FUNC_MAX);i++) {
 			ATOMIC_SET(&(rtw_mem_func_stat[i].alloc), 0);
 			ATOMIC_SET(&(rtw_mem_func_stat[i].peak), 0);
 			ATOMIC_SET(&(rtw_mem_func_stat[i].alloc_cnt), 0);
@@ -542,7 +542,7 @@ void* rtw_malloc2d(int h, int w, int size)
 		return NULL;
 	}
 
-	for( j=0; j<h; j++ )
+	for ( j=0; j<h; j++ )
 		a[j] = ((char *)(a+h)) + j*w*size;
 
 	return a;

@@ -772,7 +772,7 @@ u8 rtw_efuse_map_write(struct adapter *padapter, u16 addr, u16 cnts, u8 *data)
 			DBG_871X("offset=%x\n",offset);
 			DBG_871X("word_en=%x\n",word_en);
 
-			for(i=0;i<PGPKT_DATA_SIZE;i++)
+			for (i=0;i<PGPKT_DATA_SIZE;i++)
 			{
 				DBG_871X("data=%x \t",newdata[i]);
 			}
@@ -1190,14 +1190,14 @@ Efuse_InitSomeVar(
 	memset((void *)&fakeEfuseInitMap[0], 0xff, EFUSE_MAX_MAP_LEN);
 	memset((void *)&fakeEfuseModifiedMap[0], 0xff, EFUSE_MAX_MAP_LEN);
 
-	for(i=0; i<EFUSE_MAX_BT_BANK; i++)
+	for (i=0; i<EFUSE_MAX_BT_BANK; i++)
 	{
 		memset((void *)&BTEfuseContent[i][0], EFUSE_MAX_HW_SIZE, 0xff);
 	}
 	memset((void *)&BTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 	memset((void *)&BTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 
-	for(i=0; i<EFUSE_MAX_BT_BANK; i++)
+	for (i=0; i<EFUSE_MAX_BT_BANK; i++)
 	{
 		memset((void *)&fakeBTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
 	}
