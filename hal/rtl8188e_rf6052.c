@@ -232,8 +232,8 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 
 
 	ODM_TxPwrTrackAdjust88E(&pHalData->odmpriv, 1, &direction, &pwrtrac_value);
-	/* printk("ODM_TxPwrTrackAdjust88E => direction:%02x, pwrtrac_value:%d \n", direction, pwrtrac_value); */
-	/* printk(" ==> TxAGC:0x%08x \n",TxAGC[0] ); */
+	/* printk("ODM_TxPwrTrackAdjust88E => direction:%02x, pwrtrac_value:%d\n", direction, pwrtrac_value); */
+	/* printk(" ==> TxAGC:0x%08x\n",TxAGC[0] ); */
 
 	if (direction == 1)			/*  Increase TX pwoer */
 	{
@@ -257,7 +257,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 			ptr++;
 		}
 	}
-	/* printk(" ==> TxAGC:0x%08x \n",TxAGC[0] ); */
+	/* printk(" ==> TxAGC:0x%08x\n",TxAGC[0] ); */
 
 	/*  rf-A cck tx power */
 	tmpval = TxAGC[RF_PATH_A]&0xff;
@@ -541,7 +541,7 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
 	u8 index = 0;
 
 
-	/* DBG_871X("PHY_RF6052SetOFDMTxPower, channel(%d) \n", Channel); */
+	/* DBG_871X("PHY_RF6052SetOFDMTxPower, channel(%d)\n", Channel); */
 
 	getPowerBase88E(Adapter, pPowerLevelOFDM,pPowerLevelBW20,pPowerLevelBW40, Channel, &powerBase0[0], &powerBase1[0]);
 

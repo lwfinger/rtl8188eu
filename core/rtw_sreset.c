@@ -65,7 +65,7 @@ u8 sreset_get_wifi_status(struct adapter *padapter)
 
 	if(WIFI_STATUS_SUCCESS !=psrtpriv->Wifi_Error_Status)
 	{
-		DBG_8192C("==>%s error_status(0x%x) \n",__FUNCTION__,psrtpriv->Wifi_Error_Status);
+		DBG_8192C("==>%s error_status(0x%x)\n",__FUNCTION__,psrtpriv->Wifi_Error_Status);
 		status = (psrtpriv->Wifi_Error_Status &( ~(USB_READ_PORT_FAIL|USB_WRITE_PORT_FAIL)));
 	}
 	DBG_8192C("==> %s wifi_status(0x%x)\n",__FUNCTION__,status);
@@ -120,7 +120,7 @@ static void sreset_restore_security_station(struct adapter *padapter)
 	{
 		psta = rtw_get_stainfo(pstapriv, get_bssid(mlmepriv));
 		if (psta == NULL) {
-			/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail \n")); */
+			/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail\n")); */
 		}
 		else
 		{

@@ -630,7 +630,7 @@ void read_cam(struct adapter *padapter ,u8 entry)
 		/* HW_VAR_CAM_READ */
 		cam_val[1]=addr+j;
 		rtw_hal_get_hwreg(padapter, HW_VAR_CAM_READ, (u8 *)cam_val);
-		DBG_8192C("offset:0x%02x => 0x%08x \n",addr+j,cam_val[0]);
+		DBG_8192C("offset:0x%02x => 0x%08x\n",addr+j,cam_val[0]);
 	}
 	DBG_8192C("*********************************\n");
 }
@@ -1248,7 +1248,7 @@ int rtw_check_bcn_info(struct adapter *Adapter, u8 *pframe, u32 packet_len)
 			if(pht_info) {
 					bcn_channel = pht_info->primary_channel;
 			} else { /* we don't find channel IE, so don't check it */
-					DBG_871X("Oops: %s we don't find channel IE, so don't check it \n", __func__);
+					DBG_871X("Oops: %s we don't find channel IE, so don't check it\n", __func__);
 					bcn_channel = Adapter->mlmeextpriv.cur_channel;
 			}
 	}

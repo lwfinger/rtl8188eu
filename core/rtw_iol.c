@@ -242,5 +242,5 @@ void rtw_IOL_cmd_buf_dump(struct adapter *Adapter,int buf_len,u8 *pbuf)
 		if(j%32 ==0) printk("\n");j++;
 	}
 	printk("\n");
-	printk("============= ioreg_cmd len = %d =============== \n",buf_len);
+	printk("============= ioreg_cmd len = %d ===============\n",buf_len);
 }

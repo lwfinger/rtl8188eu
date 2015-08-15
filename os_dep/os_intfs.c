@@ -534,7 +534,7 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 
 	if(dev_alloc_name(pnetdev, ifname) < 0)
 	{
-		RT_TRACE(_module_os_intfs_c_,_drv_err_,("dev_alloc_name, fail! \n"));
+		RT_TRACE(_module_os_intfs_c_,_drv_err_,("dev_alloc_name, fail!\n"));
 	}
 
 	netif_carrier_off(pnetdev);
@@ -859,17 +859,17 @@ void rtw_cancel_all_timer(struct adapter *padapter)
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+rtw_cancel_all_timer\n"));
 
 	_cancel_timer_ex(&padapter->mlmepriv.assoc_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel association timer complete! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel association timer complete!\n"));
 
 	_cancel_timer_ex(&padapter->mlmepriv.scan_to_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel scan_to_timer! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel scan_to_timer!\n"));
 
 	_cancel_timer_ex(&padapter->mlmepriv.dynamic_chk_timer);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel dynamic_chk_timer! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel dynamic_chk_timer!\n"));
 
 	/*  cancel sw led timer */
 	rtw_hal_sw_led_deinit(padapter);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel DeInitSwLeds! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel DeInitSwLeds!\n"));
 
 	_cancel_timer_ex(&(adapter_to_pwrctl(padapter)->pwr_state_check_timer));
 
@@ -879,7 +879,7 @@ void rtw_cancel_all_timer(struct adapter *padapter)
 
 	_cancel_timer_ex(&padapter->mlmepriv.set_scan_deny_timer);
 	rtw_clear_scan_deny(padapter);
-	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel set_scan_deny_timer! \n"));
+	RT_TRACE(_module_os_intfs_c_,_drv_info_,("rtw_cancel_all_timer:cancel set_scan_deny_timer!\n"));
 
 	_cancel_timer_ex(&padapter->recvpriv.signal_stat_timer);
 
@@ -1576,7 +1576,7 @@ static int get_defaultgw(u32 *ip_addr ,char mac[])
 
 	if( !(*ip_addr) || !gw_index )
 	{
-		/* DBG_871X("No default GW \n"); */
+		/* DBG_871X("No default GW\n"); */
 		return -1;
 	}
 
@@ -1584,7 +1584,7 @@ static int get_defaultgw(u32 *ip_addr ,char mac[])
 
 	if(gw_dev == NULL)
 	{
-		/* DBG_871X("get Oif Device Fail \n"); */
+		/* DBG_871X("get Oif Device Fail\n"); */
 		return -1;
 	}
 
@@ -1716,7 +1716,7 @@ int rtw_resume_common(struct adapter *padapter)
 
 	DBG_871X("bkeepfwalive(%x)\n",pwrpriv->bkeepfwalive);
 	if(pm_netdev_open(pnetdev,true) != 0) {
-		DBG_871X("%s ==> pm_netdev_open failed \n",__FUNCTION__);
+		DBG_871X("%s ==> pm_netdev_open failed\n",__FUNCTION__);
 		ret = -1;
 		return ret;
 	}

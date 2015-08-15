@@ -742,7 +742,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 		{
 			psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
 			if (psta == NULL) {
-				/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail \n")); */
+				/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail\n")); */
 			}
 			else
 			{
@@ -814,7 +814,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param, 
 			pbcmc_sta=rtw_get_bcmc_stainfo(padapter);
 			if(pbcmc_sta==NULL)
 			{
-				/* DEBUG_ERR( ("Set OID_802_11_ADD_KEY: bcmc stainfo is null \n")); */
+				/* DEBUG_ERR( ("Set OID_802_11_ADD_KEY: bcmc stainfo is null\n")); */
 			}
 			else
 			{
@@ -871,7 +871,7 @@ static int rtw_set_wpa_ie(struct adapter *padapter, char *pie, unsigned short ie
 			int i;
 			DBG_871X("\n wpa_ie(length:%d):\n", ielen);
 			for(i=0;i<ielen;i=i+8)
-				DBG_871X("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x \n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
+				DBG_871X("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
 		}
 
 		pos = buf;
@@ -1136,7 +1136,7 @@ static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
 
 		default :
 			ret = -EINVAL;;
-			RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_err_,("\n Mode: %s is not supported  \n", iw_operation_mode[wrqu->mode]));
+			RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_err_,("\n Mode: %s is not supported \n", iw_operation_mode[wrqu->mode]));
 			goto exit;
 	}
 
@@ -1163,7 +1163,7 @@ static int rtw_wx_get_mode(struct net_device *dev, struct iw_request_info *a,
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 
-	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,(" rtw_wx_get_mode \n"));
+	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,(" rtw_wx_get_mode\n"));
 
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) == true)
 		wrqu->mode = IW_MODE_INFRA;
@@ -2023,7 +2023,7 @@ static int rtw_wx_set_rate(struct net_device *dev,
 	u32	ratevalue = 0;
 	u8 mpdatarate[NumRates]={11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0xff};
 
-	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,(" rtw_wx_set_rate \n"));
+	RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,(" rtw_wx_set_rate\n"));
 	RT_TRACE(_module_rtl871x_ioctl_os_c,_drv_info_,("target_rate = %d, fixed = %d\n",target_rate,fixed));
 
 	if(target_rate == -1){
@@ -3444,7 +3444,7 @@ static int rtw_p2p_profilefound(struct net_device *dev,
 	/* 	YY => SSID Length */
 	/* 	SSID => SSID for persistence group */
 
-	DBG_871X( "[%s] In value = %s, len = %d \n", __FUNCTION__, extra, wrqu->data.length -1);
+	DBG_871X( "[%s] In value = %s, len = %d\n", __FUNCTION__, extra, wrqu->data.length -1);
 
 
 	/* 	The upper application should pass the SSID to driver by using this rtw_p2p_profilefound function. */
@@ -4623,7 +4623,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 			if ( rtw_get_p2p_attr_content( p2pie, p2pielen, P2P_ATTR_DEVICE_ID, attr_content, &attr_contentlen) )
 			{
 				/* 	Handle the P2P Device ID attribute of Beacon first */
-				printk( "[%s] P2P_ATTR_DEVICE_ID \n", __FUNCTION__ );
+				printk( "[%s] P2P_ATTR_DEVICE_ID\n", __FUNCTION__ );
 				if ( _rtw_memcmp( attr_content, peerMAC, ETH_ALEN ) )
 				{
 					uintPeerChannel = pnetwork->network.Configuration.DSConfig;
@@ -4633,7 +4633,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 			else if ( rtw_get_p2p_attr_content( p2pie, p2pielen, P2P_ATTR_DEVICE_INFO, attr_content, &attr_contentlen) )
 			{
 				/* 	Handle the P2P Device Info attribute of probe response */
-				printk( "[%s] P2P_ATTR_DEVICE_INFO \n", __FUNCTION__ );
+				printk( "[%s] P2P_ATTR_DEVICE_INFO\n", __FUNCTION__ );
 				if ( _rtw_memcmp( attr_content, peerMAC, ETH_ALEN ) )
 				{
 					uintPeerChannel = pnetwork->network.Configuration.DSConfig;
@@ -6043,7 +6043,7 @@ static int rtw_dbg_port(struct net_device *dev,
 				case 0x17:
 					{
 						struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
-						printk("===>  Fixed channel to %d \n",extra_arg);
+						printk("===>  Fixed channel to %d\n",extra_arg);
 						pmlmeext->fixed_chan = extra_arg;
 
 					}
@@ -6096,14 +6096,14 @@ static int rtw_dbg_port(struct net_device *dev,
 
 						if(0xf==extra_arg){
 							rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DM_FUNC,&odm_flag);
-							DBG_871X(" === DMFlag(0x%08x) === \n",odm_flag);
-							DBG_871X("extra_arg = 0  - disable all dynamic func \n");
+							DBG_871X(" === DMFlag(0x%08x) ===\n",odm_flag);
+							DBG_871X("extra_arg = 0  - disable all dynamic func\n");
 							DBG_871X("extra_arg = 1  - disable DIG- BIT(0)\n");
 							DBG_871X("extra_arg = 2  - disable High power - BIT(1)\n");
 							DBG_871X("extra_arg = 3  - disable tx power tracking - BIT(2)\n");
 							DBG_871X("extra_arg = 4  - disable BT coexistence - BIT(3)\n");
 							DBG_871X("extra_arg = 5  - disable antenna diversity - BIT(4)\n");
-							DBG_871X("extra_arg = 6  - enable all dynamic func \n");
+							DBG_871X("extra_arg = 6  - enable all dynamic func\n");
 						}
 						else{
 							/*	extra_arg = 0  - disable all dynamic func
@@ -6113,7 +6113,7 @@ static int rtw_dbg_port(struct net_device *dev,
 							*/
 							rtw_hal_set_def_var(padapter, HAL_DEF_DBG_DM_FUNC, &(extra_arg));
 							rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DM_FUNC,&odm_flag);
-							DBG_871X(" === DMFlag(0x%08x) === \n",odm_flag);
+							DBG_871X(" === DMFlag(0x%08x) ===\n",odm_flag);
 						}
 					}
 					break;
@@ -8049,7 +8049,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 
 		*extra = 0;
 		for (i=0; i<cnts; i++) {
-			DBG_871X("wlrfkrmap = 0x%02x \n", pEfuseHal->fakeEfuseModifiedMap[addr+i]);
+			DBG_871X("wlrfkrmap = 0x%02x\n", pEfuseHal->fakeEfuseModifiedMap[addr+i]);
 			sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[addr+i]);
 		}
 	} else if (strcmp(tmp[0],"btrfkrmap")== 0) {
@@ -8072,7 +8072,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 
 		*extra = 0;
 		for (i=0; i<cnts; i++) {
-				DBG_871X("wlrfkrmap = 0x%02x \n", pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
+				DBG_871X("wlrfkrmap = 0x%02x\n", pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
 				sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
 		}
 	} else {
@@ -8352,9 +8352,9 @@ static int rtw_mp_efuse_set(struct net_device *dev,
     else if (strcmp(tmp[0], "wldumpfake") == 0)
 	{
 		if (rtw_efuse_map_read(padapter, 0, EFUSE_MAP_SIZE,  pEfuseHal->fakeEfuseModifiedMap) == _SUCCESS) {
-			DBG_871X("%s: WiFi hw efuse dump to Fake map success \n", __FUNCTION__);
+			DBG_871X("%s: WiFi hw efuse dump to Fake map success\n", __FUNCTION__);
 		} else {
-			DBG_871X("%s: WiFi hw efuse dump to Fake map Fail \n", __FUNCTION__);
+			DBG_871X("%s: WiFi hw efuse dump to Fake map Fail\n", __FUNCTION__);
 			err = -EFAULT;
 		}
 	}

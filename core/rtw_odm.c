@@ -110,7 +110,7 @@ int _rtw_odm_dbg_comp_msg(struct adapter *adapter, char *buf, int len)
 	int i;
 
 	rtw_hal_get_def_var(adapter, HW_DEF_ODM_DBG_FLAG, &dbg_comp);
-	cnt += snprintf(buf+cnt, len-cnt, "odm.DebugComponents = 0x%016llx \n", dbg_comp);
+	cnt += snprintf(buf+cnt, len-cnt, "odm.DebugComponents = 0x%016llx\n", dbg_comp);
 	for (i=0;i<RTW_ODM_COMP_MAX;i++) {
 		if (odm_comp_str[i])
 			cnt += snprintf(buf+cnt, len-cnt, "%cBIT%-2d %s\n",

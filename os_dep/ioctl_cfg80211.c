@@ -343,7 +343,7 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 
 	bssinf_len = pnetwork->network.IELength+sizeof (struct rtw_ieee80211_hdr_3addr);
 	if(bssinf_len > MAX_BSSINFO_LEN){
-		DBG_871X("%s IE Length too long > %d byte \n",__FUNCTION__,MAX_BSSINFO_LEN);
+		DBG_871X("%s IE Length too long > %d byte\n",__FUNCTION__,MAX_BSSINFO_LEN);
 		goto exit;
 	}
 
@@ -1247,14 +1247,14 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 		struct sta_info * psta,*pbcmc_sta;
 		struct sta_priv * pstapriv = &padapter->stapriv;
 
-		/* DBG_8192C("%s, : dot11AuthAlgrthm == dot11AuthAlgrthm_8021X \n", __func__); */
+		/* DBG_8192C("%s, : dot11AuthAlgrthm == dot11AuthAlgrthm_8021X\n", __func__); */
 
 		if (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_MP_STATE) == true) /* sta mode */
 		{
 			psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
 			if (psta == NULL) {
-				/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail \n")); */
-				DBG_8192C("%s, : Obtain Sta_info fail \n", __func__);
+				/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail\n")); */
+				DBG_8192C("%s, : Obtain Sta_info fail\n", __func__);
 			}
 			else
 			{
@@ -1272,7 +1272,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 				if(param->u.crypt.set_tx ==1)/* pairwise key */
 				{
 
-					DBG_8192C("%s, : param->u.crypt.set_tx ==1 \n", __func__);
+					DBG_8192C("%s, : param->u.crypt.set_tx ==1\n", __func__);
 
 					memcpy(psta->dot118021x_UncstKey.skey,  param->u.crypt.key, (param->u.crypt.key_len>16 ?16:param->u.crypt.key_len));
 
@@ -1338,7 +1338,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
 			pbcmc_sta=rtw_get_bcmc_stainfo(padapter);
 			if(pbcmc_sta==NULL)
 			{
-				/* DEBUG_ERR( ("Set OID_802_11_ADD_KEY: bcmc stainfo is null \n")); */
+				/* DEBUG_ERR( ("Set OID_802_11_ADD_KEY: bcmc stainfo is null\n")); */
 			}
 			else
 			{
@@ -1989,7 +1989,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 
 			if(check_fwstate(pmlmepriv, WIFI_UNDER_WPS))
 			{
-				DBG_8192C("AP mode process WPS \n");
+				DBG_8192C("AP mode process WPS\n");
 			}
 
 			need_indicate_scan_done = true;
@@ -2267,7 +2267,7 @@ static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t iel
 		int i;
 		DBG_8192C("set wpa_ie(length:%zu):\n", ielen);
 		for(i=0;i<ielen;i=i+8)
-			DBG_8192C("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x \n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
+			DBG_8192C("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n",buf[i],buf[i+1],buf[i+2],buf[i+3],buf[i+4],buf[i+5],buf[i+6],buf[i+7]);
 	}
 
 	pos = buf;

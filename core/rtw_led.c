@@ -2237,7 +2237,7 @@ void BlinkHandler(PLED_871x	 pLed)
 			break;
 
 		default:
-			/* RT_TRACE(COMP_LED, DBG_LOUD, ("BlinkWorkItemCallback 0x%x \n", pHalData->LedStrategy)); */
+			/* RT_TRACE(COMP_LED, DBG_LOUD, ("BlinkWorkItemCallback 0x%x\n", pHalData->LedStrategy)); */
 			/* SwLedBlink(pLed); */
 			break;
 	}

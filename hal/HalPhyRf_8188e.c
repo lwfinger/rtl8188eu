@@ -55,7 +55,7 @@ static void setIqkMatrix(
 {
 	s32	ele_A=0, ele_D, ele_C=0, TempCCk, value32;
 
-	/* printk("%s==> OFDM_index:%d \n",__FUNCTION__,OFDM_index); */
+	/* printk("%s==> OFDM_index:%d\n",__FUNCTION__,OFDM_index); */
 
 	/* if(OFDM_index> OFDM_TABLE_SIZE_92D) */
 	/*  */
@@ -259,7 +259,7 @@ odm_TxPwrTrackSetPwr88E(
 		u8	rf = 0;
 		u32	pwr = 0, TxAGC = 0;
 		struct adapter *Adapter = pDM_Odm->Adapter;
-		/* printk("odm_TxPwrTrackSetPwr88E CH=%d, modify TXAGC \n", *(pDM_Odm->pChannel)); */
+		/* printk("odm_TxPwrTrackSetPwr88E CH=%d, modify TXAGC\n", *(pDM_Odm->pChannel)); */
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("odm_TxPwrTrackSetPwr88E CH=%d\n", *(pDM_Odm->pChannel)));
 
 	/* if (MP_DRIVER != 1) */
@@ -379,7 +379,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
     pDM_Odm->RFCalibrateInfo.RegA24 = 0x090e1317;
 #endif
 
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("===>odm_TXPowerTrackingCallback_ThermalMeter_8188E, pDM_Odm->BbSwingIdxCckBase: %d, pDM_Odm->BbSwingIdxOfdmBase: %d \n", pDM_Odm->BbSwingIdxCckBase, pDM_Odm->BbSwingIdxOfdmBase));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("===>odm_TXPowerTrackingCallback_ThermalMeter_8188E, pDM_Odm->BbSwingIdxCckBase: %d, pDM_Odm->BbSwingIdxOfdmBase: %d\n", pDM_Odm->BbSwingIdxCckBase, pDM_Odm->BbSwingIdxOfdmBase));
 	ThermalValue = (u8)ODM_GetRFReg(pDM_Odm, RF_PATH_A, RF_T_METER_88E, 0xfc00);	/* 0x42: RF Reg[15:10] 88E */
 	if (!ThermalValue || ! pDM_Odm->RFCalibrateInfo.TxPowerTrackControl)
 		return;
@@ -416,7 +416,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
 	if(ThermalValue_AVG_count)
 	{
 		ThermalValue = (u8)(ThermalValue_AVG / ThermalValue_AVG_count);
-		ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("AVG Thermal Meter = 0x%x \n", ThermalValue));
+		ODM_RT_TRACE(pDM_Odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("AVG Thermal Meter = 0x%x\n", ThermalValue));
 	}
 
 	/* 4 5. Calculate delta, delta_LCK, delta_IQK. */
@@ -687,7 +687,7 @@ phy_PathA_RxIQK(
 
 	u4tmp = 0x80007C00 | (regE94&0x3FF0000)  | ((regE9C&0x3FF0000) >> 16);
 	ODM_SetBBReg(pDM_Odm, rTx_IQK, bMaskDWord, u4tmp);
-	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("0xe40 = 0x%x u4tmp = 0x%x \n", ODM_GetBBReg(pDM_Odm, rTx_IQK, bMaskDWord), u4tmp));
+	ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("0xe40 = 0x%x u4tmp = 0x%x\n", ODM_GetBBReg(pDM_Odm, rTx_IQK, bMaskDWord), u4tmp));
 
 
 	/* 1 RX IQK */
@@ -1986,8 +1986,8 @@ if (*(pDM_Odm->mp_mode) == 1)
 	is13simular = false;
 
 
-	/* ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK !!!interface %d currentband %d ishardwareD %d \n", pDM_Odm->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter))); */
-/* 	RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate \n")); */
+	/* ODM_RT_TRACE(pDM_Odm,ODM_COMP_CALIBRATION, ODM_DBG_LOUD,  ("IQK !!!interface %d currentband %d ishardwareD %d\n", pDM_Odm->interfaceIndex, pHalData->CurrentBandType92D, IS_HARDWARE_TYPE_8192D(pAdapter))); */
+/* 	RT_TRACE(COMP_INIT,DBG_LOUD,("Acquire Mutex in IQCalibrate\n")); */
 	for (i=0; i<3; i++)
 	{
 
@@ -2030,7 +2030,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 			}
 		}
 	}
-/* 	RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate \n")); */
+/* 	RT_TRACE(COMP_INIT,DBG_LOUD,("Release Mutex in IQCalibrate\n")); */
 
 	for (i=0; i<4; i++)
 	{

@@ -420,7 +420,7 @@ int hostapd_mode_init(struct adapter *padapter)
 	pnetdev->watchdog_timeo = HZ; /* 1 second timeout */
 
 	if(dev_alloc_name(pnetdev,"mgnt.wlan%d") < 0)
-		DBG_871X("hostapd_mode_init(): dev_alloc_name, fail! \n");
+		DBG_871X("hostapd_mode_init(): dev_alloc_name, fail!\n");
 
 	mac[0]=0x00;
 	mac[1]=0xe0;

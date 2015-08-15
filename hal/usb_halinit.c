@@ -67,7 +67,7 @@ _ConfigNormalChipOutEP_8188E(
 				break;
 
 	}
-	DBG_871X("%s OutEpQueueSel(0x%02x), OutEpNumber(%d) \n",__FUNCTION__,pHalData->OutEpQueueSel,pHalData->OutEpNumber );
+	DBG_871X("%s OutEpQueueSel(0x%02x), OutEpNumber(%d)\n",__FUNCTION__,pHalData->OutEpQueueSel,pHalData->OutEpNumber );
 
 }
 
@@ -191,7 +191,7 @@ static void _InitPABias(struct adapter *padapter)
 	/* efuse_one_byte_read(padapter, 0x1FA, &pa_setting); */
 	pa_setting = EFUSE_Read1Byte(padapter, 0x1FA);
 
-	/* RT_TRACE(COMP_INIT, DBG_LOUD, ("_InitPABias 0x1FA 0x%x \n",pa_setting)); */
+	/* RT_TRACE(COMP_INIT, DBG_LOUD, ("_InitPABias 0x1FA 0x%x\n",pa_setting)); */
 
 	if(!(pa_setting & BIT0))
 	{
@@ -1317,7 +1317,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	status = PHY_MACConfig8188E(Adapter);
 	if(status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init MAC ...... \n ");
+		DBG_871X(" ### Failed to init MAC ......\n ");
 		goto exit;
 	}
 #endif
@@ -1330,7 +1330,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	status = PHY_BBConfig8188E(Adapter);
 	if(status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init BB ...... \n ");
+		DBG_871X(" ### Failed to init BB ......\n ");
 		goto exit;
 	}
 #endif
@@ -1341,7 +1341,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	status = PHY_RFConfig8188E(Adapter);
 	if(status == _FAIL)
 	{
-		DBG_871X(" ### Failed to init RF ...... \n ");
+		DBG_871X(" ### Failed to init RF ......\n ");
 		goto exit;
 	}
 #endif
@@ -1349,7 +1349,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if(status == _FAIL){
-		DBG_871X("%s  rtl8188e_iol_efuse_patch failed \n",__FUNCTION__);
+		DBG_871X("%s  rtl8188e_iol_efuse_patch failed\n",__FUNCTION__);
 		goto exit;
 	}
 
@@ -1630,7 +1630,7 @@ static u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
  {
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(Adapter);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	DBG_8192C("==> %s \n",__FUNCTION__);
+	DBG_8192C("==> %s\n",__FUNCTION__);
 
 	rtw_write32(Adapter, REG_HIMR_88E, IMR_DISABLED_88E);
 	rtw_write32(Adapter, REG_HIMRE_88E, IMR_DISABLED_88E);
@@ -1672,7 +1672,7 @@ static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 
 	status = _SUCCESS;
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("===> usb_inirp_init \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("===> usb_inirp_init\n"));
 
 	precvpriv->ff_hwaddr = RECV_BULK_IN_ADDR;
 
@@ -1682,7 +1682,7 @@ static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 	{
 		if(_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == false )
 		{
-			RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_port error \n"));
+			RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_port error\n"));
 			status = _FAIL;
 			goto exit;
 		}
@@ -1701,14 +1701,14 @@ static unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
 	_read_interrupt = pintfhdl->io_ops._read_interrupt;
 	if(_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == false )
 	{
-		RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_interrupt error \n"));
+		RT_TRACE(_module_hci_hal_init_c_,_drv_err_,("usb_rx_init: usb_read_interrupt error\n"));
 		status = _FAIL;
 	}
 #endif
 
 exit:
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("<=== usb_inirp_init\n"));
 
 ;
 
@@ -1718,11 +1718,11 @@ exit:
 
 static unsigned int rtl8188eu_inirp_deinit(struct adapter *Adapter)
 {
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n ===> usb_rx_deinit\n"));
 
 	rtw_read_port_cancel(Adapter);
 
-	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n <=== usb_rx_deinit \n"));
+	RT_TRACE(_module_hci_hal_init_c_,_drv_info_,("\n <=== usb_rx_deinit\n"));
 
 	return _SUCCESS;
 }
@@ -2446,11 +2446,11 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			break;
 		case HW_VAR_ON_RCR_AM:
                         rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)|RCR_AM);
-                        DBG_871X("%s, %d, RCR= %x \n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
+                        DBG_871X("%s, %d, RCR= %x\n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
                         break;
               case HW_VAR_OFF_RCR_AM:
                         rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR)& (~RCR_AM));
-                        DBG_871X("%s, %d, RCR= %x \n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
+                        DBG_871X("%s, %d, RCR= %x\n", __FUNCTION__,__LINE__, rtw_read32(Adapter, REG_RCR));
                         break;
 		case HW_VAR_BEACON_INTERVAL:
 			rtw_write16(Adapter, REG_BCN_INTERVAL, *((u16 *)val));
@@ -2507,7 +2507,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			break;
 		case HW_VAR_DM_FLAG:
 			podmpriv->SupportAbility = *((u8 *)val);
-			/* DBG_871X("HW_VAR_DM_FLAG ==> SupportAbility:0x%08x \n",podmpriv->SupportAbility ); */
+			/* DBG_871X("HW_VAR_DM_FLAG ==> SupportAbility:0x%08x\n",podmpriv->SupportAbility ); */
 			break;
 		case HW_VAR_DM_FUNC_OP:
 			if(val[0])
@@ -2518,7 +2518,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			{/*  restore dm flag */
 				podmpriv->SupportAbility = podmpriv->BK_SupportAbility;
 			}
-			/* DBG_871X("HW_VAR_DM_FUNC_OP ==> %s SupportAbility:0x%08x \n", */
+			/* DBG_871X("HW_VAR_DM_FUNC_OP ==> %s SupportAbility:0x%08x\n", */
 			/* 	(val[0]==1)?"Save":"Restore", */
 			/* 	podmpriv->SupportAbility */
 			/* 	); */
@@ -2531,7 +2531,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			else{
 				podmpriv->SupportAbility |= *((u32 *)val);
 			}
-			/* DBG_871X("HW_VAR_DM_FUNC_SET ==> SupportAbility:0x%08x \n",podmpriv->SupportAbility ); */
+			/* DBG_871X("HW_VAR_DM_FUNC_SET ==> SupportAbility:0x%08x\n",podmpriv->SupportAbility ); */
 			break;
 		case HW_VAR_DM_FUNC_CLR:
 			podmpriv->SupportAbility &= *((u32 *)val);
@@ -2562,9 +2562,9 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 					ulCommand= ulCommand | CAM_POLLINIG|CAM_WRITE;
 					/*  write content 0 is equall to mark invalid */
 					rtw_write32(Adapter, WCAMI, ulContent);  /* delay_ms(40); */
-					/* RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A4: %lx \n",ulContent)); */
+					/* RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A4: %lx\n",ulContent)); */
 					rtw_write32(Adapter, RWCAM, ulCommand);  /* delay_ms(40); */
-					/* RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A0: %lx \n",ulCommand)); */
+					/* RT_TRACE(COMP_SEC, DBG_LOUD, ("CAM_empty_entry(): WRITE A0: %lx\n",ulCommand)); */
 				}
 			}
 			break;
@@ -2811,7 +2811,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 							break;
 					}while(trycnt--);
 					if(trycnt ==0)
-						DBG_8192C("Stop RX DMA failed...... \n");
+						DBG_8192C("Stop RX DMA failed......\n");
 
 					/* RQPN Load 0 */
 					rtw_write16(Adapter,REG_RQPN_NPQ,0x0);
@@ -3371,7 +3371,7 @@ void rtl8188eu_set_hal_ops(struct adapter * padapter)
 
 	padapter->HalData = rtw_zmalloc(sizeof(HAL_DATA_TYPE));
 	if(padapter->HalData == NULL){
-		DBG_8192C("cant not alloc memory for HAL DATA \n");
+		DBG_8192C("cant not alloc memory for HAL DATA\n");
 	}
 
 	padapter->hal_data_sz = sizeof(HAL_DATA_TYPE);

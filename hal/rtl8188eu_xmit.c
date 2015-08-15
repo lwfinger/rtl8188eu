@@ -260,7 +260,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x3F);
 
 		qsel = (uint)(pattrib->qsel & 0x0000001f);
-		/* DBG_8192C("==> macid(%d) qsel:0x%02x \n",pattrib->mac_id,qsel); */
+		/* DBG_8192C("==> macid(%d) qsel:0x%02x\n",pattrib->mac_id,qsel); */
 		ptxdesc->txdw1 |= cpu_to_le32((qsel << QSEL_SHT) & 0x00001f00);
 
 		ptxdesc->txdw1 |= cpu_to_le32((pattrib->raid<< RATE_ID_SHT) & 0x000F0000);
@@ -568,12 +568,12 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	if (pxmitbuf == NULL) {
 		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
 		if (pxmitbuf == NULL){
-			/* DBG_871X("%s #1, connot alloc xmitbuf!!!! \n",__FUNCTION__); */
+			/* DBG_871X("%s #1, connot alloc xmitbuf!!!!\n",__FUNCTION__); */
 			return false;
 		}
 	}
 
-/* DBG_8192C("%s ===================================== \n",__FUNCTION__); */
+/* DBG_8192C("%s =====================================\n",__FUNCTION__); */
 	/* 3 1. pick up first frame */
 	do {
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
@@ -614,7 +614,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		pxmitframe->pkt_offset = 1; /*  first frame of aggregation, reserve offset */
 
 		if (rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe) == false) {
-			DBG_871X("%s coalesce 1st xmitframe failed \n",__FUNCTION__);
+			DBG_871X("%s coalesce 1st xmitframe failed\n",__FUNCTION__);
 			continue;
 		}
 
@@ -731,7 +731,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 		pxmitframe->buf_addr = pxmitbuf->pbuf + pbuf;
 
 		if (rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe) == false) {
-			DBG_871X("%s coalesce failed \n",__FUNCTION__);
+			DBG_871X("%s coalesce failed\n",__FUNCTION__);
 			rtw_free_xmitframe(pxmitpriv, pxmitframe);
 			continue;
 		}
@@ -808,7 +808,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 static s32 xmitframe_direct(struct adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 res = _SUCCESS;
-/* DBG_8192C("==> %s \n",__FUNCTION__); */
+/* DBG_8192C("==> %s\n",__FUNCTION__); */
 
 	res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
 	if (res == _SUCCESS) {

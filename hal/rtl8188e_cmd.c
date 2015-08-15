@@ -171,7 +171,7 @@ u8 rtl8188e_set_rssi_cmd(struct adapter*padapter, u8 *param)
 
 	if(pHalData->fw_ractrl == true){
 	}else{
-		DBG_8192C("==>%s fw dont support RA \n",__FUNCTION__);
+		DBG_8192C("==>%s fw dont support RA\n",__FUNCTION__);
 		res=_FAIL;
 	}
 	return res;
@@ -192,7 +192,7 @@ u8 rtl8188e_set_raid_cmd(struct adapter*padapter, u32 mask)
 
 		FillH2CCmd_88E(padapter, H2C_DM_MACID_CFG, 3, buf);
 	}else{
-		DBG_8192C("==>%s fw dont support RA \n",__FUNCTION__);
+		DBG_8192C("==>%s fw dont support RA\n",__FUNCTION__);
 		res=_FAIL;
 	}
 	return res;
@@ -309,7 +309,7 @@ void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, __le16 mstatus_rpt
 	u32 reg_macid_no_link = REG_MACID_NO_LINK_0;
 	opmode = (u8) mst_rpt;
 	macid = (u8)(mst_rpt >> 8)  ;
-	DBG_871X("### %s: MStatus=%x MACID=%d \n", __FUNCTION__,opmode,macid);
+	DBG_871X("### %s: MStatus=%x MACID=%d\n", __FUNCTION__,opmode,macid);
 	FillH2CCmd_88E(padapter, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
 
 	if(macid > 31){
@@ -857,11 +857,11 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state)
 	switch(p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
-			DBG_8192C("P2P_PS_DISABLE \n");
+			DBG_8192C("P2P_PS_DISABLE\n");
 			memset(p2p_ps_offload, 0 ,1);
 			break;
 		case P2P_PS_ENABLE:
-			DBG_8192C("P2P_PS_ENABLE \n");
+			DBG_8192C("P2P_PS_ENABLE\n");
 			/*  update CTWindow value. */
 			if( pwdinfo->ctwindow > 0 )
 			{
@@ -914,11 +914,11 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state)
 			}
 			break;
 		case P2P_PS_SCAN:
-			DBG_8192C("P2P_PS_SCAN \n");
+			DBG_8192C("P2P_PS_SCAN\n");
 			p2p_ps_offload->discovery = 1;
 			break;
 		case P2P_PS_SCAN_DONE:
-			DBG_8192C("P2P_PS_SCAN_DONE \n");
+			DBG_8192C("P2P_PS_SCAN_DONE\n");
 			p2p_ps_offload->discovery = 0;
 			pwdinfo->p2p_ps_state = P2P_PS_ENABLE;
 			break;

@@ -1031,7 +1031,7 @@ phy_BB8190_Config_HardCode(
 	struct adapter *Adapter
 	)
 {
-	/* RT_ASSERT(false, ("This function is not implement yet!! \n")); */
+	/* RT_ASSERT(false, ("This function is not implement yet!!\n")); */
 	return _SUCCESS;
 }
 
@@ -1312,7 +1312,7 @@ PHY_CheckBBAndRFOK(
 		/*  */
 		if(ulRegRead != WriteData[i])
 		{
-			/* RT_TRACE(COMP_FPGA, DBG_LOUD, ("ulRegRead: %lx, WriteData: %lx \n", ulRegRead, WriteData[i])); */
+			/* RT_TRACE(COMP_FPGA, DBG_LOUD, ("ulRegRead: %lx, WriteData: %lx\n", ulRegRead, WriteData[i])); */
 			rtStatus = _FAIL;
 			break;
 		}
@@ -1335,14 +1335,14 @@ rtl8192c_PHY_GetHWRegOriginalValue(
 	pHalData->DefaultInitialGain[2] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XCAGCCore1, bMaskByte0);
 	pHalData->DefaultInitialGain[3] = (u8)PHY_QueryBBReg(Adapter, rOFDM0_XDAGCCore1, bMaskByte0);
 	/* RT_TRACE(COMP_INIT, DBG_LOUD, */
-	/* Default initial gain (c50=0x%x, c58=0x%x, c60=0x%x, c68=0x%x) \n", */
+	/* Default initial gain (c50=0x%x, c58=0x%x, c60=0x%x, c68=0x%x)\n", */
 	/* pHalData->DefaultInitialGain[0], pHalData->DefaultInitialGain[1], */
 	/* pHalData->DefaultInitialGain[2], pHalData->DefaultInitialGain[3])); */
 
 	/*  read framesync */
 	pHalData->framesync = (u8)PHY_QueryBBReg(Adapter, rOFDM0_RxDetector3, bMaskByte0);
 	pHalData->framesyncC34 = PHY_QueryBBReg(Adapter, rOFDM0_RxDetector2, bMaskDWord);
-	/* RT_TRACE(COMP_INIT, DBG_LOUD, ("Default framesync (0x%x) = 0x%x \n", */
+	/* RT_TRACE(COMP_INIT, DBG_LOUD, ("Default framesync (0x%x) = 0x%x\n", */
 	/* 	rOFDM0_RxDetector3, pHalData->framesync)); */
 }
 
@@ -1824,7 +1824,7 @@ _PHY_SetBWMode92C(
 
 	/* pHalData->SetBWModeInProgress= false; */
 
-	/* RT_TRACE(COMP_SCAN, DBG_LOUD, ("<==PHY_SetBWModeCallback8192C() \n" )); */
+	/* RT_TRACE(COMP_SCAN, DBG_LOUD, ("<==PHY_SetBWModeCallback8192C()\n" )); */
 }
 
 

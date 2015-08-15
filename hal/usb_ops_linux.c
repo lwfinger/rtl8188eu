@@ -58,7 +58,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	pIo_buf = pdvobjpriv->usb_vendor_req_buf;
 
 	if ( pIo_buf== NULL) {
-		DBG_8192C( "[%s] pIo_buf == NULL \n", __FUNCTION__ );
+		DBG_8192C( "[%s] pIo_buf == NULL\n", __FUNCTION__ );
 		status = -ENOMEM;
 		goto release_mutex;
 	}
@@ -301,13 +301,13 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 	memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
 
 	if (  pHalData->IntArray[1]  & IMR_TXERR_88E )
-		DBG_871X("===> %s Tx Error Flag Interrupt Status \n",__FUNCTION__);
+		DBG_871X("===> %s Tx Error Flag Interrupt Status\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_RXERR_88E )
-		DBG_871X("===> %s Rx Error Flag INT Status \n",__FUNCTION__);
+		DBG_871X("===> %s Rx Error Flag INT Status\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_TXFOVW_88E )
-		DBG_871X("===> %s Transmit FIFO Overflow \n",__FUNCTION__);
+		DBG_871X("===> %s Transmit FIFO Overflow\n",__FUNCTION__);
 	if (  pHalData->IntArray[1]  & IMR_RXFOVW_88E )
-		DBG_871X("===> %s Receive FIFO Overflow \n",__FUNCTION__);
+		DBG_871X("===> %s Receive FIFO Overflow\n",__FUNCTION__);
 
 	/*  C2H Event */
 	if (pbuf[0]!= 0){
@@ -478,7 +478,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 		if ((pattrib->pkt_len<=0) || (pkt_offset>transfer_len))
 		{
 			RT_TRACE(_module_rtl871x_recv_c_,_drv_info_,("recvbuf2recvframe: pkt_len<=0\n"));
-			DBG_8192C("%s()-%d: RX Warning!,pkt_len<=0 or pkt_offset> transfoer_len \n", __FUNCTION__, __LINE__);
+			DBG_8192C("%s()-%d: RX Warning!,pkt_len<=0 or pkt_offset> transfoer_len\n", __FUNCTION__, __LINE__);
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
 			goto _exit_recvbuf2recvframe;
 		}
@@ -528,7 +528,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 		{
 			if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0))
 			{
-				DBG_8192C("recvbuf2recvframe: alloc_skb fail , drop frag frame \n");
+				DBG_8192C("recvbuf2recvframe: alloc_skb fail , drop frag frame\n");
 				rtw_free_recvframe(precvframe, pfree_recv_queue);
 				goto _exit_recvbuf2recvframe;
 			}
@@ -577,12 +577,12 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 		} else{ /*  pkt_rpt_type == TX_REPORT1-CCX, TX_REPORT2-TX RTP,HIS_REPORT-USB HISR RTP */
 			/* enqueue recvframe to txrtp queue */
 			if (pattrib->pkt_rpt_type == TX_REPORT1){
-				/* DBG_8192C("rx CCX \n"); */
+				/* DBG_8192C("rx CCX\n"); */
 				/* CCX-TXRPT ack for xmit mgmt frames. */
 				handle_txrpt_ccx_88e(padapter, precvframe->u.hdr.rx_data);
 			}
 			else if (pattrib->pkt_rpt_type == TX_REPORT2){
-				/* DBG_8192C("rx TX RPT \n"); */
+				/* DBG_8192C("rx TX RPT\n"); */
 				ODM_RA_TxRPT2Handle_8188E(
 							&pHalData->odmpriv,
 							precvframe->u.hdr.rx_data,
@@ -622,7 +622,7 @@ void rtl8188eu_recv_tasklet(void *priv)
 	{
 		if ((padapter->bDriverStopped == true)||(padapter->bSurpriseRemoved== true))
 		{
-			DBG_8192C("recv_tasklet => bDriverStopped or bSurpriseRemoved \n");
+			DBG_8192C("recv_tasklet => bDriverStopped or bSurpriseRemoved\n");
 			rtw_skb_free(pskb);
 			break;
 		}
@@ -699,7 +699,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 	}
 	else
 	{
-		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0 \n", purb->status));
+		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usb_read_port_complete : purb->status(%d) != 0\n", purb->status));
 
 		DBG_8192C("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
