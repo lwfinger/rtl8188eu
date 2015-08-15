@@ -900,7 +900,7 @@ ODM_RA_TxRPT2Handle_8188E(
 
 		pBuffer += TX_RPT2_ITEM_SIZE;
 		MacId++;
-	}while(MacId < ItemNum);
+	}while (MacId < ItemNum);
 
         odm_RATxRPTTimerSetting(pDM_Odm,minRptTime);
 

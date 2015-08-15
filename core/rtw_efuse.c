@@ -206,8 +206,8 @@ ReadEFuseByte(
 	/* Check bit 32 read-ready */
 	retry = 0;
 	value32 = rtw_read32(Adapter, EFUSE_CTRL);
-	/* while(!(((value32 >> 24) & 0xff) & 0x80)  && (retry<10)) */
-	while(!(((value32 >> 24) & 0xff) & 0x80)  && (retry<10000))
+	/* while (!(((value32 >> 24) & 0xff) & 0x80)  && (retry<10)) */
+	while (!(((value32 >> 24) & 0xff) & 0x80)  && (retry<10000))
 	{
 		value32 = rtw_read32(Adapter, EFUSE_CTRL);
 		retry++;
@@ -324,7 +324,7 @@ EFUSE_Read1Byte(
 
 		/* Wait Write-ready (0x30[31]=1) */
 		Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
-		while(!(Bytetemp & 0x80))
+		while (!(Bytetemp & 0x80))
 		{
 			Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
 			k++;
@@ -398,7 +398,7 @@ EFUSE_Write1Byte(
 
 		/* Wait Write-ready (0x30[31]=0) */
 		Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
-		while(Bytetemp & 0x80)
+		while (Bytetemp & 0x80)
 		{
 			Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
 			k++;
@@ -435,7 +435,7 @@ efuse_OneByteRead(
 
 	rtw_write8(pAdapter, EFUSE_CTRL+3,  0x72);/* read cmd */
 
-	while(!(0x80 &rtw_read8(pAdapter, EFUSE_CTRL+3))&&(tmpidx<100))
+	while (!(0x80 &rtw_read8(pAdapter, EFUSE_CTRL+3))&&(tmpidx<100))
 	{
 		tmpidx++;
 	}
@@ -481,7 +481,7 @@ efuse_OneByteWrite(
 
 	rtw_write8(pAdapter, EFUSE_CTRL+3, 0xF2);/* write cmd */
 
-	while((0x80 &  rtw_read8(pAdapter, EFUSE_CTRL+3)) && (tmpidx<100) ){
+	while ((0x80 &  rtw_read8(pAdapter, EFUSE_CTRL+3)) && (tmpidx<100) ){
 		tmpidx++;
 	}
 

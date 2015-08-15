@@ -116,7 +116,7 @@ void _rtw_free_evt_priv (struct	evt_priv *pevtpriv)
 
 #ifdef CONFIG_C2H_WK
 	_cancel_workitem_sync(&pevtpriv->c2h_wk);
-	while(pevtpriv->c2h_wk_alive)
+	while (pevtpriv->c2h_wk_alive)
 		rtw_msleep_os(10);
 
 	while (!rtw_cbuf_empty(pevtpriv->c2h_queue)) {
@@ -380,7 +380,7 @@ int rtw_cmd_thread(void * context)
 
 	RT_TRACE(_module_rtl871x_cmd_c_,_drv_info_,("start r871x rtw_cmd_thread !!!!\n"));
 
-	while(1)
+	while (1)
 	{
 		if (_rtw_down_sema(&pcmdpriv->cmd_queue_sema) == _FAIL) {
 			DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" _rtw_down_sema(&pcmdpriv->cmd_queue_sema) return _FAIL, break\n", FUNC_ADPT_ARG(padapter));
@@ -489,7 +489,7 @@ post_process:
 		/* DBG_871X("%s: leaving... drop cmdcode:%u\n", __FUNCTION__, pcmd->cmdcode); */
 
 		rtw_free_cmd_obj(pcmd);
-	}while(1);
+	}while (1);
 
 	_rtw_up_sema(&pcmdpriv->terminate_cmdthread_sema);
 
@@ -2278,12 +2278,12 @@ static void rtw_chk_hi_queue_hdl(struct adapter *padapter)
 	{
 		u8 val = 0;
 
-		/* while((rtw_read32(padapter, 0x414)&0x00ffff00)!=0) */
-		/* while((rtw_read32(padapter, 0x414)&0x0000ff00)!=0) */
+		/* while ((rtw_read32(padapter, 0x414)&0x00ffff00)!=0) */
+		/* while ((rtw_read32(padapter, 0x414)&0x0000ff00)!=0) */
 
 		rtw_hal_get_hwreg(padapter, HW_VAR_CHK_HI_QUEUE_EMPTY, &val);
 
-		while(false == val)
+		while (false == val)
 		{
 			rtw_msleep_os(100);
 

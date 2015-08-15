@@ -763,7 +763,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 			descCount = 0;
 			bulkPtr = ((pbuf / bulkSize) + 1) * bulkSize;
 		}
-	}/* end while( aggregate same priority and same DA(AP or STA) frames) */
+	}/* end while ( aggregate same priority and same DA(AP or STA) frames) */
 
 
 	if (_rtw_queue_empty(&ptxservq->sta_pending) == true)

@@ -438,8 +438,8 @@ void dbg_rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dm
 #define rtw_usb_buffer_free_f(dev, size, addr, dma, mstat_f)	dbg_rtw_usb_buffer_free((dev), (size), (addr), (dma), ((mstat_f)&0xff00)|MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
 
 #else /* DBG_MEM_ALLOC */
-#define rtw_mstat_update(flag, status, sz) do {} while(0)
-#define rtw_mstat_dump() do {} while(0)
+#define rtw_mstat_update(flag, status, sz) do {} while (0)
+#define rtw_mstat_dump() do {} while (0)
 u8*	_rtw_vmalloc(u32 sz);
 u8*	_rtw_zvmalloc(u32 sz);
 void	_rtw_vmfree(u8 *pbuf, u32 sz);

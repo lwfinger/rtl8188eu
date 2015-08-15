@@ -325,7 +325,7 @@ struct sta_info {
 		sta->sta_stats.last_rx_probersp_uo_pkts = sta->sta_stats.rx_probersp_uo_pkts; \
 		sta->sta_stats.last_rx_ctrl_pkts = sta->sta_stats.rx_ctrl_pkts; \
 		sta->sta_stats.last_rx_data_pkts = sta->sta_stats.rx_data_pkts; \
-	} while(0)
+	} while (0)
 
 #define STA_RX_PKTS_ARG(sta) \
 	sta->sta_stats.rx_mgnt_pkts \

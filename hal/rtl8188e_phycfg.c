@@ -87,7 +87,7 @@ sic_IsSICReady(
 	u32		retryCnt=0;
 	u8		sic_cmd=0xff;
 
-	while(1)
+	while (1)
 	{
 		if (retryCnt++ >= SIC_MAX_POLL_CNT)
 		{
@@ -145,7 +145,7 @@ sic_Read4Byte(
 		/* RTPRINT(FPHY, PHY_SICR, ("write cmdreg 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_READ)); */
 
 		retry = 4;
-		while(retry--){
+		while (retry--){
 			rtw_udelay_os(50);
 			/* PlatformStallExecution(50); */
 		}
@@ -179,7 +179,7 @@ sic_Write4Byte(
 		rtw_write8(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8));
 		rtw_write32(Adapter, SIC_DATA_REG, (u32)data);
 		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_WRITE);
-		while(retry--){
+		while (retry--){
 			rtw_udelay_os(50);
 		}
 	}

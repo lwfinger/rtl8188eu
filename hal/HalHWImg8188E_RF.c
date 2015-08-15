@@ -177,7 +177,7 @@ ODM_ReadAndConfig_RadioA_1T_8188E(
 	PDM_ODM_T  pDM_Odm
 	)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
+	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
 
 	u32     hex         = 0;
 	u32     i           = 0;
@@ -348,7 +348,7 @@ ODM_ReadAndConfig_RadioA_1T_ICUT_8188E(
 	PDM_ODM_T  pDM_Odm
 	)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while(0)
+	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = Array[i]; v2 = Array[i+1]; } while (0)
 
 	u32     hex         = 0;
 	u32     i           = 0;

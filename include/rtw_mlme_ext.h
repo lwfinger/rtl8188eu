@@ -673,18 +673,18 @@ void sa_query_timer_hdl(struct adapter *padapter);
 #define set_survey_timer(mlmeext, ms) \
 	do { \
 		_set_timer(&(mlmeext)->survey_timer, (ms)); \
-	} while(0)
+	} while (0)
 
 #define set_link_timer(mlmeext, ms) \
 	do { \
 		_set_timer(&(mlmeext)->link_timer, (ms)); \
-	} while(0)
+	} while (0)
 #ifdef CONFIG_IEEE80211W
 #define set_sa_query_timer(mlmeext, ms) \
 	do { \
 		DBG_871X("%s set_sa_query_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms)); \
 		_set_timer(&(mlmeext)->sa_query_timer, (ms)); \
-	} while(0)
+	} while (0)
 #endif /* CONFIG_IEEE80211W */
 extern int cckrates_included(unsigned char *rate, int ratelen);
 extern int cckratesonly_included(unsigned char *rate, int ratelen);

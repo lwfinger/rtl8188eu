@@ -140,7 +140,7 @@ u8 HalPwrSeqCmdParsing(
 		}
 
 		AryIdx++;/* Add Array Index */
-	}while(1);
+	}while (1);
 
 	return true;
 }

@@ -72,7 +72,7 @@ int rtw_get_bit_value_from_ieee_value(u8 val)
 	unsigned char dot11_rate_table[]={2,4,11,22,12,18,24,36,48,72,96,108,0}; /*  last element must be zero!! */
 
 	int i=0;
-	while(dot11_rate_table[i] != 0) {
+	while (dot11_rate_table[i] != 0) {
 		if (dot11_rate_table[i] == val)
 			return BIT(i);
 		i++;
@@ -84,7 +84,7 @@ uint	rtw_is_cckrates_included(u8 *rate)
 {
 	u32	i = 0;
 
-	while(rate[i]!=0) {
+	while (rate[i]!=0) {
 		if ((((rate[i]) & 0x7f) == 2) || (((rate[i]) & 0x7f) == 4) ||
 		    (((rate[i]) & 0x7f) == 11)  || (((rate[i]) & 0x7f) == 22) )
 			return true;
@@ -228,7 +228,7 @@ u8 *rtw_get_ie(u8 *pbuf, sint index, sint *len, sint limit)
 	p = pbuf;
 	i = 0;
 	*len = 0;
-	while(1)
+	while (1)
 	{
 		if (*p == index)
 		{
@@ -274,7 +274,7 @@ u8 *rtw_get_ie_ex(u8 *in_ie, uint in_len, u8 eid, u8 *oui, u8 oui_len, u8 *ie, u
 
 	cnt = 0;
 
-	while(cnt<in_len)
+	while (cnt<in_len)
 	{
 		if (eid == in_ie[cnt]
 			&& ( !oui || _rtw_memcmp(&in_ie[cnt+2], oui, oui_len) == true))
@@ -381,7 +381,7 @@ uint	rtw_get_rateset_len(u8	*rateset)
 {
 	uint i = 0;
 ;
-	while(1)
+	while (1)
 	{
 		if ((rateset[i]) == 0)
 			break;
@@ -490,7 +490,7 @@ unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
 	u8 *pbuf = pie;
 	int limit_new = limit;
 
-	while(1)
+	while (1)
 	{
 		pbuf = rtw_get_ie(pbuf, _WPA_IE_ID_, &len, limit_new);
 
@@ -752,7 +752,7 @@ int rtw_get_sec_ie(u8 *in_ie,uint in_len,u8 *rsn_ie,u16 *rsn_len,u8 *wpa_ie,u16 
 
 	sec_idx=0;
 
-	while(cnt<in_len)
+	while (cnt<in_len)
 	{
 		authmode=in_ie[cnt];
 
@@ -869,7 +869,7 @@ u8 *rtw_get_wps_ie(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps_ielen)
 
 	cnt = 0;
 
-	while(cnt<in_len)
+	while (cnt<in_len)
 	{
 		eid = in_ie[cnt];
 
@@ -925,7 +925,7 @@ u8 *rtw_get_wps_attr(u8 *wps_ie, uint wps_ielen, u16 target_attr_id ,u8 *buf_att
 	/*  6 = 1(Element ID) + 1(Length) + 4(WPS OUI) */
 	attr_ptr = wps_ie + 6; /* goto first attr */
 
-	while(attr_ptr - wps_ie < wps_ielen)
+	while (attr_ptr - wps_ie < wps_ielen)
 	{
 		/*  4 = 2(Attribute ID) + 2(Length) */
 		u16 attr_id = RTW_GET_BE16(attr_ptr);
@@ -1295,7 +1295,7 @@ void dump_ies(u8 *buf, u32 buf_len)
 	u8* pos = (u8*)buf;
 	u8 id, len;
 
-	while(pos-buf<=buf_len){
+	while (pos-buf<=buf_len){
 		id = *pos;
 		len = *(pos+1);
 
@@ -1326,7 +1326,7 @@ void dump_wps_ie(u8 *ie, u32 ie_len)
 		return;
 
 	pos+=6;
-	while(pos-ie < ie_len){
+	while (pos-ie < ie_len){
 		id = RTW_GET_BE16(pos);
 		len = RTW_GET_BE16(pos + 2);
 
@@ -1350,7 +1350,7 @@ u32 rtw_get_p2p_merged_ies_len(u8 *in_ie, u32 in_len)
 	int i=0;
 	int j=0, len=0;
 
-	while( i < in_len)
+	while ( i < in_len)
 	{
 		pIE = (struct ndis_802_11_variable_ies *)(in_ie+ i);
 
@@ -1386,7 +1386,7 @@ int rtw_p2p_merge_ies(u8 *in_ie, u32 in_len, u8 *merge_ie)
 		memcpy(merge_ie, ELOUI, 6);
 		merge_ie += 6;
 
-		while( i < in_len)
+		while ( i < in_len)
 		{
 			pIE = (struct ndis_802_11_variable_ies *)(in_ie+ i);
 
@@ -1421,7 +1421,7 @@ void dump_p2p_ie(u8 *ie, u32 ie_len) {
 		return;
 
 	pos+=6;
-	while(pos-ie < ie_len){
+	while (pos-ie < ie_len){
 		id = *pos;
 		len = RTW_GET_LE16(pos+1);
 
@@ -1471,7 +1471,7 @@ u8 *rtw_get_p2p_ie(u8 *in_ie, int in_len, u8 *p2p_ie, uint *p2p_ielen)
 	if ( p2p_ielen != NULL )
 		*p2p_ielen = 0;
 
-	while(cnt<in_len)
+	while (cnt<in_len)
 	{
 		eid = in_ie[cnt];
 		if ((in_len < 0) || (cnt > MAX_IE_SZ)) {
@@ -1535,7 +1535,7 @@ u8 *rtw_get_p2p_attr(u8 *p2p_ie, uint p2p_ielen, u8 target_attr_id ,u8 *buf_attr
 	/*  6 = 1(Element ID) + 1(Length) + 3 (OUI) + 1(OUI Type) */
 	attr_ptr = p2p_ie + 6; /* goto first attr */
 
-	while(attr_ptr - p2p_ie < p2p_ielen)
+	while (attr_ptr - p2p_ie < p2p_ielen)
 	{
 		/*  3 = 1(Attribute ID) + 2(Length) */
 		u8 attr_id = *attr_ptr;
@@ -1623,7 +1623,7 @@ static uint rtw_p2p_attr_remove(u8 *ie, uint ielen_ori, u8 attr_id)
 	uint ielen = ielen_ori;
 	int index=0;
 
-	while(1) {
+	while (1) {
 		target_attr=rtw_get_p2p_attr(ie, ielen, attr_id, NULL, &target_attr_len);
 		if (target_attr && target_attr_len)
 		{
@@ -1683,7 +1683,7 @@ void dump_wfd_ie(u8 *ie, u32 ie_len)
 		return;
 
 	pos+=6;
-	while(pos-ie < ie_len){
+	while (pos-ie < ie_len){
 		id = *pos;
 		len = RTW_GET_BE16(pos+1);
 
@@ -1707,7 +1707,7 @@ int rtw_get_wfd_ie(u8 *in_ie, int in_len, u8 *wfd_ie, uint *wfd_ielen)
 		return match;
 	}
 
-	while(cnt<in_len)
+	while (cnt<in_len)
 	{
 		eid = in_ie[cnt];
 
@@ -1795,7 +1795,7 @@ int rtw_get_wfd_attr_content(u8 *wfd_ie, uint wfd_ielen, u8 target_attr_id ,u8 *
 
 	/* 	1 ( WFD IE ) + 1 ( Length ) + 3 ( OUI ) + 1 ( OUI Type ) */
 	cnt = 6;
-	while( cnt < wfd_ielen )
+	while ( cnt < wfd_ielen )
 	{
 		u16 attrlen = RTW_GET_BE16(wfd_ie + cnt + 1);
 

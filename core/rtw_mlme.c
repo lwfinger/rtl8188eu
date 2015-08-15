@@ -595,7 +595,7 @@ struct	wlan_network	* rtw_get_oldest_wlan_network(struct  __queue *scanned_queue
 
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 
 		if (rtw_end_of_queue_search(phead,plist)== true)
@@ -737,7 +737,7 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 		feature = 1; /*  p2p enable */
 #endif
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -2036,7 +2036,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
 	spin_lock_bh(&pmlmepriv->lock);
 
 	if (rtw_to_roaming(adapter) > 0) { /* join timeout caused by roaming */
-		while(1) {
+		while (1) {
 			pmlmepriv->to_roaming--;
 			if (rtw_to_roaming(adapter) != 0) { /* try another */
 				DBG_871X("%s try another roaming\n", __FUNCTION__);
@@ -2509,7 +2509,7 @@ int rtw_restruct_wmm_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie, uint in_
 	unsigned int i, j;
 
 	i = 12; /* after the fixed IE */
-	while(i<in_len)
+	while (i<in_len)
 	{
 		ielength = initial_out_len;
 
@@ -2565,7 +2565,7 @@ static int SecIsInPMKIDList(struct adapter *Adapter, u8 *bssid)
 			/* continue; */
 		}
 
-	}while(i<NUM_PMKID_CACHE);
+	}while (i<NUM_PMKID_CACHE);
 
 	if ( i == NUM_PMKID_CACHE )
 	{
@@ -3079,7 +3079,7 @@ void _rtw_roaming(struct adapter *padapter, struct wlan_network *tgt_network)
 
 		pmlmepriv->assoc_by_bssid = false;
 
-		while(1) {
+		while (1) {
 			if ( _SUCCESS==(do_join_r=rtw_do_join(padapter)) ) {
 				break;
 			} else {

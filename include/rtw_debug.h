@@ -155,15 +155,15 @@
 extern void rtl871x_cedbg(const char *fmt, ...);
 #endif
 
-#define RT_TRACE(_Comp, _Level, Fmt) do{}while(0)
-#define _func_enter_ do{}while(0)
-#define _func_exit_ do{}while(0)
-#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen) do{}while(0)
+#define RT_TRACE(_Comp, _Level, Fmt) do{}while (0)
+#define _func_enter_ do{}while (0)
+#define _func_exit_ do{}while (0)
+#define RT_PRINT_DATA(_Comp, _Level, _TitleString, _HexData, _HexDataLen) do{}while (0)
 
-#define DBG_871X(x, ...) do {} while(0)
-#define MSG_8192C(x, ...) do {} while(0)
-#define DBG_8192C(x,...) do {} while(0)
-#define DBG_871X_LEVEL(x,...) do {} while(0)
+#define DBG_871X(x, ...) do {} while (0)
+#define MSG_8192C(x, ...) do {} while (0)
+#define DBG_8192C(x,...) do {} while (0)
+#define DBG_871X_LEVEL(x,...) do {} while (0)
 
 #undef	_dbgdump
 #define _dbgdump	printk
@@ -181,7 +181,7 @@ extern u32 GlobalDebugLevel;
 			else \
 				_dbgdump(DRIVER_PREFIX fmt, ##arg);\
 		}\
-	}while(0)
+	}while (0)
 #endif
 
 #ifdef CONFIG_DEBUG
@@ -189,17 +189,17 @@ extern u32 GlobalDebugLevel;
 	#undef DBG_871X
 	#define DBG_871X(...)     do {\
 		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
-	}while(0)
+	}while (0)
 
 	#undef MSG_8192C
 	#define MSG_8192C(...)     do {\
 		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
-	}while(0)
+	}while (0)
 
 	#undef DBG_8192C
 	#define DBG_8192C(...)     do {\
 		_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
-	}while(0)
+	}while (0)
 #endif
 #endif /* CONFIG_DEBUG */
 

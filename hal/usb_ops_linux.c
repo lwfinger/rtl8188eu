@@ -63,7 +63,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 		goto release_mutex;
 	}
 
-	while(++vendorreq_times<= MAX_USBCTRL_VENDORREQ_TIMES)
+	while (++vendorreq_times<= MAX_USBCTRL_VENDORREQ_TIMES)
 	{
 		memset(pIo_buf, 0, len);
 
@@ -605,7 +605,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 		if (transfer_len>0 && pkt_cnt==0)
 			pkt_cnt = (le32_to_cpu(prxstat->rxdw2)>>16) & 0xff;
 
-	}while((transfer_len>0) && (pkt_cnt>0));
+	}while ((transfer_len>0) && (pkt_cnt>0));
 
 _exit_recvbuf2recvframe:
 
@@ -835,7 +835,7 @@ void rtl8188eu_xmit_tasklet(void *priv)
 	if (check_fwstate(&padapter->mlmepriv, _FW_UNDER_SURVEY) == true)
 		return;
 
-	while(1) {
+	while (1) {
 		if (padapter->bDriverStopped ||
 		    padapter->bSurpriseRemoved ||
 		    padapter->bWritePortCancel) {

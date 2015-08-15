@@ -40,7 +40,7 @@
 						}			\
 						if (_offset >= _size)\
 							_offset = _size-1;\
-					} while(0)
+					} while (0)
 
 /* 3============================================================ */
 /* 3 Tx Power Tracking */
@@ -1833,7 +1833,7 @@ if ( *(pDM_Odm->mp_mode) == 1)
 
 				i++;
 			}
-			while(tmpReg > apkbound && i < 4);
+			while (tmpReg > apkbound && i < 4);
 
 			APK_result[path][index] = tmpReg;
 		}
@@ -2130,7 +2130,7 @@ if (*(pDM_Odm->mp_mode) == 1)
 	if (bSingleTone || bCarrierSuppression)
 		return;
 
-	while(*(pDM_Odm->pbScanInProcess) && timecount < timeout)
+	while (*(pDM_Odm->pbScanInProcess) && timecount < timeout)
 	{
 		ODM_delay_ms(50);
 		timecount += 50;

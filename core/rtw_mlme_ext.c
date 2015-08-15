@@ -4774,7 +4774,7 @@ int issue_probereq_p2p_ex(struct adapter *adapter, u8 *da, int try_cnt, int wait
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -6327,7 +6327,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid, 
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7164,7 +7164,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7299,7 +7299,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7422,7 +7422,7 @@ int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason, int
 		if (i < try_cnt && wait_ms > 0 && ret==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
+	}while ((i<try_cnt) && ((ret==_FAIL)||(wait_ms==0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7834,7 +7834,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
 		phead = get_list_head(queue);
 		plist = get_next(phead);
 
-		while(1)
+		while (1)
 		{
 			int len;
 			u8 *p;
@@ -7965,9 +7965,9 @@ unsigned int send_beacon(struct adapter *padapter)
 			rtw_yield_os();
 			rtw_hal_get_hwreg(padapter, HW_VAR_BCN_VALID, (u8 *)(&bxmitok));
 			poll++;
-		}while((poll%10)!=0 && false == bxmitok && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+		}while ((poll%10)!=0 && false == bxmitok && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
 
-	}while(false == bxmitok && issue<100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
+	}while (false == bxmitok && issue<100 && !padapter->bSurpriseRemoved && !padapter->bDriverStopped);
 
 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
 	{

@@ -582,7 +582,7 @@ __inline static int IsFrameTypeCtrl(unsigned char *pframe)
 #define SetOrderBit(pbuf)	\
 	do	{	\
 		*(unsigned short *)(pbuf) |= cpu_to_le16(_ORDER_); \
-	} while(0)
+	} while (0)
 
 #define GetOrderBit(pbuf)	(((*(unsigned short *)(pbuf)) & le16_to_cpu(_ORDER_)) != 0)
 

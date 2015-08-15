@@ -69,7 +69,7 @@ static s32 iol_execute(struct adapter *padapter, u8 control)
 	rtw_write8(padapter, REG_HMEBOX_E0,  reg_0x88|control);
 
 	t1 = start = rtw_get_current_time();
-	while(
+	while (
 		/* reg_1c7 = rtw_read8(padapter, 0x1c7) >1) && */
 		(reg_0x88=rtw_read8(padapter, REG_HMEBOX_E0)) & control
 		&& (passing_time=rtw_get_passing_time_ms(start))<1000
@@ -157,7 +157,7 @@ efuse_phymap_to_logical(u8 * phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	/*  */
 	/*  2. Read real efuse content. Filter PG header and every section data. */
 	/*  */
-	while((rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E))
+	while ((rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E))
 	{
 		/* RTPRINT(FEEPROM, EFUSE_READ_ALL, ("efuse_Addr-%d efuse_data=%x\n", eFuse_Addr-1, *rtemp8)); */
 
@@ -311,7 +311,7 @@ static void efuse_read_phymap_from_txpktbuf(
 
 	dbg_addr = bcnhead*128/8; /* 8-bytes addressing */
 
-	while(1)
+	while (1)
 	{
 		/* DBG_871X("%s dbg_addr:0x%x\n", __FUNCTION__, dbg_addr+i); */
 		rtw_write16(adapter, REG_PKTBUF_DBG_ADDR, dbg_addr+i);
@@ -319,8 +319,8 @@ static void efuse_read_phymap_from_txpktbuf(
 		/* DBG_871X("%s write reg_0x143:0x00\n", __FUNCTION__); */
 		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
 		start = rtw_get_current_time();
-		while(!(reg_0x143=rtw_read8(adapter, REG_TXPKTBUF_DBG))/* dbg */
-		/* while(rtw_read8(adapter, REG_TXPKTBUF_DBG) & BIT0 */
+		while (!(reg_0x143=rtw_read8(adapter, REG_TXPKTBUF_DBG))/* dbg */
+		/* while (rtw_read8(adapter, REG_TXPKTBUF_DBG) & BIT0 */
 			&& (passing_time=rtw_get_passing_time_ms(start))<1000
 		) {
 			DBG_871X("%s polling reg_0x143:0x%02x, reg_0x106:0x%02x\n", __FUNCTION__, reg_0x143, rtw_read8(adapter, 0x106));
@@ -506,7 +506,7 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter,int data_len)
 
 				}
 				rtw_usleep_os(2);
-			}while( !rstatus && (loop++ <10));
+			}while ( !rstatus && (loop++ <10));
 		}
 		rtw_IOL_cmd_buf_dump(Adapter,data_len,pbuf);
 		rtw_vmfree(pbuf, data_len+10);
@@ -652,7 +652,7 @@ _FillDummy(
 	u8	remain = (u8)(FwLen%4);
 	remain = (remain==0)?0:(4-remain);
 
-	while(remain>0)
+	while (remain>0)
 	{
 		pFwBuf[FwLen] = 0;
 		FwLen++;
@@ -1026,7 +1026,7 @@ static bool efuse_read_phymap(
 	/*  */
 	/*  Read physical efuse content. */
 	/*  */
-	while(addr < limit)
+	while (addr < limit)
 	{
 		ReadEFuseByte(Adapter, addr, pos, false);
 		if (*pos != 0xFF)
@@ -1117,7 +1117,7 @@ Hal_EfuseReadEFuse88E(
 	/*  */
 	/*  2. Read real efuse content. Filter PG header and every section data. */
 	/*  */
-	while((*rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E))
+	while ((*rtemp8 != 0xFF) && (eFuse_Addr < EFUSE_REAL_CONTENT_LEN_88E))
 	{
 		/* RTPRINT(FEEPROM, EFUSE_READ_ALL, ("efuse_Addr-%d efuse_data=%x\n", eFuse_Addr-1, *rtemp8)); */
 
@@ -1783,7 +1783,7 @@ hal_EfusePgPacketRead_8188e(
 	/*  Skip dummy parts to prevent unexpected data read from Efuse. */
 	/*  By pass right now. 2009.02.19. */
 	/*  */
-	while(bContinual && AVAILABLE_EFUSE_ADDR(efuse_addr) )
+	while (bContinual && AVAILABLE_EFUSE_ADDR(efuse_addr) )
 	{
 		/*   Header Read ------------- */
 		if (ReadState & PG_STATE_HEADER)
@@ -1967,14 +1967,14 @@ hal_EfusePgPacketWrite2ByteHeader(
 	/* RTPRINT(FEEPROM, EFUSE_PG, ("Wirte 2byte header\n")); */
 	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_AVAILABLE_EFUSE_BYTES_BANK, (void *)&efuse_max_available_len, bPseudoTest);
 
-	while(efuse_addr < efuse_max_available_len)
+	while (efuse_addr < efuse_max_available_len)
 	{
 		pg_header = ((pTargetPkt->offset & 0x07) << 5) | 0x0F;
 		/* RTPRINT(FEEPROM, EFUSE_PG, ("pg_header = 0x%x\n", pg_header)); */
 		efuse_OneByteWrite(pAdapter, efuse_addr, pg_header, bPseudoTest);
 		efuse_OneByteRead(pAdapter, efuse_addr, &tmp_header, bPseudoTest);
 
-		while(tmp_header == 0xFF)
+		while (tmp_header == 0xFF)
 		{
 			if (repeatcnt++ > EFUSE_REPEAT_THRESHOLD_)
 			{
@@ -1996,7 +1996,7 @@ hal_EfusePgPacketWrite2ByteHeader(
 			efuse_OneByteWrite(pAdapter, efuse_addr, pg_header, bPseudoTest);
 			efuse_OneByteRead(pAdapter, efuse_addr, &tmp_header, bPseudoTest);
 
-			while(tmp_header == 0xFF)
+			while (tmp_header == 0xFF)
 			{
 				if (repeatcnt++ > EFUSE_REPEAT_THRESHOLD_)
 				{
@@ -2067,7 +2067,7 @@ hal_EfusePgPacketWrite1ByteHeader(
 	efuse_OneByteWrite(pAdapter, efuse_addr, pg_header, bPseudoTest);
 	efuse_OneByteRead(pAdapter, efuse_addr, &tmp_header, bPseudoTest);
 
-	while(tmp_header == 0xFF)
+	while (tmp_header == 0xFF)
 	{
 		if (repeatcnt++ > EFUSE_REPEAT_THRESHOLD_)
 		{
@@ -2258,7 +2258,7 @@ hal_EfusePartialWriteCheck(
 	}
 	/* RTPRINT(FEEPROM, EFUSE_PG, ("hal_EfusePartialWriteCheck(), startAddr=%d\n", startAddr)); */
 
-	while(1)
+	while (1)
 	{
 		if (startAddr >= efuse_max_available_len)
 		{

@@ -77,7 +77,7 @@ static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, un
 	unsigned short tagLen, tagType;
 
 	start_ptr = cur_ptr = (unsigned char *)ph->tag;
-	while((cur_ptr - start_ptr) < ntohs(ph->length)) {
+	while ((cur_ptr - start_ptr) < ntohs(ph->length)) {
 		/*  prevent un-alignment access */
 		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
 		tagLen  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
@@ -1459,7 +1459,7 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 							/*  recalculate checksum */
 							sum = ~(udph->check) & 0xffff;
 							sum += dhcph->flags;
-							while(sum >> 16)
+							while (sum >> 16)
 								sum = (sum & 0xffff) + (sum >> 16);
 							udph->check = ~sum;
 						}

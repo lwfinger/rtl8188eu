@@ -2520,7 +2520,7 @@ static u8 rtw_p2p_get_peer_ch_list(struct wifidirect_info *pwdinfo, u8 *ch_conte
 	ch_content += 3;
 	ch_cnt -= 3;
 
-	while( ch_cnt > 0)
+	while ( ch_cnt > 0)
 	{
 		ch_content += 1;
 		ch_cnt -= 1;
@@ -3880,7 +3880,7 @@ void process_p2p_ps_ie(struct adapter *padapter, u8 *IEs, u32 IELength)
 
 	p2p_ie = rtw_get_p2p_ie( ies, ies_len, NULL, &p2p_ielen);
 
-	while(p2p_ie)
+	while (p2p_ie)
 	{
 		find_p2p = true;
 		/*  Get Notice of Absence IE. */
@@ -3901,7 +3901,7 @@ void process_p2p_ps_ie(struct adapter *padapter, u8 *IEs, u32 IELength)
 				/*  NoA length should be n*(13) + 2 */
 				if (attr_contentlen > 2)
 				{
-					while(noa_offset < attr_contentlen)
+					while (noa_offset < attr_contentlen)
 					{
 						/* memcpy(&wifidirect_info->noa_count[noa_num], &noa_attr[noa_offset], 1); */
 						pwdinfo->noa_count[noa_num] = noa_attr[noa_offset];

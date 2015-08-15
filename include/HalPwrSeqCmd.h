@@ -45,7 +45,7 @@
      /*  do{ */
      /*  if ( (Read(offset) & msk) == (value & msk) ) */
      /*  break; */
-     /*  } while(not timeout); */
+     /*  } while (not timeout); */
 
 #define PWR_CMD_DELAY			0x03
      /*  offset: the value to delay */

@@ -1233,7 +1233,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 
 	#define HAL_INIT_PROFILE_TAG(stage) hal_init_stages_timestamp[(stage)]=rtw_get_current_time();
 #else
-	#define HAL_INIT_PROFILE_TAG(stage) do {} while(0)
+	#define HAL_INIT_PROFILE_TAG(stage) do {} while (0)
 #endif /* DBG_HAL_INIT_PROFILING */
 
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_BEGIN);
@@ -2262,7 +2262,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				rtw_write8(Adapter, REG_RRSR+2, rtw_read8(Adapter, REG_RRSR+2)&0xf0);
 
 				/*  Set RTS initial rate */
-				while(BrateCfg > 0x1)
+				while (BrateCfg > 0x1)
 				{
 					BrateCfg = (BrateCfg>> 1);
 					RateIndex++;
@@ -2809,7 +2809,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 					do{
 						if (!(rtw_read32(Adapter,REG_RXPKT_NUM)&RXDMA_IDLE))
 							break;
-					}while(trycnt--);
+					}while (trycnt--);
 					if (trycnt ==0)
 						DBG_8192C("Stop RX DMA failed......\n");
 
@@ -3125,7 +3125,7 @@ static void _update_response_rate(struct adapter *padapter,unsigned int mask)
 	rtw_write8(padapter,REG_RRSR+1, (mask>>8)&0xff);
 
 	/*  Set RTS initial rate */
-	while(mask > 0x1)
+	while (mask > 0x1)
 	{
 		mask = (mask>> 1);
 		RateIndex++;

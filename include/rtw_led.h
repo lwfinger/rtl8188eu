@@ -175,7 +175,7 @@ struct led_priv{
 	do { \
 		if ((adapter)->ledpriv.LedControlHandler) \
 			(adapter)->ledpriv.LedControlHandler((adapter), (LedAction)); \
-	} while(0)
+	} while (0)
 
 void BlinkTimerCallback(void *data);
 void BlinkWorkItemCallback(struct work_struct *work);

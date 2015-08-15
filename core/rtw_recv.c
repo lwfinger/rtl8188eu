@@ -283,7 +283,7 @@ void rtw_free_recvframe_queue(struct  __queue *pframequeue,  struct  __queue *pf
 	phead = get_list_head(pframequeue);
 	plist = get_next(phead);
 
-	while(rtw_end_of_queue_search(phead, plist) == false)
+	while (rtw_end_of_queue_search(phead, plist) == false)
 	{
 		precvframe = LIST_CONTAINOR(plist, union recv_frame, u);
 
@@ -302,7 +302,7 @@ u32 rtw_free_uc_swdec_pending_queue(struct adapter *adapter)
 {
 	u32 cnt = 0;
 	union recv_frame *pending_frame;
-	while((pending_frame=rtw_alloc_recvframe(&adapter->recvpriv.uc_swdec_pending_queue))) {
+	while ((pending_frame=rtw_alloc_recvframe(&adapter->recvpriv.uc_swdec_pending_queue))) {
 		rtw_free_recvframe(pending_frame, &adapter->recvpriv.free_recv_queue);
 		cnt++;
 	}
@@ -1982,7 +1982,7 @@ static union recv_frame * recvframe_defrag(struct adapter *adapter, struct  __qu
 
 	data=get_recvframe_data(prframe);
 
-	while(rtw_end_of_queue_search(phead, plist) == false)
+	while (rtw_end_of_queue_search(phead, plist) == false)
 	{
 		pnextrframe = LIST_CONTAINOR(plist, union recv_frame , u);
 		pnfhdr=&pnextrframe->u.hdr;
@@ -2186,7 +2186,7 @@ static int amsdu_to_msdu(struct adapter *padapter, union recv_frame *prframe)
 
 	pdata = prframe->u.hdr.rx_data;
 
-	while(a_len > ETH_HLEN) {
+	while (a_len > ETH_HLEN) {
 
 		/* Offset 12 denote 2 mac address */
 #ifdef ENDIAN_FREE
@@ -2407,7 +2407,7 @@ int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, union rec
 	phead = get_list_head(ppending_recvframe_queue);
 	plist = get_next(phead);
 
-	while(rtw_end_of_queue_search(phead, plist) == false)
+	while (rtw_end_of_queue_search(phead, plist) == false)
 	{
 		pnextrframe = LIST_CONTAINOR(plist, union recv_frame, u);
 		pnextattrib = &pnextrframe->u.hdr.attrib;
@@ -2475,7 +2475,7 @@ int recv_indicatepkts_in_order(struct adapter *padapter, struct recv_reorder_ctr
 
 	/*  Prepare indication list and indication. */
 	/*  Check if there is any packet need indicate. */
-	while(!rtw_is_list_empty(phead))
+	while (!rtw_is_list_empty(phead))
 	{
 
 		prframe = LIST_CONTAINOR(plist, union recv_frame, u);
@@ -2837,7 +2837,7 @@ int recv_func(struct adapter *padapter, union recv_frame *rframe)
 		union recv_frame *pending_frame;
 		int cnt = 0;
 
-		while((pending_frame=rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue))) {
+		while ((pending_frame=rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue))) {
 			cnt++;
 			recv_func_posthandle(padapter, pending_frame);
 		}

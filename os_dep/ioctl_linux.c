@@ -421,7 +421,7 @@ static char *translate_scan(struct adapter *padapter,
 	max_rate = 0;
 	p = custom;
 	p += snprintf(p, MAX_CUSTOM_LEN - (p - custom), " Rates (Mb/s): ");
-	while(pnetwork->network.SupportedRates[i]!=0) {
+	while (pnetwork->network.SupportedRates[i]!=0) {
 		rate = pnetwork->network.SupportedRates[i]&0x7F;
 		if (rate > max_rate)
 			max_rate = rate;
@@ -518,7 +518,7 @@ static char *translate_scan(struct adapter *padapter,
 			total_ielen = pnetwork->network.IELength - _FIXED_IE_LENGTH_;
 		}
 
-		while(cnt < total_ielen)
+		while (cnt < total_ielen)
 		{
 			if (rtw_is_wps_ie(&ie_ptr[cnt], &wps_ielen) && (wps_ielen>2))
 			{
@@ -957,7 +957,7 @@ static int rtw_set_wpa_ie(struct adapter *padapter, char *pie, unsigned short ie
 			u16 cnt = 0;
 			u8 eid, wps_oui[4]={0x0,0x50,0xf2,0x04};
 
-			while( cnt < ielen )
+			while ( cnt < ielen )
 			{
 				eid = buf[cnt];
 
@@ -1651,7 +1651,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 		char sec_len;
 		int ssid_index = 0;
 
-		while(len >= 1) {
+		while (len >= 1) {
 			section = *(pos++); len-=1;
 
 			switch(section) {
@@ -1783,7 +1783,7 @@ static int rtw_wx_get_scan(struct net_device *dev, struct iw_request_info *a,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -3099,7 +3099,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 		goto exit;
 	}
 
-	while((check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))) == true)
+	while ((check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))) == true)
 	{
 		rtw_msleep_os(30);
 		cnt++;
@@ -3129,7 +3129,7 @@ static int rtw_get_ap_info(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -4197,7 +4197,7 @@ static int rtw_p2p_connect(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -4312,7 +4312,7 @@ static int rtw_p2p_invite_req(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -4604,7 +4604,7 @@ static int rtw_p2p_set_pc(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -4937,7 +4937,7 @@ static int rtw_p2p_prov_disc(struct net_device *dev,
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 
-	while(1)
+	while (1)
 	{
 		if (rtw_end_of_queue_search(phead,plist)== true)
 			break;
@@ -9606,7 +9606,7 @@ static int rtw_ioctl_wext_private(struct net_device *dev, union iwreq_data *wrq_
 
 	/* Search the correct ioctl */
 	k = -1;
-	while((++k < num_priv_args) && strcmp(priv_args[k].name, cmdname));
+	while ((++k < num_priv_args) && strcmp(priv_args[k].name, cmdname));
 
 	/* If not found... */
 	if (k == num_priv_args) {
