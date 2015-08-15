@@ -119,7 +119,7 @@ uint	 rtw_hal_init(struct adapter *padapter)
 
 		init_hw_mlme_ext(padapter);
 	}
-	else{
+	else {
 		for (i = 0; i<dvobj->iface_nums; i++) {
 			padapter = dvobj->padapters[i];
 			padapter->hw_init_completed = false;

@@ -1026,7 +1026,7 @@ _PHY_PathADDAOn(
 		pathOn = 0x0bdb25a0;
 		ODM_SetBBReg(pDM_Odm, ADDAReg[0], bMaskDWord, 0x0b1b25a0);
 	}
-	else{
+	else {
 		ODM_SetBBReg(pDM_Odm,ADDAReg[0], bMaskDWord, pathOn);
 	}
 

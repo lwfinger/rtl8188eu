@@ -1903,7 +1903,7 @@ static void phy_SpurCalibration_8188E(
 		PHY_SetBBReg(Adapter, rOFDM1_CFOTracking, BIT(28), 0x1); /* enable CSI Mask */
 		PHY_SetBBReg(Adapter, rOFDM1_csi_fix_mask, BIT(26)|BIT(25), 0x3); /* Fix CSI Mask Tone */
 	}
-	else{
+	else {
 		PHY_SetBBReg(Adapter, rOFDM1_CFOTracking, BIT(28), 0x0); /* disable CSI Mask */
 		PHY_SetBBReg(Adapter, rOFDM1_csi_fix_mask, BIT(26)|BIT(25), 0x0);
 	}

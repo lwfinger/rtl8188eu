@@ -217,7 +217,7 @@ void update_recvframe_phyinfo_88e(
 		}
 		else
 			sa = get_sa(wlanhdr);
-	} else{
+	} else {
 		sa = get_sa(wlanhdr);
 	}
 

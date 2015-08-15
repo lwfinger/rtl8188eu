@@ -709,7 +709,7 @@ static void _MCUIO_Reset88E(struct adapter *padapter,u8 bReset)
 		/*  Reset MCU IO Wrapper- sugggest by SD1-Gimmy */
 		u1bTmp = rtw_read8(padapter, REG_RSV_CTRL+1);
 		rtw_write8(padapter,REG_RSV_CTRL+1, (u1bTmp&(~BIT3)));
-	}else{
+	} else {
 		/*  Enable MCU IO Wrapper */
 		u1bTmp = rtw_read8(padapter, REG_RSV_CTRL+1);
 		rtw_write8(padapter, REG_RSV_CTRL+1, u1bTmp|BIT3);
@@ -1830,18 +1830,18 @@ hal_EfusePgPacketRead_8188e(
 					}
 					if (bDataEmpty==false) {
 						ReadState = PG_STATE_DATA;
-					}else{/* read next header */
+					} else {/* read next header */
 						efuse_addr = efuse_addr + (word_cnts*2)+1;
 						ReadState = PG_STATE_HEADER;
 					}
 				}
-				else{/* read next header */
+				else {/* read next header */
 					efuse_addr = efuse_addr + (word_cnts*2)+1;
 					ReadState = PG_STATE_HEADER;
 				}
 
 			}
-			else{
+			else {
 				bContinual = false ;
 			}
 		}
@@ -2526,7 +2526,7 @@ ReadChipVersion8188E(struct adapter *padapter)
 	} else if (IS_2T2R(ChipVersion)) {
 		pHalData->rf_type = RF_2T2R;
 		pHalData->NumTotalRFPath = 2;
-	} else{
+	} else {
 		pHalData->rf_type = RF_1T1R;
 		pHalData->NumTotalRFPath = 1;
 	}
@@ -2577,7 +2577,7 @@ static void rtl8188e_SetHalODMVar(
 					ODM_RAInfo_Init(podmpriv,psta->mac_id);
 					#endif
 				}
-				else{
+				else {
 					DBG_8192C("### Clean STA_(%d) info\n",psta->mac_id);
 					ODM_CmnInfoPtrArrayHook(podmpriv, ODM_CMNINFO_STA_STATUS,psta->mac_id,NULL);
 			            }
@@ -3208,7 +3208,7 @@ Hal_ReadTxPowerInfo88E(
 				pHalData->EEPROMRegulatory = (EEPROM_DEFAULT_BOARD_OPTION&0x7);	/* bit0~2 */
 			else
 				pHalData->EEPROMRegulatory = (PROMContent[EEPROM_RF_BOARD_OPTION_88E]&0x7);	/* bit0~2 */
-		}else{
+		} else {
 			pHalData->EEPROMRegulatory = registry_par->regulatory_tid;
 		}
 	}
@@ -3273,7 +3273,7 @@ Hal_EfuseParseEEPROMVer88E(
 		if (pHalData->EEPROMVersion == 0xFF)
 			pHalData->EEPROMVersion = EEPROM_Default_Version;
 	}
-	else{
+	else {
 		pHalData->EEPROMVersion = 1;
 	}
 	RT_TRACE(_module_hci_hal_init_c_, _drv_info_, ("Hal_EfuseParseEEPROMVer(), EEVer = %d\n",
@@ -3352,7 +3352,7 @@ Hal_ReadAntennaDiversity88E(
 			if (pHalData->TRxAntDivType == 0xFF)
 				pHalData->TRxAntDivType = CG_TRX_HW_ANTDIV; /*  For 88EE, 1Tx and 1RxCG are fixed.(1Ant, Tx and RxCG are both on aux port) */
 		}
-		else{
+		else {
 			pHalData->TRxAntDivType = registry_par->antdiv_type ;
 		}
 

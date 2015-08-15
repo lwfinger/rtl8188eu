@@ -2107,7 +2107,7 @@ int rtw_handle_dualmac(struct adapter *adapter, bool init)
 			pbuddy_padapter = NULL;
 			DBG_871X("%s(): pbuddy_padapter exist, Exchange Information\n", __FUNCTION__);
 		}
-	}else {
+	} else {
 		pbuddy_padapter = NULL;
 	}
 exit:

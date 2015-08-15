@@ -1588,7 +1588,7 @@ odm_DIG(
 				else
 					pDM_DigTable->rx_gain_range_max = pDM_Odm->RSSI_Min + 10;
 			}
-			else{
+			else {
 
 			/* 2 Modify DIG upper bound */
 			/* 2013.03.19 Luke: Modified upper bound for Netgear rental house test */
@@ -2103,13 +2103,13 @@ odm_1R_CCA(
 				pDM_PSTable->CurCCAState = CCA_2R;
 
 		}
-		else{
+		else {
 			if (pDM_Odm->RSSI_Min <= 30)
 				pDM_PSTable->CurCCAState = CCA_2R;
 			else
 				pDM_PSTable->CurCCAState = CCA_1R;
 		}
-	} else{
+	} else {
 		pDM_PSTable->CurCCAState=CCA_MAX;
 	}
 
@@ -2162,7 +2162,7 @@ ODM_RF_Saving(
 				else
 					pDM_PSTable->CurRFState = RF_Normal;
 			}
-			else{
+			else {
 				if (pDM_Odm->RSSI_Min <= Rssi_Low_bound)
 					pDM_PSTable->CurRFState = RF_Normal;
 				else
@@ -2296,7 +2296,7 @@ u32 ODM_Get_Rate_Bitmap(
 					{
 						rate_bitmap = 0x000ff000;
 					}
-					else{
+					else {
 						if (*(pDM_Odm->pBandWidth) == ODM_BW40M)
 							rate_bitmap = 0x000ff015;
 						else
@@ -2784,7 +2784,7 @@ odm_RSSIMonitorCheckCE(
 				if (pHalData->fw_ractrl == true)/*  Report every sta's RSSI to FW */
 				{
 				}
-				else{
+				else {
 					#if (RATE_ADAPTIVE_SUPPORT == 1)
 					ODM_RA_SetRSSI_8188E(
 					&(pHalData->odmpriv), (PWDB_rssi[i]&0xFF), (u8)((PWDB_rssi[i]>>16) & 0xFF));

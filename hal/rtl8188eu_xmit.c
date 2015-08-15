@@ -270,7 +270,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 		if (pattrib->ampdu_en==true) {
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_EN);/* AGG EN */
 			ptxdesc->txdw6 = cpu_to_le32(0x6666f800);
-		} else{
+		} else {
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_BK);/* AGG BK */
 		}
 
@@ -814,7 +814,7 @@ static s32 xmitframe_direct(struct adapter *padapter, struct xmit_frame *pxmitfr
 	if (res == _SUCCESS) {
 		rtw_dump_xframe(padapter, pxmitframe);
 	}
-	else{
+	else {
 		DBG_8192C("==> %s xmitframe_coalsece failed\n",__FUNCTION__);
 	}
 

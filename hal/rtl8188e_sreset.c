@@ -46,7 +46,7 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 			if (psrtpriv->last_tx_complete_time == 0) {
 				psrtpriv->last_tx_complete_time = current_time;
 			}
-			else{
+			else {
 				diff_time = rtw_get_passing_time_ms(psrtpriv->last_tx_complete_time);
 				if (diff_time > 4000) {
 					u32 ability;

@@ -1197,7 +1197,7 @@ u8 rtw_setopmode_cmd(struct adapter  *padapter, enum NDIS_802_11_NETWORK_INFRAST
 		init_h2fwcmd_w_parm_no_rsp(ph2c, psetop, _SetOpMode_CMD_);
 		res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 	}
-	else{
+	else {
 		setopmode_hdl(padapter, (u8 *)psetop);
 		rtw_mfree((u8 *)psetop, sizeof(*psetop));
 	}
@@ -1232,7 +1232,7 @@ u8 rtw_setstakey_cmd(struct adapter *padapter, u8 *psta, u8 unicast_key, bool en
 
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
 			psetstakey_para->algorithm =(unsigned char) psecuritypriv->dot11PrivacyAlgrthm;
-	}else{
+	} else {
 		GET_ENCRY_ALGO(psecuritypriv, sta, psetstakey_para->algorithm, false);
 	}
 
@@ -1268,7 +1268,7 @@ u8 rtw_setstakey_cmd(struct adapter *padapter, u8 *psta, u8 unicast_key, bool en
 		ph2c->rspsz = sizeof(struct set_stakey_rsp);
 		res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 	}
-	else{
+	else {
 		set_stakey_hdl(padapter, (u8 *)psetstakey_para);
 		rtw_mfree((u8 *) psetstakey_para, sizeof(struct set_stakey_parm));
 	}
@@ -2154,7 +2154,7 @@ u8 rtw_antenna_select_cmd(struct adapter*padapter, u8 antenna, u8 enqueue)
 
 		res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 	}
-	else{
+	else {
 		antenna_select_wk_hdl(padapter, antenna );
 	}
 exit:

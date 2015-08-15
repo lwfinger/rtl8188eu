@@ -185,7 +185,7 @@ odm_SignalScaleMapping(
 	{
 		return odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(pDM_Odm, CurrSig);
 	}
-	else{
+	else {
 		return odm_SignalScaleMapping_92CSeries(pDM_Odm,CurrSig);
 	}
 
@@ -419,7 +419,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			else if (pPhyInfo->RxPWDBAll > 40 && !pDM_Odm->bInHctTest) {
 				SQ = 100;
 			}
-			else{
+			else {
 				SQ_rpt = pPhyStaRpt->cck_sig_qual_ofdm_pwdb_all;
 
 				if (SQ_rpt > 64)
@@ -504,7 +504,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 		if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19)) {
 			/* do nothing */
-		} else{/* pMgntInfo->CustomerID != RT_CID_819x_Lenovo */
+		} else {/* pMgntInfo->CustomerID != RT_CID_819x_Lenovo */
 			/*  */
 			/*  (3)EVM of HT rate */
 			/*  */

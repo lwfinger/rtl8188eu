@@ -188,7 +188,7 @@ RateDownFinish:
 	}
 	else if (pRaInfo->RAWaitingCounter== 0) {
 	}
-	else{
+	else {
 		pRaInfo->RAWaitingCounter=0;
 		pRaInfo->RAPendingCounter=0;
 	}
@@ -434,7 +434,7 @@ odm_ARFBRefresh_8188E(
 			}
 		}
 	}
-	else{
+	else {
 		pRaInfo->HighestRate=0;
 	}
 	/*  Lowest rate */
@@ -448,7 +448,7 @@ odm_ARFBRefresh_8188E(
 			}
 		}
 	}
-	else{
+	else {
 		pRaInfo->LowestRate=0;
 	}
 
@@ -524,12 +524,12 @@ odm_PTTryState_8188E(
 			pRaInfo->PTStopCount=0;
 
 		}
-		else{
+		else {
 			pRaInfo->RAstage=0;
 			pRaInfo->PTStopCount++;
 		}
 	}
-	else{
+	else {
 		pRaInfo->PTStage=0;
 		pRaInfo->RAstage=0;
 	}
@@ -871,7 +871,7 @@ ODM_RA_TxRPT2Handle_8188E(
 					else
 						pRAInfo->RAstage=0;
 				}
-				else{
+				else {
 					odm_RateDecision_8188E(pDM_Odm,pRAInfo);
 				}
 #else

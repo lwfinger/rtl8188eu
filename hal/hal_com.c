@@ -215,7 +215,7 @@ _TwoOutPipeMapping(
 		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];/* TXCMD */
 
 	}
-	else{/* typical setting */
+	else {/* typical setting */
 
 
 		/* BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
@@ -260,7 +260,7 @@ static void _ThreeOutPipeMapping(
 		pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];/* TXCMD */
 
 	}
-	else{/* typical setting */
+	else {/* typical setting */
 
 
 		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */

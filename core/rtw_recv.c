@@ -419,7 +419,7 @@ sint recvframe_chkmic(struct adapter *adapter,  union recv_frame *precvframe) {
 					goto exit;
 				}
 			}
-			else{
+			else {
 				mickey =&stainfo->dot11tkiprxmickey.skey[0];
 				RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, ("\n recvframe_chkmic: unicast key\n"));
 			}
@@ -489,7 +489,7 @@ sint recvframe_chkmic(struct adapter *adapter,  union recv_frame *precvframe) {
 				res =_FAIL;
 
 			}
-			else{
+			else {
 				/* mic checked ok */
 				if ((psecuritypriv->bcheck_grpkey ==false)&&(IS_MCAST(prxattrib->ra) ==true)) {
 					psecuritypriv->bcheck_grpkey =true;
@@ -594,7 +594,7 @@ static union recv_frame *decryptor(struct adapter *padapter, union recv_frame *p
 		return_packet = NULL;
 
 	}
-	else{
+	else {
 		prxattrib->bdecrypted = true;
 	}
 	return return_packet;
@@ -675,7 +675,7 @@ static union recv_frame * portctrl(struct adapter *adapter, union recv_frame * p
 
 				prtnframe =precv_frame;
 			}
-			else{
+			else {
 				RT_TRACE(_module_rtl871x_recv_c_, _drv_info_, ("########portctrl:ether_type =0x%04x\n", ether_type));
 			}
 		}

@@ -517,7 +517,7 @@ _InitNormalChipTwoOutEpPriority(
 		mgtQ	= valueHi;
 		hiQ		= valueHi;
 	}
-	else{/* for WMM ,CONFIG_OUT_EP_WIFI_MODE */
+	else {/* for WMM ,CONFIG_OUT_EP_WIFI_MODE */
 		beQ		= valueLow;
 		bkQ		= valueHi;
 		viQ		= valueHi;
@@ -546,7 +546,7 @@ _InitNormalChipThreeOutEpPriority(
 		mgtQ	= QUEUE_HIGH;
 		hiQ		= QUEUE_HIGH;
 	}
-	else{/*  for WMM */
+	else {/*  for WMM */
 		beQ		= QUEUE_LOW;
 		bkQ		= QUEUE_NORMAL;
 		viQ		= QUEUE_NORMAL;
@@ -2528,7 +2528,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				pdmpriv->DMFlag = pdmpriv->InitDMFlag;
 				podmpriv->SupportAbility =	pdmpriv->InitODMFlag;
 			}
-			else{
+			else {
 				podmpriv->SupportAbility |= *((u32 *)val);
 			}
 			/* DBG_871X("HW_VAR_DM_FUNC_SET ==> SupportAbility:0x%08x\n",podmpriv->SupportAbility ); */
@@ -2741,7 +2741,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				if (rx_gain == 0xff) {/* restore rx gain */
 					ODM_Write_DIG(podmpriv,pDigTable->BackupIGValue);
 				}
-				else{
+				else {
 					pDigTable->BackupIGValue = pDigTable->CurIGValue;
 					ODM_Write_DIG(podmpriv,rx_gain);
 				}

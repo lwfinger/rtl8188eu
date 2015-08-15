@@ -2430,7 +2430,7 @@ sint rtw_set_key(struct adapter * adapter, struct security_priv *psecuritypriv, 
 		psetkeyparm->algorithm =(unsigned char)psecuritypriv->dot118021XGrpPrivacy;
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("\n rtw_set_key: psetkeyparm->algorithm =(unsigned char)psecuritypriv->dot118021XGrpPrivacy =%d\n", psetkeyparm->algorithm));
 	}
-	else{
+	else {
 		psetkeyparm->algorithm =(u8)psecuritypriv->dot11PrivacyAlgrthm;
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("\n rtw_set_key: psetkeyparm->algorithm =(u8)psecuritypriv->dot11PrivacyAlgrthm =%d\n", psetkeyparm->algorithm));
 
@@ -2491,7 +2491,7 @@ sint rtw_set_key(struct adapter * adapter, struct security_priv *psecuritypriv, 
 
 		res = rtw_enqueue_cmd(pcmdpriv, pcmd);
 	}
-	else{
+	else {
 		setkey_hdl(adapter, (u8 *)psetkeyparm);
 		rtw_mfree((u8 *) psetkeyparm, sizeof(struct setkey_parm));
 	}

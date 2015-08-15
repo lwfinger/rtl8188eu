@@ -806,7 +806,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY:( stainfo!=NULL)&&(Adapter->securitypriv.dot11AuthAlgrthm ==dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo =stainfo->dot118021XPrivacy;
 		}
-		else{
+		else {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("OID_802_11_ADD_KEY: stainfo == NULL)||(Adapter->securitypriv.dot11AuthAlgrthm!=dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo =padapter->securitypriv.dot11PrivacyAlgrthm;
 		}
@@ -1114,7 +1114,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 				res =rtw_setstakey_cmd(padapter, (unsigned char *)stainfo, false, true);
 				RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("\n rtw_set_802_11_add_key:rtw_setstakey_cmd(group)\n"));
 			}
-			else{
+			else {
 				res =rtw_setstakey_cmd(padapter, (unsigned char *)stainfo, true, true);
 				RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("\n rtw_set_802_11_add_key:rtw_setstakey_cmd(unicast)\n"));
 			}
@@ -1168,7 +1168,7 @@ u8 rtw_set_802_11_remove_key(struct adapter*	padapter, struct ndis_802_11_remove
 			memset(&stainfo->dot118021x_UncstKey, 0, 16);
 
 			/*  \todo Send a H2C Command to Firmware for disable this Key in CAM Entry. */
-		} else{
+		} else {
 			ret = _FAIL;
 			goto exit;
 		}

@@ -1086,7 +1086,7 @@ static int rtw_wx_get_freq(struct net_device *dev,
 		wrqu->freq.i = pcur_bss->Configuration.DSConfig;
 
 	}
-	else{
+	else {
 		wrqu->freq.m = rtw_ch2freq(padapter->mlmeextpriv.cur_channel) * 100000;
 		wrqu->freq.e = 1;
 		wrqu->freq.i = padapter->mlmeextpriv.cur_channel;
@@ -2084,7 +2084,7 @@ set_rate:
 			if (fixed == 0)
 				break;
 		}
-		else{
+		else {
 			datarates[i] = 0xff;
 		}
 
@@ -5929,7 +5929,7 @@ static int rtw_dbg_port(struct net_device *dev,
 									psta->tx_vo_cnt =0;
 									psta->tx_vi_cnt =0;
 								}
-								else{
+								else {
 									if (extra_arg == psta->mac_id)
 									{
 										DBG_871X("=== sta's macaddr:" MAC_FMT "===\n", MAC_ARG(psta->hwaddr));
@@ -6033,7 +6033,7 @@ static int rtw_dbg_port(struct net_device *dev,
 					if (arg == 0xff) {
 						rtw_odm_dbg_comp_msg(padapter);
 					}
-					else{
+					else {
 						u64 dbg_comp = (u64)extra_arg;
 						rtw_odm_dbg_comp_set(padapter, dbg_comp);
 					}
@@ -6105,7 +6105,7 @@ static int rtw_dbg_port(struct net_device *dev,
 							DBG_871X("extra_arg = 5  - disable antenna diversity - BIT(4)\n");
 							DBG_871X("extra_arg = 6  - enable all dynamic func\n");
 						}
-						else{
+						else {
 							/*	extra_arg = 0  - disable all dynamic func
 								extra_arg = 1  - disable DIG
 								extra_arg = 2  - disable tx power tracking
@@ -7614,7 +7614,7 @@ static int rtw_pm_set(struct net_device *dev,
 		sscanf(extra+4, "%u", &mode);
 		ret = rtw_pm_set_ips(padapter,mode);
 	}
-	else{
+	else {
 		ret = -EINVAL;
 	}
 

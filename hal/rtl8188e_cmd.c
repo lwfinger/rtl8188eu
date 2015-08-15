@@ -120,7 +120,7 @@ static s32 FillH2CCmd_88E(struct adapter *padapter, u8 ElementID, u32 CmdLen, u8
 		{
 			memcpy((u8*)(&h2c_cmd)+1, pCmdBuffer, CmdLen );
 		}
-		else{
+		else {
 			memcpy((u8*)(&h2c_cmd)+1, pCmdBuffer,3);
 			ext_cmd_len = CmdLen-3;
 			memcpy((u8*)(&h2c_cmd_ex), pCmdBuffer+3,ext_cmd_len );
@@ -170,7 +170,7 @@ u8 rtl8188e_set_rssi_cmd(struct adapter*padapter, u8 *param)
 ;
 
 	if (pHalData->fw_ractrl == true) {
-	}else{
+	} else {
 		DBG_8192C("==>%s fw dont support RA\n",__FUNCTION__);
 		res=_FAIL;
 	}
@@ -191,7 +191,7 @@ u8 rtl8188e_set_raid_cmd(struct adapter*padapter, u32 mask)
 		memcpy(buf, &lmask, 3);
 
 		FillH2CCmd_88E(padapter, H2C_DM_MACID_CFG, 3, buf);
-	}else{
+	} else {
 		DBG_8192C("==>%s fw dont support RA\n",__FUNCTION__);
 		res=_FAIL;
 	}
@@ -943,7 +943,7 @@ u8 rtl8188e_reset_tsf(struct adapter *padapter, u8 reset_port )
 ;
 	if (IFACE_PORT0==reset_port) {
 		buf[0] = 0x1; buf[1] = 0;
-	} else{
+	} else {
 		buf[0] = 0x0; buf[1] = 0x1;
 	}
 
