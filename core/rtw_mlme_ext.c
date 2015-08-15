@@ -4705,10 +4705,9 @@ int issue_probereq_p2p_ex(struct adapter *adapter, u8 *da, int try_cnt, int wait
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
-	do
-	{
+	do {
 		ret = _issue_probereq_p2p(adapter, da, wait_ms>0?true:false);
 
 		i++;
@@ -4719,7 +4718,7 @@ int issue_probereq_p2p_ex(struct adapter *adapter, u8 *da, int try_cnt, int wait
 		if (i < try_cnt && wait_ms > 0 && ret ==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
+	} while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -6242,10 +6241,9 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid, 
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
-	do
-	{
+	do {
 		ret = _issue_probereq(padapter, pssid, da, wait_ms>0?true:false);
 
 		i++;
@@ -6256,7 +6254,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid, 
 		if (i < try_cnt && wait_ms > 0 && ret ==_FAIL)
 			rtw_msleep_os(wait_ms);
 
-	}while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
+	} while ((i<try_cnt) && ((ret ==_FAIL)||(wait_ms == 0)));
 
 	if (ret != _FAIL) {
 		ret = _SUCCESS;
@@ -7062,7 +7060,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -7197,7 +7195,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -7325,7 +7323,7 @@ int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason, int
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	do
 	{
@@ -7866,7 +7864,7 @@ unsigned int send_beacon(struct adapter *padapter)
 	u8	bxmitok = false;
 	int	issue =0;
 	int poll = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_BCN_VALID, NULL);
 	do{

@@ -4292,7 +4292,7 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
 	u8 tx_ch = (u8)ieee80211_frequency_to_channel(chan->center_freq);
 	u8 category, action;
 	int type = (-1);
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	/* cookie generation */
 	*cookie = (unsigned long) buf;

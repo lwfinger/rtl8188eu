@@ -391,7 +391,7 @@ inline u8 rtw_get_oper_ch(struct adapter *adapter)
 inline void rtw_set_oper_ch(struct adapter *adapter, u8 ch)
 {
 	if (adapter_to_dvobj(adapter)->oper_channel != ch)
-		adapter_to_dvobj(adapter)->on_oper_ch_time = rtw_get_current_time();
+		adapter_to_dvobj(adapter)->on_oper_ch_time = jiffies;
 
 	adapter_to_dvobj(adapter)->oper_channel = ch;
 }

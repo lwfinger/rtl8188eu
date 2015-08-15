@@ -36,7 +36,7 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 		DBG_871X("%s REG_TXDMA_STATUS:0x%08x\n", __FUNCTION__, txdma_status);
 		rtw_hal_sreset_reset(padapter);
 	}
-	current_time = rtw_get_current_time();
+	current_time = jiffies;
 
 	if (0 == pxmitpriv->free_xmitbuf_cnt || 0 == pxmitpriv->free_xmit_extbuf_cnt) {
 

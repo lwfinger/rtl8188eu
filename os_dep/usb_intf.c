@@ -620,7 +620,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 
 
 	int ret = 0;
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 
 	;
 
@@ -698,7 +698,7 @@ int rtw_resume_process(struct adapter *padapter)
 	struct net_device *pnetdev;
 	struct pwrctrl_priv *pwrpriv;
 	int ret = -1;
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 #ifdef CONFIG_BT_COEXIST
 	u8 pm_cnt;
 #endif	/* ifdef CONFIG_BT_COEXIST */

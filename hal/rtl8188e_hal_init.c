@@ -68,7 +68,7 @@ static s32 iol_execute(struct adapter *padapter, u8 control)
 	/* DBG_871X("%s reg_0x88:0x%02x, write 0x%02x\n", __FUNCTION__, reg_0x88, reg_0x88|control); */
 	rtw_write8(padapter, REG_HMEBOX_E0,  reg_0x88|control);
 
-	t1 = start = rtw_get_current_time();
+	t1 = start = jiffies;
 	while (
 		/* reg_1c7 = rtw_read8(padapter, 0x1c7) >1) && */
 		(reg_0x88=rtw_read8(padapter, REG_HMEBOX_E0)) & control
@@ -82,7 +82,7 @@ static s32 iol_execute(struct adapter *padapter, u8 control)
 	status = (reg_0x88 & control)?_FAIL:_SUCCESS;
 	if (reg_0x88 & control<<4)
 		status = _FAIL;
-	t2= rtw_get_current_time();
+	t2= jiffies;
 	/* printk("==> step iol_execute :  %5u reg-0x1c0= 0x%02x\n",rtw_get_time_interval_ms(t1,t2),rtw_read8(padapter, 0x1c0)); */
 	/* DBG_871X("%s in %u ms, reg_0x88:0x%02x\n", __FUNCTION__, passing_time, reg_0x88); */
 
@@ -318,7 +318,7 @@ static void efuse_read_phymap_from_txpktbuf(
 
 		/* DBG_871X("%s write reg_0x143:0x00\n", __FUNCTION__); */
 		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
-		start = rtw_get_current_time();
+		start = jiffies;
 		while (!(reg_0x143=rtw_read8(adapter, REG_TXPKTBUF_DBG))/* dbg */
 		/* while (rtw_read8(adapter, REG_TXPKTBUF_DBG) & BIT0 */
 			&& (passing_time=rtw_get_passing_time_ms(start))<1000
@@ -436,7 +436,7 @@ static s32 iol_ioconfig(
 static int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms,u32 bndy_cnt)
 {
 
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 	u32 passing_time_ms;
 	u8 polling_ret,i;
 	int ret = _FAIL;
@@ -456,7 +456,7 @@ static int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_fram
 
 	dump_mgntframe_and_wait(adapter, xmit_frame, max_wating_ms);
 
-	t1=	rtw_get_current_time();
+	t1=	jiffies;
 	iol_mode_enable(adapter, 1);
 	for (i=0;i<bndy_cnt;i++) {
 		u8 page_no = 0;
@@ -468,7 +468,7 @@ static int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_fram
 		}
 	}
 	iol_mode_enable(adapter, 0);
-	t2 = rtw_get_current_time();
+	t2 = jiffies;
 	/* printk("==> %s :  %5u\n",__FUNCTION__,rtw_get_time_interval_ms(t1,t2)); */
 exit:
 	/* restore BCN_HEAD */

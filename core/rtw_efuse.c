@@ -184,10 +184,8 @@ ReadEFuseByte(
 	u32	value32;
 	u8	readbyte;
 	u16	retry;
-	/* u32 start =rtw_get_current_time(); */
 
-	if (bPseudoTest)
-	{
+	if (bPseudoTest) {
 		Efuse_Read1ByteFromFakeContent(Adapter, _offset, pbuf);
 		return;
 	}

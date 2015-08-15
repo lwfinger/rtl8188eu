@@ -257,7 +257,7 @@ void sreset_reset(struct adapter *padapter)
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	unsigned long irqL;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	DBG_871X("%s\n", __FUNCTION__);
 

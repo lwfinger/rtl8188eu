@@ -761,7 +761,7 @@ u32 rtw_tkip_decrypt(struct adapter *padapter, u8 *precvframe)
 					res =_FAIL;
 
 					if (start == 0)
-						start = rtw_get_current_time();
+						start = jiffies;
 
 					if (is_broadcast_mac_addr(prxattrib->ra))
 						no_gkey_bc_cnt++;
@@ -773,7 +773,7 @@ u32 rtw_tkip_decrypt(struct adapter *padapter, u8 *precvframe)
 							DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
 								FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
 						}
-						start = rtw_get_current_time();
+						start = jiffies;
 						no_gkey_bc_cnt = 0;
 						no_gkey_mc_cnt = 0;
 					}
@@ -1845,7 +1845,7 @@ u32	rtw_aes_decrypt(struct adapter *padapter, u8 *precvframe)
 					res =_FAIL;
 
 					if (start == 0)
-						start = rtw_get_current_time();
+						start = jiffies;
 
 					if (is_broadcast_mac_addr(prxattrib->ra))
 						no_gkey_bc_cnt++;
@@ -1857,7 +1857,7 @@ u32	rtw_aes_decrypt(struct adapter *padapter, u8 *precvframe)
 							DBG_871X_LEVEL(_drv_always_, FUNC_ADPT_FMT" no_gkey_bc_cnt:%u, no_gkey_mc_cnt:%u\n",
 								FUNC_ADPT_ARG(padapter), no_gkey_bc_cnt, no_gkey_mc_cnt);
 						}
-						start = rtw_get_current_time();
+						start = jiffies;
 						no_gkey_bc_cnt = 0;
 						no_gkey_mc_cnt = 0;
 					}

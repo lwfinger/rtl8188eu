@@ -216,7 +216,7 @@ struct	wlan_network *_rtw_alloc_network(struct	mlme_priv *pmlmepriv )/* _queue *
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("_rtw_alloc_network: ptr =%p\n", plist));
 	pnetwork->network_type = 0;
 	pnetwork->fixed = false;
-	pnetwork->last_scanned = rtw_get_current_time();
+	pnetwork->last_scanned = jiffies;
 	pnetwork->aid =0;
 	pnetwork->join_res =0;
 
@@ -245,7 +245,7 @@ void _rtw_free_network(struct	mlme_priv *pmlmepriv , struct wlan_network *pnetwo
 	if (pnetwork->fixed == true)
 		goto exit;
 
-	curr_time = rtw_get_current_time();
+	curr_time = jiffies;
 
 	if ( (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) ==true ) ||
 		(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) ==true ) )
@@ -404,7 +404,7 @@ sint rtw_if_up(struct adapter *padapter)	{
 
 void rtw_generate_random_ibss(u8* pibss)
 {
-	u32	curtime = rtw_get_current_time();
+	u32	curtime = jiffies;
 
 ;
 	pibss[0] = 0x02;  /* in ad-hoc mode bit1 must set to 1 */
@@ -761,10 +761,9 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 
 			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(target->PhyInfo.Optimum_antenna));
 			memcpy(&(pnetwork->network), target,  get_wlan_bssid_ex_sz(target));
-			/* pnetwork->last_scanned = rtw_get_current_time(); */
 			/*  variable initialize */
 			pnetwork->fixed = false;
-			pnetwork->last_scanned = rtw_get_current_time();
+			pnetwork->last_scanned = jiffies;
 
 			pnetwork->network_type = 0;
 			pnetwork->aid =0;
@@ -789,7 +788,7 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 			rtw_hal_get_def_var(adapter, HAL_DEF_CURRENT_ANTENNA, &(target->PhyInfo.Optimum_antenna));
 			memcpy(&(pnetwork->network), target, bssid_ex_sz );
 
-			pnetwork->last_scanned = rtw_get_current_time();
+			pnetwork->last_scanned = jiffies;
 
 			/* bss info not receving from the right channel */
 			if (pnetwork->network.PhyInfo.SignalQuality == 101)
@@ -806,7 +805,7 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 		 */
 		bool update_ie = true;
 
-		pnetwork->last_scanned = rtw_get_current_time();
+		pnetwork->last_scanned = jiffies;
 
 		/* target.Reserved[0]==1, means that scaned network is a bcn frame. */
 		/*  probe resp(3) > beacon(1) > probe req(2) */
@@ -1312,7 +1311,7 @@ void rtw_indicate_disconnect( struct adapter *padapter )
 		rtw_os_indicate_disconnect(padapter);
 
 		/* set ips_deny_time to avoid enter IPS before LPS leave */
-		adapter_to_pwrctl(padapter)->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(3000);
+		adapter_to_pwrctl(padapter)->ips_deny_time = jiffies + rtw_ms_to_systime(3000);
 
 		_clr_fwstate_(pmlmepriv, _FW_LINKED);
 
@@ -1341,7 +1340,7 @@ void rtw_scan_abort(struct adapter *adapter)
 	struct mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 
-	start = rtw_get_current_time();
+	start = jiffies;
 	pmlmeext->scan_abort = true;
 	while (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY)
 		&& rtw_get_passing_time_ms(start) <= 200) {

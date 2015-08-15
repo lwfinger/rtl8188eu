@@ -129,7 +129,7 @@ static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 
 	bool ret = false;
 
-	if (adapter_to_pwrctl(adapter)->ips_deny_time >= rtw_get_current_time()) {
+	if (adapter_to_pwrctl(adapter)->ips_deny_time >= jiffies) {
 		/* DBG_871X("%s ips_deny_time\n", __func__); */
 		goto exit;
 	}
@@ -403,7 +403,7 @@ void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 #ifdef CONFIG_DETECT_CPWM_BY_POLLING
 	if (rpwm & PS_ACK)
 	{
-		cpwm_polling_start_time = rtw_get_current_time();
+		cpwm_polling_start_time = jiffies;
 
 		/* polling cpwm */
 		do{
@@ -421,8 +421,6 @@ void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 			DBG_871X("%s polling cpwm timeout!!!!!!!!!!\n", __FUNCTION__);
 	}
 #endif
-
-;
 }
 
 u8 PS_RDY_CHECK(struct adapter * padapter);
@@ -435,7 +433,7 @@ u8 PS_RDY_CHECK(struct adapter * padapter)
 	if (true == pwrpriv->bInSuspend )
 		return false;
 
-	curr_time = rtw_get_current_time();
+	curr_time = jiffies;
 	delta_time = curr_time -pwrpriv->DelayLPSLastTimeStamp;
 
 	if (delta_time < LPS_DELAY_TIME)
@@ -541,7 +539,7 @@ s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
 	u8 bAwake = false;
 	s32 err = 0;
 
-	start_time = rtw_get_current_time();
+	start_time = jiffies;
 	while (1)
 	{
 		rtw_hal_get_hwreg(padapter, HW_VAR_FWLPS_RF_ON, &bAwake);
@@ -848,7 +846,7 @@ u8 rtw_interface_ps_func(struct adapter *padapter, enum HAL_INTF_PS_FUNC efunc_i
 inline void rtw_set_ips_deny(struct adapter *padapter, u32 ms)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ms);
+	pwrpriv->ips_deny_time = jiffies + rtw_ms_to_systime(ms);
 }
 
 /*
@@ -863,10 +861,10 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	int ret = _SUCCESS;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
-	if (pwrpriv->ips_deny_time < rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms))
-		pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms);
+	if (pwrpriv->ips_deny_time < jiffies + rtw_ms_to_systime(ips_deffer_ms))
+		pwrpriv->ips_deny_time = jiffies + rtw_ms_to_systime(ips_deffer_ms);
 
 	if (pwrpriv->ps_processing) {
 		DBG_871X("%s wait ps_processing...\n", __func__);
@@ -986,8 +984,8 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 	}
 
 exit:
-	if (pwrpriv->ips_deny_time < rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms))
-		pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms);
+	if (pwrpriv->ips_deny_time < jiffies + rtw_ms_to_systime(ips_deffer_ms))
+		pwrpriv->ips_deny_time = jiffies + rtw_ms_to_systime(ips_deffer_ms);
 	return ret;
 
 }

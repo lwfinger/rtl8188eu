@@ -1161,7 +1161,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	struct btcoexist_priv	*pbtpriv = &(pHalData->bt_coexist);
 #endif
 
-	u32 init_start_time = rtw_get_current_time();
+	u32 init_start_time = jiffies;
 
 
 #ifdef DBG_HAL_INIT_PROFILING
@@ -1231,7 +1231,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM;hal_init_profiling_i++)
 		hal_init_stages_timestamp[hal_init_profiling_i]=0;
 
-	#define HAL_INIT_PROFILE_TAG(stage) hal_init_stages_timestamp[(stage)]=rtw_get_current_time();
+	#define HAL_INIT_PROFILE_TAG(stage) hal_init_stages_timestamp[(stage)]=jiffies;
 #else
 	#define HAL_INIT_PROFILE_TAG(stage) do {} while (0)
 #endif /* DBG_HAL_INIT_PROFILING */
@@ -1525,7 +1525,7 @@ exit:
 	DBG_871X("%s in %dms\n", __FUNCTION__, rtw_get_passing_time_ms(init_start_time));
 
 	#ifdef DBG_HAL_INIT_PROFILING
-	hal_init_stages_timestamp[HAL_INIT_STAGES_END]=rtw_get_current_time();
+	hal_init_stages_timestamp[HAL_INIT_STAGES_END]=jiffies;
 
 	for (hal_init_profiling_i=0;hal_init_profiling_i<HAL_INIT_STAGES_NUM-1;hal_init_profiling_i++) {
 		DBG_871X("DBG_HAL_INIT_PROFILING: %35s, %u, %5u, %5u\n"
@@ -1975,7 +1975,7 @@ _ReadRFType(
 static int _ReadAdapterInfo8188EU(struct adapter *Adapter)
 {
 	/* HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter); */
-	u32 start=rtw_get_current_time();
+	u32 start=jiffies;
 
 	MSG_8192C("====> %s\n", __FUNCTION__);
 

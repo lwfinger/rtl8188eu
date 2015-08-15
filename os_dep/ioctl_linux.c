@@ -1582,7 +1582,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 		u32 curr_time, delta_time;
 
 		/*  under DHCP(Special packet) */
-		curr_time = rtw_get_current_time();
+		curr_time = jiffies;
 		delta_time = curr_time - adapter_to_pwrctl(padapter)->DelayLPSLastTimeStamp;
 		delta_time = rtw_systime_to_ms(delta_time);
 		if (delta_time < 500) /*  500ms */
