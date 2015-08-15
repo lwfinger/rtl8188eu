@@ -177,7 +177,6 @@ static void sreset_restore_network_station(struct adapter *padapter)
 	sreset_restore_security_station(padapter);
 }
 
-
 static void sreset_restore_network_status(struct adapter *padapter)
 {
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;

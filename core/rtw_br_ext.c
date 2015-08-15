@@ -69,7 +69,6 @@
   PPPoE |type|   SID   |           AC MAC            |
 -----------------------------------------------------------------*/
 
-
 /* Find a tag in pppoe frame and return the pointer */
 static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
 {
@@ -87,7 +86,6 @@ static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, un
 	}
 	return NULL;
 }
-
 
 static __inline__ int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
 {
@@ -138,7 +136,6 @@ static __inline__ unsigned long __nat25_timeout(struct adapter *priv)
 	return timeout;
 }
 
-
 static __inline__ int  __nat25_has_expired(struct adapter *priv,
 				struct nat25_network_db_entry *fdb)
 {
@@ -148,7 +145,6 @@ static __inline__ int  __nat25_has_expired(struct adapter *priv,
 	return 0;
 }
 
-
 static __inline__ void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
 				unsigned int *ipAddr)
 {
@@ -157,7 +153,6 @@ static __inline__ void __nat25_generate_ipv4_network_addr(unsigned char *network
 	networkAddr[0] = NAT25_IPV4;
 	memcpy(networkAddr+7, (unsigned char *)ipAddr, 4);
 }
-
 
 static __inline__ void __nat25_generate_ipx_network_addr_with_node(unsigned char *networkAddr,
 				__be32 *ipxNetAddr, unsigned char *ipxNodeAddr)
@@ -169,7 +164,6 @@ static __inline__ void __nat25_generate_ipx_network_addr_with_node(unsigned char
 	memcpy(networkAddr+5, ipxNodeAddr, 6);
 }
 
-
 static __inline__ void __nat25_generate_ipx_network_addr_with_socket(unsigned char *networkAddr,
 				__be32 *ipxNetAddr, __be16 *ipxSocketAddr)
 {
@@ -179,7 +173,6 @@ static __inline__ void __nat25_generate_ipx_network_addr_with_socket(unsigned ch
 	memcpy(networkAddr+1, (unsigned char *)ipxNetAddr, 4);
 	memcpy(networkAddr+5, (unsigned char *)ipxSocketAddr, 2);
 }
-
 
 static __inline__ void __nat25_generate_apple_network_addr(unsigned char *networkAddr,
 				__be16 *network, unsigned char *node)
@@ -191,7 +184,6 @@ static __inline__ void __nat25_generate_apple_network_addr(unsigned char *networ
 	networkAddr[3] = *node;
 }
 
-
 static __inline__ void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
 				unsigned char *ac_mac, __be16 *sid)
 {
@@ -202,7 +194,6 @@ static __inline__ void __nat25_generate_pppoe_network_addr(unsigned char *networ
 	memcpy(networkAddr+3, (unsigned char *)ac_mac, 6);
 }
 
-
 #ifdef CL_IPV6_PASS
 static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
 				unsigned int *ipAddr)
@@ -212,7 +203,6 @@ static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
 	networkAddr[0] = NAT25_IPV6;
 	memcpy(networkAddr+1, (unsigned char *)ipAddr, 16);
 }
-
 
 static unsigned char *scan_tlv(unsigned char *data, int len, unsigned char tag, unsigned char len8b)
 {
@@ -225,7 +215,6 @@ static unsigned char *scan_tlv(unsigned char *data, int len, unsigned char tag, 
 	}
 	return NULL;
 }
-
 
 static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char *replace_mac)
 {
@@ -295,7 +284,6 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
 	return 0;
 }
 
-
 static void convert_ipv6_mac_to_mc(struct sk_buff *skb)
 {
 	struct ipv6hdr *iph = (struct ipv6hdr *)(skb->data + ETH_HLEN);
@@ -313,7 +301,6 @@ static void convert_ipv6_mac_to_mc(struct sk_buff *skb)
 	#endif
 }
 #endif /* CL_IPV6_PASS */
-
 
 static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 {
@@ -375,7 +362,6 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 	}
 }
 
-
 static __inline__ void __network_hash_link(struct adapter *priv,
 				struct nat25_network_db_entry *ent, int hash)
 {
@@ -392,7 +378,6 @@ static __inline__ void __network_hash_link(struct adapter *priv,
 	/* spin_unlock_bh(&priv->br_ext_lock); */
 }
 
-
 static __inline__ void __network_hash_unlink(struct nat25_network_db_entry *ent)
 {
 	/*  Caller must spin_lock_bh already! */
@@ -407,7 +392,6 @@ static __inline__ void __network_hash_unlink(struct nat25_network_db_entry *ent)
 
 	/* spin_unlock_bh(&priv->br_ext_lock); */
 }
-
 
 static int __nat25_db_network_lookup_and_replace(struct adapter *priv,
 				struct sk_buff *skb, unsigned char *networkAddr)
@@ -485,7 +469,6 @@ static int __nat25_db_network_lookup_and_replace(struct adapter *priv,
 	return 0;
 }
 
-
 static void __nat25_db_network_insert(struct adapter *priv,
 				unsigned char *macAddr, unsigned char *networkAddr)
 {
@@ -525,7 +508,6 @@ static void __nat25_db_network_insert(struct adapter *priv,
 	spin_unlock_bh(&priv->br_ext_lock);
 }
 
-
 static void __nat25_db_print(struct adapter *priv)
 {
 }
@@ -563,7 +545,6 @@ void nat25_db_cleanup(struct adapter *priv)
 
 	spin_unlock_bh(&priv->br_ext_lock);
 }
-
 
 void nat25_db_expire(struct adapter *priv)
 {
@@ -605,7 +586,6 @@ void nat25_db_expire(struct adapter *priv)
 
 	spin_unlock_bh(&priv->br_ext_lock);
 }
-
 
 #ifdef SUPPORT_TX_MCAST2UNI
 static int checkIPMcAndReplace(struct adapter *priv, struct sk_buff *skb, unsigned int *dst_ip)
@@ -1318,7 +1298,6 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						iph->daddr.s6_addr16[0], iph->daddr.s6_addr16[1], iph->daddr.s6_addr16[2], iph->daddr.s6_addr16[3],
 						iph->daddr.s6_addr16[4], iph->daddr.s6_addr16[5], iph->daddr.s6_addr16[6], iph->daddr.s6_addr16[7]);
 
-
 				__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->daddr);
 				if (!__nat25_db_network_lookup_and_replace(priv, skb, networkAddr)) {
 #ifdef SUPPORT_RX_UNI2MCAST
@@ -1336,7 +1315,6 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 	return -1;
 }
-
 
 int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 {
@@ -1469,7 +1447,6 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 		}
 	}
 }
-
 
 void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
 				unsigned char *ipAddr)

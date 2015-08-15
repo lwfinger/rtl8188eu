@@ -25,8 +25,6 @@
 
 #include <rtw_efuse.h>
 
-
-
 /*------------------------Define local variable------------------------------*/
 u8	fakeEfuseBank =0;
 u32	fakeEfuseUsedBytes =0;
@@ -224,7 +222,6 @@ ReadEFuseByte(
 	/* DBG_871X("ReadEFuseByte _offset:%08u, in %d ms\n", _offset , rtw_get_passing_time_ms(start)); */
 
 }
-
 
 /*  */
 /* 	Description: */
@@ -524,7 +521,6 @@ Efuse_PgPacketWrite(struct adapter *pAdapter,
 	return ret;
 }
 
-
 static int
 Efuse_PgPacketWrite_BT(struct adapter *pAdapter,
 					u8			offset,
@@ -582,7 +578,6 @@ efuse_WordEnableDataRead(u8	word_en,
 		targetdata[7] = sourdata[7];
 	}
 }
-
 
 u8
 Efuse_WordEnableDataWrite(	struct adapter *pAdapter,
@@ -797,7 +792,6 @@ exit:
 	return ret;
 }
 
-
 /*  */
 u8 rtw_BT_efuse_map_write(struct adapter *padapter, u16 addr, u16 cnts, u8 *data)
 {
@@ -998,7 +992,6 @@ efuse_ShadowRead4Byte(
 
 }	/*  efuse_ShadowRead4Byte */
 
-
 /*-----------------------------------------------------------------------------
  * Function:	efuse_ShadowWrite1Byte
  *			efuse_ShadowWrite2Byte
@@ -1164,7 +1157,6 @@ EFUSE_ShadowWrite(
 #endif
 	if ( pAdapter->registrypriv.mp_mode == 0)
 		return;
-
 
 	if (Type == 1)
 		efuse_ShadowWrite1Byte(pAdapter, Offset, (u8)Value);

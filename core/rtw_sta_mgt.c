@@ -26,7 +26,6 @@
 #include <xmit_osdep.h>
 #include <mlme_osdep.h>
 
-
 #include <sta_info.h>
 
 static void _rtw_init_stainfo(struct sta_info *psta)
@@ -56,7 +55,6 @@ static void _rtw_init_stainfo(struct sta_info *psta)
 	psta->capability = 0;
 
 	psta->bpairwise_key_installed = false;
-
 
 	psta->nonerp_set = 0;
 	psta->no_short_slot_time_set = 0;
@@ -111,7 +109,6 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 	psta = (struct sta_info *)(pstapriv->pstainfo_buf);
 
-
 	for (i = 0; i < NUM_STA; i++) {
 		_rtw_init_stainfo(psta);
 
@@ -121,8 +118,6 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 		psta++;
 	}
-
-
 
 #ifdef CONFIG_AP_MODE
 
@@ -242,7 +237,6 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 	return _SUCCESS;
 }
 
-
 struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 {
 	unsigned long irqL, irqL2;
@@ -324,7 +318,6 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 			rtw_init_recv_timer(preorder_ctrl);
 		}
 
-
 		/* init for DM */
 		psta->rssi_stat.UndecoratedSmoothedPWDB = (-1);
 		psta->rssi_stat.UndecoratedSmoothedCCK = (-1);
@@ -335,7 +328,6 @@ exit:
 	spin_unlock_bh(&(pstapriv->sta_hash_lock));
 	return psta;
 }
-
 
 /*  using pstapriv->sta_hash_lock to protect */
 u32	rtw_free_stainfo(struct adapter *padapter , struct sta_info *psta)
@@ -349,19 +341,16 @@ u32	rtw_free_stainfo(struct adapter *padapter , struct sta_info *psta)
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct hw_xmit *phwxmit;
 
-
 ;
 
 	if (psta == NULL)
 		goto exit;
-
 
 	spin_lock_bh(&psta->lock);
 	psta->state &= ~_FW_LINKED;
 	spin_unlock_bh(&psta->lock);
 
 	pfree_sta_queue = &pstapriv->free_sta_queue;
-
 
 	pstaxmitpriv = &psta->sta_xmitpriv;
 
@@ -425,7 +414,6 @@ u32	rtw_free_stainfo(struct adapter *padapter , struct sta_info *psta)
 		preorder_ctrl = &psta->recvreorder_ctrl[i];
 
 		_cancel_timer_ex(&preorder_ctrl->reordering_ctrl_timer);
-
 
 		ppending_recvframe_queue = &preorder_ctrl->pending_recvframe_queue;
 
@@ -572,7 +560,6 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 	phead = &(pstapriv->sta_hash[index]);
 	plist = get_next(phead);
 
-
 	while ((rtw_end_of_queue_search(phead, plist)) == false)
 	{
 
@@ -659,7 +646,6 @@ u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 		}
 	}
 	spin_unlock_bh(&(pacl_node_q->lock));
-
 
 	if (pacl_list->mode == 1)/* accept unless in deny list */
 	{

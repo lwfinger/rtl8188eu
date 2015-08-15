@@ -27,7 +27,6 @@ b. provides the protocol engine
 
 c. provides the software interface between caller and the hardware interface
 
-
 Compiler Flag Option:
 
    a. USE_ASYNC_IRP: Both sync/async operations are provided.
@@ -182,7 +181,6 @@ void _rtw_read_mem(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	void (*_read_mem)(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *pmem);
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-
 
 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved) {
 		RT_TRACE(_module_rtl871x_io_c_, _drv_info_,

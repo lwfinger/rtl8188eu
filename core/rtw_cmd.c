@@ -48,7 +48,6 @@ sint	_rtw_init_cmd_priv (struct	cmd_priv *pcmdpriv)
 	/* _rtw_init_sema(&(pcmdpriv->cmd_done_sema), 0); */
 	_rtw_init_sema(&(pcmdpriv->terminate_cmdthread_sema), 0);
 
-
 	_rtw_init_queue(&(pcmdpriv->cmd_queue));
 
 	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
@@ -271,8 +270,6 @@ static int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 	return _SUCCESS;
 }
 
-
-
 u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {
 	int res = _FAIL;
@@ -344,7 +341,6 @@ void rtw_free_cmd_obj(struct cmd_obj *pcmd)
 
 ;
 }
-
 
 void rtw_stop_cmd_thread(struct adapter *adapter)
 {
@@ -477,7 +473,6 @@ post_process:
 
 	}
 	pcmdpriv->cmdthd_running =false;
-
 
 	/*  free all cmd_obj resources */
 	do{
@@ -693,7 +688,6 @@ exit:
 
 	return res;
 }
-
 
 /*
 unsigned char rtw_setphy_cmd(unsigned char  *adapter)
@@ -1004,7 +998,6 @@ u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network* pnetwork)
 	/* for IEs is fix buf size */
 	t_len = sizeof(struct wlan_bssid_ex);
 
-
 	/* for hidden ap to set fw_state here */
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE|WIFI_ADHOC_STATE) != true)
 	{
@@ -1064,7 +1057,6 @@ u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network* pnetwork)
 	}
 
 	psecnetwork->IELength = rtw_restruct_sec_ie(padapter, &pnetwork->network.IEs[0], &psecnetwork->IEs[0], pnetwork->network.IELength);
-
 
 	pqospriv->qos_option = 0;
 
@@ -1525,7 +1517,6 @@ u8 rtw_reset_securitypriv_cmd(struct adapter*padapter)
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
 
-
 	/* rtw_enqueue_cmd(pcmdpriv, ph2c); */
 	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 
@@ -1565,7 +1556,6 @@ u8 rtw_free_assoc_resources_cmd(struct adapter*padapter)
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
 
-
 	/* rtw_enqueue_cmd(pcmdpriv, ph2c); */
 	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
 
@@ -1602,7 +1592,6 @@ u8 rtw_dynamic_chk_wk_cmd(struct adapter*padapter)
 	pdrvextra_cmd_parm->pbuf = (u8 *)padapter;
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
-
 
 	/* rtw_enqueue_cmd(pcmdpriv, ph2c); */
 	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
@@ -2624,7 +2613,6 @@ void rtw_createbss_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
 #endif
 
 	spin_lock_bh(&pmlmepriv->lock);
-
 
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) )
 	{

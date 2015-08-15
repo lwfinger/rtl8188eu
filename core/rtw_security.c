@@ -25,7 +25,6 @@
 #include <wifi.h>
 #include <osdep_intf.h>
 
-
 /* WEP related ===== */
 
 #define CRC32_POLY 0x04c11db7
@@ -36,7 +35,6 @@ struct arc4context
 	u32 y;
 	u8 state[256];
 };
-
 
 static void arcfour_init(struct arc4context	*parc4ctx, u8 * key, u32	key_len)
 {
@@ -85,7 +83,6 @@ static u32 arcfour_byte(	struct arc4context	*parc4ctx)
 	return state[(sx + sy) & 0xff];
 }
 
-
 static void arcfour_encrypt(	struct arc4context	*parc4ctx,
 	u8 * dest,
 	u8 * src,
@@ -100,7 +97,6 @@ static void arcfour_encrypt(	struct arc4context	*parc4ctx,
 
 static sint bcrc32initialized = 0;
 static u32 crc32_table[256];
-
 
 static u8 crc32_reverseBit( u8 data)
 {
@@ -156,7 +152,6 @@ static __le32 getcrc32(u8 *buf, sint len)
 	return cpu_to_le32(~crc);    /* transmit complement, per CRC-32 spec */
 }
 
-
 /*
 	Need to consider the fragment  situation
 */
@@ -177,7 +172,6 @@ void rtw_wep_encrypt(struct adapter *padapter, u8 *pxmitframe)
 	struct	xmit_priv		*pxmitpriv =&padapter->xmitpriv;
 
 ;
-
 
 	if (((struct xmit_frame*)pxmitframe)->buf_addr == NULL)
 		return;
@@ -406,14 +400,10 @@ void rtw_seccalctkipmic(u8 * key, u8 *header, u8 *data, u32 data_len, u8 *mic_co
 	}
 	rtw_secmicappend(&micdata, &priority[0], 4);
 
-
 	rtw_secmicappend(&micdata, data, data_len);
 
 	rtw_secgetmic(&micdata, mic_code);
 }
-
-
-
 
 /* macros for extraction/creation of unsigned char/unsigned short values  */
 #define RotR1(v16)   ((((v16) >> 1) & 0x7FFF) ^ (((v16) & 1) << 15))
@@ -435,7 +425,6 @@ void rtw_seccalctkipmic(u8 * key, u8 *header, u8 *data, u32 data_len, u8 *mic_co
 #define TK_SIZE          16    /* 128-bit temporal key              */
 #define P1K_SIZE         10    /*  80-bit Phase1 key                */
 #define RC4_KEY_SIZE     16    /* 128-bit RC4KEY (104 bits unknown) */
-
 
 /* 2-unsigned char by 2-unsigned char subset of the full AES S-box table */
 static const unsigned short Sbox1[2][256]=       /* Sbox for hash (can be in ROM)     */
@@ -473,7 +462,6 @@ static const unsigned short Sbox1[2][256]=       /* Sbox for hash (can be in ROM
    0x038F, 0x59F8, 0x0980, 0x1A17, 0x65DA, 0xD731, 0x84C6, 0xD0B8,
    0x82C3, 0x29B0, 0x5A77, 0x1E11, 0x7BCB, 0xA8FC, 0x6DD6, 0x2C3A,
   },
-
 
   {  /* second half of table is unsigned char-reversed version of first! */
    0xA5C6, 0x84F8, 0x99EE, 0x8DF6, 0x0DFF, 0xBDD6, 0xB1DE, 0x5491,
@@ -553,7 +541,6 @@ static void phase1(u16 *p1k, const u8 *tk, const u8 *ta, u32 iv32)
 ;
 }
 
-
 /*
 **********************************************************************
 * Routine: Phase 2 -- generate RC4KEY, given TK, P1K, IV16
@@ -613,7 +600,6 @@ static void phase2(u8 *rc4key, const u8 *tk, const u16 *p1k, u16 iv16)
 	rc4key[2] = Lo8(iv16);
 	rc4key[3] = Lo8((PPK[5] ^ TK16(0)) >> 1);
 
-
 	/* Copy 96 bits of PPK[0..5] to RC4KEY[4..15]  (little-endian)       */
 	for (i =0;i<6;i++)
 	{
@@ -622,7 +608,6 @@ static void phase2(u8 *rc4key, const u8 *tk, const u16 *p1k, u16 iv16)
 	}
 ;
 }
-
 
 /* The hlen isn't include the IV */
 u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
@@ -722,7 +707,6 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 				}
 			}
 
-
 		}
 		else {
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_tkip_encrypt: stainfo == NULL!!!\n"));
@@ -735,7 +719,6 @@ u32	rtw_tkip_encrypt(struct adapter *padapter, u8 *pxmitframe)
 	return res;
 
 }
-
 
 /* The hlen isn't include the IV */
 u32 rtw_tkip_decrypt(struct adapter *padapter, u8 *precvframe)
@@ -843,7 +826,6 @@ u32 rtw_tkip_decrypt(struct adapter *padapter, u8 *precvframe)
 				res =_FAIL;
 			}
 
-
 		}
 		else {
 			RT_TRACE(_module_rtl871x_security_c_, _drv_err_, ("rtw_tkip_decrypt: stainfo == NULL!!!\n"));
@@ -857,10 +839,7 @@ exit:
 
 }
 
-
 /* 3			=====AES related ===== */
-
-
 
 #define MAX_MSG_SIZE	2048
 /*****************************/
@@ -948,7 +927,6 @@ static void add_round_key( u8 *shiftrow_in,
 	            u8 *out);
 static void aes128k128d(u8 *key, u8 *data, u8 *ciphertext);
 
-
 /****************************************/
 /* aes128k128d()                        */
 /* Performs a 128 bit AES encrypt with  */
@@ -965,7 +943,6 @@ static void xor_128(u8 *a, u8 *b, u8 *out)
 ;
 }
 
-
 static void xor_32(u8 *a, u8 *b, u8 *out)
 {
 	sint i;
@@ -977,12 +954,10 @@ static void xor_32(u8 *a, u8 *b, u8 *out)
 ;
 }
 
-
 static u8 sbox(u8 a)
 {
 	return sbox_table[(sint)a];
 }
-
 
 static void next_key(u8 *key, sint round)
 {
@@ -1010,7 +985,6 @@ static void next_key(u8 *key, sint round)
 ;
 }
 
-
 static void byte_sub(u8 *in, u8 *out)
 {
 	sint i;
@@ -1021,7 +995,6 @@ static void byte_sub(u8 *in, u8 *out)
 	}
 ;
 }
-
 
 static void shift_row(u8 *in, u8 *out)
 {
@@ -1044,7 +1017,6 @@ static void shift_row(u8 *in, u8 *out)
 	out[15] = in[11];
 ;
 }
-
 
 static void mix_column(u8 *in, u8 *out)
 {
@@ -1108,7 +1080,6 @@ static void mix_column(u8 *in, u8 *out)
 ;
 }
 
-
 static void aes128k128d(u8 *key, u8 *data, u8 *ciphertext)
 {
 	sint round;
@@ -1146,7 +1117,6 @@ static void aes128k128d(u8 *key, u8 *data, u8 *ciphertext)
 	}
 ;
 }
-
 
 /************************************************/
 /* construct_mic_iv()                           */
@@ -1228,7 +1198,6 @@ static void construct_mic_header1(
 ;
 }
 
-
 /************************************************/
 /* construct_mic_header2()                      */
 /* Builds the last MIC header block from        */
@@ -1255,7 +1224,6 @@ static void construct_mic_header2(
 	mic_header2[6] = 0x00;
 	mic_header2[7] = 0x00; /* mpdu[23]; */
 
-
 	if (!qc_exists && a4_exists)
 	{
 	for (i =0;i<6;i++) mic_header2[8+i] = mpdu[24+i];   /* A4 */
@@ -1278,7 +1246,6 @@ static void construct_mic_header2(
 
 ;
 }
-
 
 /************************************************/
 /* construct_mic_header2()                      */
@@ -1326,7 +1293,6 @@ static void construct_ctr_preload(
 	ctr_preload[15] =  (unsigned char) (c % 256);
 }
 
-
 /************************************/
 /* bitwise_xor()                    */
 /* A 128 bit, bitwise exclusive or  */
@@ -1341,7 +1307,6 @@ static void bitwise_xor(u8 *ina, u8 *inb, u8 *out)
 	}
 ;
 }
-
 
 static sint aes_cipher(u8 *key, uint	hdrlen,
 			u8 *pframe, uint plen)
@@ -1425,7 +1390,6 @@ static sint aes_cipher(u8 *key, uint	hdrlen,
 	                    a4_exists,
 	                    qc_exists
 	                    );
-
 
 	payload_remainder = plen % 16;
 	num_blocks = plen / 16;
@@ -1528,7 +1492,6 @@ static sint aes_cipher(u8 *key, uint	hdrlen,
 u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 {	/*  exclude ICV */
 
-
 	/*static*/
 /* 	unsigned char	message[MAX_MSG_SIZE]; */
 
@@ -1596,8 +1559,6 @@ u32	rtw_aes_encrypt(struct adapter *padapter, u8 *pxmitframe)
 
 	}
 
-
-
 ;
 		return res;
 }
@@ -1620,7 +1581,6 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 	u8 aes_out[16];
 	u8 padded_buffer[16];
 	u8 mic[8];
-
 
 	uint	frtype  = GetFrameType(pframe);
 	uint	frsubtype  = GetFrameSubType(pframe);
@@ -1672,7 +1632,6 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 	} else
 		qc_exists = 0;
 
-
 	/*  now, decrypt pframe with hdrlen offset and plen long */
 
 	payload_index = hdrlen + 8; /*  8 is for extiv */
@@ -1723,7 +1682,6 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 	if ((hdrlen +plen+8) <= MAX_MSG_SIZE)
 		memcpy((void *)message, pframe, (hdrlen +plen+8)); /* 8 is for ext iv len */
 
-
 	pn_vector[0]=pframe[hdrlen];
 	pn_vector[1]=pframe[hdrlen+1];
 	pn_vector[2]=pframe[hdrlen+4];
@@ -1752,7 +1710,6 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 	                    a4_exists,
 	                    qc_exists
 	                    );
-
 
 	payload_remainder = (plen-8) % 16;
 	num_blocks = (plen-8) / 16;
@@ -2139,7 +2096,6 @@ static int sha256_process(struct sha256_state *md, unsigned char *in,
 
 	return 0;
 }
-
 
 /**
    Terminate the hash to get the digest
@@ -2640,7 +2596,6 @@ static void aes_128_encrypt(void *ctx, u8 *plain, u8 *crypt)
 	rijndaelEncrypt(ctx, plain, crypt);
 }
 
-
 static void gf_mulx(u8 *pad)
 {
 	int i, carry;
@@ -2658,7 +2613,6 @@ static void aes_encrypt_deinit(void *ctx)
 	memset(ctx, 0, AES_PRIV_SIZE);
 	rtw_mfree(ctx, AES_PRIV_SIZE);
 }
-
 
 /**
  * omac1_aes_128_vector - One-Key CBC MAC (OMAC1) hash with AES-128
@@ -2732,7 +2686,6 @@ static int omac1_aes_128_vector(u8 *key, size_t num_elem,
 	aes_encrypt_deinit(ctx);
 	return 0;
 }
-
 
 /**
  * omac1_aes_128 - One-Key CBC MAC (OMAC1) hash with AES-128 (aka AES-CMAC)

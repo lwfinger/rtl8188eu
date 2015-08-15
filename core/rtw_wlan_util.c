@@ -68,7 +68,6 @@ static u8 rtw_basic_rate_mix[7] = {
 	IEEE80211_OFDM_RATE_24MB|IEEE80211_BASIC_RATE_MASK
 };
 
-
 int cckrates_included(unsigned char *rate, int ratelen)
 {
 	int	i;
@@ -137,7 +136,6 @@ u8 judge_network_type(struct adapter *padapter, unsigned char *rate, int ratelen
 	u8 network_type = 0;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
-
 
 	if (pmlmeext->cur_channel > 14)
 	{
@@ -635,7 +633,6 @@ void read_cam(struct adapter *padapter , u8 entry)
 	DBG_8192C("*********************************\n");
 }
 
-
 void write_cam(struct adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *key)
 {
 	unsigned int	i, val, addr;
@@ -710,7 +707,6 @@ int WFD_info_handler(struct adapter *padapter, struct ndis_802_11_variable_ies *
 	struct wifidirect_info	*pwdinfo;
 	u8	wfd_ie[ 128 ] = { 0x00 };
 	u32	wfd_ielen = 0;
-
 
 	pwdinfo = &padapter->wdinfo;
 	if ( rtw_get_wfd_ie( ( u8* ) pIE, pIE->Length, wfd_ie, &wfd_ielen ) )
@@ -922,7 +918,6 @@ static void bwmode_update_check(struct adapter *padapter, struct ndis_802_11_var
 		new_ch_offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
 	}
 
-
 	if ((new_bwmode!= pmlmeext->cur_bwmode) || (new_ch_offset!=pmlmeext->cur_ch_offset))
 	{
 		pmlmeinfo->bwmode_updated = true;
@@ -938,7 +933,6 @@ static void bwmode_update_check(struct adapter *padapter, struct ndis_802_11_var
 		pmlmeinfo->bwmode_updated = false;
 	}
 
-
 	if (true == pmlmeinfo->bwmode_updated)
 	{
 		struct sta_info *psta;
@@ -946,7 +940,6 @@ static void bwmode_update_check(struct adapter *padapter, struct ndis_802_11_var
 		struct sta_priv	*pstapriv = &padapter->stapriv;
 
 		/* set_channel_bwmode(padapter, pmlmeext->cur_channel, pmlmeext->cur_ch_offset, pmlmeext->cur_bwmode); */
-
 
 		/* update ap's stainfo */
 		psta = rtw_get_stainfo(pstapriv, cur_network->MacAddress);
@@ -1047,7 +1040,6 @@ void HT_info_handler(struct adapter *padapter, struct ndis_802_11_variable_ies *
 	if (pIE == NULL) return;
 
 	if (phtpriv->ht_option == false)	return;
-
 
 	if (pIE->Length > sizeof(struct HT_info_element))
 		return;

@@ -66,7 +66,6 @@ static u8	WIFI_OFDMRATES[] =
  IEEE80211_OFDM_RATE_48MB,
  IEEE80211_OFDM_RATE_54MB};
 
-
 int rtw_get_bit_value_from_ieee_value(u8 val)
 {
 	unsigned char dot11_rate_table[]={2, 4, 11, 22, 12, 18, 24, 36, 48, 72, 96, 108, 0}; /*  last element must be zero!! */
@@ -265,7 +264,6 @@ u8 *rtw_get_ie_ex(u8 *in_ie, uint in_len, u8 eid, u8 *oui, u8 oui_len, u8 *ie, u
 	uint cnt;
 	u8 *target_ie = NULL;
 
-
 	if (ielen)
 		*ielen = 0;
 
@@ -460,7 +458,6 @@ int rtw_generate_ie(struct registry_priv *pregistrypriv)
 	/* DS parameter set */
 	ie = rtw_set_ie(ie, _DSSET_IE_, 1, (u8 *)&(pdev_network->Configuration.DSConfig), &sz);
 
-
 	/* IBSS Parameter Set */
 
 	ie = rtw_set_ie(ie, _IBSS_PARA_IE_, 2, (u8 *)&(pdev_network->Configuration.ATIMWindow), &sz);
@@ -576,7 +573,6 @@ int rtw_get_wpa2_cipher_suite(u8 *s)
 	return 0;
 }
 
-
 int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwise_cipher, int *is_8021x)
 {
 	int i, ret =_SUCCESS;
@@ -589,7 +585,6 @@ int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 		return _FAIL;
 	}
 
-
 	if ((*wpa_ie != _WPA_IE_ID_) || (*(wpa_ie+1) != (u8)(wpa_ie_len - 2)) ||
 	   (_rtw_memcmp(wpa_ie+2, RTW_WPA_OUI_TYPE, WPA_SELECTOR_LEN) != true) )
 	{
@@ -600,7 +595,6 @@ int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 
 	pos += 8;
 	left = wpa_ie_len - 8;
-
 
 	/* group_cipher */
 	if (left >= WPA_SELECTOR_LEN) {
@@ -617,7 +611,6 @@ int rtw_parse_wpa_ie(u8* wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
 
 		return _FAIL;
 	}
-
 
 	/* pairwise_cipher */
 	if (left >= 2)
@@ -673,7 +666,6 @@ int rtw_parse_wpa2_ie(u8* rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
 		/* No RSN IE - fail silently */
 		return _FAIL;
 	}
-
 
 	if ((*rsn_ie!= _WPA2_IE_ID_) || (*(rsn_ie+1) != (u8)(rsn_ie_len - 2)))
 	{
@@ -1699,7 +1691,6 @@ int rtw_get_wfd_ie(u8 *in_ie, int in_len, u8 *wfd_ie, uint *wfd_ielen)
 	uint cnt = 0;
 	u8 eid, wfd_oui[4]={0x50, 0x6F, 0x9A, 0x0A};
 
-
 	match =false;
 
 	if ( in_len < 0 )
@@ -1783,7 +1774,6 @@ int rtw_get_wfd_attr_content(u8 *wfd_ie, uint wfd_ielen, u8 target_attr_id , u8 
 	int match;
 	uint cnt = 0;
 	u8 attr_id, wfd_oui[4]={0x50, 0x6F, 0x9A, 0x0A};
-
 
 	match =false;
 

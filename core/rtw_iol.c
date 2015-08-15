@@ -56,7 +56,6 @@ exit:
 	return xmit_frame;
 }
 
-
 int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len)
 {
 	struct pkt_attrib	*pattrib = &xmit_frame->attrib;
@@ -185,8 +184,6 @@ int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path, u16 addr,
 	return rtw_IOL_append_cmds(xmit_frame, (u8*)&cmd, cmd.length);
 
 }
-
-
 
 int rtw_IOL_append_DELAY_US_cmd(struct xmit_frame *xmit_frame, u16 us)
 {

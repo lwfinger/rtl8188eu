@@ -19,7 +19,6 @@
  ******************************************************************************/
 #define _RTW_DEBUG_C_
 
-
 #include <rtw_debug.h>
 #include <rtw_sreset.h>
 
@@ -269,7 +268,6 @@ int proc_get_rf_info(char *page, char **start,
 
 	len += snprintf(page + len, count - len, "cur_ch =%d, cur_bw =%d, cur_ch_offet =%d\n",
 					pmlmeext->cur_channel, pmlmeext->cur_bwmode, pmlmeext->cur_ch_offset);
-
 
 	*eof = 1;
 	return len;
@@ -527,7 +525,6 @@ int proc_get_rf_reg_dump1(char *page, char **start,
 	return len;
 }
 
-
 int proc_get_rf_reg_dump2(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data)
@@ -552,7 +549,6 @@ int proc_get_rf_reg_dump2(char *page, char **start,
 	*eof = 1;
 	return len;
 }
-
 
 int proc_get_rf_reg_dump3(char *page, char **start,
 			  off_t offset, int count,
@@ -580,7 +576,6 @@ int proc_get_rf_reg_dump3(char *page, char **start,
 	return len;
 }
 
-
 int proc_get_rf_reg_dump4(char *page, char **start,
 			  off_t offset, int count,
 			  int *eof, void *data)
@@ -605,8 +600,6 @@ int proc_get_rf_reg_dump4(char *page, char **start,
 	*eof = 1;
 	return len;
 }
-
-
 
 int proc_get_rx_signal(char *page, char **start,
 			  off_t offset, int count,
@@ -930,7 +923,6 @@ int proc_set_rssi_disp(struct file *file, const char __user *buffer,
 
 }
 
-
 #ifdef CONFIG_AP_MODE
 
 int proc_get_all_sta_info(char *page, char **start,
@@ -945,7 +937,6 @@ int proc_get_all_sta_info(char *page, char **start,
 	struct list_head *plist, *phead;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	int len = 0;
-
 
 	len += snprintf(page + len, count - len, "sta_dz_bitmap =0x%x, tim_bitmap =0x%x\n", pstapriv->sta_dz_bitmap, pstapriv->tim_bitmap);
 

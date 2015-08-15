@@ -94,7 +94,6 @@ InitLed871x(
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
 }
 
-
 /*  */
 /* 	Description: */
 /* 		DeInitialize an LED_871x object. */
@@ -108,7 +107,6 @@ DeInitLed871x(
 	_cancel_timer_ex(&(pLed->BlinkTimer));
 	ResetLedStatus(pLed);
 }
-
 
 /*  */
 /* 	Description: */
@@ -168,7 +166,6 @@ static void SwLedBlink(PLED_871x pLed)
 			bStopBlinking = true;
 		}
 		break;
-
 
 	default:
 		bStopBlinking = true;
@@ -622,7 +619,6 @@ static void SwLedBlink3(PLED_871x pLed)
 					if ( pLed->bLedOn )
 						SwLedOff(padapter, pLed);
 
-
 					RT_TRACE(_module_rtl8712_led_c_, _drv_info_, ("CurrLedState %d\n", pLed->CurrLedState));
 				}
 				pLed->bLedBlinkInProgress = false;
@@ -680,7 +676,6 @@ static void SwLedBlink3(PLED_871x pLed)
 				pLed->bLedWPSBlinkInProgress = false;
 			}
 			break;
-
 
 		default:
 			break;
@@ -873,7 +868,6 @@ static void SwLedBlink4(PLED_871x pLed)
 			}
 			break;
 
-
 		default:
 			break;
 	}
@@ -942,7 +936,6 @@ static void SwLedBlink5(PLED_871x pLed)
 				}
 			}
 			break;
-
 
 		case LED_BLINK_TXRX:
 			pLed->BlinkTimes--;
@@ -1120,7 +1113,6 @@ SwLedControlMode0(
 		}
 		break;
 
-
 	default:
 		break;
 	}
@@ -1295,7 +1287,6 @@ SwLedControlMode1(
 				_set_timer(&(pLed->BlinkTimer), LED_BLINK_SCAN_INTERVAL_ALPHA);
 			 }
 			break;
-
 
 		case LED_CTL_STOP_WPS:
 			if (pLed->bLedNoLinkBlinkInProgress == true)
@@ -1739,7 +1730,6 @@ SwLedControlMode2(
 	RT_TRACE(_module_rtl8712_led_c_, _drv_info_, ("CurrLedState %d\n", pLed->CurrLedState));
 }
 
-
  /* Edimax-Belkin, added by chiyoko, 20090413 */
 static void
 SwLedControlMode4(
@@ -2069,8 +2059,6 @@ SwLedControlMode4(
 
 	RT_TRACE(_module_rtl8712_led_c_, _drv_info_, ("Led %d\n", pLed->CurrLedState));
 }
-
-
 
  /* Sercomm-Belkin, added by chiyoko, 20090415 */
 static void

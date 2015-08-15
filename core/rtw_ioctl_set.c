@@ -19,7 +19,6 @@
  ******************************************************************************/
 #define _RTW_IOCTL_SET_C_
 
-
 #include <drv_conf.h>
 #include <osdep_service.h>
 #include <drv_types.h>
@@ -230,7 +229,6 @@ u8 rtw_set_802_11_bssid(struct adapter* padapter, u8 *bssid)
 	}
 
 	spin_lock_bh(&pmlmepriv->lock);
-
 
 	DBG_871X("Set BSSID under fw_state =0x%08x\n", get_fwstate(pmlmepriv));
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == true) {
@@ -559,7 +557,6 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
 
 	return true;
 }
-
 
 u8 rtw_set_802_11_disassociate(struct adapter *padapter)
 {
@@ -1106,7 +1103,6 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 			{
 
 			}
-
 
 			/* Set key to CAM through H2C command */
 			if (bgrouptkey)/* never go to here */

@@ -344,7 +344,6 @@ void rtw_set_rpwm(struct adapter *padapter, u8 pslv)
 
 	pslv = PS_STATE(pslv);
 
-
 	if (true == pwrpriv->btcoex_rfon)
 	{
 		if (pslv < PS_STATE_S4)
@@ -542,7 +541,6 @@ s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
 	u8 bAwake = false;
 	s32 err = 0;
 
-
 	start_time = rtw_get_current_time();
 	while (1)
 	{
@@ -711,11 +709,9 @@ void rtw_init_pwrctrl_priv(struct adapter *padapter)
 	rtw_register_early_suspend(pwrctrlpriv);
 	#endif /* CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER */
 
-
 ;
 
 }
-
 
 void rtw_free_pwrctrl_priv(struct adapter *adapter)
 {
@@ -849,7 +845,6 @@ u8 rtw_interface_ps_func(struct adapter *padapter, enum HAL_INTF_PS_FUNC efunc_i
 	return bResult;
 }
 
-
 inline void rtw_set_ips_deny(struct adapter *padapter, u32 ms)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
@@ -872,7 +867,6 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 
 	if (pwrpriv->ips_deny_time < rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms))
 		pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms);
-
 
 	if (pwrpriv->ps_processing) {
 		DBG_871X("%s wait ps_processing...\n", __func__);
