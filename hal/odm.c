@@ -1172,7 +1172,7 @@ ODM_Write_DIG(
 			if (pDM_Odm->SupportICType != ODM_RTL8188E)
 				ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_B,pDM_Odm), ODM_BIT(IGI,pDM_Odm), CurrentIGI);
 		} else if (pDM_Odm->SupportPlatform & (ODM_AP|ODM_ADSL)) {
-			switch(*(pDM_Odm->pOnePathCCA)) {
+			switch (*(pDM_Odm->pOnePathCCA)) {
 			case ODM_CCA_2R:
 				ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_A,pDM_Odm), ODM_BIT(IGI,pDM_Odm), CurrentIGI);
 				if (pDM_Odm->SupportICType != ODM_RTL8188E)
@@ -2257,7 +2257,7 @@ u32 ODM_Get_Rate_Bitmap(
 
 	WirelessMode = pEntry->wireless_mode;
 
-	switch(WirelessMode)
+	switch (WirelessMode)
 	{
 		case ODM_WM_B:
 			if (ra_mask & 0x0000000c)		/* 11M or 5.5M enable */

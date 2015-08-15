@@ -50,7 +50,7 @@ _ConfigNormalChipOutEP_8188E(
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
 
-	switch(NumOutPipe){
+	switch (NumOutPipe){
 		case	3:
 				pHalData->OutEpQueueSel=TX_SELE_HQ| TX_SELE_LQ|TX_SELE_NQ;
 				pHalData->OutEpNumber=3;
@@ -450,7 +450,7 @@ _InitNormalChipOneOutEpPriority(
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
 
 	u16	value = 0;
-	switch(pHalData->OutEpQueueSel)
+	switch (pHalData->OutEpQueueSel)
 	{
 		case TX_SELE_HQ:
 			value = QUEUE_HIGH;
@@ -490,7 +490,7 @@ _InitNormalChipTwoOutEpPriority(
 	u16	valueHi = 0;
 	u16	valueLow = 0;
 
-	switch(pHalData->OutEpQueueSel)
+	switch (pHalData->OutEpQueueSel)
 	{
 		case (TX_SELE_HQ | TX_SELE_LQ):
 			valueHi = QUEUE_HIGH;
@@ -564,7 +564,7 @@ _InitQueuePriority(
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(Adapter);
 
-	switch(pHalData->OutEpNumber)
+	switch (pHalData->OutEpNumber)
 	{
 		case 1:
 			_InitNormalChipOneOutEpPriority(Adapter);
@@ -844,7 +844,7 @@ usb_AggSettingRxUpdate(
 	valueDMA = rtw_read8(Adapter, REG_TRXDMA_CTRL);
 	valueUSB = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION);
 
-	switch(pHalData->UsbRxAggMode)
+	switch (pHalData->UsbRxAggMode)
 	{
 		case USB_RX_AGG_DMA:
 			valueDMA |= RXDMA_AGG_EN;
@@ -868,7 +868,7 @@ usb_AggSettingRxUpdate(
 	rtw_write8(Adapter, REG_TRXDMA_CTRL, valueDMA);
 	rtw_write8(Adapter, REG_USB_SPECIAL_OPTION, valueUSB);
 
-	switch(pHalData->UsbRxAggMode)
+	switch (pHalData->UsbRxAggMode)
 	{
 		case USB_RX_AGG_DMA:
 			rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH, pHalData->UsbRxAggPageCount);
@@ -892,7 +892,7 @@ usb_AggSettingRxUpdate(
 			break;
 	}
 
-	switch(PBP_128)
+	switch (PBP_128)
 	{
 		case PBP_128:
 			pHalData->HwRxPageSize = 128;
@@ -1773,7 +1773,7 @@ _ReadLEDSetting(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	pledpriv->bRegUseLed = true;
 
-	switch(pHalData->CustomerID)
+	switch (pHalData->CustomerID)
 	{
 		default:
 			pledpriv->LedStrategy = SW_LED_MODE1;
@@ -2207,7 +2207,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
 ;
 
-	switch(variable)
+	switch (variable)
 	{
 		case HW_VAR_MEDIA_STATUS:
 			{
@@ -2629,7 +2629,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				MinSpacingToSet = *((u8 *)val);
 				if (MinSpacingToSet <= 7)
 				{
-					switch(Adapter->securitypriv.dot11PrivacyAlgrthm)
+					switch (Adapter->securitypriv.dot11PrivacyAlgrthm)
 					{
 						case _NO_PRIVACY_:
 						case _AES_:
@@ -2859,7 +2859,7 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
 ;
 
-	switch(variable)
+	switch (variable)
 	{
 		case HW_VAR_BASIC_RATE:
 			*((u16 *)(val)) = pHalData->BasicRateSet;
@@ -2943,7 +2943,7 @@ static u8 GetHalDefVar8188EUsb(
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
 	u8			bResult = _SUCCESS;
 
-	switch(eVariable)
+	switch (eVariable)
 	{
 		case HAL_DEF_UNDERCORATEDSMOOTHEDPWDB:
 			{
@@ -3068,7 +3068,7 @@ static u8 SetHalDefVar8188EUsb(
 	DM_ODM_T		*podmpriv = &pHalData->odmpriv;
 	u8			bResult = _SUCCESS;
 
-	switch(eVariable)
+	switch (eVariable)
 	{
 		case HAL_DEF_DBG_DM_FUNC:
 			{
@@ -3350,7 +3350,7 @@ static void rtl8188eu_init_default_value(struct adapter * padapter)
 static u8 rtl8188eu_ps_func(struct adapter *Adapter, enum HAL_INTF_PS_FUNC efunc_id, u8 *val)
 {
 	u8 bResult = true;
-	switch(efunc_id){
+	switch (efunc_id){
 
 		#if defined(CONFIG_AUTOSUSPEND)
 		case HAL_USB_SELECT_SUSPEND:

@@ -1245,7 +1245,7 @@ int rtw_check_beacon_data(struct adapter *padapter, u8 *pbuf,  int len)
 	{
 		pHT_info_ie=p;
 	}
-	switch(network_type)
+	switch (network_type)
 	{
 		case WIRELESS_11B:
 			pbss_network->NetworkTypeInUse = Ndis802_11DS;
@@ -1626,7 +1626,7 @@ void update_beacon(struct adapter *padapter, u8 ie_id, u8 *oui, u8 tx)
 
 	spin_lock_bh(&pmlmepriv->bcn_update_lock);
 
-	switch(ie_id)
+	switch (ie_id)
 	{
 		case 0xFF:
 
@@ -2068,7 +2068,7 @@ u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta, bool active, u16
 	return beacon_updated;
 }
 
-int rtw_ap_inform_ch_switch(struct adapter *padapter, u8 new_ch, u8 ch_offset)
+int rtw_ap_inform_ch_switch (struct adapter *padapter, u8 new_ch, u8 ch_offset)
 {
 	unsigned long irqL;
 	struct list_head *phead, *plist;
@@ -2095,12 +2095,12 @@ int rtw_ap_inform_ch_switch(struct adapter *padapter, u8 new_ch, u8 ch_offset)
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 		plist = get_next(plist);
 
-		issue_action_spct_ch_switch(padapter, psta->hwaddr, new_ch, ch_offset);
+		issue_action_spct_ch_switch (padapter, psta->hwaddr, new_ch, ch_offset);
 		psta->expire_to = ((pstapriv->expire_to * 2) > 5) ? 5 : (pstapriv->expire_to * 2);
 	}
 	spin_unlock_bh(&pstapriv->asoc_list_lock);
 
-	issue_action_spct_ch_switch(padapter, bc_addr, new_ch, ch_offset);
+	issue_action_spct_ch_switch (padapter, bc_addr, new_ch, ch_offset);
 
 	return ret;
 }

@@ -120,7 +120,7 @@ rtl8188e_PHY_RF6052SetBandwidth(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
-	switch(Bandwidth)
+	switch (Bandwidth)
 	{
 		case HT_CHANNEL_WIDTH_20:
 			pHalData->RfRegChnlVal[0] = ((pHalData->RfRegChnlVal[0] & 0xfffff3ff) | BIT(10) | BIT(11));
@@ -337,7 +337,7 @@ static void getTxPowerWriteValByRegulatory88E(
 	/*  Index 0 & 1= legacy OFDM, 2-5=HT_MCS rate */
 	/*  */
 	for(rf=0; rf<2; rf++) {
-		switch(Regulatory) {
+		switch (Regulatory) {
 			case 0:	/*  Realtek better performance */
 					/*  increase power diff defined by Realtek for large power */
 				chnlGroup = 0;
@@ -617,7 +617,7 @@ phy_RF6052_Config_ParaFile(
 		pPhyReg = &pHalData->PHYRegDef[eRFPath];
 
 		/*----Store original RFENV control type----*/
-		switch(eRFPath)
+		switch (eRFPath)
 		{
 		case RF_PATH_A:
 		case RF_PATH_C:
@@ -645,7 +645,7 @@ phy_RF6052_Config_ParaFile(
 		rtw_udelay_os(1);/* PlatformStallExecution(1); */
 
 		/*----Initialize RF fom connfiguration file----*/
-		switch(eRFPath)
+		switch (eRFPath)
 		{
 		case RF_PATH_A:
 			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
@@ -662,7 +662,7 @@ phy_RF6052_Config_ParaFile(
 		}
 
 		/*----Restore RFENV control type----*/;
-		switch(eRFPath)
+		switch (eRFPath)
 		{
 		case RF_PATH_A:
 		case RF_PATH_C:

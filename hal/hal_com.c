@@ -107,7 +107,7 @@ u8	MRateToHwRate(u8 rate)
 {
 	u8	ret = DESC_RATE1M;
 
-	switch(rate)
+	switch (rate)
 	{
 		/*  CCK and OFDM non-HT rates */
 	case IEEE80211_CCK_RATE_1MB:	ret = DESC_RATE1M;	break;
@@ -153,7 +153,7 @@ void	HalSetBrateCfg(
 
 		if ( is_brate )
 		{
-			switch(brate)
+			switch (brate)
 			{
 				case IEEE80211_CCK_RATE_1MB:	*pBrateCfg |= RATE_1M;	break;
 				case IEEE80211_CCK_RATE_2MB:	*pBrateCfg |= RATE_2M;	break;
@@ -292,7 +292,7 @@ Hal_MappingOutPipe(
 
 	bool result = true;
 
-	switch(NumOutPipe)
+	switch (NumOutPipe)
 	{
 		case 2:
 			_TwoOutPipeMapping(pAdapter, bWIFICfg);
@@ -387,7 +387,7 @@ SetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *valu
 	PDM_ODM_T pDM_Odm = &(pHalData->odmpriv);
 	u8 bResult = _SUCCESS;
 
-	switch(variable) {
+	switch (variable) {
 	case HW_DEF_FA_CNT_DUMP:
 		if (*((u8*)value))
 			pDM_Odm->DebugComponents |= (ODM_COMP_DIG |ODM_COMP_FA_CNT);
@@ -416,7 +416,7 @@ GetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *valu
 	PDM_ODM_T pDM_Odm = &(pHalData->odmpriv);
 	u8 bResult = _SUCCESS;
 
-	switch(variable) {
+	switch (variable) {
 	case HW_DEF_ODM_DBG_FLAG:
 		*((u64*)value) = pDM_Odm->DebugComponents;
 		break;

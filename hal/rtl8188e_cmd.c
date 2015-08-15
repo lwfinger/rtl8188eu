@@ -256,7 +256,7 @@ void rtl8188e_set_FwPwrMode_cmd(struct adapter *padapter, u8 Mode)
 
 	H2CSetPwrMode.AwakeInterval = 2;	/* DTIM =1 */
 
-	switch(Mode)
+	switch (Mode)
 	{
 		case PS_MODE_ACTIVE:
 			H2CSetPwrMode.Mode = 0;
@@ -493,7 +493,7 @@ static void ConstructNullFunctionData(
 		SetPwrMgt(fctrl);
 	}
 
-	switch(cur_network->network.InfrastructureMode)
+	switch (cur_network->network.InfrastructureMode)
 	{
 		case Ndis802_11Infrastructure:
 			SetToDs(fctrl);
@@ -854,7 +854,7 @@ void rtl8188e_set_p2p_ps_offload_cmd(struct adapter* padapter, u8 p2p_ps_state)
 	struct P2P_PS_Offload_t	*p2p_ps_offload = &pHalData->p2p_ps_offload;
 	u8	i;
 
-	switch(p2p_ps_state)
+	switch (p2p_ps_state)
 	{
 		case P2P_PS_DISABLE:
 			DBG_8192C("P2P_PS_DISABLE\n");

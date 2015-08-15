@@ -381,7 +381,7 @@ odm_ARFBRefresh_8188E(
 	u32 MaskFromReg;
 	s8 i;
 
-	switch(pRaInfo->RateID){
+	switch (pRaInfo->RateID){
 		case RATR_INX_WIRELESS_NGB:
 			pRaInfo->RAUseRate=(pRaInfo->RateMask)&0x0f8ff015;
 			break;

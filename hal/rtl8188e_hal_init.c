@@ -1265,7 +1265,7 @@ Hal_EfuseSwitchToBank(
 		{
 			value32 = rtw_read32(pAdapter, EFUSE_TEST);
 			bRet = true;
-			switch(bank)
+			switch (bank)
 			{
 			case 0:
 				value32 = (value32 & ~EFUSE_SEL_MASK) | EFUSE_SEL(EFUSE_WIFI_SEL_0);
@@ -1392,7 +1392,7 @@ static void Hal_EFUSEGetEfuseDefinition88E(
 	void *		pOut
 	)
 {
-	switch(type) {
+	switch (type) {
 	case TYPE_EFUSE_MAX_SECTION:
 		{
 			u8*	pMax_section;
@@ -1459,7 +1459,7 @@ static void Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 	void *		pOut
 	)
 {
-	switch(type)
+	switch (type)
 	{
 		case TYPE_EFUSE_MAX_SECTION:
 			{
@@ -2549,7 +2549,7 @@ static void rtl8188e_GetHalODMVar(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T podmpriv = &pHalData->odmpriv;
-	switch(eVariable){
+	switch (eVariable){
 		case HAL_ODM_STA_INFO:
 			break;
 		default:
@@ -2566,7 +2566,7 @@ static void rtl8188e_SetHalODMVar(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T podmpriv = &pHalData->odmpriv;
 	/* _irqL irqL; */
-	switch(eVariable){
+	switch (eVariable){
 		case HAL_ODM_STA_INFO:
 			{
 				struct sta_info *psta = (struct sta_info *)pValue1;
@@ -2853,7 +2853,7 @@ Hal_EEValueCheck(
 	void *		pOutValue
 	)
 {
-	switch(EEType)
+	switch (EEType)
 	{
 		case EETYPE_TX_PWR:
 			{

@@ -136,7 +136,7 @@ static void SwLedBlink(PLED_871x pLed)
 
 	/*  Determine if we shall change LED state again. */
 	pLed->BlinkTimes--;
-	switch(pLed->CurrLedState)
+	switch (pLed->CurrLedState)
 	{
 
 	case LED_BLINK_NORMAL:
@@ -204,7 +204,7 @@ static void SwLedBlink(PLED_871x pLed)
 			pLed->BlinkingLedState = RTW_LED_ON;
 
 		/*  Schedule a timer to toggle LED state. */
-		switch( pLed->CurrLedState )
+		switch ( pLed->CurrLedState )
 		{
 		case LED_BLINK_NORMAL:
 			_set_timer(&(pLed->BlinkTimer), LED_BLINK_NORMAL_INTERVAL);
@@ -258,7 +258,7 @@ static void SwLedBlink1(PLED_871x pLed)
 		return;
 	}
 
-	switch(pLed->CurrLedState)
+	switch (pLed->CurrLedState)
 	{
 		case LED_BLINK_SLOWLY:
 			if ( pLed->bLedOn )
@@ -420,7 +420,7 @@ static void SwLedBlink2(PLED_871x pLed)
 		RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Blinktimes (%d): turn off\n", pLed->BlinkTimes));
 	}
 
-	switch(pLed->CurrLedState)
+	switch (pLed->CurrLedState)
 	{
 		case LED_BLINK_SCAN:
 			pLed->BlinkTimes--;
@@ -540,7 +540,7 @@ static void SwLedBlink3(PLED_871x pLed)
 		RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Blinktimes (%d): turn off\n", pLed->BlinkTimes));
 	}
 
-	switch(pLed->CurrLedState)
+	switch (pLed->CurrLedState)
 	{
 		case LED_BLINK_SCAN:
 			pLed->BlinkTimes--;
@@ -714,7 +714,7 @@ static void SwLedBlink4(PLED_871x pLed)
 		SwLedOff(padapter, pLed1);
 	}
 
-	switch(pLed->CurrLedState)
+	switch (pLed->CurrLedState)
 	{
 		case LED_BLINK_SLOWLY:
 			if ( pLed->bLedOn )
@@ -899,7 +899,7 @@ static void SwLedBlink5(PLED_871x pLed)
 		RT_TRACE(_module_rtl8712_led_c_,_drv_info_,("Blinktimes (%d): turn off\n", pLed->BlinkTimes));
 	}
 
-	switch(pLed->CurrLedState)
+	switch (pLed->CurrLedState)
 	{
 		case LED_BLINK_SCAN:
 			pLed->BlinkTimes--;
@@ -1025,7 +1025,7 @@ SwLedControlMode0(
 	PLED_871x	pLed = &(ledpriv->SwLed1);
 
 	/*  Decide led state */
-	switch(LedAction)
+	switch (LedAction)
 	{
 	case LED_CTL_TX:
 	case LED_CTL_RX:
@@ -1140,7 +1140,7 @@ SwLedControlMode1(
 	PLED_871x			pLed = &(ledpriv->SwLed0);
 	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
 
-	switch(LedAction)
+	switch (LedAction)
 	{
 		case LED_CTL_POWER_ON:
 		case LED_CTL_START_TO_LINK:
@@ -1407,7 +1407,7 @@ SwLedControlMode2(
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	PLED_871x		pLed = &(ledpriv->SwLed0);
 
-	switch(LedAction)
+	switch (LedAction)
 	{
 		case LED_CTL_SITE_SURVEY:
 			 if (pmlmepriv->LinkDetectInfo.bBusyTraffic)
@@ -1572,7 +1572,7 @@ SwLedControlMode2(
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	PLED_871x		pLed = &(ledpriv->SwLed0);
 
-	switch(LedAction)
+	switch (LedAction)
 	{
 		case LED_CTL_SITE_SURVEY:
 			if (pmlmepriv->LinkDetectInfo.bBusyTraffic)
@@ -1752,7 +1752,7 @@ SwLedControlMode4(
 	PLED_871x		pLed = &(ledpriv->SwLed0);
 	PLED_871x		pLed1 = &(ledpriv->SwLed1);
 
-	switch(LedAction)
+	switch (LedAction)
 	{
 		case LED_CTL_START_TO_LINK:
 			if (pLed1->bLedWPSBlinkInProgress)
@@ -2083,7 +2083,7 @@ SwLedControlMode5(
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	PLED_871x		pLed = &(ledpriv->SwLed0);
 
-	switch(LedAction)
+	switch (LedAction)
 	{
 		case LED_CTL_POWER_ON:
 		case LED_CTL_NO_LINK:
@@ -2166,7 +2166,7 @@ SwLedControlMode6(
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	PLED_871x pLed0 = &(ledpriv->SwLed0);
 
-	switch(LedAction)
+	switch (LedAction)
 	{
 		case LED_CTL_POWER_ON:
 		case LED_CTL_LINK:
@@ -2206,7 +2206,7 @@ void BlinkHandler(PLED_871x	 pLed)
 		return;
 	}
 
-	switch(ledpriv->LedStrategy)
+	switch (ledpriv->LedStrategy)
 	{
 		case SW_LED_MODE0:
 			SwLedBlink(pLed);
@@ -2269,7 +2269,7 @@ LedControl871x(
 		return;
 	}
 
-	switch(ledpriv->LedStrategy)
+	switch (ledpriv->LedStrategy)
 	{
 		case SW_LED_MODE0:
 			/* SwLedControlMode0(padapter, LedAction); */

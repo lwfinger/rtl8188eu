@@ -1273,7 +1273,7 @@ PHY_CheckBBAndRFOK(
 		/*  */
 		/*  Write Data to register and readback */
 		/*  */
-		switch(CheckBlock)
+		switch (CheckBlock)
 		{
 		case HW90_BLOCK_MAC:
 			/* RT_ASSERT(false, ("PHY_CheckBBRFOK(): Never Write 0x100 here!")); */
@@ -1372,7 +1372,7 @@ phy_DbmToTxPwrIdx(
 	/* 	The mapping may be different by different NICs. Do not use this formula for what needs accurate result. */
 	/*  By Bruce, 2008-01-29. */
 	/*  */
-	switch(WirelessMode)
+	switch (WirelessMode)
 	{
 	case WIRELESS_MODE_B:
 		Offset = -7;
@@ -1426,7 +1426,7 @@ phy_TxPwrIdxToDbm(
 	/* 	The mapping may be different by different NICs. Do not use this formula for what needs accurate result. */
 	/*  By Bruce, 2008-01-29. */
 	/*  */
-	switch(WirelessMode) {
+	switch (WirelessMode) {
 	case WIRELESS_MODE_B:
 		Offset = -7;
 		break;
@@ -1726,7 +1726,7 @@ _PHY_SetBWMode92C(
 	regBwOpMode = rtw_read8(Adapter, REG_BWOPMODE);
 	regRRSR_RSC = rtw_read8(Adapter, REG_RRSR+2);
 
-	switch(pHalData->CurrentChannelBW) {
+	switch (pHalData->CurrentChannelBW) {
 		case HT_CHANNEL_WIDTH_20:
 			regBwOpMode |= BW_OPMODE_20MHZ;
 			   /*  2007/02/07 Mark by Emily becasue we have not verify whether this register works */
@@ -1751,7 +1751,7 @@ _PHY_SetBWMode92C(
 	/* 3 */
 	/* 3<2>Set PHY related register */
 	/* 3 */
-	switch(pHalData->CurrentChannelBW)
+	switch (pHalData->CurrentChannelBW)
 	{
 		/* 20 MHz channel*/
 		case HT_CHANNEL_WIDTH_20:
@@ -1793,7 +1793,7 @@ _PHY_SetBWMode92C(
 	/* RT_TRACE(COMP_SCAN, DBG_LOUD, ("SetBWModeCallback8190Pci: time of SetBWMode = %I64d us!\n", (EndTime - BeginTime))); */
 
 	/* 3<3>Set RF related register */
-	switch(pHalData->rf_chip)
+	switch (pHalData->rf_chip)
 	{
 		case RF_8225:
 			/* PHY_SetRF8225Bandwidth(Adapter, pHalData->CurrentChannelBW); */
@@ -1933,7 +1933,7 @@ PHY_SwChnl8188E(	/*  Call after initialization */
 	/* 	return; */
 
 	/*  */
-	switch(pHalData->CurrentWirelessMode)
+	switch (pHalData->CurrentWirelessMode)
 	{
 		case WIRELESS_MODE_A:
 		case WIRELESS_MODE_N_5G:

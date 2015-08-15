@@ -661,7 +661,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 			return -1;
 		}
 
-		switch(method) {
+		switch (method) {
 		case NAT25_CHECK:
 			return -1;
 
@@ -734,7 +734,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 			return -1;
 		}
 
-		switch(method)
+		switch (method)
 		{
 			case NAT25_CHECK:
 				return 0;	/*  skb_copy for all ARP frame */
@@ -868,7 +868,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		/*   IPX   */
 		if (ipx != NULL)
 		{
-			switch(method)
+			switch (method)
 			{
 				case NAT25_CHECK:
 					if (!memcmp(skb->data+ETH_ALEN, ipx->ipx_source.node, ETH_ALEN))
@@ -955,7 +955,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				return -1;
 			}
 
-			switch(method)
+			switch (method)
 			{
 				case NAT25_CHECK:
 					return 0;
@@ -1004,7 +1004,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		/*   DDP   */
 		else if (ddp != NULL)
 		{
-			switch(method)
+			switch (method)
 			{
 				case NAT25_CHECK:
 					return -1;
@@ -1056,7 +1056,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
 		__be16 *pMagic;
 
-		switch(method)
+		switch (method)
 		{
 			case NAT25_CHECK:
 				if (ph->sid == 0)
@@ -1221,7 +1221,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	/*---------------------------------------------------*/
 	else if (protocol == 0x888e)
 	{
-		switch(method)
+		switch (method)
 		{
 			case NAT25_CHECK:
 				return -1;
@@ -1243,7 +1243,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	else if ((protocol == 0xe2ae) ||
 		(protocol == 0xe2af))
 	{
-		switch(method)
+		switch (method)
 		{
 			case NAT25_CHECK:
 				return -1;
@@ -1273,7 +1273,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 			return -1;
 		}
 
-		switch(method)
+		switch (method)
 		{
 			case NAT25_CHECK:
 				if (skb->data[0] & 1)

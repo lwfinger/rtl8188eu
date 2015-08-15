@@ -328,7 +328,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 		}
 		if (psta)
 		{
-			switch(pattrib->priority)
+			switch (pattrib->priority)
 			{
 				case 1:
 				case 2:

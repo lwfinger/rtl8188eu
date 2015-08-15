@@ -38,7 +38,7 @@ inline int RTW_STATUS_CODE(int error_code){
 	if (error_code >=0)
 		return _SUCCESS;
 
-	switch(error_code) {
+	switch (error_code) {
 		/* case -ETIMEDOUT: */
 		/* 	return RTW_STATUS_TIMEDOUT; */
 		default:
@@ -250,7 +250,7 @@ void rtw_mstat_update(const enum mstat_f flags, const MSTAT_STATUS status, u32 s
 		}
 	}
 
-	switch(status) {
+	switch (status) {
 		case MSTAT_ALLOC_SUCCESS:
 			ATOMIC_INC(&(rtw_mem_type_stat[mstat_tf_idx(flags)].alloc_cnt));
 			alloc = ATOMIC_ADD_RETURN(&(rtw_mem_type_stat[mstat_tf_idx(flags)].alloc), sz);

@@ -201,7 +201,7 @@ struct sha256_state {
 
 #define GET_ENCRY_ALGO(psecuritypriv, psta, encry_algo, bmcst)\
 do{\
-	switch(psecuritypriv->dot11AuthAlgrthm)\
+	switch (psecuritypriv->dot11AuthAlgrthm)\
 	{\
 		case dot11AuthAlgrthm_Open:\
 		case dot11AuthAlgrthm_Shared:\
@@ -223,7 +223,7 @@ do{\
 
 #define SET_ICE_IV_LEN( iv_len, icv_len, encrypt)\
 do{\
-	switch(encrypt)\
+	switch (encrypt)\
 	{\
 		case _WEP40_:\
 		case _WEP104_:\

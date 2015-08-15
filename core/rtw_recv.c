@@ -533,7 +533,7 @@ static union recv_frame *decryptor(struct adapter *padapter,union recv_frame *pr
 		{
 			DBG_871X("prxattrib->key_index(%d) > WEP_KEYS\n", prxattrib->key_index);
 
-			switch(prxattrib->encrypt){
+			switch (prxattrib->encrypt){
 				case _WEP40_:
 				case _WEP104_:
 					prxattrib->key_index = psecuritypriv->dot11PrivacyKeyIndex;
@@ -556,7 +556,7 @@ static union recv_frame *decryptor(struct adapter *padapter,union recv_frame *pr
 			, prxattrib->bdecrypted ,prxattrib->encrypt, psecuritypriv->hw_decrypted);
 		#endif
 
-		switch(prxattrib->encrypt){
+		switch (prxattrib->encrypt){
 		case _WEP40_:
 		case _WEP104_:
 			rtw_wep_decrypt(padapter, (u8 *)precv_frame);
@@ -794,7 +794,7 @@ void process_wmmps_data(struct adapter *padapter, union recv_frame *precv_frame)
 	{
 		u8 wmmps_ac=0;
 
-		switch(pattrib->priority)
+		switch (pattrib->priority)
 		{
 			case 1:
 			case 2:
@@ -1254,7 +1254,7 @@ sint validate_recv_ctrl_frame(struct adapter *padapter, union recv_frame *precv_
 		/* for rx pkt statistics */
 		psta->sta_stats.rx_ctrl_pkts++;
 
-		switch(pattrib->priority)
+		switch (pattrib->priority)
 		{
 			case 1:
 			case 2:
@@ -1424,7 +1424,7 @@ sint validate_recv_mgnt_frame(struct adapter *padapter, union recv_frame *precv_
 
 		memcpy(pattrib->bssid, pbssid, ETH_ALEN);
 
-	switch(pattrib->to_fr_ds)
+	switch (pattrib->to_fr_ds)
 	{
 		case 0:
 			memcpy(pattrib->ra, pda, ETH_ALEN);
@@ -1493,7 +1493,7 @@ sint validate_recv_data_frame(struct adapter *adapter, union recv_frame *precv_f
 
 	memcpy(pattrib->bssid, pbssid, ETH_ALEN);
 
-	switch(pattrib->to_fr_ds)
+	switch (pattrib->to_fr_ds)
 	{
 		case 0:
 			memcpy(pattrib->ra, pda, ETH_ALEN);

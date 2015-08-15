@@ -752,7 +752,7 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
 	{
 		GET_ENCRY_ALGO(psecuritypriv, psta, pattrib->encrypt, bmcast);
 
-		switch(psecuritypriv->dot11AuthAlgrthm)
+		switch (psecuritypriv->dot11AuthAlgrthm)
 		{
 			case dot11AuthAlgrthm_Open:
 			case dot11AuthAlgrthm_Shared:
@@ -979,7 +979,7 @@ static s32 xmitframe_swencrypt(struct adapter *padapter, struct xmit_frame *pxmi
 	{
 		/* DBG_871X("start xmitframe_swencrypt\n"); */
 		RT_TRACE(_module_rtl871x_xmit_c_,_drv_alert_,("### xmitframe_swencrypt\n"));
-		switch(pattrib->encrypt){
+		switch (pattrib->encrypt){
 		case _WEP40_:
 		case _WEP104_:
 			rtw_wep_encrypt(padapter, (u8 *)pxmitframe);
@@ -1206,7 +1206,7 @@ s32 rtw_txframes_sta_ac_pending(struct adapter *padapter, struct pkt_attrib *pat
 		return 0;
 	}
 
-	switch(priority)
+	switch (priority)
 	{
 			case 1:
 			case 2:
@@ -1355,7 +1355,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
 
 			if (psta != NULL)
 			{
-				switch(pattrib->encrypt)
+				switch (pattrib->encrypt)
 				{
 					case _WEP40_:
 					case _WEP104_:
@@ -1628,7 +1628,7 @@ s32 rtw_mgmt_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, s
 			/* it's MIC of AES */
 			pattrib->icv_len = 8;
 
-			switch(pattrib->encrypt)
+			switch (pattrib->encrypt)
 			{
 				case _AES_:
 						/* set AES IV header */
@@ -1737,7 +1737,7 @@ void rtw_update_protection(struct adapter *padapter, u8 *ie, uint ie_len)
 
 ;
 
-	switch(pxmitpriv->vcs_setting)
+	switch (pxmitpriv->vcs_setting)
 	{
 		case DISABLE_VCS:
 			pxmitpriv->vcs = NONE_VCS;
@@ -2608,7 +2608,7 @@ u32 rtw_get_ff_hwaddr(struct xmit_frame *pxmitframe)
 	u32 addr;
 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
 
-	switch(pattrib->qsel)
+	switch (pattrib->qsel)
 	{
 		case 0:
 		case 3:
@@ -2838,7 +2838,7 @@ sint xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fr
 
 			psta->sleepq_len++;
 
-			switch(pattrib->priority)
+			switch (pattrib->priority)
 			{
 				case 1:
 				case 2:
@@ -3001,7 +3001,7 @@ void wakeup_sta_to_xmit(struct adapter *padapter, struct sta_info *psta)
 
 		rtw_list_delete(&pxmitframe->list);
 
-		switch(pxmitframe->attrib.priority)
+		switch (pxmitframe->attrib.priority)
 		{
 			case 1:
 			case 2:
@@ -3165,7 +3165,7 @@ void xmit_delivery_enabled_frames(struct adapter *padapter, struct sta_info *pst
 
 		xmitframe_plist = get_next(xmitframe_plist);
 
-		switch(pxmitframe->attrib.priority) {
+		switch (pxmitframe->attrib.priority) {
 			case 1:
 			case 2:
 				wmmps_ac = psta->uapsd_bk&BIT(1);
@@ -3252,7 +3252,7 @@ int rtw_sctx_wait(struct submit_ctx *sctx)
 
 static bool rtw_sctx_chk_waring_status(int status)
 {
-	switch(status) {
+	switch (status) {
 	case RTW_SCTX_DONE_UNKNOWN:
 	case RTW_SCTX_DONE_BUF_ALLOC:
 	case RTW_SCTX_DONE_BUF_FREE:

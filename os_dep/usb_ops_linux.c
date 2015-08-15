@@ -316,7 +316,7 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 
 ;
 
-	switch(pxmitbuf->flags)
+	switch (pxmitbuf->flags)
 	{
 		case VO_QUEUE_INX:
 			pxmitpriv->voq_cnt--;
@@ -440,7 +440,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 
 	_enter_critical(&pxmitpriv->lock, &irqL);
 
-	switch(addr)
+	switch (addr)
 	{
 		case VO_QUEUE_INX:
 			pxmitpriv->voq_cnt++;
@@ -484,7 +484,7 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 		else
 			psta = rtw_get_stainfo(pstapriv, pattrib->dst);
 		if (psta) {
-			switch(pattrib->priority) {
+			switch (pattrib->priority) {
 			case 1:
 			case 2:
 				psta->tx_bk_cnt += agg_num;

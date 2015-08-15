@@ -350,7 +350,7 @@ static void usb_read_interrupt_complete(struct urb *purb, struct pt_regs *regs)
 	{
 		DBG_8192C("###=> usb_read_interrupt_complete => urb status(%d)\n", purb->status);
 
-		switch(purb->status) {
+		switch (purb->status) {
 			case -EINVAL:
 			case -EPIPE:
 			case -ENODEV:
@@ -552,7 +552,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 		recvframe_put(precvframe, skb_len);
 		/* recvframe_pull(precvframe, drvinfo_sz + RXDESC_SIZE); */
 
-		switch(pHalData->UsbRxAggMode) {
+		switch (pHalData->UsbRxAggMode) {
 		case USB_RX_AGG_DMA:
 		case USB_RX_AGG_MIX:
 			pkt_offset = (u16)_RND128(pkt_offset);
@@ -707,7 +707,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 			padapter->bSurpriseRemoved = true;
 		}
 
-		switch(purb->status) {
+		switch (purb->status) {
 			case -EINVAL:
 			case -EPIPE:
 			case -ENODEV:

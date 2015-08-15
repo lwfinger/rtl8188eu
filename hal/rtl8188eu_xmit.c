@@ -150,7 +150,7 @@ static void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxd
 
 static void fill_txdesc_vcs(struct pkt_attrib *pattrib, __le32 *pdw)
 {
-	switch(pattrib->vcs_mode)
+	switch (pattrib->vcs_mode)
 	{
 		case RTS_CTS:
 			*pdw |= cpu_to_le32(RTS_EN);

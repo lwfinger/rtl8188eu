@@ -371,7 +371,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 
 	cmd_num = rtw_android_cmdstr_to_num(command);
 
-	switch(cmd_num) {
+	switch (cmd_num) {
 	case ANDROID_WIFI_CMD_START:
 		/* bytes_written = wl_android_wifi_on(net); */
 		goto response;
@@ -386,7 +386,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		goto exit;
 	}
 
-	switch(cmd_num) {
+	switch (cmd_num) {
 
 	case ANDROID_WIFI_CMD_STOP:
 		break;

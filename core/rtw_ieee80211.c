@@ -159,7 +159,7 @@ u8 *rtw_set_ie
 ;
 }
 
-inline u8 *rtw_set_ie_ch_switch(u8 *buf, u32 *buf_len, u8 ch_switch_mode,
+inline u8 *rtw_set_ie_ch_switch (u8 *buf, u32 *buf_len, u8 ch_switch_mode,
 	u8 new_ch, u8 ch_switch_cnt)
 {
 	u8 ie_data[3];
@@ -829,7 +829,7 @@ u8 *rtw_get_wps_ie_from_scan_queue(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps
 	u8*	wps = NULL;
 
 	DBG_871X( "[%s] frame_type = %d\n", __FUNCTION__, frame_type );
-	switch( frame_type )
+	switch ( frame_type )
 	{
 		case 1:
 		case 3:
@@ -1436,7 +1436,7 @@ u8 *rtw_get_p2p_ie_from_scan_queue(u8 *in_ie, int in_len, u8 *p2p_ie, uint *p2p_
 	u8*	p2p = NULL;
 
 	DBG_871X( "[%s] frame_type = %d\n", __FUNCTION__, frame_type );
-	switch( frame_type )
+	switch ( frame_type )
 	{
 		case 1:
 		case 3:
@@ -1759,7 +1759,7 @@ int rtw_get_wfd_ie_from_scan_queue(u8 *in_ie, int in_len, u8 *wfd_ie, uint *wfd_
 	match=false;
 
 	DBG_871X( "[%s] frame_type = %d\n", __FUNCTION__, frame_type );
-	switch( frame_type )
+	switch ( frame_type )
 	{
 		case 1:
 		case 3:
@@ -2055,7 +2055,7 @@ int rtw_action_frame_parse(const u8 *frame, u32 frame_len, u8* category, u8 *act
 
 	c = frame_body[0];
 
-	switch(c) {
+	switch (c) {
 	case RTW_WLAN_CATEGORY_P2P: /* vendor-specific */
 		break;
 	default:

@@ -279,7 +279,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 		if (pDM_Odm->SupportICType & (ODM_RTL8188E|ODM_RTL8812)) {
 			LNA_idx = ((cck_agc_rpt & 0xE0) >>5);
 			VGA_idx = (cck_agc_rpt & 0x1F);
-			switch(LNA_idx) {
+			switch (LNA_idx) {
 			case 7:
 				if (VGA_idx <= 27)
 					rx_pwr_all = -100 + 2*(27-VGA_idx); /* VGA_idx = 27~2 */
@@ -330,7 +330,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			if (!cck_highpwr)
 			{
 				report =( cck_agc_rpt & 0xc0 )>>6;
-				switch(report)
+				switch (report)
 				{
 					/*  03312009 modified by cosa */
 					/*  Modify the RF RNA gain value to -40, -20, -2, 14 by Jenyu's suggestion */
@@ -355,7 +355,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 				/* report = pPhyStaRpt->cck_agc_rpt_ofdm_cfosho_a& 0x60; */
 
 				report = (cck_agc_rpt & 0x60)>>5;
-				switch(report)
+				switch (report)
 				{
 					case 0x3:
 						rx_pwr_all = -46 - ((cck_agc_rpt & 0x1f)<<1) ;

@@ -2163,7 +2163,7 @@ unsigned int OnAtim(struct adapter *padapter, union recv_frame *precv_frame)
 	return _SUCCESS;
 }
 
-static unsigned int on_action_spct_ch_switch(struct adapter *padapter, struct sta_info *psta, u8 *ies, uint ies_len)
+static unsigned int on_action_spct_ch_switch (struct adapter *padapter, struct sta_info *psta, u8 *ies, uint ies_len)
 {
 	unsigned int ret = _FAIL;
 	struct mlme_ext_priv *mlmeext = &padapter->mlmeextpriv;
@@ -2252,7 +2252,7 @@ unsigned int on_action_spct(struct adapter *padapter, union recv_frame *precv_fr
 		break;
 	case RTW_WLAN_ACTION_SPCT_CHL_SWITCH:
 		#ifdef CONFIG_SPCT_CH_SWITCH
-		ret = on_action_spct_ch_switch(padapter, psta, &frame_body[2],
+		ret = on_action_spct_ch_switch (padapter, psta, &frame_body[2],
 			frame_len-(frame_body-pframe)-2);
 		#endif
 		break;
@@ -4869,7 +4869,7 @@ static unsigned int on_action_public_p2p(union recv_frame *precv_frame)
 
 		len -= sizeof(struct rtw_ieee80211_hdr_3addr);
 
-		switch( frame_body[ 6 ] )/* OUI Subtype */
+		switch ( frame_body[ 6 ] )/* OUI Subtype */
 		{
 			case P2P_GO_NEGO_REQ:
 			{
@@ -5392,7 +5392,7 @@ unsigned int OnAction_p2p(struct adapter *padapter, union recv_frame *precv_fram
 		OUI_Subtype = frame_body[5];
 		dialogToken = frame_body[6];
 
-		switch(OUI_Subtype)
+		switch (OUI_Subtype)
 		{
 			case P2P_NOTICE_OF_ABSENCE:
 
@@ -5628,7 +5628,7 @@ static int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
 
 	if (ssid_ie && ssid_len_ori>0)
 	{
-		switch(hidden_ssid_mode)
+		switch (hidden_ssid_mode)
 		{
 			case 1:
 			{
@@ -6806,7 +6806,7 @@ void issue_assocreq(struct adapter *padapter)
 
 			rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
 			/* switch (pregpriv->rf_config) */
-			switch(rf_type) {
+			switch (rf_type) {
 			case RF_1T1R:
 				if (pregpriv->rx_stbc)
 					pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info |= cpu_to_le16(0x0100);/* RX STBC One spatial stream */
@@ -7445,7 +7445,7 @@ exit:
 	return ret;
 }
 
-void issue_action_spct_ch_switch(struct adapter *padapter, u8 *ra, u8 new_ch, u8 ch_offset)
+void issue_action_spct_ch_switch (struct adapter *padapter, u8 *ra, u8 new_ch, u8 ch_offset)
 {
 	unsigned long	irqL;
 	struct list_head *plist, *phead;
@@ -7499,7 +7499,7 @@ void issue_action_spct_ch_switch(struct adapter *padapter, u8 *ra, u8 new_ch, u8
 		pframe = rtw_set_fixed_ie(pframe, 1, &(action), &(pattrib->pktlen));
 	}
 
-	pframe = rtw_set_ie_ch_switch(pframe, &(pattrib->pktlen), 0, new_ch, 0);
+	pframe = rtw_set_ie_ch_switch (pframe, &(pattrib->pktlen), 0, new_ch, 0);
 	pframe = rtw_set_ie_secondary_ch_offset(pframe, &(pattrib->pktlen),
 		hal_ch_offset_to_secondary_ch_offset(ch_offset));
 

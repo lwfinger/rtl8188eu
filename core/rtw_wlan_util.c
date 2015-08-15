@@ -99,7 +99,7 @@ unsigned char networktype_to_raid(unsigned char network_type)
 {
 	unsigned char raid;
 
-	switch(network_type)
+	switch (network_type)
 	{
 		case WIRELESS_11B:
 			raid = RATR_INX_WIRELESS_B;
@@ -313,7 +313,7 @@ void UpdateBrateTbl(
 	for(i=0;i<NDIS_802_11_LENGTH_RATES_EX;i++)
 	{
 		rate = mBratesOS[i] & 0x7f;
-		switch(rate)
+		switch (rate)
 		{
 			case IEEE80211_CCK_RATE_1MB:
 			case IEEE80211_CCK_RATE_2MB:
@@ -337,7 +337,7 @@ void UpdateBrateTblForSoftAP(u8 *bssrateset, u32 bssratelen)
 	for(i=0;i<bssratelen;i++)
 	{
 		rate = bssrateset[i] & 0x7f;
-		switch(rate)
+		switch (rate)
 		{
 			case IEEE80211_CCK_RATE_1MB:
 			case IEEE80211_CCK_RATE_2MB:
