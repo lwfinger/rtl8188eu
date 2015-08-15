@@ -54,21 +54,21 @@ u8 sreset_get_wifi_status(struct adapter *padapter)
         {
 		return status;
 	}
-	val32 =rtw_read32(padapter,REG_TXDMA_STATUS);
-	if (val32==0xeaeaeaea){
+	val32 =rtw_read32(padapter, REG_TXDMA_STATUS);
+	if (val32 ==0xeaeaeaea){
 		psrtpriv->Wifi_Error_Status = WIFI_IF_NOT_EXIST;
 	}
 	else if (val32!=0){
-		DBG_8192C("txdmastatu(%x)\n",val32);
+		DBG_8192C("txdmastatu(%x)\n", val32);
 		psrtpriv->Wifi_Error_Status = WIFI_MAC_TXDMA_ERROR;
 	}
 
 	if (WIFI_STATUS_SUCCESS !=psrtpriv->Wifi_Error_Status)
 	{
-		DBG_8192C("==>%s error_status(0x%x)\n",__FUNCTION__,psrtpriv->Wifi_Error_Status);
+		DBG_8192C("==>%s error_status(0x%x)\n", __FUNCTION__, psrtpriv->Wifi_Error_Status);
 		status = (psrtpriv->Wifi_Error_Status &( ~(USB_READ_PORT_FAIL|USB_WRITE_PORT_FAIL)));
 	}
-	DBG_8192C("==> %s wifi_status(0x%x)\n",__FUNCTION__,status);
+	DBG_8192C("==> %s wifi_status(0x%x)\n", __FUNCTION__, status);
 
 	/* status restore */
 	psrtpriv->Wifi_Error_Status = WIFI_STATUS_SUCCESS;
@@ -101,7 +101,7 @@ static void sreset_restore_security_station(struct adapter *padapter)
 	struct mlme_priv *mlmepriv = &padapter->mlmepriv;
 	struct sta_priv * pstapriv = &padapter->stapriv;
 	struct sta_info *psta;
-	struct security_priv* psecuritypriv=&(padapter->securitypriv);
+	struct security_priv* psecuritypriv =&(padapter->securitypriv);
 	struct mlme_ext_info	*pmlmeinfo = &padapter->mlmeextpriv.mlmext_info;
 
 	{
@@ -125,9 +125,9 @@ static void sreset_restore_security_station(struct adapter *padapter)
 		else
 		{
 			/* pairwise key */
-			rtw_setstakey_cmd(padapter, (unsigned char *)psta, true,false);
+			rtw_setstakey_cmd(padapter, (unsigned char *)psta, true, false);
 			/* group key */
-			rtw_set_key(padapter,&padapter->securitypriv,padapter->securitypriv.dot118021XGrpKeyid, 0,false);
+			rtw_set_key(padapter,&padapter->securitypriv, padapter->securitypriv.dot118021XGrpKeyid, 0, false);
 		}
 	}
 }
@@ -138,14 +138,14 @@ static void sreset_restore_network_station(struct adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	rtw_setopmode_cmd(padapter, Ndis802_11Infrastructure,false);
+	rtw_setopmode_cmd(padapter, Ndis802_11Infrastructure, false);
 
 	{
 		u8 threshold;
-		/*  TH=1 => means that invalidate usb rx aggregation */
-		/*  TH=0 => means that validate usb rx aggregation, use init value. */
+		/*  TH =1 => means that invalidate usb rx aggregation */
+		/*  TH =0 => means that validate usb rx aggregation, use init value. */
 		if (mlmepriv->htpriv.ht_option) {
-			if (padapter->registrypriv.wifi_spec==1)
+			if (padapter->registrypriv.wifi_spec ==1)
 				threshold = 1;
 			else
 				threshold = 0;
@@ -172,7 +172,7 @@ static void sreset_restore_network_station(struct adapter *padapter)
 
 	mlmeext_joinbss_event_callback(padapter, 1);
 	/* restore Sequence No. */
-	rtw_write8(padapter,0x4dc,padapter->xmitpriv.nqos_ssn);
+	rtw_write8(padapter, 0x4dc, padapter->xmitpriv.nqos_ssn);
 
 	sreset_restore_security_station(padapter);
 }

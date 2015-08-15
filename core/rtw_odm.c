@@ -111,7 +111,7 @@ int _rtw_odm_dbg_comp_msg(struct adapter *adapter, char *buf, int len)
 
 	rtw_hal_get_def_var(adapter, HW_DEF_ODM_DBG_FLAG, &dbg_comp);
 	cnt += snprintf(buf+cnt, len-cnt, "odm.DebugComponents = 0x%016llx\n", dbg_comp);
-	for (i=0;i<RTW_ODM_COMP_MAX;i++) {
+	for (i =0;i<RTW_ODM_COMP_MAX;i++) {
 		if (odm_comp_str[i])
 			cnt += snprintf(buf+cnt, len-cnt, "%cBIT%-2d %s\n",
 				(BIT0 << i) & dbg_comp ? '+' : ' ', i, odm_comp_str[i]);
@@ -143,7 +143,7 @@ int _rtw_odm_dbg_level_msg(struct adapter *adapter, char *buf, int len)
 
 	rtw_hal_get_def_var(adapter, HW_DEF_ODM_DBG_LEVEL, &dbg_level);
 	cnt += snprintf(buf+cnt, len-cnt, "odm.DebugDebugLevel = %u\n", dbg_level);
-	for (i=0;i<RTW_ODM_DBG_LEVEL_NUM;i++) {
+	for (i =0;i<RTW_ODM_DBG_LEVEL_NUM;i++) {
 		if (odm_dbg_level_str[i])
 			cnt += snprintf(buf+cnt, len-cnt, "%u %s\n", i, odm_dbg_level_str[i]);
 	}

@@ -237,8 +237,8 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
 			mac = scan_tlv(&data[8], len-8, 1, 1);
 			if (mac) {
 				_DEBUG_INFO("Router Solicitation, replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
-					mac[0],mac[1],mac[2],mac[3],mac[4],mac[5],
-					replace_mac[0],replace_mac[1],replace_mac[2],replace_mac[3],replace_mac[4],replace_mac[5]);
+					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
 				memcpy(mac, replace_mac, 6);
 				return 1;
 			}
@@ -249,8 +249,8 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
 			mac = scan_tlv(&data[16], len-16, 1, 1);
 			if (mac) {
 				_DEBUG_INFO("Router Advertisement, replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
-					mac[0],mac[1],mac[2],mac[3],mac[4],mac[5],
-					replace_mac[0],replace_mac[1],replace_mac[2],replace_mac[3],replace_mac[4],replace_mac[5]);
+					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
 				memcpy(mac, replace_mac, 6);
 				return 1;
 			}
@@ -261,8 +261,8 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
 			mac = scan_tlv(&data[24], len-24, 1, 1);
 			if (mac) {
 				_DEBUG_INFO("Neighbor Solicitation, replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
-					mac[0],mac[1],mac[2],mac[3],mac[4],mac[5],
-					replace_mac[0],replace_mac[1],replace_mac[2],replace_mac[3],replace_mac[4],replace_mac[5]);
+					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
 				memcpy(mac, replace_mac, 6);
 				return 1;
 			}
@@ -273,8 +273,8 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
 			mac = scan_tlv(&data[24], len-24, 2, 1);
 			if (mac) {
 				_DEBUG_INFO("Neighbor Advertisement, replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
-					mac[0],mac[1],mac[2],mac[3],mac[4],mac[5],
-					replace_mac[0],replace_mac[1],replace_mac[2],replace_mac[3],replace_mac[4],replace_mac[5]);
+					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
 				memcpy(mac, replace_mac, 6);
 				return 1;
 			}
@@ -285,8 +285,8 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
 			mac = scan_tlv(&data[40], len-40, 2, 1);
 			if (mac) {
 				_DEBUG_INFO("Redirect,  replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
-					mac[0],mac[1],mac[2],mac[3],mac[4],mac[5],
-					replace_mac[0],replace_mac[1],replace_mac[2],replace_mac[3],replace_mac[4],replace_mac[5]);
+					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
 				memcpy(mac, replace_mac, 6);
 				return 1;
 			}
@@ -303,12 +303,12 @@ static void convert_ipv6_mac_to_mc(struct sk_buff *skb)
 
 	/* dst_mac[0] = 0xff; */
 	/* dst_mac[1] = 0xff; */
-	/*modified by qinjunjie,ipv6 multicast address ix 0x33-33-xx-xx-xx-xx*/
+	/*modified by qinjunjie, ipv6 multicast address ix 0x33-33-xx-xx-xx-xx*/
 	dst_mac[0] = 0x33;
 	dst_mac[1] = 0x33;
 	memcpy(&dst_mac[2], &iph->daddr.s6_addr32[3], 4);
 	#if defined(__LINUX_2_6__)
-	/*modified by qinjunjie,warning:should not remove next line*/
+	/*modified by qinjunjie, warning:should not remove next line*/
 	skb->pkt_type = PACKET_MULTICAST;
 	#endif
 }
@@ -368,7 +368,7 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 		unsigned long x = 0;
 		int i;
 
-		for (i=0; i<MAX_NETWORK_ADDR_LEN; i++)
+		for (i =0; i<MAX_NETWORK_ADDR_LEN; i++)
 			x ^= networkAddr[i];
 
 		return x & (NAT25_HASH_SIZE - 1);
@@ -540,7 +540,7 @@ void nat25_db_cleanup(struct adapter *priv)
 	unsigned long irqL;
 	spin_lock_bh(&priv->br_ext_lock);
 
-	for (i=0; i<NAT25_HASH_SIZE; i++)
+	for (i =0; i<NAT25_HASH_SIZE; i++)
 	{
 		struct nat25_network_db_entry *f;
 		f = priv->nethash[i];
@@ -573,7 +573,7 @@ void nat25_db_expire(struct adapter *priv)
 
 	/* if (!priv->ethBrExtInfo.nat25_disable) */
 	{
-		for (i=0; i<NAT25_HASH_SIZE; i++)
+		for (i =0; i<NAT25_HASH_SIZE; i++)
 		{
 			struct nat25_network_db_entry *f;
 			f = priv->nethash[i];
@@ -624,7 +624,7 @@ static int checkIPMcAndReplace(struct adapter *priv, struct sk_buff *skb, unsign
 		if (pstat->ipmc_num == 0)
 			continue;
 
-		for (i=0; i<MAX_IP_MC_ENTRY; i++) {
+		for (i =0; i<MAX_IP_MC_ENTRY; i++) {
 			if (pstat->ipmc[i].used && !memcmp(&pstat->ipmc[i].mcmac[3], ((unsigned char *)dst_ip)+1, 3)) {
 				memcpy(skb->data, pstat->ipmc[i].mcmac, ETH_ALEN);
 				return 1;
@@ -672,7 +672,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				/* in class A, B, C, host address is all zero or all one is illegal */
 				if (iph->saddr == 0)
 					return 0;
-				DEBUG_INFO("NAT25: Insert IP, SA=%08x, DA=%08x\n", iph->saddr, iph->daddr);
+				DEBUG_INFO("NAT25: Insert IP, SA =%08x, DA =%08x\n", iph->saddr, iph->daddr);
 				__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
 				/* record source IP address and , source mac address into db */
 				__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
@@ -683,7 +683,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 		case NAT25_LOOKUP:
 			{
-				DEBUG_INFO("NAT25: Lookup IP, SA=%08x, DA=%08x\n", iph->saddr, iph->daddr);
+				DEBUG_INFO("NAT25: Lookup IP, SA =%08x, DA =%08x\n", iph->saddr, iph->daddr);
 #ifdef SUPPORT_TX_MCAST2UNI
 				if (priv->pshare->rf_ft_var.mc2u_disable ||
 				    ((((OPMODE & (WIFI_STATION_STATE|WIFI_ASOC_STATE)) ==
@@ -704,7 +704,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 							/*  forward unknow IP packet to upper TCP/IP */
 							DEBUG_INFO("NAT25: Replace DA with BR's MAC\n");
 							if ( (*(u32 *)priv->br_mac) == 0 && (*(u16 *)(priv->br_mac+4)) == 0 ) {
-								printk("Re-init netdev_br_init() due to br_mac==0!\n");
+								printk("Re-init netdev_br_init() due to br_mac ==0!\n");
 								netdev_br_init(priv->pnetdev);
 							}
 							memcpy(skb->data, priv->br_mac, ETH_ALEN);
@@ -741,7 +741,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 			case NAT25_INSERT:
 				{
-					DEBUG_INFO("NAT25: Insert ARP, MAC=%02x%02x%02x%02x%02x%02x\n", arp_ptr[0],
+					DEBUG_INFO("NAT25: Insert ARP, MAC =%02x%02x%02x%02x%02x%02x\n", arp_ptr[0],
 						arp_ptr[1], arp_ptr[2], arp_ptr[3], arp_ptr[4], arp_ptr[5]);
 
 					/*  change to ARP sender mac address to wlan STA address */
@@ -797,14 +797,14 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 		if (protocol == ETH_P_IPX)
 		{
-			DEBUG_INFO("NAT25: Protocol=IPX (Ethernet II)\n");
+			DEBUG_INFO("NAT25: Protocol =IPX (Ethernet II)\n");
 			ipx = (struct ipxhdr *)framePtr;
 		}
 		else if (protocol <= ETH_FRAME_LEN)
 		{
 			if (!memcmp(ipx_header, framePtr, 2))
 			{
-				DEBUG_INFO("NAT25: Protocol=IPX (Ethernet 802.3)\n");
+				DEBUG_INFO("NAT25: Protocol =IPX (Ethernet 802.3)\n");
 				ipx = (struct ipxhdr *)framePtr;
 			}
 			else
@@ -824,7 +824,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 					{
 						framePtr += 5;	/*  eliminate the SNAP header */
 
-						DEBUG_INFO("NAT25: Protocol=IPX (Ethernet SNAP)\n");
+						DEBUG_INFO("NAT25: Protocol =IPX (Ethernet SNAP)\n");
 						ipx = (struct ipxhdr *)framePtr;
 					}
 					else if (!memcmp(aarp_snap_id, framePtr, 5))
@@ -841,7 +841,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 					}
 					else
 					{
-						DEBUG_WARN("NAT25: Protocol=Ethernet SNAP %02x%02x%02x%02x%02x\n", framePtr[0],
+						DEBUG_WARN("NAT25: Protocol =Ethernet SNAP %02x%02x%02x%02x%02x\n", framePtr[0],
 							framePtr[1], framePtr[2], framePtr[3], framePtr[4]);
 						return -1;
 					}
@@ -852,7 +852,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 					if (!memcmp(ipx_header, framePtr, 2))
 					{
-						DEBUG_INFO("NAT25: Protocol=IPX (Ethernet 802.2)\n");
+						DEBUG_INFO("NAT25: Protocol =IPX (Ethernet 802.2)\n");
 						ipx = (struct ipxhdr *)framePtr;
 					}
 					else
@@ -880,7 +880,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 				case NAT25_INSERT:
 					{
-						DEBUG_INFO("NAT25: Insert IPX, Dest=%08x,%02x%02x%02x%02x%02x%02x,%04x Source=%08x,%02x%02x%02x%02x%02x%02x,%04x\n",
+						DEBUG_INFO("NAT25: Insert IPX, Dest =%08x,%02x%02x%02x%02x%02x%02x,%04x Source =%08x,%02x%02x%02x%02x%02x%02x,%04x\n",
 							ipx->ipx_dest.net,
 							ipx->ipx_dest.node[0],
 							ipx->ipx_dest.node[1],
@@ -965,7 +965,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						/*  change to AARP source mac address to wlan STA address */
                                                 memcpy(ea->hw_src, GET_MY_HWADDR(priv), ETH_ALEN);
 
-						DEBUG_INFO("NAT25: Insert AARP, Source=%d,%d Destination=%d,%d\n",
+						DEBUG_INFO("NAT25: Insert AARP, Source =%d,%d Destination =%d,%d\n",
 							ea->pa_src_net,
 							ea->pa_src_node,
 							ea->pa_dst_net,
@@ -981,7 +981,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 				case NAT25_LOOKUP:
 					{
-						DEBUG_INFO("NAT25: Lookup AARP, Source=%d,%d Destination=%d,%d\n",
+						DEBUG_INFO("NAT25: Lookup AARP, Source =%d,%d Destination =%d,%d\n",
 							ea->pa_src_net,
 							ea->pa_src_node,
 							ea->pa_dst_net,
@@ -1011,7 +1011,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 				case NAT25_INSERT:
 					{
-						DEBUG_INFO("NAT25: Insert DDP, Source=%d,%d Destination=%d,%d\n",
+						DEBUG_INFO("NAT25: Insert DDP, Source =%d,%d Destination =%d,%d\n",
 							ddp->deh_snet,
 							ddp->deh_snode,
 							ddp->deh_dnet,
@@ -1027,7 +1027,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 				case NAT25_LOOKUP:
 					{
-						DEBUG_INFO("NAT25: Lookup DDP, Source=%d,%d Destination=%d,%d\n",
+						DEBUG_INFO("NAT25: Lookup DDP, Source =%d,%d Destination =%d,%d\n",
 							ddp->deh_snet,
 							ddp->deh_snode,
 							ddp->deh_dnet,
@@ -1071,7 +1071,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						if (priv->ethBrExtInfo.addPPPoETag) {
 							struct pppoe_tag *tag, *pOldTag;
 							unsigned char tag_buf[40];
-							int old_tag_len=0;
+							int old_tag_len =0;
 
 							tag = (struct pppoe_tag *)tag_buf;
 							pOldTag = (struct pppoe_tag *)__nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID));
@@ -1147,7 +1147,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						struct pppoe_tag *tag;
 						unsigned char *ptr;
 						unsigned short tagType, tagLen;
-						int offset=0;
+						int offset =0;
 
 						if ((ptr = __nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID))) == NULL) {
 							DEBUG_ERR("Fail to find PTT_RELAY_SID in FADO!\n");
@@ -1282,12 +1282,12 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 			case NAT25_INSERT:
 				{
-					DEBUG_INFO("NAT25: Insert IP, SA=%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x,"
-									" DA=%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x\n",
-						iph->saddr.s6_addr16[0],iph->saddr.s6_addr16[1],iph->saddr.s6_addr16[2],iph->saddr.s6_addr16[3],
-						iph->saddr.s6_addr16[4],iph->saddr.s6_addr16[5],iph->saddr.s6_addr16[6],iph->saddr.s6_addr16[7],
-						iph->daddr.s6_addr16[0],iph->daddr.s6_addr16[1],iph->daddr.s6_addr16[2],iph->daddr.s6_addr16[3],
-						iph->daddr.s6_addr16[4],iph->daddr.s6_addr16[5],iph->daddr.s6_addr16[6],iph->daddr.s6_addr16[7]);
+					DEBUG_INFO("NAT25: Insert IP, SA =%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x,"
+									" DA =%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x\n",
+						iph->saddr.s6_addr16[0], iph->saddr.s6_addr16[1], iph->saddr.s6_addr16[2], iph->saddr.s6_addr16[3],
+						iph->saddr.s6_addr16[4], iph->saddr.s6_addr16[5], iph->saddr.s6_addr16[6], iph->saddr.s6_addr16[7],
+						iph->daddr.s6_addr16[0], iph->daddr.s6_addr16[1], iph->daddr.s6_addr16[2], iph->daddr.s6_addr16[3],
+						iph->daddr.s6_addr16[4], iph->daddr.s6_addr16[5], iph->daddr.s6_addr16[6], iph->daddr.s6_addr16[7]);
 
 					if (memcmp(&iph->saddr, "\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0", 16)) {
 						__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->saddr);
@@ -1311,12 +1311,12 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				return 0;
 
 			case NAT25_LOOKUP:
-				DEBUG_INFO("NAT25: Lookup IP, SA=%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x,"
-								" DA=%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x\n",
-						iph->saddr.s6_addr16[0],iph->saddr.s6_addr16[1],iph->saddr.s6_addr16[2],iph->saddr.s6_addr16[3],
-						iph->saddr.s6_addr16[4],iph->saddr.s6_addr16[5],iph->saddr.s6_addr16[6],iph->saddr.s6_addr16[7],
-						iph->daddr.s6_addr16[0],iph->daddr.s6_addr16[1],iph->daddr.s6_addr16[2],iph->daddr.s6_addr16[3],
-						iph->daddr.s6_addr16[4],iph->daddr.s6_addr16[5],iph->daddr.s6_addr16[6],iph->daddr.s6_addr16[7]);
+				DEBUG_INFO("NAT25: Lookup IP, SA =%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x,"
+								" DA =%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x\n",
+						iph->saddr.s6_addr16[0], iph->saddr.s6_addr16[1], iph->saddr.s6_addr16[2], iph->saddr.s6_addr16[3],
+						iph->saddr.s6_addr16[4], iph->saddr.s6_addr16[5], iph->saddr.s6_addr16[6], iph->saddr.s6_addr16[7],
+						iph->daddr.s6_addr16[0], iph->daddr.s6_addr16[1], iph->daddr.s6_addr16[2], iph->daddr.s6_addr16[3],
+						iph->daddr.s6_addr16[4], iph->daddr.s6_addr16[5], iph->daddr.s6_addr16[6], iph->daddr.s6_addr16[7]);
 
 
 				__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->daddr);
@@ -1342,13 +1342,13 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 {
 	if (!(skb->data[0] & 1))
 	{
-		int is_vlan_tag=0, i, retval=0;
-		unsigned short vlan_hdr=0;
+		int is_vlan_tag =0, i, retval =0;
+		unsigned short vlan_hdr =0;
 
 		if (*((__be16 *)(skb->data+ETH_ALEN*2)) == __constant_htons(ETH_P_8021Q)) {
 			is_vlan_tag = 1;
 			vlan_hdr = *((unsigned short *)(skb->data+ETH_ALEN*2+2));
-			for (i=0; i<6; i++)
+			for (i =0; i<6; i++)
 				*((unsigned short *)(skb->data+ETH_ALEN*2+2-i*2)) = *((unsigned short *)(skb->data+ETH_ALEN*2-2-i*2));
 			skb_pull(skb, 4);
 		}
@@ -1387,7 +1387,7 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 
 		if (is_vlan_tag) {
 			skb_push(skb, 4);
-			for (i=0; i<6; i++)
+			for (i =0; i<6; i++)
 				*((__be16 *)(skb->data+i*2)) = *((__be16 *)(skb->data+4+i*2));
 			*((__be16 *)(skb->data+ETH_ALEN*2)) = __constant_htons(ETH_P_8021Q);
 			*((__be16 *)(skb->data+ETH_ALEN*2+2)) = cpu_to_be16(vlan_hdr);
