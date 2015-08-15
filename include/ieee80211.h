@@ -308,7 +308,7 @@ struct rtw_ieee80211_hdr {
 	u8 addr1[ETH_ALEN];
 	u8 addr2[ETH_ALEN];
 	u8 addr3[ETH_ALEN];
-	__le16 seq_ctl;
+	u16 seq_ctl;
 	u8 addr4[ETH_ALEN];
 } __attribute__ ((packed));
 
@@ -318,7 +318,7 @@ struct rtw_ieee80211_hdr_3addr {
 	u8 addr1[ETH_ALEN];
 	u8 addr2[ETH_ALEN];
 	u8 addr3[ETH_ALEN];
-	__le16 seq_ctl;
+	u16 seq_ctl;
 } __attribute__ ((packed));
 
 
@@ -328,19 +328,19 @@ struct rtw_ieee80211_hdr_qos {
 	u8 addr1[ETH_ALEN];
 	u8 addr2[ETH_ALEN];
 	u8 addr3[ETH_ALEN];
-	__le16 seq_ctl;
+	u16 seq_ctl;
 	u8 addr4[ETH_ALEN];
-	__le16	qc;
+	u16 qc;
 }  __attribute__ ((packed));
 
 struct rtw_ieee80211_hdr_3addr_qos {
         __le16 frame_ctl;
-	u16 duration_id;
+	__le16 duration_id;
 	u8 addr1[ETH_ALEN];
 	u8 addr2[ETH_ALEN];
 	u8 addr3[ETH_ALEN];
-	__le16 seq_ctl;
-       __le16     qc;
+	u16 seq_ctl;
+	u16 qc;
 }  __attribute__ ((packed));
 
 struct eapol {
