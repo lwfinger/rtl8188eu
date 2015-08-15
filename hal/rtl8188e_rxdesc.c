@@ -44,7 +44,7 @@ static void process_rssi(struct adapter *padapter,union recv_frame *prframe)
 	struct signal_stat * signal_stat = &padapter->recvpriv.signal_strength_data;
 
 
-	if(signal_stat->update_req) {
+	if (signal_stat->update_req) {
 		signal_stat->total_num = 0;
 		signal_stat->total_val = 0;
 		signal_stat->update_req = 0;
@@ -61,14 +61,14 @@ static void process_link_qual(struct adapter *padapter,union recv_frame *prframe
 	struct rx_pkt_attrib *pattrib;
 	struct signal_stat * signal_stat;
 
-	if(prframe == NULL || padapter==NULL){
+	if (prframe == NULL || padapter==NULL){
 		return;
 	}
 
 	pattrib = &prframe->u.hdr.attrib;
 	signal_stat = &padapter->recvpriv.signal_qual_data;
 
-	if(signal_stat->update_req) {
+	if (signal_stat->update_req) {
 		signal_stat->total_num = 0;
 		signal_stat->total_val = 0;
 		signal_stat->update_req = 0;
@@ -130,7 +130,7 @@ void update_recvframe_attrib_88e(
 	/*  update rx report to recv_frame attribute */
 	pattrib->pkt_rpt_type = (u8)((le32_to_cpu(report.rxdw3) >> 14) & 0x3);/* prxreport->rpt_sel; */
 
-	if(pattrib->pkt_rpt_type == NORMAL_RX)/* Normal rx packet */
+	if (pattrib->pkt_rpt_type == NORMAL_RX)/* Normal rx packet */
 	{
 		pattrib->pkt_len = (u16)(le32_to_cpu(report.rxdw0) &0x00003fff);/* u16)prxreport->pktlen; */
 		pattrib->drvinfo_sz = (u8)((le32_to_cpu(report.rxdw0) >> 16) & 0xf) * 8;/* u8)(prxreport->drvinfosize << 3); */
@@ -156,10 +156,10 @@ void update_recvframe_attrib_88e(
 		pattrib->icv_err = (u8)((le32_to_cpu(report.rxdw0) >> 15) & 0x1);/* u8)prxreport->icverr; */
 		pattrib->shift_sz = (u8)((le32_to_cpu(report.rxdw0) >> 24) & 0x3);
 
-	} else if(pattrib->pkt_rpt_type == TX_REPORT1) {/* CCX */
+	} else if (pattrib->pkt_rpt_type == TX_REPORT1) {/* CCX */
 		pattrib->pkt_len = TX_RPT1_PKT_LEN;
 		pattrib->drvinfo_sz = 0;
-	} else if(pattrib->pkt_rpt_type == TX_REPORT2) { /*  TX RPT */
+	} else if (pattrib->pkt_rpt_type == TX_REPORT2) { /*  TX RPT */
 		pattrib->pkt_len =(u16)(le32_to_cpu(report.rxdw0) & 0x3FF);/* Rx length[9:0] */
 		pattrib->drvinfo_sz = 0;
 
@@ -170,7 +170,7 @@ void update_recvframe_attrib_88e(
 		pattrib->MacIDValidEntry[1] = le32_to_cpu(report.rxdw5);
 
 	}
-	else if(pattrib->pkt_rpt_type == HIS_REPORT)/*  USB HISR RPT */
+	else if (pattrib->pkt_rpt_type == HIS_REPORT)/*  USB HISR RPT */
 	{
 		pattrib->pkt_len = (u16)(le32_to_cpu(report.rxdw0) &0x00003fff);/* u16)prxreport->pktlen; */
 	}
@@ -211,8 +211,8 @@ void update_recvframe_phyinfo_88e(
 
 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
 
-	if(pkt_info.bPacketBeacon){
-		if(check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE) == true){
+	if (pkt_info.bPacketBeacon){
+		if (check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE) == true){
 			sa = padapter->mlmepriv.cur_network.network.MacAddress;
 		}
 		else

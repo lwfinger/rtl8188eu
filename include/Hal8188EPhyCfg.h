@@ -330,7 +330,7 @@ storePwrIndexDiffRateOffset(
 
 #define	SIC_MAX_POLL_CNT		5
 
-#if(SIC_HW_SUPPORT == 1)
+#if (SIC_HW_SUPPORT == 1)
 #define	SIC_CMD_READY			0
 #define	SIC_CMD_PREWRITE		0x1
 #define	SIC_CMD_WRITE			0x40
@@ -353,7 +353,7 @@ storePwrIndexDiffRateOffset(
 #define	SIC_DATA_REG			0x1EC		/*  1bc~1bf */
 #endif
 
-#if(SIC_ENABLE == 1)
+#if (SIC_ENABLE == 1)
 void SIC_Init(IN struct adapter *Adapter);
 #endif
 

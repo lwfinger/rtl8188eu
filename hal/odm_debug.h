@@ -104,31 +104,31 @@
 
 #if DBG
 #define ODM_RT_TRACE(pDM_Odm, comp, level, fmt)									\
-		if(((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
+		if (((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
 		{																			\
-			if(pDM_Odm->SupportICType == ODM_RTL8192C)								\
+			if (pDM_Odm->SupportICType == ODM_RTL8192C)								\
 				DbgPrint("[ODM-92C] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8192D)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8192D)							\
 				DbgPrint("[ODM-92D] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8723A)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8723A)							\
 				DbgPrint("[ODM-8723A] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8188E)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8188E)							\
 				DbgPrint("[ODM-8188E] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8812)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8812)							\
 				DbgPrint("[ODM-8812] ");												\
-			else if(pDM_Odm->SupportICType == ODM_RTL8821)							\
+			else if (pDM_Odm->SupportICType == ODM_RTL8821)							\
 				DbgPrint("[ODM-8821] ");												\
 			RT_PRINTK fmt;															\
 		}
 
 #define ODM_RT_TRACE_F(pDM_Odm, comp, level, fmt)									\
-		if(((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
+		if (((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
 		{																			\
 			RT_PRINTK fmt;															\
 		}
 
 #define ODM_RT_ASSERT(pDM_Odm, expr, fmt)											\
-		if(!(expr)) {																	\
+		if (!(expr)) {																	\
 			DbgPrint( "Assertion failed! %s at ......\n", #expr);								\
 			DbgPrint( "      ......%s,%s,line=%d\n",__FILE__,__FUNCTION__,__LINE__);			\
 			RT_PRINTK fmt;															\
@@ -139,7 +139,7 @@
 #define ODM_dbg_trace(str) { DbgPrint("%s:%s\n", __FUNCTION__, str); }
 
 #define ODM_PRINT_ADDR(pDM_Odm, comp, level, title_str, ptr)						\
-			if(((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
+			if (((comp) & pDM_Odm->DebugComponents) && (level <= pDM_Odm->DebugLevel))	\
 			{																		\
 				int __i;																\
 				u8 *	__ptr = (u8 *)ptr;											\

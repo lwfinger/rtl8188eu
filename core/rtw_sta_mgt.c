@@ -95,7 +95,7 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 
 	pstapriv->pallocated_stainfo_buf = rtw_zvmalloc (sizeof(struct sta_info) * NUM_STA+ 4);
 
-	if(!pstapriv->pallocated_stainfo_buf)
+	if (!pstapriv->pallocated_stainfo_buf)
 		return _FAIL;
 
 	pstapriv->pstainfo_buf = pstapriv->pallocated_stainfo_buf + 4 -
@@ -207,7 +207,7 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 	struct recv_reorder_ctrl *preorder_ctrl;
 	int	index;
 
-	if(pstapriv){
+	if (pstapriv){
 		/*	delete all reordering_ctrl_timer		*/
 		spin_lock_bh(&pstapriv->sta_hash_lock);
 		for(index = 0; index < NUM_STA; index++)
@@ -233,7 +233,7 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 
 		rtw_mfree_sta_priv_lock(pstapriv);
 
-		if(pstapriv->pallocated_stainfo_buf) {
+		if (pstapriv->pallocated_stainfo_buf) {
 			rtw_vmfree(pstapriv->pallocated_stainfo_buf, sizeof(struct sta_info)*NUM_STA+4);
 		}
 	}
@@ -278,7 +278,7 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 
 		RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_info_,("rtw_alloc_stainfo: index  = %x", index));
 
-		if(index >= NUM_STA){
+		if (index >= NUM_STA){
 			RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_err_,("ERROR=> rtw_alloc_stainfo: index >= NUM_STA"));
 			psta= NULL;
 			goto exit;
@@ -505,7 +505,7 @@ void rtw_free_all_stainfo(struct adapter *padapter)
 
 ;
 
-	if(pstapriv->asoc_sta_count==1)
+	if (pstapriv->asoc_sta_count==1)
 		goto exit;
 
 	spin_lock_bh(&pstapriv->sta_hash_lock);
@@ -521,7 +521,7 @@ void rtw_free_all_stainfo(struct adapter *padapter)
 
 			plist = get_next(plist);
 
-			if(pbcmc_stainfo!=psta)
+			if (pbcmc_stainfo!=psta)
 				rtw_free_stainfo(padapter , psta);
 
 		}
@@ -553,10 +553,10 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 
 ;
 
-	if(hwaddr==NULL)
+	if (hwaddr==NULL)
 		return NULL;
 
-	if(IS_MCAST(hwaddr))
+	if (IS_MCAST(hwaddr))
 	{
 		addr = bc_addr;
 	}
@@ -606,7 +606,7 @@ u32 rtw_init_bcmc_stainfo(struct adapter* padapter)
 
 	psta = rtw_alloc_stainfo(pstapriv, bcast_addr);
 
-	if(psta==NULL){
+	if (psta==NULL){
 		res=_FAIL;
 		RT_TRACE(_module_rtl871x_sta_mgt_c_,_drv_err_,("rtw_alloc_stainfo fail"));
 		goto exit;
@@ -649,9 +649,9 @@ u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 		paclnode = LIST_CONTAINOR(plist, struct rtw_wlan_acl_node, list);
 		plist = get_next(plist);
 
-		if(_rtw_memcmp(paclnode->addr, mac_addr, ETH_ALEN))
+		if (_rtw_memcmp(paclnode->addr, mac_addr, ETH_ALEN))
 		{
-			if(paclnode->valid == true)
+			if (paclnode->valid == true)
 			{
 				match = true;
 				break;
@@ -661,11 +661,11 @@ u8 rtw_access_ctrl(struct adapter *padapter, u8 *mac_addr)
 	spin_unlock_bh(&(pacl_node_q->lock));
 
 
-	if(pacl_list->mode == 1)/* accept unless in deny list */
+	if (pacl_list->mode == 1)/* accept unless in deny list */
 	{
 		res = (match == true) ?  false:true;
 	}
-	else if(pacl_list->mode == 2)/* deny unless in accept list */
+	else if (pacl_list->mode == 2)/* deny unless in accept list */
 	{
 		res = (match == true) ?  true:false;
 	}

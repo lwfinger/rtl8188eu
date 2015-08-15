@@ -44,7 +44,7 @@ void rtl8188eu_init_recvbuf(struct adapter *padapter, struct recv_buf *precvbuf)
 
 	precvbuf->ref_cnt = 0;
 
-	if(precvbuf->pbuf)
+	if (precvbuf->pbuf)
 	{
 		precvbuf->pdata = precvbuf->phead = precvbuf->ptail = precvbuf->pbuf;
 		precvbuf->pend = precvbuf->pdata + MAX_RECVBUF_SZ;
@@ -64,13 +64,13 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-	if(precvpriv->int_in_urb == NULL){
+	if (precvpriv->int_in_urb == NULL){
 		res= _FAIL;
 		DBG_8192C("alloc_urb for interrupt in endpoint fail !!!!\n");
 		goto exit;
 	}
 	precvpriv->int_in_buf = rtw_zmalloc(INTERRUPT_MSG_FORMAT_LEN);
-	if(precvpriv->int_in_buf == NULL){
+	if (precvpriv->int_in_buf == NULL){
 		res= _FAIL;
 		DBG_8192C("alloc_mem for interrupt in endpoint fail !!!!\n");
 		goto exit;
@@ -81,7 +81,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 	_rtw_init_queue(&precvpriv->free_recv_buf_queue);
 
 	precvpriv->pallocated_recv_buf = rtw_zmalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4);
-	if(precvpriv->pallocated_recv_buf==NULL){
+	if (precvpriv->pallocated_recv_buf==NULL){
 		res= _FAIL;
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("alloc recv_buf fail!\n"));
 		goto exit;
@@ -100,7 +100,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 		precvbuf->alloc_sz = MAX_RECVBUF_SZ;
 
 		res = rtw_os_recvbuf_resource_alloc(padapter, precvbuf);
-		if(res==_FAIL)
+		if (res==_FAIL)
 			break;
 
 		precvbuf->ref_cnt = 0;
@@ -130,7 +130,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 		{
 			pskb = rtw_skb_alloc(MAX_RECVBUF_SZ + RECVBUFF_ALIGN_SZ);
 
-			if(pskb)
+			if (pskb)
 			{
 				pskb->dev = padapter->pnetdev;
 
@@ -164,14 +164,14 @@ void rtl8188eu_free_recv_priv (struct adapter *padapter)
 		precvbuf++;
 	}
 
-	if(precvpriv->pallocated_recv_buf)
+	if (precvpriv->pallocated_recv_buf)
 		rtw_mfree(precvpriv->pallocated_recv_buf, NR_RECVBUFF *sizeof(struct recv_buf) + 4);
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
-	if(precvpriv->int_in_urb)
+	if (precvpriv->int_in_urb)
 		usb_free_urb(precvpriv->int_in_urb);
 
-	if(precvpriv->int_in_buf)
+	if (precvpriv->int_in_buf)
 		rtw_mfree(precvpriv->int_in_buf, INTERRUPT_MSG_FORMAT_LEN);
 #endif/* CONFIG_USB_INTERRUPT_IN_PIPE */
 

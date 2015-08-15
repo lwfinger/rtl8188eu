@@ -89,7 +89,7 @@ int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitb
 
 	for(i=0; i<8; i++) {
 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
-		if(pxmitbuf->pxmit_urb[i] == NULL) {
+		if (pxmitbuf->pxmit_urb[i] == NULL) {
 			DBG_871X("pxmitbuf->pxmit_urb[i]==NULL");
 			return _FAIL;
 		}
@@ -107,14 +107,14 @@ void rtw_os_xmit_resource_free(struct adapter *padapter, struct xmit_buf *pxmitb
 
 	for(i=0; i<8; i++)
 	{
-		if(pxmitbuf->pxmit_urb[i])
+		if (pxmitbuf->pxmit_urb[i])
 		{
 			/* usb_kill_urb(pxmitbuf->pxmit_urb[i]); */
 			usb_free_urb(pxmitbuf->pxmit_urb[i]);
 		}
 	}
 
-	if(pxmitbuf->pallocated_buf)
+	if (pxmitbuf->pallocated_buf)
 		rtw_mfree(pxmitbuf->pallocated_buf, free_sz);
 }
 
@@ -128,13 +128,13 @@ void rtw_os_pkt_complete(struct adapter *padapter, struct sk_buff *pkt)
 
 	queue = skb_get_queue_mapping(pkt);
 	if (padapter->registrypriv.wifi_spec) {
-		if(__netif_subqueue_stopped(padapter->pnetdev, queue) &&
+		if (__netif_subqueue_stopped(padapter->pnetdev, queue) &&
 			(pxmitpriv->hwxmits[queue].accnt < WMM_XMIT_THRESHOLD))
 		{
 			netif_wake_subqueue(padapter->pnetdev, queue);
 		}
 	} else {
-		if(__netif_subqueue_stopped(padapter->pnetdev, queue))
+		if (__netif_subqueue_stopped(padapter->pnetdev, queue))
 			netif_wake_subqueue(padapter->pnetdev, queue);
 	}
 #else
@@ -147,7 +147,7 @@ void rtw_os_pkt_complete(struct adapter *padapter, struct sk_buff *pkt)
 
 void rtw_os_xmit_complete(struct adapter *padapter, struct xmit_frame *pxframe)
 {
-	if(pxframe->pkt)
+	if (pxframe->pkt)
 		rtw_os_pkt_complete(padapter, pxframe->pkt);
 
 	pxframe->pkt = NULL;
@@ -160,14 +160,14 @@ void rtw_os_xmit_schedule(struct adapter *padapter)
 	unsigned long  irqL;
 	struct xmit_priv *pxmitpriv;
 
-	if(!padapter)
+	if (!padapter)
 		return;
 
 	pxmitpriv = &padapter->xmitpriv;
 
 	spin_lock_bh(&pxmitpriv->lock);
 
-	if(rtw_txframes_pending(padapter))
+	if (rtw_txframes_pending(padapter))
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
 
 	spin_unlock_bh(&pxmitpriv->lock);
@@ -187,13 +187,13 @@ static void rtw_check_xmit_resource(struct adapter *padapter, struct sk_buff *pk
 			netif_stop_subqueue(padapter->pnetdev, queue);
 		}
 	} else {
-		if(pxmitpriv->free_xmitframe_cnt<=4) {
+		if (pxmitpriv->free_xmitframe_cnt<=4) {
 			if (!netif_tx_queue_stopped(netdev_get_tx_queue(padapter->pnetdev, queue)))
 				netif_stop_subqueue(padapter->pnetdev, queue);
 		}
 	}
 #else
-	if(pxmitpriv->free_xmitframe_cnt<=4)
+	if (pxmitpriv->free_xmitframe_cnt<=4)
 	{
 		if (!rtw_netif_queue_stopped(padapter->pnetdev))
 			rtw_netif_stop_queue(padapter->pnetdev);
@@ -235,7 +235,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
 
 	for (i = 0; i < chk_alive_num; i++) {
 		psta = rtw_get_stainfo_by_offset(pstapriv, chk_alive_list[i]);
-		if(!(psta->state &_FW_LINKED))
+		if (!(psta->state &_FW_LINKED))
 			continue;
 
 		/* avoid come from STA1 and send back STA1 */

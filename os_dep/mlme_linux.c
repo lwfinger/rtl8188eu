@@ -86,7 +86,7 @@ void rtw_os_indicate_connect(struct adapter *adapter)
 	rtw_indicate_wx_assoc_event(adapter);
 	netif_carrier_on(adapter->pnetdev);
 
-	if(adapter->pid[2] !=0)
+	if (adapter->pid[2] !=0)
 		rtw_signal_process(adapter->pid[2], SIGALRM);
 }
 
@@ -108,7 +108,7 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 
 	spin_lock_bh(&adapter->security_key_mutex);
 
-	if(adapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X)/* 802.1x */
+	if (adapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X)/* 802.1x */
 	{
 		/*  Added by Albert 2009/02/18 */
 		/*  We have to backup the PMK information for WiFi PMK Caching test item. */
@@ -142,7 +142,7 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 	}
 	else /* reset values in securitypriv */
 	{
-		/* if(adapter->mlmepriv.fw_state & WIFI_STATION_STATE) */
+		/* if (adapter->mlmepriv.fw_state & WIFI_STATION_STATE) */
 		/*  */
 		struct security_priv *psec_priv=&adapter->securitypriv;
 
@@ -182,7 +182,7 @@ void rtw_report_sec_ie(struct adapter *adapter,u8 authmode,u8 *sec_ie)
 	RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("+rtw_report_sec_ie, authmode=%d\n", authmode));
 
 	buff = NULL;
-	if(authmode==_WPA_IE_ID_) {
+	if (authmode==_WPA_IE_ID_) {
 		RT_TRACE(_module_mlme_osdep_c_,_drv_info_,("rtw_report_sec_ie, authmode=%d\n", authmode));
 
 		buff = rtw_malloc(IW_CUSTOM_MAX);
@@ -208,7 +208,7 @@ void rtw_report_sec_ie(struct adapter *adapter,u8 authmode,u8 *sec_ie)
 
 		wrqu.data.length = (wrqu.data.length<IW_CUSTOM_MAX) ? wrqu.data.length:IW_CUSTOM_MAX;
 
-		if(buff)
+		if (buff)
 		    rtw_mfree(buff, IW_CUSTOM_MAX);
 	}
 }
@@ -282,13 +282,13 @@ void rtw_indicate_sta_assoc_event(struct adapter *padapter, struct sta_info *pst
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	if(psta==NULL)
+	if (psta==NULL)
 		return;
 
-	if(psta->aid > NUM_STA)
+	if (psta->aid > NUM_STA)
 		return;
 
-	if(pstapriv->sta_aid[psta->aid - 1] != psta)
+	if (pstapriv->sta_aid[psta->aid - 1] != psta)
 		return;
 
 
@@ -304,13 +304,13 @@ void rtw_indicate_sta_disassoc_event(struct adapter *padapter, struct sta_info *
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	if(psta==NULL)
+	if (psta==NULL)
 		return;
 
-	if(psta->aid > NUM_STA)
+	if (psta->aid > NUM_STA)
 		return;
 
-	if(pstapriv->sta_aid[psta->aid - 1] != psta)
+	if (pstapriv->sta_aid[psta->aid - 1] != psta)
 		return;
 
 
@@ -342,7 +342,7 @@ static int mgnt_netdev_open(struct net_device *pnetdev)
 
 	init_usb_anchor(&phostapdpriv->anchored);
 
-	if(!rtw_netif_queue_stopped(pnetdev))
+	if (!rtw_netif_queue_stopped(pnetdev))
 		rtw_netif_start_queue(pnetdev);
 	else
 		rtw_netif_wake_queue(pnetdev);
@@ -419,7 +419,7 @@ int hostapd_mode_init(struct adapter *padapter)
 
 	pnetdev->watchdog_timeo = HZ; /* 1 second timeout */
 
-	if(dev_alloc_name(pnetdev,"mgnt.wlan%d") < 0)
+	if (dev_alloc_name(pnetdev,"mgnt.wlan%d") < 0)
 		DBG_871X("hostapd_mode_init(): dev_alloc_name, fail!\n");
 
 	mac[0]=0x00;
@@ -438,7 +438,7 @@ int hostapd_mode_init(struct adapter *padapter)
 	/* Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0) {
 		DBG_871X("hostapd_mode_init(): register_netdev fail!\n");
-		if(pnetdev)
+		if (pnetdev)
 			rtw_free_netdev(pnetdev);
 	}
 	return 0;

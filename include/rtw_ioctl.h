@@ -65,7 +65,7 @@
 #define OID_MP_SEG4		0xFF011100
 
 #define DEBUG_OID(dbg, str)			\
-       if((!dbg))							\
+       if ((!dbg))							\
 	{								\
 	   RT_TRACE(_module_rtl871x_ioctl_c_,_drv_info_,("%s(%d): %s", __FUNCTION__, __LINE__, str));	\
 	}

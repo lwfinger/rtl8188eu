@@ -231,7 +231,7 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
 		if (!strncasecmp(cmdstr, android_wifi_cmd_str[cmd_num],
 		    strlen(android_wifi_cmd_str[cmd_num])))
 #else
-		if(0 == strnicmp(cmdstr, android_wifi_cmd_str[cmd_num],
+		if (0 == strnicmp(cmdstr, android_wifi_cmd_str[cmd_num],
 		   strlen(android_wifi_cmd_str[cmd_num])))
 #endif
 			break;
@@ -246,7 +246,7 @@ static int rtw_android_get_rssi(struct net_device *net, char *command, int total
 	struct	wlan_network	*pcur_network = &pmlmepriv->cur_network;
 	int bytes_written = 0;
 
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == true) {
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 		bytes_written += snprintf(&command[bytes_written], total_len, "%s rssi %d",
 			pcur_network->network.Ssid.Ssid, padapter->recvpriv.rssi);
 	}
@@ -470,7 +470,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		/* 	wpa_cli driver wfd-enable */
 
 		pwfd_info = &padapter->wfd_info;
-		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
+		if ( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
 			pwfd_info->wfd_enable = true;
 		break;
 	case ANDROID_WIFI_CMD_WFD_DISABLE:
@@ -479,7 +479,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		/* 	wpa_cli driver wfd-disable */
 
 		pwfd_info = &padapter->wfd_info;
-		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
+		if ( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
 			pwfd_info->wfd_enable = false;
 		break;
 	case ANDROID_WIFI_CMD_WFD_SET_TCPPORT:
@@ -488,7 +488,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		/* 	wpa_cli driver wfd-set-tcpport = 554 */
 
 		pwfd_info = &padapter->wfd_info;
-		if( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
+		if ( padapter->wdinfo.driver_interface == DRIVER_CFG80211 )
 			pwfd_info->rtsp_ctrlport = (u16)get_int_from_command(priv_cmd.buf);
 		break;
 	case ANDROID_WIFI_CMD_WFD_SET_MAX_TPUT:

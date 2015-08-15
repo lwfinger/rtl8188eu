@@ -63,11 +63,11 @@ u8 ODM_GetRightChnlPlaceforIQK(u8 chnl)
 	u8	place = chnl;
 
 
-	if(chnl > 14)
+	if (chnl > 14)
 	{
 		for(place = 14; place<sizeof(channel_all); place++)
 		{
-			if(channel_all[place] == chnl)
+			if (channel_all[place] == chnl)
 			{
 				return place-13;
 			}

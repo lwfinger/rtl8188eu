@@ -577,7 +577,7 @@ __inline static void set_fwstate(struct mlme_priv *pmlmepriv, sint state)
 {
 	pmlmepriv->fw_state |= state;
 	/* FOR HW integration */
-	if(_FW_UNDER_SURVEY==state){
+	if (_FW_UNDER_SURVEY==state){
 		pmlmepriv->bScanInProcess = true;
 	}
 }
@@ -586,7 +586,7 @@ __inline static void _clr_fwstate_(struct mlme_priv *pmlmepriv, sint state)
 {
 	pmlmepriv->fw_state &= ~state;
 	/* FOR HW integration */
-	if(_FW_UNDER_SURVEY==state){
+	if (_FW_UNDER_SURVEY==state){
 		pmlmepriv->bScanInProcess = false;
 	}
 }

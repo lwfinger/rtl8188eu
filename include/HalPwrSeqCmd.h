@@ -43,7 +43,7 @@
      /*  value: the value to be polled, masked by the msd field. */
      /*  note: driver shall implement this cmd by */
      /*  do{ */
-     /*  if( (Read(offset) & msk) == (value & msk) ) */
+     /*  if ( (Read(offset) & msk) == (value & msk) ) */
      /*  break; */
      /*  } while(not timeout); */
 

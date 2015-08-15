@@ -68,7 +68,7 @@ u8 rtw_validate_ssid(struct ndis_802_11_ssid *ssid)
 	for(i = 0; i < ssid->SsidLength; i++)
 	{
 		/* wifi, printable ascii code must be supported */
-		if(!( (ssid->Ssid[i] >= 0x20) && (ssid->Ssid[i] <= 0x7e) )){
+		if (!( (ssid->Ssid[i] >= 0x20) && (ssid->Ssid[i] <= 0x7e) )){
 			RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_, ("ssid has nonprintabl ascii\n"));
 			ret= false;
 			break;
@@ -109,7 +109,7 @@ u8 rtw_do_join(struct adapter * padapter)
 
 	pmlmepriv->to_join = true;
 
-	if(_rtw_queue_empty(queue)== true)
+	if (_rtw_queue_empty(queue)== true)
 	{
 		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
 		_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
@@ -123,7 +123,7 @@ u8 rtw_do_join(struct adapter * padapter)
 		{
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_do_join(): site survey if scanned_queue is empty\n."));
 			/*  submit site_survey_cmd */
-			if(_SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ) {
+			if (_SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ) {
 				pmlmepriv->to_join = false;
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_do_join(): site survey return error\n."));
 			}
@@ -140,14 +140,14 @@ u8 rtw_do_join(struct adapter * padapter)
 	{
 		int select_ret;
 		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
-		if((select_ret=rtw_select_and_join_from_scanned_queue(pmlmepriv))==_SUCCESS)
+		if ((select_ret=rtw_select_and_join_from_scanned_queue(pmlmepriv))==_SUCCESS)
 		{
 			pmlmepriv->to_join = false;
 			_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
 		}
 		else
 		{
-			if(check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==true)
+			if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)==true)
 			{
 				/*  submit createbss_cmd to change to a ADHOC_MASTER */
 
@@ -165,7 +165,7 @@ u8 rtw_do_join(struct adapter * padapter)
 
 				rtw_generate_random_ibss(pibss);
 
-				if(rtw_createbss_cmd(padapter)!=_SUCCESS)
+				if (rtw_createbss_cmd(padapter)!=_SUCCESS)
 				{
 					RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("***Error=>do_goin: rtw_createbss_cmd status FAIL***\n "));
 					ret =  false;
@@ -182,12 +182,12 @@ u8 rtw_do_join(struct adapter * padapter)
 
 				/* when set_ssid/set_bssid for rtw_do_join(), but there are no desired bss in scanning queue */
 				/* we try to issue sitesurvey firstly */
-				if(pmlmepriv->LinkDetectInfo.bBusyTraffic==false
+				if (pmlmepriv->LinkDetectInfo.bBusyTraffic==false
 					|| rtw_to_roaming(padapter) > 0
 				)
 				{
 					/* DBG_871X("rtw_do_join() when   no desired bss in scanning queue\n"); */
-					if( _SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ){
+					if ( _SUCCESS!=(ret=rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0)) ){
 						pmlmepriv->to_join = false;
 						RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("do_join(): site survey return error\n."));
 					}
@@ -308,7 +308,7 @@ u8 rtw_set_802_11_ssid(struct adapter* padapter, struct ndis_802_11_ssid *ssid)
 	DBG_871X_LEVEL(_drv_always_, "set ssid [%s] fw_state=0x%08x\n",
 			ssid->Ssid, get_fwstate(pmlmepriv));
 
-	if(padapter->hw_init_completed==false){
+	if (padapter->hw_init_completed==false){
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
 			 ("set_ssid: hw_init_completed==false=>exit!!!\n"));
 		status = _FAIL;
@@ -332,13 +332,13 @@ u8 rtw_set_802_11_ssid(struct adapter* padapter, struct ndis_802_11_ssid *ssid)
 		if ((pmlmepriv->assoc_ssid.SsidLength == ssid->SsidLength) &&
 		    (_rtw_memcmp(&pmlmepriv->assoc_ssid.Ssid, ssid->Ssid, ssid->SsidLength) == true))
 		{
-			if((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == false))
+			if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == false))
 			{
 				RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
 					 ("Set SSID is the same ssid, fw_state=0x%08x\n",
 					  get_fwstate(pmlmepriv)));
 
-				if(rtw_is_same_ibss(padapter, pnetwork) == false) {
+				if (rtw_is_same_ibss(padapter, pnetwork) == false) {
 					/* if in WIFI_ADHOC_MASTER_STATE | WIFI_ADHOC_STATE, create bss or rejoin again */
 					rtw_disassoc_cmd(padapter, 0, true);
 
@@ -434,7 +434,7 @@ u8 rtw_set_802_11_connect(struct adapter* padapter, u8 *bssid, struct ndis_802_1
 		goto exit;
 	}
 
-	if(padapter->hw_init_completed==false){
+	if (padapter->hw_init_completed==false){
 		RT_TRACE(_module_rtl871x_ioctl_set_c_, _drv_err_,
 			 ("set_ssid: hw_init_completed==false=>exit!!!\n"));
 		status = _FAIL;
@@ -497,30 +497,30 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter* padapter,
 		 ("+rtw_set_802_11_infrastructure_mode: old=%d new=%d fw_state=0x%08x\n",
 		  *pold_state, networktype, get_fwstate(pmlmepriv)));
 
-	if(*pold_state != networktype)
+	if (*pold_state != networktype)
 	{
 		spin_lock_bh(&pmlmepriv->lock);
 
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,(" change mode!"));
 		/* DBG_871X("change mode, old_mode=%d, new_mode=%d, fw_state=0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv)); */
 
-		if(*pold_state==Ndis802_11APMode) {
+		if (*pold_state==Ndis802_11APMode) {
 			/* change to other mode from Ndis802_11APMode */
 			cur_network->join_res = -1;
 
 			stop_ap_mode(padapter);
 		}
 
-		if((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||(*pold_state==Ndis802_11IBSS))
+		if ((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||(*pold_state==Ndis802_11IBSS))
 			rtw_disassoc_cmd(padapter, 0, true);
 
-		if((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||
+		if ((check_fwstate(pmlmepriv, _FW_LINKED)== true) ||
 			(check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)== true) )
 			rtw_free_assoc_resources(padapter, 1);
 
-		if((*pold_state == Ndis802_11Infrastructure) ||(*pold_state == Ndis802_11IBSS))
+		if ((*pold_state == Ndis802_11Infrastructure) ||(*pold_state == Ndis802_11IBSS))
 	       {
-			if(check_fwstate(pmlmepriv, _FW_LINKED) == true)
+			if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 			{
 				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have chked whether  issue dis-assoc_cmd or not */
 			}
@@ -615,7 +615,7 @@ u8 rtw_set_802_11_bssid_list_scan(struct adapter* padapter, struct ndis_802_11_s
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_bssid_list_scan fail since fw_state = %x\n", get_fwstate(pmlmepriv)));
 		res = true;
 
-		if(check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))== true){
+		if (check_fwstate(pmlmepriv, (_FW_UNDER_SURVEY|_FW_UNDER_LINKING))== true){
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n###_FW_UNDER_SURVEY|_FW_UNDER_LINKING\n\n"));
 		} else {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n###pmlmepriv->sitesurveyctrl.traffic_busy==true\n\n"));
@@ -650,12 +650,12 @@ u8 rtw_set_802_11_authentication_mode(struct adapter* padapter, enum NDIS_802_11
 
 	RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_info_,("rtw_set_802_11_authentication_mode:psecuritypriv->ndisauthtype=%d", psecuritypriv->ndisauthtype));
 
-	if(psecuritypriv->ndisauthtype>3)
+	if (psecuritypriv->ndisauthtype>3)
 		psecuritypriv->dot11AuthAlgrthm=dot11AuthAlgrthm_8021X;
 
 	res=rtw_set_auth(padapter,psecuritypriv);
 
-	if(res==_SUCCESS)
+	if (res==_SUCCESS)
 		ret=true;
 	else
 		ret=false;
@@ -677,7 +677,7 @@ u8 rtw_set_802_11_add_wep(struct adapter* padapter, struct ndis_802_11_wep *wep)
 	btransmitkey= (wep->KeyIndex & 0x80000000) > 0 ? true  : false;	/* for ??? */
 	keyid=wep->KeyIndex & 0x3fffffff;
 
-	if(keyid>4)
+	if (keyid>4)
 	{
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("MgntActrtw_set_802_11_add_wep:keyid>4=>fail\n"));
 		ret=false;
@@ -718,7 +718,7 @@ u8 rtw_set_802_11_add_wep(struct adapter* padapter, struct ndis_802_11_wep *wep)
 
 	res=rtw_set_key(padapter,psecuritypriv, keyid, 1,true);
 
-	if(res==_FAIL)
+	if (res==_FAIL)
 		ret= false;
 exit:
 
@@ -744,7 +744,7 @@ u8 rtw_set_802_11_remove_wep(struct adapter* padapter, u32 keyindex){
 	{
 		int res;
 		struct security_priv* psecuritypriv=&(padapter->securitypriv);
-		if( keyindex < 4 ){
+		if ( keyindex < 4 ){
 
 			memset(&psecuritypriv->dot11DefKey[keyindex], 0, 16);
 
@@ -752,7 +752,7 @@ u8 rtw_set_802_11_remove_wep(struct adapter* padapter, u32 keyindex){
 
 			psecuritypriv->dot11DefKeylen[keyindex]=0;
 
-			if(res==_FAIL)
+			if (res==_FAIL)
 				ret=_FAIL;
 
 		}
@@ -793,7 +793,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		goto exit;
 	}
 
-	if(key->KeyIndex & 0x40000000)
+	if (key->KeyIndex & 0x40000000)
 	{
 		/*  Pairwise key */
 
@@ -802,7 +802,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		pbssid=get_bssid(&padapter->mlmepriv);
 		stainfo=rtw_get_stainfo(&padapter->stapriv, pbssid);
 
-		if((stainfo!=NULL)&&(padapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)){
+		if ((stainfo!=NULL)&&(padapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)){
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY:( stainfo!=NULL)&&(Adapter->securitypriv.dot11AuthAlgrthm==dot11AuthAlgrthm_8021X)\n"));
 			encryptionalgo=stainfo->dot118021XPrivacy;
 		}
@@ -815,11 +815,11 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11PrivacyAlgrthm ==%d)!\n",padapter->securitypriv.dot11PrivacyAlgrthm));
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (Adapter->securitypriv.dot11AuthAlgrthm ==%d)!\n",padapter->securitypriv.dot11AuthAlgrthm));
 
-		if((stainfo!=NULL)){
+		if ((stainfo!=NULL)){
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("rtw_set_802_11_add_key: (stainfo->dot118021XPrivacy ==%d)!\n", stainfo->dot118021XPrivacy));
 		}
 
-		if(key->KeyIndex & 0x000000FF){
+		if (key->KeyIndex & 0x000000FF){
 			/*  The key index is specified in the lower 8 bits by values of zero to 255. */
 			/*  The key index should be set to zero for a Pairwise key, and the driver should fail with */
 			/*  NDIS_STATUS_INVALID_DATA if the lower 8 bits is not zero */
@@ -837,8 +837,8 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		}
 
 		/*  Check key length for TKIP. */
-		/* if(encryptionAlgorithm == RT_ENC_TKIP_ENCRYPTION && key->KeyLength != 32) */
-		if((encryptionalgo== _TKIP_)&& (key->KeyLength != 32)){
+		/* if (encryptionAlgorithm == RT_ENC_TKIP_ENCRYPTION && key->KeyLength != 32) */
+		if ((encryptionalgo== _TKIP_)&& (key->KeyLength != 32)){
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("TKIP KeyLength:0x%x != 32\n", key->KeyLength));
 			ret=_FAIL;
 			goto exit;
@@ -846,9 +846,9 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		}
 
 		/*  Check key length for AES. */
-		if((encryptionalgo== _AES_)&& (key->KeyLength != 16)) {
+		if ((encryptionalgo== _AES_)&& (key->KeyLength != 16)) {
 			/*  For our supplicant, EAPPkt9x.vxd, cannot differentiate TKIP and AES case. */
-			if(key->KeyLength == 32) {
+			if (key->KeyLength == 32) {
 				key->KeyLength = 16;
 			} else {
 				ret= _FAIL;
@@ -878,7 +878,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: +++++ Group key +++++\n"));
 
 		/*  when add wep key through add key and didn't assigned encryption type before */
-		if((padapter->securitypriv.ndisauthtype<=3)&&(padapter->securitypriv.dot118021XGrpPrivacy==0))
+		if ((padapter->securitypriv.ndisauthtype<=3)&&(padapter->securitypriv.dot118021XGrpPrivacy==0))
 		{
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("keylen=%d( Adapter->securitypriv.dot11PrivacyAlgrthm=%x  )padapter->securitypriv.dot118021XGrpPrivacy(%x)\n", key->KeyLength,padapter->securitypriv.dot11PrivacyAlgrthm,padapter->securitypriv.dot118021XGrpPrivacy));
 
@@ -910,20 +910,20 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 
 		}
 
-		if((check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE)==true) && (IS_MAC_ADDRESS_BROADCAST(key->BSSID) == false)) {
+		if ((check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE)==true) && (IS_MAC_ADDRESS_BROADCAST(key->BSSID) == false)) {
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,(" IBSS but BSSID is not Broadcast Address.\n"));
 			ret= _FAIL;
 			goto exit;
 		}
 
 		/*  Check key length for TKIP */
-		if((encryptionalgo== _TKIP_) && (key->KeyLength != 32)) {
+		if ((encryptionalgo== _TKIP_) && (key->KeyLength != 32)) {
 
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,(" TKIP GTK KeyLength:%u != 32\n", key->KeyLength));
 			ret= _FAIL;
 			goto exit;
 
-		} else if(encryptionalgo== _AES_ && (key->KeyLength != 16 && key->KeyLength != 32) ) {
+		} else if (encryptionalgo== _AES_ && (key->KeyLength != 16 && key->KeyLength != 32) ) {
 
 			/*  Check key length for AES */
 			/*  For NDTEST, we allow keylen=32 in this case. 2005.01.27, by rcnjko. */
@@ -933,16 +933,16 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		}
 
 		/*  Change the key length for EAPPkt9x.vxd. Added by Annie, 2005-11-03. */
-		if((encryptionalgo==  _AES_) && (key->KeyLength == 32) ) {
+		if ((encryptionalgo==  _AES_) && (key->KeyLength == 32) ) {
 			key->KeyLength = 16;
 			RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("AES key length changed: %u\n", key->KeyLength) );
 		}
 
-		if(key->KeyIndex & 0x8000000) {/* error ??? 0x8000_0000 */
+		if (key->KeyIndex & 0x8000000) {/* error ??? 0x8000_0000 */
 			bgrouptkey = true;
 		}
 
-		if((check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE)==true)&&(check_fwstate(&padapter->mlmepriv, _FW_LINKED)==true))
+		if ((check_fwstate(&padapter->mlmepriv, WIFI_ADHOC_STATE)==true)&&(check_fwstate(&padapter->mlmepriv, _FW_LINKED)==true))
 		{
 			bgrouptkey = true;
 		}
@@ -959,7 +959,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 	}
 
 	/*  If WEP encryption algorithm, just call rtw_set_802_11_add_wep(). */
-	if((padapter->securitypriv.dot11AuthAlgrthm !=dot11AuthAlgrthm_8021X)&&(encryptionalgo== _WEP40_  || encryptionalgo== _WEP104_))
+	if ((padapter->securitypriv.dot11AuthAlgrthm !=dot11AuthAlgrthm_8021X)&&(encryptionalgo== _WEP40_  || encryptionalgo== _WEP104_))
 	{
 		u8 ret;
 		u32 keyindex;
@@ -987,10 +987,10 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 
 	}
 
-	if(key->KeyIndex & 0x20000000){
+	if (key->KeyIndex & 0x20000000){
 		/*  SetRSC */
 		RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("OID_802_11_ADD_KEY: +++++ SetRSC+++++\n"));
-		if(bgroup == true)
+		if (bgroup == true)
 		{
 			unsigned long long keysrc=key->KeyRSC & 0x00FFFFFFFFFFFFULL;
 			memcpy(&padapter->securitypriv.dot11Grprxpn, &keysrc, 8);
@@ -1005,16 +1005,16 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 
 	/*  Indicate this key idx is used for TX */
 	/*  Save the key in KeyMaterial */
-	if(bgroup == true) /*  Group transmit key */
+	if (bgroup == true) /*  Group transmit key */
 	{
 		int res;
 
-		if(bgrouptkey == true)
+		if (bgrouptkey == true)
 		{
 			padapter->securitypriv.dot118021XGrpKeyid=(u8)key->KeyIndex;
 		}
 
-		if((key->KeyIndex&0x3) == 0){
+		if ((key->KeyIndex&0x3) == 0){
 			ret = _FAIL;
 			goto exit;
 		}
@@ -1023,7 +1023,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		memset(&padapter->securitypriv.dot118021XGrptxmickey[(u8)((key->KeyIndex) & 0x03)], 0, 16);
 		memset(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], 0, 16);
 
-		if((key->KeyIndex & 0x10000000))
+		if ((key->KeyIndex & 0x10000000))
 		{
 			memcpy(&padapter->securitypriv.dot118021XGrptxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 16, 8);
 			memcpy(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 24, 8);
@@ -1063,7 +1063,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 
 		res=rtw_set_key(padapter,&padapter->securitypriv, key->KeyIndex, 1,true);
 
-		if(res==_FAIL)
+		if (res==_FAIL)
 			ret= _FAIL;
 
 		goto exit;
@@ -1076,13 +1076,13 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 		pbssid=get_bssid(&padapter->mlmepriv);
 		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid );
 
-		if(stainfo!=NULL)
+		if (stainfo!=NULL)
 		{
 			memset( &stainfo->dot118021x_UncstKey, 0, 16);/*  clear keybuffer */
 
 			memcpy(&stainfo->dot118021x_UncstKey, key->KeyMaterial, 16);
 
-			if(encryptionalgo== _TKIP_)
+			if (encryptionalgo== _TKIP_)
 			{
 				padapter->securitypriv.busetkipkey=false;
 
@@ -1091,7 +1091,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n ==========_set_timer\n"));
 
 				/*  if TKIP, save the Receive/Transmit MIC key in KeyMaterial[128-255] */
-				if((key->KeyIndex & 0x10000000)){
+				if ((key->KeyIndex & 0x10000000)){
 					memcpy(&stainfo->dot11tkiptxmickey, key->KeyMaterial + 16, 8);
 					memcpy(&stainfo->dot11tkiprxmickey, key->KeyMaterial + 24, 8);
 
@@ -1102,14 +1102,14 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 				}
 
 			}
-			else if(encryptionalgo == _AES_)
+			else if (encryptionalgo == _AES_)
 			{
 
 			}
 
 
 			/* Set key to CAM through H2C command */
-			if(bgrouptkey)/* never go to here */
+			if (bgrouptkey)/* never go to here */
 			{
 				res=rtw_setstakey_cmd(padapter, (unsigned char *)stainfo, false, true);
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n rtw_set_802_11_add_key:rtw_setstakey_cmd(group)\n"));
@@ -1119,7 +1119,7 @@ u8 rtw_set_802_11_add_key(struct adapter* padapter, struct ndis_802_11_key *key)
 				RT_TRACE(_module_rtl871x_ioctl_set_c_,_drv_err_,("\n rtw_set_802_11_add_key:rtw_setstakey_cmd(unicast)\n"));
 			}
 
-			if(res ==false)
+			if (res ==false)
 				ret= _FAIL;
 
 		}
@@ -1161,7 +1161,7 @@ u8 rtw_set_802_11_remove_key(struct adapter*	padapter, struct ndis_802_11_remove
 	} else {
 		pbssid=get_bssid(&padapter->mlmepriv);
 		stainfo=rtw_get_stainfo(&padapter->stapriv , pbssid );
-		if(stainfo !=NULL){
+		if (stainfo !=NULL){
 			encryptionalgo=stainfo->dot118021XPrivacy;
 
 			/*  clear key by BSSID */
@@ -1200,13 +1200,13 @@ u16 rtw_get_cur_max_rate(struct adapter *adapter)
 	u16	mcs_rate=0;
 	u32	ht_ielen = 0;
 
-	if((check_fwstate(pmlmepriv, _FW_LINKED) != true)
+	if ((check_fwstate(pmlmepriv, _FW_LINKED) != true)
 		&& (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) != true))
 		return 0;
 
 	if (pmlmeext->cur_wireless_mode & (WIRELESS_11_24N|WIRELESS_11_5N)) {
 		p = rtw_get_ie(&pcur_bss->IEs[12], _HT_CAPABILITY_IE_, &ht_ielen, pcur_bss->IELength-12);
-		if(p && ht_ielen>0)
+		if (p && ht_ielen>0)
 		{
 			pht_capie = (struct ieee80211_ht_cap *)(p+2);
 
@@ -1235,7 +1235,7 @@ u16 rtw_get_cur_max_rate(struct adapter *adapter)
 		while( (pcur_bss->SupportedRates[i]!=0) && (pcur_bss->SupportedRates[i]!=0xFF))
 		{
 			rate = pcur_bss->SupportedRates[i]&0x7F;
-			if(rate>max_rate)
+			if (rate>max_rate)
 				max_rate = rate;
 			i++;
 		}
@@ -1255,7 +1255,7 @@ u16 rtw_get_cur_max_rate(struct adapter *adapter)
 */
 int rtw_set_scan_mode(struct adapter *adapter, RT_SCAN_TYPE scan_mode)
 {
-	if(scan_mode != SCAN_ACTIVE && scan_mode != SCAN_PASSIVE)
+	if (scan_mode != SCAN_ACTIVE && scan_mode != SCAN_PASSIVE)
 		return _FAIL;
 
 	adapter->mlmepriv.scan_mode = scan_mode;
@@ -1294,15 +1294,15 @@ int rtw_set_country(struct adapter *adapter, const char *country_code)
 
 	/* TODO: should have a table to match country code and RT_CHANNEL_DOMAIN */
 	/* TODO: should consider 2-character and 3-character country code */
-	if(0 == strcmp(country_code, "US"))
+	if (0 == strcmp(country_code, "US"))
 		channel_plan = RT_CHANNEL_DOMAIN_FCC;
-	else if(0 == strcmp(country_code, "EU"))
+	else if (0 == strcmp(country_code, "EU"))
 		channel_plan = RT_CHANNEL_DOMAIN_ETSI;
-	else if(0 == strcmp(country_code, "JP"))
+	else if (0 == strcmp(country_code, "JP"))
 		channel_plan = RT_CHANNEL_DOMAIN_MKK;
-	else if(0 == strcmp(country_code, "CN"))
+	else if (0 == strcmp(country_code, "CN"))
 		channel_plan = RT_CHANNEL_DOMAIN_CHINA;
-	else if(0 == strcmp(country_code, "IN"))
+	else if (0 == strcmp(country_code, "IN"))
 		channel_plan = RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN;
 	else
 		DBG_871X("%s unknown country_code:%s\n", __FUNCTION__, country_code);

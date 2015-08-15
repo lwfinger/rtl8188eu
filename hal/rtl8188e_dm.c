@@ -59,7 +59,7 @@ static void dm_CheckPbcGPIO(struct adapter *padapter)
 	u8	tmp1byte;
 	u8	bPbcPressed = false;
 
-	if(!padapter->registrypriv.hw_wps_pbc)
+	if (!padapter->registrypriv.hw_wps_pbc)
 		return;
 
 	tmp1byte = rtw_read8(padapter, GPIO_IO_SEL);
@@ -82,7 +82,7 @@ static void dm_CheckPbcGPIO(struct adapter *padapter)
 	{
 		bPbcPressed = true;
 	}
-	if( true == bPbcPressed)
+	if ( true == bPbcPressed)
 	{
 		/*  Here we only set bPbcPressed to true */
 		/*  After trigger PBC, the variable will be set to false */
@@ -141,7 +141,7 @@ static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
 
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_PLATFORM,ODM_CE);
 
-	if(Adapter->interface_type == RTW_GSPI )
+	if (Adapter->interface_type == RTW_GSPI )
 		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_INTERFACE,ODM_ITRF_SDIO);
 	else
 		ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_INTERFACE,Adapter->interface_type);/* RTL871X_HCI_TYPE */
@@ -161,13 +161,13 @@ static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_BWIFI_TEST,Adapter->registrypriv.wifi_spec);
 
 
-	if(pHalData->rf_type == RF_1T1R){
+	if (pHalData->rf_type == RF_1T1R){
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_1T1R);
 	}
-	else if(pHalData->rf_type == RF_2T2R){
+	else if (pHalData->rf_type == RF_2T2R){
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_2T2R);
 	}
-	else if(pHalData->rf_type == RF_1T2R){
+	else if (pHalData->rf_type == RF_1T2R){
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_1T2R);
 	}
 
@@ -204,7 +204,7 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 		pdmpriv->InitODMFlag |= ODM_MAC_EDCA_TURBO;
 	}
 
-	if(pHalData->AntDivCfg)
+	if (pHalData->AntDivCfg)
 		pdmpriv->InitODMFlag |= ODM_BB_ANT_DIV;
 
 #if (MP_DRIVER==1)
@@ -288,11 +288,11 @@ rtl8188e_HalDmWatchDog(
 #ifdef CONFIG_P2P
 	/*  Fw is under p2p powersaving mode, driver should stop dynamic mechanism. */
 	/*  modifed by thomas. 2011.06.11. */
-	if(Adapter->wdinfo.p2p_ps_mode)
+	if (Adapter->wdinfo.p2p_ps_mode)
 		bFwPSAwake = false;
 #endif /* CONFIG_P2P */
 
-	if( (hw_init_completed == true)
+	if ( (hw_init_completed == true)
 		&& ((!bFwCurrentInPSMode) && bFwPSAwake))
 	{
 		/*  */
@@ -308,7 +308,7 @@ rtl8188e_HalDmWatchDog(
 		u8	bLinked=false;
 		u8   bsta_state = false;
 
-		if(rtw_linked_check(Adapter))
+		if (rtw_linked_check(Adapter))
 			bLinked = true;
 
 		ODM_CmnInfoUpdate(&pHalData->odmpriv ,ODM_CMNINFO_LINK, bLinked);
@@ -355,12 +355,12 @@ void	AntDivCompare8188E(struct adapter *Adapter, struct wlan_bssid_ex *dst, stru
 	/* struct adapter *Adapter = pDM_Odm->Adapter ; */
 
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	if(0 != pHalData->AntDivCfg )
+	if (0 != pHalData->AntDivCfg )
 	{
 		/* DBG_8192C("update_network=> orgRSSI(%d)(%d),newRSSI(%d)(%d)\n",dst->Rssi,query_rx_pwr_percentage(dst->Rssi), */
 		/* 	src->Rssi,query_rx_pwr_percentage(src->Rssi)); */
 		/* select optimum_antenna for before linked =>For antenna diversity */
-		if(dst->Rssi >=  src->Rssi )/* keep org parameter */
+		if (dst->Rssi >=  src->Rssi )/* keep org parameter */
 		{
 			src->Rssi = dst->Rssi;
 			src->PhyInfo.Optimum_antenna = dst->PhyInfo.Optimum_antenna;
@@ -378,19 +378,19 @@ u8 AntDivBeforeLink8188E(struct adapter *Adapter )
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
 
 	/*  Condition that does not need to use antenna diversity. */
-	if(pHalData->AntDivCfg==0)
+	if (pHalData->AntDivCfg==0)
 	{
 		/* DBG_8192C("odm_AntDivBeforeLink8192C(): No AntDiv Mechanism.\n"); */
 		return false;
 	}
 
-	if(check_fwstate(pmlmepriv, _FW_LINKED) == true)
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
 		return false;
 	}
 
 
-	if(pDM_SWAT_Table->SWAS_NoLink_State == 0){
+	if (pDM_SWAT_Table->SWAS_NoLink_State == 0){
 		/* switch channel */
 		pDM_SWAT_Table->SWAS_NoLink_State = 1;
 		pDM_SWAT_Table->CurAntenna = (pDM_SWAT_Table->CurAntenna==Antenna_A)?Antenna_B:Antenna_A;

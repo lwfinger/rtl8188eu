@@ -74,21 +74,21 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role);
 
 static inline void _rtw_p2p_set_state(struct wifidirect_info *wdinfo, enum P2P_STATE state)
 {
-	if(wdinfo->p2p_state != state) {
+	if (wdinfo->p2p_state != state) {
 		/* wdinfo->pre_p2p_state = wdinfo->p2p_state; */
 		wdinfo->p2p_state = state;
 	}
 }
 static inline void _rtw_p2p_set_pre_state(struct wifidirect_info *wdinfo, enum P2P_STATE state)
 {
-	if(wdinfo->pre_p2p_state != state) {
+	if (wdinfo->pre_p2p_state != state) {
 		wdinfo->pre_p2p_state = state;
 	}
 }
 
 static inline void _rtw_p2p_set_role(struct wifidirect_info *wdinfo, enum P2P_ROLE role)
 {
-	if(wdinfo->role != role) {
+	if (wdinfo->role != role) {
 		wdinfo->role = role;
 	}
 }

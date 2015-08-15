@@ -52,7 +52,7 @@ SwLedOn(
 	u8	LedCfg;
 	/* HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter); */
 
-	if( (padapter->bSurpriseRemoved == true) || ( padapter->bDriverStopped == true))
+	if ( (padapter->bSurpriseRemoved == true) || ( padapter->bDriverStopped == true))
 	{
 		return;
 	}
@@ -89,7 +89,7 @@ SwLedOff(
 	u8	LedCfg;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
-	if((padapter->bSurpriseRemoved == true) || ( padapter->bDriverStopped == true))
+	if ((padapter->bSurpriseRemoved == true) || ( padapter->bDriverStopped == true))
 	{
 		goto exit;
 	}
@@ -100,7 +100,7 @@ SwLedOff(
 	switch(pLed->LedPin)
 	{
 		case LED_PIN_LED0:
-			if(pHalData->bLedOpenDrain == true) /*  Open-drain arrangement for controlling the LED) */
+			if (pHalData->bLedOpenDrain == true) /*  Open-drain arrangement for controlling the LED) */
 			{
 				LedCfg &= 0x90; /*  Set to software control. */
 				rtw_write8(padapter, REG_LEDCFG2, (LedCfg|BIT3));

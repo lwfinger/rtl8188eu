@@ -61,12 +61,12 @@ Efuse_Read1ByteFromFakeContent(
 		u16		Offset,
 		u8		*Value	)
 {
-	if(Offset >= EFUSE_MAX_HW_SIZE)
+	if (Offset >= EFUSE_MAX_HW_SIZE)
 	{
 		return false;
 	}
 	/* DbgPrint("Read fake content, offset = %d\n", Offset); */
-	if(fakeEfuseBank == 0)
+	if (fakeEfuseBank == 0)
 		*Value = fakeEfuseContent[Offset];
 	else
 		*Value = fakeBTEfuseContent[fakeEfuseBank-1][Offset];
@@ -84,11 +84,11 @@ Efuse_Write1ByteToFakeContent(
 		u16		Offset,
 		u8		Value	)
 {
-	if(Offset >= EFUSE_MAX_HW_SIZE)
+	if (Offset >= EFUSE_MAX_HW_SIZE)
 	{
 		return false;
 	}
-	if(fakeEfuseBank == 0)
+	if (fakeEfuseBank == 0)
 		fakeEfuseContent[Offset] = Value;
 	else
 	{
@@ -158,10 +158,10 @@ u8
 Efuse_CalculateWordCnts(u8	word_en)
 {
 	u8 word_cnts = 0;
-	if(!(word_en & BIT(0)))	word_cnts++; /*  0 : write enable */
-	if(!(word_en & BIT(1)))	word_cnts++;
-	if(!(word_en & BIT(2)))	word_cnts++;
-	if(!(word_en & BIT(3)))	word_cnts++;
+	if (!(word_en & BIT(0)))	word_cnts++; /*  0 : write enable */
+	if (!(word_en & BIT(1)))	word_cnts++;
+	if (!(word_en & BIT(2)))	word_cnts++;
+	if (!(word_en & BIT(3)))	word_cnts++;
 	return word_cnts;
 }
 
@@ -188,7 +188,7 @@ ReadEFuseByte(
 	u16	retry;
 	/* u32 start=rtw_get_current_time(); */
 
-	if(bPseudoTest)
+	if (bPseudoTest)
 	{
 		Efuse_Read1ByteFromFakeContent(Adapter, _offset, pbuf);
 		return;
@@ -328,7 +328,7 @@ EFUSE_Read1Byte(
 		{
 			Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
 			k++;
-			if(k==1000)
+			if (k==1000)
 			{
 				k=0;
 				break;
@@ -378,7 +378,7 @@ EFUSE_Write1Byte(
 	/* RT_TRACE(COMP_EFUSE, DBG_LOUD, ("Addr=%x Data =%x\n", Address, Value)); */
 	EFUSE_GetEfuseDefinition(Adapter, EFUSE_WIFI , TYPE_EFUSE_REAL_CONTENT_LEN, (void *)&contentLen, false);
 
-	if( Address < contentLen)	/* E-fuse 512Byte */
+	if ( Address < contentLen)	/* E-fuse 512Byte */
 	{
 		rtw_write8(Adapter, EFUSE_CTRL, Value);
 
@@ -402,7 +402,7 @@ EFUSE_Write1Byte(
 		{
 			Bytetemp = rtw_read8(Adapter, EFUSE_CTRL+3);
 			k++;
-			if(k==100)
+			if (k==100)
 			{
 				k=0;
 				break;
@@ -422,7 +422,7 @@ efuse_OneByteRead(
 	u8	tmpidx = 0;
 	u8	bResult;
 
-	if(bPseudoTest)
+	if (bPseudoTest)
 	{
 		bResult = Efuse_Read1ByteFromFakeContent(pAdapter, addr, data);
 		return bResult;
@@ -439,7 +439,7 @@ efuse_OneByteRead(
 	{
 		tmpidx++;
 	}
-	if(tmpidx<100)
+	if (tmpidx<100)
 	{
 		*data=rtw_read8(pAdapter, EFUSE_CTRL);
 		bResult = true;
@@ -463,7 +463,7 @@ efuse_OneByteWrite(
 	u8	tmpidx = 0;
 	u8	bResult;
 
-	if(bPseudoTest)
+	if (bPseudoTest)
 	{
 		bResult = Efuse_Write1ByteToFakeContent(pAdapter, addr, data);
 		return bResult;
@@ -485,7 +485,7 @@ efuse_OneByteWrite(
 		tmpidx++;
 	}
 
-	if(tmpidx<100)
+	if (tmpidx<100)
 	{
 		bResult = true;
 	}
@@ -716,7 +716,7 @@ u8 rtw_efuse_map_write(struct adapter *padapter, u16 addr, u16 cnts, u8 *data)
 		return _FAIL;
 
 	map = rtw_zmalloc(mapLen);
-	if(map == NULL){
+	if (map == NULL){
 		return _FAIL;
 	}
 
@@ -814,7 +814,7 @@ u8 rtw_BT_efuse_map_write(struct adapter *padapter, u16 addr, u16 cnts, u8 *data
 		return _FAIL;
 
 	map = rtw_zmalloc(mapLen);
-	if(map == NULL){
+	if (map == NULL){
 		return _FAIL;
 	}
 

@@ -33,34 +33,34 @@ void dump_chip_info(struct hal_version	ChipVersion)
 	int cnt = 0;
 	u8 buf[128];
 
-	if(IS_81XXC(ChipVersion)){
+	if (IS_81XXC(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: %s_", IS_92C_SERIAL(ChipVersion)?"CHIP_8192C":"CHIP_8188C");
 	}
-	else if(IS_92D(ChipVersion)){
+	else if (IS_92D(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8192D_");
 	}
-	else if(IS_8723_SERIES(ChipVersion)){
+	else if (IS_8723_SERIES(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8723A_");
 	}
-	else if(IS_8188E(ChipVersion)){
+	else if (IS_8188E(ChipVersion)){
 		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8188E_");
 	}
 
 	cnt += sprintf((buf+cnt), "%s_", IS_NORMAL_CHIP(ChipVersion)?"Normal_Chip":"Test_Chip");
 	cnt += sprintf((buf+cnt), "%s_", IS_CHIP_VENDOR_TSMC(ChipVersion)?"TSMC":"UMC");
-	if(IS_A_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "A_CUT_");
-	else if(IS_B_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "B_CUT_");
-	else if(IS_C_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "C_CUT_");
-	else if(IS_D_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "D_CUT_");
-	else if(IS_E_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "E_CUT_");
-	else if(IS_I_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "I_CUT_");
-	else if(IS_J_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "J_CUT_");
-	else if(IS_K_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "K_CUT_");
+	if (IS_A_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "A_CUT_");
+	else if (IS_B_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "B_CUT_");
+	else if (IS_C_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "C_CUT_");
+	else if (IS_D_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "D_CUT_");
+	else if (IS_E_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "E_CUT_");
+	else if (IS_I_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "I_CUT_");
+	else if (IS_J_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "J_CUT_");
+	else if (IS_K_CUT(ChipVersion)) cnt += sprintf((buf+cnt), "K_CUT_");
 	else cnt += sprintf((buf+cnt), "UNKNOWN_CUT(%d)_", ChipVersion.CUTVersion);
 
-	if(IS_1T1R(ChipVersion)) cnt += sprintf((buf+cnt), "1T1R_");
-	else if(IS_1T2R(ChipVersion)) cnt += sprintf((buf+cnt), "1T2R_");
-	else if(IS_2T2R(ChipVersion)) cnt += sprintf((buf+cnt), "2T2R_");
+	if (IS_1T1R(ChipVersion)) cnt += sprintf((buf+cnt), "1T1R_");
+	else if (IS_1T2R(ChipVersion)) cnt += sprintf((buf+cnt), "1T2R_");
+	else if (IS_2T2R(ChipVersion)) cnt += sprintf((buf+cnt), "2T2R_");
 	else cnt += sprintf((buf+cnt), "UNKNOWN_RFTYPE(%d)_", ChipVersion.RFType);
 
 	cnt += sprintf((buf+cnt), "RomVer(%d)\n", ChipVersion.ROMVer);
@@ -151,7 +151,7 @@ void	HalSetBrateCfg(
 		is_brate = mBratesOS[i] & IEEE80211_BASIC_RATE_MASK;
 		brate = mBratesOS[i] & 0x7f;
 
-		if( is_brate )
+		if ( is_brate )
 		{
 			switch(brate)
 			{
@@ -198,7 +198,7 @@ _TwoOutPipeMapping(
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
 
-	if(bWIFICfg){ /* WMM */
+	if (bWIFICfg){ /* WMM */
 
 		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
 		/*   0,		1,	0,	1,	0,	0,	0,	0,		0	}; */
@@ -243,7 +243,7 @@ static void _ThreeOutPipeMapping(
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
 
-	if(bWIFICfg){/* for WMM */
+	if (bWIFICfg){/* for WMM */
 
 		/* 	BK,	BE,	VI,	VO,	BCN,	CMD,MGT,HIGH,HCCA */
 		/*   1,		2,	1,	0,	0,	0,	0,	0,		0	}; */
@@ -389,7 +389,7 @@ SetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *valu
 
 	switch(variable) {
 	case HW_DEF_FA_CNT_DUMP:
-		if(*((u8*)value))
+		if (*((u8*)value))
 			pDM_Odm->DebugComponents |= (ODM_COMP_DIG |ODM_COMP_FA_CNT);
 		else
 			pDM_Odm->DebugComponents &= ~(ODM_COMP_DIG |ODM_COMP_FA_CNT);

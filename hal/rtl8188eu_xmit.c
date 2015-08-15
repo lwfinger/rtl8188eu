@@ -163,19 +163,19 @@ static void fill_txdesc_vcs(struct pkt_attrib *pattrib, __le32 *pdw)
 			break;
 	}
 
-	if(pattrib->vcs_mode) {
+	if (pattrib->vcs_mode) {
 		*pdw |= cpu_to_le32(HW_RTS_EN);
 
 		/*  Set RTS BW */
-		if(pattrib->ht_en)
+		if (pattrib->ht_en)
 		{
 			*pdw |= (pattrib->bwmode&HT_CHANNEL_WIDTH_40)?	cpu_to_le32(BIT(27)):0;
 
-			if(pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_LOWER)
+			if (pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_LOWER)
 				*pdw |= cpu_to_le32((0x01<<28)&0x30000000);
-			else if(pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_UPPER)
+			else if (pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_UPPER)
 				*pdw |= cpu_to_le32((0x02<<28)&0x30000000);
-			else if(pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE)
+			else if (pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE)
 				*pdw |= 0;
 			else
 				*pdw |= cpu_to_le32((0x03<<28)&0x30000000);
@@ -187,15 +187,15 @@ static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
 {
 	/* DBG_8192C("bwmode=%d, ch_off=%d\n", pattrib->bwmode, pattrib->ch_offset); */
 
-	if(pattrib->ht_en)
+	if (pattrib->ht_en)
 	{
 		*pdw |= (pattrib->bwmode&HT_CHANNEL_WIDTH_40)?	cpu_to_le32(BIT(25)):0;
 
-		if(pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_LOWER)
+		if (pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_LOWER)
 			*pdw |= cpu_to_le32((0x01<<DATA_SC_SHT)&0x003f0000);
-		else if(pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_UPPER)
+		else if (pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_UPPER)
 			*pdw |= cpu_to_le32((0x02<<DATA_SC_SHT)&0x003f0000);
-		else if(pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE)
+		else if (pattrib->ch_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE)
 			*pdw |= 0;
 		else
 			*pdw |= cpu_to_le32((0x03<<DATA_SC_SHT)&0x003f0000);
@@ -221,7 +221,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 #endif /* CONFIG_P2P */
 
 	if (padapter->registrypriv.mp_mode == 0) {
-		if((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)==0)) {
+		if ((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)==0)) {
 			ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
 			pull = 1;
 		}
@@ -240,8 +240,8 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	if (bmcst) ptxdesc->txdw0 |= cpu_to_le32(BMC);
 
 	if (padapter->registrypriv.mp_mode == 0) {
-		if(!bagg_pkt) {
-			if((pull) && (pxmitframe->pkt_offset>0))
+		if (!bagg_pkt) {
+			if ((pull) && (pxmitframe->pkt_offset>0))
 				pxmitframe->pkt_offset = pxmitframe->pkt_offset -1;
 		}
 	}
@@ -252,7 +252,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	/* driver uses rate */
 	ptxdesc->txdw4 |= cpu_to_le32(USERATE);/* rate control always by driver */
 
-	if((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
+	if ((pxmitframe->frame_tag&0x0f) == DATA_FRAMETAG)
 	{
 		/* DBG_8192C("pxmitframe->frame_tag == DATA_FRAMETAG\n"); */
 
@@ -267,7 +267,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 
 		fill_txdesc_sectype(pattrib, ptxdesc);
 
-		if(pattrib->ampdu_en==true){
+		if (pattrib->ampdu_en==true){
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_EN);/* AGG EN */
 			ptxdesc->txdw6 = cpu_to_le32(0x6666f800);
 		} else{
@@ -305,14 +305,14 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			ptxdesc->txdw5 |= cpu_to_le32(0x0001ff00);/* DATA/RTS  Rate FB LMT */
 
 	#if (RATE_ADAPTIVE_SUPPORT == 1)
-			if(pattrib->ht_en){
-				if( ODM_RA_GetShortGI_8188E(&pHalData->odmpriv,pattrib->mac_id))
+			if (pattrib->ht_en){
+				if ( ODM_RA_GetShortGI_8188E(&pHalData->odmpriv,pattrib->mac_id))
 					ptxdesc->txdw5 |= cpu_to_le32(SGI);/* SGI */
 			}
 
 			data_rate =ODM_RA_GetDecisionRate_8188E(&pHalData->odmpriv,pattrib->mac_id);
 			/* for debug */
-			if(padapter->fix_rate!= 0xFF){
+			if (padapter->fix_rate!= 0xFF){
 
 				data_rate = padapter->fix_rate;
 				ptxdesc->txdw4 |= cpu_to_le32(DISDATAFB);
@@ -326,11 +326,11 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			#endif /* POWER_TRAINING_ACTIVE==1) */
 	#else/* if (RATE_ADAPTIVE_SUPPORT == 1) */
 
-			if(pattrib->ht_en)
+			if (pattrib->ht_en)
 				ptxdesc->txdw5 |= cpu_to_le32(SGI);/* SGI */
 
 			data_rate = 0x13; /* default rate: MCS7 */
-			 if(padapter->fix_rate!= 0xFF){/* rate control by iwpriv */
+			 if (padapter->fix_rate!= 0xFF){/* rate control by iwpriv */
 				data_rate = padapter->fix_rate;
 				ptxdesc->txdw4 | cpu_to_le32(DISDATAFB);
 			}
@@ -352,7 +352,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 
 			ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
 		}
-	} else if((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG) {
+	} else if ((pxmitframe->frame_tag&0x0f)== MGNT_FRAMETAG) {
 		/* offset 4 */
 		ptxdesc->txdw1 |= cpu_to_le32(pattrib->mac_id&0x3f);
 
@@ -378,13 +378,13 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 
 		/* offset 20 */
 		ptxdesc->txdw5 |= cpu_to_le32(RTY_LMT_EN);/* retry limit enable */
-		if(pattrib->retry_ctrl == true)
+		if (pattrib->retry_ctrl == true)
 			ptxdesc->txdw5 |= cpu_to_le32(0x00180000);/* retry limit = 6 */
 		else
 			ptxdesc->txdw5 |= cpu_to_le32(0x00300000);/* retry limit = 12 */
 
 #ifdef CONFIG_INTEL_PROXIM
-		if((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)){
+		if ((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)){
 			DBG_871X("\n %s pattrib->rate=%d\n",__FUNCTION__,pattrib->rate);
 			ptxdesc->txdw5 |= cpu_to_le32( pattrib->rate);
 		}
@@ -394,7 +394,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
 		}
 	}
-	else if((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG)
+	else if ((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG)
 	{
 		DBG_8192C("pxmitframe->frame_tag == TXAGG_FRAMETAG\n");
 	}
@@ -424,7 +424,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	/*  (2) Enable HW SEQ control for beacon packet, because we use Hw beacon. */
 	/*  (3) Use HW Qos SEQ to control the seq num of Ext port non-Qos packets. */
 	/*  2010.06.23. Added by tynli. */
-	if(!pattrib->qos_en)
+	if (!pattrib->qos_en)
 	{
 		ptxdesc->txdw3 |= cpu_to_le32(EN_HWSEQ); /*  Hw set sequence number */
 		ptxdesc->txdw4 |= cpu_to_le32(HW_SSN);	/*  Hw set sequence number */
@@ -478,7 +478,7 @@ static s32 rtw_dump_xframe(struct adapter *padapter, struct xmit_frame *pxmitfra
 
 		pull = update_txdesc(pxmitframe, mem_addr, sz, false);
 
-		if(pull)
+		if (pull)
 		{
 			mem_addr += PACKET_OFFSET_SZ; /* pull txdesc head */
 
@@ -525,7 +525,7 @@ static u32 xmitframe_need_length(struct xmit_frame *pxmitframe)
 		pattrib->pktlen +
 		((pattrib->bswenc) ? pattrib->icv_len : 0);
 
-	if(pattrib->encrypt ==_TKIP_)
+	if (pattrib->encrypt ==_TKIP_)
 		len += 8;
 
 	return len;
@@ -643,13 +643,13 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	/*  dequeue same priority packet from station tx queue */
 	/* psta = pfirstframe->attrib.psta; */
 	psta = rtw_get_stainfo(&padapter->stapriv, pfirstframe->attrib.ra);
-	if(pfirstframe->attrib.psta != psta){
+	if (pfirstframe->attrib.psta != psta){
 		DBG_871X("%s, pattrib->psta(%p) != psta(%p)\n", __func__, pfirstframe->attrib.psta, psta);
 	}
 	if (psta == NULL) {
 		DBG_8192C("rtw_xmit_classifier: psta == NULL\n");
 	}
-	if(!(psta->state &_FW_LINKED)){
+	if (!(psta->state &_FW_LINKED)){
 		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 	}
 
@@ -956,7 +956,7 @@ s32 rtl8188eu_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt)
 
 	pxmit_skb = rtw_skb_alloc(len + TXDESC_SIZE);
 
-	if(!pxmit_skb)
+	if (!pxmit_skb)
 		goto _exit;
 
 	pxmitbuf = pxmit_skb->data;
@@ -975,7 +975,7 @@ s32 rtl8188eu_hostap_mgnt_xmit_entry(struct adapter *padapter, _pkt *pkt)
 	ptxdesc->txdw0 |= cpu_to_le32(((TXDESC_SIZE+OFFSET_SZ)<<OFFSET_SHT)&0x00ff0000);/* default = 32 bytes for TX Desc */
 	ptxdesc->txdw0 |= cpu_to_le32(OWN | FSG | LSG);
 
-	if(bmcst)
+	if (bmcst)
 	{
 		ptxdesc->txdw0 |= cpu_to_le32(BIT(24));
 	}

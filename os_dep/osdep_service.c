@@ -35,7 +35,7 @@
 * @return: one of RTW_STATUS_CODE
 */
 inline int RTW_STATUS_CODE(int error_code){
-	if(error_code >=0)
+	if (error_code >=0)
 		return _SUCCESS;
 
 	switch(error_code) {
@@ -52,15 +52,15 @@ u32 rtw_atoi(u8* s)
 	int num=0,flag=0;
 	int i;
 	for(i=0;i<=strlen(s);i++) {
-		if(s[i] >= '0' && s[i] <= '9')
+		if (s[i] >= '0' && s[i] <= '9')
 			num = num * 10 + s[i] -'0';
-		else if(s[0] == '-' && i==0)
+		else if (s[0] == '-' && i==0)
 			flag =1;
 		else
 			break;
 	 }
 
-	if(flag == 1)
+	if (flag == 1)
 		num = num * -1;
 
 	return num;
@@ -235,7 +235,7 @@ void rtw_mstat_update(const enum mstat_f flags, const MSTAT_STATUS status, u32 s
 	int i;
 
 	/* initialization */
-	if(!update_time) {
+	if (!update_time) {
 		for(i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
 			ATOMIC_SET(&(rtw_mem_type_stat[i].alloc), 0);
 			ATOMIC_SET(&(rtw_mem_type_stat[i].peak), 0);
@@ -337,10 +337,10 @@ inline u8* dbg_rtw_malloc(u32 sz, const enum mstat_f flags, const char *func, co
 {
 	u8 *p;
 
-	/* if(sz>=153 && sz<=306) */
+	/* if (sz>=153 && sz<=306) */
 	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
-	/* if((sz)>4096) */
+	/* if ((sz)>4096) */
 	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
 	p=_rtw_malloc((sz));
@@ -358,10 +358,10 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const enum mstat_f flags, const char *func, c
 {
 	u8 *p;
 
-	/* if(sz>=153 && sz<=306) */
+	/* if (sz>=153 && sz<=306) */
 	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
-	/* if((sz)>4096) */
+	/* if ((sz)>4096) */
 	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
 	p = _rtw_zmalloc((sz));
@@ -377,10 +377,10 @@ inline u8* dbg_rtw_zmalloc(u32 sz, const enum mstat_f flags, const char *func, c
 
 inline void dbg_rtw_mfree(u8 *pbuf, u32 sz, const enum mstat_f flags, const char *func, const int line)
 {
-	/* if(sz>=153 && sz<=306) */
+	/* if (sz>=153 && sz<=306) */
 	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __FUNCTION__, (sz)); */
 
-	/* if((sz)>4096) */
+	/* if ((sz)>4096) */
 	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s(%p,%d)\n", func, line, __FUNCTION__, (pbuf), (sz)); */
 
 	_rtw_mfree((pbuf), (sz));
@@ -399,10 +399,10 @@ inline struct sk_buff * dbg_rtw_skb_alloc(unsigned int size, const enum mstat_f 
 
 	skb = _rtw_skb_alloc(size);
 
-	if(skb)
+	if (skb)
 		truesize = skb->truesize;
 
-	if(!skb || truesize < size /*|| size > 4096*/)
+	if (!skb || truesize < size /*|| size > 4096*/)
 		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%d), skb:%p, truesize=%u\n", func, line, __FUNCTION__, size, skb, truesize);
 
 	rtw_mstat_update(
@@ -418,7 +418,7 @@ inline void dbg_rtw_skb_free(struct sk_buff *skb, const enum mstat_f flags, cons
 {
 	unsigned int truesize = skb->truesize;
 
-	/* if(truesize > 4096) */
+	/* if (truesize > 4096) */
 	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize); */
 
 	_rtw_skb_free(skb);
@@ -437,10 +437,10 @@ inline struct sk_buff *dbg_rtw_skb_copy(const struct sk_buff *skb, const enum ms
 	unsigned int cp_truesize = 0;
 
 	skb_cp = _rtw_skb_copy(skb);
-	if(skb_cp)
+	if (skb_cp)
 		cp_truesize = skb_cp->truesize;
 
-	if(!skb_cp || cp_truesize != truesize /*||cp_truesize > 4096*/)
+	if (!skb_cp || cp_truesize != truesize /*||cp_truesize > 4096*/)
 		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%u), skb_cp:%p, cp_truesize=%u\n", func, line, __FUNCTION__, truesize, skb_cp, cp_truesize);
 
 	rtw_mstat_update(
@@ -459,10 +459,10 @@ inline struct sk_buff *dbg_rtw_skb_clone(struct sk_buff *skb, const enum mstat_f
 	unsigned int cl_truesize = 0;
 
 	skb_cl = _rtw_skb_clone(skb);
-	if(skb_cl)
+	if (skb_cl)
 		cl_truesize = skb_cl->truesize;
 
-	if(!skb_cl || cl_truesize != truesize /*|| cl_truesize > 4096*/)
+	if (!skb_cl || cl_truesize != truesize /*|| cl_truesize > 4096*/)
 		DBG_871X("DBG_MEM_ALLOC %s:%d %s(%u), skb_cl:%p, cl_truesize=%u\n", func, line, __FUNCTION__, truesize, skb_cl, cl_truesize);
 
 	rtw_mstat_update(
@@ -479,7 +479,7 @@ inline int dbg_rtw_netif_rx(struct  net_device * ndev, struct sk_buff *skb, cons
 	int ret;
 	unsigned int truesize = skb->truesize;
 
-	/* if(truesize > 4096) */
+	/* if (truesize > 4096) */
 	/* 	DBG_871X("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize); */
 
 	ret = _rtw_netif_rx(ndev, skb);
@@ -536,7 +536,7 @@ void* rtw_malloc2d(int h, int w, int size)
 	int j;
 
 	void **a = (void **) rtw_zmalloc( h*sizeof(void *) + h*w*size );
-	if(a == NULL)
+	if (a == NULL)
 	{
 		DBG_871X("%s: alloc memory fail!\n", __FUNCTION__);
 		return NULL;
@@ -892,7 +892,7 @@ static int openFile(struct file **fpp, char *path, int flag, int mode)
 	struct file *fp;
 
 	fp=filp_open(path, flag, mode);
-	if(IS_ERR(fp)) {
+	if (IS_ERR(fp)) {
 		*fpp=NULL;
 		return PTR_ERR(fp);
 	}
@@ -922,9 +922,9 @@ static int readFile(struct file *fp,char *buf,int len)
 
 	while(sum<len) {
 		rlen=fp->f_op->read(fp,(char __user *)buf+sum,len-sum, &fp->f_pos);
-		if(rlen>0)
+		if (rlen>0)
 			sum+=rlen;
-		else if(0 != rlen)
+		else if (0 != rlen)
 			return rlen;
 		else
 			break;
@@ -943,9 +943,9 @@ static int writeFile(struct file *fp,char *buf,int len)
 
 	while(sum<len) {
 		wlen=fp->f_op->write(fp,(char __user *)buf+sum,len-sum, &fp->f_pos);
-		if(wlen>0)
+		if (wlen>0)
 			sum+=wlen;
-		else if(0 != wlen)
+		else if (0 != wlen)
 			return wlen;
 		else
 			break;
@@ -968,13 +968,13 @@ static int isFileReadable(char *path)
 	char buf;
 
 	fp=filp_open(path, O_RDONLY, 0);
-	if(IS_ERR(fp)) {
+	if (IS_ERR(fp)) {
 		ret = PTR_ERR(fp);
 	}
 	else {
 		oldfs = get_fs(); set_fs(get_ds());
 
-		if(1!=readFile(fp, &buf, 1))
+		if (1!=readFile(fp, &buf, 1))
 			ret = PTR_ERR(fp);
 
 		set_fs(oldfs);
@@ -996,8 +996,8 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 	mm_segment_t oldfs;
 	struct file *fp;
 
-	if(path && buf) {
-		if( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
+	if (path && buf) {
+		if ( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
@@ -1030,8 +1030,8 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 	mm_segment_t oldfs;
 	struct file *fp;
 
-	if(path && buf) {
-		if( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
+	if (path && buf) {
+		if ( 0 == (ret=openFile(&fp, path, O_CREAT|O_WRONLY, 0666)) ) {
 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());
@@ -1058,7 +1058,7 @@ static int storeToFile(char *path, u8* buf, u32 sz)
 */
 int rtw_is_file_readable(char *path)
 {
-	if(isFileReadable(path) == 0)
+	if (isFileReadable(path) == 0)
 		return true;
 	else
 		return false;
@@ -1142,12 +1142,12 @@ void rtw_free_netdev(struct net_device * netdev)
 {
 	struct rtw_netdev_priv_indicator *pnpi;
 
-	if(!netdev)
+	if (!netdev)
 		goto RETURN;
 
 	pnpi = netdev_priv(netdev);
 
-	if(!pnpi->priv)
+	if (!pnpi->priv)
 		goto RETURN;
 
 	rtw_vmfree(pnpi->priv, pnpi->sizeof_priv);
@@ -1168,20 +1168,20 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 	struct rereg_nd_name_data *rereg_priv;
 	int ret;
 
-	if(!padapter)
+	if (!padapter)
 		goto error;
 
 	cur_pnetdev = padapter->pnetdev;
 	rereg_priv = &padapter->rereg_nd_name_priv;
 
 	/* free the old_pnetdev */
-	if(rereg_priv->old_pnetdev) {
+	if (rereg_priv->old_pnetdev) {
 		free_netdev(rereg_priv->old_pnetdev);
 		rereg_priv->old_pnetdev = NULL;
 	}
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
-	if(!rtnl_is_locked())
+	if (!rtnl_is_locked())
 		unregister_netdev(cur_pnetdev);
 	else
 #endif
@@ -1204,7 +1204,7 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
-	if(!rtnl_is_locked())
+	if (!rtnl_is_locked())
 		ret = register_netdev(pnetdev);
 	else
 #endif

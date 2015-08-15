@@ -213,7 +213,7 @@ void _rtw_read_port(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem)
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
 
-	if( (adapter->bDriverStopped) || (adapter->bSurpriseRemoved)) {
+	if ( (adapter->bDriverStopped) || (adapter->bSurpriseRemoved)) {
 		RT_TRACE(_module_rtl871x_io_c_, _drv_info_,
 			 ("rtw_read_port:bDriverStopped(%d) OR bSurpriseRemoved(%d)",
 			 adapter->bDriverStopped, adapter->bSurpriseRemoved));
@@ -233,7 +233,7 @@ void _rtw_read_port_cancel(struct adapter *adapter)
 
 	_read_port_cancel = pintfhdl->io_ops._read_port_cancel;
 
-	if(_read_port_cancel)
+	if (_read_port_cancel)
 		_read_port_cancel(pintfhdl);
 
 }
@@ -273,7 +273,7 @@ void _rtw_write_port_cancel(struct adapter *adapter)
 
 	_write_port_cancel = pintfhdl->io_ops._write_port_cancel;
 
-	if(_write_port_cancel)
+	if (_write_port_cancel)
 		_write_port_cancel(pintfhdl);
 
 }
@@ -304,7 +304,7 @@ int rtw_inc_and_chk_continual_io_error(struct dvobj_priv *dvobj)
 {
 	int ret = false;
 	int value;
-	if( (value=ATOMIC_INC_RETURN(&dvobj->continual_io_error)) > MAX_CONTINUAL_IO_ERR) {
+	if ( (value=ATOMIC_INC_RETURN(&dvobj->continual_io_error)) > MAX_CONTINUAL_IO_ERR) {
 		DBG_871X("[dvobj:%p][ERROR] continual_io_error:%d > %d\n", dvobj, value, MAX_CONTINUAL_IO_ERR);
 		ret = true;
 	} else {

@@ -209,7 +209,7 @@ do{\
 			encry_algo = (u8)psecuritypriv->dot11PrivacyAlgrthm;\
 			break;\
 		case dot11AuthAlgrthm_8021X:\
-			if(bmcst)\
+			if (bmcst)\
 				encry_algo = (u8)psecuritypriv->dot118021XGrpPrivacy;\
 			else\
 				encry_algo =(u8) psta->dot118021XPrivacy;\

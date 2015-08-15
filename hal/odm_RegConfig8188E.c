@@ -29,7 +29,7 @@ odm_ConfigRFReg_8188E(
 	u32				    RegAddr
 	)
 {
-    if(Addr == 0xffe)
+    if (Addr == 0xffe)
 	{
 		ODM_sleep_ms(50);
 	}

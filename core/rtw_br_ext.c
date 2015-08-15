@@ -81,7 +81,7 @@ static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, un
 		/*  prevent un-alignment access */
 		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
 		tagLen  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
-		if(tagType == type)
+		if (tagType == type)
 			return cur_ptr;
 		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
 	}
@@ -142,7 +142,7 @@ static __inline__ unsigned long __nat25_timeout(struct adapter *priv)
 static __inline__ int  __nat25_has_expired(struct adapter *priv,
 				struct nat25_network_db_entry *fdb)
 {
-	if(time_before_eq(fdb->ageing_timer, __nat25_timeout(priv)))
+	if (time_before_eq(fdb->ageing_timer, __nat25_timeout(priv)))
 		return 1;
 
 	return 0;
@@ -317,7 +317,7 @@ static void convert_ipv6_mac_to_mc(struct sk_buff *skb)
 
 static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 {
-	if(networkAddr[0] == NAT25_IPV4)
+	if (networkAddr[0] == NAT25_IPV4)
 	{
 		unsigned long x;
 
@@ -325,7 +325,7 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 
 		return x & (NAT25_HASH_SIZE - 1);
 	}
-	else if(networkAddr[0] == NAT25_IPX)
+	else if (networkAddr[0] == NAT25_IPX)
 	{
 		unsigned long x;
 
@@ -334,7 +334,7 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 
 		return x & (NAT25_HASH_SIZE - 1);
 	}
-	else if(networkAddr[0] == NAT25_APPLE)
+	else if (networkAddr[0] == NAT25_APPLE)
 	{
 		unsigned long x;
 
@@ -342,7 +342,7 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 
 		return x & (NAT25_HASH_SIZE - 1);
 	}
-	else if(networkAddr[0] == NAT25_PPPOE)
+	else if (networkAddr[0] == NAT25_PPPOE)
 	{
 		unsigned long x;
 
@@ -351,7 +351,7 @@ static __inline__ int __nat25_network_hash(unsigned char *networkAddr)
 		return x & (NAT25_HASH_SIZE - 1);
 	}
 #ifdef CL_IPV6_PASS
-	else if(networkAddr[0] == NAT25_IPV6)
+	else if (networkAddr[0] == NAT25_IPV6)
 	{
 		unsigned long x;
 
@@ -384,7 +384,7 @@ static __inline__ void __network_hash_link(struct adapter *priv,
 	/* spin_lock_bh(&priv->br_ext_lock); */
 
 	ent->next_hash = priv->nethash[hash];
-	if(ent->next_hash != NULL)
+	if (ent->next_hash != NULL)
 		ent->next_hash->pprev_hash = &ent->next_hash;
 	priv->nethash[hash] = ent;
 	ent->pprev_hash = &priv->nethash[hash];
@@ -400,7 +400,7 @@ static __inline__ void __network_hash_unlink(struct nat25_network_db_entry *ent)
 	/* spin_lock_bh(&priv->br_ext_lock); */
 
 	*(ent->pprev_hash) = ent->next_hash;
-	if(ent->next_hash != NULL)
+	if (ent->next_hash != NULL)
 		ent->next_hash->pprev_hash = ent->pprev_hash;
 	ent->next_hash = NULL;
 	ent->pprev_hash = NULL;
@@ -419,9 +419,9 @@ static int __nat25_db_network_lookup_and_replace(struct adapter *priv,
 	db = priv->nethash[__nat25_network_hash(networkAddr)];
 	while (db != NULL)
 	{
-		if(!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN))
+		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN))
 		{
-			if(!__nat25_has_expired(priv, db))
+			if (!__nat25_has_expired(priv, db))
 			{
 				/*  replace the destination mac address */
 				memcpy(skb->data, db->macAddr, ETH_ALEN);
@@ -498,7 +498,7 @@ static void __nat25_db_network_insert(struct adapter *priv,
 	db = priv->nethash[hash];
 	while (db != NULL)
 	{
-		if(!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN))
+		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN))
 		{
 			memcpy(db->macAddr, macAddr, ETH_ALEN);
 			db->ageing_timer = jiffies;
@@ -510,7 +510,7 @@ static void __nat25_db_network_insert(struct adapter *priv,
 	}
 
 	db = (struct nat25_network_db_entry *) rtw_malloc(sizeof(*db));
-	if(db == NULL) {
+	if (db == NULL) {
 		spin_unlock_bh(&priv->br_ext_lock);
 		return;
 	}
@@ -548,7 +548,7 @@ void nat25_db_cleanup(struct adapter *priv)
 			struct nat25_network_db_entry *g;
 
 			g = f->next_hash;
-			if(priv->scdb_entry == f)
+			if (priv->scdb_entry == f)
 			{
 				memset(priv->scdb_mac, 0, ETH_ALEN);
 				memset(priv->scdb_ip, 0, 4);
@@ -571,7 +571,7 @@ void nat25_db_expire(struct adapter *priv)
 	unsigned long irqL;
 	spin_lock_bh(&priv->br_ext_lock);
 
-	/* if(!priv->ethBrExtInfo.nat25_disable) */
+	/* if (!priv->ethBrExtInfo.nat25_disable) */
 	{
 		for (i=0; i<NAT25_HASH_SIZE; i++)
 		{
@@ -583,11 +583,11 @@ void nat25_db_expire(struct adapter *priv)
 				struct nat25_network_db_entry *g;
 				g = f->next_hash;
 
-				if(__nat25_has_expired(priv, f))
+				if (__nat25_has_expired(priv, f))
 				{
-					if(atomic_dec_and_test(&f->use_count))
+					if (atomic_dec_and_test(&f->use_count))
 					{
-						if(priv->scdb_entry == f)
+						if (priv->scdb_entry == f)
 						{
 							memset(priv->scdb_mac, 0, ETH_ALEN);
 							memset(priv->scdb_ip, 0, 4);
@@ -641,10 +641,10 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
 	u32 tmp;
 
-	if(skb == NULL)
+	if (skb == NULL)
 		return -1;
 
-	if((method <= NAT25_MIN) || (method >= NAT25_MAX))
+	if ((method <= NAT25_MIN) || (method >= NAT25_MAX))
 		return -1;
 
 	protocol = be16_to_cpu(*((__be16 *)(skb->data + 2 * ETH_ALEN)));
@@ -652,10 +652,10 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	/*---------------------------------------------------*/
 	/*                 Handle IP frame                   */
 	/*---------------------------------------------------*/
-	if(protocol == ETH_P_IP) {
+	if (protocol == ETH_P_IP) {
 		struct iphdr* iph = (struct iphdr *)(skb->data + ETH_HLEN);
 
-		if(((unsigned char*)(iph) + (iph->ihl<<2)) >= (skb->data + ETH_HLEN + skb->len))
+		if (((unsigned char*)(iph) + (iph->ihl<<2)) >= (skb->data + ETH_HLEN + skb->len))
 		{
 			DEBUG_WARN("NAT25: malformed IP packet !\n");
 			return -1;
@@ -722,13 +722,13 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	/*---------------------------------------------------*/
 	/*                 Handle ARP frame                  */
 	/*---------------------------------------------------*/
-	else if(protocol == ETH_P_ARP)
+	else if (protocol == ETH_P_ARP)
 	{
 		struct arphdr *arp = (struct arphdr *)(skb->data + ETH_HLEN);
 		unsigned char *arp_ptr = (unsigned char *)(arp + 1);
 		unsigned int *sender, *target;
 
-		if(arp->ar_pro != __constant_htons(ETH_P_IP))
+		if (arp->ar_pro != __constant_htons(ETH_P_IP))
 		{
 			DEBUG_WARN("NAT25: arp protocol unknown (%4x)!\n", htons(arp->ar_pro));
 			return -1;
@@ -786,7 +786,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	/*---------------------------------------------------*/
 	/*         Handle IPX and Apple Talk frame           */
 	/*---------------------------------------------------*/
-	else if((protocol == ETH_P_IPX) ||
+	else if ((protocol == ETH_P_IPX) ||
 		(protocol <= ETH_FRAME_LEN))
 	{
 		unsigned char ipx_header[2] = {0xFF, 0xFF};
@@ -795,14 +795,14 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		struct ddpehdr	*ddp = NULL;
 		unsigned char *framePtr = skb->data + ETH_HLEN;
 
-		if(protocol == ETH_P_IPX)
+		if (protocol == ETH_P_IPX)
 		{
 			DEBUG_INFO("NAT25: Protocol=IPX (Ethernet II)\n");
 			ipx = (struct ipxhdr *)framePtr;
 		}
-		else if(protocol <= ETH_FRAME_LEN)
+		else if (protocol <= ETH_FRAME_LEN)
 		{
-			if(!memcmp(ipx_header, framePtr, 2))
+			if (!memcmp(ipx_header, framePtr, 2))
 			{
 				DEBUG_INFO("NAT25: Protocol=IPX (Ethernet 802.3)\n");
 				ipx = (struct ipxhdr *)framePtr;
@@ -812,7 +812,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				unsigned char ipx_8022_type =  0xE0;
 				unsigned char snap_8022_type = 0xAA;
 
-				if(*framePtr == snap_8022_type)
+				if (*framePtr == snap_8022_type)
 				{
 					unsigned char ipx_snap_id[5] = {0x0, 0x0, 0x0, 0x81, 0x37};		/*  IPX SNAP ID */
 					unsigned char aarp_snap_id[5] = {0x00, 0x00, 0x00, 0x80, 0xF3};	/*  Apple Talk AARP SNAP ID */
@@ -820,20 +820,20 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 					framePtr += 3;	/*  eliminate the 802.2 header */
 
-					if(!memcmp(ipx_snap_id, framePtr, 5))
+					if (!memcmp(ipx_snap_id, framePtr, 5))
 					{
 						framePtr += 5;	/*  eliminate the SNAP header */
 
 						DEBUG_INFO("NAT25: Protocol=IPX (Ethernet SNAP)\n");
 						ipx = (struct ipxhdr *)framePtr;
 					}
-					else if(!memcmp(aarp_snap_id, framePtr, 5))
+					else if (!memcmp(aarp_snap_id, framePtr, 5))
 					{
 						framePtr += 5;	/*  eliminate the SNAP header */
 
 						ea = (struct elapaarp *)framePtr;
 					}
-					else if(!memcmp(ddp_snap_id, framePtr, 5))
+					else if (!memcmp(ddp_snap_id, framePtr, 5))
 					{
 						framePtr += 5;	/*  eliminate the SNAP header */
 
@@ -846,11 +846,11 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						return -1;
 					}
 				}
-				else if(*framePtr == ipx_8022_type)
+				else if (*framePtr == ipx_8022_type)
 				{
 					framePtr += 3;	/*  eliminate the 802.2 header */
 
-					if(!memcmp(ipx_header, framePtr, 2))
+					if (!memcmp(ipx_header, framePtr, 2))
 					{
 						DEBUG_INFO("NAT25: Protocol=IPX (Ethernet 802.2)\n");
 						ipx = (struct ipxhdr *)framePtr;
@@ -866,12 +866,12 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 			return -1;
 
 		/*   IPX   */
-		if(ipx != NULL)
+		if (ipx != NULL)
 		{
 			switch(method)
 			{
 				case NAT25_CHECK:
-					if(!memcmp(skb->data+ETH_ALEN, ipx->ipx_source.node, ETH_ALEN))
+					if (!memcmp(skb->data+ETH_ALEN, ipx->ipx_source.node, ETH_ALEN))
 					{
 						DEBUG_INFO("NAT25: Check IPX skb_copy\n");
 						return 0;
@@ -898,7 +898,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 							ipx->ipx_source.node[5],
 							ipx->ipx_source.sock);
 
-						if(!memcmp(skb->data+ETH_ALEN, ipx->ipx_source.node, ETH_ALEN))
+						if (!memcmp(skb->data+ETH_ALEN, ipx->ipx_source.node, ETH_ALEN))
 						{
 							DEBUG_INFO("NAT25: Use IPX Net, and Socket as network addr\n");
 
@@ -920,7 +920,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 				case NAT25_LOOKUP:
 					{
-                                                if(!memcmp(GET_MY_HWADDR(priv), ipx->ipx_dest.node, ETH_ALEN))
+                                                if (!memcmp(GET_MY_HWADDR(priv), ipx->ipx_dest.node, ETH_ALEN))
 						{
 							DEBUG_INFO("NAT25: Lookup IPX, Modify Destination IPX Node addr\n");
 
@@ -946,10 +946,10 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		}
 
 		/*   AARP   */
-		else if(ea != NULL)
+		else if (ea != NULL)
 		{
 			/* Sanity check fields. */
-			if(ea->hw_len != ETH_ALEN || ea->pa_len != AARP_PA_ALEN)
+			if (ea->hw_len != ETH_ALEN || ea->pa_len != AARP_PA_ALEN)
 			{
 				DEBUG_WARN("NAT25: Appletalk AARP Sanity check fail!\n");
 				return -1;
@@ -1002,7 +1002,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		}
 
 		/*   DDP   */
-		else if(ddp != NULL)
+		else if (ddp != NULL)
 		{
 			switch(method)
 			{
@@ -1050,7 +1050,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	/*---------------------------------------------------*/
 	/*                Handle PPPoE frame                 */
 	/*---------------------------------------------------*/
-	else if((protocol == ETH_P_PPP_DISC) ||
+	else if ((protocol == ETH_P_PPP_DISC) ||
 		(protocol == ETH_P_PPP_SES))
 	{
 		struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
@@ -1064,9 +1064,9 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				return 1;
 
 			case NAT25_INSERT:
-				if(ph->sid == 0)	/*  Discovery phase according to tag */
+				if (ph->sid == 0)	/*  Discovery phase according to tag */
 				{
-					if(ph->code == PADI_CODE || ph->code == PADR_CODE)
+					if (ph->code == PADI_CODE || ph->code == PADR_CODE)
 					{
 						if (priv->ethBrExtInfo.addPPPoETag) {
 							struct pppoe_tag *tag, *pOldTag;
@@ -1101,7 +1101,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 							memcpy(tag->tag_data+MAGIC_CODE_LEN, skb->data+ETH_ALEN, ETH_ALEN);
 
 							/* Add relay tag */
-							if(__nat25_add_pppoe_tag(skb, tag) < 0)
+							if (__nat25_add_pppoe_tag(skb, tag) < 0)
 								return -1;
 
 							DEBUG_INFO("NAT25: Insert PPPoE, forward %s packet\n",
@@ -1141,7 +1141,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				return 0;
 
 			case NAT25_LOOKUP:
-				if(ph->code == PADO_CODE || ph->code == PADS_CODE)
+				if (ph->code == PADO_CODE || ph->code == PADS_CODE)
 				{
 					if (priv->ethBrExtInfo.addPPPoETag) {
 						struct pppoe_tag *tag;
@@ -1149,7 +1149,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						unsigned short tagType, tagLen;
 						int offset=0;
 
-						if((ptr = __nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID))) == NULL) {
+						if ((ptr = __nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID))) == NULL) {
 							DEBUG_ERR("Fail to find PTT_RELAY_SID in FADO!\n");
 							return -1;
 						}
@@ -1158,7 +1158,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 						tagType = (unsigned short)((ptr[0] << 8) + ptr[1]);
 						tagLen = (unsigned short)((ptr[2] << 8) + ptr[3]);
 
-						if((tagType != ntohs(PTT_RELAY_SID)) || (tagLen < (MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN))) {
+						if ((tagType != ntohs(PTT_RELAY_SID)) || (tagLen < (MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN))) {
 							DEBUG_ERR("Invalid PTT_RELAY_SID tag length [%d]!\n", tagLen);
 							return -1;
 						}
@@ -1196,7 +1196,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 					}
 				}
 				else {
-					if(ph->sid != 0)
+					if (ph->sid != 0)
 					{
 						DEBUG_INFO("NAT25: Lookup PPPoE, lookup session packet from %s\n", skb->dev->name);
 						__nat25_generate_pppoe_network_addr(networkAddr, skb->data+ETH_ALEN, &(ph->sid));
@@ -1219,7 +1219,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	/*---------------------------------------------------*/
 	/*                 Handle EAP frame                  */
 	/*---------------------------------------------------*/
-	else if(protocol == 0x888e)
+	else if (protocol == 0x888e)
 	{
 		switch(method)
 		{
@@ -1240,7 +1240,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	/*---------------------------------------------------*/
 	/*         Handle C-Media proprietary frame          */
 	/*---------------------------------------------------*/
-	else if((protocol == 0xe2ae) ||
+	else if ((protocol == 0xe2ae) ||
 		(protocol == 0xe2af))
 	{
 		switch(method)
@@ -1263,7 +1263,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 	/*         Handle IPV6 frame								  */
 	/*---------------------------------------------------*/
 #ifdef CL_IPV6_PASS
-	else if(protocol == ETH_P_IPV6)
+	else if (protocol == ETH_P_IPV6)
 	{
 		struct ipv6hdr *iph = (struct ipv6hdr *)(skb->data + ETH_HLEN);
 
@@ -1340,7 +1340,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 
 int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 {
-	if(!(skb->data[0] & 1))
+	if (!(skb->data[0] & 1))
 	{
 		int is_vlan_tag=0, i, retval=0;
 		unsigned short vlan_hdr=0;
@@ -1393,7 +1393,7 @@ int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb)
 			*((__be16 *)(skb->data+ETH_ALEN*2+2)) = cpu_to_be16(vlan_hdr);
 		}
 
-		if(retval == -1) {
+		if (retval == -1) {
 			return -1;
 		}
 	}
@@ -1427,29 +1427,29 @@ struct dhcpMessage {
 
 void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
 {
-	if(skb == NULL)
+	if (skb == NULL)
 		return;
 
-	if(!priv->ethBrExtInfo.dhcp_bcst_disable) {
+	if (!priv->ethBrExtInfo.dhcp_bcst_disable) {
 		__be16 protocol = *((__be16 *)(skb->data + 2 * ETH_ALEN));
 
-		if(protocol == __constant_htons(ETH_P_IP)) /*  IP */
+		if (protocol == __constant_htons(ETH_P_IP)) /*  IP */
 		{
 			struct iphdr* iph = (struct iphdr *)(skb->data + ETH_HLEN);
 
-			if(iph->protocol == IPPROTO_UDP) /*  UDP */
+			if (iph->protocol == IPPROTO_UDP) /*  UDP */
 			{
 				struct udphdr *udph = (struct udphdr *)((SIZE_PTR)iph + (iph->ihl << 2));
 
-				if((udph->source == __constant_htons(CLIENT_PORT))
+				if ((udph->source == __constant_htons(CLIENT_PORT))
 					&& (udph->dest == __constant_htons(SERVER_PORT))) /*  DHCP request */
 				{
 					struct dhcpMessage *dhcph =
 						(struct dhcpMessage *)((SIZE_PTR)udph + sizeof(struct udphdr));
 
-					if(dhcph->cookie == DHCP_MAGIC) /*  match magic word */
+					if (dhcph->cookie == DHCP_MAGIC) /*  match magic word */
 					{
-						if(!(dhcph->flags & BROADCAST_FLAG)) /*  if not broadcast */
+						if (!(dhcph->flags & BROADCAST_FLAG)) /*  if not broadcast */
 						{
 							register int sum = 0;
 
@@ -1483,7 +1483,7 @@ void *scdb_findEntry(struct adapter *priv, unsigned char *macAddr,
 	db = priv->nethash[hash];
 	while (db != NULL)
 	{
-		if(!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
+		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
 			/* spin_unlock_bh(&priv->br_ext_lock); */
 			return (void *)db;
 		}

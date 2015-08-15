@@ -50,20 +50,20 @@ u8 sreset_get_wifi_status(struct adapter *padapter)
 	u8 status = WIFI_STATUS_SUCCESS;
 	u32 val32 = 0;
 	unsigned long irqL;
-	if(psrtpriv->silent_reset_inprogress == true)
+	if (psrtpriv->silent_reset_inprogress == true)
         {
 		return status;
 	}
 	val32 =rtw_read32(padapter,REG_TXDMA_STATUS);
-	if(val32==0xeaeaeaea){
+	if (val32==0xeaeaeaea){
 		psrtpriv->Wifi_Error_Status = WIFI_IF_NOT_EXIST;
 	}
-	else if(val32!=0){
+	else if (val32!=0){
 		DBG_8192C("txdmastatu(%x)\n",val32);
 		psrtpriv->Wifi_Error_Status = WIFI_MAC_TXDMA_ERROR;
 	}
 
-	if(WIFI_STATUS_SUCCESS !=psrtpriv->Wifi_Error_Status)
+	if (WIFI_STATUS_SUCCESS !=psrtpriv->Wifi_Error_Status)
 	{
 		DBG_8192C("==>%s error_status(0x%x)\n",__FUNCTION__,psrtpriv->Wifi_Error_Status);
 		status = (psrtpriv->Wifi_Error_Status &( ~(USB_READ_PORT_FAIL|USB_WRITE_PORT_FAIL)));
@@ -115,7 +115,7 @@ static void sreset_restore_security_station(struct adapter *padapter)
 		rtw_hal_set_hwreg(padapter, HW_VAR_SEC_CFG, (u8 *)(&val8));
 	}
 
-	if((padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_) ||
+	if ((padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_) ||
 		(padapter->securitypriv.dot11PrivacyAlgrthm == _AES_))
 	{
 		psta = rtw_get_stainfo(pstapriv, get_bssid(mlmepriv));
@@ -144,8 +144,8 @@ static void sreset_restore_network_station(struct adapter *padapter)
 		u8 threshold;
 		/*  TH=1 => means that invalidate usb rx aggregation */
 		/*  TH=0 => means that validate usb rx aggregation, use init value. */
-		if(mlmepriv->htpriv.ht_option) {
-			if(padapter->registrypriv.wifi_spec==1)
+		if (mlmepriv->htpriv.ht_option) {
+			if (padapter->registrypriv.wifi_spec==1)
 				threshold = 1;
 			else
 				threshold = 0;

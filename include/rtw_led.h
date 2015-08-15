@@ -173,7 +173,7 @@ struct led_priv{
 
 #define rtw_led_control(adapter, LedAction) \
 	do { \
-		if((adapter)->ledpriv.LedControlHandler) \
+		if ((adapter)->ledpriv.LedControlHandler) \
 			(adapter)->ledpriv.LedControlHandler((adapter), (LedAction)); \
 	} while(0)
 
