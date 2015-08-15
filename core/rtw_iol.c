@@ -219,7 +219,7 @@ int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame)
 u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame)
 {
 	u8 is_cmd_bndy = false;
-	if (((pxmit_frame->attrib.pktlen+32)%256) + 8 >= 256){
+	if (((pxmit_frame->attrib.pktlen+32)%256) + 8 >= 256) {
 		rtw_IOL_append_END_cmd(pxmit_frame);
 		pxmit_frame->attrib.pktlen = ((((pxmit_frame->attrib.pktlen+32)/256)+1)*256 );
 
@@ -236,7 +236,7 @@ void rtw_IOL_cmd_buf_dump(struct adapter *Adapter, int buf_len, u8 *pbuf)
 	int j =1;
 
 	printk("###### %s ######\n", __FUNCTION__);
-	for (i =0;i< buf_len;i++){
+	for (i =0;i< buf_len;i++) {
 		printk("%02x-",*(pbuf+i));
 
 		if (j%32 == 0) printk("\n");j++;

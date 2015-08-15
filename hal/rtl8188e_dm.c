@@ -161,13 +161,13 @@ static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
 	ODM_CmnInfoInit(pDM_Odm,ODM_CMNINFO_BWIFI_TEST,Adapter->registrypriv.wifi_spec);
 
 
-	if (pHalData->rf_type == RF_1T1R){
+	if (pHalData->rf_type == RF_1T1R) {
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_1T1R);
 	}
-	else if (pHalData->rf_type == RF_2T2R){
+	else if (pHalData->rf_type == RF_2T2R) {
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_2T2R);
 	}
-	else if (pHalData->rf_type == RF_1T2R){
+	else if (pHalData->rf_type == RF_1T2R) {
 		ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_RF_TYPE,ODM_1T2R);
 	}
 
@@ -390,7 +390,7 @@ u8 AntDivBeforeLink8188E(struct adapter *Adapter )
 	}
 
 
-	if (pDM_SWAT_Table->SWAS_NoLink_State == 0){
+	if (pDM_SWAT_Table->SWAS_NoLink_State == 0) {
 		/* switch channel */
 		pDM_SWAT_Table->SWAS_NoLink_State = 1;
 		pDM_SWAT_Table->CurAntenna = (pDM_SWAT_Table->CurAntenna==Antenna_A)?Antenna_B:Antenna_A;

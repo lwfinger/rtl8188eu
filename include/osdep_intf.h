@@ -92,8 +92,8 @@ u16 rtw_recv_select_queue(struct sk_buff *skb,
 void rtw_proc_init_one(struct net_device *dev);
 void rtw_proc_remove_one(struct net_device *dev);
 #else /* CONFIG_PROC_DEBUG */
-static void rtw_proc_init_one(struct net_device *dev){}
-static void rtw_proc_remove_one(struct net_device *dev){}
+static void rtw_proc_init_one(struct net_device *dev) {}
+static void rtw_proc_remove_one(struct net_device *dev) {}
 #endif /* CONFIG_PROC_DEBUG */
 
 void rtw_ips_dev_unload(struct adapter *padapter);

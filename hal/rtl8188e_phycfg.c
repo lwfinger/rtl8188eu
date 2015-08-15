@@ -145,7 +145,7 @@ sic_Read4Byte(
 		/* RTPRINT(FPHY, PHY_SICR, ("write cmdreg 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_READ)); */
 
 		retry = 4;
-		while (retry--){
+		while (retry--) {
 			rtw_udelay_os(50);
 			/* PlatformStallExecution(50); */
 		}
@@ -179,7 +179,7 @@ sic_Write4Byte(
 		rtw_write8(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8));
 		rtw_write32(Adapter, SIC_DATA_REG, (u32)data);
 		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_WRITE);
-		while (retry--){
+		while (retry--) {
 			rtw_udelay_os(50);
 		}
 	}
@@ -205,7 +205,7 @@ SIC_SetBBReg(
 
 	/* RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_SetBBReg(), mask=0x%x, addr[0x%x]=0x%x\n", BitMask, RegAddr, Data)); */
 
-	if (BitMask!= bMaskDWord){/* if not "double word" write */
+	if (BitMask!= bMaskDWord) {/* if not "double word" write */
 		OriginalValue = sic_Read4Byte(Adapter, RegAddr);
 		/* BitShift = sic_CalculateBitShift(BitMask); */
 		BitShift = phy_CalculateBitShift(BitMask);
@@ -360,7 +360,7 @@ rtl8188e_PHY_SetBBReg(
 	return;
 #endif
 
-	if (BitMask!= bMaskDWord){/* if not "double word" write */
+	if (BitMask!= bMaskDWord) {/* if not "double word" write */
 		OriginalValue = rtw_read32(Adapter, RegAddr);
 		BitShift = phy_CalculateBitShift(BitMask);
 		Data = ((OriginalValue & (~BitMask)) | ((Data << BitShift) & BitMask));
@@ -1066,7 +1066,7 @@ phy_BB8188E_Config_ParaFile(
 	if (HAL_STATUS_FAILURE ==ODM_ConfigBBWithHeaderFile(&pHalData->odmpriv, CONFIG_BB_PHY_REG))
 		rtStatus = _FAIL;
 
-	if (rtStatus != _SUCCESS){
+	if (rtStatus != _SUCCESS) {
 		/* RT_TRACE(COMP_INIT, DBG_SERIOUS, ("phy_BB8192S_Config_ParaFile():Write BB Reg Fail!!")); */
 		goto phy_BB8190_Config_ParaFile_Fail;
 	}
@@ -1090,7 +1090,7 @@ phy_BB8188E_Config_ParaFile(
 			rtStatus = _FAIL;
 	}
 
-	if (rtStatus != _SUCCESS){
+	if (rtStatus != _SUCCESS) {
 		/* RT_TRACE(COMP_INIT, DBG_SERIOUS, ("phy_BB8192S_Config_ParaFile():BB_PG Reg Fail!!")); */
 		goto phy_BB8190_Config_ParaFile_Fail;
 	}
@@ -1098,7 +1098,7 @@ phy_BB8188E_Config_ParaFile(
 	/*  3. BB AGC table Initialization */
 	if (HAL_STATUS_FAILURE ==ODM_ConfigBBWithHeaderFile(&pHalData->odmpriv,  CONFIG_BB_AGC_TAB))
 		rtStatus = _FAIL;
-	if (rtStatus != _SUCCESS){
+	if (rtStatus != _SUCCESS) {
 		/* RT_TRACE(COMP_FPGA, DBG_SERIOUS, ("phy_BB8192S_Config_ParaFile():AGC Table Fail\n")); */
 		goto phy_BB8190_Config_ParaFile_Fail;
 	}
@@ -1899,7 +1899,7 @@ static void phy_SpurCalibration_8188E(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
 	/* DbgPrint("===> phy_SpurCalibration_8188E  CurrentChannelBW = %d, CurrentChannel = %d\n", pHalData->CurrentChannelBW, pHalData->CurrentChannel); */
-	if (pHalData->CurrentChannelBW == 0 && pHalData->CurrentChannel == 13){
+	if (pHalData->CurrentChannelBW == 0 && pHalData->CurrentChannel == 13) {
 		PHY_SetBBReg(Adapter, rOFDM1_CFOTracking, BIT(28), 0x1); /* enable CSI Mask */
 		PHY_SetBBReg(Adapter, rOFDM1_csi_fix_mask, BIT(26)|BIT(25), 0x3); /* Fix CSI Mask Tone */
 	}
@@ -2220,7 +2220,7 @@ _PHY_DumpRFReg(struct adapter *pAdapter)
 
 	/* RTPRINT(FINIT, INIT_RF, ("PHY_DumpRFReg()====>\n")); */
 
-	for (rfRegOffset = 0x00;rfRegOffset<=0x30;rfRegOffset++){
+	for (rfRegOffset = 0x00;rfRegOffset<=0x30;rfRegOffset++) {
 		rfRegValue = PHY_QueryRFReg(pAdapter,RF_PATH_A, rfRegOffset, bMaskDWord);
 		/* RTPRINT(FINIT, INIT_RF, (" 0x%02x = 0x%08x\n",rfRegOffset,rfRegValue)); */
 	}

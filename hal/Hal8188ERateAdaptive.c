@@ -182,11 +182,11 @@ odm_RateDown_8188E(
 		RateID = LowestRate;
 	}
 RateDownFinish:
-	if (pRaInfo->RAWaitingCounter==1){
+	if (pRaInfo->RAWaitingCounter==1) {
 		pRaInfo->RAWaitingCounter+=1;
 		pRaInfo->RAPendingCounter+=1;
 	}
-	else if (pRaInfo->RAWaitingCounter== 0){
+	else if (pRaInfo->RAWaitingCounter== 0) {
 	}
 	else{
 		pRaInfo->RAWaitingCounter=0;
@@ -225,11 +225,11 @@ odm_RateUp_8188E(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,
 				(" RateID=%d HighestRate=%d\n",
 				RateID, HighestRate));
-	if (pRaInfo->RAWaitingCounter==1){
+	if (pRaInfo->RAWaitingCounter==1) {
 		pRaInfo->RAWaitingCounter=0;
 		pRaInfo->RAPendingCounter=0;
 	}
-	else if (pRaInfo->RAWaitingCounter>1){
+	else if (pRaInfo->RAWaitingCounter>1) {
 		pRaInfo->PreRssiStaRA=pRaInfo->RssiStaRA;
 		goto RateUpfinish;
 	}
@@ -273,7 +273,7 @@ RateUpfinish:
 	return 0;
 }
 
-static void odm_ResetRaCounter_8188E(PODM_RA_INFO_T  pRaInfo){
+static void odm_ResetRaCounter_8188E(PODM_RA_INFO_T  pRaInfo) {
 	u8 RateID;
 	RateID=pRaInfo->DecisionRate;
 	pRaInfo->NscUp=(N_THRESHOLD_HIGH[RateID]+N_THRESHOLD_LOW[RateID])>>1;
@@ -294,7 +294,7 @@ odm_RateDecision_8188E(
 
 	if (pRaInfo->Active && (pRaInfo->TOTAL > 0)) /*  STA used and data packet exits */
 	{
-		if ( (pRaInfo->RssiStaRA<(pRaInfo->PreRssiStaRA-3))|| (pRaInfo->RssiStaRA>(pRaInfo->PreRssiStaRA+3))){
+		if ( (pRaInfo->RssiStaRA<(pRaInfo->PreRssiStaRA-3))|| (pRaInfo->RssiStaRA>(pRaInfo->PreRssiStaRA+3))) {
 			pRaInfo->RAWaitingCounter=0;
 			pRaInfo->RAPendingCounter=0;
 		}
@@ -381,7 +381,7 @@ odm_ARFBRefresh_8188E(
 	u32 MaskFromReg;
 	s8 i;
 
-	switch (pRaInfo->RateID){
+	switch (pRaInfo->RateID) {
 		case RATR_INX_WIRELESS_NGB:
 			pRaInfo->RAUseRate=(pRaInfo->RateMask)&0x0f8ff015;
 			break;
@@ -425,10 +425,10 @@ odm_ARFBRefresh_8188E(
 			break;
 	}
 	/*  Highest rate */
-	if (pRaInfo->RAUseRate){
+	if (pRaInfo->RAUseRate) {
 		for (i=RATESIZE;i>=0;i--)
 		{
-			if ((pRaInfo->RAUseRate)&BIT(i)){
+			if ((pRaInfo->RAUseRate)&BIT(i)) {
 				pRaInfo->HighestRate=i;
 				break;
 			}
@@ -438,7 +438,7 @@ odm_ARFBRefresh_8188E(
 		pRaInfo->HighestRate=0;
 	}
 	/*  Lowest rate */
-	if (pRaInfo->RAUseRate){
+	if (pRaInfo->RAUseRate) {
 		for (i=0;i<RATESIZE;i++)
 		{
 			if ((pRaInfo->RAUseRate)&BIT(i))
@@ -588,7 +588,7 @@ odm_RATxRPTTimerSetting(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE,(" =====>odm_RATxRPTTimerSetting()\n"));
 
 
-	if (pDM_Odm->CurrminRptTime != minRptTime){
+	if (pDM_Odm->CurrminRptTime != minRptTime) {
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD,
 		(" CurrminRptTime =0x%04x minRptTime=0x%04x\n", pDM_Odm->CurrminRptTime, minRptTime));
 		rtw_rpt_timer_cfg_cmd(pDM_Odm->Adapter,minRptTime);
@@ -622,11 +622,11 @@ ODM_RAInfo_Init(
 	PODM_RA_INFO_T pRaInfo = &pDM_Odm->RAInfo[MacID];
 	u8 WirelessMode=0xFF; /* invalid value */
 	u8 max_rate_idx = 0x13; /* MCS7 */
-	if (pDM_Odm->pWirelessMode!=NULL){
+	if (pDM_Odm->pWirelessMode!=NULL) {
 		WirelessMode=*(pDM_Odm->pWirelessMode);
 	}
 
-	if (WirelessMode != 0xFF ){
+	if (WirelessMode != 0xFF ) {
 		if (WirelessMode & ODM_WM_N24G)
 			max_rate_idx = 0x13;
 		else if (WirelessMode & ODM_WM_G)
@@ -854,11 +854,11 @@ ODM_RA_TxRPT2Handle_8188E(
 							MacIDValidEntry0 ,
 							MacIDValidEntry1));
 #if POWER_TRAINING_ACTIVE == 1
-				if (pRAInfo->PTActive){
-					if (pRAInfo->RAstage<5){
+				if (pRAInfo->PTActive) {
+					if (pRAInfo->RAstage<5) {
 						odm_RateDecision_8188E(pDM_Odm,pRAInfo);
 					}
-					else if (pRAInfo->RAstage==5){  /*  Power training try state */
+					else if (pRAInfo->RAstage==5) {  /*  Power training try state */
 						odm_PTTryState_8188E(pRAInfo);
 					}
 					else {/*  RAstage==6 */

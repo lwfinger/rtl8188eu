@@ -62,7 +62,7 @@ static void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 		/* Clear first */
 		ptxdesc->txdw7 &= cpu_to_le32(0xffff0000);
 
-		for (index = 0 ; index < count ; index++){
+		for (index = 0 ; index < count ; index++) {
 			checksum = checksum ^ le16_to_cpu(*(__le16 *)(usPtr + index));
 		}
 
@@ -267,7 +267,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 
 		fill_txdesc_sectype(pattrib, ptxdesc);
 
-		if (pattrib->ampdu_en==true){
+		if (pattrib->ampdu_en==true) {
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_EN);/* AGG EN */
 			ptxdesc->txdw6 = cpu_to_le32(0x6666f800);
 		} else{
@@ -286,7 +286,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			ptxdesc->txdw4 |= cpu_to_le32(QOS);/* QoS */
 
 		/* offset 20 */
-		if (pxmitframe->agg_num > 1){
+		if (pxmitframe->agg_num > 1) {
 			/* DBG_8192C("%s agg_num:%d\n",__FUNCTION__,pxmitframe->agg_num ); */
 			ptxdesc->txdw5 |= cpu_to_le32((pxmitframe->agg_num << USB_TXAGG_NUM_SHT) & 0xFF000000);
 		}
@@ -305,14 +305,14 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			ptxdesc->txdw5 |= cpu_to_le32(0x0001ff00);/* DATA/RTS  Rate FB LMT */
 
 	#if (RATE_ADAPTIVE_SUPPORT == 1)
-			if (pattrib->ht_en){
+			if (pattrib->ht_en) {
 				if ( ODM_RA_GetShortGI_8188E(&pHalData->odmpriv,pattrib->mac_id))
 					ptxdesc->txdw5 |= cpu_to_le32(SGI);/* SGI */
 			}
 
 			data_rate =ODM_RA_GetDecisionRate_8188E(&pHalData->odmpriv,pattrib->mac_id);
 			/* for debug */
-			if (padapter->fix_rate!= 0xFF){
+			if (padapter->fix_rate!= 0xFF) {
 
 				data_rate = padapter->fix_rate;
 				ptxdesc->txdw4 |= cpu_to_le32(DISDATAFB);
@@ -330,7 +330,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 				ptxdesc->txdw5 |= cpu_to_le32(SGI);/* SGI */
 
 			data_rate = 0x13; /* default rate: MCS7 */
-			 if (padapter->fix_rate!= 0xFF){/* rate control by iwpriv */
+			 if (padapter->fix_rate!= 0xFF) {/* rate control by iwpriv */
 				data_rate = padapter->fix_rate;
 				ptxdesc->txdw4 | cpu_to_le32(DISDATAFB);
 			}
@@ -384,7 +384,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 			ptxdesc->txdw5 |= cpu_to_le32(0x00300000);/* retry limit = 12 */
 
 #ifdef CONFIG_INTEL_PROXIM
-		if ((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)){
+		if ((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)) {
 			DBG_871X("\n %s pattrib->rate=%d\n",__FUNCTION__,pattrib->rate);
 			ptxdesc->txdw5 |= cpu_to_le32( pattrib->rate);
 		}
@@ -567,7 +567,7 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	/*  check xmitbuffer is ok */
 	if (pxmitbuf == NULL) {
 		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
-		if (pxmitbuf == NULL){
+		if (pxmitbuf == NULL) {
 			/* DBG_871X("%s #1, connot alloc xmitbuf!!!!\n",__FUNCTION__); */
 			return false;
 		}
@@ -643,13 +643,13 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	/*  dequeue same priority packet from station tx queue */
 	/* psta = pfirstframe->attrib.psta; */
 	psta = rtw_get_stainfo(&padapter->stapriv, pfirstframe->attrib.ra);
-	if (pfirstframe->attrib.psta != psta){
+	if (pfirstframe->attrib.psta != psta) {
 		DBG_871X("%s, pattrib->psta(%p) != psta(%p)\n", __func__, pfirstframe->attrib.psta, psta);
 	}
 	if (psta == NULL) {
 		DBG_8192C("rtw_xmit_classifier: psta == NULL\n");
 	}
-	if (!(psta->state &_FW_LINKED)){
+	if (!(psta->state &_FW_LINKED)) {
 		DBG_871X("%s, psta->state(0x%x) != _FW_LINKED\n", __func__, psta->state);
 	}
 

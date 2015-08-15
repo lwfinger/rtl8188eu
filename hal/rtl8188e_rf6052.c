@@ -674,7 +674,7 @@ phy_RF6052_Config_ParaFile(
 			break;
 		}
 
-		if (rtStatus != _SUCCESS){
+		if (rtStatus != _SUCCESS) {
 			/* RT_TRACE(COMP_FPGA, DBG_LOUD, ("phy_RF6052_Config_ParaFile():Radio[%d] Fail!!", eRFPath)); */
 			goto phy_RF6052_Config_ParaFile_Fail;
 		}

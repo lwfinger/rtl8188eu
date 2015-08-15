@@ -69,7 +69,7 @@ sint	_rtw_init_mlme_priv (struct adapter* padapter)
 
 	pbuf = rtw_zvmalloc(MAX_BSS_CNT * (sizeof(struct wlan_network)));
 
-	if (pbuf == NULL){
+	if (pbuf == NULL) {
 		res =_FAIL;
 		goto exit;
 	}
@@ -323,7 +323,7 @@ struct wlan_network *_rtw_find_network(struct  __queue *scanned_queue, u8 *addr)
 
 ;
 
-	if (_rtw_memcmp(zero_addr, addr, ETH_ALEN)){
+	if (_rtw_memcmp(zero_addr, addr, ETH_ALEN)) {
 		pnetwork =NULL;
 		goto exit;
 	}
@@ -399,7 +399,7 @@ sint rtw_if_up(struct adapter *padapter)	{
 ;
 
 	if ( padapter->bDriverStopped || padapter->bSurpriseRemoved ||
-		(check_fwstate(&padapter->mlmepriv, _FW_LINKED) == false)){
+		(check_fwstate(&padapter->mlmepriv, _FW_LINKED) == false)) {
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_if_up:bDriverStopped(%d) OR bSurpriseRemoved(%d)", padapter->bDriverStopped, padapter->bSurpriseRemoved));
 		res =false;
 	}
@@ -795,7 +795,7 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 
 			pnetwork = rtw_alloc_network(pmlmepriv); /*  will update scan_time */
 
-			if (pnetwork == NULL){
+			if (pnetwork == NULL) {
 				RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("\n\n\nsomething wrong here\n\n\n"));
 				goto exit;
 			}
@@ -1605,7 +1605,7 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
 						pcur_wlan->fixed = false;
 
 					pcur_sta = rtw_get_stainfo(pstapriv, cur_network->network.MacAddress);
-					if (pcur_sta){
+					if (pcur_sta) {
 						spin_lock_bh(&(pstapriv->sta_hash_lock));
 						rtw_free_stainfo(adapter,  pcur_sta);
 						spin_unlock_bh(&(pstapriv->sta_hash_lock));
@@ -1722,7 +1722,7 @@ static u8 search_max_mac_id(struct adapter *padapter)
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
 #if defined (CONFIG_AP_MODE)
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)){
+	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 
 		for (aid = (pstapriv->max_num_sta); aid > 0; aid--)
 		{
@@ -1913,7 +1913,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
 
 	DBG_871X("%s(mac_id =%d) =" MAC_FMT "\n", __func__, mac_id, MAC_ARG(pstadel->macaddr));
 
-	if (mac_id>=0){
+	if (mac_id>=0) {
 		u16 media_status;
 		media_status = (mac_id<<8)|0; /*   MACID|OPMODE:0 means disconnect */
 		/* for STA, AP, ADHOC mode, report disconnect stauts to FW */
@@ -2258,7 +2258,7 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
 		updated = true;
 	}
 
-	if (updated){
+	if (updated) {
 		DBG_871X("[by_bssid:%u][assoc_ssid:%s]"
 			"[to_roaming:%u] "
 			"new candidate: %s("MAC_FMT") rssi:%d\n",
@@ -2308,7 +2308,7 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv )
 	while (!rtw_end_of_queue_search(phead, pmlmepriv->pscanned)) {
 
 		pnetwork = LIST_CONTAINOR(pmlmepriv->pscanned, struct wlan_network, list);
-		if (pnetwork == NULL){
+		if (pnetwork == NULL) {
 			RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("%s return _FAIL:(pnetwork == NULL)\n", __FUNCTION__));
 			ret = _FAIL;
 			goto exit;
@@ -2371,13 +2371,13 @@ sint rtw_set_auth(struct adapter * adapter, struct security_priv *psecuritypriv)
 ;
 
 	pcmd = (struct	cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-	if (pcmd == NULL){
+	if (pcmd == NULL) {
 		res = _FAIL;  /* try again */
 		goto exit;
 	}
 
 	psetauthparm =(struct setauth_parm*)rtw_zmalloc(sizeof(struct setauth_parm));
-	if (psetauthparm == NULL){
+	if (psetauthparm == NULL) {
 		rtw_mfree((unsigned char *)pcmd, sizeof(struct	cmd_obj));
 		res = _FAIL;
 		goto exit;
@@ -2420,13 +2420,13 @@ sint rtw_set_key(struct adapter * adapter, struct security_priv *psecuritypriv, 
 ;
 
 	psetkeyparm =(struct setkey_parm*)rtw_zmalloc(sizeof(struct setkey_parm));
-	if (psetkeyparm == NULL){
+	if (psetkeyparm == NULL) {
 		res = _FAIL;
 		goto exit;
 	}
 	memset(psetkeyparm, 0, sizeof(struct setkey_parm));
 
-	if (psecuritypriv->dot11AuthAlgrthm ==dot11AuthAlgrthm_8021X){
+	if (psecuritypriv->dot11AuthAlgrthm ==dot11AuthAlgrthm_8021X) {
 		psetkeyparm->algorithm =(unsigned char)psecuritypriv->dot118021XGrpPrivacy;
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("\n rtw_set_key: psetkeyparm->algorithm =(unsigned char)psecuritypriv->dot118021XGrpPrivacy =%d\n", psetkeyparm->algorithm));
 	}
@@ -2443,7 +2443,7 @@ sint rtw_set_key(struct adapter * adapter, struct security_priv *psecuritypriv, 
 	DBG_871X("==> rtw_set_key algorithm(%x), keyid(%x), key_mask(%x)\n", psetkeyparm->algorithm, psetkeyparm->keyid, psecuritypriv->key_mask);
 	RT_TRACE(_module_rtl871x_mlme_c_, _drv_err_, ("\n rtw_set_key: psetkeyparm->algorithm =%d psetkeyparm->keyid =(u8)keyid =%d\n", psetkeyparm->algorithm, keyid));
 
-	switch (psetkeyparm->algorithm){
+	switch (psetkeyparm->algorithm) {
 
 		case _WEP40_:
 			keylen =5;
@@ -2471,9 +2471,9 @@ sint rtw_set_key(struct adapter * adapter, struct security_priv *psecuritypriv, 
 	}
 
 
-	if (enqueue){
+	if (enqueue) {
 		pcmd = (struct	cmd_obj*)rtw_zmalloc(sizeof(struct	cmd_obj));
-		if (pcmd == NULL){
+		if (pcmd == NULL) {
 			rtw_mfree((unsigned char *)psetkeyparm, sizeof(struct setkey_parm));
 			res = _FAIL;  /* try again */
 			goto exit;
@@ -2592,7 +2592,7 @@ static int rtw_append_pmkid(struct adapter *Adapter, int iEntry, u8 *ie, uint ie
 {
 	struct security_priv *psecuritypriv =&Adapter->securitypriv;
 
-	if (ie[13]<=20){
+	if (ie[13]<=20) {
 		/*  The RSN IE didn't include the PMK ID, append the PMK information */
 			ie[ie_len]=1;
 			ie_len++;

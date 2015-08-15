@@ -50,7 +50,7 @@ static u8 _is_fw_read_cmd_down(struct adapter* padapter, u8 msgbox_num)
 
 	do{
 		valid = rtw_read8(padapter,REG_HMETFR) & BIT(msgbox_num);
-		if (0 == valid ){
+		if (0 == valid ) {
 			read_down = true;
 		}
 	}while ( (!read_down) && (retry_cnts--));
@@ -109,7 +109,7 @@ static s32 FillH2CCmd_88E(struct adapter *padapter, u8 ElementID, u32 CmdLen, u8
 	do{
 		h2c_box_num = pHalData->LastHMEBoxNum;
 
-		if (!_is_fw_read_cmd_down(padapter, h2c_box_num)){
+		if (!_is_fw_read_cmd_down(padapter, h2c_box_num)) {
 			DBG_8192C(" fw read cmd failed...\n");
 			goto exit;
 		}
@@ -128,7 +128,7 @@ static s32 FillH2CCmd_88E(struct adapter *padapter, u8 ElementID, u32 CmdLen, u8
 			/* Write Ext command */
 			msgbox_ex_addr = REG_HMEBOX_EXT_0 + (h2c_box_num *RTL88E_EX_MESSAGE_BOX_SIZE);
 			#ifdef CONFIG_H2C_EF
-			for (cmd_idx=0;cmd_idx<ext_cmd_len;cmd_idx++ ){
+			for (cmd_idx=0;cmd_idx<ext_cmd_len;cmd_idx++ ) {
 				rtw_write8(padapter,msgbox_ex_addr+cmd_idx,*((u8*)(&h2c_cmd_ex)+cmd_idx));
 			}
 			#else
@@ -139,7 +139,7 @@ static s32 FillH2CCmd_88E(struct adapter *padapter, u8 ElementID, u32 CmdLen, u8
 		/*  Write command */
 		msgbox_addr =REG_HMEBOX_0 + (h2c_box_num *RTL88E_MESSAGE_BOX_SIZE);
 		#ifdef CONFIG_H2C_EF
-		for (cmd_idx=0;cmd_idx<RTL88E_MESSAGE_BOX_SIZE;cmd_idx++ ){
+		for (cmd_idx=0;cmd_idx<RTL88E_MESSAGE_BOX_SIZE;cmd_idx++ ) {
 			rtw_write8(padapter,msgbox_addr+cmd_idx,*((u8*)(&h2c_cmd)+cmd_idx));
 		}
 		#else
@@ -169,7 +169,7 @@ u8 rtl8188e_set_rssi_cmd(struct adapter*padapter, u8 *param)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 ;
 
-	if (pHalData->fw_ractrl == true){
+	if (pHalData->fw_ractrl == true) {
 	}else{
 		DBG_8192C("==>%s fw dont support RA\n",__FUNCTION__);
 		res=_FAIL;
@@ -183,7 +183,7 @@ u8 rtl8188e_set_raid_cmd(struct adapter*padapter, u32 mask)
 	u8	res=_SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 ;
-	if (pHalData->fw_ractrl == true){
+	if (pHalData->fw_ractrl == true) {
 		__le32 lmask;
 
 		memset(buf, 0, 3);
@@ -312,7 +312,7 @@ void rtl8188e_set_FwMediaStatus_cmd(struct adapter *padapter, __le16 mstatus_rpt
 	DBG_871X("### %s: MStatus=%x MACID=%d\n", __FUNCTION__,opmode,macid);
 	FillH2CCmd_88E(padapter, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
 
-	if (macid > 31){
+	if (macid > 31) {
 		macid = macid-32;
 		reg_macid_no_link = REG_MACID_NO_LINK_1;
 	}

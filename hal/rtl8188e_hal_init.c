@@ -408,7 +408,7 @@ s32 rtl8188e_iol_efuse_patch(struct adapter *padapter)
 	s32	result = _SUCCESS;
 	printk("==> %s\n",__FUNCTION__);
 
-	if (rtw_IOL_applied(padapter)){
+	if (rtw_IOL_applied(padapter)) {
 		iol_mode_enable(padapter, 1);
 		result = iol_execute(padapter, CMD_READ_EFUSE_MAP);
 		if (result == _SUCCESS)
@@ -458,7 +458,7 @@ static int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_fram
 
 	t1=	rtw_get_current_time();
 	iol_mode_enable(adapter, 1);
-	for (i=0;i<bndy_cnt;i++){
+	for (i=0;i<bndy_cnt;i++) {
 		u8 page_no = 0;
 		page_no = i*2 ;
 		/* printk(" i = %d, page_no = %d\n",i,page_no); */
@@ -486,8 +486,8 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter,int data_len)
 	printk("###### %s ######\n",__FUNCTION__);
 
 	rtw_write8(Adapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
-	if (pbuf){
-		for (addr=0;addr< data_cnts;addr++){
+	if (pbuf) {
+		for (addr=0;addr< data_cnts;addr++) {
 			/* printk("==> addr:0x%02x\n",addr); */
 			rtw_write32(Adapter,0x140,addr);
 			rtw_usleep_os(2);
@@ -495,7 +495,7 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(struct adapter *Adapter,int data_len)
 			do{
 				rstatus=(reg_140=rtw_read32(Adapter,REG_PKTBUF_DBG_CTRL)&BIT24);
 				/* printk("rstatus = %02x, reg_140:0x%08x\n",rstatus,reg_140); */
-				if (rstatus){
+				if (rstatus) {
 					fifo_data = rtw_read32(Adapter,REG_PKTBUF_DBG_DATA_L);
 					/* printk("fifo_data_144:0x%08x\n",fifo_data); */
 					memcpy(pbuf+(addr*8),&fifo_data , 4);
@@ -613,7 +613,7 @@ _BlockWrite(
 				("_BlockWrite: [P3] buffSize_p3(%d) blockSize_p3(%d) blockCount_p3(%d)\n",
 				(buffSize-offset), blockSize_p3, blockCount_p3));
 
-		for (i = 0 ; i < blockCount_p3 ; i++){
+		for (i = 0 ; i < blockCount_p3 ; i++) {
 			ret =rtw_write8(padapter, (FW_8188E_START_ADDRESS + offset + i), *(bufferPtr + offset + i));
 
 			if (ret == _FAIL)
@@ -705,7 +705,7 @@ static void _MCUIO_Reset88E(struct adapter *padapter,u8 bReset)
 {
 	u8 u1bTmp;
 
-	if (bReset==true){
+	if (bReset==true) {
 		/*  Reset MCU IO Wrapper- sugggest by SD1-Gimmy */
 		u1bTmp = rtw_read8(padapter, REG_RSV_CTRL+1);
 		rtw_write8(padapter,REG_RSV_CTRL+1, (u1bTmp&(~BIT3)));
@@ -956,20 +956,20 @@ hal_EfusePowerSwitch_RTL8188E(
 
 		/*  1.2V Power: From VDDON with Power Cut(0x0000h[15]), defualt valid */
 		tmpV16 = rtw_read16(pAdapter,REG_SYS_ISO_CTRL);
-		if ( ! (tmpV16 & PWC_EV12V ) ){
+		if ( ! (tmpV16 & PWC_EV12V ) ) {
 			tmpV16 |= PWC_EV12V ;
 			 rtw_write16(pAdapter,REG_SYS_ISO_CTRL,tmpV16);
 		}
 		/*  Reset: 0x0000h[28], default valid */
 		tmpV16 =  rtw_read16(pAdapter,REG_SYS_FUNC_EN);
-		if ( !(tmpV16 & FEN_ELDR) ){
+		if ( !(tmpV16 & FEN_ELDR) ) {
 			tmpV16 |= FEN_ELDR ;
 			rtw_write16(pAdapter,REG_SYS_FUNC_EN,tmpV16);
 		}
 
 		/*  Clock: Gated(0x0008h[5]) 8M(0x0008h[1]) clock from ANA, default valid */
 		tmpV16 = rtw_read16(pAdapter,REG_SYS_CLKR);
-		if ( (!(tmpV16 & LOADER_CLK_EN) )  ||(!(tmpV16 & ANA8M) ) ){
+		if ( (!(tmpV16 & LOADER_CLK_EN) )  ||(!(tmpV16 & ANA8M) ) ) {
 			tmpV16 |= (LOADER_CLK_EN |ANA8M ) ;
 			rtw_write16(pAdapter,REG_SYS_CLKR,tmpV16);
 		}
@@ -987,7 +987,7 @@ hal_EfusePowerSwitch_RTL8188E(
 	{
 		rtw_write8(pAdapter, REG_EFUSE_ACCESS, EFUSE_ACCESS_OFF);
 
-		if (bWrite == true){
+		if (bWrite == true) {
 			/*  Disable LDO 2.5V after read/write action */
 			tempval = rtw_read8(pAdapter, EFUSE_TEST+3);
 			rtw_write8(pAdapter, EFUSE_TEST+3, (tempval & 0x7F));
@@ -1563,7 +1563,7 @@ Hal_EfuseWordEnableDataWrite(struct adapter *pAdapter,
 
 		efuse_OneByteRead(pAdapter,tmpaddr, &tmpdata[0], bPseudoTest);
 		efuse_OneByteRead(pAdapter,tmpaddr+1, &tmpdata[1], bPseudoTest);
-		if ((data[0]!=tmpdata[0])||(data[1]!=tmpdata[1])){
+		if ((data[0]!=tmpdata[0])||(data[1]!=tmpdata[1])) {
 			badworden &= (~BIT0);
 		}
 	}
@@ -1575,7 +1575,7 @@ Hal_EfuseWordEnableDataWrite(struct adapter *pAdapter,
 
 		efuse_OneByteRead(pAdapter,tmpaddr    , &tmpdata[2], bPseudoTest);
 		efuse_OneByteRead(pAdapter,tmpaddr+1, &tmpdata[3], bPseudoTest);
-		if ((data[2]!=tmpdata[2])||(data[3]!=tmpdata[3])){
+		if ((data[2]!=tmpdata[2])||(data[3]!=tmpdata[3])) {
 			badworden &=( ~BIT1);
 		}
 	}
@@ -1587,7 +1587,7 @@ Hal_EfuseWordEnableDataWrite(struct adapter *pAdapter,
 
 		efuse_OneByteRead(pAdapter,tmpaddr, &tmpdata[4], bPseudoTest);
 		efuse_OneByteRead(pAdapter,tmpaddr+1, &tmpdata[5], bPseudoTest);
-		if ((data[4]!=tmpdata[4])||(data[5]!=tmpdata[5])){
+		if ((data[4]!=tmpdata[4])||(data[5]!=tmpdata[5])) {
 			badworden &=( ~BIT2);
 		}
 	}
@@ -1599,7 +1599,7 @@ Hal_EfuseWordEnableDataWrite(struct adapter *pAdapter,
 
 		efuse_OneByteRead(pAdapter,tmpaddr, &tmpdata[6], bPseudoTest);
 		efuse_OneByteRead(pAdapter,tmpaddr+1, &tmpdata[7], bPseudoTest);
-		if ((data[6]!=tmpdata[6])||(data[7]!=tmpdata[7])){
+		if ((data[6]!=tmpdata[6])||(data[7]!=tmpdata[7])) {
 			badworden &=( ~BIT3);
 		}
 	}
@@ -1828,7 +1828,7 @@ hal_EfusePgPacketRead_8188e(
 							}
 						}
 					}
-					if (bDataEmpty==false){
+					if (bDataEmpty==false) {
 						ReadState = PG_STATE_DATA;
 					}else{/* read next header */
 						efuse_addr = efuse_addr + (word_cnts*2)+1;
@@ -2520,10 +2520,10 @@ ReadChipVersion8188E(struct adapter *padapter)
 
 	pHalData->VersionID = ChipVersion;
 
-	if (IS_1T2R(ChipVersion)){
+	if (IS_1T2R(ChipVersion)) {
 		pHalData->rf_type = RF_1T2R;
 		pHalData->NumTotalRFPath = 2;
-	} else if (IS_2T2R(ChipVersion)){
+	} else if (IS_2T2R(ChipVersion)) {
 		pHalData->rf_type = RF_2T2R;
 		pHalData->NumTotalRFPath = 2;
 	} else{
@@ -2549,7 +2549,7 @@ static void rtl8188e_GetHalODMVar(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T podmpriv = &pHalData->odmpriv;
-	switch (eVariable){
+	switch (eVariable) {
 		case HAL_ODM_STA_INFO:
 			break;
 		default:
@@ -2566,11 +2566,11 @@ static void rtl8188e_SetHalODMVar(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T podmpriv = &pHalData->odmpriv;
 	/* _irqL irqL; */
-	switch (eVariable){
+	switch (eVariable) {
 		case HAL_ODM_STA_INFO:
 			{
 				struct sta_info *psta = (struct sta_info *)pValue1;
-				if (bSet){
+				if (bSet) {
 					DBG_8192C("### Set STA_(%d) info\n",psta->mac_id);
 					ODM_CmnInfoPtrArrayHook(podmpriv, ODM_CMNINFO_STA_STATUS,psta->mac_id,psta);
 					#if (RATE_ADAPTIVE_SUPPORT==1)
@@ -3112,7 +3112,7 @@ void Hal_ReadPowerSavingMode88E(
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(padapter);
 	u8 tmpvalue;
 
-	if (AutoLoadFail){
+	if (AutoLoadFail) {
 		pwrctl->bHWPowerdown = false;
 		pwrctl->bSupportRemoteWakeup = false;
 	}
@@ -3203,7 +3203,7 @@ Hal_ReadTxPowerInfo88E(
 	if (!AutoLoadFail)
 	{
 		struct registry_priv  *registry_par = &padapter->registrypriv;
-		if ( registry_par->regulatory_tid == 0xff){
+		if ( registry_par->regulatory_tid == 0xff) {
 			if (PROMContent[EEPROM_RF_BOARD_OPTION_88E] == 0xFF)
 				pHalData->EEPROMRegulatory = (EEPROM_DEFAULT_BOARD_OPTION&0x7);	/* bit0~2 */
 			else
@@ -3268,7 +3268,7 @@ Hal_EfuseParseEEPROMVer88E(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
-	if (!AutoLoadFail){
+	if (!AutoLoadFail) {
 		pHalData->EEPROMVersion = hwinfo[EEPROM_VERSION_88E];
 		if (pHalData->EEPROMVersion == 0xFF)
 			pHalData->EEPROMVersion = EEPROM_Default_Version;

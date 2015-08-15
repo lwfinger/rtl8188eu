@@ -175,7 +175,7 @@ static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
 #endif
 
 #ifdef CONFIG_INTEL_PROXIM
-	if (adapter->proximity.proxim_on ==true){
+	if (adapter->proximity.proxim_on ==true) {
 		return;
 	}
 #endif
@@ -908,7 +908,7 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 	}
 
 	/* System suspend is not allowed to wakeup */
-	if ((pwrpriv->bInternalAutoSuspend == false) && (true == pwrpriv->bInSuspend )){
+	if ((pwrpriv->bInternalAutoSuspend == false) && (true == pwrpriv->bInSuspend )) {
 		ret = _FAIL;
 		goto exit;
 	}
@@ -923,8 +923,8 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
 	{
 #if defined (CONFIG_BT_COEXIST)&& defined (CONFIG_AUTOSUSPEND)
-		if (true ==pwrpriv->bInternalAutoSuspend){
-			if (0 ==pwrpriv->autopm_cnt){
+		if (true ==pwrpriv->bInternalAutoSuspend) {
+			if (0 ==pwrpriv->autopm_cnt) {
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2, 6, 33))
 				if (usb_autopm_get_interface(adapter_to_dvobj(padapter)->pusbintf) < 0)
 				{
@@ -981,7 +981,7 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
 	if (padapter->bDriverStopped
 		|| !padapter->bup
 		|| !padapter->hw_init_completed
-	){
+	) {
 		DBG_8192C("%s: bDriverStopped =%d, bup =%d, hw_init_completed =%u\n"
 			, caller
 			, padapter->bDriverStopped
@@ -1036,7 +1036,7 @@ int rtw_pm_set_ips(struct adapter *padapter, u8 mode)
 		DBG_871X("%s %s\n", __FUNCTION__, mode == IPS_NORMAL?"IPS_NORMAL":"IPS_LEVEL_2");
 		return 0;
 	}
-	else if (mode ==IPS_NONE){
+	else if (mode ==IPS_NONE) {
 		rtw_ips_mode_req(pwrctrlpriv, mode);
 		DBG_871X("%s %s\n", __FUNCTION__, "IPS_NONE");
 		if ((padapter->bSurpriseRemoved == 0)&&(_FAIL == rtw_pwr_wakeup(padapter)) )

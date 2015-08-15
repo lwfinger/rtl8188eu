@@ -32,7 +32,7 @@ void rtl8188e_sreset_xmit_status_check(struct adapter *padapter)
 	unsigned int diff_time;
 	u32 txdma_status;
 
-	if ( (txdma_status=rtw_read32(padapter, REG_TXDMA_STATUS)) !=0x00){
+	if ( (txdma_status=rtw_read32(padapter, REG_TXDMA_STATUS)) !=0x00) {
 		DBG_871X("%s REG_TXDMA_STATUS:0x%08x\n", __FUNCTION__, txdma_status);
 		rtw_hal_sreset_reset(padapter);
 	}
@@ -77,7 +77,7 @@ void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
 	u32 rx_dma_status = 0;
 	u8 fw_status=0;
 	rx_dma_status = rtw_read32(padapter,REG_RXDMA_STATUS);
-	if (rx_dma_status!= 0x00){
+	if (rx_dma_status!= 0x00) {
 		DBG_8192C("%s REG_RXDMA_STATUS:0x%08x\n",__FUNCTION__,rx_dma_status);
 		rtw_write32(padapter,REG_RXDMA_STATUS,rx_dma_status);
 	}

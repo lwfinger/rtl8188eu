@@ -1830,7 +1830,7 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
 	if (ralink_vendor_flag && !epigram_vendor_flag) {
 		DBG_871X("link to Ralink AP\n");
 		return HT_IOT_PEER_RALINK;
-	} else if (ralink_vendor_flag && epigram_vendor_flag){
+	} else if (ralink_vendor_flag && epigram_vendor_flag) {
 		DBG_871X("link to Tenda W311R AP\n");
 		return HT_IOT_PEER_TENDA;
 	} else {

@@ -113,7 +113,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
 
 	pxmitpriv->pallocated_frame_buf = rtw_zvmalloc(NR_XMITFRAME * sizeof(struct xmit_frame) + 4);
 
-	if (pxmitpriv->pallocated_frame_buf  == NULL){
+	if (pxmitpriv->pallocated_frame_buf  == NULL) {
 		pxmitpriv->pxmit_frame_buf =NULL;
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xmit_frame fail!\n"));
 		res = _FAIL;
@@ -153,7 +153,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
 
 	pxmitpriv->pallocated_xmitbuf = rtw_zvmalloc(NR_XMITBUFF * sizeof(struct xmit_buf) + 4);
 
-	if (pxmitpriv->pallocated_xmitbuf  == NULL){
+	if (pxmitpriv->pallocated_xmitbuf  == NULL) {
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xmit_buf fail!\n"));
 		res = _FAIL;
 		goto exit;
@@ -200,7 +200,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
 
 	pxmitpriv->xframe_ext_alloc_addr = rtw_zvmalloc(num_xmit_extbuf * sizeof(struct xmit_frame) + 4);
 
-	if (pxmitpriv->xframe_ext_alloc_addr  == NULL){
+	if (pxmitpriv->xframe_ext_alloc_addr  == NULL) {
 		pxmitpriv->xframe_ext = NULL;
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xframe_ext fail!\n"));
 		res = _FAIL;
@@ -233,7 +233,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
 
 	pxmitpriv->pallocated_xmit_extbuf = rtw_zvmalloc(num_xmit_extbuf * sizeof(struct xmit_buf) + 4);
 
-	if (pxmitpriv->pallocated_xmit_extbuf  == NULL){
+	if (pxmitpriv->pallocated_xmit_extbuf  == NULL) {
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("alloc xmit_extbuf fail!\n"));
 		res = _FAIL;
 		goto exit;
@@ -828,7 +828,7 @@ exit:
 	return res;
 }
 
-static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitframe){
+static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitframe) {
 	sint			curfragnum, length;
 	u8	*pframe, *payload, mic[8];
 	struct	mic_data		micdata;
@@ -870,14 +870,14 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 	if (pattrib->encrypt ==_TKIP_)/* if (psecuritypriv->dot11PrivacyAlgrthm ==_TKIP_PRIVACY_) */
 	{
 		/* encode mic code */
-		if (stainfo!= NULL){
+		if (stainfo!= NULL) {
 			u8 null_key[16]={0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 
 			pframe = pxmitframe->buf_addr + hw_hdr_offset;
 
 			if (bmcst)
 			{
-				if (_rtw_memcmp(psecuritypriv->dot118021XGrptxmickey[psecuritypriv->dot118021XGrpKeyid].skey, null_key, 16) ==true){
+				if (_rtw_memcmp(psecuritypriv->dot118021XGrptxmickey[psecuritypriv->dot118021XGrpKeyid].skey, null_key, 16) ==true) {
 					/* DbgPrint("\nxmitframe_addmic:stainfo->dot11tkiptxmickey == 0\n"); */
 					/* rtw_msleep_os(10); */
 					return _FAIL;
@@ -887,7 +887,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 			}
 			else
 			{
-				if (_rtw_memcmp(&stainfo->dot11tkiptxmickey.skey[0], null_key, 16) ==true){
+				if (_rtw_memcmp(&stainfo->dot11tkiptxmickey.skey[0], null_key, 16) ==true) {
 					/* DbgPrint("\nxmitframe_addmic:stainfo->dot11tkiptxmickey == 0\n"); */
 					/* rtw_msleep_os(10); */
 					return _FAIL;
@@ -896,7 +896,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 				rtw_secmicsetkey(&micdata, &stainfo->dot11tkiptxmickey.skey[0]);
 			}
 
-			if (pframe[1]&1){   /* ToDS ==1 */
+			if (pframe[1]&1) {   /* ToDS ==1 */
 				rtw_secmicappend(&micdata, &pframe[16], 6);  /* DA */
 				if (pframe[1]&2)  /* From Ds ==1 */
 					rtw_secmicappend(&micdata, &pframe[24], 6);
@@ -920,14 +920,14 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 
 			payload =pframe;
 
-			for (curfragnum =0;curfragnum<pattrib->nr_frags;curfragnum++){
+			for (curfragnum =0;curfragnum<pattrib->nr_frags;curfragnum++) {
 				payload =(u8 *)RND4((SIZE_PTR)(payload));
 				RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("===curfragnum =%d, pframe = 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x,!!!\n",
 					curfragnum,*payload, *(payload+1),*(payload+2),*(payload+3),*(payload+4),*(payload+5),*(payload+6),*(payload+7)));
 
 				payload =payload+pattrib->hdrlen+pattrib->iv_len;
 				RT_TRACE(_module_rtl871x_xmit_c_, _drv_err_, ("curfragnum =%d pattrib->hdrlen =%d pattrib->iv_len =%d", curfragnum, pattrib->hdrlen, pattrib->iv_len));
-				if ((curfragnum+1) ==pattrib->nr_frags){
+				if ((curfragnum+1) ==pattrib->nr_frags) {
 					length =pattrib->last_txcmdsz-pattrib->hdrlen-pattrib->iv_len-( (pattrib->bswenc) ? pattrib->icv_len : 0);
 					rtw_secmicappend(&micdata, payload, length);
 					payload =payload+length;
@@ -967,7 +967,7 @@ static s32 xmitframe_addmic(struct adapter *padapter, struct xmit_frame *pxmitfr
 	return _SUCCESS;
 }
 
-static s32 xmitframe_swencrypt(struct adapter *padapter, struct xmit_frame *pxmitframe){
+static s32 xmitframe_swencrypt(struct adapter *padapter, struct xmit_frame *pxmitframe) {
 
 	struct	pkt_attrib	 *pattrib = &pxmitframe->attrib;
 	/* struct	security_priv	*psecuritypriv =&padapter->securitypriv; */
@@ -979,7 +979,7 @@ static s32 xmitframe_swencrypt(struct adapter *padapter, struct xmit_frame *pxmi
 	{
 		/* DBG_871X("start xmitframe_swencrypt\n"); */
 		RT_TRACE(_module_rtl871x_xmit_c_, _drv_alert_, ("### xmitframe_swencrypt\n"));
-		switch (pattrib->encrypt){
+		switch (pattrib->encrypt) {
 		case _WEP40_:
 		case _WEP104_:
 			rtw_wep_encrypt(padapter, (u8 *)pxmitframe);
@@ -1109,7 +1109,7 @@ s32 rtw_make_wlanhdr (struct adapter *padapter , u8 *hdr, struct pkt_attrib *pat
 
 		/* Update Seq Num will be handled by f/w */
 		{
-			if (psta){
+			if (psta) {
 
 				psta->sta_xmitpriv.txseq_tid[pattrib->priority]++;
 				psta->sta_xmitpriv.txseq_tid[pattrib->priority] &= 0xFFF;
@@ -1308,7 +1308,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
 		return _FAIL;
 	}
 
-	if (pxmitframe->buf_addr == NULL){
+	if (pxmitframe->buf_addr == NULL) {
 		DBG_8192C("==> %s buf_addr == NULL\n", __FUNCTION__);
 		return _FAIL;
 	}
@@ -2097,7 +2097,7 @@ s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitfram
 		goto exit;
 	}
 
-	if (pxmitframe->pkt){
+	if (pxmitframe->pkt) {
 		pndis_pkt = pxmitframe->pkt;
 		pxmitframe->pkt = NULL;
 	}

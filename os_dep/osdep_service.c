@@ -34,7 +34,7 @@
 * Translate the OS dependent @param error_code to OS independent RTW_STATUS_CODE
 * @return: one of RTW_STATUS_CODE
 */
-inline int RTW_STATUS_CODE(int error_code){
+inline int RTW_STATUS_CODE(int error_code) {
 	if (error_code >=0)
 		return _SUCCESS;
 
@@ -997,7 +997,7 @@ static int retriveFromFile(char *path, u8* buf, u32 sz)
 	struct file *fp;
 
 	if (path && buf) {
-		if ( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ){
+		if ( 0 == (ret=openFile(&fp,path, O_RDONLY, 0)) ) {
 			DBG_871X("%s openFile path:%s fp=%p\n",__FUNCTION__, path ,fp);
 
 			oldfs = get_fs(); set_fs(get_ds());

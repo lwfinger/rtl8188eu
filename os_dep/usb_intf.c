@@ -627,7 +627,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	DBG_871X("==> %s (%s:%d)\n",__FUNCTION__, current->comm, current->pid);
 
 
-	if (!padapter->bup){
+	if (!padapter->bup) {
 		u8 bMacPwrCtrlOn = false;
 		rtw_hal_get_hwreg(padapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 		if (bMacPwrCtrlOn)
@@ -679,7 +679,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	struct pwrctrl_priv *pwrpriv = dvobj_to_pwrctl(dvobj);
 	int ret = 0;
 
-	if (pwrpriv->bInternalAutoSuspend ){
+	if (pwrpriv->bInternalAutoSuspend ) {
 		ret = rtw_resume_process(padapter);
 	} else {
 		if (rtw_is_earlysuspend_registered(pwrpriv)) {
@@ -725,7 +725,7 @@ int rtw_resume_process(struct adapter *padapter)
 	#endif
 
 	DBG_871X("pwrpriv->bAutoResume (%x)\n",pwrpriv->bAutoResume );
-	if ( true == pwrpriv->bAutoResume ){
+	if ( true == pwrpriv->bAutoResume ) {
 		pwrpriv->bInternalAutoSuspend = false;
 		pwrpriv->bAutoResume=false;
 		DBG_871X("pwrpriv->bAutoResume (%x)  pwrpriv->bInternalAutoSuspend(%x)\n",pwrpriv->bAutoResume,pwrpriv->bInternalAutoSuspend );
@@ -754,7 +754,7 @@ int rtw_resume_process(struct adapter *padapter)
 		#endif
 #ifdef CONFIG_BT_COEXIST
 		DBG_871X("pwrpriv->bAutoResume (%x)\n",pwrpriv->bAutoResume );
-		if ( true == pwrpriv->bAutoResume ){
+		if ( true == pwrpriv->bAutoResume ) {
 			pwrpriv->bInternalAutoSuspend = false;
 			pwrpriv->bAutoResume=false;
 			DBG_871X("pwrpriv->bAutoResume (%x)  pwrpriv->bInternalAutoSuspend(%x)\n",pwrpriv->bAutoResume,pwrpriv->bInternalAutoSuspend );
@@ -810,7 +810,7 @@ void autosuspend_enter(struct adapter* padapter)
 			usb_autosuspend_device(dvobj->pusbdev, 1);
 		#endif
 #else	/* ifndef	CONFIG_BT_COEXIST */
-		if (1==pwrpriv->autopm_cnt){
+		if (1==pwrpriv->autopm_cnt) {
 		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,35))
 		usb_enable_autosuspend(dvobj->pusbdev);
 		#else
@@ -873,7 +873,7 @@ int autoresume_enter(struct adapter* padapter)
 		#endif
 #else	/* ifndef	CONFIG_BT_COEXIST */
 		pwrpriv->bAutoResume=true;
-		if (0==pwrpriv->autopm_cnt){
+		if (0==pwrpriv->autopm_cnt) {
 		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,33))
 			if (usb_autopm_get_interface(dvobj->pusbintf) < 0)
 			{
@@ -990,7 +990,7 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 #ifdef CONFIG_AUTOSUSPEND
 	if ( padapter->registrypriv.power_mgnt != PS_MODE_ACTIVE )
 	{
-		if (padapter->registrypriv.usbss_enable ){	/* autosuspend (2s delay) */
+		if (padapter->registrypriv.usbss_enable ) {	/* autosuspend (2s delay) */
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,38))
 			dvobj->pusbdev->dev.power.autosuspend_delay = 0 * HZ;/* 15 * HZ; idle-delay time */
 			#else
@@ -1090,7 +1090,7 @@ static void rtw_usb_if1_deinit(struct adapter *if1)
 	}
 
 #ifdef CONFIG_BT_COEXIST
-	if (1 == pwrctl->autopm_cnt){
+	if (1 == pwrctl->autopm_cnt) {
 		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,33))
 			usb_autopm_put_interface(adapter_to_dvobj(if1)->pusbintf);
 		#elif (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,20))

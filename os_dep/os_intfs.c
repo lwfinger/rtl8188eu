@@ -1086,7 +1086,7 @@ int _netdev_open(struct net_device *pnetdev)
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+871x_drv - dev_open\n"));
 	DBG_871X("+871x_drv - drv_open, bup=%d\n", padapter->bup);
 
-	if (pwrctrlpriv->ps_flag == true){
+	if (pwrctrlpriv->ps_flag == true) {
 		padapter->net_closed = false;
 		goto netdev_open_normal_process;
 	}
@@ -1293,7 +1293,7 @@ static int netdev_close(struct net_device *pnetdev)
 	}
 	padapter->net_closed = true;
 
-	if (adapter_to_pwrctl(padapter)->rf_pwrstate == rf_on){
+	if (adapter_to_pwrctl(padapter)->rf_pwrstate == rf_on) {
 		DBG_871X("(2)871x_drv - drv_close, bup=%d, hw_init_completed=%d\n", padapter->bup, padapter->hw_init_completed);
 
 		/* s1. */
@@ -1637,7 +1637,7 @@ static int rtw_suspend_free_assoc_resource(struct adapter *padapter)
 	DBG_871X("==> "FUNC_ADPT_FMT" entry....\n", FUNC_ADPT_ARG(padapter));
 
 	rtw_cancel_all_timer(padapter);
-	if (pnetdev){
+	if (pnetdev) {
 		netif_carrier_off(pnetdev);
 		rtw_netif_stop_queue(pnetdev);
 	}
@@ -1662,7 +1662,7 @@ static int rtw_suspend_free_assoc_resource(struct adapter *padapter)
 		rtw_sta_flush(padapter);
 	}
 	#endif
-	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) ){
+	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) ) {
 		/* s2-2.  indicate disconnect to os */
 		rtw_indicate_disconnect(padapter);
 	}

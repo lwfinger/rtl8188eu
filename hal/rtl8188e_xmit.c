@@ -67,22 +67,22 @@ void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *pt
 	u8 bDumpTxDesc = false;
 	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DUMP_TXPKT, &(bDumpTxPkt));
 
-	if (bDumpTxPkt ==1){/* dump txdesc for data frame */
+	if (bDumpTxPkt ==1) {/* dump txdesc for data frame */
 		DBG_871X("dump tx_desc for data frame\n");
-		if ((frame_tag&0x0f) == DATA_FRAMETAG){
+		if ((frame_tag&0x0f) == DATA_FRAMETAG) {
 			bDumpTxDesc = true;
 		}
 	}
-	else if (bDumpTxPkt ==2){/* dump txdesc for mgnt frame */
+	else if (bDumpTxPkt ==2) {/* dump txdesc for mgnt frame */
 		DBG_871X("dump tx_desc for mgnt frame\n");
-		if ((frame_tag&0x0f) == MGNT_FRAMETAG){
+		if ((frame_tag&0x0f) == MGNT_FRAMETAG) {
 			bDumpTxDesc = true;
 		}
 	}
-	else if (bDumpTxPkt ==3){/* dump early info */
+	else if (bDumpTxPkt ==3) {/* dump early info */
 	}
 
-	if (bDumpTxDesc){
+	if (bDumpTxDesc) {
 		DBG_8192C("=====================================\n");
 		DBG_8192C("txdw0(0x%08x)\n",ptxdesc->txdw0);
 		DBG_8192C("txdw1(0x%08x)\n",ptxdesc->txdw1);

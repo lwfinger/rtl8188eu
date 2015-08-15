@@ -377,7 +377,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			/* Modification for ext-LNA board */
 			if (pDM_Odm->BoardType & (ODM_BOARD_EXT_LNA | ODM_BOARD_EXT_PA))
 			{
-				if ((cck_agc_rpt>>7) == 0){
+				if ((cck_agc_rpt>>7) == 0) {
 					PWDB_ALL = (PWDB_ALL>94)?100:(PWDB_ALL +6);
 				}
 				else
@@ -413,10 +413,10 @@ odm_RxPhyStatus92CSeries_Parsing(
 		{
 			u8	SQ,SQ_rpt;
 
-			if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19)){/* pMgntInfo->CustomerID == RT_CID_819x_Lenovo */
+			if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19)) {/* pMgntInfo->CustomerID == RT_CID_819x_Lenovo */
 				SQ = odm_SQ_process_patch_RT_CID_819x_Lenovo(pDM_Odm,isCCKrate,PWDB_ALL,0,0);
 			}
-			else if (pPhyInfo->RxPWDBAll > 40 && !pDM_Odm->bInHctTest){
+			else if (pPhyInfo->RxPWDBAll > 40 && !pDM_Odm->bInHctTest) {
 				SQ = 100;
 			}
 			else{
@@ -502,7 +502,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 		pPhyInfo->RxPower = rx_pwr_all;
 		pPhyInfo->RecvSignalPower = rx_pwr_all;
 
-		if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19)){
+		if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19)) {
 			/* do nothing */
 		} else{/* pMgntInfo->CustomerID != RT_CID_819x_Lenovo */
 			/*  */
@@ -636,7 +636,7 @@ odm_Process_RSSIForDM(
 
 		if (!isCCKrate)/* ofdm rate */
 		{
-			if (pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_B] == 0){
+			if (pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_B] == 0) {
 				RSSI_Ave = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_A];
 				pDM_Odm->RSSI_A = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_A];
 				pDM_Odm->RSSI_B = 0;

@@ -40,13 +40,13 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 	u8 *pIo_buf;
 	int vendorreq_times = 0;
 
-	if ((padapter->bSurpriseRemoved) ||(dvobj_to_pwrctl(pdvobjpriv)->pnp_bstop_trx)){
+	if ((padapter->bSurpriseRemoved) ||(dvobj_to_pwrctl(pdvobjpriv)->pnp_bstop_trx)) {
 		RT_TRACE(_module_hci_ops_os_c_,_drv_err_,("usbctrl_vendorreq:(padapter->bSurpriseRemoved ||pwrctl->pnp_bstop_trx)!!!\n"));
 		status = -EPERM;
 		goto exit;
 	}
 
-	if (len>MAX_VENDOR_REQ_CMD_SIZE){
+	if (len>MAX_VENDOR_REQ_CMD_SIZE) {
 		DBG_8192C( "[%s] Buffer len error ,vendor request failed\n", __FUNCTION__ );
 		status = -EINVAL;
 		goto exit;
@@ -112,7 +112,7 @@ static int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u
 				}
 			}
 
-			if (rtw_inc_and_chk_continual_io_error(pdvobjpriv) == true ){
+			if (rtw_inc_and_chk_continual_io_error(pdvobjpriv) == true ) {
 				padapter->bSurpriseRemoved = true;
 				break;
 			}
@@ -310,7 +310,7 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 		DBG_871X("===> %s Receive FIFO Overflow\n",__FUNCTION__);
 
 	/*  C2H Event */
-	if (pbuf[0]!= 0){
+	if (pbuf[0]!= 0) {
 		memcpy(&(pHalData->C2hArray[0]), &(pbuf[USB_INTR_CONTENT_C2H_OFFSET]), 16);
 		/* rtw_c2h_wk_cmd(padapter); to do.. */
 	}
@@ -498,7 +498,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 
 		/*  for first fragment packet, driver need allocate 1536+drvinfo_sz+RXDESC_SIZE to defrag packet. */
 		/*  modify alloc_sz for recvive crc error packet by thomas 2011-06-02 */
-		if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)){
+		if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)) {
 			if (skb_len <= 1650)
 				alloc_sz = 1664;
 			else
@@ -576,12 +576,12 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 			}
 		} else{ /*  pkt_rpt_type == TX_REPORT1-CCX, TX_REPORT2-TX RTP,HIS_REPORT-USB HISR RTP */
 			/* enqueue recvframe to txrtp queue */
-			if (pattrib->pkt_rpt_type == TX_REPORT1){
+			if (pattrib->pkt_rpt_type == TX_REPORT1) {
 				/* DBG_8192C("rx CCX\n"); */
 				/* CCX-TXRPT ack for xmit mgmt frames. */
 				handle_txrpt_ccx_88e(padapter, precvframe->u.hdr.rx_data);
 			}
-			else if (pattrib->pkt_rpt_type == TX_REPORT2){
+			else if (pattrib->pkt_rpt_type == TX_REPORT2) {
 				/* DBG_8192C("rx TX RPT\n"); */
 				ODM_RA_TxRPT2Handle_8188E(
 							&pHalData->odmpriv,
@@ -703,7 +703,7 @@ static void usb_read_port_complete(struct urb *purb, struct pt_regs *regs)
 
 		DBG_8192C("###=> usb_read_port_complete => urb status(%d)\n", purb->status);
 
-		if (rtw_inc_and_chk_continual_io_error(adapter_to_dvobj(padapter)) == true ){
+		if (rtw_inc_and_chk_continual_io_error(adapter_to_dvobj(padapter)) == true ) {
 			padapter->bSurpriseRemoved = true;
 		}
 

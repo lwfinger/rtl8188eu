@@ -70,7 +70,7 @@
  * if that's true, then detect them, and take measures.
  * Anyway, the measure is: define only ___ntohl as a macro instead,
  * and in a separate file, have
- * unsigned long inline ntohl(x){return ___ntohl(x);}
+ * unsigned long inline ntohl(x) {return ___ntohl(x);}
  *
  * The same for constant arguments
  *	__constant_ntohl(__u32 x)

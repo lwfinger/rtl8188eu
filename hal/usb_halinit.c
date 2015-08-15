@@ -50,7 +50,7 @@ _ConfigNormalChipOutEP_8188E(
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
 
-	switch (NumOutPipe){
+	switch (NumOutPipe) {
 		case	3:
 				pHalData->OutEpQueueSel=TX_SELE_HQ| TX_SELE_LQ|TX_SELE_NQ;
 				pHalData->OutEpNumber=3;
@@ -83,14 +83,14 @@ static bool HalUsbSetQueuePipeMapping8188EUsb(
 	_ConfigNormalChipOutEP_8188E(pAdapter, NumOutPipe);
 
 	/*  Normal chip with one IN and one OUT doesn't have interrupt IN EP. */
-	if (1 == pHalData->OutEpNumber){
-		if (1 != NumInPipe){
+	if (1 == pHalData->OutEpNumber) {
+		if (1 != NumInPipe) {
 			return result;
 		}
 	}
 
 	/*  All config other than above support one Bulk IN and one Interrupt IN. */
-	/* if (2 != NumInPipe){ */
+	/* if (2 != NumInPipe) { */
 	/* 	return result; */
 	/*  */
 
@@ -285,7 +285,7 @@ _SetMacID(
 	)
 {
 	u32 i;
-	for (i=0 ; i< MAC_ADDR_LEN ; i++){
+	for (i=0 ; i< MAC_ADDR_LEN ; i++) {
 		rtw_write32(Adapter, REG_MACID+i, MacID[i]);
 	}
 }
@@ -296,7 +296,7 @@ _SetBSSID(
 	)
 {
 	u32 i;
-	for (i=0 ; i< MAC_ADDR_LEN ; i++){
+	for (i=0 ; i< MAC_ADDR_LEN ; i++) {
 		rtw_write32(Adapter, REG_BSSID+i, BSSID[i]);
 	}
 }
@@ -509,7 +509,7 @@ _InitNormalChipTwoOutEpPriority(
 			break;
 	}
 
-	if (!pregistrypriv->wifi_spec ){
+	if (!pregistrypriv->wifi_spec ) {
 		beQ		= valueLow;
 		bkQ		= valueLow;
 		viQ		= valueHi;
@@ -538,7 +538,7 @@ _InitNormalChipThreeOutEpPriority(
 	struct registry_priv *pregistrypriv = &Adapter->registrypriv;
 	u16			beQ,bkQ,viQ,voQ,mgtQ,hiQ;
 
-	if (!pregistrypriv->wifi_spec ){/*  typical setting */
+	if (!pregistrypriv->wifi_spec ) {/*  typical setting */
 		beQ		= QUEUE_LOW;
 		bkQ		= QUEUE_LOW;
 		viQ		= QUEUE_NORMAL;
@@ -806,7 +806,7 @@ usb_AggSettingTxUpdate(
 	if (Adapter->registrypriv.wifi_spec)
 		pHalData->UsbTxAggMode = false;
 
-	if (pHalData->UsbTxAggMode){
+	if (pHalData->UsbTxAggMode) {
 		value32 = rtw_read32(Adapter, REG_TDECTRL);
 		value32 = value32 & ~(BLK_DESC_NUM_MASK << BLK_DESC_NUM_SHIFT);
 		value32 |= ((pHalData->UsbTxAggDescNum & BLK_DESC_NUM_MASK) << BLK_DESC_NUM_SHIFT);
@@ -1012,7 +1012,7 @@ _InitRFType(
 
 	pHalData->rf_chip	= RF_6052;
 
-	if (false == is92CU){
+	if (false == is92CU) {
 		pHalData->rf_type = RF_1T1R;
 		DBG_8192C("Set RF Chip ID to RF_6052 and RF type to 1T1R.\n");
 		return;
@@ -1242,7 +1242,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	{
 		_ps_open_RF(Adapter);
 
-		if (pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized){
+		if (pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized) {
 			PHY_IQCalibrate_8188E(Adapter,true);
 		}
 		else
@@ -1260,7 +1260,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_PW_ON);
 	status = InitPowerOn_rtl8188eu(Adapter);
-	if (status == _FAIL){
+	if (status == _FAIL) {
 		RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("Failed to init power on!\n"));
 		goto exit;
 	}
@@ -1269,7 +1269,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	pHalData->CurrentChannel = 6;/* default set to 6 */
 
 
-	if (pwrctrlpriv->reg_rfoff == true){
+	if (pwrctrlpriv->reg_rfoff == true) {
 		pwrctrlpriv->rf_pwrstate = rf_off;
 	}
 
@@ -1348,7 +1348,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
 	status = rtl8188e_iol_efuse_patch(Adapter);
-	if (status == _FAIL){
+	if (status == _FAIL) {
 		DBG_871X("%s  rtl8188e_iol_efuse_patch failed\n",__FUNCTION__);
 		goto exit;
 	}
@@ -1357,7 +1357,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_INIT_LLTT);
 	status =  InitLLTTable(Adapter, txpktbuf_bndy);
-	if (status == _FAIL){
+	if (status == _FAIL) {
 		RT_TRACE(_module_hci_hal_init_c_, _drv_err_, ("Failed to init LLT table\n"));
 		goto exit;
 	}
@@ -1391,7 +1391,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	_InitHardwareDropIncorrectBulkOut(Adapter);
 
 
-	if (pHalData->bRDGEnable){
+	if (pHalData->bRDGEnable) {
 		_InitRDGSetting(Adapter);
 	}
 
@@ -1495,7 +1495,7 @@ static u32 rtl8188eu_hal_init(struct adapter *Adapter)
 	/*  2010/08/26 MH Merge from 8192CE. */
 	if (pwrctrlpriv->rf_pwrstate == rf_on)
 	{
-		if (pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized){
+		if (pHalData->odmpriv.RFCalibrateInfo.bIQKInitialized) {
 			PHY_IQCalibrate_8188E(Adapter,true);
 		} else {
 			PHY_IQCalibrate_8188E(Adapter,false);
@@ -1640,7 +1640,7 @@ static u32 rtl8188eu_hal_deinit(struct adapter *Adapter)
 		if ((pwrctl->bHWPwrPindetect) && (pwrctl->bHWPowerdown))
 			rtl8188eu_hw_power_down(Adapter);
 	} else {
-		if (Adapter->hw_init_completed == true){
+		if (Adapter->hw_init_completed == true) {
 			hal_poweroff_rtl8188eu(Adapter);
 
 			if ((pwrctl->bHWPwrPindetect ) && (pwrctl->bHWPowerdown))
@@ -2524,7 +2524,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 			/* 	); */
 			break;
 		case HW_VAR_DM_FUNC_SET:
-			if (*((u32 *)val) == DYNAMIC_ALL_FUNC_ENABLE){
+			if (*((u32 *)val) == DYNAMIC_ALL_FUNC_ENABLE) {
 				pdmpriv->DMFlag = pdmpriv->InitDMFlag;
 				podmpriv->SupportAbility =	pdmpriv->InitODMFlag;
 			}
@@ -2647,7 +2647,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 							break;
 					}
 
-					if (MinSpacingToSet < SecMinSpace){
+					if (MinSpacingToSet < SecMinSpace) {
 						MinSpacingToSet = SecMinSpace;
 					}
 
@@ -2738,7 +2738,7 @@ static void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 				DIG_T	*pDigTable = &podmpriv->DM_DigTable;
 				u32		rx_gain = ((u32 *)(val))[0];
 
-				if (rx_gain == 0xff){/* restore rx gain */
+				if (rx_gain == 0xff) {/* restore rx gain */
 					ODM_Write_DIG(podmpriv,pDigTable->BackupIGValue);
 				}
 				else{
@@ -3014,11 +3014,11 @@ static u8 GetHalDefVar8188EUsb(
 				if (rtw_linked_check(Adapter))
 					bLinked = true;
 
-				if (bLinked){
+				if (bLinked) {
 					DBG_871X("============ RA status check ===================\n");
 					if (Adapter->bRxRSSIDisplay >30)
 						Adapter->bRxRSSIDisplay = 1;
-					for (i=0;i< Adapter->bRxRSSIDisplay;i++){
+					for (i=0;i< Adapter->bRxRSSIDisplay;i++) {
 	DBG_8192C("Mac_id:%d ,RSSI:%d,RateID = %d,RAUseRate = 0x%08x,RateSGI = %d, DecisionRate = 0x%02x ,PTStage = %d, RetryOver drop:%d, LifeTimeOver drop:%d\n",
 						i,
 						podmpriv->RAInfo[i].RssiStaRA,
@@ -3074,24 +3074,24 @@ static u8 SetHalDefVar8188EUsb(
 			{
 				u8 dm_func = *(( u8*)pValue);
 
-				if (dm_func == 0){ /* disable all dynamic func */
+				if (dm_func == 0) { /* disable all dynamic func */
 					podmpriv->SupportAbility = DYNAMIC_FUNC_DISABLE;
 					DBG_8192C("==> Disable all dynamic function...\n");
 				}
-				else if (dm_func == 1){/* disable DIG */
+				else if (dm_func == 1) {/* disable DIG */
 					podmpriv->SupportAbility  &= (~DYNAMIC_BB_DIG);
 					DBG_8192C("==> Disable DIG...\n");
 				}
-				else if (dm_func == 2){/* disable High power */
+				else if (dm_func == 2) {/* disable High power */
 					podmpriv->SupportAbility  &= (~DYNAMIC_BB_DYNAMIC_TXPWR);
 				}
-				else if (dm_func == 3){/* disable tx power tracking */
+				else if (dm_func == 3) {/* disable tx power tracking */
 					podmpriv->SupportAbility  &= (~DYNAMIC_RF_CALIBRATION);
 					DBG_8192C("==> Disable tx power tracking...\n");
-				} else if (dm_func == 5){/* disable antenna diversity */
+				} else if (dm_func == 5) {/* disable antenna diversity */
 					podmpriv->SupportAbility  &= (~DYNAMIC_BB_ANT_DIV);
 				}
-				else if (dm_func == 6){/* turn on all dynamic func */
+				else if (dm_func == 6) {/* turn on all dynamic func */
 					if (!(podmpriv->SupportAbility  & DYNAMIC_BB_DIG))
 					{
 						DIG_T	*pDigTable = &podmpriv->DM_DigTable;
@@ -3224,7 +3224,7 @@ static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rss
 		DBG_871X("update raid entry, mask=0x%x, arg=0x%x\n", mask, arg);
 		psta->ra_mask=mask;
 #ifdef CONFIG_INTEL_PROXIM
-		if (padapter->proximity.proxim_on ==true){
+		if (padapter->proximity.proxim_on ==true) {
 			arg &= ~BIT(6);
 		}
 		else {
@@ -3350,7 +3350,7 @@ static void rtl8188eu_init_default_value(struct adapter * padapter)
 static u8 rtl8188eu_ps_func(struct adapter *Adapter, enum HAL_INTF_PS_FUNC efunc_id, u8 *val)
 {
 	u8 bResult = true;
-	switch (efunc_id){
+	switch (efunc_id) {
 
 		#if defined(CONFIG_AUTOSUSPEND)
 		case HAL_USB_SELECT_SUSPEND:
@@ -3370,7 +3370,7 @@ void rtl8188eu_set_hal_ops(struct adapter * padapter)
 
 
 	padapter->HalData = rtw_zmalloc(sizeof(HAL_DATA_TYPE));
-	if (padapter->HalData == NULL){
+	if (padapter->HalData == NULL) {
 		DBG_8192C("cant not alloc memory for HAL DATA\n");
 	}
 

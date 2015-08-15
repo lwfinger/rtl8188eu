@@ -1579,7 +1579,7 @@ odm_DIG(
 		}
 		else
 		{
-			if ((pDM_Odm->SupportICType & (ODM_RTL8192E|ODM_RTL8723B|ODM_RTL8812|ODM_RTL8821)) && (pDM_Odm->bBtLimitedDig==1)){
+			if ((pDM_Odm->SupportICType & (ODM_RTL8192E|ODM_RTL8723B|ODM_RTL8812|ODM_RTL8821)) && (pDM_Odm->bBtLimitedDig==1)) {
 				/* 2 Modify DIG upper bound for 92E, 8723B, 8821 & 8812 BT */
 				if ((pDM_Odm->RSSI_Min + 10) > dm_dig_max )
 					pDM_DigTable->rx_gain_range_max = dm_dig_max;
@@ -2141,7 +2141,7 @@ ODM_RF_Saving(
 		Rssi_Up_bound = 50 ;
 		Rssi_Low_bound = 45;
 	}
-	if (pDM_PSTable->initialize == 0){
+	if (pDM_PSTable->initialize == 0) {
 
 		pDM_PSTable->Reg874 = (ODM_GetBBReg(pDM_Odm, 0x874, bMaskDWord)&0x1CC000)>>14;
 		pDM_PSTable->RegC70 = (ODM_GetBBReg(pDM_Odm, 0xc70, bMaskDWord)&BIT3)>>3;
@@ -2412,7 +2412,7 @@ odm_RefreshRateAdaptiveMaskCE(
 		ODM_RT_TRACE(pDM_Odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("<---- odm_RefreshRateAdaptiveMask(): driver does not control rate adaptive mask\n"));
 		return;
 	}
-	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++){
+	for (i=0; i<ODM_ASSOCIATE_ENTRY_NUM; i++) {
 		PSTA_INFO_T pstat = pDM_Odm->pODM_StaInfo[i];
 		if (IS_STA_VALID(pstat) ) {
 			if (IS_MCAST( pstat->hwaddr))  /* if (psta->mac_id ==1) */
@@ -2780,7 +2780,7 @@ odm_RSSIMonitorCheckCE(
 
 		for (i=0; i< sta_cnt; i++)
 		{
-			if (PWDB_rssi[i] != (0)){
+			if (PWDB_rssi[i] != (0)) {
 				if (pHalData->fw_ractrl == true)/*  Report every sta's RSSI to FW */
 				{
 				}
@@ -2998,9 +2998,9 @@ void odm_SwAntDivChkAntSwitch(
 		PDM_ODM_T		pDM_Odm,
 		u8			Step
 	) {}
-static void ODM_SwAntDivResetBeforeLink(		PDM_ODM_T		pDM_Odm	){}
-void ODM_SwAntDivRestAfterLink(		PDM_ODM_T		pDM_Odm	){}
-void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext){}
+static void ODM_SwAntDivResetBeforeLink(		PDM_ODM_T		pDM_Odm	) {}
+void ODM_SwAntDivRestAfterLink(		PDM_ODM_T		pDM_Odm	) {}
+void odm_SwAntDivChkAntSwitchCallback(void *FunctionContext) {}
 
 /* 3============================================================ */
 /* 3 SW Antenna Diversity */
@@ -3029,7 +3029,7 @@ odm_InitHybridAntDiv_88C_92D(
 	ODM_SetBBReg(pDM_Odm,ODM_REG_ANTSEL_CTRL_11N, BIT8|BIT9, 0x01);	/*  0x01: left antenna, 0x02: right antenna */
 
 	/*  only AP support different path selection temperarly */
-	if (!bTxPathSel){                 /* PATH-A */
+	if (!bTxPathSel) {                 /* PATH-A */
 		ODM_SetBBReg(pDM_Odm,ODM_REG_PIN_CTRL_11N, BIT8|BIT9, 0 ); /*  ANTSEL as HW control */
 		ODM_SetBBReg(pDM_Odm,ODM_REG_ANTSEL_PATH_11N, BIT13, 1);	 /* select TX ANTESEL from path A */
 	}
@@ -3111,7 +3111,7 @@ odm_StaDefAntSel(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("CCK_Ant1_Cnt:%d, CCK_Ant2_Cnt:%d\n",CCK_Ant1_Cnt,CCK_Ant2_Cnt));
 
 
-	if (((OFDM_Ant1_Cnt+OFDM_Ant2_Cnt)== 0)&&((CCK_Ant1_Cnt + CCK_Ant2_Cnt) <10)){
+	if (((OFDM_Ant1_Cnt+OFDM_Ant2_Cnt)== 0)&&((CCK_Ant1_Cnt + CCK_Ant2_Cnt) <10)) {
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("odm_StaDefAntSelect Fail: No enough packet info!\n"));
 		return	false;
 	}
@@ -3161,7 +3161,7 @@ odm_SetRxIdleAnt(
 			ODM_SetBBReg(pDM_Odm,ODM_REG_RX_DEFUALT_A_11N, 0xFFFF, 0x569a);   /* left-side antenna */
 
 		/* for path-B */
-		if (bDualPath){
+		if (bDualPath) {
 			if (Ant== 0)
 				ODM_SetBBReg(pDM_Odm,ODM_REG_RX_DEFUALT_A_11N, 0xFFFF0000, 0x65a9);   /* right-side antenna */
 			else
@@ -3270,7 +3270,7 @@ odm_HwAntDiv_92C_92D(
 						 &pDM_SWAT_Table->TxAnt[i]);
 
 			/* if Tx antenna selection: successful */
-			if (bRet){
+			if (bRet) {
 				pDM_SWAT_Table->RSSI_Ant1_Sum[i] = 0;
 				pDM_SWAT_Table->RSSI_Ant2_Sum[i] = 0;
 				pDM_SWAT_Table->OFDM_Ant1_Cnt[i] = 0;
@@ -3566,7 +3566,7 @@ odm_PHY_SaveAFERegisters(
 	u32	i;
 
 	/* RTPRINT(FINIT, INIT_IQK, ("Save ADDA parameters.\n")); */
-	for ( i = 0 ; i < RegisterNum ; i++){
+	for ( i = 0 ; i < RegisterNum ; i++) {
 		AFEBackup[i] = ODM_GetBBReg(pDM_Odm, AFEReg[i], bMaskDWord);
 	}
 }

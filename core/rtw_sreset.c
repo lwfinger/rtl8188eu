@@ -55,10 +55,10 @@ u8 sreset_get_wifi_status(struct adapter *padapter)
 		return status;
 	}
 	val32 =rtw_read32(padapter, REG_TXDMA_STATUS);
-	if (val32 == 0xeaeaeaea){
+	if (val32 == 0xeaeaeaea) {
 		psrtpriv->Wifi_Error_Status = WIFI_IF_NOT_EXIST;
 	}
-	else if (val32!=0){
+	else if (val32!=0) {
 		DBG_8192C("txdmastatu(%x)\n", val32);
 		psrtpriv->Wifi_Error_Status = WIFI_MAC_TXDMA_ERROR;
 	}

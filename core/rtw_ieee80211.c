@@ -220,7 +220,7 @@ u8 *rtw_get_ie(u8 *pbuf, sint index, sint *len, sint limit)
 	sint tmp, i;
 	u8 *p;
 ;
-	if (limit < 1){
+	if (limit < 1) {
 		;
 		return NULL;
 	}
@@ -763,7 +763,7 @@ int rtw_get_sec_ie(u8 *in_ie, uint in_len, u8 *rsn_ie, u16 *rsn_len, u8 *wpa_ie,
 				if (wpa_ie) {
 				memcpy(wpa_ie, &in_ie[cnt], in_ie[cnt+1]+2);
 
-				for (i =0;i<(in_ie[cnt+1]+2);i =i+8){
+				for (i =0;i<(in_ie[cnt+1]+2);i =i+8) {
 						RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("\n %2x,%2x,%2x,%2x,%2x,%2x,%2x,%2x\n",
 									wpa_ie[i], wpa_ie[i+1], wpa_ie[i+2], wpa_ie[i+3], wpa_ie[i+4],
 									wpa_ie[i+5], wpa_ie[i+6], wpa_ie[i+7]));
@@ -782,7 +782,7 @@ int rtw_get_sec_ie(u8 *in_ie, uint in_len, u8 *rsn_ie, u16 *rsn_len, u8 *wpa_ie,
 				if (rsn_ie) {
 				memcpy(rsn_ie, &in_ie[cnt], in_ie[cnt+1]+2);
 
-				for (i =0;i<(in_ie[cnt+1]+2);i =i+8){
+				for (i =0;i<(in_ie[cnt+1]+2);i =i+8) {
 						RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("\n %2x,%2x,%2x,%2x,%2x,%2x,%2x,%2x\n",
 									rsn_ie[i], rsn_ie[i+1], rsn_ie[i+2], rsn_ie[i+3], rsn_ie[i+4],
 									rsn_ie[i+5], rsn_ie[i+6], rsn_ie[i+7]));
@@ -1295,7 +1295,7 @@ void dump_ies(u8 *buf, u32 buf_len)
 	u8* pos = (u8*)buf;
 	u8 id, len;
 
-	while (pos-buf<=buf_len){
+	while (pos-buf<=buf_len) {
 		id = *pos;
 		len = *(pos+1);
 
@@ -1326,7 +1326,7 @@ void dump_wps_ie(u8 *ie, u32 ie_len)
 		return;
 
 	pos+=6;
-	while (pos-ie < ie_len){
+	while (pos-ie < ie_len) {
 		id = RTW_GET_BE16(pos);
 		len = RTW_GET_BE16(pos + 2);
 
@@ -1421,7 +1421,7 @@ void dump_p2p_ie(u8 *ie, u32 ie_len) {
 		return;
 
 	pos+=6;
-	while (pos-ie < ie_len){
+	while (pos-ie < ie_len) {
 		id = *pos;
 		len = RTW_GET_LE16(pos+1);
 
@@ -1683,7 +1683,7 @@ void dump_wfd_ie(u8 *ie, u32 ie_len)
 		return;
 
 	pos+=6;
-	while (pos-ie < ie_len){
+	while (pos-ie < ie_len) {
 		id = *pos;
 		len = RTW_GET_BE16(pos+1);
 

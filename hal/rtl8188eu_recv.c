@@ -64,13 +64,13 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 
 #ifdef CONFIG_USB_INTERRUPT_IN_PIPE
 	precvpriv->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-	if (precvpriv->int_in_urb == NULL){
+	if (precvpriv->int_in_urb == NULL) {
 		res= _FAIL;
 		DBG_8192C("alloc_urb for interrupt in endpoint fail !!!!\n");
 		goto exit;
 	}
 	precvpriv->int_in_buf = rtw_zmalloc(INTERRUPT_MSG_FORMAT_LEN);
-	if (precvpriv->int_in_buf == NULL){
+	if (precvpriv->int_in_buf == NULL) {
 		res= _FAIL;
 		DBG_8192C("alloc_mem for interrupt in endpoint fail !!!!\n");
 		goto exit;
@@ -81,7 +81,7 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
 	_rtw_init_queue(&precvpriv->free_recv_buf_queue);
 
 	precvpriv->pallocated_recv_buf = rtw_zmalloc(NR_RECVBUFF *sizeof(struct recv_buf) + 4);
-	if (precvpriv->pallocated_recv_buf== NULL){
+	if (precvpriv->pallocated_recv_buf== NULL) {
 		res= _FAIL;
 		RT_TRACE(_module_rtl871x_recv_c_,_drv_err_,("alloc recv_buf fail!\n"));
 		goto exit;

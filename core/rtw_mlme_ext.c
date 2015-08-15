@@ -222,7 +222,7 @@ static struct rt_channel_plan_map	RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03, 0
 int rtw_ch_set_search_ch(struct rt_channel_info *ch_set, const u32 ch)
 {
 	int i;
-	for (i =0;ch_set[i].ChannelNum!=0;i++){
+	for (i =0;ch_set[i].ChannelNum!=0;i++) {
 		if (ch == ch_set[i].ChannelNum)
 			break;
 	}
@@ -6856,7 +6856,7 @@ void issue_assocreq(struct adapter *padapter)
 						/* Commented by Kurt 20110629 */
 						/* In some older APs, WPS handshake */
 						/* would be fail if we append vender extensions informations to AP */
-						if (_rtw_memcmp(pIE->data, WPS_OUI, 4)){
+						if (_rtw_memcmp(pIE->data, WPS_OUI, 4)) {
 							pIE->Length =14;
 						}
 					}
@@ -8062,7 +8062,7 @@ void site_survey(struct adapter *padapter)
 		}
 	}
 
-	if (0){
+	if (0) {
 		DBG_871X(FUNC_ADPT_FMT" ch:%u (cnt:%u, idx:%d) at %dms, %c%c%c\n"
 		, FUNC_ADPT_ARG(padapter)
 		, survey_channel
@@ -8116,7 +8116,7 @@ void site_survey(struct adapter *padapter)
 			#endif /* CONFIG_P2P */
 			{
 				int i;
-				for (i =0;i<RTW_SSID_SCAN_AMOUNT;i++){
+				for (i =0;i<RTW_SSID_SCAN_AMOUNT;i++) {
 					if (pmlmeext->sitesurvey_res.ssid[i].SsidLength) {
 						/* todo: to issue two probe req??? */
 						issue_probereq(padapter, &(pmlmeext->sitesurvey_res.ssid[i]), NULL);
@@ -9277,7 +9277,7 @@ void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
 		/* restore to initial setting. */
 		update_tx_basic_rate(padapter, padapter->registrypriv.wireless_mode);
 
-		if (psta){/* only for STA mode */
+		if (psta) {/* only for STA mode */
 			media_status = (psta->mac_id<<8)|0; /*   MACID|OPMODE:1 connect */
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_MEDIA_STATUS_RPT, (u8 *)&media_status);
 		}
@@ -10160,7 +10160,7 @@ u8 sitesurvey_cmd_hdl(struct adapter *padapter, u8 *pbuf)
 		pmlmeext->sitesurvey_res.bss_cnt = 0;
 		pmlmeext->sitesurvey_res.channel_idx = 0;
 
-		for (i =0;i<RTW_SSID_SCAN_AMOUNT;i++){
+		for (i =0;i<RTW_SSID_SCAN_AMOUNT;i++) {
 			if (pparm->ssid[i].SsidLength) {
 				memcpy(pmlmeext->sitesurvey_res.ssid[i].Ssid, pparm->ssid[i].Ssid, IW_ESSID_MAX_SIZE);
 				pmlmeext->sitesurvey_res.ssid[i].SsidLength = pparm->ssid[i].SsidLength;

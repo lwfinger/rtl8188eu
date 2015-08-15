@@ -61,7 +61,7 @@ static void process_link_qual(struct adapter *padapter,union recv_frame *prframe
 	struct rx_pkt_attrib *pattrib;
 	struct signal_stat * signal_stat;
 
-	if (prframe == NULL || padapter== NULL){
+	if (prframe == NULL || padapter== NULL) {
 		return;
 	}
 
@@ -211,8 +211,8 @@ void update_recvframe_phyinfo_88e(
 
 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID && (GetFrameSubType(wlanhdr) == WIFI_BEACON);
 
-	if (pkt_info.bPacketBeacon){
-		if (check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE) == true){
+	if (pkt_info.bPacketBeacon) {
+		if (check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE) == true) {
 			sa = padapter->mlmepriv.cur_network.network.MacAddress;
 		}
 		else
