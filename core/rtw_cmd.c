@@ -233,7 +233,7 @@ void rtw_free_cmd_priv (struct	cmd_priv *pcmdpriv)
 	_rtw_free_cmd_priv(pcmdpriv);
 }
 
-int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
+static int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 {
 	u8 bAllow = false; /* set to true to allow enqueuing cmd when hw_init_completed is false */
 
@@ -1946,7 +1946,7 @@ void dynamic_chk_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz)
 #endif
 }
 
-void lps_ctrl_wk_hdl(struct adapter *padapter, u8 lps_ctrl_type)
+static void lps_ctrl_wk_hdl(struct adapter *padapter, u8 lps_ctrl_type)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
@@ -2165,7 +2165,7 @@ exit:
 
 }
 
-void power_saving_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz)
+static void power_saving_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz)
 {
 	 rtw_ps_processor(padapter);
 }
@@ -2737,15 +2737,4 @@ void rtw_setassocsta_cmdrsp_callback(struct adapter*	padapter,  struct cmd_obj *
 
 exit:
 	rtw_free_cmd_obj(pcmd);
-
-;
-}
-
-void rtw_getrttbl_cmd_cmdrsp_callback(struct adapter*	padapter,  struct cmd_obj *pcmd)
-{
-;
-
-	rtw_free_cmd_obj(pcmd);
-;
-
 }
