@@ -8562,6 +8562,7 @@ void start_clnt_join(struct adapter* padapter)
 
 				scanned = LIST_CONTAINOR(pos, struct wlan_network, list);
 				if(scanned==NULL) {
+					spin_unlock_bh(&(padapter->mlmepriv.scanned_queue.lock));
 					rtw_warn_on(1);
 					return;
 				}
@@ -9443,7 +9444,7 @@ void mlmeext_sta_del_event_callback(struct adapter *padapter)
 Following are the functions for the timer handlers
 
 *****************************************************************************/
-void _linked_rx_signal_strehgth_display(struct adapter *padapter)
+static void _linked_rx_signal_strehgth_display(struct adapter *padapter)
 {
 	struct mlme_ext_priv    *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info    *pmlmeinfo = &(pmlmeext->mlmext_info);
