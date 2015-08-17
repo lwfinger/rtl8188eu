@@ -1394,60 +1394,9 @@ sint validate_recv_mgnt_frame(struct adapter *padapter, union recv_frame *precv_
 			}
 		}
 	}
-
-#ifdef CONFIG_INTEL_PROXIM
-	if (padapter->proximity.proxim_on ==true)
-	{
-		struct rx_pkt_attrib * pattrib =&precv_frame->u.hdr.attrib;
-		 struct recv_stat* prxstat =( struct recv_stat * )  precv_frame->u.hdr.rx_head ;
-		 u8 * pda,*psa,*pbssid,*ptr;
-		 ptr =precv_frame->u.hdr.rx_data;
-		pda = get_da(ptr);
-		psa = get_sa(ptr);
-		pbssid = get_hdr_bssid(ptr);
-
-		memcpy(pattrib->dst, pda, ETH_ALEN);
-		memcpy(pattrib->src, psa, ETH_ALEN);
-
-		memcpy(pattrib->bssid, pbssid, ETH_ALEN);
-
-	switch (pattrib->to_fr_ds)
-	{
-		case 0:
-			memcpy(pattrib->ra, pda, ETH_ALEN);
-			memcpy(pattrib->ta, psa, ETH_ALEN);
-			break;
-
-		case 1:
-			memcpy(pattrib->ra, pda, ETH_ALEN);
-			memcpy(pattrib->ta, pbssid, ETH_ALEN);
-			break;
-
-		case 2:
-			memcpy(pattrib->ra, pbssid, ETH_ALEN);
-			memcpy(pattrib->ta, psa, ETH_ALEN);
-			break;
-
-		case 3:
-			memcpy(pattrib->ra, GetAddr1Ptr(ptr), ETH_ALEN);
-			memcpy(pattrib->ta, GetAddr2Ptr(ptr), ETH_ALEN);
-			RT_TRACE(_module_rtl871x_recv_c_, _drv_err_, (" case 3\n"));
-			break;
-
-		default:
-			break;
-
-		}
-			pattrib->priority =0;
-			pattrib->hdrlen = pattrib->to_fr_ds ==3 ? 30 : 24;
-
-		 padapter->proximity.proxim_rx(padapter, precv_frame);
-	}
-#endif
 	mgt_dispatcher(padapter, precv_frame);
 
 	return _SUCCESS;
-
 }
 
 sint validate_recv_data_frame(struct adapter *adapter, union recv_frame *precv_frame);

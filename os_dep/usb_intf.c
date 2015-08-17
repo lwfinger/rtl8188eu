@@ -1229,11 +1229,6 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		DBG_88E("rtw_init_primary_adapter Failed!\n");
 		goto free_dvobj;
 	}
-
-#ifdef CONFIG_INTEL_PROXIM
-	rtw_sw_export=if1;
-#endif
-
 	if (ui_pid[1]!=0) {
 		DBG_88E("ui_pid[1]:%d\n",ui_pid[1]);
 		rtw_signal_process(ui_pid[1], SIGUSR2);
@@ -1301,16 +1296,6 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 
 	RT_TRACE(_module_hci_intfs_c_,_drv_err_,("-dev_remove()\n"));
 	DBG_88E("-r871xu_dev_remove, done\n");
-
-
-#ifdef CONFIG_INTEL_PROXIM
-	rtw_sw_export= NULL;
-#endif
-
-;
-
-	return;
-
 }
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
 extern int console_suspend_enabled;
@@ -1346,11 +1331,3 @@ static void __exit rtw_drv_halt(void)
 
 module_init(rtw_drv_entry);
 module_exit(rtw_drv_halt);
-
-#ifdef CONFIG_INTEL_PROXIM
-struct adapter  *rtw_usb_get_sw_pointer(void)
-{
-	return rtw_sw_export;
-}
-EXPORT_SYMBOL(rtw_usb_get_sw_pointer);
-#endif	/* CONFIG_INTEL_PROXIM */

@@ -3223,14 +3223,6 @@ static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rss
 		mask |= ((raid<<28)&0xf0000000);
 		DBG_88E("update raid entry, mask=0x%x, arg=0x%x\n", mask, arg);
 		psta->ra_mask=mask;
-#ifdef CONFIG_INTEL_PROXIM
-		if (padapter->proximity.proxim_on ==true) {
-			arg &= ~BIT(6);
-		}
-		else {
-			arg |= BIT(6);
-		}
-#endif /* CONFIG_INTEL_PROXIM */
 		mask |= ((raid<<28)&0xf0000000);
 
 		/* to do */

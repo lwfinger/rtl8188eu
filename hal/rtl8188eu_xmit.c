@@ -383,23 +383,10 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 		else
 			ptxdesc->txdw5 |= cpu_to_le32(0x00300000);/* retry limit = 12 */
 
-#ifdef CONFIG_INTEL_PROXIM
-		if ((padapter->proximity.proxim_on==true)&&(pattrib->intel_proxim==true)) {
-			DBG_88E("\n %s pattrib->rate=%d\n",__FUNCTION__,pattrib->rate);
-			ptxdesc->txdw5 |= cpu_to_le32( pattrib->rate);
-		}
-		else
-#endif
-		{
-			ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
-		}
-	}
-	else if ((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG)
-	{
+		ptxdesc->txdw5 |= cpu_to_le32(MRateToHwRate(pmlmeext->tx_rate));
+	} else if ((pxmitframe->frame_tag&0x0f) == TXAGG_FRAMETAG) {
 		DBG_8192C("pxmitframe->frame_tag == TXAGG_FRAMETAG\n");
-	}
-	else
-	{
+	} else {
 		DBG_8192C("pxmitframe->frame_tag = %d\n", pxmitframe->frame_tag);
 
 		/* offset 4 */
@@ -424,8 +411,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	/*  (2) Enable HW SEQ control for beacon packet, because we use Hw beacon. */
 	/*  (3) Use HW Qos SEQ to control the seq num of Ext port non-Qos packets. */
 	/*  2010.06.23. Added by tynli. */
-	if (!pattrib->qos_en)
-	{
+	if (!pattrib->qos_en) {
 		ptxdesc->txdw3 |= cpu_to_le32(EN_HWSEQ); /*  Hw set sequence number */
 		ptxdesc->txdw4 |= cpu_to_le32(HW_SSN);	/*  Hw set sequence number */
 	}
@@ -435,7 +421,6 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	rtl8188eu_cal_txdesc_chksum(ptxdesc);
 	_dbg_dump_tx_info(padapter,pxmitframe->frame_tag,ptxdesc);
 	return pull;
-
 }
 
 /* for non-agg data frame or  management frame */
