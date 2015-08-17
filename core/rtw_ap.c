@@ -23,6 +23,7 @@
 #include <osdep_service.h>
 #include <drv_types.h>
 #include <wifi.h>
+#include <ieee80211.h>
 
 #ifdef CONFIG_AP_MODE
 
