@@ -1276,14 +1276,10 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	dvobj->processing_dev_remove = true;
 	rtw_unregister_netdevs(dvobj);
 
-	if (usb_drv->drv_registered == true)
-	{
+	if (usb_drv->drv_registered == true) {
 		/* DBG_88E("r871xu_dev_remove():padapter->bSurpriseRemoved == true\n"); */
 		padapter->bSurpriseRemoved = true;
 	}
-#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
-	rtw_unregister_early_suspend(dvobj_to_pwrctl(dvobj));
-#endif
 
 	rtw_pm_set_ips(padapter, IPS_NONE);
 	rtw_pm_set_lps(padapter, PS_MODE_ACTIVE);

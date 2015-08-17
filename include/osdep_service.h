@@ -672,14 +672,6 @@ __inline static u32 bitshift(u32 bitmask)
 /*  limitation of path length */
 	#define PATH_LENGTH_MAX PATH_MAX
 
-
-/*  Suspend lock prevent system from going suspend */
-#ifdef CONFIG_WAKELOCK
-#include <linux/wakelock.h>
-#elif defined(CONFIG_ANDROID_POWER)
-#include <linux/android_power.h>
-#endif
-
 void rtw_suspend_lock_init(void);
 void rtw_suspend_lock_uninit(void);
 void rtw_lock_suspend(void);
