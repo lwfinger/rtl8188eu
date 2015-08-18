@@ -1894,6 +1894,10 @@ static union recv_frame * recvframe_defrag(struct adapter *adapter, struct  __qu
 	plist = get_next(phead);
 	prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 	pfhdr =&prframe->u.hdr;
+	if (!pfhdr) {
+		pr_err("pfhdr NULL in %s\n", __func__);
+		return NULL;
+	}
 	rtw_list_delete(&(prframe->u.list));
 
 	if (curfragnum!=pfhdr->attrib.frag_num)
