@@ -1473,7 +1473,7 @@ static struct recv_frame *recvframe_defrag(struct adapter *adapter, struct __que
 
 	phead = get_list_head(defrag_q);
 	plist = phead->next;
-	phhdr = container_of(plist, struct recv_frame, list);
+	pfhdr = container_of(plist, struct recv_frame, list);
 	prframe = (struct recv_frame *)pfhdr;
 	list_del_init(&(prframe->list));
 
