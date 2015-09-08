@@ -149,8 +149,8 @@ struct mp_tx {
 #define MP_MAX_LINES		1000
 #define MP_MAX_LINES_BYTES	256
 
-#define ULONG u32
-#define PULONG u32*
+#define u32 u32
+#define Pu32 u32*
 
 struct mpt_context {
 	/*  Indicate if we have started Mass Production Test. */
@@ -172,23 +172,23 @@ struct mpt_context {
 	void (*CurrMptAct)(void * Adapter);
 
 	/*  1=Start, 0=Stop from UI. */
-	ULONG			MptTestStart;
+	u32			MptTestStart;
 	/*  _TEST_MODE, defined in MPT_Req2.h */
-	ULONG			MptTestItem;
+	u32			MptTestItem;
 	/*  Variable needed in each implementation of CurrMptAct. */
-	ULONG			MptActType;	/*  Type of action performed in CurrMptAct. */
+	u32			MptActType;	/*  Type of action performed in CurrMptAct. */
 	/*  The Offset of IO operation is depend of MptActType. */
-	ULONG			MptIoOffset;
+	u32			MptIoOffset;
 	/*  The Value of IO operation is depend of MptActType. */
-	ULONG			MptIoValue;
+	u32			MptIoValue;
 	/*  The RfPath of IO operation is depend of MptActType. */
-	ULONG			MptRfPath;
+	u32			MptRfPath;
 
 	WIRELESS_MODE		MptWirelessModeToSw;	/*  Wireless mode to switch. */
 	u8			MptChannelToSw;		/*  Channel to switch. */
 	u8			MptInitGainToSet;	/*  Initial gain to set. */
-	ULONG			MptBandWidth;		/*  bandwidth to switch. */
-	ULONG			MptRateIndex;		/*  rate index. */
+	u32			MptBandWidth;		/*  bandwidth to switch. */
+	u32			MptRateIndex;		/*  rate index. */
 	/*  Register value kept for Single Carrier Tx test. */
 	u8			btMpCckTxPower;
 	/*  Register value kept for Single Carrier Tx test. */
@@ -197,13 +197,13 @@ struct mpt_context {
 	u8			TxPwrLevel[2];	/*  rf-A, rf-B */
 
 	/*  Content of RCR Regsiter for Mass Production Test. */
-	ULONG			MptRCR;
+	u32			MptRCR;
 	/*  true if we only receive packets with specific pattern. */
 	bool			bMptFilterPattern;
 	/*  Rx OK count, statistics used in Mass Production Test. */
-	ULONG			MptRxOkCnt;
+	u32			MptRxOkCnt;
 	/*  Rx CRC32 error count, statistics used in Mass Production Test. */
-	ULONG			MptRxCrcErrCnt;
+	u32			MptRxCrcErrCnt;
 
 	bool			bCckContTx;	/*  true if we are in CCK Continuous Tx test. */
 	bool			bOfdmContTx;	/*  true if we are in OFDM Continuous Tx test. */
@@ -217,7 +217,7 @@ struct mpt_context {
 
 	/*  ACK counter asked by K.Y.. */
 	bool			bMptEnableAckCounter;
-	ULONG			MptAckCounter;
+	u32			MptAckCounter;
 
 	/*  SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~! */
 	/* s8		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT]; */
@@ -237,7 +237,7 @@ struct mpt_context {
 	u8			c2hBuf[20];
 
 	u8          btInBuf[100];
-	ULONG			mptOutLen;
+	u32			mptOutLen;
 	u8          mptOutBuf[100];
 };
 

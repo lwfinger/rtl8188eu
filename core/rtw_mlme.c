@@ -701,7 +701,7 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 {
 	unsigned long irqL;
 	struct list_head *plist, *phead;
-	ULONG	bssid_ex_sz;
+	u32	bssid_ex_sz;
 	struct mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 	struct wifidirect_info *pwdinfo = &(adapter->wdinfo);
@@ -732,7 +732,7 @@ void rtw_update_scanned_network(struct adapter *adapter, struct wlan_bssid_ex *t
 		if ((unsigned long)(pnetwork) < 0x7ffffff)
 		{
 #ifdef PLATFORM_OS_XP
-			KeBugCheckEx(0x87111c1c, (ULONG_PTR)pnetwork, 0, 0, 0);
+			KeBugCheckEx(0x87111c1c, (u32_PTR)pnetwork, 0, 0, 0);
 #endif
 		}
 

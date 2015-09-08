@@ -25,7 +25,7 @@
 #include <drv_types.h>
 #include <usb_vendor_req.h>
 
-#define USBD_HALTED(Status) ((ULONG)(Status) >> 30 == 3)
+#define USBD_HALTED(Status) ((u32)(Status) >> 30 == 3)
 
 
 /* uint usb_dvobj_init(struct adapter * adapter); */

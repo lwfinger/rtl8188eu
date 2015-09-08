@@ -32,8 +32,6 @@
 
 	typedef	signed int sint;
 
-	#define ULONG u32
-
 	typedef void (*proc_t)(void*);
 
 	typedef		__kernel_size_t	SIZE_T;
