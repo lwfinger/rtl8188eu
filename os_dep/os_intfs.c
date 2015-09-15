@@ -819,11 +819,6 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
 	/*  add for CONFIG_IEEE80211W, none 11w also can use */
 	spin_lock_init(&padapter->security_key_mutex);
 
-	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
-	/* memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
-
-	/* _init_timer(&(padapter->securitypriv.tkip_timer), padapter->pifp, rtw_use_tkipkey_handler, padapter); */
-
 	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
 	{
 		DBG_88E("Can't _rtw_init_sta_priv\n");
@@ -856,6 +851,9 @@ exit:
 
 void rtw_cancel_all_timer(struct adapter *padapter)
 {
+	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
+	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+
 	RT_TRACE(_module_os_intfs_c_,_drv_info_,("+rtw_cancel_all_timer\n"));
 
 	_cancel_timer_ex(&padapter->mlmepriv.assoc_timer);
@@ -886,6 +884,15 @@ void rtw_cancel_all_timer(struct adapter *padapter)
 #if defined(CONFIG_CHECK_BT_HANG) && defined(CONFIG_BT_COEXIST)
 	if (padapter->HalFunc.hal_cancel_checkbthang_workqueue)
 		padapter->HalFunc.hal_cancel_checkbthang_workqueue(padapter);
+#endif
+	_cancel_timer_ex(&pwdinfo->find_phase_timer);
+	_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
+	_cancel_timer_ex(&pwdinfo->pre_tx_scan_timer);
+	_cancel_timer_ex(&pwdinfo->reset_ch_sitesurvey);
+	_cancel_timer_ex(&pmlmeext->survey_timer);
+	_cancel_timer_ex(&pmlmeext->link_timer);
+#ifdef CONFIG_IEEE80211W
+	_cancel_timer_ex(&pmlmeext->sa_query_timer);
 #endif
 	/* cancel dm timer */
 	rtw_hal_dm_deinit(padapter);

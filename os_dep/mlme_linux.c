@@ -59,7 +59,6 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	_init_timer(&(pmlmepriv->assoc_timer), padapter->pnetdev, rtw_join_timeout_handler, padapter);
-	/* _init_timer(&(pmlmepriv->sitesurveyctrl.sitesurvey_ctrl_timer), padapter->pnetdev, sitesurvey_ctrl_handler, padapter); */
 	_init_timer(&(pmlmepriv->scan_to_timer), padapter->pnetdev, _rtw_scan_timeout_handler, padapter);
 
 	_init_timer(&(pmlmepriv->dynamic_chk_timer), padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
@@ -127,7 +126,6 @@ void rtw_reset_securitypriv( struct adapter *adapter )
 		pmlmeext->mgnt_80211w_IPN_rx = 0;
 #endif /* CONFIG_IEEE80211W */
 		memset((unsigned char *)&adapter->securitypriv, 0, sizeof (struct security_priv));
-		/* _init_timer(&(adapter->securitypriv.tkip_timer),adapter->pnetdev, rtw_use_tkipkey_handler, adapter); */
 
 		/*  Added by Albert 2009/02/18 */
 		/*  Restore the PMK information to securitypriv structure for the following connection. */
@@ -246,20 +244,6 @@ void init_addba_retry_timer(struct adapter *padapter, struct sta_info *psta)
 	_init_timer(&psta->addba_retry_timer, padapter->pnetdev, _addba_timer_hdl, psta);
 }
 
-/*
-void _reauth_timer_hdl(void *FunctionContext)
-{
-	struct adapter *padapter = (struct adapter *)FunctionContext;
-	reauth_timer_hdl(padapter);
-}
-
-void _reassoc_timer_hdl(void *FunctionContext)
-{
-	struct adapter *padapter = (struct adapter *)FunctionContext;
-	reassoc_timer_hdl(padapter);
-}
-*/
-
 void init_mlme_ext_timer(struct adapter *padapter)
 {
 	struct	mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
@@ -269,10 +253,6 @@ void init_mlme_ext_timer(struct adapter *padapter)
 #ifdef CONFIG_IEEE80211W
 	_init_timer(&pmlmeext->sa_query_timer, padapter->pnetdev, _sa_query_timer_hdl, padapter);
 #endif /* CONFIG_IEEE80211W */
-	/* _init_timer(&pmlmeext->ADDBA_timer, padapter->pnetdev, _addba_timer_hdl, padapter); */
-
-	/* _init_timer(&pmlmeext->reauth_timer, padapter->pnetdev, _reauth_timer_hdl, padapter); */
-	/* _init_timer(&pmlmeext->reassoc_timer, padapter->pnetdev, _reassoc_timer_hdl, padapter); */
 }
 
 #ifdef CONFIG_AP_MODE
