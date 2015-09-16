@@ -156,7 +156,7 @@ install:
 	cp rtl8188eufw.bin /lib/firmware/.
 	/sbin/depmod -a ${KVER}
 	mkdir -p /lib/firmware/rtlwifi
-	cp -n rtl8188eufw.bin /lib/firmware/rtlwifi/.
+	cp rtl8188eufw.bin /lib/firmware/rtlwifi/.
 
 uninstall:
 	rm -f $(MODDESTDIR)/8188eu.ko
