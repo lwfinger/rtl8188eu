@@ -154,10 +154,6 @@ static char* ifname = "wlan%d";
 module_param(ifname, charp, 0644);
 MODULE_PARM_DESC(ifname, "The default name to allocate for first interface");
 
-static char* if2name = "wlan%d";
-module_param(if2name, charp, 0644);
-MODULE_PARM_DESC(if2name, "The default name to allocate for second interface");
-
 char* rtw_initmac = NULL;  /*  temp mac address if users want to use instead of the mac address in Efuse */
 
 module_param(rtw_initmac, charp, 0644);
@@ -341,7 +337,6 @@ static uint loadparam( struct adapter *padapter,  struct  net_device *	pnetdev)
 #endif
 
 	snprintf(registry_par->ifname, 16, "%s", ifname);
-	snprintf(registry_par->if2name, 16, "%s", if2name);
 
 	registry_par->notch_filter = (u8)rtw_notch_filter;
 
@@ -1066,8 +1061,6 @@ int rtw_drv_register_netdev(struct adapter *if1)
 
 				if (padapter->iface_id == IFACE_ID0)
 					name = if1->registrypriv.ifname;
-				else if (padapter->iface_id == IFACE_ID1)
-					name = if1->registrypriv.if2name;
 				else
 					name = "wlan%d";
 

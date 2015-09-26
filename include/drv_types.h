@@ -156,7 +156,6 @@ struct registry_priv {
 	u8 enable80211d;
 #endif
 	u8 ifname[16];
-	u8 if2name[16];
 	u8 notch_filter;
 	u8 regulatory_tid;
 	u8 qos_opt_enable;
