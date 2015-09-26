@@ -43,7 +43,6 @@ MODULE_AUTHOR("Realtek Semiconductor Corp.");
 MODULE_VERSION(DRIVERVERSION);
 
 /* module param defaults */
-static int rtw_chip_version = 0x00;
 static int rtw_rfintfs = HWPI;
 static int rtw_lbkmode = 0;/* RTL8712_AIR_TRX; */
 
@@ -163,7 +162,6 @@ char* rtw_initmac = NULL;  /*  temp mac address if users want to use instead of 
 
 module_param(rtw_initmac, charp, 0644);
 module_param(rtw_channel_plan, int, 0644);
-module_param(rtw_chip_version, int, 0644);
 module_param(rtw_rfintfs, int, 0644);
 module_param(rtw_lbkmode, int, 0644);
 module_param(rtw_network_mode, int, 0644);
@@ -258,7 +256,6 @@ static uint loadparam( struct adapter *padapter,  struct  net_device *	pnetdev)
 	struct registry_priv  *registry_par = &padapter->registrypriv;
 
 	GlobalDebugLevel = rtw_debug;
-	registry_par->chip_version = (u8)rtw_chip_version;
 	registry_par->rfintfs = (u8)rtw_rfintfs;
 	registry_par->lbkmode = (u8)rtw_lbkmode;
 	/* registry_par->hci = (u8)hci; */
