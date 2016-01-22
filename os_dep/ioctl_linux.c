@@ -232,7 +232,7 @@ static char *translate_scan(struct adapter *padapter,
 	u16 cap;
 	__le16 le_cap;
 	u32 ht_ielen = 0;
-	char custom[MAX_CUSTOM_LEN];
+	char *custom;
 	char *p;
 	u16 max_rate=0, rate, ht_cap=false;
 	u32 i = 0;
@@ -288,9 +288,12 @@ static char *translate_scan(struct adapter *padapter,
 	if ( SCAN_RESULT_WFD_TYPE == pwdinfo->wfd_info->scan_result_type )
 	{
 		u32	blnGotWFD = false;
-		u8	wfd_ie[ 128 ] = { 0x00 };
+		u8	*wfd_ie;
 		uint	wfd_ielen = 0;
 
+		wfd_ie = kzalloc(128, GFP_ATOMIC);
+		if (!wfd_ie)
+			return start;
 		if ( rtw_get_wfd_ie_from_scan_queue( &pnetwork->network.IEs[0], pnetwork->network.IELength,  wfd_ie, &wfd_ielen, pnetwork->network.Reserved[0]) )
 		{
 			u8	wfd_devinfo[ 6 ] = { 0x00 };
@@ -319,11 +322,9 @@ static char *translate_scan(struct adapter *padapter,
 				}
 			}
 		}
-
+		kfree(wfd_ie);
 		if ( blnGotWFD == false )
-		{
 			return start;
-		}
 	}
 #endif /*  CONFIG_P2P */
 
@@ -419,6 +420,9 @@ static char *translate_scan(struct adapter *padapter,
 
 	/*Add basic and extended rates */
 	max_rate = 0;
+	custom = kzalloc(MAX_CUSTOM_LEN, GFP_ATOMIC);
+	if (!custom)
+		return start;
 	p = custom;
 	p += snprintf(p, MAX_CUSTOM_LEN - (p - custom), " Rates (Mb/s): ");
 	while (pnetwork->network.SupportedRates[i]!=0) {
@@ -451,23 +455,36 @@ static char *translate_scan(struct adapter *padapter,
 
 	/* parsing WPA/WPA2 IE */
 	{
-		u8 buf[MAX_WPA_IE_LEN];
-		u8 wpa_ie[255],rsn_ie[255];
+		u8 *buf;
+		u8 *wpa_ie, *rsn_ie;
 		u16 wpa_len=0,rsn_len=0;
 		u8 *p;
 		sint out_len=0;
+
+		buf = kzalloc(MAX_WPA_IE_LEN, GFP_ATOMIC);
+		if (!buf)
+			goto exit;
+		wpa_ie = kzalloc(255, GFP_ATOMIC);
+		if (!wpa_ie) {
+			kfree(buf);
+			goto exit;
+		}
+		rsn_ie = kzalloc(255, GFP_ATOMIC);
+		if (!rsn_ie) {
+			kfree(buf);
+			kfree(wpa_ie);
+			goto exit;
+		}
 		out_len=rtw_get_sec_ie(pnetwork->network.IEs ,pnetwork->network.IELength,rsn_ie,&rsn_len,wpa_ie,&wpa_len);
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_wx_get_scan: ssid=%s\n",pnetwork->network.Ssid.Ssid));
 		RT_TRACE(_module_rtl871x_mlme_c_,_drv_info_,("rtw_wx_get_scan: wpa_len=%d rsn_len=%d\n",wpa_len,rsn_len));
 
-		if (wpa_len > 0)
-		{
+		if (wpa_len > 0) {
 			p=buf;
 			memset(buf, 0, MAX_WPA_IE_LEN);
 			p += sprintf(p, "wpa_ie=");
-			for (i = 0; i < wpa_len; i++) {
+			for (i = 0; i < wpa_len; i++)
 				p += sprintf(p, "%02x", wpa_ie[i]);
-			}
 
 			memset(&iwe, 0, sizeof(iwe));
 			iwe.cmd = IWEVCUSTOM;
@@ -479,14 +496,12 @@ static char *translate_scan(struct adapter *padapter,
 			iwe.u.data.length = wpa_len;
 			start = iwe_stream_add_point(info, start, stop, &iwe, wpa_ie);
 		}
-		if (rsn_len > 0)
-		{
+		if (rsn_len > 0) {
 			p = buf;
 			memset(buf, 0, MAX_WPA_IE_LEN);
 			p += sprintf(p, "rsn_ie=");
-			for (i = 0; i < rsn_len; i++) {
+			for (i = 0; i < rsn_len; i++)
 				p += sprintf(p, "%02x", rsn_ie[i]);
-			}
 			memset(&iwe, 0, sizeof(iwe));
 			iwe.cmd = IWEVCUSTOM;
 			iwe.u.data.length = strlen(buf);
@@ -497,6 +512,9 @@ static char *translate_scan(struct adapter *padapter,
 			iwe.u.data.length = rsn_len;
 			start = iwe_stream_add_point(info, start, stop, &iwe, rsn_ie);
 		}
+		kfree(buf);
+		kfree(wpa_ie);
+		kfree(rsn_ie);
 	}
 
 	{ /* parsing WPS IE */
@@ -518,10 +536,8 @@ static char *translate_scan(struct adapter *padapter,
 			total_ielen = pnetwork->network.IELength - _FIXED_IE_LENGTH_;
 		}
 
-		while (cnt < total_ielen)
-		{
-			if (rtw_is_wps_ie(&ie_ptr[cnt], &wps_ielen) && (wps_ielen>2))
-			{
+		while (cnt < total_ielen) {
+			if (rtw_is_wps_ie(&ie_ptr[cnt], &wps_ielen) && (wps_ielen>2)) {
 				wpsie_ptr = &ie_ptr[cnt];
 				iwe.cmd =IWEVGENIE;
 				iwe.u.data.length = (u16)wps_ielen;
@@ -557,9 +573,13 @@ static char *translate_scan(struct adapter *padapter,
 	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_QUAL_LEN);
 
 	{
-		u8 buf[MAX_WPA_IE_LEN];
+		u8 *buf;
 		u8 * p,*pos;
 		int len;
+
+		buf = kzalloc(MAX_WPA_IE_LEN, GFP_ATOMIC);
+		if (!buf)
+			goto exit;
 		p = buf;
 		pos = pnetwork->network.Reserved;
 		memset(buf, 0, MAX_WPA_IE_LEN);
@@ -568,8 +588,10 @@ static char *translate_scan(struct adapter *padapter,
 		iwe.cmd = IWEVCUSTOM;
 		iwe.u.data.length = strlen(buf);
 		start = iwe_stream_add_point(info, start, stop, &iwe, buf);
+		kfree(buf);
 	}
-
+exit:
+	kfree(custom);
 	return start;
 }
 
