@@ -190,7 +190,7 @@ static char *translate_scan(struct adapter *padapter,
 	u16 cap;
 	__le16 le_tmp;
 	u32 ht_ielen = 0;
-	char custom[MAX_CUSTOM_LEN];
+	char *custom;
 	char *p;
 	u16 max_rate = 0, rate, ht_cap = false;
 	u32 i = 0;
@@ -319,6 +319,9 @@ static char *translate_scan(struct adapter *padapter,
 
 	/*Add basic and extended rates */
 	max_rate = 0;
+	custom = kzalloc(MAX_CUSTOM_LEN, GFP_ATOMIC);
+	if (!custom)
+		return start;
 	p = custom;
 	p += snprintf(p, MAX_CUSTOM_LEN - (p - custom), " Rates (Mb/s): ");
 	while (pnetwork->network.SupportedRates[i] != 0) {
@@ -429,6 +432,7 @@ static char *translate_scan(struct adapter *padapter,
 	iwe.u.qual.qual = (u8)sq;   /*  signal quality */
 	iwe.u.qual.noise = 0; /*  noise level */
 	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_QUAL_LEN);
+	kfree(custom);
 	return start;
 }
 
