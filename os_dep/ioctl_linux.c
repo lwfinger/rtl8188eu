@@ -352,11 +352,25 @@ static char *translate_scan(struct adapter *padapter,
 
 	/* parsing WPA/WPA2 IE */
 	{
-		u8 buf[MAX_WPA_IE_LEN];
-		u8 wpa_ie[255], rsn_ie[255];
+		u8 *buf;
+		u8 *wpa_ie, *rsn_ie;
 		u16 wpa_len = 0, rsn_len = 0;
 		u8 *p;
 
+		buf = kzalloc(MAX_WPA_IE_LEN, GFP_ATOMIC);
+		if (!buf)
+			goto exit;
+		wpa_ie = kzalloc(255, GFP_ATOMIC);
+		if (!wpa_ie) {
+			kfree(buf);
+			goto exit;
+		}
+		rsn_ie = kzalloc(255, GFP_ATOMIC);
+		if (!rsn_ie) {
+			kfree(buf);
+			kfree(wpa_ie);
+			goto exit;
+		}
 		rtw_get_sec_ie(pnetwork->network.IEs, pnetwork->network.IELength, rsn_ie, &rsn_len, wpa_ie, &wpa_len);
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_scan: ssid =%s\n", pnetwork->network.Ssid.Ssid));
 		RT_TRACE(_module_rtl871x_mlme_c_, _drv_info_, ("rtw_wx_get_scan: wpa_len =%d rsn_len =%d\n", wpa_len, rsn_len));
@@ -394,6 +408,9 @@ static char *translate_scan(struct adapter *padapter,
 			iwe.u.data.length = rsn_len;
 			start = iwe_stream_add_point(info, start, stop, &iwe, rsn_ie);
 		}
+		kfree(buf);
+		kfree(wpa_ie);
+		kfree(rsn_ie);
 	}
 
 	{/* parsing WPS IE */
@@ -432,6 +449,7 @@ static char *translate_scan(struct adapter *padapter,
 	iwe.u.qual.qual = (u8)sq;   /*  signal quality */
 	iwe.u.qual.noise = 0; /*  noise level */
 	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_QUAL_LEN);
+exit:
 	kfree(custom);
 	return start;
 }
