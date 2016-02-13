@@ -73,7 +73,6 @@ enum rf_radio_path {
 #define MAX_PG_GROUP 13
 
 #define	RF_PATH_MAX			3
-#define		MAX_RF_PATH		RF_PATH_MAX
 #define		MAX_TX_COUNT		4 /* path numbers */
 
 #define CHANNEL_MAX_NUMBER		14	/*  14 is the max chnl number */

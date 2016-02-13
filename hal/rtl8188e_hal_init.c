@@ -2013,7 +2013,7 @@ static void Hal_ReadPowerValueFromPROM_8188E(struct txpowerinfo24g *pwrInfo24G, 
 	memset(pwrInfo24G, 0, sizeof(struct txpowerinfo24g));
 
 	if (AutoLoadFail) {
-		for (rfPath = 0; rfPath < MAX_RF_PATH; rfPath++) {
+		for (rfPath = 0; rfPath < RF_PATH_MAX; rfPath++) {
 			/* 2.4G default value */
 			for (group = 0; group < MAX_CHNL_GROUP_24G; group++) {
 				pwrInfo24G->IndexCCK_Base[rfPath][group] =	EEPROM_DEFAULT_24G_INDEX;
@@ -2034,7 +2034,7 @@ static void Hal_ReadPowerValueFromPROM_8188E(struct txpowerinfo24g *pwrInfo24G, 
 		return;
 	}
 
-	for (rfPath = 0; rfPath < MAX_RF_PATH; rfPath++) {
+	for (rfPath = 0; rfPath < RF_PATH_MAX; rfPath++) {
 		/* 2.4G default value */
 		for (group = 0; group < MAX_CHNL_GROUP_24G; group++) {
 			pwrInfo24G->IndexCCK_Base[rfPath][group] =	PROMContent[eeAddr++];
