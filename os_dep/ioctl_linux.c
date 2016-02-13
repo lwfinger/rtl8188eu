@@ -6584,7 +6584,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
 
 /*
  * Input Format: %d,%x,%x
- *	%d is RF path, should be smaller than MAX_RF_PATH_NUMS
+ *	%d is RF path, should be smaller than RF_PATH_MAX
  *	1st %x is address(offset)
  *	2st %x is data to write
  */
@@ -6600,7 +6600,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
 	if (ret < 3)
 		return -EINVAL;
 
-	if (path >= MAX_RF_PATH_NUMS)
+	if (path >= RF_PATH_MAX)
 		return -EINVAL;
 	if (addr > 0xFF)
 		return -EINVAL;
@@ -6619,7 +6619,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
 
 /*
  * Input Format: %d,%x
- *	%d is RF path, should be smaller than MAX_RF_PATH_NUMS
+ *	%d is RF path, should be smaller than RF_PATH_MAX
  *	%x is address(offset)
  *
  * Return:
@@ -6647,7 +6647,7 @@ static int rtw_mp_read_rf(struct net_device *dev,
 	if (ret < 2)
 		return -EINVAL;
 
-	if (path >= MAX_RF_PATH_NUMS)
+	if (path >= RF_PATH_MAX)
 		return -EINVAL;
 	if (addr > 0xFF)
 		return -EINVAL;

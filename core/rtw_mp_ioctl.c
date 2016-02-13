@@ -138,7 +138,7 @@ int rtl8188eu_oid_rt_pro_write_rf_reg_hdl(struct oid_par_priv *poid_par_priv)
 
 	pbbreg = (struct rf_reg_param *)(poid_par_priv->information_buf);
 
-	if (pbbreg->path >= MAX_RF_PATH_NUMS)
+	if (pbbreg->path >= RF_PATH_MAX)
 		return NDIS_STATUS_NOT_ACCEPTED;
 	if (pbbreg->offset > 0xFF)
 		return NDIS_STATUS_NOT_ACCEPTED;
@@ -179,7 +179,7 @@ int rtl8188eu_oid_rt_pro_read_rf_reg_hdl(struct oid_par_priv *poid_par_priv)
 
 	pbbreg = (struct rf_reg_param *)(poid_par_priv->information_buf);
 
-	if (pbbreg->path >= MAX_RF_PATH_NUMS)
+	if (pbbreg->path >= RF_PATH_MAX)
 		return NDIS_STATUS_NOT_ACCEPTED;
 	if (pbbreg->offset > 0xFF)
 		return NDIS_STATUS_NOT_ACCEPTED;

@@ -315,7 +315,7 @@ void Hal_SetOFDMTxPower(struct adapter *pAdapter, u8 *TxPower)
 void Hal_SetAntennaPathPower(struct adapter *pAdapter)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
-	u8 TxPowerLevel[MAX_RF_PATH_NUMS];
+	u8 TxPowerLevel[RF_PATH_MAX];
 	u8 rfPath;
 
 	TxPowerLevel[RF_PATH_A] = pAdapter->mppriv.txpoweridx;
@@ -352,10 +352,10 @@ void Hal_SetTxPower(struct adapter *pAdapter)
 {
 	struct hal_data_8188e *pHalData = GET_HAL_DATA(pAdapter);
 	u8 TxPower = pAdapter->mppriv.txpoweridx;
-	u8 TxPowerLevel[MAX_RF_PATH_NUMS];
+	u8 TxPowerLevel[RF_PATH_MAX];
 	u8 rf, rfPath;
 
-	for (rf = 0; rf < MAX_RF_PATH_NUMS; rf++)
+	for (rf = 0; rf < RF_PATH_MAX; rf++)
 		TxPowerLevel[rf] = TxPower;
 
 	switch (pAdapter->mppriv.antenna_tx) {
