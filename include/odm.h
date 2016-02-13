@@ -946,8 +946,6 @@ struct odm_dm_struct {
 	struct timer_list FastAntTrainingTimer;
 };		/*  DM_Dynamic_Mechanism_Structure */
 
-#define ODM_RF_PATH_MAX 3
-
 enum ODM_RF_RADIO_PATH {
 	ODM_RF_PATH_A = 0,   /* Radio Path A */
 	ODM_RF_PATH_B = 1,   /* Radio Path B */
