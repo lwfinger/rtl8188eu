@@ -257,8 +257,8 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 	isCCKrate = (pPktinfo->Rate <= DESC92C_RATE11M) ? true : false;
 
-	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_A] = -1;
-	pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_B] = -1;
+	pPhyInfo->RxMIMOSignalQuality[RF_PATH_A] = -1;
+	pPhyInfo->RxMIMOSignalQuality[RF_PATH_B] = -1;
 
 
 	if (isCCKrate) {
@@ -433,8 +433,8 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 			/* DbgPrint("cck SQ = %d\n", SQ); */
 			pPhyInfo->SignalQuality = SQ;
-			pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_A] = SQ;
-			pPhyInfo->RxMIMOSignalQuality[ODM_RF_PATH_B] = -1;
+			pPhyInfo->RxMIMOSignalQuality[RF_PATH_A] = SQ;
+			pPhyInfo->RxMIMOSignalQuality[RF_PATH_B] = -1;
 		}
 	}
 	else /* is OFDM rate */
@@ -442,7 +442,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 		pDM_Odm->PhyDbgInfo.NumQryPhyStatusOFDM++;
 
 		/*  (1)Get RSSI for HT rate */
-		for (i = ODM_RF_PATH_A; i < RF_PATH_MAX; i++)
+		for (i = RF_PATH_A; i < RF_PATH_MAX; i++)
 		{
 			/*  2008/01/30 MH we will judge RF RX path now. */
 			if (pDM_Odm->RFPathRxEnable & BIT(i))
@@ -481,7 +481,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			{
 				if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19))
 				{
-					if (i==ODM_RF_PATH_A)
+					if (i==RF_PATH_A)
 						pPhyInfo->SignalQuality = odm_SQ_process_patch_RT_CID_819x_Lenovo(pDM_Odm,isCCKrate,PWDB_ALL,i,RSSI);
 
 				}
@@ -524,7 +524,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 				if (pPktinfo->bPacketMatchBSSID)
 				{
-					if (i==ODM_RF_PATH_A) /*  Fill value in RFD, Get the first spatial stream only */
+					if (i==RF_PATH_A) /*  Fill value in RFD, Get the first spatial stream only */
 					{
 						pPhyInfo->SignalQuality = (u8)(EVM & 0xff);
 					}
@@ -636,27 +636,27 @@ odm_Process_RSSIForDM(
 
 		if (!isCCKrate)/* ofdm rate */
 		{
-			if (pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_B] == 0) {
-				RSSI_Ave = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_A];
-				pDM_Odm->RSSI_A = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_A];
+			if (pPhyInfo->RxMIMOSignalStrength[RF_PATH_B] == 0) {
+				RSSI_Ave = pPhyInfo->RxMIMOSignalStrength[RF_PATH_A];
+				pDM_Odm->RSSI_A = pPhyInfo->RxMIMOSignalStrength[RF_PATH_A];
 				pDM_Odm->RSSI_B = 0;
 			}
 			else
 			{
 				/* DbgPrint("pRfd->Status.RxMIMOSignalStrength[0] = %d, pRfd->Status.RxMIMOSignalStrength[1] = %d\n", */
 					/* pRfd->Status.RxMIMOSignalStrength[0], pRfd->Status.RxMIMOSignalStrength[1]); */
-				pDM_Odm->RSSI_A =  pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_A];
-				pDM_Odm->RSSI_B = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_B];
+				pDM_Odm->RSSI_A =  pPhyInfo->RxMIMOSignalStrength[RF_PATH_A];
+				pDM_Odm->RSSI_B = pPhyInfo->RxMIMOSignalStrength[RF_PATH_B];
 
-				if (pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_A] > pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_B])
+				if (pPhyInfo->RxMIMOSignalStrength[RF_PATH_A] > pPhyInfo->RxMIMOSignalStrength[RF_PATH_B])
 				{
-					RSSI_max = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_A];
-					RSSI_min = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_B];
+					RSSI_max = pPhyInfo->RxMIMOSignalStrength[RF_PATH_A];
+					RSSI_min = pPhyInfo->RxMIMOSignalStrength[RF_PATH_B];
 				}
 				else
 				{
-					RSSI_max = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_B];
-					RSSI_min = pPhyInfo->RxMIMOSignalStrength[ODM_RF_PATH_A];
+					RSSI_max = pPhyInfo->RxMIMOSignalStrength[RF_PATH_B];
+					RSSI_min = pPhyInfo->RxMIMOSignalStrength[RF_PATH_A];
 				}
 				if ((RSSI_max -RSSI_min) < 3)
 					RSSI_Ave = RSSI_max;
@@ -832,8 +832,8 @@ ODM_MacStatusQuery(
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
 	PDM_ODM_T			pDM_Odm,
-	ODM_RF_RADIO_PATH_E	Content,
-	ODM_RF_RADIO_PATH_E	eRFPath
+	enum rf_radio_path	Content,
+	enum rf_radio_path	eRFPath
     )
 {
 	/* RT_STATUS	rtStatus = RT_STATUS_SUCCESS; */

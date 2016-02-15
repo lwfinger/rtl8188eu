@@ -25,7 +25,7 @@ odm_ConfigRFReg_8188E(
 	PDM_ODM_T 				pDM_Odm,
 	u32 					Addr,
 	u32 					Data,
-	ODM_RF_RADIO_PATH_E     RF_PATH,
+	enum rf_radio_path     RF_PATH,
 	u32				    RegAddr
 	);
 

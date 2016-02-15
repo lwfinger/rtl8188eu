@@ -436,7 +436,7 @@ u32 read_macreg(struct adapter *padapter, u32 addr, u32 sz);
 void write_macreg(struct adapter *padapter, u32 addr, u32 val, u32 sz);
 u32 read_bbreg(struct adapter *padapter, u32 addr, u32 bitmask);
 void write_bbreg(struct adapter *padapter, u32 addr, u32 bitmask, u32 val);
-u32 read_rfreg(struct adapter *padapter, RF_RADIO_PATH_E rfpath, u32 addr);
+u32 read_rfreg(struct adapter *padapter, enum rf_radio_path rfpath, u32 addr);
 void write_rfreg(struct adapter *padapter, u8 rfpath, u32 addr, u32 val);
 
 void	SetChannel(struct adapter *pAdapter);

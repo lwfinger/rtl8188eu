@@ -648,11 +648,11 @@ phy_RF6052_Config_ParaFile(
 		switch (eRFPath)
 		{
 		case RF_PATH_A:
-			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
+			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(enum rf_radio_path)eRFPath, (enum rf_radio_path)eRFPath))
 				rtStatus= _FAIL;
 			break;
 		case RF_PATH_B:
-			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(ODM_RF_RADIO_PATH_E)eRFPath, (ODM_RF_RADIO_PATH_E)eRFPath))
+			if (HAL_STATUS_FAILURE ==ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv,(enum rf_radio_path)eRFPath, (enum rf_radio_path)eRFPath))
 				rtStatus= _FAIL;
 			break;
 		case RF_PATH_C:
@@ -744,7 +744,7 @@ PHY_RF6052_Config8188E(
 static u32
 PHY_RFShadowRead(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				Offset)
 {
 	return	RF_Shadow[eRFPath][Offset].Value;
@@ -755,7 +755,7 @@ PHY_RFShadowRead(
 static void
 PHY_RFShadowWrite(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				Offset,
 	u32				Data)
 {
@@ -768,7 +768,7 @@ PHY_RFShadowWrite(
 static bool
 PHY_RFShadowCompare(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				Offset)
 {
 	u32	reg;
@@ -794,7 +794,7 @@ PHY_RFShadowCompare(
 static void
 PHY_RFShadowRecorver(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				Offset)
 {
 	/*  Check if the address is error */
@@ -825,7 +825,7 @@ PHY_RFShadowCompareAll(
 	{
 		for (Offset = 0; Offset <= RF6052_MAX_REG; Offset++)
 		{
-			PHY_RFShadowCompare(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset);
+			PHY_RFShadowCompare(Adapter, (enum rf_radio_path)eRFPath, Offset);
 		}
 	}
 
@@ -843,7 +843,7 @@ PHY_RFShadowRecorverAll(
 	{
 		for (Offset = 0; Offset <= RF6052_MAX_REG; Offset++)
 		{
-			PHY_RFShadowRecorver(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset);
+			PHY_RFShadowRecorver(Adapter, (enum rf_radio_path)eRFPath, Offset);
 		}
 	}
 
@@ -853,7 +853,7 @@ PHY_RFShadowRecorverAll(
 static void
 PHY_RFShadowCompareFlagSet(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				Offset,
 	u8				Type)
 {
@@ -866,7 +866,7 @@ PHY_RFShadowCompareFlagSet(
 static void
 PHY_RFShadowRecorverFlagSet(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				Offset,
 	u8				Type)
 {
@@ -889,9 +889,9 @@ PHY_RFShadowCompareFlagSetAll(
 		{
 			/*  2008/11/20 MH For S3S4 test, we only check reg 26/27 now!!!! */
 			if (Offset != 0x26 && Offset != 0x27)
-				PHY_RFShadowCompareFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, false);
+				PHY_RFShadowCompareFlagSet(Adapter, (enum rf_radio_path)eRFPath, Offset, false);
 			else
-				PHY_RFShadowCompareFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, true);
+				PHY_RFShadowCompareFlagSet(Adapter, (enum rf_radio_path)eRFPath, Offset, true);
 		}
 	}
 
@@ -911,9 +911,9 @@ PHY_RFShadowRecorverFlagSetAll(
 		{
 			/*  2008/11/20 MH For S3S4 test, we only check reg 26/27 now!!!! */
 			if (Offset != 0x26 && Offset != 0x27)
-				PHY_RFShadowRecorverFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, false);
+				PHY_RFShadowRecorverFlagSet(Adapter, (enum rf_radio_path)eRFPath, Offset, false);
 			else
-				PHY_RFShadowRecorverFlagSet(Adapter, (RF_RADIO_PATH_E)eRFPath, Offset, true);
+				PHY_RFShadowRecorverFlagSet(Adapter, (enum rf_radio_path)eRFPath, Offset, true);
 		}
 	}
 

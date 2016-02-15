@@ -380,7 +380,7 @@ rtl8188e_PHY_SetBBReg(
 *
 * Input:
 *			struct adapter *	Adapter,
-*			RF_RADIO_PATH_E	eRFPath,	Radio path of A/B/C/D
+*			enum rf_radio_path	eRFPath,	Radio path of A/B/C/D
 *			u32			Offset,		The target address to be read
 *
 * Output:	None
@@ -395,7 +395,7 @@ rtl8188e_PHY_SetBBReg(
 static	u32
 phy_RFSerialRead(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				Offset
 	)
 {
@@ -473,7 +473,7 @@ phy_RFSerialRead(
 *
 * Input:
 *			struct adapter *	Adapter,
-*			RF_RADIO_PATH_E	eRFPath,	Radio path of A/B/C/D
+*			enum rf_radio_path	eRFPath,	Radio path of A/B/C/D
 *			u32			Offset,		The target address to be read
 *			u32			Data		The new register Data in the target bit position
 *										of the target to be read
@@ -512,7 +512,7 @@ phy_RFSerialRead(
 static	void
 phy_RFSerialWrite(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				Offset,
 	u32				Data
 	)
@@ -547,7 +547,7 @@ phy_RFSerialWrite(
 *
 * Input:
 *			struct adapter *	Adapter,
-*			RF_RADIO_PATH_E	eRFPath,	Radio path of A/B/C/D
+*			enum rf_radio_path	eRFPath,	Radio path of A/B/C/D
 *			u32			RegAddr,	The target address to be read
 *			u32			BitMask		The target bit position in the target address
 *										to be read
@@ -556,7 +556,7 @@ phy_RFSerialWrite(
 * Return:		u32			Readback value
 * Note:		This function is equal to "GetRFRegSetting" in PHY programming guide
 */
-u32 rtl8188e_PHY_QueryRFReg(struct adapter *Adapter, RF_RADIO_PATH_E eRFPath, u32 RegAddr, u32 BitMask)
+u32 rtl8188e_PHY_QueryRFReg(struct adapter *Adapter, enum rf_radio_path eRFPath, u32 RegAddr, u32 BitMask)
 {
 	u32 Original_Value, Readback_Value, BitShift;
 
@@ -579,7 +579,7 @@ u32 rtl8188e_PHY_QueryRFReg(struct adapter *Adapter, RF_RADIO_PATH_E eRFPath, u3
 *
 * Input:
 *			struct adapter *	Adapter,
-*			RF_RADIO_PATH_E	eRFPath,	Radio path of A/B/C/D
+*			enum rf_radio_path	eRFPath,	Radio path of A/B/C/D
 *			u32			RegAddr,	The target address to be modified
 *			u32			BitMask		The target bit position in the target address
 *								to be modified
@@ -593,7 +593,7 @@ u32 rtl8188e_PHY_QueryRFReg(struct adapter *Adapter, RF_RADIO_PATH_E eRFPath, u3
 void
 rtl8188e_PHY_SetRFReg(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				RegAddr,
 	u32				BitMask,
 	u32				Data
@@ -1173,7 +1173,7 @@ PHY_RFConfig8188E(
  *
  * Input:	struct adapter *		Adapter
  *			s8 *					pFileName
- *			RF_RADIO_PATH_E	eRFPath
+ *			enum rf_radio_path	eRFPath
  *
  * Output:      NONE
  *
@@ -1185,7 +1185,7 @@ int
 rtl8188e_PHY_ConfigRFWithParaFile(
 	struct adapter *		Adapter,
 	u8*				pFileName,
-	RF_RADIO_PATH_E		eRFPath
+	enum rf_radio_path		eRFPath
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1219,7 +1219,7 @@ static u32 Rtl8192S_HighPower_RadioA_Array[HighPowerRadioAArrayLen] = {
 static int
 PHY_ConfigRFExternalPA(
 	struct adapter *		Adapter,
-	RF_RADIO_PATH_E		eRFPath
+	enum rf_radio_path		eRFPath
 )
 {
 	int	rtStatus = _SUCCESS;
@@ -1239,7 +1239,7 @@ PHY_ConfigRFExternalPA(
  *
  * Input:	struct adapter *		Adapter
  *			HW90_BLOCK_E		CheckBlock
- *			RF_RADIO_PATH_E	eRFPath		it is used only when CheckBlock is HW90_BLOCK_RF
+ *			enum rf_radio_path	eRFPath		it is used only when CheckBlock is HW90_BLOCK_RF
  *
  * Output:      NONE
  *
@@ -1251,7 +1251,7 @@ static int
 PHY_CheckBBAndRFOK(
 	struct adapter *		Adapter,
 	HW90_BLOCK_E		CheckBlock,
-	RF_RADIO_PATH_E	eRFPath
+	enum rf_radio_path	eRFPath
 	)
 {
 	int			rtStatus = _SUCCESS;
@@ -1884,7 +1884,7 @@ static void _PHY_SwChnl8192C(struct adapter *Adapter, u8 channel)
 	for (eRFPath = 0; eRFPath <pHalData->NumTotalRFPath; eRFPath++)
 	{
 		pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffffc00) | param2);
-		PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
+		PHY_SetRFReg(Adapter, (enum rf_radio_path)eRFPath, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
 	}
 
 

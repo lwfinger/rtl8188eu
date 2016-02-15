@@ -22,11 +22,10 @@
 #ifndef	__HALHWOUTSRC_H__
 #define __HALHWOUTSRC_H__
 
-/*  */
+#include "Hal8188EPhyCfg.h"
+
 /*  Definition  */
-/*  */
-/*  */
-/*  */
+
 /*  CCK Rates, TxHT = 0 */
 #define DESC92C_RATE1M					0x00
 #define DESC92C_RATE2M					0x01
@@ -173,9 +172,9 @@ ODM_MacStatusQuery(
 HAL_STATUS
 ODM_ConfigRFWithHeaderFile(
 	PDM_ODM_T	      pDM_Odm,
-	ODM_RF_RADIO_PATH_E 	Content,
-	ODM_RF_RADIO_PATH_E 	eRFPath
-	);
+	enum rf_radio_path 	Content,
+	enum rf_radio_path 	eRFPath
+);
 
 HAL_STATUS
 ODM_ConfigBBWithHeaderFile(

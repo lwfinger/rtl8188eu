@@ -1170,13 +1170,6 @@ typedef  struct DM_Out_Source_Dynamic_Mechanism_Structure
 	/*  ODM relative workitem. */
 } DM_ODM_T, *PDM_ODM_T;		/*  DM_Dynamic_Mechanism_Structure */
 
-typedef enum _ODM_RF_RADIO_PATH {
-    ODM_RF_PATH_A = 0,   /* Radio Path A */
-    ODM_RF_PATH_B = 1,   /* Radio Path B */
-    ODM_RF_PATH_C = 2,   /* Radio Path C */
-    ODM_RF_PATH_D = 3,   /* Radio Path D */
-} ODM_RF_RADIO_PATH_E, *PODM_RF_RADIO_PATH_E;
-
  typedef enum _ODM_RF_CONTENT{
 	odm_radioa_txt = 0x1000,
 	odm_radiob_txt = 0x1001,

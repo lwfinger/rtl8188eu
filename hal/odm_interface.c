@@ -23,9 +23,9 @@
 /*  */
 
 #include "odm_precomp.h"
-/*  */
+#include "Hal8188EPhyCfg.h"
+
 /*  ODM IO Relative API. */
-/*  */
 
 u8
 ODM_Read1Byte(
@@ -141,27 +141,27 @@ ODM_GetBBReg(
 void
 ODM_SetRFReg(
 	PDM_ODM_T			pDM_Odm,
-	ODM_RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				RegAddr,
 	u32				BitMask,
 	u32				Data
 	)
 {
 	struct adapter *	Adapter = pDM_Odm->Adapter;
-	PHY_SetRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath, RegAddr, BitMask, Data);
+	PHY_SetRFReg(Adapter, (enum rf_radio_path)eRFPath, RegAddr, BitMask, Data);
 }
 
 u32
 ODM_GetRFReg(
 	PDM_ODM_T			pDM_Odm,
-	ODM_RF_RADIO_PATH_E	eRFPath,
+	enum rf_radio_path	eRFPath,
 	u32				RegAddr,
 	u32				BitMask
 	)
 {
 	struct adapter *	Adapter = pDM_Odm->Adapter;
 
-	return PHY_QueryRFReg(Adapter, (RF_RADIO_PATH_E)eRFPath,
+	return PHY_QueryRFReg(Adapter, (enum rf_radio_path)eRFPath,
 			      RegAddr, BitMask);
 }
 

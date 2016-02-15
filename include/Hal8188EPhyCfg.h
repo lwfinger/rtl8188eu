@@ -67,12 +67,12 @@ typedef enum _HW90_BLOCK{
 	HW90_BLOCK_MAXIMUM = 4, /*  Never use this */
 }HW90_BLOCK_E, *PHW90_BLOCK_E;
 
-typedef enum _RF_RADIO_PATH{
+enum rf_radio_path {
 	RF_PATH_A = 0,			/* Radio Path A */
 	RF_PATH_B = 1,			/* Radio Path B */
 	RF_PATH_C = 2,			/* Radio Path C */
 	RF_PATH_D = 3,			/* Radio Path D */
-}RF_RADIO_PATH_E, *PRF_RADIO_PATH_E;
+};
 
 #define MAX_PG_GROUP 13
 
@@ -217,11 +217,11 @@ void	rtl8188e_PHY_SetBBReg(	struct adapter *Adapter,
 								u32		BitMask,
 								u32		Data	);
 u32	rtl8188e_PHY_QueryRFReg(	struct adapter *		Adapter,
-								RF_RADIO_PATH_E	eRFPath,
+								enum rf_radio_path	eRFPath,
 								u32				RegAddr,
 								u32				BitMask	);
 void	rtl8188e_PHY_SetRFReg(	struct adapter *		Adapter,
-								RF_RADIO_PATH_E	eRFPath,
+								enum rf_radio_path	eRFPath,
 								u32				RegAddr,
 								u32				BitMask,
 								u32				Data	);
@@ -235,9 +235,9 @@ int	PHY_BBConfig8188E(struct adapter *Adapter	);
 int	PHY_RFConfig8188E(struct adapter *Adapter	);
 
 /* RF config */
-int	rtl8188e_PHY_ConfigRFWithParaFile(struct adapter *Adapter, u8 * pFileName, RF_RADIO_PATH_E eRFPath);
+int	rtl8188e_PHY_ConfigRFWithParaFile(struct adapter *Adapter, u8 * pFileName, enum rf_radio_path eRFPath);
 int	rtl8188e_PHY_ConfigRFWithHeaderFile(struct adapter *Adapter,
-					RF_RADIO_PATH_E		eRFPath);
+					enum rf_radio_path		eRFPath);
 
 /* Read initi reg value for tx power setting. */
 void	rtl8192c_PHY_GetHWRegOriginalValue(struct adapter *	Adapter	);
