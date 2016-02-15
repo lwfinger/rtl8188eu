@@ -353,8 +353,6 @@ enum MP_MODE {
 	MP_PACKET_RX
 };
 
-#define MAX_RF_PATH_NUMS	RF_PATH_MAX
-
 extern u8 mpdatarate[NumRates];
 
 /* MP set force data rate base on the definition. */
