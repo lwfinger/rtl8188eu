@@ -442,7 +442,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 		pDM_Odm->PhyDbgInfo.NumQryPhyStatusOFDM++;
 
 		/*  (1)Get RSSI for HT rate */
-		for (i = ODM_RF_PATH_A; i < ODM_RF_PATH_MAX; i++)
+		for (i = ODM_RF_PATH_A; i < RF_PATH_MAX; i++)
 		{
 			/*  2008/01/30 MH we will judge RF RX path now. */
 			if (pDM_Odm->RFPathRxEnable & BIT(i))
