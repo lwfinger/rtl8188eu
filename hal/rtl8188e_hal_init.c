@@ -3157,15 +3157,10 @@ Hal_ReadTxPowerInfo88E(
 	if (!AutoLoadFail)
 		pHalData->bTXPowerDataReadFromEEPORM = true;
 
-	/* for (rfPath = 0 ; rfPath < MAX_RF_PATH ; rfPath++) */
-	for (rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++)
-	{
-		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++)
-		{
+	for (rfPath = 0 ; rfPath < pHalData->NumTotalRFPath ; rfPath++) {
+		for (ch = 0 ; ch < CHANNEL_MAX_NUMBER ; ch++) {
 			bIn24G = Hal_GetChnlGroup88E(ch+1,&group);
-			if (bIn24G)
-			{
-
+			if (bIn24G) {
 				pHalData->Index24G_CCK_Base[rfPath][ch]=pwrInfo24G.IndexCCK_Base[rfPath][group];
 
 				if (ch==(14-1))
