@@ -167,28 +167,9 @@ odm_SignalScaleMapping_92CSeries(
 #endif
 	return RetSig;
 }
-static s32
-odm_SignalScaleMapping(
-	PDM_ODM_T pDM_Odm,
-	s32 CurrSig
-)
+static s32 odm_SignalScaleMapping(PDM_ODM_T pDM_Odm, s32 CurrSig)
 {
-	if (	(pDM_Odm->SupportPlatform == ODM_MP) &&
-		(pDM_Odm->SupportInterface  != ODM_ITRF_PCIE) && /* USB & SDIO */
-		(pDM_Odm->PatchID==10))/* pMgntInfo->CustomerID == RT_CID_819x_Netcore */
-	{
-		return odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Netcore(pDM_Odm,CurrSig);
-	}
-	else if (	(pDM_Odm->SupportPlatform == ODM_MP) &&
-			(pDM_Odm->SupportInterface  == ODM_ITRF_PCIE) &&
-			(pDM_Odm->PatchID==19))/* pMgntInfo->CustomerID == RT_CID_819x_Lenovo) */
-	{
-		return odm_SignalScaleMapping_92CSeries_patch_RT_CID_819x_Lenovo(pDM_Odm, CurrSig);
-	}
-	else {
-		return odm_SignalScaleMapping_92CSeries(pDM_Odm,CurrSig);
-	}
-
+	return odm_SignalScaleMapping_92CSeries(pDM_Odm,CurrSig);
 }
 
 /* pMgntInfo->CustomerID == RT_CID_819x_Lenovo */
@@ -315,8 +296,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			}
 			rx_pwr_all += 6;
 			PWDB_ALL = odm_QueryRxPwrPercentage(rx_pwr_all);
-			if (cck_highpwr == false)
-			{
+			if (cck_highpwr == false) {
 				if (PWDB_ALL >= 80)
 					PWDB_ALL = ((PWDB_ALL-80)<<1)+((PWDB_ALL-80)>>1)+80;
 				else if ((PWDB_ALL <= 78) && (PWDB_ALL >= 20))
@@ -324,33 +304,27 @@ odm_RxPhyStatus92CSeries_Parsing(
 				if (PWDB_ALL>100)
 					PWDB_ALL = 100;
 			}
-		}
-		else
-		{
-			if (!cck_highpwr)
-			{
+		} else {
+			if (!cck_highpwr) {
 				report =( cck_agc_rpt & 0xc0 )>>6;
-				switch (report)
-				{
-					/*  03312009 modified by cosa */
-					/*  Modify the RF RNA gain value to -40, -20, -2, 14 by Jenyu's suggestion */
-					/*  Note: different RF with the different RNA gain. */
-					case 0x3:
-						rx_pwr_all = -46 - (cck_agc_rpt & 0x3e);
-						break;
-					case 0x2:
-						rx_pwr_all = -26 - (cck_agc_rpt & 0x3e);
-						break;
-					case 0x1:
-						rx_pwr_all = -12 - (cck_agc_rpt & 0x3e);
-						break;
-					case 0x0:
-						rx_pwr_all = 16 - (cck_agc_rpt & 0x3e);
-						break;
+				switch (report) {
+				/*  03312009 modified by cosa */
+				/*  Modify the RF RNA gain value to -40, -20, -2, 14 by Jenyu's suggestion */
+				/*  Note: different RF with the different RNA gain. */
+				case 0x3:
+					rx_pwr_all = -46 - (cck_agc_rpt & 0x3e);
+					break;
+				case 0x2:
+					rx_pwr_all = -26 - (cck_agc_rpt & 0x3e);
+					break;
+				case 0x1:
+					rx_pwr_all = -12 - (cck_agc_rpt & 0x3e);
+					break;
+				case 0x0:
+					rx_pwr_all = 16 - (cck_agc_rpt & 0x3e);
+					break;
 				}
-			}
-			else
-			{
+			} else {
 				/* report = pDrvInfo->cfosho[0] & 0x60; */
 				/* report = pPhyStaRpt->cck_agc_rpt_ofdm_cfosho_a& 0x60; */
 
@@ -375,13 +349,10 @@ odm_RxPhyStatus92CSeries_Parsing(
 			PWDB_ALL = odm_QueryRxPwrPercentage(rx_pwr_all);
 
 			/* Modification for ext-LNA board */
-			if (pDM_Odm->BoardType & (ODM_BOARD_EXT_LNA | ODM_BOARD_EXT_PA))
-			{
+			if (pDM_Odm->BoardType & (ODM_BOARD_EXT_LNA | ODM_BOARD_EXT_PA)) {
 				if ((cck_agc_rpt>>7) == 0) {
 					PWDB_ALL = (PWDB_ALL>94)?100:(PWDB_ALL +6);
-				}
-				else
-	                   {
+				} else {
 					if (PWDB_ALL > 38)
 						PWDB_ALL -= 16;
 					else
@@ -393,9 +364,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 					PWDB_ALL += 6;
 				/* else if (PWDB_ALL <= 25) */
 				/* 	PWDB_ALL += 8; */
-			}
-			else/* Modification for int-LNA board */
-			{
+			} else { /* Modification for int-LNA board */
 				if (PWDB_ALL > 99)
 					PWDB_ALL -= 8;
 				else if (PWDB_ALL > 50 && PWDB_ALL <= 68)
@@ -409,17 +378,12 @@ odm_RxPhyStatus92CSeries_Parsing(
 		/*  */
 		/*  (3) Get Signal Quality (EVM) */
 		/*  */
-		if (pPktinfo->bPacketMatchBSSID)
-		{
+		if (pPktinfo->bPacketMatchBSSID) {
 			u8	SQ,SQ_rpt;
 
-			if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19)) {/* pMgntInfo->CustomerID == RT_CID_819x_Lenovo */
-				SQ = odm_SQ_process_patch_RT_CID_819x_Lenovo(pDM_Odm,isCCKrate,PWDB_ALL,0,0);
-			}
-			else if (pPhyInfo->RxPWDBAll > 40 && !pDM_Odm->bInHctTest) {
+			if (pPhyInfo->RxPWDBAll > 40 && !pDM_Odm->bInHctTest) {
 				SQ = 100;
-			}
-			else {
+			} else {
 				SQ_rpt = pPhyStaRpt->cck_sig_qual_ofdm_pwdb_all;
 
 				if (SQ_rpt > 64)
@@ -430,28 +394,21 @@ odm_RxPhyStatus92CSeries_Parsing(
 					SQ = ((64-SQ_rpt) * 100) / 44;
 
 			}
-
 			/* DbgPrint("cck SQ = %d\n", SQ); */
 			pPhyInfo->SignalQuality = SQ;
 			pPhyInfo->RxMIMOSignalQuality[RF_PATH_A] = SQ;
 			pPhyInfo->RxMIMOSignalQuality[RF_PATH_B] = -1;
 		}
-	}
-	else /* is OFDM rate */
-	{
+	} else { /* is OFDM rate */
 		pDM_Odm->PhyDbgInfo.NumQryPhyStatusOFDM++;
 
 		/*  (1)Get RSSI for HT rate */
-		for (i = RF_PATH_A; i < RF_PATH_MAX; i++)
-		{
+		for (i = RF_PATH_A; i < RF_PATH_MAX; i++) {
 			/*  2008/01/30 MH we will judge RF RX path now. */
 			if (pDM_Odm->RFPathRxEnable & BIT(i))
 				rf_rx_num++;
-			/* else */
-				/* continue; */
 
 			rx_pwr[i] = ((pPhyStaRpt->path_agc[i].gain& 0x3F)*2) - 110;
-
 			pPhyInfo->RxPwr[i] = rx_pwr[i];
 
 			/* Translate DBM to percentage. */
@@ -460,8 +417,7 @@ odm_RxPhyStatus92CSeries_Parsing(
 			/* RTPRINT(FRX, RX_PHY_SS, ("RF-%d RXPWR=%x RSSI=%d\n", i, rx_pwr[i], RSSI)); */
 
 			/* Modification for ext-LNA board */
-			if (pDM_Odm->BoardType & (ODM_BOARD_EXT_LNA | ODM_BOARD_EXT_PA))
-			{
+			if (pDM_Odm->BoardType & (ODM_BOARD_EXT_LNA | ODM_BOARD_EXT_PA)) {
 				if ((pPhyStaRpt->path_agc[i].trsw) == 1)
 					RSSI = (RSSI>94)?100:(RSSI +6);
 				else
@@ -475,18 +431,6 @@ odm_RxPhyStatus92CSeries_Parsing(
 
 			/* Get Rx snr value in DB */
 			pPhyInfo->RxSNR[i] = pDM_Odm->PhyDbgInfo.RxSNRdB[i] = (s32)(pPhyStaRpt->path_rxsnr[i]/2);
-
-			/* Record Signal Strength for next packet */
-			if (pPktinfo->bPacketMatchBSSID)
-			{
-				if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19))
-				{
-					if (i==RF_PATH_A)
-						pPhyInfo->SignalQuality = odm_SQ_process_patch_RT_CID_819x_Lenovo(pDM_Odm,isCCKrate,PWDB_ALL,i,RSSI);
-
-				}
-
-			}
 		}
 
 
@@ -502,50 +446,41 @@ odm_RxPhyStatus92CSeries_Parsing(
 		pPhyInfo->RxPower = rx_pwr_all;
 		pPhyInfo->RecvSignalPower = rx_pwr_all;
 
-		if ((pDM_Odm->SupportPlatform == ODM_MP) &&(pDM_Odm->PatchID==19)) {
-			/* do nothing */
-		} else {/* pMgntInfo->CustomerID != RT_CID_819x_Lenovo */
-			/*  */
-			/*  (3)EVM of HT rate */
-			/*  */
-			if (pPktinfo->Rate >=DESC92C_RATEMCS8 && pPktinfo->Rate <=DESC92C_RATEMCS15)
-				Max_spatial_stream = 2; /* both spatial stream make sense */
-			else
-				Max_spatial_stream = 1; /* only spatial stream 1 makes sense */
+		/*  */
+		/*  (3)EVM of HT rate */
+		/*  */
+		if (pPktinfo->Rate >=DESC92C_RATEMCS8 && pPktinfo->Rate <=DESC92C_RATEMCS15)
+			Max_spatial_stream = 2; /* both spatial stream make sense */
+		else
+			Max_spatial_stream = 1; /* only spatial stream 1 makes sense */
 
-			for (i=0; i<Max_spatial_stream; i++) {
-				/*  Do not use shift operation like "rx_evmX >>= 1" because the compilor of free build environment */
-				/*  fill most significant bit to "zero" when doing shifting operation which may change a negative */
-				/*  value to positive one, then the dbm value (which is supposed to be negative)  is not correct anymore. */
-				EVM = odm_EVMdbToPercentage( (pPhyStaRpt->stream_rxevm[i] ));	/* dbm */
+		for (i=0; i<Max_spatial_stream; i++) {
+			/*  Do not use shift operation like "rx_evmX >>= 1" because the compilor of free build environment */
+			/*  fill most significant bit to "zero" when doing shifting operation which may change a negative */
+			/*  value to positive one, then the dbm value (which is supposed to be negative)  is not correct anymore. */
+			EVM = odm_EVMdbToPercentage( (pPhyStaRpt->stream_rxevm[i] ));	/* dbm */
 
-				/* RTPRINT(FRX, RX_PHY_SQ, ("RXRATE=%x RXEVM=%x EVM=%s%d\n", */
-				/* GET_RX_STATUS_DESC_RX_MCS(pDesc), pDrvInfo->rxevm[i], "%", EVM)); */
+			/* RTPRINT(FRX, RX_PHY_SQ, ("RXRATE=%x RXEVM=%x EVM=%s%d\n", */
+			/* GET_RX_STATUS_DESC_RX_MCS(pDesc), pDrvInfo->rxevm[i], "%", EVM)); */
 
-				if (pPktinfo->bPacketMatchBSSID)
+			if (pPktinfo->bPacketMatchBSSID)
+			{
+				if (i==RF_PATH_A) /*  Fill value in RFD, Get the first spatial stream only */
 				{
-					if (i==RF_PATH_A) /*  Fill value in RFD, Get the first spatial stream only */
-					{
-						pPhyInfo->SignalQuality = (u8)(EVM & 0xff);
-					}
-					pPhyInfo->RxMIMOSignalQuality[i] = (u8)(EVM & 0xff);
+					pPhyInfo->SignalQuality = (u8)(EVM & 0xff);
 				}
+				pPhyInfo->RxMIMOSignalQuality[i] = (u8)(EVM & 0xff);
 			}
 		}
 
 	}
 	/* UI BSS List signal strength(in percentage), make it good looking, from 0~100. */
 	/* It is assigned to the BSS List in GetValueFromBeaconOrProbeRsp(). */
-	if (isCCKrate)
-	{
+	if (isCCKrate) {
 		pPhyInfo->SignalStrength = (u8)(odm_SignalScaleMapping(pDM_Odm, PWDB_ALL));/* PWDB_ALL; */
-	}
-	else
-	{
+	} else {
 		if (rf_rx_num != 0)
-		{
 			pPhyInfo->SignalStrength = (u8)(odm_SignalScaleMapping(pDM_Odm, total_rssi/=rf_rx_num));
-		}
 	}
 
 	/* For 92C/92D HW (Hybrid) Antenna Diversity */
@@ -582,12 +517,6 @@ odm_Process_RSSIForDM(
 
 	if (pPktinfo->StationID == 0xFF)
 		return;
-
-	/*  2011/11/17 MH Need to debug */
-	/* if (pDM_Odm->SupportPlatform == ODM_MP) */
-	{
-
-	}
 
 	pEntry = pDM_Odm->pODM_StaInfo[pPktinfo->StationID];
 	if (!IS_STA_VALID(pEntry))

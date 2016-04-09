@@ -673,6 +673,7 @@ ODM_CmnInfoInit(
 			break;
 		case	ODM_CMNINFO_PLATFORM:
 			pDM_Odm->SupportPlatform = (u8)Value;
+			pr_info("SupportPlatform 0x%x\n", Value);
 			break;
 
 		case	ODM_CMNINFO_INTERFACE:
@@ -1167,28 +1168,10 @@ ODM_Write_DIG(
 
 	if (pDM_DigTable->CurIGValue != CurrentIGI)/* if (pDM_DigTable->PreIGValue != CurrentIGI) */
 	{
-		if (pDM_Odm->SupportPlatform & (ODM_CE|ODM_MP)) {
+		if (pDM_Odm->SupportPlatform & (ODM_CE)) {
 			ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_A,pDM_Odm), ODM_BIT(IGI,pDM_Odm), CurrentIGI);
 			if (pDM_Odm->SupportICType != ODM_RTL8188E)
 				ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_B,pDM_Odm), ODM_BIT(IGI,pDM_Odm), CurrentIGI);
-		} else if (pDM_Odm->SupportPlatform & (ODM_AP|ODM_ADSL)) {
-			switch (*(pDM_Odm->pOnePathCCA)) {
-			case ODM_CCA_2R:
-				ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_A,pDM_Odm), ODM_BIT(IGI,pDM_Odm), CurrentIGI);
-				if (pDM_Odm->SupportICType != ODM_RTL8188E)
-					ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_B,pDM_Odm), ODM_BIT(IGI,pDM_Odm), CurrentIGI);
-				break;
-			case ODM_CCA_1R_A:
-				ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_A,pDM_Odm), ODM_BIT(IGI,pDM_Odm), CurrentIGI);
-				if (pDM_Odm->SupportICType != ODM_RTL8188E)
-					ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_B,pDM_Odm), ODM_BIT(IGI,pDM_Odm), getIGIForDiff(CurrentIGI));
-				break;
-			case ODM_CCA_1R_B:
-				ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_A,pDM_Odm), ODM_BIT(IGI,pDM_Odm), getIGIForDiff(CurrentIGI));
-				if (pDM_Odm->SupportICType != ODM_RTL8188E)
-					ODM_SetBBReg(pDM_Odm, ODM_REG(IGI_B,pDM_Odm), ODM_BIT(IGI,pDM_Odm), CurrentIGI);
-				break;
-			}
 		}
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_DIG, ODM_DBG_LOUD, ("CurrentIGI(0x%02x).\n",CurrentIGI));
 		/* pDM_DigTable->PreIGValue = pDM_DigTable->CurIGValue; */
@@ -1523,7 +1506,7 @@ odm_DIG(
 		}
 		else
 		{
-			if ((pDM_Odm->SupportICType >= ODM_RTL8188E) && (pDM_Odm->SupportPlatform & (ODM_MP|ODM_CE)))
+			if ((pDM_Odm->SupportICType >= ODM_RTL8188E) && (pDM_Odm->SupportPlatform & (ODM_CE)))
 				dm_dig_max = 0x5A;
 			else
 				dm_dig_max = DM_DIG_MAX_NIC;
@@ -1696,7 +1679,7 @@ odm_DIG(
 	}
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_DIG(): pDM_DigTable->LargeFAHit=%d\n",pDM_DigTable->LargeFAHit));
 
-	if ((pDM_Odm->SupportPlatform&(ODM_MP|ODM_CE))&&(pDM_Odm->PhyDbgInfo.NumQryBeaconPkt < 10) && (pDM_Odm->bsta_state))
+	if ((pDM_Odm->SupportPlatform&(ODM_CE))&&(pDM_Odm->PhyDbgInfo.NumQryBeaconPkt < 10) && (pDM_Odm->bsta_state))
 		pDM_DigTable->rx_gain_range_min = dm_dig_min;
 
 	if (pDM_DigTable->rx_gain_range_min > pDM_DigTable->rx_gain_range_max)
@@ -1761,7 +1744,7 @@ odm_DIG(
 					else if (pFalseAlmCnt->Cnt_all < DM_DIG_FA_TH0)
 						CurrentIGI = CurrentIGI - 2;/* pDM_DigTable->CurIGValue =pDM_DigTable->PreIGValue-1; */
 
-					if ((pDM_Odm->SupportPlatform&(ODM_MP|ODM_CE))&&(pDM_Odm->PhyDbgInfo.NumQryBeaconPkt < 10)
+					if ((pDM_Odm->SupportPlatform&(ODM_CE))&&(pDM_Odm->PhyDbgInfo.NumQryBeaconPkt < 10)
 						&&(pFalseAlmCnt->Cnt_all < DM_DIG_FA_TH1) && (pDM_Odm->bsta_state))
 					{
 						CurrentIGI = pDM_DigTable->rx_gain_range_min;
@@ -2067,7 +2050,7 @@ odm_DynamicBBPowerSaving(
 		return;
 	if (!(pDM_Odm->SupportAbility & ODM_BB_PWR_SAVE))
 		return;
-	if (!(pDM_Odm->SupportPlatform & (ODM_MP|ODM_CE)))
+	if (!(pDM_Odm->SupportPlatform & (ODM_CE)))
 		return;
 
 	/* 1 2.Power Saving for 92C */
@@ -2369,21 +2352,7 @@ odm_RefreshRateAdaptiveMask(
 	/*  at the same time. In the stage2/3, we need to prive universal interface and merge all */
 	/*  HW dynamic mechanism. */
 	/*  */
-	switch	(pDM_Odm->SupportPlatform)
-	{
-		case	ODM_MP:
-			odm_RefreshRateAdaptiveMaskMP(pDM_Odm);
-			break;
-
-		case	ODM_CE:
-			odm_RefreshRateAdaptiveMaskCE(pDM_Odm);
-			break;
-
-		case	ODM_AP:
-		case	ODM_ADSL:
-			odm_RefreshRateAdaptiveMaskAPADSL(pDM_Odm);
-			break;
-	}
+	odm_RefreshRateAdaptiveMaskCE(pDM_Odm);
 
 }
 
@@ -2585,22 +2554,7 @@ odm_DynamicTxPower(
 	/*  at the same time. In the stage2/3, we need to prive universal interface and merge all */
 	/*  HW dynamic mechanism. */
 	/*  */
-	switch	(pDM_Odm->SupportPlatform)
-	{
-		case	ODM_MP:
-		case	ODM_CE:
-			odm_DynamicTxPowerNIC(pDM_Odm);
-			break;
-		case	ODM_AP:
-			odm_DynamicTxPowerAP(pDM_Odm);
-			break;
-
-		case	ODM_ADSL:
-			/* odm_DIGAP(pDM_Odm); */
-			break;
-	}
-
-
+	odm_DynamicTxPowerNIC(pDM_Odm);
 }
 
 
@@ -2685,25 +2639,7 @@ odm_RSSIMonitorCheck(
 	/*  at the same time. In the stage2/3, we need to prive universal interface and merge all */
 	/*  HW dynamic mechanism. */
 	/*  */
-	switch	(pDM_Odm->SupportPlatform)
-	{
-		case	ODM_MP:
-			odm_RSSIMonitorCheckMP(pDM_Odm);
-			break;
-
-		case	ODM_CE:
-			odm_RSSIMonitorCheckCE(pDM_Odm);
-			break;
-
-		case	ODM_AP:
-			odm_RSSIMonitorCheckAP(pDM_Odm);
-			break;
-
-		case	ODM_ADSL:
-			/* odm_DIGAP(pDM_Odm); */
-			break;
-	}
-
+	odm_RSSIMonitorCheckCE(pDM_Odm);
 }	/*  odm_RSSIMonitorCheck */
 
 
@@ -2917,25 +2853,7 @@ ODM_TXPowerTrackingCheck(
 	/*  at the same time. In the stage2/3, we need to prive universal interface and merge all */
 	/*  HW dynamic mechanism. */
 	/*  */
-	switch	(pDM_Odm->SupportPlatform)
-	{
-		case	ODM_MP:
-			odm_TXPowerTrackingCheckMP(pDM_Odm);
-			break;
-
-		case	ODM_CE:
-			odm_TXPowerTrackingCheckCE(pDM_Odm);
-			break;
-
-		case	ODM_AP:
-			odm_TXPowerTrackingCheckAP(pDM_Odm);
-			break;
-
-		case	ODM_ADSL:
-			/* odm_DIGAP(pDM_Odm); */
-			break;
-	}
-
+	odm_TXPowerTrackingCheckCE(pDM_Odm);
 }
 
 void
@@ -3348,16 +3266,7 @@ odm_EdcaTurboCheck(
 	if (!(pDM_Odm->SupportAbility& ODM_MAC_EDCA_TURBO ))
 		return;
 
-	switch	(pDM_Odm->SupportPlatform) {
-	case	ODM_MP:
-		break;
-	case	ODM_CE:
-		odm_EdcaTurboCheckCE(pDM_Odm);
-		break;
-	case	ODM_AP:
-	case	ODM_ADSL:
-		break;
-	}
+	odm_EdcaTurboCheckCE(pDM_Odm);
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_EDCA_TURBO,ODM_DBG_LOUD,("<========================odm_EdcaTurboCheck\n"));
 
 }	/*  odm_CheckEdcaTurbo */
