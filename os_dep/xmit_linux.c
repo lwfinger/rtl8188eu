@@ -40,6 +40,14 @@ uint rtw_remainder_len(struct pkt_file *pfile)
 void _rtw_open_pktfile(struct sk_buff *pktptr, struct pkt_file *pfile)
 {
 
+	if (!pktptr) {
+		pr_err("8188eu: pktptr is NULL\n");
+		return;
+	}
+	if (!pfile) {
+		pr_err("8188eu: pfile is NULL\n");
+		return;
+	}
 	pfile->pkt = pktptr;
 	pfile->cur_addr = pktptr->data;
 	pfile->buf_start = pktptr->data;
