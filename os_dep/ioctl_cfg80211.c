@@ -29,6 +29,13 @@
 
 #include "ioctl_cfg80211.h"
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 7, 0))
+#define ieee80211_band nl80211_band
+#define IEEE80211_BAND_2GHZ NL80211_BAND_2GHZ
+#define IEEE80211_BAND_5GHZ NL80211_BAND_5GHZ
+#define IEEE80211_NUM_BANDS NUM_NL80211_BANDS
+#endif
+
 #define RTW_MAX_MGMT_TX_CNT (8)
 
 #define RTW_SCAN_IE_LEN_MAX      2304
@@ -1743,6 +1750,11 @@ exit:
 void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv, bool aborted)
 {
 	unsigned long	irqL;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0))
+	struct cfg80211_scan_info info = {
+		.aborted = aborted
+	};
+#endif
 
 	spin_lock_bh(&pwdev_priv->scan_req_lock);
 	if (pwdev_priv->scan_request != NULL)
@@ -1761,7 +1773,11 @@ void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv, bool abor
 		}
 		else
 		{
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0))
+			cfg80211_scan_done(pwdev_priv->scan_request, &info);
+#else
 			cfg80211_scan_done(pwdev_priv->scan_request, aborted);
+#endif
 		}
 
 		pwdev_priv->scan_request = NULL;
