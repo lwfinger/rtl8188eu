@@ -1,4 +1,3 @@
-SHELL := /bin/bash
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
 EXTRA_CFLAGS += -O1
 
@@ -23,6 +22,14 @@ CONFIG_USB_HCI = y
 
 CONFIG_BT_COEXIST = n
 CONFIG_WOWLAN = n
+CONFIG_MP_INCLUDED = n
+CONFIG_POWER_SAVING = n
+CONFIG_USB_AUTOSUSPEND = n
+CONFIG_HW_PWRP_DETECTION = n
+CONFIG_WIFI_TEST = n
+CONFIG_BT_COEXIST = n
+CONFIG_RTL8192CU_REDEFINE_1X1 = n
+CONFIG_INTEL_WIDI = n 
 
 export TopDIR ?= $(shell pwd)
 
@@ -154,10 +161,7 @@ strip:
 	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
 
 install:
-	install -p -m 644 8188eu.ko  $(MODDESTDIR)
-	@if [ -a /lib/modules/$(KVER)/kernel/drivers/staging/rtl8188eu/r8188eu.ko ] ; then modprobe -r r8188eu; fi;
-	@echo "blacklist r8188eu" > /etc/modprobe.d/50-8188eu.conf
-	cp rtl8188eufw.bin /lib/firmware/.
+	install -p -D -m 644 8188eu.ko  $(MODDESTDIR)/8188eu.ko
 	/sbin/depmod -a ${KVER}
 	mkdir -p /lib/firmware/rtlwifi
 	cp rtl8188eufw.bin /lib/firmware/rtlwifi/.
@@ -165,7 +169,6 @@ install:
 uninstall:
 	rm -f $(MODDESTDIR)/8188eu.ko
 	/sbin/depmod -a ${KVER}
-	@rm /etc/modprobe.d/50-8188eu.conf
 
 config_r:
 	@echo "make config"
