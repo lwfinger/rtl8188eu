@@ -2120,10 +2120,8 @@ static u8 Hal_GetChnlGroup88E(u8 chnl, u8 *pGroup)
 			*pGroup = 2;
 		else if (chnl < 12)		/*  Channel 9-11 */
 			*pGroup = 3;
-		else if (chnl < 14)		/*  Channel 12-13 */
+		else if (chnl < 15)		/*  Channel 12-14 */
 			*pGroup = 4;
-		else if (chnl == 14)		/*  Channel 14 */
-			*pGroup = 5;
 	} else {
 		bIn24G = false;
 
@@ -2194,14 +2192,11 @@ void Hal_ReadTxPowerInfo88E(struct adapter *padapter, u8 *PROMContent, bool Auto
 		pHalData->bTXPowerDataReadFromEEPORM = true;
 
 	for (rfPath = 0; rfPath < pHalData->NumTotalRFPath; rfPath++) {
-		for (ch = 0; ch < CHANNEL_MAX_NUMBER; ch++) {
+		for (ch = 1; ch < CHANNEL_MAX_NUMBER + 1; ch++) {
 			bIn24G = Hal_GetChnlGroup88E(ch, &group);
 			if (bIn24G) {
-				pHalData->Index24G_CCK_Base[rfPath][ch] = pwrInfo24G.IndexCCK_Base[rfPath][group];
-				if (ch == 14)
-					pHalData->Index24G_BW40_Base[rfPath][ch] = pwrInfo24G.IndexBW40_Base[rfPath][4];
-				else
-					pHalData->Index24G_BW40_Base[rfPath][ch] = pwrInfo24G.IndexBW40_Base[rfPath][group];
+				pHalData->Index24G_CCK_Base[rfPath][ch - 1] = pwrInfo24G.IndexCCK_Base[rfPath][group];
+				pHalData->Index24G_BW40_Base[rfPath][ch - 1] = pwrInfo24G.IndexBW40_Base[rfPath][group];
 			}
 			if (bIn24G) {
 				DBG_88E("======= Path %d, Channel %d =======\n", rfPath, ch);
