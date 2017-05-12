@@ -3,7 +3,7 @@ CC=gcc
 endif
 
 ifndef CFLAGS
-CFLAGS = -MMD -O2 -Wall -g
+CFLAGS = -MMD -O3 -pipe -ffast-math -ftree-vectorize -Wall
 endif
 
 CFLAGS += -I.. -I../utils

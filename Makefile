@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-EXTRA_CFLAGS += -O1
+EXTRA_CFLAGS += -O3 -pipe -ffast-math -ftree-vectorize
 
 EXTRA_CFLAGS += -Wno-unused-variable
 EXTRA_CFLAGS += -Wno-unused-value
