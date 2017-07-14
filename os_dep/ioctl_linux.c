@@ -3162,7 +3162,7 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 	uint p2pielen = 0, attr_contentlen = 0;
 	u8 attr_content[100] = {0x00};
 
-	u8 go_devadd_str[17 + 10] = {0x00};
+	u8 go_devadd_str[100 + 10] = {0x00};
 	/*  +10 is for the str "go_devadd =", we have to clear it at wrqu->data.pointer */
 
 	/*	Commented by Albert 20121209 */
@@ -3219,7 +3219,7 @@ static int rtw_p2p_get_go_device_address(struct net_device *dev,
 	if (!blnMatch)
 		sprintf(go_devadd_str, "\n\ndev_add = NULL");
 	else
-		sprintf(go_devadd_str, "\n\ndev_add =%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",
+		sprintf(go_devadd_str, "\ndev_add =%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",
 			attr_content[0], attr_content[1], attr_content[2], attr_content[3], attr_content[4], attr_content[5]);
 
 	if (copy_to_user(wrqu->data.pointer, go_devadd_str, 10 + 17))
