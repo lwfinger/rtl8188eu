@@ -2003,7 +2003,7 @@ void update_bmc_sta_support_rate(struct adapter *padapter, u32 mac_id)
 	}
 	else
 	{
-		memcpy((pmlmeinfo->FW_sta_info[mac_id].SupportedRates), rtw_basic_rate_ofdm, 4);
+		memcpy((pmlmeinfo->FW_sta_info[mac_id].SupportedRates), rtw_basic_rate_ofdm, 3);
 	}
 }
 

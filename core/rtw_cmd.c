@@ -1830,7 +1830,7 @@ static void traffic_status_watchdog(struct adapter *padapter)
 			      pmlmepriv->LinkDetectInfo.NumTxOkInPeriod) > 8 ) ||
 			    (pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod > 2))
 			bEnterPS = false;
-		else
+			else
 			bEnterPS = true;
 
 			/*  LeisurePS only work in infra mode. */
