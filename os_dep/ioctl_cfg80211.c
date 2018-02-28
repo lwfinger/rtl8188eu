@@ -335,7 +335,8 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 	u8 *notify_ie;
 	size_t notify_ielen;
 	s32 notify_signal;
-	u8 buf[MAX_BSSINFO_LEN], *pbuf;
+	//u8 buf[MAX_BSSINFO_LEN], *pbuf;
+	u8 *buf=NULL, *pbuf=NULL;
 	size_t len,bssinf_len=0;
 	struct rtw_ieee80211_hdr *pwlanhdr;
 	__le16 *fctrl;
@@ -416,6 +417,8 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 	} else {
 		notify_signal = 100*translate_percentage_to_dbm(pnetwork->network.PhyInfo.SignalStrength);/* dbm */
 	}
+        if (!(buf=(u8 *)kzalloc(MAX_BSSINFO_LEN, GFP_KERNEL)))
+            goto exit;
 	pbuf = buf;
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pbuf;
@@ -497,6 +500,8 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 #endif
 
 exit:
+        if (buf)
+		kfree(buf);
 	return bss;
 
 }
@@ -674,6 +679,9 @@ check_bss:
 		struct ieee80211_channel *notify_channel;
 		u32 freq;
 		u16 channel = cur_network->network.Configuration.DSConfig;
+			#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
+			struct cfg80211_roam_info roam_info = {};
+			#endif
 
 		if (channel <= RTW_CH_MAX_2G_CHANNEL)
 			freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
@@ -684,16 +692,27 @@ check_bss:
 		#endif
 
 		DBG_88E(FUNC_ADPT_FMT" call cfg80211_roamed\n", FUNC_ADPT_ARG(padapter));
+		#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
+		roam_info.channel = notify_channel;
+		roam_info.bssid = cur_network->network.MacAddress;
+		roam_info.req_ie = pmlmepriv->assoc_req+sizeof(struct ieee80211_hdr_3addr)+2;
+		roam_info.req_ie_len = pmlmepriv->assoc_req_len-sizeof(struct ieee80211_hdr_3addr)-2;
+		roam_info.resp_ie = pmlmepriv->assoc_rsp+sizeof(struct ieee80211_hdr_3addr)+6;
+		roam_info.resp_ie_len = pmlmepriv->assoc_rsp_len-sizeof(struct ieee80211_hdr_3addr)-6;
+		cfg80211_roamed(padapter->pnetdev, &roam_info, GFP_ATOMIC);
+		#else
 		cfg80211_roamed(padapter->pnetdev
 			#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
 			, notify_channel
 			#endif
-			, cur_network->network.MacAddress
-			, pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2
-			, pmlmepriv->assoc_req_len-sizeof(struct rtw_ieee80211_hdr_3addr)-2
-			, pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6
-			, pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6
-			, GFP_ATOMIC);
+		, cur_network->network.MacAddress
+		, pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2
+		, pmlmepriv->assoc_req_len-sizeof(struct rtw_ieee80211_hdr_3addr)-2
+		, pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6
+		, pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6
+		, GFP_ATOMIC);
+		#endif
+
 	} else {
 		cfg80211_connect_result(padapter->pnetdev, cur_network->network.MacAddress
 			, pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2
@@ -851,7 +870,6 @@ static int set_group_key(struct adapter *padapter, u8 *key, u8 alg, int keyid)
 	res = rtw_enqueue_cmd(pcmdpriv, pcmd);
 
 exit:
-
 	return res;
 
 
@@ -1641,13 +1659,20 @@ exit:
 
 extern int netdev_open(struct net_device *pnetdev);
 
-static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
-				     struct net_device *ndev,
-				     enum nl80211_iftype type, u32 *flags,
-				     struct vif_params *params)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
+    static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
+	struct net_device *ndev,
+	enum nl80211_iftype type,
+	struct vif_params *params)
+#else
+    static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
+	struct net_device *ndev,
+	 enum nl80211_iftype type, u32 *flags,
+	 struct vif_params *params)
+#endif
 {
 	enum nl80211_iftype old_type;
-	enum NDIS_802_11_NETWORK_INFRASTRUCTURE networkType ;
+	enum NDIS_802_11_NETWORK_INFRASTRUCTURE networkType;
 	struct adapter *padapter = wiphy_to_adapter(wiphy);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct wireless_dev *rtw_wdev = wiphy_to_wdev(wiphy);
@@ -3189,7 +3214,12 @@ static int rtw_cfg80211_add_monitor_if (struct adapter *padapter, char *name, st
 	mon_ndev->type = ARPHRD_IEEE80211_RADIOTAP;
 	strncpy(mon_ndev->name, name, IFNAMSIZ);
 	mon_ndev->name[IFNAMSIZ - 1] = 0;
-	mon_ndev->destructor = rtw_ndev_destructor;
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 9))
+		mon_ndev->needs_free_netdev = false;
+		mon_ndev->priv_destructor = rtw_ndev_destructor;
+	#else
+		mon_ndev->destructor = rtw_ndev_destructor;
+	#endif
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
 	mon_ndev->netdev_ops = &rtw_cfg80211_monitor_if_ops;
@@ -3256,7 +3286,11 @@ static int
 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
 		unsigned char name_assign_type,
 	#endif
+	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0))
+		enum nl80211_iftype type, struct vif_params *params)
+	#else
 		enum nl80211_iftype type, u32 *flags, struct vif_params *params)
+	#endif
 {
 	int ret = 0;
 	struct net_device* ndev = NULL;

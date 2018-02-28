@@ -406,7 +406,9 @@ static s32 iol_read_efuse(
 s32 rtl8188e_iol_efuse_patch(struct adapter *padapter)
 {
 	s32	result = _SUCCESS;
-	printk("==> %s\n",__FUNCTION__);
+
+	/* deleted because it prints every 7s when not associated */
+	/* printk("==> %s\n",__FUNCTION__); */
 
 	if (rtw_IOL_applied(padapter)) {
 		iol_mode_enable(padapter, 1);
