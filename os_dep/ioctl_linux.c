@@ -5591,7 +5591,7 @@ static int rtw_hostapd_ioctl(struct net_device *dev, struct iw_point *p)
 		ret = rtw_ioctl_acl_remove_sta(dev, param, p->length);
 		break;
 	default:
-		DBG_88E("Unknown hostapd request: %d\n", param->cmd);
+		pr_info("Unknown hostapd request: %d\n", param->cmd);
 		ret = -EOPNOTSUPP;
 		break;
 	}
