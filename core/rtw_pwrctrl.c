@@ -319,7 +319,7 @@ void pwr_state_check_handler(struct timer_list *t)
 	struct adapter *padapter = (struct adapter  *)FunctionContext;
 #else
 	struct dvobj_priv *dvobj = from_timer(dvobj, t, pwrctl_priv.pwr_state_check_timer);
-	struct adapter *padapter = dvobj->
+	struct adapter *padapter = dvobj->if1;
 #endif
 
 	rtw_ps_cmd(padapter);

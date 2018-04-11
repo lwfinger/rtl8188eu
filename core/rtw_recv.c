@@ -36,7 +36,11 @@
 #include <wifi.h>
 #include <circ_buf.h>
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
+#else
+void rtw_signal_stat_timer_hdl(struct timer_list *t);
+#endif
 
 void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
 {
@@ -111,7 +115,11 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
 	_rtw_init_sema(&precvpriv->allrxreturnevt, 0);
 	res = rtw_hal_init_recv_priv(padapter);
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	_init_timer(&precvpriv->signal_stat_timer, padapter->pnetdev, RTW_TIMER_HDL_NAME(signal_stat), padapter);
+#else
+	timer_setup(&precvpriv->signal_stat_timer, RTW_TIMER_HDL_NAME(signal_stat), 0);
+#endif
 
 	precvpriv->signal_stat_sampling_interval = 1000; /* ms */
 
@@ -2836,8 +2844,17 @@ _recv_entry_drop:
 	return ret;
 }
 
-void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS)
+#else
+void rtw_signal_stat_timer_hdl(struct timer_list *t)
+#endif
+{
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	struct adapter *adapter = (struct adapter *)FunctionContext;
+#else
+	struct adapter *adapter = from_timer(adapter, t, recvpriv.signal_stat_timer);
+#endif
 	struct recv_priv *recvpriv = &adapter->recvpriv;
 
 	u32 tmp_s, tmp_q;

@@ -2766,8 +2766,10 @@ ODM_InitAllTimers(
 	PDM_ODM_T	pDM_Odm
 	)
 {
+#if 0
 	ODM_InitializeTimer(pDM_Odm,&pDM_Odm->DM_SWAT_Table.SwAntennaSwitchTimer,
 		(RT_TIMER_CALL_BACK)odm_SwAntDivChkAntSwitchCallback, NULL, "SwAntennaSwitchTimer");
+#endif
 }
 
 void

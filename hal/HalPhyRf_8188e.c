@@ -1251,8 +1251,8 @@ phy_IQCalibrate_8188E(
 #endif
 	if ( *(pDM_Odm->mp_mode) == 1)
 		retryCount = 9;
-else
-	retryCount = 2;
+	else
+		retryCount = 2;
 	/*  Note: IQ calibration must be performed after loading */
 	/* 		PHY_REG.txt , and radio_a, radio_b.txt */
 

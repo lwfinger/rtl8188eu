@@ -534,8 +534,13 @@ void rtw_atimdone_event_callback(struct adapter *adapter, u8 *pbuf);
 void rtw_cpwm_event_callback(struct adapter *adapter, u8 *pbuf);
 
 int event_thread(void *context);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+void _rtw_scan_timeout_handler (void *FunctionContext);
 void rtw_join_timeout_handler(void* FunctionContext);
-void _rtw_scan_timeout_handler(void* FunctionContext);
+#else
+void _rtw_scan_timeout_handler(struct timer_list *t);
+void rtw_join_timeout_handler(struct timer_list *t);
+#endif
 
 void rtw_free_network_queue(struct adapter *adapter,u8 isfreeall);
 int rtw_init_mlme_priv(struct adapter *adapter);/*  (struct mlme_priv *pmlmepriv); */
