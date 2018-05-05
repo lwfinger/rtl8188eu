@@ -603,25 +603,32 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 {
 	int i;
 	struct adapter *padapter = NULL;
+	struct net_device *pnetdev = NULL;
 
-	for (i=0;i<dvobj->iface_nums;i++)
-	{
-		struct net_device *pnetdev = NULL;
+	if (!dvobj || dvobj->iface_nums == 0)
+		return;
 
+	for (i=0;i<dvobj->iface_nums;i++) {
 		padapter = dvobj->padapters[i];
 
 		if (padapter == NULL)
 			continue;
 
 		pnetdev = padapter->pnetdev;
+		if (!pnetdev)
+			continue;
 
-		if ((padapter->DriverState != DRIVER_DISAPPEAR) && pnetdev) {
+		if (padapter->DriverState != DRIVER_DISAPPEAR) {
+			struct wireless_dev *wdev = padapter->rtw_wdev;
 
+			wdev->current_bss = NULL;
+			pnetdev->reg_state = NETREG_REGISTERED;
 			unregister_netdev(pnetdev); /* will call netdev_close() */
 			rtw_proc_remove_one(pnetdev);
 		}
 
-		rtw_wdev_unregister(padapter->rtw_wdev);
+		if (padapter->rtw_wdev)
+			rtw_wdev_unregister(padapter->rtw_wdev);
 	}
 
 }

@@ -3149,69 +3149,52 @@ static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rss
 	struct wlan_bssid_ex		*cur_network = &(pmlmeinfo->network);
 
 	if (mac_id >= NUM_STA) /* CAM_SIZE */
-	{
 		return;
-	}
 
 	psta = pmlmeinfo->FW_sta_info[mac_id].psta;
 	if (psta == NULL)
-	{
 		return;
-	}
 
-	switch (mac_id)
-	{
-		case 0:/*  for infra mode */
-			supportRateNum = rtw_get_rateset_len(cur_network->SupportedRates);
-			networkType = judge_network_type(padapter, cur_network->SupportedRates, supportRateNum) & 0xf;
-			/* pmlmeext->cur_wireless_mode = networkType; */
-			raid = networktype_to_raid(networkType);
+	switch (mac_id) {
+	case 0:/*  for infra mode */
+		supportRateNum = rtw_get_rateset_len(cur_network->SupportedRates);
+		networkType = judge_network_type(padapter, cur_network->SupportedRates, supportRateNum) & 0xf;
+		/* pmlmeext->cur_wireless_mode = networkType; */
+		raid = networktype_to_raid(networkType);
 
-			mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
-			mask |= (pmlmeinfo->HT_enable)? update_MSC_rate(&(pmlmeinfo->HT_caps)): 0;
+		mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
+		mask |= (pmlmeinfo->HT_enable)? update_MSC_rate(&(pmlmeinfo->HT_caps)): 0;
 
+		if (support_short_GI(padapter, &(pmlmeinfo->HT_caps)))
+			shortGIrate = true;
+		break;
+	case 1:/* for broadcast/multicast */
+		supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
+		if (pmlmeext->cur_wireless_mode & WIRELESS_11B)
+			networkType = WIRELESS_11B;
+		else
+			networkType = WIRELESS_11G;
+		raid = networktype_to_raid(networkType);
+		mask = update_basic_rate(cur_network->SupportedRates, supportRateNum);
+		break;
+	default: /* for each sta in IBSS */
+		supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
+		networkType = judge_network_type(padapter, pmlmeinfo->FW_sta_info[mac_id].SupportedRates, supportRateNum) & 0xf;
+		/* pmlmeext->cur_wireless_mode = networkType; */
+		raid = networktype_to_raid(networkType);
+		mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
 
-			if (support_short_GI(padapter, &(pmlmeinfo->HT_caps)))
-			{
-				shortGIrate = true;
-			}
+		/* todo: support HT in IBSS */
 
-			break;
-
-		case 1:/* for broadcast/multicast */
-			supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
-			if (pmlmeext->cur_wireless_mode & WIRELESS_11B)
-				networkType = WIRELESS_11B;
-			else
-				networkType = WIRELESS_11G;
-			raid = networktype_to_raid(networkType);
-			mask = update_basic_rate(cur_network->SupportedRates, supportRateNum);
-
-
-			break;
-
-		default: /* for each sta in IBSS */
-			supportRateNum = rtw_get_rateset_len(pmlmeinfo->FW_sta_info[mac_id].SupportedRates);
-			networkType = judge_network_type(padapter, pmlmeinfo->FW_sta_info[mac_id].SupportedRates, supportRateNum) & 0xf;
-			/* pmlmeext->cur_wireless_mode = networkType; */
-			raid = networktype_to_raid(networkType);
-			mask = update_supported_rate(cur_network->SupportedRates, supportRateNum);
-
-			/* todo: support HT in IBSS */
-
-			break;
+		break;
 	}
 
 	rate_bitmap = ODM_Get_Rate_Bitmap(&pHalData->odmpriv,mac_id,mask,rssi_level);
-	pr_info("%s => mac_id:%d, networkType:0x%02x, mask:0x%08x\n\t ==> rssi_level:%d, rate_bitmap:0x%08x\n",
-	        __FUNCTION__,mac_id,networkType,mask,rssi_level,rate_bitmap);
-
 	mask &= rate_bitmap;
 
 	init_rate = get_highest_rate_idx(mask)&0x3f;
 
-	if (pHalData->fw_ractrl == true)
-	{
+	if (pHalData->fw_ractrl == true) {
 		u8 arg = 0;
 
 		arg = mac_id&0x1f;/* MACID */
@@ -3231,13 +3214,8 @@ static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rss
 		RateMask[4] = macId | (bShortGI?0x20:0x00) | 0x80;
 		*/
 		rtl8188e_set_raid_cmd(padapter, mask);
-
-	}
-	else
-	{
-
+	} else {
 #if (RATE_ADAPTIVE_SUPPORT == 1)
-
 		ODM_RA_UpdateRateInfo_8188E(
 				&(pHalData->odmpriv),
 				mac_id,
@@ -3248,7 +3226,6 @@ static void UpdateHalRAMask8188EUsb(struct adapter *padapter, u32 mac_id, u8 rss
 
 #endif
 	}
-
 
 	/* set ra_id */
 	psta->raid = raid;
