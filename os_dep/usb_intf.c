@@ -58,6 +58,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x2001, 0x3311)}, /* DLink GO-USB-N150 REV B1 */
 	{USB_DEVICE(0x056E, 0x4008)}, /* Elecom WDC-150SU2M */
 	{USB_DEVICE(0x2357, 0x010c)}, /* TP-Link TL-WN722N v2 */
+	{USB_DEVICE(0x2001, 0x331B)}, /* Dlink DWA-121 REV B1 */
 	{}	/* Terminating entry */
 };
 
