@@ -1247,7 +1247,7 @@ PDM_ODM_T pDM_Odm
 	{
 		pDM_Odm->TH_L2H_ini = 0xf8; /*  -8 */
 	}
-	if ((pDM_Odm->SupportICType == ODM_RTL8192E)&&(pDM_Odm->SupportInterface == ODM_ITRF_PCIE))
+	if ((pDM_Odm->SupportICType == ODM_RTL8192E)&&pDM_Odm->SupportInterface == ODM_ITRF_PCIE)
 	{
 		pDM_Odm->TH_L2H_ini = 0xf0; /*  -16 */
 	}
@@ -1481,7 +1481,7 @@ odm_DIG(
 	}
 
 	/* 1 Boundary Decision */
-	if (pDM_Odm->SupportICType & (ODM_RTL8192C) &&(pDM_Odm->BoardType & (ODM_BOARD_EXT_LNA | ODM_BOARD_EXT_PA)))
+	if (pDM_Odm->SupportICType & (ODM_RTL8192C) &&pDM_Odm->BoardType & (ODM_BOARD_EXT_LNA | ODM_BOARD_EXT_PA))
 	{
 		if (pDM_Odm->SupportPlatform & (ODM_AP|ODM_ADSL))
 		{
@@ -1523,7 +1523,7 @@ odm_DIG(
 
 	if (pDM_Odm->bLinked)
 	{
-		if (pDM_Odm->SupportICType&(ODM_RTL8723A/*|ODM_RTL8821*/))
+		if (pDM_Odm->SupportICType&ODM_RTL8723A/*|ODM_RTL8821*/)
 		{
 			/* 2 Upper Bound */
 			if (( pDM_Odm->RSSI_Min + 10) > DM_DIG_MAX_NIC )
@@ -1590,7 +1590,7 @@ odm_DIG(
 			}
 
 			/* 1 Lower Bound for 88E AntDiv */
-			if ((pDM_Odm->SupportICType == ODM_RTL8188E)&&(pDM_Odm->SupportAbility & ODM_BB_ANT_DIV))
+			if ((pDM_Odm->SupportICType == ODM_RTL8188E)&&pDM_Odm->SupportAbility & ODM_BB_ANT_DIV)
 			{
 				if ((pDM_Odm->AntDivType == CG_TRX_HW_ANTDIV) ||(pDM_Odm->AntDivType == CGCS_RX_HW_ANTDIV))
 				{
@@ -1679,7 +1679,7 @@ odm_DIG(
 	}
 	ODM_RT_TRACE(pDM_Odm, ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_DIG(): pDM_DigTable->LargeFAHit=%d\n",pDM_DigTable->LargeFAHit));
 
-	if ((pDM_Odm->SupportPlatform&(ODM_CE))&&(pDM_Odm->PhyDbgInfo.NumQryBeaconPkt < 10) && (pDM_Odm->bsta_state))
+	if ((pDM_Odm->SupportPlatform&ODM_CE)&&pDM_Odm->PhyDbgInfo.NumQryBeaconPkt < 10 && (pDM_Odm->bsta_state))
 		pDM_DigTable->rx_gain_range_min = dm_dig_min;
 
 	if (pDM_DigTable->rx_gain_range_min > pDM_DigTable->rx_gain_range_max)
@@ -1744,8 +1744,8 @@ odm_DIG(
 					else if (pFalseAlmCnt->Cnt_all < DM_DIG_FA_TH0)
 						CurrentIGI = CurrentIGI - 2;/* pDM_DigTable->CurIGValue =pDM_DigTable->PreIGValue-1; */
 
-					if ((pDM_Odm->SupportPlatform&(ODM_CE))&&(pDM_Odm->PhyDbgInfo.NumQryBeaconPkt < 10)
-						&&(pFalseAlmCnt->Cnt_all < DM_DIG_FA_TH1) && (pDM_Odm->bsta_state))
+					if ((pDM_Odm->SupportPlatform&ODM_CE)&&pDM_Odm->PhyDbgInfo.NumQryBeaconPkt < 10
+						&&pFalseAlmCnt->Cnt_all < DM_DIG_FA_TH1 && (pDM_Odm->bsta_state))
 					{
 						CurrentIGI = pDM_DigTable->rx_gain_range_min;
 						ODM_RT_TRACE(pDM_Odm, ODM_COMP_DIG, ODM_DBG_LOUD, ("odm_DIG(): Beacon is less than 10 and FA is less than 768, IGI GOES TO 0x1E!!!!!!!!!!!!\n"));
@@ -1859,7 +1859,7 @@ odm_FalseAlarmCounterStatistics(
 	)
 {
 	u32 ret_value;
-	Pfalse_ALARM_STATISTICS FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
+	Pfalse_ALARM_STATISTICS FalseAlmCnt = &pDM_Odm->FalseAlmCnt;
 
 	if (!(pDM_Odm->SupportAbility & ODM_BB_FA_CNT))
 		return;
@@ -1972,7 +1972,7 @@ odm_CCKPacketDetectionThresh(
 
 	pDIG_T	pDM_DigTable = &pDM_Odm->DM_DigTable;
 	u8	CurCCK_CCAThres;
-	Pfalse_ALARM_STATISTICS FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
+	Pfalse_ALARM_STATISTICS FalseAlmCnt = &pDM_Odm->FalseAlmCnt;
 
 	if (!(pDM_Odm->SupportAbility & (ODM_BB_CCK_PD|ODM_BB_FA_CNT)))
 		return;
@@ -2054,7 +2054,7 @@ odm_DynamicBBPowerSaving(
 		return;
 
 	/* 1 2.Power Saving for 92C */
-	if ((pDM_Odm->SupportICType == ODM_RTL8192C) &&(pDM_Odm->RFType == ODM_2T2R))
+	if ((pDM_Odm->SupportICType == ODM_RTL8192C) &&pDM_Odm->RFType == ODM_2T2R)
 	{
 		odm_1R_CCA(pDM_Odm);
 	}
@@ -2667,7 +2667,7 @@ struct adapter *pAdapter
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
 	/* 1 1.Determine the minimum RSSI */
 
@@ -2723,7 +2723,7 @@ odm_RSSIMonitorCheckCE(
 				else {
 					#if (RATE_ADAPTIVE_SUPPORT == 1)
 					ODM_RA_SetRSSI_8188E(
-					&(pHalData->odmpriv), (PWDB_rssi[i]&0xFF), (u8)((PWDB_rssi[i]>>16) & 0xFF));
+					&pHalData->odmpriv, (PWDB_rssi[i]&0xFF), (u8)((PWDB_rssi[i]>>16) & 0xFF));
 					#endif
 				}
 			}
@@ -3031,7 +3031,7 @@ odm_StaDefAntSel(
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("CCK_Ant1_Cnt:%d, CCK_Ant2_Cnt:%d\n",CCK_Ant1_Cnt,CCK_Ant2_Cnt));
 
 
-	if (((OFDM_Ant1_Cnt+OFDM_Ant2_Cnt)== 0)&&((CCK_Ant1_Cnt + CCK_Ant2_Cnt) <10)) {
+	if (((OFDM_Ant1_Cnt+OFDM_Ant2_Cnt)== 0)&&CCK_Ant1_Cnt + CCK_Ant2_Cnt <10) {
 		ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV,ODM_DBG_LOUD,("odm_StaDefAntSelect Fail: No enough packet info!\n"));
 		return	false;
 	}
@@ -3287,11 +3287,11 @@ odm_EdcaTurboCheckCE(
 	u64	cur_rx_bytes = 0;
 	u8	bbtchange = false;
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter);
-	struct xmit_priv		*pxmitpriv = &(Adapter->xmitpriv);
-	struct recv_priv		*precvpriv = &(Adapter->recvpriv);
+	struct xmit_priv		*pxmitpriv = &Adapter->xmitpriv;
+	struct recv_priv		*precvpriv = &Adapter->recvpriv;
 	struct registry_priv	*pregpriv = &Adapter->registrypriv;
-	struct mlme_ext_priv	*pmlmeext = &(Adapter->mlmeextpriv);
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
+	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
 
 
 	if ((pregpriv->wifi_spec == 1) )/*  (pmlmeinfo->HT_enable == 0)) */
@@ -3697,7 +3697,7 @@ ODM_SingleDualAntennaDetection(
 		}
 		/* 2 Test Ant A and B based on DPDT Open */
 		else if (mode==ANTTESTALL) {
-			if ((AntO_report >=100)&(AntO_report <118)) {
+			if (AntO_report >= 100 && AntO_report < 118) {
 				if (AntA_report > (AntO_report+1)) {
 					pDM_SWAT_Table->ANTA_ON=false;
 					ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD,("Ant A is OFF"));

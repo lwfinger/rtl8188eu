@@ -504,7 +504,7 @@ void
 odm_PrimaryCCA_Init(
 		PDM_ODM_T		pDM_Odm)
 {
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
+	pPri_CCA_T		PrimaryCCA = &pDM_Odm->DM_PriCCA;
 	PrimaryCCA->DupRTS_flag = 0;
 	PrimaryCCA->intf_flag = 0;
 	PrimaryCCA->intf_type = 0;
@@ -517,7 +517,7 @@ ODM_DynamicPrimaryCCA_DupRTS(
 		PDM_ODM_T		pDM_Odm
 	)
 {
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
+	pPri_CCA_T		PrimaryCCA = &pDM_Odm->DM_PriCCA;
 
 	return	PrimaryCCA->DupRTS_flag;
 }
@@ -530,8 +530,8 @@ odm_DynamicPrimaryCCA(
 	struct adapter *Adapter =  pDM_Odm->Adapter;	/*  for NIC */
 	prtl8192cd_priv	priv		= pDM_Odm->priv;	/*  for AP */
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	Pfalse_ALARM_STATISTICS		FalseAlmCnt = &(pDM_Odm->FalseAlmCnt);
-	pPri_CCA_T		PrimaryCCA = &(pDM_Odm->DM_PriCCA);
+	Pfalse_ALARM_STATISTICS		FalseAlmCnt = &pDM_Odm->FalseAlmCnt;
+	pPri_CCA_T		PrimaryCCA = &pDM_Odm->DM_PriCCA;
 	bool		Is40MHz;
 	bool		Client_40MHz = false, Client_tmp = false;      /*  connected client BW */
 	bool		bConnected = false;		/*  connected or not */

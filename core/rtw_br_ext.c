@@ -1040,7 +1040,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 				} else {	/*  session phase */
 						DEBUG_INFO("NAT25: Insert PPPoE, insert session packet to %s\n", skb->dev->name);
 
-						__nat25_generate_pppoe_network_addr(networkAddr, skb->data, &(ph->sid));
+						__nat25_generate_pppoe_network_addr(networkAddr, skb->data, &ph->sid);
 
 						__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
 
@@ -1111,7 +1111,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 					if (ph->sid != 0)
 					{
 						DEBUG_INFO("NAT25: Lookup PPPoE, lookup session packet from %s\n", skb->dev->name);
-						__nat25_generate_pppoe_network_addr(networkAddr, skb->data+ETH_ALEN, &(ph->sid));
+						__nat25_generate_pppoe_network_addr(networkAddr, skb->data+ETH_ALEN, &ph->sid);
 
 						__nat25_db_network_lookup_and_replace(priv, skb, networkAddr);
 

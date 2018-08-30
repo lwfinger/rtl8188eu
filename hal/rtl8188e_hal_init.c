@@ -708,7 +708,7 @@ static void _MCUIO_Reset88E(struct adapter *padapter,u8 bReset)
 	if (bReset==true) {
 		/*  Reset MCU IO Wrapper- sugggest by SD1-Gimmy */
 		u1bTmp = rtw_read8(padapter, REG_RSV_CTRL+1);
-		rtw_write8(padapter,REG_RSV_CTRL+1, (u1bTmp&(~BIT3)));
+		rtw_write8(padapter,REG_RSV_CTRL+1, (u1bTmp&~BIT3));
 	} else {
 		/*  Enable MCU IO Wrapper */
 		u1bTmp = rtw_read8(padapter, REG_RSV_CTRL+1);
@@ -722,7 +722,7 @@ void _8051Reset88E(struct adapter *padapter)
 
 	_MCUIO_Reset88E(padapter,true);
 	u1bTmp = rtw_read8(padapter, REG_SYS_FUNC_EN+1);
-	rtw_write8(padapter, REG_SYS_FUNC_EN+1, u1bTmp&(~BIT2));
+	rtw_write8(padapter, REG_SYS_FUNC_EN+1, u1bTmp&~BIT2);
 	_MCUIO_Reset88E(padapter,false);
 	rtw_write8(padapter, REG_SYS_FUNC_EN+1, u1bTmp|(BIT2));
 
@@ -1788,7 +1788,7 @@ hal_EfusePgPacketRead_8188e(
 		/*   Header Read ------------- */
 		if (ReadState & PG_STATE_HEADER)
 		{
-			if (efuse_OneByteRead(pAdapter, efuse_addr ,&efuse_data, bPseudoTest)&&(efuse_data!=0xFF))
+			if (efuse_OneByteRead(pAdapter, efuse_addr ,&efuse_data, bPseudoTest)&&efuse_data!=0xFF)
 			{
 				if (EXT_HEADER(efuse_data))
 				{
@@ -1855,8 +1855,8 @@ hal_EfusePgPacketRead_8188e(
 
 	}
 
-	if (	(data[0]== 0xff) &&(data[1]== 0xff) && (data[2]== 0xff)  && (data[3]== 0xff) &&
-		(data[4]== 0xff) &&(data[5]== 0xff) && (data[6]== 0xff)  && (data[7]== 0xff))
+	if (	(data[0]== 0xff) &&data[1]== 0xff && (data[2]== 0xff)  && (data[3]== 0xff) &&
+		(data[4]== 0xff) &&data[5]== 0xff && (data[6]== 0xff)  && (data[7]== 0xff))
 		return false;
 	else
 		return true;
@@ -2208,7 +2208,7 @@ hal_EfuseCheckIfDatafollowed(
 
 	for (i=0; i<(word_cnts*2) ; i++)
 	{
-		if (efuse_OneByteRead(pAdapter, (startAddr+i) ,&efuse_data, bPseudoTest)&&(efuse_data != 0xFF))
+		if (efuse_OneByteRead(pAdapter, (startAddr+i) ,&efuse_data, bPseudoTest)&&efuse_data != 0xFF)
 			bRet = true;
 	}
 

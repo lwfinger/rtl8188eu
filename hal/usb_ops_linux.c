@@ -297,8 +297,8 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 	}
 
 	/*  HISR */
-	memcpy(&(pHalData->IntArray[0]), &(pbuf[USB_INTR_CONTENT_HISR_OFFSET]), 4);
-	memcpy(&(pHalData->IntArray[1]), &(pbuf[USB_INTR_CONTENT_HISRE_OFFSET]), 4);
+	memcpy(&pHalData->IntArray[0], &pbuf[USB_INTR_CONTENT_HISR_OFFSET], 4);
+	memcpy(&pHalData->IntArray[1], &pbuf[USB_INTR_CONTENT_HISRE_OFFSET], 4);
 
 	if (  pHalData->IntArray[1]  & IMR_TXERR_88E )
 		DBG_88E("===> %s Tx Error Flag Interrupt Status\n",__FUNCTION__);
@@ -311,7 +311,7 @@ static void interrupt_handler_8188eu(struct adapter *padapter,u16 pkt_len,u8 *pb
 
 	/*  C2H Event */
 	if (pbuf[0]!= 0) {
-		memcpy(&(pHalData->C2hArray[0]), &(pbuf[USB_INTR_CONTENT_C2H_OFFSET]), 16);
+		memcpy(&pHalData->C2hArray[0], &pbuf[USB_INTR_CONTENT_C2H_OFFSET], 16);
 		/* rtw_c2h_wk_cmd(padapter); to do.. */
 	}
 
@@ -460,7 +460,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 
 		pattrib = &precvframe->u.hdr.attrib;
 
-		if ((padapter->registrypriv.mp_mode == 0) &&((pattrib->crc_err) || (pattrib->icv_err)))
+		if ((padapter->registrypriv.mp_mode == 0) && (pattrib->crc_err || pattrib->icv_err))
 		{
 			DBG_8192C("%s: RX Warning! crc_err=%d icv_err=%d, skip!\n", __FUNCTION__, pattrib->crc_err, pattrib->icv_err);
 
@@ -498,7 +498,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 
 		/*  for first fragment packet, driver need allocate 1536+drvinfo_sz+RXDESC_SIZE to defrag packet. */
 		/*  modify alloc_sz for recvive crc error packet by thomas 2011-06-02 */
-		if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0)) {
+		if ((pattrib->mfrag == 1)&&pattrib->frag_num == 0) {
 			if (skb_len <= 1650)
 				alloc_sz = 1664;
 			else
@@ -526,7 +526,7 @@ static int recvbuf2recvframe(struct adapter *padapter, struct sk_buff *pskb)
 		}
 		else
 		{
-			if ((pattrib->mfrag == 1)&&(pattrib->frag_num == 0))
+			if ((pattrib->mfrag == 1)&&pattrib->frag_num == 0)
 			{
 				DBG_8192C("recvbuf2recvframe: alloc_skb fail , drop frag frame\n");
 				rtw_free_recvframe(precvframe, pfree_recv_queue);

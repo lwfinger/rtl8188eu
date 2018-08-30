@@ -91,12 +91,12 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-	_init_timer(&(pmlmepriv->assoc_timer), padapter->pnetdev, rtw_join_timeout_handler, padapter);
-	_init_timer(&(pmlmepriv->scan_to_timer), padapter->pnetdev, _rtw_scan_timeout_handler, padapter);
+	_init_timer(&pmlmepriv->assoc_timer, padapter->pnetdev, rtw_join_timeout_handler, padapter);
+	_init_timer(&pmlmepriv->scan_to_timer, padapter->pnetdev, _rtw_scan_timeout_handler, padapter);
 
-	_init_timer(&(pmlmepriv->dynamic_chk_timer), padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
+	_init_timer(&pmlmepriv->dynamic_chk_timer, padapter->pnetdev, _dynamic_check_timer_handlder, padapter);
 
-	_init_timer(&(pmlmepriv->set_scan_deny_timer), padapter->pnetdev, _rtw_set_scan_deny_timer_hdl, padapter);
+	_init_timer(&pmlmepriv->set_scan_deny_timer, padapter->pnetdev, _rtw_set_scan_deny_timer_hdl, padapter);
 #else
 	timer_setup(&pmlmepriv->assoc_timer, rtw_join_timeout_handler, 0);
 	timer_setup(&pmlmepriv->scan_to_timer, _rtw_scan_timeout_handler, 0);
@@ -112,7 +112,7 @@ void rtw_init_mlme_timer(struct adapter *padapter)
 
 void rtw_os_indicate_connect(struct adapter *adapter)
 {
-	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
+	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 ;
 
 	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)) ||

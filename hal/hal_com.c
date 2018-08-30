@@ -384,7 +384,7 @@ u8
 SetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *value)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
-	PDM_ODM_T pDM_Odm = &(pHalData->odmpriv);
+	PDM_ODM_T pDM_Odm = &pHalData->odmpriv;
 	u8 bResult = _SUCCESS;
 
 	switch (variable) {
@@ -413,7 +413,7 @@ u8
 GetHalDefVar(struct adapter *adapter, enum HAL_DEF_VARIABLE variable, void *value)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
-	PDM_ODM_T pDM_Odm = &(pHalData->odmpriv);
+	PDM_ODM_T pDM_Odm = &pHalData->odmpriv;
 	u8 bResult = _SUCCESS;
 
 	switch (variable) {

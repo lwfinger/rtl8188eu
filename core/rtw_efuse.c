@@ -430,7 +430,7 @@ efuse_OneByteRead(
 
 	rtw_write8(pAdapter, EFUSE_CTRL+3,  0x72);/* read cmd */
 
-	while (!(0x80 &rtw_read8(pAdapter, EFUSE_CTRL+3))&&(tmpidx<100))
+	while (!(0x80 &rtw_read8(pAdapter, EFUSE_CTRL+3)) && (tmpidx < 100))
 	{
 		tmpidx++;
 	}

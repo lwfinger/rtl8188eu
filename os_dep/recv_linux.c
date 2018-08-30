@@ -201,8 +201,8 @@ int rtw_recv_indicatepkt(struct adapter *padapter, union recv_frame *precv_frame
 	void *br_port = NULL;
 #endif
 
-	precvpriv = &(padapter->recvpriv);
-	pfree_recv_queue = &(precvpriv->free_recv_queue);
+	precvpriv = &padapter->recvpriv;
+	pfree_recv_queue = &precvpriv->free_recv_queue;
 
 #ifdef CONFIG_DRVEXT_MODULE
 	if (drvext_rx_handler(padapter, precv_frame->u.hdr.rx_data, precv_frame->u.hdr.len) == _SUCCESS)
@@ -415,7 +415,7 @@ void rtw_init_recv_timer(struct recv_reorder_ctrl *preorder_ctrl)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	struct adapter *padapter = preorder_ctrl->padapter;
 
-	_init_timer(&(preorder_ctrl->reordering_ctrl_timer), padapter->pnetdev, _rtw_reordering_ctrl_timeout_handler, preorder_ctrl);
+	_init_timer(&preorder_ctrl->reordering_ctrl_timer, padapter->pnetdev, _rtw_reordering_ctrl_timeout_handler, preorder_ctrl);
 #else
 
 	timer_setup(&preorder_ctrl->reordering_ctrl_timer, _rtw_reordering_ctrl_timeout_handler, 0);

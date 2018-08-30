@@ -181,7 +181,7 @@ int proc_get_fwstate(char *page, char **start,
 {
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	int len = 0;
 
@@ -216,7 +216,7 @@ int proc_get_mlmext_state(char *page, char **start,
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
 
 	int len = 0;
 
@@ -232,7 +232,7 @@ int proc_get_qos_option(char *page, char **start,
 {
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	int len = 0;
 
@@ -249,7 +249,7 @@ int proc_get_ht_option(char *page, char **start,
 {
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	int len = 0;
 	len += snprintf(page + len, count - len, "ht_option =%d\n", pmlmepriv->htpriv.ht_option);
@@ -281,9 +281,9 @@ int proc_get_ap_info(char *page, char **start,
 	struct sta_info *psta;
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-	struct wlan_network *cur_network = &(pmlmepriv->cur_network);
+	struct wlan_network *cur_network = &pmlmepriv->cur_network;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	int len = 0;
 
@@ -607,7 +607,7 @@ int proc_get_rx_signal(char *page, char **start,
 {
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	int len = 0;
 
@@ -944,7 +944,7 @@ int proc_get_all_sta_info(char *page, char **start,
 
 	for (i =0; i< NUM_STA; i++)
 	{
-		phead = &(pstapriv->sta_hash[i]);
+		phead = &pstapriv->sta_hash[i];
 		plist = get_next(phead);
 
 		while ((rtw_end_of_queue_search(phead, plist)) == false)
@@ -1136,7 +1136,7 @@ int proc_get_sreset(char *page, char **start, off_t offset, int count, int *eof,
 {
 	struct net_device *dev = data;
 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	int len = 0;
 

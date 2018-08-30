@@ -206,10 +206,10 @@ int _rtw_mstat_dump(char *buf, int len)
 	int tx_alloc, tx_peak, tx_alloc_err, rx_alloc, rx_peak, rx_alloc_err;
 
 	for (i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
-		value_t[0][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].alloc));
-		value_t[1][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].peak));
-		value_t[2][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].alloc_cnt));
-		value_t[3][i] = ATOMIC_READ(&(rtw_mem_type_stat[i].alloc_err_cnt));
+		value_t[0][i] = ATOMIC_READ(&rtw_mem_type_stat[i].alloc);
+		value_t[1][i] = ATOMIC_READ(&rtw_mem_type_stat[i].peak);
+		value_t[2][i] = ATOMIC_READ(&rtw_mem_type_stat[i].alloc_cnt);
+		value_t[3][i] = ATOMIC_READ(&rtw_mem_type_stat[i].alloc_err_cnt);
 	}
 	cnt += snprintf(buf+cnt, len-cnt, "===================== MSTAT =====================\n");
 	cnt += snprintf(buf+cnt, len-cnt, "%4s %10s %10s %10s %10s\n", "TAG", "alloc", "peak", "aloc_cnt", "err_cnt");
@@ -237,46 +237,46 @@ void rtw_mstat_update(const enum mstat_f flags, const MSTAT_STATUS status, u32 s
 	/* initialization */
 	if (!update_time) {
 		for (i=0;i<mstat_tf_idx(MSTAT_TYPE_MAX);i++) {
-			ATOMIC_SET(&(rtw_mem_type_stat[i].alloc), 0);
-			ATOMIC_SET(&(rtw_mem_type_stat[i].peak), 0);
-			ATOMIC_SET(&(rtw_mem_type_stat[i].alloc_cnt), 0);
-			ATOMIC_SET(&(rtw_mem_type_stat[i].alloc_err_cnt), 0);
+			ATOMIC_SET(&rtw_mem_type_stat[i].alloc, 0);
+			ATOMIC_SET(&rtw_mem_type_stat[i].peak, 0);
+			ATOMIC_SET(&rtw_mem_type_stat[i].alloc_cnt, 0);
+			ATOMIC_SET(&rtw_mem_type_stat[i].alloc_err_cnt, 0);
 		}
 		for (i=0;i<mstat_ff_idx(MSTAT_FUNC_MAX);i++) {
-			ATOMIC_SET(&(rtw_mem_func_stat[i].alloc), 0);
-			ATOMIC_SET(&(rtw_mem_func_stat[i].peak), 0);
-			ATOMIC_SET(&(rtw_mem_func_stat[i].alloc_cnt), 0);
-			ATOMIC_SET(&(rtw_mem_func_stat[i].alloc_err_cnt), 0);
+			ATOMIC_SET(&rtw_mem_func_stat[i].alloc, 0);
+			ATOMIC_SET(&rtw_mem_func_stat[i].peak, 0);
+			ATOMIC_SET(&rtw_mem_func_stat[i].alloc_cnt, 0);
+			ATOMIC_SET(&rtw_mem_func_stat[i].alloc_err_cnt, 0);
 		}
 	}
 
 	switch (status) {
 		case MSTAT_ALLOC_SUCCESS:
-			ATOMIC_INC(&(rtw_mem_type_stat[mstat_tf_idx(flags)].alloc_cnt));
-			alloc = ATOMIC_ADD_RETURN(&(rtw_mem_type_stat[mstat_tf_idx(flags)].alloc), sz);
-			peak=ATOMIC_READ(&(rtw_mem_type_stat[mstat_tf_idx(flags)].peak));
+			ATOMIC_INC(&rtw_mem_type_stat[mstat_tf_idx(flags].alloc_cnt));
+			alloc = ATOMIC_ADD_RETURN(&rtw_mem_type_stat[mstat_tf_idx(flags].alloc), sz);
+			peak=ATOMIC_READ(&rtw_mem_type_stat[mstat_tf_idx(flags].peak));
 			if (peak<alloc)
-				ATOMIC_SET(&(rtw_mem_type_stat[mstat_tf_idx(flags)].peak), alloc);
+				ATOMIC_SET(&rtw_mem_type_stat[mstat_tf_idx(flags].peak), alloc);
 
-			ATOMIC_INC(&(rtw_mem_func_stat[mstat_ff_idx(flags)].alloc_cnt));
-			alloc = ATOMIC_ADD_RETURN(&(rtw_mem_func_stat[mstat_ff_idx(flags)].alloc), sz);
-			peak=ATOMIC_READ(&(rtw_mem_func_stat[mstat_ff_idx(flags)].peak));
+			ATOMIC_INC(&rtw_mem_func_stat[mstat_ff_idx(flags].alloc_cnt));
+			alloc = ATOMIC_ADD_RETURN(&rtw_mem_func_stat[mstat_ff_idx(flags].alloc), sz);
+			peak=ATOMIC_READ(&rtw_mem_func_stat[mstat_ff_idx(flags].peak));
 			if (peak<alloc)
-				ATOMIC_SET(&(rtw_mem_func_stat[mstat_ff_idx(flags)].peak), alloc);
+				ATOMIC_SET(&rtw_mem_func_stat[mstat_ff_idx(flags].peak), alloc);
 			break;
 
 		case MSTAT_ALLOC_FAIL:
-			ATOMIC_INC(&(rtw_mem_type_stat[mstat_tf_idx(flags)].alloc_err_cnt));
+			ATOMIC_INC(&rtw_mem_type_stat[mstat_tf_idx(flags].alloc_err_cnt));
 
-			ATOMIC_INC(&(rtw_mem_func_stat[mstat_ff_idx(flags)].alloc_err_cnt));
+			ATOMIC_INC(&rtw_mem_func_stat[mstat_ff_idx(flags].alloc_err_cnt));
 			break;
 
 		case MSTAT_FREE:
-			ATOMIC_DEC(&(rtw_mem_type_stat[mstat_tf_idx(flags)].alloc_cnt));
-			ATOMIC_SUB(&(rtw_mem_type_stat[mstat_tf_idx(flags)].alloc), sz);
+			ATOMIC_DEC(&rtw_mem_type_stat[mstat_tf_idx(flags].alloc_cnt));
+			ATOMIC_SUB(&rtw_mem_type_stat[mstat_tf_idx(flags].alloc), sz);
 
-			ATOMIC_DEC(&(rtw_mem_func_stat[mstat_ff_idx(flags)].alloc_cnt));
-			ATOMIC_SUB(&(rtw_mem_func_stat[mstat_ff_idx(flags)].alloc), sz);
+			ATOMIC_DEC(&rtw_mem_func_stat[mstat_ff_idx(flags].alloc_cnt));
+			ATOMIC_SUB(&rtw_mem_func_stat[mstat_ff_idx(flags].alloc), sz);
 			break;
 	};
 
@@ -642,15 +642,15 @@ void	_rtw_mutex_free(_mutex *pmutex)
 void	_rtw_init_queue(struct  __queue *pqueue)
 {
 
-	_rtw_init_listhead(&(pqueue->queue));
+	_rtw_init_listhead(&pqueue->queue);
 
-	spin_lock_init(&(pqueue->lock));
+	spin_lock_init(&pqueue->lock);
 
 }
 
 u32	  _rtw_queue_empty(struct  __queue *pqueue)
 {
-	return (rtw_is_list_empty(&(pqueue->queue)));
+	return (rtw_is_list_empty(&pqueue->queue));
 }
 
 

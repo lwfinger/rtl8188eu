@@ -44,11 +44,11 @@ sint	_rtw_init_cmd_priv (struct	cmd_priv *pcmdpriv)
 
 ;
 
-	_rtw_init_sema(&(pcmdpriv->cmd_queue_sema), 0);
-	/* _rtw_init_sema(&(pcmdpriv->cmd_done_sema), 0); */
-	_rtw_init_sema(&(pcmdpriv->terminate_cmdthread_sema), 0);
+	_rtw_init_sema(&pcmdpriv->cmd_queue_sema, 0);
+	/* _rtw_init_sema(&pcmdpriv->cmd_done_sema, 0); */
+	_rtw_init_sema(&pcmdpriv->terminate_cmdthread_sema, 0);
 
-	_rtw_init_queue(&(pcmdpriv->cmd_queue));
+	_rtw_init_queue(&pcmdpriv->cmd_queue);
 
 	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
 
@@ -90,7 +90,7 @@ sint _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 	sint res =_SUCCESS;
 
 #ifdef CONFIG_H2CLBK
-	_rtw_init_sema(&(pevtpriv->lbkevt_done), 0);
+	_rtw_init_sema(&pevtpriv->lbkevt_done, 0);
 	pevtpriv->lbkevt_limit = 0;
 	pevtpriv->lbkevt_num = 0;
 	pevtpriv->cmdevt_parm = NULL;
@@ -139,8 +139,8 @@ void _rtw_free_cmd_priv (struct	cmd_priv *pcmdpriv)
 ;
 
 	if (pcmdpriv) {
-		_rtw_free_sema(&(pcmdpriv->cmd_queue_sema));
-		_rtw_free_sema(&(pcmdpriv->terminate_cmdthread_sema));
+		_rtw_free_sema(&pcmdpriv->cmd_queue_sema);
+		_rtw_free_sema(&pcmdpriv->terminate_cmdthread_sema);
 
 		if (pcmdpriv->cmd_allocated_buf)
 			rtw_mfree(pcmdpriv->cmd_allocated_buf, MAX_CMDSZ + CMDBUFF_ALIGN_SZ);
@@ -186,10 +186,10 @@ struct	cmd_obj	*_rtw_dequeue_cmd(struct  __queue *queue)
 	struct cmd_obj *obj;
 
 	_enter_critical(&queue->lock, &irqL);
-	if (rtw_is_list_empty(&(queue->queue))) {
+	if (rtw_is_list_empty(&queue->queue)) {
 		obj = NULL;
 	} else {
-		obj = LIST_CONTAINOR(get_next(&(queue->queue)), struct cmd_obj, list);
+		obj = LIST_CONTAINOR(get_next(&queue->queue), struct cmd_obj, list);
 		rtw_list_delete(&obj->list);
 	}
 
@@ -302,7 +302,7 @@ void rtw_cmd_clr_isr(struct	cmd_priv *pcmdpriv)
 {
 ;
 	pcmdpriv->cmd_done_cnt++;
-	/* _rtw_up_sema(&(pcmdpriv->cmd_done_sema)); */
+	/* _rtw_up_sema(&pcmdpriv->cmd_done_sema); */
 ;
 }
 
@@ -310,7 +310,7 @@ void rtw_free_cmd_obj(struct cmd_obj *pcmd)
 {
 ;
 
-	if ((pcmd->cmdcode!=_JoinBss_CMD_) &&(pcmd->cmdcode!= _CreateBss_CMD_))
+	if ((pcmd->cmdcode!=_JoinBss_CMD_) &&pcmd->cmdcode!= _CreateBss_CMD_)
 		rtw_mfree((unsigned char*)pcmd->parmbuf, pcmd->cmdsz);
 
 	if (pcmd->rsp!= NULL) {
@@ -342,7 +342,7 @@ int rtw_cmd_thread(void * context)
 	u8 (*cmd_hdl)(struct adapter *padapter, u8* pbuf);
 	void (*pcmd_callback)(struct adapter *dev, struct cmd_obj *pcmd);
 	struct adapter *padapter = (struct adapter *)context;
-	struct cmd_priv *pcmdpriv = &(padapter->cmdpriv);
+	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
 
 ;
 
@@ -375,7 +375,7 @@ int rtw_cmd_thread(void * context)
 			break;
 		}
 
-		if (rtw_is_list_empty(&(pcmdpriv->cmd_queue.queue)))
+		if (rtw_is_list_empty(&pcmdpriv->cmd_queue.queue))
 		{
 			/* DBG_88E("%s: cmd queue is empty!\n", __func__); */
 			continue;
@@ -524,7 +524,7 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid, 
 	struct cmd_priv		*pcmdpriv = &padapter->cmdpriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 #ifdef CONFIG_P2P
-	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
+	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 #endif /* CONFIG_P2P */
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
@@ -957,7 +957,7 @@ u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network* pnetwork)
 	struct ht_priv			*phtpriv = &pmlmepriv->htpriv;
 	enum NDIS_802_11_NETWORK_INFRASTRUCTURE ndis_network_mode = pnetwork->network.InfrastructureMode;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
 
 ;
 
@@ -1771,7 +1771,7 @@ static void traffic_status_watchdog(struct adapter *padapter)
 	u16	BusyThreshold = 200;/*  100; */
 	u8	bBusyTraffic = false, bTxBusyTraffic = false, bRxBusyTraffic = false;
 	u8	bHigherBusyTraffic = false, bHigherBusyRxTraffic = false, bHigherBusyTxTraffic = false;
-	struct mlme_priv		*pmlmepriv = &(padapter->mlmepriv);
+	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 
 	RT_LINK_DETECT_T * link_detect = &pmlmepriv->LinkDetectInfo;
 
@@ -1860,7 +1860,7 @@ void dynamic_chk_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz)
 	struct mlme_priv *pmlmepriv;
 
 	padapter = (struct adapter *)pbuf;
-	pmlmepriv = &(padapter->mlmepriv);
+	pmlmepriv = &padapter->mlmepriv;
 
 #ifdef CONFIG_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
@@ -1885,7 +1885,7 @@ void dynamic_chk_wk_hdl(struct adapter *padapter, u8 *pbuf, int sz)
 static void lps_ctrl_wk_hdl(struct adapter *padapter, u8 lps_ctrl_type)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	u8	mstatus;
 
 	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)) ||
@@ -2056,7 +2056,7 @@ u8 rtw_antenna_select_cmd(struct adapter*padapter, u8 antenna, u8 enqueue)
 	u8	res = _SUCCESS;
 
 ;
-	rtw_hal_get_def_var(padapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &(bSupportAntDiv));
+	rtw_hal_get_def_var(padapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &bSupportAntDiv);
 	if (false == bSupportAntDiv )	return res;
 
 	if (true == enqueue) {
@@ -2112,7 +2112,7 @@ u8 p2p_protocol_wk_cmd(struct adapter*padapter, int intCmdType )
 {
 	struct cmd_obj	*ph2c;
 	struct drvextra_cmd_parm	*pdrvextra_cmd_parm;
-	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
+	struct wifidirect_info	*pwdinfo = &padapter->wdinfo;
 	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
 	u8	res = _SUCCESS;
 
@@ -2505,7 +2505,7 @@ void rtw_createbss_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
 	struct wlan_network *pwlan = NULL;
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct wlan_bssid_ex *pnetwork = (struct wlan_bssid_ex *)pcmd->parmbuf;
-	struct wlan_network *tgt_network = &(pmlmepriv->cur_network);
+	struct wlan_network *tgt_network = &pmlmepriv->cur_network;
 
 ;
 
@@ -2552,28 +2552,28 @@ void rtw_createbss_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
 		unsigned long	irqL;
 
 		pwlan = _rtw_alloc_network(pmlmepriv);
-		spin_lock_bh(&(pmlmepriv->scanned_queue.lock));
+		spin_lock_bh(&pmlmepriv->scanned_queue.lock);
 		if ( pwlan == NULL)
 		{
 			pwlan = rtw_get_oldest_wlan_network(&pmlmepriv->scanned_queue);
 			if ( pwlan == NULL)
 			{
 				RT_TRACE(_module_rtl871x_cmd_c_, _drv_err_, ("\n Error:  can't get pwlan in rtw_joinbss_event_callback\n"));
-				spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
+				spin_unlock_bh(&pmlmepriv->scanned_queue.lock);
 				goto createbss_cmd_fail;
 			}
 			pwlan->last_scanned = jiffies;
 		}
 		else
 		{
-			rtw_list_insert_tail(&(pwlan->list), &pmlmepriv->scanned_queue.queue);
+			rtw_list_insert_tail(&pwlan->list, &pmlmepriv->scanned_queue.queue);
 		}
 
 		pnetwork->Length = get_wlan_bssid_ex_sz(pnetwork);
-		memcpy(&(pwlan->network), pnetwork, pnetwork->Length);
+		memcpy(&pwlan->network, pnetwork, pnetwork->Length);
 		/* pwlan->fixed = true; */
 
-		/* rtw_list_insert_tail(&(pwlan->list), &pmlmepriv->scanned_queue.queue); */
+		/* rtw_list_insert_tail(&pwlan->list, &pmlmepriv->scanned_queue.queue); */
 
 		/*  copy pdev_network information to	pmlmepriv->cur_network */
 		memcpy(&tgt_network->network, pnetwork, (get_wlan_bssid_ex_sz(pnetwork)));
@@ -2583,7 +2583,7 @@ void rtw_createbss_cmd_callback(struct adapter *padapter, struct cmd_obj *pcmd)
 
 		_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
 
-		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
+		spin_unlock_bh(&pmlmepriv->scanned_queue.lock);
 		/*  we will set _FW_LINKED when there is one more sat to join us (rtw_stassoc_event_callback) */
 
 	}

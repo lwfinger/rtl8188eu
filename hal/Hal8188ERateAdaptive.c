@@ -347,7 +347,7 @@ odm_RateDecision_8188E(
 					pRaInfo->RssiStaRA,RtyPtID, PenaltyID1,PenaltyID2, RateID, pRaInfo->NscDown, pRaInfo->NscUp, pRaInfo->RateSGI));
 		if ((pRaInfo->NscDown < N_THRESHOLD_LOW[RateID]) ||(pRaInfo->DROP>DROPING_NECESSARY[RateID]))
 			odm_RateDown_8188E(pDM_Odm,pRaInfo);
-		/* else if ((pRaInfo->NscUp > N_THRESHOLD_HIGH[RateID])&&(pool_retry<POOL_RETRY_TH[RateID])) */
+		/* else if ((pRaInfo->NscUp > N_THRESHOLD_HIGH[RateID])&&pool_retry<POOL_RETRY_TH[RateID]) */
 		else if (pRaInfo->NscUp > N_THRESHOLD_HIGH[RateID])
 			odm_RateUp_8188E(pDM_Odm,pRaInfo);
 
@@ -757,7 +757,7 @@ ODM_RA_UpdateRateInfo_8188E(
 	if ((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return;
 
-	pRaInfo = &(pDM_Odm->RAInfo[MacID]);
+	pRaInfo = &pDM_Odm->RAInfo[MacID];
 	pRaInfo->RateID = RateID;
 	pRaInfo->RateMask = RateMask;
 	pRaInfo->SGIEnable = SGIEnable;
@@ -778,7 +778,7 @@ ODM_RA_SetRSSI_8188E(
 	if ((NULL == pDM_Odm) || (MacID >= ASSOCIATE_ENTRY_NUM))
 		return;
 
-	pRaInfo = &(pDM_Odm->RAInfo[MacID]);
+	pRaInfo = &pDM_Odm->RAInfo[MacID];
 	pRaInfo->RssiStaRA = Rssi;
 }
 
@@ -822,7 +822,7 @@ ODM_RA_TxRPT2Handle_8188E(
 		else
 			valid = (1<<MacId) & MacIDValidEntry0;
 
-		pRAInfo = &(pDM_Odm->RAInfo[MacId]);
+		pRAInfo = &pDM_Odm->RAInfo[MacId];
 		if (valid)
 		{
 

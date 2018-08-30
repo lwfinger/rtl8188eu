@@ -65,7 +65,7 @@ void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *pt
 {
 	u8 bDumpTxPkt;
 	u8 bDumpTxDesc = false;
-	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DUMP_TXPKT, &(bDumpTxPkt));
+	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DUMP_TXPKT, &bDumpTxPkt);
 
 	if (bDumpTxPkt ==1) {/* dump txdesc for data frame */
 		DBG_88E("dump tx_desc for data frame\n");

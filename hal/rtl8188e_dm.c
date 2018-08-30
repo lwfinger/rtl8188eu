@@ -129,7 +129,7 @@ static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
 
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	u8	cut_ver,fab_ver;
 
 	/*  */
@@ -185,7 +185,7 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 	struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
 	struct pwrctrl_priv *pwrctrlpriv = adapter_to_pwrctl(Adapter);
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	int i;
 
@@ -218,21 +218,21 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
 
 	ODM_CmnInfoUpdate(pDM_Odm,ODM_CMNINFO_ABILITY,pdmpriv->InitODMFlag);
 
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_TX_UNI,&(Adapter->xmitpriv.tx_bytes));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_RX_UNI,&(Adapter->recvpriv.rx_bytes));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_WM_MODE,&(pmlmeext->cur_wireless_mode));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_SEC_CHNL_OFFSET,&(pHalData->nCur40MhzPrimeSC));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_SEC_MODE,&(Adapter->securitypriv.dot11PrivacyAlgrthm));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_BW,&(pHalData->CurrentChannelBW ));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_CHNL,&( pHalData->CurrentChannel));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_NET_CLOSED,&( Adapter->net_closed));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_MP_MODE,&(Adapter->registrypriv.mp_mode));
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_TX_UNI,&Adapter->xmitpriv.tx_bytes);
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_RX_UNI,&Adapter->recvpriv.rx_bytes);
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_WM_MODE,&pmlmeext->cur_wireless_mode);
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_SEC_CHNL_OFFSET,&pHalData->nCur40MhzPrimeSC);
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_SEC_MODE,&Adapter->securitypriv.dot11PrivacyAlgrthm);
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_BW,&pHalData->CurrentChannelBW );
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_CHNL,& pHalData->CurrentChannel);
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_NET_CLOSED,& Adapter->net_closed);
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_MP_MODE,&Adapter->registrypriv.mp_mode);
 
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_BAND,&(pDM_Odm->u8_temp));
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_BAND,&pDM_Odm->u8_temp);
 	/*  only for 8192D   ================= */
 
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_SCAN,&(pmlmepriv->bScanInProcess));
-	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_POWER_SAVING,&(pwrctrlpriv->bpower_saving));
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_SCAN,&pmlmepriv->bScanInProcess);
+	ODM_CmnInfoHook(pDM_Odm,ODM_CMNINFO_POWER_SAVING,&pwrctrlpriv->bpower_saving);
 	ODM_CmnInfoInit(pDM_Odm, ODM_CMNINFO_RF_ANTENNA_TYPE, pHalData->TRxAntDivType);
 
 	for (i=0; i< NUM_STA; i++)
@@ -249,7 +249,7 @@ rtl8188e_InitHalDm(
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 	u8	i;
 
 	dm_InitGPIOSetting(Adapter);
@@ -275,7 +275,7 @@ rtl8188e_HalDmWatchDog(
 	u8 hw_init_completed = false;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
-	PDM_ODM_T		pDM_Odm = &(pHalData->odmpriv);
+	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
 	hw_init_completed = Adapter->hw_init_completed;
 
@@ -335,7 +335,7 @@ void rtl8188e_init_dm_priv(struct adapter *Adapter)
 	struct dm_priv	*pdmpriv = &pHalData->dmpriv;
 	PDM_ODM_T		podmpriv = &pHalData->odmpriv;
 	memset(pdmpriv, 0, sizeof(struct dm_priv));
-	/* spin_lock_init(&(pHalData->odm_stainfo_lock)); */
+	/* spin_lock_init(&pHalData->odm_stainfo_lock); */
 	Init_ODM_ComInfo_88E(Adapter);
 	ODM_InitDebugSetting(podmpriv);
 }
@@ -375,7 +375,7 @@ u8 AntDivBeforeLink8188E(struct adapter *Adapter )
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PDM_ODM_T	pDM_Odm =&pHalData->odmpriv;
 	SWAT_T		*pDM_SWAT_Table = &pDM_Odm->DM_SWAT_Table;
-	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
+	struct mlme_priv	*pmlmepriv = &Adapter->mlmepriv;
 
 	/*  Condition that does not need to use antenna diversity. */
 	if (pHalData->AntDivCfg== 0)

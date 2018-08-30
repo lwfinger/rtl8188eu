@@ -214,14 +214,14 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz ,u8 bag
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct tx_desc	*ptxdesc = (struct tx_desc *)pmem;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
 	sint	bmcst = IS_MCAST(pattrib->ra);
 #ifdef CONFIG_P2P
 	struct wifidirect_info*	pwdinfo = &padapter->wdinfo;
 #endif /* CONFIG_P2P */
 
 	if (padapter->registrypriv.mp_mode == 0) {
-		if ((!bagg_pkt) &&(urb_zero_packet_chk(padapter, sz)== 0)) {
+		if ((!bagg_pkt) &&urb_zero_packet_chk(padapter, sz== 0)) {
 			ptxdesc = (struct tx_desc *)(pmem+PACKET_OFFSET_SZ);
 			pull = 1;
 		}
@@ -641,26 +641,26 @@ s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxm
 	switch (pfirstframe->attrib.priority) {
 		case 1:
 		case 2:
-			ptxservq = &(psta->sta_xmitpriv.bk_q);
+			ptxservq = &psta->sta_xmitpriv.bk_q;
 			phwxmit = pxmitpriv->hwxmits + 3;
 			break;
 
 		case 4:
 		case 5:
-			ptxservq = &(psta->sta_xmitpriv.vi_q);
+			ptxservq = &psta->sta_xmitpriv.vi_q;
 			phwxmit = pxmitpriv->hwxmits + 1;
 			break;
 
 		case 6:
 		case 7:
-			ptxservq = &(psta->sta_xmitpriv.vo_q);
+			ptxservq = &psta->sta_xmitpriv.vo_q;
 			phwxmit = pxmitpriv->hwxmits;
 			break;
 
 		case 0:
 		case 3:
 		default:
-			ptxservq = &(psta->sta_xmitpriv.be_q);
+			ptxservq = &psta->sta_xmitpriv.be_q;
 			phwxmit = pxmitpriv->hwxmits + 2;
 			break;
 	}

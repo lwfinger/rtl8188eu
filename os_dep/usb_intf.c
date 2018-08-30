@@ -344,7 +344,7 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf)
 	}
 
 	/* 3 misc */
-	_rtw_init_sema(&(pdvobjpriv->usb_suspend_sema), 0);
+	_rtw_init_sema(&pdvobjpriv->usb_suspend_sema, 0);
 	rtw_reset_continual_io_error(pdvobjpriv);
 
 	usb_get_dev(pusbd);
@@ -723,8 +723,8 @@ int rtw_resume_process(struct adapter *padapter)
 #ifdef CONFIG_BT_COEXIST
 #ifdef CONFIG_AUTOSUSPEND
 	#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
-	DBG_88E("%s...pm_usage_cnt(%d)  pwrpriv->bAutoResume=%x.  ....\n",__func__,atomic_read(&(adapter_to_dvobj(padapter)->pusbintf->pm_usage_cnt)),pwrpriv->bAutoResume);
-	pm_cnt=atomic_read(&(adapter_to_dvobj(padapter)->pusbintf->pm_usage_cnt));
+	DBG_88E("%s...pm_usage_cnt(%d)  pwrpriv->bAutoResume=%x.  ....\n",__func__,atomic_read(&adapter_to_dvobj(padapter->pusbintf->pm_usage_cnt)),pwrpriv->bAutoResume);
+	pm_cnt=atomic_read(&adapter_to_dvobj(padapter->pusbintf->pm_usage_cnt));
 	#else
 	DBG_88E("...pm_usage_cnt(%d).....\n", adapter_to_dvobj(padapter)->pusbintf->pm_usage_cnt);
 	pm_cnt = adapter_to_dvobj(padapter)->pusbintf->pm_usage_cnt;
@@ -838,7 +838,7 @@ void autosuspend_enter(struct adapter* padapter)
 #endif	/* ifndef	CONFIG_BT_COEXIST */
 	}
 	#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
-	DBG_88E("...pm_usage_cnt(%d).....\n", atomic_read(&(dvobj->pusbintf->pm_usage_cnt)));
+	DBG_88E("...pm_usage_cnt(%d).....\n", atomic_read(&dvobj->pusbintf->pm_usage_cnt));
 	#else
 	DBG_88E("...pm_usage_cnt(%d).....\n", dvobj->pusbintf->pm_usage_cnt);
 	#endif
@@ -848,9 +848,9 @@ int autoresume_enter(struct adapter* padapter)
 {
 	int result = _SUCCESS;
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	struct security_priv* psecuritypriv=&(padapter->securitypriv);
+	struct security_priv* psecuritypriv=&padapter->securitypriv;
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
+	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 
 	DBG_88E("====> autoresume_enter\n");
@@ -873,7 +873,7 @@ int autoresume_enter(struct adapter* padapter)
 		#endif
 
 		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
-		DBG_88E("...pm_usage_cnt(%d).....\n", atomic_read(&(dvobj->pusbintf->pm_usage_cnt)));
+		DBG_88E("...pm_usage_cnt(%d).....\n", atomic_read(&dvobj->pusbintf->pm_usage_cnt));
 		#else
 		DBG_88E("...pm_usage_cnt(%d).....\n", dvobj->pusbintf->pm_usage_cnt);
 		#endif
@@ -893,7 +893,7 @@ int autoresume_enter(struct adapter* padapter)
 			usb_autoresume_device(dvobj->pusbdev, 1);
 		#endif
 		#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
-			DBG_88E("...pm_usage_cnt(%d).....\n", atomic_read(&(dvobj->pusbintf->pm_usage_cnt)));
+			DBG_88E("...pm_usage_cnt(%d).....\n", atomic_read(&dvobj->pusbintf->pm_usage_cnt));
 		#else
 			DBG_88E("...pm_usage_cnt(%d).....\n", dvobj->pusbintf->pm_usage_cnt);
 		#endif
@@ -1011,7 +1011,7 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
 			#endif
 
 			#if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,32))
-			DBG_88E("%s...pm_usage_cnt(%d).....\n",__FUNCTION__,atomic_read(&(dvobj->pusbintf ->pm_usage_cnt)));
+			DBG_88E("%s...pm_usage_cnt(%d).....\n",__FUNCTION__,atomic_read(&dvobj->pusbintf ->pm_usage_cnt));
 			#else
 			DBG_88E("%s...pm_usage_cnt(%d).....\n",__FUNCTION__,dvobj->pusbintf ->pm_usage_cnt);
 			#endif

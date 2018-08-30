@@ -1052,9 +1052,9 @@ _PHY_MACSettingCalibration(
 	ODM_Write1Byte(pDM_Odm, MACReg[i], 0x3F);
 
 	for (i = 1 ; i < (IQK_MAC_REG_NUM - 1); i++) {
-		ODM_Write1Byte(pDM_Odm, MACReg[i], (u8)(MACBackup[i]&(~BIT3)));
+		ODM_Write1Byte(pDM_Odm, MACReg[i], (u8)(MACBackup[i]&~BIT3));
 	}
-	ODM_Write1Byte(pDM_Odm, MACReg[i], (u8)(MACBackup[i]&(~BIT5)));
+	ODM_Write1Byte(pDM_Odm, MACReg[i], (u8)(MACBackup[i]&~BIT5));
 
 }
 
@@ -1578,7 +1578,7 @@ phy_APCalibrate_8188E(
 #if MP_DRIVER == 1
 if ( *(pDM_Odm->mp_mode) == 1)
 {
-	struct mpt_context *pMptCtx = &(pAdapter->mppriv.MptCtx);
+	struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
 	pMptCtx->APK_bound[0] = 45;
 	pMptCtx->APK_bound[1] = 52;
 }
@@ -1917,7 +1917,7 @@ PHY_IQCalibrate_8188E(
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
 	#if (MP_DRIVER == 1)
-		struct mpt_context *pMptCtx = &(pAdapter->mppriv.MptCtx);
+		struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
 	#endif/* MP_DRIVER == 1) */
 
 	s32			result[4][8];	/* last is final result */
@@ -2065,11 +2065,11 @@ if (*(pDM_Odm->mp_mode) == 1)
 		pDM_Odm->RFCalibrateInfo.RegE9C = pDM_Odm->RFCalibrateInfo.RegEBC = 0x0;		/* Y default value */
 	}
 
-	if ((RegE94 != 0)/*&&(RegEA4 != 0)*/)
+	if ((RegE94 != 0)/*&&RegEA4 != 0*/)
 		_PHY_PathAFillIQKMatrix(pAdapter, bPathAOK, result, final_candidate, (RegEA4 == 0));
 
 	if (is2T) {
-		if ((RegEB4 != 0)/*&&(RegEC4 != 0)*/)
+		if ((RegEB4 != 0)/*&&RegEC4 != 0*/)
 			_PHY_PathBFillIQKMatrix(pAdapter, bPathBOK, result, final_candidate, (RegEC4 == 0));
 	}
 
@@ -2102,7 +2102,7 @@ PHY_LCCalibrate_8188E(
 	PDM_ODM_T		pDM_Odm = &pHalData->odmpriv;
 
 	#if (MP_DRIVER == 1)
-	struct mpt_context *pMptCtx = &(pAdapter->mppriv.MptCtx);
+	struct mpt_context *pMptCtx = &pAdapter->mppriv.MptCtx;
 	#endif/* MP_DRIVER == 1) */
 
 

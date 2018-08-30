@@ -249,7 +249,7 @@ rtl8188e_PHY_RF6052SetCckTxPower(
 
 	for (idx1=RF_PATH_A; idx1<=RF_PATH_B; idx1++)
 	{
-		ptr = (u8*)(&(TxAGC[idx1]));
+		ptr = (u8*)(&TxAGC[idx1]);
 		for (idx2=0; idx2<4; idx2++)
 		{
 			if (*ptr > RF6052_MAX_TX_PWR)
@@ -400,7 +400,7 @@ static void getTxPowerWriteValByRegulatory88E(
 
 				for (i=0; i<4; i++)
 					{
-					pwr_diff_limit[i] = (u8)((pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]&(0x7f<<(i*8)))>>(i*8));
+					pwr_diff_limit[i] = (u8)((pHalData->MCSTxPowerLevelOriginalOffset[chnlGroup][index+(rf?8:0)]&0x7f<<(i*8))>>(i*8));
 
 					if (pwr_diff_limit[i] > pwr_diff)
 						pwr_diff_limit[i] = pwr_diff;
