@@ -185,45 +185,6 @@ phydm_dynamic_rx_path(
 
 }
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-phydm_dynamic_rx_path_callback(
-	struct timer_list		*p_timer
-)
-{
-	struct _ADAPTER		*adapter = (struct _ADAPTER *)p_timer->adapter;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-	struct PHY_DM_STRUCT		*p_dm_odm = &(p_hal_data->DM_OutSrc);
-	struct _DYNAMIC_RX_PATH_			*p_dm_drp_table = &(p_dm_odm->dm_drp_table);
-
-#if DEV_BUS_TYPE == RT_PCI_INTERFACE
-#if USE_WORKITEM
-	odm_schedule_work_item(&(p_dm_drp_table->phydm_dynamic_rx_path_workitem));
-#else
-	{
-		/* dbg_print("phydm_dynamic_rx_path\n"); */
-		phydm_dynamic_rx_path(p_dm_odm);
-	}
-#endif
-#else
-	odm_schedule_work_item(&(p_dm_drp_table->phydm_dynamic_rx_path_workitem));
-#endif
-}
-
-void
-phydm_dynamic_rx_path_workitem_callback(
-	void		*p_context
-)
-{
-	struct _ADAPTER		*p_adapter = (struct _ADAPTER *)p_context;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(p_adapter);
-	struct PHY_DM_STRUCT		*p_dm_odm = &(p_hal_data->DM_OutSrc);
-
-	/* dbg_print("phydm_dynamic_rx_path\n"); */
-	phydm_dynamic_rx_path(p_dm_odm);
-}
-#else if (DM_ODM_SUPPORT_TYPE == ODM_CE)
-
 void
 phydm_dynamic_rx_path_callback(
 	void *function_context
@@ -234,15 +195,7 @@ phydm_dynamic_rx_path_callback(
 
 	if (padapter->net_closed == _TRUE)
 		return;
-
-#if 0 /* Can't do I/O in timer callback*/
-	odm_s0s1_sw_ant_div(p_dm_odm, SWAW_STEP_DETERMINE);
-#else
-	/*rtw_run_in_thread_cmd(padapter, odm_sw_antdiv_workitem_callback, padapter);*/
-#endif
 }
-
-#endif
 
 void
 phydm_dynamic_rx_path_timers(

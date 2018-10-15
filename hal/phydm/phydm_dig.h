@@ -94,14 +94,6 @@ struct _dynamic_initial_gain_threshold_ {
 	u32		cck_fa_ma;
 	enum dig_goupcheck_level		dig_go_up_check_level;
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	bool					is_tp_target;
-	bool					is_noise_est;
-	u32					tp_train_th_min;
-	u8					igi_offset_a;
-	u8					igi_offset_b;
-#endif
-
 #if (RTL8822B_SUPPORT == 1 || RTL8197F_SUPPORT == 1 || RTL8821C_SUPPORT == 1)
 	u8		rf_gain_idx;
 	u8		agc_table_idx;
@@ -232,24 +224,10 @@ enum phydm_pause_level {
 #define		DM_DIG_MAX_AP_HP				0x42
 #define		DM_DIG_MIN_AP_HP				0x30
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	#define		DM_DIG_MAX_AP_COVERAGR		0x26
-	#define		DM_DIG_MIN_AP_COVERAGE		0x1c
-	#define		DM_DIG_MAX_OF_MIN_COVERAGE	0x22
-
-	#define		dm_dig_tp_target_th0			500
-	#define		dm_dig_tp_target_th1			1000
-	#define		dm_dig_tp_training_period		10
-#endif
-
 /* vivi 92c&92d has different definition, 20110504
  * this is for 92c */
-#if (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	#ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
-		#define		DM_DIG_FA_TH0				0x80/* 0x20 */
-	#else
-		#define		DM_DIG_FA_TH0				0x200/* 0x20 */
-	#endif
+#ifdef CONFIG_SPECIAL_SETTING_FOR_FUNAI_TV
+	#define		DM_DIG_FA_TH0				0x80/* 0x20 */
 #else
 	#define		DM_DIG_FA_TH0				0x200/* 0x20 */
 #endif
@@ -336,33 +314,5 @@ bool
 phydm_dig_go_up_check(
 	void		*p_dm_void
 );
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-odm_mpt_dig_callback(
-	struct timer_list						*p_timer
-);
-
-void
-odm_mpt_dig_work_item_callback(
-	void			*p_context
-);
-
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-void
-odm_mpt_dig_callback(
-	void					*p_dm_void
-);
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE != ODM_CE)
-void
-ODM_MPT_DIG(
-	void					*p_dm_void
-);
-#endif
-
 
 #endif

@@ -64,14 +64,7 @@ struct _DYNAMIC_RX_PATH_ {
 	u8			drp_skip_counter;
 	u8			drp_period;
 	u8			drp_init_finished;
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-#if USE_WORKITEM
-	RT_WORK_ITEM	phydm_dynamic_rx_path_workitem;
-#endif
-#endif
 	struct timer_list		phydm_dynamic_rx_path_timer;
-
 };
 
 
@@ -83,30 +76,9 @@ phydm_process_phy_status_for_dynamic_rx_path(
 	void			*p_pkt_info_void
 );
 
-void
-phydm_dynamic_rx_path(
-	void			*p_dm_void
-);
+void phydm_dynamic_rx_path(void *p_dm_void);
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-phydm_dynamic_rx_path_callback(
-	struct timer_list		*p_timer
-);
-
-void
-phydm_dynamic_rx_path_workitem_callback(
-	void		*p_context
-);
-
-#else if (DM_ODM_SUPPORT_TYPE == ODM_CE)
-
-void
-phydm_dynamic_rx_path_callback(
-	void *function_context
-);
-
-#endif
+void phydm_dynamic_rx_path_callback(void *function_context);
 
 void
 phydm_dynamic_rx_path_timers(

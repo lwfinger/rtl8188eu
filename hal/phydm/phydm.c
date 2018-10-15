@@ -157,29 +157,11 @@ odm_init_mp_driver_status(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-
-	/* Decide when compile time */
-#if (MP_DRIVER == 1)
-	p_dm_odm->mp_mode = true;
-#else
-	p_dm_odm->mp_mode = false;
-#endif
-
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-
 	struct _ADAPTER	*adapter =  p_dm_odm->adapter;
 
 	/* Update information every period */
 	p_dm_odm->mp_mode = (bool)adapter->registrypriv.mp_mode;
 
-#else
-
-	struct rtl8192cd_priv	*priv = p_dm_odm->priv;
-
-	p_dm_odm->mp_mode = (bool)priv->pshare->rf_ft_var.mp_specific;
-
-#endif
 }
 
 void
@@ -187,21 +169,10 @@ odm_update_mp_driver_status(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-
-	/* Do nothing. */
-
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 	struct _ADAPTER	*adapter =  p_dm_odm->adapter;
 
 	/* Update information erery period */
 	p_dm_odm->mp_mode = (bool)adapter->registrypriv.mp_mode;
-
-#else
-
-	/* Do nothing. */
-
-#endif
 }
 
 void
@@ -247,26 +218,14 @@ phydm_traffic_load_decision(
 	p_dm_odm->last_tx_ok_cnt =  *(p_dm_odm->p_num_tx_bytes_unicast);
 	p_dm_odm->last_rx_ok_cnt =  *(p_dm_odm->p_num_rx_bytes_unicast);
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	p_dm_odm->tx_tp = ((p_dm_odm->tx_tp) >> 1) + (u32)(((p_dm_odm->cur_tx_ok_cnt) >> 17) >> 1); /* <<3(8bit), >>20(10^6,M)*/
-	p_dm_odm->rx_tp = ((p_dm_odm->rx_tp) >> 1) + (u32)(((p_dm_odm->cur_rx_ok_cnt) >> 17) >> 1); /* <<3(8bit), >>20(10^6,M)*/
-#else
 	p_dm_odm->tx_tp = ((p_dm_odm->tx_tp) >> 1) + (u32)(((p_dm_odm->cur_tx_ok_cnt) >> 18) >> 1); /* <<3(8bit), >>20(10^6,M), >>1(2sec)*/
 	p_dm_odm->rx_tp = ((p_dm_odm->rx_tp) >> 1) + (u32)(((p_dm_odm->cur_rx_ok_cnt) >> 18) >> 1); /* <<3(8bit), >>20(10^6,M), >>1(2sec)*/
-#endif
 	p_dm_odm->total_tp = p_dm_odm->tx_tp + p_dm_odm->rx_tp;
 
 	if (p_dm_odm->total_tp == 0)
 		p_dm_odm->consecutive_idlel_time += PHYDM_WATCH_DOG_PERIOD;
 	else
 		p_dm_odm->consecutive_idlel_time = 0;
-	/*
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD, ("cur_tx_ok_cnt = %d, cur_rx_ok_cnt = %d, last_tx_ok_cnt = %d, last_rx_ok_cnt = %d\n",
-		p_dm_odm->cur_tx_ok_cnt, p_dm_odm->cur_rx_ok_cnt, p_dm_odm->last_tx_ok_cnt, p_dm_odm->last_rx_ok_cnt));
-
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD, ("tx_tp = %d, rx_tp = %d\n",
-		p_dm_odm->tx_tp, p_dm_odm->rx_tp));
-	*/
 
 	p_dm_odm->pre_traffic_load = p_dm_odm->traffic_load;
 
@@ -512,11 +471,6 @@ phydm_init_cck_setting(
 
 #if (RTL8192E_SUPPORT == 1)
 	if (p_dm_odm->support_ic_type & (ODM_RTL8192E)) {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-		phydm_config_cck_rx_antenna_init(p_dm_odm);
-		phydm_config_cck_rx_path(p_dm_odm, PHYDM_A, CCA_PATHDIV_DISABLE);
-#endif
-
 		/* 0x824[9] = 0x82C[9] = 0xA80[7]  those registers setting should be equal or CCK RSSI report may be incorrect */
 		value_824 = odm_get_bb_reg(p_dm_odm, 0x824, BIT(9));
 		value_82c = odm_get_bb_reg(p_dm_odm, 0x82c, BIT(9));
@@ -591,11 +545,6 @@ odm_common_info_self_init(
 {
 	phydm_init_cck_setting(p_dm_odm);
 	p_dm_odm->rf_path_rx_enable = (u8) odm_get_bb_reg(p_dm_odm, ODM_REG(BB_RX_PATH, p_dm_odm), ODM_BIT(BB_RX_PATH, p_dm_odm));
-#if (DM_ODM_SUPPORT_TYPE != ODM_CE)
-	p_dm_odm->p_is_net_closed = &p_dm_odm->BOOLEAN_temp;
-
-	phydm_init_debug_setting(p_dm_odm);
-#endif
 	odm_init_mp_driver_status(p_dm_odm);
 	phydm_init_trx_antenna_setting(p_dm_odm);
 	phydm_init_soft_ml_setting(p_dm_odm);
@@ -640,50 +589,6 @@ odm_common_info_self_update(
 	u32	i, one_entry_macid = 0, ma_rx_tp = 0;
 	struct sta_info	*p_entry;
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-
-	struct _ADAPTER	*adapter =  p_dm_odm->adapter;
-	PMGNT_INFO	p_mgnt_info = &adapter->MgntInfo;
-
-	p_entry = p_dm_odm->p_odm_sta_info[0];
-	if (p_mgnt_info->mAssoc) {
-		p_entry->bUsed = true;
-		for (i = 0; i < 6; i++)
-			p_entry->MacAddr[i] = p_mgnt_info->Bssid[i];
-	} else if (GetFirstClientPort(adapter)) {
-		struct _ADAPTER	*p_client_adapter = GetFirstClientPort(adapter);
-
-		p_entry->bUsed = true;
-		for (i = 0; i < 6; i++)
-			p_entry->MacAddr[i] = p_client_adapter->MgntInfo.Bssid[i];
-	} else {
-		p_entry->bUsed = false;
-		for (i = 0; i < 6; i++)
-			p_entry->MacAddr[i] = 0;
-	}
-
-	/* STA mode is linked to AP */
-	if (IS_STA_VALID(p_dm_odm->p_odm_sta_info[0]) && !ACTING_AS_AP(adapter))
-		p_dm_odm->bsta_state = true;
-	else
-		p_dm_odm->bsta_state = false;
-#endif
-
-	/* THis variable cannot be used because it is wrong*/
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-	if (*(p_dm_odm->p_band_width) == ODM_BW40M) {
-		if (*(p_dm_odm->p_sec_ch_offset) == 1)
-			p_dm_odm->control_channel = *(p_dm_odm->p_channel) + 2;
-		else if (*(p_dm_odm->p_sec_ch_offset) == 2)
-			p_dm_odm->control_channel = *(p_dm_odm->p_channel) - 2;
-	} else if (*(p_dm_odm->p_band_width) == ODM_BW80M)	{
-		if (*(p_dm_odm->p_sec_ch_offset) == 1)
-			p_dm_odm->control_channel = *(p_dm_odm->p_channel) + 6;
-		else if (*(p_dm_odm->p_sec_ch_offset) == 2)
-			p_dm_odm->control_channel = *(p_dm_odm->p_channel) - 6;
-	} else
-		p_dm_odm->control_channel = *(p_dm_odm->p_channel);
-#else
 	if (*(p_dm_odm->p_band_width) == ODM_BW40M) {
 		if (*(p_dm_odm->p_sec_ch_offset) == 1)
 			p_dm_odm->control_channel = *(p_dm_odm->p_channel) - 2;
@@ -691,7 +596,6 @@ odm_common_info_self_update(
 			p_dm_odm->control_channel = *(p_dm_odm->p_channel) + 2;
 	} else
 		p_dm_odm->control_channel = *(p_dm_odm->p_channel);
-#endif
 
 	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
 		p_entry = p_dm_odm->p_odm_sta_info[i];
@@ -699,15 +603,6 @@ odm_common_info_self_update(
 			entry_cnt++;
 			if (entry_cnt == 1)
 				one_entry_macid = i;
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-			ma_rx_tp = (p_entry->rx_byte_cnt_low_maw) << 3; /*  low moving average RX  TP   ( bit /sec)*/
-
-			ODM_RT_TRACE(p_dm_odm, PHYDM_COMP_RA_DBG, ODM_DBG_LOUD, ("ClientTP[%d]: ((%d )) bit/sec\n", i, ma_rx_tp));
-
-			if (ma_rx_tp > ACTIVE_TP_THRESHOLD)
-				num_active_client++;
-#endif
 		}
 	}
 
@@ -737,9 +632,7 @@ odm_common_info_self_reset(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	p_dm_odm->phy_dbg_info.num_qry_beacon_pkt = 0;
-#endif
 }
 
 void *
@@ -823,10 +716,6 @@ phydm_supportability_init(
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	u32			support_ability = 0;
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-	struct _ADAPTER		*adapter = p_dm_odm->adapter;
-	PMGNT_INFO		p_mgnt_info = &adapter->MgntInfo;
-#endif
 
 	if (p_dm_odm->support_ic_type != ODM_RTL8821C)
 		return;
@@ -970,12 +859,8 @@ phydm_supportability_init(
 			ODM_BB_RSSI_MONITOR	|
 			ODM_BB_RATE_ADAPTIVE	|
 			ODM_RF_TX_PWR_TRACK	|
-#if (DM_ODM_SUPPORT_TYPE & (ODM_CE))
 			ODM_MAC_EDCA_TURBO	|
-#endif
-			ODM_BB_CFO_TRACKING;	/* |
- *				ODM_BB_DYNAMIC_TXPWR	|
- *				ODM_BB_NHM_CNT;*/
+			ODM_BB_CFO_TRACKING;
 		break;
 	default:
 		dbg_print("[Warning] Supportability Init error !!!\n");
@@ -991,15 +876,6 @@ phydm_supportability_init(
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("ODM adaptivity is set to Enabled!!!\n"));
 
 		support_ability |= ODM_BB_ADAPTIVITY;
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-		phydm_adaptivity_info_init(p_dm_odm, PHYDM_ADAPINFO_CARRIER_SENSE_ENABLE, p_mgnt_info->RegEnableCarrierSense);
-		phydm_adaptivity_info_init(p_dm_odm, PHYDM_ADAPINFO_DCBACKOFF, p_mgnt_info->RegDCbackoff);
-		phydm_adaptivity_info_init(p_dm_odm, PHYDM_ADAPINFO_DYNAMICLINKADAPTIVITY, p_mgnt_info->RegDmLinkAdaptivity);
-		phydm_adaptivity_info_init(p_dm_odm, PHYDM_ADAPINFO_AP_NUM_TH, p_mgnt_info->RegAPNumTH);
-		phydm_adaptivity_info_init(p_dm_odm, PHYDM_ADAPINFO_TH_L2H_INI, p_mgnt_info->RegL2HForAdaptivity);
-		phydm_adaptivity_info_init(p_dm_odm, PHYDM_ADAPINFO_TH_EDCCA_HL_DIFF, p_mgnt_info->RegHLDiffForAdaptivity);
-#endif
 	} else {
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("ODM adaptivity is set to disnabled!!!\n"));
 		/**/
@@ -1017,11 +893,6 @@ odm_dm_init(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct _ADAPTER		*adapter = p_dm_odm->adapter;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-#endif
-
 #if SUPPORTABLITY_PHYDMLIZE
 	phydm_supportability_init(p_dm_odm);
 #endif
@@ -1057,14 +928,12 @@ odm_dm_init(
 #endif
 
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 #ifdef BEAMFORMING_VERSION_1
 	if (p_hal_data->beamforming_version == BEAMFORMING_VERSION_1)
 #endif
 	{
 		phydm_beamforming_init(p_dm_odm);
 	}
-#endif
 
 	if (p_dm_odm->support_ic_type & ODM_IC_11N_SERIES) {
 #if (defined(CONFIG_BB_POWER_SAVING))
@@ -1078,7 +947,6 @@ odm_dm_init(
 		}
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 
 #if (RTL8723B_SUPPORT == 1)
 		if (p_dm_odm->support_ic_type == ODM_RTL8723B)
@@ -1089,9 +957,6 @@ odm_dm_init(
 		if (p_dm_odm->support_ic_type == ODM_RTL8192E)
 			odm_primary_cca_check_init(p_dm_odm);
 #endif
-
-#endif
-
 	}
 
 }
@@ -1176,27 +1041,6 @@ phydm_support_ability_debug(
 	PHYDM_SNPRINTF((output + used, out_len - used, "%s\n", "================================"));
 }
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-/*
- * tmp modify for LC Only
- *   */
-void
-odm_dm_watchdog_lps(
-	struct PHY_DM_STRUCT		*p_dm_odm
-)
-{
-	odm_common_info_self_update(p_dm_odm);
-	odm_false_alarm_counter_statistics(p_dm_odm);
-	odm_rssi_monitor_check(p_dm_odm);
-	odm_dig_by_rssi_lps(p_dm_odm);
-	odm_cck_packet_detection_thresh(p_dm_odm);
-	odm_common_info_self_reset(p_dm_odm);
-
-	if (*(p_dm_odm->p_is_power_saving) == true)
-		return;
-}
-#endif
-
 void
 phydm_watchdog_mp(
 	struct PHY_DM_STRUCT		*p_dm_odm
@@ -1221,13 +1065,6 @@ odm_dm_watchdog(
 	phydm_receiver_blocking(p_dm_odm);
 	odm_hw_setting(p_dm_odm);
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-	{
-		struct rtl8192cd_priv *priv		= p_dm_odm->priv;
-		if ((priv->auto_channel != 0) && (priv->auto_channel != 2)) /* if struct _ACS_ running, do not do FA/CCA counter read */
-			return;
-	}
-#endif
 	odm_false_alarm_counter_statistics(p_dm_odm);
 	phydm_noisy_detection(p_dm_odm);
 
@@ -1236,9 +1073,7 @@ odm_dm_watchdog(
 	if (*(p_dm_odm->p_is_power_saving) == true) {
 		odm_dig_by_rssi_lps(p_dm_odm);
 		phydm_adaptivity(p_dm_odm);
-#if (DM_ODM_SUPPORT_TYPE & (ODM_CE))
 		odm_antenna_diversity(p_dm_odm); /*enable AntDiv in PS mode, request from SD4 Jeff*/
-#endif
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD, ("DMWatchdog in power saving mode\n"));
 		return;
 	}
@@ -1261,9 +1096,7 @@ odm_dm_watchdog(
 	phydm_dynamic_rx_path(p_dm_odm);
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	phydm_beamforming_watchdog(p_dm_odm);
-#endif
 
 	phydm_rf_watchdog(p_dm_odm);
 
@@ -1274,23 +1107,15 @@ odm_dm_watchdog(
 			odm_dynamic_primary_cca(p_dm_odm);
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
-
 #if (RTL8192E_SUPPORT == 1)
 		if (p_dm_odm->support_ic_type == ODM_RTL8192E)
 			odm_dynamic_primary_cca_check(p_dm_odm);
 #endif
-#endif
 	}
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	odm_dtc(p_dm_odm);
-#endif
 
 	odm_common_info_self_reset(p_dm_odm);
-
 }
-
 
 /*
  * Init /.. Fixed HW value. Only init time.
@@ -1646,13 +1471,7 @@ odm_cmn_info_ptr_array_hook(
 		p_dm_odm->p_odm_sta_info[index] = (struct sta_info *)p_value;
 
 		if (IS_STA_VALID(p_dm_odm->p_odm_sta_info[index]))
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-			p_dm_odm->platform2phydm_macid_table[((struct sta_info *)p_value)->AssociatedMacId] = index; /*associated_mac_id are unique bttween different adapter*/
-#elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-			p_dm_odm->platform2phydm_macid_table[((struct sta_info *)p_value)->aid] = index;
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 			p_dm_odm->platform2phydm_macid_table[((struct sta_info *)p_value)->mac_id] = index;
-#endif
 
 		break;
 	/* To remove the compiler warning, must add an empty default statement to handle the other values. */
@@ -1758,15 +1577,6 @@ odm_cmn_info_update(
 		p_dm_odm->is_bt_disable_edca_turbo = (bool)value;
 		break;
 #endif
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)		/* for repeater mode add by YuChen 2014.06.23 */
-#ifdef UNIVERSAL_REPEATER
-	case	ODM_CMNINFO_VXD_LINK:
-		p_dm_odm->vxd_linked = (bool)value;
-		break;
-#endif
-#endif
-
 	case	ODM_CMNINFO_AP_TOTAL_NUM:
 		p_dm_odm->ap_total_num = (u8)value;
 		break;
@@ -1780,42 +1590,10 @@ odm_cmn_info_update(
 		p_dm_odm->dfs_region_domain = (u8)value;
 		break;
 #endif
-
-#if 0
-	case	ODM_CMNINFO_OP_MODE:
-		p_dm_odm->op_mode = (u8)value;
-		break;
-
-	case	ODM_CMNINFO_WM_MODE:
-		p_dm_odm->wireless_mode = (u8)value;
-		break;
-
-	case	ODM_CMNINFO_BAND:
-		p_dm_odm->band_type = (u8)value;
-		break;
-
-	case	ODM_CMNINFO_SEC_CHNL_OFFSET:
-		p_dm_odm->sec_ch_offset = (u8)value;
-		break;
-
-	case	ODM_CMNINFO_SEC_MODE:
-		p_dm_odm->security = (u8)value;
-		break;
-
-	case	ODM_CMNINFO_BW:
-		p_dm_odm->band_width = (u8)value;
-		break;
-
-	case	ODM_CMNINFO_CHNL:
-		p_dm_odm->channel = (u8)value;
-		break;
-#endif
 	default:
 		/* do nothing */
 		break;
 	}
-
-
 }
 
 u32
@@ -1887,266 +1665,6 @@ phydm_cmn_info_query(
 	}
 }
 
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-odm_init_all_work_items(struct PHY_DM_STRUCT	*p_dm_odm)
-{
-
-	struct _ADAPTER		*p_adapter = p_dm_odm->adapter;
-#if USE_WORKITEM
-
-#if CONFIG_DYNAMIC_RX_PATH
-	odm_initialize_work_item(p_dm_odm,
-			 &p_dm_odm->dm_drp_table.phydm_dynamic_rx_path_workitem,
-		 (RT_WORKITEM_CALL_BACK)phydm_dynamic_rx_path_workitem_callback,
-				 (void *)p_adapter,
-				 "DynamicRxPathWorkitem");
-
-#endif
-#ifdef CONFIG_S0S1_SW_ANTENNA_DIVERSITY
-	odm_initialize_work_item(p_dm_odm,
-		 &p_dm_odm->dm_swat_table.phydm_sw_antenna_switch_workitem,
-			 (RT_WORKITEM_CALL_BACK)odm_sw_antdiv_workitem_callback,
-				 (void *)p_adapter,
-				 "AntennaSwitchWorkitem");
-#endif
-#ifdef CONFIG_HL_SMART_ANTENNA_TYPE1
-	odm_initialize_work_item(p_dm_odm,
-			 &p_dm_odm->dm_sat_table.hl_smart_antenna_workitem,
-		 (RT_WORKITEM_CALL_BACK)phydm_beam_switch_workitem_callback,
-				 (void *)p_adapter,
-				 "hl_smart_ant_workitem");
-
-	odm_initialize_work_item(p_dm_odm,
-		 &p_dm_odm->dm_sat_table.hl_smart_antenna_decision_workitem,
-		 (RT_WORKITEM_CALL_BACK)phydm_beam_decision_workitem_callback,
-				 (void *)p_adapter,
-				 "hl_smart_ant_decision_workitem");
-#endif
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->path_div_switch_workitem),
-		(RT_WORKITEM_CALL_BACK)odm_path_div_chk_ant_switch_workitem_callback,
-		(void *)p_adapter,
-		"SWAS_WorkItem");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->cck_path_diversity_workitem),
-		(RT_WORKITEM_CALL_BACK)odm_cck_tx_path_diversity_work_item_callback,
-		(void *)p_adapter,
-		"CCKTXPathDiversityWorkItem");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->mpt_dig_workitem),
-		(RT_WORKITEM_CALL_BACK)odm_mpt_dig_work_item_callback,
-		(void *)p_adapter,
-		"mpt_dig_workitem");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->ra_rpt_workitem),
-		(RT_WORKITEM_CALL_BACK)odm_update_init_rate_work_item_callback,
-		(void *)p_adapter,
-		"ra_rpt_workitem");
-
-#if (defined(CONFIG_5G_CG_SMART_ANT_DIVERSITY)) || (defined(CONFIG_2G_CG_SMART_ANT_DIVERSITY))
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->fast_ant_training_workitem),
-		(RT_WORKITEM_CALL_BACK)odm_fast_ant_training_work_item_callback,
-		(void *)p_adapter,
-		"fast_ant_training_workitem");
-#endif
-
-#endif /*#if USE_WORKITEM*/
-
-#if (BEAMFORMING_SUPPORT == 1)
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->beamforming_info.txbf_info.txbf_enter_work_item),
-		(RT_WORKITEM_CALL_BACK)hal_com_txbf_enter_work_item_callback,
-		(void *)p_adapter,
-		"txbf_enter_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->beamforming_info.txbf_info.txbf_leave_work_item),
-		(RT_WORKITEM_CALL_BACK)hal_com_txbf_leave_work_item_callback,
-		(void *)p_adapter,
-		"txbf_leave_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->beamforming_info.txbf_info.txbf_fw_ndpa_work_item),
-		(RT_WORKITEM_CALL_BACK)hal_com_txbf_fw_ndpa_work_item_callback,
-		(void *)p_adapter,
-		"txbf_fw_ndpa_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->beamforming_info.txbf_info.txbf_clk_work_item),
-		(RT_WORKITEM_CALL_BACK)hal_com_txbf_clk_work_item_callback,
-		(void *)p_adapter,
-		"txbf_clk_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->beamforming_info.txbf_info.txbf_rate_work_item),
-		(RT_WORKITEM_CALL_BACK)hal_com_txbf_rate_work_item_callback,
-		(void *)p_adapter,
-		"txbf_rate_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->beamforming_info.txbf_info.txbf_status_work_item),
-		(RT_WORKITEM_CALL_BACK)hal_com_txbf_status_work_item_callback,
-		(void *)p_adapter,
-		"txbf_status_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->beamforming_info.txbf_info.txbf_reset_tx_path_work_item),
-		(RT_WORKITEM_CALL_BACK)hal_com_txbf_reset_tx_path_work_item_callback,
-		(void *)p_adapter,
-		"txbf_reset_tx_path_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->beamforming_info.txbf_info.txbf_get_tx_rate_work_item),
-		(RT_WORKITEM_CALL_BACK)hal_com_txbf_get_tx_rate_work_item_callback,
-		(void *)p_adapter,
-		"txbf_get_tx_rate_work_item");
-#endif
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->adaptivity.phydm_pause_edcca_work_item),
-		(RT_WORKITEM_CALL_BACK)phydm_pause_edcca_work_item_callback,
-		(void *)p_adapter,
-		"phydm_pause_edcca_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->adaptivity.phydm_resume_edcca_work_item),
-		(RT_WORKITEM_CALL_BACK)phydm_resume_edcca_work_item_callback,
-		(void *)p_adapter,
-		"phydm_resume_edcca_work_item");
-
-#if (PHYDM_LA_MODE_SUPPORT == 1)
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->adcsmp.adc_smp_work_item),
-		(RT_WORKITEM_CALL_BACK)adc_smp_work_item_callback,
-		(void *)p_adapter,
-		"adc_smp_work_item");
-
-	odm_initialize_work_item(
-		p_dm_odm,
-		&(p_dm_odm->adcsmp.adc_smp_work_item_1),
-		(RT_WORKITEM_CALL_BACK)adc_smp_work_item_callback,
-		(void *)p_adapter,
-		"adc_smp_work_item_1");
-#endif
-
-}
-
-void
-odm_free_all_work_items(struct PHY_DM_STRUCT	*p_dm_odm)
-{
-#if USE_WORKITEM
-
-#ifdef CONFIG_S0S1_SW_ANTENNA_DIVERSITY
-	odm_free_work_item(&(p_dm_odm->dm_swat_table.phydm_sw_antenna_switch_workitem));
-#endif
-
-#if CONFIG_DYNAMIC_RX_PATH
-	odm_free_work_item(&(p_dm_odm->dm_drp_table.phydm_dynamic_rx_path_workitem));
-#endif
-
-
-
-#ifdef CONFIG_HL_SMART_ANTENNA_TYPE1
-	odm_free_work_item(&(p_dm_odm->dm_sat_table.hl_smart_antenna_workitem));
-	odm_free_work_item(&(p_dm_odm->dm_sat_table.hl_smart_antenna_decision_workitem));
-#endif
-
-	odm_free_work_item(&(p_dm_odm->path_div_switch_workitem));
-	odm_free_work_item(&(p_dm_odm->cck_path_diversity_workitem));
-#if (defined(CONFIG_5G_CG_SMART_ANT_DIVERSITY)) || (defined(CONFIG_2G_CG_SMART_ANT_DIVERSITY))
-	odm_free_work_item(&(p_dm_odm->fast_ant_training_workitem));
-#endif
-	odm_free_work_item(&(p_dm_odm->mpt_dig_workitem));
-	odm_free_work_item(&(p_dm_odm->ra_rpt_workitem));
-	/*odm_free_work_item((&p_dm_odm->sbdcnt_workitem));*/
-#endif
-
-#if (BEAMFORMING_SUPPORT == 1)
-	odm_free_work_item((&p_dm_odm->beamforming_info.txbf_info.txbf_enter_work_item));
-	odm_free_work_item((&p_dm_odm->beamforming_info.txbf_info.txbf_leave_work_item));
-	odm_free_work_item((&p_dm_odm->beamforming_info.txbf_info.txbf_fw_ndpa_work_item));
-	odm_free_work_item((&p_dm_odm->beamforming_info.txbf_info.txbf_clk_work_item));
-	odm_free_work_item((&p_dm_odm->beamforming_info.txbf_info.txbf_rate_work_item));
-	odm_free_work_item((&p_dm_odm->beamforming_info.txbf_info.txbf_status_work_item));
-	odm_free_work_item((&p_dm_odm->beamforming_info.txbf_info.txbf_reset_tx_path_work_item));
-	odm_free_work_item((&p_dm_odm->beamforming_info.txbf_info.txbf_get_tx_rate_work_item));
-#endif
-
-	odm_free_work_item((&p_dm_odm->adaptivity.phydm_pause_edcca_work_item));
-	odm_free_work_item((&p_dm_odm->adaptivity.phydm_resume_edcca_work_item));
-
-#if (PHYDM_LA_MODE_SUPPORT == 1)
-	odm_free_work_item((&p_dm_odm->adcsmp.adc_smp_work_item));
-	odm_free_work_item((&p_dm_odm->adcsmp.adc_smp_work_item_1));
-#endif
-
-}
-#endif /*#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)*/
-
-#if 0
-void
-odm_FindMinimumRSSI(
-	struct PHY_DM_STRUCT		*p_dm_odm
-)
-{
-	u32	i;
-	u8	rssi_min = 0xFF;
-
-	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
-		/*		if(p_dm_odm->p_odm_sta_info[i] != NULL) */
-		if (IS_STA_VALID(p_dm_odm->p_odm_sta_info[i])) {
-			if (p_dm_odm->p_odm_sta_info[i]->rssi_ave < rssi_min)
-				rssi_min = p_dm_odm->p_odm_sta_info[i]->rssi_ave;
-		}
-	}
-
-	p_dm_odm->rssi_min = rssi_min;
-
-}
-
-void
-odm_IsLinked(
-	struct PHY_DM_STRUCT		*p_dm_odm
-)
-{
-	u32 i;
-	bool Linked = false;
-
-	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
-		if (IS_STA_VALID(p_dm_odm->p_odm_sta_info[i])) {
-			Linked = true;
-			break;
-		}
-
-	}
-
-	p_dm_odm->is_linked = Linked;
-}
-#endif
-
 void
 odm_init_all_timers(
 	struct PHY_DM_STRUCT	*p_dm_odm
@@ -2160,35 +1678,9 @@ odm_init_all_timers(
 	phydm_dynamic_rx_path_timers(p_dm_odm, INIT_DRP_TIMMER);
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-#ifdef MP_TEST
-	if (p_dm_odm->priv->pshare->rf_ft_var.mp_specific)
-		odm_initialize_timer(p_dm_odm, &p_dm_odm->mpt_dig_timer,
-			(void *)odm_mpt_dig_callback, NULL, "mpt_dig_timer");
-#endif
-#elif (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	odm_initialize_timer(p_dm_odm, &p_dm_odm->mpt_dig_timer,
-		     (void *)odm_mpt_dig_callback, NULL, "mpt_dig_timer");
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	odm_initialize_timer(p_dm_odm, &p_dm_odm->path_div_switch_timer,
-		(void *)odm_path_div_chk_ant_switch_callback, NULL, "PathDivTimer");
-	odm_initialize_timer(p_dm_odm, &p_dm_odm->cck_path_diversity_timer,
-		(void *)odm_cck_tx_path_diversity_callback, NULL, "cck_path_diversity_timer");
-	odm_initialize_timer(p_dm_odm, &p_dm_odm->sbdcnt_timer,
-			     (void *)phydm_sbd_callback, NULL, "SbdTimer");
-#if (BEAMFORMING_SUPPORT == 1)
-	odm_initialize_timer(p_dm_odm, &p_dm_odm->beamforming_info.txbf_info.txbf_fw_ndpa_timer,
-		(void *)hal_com_txbf_fw_ndpa_timer_callback, NULL, "txbf_fw_ndpa_timer");
-#endif
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 #if (BEAMFORMING_SUPPORT == 1)
 	odm_initialize_timer(p_dm_odm, &p_dm_odm->beamforming_info.beamforming_timer,
 		(void *)beamforming_sw_timer_callback, NULL, "beamforming_timer");
-#endif
 #endif
 }
 
@@ -2197,14 +1689,6 @@ odm_cancel_all_timers(
 	struct PHY_DM_STRUCT	*p_dm_odm
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	/*  */
-	/* 2012/01/12 MH Temp BSOD fix. We need to find NIC allocate mem fail reason in */
-	/* win7 platform. */
-	/*  */
-	HAL_ADAPTER_STS_CHK(p_dm_odm);
-#endif
-
 #if (defined(CONFIG_PHYDM_ANTENNA_DIVERSITY))
 	odm_ant_div_timers(p_dm_odm, CANCEL_ANTDIV_TIMMER);
 #endif
@@ -2213,31 +1697,9 @@ odm_cancel_all_timers(
 	phydm_dynamic_rx_path_timers(p_dm_odm, CANCEL_DRP_TIMMER);
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-#ifdef MP_TEST
-	if (p_dm_odm->priv->pshare->rf_ft_var.mp_specific)
-		odm_cancel_timer(p_dm_odm, &p_dm_odm->mpt_dig_timer);
-#endif
-#elif (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	odm_cancel_timer(p_dm_odm, &p_dm_odm->mpt_dig_timer);
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	odm_cancel_timer(p_dm_odm, &p_dm_odm->path_div_switch_timer);
-	odm_cancel_timer(p_dm_odm, &p_dm_odm->cck_path_diversity_timer);
-	odm_cancel_timer(p_dm_odm, &p_dm_odm->mpt_dig_timer);
-	odm_cancel_timer(p_dm_odm, &p_dm_odm->sbdcnt_timer);
-#if (BEAMFORMING_SUPPORT == 1)
-	odm_cancel_timer(p_dm_odm, &p_dm_odm->beamforming_info.txbf_info.txbf_fw_ndpa_timer);
-#endif
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 #if (BEAMFORMING_SUPPORT == 1)
 	odm_cancel_timer(p_dm_odm, &p_dm_odm->beamforming_info.beamforming_timer);
 #endif
-#endif
-
 }
 
 
@@ -2254,29 +1716,8 @@ odm_release_all_timers(
 	phydm_dynamic_rx_path_timers(p_dm_odm, RELEASE_DRP_TIMMER);
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-#ifdef MP_TEST
-	if (p_dm_odm->priv->pshare->rf_ft_var.mp_specific)
-		odm_release_timer(p_dm_odm, &p_dm_odm->mpt_dig_timer);
-#endif
-#elif (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	odm_release_timer(p_dm_odm, &p_dm_odm->mpt_dig_timer);
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	odm_release_timer(p_dm_odm, &p_dm_odm->path_div_switch_timer);
-	odm_release_timer(p_dm_odm, &p_dm_odm->cck_path_diversity_timer);
-	odm_release_timer(p_dm_odm, &p_dm_odm->mpt_dig_timer);
-	odm_release_timer(p_dm_odm, &p_dm_odm->sbdcnt_timer);
-#if (BEAMFORMING_SUPPORT == 1)
-	odm_release_timer(p_dm_odm, &p_dm_odm->beamforming_info.txbf_info.txbf_fw_ndpa_timer);
-#endif
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 #if (BEAMFORMING_SUPPORT == 1)
 	odm_release_timer(p_dm_odm, &p_dm_odm->beamforming_info.beamforming_timer);
-#endif
 #endif
 }
 
@@ -2285,98 +1726,9 @@ odm_release_all_timers(
  * 3 Tx Power Tracking
  * 3============================================================ */
 
-
-
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-void
-odm_init_all_threads(
-	struct PHY_DM_STRUCT	*p_dm_odm
-)
-{
-#ifdef TPT_THREAD
-	k_tpt_task_init(p_dm_odm->priv);
-#endif
-}
-
-void
-odm_stop_all_threads(
-	struct PHY_DM_STRUCT	*p_dm_odm
-)
-{
-#ifdef TPT_THREAD
-	k_tpt_task_stop(p_dm_odm->priv);
-#endif
-}
-#endif
-
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-/*
- * 2011/07/26 MH Add an API for testing IQK fail case.
- *   */
-bool
-odm_check_power_status(
-	struct _ADAPTER		*adapter)
-{
-
-	HAL_DATA_TYPE		*p_hal_data = GET_HAL_DATA(adapter);
-	struct PHY_DM_STRUCT			*p_dm_odm = &p_hal_data->DM_OutSrc;
-	RT_RF_POWER_STATE	rt_state;
-	PMGNT_INFO			p_mgnt_info	= &(adapter->MgntInfo);
-
-	/* 2011/07/27 MH We are not testing ready~~!! We may fail to get correct value when init sequence. */
-	if (p_mgnt_info->init_adpt_in_progress == true) {
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("odm_check_power_status Return true, due to initadapter\n"));
-		return	true;
-	}
-
-	/*  */
-	/*	2011/07/19 MH We can not execute tx pwoer tracking/ LLC calibrate or IQK. */
-	/*  */
-	adapter->HalFunc.GetHwRegHandler(adapter, HW_VAR_RF_STATE, (u8 *)(&rt_state));
-	if (adapter->bDriverStopped || adapter->bDriverIsGoingToPnpSetPowerSleep || rt_state == eRfOff) {
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("odm_check_power_status Return false, due to %d/%d/%d\n",
-			adapter->bDriverStopped, adapter->bDriverIsGoingToPnpSetPowerSleep, rt_state));
-		return	false;
-	}
-	return	true;
-}
-#elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-bool
-odm_check_power_status(
-	struct _ADAPTER		*adapter)
-{
-#if 0
-	/* HAL_DATA_TYPE		*p_hal_data = GET_HAL_DATA(adapter); */
-	struct PHY_DM_STRUCT			*p_dm_odm = &p_hal_data->DM_OutSrc;
-	RT_RF_POWER_STATE	rt_state;
-	PMGNT_INFO			p_mgnt_info	= &(adapter->MgntInfo);
-
-	/*  2011/07/27 MH We are not testing ready~~!! We may fail to get correct value when init sequence. */
-	if (p_mgnt_info->init_adpt_in_progress == true) {
-		ODM_RT_TRACE(p_dm_odm, COMP_INIT, DBG_LOUD, ("odm_check_power_status Return true, due to initadapter"));
-		return	true;
-	}
-
-	/* */
-	/*	2011/07/19 MH We can not execute tx pwoer tracking/ LLC calibrate or IQK. */
-	/* */
-	phydm_get_hw_reg_interface(p_dm_odm, HW_VAR_RF_STATE, (u8 *)(&rt_state));
-	if (adapter->is_driver_stopped || adapter->is_driver_is_going_to_pnp_set_power_sleep || rt_state == eRfOff) {
-		ODM_RT_TRACE(p_dm_odm, COMP_INIT, DBG_LOUD, ("odm_check_power_status Return false, due to %d/%d/%d\n",
-			adapter->is_driver_stopped, adapter->is_driver_is_going_to_pnp_set_power_sleep, rt_state));
-		return	false;
-	}
-#endif
-	return	true;
-}
-#endif
-
 /* need to ODM CE Platform
  * move to here for ANT detection mechanism using */
 
-#if ((DM_ODM_SUPPORT_TYPE == ODM_WIN) || (DM_ODM_SUPPORT_TYPE == ODM_CE))
 u32
 get_psd_data(
 	struct PHY_DM_STRUCT	*p_dm_odm,
@@ -2408,16 +1760,10 @@ get_psd_data(
 	/* Read PSD report, Reg8B4[15:0] */
 	psd_report = odm_get_bb_reg(p_dm_odm, 0x8B4, MASKDWORD) & 0x0000FFFF;
 
-#if 1/* (DEV_BUS_TYPE == RT_PCI_INTERFACE) && ((RT_PLATFORM == PLATFORM_LINUX) || (RT_PLATFORM == PLATFORM_MACOSX)) */
 	psd_report = (u32)(odm_convert_to_db(psd_report)) + (u32)(initial_gain_psd - 0x1c);
-#else
-	psd_report = (int)(20 * log10((double)psd_report)) + (int)(initial_gain_psd - 0x1c);
-#endif
 
 	return psd_report;
-
 }
-#endif
 
 u32
 odm_convert_to_db(
@@ -2476,47 +1822,8 @@ odm_asoc_entry_init(
 	struct PHY_DM_STRUCT	*p_dm_odm
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct _ADAPTER *p_loop_adapter = GetDefaultAdapter(p_dm_odm->adapter);
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(p_loop_adapter);
-	struct PHY_DM_STRUCT		*p_dm_out_src = &p_hal_data->DM_OutSrc;
-	u8	total_assoc_entry_num = 0;
-	u8	index = 0;
-	u8	adaptercount = 0;
-
-	odm_cmn_info_ptr_array_hook(p_dm_out_src, ODM_CMNINFO_STA_STATUS, 0, &p_loop_adapter->MgntInfo.DefaultPort[0]);
-	p_loop_adapter->MgntInfo.DefaultPort[0].MultiPortStationIdx = total_assoc_entry_num;
-
-	adaptercount += 1;
-	RT_TRACE(COMP_INIT, DBG_LOUD, ("adaptercount=%d\n", adaptercount));
-	p_loop_adapter = GetNextExtAdapter(p_loop_adapter);
-	total_assoc_entry_num += 1;
-
-	while (p_loop_adapter) {
-		for (index = 0; index < ASSOCIATE_ENTRY_NUM; index++) {
-			odm_cmn_info_ptr_array_hook(p_dm_out_src, ODM_CMNINFO_STA_STATUS, total_assoc_entry_num + index, &p_loop_adapter->MgntInfo.AsocEntry[index]);
-			p_loop_adapter->MgntInfo.AsocEntry[index].MultiPortStationIdx = total_assoc_entry_num + index;
-		}
-
-		total_assoc_entry_num += index;
-		if (IS_HARDWARE_TYPE_8188E((p_dm_odm->adapter)))
-			p_loop_adapter->RASupport = true;
-		adaptercount += 1;
-		RT_TRACE(COMP_INIT, DBG_LOUD, ("adaptercount=%d\n", adaptercount));
-		p_loop_adapter = GetNextExtAdapter(p_loop_adapter);
-	}
-
-	RT_TRACE(COMP_INIT, DBG_LOUD, ("total_assoc_entry_num = %d\n", total_assoc_entry_num));
-	if (total_assoc_entry_num < (ODM_ASSOCIATE_ENTRY_NUM - 1)) {
-
-		RT_TRACE(COMP_INIT, DBG_LOUD, ("In hook null\n"));
-		for (index = total_assoc_entry_num; index < ODM_ASSOCIATE_ENTRY_NUM; index++)
-			odm_cmn_info_ptr_array_hook(p_dm_out_src, ODM_CMNINFO_STA_STATUS, index, NULL);
-	}
-#endif
 }
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 /* Justin: According to the current RRSI to adjust Response Frame TX power, 2012/11/05 */
 void odm_dtc(struct PHY_DM_STRUCT *p_dm_odm)
 {
@@ -2554,12 +1861,6 @@ void odm_dtc(struct PHY_DM_STRUCT *p_dm_odm)
 	u8 sign;
 	u8 resp_txagc = 0;
 
-#if 0
-	/* As DIG is disabled, DTC is also disable */
-	if (!(p_dm_odm->support_ability & ODM_XXXXXX))
-		return;
-#endif
-
 	if (DTC_BASE < p_dm_odm->rssi_min) {
 		/* need to decade the CTS TX power */
 		sign = 1;
@@ -2569,21 +1870,7 @@ void odm_dtc(struct PHY_DM_STRUCT *p_dm_odm)
 			else
 				dtc_steps++;
 		}
-	}
-#if 0
-	else if (DTC_DWN_BASE > p_dm_odm->rssi_min) {
-		/* needs to increase the CTS TX power */
-		sign = 0;
-		dtc_steps = 1;
-		for (i = 0; i < ARRAY_SIZE(dtc_table_up); i++) {
-			if ((dtc_table_up[i] <= p_dm_odm->rssi_min) || (dtc_steps >= 10))
-				break;
-			else
-				dtc_steps++;
-		}
-	}
-#endif
-	else {
+	} else {
 		sign = 0;
 		dtc_steps = 0;
 	}
@@ -2597,14 +1884,11 @@ void odm_dtc(struct PHY_DM_STRUCT *p_dm_odm)
 #endif /* CONFIG_RESP_TXAGC_ADJUST */
 }
 
-#endif /* #if (DM_ODM_SUPPORT_TYPE == ODM_CE) */
-
 void
 odm_update_power_training_state(
 	struct PHY_DM_STRUCT	*p_dm_odm
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	struct _FALSE_ALARM_STATISTICS	*false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
 	struct _dynamic_initial_gain_threshold_						*p_dm_dig_table = &p_dm_odm->dm_dig_table;
 	u32						score = 0;
@@ -2697,7 +1981,6 @@ odm_update_power_training_state(
 
 	p_dm_odm->phy_dbg_info.num_qry_phy_status_ofdm = 0;
 	p_dm_odm->phy_dbg_info.num_qry_phy_status_cck = 0;
-#endif
 }
 
 
@@ -2706,27 +1989,6 @@ odm_update_power_training_state(
 /* The following is for compile only*/
 /*===========================================================*/
 /*#define TARGET_CHNL_NUM_2G_5G	59*/
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-
-u8 get_right_chnl_place_for_iqk(u8 chnl)
-{
-	u8	channel_all[TARGET_CHNL_NUM_2G_5G] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 100,
-		102, 104, 106, 108, 110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 149, 151, 153, 155, 157, 159, 161, 163, 165
-						};
-	u8	place = chnl;
-
-
-	if (chnl > 14) {
-		for (place = 14; place < sizeof(channel_all); place++) {
-			if (channel_all[place] == chnl)
-				return place - 13;
-		}
-	}
-
-	return 0;
-}
-
-#endif
 /*===========================================================*/
 
 void
@@ -2740,30 +2002,6 @@ phydm_noisy_detection(
 	total_cca_cnt = p_dm_odm->false_alm_cnt.cnt_cca_all;
 	total_fa_cnt  = p_dm_odm->false_alm_cnt.cnt_all;
 
-#if 0
-	if (total_fa_cnt * 16 >= total_cca_cnt * 14)    /*  87.5 */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 12) /*  75 */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 10) /*  56.25 */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 8) /*  50 */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 7) /*  43.75 */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 6) /*  37.5 */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 5) /*  31.25% */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 4) /*  25% */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 3) /*  18.75% */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 2) /*  12.5% */
-		;
-	else if (total_fa_cnt * 16 >= total_cca_cnt * 1) /*  6.25% */
-		;
-#endif
 	for (i = 0; i <= 16; i++) {
 		if (total_fa_cnt * 16 >= total_cca_cnt * (16 - i)) {
 			score = 16 - i;
@@ -2778,81 +2016,6 @@ phydm_noisy_detection(
 	score_smooth = (total_cca_cnt >= 300) ? ((p_dm_odm->noisy_decision_smooth + 3) >> 3) : 0;
 
 	p_dm_odm->noisy_decision = (score_smooth >= 3) ? 1 : 0;
-#if 0
-	switch (score_smooth) {
-	case 0:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=0%%\n"));
-		break;
-	case 1:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=6.25%%\n"));
-		break;
-	case 2:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=12.5%%\n"));
-		break;
-	case 3:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=18.75%%\n"));
-		break;
-	case 4:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=25%%\n"));
-		break;
-	case 5:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=31.25%%\n"));
-		break;
-	case 6:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=37.5%%\n"));
-		break;
-	case 7:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=43.75%%\n"));
-		break;
-	case 8:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=50%%\n"));
-		break;
-	case 9:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=56.25%%\n"));
-		break;
-	case 10:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=62.5%%\n"));
-		break;
-	case 11:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=68.75%%\n"));
-		break;
-	case 12:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=75%%\n"));
-		break;
-	case 13:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=81.25%%\n"));
-		break;
-	case 14:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=87.5%%\n"));
-		break;
-	case 15:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=93.75%%\n"));
-		break;
-	case 16:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] total_fa_cnt/total_cca_cnt=100%%\n"));
-		break;
-	default:
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD,
-			("[NoisyDetection] Unknown value!! Need Check!!\n"));
-	}
-#endif
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_NOISY_DETECT, ODM_DBG_LOUD,
 		("[NoisyDetection] total_cca_cnt=%d, total_fa_cnt=%d, noisy_decision_smooth=%d, score=%d, score_smooth=%d, p_dm_odm->noisy_decision=%d\n",
 		total_cca_cnt, total_fa_cnt, p_dm_odm->noisy_decision_smooth, score, score_smooth, p_dm_odm->noisy_decision));

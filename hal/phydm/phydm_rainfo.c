@@ -142,11 +142,7 @@ phydm_ra_print_msg(
 
 	ODM_RT_TRACE(p_dm_odm, PHYDM_COMP_RA_DBG, ODM_DBG_LOUD, (" |rate index| |Current-value| |Default-value| |Modify?|\n"));
 	for (i = 0 ; i <= (p_ra_table->rate_length); i++) {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-		ODM_RT_TRACE(p_dm_odm, PHYDM_COMP_RA_DBG, ODM_DBG_LOUD, ("     [ %d ]  %20d  %25d  %20s\n", i, value[i], value_default[i], ((modify_note[i] == 1) ? "V" : " .  ")));
-#else
 		ODM_RT_TRACE(p_dm_odm, PHYDM_COMP_RA_DBG, ODM_DBG_LOUD, ("     [ %d ]  %10d  %14d  %14s\n", i, value[i], value_default[i], ((modify_note[i] == 1) ? "V" : " .  ")));
-#endif
 	}
 
 }
@@ -475,9 +471,6 @@ phydm_reset_retry_limit_table(
 	struct _rate_adaptive_table_		*p_ra_table = &p_dm_odm->dm_ra_table;
 	u8			i;
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN) /*support all IC platform*/
-
-#else
 #if ((RTL8192E_SUPPORT == 1) || (RTL8723B_SUPPORT == 1) || (RTL8188E_SUPPORT == 1))
 	u8 per_rate_retrylimit_table_20M[ODM_RATEMCS15 + 1] = {
 		1, 1, 2, 4,					/*CCK*/
@@ -500,7 +493,6 @@ phydm_reset_retry_limit_table(
 
 #else
 
-#endif
 #endif
 
 	memcpy(&(p_ra_table->per_rate_retrylimit_20M[0]), &(per_rate_retrylimit_table_20M[0]), ODM_NUM_RATE_IDX);
@@ -713,12 +705,6 @@ phydm_c2h_ra_report_handler(
 	u8	rate_idx = rate & 0x7f; /*remove bit7 SGI*/
 	u8	pre_rate = p_ra_table->link_tx_rate[macid];
 	u8	rate_order;
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct _ADAPTER	*adapter = p_dm_odm->adapter;
-
-	GET_HAL_DATA(adapter)->CurrentRARate = HwRateToMRate(rate_idx);
-#endif
-
 
 	if (cmd_len >= 4) {
 		if (cmd_buf[3] == 0) {
@@ -755,7 +741,6 @@ phydm_c2h_ra_report_handler(
 	p_ra_table->link_tx_rate[macid] = rate;
 
 	/*trigger power training*/
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 
 	rate_order = phydm_rate_order_compute(p_dm_odm, rate_idx);
 
@@ -765,8 +750,6 @@ phydm_c2h_ra_report_handler(
 		phydm_update_pwr_track(p_dm_odm, rate_idx);
 		p_ra_table->power_tracking_flag = 0;
 	}
-
-#endif
 
 	/*trigger dynamic rate ID*/
 #if (defined(CONFIG_RA_DYNAMIC_RATE_ID))
@@ -781,23 +764,10 @@ odm_rssi_monitor_init(
 	void		*p_dm_void
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _rate_adaptive_table_		*p_ra_table = &p_dm_odm->dm_ra_table;
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-	struct _ADAPTER		*adapter = p_dm_odm->adapter;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-
-	p_ra_table->PT_collision_pre = true;	/*used in odm_dynamic_arfb_select(WIN only)*/
-
-	p_hal_data->UndecoratedSmoothedPWDB = -1;
-	p_hal_data->ra_rpt_linked = false;
-#endif
 
 	p_ra_table->firstconnect = false;
-
-
-#endif
 }
 
 void
@@ -851,272 +821,8 @@ odm_rssi_monitor_check_mp(
 	void	*p_dm_void
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _rate_adaptive_table_			*p_ra_table = &p_dm_odm->dm_ra_table;
-	u8			h2c_parameter[H2C_0X42_LENGTH] = {0};
-	u32			i;
-	bool			is_ext_ra_info = true;
-	u8			cmdlen = H2C_0X42_LENGTH;
-	u8			tx_bf_en = 0, stbc_en = 0;
-
-	struct _ADAPTER		*adapter = p_dm_odm->adapter;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-	struct sta_info		*p_entry = NULL;
-	s32			tmp_entry_max_pwdb = 0, tmp_entry_min_pwdb = 0xff;
-	PMGNT_INFO		p_mgnt_info = &adapter->MgntInfo;
-	PMGNT_INFO		p_default_mgnt_info = &adapter->MgntInfo;
-	u64			cur_tx_ok_cnt = 0, cur_rx_ok_cnt = 0;
-#if (BEAMFORMING_SUPPORT == 1)
-#ifndef BEAMFORMING_VERSION_1
-	enum beamforming_cap beamform_cap = BEAMFORMING_CAP_NONE;
-#endif
-#endif
-	struct _ADAPTER	*p_loop_adapter = GetDefaultAdapter(adapter);
-
-	if (p_dm_odm->support_ic_type == ODM_RTL8188E) {
-		is_ext_ra_info = false;
-		cmdlen = 3;
-	}
-
-	while (p_loop_adapter) {
-
-		if (p_loop_adapter != NULL) {
-			p_mgnt_info = &p_loop_adapter->MgntInfo;
-			cur_tx_ok_cnt = p_loop_adapter->TxStats.NumTxBytesUnicast - p_mgnt_info->lastTxOkCnt;
-			cur_rx_ok_cnt = p_loop_adapter->RxStats.NumRxBytesUnicast - p_mgnt_info->lastRxOkCnt;
-			p_mgnt_info->lastTxOkCnt = cur_tx_ok_cnt;
-			p_mgnt_info->lastRxOkCnt = cur_rx_ok_cnt;
-		}
-
-		for (i = 0; i < ASSOCIATE_ENTRY_NUM; i++) {
-
-			if (IsAPModeExist(p_loop_adapter)) {
-				if (GetFirstExtAdapter(p_loop_adapter) != NULL &&
-				    GetFirstExtAdapter(p_loop_adapter) == p_loop_adapter)
-				p_entry = AsocEntry_EnumStation(p_loop_adapter, i);
-				else if (GetFirstGOPort(p_loop_adapter) != NULL &&
-					 IsFirstGoAdapter(p_loop_adapter))
-				p_entry = AsocEntry_EnumStation(p_loop_adapter, i);
-			} else {
-				if (GetDefaultAdapter(p_loop_adapter) == p_loop_adapter)
-					p_entry = AsocEntry_EnumStation(p_loop_adapter, i);
-			}
-
-			if (p_entry != NULL) {
-				if (p_entry->bAssociated) {
-
-					RT_DISP_ADDR(FDM, DM_PWDB, ("p_entry->mac_addr ="), p_entry->MacAddr);
-					RT_DISP(FDM, DM_PWDB, ("p_entry->rssi = 0x%x(%d)\n",
-						p_entry->rssi_stat.undecorated_smoothed_pwdb, p_entry->rssi_stat.undecorated_smoothed_pwdb));
-
-					/* 2 BF_en */
-#if (BEAMFORMING_SUPPORT == 1)
-#ifndef BEAMFORMING_VERSION_1
-					beamform_cap = phydm_beamforming_get_entry_beam_cap_by_mac_id(p_dm_odm, p_entry->AssociatedMacId);
-					if (beamform_cap & (BEAMFORMER_CAP_HT_EXPLICIT | BEAMFORMER_CAP_VHT_SU))
-						tx_bf_en = 1;
-#else
-					if (Beamform_GetSupportBeamformerCap(GetDefaultAdapter(adapter), p_entry))
-						tx_bf_en = 1;
-#endif
-#endif
-					/* 2 STBC_en */
-					if ((IS_WIRELESS_MODE_AC(adapter) && TEST_FLAG(p_entry->VHTInfo.STBC, STBC_VHT_ENABLE_TX)) ||
-					    TEST_FLAG(p_entry->HTInfo.STBC, STBC_HT_ENABLE_TX))
-						stbc_en = 1;
-
-					if (p_entry->rssi_stat.undecorated_smoothed_pwdb < tmp_entry_min_pwdb)
-						tmp_entry_min_pwdb = p_entry->rssi_stat.undecorated_smoothed_pwdb;
-					if (p_entry->rssi_stat.undecorated_smoothed_pwdb > tmp_entry_max_pwdb)
-						tmp_entry_max_pwdb = p_entry->rssi_stat.undecorated_smoothed_pwdb;
-
-					h2c_parameter[4] = (p_ra_table->RA_threshold_offset & 0x7f) | (p_ra_table->RA_offset_direction << 7);
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RA_threshold_offset = (( %s%d ))\n", ((p_ra_table->RA_threshold_offset == 0) ? " " : ((p_ra_table->RA_offset_direction) ? "+" : "-")), p_ra_table->RA_threshold_offset));
-
-					if (is_ext_ra_info) {
-						if (cur_rx_ok_cnt > (cur_tx_ok_cnt * 6))
-							h2c_parameter[3] |= RAINFO_BE_RX_STATE;
-
-						if (tx_bf_en)
-							h2c_parameter[3] |= RAINFO_BF_STATE;
-						else {
-							if (stbc_en)
-								h2c_parameter[3] |= RAINFO_STBC_STATE;
-						}
-
-						if (p_dm_odm->noisy_decision)
-							h2c_parameter[3] |= RAINFO_NOISY_STATE;
-						else
-							h2c_parameter[3] &= (~RAINFO_NOISY_STATE);
-#if 1
-						if (p_dm_odm->h2c_rarpt_connect) {
-							h2c_parameter[3] |= RAINFO_INIT_RSSI_RATE_STATE;
-							ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("h2c_rarpt_connect = (( %d ))\n", p_dm_odm->h2c_rarpt_connect));
-						}
-#else
-
-						if (p_entry->rssi_stat.ra_rpt_linked == false) {
-							h2c_parameter[3] |= RAINFO_INIT_RSSI_RATE_STATE;
-							p_entry->rssi_stat.ra_rpt_linked = true;
-
-							ODM_RT_TRACE(p_dm_odm, ODM_COMP_RSSI_MONITOR, ODM_DBG_LOUD, ("RA First Link, RSSI[%d] = ((%d))\n",
-								p_entry->associated_mac_id, p_entry->rssi_stat.undecorated_smoothed_pwdb));
-						}
-#endif
-					}
-
-					h2c_parameter[2] = (u8)(p_entry->rssi_stat.undecorated_smoothed_pwdb & 0xFF);
-					/* h2c_parameter[1] = 0x20;   */ /* fw v12 cmdid 5:use max macid ,for nic ,default macid is 0 ,max macid is 1 */
-					h2c_parameter[0] = (p_entry->AssociatedMacId);
-
-					odm_fill_h2c_cmd(p_dm_odm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
-				}
-			} else
-				break;
-		}
-
-		p_loop_adapter = GetNextExtAdapter(p_loop_adapter);
-	}
-
-
-	/*Default port*/
-	if (tmp_entry_max_pwdb != 0) {	/* If associated entry is found */
-		p_hal_data->EntryMaxUndecoratedSmoothedPWDB = tmp_entry_max_pwdb;
-		RT_DISP(FDM, DM_PWDB, ("EntryMaxPWDB = 0x%x(%d)\n",	tmp_entry_max_pwdb, tmp_entry_max_pwdb));
-	} else
-		p_hal_data->EntryMaxUndecoratedSmoothedPWDB = 0;
-
-	if (tmp_entry_min_pwdb != 0xff) { /* If associated entry is found */
-		p_hal_data->EntryMinUndecoratedSmoothedPWDB = tmp_entry_min_pwdb;
-		RT_DISP(FDM, DM_PWDB, ("EntryMinPWDB = 0x%x(%d)\n", tmp_entry_min_pwdb, tmp_entry_min_pwdb));
-
-	} else
-		p_hal_data->EntryMinUndecoratedSmoothedPWDB = 0;
-
-	/* Default porti sent RSSI to FW */
-	if (p_hal_data->bUseRAMask) {
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_RSSI_MONITOR, ODM_DBG_LOUD, ("1 RA First Link, RSSI[%d] = ((%d)) , ra_rpt_linked = ((%d))\n",
-			WIN_DEFAULT_PORT_MACID, p_hal_data->UndecoratedSmoothedPWDB, p_hal_data->ra_rpt_linked));
-		if (p_hal_data->UndecoratedSmoothedPWDB > 0) {
-
-			PRT_HIGH_THROUGHPUT			p_ht_info = GET_HT_INFO(p_default_mgnt_info);
-			PRT_VERY_HIGH_THROUGHPUT	p_vht_info = GET_VHT_INFO(p_default_mgnt_info);
-
-			/* BF_en*/
-#if (BEAMFORMING_SUPPORT == 1)
-#ifndef BEAMFORMING_VERSION_1
-			beamform_cap = phydm_beamforming_get_entry_beam_cap_by_mac_id(p_dm_odm, p_default_mgnt_info->m_mac_id);
-
-			if (beamform_cap & (BEAMFORMER_CAP_HT_EXPLICIT | BEAMFORMER_CAP_VHT_SU))
-				tx_bf_en = 1;
-#else
-			if (Beamform_GetSupportBeamformerCap(GetDefaultAdapter(adapter), NULL))
-				tx_bf_en = 1;
-#endif
-#endif
-
-			/* STBC_en*/
-			if ((IS_WIRELESS_MODE_AC(adapter) && TEST_FLAG(p_vht_info->VhtCurStbc, STBC_VHT_ENABLE_TX)) ||
-			    TEST_FLAG(p_ht_info->HtCurStbc, STBC_HT_ENABLE_TX))
-				stbc_en = 1;
-
-			h2c_parameter[4] = (p_ra_table->RA_threshold_offset & 0x7f) | (p_ra_table->RA_offset_direction << 7);
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RA_threshold_offset = (( %s%d ))\n", ((p_ra_table->RA_threshold_offset == 0) ? " " : ((p_ra_table->RA_offset_direction) ? "+" : "-")), p_ra_table->RA_threshold_offset));
-
-			if (is_ext_ra_info) {
-				if (tx_bf_en)
-					h2c_parameter[3] |= RAINFO_BF_STATE;
-				else {
-					if (stbc_en)
-						h2c_parameter[3] |= RAINFO_STBC_STATE;
-				}
-
-#if 1
-				if (p_dm_odm->h2c_rarpt_connect) {
-					h2c_parameter[3] |= RAINFO_INIT_RSSI_RATE_STATE;
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("h2c_rarpt_connect = (( %d ))\n", p_dm_odm->h2c_rarpt_connect));
-				}
-#else
-				ODM_RT_TRACE(p_dm_odm, ODM_COMP_RSSI_MONITOR, ODM_DBG_LOUD, ("2 RA First Link, RSSI[%d] = ((%d)) , ra_rpt_linked = ((%d))\n",
-					WIN_DEFAULT_PORT_MACID, p_hal_data->undecorated_smoothed_pwdb, p_hal_data->ra_rpt_linked));
-
-				if (p_hal_data->ra_rpt_linked == false) {
-
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_RSSI_MONITOR, ODM_DBG_LOUD, ("3 RA First Link, RSSI[%d] = ((%d)) , ra_rpt_linked = ((%d))\n",
-						WIN_DEFAULT_PORT_MACID, p_hal_data->undecorated_smoothed_pwdb, p_hal_data->ra_rpt_linked));
-
-					h2c_parameter[3] |= RAINFO_INIT_RSSI_RATE_STATE;
-					p_hal_data->ra_rpt_linked = true;
-
-
-				}
-#endif
-
-				if (p_dm_odm->noisy_decision == 1) {
-					h2c_parameter[3] |= RAINFO_NOISY_STATE;
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_NOISY_DETECT, ODM_DBG_LOUD, ("[RSSIMonitorCheckMP] Send H2C to FW\n"));
-				} else
-					h2c_parameter[3] &= (~RAINFO_NOISY_STATE);
-
-				ODM_RT_TRACE(p_dm_odm, ODM_COMP_NOISY_DETECT, ODM_DBG_LOUD, ("[RSSIMonitorCheckMP] h2c_parameter=%x\n", h2c_parameter[3]));
-			}
-
-			h2c_parameter[2] = (u8)(p_hal_data->UndecoratedSmoothedPWDB & 0xFF);
-			/*h2c_parameter[1] = 0x20;*/	/* fw v12 cmdid 5:use max macid ,for nic ,default macid is 0 ,max macid is 1*/
-			h2c_parameter[0] = WIN_DEFAULT_PORT_MACID;		/* fw v12 cmdid 5:use max macid ,for nic ,default macid is 0 ,max macid is 1*/
-
-			odm_fill_h2c_cmd(p_dm_odm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
-		}
-
-		/* BT 3.0 HS mode rssi */
-		if (p_dm_odm->is_bt_hs_operation) {
-			h2c_parameter[2] = p_dm_odm->bt_hs_rssi;
-			/* h2c_parameter[1] = 0x0; */
-			h2c_parameter[0] = WIN_BT_PORT_MACID;
-
-			odm_fill_h2c_cmd(p_dm_odm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
-		}
-	} else
-		PlatformEFIOWrite1Byte(adapter, 0x4fe, (u8)p_hal_data->UndecoratedSmoothedPWDB);
-
-	if ((p_dm_odm->support_ic_type == ODM_RTL8812) || (p_dm_odm->support_ic_type == ODM_RTL8192E))
-		odm_rssi_dump_to_register(p_dm_odm);
-
-
-	{
-		struct _ADAPTER *p_loop_adapter = GetDefaultAdapter(adapter);
-		bool		default_pointer_value, *p_is_link_temp = &default_pointer_value;
-		s32	global_rssi_min = 0xFF, local_rssi_min;
-		bool		is_link = false;
-
-		while (p_loop_adapter) {
-			local_rssi_min = phydm_find_minimum_rssi(p_dm_odm, p_loop_adapter, p_is_link_temp);
-			/* dbg_print("p_hal_data->is_linked=%d, local_rssi_min=%d\n", p_hal_data->is_linked, local_rssi_min); */
-
-			if (*p_is_link_temp)
-				is_link = true;
-
-			if ((local_rssi_min < global_rssi_min) && (*p_is_link_temp))
-				global_rssi_min = local_rssi_min;
-
-			p_loop_adapter = GetNextExtAdapter(p_loop_adapter);
-		}
-
-		p_hal_data->bLinked = is_link;
-		odm_cmn_info_update(&p_hal_data->DM_OutSrc, ODM_CMNINFO_LINK, (u64)is_link);
-
-		if (is_link)
-			odm_cmn_info_update(&p_hal_data->DM_OutSrc, ODM_CMNINFO_RSSI_MIN, (u64)global_rssi_min);
-		else
-			odm_cmn_info_update(&p_hal_data->DM_OutSrc, ODM_CMNINFO_RSSI_MIN, 0);
-
-	}
-
-#endif	/*  #if (DM_ODM_SUPPORT_TYPE == ODM_WIN) */
 }
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 /*H2C_RSSI_REPORT*/
 s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 {
@@ -1256,14 +962,12 @@ void phydm_ra_rssi_rpt_wk(void *p_context)
 
 	rtw_run_in_thread_cmd(p_dm_odm->adapter, phydm_ra_rssi_rpt_wk_hdl, p_dm_odm);
 }
-#endif
 
 void
 odm_rssi_monitor_check_ce(
 	void		*p_dm_void
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _ADAPTER		*adapter = p_dm_odm->adapter;
 	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
@@ -1309,139 +1013,13 @@ odm_rssi_monitor_check_ce(
 
 	p_dm_odm->rssi_min = p_hal_data->min_undecorated_pwdb_for_dm;
 	/* odm_cmn_info_update(&p_hal_data->odmpriv,ODM_CMNINFO_RSSI_MIN, pdmpriv->min_undecorated_pwdb_for_dm); */
-#endif/* if (DM_ODM_SUPPORT_TYPE == ODM_CE) */
 }
-
 
 void
 odm_rssi_monitor_check_ap(
 	void		*p_dm_void
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-#if (RTL8812A_SUPPORT || RTL8881A_SUPPORT || RTL8192E_SUPPORT || RTL8814A_SUPPORT || RTL8197F_SUPPORT)
-
-	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _rate_adaptive_table_			*p_ra_table = &p_dm_odm->dm_ra_table;
-	u8			h2c_parameter[H2C_0X42_LENGTH] = {0};
-	u32			 i;
-	bool			is_ext_ra_info = true;
-	u8			cmdlen = H2C_0X42_LENGTH;
-	u8			tx_bf_en = 0, stbc_en = 0;
-
-	struct rtl8192cd_priv	*priv		= p_dm_odm->priv;
-	struct sta_info	*pstat;
-	bool			act_bfer = false;
-
-#if (BEAMFORMING_SUPPORT == 1)
-	u8	idx = 0xff;
-#if (defined(CONFIG_PHYDM_ANTENNA_DIVERSITY))
-	struct _BF_DIV_COEX_	*p_dm_bdc_table = &p_dm_odm->dm_bdc_table;
-	p_dm_bdc_table->num_txbfee_client = 0;
-	p_dm_bdc_table->num_txbfer_client = 0;
-#endif
-#endif
-	if (!p_dm_odm->h2c_rarpt_connect && (priv->up_time % 2))
-		return;
-
-	if (p_dm_odm->support_ic_type == ODM_RTL8188E) {
-		is_ext_ra_info = false;
-		cmdlen = 3;
-	}
-
-	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
-		pstat = p_dm_odm->p_odm_sta_info[i];
-
-		if (IS_STA_VALID(pstat)) {
-			if (pstat->sta_in_firmware != 1)
-				continue;
-
-			/* 2 BF_en */
-#if (BEAMFORMING_SUPPORT == 1)
-			BEAMFORMING_CAP beamform_cap = Beamforming_GetEntryBeamCapByMacId(priv, pstat->aid);
-			PRT_BEAMFORMING_ENTRY	p_entry = Beamforming_GetEntryByMacId(priv, pstat->aid, &idx);
-
-			if (beamform_cap & (BEAMFORMER_CAP_HT_EXPLICIT | BEAMFORMER_CAP_VHT_SU))	{
-
-				if (p_entry->Sounding_En)
-					tx_bf_en = 1;
-				else
-					tx_bf_en = 0;
-
-				act_bfer = true;
-			}
-
-#if (defined(CONFIG_PHYDM_ANTENNA_DIVERSITY)) /*BDC*/
-			if (act_bfer == true) {
-				p_dm_bdc_table->w_bfee_client[i] = 1; /* AP act as BFer */
-				p_dm_bdc_table->num_txbfee_client++;
-			} else {
-				p_dm_bdc_table->w_bfee_client[i] = 0; /* AP act as BFer */
-			}
-
-			if ((beamform_cap & BEAMFORMEE_CAP_HT_EXPLICIT) || (beamform_cap & BEAMFORMEE_CAP_VHT_SU)) {
-				p_dm_bdc_table->w_bfer_client[i] = 1; /* AP act as BFee */
-				p_dm_bdc_table->num_txbfer_client++;
-			} else {
-				p_dm_bdc_table->w_bfer_client[i] = 0; /* AP act as BFer */
-			}
-#endif
-#endif
-
-			/* 2 STBC_en */
-			if ((priv->pmib->dot11nConfigEntry.dot11nSTBC) &&
-			    ((pstat->ht_cap_buf.ht_cap_info & cpu_to_le16(_HTCAP_RX_STBC_CAP_))
-#ifdef RTK_AC_SUPPORT
-			     || (pstat->vht_cap_buf.vht_cap_info & cpu_to_le32(_VHTCAP_RX_STBC_CAP_))
-#endif
-			    ))
-				stbc_en = 1;
-
-			/* 2 RAINFO */
-
-			h2c_parameter[4] = (p_ra_table->RA_threshold_offset & 0x7f) | (p_ra_table->RA_offset_direction << 7);
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RA_threshold_offset = (( %s%d ))\n", ((p_ra_table->RA_threshold_offset == 0) ? " " : ((p_ra_table->RA_offset_direction) ? "+" : "-")), p_ra_table->RA_threshold_offset));
-
-			if (is_ext_ra_info) {
-				if ((pstat->rx_avarage)  > ((pstat->tx_avarage) * 6))
-					h2c_parameter[3] |= RAINFO_BE_RX_STATE;
-
-				if (tx_bf_en)
-					h2c_parameter[3] |= RAINFO_BF_STATE;
-				else {
-					if (stbc_en)
-						h2c_parameter[3] |= RAINFO_STBC_STATE;
-				}
-
-				if (p_dm_odm->noisy_decision)
-					h2c_parameter[3] |= RAINFO_NOISY_STATE;
-				else
-					h2c_parameter[3] &= (~RAINFO_NOISY_STATE);
-
-				if (pstat->H2C_rssi_rpt) {
-					h2c_parameter[3] |= RAINFO_INIT_RSSI_RATE_STATE;
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("[RA Init] set Init rate by RSSI, STA %d\n", pstat->aid));
-				}
-
-				/*ODM_RT_TRACE(p_dm_odm,PHYDM_COMP_RA_DBG, ODM_DBG_LOUD, ("[RAINFO] H2C_Para[3] = %x\n",h2c_parameter[3]));*/
-			}
-
-			h2c_parameter[2] = (u8)(pstat->rssi & 0xFF);
-			h2c_parameter[0] = REMAP_AID(pstat);
-
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_COMMON, ODM_DBG_LOUD, ("h2c_parameter[3]=%d\n", h2c_parameter[3]));
-
-			/* ODM_RT_TRACE(p_dm_odm,PHYDM_COMP_RA_DBG, ODM_DBG_LOUD, ("[RSSI] H2C_Para[2] = %x,\n",h2c_parameter[2])); */
-			/* ODM_RT_TRACE(p_dm_odm,PHYDM_COMP_RA_DBG, ODM_DBG_LOUD, ("[MACID] H2C_Para[0] = %x,\n",h2c_parameter[0])); */
-
-			odm_fill_h2c_cmd(p_dm_odm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
-
-		}
-	}
-
-#endif
-#endif
-
 }
 
 void
@@ -1481,51 +1059,19 @@ odm_rate_adaptive_mask_init(
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _ODM_RATE_ADAPTIVE	*p_odm_ra = &p_dm_odm->rate_adaptive;
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	PMGNT_INFO		p_mgnt_info = &p_dm_odm->adapter->MgntInfo;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(p_dm_odm->adapter);
-
-	p_mgnt_info->Ratr_State = DM_RATR_STA_INIT;
-
-	if (p_mgnt_info->DM_Type == dm_type_by_driver)
-		p_hal_data->bUseRAMask = true;
-	else
-		p_hal_data->bUseRAMask = false;
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	p_odm_ra->type = dm_type_by_driver;
 	if (p_odm_ra->type == dm_type_by_driver)
 		p_dm_odm->is_use_ra_mask = _TRUE;
 	else
 		p_dm_odm->is_use_ra_mask = _FALSE;
-#endif
 
 	p_odm_ra->ratr_state = DM_RATR_STA_INIT;
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	if (p_dm_odm->support_ic_type == ODM_RTL8812)
-		p_odm_ra->ldpc_thres = 50;
-	else
-		p_odm_ra->ldpc_thres = 35;
-
-	p_odm_ra->rts_thres = 35;
-
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 	p_odm_ra->ldpc_thres = 35;
 	p_odm_ra->is_use_ldpc = false;
 
-#else
-	p_odm_ra->ultra_low_rssi_thresh = 9;
-
-#endif
-
 	p_odm_ra->high_rssi_thresh = 50;
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-	p_odm_ra->low_rssi_thresh = 23;
-#else
 	p_odm_ra->low_rssi_thresh = 20;
-#endif
 }
 /*-----------------------------------------------------------------------------
  * Function:	odm_refresh_rate_adaptive_mask()
@@ -1587,7 +1133,6 @@ phydm_trans_platform_bw(
 	u8		BW
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	if (BW == CHANNEL_WIDTH_20)
 		BW = PHYDM_BW_20;
 
@@ -1602,47 +1147,8 @@ phydm_trans_platform_bw(
 
 	else if (BW == CHANNEL_WIDTH_80_80)
 		BW = PHYDM_BW_80_80;
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-
-	if (BW == HT_CHANNEL_WIDTH_20)
-		BW = PHYDM_BW_20;
-
-	else if (BW == HT_CHANNEL_WIDTH_20_40)
-		BW = PHYDM_BW_40;
-
-	else if (BW == HT_CHANNEL_WIDTH_80)
-		BW = PHYDM_BW_80;
-
-	else if (BW == HT_CHANNEL_WIDTH_160)
-		BW = PHYDM_BW_160;
-
-	else if (BW == HT_CHANNEL_WIDTH_10)
-		BW = PHYDM_BW_10;
-
-	else if (BW == HT_CHANNEL_WIDTH_5)
-		BW = PHYDM_BW_5;
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-
-	if (BW == CHANNEL_WIDTH_20)
-		BW = PHYDM_BW_20;
-
-	else if (BW == CHANNEL_WIDTH_40)
-		BW = PHYDM_BW_40;
-
-	else if (BW == CHANNEL_WIDTH_80)
-		BW = PHYDM_BW_80;
-
-	else if (BW == CHANNEL_WIDTH_160)
-		BW = PHYDM_BW_160;
-
-	else if (BW == CHANNEL_WIDTH_80_80)
-		BW = PHYDM_BW_80_80;
-#endif
 
 	return BW;
-
 }
 
 u8
@@ -1651,7 +1157,6 @@ phydm_trans_platform_rf_type(
 	u8		rf_type
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	if (rf_type == RF_1T2R)
 		rf_type = PHYDM_RF_1T2R;
 
@@ -1678,66 +1183,8 @@ phydm_trans_platform_rf_type(
 
 	else if (rf_type == RF_3T4R)
 		rf_type = PHYDM_RF_3T4R;
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-
-	if (rf_type == MIMO_1T2R)
-		rf_type = PHYDM_RF_1T2R;
-
-	else if (rf_type == MIMO_2T4R)
-		rf_type = PHYDM_RF_2T4R;
-
-	else if (rf_type == MIMO_2T2R)
-		rf_type = PHYDM_RF_2T2R;
-
-	else if (rf_type == MIMO_1T1R)
-		rf_type = PHYDM_RF_1T1R;
-
-	else if (rf_type == MIMO_3T3R)
-		rf_type = PHYDM_RF_3T3R;
-
-	else if (rf_type == MIMO_4T4R)
-		rf_type = PHYDM_RF_4T4R;
-
-	else if (rf_type == MIMO_2T3R)
-		rf_type = PHYDM_RF_1T2R;
-
-	else if (rf_type == MIMO_3T4R)
-		rf_type = PHYDM_RF_3T4R;
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-
-	if (rf_type == RF_1T2R)
-		rf_type = PHYDM_RF_1T2R;
-
-	else if (rf_type == RF_2T4R)
-		rf_type = PHYDM_RF_2T4R;
-
-	else if (rf_type == RF_2T2R)
-		rf_type = PHYDM_RF_2T2R;
-
-	else if (rf_type == RF_1T1R)
-		rf_type = PHYDM_RF_1T1R;
-
-	else if (rf_type == RF_2T2R_GREEN)
-		rf_type = PHYDM_RF_2T2R_GREEN;
-
-	else if (rf_type == RF_3T3R)
-		rf_type = PHYDM_RF_3T3R;
-
-	else if (rf_type == RF_4T4R)
-		rf_type = PHYDM_RF_4T4R;
-
-	else if (rf_type == RF_2T3R)
-		rf_type = PHYDM_RF_1T2R;
-
-	else if (rf_type == RF_3T4R)
-		rf_type = PHYDM_RF_3T4R;
-
-#endif
 
 	return rf_type;
-
 }
 
 u32
@@ -1746,12 +1193,6 @@ phydm_trans_platform_wireless_mode(
 	u32		wireless_mode
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-
 	if (wireless_mode == WIRELESS_11A)
 		wireless_mode = PHYDM_WIRELESS_MODE_A;
 
@@ -1764,8 +1205,13 @@ phydm_trans_platform_wireless_mode(
 	else if (wireless_mode == WIRELESS_AUTO)
 		wireless_mode = PHYDM_WIRELESS_MODE_AUTO;
 
-	else if ((wireless_mode == WIRELESS_11_24N) || (wireless_mode == WIRELESS_11G_24N) || (wireless_mode == WIRELESS_11B_24N) ||
-		(wireless_mode == WIRELESS_11BG_24N) || (wireless_mode == WIRELESS_MODE_24G) || (wireless_mode == WIRELESS_11ABGN) || (wireless_mode == WIRELESS_11AGN))
+	else if ((wireless_mode == WIRELESS_11_24N) ||
+		 (wireless_mode == WIRELESS_11G_24N) ||
+		 (wireless_mode == WIRELESS_11B_24N) ||
+		 (wireless_mode == WIRELESS_11BG_24N) ||
+		 (wireless_mode == WIRELESS_MODE_24G) ||
+		 (wireless_mode == WIRELESS_11ABGN) ||
+		 (wireless_mode == WIRELESS_11AGN))
 		wireless_mode = PHYDM_WIRELESS_MODE_N_24G;
 
 	else if ((wireless_mode == WIRELESS_11_5N) || (wireless_mode == WIRELESS_11A_5N))
@@ -1784,10 +1230,8 @@ phydm_trans_platform_wireless_mode(
 		wireless_mode = PHYDM_WIRELESS_MODE_MAX;
 	else
 		wireless_mode = PHYDM_WIRELESS_MODE_UNKNOWN;
-#endif
 
 	return wireless_mode;
-
 }
 
 u8
@@ -1826,9 +1270,7 @@ phydm_rate_id_mapping(
 
 	phydm_BW = phydm_trans_platform_bw(p_dm_odm, bw);
 	phydm_rf_type = phydm_trans_platform_rf_type(p_dm_odm, rf_type);
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	wireless_mode = phydm_trans_platform_wireless_mode(p_dm_odm, wireless_mode);
-#endif
 
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("wireless_mode= (( 0x%x )), rf_type = (( 0x%x )), BW = (( 0x%x ))\n",
 			wireless_mode, phydm_rf_type, phydm_BW));
@@ -1947,11 +1389,8 @@ phydm_update_hal_ra_mask(
 	u8			phydm_rf_type;
 	u8			phydm_BW;
 	u32			ratr_bitmap = *ratr_bitmap_lsb_in, ratr_bitmap_msb = *ratr_bitmap_msb_in;
-	/*struct _ODM_RATE_ADAPTIVE*		p_ra = &(p_dm_odm->rate_adaptive);*/
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	wireless_mode = phydm_trans_platform_wireless_mode(p_dm_odm, wireless_mode);
-#endif
 
 	phydm_rf_type = phydm_trans_platform_rf_type(p_dm_odm, rf_type);
 	phydm_BW = phydm_trans_platform_bw(p_dm_odm, BW);
@@ -2122,131 +1561,13 @@ odm_refresh_rate_adaptive_mask_mp(
 	void		*p_dm_void
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct PHY_DM_STRUCT				*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _rate_adaptive_table_					*p_ra_table = &p_dm_odm->dm_ra_table;
-	struct _ADAPTER				*p_adapter	 =  p_dm_odm->adapter;
-	struct _ADAPTER				*p_target_adapter = NULL;
-	HAL_DATA_TYPE			*p_hal_data = GET_HAL_DATA(p_adapter);
-	PMGNT_INFO				p_mgnt_info = GetDefaultMgntInfo(p_adapter);
-	u32		i;
-	struct sta_info *p_entry;
-	u8		ratr_state_new;
-
-	if (p_adapter->bDriverStopped) {
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_TRACE, ("<---- odm_refresh_rate_adaptive_mask(): driver is going to unload\n"));
-		return;
-	}
-
-	if (!p_hal_data->bUseRAMask) {
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("<---- odm_refresh_rate_adaptive_mask(): driver does not control rate adaptive mask\n"));
-		return;
-	}
-
-	/* if default port is connected, update RA table for default port (infrastructure mode only) */
-	if (p_mgnt_info->mAssoc && (!ACTING_AS_AP(p_adapter))) {
-		odm_refresh_ldpc_rts_mp(p_adapter, p_dm_odm, p_mgnt_info->mMacId,  p_mgnt_info->IOTPeer, p_hal_data->UndecoratedSmoothedPWDB);
-		/*ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Infrasture mode\n"));*/
-
-#if RA_MASK_PHYDMLIZE_WIN
-		ratr_state_new = phydm_RA_level_decision(p_dm_odm, p_hal_data->UndecoratedSmoothedPWDB, p_mgnt_info->Ratr_State);
-
-		if ((p_mgnt_info->Ratr_State != ratr_state_new) || (p_ra_table->force_update_ra_mask_count >= FORCED_UPDATE_RAMASK_PERIOD)) {
-
-			p_ra_table->force_update_ra_mask_count = 0;
-			ODM_PRINT_ADDR(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target AP addr :"), p_mgnt_info->Bssid);
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Update RA Level: ((%x)) -> ((%x)),  RSSI = ((%d))\n\n",
-				p_mgnt_info->Ratr_State, ratr_state_new, p_hal_data->UndecoratedSmoothedPWDB));
-
-			p_mgnt_info->Ratr_State = ratr_state_new;
-			p_adapter->HalFunc.UpdateHalRAMaskHandler(p_adapter, p_mgnt_info->mMacId, NULL, ratr_state_new);
-		} else {
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Stay in RA level  = (( %d ))\n\n", ratr_state_new));
-			/**/
-		}
-
-#else
-		if (odm_ra_state_check(p_dm_odm, p_hal_data->UndecoratedSmoothedPWDB, p_mgnt_info->bSetTXPowerTrainingByOid, &p_mgnt_info->Ratr_State)) {
-			ODM_PRINT_ADDR(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target AP addr : "), p_mgnt_info->Bssid);
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RSSI:%d, RSSI_LEVEL:%d\n", p_hal_data->UndecoratedSmoothedPWDB, p_mgnt_info->Ratr_State));
-			p_adapter->HalFunc.UpdateHalRAMaskHandler(p_adapter, p_mgnt_info->mMacId, NULL, p_mgnt_info->Ratr_State);
-		} else if (p_dm_odm->is_change_state) {
-			ODM_PRINT_ADDR(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target AP addr : "), p_mgnt_info->Bssid);
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Change Power Training state, is_disable_power_training = %d\n", p_dm_odm->is_disable_power_training));
-			p_adapter->HalFunc.UpdateHalRAMaskHandler(p_adapter, p_mgnt_info->mMacId, NULL, p_mgnt_info->Ratr_State);
-		}
-#endif
-	}
-
-	/*  */
-	/* The following part configure AP/VWifi/IBSS rate adaptive mask. */
-	/*  */
-
-	if (p_mgnt_info->mIbss)	/* Target: AP/IBSS peer. */
-		p_target_adapter = GetDefaultAdapter(p_adapter);
-	else
-		p_target_adapter = GetFirstAPAdapter(p_adapter);
-
-	/* if extension port (softap) is started, updaet RA table for more than one clients associate */
-	if (p_target_adapter != NULL) {
-		for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
-
-			p_entry = AsocEntry_EnumStation(p_target_adapter, i);
-
-			if (IS_STA_VALID(p_entry)) {
-
-				odm_refresh_ldpc_rts_mp(p_adapter, p_dm_odm, p_entry->AssociatedMacId, p_entry->IOTPeer, p_entry->rssi_stat.undecorated_smoothed_pwdb);
-
-#if RA_MASK_PHYDMLIZE_WIN
-				ratr_state_new = phydm_RA_level_decision(p_dm_odm, p_entry->rssi_stat.undecorated_smoothed_pwdb, p_entry->Ratr_State);
-
-				if ((p_entry->Ratr_State != ratr_state_new) || (p_ra_table->force_update_ra_mask_count >= FORCED_UPDATE_RAMASK_PERIOD)) {
-
-					p_ra_table->force_update_ra_mask_count = 0;
-					ODM_PRINT_ADDR(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target AP addr :"), p_entry->MacAddr);
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Update Tx RA Level: ((%x)) -> ((%x)),  RSSI = ((%d))\n",
-						p_entry->Ratr_State, ratr_state_new,  p_entry->rssi_stat.undecorated_smoothed_pwdb));
-
-					p_entry->Ratr_State = ratr_state_new;
-					p_adapter->HalFunc.UpdateHalRAMaskHandler(p_adapter, p_entry->AssociatedMacId, NULL, ratr_state_new);
-				} else {
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Stay in RA level  = (( %d ))\n\n", ratr_state_new));
-					/**/
-				}
-
-
-#else
-
-				if (odm_ra_state_check(p_dm_odm, p_entry->rssi_stat.undecorated_smoothed_pwdb, p_mgnt_info->bSetTXPowerTrainingByOid, &p_entry->Ratr_State)) {
-					ODM_PRINT_ADDR(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target STA addr : "), p_entry->mac_addr);
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RSSI:%d, RSSI_LEVEL:%d\n", p_entry->rssi_stat.undecorated_smoothed_pwdb, p_entry->Ratr_State));
-					p_adapter->hal_func.update_hal_ra_mask_handler(p_target_adapter, p_entry->AssociatedMacId, p_entry, p_entry->Ratr_State);
-				} else if (p_dm_odm->is_change_state) {
-					ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Change Power Training state, is_disable_power_training = %d\n", p_dm_odm->is_disable_power_training));
-					p_adapter->HalFunc.UpdateHalRAMaskHandler(p_adapter, p_mgnt_info->mMacId, NULL, p_mgnt_info->Ratr_State);
-				}
-#endif
-
-			}
-		}
-	}
-
-#if RA_MASK_PHYDMLIZE_WIN
-
-#else
-	if (p_mgnt_info->bSetTXPowerTrainingByOid)
-		p_mgnt_info->bSetTXPowerTrainingByOid = false;
-#endif
-#endif	/*  #if (DM_ODM_SUPPORT_TYPE == ODM_WIN) */
 }
-
 
 void
 odm_refresh_rate_adaptive_mask_ce(
 	void	*p_dm_void
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _rate_adaptive_table_			*p_ra_table = &p_dm_odm->dm_ra_table;
 	struct _ADAPTER	*p_adapter	 =  p_dm_odm->adapter;
@@ -2321,128 +1642,13 @@ odm_refresh_rate_adaptive_mask_ce(
 
 		}
 	}
-
-#endif
 }
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-void
-phydm_gen_ramask_h2c_AP(
-	void			*p_dm_void,
-	struct rtl8192cd_priv *priv,
-	struct sta_info *p_entry,
-	u8			rssi_level
-)
-{
-	struct PHY_DM_STRUCT	*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-
-	if (p_dm_odm->support_ic_type == ODM_RTL8812) {
-
-#if (RTL8812A_SUPPORT == 1)
-		UpdateHalRAMask8812(priv, p_entry, rssi_level);
-		/**/
-#endif
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8188E) {
-
-#if (RTL8188E_SUPPORT == 1)
-#ifdef TXREPORT
-		add_RATid(priv, p_entry);
-		/**/
-#endif
-#endif
-	} else {
-
-#ifdef CONFIG_WLAN_HAL
-		GET_HAL_INTERFACE(priv)->UpdateHalRAMaskHandler(priv, p_entry, rssi_level);
-#endif
-
-	} 
-}
-
-#endif
 
 void
 odm_refresh_rate_adaptive_mask_apadsl(
 	void	*p_dm_void
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _rate_adaptive_table_			*p_ra_table = &p_dm_odm->dm_ra_table;
-	struct rtl8192cd_priv *priv = p_dm_odm->priv;
-	struct aid_obj *aidarray;
-	u32		i;
-	struct sta_info *p_entry;
-	u8		ratr_state_new;
-
-	if (priv->up_time % 2)
-		return;
-
-	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
-		p_entry = p_dm_odm->p_odm_sta_info[i];
-
-		if (IS_STA_VALID(p_entry)) {
-
-#if defined(UNIVERSAL_REPEATER) || defined(MBSSID)
-			aidarray = container_of(p_entry, struct aid_obj, station);
-			priv = aidarray->priv;
-#endif
-
-			if (!priv->pmib->dot11StationConfigEntry.autoRate)
-				continue;
-
-#if RA_MASK_PHYDMLIZE_AP
-			ratr_state_new = phydm_RA_level_decision(p_dm_odm, (u32)p_entry->rssi, p_entry->rssi_level);
-
-			if ((p_entry->rssi_level != ratr_state_new) || (p_ra_table->force_update_ra_mask_count >= FORCED_UPDATE_RAMASK_PERIOD)) {
-
-				p_ra_table->force_update_ra_mask_count = 0;
-				ODM_PRINT_ADDR(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target AP addr :"), p_entry->hwaddr);
-				ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Update Tx RA Level: ((%x)) -> ((%x)),  RSSI = ((%d))\n", p_entry->rssi_level, ratr_state_new, p_entry->rssi));
-
-				p_entry->rssi_level = ratr_state_new;
-				phydm_gen_ramask_h2c_AP(p_dm_odm, priv, p_entry, p_entry->rssi_level);
-			} else {
-				ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Stay in RA level  = (( %d ))\n\n", ratr_state_new));
-				/**/
-			}
-
-#else
-			if (odm_ra_state_check(p_dm_odm, (s32)p_entry->rssi, false, &p_entry->rssi_level)) {
-				ODM_PRINT_ADDR(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Target STA addr : "), p_entry->hwaddr);
-				ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RSSI:%d, RSSI_LEVEL:%d\n", p_entry->rssi, p_entry->rssi_level));
-
-#ifdef CONFIG_WLAN_HAL
-				if (IS_HAL_CHIP(priv)) {
-#ifdef WDS
-					/*if(!(pstat->state & WIFI_WDS))*/	/*if WDS donot setting*/
-#endif
-					GET_HAL_INTERFACE(priv)->update_hal_ra_mask_handler(priv, p_entry, p_entry->rssi_level);
-				} else
-#endif
-
-#ifdef CONFIG_RTL_8812_SUPPORT
-					if (GET_CHIP_VER(priv) == VERSION_8812E)
-						update_hal_ra_mask8812(priv, p_entry, 3);
-					else
-#endif
-					{
-#ifdef CONFIG_RTL_88E_SUPPORT
-						if (GET_CHIP_VER(priv) == VERSION_8188E) {
-#ifdef TXREPORT
-							add_ra_tid(priv, p_entry);
-#endif
-						}
-#endif
-
-
-					}
-			}
-#endif /*#ifdef RA_MASK_PHYDMLIZE*/
-
-		}
-	}
-#endif /*#if (DM_ODM_SUPPORT_TYPE & ODM_AP)*/
 }
 
 void
@@ -2450,38 +1656,6 @@ odm_refresh_basic_rate_mask(
 	void	*p_dm_void
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _ADAPTER		*adapter	 =  p_dm_odm->adapter;
-	static u8		stage = 0;
-	u8			cur_stage = 0;
-	OCTET_STRING	os_rate_set;
-	PMGNT_INFO		p_mgnt_info = GetDefaultMgntInfo(adapter);
-	u8			rate_set[5] = {MGN_1M, MGN_2M, MGN_5_5M, MGN_11M, MGN_6M};
-
-	if (p_dm_odm->support_ic_type != ODM_RTL8812 && p_dm_odm->support_ic_type != ODM_RTL8821)
-		return;
-
-	if (p_dm_odm->is_linked == false)	/* unlink Default port information */
-		cur_stage = 0;
-	else if (p_dm_odm->rssi_min < 40)	/* link RSSI  < 40% */
-		cur_stage = 1;
-	else if (p_dm_odm->rssi_min > 45)	/* link RSSI > 45% */
-		cur_stage = 3;
-	else
-		cur_stage = 2;					/* link  25% <= RSSI <= 30% */
-
-	if (cur_stage != stage) {
-		if (cur_stage == 1) {
-			FillOctetString(os_rate_set, rate_set, 5);
-			FilterSupportRate(p_mgnt_info->mBrates, &os_rate_set, false);
-			phydm_set_hw_reg_handler_interface(p_dm_odm, HW_VAR_BASIC_RATE, (u8 *)&os_rate_set);
-		} else if (cur_stage == 3 && (stage == 1 || stage == 2))
-			phydm_set_hw_reg_handler_interface(p_dm_odm, HW_VAR_BASIC_RATE, (u8 *)(&p_mgnt_info->mBrates));
-	}
-
-	stage = cur_stage;
-#endif
 }
 
 u8
@@ -2601,8 +1775,6 @@ phydm_ra_info_init(
 
 }
 
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 u8
 odm_find_rts_rate(
 	void			*p_dm_void,
@@ -2744,315 +1916,8 @@ phydm_update_pwr_track(
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("Pwr Track Get rate=0x%x\n", rate));
 
 	p_dm_odm->tx_rate = rate;
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-#if DEV_BUS_TYPE == RT_PCI_INTERFACE
-#if USE_WORKITEM
-	odm_schedule_work_item(&p_dm_odm->ra_rpt_workitem);
-#else
-	if (p_dm_odm->support_ic_type == ODM_RTL8821) {
-#if (RTL8821A_SUPPORT == 1)
-		odm_tx_pwr_track_set_pwr8821a(p_dm_odm, MIX_MODE, ODM_RF_PATH_A, 0);
-#endif
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8812) {
-		for (path_idx = ODM_RF_PATH_A; path_idx < MAX_PATH_NUM_8812A; path_idx++) {
-#if (RTL8812A_SUPPORT == 1)
-			odm_tx_pwr_track_set_pwr8812a(p_dm_odm, MIX_MODE, path_idx, 0);
-#endif
-		}
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8723B) {
-#if (RTL8723B_SUPPORT == 1)
-		odm_tx_pwr_track_set_pwr_8723b(p_dm_odm, MIX_MODE, ODM_RF_PATH_A, 0);
-#endif
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8192E) {
-		for (path_idx = ODM_RF_PATH_A; path_idx < MAX_PATH_NUM_8192E; path_idx++) {
-#if (RTL8192E_SUPPORT == 1)
-			odm_tx_pwr_track_set_pwr92_e(p_dm_odm, MIX_MODE, path_idx, 0);
-#endif
-		}
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8188E) {
-#if (RTL8188E_SUPPORT == 1)
-		odm_tx_pwr_track_set_pwr88_e(p_dm_odm, MIX_MODE, ODM_RF_PATH_A, 0);
-#endif
-	}
-#endif
-#else
-	odm_schedule_work_item(&p_dm_odm->ra_rpt_workitem);
-#endif
-#endif
-
 }
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-
-s32
-phydm_find_minimum_rssi(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	struct _ADAPTER		*p_adapter,
-	OUT	bool			*p_is_link_temp
-
-)
-{
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(p_adapter);
-	PMGNT_INFO		p_mgnt_info = &(p_adapter->MgntInfo);
-	bool			act_as_ap = ACTING_AS_AP(p_adapter);
-
-	/* 1.Determine the minimum RSSI */
-	if ((!p_mgnt_info->bMediaConnect) ||
-	    (act_as_ap && (p_hal_data->EntryMinUndecoratedSmoothedPWDB == 0))) {/* We should check AP mode and Entry info.into consideration, revised by Roger, 2013.10.18*/
-
-		p_hal_data->MinUndecoratedPWDBForDM = 0;
-		*p_is_link_temp = false;
-
-	} else
-		*p_is_link_temp = true;
-
-
-	if (p_mgnt_info->bMediaConnect) {	/* Default port*/
-
-		if (act_as_ap || p_mgnt_info->mIbss) {
-			p_hal_data->MinUndecoratedPWDBForDM = p_hal_data->EntryMinUndecoratedSmoothedPWDB;
-			/**/
-		} else {
-			p_hal_data->MinUndecoratedPWDBForDM = p_hal_data->UndecoratedSmoothedPWDB;
-			/**/
-		}
-	} else { /* associated entry pwdb*/
-		p_hal_data->MinUndecoratedPWDBForDM = p_hal_data->EntryMinUndecoratedSmoothedPWDB;
-		/**/
-	}
-
-	return p_hal_data->MinUndecoratedPWDBForDM;
-}
-
-void
-odm_update_init_rate_work_item_callback(
-	void	*p_context
-)
-{
-	struct _ADAPTER	*adapter = (struct _ADAPTER *)p_context;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-	struct PHY_DM_STRUCT		*p_dm_odm = &p_hal_data->DM_OutSrc;
-	u8		p = 0;
-
-	if (p_dm_odm->support_ic_type == ODM_RTL8821) {
-		odm_tx_pwr_track_set_pwr8821a(p_dm_odm, MIX_MODE, ODM_RF_PATH_A, 0);
-		/**/
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8812) {
-		for (p = ODM_RF_PATH_A; p < MAX_PATH_NUM_8812A; p++) {    /*DOn't know how to include &c*/
-
-			odm_tx_pwr_track_set_pwr8812a(p_dm_odm, MIX_MODE, p, 0);
-			/**/
-		}
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8723B) {
-		odm_tx_pwr_track_set_pwr_8723b(p_dm_odm, MIX_MODE, ODM_RF_PATH_A, 0);
-		/**/
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8192E) {
-		for (p = ODM_RF_PATH_A; p < MAX_PATH_NUM_8192E; p++) {   /*DOn't know how to include &c*/
-			odm_tx_pwr_track_set_pwr92_e(p_dm_odm, MIX_MODE, p, 0);
-			/**/
-		}
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8188E) {
-		odm_tx_pwr_track_set_pwr88_e(p_dm_odm, MIX_MODE, ODM_RF_PATH_A, 0);
-		/**/
-	}
-}
-
-void
-odm_rssi_dump_to_register(
-	void	*p_dm_void
-)
-{
-	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _ADAPTER		*adapter = p_dm_odm->adapter;
-
-	if (p_dm_odm->support_ic_type == ODM_RTL8812) {
-		PlatformEFIOWrite1Byte(adapter, REG_A_RSSI_DUMP_JAGUAR, adapter->RxStats.RxRSSIPercentage[0]);
-		PlatformEFIOWrite1Byte(adapter, REG_B_RSSI_DUMP_JAGUAR, adapter->RxStats.RxRSSIPercentage[1]);
-
-		/* Rx EVM*/
-		PlatformEFIOWrite1Byte(adapter, REG_S1_RXEVM_DUMP_JAGUAR, adapter->RxStats.RxEVMdbm[0]);
-		PlatformEFIOWrite1Byte(adapter, REG_S2_RXEVM_DUMP_JAGUAR, adapter->RxStats.RxEVMdbm[1]);
-
-		/* Rx SNR*/
-		PlatformEFIOWrite1Byte(adapter, REG_A_RX_SNR_DUMP_JAGUAR, (u8)(adapter->RxStats.RxSNRdB[0]));
-		PlatformEFIOWrite1Byte(adapter, REG_B_RX_SNR_DUMP_JAGUAR, (u8)(adapter->RxStats.RxSNRdB[1]));
-
-		/* Rx Cfo_Short*/
-		PlatformEFIOWrite2Byte(adapter, REG_A_CFO_SHORT_DUMP_JAGUAR, adapter->RxStats.RxCfoShort[0]);
-		PlatformEFIOWrite2Byte(adapter, REG_B_CFO_SHORT_DUMP_JAGUAR, adapter->RxStats.RxCfoShort[1]);
-
-		/* Rx Cfo_Tail*/
-		PlatformEFIOWrite2Byte(adapter, REG_A_CFO_LONG_DUMP_JAGUAR, adapter->RxStats.RxCfoTail[0]);
-		PlatformEFIOWrite2Byte(adapter, REG_B_CFO_LONG_DUMP_JAGUAR, adapter->RxStats.RxCfoTail[1]);
-	} else if (p_dm_odm->support_ic_type == ODM_RTL8192E) {
-		PlatformEFIOWrite1Byte(adapter, REG_A_RSSI_DUMP_92E, adapter->RxStats.RxRSSIPercentage[0]);
-		PlatformEFIOWrite1Byte(adapter, REG_B_RSSI_DUMP_92E, adapter->RxStats.RxRSSIPercentage[1]);
-		/* Rx EVM*/
-		PlatformEFIOWrite1Byte(adapter, REG_S1_RXEVM_DUMP_92E, adapter->RxStats.RxEVMdbm[0]);
-		PlatformEFIOWrite1Byte(adapter, REG_S2_RXEVM_DUMP_92E, adapter->RxStats.RxEVMdbm[1]);
-		/* Rx SNR*/
-		PlatformEFIOWrite1Byte(adapter, REG_A_RX_SNR_DUMP_92E, (u8)(adapter->RxStats.RxSNRdB[0]));
-		PlatformEFIOWrite1Byte(adapter, REG_B_RX_SNR_DUMP_92E, (u8)(adapter->RxStats.RxSNRdB[1]));
-		/* Rx Cfo_Short*/
-		PlatformEFIOWrite2Byte(adapter, REG_A_CFO_SHORT_DUMP_92E, adapter->RxStats.RxCfoShort[0]);
-		PlatformEFIOWrite2Byte(adapter, REG_B_CFO_SHORT_DUMP_92E, adapter->RxStats.RxCfoShort[1]);
-		/* Rx Cfo_Tail*/
-		PlatformEFIOWrite2Byte(adapter, REG_A_CFO_LONG_DUMP_92E, adapter->RxStats.RxCfoTail[0]);
-		PlatformEFIOWrite2Byte(adapter, REG_B_CFO_LONG_DUMP_92E, adapter->RxStats.RxCfoTail[1]);
-	}
-}
-
-void
-odm_refresh_ldpc_rts_mp(
-	struct _ADAPTER			*p_adapter,
-	struct PHY_DM_STRUCT			*p_dm_odm,
-	u8				m_mac_id,
-	u8				iot_peer,
-	s32				undecorated_smoothed_pwdb
-)
-{
-	bool					is_ctl_ldpc = false;
-	struct _ODM_RATE_ADAPTIVE		*p_ra = &p_dm_odm->rate_adaptive;
-
-	if (p_dm_odm->support_ic_type != ODM_RTL8821 && p_dm_odm->support_ic_type != ODM_RTL8812)
-		return;
-
-	if ((p_dm_odm->support_ic_type == ODM_RTL8821) && (p_dm_odm->cut_version == ODM_CUT_A))
-		is_ctl_ldpc = true;
-	else if (p_dm_odm->support_ic_type == ODM_RTL8812 &&
-		 iot_peer == HT_IOT_PEER_REALTEK_JAGUAR_CCUTAP)
-		is_ctl_ldpc = true;
-
-	if (is_ctl_ldpc) {
-		if (undecorated_smoothed_pwdb < (p_ra->ldpc_thres - 5))
-			MgntSet_TX_LDPC(p_adapter, m_mac_id, true);
-		else if (undecorated_smoothed_pwdb > p_ra->ldpc_thres)
-			MgntSet_TX_LDPC(p_adapter, m_mac_id, false);
-	}
-
-	if (undecorated_smoothed_pwdb < (p_ra->rts_thres - 5))
-		p_ra->is_lower_rts_rate = true;
-	else if (undecorated_smoothed_pwdb > p_ra->rts_thres)
-		p_ra->is_lower_rts_rate = false;
-}
-
-#if 0
-void
-odm_dynamic_arfb_select(
-	void		*p_dm_void,
-	u8			rate,
-	bool			collision_state
-)
-{
-	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _rate_adaptive_table_			*p_ra_table = &p_dm_odm->dm_ra_table;
-
-	if (p_dm_odm->support_ic_type != ODM_RTL8192E)
-		return;
-
-	if (collision_state == p_ra_table->PT_collision_pre)
-		return;
-
-	if (rate >= DESC_RATEMCS8  && rate <= DESC_RATEMCS12) {
-		if (collision_state == 1) {
-			if (rate == DESC_RATEMCS12) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x0);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x07060501);
-			} else if (rate == DESC_RATEMCS11) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x0);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x07070605);
-			} else if (rate == DESC_RATEMCS10) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x0);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x08080706);
-			} else if (rate == DESC_RATEMCS9) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x0);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x08080707);
-			} else {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x0);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x09090808);
-			}
-		} else { /* collision_state == 0*/
-			if (rate == DESC_RATEMCS12) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x05010000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x09080706);
-			} else if (rate == DESC_RATEMCS11) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x06050000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x09080807);
-			} else if (rate == DESC_RATEMCS10) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x07060000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x0a090908);
-			} else if (rate == DESC_RATEMCS9) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x07070000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x0a090808);
-			} else {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x08080000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x0b0a0909);
-			}
-		}
-	} else { /* MCS13~MCS15,  1SS, G-mode*/
-		if (collision_state == 1) {
-			if (rate == DESC_RATEMCS15) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x00000000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x05040302);
-			} else if (rate == DESC_RATEMCS14) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x00000000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x06050302);
-			} else if (rate == DESC_RATEMCS13) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x00000000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x07060502);
-			} else {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x00000000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x06050402);
-			}
-		} else { /* collision_state == 0 */
-			if (rate == DESC_RATEMCS15) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x03020000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x07060504);
-			} else if (rate == DESC_RATEMCS14) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x03020000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x08070605);
-			} else if (rate == DESC_RATEMCS13) {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x05020000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x09080706);
-			} else {
-
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E, 0x04020000);
-				odm_write_4byte(p_dm_odm, REG_DARFRC_8192E+4, 0x08070605);
-			}
-		}
-	}
-	p_ra_table->PT_collision_pre = collision_state;
-}
-#endif
-
-void
-odm_rate_adaptive_state_ap_init(
-	void		*PADAPTER_VOID,
-	struct sta_info	*p_entry
-)
-{
-	struct _ADAPTER		*adapter = (struct _ADAPTER *)PADAPTER_VOID;
-	p_entry->Ratr_State = DM_RATR_STA_INIT;
-}
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE) /*#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)*/
 
 static void
 find_minimum_rssi(
@@ -3333,14 +2198,6 @@ odm_get_rate_bitmap(
 
 }
 
-#endif /* #if (DM_ODM_SUPPORT_TYPE == ODM_CE) */
-
-#elif (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-
-
-#endif /*#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN| ODM_CE))*/
-
-
 /* RA_MASK_PHYDMLIZE, will delete it later*/
 
 #if (RA_MASK_PHYDMLIZE_CE || RA_MASK_PHYDMLIZE_AP || RA_MASK_PHYDMLIZE_WIN)
@@ -3365,35 +2222,17 @@ odm_ra_state_check(
 	/* threshold Adjustment:*/
 	/* when RSSI state trends to go up one or two levels, make sure RSSI is high enough.*/
 	/* Here go_up_gap is added to solve the boundary's level alternation issue.*/
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	u8 ultra_low_rssi_thresh_for_ra = p_ra->ultra_low_rssi_thresh;
-
-	if (p_dm_odm->support_ic_type == ODM_RTL8881A)
-		low_rssi_thresh_for_ra = 30;		/* for LDPC / BCC switch*/
-#endif
-
 	switch (*p_ra_tr_state) {
 	case DM_RATR_STA_INIT:
 	case DM_RATR_STA_HIGH:
 		break;
-
 	case DM_RATR_STA_MIDDLE:
 		high_rssi_thresh_for_ra += go_up_gap;
 		break;
-
 	case DM_RATR_STA_LOW:
 		high_rssi_thresh_for_ra += go_up_gap;
 		low_rssi_thresh_for_ra += go_up_gap;
 		break;
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	case DM_RATR_STA_ULTRA_LOW:
-		high_rssi_thresh_for_ra += go_up_gap;
-		low_rssi_thresh_for_ra += go_up_gap;
-		ultra_low_rssi_thresh_for_ra += go_up_gap;
-		break;
-#endif
-
 	default:
 		ODM_RT_ASSERT(p_dm_odm, false, ("wrong rssi level setting %d !", *p_ra_tr_state));
 		break;
@@ -3405,18 +2244,9 @@ odm_ra_state_check(
 	else if (RSSI > low_rssi_thresh_for_ra)
 		ratr_state = DM_RATR_STA_MIDDLE;
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	else if (RSSI > ultra_low_rssi_thresh_for_ra)
-		ratr_state = DM_RATR_STA_LOW;
-	else
-		ratr_state = DM_RATR_STA_ULTRA_LOW;
-#else
 	else
 		ratr_state = DM_RATR_STA_LOW;
-#endif
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("[Mod RA RSSI Thresh]  High= (( %d )), Low = (( %d ))\n", high_rssi_thresh_for_ra, low_rssi_thresh_for_ra));
-	/*printk("==>%s,ratr_state:0x%02x,RSSI:%d\n",__FUNCTION__,ratr_state,RSSI);*/
-
 	if (*p_ra_tr_state != ratr_state || is_force_update) {
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("[RSSI Level Update] %d->%d\n", *p_ra_tr_state, ratr_state));
 		*p_ra_tr_state = ratr_state;
