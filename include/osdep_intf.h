@@ -21,9 +21,6 @@
 #ifndef __OSDEP_INTF_H_
 #define __OSDEP_INTF_H_
 
-#include <drv_conf.h>
-#include <osdep_service.h>
-#include <drv_types.h>
 
 struct intf_priv {
 
@@ -40,75 +37,135 @@ struct intf_priv {
 
 	void (*_bus_io)(u8 *priv);
 
-/*
-Under Sync. IRP (SDIO/USB)
-A protection mechanism is necessary for the io_rwmem(read/write protocol)
+	/*
+	Under Sync. IRP (SDIO/USB)
+	A protection mechanism is necessary for the io_rwmem(read/write protocol)
 
-Under Async. IRP (SDIO/USB)
-The protection mechanism is through the pending queue.
-*/
+	Under Async. IRP (SDIO/USB)
+	The protection mechanism is through the pending queue.
+	*/
 
 	_mutex ioctl_mutex;
 
 
-	/*  when in USB, IO is through interrupt in/out endpoints */
+#ifdef PLATFORM_LINUX
+#ifdef CONFIG_USB_HCI
+	/* when in USB, IO is through interrupt in/out endpoints */
 	struct usb_device	*udev;
-	struct urb *piorw_urb;
+	PURB	piorw_urb;
 	u8 io_irp_cnt;
 	u8 bio_irp_pending;
-	struct  semaphore io_retevt;
+	_sema io_retevt;
 	struct timer_list io_timer;
 	u8 bio_irp_timeout;
 	u8 bio_timer_cancel;
-};
-
-#ifdef CONFIG_R871X_TEST
-int rtw_start_pseudo_adhoc(struct adapter *padapter);
-int rtw_stop_pseudo_adhoc(struct adapter *padapter);
+#endif
 #endif
 
-u8 rtw_init_drv_sw(struct adapter *padapter);
-u8 rtw_free_drv_sw(struct adapter *padapter);
-u8 rtw_reset_drv_sw(struct adapter *padapter);
+#ifdef PLATFORM_OS_XP
+#ifdef CONFIG_SDIO_HCI
+	/* below is for io_rwmem... */
+	PMDL pmdl;
+	PSDBUS_REQUEST_PACKET  sdrp;
+	PSDBUS_REQUEST_PACKET  recv_sdrp;
+	PSDBUS_REQUEST_PACKET  xmit_sdrp;
 
-u32 rtw_start_drv_threads(struct adapter *padapter);
-void rtw_stop_drv_threads (struct adapter *padapter);
-void rtw_cancel_all_timer(struct adapter *padapter);
+	PIRP		piorw_irp;
 
+#endif
+#ifdef CONFIG_USB_HCI
+	PURB	piorw_urb;
+	PIRP		piorw_irp;
+	u8 io_irp_cnt;
+	u8 bio_irp_pending;
+	_sema io_retevt;
+#endif
+#endif
+
+};
+
+
+#ifdef CONFIG_R871X_TEST
+	int rtw_start_pseudo_adhoc(_adapter *padapter);
+	int rtw_stop_pseudo_adhoc(_adapter *padapter);
+#endif
+
+struct dvobj_priv *devobj_init(void);
+void devobj_deinit(struct dvobj_priv *pdvobj);
+
+u8 rtw_init_drv_sw(_adapter *padapter);
+u8 rtw_free_drv_sw(_adapter *padapter);
+u8 rtw_reset_drv_sw(_adapter *padapter);
+void rtw_dev_unload(PADAPTER padapter);
+
+u32 rtw_start_drv_threads(_adapter *padapter);
+void rtw_stop_drv_threads(_adapter *padapter);
+#if defined(CONFIG_WOWLAN) || defined(CONFIG_AP_WOWLAN)
+void rtw_cancel_dynamic_chk_timer(_adapter *padapter);
+#endif
+void rtw_cancel_all_timer(_adapter *padapter);
+
+uint loadparam(_adapter *adapter);
+
+#ifdef PLATFORM_LINUX
 int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname);
-struct net_device *rtw_init_netdev(struct adapter *padapter);
+struct net_device *rtw_init_netdev(_adapter *padapter);
 
-#if (LINUX_VERSION_CODE <  KERNEL_VERSION(3, 16, 0))
+void rtw_os_ndev_free(_adapter *adapter);
+int rtw_os_ndev_init(_adapter *adapter, const char *name);
+void rtw_os_ndev_deinit(_adapter *adapter);
+void rtw_os_ndev_unregister(_adapter *adapter);
+void rtw_os_ndevs_unregister(struct dvobj_priv *dvobj);
+int rtw_os_ndevs_init(struct dvobj_priv *dvobj);
+void rtw_os_ndevs_deinit(struct dvobj_priv *dvobj);
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 u16 rtw_recv_select_queue(struct sk_buff *skb);
-#else
-u16 rtw_recv_select_queue(struct sk_buff *skb,
-			  void *accel_priv,
-			  select_queue_fallback_t fallback);
+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35) */
+
+int rtw_ndev_notifier_register(void);
+void rtw_ndev_notifier_unregister(void);
+
+#include "../os_dep/linux/rtw_proc.h"
+
+#ifdef CONFIG_IOCTL_CFG80211
+	#include "../os_dep/linux/ioctl_cfg80211.h"
+#endif /* CONFIG_IOCTL_CFG80211 */
+
+u8 rtw_rtnl_lock_needed(struct dvobj_priv *dvobj);
+void rtw_set_rtnl_lock_holder(struct dvobj_priv *dvobj, _thread_hdl_ thd_hdl);
+
+#endif /* PLATFORM_LINUX */
+
+
+#ifdef PLATFORM_FREEBSD
+extern int rtw_ioctl(struct ifnet *ifp, u_long cmd, caddr_t data);
 #endif
 
-#ifdef CONFIG_PROC_DEBUG
-void rtw_proc_init_one(struct net_device *dev);
-void rtw_proc_remove_one(struct net_device *dev);
-#else /* CONFIG_PROC_DEBUG */
-static void rtw_proc_init_one(struct net_device *dev) {}
-static void rtw_proc_remove_one(struct net_device *dev) {}
-#endif /* CONFIG_PROC_DEBUG */
+void rtw_ips_dev_unload(_adapter *padapter);
 
-void rtw_ips_dev_unload(struct adapter *padapter);
+#ifdef CONFIG_IPS
+int rtw_ips_pwr_up(_adapter *padapter);
+void rtw_ips_pwr_down(_adapter *padapter);
+#endif
 
-int rtw_ips_pwr_up(struct adapter *padapter);
-void rtw_ips_pwr_down(struct adapter *padapter);
+#ifdef CONFIG_CONCURRENT_MODE
+struct _io_ops;
+struct dvobj_priv;
+_adapter *rtw_drv_add_vir_if(_adapter *primary_padapter, void (*set_intf_ops)(_adapter *primary_padapter, struct _io_ops *pops));
+void rtw_drv_stop_vir_ifaces(struct dvobj_priv *dvobj);
+void rtw_drv_free_vir_ifaces(struct dvobj_priv *dvobj);
+#endif
 
-int rtw_drv_register_netdev(struct adapter *padapter);
-void rtw_ndev_destructor(struct  net_device * ndev);
-
-int rtw_suspend_common(struct adapter *padapter);
-int rtw_resume_common(struct adapter *padapter);
+void rtw_ndev_destructor(_nic_hdl ndev);
 
 #ifdef CONFIG_ARP_KEEP_ALIVE
-int	rtw_gw_addr_query(struct adapter *padapter);
+int	rtw_gw_addr_query(_adapter *padapter);
 #endif
 
-#endif	/* _OSDEP_INTF_H_ */
+int rtw_suspend_common(_adapter *padapter);
+int rtw_resume_common(_adapter *padapter);
+
+#endif /* _OSDEP_INTF_H_ */

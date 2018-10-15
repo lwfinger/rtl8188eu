@@ -19,19 +19,9 @@
  ******************************************************************************/
 #ifndef _RTW_EVENT_H_
 #define _RTW_EVENT_H_
-#include <drv_conf.h>
-#include <osdep_service.h>
-
-#include <wlan_bssdef.h>
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
-#include <asm/semaphore.h>
-#else
-#include <linux/semaphore.h>
-#endif
-#include <linux/sem.h>
 
 #ifdef CONFIG_H2CLBK
-#include <h2clbk.h>
+	#include <h2clbk.h>
 #endif
 
 /*
@@ -39,7 +29,7 @@ Used to report a bss has been scanned
 
 */
 struct survey_event	{
-	struct wlan_bssid_ex bss;
+	WLAN_BSSID_EX bss;
 };
 
 /*
@@ -76,25 +66,25 @@ It is used in AP/Ad-HoC(M) mode.
 */
 struct stassoc_event {
 	unsigned char macaddr[6];
-	unsigned char rsvd[2];
-	int    cam_id;
-
 };
 
 struct stadel_event {
- unsigned char macaddr[6];
- unsigned char rsvd[2]; /* for reason */
- int mac_id;
+	unsigned char macaddr[6];
+	unsigned char rsvd[2]; /* for reason */
+	unsigned char locally_generated;
+	int mac_id;
 };
 
-struct addba_event
-{
+struct addba_event {
 	unsigned int tid;
 };
 
+struct wmm_event {
+	unsigned char wmm;
+};
 
 #ifdef CONFIG_H2CLBK
-struct c2hlbk_event{
+struct c2hlbk_event {
 	unsigned char mac[6];
 	unsigned short	s0;
 	unsigned short	s1;
@@ -112,13 +102,13 @@ struct c2hlbk_event{
 
 struct fwevent {
 	u32	parmsize;
-	void (*event_callback)(struct adapter *dev, u8 *pbuf);
+	void (*event_callback)(_adapter *dev, u8 *pbuf);
 };
 
 
 #define C2HEVENT_SZ			32
 
-struct event_node{
+struct event_node {
 	unsigned char *node;
 	unsigned char evt_code;
 	unsigned short evt_sz;
@@ -138,8 +128,8 @@ struct c2hevent_queue {
 struct network_queue {
 	volatile int	head;
 	volatile int	tail;
-	struct wlan_bssid_ex networks[NETWORK_QUEUE_SZ];
+	WLAN_BSSID_EX networks[NETWORK_QUEUE_SZ];
 };
 
 
-#endif /*  _WLANEVENT_H_ */
+#endif /* _WLANEVENT_H_ */

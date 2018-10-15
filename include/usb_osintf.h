@@ -20,21 +20,12 @@
 #ifndef __USB_OSINTF_H
 #define __USB_OSINTF_H
 
-#include <drv_conf.h>
-#include <osdep_service.h>
-#include <drv_types.h>
 #include <usb_vendor_req.h>
 
-#define USBD_HALTED(Status) ((u32)(Status) >> 30 == 3)
+#define USBD_HALTED(Status) ((ULONG)(Status) >> 30 == 3)
 
 
-/* uint usb_dvobj_init(struct adapter * adapter); */
-/* void usb_dvobj_deinit(struct adapter * adapter); */
+u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, RT_USB_BREQUEST brequest, RT_USB_WVALUE wvalue, u8 windex, void *data, u8 datalen, u8 isdirectionin);
 
-u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, RT_USB_BREQUEST brequest, RT_USB_WVALUE wvalue, u8 windex, void* data, u8 datalen, u8 isdirectionin);
-void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb);
-int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method);
-int nat25_handle_frame(struct adapter *priv, struct sk_buff *skb);
-void nat25_db_expire(struct adapter *priv);
 
 #endif

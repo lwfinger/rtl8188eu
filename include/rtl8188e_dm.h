@@ -19,47 +19,14 @@
  ******************************************************************************/
 #ifndef __RTL8188E_DM_H__
 #define __RTL8188E_DM_H__
-enum {
-	UP_LINK,
-	DOWN_LINK,
-};
-/*  duplicate code,will move to ODM ######### */
-#define IQK_MAC_REG_NUM		4
-#define IQK_ADDA_REG_NUM		16
-#define IQK_BB_REG_NUM			9
-#define HP_THERMAL_NUM		8
-/*  duplicate code,will move to ODM ######### */
-struct	dm_priv
-{
-	u8	DM_Type;
-	u8	DMFlag;
-	u8	InitDMFlag;
-	u32	InitODMFlag;
 
-	/*  Upper and Lower Signal threshold for Rate Adaptive*/
-	int	UndecoratedSmoothedPWDB;
-	int	UndecoratedSmoothedCCK;
-	int	EntryMinUndecoratedSmoothedPWDB;
-	int	EntryMaxUndecoratedSmoothedPWDB;
-	int	MinUndecoratedPWDBForDM;
-	int	LastMinUndecoratedPWDBForDM;
+void rtl8188e_init_dm_priv(IN PADAPTER Adapter);
+void rtl8188e_deinit_dm_priv(IN PADAPTER Adapter);
+void rtl8188e_InitHalDm(IN PADAPTER Adapter);
+void rtl8188e_HalDmWatchDog(IN PADAPTER Adapter);
 
-/*  duplicate code,will move to ODM ######### */
-	/* for High Power */
-	u8 bDynamicTxPowerEnable;
-	u8 LastDTPLvl;
-	u8 DynamicTxHighPowerLvl;/* Add by Jacken Tx Power Control for Near/Far Range 2008/03/06 */
-	u8	PowerIndex_backup[6];
-	u8	TxPowerTrackControl;	/* for mp mode, turn off txpwrtracking as default */
-};
+/* VOID rtl8192c_dm_CheckTXPowerTracking(IN PADAPTER Adapter); */
 
-
-void rtl8188e_init_dm_priv(struct adapter *Adapter);
-void rtl8188e_deinit_dm_priv(struct adapter *Adapter);
-void rtl8188e_InitHalDm(struct adapter *Adapter);
-void rtl8188e_HalDmWatchDog(struct adapter *Adapter);
-
-void	AntDivCompare8188E(struct adapter *Adapter, struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src);
-u8 AntDivBeforeLink8188E(struct adapter *Adapter );
+/* void rtl8192c_dm_RF_Saving(IN PADAPTER pAdapter, IN u8 bForceInNormal); */
 
 #endif

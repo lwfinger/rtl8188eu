@@ -20,23 +20,17 @@
 #ifndef	__MLME_OSDEP_H_
 #define __MLME_OSDEP_H_
 
-#include <drv_conf.h>
-#include <osdep_service.h>
-#include <drv_types.h>
 
-#if defined(PLATFORM_MPIXEL)
-extern int time_after(u32 now, u32 old);
+#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MPIXEL)
+	extern int time_after(u32 now, u32 old);
 #endif
 
-extern void rtw_init_mlme_timer(struct adapter *padapter);
-extern void rtw_os_indicate_disconnect( struct adapter *adapter );
-extern void rtw_os_indicate_connect( struct adapter *adapter );
-void rtw_os_indicate_scan_done( struct adapter *padapter, bool aborted);
-extern void rtw_report_sec_ie(struct adapter *adapter,u8 authmode,u8 *sec_ie);
+extern void rtw_init_mlme_timer(_adapter *padapter);
+extern void rtw_os_indicate_disconnect(_adapter *adapter, u16 reason, u8 locally_generated);
+extern void rtw_os_indicate_connect(_adapter *adapter);
+void rtw_os_indicate_scan_done(_adapter *padapter, bool aborted);
+extern void rtw_report_sec_ie(_adapter *adapter, u8 authmode, u8 *sec_ie);
 
-void rtw_reset_securitypriv( struct adapter *adapter );
-void rtw_indicate_wx_assoc_event(struct adapter *padapter);
-void rtw_indicate_wx_disassoc_event(struct adapter *padapter);
-void indicate_wx_scan_complete_event(struct adapter *padapter);
+void rtw_reset_securitypriv(_adapter *adapter);
 
-#endif	/* _MLME_OSDEP_H_ */
+#endif /* _MLME_OSDEP_H_ */

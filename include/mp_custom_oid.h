@@ -20,25 +20,25 @@
 #ifndef	__CUSTOM_OID_H
 #define __CUSTOM_OID_H
 
-/*  by Owen */
-/*  0xFF818000 - 0xFF81802F		RTL8180 Mass Production Kit */
-/*  0xFF818500 - 0xFF81850F		RTL8185 Setup Utility */
-/*  0xFF818580 - 0xFF81858F		RTL8185 Phy Status Utility */
+/* by Owen
+ * 0xFF818000 - 0xFF81802F		RTL8180 Mass Production Kit
+ * 0xFF818500 - 0xFF81850F		RTL8185 Setup Utility
+ * 0xFF818580 - 0xFF81858F		RTL8185 Phy Status Utility */
 
 /*  */
 
-/*  by Owen for Production Kit */
-/*  For Production Kit with Agilent Equipments */
-/*  in order to make our custom oids hopefully somewhat unique */
-/*  we will use 0xFF (indicating implementation specific OID) */
-/*                81(first byte of non zero Realtek unique identifier) */
-/*                80 (second byte of non zero Realtek unique identifier) */
-/*                XX (the custom OID number - providing 255 possible custom oids) */
+/* by Owen for Production Kit
+ * For Production Kit with Agilent Equipments
+ * in order to make our custom oids hopefully somewhat unique
+ * we will use 0xFF (indicating implementation specific OID)
+ * 81(first byte of non zero Realtek unique identifier)
+ * 80 (second byte of non zero Realtek unique identifier)
+ * XX (the custom OID number - providing 255 possible custom oids) */
 
 #define OID_RT_PRO_RESET_DUT				0xFF818000
 #define OID_RT_PRO_SET_DATA_RATE			0xFF818001
 #define OID_RT_PRO_START_TEST				0xFF818002
-#define OID_RT_PRO_STOP_TEST				0xFF818003
+#define OID_RT_PRO_STOP_TEST			0xFF818003
 #define OID_RT_PRO_SET_PREAMBLE				0xFF818004
 #define OID_RT_PRO_SET_SCRAMBLER			0xFF818005
 #define OID_RT_PRO_SET_FILTER_BB			0xFF818006
@@ -78,27 +78,27 @@
 #define OID_RT_PRO_QUERY_PERMANENT_ADDRESS		0xFF818029
 #define OID_RT_PRO_SET_PHILIPS_RF_PARAMETERS		0xFF81802A
 #define OID_RT_PRO_RECEIVE_PACKET			0xFF81802C
-/*  added by Owen on 04/08/03 for Cameo's request */
+/* added by Owen on 04/08/03 for Cameo's request */
 #define OID_RT_PRO_WRITE_EEPROM_BYTE			0xFF81802D
 #define OID_RT_PRO_READ_EEPROM_BYTE			0xFF81802E
 #define OID_RT_PRO_SET_MODULATION			0xFF81802F
 /*  */
 
-/* Sean */
+/* Sean		 */
 #define OID_RT_DRIVER_OPTION				0xFF818080
 #define OID_RT_RF_OFF					0xFF818081
 #define OID_RT_AUTH_STATUS				0xFF818082
 
-/*  */
+/* ************************************************************************ */
 #define OID_RT_PRO_SET_CONTINUOUS_TX			0xFF81800B
 #define OID_RT_PRO_SET_SINGLE_CARRIER_TX		0xFF81800C
 #define OID_RT_PRO_SET_CARRIER_SUPPRESSION_TX		0xFF81802B
 #define OID_RT_PRO_SET_SINGLE_TONE_TX			0xFF818043
-/*  */
+/* ************************************************************************ */
 
 
-/*  by Owen for RTL8185 Phy Status Report Utility */
-#define OID_RT_UTILITYfalse_ALARM_COUNTERS				0xFF818580
+/* by Owen for RTL8185 Phy Status Report Utility */
+#define OID_RT_UTILITY_FALSE_ALARM_COUNTERS				0xFF818580
 #define OID_RT_UTILITY_SELECT_DEBUG_MODE				0xFF818581
 #define OID_RT_UTILITY_SELECT_SUBCARRIER_NUMBER				0xFF818582
 #define OID_RT_UTILITY_GET_RSSI_STATUS					0xFF818583
@@ -107,21 +107,21 @@
 #define OID_RT_UTILITY_GET_CHANNEL_ESTIMATION_STATUS			0xFF818586
 /*  */
 
-/*  by Owen on 03/09/19-03/09/22 for RTL8185 */
+/* by Owen on 03/09/19-03/09/22 for RTL8185 */
 #define OID_RT_WIRELESS_MODE				0xFF818500
 #define OID_RT_SUPPORTED_RATES				0xFF818501
 #define OID_RT_DESIRED_RATES				0xFF818502
 #define OID_RT_WIRELESS_MODE_STARTING_ADHOC		0xFF818503
 /*  */
 
-#define OID_RT_GET_CONNECT_STATE			0xFF030001
-#define OID_RT_RESCAN					0xFF030002
+#define OID_RT_GET_CONNECT_STATE	0xFF030001
+#define OID_RT_RESCAN		0xFF030002
 #define OID_RT_SET_KEY_LENGTH				0xFF030003
 #define OID_RT_SET_DEFAULT_KEY_ID			0xFF030004
 
 #define OID_RT_SET_CHANNEL				0xFF010182
-#define OID_RT_SET_SNIFFER_MODE				0xFF010183
-#define OID_RT_GET_SIGNAL_QUALITY			0xFF010184
+#define OID_RT_SET_SNIFFER_MODE	0xFF010183
+#define OID_RT_GET_SIGNAL_QUALITY	0xFF010184
 #define OID_RT_GET_SMALL_PACKET_CRC			0xFF010185
 #define OID_RT_GET_MIDDLE_PACKET_CRC			0xFF010186
 #define OID_RT_GET_LARGE_PACKET_CRC			0xFF010187
@@ -155,7 +155,7 @@
 #define OID_RT_GET_CCA_UPGRADE_EVALUATE_TIMES		0xFF0101A3
 #define OID_RT_GET_CCA_FALLBACK_EVALUATE_TIMES		0xFF0101A4
 
-/*  by Owen on 03/31/03 for Cameo's request */
+/* by Owen on 03/31/03 for Cameo's request */
 #define OID_RT_SET_RATE_ADAPTIVE			0xFF0101A5
 /*  */
 #define OID_RT_GET_DCST_EVALUATE_PERIOD			0xFF0101A5
@@ -188,20 +188,20 @@
 #define OID_RT_RF_READ_WRITE_OFFSET			0xFF0101BF
 #define OID_RT_RF_READ_WRITE				0xFF0101C0
 
-/*  For Netgear request. 2005.01.13, by rcnjko. */
+/* For Netgear request. 2005.01.13, by rcnjko. */
 #define OID_RT_FORCED_DATA_RATE				0xFF0101C1
 #define OID_RT_WIRELESS_MODE_FOR_SCAN_LIST		0xFF0101C2
-/*  For Netgear request. 2005.02.17, by rcnjko. */
+/* For Netgear request. 2005.02.17, by rcnjko. */
 #define OID_RT_GET_BSS_WIRELESS_MODE			0xFF0101C3
-/*  For AZ project. 2005.06.27, by rcnjko. */
+/* For AZ project. 2005.06.27, by rcnjko. */
 #define OID_RT_SCAN_WITH_MAGIC_PACKET			0xFF0101C4
 
-/*  Vincent 8185MP */
+/* Vincent 8185MP */
 #define OID_RT_PRO_RX_FILTER				0xFF0111C0
 
-/* Andy TEST */
-/* define OID_RT_PRO_WRITE_REGISTRY			0xFF0111C1 */
-/* define OID_RT_PRO_READ_REGISTRY			0xFF0111C2 */
+/* Andy TEST
+ * #define OID_RT_PRO_WRITE_REGISTRY			0xFF0111C1
+ * #define OID_RT_PRO_READ_REGISTRY			0xFF0111C2 */
 #define OID_CE_USB_WRITE_REGISTRY			0xFF0111C1
 #define OID_CE_USB_READ_REGISTRY			0xFF0111C2
 
@@ -215,22 +215,22 @@
 #define OID_RT_PRO_RF_READ_REGISTRY			0xFF0111C9
 #define OID_RT_PRO_QUERY_RF_TYPE			0xFF0111CA
 
-/*  AP OID */
+/* AP OID */
 #define OID_RT_AP_GET_ASSOCIATED_STATION_LIST		0xFF010300
 #define OID_RT_AP_GET_CURRENT_TIME_STAMP		0xFF010301
 #define OID_RT_AP_SWITCH_INTO_AP_MODE			0xFF010302
 #define OID_RT_AP_SET_DTIM_PERIOD			0xFF010303
-#define OID_RT_AP_SUPPORTED				0xFF010304	/*  Determine if driver supports AP mode. 2004.08.27, by rcnjko. */
-#define OID_RT_AP_SET_PASSPHRASE			0xFF010305	/*  Set WPA-PSK passphrase into authenticator. 2005.07.08, byrcnjko. */
+#define OID_RT_AP_SUPPORTED				0xFF010304	/* Determine if driver supports AP mode. 2004.08.27, by rcnjko. */
+#define OID_RT_AP_SET_PASSPHRASE			0xFF010305	/* Set WPA-PSK passphrase into authenticator. 2005.07.08, byrcnjko. */
 
-/*  8187MP. 2004.09.06, by rcnjko. */
+/* 8187MP. 2004.09.06, by rcnjko. */
 #define OID_RT_PRO8187_WI_POLL				0xFF818780
 #define OID_RT_PRO_WRITE_BB_REG				0xFF818781
 #define OID_RT_PRO_READ_BB_REG				0xFF818782
 #define OID_RT_PRO_WRITE_RF_REG				0xFF818783
 #define OID_RT_PRO_READ_RF_REG				0xFF818784
 
-/*  Meeting House. added by Annie, 2005-07-20. */
+/* Meeting House. added by Annie, 2005-07-20. */
 #define OID_RT_MH_VENDER_ID				0xFFEDC100
 
 /* 8711 MP OID added 20051230. */
@@ -239,8 +239,8 @@
 #define OID_RT_PRO_READ_REGISTER			0xFF871101 /* Q */
 #define OID_RT_PRO_WRITE_REGISTER			0xFF871102 /* S */
 
-#define OID_RT_PRO_BURST_READ_REGISTER			0xFF871103 /* Q */
-#define OID_RT_PRO_BURST_WRITE_REGISTER			0xFF871104 /* S */
+#define OID_RT_PRO_BURST_READ_REGISTER			0xFF871103 /* Q		 */
+#define OID_RT_PRO_BURST_WRITE_REGISTER 		0xFF871104 /* S */
 
 #define OID_RT_PRO_WRITE_TXCMD				0xFF871105 /* S */
 
@@ -266,7 +266,7 @@
 #define OID_RT_PRO_SCSI_ACCESS_TEST			0xFF871115 /* Q, S */
 
 #define OID_RT_PRO_SCSI_TCPIPOFFLOAD_OUT		0xFF871116 /* S */
-#define OID_RT_PRO_SCSI_TCPIPOFFLOAD_IN			0xFF871117 /* Q,S */
+#define OID_RT_PRO_SCSI_TCPIPOFFLOAD_IN			0xFF871117 /* Q, S */
 #define OID_RT_RRO_RX_PKT_VIA_IOCTRL			0xFF871118 /* Q */
 #define OID_RT_RRO_RX_PKTARRAY_VIA_IOCTRL		0xFF871119 /* Q */
 
@@ -277,7 +277,7 @@
 #define OID_RT_PRO_SET_RF_INTFS				0xFF87111E /* S */
 #define OID_RT_POLL_RX_STATUS				0xFF87111F /* Q */
 
-#define OID_RT_PRO_CFG_DEBUG_MESSAGE			0xFF871120 /* Q,S */
+#define OID_RT_PRO_CFG_DEBUG_MESSAGE			0xFF871120 /* Q, S */
 #define OID_RT_PRO_SET_DATA_RATE_EX			0xFF871121/* S */
 #define OID_RT_PRO_SET_BASIC_RATE			0xFF871122/* S */
 #define OID_RT_PRO_READ_TSSI				0xFF871123/* S */
@@ -299,7 +299,7 @@
 
 /* For SDIO INTERFACE only */
 #define OID_RT_PRO_SYNCPAGERW_SRAM			0xFF8711A0 /* Q, S */
-#define OID_RT_PRO_871X_DRV_EXT				0xFF8711A1
+#define OID_RT_PRO_871X_DRV_EXT			0xFF8711A1
 
 /* For USB INTERFACE only */
 #define OID_RT_PRO_USB_VENDOR_REQ			0xFF8711B0 /* Q, S */
@@ -314,8 +314,8 @@
 
 #define OID_RT_PRO_ENCRYPTION_CTRL			0xFF871200 /* Q, S */
 #define OID_RT_PRO_ADD_STA_INFO				0xFF871201 /* S */
-#define OID_RT_PRO_DELE_STA_INFO			0xFF871202 /* S */
-#define OID_RT_PRO_QUERY_DR_VARIABLE			0xFF871203 /* Q */
+#define OID_RT_PRO_DELE_STA_INFO    			0xFF871202 /* S */
+#define OID_RT_PRO_QUERY_DR_VARIABLE   			0xFF871203 /* Q */
 
 #define OID_RT_PRO_RX_PACKET_TYPE			0xFF871204 /* Q, S */
 
@@ -327,7 +327,7 @@
 #define OID_RT_SET_BANDWIDTH				0xFF871209 /* S */
 #define OID_RT_SET_CRYSTAL_CAP				0xFF87120A /* S */
 
-#define OID_RT_SET_RX_PACKET_TYPE			0xFF87120B /* S */
+#define OID_RT_SET_RX_PACKET_TYPE    			0xFF87120B /* S */
 
 #define OID_RT_GET_EFUSE_MAX_SIZE			0xFF87120C /* Q */
 
@@ -350,4 +350,4 @@
 #define OID_RT_PRO_EFUSE				0xFF871216 /* Q, S */
 #define OID_RT_PRO_EFUSE_MAP				0xFF871217 /* Q, S */
 
-#endif /* ifndef	__CUSTOM_OID_H */
+#endif /* #ifndef	__CUSTOM_OID_H */

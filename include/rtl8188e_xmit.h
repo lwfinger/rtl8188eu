@@ -20,18 +20,8 @@
 #ifndef __RTL8188E_XMIT_H__
 #define __RTL8188E_XMIT_H__
 
-#define		MAX_TX_AGG_PACKET_NUMBER	0xFF
-/*  */
-/*  Queue Select Value in TxDesc */
-/*  */
-#define QSLT_BK							0x2/* 0x01 */
-#define QSLT_BE							0x0
-#define QSLT_VI							0x5/* 0x4 */
-#define QSLT_VO							0x7/* 0x6 */
-#define QSLT_BEACON						0x10
-#define QSLT_HIGH						0x11
-#define QSLT_MGNT						0x12
-#define QSLT_CMD						0x13
+
+
 
 /* For 88e early mode */
 #define SET_EARLYMODE_PKTNUM(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr, 0, 3, __Value)
@@ -42,9 +32,9 @@
 #define SET_EARLYMODE_LEN3(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr+4, 8, 12, __Value)
 #define SET_EARLYMODE_LEN4(__pAddr, __Value) SET_BITS_TO_LE_4BYTE(__pAddr+4, 20, 12, __Value)
 
-/*  */
-/* defined for TX DESC Operation */
-/*  */
+/*
+ * defined for TX DESC Operation
+ *   */
 
 #define MAX_TID (15)
 
@@ -80,33 +70,27 @@
 #define EN_HWSEQ			BIT(31)
 
 /* OFFSET 16 */
-#define		QOS                          BIT(6)
+#define	QOS                          BIT(6)
 #define	HW_SSN				BIT(7)
-#define		USERATE			BIT(8)
-#define		DISDATAFB			BIT(10)
+#define	USERATE			BIT(8)
+#define	DISDATAFB			BIT(10)
 #define   CTS_2_SELF			BIT(11)
 #define	RTS_EN				BIT(12)
 #define	HW_RTS_EN			BIT(13)
-#define		DATA_SHORT			BIT(24)
-#define		PWR_STATUS_SHT	15
-#define		DATA_SC_SHT		20
-#define		DATA_BW			BIT(25)
+#define	DATA_SHORT			BIT(24)
+#define	PWR_STATUS_SHT	15
+#define	DATA_SC_SHT		20
+#define	DATA_BW			BIT(25)
 
 /* OFFSET 20 */
 #define	RTY_LMT_EN			BIT(17)
 
-enum TXDESC_SC{
-	SC_DONT_CARE = 0x00,
-	SC_UPPER= 0x01,
-	SC_LOWER=0x02,
-	SC_DUPLICATE=0x03
-};
+
 /* OFFSET 20 */
 #define SGI					BIT(6)
 #define USB_TXAGG_NUM_SHT	24
 
-typedef struct txdesc_88e
-{
+typedef struct txdesc_88e {
 	/* Offset 0 */
 	u32 pktlen:16;
 	u32 offset:8;
@@ -131,7 +115,7 @@ typedef struct txdesc_88e
 	u32 en_desc_id:1;
 	u32 sectype:2;
 	u32 rsvd0424:2;
-	u32 pkt_offset:5;	/*  unit: 8 bytes */
+	u32 pkt_offset:5;	/* unit: 8 bytes */
 	u32 rsvd0431:1;
 
 	/* Offset 8 */
@@ -205,11 +189,11 @@ typedef struct txdesc_88e
 	u32 mcs7_sgi_max_len:4;
 
 	/* Offset 28 */
-	u32 checksum:16;	/*  TxBuffSize(PCIe)/CheckSum(USB) */
+	u32 checksum:16;	/* TxBuffSize(PCIe)/CheckSum(USB) */
 	u32 sw0:8; /* offset 30 */
 	u32 sw1:4;
 	u32 mcs15_sgi_max_len:4;
-}TXDESC, *PTXDESC;
+} TXDESC_8188E, *PTXDESC_8188E;
 
 #define txdesc_set_ccx_sw_88e(txdesc, value) \
 	do { \
@@ -254,20 +238,63 @@ struct txrpt_ccx_88e {
 #define txrpt_ccx_sw_88e(txrpt_ccx) ((txrpt_ccx)->sw0 + ((txrpt_ccx)->sw1<<8))
 #define txrpt_ccx_qtime_88e(txrpt_ccx) ((txrpt_ccx)->ccx_qtime0+((txrpt_ccx)->ccx_qtime1<<8))
 
-void rtl8188e_fill_fake_txdesc(struct adapter *padapter,u8*pDesc,u32 BufferLen,u8 IsPsPoll,u8	IsBTQosNull);
-s32 rtl8188eu_init_xmit_priv(struct adapter *padapter);
-void rtl8188eu_free_xmit_priv(struct adapter *padapter);
-s32 rtl8188eu_hal_xmit(struct adapter *padapter, struct xmit_frame *pxmitframe);
-s32 rtl8188eu_mgnt_xmit(struct adapter *padapter, struct xmit_frame *pmgntframe);
-s32	rtl8188eu_hal_xmitframe_enqueue(struct adapter *padapter, struct xmit_frame *pxmitframe);
-s32 rtl8188eu_xmit_buf_handler(struct adapter *padapter);
-#define hal_xmit_handler rtl8188eu_xmit_buf_handler
-void rtl8188eu_xmit_tasklet(void *priv);
-s32 rtl8188eu_xmitframe_complete(struct adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
+#define SET_TX_DESC_SEC_TYPE_8188E(__pTxDesc, __Value) SET_BITS_TO_LE_4BYTE(__pTxDesc+4, 22, 2, __Value)
 
-void dump_txrpt_ccx_88e(void *buf);
-void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf);
+void rtl8188e_fill_fake_txdesc(PADAPTER	padapter, u8 *pDesc, u32 BufferLen,
+			       u8 IsPsPoll, u8	IsBTQosNull, u8 bDataFrame);
+void rtl8188e_cal_txdesc_chksum(struct tx_desc	*ptxdesc);
+#if defined(CONFIG_CONCURRENT_MODE)
+	void fill_txdesc_force_bmc_camid(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc);
+#endif
 
-void _dbg_dump_tx_info(struct adapter	*padapter,int frame_tag,struct tx_desc *ptxdesc);
+#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
+	s32 rtl8188es_init_xmit_priv(PADAPTER padapter);
+	void rtl8188es_free_xmit_priv(PADAPTER padapter);
+	s32 rtl8188es_hal_xmit(PADAPTER padapter, struct xmit_frame *pxmitframe);
+	s32 rtl8188es_mgnt_xmit(PADAPTER padapter, struct xmit_frame *pmgntframe);
+	s32	rtl8188es_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe);
+	thread_return rtl8188es_xmit_thread(thread_context context);
+	s32 rtl8188es_xmit_buf_handler(PADAPTER padapter);
 
+	#ifdef CONFIG_SDIO_TX_TASKLET
+		void rtl8188es_xmit_tasklet(void *priv);
+	#endif
+#endif
+
+#ifdef CONFIG_USB_HCI
+	s32 rtl8188eu_init_xmit_priv(PADAPTER padapter);
+	void rtl8188eu_free_xmit_priv(PADAPTER padapter);
+	s32 rtl8188eu_hal_xmit(PADAPTER padapter, struct xmit_frame *pxmitframe);
+	s32 rtl8188eu_mgnt_xmit(PADAPTER padapter, struct xmit_frame *pmgntframe);
+	s32	rtl8188eu_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe);
+	s32 rtl8188eu_xmit_buf_handler(PADAPTER padapter);
+	void rtl8188eu_xmit_tasklet(void *priv);
+	s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
+#endif
+
+#ifdef CONFIG_PCI_HCI
+	s32 rtl8188ee_init_xmit_priv(PADAPTER padapter);
+	void rtl8188ee_free_xmit_priv(PADAPTER padapter);
+	void	rtl8188ee_xmitframe_resume(_adapter *padapter);
+	s32 rtl8188ee_hal_xmit(PADAPTER padapter, struct xmit_frame *pxmitframe);
+	s32 rtl8188ee_mgnt_xmit(PADAPTER padapter, struct xmit_frame *pmgntframe);
+	s32	rtl8188ee_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmitframe);
+	void rtl8188ee_xmit_tasklet(void *priv);
+#endif
+
+
+
+#ifdef CONFIG_TX_EARLY_MODE
+	void UpdateEarlyModeInfo8188E(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf);
+#endif
+
+#ifdef CONFIG_XMIT_ACK
+	void dump_txrpt_ccx_88e(void *buf);
+	void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf);
+#else
+	#define dump_txrpt_ccx_88e(buf) do {} while (0)
+	#define handle_txrpt_ccx_88e(adapter, buf) do {} while (0)
+#endif /* CONFIG_XMIT_ACK */
+
+void _dbg_dump_tx_info(_adapter	*padapter, int frame_tag, struct tx_desc *ptxdesc);
 #endif /* __RTL8188E_XMIT_H__ */

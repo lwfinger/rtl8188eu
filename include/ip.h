@@ -55,15 +55,15 @@
 #define	IPOPT_MEASUREMENT	0x40
 #define	IPOPT_RESERVED2		0x60
 
-#define IPOPT_END	(0 |IPOPT_CONTROL)
-#define IPOPT_NOOP	(1 |IPOPT_CONTROL)
-#define IPOPT_SEC	(2 |IPOPT_CONTROL|IPOPT_COPY)
-#define IPOPT_LSRR	(3 |IPOPT_CONTROL|IPOPT_COPY)
-#define IPOPT_TIMESTAMP	(4 |IPOPT_MEASUREMENT)
-#define IPOPT_RR	(7 |IPOPT_CONTROL)
-#define IPOPT_SID	(8 |IPOPT_CONTROL|IPOPT_COPY)
-#define IPOPT_SSRR	(9 |IPOPT_CONTROL|IPOPT_COPY)
-#define IPOPT_RA	(20|IPOPT_CONTROL|IPOPT_COPY)
+#define IPOPT_END	(0 | IPOPT_CONTROL)
+#define IPOPT_NOOP	(1 | IPOPT_CONTROL)
+#define IPOPT_SEC	(2 | IPOPT_CONTROL | IPOPT_COPY)
+#define IPOPT_LSRR	(3 | IPOPT_CONTROL | IPOPT_COPY)
+#define IPOPT_TIMESTAMP	(4 | IPOPT_MEASUREMENT)
+#define IPOPT_RR	(7 | IPOPT_CONTROL)
+#define IPOPT_SID	(8 | IPOPT_CONTROL | IPOPT_COPY)
+#define IPOPT_SSRR	(9 | IPOPT_CONTROL | IPOPT_COPY)
+#define IPOPT_RA	(20 | IPOPT_CONTROL | IPOPT_COPY)
 
 #define IPVERSION	4
 #define MAXTTL		255
@@ -90,27 +90,30 @@
 #define	IPOPT_TS_TSANDADDR	1		/* timestamps and addresses */
 #define	IPOPT_TS_PRESPEC	3		/* specified modules only */
 
+#ifdef PLATFORM_LINUX
+
 struct ip_options {
-  __u32		faddr;				/* Saved first hop address */
-  unsigned char	optlen;
-  unsigned char srr;
-  unsigned char rr;
-  unsigned char ts;
-  unsigned char is_setbyuser:1,			/* Set by setsockopt?			*/
-                is_data:1,			/* Options in __data, rather than skb	*/
-                is_strictroute:1,		/* Strict source route			*/
-                srr_is_hit:1,			/* Packet destination addr was our one	*/
-                is_changed:1,			/* IP checksum more not valid		*/
-                rr_needaddr:1,			/* Need to record addr of outgoing dev	*/
-                ts_needtime:1,			/* Need to record timestamp		*/
-                ts_needaddr:1;			/* Need to record addr of outgoing dev  */
-  unsigned char router_alert;
-  unsigned char __pad1;
-  unsigned char __pad2;
-  unsigned char __data[0];
+	__u32		faddr;				/* Saved first hop address */
+	unsigned char	optlen;
+	unsigned char srr;
+	unsigned char rr;
+	unsigned char ts;
+	unsigned char is_setbyuser:1,			/* Set by setsockopt?			*/
+		 is_data:1,			/* Options in __data, rather than skb	*/
+		 is_strictroute:1,		/* Strict source route			*/
+		 srr_is_hit:1,			/* Packet destination addr was our one	*/
+		 is_changed:1,			/* IP checksum more not valid		*/
+		 rr_needaddr:1,			/* Need to record addr of outgoing dev	*/
+		 ts_needtime:1,			/* Need to record timestamp		*/
+		 ts_needaddr:1;			/* Need to record addr of outgoing dev */
+	unsigned char router_alert;
+	unsigned char __pad1;
+	unsigned char __pad2;
+	unsigned char __data[0];
 };
 
 #define optlength(opt) (sizeof(struct ip_options) + opt->optlen)
+#endif
 
 struct iphdr {
 #if defined(__LITTLE_ENDIAN_BITFIELD)

@@ -20,57 +20,114 @@
 #ifndef __USB_OPS_H_
 #define __USB_OPS_H_
 
-#include <drv_conf.h>
-#include <osdep_service.h>
-#include <drv_types.h>
-#include <osdep_intf.h>
 
 #define REALTEK_USB_VENQT_READ		0xC0
-#define REALTEK_USB_VENQT_WRITE		0x40
+#define REALTEK_USB_VENQT_WRITE	0x40
 #define REALTEK_USB_VENQT_CMD_REQ	0x05
 #define REALTEK_USB_VENQT_CMD_IDX	0x00
+#define REALTEK_USB_IN_INT_EP_IDX	1
 
-enum{
+enum {
 	VENDOR_WRITE = 0x00,
 	VENDOR_READ = 0x01,
 };
 #define ALIGNMENT_UNIT				16
 #define MAX_VENDOR_REQ_CMD_SIZE	254		/* 8188cu SIE Support */
-#define MAX_USB_IO_CTL_SIZE		(MAX_VENDOR_REQ_CMD_SIZE +ALIGNMENT_UNIT)
+#define MAX_USB_IO_CTL_SIZE		(MAX_VENDOR_REQ_CMD_SIZE + ALIGNMENT_UNIT)
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,12))
-#define rtw_usb_control_msg(dev, pipe, request, requesttype, value, index, data, size, timeout_ms) \
-	usb_control_msg((dev), (pipe), (request), (requesttype), (value), (index), (data), (size), (timeout_ms))
-#define rtw_usb_bulk_msg(usb_dev, pipe, data, len, actual_length, timeout_ms) \
-	usb_bulk_msg((usb_dev), (pipe), (data), (len), (actual_length), (timeout_ms))
-#else
-#define rtw_usb_control_msg(dev, pipe, request, requesttype, value, index, data, size,timeout_ms) \
-	usb_control_msg((dev), (pipe), (request), (requesttype), (value), (index), (data), (size), \
-		((timeout_ms) == 0) ||((timeout_ms)*HZ/1000>0)?((timeout_ms)*HZ/1000):1)
-#define rtw_usb_bulk_msg(usb_dev, pipe, data, len, actual_length, timeout_ms) \
-	usb_bulk_msg((usb_dev), (pipe), (data), (len), (actual_length), \
-		((timeout_ms) == 0) ||((timeout_ms)*HZ/1000>0)?((timeout_ms)*HZ/1000):1)
-#endif
+#ifdef PLATFORM_LINUX
 #include <usb_ops_linux.h>
+#endif /* PLATFORM_LINUX */
 
-void rtl8188eu_set_hw_type(struct adapter *padapter);
-#define hal_set_hw_type rtl8188eu_set_hw_type
-void rtl8188eu_set_intf_ops(struct _io_ops *pops);
-#define usb_set_intf_ops rtl8188eu_set_intf_ops
+#ifdef CONFIG_RTL8188E
+void rtl8188eu_set_hw_type(struct dvobj_priv *pdvobj);
+#ifdef CONFIG_SUPPORT_USB_INT
+void interrupt_handler_8188eu(_adapter *padapter, u16 pkt_len, u8 *pbuf);
+#endif
+#endif
 
-#define USB_HIGH_SPEED_BULK_SIZE	512
-#define USB_FULL_SPEED_BULK_SIZE	64
+#if defined(CONFIG_RTL8812A) || defined(CONFIG_RTL8821A)
+void rtl8812au_set_hw_type(struct dvobj_priv *pdvobj);
+#ifdef CONFIG_SUPPORT_USB_INT
+void interrupt_handler_8812au(_adapter *padapter, u16 pkt_len, u8 *pbuf);
+#endif
+#endif
 
-static inline u8 rtw_usb_bulk_size_boundary(struct adapter * padapter,int buf_len)
+#ifdef CONFIG_RTL8814A
+void rtl8814au_set_hw_type(struct dvobj_priv *pdvobj);
+#ifdef CONFIG_SUPPORT_USB_INT
+void interrupt_handler_8814au(_adapter *padapter, u16 pkt_len, u8 *pbuf);
+#endif
+#endif /* CONFIG_RTL8814 */
+
+#ifdef CONFIG_RTL8192E
+void rtl8192eu_set_hw_type(struct dvobj_priv *pdvobj);
+#ifdef CONFIG_SUPPORT_USB_INT
+void interrupt_handler_8192eu(_adapter *padapter, u16 pkt_len, u8 *pbuf);
+#endif
+
+#endif
+
+#ifdef CONFIG_RTL8188F
+void rtl8188fu_set_hw_type(struct dvobj_priv *pdvobj);
+#ifdef CONFIG_SUPPORT_USB_INT
+void interrupt_handler_8188fu(_adapter *padapter, u16 pkt_len, u8 *pbuf);
+#endif
+#endif
+
+#ifdef CONFIG_RTL8723B
+void rtl8723bu_set_hw_type(struct dvobj_priv *pdvobj);
+#ifdef CONFIG_SUPPORT_USB_INT
+void interrupt_handler_8723bu(_adapter *padapter, u16 pkt_len, u8 *pbuf);
+#endif
+#endif
+
+#ifdef CONFIG_RTL8703B
+void rtl8703bu_set_hw_type(struct dvobj_priv *pdvobj);
+#ifdef CONFIG_SUPPORT_USB_INT
+void interrupt_handler_8703bu(_adapter *padapter, u16 pkt_len, u8 *pbuf);
+#endif /* CONFIG_SUPPORT_USB_INT */
+#endif /* CONFIG_RTL8703B */
+
+void usb_set_intf_ops(_adapter *padapter, struct _io_ops *pops);
+
+#ifdef CONFIG_RTL8723D
+void rtl8723du_set_hw_type(struct dvobj_priv *pdvobj);
+void rtl8723du_set_intf_ops(struct _io_ops *pops);
+void rtl8723du_recv_tasklet(void *priv);
+void rtl8723du_xmit_tasklet(void *priv);
+#ifdef CONFIG_SUPPORT_USB_INT
+void interrupt_handler_8723du(_adapter *padapter, u16 pkt_len, u8 *pbuf);
+#endif /* CONFIG_SUPPORT_USB_INT */
+#endif /* CONFIG_RTL8723D */
+
+enum RTW_USB_SPEED {
+	RTW_USB_SPEED_UNKNOWN	= 0,
+	RTW_USB_SPEED_1_1	= 1,
+	RTW_USB_SPEED_2		= 2,
+	RTW_USB_SPEED_3		= 3,
+};
+
+#define IS_FULL_SPEED_USB(Adapter)	(adapter_to_dvobj(Adapter)->usb_speed == RTW_USB_SPEED_1_1)
+#define IS_HIGH_SPEED_USB(Adapter)	(adapter_to_dvobj(Adapter)->usb_speed == RTW_USB_SPEED_2)
+#define IS_SUPER_SPEED_USB(Adapter)	(adapter_to_dvobj(Adapter)->usb_speed == RTW_USB_SPEED_3)
+
+#define USB_SUPER_SPEED_BULK_SIZE	1024	/* usb 3.0 */
+#define USB_HIGH_SPEED_BULK_SIZE	512		/* usb 2.0 */
+#define USB_FULL_SPEED_BULK_SIZE	64		/* usb 1.1 */
+
+static inline u8 rtw_usb_bulk_size_boundary(_adapter *padapter, int buf_len)
 {
-	u8 rst = true;
-	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
+	u8 rst = _TRUE;
 
-	if (pdvobjpriv->ishighspeed == true)
-		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE)?true:false;
+	if (IS_SUPER_SPEED_USB(padapter))
+		rst = (0 == (buf_len) % USB_SUPER_SPEED_BULK_SIZE) ? _TRUE : _FALSE;
+	if (IS_HIGH_SPEED_USB(padapter))
+		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE) ? _TRUE : _FALSE;
 	else
-		rst = (0 == (buf_len) % USB_FULL_SPEED_BULK_SIZE)?true:false;
+		rst = (0 == (buf_len) % USB_FULL_SPEED_BULK_SIZE) ? _TRUE : _FALSE;
 	return rst;
 }
+
 
 #endif /* __USB_OPS_H_ */
