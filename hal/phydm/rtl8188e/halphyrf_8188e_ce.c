@@ -35,7 +35,7 @@
  * 3============================================================ */
 
 
-void set_iqk_matrix_8188e(
+static void set_iqk_matrix_8188e(
 	struct PHY_DM_STRUCT	*p_dm_odm,
 	u8		OFDM_index,
 	u8		rf_path,
@@ -568,7 +568,7 @@ void configure_txpower_track_8188e(
 #define MAX_TOLERANCE		5
 #define IQK_DELAY_TIME		1		/* ms */
 
-u8			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
+static u8			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_path_a_iqk_8188e(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
@@ -644,7 +644,7 @@ phy_path_a_iqk_8188e(
 
 }
 
-u8			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
+static u8			/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_path_a_rx_iqk(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
@@ -786,7 +786,7 @@ phy_path_a_rx_iqk(
 
 }
 
-u8				/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
+static u8				/* bit0 = 1 => Tx OK, bit1 = 1 => Rx OK */
 phy_path_b_iqk_8188e(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm
@@ -849,8 +849,7 @@ phy_path_b_iqk_8188e(
 
 }
 
-void
-_phy_path_a_fill_iqk_matrix(
+static void _phy_path_a_fill_iqk_matrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -922,8 +921,7 @@ _phy_path_a_fill_iqk_matrix(
 	}
 }
 
-void
-_phy_path_b_fill_iqk_matrix(
+static void _phy_path_b_fill_iqk_matrix(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -993,8 +991,7 @@ _phy_path_b_fill_iqk_matrix(
  *
  * MP Already declare in odm.c */
 #if !(DM_ODM_SUPPORT_TYPE & ODM_WIN)
-bool
-odm_check_power_status(
+static bool odm_check_power_status(
 	struct _ADAPTER		*adapter)
 {
 #if 0
@@ -1055,8 +1052,7 @@ _phy_save_adda_registers(
 }
 
 
-void
-_phy_save_mac_registers(
+static void _phy_save_mac_registers(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -1084,8 +1080,7 @@ _phy_save_mac_registers(
 }
 
 
-void
-_phy_reload_adda_registers(
+static void _phy_reload_adda_registers(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -1112,8 +1107,7 @@ _phy_reload_adda_registers(
 		odm_set_bb_reg(p_dm_odm, adda_reg[i], MASKDWORD, adda_backup[i]);
 }
 
-void
-_phy_reload_mac_registers(
+static void _phy_reload_mac_registers(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -1233,8 +1227,7 @@ _phy_path_a_stand_by(
 	odm_set_bb_reg(p_dm_odm, REG_FPGA0_IQK, MASKH3BYTES, 0x808000);
 }
 
-void
-_phy_pi_mode_switch(
+static void _phy_pi_mode_switch(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -1260,8 +1253,7 @@ _phy_pi_mode_switch(
 	odm_set_bb_reg(p_dm_odm, REG_FPGA0_XB_HSSI_PARAMETER1, MASKDWORD, mode);
 }
 
-bool
-phy_simularity_compare_8188e(
+static bool phy_simularity_compare_8188e(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -1272,7 +1264,7 @@ phy_simularity_compare_8188e(
 	u8		 c2
 )
 {
-	u32		i, j, diff, simularity_bit_map, bound = 0;
+	u32		i, j, diff, simularity_bit_map, bound;
 #if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(p_adapter);
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
@@ -1343,8 +1335,7 @@ phy_simularity_compare_8188e(
 
 
 
-void
-_phy_iq_calibrate_8188e(
+static void _phy_iq_calibrate_8188e(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -1614,11 +1605,7 @@ _phy_iq_calibrate_8188e(
 }
 
 
-void
-_phy_lc_calibrate_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	bool		is2T
-)
+static void _phy_lc_calibrate_8188e(struct PHY_DM_STRUCT *p_dm_odm, bool is2T)
 {
 	u8	tmp_reg;
 	u32	rf_amode = 0, rf_bmode = 0, lc_cal;
@@ -1690,8 +1677,7 @@ _phy_lc_calibrate_8188e(
 #define		APK_CURVE_REG_NUM 4
 #define		PATH_NUM		2
 
-void
-_phy_ap_calibrate_8188e(
+static void _phy_ap_calibrate_8188e(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
@@ -2525,7 +2511,7 @@ phy_ap_calibrate_8188e(
 }
 #endif
 
-void _phy_set_rf_path_switch_8188e(
+static void _phy_set_rf_path_switch_8188e(
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct PHY_DM_STRUCT		*p_dm_odm,
 #else
