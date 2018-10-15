@@ -320,13 +320,13 @@ endif
 endif
 
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188E_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8188E_USB.o
 endif
 ifeq ($(CONFIG_PCI_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188E_PCIE.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8188E_PCIE.o
 endif
 ifeq ($(CONFIG_SDIO_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188E_SDIO.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8188E_SDIO.o
 endif
 
 #hal/OUTSRC/$(RTL871X)/Hal8188EFWImg_CE.o
@@ -384,10 +384,10 @@ endif
 endif
 
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8192E_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8192E_USB.o
 endif
 ifeq ($(CONFIG_PCI_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8192E_PCIE.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8192E_PCIE.o
 endif
 
 #hal/OUTSRC/$(RTL871X)/HalHWImg8188E_FW.o
@@ -444,18 +444,18 @@ endif
 
 ifeq ($(CONFIG_RTL8812A), y)
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8812A_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8812A_USB.o
 endif
 ifeq ($(CONFIG_PCI_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8812A_PCIE.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8812A_PCIE.o
 endif
 endif
 ifeq ($(CONFIG_RTL8821A), y)
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8821A_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8821A_USB.o
 endif
 ifeq ($(CONFIG_PCI_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8821A_PCIE.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8821A_PCIE.o
 endif
 endif
 
@@ -551,10 +551,10 @@ _HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops.o
 endif
 
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8723B_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8723B_USB.o
 endif
 ifeq ($(CONFIG_PCI_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8723B_PCIE.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8723B_PCIE.o
 endif
 
 _OUTSRC_FILES += hal/phydm/$(RTL871X)/halhwimg8723b_bb.o\
@@ -617,10 +617,10 @@ endif
 endif
 
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8814A_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8814A_USB.o
 endif
 ifeq ($(CONFIG_PCI_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8814A_PCIE.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8814A_PCIE.o
 endif
 
 _OUTSRC_FILES += hal/phydm/$(RTL871X)/halhwimg8814a_bb.o\
@@ -678,10 +678,10 @@ _HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops.o
 endif
 
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8703B_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8703B_USB.o
 endif
 ifeq ($(CONFIG_PCI_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8703B_PCIE.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8703B_PCIE.o
 endif
 
 _OUTSRC_FILES += hal/phydm/$(RTL871X)/halhwimg8703b_bb.o\
@@ -737,10 +737,10 @@ _HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops.o
 endif
 
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8723D_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8723D_USB.o
 endif
 ifeq ($(CONFIG_PCI_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8723D_PCIE.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8723D_PCIE.o
 endif
 
 _OUTSRC_FILES += hal/phydm/$(RTL871X)/halhwimg8723d_bb.o\
@@ -792,11 +792,11 @@ _HAL_INTFS_FILES += hal/$(RTL871X)/$(HCI_NAME)/$(HCI_NAME)_ops.o
 endif
 
 ifeq ($(CONFIG_USB_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188F_USB.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8188F_USB.o
 endif
 
 ifeq ($(CONFIG_SDIO_HCI), y)
-_HAL_INTFS_FILES +=hal/efuse/$(RTL871X)/HalEfuseMask8188F_SDIO.o
+_HAL_INTFS_FILES +=hal/HalEfuseMask8188F_SDIO.o
 endif
 
 _OUTSRC_FILES += hal/phydm/$(RTL871X)/halhwimg8188f_bb.o\
