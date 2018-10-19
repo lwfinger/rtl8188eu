@@ -84,7 +84,7 @@ module_param(rtw_usb_rxagg_mode, int, 0644);
 #ifdef RTW_LOG_LEVEL
 	uint rtw_drv_log_level = (uint)RTW_LOG_LEVEL; /* from Makefile */
 #else
-	uint rtw_drv_log_level = _DRV_ERR_;
+	uint rtw_drv_log_level = _DRV_INFO_;
 #endif
 module_param(rtw_drv_log_level, uint, 0644);
 MODULE_PARM_DESC(rtw_drv_log_level, "set log level when insert driver module, default log level is _DRV_INFO_ = 4");
@@ -1015,20 +1015,6 @@ static int rtw_net_set_mac_address(struct net_device *pnetdev, void *addr)
 	_rtw_memcpy(adapter_mac_addr(padapter), sa->sa_data, ETH_ALEN); /* set mac addr to adapter */
 	_rtw_memcpy(pnetdev->dev_addr, sa->sa_data, ETH_ALEN); /* set mac addr to net_device */
 
-#if 0
-	if (rtw_is_hw_init_completed(padapter)) {
-		rtw_ps_deny(padapter, PS_DENY_IOCTL);
-		LeaveAllPowerSaveModeDirect(padapter); /* leave PS mode for guaranteeing to access hw register successfully */
-
-#ifdef CONFIG_MI_WITH_MBSSID_CAM
-		rtw_hal_change_macaddr_mbid(padapter, sa->sa_data);
-#else
-		rtw_hal_set_hwreg(padapter, HW_VAR_MAC_ADDR, sa->sa_data); /* set mac addr to mac register */
-#endif
-
-		rtw_ps_deny_cancel(padapter, PS_DENY_IOCTL);
-	}
-#else
 	rtw_ps_deny(padapter, PS_DENY_IOCTL);
 	LeaveAllPowerSaveModeDirect(padapter); /* leave PS mode for guaranteeing to access hw register successfully */
 #ifdef CONFIG_MI_WITH_MBSSID_CAM
@@ -1037,7 +1023,6 @@ static int rtw_net_set_mac_address(struct net_device *pnetdev, void *addr)
 	rtw_hal_set_hwreg(padapter, HW_VAR_MAC_ADDR, sa->sa_data); /* set mac addr to mac register */
 #endif
 	rtw_ps_deny_cancel(padapter, PS_DENY_IOCTL);
-#endif
 
 	RTW_INFO(FUNC_ADPT_FMT": Set Mac Addr to "MAC_FMT" Successfully\n"
 		 , FUNC_ADPT_ARG(padapter), MAC_ARG(sa->sa_data));
@@ -1100,11 +1085,12 @@ unsigned int rtw_classify8021d(struct sk_buff *skb)
 
 
 static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 13, 0)
-	, void *accel_priv
-	#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)
-	, select_queue_fallback_t fallback
-	#endif
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 19, 0))
+			    ,struct net_device *sb_dev
+                            ,select_queue_fallback_t fallback
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0))
+ 			    ,void *unused
+                             ,select_queue_fallback_t fallback
 #endif
 )
 {
@@ -1245,7 +1231,7 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 
 #ifdef CONFIG_EASY_REPLACEMENT
 	struct net_device	*TargetNetdev = NULL;
-	_adapter			*TargetAdapter = NULL;
+	_adapter *TargetAdapter = NULL;
 	struct net		*devnet = NULL;
 
 	if (padapter->bDongle == 1) {
@@ -1786,17 +1772,26 @@ u8 rtw_init_default_value(_adapter *padapter)
 }
 
 #ifdef CONFIG_SWTIMER_BASED_TXBCN
-void _tx_beacon_timer_handlder(void *FunctionContext)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+void _tx_beacon_timer_handler(void *FunctionContext)
+#else
+void _tx_beacon_timer_handler(struct timer_list *t)
+#endif
 {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	struct dvobj_priv *pdvobj = (struct dvobj_priv *)FunctionContext;
+#else
+	struct dvobj_priv *pdvobj = from_timer(pdvobj, t, txbcn_timer);
+#endif
 
-	tx_beacon_timer_handlder(pdvobj);
+	tx_beacon_timer_handler(pdvobj);
 }
 #endif
 
 struct dvobj_priv *devobj_init(void)
 {
 	struct dvobj_priv *pdvobj = NULL;
+	_adapter *adapter;
 
 	pdvobj = (struct dvobj_priv *)rtw_zmalloc(sizeof(*pdvobj));
 	if (pdvobj == NULL)
@@ -1835,11 +1830,19 @@ struct dvobj_priv *devobj_init(void)
 	pdvobj->inter_bcn_space = DEFAULT_BCN_INTERVAL; /* default value is equal to the default beacon_interval (100ms) */
 	_rtw_init_queue(&pdvobj->ap_if_q);
 #ifdef CONFIG_SWTIMER_BASED_TXBCN
-	_init_timer(&(pdvobj->txbcn_timer), NULL, _tx_beacon_timer_handlder, pdvobj);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+	_init_timer(&pdvobj->txbcn_timer, NULL, _tx_beacon_timer_handler, pdvobj);
+#else
+	timer_setup(&pdvobj->txbcn_timer, _tx_beacon_timer_handler, 0);
+#endif
 #endif
 #endif
 
-	_init_timer(&(pdvobj->dynamic_chk_timer), NULL, _dynamic_check_timer_handlder, pdvobj);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+	_init_timer(&pdvobj->dynamic_chk_timer, NULL, _dynamic_check_timer_handler, pdvobj);
+#else
+	timer_setup(&pdvobj->dynamic_chk_timer, _dynamic_check_timer_handler, 0);
+#endif
 
 #ifdef CONFIG_MCC_MODE
 	_rtw_mutex_init(&(pdvobj->mcc_objpriv.mcc_mutex));
@@ -1983,13 +1986,9 @@ u8 rtw_reset_drv_sw(_adapter *padapter)
 
 u8 rtw_init_drv_sw(_adapter *padapter)
 {
-
 	u8	ret8 = _SUCCESS;
 
-
-
 	_rtw_init_listhead(&padapter->list);
-
 	ret8 = rtw_init_default_value(padapter);
 
 	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL) {
@@ -3495,7 +3494,7 @@ int	rtw_gw_addr_query(_adapter *padapter)
 }
 #endif
 
-void rtw_dev_unload(PADAPTER padapter)
+void rtw_dev_unload(_adapter *padapter)
 {
 	struct net_device *pnetdev = (struct net_device *)padapter->pnetdev;
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(padapter);
@@ -4217,7 +4216,6 @@ int rtw_resume_process_ap_wow(_adapter *padapter)
 
 	rtw_mi_start_drv_threads(padapter);
 
-#if 1
 	if (rtw_mi_check_status(padapter, MI_LINKED)) {
 		ch =  rtw_mi_get_union_chan(padapter);
 		bw = rtw_mi_get_union_bw(padapter);
@@ -4225,13 +4223,6 @@ int rtw_resume_process_ap_wow(_adapter *padapter)
 		RTW_INFO(FUNC_ADPT_FMT" back to linked/linking union - ch:%u, bw:%u, offset:%u\n", FUNC_ADPT_ARG(padapter), ch, bw, offset);
 		set_channel_bwmode(padapter, ch, offset, bw);
 	}
-#else
-	if (rtw_mi_get_ch_setting_union(padapter, &ch, &bw, &offset) != 0) {
-		RTW_INFO(FUNC_ADPT_FMT" back to linked/linking union - ch:%u, bw:%u, offset:%u\n", FUNC_ADPT_ARG(padapter), ch, bw, offset);
-		set_channel_bwmode(padapter, ch, offset, bw);
-		rtw_mi_update_union_chan_inf(padapter, ch, offset, bw);
-	}
-#endif
 
 	/*FOR ONE AP - TODO :Multi-AP*/
 	{

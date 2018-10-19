@@ -393,10 +393,19 @@ exit:
 	return;
 }
 
-void pwr_state_check_handler(RTW_TIMER_HDL_ARGS);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void pwr_state_check_handler(RTW_TIMER_HDL_ARGS)
+#else
+void pwr_state_check_handler(struct timer_list *t)
+#endif
 {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	_adapter *padapter = (_adapter *)FunctionContext;
+#else
+	struct pwrctrl_priv *pwrpriv = from_timer(pwrpriv, t, pwr_state_check_timer);
+	_adapter *padapter = pwrpriv->padapter;
+#endif
+
 	rtw_ps_cmd(padapter);
 }
 
@@ -1939,12 +1948,6 @@ void rtw_init_pwrctrl_priv(PADAPTER padapter)
 	if (padapter->adapter_type != PRIMARY_ADAPTER)
 		return;
 #endif
-
-
-#ifdef PLATFORM_WINDOWS
-	pwrctrlpriv->pnp_current_pwr_state = NdisDeviceStateD0;
-#endif
-
 	_init_pwrlock(&pwrctrlpriv->lock);
 	_init_pwrlock(&pwrctrlpriv->check_32k_lock);
 	pwrctrlpriv->rf_pwrstate = rf_on;
@@ -1962,6 +1965,7 @@ void rtw_init_pwrctrl_priv(PADAPTER padapter)
 	pwrctrlpriv->bInternalAutoSuspend = _FALSE;
 	pwrctrlpriv->bInSuspend = _FALSE;
 	pwrctrlpriv->bkeepfwalive = _FALSE;
+	pwrctrlpriv->padapter = padapter;
 
 #ifdef CONFIG_AUTOSUSPEND
 #ifdef SUPPORT_HW_RFOFF_DETECTED
@@ -2008,7 +2012,11 @@ void rtw_init_pwrctrl_priv(PADAPTER padapter)
 #endif /* CONFIG_LPS_RPWM_TIMER */
 #endif /* CONFIG_LPS_LCLK */
 
-	rtw_init_timer(&pwrctrlpriv->pwr_state_check_timer, padapter, pwr_state_check_handler);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+	_init_timer(&pwrctrlpriv->pwr_state_check_timer, padapter->pnetdev, pwr_state_check_handler, padapter);
+#else
+	timer_setup(&pwrctrlpriv->pwr_state_check_timer, pwr_state_check_handler, 0);
+#endif
 
 	pwrctrlpriv->wowlan_mode = _FALSE;
 	pwrctrlpriv->wowlan_ap_mode = _FALSE;
@@ -2056,7 +2064,6 @@ void rtw_init_pwrctrl_priv(PADAPTER padapter)
 
 
 }
-
 
 void rtw_free_pwrctrl_priv(PADAPTER adapter)
 {

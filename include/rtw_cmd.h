@@ -1074,7 +1074,11 @@ extern u8 rtw_ps_cmd(_adapter *padapter);
 u8 rtw_chk_hi_queue_cmd(_adapter *padapter);
 #ifdef CONFIG_DFS_MASTER
 u8 rtw_dfs_master_cmd(_adapter *adapter, bool enqueue);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void rtw_dfs_master_timer_hdl(RTW_TIMER_HDL_ARGS);
+#else
+void rtw_dfs_master_timer_hdl(struct timer_list *t);
+#endif
 void rtw_dfs_master_enable(_adapter *adapter, u8 ch, u8 bw, u8 offset);
 void rtw_dfs_master_disable(_adapter *adapter, u8 ch, u8 bw, u8 offset, bool by_others);
 enum {

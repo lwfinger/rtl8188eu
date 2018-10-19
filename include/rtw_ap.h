@@ -83,6 +83,6 @@ void rtw_process_public_act_bsscoex(_adapter *padapter, u8 *pframe, uint frame_l
 int rtw_ht_operation_update(_adapter *padapter);
 
 #ifdef CONFIG_SWTIMER_BASED_TXBCN
-void tx_beacon_handlder(struct dvobj_priv *pdvobj);
-void tx_beacon_timer_handlder(struct dvobj_priv *pdvobj);
+void tx_beacon_handler(struct dvobj_priv *pdvobj);
+void tx_beacon_timer_handler(struct dvobj_priv *pdvobj);
 #endif

@@ -4028,7 +4028,7 @@ exit:
 /*#define DBG_SWTIMER_BASED_TXBCN*/
 
 #ifdef CONFIG_SWTIMER_BASED_TXBCN
-void tx_beacon_handlder(struct dvobj_priv *pdvobj)
+void tx_beacon_handler(struct dvobj_priv *pdvobj)
 {
 #define BEACON_EARLY_TIME		20	/* unit:TU*/
 	_irqL irqL;
@@ -4159,7 +4159,7 @@ void tx_beacon_handlder(struct dvobj_priv *pdvobj)
 
 }
 
-void tx_beacon_timer_handlder(struct dvobj_priv *pdvobj)
+void tx_beacon_timer_handler(struct dvobj_priv *pdvobj)
 {
 	_adapter *padapter = pdvobj->padapters[0];
 

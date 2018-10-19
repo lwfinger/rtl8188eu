@@ -2908,7 +2908,7 @@ static u8 is_drv_in_lps(_adapter *adapter)
 	#endif /* CONFIG_LPS_LCLK_WD_TIMER*/
 	return is_in_lps;
 }
-void rtw_iface_dynamic_check_timer_handlder(_adapter *adapter)
+void rtw_iface_dynamic_check_timer_handler(_adapter *adapter)
 {
 #ifdef CONFIG_AP_MODE
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
@@ -2960,7 +2960,7 @@ void rtw_iface_dynamic_check_timer_handlder(_adapter *adapter)
 
 		if (adapter->pppoe_connection_in_progress > 0)
 			adapter->pppoe_connection_in_progress--;
-		/* due to rtw_dynamic_check_timer_handlder() is called every 2 seconds */
+		/* due to rtw_dynamic_check_timer_handler() is called every 2 seconds */
 		if (adapter->pppoe_connection_in_progress > 0)
 			adapter->pppoe_connection_in_progress--;
 	}
@@ -3014,7 +3014,7 @@ static void collect_traffic_statistics(_adapter *padapter)
 	#endif
 }
 
-void rtw_dynamic_check_timer_handlder(_adapter *adapter)
+void rtw_dynamic_check_timer_handler(_adapter *adapter)
 {
 	if (!adapter)
 		return;
@@ -3027,7 +3027,7 @@ void rtw_dynamic_check_timer_handlder(_adapter *adapter)
 
 	collect_traffic_statistics(adapter);
 
-	rtw_mi_dynamic_check_timer_handlder(adapter);
+	rtw_mi_dynamic_check_timer_handler(adapter);
 
 	if (!is_drv_in_lps(adapter))
 		rtw_dynamic_chk_wk_cmd(adapter);
