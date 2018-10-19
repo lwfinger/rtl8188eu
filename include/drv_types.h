@@ -39,17 +39,7 @@
 	#include <net/arp.h>
 #endif
 
-#ifdef PLATFORM_OS_XP
-	#include <drv_types_xp.h>
-#endif
-
-#ifdef PLATFORM_OS_CE
-	#include <drv_types_ce.h>
-#endif
-
-#ifdef PLATFORM_LINUX
-	#include <drv_types_linux.h>
-#endif
+#include <drv_types_linux.h>
 
 enum _NIC_VERSION {
 
@@ -924,13 +914,11 @@ struct dvobj_priv {
 
 	struct rtw_traffic_statistics	traffic_stat;
 
-#ifdef PLATFORM_LINUX
 	_thread_hdl_ rtnl_lock_holder;
 
 	#if defined(CONFIG_IOCTL_CFG80211) && defined(RTW_SINGLE_WIPHY)
 	struct wiphy *wiphy;
 	#endif
-#endif /* PLATFORM_LINUX */
 
 #ifdef CONFIG_SWTIMER_BASED_TXBCN
 	struct timer_list txbcn_timer;
@@ -977,40 +965,8 @@ struct dvobj_priv {
 	u8 *usb_vendor_req_buf;
 #endif
 
-#ifdef PLATFORM_WINDOWS
-	/* related device objects */
-	PDEVICE_OBJECT	pphysdevobj;/* pPhysDevObj; */
-	PDEVICE_OBJECT	pfuncdevobj;/* pFuncDevObj; */
-	PDEVICE_OBJECT	pnextdevobj;/* pNextDevObj; */
-
-	u8	nextdevstacksz;/* unsigned char NextDeviceStackSize;	 */ /* = (CHAR)CEdevice->pUsbDevObj->StackSize + 1; */
-
-	/* urb for control diescriptor request */
-
-#ifdef PLATFORM_OS_XP
-	struct _URB_CONTROL_DESCRIPTOR_REQUEST descriptor_urb;
-	PUSB_CONFIGURATION_DESCRIPTOR	pconfig_descriptor;/* UsbConfigurationDescriptor; */
-#endif
-
-#ifdef PLATFORM_OS_CE
-	WCHAR			active_path[MAX_ACTIVE_REG_PATH];	/* adapter regpath */
-	USB_EXTENSION	usb_extension;
-
-	_nic_hdl		pipehdls_r8192c[0x10];
-#endif
-
-	u32	config_descriptor_len;/* ULONG UsbConfigurationDescriptorLength; */
-#endif/* PLATFORM_WINDOWS */
-
-#ifdef PLATFORM_LINUX
 	struct usb_interface *pusbintf;
 	struct usb_device *pusbdev;
-#endif/* PLATFORM_LINUX */
-
-#ifdef PLATFORM_FREEBSD
-	struct usb_interface *pusbintf;
-	struct usb_device *pusbdev;
-#endif/* PLATFORM_FREEBSD */
 
 #endif/* CONFIG_USB_HCI */
 
@@ -1018,7 +974,6 @@ struct dvobj_priv {
 
 #ifdef CONFIG_PCI_HCI
 
-#ifdef PLATFORM_LINUX
 	struct pci_dev *ppcidev;
 
 	/* PCI MEM map */
@@ -1060,7 +1015,6 @@ struct dvobj_priv {
 	u8	b_support_aspm; /* If it supports ASPM, Offset[560h] = 0x40, otherwise Offset[560h] = 0x00. */
 	u8	b_support_backdoor;
 	u8	bdma64;
-#endif/* PLATFORM_LINUX */
 
 #endif/* CONFIG_PCI_HCI */
 
@@ -1113,13 +1067,9 @@ static inline void dev_clr_drv_stopped(struct dvobj_priv *dvobj)
 #define dev_is_surprise_removed(dvobj)	(ATOMIC_READ(&dvobj->bSurpriseRemoved) == _TRUE)
 #define dev_is_drv_stopped(dvobj)		(ATOMIC_READ(&dvobj->bDriverStopped) == _TRUE)
 
-#ifdef PLATFORM_LINUX
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {
 	/* todo: get interface type from dvobj and the return the dev accordingly */
-#ifdef RTW_DVOBJ_CHIP_HW_TYPE
-#endif
-
 #ifdef CONFIG_USB_HCI
 	return &dvobj->pusbintf->dev;
 #endif
@@ -1133,7 +1083,6 @@ static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 	return &dvobj->ppcidev->dev;
 #endif
 }
-#endif
 
 _adapter *dvobj_get_port0_adapter(struct dvobj_priv *dvobj);
 _adapter *dvobj_get_unregisterd_adapter(struct dvobj_priv *dvobj);
@@ -1222,7 +1171,7 @@ struct _ADAPTER {
 	struct	recv_priv	recvpriv;
 	struct	sta_priv	stapriv;
 	struct	security_priv	securitypriv;
-	_lock   security_key_mutex; /* add for CONFIG_IEEE80211W, none 11w also can use */
+	spinlock_t security_key_mutex; /* add for CONFIG_IEEE80211W, non 11w also can use */
 	struct	registry_priv	registrypriv;
 
 	struct	led_priv	ledpriv;
@@ -1301,10 +1250,6 @@ struct _ADAPTER {
 	_thread_hdl_ recvThread;
 
 	u8 registered;
-#ifndef PLATFORM_LINUX
-	NDIS_STATUS(*dvobj_init)(struct dvobj_priv *dvobj);
-	void (*dvobj_deinit)(struct dvobj_priv *dvobj);
-#endif
 
 	u32(*intf_init)(struct dvobj_priv *dvobj);
 	void (*intf_deinit)(struct dvobj_priv *dvobj);
@@ -1315,18 +1260,6 @@ struct _ADAPTER {
 	void (*intf_start)(_adapter *adapter);
 	void (*intf_stop)(_adapter *adapter);
 
-#ifdef PLATFORM_WINDOWS
-	_nic_hdl		hndis_adapter;/* hNdisAdapter(NDISMiniportAdapterHandle); */
-	_nic_hdl		hndis_config;/* hNdisConfiguration; */
-	NDIS_STRING fw_img;
-
-	u32	NdisPacketFilter;
-	u8	MCList[MAX_MCAST_LIST_NUM][6];
-	u32	MCAddrCount;
-#endif /* end of PLATFORM_WINDOWS */
-
-
-#ifdef PLATFORM_LINUX
 	_nic_hdl pnetdev;
 	char old_ifname[IFNAMSIZ];
 
@@ -1359,13 +1292,6 @@ struct _ADAPTER {
 
 #endif /* CONFIG_IOCTL_CFG80211 */
 
-#endif /* PLATFORM_LINUX */
-
-#ifdef PLATFORM_FREEBSD
-	_nic_hdl pifp;
-	int bup;
-	_lock glock;
-#endif /* PLATFORM_FREEBSD */
 	u8 mac_addr[ETH_ALEN];
 	int net_closed;
 

@@ -26,35 +26,10 @@
 #define SDIO_ERR_VAL16	0xFFFF
 #define SDIO_ERR_VAL32	0xFFFFFFFF
 
-#ifdef PLATFORM_LINUX
 #include <sdio_ops_linux.h>
-#endif
-
-#ifdef PLATFORM_WINDOWS
-
-#ifdef PLATFORM_OS_XP
-#include <sdio_ops_xp.h>
-struct async_context {
-	PMDL pmdl;
-	PSDBUS_REQUEST_PACKET sdrp;
-	unsigned char *r_buf;
-	unsigned char *padapter;
-};
-#endif
-
-#ifdef PLATFORM_OS_CE
-#include <sdio_ops_ce.h>
-#endif
-
-#endif /* PLATFORM_WINDOWS */
-
 
 extern void sdio_set_intf_ops(_adapter *padapter, struct _io_ops *pops);
 
-#if 0
-extern void sdio_func1cmd52_read(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem);
-extern void sdio_func1cmd52_write(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem);
-#endif
 extern u8 SdioLocalCmd52Read1Byte(PADAPTER padapter, u32 addr);
 extern void SdioLocalCmd52Write1Byte(PADAPTER padapter, u32 addr, u8 v);
 extern s32 _sdio_local_read(PADAPTER padapter, u32 addr, u32 cnt, u8 *pbuf);

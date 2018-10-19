@@ -381,11 +381,7 @@ static inline unsigned char *__skb_pull(struct sk_buff *skb, unsigned int len)
 }
 static inline unsigned char *skb_pull(struct sk_buff *skb, unsigned int len)
 {
-	#ifdef PLATFORM_FREEBSD
-	return __skb_pull(skb, len);
-	#else
 	return unlikely(len > skb->len) ? NULL : __skb_pull(skb, len);
-	#endif //PLATFORM_FREEBSD
 }
 static inline u32 skb_queue_len(const struct sk_buff_head *list_)
 {

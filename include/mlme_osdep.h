@@ -21,7 +21,7 @@
 #define __MLME_OSDEP_H_
 
 
-#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MPIXEL)
+#if defined(PLATFORM_MPIXEL)
 	extern int time_after(u32 now, u32 old);
 #endif
 

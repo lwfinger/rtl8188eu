@@ -57,12 +57,10 @@ void rtw_os_read_port(_adapter *padapter, struct recv_buf *precvbuf);
 
 void rtw_init_recv_timer(struct recv_reorder_ctrl *preorder_ctrl);
 
-#ifdef PLATFORM_LINUX
 #ifdef CONFIG_RTW_NAPI
 #include <linux/netdevice.h>	/* struct napi_struct */
 
 int rtw_recv_napi_poll(struct napi_struct *, int budget);
 #endif /* CONFIG_RTW_NAPI */
-#endif /* PLATFORM_LINUX */
 
 #endif /*  */

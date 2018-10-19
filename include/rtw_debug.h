@@ -33,37 +33,18 @@ enum {
 
 #define DRIVER_PREFIX "RTW: "
 
-#ifdef PLATFORM_OS_CE
-extern void rtl871x_cedbg(const char *fmt, ...);
-#endif
-
-#ifdef PLATFORM_WINDOWS
-	#define RTW_PRINT do {} while (0)
-	#define RTW_ERR do {} while (0)
-	#define RTW_WARN do {} while (0)
-	#define RTW_INFO do {} while (0)
-	#define RTW_DBG do {} while (0)
-	#define RTW_PRINT_SEL do {} while (0)
-	#define _RTW_PRINT do {} while (0)
-	#define _RTW_ERR do {} while (0)
-	#define _RTW_WARN do {} while (0)
-	#define _RTW_INFO do {} while (0)
-	#define _RTW_DBG do {} while (0)
-	#define _RTW_PRINT_SEL do {} while (0)
-#else
-	#define RTW_PRINT(x, ...) do {} while (0)
-	#define RTW_ERR(x, ...) do {} while (0)
-	#define RTW_WARN(x,...) do {} while (0)
-	#define RTW_INFO(x,...) do {} while (0)
-	#define RTW_DBG(x,...) do {} while (0)
-	#define RTW_PRINT_SEL(x,...) do {} while (0)
-	#define _RTW_PRINT(x, ...) do {} while (0)
-	#define _RTW_ERR(x, ...) do {} while (0)
-	#define _RTW_WARN(x,...) do {} while (0)
-	#define _RTW_INFO(x,...) do {} while (0)
-	#define _RTW_DBG(x,...) do {} while (0)
-	#define _RTW_PRINT_SEL(x,...) do {} while (0)
-#endif
+#define RTW_PRINT(x, ...) do {} while (0)
+#define RTW_ERR(x, ...) do {} while (0)
+#define RTW_WARN(x,...) do {} while (0)
+#define RTW_INFO(x,...) do {} while (0)
+#define RTW_DBG(x,...) do {} while (0)
+#define RTW_PRINT_SEL(x,...) do {} while (0)
+#define _RTW_PRINT(x, ...) do {} while (0)
+#define _RTW_ERR(x, ...) do {} while (0)
+#define _RTW_WARN(x,...) do {} while (0)
+#define _RTW_INFO(x,...) do {} while (0)
+#define _RTW_DBG(x,...) do {} while (0)
+#define _RTW_PRINT_SEL(x,...) do {} while (0)
 
 #define RTW_INFO_DUMP(_TitleString, _HexData, _HexDataLen) do {} while (0)
 #define RTW_DBG_DUMP(_TitleString, _HexData, _HexDataLen) do {} while (0)

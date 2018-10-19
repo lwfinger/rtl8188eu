@@ -39,15 +39,11 @@
 
 	/* recv_buffer must be large than usb agg size */
 	#ifndef MAX_RECVBUF_SZ
-		#ifdef PLATFORM_OS_CE
-			#define MAX_RECVBUF_SZ (8192+1024)
-		#else /* !PLATFORM_OS_CE */
-			#ifndef CONFIG_MINIMAL_MEMORY_USAGE
-				#define MAX_RECVBUF_SZ (32768)
-			#else
-				#define MAX_RECVBUF_SZ (4000)
-			#endif
-		#endif /* PLATFORM_OS_CE */
+		#ifndef CONFIG_MINIMAL_MEMORY_USAGE
+			#define MAX_RECVBUF_SZ (32768)
+		#else
+			#define MAX_RECVBUF_SZ (4000)
+		#endif
 	#endif /* !MAX_RECVBUF_SZ */
 
 	/* rtl8822bu_ops.c */

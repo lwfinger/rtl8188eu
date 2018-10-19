@@ -35,9 +35,7 @@ enum {
 #define MAX_VENDOR_REQ_CMD_SIZE	254		/* 8188cu SIE Support */
 #define MAX_USB_IO_CTL_SIZE		(MAX_VENDOR_REQ_CMD_SIZE + ALIGNMENT_UNIT)
 
-#ifdef PLATFORM_LINUX
 #include <usb_ops_linux.h>
-#endif /* PLATFORM_LINUX */
 
 #ifdef CONFIG_RTL8188E
 void rtl8188eu_set_hw_type(struct dvobj_priv *pdvobj);

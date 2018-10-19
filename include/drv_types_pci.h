@@ -21,9 +21,7 @@
 #define __DRV_TYPES_PCI_H__
 
 
-#ifdef PLATFORM_LINUX
-	#include <linux/pci.h>
-#endif
+#include <linux/pci.h>
 
 
 #define	INTEL_VENDOR_ID				0x8086

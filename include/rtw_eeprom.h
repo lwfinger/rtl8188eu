@@ -110,12 +110,10 @@ extern void eeprom_read_sz(_adapter *padapter, u16 reg, u8 *data, u32 sz);
 
 extern void read_eeprom_content_by_attrib(_adapter	*padapter);
 
-#ifdef PLATFORM_LINUX
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
 extern int isAdaptorInfoFileValid(void);
 extern int storeAdaptorInfoFile(char *path, u8 *efuse_data);
 extern int retriveAdaptorInfoFile(char *path, u8 *efuse_data);
 #endif /* CONFIG_ADAPTOR_INFO_CACHING_FILE */
-#endif /* PLATFORM_LINUX */
 
 #endif /* __RTL871X_EEPROM_H__ */
