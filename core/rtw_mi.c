@@ -888,18 +888,18 @@ void rtw_mi_buddy_adapter_reset(_adapter *padapter)
 	_rtw_mi_adapter_reset(padapter, _TRUE);
 }
 
-static u8 _rtw_mi_dynamic_check_timer_handlder(_adapter *adapter, void *data)
+static u8 _rtw_mi_dynamic_check_timer_handler(_adapter *adapter, void *data)
 {
-	rtw_iface_dynamic_check_timer_handlder(adapter);
+	rtw_iface_dynamic_check_timer_handler(adapter);
 	return _TRUE;
 }
-u8 rtw_mi_dynamic_check_timer_handlder(_adapter *padapter)
+u8 rtw_mi_dynamic_check_timer_handler(_adapter *padapter)
 {
-	return _rtw_mi_process(padapter, _FALSE, NULL, _rtw_mi_dynamic_check_timer_handlder);
+	return _rtw_mi_process(padapter, _FALSE, NULL, _rtw_mi_dynamic_check_timer_handler);
 }
-u8 rtw_mi_buddy_dynamic_check_timer_handlder(_adapter *padapter)
+u8 rtw_mi_buddy_dynamic_check_timer_handler(_adapter *padapter)
 {
-	return _rtw_mi_process(padapter, _TRUE, NULL, _rtw_mi_dynamic_check_timer_handlder);
+	return _rtw_mi_process(padapter, _TRUE, NULL, _rtw_mi_dynamic_check_timer_handler);
 }
 
 static u8 _rtw_mi_dev_unload(_adapter *adapter, void *data)

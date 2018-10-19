@@ -15011,7 +15011,7 @@ u8 tx_beacon_hdl(_adapter *padapter, unsigned char *pbuf)
 
 #ifdef CONFIG_SWTIMER_BASED_TXBCN
 
-	tx_beacon_handlder(padapter->dvobj);
+	tx_beacon_handler(padapter->dvobj);
 
 #else
 

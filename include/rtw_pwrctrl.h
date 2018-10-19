@@ -308,6 +308,7 @@ struct aoac_report {
 };
 
 struct pwrctrl_priv {
+	_adapter *padapter;
 	_pwrlock	lock;
 	_pwrlock	check_32k_lock;
 	volatile u8 rpwm; /* requested power state for fw */

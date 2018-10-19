@@ -190,8 +190,8 @@ u8 rtw_mi_buddy_dequeue_writeport(_adapter *padapter);
 void rtw_mi_adapter_reset(_adapter *padapter);
 void rtw_mi_buddy_adapter_reset(_adapter *padapter);
 
-u8 rtw_mi_dynamic_check_timer_handlder(_adapter *padapter);
-u8 rtw_mi_buddy_dynamic_check_timer_handlder(_adapter *padapter);
+u8 rtw_mi_dynamic_check_timer_handler(_adapter *padapter);
+u8 rtw_mi_buddy_dynamic_check_timer_handler(_adapter *padapter);
 
 u8 rtw_mi_dev_unload(_adapter *padapter);
 u8 rtw_mi_buddy_dev_unload(_adapter *padapter);
