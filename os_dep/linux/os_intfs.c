@@ -1816,10 +1816,10 @@ struct dvobj_priv *devobj_init(void)
 	ATOMIC_SET(&pdvobj->disable_func, 0);
 
 	rtw_macid_ctl_init(&pdvobj->macid_ctl);
-	_rtw_spinlock_init(&pdvobj->cam_ctl.lock);
+	spin_lock_init(&pdvobj->cam_ctl.lock);
 	_rtw_mutex_init(&pdvobj->cam_ctl.sec_cam_access_mutex);
 #if defined(RTK_129X_PLATFORM) && defined(CONFIG_PCI_HCI)
-	_rtw_spinlock_init(&pdvobj->io_reg_lock);
+	spin_lock_init(&pdvobj->io_reg_lock);
 #endif
 #ifdef CONFIG_MBSSID_CAM
 	rtw_mbid_cam_init(pdvobj);
@@ -1846,7 +1846,7 @@ struct dvobj_priv *devobj_init(void)
 
 #ifdef CONFIG_MCC_MODE
 	_rtw_mutex_init(&(pdvobj->mcc_objpriv.mcc_mutex));
-	_rtw_spinlock_init(&pdvobj->mcc_objpriv.mcc_lock);
+	spin_lock_init(&pdvobj->mcc_objpriv.mcc_lock);
 #endif /* CONFIG_MCC_MODE */
 
 	return pdvobj;
@@ -2048,7 +2048,7 @@ u8 rtw_init_drv_sw(_adapter *padapter)
 		goto exit;
 	}
 	/* add for CONFIG_IEEE80211W, none 11w also can use */
-	_rtw_spinlock_init(&padapter->security_key_mutex);
+	spin_lock_init(&padapter->security_key_mutex);
 
 	/* We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
 	/* _rtw_memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
@@ -2110,7 +2110,7 @@ u8 rtw_init_drv_sw(_adapter *padapter)
 #endif
 
 #ifdef CONFIG_BR_EXT
-	_rtw_spinlock_init(&padapter->br_ext_lock);
+	spin_lock_init(&padapter->br_ext_lock);
 #endif /* CONFIG_BR_EXT */
 
 #ifdef CONFIG_BEAMFORMING

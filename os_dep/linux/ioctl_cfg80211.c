@@ -7072,7 +7072,7 @@ int rtw_wdev_alloc(_adapter *padapter, struct wiphy *wiphy)
 	pwdev_priv->ifname_mon[0] = '\0';
 	pwdev_priv->padapter = padapter;
 	pwdev_priv->scan_request = NULL;
-	_rtw_spinlock_init(&pwdev_priv->scan_req_lock);
+	spin_lock_init(&pwdev_priv->scan_req_lock);
 
 	pwdev_priv->p2p_enabled = _FALSE;
 	pwdev_priv->probe_resp_ie_update_time = rtw_get_current_time();

@@ -44,7 +44,7 @@ void	_rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv)
 
 	_rtw_memset((unsigned char *)psta_xmitpriv, 0, sizeof(struct sta_xmit_priv));
 
-	_rtw_spinlock_init(&psta_xmitpriv->lock);
+	spin_lock_init(&psta_xmitpriv->lock);
 
 	/* for(i = 0 ; i < MAX_NUMBLKS; i++) */
 	/*	_init_txservq(&(psta_xmitpriv->blk_q[i])); */
@@ -70,8 +70,8 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	/* We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
 	/* _rtw_memset((unsigned char *)pxmitpriv, 0, sizeof(struct xmit_priv)); */
 
-	_rtw_spinlock_init(&pxmitpriv->lock);
-	_rtw_spinlock_init(&pxmitpriv->lock_sctx);
+	spin_lock_init(&pxmitpriv->lock);
+	spin_lock_init(&pxmitpriv->lock_sctx);
 	_rtw_init_sema(&pxmitpriv->xmit_sema, 0);
 	_rtw_init_sema(&pxmitpriv->terminate_xmitthread_sema, 0);
 
@@ -3888,7 +3888,7 @@ void rtw_init_hwxmits(struct hw_xmit *phwxmit, sint entry)
 {
 	sint i;
 	for (i = 0; i < entry; i++, phwxmit++) {
-		/* _rtw_spinlock_init(&phwxmit->xmit_lock); */
+		/* spin_lock_init(&phwxmit->xmit_lock); */
 		/* _rtw_init_listhead(&phwxmit->pending);		 */
 		/* phwxmit->txcmdcnt = 0; */
 		phwxmit->accnt = 0;

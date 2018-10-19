@@ -1213,25 +1213,6 @@ void	_rtw_mutex_free(_mutex *pmutex)
 #endif
 }
 
-void	_rtw_spinlock_init(_lock *plock)
-{
-
-#ifdef PLATFORM_LINUX
-
-	spin_lock_init(plock);
-
-#endif
-#ifdef PLATFORM_FREEBSD
-	mtx_init(plock, "", NULL, MTX_DEF | MTX_RECURSE);
-#endif
-#ifdef PLATFORM_WINDOWS
-
-	NdisAllocateSpinLock(plock);
-
-#endif
-
-}
-
 void	_rtw_spinlock_free(_lock *plock)
 {
 #ifdef PLATFORM_FREEBSD
@@ -1346,7 +1327,7 @@ void	_rtw_spinunlock_ex(_lock *plock)
 void _rtw_init_queue(_queue *pqueue)
 {
 	_rtw_init_listhead(&(pqueue->queue));
-	_rtw_spinlock_init(&(pqueue->lock));
+	spin_lock_init(&(pqueue->lock));
 }
 
 void _rtw_deinit_queue(_queue *pqueue)

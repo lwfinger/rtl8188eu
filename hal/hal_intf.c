@@ -139,7 +139,7 @@ void rtw_hal_dm_init(_adapter *padapter)
 
 		padapter->hal_func.dm_init(padapter);
 
-		_rtw_spinlock_init(&pHalData->IQKSpinLock);
+		spin_lock_init(&pHalData->IQKSpinLock);
 
 		phy_load_tx_power_ext_info(padapter, 1);
 	}
