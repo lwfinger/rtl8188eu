@@ -18,7 +18,6 @@
  *
  ******************************************************************************/
 
-
 #ifndef	__HALDMOUTSRC_H__
 #define __HALDMOUTSRC_H__
 
@@ -46,7 +45,6 @@
 
 #include "phydm_adc_sampling.h"
 #include "phydm_dynamic_rx_path.h"
-
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_CE | ODM_WIN))
 	#include "phydm_beamforming.h"
@@ -107,7 +105,6 @@
 #define	FREQ_POSITIVE	1
 #define	FREQ_NEGATIVE	2
 
-
 #if (DM_ODM_SUPPORT_TYPE == ODM_AP)
 	#define PHYDM_WATCH_DOG_PERIOD	1
 #else
@@ -127,7 +124,6 @@ struct rtl8192cd_priv {
 
 	};
 #endif
-
 
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 struct _ADAPTER {
@@ -157,7 +153,6 @@ struct _dynamic_primary_cca {
 	u8	MF_state;
 };
 
-
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	#ifdef ADSL_AP_BUILD_WORKAROUND
 		#define MAX_TOLERANCE			5
@@ -172,7 +167,6 @@ struct _dynamic_primary_cca {
 
 #define IQK_THRESHOLD			8
 #define DPK_THRESHOLD			4
-
 
 #if (DM_ODM_SUPPORT_TYPE &  (ODM_AP))
 __PACK struct _odm_phy_status_info_ {
@@ -253,7 +247,6 @@ struct _odm_per_pkt_info_ {
 	u8		ppdu_cnt;
 };
 
-
 struct _odm_phy_dbg_info_ {
 	/*ODM Write,debug info*/
 	s8		rx_snr_db[4];
@@ -275,7 +268,6 @@ struct _odm_phy_dbg_info_ {
 	s32		rx_evm[4];
 
 };
-
 
 /*2011/20/20 MH For MP driver RT_WLAN_STA =  struct sta_info*/
 /*Please declare below ODM relative info in your STA info structure.*/
@@ -415,7 +407,6 @@ enum odm_cmninfo_e {
 
 };
 
-
 enum phydm_info_query_e {
 	PHYDM_INFO_FA_OFDM,
 	PHYDM_INFO_FA_CCK,
@@ -443,7 +434,6 @@ enum phydm_api_e {
 	PHYDM_API_CSI_MASK,
 
 };
-
 
 /*2011/10/20 MH Define ODM support ability.  ODM_CMNINFO_ABILITY*/
 enum odm_ability_e {
@@ -476,7 +466,6 @@ enum odm_ability_e {
 
 };
 
-
 /*ODM_CMNINFO_ONE_PATH_CCA*/
 enum odm_cca_path_e {
 	ODM_CCA_2R		= 0,
@@ -490,7 +479,6 @@ enum cca_pathdiv_en_e {
 
 };
 
-
 enum phy_reg_pg_type {
 	PHY_REG_PG_RELATIVE_VALUE = 0,
 	PHY_REG_PG_EXACT_VALUE = 1
@@ -498,15 +486,7 @@ enum phy_reg_pg_type {
 
 /*2011/09/22 MH Copy from SD4 defined structure. We use to support PHY DM integration.*/
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	#if (RT_PLATFORM != PLATFORM_LINUX)
-		typedef
-	#endif
-
 	struct PHY_DM_STRUCT
-#else/*for AP,ADSL,CE Team*/
-	struct PHY_DM_STRUCT
-#endif
 {
 	/*Add for different team use temporarily*/
 	struct _ADAPTER		*adapter;		/*For CE/NIC team*/
@@ -514,14 +494,7 @@ enum phy_reg_pg_type {
 	/*WHen you use adapter or priv pointer, you must make sure the pointer is ready.*/
 	bool			odm_ready;
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_CE | ODM_WIN))
 	struct rtl8192cd_priv		fake_priv;
-#endif
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	/* ADSL_AP_BUILD_WORKAROUND */
-	struct _ADAPTER			fake_adapter;
-#endif
-
 	enum phy_reg_pg_type		phy_reg_pg_value_type;
 	u8				phy_reg_pg_version;
 
@@ -541,7 +514,6 @@ enum phy_reg_pg_type {
 	u8			rf_path_rx_enable;
 	u8			control_channel;
 	/*------ ODM HANDLE, DRIVER NEEDS NOT TO HOOK------*/
-
 
 	/* 1  COMMON INFORMATION */
 
@@ -940,19 +912,7 @@ enum phy_reg_pg_type {
 	u32 radar_detect_reg_924;
 	/*====== phydm_radar_detect_with_dbg_parm end ======*/
 #endif
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-
-#if (RT_PLATFORM != PLATFORM_LINUX)
-};		/*DM_Dynamic_Mechanism_Structure*/
-#else
 };
-#endif
-
-#else	/*for AP,ADSL,CE Team*/
-};
-#endif
-
 
 enum phydm_structure_type {
 	PHYDM_FALSEALMCNT,
@@ -961,8 +921,6 @@ enum phydm_structure_type {
 	PHYDM_ROMINFO,
 
 };
-
-
 
 enum odm_rf_content {
 	odm_radioa_txt = 0x1000,
@@ -1081,7 +1039,6 @@ odm_dm_watchdog_lps(
 );
 #endif
 
-
 s32
 odm_pwdb_conversion(
 	s32 X,
@@ -1104,7 +1061,6 @@ void
 phydm_txcurrentcalibration(
 	struct PHY_DM_STRUCT	*p_dm_odm
 );	
-
 
 void
 phydm_seq_sorting(
@@ -1221,7 +1177,6 @@ odm_release_all_timers(
 	struct PHY_DM_STRUCT	*p_dm_odm
 );
 
-
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 void odm_init_all_work_items(struct PHY_DM_STRUCT	*p_dm_odm);
 void odm_free_all_work_items(struct PHY_DM_STRUCT	*p_dm_odm);
@@ -1259,7 +1214,6 @@ odm_asoc_entry_init(
 	struct PHY_DM_STRUCT		*p_dm_odm
 );
 
-
 void *
 phydm_get_structure(
 	struct PHY_DM_STRUCT		*p_dm_odm,
@@ -1276,7 +1230,6 @@ phydm_get_structure(
 	#define	IS_HARDWARE_TYPE_8192C(_adapter)			false
 	#define	IS_HARDWARE_TYPE_8192D(_adapter)			false
 	#define	RF_T_METER_92D	0x42
-
 
 	#define	GET_RX_STATUS_DESC_RX_MCS(__prx_status_desc)	LE_BITS_TO_1BYTE(__prx_status_desc+12, 0, 6)
 
@@ -1295,9 +1248,7 @@ phydm_get_structure(
 	void odm_dtc(struct PHY_DM_STRUCT *p_dm_odm);
 #endif /* #if (DM_ODM_SUPPORT_TYPE == ODM_CE) */
 
-
 void phydm_noisy_detection(struct PHY_DM_STRUCT	*p_dm_odm);
-
 
 #endif
 

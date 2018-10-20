@@ -28,11 +28,9 @@ s32	rtl8188eu_init_xmit_priv(_adapter *padapter)
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
-#ifdef PLATFORM_LINUX
 	tasklet_init(&pxmitpriv->xmit_tasklet,
 		     (void(*)(unsigned long))rtl8188eu_xmit_tasklet,
 		     (unsigned long)padapter);
-#endif
 #ifdef CONFIG_TX_EARLY_MODE
 	pHalData->bEarlyModeEnable = padapter->registrypriv.early_mode;
 #endif
@@ -1157,9 +1155,7 @@ s32	rtl8188eu_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmit
 
 		pxmitpriv->tx_drop++;
 	} else {
-#ifdef PLATFORM_LINUX
 		tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
-#endif
 	}
 
 	return err;
@@ -1171,18 +1167,13 @@ s32	rtl8188eu_hal_xmitframe_enqueue(_adapter *padapter, struct xmit_frame *pxmit
 
 static void rtl8188eu_hostap_mgnt_xmit_cb(struct urb *urb)
 {
-#ifdef PLATFORM_LINUX
 	struct sk_buff *skb = (struct sk_buff *)urb->context;
 
-	/* RTW_INFO("%s\n", __FUNCTION__); */
-
 	rtw_skb_free(skb);
-#endif
 }
 
 s32 rtl8188eu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 {
-#ifdef PLATFORM_LINUX
 	u16 fc;
 	int rc, len, pipe;
 	unsigned int bmcst, tid, qsel;
@@ -1196,8 +1187,6 @@ s32 rtl8188eu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
 	struct dvobj_priv *pdvobj = adapter_to_dvobj(padapter);
 
-
-	/* RTW_INFO("%s\n", __FUNCTION__); */
 
 	skb = pkt;
 
@@ -1289,9 +1278,6 @@ _exit:
 
 	rtw_skb_free(skb);
 
-#endif
-
 	return 0;
-
 }
 #endif
