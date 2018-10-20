@@ -85,7 +85,7 @@ void _ips_enter(_adapter *padapter)
 
 	if (rf_off == pwrpriv->change_rfpwrstate) {
 		pwrpriv->bpower_saving = _TRUE;
-		RTW_PRINT("nolinked power save enter\n");
+		RTW_INFO("nolinked power save enter\n");
 
 		if (pwrpriv->ips_mode == IPS_LEVEL_2)
 			pwrpriv->bkeepfwalive = _TRUE;
@@ -125,7 +125,7 @@ int _ips_leave(_adapter *padapter)
 		result = rtw_ips_pwr_up(padapter);
 		if (result == _SUCCESS)
 			pwrpriv->rf_pwrstate = rf_on;
-		RTW_PRINT("nolinked power save leave\n");
+		RTW_INFO("nolinked power save leave\n");
 
 		RTW_INFO("==> ips_leave.....LED(0x%08x)...\n", rtw_read32(padapter, 0x4c));
 		pwrpriv->bips_processing = _FALSE;
@@ -2092,13 +2092,13 @@ void rtw_free_pwrctrl_priv(PADAPTER adapter)
 #ifdef CONFIG_WOWLAN
 #ifdef CONFIG_PNO_SUPPORT
 	if (pwrctrlpriv->pnlo_info != NULL)
-		printk("****** pnlo_info memory leak********\n");
+		RTW_INFO("****** pnlo_info memory leak********\n");
 
 	if (pwrctrlpriv->pscan_info != NULL)
-		printk("****** pscan_info memory leak********\n");
+		RTW_INFO("****** pscan_info memory leak********\n");
 
 	if (pwrctrlpriv->pno_ssid_list != NULL)
-		printk("****** pno_ssid_list memory leak********\n");
+		RTW_INFO("****** pno_ssid_list memory leak********\n");
 #endif
 #ifdef CONFIG_WOW_PATTERN_HW_CAM
 	_rtw_mutex_free(&pwrctrlpriv->wowlan_pattern_cam_mutex);

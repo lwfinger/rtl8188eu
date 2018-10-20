@@ -2024,10 +2024,10 @@ static sint validate_80211w_mgmt(_adapter *adapter, union recv_frame *precv_fram
 			/* dump the packet content before decrypt */
 			{
 				int pp;
-				printk("pattrib->pktlen = %d =>", pattrib->pkt_len);
+				RTW_INFO("pattrib->pktlen = %d =>", pattrib->pkt_len);
 				for (pp = 0; pp < pattrib->pkt_len; pp++)
-					printk(" %02x ", ptr[pp]);
-				printk("\n");
+					RTW_INFO(" %02x ", ptr[pp]);
+				RTW_INFO("\n");
 			}
 #endif
 
@@ -2043,10 +2043,10 @@ static sint validate_80211w_mgmt(_adapter *adapter, union recv_frame *precv_fram
 			/* print packet content after decryption */
 			{
 				int pp;
-				printk("after decryption pattrib->pktlen = %d @@=>", pattrib->pkt_len);
+				RTW_INFO("after decryption pattrib->pktlen = %d @@=>", pattrib->pkt_len);
 				for (pp = 0; pp < pattrib->pkt_len; pp++)
-					printk(" %02x ", ptr[pp]);
-				printk("\n");
+					RTW_INFO(" %02x ", ptr[pp]);
+				RTW_INFO("\n");
 			}
 #endif
 			if (!precv_frame) {

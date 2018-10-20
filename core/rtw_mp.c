@@ -2701,11 +2701,11 @@ u8 rtw_mpRateParseFunc(PADAPTER pAdapter, u8 *targetStr)
 		}
 	}
 
-	printk("%s ,please input a Data RATE String as:", __func__);
+	RTW_INFO("%s ,please input a Data RATE String as:", __func__);
 	for (i = 0; i <= 83; i++) {
-		printk("%s ", rateindex_Array[i]);
+		RTW_INFO("%s ", rateindex_Array[i]);
 		if (i % 10 == 0)
-			printk("\n");
+			RTW_INFO("\n");
 	}
 	return _FAIL;
 }

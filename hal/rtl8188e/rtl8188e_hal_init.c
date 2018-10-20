@@ -39,7 +39,7 @@ static void iol_mode_enable(PADAPTER padapter, u8 enable)
 		rtw_write8(padapter, REG_SYS_CFG, reg_0xf0 | SW_OFFLOAD_EN);
 
 		if (padapter->bFWReady == _FALSE) {
-			printk("bFWReady == _FALSE call reset 8051...\n");
+			RTW_INFO("bFWReady == _FALSE call reset 8051...\n");
 			_8051Reset88E(padapter);
 		}
 
@@ -78,8 +78,6 @@ static s32 iol_execute(PADAPTER padapter, u8 control)
 	if (reg_0x88 & control << 4)
 		status = _FAIL;
 	t2 = rtw_get_current_time();
-	/* printk("==> step iol_execute :  %5u reg-0x1c0= 0x%02x\n",rtw_get_time_interval_ms(t1,t2),rtw_read8(padapter, 0x1c0)); */
-	/* RTW_INFO("%s in %u ms, reg_0x88:0x%02x\n", __FUNCTION__, passing_time, reg_0x88); */
 
 	return status;
 }
@@ -136,7 +134,6 @@ efuse_phymap_to_logical(u8 *phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	rtemp8 = *(phymap + eFuse_Addr);
 	if (rtemp8 != 0xFF) {
 		efuse_utilized++;
-		/* printk("efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, *rtemp8); */
 		eFuse_Addr++;
 	} else {
 		RTW_INFO("EFUSE is empty efuse_Addr-%d efuse_data=%x\n", eFuse_Addr, rtemp8);
@@ -422,7 +419,6 @@ static s32 iol_read_efuse(
 s32 rtl8188e_iol_efuse_patch(PADAPTER padapter)
 {
 	s32	result = _SUCCESS;
-	printk("==> %s\n", __FUNCTION__);
 
 	if (rtw_IOL_applied(padapter)) {
 		iol_mode_enable(padapter, 1);
@@ -458,7 +454,6 @@ int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame,
 	int ret = _FAIL;
 	u32 t1, t2;
 
-	/* printk("===> %s ,bndy_cnt = %d\n",__FUNCTION__,bndy_cnt); */
 	if (rtw_IOL_append_END_cmd(xmit_frame) != _SUCCESS)
 		goto exit;
 #ifdef CONFIG_USB_HCI
@@ -482,14 +477,12 @@ int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame,
 	for (i = 0; i < bndy_cnt; i++) {
 		u8 page_no = 0;
 		page_no = i * 2 ;
-		/* printk(" i = %d, page_no = %d\n",i,page_no);	 */
 		ret = iol_ioconfig(adapter, page_no);
 		if (ret != _SUCCESS)
 			break;
 	}
 	iol_mode_enable(adapter, 0);
 	t2 = rtw_get_current_time();
-	/* printk("==> %s :  %5u\n",__FUNCTION__,rtw_get_time_interval_ms(t1,t2)); */
 exit:
 	/* restore BCN_HEAD */
 	rtw_write8(adapter, REG_TDECTRL + 1, 0);
@@ -503,25 +496,21 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(ADAPTER *Adapter, int data_len)
 
 	u16 data_cnts = (data_len / 8) + 1;
 	u8 *pbuf = rtw_zvmalloc(data_len + 10);
-	printk("###### %s ######\n", __FUNCTION__);
+	RTW_INFO("###### %s ######\n", __FUNCTION__);
 
 	rtw_write8(Adapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
 	if (pbuf) {
 		for (addr = 0; addr < data_cnts; addr++) {
-			/* printk("==> addr:0x%02x\n",addr); */
 			rtw_write32(Adapter, 0x140, addr);
 			rtw_usleep_os(2);
 			loop = 0;
 			do {
 				rstatus = (reg_140 = rtw_read32(Adapter, REG_PKTBUF_DBG_CTRL) & BIT24);
-				/* printk("rstatus = %02x, reg_140:0x%08x\n",rstatus,reg_140); */
 				if (rstatus) {
 					fifo_data = rtw_read32(Adapter, REG_PKTBUF_DBG_DATA_L);
-					/* printk("fifo_data_144:0x%08x\n",fifo_data);					 */
 					_rtw_memcpy(pbuf + (addr * 8), &fifo_data , 4);
 
 					fifo_data = rtw_read32(Adapter, REG_PKTBUF_DBG_DATA_H);
-					/* printk("fifo_data_148:0x%08x\n",fifo_data);					 */
 					_rtw_memcpy(pbuf + (addr * 8 + 4), &fifo_data, 4);
 
 				}
@@ -532,7 +521,7 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(ADAPTER *Adapter, int data_len)
 		rtw_vmfree(pbuf, data_len + 10);
 
 	}
-	printk("###### %s ######\n", __FUNCTION__);
+	RTW_INFO("###### %s ######\n", __FUNCTION__);
 }
 
 #endif /* defined(CONFIG_IOL) */

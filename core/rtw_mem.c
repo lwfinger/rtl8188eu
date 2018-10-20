@@ -12,7 +12,7 @@ struct u8 *rtk_buf_mem[NR_RECVBUFF];
 
 struct u8	*rtw_get_buf_premem(int index)
 {
-	printk("%s, rtk_buf_mem index : %d\n", __func__, index);
+	RTW_INFO("%s, rtk_buf_mem index : %d\n", __func__, index);
 	return rtk_buf_mem[index];
 }
 
@@ -40,7 +40,7 @@ struct sk_buff *rtw_alloc_skb_premem(u16 in_size)
 
 	skb = skb_dequeue(&rtk_skb_mem_q);
 
-	printk("%s, rtk_skb_mem_q len : %d\n", __func__, skb_queue_len(&rtk_skb_mem_q));
+	RTW_INFO("%s, rtk_skb_mem_q len : %d\n", __func__, skb_queue_len(&rtk_skb_mem_q));
 
 	return skb;
 }
@@ -56,7 +56,7 @@ int rtw_free_skb_premem(struct sk_buff *pskb)
 
 	skb_queue_tail(&rtk_skb_mem_q, pskb);
 
-	printk("%s, rtk_skb_mem_q len : %d\n", __func__, skb_queue_len(&rtk_skb_mem_q));
+	RTW_INFO("%s, rtk_skb_mem_q len : %d\n", __func__, skb_queue_len(&rtk_skb_mem_q));
 
 	return 0;
 }
@@ -69,7 +69,7 @@ static int __init rtw_mem_init(void)
 	SIZE_PTR alignment = 0;
 	struct sk_buff *pskb = NULL;
 
-	printk("%s\n", __func__);
+	RTW_INFO("%s\n", __func__);
 	pr_info("MAX_RTKM_NR_PREALLOC_RECV_SKB: %d\n", MAX_RTKM_NR_PREALLOC_RECV_SKB);
 	pr_info("MAX_RTKM_RECVBUF_SZ: %d\n", MAX_RTKM_RECVBUF_SZ);
 
@@ -89,12 +89,12 @@ static int __init rtw_mem_init(void)
 
 			skb_queue_tail(&rtk_skb_mem_q, pskb);
 		} else
-			printk("%s, alloc skb memory fail!\n", __func__);
+			RTW_INFO("%s, alloc skb memory fail!\n", __func__);
 
 		pskb = NULL;
 	}
 
-	printk("%s, rtk_skb_mem_q len : %d\n", __func__, skb_queue_len(&rtk_skb_mem_q));
+	RTW_INFO("%s, rtk_skb_mem_q len : %d\n", __func__, skb_queue_len(&rtk_skb_mem_q));
 
 	return 0;
 
@@ -103,11 +103,11 @@ static int __init rtw_mem_init(void)
 static void __exit rtw_mem_exit(void)
 {
 	if (skb_queue_len(&rtk_skb_mem_q))
-		printk("%s, rtk_skb_mem_q len : %d\n", __func__, skb_queue_len(&rtk_skb_mem_q));
+		RTW_INFO("%s, rtk_skb_mem_q len : %d\n", __func__, skb_queue_len(&rtk_skb_mem_q));
 
 	skb_queue_purge(&rtk_skb_mem_q);
 
-	printk("%s\n", __func__);
+	RTW_INFO("%s\n", __func__);
 }
 
 module_init(rtw_mem_init);

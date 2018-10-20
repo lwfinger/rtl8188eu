@@ -1138,8 +1138,8 @@ void rtw_hal_dump_macaddr(void *sel, _adapter *adapter)
 		iface = dvobj->padapters[i];
 		if (iface) {
 			rtw_hal_get_macaddr_port(iface, mac_addr);
-			RTW_PRINT_SEL(sel, ADPT_FMT"- hw port(%d) mac_addr ="MAC_FMT"\n",
-				ADPT_ARG(iface), iface->hw_port, MAC_ARG(mac_addr));
+			RTW_INFO(ADPT_FMT"- hw port(%d) mac_addr ="MAC_FMT"\n",
+				 ADPT_ARG(iface), iface->hw_port, MAC_ARG(mac_addr));
 		}
 	}
 #endif

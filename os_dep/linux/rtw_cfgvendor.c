@@ -1118,7 +1118,7 @@ static int wl_cfgvendor_priv_string_handler(struct wiphy *wiphy,
 	int err = 0;
 	u8 resp[1] = {'\0'};
 
-	RTW_PRINT(FUNC_NDEV_FMT" %s\n", FUNC_NDEV_ARG(wdev_to_ndev(wdev)), (char *)data);
+	RTW_INFO(FUNC_NDEV_FMT" %s\n", FUNC_NDEV_ARG(wdev_to_ndev(wdev)), (char *)data);
 	err =  rtw_cfgvendor_send_cmd_reply(wiphy, wdev_to_ndev(wdev), resp, 1);
 	if (unlikely(err))
 		RTW_ERR(FUNC_NDEV_FMT"Vendor Command reply failed ret:%d\n"

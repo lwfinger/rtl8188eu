@@ -2005,23 +2005,23 @@ u32	rtw_aes_decrypt(_adapter *padapter, u8 *precvframe)
 #if 0
 			/*  add for CONFIG_IEEE80211W, debug */
 			if (0)
-				printk("@@@@@@@@@@@@@@@@@@ length=%d, prxattrib->hdrlen=%d, prxattrib->pkt_len=%d\n"
+				RTW_INFO("@@@@@@@@@@@@@@@@@@ length=%d, prxattrib->hdrlen=%d, prxattrib->pkt_len=%d\n"
 				       , length, prxattrib->hdrlen, prxattrib->pkt_len);
 			if (0) {
 				int no;
 				/* test print PSK */
-				printk("PSK key below:\n");
+				RTW_INFO("PSK key below:\n");
 				for (no = 0; no < 16; no++)
-					printk(" %02x ", prwskey[no]);
-				printk("\n");
+					RTW_INFO(" %02x ", prwskey[no]);
+				RTW_INFO("\n");
 			}
 			if (0) {
 				int no;
 				/* test print PSK */
-				printk("frame:\n");
+				RTW_INFO("frame:\n");
 				for (no = 0; no < prxattrib->pkt_len; no++)
-					printk(" %02x ", pframe[no]);
-				printk("\n");
+					RTW_INFO(" %02x ", pframe[no]);
+				RTW_INFO("\n");
 			}
 #endif
 
@@ -2103,7 +2103,7 @@ u32	rtw_BIP_verify(_adapter *padapter, u8 *precvframe)
 			int pp;
 			RTW_INFO("pkt: ");
 			for (pp = 0; pp < pattrib->pkt_len; pp++)
-				printk(" %02x ", pframe[pp]);
+				RTW_INFO(" %02x ", pframe[pp]);
 			RTW_INFO("\n");
 			/* BIP AAD + management frame body + MME(MIC is zero) */
 			RTW_INFO("AAD+PKT: ");

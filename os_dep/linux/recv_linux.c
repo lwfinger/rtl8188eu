@@ -756,7 +756,7 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 
 
 	if (pattrib->eth_type == 0x888e)
-		RTW_PRINT("recv eapol packet\n");
+		RTW_INFO("recv eapol packet\n");
 
 #ifdef CONFIG_AUTO_AP_MODE
 #if 1 /* for testing */

@@ -237,7 +237,7 @@ u8 rtw_IOL_cmd_boundary_handle(struct xmit_frame *pxmit_frame)
 		rtw_IOL_append_END_cmd(pxmit_frame);
 		pxmit_frame->attrib.pktlen = ((((pxmit_frame->attrib.pktlen + 32) / 256) + 1) * 256);
 
-		/* printk("==> %s, pktlen(%d)\n",__FUNCTION__,pxmit_frame->attrib.pktlen); */
+		/* RTW_INFO("==> %s, pktlen(%d)\n",__FUNCTION__,pxmit_frame->attrib.pktlen); */
 		pxmit_frame->attrib.last_txcmdsz = pxmit_frame->attrib.pktlen;
 		is_cmd_bndy = _TRUE;
 	}
@@ -249,16 +249,16 @@ void rtw_IOL_cmd_buf_dump(ADAPTER *Adapter, int buf_len, u8 *pbuf)
 	int i;
 	int j = 1;
 
-	printk("###### %s ######\n", __FUNCTION__);
+	RTW_INFO("###### %s ######\n", __FUNCTION__);
 	for (i = 0; i < buf_len; i++) {
-		printk("%02x-", *(pbuf + i));
+		RTW_INFO("%02x-", *(pbuf + i));
 
 		if (j % 32 == 0)
-			printk("\n");
+			RTW_INFO("\n");
 		j++;
 	}
-	printk("\n");
-	printk("============= ioreg_cmd len = %d ===============\n", buf_len);
+	RTW_INFO("\n");
+	RTW_INFO("============= ioreg_cmd len = %d ===============\n", buf_len);
 }
 
 

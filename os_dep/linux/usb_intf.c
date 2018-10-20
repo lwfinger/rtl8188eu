@@ -69,7 +69,7 @@ static void rtw_dev_shutdown(struct device *dev)
 					struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(adapter);
 					#ifdef CONFIG_WOWLAN
 					if (pwrctl->wowlan_mode == _TRUE)
-						RTW_PRINT("%s wowlan_mode ==_TRUE do not run rtw_hal_deinit()\n", __FUNCTION__);
+						RTW_INFO("%s wowlan_mode ==_TRUE do not run rtw_hal_deinit()\n", __FUNCTION__);
 					else
 					#endif
 					{
@@ -1520,10 +1520,10 @@ static int __init rtw_drv_entry(void)
 {
 	int ret = 0;
 
-	RTW_PRINT("module init start\n");
+	RTW_INFO("module init start\n");
 	dump_drv_version(RTW_DBGDUMP);
 #ifdef BTCOEXVERSION
-	RTW_PRINT(DRV_NAME" BT-Coex version = %s\n", BTCOEXVERSION);
+	RTW_INFO(DRV_NAME" BT-Coex version = %s\n", BTCOEXVERSION);
 #endif /* BTCOEXVERSION */
 
 	ret = platform_wifi_power_on();
@@ -1552,13 +1552,13 @@ static int __init rtw_drv_entry(void)
 	}
 
 exit:
-	RTW_PRINT("module init ret=%d\n", ret);
+	RTW_INFO("module init ret=%d\n", ret);
 	return ret;
 }
 
 static void __exit rtw_drv_halt(void)
 {
-	RTW_PRINT("module exit start\n");
+	RTW_INFO("module exit start\n");
 
 	usb_drv.drv_registered = _FALSE;
 
@@ -1570,7 +1570,7 @@ static void __exit rtw_drv_halt(void)
 	rtw_drv_proc_deinit();
 	rtw_ndev_notifier_unregister();
 
-	RTW_PRINT("module exit success\n");
+	RTW_INFO("module exit success\n");
 
 	rtw_mstat_dump(RTW_DBGDUMP);
 }

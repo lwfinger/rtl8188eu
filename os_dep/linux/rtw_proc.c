@@ -300,13 +300,13 @@ static void *proc_start_seq_file_test(struct seq_file *m, loff_t *pos)
 	struct net_device *dev = m->private;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 
-	RTW_PRINT(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
+	RTW_INFO(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
 	if (*pos >= RTW_SEQ_FILE_TEST_SHOW_LIMIT) {
-		RTW_PRINT(FUNC_ADPT_FMT" pos:%llu, out of range return\n", FUNC_ADPT_ARG(adapter), *pos);
+		RTW_INFO(FUNC_ADPT_FMT" pos:%llu, out of range return\n", FUNC_ADPT_ARG(adapter), *pos);
 		return NULL;
 	}
 
-	RTW_PRINT(FUNC_ADPT_FMT" return pos:%lld\n", FUNC_ADPT_ARG(adapter), *pos);
+	RTW_INFO(FUNC_ADPT_FMT" return pos:%lld\n", FUNC_ADPT_ARG(adapter), *pos);
 	return pos;
 }
 void proc_stop_seq_file_test(struct seq_file *m, void *v)
@@ -314,7 +314,7 @@ void proc_stop_seq_file_test(struct seq_file *m, void *v)
 	struct net_device *dev = m->private;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 
-	RTW_PRINT(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
+	RTW_INFO(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
 }
 
 void *proc_next_seq_file_test(struct seq_file *m, void *v, loff_t *pos)
@@ -324,11 +324,11 @@ void *proc_next_seq_file_test(struct seq_file *m, void *v, loff_t *pos)
 
 	(*pos)++;
 	if (*pos >= RTW_SEQ_FILE_TEST_SHOW_LIMIT) {
-		RTW_PRINT(FUNC_ADPT_FMT" pos:%lld, out of range return\n", FUNC_ADPT_ARG(adapter), *pos);
+		RTW_INFO(FUNC_ADPT_FMT" pos:%lld, out of range return\n", FUNC_ADPT_ARG(adapter), *pos);
 		return NULL;
 	}
 
-	RTW_PRINT(FUNC_ADPT_FMT" return pos:%lld\n", FUNC_ADPT_ARG(adapter), *pos);
+	RTW_INFO(FUNC_ADPT_FMT" return pos:%lld\n", FUNC_ADPT_ARG(adapter), *pos);
 	return pos;
 }
 
@@ -338,7 +338,7 @@ static int proc_get_seq_file_test(struct seq_file *m, void *v)
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 
 	u32 pos = *((loff_t *)(v));
-	RTW_PRINT(FUNC_ADPT_FMT" pos:%d\n", FUNC_ADPT_ARG(adapter), pos);
+	RTW_INFO(FUNC_ADPT_FMT" pos:%d\n", FUNC_ADPT_ARG(adapter), pos);
 	RTW_PRINT_SEL(m, FUNC_ADPT_FMT" pos:%d\n", FUNC_ADPT_ARG(adapter), pos);
 	return 0;
 }

@@ -317,7 +317,7 @@ int register_net_gpio_init(void)
 {
 	rtl_net = dev_get_by_name(&init_net, "wlan0");
 	if (!rtl_net) {
-		RTW_PRINT("rtl_net init fail!\n");
+		RTW_INFO("rtl_net init fail!\n");
 		return -1;
 	}
 	return rtw_register_gpio_interrupt(rtl_net, 7, gpio_int);
@@ -326,7 +326,7 @@ int unregister_net_gpio_init(void)
 {
 	rtl_net = dev_get_by_name(&init_net, "wlan0");
 	if (!rtl_net) {
-		RTW_PRINT("rtl_net init fail!\n");
+		RTW_INFO("rtl_net init fail!\n");
 		return -1;
 	}
 	return rtw_disable_gpio_interrupt(rtl_net, 7);

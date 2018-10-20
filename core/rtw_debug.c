@@ -2451,7 +2451,7 @@ ssize_t proc_set_bw_mode(struct file *file, const char __user *buffer, size_t co
 		if (pregpriv && bw_2g <= 4 && bw_5g <= 4) {
 
 			pregpriv->bw_mode = mode;
-			printk("bw_mode=0x%x\n", mode);
+			RTW_INFO("bw_mode=0x%x\n", mode);
 
 		}
 	}
@@ -2494,7 +2494,7 @@ ssize_t proc_set_ampdu_enable(struct file *file, const char __user *buffer, size
 
 		if (pregpriv && mode < 2) {
 			pregpriv->ampdu_enable = mode;
-			printk("ampdu_enable=%d\n", mode);
+			RTW_INFO("ampdu_enable=%d\n", mode);
 		}
 
 	}
@@ -3059,7 +3059,7 @@ ssize_t proc_set_rx_stbc(struct file *file, const char __user *buffer, size_t co
 
 		if (pregpriv && (mode == 0 || mode == 1 || mode == 2 || mode == 3)) {
 			pregpriv->rx_stbc = mode;
-			printk("rx_stbc=%d\n", mode);
+			RTW_INFO("rx_stbc=%d\n", mode);
 		}
 	}
 

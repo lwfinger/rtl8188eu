@@ -552,8 +552,8 @@ static inline void dump_buf(u8 *buf, u32 len)
 
 	RTW_INFO("-----------------Len %d----------------\n", len);
 	for (i = 0; i < len; i++)
-		printk("%2.2x-", *(buf + i));
-	printk("\n");
+		RTW_INFO("%2.2x-", *(buf + i));
+	RTW_INFO("\n");
 }
 
 /*
@@ -724,8 +724,8 @@ u8 rtw_BT_efuse_map_write(PADAPTER adapter, u16 addr, u16 cnts, u8 *data)
 {
 #define RT_ASSERT_RET(expr)									\
 	if (!(expr)) {										\
-		printk("Assertion failed! %s at ......\n", #expr);				\
-		printk("	  ......%s,%s, line=%d\n",__FILE__, __FUNCTION__, __LINE__);	\
+		RTW_INFO("Assertion failed! %s at ......\n", #expr);				\
+		RTW_INFO("	  ......%s,%s, line=%d\n",__FILE__, __FUNCTION__, __LINE__);	\
 		return _FAIL;	\
 	}
 
@@ -2024,8 +2024,8 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 {
 #define RT_ASSERT_RET(expr)												\
 	if (!(expr)) {															\
-		printk("Assertion failed! %s at ......\n", #expr);							\
-		printk("      ......%s,%s, line=%d\n",__FILE__, __FUNCTION__, __LINE__);	\
+		RTW_INFO("Assertion failed! %s at ......\n", #expr);							\
+		RTW_INFO("      ......%s,%s, line=%d\n",__FILE__, __FUNCTION__, __LINE__);	\
 		return _FAIL;	\
 	}
 
@@ -2168,8 +2168,8 @@ u8 rtw_BT_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 {
 #define RT_ASSERT_RET(expr)												\
 	if (!(expr)) {															\
-		printk("Assertion failed! %s at ......\n", #expr);							\
-		printk("      ......%s,%s, line=%d\n",__FILE__, __FUNCTION__, __LINE__);	\
+		RTW_INFO("Assertion failed! %s at ......\n", #expr);							\
+		RTW_INFO("      ......%s,%s, line=%d\n",__FILE__, __FUNCTION__, __LINE__);	\
 		return _FAIL;	\
 	}
 
