@@ -2364,13 +2364,7 @@ efuse_ShadowRead4Byte(
  * 11/12/2008	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-#ifdef PLATFORM
-static VOID
-efuse_ShadowWrite1Byte(
-	IN	PADAPTER	pAdapter,
-	IN	u16		Offset,
-	IN	u8		Value);
-#endif /* PLATFORM */
+
 static VOID
 efuse_ShadowWrite1Byte(
 	IN	PADAPTER	pAdapter,
@@ -2683,9 +2677,7 @@ u8 mac_hidden_wl_func_to_hal_wl_func(u8 func)
 	return wl_func;
 }
 
-#ifdef PLATFORM_LINUX
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
-/* #include <rtw_eeprom.h> */
 
 int isAdaptorInfoFileValid(void)
 {
@@ -2723,14 +2715,6 @@ int retriveAdaptorInfoFile(char *path, u8 *efuse_data)
 			ret = _SUCCESS;
 		else
 			ret = _FAIL;
-
-#if 0
-		if (isAdaptorInfoFileValid())
-			return 0;
-		else
-			return _FAIL;
-#endif
-
 	} else {
 		RTW_INFO("%s NULL pointer\n", __FUNCTION__);
 		ret = _FAIL;
@@ -2945,5 +2929,3 @@ exit:
 	return ret;
 }
 #endif /* CONFIG_EFUSE_CONFIG_FILE */
-
-#endif /* PLATFORM_LINUX */

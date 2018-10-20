@@ -52,10 +52,6 @@ jackson@realtek.com.tw
 #include <drv_types.h>
 #include <hal_data.h>
 
-#if defined(PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-	#error "Shall be Linux or Windows, but not both!\n"
-#endif
-
 #ifdef CONFIG_SDIO_HCI
 	#define rtw_le16_to_cpu(val)		val
 	#define rtw_le32_to_cpu(val)		val
@@ -632,11 +628,6 @@ int dbg_rtw_writeN(_adapter *adapter, u32 addr , u32 length , u8 *data, const ch
 u8 dbg_rtw_sd_f0_read8(_adapter *adapter, u32 addr, const char *caller, const int line)
 {
 	u8 val = _rtw_sd_f0_read8(adapter, addr);
-
-#if 0
-	if (match_read_sniff_ranges(addr, 1))
-		RTW_INFO("DBG_IO %s:%d rtw_sd_f0_read8(0x%04x) return 0x%02x\n", caller, line, addr, val);
-#endif
 
 	return val;
 }

@@ -22,7 +22,6 @@
 #include <drv_types.h>
 #include <hal_data.h>
 
-
 extern void indicate_wx_scan_complete_event(_adapter *padapter);
 
 #define IS_MAC_ADDRESS_BROADCAST(addr) \
@@ -50,7 +49,6 @@ u8 rtw_validate_ssid(NDIS_802_11_SSID *ssid)
 	u8	 i;
 	u8	ret = _TRUE;
 
-
 	if (ssid->SsidLength > 32) {
 		ret = _FALSE;
 		goto exit;
@@ -68,7 +66,6 @@ u8 rtw_validate_ssid(NDIS_802_11_SSID *ssid)
 
 exit:
 
-
 	return ret;
 }
 
@@ -82,11 +79,9 @@ u8 rtw_do_join(_adapter *padapter)
 	_queue	*queue	= &(pmlmepriv->scanned_queue);
 	u8 ret = _SUCCESS;
 
-
 	_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 	phead = get_list_head(queue);
 	plist = get_next(phead);
-
 
 	pmlmepriv->cur_network.join_res = -2;
 
@@ -150,22 +145,9 @@ u8 rtw_do_join(_adapter *padapter)
 
 				pmlmepriv->to_join = _FALSE;
 
-
 			} else {
 				/* can't associate ; reset under-linking			 */
 				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
-
-#if 0
-				if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == _TRUE)) {
-					if (_rtw_memcmp(pmlmepriv->cur_network.network.Ssid.Ssid, pmlmepriv->assoc_ssid.Ssid, pmlmepriv->assoc_ssid.SsidLength)) {
-						/* for funk to do roaming */
-						/* funk will reconnect, but funk will not sitesurvey before reconnect */
-						if (pmlmepriv->sitesurveyctrl.traffic_busy == _FALSE)
-							rtw_sitesurvey_cmd(padapter, &pmlmepriv->assoc_ssid, 1, NULL, 0);
-					}
-
-				}
-#endif
 
 				/* when set_ssid/set_bssid for rtw_do_join(), but there are no desired bss in scanning queue */
 				/* we try to issue sitesurvey firstly			 */
@@ -192,91 +174,12 @@ exit:
 	return ret;
 }
 
-#ifdef PLATFORM_WINDOWS
-u8 rtw_pnp_set_power_wakeup(_adapter *padapter)
-{
-	u8 res = _SUCCESS;
-
-
-
-	res = rtw_setstandby_cmd(padapter, 0);
-
-
-
-	return res;
-}
-
-u8 rtw_pnp_set_power_sleep(_adapter *padapter)
-{
-	u8 res = _SUCCESS;
-
-
-	/* DbgPrint("+rtw_pnp_set_power_sleep\n"); */
-
-	res = rtw_setstandby_cmd(padapter, 1);
-
-
-
-	return res;
-}
-
-u8 rtw_set_802_11_reload_defaults(_adapter *padapter, NDIS_802_11_RELOAD_DEFAULTS reloadDefaults)
-{
-
-
-
-	/* SecClearAllKeys(Adapter); */
-	/* 8711 CAM was not for En/Decrypt only */
-	/* so, we can't clear all keys. */
-	/* should we disable WPAcfg (ox0088) bit 1-2, instead of clear all CAM */
-
-	/* TO DO... */
-
-
-	return _TRUE;
-}
-
-u8 set_802_11_test(_adapter *padapter, NDIS_802_11_TEST *test)
-{
-	u8 ret = _TRUE;
-
-
-	switch (test->Type) {
-	case 1:
-		NdisMIndicateStatus(padapter->hndis_adapter, NDIS_STATUS_MEDIA_SPECIFIC_INDICATION, (PVOID)&test->AuthenticationEvent, test->Length - 8);
-		NdisMIndicateStatusComplete(padapter->hndis_adapter);
-		break;
-
-	case 2:
-		NdisMIndicateStatus(padapter->hndis_adapter, NDIS_STATUS_MEDIA_SPECIFIC_INDICATION, (PVOID)&test->RssiTrigger, sizeof(NDIS_802_11_RSSI));
-		NdisMIndicateStatusComplete(padapter->hndis_adapter);
-		break;
-
-	default:
-		ret = _FALSE;
-		break;
-	}
-
-
-	return ret;
-}
-
-u8	rtw_set_802_11_pmkid(_adapter	*padapter, NDIS_802_11_PMKID *pmkid)
-{
-	u8	ret = _SUCCESS;
-
-	return ret;
-}
-
-#endif
-
 u8 rtw_set_802_11_bssid(_adapter *padapter, u8 *bssid)
 {
 	_irqL irqL;
 	u8 status = _SUCCESS;
 
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
 
 	RTW_PRINT("set bssid:%pM\n", bssid);
 
@@ -287,7 +190,6 @@ u8 rtw_set_802_11_bssid(_adapter *padapter, u8 *bssid)
 	}
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
-
 
 	RTW_INFO("Set BSSID under fw_state=0x%08x\n", get_fwstate(pmlmepriv));
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) == _TRUE)
@@ -336,7 +238,6 @@ release_mlme_lock:
 
 exit:
 
-
 	return status;
 }
 
@@ -348,7 +249,6 @@ u8 rtw_set_802_11_ssid(_adapter *padapter, NDIS_802_11_SSID *ssid)
 
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct wlan_network *pnetwork = &pmlmepriv->cur_network;
-
 
 	RTW_PRINT("set ssid [%s] fw_state=0x%08x\n",
 		  ssid->Ssid, get_fwstate(pmlmepriv));
@@ -433,7 +333,6 @@ release_mlme_lock:
 
 exit:
 
-
 	return status;
 
 }
@@ -446,7 +345,6 @@ u8 rtw_set_802_11_connect(_adapter *padapter, u8 *bssid, NDIS_802_11_SSID *ssid)
 	bool bssid_valid = _TRUE;
 	bool ssid_valid = _TRUE;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
 
 	if (!ssid || rtw_validate_ssid(ssid) == _FALSE)
 		ssid_valid = _FALSE;
@@ -503,7 +401,6 @@ release_mlme_lock:
 
 exit:
 
-
 	return status;
 }
 
@@ -515,8 +412,6 @@ u8 rtw_set_802_11_infrastructure_mode(_adapter *padapter,
 	struct	wlan_network	*cur_network = &pmlmepriv->cur_network;
 	NDIS_802_11_NETWORK_INFRASTRUCTURE *pold_state = &(cur_network->network.InfrastructureMode);
 	u8 ap2sta_mode = _FALSE;
-
-
 
 	if (*pold_state != networktype) {
 		/* RTW_INFO("change mode, old_mode=%d, new_mode=%d, fw_state=0x%x\n", *pold_state, networktype, get_fwstate(pmlmepriv)); */
@@ -580,20 +475,16 @@ u8 rtw_set_802_11_infrastructure_mode(_adapter *padapter,
 
 		/* SecClearAllKeys(adapter); */
 
-
 		_exit_critical_bh(&pmlmepriv->lock, &irqL);
 	}
 
-
 	return _TRUE;
 }
-
 
 u8 rtw_set_802_11_disassociate(_adapter *padapter)
 {
 	_irqL irqL;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
@@ -608,7 +499,6 @@ u8 rtw_set_802_11_disassociate(_adapter *padapter)
 	}
 
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
-
 
 	return _TRUE;
 }
@@ -634,8 +524,6 @@ u8 rtw_set_802_11_bssid_list_scan(_adapter *padapter, NDIS_802_11_SSID *pssid, i
 	struct	mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	u8	res = _TRUE;
 
-
-
 	if (padapter == NULL) {
 		res = _FALSE;
 		goto exit;
@@ -649,7 +537,6 @@ u8 rtw_set_802_11_bssid_list_scan(_adapter *padapter, NDIS_802_11_SSID *pssid, i
 	    (pmlmepriv->LinkDetectInfo.bBusyTraffic == _TRUE)) {
 		/* Scan or linking is in progress, do nothing. */
 		res = _TRUE;
-
 
 	} else {
 		if (rtw_is_scan_deny(padapter)) {
@@ -666,7 +553,6 @@ u8 rtw_set_802_11_bssid_list_scan(_adapter *padapter, NDIS_802_11_SSID *pssid, i
 	}
 exit:
 
-
 	return res;
 }
 #endif
@@ -676,10 +562,7 @@ u8 rtw_set_802_11_authentication_mode(_adapter *padapter, NDIS_802_11_AUTHENTICA
 	int res;
 	u8 ret;
 
-
-
 	psecuritypriv->ndisauthtype = authmode;
-
 
 	if (psecuritypriv->ndisauthtype > 3)
 		psecuritypriv->dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
@@ -696,7 +579,6 @@ u8 rtw_set_802_11_authentication_mode(_adapter *padapter, NDIS_802_11_AUTHENTICA
 	else
 		ret = _FALSE;
 
-
 	return ret;
 }
 
@@ -708,7 +590,6 @@ u8 rtw_set_802_11_add_wep(_adapter *padapter, NDIS_802_11_WEP *wep)
 	sint		keyid, res;
 	struct security_priv *psecuritypriv = &(padapter->securitypriv);
 	u8		ret = _SUCCESS;
-
 
 	bdefaultkey = (wep->KeyIndex & 0x40000000) > 0 ? _FALSE : _TRUE; /* for ??? */
 	btransmitkey = (wep->KeyIndex & 0x80000000) > 0 ? _TRUE  : _FALSE;	/* for ??? */
@@ -731,20 +612,17 @@ u8 rtw_set_802_11_add_wep(_adapter *padapter, NDIS_802_11_WEP *wep)
 		break;
 	}
 
-
 	_rtw_memcpy(&(psecuritypriv->dot11DefKey[keyid].skey[0]), &(wep->KeyMaterial), wep->KeyLength);
 
 	psecuritypriv->dot11DefKeylen[keyid] = wep->KeyLength;
 
 	psecuritypriv->dot11PrivacyKeyIndex = keyid;
 
-
 	res = rtw_set_key(padapter, psecuritypriv, keyid, 1, _TRUE);
 
 	if (res == _FAIL)
 		ret = _FALSE;
 exit:
-
 
 	return ret;
 
@@ -754,7 +632,6 @@ u8 rtw_set_802_11_remove_wep(_adapter *padapter, u32 keyindex)
 {
 
 	u8 ret = _SUCCESS;
-
 
 	if (keyindex >= 0x80000000 || padapter == NULL) {
 
@@ -782,7 +659,6 @@ u8 rtw_set_802_11_remove_wep(_adapter *padapter, u32 keyindex)
 
 exit:
 
-
 	return ret;
 
 }
@@ -797,7 +673,6 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 	u8	bgrouptkey = _FALSE;/* can be remove later */
 	u8	ret = _SUCCESS;
 
-
 	if (((key->KeyIndex & 0x80000000) == 0) && ((key->KeyIndex & 0x40000000) > 0)) {
 
 		/* It is invalid to clear bit 31 and set bit 30. If the miniport driver encounters this combination, */
@@ -809,7 +684,6 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 	if (key->KeyIndex & 0x40000000) {
 		/* Pairwise key */
 
-
 		pbssid = get_bssid(&padapter->mlmepriv);
 		stainfo = rtw_get_stainfo(&padapter->stapriv, pbssid);
 
@@ -818,9 +692,6 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 		} else {
 			encryptionalgo = padapter->securitypriv.dot11PrivacyAlgrthm;
 		}
-
-
-
 
 		if (key->KeyIndex & 0x000000FF) {
 			/* The key index is specified in the lower 8 bits by values of zero to 255. */
@@ -869,7 +740,6 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 	} else {
 		/* Group key - KeyIndex(BIT30==0) */
 
-
 		/* when add wep key through add key and didn't assigned encryption type before */
 		if ((padapter->securitypriv.ndisauthtype <= 3) && (padapter->securitypriv.dot118021XGrpPrivacy == 0)) {
 
@@ -886,7 +756,6 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 			}
 
 			encryptionalgo = padapter->securitypriv.dot11PrivacyAlgrthm;
-
 
 		} else {
 			encryptionalgo = padapter->securitypriv.dot118021XGrpPrivacy;
@@ -925,7 +794,6 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 
 		bgroup = _TRUE;
 
-
 	}
 
 	/* If WEP encryption algorithm, just call rtw_set_802_11_add_wep(). */
@@ -935,12 +803,10 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 		u32 len = FIELD_OFFSET(NDIS_802_11_KEY, KeyMaterial) + key->KeyLength;
 		NDIS_802_11_WEP *wep = &padapter->securitypriv.ndiswep;
 
-
 		wep->Length = len;
 		keyindex = key->KeyIndex & 0x7fffffff;
 		wep->KeyIndex = keyindex ;
 		wep->KeyLength = key->KeyLength;
-
 
 		_rtw_memcpy(wep->KeyMaterial, key->KeyMaterial, key->KeyLength);
 		_rtw_memcpy(&(padapter->securitypriv.dot11DefKey[keyindex].skey[0]), key->KeyMaterial, key->KeyLength);
@@ -987,11 +853,9 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 			_rtw_memcpy(&padapter->securitypriv.dot118021XGrptxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 16, 8);
 			_rtw_memcpy(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 24, 8);
 
-
 		} else {
 			_rtw_memcpy(&padapter->securitypriv.dot118021XGrptxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 24, 8);
 			_rtw_memcpy(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 16, 8);
-
 
 		}
 
@@ -1003,7 +867,6 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 		padapter->securitypriv.binstallGrpkey = _TRUE;
 
 		padapter->securitypriv.bcheck_grpkey = _FALSE;
-
 
 		res = rtw_set_key(padapter, &padapter->securitypriv, key->KeyIndex, 1, _TRUE);
 
@@ -1028,7 +891,6 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 
 				/* _set_timer(&padapter->securitypriv.tkip_timer, 50); */
 
-
 				/* if TKIP, save the Receive/Transmit MIC key in KeyMaterial[128-255] */
 				if ((key->KeyIndex & 0x10000000)) {
 					_rtw_memcpy(&stainfo->dot11tkiptxmickey, key->KeyMaterial + 16, 8);
@@ -1044,28 +906,16 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 
 			}
 
-
 			/* Set key to CAM through H2C command */
-#if 0
-			if (bgrouptkey) { /* never go to here */
-				res = rtw_setstakey_cmd(padapter, stainfo, GROUP_KEY, _TRUE);
-			} else {
-				res = rtw_setstakey_cmd(padapter, stainfo, UNICAST_KEY, _TRUE);
-			}
-#else
 
 			res = rtw_setstakey_cmd(padapter, stainfo, UNICAST_KEY, _TRUE);
-#endif
 
 			if (res == _FALSE)
 				ret = _FAIL;
-
 		}
-
 	}
 
 exit:
-
 
 	return ret;
 }
@@ -1079,7 +929,6 @@ u8 rtw_set_802_11_remove_key(_adapter	*padapter, NDIS_802_11_REMOVE_KEY *key)
 	u8	bgroup = (key->KeyIndex & 0x4000000) > 0 ? _FALSE : _TRUE;
 	u8	keyIndex = (u8)key->KeyIndex & 0x03;
 	u8	ret = _SUCCESS;
-
 
 	if ((key->KeyIndex & 0xbffffffc) > 0) {
 		ret = _FAIL;
@@ -1115,7 +964,6 @@ u8 rtw_set_802_11_remove_key(_adapter	*padapter, NDIS_802_11_REMOVE_KEY *key)
 	}
 
 exit:
-
 
 	return _TRUE;
 

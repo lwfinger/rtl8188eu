@@ -264,7 +264,7 @@ void sreset_stop_adapter(_adapter *padapter)
 	rtw_cancel_all_timer(padapter);
 
 	/* TODO: OS and HCI independent */
-#if defined(PLATFORM_LINUX) && defined(CONFIG_USB_HCI)
+#if defined(CONFIG_USB_HCI)
 	tasklet_kill(&pxmitpriv->xmit_tasklet);
 #endif
 
@@ -292,7 +292,7 @@ void sreset_start_adapter(_adapter *padapter)
 		sreset_restore_network_status(padapter);
 
 	/* TODO: OS and HCI independent */
-#if defined(PLATFORM_LINUX) && defined(CONFIG_USB_HCI)
+#if defined(CONFIG_USB_HCI)
 	tasklet_hi_schedule(&pxmitpriv->xmit_tasklet);
 #endif
 

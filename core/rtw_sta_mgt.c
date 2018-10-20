@@ -21,13 +21,6 @@
 
 #include <drv_types.h>
 
-#if defined(PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-
-	#error "Shall be Linux or Windows, but not both!\n"
-
-#endif
-
-
 bool test_st_match_rule(_adapter *adapter, u8 *local_naddr, u8 *local_port, u8 *remote_naddr, u8 *remote_port)
 {
 	if (ntohs(*((u16 *)local_port)) == 5001 || ntohs(*((u16 *)remote_port)) == 5001)
