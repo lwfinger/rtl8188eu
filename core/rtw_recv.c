@@ -151,7 +151,7 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	_init_timer(&precvpriv->signal_stat_timer, padapter->pnetdev, RTW_TIMER_HDL_NAME(signal_stat), padapter);
 #else
-	timer_setup(&precvpriv->signal_stat_timer, RTW_TIMER_HDL_NAME(signal_stat), 9);
+	timer_setup(&precvpriv->signal_stat_timer, rtw_signal_stat_timer_hdl, 0);
 #endif
 
 	precvpriv->signal_stat_sampling_interval = 2000; /* ms */
