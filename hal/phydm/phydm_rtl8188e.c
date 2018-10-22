@@ -24,7 +24,7 @@
 
 #include "mp_precomp.h"
 
-#include "../phydm_precomp.h"
+#include "phydm_precomp.h"
 
 #if (RTL8188E_SUPPORT == 1)
 

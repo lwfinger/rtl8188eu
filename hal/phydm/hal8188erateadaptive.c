@@ -16,7 +16,7 @@ Major Change History:
 --*/
 #include "mp_precomp.h"
 
-#include "../phydm_precomp.h"
+#include "phydm_precomp.h"
 
 
 #if (RATE_ADAPTIVE_SUPPORT == 1)

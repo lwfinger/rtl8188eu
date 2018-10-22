@@ -20,7 +20,7 @@
 
 /*Image2HeaderVersion: 2.18*/
 #include "mp_precomp.h"
-#include "../phydm_precomp.h"
+#include "phydm_precomp.h"
 
 #if (RTL8188E_SUPPORT == 1)
 static bool

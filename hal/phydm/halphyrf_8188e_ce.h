@@ -26,7 +26,7 @@
 #define	index_mapping_NUM_88E	15
 #define AVG_THERMAL_NUM_88E	4
 
-#include "../halphyrf_ce.h"
+#include "halphyrf_ce.h"
 
 void configure_txpower_track_8188e(
 	struct _TXPWRTRACK_CFG	*p_config

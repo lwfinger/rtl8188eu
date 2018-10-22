@@ -65,18 +65,18 @@ phy_set_tx_power_limit(
 #endif
 
 #if (RTL8188E_SUPPORT == 1)
-	#include "rtl8188e/hal8188erateadaptive.h" /* for  RA,Power training */
-	#include "rtl8188e/halhwimg8188e_mac.h"
-	#include "rtl8188e/halhwimg8188e_rf.h"
-	#include "rtl8188e/halhwimg8188e_bb.h"
-	#include "rtl8188e/halhwimg8188e_t_fw.h"
-	#include "rtl8188e/halhwimg8188e_s_fw.h"
-	#include "rtl8188e/phydm_regconfig8188e.h"
-	#include "rtl8188e/phydm_rtl8188e.h"
-	#include "rtl8188e/hal8188ereg.h"
-	#include "rtl8188e/version_rtl8188e.h"
+	#include "hal8188erateadaptive.h" /* for  RA,Power training */
+	#include "halhwimg8188e_mac.h"
+	#include "halhwimg8188e_rf.h"
+	#include "halhwimg8188e_bb.h"
+	#include "halhwimg8188e_t_fw.h"
+	#include "halhwimg8188e_s_fw.h"
+	#include "phydm_regconfig8188e.h"
+	#include "phydm_rtl8188e.h"
+	#include "hal8188ereg.h"
+	#include "version_rtl8188e.h"
 	#include "rtl8188e_hal.h"
-	#include "rtl8188e/halphyrf_8188e_ce.h"
+	#include "halphyrf_8188e_ce.h"
 #endif /* 88E END */
 
 #if (RTL8192E_SUPPORT == 1)
