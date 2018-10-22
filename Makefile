@@ -213,7 +213,7 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/hal_mp.o \
 			hal/hal_mcc.o \
 			hal/hal_$(HCI_NAME).o \
-			hal/led/hal_$(HCI_NAME)_led.o
+			hal/hal_$(HCI_NAME)_led.o
 
 			
 _OUTSRC_FILES := hal/phydm/phydm_debug.o	\
