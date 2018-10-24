@@ -155,7 +155,7 @@ struct	intf_hdl {
 
 struct reg_protocol_rd {
 
-#ifdef CONFIG_LITTLE_ENDIAN
+#ifdef __LITTLE_ENDIAN
 
 	/* DW1 */
 	u32		NumOfTrans:4;
@@ -179,25 +179,20 @@ struct reg_protocol_rd {
 
 
 	/* DW1 */
+	u32 Reserved2:24;
 	u32 Reserved1:4;
 	u32 NumOfTrans:4;
 
-	u32 Reserved2:24;
-
 	/* DW2 */
-	u32 WriteEnable:1;
-	u32 ByteCount:7;
-
-
+	u32 Reserved4:16;
 	u32 Reserved3:3;
 	u32 Byte4Access:1;
-
 	u32 Byte2Access:1;
+	u32 WriteEnable:1;
 	u32 Byte1Access:1;
 	u32 BurstMode:1;
 	u32 FixOrContinuous:1;
-
-	u32 Reserved4:16;
+	u32 ByteCount:7;
 
 	/* DW3 */
 	u32		BusAddress;
@@ -206,14 +201,12 @@ struct reg_protocol_rd {
 	/* u32		Value; */
 
 #endif
-
 };
-
 
 struct reg_protocol_wt {
 
 
-#ifdef CONFIG_LITTLE_ENDIAN
+#ifdef __LITTLE_ENDIAN
 
 	/* DW1 */
 	u32		NumOfTrans:4;
@@ -236,24 +229,21 @@ struct reg_protocol_wt {
 
 #else
 	/* DW1 */
+	u32 Reserved2:24;
 	u32 Reserved1:4;
 	u32 NumOfTrans:4;
 
-	u32 Reserved2:24;
 
 	/* DW2 */
-	u32 WriteEnable:1;
-	u32 ByteCount:7;
-
+	u32 Reserved4:16;
 	u32 Reserved3:3;
 	u32 Byte4Access:1;
-
 	u32 Byte2Access:1;
 	u32 Byte1Access:1;
 	u32 BurstMode:1;
 	u32 FixOrContinuous:1;
-
-	u32 Reserved4:16;
+	u32 WriteEnable:1;
+	u32 ByteCount:7;
 
 	/* DW3 */
 	u32		BusAddress;

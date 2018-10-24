@@ -62,7 +62,7 @@ struct rsn_ie_hdr {
 } __attribute__((packed));
 
 struct wme_ac_parameter {
-#if defined(CONFIG_LITTLE_ENDIAN)
+#if defined(__LITTLE_ENDIAN)
 	/* byte 1 */
 	u8	aifsn:4,
 	     acm:1,
@@ -72,7 +72,7 @@ struct wme_ac_parameter {
 	/* byte 2 */
 	u8	eCWmin:4,
 	     eCWmax:4;
-#elif defined(CONFIG_BIG_ENDIAN)
+#else
 	/* byte 1 */
 	u8	reserved:1,
 	     aci:2,
@@ -82,8 +82,6 @@ struct wme_ac_parameter {
 	/* byte 2 */
 	u8	eCWmax:4,
 	     eCWmin:4;
-#else
-#error	"Please fix <endian.h>"
 #endif
 
 	/* bytes 3 & 4 */
