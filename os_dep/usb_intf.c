@@ -1526,16 +1526,6 @@ static int __init rtw_drv_entry(void)
 	RTW_INFO(DRV_NAME" BT-Coex version = %s\n", BTCOEXVERSION);
 #endif /* BTCOEXVERSION */
 
-	ret = platform_wifi_power_on();
-	if (ret != 0) {
-		RTW_INFO("%s: power on failed!!(%d)\n", __FUNCTION__, ret);
-		ret = -1;
-		goto exit;
-	}
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
-	/* console_suspend_enabled=0; */
-#endif
-
 	usb_drv.drv_registered = _TRUE;
 	rtw_suspend_lock_init();
 	rtw_drv_proc_init();
@@ -1563,8 +1553,6 @@ static void __exit rtw_drv_halt(void)
 	usb_drv.drv_registered = _FALSE;
 
 	usb_deregister(&usb_drv.usbdrv);
-
-	platform_wifi_power_off();
 
 	rtw_suspend_lock_uninit();
 	rtw_drv_proc_deinit();

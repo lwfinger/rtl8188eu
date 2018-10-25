@@ -54,7 +54,7 @@ enum {
 
 #define RTW_DBG_EXPR(EXPR) do {} while (0)
 
-#define RTW_DBGDUMP 0 /* 'stream' for _dbgdump */
+#define RTW_DBGDUMP NULL /* 'stream' for _dbgdump */
 
 /* don't use these 3 APIs anymore, will be removed later */
 #define RT_TRACE(_Comp, _Level, Fmt) do {} while (0)
