@@ -48,7 +48,7 @@ odm_get_auto_channel_select_result(
 
 }
 
-void
+static void
 odm_auto_channel_select_setting(
 	void			*p_dm_void,
 	bool			is_enable

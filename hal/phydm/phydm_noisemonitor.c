@@ -41,7 +41,7 @@
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_CE | ODM_WIN))
 
-s16 odm_inband_noise_monitor_n_series(struct PHY_DM_STRUCT	*p_dm_odm, u8 is_pause_dig, u8 igi_value, u32 max_time)
+static s16 odm_inband_noise_monitor_n_series(struct PHY_DM_STRUCT	*p_dm_odm, u8 is_pause_dig, u8 igi_value, u32 max_time)
 {
 	u32				tmp4b;
 	u8				max_rf_path = 0, rf_path;
@@ -167,7 +167,7 @@ s16 odm_inband_noise_monitor_n_series(struct PHY_DM_STRUCT	*p_dm_odm, u8 is_paus
 
 }
 
-s16
+static s16
 odm_inband_noise_monitor_ac_series(struct PHY_DM_STRUCT	*p_dm_odm, u8 is_pause_dig, u8 igi_value, u32 max_time
 				  )
 {

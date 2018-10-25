@@ -285,10 +285,7 @@ phydm_check_nhm_ready(
 	return ret;
 }
 
-void
-phydm_store_nhm_setting(
-	void		*p_dm_void
-)
+static void phydm_store_nhm_setting(void *p_dm_void)
 {
 	struct PHY_DM_STRUCT	*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _CCX_INFO	*ccx_info = &p_dm_odm->dm_ccx_info;

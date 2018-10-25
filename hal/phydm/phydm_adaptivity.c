@@ -240,7 +240,7 @@ phydm_set_edcca_threshold(
 
 }
 
-void
+static void
 phydm_set_lna(
 	void				*p_dm_void,
 	enum phydm_set_lna	type
@@ -596,7 +596,7 @@ phydm_search_pwdb_lower_bound(
 	phydm_set_edcca_threshold(p_dm_odm, 0x7f, 0x7f);				/*resume to no link state*/
 }
 
-bool
+static bool
 phydm_re_search_condition(
 	void				*p_dm_void
 )

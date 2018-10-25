@@ -25,7 +25,7 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-const u16 db_invert_table[12][8] = {
+static const u16 db_invert_table[12][8] = {
 	{	1,		1,		1,		2,		2,		2,		2,		3},
 	{	3,		3,		4,		4,		4,		5,		6,		6},
 	{	7,		8,		9,		10,		11,		13,		14,		16},
@@ -164,7 +164,7 @@ odm_init_mp_driver_status(
 
 }
 
-void
+static void
 odm_update_mp_driver_status(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -175,7 +175,7 @@ odm_update_mp_driver_status(
 	p_dm_odm->mp_mode = (bool)adapter->registrypriv.mp_mode;
 }
 
-void
+static void
 phydm_init_trx_antenna_setting(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -197,7 +197,7 @@ phydm_init_trx_antenna_setting(
 	/*#endif*/
 }
 
-void
+static void
 phydm_traffic_load_decision(
 	void	*p_dm_void
 )
@@ -248,7 +248,7 @@ phydm_traffic_load_decision(
 	}
 }
 
-void
+static void
 phydm_config_ofdm_tx_path(
 	struct PHY_DM_STRUCT		*p_dm_odm,
 	u32			path
@@ -338,7 +338,7 @@ phydm_config_ofdm_rx_path(
 #endif
 }
 
-void
+static void
 phydm_config_cck_rx_antenna_init(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -358,7 +358,7 @@ phydm_config_cck_rx_antenna_init(
 #endif
 }
 
-void
+static void
 phydm_config_cck_rx_path(
 	struct PHY_DM_STRUCT		*p_dm_odm,
 	u8			path,
@@ -460,7 +460,7 @@ phydm_config_trx_path(
 
 }
 
-void
+static void
 phydm_init_cck_setting(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -506,7 +506,7 @@ phydm_init_cck_setting(
 
 }
 
-void
+static void
 phydm_init_soft_ml_setting(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -519,7 +519,7 @@ phydm_init_soft_ml_setting(
 #endif
 }
 
-void
+static void
 phydm_init_hw_info_by_rfe(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -538,7 +538,7 @@ phydm_init_hw_info_by_rfe(
 #endif
 }
 
-void
+static void
 odm_common_info_self_init(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -580,7 +580,7 @@ odm_common_info_self_init(
 
 }
 
-void
+static void
 odm_common_info_self_update(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -627,7 +627,7 @@ odm_common_info_self_update(
 	p_dm_odm->phydm_sys_up_time += p_dm_odm->phydm_period;
 }
 
-void
+static void
 odm_common_info_self_reset(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -683,7 +683,7 @@ phydm_get_structure(
 	return	p_struct;
 }
 
-void
+static void
 odm_hw_setting(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
@@ -709,7 +709,7 @@ odm_hw_setting(
 #endif
 }
 #if SUPPORTABLITY_PHYDMLIZE
-void
+static void
 phydm_supportability_init(
 	void		*p_dm_void
 )
@@ -2055,7 +2055,7 @@ phydm_set_ext_switch(
 	}
 }
 
-void
+static void
 phydm_csi_mask_enable(
 	void		*p_dm_void,
 	u32		enable
@@ -2079,7 +2079,7 @@ phydm_csi_mask_enable(
 
 }
 
-void
+static void
 phydm_clean_all_csi_mask(
 	void		*p_dm_void
 )
@@ -2106,7 +2106,7 @@ phydm_clean_all_csi_mask(
 	}
 }
 
-void
+static void
 phydm_set_csi_mask_reg(
 	void		*p_dm_void,
 	u32		tone_idx_tmp,
@@ -2169,7 +2169,7 @@ phydm_set_csi_mask_reg(
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_API, ODM_DBG_LOUD, ("New Mask tone idx[%d]:  Reg0x%x = ((0x%x))\n", (tone_idx_tmp + tone_num_shift), target_reg, reg_tmp_value));
 }
 
-void
+static void
 phydm_set_nbi_reg(
 	void		*p_dm_void,
 	u32		tone_idx_tmp,
@@ -2239,7 +2239,7 @@ phydm_set_nbi_reg(
 }
 
 
-void
+static void
 phydm_nbi_enable(
 	void		*p_dm_void,
 	u32		enable
@@ -2262,7 +2262,7 @@ phydm_nbi_enable(
 	}
 }
 
-u8
+static u8
 phydm_calculate_fc(
 	void		*p_dm_void,
 	u32		channel,
@@ -2342,7 +2342,7 @@ phydm_calculate_fc(
 }
 
 
-u8
+static u8
 phydm_calculate_intf_distance(
 	void		*p_dm_void,
 	u32		bw,
@@ -2376,7 +2376,7 @@ phydm_calculate_intf_distance(
 }
 
 
-u8
+static u8
 phydm_csi_mask_setting(
 	void		*p_dm_void,
 	u32		enable,

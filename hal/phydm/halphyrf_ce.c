@@ -718,7 +718,7 @@ u8 odm_get_right_chnl_place_for_iqk(u8 chnl)
 }
 #endif
 
-void
+static void
 odm_iq_calibrate(
 	struct PHY_DM_STRUCT	*p_dm_odm
 )

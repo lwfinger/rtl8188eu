@@ -20,7 +20,7 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-void
+static void
 odm_set_crystal_cap(
 	void					*p_dm_void,
 	u8					crystal_cap
@@ -65,7 +65,7 @@ odm_set_crystal_cap(
 #endif
 }
 
-u8
+static u8
 odm_get_default_crytaltal_cap(
 	void					*p_dm_void
 )
@@ -90,7 +90,7 @@ odm_get_default_crytaltal_cap(
 	return crystal_cap;
 }
 
-void
+static void
 odm_set_atc_status(
 	void					*p_dm_void,
 	bool					atc_status
@@ -106,7 +106,7 @@ odm_set_atc_status(
 	p_cfo_track->is_atc_status = atc_status;
 }
 
-bool
+static bool
 odm_get_atc_status(
 	void					*p_dm_void
 )

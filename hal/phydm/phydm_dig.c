@@ -58,7 +58,7 @@ odm_change_dynamic_init_gain_thresh(
 	}
 }	/* dm_change_dynamic_init_gain_thresh */
 
-int
+static int
 get_igi_for_diff(int value_IGI)
 {
 #define ONERCCA_LOW_TH		0x30
@@ -73,7 +73,7 @@ get_igi_for_diff(int value_IGI)
 		return value_IGI;
 }
 
-void
+static void
 odm_fa_threshold_check(
 	void			*p_dm_void,
 	bool			is_dfs_band,
@@ -121,7 +121,7 @@ odm_fa_threshold_check(
 	return;
 }
 
-u8
+static u8
 odm_forbidden_igi_check(
 	void			*p_dm_void,
 	u8			dig_dynamic_min,
@@ -226,7 +226,7 @@ odm_forbidden_igi_check(
 
 }
 
-void
+static void
 odm_inband_noise_calculate(
 	void		*p_dm_void
 )
@@ -337,7 +337,7 @@ odm_inband_noise_calculate(
 	return;
 }
 
-void
+static void
 odm_dig_for_bt_hs_mode(
 	void		*p_dm_void
 )
@@ -369,7 +369,7 @@ odm_dig_for_bt_hs_mode(
 #endif
 }
 
-void
+static void
 phydm_set_big_jump_step(
 	void			*p_dm_void,
 	u8			current_igi
@@ -612,7 +612,7 @@ odm_pause_dig(
 
 }
 
-bool
+static bool
 odm_dig_abort(
 	void			*p_dm_void
 )

@@ -62,7 +62,7 @@
 	#define GET_VERSION(ic, txt) GET_VERSION_MP(ic, txt)
 #endif
 
-u8
+static u8
 odm_query_rx_pwr_percentage(
 	s8		ant_power
 )
@@ -79,7 +79,7 @@ odm_query_rx_pwr_percentage(
  * 2012/01/12 MH MOve some signal strength smooth method to MP HAL layer.
  * IF other SW team do not support the feature, remove this section.??
  *   */
-s32
+static s32
 odm_signal_scale_mapping_92c_series_patch_rt_cid_819x_lenovo(
 	struct PHY_DM_STRUCT *p_dm_odm,
 	s32 curr_sig
@@ -117,7 +117,7 @@ odm_signal_scale_mapping_92c_series_patch_rt_cid_819x_lenovo(
 	return ret_sig;
 }
 
-s32
+static s32
 odm_signal_scale_mapping_92c_series_patch_rt_cid_819x_netcore(
 	struct PHY_DM_STRUCT *p_dm_odm,
 	s32 curr_sig
@@ -155,7 +155,7 @@ odm_signal_scale_mapping_92c_series_patch_rt_cid_819x_netcore(
 	return ret_sig;
 }
 
-s32
+static s32
 odm_signal_scale_mapping_92c_series(
 	struct PHY_DM_STRUCT *p_dm_odm,
 	s32 curr_sig
@@ -482,7 +482,7 @@ odm_cfo(
 	return ret_val;
 }
 
-u8
+static u8
 phydm_rate_to_num_ss(
 	struct PHY_DM_STRUCT		*p_dm_odm,
 	u8			data_rate
@@ -598,7 +598,7 @@ odm_CCKRSSI_8192E(
 #endif
 
 #if (RTL8188E_SUPPORT == 1)
-s8
+static s8
 odm_CCKRSSI_8188E(
 	struct PHY_DM_STRUCT	*p_dm_odm,
 	u16		LNA_idx,
@@ -621,7 +621,7 @@ odm_CCKRSSI_8188E(
 }
 #endif
 
-void
+static void
 odm_rx_phy_status92c_series_parsing(
 	struct PHY_DM_STRUCT					*p_dm_odm,
 	struct _odm_phy_status_info_			*p_phy_info,
@@ -1420,7 +1420,7 @@ odm_init_rssi_for_dm(
 
 }
 
-void
+static void
 odm_process_rssi_for_dm(
 	struct PHY_DM_STRUCT					*p_dm_odm,
 	struct _odm_phy_status_info_			*p_phy_info,
@@ -1721,7 +1721,7 @@ odm_process_rssi_for_dm(
 /*
  * Endianness before calling this API
  *   */
-void
+static void
 odm_phy_status_query_92c_series(
 	struct PHY_DM_STRUCT					*p_dm_odm,
 	struct _odm_phy_status_info_				*p_phy_info,
