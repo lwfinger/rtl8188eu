@@ -816,7 +816,7 @@ phydm_modify_RA_PCR_threshold(
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Set RA_threshold_offset = (( %s%d ))\n", ((RA_threshold_offset == 0) ? " " : ((RA_offset_direction) ? "+" : "-")), RA_threshold_offset));
 }
 
-void
+static void
 odm_rssi_monitor_check_mp(
 	void	*p_dm_void
 )
@@ -824,7 +824,7 @@ odm_rssi_monitor_check_mp(
 }
 
 /*H2C_RSSI_REPORT*/
-s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
+static s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 {
 	struct _ADAPTER *adapter = p_dm_odm->adapter;
 	struct _rate_adaptive_table_			*p_ra_table = &p_dm_odm->dm_ra_table;
@@ -935,7 +935,7 @@ s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 	return _SUCCESS;
 }
 
-void phydm_ra_rssi_rpt_wk_hdl(void *p_context)
+static void phydm_ra_rssi_rpt_wk_hdl(void *p_context)
 {
 	struct PHY_DM_STRUCT	*p_dm_odm = (struct PHY_DM_STRUCT *)p_context;
 	int i;
@@ -963,7 +963,7 @@ void phydm_ra_rssi_rpt_wk(void *p_context)
 	rtw_run_in_thread_cmd(p_dm_odm->adapter, phydm_ra_rssi_rpt_wk_hdl, p_dm_odm);
 }
 
-void
+static void
 odm_rssi_monitor_check_ce(
 	void		*p_dm_void
 )
@@ -1015,7 +1015,7 @@ odm_rssi_monitor_check_ce(
 	/* odm_cmn_info_update(&p_hal_data->odmpriv,ODM_CMNINFO_RSSI_MIN, pdmpriv->min_undecorated_pwdb_for_dm); */
 }
 
-void
+static void
 odm_rssi_monitor_check_ap(
 	void		*p_dm_void
 )
@@ -1127,7 +1127,7 @@ odm_refresh_rate_adaptive_mask(
 
 }
 
-u8
+static u8
 phydm_trans_platform_bw(
 	void		*p_dm_void,
 	u8		BW
@@ -1151,7 +1151,7 @@ phydm_trans_platform_bw(
 	return BW;
 }
 
-u8
+static u8
 phydm_trans_platform_rf_type(
 	void		*p_dm_void,
 	u8		rf_type
@@ -1187,7 +1187,7 @@ phydm_trans_platform_rf_type(
 	return rf_type;
 }
 
-u32
+static u32
 phydm_trans_platform_wireless_mode(
 	void		*p_dm_void,
 	u32		wireless_mode
@@ -1702,7 +1702,7 @@ phydm_rate_order_compute(
 
 }
 
-void
+static void
 phydm_ra_common_info_update(
 	void	*p_dm_void
 )
@@ -1869,24 +1869,11 @@ odm_find_rts_rate(
 
 }
 
-void
+static void
 odm_set_ra_dm_arfb_by_noisy(
 	struct PHY_DM_STRUCT	*p_dm_odm
 )
 {
-#if 0
-
-	/*dbg_print("DM_ARFB ====>\n");*/
-	if (p_dm_odm->is_noisy_state) {
-		odm_write_4byte(p_dm_odm, 0x430, 0x00000000);
-		odm_write_4byte(p_dm_odm, 0x434, 0x05040200);
-		/*dbg_print("DM_ARFB ====> Noisy state\n");*/
-	} else {
-		odm_write_4byte(p_dm_odm, 0x430, 0x02010000);
-		odm_write_4byte(p_dm_odm, 0x434, 0x07050403);
-		/*dbg_print("DM_ARFB ====> Clean state\n");*/
-	}
-#endif
 }
 
 void
@@ -1897,7 +1884,6 @@ odm_update_noisy_state(
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 
-	/*dbg_print("Get C2H Command! NoisyState=0x%x\n ", is_noisy_state_from_c2h);*/
 	if (p_dm_odm->support_ic_type == ODM_RTL8821  || p_dm_odm->support_ic_type == ODM_RTL8812  ||
 	    p_dm_odm->support_ic_type == ODM_RTL8723B || p_dm_odm->support_ic_type == ODM_RTL8192E || p_dm_odm->support_ic_type == ODM_RTL8188E || p_dm_odm->support_ic_type == ODM_RTL8723D)
 		p_dm_odm->is_noisy_state = is_noisy_state_from_c2h;
@@ -2013,14 +1999,14 @@ phydm_get_rate_bitmap_ex(
 			}
 		} else {
 			if (rssi_level == DM_RATR_STA_HIGH)
-				rate_bitmap = 0x0000000f0f0f0000;
+				rate_bitmap = 0x0000000f0f0f0000L;
 			else if (rssi_level == DM_RATR_STA_MIDDLE)
-				rate_bitmap = 0x0000000fcfcfe000;
+				rate_bitmap = 0x0000000fcfcfe000L;
 			else {
 				if (*(p_dm_odm->p_band_width) == ODM_BW40M)
-					rate_bitmap = 0x0000000ffffff015;
+					rate_bitmap = 0x0000000ffffff015L;
 				else
-					rate_bitmap = 0x0000000ffffff005;
+					rate_bitmap = 0x0000000ffffff005L;
 			}
 		}
 	}
@@ -2028,29 +2014,29 @@ phydm_get_rate_bitmap_ex(
 
 	case (ODM_WM_AC|ODM_WM_G):
 		if (rssi_level == 1)
-			rate_bitmap = 0x00000000fc3f0000;
+			rate_bitmap = 0x00000000fc3f0000L;
 		else if (rssi_level == 2)
-			rate_bitmap = 0x00000000fffff000;
+			rate_bitmap = 0x00000000fffff000L;
 		else
-			rate_bitmap = 0x00000000ffffffff;
+			rate_bitmap = 0x00000000ffffffffL;
 		break;
 
 	case (ODM_WM_AC|ODM_WM_A):
 
 		if (p_dm_odm->rf_type == ODM_1T2R || p_dm_odm->rf_type == ODM_1T1R) {
 			if (rssi_level == 1)				/* add by Gary for ac-series */
-				rate_bitmap = 0x00000000003f8000;
+				rate_bitmap = 0x00000000003f8000L;
 			else if (rssi_level == 2)
-				rate_bitmap = 0x00000000003fe000;
+				rate_bitmap = 0x00000000003fe000L;
 			else
-				rate_bitmap = 0x00000000003ff010;
+				rate_bitmap = 0x00000000003ff010L;
 		} else if (p_dm_odm->rf_type == ODM_2T2R  || p_dm_odm->rf_type == ODM_2T3R  || p_dm_odm->rf_type == ODM_2T4R) {
 			if (rssi_level == 1)				/* add by Gary for ac-series */
-				rate_bitmap = 0x00000000fe3f8000;       /* VHT 2SS MCS3~9 */
+				rate_bitmap = 0x00000000fe3f8000L;       /* VHT 2SS MCS3~9 */
 			else if (rssi_level == 2)
-				rate_bitmap = 0x00000000fffff000;       /* VHT 2SS MCS0~9 */
+				rate_bitmap = 0x00000000fffff000L;       /* VHT 2SS MCS0~9 */
 			else
-				rate_bitmap = 0x00000000fffff010;       /* All */
+				rate_bitmap = 0x00000000fffff010L;       /* All */
 		} else {
 			if (rssi_level == 1)				/* add by Gary for ac-series */
 				rate_bitmap = 0x000003f8fe3f8000ULL;       /* VHT 3SS MCS3~9 */
