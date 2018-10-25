@@ -69,12 +69,12 @@ static u8 RETRY_PENALTY[PERENTRY][RETRYSIZE + 1] = {{5, 4, 3, 2, 0, 3}, /* 92 , 
 	{49, 16, 16, 0, 0, 48}
 };/* 3 */ /* 3, idx=0x16 */
 
-static u8	RETRY_PENALTY_UP[RETRYSIZE + 1] = {49, 44, 16, 16, 0, 48}; /* 12% for rate up */
+static u8 RETRY_PENALTY_UP[RETRYSIZE + 1] = {49, 44, 16, 16, 0, 48}; /* 12% for rate up */
 
 static u8 PT_PENALTY[RETRYSIZE + 1] = {34, 31, 30, 24, 0, 32};
 
 #if 0
-static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{
+static u8 RETRY_PENALTY_IDX[2][RATESIZE] = {{
 		4, 4, 4, 5, 4, 4, 5, 7, 7, 7, 8, 0x0a,	 /* SS>TH */
 		4, 4, 4, 4, 6, 0x0a, 0x0b, 0x0d,
 		5, 5, 7, 7, 8, 0x0b, 0x0d, 0x0f
@@ -89,7 +89,7 @@ static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{
 
 
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-static u8	RETRY_PENALTY_IDX[2][RATESIZE] = 	{{
+static u8 RETRY_PENALTY_IDX[2][RATESIZE] = 	{{
 		4, 4, 4, 5, 4, 4, 5, 7, 7, 7, 8, 0x0a,	 /* SS>TH */
 #if (DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE)
 		4, 4, 4, 4, 0x0d, 0x0d, 0x0f, 0x0f,
@@ -105,12 +105,12 @@ static u8	RETRY_PENALTY_IDX[2][RATESIZE] = 	{{
 	}
 };
 
-static u8	RETRY_PENALTY_UP_IDX[RATESIZE] = 	{0x10, 0x10, 0x10, 0x10, 0x11, 0x11, 0x12, 0x12, 0x12, 0x13, 0x13, 0x14,	 /* SS>TH */
+static u8 RETRY_PENALTY_UP_IDX[RATESIZE] = 	{0x10, 0x10, 0x10, 0x10, 0x11, 0x11, 0x12, 0x12, 0x12, 0x13, 0x13, 0x14,	 /* SS>TH */
 				 0x13, 0x13, 0x14, 0x14, 0x15, 0x15, 0x15, 0x15,
 				 0x11, 0x11, 0x12, 0x13, 0x13, 0x13, 0x14, 0x15
 					    };
 
-static u8	RSSI_THRESHOLD[RATESIZE] =				{0, 0, 0, 0,
+static u8 RSSI_THRESHOLD[RATESIZE] =				{0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0x24, 0x26, 0x2a,
 				 0x17, 0x1a, 0x1c, 0x1f, 0x23, 0x28, 0x2a, 0x2c,
 					 0, 0, 0, 0x1f, 0x23, 0x28, 0x2a, 0x2c
@@ -119,7 +119,7 @@ static u8	RSSI_THRESHOLD[RATESIZE] =				{0, 0, 0, 0,
 
 /* wilson modify */
 #if 0
-static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{
+static u8 RETRY_PENALTY_IDX[2][RATESIZE] = {{
 		4, 4, 4, 5, 4, 4, 5, 7, 7, 7, 8, 0x0a,	 /*  SS>TH */
 		4, 4, 4, 4, 6, 0x0a, 0x0b, 0x0d,
 		5, 5, 7, 7, 8, 0x0b, 0x0d, 0x0f
@@ -132,7 +132,7 @@ static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{
 };
 #endif
 
-static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{
+static u8 RETRY_PENALTY_IDX[2][RATESIZE] = {{
 		4, 4, 4, 5, 4, 4, 5, 7, 7, 7, 8, 0x0a,	 /* SS>TH */
 		4, 4, 4, 4, 6, 0x0a, 0x0b, 0x0d,
 		5, 5, 7, 7, 8, 0x0b, 0x0d, 0x0f
@@ -144,12 +144,12 @@ static u8	RETRY_PENALTY_IDX[2][RATESIZE] = {{
 	}
 };
 
-static u8	RETRY_PENALTY_UP_IDX[RATESIZE] = {0x0c, 0x0d, 0x0d, 0x0f, 0x0d, 0x0e, 0x0f, 0x0f, 0x10, 0x12, 0x13, 0x14,	 /* SS>TH */
+static u8 RETRY_PENALTY_UP_IDX[RATESIZE] = {0x0c, 0x0d, 0x0d, 0x0f, 0x0d, 0x0e, 0x0f, 0x0f, 0x10, 0x12, 0x13, 0x14,	 /* SS>TH */
 			  0x0f, 0x10, 0x10, 0x12, 0x12, 0x13, 0x14, 0x15,
 				  0x11, 0x11, 0x12, 0x13, 0x13, 0x13, 0x14, 0x15
 					   };
 
-static u8	RSSI_THRESHOLD[RATESIZE] =			{0, 0, 0, 0,
+static u8 RSSI_THRESHOLD[RATESIZE] =			{0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0x24, 0x26, 0x2a,
 				 0x18, 0x1a, 0x1d, 0x1f, 0x21, 0x27, 0x29, 0x2a,
 					 0, 0, 0, 0x1f, 0x23, 0x28, 0x2a, 0x2c
@@ -157,42 +157,42 @@ static u8	RSSI_THRESHOLD[RATESIZE] =			{0, 0, 0, 0,
 
 #endif
 
-/*static u8	RSSI_THRESHOLD[RATESIZE] = {0,0,0,0,
+/*static u8 RSSI_THRESHOLD[RATESIZE] = {0,0,0,0,
 													0,0,0,0,0,0x24,0x26,0x2a,
 													0x1a,0x1c,0x1e,0x21,0x24,0x2a,0x2b,0x2d,
 													0,0,0,0x1f,0x23,0x28,0x2a,0x2c};*/
-/*static u16	N_THRESHOLD_HIGH[RATESIZE] = {4,4,8,16,
+/*static u16 N_THRESHOLD_HIGH[RATESIZE] = {4,4,8,16,
 													24,36,48,72,96,144,192,216,
 													60,80,100,160,240,400,560,640,
 													300,320,480,720,1000,1200,1600,2000};
-static u16	N_THRESHOLD_LOW[RATESIZE] = {2,2,4,8,
+static u16 N_THRESHOLD_LOW[RATESIZE] = {2,2,4,8,
 													12,18,24,36,48,72,96,108,
 													30,40,50,80,120,200,280,320,
 													150,160,240,360,500,600,800,1000};*/
-static u16	N_THRESHOLD_HIGH[RATESIZE] = {4, 4, 8, 16,
+static u16 N_THRESHOLD_HIGH[RATESIZE] = {4, 4, 8, 16,
 					      24, 36, 48, 72, 96, 144, 192, 216,
 				      60, 80, 100, 160, 240, 400, 600, 800,
 				      300, 320, 480, 720, 1000, 1200, 1600, 2000
 					};
-static u16	N_THRESHOLD_LOW[RATESIZE] = {2, 2, 4, 8,
+static u16 N_THRESHOLD_LOW[RATESIZE] = {2, 2, 4, 8,
 					     12, 18, 24, 36, 48, 72, 96, 108,
 					     30, 40, 50, 80, 120, 200, 300, 400,
 				     150, 160, 240, 360, 500, 600, 800, 1000
 				       };
-static u8	 TRYING_NECESSARY[RATESIZE] = {2, 2, 2, 2,
+static u8  TRYING_NECESSARY[RATESIZE] = {2, 2, 2, 2,
 					       2, 2, 3, 3, 4, 4, 5, 7,
 					       4, 4, 7, 10, 10, 12, 12, 18,
 					       5, 7, 7, 8, 11, 18, 36, 60
 					};  /* 0329 */ /* 1207 */
 #if 0
-static u8	 POOL_RETRY_TH[RATESIZE] = {30, 30, 30, 30,
+static u8  POOL_RETRY_TH[RATESIZE] = {30, 30, 30, 30,
 					    30, 30, 25, 25, 20, 15, 15, 10,
 					    30, 25, 25, 20, 15, 10, 10, 10,
 					    30, 25, 25, 20, 15, 10, 10, 10
 				     };
 #endif
 
-static u8	DROPING_NECESSARY[RATESIZE] = {1, 1, 1, 1,
+static u8 DROPING_NECESSARY[RATESIZE] = {1, 1, 1, 1,
 					       1, 2, 3, 4, 5, 6, 7, 8,
 					       1, 2, 3, 4, 5, 6, 7, 8,
 					       5, 6, 7, 8, 9, 10, 11, 12
@@ -226,7 +226,7 @@ static u16 dynamic_tx_rpt_timing[6] = {0x186a, 0x30d4, 0x493e, 0x61a8, 0x7a12, 0
 	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
 static int
 odm_ra_learn_bounding(
-	struct PHY_DM_STRUCT		*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	struct _odm_ra_info_	*p_ra_info
 )
 {
@@ -291,9 +291,9 @@ odm_ra_learn_bounding(
 
 static void
 odm_set_tx_rpt_timing_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	struct _odm_ra_info_	*p_ra_info,
-	u8				extend
+	u8 extend
 )
 {
 	u8 idx = 0;
@@ -319,7 +319,7 @@ odm_set_tx_rpt_timing_8188e(
 
 static int
 odm_rate_down_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	struct _odm_ra_info_  *p_ra_info
 )
 {
@@ -412,7 +412,7 @@ rate_down_finish:
 
 static int
 odm_rate_up_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	struct _odm_ra_info_  *p_ra_info
 )
 {
@@ -501,7 +501,7 @@ static void odm_reset_ra_counter_8188e(struct _odm_ra_info_  *p_ra_info)
 
 static void
 odm_rate_decision_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	struct _odm_ra_info_  *p_ra_info
 )
 {
@@ -624,7 +624,7 @@ odm_rate_decision_8188e(
 
 static int
 odm_arfb_refresh_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	struct _odm_ra_info_  *p_ra_info
 )
 {
@@ -718,7 +718,7 @@ odm_arfb_refresh_8188e(
 #if POWER_TRAINING_ACTIVE == 1
 static void
 odm_pt_try_state_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	struct _odm_ra_info_	*p_ra_info
 )
 {
@@ -824,8 +824,8 @@ odm_pt_decision_8188e(
 
 static void
 odm_ra_tx_rpt_timer_setting(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	u16			min_rpt_time
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u16 min_rpt_time
 )
 {
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, (" =====>odm_ra_tx_rpt_timer_setting()\n"));
@@ -847,7 +847,7 @@ odm_ra_tx_rpt_timer_setting(
 
 void
 odm_ra_support_init(
-	struct PHY_DM_STRUCT	*p_dm_odm
+	struct PHY_DM_STRUCT *p_dm_odm
 )
 {
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>odm_ra_support_init()\n"));
@@ -862,7 +862,7 @@ odm_ra_support_init(
 
 int
 odm_ra_info_init(
-	struct PHY_DM_STRUCT	*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	u32		mac_id
 )
 {
@@ -943,7 +943,7 @@ odm_ra_info_init(
 
 int
 odm_ra_info_init_all(
-	struct PHY_DM_STRUCT		*p_dm_odm
+	struct PHY_DM_STRUCT *p_dm_odm
 )
 {
 	u32 mac_id = 0;
@@ -1026,7 +1026,7 @@ odm_ra_info_init_all(
 		} else if (adapter->MgntInfo.RegRALvl == 2) {
 			/* Compile flag default is lvl2, we need not to update. */
 		} else if (adapter->MgntInfo.RegRALvl >= 0x80) {
-			u8	index = 0, offset = adapter->MgntInfo.RegRALvl - 0x80;
+			u8 index = 0, offset = adapter->MgntInfo.RegRALvl - 0x80;
 
 			/* Reset to default rate adaptive value. */
 			RETRY_PENALTY_UP_IDX[11] = 0x14;
@@ -1061,8 +1061,8 @@ odm_ra_info_init_all(
 
 u8
 odm_ra_get_sgi_8188e(
-	struct PHY_DM_STRUCT	*p_dm_odm,
-	u8		mac_id
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 mac_id
 )
 {
 	if ((NULL == p_dm_odm) || (mac_id >= ASSOCIATE_ENTRY_NUM))
@@ -1074,13 +1074,13 @@ odm_ra_get_sgi_8188e(
 
 u8
 odm_ra_get_decision_rate_8188e(
-	struct PHY_DM_STRUCT	*p_dm_odm,
-	u8		mac_id
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 mac_id
 )
 {
 	u8 decision_rate = 0;
 	struct _rate_adaptive_table_	*p_ra_table = &p_dm_odm->dm_ra_table;
-	u8	cmd_buf[3];
+	u8 cmd_buf[3];
 
 	if ((NULL == p_dm_odm) || (mac_id >= ASSOCIATE_ENTRY_NUM))
 		return 0;
@@ -1100,8 +1100,8 @@ odm_ra_get_decision_rate_8188e(
 
 u8
 odm_ra_get_hw_pwr_status_8188e(
-	struct PHY_DM_STRUCT	*p_dm_odm,
-	u8		mac_id
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 mac_id
 )
 {
 	u8 pt_stage = 5;
@@ -1139,9 +1139,9 @@ odm_ra_update_rate_info_8188e(
 
 void
 odm_ra_set_rssi_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	u8			mac_id,
-	u8			rssi
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 mac_id,
+	u8 rssi
 )
 {
 	struct _odm_ra_info_ *p_ra_info = NULL;
@@ -1157,8 +1157,8 @@ odm_ra_set_rssi_8188e(
 
 void
 odm_ra_set_tx_rpt_time(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	u16			min_rpt_time
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u16 min_rpt_time
 )
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
@@ -1176,20 +1176,16 @@ odm_ra_set_tx_rpt_time(
 }
 
 
-void
-odm_ra_tx_rpt2_handle_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	u8			*tx_rpt_buf,
-	u16			tx_rpt_len,
-	u32			mac_id_valid_entry0,
-	u32			mac_id_valid_entry1
-)
+void odm_ra_tx_rpt2_handle_8188e(struct PHY_DM_STRUCT *p_dm_odm,
+				 u8 *tx_rpt_buf, u16 tx_rpt_len,
+				 u32 mac_id_valid_entry0,
+				 u32 mac_id_valid_entry1)
 {
 	struct _odm_ra_info_ *p_ra_info = NULL;
-	u8			mac_id = 0;
-	u8			*p_buffer = NULL;
+	u8 mac_id = 0;
+	u8 *p_buffer = NULL;
 	u32			valid = 0, item_num = 0;
-	u16			min_rpt_time = 0x927c;
+	u16 min_rpt_time = 0x927c;
 
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>odm_ra_tx_rpt2_handle_8188e(): valid0=%d valid1=%d BufferLength=%d\n",
 			mac_id_valid_entry0, mac_id_valid_entry1, tx_rpt_len));
@@ -1273,7 +1269,7 @@ odm_ra_tx_rpt2_handle_8188e(
 				extern void rtl8188e_set_station_tx_rate_info(struct PHY_DM_STRUCT *, struct _odm_ra_info_ *, int);
 				rtl8188e_set_station_tx_rate_info(p_dm_odm, p_ra_info, mac_id);
 #ifdef DETECT_STA_EXISTANCE
-				void rtl8188e_detect_sta_existance(struct PHY_DM_STRUCT	*p_dm_odm, struct _odm_ra_info_ *p_ra_info, int mac_id);
+				void rtl8188e_detect_sta_existance(struct PHY_DM_STRUCT *p_dm_odm, struct _odm_ra_info_ *p_ra_info, int mac_id);
 				rtl8188e_detect_sta_existance(p_dm_odm, p_ra_info, mac_id);
 #endif
 #endif
@@ -1311,8 +1307,8 @@ odm_ra_tx_rpt2_handle_8188e(
 
 static void
 odm_ra_tx_rpt_timer_setting(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	u16			min_rpt_time
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u16 min_rpt_time
 )
 {
 	return;
@@ -1321,7 +1317,7 @@ odm_ra_tx_rpt_timer_setting(
 
 void
 odm_ra_support_init(
-	struct PHY_DM_STRUCT	*p_dm_odm
+	struct PHY_DM_STRUCT *p_dm_odm
 )
 {
 	return;
@@ -1329,7 +1325,7 @@ odm_ra_support_init(
 
 int
 odm_ra_info_init(
-	struct PHY_DM_STRUCT	*p_dm_odm,
+	struct PHY_DM_STRUCT *p_dm_odm,
 	u32		mac_id
 )
 {
@@ -1338,7 +1334,7 @@ odm_ra_info_init(
 
 int
 odm_ra_info_init_all(
-	struct PHY_DM_STRUCT		*p_dm_odm
+	struct PHY_DM_STRUCT *p_dm_odm
 )
 {
 	return 0;
@@ -1346,8 +1342,8 @@ odm_ra_info_init_all(
 
 u8
 odm_ra_get_sgi_8188e(
-	struct PHY_DM_STRUCT	*p_dm_odm,
-	u8		mac_id
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 mac_id
 )
 {
 	return 0;
@@ -1355,16 +1351,16 @@ odm_ra_get_sgi_8188e(
 
 u8
 odm_ra_get_decision_rate_8188e(
-	struct PHY_DM_STRUCT	*p_dm_odm,
-	u8		mac_id
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 mac_id
 )
 {
 	return 0;
 }
 u8
 odm_ra_get_hw_pwr_status_8188e(
-	struct PHY_DM_STRUCT	*p_dm_odm,
-	u8		mac_id
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 mac_id
 )
 {
 	return 0;
@@ -1384,9 +1380,9 @@ odm_ra_update_rate_info_8188e(
 
 void
 odm_ra_set_rssi_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	u8			mac_id,
-	u8			rssi
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 mac_id,
+	u8 rssi
 )
 {
 	return;
@@ -1394,8 +1390,8 @@ odm_ra_set_rssi_8188e(
 
 void
 odm_ra_set_tx_rpt_time(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	u16			min_rpt_time
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u16 min_rpt_time
 )
 {
 	return;
@@ -1403,9 +1399,9 @@ odm_ra_set_tx_rpt_time(
 
 void
 odm_ra_tx_rpt2_handle_8188e(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	u8			*tx_rpt_buf,
-	u16			tx_rpt_len,
+	struct PHY_DM_STRUCT *p_dm_odm,
+	u8 *tx_rpt_buf,
+	u16 tx_rpt_len,
 	u32			mac_id_valid_entry0,
 	u32			mac_id_valid_entry1
 )
