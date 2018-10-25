@@ -126,7 +126,7 @@ odm_dynamic_tx_power_write_power_index(
 
 }
 
-void
+static void
 odm_dynamic_tx_power_nic_ce(
 	void					*p_dm_void
 )

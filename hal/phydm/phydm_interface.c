@@ -630,7 +630,7 @@ odm_release_timer(
 }
 
 
-u8
+static u8
 phydm_trans_h2c_id(
 	struct PHY_DM_STRUCT	*p_dm_odm,
 	u8		phydm_h2c_id

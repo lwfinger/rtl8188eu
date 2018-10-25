@@ -86,7 +86,7 @@ static BOOLEAN HalUsbSetQueuePipeMapping8188EUsb(
 
 }
 
-void rtl8188eu_interface_configure(_adapter *padapter)
+static void rtl8188eu_interface_configure(_adapter *padapter)
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(padapter);
@@ -874,7 +874,8 @@ InitUsbAggregationSetting(
 	/* 201/12/10 MH Add for USB agg mode dynamic switch. */
 	pHalData->UsbRxHighSpeedMode = _FALSE;
 }
-VOID
+
+static VOID
 HalRxAggr8188EUsb(
 	IN  PADAPTER Adapter,
 	IN BOOLEAN	Value
@@ -901,7 +902,7 @@ HalRxAggr8188EUsb(
  *	12/10/2010	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
-VOID
+static VOID
 USB_AggModeSwitch(
 	IN	PADAPTER			Adapter
 )
@@ -1054,7 +1055,7 @@ rt_rf_power_state RfOnOffDetect(IN	PADAPTER pAdapter)
 
 void _ps_open_RF(_adapter *padapter);
 
-u32 rtl8188eu_hal_init(PADAPTER Adapter)
+static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 {
 	u8	value8 = 0;
 	u16  value16;
@@ -1489,13 +1490,13 @@ void _ps_open_RF(_adapter *padapter)
 	/* phy_SsPwrSwitch92CU(padapter, rf_on, 1); */
 }
 
-void _ps_close_RF(_adapter *padapter)
+static void _ps_close_RF(_adapter *padapter)
 {
 	/* here call with bRegSSPwrLvl 1, bRegSSPwrLvl 2 needs to be verified */
 	/* phy_SsPwrSwitch92CU(padapter, rf_off, 1); */
 }
 
-VOID
+static void
 hal_poweroff_8188eu(
 	IN	PADAPTER			Adapter
 )
@@ -1582,7 +1583,7 @@ static void rtl8188eu_hw_power_down(_adapter *padapter)
 	rtw_write16(padapter, REG_APS_FSMCO, 0x8812);
 }
 
-u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
+static u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
 {
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(Adapter);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -1613,7 +1614,7 @@ u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
 	return _SUCCESS;
 }
 
-unsigned int rtl8188eu_inirp_init(PADAPTER Adapter)
+static unsigned int rtl8188eu_inirp_init(PADAPTER Adapter)
 {
 	u8 i;
 	struct recv_buf *precvbuf;
@@ -1663,7 +1664,7 @@ exit:
 
 }
 
-unsigned int rtl8188eu_inirp_deinit(PADAPTER Adapter)
+static unsigned int rtl8188eu_inirp_deinit(PADAPTER Adapter)
 {
 
 	rtw_read_port_cancel(Adapter);
@@ -1850,7 +1851,7 @@ static u8 ReadAdapterInfo8188EU(PADAPTER Adapter)
 	return _SUCCESS;
 }
 
-void UpdateInterruptMask8188EU(PADAPTER padapter, u8 bHIMR0 , u32 AddMSR, u32 RemoveMSR)
+static void UpdateInterruptMask8188EU(PADAPTER padapter, u8 bHIMR0 , u32 AddMSR, u32 RemoveMSR)
 {
 	HAL_DATA_TYPE *pHalData;
 
@@ -1875,7 +1876,7 @@ void UpdateInterruptMask8188EU(PADAPTER padapter, u8 bHIMR0 , u32 AddMSR, u32 Re
 
 }
 
-void SetHwReg8188EU(PADAPTER Adapter, u8 variable, u8 *val)
+static void SetHwReg8188EU(PADAPTER Adapter, u8 variable, u8 *val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -1913,7 +1914,7 @@ void SetHwReg8188EU(PADAPTER Adapter, u8 variable, u8 *val)
 
 }
 
-void GetHwReg8188EU(PADAPTER Adapter, u8 variable, u8 *val)
+static void GetHwReg8188EU(PADAPTER Adapter, u8 variable, u8 *val)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -1929,7 +1930,7 @@ void GetHwReg8188EU(PADAPTER Adapter, u8 variable, u8 *val)
  *	Description:
  *		Query setting of specified variable.
  *   */
-u8
+static u8
 GetHalDefVar8188EUsb(
 	IN	PADAPTER				Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
@@ -1966,7 +1967,7 @@ GetHalDefVar8188EUsb(
  *	Description:
  *		Change default setting of specified variable.
  *   */
-u8
+static u8
 SetHalDefVar8188EUsb(
 	IN	PADAPTER				Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
@@ -1985,7 +1986,7 @@ SetHalDefVar8188EUsb(
 	return bResult;
 }
 
-void _update_response_rate(_adapter *padapter, unsigned int mask)
+static void _update_response_rate(_adapter *padapter, unsigned int mask)
 {
 	u8	RateIndex = 0;
 	/* Set RRSR rate table. */
@@ -2000,7 +2001,7 @@ void _update_response_rate(_adapter *padapter, unsigned int mask)
 	rtw_write8(padapter, REG_INIRTS_RATE_SEL, RateIndex);
 }
 
-void SetBeaconRelatedRegisters8188EUsb(PADAPTER padapter)
+static void SetBeaconRelatedRegisters8188EUsb(PADAPTER padapter)
 {
 	u32	value32;
 	/* HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter); */

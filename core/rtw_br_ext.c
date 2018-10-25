@@ -1518,11 +1518,11 @@ struct dhcpMessage {
 
 void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb)
 {
-	if (skb == NULL)
+	if (!skb)
 		return;
 
 	if (!priv->ethBrExtInfo.dhcp_bcst_disable) {
-		unsigned short protocol = *((unsigned short *)(skb->data + 2 * ETH_ALEN));
+		__be16 protocol = *((__be16 *)(skb->data + 2 * ETH_ALEN));
 
 		if (protocol == __constant_htons(ETH_P_IP)) { /* IP */
 			struct iphdr *iph = (struct iphdr *)(skb->data + ETH_HLEN);
@@ -1555,7 +1555,6 @@ void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb)
 		}
 	}
 }
-
 
 void *scdb_findEntry(_adapter *priv, unsigned char *macAddr,
 		     unsigned char *ipAddr)

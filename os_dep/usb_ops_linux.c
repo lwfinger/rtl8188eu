@@ -688,8 +688,6 @@ void usb_init_recvbuf(_adapter *padapter, struct recv_buf *precvbuf)
 
 }
 
-int recvbuf2recvframe(PADAPTER padapter, void *ptr);
-
 #ifdef CONFIG_USE_USB_BUFFER_ALLOC_RX
 void usb_recv_tasklet(void *priv)
 {

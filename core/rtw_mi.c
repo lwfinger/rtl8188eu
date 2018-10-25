@@ -33,7 +33,7 @@ void rtw_mi_update_union_chan_inf(_adapter *adapter, u8 ch, u8 offset , u8 bw)
 }
 
 /* Find union about ch, bw, ch_offset of all linked/linking interfaces */
-int _rtw_mi_get_ch_setting_union(_adapter *adapter, u8 *ch, u8 *bw, u8 *offset, bool include_self)
+static int _rtw_mi_get_ch_setting_union(_adapter *adapter, u8 *ch, u8 *bw, u8 *offset, bool include_self)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	_adapter *iface;
@@ -111,7 +111,7 @@ inline int rtw_mi_get_ch_setting_union_no_self(_adapter *adapter, u8 *ch, u8 *bw
 }
 
 /* For now, not return union_ch/bw/offset */
-void _rtw_mi_status(_adapter *adapter, struct mi_state *mstate, bool include_self)
+static void _rtw_mi_status(_adapter *adapter, struct mi_state *mstate, bool include_self)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	_adapter *iface;
@@ -667,7 +667,7 @@ void rtw_mi_buddy_xmit_tasklet_schedule(_adapter *padapter)
 }
 #endif
 
-u8 _rtw_mi_busy_traffic_check(_adapter *padapter, void *data)
+static u8 _rtw_mi_busy_traffic_check(_adapter *padapter, void *data)
 {
 	u32 passtime;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -1118,7 +1118,7 @@ _adapter *rtw_get_iface_by_hwport(_adapter *padapter, u8 hw_port)
 /*#define CONFIG_SKB_ALLOCATED*/
 #define DBG_SKB_PROCESS
 #ifdef DBG_SKB_PROCESS
-void rtw_dbg_skb_process(_adapter *padapter, union recv_frame *precvframe, union recv_frame *pcloneframe)
+static void rtw_dbg_skb_process(_adapter *padapter, union recv_frame *precvframe, union recv_frame *pcloneframe)
 {
 	_pkt *pkt_copy, *pkt_org;
 

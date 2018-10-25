@@ -108,43 +108,43 @@
 /*
 * Read LE data from memory to host byte order
 */
-#define ReadLE4Byte(_ptr)	le32_to_cpu(*((u32 *)(_ptr)))
-#define ReadLE2Byte(_ptr)	le16_to_cpu(*((u16 *)(_ptr)))
+#define ReadLE4Byte(_ptr)	le32_to_cpu(*((__le32 *)(_ptr)))
+#define ReadLE2Byte(_ptr)	le16_to_cpu(*((__le16 *)(_ptr)))
 #define ReadLE1Byte(_ptr)	(*((u8 *)(_ptr)))
 
 /*
 * Read BE data from memory to host byte order
 */
-#define ReadBEE4Byte(_ptr)	be32_to_cpu(*((u32 *)(_ptr)))
-#define ReadBE2Byte(_ptr)	be16_to_cpu(*((u16 *)(_ptr)))
+#define ReadBEE4Byte(_ptr)	be32_to_cpu(*((__be32 *)(_ptr)))
+#define ReadBE2Byte(_ptr)	be16_to_cpu(*((__be16 *)(_ptr)))
 #define ReadBE1Byte(_ptr)	(*((u8 *)(_ptr)))
 
 /*
 * Write host byte order data to memory in LE order
 */
-#define WriteLE4Byte(_ptr, _val)	((*((u32 *)(_ptr))) = cpu_to_le32(_val))
-#define WriteLE2Byte(_ptr, _val)	((*((u16 *)(_ptr))) = cpu_to_le16(_val))
+#define WriteLE4Byte(_ptr, _val)	((*((__le32 *)(_ptr))) = cpu_to_le32(_val))
+#define WriteLE2Byte(_ptr, _val)	((*((i__le16 *)(_ptr))) = cpu_to_le16(_val))
 #define WriteLE1Byte(_ptr, _val)	((*((u8 *)(_ptr))) = ((u8)(_val)))
 
 /*
 * Write host byte order data to memory in BE order
 */
-#define WriteBE4Byte(_ptr, _val)	((*((u32 *)(_ptr))) = cpu_to_be32(_val))
-#define WriteBE2Byte(_ptr, _val)	((*((u16 *)(_ptr))) = cpu_to_be16(_val))
+#define WriteBE4Byte(_ptr, _val)	((*((__be32 *)(_ptr))) = cpu_to_be32(_val))
+#define WriteBE2Byte(_ptr, _val)	((*((__be16 *)(_ptr))) = cpu_to_be16(_val))
 #define WriteBE1Byte(_ptr, _val)	((*((u8 *)(_ptr))) = ((u8)(_val)))
 
 /*
 * Return 4-byte value in host byte ordering from 4-byte pointer in litten-endian system.
 */
-#define LE_P4BYTE_TO_HOST_4BYTE(__pStart) (le32_to_cpu(*((u32 *)(__pStart))))
-#define LE_P2BYTE_TO_HOST_2BYTE(__pStart) (le16_to_cpu(*((u16 *)(__pStart))))
+#define LE_P4BYTE_TO_HOST_4BYTE(__pStart) (le32_to_cpu(*((__le32 *)(__pStart))))
+#define LE_P2BYTE_TO_HOST_2BYTE(__pStart) (le16_to_cpu(*((__le16 *)(__pStart))))
 #define LE_P1BYTE_TO_HOST_1BYTE(__pStart) ((*((u8 *)(__pStart))))
 
 /*
 * Return 4-byte value in host byte ordering from 4-byte pointer in big-endian system.
 */
-#define BE_P4BYTE_TO_HOST_4BYTE(__pStart) (be32_to_cpu(*((u32 *)(__pStart))))
-#define BE_P2BYTE_TO_HOST_2BYTE(__pStart) (be16_to_cpu(*((u16 *)(__pStart))))
+#define BE_P4BYTE_TO_HOST_4BYTE(__pStart) (be32_to_cpu(*((__be32 *)(__pStart))))
+#define BE_P2BYTE_TO_HOST_2BYTE(__pStart) (be16_to_cpu(*((__be16 *)(__pStart))))
 #define BE_P1BYTE_TO_HOST_1BYTE(__pStart) ((*((u8 *)(__pStart))))
 
 /*

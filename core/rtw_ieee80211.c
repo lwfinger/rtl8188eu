@@ -442,20 +442,20 @@ int rtw_generate_ie(struct registry_priv *pregistrypriv)
 	ie += sz;
 
 	/* beacon interval : 2bytes */
-	*(u16 *)ie = cpu_to_le16((u16)pdev_network->Configuration.BeaconPeriod); /* BCN_INTERVAL; */
+	*(__le16 *)ie = cpu_to_le16((u16)pdev_network->Configuration.BeaconPeriod); /* BCN_INTERVAL; */
 	sz += 2;
 	ie += 2;
 
 	/* capability info */
-	*(u16 *)ie = 0;
+	*(__le16 *)ie = 0;
 
-	*(u16 *)ie |= cpu_to_le16(cap_IBSS);
+	*(__le16 *)ie |= cpu_to_le16(cap_IBSS);
 
 	if (pregistrypriv->preamble == PREAMBLE_SHORT)
-		*(u16 *)ie |= cpu_to_le16(cap_ShortPremble);
+		*(__le16 *)ie |= cpu_to_le16(cap_ShortPremble);
 
 	if (pdev_network->Privacy)
-		*(u16 *)ie |= cpu_to_le16(cap_Privacy);
+		*(__le16 *)ie |= cpu_to_le16(cap_Privacy);
 
 	sz += 2;
 	ie += 2;
@@ -506,37 +506,28 @@ int rtw_generate_ie(struct registry_priv *pregistrypriv)
 	}
 #endif /* CONFIG_80211N_HT */
 
-	/* pdev_network->IELength =  sz; */ /* update IELength */
-
-
-	/* return _SUCCESS; */
-
 	return sz;
-
 }
 
 unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
 {
 	int len;
 	u16 val16;
+	__le16 leval16;
 	unsigned char wpa_oui_type[] = {0x00, 0x50, 0xf2, 0x01};
 	u8 *pbuf = pie;
 	int limit_new = limit;
 
 	while (1) {
 		pbuf = rtw_get_ie(pbuf, _WPA_IE_ID_, &len, limit_new);
-
 		if (pbuf) {
-
 			/* check if oui matches... */
 			if (_rtw_memcmp((pbuf + 2), wpa_oui_type, sizeof(wpa_oui_type)) == _FALSE)
-
 				goto check_next_ie;
-
 			/* check version... */
-			_rtw_memcpy((u8 *)&val16, (pbuf + 6), sizeof(val16));
+			_rtw_memcpy((u8 *)&leval16, (pbuf + 6), sizeof(val16));
 
-			val16 = le16_to_cpu(val16);
+			val16 = le16_to_cpu(leval16);
 			if (val16 != 0x0001)
 				goto check_next_ie;
 
@@ -545,7 +536,6 @@ unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
 			return pbuf;
 
 		} else {
-
 			*wpa_ie_len = 0;
 			return NULL;
 		}
@@ -1447,7 +1437,7 @@ void dump_ht_cap_ie_content(void *sel, u8 *buf, u32 buf_len)
 		      , HT_SUP_MCS_SET_ARG(HT_CAP_ELE_SUP_MCS_SET(buf)));
 }
 
-void dump_ht_cap_ie(void *sel, u8 *ie, u32 ie_len)
+static void dump_ht_cap_ie(void *sel, u8 *ie, u32 ie_len)
 {
 	u8 *pos = (u8 *)ie;
 	u16 id;
@@ -2487,7 +2477,7 @@ int ieee80211_get_hdrlen(u16 fc)
 	return hdrlen;
 }
 
-int rtw_get_cipher_info(struct wlan_network *pnetwork)
+static int rtw_get_cipher_info(struct wlan_network *pnetwork)
 {
 	u32 wpa_ielen;
 	unsigned char *pbuf;
@@ -2523,6 +2513,7 @@ int rtw_get_cipher_info(struct wlan_network *pnetwork)
 void rtw_get_bcn_info(struct wlan_network *pnetwork)
 {
 	unsigned short cap = 0;
+	__le16 le_cap;
 	u8 bencrypt = 0;
 	/* u8 wpa_ie[255],rsn_ie[255]; */
 	u16 wpa_len = 0, rsn_len = 0;
@@ -2531,8 +2522,8 @@ void rtw_get_bcn_info(struct wlan_network *pnetwork)
 	unsigned int		len;
 	unsigned char		*p;
 
-	_rtw_memcpy((u8 *)&cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
-	cap = le16_to_cpu(cap);
+	_rtw_memcpy((u8 *)&le_cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
+	cap = le16_to_cpu(le_cap);
 	if (cap & WLAN_CAPABILITY_PRIVACY) {
 		bencrypt = 1;
 		pnetwork->network.Privacy = 1;

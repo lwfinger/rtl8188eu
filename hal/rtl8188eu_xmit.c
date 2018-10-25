@@ -42,7 +42,7 @@ void	rtl8188eu_free_xmit_priv(_adapter *padapter)
 {
 }
 
-u8 urb_zero_packet_chk(_adapter *padapter, int sz)
+static u8 urb_zero_packet_chk(_adapter *padapter, int sz)
 {
 	u8 blnSetTxDescOffset;
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(padapter);
@@ -51,9 +51,9 @@ u8 urb_zero_packet_chk(_adapter *padapter, int sz)
 	return blnSetTxDescOffset;
 }
 
-void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
+static void rtl8188eu_cal_txdesc_chksum(struct tx_desc	*ptxdesc)
 {
-	u16	*usPtr = (u16 *)ptxdesc;
+	__le16	*usPtr = (__le16 *)ptxdesc;
 	u32 count = 16;		/* (32 bytes / 2 bytes per XOR) => 16 times */
 	u32 index;
 	u16 checksum = 0;
@@ -147,7 +147,7 @@ void rtl8188e_fill_fake_txdesc(
 #endif
 }
 
-void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
+static void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 {
 	if ((pattrib->encrypt > 0) && !pattrib->bswenc) {
 		switch (pattrib->encrypt) {
@@ -182,7 +182,7 @@ void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)
 
 }
 
-void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
+static void fill_txdesc_vcs(struct pkt_attrib *pattrib, __le32 *pdw)
 {
 	/* RTW_INFO("cvs_mode=%d\n", pattrib->vcs_mode);	 */
 
@@ -217,7 +217,7 @@ void fill_txdesc_vcs(struct pkt_attrib *pattrib, u32 *pdw)
 	}
 }
 
-void fill_txdesc_phy(struct pkt_attrib *pattrib, u32 *pdw)
+static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
 {
 	/* RTW_INFO("bwmode=%d, ch_off=%d\n", pattrib->bwmode, pattrib->ch_offset); */
 
@@ -321,14 +321,15 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 
 		if (pattrib->ampdu_en == _TRUE) {
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_EN);/* AGG EN */
-			ptxdesc->txdw2 |= (pattrib->ampdu_spacing << AMPDU_DENSITY_SHT) & 0x00700000;
+			ptxdesc->txdw2 |= cpu_to_le32((pattrib->ampdu_spacing <<
+						      AMPDU_DENSITY_SHT) & 0x00700000);
 
 			/* SET_TX_DESC_MAX_AGG_NUM_88E(pDesc, 0x1F); */
 			/* SET_TX_DESC_MCSG1_MAX_LEN_88E(pDesc, 0x6); */
 			/* SET_TX_DESC_MCSG2_MAX_LEN_88E(pDesc, 0x6); */
 			/* SET_TX_DESC_MCSG3_MAX_LEN_88E(pDesc, 0x6); */
 			/* SET_TX_DESC_MCS7_SGI_MAX_LEN_88E(pDesc, 0x6); */
-			ptxdesc->txdw6 = 0x6666f800;
+			ptxdesc->txdw6 = cpu_to_le32(0x6666f800);
 		} else {
 			ptxdesc->txdw2 |= cpu_to_le32(AGG_BK);/* AGG BK */
 		}

@@ -79,7 +79,7 @@ phydm_init_debug_setting(
 }
 
 #if CONFIG_PHYDM_DEBUG_FUNCTION
-void
+static void
 phydm_bb_rx_hang_info(
 	void			*p_dm_void,
 	u32			*_used,
@@ -256,7 +256,7 @@ phydm_bb_rx_hang_info(
 
 }
 
-void
+static void
 phydm_bb_debug_info_n_series(
 	void			*p_dm_void,
 	u32			*_used,
@@ -427,7 +427,7 @@ phydm_bb_debug_info_n_series(
 }
 
 
-void
+static void
 phydm_bb_debug_info(
 	void			*p_dm_void,
 	u32			*_used,
@@ -1430,7 +1430,7 @@ phydm_api_trx_mode(
 }
 #endif
 
-void
+static void
 phydm_get_per_path_txagc(
 	void			*p_dm_void,
 	u8			path,
@@ -1481,7 +1481,7 @@ phydm_get_per_path_txagc(
 }
 
 
-void
+static void
 phydm_get_txagc(
 	void			*p_dm_void,
 	u32			*_used,
@@ -1511,7 +1511,7 @@ phydm_get_txagc(
 
 }
 
-void
+static void
 phydm_set_txagc(
 	void			*p_dm_void,
 	u32			*const dm_value,
@@ -1564,7 +1564,7 @@ phydm_set_txagc(
 #endif
 }
 
-void
+static void
 phydm_debug_trace(
 	void		*p_dm_void,
 	u32		*const dm_value,
@@ -1629,7 +1629,7 @@ phydm_debug_trace(
 	PHYDM_SNPRINTF((output + used, out_len - used, "%s\n", "================================"));
 }
 
-void
+static void
 phydm_fw_debug_trace(
 	void		*p_dm_void,
 	u32		*const dm_value,
@@ -1681,7 +1681,7 @@ phydm_fw_debug_trace(
 	}
 }
 
-void
+static void
 phydm_dump_bb_reg(
 	void			*p_dm_void,
 	u32			*_used,
@@ -1726,7 +1726,7 @@ phydm_dump_bb_reg(
 	}
 }
 
-void
+static void
 phydm_dump_all_reg(
 	void			*p_dm_void,
 	u32			*_used,
@@ -1775,7 +1775,7 @@ phydm_dump_all_reg(
 	}
 }
 
-void
+static void
 phydm_enable_big_jump(
 	struct PHY_DM_STRUCT	*p_dm_odm,
 	bool		state
@@ -1878,7 +1878,7 @@ enum PHYDM_CMD_ID {
 	PHYDM_DYNAMIC_RA_PATH
 };
 
-struct _PHYDM_COMMAND phy_dm_ary[] = {
+static struct _PHYDM_COMMAND phy_dm_ary[] = {
 	{"-h", PHYDM_HELP},		/*do not move this element to other position*/
 	{"demo", PHYDM_DEMO},	/*do not move this element to other position*/
 	{"ra", PHYDM_RA},
@@ -3016,7 +3016,7 @@ phydm_fw_trace_handler_8051(
 	int i = 0;
 	u8	extend_c2h_sub_id = 0, extend_c2h_dbg_len = 0, extend_c2h_dbg_seq = 0;
 	u8	fw_debug_trace[128];
-	u8	*extend_c2h_dbg_content = 0;
+	u8	*extend_c2h_dbg_content = NULL;
 
 	if (cmd_len > 127)
 		return;

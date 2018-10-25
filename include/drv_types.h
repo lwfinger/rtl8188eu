@@ -1473,7 +1473,12 @@ int rtw_dev_pno_set(struct net_device *net, pno_ssid_t *ssid, int num,
 #endif /* CONFIG_PNO_SET_DEBUG */
 #endif /* CONFIG_PNO_SUPPORT */
 
+void *scdb_findEntry(_adapter *priv, unsigned char *macAddr,
+		     unsigned char *ipAddr);
+void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb);
 int rtw_suspend_free_assoc_resource(_adapter *padapter);
+int recvbuf2recvframe(PADAPTER padapter, void *ptr);
+
 #ifdef CONFIG_WOWLAN
 	int rtw_suspend_wow(_adapter *padapter);
 	int rtw_resume_process_wow(_adapter *padapter);

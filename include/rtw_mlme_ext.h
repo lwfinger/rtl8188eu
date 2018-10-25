@@ -1108,7 +1108,7 @@ u8 rtw_getmacreg_hdl(_adapter *padapter, u8 *pbuf);
 
 #ifdef _RTW_CMD_C_
 
-struct cmd_hdl wlancmds[] = {
+static struct cmd_hdl wlancmds[] = {
 	GEN_DRV_CMD_HANDLER(sizeof(struct readMAC_parm), rtw_getmacreg) /*0*/
 	GEN_DRV_CMD_HANDLER(0, NULL)
 	GEN_DRV_CMD_HANDLER(0, NULL)

@@ -25,21 +25,13 @@ extern void indicate_wx_scan_complete_event(_adapter *padapter);
 extern u8 rtw_do_join(_adapter *padapter);
 
 
-sint	_rtw_init_mlme_priv(_adapter *padapter)
+static sint _rtw_init_mlme_priv(_adapter *padapter)
 {
 	sint	i;
 	u8	*pbuf;
 	struct wlan_network	*pnetwork;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	sint	res = _SUCCESS;
-
-
-	/* We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
-	/* _rtw_memset((u8 *)pmlmepriv, 0, sizeof(struct mlme_priv)); */
-
-
-	/*qos_priv*/
-	/*pmlmepriv->qospriv.qos_option = pregistrypriv->wmm_enable;*/
 
 	/*ht_priv*/
 #ifdef CONFIG_80211N_HT
@@ -274,7 +266,7 @@ exit:
 }
 #endif /* defined(CONFIG_WFD) && defined(CONFIG_IOCTL_CFG80211) */
 
-void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
+static void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 {
 	if (NULL == pmlmepriv) {
 		rtw_warn_on(1);
@@ -292,7 +284,7 @@ exit:
 	return;
 }
 
-sint	_rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
+static sint	_rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
 {
 	_irqL irqL;
 
@@ -553,10 +545,9 @@ u8 *rtw_get_capability_from_ie(u8 *ie)
 
 u16 rtw_get_capability(WLAN_BSSID_EX *bss)
 {
-	u16	val;
+	__le16	val;
 
 	_rtw_memcpy((u8 *)&val, rtw_get_capability_from_ie(bss->IEs), 2);
-
 	return le16_to_cpu(val);
 }
 
@@ -668,18 +659,15 @@ inline int is_same_ess(WLAN_BSSID_EX *a, WLAN_BSSID_EX *b)
 int is_same_network(WLAN_BSSID_EX *src, WLAN_BSSID_EX *dst, u8 feature)
 {
 	u16 s_cap, d_cap;
-
+	__le16 le_tmp;
 
 	if (rtw_bug_check(dst, src, &s_cap, &d_cap) == _FALSE)
 		return _FALSE;
 
-	_rtw_memcpy((u8 *)&s_cap, rtw_get_capability_from_ie(src->IEs), 2);
-	_rtw_memcpy((u8 *)&d_cap, rtw_get_capability_from_ie(dst->IEs), 2);
-
-
-	s_cap = le16_to_cpu(s_cap);
-	d_cap = le16_to_cpu(d_cap);
-
+	_rtw_memcpy((u8 *)&le_tmp, rtw_get_capability_from_ie(src->IEs), 2);
+	s_cap = le16_to_cpu(le_tmp);
+	_rtw_memcpy((u8 *)&le_tmp, rtw_get_capability_from_ie(dst->IEs), 2);
+	d_cap = le16_to_cpu(le_tmp);
 
 #ifdef CONFIG_P2P
 	if ((feature == 1) && /* 1: P2P supported */
@@ -696,7 +684,6 @@ int is_same_network(WLAN_BSSID_EX *src, WLAN_BSSID_EX *dst, u8 feature)
 		 (d_cap & WLAN_CAPABILITY_IBSS)) &&
 		((s_cap & WLAN_CAPABILITY_BSS) ==
 		 (d_cap & WLAN_CAPABILITY_BSS)));
-
 }
 
 struct wlan_network *_rtw_find_same_network(_queue *scanned_queue, struct wlan_network *network)
@@ -1405,7 +1392,7 @@ static void free_scanqueue(struct	mlme_priv *pmlmepriv)
 
 }
 
-void rtw_reset_rx_info(struct debug_priv *pdbgpriv)
+static void rtw_reset_rx_info(struct debug_priv *pdbgpriv)
 {
 	pdbgpriv->dbg_rx_ampdu_drop_count = 0;
 	pdbgpriv->dbg_rx_ampdu_forced_indicate_count = 0;
@@ -1506,8 +1493,6 @@ void rtw_free_assoc_resources(_adapter *adapter, int lock_scanned_queue)
 	adapter->securitypriv.key_mask = 0;
 
 	rtw_reset_rx_info(pdbgpriv);
-
-
 }
 
 /*
@@ -1940,39 +1925,13 @@ void rtw_joinbss_event_prehandle(_adapter *adapter, u8 *pbuf)
 	struct wlan_network	*pcur_wlan = NULL, *ptarget_wlan = NULL;
 	unsigned int		the_same_macaddr = _FALSE;
 
-
-#ifdef CONFIG_RTL8712
-	/* endian_convert */
-	pnetwork->join_res = le32_to_cpu(pnetwork->join_res);
-	pnetwork->network_type = le32_to_cpu(pnetwork->network_type);
-	pnetwork->network.Length = le32_to_cpu(pnetwork->network.Length);
-	pnetwork->network.Ssid.SsidLength = le32_to_cpu(pnetwork->network.Ssid.SsidLength);
-	pnetwork->network.Privacy = le32_to_cpu(pnetwork->network.Privacy);
-	pnetwork->network.Rssi = le32_to_cpu(pnetwork->network.Rssi);
-	pnetwork->network.NetworkTypeInUse = le32_to_cpu(pnetwork->network.NetworkTypeInUse) ;
-	pnetwork->network.Configuration.ATIMWindow = le32_to_cpu(pnetwork->network.Configuration.ATIMWindow);
-	pnetwork->network.Configuration.BeaconPeriod = le32_to_cpu(pnetwork->network.Configuration.BeaconPeriod);
-	pnetwork->network.Configuration.DSConfig = le32_to_cpu(pnetwork->network.Configuration.DSConfig);
-	pnetwork->network.Configuration.FHConfig.DwellTime = le32_to_cpu(pnetwork->network.Configuration.FHConfig.DwellTime);
-	pnetwork->network.Configuration.FHConfig.HopPattern = le32_to_cpu(pnetwork->network.Configuration.FHConfig.HopPattern);
-	pnetwork->network.Configuration.FHConfig.HopSet = le32_to_cpu(pnetwork->network.Configuration.FHConfig.HopSet);
-	pnetwork->network.Configuration.FHConfig.Length = le32_to_cpu(pnetwork->network.Configuration.FHConfig.Length);
-	pnetwork->network.Configuration.Length = le32_to_cpu(pnetwork->network.Configuration.Length);
-	pnetwork->network.InfrastructureMode = le32_to_cpu(pnetwork->network.InfrastructureMode);
-	pnetwork->network.IELength = le32_to_cpu(pnetwork->network.IELength);
-#endif
-
-
 	rtw_get_encrypt_decrypt_from_registrypriv(adapter);
-
-
 
 	the_same_macaddr = _rtw_memcmp(pnetwork->network.MacAddress, cur_network->network.MacAddress, ETH_ALEN);
 
 	pnetwork->network.Length = get_WLAN_BSSID_EX_sz(&pnetwork->network);
-	if (pnetwork->network.Length > sizeof(WLAN_BSSID_EX)) {
-		goto ignore_joinbss_callback;
-	}
+	if (pnetwork->network.Length > sizeof(WLAN_BSSID_EX))
+		return;
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
@@ -2446,7 +2405,7 @@ err_2:
 }
 #endif
 
-void rtw_sta_mstatus_disc_rpt(_adapter *adapter, u8 mac_id)
+static void rtw_sta_mstatus_disc_rpt(_adapter *adapter, u8 mac_id)
 {
 	struct macid_ctl_t *macid_ctl = &adapter->dvobj->macid_ctl;
 
@@ -3164,7 +3123,7 @@ int rtw_select_roaming_candidate(struct mlme_priv *mlme)
 
 	if (mlme->cur_network_scanned == NULL) {
 		rtw_warn_on(1);
-		goto exit;
+		return ret;
 	}
 
 	_enter_critical_bh(&(mlme->scanned_queue.lock), &irqL);
@@ -3978,10 +3937,10 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 
 	_rtw_memset(&ht_capie, 0, sizeof(struct rtw_ieee80211_ht_cap));
 
-	ht_capie.cap_info = IEEE80211_HT_CAP_DSSSCCK40;
+	ht_capie.cap_info = cpu_to_le16(IEEE80211_HT_CAP_DSSSCCK40);
 
 	if (phtpriv->sgi_20m)
-		ht_capie.cap_info |= IEEE80211_HT_CAP_SGI_20;
+		ht_capie.cap_info |= cpu_to_le16(IEEE80211_HT_CAP_SGI_20);
 
 	/* Get HT BW */
 	if (in_ie == NULL) {
@@ -4024,23 +3983,23 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 	}
 
 	if ((cbw40_enable == 1) && (operation_bw == CHANNEL_WIDTH_40)) {
-		ht_capie.cap_info |= IEEE80211_HT_CAP_SUP_WIDTH;
+		ht_capie.cap_info |= cpu_to_le16(IEEE80211_HT_CAP_SUP_WIDTH);
 		if (phtpriv->sgi_40m)
-			ht_capie.cap_info |= IEEE80211_HT_CAP_SGI_40;
+			ht_capie.cap_info |= cpu_to_le16(IEEE80211_HT_CAP_SGI_40);
 	}
 
 	/* todo: disable SM power save mode */
-	ht_capie.cap_info |= IEEE80211_HT_CAP_SM_PS;
+	ht_capie.cap_info |= cpu_to_le16(IEEE80211_HT_CAP_SM_PS);
 
 	/* RX LDPC */
 	if (TEST_FLAG(phtpriv->ldpc_cap, LDPC_HT_ENABLE_RX)) {
-		ht_capie.cap_info |= IEEE80211_HT_CAP_LDPC_CODING;
+		ht_capie.cap_info |= cpu_to_le16(IEEE80211_HT_CAP_LDPC_CODING);
 		RTW_INFO("[HT] Declare supporting RX LDPC\n");
 	}
 
 	/* TX STBC */
 	if (TEST_FLAG(phtpriv->stbc_cap, STBC_HT_ENABLE_TX)) {
-		ht_capie.cap_info |= IEEE80211_HT_CAP_TX_STBC;
+		ht_capie.cap_info |= cpu_to_le16(IEEE80211_HT_CAP_TX_STBC);
 		RTW_INFO("[HT] Declare supporting TX STBC\n");
 	}
 
@@ -4086,13 +4045,11 @@ unsigned int rtw_restructure_ht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, ui
 		RTW_WARN("rf_type:%d or rx_nss:%u is not expected\n", rf_type, hal_spec->rx_nss_num);
 	}
 
-	{
-		rtw_hal_get_def_var(padapter, HAL_DEF_RX_PACKET_OFFSET, &rx_packet_offset);
-		rtw_hal_get_def_var(padapter, HAL_DEF_MAX_RECVBUF_SZ, &max_recvbuf_sz);
-		if (max_recvbuf_sz - rx_packet_offset >= (8191 - 256)) {
-			RTW_INFO("%s IEEE80211_HT_CAP_MAX_AMSDU is set\n", __FUNCTION__);
-			ht_capie.cap_info = ht_capie.cap_info | IEEE80211_HT_CAP_MAX_AMSDU;
-		}
+	rtw_hal_get_def_var(padapter, HAL_DEF_RX_PACKET_OFFSET, &rx_packet_offset);
+	rtw_hal_get_def_var(padapter, HAL_DEF_MAX_RECVBUF_SZ, &max_recvbuf_sz);
+	if (max_recvbuf_sz - rx_packet_offset >= (8191 - 256)) {
+		RTW_INFO("%s IEEE80211_HT_CAP_MAX_AMSDU is set\n", __FUNCTION__);
+		ht_capie.cap_info = ht_capie.cap_info | cpu_to_le16(IEEE80211_HT_CAP_MAX_AMSDU);
 	}
 	/*
 	AMPDU_para [1:0]:Max AMPDU Len => 0:8k , 1:16k, 2:32k, 3:64k
@@ -4244,7 +4201,7 @@ void rtw_update_ht_cap(_adapter *padapter, u8 *pie, uint ie_len, u8 channel)
 
 	/* update cur_bwmode & cur_ch_offset */
 	if ((cbw40_enable) &&
-	    (pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info & BIT(1)) &&
+	    (le16_to_cpu(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info) & BIT(1)) &&
 	    (pmlmeinfo->HT_info.infos[0] & BIT(2))) {
 		struct hal_spec_t *hal_spec = GET_HAL_SPEC(padapter);
 		int i;
@@ -4301,61 +4258,12 @@ void rtw_update_ht_cap(_adapter *padapter, u8 *pie, uint ie_len, u8 channel)
 	/*  */
 	/* Config SM Power Save setting */
 	/*  */
-	pmlmeinfo->SM_PS = (pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info & 0x0C) >> 2;
-	if (pmlmeinfo->SM_PS == WLAN_HT_CAP_SM_PS_STATIC) {
-#if 0
-		u8 i;
-		/* update the MCS rates */
-		for (i = 0; i < 16; i++)
-			pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
-#endif
+	pmlmeinfo->SM_PS = (le16_to_cpu(pmlmeinfo->HT_caps.u.HT_cap_element.HT_caps_info) & 0x0C) >> 2;
+	if (pmlmeinfo->SM_PS == WLAN_HT_CAP_SM_PS_STATIC)
 		RTW_INFO("%s(): WLAN_HT_CAP_SM_PS_STATIC\n", __FUNCTION__);
-	}
 
-	/*  */
 	/* Config current HT Protection mode. */
-	/*  */
 	pmlmeinfo->HT_protection = pmlmeinfo->HT_info.infos[1] & 0x3;
-
-
-
-#if 0 /* move to rtw_update_sta_info_client() */
-	/* for A-MPDU Rx reordering buffer control for bmc_sta & sta_info */
-	/* if A-MPDU Rx is enabled, reseting  rx_ordering_ctrl wstart_b(indicate_seq) to default value=0xffff */
-	/* todo: check if AP can send A-MPDU packets */
-	bmc_sta = rtw_get_bcmc_stainfo(padapter);
-	if (bmc_sta) {
-		for (i = 0; i < 16 ; i++) {
-			/* preorder_ctrl = &precvpriv->recvreorder_ctrl[i]; */
-			preorder_ctrl = &bmc_sta->recvreorder_ctrl[i];
-			preorder_ctrl->enable = _FALSE;
-			preorder_ctrl->indicate_seq = 0xffff;
-#ifdef DBG_RX_SEQ
-			RTW_INFO("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __FUNCTION__, __LINE__,
-				 preorder_ctrl->indicate_seq);
-#endif
-			preorder_ctrl->wend_b = 0xffff;
-			preorder_ctrl->wsize_b = 64;/* max_ampdu_sz; */ /* ex. 32(kbytes) -> wsize_b=32 */
-		}
-	}
-
-	psta = rtw_get_stainfo(&padapter->stapriv, pcur_network->network.MacAddress);
-	if (psta) {
-		for (i = 0; i < 16 ; i++) {
-			/* preorder_ctrl = &precvpriv->recvreorder_ctrl[i]; */
-			preorder_ctrl = &psta->recvreorder_ctrl[i];
-			preorder_ctrl->enable = _FALSE;
-			preorder_ctrl->indicate_seq = 0xffff;
-#ifdef DBG_RX_SEQ
-			RTW_INFO("DBG_RX_SEQ %s:%d indicate_seq:%u\n", __FUNCTION__, __LINE__,
-				 preorder_ctrl->indicate_seq);
-#endif
-			preorder_ctrl->wend_b = 0xffff;
-			preorder_ctrl->wsize_b = 64;/* max_ampdu_sz; */ /* ex. 32(kbytes) -> wsize_b=32 */
-		}
-	}
-#endif
-
 }
 
 #ifdef CONFIG_TDLS
@@ -4645,9 +4553,9 @@ static bool wfd_st_match_rule(_adapter *adapter, u8 *local_naddr, u8 *local_port
 {
 	struct wifi_display_info *wfdinfo = &adapter->wfd_info;
 
-	if (ntohs(*((u16 *)local_port)) == wfdinfo->rtsp_ctrlport
-	    || ntohs(*((u16 *)local_port)) == wfdinfo->tdls_rtsp_ctrlport
-	    || ntohs(*((u16 *)remote_port)) == wfdinfo->peer_rtsp_ctrlport)
+	if (ntohs(*((__be16 *)local_port)) == wfdinfo->rtsp_ctrlport ||
+	    ntohs(*((__be16 *)local_port)) == wfdinfo->tdls_rtsp_ctrlport ||
+	    ntohs(*((__be16 *)remote_port)) == wfdinfo->peer_rtsp_ctrlport)
 		return _TRUE;
 	return _FALSE;
 }

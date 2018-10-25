@@ -480,7 +480,7 @@ odm_txpowertracking_init(
 	odm_txpowertracking_thermal_meter_init(p_dm_odm);
 }
 
-u8
+static u8
 get_swing_index(
 	void	*p_dm_void
 )

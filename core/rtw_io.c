@@ -80,29 +80,28 @@ u8 _rtw_read8(_adapter *adapter, u32 addr)
 
 u16 _rtw_read16(_adapter *adapter, u32 addr)
 {
-	u16 r_val;
+	__le16 r_val;
 	/* struct	io_queue  	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-	u16(*_read16)(struct intf_hdl *pintfhdl, u32 addr);
+	__le16(*_read16)(struct intf_hdl *pintfhdl, u32 addr);
 	_read16 = pintfhdl->io_ops._read16;
 
 	r_val = _read16(pintfhdl, addr);
-	return rtw_le16_to_cpu(r_val);
+	return le16_to_cpu(r_val);
 }
 
 u32 _rtw_read32(_adapter *adapter, u32 addr)
 {
-	u32 r_val;
+	__le32 r_val;
 	/* struct	io_queue  	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-	u32(*_read32)(struct intf_hdl *pintfhdl, u32 addr);
+	__le32(*_read32)(struct intf_hdl *pintfhdl, u32 addr);
 	_read32 = pintfhdl->io_ops._read32;
 
 	r_val = _read32(pintfhdl, addr);
 	return rtw_le32_to_cpu(r_val);
-
 }
 
 int _rtw_write8(_adapter *adapter, u32 addr, u8 val)
@@ -123,12 +122,14 @@ int _rtw_write16(_adapter *adapter, u32 addr, u16 val)
 	/* struct	io_queue  	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-	int (*_write16)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
+	int (*_write16)(struct intf_hdl *pintfhdl, u32 addr, __le16 val);
 	int ret;
+	__le16 outval;
+
 	_write16 = pintfhdl->io_ops._write16;
 
-	val = rtw_cpu_to_le16(val);
-	ret = _write16(pintfhdl, addr, val);
+	outval = rtw_cpu_to_le16(val);
+	ret = _write16(pintfhdl, addr, outval);
 
 	return RTW_STATUS_CODE(ret);
 }
@@ -137,12 +138,14 @@ int _rtw_write32(_adapter *adapter, u32 addr, u32 val)
 	/* struct	io_queue  	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-	int (*_write32)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
+	int (*_write32)(struct intf_hdl *pintfhdl, u32 addr, __le32 val);
 	int ret;
+	__le32 outval;
+
 	_write32 = pintfhdl->io_ops._write32;
 
-	val = rtw_cpu_to_le32(val);
-	ret = _write32(pintfhdl, addr, val);
+	outval = rtw_cpu_to_le32(val);
+	ret = _write32(pintfhdl, addr, outval);
 
 	return RTW_STATUS_CODE(ret);
 }
@@ -303,11 +306,13 @@ int _rtw_write16_async(_adapter *adapter, u32 addr, u16 val)
 	/* struct	io_queue  	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-	int (*_write16_async)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
+	int (*_write16_async)(struct intf_hdl *pintfhdl, u32 addr, __le16 val);
 	int ret;
+	__le16 outval;
+
 	_write16_async = pintfhdl->io_ops._write16_async;
-	val = rtw_cpu_to_le16(val);
-	ret = _write16_async(pintfhdl, addr, val);
+	outval = rtw_cpu_to_le16(val);
+	ret = _write16_async(pintfhdl, addr, outval);
 
 	return RTW_STATUS_CODE(ret);
 }
@@ -316,11 +321,13 @@ int _rtw_write32_async(_adapter *adapter, u32 addr, u32 val)
 	/* struct	io_queue  	*pio_queue = (struct io_queue *)adapter->pio_queue; */
 	struct io_priv *pio_priv = &adapter->iopriv;
 	struct	intf_hdl		*pintfhdl = &(pio_priv->intf);
-	int (*_write32_async)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
+	int (*_write32_async)(struct intf_hdl *pintfhdl, u32 addr, __le32 val);
 	int ret;
+	__le32 outval;
+
 	_write32_async = pintfhdl->io_ops._write32_async;
-	val = rtw_cpu_to_le32(val);
-	ret = _write32_async(pintfhdl, addr, val);
+	outval = rtw_cpu_to_le32(val);
+	ret = _write32_async(pintfhdl, addr, outval);
 
 	return RTW_STATUS_CODE(ret);
 }

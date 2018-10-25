@@ -1040,11 +1040,11 @@ int rtw_halmac_deinit_adapter(struct dvobj_priv *);
 #define rf_mode_table_data0	RF_ModeTableData0
 #define rf_mode_table_data1	RF_ModeTableData1
 
-
-
-
-
-
 #define RX_SMOOTH_FACTOR	Rx_Smooth_Factor
+
+extern int new_bcn_max;
+extern u8 REALTEK_96B_IE[];
+extern unsigned char WPA_TKIP_CIPHER[4];
+extern unsigned char RSN_TKIP_CIPHER[4];
 
 #endif /* __HAL_DATA_H__ */

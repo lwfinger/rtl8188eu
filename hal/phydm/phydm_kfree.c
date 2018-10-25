@@ -28,12 +28,7 @@
 /*<YuChen, 150720> Add for KFree Feature Requested by RF David.*/
 /*This is a phydm API*/
 
-void
-phydm_set_kfree_to_rf_8814a(
-	void		*p_dm_void,
-	u8		e_rf_path,
-	u8		data
-)
+static void phydm_set_kfree_to_rf_8814a(void *p_dm_void, u8 e_rf_path, u8 data)
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct odm_rf_calibration_structure	*p_rf_calibrate_info = &(p_dm_odm->rf_calibrate_info);
@@ -119,12 +114,7 @@ phydm_set_kfree_to_rf_8814a(
 }
 
 
-void
-phydm_set_kfree_to_rf(
-	void		*p_dm_void,
-	u8		e_rf_path,
-	u8		data
-)
+static void phydm_set_kfree_to_rf(void *p_dm_void, u8 e_rf_path, u8 data)
 {
 	struct PHY_DM_STRUCT	*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 

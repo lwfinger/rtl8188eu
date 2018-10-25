@@ -94,26 +94,7 @@ struct recv_reorder_ctrl {
 struct	stainfo_rxcache	{
 	u16	tid_rxseq[16];
 	u8 iv[16][8];
-#if 0
-	unsigned short	tid0_rxseq;
-	unsigned short	tid1_rxseq;
-	unsigned short	tid2_rxseq;
-	unsigned short	tid3_rxseq;
-	unsigned short	tid4_rxseq;
-	unsigned short	tid5_rxseq;
-	unsigned short	tid6_rxseq;
-	unsigned short	tid7_rxseq;
-	unsigned short	tid8_rxseq;
-	unsigned short	tid9_rxseq;
-	unsigned short	tid10_rxseq;
-	unsigned short	tid11_rxseq;
-	unsigned short	tid12_rxseq;
-	unsigned short	tid13_rxseq;
-	unsigned short	tid14_rxseq;
-	unsigned short	tid15_rxseq;
-#endif
 };
-
 
 struct smooth_rssi_data {
 	u32	elements[100];	/* array to store values */
@@ -170,9 +151,8 @@ struct rx_raw_rssi {
 	u8 ofdm_snr[4];
 };
 
-
 struct rx_pkt_attrib	{
-	u16	pkt_len;
+	__le16	pkt_len;
 	u8	physt;
 	u8	drvinfo_sz;
 	u8	shift_sz;
@@ -183,7 +163,7 @@ struct rx_pkt_attrib	{
 	u8	priority;
 	u8	pw_save;
 	u8	mdata;
-	u16	seq_num;
+	__le16	seq_num;
 	u8	frag_num;
 	u8	mfrag;
 	u8	order;
@@ -195,7 +175,7 @@ struct rx_pkt_attrib	{
 	u8	crc_err;
 	u8	icv_err;
 
-	u16	eth_type;
+	__le16	eth_type;
 
 	u8	dst[ETH_ALEN];
 	u8	src[ETH_ALEN];
@@ -219,16 +199,9 @@ struct rx_pkt_attrib	{
 	u8	ldpc;
 	u8	sgi;
 	u8	pkt_rpt_type;
-	u32 tsfl;
-	u32	MacIDValidEntry[2];	/* 64 bits present 64 entry. */
+	__le32 tsfl;
+	__le32	MacIDValidEntry[2];	/* 64 bits present 64 entry. */
 
-#if 0
-	u8	signal_qual;
-	s8	rx_mimo_signal_qual[2];
-	u8	signal_strength;
-	u32	RxPWDBAll;
-	s32	RecvSignalPower;
-#endif
 	struct phy_info phy_info;
 };
 
@@ -266,26 +239,21 @@ struct recv_stat {
 };
 #else
 struct recv_stat {
-	unsigned int rxdw0;
+	__le32 rxdw0;
 
-	unsigned int rxdw1;
+	__le32 rxdw1;
 
 #if !((defined(CONFIG_RTL8192E) || defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)) && defined(CONFIG_PCI_HCI))  /* exclude 8192ee, 8814ae, 8822be, 8821ce */
-	unsigned int rxdw2;
+	__le32 rxdw2;
 
-	unsigned int rxdw3;
+	__le32 rxdw3;
 #endif
 
 #ifndef BUF_DESC_ARCH
-	unsigned int rxdw4;
+	__le32 rxdw4;
 
-	unsigned int rxdw5;
+	__le32 rxdw5;
 
-#ifdef CONFIG_PCI_HCI
-	unsigned int rxdw6;
-
-	unsigned int rxdw7;
-#endif
 #endif /* if BUF_DESC_ARCH is defined, rx_buf_desc occupy 4 double words */
 };
 #endif

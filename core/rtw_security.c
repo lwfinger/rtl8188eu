@@ -210,7 +210,7 @@ exit:
 	return;
 }
 
-static u32 getcrc32(u8 *buf, sint len)
+static __le32 getcrc32(u8 *buf, sint len)
 {
 	u8 *p;
 	u32  crc;
@@ -221,7 +221,7 @@ static u32 getcrc32(u8 *buf, sint len)
 
 	for (p = buf; len > 0; ++p, --len)
 		crc = crc32_table[(crc ^ *p) & 0xff] ^ (crc >> 8);
-	return ~crc;    /* transmit complement, per CRC-32 spec */
+	return cpu_to_le32(~crc);    /* transmit complement, per CRC-32 spec */
 }
 
 
@@ -231,7 +231,6 @@ static u32 getcrc32(u8 *buf, sint len)
 void rtw_wep_encrypt(_adapter *padapter, u8 *pxmitframe)
 {
 	/* exclude ICV */
-
 	unsigned char	crc[4];
 	struct arc4context	 mycontext;
 
@@ -278,7 +277,7 @@ void rtw_wep_encrypt(_adapter *padapter, u8 *pxmitframe)
 
 				length = pattrib->last_txcmdsz - pattrib->hdrlen - pattrib->iv_len - pattrib->icv_len;
 
-				*((u32 *)crc) = cpu_to_le32(getcrc32(payload, length));
+				*((__le32 *)crc) = getcrc32(payload, length);
 
 				arcfour_init(&mycontext, wepkey, 3 + keylength);
 				arcfour_encrypt(&mycontext, payload, payload, length);
@@ -286,7 +285,7 @@ void rtw_wep_encrypt(_adapter *padapter, u8 *pxmitframe)
 
 			} else {
 				length = pxmitpriv->frag_len - pattrib->hdrlen - pattrib->iv_len - pattrib->icv_len ;
-				*((u32 *)crc) = cpu_to_le32(getcrc32(payload, length));
+				*((__le32 *)crc) = getcrc32(payload, length);
 				arcfour_init(&mycontext, wepkey, 3 + keylength);
 				arcfour_encrypt(&mycontext, payload, payload, length);
 				arcfour_encrypt(&mycontext, payload + length, crc, 4);
@@ -337,15 +336,12 @@ void rtw_wep_decrypt(_adapter  *padapter, u8 *precvframe)
 		arcfour_encrypt(&mycontext, payload, payload,  length);
 
 		/* calculate icv and compare the icv */
-		*((u32 *)crc) = le32_to_cpu(getcrc32(payload, length - 4));
+		*((__le32 *)crc) = getcrc32(payload, length - 4);
 
 
 		WEP_SW_DEC_CNT_INC(psecuritypriv, prxattrib->ra);
 	}
-
-
 	return;
-
 }
 
 /* 3		=====TKIP related===== */
@@ -761,7 +757,7 @@ u32	rtw_tkip_encrypt(_adapter *padapter, u8 *pxmitframe)
 
 				if ((curfragnum + 1) == pattrib->nr_frags) {	/* 4 the last fragment */
 					length = pattrib->last_txcmdsz - pattrib->hdrlen - pattrib->iv_len - pattrib->icv_len;
-					*((u32 *)crc) = cpu_to_le32(getcrc32(payload, length)); /* modified by Amy*/
+					*((__le32 *)crc) = getcrc32(payload, length); /* modified by Amy*/
 
 					arcfour_init(&mycontext, rc4key, 16);
 					arcfour_encrypt(&mycontext, payload, payload, length);
@@ -769,7 +765,7 @@ u32	rtw_tkip_encrypt(_adapter *padapter, u8 *pxmitframe)
 
 				} else {
 					length = pxmitpriv->frag_len - pattrib->hdrlen - pattrib->iv_len - pattrib->icv_len ;
-					*((u32 *)crc) = cpu_to_le32(getcrc32(payload, length)); /* modified by Amy*/
+					*((__le32 *)crc) = getcrc32(payload, length); /* modified by Amy*/
 					arcfour_init(&mycontext, rc4key, 16);
 					arcfour_encrypt(&mycontext, payload, payload, length);
 					arcfour_encrypt(&mycontext, payload + length, crc, 4);
@@ -887,7 +883,7 @@ u32 rtw_tkip_decrypt(_adapter *padapter, u8 *precvframe)
 			arcfour_init(&mycontext, rc4key, 16);
 			arcfour_encrypt(&mycontext, payload, payload, length);
 
-			*((u32 *)crc) = le32_to_cpu(getcrc32(payload, length - 4));
+			*((__le32 *)crc) = getcrc32(payload, length - 4);
 
 			if (crc[3] != payload[length - 1] || crc[2] != payload[length - 2] || crc[1] != payload[length - 3] || crc[0] != payload[length - 4]) {
 				res = _FAIL;
@@ -1373,7 +1369,7 @@ static sint aes_cipher(u8 *key, uint	hdrlen,
 	u8 padded_buffer[16];
 	u8 mic[8];
 	/*	uint	offset = 0; */
-	uint	frtype  = GetFrameType(pframe);
+	u16	frtype  = GetFrameType(pframe);
 	uint	frsubtype  = get_frame_sub_type(pframe);
 
 	frsubtype = frsubtype >> 4;
@@ -2797,7 +2793,7 @@ static int omac1_aes_128_vector(u8 *key, size_t num_elem,
  * OMAC1 was standardized with the name CMAC by NIST in a Special Publication
  * (SP) 800-38B.
  */ /* modify for CONFIG_IEEE80211W */
-int omac1_aes_128(u8 *key, u8 *data, size_t data_len, u8 *mac)
+static int omac1_aes_128(u8 *key, u8 *data, size_t data_len, u8 *mac)
 {
 	return omac1_aes_128_vector(key, 1, &data, &data_len, mac);
 }
