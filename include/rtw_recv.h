@@ -629,17 +629,14 @@ __inline static u8 *recvframe_pull(union recv_frame *precvframe, sint sz)
 
 }
 
-__inline static u8 *recvframe_put(union recv_frame *precvframe, sint sz)
+__inline static u8 *recvframe_put(union recv_frame *precvframe, __le16 le_sz)
 {
-	/* rx_tai += sz; move rx_tail sz bytes  hereafter */
-
+	s16 sz = le16_to_cpu(le_sz);
 	/* used for append sz bytes from ptr to rx_tail, update rx_tail and return the updated rx_tail to the caller */
 	/* after putting, rx_tail must be still larger than rx_end. */
 	unsigned char *prev_rx_tail;
 
-	/* RTW_INFO("recvframe_put: len=%d\n", sz); */
-
-	if (precvframe == NULL)
+	if (!precvframe)
 		return NULL;
 
 	prev_rx_tail = precvframe->u.hdr.rx_tail;
@@ -654,7 +651,6 @@ __inline static u8 *recvframe_put(union recv_frame *precvframe, sint sz)
 	precvframe->u.hdr.len += sz;
 
 	return precvframe->u.hdr.rx_tail;
-
 }
 
 

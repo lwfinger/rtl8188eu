@@ -20,6 +20,7 @@
 #define _RTW_MLME_C_
 
 #include <hal_data.h>
+#include <usb_osintf.h>
 
 extern void indicate_wx_scan_complete_event(_adapter *padapter);
 extern u8 rtw_do_join(_adapter *padapter);
@@ -2914,7 +2915,6 @@ void rtw_iface_dynamic_check_timer_handler(_adapter *adapter)
 #endif /* (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 		&& (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE) == _TRUE)) {
 		/* expire NAT2.5 entry */
-		void nat25_db_expire(_adapter *priv);
 		nat25_db_expire(adapter);
 
 		if (adapter->pppoe_connection_in_progress > 0)

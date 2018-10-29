@@ -19,6 +19,7 @@
 ******************************************************************************/
 
 #include "drv_types.h"
+#include "hal8188e_t_fw.h"
 
 #ifdef LOAD_FW_HEADER_FROM_DRIVER
 

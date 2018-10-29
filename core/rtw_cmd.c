@@ -4298,10 +4298,6 @@ static void session_tracker_chk_for_sta(_adapter *adapter, struct sta_info *sta)
 			continue;
 
 		#ifdef CONFIG_WFD
-		if (0)
-			RTW_INFO(FUNC_ADPT_FMT" local:%u, remote:%u, rtsp:%u, %u, %u\n", FUNC_ADPT_ARG(adapter)
-				, ntohs(st->local_port), ntohs(st->remote_port), adapter->wfd_info.rtsp_ctrlport, adapter->wfd_info.tdls_rtsp_ctrlport
-				, adapter->wfd_info.peer_rtsp_ctrlport);
 		if (ntohs(st->local_port) == adapter->wfd_info.rtsp_ctrlport)
 			op_wfd_mode |= MIRACAST_SINK;
 		if (ntohs(st->local_port) == adapter->wfd_info.tdls_rtsp_ctrlport)

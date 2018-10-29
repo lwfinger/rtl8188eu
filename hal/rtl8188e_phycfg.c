@@ -1102,7 +1102,7 @@ rtl8188e_PHY_ConfigRFWithParaFile(
  * **************************************** */
 #define HighPowerRadioAArrayLen 22
 /* This is for High power PA */
-u32 Rtl8192S_HighPower_RadioA_Array[HighPowerRadioAArrayLen] = {
+static u32 Rtl8192S_HighPower_RadioA_Array[HighPowerRadioAArrayLen] = {
 	0x013, 0x00029ea4,
 	0x013, 0x00025e74,
 	0x013, 0x00020ea4,
@@ -1384,7 +1384,7 @@ PHY_SetTxPowerIndex_8188E(
 		RTW_INFO("Invalid RFPath!!\n");
 }
 
-u8
+static u8
 phy_GetCurrentTxNum_8188E(
 	IN	PADAPTER	pAdapter,
 	IN	u8			Rate
@@ -1402,7 +1402,7 @@ phy_GetCurrentTxNum_8188E(
 	return TxNum;
 }
 
-s8 tx_power_extra_bias(
+static s8 tx_power_extra_bias(
 	IN	u8				RFPath,
 	IN	u8				Rate,
 	IN	CHANNEL_WIDTH	BandWidth,
@@ -1477,7 +1477,7 @@ PHY_UpdateTxPowerDbm8188E(
 	return _TRUE;
 }
 
-VOID
+static void
 PHY_ScanOperationBackup8188E(
 	IN	PADAPTER	Adapter,
 	IN	u8		Operation
@@ -1505,7 +1505,8 @@ PHY_ScanOperationBackup8188E(
 	}
 #endif
 }
-void
+
+static void
 phy_SpurCalibration_8188E(
 	IN	PADAPTER			Adapter
 )
@@ -1973,13 +1974,8 @@ _PHY_DumpRFReg(IN	PADAPTER	pAdapter)
  *		To dump all Tx FIFO LLT related link-list table.
  *		Added by Roger, 2009.03.10.
  *   */
-VOID
-DumpBBDbgPort_92CU(
-	IN	PADAPTER			Adapter
-)
+static void DumpBBDbgPort_92CU(PADAPTER Adapter)
 {
-
-
 	phy_set_bb_reg(Adapter, 0x0908, 0xffff, 0x0000);
 
 	phy_set_bb_reg(Adapter, 0x0908, 0xffff, 0x0803);
@@ -1993,8 +1989,6 @@ DumpBBDbgPort_92CU(
 
 	phy_set_bb_reg(Adapter, 0x0908, 0xffff, 0x0100);
 	phy_set_bb_reg(Adapter, 0x0a28, 0x00ff0000, 0x00150000);
-
-
 }
 #endif
 

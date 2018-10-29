@@ -758,10 +758,17 @@ typedef struct hal_com_data {
 	u8 not_xmitframe_fw_dl; /*not use xmitframe to download fw*/
 } HAL_DATA_COMMON, *PHAL_DATA_COMMON;
 
+#ifdef SUPPORT_HW_RFOFF_DETECTED
+	int rtw_hw_suspend(_adapter *padapter);
+	int rtw_hw_resume(_adapter *padapter);
+#endif
 
+#ifdef CONFIG_GLOBAL_UI_PID
+extern int ui_pid[3];
+#endif
 
 typedef struct hal_com_data HAL_DATA_TYPE, *PHAL_DATA_TYPE;
-#define GET_HAL_DATA(__pAdapter)			((HAL_DATA_TYPE *)((__pAdapter)->HalData))
+#define GET_HAL_DATA(__pAdapter)		((HAL_DATA_TYPE *)((__pAdapter)->HalData))
 #define GET_HAL_SPEC(__pAdapter)			(&(GET_HAL_DATA((__pAdapter))->hal_spec))
 #define GET_ODM(__pAdapter)			(&(GET_HAL_DATA((__pAdapter))->odmpriv))
 

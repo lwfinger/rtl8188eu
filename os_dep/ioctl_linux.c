@@ -22,6 +22,7 @@
 #include <drv_types.h>
 #include <rtw_mp.h>
 #include <rtw_mp_ioctl.h>
+#include <rtw_mlme.h>
 #include "../../hal/phydm/phydm_precomp.h"
 #ifdef RTW_HALMAC
 #include "../../hal/hal_halmac.h"
@@ -43,10 +44,6 @@ extern int rtw_ht_enable;
 #define MAX_CUSTOM_LEN 64
 #define RATE_COUNT 4
 
-#ifdef CONFIG_GLOBAL_UI_PID
-extern int ui_pid[3];
-#endif
-
 /* combo scan */
 #define WEXT_CSCAN_AMOUNT 9
 #define WEXT_CSCAN_BUF_LEN		360
@@ -66,7 +63,7 @@ extern u8 str_2char2num(u8 hch, u8 lch);
 extern void macstr2num(u8 *dst, u8 *src);
 extern u8 convert_ip_addr(u8 hch, u8 mch, u8 lch);
 
-u32 rtw_rates[] = {1000000, 2000000, 5500000, 11000000,
+static u32 rtw_rates[] = {1000000, 2000000, 5500000, 11000000,
 	6000000, 9000000, 12000000, 18000000, 24000000, 36000000, 48000000, 54000000};
 
 static const char *const iw_operation_mode[] = {
@@ -512,11 +509,12 @@ static inline char *iwe_stream_rate_process(_adapter *padapter,
 	p = rtw_get_ie(&pnetwork->network.IEs[ie_offset], _HT_CAPABILITY_IE_, &ht_ielen, pnetwork->network.IELength - ie_offset);
 	if (p && ht_ielen > 0) {
 		struct rtw_ieee80211_ht_cap *pht_capie;
+
 		ht_cap = _TRUE;
 		pht_capie = (struct rtw_ieee80211_ht_cap *)(p + 2);
 		_rtw_memcpy(&mcs_rate , pht_capie->supp_mcs_set, 2);
-		bw_40MHz = (pht_capie->cap_info & IEEE80211_HT_CAP_SUP_WIDTH) ? 1 : 0;
-		short_GI = (pht_capie->cap_info & (IEEE80211_HT_CAP_SGI_20 | IEEE80211_HT_CAP_SGI_40)) ? 1 : 0;
+		bw_40MHz = (le16_to_cpu(pht_capie->cap_info) & IEEE80211_HT_CAP_SUP_WIDTH) ? 1 : 0;
+		short_GI = (le16_to_cpu(pht_capie->cap_info) & (IEEE80211_HT_CAP_SGI_20 | IEEE80211_HT_CAP_SGI_40)) ? 1 : 0;
 	}
 
 #ifdef CONFIG_80211AC_VHT
@@ -813,19 +811,18 @@ static char *translate_scan(_adapter *padapter,
 {
 	struct iw_event iwe;
 	u16 cap = 0;
-	_rtw_memset(&iwe, 0, sizeof(iwe));
+	__le16 le_tmp;
 
+	_rtw_memset(&iwe, 0, sizeof(iwe));
 	if (_FALSE == search_p2p_wfd_ie(padapter, info, pnetwork, start, stop))
 		return start;
 
 	start = iwe_stream_mac_addr_proess(padapter, info, pnetwork, start, stop, &iwe);
 	start = iwe_stream_essid_proess(padapter, info, pnetwork, start, stop, &iwe);
 	start = iwe_stream_protocol_process(padapter, info, pnetwork, start, stop, &iwe);
-	if (pnetwork->network.Reserved[0] == 2) /* Probe Request */
-		cap = 0;
-	else {
-		_rtw_memcpy((u8 *)&cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
-		cap = le16_to_cpu(cap);
+	if (pnetwork->network.Reserved[0] != 2) { /* Probe Request */
+		_rtw_memcpy((u8 *)&le_tmp, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
+		cap = le16_to_cpu(le_tmp);
 	}
 
 	start = iwe_stream_mode_process(padapter, info, pnetwork, start, stop, &iwe, cap);
@@ -2366,9 +2363,9 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 	if (mlme == NULL)
 		return -1;
 
-	RTW_INFO("%s\n", __FUNCTION__);
+	RTW_INFO("%s\n", __func__);
 
-	reason = cpu_to_le16(mlme->reason_code);
+	reason = mlme->reason_code;
 
 
 	RTW_INFO("%s, cmd=%d, reason=%d\n", __FUNCTION__, mlme->cmd, reason);
@@ -4067,11 +4064,10 @@ static void rtw_dbg_mode_hdl(_adapter *padapter, u32 id, u8 *pdata, u32 len)
 		value = prfreg->value;
 
 		rtw_hal_write_rfreg(padapter, path, offset, 0xffffffff, value);
-
 		break;
 	case GEN_MP_IOCTL_SUBCODE(TRIGGER_GPIO):
 		RTW_INFO("==> trigger gpio 0\n");
-		rtw_hal_set_hwreg(padapter, HW_VAR_TRIGGER_GPIO_0, 0);
+		rtw_hal_set_hwreg(padapter, HW_VAR_TRIGGER_GPIO_0, NULL);
 		break;
 #ifdef CONFIG_BT_COEXIST
 	case GEN_MP_IOCTL_SUBCODE(SET_DM_BT):
@@ -4092,8 +4088,8 @@ static void rtw_dbg_mode_hdl(_adapter *padapter, u32 id, u8 *pdata, u32 len)
 	default:
 		break;
 	}
-
 }
+
 #ifdef MP_IOCTL_HDL
 static int rtw_mp_ioctl_hdl(struct net_device *dev, struct iw_request_info *info,
 			    union iwreq_data *wrqu, char *extra)
@@ -4804,7 +4800,8 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 	_queue *queue = &(pmlmepriv->scanned_queue);
 	struct wlan_network *pnetwork = NULL;
 	u8 blnMatch = 0;
-	u16	attr_content = 0;
+	u16	attr_content;
+	__be16 be_tmp;
 	uint attr_contentlen = 0;
 	u8	attr_content_str[P2P_PRIVATE_IOCTL_SET_LEN] = { 0x00 };
 
@@ -4835,19 +4832,16 @@ static int rtw_p2p_get_wps_configmethod(struct net_device *dev,
 
 			wpsie = rtw_get_wps_ie_from_scan_queue(&pnetwork->network.IEs[0], pnetwork->network.IELength, NULL, &wpsie_len, pnetwork->network.Reserved[0]);
 			if (wpsie) {
-				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_CONF_METHOD, (u8 *)&attr_content, &attr_contentlen);
+				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_CONF_METHOD, (u8 *)&be_tmp, &attr_contentlen);
 				if (attr_contentlen) {
-					attr_content = be16_to_cpu(attr_content);
+					attr_content = be16_to_cpu(be_tmp);
 					sprintf(attr_content_str, "\n\nM=%.4d", attr_content);
 					blnMatch = 1;
 				}
 			}
-
 			break;
 		}
-
 		plist = get_next(plist);
-
 	}
 
 	_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
@@ -5055,10 +5049,11 @@ static int rtw_p2p_get_device_type(struct net_device *dev,
 			if (wpsie) {
 				rtw_get_wps_attr_content(wpsie, wpsie_len, WPS_ATTR_PRIMARY_DEV_TYPE, dev_type, &dev_type_len);
 				if (dev_type_len) {
-					u16	type = 0;
+					u16 type;
+					__be16 be_tmp;
 
-					_rtw_memcpy(&type, dev_type, 2);
-					type = be16_to_cpu(type);
+					_rtw_memcpy(&be_tmp, dev_type, 2);
+					type = be16_to_cpu(be_tmp);
 					sprintf(dev_type_str, "\n\nN=%.2d", type);
 					blnMatch = 1;
 				}
@@ -6264,11 +6259,8 @@ static int rtw_p2p_get(struct net_device *dev,
 		       struct iw_request_info *info,
 		       union iwreq_data *wrqu, char *extra)
 {
-
 	int ret = 0;
-
 #ifdef CONFIG_P2P
-
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct iw_point *pdata = &wrqu->data;
@@ -6276,34 +6268,34 @@ static int rtw_p2p_get(struct net_device *dev,
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 
 	if (padapter->bShowGetP2PState)
-		RTW_INFO("[%s] extra = %s\n", __FUNCTION__, (char *) wrqu->data.pointer);
+		RTW_INFO("[%s] extra = %s\n", __func__, (char *)wrqu->data.pointer);
 
-	if (_rtw_memcmp(wrqu->data.pointer, "status", 6))
+	if (_rtw_memcmp((__force void *)wrqu->data.pointer, "status", 6))
 		rtw_p2p_get_status(dev, info, wrqu, extra);
-	else if (_rtw_memcmp(wrqu->data.pointer, "role", 4))
+	else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "role", 4))
 		rtw_p2p_get_role(dev, info, wrqu, extra);
-	else if (_rtw_memcmp(wrqu->data.pointer, "peer_ifa", 8))
+	else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "peer_ifa", 8))
 		rtw_p2p_get_peer_ifaddr(dev, info, wrqu, extra);
-	else if (_rtw_memcmp(wrqu->data.pointer, "req_cm", 6))
+	else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "req_cm", 6))
 		rtw_p2p_get_req_cm(dev, info, wrqu, extra);
-	else if (_rtw_memcmp(wrqu->data.pointer, "peer_deva", 9)) {
+	else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "peer_deva", 9)) {
 		/*	Get the P2P device address when receiving the provision discovery request frame. */
 		rtw_p2p_get_peer_devaddr(dev, info, wrqu, extra);
-	} else if (_rtw_memcmp(wrqu->data.pointer, "group_id", 8))
+	} else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "group_id", 8))
 		rtw_p2p_get_groupid(dev, info, wrqu, extra);
-	else if (_rtw_memcmp(wrqu->data.pointer, "inv_peer_deva", 13)) {
+	else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "inv_peer_deva", 13)) {
 		/*	Get the P2P device address when receiving the P2P Invitation request frame. */
 		rtw_p2p_get_peer_devaddr_by_invitation(dev, info, wrqu, extra);
-	} else if (_rtw_memcmp(wrqu->data.pointer, "op_ch", 5))
+	} else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "op_ch", 5))
 		rtw_p2p_get_op_ch(dev, info, wrqu, extra);
 
 #ifdef CONFIG_WFD
 	if (hal_chk_wl_func(padapter, WL_FUNC_MIRACAST)) {
-		if (_rtw_memcmp(wrqu->data.pointer, "peer_port", 9))
+		if (_rtw_memcmp((__force void *)wrqu->data.pointer, "peer_port", 9))
 			rtw_p2p_get_peer_wfd_port(dev, info, wrqu, extra);
-		else if (_rtw_memcmp(wrqu->data.pointer, "wfd_sa", 6))
+		else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "wfd_sa", 6))
 			rtw_p2p_get_peer_wfd_session_available(dev, info, wrqu, extra);
-		else if (_rtw_memcmp(wrqu->data.pointer, "wfd_pc", 6))
+		else if (_rtw_memcmp((__force void *)wrqu->data.pointer, "wfd_pc", 6))
 			rtw_p2p_get_peer_wfd_preferred_connection(dev, info, wrqu, extra);
 	}
 #endif /* CONFIG_WFD */
@@ -9026,7 +9018,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 	struct pwrctrl_priv *pwrctrlpriv ;
 	u8 *data = NULL;
 	u8 *rawdata = NULL;
-	char *pch, *ptmp, *token, *tmp[3] = {0x00, 0x00, 0x00};
+	char *pch, *ptmp, *token, *tmp[3] = {NULL, NULL, NULL};
 	u16 i = 0, j = 0, mapLen = 0, addr = 0, cnts = 0;
 	u16 max_available_len = 0, raw_cursize = 0, raw_maxsize = 0;
 	u16 mask_len;
@@ -9689,7 +9681,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 	u8 *ShadowMapBT = NULL;
 	u8 *ShadowMapWiFi = NULL;
 	u8 *setrawdata = NULL;
-	char *pch, *ptmp, *token, *tmp[3] = {0x00, 0x00, 0x00};
+	char *pch, *ptmp, *token, *tmp[3] = {NULL, NULL, NULL};
 	u16 addr = 0xFF, cnts = 0, BTStatus = 0 , max_available_len = 0;
 	u16 wifimaplen;
 	int err;

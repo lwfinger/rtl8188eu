@@ -27,29 +27,13 @@ static u8 RETRY_PENALTY[PERENTRY][RETRYSIZE + 1] = {{5, 4, 3, 2, 0, 3}, /* 92 , 
 	{6, 5, 4, 3, 0, 4}, /* 86 , idx=1 */
 	{6, 5, 4, 2, 0, 4}, /* 81 , idx=2 */
 	{8, 7, 6, 4, 0, 6}, /* 75 , idx=3 */
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-	{10, 9, 7, 6, 0, 8},/*71	, idx=4*/
-	{10, 9, 7, 4, 0, 8},/*66	, idx=5*/
-#else
 	{10, 9, 8, 6, 0, 8}, /* 71	, idx=4 */
 	{10, 9, 8, 4, 0, 8}, /* 66	, idx=5 */
-#endif
 	{10, 9, 8, 2, 0, 8}, /* 62	, idx=6 */
 	{10, 9, 8, 0, 0, 8}, /* 59	, idx=7 */
 	{18, 17, 16, 8, 0, 16}, /* 53 , idx=8 */
 	{26, 25, 24, 16, 0, 24}, /* 50	, idx=9 */
 	{34, 33, 32, 24, 0, 32}, /* 47	, idx=0x0a */
-	/* {34,33,32,16,0,32}, */ /* 43	, idx=0x0b */
-	/* {34,33,32,8,0,32}, */ /* 40 , idx=0x0c */
-	/* {34,33,28,8,0,32}, */ /* 37 , idx=0x0d */
-	/* {34,33,20,8,0,32}, */ /* 32 , idx=0x0e */
-	/* {34,32,24,8,0,32}, */ /* 26 , idx=0x0f */
-	/* {49,48,32,16,0,48}, */ /* 20	, idx=0x10 */
-	/* {49,48,24,0,0,48}, */ /* 17 , idx=0x11 */
-	/* {49,47,16,16,0,48}, */ /* 15	, idx=0x12 */
-	/* {49,44,16,16,0,48}, */ /* 12	, idx=0x13 */
-	/* {49,40,16,0,0,48}, */ /* 9 , idx=0x14 */
 	{34, 31, 28, 20, 0, 32}, /* 43	, idx=0x0b */
 	{34, 31, 27, 18, 0, 32}, /* 40 , idx=0x0c */
 	{34, 31, 26, 16, 0, 32}, /* 37 , idx=0x0d */
@@ -58,13 +42,8 @@ static u8 RETRY_PENALTY[PERENTRY][RETRYSIZE + 1] = {{5, 4, 3, 2, 0, 3}, /* 92 , 
 	{49, 46, 40, 16, 0, 48}, /* 20	, idx=0x10 */
 	{49, 45, 32, 0, 0, 48}, /* 17 , idx=0x11 */
 	{49, 45, 22, 18, 0, 48}, /* 15	, idx=0x12 */
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-	{49, 40, 28, 18, 0, 48}, /* 12 , idx=0x13 */
-	{49, 34, 20, 16, 0, 48}, /* 9 , idx=0x14 */
-#else
 	{49, 40, 24, 16, 0, 48}, /* 12	, idx=0x13 */
 	{49, 32, 18, 12, 0, 48}, /* 9 , idx=0x14 */
-#endif
 	{49, 22, 18, 14, 0, 48}, /* 6 , idx=0x15 */
 	{49, 16, 16, 0, 0, 48}
 };/* 3 */ /* 3, idx=0x16 */
@@ -1177,7 +1156,7 @@ odm_ra_set_tx_rpt_time(
 
 
 void odm_ra_tx_rpt2_handle_8188e(struct PHY_DM_STRUCT *p_dm_odm,
-				 u8 *tx_rpt_buf, u16 tx_rpt_len,
+				 u8 *tx_rpt_buf, __le16 tx_rpt_len,
 				 u32 mac_id_valid_entry0,
 				 u32 mac_id_valid_entry1)
 {
@@ -1190,7 +1169,7 @@ void odm_ra_tx_rpt2_handle_8188e(struct PHY_DM_STRUCT *p_dm_odm,
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("=====>odm_ra_tx_rpt2_handle_8188e(): valid0=%d valid1=%d BufferLength=%d\n",
 			mac_id_valid_entry0, mac_id_valid_entry1, tx_rpt_len));
 
-	item_num = tx_rpt_len >> 3;
+	item_num = le16_to_cpu(tx_rpt_len) >> 3;
 	p_buffer = tx_rpt_buf;
 
 	do {
@@ -1202,8 +1181,6 @@ void odm_ra_tx_rpt2_handle_8188e(struct PHY_DM_STRUCT *p_dm_odm,
 
 		p_ra_info = &(p_dm_odm->ra_info[mac_id]);
 		if (valid) {
-
-
 			p_ra_info->RTY[0] = (u16)GET_TX_REPORT_TYPE1_RERTY_0(p_buffer);
 			p_ra_info->RTY[1] = (u16)GET_TX_REPORT_TYPE1_RERTY_1(p_buffer);
 			p_ra_info->RTY[2] = (u16)GET_TX_REPORT_TYPE1_RERTY_2(p_buffer);
@@ -1264,16 +1241,6 @@ void odm_ra_tx_rpt2_handle_8188e(struct PHY_DM_STRUCT *p_dm_odm,
 #else
 				odm_rate_decision_8188e(p_dm_odm, p_ra_info);
 #endif
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-				extern void rtl8188e_set_station_tx_rate_info(struct PHY_DM_STRUCT *, struct _odm_ra_info_ *, int);
-				rtl8188e_set_station_tx_rate_info(p_dm_odm, p_ra_info, mac_id);
-#ifdef DETECT_STA_EXISTANCE
-				void rtl8188e_detect_sta_existance(struct PHY_DM_STRUCT *p_dm_odm, struct _odm_ra_info_ *p_ra_info, int mac_id);
-				rtl8188e_detect_sta_existance(p_dm_odm, p_ra_info, mac_id);
-#endif
-#endif
-
 				ODM_RT_TRACE(p_dm_odm, ODM_COMP_INIT, ODM_DBG_LOUD,
 					("macid=%d R0=%d R1=%d R2=%d R3=%d R4=%d drop=%d valid0=%x rate_id=%d SGI=%d\n",
 					      mac_id,
@@ -1401,13 +1368,11 @@ void
 odm_ra_tx_rpt2_handle_8188e(
 	struct PHY_DM_STRUCT *p_dm_odm,
 	u8 *tx_rpt_buf,
-	u16 tx_rpt_len,
+	__le16 tx_rpt_len,
 	u32			mac_id_valid_entry0,
 	u32			mac_id_valid_entry1
 )
 {
-	return;
 }
-
 
 #endif

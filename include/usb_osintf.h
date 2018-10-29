@@ -26,6 +26,8 @@
 
 
 u8 usbvendorrequest(struct dvobj_priv *pdvobjpriv, RT_USB_BREQUEST brequest, RT_USB_WVALUE wvalue, u8 windex, void *data, u8 datalen, u8 isdirectionin);
-
+void nat25_db_expire(_adapter *priv);
+int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method);
+int nat25_handle_frame(_adapter *priv, struct sk_buff *skb);
 
 #endif

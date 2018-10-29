@@ -186,7 +186,7 @@ int _rtw_IOL_append_WRF_cmd(struct xmit_frame *xmit_frame, u8 rf_path, u16 addr,
 
 	/* RTW_PUT_LE16((u8*)&cmd.address, addr);	 */
 	/* RTW_PUT_LE32((u8*)&cmd.value, (u32)value);	 */
-	cmd.address = (rf_path << 8) | ((addr) & 0xFF);
+	cmd.address = cpu_to_le16((rf_path << 8) | ((addr) & 0xFF));
 	cmd.data = cpu_to_le32(value);
 
 	if (mask != 0x000FFFFF) {
@@ -225,7 +225,7 @@ int rtw_IOL_append_DELAY_MS_cmd(struct xmit_frame *xmit_frame, u16 ms)
 }
 int rtw_IOL_append_END_cmd(struct xmit_frame *xmit_frame)
 {
-	struct ioreg_cfg cmd = {4, IOREG_CMD_END, 0xFFFF, 0xFF, 0x0};
+	struct ioreg_cfg cmd = {4, IOREG_CMD_END, cpu_to_le16(0xFFFF), cpu_to_le32(0xFF), 0x0};
 	return rtw_IOL_append_cmds(xmit_frame, (u8 *)&cmd, 4);
 
 }

@@ -96,7 +96,7 @@ void
 odm_ra_tx_rpt2_handle_8188e(
 	struct PHY_DM_STRUCT		*p_dm_odm,
 	u8			*tx_rpt_buf,
-	u16			tx_rpt_len,
+	__le16			tx_rpt_len,
 	u32			mac_id_valid_entry0,
 	u32			mac_id_valid_entry1
 );

@@ -28,20 +28,8 @@
 	#include <linux/if_pppox.h>
 #endif
 
-#if 1	/* rtw_wifi_driver */
-	#include <drv_types.h>
-#else	/* rtw_wifi_driver */
-	#include "./8192cd_cfg.h"
-
-	#ifndef __KERNEL__
-		#include "./sys-support.h"
-	#endif
-
-	#include "./8192cd.h"
-	#include "./8192cd_headers.h"
-	#include "./8192cd_br_ext.h"
-	#include "./8192cd_debug.h"
-#endif /* rtw_wifi_driver */
+#include <drv_types.h>
+#include <usb_osintf.h>
 
 #ifdef CL_IPV6_PASS
 	#ifdef __KERNEL__
@@ -100,16 +88,15 @@ static __inline__ unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, un
 			return cur_ptr;
 		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
 	}
-	return 0;
+	return NULL;
 }
-
 
 static __inline__ int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
 {
 	struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
 	int data_len;
 
-	data_len = tag->tag_len + TAG_HDR_LEN;
+	data_len = be16_to_cpu(tag->tag_len) + TAG_HDR_LEN;
 	if (skb_tailroom(skb) < data_len) {
 		_DEBUG_ERR("skb_tailroom() failed in add SID tag!\n");
 		return -1;
@@ -165,7 +152,7 @@ static __inline__ int  __nat25_has_expired(_adapter *priv,
 
 
 static __inline__ void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
-		unsigned int *ipAddr)
+		u32 *ipAddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -175,7 +162,7 @@ static __inline__ void __nat25_generate_ipv4_network_addr(unsigned char *network
 
 
 static __inline__ void __nat25_generate_ipx_network_addr_with_node(unsigned char *networkAddr,
-		unsigned int *ipxNetAddr, unsigned char *ipxNodeAddr)
+		__be32 *ipxNetAddr, unsigned char *ipxNodeAddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -186,7 +173,7 @@ static __inline__ void __nat25_generate_ipx_network_addr_with_node(unsigned char
 
 
 static __inline__ void __nat25_generate_ipx_network_addr_with_socket(unsigned char *networkAddr,
-		unsigned int *ipxNetAddr, unsigned short *ipxSocketAddr)
+		__be32 *ipxNetAddr, __be16 *ipxSocketAddr)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -197,7 +184,7 @@ static __inline__ void __nat25_generate_ipx_network_addr_with_socket(unsigned ch
 
 
 static __inline__ void __nat25_generate_apple_network_addr(unsigned char *networkAddr,
-		unsigned short *network, unsigned char *node)
+		__be16 *network, unsigned char *node)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -208,7 +195,7 @@ static __inline__ void __nat25_generate_apple_network_addr(unsigned char *networ
 
 
 static __inline__ void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
-		unsigned char *ac_mac, unsigned short *sid)
+		unsigned char *ac_mac, __be16 *sid)
 {
 	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
 
@@ -757,8 +744,9 @@ static int checkIPMcAndReplace(_adapter *priv, struct sk_buff *skb, unsigned int
 
 int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 {
-	unsigned short protocol;
+	__be16 protocol;
 	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
+	unsigned int tmp;
 
 	if (skb == NULL)
 		return -1;
@@ -766,7 +754,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 	if ((method <= NAT25_MIN) || (method >= NAT25_MAX))
 		return -1;
 
-	protocol = *((unsigned short *)(skb->data + 2 * ETH_ALEN));
+	protocol = *((__be16 *)(skb->data + 2 * ETH_ALEN));
 
 	/*---------------------------------------------------*/
 	/*                 Handle IP frame                  */
@@ -788,8 +776,9 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 			/* in class A, B, C, host address is all zero or all one is illegal */
 			if (iph->saddr == 0)
 				return 0;
+			tmp = be32_to_cpu(iph->saddr);
 			RTW_INFO("NAT25: Insert IP, SA=%08x, DA=%08x\n", iph->saddr, iph->daddr);
-			__nat25_generate_ipv4_network_addr(networkAddr, &iph->saddr);
+			__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
 			/* record source IP address and , source mac address into db */
 			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
 
@@ -807,7 +796,8 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 			     (OPMODE & WIFI_ADHOC_STATE)))
 #endif
 			{
-				__nat25_generate_ipv4_network_addr(networkAddr, &iph->daddr);
+				tmp = be32_to_cpu(iph->daddr);
+				__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
 
 				if (!__nat25_db_network_lookup_and_replace(priv, skb, networkAddr)) {
 					if (*((unsigned char *)&iph->daddr + 3) == 0xff) {
@@ -843,7 +833,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 		unsigned int *sender, *target;
 
 		if (arp->ar_pro != __constant_htons(ETH_P_IP)) {
-			DEBUG_WARN("NAT25: arp protocol unknown (%4x)!\n", htons(arp->ar_pro));
+			DEBUG_WARN("NAT25: arp protocol unknown (%4x)!\n", be16_to_cpu(arp->ar_pro));
 			return -1;
 		}
 
@@ -1120,7 +1110,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 	else if ((protocol == __constant_htons(ETH_P_PPP_DISC)) ||
 		 (protocol == __constant_htons(ETH_P_PPP_SES))) {
 		struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
-		unsigned short *pMagic;
+		__be16 *pMagic;
 
 		switch (method) {
 		case NAT25_CHECK:
@@ -1159,7 +1149,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 						tag->tag_len = htons(MAGIC_CODE_LEN + RTL_RELAY_TAG_LEN + old_tag_len);
 
 						/* insert the magic_code+client mac in relay tag */
-						pMagic = (unsigned short *)tag->tag_data;
+						pMagic = (__be16 *)tag->tag_data;
 						*pMagic = htons(MAGIC_CODE);
 						memcpy(tag->tag_data + MAGIC_CODE_LEN, skb->data + ETH_ALEN, ETH_ALEN);
 
@@ -1208,7 +1198,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 					int offset = 0;
 
 					ptr = __nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID));
-					if (ptr == 0) {
+					if (!ptr) {
 						DEBUG_ERR("Fail to find PTT_RELAY_SID in FADO!\n");
 						return -1;
 					}
@@ -1222,7 +1212,7 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 						return -1;
 					}
 
-					pMagic = (unsigned short *)tag->tag_data;
+					pMagic = (__be16 *)tag->tag_data;
 					if (ntohs(*pMagic) != MAGIC_CODE) {
 						DEBUG_ERR("Can't find MAGIC_CODE in %s packet!\n",
 							(ph->code == PADO_CODE ? "PADO" : "PADS"));
@@ -1348,9 +1338,9 @@ int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method)
 						struct icmp6hdr  *hdr = (struct icmp6hdr *)(skb->data + ETH_HLEN + sizeof(*iph));
 						hdr->icmp6_cksum = 0;
 						hdr->icmp6_cksum = csum_ipv6_magic(&iph->saddr, &iph->daddr,
-							iph->payload_len,
+							be16_to_cpu(iph->payload_len),
 							IPPROTO_ICMPV6,
-							csum_partial((__u8 *)hdr, iph->payload_len, 0));
+							csum_partial((__u8 *)hdr, be16_to_cpu(iph->payload_len), 0));
 					}
 				}
 			}
@@ -1409,7 +1399,7 @@ int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
 		int is_vlan_tag = 0, i, retval = 0;
 		unsigned short vlan_hdr = 0;
 
-		if (*((unsigned short *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_8021Q)) {
+		if (*((__be16 *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_8021Q)) {
 			is_vlan_tag = 1;
 			vlan_hdr = *((unsigned short *)(skb->data + ETH_ALEN * 2 + 2));
 			for (i = 0; i < 6; i++)
@@ -1426,7 +1416,7 @@ int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
 			 *	corresponding network protocol is NOT support.
 			 */
 			if (!priv->ethBrExtInfo.nat25sc_disable &&
-			    (*((unsigned short *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_IP)) &&
+			    (*((__be16 *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_IP)) &&
 			    !memcmp(priv->scdb_ip, skb->data + ETH_HLEN + 16, 4)) {
 				memcpy(skb->data, priv->scdb_mac, ETH_ALEN);
 
@@ -1437,9 +1427,9 @@ int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
 				retval = nat25_db_handle(priv, skb, NAT25_LOOKUP);
 			}
 		} else {
-			if (((*((unsigned short *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_IP)) &&
+			if (((*((__be16 *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_IP)) &&
 			     !memcmp(priv->br_ip, skb->data + ETH_HLEN + 16, 4)) ||
-			    ((*((unsigned short *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_ARP)) &&
+			    ((*((__be16 *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_ARP)) &&
 			     !memcmp(priv->br_ip, skb->data + ETH_HLEN + 24, 4))) {
 				/* for traffic to upper TCP/IP */
 				retval = nat25_db_handle(priv, skb, NAT25_LOOKUP);
@@ -1449,9 +1439,9 @@ int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
 		if (is_vlan_tag) {
 			skb_push(skb, 4);
 			for (i = 0; i < 6; i++)
-				*((unsigned short *)(skb->data + i * 2)) = *((unsigned short *)(skb->data + 4 + i * 2));
-			*((unsigned short *)(skb->data + ETH_ALEN * 2)) = __constant_htons(ETH_P_8021Q);
-			*((unsigned short *)(skb->data + ETH_ALEN * 2 + 2)) = vlan_hdr;
+				*((__be16 *)(skb->data + i * 2)) = *((__be16 *)(skb->data + 4 + i * 2));
+			*((__be16 *)(skb->data + ETH_ALEN * 2)) = __constant_htons(ETH_P_8021Q);
+			*((u16 *)(skb->data + ETH_ALEN * 2 + 2)) = vlan_hdr;
 		}
 
 		if (retval == -1) {
@@ -1462,35 +1452,6 @@ int nat25_handle_frame(_adapter *priv, struct sk_buff *skb)
 
 	return 0;
 }
-
-#if 0
-void mac_clone(_adapter *priv, unsigned char *addr)
-{
-	struct sockaddr sa;
-
-	memcpy(sa.sa_data, addr, ETH_ALEN);
-	RTW_INFO("MAC Clone: Addr=%02x%02x%02x%02x%02x%02x\n",
-		 addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]);
-	rtl8192cd_set_hwaddr(priv->dev, &sa);
-}
-
-
-int mac_clone_handle_frame(_adapter *priv, struct sk_buff *skb)
-{
-	if (priv->ethBrExtInfo.macclone_enable && !priv->macclone_completed) {
-		if (!(skb->data[ETH_ALEN] & 1)) {	/* check any other particular MAC add */
-			if (memcmp(skb->data + ETH_ALEN, GET_MY_HWADDR(priv), ETH_ALEN) &&
-			    ((priv->dev->br_port) &&
-			     memcmp(skb->data + ETH_ALEN, priv->br_mac, ETH_ALEN))) {
-				mac_clone(priv, skb->data + ETH_ALEN);
-				priv->macclone_completed = 1;
-			}
-		}
-	}
-
-	return 0;
-}
-#endif /* 0 */
 
 #define SERVER_PORT			67
 #define CLIENT_PORT			68
@@ -1535,13 +1496,13 @@ void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb)
 					struct dhcpMessage *dhcph =
 						(struct dhcpMessage *)((SIZE_PTR)udph + sizeof(struct udphdr));
 
-					if (dhcph->cookie == __constant_htonl(DHCP_MAGIC)) { /* match magic word */
-						if (!(dhcph->flags & htons(BROADCAST_FLAG))) { /* if not broadcast */
+					if (dhcph->cookie == DHCP_MAGIC) { /* match magic word */
+						if (!(dhcph->flags & BROADCAST_FLAG)) { /* if not broadcast */
 							register int sum = 0;
 
 							RTW_INFO("DHCP: change flag of DHCP request to broadcast.\n");
 							/* or BROADCAST flag */
-							dhcph->flags |= htons(BROADCAST_FLAG);
+							dhcph->flags |= BROADCAST_FLAG;
 							/* recalculate checksum */
 							sum = ~(udph->check) & 0xffff;
 							sum += dhcph->flags;

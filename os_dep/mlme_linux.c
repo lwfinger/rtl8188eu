@@ -22,7 +22,7 @@
 #define _MLME_OSDEP_C_
 
 #include <drv_types.h>
-
+#include <rtw_mlme.h>
 
 #ifdef RTK_DMP_PLATFORM
 void Linkup_workitem_callback(struct work_struct *work)
@@ -186,9 +186,6 @@ void rtw_init_mlme_timer(_adapter *padapter)
 #endif
 
 }
-
-extern void rtw_indicate_wx_assoc_event(_adapter *padapter);
-extern void rtw_indicate_wx_disassoc_event(_adapter *padapter);
 
 void rtw_os_indicate_connect(_adapter *adapter)
 {

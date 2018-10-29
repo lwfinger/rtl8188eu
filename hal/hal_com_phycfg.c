@@ -44,7 +44,7 @@
 #define PG_TXPWR_SRC_DEF		2
 #define PG_TXPWR_SRC_NUM		3
 
-const char *const _pg_txpwr_src_str[] = {
+static const char *const _pg_txpwr_src_str[] = {
 	"PG_DATA",
 	"IC_DEF",
 	"DEF",
@@ -225,7 +225,7 @@ void dump_pg_txpwr_info_5g(void *sel, TxPowerInfo5G *txpwr_info, u8 rfpath_num, 
 	RTW_PRINT_SEL(sel, "\n");
 }
 
-const struct map_t pg_txpwr_def_info =
+static const struct map_t pg_txpwr_def_info =
 	MAP_ENT(0xB8, 1, 0xFF
 		, MAPSEG_ARRAY_ENT(0x10, 168,
 			0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x24, 0xEE, 0xEE, 0xEE, 0xEE,
@@ -570,7 +570,7 @@ static inline void hal_init_pg_txpwr_info_5g(_adapter *adapter, TxPowerInfo5G *p
 #define LOAD_PG_TXPWR_WARN_COND(_txpwr_src) (_txpwr_src > PG_TXPWR_SRC_PG_DATA)
 #endif
 
-u16 hal_load_pg_txpwr_info_path_2g(
+static u16 hal_load_pg_txpwr_info_path_2g(
 	_adapter *adapter,
 	TxPowerInfo24G	*pwr_info,
 	u32 path,
@@ -700,7 +700,7 @@ exit:
 	return offset;
 }
 
-u16 hal_load_pg_txpwr_info_path_5g(
+static u16 hal_load_pg_txpwr_info_path_5g(
 	_adapter *adapter,
 	TxPowerInfo5G	*pwr_info,
 	u32 path,
@@ -861,7 +861,7 @@ exit:
 	return offset;
 }
 
-void hal_load_pg_txpwr_info(
+static void hal_load_pg_txpwr_info(
 	_adapter *adapter,
 	TxPowerInfo24G *pwr_info_2g,
 	TxPowerInfo5G *pwr_info_5g,
@@ -1208,7 +1208,7 @@ void dump_hal_txpwr_info_5g(void *sel, _adapter *adapter, u8 rfpath_num, u8 max_
 *
 * Return dBm or -1 for undefined
 */
-s8 rtw_regsty_get_target_tx_power(
+static s8 rtw_regsty_get_target_tx_power(
 	IN	PADAPTER		Adapter,
 	IN	u8				Band,
 	IN	u8				RfPath,
@@ -1252,7 +1252,7 @@ s8 rtw_regsty_get_target_tx_power(
 	return value;
 }
 
-bool rtw_regsty_chk_target_tx_power_valid(_adapter *adapter)
+static bool rtw_regsty_chk_target_tx_power_valid(_adapter *adapter)
 {
 	struct hal_spec_t *hal_spec = GET_HAL_SPEC(adapter);
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
@@ -1333,7 +1333,7 @@ PHY_GetTxPowerByRateBase(
 	return value;
 }
 
-VOID
+static VOID
 phy_SetTxPowerByRateBase(
 	IN	PADAPTER		Adapter,
 	IN	u8				Band,
@@ -1456,7 +1456,7 @@ static void phy_txpwr_by_rate_chk_for_path_dup(_adapter *adapter)
 	}
 }
 
-VOID
+static VOID
 phy_StoreTxPowerByRateBase(
 	IN	PADAPTER	pAdapter
 )
@@ -1898,7 +1898,7 @@ PHY_GetRateValuesOfTxPowerByRate(
 	};
 }
 
-void
+static void
 PHY_StoreTxPowerByRateNew(
 	IN	PADAPTER	pAdapter,
 	IN	u32			Band,
@@ -1982,7 +1982,7 @@ phy_store_tx_power_by_rate(
 
 }
 
-VOID
+static VOID
 phy_ConvertTxPowerByRateInDbmToRelativeValues(
 	IN	PADAPTER	pAdapter
 )
@@ -2114,11 +2114,7 @@ exit:
 	return;
 }
 
-BOOLEAN
-phy_GetChnlIndex(
-	IN	u8	Channel,
-	OUT u8	*ChannelIdx
-)
+static BOOLEAN phy_GetChnlIndex(u8 Channel, u8 *ChannelIdx)
 {
 	u8  i = 0;
 	BOOLEAN bIn24G = _TRUE;
@@ -2704,7 +2700,7 @@ PHY_SetTxPowerByRate(
 	u8	rateIndex = PHY_GetRateIndexOfTxPowerByRate(Rate);
 
 	if (Band != BAND_ON_2_4G && Band != BAND_ON_5G) {
-		RTW_INFO("Invalid band %d in %s\n", Band, __FUNCTION__);
+	RTW_INFO("Invalid band %d in %s\n", Band, __FUNCTION__);
 		return;
 	}
 	if (RFPath > ODM_RF_PATH_D) {
@@ -2790,10 +2786,7 @@ PHY_SetTxPowerIndexByRateArray(
 	}
 }
 
-s8
-phy_GetWorldWideLimit(
-	s8 *LimitTable
-)
+static s8 phy_GetWorldWideLimit(s8 *LimitTable)
 {
 	s8	min = LimitTable[0];
 	u8	i = 0;
@@ -2806,11 +2799,7 @@ phy_GetWorldWideLimit(
 	return min;
 }
 
-s8
-phy_GetChannelIndexOfTxPowerLimit(
-	IN	u8			Band,
-	IN	u8			Channel
-)
+static s8 phy_GetChannelIndexOfTxPowerLimit(u8 Band, u8 Channel)
 {
 	s8	channelIndex = -1;
 	u8	i = 0;
@@ -3292,11 +3281,7 @@ PHY_GetTxPowerLimitOriginal(
 }
 #endif
 
-
-VOID
-phy_CrossReferenceHTAndVHTTxPowerLimit(
-	IN	PADAPTER			pAdapter
-)
+static void phy_CrossReferenceHTAndVHTTxPowerLimit(PADAPTER pAdapter)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
 	u8 regulation, bw, channel, rs, ref_rs;
@@ -4373,11 +4358,7 @@ phy_ConfigBBWithParaFile(
 	return rtStatus;
 }
 
-VOID
-phy_DecryptBBPgParaFile(
-	PADAPTER		Adapter,
-	char			*buffer
-)
+static void phy_DecryptBBPgParaFile(PADAPTER Adapter, char *buffer)
 {
 	u32	i = 0, j = 0;
 	u8	map[95] = {0};
@@ -4411,11 +4392,7 @@ phy_DecryptBBPgParaFile(
 	}
 }
 
-int
-phy_ParseBBPgParaFile(
-	PADAPTER		Adapter,
-	char			*buffer
-)
+static int phy_ParseBBPgParaFile(PADAPTER Adapter, char *buffer)
 {
 	int	rtStatus = _SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -4921,8 +4898,7 @@ PHY_ConfigRFWithParaFile(
 	return rtStatus;
 }
 
-VOID
-initDeltaSwingIndexTables(
+static void initDeltaSwingIndexTables(
 	PADAPTER	Adapter,
 	char		*Band,
 	char		*Path,
@@ -5109,8 +5085,7 @@ PHY_ConfigRFWithTxPwrTrackParaFile(
 	return rtStatus;
 }
 
-int
-phy_ParsePowerLimitTableFile(
+static int phy_ParsePowerLimitTableFile(
 	PADAPTER		Adapter,
 	char			*buffer
 )

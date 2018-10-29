@@ -1170,6 +1170,9 @@ struct sta_media_status_rpt_cmd_parm {
 void rtw_sta_media_status_rpt(_adapter *adapter, struct sta_info *sta, bool connected);
 u8 rtw_sta_media_status_rpt_cmd(_adapter *adapter, struct sta_info *sta, bool connected);
 void rtw_sta_media_status_rpt_cmd_hdl(_adapter *adapter, struct sta_media_status_rpt_cmd_parm *parm);
+void rtw_indicate_wx_assoc_event(_adapter *padapter);
+void rtw_indicate_wx_disassoc_event(_adapter *padapter);
+void indicate_wx_scan_complete_event(_adapter *padapter);
 
 #ifdef CONFIG_INTEL_PROXIM
 void rtw_proxim_enable(_adapter *padapter);

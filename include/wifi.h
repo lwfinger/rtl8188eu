@@ -303,7 +303,7 @@ enum WIFI_REG_DOMAIN {
 		*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_FRAG_); \
 	} while (0)
 
-#define GetMFrag(pbuf)	(((*(unsigned short *)(pbuf)) & le16_to_cpu(_MORE_FRAG_)) != 0)
+#define GetMFrag(pbuf)	((le16_to_cpu(*(__le16 *)(pbuf)) & (_MORE_FRAG_)) != 0)
 
 #define ClearMFrag(pbuf)	\
 	do	{	\
@@ -327,7 +327,7 @@ enum WIFI_REG_DOMAIN {
 		*(__le16 *)(pbuf) |= cpu_to_le16(_PWRMGT_); \
 	} while (0)
 
-#define GetPwrMgt(pbuf)	(((*(unsigned short *)(pbuf)) & le16_to_cpu(_PWRMGT_)) != 0)
+#define GetPwrMgt(pbuf)	((le16_to_cpu(*(__le16 *)(pbuf)) & (_PWRMGT_)) != 0)
 
 #define ClearPwrMgt(pbuf)	\
 	do	{	\
@@ -339,7 +339,7 @@ enum WIFI_REG_DOMAIN {
 		*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_DATA_); \
 	} while (0)
 
-#define GetMData(pbuf)	(((*(__le16 *)(pbuf)) & le16_to_cpu(_MORE_DATA_)) != 0)
+#define GetMData(pbuf)	((le16_to_cpu(*(__le16 *)(pbuf)) & (_MORE_DATA_)) != 0)
 
 #define ClearMData(pbuf)	\
 	do	{	\
@@ -359,7 +359,7 @@ enum WIFI_REG_DOMAIN {
 	} while (0)
 
 
-#define GetOrder(pbuf)	(((*(__le16 *)(pbuf)) & le16_to_cpu(_ORDER_)) != 0)
+#define GetOrder(pbuf)	((le16_to_cpu(*(__le16 *)(pbuf)) & (_ORDER_)) != 0)
 
 #define GetFrameType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(3) | BIT(2)))
 
@@ -388,7 +388,7 @@ enum WIFI_REG_DOMAIN {
 #define SetFragNum(pbuf, num) \
 	do {    \
 		*(__le16 *)((SIZE_PTR)(pbuf) + 22) = \
-			((*(unsigned short *)((SIZE_PTR)(pbuf) + 22)) & cpu_to_le16(~(0x000f))) | \
+			((*(__le16 *)((SIZE_PTR)(pbuf) + 22)) & cpu_to_le16(~(0x000f))) | \
 				cpu_to_le16(0x0f & (num));     \
 	} while (0)
 
@@ -410,7 +410,7 @@ enum WIFI_REG_DOMAIN {
 		*(__le16 *)(pbuf) |= cpu_to_le16(tid & 0xf); \
 	} while (0)
 
-#define GetPriority(pbuf)	((le16_to_cpu(*(unsigned short *)(pbuf))) & 0xf)
+#define GetPriority(pbuf)	((le16_to_cpu(*(__le16 *)(pbuf))) & 0xf)
 
 #define SetEOSP(pbuf, eosp)	\
 	do	{	\
@@ -422,18 +422,18 @@ enum WIFI_REG_DOMAIN {
 		*(__le16 *)(pbuf) |= cpu_to_le16((ack & 3) << 5); \
 	} while (0)
 
-#define GetAckpolicy(pbuf) (((le16_to_cpu(*(unsigned short *)pbuf)) >> 5) & 0x3)
+#define GetAckpolicy(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 5) & 0x3)
 
-#define GetAMsdu(pbuf) (((le16_to_cpu(*(unsigned short *)pbuf)) >> 7) & 0x1)
+#define GetAMsdu(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 7) & 0x1)
 
 #define SetAMsdu(pbuf, amsdu)	\
 	do	{	\
 		*(__le16 *)(pbuf) |= cpu_to_le16((amsdu & 1) << 7); \
 	} while (0)
 
-#define GetAid(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + 2)) & 0x3fff)
+#define GetAid(pbuf)	(le16_to_cpu(*(__le16 *)((SIZE_PTR)(pbuf) + 2)) & 0x3fff)
 
-#define GetTid(pbuf)	(cpu_to_le16(*(unsigned short *)((SIZE_PTR)(pbuf) + (((GetToDs(pbuf)<<1) | GetFrDs(pbuf)) == 3 ? 30 : 24))) & 0x000f)
+#define GetTid(pbuf)	(le16_to_cpu(*(__le16 *)((SIZE_PTR)(pbuf) + (((GetToDs(pbuf)<<1) | GetFrDs(pbuf)) == 3 ? 30 : 24))) & 0x000f)
 
 #define GetAddr1Ptr(pbuf)	((unsigned char *)((SIZE_PTR)(pbuf) + 4))
 

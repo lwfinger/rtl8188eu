@@ -2546,7 +2546,7 @@ void rtw_get_bcn_info(struct wlan_network *pnetwork)
 	p = rtw_get_ie(pnetwork->network.IEs + _FIXED_IE_LENGTH_, _HT_CAPABILITY_IE_, &len, pnetwork->network.IELength - _FIXED_IE_LENGTH_);
 	if (p && len > 0) {
 		pht_cap = (struct rtw_ieee80211_ht_cap *)(p + 2);
-		pnetwork->BcnInfo.ht_cap_info = pht_cap->cap_info;
+		pnetwork->BcnInfo.ht_cap_info = le16_to_cpu(pht_cap->cap_info);
 	} else
 		pnetwork->BcnInfo.ht_cap_info = 0;
 	/* parsing HT_INFO_IE */

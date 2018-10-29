@@ -2624,7 +2624,7 @@ void rtw_hal_set_bssid(_adapter *adapter, u8 *val)
 	RTW_INFO("%s "ADPT_FMT"- hw port -%d BSSID: "MAC_FMT"\n", __func__, ADPT_ARG(adapter), adapter->hw_port, MAC_ARG(val));
 }
 
-void rtw_hal_get_msr(_adapter *adapter, u8 *net_type)
+static void rtw_hal_get_msr(_adapter *adapter, u8 *net_type)
 {
 	switch (adapter->hw_port) {
 	case HW_PORT0:
@@ -3098,7 +3098,7 @@ inline s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode
 	return rtw_hal_set_FwMediaStatusRpt_cmd(adapter, opmode, miracast, miracast_sink, role, macid, 1, macid_end);
 }
 
-void rtw_hal_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
+static void rtw_hal_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
 {
 	struct	hal_ops *pHalFunc = &padapter->hal_func;
 	u8	u1H2CRsvdPageParm[H2C_RSVDPAGE_LOC_LEN] = {0};
@@ -3194,7 +3194,7 @@ void rtw_hal_set_output_gpio(_adapter *padapter, u8 index, u8 outputval)
 }
 #endif
 
-void rtw_hal_set_FwAoacRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
+static void rtw_hal_set_FwAoacRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
 {
 	struct	hal_ops *pHalFunc = &padapter->hal_func;
 	struct	pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
@@ -4410,7 +4410,7 @@ static void rtw_hal_construct_P2PBeacon(_adapter *padapter, u8 *pframe, u32 *pLe
 	/* struct pkt_attrib	*pattrib; */
 	/* unsigned char	*pframe; */
 	struct rtw_ieee80211_hdr *pwlanhdr;
-	unsigned short *fctrl;
+	__le16 *fctrl;
 	unsigned int	rate_len;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	u32	pktlen;
@@ -4698,7 +4698,7 @@ static void rtw_hal_construct_P2PProbeRsp(_adapter *padapter, u8 *pframe, u32 *p
 	/* struct pkt_attrib			*pattrib; */
 	/* unsigned char					*pframe; */
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	unsigned short				*fctrl;
+	__le16 *fctrl;
 	unsigned char					*mac;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -5033,7 +5033,7 @@ static void rtw_hal_construct_P2PNegoRsp(_adapter *padapter, u8 *pframe, u32 *pL
 	/* struct pkt_attrib			*pattrib; */
 	/* unsigned char					*pframe; */
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	unsigned short				*fctrl;
+	__le16 *fctrl;
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -5451,7 +5451,7 @@ static void rtw_hal_construct_P2PInviteRsp(_adapter *padapter, u8 *pframe, u32 *
 	/* struct pkt_attrib			*pattrib; */
 	/* unsigned char					*pframe; */
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	unsigned short				*fctrl;
+	__le16 *fctrl;
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -5708,7 +5708,7 @@ static void rtw_hal_construct_P2PProvisionDisRsp(_adapter *padapter, u8 *pframe,
 	/* struct pkt_attrib			*pattrib; */
 	/* unsigned char					*pframe; */
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	unsigned short				*fctrl;
+	__le16 *fctrl;
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -5875,7 +5875,7 @@ static void rtw_hal_construct_beacon(_adapter *padapter,
 				     u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16					*fctrl;
+	__le16 *fctrl;
 	u32					rate_len, pktlen;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -5973,7 +5973,7 @@ static void rtw_hal_construct_PSPoll(_adapter *padapter,
 				     u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16					*fctrl;
+	__le16 *fctrl;
 	u32					pktlen;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -6011,7 +6011,7 @@ void rtw_hal_construct_NullFunctionData(
 	u8		bForcePowerSave)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16						*fctrl;
+	__le16 *fctrl;
 	u32						pktlen;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct wlan_network		*cur_network = &pmlmepriv->cur_network;
@@ -6070,11 +6070,11 @@ void rtw_hal_construct_NullFunctionData(
 	*pLength = pktlen;
 }
 
-void rtw_hal_construct_ProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength,
+static void rtw_hal_construct_ProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength,
 				u8 *StaAddr, BOOLEAN bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16					*fctrl;
+	__le16 *fctrl;
 	u8					*mac, *bssid;
 	u32					pktlen;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -6169,7 +6169,7 @@ static void rtw_hal_construct_ARPRsp(
 )
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16	*fctrl;
+	__le16 *fctrl;
 	u32	pktlen;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct wlan_network	*cur_network = &pmlmepriv->cur_network;
@@ -6293,7 +6293,7 @@ static void rtw_hal_construct_ProbeReq(_adapter *padapter, u8 *pframe,
 				       u32 *pLength, pno_ssid_t *ssid)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16				*fctrl;
+	__le16 *fctrl;
 	u32				pktlen;
 	unsigned char			*mac;
 	unsigned char			bssrate[NumRates];
@@ -6473,7 +6473,7 @@ static void rtw_hal_construct_GTKRsp(
 )
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16	*fctrl;
+	__le16	*fctrl;
 	u32	pktlen;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct wlan_network	*cur_network = &pmlmepriv->cur_network;
@@ -10096,7 +10096,7 @@ bool kfree_data_is_bb_gain_empty(struct kfree_data_t *data)
 }
 
 #ifdef CONFIG_USB_RX_AGGREGATION
-void rtw_set_usb_agg_by_mode_normal(_adapter *padapter, u8 cur_wireless_mode)
+static void rtw_set_usb_agg_by_mode_normal(_adapter *padapter, u8 cur_wireless_mode)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	if (cur_wireless_mode < WIRELESS_11_24N
@@ -10164,7 +10164,7 @@ void rtw_set_usb_agg_by_mode_normal(_adapter *padapter, u8 cur_wireless_mode)
 	}
 }
 
-void rtw_set_usb_agg_by_mode_customer(_adapter *padapter, u8 cur_wireless_mode, u8 UsbDmaSize, u8 Legacy_UsbDmaSize)
+static void rtw_set_usb_agg_by_mode_customer(_adapter *padapter, u8 cur_wireless_mode, u8 UsbDmaSize, u8 Legacy_UsbDmaSize)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
@@ -10191,7 +10191,7 @@ void rtw_set_usb_agg_by_mode_customer(_adapter *padapter, u8 cur_wireless_mode, 
 	}
 }
 
-void rtw_set_usb_agg_by_mode(_adapter *padapter, u8 cur_wireless_mode)
+static void rtw_set_usb_agg_by_mode(_adapter *padapter, u8 cur_wireless_mode)
 {
 #ifdef CONFIG_PLATFORM_NOVATEK_NT72668
 	rtw_set_usb_agg_by_mode_customer(padapter, cur_wireless_mode, 0x3, 0x3);
@@ -11319,7 +11319,7 @@ void	rtw_hal_antdiv_rssi_compared(_adapter *padapter, WLAN_BSSID_EX *dst, WLAN_B
 #endif
 
 #ifdef CONFIG_PHY_CAPABILITY_QUERY
-void rtw_dump_phy_cap_by_phydmapi(void *sel, _adapter *adapter)
+static void rtw_dump_phy_cap_by_phydmapi(void *sel, _adapter *adapter)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	struct phy_spec_t *phy_spec = &pHalData->phy_spec;
@@ -11369,7 +11369,7 @@ void rtw_dump_phy_cap_by_phydmapi(void *sel, _adapter *adapter)
 	#endif
 }
 #else
-void rtw_dump_phy_cap_by_hal(void *sel, _adapter *adapter)
+static void rtw_dump_phy_cap_by_hal(void *sel, _adapter *adapter)
 {
 	u8 phy_cap = _FALSE;
 

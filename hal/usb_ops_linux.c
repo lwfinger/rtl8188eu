@@ -167,9 +167,10 @@ int recvbuf2recvframe(PADAPTER padapter, void *ptr)
 		}
 
 
-		pkt_offset = RXDESC_SIZE + pattrib->drvinfo_sz + pattrib->shift_sz + pattrib->pkt_len;
+		pkt_offset = RXDESC_SIZE + pattrib->drvinfo_sz +
+			     pattrib->shift_sz + le16_to_cpu(pattrib->pkt_len);
 
-		if ((pattrib->pkt_len <= 0) || (pkt_offset > transfer_len)) {
+		if ((le16_to_cpu(pattrib->pkt_len) <= 0) || (pkt_offset > transfer_len)) {
 			RTW_INFO("%s()-%d: RX Warning!,pkt_len<=0 or pkt_offset> transfoer_len\n", __FUNCTION__, __LINE__);
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
 			goto _exit_recvbuf2recvframe;
@@ -218,14 +219,12 @@ int recvbuf2recvframe(PADAPTER padapter, void *ptr)
 					&pHalData->odmpriv,
 					precvframe->u.hdr.rx_data,
 					pattrib->pkt_len,
-					pattrib->MacIDValidEntry[0],
-					pattrib->MacIDValidEntry[1]
-				);
-
+					le32_to_cpu(pattrib->MacIDValidEntry[0]),
+					le32_to_cpu(pattrib->MacIDValidEntry[1]));
 			} else if (pattrib->pkt_rpt_type == HIS_REPORT) {
 				/* RTW_INFO("%s , rx USB HISR\n",__FUNCTION__); */
 #ifdef CONFIG_SUPPORT_USB_INT
-				interrupt_handler_8188eu(padapter, pattrib->pkt_len, precvframe->u.hdr.rx_data);
+				interrupt_handler_8188eu(padapter, le16_to_cpu(pattrib->pkt_len), precvframe->u.hdr.rx_data);
 #endif
 			}
 			rtw_free_recvframe(precvframe, pfree_recv_queue);

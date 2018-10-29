@@ -21,8 +21,7 @@
 
 #include <drv_types.h>
 #include <hal_data.h>
-
-extern void indicate_wx_scan_complete_event(_adapter *padapter);
+#include <rtw_mlme.h>
 
 #define IS_MAC_ADDRESS_BROADCAST(addr) \
 	(\
