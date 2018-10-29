@@ -1,3 +1,18 @@
+IMPORTANT - PLEASE READ:
+
+If your system says that /lib/modules/...../build does not exist, you have not
+installed the kernel headers, you have done it incorrectly, or you are not running
+the kernel for which the headers have been installed. The necessary steps are
+dependent on which distro you are using. Creating a new issue and asking at
+GitHub will not be productive.
+
+Unsolicited E-mail sent to my provate address will be ignored!!
+
+If a build fails that previously worked, perform a 'git pull' and retry before
+reporting a problem here. If you downloaded the source in zip form, then you need to
+get an entirely new source file. That is why using git, which downloads only the changed
+lines, is recommended.
+
 rtl8188eu
 =========
 
