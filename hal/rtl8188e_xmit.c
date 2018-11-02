@@ -290,7 +290,7 @@ void fill_txdesc_force_bmc_camid(struct pkt_attrib *pattrib, struct tx_desc *ptx
 
 void rtl8188e_cal_txdesc_chksum(struct tx_desc *ptxdesc)
 {
-	u16	*usPtr = (u16 *)ptxdesc;
+	__le16	*usPtr = (__le16 *)ptxdesc;
 	u32 count = 16;		/* (32 bytes / 2 bytes per XOR) => 16 times */
 	u32 index;
 	u16 checksum = 0;

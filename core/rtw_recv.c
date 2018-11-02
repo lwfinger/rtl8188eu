@@ -2339,8 +2339,8 @@ sint wlanhdr_to_ethhdr(union recv_frame *precvframe)
 		_rtw_memcpy(ptr + ETH_ALEN, pattrib->src, ETH_ALEN);
 
 		if (!bsnaphdr) {
-			len = htons(len);
-			_rtw_memcpy(ptr + 12, &len, 2);
+			be_tmp = htons(len);
+			_rtw_memcpy(ptr + 12, &be_tmp, 2);
 		}
 	}
 

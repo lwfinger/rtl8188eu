@@ -21,6 +21,7 @@
 
 #include <drv_types.h>
 #include <hal_data.h>
+#include <rtw_debug.h>
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
@@ -28,45 +29,45 @@ MODULE_AUTHOR("Realtek Semiconductor Corp.");
 MODULE_VERSION(DRIVERVERSION);
 
 /* module param defaults */
-int rtw_chip_version = 0x00;
-int rtw_rfintfs = HWPI;
-int rtw_lbkmode = 0;/* RTL8712_AIR_TRX; */
-int rtw_network_mode = Ndis802_11IBSS;/* Ndis802_11Infrastructure; */ /* infra, ad-hoc, auto */
+static int rtw_chip_version = 0x00;
+static int rtw_rfintfs = HWPI;
+static int rtw_lbkmode = 0;/* RTL8712_AIR_TRX; */
+static int rtw_network_mode = Ndis802_11IBSS;/* Ndis802_11Infrastructure; */ /* infra, ad-hoc, auto */
 /* NDIS_802_11_SSID	ssid; */
-int rtw_channel = 1;/* ad-hoc support requirement */
-int rtw_wireless_mode = WIRELESS_MODE_MAX;
-int rtw_vrtl_carrier_sense = AUTO_VCS;
-int rtw_vcs_type = RTS_CTS;
-int rtw_rts_thresh = 2347;
-int rtw_frag_thresh = 2346;
-int rtw_preamble = PREAMBLE_LONG;/* long, short, auto */
-int rtw_scan_mode = 1;/* active, passive */
-int rtw_adhoc_tx_pwr = 1;
-int rtw_soft_ap = 0;
+static int rtw_channel = 1;/* ad-hoc support requirement */
+static int rtw_wireless_mode = WIRELESS_MODE_MAX;
+static int rtw_vrtl_carrier_sense = AUTO_VCS;
+static int rtw_vcs_type = RTS_CTS;
+static int rtw_rts_thresh = 2347;
+static int rtw_frag_thresh = 2346;
+static int rtw_preamble = PREAMBLE_LONG;/* long, short, auto */
+static int rtw_scan_mode = 1;/* active, passive */
+static int rtw_adhoc_tx_pwr = 1;
+static int rtw_soft_ap = 0;
 /* int smart_ps = 1; */
 #ifdef CONFIG_POWER_SAVING
-	int rtw_power_mgnt = PS_MODE_MAX;
+	static int rtw_power_mgnt = PS_MODE_MAX;
 	#ifdef CONFIG_IPS_LEVEL_2
-		int rtw_ips_mode = IPS_LEVEL_2;
+		static int rtw_ips_mode = IPS_LEVEL_2;
 	#else
-		int rtw_ips_mode = IPS_NORMAL;
+		static int rtw_ips_mode = IPS_NORMAL;
 	#endif
 #else
-	int rtw_power_mgnt = PS_MODE_ACTIVE;
-	int rtw_ips_mode = IPS_NONE;
+	static int rtw_power_mgnt = PS_MODE_ACTIVE;
+	static int rtw_ips_mode = IPS_NONE;
 #endif
 module_param(rtw_ips_mode, int, 0644);
 MODULE_PARM_DESC(rtw_ips_mode, "The default IPS mode");
 
-int rtw_smart_ps = 2;
+static int rtw_smart_ps = 2;
 
-int rtw_check_fw_ps = 1;
+static int rtw_check_fw_ps = 1;
 
 #ifdef CONFIG_TX_EARLY_MODE
-int rtw_early_mode = 1;
+static int rtw_early_mode = 1;
 #endif
 
-int rtw_usb_rxagg_mode = 2;/* RX_AGG_DMA=1, RX_AGG_USB=2 */
+static int rtw_usb_rxagg_mode = 2;/* RX_AGG_DMA=1, RX_AGG_USB=2 */
 module_param(rtw_usb_rxagg_mode, int, 0644);
 
 /* set log level when inserting driver module, default log level is _DRV_INFO_ = 4,
@@ -80,33 +81,33 @@ module_param(rtw_usb_rxagg_mode, int, 0644);
 module_param(rtw_drv_log_level, uint, 0644);
 MODULE_PARM_DESC(rtw_drv_log_level, "set log level when insert driver module, default log level is _DRV_INFO_ = 4");
 
-int rtw_radio_enable = 1;
-int rtw_long_retry_lmt = 7;
-int rtw_short_retry_lmt = 7;
-int rtw_busy_thresh = 40;
+static int rtw_radio_enable = 1;
+static int rtw_long_retry_lmt = 7;
+static int rtw_short_retry_lmt = 7;
+static int rtw_busy_thresh = 40;
 /* int qos_enable = 0; */ /* * */
-int rtw_ack_policy = NORMAL_ACK;
+static int rtw_ack_policy = NORMAL_ACK;
 
-int rtw_mp_mode = 0;
+static int rtw_mp_mode = 0;
 
 #if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_RTW_CUSTOMER_STR)
-uint rtw_mp_customer_str = 0;
+static uint rtw_mp_customer_str = 0;
 module_param(rtw_mp_customer_str, uint, 0644);
 MODULE_PARM_DESC(rtw_mp_customer_str, "Whether or not to enable customer str support on MP mode");
 #endif
 
-int rtw_software_encrypt = 0;
-int rtw_software_decrypt = 0;
+static int rtw_software_encrypt = 0;
+static int rtw_software_decrypt = 0;
 
-int rtw_acm_method = 0;/* 0:By SW 1:By HW. */
+static int rtw_acm_method = 0;/* 0:By SW 1:By HW. */
 
-int rtw_wmm_enable = 1;/* default is set to enable the wmm. */
-int rtw_uapsd_enable = 0;
-int rtw_uapsd_max_sp = NO_LIMIT;
-int rtw_uapsd_acbk_en = 0;
-int rtw_uapsd_acbe_en = 0;
-int rtw_uapsd_acvi_en = 0;
-int rtw_uapsd_acvo_en = 0;
+static int rtw_wmm_enable = 1;/* default is set to enable the wmm. */
+static int rtw_uapsd_enable = 0;
+static int rtw_uapsd_max_sp = NO_LIMIT;
+static int rtw_uapsd_acbk_en = 0;
+static int rtw_uapsd_acbe_en = 0;
+static int rtw_uapsd_acvi_en = 0;
+static int rtw_uapsd_acvo_en = 0;
 #if defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)
 	static int rtw_pwrtrim_enable = 2; /* disable kfree , rename to power trim disable */
 #else
@@ -3035,9 +3036,6 @@ int pm_netdev_open(struct net_device *pnetdev, u8 bnormal)
 	if (_TRUE == bnormal) {
 		_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
 		status = _netdev_open(pnetdev);
-#if 0
-		rtw_restore_mac_addr(padapter);
-#endif
 		_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
 	}
 #ifdef CONFIG_IPS

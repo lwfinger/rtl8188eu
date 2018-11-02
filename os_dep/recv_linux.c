@@ -79,7 +79,7 @@ int rtw_os_alloc_recvframe(_adapter *padapter, union recv_frame *precvframe, u8 
 	/*	For 8 bytes IP header alignment. */
 	shift_sz = pattrib->qos ? 6 : 0; /*	Qos data, wireless lan header length is 26 */
 
-	skb_len = pattrib->pkt_len;
+	skb_len = le16_to_cpu(pattrib->pkt_len);
 
 	/* for first fragment packet, driver need allocate 1536+drvinfo_sz+RXDESC_SIZE to defrag packet. */
 	/* modify alloc_sz for recvive crc error packet by thomas 2011-06-02 */
@@ -315,7 +315,7 @@ _pkt *rtw_os_alloc_msdu_pkt(union recv_frame *prframe, u16 nSubframe_Length, u8 
 		_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
 		_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->dst, ETH_ALEN);
 	} else {
-		u16 len;
+		__be16 len;
 		/* Leave Ethernet header part of hdr and full payload */
 		len = htons(sub_skb->len);
 		_rtw_memcpy(skb_push(sub_skb, 2), &len, 2);
@@ -733,7 +733,7 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 	skb->len = precv_frame->u.hdr.len;
 
 
-	if (pattrib->eth_type == 0x888e)
+	if (pattrib->eth_type == cpu_to_le16(0x888e))
 		RTW_INFO("recv eapol packet\n");
 
 #ifdef CONFIG_AUTO_AP_MODE
@@ -848,9 +848,9 @@ void rtw_os_read_port(_adapter *padapter, struct recv_buf *precvbuf)
 
 }
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-void _rtw_reordering_ctrl_timeout_handler(void *FunctionContext)
+static void _rtw_reordering_ctrl_timeout_handler(void *FunctionContext)
 #else
-void _rtw_reordering_ctrl_timeout_handler(struct timer_list *t)
+static void _rtw_reordering_ctrl_timeout_handler(struct timer_list *t)
 #endif
 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)

@@ -21,14 +21,15 @@
 
 #include <drv_types.h>
 
-bool test_st_match_rule(_adapter *adapter, u8 *local_naddr, u8 *local_port, u8 *remote_naddr, u8 *remote_port)
+static bool test_st_match_rule(_adapter *adapter, u8 *local_naddr, u8 *local_port, u8 *remote_naddr, u8 *remote_port)
 {
-	if (ntohs(*((u16 *)local_port)) == 5001 || ntohs(*((u16 *)remote_port)) == 5001)
+	if (ntohs(*((__be16 *)local_port)) == 5001 ||
+	    ntohs(*((__be16 *)remote_port)) == 5001)
 		return _TRUE;
 	return _FALSE;
 }
 
-struct st_register test_st_reg = {
+static struct st_register test_st_reg = {
 	.s_proto = 0x06,
 	.rule = test_st_match_rule,
 };
@@ -458,108 +459,102 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 	/* _enter_critical_bh(&(pfree_sta_queue->lock), &irqL); */
 	_enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL2);
 	if (_rtw_queue_empty(pfree_sta_queue) == _TRUE) {
-		/* _exit_critical_bh(&(pfree_sta_queue->lock), &irqL); */
-		_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL2);
 		psta = NULL;
-	} else {
-		psta = LIST_CONTAINOR(get_next(&pfree_sta_queue->queue), struct sta_info, list);
+		goto exit;
+	}
+	psta = LIST_CONTAINOR(get_next(&pfree_sta_queue->queue), struct sta_info, list);
 
-		rtw_list_delete(&(psta->list));
+	rtw_list_delete(&(psta->list));
 
-		/* _exit_critical_bh(&(pfree_sta_queue->lock), &irqL); */
+	/* _exit_critical_bh(&(pfree_sta_queue->lock), &irqL); */
 
-		tmp_aid = psta->aid;
+	tmp_aid = psta->aid;
 
-		_rtw_init_stainfo(psta);
+	_rtw_init_stainfo(psta);
 
-		psta->padapter = pstapriv->padapter;
+	psta->padapter = pstapriv->padapter;
 
-		_rtw_memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
+	_rtw_memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
 
-		index = wifi_mac_hash(hwaddr);
+	index = wifi_mac_hash(hwaddr);
 
 
-		if (index >= NUM_STA) {
-			psta = NULL;
-			goto exit;
-		}
-		phash_list = &(pstapriv->sta_hash[index]);
+	if (index >= NUM_STA) {
+		psta = NULL;
+		goto exit;
+	}
+	phash_list = &(pstapriv->sta_hash[index]);
 
-		/* _enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL2); */
+	/* _enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL2); */
 
-		rtw_list_insert_tail(&psta->hash_list, phash_list);
+	rtw_list_insert_tail(&psta->hash_list, phash_list);
 
-		pstapriv->asoc_sta_count++;
+	pstapriv->asoc_sta_count++;
 
-		/* _exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL2); */
+	/* _exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL2); */
 
-		/* Commented by Albert 2009/08/13
-		 * For the SMC router, the sequence number of first packet of WPS handshake will be 0.
-		 * In this case, this packet will be dropped by recv_decache function if we use the 0x00 as the default value for tid_rxseq variable.
-		 * So, we initialize the tid_rxseq variable as the 0xffff. */
+	/* Commented by Albert 2009/08/13
+	 * For the SMC router, the sequence number of first packet of WPS handshake will be 0.
+	 * In this case, this packet will be dropped by recv_decache function if we use the 0x00 as the default value for tid_rxseq variable.
+	 * So, we initialize the tid_rxseq variable as the 0xffff. */
 
-		for (i = 0; i < 16; i++) {
-			_rtw_memcpy(&psta->sta_recvpriv.rxcache.tid_rxseq[i], &wRxSeqInitialValue, 2);
-			_rtw_memset(&psta->sta_recvpriv.rxcache.iv[i], 0, sizeof(psta->sta_recvpriv.rxcache.iv[i]));
-		}
+	for (i = 0; i < 16; i++) {
+		_rtw_memcpy(&psta->sta_recvpriv.rxcache.tid_rxseq[i], &wRxSeqInitialValue, 2);
+		_rtw_memset(&psta->sta_recvpriv.rxcache.iv[i], 0, sizeof(psta->sta_recvpriv.rxcache.iv[i]));
+	}
 
-		init_addba_retry_timer(pstapriv->padapter, psta);
+	init_addba_retry_timer(pstapriv->padapter, psta);
 #ifdef CONFIG_IEEE80211W
-		init_dot11w_expire_timer(pstapriv->padapter, psta);
+	init_dot11w_expire_timer(pstapriv->padapter, psta);
 #endif /* CONFIG_IEEE80211W */
 #ifdef CONFIG_TDLS
-		rtw_init_tdls_timer(pstapriv->padapter, psta);
+	rtw_init_tdls_timer(pstapriv->padapter, psta);
 #endif /* CONFIG_TDLS */
 
-		/* for A-MPDU Rx reordering buffer control */
-		for (i = 0; i < 16 ; i++) {
-			preorder_ctrl = &psta->recvreorder_ctrl[i];
+	/* for A-MPDU Rx reordering buffer control */
+	for (i = 0; i < 16 ; i++) {
+		preorder_ctrl = &psta->recvreorder_ctrl[i];
 
-			preorder_ctrl->padapter = pstapriv->padapter;
+		preorder_ctrl->padapter = pstapriv->padapter;
 
-			preorder_ctrl->enable = _FALSE;
+		preorder_ctrl->enable = _FALSE;
 
-			preorder_ctrl->indicate_seq = 0xffff;
+		preorder_ctrl->indicate_seq = 0xffff;
 #ifdef DBG_RX_SEQ
-			RTW_INFO("DBG_RX_SEQ %s:%d IndicateSeq: %d\n", __FUNCTION__, __LINE__,
-				 preorder_ctrl->indicate_seq);
+		RTW_INFO("DBG_RX_SEQ %s:%d IndicateSeq: %d\n", __FUNCTION__, __LINE__,
+			 preorder_ctrl->indicate_seq);
 #endif
-			preorder_ctrl->wend_b = 0xffff;
-			/* preorder_ctrl->wsize_b = (NR_RECVBUFF-2); */
-			preorder_ctrl->wsize_b = 64;/* 64; */
-			preorder_ctrl->ampdu_size = RX_AMPDU_SIZE_INVALID;
+		preorder_ctrl->wend_b = 0xffff;
+		/* preorder_ctrl->wsize_b = (NR_RECVBUFF-2); */
+		preorder_ctrl->wsize_b = 64;/* 64; */
+		preorder_ctrl->ampdu_size = RX_AMPDU_SIZE_INVALID;
 
-			_rtw_init_queue(&preorder_ctrl->pending_recvframe_queue);
+		_rtw_init_queue(&preorder_ctrl->pending_recvframe_queue);
 
-			rtw_init_recv_timer(preorder_ctrl);
-		}
-
-
-		/* init for DM */
-		psta->rssi_stat.undecorated_smoothed_pwdb = (-1);
-		psta->rssi_stat.undecorated_smoothed_cck = (-1);
-#ifdef CONFIG_ATMEL_RC_PATCH
-		psta->flag_atmel_rc = 0;
-#endif
-		/* init for the sequence number of received management frame */
-		psta->RxMgmtFrameSeqNum = 0xffff;
-		psta->ra_rpt_linked = _FALSE;
-
-		rtw_alloc_macid(pstapriv->padapter, psta);
-
+		rtw_init_recv_timer(preorder_ctrl);
 	}
+
+
+	/* init for DM */
+	psta->rssi_stat.undecorated_smoothed_pwdb = (-1);
+	psta->rssi_stat.undecorated_smoothed_cck = (-1);
+#ifdef CONFIG_ATMEL_RC_PATCH
+	psta->flag_atmel_rc = 0;
+#endif
+	/* init for the sequence number of received management frame */
+	psta->RxMgmtFrameSeqNum = 0xffff;
+	psta->ra_rpt_linked = _FALSE;
+
+	rtw_alloc_macid(pstapriv->padapter, psta);
 
 exit:
 
 	_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL2);
 
-
 	if (psta)
 		rtw_mi_update_iface_status(&(pstapriv->padapter->mlmepriv), 0);
-
 	return psta;
 }
-
 
 /* using pstapriv->sta_hash_lock to protect */
 u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)

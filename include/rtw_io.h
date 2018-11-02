@@ -91,8 +91,8 @@ struct io_queue;
 
 struct _io_ops {
 	u8(*_read8)(struct intf_hdl *pintfhdl, u32 addr);
-	__le16(*_read16)(struct intf_hdl *pintfhdl, u32 addr);
-	__le32(*_read32)(struct intf_hdl *pintfhdl, u32 addr);
+	u16(*_read16)(struct intf_hdl *pintfhdl, u32 addr);
+	u32(*_read32)(struct intf_hdl *pintfhdl, u32 addr);
 
 	int (*_write8)(struct intf_hdl *pintfhdl, u32 addr, u8 val);
 	int (*_write16)(struct intf_hdl *pintfhdl, u32 addr, __le16 val);

@@ -68,9 +68,7 @@ enum {
 
 #ifdef CONFIG_RTW_DEBUG
 
-#ifndef _OS_INTFS_C_
 extern uint rtw_drv_log_level;
-#endif
 
 #if defined(_dbgdump)
 

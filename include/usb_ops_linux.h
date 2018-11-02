@@ -66,8 +66,8 @@
 
 #ifdef CONFIG_USB_SUPPORT_ASYNC_VDN_REQ
 int usb_async_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val);
-int usb_async_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val);
-int usb_async_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val);
+int usb_async_write16(struct intf_hdl *pintfhdl, u32 addr, __le16 val);
+int usb_async_write32(struct intf_hdl *pintfhdl, u32 addr, __le32 val);
 #endif /* CONFIG_USB_SUPPORT_ASYNC_VDN_REQ */
 
 unsigned int ffaddr2pipehdl(struct dvobj_priv *pdvobj, u32 addr);
@@ -90,8 +90,8 @@ u8 usb_read8(struct intf_hdl *pintfhdl, u32 addr);
 u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr);
 u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr);
 int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val);
-int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val);
-int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val);
+int usb_write16(struct intf_hdl *pintfhdl, u32 addr, __le16 val);
+int usb_write32(struct intf_hdl *pintfhdl, u32 addr, __le32 val);
 int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata);
 u32 usb_read_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *rmem);
 void usb_recv_tasklet(void *priv);

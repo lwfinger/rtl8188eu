@@ -23,7 +23,7 @@
 	#include <linux/fs.h>
 #endif
 #include <drv_types.h>
-
+#include <hal_data.h>
 
 u8 RTW_WPA_OUI_TYPE[] = { 0x00, 0x50, 0xf2, 1 };
 u16 RTW_WPA_VERSION = 1;
@@ -1361,7 +1361,6 @@ func_exit:
 	return res;
 }
 
-extern char *rtw_initmac;
 /**
  * rtw_macaddr_cfg - Decide the mac address used
  * @out: buf to store mac address decided

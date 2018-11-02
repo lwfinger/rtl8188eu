@@ -4403,9 +4403,9 @@ static void session_tracker_cmd_hdl(_adapter *adapter, struct st_cmd_parm *parm)
 			st = LIST_CONTAINOR(plist, struct session_tracker, list);
 
 			if (st->local_naddr == local_naddr
-				&& st->local_port == local_port
+				&& st->local_port == cpu_to_be16(local_port)
 				&& st->remote_naddr == remote_naddr
-				&& st->remote_port == remote_port)
+				&& st->remote_port == cpu_to_be16(remote_port))
 				break;
 
 			plist = get_next(plist);
@@ -4440,9 +4440,9 @@ unlock:
 				goto exit;
 
 			st->local_naddr = local_naddr;
-			st->local_port = local_port;
+			st->local_port = cpu_to_be16(local_port);
 			st->remote_naddr = remote_naddr;
-			st->remote_port = remote_port;
+			st->remote_port = cpu_to_be16(remote_port);
 			st->set_time = rtw_get_current_time();
 			st->status = ST_STATUS_CHECK;
 

@@ -127,19 +127,14 @@ static void update_BCNTIM(_adapter *padapter)
 			*dst_ie++ = BIT(0);/*bitmap ctrl */
 		else
 			*dst_ie++ = 0;
-
 		if (tim_ielen == 4) {
 			u8 pvb = 0;
 
-			if (pstapriv->tim_bitmap & 0x00fe)
-				pvb = (u8)tim_bitmap_le;
-			else if (pstapriv->tim_bitmap & 0xff00)
-				pvb = (u8)(tim_bitmap_le >> 8);
+			if (pstapriv->tim_bitmap & 0xff00)
+				pvb = le16_to_cpu(tim_bitmap_le) >> 8;
 			else
-				pvb = (u8)tim_bitmap_le;
-
+				pvb = le16_to_cpu(tim_bitmap_le);
 			*dst_ie++ = pvb;
-
 		} else if (tim_ielen == 5) {
 			_rtw_memcpy(dst_ie, &tim_bitmap_le, 2);
 			dst_ie += 2;

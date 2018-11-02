@@ -457,7 +457,7 @@ static const struct ieee80211_regdomain *_rtw_regdomain_select(struct
 #endif
 }
 
-void _rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
+static void _rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
 {
 	struct rtw_regulatory *reg = NULL;
 
@@ -467,9 +467,9 @@ void _rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
 }
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 9, 0))
-int rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
+static int rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
 #else
-void rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
+static void rtw_reg_notifier(struct wiphy *wiphy, struct regulatory_request *request)
 #endif
 {
 	_rtw_reg_notifier(wiphy, request);

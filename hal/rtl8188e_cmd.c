@@ -148,7 +148,7 @@ exit:
 	return ret;
 }
 
-u8 rtl8192c_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
+static u8 rtl8192c_h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
 {
 	u8 ElementID, CmdLen;
 	u8 *pCmdBuffer;
@@ -190,9 +190,8 @@ u8 rtl8188e_set_rssi_cmd(_adapter *padapter, u8 *param)
 		return _FAIL;
 	}
 
-	*((u32 *) param) = cpu_to_le32(*((u32 *) param));
+	*((__le32 *) param) = cpu_to_le32(*((u32 *) param));
 	FillH2CCmd_88E(padapter, H2C_RSSI_REPORT, 3, param);
-
 
 	return res;
 }
@@ -320,11 +319,11 @@ void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode)
 
 }
 
-void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
+static void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16					*fctrl;
-	u32					rate_len, pktlen;
+	__le16 *fctrl;
+	u32 rate_len, pktlen;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX		*cur_network = &(pmlmeinfo->network);
@@ -417,11 +416,11 @@ _ConstructBeacon:
 
 }
 
-void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
+static void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16					*fctrl;
-	u32					pktlen;
+	__le16 *fctrl;
+	u32 pktlen;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -447,7 +446,7 @@ void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 	*pLength = 16;
 }
 
-void ConstructNullFunctionData(
+static void ConstructNullFunctionData(
 	PADAPTER padapter,
 	u8		*pframe,
 	u32		*pLength,
@@ -458,8 +457,8 @@ void ConstructNullFunctionData(
 	u8		bForcePowerSave)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
-	u16						*fctrl;
-	u32						pktlen;
+	__le16 *fctrl;
+	u32 pktlen;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct wlan_network		*cur_network = &pmlmepriv->cur_network;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -517,7 +516,7 @@ void ConstructNullFunctionData(
 	*pLength = pktlen;
 }
 
-void rtl8188e_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
+static void rtl8188e_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
 {
 	u8 u1H2CRsvdPageParm[H2C_RSVDPAGE_LOC_LEN] = {0};
 	u8 u1H2CAoacRsvdPageParm[H2C_AOAC_RSVDPAGE_LOC_LEN] = {0};

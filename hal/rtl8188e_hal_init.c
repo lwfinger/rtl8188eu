@@ -251,7 +251,7 @@ exit:
 		rtw_mfree2d((void *)eFuseWord, EFUSE_MAX_SECTION_88E, EFUSE_MAX_WORD_UNIT, sizeof(u16));
 }
 
-void efuse_read_phymap_from_txpktbuf(
+static void efuse_read_phymap_from_txpktbuf(
 	ADAPTER *adapter,
 	int bcnhead,	/* beacon head, where FW store len(2-byte) and efuse physical map. */
 	u8 *content,	/* buffer to store efuse physical map */
@@ -323,11 +323,11 @@ void efuse_read_phymap_from_txpktbuf(
 			lenc[0] = rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L);
 			lenc[1] = rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L + 1);
 
-			aaabak = le16_to_cpup((u16 *)lenc);
-			lenbak = le16_to_cpu(*((u16 *)lenc));
-			aaa = le16_to_cpup((u16 *)&lo32);
+			aaabak = le16_to_cpup((__le16 *)lenc);
+			lenbak = le16_to_cpu(*((__le16 *)lenc));
+			aaa = le16_to_cpup((__le16 *)&lo32);
 #endif
-			len = le16_to_cpu(*((u16 *)&lo32));
+			len = le16_to_cpu(*((__le16 *)&lo32));
 
 			limit = (len - 2 < limit) ? len - 2 : limit;
 
@@ -445,7 +445,7 @@ static s32 iol_ioconfig(
 	return rst;
 }
 
-int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
+static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {
 
 	u32 start_time = rtw_get_current_time();
@@ -733,7 +733,7 @@ exit:
 	return ret;
 }
 
-void _MCUIO_Reset88E(PADAPTER padapter, u8 bReset)
+static void _MCUIO_Reset88E(PADAPTER padapter, u8 bReset)
 {
 	u8 u1bTmp;
 
@@ -968,8 +968,9 @@ s32 rtl8188e_FirmwareDownload(PADAPTER padapter, BOOLEAN  bUsedWoWLANFw)
 	pHalData->FirmwareSignature = le16_to_cpu(pFwHdr->Signature);
 
 	RTW_INFO("%s: fw_ver=%x fw_subver=%04x sig=0x%x, Month=%02x, Date=%02x, Hour=%02x, Minute=%02x\n",
-		__FUNCTION__, pHalData->firmware_version, pHalData->firmware_sub_version, pHalData->FirmwareSignature
-		 , pFwHdr->Month, pFwHdr->Date, pFwHdr->Hour, pFwHdr->Minute);
+		__func__, pHalData->firmware_version,
+		pHalData->firmware_sub_version, pHalData->FirmwareSignature,
+		pFwHdr->Month, pFwHdr->Date, pFwHdr->Hour, pFwHdr->Minute);
 
 	if (IS_FW_HEADER_EXIST_88E(pFwHdr)) {
 		/* Shift 32 bytes for FW header */
@@ -1466,7 +1467,7 @@ rtl8188e_ReadEFuse(
 }
 
 /* Do not support BT */
-VOID
+static void
 Hal_EFUSEGetEfuseDefinition88E(
 	IN		PADAPTER	pAdapter,
 	IN		u1Byte		efuseType,
@@ -1525,7 +1526,8 @@ Hal_EFUSEGetEfuseDefinition88E(
 	break;
 	}
 }
-VOID
+
+static void
 Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 	IN		PADAPTER	pAdapter,
 	IN		u8			efuseType,
@@ -2497,7 +2499,8 @@ void rtl8188e_stop_thread(_adapter *padapter)
 #endif
 #endif
 }
-void hal_notch_filter_8188e(_adapter *adapter, bool enable)
+
+static void hal_notch_filter_8188e(_adapter *adapter, bool enable)
 {
 	if (enable) {
 		RTW_INFO("Enable notch filter\n");
@@ -2508,7 +2511,7 @@ void hal_notch_filter_8188e(_adapter *adapter, bool enable)
 	}
 }
 
-void update_ra_mask_8188e(_adapter *padapter, struct sta_info *psta, struct macid_cfg *h2c_macid_cfg)
+static void update_ra_mask_8188e(_adapter *padapter, struct sta_info *psta, struct macid_cfg *h2c_macid_cfg)
 {
 	HAL_DATA_TYPE	*hal_data = GET_HAL_DATA(padapter);
 
@@ -2679,7 +2682,7 @@ u8 GetEEPROMSize8188E(PADAPTER padapter)
  * LLT R/W/Init function
  *
  * ------------------------------------------------------------------------- */
-s32 _LLTWrite(PADAPTER padapter, u32 address, u32 data)
+static s32 _LLTWrite(PADAPTER padapter, u32 address, u32 data)
 {
 	s32	status = _SUCCESS;
 	s8	count = POLLING_LLT_THRESHOLD;
@@ -2702,7 +2705,7 @@ s32 _LLTWrite(PADAPTER padapter, u32 address, u32 data)
 	return status;
 }
 
-u8 _LLTRead(PADAPTER padapter, u32 address)
+static u8 _LLTRead(PADAPTER padapter, u32 address)
 {
 	s32	count = POLLING_LLT_THRESHOLD;
 	u32	value = _LLT_INIT_ADDR(address) | _LLT_OP(_LLT_READ_ACCESS);
@@ -2815,7 +2818,7 @@ Hal_EfuseParseIDCode88E(
 
 
 	/* Checl 0x8129 again for making sure autoload status!! */
-	EEPROMId = le16_to_cpu(*((u16 *)hwinfo));
+	EEPROMId = le16_to_cpu(*((__le16 *)hwinfo));
 	if (EEPROMId != RTL_EEPROM_ID) {
 		RTW_INFO("EEPROM ID(%#x) is invalid!!\n", EEPROMId);
 		pHalData->bautoload_fail_flag = _TRUE;
@@ -4583,7 +4586,7 @@ struct bcn_qinfo_88e {
 	u16 pkt_num:8;
 };
 
-void dump_qinfo_88e(void *sel, struct qinfo_88e *info, const char *tag)
+static void dump_qinfo_88e(void *sel, struct qinfo_88e *info, const char *tag)
 {
 	/* if (info->pkt_num) */
 	RTW_PRINT_SEL(sel, "%shead:0x%02x, tail:0x%02x, pkt_num:%u, macid:%u, ac:%u\n"
@@ -4591,7 +4594,7 @@ void dump_qinfo_88e(void *sel, struct qinfo_88e *info, const char *tag)
 		     );
 }
 
-void dump_bcn_qinfo_88e(void *sel, struct bcn_qinfo_88e *info, const char *tag)
+static void dump_bcn_qinfo_88e(void *sel, struct bcn_qinfo_88e *info, const char *tag)
 {
 	/* if (info->pkt_num) */
 	RTW_PRINT_SEL(sel, "%shead:0x%02x, pkt_num:%u\n"
@@ -4599,7 +4602,7 @@ void dump_bcn_qinfo_88e(void *sel, struct bcn_qinfo_88e *info, const char *tag)
 		     );
 }
 
-void dump_mac_qinfo_88e(void *sel, _adapter *adapter)
+static void dump_mac_qinfo_88e(void *sel, _adapter *adapter)
 {
 	u32 q0_info;
 	u32 q1_info;
@@ -4693,7 +4696,8 @@ void GetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 	}
 
 }
-void hal_ra_info_dump(_adapter *padapter , void *sel)
+
+static void hal_ra_info_dump(_adapter *padapter , void *sel)
 {
 	int i;
 	u8 mac_id;

@@ -249,9 +249,9 @@ int usb_async_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
 	return ret;
 }
 
-int usb_async_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
+int usb_async_write16(struct intf_hdl *pintfhdl, u32 addr, __le16 val)
 {
-	u16 data;
+	__le16 data;
 	int ret;
 	struct dvobj_priv  *pdvobjpriv = (struct dvobj_priv *)pintfhdl->pintf_dev;
 	struct usb_device *udev = pdvobjpriv->pusbdev;
@@ -304,7 +304,7 @@ u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
 	u16 wvalue;
 	u16 index;
 	u16 len;
-	u16 data = 0;
+	__le16 data = 0;
 
 	request = 0x05;
 	requesttype = 0x01;/* read_in */
@@ -315,8 +315,7 @@ u16 usb_read16(struct intf_hdl *pintfhdl, u32 addr)
 	usbctrl_vendorreq(pintfhdl, request, wvalue, index,
 			  &data, len, requesttype);
 
-	return data;
-
+	return le16_to_cpu(data);
 }
 
 u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
@@ -326,7 +325,7 @@ u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 	u16 wvalue;
 	u16 index;
 	u16 len;
-	u32 data = 0;
+	__le32 data = 0;
 
 	request = 0x05;
 	requesttype = 0x01;/* read_in */
@@ -337,7 +336,7 @@ u32 usb_read32(struct intf_hdl *pintfhdl, u32 addr)
 	usbctrl_vendorreq(pintfhdl, request, wvalue, index,
 			  &data, len, requesttype);
 
-	return data;
+	return le32_to_cpu(data);
 }
 
 int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
@@ -364,14 +363,14 @@ int usb_write8(struct intf_hdl *pintfhdl, u32 addr, u8 val)
 	return ret;
 }
 
-int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
+int usb_write16(struct intf_hdl *pintfhdl, u32 addr, __le16 val)
 {
 	u8 request;
 	u8 requesttype;
 	u16 wvalue;
 	u16 index;
 	u16 len;
-	u16 data;
+	__le16 data;
 	int ret;
 
 	request = 0x05;
@@ -389,14 +388,14 @@ int usb_write16(struct intf_hdl *pintfhdl, u32 addr, u16 val)
 
 }
 
-int usb_write32(struct intf_hdl *pintfhdl, u32 addr, u32 val)
+int usb_write32(struct intf_hdl *pintfhdl, u32 addr, __le32 val)
 {
 	u8 request;
 	u8 requesttype;
 	u16 wvalue;
 	u16 index;
 	u16 len;
-	u32 data;
+	__le32 data;
 	int ret;
 
 	request = 0x05;

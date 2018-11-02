@@ -1,7 +1,7 @@
 #include "btc/mp_precomp.h"
 #include <hal_btcoex_wifionly.h>
 
-struct  wifi_only_cfg GLBtCoexistWifiOnly;
+static struct  wifi_only_cfg GLBtCoexistWifiOnly;
 
 void halwifionly_write1byte(PVOID pwifionlyContext, u32 RegAddr, u8 Data)
 {

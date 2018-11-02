@@ -43,7 +43,7 @@ u8	fakeBTEfuseModifiedMap[EFUSE_BT_MAX_MAP_LEN] = {0};
 
 u8	maskfileBuffer[64];
 /*------------------------Define local variable------------------------------*/
-BOOLEAN rtw_file_efuse_IsMasked(PADAPTER pAdapter, u16 Offset)
+static BOOLEAN rtw_file_efuse_IsMasked(PADAPTER pAdapter, u16 Offset)
 {
 	int r = Offset / 16;
 	int c = (Offset % 16) / 2;
@@ -60,7 +60,7 @@ BOOLEAN rtw_file_efuse_IsMasked(PADAPTER pAdapter, u16 Offset)
 	return (result > 0) ? 0 : 1;
 }
 
-BOOLEAN efuse_IsMasked(PADAPTER pAdapter, u16 Offset)
+static BOOLEAN efuse_IsMasked(PADAPTER pAdapter, u16 Offset)
 {
 	PHAL_DATA_TYPE pHalData = GET_HAL_DATA(pAdapter);
 
@@ -1436,7 +1436,7 @@ u8 EfusePgPacketWrite_BT(
 #define EFUSE_CTRL			REG_EFUSE_CTRL		/* E-Fuse Control. */
 /* ------------------------------------------------------------------------------ */
 
-VOID efuse_PreUpdateAction(
+static VOID efuse_PreUpdateAction(
 	PADAPTER	pAdapter,
 	pu4Byte	BackupRegs)
 {
@@ -1462,7 +1462,7 @@ VOID efuse_PreUpdateAction(
 #endif
 }
 
-VOID efuse_PostUpdateAction(
+static VOID efuse_PostUpdateAction(
 	PADAPTER	pAdapter,
 	pu4Byte	BackupRegs)
 {
@@ -1860,7 +1860,7 @@ Efuse_PgPacketWrite(IN	PADAPTER	pAdapter,
 }
 
 
-int
+static int
 Efuse_PgPacketWrite_BT(IN	PADAPTER	pAdapter,
 		       IN	u8			offset,
 		       IN	u8			word_en,

@@ -3707,7 +3707,7 @@ static int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 			/*			if (priv->dev->br_port &&
 			 *				 !memcmp(skb->data+MACADDRLEN, priv->br_mac, MACADDRLEN)) { */
 #if 1
-			if (*((unsigned short *)(skb->data + MACADDRLEN * 2)) == __constant_htons(ETH_P_8021Q)) {
+			if (*((__be16 *)(skb->data + MACADDRLEN * 2)) == __constant_htons(ETH_P_8021Q)) {
 				is_vlan_tag = 1;
 				vlan_hdr = *((unsigned short *)(skb->data + MACADDRLEN * 2 + 2));
 				for (i = 0; i < 6; i++)

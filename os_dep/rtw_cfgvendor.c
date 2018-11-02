@@ -144,7 +144,7 @@ int dbg_rtw_cfg80211_vendor_cmd_reply(struct sk_buff *skb
 	dbg_rtw_cfg80211_vendor_cmd_reply(skb, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
 #else
 
-struct sk_buff *rtw_cfg80211_vendor_event_alloc(
+static struct sk_buff *rtw_cfg80211_vendor_event_alloc(
 	struct wiphy *wiphy, struct wireless_dev *wdev, int len, int event_id, gfp_t gfp)
 {
 	struct sk_buff *skb;
@@ -176,7 +176,7 @@ struct sk_buff *rtw_cfg80211_vendor_event_alloc(
 int rtw_cfgvendor_send_async_event(struct wiphy *wiphy,
 	   struct net_device *dev, int event_id, const void  *data, int len)
 {
-	u16 kflags;
+	gfp_t kflags;
 	struct sk_buff *skb;
 
 	kflags = in_atomic() ? GFP_ATOMIC : GFP_KERNEL;
@@ -234,7 +234,7 @@ static int rtw_cfgvendor_send_cmd_reply(struct wiphy *wiphy,
 #define MAX_FEATURE_SET_CONCURRRENT_GROUPS  3
 
 #include <hal_data.h>
-int rtw_dev_get_feature_set(struct net_device *dev)
+static int rtw_dev_get_feature_set(struct net_device *dev)
 {
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	HAL_DATA_TYPE *HalData = GET_HAL_DATA(adapter);
@@ -256,7 +256,7 @@ int rtw_dev_get_feature_set(struct net_device *dev)
 	return feature_set;
 }
 
-int *rtw_dev_get_feature_set_matrix(struct net_device *dev, int *num)
+static int *rtw_dev_get_feature_set_matrix(struct net_device *dev, int *num)
 {
 	int feature_set_full, mem_needed;
 	int *ret;

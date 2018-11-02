@@ -49,7 +49,7 @@ inline u8 rtw_odm_get_force_igi_lb(_adapter *adapter)
 	return hal_data->u1ForcedIgiLb;
 }
 
-void rtw_odm_adaptivity_ver_msg(void *sel, _adapter *adapter)
+static void rtw_odm_adaptivity_ver_msg(void *sel, _adapter *adapter)
 {
 	RTW_PRINT_SEL(sel, "ADAPTIVITY_VERSION "ADAPTIVITY_VERSION"\n");
 }
@@ -57,7 +57,7 @@ void rtw_odm_adaptivity_ver_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_EN_DISABLE 0
 #define RTW_ADAPTIVITY_EN_ENABLE 1
 
-void rtw_odm_adaptivity_en_msg(void *sel, _adapter *adapter)
+static void rtw_odm_adaptivity_en_msg(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 	struct mlme_priv *mlme = &adapter->mlmepriv;
@@ -77,7 +77,7 @@ void rtw_odm_adaptivity_en_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_MODE_NORMAL 0
 #define RTW_ADAPTIVITY_MODE_CARRIER_SENSE 1
 
-void rtw_odm_adaptivity_mode_msg(void *sel, _adapter *adapter)
+static void rtw_odm_adaptivity_mode_msg(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
@@ -94,7 +94,7 @@ void rtw_odm_adaptivity_mode_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_DML_DISABLE 0
 #define RTW_ADAPTIVITY_DML_ENABLE 1
 
-void rtw_odm_adaptivity_dml_msg(void *sel, _adapter *adapter)
+static void rtw_odm_adaptivity_dml_msg(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
@@ -108,7 +108,7 @@ void rtw_odm_adaptivity_dml_msg(void *sel, _adapter *adapter)
 		_RTW_PRINT_SEL(sel, "INVALID\n");
 }
 
-void rtw_odm_adaptivity_dc_backoff_msg(void *sel, _adapter *adapter)
+static void rtw_odm_adaptivity_dc_backoff_msg(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
