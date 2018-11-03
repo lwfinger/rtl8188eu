@@ -727,7 +727,7 @@ odm_iq_calibrate(
 	struct _ADAPTER	*adapter = p_dm_odm->adapter;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(adapter);
 
-	RT_TRACE(COMP_SCAN, ODM_DBG_LOUD, ("=>%s\n" , __FUNCTION__));
+	RT_TRACE(COMP_SCAN, ODM_DBG_LOUD, ("=>%s\n" , __func__));
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	if (*p_dm_odm->p_is_fcs_mode_enable)
@@ -751,7 +751,7 @@ odm_iq_calibrate(
 	} else
 		p_dm_odm->linked_interval = 0;
 
-		RT_TRACE(COMP_SCAN, ODM_DBG_LOUD, ("<=%s interval=%d ch=%d prech=%d scan=%s\n", __FUNCTION__, p_dm_odm->linked_interval,
+		RT_TRACE(COMP_SCAN, ODM_DBG_LOUD, ("<=%s interval=%d ch=%d prech=%d scan=%s\n", __func__, p_dm_odm->linked_interval,
 			*p_dm_odm->p_channel,  p_dm_odm->pre_channel, *p_dm_odm->p_is_scan_in_process == TRUE?"TRUE":"FALSE"));
 }
 

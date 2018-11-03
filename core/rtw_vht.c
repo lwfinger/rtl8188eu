@@ -98,7 +98,7 @@ u8	rtw_vht_mcsmap_to_nss(u8 *pvht_mcs_map)
 		}
 	}
 
-	/* RTW_INFO("%s : %dSS\n", __FUNCTION__, nss); */
+	/* RTW_INFO("%s : %dSS\n", __func__, nss); */
 	return nss;
 }
 
@@ -122,7 +122,7 @@ void rtw_vht_nss_to_mcsmap(u8 nss, u8 *target_mcs_map, u8 *cur_mcs_map)
 		}
 	}
 
-	/* RTW_INFO("%s : %dSS\n", __FUNCTION__, nss); */
+	/* RTW_INFO("%s : %dSS\n", __func__, nss); */
 }
 
 u16	rtw_vht_mcs_to_data_rate(u8 bw, u8 short_GI, u8 vht_mcs_rate)
@@ -604,19 +604,19 @@ u32	rtw_build_vht_cap_ie(_adapter *padapter, u8 *pbuf)
 	rtw_hal_get_def_var(padapter, HAL_DEF_RX_PACKET_OFFSET, &rx_packet_offset);
 	rtw_hal_get_def_var(padapter, HAL_DEF_MAX_RECVBUF_SZ, &max_recvbuf_sz);
 
-	RTW_DBG("%s, line%d, Available RX buf size = %d bytes\n.", __FUNCTION__, __LINE__, max_recvbuf_sz - rx_packet_offset);
+	RTW_DBG("%s, line%d, Available RX buf size = %d bytes\n.", __func__, __LINE__, max_recvbuf_sz - rx_packet_offset);
 
 	if ((max_recvbuf_sz - rx_packet_offset) >= 11454) {
 		SET_VHT_CAPABILITY_ELE_MAX_MPDU_LENGTH(pcap, 2);
-		RTW_INFO("%s, line%d, Set MAX MPDU len = 11454 bytes\n.", __FUNCTION__, __LINE__);
+		RTW_INFO("%s, line%d, Set MAX MPDU len = 11454 bytes\n.", __func__, __LINE__);
 	} else if ((max_recvbuf_sz - rx_packet_offset) >= 7991) {
 		SET_VHT_CAPABILITY_ELE_MAX_MPDU_LENGTH(pcap, 1);
-		RTW_INFO("%s, line%d, Set MAX MPDU len = 7991 bytes\n.", __FUNCTION__, __LINE__);
+		RTW_INFO("%s, line%d, Set MAX MPDU len = 7991 bytes\n.", __func__, __LINE__);
 	} else if ((max_recvbuf_sz - rx_packet_offset) >= 3895) {
 		SET_VHT_CAPABILITY_ELE_MAX_MPDU_LENGTH(pcap, 0);
-		RTW_INFO("%s, line%d, Set MAX MPDU len = 3895 bytes\n.", __FUNCTION__, __LINE__);
+		RTW_INFO("%s, line%d, Set MAX MPDU len = 3895 bytes\n.", __func__, __LINE__);
 	} else
-		RTW_ERR("%s, line%d, Error!! Available RX buf size < 3895 bytes\n.", __FUNCTION__, __LINE__);
+		RTW_ERR("%s, line%d, Error!! Available RX buf size < 3895 bytes\n.", __func__, __LINE__);
 
 	/* B2 B3 Supported Channel Width Set */
 	if (hal_chk_bw_cap(padapter, BW_CAP_160M) && REGSTY_IS_BW_5G_SUPPORT(pregistrypriv, CHANNEL_WIDTH_160)) {
@@ -784,7 +784,7 @@ void VHTOnAssocRsp(_adapter *padapter)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u8	ht_AMPDU_len;
 
-	RTW_INFO("%s\n", __FUNCTION__);
+	RTW_INFO("%s\n", __func__);
 
 	if (!pmlmeinfo->HT_enable)
 		return;

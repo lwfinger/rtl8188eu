@@ -1822,11 +1822,11 @@ static int btreg_parse_str(char const *input, u8 *type, u16 *addr, u16 *val)
 
 	num = sscanf(input, "%s %x %x", str, &a, &v);
 	if (num < 2) {
-		RTW_INFO("%s: INVALID input!(%s)\n", __FUNCTION__, input);
+		RTW_INFO("%s: INVALID input!(%s)\n", __func__, input);
 		return -EINVAL;
 	}
 	if ((num < 3) && val) {
-		RTW_INFO("%s: INVALID input!(%s)\n", __FUNCTION__, input);
+		RTW_INFO("%s: INVALID input!(%s)\n", __func__, input);
 		return -EINVAL;
 	}
 
@@ -1842,7 +1842,7 @@ static int btreg_parse_str(char const *input, u8 *type, u16 *addr, u16 *val)
 		}
 	}
 	if (i == n) {
-		RTW_INFO("%s: unknown type(%s)!\n", __FUNCTION__, str);
+		RTW_INFO("%s: unknown type(%s)!\n", __func__, str);
 		return -EINVAL;
 	}
 
@@ -1851,7 +1851,7 @@ static int btreg_parse_str(char const *input, u8 *type, u16 *addr, u16 *val)
 		/* RF */
 		if (a & 0xFFFFFF80) {
 			RTW_INFO("%s: INVALID address(0x%X) for type %s(%d)!\n",
-				 __FUNCTION__, a, btreg_type[t], t);
+				 __func__, a, btreg_type[t], t);
 			return -EINVAL;
 		}
 		break;
@@ -1859,7 +1859,7 @@ static int btreg_parse_str(char const *input, u8 *type, u16 *addr, u16 *val)
 		/* Modem */
 		if (a & 0xFFFFFE00) {
 			RTW_INFO("%s: INVALID address(0x%X) for type %s(%d)!\n",
-				 __FUNCTION__, a, btreg_type[t], t);
+				 __func__, a, btreg_type[t], t);
 			return -EINVAL;
 		}
 		break;
@@ -1867,7 +1867,7 @@ static int btreg_parse_str(char const *input, u8 *type, u16 *addr, u16 *val)
 		/* Others(Bluewize, Vendor, LE) */
 		if (a & 0xFFFFF000) {
 			RTW_INFO("%s: INVALID address(0x%X) for type %s(%d)!\n",
-				 __FUNCTION__, a, btreg_type[t], t);
+				 __func__, a, btreg_type[t], t);
 			return -EINVAL;
 		}
 		break;
@@ -1875,7 +1875,7 @@ static int btreg_parse_str(char const *input, u8 *type, u16 *addr, u16 *val)
 
 	if (val) {
 		if (v & 0xFFFF0000) {
-			RTW_INFO("%s: INVALID value(0x%x)!\n", __FUNCTION__, v);
+			RTW_INFO("%s: INVALID value(0x%x)!\n", __func__, v);
 			return -EINVAL;
 		}
 		*val = (u16)v;

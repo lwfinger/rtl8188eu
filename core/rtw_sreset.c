@@ -67,10 +67,10 @@ u8 sreset_get_wifi_status(_adapter *padapter)
 	}
 
 	if (WIFI_STATUS_SUCCESS != psrtpriv->Wifi_Error_Status) {
-		RTW_INFO("==>%s error_status(0x%x)\n", __FUNCTION__, psrtpriv->Wifi_Error_Status);
+		RTW_INFO("==>%s error_status(0x%x)\n", __func__, psrtpriv->Wifi_Error_Status);
 		status = (psrtpriv->Wifi_Error_Status & (~(USB_READ_PORT_FAIL | USB_WRITE_PORT_FAIL)));
 	}
-	RTW_INFO("==> %s wifi_status(0x%x)\n", __FUNCTION__, status);
+	RTW_INFO("==> %s wifi_status(0x%x)\n", __func__, status);
 
 	/* status restore */
 	psrtpriv->Wifi_Error_Status = WIFI_STATUS_SUCCESS;
@@ -315,7 +315,7 @@ void sreset_reset(_adapter *padapter)
 	struct dvobj_priv *psdpriv = padapter->dvobj;
 	struct debug_priv *pdbgpriv = &psdpriv->drv_dbg;
 
-	RTW_INFO("%s\n", __FUNCTION__);
+	RTW_INFO("%s\n", __func__);
 
 	psrtpriv->Wifi_Error_Status = WIFI_STATUS_SUCCESS;
 
@@ -340,7 +340,7 @@ void sreset_reset(_adapter *padapter)
 
 	_exit_pwrlock(&pwrpriv->lock);
 
-	RTW_INFO("%s done in %d ms\n", __FUNCTION__, rtw_get_passing_time_ms(start));
+	RTW_INFO("%s done in %d ms\n", __func__, rtw_get_passing_time_ms(start));
 	pdbgpriv->dbg_sreset_cnt++;
 #endif
 }

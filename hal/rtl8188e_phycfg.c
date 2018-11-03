@@ -1768,7 +1768,7 @@ static void _PHY_SwChnl8188E(PADAPTER Adapter, u8 channel)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
 	if (Adapter->bNotifyChannelChange)
-		RTW_INFO("[%s] ch = %d\n", __FUNCTION__, channel);
+		RTW_INFO("[%s] ch = %d\n", __func__, channel);
 
 	/* s1. pre common command - CmdID_SetTxPowerLevel */
 	PHY_SetTxPowerLevel8188E(Adapter, channel);
@@ -1881,12 +1881,12 @@ PHY_SetSwChnlBWMode8188E(
 	IN	u8					Offset80
 )
 {
-	/* RTW_INFO("%s()===>\n",__FUNCTION__); */
+	/* RTW_INFO("%s()===>\n",__func__); */
 
 	PHY_SwChnl8188E(Adapter, channel);
 	PHY_SetBWMode8188E(Adapter, Bandwidth, Offset40);
 
-	/* RTW_INFO("<==%s()\n",__FUNCTION__); */
+	/* RTW_INFO("<==%s()\n",__func__); */
 }
 
 static VOID _PHY_SetRFPathSwitch(

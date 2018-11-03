@@ -103,7 +103,7 @@ odm_txpowertracking_callback_thermal_meter_92e(
 	struct rtl8192cd_priv	*priv = p_dm_odm->priv;
 
 	rf_mimo_mode = p_dm_odm->rf_type;
-	/* ODM_RT_TRACE(p_dm_odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("%s:%d rf_mimo_mode:%d\n", __FUNCTION__, __LINE__, rf_mimo_mode)); */
+	/* ODM_RT_TRACE(p_dm_odm,ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD,("%s:%d rf_mimo_mode:%d\n", __func__, __LINE__, rf_mimo_mode)); */
 
 #ifdef MP_TEST
 	if ((OPMODE & WIFI_MP_STATE) || priv->pshare->rf_ft_var.mp_specific) {
@@ -313,7 +313,7 @@ odm_txpowertracking_callback_thermal_meter_92e(
 		priv->pshare->OFDM_index[i] = OFDM_index[i];
 	priv->pshare->CCK_index = CCK_index;
 
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("\n******** END:%s() ********\n", __FUNCTION__));
+	ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("\n******** END:%s() ********\n", __func__));
 }
 #endif
 
@@ -691,7 +691,7 @@ odm_txpowertracking_callback_thermal_meter_jaguar_series2(
 	}
 
 	if (delta_IQK > c.threshold_iqk) {
-		panic_printk("%s(%d)\n", __FUNCTION__, __LINE__);
+		panic_printk("%s(%d)\n", __func__, __LINE__);
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("delta_IQK(%d) >= threshold_iqk(%d)\n", delta_IQK, c.threshold_iqk));
 		p_dm_odm->rf_calibrate_info.thermal_value_iqk = thermal_value;
 		if (c.do_iqk)
@@ -801,7 +801,7 @@ odm_txpowertracking_callback_thermal_meter_jaguar_series2(
 		}
 #endif
 
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("\n******** END:%s() ********\n", __FUNCTION__));
+		ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("\n******** END:%s() ********\n", __func__));
 		/* update thermal meter value */
 		p_dm_odm->rf_calibrate_info.thermal_value =  thermal_value;
 
@@ -1000,7 +1000,7 @@ odm_txpowertracking_callback_thermal_meter_jaguar_series(
 			RTL_W8(0x522, 0x0);
 			priv->pshare->thermal_value_lck = thermal_value;
 		}
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("\n******** END:%s() ********\n", __FUNCTION__));
+		ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("\n******** END:%s() ********\n", __func__));
 
 		/* update thermal meter value */
 		priv->pshare->thermal_value = thermal_value;

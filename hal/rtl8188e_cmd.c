@@ -172,7 +172,7 @@ u8 rtl8192c_set_FwSelectSuspend_cmd(_adapter *padapter , u8 bfwpoll, u16 period)
 {
 	u8	res = _SUCCESS;
 	struct H2C_SS_RFOFF_PARAM param;
-	RTW_INFO("==>%s bfwpoll(%x)\n", __FUNCTION__, bfwpoll);
+	RTW_INFO("==>%s bfwpoll(%x)\n", __func__, bfwpoll);
 	param.gpio_period = period;/* Polling GPIO_11 period time */
 	param.ROFOn = (_TRUE == bfwpoll) ? 1 : 0;
 	FillH2CCmd_88E(padapter, SELECTIVE_SUSPEND_ROF_CMD, sizeof(param), (u8 *)(&param));
@@ -186,7 +186,7 @@ u8 rtl8188e_set_rssi_cmd(_adapter *padapter, u8 *param)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
 	if (pHalData->fw_ractrl == _FALSE) {
-		RTW_INFO("==>%s fw dont support RA\n", __FUNCTION__);
+		RTW_INFO("==>%s fw dont support RA\n", __func__);
 		return _FAIL;
 	}
 
@@ -207,7 +207,7 @@ u8 rtl8188e_set_raid_cmd(_adapter *padapter, u32 bitmap, u8 *arg, u8 bw)
 	u8 ignore_bw = _FALSE;
 
 	if (pHalData->fw_ractrl == _FALSE) {
-		RTW_INFO("==>%s fw dont support RA\n", __FUNCTION__);
+		RTW_INFO("==>%s fw dont support RA\n", __func__);
 		return _FAIL;
 	}
 
@@ -239,13 +239,13 @@ u8 rtl8188e_set_raid_cmd(_adapter *padapter, u32 bitmap, u8 *arg, u8 bw)
 	/* DisableTXPowerTraining */
 	if (pHalData->bDisableTXPowerTraining) {
 		H2CCommand[2] |= BIT6;
-		RTW_INFO("%s,Disable PWT by driver\n", __FUNCTION__);
+		RTW_INFO("%s,Disable PWT by driver\n", __func__);
 	} else {
 		struct PHY_DM_STRUCT	*pDM_OutSrc = &pHalData->odmpriv;
 
 		if (pDM_OutSrc->is_disable_power_training) {
 			H2CCommand[2] |= BIT6;
-			RTW_INFO("%s,Disable PWT by DM\n", __FUNCTION__);
+			RTW_INFO("%s,Disable PWT by DM\n", __func__);
 		}
 	}
 
@@ -271,7 +271,7 @@ void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode)
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	u8	RLBM = 0; /* 0:Min, 1:Max , 2:User define */
 
-	RTW_INFO("%s: Mode=%d SmartPS=%d UAPSD=%d\n", __FUNCTION__,
+	RTW_INFO("%s: Mode=%d SmartPS=%d UAPSD=%d\n", __func__,
 		 Mode, pwrpriv->smart_ps, padapter->registrypriv.uapsd_enable);
 
 	H2CSetPwrMode.AwakeInterval = 2;	/* DTIM = 1 */
@@ -330,7 +330,7 @@ static void ConstructBeacon(_adapter *padapter, u8 *pframe, u32 *pLength)
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 
-	/* RTW_INFO("%s\n", __FUNCTION__); */
+	/* RTW_INFO("%s\n", __func__); */
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -412,7 +412,7 @@ _ConstructBeacon:
 
 	*pLength = pktlen;
 
-	/* RTW_INFO("%s bcn_sz=%d\n", __FUNCTION__, pktlen); */
+	/* RTW_INFO("%s bcn_sz=%d\n", __func__, pktlen); */
 
 }
 
@@ -424,7 +424,7 @@ static void ConstructPSPoll(_adapter *padapter, u8 *pframe, u32 *pLength)
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	/* RTW_INFO("%s\n", __FUNCTION__); */
+	/* RTW_INFO("%s\n", __func__); */
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -465,7 +465,7 @@ static void ConstructNullFunctionData(
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
 
-	/* RTW_INFO("%s:%d\n", __FUNCTION__, bForcePowerSave); */
+	/* RTW_INFO("%s:%d\n", __func__, bForcePowerSave); */
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -594,7 +594,7 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 	u32 poll = 0;
 
 
-	RTW_INFO("%s mstatus(%x)\n", __FUNCTION__, mstatus);
+	RTW_INFO("%s mstatus(%x)\n", __func__, mstatus);
 
 	if (mstatus == 1) {
 		/* We should set AID, correct TSF, HW seq enable before set JoinBssReport to Fw in 88/92C. */
@@ -727,16 +727,16 @@ void rtl8188e_set_p2p_ps_offload_cmd(_adapter *padapter, u8 p2p_ps_state)
 				p2p_ps_offload->NoA1_En = 1;
 
 			/* config P2P NoA Descriptor Register */
-			/* RTW_INFO("%s(): noa_duration = %x\n",__FUNCTION__,pwdinfo->noa_duration[i]); */
+			/* RTW_INFO("%s(): noa_duration = %x\n",__func__,pwdinfo->noa_duration[i]); */
 			rtw_write32(padapter, REG_NOA_DESC_DURATION, pwdinfo->noa_duration[i]);
 
-			/* RTW_INFO("%s(): noa_interval = %x\n",__FUNCTION__,pwdinfo->noa_interval[i]); */
+			/* RTW_INFO("%s(): noa_interval = %x\n",__func__,pwdinfo->noa_interval[i]); */
 			rtw_write32(padapter, REG_NOA_DESC_INTERVAL, pwdinfo->noa_interval[i]);
 
-			/* RTW_INFO("%s(): start_time = %x\n",__FUNCTION__,pwdinfo->noa_start_time[i]); */
+			/* RTW_INFO("%s(): start_time = %x\n",__func__,pwdinfo->noa_start_time[i]); */
 			rtw_write32(padapter, REG_NOA_DESC_START, pwdinfo->noa_start_time[i]);
 
-			/* RTW_INFO("%s(): noa_count = %x\n",__FUNCTION__,pwdinfo->noa_count[i]); */
+			/* RTW_INFO("%s(): noa_count = %x\n",__func__,pwdinfo->noa_count[i]); */
 			rtw_write8(padapter, REG_NOA_DESC_COUNT, pwdinfo->noa_count[i]);
 		}
 

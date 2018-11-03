@@ -2737,7 +2737,7 @@ void netdev_br_init(struct net_device *netdev)
 				memcpy(adapter->br_mac, br_netdev->dev_addr, ETH_ALEN);
 				dev_put(br_netdev);
 			} else
-				printk("%s()-%d: dev_get_by_name(%s) failed!", __FUNCTION__, __LINE__, CONFIG_BR_EXT_BRNAME);
+				printk("%s()-%d: dev_get_by_name(%s) failed!", __func__, __LINE__, CONFIG_BR_EXT_BRNAME);
 		}
 
 		adapter->ethBrExtInfo.addPPPoETag = 1;
@@ -2928,7 +2928,7 @@ static int  ips_netdrv_open(_adapter *padapter)
 
 	padapter->net_closed = _FALSE;
 
-	RTW_INFO("===> %s.........\n", __FUNCTION__);
+	RTW_INFO("===> %s.........\n", __func__);
 
 
 	rtw_clr_drv_stopped(padapter);
@@ -3003,7 +3003,7 @@ void rtw_ips_dev_unload(_adapter *padapter)
 #ifdef DBG_CONFIG_ERROR_DETECT
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
 #endif/* #ifdef DBG_CONFIG_ERROR_DETECT */
-	RTW_INFO("====> %s...\n", __FUNCTION__);
+	RTW_INFO("====> %s...\n", __func__);
 
 
 #if defined(CONFIG_SWLPS_IN_IPS) || defined(CONFIG_FWLPS_IN_IPS)
@@ -3445,8 +3445,8 @@ int	rtw_gw_addr_query(_adapter *padapter)
 		pmlmepriv->gw_ip[2] = (gw_addr & 0xff0000) >> 16;
 		pmlmepriv->gw_ip[3] = (gw_addr & 0xff000000) >> 24;
 		_rtw_memcpy(pmlmepriv->gw_mac_addr, gw_mac, 6);
-		RTW_INFO("%s Gateway Mac:\t" MAC_FMT "\n", __FUNCTION__, MAC_ARG(pmlmepriv->gw_mac_addr));
-		RTW_INFO("%s Gateway IP:\t" IP_FMT "\n", __FUNCTION__, IP_ARG(pmlmepriv->gw_ip));
+		RTW_INFO("%s Gateway Mac:\t" MAC_FMT "\n", __func__, MAC_ARG(pmlmepriv->gw_mac_addr));
+		RTW_INFO("%s Gateway IP:\t" IP_FMT "\n", __func__, IP_ARG(pmlmepriv->gw_ip));
 	} else
 		RTW_INFO("Get Gateway IP/MAC fail!\n");
 
@@ -3505,7 +3505,7 @@ void rtw_dev_unload(_adapter *padapter)
 #ifdef CONFIG_WOWLAN
 			if (pwrctl->bSupportRemoteWakeup == _TRUE &&
 			    pwrctl->wowlan_mode == _TRUE)
-				RTW_INFO("%s bSupportRemoteWakeup==_TRUE  do not run rtw_hal_deinit()\n", __FUNCTION__);
+				RTW_INFO("%s bSupportRemoteWakeup==_TRUE  do not run rtw_hal_deinit()\n", __func__);
 			else
 #endif
 			{
@@ -3519,7 +3519,7 @@ void rtw_dev_unload(_adapter *padapter)
 
 		RTW_INFO("<== "FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 	} else {
-		RTW_INFO("%s: bup==_FALSE\n", __FUNCTION__);
+		RTW_INFO("%s: bup==_FALSE\n", __func__);
 	}
 	rtw_cancel_all_timer(padapter);
 }
@@ -3545,7 +3545,7 @@ int rtw_suspend_free_assoc_resource(_adapter *padapter)
 				)
 			#endif /* CONFIG_P2P */
 		) {
-			RTW_INFO("%s %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n", __FUNCTION__,
+			RTW_INFO("%s %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n", __func__,
 				pmlmepriv->cur_network.network.Ssid.Ssid,
 				MAC_ARG(pmlmepriv->cur_network.network.MacAddress),
 				pmlmepriv->cur_network.network.Ssid.SsidLength,
@@ -3580,7 +3580,7 @@ int rtw_suspend_free_assoc_resource(_adapter *padapter)
 	}
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING) == _TRUE) {
-		RTW_INFO("%s: fw_under_linking\n", __FUNCTION__);
+		RTW_INFO("%s: fw_under_linking\n", __func__);
 		rtw_indicate_disconnect(padapter, 0, _FALSE);
 	}
 
@@ -3664,7 +3664,7 @@ int rtw_suspend_wow(_adapter *padapter)
 		if (rtw_chk_roam_flags(padapter, RTW_ROAM_ON_RESUME)) {
 			if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)
 			    && check_fwstate(pmlmepriv, _FW_LINKED)) {
-				RTW_INFO("%s %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n", __FUNCTION__,
+				RTW_INFO("%s %s(" MAC_FMT "), length:%d assoc_ssid.length:%d\n", __func__,
 					pmlmepriv->cur_network.network.Ssid.Ssid,
 					MAC_ARG(pmlmepriv->cur_network.network.MacAddress),
 					pmlmepriv->cur_network.network.Ssid.SsidLength,
@@ -3717,7 +3717,7 @@ int rtw_suspend_wow(_adapter *padapter)
 #endif /* #ifdef CONFIG_LPS */
 
 	} else
-		RTW_INFO("%s: ### ERROR ### wowlan_mode=%d\n", __FUNCTION__, pwrpriv->wowlan_mode);
+		RTW_INFO("%s: ### ERROR ### wowlan_mode=%d\n", __func__, pwrpriv->wowlan_mode);
 	RTW_INFO("<== "FUNC_ADPT_FMT" exit....\n", FUNC_ADPT_ARG(padapter));
 	return ret;
 }
@@ -3846,7 +3846,7 @@ static int rtw_suspend_normal(_adapter *padapter)
 
 	if ((rtw_hal_check_ips_status(padapter) == _TRUE)
 	    || (adapter_to_pwrctl(padapter)->rf_pwrstate == rf_off))
-		RTW_INFO("%s: ### ERROR #### driver in IPS ####ERROR###!!!\n", __FUNCTION__);
+		RTW_INFO("%s: ### ERROR #### driver in IPS ####ERROR###!!!\n", __func__);
 
 
 #ifdef CONFIG_CONCURRENT_MODE
@@ -3878,7 +3878,7 @@ int rtw_suspend_common(_adapter *padapter)
 	u32 start_time = rtw_get_current_time();
 
 	RTW_INFO(" suspend start\n");
-	RTW_INFO("==> %s (%s:%d)\n", __FUNCTION__, current->comm, current->pid);
+	RTW_INFO("==> %s (%s:%d)\n", __func__, current->comm, current->pid);
 
 	pdbgpriv->dbg_suspend_cnt++;
 
@@ -3944,7 +3944,7 @@ int rtw_suspend_common(_adapter *padapter)
 		  rtw_get_passing_time_ms(start_time));
 
 exit:
-	RTW_INFO("<===  %s return %d.............. in %dms\n", __FUNCTION__
+	RTW_INFO("<===  %s return %d.............. in %dms\n", __func__
 		 , ret, rtw_get_passing_time_ms(start_time));
 
 	return ret;
@@ -4040,7 +4040,7 @@ int rtw_resume_process_wow(_adapter *padapter)
 			rtw_netif_wake_queue(pnetdev);
 	} else
 
-		RTW_INFO("%s: ### ERROR ### wowlan_mode=%d\n", __FUNCTION__, pwrpriv->wowlan_mode);
+		RTW_INFO("%s: ### ERROR ### wowlan_mode=%d\n", __func__, pwrpriv->wowlan_mode);
 
 	if (padapter->pid[1] != 0) {
 		RTW_INFO("pid[1]:%d\n", padapter->pid[1]);
@@ -4345,7 +4345,7 @@ int rtw_resume_common(_adapter *padapter)
 		return 0;
 
 	RTW_INFO("resume start\n");
-	RTW_INFO("==> %s (%s:%d)\n", __FUNCTION__, current->comm, current->pid);
+	RTW_INFO("==> %s (%s:%d)\n", __func__, current->comm, current->pid);
 
 	if (rtw_mi_check_status(padapter, WIFI_AP_STATE) == _FALSE) {
 #ifdef CONFIG_WOWLAN
@@ -4369,7 +4369,7 @@ int rtw_resume_common(_adapter *padapter)
 		pwrpriv->wowlan_in_resume = _FALSE;
 #endif
 	}
-	RTW_INFO("%s:%d in %d ms\n", __FUNCTION__ , ret,
+	RTW_INFO("%s:%d in %d ms\n", __func__ , ret,
 		  rtw_get_passing_time_ms(start_time));
 
 

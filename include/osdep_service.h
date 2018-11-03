@@ -150,48 +150,48 @@ void dbg_rtw_usb_buffer_free(struct usb_device *dev, size_t size, void *addr, dm
 #endif /* CONFIG_USB_HCI */
 
 #ifdef CONFIG_USE_VMALLOC
-#define rtw_vmalloc(sz)			dbg_rtw_vmalloc((sz), MSTAT_TYPE_VIR, __FUNCTION__, __LINE__)
-#define rtw_zvmalloc(sz)			dbg_rtw_zvmalloc((sz), MSTAT_TYPE_VIR, __FUNCTION__, __LINE__)
-#define rtw_vmfree(pbuf, sz)		dbg_rtw_vmfree((pbuf), (sz), MSTAT_TYPE_VIR, __FUNCTION__, __LINE__)
-#define rtw_vmalloc_f(sz, mstat_f)			dbg_rtw_vmalloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_VIR, __FUNCTION__, __LINE__)
-#define rtw_zvmalloc_f(sz, mstat_f)		dbg_rtw_zvmalloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_VIR, __FUNCTION__, __LINE__)
-#define rtw_vmfree_f(pbuf, sz, mstat_f)	dbg_rtw_vmfree((pbuf), (sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_VIR, __FUNCTION__, __LINE__)
+#define rtw_vmalloc(sz)			dbg_rtw_vmalloc((sz), MSTAT_TYPE_VIR, __func__, __LINE__)
+#define rtw_zvmalloc(sz)			dbg_rtw_zvmalloc((sz), MSTAT_TYPE_VIR, __func__, __LINE__)
+#define rtw_vmfree(pbuf, sz)		dbg_rtw_vmfree((pbuf), (sz), MSTAT_TYPE_VIR, __func__, __LINE__)
+#define rtw_vmalloc_f(sz, mstat_f)			dbg_rtw_vmalloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_VIR, __func__, __LINE__)
+#define rtw_zvmalloc_f(sz, mstat_f)		dbg_rtw_zvmalloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_VIR, __func__, __LINE__)
+#define rtw_vmfree_f(pbuf, sz, mstat_f)	dbg_rtw_vmfree((pbuf), (sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_VIR, __func__, __LINE__)
 #else /* CONFIG_USE_VMALLOC */
-#define rtw_vmalloc(sz)			dbg_rtw_malloc((sz), MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_zvmalloc(sz)			dbg_rtw_zmalloc((sz), MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_vmfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_vmalloc_f(sz, mstat_f)			dbg_rtw_malloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_zvmalloc_f(sz, mstat_f)		dbg_rtw_zmalloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_vmfree_f(pbuf, sz, mstat_f)	dbg_rtw_mfree((pbuf), (sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
+#define rtw_vmalloc(sz)			dbg_rtw_malloc((sz), MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_zvmalloc(sz)			dbg_rtw_zmalloc((sz), MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_vmfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_vmalloc_f(sz, mstat_f)			dbg_rtw_malloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_zvmalloc_f(sz, mstat_f)		dbg_rtw_zmalloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_vmfree_f(pbuf, sz, mstat_f)	dbg_rtw_mfree((pbuf), (sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __func__, __LINE__)
 #endif /* CONFIG_USE_VMALLOC */
-#define rtw_malloc(sz)			dbg_rtw_malloc((sz), MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_zmalloc(sz)			dbg_rtw_zmalloc((sz), MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_mfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_malloc_f(sz, mstat_f)			dbg_rtw_malloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_zmalloc_f(sz, mstat_f)			dbg_rtw_zmalloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
-#define rtw_mfree_f(pbuf, sz, mstat_f)		dbg_rtw_mfree((pbuf), (sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __FUNCTION__, __LINE__)
+#define rtw_malloc(sz)			dbg_rtw_malloc((sz), MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_zmalloc(sz)			dbg_rtw_zmalloc((sz), MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_mfree(pbuf, sz)		dbg_rtw_mfree((pbuf), (sz), MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_malloc_f(sz, mstat_f)			dbg_rtw_malloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_zmalloc_f(sz, mstat_f)			dbg_rtw_zmalloc((sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __func__, __LINE__)
+#define rtw_mfree_f(pbuf, sz, mstat_f)		dbg_rtw_mfree((pbuf), (sz), ((mstat_f) & 0xff00) | MSTAT_TYPE_PHY, __func__, __LINE__)
 
-#define rtw_skb_alloc(size)	dbg_rtw_skb_alloc((size), MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#define rtw_skb_free(skb)	dbg_rtw_skb_free((skb), MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#define rtw_skb_alloc_f(size, mstat_f)	dbg_rtw_skb_alloc((size), ((mstat_f) & 0xff00) | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#define rtw_skb_free_f(skb, mstat_f)	dbg_rtw_skb_free((skb), ((mstat_f) & 0xff00) | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#define rtw_skb_copy(skb)	dbg_rtw_skb_copy((skb), MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#define rtw_skb_clone(skb)	dbg_rtw_skb_clone((skb), MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#define rtw_skb_copy_f(skb, mstat_f)	dbg_rtw_skb_copy((skb), ((mstat_f) & 0xff00) | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#define rtw_skb_clone_f(skb, mstat_f)	dbg_rtw_skb_clone((skb), ((mstat_f) & 0xff00) | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
-#define rtw_netif_rx(ndev, skb)	dbg_rtw_netif_rx(ndev, skb, MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
+#define rtw_skb_alloc(size)	dbg_rtw_skb_alloc((size), MSTAT_TYPE_SKB, __func__, __LINE__)
+#define rtw_skb_free(skb)	dbg_rtw_skb_free((skb), MSTAT_TYPE_SKB, __func__, __LINE__)
+#define rtw_skb_alloc_f(size, mstat_f)	dbg_rtw_skb_alloc((size), ((mstat_f) & 0xff00) | MSTAT_TYPE_SKB, __func__, __LINE__)
+#define rtw_skb_free_f(skb, mstat_f)	dbg_rtw_skb_free((skb), ((mstat_f) & 0xff00) | MSTAT_TYPE_SKB, __func__, __LINE__)
+#define rtw_skb_copy(skb)	dbg_rtw_skb_copy((skb), MSTAT_TYPE_SKB, __func__, __LINE__)
+#define rtw_skb_clone(skb)	dbg_rtw_skb_clone((skb), MSTAT_TYPE_SKB, __func__, __LINE__)
+#define rtw_skb_copy_f(skb, mstat_f)	dbg_rtw_skb_copy((skb), ((mstat_f) & 0xff00) | MSTAT_TYPE_SKB, __func__, __LINE__)
+#define rtw_skb_clone_f(skb, mstat_f)	dbg_rtw_skb_clone((skb), ((mstat_f) & 0xff00) | MSTAT_TYPE_SKB, __func__, __LINE__)
+#define rtw_netif_rx(ndev, skb)	dbg_rtw_netif_rx(ndev, skb, MSTAT_TYPE_SKB, __func__, __LINE__)
 #ifdef CONFIG_RTW_NAPI
-#define rtw_netif_receive_skb(ndev, skb) dbg_rtw_netif_receive_skb(ndev, skb, MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
+#define rtw_netif_receive_skb(ndev, skb) dbg_rtw_netif_receive_skb(ndev, skb, MSTAT_TYPE_SKB, __func__, __LINE__)
 #ifdef CONFIG_RTW_GRO
-#define rtw_napi_gro_receive(napi, skb) dbg_rtw_napi_gro_receive(napi, skb, MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
+#define rtw_napi_gro_receive(napi, skb) dbg_rtw_napi_gro_receive(napi, skb, MSTAT_TYPE_SKB, __func__, __LINE__)
 #endif
 #endif /* CONFIG_RTW_NAPI */
-#define rtw_skb_queue_purge(sk_buff_head) dbg_rtw_skb_queue_purge(sk_buff_head, MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
+#define rtw_skb_queue_purge(sk_buff_head) dbg_rtw_skb_queue_purge(sk_buff_head, MSTAT_TYPE_SKB, __func__, __LINE__)
 #ifdef CONFIG_USB_HCI
-#define rtw_usb_buffer_alloc(dev, size, dma)		dbg_rtw_usb_buffer_alloc((dev), (size), (dma), MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
-#define rtw_usb_buffer_free(dev, size, addr, dma)	dbg_rtw_usb_buffer_free((dev), (size), (addr), (dma), MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
-#define rtw_usb_buffer_alloc_f(dev, size, dma, mstat_f)			dbg_rtw_usb_buffer_alloc((dev), (size), (dma), ((mstat_f) & 0xff00) | MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
-#define rtw_usb_buffer_free_f(dev, size, addr, dma, mstat_f)	dbg_rtw_usb_buffer_free((dev), (size), (addr), (dma), ((mstat_f) & 0xff00) | MSTAT_TYPE_USB, __FUNCTION__, __LINE__)
+#define rtw_usb_buffer_alloc(dev, size, dma)		dbg_rtw_usb_buffer_alloc((dev), (size), (dma), MSTAT_TYPE_USB, __func__, __LINE__)
+#define rtw_usb_buffer_free(dev, size, addr, dma)	dbg_rtw_usb_buffer_free((dev), (size), (addr), (dma), MSTAT_TYPE_USB, __func__, __LINE__)
+#define rtw_usb_buffer_alloc_f(dev, size, dma, mstat_f)			dbg_rtw_usb_buffer_alloc((dev), (size), (dma), ((mstat_f) & 0xff00) | MSTAT_TYPE_USB, __func__, __LINE__)
+#define rtw_usb_buffer_free_f(dev, size, addr, dma, mstat_f)	dbg_rtw_usb_buffer_free((dev), (size), (addr), (dma), ((mstat_f) & 0xff00) | MSTAT_TYPE_USB, __func__, __LINE__)
 #endif /* CONFIG_USB_HCI */
 
 #else /* DBG_MEM_ALLOC */
@@ -313,8 +313,8 @@ extern void	rtw_usleep_os(int us);
 extern u32	rtw_atoi(u8 *s);
 
 #ifdef DBG_DELAY_OS
-#define rtw_mdelay_os(ms) _rtw_mdelay_os((ms), __FUNCTION__, __LINE__)
-#define rtw_udelay_os(ms) _rtw_udelay_os((ms), __FUNCTION__, __LINE__)
+#define rtw_mdelay_os(ms) _rtw_mdelay_os((ms), __func__, __LINE__)
+#define rtw_udelay_os(ms) _rtw_udelay_os((ms), __func__, __LINE__)
 extern void _rtw_mdelay_os(int ms, const char *func, const int line);
 extern void _rtw_udelay_os(int us, const char *func, const int line);
 #else

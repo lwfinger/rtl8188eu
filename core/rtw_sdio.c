@@ -51,7 +51,7 @@ static u8 sdio_io(struct dvobj_priv *d, u32 addr, void *buf, size_t len, u8 writ
 		err = d->intf_ops->read(d, addr, buf, len, 0);
 	if (err) {
 		RTW_INFO("%s: [ERROR] %s FAIL! error(%d)\n",
-			 __FUNCTION__, write ? "write" : "read", err);
+			 __func__, write ? "write" : "read", err);
 		return _FAIL;
 	}
 
@@ -89,7 +89,7 @@ u8 rtw_sdio_f0_read(struct dvobj_priv *d, u32 addr, void *buf, size_t len)
 
 	err = d->intf_ops->read(d, addr, buf, len, 0);
 	if (err) {
-		RTW_INFO("%s: [ERROR] Read f0 register FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] Read f0 register FAIL!\n", __func__);
 		ret = _FAIL;
 	}
 

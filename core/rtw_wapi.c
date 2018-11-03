@@ -19,7 +19,7 @@ void WapiFreeAllStaInfo(_adapter *padapter)
 	PRT_WAPI_STA_INFO		pWapiStaInfo;
 	PRT_WAPI_BKID			pWapiBkid;
 
-	WAPI_TRACE(WAPI_INIT, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "===========> %s\n", __func__);
 	pWapiInfo = &padapter->wapiInfo;
 
 	/* Pust to Idle List */
@@ -36,7 +36,7 @@ void WapiFreeAllStaInfo(_adapter *padapter)
 		pWapiBkid = (PRT_WAPI_BKID)list_entry(pWapiInfo->wapiBKIDIdleList.next, RT_WAPI_BKID, list);
 		list_del_init(&pWapiBkid->list);
 	}
-	WAPI_TRACE(WAPI_INIT, "<=========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "<=========== %s\n", __func__);
 	return;
 }
 
@@ -128,7 +128,7 @@ WapiGetEntryForCamWrite(_adapter *padapter, u8 *pMacAddr, u8 KID, BOOLEAN IsMsk)
 	u8 i = 0;
 	u8 ret = 0xff;
 
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 	pWapiInfo =  &padapter->wapiInfo;
 
@@ -156,7 +156,7 @@ WapiGetEntryForCamWrite(_adapter *padapter, u8 *pMacAddr, u8 KID, BOOLEAN IsMsk)
 		}
 	}
 
-	WAPI_TRACE(WAPI_API, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "<========== %s\n", __func__);
 	return ret;
 
 	/*
@@ -176,7 +176,7 @@ u8 WapiGetEntryForCamClear(_adapter *padapter, u8 *pPeerMac, u8 keyid, u8 IsMsk)
 	PRT_WAPI_T		pWapiInfo = NULL;
 	u8		i = 0;
 
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 	pWapiInfo =  &padapter->wapiInfo;
 
@@ -189,7 +189,7 @@ u8 WapiGetEntryForCamClear(_adapter *padapter, u8 *pPeerMac, u8 keyid, u8 IsMsk)
 			pWapiInfo->wapiCamEntry[i].keyidx = 2;
 			_rtw_memset(pWapiInfo->wapiCamEntry[i].PeerMacAddr, 0, ETH_ALEN);
 
-			WAPI_TRACE(WAPI_API, "<========== %s\n", __FUNCTION__);
+			WAPI_TRACE(WAPI_API, "<========== %s\n", __func__);
 			return pWapiInfo->wapiCamEntry[i].entry_idx;
 		}
 	}
@@ -225,7 +225,7 @@ WapiResetAllCamEntry(_adapter *padapter)
 	PRT_WAPI_T		pWapiInfo;
 	int				i;
 
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 	pWapiInfo =  &padapter->wapiInfo;
 
@@ -236,7 +236,7 @@ WapiResetAllCamEntry(_adapter *padapter)
 		pWapiInfo->wapiCamEntry[i].entry_idx = 4 + i * 2;
 	}
 
-	WAPI_TRACE(WAPI_API, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "<========== %s\n", __func__);
 
 	return;
 }
@@ -254,7 +254,7 @@ u8 WapiWriteOneCamEntry(
 	u8 retVal = 0;
 	u16 usConfig = 0;
 
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 	if (EntryId >= 32) {
 		WAPI_TRACE(WAPI_ERR, "<=== CamAddOneEntry(): ulKeyId exceed!\n");
@@ -272,7 +272,7 @@ u8 WapiWriteOneCamEntry(
 
 	write_cam(padapter, EntryId, usConfig, pMacAddr, pKey);
 
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 	return 1;
 }
 
@@ -281,11 +281,11 @@ void rtw_wapi_init(_adapter *padapter)
 	PRT_WAPI_T		pWapiInfo;
 	int				i;
 
-	WAPI_TRACE(WAPI_INIT, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "===========> %s\n", __func__);
 	RT_ASSERT_RET(padapter);
 
 	if (!padapter->WapiSupport) {
-		WAPI_TRACE(WAPI_INIT, "<========== %s, WAPI not supported!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_INIT, "<========== %s, WAPI not supported!\n", __func__);
 		return;
 	}
 
@@ -310,38 +310,38 @@ void rtw_wapi_init(_adapter *padapter)
 		pWapiInfo->wapiCamEntry[i].entry_idx = 4 + i * 2;
 	}
 
-	WAPI_TRACE(WAPI_INIT, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "<========== %s\n", __func__);
 }
 
 void rtw_wapi_free(_adapter *padapter)
 {
-	WAPI_TRACE(WAPI_INIT, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "===========> %s\n", __func__);
 	RT_ASSERT_RET(padapter);
 
 	if (!padapter->WapiSupport) {
-		WAPI_TRACE(WAPI_INIT, "<========== %s, WAPI not supported!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_INIT, "<========== %s, WAPI not supported!\n", __func__);
 		return;
 	}
 
 	WapiFreeAllStaInfo(padapter);
 
-	WAPI_TRACE(WAPI_INIT, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "<========== %s\n", __func__);
 }
 
 void rtw_wapi_disable_tx(_adapter *padapter)
 {
-	WAPI_TRACE(WAPI_INIT, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "===========> %s\n", __func__);
 	RT_ASSERT_RET(padapter);
 
 	if (!padapter->WapiSupport) {
-		WAPI_TRACE(WAPI_INIT, "<========== %s, WAPI not supported!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_INIT, "<========== %s, WAPI not supported!\n", __func__);
 		return;
 	}
 
 	padapter->wapiInfo.wapiTxMsk.bTxEnable = false;
 	padapter->wapiInfo.wapiTxMsk.bSet = false;
 
-	WAPI_TRACE(WAPI_INIT, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "<========== %s\n", __func__);
 }
 
 u8 rtw_wapi_is_wai_packet(_adapter *padapter, u8 *pkt_data)
@@ -353,10 +353,10 @@ u8 rtw_wapi_is_wai_packet(_adapter *padapter, u8 *pkt_data)
 	u8 WaiPkt = 0, *pTaddr, bFind = false;
 	u8 Offset_TypeWAI = 0 ;	/* (mac header len + llc length) */
 
-	WAPI_TRACE(WAPI_TX | WAPI_RX, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_TX | WAPI_RX, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return 0;
 	}
 
@@ -380,7 +380,7 @@ u8 rtw_wapi_is_wai_packet(_adapter *padapter, u8 *pkt_data)
 		}
 	}
 
-	WAPI_TRACE(WAPI_TX | WAPI_RX, "%s: bFind=%d pTaddr="MAC_FMT"\n", __FUNCTION__, bFind, MAC_ARG(pTaddr));
+	WAPI_TRACE(WAPI_TX | WAPI_RX, "%s: bFind=%d pTaddr="MAC_FMT"\n", __func__, bFind, MAC_ARG(pTaddr));
 
 	if (pkt_data[0] == WIFI_QOS_DATA_TYPE)
 		Offset_TypeWAI += 2;
@@ -391,9 +391,9 @@ u8 rtw_wapi_is_wai_packet(_adapter *padapter, u8 *pkt_data)
 
 		psecuritypriv->hw_decrypted = _TRUE;
 	} else
-		WAPI_TRACE(WAPI_TX | WAPI_RX, "%s(): non wai packet\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_TX | WAPI_RX, "%s(): non wai packet\n", __func__);
 
-	WAPI_TRACE(WAPI_TX | WAPI_RX, "%s(): Recvd WAI frame. IsWAIPkt(%d)\n", __FUNCTION__, WaiPkt);
+	WAPI_TRACE(WAPI_TX | WAPI_RX, "%s(): Recvd WAI frame. IsWAIPkt(%d)\n", __func__, WaiPkt);
 
 	return	WaiPkt;
 }
@@ -408,10 +408,10 @@ void rtw_wapi_update_info(_adapter *padapter, union recv_frame *precv_frame)
 	u8	*pRecvPN;
 
 
-	WAPI_TRACE(WAPI_RX, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_RX, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_RX, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_RX, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return;
 	}
 
@@ -428,7 +428,7 @@ void rtw_wapi_update_info(_adapter *padapter, union recv_frame *precv_frame)
 	pRecvPN = ptr + precv_hdr->attrib.hdrlen + 2;
 	_rtw_memcpy((u8 *)precv_hdr->WapiTempPN, pRecvPN, 16);
 
-	WAPI_TRACE(WAPI_RX, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_RX, "<========== %s\n", __func__);
 }
 
 /****************************************************************************
@@ -452,10 +452,10 @@ u8 rtw_wapi_check_for_drop(
 	u8					*ptr = precv_frame->u.hdr.rx_data;
 	int					i;
 
-	WAPI_TRACE(WAPI_RX, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_RX, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_RX, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_RX, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return false;
 	}
 
@@ -494,7 +494,7 @@ u8 rtw_wapi_check_for_drop(
 			}
 		}
 	}
-	WAPI_TRACE(WAPI_RX, "%s: bFind=%d prxb->WapiSrcAddr="MAC_FMT"\n", __FUNCTION__, bFind, MAC_ARG(precv_hdr->WapiSrcAddr));
+	WAPI_TRACE(WAPI_RX, "%s: bFind=%d prxb->WapiSrcAddr="MAC_FMT"\n", __func__, bFind, MAC_ARG(precv_hdr->WapiSrcAddr));
 
 	if (bFind) {
 		if (IS_MCAST(precv_hdr->attrib.ra)) {
@@ -520,13 +520,13 @@ u8 rtw_wapi_check_for_drop(
 				pLastRecvPN = pWapiSta->lastRxUnicastPNVOQueue;
 				break;
 			default:
-				WAPI_TRACE(WAPI_ERR, "%s: Unknown TID\n", __FUNCTION__);
+				WAPI_TRACE(WAPI_ERR, "%s: Unknown TID\n", __func__);
 				break;
 			}
 		}
 
 		if (!WapiComparePN(precv_hdr->WapiTempPN, pLastRecvPN)) {
-			WAPI_TRACE(WAPI_RX, "%s: Equal PN!!\n", __FUNCTION__);
+			WAPI_TRACE(WAPI_RX, "%s: Equal PN!!\n", __func__);
 			if (IS_MCAST(precv_hdr->attrib.ra))
 				_rtw_memcpy(pLastRecvPN, WapiAEMultiCastPNInitialValueSrc, 16);
 			else
@@ -536,7 +536,7 @@ u8 rtw_wapi_check_for_drop(
 			_rtw_memcpy(pLastRecvPN, precv_hdr->WapiTempPN, 16);
 	}
 
-	WAPI_TRACE(WAPI_RX, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_RX, "<========== %s\n", __func__);
 	return bDrop;
 }
 
@@ -545,10 +545,10 @@ void rtw_build_probe_resp_wapi_ie(_adapter *padapter, unsigned char *pframe, str
 	PRT_WAPI_T pWapiInfo = &(padapter->wapiInfo);
 	u8 WapiIELength = 0;
 
-	WAPI_TRACE(WAPI_MLME, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_MLME, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport)  || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported!\n", __func__);
 		return;
 	}
 
@@ -560,17 +560,17 @@ void rtw_build_probe_resp_wapi_ie(_adapter *padapter, unsigned char *pframe, str
 	pframe += WapiIELength + 2;
 	pattrib->pktlen += WapiIELength + 2;
 
-	WAPI_TRACE(WAPI_MLME, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_MLME, "<========== %s\n", __func__);
 }
 
 void rtw_build_beacon_wapi_ie(_adapter *padapter, unsigned char *pframe, struct pkt_attrib *pattrib)
 {
 	PRT_WAPI_T pWapiInfo = &(padapter->wapiInfo);
 	u8 WapiIELength = 0;
-	WAPI_TRACE(WAPI_MLME, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_MLME, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport)  || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported!\n", __func__);
 		return;
 	}
 
@@ -582,7 +582,7 @@ void rtw_build_beacon_wapi_ie(_adapter *padapter, unsigned char *pframe, struct 
 	pframe += WapiIELength + 2;
 	pattrib->pktlen += WapiIELength + 2;
 
-	WAPI_TRACE(WAPI_MLME, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_MLME, "<========== %s\n", __func__);
 }
 
 void rtw_build_assoc_req_wapi_ie(_adapter *padapter, unsigned char *pframe, struct pkt_attrib *pattrib)
@@ -592,10 +592,10 @@ void rtw_build_assoc_req_wapi_ie(_adapter *padapter, unsigned char *pframe, stru
 	PRT_WAPI_T			pWapiInfo = &(padapter->wapiInfo);
 	u8					WapiIELength = 0;
 
-	WAPI_TRACE(WAPI_MLME, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_MLME, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported!\n", __func__);
 		return;
 	}
 
@@ -617,7 +617,7 @@ void rtw_build_assoc_req_wapi_ie(_adapter *padapter, unsigned char *pframe, stru
 	_rtw_memcpy(pframe + 2, pWapiInfo->wapiIE, WapiIELength);
 	pframe += WapiIELength + 2;
 	pattrib->pktlen += WapiIELength + 2;
-	WAPI_TRACE(WAPI_MLME, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_MLME, "<========== %s\n", __func__);
 }
 
 void rtw_wapi_on_assoc_ok(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
@@ -628,10 +628,10 @@ void rtw_wapi_on_assoc_ok(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 	/* u8 WapiASUEPNInitialValueSrc[16] = {0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C,0x36,0x5C} ; */
 	u8 WapiAEMultiCastPNInitialValueSrc[16] = {0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C} ;
 
-	WAPI_TRACE(WAPI_MLME, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_MLME, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return;
 	}
 
@@ -648,7 +648,7 @@ void rtw_wapi_on_assoc_ok(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 	_rtw_memcpy(pWapiSta->lastRxUnicastPNVIQueue, WapiAEPNInitialValueSrc, 16);
 	_rtw_memcpy(pWapiSta->lastRxUnicastPNVOQueue, WapiAEPNInitialValueSrc, 16);
 
-	WAPI_TRACE(WAPI_MLME, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_MLME, "<========== %s\n", __func__);
 }
 
 
@@ -661,10 +661,10 @@ void rtw_wapi_return_one_sta_info(_adapter *padapter, u8 *MacAddr)
 
 	pWapiInfo = &padapter->wapiInfo;
 
-	WAPI_TRACE(WAPI_API, "==========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "==========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return;
 	}
 
@@ -678,16 +678,16 @@ void rtw_wapi_return_one_sta_info(_adapter *padapter, u8 *MacAddr)
 	}
 
 
-	WAPI_TRACE(WAPI_API, " %s: after clear bkid\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, " %s: after clear bkid\n", __func__);
 
 
 	/* Remove STA info */
 	if (list_empty(&(pWapiInfo->wapiSTAUsedList))) {
-		WAPI_TRACE(WAPI_API, " %s: wapiSTAUsedList is null\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_API, " %s: wapiSTAUsedList is null\n", __func__);
 		return;
 	} else {
 
-		WAPI_TRACE(WAPI_API, " %s: wapiSTAUsedList is not null\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_API, " %s: wapiSTAUsedList is not null\n", __func__);
 #if 0
 		pWapiStaInfo = (PRT_WAPI_STA_INFO)list_entry((pWapiInfo->wapiSTAUsedList.next), RT_WAPI_STA_INFO, list);
 
@@ -700,17 +700,17 @@ void rtw_wapi_return_one_sta_info(_adapter *padapter, u8 *MacAddr)
 				pWapiStaInfo->PeerMacAddr[4], pWapiStaInfo->PeerMacAddr[5]);
 
 			if (pWapiStaInfo == NULL) {
-				WAPI_TRACE(WAPI_API, " %s: pWapiStaInfo == NULL Case\n", __FUNCTION__);
+				WAPI_TRACE(WAPI_API, " %s: pWapiStaInfo == NULL Case\n", __func__);
 				return;
 			}
 
 			if (pWapiStaInfo->PeerMacAddr == NULL) {
-				WAPI_TRACE(WAPI_API, " %s: pWapiStaInfo->PeerMacAddr == NULL Case\n", __FUNCTION__);
+				WAPI_TRACE(WAPI_API, " %s: pWapiStaInfo->PeerMacAddr == NULL Case\n", __func__);
 				return;
 			}
 
 			if (MacAddr == NULL) {
-				WAPI_TRACE(WAPI_API, " %s: MacAddr == NULL Case\n", __FUNCTION__);
+				WAPI_TRACE(WAPI_API, " %s: MacAddr == NULL Case\n", __func__);
 				return;
 			}
 
@@ -740,7 +740,7 @@ void rtw_wapi_return_one_sta_info(_adapter *padapter, u8 *MacAddr)
 
 	}
 
-	WAPI_TRACE(WAPI_API, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "<========== %s\n", __func__);
 	return;
 }
 
@@ -749,12 +749,12 @@ void rtw_wapi_return_all_sta_info(_adapter *padapter)
 	PRT_WAPI_T				pWapiInfo;
 	PRT_WAPI_STA_INFO		pWapiStaInfo;
 	PRT_WAPI_BKID			pWapiBkid;
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 	pWapiInfo = &padapter->wapiInfo;
 
 	if ((!padapter->WapiSupport) || (!pWapiInfo->bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return;
 	}
 
@@ -774,17 +774,17 @@ void rtw_wapi_return_all_sta_info(_adapter *padapter)
 		memset(pWapiBkid->bkid, 0, 16);
 		list_add_tail(&pWapiBkid->list, &pWapiInfo->wapiBKIDIdleList);
 	}
-	WAPI_TRACE(WAPI_API, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "<========== %s\n", __func__);
 }
 
 void rtw_wapi_clear_cam_entry(_adapter *padapter, u8 *pMacAddr)
 {
 	u8 UcIndex = 0;
 
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!padapter->wapiInfo.bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return;
 	}
 
@@ -812,22 +812,22 @@ void rtw_wapi_clear_cam_entry(_adapter *padapter, u8 *pMacAddr)
 		CAM_empty_entry(padapter, UcIndex);
 	}
 
-	WAPI_TRACE(WAPI_API, "<========== %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "<========== %s\n", __func__);
 }
 
 void rtw_wapi_clear_all_cam_entry(_adapter *padapter)
 {
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!padapter->wapiInfo.bWapiEnable)) {
-		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_MLME, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return;
 	}
 
 	invalidate_cam_all(padapter); /* is this ok? */
 	WapiResetAllCamEntry(padapter);
 
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 }
 
 void rtw_wapi_set_key(_adapter *padapter, RT_WAPI_KEY *pWapiKey, RT_WAPI_STA_INFO *pWapiSta, u8 bGroupKey, u8 bUseDefaultKey)
@@ -838,10 +838,10 @@ void rtw_wapi_set_key(_adapter *padapter, RT_WAPI_KEY *pWapiKey, RT_WAPI_STA_INF
 	BOOLEAN IsPairWise = false ;
 	u8 EncAlgo;
 
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 	if ((!padapter->WapiSupport) || (!padapter->wapiInfo.bWapiEnable)) {
-		WAPI_TRACE(WAPI_API, "<========== %s, WAPI not supported or not enabled!\n", __FUNCTION__);
+		WAPI_TRACE(WAPI_API, "<========== %s, WAPI not supported or not enabled!\n", __func__);
 		return;
 	}
 
@@ -883,7 +883,7 @@ void rtw_wapi_set_key(_adapter *padapter, RT_WAPI_KEY *pWapiKey, RT_WAPI_STA_INF
 			     pWapiKey->micKey);
 
 	WAPI_TRACE(WAPI_API, "Set Wapi Key :KeyId:%d,EntryId:%d,PairwiseKey:%d.\n", pWapiKey->keyId, EntryId, !bGroupKey);
-	WAPI_TRACE(WAPI_API, "===========> %s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_API, "===========> %s\n", __func__);
 
 }
 
@@ -904,7 +904,7 @@ void wapi_test_set_key(struct _adapter *padapter, u8 *buf)
 	u8					WapiASUEPNInitialValueSrc[16] = {0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C} ;
 	u8					WapiAEMultiCastPNInitialValueSrc[16] = {0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C, 0x36, 0x5C} ;
 
-	WAPI_TRACE(WAPI_INIT, "===========>%s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "===========>%s\n", __func__);
 
 	if (!padapter->WapiSupport)
 		return;
@@ -1043,7 +1043,7 @@ void wapi_test_set_key(struct _adapter *padapter, u8 *buf)
 			}
 		}
 	}
-	WAPI_TRACE(WAPI_INIT, "<===========%s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "<===========%s\n", __func__);
 }
 
 
@@ -1058,10 +1058,10 @@ void wapi_test_init(struct _adapter *padapter)
 	u8 MskMicKey[16] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f};
 	u8 MskId = 0;
 
-	WAPI_TRACE(WAPI_INIT, "===========>%s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "===========>%s\n", __func__);
 
 	/* Enable Wapi */
-	WAPI_TRACE(WAPI_INIT, "%s: Enable wapi!!!!\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "%s: Enable wapi!!!!\n", __func__);
 	padapter->wapiInfo.bWapiEnable = true;
 	padapter->pairwise_key_type = KEY_TYPE_SMS4;
 	ieee->group_key_type = KEY_TYPE_SMS4;
@@ -1069,7 +1069,7 @@ void wapi_test_init(struct _adapter *padapter)
 	padapter->wapiInfo.extra_postfix_len = SMS4_MIC_LEN;
 
 	/* set usk */
-	WAPI_TRACE(WAPI_INIT, "%s: Set USK!!!!\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "%s: Set USK!!!!\n", __func__);
 	memset(keybuf, 0, 100);
 	keybuf[0] = 1;                           /* set usk */
 	keybuf[1] = 1; 				/* enable tx */
@@ -1095,7 +1095,7 @@ void wapi_test_init(struct _adapter *padapter)
 	wapi_test_set_key(padapter, keybuf);
 
 	/* set msk */
-	WAPI_TRACE(WAPI_INIT, "%s: Set MSK!!!!\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "%s: Set MSK!!!!\n", __func__);
 	memset(keybuf, 0, 100);
 	keybuf[0] = 2;                                /* set msk */
 	keybuf[1] = 1;                               /* Enable TX */
@@ -1117,7 +1117,7 @@ void wapi_test_init(struct _adapter *padapter)
 	memcpy(keybuf + 26, MskMicKey, 16);
 	keybuf[42] = MskId;
 	wapi_test_set_key(padapter, keybuf);
-	WAPI_TRACE(WAPI_INIT, "<===========%s\n", __FUNCTION__);
+	WAPI_TRACE(WAPI_INIT, "<===========%s\n", __func__);
 }
 #endif
 
@@ -1135,7 +1135,7 @@ void rtw_wapi_get_iv(_adapter *padapter, u8 *pRA, u8 *IV)
 
 	if (IS_MCAST(pRA)) {
 		if (!pWapiInfo->wapiTxMsk.bTxEnable) {
-			WAPI_TRACE(WAPI_ERR, "%s: bTxEnable = 0!!\n", __FUNCTION__);
+			WAPI_TRACE(WAPI_ERR, "%s: bTxEnable = 0!!\n", __func__);
 			return;
 		}
 

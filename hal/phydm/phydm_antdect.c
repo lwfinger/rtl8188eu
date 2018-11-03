@@ -700,7 +700,7 @@ odm_single_dual_antenna_detection_psd(
 	while (odm_get_bb_reg(p_dm_odm, 0xdf4, BIT(6))) {
 		i++;
 		if (i > 1000000) {
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Wait in %s() more than %d times!\n", __FUNCTION__, i));
+			ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("Wait in %s() more than %d times!\n", __func__, i));
 			break;
 		}
 	}

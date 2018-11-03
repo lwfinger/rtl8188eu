@@ -60,7 +60,7 @@ struct sk_buff *dbg_rtw_cfg80211_vendor_event_alloc(struct wiphy *wiphy, struct 
 		truesize = skb->truesize;
 
 	if (!skb || truesize < len || match_mstat_sniff_rules(flags, truesize))
-		RTW_INFO("DBG_MEM_ALLOC %s:%d %s(%d), skb:%p, truesize=%u\n", func, line, __FUNCTION__, len, skb, truesize);
+		RTW_INFO("DBG_MEM_ALLOC %s:%d %s(%d), skb:%p, truesize=%u\n", func, line, __func__, len, skb, truesize);
 
 	rtw_mstat_update(
 		flags
@@ -77,7 +77,7 @@ void dbg_rtw_cfg80211_vendor_event(struct sk_buff *skb, gfp_t gfp
 	unsigned int truesize = skb->truesize;
 
 	if (match_mstat_sniff_rules(flags, truesize))
-		RTW_INFO("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize);
+		RTW_INFO("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __func__, truesize);
 
 	cfg80211_vendor_event(skb, gfp);
 
@@ -100,7 +100,7 @@ struct sk_buff *dbg_rtw_cfg80211_vendor_cmd_alloc_reply_skb(struct wiphy *wiphy,
 		truesize = skb->truesize;
 
 	if (!skb || truesize < len || match_mstat_sniff_rules(flags, truesize))
-		RTW_INFO("DBG_MEM_ALLOC %s:%d %s(%d), skb:%p, truesize=%u\n", func, line, __FUNCTION__, len, skb, truesize);
+		RTW_INFO("DBG_MEM_ALLOC %s:%d %s(%d), skb:%p, truesize=%u\n", func, line, __func__, len, skb, truesize);
 
 	rtw_mstat_update(
 		flags
@@ -118,7 +118,7 @@ int dbg_rtw_cfg80211_vendor_cmd_reply(struct sk_buff *skb
 	int ret;
 
 	if (match_mstat_sniff_rules(flags, truesize))
-		RTW_INFO("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __FUNCTION__, truesize);
+		RTW_INFO("DBG_MEM_ALLOC %s:%d %s, truesize=%u\n", func, line, __func__, truesize);
 
 	ret = cfg80211_vendor_cmd_reply(skb);
 
@@ -132,16 +132,16 @@ int dbg_rtw_cfg80211_vendor_cmd_reply(struct sk_buff *skb
 }
 
 #define rtw_cfg80211_vendor_event_alloc(wiphy, wdev, len, event_id, gfp) \
-	dbg_rtw_cfg80211_vendor_event_alloc(wiphy, wdev, len, event_id, gfp, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
+	dbg_rtw_cfg80211_vendor_event_alloc(wiphy, wdev, len, event_id, gfp, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __func__, __LINE__)
 
 #define rtw_cfg80211_vendor_event(skb, gfp) \
-	dbg_rtw_cfg80211_vendor_event(skb, gfp, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
+	dbg_rtw_cfg80211_vendor_event(skb, gfp, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __func__, __LINE__)
 
 #define rtw_cfg80211_vendor_cmd_alloc_reply_skb(wiphy, len) \
-	dbg_rtw_cfg80211_vendor_cmd_alloc_reply_skb(wiphy, len, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
+	dbg_rtw_cfg80211_vendor_cmd_alloc_reply_skb(wiphy, len, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __func__, __LINE__)
 
 #define rtw_cfg80211_vendor_cmd_reply(skb) \
-	dbg_rtw_cfg80211_vendor_cmd_reply(skb, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __FUNCTION__, __LINE__)
+	dbg_rtw_cfg80211_vendor_cmd_reply(skb, MSTAT_FUNC_CFG_VENDOR | MSTAT_TYPE_SKB, __func__, __LINE__)
 #else
 
 static struct sk_buff *rtw_cfg80211_vendor_event_alloc(

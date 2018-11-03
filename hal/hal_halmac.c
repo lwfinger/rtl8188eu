@@ -70,7 +70,7 @@ static u8 _halmac_sdio_cmd52_read(void *p, u32 offset)
 	_halmac_mac_reg_page0_chk(__func__, d, offset);
 	ret = rtw_sdio_read_cmd52(d, offset, &val, 1);
 	if (_FAIL == ret) {
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 		return SDIO_ERR_VAL8;
 	}
 
@@ -87,7 +87,7 @@ static void _halmac_sdio_cmd52_write(void *p, u32 offset, u8 val)
 	_halmac_mac_reg_page0_chk(__func__, d, offset);
 	ret = rtw_sdio_write_cmd52(d, offset, &val, 1);
 	if (_FAIL == ret)
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 }
 
 static u8 _halmac_sdio_reg_read_8(void *p, u32 offset)
@@ -107,7 +107,7 @@ static u8 _halmac_sdio_reg_read_8(void *p, u32 offset)
 
 	err = d->intf_ops->read(d, offset, pbuf, 1, 0);
 	if (err) {
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 		goto exit;
 	}
 
@@ -136,7 +136,7 @@ static u16 _halmac_sdio_reg_read_16(void *p, u32 offset)
 
 	err = d->intf_ops->read(d, offset, pbuf, 2, 0);
 	if (err) {
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 		goto exit;
 	}
 
@@ -165,7 +165,7 @@ static u32 _halmac_sdio_reg_read_32(void *p, u32 offset)
 
 	err = d->intf_ops->read(d, offset, pbuf, 4, 0);
 	if (err) {
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 		goto exit;
 	}
 
@@ -225,7 +225,7 @@ static void _halmac_sdio_reg_write_8(void *p, u32 offset, u8 val)
 
 	err = d->intf_ops->write(d, offset, pbuf, 1, 0);
 	if (err)
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 
 	rtw_mfree(pbuf, 1);
 }
@@ -247,7 +247,7 @@ static void _halmac_sdio_reg_write_16(void *p, u32 offset, u16 val)
 
 	err = d->intf_ops->write(d, offset, pbuf, 2, 0);
 	if (err)
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 
 	rtw_mfree(pbuf, 2);
 }
@@ -269,7 +269,7 @@ static void _halmac_sdio_reg_write_32(void *p, u32 offset, u32 val)
 
 	err = d->intf_ops->write(d, offset, pbuf, 4, 0);
 	if (err)
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 
 	rtw_mfree(pbuf, 4);
 }
@@ -324,7 +324,7 @@ static void _halmac_reg_write_8(void *p, u32 offset, u8 val)
 
 	err = rtw_write8(adapter, offset, val);
 	if (err == _FAIL)
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 }
 
 static void _halmac_reg_write_16(void *p, u32 offset, u16 val)
@@ -339,7 +339,7 @@ static void _halmac_reg_write_16(void *p, u32 offset, u16 val)
 
 	err = rtw_write16(adapter, offset, val);
 	if (err == _FAIL)
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 }
 
 static void _halmac_reg_write_32(void *p, u32 offset, u32 val)
@@ -354,7 +354,7 @@ static void _halmac_reg_write_32(void *p, u32 offset, u32 val)
 
 	err = rtw_write32(adapter, offset, val);
 	if (err == _FAIL)
-		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __FUNCTION__);
+		RTW_INFO("%s: [ERROR] I/O FAIL!\n", __func__);
 }
 #endif /* !CONFIG_SDIO_HCI */
 
@@ -469,46 +469,46 @@ static inline u8 is_valid_id_status(HALMAC_FEATURE_ID id, HALMAC_CMD_PROCESS_STA
 {
 	switch (id) {
 	case HALMAC_FEATURE_CFG_PARA:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	case HALMAC_FEATURE_DUMP_PHYSICAL_EFUSE:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		if (HALMAC_CMD_PROCESS_DONE != status)
 			RTW_INFO("%s: id(%d) unspecified status(%d)!\n",
-				 __FUNCTION__, id, status);
+				 __func__, id, status);
 		break;
 	case HALMAC_FEATURE_DUMP_LOGICAL_EFUSE:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		if (HALMAC_CMD_PROCESS_DONE != status)
 			RTW_INFO("%s: id(%d) unspecified status(%d)!\n",
-				 __FUNCTION__, id, status);
+				 __func__, id, status);
 		break;
 	case HALMAC_FEATURE_UPDATE_PACKET:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	case HALMAC_FEATURE_UPDATE_DATAPACK:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	case HALMAC_FEATURE_RUN_DATAPACK:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	case HALMAC_FEATURE_CHANNEL_SWITCH:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	case HALMAC_FEATURE_IQK:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	case HALMAC_FEATURE_POWER_TRACKING:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	case HALMAC_FEATURE_PSD:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	case HALMAC_FEATURE_ALL:
-		RTW_INFO("%s: %s\n", __FUNCTION__, RTW_HALMAC_FEATURE_NAME[id]);
+		RTW_INFO("%s: %s\n", __func__, RTW_HALMAC_FEATURE_NAME[id]);
 		break;
 	default:
-		RTW_ERR("%s: unknown feature id(%d)\n", __FUNCTION__, id);
+		RTW_ERR("%s: unknown feature id(%d)\n", __func__, id);
 		return _FALSE;
 	}
 
@@ -525,7 +525,7 @@ static int init_halmac_event_with_waittime(struct dvobj_priv *d, HALMAC_FEATURE_
 		if (!sctx)
 			return -1;
 	} else {
-		RTW_WARN("%s: id(%d) sctx is not NULL!!\n", __FUNCTION__, id);
+		RTW_WARN("%s: id(%d) sctx is not NULL!!\n", __func__, id);
 		sctx = d->hmpriv.indicator[id].sctx;
 		d->hmpriv.indicator[id].sctx = NULL;
 	}
@@ -578,7 +578,7 @@ static int wait_halmac_event(struct dvobj_priv *d, HALMAC_FEATURE_ID id)
 
 	/* timeout! We have to reset halmac state */
 	RTW_ERR("%s: Wait id(%d, %s) TIMEOUT! Reset HALMAC state!\n",
-		__FUNCTION__, id, RTW_HALMAC_FEATURE_NAME[id]);
+		__func__, id, RTW_HALMAC_FEATURE_NAME[id]);
 	mac = dvobj_to_halmac(d);
 	api = HALMAC_GET_API(mac);
 	api->halmac_reset_feature(mac, id);
@@ -615,20 +615,20 @@ static u8 _halmac_event_indication(void *p, HALMAC_FEATURE_ID feature_id, HALMAC
 	indicator->status = process_status;
 	indicator->ret_size = size;
 	if (!indicator->sctx) {
-		RTW_WARN("%s: No feature id(%d, %s) waiting!!\n", __FUNCTION__, feature_id, RTW_HALMAC_FEATURE_NAME[feature_id]);
+		RTW_WARN("%s: No feature id(%d, %s) waiting!!\n", __func__, feature_id, RTW_HALMAC_FEATURE_NAME[feature_id]);
 		goto exit;
 	}
 	sctx = indicator->sctx;
 
 	if (HALMAC_CMD_PROCESS_ERROR == process_status) {
-		RTW_ERR("%s: Something wrong id(%d, %s)!!\n", __FUNCTION__, feature_id, RTW_HALMAC_FEATURE_NAME[feature_id]);
+		RTW_ERR("%s: Something wrong id(%d, %s)!!\n", __func__, feature_id, RTW_HALMAC_FEATURE_NAME[feature_id]);
 		rtw_sctx_done_err(&sctx, RTW_SCTX_DONE_UNKNOWN);
 		goto exit;
 	}
 
 	if (size > indicator->buf_size) {
 		RTW_WARN("%s: id(%d, %s) buffer is not enough(%d<%d), data will be truncated!\n",
-			 __FUNCTION__, feature_id, RTW_HALMAC_FEATURE_NAME[feature_id], indicator->buf_size, size);
+			 __func__, feature_id, RTW_HALMAC_FEATURE_NAME[feature_id], indicator->buf_size, size);
 		cpsz = indicator->buf_size;
 	} else {
 		cpsz = size;
@@ -887,7 +887,7 @@ static void deinit_priv(struct halmacpriv *priv)
 					continue;
 
 				RTW_INFO("%s: <WARN> %s id(%d) sctx still exist!!\n",
-					__FUNCTION__, RTW_HALMAC_FEATURE_NAME[i], i);
+					__func__, RTW_HALMAC_FEATURE_NAME[i], i);
 				sctx = indicator[i].sctx;
 				indicator[i].sctx = NULL;
 				rtw_mfree((u8 *)sctx, sizeof(*sctx));
@@ -942,7 +942,7 @@ int rtw_halmac_init_adapter(struct dvobj_priv *d, PHALMAC_PLATFORM_API pf_api)
 #endif
 	status = halmac_init_adapter(d, pf_api, intf, &halmac, &api);
 	if (HALMAC_RET_SUCCESS != status) {
-		RTW_INFO("%s: halmac_init_adapter fail!(status=%d)\n", __FUNCTION__, status);
+		RTW_INFO("%s: halmac_init_adapter fail!(status=%d)\n", __func__, status);
 		err = -1;
 		goto out;
 	}
@@ -1026,7 +1026,7 @@ int rtw_halmac_poweron(struct dvobj_priv *d)
 		api->halmac_mac_power_switch(halmac, HALMAC_MAC_POWER_OFF);
 		status = api->halmac_mac_power_switch(halmac, HALMAC_MAC_POWER_ON);
 		RTW_WARN("%s: Power state abnormal, try to recover...%s\n",
-			 __FUNCTION__, (HALMAC_RET_SUCCESS == status)?"OK":"FAIL!");
+			 __func__, (HALMAC_RET_SUCCESS == status)?"OK":"FAIL!");
 	}
 	if (HALMAC_RET_SUCCESS != status) {
 		if (HALMAC_RET_PWR_UNCHANGE == status)
@@ -1237,7 +1237,7 @@ static int _send_general_info(struct dvobj_priv *d)
 		break;
 	case HALMAC_RET_NO_DLFW:
 		RTW_WARN("%s: halmac_send_general_info() fail because fw not dl!\n",
-			 __FUNCTION__);
+			 __func__);
 		/* go through */
 	default:
 		return -1;
@@ -1730,17 +1730,17 @@ int rtw_halmac_send_h2c(struct dvobj_priv *d, u8 *h2c)
 	s32 ret = _FAIL;
 
 	if (adapter->bFWReady == _FALSE) {
-		RTW_INFO("%s: return H2C cmd because fw is not ready\n", __FUNCTION__);
+		RTW_INFO("%s: return H2C cmd because fw is not ready\n", __func__);
 		return ret;
 	}
 
 	if (!h2c) {
-		RTW_INFO("%s: pbuf is NULL\n", __FUNCTION__);
+		RTW_INFO("%s: pbuf is NULL\n", __func__);
 		return ret;
 	}
 
 	if (rtw_is_surprise_removed(adapter)) {
-		RTW_INFO("%s: surprise removed\n", __FUNCTION__);
+		RTW_INFO("%s: surprise removed\n", __func__);
 		return ret;
 	}
 
@@ -2033,11 +2033,11 @@ int rtw_halmac_write_bt_physical_efuse(struct dvobj_priv *d, u32 offset, u32 cnt
 	for (i = 0; i < cnt; i++) {
 		status = api->halmac_write_efuse_bt(mac, offset + i, data[i], bank);
 		if (HALMAC_RET_SUCCESS != status) {
-			printk("%s: halmac_write_efuse_bt status = %d\n", __FUNCTION__, status);
+			printk("%s: halmac_write_efuse_bt status = %d\n", __func__, status);
 			return -1;
 		}
 	}
-	printk("%s: halmac_write_efuse_bt status = HALMAC_RET_SUCCESS %d\n", __FUNCTION__, status);
+	printk("%s: halmac_write_efuse_bt status = HALMAC_RET_SUCCESS %d\n", __func__, status);
 	return 0;
 }
 
@@ -2056,11 +2056,11 @@ int rtw_halmac_read_bt_physical_efuse_map(struct dvobj_priv *d, u8 *map, u32 siz
 
 	status = api->halmac_dump_efuse_map_bt(mac, bank, size, map);
 	if (HALMAC_RET_SUCCESS != status) {
-		printk("%s: halmac_dump_efuse_map_bt fail!\n", __FUNCTION__);
+		printk("%s: halmac_dump_efuse_map_bt fail!\n", __func__);
 		return -1;
 	}
 
-	printk("%s: OK!\n", __FUNCTION__);
+	printk("%s: OK!\n", __func__);
 
 	return 0;
 }

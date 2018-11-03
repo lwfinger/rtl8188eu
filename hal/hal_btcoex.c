@@ -615,18 +615,18 @@ static u8 _btmpoper_cmd(PBTC_COEXIST pBtCoexist, u8 opcode, u8 opcodever, u8 *cm
 	/* GLBtcBtMpRptWait should be 0 here*/
 
 	if (!GLBtcBtMpRptWiFiOK) {
-		RTW_ERR("%s: Didn't get H2C Rsp Event!\n", __FUNCTION__);
+		RTW_ERR("%s: Didn't get H2C Rsp Event!\n", __func__);
 		ret = BT_STATUS_H2C_TIMTOUT;
 		goto exit;
 	}
 	if (!GLBtcBtMpRptBTOK) {
-		RTW_ERR("%s: Didn't get BT response!\n", __FUNCTION__);
+		RTW_ERR("%s: Didn't get BT response!\n", __func__);
 		ret = BT_STATUS_H2C_BT_NO_RSP;
 		goto exit;
 	}
 	if (seq != GLBtcBtMpRptSeq) {
 		RTW_ERR("%s: Sequence number not match!(%d!=%d)!\n",
-			 __FUNCTION__, seq, GLBtcBtMpRptSeq);
+			 __func__, seq, GLBtcBtMpRptSeq);
 		ret = BT_STATUS_C2H_REQNUM_MISMATCH;
 		goto exit;
 	}
@@ -635,23 +635,23 @@ static u8 _btmpoper_cmd(PBTC_COEXIST pBtCoexist, u8 opcode, u8 opcodever, u8 *cm
 	/* Examine the status reported from C2H */
 	case BT_STATUS_OK:
 		ret = BT_STATUS_BT_OP_SUCCESS;
-		RTW_DBG("%s: C2H status = BT_STATUS_BT_OP_SUCCESS\n", __FUNCTION__);
+		RTW_DBG("%s: C2H status = BT_STATUS_BT_OP_SUCCESS\n", __func__);
 		break;
 	case BT_STATUS_VERSION_MISMATCH:
 		ret = BT_STATUS_OPCODE_L_VERSION_MISMATCH;
-		RTW_DBG("%s: C2H status = BT_STATUS_OPCODE_L_VERSION_MISMATCH\n", __FUNCTION__);
+		RTW_DBG("%s: C2H status = BT_STATUS_OPCODE_L_VERSION_MISMATCH\n", __func__);
 		break;
 	case BT_STATUS_UNKNOWN_OPCODE:
 		ret = BT_STATUS_UNKNOWN_OPCODE_L;
-		RTW_DBG("%s: C2H status = MP_BT_STATUS_UNKNOWN_OPCODE_L\n", __FUNCTION__);
+		RTW_DBG("%s: C2H status = MP_BT_STATUS_UNKNOWN_OPCODE_L\n", __func__);
 		break;
 	case BT_STATUS_ERROR_PARAMETER:
 		ret = BT_STATUS_PARAMETER_FORMAT_ERROR_L;
-		RTW_DBG("%s: C2H status = MP_BT_STATUS_PARAMETER_FORMAT_ERROR_L\n", __FUNCTION__);
+		RTW_DBG("%s: C2H status = MP_BT_STATUS_PARAMETER_FORMAT_ERROR_L\n", __func__);
 		break;
 	default:
 		ret = BT_STATUS_UNKNOWN_STATUS_L;
-		RTW_DBG("%s: C2H status = MP_BT_STATUS_UNKNOWN_STATUS_L\n", __FUNCTION__);
+		RTW_DBG("%s: C2H status = MP_BT_STATUS_UNKNOWN_STATUS_L\n", __func__);
 		break;
 	}
 

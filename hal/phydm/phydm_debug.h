@@ -131,7 +131,7 @@
 #define	config_phydm_read_txagc_check(data)		(data != INVALID_TXAGC_DATA)
 
 #define dbg_print	printk
-#define RT_PRINTK(fmt, args...)	dbg_print("%s(): " fmt, __FUNCTION__, ## args);
+#define RT_PRINTK(fmt, args...)	dbg_print("%s(): " fmt, __func__, ## args);
 #define	RT_DISP(dbgtype, dbgflag, printstr)
 
 #ifndef ASSERT
@@ -174,15 +174,15 @@
 #define ODM_RT_ASSERT(p_dm_odm, expr, fmt)											 do {\
 		if (!(expr)) {																	\
 			dbg_print("Assertion failed! %s at ......\n", #expr);								\
-			dbg_print("      ......%s,%s, line=%d\n", __FILE__, __FUNCTION__, __LINE__);			\
+			dbg_print("      ......%s,%s, line=%d\n", __FILE__, __func__, __LINE__);			\
 			RT_PRINTK fmt;															\
 			ASSERT(false);															\
 		}	\
 	} while (0)
 
-#define ODM_dbg_enter() { dbg_print(" == > %s\n", __FUNCTION__); }
-#define ODM_dbg_exit() { dbg_print("< == %s\n", __FUNCTION__); }
-#define ODM_dbg_trace(str) { dbg_print("%s:%s\n", __FUNCTION__, str); }
+#define ODM_dbg_enter() { dbg_print(" == > %s\n", __func__); }
+#define ODM_dbg_exit() { dbg_print("< == %s\n", __func__); }
+#define ODM_dbg_trace(str) { dbg_print("%s:%s\n", __func__, str); }
 
 #define ODM_PRINT_ADDR(p_dm_odm, comp, level, title_str, ptr)							 do {\
 		if (((comp) & p_dm_odm->debug_components) && (level <= p_dm_odm->debug_level)) { \

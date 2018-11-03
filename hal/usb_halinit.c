@@ -54,7 +54,7 @@ _ConfigNormalChipOutEP_8188E(
 		break;
 
 	}
-	RTW_INFO("%s OutEpQueueSel(0x%02x), OutEpNumber(%d)\n", __FUNCTION__, pHalData->OutEpQueueSel, pHalData->OutEpNumber);
+	RTW_INFO("%s OutEpQueueSel(0x%02x), OutEpNumber(%d)\n", __func__, pHalData->OutEpQueueSel, pHalData->OutEpNumber);
 
 }
 
@@ -1014,7 +1014,7 @@ _InitAntenna_Selection(IN	PADAPTER Adapter)
 
 	if (pHalData->AntDivCfg == 0)
 		return;
-	RTW_INFO("==>  %s ....\n", __FUNCTION__);
+	RTW_INFO("==>  %s ....\n", __func__);
 
 	rtw_write32(Adapter, REG_LEDCFG0, rtw_read32(Adapter, REG_LEDCFG0) | BIT23);
 	phy_set_bb_reg(Adapter, rFPGA0_XAB_RFParameter, BIT13, 0x01);
@@ -1208,7 +1208,7 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 	if (Adapter->registrypriv.mp_mode == 0) {
 		status = rtl8188e_FirmwareDownload(Adapter, _FALSE);
 		if (status != _SUCCESS) {
-			RTW_INFO("%s: Download Firmware failed!!\n", __FUNCTION__);
+			RTW_INFO("%s: Download Firmware failed!!\n", __func__);
 			Adapter->bFWReady = _FALSE;
 			pHalData->fw_ractrl = _FALSE;
 			return status;
@@ -1256,7 +1256,7 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 #if defined(CONFIG_IOL_EFUSE_PATCH)
 	status = rtl8188e_iol_efuse_patch(Adapter);
 	if (status == _FAIL) {
-		RTW_INFO("%s  rtl8188e_iol_efuse_patch failed\n", __FUNCTION__);
+		RTW_INFO("%s  rtl8188e_iol_efuse_patch failed\n", __func__);
 		goto exit;
 	}
 #endif
@@ -1466,7 +1466,7 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 exit:
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_END);
 
-	RTW_INFO("%s in %dms\n", __FUNCTION__, rtw_get_passing_time_ms(init_start_time));
+	RTW_INFO("%s in %dms\n", __func__, rtw_get_passing_time_ms(init_start_time));
 
 #ifdef DBG_HAL_INIT_PROFILING
 	hal_init_stages_timestamp[HAL_INIT_STAGES_END] = rtw_get_current_time();
@@ -1587,7 +1587,7 @@ static u32 rtl8188eu_hal_deinit(PADAPTER Adapter)
 {
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(Adapter);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	RTW_INFO("==> %s\n", __FUNCTION__);
+	RTW_INFO("==> %s\n", __func__);
 
 #ifdef CONFIG_SUPPORT_USB_INT
 	rtw_write32(Adapter, REG_HIMR_88E, IMR_DISABLED_88E);

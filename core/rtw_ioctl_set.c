@@ -494,7 +494,7 @@ u8 rtw_set_802_11_disassociate(_adapter *padapter)
 		/* modify for CONFIG_IEEE80211W, none 11w can use it */
 		rtw_free_assoc_resources_cmd(padapter);
 		if (_FAIL == rtw_pwr_wakeup(padapter))
-			RTW_INFO("%s(): rtw_pwr_wakeup fail !!!\n", __FUNCTION__);
+			RTW_INFO("%s(): rtw_pwr_wakeup fail !!!\n", __func__);
 	}
 
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);

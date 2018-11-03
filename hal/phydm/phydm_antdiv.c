@@ -4425,15 +4425,15 @@ odm_set_tx_ant_by_tx_info(
 		return;
 
 	if (support_ic_type == ODM_RTL8881A) {
-		/*panic_printk("[%s] [%d]   ******ODM_SetTxAntByTxInfo_8881E******\n",__FUNCTION__,__LINE__);	*/
+		/*panic_printk("[%s] [%d]   ******ODM_SetTxAntByTxInfo_8881E******\n",__func__,__LINE__);	*/
 		pdesc->dword6 &= set_desc(~(BIT(18) | BIT(17) | BIT(16)));
 		pdesc->dword6 |= set_desc(p_dm_fat_table->antsel_a[aid] << 16);
 	} else if (support_ic_type == ODM_RTL8192E) {
-		/*panic_printk("[%s] [%d]   ******ODM_SetTxAntByTxInfo_8192E******\n",__FUNCTION__,__LINE__);	*/
+		/*panic_printk("[%s] [%d]   ******ODM_SetTxAntByTxInfo_8192E******\n",__func__,__LINE__);	*/
 		pdesc->dword6 &= set_desc(~(BIT(18) | BIT(17) | BIT(16)));
 		pdesc->dword6 |= set_desc(p_dm_fat_table->antsel_a[aid] << 16);
 	} else if (support_ic_type == ODM_RTL8188E) {
-		/*panic_printk("[%s] [%d]   ******ODM_SetTxAntByTxInfo_8188E******\n",__FUNCTION__,__LINE__);*/
+		/*panic_printk("[%s] [%d]   ******ODM_SetTxAntByTxInfo_8188E******\n",__func__,__LINE__);*/
 		pdesc->dword2 &= set_desc(~BIT(24));
 		pdesc->dword2 &= set_desc(~BIT(25));
 		pdesc->dword7 &= set_desc(~BIT(29));
@@ -4445,7 +4445,7 @@ odm_set_tx_ant_by_tx_info(
 
 	} else if (support_ic_type == ODM_RTL8812) {
 		/*[path-A]*/
-		/*panic_printk("[%s] [%d]   ******ODM_SetTxAntByTxInfo_8881E******\n",__FUNCTION__,__LINE__);*/
+		/*panic_printk("[%s] [%d]   ******ODM_SetTxAntByTxInfo_8881E******\n",__func__,__LINE__);*/
 
 		pdesc->dword6 &= set_desc(~BIT(16));
 		pdesc->dword6 &= set_desc(~BIT(17));
@@ -4479,7 +4479,7 @@ odm_set_tx_ant_by_tx_info_hal(
 		return;
 
 	if (support_ic_type == ODM_RTL8881A || support_ic_type == ODM_RTL8192E || support_ic_type == ODM_RTL8814A) {
-		/*panic_printk("[%s] [%d] ******odm_set_tx_ant_by_tx_info_hal******\n",__FUNCTION__,__LINE__);*/
+		/*panic_printk("[%s] [%d] ******odm_set_tx_ant_by_tx_info_hal******\n",__func__,__LINE__);*/
 		pdescdata->ant_sel = 1;
 		pdescdata->ant_sel_a = p_dm_fat_table->antsel_a[aid];
 	}

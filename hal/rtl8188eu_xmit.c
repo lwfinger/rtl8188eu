@@ -270,7 +270,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 
 	/* 4 offset 0 */
 	ptxdesc->txdw0 |= cpu_to_le32(OWN | FSG | LSG);
-	/* RTW_INFO("%s==> pkt_len=%d,bagg_pkt=%02x\n",__FUNCTION__,sz,bagg_pkt); */
+	/* RTW_INFO("%s==> pkt_len=%d,bagg_pkt=%02x\n",__func__,sz,bagg_pkt); */
 	ptxdesc->txdw0 |= cpu_to_le32(sz & 0x0000ffff);/* update TXPKTSIZE */
 
 	offset = TXDESC_SIZE + OFFSET_SZ;
@@ -280,7 +280,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 		offset += EARLY_MODE_INFO_SIZE ;/* 0x28			 */
 	}
 #endif
-	/* RTW_INFO("%s==>offset(0x%02x)\n",__FUNCTION__,offset); */
+	/* RTW_INFO("%s==>offset(0x%02x)\n",__func__,offset); */
 	ptxdesc->txdw0 |= cpu_to_le32(((offset) << OFFSET_SHT) & 0x00ff0000);/* 32 bytes for TX Desc */
 
 	if (bmcst)
@@ -294,7 +294,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 		}
 	}
 #endif
-	/* RTW_INFO("%s, pkt_offset=0x%02x\n",__FUNCTION__,pxmitframe->pkt_offset); */
+	/* RTW_INFO("%s, pkt_offset=0x%02x\n",__func__,pxmitframe->pkt_offset); */
 
 	/* pkt_offset, unit:8 bytes padding */
 	if (pxmitframe->pkt_offset > 0)
@@ -348,7 +348,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 		/* offset 20 */
 #ifdef CONFIG_USB_TX_AGGREGATION
 		if (pxmitframe->agg_num > 1) {
-			/* RTW_INFO("%s agg_num:%d\n",__FUNCTION__,pxmitframe->agg_num ); */
+			/* RTW_INFO("%s agg_num:%d\n",__func__,pxmitframe->agg_num ); */
 			ptxdesc->txdw5 |= cpu_to_le32((pxmitframe->agg_num << USB_TXAGG_NUM_SHT) & 0xFF000000);
 		}
 #endif
@@ -727,12 +727,12 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	if (pxmitbuf == NULL) {
 		pxmitbuf = rtw_alloc_xmitbuf(pxmitpriv);
 		if (pxmitbuf == NULL) {
-			/* RTW_INFO("%s #1, connot alloc xmitbuf!!!!\n",__FUNCTION__); */
+			/* RTW_INFO("%s #1, connot alloc xmitbuf!!!!\n",__func__); */
 			return _FALSE;
 		}
 	}
 
-	/* RTW_INFO("%s =====================================\n",__FUNCTION__); */
+	/* RTW_INFO("%s =====================================\n",__func__); */
 	/* 3 1. pick up first frame */
 	do {
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
@@ -771,7 +771,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 #endif
 
 		if (rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe) == _FALSE) {
-			RTW_INFO("%s coalesce 1st xmitframe failed\n", __FUNCTION__);
+			RTW_INFO("%s coalesce 1st xmitframe failed\n", __func__);
 			continue;
 		}
 
@@ -866,7 +866,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		if (_RND8(pbuf + len) > MAX_XMITBUF_SZ)
 			/* if (_RND8(pbuf + len) > (MAX_XMITBUF_SZ/2))//to do : for TX TP finial tune , Georgia 2012-0323 */
 		{
-			/* RTW_INFO("%s....len> MAX_XMITBUF_SZ\n",__FUNCTION__); */
+			/* RTW_INFO("%s....len> MAX_XMITBUF_SZ\n",__func__); */
 			pxmitframe->agg_num = 1;
 			pxmitframe->pkt_offset = 1;
 			break;
@@ -894,7 +894,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		pxmitframe->buf_addr = pxmitbuf->pbuf + pbuf;
 
 		if (rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe) == _FALSE) {
-			RTW_INFO("%s coalesce failed\n", __FUNCTION__);
+			RTW_INFO("%s coalesce failed\n", __func__);
 			rtw_free_xmitframe(pxmitpriv, pxmitframe);
 			continue;
 		}
@@ -973,7 +973,7 @@ agg_end:
 
 	/* 3 4. write xmit buffer to USB FIFO */
 	ff_hwaddr = rtw_get_ff_hwaddr(pfirstframe);
-	/* RTW_INFO("%s ===================================== write port,buf_size(%d)\n",__FUNCTION__,pbuf_tail); */
+	/* RTW_INFO("%s ===================================== write port,buf_size(%d)\n",__func__,pbuf_tail); */
 	/* xmit address == ((xmit_frame*)pxmitbuf->priv_data)->buf_addr */
 	rtw_write_port(padapter, ff_hwaddr, pbuf_tail, (u8 *)pxmitbuf);
 
@@ -1059,13 +1059,13 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 static s32 xmitframe_direct(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
 	s32 res = _SUCCESS;
-	/* RTW_INFO("==> %s\n",__FUNCTION__); */
+	/* RTW_INFO("==> %s\n",__func__); */
 
 	res = rtw_xmitframe_coalesce(padapter, pxmitframe->pkt, pxmitframe);
 	if (res == _SUCCESS)
 		rtw_dump_xframe(padapter, pxmitframe);
 	else
-		RTW_INFO("==> %s xmitframe_coalsece failed\n", __FUNCTION__);
+		RTW_INFO("==> %s xmitframe_coalsece failed\n", __func__);
 
 	return res;
 }
@@ -1086,7 +1086,7 @@ static s32 pre_xmitframe(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL);
 
-	/* RTW_INFO("==> %s\n",__FUNCTION__); */
+	/* RTW_INFO("==> %s\n",__func__); */
 
 	if (rtw_txframes_sta_ac_pending(padapter, pattrib) > 0) {
 		/* RTW_INFO("enqueue AC(%d)\n",pattrib->priority); */

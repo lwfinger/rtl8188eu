@@ -137,10 +137,10 @@ void dbg_rtw_p2p_set_state(struct wifidirect_info *wdinfo, enum P2P_STATE state,
 void dbg_rtw_p2p_set_pre_state(struct wifidirect_info *wdinfo, enum P2P_STATE state, const char *caller, int line);
 /* void dbg_rtw_p2p_restore_state(struct wifidirect_info *wdinfo, const char *caller, int line); */
 void dbg_rtw_p2p_set_role(struct wifidirect_info *wdinfo, enum P2P_ROLE role, const char *caller, int line);
-#define rtw_p2p_set_state(wdinfo, state) dbg_rtw_p2p_set_state(wdinfo, state, __FUNCTION__, __LINE__)
-#define rtw_p2p_set_pre_state(wdinfo, state) dbg_rtw_p2p_set_pre_state(wdinfo, state, __FUNCTION__, __LINE__)
-#define rtw_p2p_set_role(wdinfo, role) dbg_rtw_p2p_set_role(wdinfo, role, __FUNCTION__, __LINE__)
-/* #define rtw_p2p_restore_state(wdinfo) dbg_rtw_p2p_restore_state(wdinfo, __FUNCTION__, __LINE__) */
+#define rtw_p2p_set_state(wdinfo, state) dbg_rtw_p2p_set_state(wdinfo, state, __func__, __LINE__)
+#define rtw_p2p_set_pre_state(wdinfo, state) dbg_rtw_p2p_set_pre_state(wdinfo, state, __func__, __LINE__)
+#define rtw_p2p_set_role(wdinfo, role) dbg_rtw_p2p_set_role(wdinfo, role, __func__, __LINE__)
+/* #define rtw_p2p_restore_state(wdinfo) dbg_rtw_p2p_restore_state(wdinfo, __func__, __LINE__) */
 #else /* CONFIG_DBG_P2P */
 #define rtw_p2p_set_state(wdinfo, state) _rtw_p2p_set_state(wdinfo, state)
 #define rtw_p2p_set_pre_state(wdinfo, state) _rtw_p2p_set_pre_state(wdinfo, state)

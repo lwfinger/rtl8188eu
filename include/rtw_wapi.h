@@ -40,14 +40,14 @@ static inline void dump_buf(u8 *buf, u32 len)
 	if (!(_Exp)) {									\
 		printk("RTWLAN: ");					\
 		printk("Assertion failed! %s,%s, line=%d\n", \
-		       #_Exp, __FUNCTION__, __LINE__);          \
+		       #_Exp, __func__, __LINE__);          \
 		return;						\
 	}
 #define RT_ASSERT_RET_VALUE(_Exp, Ret)								\
 	if (!(_Exp)) {									\
 		printk("RTWLAN: ");					\
 		printk("Assertion failed! %s,%s, line=%d\n", \
-		       #_Exp, __FUNCTION__, __LINE__);          \
+		       #_Exp, __func__, __LINE__);          \
 		return Ret;						\
 	}
 

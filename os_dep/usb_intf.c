@@ -62,7 +62,7 @@ static void rtw_dev_shutdown(struct device *dev)
 					struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(adapter);
 					#ifdef CONFIG_WOWLAN
 					if (pwrctl->wowlan_mode == _TRUE)
-						RTW_INFO("%s wowlan_mode ==_TRUE do not run rtw_hal_deinit()\n", __FUNCTION__);
+						RTW_INFO("%s wowlan_mode ==_TRUE do not run rtw_hal_deinit()\n", __func__);
 					else
 					#endif
 					{
@@ -280,55 +280,8 @@ static void rtw_decide_chip_type_by_usb_info(struct dvobj_priv *pdvobjpriv, cons
 {
 	pdvobjpriv->chip_type = pdid->driver_info;
 
-#ifdef CONFIG_RTL8188E
 	if (pdvobjpriv->chip_type == RTL8188E)
 		rtl8188eu_set_hw_type(pdvobjpriv);
-#endif
-
-#if defined(CONFIG_RTL8812A) || defined(CONFIG_RTL8821A)
-	if (pdvobjpriv->chip_type == RTL8812 || pdvobjpriv->chip_type == RTL8821)
-		rtl8812au_set_hw_type(pdvobjpriv);
-#endif
-
-#ifdef CONFIG_RTL8192E
-	if (pdvobjpriv->chip_type == RTL8192E)
-		rtl8192eu_set_hw_type(pdvobjpriv);
-#endif
-
-#ifdef CONFIG_RTL8723B
-	if (pdvobjpriv->chip_type == RTL8723B)
-		rtl8723bu_set_hw_type(pdvobjpriv);
-#endif
-
-#ifdef CONFIG_RTL8814A
-	if (pdvobjpriv->chip_type == RTL8814A)
-		rtl8814au_set_hw_type(pdvobjpriv);
-#endif /* CONFIG_RTL8814A */
-
-#ifdef CONFIG_RTL8188F
-	if (pdvobjpriv->chip_type == RTL8188F)
-		rtl8188fu_set_hw_type(pdvobjpriv);
-#endif
-
-#ifdef CONFIG_RTL8703B
-	if (pdvobjpriv->chip_type == RTL8703B)
-		rtl8703bu_set_hw_type(pdvobjpriv);
-#endif /* CONFIG_RTL8703B */
-
-#ifdef CONFIG_RTL8822B
-	if (pdvobjpriv->chip_type == RTL8822B)
-		rtl8822bu_set_hw_type(pdvobjpriv);
-#endif /* CONFIG_RTL8822B */
-
-#ifdef CONFIG_RTL8723D
-	if (pdvobjpriv->chip_type == RTL8723D)
-		rtl8723du_set_hw_type(pdvobjpriv);
-#endif /* CONFIG_RTL8723D */
-
-#ifdef CONFIG_RTL8821C
-	if (pdvobjpriv->chip_type == RTL8821C)
-		rtl8821cu_set_hw_type(pdvobjpriv);
-#endif /* CONFIG_RTL8821C */
 }
 
 static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf, const struct usb_device_id *pdid)
@@ -515,56 +468,8 @@ u8 rtw_set_hal_ops(_adapter *padapter)
 	if (rtw_hal_data_init(padapter) == _FAIL)
 		return _FAIL;
 
-#ifdef CONFIG_RTL8188E
 	if (rtw_get_chip_type(padapter) == RTL8188E)
 		rtl8188eu_set_hal_ops(padapter);
-#endif
-
-#if defined(CONFIG_RTL8812A) || defined(CONFIG_RTL8821A)
-	if (rtw_get_chip_type(padapter) == RTL8812 || rtw_get_chip_type(padapter) == RTL8821)
-		rtl8812au_set_hal_ops(padapter);
-#endif
-
-#ifdef CONFIG_RTL8192E
-	if (rtw_get_chip_type(padapter) == RTL8192E)
-		rtl8192eu_set_hal_ops(padapter);
-#endif
-#ifdef CONFIG_RTL8723B
-	if (rtw_get_chip_type(padapter) == RTL8723B)
-		rtl8723bu_set_hal_ops(padapter);
-#endif
-#ifdef CONFIG_RTL8814A
-	if (rtw_get_chip_type(padapter) == RTL8814A)
-		rtl8814au_set_hal_ops(padapter);
-#endif /* CONFIG_RTL8814A */
-
-#ifdef CONFIG_RTL8188F
-	if (rtw_get_chip_type(padapter) == RTL8188F)
-		rtl8188fu_set_hal_ops(padapter);
-#endif
-
-#ifdef CONFIG_RTL8703B
-	if (rtw_get_chip_type(padapter) == RTL8703B)
-		rtl8703bu_set_hal_ops(padapter);
-#endif /* CONFIG_RTL8703B */
-
-#ifdef CONFIG_RTL8822B
-	if (rtw_get_chip_type(padapter) == RTL8822B)
-		rtl8822bu_set_hal_ops(padapter);
-#endif /* CONFIG_RTL8822B */
-
-#ifdef CONFIG_RTL8723D
-	if (rtw_get_chip_type(padapter) == RTL8723D)
-		rtl8723du_set_hal_ops(padapter);
-#endif /* CONFIG_RTL8723D */
-
-
-#ifdef CONFIG_RTL8821C
-	if (rtw_get_chip_type(padapter) == RTL8821C) {
-		if (rtl8821cu_set_hal_ops(padapter) == _FAIL)
-			return _FAIL;
-	}
-#endif
 
 	if (_FAIL == rtw_hal_ops_check(padapter))
 		return _FAIL;
@@ -633,7 +538,7 @@ static void process_spec_devid(const struct usb_device_id *pdid)
 		if ((pdid->idVendor == vid) && (pdid->idProduct == pid) && (flags & SPEC_DEV_ID_ASSIGN_IFNAME)) {
 			extern char *ifname;
 			strncpy(ifname, "wlan10", 6);
-			/* RTW_INFO("%s()-%d: ifname=%s, vid=%04X, pid=%04X\n", __FUNCTION__, __LINE__, ifname, vid, pid); */
+			/* RTW_INFO("%s()-%d: ifname=%s, vid=%04X, pid=%04X\n", __func__, __LINE__, ifname, vid, pid); */
 		}
 #endif /* RTK_DMP_PLATFORM */
 
@@ -708,7 +613,7 @@ int rtw_hw_suspend(_adapter *padapter)
 	return 0;
 
 error_exit:
-	RTW_INFO("%s, failed\n", __FUNCTION__);
+	RTW_INFO("%s, failed\n", __func__);
 	return -1;
 
 }
@@ -743,7 +648,7 @@ int rtw_hw_resume(_adapter *padapter)
 
 	return 0;
 error_exit:
-	RTW_INFO("%s, Open net dev failed\n", __FUNCTION__);
+	RTW_INFO("%s, Open net dev failed\n", __func__);
 	return -1;
 }
 #endif
@@ -763,7 +668,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	padapter = dvobj_get_primary_adapter(dvobj);
 
 	if (pwrpriv->bInSuspend == _TRUE) {
-		RTW_INFO("%s bInSuspend = %d\n", __FUNCTION__, pwrpriv->bInSuspend);
+		RTW_INFO("%s bInSuspend = %d\n", __func__, pwrpriv->bInSuspend);
 		pdbgpriv->dbg_suspend_error_cnt++;
 		goto exit;
 	}
@@ -799,7 +704,7 @@ static int rtw_resume_process(_adapter *padapter)
 
 	if (pwrpriv->bInSuspend == _FALSE) {
 		pdbgpriv->dbg_resume_error_cnt++;
-		RTW_INFO("%s bInSuspend = %d\n", __FUNCTION__, pwrpriv->bInSuspend);
+		RTW_INFO("%s bInSuspend = %d\n", __func__, pwrpriv->bInSuspend);
 		return -1;
 	}
 
@@ -876,7 +781,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	padapter = dvobj_get_primary_adapter(dvobj);
 	pmlmeext = &padapter->mlmeextpriv;
 
-	RTW_INFO("==> %s (%s:%d)\n", __FUNCTION__, current->comm, current->pid);
+	RTW_INFO("==> %s (%s:%d)\n", __func__, current->comm, current->pid);
 	pdbgpriv->dbg_resume_cnt++;
 
 	if (pwrpriv->bInternalAutoSuspend)
@@ -903,7 +808,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 	}
 
 	pmlmeext->last_scan_time = rtw_get_current_time();
-	RTW_INFO("<========  %s return %d\n", __FUNCTION__, ret);
+	RTW_INFO("<========  %s return %d\n", __func__, ret);
 
 	return ret;
 }
@@ -1137,9 +1042,9 @@ static _adapter *rtw_usb_primary_adapter_init(struct dvobj_priv *dvobj,
 			/* usb_autopm_get_interface(adapter_to_dvobj(padapter)->pusbintf ); */ /* init pm_usage_cnt ,let it start from 1 */
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 32))
-			RTW_INFO("%s...pm_usage_cnt(%d).....\n", __FUNCTION__, atomic_read(&(dvobj->pusbintf->pm_usage_cnt)));
+			RTW_INFO("%s...pm_usage_cnt(%d).....\n", __func__, atomic_read(&(dvobj->pusbintf->pm_usage_cnt)));
 #else
-			RTW_INFO("%s...pm_usage_cnt(%d).....\n", __FUNCTION__, dvobj->pusbintf->pm_usage_cnt);
+			RTW_INFO("%s...pm_usage_cnt(%d).....\n", __func__, dvobj->pusbintf->pm_usage_cnt);
 #endif
 		}
 	}

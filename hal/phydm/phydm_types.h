@@ -117,7 +117,7 @@ enum rt_spinlock_type {
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	#define sta_info 	_RT_WLAN_STA
-	#define	__func__		__FUNCTION__
+	#define	__func__		__func__
 	#define	PHYDM_TESTCHIP_SUPPORT	TESTCHIP_SUPPORT
 	#define MASKH3BYTES			0xffffff00
 	#define SUCCESS	0

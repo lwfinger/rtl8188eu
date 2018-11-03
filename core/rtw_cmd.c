@@ -270,7 +270,7 @@ sint _rtw_enqueue_cmd(_queue *queue, struct cmd_obj *obj, bool to_head)
 
 #ifdef DBG_CMD_QUEUE
 	if (dump_cmd_id) {
-		RTW_INFO("%s===> cmdcode:0x%02x\n", __FUNCTION__, obj->cmdcode);
+		RTW_INFO("%s===> cmdcode:0x%02x\n", __func__, obj->cmdcode);
 		if (obj->cmdcode == GEN_CMD_CODE(_Set_MLME_EVT)) {
 			if (obj->parmbuf) {
 				struct C2HEvent_Header *pc2h_evt_hdr = (struct C2HEvent_Header *)(obj->parmbuf);
@@ -289,7 +289,7 @@ sint _rtw_enqueue_cmd(_queue *queue, struct cmd_obj *obj, bool to_head)
 		RTW_INFO("[%d] head %p, tail %p, tail->prev->next %p[tail], tail->next %p[head]\n", __LINE__,
 			&queue->queue, queue->queue.prev, queue->queue.prev->prev->next, queue->queue.prev->next);
 
-		RTW_INFO("==========%s============\n", __FUNCTION__);
+		RTW_INFO("==========%s============\n", __func__);
 		RTW_INFO("head:%p,obj_addr:%p\n", &queue->queue, obj);
 		RTW_INFO("padapter: %p\n", obj->padapter);
 		RTW_INFO("cmdcode: 0x%02x\n", obj->cmdcode);
@@ -337,7 +337,7 @@ struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
 
 #ifdef DBG_CMD_QUEUE
 		if (queue->queue.prev->next != &queue->queue) {
-			RTW_INFO("==========%s============\n", __FUNCTION__);
+			RTW_INFO("==========%s============\n", __func__);
 			RTW_INFO("head:%p,obj_addr:%p\n", &queue->queue, obj);
 			RTW_INFO("padapter: %p\n", obj->padapter);
 			RTW_INFO("cmdcode: 0x%02x\n", obj->cmdcode);
@@ -352,7 +352,7 @@ struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
 		}
 
 		if (dump_cmd_id) {
-			RTW_INFO("%s===> cmdcode:0x%02x\n", __FUNCTION__, obj->cmdcode);
+			RTW_INFO("%s===> cmdcode:0x%02x\n", __func__, obj->cmdcode);
 			if (obj->cmdcode == GEN_CMD_CODE(_Set_Drv_Extra)) {
 				if (obj->parmbuf) {
 					struct drvextra_cmd_parm *pdrvextra_cmd_parm = (struct drvextra_cmd_parm *)(obj->parmbuf);

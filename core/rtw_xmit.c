@@ -932,7 +932,7 @@ static s32 update_attrib_sec_info(_adapter *padapter, struct pkt_attrib *pattrib
 
 		if ((pattrib->ether_type != 0x888e) && (check_fwstate(pmlmepriv, WIFI_MP_STATE) == _FALSE)) {
 #ifdef DBG_TX_DROP_FRAME
-			RTW_INFO("DBG_TX_DROP_FRAME %s psta->ieee8021x_blocked == _TRUE,  pattrib->ether_type(%04x) != 0x888e\n", __FUNCTION__, pattrib->ether_type);
+			RTW_INFO("DBG_TX_DROP_FRAME %s psta->ieee8021x_blocked == _TRUE,  pattrib->ether_type(%04x) != 0x888e\n", __func__, pattrib->ether_type);
 #endif
 			res = _FAIL;
 			goto exit;
@@ -989,7 +989,7 @@ static s32 update_attrib_sec_info(_adapter *padapter, struct pkt_attrib *pattrib
 
 		if (psecuritypriv->busetkipkey == _FAIL) {
 #ifdef DBG_TX_DROP_FRAME
-			RTW_INFO("DBG_TX_DROP_FRAME %s psecuritypriv->busetkipkey(%d)==_FAIL drop packet\n", __FUNCTION__, psecuritypriv->busetkipkey);
+			RTW_INFO("DBG_TX_DROP_FRAME %s psecuritypriv->busetkipkey(%d)==_FAIL drop packet\n", __func__, psecuritypriv->busetkipkey);
 #endif
 			res = _FAIL;
 			goto exit;
@@ -1375,7 +1375,7 @@ static s32 update_attrib(_adapter *padapter, _pkt *pkt, struct pkt_attrib *pattr
 
 	update_attrib_phy_info(padapter, pattrib, psta);
 
-	/* RTW_INFO("%s ==> mac_id(%d)\n",__FUNCTION__,pattrib->mac_id ); */
+	/* RTW_INFO("%s ==> mac_id(%d)\n",__func__,pattrib->mac_id ); */
 
 	pattrib->psta = psta;
 	/* TODO:_unlock */
@@ -2173,7 +2173,7 @@ s32 rtw_xmitframe_coalesce_amsdu(_adapter *padapter, struct xmit_frame *pxmitfra
 	s32 res = _SUCCESS;
 
 	if (pxmitframe->buf_addr == NULL) {
-		RTW_INFO("==> %s buf_addr==NULL\n", __FUNCTION__);
+		RTW_INFO("==> %s buf_addr==NULL\n", __func__);
 		return _FAIL;
 	}
 
@@ -2376,7 +2376,7 @@ s32 rtw_xmitframe_coalesce(_adapter *padapter, _pkt *pkt, struct xmit_frame *pxm
 		}
 	*/
 	if (pxmitframe->buf_addr == NULL) {
-		RTW_INFO("==> %s buf_addr==NULL\n", __FUNCTION__);
+		RTW_INFO("==> %s buf_addr==NULL\n", __func__);
 		return _FAIL;
 	}
 
@@ -2830,13 +2830,13 @@ struct xmit_frame *__rtw_alloc_cmdxmitframe(struct xmit_priv *pxmitpriv,
 
 	pcmdframe = rtw_alloc_xmitframe(pxmitpriv);
 	if (pcmdframe == NULL) {
-		RTW_INFO("%s, alloc xmitframe fail\n", __FUNCTION__);
+		RTW_INFO("%s, alloc xmitframe fail\n", __func__);
 		return NULL;
 	}
 
 	pxmitbuf = __rtw_alloc_cmd_xmitbuf(pxmitpriv, buf_type);
 	if (pxmitbuf == NULL) {
-		RTW_INFO("%s, alloc xmitbuf fail\n", __FUNCTION__);
+		RTW_INFO("%s, alloc xmitbuf fail\n", __func__);
 		rtw_free_xmitframe(pxmitpriv, pcmdframe);
 		return NULL;
 	}
@@ -3720,7 +3720,7 @@ static int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 				}
 
 				if (skb_is_nonlinear(skb))
-					DEBUG_ERR("%s(): skb_is_nonlinear!!\n", __FUNCTION__);
+					DEBUG_ERR("%s(): skb_is_nonlinear!!\n", __func__);
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 18))
 				res = skb_linearize(skb, GFP_ATOMIC);
@@ -3743,7 +3743,7 @@ static int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 
 					}
 					/* we just print warning message and let it go */
-					/* DEBUG_WARN("%s()-%d: nat25_db_handle INSERT Warning!\n", __FUNCTION__, __LINE__); */
+					/* DEBUG_WARN("%s()-%d: nat25_db_handle INSERT Warning!\n", __func__, __LINE__); */
 					/* return -1; */ /* return -1 will cause system crash on 2011/08/30! */
 					return 0;
 				}
@@ -4023,7 +4023,7 @@ s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
 
 	if (rtw_get_passing_time_ms(start) > 2000) {
 		if (drop_cnt)
-			RTW_INFO("DBG_TX_DROP_FRAME %s no more pxmitframe, drop_cnt:%u\n", __FUNCTION__, drop_cnt);
+			RTW_INFO("DBG_TX_DROP_FRAME %s no more pxmitframe, drop_cnt:%u\n", __func__, drop_cnt);
 		start = rtw_get_current_time();
 		drop_cnt = 0;
 	}
@@ -4074,7 +4074,7 @@ s32 rtw_xmit(_adapter *padapter, _pkt **ppkt)
 	if (res == _FAIL) {
 		/*RTW_INFO("%s-"ADPT_FMT" update attrib fail\n", __func__, ADPT_ARG(padapter));*/
 #ifdef DBG_TX_DROP_FRAME
-		RTW_INFO("DBG_TX_DROP_FRAME %s update attrib fail\n", __FUNCTION__);
+		RTW_INFO("DBG_TX_DROP_FRAME %s update attrib fail\n", __func__);
 #endif
 		rtw_free_xmitframe(pxmitpriv, pxmitframe);
 		return -1;
@@ -4829,7 +4829,7 @@ static struct xmit_buf *dequeue_pending_xmitbuf_under_survey(
 			if (pxmitframe)
 				type = get_frame_sub_type(pxmitbuf->pbuf + TXDESC_SIZE + pxmitframe->pkt_offset * PACKET_OFFSET_SZ);
 			else
-				RTW_INFO("%s, !!!ERROR!!! For USB, TODO ITEM\n", __FUNCTION__);
+				RTW_INFO("%s, !!!ERROR!!! For USB, TODO ITEM\n", __func__);
 #else
 			type = get_frame_sub_type(pxmitbuf->pbuf + TXDESC_OFFSET);
 #endif
@@ -5013,7 +5013,7 @@ void rtw_amsdu_be_timeout_handler(void *FunctionContext)
 	adapter->xmitpriv.amsdu_be_timeout = RTW_AMSDU_TIMER_TIMEOUT;
 
 	if (printk_ratelimit())
-		RTW_INFO("%s Timeout!\n",__FUNCTION__);
+		RTW_INFO("%s Timeout!\n",__func__);
 
 	tasklet_hi_schedule(&adapter->xmitpriv.xmit_tasklet);
 }

@@ -30,7 +30,7 @@ void interrupt_handler_8188eu(_adapter *padapter, u16 pkt_len, u8 *pbuf)
 	struct reportpwrstate_parm pwr_rpt;
 
 	if (pkt_len != INTERRUPT_MSG_FORMAT_LEN) {
-		RTW_INFO("%s Invalid interrupt content length (%d)!\n", __FUNCTION__, pkt_len);
+		RTW_INFO("%s Invalid interrupt content length (%d)!\n", __func__, pkt_len);
 		return ;
 	}
 
@@ -48,7 +48,7 @@ void interrupt_handler_8188eu(_adapter *padapter, u16 pkt_len, u8 *pbuf)
 		hisr_ex = le32_to_cpu(hisr_ex);
 
 		if ((hisr != 0) || (hisr_ex != 0))
-			RTW_INFO("===> %s hisr:0x%08x ,hisr_ex:0x%08x\n", __FUNCTION__, hisr, hisr_ex);
+			RTW_INFO("===> %s hisr:0x%08x ,hisr_ex:0x%08x\n", __func__, hisr, hisr_ex);
 	}
 #endif
 
@@ -91,13 +91,13 @@ void interrupt_handler_8188eu(_adapter *padapter, u16 pkt_len, u8 *pbuf)
 
 #ifdef DBG_CONFIG_ERROR_DETECT_INT
 	if (pHalData->IntArray[1]  & IMR_TXERR_88E)
-		RTW_INFO("===> %s Tx Error Flag Interrupt Status\n", __FUNCTION__);
+		RTW_INFO("===> %s Tx Error Flag Interrupt Status\n", __func__);
 	if (pHalData->IntArray[1]  & IMR_RXERR_88E)
-		RTW_INFO("===> %s Rx Error Flag INT Status\n", __FUNCTION__);
+		RTW_INFO("===> %s Rx Error Flag INT Status\n", __func__);
 	if (pHalData->IntArray[1]  & IMR_TXFOVW_88E)
-		RTW_INFO("===> %s Transmit FIFO Overflow\n", __FUNCTION__);
+		RTW_INFO("===> %s Transmit FIFO Overflow\n", __func__);
 	if (pHalData->IntArray[1]  & IMR_RXFOVW_88E)
-		RTW_INFO("===> %s Receive FIFO Overflow\n", __FUNCTION__);
+		RTW_INFO("===> %s Receive FIFO Overflow\n", __func__);
 #endif/* DBG_CONFIG_ERROR_DETECT_INT */
 
 
@@ -148,7 +148,7 @@ int recvbuf2recvframe(PADAPTER padapter, void *ptr)
 
 		precvframe = rtw_alloc_recvframe(pfree_recv_queue);
 		if (precvframe == NULL) {
-			RTW_INFO("%s()-%d: rtw_alloc_recvframe() failed! RX Drop!\n", __FUNCTION__, __LINE__);
+			RTW_INFO("%s()-%d: rtw_alloc_recvframe() failed! RX Drop!\n", __func__, __LINE__);
 			goto _exit_recvbuf2recvframe;
 		}
 
@@ -161,7 +161,7 @@ int recvbuf2recvframe(PADAPTER padapter, void *ptr)
 		pattrib = &precvframe->u.hdr.attrib;
 
 		if ((padapter->registrypriv.mp_mode == 0) && ((pattrib->crc_err) || (pattrib->icv_err))) {
-			RTW_INFO("%s: RX Warning! crc_err=%d icv_err=%d, skip!\n", __FUNCTION__, pattrib->crc_err, pattrib->icv_err);
+			RTW_INFO("%s: RX Warning! crc_err=%d icv_err=%d, skip!\n", __func__, pattrib->crc_err, pattrib->icv_err);
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
 			goto _exit_recvbuf2recvframe;
 		}
@@ -171,7 +171,7 @@ int recvbuf2recvframe(PADAPTER padapter, void *ptr)
 			     pattrib->shift_sz + le16_to_cpu(pattrib->pkt_len);
 
 		if ((le16_to_cpu(pattrib->pkt_len) <= 0) || (pkt_offset > transfer_len)) {
-			RTW_INFO("%s()-%d: RX Warning!,pkt_len<=0 or pkt_offset> transfoer_len\n", __FUNCTION__, __LINE__);
+			RTW_INFO("%s()-%d: RX Warning!,pkt_len<=0 or pkt_offset> transfoer_len\n", __func__, __LINE__);
 			rtw_free_recvframe(precvframe, pfree_recv_queue);
 			goto _exit_recvbuf2recvframe;
 		}
@@ -222,7 +222,7 @@ int recvbuf2recvframe(PADAPTER padapter, void *ptr)
 					le32_to_cpu(pattrib->MacIDValidEntry[0]),
 					le32_to_cpu(pattrib->MacIDValidEntry[1]));
 			} else if (pattrib->pkt_rpt_type == HIS_REPORT) {
-				/* RTW_INFO("%s , rx USB HISR\n",__FUNCTION__); */
+				/* RTW_INFO("%s , rx USB HISR\n",__func__); */
 #ifdef CONFIG_SUPPORT_USB_INT
 				interrupt_handler_8188eu(padapter, le16_to_cpu(pattrib->pkt_len), precvframe->u.hdr.rx_data);
 #endif

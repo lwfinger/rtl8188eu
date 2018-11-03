@@ -36,12 +36,12 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 
 	txdma_status = rtw_read32(padapter, REG_TXDMA_STATUS);
 	if (txdma_status != 0x00 && txdma_status != 0xeaeaeaea) {
-		RTW_INFO("%s REG_TXDMA_STATUS:0x%08x\n", __FUNCTION__, txdma_status);
+		RTW_INFO("%s REG_TXDMA_STATUS:0x%08x\n", __func__, txdma_status);
 		rtw_hal_sreset_reset(padapter);
 	}
 #ifdef CONFIG_USB_HCI
 	/* total xmit irp = 4 */
-	/* RTW_INFO("==>%s free_xmitbuf_cnt(%d),txirp_cnt(%d)\n",__FUNCTION__,pxmitpriv->free_xmitbuf_cnt,pxmitpriv->txirp_cnt); */
+	/* RTW_INFO("==>%s free_xmitbuf_cnt(%d),txirp_cnt(%d)\n",__func__,pxmitpriv->free_xmitbuf_cnt,pxmitpriv->txirp_cnt); */
 	/* if(pxmitpriv->txirp_cnt == NR_XMITBUFF+1) */
 	current_time = rtw_get_current_time();
 
@@ -59,7 +59,7 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 
 					/* padapter->Wifi_Error_Status = WIFI_TX_HANG; */
 					ability = rtw_phydm_ability_get(padapter);
-					RTW_INFO("%s tx hang %s\n", __FUNCTION__,
+					RTW_INFO("%s tx hang %s\n", __func__,
 						(ability & ODM_BB_ADAPTIVITY) ? "ODM_BB_ADAPTIVITY" : "");
 
 					if (!(ability & ODM_BB_ADAPTIVITY))
@@ -86,15 +86,15 @@ void rtl8188e_sreset_linked_status_check(_adapter *padapter)
 	u8 fw_status = 0;
 	rx_dma_status = rtw_read32(padapter, REG_RXDMA_STATUS);
 	if (rx_dma_status != 0x00) {
-		RTW_INFO("%s REG_RXDMA_STATUS:0x%08x\n", __FUNCTION__, rx_dma_status);
+		RTW_INFO("%s REG_RXDMA_STATUS:0x%08x\n", __func__, rx_dma_status);
 		rtw_write32(padapter, REG_RXDMA_STATUS, rx_dma_status);
 	}
 	fw_status = rtw_read8(padapter, REG_FMETHR);
 	if (fw_status != 0x00) {
 		if (fw_status == 1)
-			RTW_INFO("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!\n", __FUNCTION__, fw_status);
+			RTW_INFO("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!\n", __func__, fw_status);
 		else if (fw_status == 2)
-			RTW_INFO("%s REG_FW_STATUS (0x%02x), Condition_No_Match !!\n", __FUNCTION__, fw_status);
+			RTW_INFO("%s REG_FW_STATUS (0x%02x), Condition_No_Match !!\n", __func__, fw_status);
 	}
 #if 0
 	u32 regc50, regc58, reg824, reg800;
@@ -106,7 +106,7 @@ void rtl8188e_sreset_linked_status_check(_adapter *padapter)
 	    ((regc58 & 0xFFFFFF00) != 0x69543400) ||
 	    (((reg824 & 0xFFFFFF00) != 0x00390000) && (((reg824 & 0xFFFFFF00) != 0x80390000))) ||
 	    (((reg800 & 0xFFFFFF00) != 0x03040000) && ((reg800 & 0xFFFFFF00) != 0x83040000))) {
-		RTW_INFO("%s regc50:0x%08x, regc58:0x%08x, reg824:0x%08x, reg800:0x%08x,\n", __FUNCTION__,
+		RTW_INFO("%s regc50:0x%08x, regc58:0x%08x, reg824:0x%08x, reg800:0x%08x,\n", __func__,
 			 regc50, regc58, reg824, reg800);
 		rtw_hal_sreset_reset(padapter);
 	}

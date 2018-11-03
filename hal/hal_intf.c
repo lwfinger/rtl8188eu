@@ -309,7 +309,7 @@ u8 rtw_hal_check_ips_status(_adapter *padapter)
 	if (padapter->hal_func.check_ips_status)
 		val = padapter->hal_func.check_ips_status(padapter);
 	else
-		RTW_INFO("%s: hal_func.check_ips_status is NULL!\n", __FUNCTION__);
+		RTW_INFO("%s: hal_func.check_ips_status is NULL!\n", __func__);
 
 	return val;
 }
@@ -1096,7 +1096,7 @@ bool rtw_hal_rfkill_poll(_adapter *adapter, u8 *valid)
 #endif
 
 #define rtw_hal_error_msg(ops_fun)		\
-	RTW_PRINT("### %s - Error : Please hook hal_func.%s ###\n", __FUNCTION__, ops_fun)
+	RTW_PRINT("### %s - Error : Please hook hal_func.%s ###\n", __func__, ops_fun)
 
 u8 rtw_hal_ops_check(_adapter *padapter)
 {

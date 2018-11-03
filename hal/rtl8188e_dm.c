@@ -171,7 +171,7 @@ dm_InterruptMigration(
 
 	/* Update current settings. */
 	if (bCurrentIntMt != IntMtToSet) {
-		RTW_INFO("%s(): Update interrrupt migration(%d)\n", __FUNCTION__, IntMtToSet);
+		RTW_INFO("%s(): Update interrrupt migration(%d)\n", __func__, IntMtToSet);
 		if (IntMtToSet) {
 			/*  */
 			/* <Roger_Notes> Set interrrupt migration timer and corresponging Tx/Rx counter. */
@@ -189,7 +189,7 @@ dm_InterruptMigration(
 
 #if 0
 	if (bCurrentACIntDisable != ACIntToSet) {
-		RTW_INFO("%s(): Update AC interrrupt(%d)\n", __FUNCTION__, ACIntToSet);
+		RTW_INFO("%s(): Update AC interrrupt(%d)\n", __func__, ACIntToSet);
 		if (ACIntToSet) { /*  Disable four ACs interrupts. */
 			/* */
 			/*  <Roger_Notes> Disable VO, VI, BE and BK four AC interrupts to gain more efficient CPU utilization. */

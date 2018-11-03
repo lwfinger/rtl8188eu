@@ -715,7 +715,7 @@ void set_channel_bwmode(_adapter *padapter, unsigned char channel, unsigned char
 #endif
 
 	if (padapter->bNotifyChannelChange)
-		RTW_INFO("[%s] ch = %d, offset = %d, bwmode = %d\n", __FUNCTION__, channel, channel_offset, bwmode);
+		RTW_INFO("[%s] ch = %d, offset = %d, bwmode = %d\n", __func__, channel, channel_offset, bwmode);
 
 	center_ch = rtw_get_center_ch(channel, bwmode, channel_offset);
 
@@ -2103,7 +2103,7 @@ void HTOnAssocRsp(_adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	RTW_INFO("%s\n", __FUNCTION__);
+	RTW_INFO("%s\n", __func__);
 
 	if ((pmlmeinfo->HT_info_enable) && (pmlmeinfo->HT_caps_enable))
 		pmlmeinfo->HT_enable = 1;
@@ -2162,7 +2162,7 @@ void HTOnAssocRsp(_adapter *padapter)
 		for (i = 0; i < 16; i++)
 			pmlmeinfo->HT_caps.HT_cap_element.MCS_rate[i] &= MCS_rate_1R[i];
 #endif
-		RTW_INFO("%s(): WLAN_HT_CAP_SM_PS_STATIC\n", __FUNCTION__);
+		RTW_INFO("%s(): WLAN_HT_CAP_SM_PS_STATIC\n", __func__);
 	}
 
 	/*  */

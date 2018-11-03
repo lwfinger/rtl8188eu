@@ -127,7 +127,7 @@ static s16 odm_inband_noise_monitor_n_series(struct PHY_DM_STRUCT	*p_dm_odm, u8 
 		/* printk("####### valid_done:%d #############\n",valid_done); */
 		if ((valid_done == max_rf_path) || (odm_get_progressing_time(p_dm_odm, start) > max_time)) {
 			for (rf_path = ODM_RF_PATH_A; rf_path < max_rf_path; rf_path++) {
-				/* printk("%s PATH_%d - sum = %d, VALID_CNT = %d\n",__FUNCTION__,rf_path,noise_data.sum[rf_path], noise_data.valid_cnt[rf_path]); */
+				/* printk("%s PATH_%d - sum = %d, VALID_CNT = %d\n",__func__,rf_path,noise_data.sum[rf_path], noise_data.valid_cnt[rf_path]); */
 				if (noise_data.valid_cnt[rf_path])
 					noise_data.sum[rf_path] /= noise_data.valid_cnt[rf_path];
 				else

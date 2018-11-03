@@ -853,7 +853,7 @@ struct mlme_priv {
 
 #define mlme_set_scan_to_timer(mlme, ms) \
 	do { \
-		/* RTW_INFO("%s set_scan_to_timer(%p, %d)\n", __FUNCTION__, (mlme), (ms)); */ \
+		/* RTW_INFO("%s set_scan_to_timer(%p, %d)\n", __func__, (mlme), (ms)); */ \
 		_set_timer(&(mlme)->scan_to_timer, (ms)); \
 	} while (0)
 
