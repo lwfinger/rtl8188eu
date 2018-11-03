@@ -272,27 +272,6 @@
 #define MACID_NUM_SW_LIMIT 32
 #define SEC_CAM_ENT_NUM_SW_LIMIT 32
 
-#if defined(CONFIG_RTL8812A) || defined(CONFIG_RTL8821A) || defined(CONFIG_RTL8814A)
-	#define CONFIG_IEEE80211_BAND_5GHZ
-#endif
-
-#if defined(CONFIG_WOWLAN) && (defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C))
-	#define CONFIG_WOW_PATTERN_HW_CAM
-#endif
-
-/*
-	Mark CONFIG_DEAUTH_BEFORE_CONNECT by Arvin 2015/07/20
-	If the failure of Wi-Fi connection is due to some irregular disconnection behavior (like unplug dongle,
-	power down etc.) in last time, we can unmark this flag to avoid some unpredictable response from AP.
-*/
-/*#define CONFIG_DEAUTH_BEFORE_CONNECT */
-
-/*#define CONFIG_WEXT_DONT_JOIN_BYSSID	*/
-/* #include <rtl871x_byteorder.h> */
-
-
-/*#define CONFIG_DOSCAN_IN_BUSYTRAFFIC	*/
-
 /*Don't release SDIO irq in suspend/resume procedure*/
 #define CONFIG_RTW_SDIO_KEEP_IRQ	0
 

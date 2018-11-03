@@ -124,38 +124,9 @@ typedef enum _RX_AGG_MODE {
 #endif /* RTW_RX_AGGREGATION */
 
 /* E-Fuse */
-#ifdef CONFIG_RTL8188E
-	#define EFUSE_MAP_SIZE	512
-#endif
-#if defined(CONFIG_RTL8812A) || defined(CONFIG_RTL8821A) || defined(CONFIG_RTL8814A)
-	#define EFUSE_MAP_SIZE	512
-#endif
-#ifdef CONFIG_RTL8192E
-	#define EFUSE_MAP_SIZE	512
-#endif
-#ifdef CONFIG_RTL8723B
-	#define EFUSE_MAP_SIZE	512
-#endif
-#ifdef CONFIG_RTL8814A
-	#define EFUSE_MAP_SIZE	512
-#endif
-#ifdef CONFIG_RTL8703B
-	#define EFUSE_MAP_SIZE	512
-#endif
-#ifdef CONFIG_RTL8723D
-	#define EFUSE_MAP_SIZE	512
-#endif
-#ifdef CONFIG_RTL8188F
-	#define EFUSE_MAP_SIZE	512
-#endif
+#define EFUSE_MAP_SIZE	512
 
-#if defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)
-	#define EFUSE_MAX_SIZE	1024
-#elif defined(CONFIG_RTL8188E) || defined(CONFIG_RTL8188F) || defined(CONFIG_RTL8703B)
-	#define EFUSE_MAX_SIZE	256
-#else
-	#define EFUSE_MAX_SIZE	512
-#endif
+#define EFUSE_MAX_SIZE	256
 /* end of E-Fuse */
 
 #define Mac_OFDM_OK			0x00000000
@@ -168,19 +139,6 @@ typedef enum _RX_AGG_MODE {
 #define Mac_HT_Fail			0x70000000
 #define Mac_HT_FasleAlarm	0x90000000
 #define Mac_DropPacket		0xA0000000
-
-#ifdef CONFIG_RF_POWER_TRIM
-#if defined(CONFIG_RTL8723B)
-	#define REG_RF_BB_GAIN_OFFSET	0x7f
-	#define RF_GAIN_OFFSET_MASK		0xfffff
-#elif defined(CONFIG_RTL8188E)
-	#define REG_RF_BB_GAIN_OFFSET	0x55
-	#define RF_GAIN_OFFSET_MASK		0xfffff
-#else
-	#define REG_RF_BB_GAIN_OFFSET	0x55
-	#define RF_GAIN_OFFSET_MASK		0xfffff
-#endif /* CONFIG_RTL8723B */
-#endif /*CONFIG_RF_POWER_TRIM*/
 
 /* For store initial value of BB register */
 typedef struct _BB_INIT_REGISTER {
@@ -386,11 +344,6 @@ typedef struct hal_com_data {
 	struct kfree_data_t kfree_data;
 #endif /*CONFIG_RF_POWER_TRIM*/
 
-#if defined(CONFIG_RTL8723B) || defined(CONFIG_RTL8703B) || \
-	defined(CONFIG_RTL8723D)
-	u8	adjuseVoltageVal;
-	u8	need_restore;
-#endif
 	u8	EfuseUsedPercentage;
 	u16	EfuseUsedBytes;
 	/*u8		EfuseMap[2][HWSET_MAX_SIZE_JAGUAR];*/
@@ -617,17 +570,6 @@ typedef struct hal_com_data {
 
 #ifndef RTW_HALMAC
 	u32			sdio_tx_max_len[SDIO_MAX_TX_QUEUE];/* H, N, L, used for sdio tx aggregation max length per queue */
-#else
-#ifdef CONFIG_RTL8821C
-	u16			tx_high_page;
-	u16			tx_low_page;
-	u16			tx_normal_page;
-	u16			tx_extra_page;
-	u16			tx_pub_page;
-	u16			max_oqt_page;
-	u32			max_xmit_size_vovi;
-	u32			max_xmit_size_bebk;
-#endif
 #endif /* !RTW_HALMAC */
 #endif /* CONFIG_SDIO_HCI */
 
@@ -691,15 +633,6 @@ typedef struct hal_com_data {
 	/* For bluetooth co-existance */
 	BT_COEXIST		bt_coexist;
 #endif /* CONFIG_BT_COEXIST */
-
-#if defined(CONFIG_RTL8723B) || defined(CONFIG_RTL8703B) \
-	|| defined(CONFIG_RTL8188F) || defined(CONFIG_RTL8723D)
-#ifndef CONFIG_PCI_HCI	/* mutual exclusive with PCI -- so they're SDIO and GSPI */
-	/* Interrupt relatd register information. */
-	u32			SysIntrStatus;
-	u32			SysIntrMask;
-#endif
-#endif /*endif CONFIG_RTL8723B	*/
 
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
 	char	para_file_buf[MAX_PARA_FILE_BUF_LEN];

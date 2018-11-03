@@ -23,8 +23,6 @@
 
 #define C2H_MEM_SZ (16*1024)
 
-#ifndef CONFIG_RTL8711FW
-
 #define FREE_CMDOBJ_SZ	128
 
 #define MAX_CMDSZ	1024
@@ -204,10 +202,6 @@ u8 p2p_roch_cmd(_adapter *adapter
 u8 p2p_cancel_roch_cmd(_adapter *adapter, u64 cookie, struct wireless_dev *wdev, u8 flags);
 #endif /* CONFIG_IOCTL_CFG80211 */
 #endif /* CONFIG_P2P */
-
-#else
-/* #include <ieee80211.h> */
-#endif	/* CONFIG_RTL8711FW */
 
 enum rtw_drvextra_cmd_id {
 	NONE_WK_CID,

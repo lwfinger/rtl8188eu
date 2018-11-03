@@ -217,8 +217,6 @@ struct rx_pkt_attrib	{
 
 #ifdef CONFIG_TRX_BD_ARCH
 	#define RX_WIFI_INFO_SIZE	24
-#elif (defined(CONFIG_RTL8192E) || defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B)) && defined(CONFIG_PCI_HCI)
-	#define RXBD_SIZE	sizeof(struct recv_stat)
 #endif
 
 #define RXDESC_SIZE	24
@@ -240,14 +238,9 @@ struct recv_stat {
 #else
 struct recv_stat {
 	__le32 rxdw0;
-
 	__le32 rxdw1;
-
-#if !((defined(CONFIG_RTL8192E) || defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)) && defined(CONFIG_PCI_HCI))  /* exclude 8192ee, 8814ae, 8822be, 8821ce */
 	__le32 rxdw2;
-
 	__le32 rxdw3;
-#endif
 
 #ifndef BUF_DESC_ARCH
 	__le32 rxdw4;
