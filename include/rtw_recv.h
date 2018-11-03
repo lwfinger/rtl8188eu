@@ -23,13 +23,7 @@
 #ifdef CONFIG_SINGLE_RECV_BUF
 	#define NR_RECVBUFF (1)
 #else
-	#if defined(CONFIG_GSPI_HCI)
-		#define NR_RECVBUFF (32)
-	#elif defined(CONFIG_SDIO_HCI)
 		#define NR_RECVBUFF (8)
-	#else
-		#define NR_RECVBUFF (8)
-	#endif
 #endif /* CONFIG_SINGLE_RECV_BUF */
 #ifdef CONFIG_PREALLOC_RX_SKB_BUFFER
 	#define NR_PREALLOC_RECV_SKB (rtw_rtkm_get_nr_recv_skb()>>1)
@@ -253,27 +247,6 @@ struct recv_stat {
 
 #define EOR BIT(30)
 
-#ifdef CONFIG_PCI_HCI
-#define PCI_MAX_RX_QUEUE		1/* MSDU packet queue, Rx Command Queue */
-#define PCI_MAX_RX_COUNT		128
-#ifdef CONFIG_TRX_BD_ARCH
-#define RX_BD_NUM				PCI_MAX_RX_COUNT	/* alias */
-#endif
-
-struct rtw_rx_ring {
-#ifdef CONFIG_TRX_BD_ARCH
-	struct rx_buf_desc	*buf_desc;
-#else
-	struct recv_stat	*desc;
-#endif
-	dma_addr_t		dma;
-	unsigned int		idx;
-	struct sk_buff	*rx_buf[PCI_MAX_RX_COUNT];
-};
-#endif
-
-
-
 /*
 accesser of recv_priv: rtw_recv_entry(dispatch / passive level); recv_thread(passive) ; returnpkt(dispatch)
 ; halt(passive) ;
@@ -312,7 +285,6 @@ struct recv_priv {
 	uint  rx_smallpacket_crcerr;
 	uint  rx_middlepacket_crcerr;
 
-#ifdef CONFIG_USB_HCI
 	/* u8 *pallocated_urb_buf; */
 	_sema allrxreturnevt;
 	uint	ff_hwaddr;
@@ -324,7 +296,6 @@ struct recv_priv {
 	u8	*int_in_buf;
 #endif /* CONFIG_USB_INTERRUPT_IN_PIPE */
 
-#endif
 	struct tasklet_struct irq_prepare_beacon_tasklet;
 	struct tasklet_struct recv_tasklet;
 	struct sk_buff_head free_recv_skb_queue;
@@ -342,16 +313,7 @@ struct recv_priv {
 	_queue	free_recv_buf_queue;
 	u32	free_recv_buf_queue_cnt;
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI) || defined(CONFIG_USB_HCI)
 	_queue	recv_buf_pending_queue;
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	/* Rx */
-	struct rtw_rx_ring	rx_ring[PCI_MAX_RX_QUEUE];
-	int rxringcount;	/* size should be PCI_MAX_RX_QUEUE */
-	u16	rxbuffersize;
-#endif
 
 	/* For display the phy informatiom */
 	u8 is_signal_dbg;	/* for debug */
@@ -422,16 +384,12 @@ struct recv_buf {
 	u8	*ptail;
 	u8	*pend;
 
-#ifdef CONFIG_USB_HCI
-
 	PURB	purb;
 	dma_addr_t dma_transfer_addr;	/* (in) dma addr for transfer_buffer */
 	u32 alloc_sz;
 
 	u8  irp_pending;
 	int  transfer_len;
-
-#endif
 
 	_pkt	*pskb;
 };

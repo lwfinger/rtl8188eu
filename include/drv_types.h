@@ -820,11 +820,6 @@ struct halmacpriv {
 
 	/* For asynchronous functions */
 	struct halmac_indicator *indicator;
-
-#ifdef CONFIG_SDIO_HCI
-	/* Store hardware tx queue page number setting */
-	u16 txpage[HW_QUEUE_ENTRY];
-#endif /* CONFIG_SDIO_HCI */
 };
 #endif /* RTW_HALMAC */
 
@@ -932,8 +927,6 @@ struct dvobj_priv {
 
 	/*-------- below is for USB INTERFACE --------*/
 
-#ifdef CONFIG_USB_HCI
-
 	u8	usb_speed; /* 1.1, 2.0 or 3.0 */
 	u8	nr_endpoint;
 	u8	RtNumInPipes;
@@ -956,55 +949,7 @@ struct dvobj_priv {
 	struct usb_interface *pusbintf;
 	struct usb_device *pusbdev;
 
-#endif/* CONFIG_USB_HCI */
-
 	/*-------- below is for PCIE INTERFACE --------*/
-
-#ifdef CONFIG_PCI_HCI
-
-	struct pci_dev *ppcidev;
-
-	/* PCI MEM map */
-	unsigned long	pci_mem_end;	/* shared mem end	*/
-	unsigned long	pci_mem_start;	/* shared mem start	*/
-
-	/* PCI IO map */
-	unsigned long	pci_base_addr;	/* device I/O address	*/
-
-#ifdef RTK_129X_PLATFORM
-	unsigned long	ctrl_start;
-	/* PCI MASK addr */
-	unsigned long	mask_addr;
-
-	/* PCI TRANSLATE addr */
-	unsigned long	tran_addr;
-
-	_lock   io_reg_lock;
-#endif
-
-	/* PciBridge */
-	struct pci_priv	pcipriv;
-
-	unsigned int irq; /* get from pci_dev.irq, store to net_device.irq */
-	u16	irqline;
-	u8	irq_enabled;
-	RT_ISR_CONTENT	isr_content;
-	_lock	irq_th_lock;
-
-	/* ASPM */
-	u8	const_pci_aspm;
-	u8	const_amdpci_aspm;
-	u8	const_hwsw_rfoff_d3;
-	u8	const_support_pciaspm;
-	/* pci-e bridge */
-	u8	const_hostpci_aspm_setting;
-	/* pci-e device */
-	u8	const_devicepci_aspm_setting;
-	u8	b_support_aspm; /* If it supports ASPM, Offset[560h] = 0x40, otherwise Offset[560h] = 0x00. */
-	u8	b_support_backdoor;
-	u8	bdma64;
-
-#endif/* CONFIG_PCI_HCI */
 
 #ifdef CONFIG_MCC_MODE
 	struct mcc_obj_priv mcc_objpriv;
@@ -1058,18 +1003,7 @@ static inline void dev_clr_drv_stopped(struct dvobj_priv *dvobj)
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {
 	/* todo: get interface type from dvobj and the return the dev accordingly */
-#ifdef CONFIG_USB_HCI
 	return &dvobj->pusbintf->dev;
-#endif
-#ifdef CONFIG_SDIO_HCI
-	return &dvobj->intf_data.func->dev;
-#endif
-#ifdef CONFIG_GSPI_HCI
-	return &dvobj->intf_data.func->dev;
-#endif
-#ifdef CONFIG_PCI_HCI
-	return &dvobj->ppcidev->dev;
-#endif
 }
 
 _adapter *dvobj_get_port0_adapter(struct dvobj_priv *dvobj);
@@ -1485,28 +1419,8 @@ int recvbuf2recvframe(PADAPTER padapter, void *ptr);
 #endif
 
 /* HCI Related header file */
-#ifdef CONFIG_USB_HCI
 	#include <usb_osintf.h>
 	#include <usb_ops.h>
 	#include <usb_hal.h>
-#endif
-
-#ifdef CONFIG_SDIO_HCI
-	#include <sdio_osintf.h>
-	#include <sdio_ops.h>
-	#include <sdio_hal.h>
-#endif
-
-#ifdef CONFIG_GSPI_HCI
-	#include <gspi_osintf.h>
-	#include <gspi_ops.h>
-	#include <gspi_hal.h>
-#endif
-
-#ifdef CONFIG_PCI_HCI
-	#include <pci_osintf.h>
-	#include <pci_ops.h>
-	#include <pci_hal.h>
-#endif
 
 #endif /* __DRV_TYPES_H__ */

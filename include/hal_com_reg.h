@@ -1727,12 +1727,8 @@ Current IOREG MAP
 #define SDIO_TX_FREE_PG_QUEUE			4	/* The number of Tx FIFO free page */
 #define SDIO_TX_FIFO_PAGE_SZ			128
 
-#ifdef CONFIG_SDIO_HCI
-	#define MAX_TX_AGG_PACKET_NUMBER	0x8
-#else
 	#define MAX_TX_AGG_PACKET_NUMBER	0xFF
 	#define MAX_TX_AGG_PACKET_NUMBER_8812	64
-#endif
 
 /* -----------------------------------------------------
  *
@@ -1793,11 +1789,7 @@ Current IOREG MAP
  * General definitions
  * ******************************************************** */
 
-#ifdef CONFIG_USB_HCI
 	#define LAST_ENTRY_OF_TX_PKT_BUFFER_8188E(__Adapter)	(175)
-#else
-	#define LAST_ENTRY_OF_TX_PKT_BUFFER_8188E(__Adapter)	(IS_VENDOR_8188E_I_CUT_SERIES(__Adapter) ? 255 : 175)
-#endif
 #define LAST_ENTRY_OF_TX_PKT_BUFFER_8812			255
 #define LAST_ENTRY_OF_TX_PKT_BUFFER_8723B		255
 #define LAST_ENTRY_OF_TX_PKT_BUFFER_8192C		255

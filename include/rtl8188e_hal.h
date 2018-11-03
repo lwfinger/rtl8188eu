@@ -115,11 +115,7 @@ typedef struct _RT_8188E_FIRMWARE_HDR {
 
 
 /* #define MAX_RX_DMA_BUFFER_SIZE_88E	      0x2400 */ /* 9k for 88E nornal chip , */ /* MaxRxBuff=10k-max(TxReportSize(64*8), WOLPattern(16*24)) */
-#ifdef CONFIG_USB_HCI
 	#define RX_DMA_SIZE_88E(__Adapter) 0x2800
-#else
-	#define RX_DMA_SIZE_88E(__Adapter) ((!IS_VENDOR_8188E_I_CUT_SERIES(__Adapter))?0x2800:0x4000)
-#endif
 
 #ifdef CONFIG_WOWLAN
 	#define RESV_FMWF	(WKFMCAM_SIZE * MAX_WKFM_CAM_NUM) /* 16 entries, for each is 24 bytes*/
@@ -152,11 +148,7 @@ Tx FIFO Size : previous CUT:22K /I_CUT after:32KB
 Tx page Size : 128B
 Total page numbers : 176(0xB0) / 256(0x100)
 */
-#ifdef CONFIG_USB_HCI
 	#define TOTAL_PAGE_NUMBER_88E(_Adapter) (0xB0 - 1)
-#else
-	#define TOTAL_PAGE_NUMBER_88E(_Adapter)	((IS_VENDOR_8188E_I_CUT_SERIES(_Adapter)?0x100:0xB0) - 1)/* must reserved 1 page for dma issue */
-#endif
 #define TX_TOTAL_PAGE_NUMBER_88E(_Adapter)	(TOTAL_PAGE_NUMBER_88E(_Adapter) - BCNQ_PAGE_NUM_88E - WOWLAN_PAGE_NUM_88E)
 #define TX_PAGE_BOUNDARY_88E(_Adapter)		(TX_TOTAL_PAGE_NUMBER_88E(_Adapter) + 1) /* beacon header start address */
 
@@ -233,22 +225,6 @@ Total page numbers : 176(0xB0) / 256(0x100)
 /* #define IS_MULTI_FUNC_CHIP(_Adapter)	(((((PHAL_DATA_TYPE)(_Adapter->HalData))->MultiFunc) & (RT_MULTI_FUNC_BT|RT_MULTI_FUNC_GPS)) ? _TRUE : _FALSE) */
 
 /* #define RT_IS_FUNC_DISABLED(__pAdapter, __FuncBits) ( (__pAdapter)->DisabledFunctions & (__FuncBits) ) */
-
-#ifdef CONFIG_PCI_HCI
-	/* according to the define in the rtw_xmit.h, rtw_recv.h */
-	#define TX_DESC_NUM_8188EE  TXDESC_NUM   /* 128 */
-	#ifdef CONFIG_CONCURRENT_MODE
-		/*#define BE_QUEUE_TX_DESC_NUM_8188EE  (TXDESC_NUM<<1)*/		/* 256 */
-		#define BE_QUEUE_TX_DESC_NUM_8188EE  ((TXDESC_NUM<<1)+(TXDESC_NUM>>1))    /* 320 */
-		/*#define BE_QUEUE_TX_DESC_NUM_8188EE  ((TXDESC_NUM<<1)+TXDESC_NUM)*/    /* 384 */
-	#else
-		#define BE_QUEUE_TX_DESC_NUM_8188EE  TXDESC_NUM /* 128 */
-		/*#define BE_QUEUE_TX_DESC_NUM_8188EE  (TXDESC_NUM+(TXDESC_NUM>>1)) */ /* 192 */
-	#endif
-
-	void InterruptRecognized8188EE(PADAPTER Adapter, PRT_ISR_CONTENT pIsrContent);
-	void UpdateInterruptMask8188EE(PADAPTER Adapter, u32 AddMSR, u32 AddMSR1, u32 RemoveMSR, u32 RemoveMSR1);
-#endif /* CONFIG_PCI_HCI */
 
 /* rtl8188e_hal_init.c */
 
