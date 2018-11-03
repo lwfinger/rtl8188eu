@@ -239,29 +239,6 @@ void mac_reg_dump(void *sel, _adapter *adapter)
 		if ((j++) % 4 == 0)
 			_RTW_PRINT_SEL(sel, "\n");
 	}
-
-#ifdef CONFIG_RTL8814A
-	{
-		for (i = 0x1000; i < 0x1650; i += 4) {
-			if (j % 4 == 1)
-				RTW_PRINT_SEL(sel, "0x%04x", i);
-			_RTW_PRINT_SEL(sel, " 0x%08x ", rtw_read32(adapter, i));
-			if ((j++) % 4 == 0)
-				_RTW_PRINT_SEL(sel, "\n");
-		}
-	}
-#endif /* CONFIG_RTL8814A */
-
-
-#if defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)
-	for (i = 0x1000; i < 0x1800; i += 4) {
-		if (j % 4 == 1)
-			RTW_PRINT_SEL(sel, "0x%04x", i);
-		_RTW_PRINT_SEL(sel, " 0x%08x ", rtw_read32(adapter, i));
-		if ((j++) % 4 == 0)
-			_RTW_PRINT_SEL(sel, "\n");
-	}
-#endif /* CONFIG_RTL8822B */
 }
 
 void bb_reg_dump(void *sel, _adapter *adapter)
@@ -276,16 +253,6 @@ void bb_reg_dump(void *sel, _adapter *adapter)
 		if ((j++) % 4 == 0)
 			_RTW_PRINT_SEL(sel, "\n");
 	}
-
-#if defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)
-	for (i = 0x1800; i < 0x2000; i += 4) {
-		if (j % 4 == 1)
-			RTW_PRINT_SEL(sel, "0x%04x", i);
-		_RTW_PRINT_SEL(sel, " 0x%08x ", rtw_read32(adapter, i));
-		if ((j++) % 4 == 0)
-			_RTW_PRINT_SEL(sel, "\n");
-	}
-#endif /* CONFIG_RTL8822B */
 }
 
 void bb_reg_dump_ex(void *sel, _adapter *adapter)
@@ -298,14 +265,6 @@ void bb_reg_dump_ex(void *sel, _adapter *adapter)
 		_RTW_PRINT_SEL(sel, " 0x%08x ", rtw_read32(adapter, i));
 		_RTW_PRINT_SEL(sel, "\n");
 	}
-
-#if defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)
-	for (i = 0x1800; i < 0x2000; i += 4) {
-		RTW_PRINT_SEL(sel, "0x%04x", i);
-		_RTW_PRINT_SEL(sel, " 0x%08x ", rtw_read32(adapter, i));
-		_RTW_PRINT_SEL(sel, "\n");
-	}
-#endif /* CONFIG_RTL8822B */
 }
 
 void rf_reg_dump(void *sel, _adapter *adapter)
@@ -2512,27 +2471,8 @@ int proc_get_mac_rptbuf(struct seq_file *m, void *v)
 	u16 mac_id;
 	u32 shcut_addr = 0;
 	u32 read_addr = 0;
-#ifdef CONFIG_RTL8814A
-	RTW_PRINT_SEL(m, "TX ShortCut:\n");
-	for (mac_id = 0; mac_id < 64; mac_id++) {
-		rtw_write16(padapter, 0x140, 0x662 | ((mac_id & BIT5) >> 5));
-		shcut_addr = 0x8000;
-		shcut_addr = shcut_addr | ((mac_id & 0x1f) << 7);
-		RTW_PRINT_SEL(m, "mac_id=%d, 0x140=%x =>\n", mac_id, 0x662 | ((mac_id & BIT5) >> 5));
-		for (i = 0; i < 30; i++) {
-			read_addr = 0;
-			read_addr = shcut_addr | (i << 2);
-			RTW_PRINT_SEL(m, "i=%02d: MAC_%04x= %08x ", i, read_addr, rtw_read32(padapter, read_addr));
-			if (!((i + 1) % 4))
-				RTW_PRINT_SEL(m, "\n");
-			if (i == 29)
-				RTW_PRINT_SEL(m, "\n");
-		}
-	}
-#endif /* CONFIG_RTL8814A */
 	return 0;
 }
-
 
 int proc_get_rx_ampdu(struct seq_file *m, void *v)
 {
@@ -5161,13 +5101,7 @@ int proc_get_ack_timeout(struct seq_file *m, void *v)
 
 	ack_timeout_val = rtw_read8(padapter, REG_ACKTO);
 
-#ifdef CONFIG_RTL8821C
-	ack_timeout_val_cck = rtw_read8(padapter, REG_ACKTO_CCK_8821C);
-	RTW_PRINT_SEL(m, "Current CCK packet ACK Timeout = %d us (0x%x).\n", ack_timeout_val_cck, ack_timeout_val_cck);
-	RTW_PRINT_SEL(m, "Current non-CCK packet ACK Timeout = %d us (0x%x).\n", ack_timeout_val, ack_timeout_val);
-#else
 	RTW_PRINT_SEL(m, "Current ACK Timeout = %d us (0x%x).\n", ack_timeout_val, ack_timeout_val);
-#endif
 
 	return 0;
 }
@@ -5187,28 +5121,14 @@ ssize_t proc_set_ack_timeout(struct file *file, const char __user *buffer, size_
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
 		int num = sscanf(tmp, "%u %u", &ack_timeout_ms, &ack_timeout_ms_cck);
 
-#ifdef CONFIG_RTL8821C
-		if (num < 2) {
-			RTW_INFO(FUNC_ADPT_FMT ": input parameters < 2\n", FUNC_ADPT_ARG(padapter));
-			return -EINVAL;
-		}
-#else
 		if (num < 1) {
 			RTW_INFO(FUNC_ADPT_FMT ": input parameters < 1\n", FUNC_ADPT_ARG(padapter));
 			return -EINVAL;
 		}
-#endif
 		/* This register sets the Ack time out value after Tx unicast packet. It is in units of us. */
 		rtw_write8(padapter, REG_ACKTO, (u8)ack_timeout_ms);
 
-#ifdef CONFIG_RTL8821C
-		/* This register sets the Ack time out value after Tx unicast CCK packet. It is in units of us. */
-		rtw_write8(padapter, REG_ACKTO_CCK_8821C, (u8)ack_timeout_ms_cck);
-		RTW_INFO("Set CCK packet ACK Timeout to %d us.\n", ack_timeout_ms_cck);
-		RTW_INFO("Set non-CCK packet ACK Timeout to %d us.\n", ack_timeout_ms);
-#else
 		RTW_INFO("Set ACK Timeout to %d us.\n", ack_timeout_ms);
-#endif
 	}
 
 	return count;

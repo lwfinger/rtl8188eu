@@ -1189,10 +1189,6 @@ NDIS_STATUS oid_rt_set_power_down_hdl(struct oid_par_priv *poid_par_priv)
 	_irqlevel_changed_(&oldirql, LOWER);
 
 	bpwrup = *(u8 *)poid_par_priv->information_buf;
-	/* CALL  the power_down function */
-#if defined(CONFIG_RTL8712) /* Linux MP insmod unknown symbol */
-	dev_power_down(padapter, bpwrup);
-#endif
 	_irqlevel_changed_(&oldirql, RAISE);
 
 	return status;

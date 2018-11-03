@@ -464,14 +464,6 @@ u8 rtw_btcoex_get_pg_rfe_type(PADAPTER padapter)
 
 u8 rtw_btcoex_is_tfbga_package_type(PADAPTER padapter)
 {
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-
-#ifdef CONFIG_RTL8723B
-	if ((pHalData->PackageType == PACKAGE_TFBGA79) || (pHalData->PackageType == PACKAGE_TFBGA80)
-	    || (pHalData->PackageType == PACKAGE_TFBGA90))
-		return _TRUE;
-#endif
-
 	return _FALSE;
 }
 
