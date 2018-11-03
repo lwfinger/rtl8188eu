@@ -108,11 +108,7 @@ static int rtw_uapsd_acbk_en = 0;
 static int rtw_uapsd_acbe_en = 0;
 static int rtw_uapsd_acvi_en = 0;
 static int rtw_uapsd_acvo_en = 0;
-#if defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)
-	static int rtw_pwrtrim_enable = 2; /* disable kfree , rename to power trim disable */
-#else
-	static int rtw_pwrtrim_enable = 0; /* Default Enalbe  power trim by efuse config */
-#endif
+static int rtw_pwrtrim_enable = 0; /* Default Enalbe  power trim by efuse config */
 
 static uint rtw_tx_bw_mode = 0x21;
 module_param(rtw_tx_bw_mode, uint, 0644);
@@ -126,11 +122,7 @@ int rtw_ht_enable = 1;
 int rtw_bw_mode = 0x21;
 int rtw_ampdu_enable = 1;/* for enable tx_ampdu , */ /* 0: disable, 0x1:enable */
 static int rtw_rx_stbc = 1;/* 0: disable, bit(0):enable 2.4g, bit(1):enable 5g, default is set to enable 2.4GHZ for IOT issue with bufflao's AP at 5GHZ */
-#if (defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B)) && defined(CONFIG_PCI_HCI)
-static int rtw_ampdu_amsdu = 2;/* 0: disabled, 1:enabled, 2:auto . There is an IOT issu with DLINK DIR-629 when the flag turn on */
-#else
 static int rtw_ampdu_amsdu = 0;/* 0: disabled, 1:enabled, 2:auto . There is an IOT issu with DLINK DIR-629 when the flag turn on */
-#endif
 /* Short GI support Bit Map
 * BIT0 - 20MHz, 0: non-support, 1: support
 * BIT1 - 40MHz, 0: non-support, 1: support
