@@ -997,10 +997,6 @@ odm_txpowertracking_callback_thermal_meter_jaguar_series(
 			delay_ms(200); /* frequency deviation */
 			phy_set_rf_reg(priv, RF_PATH_A, 0xB4, BIT(14), 0);
 			phy_set_rf_reg(priv, RF_PATH_A, 0x18, MASK20BITS, reg0x18);
-#ifdef CONFIG_RTL_8812_SUPPORT
-			if (GET_CHIP_VER(priv) == VERSION_8812E)
-				update_bbrf_val8812(priv, priv->pmib->dot11RFEntry.dot11channel);
-#endif
 			RTL_W8(0x522, 0x0);
 			priv->pshare->thermal_value_lck = thermal_value;
 		}

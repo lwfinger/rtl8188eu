@@ -535,7 +535,6 @@ odm_txpowertracking_thermal_meter_init(
 	if (p_dm_odm->mp_mode == false)
 		p_rf_calibrate_info->txpowertrack_control = true;
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-#ifdef CONFIG_RTL8188E
 	{
 		p_rf_calibrate_info->is_txpowertracking = _TRUE;
 		p_rf_calibrate_info->tx_powercount = 0;
@@ -546,32 +545,6 @@ odm_txpowertracking_thermal_meter_init(
 
 		MSG_8192C("p_dm_odm txpowertrack_control = %d\n", p_rf_calibrate_info->txpowertrack_control);
 	}
-#else
-	{
-		struct _ADAPTER		*adapter = p_dm_odm->adapter;
-		HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-		struct dm_priv	*pdmpriv = &p_hal_data->dmpriv;
-
-		pdmpriv->is_txpowertracking = _TRUE;
-		pdmpriv->tx_powercount = 0;
-		pdmpriv->is_txpowertracking_init = _FALSE;
-
-		if (p_dm_odm->mp_mode == false)
-			pdmpriv->txpowertrack_control = _TRUE;
-
-		MSG_8192C("pdmpriv->txpowertrack_control = %d\n", pdmpriv->txpowertrack_control);
-
-	}
-#endif
-#elif (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-#ifdef RTL8188E_SUPPORT
-	{
-		p_rf_calibrate_info->is_txpowertracking = _TRUE;
-		p_rf_calibrate_info->tx_powercount = 0;
-		p_rf_calibrate_info->is_txpowertracking_init = _FALSE;
-		p_rf_calibrate_info->txpowertrack_control = _TRUE;
-	}
-#endif
 #endif
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)

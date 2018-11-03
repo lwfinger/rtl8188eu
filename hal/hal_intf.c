@@ -825,9 +825,6 @@ exit:
 }
 #endif /* CONFIG_FW_C2H_PKT */
 
-#if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_RTL8723B)
-#include <rtw_bt_mp.h> /* for MPTBT_FwC2hBtMpCtrl */
-#endif
 s32 c2h_handler(_adapter *adapter, u8 id, u8 seq, u8 plen, u8 *payload)
 {
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
@@ -842,26 +839,20 @@ s32 c2h_handler(_adapter *adapter, u8 id, u8 seq, u8 plen, u8 *payload)
 	case C2H_FW_SCAN_COMPLETE:
 		RTW_INFO("[C2H], FW Scan Complete\n");
 		break;
-
 #ifdef CONFIG_BT_COEXIST
 	case C2H_BT_INFO:
 		rtw_btcoex_BtInfoNotify(adapter, plen, payload);
 		break;
 	case C2H_BT_MP_INFO:
-		#if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_RTL8723B)
-		MPTBT_FwC2hBtMpCtrl(adapter, payload, plen);
-		#endif
 		rtw_btcoex_BtMpRptNotify(adapter, plen, payload);
 		break;
 	case C2H_MAILBOX_STATUS:
 		RTW_INFO_DUMP("C2H_MAILBOX_STATUS: ", payload, plen);
 		break;
 #endif /* CONFIG_BT_COEXIST */
-
 	case C2H_IQK_FINISH:
 		c2h_iqk_offload(adapter, payload, plen);
 		break;
-
 #if defined(CONFIG_TDLS) && defined(CONFIG_TDLS_CH_SW)
 	case C2H_FW_CHNL_SWITCH_COMPLETE:
 		rtw_tdls_chsw_oper_done(adapter);
@@ -870,7 +861,6 @@ s32 c2h_handler(_adapter *adapter, u8 id, u8 seq, u8 plen, u8 *payload)
 		rtw_tdls_ch_sw_back_to_base_chnl(adapter);
 		break;
 #endif
-
 #ifdef CONFIG_MCC_MODE
 	case C2H_MCC:
 		rtw_hal_mcc_c2h_handler(adapter, plen, payload);
@@ -1309,11 +1299,6 @@ u8 rtw_hal_ops_check(_adapter *padapter)
 #ifdef RTW_HALMAC
 	if (NULL == padapter->hal_func.hal_mac_c2h_handler) {
 		rtw_hal_error_msg("hal_mac_c2h_handler");
-		ret = _FAIL;
-	}
-#elif !defined(CONFIG_RTL8188E)
-	if (NULL == padapter->hal_func.c2h_handler) {
-		rtw_hal_error_msg("c2h_handler");
 		ret = _FAIL;
 	}
 #endif

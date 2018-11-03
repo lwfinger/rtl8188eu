@@ -966,7 +966,6 @@ odm_txpowertracking_thermal_meter_init(
 		p_hal_data->txpowertrack_control = true;
 	ODM_RT_TRACE(p_dm_odm, COMP_POWER_TRACKING, DBG_LOUD, ("p_mgnt_info->is_txpowertracking = %d\n", p_mgnt_info->is_txpowertracking));
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-#ifdef CONFIG_RTL8188E
 	{
 		p_dm_odm->rf_calibrate_info.is_txpowertracking = _TRUE;
 		p_dm_odm->rf_calibrate_info.tx_powercount = 0;
@@ -977,38 +976,6 @@ odm_txpowertracking_thermal_meter_init(
 
 		MSG_8192C("p_dm_odm txpowertrack_control = %d\n", p_dm_odm->rf_calibrate_info.txpowertrack_control);
 	}
-#else
-	{
-		struct _ADAPTER		*adapter = p_dm_odm->adapter;
-		HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-		struct dm_priv	*pdmpriv = &p_hal_data->dmpriv;
-
-		/* if(IS_HARDWARE_TYPE_8192C(p_hal_data)) */
-		{
-			pdmpriv->is_txpowertracking = _TRUE;
-			pdmpriv->tx_powercount = 0;
-			pdmpriv->is_txpowertracking_init = _FALSE;
-
-			if (p_dm_odm->mp_mode == false)		/* for mp driver, turn off txpwrtracking as default */
-				pdmpriv->txpowertrack_control = _TRUE;
-
-		}
-		MSG_8192C("pdmpriv->txpowertrack_control = %d\n", pdmpriv->txpowertrack_control);
-
-	}
-#endif/* endif (CONFIG_RTL8188E==1) */
-#elif (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-
-#ifdef RTL8188E_SUPPORT
-	{
-		p_dm_odm->rf_calibrate_info.is_txpowertracking = _TRUE;
-		p_dm_odm->rf_calibrate_info.tx_powercount = 0;
-		p_dm_odm->rf_calibrate_info.is_txpowertracking_init = _FALSE;
-		p_dm_odm->rf_calibrate_info.txpowertrack_control = _TRUE;
-		p_dm_odm->rf_calibrate_info.tm_trigger = 0;
-	}
-#endif
-#endif
 
 	p_dm_odm->rf_calibrate_info.txpowertrack_control = true;
 	p_dm_odm->rf_calibrate_info.delta_power_index = 0;
@@ -1017,26 +984,7 @@ odm_txpowertracking_thermal_meter_init(
 	p_dm_odm->rf_calibrate_info.thermal_value = 0;
 	p_rf_calibrate_info->default_ofdm_index = 28;
 
-#if (RTL8197F_SUPPORT == 1)
-	if (GET_CHIP_VER(priv) == VERSION_8197F) {
-		p_rf_calibrate_info->default_ofdm_index = (default_swing_index >= (OFDM_TABLE_SIZE_92D - 1)) ? 30 : default_swing_index;
-		p_rf_calibrate_info->default_cck_index = 28;
-	}
-#endif
-
-#if (RTL8822B_SUPPORT == 1)
-	if (GET_CHIP_VER(priv) == VERSION_8822B) {
-		p_rf_calibrate_info->default_ofdm_index = (default_swing_index >= (TXSCALE_TABLE_SIZE - 1)) ? 24 : default_swing_index;
-		p_rf_calibrate_info->default_cck_index = 20;
-	}
-#endif
-
-
-#if RTL8188E_SUPPORT
 	p_rf_calibrate_info->default_cck_index = 20;	/* -6 dB */
-#elif RTL8192E_SUPPORT
-	p_rf_calibrate_info->default_cck_index = 8;	/* -12 dB */
-#endif
 	p_rf_calibrate_info->bb_swing_idx_ofdm_base = p_rf_calibrate_info->default_ofdm_index;
 	p_rf_calibrate_info->bb_swing_idx_cck_base = p_rf_calibrate_info->default_cck_index;
 	p_dm_odm->rf_calibrate_info.CCK_index = p_rf_calibrate_info->default_cck_index;
@@ -1049,10 +997,7 @@ odm_txpowertracking_thermal_meter_init(
 	p_rf_calibrate_info->bb_swing_idx_cck = p_rf_calibrate_info->default_cck_index;
 
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("p_rf_calibrate_info->default_ofdm_index=%d p_rf_calibrate_info->default_cck_index=%d\n", p_rf_calibrate_info->default_ofdm_index, p_rf_calibrate_info->default_cck_index));
-
-
 }
-
 
 void
 odm_txpowertracking_check(
