@@ -61,26 +61,5 @@ extern u4Byte GLBtcDbgType[];
 #endif
 
 #include "halbtcoutsrc.h"
-#include "halbtc8192e1ant.h"
-#include "halbtc8192e2ant.h"
-#include "halbtc8723b1ant.h"
-#include "halbtc8723b2ant.h"
-#include "halbtc8812a1ant.h"
-#include "halbtc8812a2ant.h"
-#include "halbtc8821a1ant.h"
-#include "halbtc8821a2ant.h"
-#include "halbtc8703b1ant.h"
-#include "halbtc8723d1ant.h"
-#include "halbtc8723d2ant.h"
-#include "halbtc8822b1ant.h"
-#include "halbtc8822b2ant.h"
-#include "halbtc8821c1ant.h"
-#include "halbtc8821c2ant.h"
-
-/* for wifi only mode */
-#include "hal_btcoex_wifionly.h"
-#include "halbtc8723bwifionly.h"
-#include "halbtc8822bwifionly.h"
-#include "halbtc8821cwifionly.h"
 
 #endif /*  __MP_PRECOMP_H__ */
