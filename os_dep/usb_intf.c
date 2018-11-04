@@ -24,18 +24,9 @@
 
 #include <platform_ops.h>
 
-#ifndef CONFIG_USB_HCI
-#error "CONFIG_USB_HCI shall be on!\n"
-#endif
-
-#if defined(PLATFORM_LINUX) && defined (PLATFORM_WINDOWS)
-#error "Shall be Linux or Windows, but not both!\n"
-#endif
-
 #ifdef CONFIG_GLOBAL_UI_PID
 int ui_pid[3] = {0, 0, 0};
 #endif
-
 
 static int rtw_suspend(struct usb_interface *intf, pm_message_t message);
 static int rtw_resume(struct usb_interface *intf);

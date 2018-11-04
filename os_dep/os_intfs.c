@@ -242,11 +242,7 @@ static int rtw_hwpwrp_detect = 1;
 static int rtw_hwpwrp_detect = 0; /* HW power  ping detect 0:disable , 1:enable */
 #endif
 
-#ifdef CONFIG_USB_HCI
 static int rtw_hw_wps_pbc = 1;
-#else
-static int rtw_hw_wps_pbc = 0;
-#endif
 
 #ifdef CONFIG_TX_MCAST2UNI
 int rtw_mc2u_disable = 0;
@@ -1323,12 +1319,6 @@ static int rtw_os_ndev_alloc(_adapter *adapter)
 	SET_NETDEV_DEV(ndev, dvobj_to_dev(adapter_to_dvobj(adapter)));
 #endif
 
-#ifdef CONFIG_PCI_HCI
-	if (adapter_to_dvobj(adapter)->bdma64)
-		ndev->features |= NETIF_F_HIGHDMA;
-	ndev->irq = adapter_to_dvobj(adapter)->irq;
-#endif
-
 #if defined(CONFIG_IOCTL_CFG80211)
 	if (rtw_cfg80211_ndev_res_alloc(adapter) != _SUCCESS) {
 		rtw_warn_on(1);
@@ -1577,14 +1567,9 @@ u32 rtw_start_drv_threads(_adapter *padapter)
 
 
 #ifdef CONFIG_XMIT_THREAD_MODE
-#if defined(CONFIG_SDIO_HCI)
-	if (is_primary_adapter(padapter))
-#endif
-	{
-		padapter->xmitThread = kthread_run(rtw_xmit_thread, padapter, "RTW_XMIT_THREAD");
-		if (IS_ERR(padapter->xmitThread))
-			_status = _FAIL;
-	}
+	padapter->xmitThread = kthread_run(rtw_xmit_thread, padapter, "RTW_XMIT_THREAD");
+	if (IS_ERR(padapter->xmitThread))
+		_status = _FAIL;
 #endif /* #ifdef CONFIG_XMIT_THREAD_MODE */
 
 #ifdef CONFIG_RECV_THREAD_MODE
@@ -1629,14 +1614,8 @@ void rtw_stop_drv_threads(_adapter *padapter)
 
 #ifdef CONFIG_XMIT_THREAD_MODE
 	/* Below is to termindate tx_thread... */
-#if defined(CONFIG_SDIO_HCI)
-	/* Only wake-up primary adapter */
-	if (is_primary_adapter(padapter))
-#endif  /*SDIO_HCI */
-	{
-		_rtw_up_sema(&padapter->xmitpriv.xmit_sema);
-		_rtw_down_sema(&padapter->xmitpriv.terminate_xmitthread_sema);
-	}
+	_rtw_up_sema(&padapter->xmitpriv.xmit_sema);
+	_rtw_down_sema(&padapter->xmitpriv.terminate_xmitthread_sema);
 #endif
 
 #ifdef CONFIG_RECV_THREAD_MODE
@@ -3637,14 +3616,6 @@ int rtw_suspend_wow(_adapter *padapter)
 		/* rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0, "WOWLAN"); */
 		/* #endif */
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		/* 2. disable interrupt */
-		rtw_mi_intf_stop(padapter);
-
-		/* 2.1 clean interupt */
-		rtw_hal_clear_interrupt(padapter);
-#endif /* CONFIG_SDIO_HCI */
-
 		/* 2.2 free irq */
 		/* sdio_free_irq(adapter_to_dvobj(padapter)); */
 #if !(CONFIG_RTW_SDIO_KEEP_IRQ)
@@ -3760,14 +3731,6 @@ int rtw_suspend_ap_wow(_adapter *padapter)
 			rtw_stop_drv_threads(iface);
 	}
 	rtw_clr_drv_stopped(padapter);	/*for 32k command*/
-
-#ifdef CONFIG_SDIO_HCI
-	/* 2. disable interrupt*/
-	rtw_mi_intf_stop(padapter);
-
-	/* 2.1 clean interupt */
-	rtw_hal_clear_interrupt(padapter);
-#endif /* CONFIG_SDIO_HCI */
 
 	/* 2.2 free irq */
 	if (padapter->intf_free_irq)
@@ -3997,11 +3960,6 @@ int rtw_resume_process_wow(_adapter *padapter)
 #endif /* CONFIG_LPS */
 
 		pwrpriv->bFwCurrentInPSMode = _FALSE;
-
-#ifdef CONFIG_SDIO_HCI
-		rtw_mi_intf_stop(padapter);
-		rtw_hal_clear_interrupt(padapter);
-#endif /* CONFIG_SDIO_HCI */
 
 #if !(CONFIG_RTW_SDIO_KEEP_IRQ)
 		/* if (sdio_alloc_irq(adapter_to_dvobj(padapter)) != _SUCCESS) {		 */
