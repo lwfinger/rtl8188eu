@@ -456,7 +456,6 @@ static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit
 
 	if (rtw_IOL_append_END_cmd(xmit_frame) != _SUCCESS)
 		goto exit;
-#ifdef CONFIG_USB_HCI
 	{
 		struct pkt_attrib	*pattrib = &xmit_frame->attrib;
 		if (rtw_usb_bulk_size_boundary(adapter, TXDESC_SIZE + pattrib->last_txcmdsz)) {
@@ -464,7 +463,6 @@ static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit
 				goto exit;
 		}
 	}
-#endif /* CONFIG_USB_HCI */
 
 	/* rtw_IOL_cmd_buf_dump(adapter,xmit_frame->attrib.pktlen+TXDESC_OFFSET,xmit_frame->buf_addr); */
 	/* rtw_hal_mgnt_xmit(adapter, xmit_frame); */
@@ -570,14 +568,8 @@ _BlockWrite(
 	u32			remainSize_p1 = 0, remainSize_p2 = 0;
 	u8			*bufferPtr	= (u8 *)buffer;
 	u32			i = 0, offset = 0;
-#ifdef CONFIG_PCI_HCI
-	u8			remainFW[4] = {0, 0, 0, 0};
-	u8			*p = NULL;
-#endif
 
-#ifdef CONFIG_USB_HCI
 	blockSize_p1 = MAX_REG_BOLCK_SIZE;
-#endif
 
 	/* 3 Phase #1 */
 	blockCount_p1 = buffSize / blockSize_p1;
@@ -586,34 +578,11 @@ _BlockWrite(
 
 
 	for (i = 0; i < blockCount_p1; i++) {
-#ifdef CONFIG_USB_HCI
 		ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + i * blockSize_p1), blockSize_p1, (bufferPtr + i * blockSize_p1));
-#else
-		ret = rtw_write32(padapter, (FW_8188E_START_ADDRESS + i * blockSize_p1), le32_to_cpu(*((u32 *)(bufferPtr + i * blockSize_p1))));
-#endif
 
 		if (ret == _FAIL)
 			goto exit;
 	}
-
-#ifdef CONFIG_PCI_HCI
-	p = (u8 *)((u32 *)(bufferPtr + blockCount_p1 * blockSize_p1));
-	if (remainSize_p1) {
-		switch (remainSize_p1) {
-		case 0:
-			break;
-		case 3:
-			remainFW[2] = *(p + 2);
-		case 2:
-			remainFW[1] = *(p + 1);
-		case 1:
-			remainFW[0] = *(p);
-			ret = rtw_write32(padapter, (FW_8188E_START_ADDRESS + blockCount_p1 * blockSize_p1),
-					  le32_to_cpu(*(u32 *)remainFW));
-		}
-		return ret;
-	}
-#endif
 
 	/* 3 Phase #2 */
 	if (remainSize_p1) {
@@ -624,14 +593,12 @@ _BlockWrite(
 
 
 
-#ifdef CONFIG_USB_HCI
 		for (i = 0; i < blockCount_p2; i++) {
 			ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + offset + i * blockSize_p2), blockSize_p2, (bufferPtr + offset + i * blockSize_p2));
 
 			if (ret == _FAIL)
 				goto exit;
 		}
-#endif
 	}
 
 	/* 3 Phase #3 */
@@ -701,12 +668,6 @@ _WriteFW(
 	u32	pageNums, remainSize ;
 	u32	page, offset;
 	u8		*bufferPtr = (u8 *)buffer;
-
-#ifdef CONFIG_PCI_HCI
-	/* 20100120 Joseph: Add for 88CE normal chip. */
-	/* Fill in zero to make firmware image to dword alignment.
-	*		_FillDummy(bufferPtr, &size); */
-#endif
 
 	pageNums = size / MAX_DLFW_PAGE_SIZE ;
 	/* RT_ASSERT((pageNums <= 4), ("Page numbers should not greater then 4\n")); */
@@ -2473,31 +2434,10 @@ static void read_chip_version_8188e(PADAPTER padapter)
 
 void rtl8188e_start_thread(_adapter *padapter)
 {
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-#ifndef CONFIG_SDIO_TX_TASKLET
-	struct xmit_priv *xmitpriv = &padapter->xmitpriv;
-
-	xmitpriv->SdioXmitThread = kthread_run(rtl8188es_xmit_thread, padapter, "RTWHALXT");
-	if (IS_ERR(xmitpriv->SdioXmitThread))
-		RTW_ERR("%s: start rtl8188es_xmit_thread FAIL!!\n", __func__);
-#endif
-#endif
 }
 
 void rtl8188e_stop_thread(_adapter *padapter)
 {
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-#ifndef CONFIG_SDIO_TX_TASKLET
-	struct xmit_priv *xmitpriv = &padapter->xmitpriv;
-
-	/* stop xmit_buf_thread */
-	if (xmitpriv->SdioXmitThread) {
-		_rtw_up_sema(&xmitpriv->SdioXmitSema);
-		_rtw_down_sema(&xmitpriv->SdioXmitTerminateSema);
-		xmitpriv->SdioXmitThread = 0;
-	}
-#endif
-#endif
 }
 
 static void hal_notch_filter_8188e(_adapter *adapter, bool enable)
@@ -2570,21 +2510,8 @@ bool rtl8188e_gpio_radio_on_off_check(_adapter *adapter, u8 *valid)
 	u32 tmp32;
 	bool ret;
 
-#ifdef CONFIG_PCI_HCI
-#if 1
 	*valid = 0;
 	return _FALSE; /* unblock */
-#else
-	tmp32  = rtw_read32(adapter, REG_GSSR);
-	ret = (tmp32 & BIT(31)) ? _FALSE : _TRUE;	/* Power down pin output value, low active */
-	*valid = 1;
-
-	return ret;
-#endif
-#else
-	*valid = 0;
-	return _FALSE; /* unblock */
-#endif
 }
 #endif
 
@@ -2676,7 +2603,6 @@ u8 GetEEPROMSize8188E(PADAPTER padapter)
 	return size;
 }
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_PCI_HCI) || defined(CONFIG_GSPI_HCI)
 /* -------------------------------------------------------------------------
  *
  * LLT R/W/Init function
@@ -2768,8 +2694,6 @@ s32 InitLLTTable(PADAPTER padapter, u8 txpktbuf_bndy)
 
 	return status;
 }
-#endif
-
 
 void
 Hal_InitPGData88E(PADAPTER	padapter)
@@ -2852,9 +2776,7 @@ void Hal_ReadPowerSavingMode88E(
 
 		/* decide hw if support remote wakeup function */
 		/* if hw supported, 8051 (SIE) will generate WeakUP signal( D+/D- toggle) when autoresume */
-#ifdef CONFIG_USB_HCI
 		pwrctl->bSupportRemoteWakeup = (hwinfo[EEPROM_USB_OPTIONAL_FUNCTION0] & BIT1) ? _TRUE : _FALSE;
-#endif /* CONFIG_USB_HCI */
 
 		RTW_INFO("%s...bHWPwrPindetect(%x)-bHWPowerdown(%x) ,bSupportRemoteWakeup(%x)\n", __func__,
 			pwrctl->bHWPwrPindetect, pwrctl->bHWPowerdown, pwrctl->bSupportRemoteWakeup);
@@ -3323,12 +3245,6 @@ void SetBcnCtrlReg(
 	pHalData->RegBcnCtrlVal |= SetBits;
 	pHalData->RegBcnCtrlVal &= ~ClearBits;
 
-#if 0
-	/* #ifdef CONFIG_SDIO_HCI */
-	if (pHalData->sdio_himr & (SDIO_HIMR_TXBCNOK_MSK | SDIO_HIMR_TXBCNERR_MSK))
-		pHalData->RegBcnCtrlVal |= EN_TXBCN_RPT;
-#endif
-
 	rtw_write8(padapter, REG_BCN_CTRL, (u8)pHalData->RegBcnCtrlVal);
 }
 
@@ -3425,28 +3341,17 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
 				rtw_write8(Adapter, REG_DRVERLYINT, 0x05);/* restore early int time to 5ms */
 
-#if defined(CONFIG_USB_HCI)
 				UpdateInterruptMask8188EU(Adapter, _TRUE, 0, IMR_BCNDMAINT0_88E);
-#elif defined(CONFIG_SDIO_HCI)
-				UpdateInterruptMask8188ESdio(Adapter, 0, SDIO_HIMR_BCNERLY_INT_MSK);
-#endif
 
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
 
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-#if defined(CONFIG_USB_HCI)
 				UpdateInterruptMask8188EU(Adapter, _TRUE , 0, (IMR_TBDER_88E | IMR_TBDOK_88E));
-#elif defined(CONFIG_SDIO_HCI)
-				UpdateInterruptMask8188ESdio(Adapter, 0, (SDIO_HIMR_TXBCNOK_MSK | SDIO_HIMR_TXBCNERR_MSK));
-#endif
 
 #endif/* CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR */
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN		 */
 
 				StopTxBeacon(Adapter);
-#if defined(CONFIG_PCI_HCI)
-				UpdateInterruptMask8188EE(Adapter, 0, 0, RT_BCN_INT_MASKS, 0);
-#endif
 			}
 
 			rtw_write8(Adapter, REG_BCN_CTRL_1, 0x11); /* disable atim wnd and disable beacon function */
@@ -3462,19 +3367,11 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 		} else if (mode == _HW_STATE_AP_) {
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-#if defined(CONFIG_USB_HCI)
 			UpdateInterruptMask8188EU(Adapter, _TRUE , IMR_BCNDMAINT0_88E, 0);
-#elif defined(CONFIG_SDIO_HCI)
-			UpdateInterruptMask8188ESdio(Adapter, SDIO_HIMR_BCNERLY_INT_MSK, 0);
-#endif
 #endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
 
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-#if defined(CONFIG_USB_HCI)
 			UpdateInterruptMask8188EU(Adapter, _TRUE , (IMR_TBDER_88E | IMR_TBDOK_88E), 0);
-#elif defined(CONFIG_SDIO_HCI)
-			UpdateInterruptMask8188ESdio(Adapter, (SDIO_HIMR_TXBCNOK_MSK | SDIO_HIMR_TXBCNERR_MSK), 0);
-#endif
 #endif/* CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR */
 
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN */
@@ -3546,9 +3443,6 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 						 __func__, __LINE__);
 			}
 #endif /* CONFIG_TSF_RESET_OFFLOAD */
-#if defined(CONFIG_PCI_HCI)
-			UpdateInterruptMask8188EE(Adapter, RT_BCN_INT_MASKS, 0, 0, 0);
-#endif
 		}
 	} else	/* (Adapter->hw_port == HW_PORT1)*/
 #endif /* CONFIG_CONCURRENT_MODE */
@@ -3570,26 +3464,15 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
 				rtw_write8(Adapter, REG_DRVERLYINT, 0x05);/* restore early int time to 5ms	 */
-#if defined(CONFIG_USB_HCI)
 				UpdateInterruptMask8188EU(Adapter, _TRUE, 0, IMR_BCNDMAINT0_88E);
-#elif defined(CONFIG_SDIO_HCI)
-				UpdateInterruptMask8188ESdio(Adapter, 0, SDIO_HIMR_BCNERLY_INT_MSK);
-#endif
 #endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
 
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-#if defined(CONFIG_USB_HCI)
 				UpdateInterruptMask8188EU(Adapter, _TRUE , 0, (IMR_TBDER_88E | IMR_TBDOK_88E));
-#elif defined(CONFIG_SDIO_HCI)
-				UpdateInterruptMask8188ESdio(Adapter, 0, (SDIO_HIMR_TXBCNOK_MSK | SDIO_HIMR_TXBCNERR_MSK));
-#endif
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR */
 
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN		 */
 				StopTxBeacon(Adapter);
-#if defined(CONFIG_PCI_HCI)
-				UpdateInterruptMask8188EE(Adapter, 0, 0, RT_BCN_INT_MASKS, 0);
-#endif
 			}
 
 			rtw_write8(Adapter, REG_BCN_CTRL, 0x19); /* disable atim wnd */
@@ -3605,19 +3488,11 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 		} else if (mode == _HW_STATE_AP_) {
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT
-#if defined(CONFIG_USB_HCI)
 			UpdateInterruptMask8188EU(Adapter, _TRUE , IMR_BCNDMAINT0_88E, 0);
-#elif defined(CONFIG_SDIO_HCI)
-			UpdateInterruptMask8188ESdio(Adapter, SDIO_HIMR_BCNERLY_INT_MSK, 0);
-#endif
 #endif/* CONFIG_INTERRUPT_BASED_TXBCN_EARLY_INT */
 
 #ifdef CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR
-#if defined(CONFIG_USB_HCI)
 			UpdateInterruptMask8188EU(Adapter, _TRUE , (IMR_TBDER_88E | IMR_TBDOK_88E), 0);
-#elif defined(CONFIG_SDIO_HCI)
-			UpdateInterruptMask8188ESdio(Adapter, (SDIO_HIMR_TXBCNOK_MSK | SDIO_HIMR_TXBCNERR_MSK), 0);
-#endif
 #endif/* CONFIG_INTERRUPT_BASED_TXBCN_BCN_OK_ERR */
 
 #endif /* CONFIG_INTERRUPT_BASED_TXBCN */
@@ -3689,9 +3564,6 @@ static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)
 						 __func__, __LINE__);
 			}
 #endif /* CONFIG_TSF_RESET_OFFLOAD */
-#if defined(CONFIG_PCI_HCI)
-			UpdateInterruptMask8188EE(Adapter, RT_BCN_INT_MASKS, 0, 0, 0);
-#endif
 		}
 #endif
 	}
@@ -4770,11 +4642,7 @@ GetHalDefVar8188E(
 		*((u32 *)pValue) = DRVINFO_SZ;
 		break;
 	case HAL_DEF_MAX_RECVBUF_SZ:
-#ifdef CONFIG_SDIO_HCI
-		*((u32 *)pValue) = MAX_RX_DMA_BUFFER_SIZE_88E(Adapter);
-#else
 		*((u32 *)pValue) = MAX_RECVBUF_SZ;
-#endif
 		break;
 	case HAL_DEF_RX_PACKET_OFFSET:
 		*((u32 *)pValue) = RXDESC_SIZE + DRVINFO_SZ * 8;

@@ -39,10 +39,6 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 		RTW_INFO("%s REG_TXDMA_STATUS:0x%08x\n", __func__, txdma_status);
 		rtw_hal_sreset_reset(padapter);
 	}
-#ifdef CONFIG_USB_HCI
-	/* total xmit irp = 4 */
-	/* RTW_INFO("==>%s free_xmitbuf_cnt(%d),txirp_cnt(%d)\n",__func__,pxmitpriv->free_xmitbuf_cnt,pxmitpriv->txirp_cnt); */
-	/* if(pxmitpriv->txirp_cnt == NR_XMITBUFF+1) */
 	current_time = rtw_get_current_time();
 
 	if (0 == pxmitpriv->free_xmitbuf_cnt || 0 == pxmitpriv->free_xmit_extbuf_cnt) {
@@ -68,7 +64,6 @@ void rtl8188e_sreset_xmit_status_check(_adapter *padapter)
 			}
 		}
 	}
-#endif /* CONFIG_USB_HCI */
 
 	if (psrtpriv->dbg_trigger_point == SRESET_TGP_XMIT_STATUS) {
 		psrtpriv->dbg_trigger_point = SRESET_TGP_NULL;

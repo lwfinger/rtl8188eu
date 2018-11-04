@@ -139,12 +139,9 @@ void rtl8188e_fill_fake_txdesc(
 			break;
 		}
 	}
-
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 	/* USB interface drop packet if the checksum of descriptor isn't correct. */
 	/* Using this checksum can let hardware recovery from packet bulk out error (e.g. Cancel URC, Bulk out error.). */
 	rtl8188eu_cal_txdesc_chksum(ptxdesc);
-#endif
 }
 
 static void fill_txdesc_sectype(struct pkt_attrib *pattrib, struct tx_desc *ptxdesc)

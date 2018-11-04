@@ -1487,13 +1487,11 @@ int hal_read_mac_hidden_rpt(_adapter *adapter)
 	u8 id = C2H_DEFEATURE_RSVD;
 	int i;
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_PCI_HCI)
 	u8 hci_type = rtw_get_intf_type(adapter);
 
 	if ((hci_type == RTW_USB || hci_type == RTW_PCIE)
 		&& !rtw_is_hw_init_completed(adapter))
 		rtw_hal_power_on(adapter);
-#endif
 
 	/* inform FW mac hidden rpt from reg is needed */
 	rtw_write8(adapter, REG_C2HEVT_MSG_NORMAL, C2H_DEFEATURE_RSVD);
@@ -1533,11 +1531,9 @@ mac_hidden_rpt_hdl:
 
 exit:
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_PCI_HCI)
 	if ((hci_type == RTW_USB || hci_type == RTW_PCIE)
 		&& !rtw_is_hw_init_completed(adapter))
 		rtw_hal_power_off(adapter);
-#endif
 
 	RTW_INFO("%s %s! (%u, %dms), fwdl:%d, id:0x%02x\n", __func__
 		, (ret == _SUCCESS) ? "OK" : "Fail", cnt, rtw_get_passing_time_ms(start), ret_fwdl, id);
@@ -3306,33 +3302,22 @@ static u8 rtw_hal_pause_rx_dma(_adapter *adapter)
 		    (rtw_read32(adapter, REG_RXPKT_NUM) | RW_RELEASE_EN));
 	do {
 		if ((rtw_read32(adapter, REG_RXPKT_NUM) & RXDMA_IDLE)) {
-#ifdef CONFIG_USB_HCI
 			/* stop interface before leave */
 			if (_TRUE == hal->usb_intf_start) {
 				rtw_intf_stop(adapter);
 				RTW_ENABLE_FUNC(adapter, DF_RX_BIT);
 				RTW_ENABLE_FUNC(adapter, DF_TX_BIT);
 			}
-#endif /* CONFIG_USB_HCI */
 
 			RTW_PRINT("RX_DMA_IDLE is true\n");
 			ret = _SUCCESS;
 			break;
 		}
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		else {
-			res = RecvOnePkt(adapter);
-			RTW_PRINT("RecvOnePkt Result: %d\n", res);
-		}
-#endif /* CONFIG_SDIO_HCI || CONFIG_GSPI_HCI */
-
-#ifdef CONFIG_USB_HCI
 		else {
 			/* to avoid interface start repeatedly  */
 			if (_FALSE == hal->usb_intf_start)
 				rtw_intf_start(adapter);
 		}
-#endif /* CONFIG_USB_HCI */
 	} while (trycnt--);
 
 	if (trycnt < 0) {
@@ -3354,41 +3339,6 @@ static u8 rtw_hal_pause_rx_dma(_adapter *adapter)
 	return ret;
 }
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-#ifndef RTW_HALMAC
-static u8 rtw_hal_enable_cpwm2(_adapter *adapter)
-{
-	u8 ret = 0;
-	int res = 0;
-	u32 tmp = 0;
-#ifdef CONFIG_GPIO_WAKEUP
-	return _SUCCESS;
-#else
-	RTW_PRINT("%s\n", __func__);
-
-	res = sdio_local_read(adapter, SDIO_REG_HIMR, 4, (u8 *)&tmp);
-	if (!res)
-		RTW_INFO("read SDIO_REG_HIMR: 0x%08x\n", tmp);
-	else
-		RTW_INFO("sdio_local_read fail\n");
-
-	tmp = SDIO_HIMR_CPWM2_MSK;
-
-	res = sdio_local_write(adapter, SDIO_REG_HIMR, 4, (u8 *)&tmp);
-
-	if (!res) {
-		res = sdio_local_read(adapter, SDIO_REG_HIMR, 4, (u8 *)&tmp);
-		RTW_INFO("read again SDIO_REG_HIMR: 0x%08x\n", tmp);
-		ret = _SUCCESS;
-	} else {
-		RTW_INFO("sdio_local_write fail\n");
-		ret = _FAIL;
-	}
-	return ret;
-#endif /* CONFIG_CPIO_WAKEUP */
-}
-#endif
-#endif /* CONFIG_SDIO_HCI, CONFIG_GSPI_HCI */
 #endif /* CONFIG_WOWLAN || CONFIG_AP_WOWLAN */
 
 #ifdef CONFIG_WOWLAN
@@ -4102,9 +4052,7 @@ static u8 rtw_hal_set_ap_ps_cmd(_adapter *adapter, u8 enable)
 	RTW_INFO("%s(): enable=%d\n" , __func__ , enable);
 
 	SET_H2CCMD_AP_WOW_PS_EN(ap_ps_parm, enable);
-#ifndef CONFIG_USB_HCI
 	SET_H2CCMD_AP_WOW_PS_32K_EN(ap_ps_parm, enable);
-#endif /*CONFIG_USB_HCI*/
 	SET_H2CCMD_AP_WOW_PS_RF(ap_ps_parm, enable);
 
 	if (enable)
@@ -4209,28 +4157,16 @@ static void rtw_hal_ap_wow_enable(_adapter *padapter)
 	if (res == _FAIL)
 		RTW_PRINT("[WARNING] pause RX DMA fail\n");
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	/* Enable CPWM2 only. */
-	res = rtw_hal_enable_cpwm2(padapter);
-	if (res == _FAIL)
-		RTW_PRINT("[WARNING] enable cpwm2 fail\n");
-#endif
-
-#ifdef CONFIG_GPIO_WAKEUP
-	rtw_hal_switch_gpio_wl_ctrl(padapter, WAKEUP_GPIO_IDX, _TRUE);
-#endif
 	/* 5. Set Enable WOWLAN H2C command. */
 	RTW_PRINT("Set Enable AP WOWLan cmd\n");
 	rtw_hal_set_fw_ap_wow_related_cmd(padapter, 1);
 
 	rtw_write8(padapter, REG_MCUTST_WOWLAN, 0);
-#ifdef CONFIG_USB_HCI
 	rtw_mi_intf_stop(padapter);
 	/* Invoid SE0 reset signal during suspending*/
 	rtw_write8(padapter, REG_RSV_CTRL, 0x20);
 	if (IS_8188F(pHalData->version_id) == FALSE)
 		rtw_write8(padapter, REG_RSV_CTRL, 0x60);
-#endif /*CONFIG_USB_HCI*/
 }
 
 static void rtw_hal_ap_wow_disable(_adapter *padapter)
@@ -7608,15 +7544,6 @@ static void rtw_hal_wow_enable(_adapter *adapter)
 		}
 	}
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-	/* Enable CPWM2 only. */
-	res = rtw_hal_enable_cpwm2(adapter);
-	if (res == _FAIL)
-		RTW_PRINT("[WARNING] enable cpwm2 fail\n");
-#endif
-#ifdef CONFIG_GPIO_WAKEUP
-	rtw_hal_switch_gpio_wl_ctrl(adapter, WAKEUP_GPIO_IDX, _TRUE);
-#endif
 	/* Set WOWLAN H2C command. */
 	RTW_PRINT("Set WOWLan cmd\n");
 	rtw_hal_set_fw_wow_related_cmd(adapter, 1);
@@ -7635,7 +7562,6 @@ static void rtw_hal_wow_enable(_adapter *adapter)
 	dump_sec_cam(RTW_DBGDUMP, adapter);
 	dump_sec_cam_cache(RTW_DBGDUMP, adapter);
 #endif
-#ifdef CONFIG_USB_HCI
 	/* free adapter's resource */
 	rtw_mi_intf_stop(adapter);
 
@@ -7643,7 +7569,6 @@ static void rtw_hal_wow_enable(_adapter *adapter)
 	rtw_write8(adapter, REG_RSV_CTRL, 0x20);
 	if (IS_8188F(pHalData->version_id) == FALSE)
 		rtw_write8(adapter, REG_RSV_CTRL, 0x60);
-#endif /*CONFIG_USB_HCI*/
 
 	rtw_hal_gate_bb(adapter, _FALSE);
 }
@@ -8362,11 +8287,7 @@ download_page:
 		pattrib->qsel = QSLT_BEACON;
 		pattrib->pktlen = TotalPacketLen - TxDescOffset;
 		pattrib->last_txcmdsz = TotalPacketLen - TxDescOffset;
-#ifdef CONFIG_PCI_HCI
-		dump_mgntframe(adapter, pcmdframe);
-#else
 		dump_mgntframe_and_wait(adapter, pcmdframe, 100);
-#endif
 	}
 
 	RTW_INFO("%s: Set RSVD page location to Fw ,TotalPacketLen(%d), TotalPageNum(%d)\n",
@@ -8737,11 +8658,6 @@ u8 rtw_hal_query_txbfer_rf_num(_adapter *adapter)
 	if ((pregistrypriv->beamformer_rf_num) && (IS_HARDWARE_TYPE_8814AE(adapter) || IS_HARDWARE_TYPE_8814AU(adapter) || IS_HARDWARE_TYPE_8822BU(adapter) || IS_HARDWARE_TYPE_8821C(adapter)))
 		return pregistrypriv->beamformer_rf_num;
 	else if (IS_HARDWARE_TYPE_8814AE(adapter)
-#if 0
-#if defined(CONFIG_USB_HCI)
-		|| (IS_HARDWARE_TYPE_8814AU(adapter) && (pUsbModeMech->CurUsbMode == 2 || pUsbModeMech->HubUsbMode == 2))  /* for USB3.0 */
-#endif
-#endif
 		) {
 		/*BF cap provided by Yu Chen, Sean, 2015, 01 */
 		if (hal_data->rf_type == RF_3T3R)

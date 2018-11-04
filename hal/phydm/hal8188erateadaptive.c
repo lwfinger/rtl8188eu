@@ -1142,18 +1142,13 @@ odm_ra_set_tx_rpt_time(
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 	if (min_rpt_time != 0xffff) {
-#if defined(CONFIG_PCI_HCI)
-		odm_write_2byte(p_dm_odm, REG_TX_RPT_TIME, min_rpt_time);
-#elif defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 		notify_tx_report_interval_change(p_dm_odm->priv, min_rpt_time);
-#endif
 	}
 #else
 	odm_write_2byte(p_dm_odm, REG_TX_RPT_TIME, min_rpt_time);
 #endif
 
 }
-
 
 void odm_ra_tx_rpt2_handle_8188e(struct PHY_DM_STRUCT *p_dm_odm,
 				 u8 *tx_rpt_buf, __le16 tx_rpt_len,

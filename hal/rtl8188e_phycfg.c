@@ -104,7 +104,7 @@ sic_CalculateBitShift(
 
 static u32
 sic_Read4Byte(
-	PVOID		Adapter,
+	Pvoid		Adapter,
 	u32		offset
 )
 {
@@ -153,9 +153,9 @@ sic_Read4Byte(
 	return u4ret;
 }
 
-static VOID
+static void
 sic_Write4Byte(
-	PVOID		Adapter,
+	Pvoid		Adapter,
 	u32		offset,
 	u32		data
 )
@@ -198,7 +198,7 @@ sic_Write4Byte(
 /* ************************************************************
  * extern function
  * ************************************************************ */
-static VOID
+static void
 SIC_SetBBReg(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -279,7 +279,7 @@ SIC_QueryBBReg(
 	return ReturnValue;
 }
 
-VOID
+void
 SIC_Init(
 	IN	PADAPTER	Adapter
 )
@@ -378,7 +378,7 @@ PHY_QueryBBReg8188E(
 * Note:		This function is equal to "PutRegSetting" in PHY programming guide
 */
 
-VOID
+void
 PHY_SetBBReg8188E(
 	IN	PADAPTER	Adapter,
 	IN	u32		RegAddr,
@@ -558,7 +558,7 @@ phy_RFSerialRead(
  *
  *
 */
-static	VOID
+static	void
 phy_RFSerialWrite(
 	IN	PADAPTER		Adapter,
 	IN	u8				eRFPath,
@@ -647,26 +647,10 @@ PHY_QueryRFReg8188E(
 #endif
 
 
-#ifdef CONFIG_USB_HCI
-	/* PlatformAcquireMutex(&pHalData->mxRFOperate); */
-#else
-	/* _enter_critical(&pHalData->rf_lock, &irqL); */
-#endif
-
-
 	Original_Value = phy_RFSerialRead(Adapter, eRFPath, RegAddr);
 
 	BitShift =  PHY_CalculateBitShift(BitMask);
 	Readback_Value = (Original_Value & BitMask) >> BitShift;
-
-#ifdef CONFIG_USB_HCI
-	/* PlatformReleaseMutex(&pHalData->mxRFOperate); */
-#else
-	/* _exit_critical(&pHalData->rf_lock, &irqL); */
-#endif
-
-
-	/* RTPRINT(FPHY, PHY_RFR, ("RFR-%d MASK=0x%lx Addr[0x%lx]=0x%lx\n", eRFPath, BitMask, RegAddr, Original_Value));//BitMask(%#lx),BitMask, */
 
 	return Readback_Value;
 }
@@ -689,7 +673,7 @@ PHY_QueryRFReg8188E(
 * Return:		None
 * Note:		This function is equal to "PutRFRegSetting" in PHY programming guide
 */
-VOID
+void
 PHY_SetRFReg8188E(
 	IN	PADAPTER		Adapter,
 	IN	u8				eRFPath,
@@ -708,17 +692,6 @@ PHY_SetRFReg8188E(
 	return;
 #endif
 
-	/* RTPRINT(FINIT, INIT_RF, ("phy_set_rf_reg(): RegAddr(%#lx), BitMask(%#lx), Data(%#lx), eRFPath(%#x)\n", */
-	/*	RegAddr, BitMask, Data, eRFPath)); */
-
-
-#ifdef CONFIG_USB_HCI
-	/* PlatformAcquireMutex(&pHalData->mxRFOperate); */
-#else
-	/* _enter_critical(&pHalData->rf_lock, &irqL); */
-#endif
-
-
 	/* RF data is 12 bits only */
 	if (BitMask != bRFRegOffsetMask) {
 		Original_Value = phy_RFSerialRead(Adapter, eRFPath, RegAddr);
@@ -727,16 +700,6 @@ PHY_SetRFReg8188E(
 	}
 
 	phy_RFSerialWrite(Adapter, eRFPath, RegAddr, Data);
-
-
-#ifdef CONFIG_USB_HCI
-	/* PlatformReleaseMutex(&pHalData->mxRFOperate); */
-#else
-	/* _exit_critical(&pHalData->rf_lock, &irqL); */
-#endif
-
-	/* phy_query_rf_reg(Adapter,eRFPath,RegAddr,BitMask); */
-
 }
 
 
@@ -805,7 +768,7 @@ s32 PHY_MACConfig8188E(PADAPTER Adapter)
 * Return:		None
 * Note:		The initialization value is constant and it should never be changes
 -----------------------------------------------------------------------------*/
-static	VOID
+static	void
 phy_InitBBRFRegisterDefinition(
 	IN	PADAPTER		Adapter
 )
@@ -848,7 +811,7 @@ phy_InitBBRFRegisterDefinition(
 
 }
 
-static VOID
+static void
 phy_BB8192C_Config_1T(
 	IN PADAPTER Adapter
 )
@@ -989,46 +952,15 @@ PHY_BBConfig8188E(
 
 	rtw_write8(Adapter, REG_RF_CTRL, RF_EN | RF_RSTB | RF_SDMRSTB);
 
-#ifdef CONFIG_USB_HCI
 	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_USBA | FEN_USBD | FEN_BB_GLB_RSTn | FEN_BBRSTB);
-#else
-	rtw_write8(Adapter, REG_SYS_FUNC_EN, FEN_PPLL | FEN_PCIEA | FEN_DIO_PCIE | FEN_BB_GLB_RSTn | FEN_BBRSTB);
-#endif
 
-#if 0
-#ifdef CONFIG_USB_HCI
-	/* To Fix MAC loopback mode fail. Suggested by SD4 Johnny. 2010.03.23. */
-	rtw_write8(Adapter, REG_LDOHCI12_CTRL, 0x0f);
-	rtw_write8(Adapter, 0x15, 0xe9);
-#endif
-
-	rtw_write8(Adapter, REG_AFE_XTAL_CTRL + 1, 0x80);
-#endif
-
-#ifdef CONFIG_USB_HCI
-	/* rtw_write8(Adapter, 0x15, 0xe9); */
-#endif
-
-
-#ifdef CONFIG_PCI_HCI
-	/* Force use left antenna by default for 88C. */
-	if (Adapter->ledpriv.LedStrategy != SW_LED_MODE10) {
-		RegVal = rtw_read32(Adapter, REG_LEDCFG0);
-		rtw_write32(Adapter, REG_LEDCFG0, RegVal | BIT23);
-	}
-#endif
-
-	/*  */
 	/* Config BB and AGC */
-	/*  */
 	rtStatus = phy_BB8188E_Config_ParaFile(Adapter);
 
 	hal_set_crystal_cap(Adapter, pHalData->crystal_cap);
 
 	return rtStatus;
-
 }
-
 
 int
 PHY_RFConfig8188E(
@@ -1038,30 +970,8 @@ PHY_RFConfig8188E(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	int		rtStatus = _SUCCESS;
 
-	/*  */
 	/* RF config */
-	/*  */
 	rtStatus = PHY_RF6052_Config8188E(Adapter);
-#if 0
-	switch (pHalData->rf_chip) {
-	case RF_6052:
-		rtStatus = PHY_RF6052_Config(Adapter);
-		break;
-	case RF_8225:
-		rtStatus = PHY_RF8225_Config(Adapter);
-		break;
-	case RF_8256:
-		rtStatus = PHY_RF8256_Config(Adapter);
-		break;
-	case RF_8258:
-		break;
-	case RF_PSEUDO_11N:
-		rtStatus = PHY_RF8225_Config(Adapter);
-		break;
-	default: /* for MacOs Warning: "RF_TYPE_MIN" not handled in switch */
-		break;
-	}
-#endif
 	return rtStatus;
 }
 
@@ -1130,7 +1040,7 @@ static u32 Rtl8192S_HighPower_RadioA_Array[HighPowerRadioAArrayLen] = {
  * Return:      NONE
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 PHY_GetTxPowerLevel8188E(
 	IN	PADAPTER	Adapter,
 	OUT s32			*powerlevel
@@ -1165,7 +1075,7 @@ PHY_GetTxPowerLevel8188E(
  *	2009/01/21	MHC		Support new EEPROM format from SD3 requirement.
  *
  *---------------------------------------------------------------------------*/
-VOID
+void
 PHY_SetTxPowerLevel8188E(
 	IN	PADAPTER	Adapter,
 	IN	u8			Channel
@@ -1178,7 +1088,7 @@ PHY_SetTxPowerLevel8188E(
 	/* RTW_INFO("<==PHY_SetTxPowerLevel8188E()\n"); */
 }
 
-VOID
+void
 PHY_SetTxPowerIndex_8188E(
 	IN	PADAPTER			Adapter,
 	IN	u32					PowerIndex,
@@ -1546,7 +1456,7 @@ phy_SpurCalibration_8188E(
  *			(2) Will two workitem of "switch channel" and "switch channel bandwidth" run
  *			     concurrently?
  *---------------------------------------------------------------------------*/
-static VOID
+static void
 _PHY_SetBWMode88E(
 	IN	PADAPTER	Adapter
 )
@@ -1698,7 +1608,7 @@ _PHY_SetBWMode88E(
 	* * Note:		We do not take j mode into consideration now
 	* *--------------------------------------------------------------------------- */
 #endif
-VOID
+void
 PHY_SetBWMode8188E(
 	IN	PADAPTER					Adapter,
 	IN	CHANNEL_WIDTH	Bandwidth,	/* 20M or 40M */
@@ -1744,15 +1654,9 @@ PHY_SetBWMode8188E(
 #endif
 
 	if (!RTW_CANNOT_RUN(Adapter)) {
-#if 0
-		/* PlatformSetTimer(Adapter, &(pHalData->SetBWModeTimer), 0); */
-#else
 		_PHY_SetBWMode88E(Adapter);
-#endif
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 		if (IS_VENDOR_8188E_I_CUT_SERIES(Adapter))
 			phy_SpurCalibration_8188E(Adapter);
-#endif
 	} else {
 		/* pHalData->SetBWModeInProgress= FALSE; */
 		pHalData->current_channel_bw = tmpBW;
@@ -1785,27 +1689,18 @@ static void _PHY_SwChnl8188E(PADAPTER Adapter, u8 channel)
 	/* s3. post common command - CmdID_End, None */
 
 }
-VOID
+void
 PHY_SwChnl8188E(/* Call after initialization */
 	IN	PADAPTER	Adapter,
 	IN	u8		channel
 )
 {
-	/* PADAPTER Adapter =  ADJUST_TO_ADAPTIVE_ADAPTER(pAdapter, _TRUE); */
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	tmpchannel = pHalData->current_channel;
 	BOOLEAN  bResult = _TRUE;
 
-	if (pHalData->rf_chip == RF_PSEUDO_11N) {
-		/* pHalData->SwChnlInProgress=FALSE; */
+	if (pHalData->rf_chip == RF_PSEUDO_11N)
 		return; 								/* return immediately if it is peudo-phy */
-	}
-
-	/* if(pHalData->SwChnlInProgress) */
-	/*	return; */
-
-	/* if(pHalData->SetBWModeInProgress) */
-	/*	return; */
 
 	while (pHalData->odmpriv.rf_calibrate_info.is_lck_in_progress)
 		rtw_msleep_os(50);
@@ -1814,65 +1709,38 @@ PHY_SwChnl8188E(/* Call after initialization */
 	switch (pHalData->CurrentWirelessMode) {
 	case WIRELESS_MODE_A:
 	case WIRELESS_MODE_N_5G:
-		/* RT_ASSERT((channel>14), ("WIRELESS_MODE_A but channel<=14")); */
 		break;
-
 	case WIRELESS_MODE_B:
-		/* RT_ASSERT((channel<=14), ("WIRELESS_MODE_B but channel>14")); */
 		break;
-
 	case WIRELESS_MODE_G:
 	case WIRELESS_MODE_N_24G:
-		/* RT_ASSERT((channel<=14), ("WIRELESS_MODE_G but channel>14")); */
 		break;
-
 	default:
-		/* RT_ASSERT(FALSE, ("Invalid WirelessMode(%#x)!!\n", pHalData->CurrentWirelessMode)); */
 		break;
 	}
 	/* -------------------------------------------- */
 
-	/* pHalData->SwChnlInProgress = TRUE; */
 	if (channel == 0)
 		channel = 1;
 
 	pHalData->current_channel = channel;
 
-	/* pHalData->SwChnlStage=0; */
-	/* pHalData->SwChnlStep=0; */
-
 	if (!RTW_CANNOT_RUN(Adapter)) {
-#if 0
-		/* PlatformSetTimer(Adapter, &(pHalData->SwChnlTimer), 0); */
-#else
 		_PHY_SwChnl8188E(Adapter, channel);
-#endif
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI)
 		if (IS_VENDOR_8188E_I_CUT_SERIES(Adapter))
 			phy_SpurCalibration_8188E(Adapter);
-#endif
 
 
 
-		if (!bResult) {
-			/* if(IS_HARDWARE_TYPE_8192SU(Adapter)) */
-			/* { */
-			/*	pHalData->SwChnlInProgress = FALSE; */
+		if (!bResult)
 			pHalData->current_channel = tmpchannel;
-			/* } */
-		}
-
 	} else {
-		/* if(IS_HARDWARE_TYPE_8192SU(Adapter)) */
-		/* { */
-		/*	pHalData->SwChnlInProgress = FALSE; */
 		pHalData->current_channel = tmpchannel;
-		/* } */
 	}
 }
 
-VOID
+void
 PHY_SetSwChnlBWMode8188E(
 	IN	PADAPTER			Adapter,
 	IN	u8					channel,
@@ -1889,7 +1757,7 @@ PHY_SetSwChnlBWMode8188E(
 	/* RTW_INFO("<==%s()\n",__func__); */
 }
 
-static VOID _PHY_SetRFPathSwitch(
+static void _PHY_SetRFPathSwitch(
 	IN	PADAPTER	pAdapter,
 	IN	BOOLEAN		bMain,
 	IN	BOOLEAN		is2T
@@ -1948,7 +1816,7 @@ static BOOLEAN _PHY_QueryRFPathSwitch(
 }
 
 
-static VOID
+static void
 _PHY_DumpRFReg(IN	PADAPTER	pAdapter)
 {
 	u32 rfRegValue, rfRegOffset;
@@ -1967,7 +1835,6 @@ _PHY_DumpRFReg(IN	PADAPTER	pAdapter)
  * Move from phycfg.c to gen.c to be code independent later
  *
  * -------------------------Move to other DIR later---------------------------- */
-#ifdef CONFIG_USB_HCI
 
 /*
  *	Description:
@@ -1990,9 +1857,8 @@ static void DumpBBDbgPort_92CU(PADAPTER Adapter)
 	phy_set_bb_reg(Adapter, 0x0908, 0xffff, 0x0100);
 	phy_set_bb_reg(Adapter, 0x0a28, 0x00ff0000, 0x00150000);
 }
-#endif
 
-VOID
+void
 PHY_SetRFEReg_8188E(
 	IN PADAPTER		Adapter
 )

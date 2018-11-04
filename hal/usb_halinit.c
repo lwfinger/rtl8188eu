@@ -23,12 +23,6 @@
 #include <rtl8188e_hal.h>
 #include "hal_com_h2c.h"
 
-#ifndef CONFIG_USB_HCI
-
-	#error "CONFIG_USB_HCI shall be on!\n"
-
-#endif
-
 static VOID
 _ConfigNormalChipOutEP_8188E(
 	IN	PADAPTER	pAdapter,
@@ -1789,14 +1783,6 @@ readAdapterInfo_8188EU(
 #ifdef CONFIG_RF_POWER_TRIM
 	Hal_ReadRFGainOffset(padapter, pHalData->efuse_eeprom_data, pHalData->bautoload_fail_flag);
 #endif	/*CONFIG_RF_POWER_TRIM*/
-
-	/*  */
-	/* The following part initialize some vars by PG info. */
-	/*  */
-
-#if defined(CONFIG_WOWLAN) && defined(CONFIG_SDIO_HCI)
-	Hal_DetectWoWMode(padapter);
-#endif /* CONFIG_WOWLAN && CONFIG_SDIO_HCI */
 
 	Hal_CustomizeByCustomerID_8188EU(padapter);
 
