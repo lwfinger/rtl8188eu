@@ -30,17 +30,8 @@ c. provides the software interface between caller and the hardware interface
 
 Compiler Flag Option:
 
-1. CONFIG_SDIO_HCI:
-    a. USE_SYNC_IRP:  Only sync operations are provided.
-    b. USE_ASYNC_IRP:Both sync/async operations are provided.
-
 2. CONFIG_USB_HCI:
    a. USE_ASYNC_IRP: Both sync/async operations are provided.
-
-3. CONFIG_CFIO_HCI:
-   b. USE_SYNC_IRP: Only sync operations are provided.
-
-
 Only sync read/rtw_write_mem operations are provided.
 
 jackson@realtek.com.tw
@@ -52,18 +43,10 @@ jackson@realtek.com.tw
 #include <drv_types.h>
 #include <hal_data.h>
 
-#ifdef CONFIG_SDIO_HCI
-	#define rtw_le16_to_cpu(val)		val
-	#define rtw_le32_to_cpu(val)		val
-	#define rtw_cpu_to_le16(val)		val
-	#define rtw_cpu_to_le32(val)		val
-#else
 	#define rtw_le16_to_cpu(val)		le16_to_cpu(val)
 	#define rtw_le32_to_cpu(val)		le32_to_cpu(val)
 	#define rtw_cpu_to_le16(val)		cpu_to_le16(val)
 	#define rtw_cpu_to_le32(val)		cpu_to_le32(val)
-#endif
-
 
 u8 _rtw_read8(_adapter *adapter, u32 addr)
 {
@@ -159,130 +142,6 @@ int _rtw_writeN(_adapter *adapter, u32 addr , u32 length , u8 *pdata)
 
 	return RTW_STATUS_CODE(ret);
 }
-
-#ifdef CONFIG_SDIO_HCI
-u8 _rtw_sd_f0_read8(_adapter *adapter, u32 addr)
-{
-	u8 r_val = 0x00;
-	struct io_priv *pio_priv = &adapter->iopriv;
-	struct intf_hdl *pintfhdl = &(pio_priv->intf);
-	u8(*_sd_f0_read8)(struct intf_hdl *pintfhdl, u32 addr);
-
-	_sd_f0_read8 = pintfhdl->io_ops._sd_f0_read8;
-
-	if (_sd_f0_read8)
-		r_val = _sd_f0_read8(pintfhdl, addr);
-	else
-		RTW_WARN(FUNC_ADPT_FMT" _sd_f0_read8 callback is NULL\n", FUNC_ADPT_ARG(adapter));
-
-	return r_val;
-}
-
-#ifdef CONFIG_SDIO_INDIRECT_ACCESS
-u8 _rtw_sd_iread8(_adapter *adapter, u32 addr)
-{
-	u8 r_val = 0x00;
-	struct io_priv *pio_priv = &adapter->iopriv;
-	struct intf_hdl *pintfhdl = &(pio_priv->intf);
-	u8(*_sd_iread8)(struct intf_hdl *pintfhdl, u32 addr);
-
-	_sd_iread8 = pintfhdl->io_ops._sd_iread8;
-
-	if (_sd_iread8)
-		r_val = _sd_iread8(pintfhdl, addr);
-	else
-		RTW_ERR(FUNC_ADPT_FMT" _sd_iread8 callback is NULL\n", FUNC_ADPT_ARG(adapter));
-
-	return r_val;
-}
-
-u16 _rtw_sd_iread16(_adapter *adapter, u32 addr)
-{
-	u16 r_val = 0x00;
-	struct io_priv *pio_priv = &adapter->iopriv;
-	struct intf_hdl *pintfhdl = &(pio_priv->intf);
-	u16(*_sd_iread16)(struct intf_hdl *pintfhdl, u32 addr);
-
-	_sd_iread16 = pintfhdl->io_ops._sd_iread16;
-
-	if (_sd_iread16)
-		r_val = _sd_iread16(pintfhdl, addr);
-	else
-		RTW_ERR(FUNC_ADPT_FMT" _sd_iread16 callback is NULL\n", FUNC_ADPT_ARG(adapter));
-
-	return r_val;
-}
-
-u32 _rtw_sd_iread32(_adapter *adapter, u32 addr)
-{
-	u32 r_val = 0x00;
-	struct io_priv *pio_priv = &adapter->iopriv;
-	struct intf_hdl *pintfhdl = &(pio_priv->intf);
-	u32(*_sd_iread32)(struct intf_hdl *pintfhdl, u32 addr);
-
-	_sd_iread32 = pintfhdl->io_ops._sd_iread32;
-
-	if (_sd_iread32)
-		r_val = _sd_iread32(pintfhdl, addr);
-	else
-		RTW_ERR(FUNC_ADPT_FMT" _sd_iread32 callback is NULL\n", FUNC_ADPT_ARG(adapter));
-
-	return r_val;
-}
-
-int _rtw_sd_iwrite8(_adapter *adapter, u32 addr, u8 val)
-{
-	struct io_priv *pio_priv = &adapter->iopriv;
-	struct intf_hdl *pintfhdl = &(pio_priv->intf);
-	int (*_sd_iwrite8)(struct intf_hdl *pintfhdl, u32 addr, u8 val);
-	int ret = -1;
-
-	_sd_iwrite8 = pintfhdl->io_ops._sd_iwrite8;
-
-	if (_sd_iwrite8)
-		ret = _sd_iwrite8(pintfhdl, addr, val);
-	else
-		RTW_ERR(FUNC_ADPT_FMT" _sd_iwrite8 callback is NULL\n", FUNC_ADPT_ARG(adapter));
-
-	return RTW_STATUS_CODE(ret);
-}
-
-int _rtw_sd_iwrite16(_adapter *adapter, u32 addr, u16 val)
-{
-	struct io_priv *pio_priv = &adapter->iopriv;
-	struct intf_hdl *pintfhdl = &(pio_priv->intf);
-	int (*_sd_iwrite16)(struct intf_hdl *pintfhdl, u32 addr, u16 val);
-	int ret = -1;
-
-	_sd_iwrite16 = pintfhdl->io_ops._sd_iwrite16;
-
-	if (_sd_iwrite16)
-		ret = _sd_iwrite16(pintfhdl, addr, val);
-	else
-		RTW_ERR(FUNC_ADPT_FMT" _sd_iwrite16 callback is NULL\n", FUNC_ADPT_ARG(adapter));
-
-	return RTW_STATUS_CODE(ret);
-}
-int _rtw_sd_iwrite32(_adapter *adapter, u32 addr, u32 val)
-{
-	struct io_priv *pio_priv = &adapter->iopriv;
-	struct intf_hdl *pintfhdl = &(pio_priv->intf);
-	int (*_sd_iwrite32)(struct intf_hdl *pintfhdl, u32 addr, u32 val);
-	int ret = -1;
-
-	_sd_iwrite32 = pintfhdl->io_ops._sd_iwrite32;
-
-	if (_sd_iwrite32)
-		ret = _sd_iwrite32(pintfhdl, addr, val);
-	else
-		RTW_ERR(FUNC_ADPT_FMT" _sd_iwrite32 callback is NULL\n", FUNC_ADPT_ARG(adapter));
-
-	return RTW_STATUS_CODE(ret);
-}
-
-#endif /* CONFIG_SDIO_INDIRECT_ACCESS */
-
-#endif /* CONFIG_SDIO_HCI */
 
 int _rtw_write8_async(_adapter *adapter, u32 addr, u8 val)
 {
@@ -626,70 +485,5 @@ int dbg_rtw_writeN(_adapter *adapter, u32 addr , u32 length , u8 *data, const ch
 
 	return _rtw_writeN(adapter, addr, length, data);
 }
-
-#ifdef CONFIG_SDIO_HCI
-u8 dbg_rtw_sd_f0_read8(_adapter *adapter, u32 addr, const char *caller, const int line)
-{
-	u8 val = _rtw_sd_f0_read8(adapter, addr);
-
-	return val;
-}
-
-#ifdef CONFIG_SDIO_INDIRECT_ACCESS
-u8 dbg_rtw_sd_iread8(_adapter *adapter, u32 addr, const char *caller, const int line)
-{
-	u8 val = rtw_sd_iread8(adapter, addr);
-
-	if (match_read_sniff_ranges(addr, 1))
-		RTW_INFO("DBG_IO %s:%d rtw_sd_iread8(0x%04x) return 0x%02x\n", caller, line, addr, val);
-
-	return val;
-}
-
-u16 dbg_rtw_sd_iread16(_adapter *adapter, u32 addr, const char *caller, const int line)
-{
-	u16 val = _rtw_sd_iread16(adapter, addr);
-
-	if (match_read_sniff_ranges(addr, 2))
-		RTW_INFO("DBG_IO %s:%d rtw_sd_iread16(0x%04x) return 0x%04x\n", caller, line, addr, val);
-
-	return val;
-}
-
-u32 dbg_rtw_sd_iread32(_adapter *adapter, u32 addr, const char *caller, const int line)
-{
-	u32 val = _rtw_sd_iread32(adapter, addr);
-
-	if (match_read_sniff_ranges(addr, 4))
-		RTW_INFO("DBG_IO %s:%d rtw_sd_iread32(0x%04x) return 0x%08x\n", caller, line, addr, val);
-
-	return val;
-}
-
-int dbg_rtw_sd_iwrite8(_adapter *adapter, u32 addr, u8 val, const char *caller, const int line)
-{
-	if (match_write_sniff_ranges(addr, 1))
-		RTW_INFO("DBG_IO %s:%d rtw_sd_iwrite8(0x%04x, 0x%02x)\n", caller, line, addr, val);
-
-	return _rtw_sd_iwrite8(adapter, addr, val);
-}
-int dbg_rtw_sd_iwrite16(_adapter *adapter, u32 addr, u16 val, const char *caller, const int line)
-{
-	if (match_write_sniff_ranges(addr, 2))
-		RTW_INFO("DBG_IO %s:%d rtw_sd_iwrite16(0x%04x, 0x%04x)\n", caller, line, addr, val);
-
-	return _rtw_sd_iwrite16(adapter, addr, val);
-}
-int dbg_rtw_sd_iwrite32(_adapter *adapter, u32 addr, u32 val, const char *caller, const int line)
-{
-	if (match_write_sniff_ranges(addr, 4))
-		RTW_INFO("DBG_IO %s:%d rtw_sd_iwrite32(0x%04x, 0x%08x)\n", caller, line, addr, val);
-
-	return _rtw_sd_iwrite32(adapter, addr, val);
-}
-
-#endif /* CONFIG_SDIO_INDIRECT_ACCESS */
-
-#endif /* CONFIG_SDIO_HCI */
 
 #endif

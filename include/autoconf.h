@@ -32,8 +32,6 @@
 #define RTL871X_MODULE_NAME "88EU"
 #define DRV_NAME "rtl8188eu"
 
-#define CONFIG_USB_HCI
-
 #define PLATFORM_LINUX
 
 /* #define CONFIG_IOCTL_CFG80211 */

@@ -648,25 +648,6 @@ void rtw_mi_buddy_hal_dump_macaddr(_adapter *padapter)
 	_rtw_mi_process(padapter, _TRUE, NULL, _rtw_mi_hal_dump_macaddr);
 }
 
-#ifdef CONFIG_PCI_HCI
-static u8 _rtw_mi_xmit_tasklet_schedule(_adapter *padapter, void *data)
-{
-	if (rtw_txframes_pending(padapter)) {
-		/* try to deal with the pending packets */
-		tasklet_hi_schedule(&(padapter->xmitpriv.xmit_tasklet));
-	}
-	return _TRUE;
-}
-void rtw_mi_xmit_tasklet_schedule(_adapter *padapter)
-{
-	_rtw_mi_process(padapter, _FALSE, NULL, _rtw_mi_xmit_tasklet_schedule);
-}
-void rtw_mi_buddy_xmit_tasklet_schedule(_adapter *padapter)
-{
-	_rtw_mi_process(padapter, _TRUE, NULL, _rtw_mi_xmit_tasklet_schedule);
-}
-#endif
-
 static u8 _rtw_mi_busy_traffic_check(_adapter *padapter, void *data)
 {
 	u32 passtime;
@@ -835,35 +816,6 @@ u8 rtw_mi_buddy_check_pending_xmitbuf(_adapter *padapter)
 }
 #endif
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-static u8 _rtw_mi_dequeue_writeport(_adapter *padapter , bool exclude_self)
-{
-	int i;
-	u8	queue_empty = _TRUE;
-	_adapter *iface;
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-
-	for (i = 0; i < dvobj->iface_nums; i++) {
-		iface = dvobj->padapters[i];
-		if ((iface) && rtw_is_adapter_up(iface)) {
-
-			if ((exclude_self) && (iface == padapter))
-				continue;
-
-			queue_empty &= _dequeue_writeport(iface);
-		}
-	}
-	return queue_empty;
-}
-u8 rtw_mi_dequeue_writeport(_adapter *padapter)
-{
-	return _rtw_mi_dequeue_writeport(padapter, _FALSE);
-}
-u8 rtw_mi_buddy_dequeue_writeport(_adapter *padapter)
-{
-	return _rtw_mi_dequeue_writeport(padapter, _TRUE);
-}
-#endif
 static void _rtw_mi_adapter_reset(_adapter *padapter , u8 exclude_self)
 {
 	int i;
@@ -989,9 +941,7 @@ static u8 _rtw_mi_tx_beacon_hdl(_adapter *adapter, void *data)
 	   ) {
 		adapter->mlmepriv.update_bcn = _TRUE;
 #ifndef CONFIG_INTERRUPT_BASED_TXBCN
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 		tx_beacon_hdl(adapter, NULL);
-#endif
 #endif
 	}
 	return _TRUE;
@@ -1237,28 +1187,6 @@ void rtw_mi_buddy_clone_bcmc_packet(_adapter *padapter, union recv_frame *precvf
 	}
 
 }
-
-#ifdef CONFIG_PCI_HCI
-/*API be created temporary for MI, caller is interrupt-handler, PCIE's interrupt handler cannot apply to multi-AP*/
-_adapter *rtw_mi_get_ap_adapter(_adapter *padapter)
-{
-	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
-	int i;
-	_adapter *iface = NULL;
-
-	for (i = 0; i < dvobj->iface_nums; i++) {
-		iface = dvobj->padapters[i];
-		if (!iface)
-			continue;
-
-		if (check_fwstate(&iface->mlmepriv, WIFI_AP_STATE) == _TRUE
-		    && check_fwstate(&iface->mlmepriv, WIFI_ASOC_STATE) == _TRUE)
-			break;
-
-	}
-	return iface;
-}
-#endif
 
 void rtw_mi_update_ap_bmc_camid(_adapter *padapter, u8 camid_a, u8 camid_b)
 {

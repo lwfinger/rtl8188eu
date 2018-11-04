@@ -1332,9 +1332,7 @@ void LPS_Leave_check(
 
 		if (rtw_is_surprise_removed(padapter)
 		    || (!rtw_is_hw_init_completed(padapter))
-#ifdef CONFIG_USB_HCI
 		    || rtw_is_drv_stopped(padapter)
-#endif
 		    || (pwrpriv->pwr_mode == PS_MODE_ACTIVE)
 		   )
 			bReady = _TRUE;
@@ -2208,9 +2206,7 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv)
 #endif /* CONFIG_HAS_EARLYSUSPEND */
 
 #ifdef CONFIG_ANDROID_POWER
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 	extern int rtw_resume_process(PADAPTER padapter);
-#endif
 static void rtw_early_suspend(android_early_suspend_t *h)
 {
 	struct pwrctrl_priv *pwrpriv = container_of(h, struct pwrctrl_priv, early_suspend);
@@ -2227,10 +2223,8 @@ static void rtw_late_resume(android_early_suspend_t *h)
 
 	RTW_INFO("%s\n", __func__);
 	if (pwrpriv->do_late_resume) {
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 		rtw_set_do_late_resume(pwrpriv, _FALSE);
 		rtw_resume_process(adapter);
-#endif
 	}
 }
 
@@ -2372,7 +2366,6 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 	}
 
 	if (rf_off == pwrpriv->rf_pwrstate) {
-#ifdef CONFIG_USB_HCI
 #ifdef CONFIG_AUTOSUSPEND
 		if (pwrpriv->brfoffbyhw == _TRUE) {
 			RTW_INFO("hw still in rf_off state ...........\n");
@@ -2386,7 +2379,6 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 				goto exit;
 			}
 		} else
-#endif
 #endif
 		{
 #ifdef CONFIG_IPS

@@ -10529,7 +10529,6 @@ unsigned int send_beacon(_adapter *padapter)
 	return _SUCCESS;
 #endif
 
-#if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
 	u32 start = rtw_get_current_time();
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_BCN_VALID, NULL);
@@ -10564,9 +10563,6 @@ unsigned int send_beacon(_adapter *padapter)
 
 		return _SUCCESS;
 	}
-
-#endif
-
 }
 
 /****************************************************************************

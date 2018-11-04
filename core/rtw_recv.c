@@ -130,13 +130,9 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter)
 
 	}
 
-#ifdef CONFIG_USB_HCI
+       ATOMIC_SET(&(precvpriv->rx_pending_cnt), 1);
 
-	ATOMIC_SET(&(precvpriv->rx_pending_cnt), 1);
-
-	_rtw_init_sema(&precvpriv->allrxreturnevt, 0);
-
-#endif
+       _rtw_init_sema(&precvpriv->allrxreturnevt, 0);
 
 	res = rtw_hal_init_recv_priv(padapter);
 
@@ -409,29 +405,20 @@ sint rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, _queue *queue)
 	rtw_list_insert_head(&precvbuf->list, get_list_head(queue));
 
 	_exit_critical_bh(&queue->lock, &irqL);
-
 	return _SUCCESS;
 }
 
 sint rtw_enqueue_recvbuf(struct recv_buf *precvbuf, _queue *queue)
 {
 	_irqL irqL;
-#ifdef CONFIG_SDIO_HCI
-	_enter_critical_bh(&queue->lock, &irqL);
-#else
+
 	_enter_critical_ex(&queue->lock, &irqL);
-#endif/*#ifdef CONFIG_SDIO_HCI*/
 
 	rtw_list_delete(&precvbuf->list);
 
 	rtw_list_insert_tail(&precvbuf->list, get_list_head(queue));
-#ifdef CONFIG_SDIO_HCI
-	_exit_critical_bh(&queue->lock, &irqL);
-#else
 	_exit_critical_ex(&queue->lock, &irqL);
-#endif/*#ifdef CONFIG_SDIO_HCI*/
 	return _SUCCESS;
-
 }
 
 struct recv_buf *rtw_dequeue_recvbuf(_queue *queue)
@@ -440,11 +427,7 @@ struct recv_buf *rtw_dequeue_recvbuf(_queue *queue)
 	struct recv_buf *precvbuf;
 	_list	*plist, *phead;
 
-#ifdef CONFIG_SDIO_HCI
-	_enter_critical_bh(&queue->lock, &irqL);
-#else
 	_enter_critical_ex(&queue->lock, &irqL);
-#endif/*#ifdef CONFIG_SDIO_HCI*/
 
 	if (_rtw_queue_empty(queue) == _TRUE)
 		precvbuf = NULL;
@@ -456,17 +439,11 @@ struct recv_buf *rtw_dequeue_recvbuf(_queue *queue)
 		precvbuf = LIST_CONTAINOR(plist, struct recv_buf, list);
 
 		rtw_list_delete(&precvbuf->list);
-
 	}
 
-#ifdef CONFIG_SDIO_HCI
-	_exit_critical_bh(&queue->lock, &irqL);
-#else
 	_exit_critical_ex(&queue->lock, &irqL);
-#endif/*#ifdef CONFIG_SDIO_HCI*/
 
 	return precvbuf;
-
 }
 
 sint recvframe_chkmic(_adapter *adapter,  union recv_frame *precvframe);
@@ -2446,62 +2423,6 @@ exit:
 }
 #endif
 
-
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-static void recvframe_expand_pkt(
-	PADAPTER padapter,
-	union recv_frame *prframe)
-{
-	struct recv_frame_hdr *pfhdr;
-	_pkt *ppkt;
-	u8 shift_sz;
-	u32 alloc_sz;
-	u8 *ptr;
-
-
-	pfhdr = &prframe->u.hdr;
-
-	/*	6 is for IP header 8 bytes alignment in QoS packet case. */
-	if (pfhdr->attrib.qos)
-		shift_sz = 6;
-	else
-		shift_sz = 0;
-
-	/* for first fragment packet, need to allocate */
-	/* (1536 + RXDESC_SIZE + drvinfo_sz) to reassemble packet */
-	/*	8 is for skb->data 8 bytes alignment.
-	*	alloc_sz = _RND(1536 + RXDESC_SIZE + pfhdr->attrib.drvinfosize + shift_sz + 8, 128); */
-	alloc_sz = 1664; /* round (1536 + 24 + 32 + shift_sz + 8) to 128 bytes alignment */
-
-	/* 3 1. alloc new skb */
-	/* prepare extra space for 4 bytes alignment */
-	ppkt = rtw_skb_alloc(alloc_sz);
-
-	if (!ppkt)
-		return; /* no way to expand */
-
-	/* 3 2. Prepare new skb to replace & release old skb */
-	/* force ppkt->data at 8-byte alignment address */
-	skb_reserve(ppkt, 8 - ((SIZE_PTR)ppkt->data & 7));
-	/* force ip_hdr at 8-byte alignment address according to shift_sz */
-	skb_reserve(ppkt, shift_sz);
-
-	/* copy data to new pkt */
-	ptr = skb_put(ppkt, pfhdr->len);
-	if (ptr)
-		_rtw_memcpy(ptr, pfhdr->rx_data, pfhdr->len);
-
-	rtw_skb_free(pfhdr->pkt);
-
-	/* attach new pkt to recvframe */
-	pfhdr->pkt = ppkt;
-	pfhdr->rx_head = ppkt->head;
-	pfhdr->rx_data = ppkt->data;
-	pfhdr->rx_tail = skb_tail_pointer(ppkt);
-	pfhdr->rx_end = skb_end_pointer(ppkt);
-}
-#endif
-
 /* perform defrag */
 union recv_frame *recvframe_defrag(_adapter *adapter, _queue *defrag_q);
 union recv_frame *recvframe_defrag(_adapter *adapter, _queue *defrag_q)
@@ -2531,13 +2452,6 @@ union recv_frame *recvframe_defrag(_adapter *adapter, _queue *defrag_q)
 
 		return NULL;
 	}
-
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-#ifndef CONFIG_SDIO_RX_COPY
-	recvframe_expand_pkt(adapter, prframe);
-#endif
-#endif
-
 	curfragnum++;
 
 	plist = get_list_head(defrag_q);
