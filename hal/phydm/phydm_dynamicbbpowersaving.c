@@ -49,18 +49,14 @@ odm_rf_saving(
 )
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-#if (DM_ODM_SUPPORT_TYPE != ODM_AP)
 	struct _dynamic_power_saving	*p_dm_ps_table = &p_dm_odm->dm_ps_table;
 	u8	rssi_up_bound = 30 ;
 	u8	rssi_low_bound = 25;
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	if (p_dm_odm->patch_id == 40) { /* RT_CID_819x_FUNAI_TV */
 		rssi_up_bound = 50 ;
 		rssi_low_bound = 45;
 	}
-#endif
 	if (p_dm_ps_table->initialize == 0) {
-
 		p_dm_ps_table->reg874 = (odm_get_bb_reg(p_dm_odm, 0x874, MASKDWORD) & 0x1CC000) >> 14;
 		p_dm_ps_table->regc70 = (odm_get_bb_reg(p_dm_odm, 0xc70, MASKDWORD) & BIT(3)) >> 3;
 		p_dm_ps_table->reg85c = (odm_get_bb_reg(p_dm_odm, 0x85c, MASKDWORD) & 0xFF000000) >> 24;
@@ -105,7 +101,6 @@ odm_rf_saving(
 		}
 		p_dm_ps_table->pre_rf_state = p_dm_ps_table->cur_rf_state;
 	}
-#endif
 }
 
 #endif

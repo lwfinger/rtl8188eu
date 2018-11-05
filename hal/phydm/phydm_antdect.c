@@ -25,7 +25,6 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-/* #if( DM_ODM_SUPPORT_TYPE & (ODM_WIN |ODM_CE)) */
 #if (defined(CONFIG_ANT_DETECTION))
 
 /* IS_ANT_DETECT_SUPPORT_SINGLE_TONE(adapter)

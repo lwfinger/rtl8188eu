@@ -1729,14 +1729,6 @@ odm_read_and_config_mp_8188e_phy_reg_pg(
 	u32     array_len    = sizeof(array_mp_8188e_phy_reg_pg) / sizeof(u32);
 	u32    *array       = array_mp_8188e_phy_reg_pg;
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct _ADAPTER		*adapter = p_dm_odm->adapter;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-
-	PlatformZeroMemory(p_hal_data->BufOfLinesPwrByRate, MAX_LINES_HWCONFIG_TXT * MAX_BYTES_LINE_HWCONFIG_TXT);
-	p_hal_data->nLinesReadPwrByRate = array_len / 6;
-#endif
-
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("===> odm_read_and_config_mp_8188e_phy_reg_pg\n"));
 
 	p_dm_odm->phy_reg_pg_version = 1;
@@ -1751,14 +1743,7 @@ odm_read_and_config_mp_8188e_phy_reg_pg(
 		u32 v6 = array[i + 5];
 
 		odm_config_bb_phy_reg_pg_8188e(p_dm_odm, v1, v2, v3, v4, v5, v6);
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-		rsprintf((char *)p_hal_data->BufOfLinesPwrByRate[i / 6], 100, "%s, %s, %s, 0x%X, 0x%08X, 0x%08X,",
-			(v1 == 0 ? "2.4G" : "  5G"), (v2 == 0 ? "A" : "B"), (v3 == 0 ? "1Tx" : "2Tx"), v4, v5, v6);
-#endif
 	}
 }
-
-
 
 #endif /* end of HWIMG_SUPPORT*/

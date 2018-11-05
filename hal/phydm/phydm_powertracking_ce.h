@@ -169,11 +169,7 @@ struct odm_rf_calibration_structure {
 
 	u8			bb_swing_idx_ofdm[MAX_RF_PATH];
 	u8			bb_swing_idx_ofdm_current;
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	u8			bb_swing_idx_ofdm_base[MAX_RF_PATH];
-#else
-	u8			bb_swing_idx_ofdm_base;
-#endif
 	bool		default_bb_swing_index_flag;
 	bool			bb_swing_flag_ofdm;
 	u8			bb_swing_idx_cck;
@@ -301,34 +297,5 @@ void
 odm_txpowertracking_check_ce(
 	void		*p_dm_void
 );
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-
-void
-odm_txpowertracking_callback_thermal_meter92c(
-	struct _ADAPTER	*adapter
-);
-
-void
-odm_txpowertracking_callback_rx_gain_thermal_meter92d(
-	struct _ADAPTER	*adapter
-);
-
-void
-odm_txpowertracking_callback_thermal_meter92d(
-	struct _ADAPTER	*adapter
-);
-
-void
-odm_txpowertracking_direct_call92c(
-	struct _ADAPTER		*adapter
-);
-
-void
-odm_txpowertracking_thermal_meter_check(
-	struct _ADAPTER		*adapter
-);
-
-#endif
 
 #endif

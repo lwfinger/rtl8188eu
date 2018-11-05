@@ -34,11 +34,6 @@ odm_dig_lower_bound_88e(
 	struct PHY_DM_STRUCT		*p_dm_odm
 );
 
-
-
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
-
 #define sw_ant_div_reset_before_link		odm_sw_ant_div_reset_before_link
 
 void odm_sw_ant_div_reset_before_link(struct PHY_DM_STRUCT	*p_dm_odm);
@@ -49,12 +44,6 @@ odm_set_tx_ant_by_tx_info_88e(
 	u8			*p_desc,
 	u8			mac_id
 );
-#else/* (DM_ODM_SUPPORT_TYPE == ODM_AP) */
-void
-odm_set_tx_ant_by_tx_info_88e(
-	struct PHY_DM_STRUCT		*p_dm_odm
-);
-#endif
 
 void
 odm_primary_cca_init(

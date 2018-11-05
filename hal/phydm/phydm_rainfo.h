@@ -63,15 +63,7 @@
 #define	RA_MASK_VHT1SS	0x3ff000
 #define	RA_MASK_VHT2SS	0xffc00000
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-	#define		RA_FIRST_MACID	1
-#elif (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	#define	RA_FIRST_MACID	0
-	#define	WIN_DEFAULT_PORT_MACID	0
-	#define	WIN_BT_PORT_MACID	2
-#else /*if (DM_ODM_SUPPORT_TYPE == ODM_CE)*/
 	#define		RA_FIRST_MACID	0
-#endif
 
 #define ap_init_rate_adaptive_state	odm_rate_adaptive_state_ap_init
 
@@ -205,25 +197,12 @@ struct _odm_ra_info_ {
 	u8 ra_stage;  /* StageRA, decide how many times RA will be done between PT */
 	u8 pt_smooth_factor;
 #endif
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) &&	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-	u8 rate_down_counter;
-	u8 rate_up_counter;
-	u8 rate_direction;
-	u8 bounding_type;
-	u8 bounding_counter;
-	u8 bounding_learning_time;
-	u8 rate_down_start_time;
-#endif
 };
 #endif
 
 
 struct _rate_adaptive_table_ {
 	u8		firstconnect;
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	bool		PT_collision_pre;
-#endif
-
 #if (defined(CONFIG_RA_DBG_CMD))
 	bool		is_ra_dbg_init;
 
@@ -272,20 +251,10 @@ struct _ODM_RATE_ADAPTIVE {
 	u8				low_rssi_thresh;		/* if RSSI <= low_rssi_thresh	=> ratr_state is DM_RATR_STA_LOW */
 	u8				ratr_state;			/* Current RSSI level, DM_RATR_STA_HIGH/DM_RATR_STA_MIDDLE/DM_RATR_STA_LOW */
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	u8				ldpc_thres;			/* if RSSI > ldpc_thres => switch from LPDC to BCC */
 	bool				is_lower_rts_rate;
-#endif
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	u8				rts_thres;
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 	bool				is_use_ldpc;
-#else
-	u8				ultra_low_rssi_thresh;
-	u32				last_ratr;			/* RATR Register Content */
-#endif
-
 };
 
 void
@@ -480,8 +449,6 @@ odm_ra_post_action_on_assoc(
 	void	*p_dm_odm
 );
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
-
 u8
 odm_find_rts_rate(
 	void		*p_dm_void,
@@ -501,49 +468,12 @@ phydm_update_pwr_track(
 	u8		rate
 );
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-
-s32
-phydm_find_minimum_rssi(
-	struct PHY_DM_STRUCT		*p_dm_odm,
-	struct _ADAPTER		*p_adapter,
-	OUT	bool	*p_is_link_temp
-);
-
-void
-odm_update_init_rate_work_item_callback(
-	void	*p_context
-);
-
-void
-odm_rssi_dump_to_register(
-	void	*p_dm_void
-);
-
-void
-odm_refresh_ldpc_rts_mp(
-	struct _ADAPTER			*p_adapter,
-	struct PHY_DM_STRUCT			*p_dm_odm,
-	u8				m_mac_id,
-	u8				iot_peer,
-	s32				undecorated_smoothed_pwdb
-);
-
-#if 0
-void
-odm_dynamic_arfb_select(
-	void		*p_dm_void,
-	u8		rate,
-	bool		collision_state
-);
-#endif
 
 void
 odm_rate_adaptive_state_ap_init(
 	void			*PADAPTER_VOID,
 	struct sta_info	*p_entry
 );
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 
 static void
 find_minimum_rssi(
@@ -568,18 +498,5 @@ odm_get_rate_bitmap(
 );
 
 void phydm_ra_rssi_rpt_wk(void *p_context);
-#endif/*#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)*/
-
-#elif (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-/*
-void
-phydm_gen_ramask_h2c_AP(
-	void					*p_dm_void,
-	struct rtl8192cd_priv 	*priv,
-	struct sta_info 		*p_entry,
-	u8					rssi_level
-);
-*/
-#endif/*#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN| ODM_CE))*/
 
 #endif /*#ifndef	__ODMRAINFO_H__*/

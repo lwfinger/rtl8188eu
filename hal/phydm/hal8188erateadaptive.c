@@ -66,50 +66,7 @@ static u8 RETRY_PENALTY_IDX[2][RATESIZE] = {{
 };
 #endif
 
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-static u8 RETRY_PENALTY_IDX[2][RATESIZE] = 	{{
-		4, 4, 4, 5, 4, 4, 5, 7, 7, 7, 8, 0x0a,	 /* SS>TH */
-#if (DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE)
-		4, 4, 4, 4, 0x0d, 0x0d, 0x0f, 0x0f,
-#else
-		4, 4, 4, 4, 6, 0x0a, 0x0b, 0x0d,
-#endif
-		5, 5, 7, 7, 8, 0x0b, 0x0d, 0x0f
-	},	 		   /* 0329 R01 */
-	{
-		0x0a, 0x0a, 0x0a, 0x0a, 0x0c, 0x0c, 0x0e, 0x10, 0x11, 0x12, 0x12, 0x13,	 /* SS<TH */
-		0x0e, 0x0f, 0x10, 0x10, 0x11, 0x14, 0x14, 0x15,
-		9, 9, 9, 9, 0x0c, 0x0e, 0x11, 0x13
-	}
-};
-
-static u8 RETRY_PENALTY_UP_IDX[RATESIZE] = 	{0x10, 0x10, 0x10, 0x10, 0x11, 0x11, 0x12, 0x12, 0x12, 0x13, 0x13, 0x14,	 /* SS>TH */
-				 0x13, 0x13, 0x14, 0x14, 0x15, 0x15, 0x15, 0x15,
-				 0x11, 0x11, 0x12, 0x13, 0x13, 0x13, 0x14, 0x15
-					    };
-
-static u8 RSSI_THRESHOLD[RATESIZE] =				{0, 0, 0, 0,
-					 0, 0, 0, 0, 0, 0x24, 0x26, 0x2a,
-				 0x17, 0x1a, 0x1c, 0x1f, 0x23, 0x28, 0x2a, 0x2c,
-					 0, 0, 0, 0x1f, 0x23, 0x28, 0x2a, 0x2c
-					};
-#else
-
 /* wilson modify */
-#if 0
-static u8 RETRY_PENALTY_IDX[2][RATESIZE] = {{
-		4, 4, 4, 5, 4, 4, 5, 7, 7, 7, 8, 0x0a,	 /*  SS>TH */
-		4, 4, 4, 4, 6, 0x0a, 0x0b, 0x0d,
-		5, 5, 7, 7, 8, 0x0b, 0x0d, 0x0f
-	},	 		   /*  0329 R01 */
-	{
-		0x0a, 0x0a, 0x0b, 0x0c, 0x0a, 0x0a, 0x0b, 0x0c, 0x0d, 0x10, 0x13, 0x14,	 /*  SS<TH */
-		0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x11, 0x13, 0x15,
-		9, 9, 9, 9, 0x0c, 0x0e, 0x11, 0x13
-	}
-};
-#endif
 
 static u8 RETRY_PENALTY_IDX[2][RATESIZE] = {{
 		4, 4, 4, 5, 4, 4, 5, 7, 7, 7, 8, 0x0a,	 /* SS>TH */
@@ -134,20 +91,6 @@ static u8 RSSI_THRESHOLD[RATESIZE] =			{0, 0, 0, 0,
 					 0, 0, 0, 0x1f, 0x23, 0x28, 0x2a, 0x2c
 				       };
 
-#endif
-
-/*static u8 RSSI_THRESHOLD[RATESIZE] = {0,0,0,0,
-													0,0,0,0,0,0x24,0x26,0x2a,
-													0x1a,0x1c,0x1e,0x21,0x24,0x2a,0x2b,0x2d,
-													0,0,0,0x1f,0x23,0x28,0x2a,0x2c};*/
-/*static u16 N_THRESHOLD_HIGH[RATESIZE] = {4,4,8,16,
-													24,36,48,72,96,144,192,216,
-													60,80,100,160,240,400,560,640,
-													300,320,480,720,1000,1200,1600,2000};
-static u16 N_THRESHOLD_LOW[RATESIZE] = {2,2,4,8,
-													12,18,24,36,48,72,96,108,
-													30,40,50,80,120,200,280,320,
-													150,160,240,360,500,600,800,1000};*/
 static u16 N_THRESHOLD_HIGH[RATESIZE] = {4, 4, 8, 16,
 					      24, 36, 48, 72, 96, 144, 192, 216,
 				      60, 80, 100, 160, 240, 400, 600, 800,
@@ -200,73 +143,6 @@ static u8 pending_for_rate_up_fail[5] = {2, 10, 24, 40, 60};
 static u16 dynamic_tx_rpt_timing[6] = {0x186a, 0x30d4, 0x493e, 0x61a8, 0x7a12, 0x927c};	/*200ms-1200ms*/
 
 /* End rate adaptive parameters */
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-static int
-odm_ra_learn_bounding(
-	struct PHY_DM_STRUCT *p_dm_odm,
-	struct _odm_ra_info_	*p_ra_info
-)
-{
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, (" odm_ra_learn_bounding\n"));
-	if (DM_RA_RATE_UP != p_ra_info->rate_direction) {
-		/* Check if previous RA adjustment trend as +++--- or ++++----*/
-		if (((3 == p_ra_info->rate_up_counter && p_ra_info->bounding_learning_time <= 10)
-		     || (4 == p_ra_info->rate_up_counter && p_ra_info->bounding_learning_time <= 16))
-		    && (p_ra_info->rate_up_counter == p_ra_info->rate_down_counter)) {
-			if (1 != p_ra_info->bounding_type) {
-				p_ra_info->bounding_type = 1;
-				p_ra_info->bounding_counter = 0;
-			}
-			p_ra_info->bounding_counter++;
-			/* Check if previous RA adjustment trend as ++--*/
-		} else if ((2 == p_ra_info->rate_up_counter) && (p_ra_info->bounding_learning_time <= 7)
-			&& (p_ra_info->rate_up_counter == p_ra_info->rate_down_counter)) {
-			if (2 != p_ra_info->bounding_type) {
-				p_ra_info->bounding_type = 2;
-				p_ra_info->bounding_counter = 0;
-			}
-			p_ra_info->bounding_counter++;
-			/* Check if previous RA adjustment trend as +++++-----*/
-		} else if ((5 == p_ra_info->rate_up_counter) && (p_ra_info->bounding_learning_time <= 17)
-			&& (p_ra_info->rate_up_counter == p_ra_info->rate_down_counter)) {
-			if (3 != p_ra_info->bounding_type) {
-				p_ra_info->bounding_type = 3;
-				p_ra_info->bounding_counter = 0;
-			}
-			p_ra_info->bounding_counter++;
-		} else
-			p_ra_info->bounding_type = 0;
-
-		p_ra_info->rate_down_counter = 0;
-		p_ra_info->rate_up_counter = 0;
-		p_ra_info->bounding_learning_time = 1;
-	} else if (p_ra_info->bounding_type) {
-		/* Check if RA adjustment trend as +++---++(+) or ++++----++(+)*/
-		if ((1 == p_ra_info->bounding_type) && (1 == p_ra_info->bounding_counter)
-		    && (2 == p_ra_info->rate_up_counter)) {
-			p_ra_info->bounding_type = 0;
-			if (p_ra_info->bounding_learning_time <= 5)
-				return 1;
-			/* Check if RA adjustment trend as ++--++--+(+)*/
-		} else if ((2 == p_ra_info->bounding_type) && (2 == p_ra_info->bounding_counter)
-			   && (1 == p_ra_info->rate_up_counter)) {
-			p_ra_info->bounding_type = 0;
-			if (p_ra_info->bounding_learning_time <= 2)
-				return 1;
-			/* Check if RA adjustment trend as +++++-----++(+)*/
-		} else if ((3 == p_ra_info->bounding_type) && (1 == p_ra_info->bounding_counter)
-			   && (2 == p_ra_info->rate_up_counter)) {
-			p_ra_info->bounding_type = 0;
-			if (p_ra_info->bounding_learning_time <= 4)
-				return 1;
-		}
-	}
-
-	return 0;
-}
-#endif
 
 static void
 odm_set_tx_rpt_timing_8188e(
@@ -325,19 +201,6 @@ odm_rate_down_8188e(
 		if (rate_id > 0) {
 			for (i = rate_id - 1; i >= lowest_rate; i--) {
 				if (p_ra_info->ra_use_rate & BIT(i)) {
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-					p_ra_info->rate_down_counter++;
-					p_ra_info->rate_direction = DM_RA_RATE_DOWN;
-
-					/* Learning +(0)-(-)(-)+ and ++(0)--(-)(-)(0)+ after the persistence of learned TX rate expire*/
-					if (0xFF == p_ra_info->rate_down_start_time) {
-						if ((0 == p_ra_info->rate_up_counter) || (p_ra_info->rate_up_counter + 2 < p_ra_info->bounding_learning_time))
-							p_ra_info->rate_down_start_time = 0;
-						else
-							p_ra_info->rate_down_start_time = p_ra_info->bounding_learning_time;
-					}
-#endif
 					rate_id = i;
 					goto rate_down_finish;
 
@@ -347,36 +210,14 @@ odm_rate_down_8188e(
 	} else if (rate_id <= lowest_rate)
 		rate_id = lowest_rate;
 rate_down_finish:
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-	/*if (p_ra_info->RTY[2] >= 100) {
-		p_ra_info->ra_waiting_counter = 2;
+	if (p_ra_info->ra_waiting_counter == 1) {
+		p_ra_info->ra_waiting_counter += 1;
 		p_ra_info->ra_pending_counter += 1;
-	} else */if ((0 != p_ra_info->rate_down_start_time) && (0xFF != p_ra_info->rate_down_start_time)) {
-		/* Learning +(0)-(-)(-)+ and ++(0)--(-)(-)(0)+ after the persistence of learned TX rate expire*/
-		if (p_ra_info->rate_down_counter < p_ra_info->rate_up_counter) {
-
-		} else if (p_ra_info->rate_down_counter == p_ra_info->rate_up_counter) {
-			p_ra_info->ra_waiting_counter = 2;
-			p_ra_info->ra_pending_counter += 1;
-		} else if (p_ra_info->rate_down_counter <= p_ra_info->rate_up_counter + 2)
-			rate_id = p_ra_info->pre_rate;
-		else {
-			p_ra_info->ra_waiting_counter = 0;
-			p_ra_info->ra_pending_counter = 0;
-			p_ra_info->rate_down_start_time = 0;
-		}
-	} else
-#endif
-		if (p_ra_info->ra_waiting_counter == 1) {
-			p_ra_info->ra_waiting_counter += 1;
-			p_ra_info->ra_pending_counter += 1;
-		} else if (p_ra_info->ra_waiting_counter == 0) {
-		} else {
-			p_ra_info->ra_waiting_counter = 0;
-			p_ra_info->ra_pending_counter = 0;
-		}
-
+	} else if (p_ra_info->ra_waiting_counter == 0) {
+	} else {
+		p_ra_info->ra_waiting_counter = 0;
+		p_ra_info->ra_pending_counter = 0;
+	}
 	if (p_ra_info->ra_pending_counter >= 4)
 		p_ra_info->ra_pending_counter = 4;
 	p_ra_info->ra_drop_after_down = 1;
@@ -413,10 +254,6 @@ odm_rate_up_8188e(
 		p_ra_info->ra_pending_counter = 0;
 	} else if (p_ra_info->ra_waiting_counter > 1) {
 		p_ra_info->pre_rssi_sta_ra = p_ra_info->rssi_sta_ra;
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-		p_ra_info->rate_down_start_time = 0;
-#endif
 		goto rate_up_finish;
 	}
 	odm_set_tx_rpt_timing_8188e(p_dm_odm, p_ra_info, 0);
@@ -425,16 +262,6 @@ odm_rate_up_8188e(
 	if (rate_id < highest_rate) {
 		for (i = rate_id + 1; i <= highest_rate; i++) {
 			if (p_ra_info->ra_use_rate & BIT(i)) {
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-				if (odm_ra_learn_bounding(p_dm_odm, p_ra_info)) {
-					p_ra_info->ra_waiting_counter = 2;
-					p_ra_info->ra_pending_counter = 1;
-					goto rate_up_finish;
-				}
-				p_ra_info->rate_up_counter++;
-				p_ra_info->rate_direction = DM_RA_RATE_UP;
-#endif
 				rate_id = i;
 				goto rate_up_finish;
 			}
@@ -451,15 +278,6 @@ rate_up_finish:
 	/* if(p_ra_info->ra_waiting_counter==10) */
 	if (p_ra_info->ra_waiting_counter == (4 + pending_for_rate_up_fail[p_ra_info->ra_pending_counter])) {
 		p_ra_info->ra_waiting_counter = 0;
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-		/* Mark persistence expiration state*/
-		p_ra_info->rate_down_start_time = 0xFF;
-		/* Clear state to avoid wrong bounding check*/
-		p_ra_info->rate_down_counter = 0;
-		p_ra_info->rate_up_counter = 0;
-		p_ra_info->rate_direction = 0;
-#endif
 	} else
 		p_ra_info->ra_waiting_counter++;
 
@@ -491,34 +309,16 @@ odm_rate_decision_8188e(
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, ("=====>odm_rate_decision_8188e()\n"));
 
 	if (p_ra_info->active && (p_ra_info->TOTAL > 0)) { /* STA used and data packet exits */
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-		if (((p_ra_info->rssi_sta_ra <= 17) && (p_ra_info->rssi_sta_ra > p_ra_info->pre_rssi_sta_ra))
-		    || ((p_ra_info->pre_rssi_sta_ra <= 17) && (p_ra_info->pre_rssi_sta_ra > p_ra_info->rssi_sta_ra))) {
-			/* don't reset state in low signal due to the power different between CCK and MCS is large.*/
-		} else
-#endif
-			if (p_ra_info->ra_drop_after_down) {
-				p_ra_info->ra_drop_after_down--;
-				odm_reset_ra_counter_8188e(p_ra_info);
-				return;
-			}
+		if (p_ra_info->ra_drop_after_down) {
+			p_ra_info->ra_drop_after_down--;
+			odm_reset_ra_counter_8188e(p_ra_info);
+			return;
+		}
 		if ((p_ra_info->rssi_sta_ra < (p_ra_info->pre_rssi_sta_ra - 3)) || (p_ra_info->rssi_sta_ra > (p_ra_info->pre_rssi_sta_ra + 3))) {
 			p_ra_info->pre_rssi_sta_ra = p_ra_info->rssi_sta_ra;
 			p_ra_info->ra_waiting_counter = 0;
 			p_ra_info->ra_pending_counter = 0;
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-			p_ra_info->bounding_type = 0;
-#endif
 		}
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-		if (0xff != p_dm_odm->priv->pshare->rf_ft_var.txforce) {
-			p_ra_info->pre_rate = p_dm_odm->priv->pshare->rf_ft_var.txforce;
-			odm_reset_ra_counter_8188e(p_ra_info);
-		}
-#endif
 
 		/* Start RA decision */
 		if (p_ra_info->pre_rate > p_ra_info->highest_rate)
@@ -567,21 +367,11 @@ odm_rate_decision_8188e(
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE | ODM_COMP_INIT, ODM_DBG_LOUD,
 			(" RssiStaRa= %d rty_pt_id=%d penalty_id1=0x%x  penalty_id2=0x%x rate_id=%d nsc_down=%d nsc_up=%d SGI=%d\n",
 			p_ra_info->rssi_sta_ra, rty_pt_id, penalty_id1, penalty_id2, rate_id, p_ra_info->nsc_down, p_ra_info->nsc_up, p_ra_info->rate_sgi));
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-		if (0xFF != p_ra_info->bounding_learning_time)
-			p_ra_info->bounding_learning_time++;
-#endif
 		if ((p_ra_info->nsc_down < N_THRESHOLD_LOW[rate_id]) || (p_ra_info->DROP > DROPING_NECESSARY[rate_id]))
 			odm_rate_down_8188e(p_dm_odm, p_ra_info);
 		/* else if ((p_ra_info->nsc_up > N_THRESHOLD_HIGH[rate_id])&&(pool_retry<POOL_RETRY_TH[rate_id])) */
 		else if (p_ra_info->nsc_up > N_THRESHOLD_HIGH[rate_id])
 			odm_rate_up_8188e(p_dm_odm, p_ra_info);
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-		else if ((p_ra_info->RTY[2] >= 100) && (ODM_BW20M == *p_dm_odm->p_band_width))
-			odm_rate_down_8188e(p_dm_odm, p_ra_info);
-#endif
 
 		if ((p_ra_info->decision_rate) == (p_ra_info->pre_rate))
 			dynamic_tx_rpt_timing_counter += 1;
@@ -748,7 +538,6 @@ odm_pt_try_state_8188e(
 	}
 	p_ra_info->pt_pre_rate = p_ra_info->decision_rate;
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	/* Disable power training when noisy environment */
 	if (p_dm_odm->is_disable_power_training) {
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("odm_pt_try_state_8188e(): Disable power training when noisy environment\n"));
@@ -756,7 +545,6 @@ odm_pt_try_state_8188e(
 		p_ra_info->ra_stage = 0;
 		p_ra_info->pt_stop_count = 0;
 	}
-#endif
 }
 
 static void
@@ -813,11 +601,7 @@ odm_ra_tx_rpt_timer_setting(
 	if (p_dm_odm->currmin_rpt_time != min_rpt_time) {
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD,
 			(" currmin_rpt_time =0x%04x min_rpt_time=0x%04x\n", p_dm_odm->currmin_rpt_time, min_rpt_time));
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_AP))
-		odm_ra_set_tx_rpt_time(p_dm_odm, min_rpt_time);
-#else
 		rtw_rpt_timer_cfg_cmd(p_dm_odm->adapter, min_rpt_time);
-#endif
 		p_dm_odm->currmin_rpt_time = min_rpt_time;
 	}
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_TRACE, (" <=====odm_ra_tx_rpt_timer_setting()\n"));
@@ -907,16 +691,6 @@ odm_ra_info_init(
 	p_ra_info->pt_mode_ss = 0;
 	p_ra_info->ra_stage = 0;
 #endif
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP) && \
-	((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-	p_ra_info->rate_down_counter = 0;
-	p_ra_info->rate_up_counter = 0;
-	p_ra_info->rate_direction = 0;
-	p_ra_info->bounding_type = 0;
-	p_ra_info->bounding_counter = 0;
-	p_ra_info->bounding_learning_time = 0;
-	p_ra_info->rate_down_start_time = 0;
-#endif
 	return 0;
 }
 
@@ -935,8 +709,6 @@ odm_ra_info_init_all(
 
 	/* Redifine arrays for I-cut NIC */
 	if (p_dm_odm->cut_version == ODM_CUT_I) {
-#if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
-
 		u8 i;
 		u8 RETRY_PENALTY_IDX_S[2][RATESIZE] = {{
 				4, 4, 4, 5,
@@ -965,78 +737,9 @@ odm_ra_info_init_all(
 			RETRY_PENALTY_UP_IDX[i] = RETRY_PENALTY_UP_IDX_S[i];
 		}
 		return 0;
-#endif
 	}
-
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)/* This is for non-I-cut */
-	{
-		struct _ADAPTER	*adapter = p_dm_odm->adapter;
-
-		/* dbg_print("adapter->mgnt_info.reg_ra_lvl = %d\n", adapter->mgnt_info.reg_ra_lvl); */
-
-		/*  */
-		/* 2012/09/14 MH Add for different Ra pattern init. For TPLINK case, we */
-		/* need to to adjust different RA pattern for middle range RA. 20-30dB degarde */
-		/* 88E rate adptve will raise too slow. */
-		/*  */
-		if (adapter->MgntInfo.RegRALvl == 0) {
-			RETRY_PENALTY_UP_IDX[11] = 0x14;
-
-			RETRY_PENALTY_UP_IDX[17] = 0x13;
-			RETRY_PENALTY_UP_IDX[18] = 0x14;
-			RETRY_PENALTY_UP_IDX[19] = 0x15;
-
-			RETRY_PENALTY_UP_IDX[23] = 0x13;
-			RETRY_PENALTY_UP_IDX[24] = 0x13;
-			RETRY_PENALTY_UP_IDX[25] = 0x13;
-			RETRY_PENALTY_UP_IDX[26] = 0x14;
-			RETRY_PENALTY_UP_IDX[27] = 0x15;
-		} else if (adapter->MgntInfo.RegRALvl == 1) {
-			RETRY_PENALTY_UP_IDX[17] = 0x13;
-			RETRY_PENALTY_UP_IDX[18] = 0x13;
-			RETRY_PENALTY_UP_IDX[19] = 0x14;
-
-			RETRY_PENALTY_UP_IDX[23] = 0x12;
-			RETRY_PENALTY_UP_IDX[24] = 0x13;
-			RETRY_PENALTY_UP_IDX[25] = 0x13;
-			RETRY_PENALTY_UP_IDX[26] = 0x13;
-			RETRY_PENALTY_UP_IDX[27] = 0x14;
-		} else if (adapter->MgntInfo.RegRALvl == 2) {
-			/* Compile flag default is lvl2, we need not to update. */
-		} else if (adapter->MgntInfo.RegRALvl >= 0x80) {
-			u8 index = 0, offset = adapter->MgntInfo.RegRALvl - 0x80;
-
-			/* Reset to default rate adaptive value. */
-			RETRY_PENALTY_UP_IDX[11] = 0x14;
-
-			RETRY_PENALTY_UP_IDX[17] = 0x13;
-			RETRY_PENALTY_UP_IDX[18] = 0x14;
-			RETRY_PENALTY_UP_IDX[19] = 0x15;
-
-			RETRY_PENALTY_UP_IDX[23] = 0x13;
-			RETRY_PENALTY_UP_IDX[24] = 0x13;
-			RETRY_PENALTY_UP_IDX[25] = 0x13;
-			RETRY_PENALTY_UP_IDX[26] = 0x14;
-			RETRY_PENALTY_UP_IDX[27] = 0x15;
-
-			if (adapter->MgntInfo.RegRALvl >= 0x90) {
-				offset = adapter->MgntInfo.RegRALvl - 0x90;
-				/* Lazy mode. */
-				for (index = 0; index < 28; index++)
-					RETRY_PENALTY_UP_IDX[index] += (offset);
-			} else {
-				/* Aggrasive side. */
-				for (index = 0; index < 28; index++)
-					RETRY_PENALTY_UP_IDX[index] -= (offset);
-			}
-
-		}
-	}
-#endif
 	return 0;
 }
-
 
 u8
 odm_ra_get_sgi_8188e(
@@ -1140,14 +843,7 @@ odm_ra_set_tx_rpt_time(
 	u16 min_rpt_time
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	if (min_rpt_time != 0xffff) {
-		notify_tx_report_interval_change(p_dm_odm->priv, min_rpt_time);
-	}
-#else
 	odm_write_2byte(p_dm_odm, REG_TX_RPT_TIME, min_rpt_time);
-#endif
-
 }
 
 void odm_ra_tx_rpt2_handle_8188e(struct PHY_DM_STRUCT *p_dm_odm,

@@ -26,7 +26,6 @@ odm_set_crystal_cap(
 	u8					crystal_cap
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	struct PHY_DM_STRUCT					*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _CFO_TRACKING_				*p_cfo_track = (struct _CFO_TRACKING_ *)phydm_get_structure(p_dm_odm, PHYDM_CFOTRACK);
 
@@ -62,7 +61,6 @@ odm_set_crystal_cap(
 	}
 
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD, ("odm_set_crystal_cap(): crystal_cap = 0x%x\n", crystal_cap));
-#endif
 }
 
 static u8
@@ -73,17 +71,10 @@ odm_get_default_crytaltal_cap(
 	struct PHY_DM_STRUCT					*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	u8						crystal_cap = 0x20;
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	struct _ADAPTER					*adapter = p_dm_odm->adapter;
 	HAL_DATA_TYPE				*p_hal_data = GET_HAL_DATA(adapter);
 
 	crystal_cap = p_hal_data->crystal_cap;
-#else
-	struct rtl8192cd_priv	*priv		= p_dm_odm->priv;
-
-	if (priv->pmib->dot11RFEntry.xcap > 0)
-		crystal_cap = priv->pmib->dot11RFEntry.xcap;
-#endif
 
 	crystal_cap = crystal_cap & 0x3f;
 
@@ -138,10 +129,7 @@ odm_cfo_tracking_reset(
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD,
 			("odm_cfo_tracking_reset(): approch default value (0x%x)\n", p_cfo_track->crystal_cap));
 	}
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	odm_set_atc_status(p_dm_odm, true);
-#endif
 }
 
 void
@@ -260,25 +248,12 @@ odm_cfo_tracking(
 				p_cfo_track->is_adjust = false;
 		}
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 		/* 4 1.5 BT case: Disable CFO tracking */
 		if (p_dm_odm->is_bt_enabled) {
 			p_cfo_track->is_adjust = false;
 			odm_set_crystal_cap(p_dm_odm, p_cfo_track->def_x_cap);
 			ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD, ("odm_cfo_tracking(): Disable CFO tracking for BT!!\n"));
 		}
-#if 0
-		/* 4 1.6 Big jump */
-		if (p_cfo_track->is_adjust) {
-			if (CFO_ave > CFO_TH_XTAL_LOW)
-				adjust_xtal =  adjust_xtal + ((CFO_ave - CFO_TH_XTAL_LOW) >> 2);
-			else if (CFO_ave < (-CFO_TH_XTAL_LOW))
-				adjust_xtal =  adjust_xtal + ((CFO_TH_XTAL_LOW - CFO_ave) >> 2);
-
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD, ("odm_cfo_tracking(): Crystal cap offset = %d\n", adjust_xtal));
-		}
-#endif
-#endif
 
 		/* 4 1.7 Adjust Crystal Cap. */
 		if (p_cfo_track->is_adjust) {
@@ -297,7 +272,6 @@ odm_cfo_tracking(
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD, ("odm_cfo_tracking(): Crystal cap = 0x%x, Default Crystal cap = 0x%x\n",
 			p_cfo_track->crystal_cap, p_cfo_track->def_x_cap));
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 		if (p_dm_odm->support_ic_type & ODM_IC_11AC_SERIES)
 			return;
 
@@ -309,7 +283,6 @@ odm_cfo_tracking(
 			odm_set_atc_status(p_dm_odm, true);
 			ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD, ("odm_cfo_tracking(): Enable ATC!!\n"));
 		}
-#endif
 	}
 }
 
@@ -329,17 +302,9 @@ odm_parsing_cfo(
 	if (!(p_dm_odm->support_ability & ODM_BB_CFO_TRACKING))
 		return;
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
-	if (p_pktinfo->is_packet_match_bssid)
-#else
-	if (p_pktinfo->station_id != 0)
-#endif
-	{
+	if (p_pktinfo->is_packet_match_bssid) {
 		if (num_ss > p_dm_odm->num_rf_path) /*For fool proof*/
 			num_ss = p_dm_odm->num_rf_path;
-
-		/*ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD, ("num_ss = ((%d)),  p_dm_odm->num_rf_path = ((%d))\n", num_ss,  p_dm_odm->num_rf_path));*/
-
 
 		/* 3 Update CFO report for path-A & path-B */
 		/* Only paht-A and path-B have CFO tail and short CFO */

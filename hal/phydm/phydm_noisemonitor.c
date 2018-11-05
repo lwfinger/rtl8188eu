@@ -39,8 +39,6 @@
 #define VALID_MAX			10
 #define VALID_CNT				5
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_CE | ODM_WIN))
-
 static s16 odm_inband_noise_monitor_n_series(struct PHY_DM_STRUCT	*p_dm_odm, u8 is_pause_dig, u8 igi_value, u32 max_time)
 {
 	u32				tmp4b;
@@ -276,8 +274,6 @@ odm_inband_noise_monitor_ac_series(struct PHY_DM_STRUCT	*p_dm_odm, u8 is_pause_d
 	return p_dm_odm->noise_level.noise_all;
 }
 
-
-
 s16
 odm_inband_noise_monitor(void *p_dm_void, u8 is_pause_dig, u8 igi_value, u32 max_time)
 {
@@ -288,5 +284,3 @@ odm_inband_noise_monitor(void *p_dm_void, u8 is_pause_dig, u8 igi_value, u32 max
 	else
 		return odm_inband_noise_monitor_n_series(p_dm_odm, is_pause_dig, igi_value, max_time);
 }
-
-#endif

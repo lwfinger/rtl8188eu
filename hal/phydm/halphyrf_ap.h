@@ -22,17 +22,6 @@
 #define __HAL_PHY_RF_H__
 
 #include "phydm_powertracking_ap.h"
-#if (RTL8814A_SUPPORT == 1)
-	#include "rtl8814a/phydm_iqk_8814a.h"
-#endif
-
-#if (RTL8822B_SUPPORT == 1)
-	#include "rtl8822b/phydm_iqk_8822b.h"
-#endif
-
-#if (RTL8821C_SUPPORT == 1)
-	#include "rtl8822b/phydm_iqk_8821c.h"
-#endif
 
 enum pwrtrack_method {
 	BBSWING,
@@ -75,52 +64,25 @@ configure_txpower_track(
 
 void
 odm_txpowertracking_callback_thermal_meter(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	void		*p_dm_void
-#else
 	struct _ADAPTER	*adapter
-#endif
 );
-
-#if (RTL8192E_SUPPORT == 1)
-void
-odm_txpowertracking_callback_thermal_meter_92e(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	void		*p_dm_void
-#else
-	struct _ADAPTER	*adapter
-#endif
-);
-#endif
 
 #if (RTL8814A_SUPPORT == 1)
 void
 odm_txpowertracking_callback_thermal_meter_jaguar_series2(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	void		*p_dm_void
-#else
 	struct _ADAPTER	*adapter
-#endif
 );
 
 #elif ODM_IC_11AC_SERIES_SUPPORT
 void
 odm_txpowertracking_callback_thermal_meter_jaguar_series(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	void		*p_dm_void
-#else
 	struct _ADAPTER	*adapter
-#endif
 );
 
 #elif (RTL8197F_SUPPORT == 1 || RTL8822B_SUPPORT == 1)
 void
 odm_txpowertracking_callback_thermal_meter_jaguar_series3(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	void		*p_dm_void
-#else
 	struct _ADAPTER	*adapter
-#endif
 );
 
 #endif
@@ -128,40 +90,7 @@ odm_txpowertracking_callback_thermal_meter_jaguar_series3(
 #define IS_CCK_RATE(_rate)				(ODM_MGN_1M == _rate || _rate == ODM_MGN_2M || _rate == ODM_MGN_5_5M || _rate == ODM_MGN_11M)
 
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-#define MAX_TOLERANCE          5
-#define IQK_DELAY_TIME         1               /* ms */
-
-/*
-* BB/MAC/RF other monitor API
-*   */
-
-void	phy_set_monitor_mode8192c(struct _ADAPTER	*p_adapter,
-				  bool		is_enable_monitor_mode);
-
-/*
- * IQ calibrate
- *   */
-void
-phy_iq_calibrate_8192c(struct _ADAPTER	*p_adapter,
-		       bool	is_recovery);
-
-/*
- * LC calibrate
- *   */
-void
-phy_lc_calibrate_8192c(struct _ADAPTER	*p_adapter);
-
-/*
- * AP calibrate
- *   */
-void
-phy_ap_calibrate_8192c(struct _ADAPTER	*p_adapter,
-		       s8		delta);
-#endif
-
 #define ODM_TARGET_CHNL_NUM_2G_5G	59
-
 
 void
 odm_reset_iqk_result(

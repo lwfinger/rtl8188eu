@@ -66,15 +66,8 @@
 #define	PHYDM_ABCD	 (BIT(0) | BIT(1) | BIT(2) | BIT(3))
 
 /* number of entry */
-#if (DM_ODM_SUPPORT_TYPE & (ODM_CE))
-	#define	ASSOCIATE_ENTRY_NUM					MACID_NUM_SW_LIMIT  /* Max size of asoc_entry[].*/
-	#define	ODM_ASSOCIATE_ENTRY_NUM				ASSOCIATE_ENTRY_NUM
-	#elif(DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	#define ASSOCIATE_ENTRY_NUM					NUM_STAT
-	#define	ODM_ASSOCIATE_ENTRY_NUM				(ASSOCIATE_ENTRY_NUM+1)
-#else
-	#define ODM_ASSOCIATE_ENTRY_NUM				((ASSOCIATE_ENTRY_NUM*3)+1)
-#endif
+#define	ASSOCIATE_ENTRY_NUM		MACID_NUM_SW_LIMIT  /* Max size of asoc_entry[].*/
+#define	ODM_ASSOCIATE_ENTRY_NUM		ASSOCIATE_ENTRY_NUM
 
 /* -----MGN rate--------------------------------- */
 
@@ -278,27 +271,7 @@ enum ODM_MGN_RATE {
 #define ODM_RATEVHTSS4MCS8		0x52
 #define ODM_RATEVHTSS4MCS9		0x53
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	#define ODM_NUM_RATE_IDX (ODM_RATEVHTSS4MCS9+1)
-#else
-	#if (RTL8192E_SUPPORT == 1) || (RTL8197F_SUPPORT == 1)
-		#define ODM_NUM_RATE_IDX (ODM_RATEMCS15+1)
-	#elif (RTL8723B_SUPPORT == 1) || (RTL8188E_SUPPORT == 1) || (RTL8188F_SUPPORT == 1)
-		#define ODM_NUM_RATE_IDX (ODM_RATEMCS7+1)
-	#elif (RTL8821A_SUPPORT == 1) || (RTL8881A_SUPPORT == 1)
-		#define ODM_NUM_RATE_IDX (ODM_RATEVHTSS1MCS9+1)
-	#elif (RTL8812A_SUPPORT == 1)
-		#define ODM_NUM_RATE_IDX (ODM_RATEVHTSS2MCS9+1)
-	#elif (RTL8814A_SUPPORT == 1)
-		#define ODM_NUM_RATE_IDX (ODM_RATEVHTSS3MCS9+1)
-	#else
-		#define ODM_NUM_RATE_IDX (ODM_RATEVHTSS4MCS9+1)
-	#endif
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	#define CONFIG_SFW_SUPPORTED
-#endif
+#define ODM_NUM_RATE_IDX (ODM_RATEVHTSS4MCS9+1)
 
 /* 1 ============================================================
  * 1  enumeration
@@ -354,43 +327,14 @@ enum odm_ic_type_e {
 
 #define PHYDM_IC_SUPPORT_LA_MODE	(ODM_RTL8814A | ODM_RTL8822B | ODM_RTL8197F | ODM_RTL8821C)
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-
-#ifdef RTK_AC_SUPPORT
-	#define ODM_IC_11AC_SERIES_SUPPORT		1
-#else
-	#define ODM_IC_11AC_SERIES_SUPPORT		0
-#endif
-
-#define ODM_IC_11N_SERIES_SUPPORT			1
-#define ODM_CONFIG_BT_COEXIST				0
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-
-#define ODM_IC_11AC_SERIES_SUPPORT		1
-#define ODM_IC_11N_SERIES_SUPPORT			1
-#define ODM_CONFIG_BT_COEXIST				1
-
-#else
-
-#if ((RTL8188E_SUPPORT == 1) || \
-(RTL8723B_SUPPORT == 1) || (RTL8192E_SUPPORT == 1) || (RTL8195A_SUPPORT == 1) || (RTL8703B_SUPPORT == 1) || \
-(RTL8188F_SUPPORT == 1) || (RTL8723D_SUPPORT == 1) || (RTL8197F_SUPPORT == 1))
-#define ODM_IC_11N_SERIES_SUPPORT			1
+#define ODM_IC_11N_SERIES_SUPPORT		1
 #define ODM_IC_11AC_SERIES_SUPPORT		0
-#else
-#define ODM_IC_11N_SERIES_SUPPORT			0
-#define ODM_IC_11AC_SERIES_SUPPORT		1
-#endif
 
 #ifdef CONFIG_BT_COEXIST
 	#define ODM_CONFIG_BT_COEXIST				1
 #else
 	#define ODM_CONFIG_BT_COEXIST				0
 #endif
-
-#endif
-
 
 #if ((RTL8197F_SUPPORT == 1) || (RTL8723D_SUPPORT == 1) || (RTL8822B_SUPPORT == 1) || (RTL8821C_SUPPORT == 1))
 	#define ODM_PHY_STATUS_NEW_TYPE_SUPPORT			1
@@ -479,7 +423,6 @@ enum odm_operation_mode_e {
 };
 
 /* ODM_CMNINFO_WM_MODE */
-#if (DM_ODM_SUPPORT_TYPE & (ODM_CE))
 enum odm_wireless_mode_e {
 	ODM_WM_UNKNOW	= 0x0,
 	ODM_WM_B			= BIT(0),
@@ -490,36 +433,14 @@ enum odm_wireless_mode_e {
 	ODM_WM_AUTO		= BIT(5),
 	ODM_WM_AC		= BIT(6),
 };
-#else
-enum odm_wireless_mode_e {
-	ODM_WM_UNKNOWN	= 0x00,/*0x0*/
-	ODM_WM_A			= BIT(0), /* 0x1*/
-	ODM_WM_B			= BIT(1), /* 0x2*/
-	ODM_WM_G			= BIT(2),/* 0x4*/
-	ODM_WM_AUTO		= BIT(3),/* 0x8*/
-	ODM_WM_N24G		= BIT(4),/* 0x10*/
-	ODM_WM_N5G		= BIT(5),/* 0x20*/
-	ODM_WM_AC_5G		= BIT(6),/* 0x40*/
-	ODM_WM_AC_24G	= BIT(7),/* 0x80*/
-	ODM_WM_AC_ONLY	= BIT(8),/* 0x100*/
-	ODM_WM_MAX		= BIT(11)/* 0x800*/
-
-};
-#endif
 
 /* ODM_CMNINFO_BAND */
 enum odm_band_type_e {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	ODM_BAND_2_4G	= BIT(0),
-	ODM_BAND_5G		= BIT(1),
-#else
 	ODM_BAND_2_4G = 0,
 	ODM_BAND_5G,
 	ODM_BAND_ON_BOTH,
 	ODM_BANDMAX
-#endif
 };
-
 
 /* ODM_CMNINFO_SEC_CHNL_OFFSET */
 enum phydm_sec_chnl_offset_e {

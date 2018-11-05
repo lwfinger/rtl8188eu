@@ -51,19 +51,7 @@ struct _RT_ADCSMP {
 	u32					la_count;
 	u8					is_bb_trigger;
 	u8					la_work_item_index;
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	RT_WORK_ITEM	adc_smp_work_item;
-	RT_WORK_ITEM	adc_smp_work_item_1;
-#endif
 };
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-void
-adc_smp_work_item_callback(
-	void	*p_context
-);
-#endif
 
 void
 adc_smp_set(
@@ -75,15 +63,6 @@ adc_smp_set(
 	u16	polling_time
 );
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-enum rt_status
-adc_smp_query(
-	void	*p_dm_void,
-	ULONG	information_buffer_length,
-	void	*information_buffer,
-	PULONG	bytes_written
-);
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 void
 adc_smp_query(
 	void		*p_dm_void,
@@ -105,7 +84,6 @@ adc_smp_query_single_data(
 	u32		index
 );
 
-#endif
 void
 adc_smp_stop(
 	void	*p_dm_void
@@ -116,12 +94,10 @@ adc_smp_init(
 	void	*p_dm_void
 );
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 void
 adc_smp_de_init(
 	void			*p_dm_void
 );
-#endif
 
 void
 phydm_la_mode_bb_setting(

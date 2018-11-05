@@ -60,13 +60,8 @@ odm_tx_pwr_track_set_pwr88_e(
 
 void
 phy_iq_calibrate_8188e(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	struct PHY_DM_STRUCT		*p_dm_odm,
-#else
 	struct _ADAPTER	*adapter,
-#endif
 	bool	is_recovery);
-
 
 /*
  * LC calibrate
@@ -75,19 +70,6 @@ void
 phy_lc_calibrate_8188e(
 	void		*p_dm_void
 );
-#if 0
-/*
- * AP calibrate
- *   */
-void
-phy_ap_calibrate_8188e(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	struct PHY_DM_STRUCT		*p_dm_odm,
-#else
-	struct _ADAPTER	*p_adapter,
-#endif
-	s8		delta);
-#endif
 
 void
 phy_digital_predistortion_8188e(struct _ADAPTER	*p_adapter);
@@ -95,11 +77,7 @@ phy_digital_predistortion_8188e(struct _ADAPTER	*p_adapter);
 
 void
 _phy_save_adda_registers(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	struct PHY_DM_STRUCT		*p_dm_odm,
-#else
 	struct _ADAPTER	*p_adapter,
-#endif
 	u32		*adda_reg,
 	u32		*adda_backup,
 	u32		register_num
@@ -107,11 +85,7 @@ _phy_save_adda_registers(
 
 void
 _phy_path_adda_on(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	struct PHY_DM_STRUCT		*p_dm_odm,
-#else
 	struct _ADAPTER	*p_adapter,
-#endif
 	u32		*adda_reg,
 	bool		is_path_a_on,
 	bool		is2T
@@ -119,11 +93,7 @@ _phy_path_adda_on(
 
 void
 _phy_mac_setting_calibration(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	struct PHY_DM_STRUCT		*p_dm_odm,
-#else
 	struct _ADAPTER	*p_adapter,
-#endif
 	u32		*mac_reg,
 	u32		*mac_backup
 );
@@ -131,11 +101,7 @@ _phy_mac_setting_calibration(
 
 void
 _phy_path_a_stand_by(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	struct PHY_DM_STRUCT		*p_dm_odm
-#else
 	struct _ADAPTER	*p_adapter
-#endif
 );
 
 

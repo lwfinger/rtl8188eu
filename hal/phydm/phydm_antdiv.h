@@ -151,12 +151,6 @@ struct _sw_antenna_switch_ {
 	u32		pkt_cnt_sw_ant_div_by_ctrl_frame;
 	bool		is_sw_ant_div_by_ctrl_frame;
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-#if USE_WORKITEM
-	RT_WORK_ITEM	phydm_sw_antenna_switch_workitem;
-#endif
-#endif
-
 	/* AntDect (Before link Antenna Switch check) need to be moved*/
 	u16		single_ant_counter;
 	u16		dual_ant_counter;
@@ -170,41 +164,7 @@ struct _sw_antenna_switch_ {
 	bool		rssi_ant_dect_result;
 	u8		ant_5g;
 	u8		ant_2g;
-
-
 };
-
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-#if (defined(CONFIG_PHYDM_ANTENNA_DIVERSITY))
-struct _BF_DIV_COEX_ {
-	bool w_bfer_client[ODM_ASSOCIATE_ENTRY_NUM];
-	bool w_bfee_client[ODM_ASSOCIATE_ENTRY_NUM];
-	u32	MA_rx_TP[ODM_ASSOCIATE_ENTRY_NUM];
-	u32	MA_rx_TP_DIV[ODM_ASSOCIATE_ENTRY_NUM];
-
-	u8  bd_ccoex_type_wbfer;
-	u8 num_txbfee_client;
-	u8 num_txbfer_client;
-	u8 bdc_try_counter;
-	u8 bdc_hold_counter;
-	u8 bdc_mode;
-	u8 bdc_active_mode;
-	u8 BDC_state;
-	u8 bdc_rx_idle_update_counter;
-	u8 num_client;
-	u8 pre_num_client;
-	u8 num_bf_tar;
-	u8 num_div_tar;
-
-	bool is_all_div_sta_idle;
-	bool is_all_bf_sta_idle;
-	bool bdc_try_flag;
-	bool BF_pass;
-	bool DIV_pass;
-};
-#endif
-#endif
 
 #ifdef CONFIG_HL_SMART_ANTENNA_TYPE1
 struct _SMART_ANTENNA_TRAINNING_ {
@@ -237,12 +197,6 @@ struct _SMART_ANTENNA_TRAINNING_ {
 	u32	beacon_counter;
 	u32	pre_beacon_counter;
 	u8	update_beam_idx;
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	RT_WORK_ITEM	hl_smart_antenna_workitem;
-	RT_WORK_ITEM	hl_smart_antenna_decision_workitem;
-#endif
-
 };
 #endif
 
@@ -296,7 +250,6 @@ struct _FAST_ANTENNA_TRAINNING_ {
 	u32	main_crc32_fail_cnt;
 	u32	aux_crc32_fail_cnt;
 #endif
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	u32    cck_ctrl_frame_cnt_main;
 	u32    cck_ctrl_frame_cnt_aux;
 	u32    ofdm_ctrl_frame_cnt_main;
@@ -305,7 +258,6 @@ struct _FAST_ANTENNA_TRAINNING_ {
 	u32	aux_ant_ctrl_frame_sum;
 	u32	main_ant_ctrl_frame_cnt;
 	u32	aux_ant_ctrl_frame_cnt;
-#endif
 	u8	b_fix_tx_ant;
 	bool	fix_ant_bfee;
 	bool	enable_ctrl_frame_antdiv;
@@ -417,20 +369,6 @@ phydm_set_tx_ant_pwr_8723d(
 
 #ifdef CONFIG_S0S1_SW_ANTENNA_DIVERSITY
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-odm_sw_antdiv_callback(
-	struct timer_list		*p_timer
-);
-
-void
-odm_sw_antdiv_workitem_callback(
-	void	*p_context
-);
-
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-
 void
 odm_sw_antdiv_workitem_callback(
 	void	*p_context
@@ -440,8 +378,6 @@ void
 odm_sw_antdiv_callback(
 	void		*function_context
 );
-
-#endif
 
 void
 odm_s0s1_sw_ant_div_by_ctrl_frame(
@@ -497,19 +433,6 @@ odm_fast_ant_training_work_item_callback(
 
 #ifdef CONFIG_HL_SMART_ANTENNA_TYPE1
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-phydm_beam_switch_workitem_callback(
-	void	*p_context
-);
-
-void
-phydm_beam_decision_workitem_callback(
-	void	*p_context
-);
-
-#endif
-
 void
 phydm_update_beam_pattern(
 	void		*p_dm_void,
@@ -562,35 +485,12 @@ odm_process_rssi_for_ant_div(
 
 
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 void
 odm_set_tx_ant_by_tx_info(
 	void			*p_dm_void,
 	u8			*p_desc,
 	u8			mac_id
 );
-
-#elif (DM_ODM_SUPPORT_TYPE == ODM_AP)
-
-struct tx_desc; /*declared tx_desc here or compile error happened when enabled 8822B*/
-
-void
-odm_set_tx_ant_by_tx_info(
-	struct	rtl8192cd_priv		*priv,
-	struct	tx_desc			*pdesc,
-	unsigned short			aid
-);
-
-#if 1/*def def CONFIG_WLAN_HAL*/
-void
-odm_set_tx_ant_by_tx_info_hal(
-	struct	rtl8192cd_priv		*priv,
-	void	*pdesc_data,
-	u16		aid
-);
-#endif	/*#ifdef CONFIG_WLAN_HAL*/
-#endif
-
 
 void
 odm_ant_div_config(

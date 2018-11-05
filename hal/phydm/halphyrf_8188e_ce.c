@@ -113,43 +113,13 @@ void do_iqk_8188e(
 )
 {
 	struct PHY_DM_STRUCT	*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-#if !(DM_ODM_SUPPORT_TYPE & ODM_AP)
 	struct _ADAPTER		*adapter = p_dm_odm->adapter;
 	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-#endif
 
 	odm_reset_iqk_result(p_dm_odm);
 
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-#if (DEV_BUS_TYPE == RT_PCI_INTERFACE)
-#if USE_WORKITEM
-	platform_acquire_mutex(&p_hal_data->mx_chnl_bw_control);
-#else
-	platform_acquire_spin_lock(adapter, RT_CHANNEL_AND_BANDWIDTH_SPINLOCK);
-#endif
-#elif ((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-	platform_acquire_mutex(&p_hal_data->mx_chnl_bw_control);
-#endif
-#endif
-
 	p_dm_odm->rf_calibrate_info.thermal_value_iqk = thermal_value;
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	phy_iq_calibrate_8188e(p_dm_odm, false);
-#else
 	phy_iq_calibrate_8188e(adapter, false);
-#endif
-
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-#if (DEV_BUS_TYPE == RT_PCI_INTERFACE)
-#if USE_WORKITEM
-	platform_release_mutex(&p_hal_data->mx_chnl_bw_control);
-#else
-	platform_release_spin_lock(adapter, RT_CHANNEL_AND_BANDWIDTH_SPINLOCK);
-#endif
-#elif ((DEV_BUS_TYPE == RT_USB_INTERFACE) || (DEV_BUS_TYPE == RT_SDIO_INTERFACE))
-	platform_release_mutex(&p_hal_data->mx_chnl_bw_control);
-#endif
-#endif
 }
 
 /*-----------------------------------------------------------------------------
@@ -189,30 +159,16 @@ odm_tx_pwr_track_set_pwr88_e(
 	struct odm_rf_calibration_structure	*p_rf_calibrate_info = &(p_dm_odm->rf_calibrate_info);
 
 	if (p_dm_odm->mp_mode == true) {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-#if (MP_DRIVER == 1)
-		PMPT_CONTEXT p_mpt_ctx = &(adapter->mpt_ctx);
-
-		tx_rate = mpt_to_mgnt_rate(p_mpt_ctx->mpt_rate_index);
-#endif
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 		PMPT_CONTEXT p_mpt_ctx = &(adapter->mppriv.mpt_ctx);
 
 		tx_rate = mpt_to_mgnt_rate(p_mpt_ctx->mpt_rate_index);
-#endif
-#endif
 	} else {
 		u16	rate	 = *(p_dm_odm->p_forced_data_rate);
 
 		if (!rate) { /*auto rate*/
 			if (rate != 0xFF) {
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-				tx_rate = adapter->HalFunc.GetHwRateFromMRateHandler(p_dm_odm->tx_rate);
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 				if (p_dm_odm->number_linked_client != 0)
 					tx_rate = hw_rate_to_m_rate(p_dm_odm->tx_rate);
-#endif
 			}
 		} else   /*force rate*/
 			tx_rate = (u8)rate;
@@ -252,8 +208,6 @@ odm_tx_pwr_track_set_pwr88_e(
 
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("odm_TxPwrTrackSetPwr88E CH=%d\n", *(p_dm_odm->p_channel)));
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
-
 		if (p_dm_odm->mp_mode == true) {
 			pwr = phy_query_bb_reg(adapter, REG_TX_AGC_A_RATE18_06, 0xFF);
 			pwr += p_dm_odm->rf_calibrate_info.power_index_offset[ODM_RF_PATH_A];
@@ -283,13 +237,6 @@ odm_tx_pwr_track_set_pwr88_e(
 				phy_set_tx_power_index_by_rate_section(adapter, ODM_RF_PATH_A, *p_dm_odm->p_channel, HT_MCS0_MCS7);
 			}
 		}
-
-#endif
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-		/* phy_rf6052_set_cck_tx_power(p_dm_odm->priv, *(p_dm_odm->p_channel)); */
-		/* phy_rf6052_set_ofdm_tx_power(p_dm_odm->priv, *(p_dm_odm->p_channel)); */
-#endif
-
 	} else if (method == BBSWING) {
 		final_ofdm_swing_index = p_rf_calibrate_info->default_ofdm_index + p_rf_calibrate_info->absolute_ofdm_swing_idx[rf_path];
 		final_cck_swing_index = p_rf_calibrate_info->default_cck_index + p_rf_calibrate_info->absolute_ofdm_swing_idx[rf_path];
@@ -495,30 +442,16 @@ get_delta_swing_table_8188e(
 	u8			channel			= *p_dm_odm->p_channel;
 
 	if (p_dm_odm->mp_mode == true) {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-#if (MP_DRIVER == 1)
-		PMPT_CONTEXT p_mpt_ctx = &(adapter->mpt_ctx);
-
-		tx_rate = mpt_to_mgnt_rate(p_mpt_ctx->mpt_rate_index);
-#endif
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 		PMPT_CONTEXT p_mpt_ctx = &(adapter->mppriv.mpt_ctx);
 
 		tx_rate = mpt_to_mgnt_rate(p_mpt_ctx->mpt_rate_index);
-#endif
-#endif
 	} else {
 		u16	rate	 = *(p_dm_odm->p_forced_data_rate);
 
 		if (!rate) { /*auto rate*/
 			if (rate != 0xFF) {
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-				tx_rate = adapter->HalFunc.GetHwRateFromMRateHandler(p_dm_odm->tx_rate);
-#elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 				if (p_dm_odm->number_linked_client != 0)
 					tx_rate = hw_rate_to_m_rate(p_dm_odm->tx_rate);
-#endif
 			}
 		} else   /*force rate*/
 			tx_rate = (u8)rate;

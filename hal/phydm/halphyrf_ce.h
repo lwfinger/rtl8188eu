@@ -90,17 +90,10 @@ odm_clear_txpowertracking_state(
 
 void
 odm_txpowertracking_callback_thermal_meter(
-#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
-	void					*p_dm_void
-#else
 	struct _ADAPTER	*adapter
-#endif
 );
 
-
-
 #define ODM_TARGET_CHNL_NUM_2G_5G	59
-
 
 void
 odm_reset_iqk_result(

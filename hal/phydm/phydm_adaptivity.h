@@ -27,17 +27,6 @@
 #define pwdb_upper_bound	7
 #define dfir_loss	5
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-enum phydm_regulation_type {
-	REGULATION_FCC = 0,
-	REGULATION_MKK = 1,
-	REGULATION_ETSI = 2,
-	REGULATION_WW = 3,
-
-	MAX_REGULATION_NUM = 4
-};
-#endif
-
 enum phydm_adapinfo_e {
 	PHYDM_ADAPINFO_CARRIER_SENSE_ENABLE = 0,
 	PHYDM_ADAPINFO_DCBACKOFF,
@@ -45,10 +34,7 @@ enum phydm_adapinfo_e {
 	PHYDM_ADAPINFO_TH_L2H_INI,
 	PHYDM_ADAPINFO_TH_EDCCA_HL_DIFF,
 	PHYDM_ADAPINFO_AP_NUM_TH
-
 };
-
-
 
 enum phydm_set_lna {
 	phydm_disable_lna		= 0,
@@ -85,10 +71,6 @@ struct _ADAPTIVITY_STATISTICS {
 	s8			backup_l2h;
 	s8			backup_h2l;
 	bool			is_stop_edcca;
-#if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	RT_WORK_ITEM	phydm_pause_edcca_work_item;
-	RT_WORK_ITEM	phydm_resume_edcca_work_item;
-#endif
 };
 
 void
@@ -180,40 +162,14 @@ phydm_set_edcca_threshold_api(
 	u8	IGI
 );
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-phydm_disable_edcca(
-	void					*p_dm_void
-);
-
-void
-phydm_dynamic_edcca(
-	void					*p_dm_void
-);
-
-void
-phydm_adaptivity_bsod(
-	void					*p_dm_void
-);
-
-#endif
-
 void
 phydm_pause_edcca_work_item_callback(
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct _ADAPTER		*adapter
-#else
 	void			*p_dm_void
-#endif
 );
 
 void
 phydm_resume_edcca_work_item_callback(
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct _ADAPTER		*adapter
-#else
 	void			*p_dm_void
-#endif
 );
 
 #endif
