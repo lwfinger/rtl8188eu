@@ -4684,9 +4684,17 @@ static void find_phase_timer_process(struct timer_list *t)
 }
 
 #ifdef CONFIG_CONCURRENT_MODE
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void ap_p2p_switch_timer_process(void *FunctionContext)
+#else
+void ap_p2p_switch_timer_process(struct timer_list *t)
+#endif
 {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	_adapter *adapter = (_adapter *)FunctionContext;
+#else
+	_adapter *adapter = from_timer(adapter, t, wdinfo.ap_p2p_switch_timer);
+#endif
 	struct	wifidirect_info		*pwdinfo = &adapter->wdinfo;
 #ifdef CONFIG_IOCTL_CFG80211
 	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(adapter);
@@ -4949,7 +4957,7 @@ void rtw_init_wifidirect_timers(_adapter *padapter)
 		    reset_ch_sitesurvey_timer_process2, 0);
 #ifdef CONFIG_CONCURRENT_MODE
 	timer_setup(&pwdinfo->ap_p2p_switch_timer,
-		    ap_p2p_switch_timer_process, padapter);
+		    ap_p2p_switch_timer_process, 0);
 #endif
 #endif
 }
