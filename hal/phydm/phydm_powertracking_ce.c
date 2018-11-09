@@ -472,10 +472,6 @@ odm_txpowertracking_init(
 )
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-	if (!(p_dm_odm->support_ic_type & (ODM_RTL8814A | ODM_IC_11N_SERIES | ODM_RTL8822B)))
-		return;
-#endif
 
 	odm_txpowertracking_thermal_meter_init(p_dm_odm);
 }
@@ -535,13 +531,6 @@ odm_txpowertracking_thermal_meter_init(
 	u8 default_swing_index = get_swing_index(p_dm_odm);
 	u8			p = 0;
 	struct odm_rf_calibration_structure	*p_rf_calibrate_info = &(p_dm_odm->rf_calibrate_info);
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct _ADAPTER		*adapter = p_dm_odm->adapter;
-	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
-
-	if (p_dm_odm->mp_mode == false)
-		p_hal_data->txpowertrack_control = true;
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	struct _ADAPTER		*adapter = p_dm_odm->adapter;
 	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
 
@@ -558,17 +547,6 @@ odm_txpowertracking_thermal_meter_init(
 		p_rf_calibrate_info->txpowertrack_control = _TRUE;
 
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("p_dm_odm txpowertrack_control = %d\n", p_rf_calibrate_info->txpowertrack_control));
-
-#elif (DM_ODM_SUPPORT_TYPE & (ODM_AP))
-#ifdef RTL8188E_SUPPORT
-	{
-		p_rf_calibrate_info->is_txpowertracking = _TRUE;
-		p_rf_calibrate_info->tx_powercount = 0;
-		p_rf_calibrate_info->is_txpowertracking_init = _FALSE;
-		p_rf_calibrate_info->txpowertrack_control = _TRUE;
-	}
-#endif
-#endif
 
 	/* p_dm_odm->rf_calibrate_info.txpowertrack_control = true; */
 	p_rf_calibrate_info->thermal_value = p_hal_data->eeprom_thermal_meter;
@@ -644,7 +622,6 @@ odm_txpowertracking_check_ce(
 )
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-#if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	struct _ADAPTER	*adapter = p_dm_odm->adapter;
 
 	if (!(p_dm_odm->support_ability & ODM_RF_TX_PWR_TRACK))
@@ -670,8 +647,6 @@ odm_txpowertracking_check_ce(
 		odm_txpowertracking_callback_thermal_meter(adapter);
 		p_dm_odm->rf_calibrate_info.tm_trigger = 0;
 	}
-
-#endif
 }
 
 void
@@ -680,19 +655,7 @@ odm_txpowertracking_check_mp(
 )
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	struct _ADAPTER	*adapter = p_dm_odm->adapter;
-
-	if (odm_check_power_status(adapter) == false) {
-		RT_TRACE(COMP_POWER_TRACKING, DBG_LOUD, ("===>odm_check_power_status() return false\n"));
-		return;
-	}
-
-	odm_txpowertracking_thermal_meter_check(adapter);
-#endif
-
 }
-
 
 void
 odm_txpowertracking_check_ap(
@@ -700,46 +663,4 @@ odm_txpowertracking_check_ap(
 )
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-	struct rtl8192cd_priv	*priv		= p_dm_odm->priv;
-
-	return;
-
-#endif
 }
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-odm_txpowertracking_thermal_meter_check(
-	struct _ADAPTER		*adapter
-)
-{
-#ifndef AP_BUILD_WORKAROUND
-	static u8			tm_trigger = 0;
-
-	if (!(GET_HAL_DATA(adapter)->DM_OutSrc.support_ability & ODM_RF_TX_PWR_TRACK)) {
-		RT_TRACE(COMP_POWER_TRACKING, DBG_LOUD,
-			("===>odm_txpowertracking_thermal_meter_check(),p_mgnt_info->is_txpowertracking is false, return!!\n"));
-		return;
-	}
-
-	if (!tm_trigger) {
-		if (IS_HARDWARE_TYPE_8188E(adapter) || IS_HARDWARE_TYPE_JAGUAR(adapter) || IS_HARDWARE_TYPE_8192E(adapter) ||
-		    IS_HARDWARE_TYPE_8723B(adapter) || IS_HARDWARE_TYPE_8814A(adapter) || IS_HARDWARE_TYPE_8188F(adapter)
-		    || IS_HARDWARE_TYPE_8703B(adapter) || IS_HARDWARE_TYPE_8723D(adapter))
-			phy_set_rf_reg(adapter, ODM_RF_PATH_A, RF_T_METER_88E, BIT(17) | BIT(16), 0x03);
-		else
-			phy_set_rf_reg(adapter, ODM_RF_PATH_A, RF_T_METER, RFREGOFFSETMASK, 0x60);
-
-		RT_TRACE(COMP_POWER_TRACKING, DBG_LOUD, ("Trigger Thermal Meter!!\n"));
-
-		tm_trigger = 1;
-		return;
-	} else {
-		RT_TRACE(COMP_POWER_TRACKING, DBG_LOUD, ("Schedule TxPowerTracking direct call!!\n"));
-		odm_txpowertracking_direct_call(adapter);
-		tm_trigger = 0;
-	}
-#endif
-}
-#endif

@@ -24,21 +24,18 @@
 #ifdef CONFIG_SFW_SUPPORTED
 
 #ifdef LOAD_FW_HEADER_FROM_DRIVER
-#if (defined(CONFIG_AP_WOWLAN) || (DM_ODM_SUPPORT_TYPE & (ODM_AP)))
+#if defined(CONFIG_AP_WOWLAN)
 extern u8 array_mp_8188e_s_fw_ap[16054];
 extern u32 array_length_mp_8188e_s_fw_ap;
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN)) || (DM_ODM_SUPPORT_TYPE & (ODM_CE))
 extern u8 array_mp_8188e_s_fw_nic[19206];
 extern u32 array_length_mp_8188e_s_fw_nic;
 #ifdef CONFIG_WOWLAN
 extern u8 array_mp_8188e_s_fw_wowlan[22710];
 extern u32 array_length_mp_8188e_s_fw_wowlan;
 #endif /*CONFIG_WOWLAN*/
-#endif
 #endif /* end of LOAD_FW_HEADER_FROM_DRIVER */
-
 #endif /* end of CONFIG_SFW_SUPPORTED */
 
 #endif

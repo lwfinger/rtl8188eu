@@ -33,13 +33,6 @@ odm_config_rf_reg_8188e(
 	u32				    reg_addr
 )
 {
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-#ifndef SMP_SYNC
-	unsigned long x;
-#endif
-	struct rtl8192cd_priv *priv = p_dm_odm->priv;
-#endif
-
 	if (addr == 0xffe) {
 #ifdef CONFIG_LONG_DELAY_ISSUE
 		ODM_sleep_ms(50);
@@ -57,14 +50,7 @@ odm_config_rf_reg_8188e(
 	else if (addr == 0xf9)
 		ODM_delay_us(1);
 	else {
-
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-		SAVE_INT_AND_CLI(x);
 		odm_set_rf_reg(p_dm_odm, RF_PATH, reg_addr, RFREGOFFSETMASK, data);
-		RESTORE_INT(x);
-#else
-		odm_set_rf_reg(p_dm_odm, RF_PATH, reg_addr, RFREGOFFSETMASK, data);
-#endif
 		/* Add 1us delay between BB/RF register setting. */
 		ODM_delay_us(1);
 	}
@@ -157,10 +143,7 @@ odm_config_bb_phy_reg_pg_8188e(
 		ODM_delay_us(1);
 	else {
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("===> odm_config_bb_with_header_file: [PHY_REG] %08X %08X %08X\n", addr, bitmask, data));
-
-#if	!(DM_ODM_SUPPORT_TYPE&ODM_AP)
 		phy_store_tx_power_by_rate(p_dm_odm->adapter, band, rf_path, tx_num, addr, bitmask, data);
-#endif
 	}
 }
 
@@ -176,10 +159,8 @@ odm_config_bb_txpwr_lmt_8188e(
 	u8		*power_limit
 )
 {
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 	phy_set_tx_power_limit(p_dm_odm, regulation, band,
 		       bandwidth, rate_section, rf_path, channel, power_limit);
-#endif
 }
 
 void

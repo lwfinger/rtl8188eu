@@ -25,17 +25,8 @@
 /*#define DYNAMIC_TXPWR_VERSION	"1.3" */ /*2015.08.26, Add 8814 Dynamic TX power*/
 #define DYNAMIC_TXPWR_VERSION	"1.4" /*2015.11.06, Add CE 8821A Dynamic TX power*/
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_AP)
-	#define		TX_POWER_NEAR_FIELD_THRESH_LVL2	74
-	#define		TX_POWER_NEAR_FIELD_THRESH_LVL1	60
-	#define		TX_POWER_NEAR_FIELD_THRESH_AP	0x3F
-#elif (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	#define		TX_POWER_NEAR_FIELD_THRESH_LVL2	74
-	#define		TX_POWER_NEAR_FIELD_THRESH_LVL1	67
-#elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	#define		TX_POWER_NEAR_FIELD_THRESH_LVL2	74
-	#define		TX_POWER_NEAR_FIELD_THRESH_LVL1	60
-#endif
+#define		TX_POWER_NEAR_FIELD_THRESH_LVL2	74
+#define		TX_POWER_NEAR_FIELD_THRESH_LVL1	60
 
 #define		tx_high_pwr_level_normal		0
 #define		tx_high_pwr_level_level1		1
@@ -64,7 +55,6 @@ odm_dynamic_tx_power_nic(
 	void					*p_dm_void
 );
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 void
 odm_dynamic_tx_power_save_power_index(
 	void					*p_dm_void
@@ -81,21 +71,6 @@ odm_dynamic_tx_power_8821(
 	u8					*p_desc,
 	u8					mac_id
 );
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-void
-odm_dynamic_tx_power_8814a(
-	void					*p_dm_void
-);
-
-
-void
-odm_set_tx_power_level8814(
-	struct _ADAPTER		*adapter,
-	u8			channel,
-	u8			pwr_lvl
-);
-#endif
-#endif
 
 void
 odm_dynamic_tx_power(

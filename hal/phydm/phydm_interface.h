@@ -275,45 +275,6 @@ odm_release_spin_lock(
 	enum rt_spinlock_type	type
 );
 
-#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-/*
- * ODM MISC-workitem relative API.
- *   */
-void
-odm_initialize_work_item(
-	struct PHY_DM_STRUCT					*p_dm_odm,
-	PRT_WORK_ITEM				p_rt_work_item,
-	RT_WORKITEM_CALL_BACK		rt_work_item_callback,
-	void						*p_context,
-	const char					*sz_id
-);
-
-void
-odm_start_work_item(
-	PRT_WORK_ITEM	p_rt_work_item
-);
-
-void
-odm_stop_work_item(
-	PRT_WORK_ITEM	p_rt_work_item
-);
-
-void
-odm_free_work_item(
-	PRT_WORK_ITEM	p_rt_work_item
-);
-
-void
-odm_schedule_work_item(
-	PRT_WORK_ITEM	p_rt_work_item
-);
-
-bool
-odm_is_work_item_scheduled(
-	PRT_WORK_ITEM	p_rt_work_item
-);
-#endif
-
 /*
  * ODM Timer relative API.
  *   */
@@ -387,13 +348,12 @@ u64
 odm_get_current_time(
 	struct PHY_DM_STRUCT		*p_dm_odm
 );
+
 u64
 odm_get_progressing_time(
 	struct PHY_DM_STRUCT		*p_dm_odm,
 	u64			start_time
 );
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN|ODM_CE))
 
 void
 phydm_set_hw_reg_handler_interface (
@@ -407,10 +367,7 @@ phydm_get_hal_def_var_handler_interface (
 	struct PHY_DM_STRUCT		*p_dm_odm,
 	enum _HAL_DEF_VARIABLE		e_variable,
 	void						*p_value
-	);
-
-#endif
-
+);
 
 #endif /* __ODM_INTERFACE_H__ */
 

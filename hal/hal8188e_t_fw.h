@@ -22,12 +22,11 @@
 #define _FW_HEADER_8188E_T_H
 
 #ifdef LOAD_FW_HEADER_FROM_DRIVER
-#if (defined(CONFIG_AP_WOWLAN) || (DM_ODM_SUPPORT_TYPE & (ODM_AP)))
+#if (defined(CONFIG_AP_WOWLAN))
 extern u8 array_mp_8188e_t_fw_ap[15502];
 extern u32 array_length_mp_8188e_t_fw_ap;
 #endif
 
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN)) || (DM_ODM_SUPPORT_TYPE & (ODM_CE))
 extern u8 array_mp_8188e_t_fw_nic[15262];
 extern u32 array_length_mp_8188e_t_fw_nic;
 extern u8 array_mp_8188e_t_fw_nic_89em[14364];
@@ -36,7 +35,6 @@ extern u32 array_length_mp_8188e_t_fw_nic_89em;
 extern u8 array_mp_8188e_t_fw_wowlan[16388];
 extern u32 array_length_mp_8188e_t_fw_wowlan;
 #endif /*CONFIG_WOWLAN*/
-#endif
 #endif /* end of LOAD_FW_HEADER_FROM_DRIVER */
 
 #endif

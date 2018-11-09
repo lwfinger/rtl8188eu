@@ -21,7 +21,6 @@
 
 #if (defined(CONFIG_BB_TXBF_API))
 
-#if (DM_ODM_SUPPORT_TYPE != ODM_AP)
 #define tx_bf_nr(a, b) ((a > b) ? (b) : (a))
 
 u8
@@ -35,8 +34,6 @@ beamforming_get_vht_ndp_tx_rate(
 	void	*p_dm_void,
 	u8	comp_steering_num_of_bfer
 );
-
-#endif
 
 #if (RTL8822B_SUPPORT == 1)
 u8

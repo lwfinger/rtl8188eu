@@ -23,7 +23,7 @@
 
 #ifdef LOAD_FW_HEADER_FROM_DRIVER
 
-#if (defined(CONFIG_AP_WOWLAN) || (DM_ODM_SUPPORT_TYPE & (ODM_AP)))
+#if (defined(CONFIG_AP_WOWLAN))
 
 u8 array_mp_8188e_t_fw_ap[] = {
 0xE1, 0x88, 0x20, 0x00, 0x1C, 0x00, 0x00, 0x00,
@@ -1968,9 +1968,7 @@ u8 array_mp_8188e_t_fw_ap[] = {
 
 u32 array_length_mp_8188e_t_fw_ap = 15502;
 
-#endif /*defined(CONFIG_AP_WOWLAN) || (DM_ODM_SUPPORT_TYPE & (ODM_AP))*/
-
-#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN)) || (DM_ODM_SUPPORT_TYPE & (ODM_CE))
+#endif /*defined(CONFIG_AP_WOWLAN)*/
 
 u8 array_mp_8188e_t_fw_nic[] = {
 0xE1, 0x88, 0x10, 0x00, 0x1C, 0x00, 0x00, 0x00,
@@ -7743,8 +7741,6 @@ u8 array_mp_8188e_t_fw_wowlan[] = {
 u32 array_length_mp_8188e_t_fw_wowlan = 16388;
 
 #endif /*CONFIG_WOWLAN*/
-
-#endif
 
 #endif /* end of LOAD_FW_HEADER_FROM_DRIVER */
 
