@@ -22,20 +22,7 @@
 #define __HAL_PHY_RF_H__
 
 #include "phydm_kfree.h"
-#if (RTL8814A_SUPPORT == 1)
-	#include "rtl8814a/phydm_iqk_8814a.h"
-#endif
-
-#if (RTL8822B_SUPPORT == 1)
-	#include "rtl8822b/phydm_iqk_8822b.h"
-#endif
-
-#if (RTL8821C_SUPPORT == 1)
-	#include "rtl8821c/phydm_iqk_8821c.h"
-#endif
-
 #include "phydm_powertracking_ce.h"
-
 
 enum spur_cal_method {
 	PLL_RESET,

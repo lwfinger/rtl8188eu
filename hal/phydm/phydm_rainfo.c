@@ -789,15 +789,6 @@ phydm_init_ra_info(
 )
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-
-#if (RTL8822B_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type == ODM_RTL8822B) {
-		u32	ret_value;
-
-		ret_value = odm_get_bb_reg(p_dm_odm, 0x4c8, MASKBYTE2);
-		odm_set_bb_reg(p_dm_odm, 0x4cc, MASKBYTE3, (ret_value - 1));
-	}
-#endif
 }
 
 void

@@ -719,10 +719,6 @@ enum phy_reg_pg_type {
 	struct _DYNAMIC_RX_PATH_						dm_drp_table;
 #endif
 
-#if (RTL8814A_SUPPORT == 1 || RTL8822B_SUPPORT == 1 || RTL8821C_SUPPORT == 1)
-	struct _IQK_INFORMATION	IQK_info;
-#endif
-
 #if (defined(CONFIG_PATH_DIVERSITY))
 	struct _ODM_PATH_DIVERSITY_	dm_path_div;
 #endif

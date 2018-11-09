@@ -61,31 +61,16 @@ configure_txpower_track(
 	struct _TXPWRTRACK_CFG	*p_config
 );
 
-
 void
 odm_txpowertracking_callback_thermal_meter(
 	struct _ADAPTER	*adapter
 );
 
-#if (RTL8814A_SUPPORT == 1)
-void
-odm_txpowertracking_callback_thermal_meter_jaguar_series2(
-	struct _ADAPTER	*adapter
-);
-
-#elif ODM_IC_11AC_SERIES_SUPPORT
+#if ODM_IC_11AC_SERIES_SUPPORT
 void
 odm_txpowertracking_callback_thermal_meter_jaguar_series(
 	struct _ADAPTER	*adapter
 );
-
-#elif (RTL8197F_SUPPORT == 1 || RTL8822B_SUPPORT == 1)
-void
-odm_txpowertracking_callback_thermal_meter_jaguar_series3(
-	struct _ADAPTER	*adapter
-);
-
-#endif
 
 #define IS_CCK_RATE(_rate)				(ODM_MGN_1M == _rate || _rate == ODM_MGN_2M || _rate == ODM_MGN_5_5M || _rate == ODM_MGN_11M)
 

@@ -336,11 +336,7 @@ enum odm_ic_type_e {
 	#define ODM_CONFIG_BT_COEXIST				0
 #endif
 
-#if ((RTL8197F_SUPPORT == 1) || (RTL8723D_SUPPORT == 1) || (RTL8822B_SUPPORT == 1) || (RTL8821C_SUPPORT == 1))
-	#define ODM_PHY_STATUS_NEW_TYPE_SUPPORT			1
-#else
-	#define ODM_PHY_STATUS_NEW_TYPE_SUPPORT			0
-#endif
+#define ODM_PHY_STATUS_NEW_TYPE_SUPPORT			0
 
 /* ODM_CMNINFO_CUT_VER */
 enum odm_cut_version_e {

@@ -180,8 +180,6 @@ phydm_init_trx_antenna_setting(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-	/*#if (RTL8814A_SUPPORT == 1)*/
-
 	if (p_dm_odm->support_ic_type & (ODM_RTL8814A)) {
 		u8	rx_ant = 0, tx_ant = 0;
 
@@ -194,7 +192,6 @@ phydm_init_trx_antenna_setting(
 		p_dm_odm->rx_ant_status = 0x1;
 
 	}
-	/*#endif*/
 }
 
 static void
@@ -255,42 +252,6 @@ phydm_config_ofdm_tx_path(
 )
 {
 	u8	ofdm_tx_path = 0x33;
-
-#if (RTL8192E_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & (ODM_RTL8192E)) {
-
-		if (path == PHYDM_A) {
-			odm_set_bb_reg(p_dm_odm, 0x90c, MASKDWORD, 0x81121111);
-			/**/
-		} else if (path == PHYDM_B) {
-			odm_set_bb_reg(p_dm_odm, 0x90c, MASKDWORD, 0x82221222);
-			/**/
-		} else  if (path == PHYDM_AB) {
-			odm_set_bb_reg(p_dm_odm, 0x90c, MASKDWORD, 0x83321333);
-			/**/
-		}
-
-
-	}
-#endif
-
-#if (RTL8812A_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & (ODM_RTL8812)) {
-
-		if (path == PHYDM_A) {
-			ofdm_tx_path = 0x11;
-			/**/
-		} else if (path == PHYDM_B) {
-			ofdm_tx_path = 0x22;
-			/**/
-		} else  if (path == PHYDM_AB) {
-			ofdm_tx_path = 0x33;
-			/**/
-		}
-
-		odm_set_bb_reg(p_dm_odm, 0x80c, 0xff00, ofdm_tx_path);
-	}
-#endif
 }
 
 void
@@ -303,39 +264,7 @@ phydm_config_ofdm_rx_path(
 
 
 	if (p_dm_odm->support_ic_type & (ODM_RTL8192E)) {
-#if (RTL8192E_SUPPORT == 1)
-		if (path == PHYDM_A) {
-			ofdm_rx_path = 1;
-			/**/
-		} else if (path == PHYDM_B) {
-			ofdm_rx_path = 2;
-			/**/
-		} else  if (path == PHYDM_AB) {
-			ofdm_rx_path = 3;
-			/**/
-		}
-
-		odm_set_bb_reg(p_dm_odm, 0xC04, 0xff, (((ofdm_rx_path) << 4) | ofdm_rx_path));
-		odm_set_bb_reg(p_dm_odm, 0xD04, 0xf, ofdm_rx_path);
-#endif
 	}
-#if (RTL8812A_SUPPORT || RTL8822B_SUPPORT)
-	else if (p_dm_odm->support_ic_type & (ODM_RTL8812 | ODM_RTL8822B)) {
-
-		if (path == PHYDM_A) {
-			ofdm_rx_path = 1;
-			/**/
-		} else if (path == PHYDM_B) {
-			ofdm_rx_path = 2;
-			/**/
-		} else  if (path == PHYDM_AB) {
-			ofdm_rx_path = 3;
-			/**/
-		}
-
-		odm_set_bb_reg(p_dm_odm, 0x808, MASKBYTE0, ((ofdm_rx_path << 4) | ofdm_rx_path));
-	}
-#endif
 }
 
 static void
@@ -343,19 +272,6 @@ phydm_config_cck_rx_antenna_init(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-#if ((RTL8192E_SUPPORT == 1) || (RTL8812A_SUPPORT == 1))
-	if (p_dm_odm->support_ic_type & (ODM_RTL8192E | ODM_RTL8812)) {
-
-		/*CCK 2R CCA parameters*/
-		odm_set_bb_reg(p_dm_odm, 0xa2c, BIT(18), 1); /*enable 2R Rx path*/
-		odm_set_bb_reg(p_dm_odm, 0xa2c, BIT(22), 1); /*enable 2R MRC*/
-		odm_set_bb_reg(p_dm_odm, 0xa84, BIT(28), 1); /*1. pdx1[5:0] > 2*PD_lim 2. RXIQ_3 = 0 ( signed )*/
-		odm_set_bb_reg(p_dm_odm, 0xa70, BIT(7), 0); /*Concurrent CCA at LSB & USB*/
-		odm_set_bb_reg(p_dm_odm, 0xa74, BIT(8), 0); /*RX path diversity enable*/
-		odm_set_bb_reg(p_dm_odm, 0xa08, BIT(28), 1); /* r_cck_2nd_sel_eco*/
-		odm_set_bb_reg(p_dm_odm, 0xa14, BIT(7), 0); /* r_en_mrc_antsel*/
-	}
-#endif
 }
 
 static void
@@ -367,34 +283,6 @@ phydm_config_cck_rx_path(
 {
 	u8	path_div_select = 0;
 	u8	cck_1_path = 0, cck_2_path = 0;
-
-#if ((RTL8192E_SUPPORT == 1) || (RTL8812A_SUPPORT == 1))
-	if (p_dm_odm->support_ic_type & (ODM_RTL8192E | ODM_RTL8812)) {
-
-		if (path == PHYDM_A) {
-			path_div_select = 0;
-			cck_1_path = 0;
-			cck_2_path = 0;
-		} else if (path == PHYDM_B) {
-			path_div_select = 0;
-			cck_1_path = 1;
-			cck_2_path = 1;
-		} else  if (path == PHYDM_AB) {
-
-			if (path_div_en == CCA_PATHDIV_ENABLE)
-				path_div_select = 1;
-
-			cck_1_path = 0;
-			cck_2_path = 1;
-
-		}
-
-		odm_set_bb_reg(p_dm_odm, 0xa04, (BIT(27) | BIT(26)), cck_1_path);
-		odm_set_bb_reg(p_dm_odm, 0xa04, (BIT(25) | BIT(24)), cck_2_path);
-		odm_set_bb_reg(p_dm_odm, 0xa74, BIT(8), path_div_select);
-
-	}
-#endif
 }
 
 void
@@ -469,41 +357,7 @@ phydm_init_cck_setting(
 
 	p_dm_odm->is_cck_high_power = (bool) odm_get_bb_reg(p_dm_odm, ODM_REG(CCK_RPT_FORMAT, p_dm_odm), ODM_BIT(CCK_RPT_FORMAT, p_dm_odm));
 
-#if (RTL8192E_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & (ODM_RTL8192E)) {
-		/* 0x824[9] = 0x82C[9] = 0xA80[7]  those registers setting should be equal or CCK RSSI report may be incorrect */
-		value_824 = odm_get_bb_reg(p_dm_odm, 0x824, BIT(9));
-		value_82c = odm_get_bb_reg(p_dm_odm, 0x82c, BIT(9));
-
-		if (value_824 != value_82c)
-			odm_set_bb_reg(p_dm_odm, 0x82c, BIT(9), value_824);
-		odm_set_bb_reg(p_dm_odm, 0xa80, BIT(7), value_824);
-		p_dm_odm->cck_agc_report_type = (bool)value_824;
-
-		ODM_RT_TRACE(p_dm_odm, ODM_COMP_INIT, ODM_DBG_LOUD, ("cck_agc_report_type = (( %d )), ext_lna_gain = (( %d ))\n", p_dm_odm->cck_agc_report_type, p_dm_odm->ext_lna_gain));
-	}
-#endif
-
-#if ((RTL8703B_SUPPORT == 1) || (RTL8723D_SUPPORT == 1))
-	if (p_dm_odm->support_ic_type & (ODM_RTL8703B | ODM_RTL8723D)) {
-
-		p_dm_odm->cck_agc_report_type = odm_get_bb_reg(p_dm_odm, 0x950, BIT(11)) ? 1 : 0; /*1: 4bit LNA, 0: 3bit LNA */
-
-		if (p_dm_odm->cck_agc_report_type != 1) {
-			dbg_print("[Warning] 8703B/8723D CCK should be 4bit LNA, ie. 0x950[11] = 1\n");
-			/**/
-		}
-	}
-#endif
-
-#if ((RTL8723D_SUPPORT == 1) || (RTL8822B_SUPPORT == 1) || (RTL8197F_SUPPORT == 1))
-
-	if (p_dm_odm->support_ic_type & (ODM_RTL8723D | ODM_RTL8822B | ODM_RTL8197F)) {
-		p_dm_odm->cck_new_agc = odm_get_bb_reg(p_dm_odm, 0xa9c, BIT(17)) ? true : false;          /*1: new agc  0: old agc*/
-	} else
-#endif
-		p_dm_odm->cck_new_agc = false;
-
+	p_dm_odm->cck_new_agc = false;
 }
 
 static void
@@ -511,12 +365,6 @@ phydm_init_soft_ml_setting(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-#if (RTL8822B_SUPPORT == 1)
-	if (p_dm_odm->mp_mode == false) {
-		if (p_dm_odm->support_ic_type & ODM_RTL8822B)
-			odm_set_bb_reg(p_dm_odm, 0x19a8, MASKDWORD, 0xc10a0000);
-	}
-#endif
 }
 
 static void
@@ -524,18 +372,6 @@ phydm_init_hw_info_by_rfe(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-#if (RTL8822B_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & ODM_RTL8822B)
-		phydm_init_hw_info_by_rfe_type_8822b(p_dm_odm);
-#endif
-#if (RTL8821C_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & ODM_RTL8821C)
-		phydm_init_hw_info_by_rfe_type_8821c(p_dm_odm);
-#endif
-#if (RTL8197F_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & ODM_RTL8197F)
-		phydm_init_hw_info_by_rfe_type_8197f(p_dm_odm);
-#endif
 }
 
 static void
@@ -643,43 +479,21 @@ phydm_get_structure(
 
 {
 	void	*p_struct = NULL;
-#if RTL8195A_SUPPORT
-	switch (structure_type) {
-	case	PHYDM_FALSEALMCNT:
-		p_struct = &false_alm_cnt;
-		break;
 
-	case	PHYDM_CFOTRACK:
-		p_struct = &dm_cfo_track;
-		break;
-
-	case	PHYDM_ADAPTIVITY:
-		p_struct = &(p_dm_odm->adaptivity);
-		break;
-
-	default:
-		break;
-	}
-
-#else
 	switch (structure_type) {
 	case	PHYDM_FALSEALMCNT:
 		p_struct = &(p_dm_odm->false_alm_cnt);
 		break;
-
 	case	PHYDM_CFOTRACK:
 		p_struct = &(p_dm_odm->dm_cfo_track);
 		break;
-
 	case	PHYDM_ADAPTIVITY:
 		p_struct = &(p_dm_odm->adaptivity);
 		break;
-
 	default:
 		break;
 	}
 
-#endif
 	return	p_struct;
 }
 
@@ -688,25 +502,6 @@ odm_hw_setting(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-#if (RTL8821A_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & ODM_RTL8821)
-		odm_hw_setting_8821a(p_dm_odm);
-#endif
-
-#if (RTL8814A_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & ODM_RTL8814A)
-		phydm_hwsetting_8814a(p_dm_odm);
-#endif
-
-#if (RTL8822B_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & ODM_RTL8822B)
-		phydm_hwsetting_8822b(p_dm_odm);
-#endif
-
-#if (RTL8197F_SUPPORT == 1)
-	if (p_dm_odm->support_ic_type & ODM_RTL8197F)
-		phydm_hwsetting_8197f(p_dm_odm);
-#endif
 }
 #if SUPPORTABLITY_PHYDMLIZE
 static void
@@ -910,11 +705,6 @@ odm_dm_init(
 	phydm_rf_init(p_dm_odm);
 	odm_txpowertracking_init(p_dm_odm);
 
-#if (RTL8822B_SUPPORT == 1)
-			if (p_dm_odm->support_ic_type & ODM_RTL8822B)
-				phydm_txcurrentcalibration(p_dm_odm);
-#endif
-	
 	odm_antenna_diversity_init(p_dm_odm);
 #if (CONFIG_DYNAMIC_RX_PATH == 1)
 	phydm_dynamic_rx_path_init(p_dm_odm);
@@ -940,25 +730,11 @@ odm_dm_init(
 		odm_dynamic_bb_power_saving_init(p_dm_odm);
 #endif
 
-#if (RTL8188E_SUPPORT == 1)
 		if (p_dm_odm->support_ic_type == ODM_RTL8188E) {
 			odm_primary_cca_init(p_dm_odm);
 			odm_ra_info_init_all(p_dm_odm);
 		}
-#endif
-
-
-#if (RTL8723B_SUPPORT == 1)
-		if (p_dm_odm->support_ic_type == ODM_RTL8723B)
-			odm_sw_ant_detect_init(p_dm_odm);
-#endif
-
-#if (RTL8192E_SUPPORT == 1)
-		if (p_dm_odm->support_ic_type == ODM_RTL8192E)
-			odm_primary_cca_check_init(p_dm_odm);
-#endif
 	}
-
 }
 
 void
@@ -1102,15 +878,8 @@ odm_dm_watchdog(
 
 	if (p_dm_odm->support_ic_type & ODM_IC_11N_SERIES) {
 
-#if (RTL8188E_SUPPORT == 1)
 		if (p_dm_odm->support_ic_type == ODM_RTL8188E)
 			odm_dynamic_primary_cca(p_dm_odm);
-#endif
-
-#if (RTL8192E_SUPPORT == 1)
-		if (p_dm_odm->support_ic_type == ODM_RTL8192E)
-			odm_dynamic_primary_cca_check(p_dm_odm);
-#endif
 	}
 	odm_dtc(p_dm_odm);
 

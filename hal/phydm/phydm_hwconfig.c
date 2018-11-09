@@ -1154,54 +1154,6 @@ odm_process_rssi_for_dm(
 	if (p_pktinfo->is_packet_to_self || p_pktinfo->is_packet_beacon) {
 
 		if (!is_cck_rate) { /* ofdm rate */
-#if (RTL8814A_SUPPORT == 1) || (RTL8822B_SUPPORT == 1)
-			if (p_dm_odm->support_ic_type & (ODM_RTL8814A | ODM_RTL8822B)) {
-				u8 RX_count = 0;
-				u32 RSSI_linear = 0;
-
-				if (p_dm_odm->rx_ant_status & ODM_RF_A) {
-					p_dm_odm->RSSI_A = p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_A];
-					RX_count++;
-					RSSI_linear += odm_convert_to_linear(p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_A]);
-				} else
-					p_dm_odm->RSSI_A = 0;
-
-				if (p_dm_odm->rx_ant_status & ODM_RF_B) {
-					p_dm_odm->RSSI_B = p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_B];
-					RX_count++;
-					RSSI_linear += odm_convert_to_linear(p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_B]);
-				} else
-					p_dm_odm->RSSI_B = 0;
-
-				if (p_dm_odm->rx_ant_status & ODM_RF_C) {
-					p_dm_odm->RSSI_C = p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_C];
-					RX_count++;
-					RSSI_linear += odm_convert_to_linear(p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_C]);
-				} else
-					p_dm_odm->RSSI_C = 0;
-
-				if (p_dm_odm->rx_ant_status & ODM_RF_D) {
-					p_dm_odm->RSSI_D = p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_D];
-					RX_count++;
-					RSSI_linear += odm_convert_to_linear(p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_D]);
-				} else
-					p_dm_odm->RSSI_D = 0;
-
-				/* Calculate average RSSI */
-				switch (RX_count) {
-				case 2:
-					RSSI_linear = (RSSI_linear >> 1);
-					break;
-				case 3:
-					RSSI_linear = ((RSSI_linear) + (RSSI_linear << 1) + (RSSI_linear << 3)) >> 5;	/* RSSI_linear/3 ~ RSSI_linear*11/32 */
-					break;
-				case 4:
-					RSSI_linear = (RSSI_linear >> 2);
-					break;
-				}
-				rssi_ave = odm_convert_to_db(RSSI_linear);
-			} else
-#endif
 			{
 				if (p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_B] == 0) {
 					rssi_ave = p_phy_info->rx_mimo_signal_strength[ODM_RF_PATH_A];
@@ -1486,91 +1438,6 @@ odm_config_rf_with_tx_pwr_track_header_file(
 	}
 
 	/* 1 All platforms support */
-#if RTL8723B_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8723B) {
-		if (p_dm_odm->support_interface == ODM_ITRF_PCIE)
-			READ_AND_CONFIG_MP(8723b, _txpowertrack_pcie);
-		else if (p_dm_odm->support_interface == ODM_ITRF_USB)
-			READ_AND_CONFIG_MP(8723b, _txpowertrack_usb);
-		else if (p_dm_odm->support_interface == ODM_ITRF_SDIO)
-			READ_AND_CONFIG_MP(8723b, _txpowertrack_sdio);
-	}
-#endif
-#if RTL8814A_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8814A) {
-		if (p_dm_odm->rfe_type == 0)
-			READ_AND_CONFIG_MP(8814a, _txpowertrack_type0);
-		else if (p_dm_odm->rfe_type == 2)
-			READ_AND_CONFIG_MP(8814a, _txpowertrack_type2);
-		else if (p_dm_odm->rfe_type == 5)
-			READ_AND_CONFIG_MP(8814a, _txpowertrack_type5);
-		else
-			READ_AND_CONFIG_MP(8814a, _txpowertrack);
-
-		READ_AND_CONFIG_MP(8814a, _txpowertssi);
-	}
-#endif
-#if RTL8703B_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8703B) {
-		if (p_dm_odm->support_interface == ODM_ITRF_USB)
-			READ_AND_CONFIG_MP(8703b, _txpowertrack_usb);
-		else if (p_dm_odm->support_interface == ODM_ITRF_SDIO)
-			READ_AND_CONFIG_MP(8703b, _txpowertrack_sdio);
-
-		READ_AND_CONFIG_MP(8703b, _txxtaltrack);
-	}
-#endif
-
-#if RTL8188F_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8188F) {
-		if (p_dm_odm->support_interface == ODM_ITRF_USB)
-			READ_AND_CONFIG_MP(8188f, _txpowertrack_usb);
-		else if (p_dm_odm->support_interface == ODM_ITRF_SDIO)
-			READ_AND_CONFIG_MP(8188f, _txpowertrack_sdio);
-	}
-#endif
-
-#if RTL8822B_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8822B) {
-		if (p_dm_odm->rfe_type == 0)
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type0);
-		else if (p_dm_odm->rfe_type == 1)
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type1);
-		else if (p_dm_odm->rfe_type == 2)
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type2);
-		else if ((p_dm_odm->rfe_type == 3) || (p_dm_odm->rfe_type == 5))
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type3_type5);
-		else if (p_dm_odm->rfe_type == 4)
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type4);
-		else if (p_dm_odm->rfe_type == 6)
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type6);
-		else if (p_dm_odm->rfe_type == 7)
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type7);
-		else if (p_dm_odm->rfe_type == 8)
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type8);
-		else if (p_dm_odm->rfe_type == 9)
-			READ_AND_CONFIG_MP(8822b, _txpowertrack_type9);
-		else
-			READ_AND_CONFIG_MP(8822b, _txpowertrack);
-	}
-#endif
-
-#if RTL8197F_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8197F) {
-		if (p_dm_odm->rfe_type == 0)
-			READ_AND_CONFIG_MP(8197f, _txpowertrack_type0);
-		else if (p_dm_odm->rfe_type == 1)
-			READ_AND_CONFIG_MP(8197f, _txpowertrack_type1);
-		else
-			READ_AND_CONFIG_MP(8197f, _txpowertrack);
-	}
-#endif
-
-#if RTL8821C_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8821C)
-		READ_AND_CONFIG(8821c, _txpowertrack);
-#endif
-
 	return HAL_STATUS_SUCCESS;
 }
 
@@ -1822,27 +1689,8 @@ phydm_get_rx_phy_status_type0(
 	if (p_dm_odm->cck_new_agc == false) {
 		u8	lna_idx, vga_idx;
 
-#if (RTL8197F_SUPPORT == 1)
-		if (p_dm_odm->support_ic_type & ODM_RTL8197F)
-			lna_idx = p_phy_sta_rpt->lna_l;
-		else
-#endif
 			lna_idx = ((p_phy_sta_rpt->lna_h << 3) | p_phy_sta_rpt->lna_l);
 		vga_idx = p_phy_sta_rpt->vga;
-
-#if (RTL8723D_SUPPORT == 1)
-		if (p_dm_odm->support_ic_type & ODM_RTL8723D)
-			rx_power = odm_cckrssi_8723d(lna_idx, vga_idx);
-#endif
-#if (RTL8822B_SUPPORT == 1)
-		/* Need to do !! */
-		/*if (p_dm_odm->support_ic_type & ODM_RTL8822B) */
-		/*rx_power = odm_CCKRSSI_8822B(LNA_idx, VGA_idx);*/
-#endif
-#if (RTL8197F_SUPPORT == 1)
-		if (p_dm_odm->support_ic_type & ODM_RTL8197F)
-			rx_power = odm_cckrssi_8197f(p_dm_odm, lna_idx, vga_idx);
-#endif
 	}
 
 	/* Update CCK packet counter */

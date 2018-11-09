@@ -43,55 +43,8 @@ void configure_txpower_track(
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 
-#if RTL8192E_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8192E)
-		configure_txpower_track_8192e(p_config);
-#endif
-#if RTL8821A_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8821)
-		configure_txpower_track_8821a(p_config);
-#endif
-#if RTL8812A_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8812)
-		configure_txpower_track_8812a(p_config);
-#endif
-#if RTL8188E_SUPPORT
 	if (p_dm_odm->support_ic_type == ODM_RTL8188E)
 		configure_txpower_track_8188e(p_config);
-#endif
-
-#if RTL8723B_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8723B)
-		configure_txpower_track_8723b(p_config);
-#endif
-
-#if RTL8814A_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8814A)
-		configure_txpower_track_8814a(p_config);
-#endif
-
-#if RTL8703B_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8703B)
-		configure_txpower_track_8703b(p_config);
-#endif
-
-#if RTL8188F_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8188F)
-		configure_txpower_track_8188f(p_config);
-#endif
-#if RTL8723D_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8723D)
-		configure_txpower_track_8723d(p_config);
-#endif
-#if RTL8822B_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8822B)
-		configure_txpower_track_8822b(p_config);
-#endif
-#if RTL8821C_SUPPORT
-	if (p_dm_odm->support_ic_type == ODM_RTL8821C)
-		configure_txpower_track_8821c(p_config);
-#endif
-
 }
 
 /* **********************************************************************
@@ -690,25 +643,7 @@ static void odm_iq_calibrate(struct PHY_DM_STRUCT *p_dm_odm)
 
 		if (p_dm_odm->linked_interval == 2) {
 			if (IS_HARDWARE_TYPE_8814A(adapter)) {
-#if (RTL8814A_SUPPORT == 1)
-				phy_iq_calibrate_8814a(p_dm_odm, false);
-#endif
 			}
-
-#if (RTL8822B_SUPPORT == 1)
-			else if (IS_HARDWARE_TYPE_8822B(adapter))
-				phy_iq_calibrate_8822b(p_dm_odm, false);
-#endif
-
-#if (RTL8821C_SUPPORT == 1)
-			else if (IS_HARDWARE_TYPE_8821C(adapter))
-				phy_iq_calibrate_8821c(p_dm_odm, false);
-#endif
-
-#if (RTL8821A_SUPPORT == 1)
-			else if (IS_HARDWARE_TYPE_8821(adapter))
-				phy_iq_calibrate_8821a(p_dm_odm, false);
-#endif
 		}
 	} else
 		p_dm_odm->linked_interval = 0;

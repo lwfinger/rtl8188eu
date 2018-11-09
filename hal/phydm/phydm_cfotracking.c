@@ -145,18 +145,6 @@ odm_cfo_tracking_init(
 	p_cfo_track->is_adjust = true;
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD, ("ODM_CfoTracking_init()=========>\n"));
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_CFO_TRACKING, ODM_DBG_LOUD, ("ODM_CfoTracking_init(): is_atc_status = %d, crystal_cap = 0x%x\n", p_cfo_track->is_atc_status, p_cfo_track->def_x_cap));
-
-#if RTL8822B_SUPPORT
-	/* Crystal cap. control by WiFi */
-	if (p_dm_odm->support_ic_type & ODM_RTL8822B)
-		odm_set_bb_reg(p_dm_odm, 0x10, 0x40, 0x1);
-#endif
-
-#if RTL8821C_SUPPORT
-	/* Crystal cap. control by WiFi */
-	if (p_dm_odm->support_ic_type & ODM_RTL8821C)
-		odm_set_bb_reg(p_dm_odm, 0x10, 0x40, 0x1);
-#endif
 }
 
 void

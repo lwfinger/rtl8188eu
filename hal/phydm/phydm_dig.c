@@ -230,30 +230,6 @@ phydm_set_big_jump_step(
 	u8			current_igi
 )
 {
-#if (RTL8822B_SUPPORT == 1 || RTL8197F_SUPPORT == 1)
-	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _dynamic_initial_gain_threshold_			*p_dm_dig_table = &p_dm_odm->dm_dig_table;
-	u8			step1[8] = {24, 30, 40, 50, 60, 70, 80, 90};
-	u8			i;
-
-	if (p_dm_dig_table->enable_adjust_big_jump == 0)
-		return;
-
-	for (i = 0; i <= p_dm_dig_table->big_jump_step1; i++) {
-		if ((current_igi + step1[i]) > p_dm_dig_table->big_jump_lmt[p_dm_dig_table->agc_table_idx]) {
-			if (i != 0)
-				i = i - 1;
-			break;
-		} else if (i == p_dm_dig_table->big_jump_step1)
-			break;
-	}
-	if (p_dm_odm->support_ic_type & ODM_RTL8822B)
-		odm_set_bb_reg(p_dm_odm, 0x8c8, 0xe, i);
-	else if (p_dm_odm->support_ic_type & ODM_RTL8197F)
-		odm_set_bb_reg(p_dm_odm, ODM_REG_BB_AGC_SET_2_11N, 0xe, i);
-
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_DIG, ODM_DBG_LOUD, ("phydm_set_big_jump_step(): bigjump = %d (ori = 0x%x), LMT=0x%x\n", i, p_dm_dig_table->big_jump_step1, p_dm_dig_table->big_jump_lmt[p_dm_dig_table->agc_table_idx]));
-#endif
 }
 
 void
@@ -288,12 +264,6 @@ odm_write_dig(
 	}
 
 	if (p_dm_dig_table->cur_ig_value != current_igi) {
-
-#if (RTL8822B_SUPPORT == 1 || RTL8197F_SUPPORT == 1)
-		/* Modify big jump step for 8822B and 8197F */
-		if (p_dm_odm->support_ic_type & (ODM_RTL8822B | ODM_RTL8197F))
-			phydm_set_big_jump_step(p_dm_odm, current_igi);
-#endif
 
 #if (ODM_PHY_STATUS_NEW_TYPE_SUPPORT == 1)
 		/* Set IGI value of CCK for new CCK AGC */
@@ -567,28 +537,6 @@ odm_dig_init(
 		p_dm_dig_table->rx_gain_range_max = DM_DIG_MAX_NIC;
 		p_dm_dig_table->rx_gain_range_min = DM_DIG_MIN_NIC;
 	}
-
-#if (RTL8822B_SUPPORT == 1 || RTL8197F_SUPPORT == 1)
-	p_dm_dig_table->enable_adjust_big_jump = 1;
-	if (p_dm_odm->support_ic_type & ODM_RTL8822B) {
-		ret_value = odm_get_bb_reg(p_dm_odm, 0x8c8, MASKLWORD);
-		p_dm_dig_table->big_jump_step1 = (u8)(ret_value & 0xe) >> 1;
-		p_dm_dig_table->big_jump_step2 = (u8)(ret_value & 0x30) >> 4;
-		p_dm_dig_table->big_jump_step3 = (u8)(ret_value & 0xc0) >> 6;
-
-	} else if (p_dm_odm->support_ic_type & ODM_RTL8197F) {
-		ret_value = odm_get_bb_reg(p_dm_odm, ODM_REG_BB_AGC_SET_2_11N, MASKLWORD);
-		p_dm_dig_table->big_jump_step1 = (u8)(ret_value & 0xe) >> 1;
-		p_dm_dig_table->big_jump_step2 = (u8)(ret_value & 0x30) >> 4;
-		p_dm_dig_table->big_jump_step3 = (u8)(ret_value & 0xc0) >> 6;
-	}
-	if (p_dm_odm->support_ic_type & (ODM_RTL8822B | ODM_RTL8197F)) {
-		for (i = 0; i < sizeof(p_dm_dig_table->big_jump_lmt); i++) {
-			if (p_dm_dig_table->big_jump_lmt[i] == 0)
-				p_dm_dig_table->big_jump_lmt[i] = 0x64;		/* Set -10dBm as default value */
-		}
-	}
-#endif
 }
 
 

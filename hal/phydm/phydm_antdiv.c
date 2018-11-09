@@ -1813,31 +1813,7 @@ phydm_update_beam_pattern(
 		}
 
 		if (p_dm_odm->support_ic_type == ODM_RTL8821) {
-#if (RTL8821A_SUPPORT == 1)
-		reg44_tmp_p = reg44_ori & (~(BIT(11) | BIT10)); /*clean bit 10 & 11*/
-		reg44_tmp_p |= ((1 << 11) | (beam_ctrl_signal << 10));
-		reg44_tmp_n = reg44_ori & (~(BIT(11) | BIT(10)));
-
-		/*ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("reg44_tmp_p =(( 0x%x )), reg44_tmp_n = (( 0x%x ))\n", reg44_tmp_p, reg44_tmp_n));*/
-		odm_set_mac_reg(p_dm_odm, 0x44, MASKDWORD, reg44_tmp_p);
-		odm_set_mac_reg(p_dm_odm, 0x44, MASKDWORD, reg44_tmp_n);
-#endif
 		}
-#if (RTL8822B_SUPPORT == 1)
-		else if (p_dm_odm->support_ic_type == ODM_RTL8822B) {
-
-			reg44_tmp_p = reg44_ori & (~(BIT(9) | BIT8)); /*clean bit 9 & 8*/
-			reg44_tmp_p |= ((1 << 9) | (beam_ctrl_signal << 8));
-			reg44_tmp_n = reg44_ori & (~(BIT(9) | BIT(8)));
-
-			/* ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("reg44_tmp_p =(( 0x%x )), reg44_tmp_n = (( 0x%x ))\n", reg44_tmp_p, reg44_tmp_n)); */
-			odm_set_mac_reg(p_dm_odm, 0x44, MASKDWORD, reg44_tmp_p);
-			ODM_delay_us(10);
-			odm_set_mac_reg(p_dm_odm, 0x44, MASKDWORD, reg44_tmp_n);
-			ODM_delay_us(10);
-		}
-#endif
-
 	}
 }
 
@@ -2563,24 +2539,6 @@ odm_ant_div_init(
 	}
 #endif
 
-	/*[--8822B---]*/
-#if (RTL8822B_SUPPORT == 1)
-	else if (p_dm_odm->support_ic_type == ODM_RTL8822B) {
-#ifdef CONFIG_HL_SMART_ANTENNA_TYPE1
-		p_dm_odm->ant_div_type = HL_SW_SMART_ANT_TYPE1;
-
-		if (p_dm_odm->ant_div_type == HL_SW_SMART_ANT_TYPE1)
-
-			phydm_hl_smart_ant_type1_init_8822b(p_dm_odm);
-#endif
-	}
-#endif
-
-	/*
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("*** support_ic_type=[%lu]\n",p_dm_odm->support_ic_type));
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("*** AntDiv support_ability=[%lu]\n",(p_dm_odm->support_ability & ODM_BB_ANT_DIV)>>6));
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("*** AntDiv type=[%d]\n",p_dm_odm->ant_div_type));
-	*/
 }
 
 void

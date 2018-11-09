@@ -35,32 +35,9 @@ beamforming_get_vht_ndp_tx_rate(
 	u8	comp_steering_num_of_bfer
 );
 
-#if (RTL8822B_SUPPORT == 1)
-u8
-phydm_get_beamforming_sounding_info(
-	void		*p_dm_void,
-	u16	*troughput,
-	u8	total_bfee_num,
-	u8	*tx_rate
-);
-
-u8
-phydm_get_ndpa_rate(
-	void		*p_dm_void
-);
-
-u8
-phydm_get_mu_bfee_snding_decision(
-	void		*p_dm_void,
-	u16	throughput
-);
-
-#else
 #define phydm_get_beamforming_sounding_info(p_dm_void, troughput, total_bfee_num, tx_rate)
 #define phydm_get_ndpa_rate(p_dm_void)
 #define phydm_get_mu_bfee_snding_decision(p_dm_void, troughput)
-
-#endif
 
 #endif
 #endif

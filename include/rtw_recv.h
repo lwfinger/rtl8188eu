@@ -118,19 +118,8 @@ struct phy_info {
 	u8			SignalStrength;				/* in 0-100 index. */
 	s8			RxPwr[4];					/* per-path's pwdb */
 	s8			RxSNR[4];
-#if ((RTL8822B_SUPPORT == 1) || (RTL8723D_SUPPORT == 1) || (RTL8821C_SUPPORT == 1))
-	u8			RxCount:2;
-	u8			BandWidth:2;
-	u8			rxsc:4;
-#else
 	u8			BandWidth;
-#endif
 	u8			btCoexPwrAdjust;
-#if ((RTL8822B_SUPPORT == 1) || (RTL8723D_SUPPORT == 1) || (RTL8821C_SUPPORT == 1))
-	u8			channel;						/* channel number---*/
-	BOOLEAN		bMuPacket;					/* is MU packet or not---*/
-	BOOLEAN		bBeamformed;
-#endif
 };
 
 struct rx_raw_rssi {

@@ -22,7 +22,6 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-#if (RTL8188E_SUPPORT == 1)
 static bool
 check_positive(
 	struct PHY_DM_STRUCT     *p_dm_odm,
@@ -1745,5 +1744,3 @@ odm_read_and_config_mp_8188e_phy_reg_pg(
 		odm_config_bb_phy_reg_pg_8188e(p_dm_odm, v1, v2, v3, v4, v5, v6);
 	}
 }
-
-#endif /* end of HWIMG_SUPPORT*/
