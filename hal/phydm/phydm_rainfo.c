@@ -868,14 +868,8 @@ static s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 
 	if (tx_bf_en)
 		STBC_TX = 0;
-	else {
-#ifdef CONFIG_80211AC_VHT
-		if (is_supported_vht(p_entry->wireless_mode))
-			STBC_TX = TEST_FLAG(p_entry->vhtpriv.stbc_cap, STBC_VHT_ENABLE_TX);
-		else
-#endif
-			STBC_TX = TEST_FLAG(p_entry->htpriv.stbc_cap, STBC_HT_ENABLE_TX);
-	}
+	else
+		STBC_TX = TEST_FLAG(p_entry->htpriv.stbc_cap, STBC_HT_ENABLE_TX);
 
 	h2c_parameter[0] = (u8)(p_entry->mac_id & 0xFF);
 	h2c_parameter[2] = p_entry->rssi_stat.undecorated_smoothed_pwdb & 0x7F;

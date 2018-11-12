@@ -1139,7 +1139,6 @@ rtk_core :=	core/rtw_cmd.o \
 		core/rtw_mlme_ext.o \
 		core/rtw_mi.o \
 		core/rtw_wlan_util.o \
-		core/rtw_vht.o \
 		core/rtw_pwrctrl.o \
 		core/rtw_rf.o \
 		core/rtw_recv.o \

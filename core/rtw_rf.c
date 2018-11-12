@@ -570,11 +570,7 @@ const u8 _rf_type_to_rf_rx_cnt[] = {
 	4,
 };
 
-#ifdef CONFIG_80211AC_VHT
-#define COUNTRY_CHPLAN_ASSIGN_EN_11AC(_val) , .en_11ac = (_val)
-#else
 #define COUNTRY_CHPLAN_ASSIGN_EN_11AC(_val)
-#endif
 
 #if RTW_DEF_MODULE_REGULATORY_CERT
 #define COUNTRY_CHPLAN_ASSIGN_DEF_MODULE_FLAGS(_val) , .def_module_flags = (_val)

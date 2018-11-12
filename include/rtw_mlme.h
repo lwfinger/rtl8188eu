@@ -664,9 +664,6 @@ struct mlme_priv {
 
 #endif
 
-#ifdef CONFIG_80211AC_VHT
-	struct vht_priv	vhtpriv;
-#endif
 #ifdef CONFIG_BEAMFORMING
 #ifndef RTW_BEAMFORMING_VERSION_2
 #if (BEAMFORMING_SUPPORT == 0)/*for driver beamforming*/

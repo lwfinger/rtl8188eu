@@ -100,9 +100,6 @@ static void _get_sta_beamform_cap(PADAPTER adapter, struct sta_info *sta,
 {
 	struct beamforming_info *info;
 	struct ht_priv *ht;
-#ifdef CONFIG_80211AC_VHT
-	struct vht_priv *vht;
-#endif /* CONFIG_80211AC_VHT */
 	u16 bf_cap;
 
 
@@ -112,9 +109,6 @@ static void _get_sta_beamform_cap(PADAPTER adapter, struct sta_info *sta,
 
 	info = GET_BEAMFORM_INFO(adapter);
 	ht = &adapter->mlmepriv.htpriv;
-#ifdef CONFIG_80211AC_VHT
-	vht = &adapter->mlmepriv.vhtpriv;
-#endif /* CONFIG_80211AC_VHT */
 
 	if (is_supported_ht(sta->wireless_mode) == _TRUE) {
 		/* HT */
@@ -131,40 +125,6 @@ static void _get_sta_beamform_cap(PADAPTER adapter, struct sta_info *sta,
 			*comp_steering = (bf_cap & BEAMFORMING_HT_BEAMFORMER_STEER_NUM) >> 4;
 		}
 	}
-
-#ifdef CONFIG_80211AC_VHT
-	if (is_supported_vht(sta->wireless_mode) == _TRUE) {
-		/* VHT */
-		bf_cap = vht->beamform_cap;
-
-		/* We are SU Beamformee because the STA is SU Beamformer */
-		if (TEST_FLAG(bf_cap, BEAMFORMING_VHT_BEAMFORMEE_ENABLE)) {
-			info->beamforming_cap |= BEAMFORMEE_CAP_VHT_SU;
-			*sta_bf_cap |= BEAMFORMER_CAP_VHT_SU;
-
-			/* We are MU Beamformee because the STA is MU Beamformer */
-			if (TEST_FLAG(bf_cap, BEAMFORMING_VHT_MU_MIMO_STA_ENABLE)) {
-				info->beamforming_cap |= BEAMFORMEE_CAP_VHT_MU;
-				*sta_bf_cap |= BEAMFORMER_CAP_VHT_MU;
-			}
-
-			*sounding_dim = (bf_cap & BEAMFORMING_VHT_BEAMFORMEE_SOUND_DIM) >> 12;
-		}
-		/* We are SU Beamformer because the STA is SU Beamformee */
-		if (TEST_FLAG(bf_cap, BEAMFORMING_VHT_BEAMFORMER_ENABLE)) {
-			info->beamforming_cap |= BEAMFORMER_CAP_VHT_SU;
-			*sta_bf_cap |= BEAMFORMEE_CAP_VHT_SU;
-
-			/* We are MU Beamformer because the STA is MU Beamformee */
-			if (TEST_FLAG(bf_cap, BEAMFORMING_VHT_MU_MIMO_AP_ENABLE)) {
-				info->beamforming_cap |= BEAMFORMER_CAP_VHT_MU;
-				*sta_bf_cap |= BEAMFORMEE_CAP_VHT_MU;
-			}
-
-			*comp_steering = (bf_cap & BEAMFORMING_VHT_BEAMFORMER_STS_CAP) >> 8;
-		}
-	}
-#endif /* CONFIG_80211AC_VHT */
 }
 
 static u8 _send_ht_ndpa_packet(PADAPTER adapter, u8 *ra, CHANNEL_WIDTH bw)
@@ -1366,9 +1326,6 @@ static void _beamforming_enter(PADAPTER adapter, void *p)
 {
 	struct mlme_priv *mlme;
 	struct ht_priv *htpriv;
-#ifdef CONFIG_80211AC_VHT
-	struct vht_priv *vhtpriv;
-#endif
 	struct mlme_ext_priv *mlme_ext;
 	struct sta_info *sta, *sta_copy;
 	struct beamforming_info *info;
@@ -1382,9 +1339,6 @@ static void _beamforming_enter(PADAPTER adapter, void *p)
 
 	mlme = &adapter->mlmepriv;
 	htpriv = &mlme->htpriv;
-#ifdef CONFIG_80211AC_VHT
-	vhtpriv = &mlme->vhtpriv;
-#endif
 	mlme_ext = &adapter->mlmeextpriv;
 	info = GET_BEAMFORM_INFO(adapter);
 
@@ -1408,11 +1362,7 @@ static void _beamforming_enter(PADAPTER adapter, void *p)
 		return;
 	}
 
-	if ((0 == htpriv->beamform_cap)
-#ifdef CONFIG_80211AC_VHT
-	    && (0 == vhtpriv->beamform_cap)
-#endif
-	   ) {
+	if ((0 == htpriv->beamform_cap)) {
 		RTW_INFO("The configuration disabled Beamforming! Skip...\n");
 		return;
 	}
@@ -2706,9 +2656,6 @@ BOOLEAN	beamforming_init_entry(PADAPTER	adapter, struct sta_info *psta, u8 *idx)
 {
 	struct mlme_priv	*pmlmepriv = &(adapter->mlmepriv);
 	struct ht_priv		*phtpriv = &(pmlmepriv->htpriv);
-#ifdef CONFIG_80211AC_VHT
-	struct vht_priv		*pvhtpriv = &(pmlmepriv->vhtpriv);
-#endif
 	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct beamforming_entry	*pBeamformEntry = NULL;
@@ -2719,11 +2666,7 @@ BOOLEAN	beamforming_init_entry(PADAPTER	adapter, struct sta_info *psta, u8 *idx)
 	BEAMFORMING_CAP	beamform_cap = BEAMFORMING_CAP_NONE;
 
 	/* The current setting does not support Beaforming */
-	if (0 == phtpriv->beamform_cap
-#ifdef CONFIG_80211AC_VHT
-	    && 0 == pvhtpriv->beamform_cap
-#endif
-	   ) {
+	if (0 == phtpriv->beamform_cap) {
 		RTW_INFO("The configuration disabled Beamforming! Skip...\n");
 		return _FALSE;
 	}
@@ -2747,19 +2690,6 @@ BOOLEAN	beamforming_init_entry(PADAPTER	adapter, struct sta_info *psta, u8 *idx)
 		/* We are Beamformer because the STA is Beamformee */
 		if (TEST_FLAG(cur_beamform, BEAMFORMING_HT_BEAMFORMEE_ENABLE))
 			beamform_cap = (BEAMFORMING_CAP)(beamform_cap | BEAMFORMER_CAP_HT_EXPLICIT);
-#ifdef CONFIG_80211AC_VHT
-		if (is_supported_vht(wireless_mode)) {
-			/* 3 */ /* VHT */
-			cur_beamform = psta->vhtpriv.beamform_cap;
-
-			/* We are Beamformee because the STA is Beamformer */
-			if (TEST_FLAG(cur_beamform, BEAMFORMING_VHT_BEAMFORMER_ENABLE))
-				beamform_cap = (BEAMFORMING_CAP)(beamform_cap | BEAMFORMEE_CAP_VHT_SU);
-			/* We are Beamformer because the STA is Beamformee */
-			if (TEST_FLAG(cur_beamform, BEAMFORMING_VHT_BEAMFORMEE_ENABLE))
-				beamform_cap = (BEAMFORMING_CAP)(beamform_cap | BEAMFORMER_CAP_VHT_SU);
-		}
-#endif /* CONFIG_80211AC_VHT */
 
 		if (beamform_cap == BEAMFORMING_CAP_NONE)
 			return _FALSE;

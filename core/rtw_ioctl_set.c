@@ -1012,10 +1012,6 @@ u16 rtw_get_cur_max_rate(_adapter *adapter)
 			, psta->htpriv.ht_cap.supp_mcs_set
 		);
 	}
-#ifdef CONFIG_80211AC_VHT
-	else if (is_supported_vht(psta->wireless_mode))
-		max_rate = ((rtw_vht_mcs_to_data_rate(psta->bw_mode, short_GI, pmlmepriv->vhtpriv.vht_highest_rate) + 1) >> 1) * 10;
-#endif /* CONFIG_80211AC_VHT */
 	else
 #endif /* CONFIG_80211N_HT */
 	{

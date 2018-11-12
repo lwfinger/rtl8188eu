@@ -2832,31 +2832,6 @@ bypass_ht_chk:
 	}
 #endif /* CONFIG_80211N_HT */
 
-#ifdef CONFIG_80211AC_VHT
-	if (pmlmepriv->vhtpriv.vht_option == _FALSE)
-		goto bypass_vht_chk;
-
-	_rtw_memset(&pstat->vhtpriv, 0, sizeof(struct vht_priv));
-	if (elems.vht_capabilities && elems.vht_capabilities_len == 12) {
-		pstat->flags |= WLAN_STA_VHT;
-
-		_rtw_memcpy(pstat->vhtpriv.vht_cap, elems.vht_capabilities, 12);
-
-		if (elems.vht_op_mode_notify && elems.vht_op_mode_notify_len == 1)
-			_rtw_memcpy(&pstat->vhtpriv.vht_op_mode_notify, elems.vht_op_mode_notify, 1);
-		else /* for Frame without Operating Mode notify ie; default: 80M */
-			pstat->vhtpriv.vht_op_mode_notify = CHANNEL_WIDTH_80;
-	} else
-		pstat->flags &= ~WLAN_STA_VHT;
-bypass_vht_chk:
-
-	if ((pmlmepriv->vhtpriv.vht_option == _FALSE) && (pstat->flags & WLAN_STA_VHT)) {
-		rtw_warn_on(1);
-		status = _STATS_FAILURE_;
-		goto OnAssocReqFail;
-	}
-#endif /* CONFIG_80211AC_VHT */
-
 	if (((pstat->flags & WLAN_STA_HT) || (pstat->flags & WLAN_STA_VHT)) &&
 	    ((pstat->wpa2_pairwise_cipher & WPA_CIPHER_TKIP) ||
 	     (pstat->wpa_pairwise_cipher & WPA_CIPHER_TKIP))) {
@@ -2869,7 +2844,6 @@ bypass_vht_chk:
 		  * goto OnAssocReqFail;
 		*/
 	}
-
 
 	/*
 	 * if (hapd->iface->current_mode->mode == HOSTAPD_MODE_IEEE80211G) */ /* ? */
@@ -3124,16 +3098,6 @@ unsigned int OnAssocRsp(_adapter *padapter, union recv_frame *precv_frame)
 		case _HT_EXTRA_INFO_IE_:	/* HT info */
 			HT_info_handler(padapter, pIE);
 			break;
-
-#ifdef CONFIG_80211AC_VHT
-		case EID_VHTCapability:
-			VHT_caps_handler(padapter, pIE);
-			break;
-
-		case EID_VHTOperation:
-			VHT_operation_handler(padapter, pIE);
-			break;
-#endif
 
 		case _ERPINFO_IE_:
 			ERP_IE_handler(padapter, pIE);
@@ -7070,52 +7034,6 @@ unsigned int OnAction_wmm(_adapter *padapter, union recv_frame *precv_frame)
 
 unsigned int OnAction_vht(_adapter *padapter, union recv_frame *precv_frame)
 {
-#ifdef CONFIG_80211AC_VHT
-	struct rx_pkt_attrib *prxattrib = &precv_frame->u.hdr.attrib;
-	u8 *pframe = precv_frame->u.hdr.rx_data;
-	uint frame_len = precv_frame->u.hdr.len;
-	struct rtw_ieee80211_hdr_3addr *whdr = (struct rtw_ieee80211_hdr_3addr *)pframe;
-	u8 *frame_body = pframe + sizeof(struct rtw_ieee80211_hdr_3addr);
-	u8 category, action;
-	struct sta_info *psta = NULL;
-
-	/* check RA matches or not */
-	if (!_rtw_memcmp(adapter_mac_addr(padapter), GetAddr1Ptr(pframe), ETH_ALEN))
-		goto exit;
-
-	category = frame_body[0];
-	if (category != RTW_WLAN_CATEGORY_VHT)
-		goto exit;
-
-	action = frame_body[1];
-	switch (action) {
-	case RTW_WLAN_ACTION_VHT_COMPRESSED_BEAMFORMING:
-#ifdef CONFIG_BEAMFORMING
-		/*RTW_INFO("RTW_WLAN_ACTION_VHT_COMPRESSED_BEAMFORMING\n");*/
-		rtw_beamforming_get_report_frame(padapter, precv_frame);
-#endif /*CONFIG_BEAMFORMING*/
-		break;
-	case RTW_WLAN_ACTION_VHT_OPMODE_NOTIFICATION:
-		/* CategoryCode(1) + ActionCode(1) + OpModeNotification(1) */
-		/* RTW_INFO("RTW_WLAN_ACTION_VHT_OPMODE_NOTIFICATION\n"); */
-		psta = rtw_get_stainfo(&padapter->stapriv, whdr->addr2);
-		if (psta)
-			rtw_process_vht_op_mode_notify(padapter, &frame_body[2], psta);
-		break;
-	case RTW_WLAN_ACTION_VHT_GROUPID_MANAGEMENT:
-#ifdef CONFIG_BEAMFORMING
-#ifdef RTW_BEAMFORMING_VERSION_2
-		rtw_beamforming_get_vht_gid_mgnt_frame(padapter, precv_frame);
-#endif /* RTW_BEAMFORMING_VERSION_2 */
-#endif /* CONFIG_BEAMFORMING */
-		break;
-	default:
-		break;
-	}
-
-exit:
-#endif /* CONFIG_80211AC_VHT */
-
 	return _SUCCESS;
 }
 
@@ -7307,22 +7225,7 @@ void update_monitor_frame_attrib(_adapter *padapter, struct pkt_attrib *pattrib)
 		wireless_mode = WIRELESS_11G;
 
 	pattrib->raid = rtw_get_mgntframe_raid(padapter, wireless_mode);
-#ifdef CONFIG_80211AC_VHT
-	if (pHalData->rf_type == RF_1T1R)
-		pattrib->raid = RATEID_IDX_VHT_1SS;
-	else if (pHalData->rf_type == RF_2T2R || pHalData->rf_type == RF_2T4R)
-		pattrib->raid = RATEID_IDX_VHT_2SS;
-	else if (pHalData->rf_type == RF_3T3R)
-		pattrib->raid = RATEID_IDX_VHT_3SS;
-	else
-		pattrib->raid = RATEID_IDX_BGN_40M_1SS;
-#endif
-
-#ifdef CONFIG_80211AC_VHT
-	pattrib->rate = MGN_VHT1SS_MCS9;
-#else
 	pattrib->rate = MGN_MCS7;
-#endif
 
 	pattrib->encrypt = _NO_PRIVACY_;
 	pattrib->bswenc = _FALSE;
@@ -8591,30 +8494,6 @@ void issue_asocrsp(_adapter *padapter, unsigned short status, struct sta_info *p
 		}
 	}
 
-#ifdef CONFIG_80211AC_VHT
-	if ((pstat->flags & WLAN_STA_VHT) && (pmlmepriv->vhtpriv.vht_option)
-	    && (pstat->wpa_pairwise_cipher != WPA_CIPHER_TKIP)
-	    && (pstat->wpa2_pairwise_cipher != WPA_CIPHER_TKIP)) {
-		u32 ie_len = 0;
-
-		/* FILL VHT CAP IE */
-		pbuf = rtw_get_ie(ie + _BEACON_IE_OFFSET_, EID_VHTCapability, &ie_len, (pnetwork->IELength - _BEACON_IE_OFFSET_));
-		if (pbuf && ie_len > 0) {
-			_rtw_memcpy(pframe, pbuf, ie_len + 2);
-			pframe += (ie_len + 2);
-			pattrib->pktlen += (ie_len + 2);
-		}
-
-		/* FILL VHT OPERATION IE */
-		pbuf = rtw_get_ie(ie + _BEACON_IE_OFFSET_, EID_VHTOperation, &ie_len, (pnetwork->IELength - _BEACON_IE_OFFSET_));
-		if (pbuf && ie_len > 0) {
-			_rtw_memcpy(pframe, pbuf, ie_len + 2);
-			pframe += (ie_len + 2);
-			pattrib->pktlen += (ie_len + 2);
-		}
-	}
-#endif /* CONFIG_80211AC_VHT */
-
 	/* FILL WMM IE */
 	if ((pstat->flags & WLAN_STA_WME) && (pmlmepriv->qospriv.qos_option)) {
 		uint ie_len = 0;
@@ -8937,17 +8816,6 @@ void _issue_assocreq(_adapter *padapter, u8 is_reassoc)
 				pframe = rtw_set_ie(pframe, EID_EXTCapability, pIE->Length, pIE->data, &(pattrib->pktlen));
 			break;
 #endif /* CONFIG_80211N_HT */
-#ifdef CONFIG_80211AC_VHT
-		case EID_VHTCapability:
-			if (padapter->mlmepriv.vhtpriv.vht_option == _TRUE)
-				pframe = rtw_set_ie(pframe, EID_VHTCapability, pIE->Length, pIE->data, &(pattrib->pktlen));
-			break;
-
-		case EID_OpModeNotification:
-			if (padapter->mlmepriv.vhtpriv.vht_option == _TRUE)
-				pframe = rtw_set_ie(pframe, EID_OpModeNotification, pIE->Length, pIE->data, &(pattrib->pktlen));
-			break;
-#endif /* CONFIG_80211AC_VHT */
 		default:
 			break;
 		}
@@ -11817,10 +11685,6 @@ void update_sta_info(_adapter *padapter, struct sta_info *psta)
 	if (pmlmepriv->qospriv.qos_option)
 		psta->qos_option = _TRUE;
 
-#ifdef CONFIG_80211AC_VHT
-	_rtw_memcpy(&psta->vhtpriv, &pmlmepriv->vhtpriv, sizeof(struct vht_priv));
-#endif /* CONFIG_80211AC_VHT */
-
 	update_ldpc_stbc_cap(psta);
 
 	_enter_critical_bh(&psta->lock, &irqL);
@@ -11964,11 +11828,6 @@ void mlmeext_joinbss_event_callback(_adapter *padapter, int join_res)
 
 	/* HT */
 	HTOnAssocRsp(padapter);
-
-#ifdef CONFIG_80211AC_VHT
-	/* VHT */
-	VHTOnAssocRsp(padapter);
-#endif
 
 	psta = rtw_get_stainfo(pstapriv, cur_network->MacAddress);
 	if (psta) { /* only for infra. mode */
@@ -13321,14 +13180,6 @@ u8 join_cmd_hdl(_adapter *padapter, u8 *pbuf)
 			break;
 #endif /* CONFIG_80211N_HT */
 
-#ifdef CONFIG_80211AC_VHT
-		case EID_VHTCapability: /* Get VHT Cap IE. */
-			pmlmeinfo->VHT_enable = 1;
-			break;
-
-		case EID_VHTOperation: /* Get VHT Operation IE. */
-			break;
-#endif /* CONFIG_80211AC_VHT */
 		default:
 			break;
 		}
@@ -13341,47 +13192,11 @@ u8 join_cmd_hdl(_adapter *padapter, u8 *pbuf)
 
 	rtw_adjust_chbw(padapter, pmlmeext->cur_channel, &pmlmeext->cur_bwmode, &pmlmeext->cur_ch_offset);
 
-#if 0
-	if (padapter->registrypriv.wifi_spec) {
-		/* for WiFi test, follow WMM test plan spec */
-		acparm = 0x002F431C; /* VO */
-		rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_VO, (u8 *)(&acparm));
-		acparm = 0x005E541C; /* VI */
-		rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_VI, (u8 *)(&acparm));
-		acparm = 0x0000A525; /* BE */
-		rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_BE, (u8 *)(&acparm));
-		acparm = 0x0000A549; /* BK */
-		rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_BK, (u8 *)(&acparm));
-
-		/* for WiFi test, mixed mode with intel STA under bg mode throughput issue */
-		if (padapter->mlmepriv.htpriv.ht_option == _FALSE) {
-			acparm = 0x00004320;
-			rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_BE, (u8 *)(&acparm));
-		}
-	} else {
-		acparm = 0x002F3217; /* VO */
-		rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_VO, (u8 *)(&acparm));
-		acparm = 0x005E4317; /* VI */
-		rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_VI, (u8 *)(&acparm));
-		acparm = 0x00105320; /* BE */
-		rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_BE, (u8 *)(&acparm));
-		acparm = 0x0000A444; /* BK */
-		rtw_hal_set_hwreg(padapter, HW_VAR_AC_PARAM_BK, (u8 *)(&acparm));
-	}
-#endif
-
 	/* check channel, bandwidth, offset and switch */
 	if (rtw_chk_start_clnt_join(padapter, &u_ch, &u_bw, &u_offset) == _FAIL) {
 		report_join_res(padapter, (-4));
 		return H2C_SUCCESS;
 	}
-
-	/* disable dynamic functions, such as high power, DIG */
-	/*rtw_phydm_func_disable_all(padapter);*/
-
-	/* config the initial gain under linking, need to write the BB registers */
-	/* initialgain = 0x1E; */
-	/*rtw_hal_set_odm_var(padapter, HAL_ODM_INITIAL_GAIN, &initialgain, _FALSE);*/
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_BSSID, pmlmeinfo->network.MacAddress);
 	join_type = 0;
@@ -13401,7 +13216,6 @@ u8 join_cmd_hdl(_adapter *padapter, u8 *pbuf)
 	start_clnt_join(padapter);
 
 	return H2C_SUCCESS;
-
 }
 
 u8 disconnect_hdl(_adapter *padapter, unsigned char *pbuf)
@@ -15475,14 +15289,8 @@ u8 tdls_hdl(_adapter *padapter, unsigned char *pbuf)
 
 			if (ptdls_sta->ra_mask & 0xff0)
 				sta_band |= WIRELESS_11A;
-
-			/* 5G band */
-#ifdef CONFIG_80211AC_VHT
-			if (ptdls_sta->vhtpriv.vht_option)
-				sta_band = WIRELESS_11_5AC;
-#endif
-
 		} else {
+			/* 5G band */
 			if (ptdls_sta->ra_mask & 0xffff000)
 				sta_band |= WIRELESS_11_24N;
 

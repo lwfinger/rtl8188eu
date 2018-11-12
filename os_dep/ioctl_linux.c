@@ -450,12 +450,6 @@ static inline char *iwe_stream_protocol_process(_adapter *padapter,
 	if (p && ht_ielen > 0)
 		ht_cap = _TRUE;
 
-#ifdef CONFIG_80211AC_VHT
-	/* parsing VHT_CAP_IE */
-	p = rtw_get_ie(&pnetwork->network.IEs[ie_offset], EID_VHTCapability, &vht_ielen, pnetwork->network.IELength - ie_offset);
-	if (p && vht_ielen > 0)
-		vht_cap = _TRUE;
-#endif
 	/* Add the protocol name */
 	iwe->cmd = SIOCGIWNAME;
 	if ((rtw_is_cckratesonly_included((u8 *)&pnetwork->network.SupportedRates)) == _TRUE) {
@@ -470,17 +464,10 @@ static inline char *iwe_stream_protocol_process(_adapter *padapter,
 			snprintf(iwe->u.name, IFNAMSIZ, "IEEE 802.11bg");
 	} else {
 		if (pnetwork->network.Configuration.DSConfig > 14) {
-			#ifdef CONFIG_80211AC_VHT
-			if (vht_cap == _TRUE)
-				snprintf(iwe->u.name, IFNAMSIZ, "IEEE 802.11AC");
+			if (ht_cap == _TRUE)
+				snprintf(iwe->u.name, IFNAMSIZ, "IEEE 802.11an");
 			else
-			#endif
-			{
-				if (ht_cap == _TRUE)
-					snprintf(iwe->u.name, IFNAMSIZ, "IEEE 802.11an");
-				else
-					snprintf(iwe->u.name, IFNAMSIZ, "IEEE 802.11a");
-			}
+				snprintf(iwe->u.name, IFNAMSIZ, "IEEE 802.11a");
 		} else {
 			if (ht_cap == _TRUE)
 				snprintf(iwe->u.name, IFNAMSIZ, "IEEE 802.11gn");
@@ -517,26 +504,6 @@ static inline char *iwe_stream_rate_process(_adapter *padapter,
 		short_GI = (le16_to_cpu(pht_capie->cap_info) & (IEEE80211_HT_CAP_SGI_20 | IEEE80211_HT_CAP_SGI_40)) ? 1 : 0;
 	}
 
-#ifdef CONFIG_80211AC_VHT
-	/* parsing VHT_CAP_IE */
-	p = rtw_get_ie(&pnetwork->network.IEs[ie_offset], EID_VHTCapability, &vht_ielen, pnetwork->network.IELength - ie_offset);
-	if (p && vht_ielen > 0) {
-		u8	mcs_map[2];
-
-		vht_cap = _TRUE;
-		bw_160MHz = GET_VHT_CAPABILITY_ELE_CHL_WIDTH(p + 2);
-		if (bw_160MHz)
-			short_GI = GET_VHT_CAPABILITY_ELE_SHORT_GI160M(p + 2);
-		else
-			short_GI = GET_VHT_CAPABILITY_ELE_SHORT_GI80M(p + 2);
-
-		_rtw_memcpy(mcs_map, GET_VHT_CAPABILITY_ELE_TX_MCS(p + 2), 2);
-
-		vht_highest_rate = rtw_get_vht_highest_rate(mcs_map);
-		vht_data_rate = rtw_vht_mcs_to_data_rate(CHANNEL_WIDTH_80, short_GI, vht_highest_rate);
-	}
-#endif
-
 	/*Add basic and extended rates */
 	p = custom;
 	p += snprintf(p, MAX_CUSTOM_LEN - (p - custom), " Rates (Mb/s): ");
@@ -548,24 +515,19 @@ static inline char *iwe_stream_rate_process(_adapter *padapter,
 			      "%d%s ", rate >> 1, (rate & 1) ? ".5" : "");
 		i++;
 	}
-#ifdef CONFIG_80211AC_VHT
-	if (vht_cap == _TRUE)
-		max_rate = vht_data_rate;
-	else
-#endif
-		if (ht_cap == _TRUE) {
-			if (mcs_rate & 0x8000) /* MCS15 */
-				max_rate = (bw_40MHz) ? ((short_GI) ? 300 : 270) : ((short_GI) ? 144 : 130);
+	if (ht_cap == _TRUE) {
+		if (mcs_rate & 0x8000) /* MCS15 */
+			max_rate = (bw_40MHz) ? ((short_GI) ? 300 : 270) : ((short_GI) ? 144 : 130);
 
-			else if (mcs_rate & 0x0080) /* MCS7 */
-				max_rate = (bw_40MHz) ? ((short_GI) ? 150 : 135) : ((short_GI) ? 72 : 65);
-			else { /* default MCS7 */
-				/* RTW_INFO("wx_get_scan, mcs_rate_bitmap=0x%x\n", mcs_rate); */
-				max_rate = (bw_40MHz) ? ((short_GI) ? 150 : 135) : ((short_GI) ? 72 : 65);
-			}
-
-			max_rate = max_rate * 2; /* Mbps/2;		 */
+		else if (mcs_rate & 0x0080) /* MCS7 */
+			max_rate = (bw_40MHz) ? ((short_GI) ? 150 : 135) : ((short_GI) ? 72 : 65);
+		else { /* default MCS7 */
+			/* RTW_INFO("wx_get_scan, mcs_rate_bitmap=0x%x\n", mcs_rate); */
+			max_rate = (bw_40MHz) ? ((short_GI) ? 150 : 135) : ((short_GI) ? 72 : 65);
 		}
+
+		max_rate = max_rate * 2; /* Mbps/2;		 */
+	}
 
 	iwe->cmd = SIOCGIWRATE;
 	iwe->u.bitrate.fixed = iwe->u.bitrate.disabled = 0;
@@ -804,7 +766,6 @@ static inline char   *iwe_stream_net_rsv_process(_adapter *padapter,
 	return start;
 }
 
-#if 1
 static char *translate_scan(_adapter *padapter,
 		struct iw_request_info *info, struct wlan_network *pnetwork,
 		char *start, char *stop)
@@ -837,374 +798,6 @@ static char *translate_scan(_adapter *padapter,
 
 	return start;
 }
-#else
-static char *translate_scan(_adapter *padapter,
-		struct iw_request_info *info, struct wlan_network *pnetwork,
-		char *start, char *stop)
-{
-	struct iw_event iwe;
-	u16 cap;
-	u32 ht_ielen = 0, vht_ielen = 0;
-	char custom[MAX_CUSTOM_LEN];
-	char *p;
-	u16 max_rate = 0, rate, ht_cap = _FALSE, vht_cap = _FALSE;
-	u32 i = 0;
-	char	*current_val;
-	long rssi;
-	u8 bw_40MHz = 0, short_GI = 0, bw_160MHz = 0, vht_highest_rate = 0;
-	u16 mcs_rate = 0, vht_data_rate = 0;
-	u8 ie_offset = (pnetwork->network.Reserved[0] == 2 ? 0 : 12);
-	struct registry_priv *pregpriv = &padapter->registrypriv;
-
-	if (_FALSE == search_p2p_wfd_ie(padapter, info, pnetwork, start, stop))
-		return start;
-
-	/*  AP MAC address */
-	iwe.cmd = SIOCGIWAP;
-	iwe.u.ap_addr.sa_family = ARPHRD_ETHER;
-
-	_rtw_memcpy(iwe.u.ap_addr.sa_data, pnetwork->network.MacAddress, ETH_ALEN);
-	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_ADDR_LEN);
-
-	/* Add the ESSID */
-	iwe.cmd = SIOCGIWESSID;
-	iwe.u.data.flags = 1;
-	iwe.u.data.length = min((u16)pnetwork->network.Ssid.SsidLength, (u16)32);
-	start = iwe_stream_add_point(info, start, stop, &iwe, pnetwork->network.Ssid.Ssid);
-
-	/* parsing HT_CAP_IE */
-	if (pnetwork->network.Reserved[0] == 2) /* Probe Request */
-		p = rtw_get_ie(&pnetwork->network.IEs[0], _HT_CAPABILITY_IE_, &ht_ielen, pnetwork->network.IELength);
-	else
-		p = rtw_get_ie(&pnetwork->network.IEs[12], _HT_CAPABILITY_IE_, &ht_ielen, pnetwork->network.IELength - 12);
-	if (p && ht_ielen > 0) {
-		struct rtw_ieee80211_ht_cap *pht_capie;
-		ht_cap = _TRUE;
-		pht_capie = (struct rtw_ieee80211_ht_cap *)(p + 2);
-		_rtw_memcpy(&mcs_rate , pht_capie->supp_mcs_set, 2);
-		bw_40MHz = (pht_capie->cap_info & IEEE80211_HT_CAP_SUP_WIDTH) ? 1 : 0;
-		short_GI = (pht_capie->cap_info & (IEEE80211_HT_CAP_SGI_20 | IEEE80211_HT_CAP_SGI_40)) ? 1 : 0;
-	}
-
-#ifdef CONFIG_80211AC_VHT
-	/* parsing VHT_CAP_IE */
-	p = rtw_get_ie(&pnetwork->network.IEs[ie_offset], EID_VHTCapability, &vht_ielen, pnetwork->network.IELength - ie_offset);
-	if (p && vht_ielen > 0) {
-		u8	mcs_map[2];
-
-		vht_cap = _TRUE;
-		bw_160MHz = GET_VHT_CAPABILITY_ELE_CHL_WIDTH(p + 2);
-		if (bw_160MHz)
-			short_GI = GET_VHT_CAPABILITY_ELE_SHORT_GI160M(p + 2);
-		else
-			short_GI = GET_VHT_CAPABILITY_ELE_SHORT_GI80M(p + 2);
-
-		_rtw_memcpy(mcs_map, GET_VHT_CAPABILITY_ELE_TX_MCS(p + 2), 2);
-
-		vht_highest_rate = rtw_get_vht_highest_rate(mcs_map);
-		vht_data_rate = rtw_vht_mcs_to_data_rate(CHANNEL_WIDTH_80, short_GI, vht_highest_rate);
-	}
-#endif
-
-	/* Add the protocol name */
-	iwe.cmd = SIOCGIWNAME;
-	if ((rtw_is_cckratesonly_included((u8 *)&pnetwork->network.SupportedRates)) == _TRUE) {
-		if (ht_cap == _TRUE)
-			snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11bn");
-		else
-			snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11b");
-	} else if ((rtw_is_cckrates_included((u8 *)&pnetwork->network.SupportedRates)) == _TRUE) {
-		if (ht_cap == _TRUE)
-			snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11bgn");
-		else
-			snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11bg");
-	} else {
-		if (pnetwork->network.Configuration.DSConfig > 14) {
-			if (vht_cap == _TRUE)
-				snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11AC");
-			else if (ht_cap == _TRUE)
-				snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11an");
-			else
-				snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11a");
-		} else {
-			if (ht_cap == _TRUE)
-				snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11gn");
-			else
-				snprintf(iwe.u.name, IFNAMSIZ, "IEEE 802.11g");
-		}
-	}
-
-	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_CHAR_LEN);
-
-	/* Add mode */
-	if (pnetwork->network.Reserved[0] == 2) /* Probe Request */
-		cap = 0;
-	else {
-		iwe.cmd = SIOCGIWMODE;
-		_rtw_memcpy((u8 *)&cap, rtw_get_capability_from_ie(pnetwork->network.IEs), 2);
-		cap = le16_to_cpu(cap);
-	}
-
-	if (cap & (WLAN_CAPABILITY_IBSS | WLAN_CAPABILITY_BSS)) {
-		if (cap & WLAN_CAPABILITY_BSS)
-			iwe.u.mode = IW_MODE_MASTER;
-		else
-			iwe.u.mode = IW_MODE_ADHOC;
-
-		start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_UINT_LEN);
-	}
-
-	if (pnetwork->network.Configuration.DSConfig < 1 /*|| pnetwork->network.Configuration.DSConfig>14*/)
-		pnetwork->network.Configuration.DSConfig = 1;
-
-	/* Add frequency/channel */
-	iwe.cmd = SIOCGIWFREQ;
-	iwe.u.freq.m = rtw_ch2freq(pnetwork->network.Configuration.DSConfig) * 100000;
-	iwe.u.freq.e = 1;
-	iwe.u.freq.i = pnetwork->network.Configuration.DSConfig;
-	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_FREQ_LEN);
-
-	/* Add encryption capability */
-	iwe.cmd = SIOCGIWENCODE;
-	if (cap & WLAN_CAPABILITY_PRIVACY)
-		iwe.u.data.flags = IW_ENCODE_ENABLED | IW_ENCODE_NOKEY;
-	else
-		iwe.u.data.flags = IW_ENCODE_DISABLED;
-	iwe.u.data.length = 0;
-	start = iwe_stream_add_point(info, start, stop, &iwe, pnetwork->network.Ssid.Ssid);
-
-	/*Add basic and extended rates */
-	max_rate = 0;
-	p = custom;
-	p += snprintf(p, MAX_CUSTOM_LEN - (p - custom), " Rates (Mb/s): ");
-	while (pnetwork->network.SupportedRates[i] != 0) {
-		rate = pnetwork->network.SupportedRates[i] & 0x7F;
-		if (rate > max_rate)
-			max_rate = rate;
-		p += snprintf(p, MAX_CUSTOM_LEN - (p - custom),
-			      "%d%s ", rate >> 1, (rate & 1) ? ".5" : "");
-		i++;
-	}
-
-	if (vht_cap == _TRUE)
-		max_rate = vht_data_rate;
-	else if (ht_cap == _TRUE) {
-		if (mcs_rate & 0x8000) /* MCS15 */
-			max_rate = (bw_40MHz) ? ((short_GI) ? 300 : 270) : ((short_GI) ? 144 : 130);
-
-		else if (mcs_rate & 0x0080) /* MCS7 */
-			max_rate = (bw_40MHz) ? ((short_GI) ? 150 : 135) : ((short_GI) ? 72 : 65);
-		else { /* default MCS7 */
-			/* RTW_INFO("wx_get_scan, mcs_rate_bitmap=0x%x\n", mcs_rate); */
-			max_rate = (bw_40MHz) ? ((short_GI) ? 150 : 135) : ((short_GI) ? 72 : 65);
-		}
-
-		max_rate = max_rate * 2; /* Mbps/2;		 */
-	}
-
-	iwe.cmd = SIOCGIWRATE;
-	iwe.u.bitrate.fixed = iwe.u.bitrate.disabled = 0;
-	iwe.u.bitrate.value = max_rate * 500000;
-	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_PARAM_LEN);
-
-	/* parsing WPA/WPA2 IE */
-	if (pnetwork->network.Reserved[0] != 2) { /* Probe Request */
-		u8 buf[MAX_WPA_IE_LEN * 2];
-		u8 wpa_ie[255], rsn_ie[255];
-		u16 wpa_len = 0, rsn_len = 0;
-		u8 *p;
-		sint out_len = 0;
-		out_len = rtw_get_sec_ie(pnetwork->network.IEs , pnetwork->network.IELength, rsn_ie, &rsn_len, wpa_ie, &wpa_len);
-
-		if (wpa_len > 0) {
-			p = buf;
-			_rtw_memset(buf, 0, MAX_WPA_IE_LEN * 2);
-			p += sprintf(p, "wpa_ie=");
-			for (i = 0; i < wpa_len; i++)
-				p += sprintf(p, "%02x", wpa_ie[i]);
-
-			if (wpa_len > 100) {
-				printk("-----------------Len %d----------------\n", wpa_len);
-				for (i = 0; i < wpa_len; i++)
-					printk("%02x ", wpa_ie[i]);
-				printk("\n");
-				printk("-----------------Len %d----------------\n", wpa_len);
-			}
-
-			_rtw_memset(&iwe, 0, sizeof(iwe));
-			iwe.cmd = IWEVCUSTOM;
-			iwe.u.data.length = strlen(buf);
-			start = iwe_stream_add_point(info, start, stop, &iwe, buf);
-
-			_rtw_memset(&iwe, 0, sizeof(iwe));
-			iwe.cmd = IWEVGENIE;
-			iwe.u.data.length = wpa_len;
-			start = iwe_stream_add_point(info, start, stop, &iwe, wpa_ie);
-		}
-		if (rsn_len > 0) {
-			p = buf;
-			_rtw_memset(buf, 0, MAX_WPA_IE_LEN * 2);
-			p += sprintf(p, "rsn_ie=");
-			for (i = 0; i < rsn_len; i++)
-				p += sprintf(p, "%02x", rsn_ie[i]);
-			_rtw_memset(&iwe, 0, sizeof(iwe));
-			iwe.cmd = IWEVCUSTOM;
-			iwe.u.data.length = strlen(buf);
-			start = iwe_stream_add_point(info, start, stop, &iwe, buf);
-
-			_rtw_memset(&iwe, 0, sizeof(iwe));
-			iwe.cmd = IWEVGENIE;
-			iwe.u.data.length = rsn_len;
-			start = iwe_stream_add_point(info, start, stop, &iwe, rsn_ie);
-		}
-	}
-
-	{ /* parsing WPS IE */
-		uint cnt = 0, total_ielen;
-		u8 *wpsie_ptr = NULL;
-		uint wps_ielen = 0;
-
-		u8 *ie_ptr = pnetwork->network.IEs + ie_offset;
-		total_ielen = pnetwork->network.IELength - ie_offset;
-
-		if (pnetwork->network.Reserved[0] == 2) { /* Probe Request */
-			ie_ptr = pnetwork->network.IEs;
-			total_ielen = pnetwork->network.IELength;
-		} else { /* Beacon or Probe Respones */
-			ie_ptr = pnetwork->network.IEs + _FIXED_IE_LENGTH_;
-			total_ielen = pnetwork->network.IELength - _FIXED_IE_LENGTH_;
-		}
-
-		while (cnt < total_ielen) {
-			if (rtw_is_wps_ie(&ie_ptr[cnt], &wps_ielen) && (wps_ielen > 2)) {
-				wpsie_ptr = &ie_ptr[cnt];
-				iwe.cmd = IWEVGENIE;
-				iwe.u.data.length = (u16)wps_ielen;
-				start = iwe_stream_add_point(info, start, stop, &iwe, wpsie_ptr);
-			}
-			cnt += ie_ptr[cnt + 1] + 2; /* goto next */
-		}
-	}
-
-#ifdef CONFIG_WAPI_SUPPORT
-	if (pnetwork->network.Reserved[0] != 2) { /* Probe Request */
-		sint out_len_wapi = 0;
-		/* here use static for stack size */
-		static u8 buf_wapi[MAX_WAPI_IE_LEN * 2];
-		static u8 wapi_ie[MAX_WAPI_IE_LEN];
-		u16 wapi_len = 0;
-		u16  i;
-
-		_rtw_memset(buf_wapi, 0, MAX_WAPI_IE_LEN);
-		_rtw_memset(wapi_ie, 0, MAX_WAPI_IE_LEN);
-
-		out_len_wapi = rtw_get_wapi_ie(pnetwork->network.IEs , pnetwork->network.IELength, wapi_ie, &wapi_len);
-
-		RTW_INFO("rtw_wx_get_scan: %s ", pnetwork->network.Ssid.Ssid);
-		RTW_INFO("rtw_wx_get_scan: ssid = %d ", wapi_len);
-
-
-		if (wapi_len > 0) {
-			p = buf_wapi;
-			_rtw_memset(buf_wapi, 0, MAX_WAPI_IE_LEN * 2);
-			p += sprintf(p, "wapi_ie=");
-			for (i = 0; i < wapi_len; i++)
-				p += sprintf(p, "%02x", wapi_ie[i]);
-
-			_rtw_memset(&iwe, 0, sizeof(iwe));
-			iwe.cmd = IWEVCUSTOM;
-			iwe.u.data.length = strlen(buf_wapi);
-			start = iwe_stream_add_point(info, start, stop, &iwe, buf_wapi);
-
-			_rtw_memset(&iwe, 0, sizeof(iwe));
-			iwe.cmd = IWEVGENIE;
-			iwe.u.data.length = wapi_len;
-			start = iwe_stream_add_point(info, start, stop, &iwe, wapi_ie);
-		}
-	}
-#endif
-
-	{
-		struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
-		u8 ss, sq;
-
-		/* Add quality statistics */
-		iwe.cmd = IWEVQUAL;
-		iwe.u.qual.updated = IW_QUAL_QUAL_UPDATED | IW_QUAL_LEVEL_UPDATED
-#if defined(CONFIG_SIGNAL_DISPLAY_DBM) && defined(CONFIG_BACKGROUND_NOISE_MONITOR)
-				     | IW_QUAL_NOISE_UPDATED
-#else
-				     | IW_QUAL_NOISE_INVALID
-#endif
-#ifdef CONFIG_SIGNAL_DISPLAY_DBM
-				     | IW_QUAL_DBM
-#endif
-				     ;
-
-		if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE &&
-		    is_same_network(&pmlmepriv->cur_network.network, &pnetwork->network, 0)) {
-			ss = padapter->recvpriv.signal_strength;
-			sq = padapter->recvpriv.signal_qual;
-		} else {
-			ss = pnetwork->network.PhyInfo.SignalStrength;
-			sq = pnetwork->network.PhyInfo.SignalQuality;
-		}
-
-
-#ifdef CONFIG_SIGNAL_DISPLAY_DBM
-		iwe.u.qual.level = (u8) translate_percentage_to_dbm(ss); /* dbm */
-#else
-#ifdef CONFIG_SIGNAL_SCALE_MAPPING
-		iwe.u.qual.level = (u8)ss; /* % */
-#else
-		{
-			/* Do signal scale mapping when using percentage as the unit of signal strength, since the scale mapping is skipped in odm */
-
-			HAL_DATA_TYPE *pHal = GET_HAL_DATA(padapter);
-
-			iwe.u.qual.level = (u8)odm_signal_scale_mapping(&pHal->odmpriv, ss);
-		}
-#endif
-#endif
-
-		iwe.u.qual.qual = (u8)sq;   /* signal quality */
-
-#ifdef CONFIG_PLATFORM_ROCKCHIPS
-		iwe.u.qual.noise = -100; /* noise level suggest by zhf@rockchips */
-#else
-#if defined(CONFIG_SIGNAL_DISPLAY_DBM) && defined(CONFIG_BACKGROUND_NOISE_MONITOR)
-		{
-			s16 tmp_noise = 0;
-			rtw_hal_get_odm_var(padapter, HAL_ODM_NOISE_MONITOR, &(pnetwork->network.Configuration.DSConfig), &(tmp_noise));
-			iwe.u.qual.noise = tmp_noise ;
-		}
-#else
-		iwe.u.qual.noise = 0; /* noise level */
-#endif
-#endif /* CONFIG_PLATFORM_ROCKCHIPS */
-
-		/* RTW_INFO("iqual=%d, ilevel=%d, inoise=%d, iupdated=%d\n", iwe.u.qual.qual, iwe.u.qual.level , iwe.u.qual.noise, iwe.u.qual.updated); */
-
-		start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_QUAL_LEN);
-	}
-
-	{
-		u8 buf[MAX_WPA_IE_LEN];
-		u8 *p, *pos;
-		int len;
-		p = buf;
-		pos = pnetwork->network.Reserved;
-		_rtw_memset(buf, 0, MAX_WPA_IE_LEN);
-		p += sprintf(p, "fm=%02X%02X", pos[1], pos[0]);
-		_rtw_memset(&iwe, 0, sizeof(iwe));
-		iwe.cmd = IWEVCUSTOM;
-		iwe.u.data.length = strlen(buf);
-		start = iwe_stream_add_point(info, start, stop, &iwe, buf);
-	}
-
-	return start;
-}
-#endif
 
 static int wpa_set_auth_algs(struct net_device *dev, u32 value)
 {
@@ -1677,11 +1270,6 @@ static int rtw_wx_get_name(struct net_device *dev,
 		if (p && ht_ielen > 0)
 			ht_cap = _TRUE;
 
-#ifdef CONFIG_80211AC_VHT
-		if (pmlmepriv->vhtpriv.vht_option == _TRUE)
-			vht_cap = _TRUE;
-#endif
-
 		prates = &pcur_bss->SupportedRates;
 
 		if (rtw_is_cckratesonly_included((u8 *)prates) == _TRUE) {
@@ -1696,17 +1284,10 @@ static int rtw_wx_get_name(struct net_device *dev,
 				snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11bg");
 		} else {
 			if (pcur_bss->Configuration.DSConfig > 14) {
-#ifdef CONFIG_80211AC_VHT
-				if (vht_cap == _TRUE)
-					snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11AC");
+				if (ht_cap == _TRUE)
+					snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11an");
 				else
-#endif
-				{
-					if (ht_cap == _TRUE)
-						snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11an");
-					else
-						snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11a");
-				}
+					snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11a");
 			} else {
 				if (ht_cap == _TRUE)
 					snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11gn");

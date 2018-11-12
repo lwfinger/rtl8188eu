@@ -226,17 +226,6 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
 	pattrib->qos_en = _FALSE;
 
 	pattrib->pktlen = 1500;
-
-#ifdef CONFIG_80211AC_VHT
-	if (pHalData->rf_type == RF_1T1R)
-		pattrib->raid = RATEID_IDX_VHT_1SS;
-	else if (pHalData->rf_type == RF_2T2R || pHalData->rf_type == RF_2T4R)
-		pattrib->raid = RATEID_IDX_VHT_2SS;
-	else if (pHalData->rf_type == RF_3T3R)
-		pattrib->raid = RATEID_IDX_VHT_3SS;
-	else
-		pattrib->raid = RATEID_IDX_BGN_40M_1SS;
-#endif
 }
 
 s32 init_mp_priv(PADAPTER padapter)

@@ -244,19 +244,12 @@ bool rtw_chbw_to_freq_range(u8 ch, u8 bw, u8 offset, u32 *hi, u32 *lo);
 struct country_chplan {
 	char alpha2[2];
 	u8 chplan;
-#ifdef CONFIG_80211AC_VHT
-	u8 en_11ac;
-#endif
 #if RTW_DEF_MODULE_REGULATORY_CERT
 	u8 def_module_flags; /* RTW_MODULE_RTLXXX */
 #endif
 };
 
-#ifdef CONFIG_80211AC_VHT
-#define COUNTRY_CHPLAN_EN_11AC(_ent) ((_ent)->en_11ac)
-#else
 #define COUNTRY_CHPLAN_EN_11AC(_ent) 0
-#endif
 
 #if RTW_DEF_MODULE_REGULATORY_CERT
 #define COUNTRY_CHPLAN_DEF_MODULE_FALGS(_ent) ((_ent)->def_module_flags)

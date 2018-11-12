@@ -58,10 +58,6 @@ typedef struct _ADAPTER _adapter, ADAPTER, *PADAPTER;
 	#include <rtw_ht.h>
 #endif
 
-#ifdef CONFIG_80211AC_VHT
-	#include <rtw_vht.h>
-#endif
-
 #ifdef CONFIG_INTEL_WIDI
 	#include <rtw_intel_widi.h>
 #endif
@@ -248,12 +244,6 @@ struct registry_priv {
 	u8	beamformer_rf_num;
 	u8	beamformee_rf_num;
 #endif /* CONFIG_80211N_HT */
-
-#ifdef CONFIG_80211AC_VHT
-	u8	vht_enable; /* 0:disable, 1:enable, 2:auto */
-	u8	ampdu_factor;
-	u8 vht_rx_mcs_map[2];
-#endif /* CONFIG_80211AC_VHT */
 
 	u8	lowrate_two_xmit;
 

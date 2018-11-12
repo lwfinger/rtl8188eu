@@ -683,10 +683,6 @@ u8 query_ra_short_GI(struct sta_info *psta, u8 bw)
 	u8	sgi = _FALSE, sgi_20m = _FALSE, sgi_40m = _FALSE, sgi_80m = _FALSE;
 
 #ifdef CONFIG_80211N_HT
-#ifdef CONFIG_80211AC_VHT
-	if (psta->vhtpriv.vht_option)
-		sgi_80m = psta->vhtpriv.sgi_80m;
-#endif
 	sgi_20m = psta->htpriv.sgi_20m;
 	sgi_40m = psta->htpriv.sgi_40m;
 #endif

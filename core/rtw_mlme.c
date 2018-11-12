@@ -4308,20 +4308,12 @@ void rtw_append_exented_cap(_adapter *padapter, u8 *out_ie, uint *pout_len)
 {
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct ht_priv		*phtpriv = &pmlmepriv->htpriv;
-#ifdef CONFIG_80211AC_VHT
-	struct vht_priv	*pvhtpriv = &pmlmepriv->vhtpriv;
-#endif /* CONFIG_80211AC_VHT */
 	u8	cap_content[8] = { 0 };
 	u8	*pframe;
 	u8   null_content[8] = {0};
 
 	if (phtpriv->bss_coexist)
 		SET_EXT_CAPABILITY_ELE_BSS_COEXIST(cap_content, 1);
-
-#ifdef CONFIG_80211AC_VHT
-	if (pvhtpriv->vht_option)
-		SET_EXT_CAPABILITY_ELE_OP_MODE_NOTIF(cap_content, 1);
-#endif /* CONFIG_80211AC_VHT */
 	/*
 		From 802.11 specification,if a STA does not support any of capabilities defined
 		in the Extended Capabilities element, then the STA is not required to

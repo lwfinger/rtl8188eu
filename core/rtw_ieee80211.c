@@ -1560,35 +1560,6 @@ void rtw_ies_get_chbw(u8 *ies, int ies_len, u8 *ch, u8 *bw, u8 *offset)
 		}
 	}
 #endif /* CONFIG_80211N_HT */
-#ifdef CONFIG_80211AC_VHT
-	{
-		u8 *vht_op_ie;
-		int vht_op_ielen;
-
-		vht_op_ie = rtw_get_ie(ies, EID_VHTOperation, &vht_op_ielen, ies_len);
-		if (vht_op_ie && vht_op_ielen) {
-			/* enable VHT 80 before check enable HT40 or not */
-			if (GET_VHT_OPERATION_ELE_CHL_WIDTH(vht_op_ie + 2)  >=  1) {
-				/* for HT40, enable VHT80 */
-				if (*bw == CHANNEL_WIDTH_40)
-					*bw = CHANNEL_WIDTH_80;
-				/* for HT20, enable VHT20 */
-				else if (*bw == CHANNEL_WIDTH_20) {
-					/* modify VHT OP IE */
-					SET_VHT_OPERATION_ELE_CHL_WIDTH(vht_op_ie + 2, 0);
-					/* reset to 0 for VHT20 */
-					SET_VHT_OPERATION_ELE_CHL_CENTER_FREQ1(vht_op_ie + 2, 0);
-					SET_VHT_OPERATION_ELE_CHL_CENTER_FREQ2(vht_op_ie + 2, 0);
-				}
-			} else {
-				/*
-				  VHT OP WIDTH = 0  under HT20/HT40
-				  if REGSTY_BW_5G(pregistrypriv) < CHANNEL_WIDTH_80 in rtw_build_vht_operation_ie
-				*/
-			}
-		}
-	}
-#endif
 }
 
 void rtw_bss_get_chbw(WLAN_BSSID_EX *bss, u8 *ch, u8 *bw, u8 *offset)

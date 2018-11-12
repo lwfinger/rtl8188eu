@@ -1838,12 +1838,6 @@ void rtw_hal_update_sta_rate_mask(PADAPTER padapter, struct sta_info *psta)
 #ifdef CONFIG_80211N_HT
 	rtw_hal_get_hwreg(padapter, HW_VAR_RF_TYPE, (u8 *)(&rf_type));
 	tx_nss = rtw_min(rf_type_to_rf_tx_cnt(rf_type), hal_spec->tx_nss_num);
-#ifdef CONFIG_80211AC_VHT
-	if (psta->vhtpriv.vht_option) {
-		/* AC mode ra_bitmap */
-		tx_ra_bitmap |= (rtw_vht_mcs_map_to_bitmap(psta->vhtpriv.vht_mcs_map, tx_nss) << 12);
-	} else
-#endif /* CONFIG_80211AC_VHT */
 	if (psta->htpriv.ht_option) {
 		/* n mode ra_bitmap */
 
