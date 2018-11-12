@@ -756,8 +756,6 @@ typedef	enum _ELEMENT_ID {
 				Below is the definition for 802.11n
 ------------------------------------------------------------------------------*/
 
-/* #ifdef CONFIG_80211N_HT */
-
 #define set_order_bit(pbuf)	\
 		do	{	\
 			*(__le16 *)(pbuf) |= cpu_to_le16(_ORDER_); \

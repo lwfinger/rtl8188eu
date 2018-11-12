@@ -498,13 +498,11 @@ int rtw_generate_ie(struct registry_priv *pregistrypriv)
 	if (rateLen > 8)
 		ie = rtw_set_ie(ie, _EXT_SUPPORTEDRATES_IE_, (rateLen - 8), (pdev_network->SupportedRates + 8), &sz);
 
-#ifdef CONFIG_80211N_HT
 	/* HT Cap. */
 	if (((pregistrypriv->wireless_mode & WIRELESS_11_5N) || (pregistrypriv->wireless_mode & WIRELESS_11_24N))
 	    && (pregistrypriv->ht_enable == _TRUE)) {
 		/* todo: */
 	}
-#endif /* CONFIG_80211N_HT */
 
 	return sz;
 }
@@ -1421,7 +1419,6 @@ err_chk:
 	RTW_INFO("%s mac addr:"MAC_FMT"\n", __func__, MAC_ARG(out));
 }
 
-#ifdef CONFIG_80211N_HT
 void dump_ht_cap_ie_content(void *sel, u8 *buf, u32 buf_len)
 {
 	if (buf_len != 26) {
@@ -1451,7 +1448,6 @@ static void dump_ht_cap_ie(void *sel, u8 *ie, u32 ie_len)
 
 	dump_ht_cap_ie_content(sel, ht_cap_ie + 2, ht_cap_ielen);
 }
-#endif /* CONFIG_80211N_HT */
 
 void dump_ies(void *sel, u8 *buf, u32 buf_len)
 {
@@ -1463,9 +1459,7 @@ void dump_ies(void *sel, u8 *buf, u32 buf_len)
 		len = *(pos + 1);
 
 		RTW_PRINT_SEL(sel, "%s ID:%u, LEN:%u\n", __func__, id, len);
-#ifdef CONFIG_80211N_HT
 		dump_ht_cap_ie(sel, pos, len + 2);
-#endif
 		dump_wps_ie(sel, pos, len + 2);
 #ifdef CONFIG_P2P
 		dump_p2p_ie(sel, pos, len + 2);
@@ -1524,7 +1518,6 @@ void rtw_ies_get_chbw(u8 *ies, int ies_len, u8 *ch, u8 *bw, u8 *offset)
 	if (p && ie_len > 0)
 		*ch = *(p + 2);
 
-#ifdef CONFIG_80211N_HT
 	{
 		u8 *ht_cap_ie, *ht_op_ie;
 		int ht_cap_ielen, ht_op_ielen;
@@ -1559,7 +1552,6 @@ void rtw_ies_get_chbw(u8 *ies, int ies_len, u8 *ch, u8 *bw, u8 *offset)
 			}
 		}
 	}
-#endif /* CONFIG_80211N_HT */
 }
 
 void rtw_bss_get_chbw(WLAN_BSSID_EX *bss, u8 *ch, u8 *bw, u8 *offset)

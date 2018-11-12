@@ -1460,9 +1460,7 @@ int rtw_mp_pretx_proc(PADAPTER padapter, u8 bStartTest, char *extra)
 			pmp_priv->tx.stop = 1;
 			rtw_msleep_os(5);
 		}
-#ifdef CONFIG_80211N_HT
 		pmp_priv->tx.attrib.ht_en = 1;
-#endif
 		pmp_priv->tx.stop = 0;
 		pmp_priv->tx.count = 1;
 		SetPacketTx(padapter);

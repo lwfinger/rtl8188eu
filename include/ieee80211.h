@@ -1669,9 +1669,7 @@ u8 *rtw_get_wps_attr_content(u8 *wps_ie, uint wps_ielen, u16 target_attr_id , u8
 
 void dump_ies(void *sel, u8 *buf, u32 buf_len);
 
-#ifdef CONFIG_80211N_HT
 void dump_ht_cap_ie_content(void *sel, u8 *buf, u32 buf_len);
-#endif
 
 void dump_wps_ie(void *sel, u8 *ie, u32 ie_len);
 

@@ -910,11 +910,9 @@ extern char *rtw_initmac;
 #ifdef CONFIG_TX_MCAST2UNI
 extern int rtw_mc2u_disable;
 #endif
-#ifdef CONFIG_80211N_HT
 extern int rtw_ht_enable;
 extern int rtw_bw_mode;
 extern int rtw_ampdu_enable;/* for enable tx_ampdu */
-#endif
 
 int pm_netdev_open(struct net_device *pnetdev, u8 bnormal);
 void netdev_br_init(struct net_device *netdev);

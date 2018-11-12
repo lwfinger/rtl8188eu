@@ -612,10 +612,7 @@ struct mlme_ext_priv {
 	struct p2p_channels channel_list;
 	unsigned char	basicrate[NumRates];
 	unsigned char	datarate[NumRates];
-#ifdef CONFIG_80211N_HT
 	unsigned char default_supported_mcs_set[16];
-#endif
-
 	struct ss_res		sitesurvey_res;
 	struct mlme_ext_info	mlmext_info;/* for sta/adhoc mode, including current scanning/connecting/connected related info.
                                                       * for ap mode, network includes ap's cap_info */

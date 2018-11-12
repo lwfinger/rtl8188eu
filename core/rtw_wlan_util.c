@@ -1763,7 +1763,6 @@ void WMMOnAssocRsp(_adapter *padapter)
 
 static void bwmode_update_check(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 {
-#ifdef CONFIG_80211N_HT
 	unsigned char	 new_bwmode;
 	unsigned char  new_ch_offset;
 	struct HT_info_element	*pHT_info;
@@ -1862,12 +1861,10 @@ static void bwmode_update_check(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pI
 
 		/* pmlmeinfo->bwmode_updated = _FALSE; */ /* bwmode_updated done, reset it! */
 	}
-#endif /* CONFIG_80211N_HT */
 }
 
 void HT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 {
-#ifdef CONFIG_80211N_HT
 	unsigned int	i;
 	u8	rf_type = RF_1T1R;
 	u8	max_AMPDU_len, min_MPDU_spacing;
@@ -2026,13 +2023,10 @@ void HT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 			RTW_INFO("Client HT Beamforming Cap = 0x%02X\n", cur_beamform_cap);
 #endif /*CONFIG_BEAMFORMING*/
 	}
-
-#endif /* CONFIG_80211N_HT */
 }
 
 void HT_info_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 {
-#ifdef CONFIG_80211N_HT
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
@@ -2050,7 +2044,6 @@ void HT_info_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 
 	pmlmeinfo->HT_info_enable = 1;
 	_rtw_memcpy(&(pmlmeinfo->HT_info), pIE->data, pIE->Length);
-#endif /* CONFIG_80211N_HT */
 	return;
 }
 
@@ -2189,8 +2182,6 @@ void VCS_update(_adapter *padapter, struct sta_info *psta)
 
 void	update_ldpc_stbc_cap(struct sta_info *psta)
 {
-#ifdef CONFIG_80211N_HT
-
 	if (psta->htpriv.ht_option) {
 		if (TEST_FLAG(psta->htpriv.ldpc_cap, LDPC_HT_ENABLE_TX))
 			psta->ldpc = 1;
@@ -2201,7 +2192,6 @@ void	update_ldpc_stbc_cap(struct sta_info *psta)
 		psta->ldpc = 0;
 		psta->stbc = 0;
 	}
-#endif /* CONFIG_80211N_HT */
 }
 
 static int check_ielen(u8 *start, uint len)

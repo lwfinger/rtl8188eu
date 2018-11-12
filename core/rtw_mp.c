@@ -154,10 +154,7 @@ static void _init_mp_priv_(struct mp_priv *pmp_priv)
 	_rtw_memcpy(pnetwork->Ssid.Ssid, "mp_871x", pnetwork->Ssid.SsidLength);
 
 	pmp_priv->tx.payload = 2;
-#ifdef CONFIG_80211N_HT
 	pmp_priv->tx.attrib.ht_en = 1;
-#endif
-
 }
 
 static int init_mp_priv_by_os(struct mp_priv *pmp_priv)

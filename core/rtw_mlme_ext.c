@@ -1705,7 +1705,6 @@ _continue:
 			psta->qos_option = 1;
 			psta->bw_mode = CHANNEL_WIDTH_20;
 			psta->ieee8021x_blocked = _FALSE;
-#ifdef CONFIG_80211N_HT
 			psta->htpriv.ht_option = _TRUE;
 			psta->htpriv.ampdu_enable = _FALSE;
 			psta->htpriv.sgi_20m = _FALSE;
@@ -1713,7 +1712,6 @@ _continue:
 			psta->htpriv.ch_offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
 			psta->htpriv.agg_enable_bitmap = 0x0;/* reset */
 			psta->htpriv.candidate_tid_bitmap = 0x0;/* reset */
-#endif
 
 			rtw_hal_set_odm_var(padapter, HAL_ODM_STA_INFO, psta, _TRUE);
 
@@ -2808,7 +2806,6 @@ unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 	}
 
 
-#ifdef CONFIG_80211N_HT
 	if (pmlmepriv->htpriv.ht_option == _FALSE)
 		goto bypass_ht_chk;
 
@@ -2830,7 +2827,6 @@ bypass_ht_chk:
 		status = _STATS_FAILURE_;
 		goto OnAssocReqFail;
 	}
-#endif /* CONFIG_80211N_HT */
 
 	if (((pstat->flags & WLAN_STA_HT) || (pstat->flags & WLAN_STA_VHT)) &&
 	    ((pstat->wpa2_pairwise_cipher & WPA_CIPHER_TKIP) ||
@@ -3761,19 +3757,12 @@ unsigned int OnAction_back(_adapter *padapter, union recv_frame *precv_frame)
 	u8 *pframe = precv_frame->u.hdr.rx_data;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-#ifdef CONFIG_80211N_HT
 
 	RTW_INFO("%s\n", __func__);
 
 	/* check RA matches or not	 */
 	if (!_rtw_memcmp(adapter_mac_addr(padapter), GetAddr1Ptr(pframe), ETH_ALEN))
 		return _SUCCESS;
-
-#if 0
-	/* check A1 matches or not */
-	if (!_rtw_memcmp(adapter_mac_addr(padapter), get_da(pframe), ETH_ALEN))
-		return _SUCCESS;
-#endif
 
 	if ((pmlmeinfo->state & 0x03) != WIFI_FW_AP_STATE)
 		if (!(pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS))
@@ -3859,7 +3848,6 @@ unsigned int OnAction_back(_adapter *padapter, union recv_frame *precv_frame)
 			break;
 		}
 	}
-#endif /* CONFIG_80211N_HT */
 	return _SUCCESS;
 }
 
@@ -6837,13 +6825,11 @@ unsigned int on_action_public(_adapter *padapter, union recv_frame *precv_frame)
 	action = frame_body[1];
 	switch (action) {
 	case ACT_PUBLIC_BSSCOEXIST:
-#ifdef CONFIG_80211N_HT
 #ifdef CONFIG_AP_MODE
 		/*20/40 BSS Coexistence Management frame is a Public Action frame*/
 		if (check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == _TRUE)
 			rtw_process_public_act_bsscoex(padapter, pframe, frame_len);
 #endif /*CONFIG_AP_MODE*/
-#endif /*CONFIG_80211N_HT*/
 		break;
 	case ACT_PUBLIC_VENDOR:
 		ret = on_action_public_vendor(precv_frame);
@@ -6960,12 +6946,10 @@ unsigned int OnAction_ht(_adapter *padapter, union recv_frame *precv_frame)
 	action = frame_body[1];
 	switch (action) {
 	case RTW_WLAN_ACTION_HT_SM_PS:
-#ifdef CONFIG_80211N_HT
 #ifdef CONFIG_AP_MODE
 		if (check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == _TRUE)
 			rtw_process_ht_action_smps(padapter, get_addr2_ptr(pframe), frame_body[2]);
 #endif /*CONFIG_AP_MODE*/
-#endif /*CONFIG_80211N_HT*/
 		break;
 	case RTW_WLAN_ACTION_HT_COMPRESS_BEAMFORMING:
 #ifdef CONFIG_BEAMFORMING
@@ -8457,7 +8441,6 @@ void issue_asocrsp(_adapter *padapter, unsigned short status, struct sta_info *p
 	}
 #endif /* CONFIG_IEEE80211W */
 
-#ifdef CONFIG_80211N_HT
 	if ((pstat->flags & WLAN_STA_HT) && (pmlmepriv->htpriv.ht_option)) {
 		uint ie_len = 0;
 
@@ -8480,7 +8463,6 @@ void issue_asocrsp(_adapter *padapter, unsigned short status, struct sta_info *p
 		}
 
 	}
-#endif
 
 	/*adding EXT_CAPAB_IE */
 	if (pmlmepriv->ext_capab_ie_len > 0) {
@@ -8801,7 +8783,6 @@ void _issue_assocreq(_adapter *padapter, u8 is_reassoc)
 #endif
 				pframe = rtw_set_ie(pframe, EID_WPA2, pIE->Length, pIE->data, &(pattrib->pktlen));
 			break;
-#ifdef CONFIG_80211N_HT
 		case EID_HTCapability:
 			if (padapter->mlmepriv.htpriv.ht_option == _TRUE) {
 				if (!(is_ap_in_tkip(padapter))) {
@@ -8815,7 +8796,6 @@ void _issue_assocreq(_adapter *padapter, u8 is_reassoc)
 			if (padapter->mlmepriv.htpriv.ht_option == _TRUE)
 				pframe = rtw_set_ie(pframe, EID_EXTCapability, pIE->Length, pIE->data, &(pattrib->pktlen));
 			break;
-#endif /* CONFIG_80211N_HT */
 		default:
 			break;
 		}
@@ -9679,8 +9659,6 @@ static int issue_action_ba(_adapter *padapter, unsigned char *raddr, unsigned ch
 	struct sta_priv		*pstapriv = &padapter->stapriv;
 	struct registry_priv		*pregpriv = &padapter->registrypriv;
 
-#ifdef CONFIG_80211N_HT
-
 	if (rtw_rfctl_is_tx_blocked_by_ch_waiting(adapter_to_rfctl(padapter)))
 		goto exit;
 
@@ -9807,7 +9785,6 @@ static int issue_action_ba(_adapter *padapter, unsigned char *raddr, unsigned ch
 	}
 
 exit:
-#endif /* CONFIG_80211N_HT */
 	return ret;
 }
 
@@ -10003,7 +9980,7 @@ static void issue_action_BSSCoexistPacket(_adapter *padapter)
 	_queue		*queue	= &(pmlmepriv->scanned_queue);
 	u8 InfoContent[16] = {0};
 	u8 ICS[8][15];
-#ifdef CONFIG_80211N_HT
+
 	if ((pmlmepriv->num_FortyMHzIntolerant == 0) || (pmlmepriv->num_sta_no_ht == 0))
 		return;
 
@@ -10132,7 +10109,6 @@ static void issue_action_BSSCoexistPacket(_adapter *padapter)
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
 	dump_mgntframe(padapter, pmgntframe);
-#endif /* CONFIG_80211N_HT */
 }
 
 /* Spatial Multiplexing Powersave (SMPS) action frame */
@@ -10316,13 +10292,11 @@ static unsigned int _send_delba_sta_tid(_adapter *adapter, u8 initiator, struct 
 		}
 	} else if (initiator == 1) {
 		/* originator */
-#ifdef CONFIG_80211N_HT
 		if (force || sta->htpriv.agg_enable_bitmap & BIT(tid)) {
 			sta->htpriv.agg_enable_bitmap &= ~BIT(tid);
 			sta->htpriv.candidate_tid_bitmap &= ~BIT(tid);
 			issue_del_ba(adapter, sta->hwaddr, tid, 37, initiator);
 		}
-#endif
 	}
 
 exit:
@@ -10635,7 +10609,6 @@ u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, WLAN_BSSI
 	/* 20/40 BSS Coexistence check */
 	if ((pregistrypriv->wifi_spec == 1) && (_FALSE == pmlmeinfo->bwmode_updated)) {
 		struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-#ifdef CONFIG_80211N_HT
 		p = rtw_get_ie(bssid->IEs + ie_offset, _HT_CAPABILITY_IE_, &len, bssid->IELength - ie_offset);
 		if (p && len > 0) {
 			struct HT_caps_element	*pHT_caps;
@@ -10645,8 +10618,6 @@ u8 collect_bss_info(_adapter *padapter, union recv_frame *precv_frame, WLAN_BSSI
 				pmlmepriv->num_FortyMHzIntolerant++;
 		} else
 			pmlmepriv->num_sta_no_ht++;
-#endif /* CONFIG_80211N_HT */
-
 	}
 
 #ifdef CONFIG_INTEL_WIDI
@@ -11636,7 +11607,6 @@ void update_sta_info(_adapter *padapter, struct sta_info *psta)
 	/* ERP */
 	VCS_update(padapter, psta);
 
-#ifdef CONFIG_80211N_HT
 	/* HT */
 	if (pmlmepriv->htpriv.ht_option) {
 		psta->htpriv.ht_option = _TRUE;
@@ -11659,25 +11629,20 @@ void update_sta_info(_adapter *padapter, struct sta_info *psta)
 
 		_rtw_memcpy(&psta->htpriv.ht_cap, &pmlmeinfo->HT_caps, sizeof(struct rtw_ieee80211_ht_cap));
 	} else
-#endif /* CONFIG_80211N_HT */
 	{
-#ifdef CONFIG_80211N_HT
 		psta->htpriv.ht_option = _FALSE;
 		psta->htpriv.ampdu_enable = _FALSE;
 		psta->htpriv.tx_amsdu_enable = _FALSE;
 		psta->htpriv.sgi_20m = _FALSE;
 		psta->htpriv.sgi_40m = _FALSE;
-#endif /* CONFIG_80211N_HT */
 		psta->qos_option = _FALSE;
 
 	}
 
-#ifdef CONFIG_80211N_HT
 	psta->htpriv.ch_offset = pmlmeext->cur_ch_offset;
 
 	psta->htpriv.agg_enable_bitmap = 0x0;/* reset */
 	psta->htpriv.candidate_tid_bitmap = 0x0;/* reset */
-#endif /* CONFIG_80211N_HT */
 
 	psta->bw_mode = pmlmeext->cur_bwmode;
 
@@ -12556,7 +12521,6 @@ void link_timer_hdl(_adapter *padapter)
 
 void addba_timer_hdl(struct sta_info *psta)
 {
-#ifdef CONFIG_80211N_HT
 	struct ht_priv	*phtpriv;
 
 	if (!psta)
@@ -12569,7 +12533,6 @@ void addba_timer_hdl(struct sta_info *psta)
 			phtpriv->candidate_tid_bitmap = 0x0;
 
 	}
-#endif /* CONFIG_80211N_HT */
 }
 
 #ifdef CONFIG_IEEE80211W
@@ -13169,8 +13132,6 @@ u8 join_cmd_hdl(_adapter *padapter, u8 *pbuf)
 			if (_rtw_memcmp(pIE->data, WMM_OUI, 4))
 				WMM_param_handler(padapter, pIE);
 			break;
-
-#ifdef CONFIG_80211N_HT
 		case _HT_CAPABILITY_IE_:	/* Get HT Cap IE. */
 			pmlmeinfo->HT_caps_enable = 1;
 			break;
@@ -13178,8 +13139,6 @@ u8 join_cmd_hdl(_adapter *padapter, u8 *pbuf)
 		case _HT_EXTRA_INFO_IE_:	/* Get HT Info IE. */
 			pmlmeinfo->HT_info_enable = 1;
 			break;
-#endif /* CONFIG_80211N_HT */
-
 		default:
 			break;
 		}
@@ -14526,7 +14485,6 @@ u8 add_ba_hdl(_adapter *padapter, unsigned char *pbuf)
 	if (!psta)
 		return	H2C_SUCCESS;
 
-#ifdef CONFIG_80211N_HT
 	if (((pmlmeinfo->state & WIFI_FW_ASSOC_SUCCESS) && (pmlmeinfo->HT_enable)) ||
 	    ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE)) {
 		/* pmlmeinfo->ADDBA_retry_count = 0; */
@@ -14546,7 +14504,6 @@ u8 add_ba_hdl(_adapter *padapter, unsigned char *pbuf)
 #endif /* CONFIG */
 	else
 		psta->htpriv.candidate_tid_bitmap &= ~BIT(pparm->tid);
-#endif /* CONFIG_80211N_HT */
 	return	H2C_SUCCESS;
 }
 
