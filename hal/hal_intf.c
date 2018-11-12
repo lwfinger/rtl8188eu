@@ -1247,20 +1247,6 @@ u8 rtw_hal_ops_check(_adapter *padapter)
 		ret = _FAIL;
 	}
 
-	if ((IS_HARDWARE_TYPE_8814A(padapter)
-	     || IS_HARDWARE_TYPE_8822BU(padapter) || IS_HARDWARE_TYPE_8822BS(padapter))
-	    && NULL == padapter->hal_func.fw_correct_bcn) {
-		rtw_hal_error_msg("fw_correct_bcn");
-		ret = _FAIL;
-	}
-
-	if (IS_HARDWARE_TYPE_8822B(padapter) || IS_HARDWARE_TYPE_8821C(padapter)) {
-		if (!padapter->hal_func.set_tx_power_index_handler) {
-			rtw_hal_error_msg("set_tx_power_index_handler");
-			ret = _FAIL;
-		}
-	}
-
 	if (!padapter->hal_func.get_tx_power_index_handler) {
 		rtw_hal_error_msg("get_tx_power_index_handler");
 		ret = _FAIL;

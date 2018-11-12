@@ -1110,7 +1110,7 @@ static bool rtw_regsty_chk_target_tx_power_valid(_adapter *adapter)
 				if (band == BAND_ON_5G && IS_CCK_RATE_SECTION(rs))
 					continue;
 
-				if (IS_VHT_RATE_SECTION(rs) && !IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(adapter))
+				if (IS_VHT_RATE_SECTION(rs))
 					continue;
 
 				target = rtw_regsty_get_target_tx_power(adapter, band, path, rs);
@@ -1330,7 +1330,7 @@ phy_StoreTxPowerByRateBase(
 				if (band == BAND_ON_5G && IS_CCK_RATE_SECTION(rs))
 					continue;
 
-				if (IS_VHT_RATE_SECTION(rs) && !IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(pAdapter))
+				if (IS_VHT_RATE_SECTION(rs))
 					continue;
 
 				if (regsty->target_tx_pwr_valid == _TRUE)
@@ -2572,20 +2572,8 @@ phy_set_tx_power_level_by_path(
 		phy_set_tx_power_index_by_rate_section(Adapter, path, channel, OFDM);
 		phy_set_tx_power_index_by_rate_section(Adapter, path, channel, HT_MCS0_MCS7);
 
-		if (IS_HARDWARE_TYPE_JAGUAR(Adapter) || IS_HARDWARE_TYPE_8814A(Adapter))
-			phy_set_tx_power_index_by_rate_section(Adapter, path, channel, VHT_1SSMCS0_1SSMCS9);
-
-		if (pHalData->NumTotalRFPath >= 2) {
+		if (pHalData->NumTotalRFPath >= 2)
 			phy_set_tx_power_index_by_rate_section(Adapter, path, channel, HT_MCS8_MCS15);
-
-			if (IS_HARDWARE_TYPE_JAGUAR(Adapter) || IS_HARDWARE_TYPE_8814A(Adapter))
-				phy_set_tx_power_index_by_rate_section(Adapter, path, channel, VHT_2SSMCS0_2SSMCS9);
-
-			if (IS_HARDWARE_TYPE_8814A(Adapter)) {
-				phy_set_tx_power_index_by_rate_section(Adapter, path, channel, HT_MCS16_MCS23);
-				phy_set_tx_power_index_by_rate_section(Adapter, path, channel, VHT_3SSMCS0_3SSMCS9);
-			}
-		}
 	}
 }
 
@@ -3241,31 +3229,6 @@ PHY_ConvertTxPowerLimitToPowerIndex(
 			}
 		}
 	}
-
-	if (IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(Adapter)) {
-
-		for (regulation = 0; regulation < MAX_REGULATION_NUM; ++regulation) {
-
-			for (bw = 0; bw < MAX_5G_BANDWIDTH_NUM; ++bw) {
-
-				for (channel = 0; channel < CENTER_CH_5G_ALL_NUM; ++channel) {
-
-					for (rateSection = OFDM; rateSection <= VHT_4SS; ++rateSection) {
-						tempPwrLmt = pHalData->TxPwrLimit_5G[regulation][bw][rateSection][channel][RF_PATH_A];
-
-						if (tempPwrLmt != MAX_POWER_INDEX) {
-
-							for (rfPath = RF_PATH_A; rfPath < MAX_RF_PATH; ++rfPath) {
-								base = PHY_GetTxPowerByRateBase(Adapter, BAND_ON_5G, rfPath, rate_section_to_tx_num(rateSection), rateSection);
-								tempValue = tempPwrLmt - base;
-								pHalData->TxPwrLimit_5G[regulation][bw][rateSection][channel][rfPath] = tempValue;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 }
 
 /*
@@ -3448,42 +3411,8 @@ PHY_SetTxPowerIndex(
 	IN	u8				Rate
 )
 {
-	if (IS_HARDWARE_TYPE_8814A(pAdapter)) {
-#if (RTL8814A_SUPPORT == 1)
-		PHY_SetTxPowerIndex_8814A(pAdapter, PowerIndex, RFPath, Rate);
-#endif
-	} else if (IS_HARDWARE_TYPE_JAGUAR(pAdapter)) {
-#if ((RTL8812A_SUPPORT == 1) || (RTL8821A_SUPPORT == 1))
-		PHY_SetTxPowerIndex_8812A(pAdapter, PowerIndex, RFPath, Rate);
-#endif
-	} else if (IS_HARDWARE_TYPE_8723B(pAdapter)) {
-#if (RTL8723B_SUPPORT == 1)
-		PHY_SetTxPowerIndex_8723B(pAdapter, PowerIndex, RFPath, Rate);
-#endif
-	} else if (IS_HARDWARE_TYPE_8703B(pAdapter)) {
-#if (RTL8703B_SUPPORT == 1)
-		PHY_SetTxPowerIndex_8703B(pAdapter, PowerIndex, RFPath, Rate);
-#endif
-	} else if (IS_HARDWARE_TYPE_8723D(pAdapter)) {
-#if (RTL8723D_SUPPORT == 1)
-		PHY_SetTxPowerIndex_8723D(pAdapter, PowerIndex, RFPath, Rate);
-#endif
-	} else if (IS_HARDWARE_TYPE_8192E(pAdapter)) {
-#if (RTL8192E_SUPPORT == 1)
-		PHY_SetTxPowerIndex_8192E(pAdapter, PowerIndex, RFPath, Rate);
-#endif
-	} else if (IS_HARDWARE_TYPE_8188E(pAdapter)) {
-#if (RTL8188E_SUPPORT == 1)
+	if (IS_HARDWARE_TYPE_8188E(pAdapter))
 		PHY_SetTxPowerIndex_8188E(pAdapter, PowerIndex, RFPath, Rate);
-#endif
-	} else if (IS_HARDWARE_TYPE_8188F(pAdapter)) {
-#if (RTL8188F_SUPPORT == 1)
-		PHY_SetTxPowerIndex_8188F(pAdapter, PowerIndex, RFPath, Rate);
-#endif
-	} else if (IS_HARDWARE_TYPE_8822B(pAdapter))
-		rtw_hal_set_tx_power_index(pAdapter, PowerIndex, RFPath, Rate);
-	else if (IS_HARDWARE_TYPE_8821C(pAdapter))
-		rtw_hal_set_tx_power_index(pAdapter, PowerIndex, RFPath, Rate);
 }
 
 void dump_tx_power_idx_title(void *sel, _adapter *adapter)
@@ -3526,7 +3455,7 @@ void dump_tx_power_idx_by_path_rs(void *sel, _adapter *adapter, u8 rfpath, u8 rs
 	if (band == BAND_ON_5G && IS_CCK_RATE_SECTION(rs))
 		return;
 
-	if (IS_VHT_RATE_SECTION(rs) && !IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(adapter))
+	if (IS_VHT_RATE_SECTION(rs))
 		return;
 
 	for (i = 0; i < rates_by_sections[rs].rate_num; i++) {
@@ -3739,7 +3668,7 @@ void dump_target_tx_power(void *sel, _adapter *adapter)
 				if (band == BAND_ON_5G && IS_CCK_RATE_SECTION(rs))
 					continue;
 
-				if (IS_VHT_RATE_SECTION(rs) && !IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(adapter))
+				if (IS_VHT_RATE_SECTION(rs))
 					continue;
 
 				target = PHY_GetTxPowerByRateBase(adapter, band, path, rate_section_to_tx_num(rs), rs);
@@ -3783,13 +3712,10 @@ void dump_tx_power_by_rate(void *sel, _adapter *adapter)
 				if (band == BAND_ON_5G && IS_CCK_RATE_SECTION(rs))
 					continue;
 
-				if (IS_VHT_RATE_SECTION(rs) && !IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(adapter))
+				if (IS_VHT_RATE_SECTION(rs))
 					continue;
 
-				if (IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(adapter))
-					max_rate_num = 10;
-				else
-					max_rate_num = 8;
+				max_rate_num = 8;
 				rate_num = rate_section_rate_num(rs);
 				base = PHY_GetTxPowerByRateBase(adapter, band, path, tx_num, rs);
 
@@ -3830,9 +3756,6 @@ void dump_tx_power_limit(void *sel, _adapter *adapter)
 	int bw, band, ch_num, rs, i, path;
 	u8 ch, n, rd, rfpath_num;
 
-	if (IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(adapter))
-		RTW_PRINT_SEL(sel, "tx_pwr_lmt_5g_20_40_ref:0x%02x\n", hal_data->tx_pwr_lmt_5g_20_40_ref);
-
 	for (band = BAND_ON_2_4G; band <= BAND_ON_5G; band++) {
 		if (!hal_is_band_support(adapter, band))
 			continue;
@@ -3870,7 +3793,7 @@ void dump_tx_power_limit(void *sel, _adapter *adapter)
 				if (rate_section_to_tx_num(rs) >= hal_spec->tx_nss_num)
 					continue;
 
-				if (IS_VHT_RATE_SECTION(rs) && !IS_HARDWARE_TYPE_JAGUAR_AND_JAGUAR2(adapter))
+				if (IS_VHT_RATE_SECTION(rs))
 					continue;
 
 				/* by pass 5G 20M, 40M pure reference */

@@ -629,11 +629,7 @@ odm_txpowertracking_check_ce(
 
 	if (!p_dm_odm->rf_calibrate_info.tm_trigger) {
 
-		if (IS_HARDWARE_TYPE_8188E(adapter) || IS_HARDWARE_TYPE_8188F(adapter) || IS_HARDWARE_TYPE_8192E(adapter)
-		    || IS_HARDWARE_TYPE_8723B(adapter) || IS_HARDWARE_TYPE_JAGUAR(adapter) || IS_HARDWARE_TYPE_8814A(adapter)
-		    || IS_HARDWARE_TYPE_8703B(adapter) || IS_HARDWARE_TYPE_8723D(adapter) || IS_HARDWARE_TYPE_8822B(adapter)
-		    || IS_HARDWARE_TYPE_8821C(adapter)
-		   )
+		if (IS_HARDWARE_TYPE_8188E(adapter))
 			odm_set_rf_reg(p_dm_odm, ODM_RF_PATH_A, RF_T_METER_NEW, (BIT(17) | BIT(16)), 0x03);
 		else
 			odm_set_rf_reg(p_dm_odm, ODM_RF_PATH_A, RF_T_METER_OLD, RFREGOFFSETMASK, 0x60);

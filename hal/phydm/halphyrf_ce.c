@@ -546,14 +546,6 @@ odm_txpowertracking_callback_thermal_meter(
 		}
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("**********End Xtal Tracking**********\n"));
 	}
-	if (!IS_HARDWARE_TYPE_8723B(adapter)) {
-		/*Delta temperature is equal to or larger than 20 centigrade (When threshold is 8).*/
-		if (delta_IQK >= c.threshold_iqk) {
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_TX_PWR_TRACK, ODM_DBG_LOUD, ("delta_IQK(%d) >= threshold_iqk(%d)\n", delta_IQK, c.threshold_iqk));
-			if (!p_rf_calibrate_info->is_iqk_in_progress)
-				(*c.do_iqk)(p_dm_odm, delta_IQK, thermal_value, 8);
-		}
-	}
 	if (p_rf_calibrate_info->dpk_thermal[ODM_RF_PATH_A] != 0) {
 		if (diff_DPK[ODM_RF_PATH_A] >= c.threshold_dpk) {
 			odm_set_bb_reg(p_dm_odm, 0x82c, BIT(31), 0x1);
@@ -629,9 +621,6 @@ static void odm_iq_calibrate(struct PHY_DM_STRUCT *p_dm_odm)
 {
 	struct _ADAPTER	*adapter = p_dm_odm->adapter;
 
-	if (IS_HARDWARE_TYPE_8812AU(adapter))
-		return;
-
 	if (p_dm_odm->is_linked) {
 		if ((*p_dm_odm->p_channel != p_dm_odm->pre_channel) && (!*p_dm_odm->p_is_scan_in_process)) {
 			p_dm_odm->pre_channel = *p_dm_odm->p_channel;
@@ -640,11 +629,6 @@ static void odm_iq_calibrate(struct PHY_DM_STRUCT *p_dm_odm)
 
 		if (p_dm_odm->linked_interval < 3)
 			p_dm_odm->linked_interval++;
-
-		if (p_dm_odm->linked_interval == 2) {
-			if (IS_HARDWARE_TYPE_8814A(adapter)) {
-			}
-		}
 	} else
 		p_dm_odm->linked_interval = 0;
 }

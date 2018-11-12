@@ -2758,15 +2758,6 @@ void hw_var_port_switch(_adapter *adapter)
 		rtw_write8(adapter, REG_BSSID1 + i, bssid[i]);
 
 	/* write bcn ctl */
-#ifdef CONFIG_BT_COEXIST
-	/* always enable port0 beacon function for PSTDMA */
-	if (IS_HARDWARE_TYPE_8723B(adapter) || IS_HARDWARE_TYPE_8703B(adapter)
-	    || IS_HARDWARE_TYPE_8723D(adapter))
-		bcn_ctrl_1 |= EN_BCN_FUNCTION;
-	/* always disable port1 beacon function for PSTDMA */
-	if (IS_HARDWARE_TYPE_8723B(adapter) || IS_HARDWARE_TYPE_8703B(adapter))
-		bcn_ctrl &= ~EN_BCN_FUNCTION;
-#endif
 	rtw_write8(adapter, REG_BCN_CTRL, bcn_ctrl_1);
 	rtw_write8(adapter, REG_BCN_CTRL_1, bcn_ctrl);
 
@@ -3841,8 +3832,7 @@ static u8 rtw_hal_set_remote_wake_ctrl_cmd(_adapter *adapter, u8 enable)
 			SET_H2CCMD_REMOTE_WAKE_CTRL_TKIP_OFFLOAD_EN(
 					u1H2CRemoteWakeCtrlParm, enable);
 
-			if (IS_HARDWARE_TYPE_8188E(adapter) ||
-			    IS_HARDWARE_TYPE_8812(adapter)) {
+			if (IS_HARDWARE_TYPE_8188E(adapter)) {
 				SET_H2CCMD_REMOTE_WAKE_CTRL_TKIP_OFFLOAD_EN(
 					u1H2CRemoteWakeCtrlParm, 0);
 				SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_ACTION(
@@ -6132,10 +6122,8 @@ static void rtw_hal_construct_ARPRsp(
 	*pLength += 28;
 
 	if (psecuritypriv->dot11PrivacyAlgrthm == _TKIP_) {
-		if (IS_HARDWARE_TYPE_8188E(padapter) ||
-		    IS_HARDWARE_TYPE_8812(padapter)) {
+		if (IS_HARDWARE_TYPE_8188E(padapter))
 			rtw_hal_append_tkip_mic(padapter, pframe, arp_offset);
-		}
 		*pLength += 8;
 	}
 }
@@ -6513,7 +6501,7 @@ void rtw_hal_set_wow_fw_rsvd_page(_adapter *adapter, u8 *pframe, u16 index,
 		rsvd_page_loc->LocGTKInfo = *page_num;
 		RTW_INFO("LocGTKInfo: %d\n", rsvd_page_loc->LocGTKInfo);
 
-		if (IS_HARDWARE_TYPE_8188E(adapter) || IS_HARDWARE_TYPE_8812(adapter)) {
+		if (IS_HARDWARE_TYPE_8188E(adapter)) {
 			struct security_priv *psecpriv = NULL;
 
 			psecpriv = &adapter->securitypriv;
@@ -7508,9 +7496,6 @@ static void rtw_hal_wow_enable(_adapter *adapter)
 	if (psecuritypriv->binstallKCK_KEK == _TRUE)
 		rtw_hal_fw_sync_cam_id(adapter);
 #endif
-	if (IS_HARDWARE_TYPE_8723B(adapter))
-		rtw_hal_backup_rate(adapter);
-
 	/* RX DMA stop */
 	if (IS_HARDWARE_TYPE_8188E(adapter))
 		rtw_hal_disable_tx_report(adapter);
@@ -8655,19 +8640,7 @@ u8 rtw_hal_query_txbfer_rf_num(_adapter *adapter)
 	struct registry_priv	*pregistrypriv = &adapter->registrypriv;
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
 
-	if ((pregistrypriv->beamformer_rf_num) && (IS_HARDWARE_TYPE_8814AE(adapter) || IS_HARDWARE_TYPE_8814AU(adapter) || IS_HARDWARE_TYPE_8822BU(adapter) || IS_HARDWARE_TYPE_8821C(adapter)))
-		return pregistrypriv->beamformer_rf_num;
-	else if (IS_HARDWARE_TYPE_8814AE(adapter)
-		) {
-		/*BF cap provided by Yu Chen, Sean, 2015, 01 */
-		if (hal_data->rf_type == RF_3T3R)
-			return 2;
-		else if (hal_data->rf_type == RF_4T4R)
-			return 3;
-		else
-			return 1;
-	} else
-		return 1;
+	return 1;
 
 }
 u8 rtw_hal_query_txbfee_rf_num(_adapter *adapter)
@@ -8678,16 +8651,7 @@ u8 rtw_hal_query_txbfee_rf_num(_adapter *adapter)
 
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
 
-	if ((pregistrypriv->beamformee_rf_num) && (IS_HARDWARE_TYPE_8814AE(adapter) || IS_HARDWARE_TYPE_8814AU(adapter) || IS_HARDWARE_TYPE_8822BU(adapter) || IS_HARDWARE_TYPE_8821C(adapter)))
-		return pregistrypriv->beamformee_rf_num;
-	else if (IS_HARDWARE_TYPE_8814AE(adapter) || IS_HARDWARE_TYPE_8814AU(adapter)) {
-		if (pmlmeinfo->assoc_AP_vendor == HT_IOT_PEER_BROADCOM)
-			return 2;
-		else
-			return 2;/*TODO: May be 3 in the future, by ChenYu. */
-	} else
-		return 1;
-
+	return 1;
 }
 #endif
 
@@ -9896,42 +9860,9 @@ void dm_DynamicUsbTxAgg(_adapter *padapter, u8 from_timer)
 	u8 cur_wireless_mode = WIRELESS_INVALID;
 
 #ifdef CONFIG_USB_RX_AGGREGATION
-	if (IS_HARDWARE_TYPE_8821U(padapter)) { /* || IS_HARDWARE_TYPE_8192EU(padapter)) */
-		/* This AGG_PH_TH only for UsbRxAggMode == USB_RX_AGG_USB */
-		if ((pHalData->rxagg_mode == RX_AGG_USB) && (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)) {
-			if (pdvobjpriv->traffic_stat.cur_tx_tp > 2 && pdvobjpriv->traffic_stat.cur_rx_tp < 30)
-				rtw_write16(padapter , REG_RXDMA_AGG_PG_TH , 0x1010);
-			else if (pdvobjpriv->traffic_stat.last_tx_bytes > 220000 && pdvobjpriv->traffic_stat.cur_rx_tp < 30)
-				rtw_write16(padapter , REG_RXDMA_AGG_PG_TH , 0x1006);
-			else
-				rtw_write16(padapter, REG_RXDMA_AGG_PG_TH, 0x2005); /* dmc agg th 20K */
-
-			/* RTW_INFO("TX_TP=%u, RX_TP=%u\n", pdvobjpriv->traffic_stat.cur_tx_tp, pdvobjpriv->traffic_stat.cur_rx_tp); */
-		}
-	} else if (IS_HARDWARE_TYPE_8812(padapter)) {
-#ifdef CONFIG_CONCURRENT_MODE
-		u8 i;
-		_adapter *iface;
-		u8 bassocaed = _FALSE;
-		struct mlme_ext_priv *mlmeext;
-
-		for (i = 0; i < pdvobjpriv->iface_nums; i++) {
-			iface = pdvobjpriv->padapters[i];
-			mlmeext = &iface->mlmeextpriv;
-			if (rtw_linked_check(iface) == _TRUE) {
-				if (mlmeext->cur_wireless_mode >= cur_wireless_mode)
-					cur_wireless_mode = mlmeext->cur_wireless_mode;
-				bassocaed = _TRUE;
-			}
-		}
-		if (bassocaed)
-#endif
-			rtw_set_usb_agg_by_mode(padapter, cur_wireless_mode);
 #ifdef CONFIG_PLATFORM_NOVATEK_NT72668
-	} else {
-		rtw_set_usb_agg_by_mode(padapter, cur_wireless_mode);
+	rtw_set_usb_agg_by_mode(padapter, cur_wireless_mode);
 #endif /* CONFIG_PLATFORM_NOVATEK_NT72668 */
-	}
 #endif
 }
 
@@ -10253,9 +10184,6 @@ void rtw_dump_mac_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_coun
 		rtw_warn_on(1);
 		return;
 	}
-	if (IS_HARDWARE_TYPE_JAGUAR(padapter) || IS_HARDWARE_TYPE_JAGUAR2(padapter))
-		phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT26, 0x0);/*clear bit-26*/
-
 	phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT28 | BIT29 | BIT30 | BIT31, 0x3);
 	mac_cck_ok	= phy_query_mac_reg(padapter, REG_RXERR_RPT, bMaskLWord);/* [15:0]	  */
 	phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT28 | BIT29 | BIT30 | BIT31, 0x0);
@@ -10263,12 +10191,6 @@ void rtw_dump_mac_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_coun
 	phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT28 | BIT29 | BIT30 | BIT31, 0x6);
 	mac_ht_ok	= phy_query_mac_reg(padapter, REG_RXERR_RPT, bMaskLWord);/* [15:0]	 */
 	mac_vht_ok	= 0;
-	if (IS_HARDWARE_TYPE_JAGUAR(padapter) || IS_HARDWARE_TYPE_JAGUAR2(padapter)) {
-		phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT28 | BIT29 | BIT30 | BIT31, 0x0);
-		phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT26, 0x1);
-		mac_vht_ok	= phy_query_mac_reg(padapter, REG_RXERR_RPT, bMaskLWord);/* [15:0]*/
-		phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT26, 0x0);/*clear bit-26*/
-	}
 
 	phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT28 | BIT29 | BIT30 | BIT31, 0x4);
 	mac_cck_err	= phy_query_mac_reg(padapter, REG_RXERR_RPT, bMaskLWord);/* [15:0]	 */
@@ -10277,12 +10199,6 @@ void rtw_dump_mac_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_coun
 	phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT28 | BIT29 | BIT30 | BIT31, 0x7);
 	mac_ht_err	= phy_query_mac_reg(padapter, REG_RXERR_RPT, bMaskLWord);/* [15:0]		 */
 	mac_vht_err	= 0;
-	if (IS_HARDWARE_TYPE_JAGUAR(padapter) || IS_HARDWARE_TYPE_JAGUAR2(padapter)) {
-		phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT28 | BIT29 | BIT30 | BIT31, 0x1);
-		phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT26, 0x1);
-		mac_vht_err	= phy_query_mac_reg(padapter, REG_RXERR_RPT, bMaskLWord);/* [15:0]*/
-		phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT26, 0x0);/*clear bit-26*/
-	}
 
 	phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT28 | BIT29 | BIT30 | BIT31, 0x5);
 	mac_cck_fa	= phy_query_mac_reg(padapter, REG_RXERR_RPT, bMaskLWord);/* [15:0]	 */
@@ -10304,13 +10220,6 @@ void rtw_dump_mac_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_coun
 }
 void rtw_reset_mac_rx_counters(_adapter *padapter)
 {
-
-	/* If no packet rx, MaxRx clock be gating ,BIT_DISGCLK bit19 set 1 for fix*/
-	if (IS_HARDWARE_TYPE_8703B(padapter) ||
-	    IS_HARDWARE_TYPE_8723D(padapter) ||
-	    IS_HARDWARE_TYPE_8188F(padapter))
-		phy_set_mac_reg(padapter, REG_RCR, BIT19, 0x1);
-
 	/* reset mac counter */
 	phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT27, 0x1);
 	phy_set_mac_reg(padapter, REG_RXERR_RPT, BIT27, 0x0);
@@ -10323,32 +10232,19 @@ void rtw_dump_phy_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_coun
 		rtw_warn_on(1);
 		return;
 	}
-	if (IS_HARDWARE_TYPE_JAGUAR(padapter) || IS_HARDWARE_TYPE_JAGUAR2(padapter)) {
-		cckok	= phy_query_bb_reg(padapter, 0xF04, 0x3FFF);	     /* [13:0] */
-		ofdmok	= phy_query_bb_reg(padapter, 0xF14, 0x3FFF);	     /* [13:0] */
-		htok		= phy_query_bb_reg(padapter, 0xF10, 0x3FFF);     /* [13:0] */
-		vht_ok	= phy_query_bb_reg(padapter, 0xF0C, 0x3FFF);     /* [13:0] */
-		cckcrc	= phy_query_bb_reg(padapter, 0xF04, 0x3FFF0000); /* [29:16]	 */
-		ofdmcrc	= phy_query_bb_reg(padapter, 0xF14, 0x3FFF0000); /* [29:16] */
-		htcrc	= phy_query_bb_reg(padapter, 0xF10, 0x3FFF0000); /* [29:16] */
-		vht_err	= phy_query_bb_reg(padapter, 0xF0C, 0x3FFF0000); /* [29:16] */
-		CCK_FA	= phy_query_bb_reg(padapter, 0xA5C, bMaskLWord);
-		OFDM_FA	= phy_query_bb_reg(padapter, 0xF48, bMaskLWord);
-	} else {
-		cckok	= phy_query_bb_reg(padapter, 0xF88, bMaskDWord);
-		ofdmok	= phy_query_bb_reg(padapter, 0xF94, bMaskLWord);
-		htok		= phy_query_bb_reg(padapter, 0xF90, bMaskLWord);
-		vht_ok	= 0;
-		cckcrc	= phy_query_bb_reg(padapter, 0xF84, bMaskDWord);
-		ofdmcrc	= phy_query_bb_reg(padapter, 0xF94, bMaskHWord);
-		htcrc	= phy_query_bb_reg(padapter, 0xF90, bMaskHWord);
-		vht_err	= 0;
-		OFDM_FA = phy_query_bb_reg(padapter, 0xCF0, bMaskLWord) + phy_query_bb_reg(padapter, 0xCF2, bMaskLWord) +
-			phy_query_bb_reg(padapter, 0xDA2, bMaskLWord) + phy_query_bb_reg(padapter, 0xDA4, bMaskLWord) +
-			phy_query_bb_reg(padapter, 0xDA6, bMaskLWord) + phy_query_bb_reg(padapter, 0xDA8, bMaskLWord);
+	cckok	= phy_query_bb_reg(padapter, 0xF88, bMaskDWord);
+	ofdmok	= phy_query_bb_reg(padapter, 0xF94, bMaskLWord);
+	htok		= phy_query_bb_reg(padapter, 0xF90, bMaskLWord);
+	vht_ok	= 0;
+	cckcrc	= phy_query_bb_reg(padapter, 0xF84, bMaskDWord);
+	ofdmcrc	= phy_query_bb_reg(padapter, 0xF94, bMaskHWord);
+	htcrc	= phy_query_bb_reg(padapter, 0xF90, bMaskHWord);
+	vht_err	= 0;
+	OFDM_FA = phy_query_bb_reg(padapter, 0xCF0, bMaskLWord) + phy_query_bb_reg(padapter, 0xCF2, bMaskLWord) +
+		phy_query_bb_reg(padapter, 0xDA2, bMaskLWord) + phy_query_bb_reg(padapter, 0xDA4, bMaskLWord) +
+		phy_query_bb_reg(padapter, 0xDA6, bMaskLWord) + phy_query_bb_reg(padapter, 0xDA8, bMaskLWord);
 
-		CCK_FA = (rtw_read8(padapter, 0xA5B) << 8) | (rtw_read8(padapter, 0xA5C));
-	}
+	CCK_FA = (rtw_read8(padapter, 0xA5B) << 8) | (rtw_read8(padapter, 0xA5C));
 
 	rx_counter->rx_pkt_ok = cckok + ofdmok + htok + vht_ok;
 	rx_counter->rx_pkt_crc_error = cckcrc + ofdmcrc + htcrc + vht_err;
@@ -10359,36 +10255,24 @@ void rtw_dump_phy_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_coun
 
 void rtw_reset_phy_trx_ok_counters(_adapter *padapter)
 {
-	if (IS_HARDWARE_TYPE_JAGUAR(padapter) || IS_HARDWARE_TYPE_JAGUAR2(padapter)) {
-		phy_set_bb_reg(padapter, 0xB58, BIT0, 0x1);
-		phy_set_bb_reg(padapter, 0xB58, BIT0, 0x0);
-	}
 }
+
 void rtw_reset_phy_rx_counters(_adapter *padapter)
 {
 	/* reset phy counter */
-	if (IS_HARDWARE_TYPE_JAGUAR(padapter) || IS_HARDWARE_TYPE_JAGUAR2(padapter)) {
-		rtw_reset_phy_trx_ok_counters(padapter);
+	phy_set_bb_reg(padapter, 0xF14, BIT16, 0x1);
+	rtw_msleep_os(10);
+	phy_set_bb_reg(padapter, 0xF14, BIT16, 0x0);
 
-		phy_set_bb_reg(padapter, 0x9A4, BIT17, 0x1);/* reset  OFDA FA counter */
-		phy_set_bb_reg(padapter, 0x9A4, BIT17, 0x0);
+	phy_set_bb_reg(padapter, 0xD00, BIT27, 0x1);/* reset  OFDA FA counter */
+	phy_set_bb_reg(padapter, 0xC0C, BIT31, 0x1);/* reset  OFDA FA counter */
+	phy_set_bb_reg(padapter, 0xD00, BIT27, 0x0);
+	phy_set_bb_reg(padapter, 0xC0C, BIT31, 0x0);
 
-		phy_set_bb_reg(padapter, 0xA2C, BIT15, 0x0);/* reset  CCK FA counter */
-		phy_set_bb_reg(padapter, 0xA2C, BIT15, 0x1);
-	} else {
-		phy_set_bb_reg(padapter, 0xF14, BIT16, 0x1);
-		rtw_msleep_os(10);
-		phy_set_bb_reg(padapter, 0xF14, BIT16, 0x0);
-
-		phy_set_bb_reg(padapter, 0xD00, BIT27, 0x1);/* reset  OFDA FA counter */
-		phy_set_bb_reg(padapter, 0xC0C, BIT31, 0x1);/* reset  OFDA FA counter */
-		phy_set_bb_reg(padapter, 0xD00, BIT27, 0x0);
-		phy_set_bb_reg(padapter, 0xC0C, BIT31, 0x0);
-
-		phy_set_bb_reg(padapter, 0xA2C, BIT15, 0x0);/* reset  CCK FA counter */
-		phy_set_bb_reg(padapter, 0xA2C, BIT15, 0x1);
-	}
+	phy_set_bb_reg(padapter, 0xA2C, BIT15, 0x0);/* reset  CCK FA counter */
+	phy_set_bb_reg(padapter, 0xA2C, BIT15, 0x1);
 }
+
 #ifdef DBG_RX_COUNTER_DUMP
 void rtw_dump_drv_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_counter)
 {
@@ -10864,12 +10748,7 @@ void hw_var_set_opmode_mbid(_adapter *Adapter, u8 mode)
 		/*enable BCN0 Function for if1*/
 		/*don't enable update TSF0 for if1 (due to TSF update when beacon,probe rsp are received)*/
 		rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT | EN_BCN_FUNCTION | EN_TXBCN_RPT | DIS_BCNQ_SUB));
-
-		if (IS_HARDWARE_TYPE_8821(Adapter) || IS_HARDWARE_TYPE_8192E(Adapter))/* select BCN on port 0 for DualBeacon*/
-			rtw_write8(Adapter, REG_CCK_CHECK, rtw_read8(Adapter, REG_CCK_CHECK) & (~BIT_BCN_PORT_SEL));
-
 	}
-
 }
 #endif
 

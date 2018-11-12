@@ -1022,13 +1022,8 @@ static s8 rtw_rf_get_kfree_tx_gain_offset(_adapter *padapter, u8 path, u8 ch)
 
 	if (kfree_data->flag & KFREE_FLAG_ON) {
 		kfree_offset = kfree_data->bb_gain[bb_gain_sel][path];
-		if (IS_HARDWARE_TYPE_8723D(padapter))
-			RTW_INFO("%s path:%s, ch:%u, bb_gain_sel:%d, kfree_offset:%d\n"
-				, __func__, (path == 0)?"S1":"S0", 
-				ch, bb_gain_sel, kfree_offset);
-		else
-			RTW_INFO("%s path:%u, ch:%u, bb_gain_sel:%d, kfree_offset:%d\n"
-				, __func__, path, ch, bb_gain_sel, kfree_offset);
+		RTW_INFO("%s path:%u, ch:%u, bb_gain_sel:%d, kfree_offset:%d\n",
+			 __func__, path, ch, bb_gain_sel, kfree_offset);
 	}
 exit:
 #endif /* CONFIG_RF_POWER_TRIM */
@@ -1041,18 +1036,8 @@ void rtw_rf_set_tx_gain_offset(_adapter *adapter, u8 path, s8 offset)
 	u8 target_path = 0;
 	u32 val32 = 0;
 
-	if (IS_HARDWARE_TYPE_8723D(adapter)) {
-		target_path = RF_PATH_A; /*in 8723D case path means S0/S1*/
-		if (path == PPG_8723D_S1)
-			RTW_INFO("kfree gain_offset 0x55:0x%x ",
-			rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff));
-		else if (path == PPG_8723D_S0)
-			RTW_INFO("kfree gain_offset 0x65:0x%x ",
-			rtw_hal_read_rfreg(adapter, target_path, 0x65, 0xffffffff));
-	} else {
-		target_path = path;
-		RTW_INFO("kfree gain_offset 0x55:0x%x ", rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff));
-	}
+	target_path = path;
+	RTW_INFO("kfree gain_offset 0x55:0x%x ", rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff));
 	
 	switch (rtw_get_chip_type(adapter)) {
 	default:
@@ -1060,14 +1045,7 @@ void rtw_rf_set_tx_gain_offset(_adapter *adapter, u8 path, s8 offset)
 		break;
 	}
 	
-	if (IS_HARDWARE_TYPE_8723D(adapter)) {
-		if (path == PPG_8723D_S1)
-			val32 = rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff);
-		else if (path == PPG_8723D_S0)
-			val32 = rtw_hal_read_rfreg(adapter, target_path, 0x65, 0xffffffff);
-	} else {
-		val32 = rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff);
-	}
+	val32 = rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff);
 	RTW_INFO(" after :0x%x\n", val32);
 }
 
@@ -1079,10 +1057,7 @@ void rtw_rf_apply_tx_gain_offset(_adapter *adapter, u8 ch)
 	s8 total_offset;
 	int i, total = 0;
 
-	if (IS_HARDWARE_TYPE_8723D(adapter))
-		total = 2; /* S1 and S0 */
-	else
-		total = hal_data->NumTotalRFPath;
+	total = hal_data->NumTotalRFPath;
 
 	for (i = 0; i < total; i++) {
 		kfree_offset = rtw_rf_get_kfree_tx_gain_offset(adapter, i, ch);

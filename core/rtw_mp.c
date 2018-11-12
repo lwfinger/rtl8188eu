@@ -320,8 +320,6 @@ static VOID PHY_SetRFPathSwitch_default(
 
 static void mpt_InitHWConfig(PADAPTER Adapter)
 {
-	if (IS_HARDWARE_TYPE_8188ES(Adapter))
-		phy_set_mac_reg(Adapter, 0x4C , BIT23, 0);		/*select DPDT_P and DPDT_N as output pin*/
 }
 
 static void PHY_IQCalibrate(PADAPTER padapter, u8 bReCovery)
