@@ -830,11 +830,6 @@ struct mlme_priv {
 	u8	scanning_via_buddy_intf;
 #endif
 
-#if 0
-	u8	NumOfBcnInfoChkFail;
-	u32	timeBcnInfoChkStart;
-#endif
-
 #ifdef CONFIG_APPEND_VENDOR_IE_ENABLE
 	u32 vendor_ie_mask[WLAN_MAX_VENDOR_IE_NUM];
 	u8 vendor_ie[WLAN_MAX_VENDOR_IE_NUM][WLAN_MAX_VENDOR_IE_LEN];

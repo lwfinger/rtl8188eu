@@ -2060,10 +2060,6 @@ void rtw_cancel_all_timer(_adapter *padapter)
 
 	_cancel_timer_ex(&padapter->mlmepriv.assoc_timer);
 
-#if 0
-	_cancel_timer_ex(&padapter->securitypriv.tkip_timer);
-#endif
-
 	_cancel_timer_ex(&padapter->mlmepriv.scan_to_timer);
 
 #ifdef CONFIG_DFS_MASTER
@@ -2240,10 +2236,6 @@ int _netdev_vir_if_open(struct net_device *pnetdev)
 	if (padapter->bup == _FALSE && primary_padapter->bup == _TRUE &&
 	    rtw_is_hw_init_completed(primary_padapter)) {
 		padapter->bFWReady = primary_padapter->bFWReady;
-#if 0 /*#ifdef CONFIG_MI_WITH_MBSSID_CAM*/
-		rtw_hal_set_hwreg(padapter, HW_VAR_MAC_ADDR, adapter_mac_addr(padapter)); /* set mac addr to mac register */
-#endif
-
 	}
 
 	if (padapter->bup == _FALSE) {
@@ -2743,10 +2735,6 @@ int _netdev_open(struct net_device *pnetdev)
 		if (status == _FAIL) {
 			goto netdev_open_error;
 		}
-#if 0/*#ifdef CONFIG_MI_WITH_MBSSID_CAM*/
-		rtw_hal_set_hwreg(padapter, HW_VAR_MAC_ADDR, adapter_mac_addr(padapter)); /* set mac addr to mac register */
-#endif
-
 		RTW_INFO("MAC Address = "MAC_FMT"\n", MAC_ARG(pnetdev->dev_addr));
 
 		status = rtw_start_drv_threads(padapter);
@@ -2892,9 +2880,6 @@ static int  ips_netdrv_open(_adapter *padapter)
 	if (status == _FAIL) {
 		goto netdev_open_error;
 	}
-#if 0
-	rtw_restore_mac_addr(padapter);
-#endif
 	rtw_intf_start(padapter);
 
 #ifndef CONFIG_IPS_CHECK_IN_WD

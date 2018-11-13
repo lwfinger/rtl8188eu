@@ -639,11 +639,6 @@ static const struct net_device_ops rtl871x_mgnt_netdev_ops = {
 	.ndo_open = mgnt_netdev_open,
 	.ndo_stop = mgnt_netdev_close,
 	.ndo_start_xmit = mgnt_xmit_entry,
-	#if 0
-	.ndo_set_mac_address = r871x_net_set_mac_address,
-	.ndo_get_stats = r871x_net_get_stats,
-	.ndo_do_ioctl = r871x_mp_ioctl,
-	#endif
 };
 #endif
 

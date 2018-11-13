@@ -1200,15 +1200,7 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 	RTW_INFO("wlan link up\n");
 	rtd2885_wlan_netlink_sendMsg("linkup", "8712");
 #endif
-
-
 	status = _SUCCESS;
-
-#if 0 /* not used now */
-os_ndevs_deinit:
-	if (status != _SUCCESS)
-		rtw_os_ndevs_deinit(dvobj);
-#endif
 free_if_vir:
 	if (status != _SUCCESS) {
 		#ifdef CONFIG_CONCURRENT_MODE

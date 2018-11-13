@@ -300,23 +300,7 @@ static void efuse_read_phymap_from_txpktbuf(
 		lo32 = rtw_read32(adapter, REG_PKTBUF_DBG_DATA_L);
 		hi32 = rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H);
 
-#if 0
-		RTW_INFO("%s lo32:0x%08x, %02x %02x %02x %02x\n", __func__, lo32
-			 , rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L)
-			 , rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L + 1)
-			 , rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L + 2)
-			 , rtw_read8(adapter, REG_PKTBUF_DBG_DATA_L + 3)
-			);
-		RTW_INFO("%s hi32:0x%08x, %02x %02x %02x %02x\n", __func__, hi32
-			 , rtw_read8(adapter, REG_PKTBUF_DBG_DATA_H)
-			 , rtw_read8(adapter, REG_PKTBUF_DBG_DATA_H + 1)
-			 , rtw_read8(adapter, REG_PKTBUF_DBG_DATA_H + 2)
-			 , rtw_read8(adapter, REG_PKTBUF_DBG_DATA_H + 3)
-			);
-#endif
-
 		if (i == 0) {
-#if 1 /* for debug */
 			u8 lenc[2];
 			u16 lenbak, aaabak;
 			u16 aaa;
@@ -326,7 +310,6 @@ static void efuse_read_phymap_from_txpktbuf(
 			aaabak = le16_to_cpup((__le16 *)lenc);
 			lenbak = le16_to_cpu(*((__le16 *)lenc));
 			aaa = le16_to_cpup((__le16 *)&lo32);
-#endif
 			len = le16_to_cpu(*((__le16 *)&lo32));
 
 			limit = (len - 2 < limit) ? len - 2 : limit;
@@ -383,33 +366,12 @@ static s32 iol_read_efuse(
 	rtw_write8(padapter, REG_TDECTRL + 1, txpktbuf_bndy);
 	_rtw_memset(physical_map, 0xFF, 512);
 
-	/* /reg_0x106 = rtw_read8(padapter, REG_PKT_BUFF_ACCESS_CTRL); */
-	/* RTW_INFO("%s reg_0x106:0x%02x, write 0x%02x\n", __func__, reg_0x106, 0x69); */
 	rtw_write8(padapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
-	/* RTW_INFO("%s reg_0x106:0x%02x\n", __func__, rtw_read8(padapter, 0x106)); */
 
 	status = iol_execute(padapter, CMD_READ_EFUSE_MAP);
 
 	if (status == _SUCCESS)
 		efuse_read_phymap_from_txpktbuf(padapter, txpktbuf_bndy, physical_map, &size);
-
-#if 0
-	RTW_PRINT("%s physical map\n", __func__);
-	for (i = 0; i < size; i++) {
-		if (i % 16 == 0)
-			RTW_PRINT("%02x", physical_map[i]);
-		else
-			_RTW_PRINT("%02x", physical_map[i]);
-
-		if (i % 16 == 7)
-			_RTW_PRINT("    ");
-		else if (i % 16 == 15)
-			_RTW_PRINT("\n");
-		else
-			_RTW_PRINT(" ");
-	}
-	_RTW_PRINT("\n");
-#endif
 
 	efuse_phymap_to_logical(physical_map, offset, size_byte, logical_map);
 
@@ -1041,14 +1003,6 @@ hal_EfusePowerSwitch_RTL8188E(
 
 	if (PwrState == _TRUE) {
 		rtw_write8(pAdapter, REG_EFUSE_ACCESS, EFUSE_ACCESS_ON);
-#if 0
-		/* 1.2V Power: From VDDON with Power Cut(0x0000h[15]), defualt valid */
-		tmpV16 = rtw_read16(pAdapter, REG_SYS_ISO_CTRL);
-		if (!(tmpV16 & PWC_EV12V)) {
-			tmpV16 |= PWC_EV12V ;
-			rtw_write16(pAdapter, REG_SYS_ISO_CTRL, tmpV16);
-		}
-#endif
 		/* Reset: 0x0000h[28], default valid */
 		tmpV16 =  rtw_read16(pAdapter, REG_SYS_FUNC_EN);
 		if (!(tmpV16 & FEN_ELDR)) {
@@ -2874,15 +2828,6 @@ Hal_ReadPAType_8188E(
 			pHalData->ExternalPA_2G  = (GetRegAmplifierType2G(Adapter) & ODM_BOARD_EXT_PA)  ? 1 : 0;
 			pHalData->ExternalLNA_2G = (GetRegAmplifierType2G(Adapter) & ODM_BOARD_EXT_LNA) ? 1 : 0;
 		}
-#if 0
-		if (GetRegAmplifierType5G(Adapter) == 0) { /*  AUTO */
-			pHalData->external_pa_5g = ((pHalData->PAType_5G & BIT1) && (pHalData->PAType_5G & BIT0)) ? 1 : 0;
-			pHalData->external_lna_5g = ((pHalData->LNAType_5G & BIT7) && (pHalData->LNAType_5G & BIT3)) ? 1 : 0;	/*  5G only now. */
-		} else {
-			pHalData->external_pa_5g	= (GetRegAmplifierType5G(Adapter) & ODM_BOARD_EXT_PA_5G)	? 1 : 0;
-			pHalData->external_lna_5g = (GetRegAmplifierType5G(Adapter) & ODM_BOARD_EXT_LNA_5G) ? 1 : 0;
-		}
-#endif
 	} else {
 		pHalData->ExternalPA_2G  = EEPROM_Default_PAType;
 		pHalData->external_pa_5g  = EEPROM_Default_PAType;
@@ -2897,16 +2842,6 @@ Hal_ReadPAType_8188E(
 			pHalData->ExternalPA_2G  = (GetRegAmplifierType2G(Adapter) & ODM_BOARD_EXT_PA)  ? 1 : 0;
 			pHalData->ExternalLNA_2G = (GetRegAmplifierType2G(Adapter) & ODM_BOARD_EXT_LNA) ? 1 : 0;
 		}
-#if 0
-		if (GetRegAmplifierType5G(Adapter) == 0) {
-			/*  AUTO */
-			pHalData->external_pa_5g  = 0;
-			pHalData->external_lna_5g = 0;
-		} else {
-			pHalData->external_pa_5g  = (GetRegAmplifierType5G(Adapter) & ODM_BOARD_EXT_PA_5G)  ? 1 : 0;
-			pHalData->external_lna_5g = (GetRegAmplifierType5G(Adapter) & ODM_BOARD_EXT_LNA_5G) ? 1 : 0;
-		}
-#endif
 	}
 	RTW_INFO("pHalData->ExternalPA_2G = %d , pHalData->ExternalLNA_2G = %d\n",  pHalData->ExternalPA_2G, pHalData->ExternalLNA_2G);
 }
@@ -3273,14 +3208,6 @@ static void hw_var_set_monitor(PADAPTER Adapter, u8 variable, u8 *val)
 		/* Append FCS */
 		rcr_bits |= RCR_APPFCS;
 
-#if 0
-		/*
-		   CRC and ICV packet will drop in recvbuf2recvframe()
-		   We no turn on it.
-		 */
-		rcr_bits |= (RCR_ACRC32 | RCR_AICV);
-#endif
-
 		/* Receive all data frames */
 		value_rxfltmap2 = 0xFFFF;
 
@@ -3288,15 +3215,9 @@ static void hw_var_set_monitor(PADAPTER Adapter, u8 variable, u8 *val)
 		rtw_write32(Adapter, REG_RCR, value_rcr);
 
 		rtw_write16(Adapter, REG_RXFLTMAP2, value_rxfltmap2);
-
-#if 0
-		/* tx pause */
-		rtw_write8(padapter, REG_TXPAUSE, 0xFF);
-#endif
 	} else {
 		/* do nothing */
 	}
-
 }
 
 static void hw_var_set_opmode(PADAPTER Adapter, u8 variable, u8 *val)

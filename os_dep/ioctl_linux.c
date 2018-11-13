@@ -1113,7 +1113,10 @@ static int rtw_set_wpa_ie(_adapter *padapter, char *pie, unsigned short ielen)
 			int i;
 			RTW_INFO("\n wpa_ie(length:%d):\n", ielen);
 			for (i = 0; i < ielen; i = i + 8)
-				RTW_INFO("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n", buf[i], buf[i + 1], buf[i + 2], buf[i + 3], buf[i + 4], buf[i + 5], buf[i + 6], buf[i + 7]);
+				RTW_INFO("0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\n",
+					 buf[i], buf[i + 1], buf[i + 2],
+					 buf[i + 3], buf[i + 4], buf[i + 5],
+					 buf[i + 6], buf[i + 7]);
 		}
 
 		pos = buf;
@@ -1121,19 +1124,6 @@ static int rtw_set_wpa_ie(_adapter *padapter, char *pie, unsigned short ielen)
 			ret  = -1;
 			goto exit;
 		}
-
-#if 0
-		pos += RSN_HEADER_LEN;
-		left  = ielen - RSN_HEADER_LEN;
-
-		if (left >= RSN_SELECTOR_LEN) {
-			pos += RSN_SELECTOR_LEN;
-			left -= RSN_SELECTOR_LEN;
-		} else if (left > 0) {
-			ret = -1;
-			goto exit;
-		}
-#endif
 
 		if (rtw_parse_wpa_ie(buf, ielen, &group_cipher, &pairwise_cipher, NULL) == _SUCCESS) {
 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
@@ -1417,10 +1407,6 @@ static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
 	switch (wrqu->mode) {
 	case IW_MODE_MONITOR:
 		networkType = Ndis802_11Monitor;
-#if 0
-		dev->type = ARPHRD_IEEE80211; /* IEEE 802.11 : 801 */
-#endif
-
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
 		dev->type = ARPHRD_IEEE80211_RADIOTAP; /* IEEE 802.11 + radiotap header : 803 */
 		RTW_INFO("set_mode = IW_MODE_MONITOR\n");
@@ -1521,18 +1507,6 @@ static int rtw_wx_set_pmkid(struct net_device *dev,
 	struct iw_pmksa  *pPMK = (struct iw_pmksa *) extra;
 	u8     strZeroMacAddress[ETH_ALEN] = { 0x00 };
 	u8     strIssueBssid[ETH_ALEN] = { 0x00 };
-
-#if 0
-	struct iw_pmksa {
-		__u32   cmd;
-		struct sockaddr bssid;
-		__u8    pmkid[IW_PMKID_LEN];   /* IW_PMKID_LEN=16 */
-	}
-	There are the BSSID information in the bssid.sa_data array.
-	If cmd is IW_PMKSA_FLUSH, it means the wpa_suppplicant wants to clear all the PMKID information.
-	If cmd is IW_PMKSA_ADD, it means the wpa_supplicant wants to add a PMKID / BSSID to driver.
-	If cmd is IW_PMKSA_REMOVE, it means the wpa_supplicant wants to remove a PMKID / BSSID from driver.
-#endif
 
 	_rtw_memcpy(strIssueBssid, pPMK->bssid.sa_data, ETH_ALEN);
 	if (pPMK->cmd == IW_PMKSA_ADD) {
@@ -1840,19 +1814,6 @@ static int rtw_wx_set_wap(struct net_device *dev,
 	while (1) {
 
 		if ((rtw_end_of_queue_search(phead, pmlmepriv->pscanned)) == _TRUE) {
-#if 0
-			ret = -EINVAL;
-			goto cancel_ps_deny;
-
-			if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE) {
-				rtw_set_802_11_bssid(padapter, temp->sa_data);
-				goto cancel_ps_deny;
-			} else {
-				ret = -EINVAL;
-				goto cancel_ps_deny;
-			}
-#endif
-
 			break;
 		}
 
@@ -1923,15 +1884,6 @@ static int rtw_wx_set_mlme(struct net_device *dev,
 			   struct iw_request_info *info,
 			   union iwreq_data *wrqu, char *extra)
 {
-#if 0
-	/* SIOCSIWMLME data */
-	struct	iw_mlme {
-		__u16		cmd; /* IW_MLME_* */
-		__u16		reason_code;
-		struct sockaddr	addr;
-	};
-#endif
-
 	int ret = 0;
 	u16 reason;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
@@ -2134,12 +2086,6 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
 					pos += 1;
 					len -= 1;
 					break;
-#if 0
-				case WEXT_CSCAN_NPROBE_SECTION:
-					RTW_INFO("WEXT_CSCAN_NPROBE_SECTION\n");
-					break;
-#endif
-
 				default:
 					/* RTW_INFO("Unknown CSCAN section %c\n", section); */
 					len = 0; /* stop parsing */
@@ -2374,17 +2320,6 @@ static int rtw_wx_set_essid(struct net_device *dev,
 
 		while (1) {
 			if (rtw_end_of_queue_search(phead, pmlmepriv->pscanned) == _TRUE) {
-#if 0
-				if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) == _TRUE) {
-					rtw_set_802_11_ssid(padapter, &ndis_ssid);
-
-					goto cancel_ps_deny;
-				} else {
-					ret = -EINVAL;
-					goto cancel_ps_deny;
-				}
-#endif
-
 				break;
 			}
 
@@ -2662,29 +2597,6 @@ static int rtw_wx_get_retry(struct net_device *dev,
 	return 0;
 
 }
-
-#if 0
-	#define IW_ENCODE_INDEX		0x00FF	/* Token index (if needed) */
-	#define IW_ENCODE_FLAGS		0xFF00	/* Flags defined below */
-	#define IW_ENCODE_MODE		0xF000	/* Modes defined below */
-	#define IW_ENCODE_DISABLED	0x8000	/* Encoding disabled */
-	#define IW_ENCODE_ENABLED	0x0000	/* Encoding enabled */
-	#define IW_ENCODE_RESTRICTED	0x4000	/* Refuse non-encoded packets */
-	#define IW_ENCODE_OPEN		0x2000	/* Accept non-encoded packets */
-	#define IW_ENCODE_NOKEY		0x0800  /* Key is write only, so not present */
-	#define IW_ENCODE_TEMP		0x0400  /* Temporary key */
-	/*
-	iwconfig wlan0 key on->flags = 0x6001->maybe it means auto
-	iwconfig wlan0 key off->flags = 0x8800
-	iwconfig wlan0 key open->flags = 0x2800
-	iwconfig wlan0 key open 1234567890->flags = 0x2000
-	iwconfig wlan0 key restricted->flags = 0x4800
-	iwconfig wlan0 key open [3] 1234567890->flags = 0x2003
-	iwconfig wlan0 key restricted [2] 1234567890->flags = 0x4002
-	iwconfig wlan0 key open [3] -> flags = 0x2803
-	iwconfig wlan0 key restricted [2] -> flags = 0x4802
-	*/
-#endif
 
 static int rtw_wx_set_enc(struct net_device *dev,
 			  struct iw_request_info *info,
@@ -3197,52 +3109,7 @@ static int rtw_wx_get_nick(struct net_device *dev,
 	/* rtw_signal_process(pid, SIGUSR1); */ /* for test */
 
 	/* dump debug info here	 */
-#if 0
-	u32 dot11AuthAlgrthm;		/*  802.11 auth, could be open, shared, and 8021x */
-	u32 dot11PrivacyAlgrthm;	/*  This specify the privacy for shared auth. algorithm. */
-	u32 dot118021XGrpPrivacy;	/*  This specify the privacy algthm. used for Grp key */
-	u32 ndisauthtype;
-	u32 ndisencryptstatus;
-#endif
-
-	/* RTW_INFO("auth_alg=0x%x, enc_alg=0x%x, auth_type=0x%x, enc_type=0x%x\n",  */
-	/*		psecuritypriv->dot11AuthAlgrthm, psecuritypriv->dot11PrivacyAlgrthm, */
-	/*		psecuritypriv->ndisauthtype, psecuritypriv->ndisencryptstatus); */
-
-	/* RTW_INFO("enc_alg=0x%x\n", psecuritypriv->dot11PrivacyAlgrthm); */
-	/* RTW_INFO("auth_type=0x%x\n", psecuritypriv->ndisauthtype); */
-	/* RTW_INFO("enc_type=0x%x\n", psecuritypriv->ndisencryptstatus); */
-
-#if 0
-	RTW_INFO("dbg(0x210)=0x%x\n", rtw_read32(padapter, 0x210));
-	RTW_INFO("dbg(0x608)=0x%x\n", rtw_read32(padapter, 0x608));
-	RTW_INFO("dbg(0x280)=0x%x\n", rtw_read32(padapter, 0x280));
-	RTW_INFO("dbg(0x284)=0x%x\n", rtw_read32(padapter, 0x284));
-	RTW_INFO("dbg(0x288)=0x%x\n", rtw_read32(padapter, 0x288));
-
-	RTW_INFO("dbg(0x664)=0x%x\n", rtw_read32(padapter, 0x664));
-
-
-	RTW_INFO("\n");
-
-	RTW_INFO("dbg(0x430)=0x%x\n", rtw_read32(padapter, 0x430));
-	RTW_INFO("dbg(0x438)=0x%x\n", rtw_read32(padapter, 0x438));
-
-	RTW_INFO("dbg(0x440)=0x%x\n", rtw_read32(padapter, 0x440));
-
-	RTW_INFO("dbg(0x458)=0x%x\n", rtw_read32(padapter, 0x458));
-
-	RTW_INFO("dbg(0x484)=0x%x\n", rtw_read32(padapter, 0x484));
-	RTW_INFO("dbg(0x488)=0x%x\n", rtw_read32(padapter, 0x488));
-
-	RTW_INFO("dbg(0x444)=0x%x\n", rtw_read32(padapter, 0x444));
-	RTW_INFO("dbg(0x448)=0x%x\n", rtw_read32(padapter, 0x448));
-	RTW_INFO("dbg(0x44c)=0x%x\n", rtw_read32(padapter, 0x44c));
-	RTW_INFO("dbg(0x450)=0x%x\n", rtw_read32(padapter, 0x450));
-#endif
-
 	return 0;
-
 }
 
 static int rtw_wx_read32(struct net_device *dev,
@@ -3464,15 +3331,6 @@ typedef int (*iw_handler)(struct net_device *dev, struct iw_request_info *info,
 static  int rtw_drvext_hdl(struct net_device *dev, struct iw_request_info *info,
 			   union iwreq_data *wrqu, char *extra)
 {
-
-#if 0
-	struct	iw_point {
-		void __user	*pointer;	/* Pointer to the data  (in user space) */
-		__u16		length;		/* number of fields or size in bytes */
-		__u16		flags;		/* Optional params */
-	};
-#endif
-
 #ifdef CONFIG_DRVEXT_MODULE
 	u8 res;
 	struct drvext_handler *phandler;
@@ -6840,73 +6698,22 @@ static int wpa_set_param(struct net_device *dev, u8 name, u32 value)
 		 * can use this to determine if the CAP_PRIVACY_ON bit should
 		 * be set.
 		 */
-
-#if 0
-		struct ieee80211_security sec = {
-			.flags = SEC_ENABLED,
-			.enabled = value,
-		};
-		ieee->drop_unencrypted = value;
-		/* We only change SEC_LEVEL for open mode. Others
-		 * are set by ipw_wpa_set_encryption.
-		 */
-		if (!value) {
-			sec.flags |= SEC_LEVEL;
-			sec.level = SEC_LEVEL_0;
-		} else {
-			sec.flags |= SEC_LEVEL;
-			sec.level = SEC_LEVEL_1;
-		}
-		if (ieee->set_security)
-			ieee->set_security(ieee->dev, &sec);
-#endif
 		break;
-
 	}
 	case IEEE_PARAM_PRIVACY_INVOKED:
-
-		/* ieee->privacy_invoked=value; */
-
 		break;
-
 	case IEEE_PARAM_AUTH_ALGS:
-
 		ret = wpa_set_auth_algs(dev, value);
-
 		break;
-
 	case IEEE_PARAM_IEEE_802_1X:
-
-		/* ieee->ieee802_1x=value;		 */
-
 		break;
-
 	case IEEE_PARAM_WPAX_SELECT:
-
-		/* added for WPA2 mixed mode */
-		/*RTW_WARN("------------------------>wpax value = %x\n", value);*/
-		/*
-		spin_lock_irqsave(&ieee->wpax_suitlist_lock,flags);
-		ieee->wpax_type_set = 1;
-		ieee->wpax_type_notify = value;
-		spin_unlock_irqrestore(&ieee->wpax_suitlist_lock,flags);
-		*/
-
 		break;
-
 	default:
-
-
-
 		ret = -EOPNOTSUPP;
-
-
 		break;
-
 	}
-
 	return ret;
-
 }
 
 static int wpa_mlme(struct net_device *dev, u32 command, u32 reason)
@@ -7370,18 +7177,6 @@ static int rtw_add_sta(struct net_device *dev, struct ieee_param *param)
 	    param->sta_addr[4] == 0xff && param->sta_addr[5] == 0xff)
 		return -EINVAL;
 
-#if 0
-	psta = rtw_get_stainfo(pstapriv, param->sta_addr);
-	if (psta) {
-		RTW_INFO("rtw_add_sta(), free has been added psta=%p\n", psta);
-		/* _enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL);		 */
-		rtw_free_stainfo(padapter,  psta);
-		/* _exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL); */
-
-		psta = NULL;
-	}
-#endif
-	/* psta = rtw_alloc_stainfo(pstapriv, param->sta_addr); */
 	psta = rtw_get_stainfo(pstapriv, param->sta_addr);
 	if (psta) {
 		int flags = param->u.add_sta.flags;
@@ -7494,23 +7289,6 @@ static int rtw_ioctl_get_sta_data(struct net_device *dev, struct ieee_param *par
 
 	psta = rtw_get_stainfo(pstapriv, param_ex->sta_addr);
 	if (psta) {
-#if 0
-		struct {
-			u16 aid;
-			u16 capability;
-			int flags;
-			u32 sta_set;
-			u8 tx_supp_rates[16];
-			u32 tx_supp_rates_len;
-			struct rtw_ieee80211_ht_cap ht_cap;
-			u64	rx_pkts;
-			u64	rx_bytes;
-			u64	rx_drops;
-			u64	tx_pkts;
-			u64	tx_bytes;
-			u64	tx_drops;
-		} get_sta;
-#endif
 		psta_data->aid = (u16)psta->aid;
 		psta_data->capability = psta->capability;
 		psta_data->flags = psta->flags;
@@ -8601,20 +8379,6 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 			err = -EFAULT;
 			goto exit;
 		}
-
-#if 0
-		RTW_INFO("OFFSET\tVALUE(hex)\n");
-		for (i = 0; i < mapLen; i += 16) {
-			RTW_INFO("0x%02x\t", i);
-			for (j = 0; j < 8; j++)
-				RTW_INFO("%02X ", efuse[i + j]);
-			RTW_INFO("\t");
-			for (; j < 16; j++)
-				RTW_INFO("%02X ", efuse[i + j]);
-			RTW_INFO("\n");
-		}
-		RTW_INFO("\n");
-#endif
 
 		shift = blksz * order;
 		efuse += shift;
@@ -11325,12 +11089,6 @@ static s32 createpseudoadhoc(PADAPTER padapter)
 	init_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
 
 	_exit_critical_bh(&pmlmepriv->lock, &irqL);
-
-#if 0
-	err = rtw_create_ibss_cmd(padapter, 0);
-	if (err == _FAIL)
-		return _FAIL;
-#else
 	{
 		struct wlan_network *pcur_network;
 		struct sta_info *psta;
@@ -11357,7 +11115,6 @@ static s32 createpseudoadhoc(PADAPTER padapter)
 		Set_MSR(padapter, WIFI_FW_ADHOC_STATE);
 
 	}
-#endif
 
 	return _SUCCESS;
 }
@@ -11981,11 +11738,6 @@ static const struct iw_priv_args rtw_private_args[] = {
 		SIOCIWFIRSTPRIV + 0xD,
 		IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 2, IW_PRIV_TYPE_CHAR | IW_PRIV_SIZE_FIXED | IFNAMSIZ, "rfr"
 	},
-#if 0
-	{
-		SIOCIWFIRSTPRIV + 0xE, 0, 0, "wowlan_ctrl"
-	},
-#endif
 	{
 		SIOCIWFIRSTPRIV + 0x10,
 		IW_PRIV_TYPE_CHAR | 1024, 0, "p2p_set"

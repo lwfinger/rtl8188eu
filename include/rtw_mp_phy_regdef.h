@@ -1065,15 +1065,6 @@
 #define		bWMACControl	0x1
 #define		bWNICControl	0x2
 
-#if 0
-#define		ANTENNA_A	0x1	/* Useless */
-#define		ANTENNA_B	0x2
-#define		ANTENNA_AB	0x3	/* ANTENNA_A | ANTENNA_B */
-
-#define		ANTENNA_C	0x4
-#define		ANTENNA_D	0x8
-#endif
-
 #define RCR_AAP			BIT(0)				/* accept all physical address */
 #define RCR_APM			BIT(1)				/* accept physical match */
 #define RCR_AM			BIT(2)				/* accept multicast */

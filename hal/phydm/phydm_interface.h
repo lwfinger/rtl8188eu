@@ -39,20 +39,14 @@
 #define _bit_all(_name)			BIT_##_name
 #define _bit_ic(_name, _ic)		BIT_##_name##_ic
 
-/* _cat: implemented by Token-Pasting Operator. */
-#if 0
-#define _cat(_name, _ic_type, _func)								\
-	(\
-	 _func##_all(_name)										\
-	)
-#endif
+/* _cat: implemented by Token-Passing Operator. */
 
 /*===================================
 
 #define ODM_REG_DIG_11N		0xC50
 #define ODM_REG_DIG_11AC	0xDDD
 
-ODM_REG(DIG,_pdm_odm)
+ODM_REG(DIG, _pdm_odm)
 =====================================*/
 
 #define _reg_11N(_name)			ODM_REG_##_name##_11N

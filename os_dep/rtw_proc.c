@@ -2221,47 +2221,6 @@ static ssize_t proc_set_rsvd_page_info(struct file *file, const char __user *buf
 	return count;
 }
 
-#if 0 /*#ifdef CONFIG_SUPPORT_FIFO_DUMP*/
-static int proc_dump_fifo(struct seq_file *m, void *v)
-{
-	struct net_device *dev = m->private;
-	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	/*dump fifo*/
-
-	return 0;
-}
-static ssize_t proc_set_fifo_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
-{
-	struct net_device *dev = data;
-	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
-	u8 acs_satae = 0;
-
-	if (count < 3)
-		return -EFAULT;
-
-	if (count > sizeof(tmp)) {
-		rtw_warn_on(1);
-		return -EFAULT;
-	}
-	if (buffer && !copy_from_user(tmp, buffer, count)) {
-		/* get fifo_sel, start addr, size
-		int num = sscanf(tmp, "%hhu", &acs_satae);
-
-		if (num < 1)
-			return -EINVAL;
-
-		if (1 == acs_satae)
-			rtw_acs_start(padapter, _TRUE);
-		else
-			rtw_acs_start(padapter, _FALSE);
-		*/
-
-	}
-	return count;
-}
-#endif
-
 #ifdef CONFIG_WOW_PATTERN_HW_CAM
 int proc_dump_pattern_cam(struct seq_file *m, void *v)
 {
@@ -2534,9 +2493,6 @@ static const struct rtw_proc_hdl adapter_proc_hdls[] = {
 	RTW_PROC_HDL_SSEQ("napi_info", proc_get_napi_info, NULL),
 	RTW_PROC_HDL_SSEQ("rsvd_page", proc_dump_rsvd_page, proc_set_rsvd_page_info),
 
-#if 0 /*def CONFIG_SUPPORT_FIFO_DUMP*/
-	/*RTW_PROC_HDL_SSEQ("fifo_dump", proc_dump_fifo, proc_set_fifo_info),*/
-#endif
 	RTW_PROC_HDL_SSEQ("fw_info", proc_get_fw_info, NULL),
 #ifdef RTW_HALMAC
 	RTW_PROC_HDL_SSEQ("halmac_info", proc_get_halmac_info, NULL),

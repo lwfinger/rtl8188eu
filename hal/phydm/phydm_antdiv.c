@@ -313,11 +313,6 @@ odm_update_rx_idle_ant(
 			value16 |= ((u16)optional_ant << 6);
 			value16 |= ((u16)default_ant << 9);
 			odm_write_2byte(p_dm_odm, ODM_REG_TRMUX_11AC + 2, value16);
-#if 0
-			odm_set_bb_reg(p_dm_odm, ODM_REG_TRMUX_11AC, BIT(21) | BIT20 | BIT19, default_ant);	 /* Default RX */
-			odm_set_bb_reg(p_dm_odm, ODM_REG_TRMUX_11AC, BIT(24) | BIT23 | BIT22, optional_ant); /* Optional RX */
-			odm_set_bb_reg(p_dm_odm, ODM_REG_TRMUX_11AC, BIT(27) | BIT26 | BIT25, default_ant);	 /* Default TX */
-#endif
 		}
 
 		if (p_dm_odm->support_ic_type == ODM_RTL8188E) {
@@ -1614,39 +1609,12 @@ odm_fast_ant_training(
 			if (target_ant_path_a == 0)
 				odm_ant_div_on_off(p_dm_odm, ANTDIV_OFF);
 		}
-#if 0
-#if (RTL8192E_SUPPORT == 1)
-		/* 3 [path-B]--------------------------- */
-		if (is_pkt_filter_macth_path_b == false) {
-			if (p_dm_odm->fat_print_rssi == 1)
-				ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("***[%d]{path-B}: None Packet is matched\n\n\n", __LINE__));
-		} else {
-			if (p_dm_odm->fat_print_rssi == 1) {
-				ODM_RT_TRACE(p_dm_odm, ODM_COMP_ANT_DIV, ODM_DBG_LOUD,
-					(" ***target_ant_path_b = (( %d )) *** max_rssi = (( %d ))***\n\n\n", target_ant_path_b, max_rssi_path_b));
-			}
-			odm_set_bb_reg(p_dm_odm, 0xB38, BIT(21) | BIT20 | BIT19, target_ant_path_b);	/* Default RX is Omni, Optional RX is the best decision by FAT */
-			odm_set_bb_reg(p_dm_odm, 0x80c, BIT(21), 1); /* Reg80c[21]=1'b1		//from TX Info */
-
-			p_dm_fat_table->antsel_pathB[p_dm_fat_table->train_idx] = target_ant_path_b;
-		}
-#endif
-#endif
 
 		/* 2 Reset counter */
 		for (i = 0; i < (p_dm_odm->fat_comb_a); i++) {
 			p_dm_fat_table->ant_sum_rssi[i] = 0;
 			p_dm_fat_table->ant_rssi_cnt[i] = 0;
 		}
-		/*
-		#if (RTL8192E_SUPPORT == 1)
-		for(i=0; i<=(p_dm_odm->fat_comb_b); i++)
-		{
-			p_dm_fat_table->antSumRSSI_pathB[i] = 0;
-			p_dm_fat_table->antRSSIcnt_pathB[i] = 0;
-		}
-		#endif
-		*/
 
 		p_dm_fat_table->fat_state = FAT_PREPARE_STATE;
 		return;
@@ -3224,11 +3192,6 @@ odm_antenna_diversity_init(
 )
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-
-#if 0
-	if (p_dm_odm->mp_mode == true)
-		return;
-#endif
 
 #if (defined(CONFIG_PHYDM_ANTENNA_DIVERSITY))
 	odm_ant_div_config(p_dm_odm);

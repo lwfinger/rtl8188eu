@@ -885,16 +885,7 @@ void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode
 				} while (1);
 			}
 #endif
-#if 0 /*def CONFIG_LPS_PG*/
-			lps_pg_hdl_id = LPS_PG_REDLEMEM;
-			rtw_hal_set_hwreg(padapter, HW_VAR_LPS_PG_HANDLE, (u8 *)(&lps_pg_hdl_id));
-#endif
 			rtw_hal_set_hwreg(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&ps_mode));
-
-#if 0 /*def CONFIG_LPS_PG*/
-			lps_pg_hdl_id = LPS_PG_RESEND_H2C;
-			rtw_hal_set_hwreg(padapter, HW_VAR_LPS_PG_HANDLE, (u8 *)(&lps_pg_hdl_id));
-#endif
 
 #ifdef CONFIG_LPS_POFF
 			rtw_hal_set_hwreg(padapter, HW_VAR_LPS_POFF_SET_MODE,
@@ -1371,12 +1362,6 @@ void cpwm_int_hdl(
 		goto exit;
 
 	pwrpriv = adapter_to_pwrctl(padapter);
-#if 0
-	if (pwrpriv->cpwm_tog == (preportpwrstate->state & PS_TOGGLE)) {
-		goto exit;
-	}
-#endif
-
 	_enter_pwrlock(&pwrpriv->lock);
 
 #ifdef CONFIG_LPS_RPWM_TIMER

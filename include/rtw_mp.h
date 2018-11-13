@@ -439,30 +439,9 @@ typedef struct _MP_FIRMWARE {
 #define RAISE	_FALSE
 
 /* Hardware Registers */
-#if 0
-#if 0
-#define IOCMD_CTRL_REG			0x102502C0
-#define IOCMD_DATA_REG			0x102502C4
-#else
-#define IOCMD_CTRL_REG			0x10250370
-#define IOCMD_DATA_REG			0x10250374
-#endif
-
-#define IOCMD_GET_THERMAL_METER		0xFD000028
-
-#define IOCMD_CLASS_BB_RF		0xF0
-#define IOCMD_BB_READ_IDX		0x00
-#define IOCMD_BB_WRITE_IDX		0x01
-#define IOCMD_RF_READ_IDX		0x02
-#define IOCMD_RF_WRIT_IDX		0x03
-#endif
 #define BB_REG_BASE_ADDR		0x800
 
 /* MP variables */
-#if 0
-#define _2MAC_MODE_	0
-#define _LOOPBOOK_MODE_	1
-#endif
 typedef enum _MP_MODE_ {
 	MP_OFF,
 	MP_ON,
@@ -662,10 +641,6 @@ typedef enum	_MPT_TXPWR_DEF {
 #define IS_MPT_CCK_RATE(_rate)			(_rate >= MPT_RATE_1M && _rate <= MPT_RATE_11M)
 #define IS_MPT_OFDM_RATE(_rate)			(_rate >= MPT_RATE_6M && _rate <= MPT_RATE_54M)
 /*************************************************************************/
-#if 0
-extern struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv);
-extern int free_mp_xmitframe(struct xmit_priv *pxmitpriv, struct mp_xmit_frame *pmp_xmitframe);
-#endif
 
 extern s32 init_mp_priv(PADAPTER padapter);
 extern void free_mp_priv(struct mp_priv *pmp_priv);

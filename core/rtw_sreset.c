@@ -130,32 +130,18 @@ static void sreset_restore_security_station(_adapter *padapter)
 			val8 = 0xcf;
 		rtw_hal_set_hwreg(padapter, HW_VAR_SEC_CFG, (u8 *)(&val8));
 	}
-
-#if 0
-	if ((padapter->securitypriv.dot11PrivacyAlgrthm == _WEP40_) ||
-	    (padapter->securitypriv.dot11PrivacyAlgrthm == _WEP104_)) {
-
-		for (EntryId = 0; EntryId < 4; EntryId++) {
-			if (EntryId == psecuritypriv->dot11PrivacyKeyIndex)
-				rtw_set_key(padapter, &padapter->securitypriv, EntryId, 1, _FALSE);
-			else
-				rtw_set_key(padapter, &padapter->securitypriv, EntryId, 0, _FALSE);
+	if ((padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_) ||
+	    (padapter->securitypriv.dot11PrivacyAlgrthm == _AES_)) {
+		psta = rtw_get_stainfo(pstapriv, get_bssid(mlmepriv));
+		if (psta == NULL) {
+			/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail\n")); */
+		} else {
+			/* pairwise key */
+			rtw_setstakey_cmd(padapter, psta, UNICAST_KEY, _FALSE);
+			/* group key */
+			rtw_set_key(padapter, &padapter->securitypriv, padapter->securitypriv.dot118021XGrpKeyid, 0, _FALSE);
 		}
-
-	} else
-#endif
-		if ((padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_) ||
-		    (padapter->securitypriv.dot11PrivacyAlgrthm == _AES_)) {
-			psta = rtw_get_stainfo(pstapriv, get_bssid(mlmepriv));
-			if (psta == NULL) {
-				/* DEBUG_ERR( ("Set wpa_set_encryption: Obtain Sta_info fail\n")); */
-			} else {
-				/* pairwise key */
-				rtw_setstakey_cmd(padapter, psta, UNICAST_KEY, _FALSE);
-				/* group key */
-				rtw_set_key(padapter, &padapter->securitypriv, padapter->securitypriv.dot118021XGrpKeyid, 0, _FALSE);
-			}
-		}
+	}
 }
 
 static void sreset_restore_network_station(_adapter *padapter)
@@ -164,25 +150,6 @@ static void sreset_restore_network_station(_adapter *padapter)
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	u8 doiqk = _FALSE;
-
-#if 0
-	{
-		/* ======================================================= */
-		/* reset related register of Beacon control */
-
-		/* set MSR to nolink */
-		Set_MSR(padapter, _HW_STATE_NOLINK_);
-		/* reject all data frame */
-		rtw_write16(padapter, REG_RXFLTMAP2, 0x00);
-		/* reset TSF */
-		rtw_write8(padapter, REG_DUAL_TSF_RST, (BIT(0) | BIT(1)));
-
-		/* disable update TSF */
-		SetBcnCtrlReg(padapter, BIT(4), 0);
-
-		/* ======================================================= */
-	}
-#endif
 
 	rtw_setopmode_cmd(padapter, Ndis802_11Infrastructure, _FALSE);
 

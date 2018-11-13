@@ -960,12 +960,6 @@ VOID
 EXhalbtcoutsrc_UpdateMinBtRssi(
 	IN	s1Byte	btRssi
 	);
-#if 0
-VOID
-EXhalbtcoutsrc_SetBtExist(
-	IN	BOOLEAN		bBtExist
-	);
-#endif
 VOID
 EXhalbtcoutsrc_SetChipType(
 	IN	u1Byte		chipType

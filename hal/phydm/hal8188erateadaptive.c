@@ -52,20 +52,6 @@ static u8 RETRY_PENALTY_UP[RETRYSIZE + 1] = {49, 44, 16, 16, 0, 48}; /* 12% for 
 
 static u8 PT_PENALTY[RETRYSIZE + 1] = {34, 31, 30, 24, 0, 32};
 
-#if 0
-static u8 RETRY_PENALTY_IDX[2][RATESIZE] = {{
-		4, 4, 4, 5, 4, 4, 5, 7, 7, 7, 8, 0x0a,	 /* SS>TH */
-		4, 4, 4, 4, 6, 0x0a, 0x0b, 0x0d,
-		5, 5, 7, 7, 8, 0x0b, 0x0d, 0x0f
-	},	 		   /* 0329 R01 */
-	{
-		4, 4, 4, 5, 7, 7, 9, 9, 0x0c, 0x0e, 0x10, 0x12,	 /* SS<TH */
-		4, 4, 5, 5, 6, 0x0a, 0x11, 0x13,
-		9, 9, 9, 9, 0x0c, 0x0e, 0x11, 0x13
-	}
-};
-#endif
-
 /* wilson modify */
 
 static u8 RETRY_PENALTY_IDX[2][RATESIZE] = {{
@@ -106,14 +92,6 @@ static u8  TRYING_NECESSARY[RATESIZE] = {2, 2, 2, 2,
 					       4, 4, 7, 10, 10, 12, 12, 18,
 					       5, 7, 7, 8, 11, 18, 36, 60
 					};  /* 0329 */ /* 1207 */
-#if 0
-static u8  POOL_RETRY_TH[RATESIZE] = {30, 30, 30, 30,
-					    30, 30, 25, 25, 20, 15, 15, 10,
-					    30, 25, 25, 20, 15, 10, 10, 10,
-					    30, 25, 25, 20, 15, 10, 10, 10
-				     };
-#endif
-
 static u8 DROPING_NECESSARY[RATESIZE] = {1, 1, 1, 1,
 					       1, 2, 3, 4, 5, 6, 7, 8,
 					       1, 2, 3, 4, 5, 6, 7, 8,
@@ -630,34 +608,9 @@ odm_ra_info_init(
 )
 {
 	struct _odm_ra_info_ *p_ra_info = &p_dm_odm->ra_info[mac_id];
-#if 0
-	u8 wireless_mode = 0xFF; /* invalid value */
-	u8 max_rate_idx = 0x13; /* MCS7 */
-	if (p_dm_odm->p_wireless_mode != NULL)
-		wireless_mode = *(p_dm_odm->p_wireless_mode);
-
-	if (wireless_mode != 0xFF) {
-		if (wireless_mode & ODM_WM_N24G)
-			max_rate_idx = 0x13;
-		else if (wireless_mode & ODM_WM_G)
-			max_rate_idx = 0x0b;
-		else if (wireless_mode & ODM_WM_B)
-			max_rate_idx = 0x03;
-	}
-
-	/* printk("%s ==>wireless_mode:0x%08x,max_raid_idx:0x%02x\n ",__func__,wireless_mode,max_rate_idx); */
-	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD,
-		("odm_ra_info_init(): wireless_mode:0x%08x,max_raid_idx:0x%02x\n",
-		      wireless_mode, max_rate_idx));
-
-	p_ra_info->decision_rate = max_rate_idx;
-	p_ra_info->pre_rate = max_rate_idx;
-	p_ra_info->highest_rate = max_rate_idx;
-#else
 	p_ra_info->decision_rate = 0x13;
 	p_ra_info->pre_rate = 0x13;
 	p_ra_info->highest_rate = 0x13;
-#endif
 	p_ra_info->lowest_rate = 0;
 	p_ra_info->rate_id = 0;
 	p_ra_info->rate_mask = 0xffffffff;

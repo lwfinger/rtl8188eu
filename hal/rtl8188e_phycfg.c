@@ -210,25 +210,6 @@ SIC_SetBBReg(
 	u32			OriginalValue, BitShift;
 	u16			BBWaitCounter = 0;
 
-	/* RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_SetBBReg() start\n")); */
-#if 0
-	while (PlatformAtomicExchange(&pHalData->bChangeBBInProgress, _TRUE) == _TRUE) {
-		BBWaitCounter++;
-		delay_ms(10); /*  1 ms */
-
-		if ((BBWaitCounter > 100) || RT_CANNOT_IO(Adapter)) {
-			/*  Wait too long, return FALSE to avoid to be stuck here. */
-			RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_SetBBReg(), Fail to set BB offset(%#x)!!, WaitCnt(%d)\n", RegAddr, BBWaitCounter));
-			return;
-		}
-	}
-#endif
-	/*  */
-	/* Critical section start */
-	/*  */
-
-	/* RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_SetBBReg(), mask=0x%x, addr[0x%x]=0x%x\n", BitMask, RegAddr, Data)); */
-
 	if (BitMask != bMaskDWord) { /* if not "double word" write */
 		OriginalValue = sic_Read4Byte(Adapter, RegAddr);
 		/* BitShift = sic_CalculateBitShift(BitMask); */
@@ -237,9 +218,6 @@ SIC_SetBBReg(
 	}
 
 	sic_Write4Byte(Adapter, RegAddr, Data);
-
-	/* PlatformAtomicExchange(&pHalData->bChangeBBInProgress, _FALSE); */
-	/* RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_SetBBReg() end\n")); */
 }
 
 static u32
@@ -253,29 +231,10 @@ SIC_QueryBBReg(
 	u32			ReturnValue = 0, OriginalValue, BitShift;
 	u16			BBWaitCounter = 0;
 
-	/* RTPRINT(FPHY, PHY_SICR, ("[SIC], SIC_QueryBBReg() start\n")); */
-
-#if 0
-	while (PlatformAtomicExchange(&pHalData->bChangeBBInProgress, _TRUE) == _TRUE) {
-		BBWaitCounter++;
-		delay_ms(10); /*  10 ms */
-
-		if ((BBWaitCounter > 100) || RT_CANNOT_IO(Adapter)) {
-			/*  Wait too long, return FALSE to avoid to be stuck here. */
-			RTPRINT(FPHY, PHY_SICW, ("[SIC], SIC_QueryBBReg(), Fail to query BB offset(%#x)!!, WaitCnt(%d)\n", RegAddr, BBWaitCounter));
-			return ReturnValue;
-		}
-	}
-#endif
 	OriginalValue = sic_Read4Byte(Adapter, RegAddr);
-	/* BitShift = sic_CalculateBitShift(BitMask); */
 	BitShift = PHY_CalculateBitShift(BitMask);
 	ReturnValue = (OriginalValue & BitMask) >> BitShift;
 
-	/* RTPRINT(FPHY, PHY_SICR, ("[SIC], SIC_QueryBBReg(), 0x%x=0x%x\n", RegAddr, OriginalValue)); */
-	/* RTPRINT(FPHY, PHY_SICR, ("[SIC], SIC_QueryBBReg() end\n")); */
-
-	/* PlatformAtomicExchange(&pHalData->bChangeBBInProgress, _FALSE);	 */
 	return ReturnValue;
 }
 
@@ -450,20 +409,10 @@ phy_RFSerialRead(
 	u8					RfPiEnable = 0;
 
 	_enter_critical_mutex(&(adapter_to_dvobj(Adapter)->rf_read_reg_mutex) , NULL);
-#if 0
-	if (pHalData->RFChipID == RF_8225 && Offset > 0x24) /* 36 valid regs */
-		return	retValue;
-	if (pHalData->RFChipID == RF_8256 && Offset > 0x2D) /* 45 valid regs */
-		return	retValue;
-#endif
-	/*  */
 	/* Make sure RF register offset is correct */
-	/*  */
 	Offset &= 0xff;
 
-	/*  */
 	/* Switch page for 8256 RF IC */
-	/*  */
 	NewOffset = Offset;
 
 	/* 2009/06/17 MH We can not execute IO for power save or other accident mode. */
@@ -571,47 +520,17 @@ phy_RFSerialWrite(
 	BB_REGISTER_DEFINITION_T	*pPhyReg = &pHalData->PHYRegDef[eRFPath];
 	u32						NewOffset;
 
-#if 0
-	/* <Roger_TODO> We should check valid regs for RF_6052 case. */
-	if (pHalData->RFChipID == RF_8225 && Offset > 0x24) /* 36 valid regs */
-		return;
-	if (pHalData->RFChipID == RF_8256 && Offset > 0x2D) /* 45 valid regs */
-		return;
-#endif
-
-	/* 2009/06/17 MH We can not execute IO for power save or other accident mode. */
-	/* if(RT_CANNOT_IO(Adapter)) */
-	/* { */
-	/*	RTPRINT(FPHY, PHY_RFW, ("phy_RFSerialWrite stop\n")); */
-	/*	return; */
-	/* } */
-
 	Offset &= 0xff;
 
-	/*  */
-	/* Shadow Update */
-	/*  */
-	/* PHY_RFShadowWrite(Adapter, eRFPath, Offset, Data); */
-
-	/*  */
 	/* Switch page for 8256 RF IC */
-	/*  */
 	NewOffset = Offset;
 
-	/*  */
 	/* Put write addr in [5:0]  and write data in [31:16] */
-	/*  */
-	/* DataAndAddr = (Data<<16) | (NewOffset&0x3f); */
 	DataAndAddr = ((NewOffset << 20) | (Data & 0x000fffff)) & 0x0fffffff;	/* T65 RF */
 
-	/*  */
 	/* Write Operation */
-	/*  */
 	phy_set_bb_reg(Adapter, pPhyReg->rf3wireOffset, bMaskDWord, DataAndAddr);
-	/* RTPRINT(FPHY, PHY_RFW, ("RFW-%d Addr[0x%lx]=0x%lx\n", eRFPath, pPhyReg->rf3wireOffset, DataAndAddr)); */
-
 }
-
 
 /**
 * Function:	PHY_QueryRFReg
@@ -806,9 +725,6 @@ phy_InitBBRFRegisterDefinition(
 	/* Tranceiver LSSI Readback PI mode */
 	pHalData->PHYRegDef[RF_PATH_A].rfLSSIReadBackPi = TransceiverA_HSPI_Readback;
 	pHalData->PHYRegDef[RF_PATH_B].rfLSSIReadBackPi = TransceiverB_HSPI_Readback;
-	/* pHalData->PHYRegDef[RF_PATH_C].rfLSSIReadBackPi = rFPGA0_XC_LSSIReadBack; */
-	/* pHalData->PHYRegDef[RF_PATH_D].rfLSSIReadBackPi = rFPGA0_XD_LSSIReadBack;	 */
-
 }
 
 static void
@@ -816,16 +732,6 @@ phy_BB8192C_Config_1T(
 	IN PADAPTER Adapter
 )
 {
-#if 0
-	/* for path - A */
-	phy_set_bb_reg(Adapter, rFPGA0_TxInfo, 0x3, 0x1);
-	phy_set_bb_reg(Adapter, rFPGA1_TxInfo, 0x0303, 0x0101);
-	phy_set_bb_reg(Adapter, 0xe74, 0x0c000000, 0x1);
-	phy_set_bb_reg(Adapter, 0xe78, 0x0c000000, 0x1);
-	phy_set_bb_reg(Adapter, 0xe7c, 0x0c000000, 0x1);
-	phy_set_bb_reg(Adapter, 0xe80, 0x0c000000, 0x1);
-	phy_set_bb_reg(Adapter, 0xe88, 0x0c000000, 0x1);
-#endif
 	/* for path - B */
 	phy_set_bb_reg(Adapter, rFPGA0_TxInfo, 0x3, 0x2);
 	phy_set_bb_reg(Adapter, rFPGA1_TxInfo, 0x300033, 0x200022);
@@ -1046,16 +952,6 @@ PHY_GetTxPowerLevel8188E(
 	OUT s32			*powerlevel
 )
 {
-#if 0
-	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	PMGNT_INFO		pMgntInfo = &(Adapter->MgntInfo);
-	s4Byte			TxPwrDbm = 13;
-
-	if (pMgntInfo->ClientConfigPwrInDbm != UNSPECIFIED_PWR_DBM)
-		*powerlevel = pMgntInfo->ClientConfigPwrInDbm;
-	else
-		*powerlevel = TxPwrDbm;
-#endif
 }
 
 /*-----------------------------------------------------------------------------
@@ -1393,27 +1289,6 @@ PHY_ScanOperationBackup8188E(
 	IN	u8		Operation
 )
 {
-#if 0
-	IO_TYPE	IoType;
-
-	if (!rtw_is_drv_stopped(padapter)) {
-		switch (Operation) {
-		case SCAN_OPT_BACKUP:
-			IoType = IO_CMD_PAUSE_DM_BY_SCAN;
-			rtw_hal_set_hwreg(Adapter, HW_VAR_IO_CMD, (pu1Byte)&IoType);
-
-			break;
-
-		case SCAN_OPT_RESTORE:
-			IoType = IO_CMD_RESUME_DM_BY_SCAN;
-			rtw_hal_set_hwreg(Adapter, HW_VAR_IO_CMD, (pu1Byte)&IoType);
-			break;
-
-		default:
-			break;
-		}
-	}
-#endif
 }
 
 static void
@@ -1424,7 +1299,6 @@ phy_SpurCalibration_8188E(
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT		*p_dm_odm = &(pHalData->odmpriv);
 
-	/* DbgPrint("===> phy_SpurCalibration_8188E  current_channel_bw = %d, current_channel = %d\n", pHalData->current_channel_bw, pHalData->current_channel);*/
 	if (pHalData->current_channel_bw == CHANNEL_WIDTH_20 && (pHalData->current_channel == 13 || pHalData->current_channel == 14)) {
 		phy_set_bb_reg(Adapter, rOFDM0_RxDSP, BIT(9), 0x1);/* enable notch filter */
 		phy_set_bb_reg(Adapter, rOFDM1_IntfDet, BIT(8) | BIT(7) | BIT(6), 0x2);	/* intf_TH */
@@ -1591,23 +1465,6 @@ _PHY_SetBWMode88E(
 
 }
 
-
-#if 0
-	/* -----------------------------------------------------------------------------
-	* * Function:   SetBWMode8190Pci()
-	* *
-	* * Overview:  This function is export to "HalCommon" moudule
-	* *
-	* * Input:	PADAPTER			Adapter
-	* *			CHANNEL_WIDTH	Bandwidth	 20M or 40M
-	* *
-	* * Output:      NONE
-	* *
-	* * Return:      NONE
-	* *
-	* * Note:		We do not take j mode into consideration now
-	* *--------------------------------------------------------------------------- */
-#endif
 void
 PHY_SetBWMode8188E(
 	IN	PADAPTER					Adapter,
@@ -1642,16 +1499,7 @@ PHY_SetBWMode8188E(
 
 	pHalData->current_channel_bw = Bandwidth;
 
-#if 0
-	if (Offset == EXTCHNL_OFFSET_LOWER)
-		pHalData->nCur40MhzPrimeSC = HAL_PRIME_CHNL_OFFSET_UPPER;
-	else if (Offset == EXTCHNL_OFFSET_UPPER)
-		pHalData->nCur40MhzPrimeSC = HAL_PRIME_CHNL_OFFSET_LOWER;
-	else
-		pHalData->nCur40MhzPrimeSC = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
-#else
 	pHalData->nCur40MhzPrimeSC = Offset;
-#endif
 
 	if (!RTW_CANNOT_RUN(Adapter)) {
 		_PHY_SetBWMode88E(Adapter);

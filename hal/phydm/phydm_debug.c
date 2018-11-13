@@ -457,15 +457,7 @@ phydm_bb_debug_info(
 	u8    rf_gain_path_a, rf_gain_path_b, rf_gain_path_c, rf_gain_path_d;
 	u8    rx_snr_path_a, rx_snr_path_b, rx_snr_path_c, rx_snr_path_d;
 	s32    sig_power;
-
 	const char *L_rate[8] = {"6M", "9M", "12M", "18M", "24M", "36M", "48M", "54M"};
-
-#if 0
-	const double evm_comp_20M = 0.579919469776867; /* 10*log10(64.0/56.0) */
-	const double evm_comp_40M = 0.503051183113957; /* 10*log10(128.0/114.0) */
-	const double evm_comp_80M = 0.244245993314183; /* 10*log10(256.0/242.0) */
-	const double evm_comp_160M = 0.244245993314183; /* 10*log10(512.0/484.0) */
-#endif
 
 	if (p_dm_odm->support_ic_type & ODM_IC_11N_SERIES) {
 		phydm_bb_debug_info_n_series(p_dm_odm, &used, output, &out_len);
@@ -2300,21 +2292,6 @@ phydm_fw_trace_handler_code(
 				/**/
 				/*C2H_RA_Dbg_code(F_RA_H2C,1,0, SysMib.ODM.DEBUG.fw_trace_en, mode, macid, 0);    //RA MASK*/
 			}
-#if 0
-			else if (dbg_num == 2) {
-
-				if (content_0 == 1) {
-					ODM_RT_TRACE(p_dm_odm, ODM_FW_DEBUG_TRACE, ODM_DBG_LOUD, ("[FW][H2C=0x40]  MACID=((%d)), rate ID=((%d)),  SGI=((%d)),  BW=((%d))\n", content_1, content_2, content_3, content_4));
-					/**/
-				} else if (content_0 == 2) {
-					ODM_RT_TRACE(p_dm_odm, ODM_FW_DEBUG_TRACE, ODM_DBG_LOUD, ("[FW][H2C=0x40]   VHT_en=((%d)), Disable_PowerTraining=((%d)),  Disable_RA=((%d)),  No_Update=((%d))\n", content_1, content_2, content_3, content_4));
-					/**/
-				} else if (content_0 == 3) {
-					ODM_RT_TRACE(p_dm_odm, ODM_FW_DEBUG_TRACE, ODM_DBG_LOUD, ("[FW][H2C=0x40]   RA_MSK=[%x | %x | %x | %x ]\n", content_1, content_2, content_3, content_4));
-					/**/
-				}
-			}
-#endif
 		}
 	}
 	/*--------------------------------------------*/
@@ -2359,11 +2336,6 @@ phydm_fw_trace_handler_8051(
 {
 #if CONFIG_PHYDM_DEBUG_FUNCTION
 	struct PHY_DM_STRUCT	*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-#if 0
-	if (cmd_len >= 3)
-		cmd_buf[cmd_len - 1] = '\0';
-	ODM_RT_TRACE(p_dm_odm, ODM_FW_DEBUG_TRACE, ODM_DBG_LOUD, ("[FW DBG Msg] %s\n", &(cmd_buf[3])));
-#else
 
 	int i = 0;
 	u8	extend_c2h_sub_id = 0, extend_c2h_dbg_len = 0, extend_c2h_dbg_seq = 0;
@@ -2397,6 +2369,5 @@ go_backfor_aggre_dbg_pkt:
 	}
 
 
-#endif
 #endif /*#if CONFIG_PHYDM_DEBUG_FUNCTION*/
 }

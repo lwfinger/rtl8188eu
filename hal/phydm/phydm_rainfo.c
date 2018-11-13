@@ -219,19 +219,7 @@ odm_ra_para_adjust_init(
 	u8			ra_para_pool_u8[3] = { RADBG_RTY_PENALTY,  RADBG_RATE_UP_RTY_RATIO, RADBG_RATE_DOWN_RTY_RATIO};
 	u8			rate_size_ht_1ss = 20, rate_size_ht_2ss = 28, rate_size_ht_3ss = 36;	 /*4+8+8+8+8 =36*/
 	u8			rate_size_vht_1ss = 10, rate_size_vht_2ss = 20, rate_size_vht_3ss = 30;	 /*10 + 10 +10 =30*/
-#if 0
-	/* RTY_PENALTY		=	1,   u8 */
-	/* N_HIGH 				=	2, */
-	/* N_LOW				=	3, */
-	/* RATE_UP_TABLE		=	4, */
-	/* RATE_DOWN_TABLE	=	5, */
-	/* TRYING_NECESSARY	=	6, */
-	/* DROPING_NECESSARY =	7, */
-	/* RATE_UP_RTY_RATIO	=	8,  u8 */
-	/* RATE_DOWN_RTY_RATIO=	9,  u8 */
-	/* ALL_PARA		=	0xff */
 
-#endif
 	ODM_RT_TRACE(p_dm_odm, PHYDM_COMP_RA_DBG, ODM_DBG_LOUD, ("odm_ra_para_adjust_init\n"));
 
 	if (p_dm_odm->support_ic_type & (ODM_RTL8188F | ODM_RTL8195A | ODM_RTL8703B | ODM_RTL8723B | ODM_RTL8188E | ODM_RTL8723D))

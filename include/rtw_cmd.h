@@ -321,21 +321,6 @@ struct createbss_parm {
 	s8 req_offset;
 };
 
-#if 0
-/* Caller Mode: AP, Ad-HoC, Infra */
-/* Notes: To set the NIC mode of RTL8711 */
-/* Command Mode */
-/* The definition of mode: */
-
-#define IW_MODE_AUTO	0	/*  Let the driver decides which AP to join */
-#define IW_MODE_ADHOC	1	/*  Single cell network (Ad-Hoc Clients) */
-#define IW_MODE_INFRA	2	/*  Multi cell network, roaming, .. */
-#define IW_MODE_MASTER	3	/*  Synchronisation master or Access Point */
-#define IW_MODE_REPEAT	4	/*  Wireless Repeater (forwarder) */
-#define IW_MODE_SECOND	5	/*  Secondary master/repeater (backup) */
-#define IW_MODE_MONITOR	6	/*  Passive monitor (listen only) */
-#endif
-
 struct	setopmode_parm {
 	u8	mode;
 	u8	rsvd[3];

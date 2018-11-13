@@ -599,12 +599,6 @@ u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 	purb->transfer_flags |= URB_ZERO_PACKET;
 #endif
 #endif
-
-#if 0
-	if (bwritezero)
-		purb->transfer_flags |= URB_ZERO_PACKET;
-#endif
-
 	status = usb_submit_urb(purb, GFP_ATOMIC);
 	if (!status) {
 		#ifdef DBG_CONFIG_ERROR_DETECT

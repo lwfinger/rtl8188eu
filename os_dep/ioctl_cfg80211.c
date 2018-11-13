@@ -528,17 +528,6 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(_adapter *padapter, struct wlan_net
 #endif /* COMPAT_KERNEL_RELEASE */
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 38) */
 
-#if 0
-	{
-		if (bss->information_elements == bss->proberesp_ies) {
-			if (bss->len_information_elements !=  bss->len_proberesp_ies)
-				RTW_INFO("error!, len_information_elements != bss->len_proberesp_ies\n");
-		} else if (bss->len_information_elements <  bss->len_beacon_ies) {
-			bss->information_elements = bss->beacon_ies;
-			bss->len_information_elements =  bss->len_beacon_ies;
-		}
-	}
-#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0)
 	cfg80211_put_bss(wiphy, bss);
 #else
@@ -841,11 +830,6 @@ void rtw_cfg80211_indicate_disconnect(_adapter *padapter, u16 reason, u8 locally
 			cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, GFP_ATOMIC);
 			#endif
 		}
-		#if 0
-		else
-			RTW_INFO("pwdev->sme_state=%d\n", pwdev->sme_state);
-		#endif
-
 		RTW_INFO("pwdev->sme_state(a)=%d\n", pwdev->sme_state);
 		#else
 
@@ -1530,25 +1514,6 @@ static int cfg80211_rtw_get_key(struct wiphy *wiphy, struct net_device *ndev,
 	void *cookie,
 	void (*callback)(void *cookie, struct key_params *))
 {
-#if 0
-	struct iwm_priv *iwm = ndev_to_iwm(ndev);
-	struct iwm_key *key = &iwm->keys[key_index];
-	struct key_params params;
-
-	IWM_DBG_WEXT(iwm, DBG, "Getting key %d\n", key_index);
-
-	memset(&params, 0, sizeof(params));
-
-	params.cipher = key->cipher;
-	params.key_len = key->key_len;
-	params.seq_len = key->seq_len;
-	params.seq = key->seq;
-	params.key = key->key;
-
-	callback(cookie, &params);
-
-	return key->key_len ? 0 : -ENOENT;
-#endif
 	RTW_INFO(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 	return 0;
 }
@@ -1732,23 +1697,6 @@ exit:
 
 extern int netdev_open(struct net_device *pnetdev);
 
-#if 0
-enum nl80211_iftype {
-	NL80211_IFTYPE_UNSPECIFIED,
-	NL80211_IFTYPE_ADHOC, /* 1 */
-	NL80211_IFTYPE_STATION, /* 2 */
-	NL80211_IFTYPE_AP, /* 3 */
-	NL80211_IFTYPE_AP_VLAN,
-	NL80211_IFTYPE_WDS,
-	NL80211_IFTYPE_MONITOR, /* 6 */
-	NL80211_IFTYPE_MESH_POINT,
-	NL80211_IFTYPE_P2P_CLIENT, /* 8 */
-	NL80211_IFTYPE_P2P_GO, /* 9 */
-	/* keep last */
-	NUM_NL80211_IFTYPES,
-	NL80211_IFTYPE_MAX = NUM_NL80211_IFTYPES - 1
-};
-#endif
 static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 				     struct net_device *ndev,
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 12, 0))
@@ -1870,9 +1818,6 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 
 	case NL80211_IFTYPE_MONITOR:
 		networkType = Ndis802_11Monitor;
-#if 0
-		ndev->type = ARPHRD_IEEE80211; /* IEEE 802.11 : 801 */
-#endif
 		ndev->type = ARPHRD_IEEE80211_RADIOTAP; /* IEEE 802.11 + radiotap header : 803 */
 		break;
 	default:
@@ -2060,17 +2005,6 @@ static void _rtw_cfg80211_surveydone_event_callback(_adapter *padapter, struct c
 				rtw_cfg80211_clear_wps_sr_of_non_target_bss(padapter, pnetwork, &target_ssid);
 			rtw_cfg80211_inform_bss(padapter, pnetwork);
 		}
-#if 0
-		/* check ralink testbed RSN IE length */
-		{
-			if (_rtw_memcmp(pnetwork->network.Ssid.Ssid, "Ralink_11n_AP", 13)) {
-				uint ie_len = 0;
-				u8 *p = NULL;
-				p = rtw_get_ie(pnetwork->network.IEs + _BEACON_IE_OFFSET_, _RSN_IE_2_, &ie_len, (pnetwork->network.IELength - _BEACON_IE_OFFSET_));
-				RTW_INFO("ie_len=%d\n", ie_len);
-			}
-		}
-#endif
 		plist = get_next(plist);
 
 	}
@@ -2527,35 +2461,6 @@ exit:
 
 static int cfg80211_rtw_set_wiphy_params(struct wiphy *wiphy, u32 changed)
 {
-#if 0
-	struct iwm_priv *iwm = wiphy_to_iwm(wiphy);
-
-	if (changed & WIPHY_PARAM_RTS_THRESHOLD &&
-	    (iwm->conf.rts_threshold != wiphy->rts_threshold)) {
-		int ret;
-
-		iwm->conf.rts_threshold = wiphy->rts_threshold;
-
-		ret = iwm_umac_set_config_fix(iwm, UMAC_PARAM_TBL_CFG_FIX,
-				CFG_RTS_THRESHOLD,
-				iwm->conf.rts_threshold);
-		if (ret < 0)
-			return ret;
-	}
-
-	if (changed & WIPHY_PARAM_FRAG_THRESHOLD &&
-	    (iwm->conf.frag_threshold != wiphy->frag_threshold)) {
-		int ret;
-
-		iwm->conf.frag_threshold = wiphy->frag_threshold;
-
-		ret = iwm_umac_set_config_fix(iwm, UMAC_PARAM_TBL_FA_CFG_FIX,
-				CFG_FRAG_THRESHOLD,
-				iwm->conf.frag_threshold);
-		if (ret < 0)
-			return ret;
-	}
-#endif
 	RTW_INFO("%s\n", __func__);
 	return 0;
 }
@@ -2574,11 +2479,6 @@ static int rtw_cfg80211_set_wpa_version(struct security_priv *psecuritypriv, u32
 
 	if (wpa_version & (NL80211_WPA_VERSION_1 | NL80211_WPA_VERSION_2))
 		psecuritypriv->ndisauthtype = Ndis802_11AuthModeWPAPSK;
-
-#if 0
-	if (wpa_version & NL80211_WPA_VERSION_2)
-		psecuritypriv->ndisauthtype = Ndis802_11AuthModeWPA2PSK;
-#endif
 
 	#ifdef CONFIG_WAPI_SUPPORT
 	if (wpa_version & NL80211_WAPI_VERSION_1)
@@ -3336,32 +3236,6 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
 	enum tx_power_setting type, int dbm)
 #endif
 {
-#if 0
-	struct iwm_priv *iwm = wiphy_to_iwm(wiphy);
-	int ret;
-
-	switch (type) {
-	case NL80211_TX_POWER_AUTOMATIC:
-		return 0;
-	case NL80211_TX_POWER_FIXED:
-		if (mbm < 0 || (mbm % 100))
-			return -EOPNOTSUPP;
-
-		if (!test_bit(IWM_STATUS_READY, &iwm->status))
-			return 0;
-
-		ret = iwm_umac_set_config_fix(iwm, UMAC_PARAM_TBL_CFG_FIX,
-					      CFG_TX_PWR_LIMIT_USR,
-					      MBM_TO_DBM(mbm) * 2);
-		if (ret < 0)
-			return ret;
-
-		return iwm_tx_power_trigger(iwm);
-	default:
-		IWM_ERR(iwm, "Unsupported power type: %d\n", type);
-		return -EOPNOTSUPP;
-	}
-#endif
 	RTW_INFO("%s\n", __func__);
 	return 0;
 }
@@ -4998,14 +4872,6 @@ void rtw_cfg80211_issue_p2p_provision_request(_adapter *padapter, const u8 *buf,
 	/* dump_mgntframe(padapter, pmgntframe); */
 	if (dump_mgntframe_and_wait_ack(padapter, pmgntframe) != _SUCCESS)
 		RTW_INFO("%s, ack to\n", __func__);
-
-	#if 0
-	if(wps_devicepassword_id == WPS_DPID_REGISTRAR_SPEC) {
-		RTW_INFO("waiting for p2p peer key-in PIN CODE\n");
-		rtw_msleep_os(15000); /* 15 sec for key in PIN CODE, workaround for GS2 before issuing Nego Req. */
-	}
-	#endif
-
 }
 
 #ifdef CONFIG_RTW_80211R

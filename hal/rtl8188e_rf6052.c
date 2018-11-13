@@ -79,49 +79,7 @@ void rtl8188e_RF_ChangeTxPath(IN	PADAPTER	Adapter,
 			      IN	u16		DataRate)
 {
 	/* We do not support gain table change inACUT now !!!! Delete later !!! */
-#if 0/* (RTL92SE_FPGA_VERIFY == 0) */
-	static	u1Byte	RF_Path_Type = 2;	/* 1 = 1T 2= 2T */
-	static	u4Byte	tx_gain_tbl1[6]
-		= {0x17f50, 0x11f40, 0x0cf30, 0x08720, 0x04310, 0x00100};
-	static	u4Byte	tx_gain_tbl2[6]
-		= {0x15ea0, 0x10e90, 0x0c680, 0x08250, 0x04040, 0x00030};
-	u1Byte	i;
-
-	if (RF_Path_Type == 2 && (DataRate & 0xF) <= 0x7) {
-		/* Set TX SYNC power G2G3 loop filter */
-		phy_set_rf_reg(Adapter, RF_PATH_A,
-			     RF_TXPA_G2, bRFRegOffsetMask, 0x0f000);
-		phy_set_rf_reg(Adapter, RF_PATH_A,
-			     RF_TXPA_G3, bRFRegOffsetMask, 0xeacf1);
-
-		/* Change TX AGC gain table */
-		for (i = 0; i < 6; i++)
-			phy_set_rf_reg(Adapter, RF_PATH_A,
-				RF_TX_AGC, bRFRegOffsetMask, tx_gain_tbl1[i]);
-
-		/* Set PA to high value */
-		phy_set_rf_reg(Adapter, RF_PATH_A,
-			     RF_TXPA_G2, bRFRegOffsetMask, 0x01e39);
-	} else if (RF_Path_Type == 1 && (DataRate & 0xF) >= 0x8) {
-		/* Set TX SYNC power G2G3 loop filter */
-		phy_set_rf_reg(Adapter, RF_PATH_A,
-			     RF_TXPA_G2, bRFRegOffsetMask, 0x04440);
-		phy_set_rf_reg(Adapter, RF_PATH_A,
-			     RF_TXPA_G3, bRFRegOffsetMask, 0xea4f1);
-
-		/* Change TX AGC gain table */
-		for (i = 0; i < 6; i++)
-			phy_set_rf_reg(Adapter, RF_PATH_A,
-				RF_TX_AGC, bRFRegOffsetMask, tx_gain_tbl2[i]);
-
-		/* Set PA low gain */
-		phy_set_rf_reg(Adapter, RF_PATH_A,
-			     RF_TXPA_G2, bRFRegOffsetMask, 0x01e19);
-	}
-#endif
-
 }	/* RF_ChangeTxPath */
-
 
 /*-----------------------------------------------------------------------------
  * Function:    PHY_RF6052SetBandwidth()
@@ -297,29 +255,7 @@ PHY_RF6052_Config8188E(
 	/* Config BB and RF */
 	/*  */
 	rtStatus = phy_RF6052_Config_ParaFile(Adapter);
-#if 0
-	switch (Adapter->MgntInfo.bRegHwParaFile) {
-	case 0:
-		phy_RF6052_Config_HardCode(Adapter);
-		break;
-
-	case 1:
-		rtStatus = phy_RF6052_Config_ParaFile(Adapter);
-		break;
-
-	case 2:
-		/* Partial Modify. */
-		phy_RF6052_Config_HardCode(Adapter);
-		phy_RF6052_Config_ParaFile(Adapter);
-		break;
-
-	default:
-		phy_RF6052_Config_HardCode(Adapter);
-		break;
-	}
-#endif
 	return rtStatus;
-
 }
 
 /* End of HalRf6052.c */

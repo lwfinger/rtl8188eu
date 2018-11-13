@@ -20,23 +20,6 @@
 #ifndef __RTL8188E_CMD_H__
 #define __RTL8188E_CMD_H__
 
-#if 0
-enum cmd_msg_element_id {
-	NONE_CMDMSG_EID,
-	AP_OFFLOAD_EID = 0,
-	SET_PWRMODE_EID = 1,
-	JOINBSS_RPT_EID = 2,
-	RSVD_PAGE_EID = 3,
-	RSSI_4_EID = 4,
-	RSSI_SETTING_EID = 5,
-	MACID_CONFIG_EID = 6,
-	MACID_PS_MODE_EID = 7,
-	P2P_PS_OFFLOAD_EID = 8,
-	SELECTIVE_SUSPEND_ROF_CMD = 9,
-	P2P_PS_CTW_CMD_EID = 32,
-	MAX_CMDMSG_EID
-};
-#else
 typedef enum _RTL8188E_H2C_CMD_ID {
 	/* Class Common */
 	H2C_COM_RSVD_PAGE			= 0x00,
@@ -82,9 +65,6 @@ typedef enum _RTL8188E_H2C_CMD_ID {
 	/* H2C_RESET_TSF				=0xc0, */
 } RTL8188E_H2C_CMD_ID;
 
-#endif
-
-
 struct cmd_msg_parm {
 	u8 eid; /* element id */
 	u8 sz; /* sz */
@@ -117,26 +97,6 @@ typedef struct JOINBSSRPT_PARM_88E {
 #endif /* CONFIG_WOWLAN */
 } JOINBSSRPT_PARM_88E, *PJOINBSSRPT_PARM_88E;
 
-#if 0
-/* move to hal_com_h2c.h */
-typedef struct _RSVDPAGE_LOC_88E {
-	u8 LocProbeRsp;
-	u8 LocPsPoll;
-	u8 LocNullData;
-	u8 LocQosNull;
-	u8 LocBTQosNull;
-#ifdef CONFIG_WOWLAN
-	u8 LocRemoteCtrlInfo;
-	u8 LocArpRsp;
-	u8 LocNbrAdv;
-	u8 LocGTKRsp;
-	u8 LocGTKInfo;
-	u8 LocProbeReq;
-	u8 LocNetList;
-#endif /* CONFIG_WOWLAN	 */
-} RSVDPAGE_LOC_88E, *PRSVDPAGE_LOC_88E;
-#endif
-
 /* host message to firmware cmd */
 void rtl8188e_set_FwPwrMode_cmd(PADAPTER padapter, u8 Mode);
 void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus);
@@ -165,15 +125,4 @@ void CheckFwRsvdPageContent(PADAPTER padapter);
  * ----------------------------------    H2C CMD CONTENT    --------------------------------------------------
  * ---------------------------------------------------------------------------------------------------------
  *   */
-#if 0
-	/* move to hal_com_h2c.h
-	* _RSVDPAGE_LOC_CMD_0x00 */
-	#define SET_8188E_H2CCMD_RSVDPAGE_LOC_PROBE_RSP(__pH2CCmd, __Value)     SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
-	#define SET_8188E_H2CCMD_RSVDPAGE_LOC_PSPOLL(__pH2CCmd, __Value)            SET_BITS_TO_LE_1BYTE((__pH2CCmd)+1, 0, 8, __Value)
-	#define SET_8188E_H2CCMD_RSVDPAGE_LOC_NULL_DATA(__pH2CCmd, __Value)     SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 0, 8, __Value)
-	#define SET_8188E_H2CCMD_RSVDPAGE_LOC_QOS_NULL_DATA(__pH2CCmd, __Value)     SET_BITS_TO_LE_1BYTE((__pH2CCmd)+3, 0, 8, __Value)
-	/*  AOAC_RSVDPAGE_LOC_0x83 */
-	#define SET_8188E_H2CCMD_AOAC_RSVDPAGE_LOC_REMOTE_WAKE_CTRL_INFO(__pH2CCmd, __Value)        SET_BITS_TO_LE_1BYTE((__pH2CCmd), 0, 8, __Value)
-	#define SET_8188E_H2CCMD_AOAC_RSVDPAGE_LOC_ARP_RSP(__pH2CCmd, __Value)                  SET_BITS_TO_LE_1BYTE((__pH2CCmd)+1, 0, 8, __Value)
-#endif
 #endif/* __RTL8188E_CMD_H__ */
