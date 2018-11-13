@@ -75,8 +75,8 @@
  *						Firmwaer support the utility later.
  *
  *---------------------------------------------------------------------------*/
-void rtl8188e_RF_ChangeTxPath(IN	PADAPTER	Adapter,
-			      IN	u16		DataRate)
+void rtl8188e_RF_ChangeTxPath(PADAPTER	Adapter,
+			      u16		DataRate)
 {
 	/* We do not support gain table change inACUT now !!!! Delete later !!! */
 }	/* RF_ChangeTxPath */
@@ -97,8 +97,8 @@ void rtl8188e_RF_ChangeTxPath(IN	PADAPTER	Adapter,
  *---------------------------------------------------------------------------*/
 void
 rtl8188e_PHY_RF6052SetBandwidth(
-	IN	PADAPTER				Adapter,
-	IN	CHANNEL_WIDTH		Bandwidth)	/* 20M or 40M */
+	PADAPTER				Adapter,
+	CHANNEL_WIDTH		Bandwidth)	/* 20M or 40M */
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 
@@ -121,7 +121,7 @@ rtl8188e_PHY_RF6052SetBandwidth(
 
 static int
 phy_RF6052_Config_ParaFile(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 )
 {
 	u32					u4RegValue = 0;
@@ -237,7 +237,7 @@ phy_RF6052_Config_ParaFile_Fail:
 
 int
 PHY_RF6052_Config8188E(
-	IN	PADAPTER		Adapter)
+	PADAPTER		Adapter)
 {
 	HAL_DATA_TYPE				*pHalData = GET_HAL_DATA(Adapter);
 	int					rtStatus = _SUCCESS;

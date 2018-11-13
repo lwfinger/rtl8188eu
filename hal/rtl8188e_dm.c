@@ -39,14 +39,14 @@
 
 static void
 dm_CheckProtection(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 )
 {
 }
 
 static void
 dm_CheckStatistics(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 )
 {
 }
@@ -91,7 +91,7 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 /* Initialize GPIO setting registers */
 static void
 dm_InitGPIOSetting(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 )
 {
 	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(Adapter);
@@ -191,7 +191,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 
 void
 rtl8188e_InitHalDm(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 )
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
@@ -209,7 +209,7 @@ rtl8188e_InitHalDm(
 
 void
 rtl8188e_HalDmWatchDog(
-	IN	PADAPTER	Adapter
+	PADAPTER	Adapter
 )
 {
 	BOOLEAN		bFwCurrentInPSMode = _FALSE;
@@ -272,7 +272,7 @@ skip_dm:
 	return;
 }
 
-void rtl8188e_init_dm_priv(IN PADAPTER Adapter)
+void rtl8188e_init_dm_priv(PADAPTER Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT		*podmpriv = &pHalData->odmpriv;
@@ -283,7 +283,7 @@ void rtl8188e_init_dm_priv(IN PADAPTER Adapter)
 	
 }
 
-void rtl8188e_deinit_dm_priv(IN PADAPTER Adapter)
+void rtl8188e_deinit_dm_priv(PADAPTER Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT		*podmpriv = &pHalData->odmpriv;

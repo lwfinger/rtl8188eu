@@ -348,21 +348,21 @@ u8 hal_largest_bw(_adapter *adapter, u8 in_bw);
 bool hal_chk_wl_func(_adapter *adapter, u8 func);
 
 u8 hal_com_config_channel_plan(
-	IN	PADAPTER padapter,
-	IN	char *hw_alpha2,
-	IN	u8 hw_chplan,
-	IN	char *sw_alpha2,
-	IN	u8 sw_chplan,
-	IN	u8 def_chplan,
-	IN	BOOLEAN AutoLoadFail
+	PADAPTER padapter,
+	char *hw_alpha2,
+	u8 hw_chplan,
+	char *sw_alpha2,
+	u8 sw_chplan,
+	u8 def_chplan,
+	BOOLEAN AutoLoadFail
 );
 
 int hal_config_macaddr(_adapter *adapter, bool autoload_fail);
 
 BOOLEAN
 HAL_IsLegalChannel(
-	IN	PADAPTER	Adapter,
-	IN	u32			Channel
+	PADAPTER	Adapter,
+	u32			Channel
 );
 
 u8	MRateToHwRate(u8 rate);
@@ -370,14 +370,14 @@ u8	MRateToHwRate(u8 rate);
 u8	hw_rate_to_m_rate(u8 rate);
 
 void	HalSetBrateCfg(
-	IN PADAPTER		Adapter,
-	IN u8			*mBratesOS,
-	OUT u16			*pBrateCfg);
+	PADAPTER		Adapter,
+	u8			*mBratesOS,
+	u16			*pBrateCfg);
 
 BOOLEAN
 Hal_MappingOutPipe(
-	IN	PADAPTER	pAdapter,
-	IN	u8		NumOutPipe
+	PADAPTER	pAdapter,
+	u8		NumOutPipe
 );
 
 void rtw_dump_fw_info(void *sel, _adapter *adapter);
@@ -433,42 +433,42 @@ eqNByte(
 
 u32
 MapCharToHexDigit(
-	IN	char	chTmp
+	char	chTmp
 );
 
 BOOLEAN
 GetHexValueFromString(
-	IN		char			*szStr,
-	IN OUT	u32			*pu4bVal,
-	IN OUT	u32			*pu4bMove
+		char			*szStr,
+	u32			*pu4bVal,
+	u32			*pu4bMove
 );
 
 BOOLEAN
 GetFractionValueFromString(
-	IN		char		*szStr,
-	IN OUT	u8			*pInteger,
-	IN OUT	u8			*pFraction,
-	IN OUT	u32		*pu4bMove
+		char		*szStr,
+	u8			*pInteger,
+	u8			*pFraction,
+	u32		*pu4bMove
 );
 
 BOOLEAN
 IsCommentString(
-	IN		char		*szStr
+		char		*szStr
 );
 
 BOOLEAN
 ParseQualifiedString(
-	IN	char *In,
-	IN OUT  u32 *Start,
-	OUT	char *Out,
-	IN	char  LeftQualifier,
-	IN	char  RightQualifier
+	char *In,
+	u32 *Start,
+	char *Out,
+	char  LeftQualifier,
+	char  RightQualifier
 );
 
 BOOLEAN
 GetU1ByteIntegerFromStringInDecimal(
-	IN		char *Str,
-	IN OUT	u8 *pInt
+		char *Str,
+	u8 *pInt
 );
 
 BOOLEAN

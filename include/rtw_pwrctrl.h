@@ -501,7 +501,7 @@ void rtw_ps_processor(_adapter *padapter);
 int autoresume_enter(_adapter *padapter);
 #endif
 #ifdef SUPPORT_HW_RFOFF_DETECTED
-rt_rf_power_state RfOnOffDetect(IN	PADAPTER pAdapter);
+rt_rf_power_state RfOnOffDetect(PADAPTER pAdapter);
 #endif
 
 

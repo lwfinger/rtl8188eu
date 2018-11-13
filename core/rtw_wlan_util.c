@@ -389,8 +389,8 @@ void set_mcs_rate_by_mask(u8 *mcs_set, u32 mask)
 }
 
 void UpdateBrateTbl(
-	IN PADAPTER		Adapter,
-	IN u8			*mBratesOS
+	PADAPTER		Adapter,
+	u8			*mBratesOS
 )
 {
 	u8	i;

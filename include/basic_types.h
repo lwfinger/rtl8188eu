@@ -42,8 +42,6 @@
 	#include <linux/kernel.h>
 	#include <linux/init.h>
 	#include <linux/utsname.h>
-	#define IN
-	#define OUT
 	#define NDIS_OID uint
 	#define NDIS_STATUS uint
 

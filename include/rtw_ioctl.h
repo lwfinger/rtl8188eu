@@ -164,21 +164,21 @@ extern struct iw_handler_def  rtw_handlers_def;
 extern void rtw_request_wps_pbc_event(_adapter *padapter);
 
 extern	NDIS_STATUS drv_query_info(
-	IN	_nic_hdl		MiniportAdapterContext,
-	IN	NDIS_OID		Oid,
-	IN	void			*InformationBuffer,
-	IN	u32			InformationBufferLength,
-	OUT	u32			*BytesWritten,
-	OUT	u32			*BytesNeeded
+	_nic_hdl		MiniportAdapterContext,
+	NDIS_OID		Oid,
+	void			*InformationBuffer,
+	u32			InformationBufferLength,
+	u32			*BytesWritten,
+	u32			*BytesNeeded
 );
 
 extern	NDIS_STATUS	drv_set_info(
-	IN	_nic_hdl		MiniportAdapterContext,
-	IN	NDIS_OID		Oid,
-	IN	void			*InformationBuffer,
-	IN	u32			InformationBufferLength,
-	OUT	u32			*BytesRead,
-	OUT	u32			*BytesNeeded
+	_nic_hdl		MiniportAdapterContext,
+	NDIS_OID		Oid,
+	void			*InformationBuffer,
+	u32			InformationBufferLength,
+	u32			*BytesRead,
+	u32			*BytesNeeded
 );
 
 #ifdef CONFIG_APPEND_VENDOR_IE_ENABLE

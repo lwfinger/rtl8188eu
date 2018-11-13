@@ -530,7 +530,7 @@ static void rtl8188e_set_FwRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpag
  * 2010.06.23. Added by tynli. */
 void
 CheckFwRsvdPageContent(
-	IN	PADAPTER		Adapter
+	PADAPTER		Adapter
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);

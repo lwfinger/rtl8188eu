@@ -281,23 +281,23 @@ void free_mp_priv(struct mp_priv *pmp_priv)
 
 
 static void PHY_IQCalibrate_default(
-	IN	PADAPTER	pAdapter,
-	IN	BOOLEAN	bReCovery
+	PADAPTER	pAdapter,
+	BOOLEAN	bReCovery
 )
 {
 	RTW_INFO("%s\n", __func__);
 }
 
 static void PHY_LCCalibrate_default(
-	IN	PADAPTER	pAdapter
+	PADAPTER	pAdapter
 )
 {
 	RTW_INFO("%s\n", __func__);
 }
 
 static void PHY_SetRFPathSwitch_default(
-	IN	PADAPTER	pAdapter,
-	IN	BOOLEAN		bMain
+	PADAPTER	pAdapter,
+	BOOLEAN		bMain
 )
 {
 	RTW_INFO("%s\n", __func__);
@@ -337,8 +337,8 @@ static void  PHY_SetRFPathSwitch(PADAPTER padapter , BOOLEAN bMain) {
 
 s32
 MPT_InitializeAdapter(
-	IN	PADAPTER			pAdapter,
-	IN	u8				Channel
+	PADAPTER			pAdapter,
+	u8				Channel
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -398,7 +398,7 @@ MPT_InitializeAdapter(
  *---------------------------------------------------------------------------*/
 void
 MPT_DeInitAdapter(
-	IN	PADAPTER	pAdapter
+	PADAPTER	pAdapter
 )
 {
 	PMPT_CONTEXT		pMptCtx = &pAdapter->mppriv.mpt_ctx;
@@ -725,7 +725,7 @@ end_of_mp_stop_test:
  *
  * Overview:	Change RF Setting when we siwthc channel/rate/BW for MP.
  *
- * Input:       IN	PADAPTER				pAdapter
+ * Input:       PADAPTER				pAdapter
  *
  * Output:      NONE
  *
@@ -1293,7 +1293,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
 
 u8
 mpt_to_mgnt_rate(
-	IN	ULONG	MptRateIdx
+	ULONG	MptRateIdx
 )
 {
 	/* Mapped to MGN_XXX defined in MgntGen.h */
