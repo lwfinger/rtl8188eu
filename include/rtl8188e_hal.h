@@ -285,7 +285,7 @@ u8
 GetHalDefVar8188E(
 	IN	PADAPTER				Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
-	IN	PVOID					pValue
+	IN	void *					pValue
 );
 #ifdef CONFIG_GPIO_API
 int rtl8188e_GpioFuncCheck(PADAPTER adapter, u8 gpio_num);

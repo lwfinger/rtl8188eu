@@ -37,14 +37,14 @@
  * ************************************************************ */
 
 
-static VOID
+static void
 dm_CheckProtection(
 	IN	PADAPTER	Adapter
 )
 {
 }
 
-static VOID
+static void
 dm_CheckStatistics(
 	IN	PADAPTER	Adapter
 )
@@ -207,7 +207,7 @@ rtl8188e_InitHalDm(
 }
 
 
-VOID
+void
 rtl8188e_HalDmWatchDog(
 	IN	PADAPTER	Adapter
 )

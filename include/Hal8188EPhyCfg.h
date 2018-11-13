@@ -104,7 +104,7 @@ void	PHY_SetTxPowerLevel8188E(IN	PADAPTER		Adapter,
 BOOLEAN	PHY_UpdateTxPowerDbm8188E(IN	PADAPTER	Adapter,
 				  IN	int		powerInDbm);
 
-VOID
+void
 PHY_SetTxPowerIndex_8188E(
 	IN	PADAPTER			Adapter,
 	IN	u32					PowerIndex,
@@ -151,7 +151,7 @@ extern	void FillA2Entry8192C(IN	PADAPTER			Adapter,
 void	PHY_SwChnl8188E(IN	PADAPTER		pAdapter,
 			IN	u8			channel);
 
-VOID
+void
 PHY_SetSwChnlBWMode8188E(
 	IN	PADAPTER			Adapter,
 	IN	u8					channel,
@@ -160,21 +160,21 @@ PHY_SetSwChnlBWMode8188E(
 	IN	u8					Offset80
 );
 
-VOID
+void
 PHY_SetRFEReg_8188E(
 	IN PADAPTER		Adapter
 );
 /*
  * BB/MAC/RF other monitor API
  *   */
-VOID phy_set_rf_path_switch_8188e(IN	PADAPTER	pAdapter, IN	bool		bMain);
+void phy_set_rf_path_switch_8188e(IN	PADAPTER	pAdapter, IN	bool		bMain);
 
-extern	VOID
+extern	void
 PHY_SwitchEphyParameter(
 	IN	PADAPTER			Adapter
 );
 
-extern	VOID
+extern	void
 PHY_EnableHostClkReq(
 	IN	PADAPTER			Adapter
 );
@@ -239,7 +239,7 @@ SetAntennaConfig92C(
 #endif
 
 #if (SIC_ENABLE == 1)
-	VOID SIC_Init(IN PADAPTER Adapter);
+	void SIC_Init(IN PADAPTER Adapter);
 #endif
 
 

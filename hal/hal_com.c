@@ -939,7 +939,7 @@ void	HalSetBrateCfg(
 	}
 }
 
-static VOID
+static void
 _OneOutPipeMapping(
 	IN	PADAPTER	pAdapter
 )
@@ -957,7 +957,7 @@ _OneOutPipeMapping(
 	pdvobjpriv->Queue2Pipe[7] = pdvobjpriv->RtOutPipe[0];/* TXCMD */
 }
 
-static VOID
+static void
 _TwoOutPipeMapping(
 	IN	PADAPTER	pAdapter,
 	IN	BOOLEAN		bWIFICfg
@@ -1002,7 +1002,7 @@ _TwoOutPipeMapping(
 
 }
 
-static VOID _ThreeOutPipeMapping(
+static void _ThreeOutPipeMapping(
 	IN	PADAPTER	pAdapter,
 	IN	BOOLEAN		bWIFICfg
 )
@@ -1044,7 +1044,7 @@ static VOID _ThreeOutPipeMapping(
 	}
 
 }
-static VOID _FourOutPipeMapping(
+static void _FourOutPipeMapping(
 	IN	PADAPTER	pAdapter,
 	IN	BOOLEAN		bWIFICfg
 )
@@ -8398,7 +8398,7 @@ GetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value)
 void SetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
-	PVOID					pValue1,
+	void *					pValue1,
 	BOOLEAN					bSet)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
@@ -8558,8 +8558,8 @@ void SetHalODMVar(
 void GetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
-	PVOID					pValue1,
-	PVOID					pValue2)
+	void *					pValue1,
+	void *					pValue2)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT *podmpriv = &pHalData->odmpriv;

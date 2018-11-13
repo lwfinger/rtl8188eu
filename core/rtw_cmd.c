@@ -2170,7 +2170,7 @@ inline u8 rtw_set_country_cmd(_adapter *adapter, int flags, const char *country_
 	return _rtw_set_chplan_cmd(adapter, flags, RTW_CHPLAN_MAX, ent, swconfig);
 }
 
-u8 rtw_led_blink_cmd(_adapter *padapter, PVOID pLed)
+u8 rtw_led_blink_cmd(_adapter *padapter, void * pLed)
 {
 	struct	cmd_obj	*pcmdobj;
 	struct	LedBlink_param *ledBlink_param;

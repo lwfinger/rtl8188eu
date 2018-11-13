@@ -356,7 +356,7 @@ struct rtw_ndpa_sta_info {
 	u16	nc_index:3;
 };
 
-BEAMFORMING_CAP beamforming_get_entry_beam_cap_by_mac_id(PVOID pmlmepriv , u8 mac_id);
+BEAMFORMING_CAP beamforming_get_entry_beam_cap_by_mac_id(void * pmlmepriv , u8 mac_id);
 void	beamforming_notify(PADAPTER adapter);
 BEAMFORMING_CAP beamforming_get_beamform_cap(struct beamforming_info	*pBeamInfo);
 

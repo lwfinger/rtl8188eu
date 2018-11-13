@@ -44,16 +44,10 @@
 	#include <linux/utsname.h>
 	#define IN
 	#define OUT
-	#define VOID void
 	#define NDIS_OID uint
 	#define NDIS_STATUS uint
 
 	typedef	signed int sint;
-
-	#ifndef	PVOID
-		typedef void *PVOID;
-		/* #define PVOID	(void *) */
-	#endif
 
 	#define UCHAR u8
 	#define USHORT u16

@@ -1130,7 +1130,7 @@ struct _ADAPTER {
 
 	ERROR_CODE		LastError; /* <20130613, Kordan> Only the functions associated with MP records the error code by now. */
 
-	PVOID			HalData;
+	void *			HalData;
 	u32 hal_data_sz;
 	struct hal_ops	hal_func;
 

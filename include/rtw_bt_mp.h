@@ -165,7 +165,7 @@ typedef enum _BT_REPORT_TYPE {
 	BT_REPORT_MAX
 } BT_REPORT_TYPE, *PBT_REPORT_TYPE;
 
-VOID
+void
 MPTBT_Test(
 	IN	PADAPTER	Adapter,
 	IN	u1Byte		opCode,
@@ -177,13 +177,13 @@ MPTBT_Test(
 NDIS_STATUS
 MPTBT_SendOidBT(
 	IN	PADAPTER		pAdapter,
-	IN	PVOID			InformationBuffer,
+	IN	void *			InformationBuffer,
 	IN	ULONG			InformationBufferLength,
 	OUT	PULONG			BytesRead,
 	OUT	PULONG			BytesNeeded
 );
 
-VOID
+void
 MPTBT_FwC2hBtMpCtrl(
 	PADAPTER	Adapter,
 	pu1Byte	tmpBuf,
@@ -192,9 +192,9 @@ MPTBT_FwC2hBtMpCtrl(
 
 void MPh2c_timeout_handle(void *FunctionContext);
 
-VOID mptbt_BtControlProcess(
+void mptbt_BtControlProcess(
 	PADAPTER	Adapter,
-	PVOID		pInBuf
+	void *		pInBuf
 );
 
 #define	BT_H2C_MAX_RETRY								1

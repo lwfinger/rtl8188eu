@@ -1108,7 +1108,7 @@ int rtw_mp_thermal(struct net_device *dev,
 
 	if (bwrite == 0) {
 		/*RTW_INFO("to write val:%d",val);*/
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (PVOID)&max_available_size, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_AVAILABLE_EFUSE_BYTES_TOTAL, (void *)&max_available_size, _FALSE);
 		if (2 > max_available_size) {
 			RTW_INFO("no available efuse!\n");
 			return -EFAULT;

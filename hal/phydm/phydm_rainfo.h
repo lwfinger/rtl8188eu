@@ -469,7 +469,7 @@ phydm_update_pwr_track(
 
 void
 odm_rate_adaptive_state_ap_init(
-	void			*PADAPTER_VOID,
+	void			*PADAPTER_void,
 	struct sta_info	*p_entry
 );
 

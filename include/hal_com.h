@@ -508,12 +508,12 @@ u8 rtw_hal_busagg_qsel_check(_adapter *padapter, u8 pre_qsel, u8 next_qsel);
 void GetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
-	PVOID					pValue1,
-	PVOID					pValue2);
+	void *					pValue1,
+	void *					pValue2);
 void SetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
-	PVOID					pValue1,
+	void *					pValue1,
 	BOOLEAN					bSet);
 
 #ifdef CONFIG_BACKGROUND_NOISE_MONITOR

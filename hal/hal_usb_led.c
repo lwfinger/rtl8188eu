@@ -1823,7 +1823,7 @@ void BlinkTimerCallback(struct timer_list *t)
 	}
 
 #ifdef CONFIG_LED_HANDLED_BY_CMD_THREAD
-	rtw_led_blink_cmd(padapter, (PVOID)pLed);
+	rtw_led_blink_cmd(padapter, (void *)pLed);
 #else
 	_set_workitem(&(pLed->BlinkWorkItem));
 #endif

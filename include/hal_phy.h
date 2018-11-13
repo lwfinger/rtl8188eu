@@ -187,7 +187,7 @@ PHY_RFShadowRead(
 	IN	u8				eRFPath,
 	IN	u32				Offset);
 
-VOID
+void
 PHY_RFShadowWrite(
 	IN	PADAPTER		Adapter,
 	IN	u8				eRFPath,
@@ -200,43 +200,43 @@ PHY_RFShadowCompare(
 	IN	u8				eRFPath,
 	IN	u32				Offset);
 
-VOID
+void
 PHY_RFShadowRecorver(
 	IN	PADAPTER		Adapter,
 	IN	u8				eRFPath,
 	IN	u32				Offset);
 
-VOID
+void
 PHY_RFShadowCompareAll(
 	IN	PADAPTER		Adapter);
 
-VOID
+void
 PHY_RFShadowRecorverAll(
 	IN	PADAPTER		Adapter);
 
-VOID
+void
 PHY_RFShadowCompareFlagSet(
 	IN	PADAPTER		Adapter,
 	IN	u8				eRFPath,
 	IN	u32				Offset,
 	IN	u8				Type);
 
-VOID
+void
 PHY_RFShadowRecorverFlagSet(
 	IN	PADAPTER		Adapter,
 	IN	u8				eRFPath,
 	IN	u32				Offset,
 	IN	u8				Type);
 
-VOID
+void
 PHY_RFShadowCompareFlagSetAll(
 	IN	PADAPTER		Adapter);
 
-VOID
+void
 PHY_RFShadowRecorverFlagSetAll(
 	IN	PADAPTER		Adapter);
 
-VOID
+void
 PHY_RFShadowRefresh(
 	IN	PADAPTER		Adapter);
 

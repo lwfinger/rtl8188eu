@@ -67,12 +67,12 @@ static u1Byte Array_MP_8188E_MUSB[] = {
 };
 
 u2Byte
-EFUSE_GetArrayLen_MP_8188E_MUSB(VOID)
+EFUSE_GetArrayLen_MP_8188E_MUSB(void)
 {
 	return sizeof(Array_MP_8188E_MUSB) / sizeof(u1Byte);
 }
 
-VOID
+void
 EFUSE_GetMaskArray_MP_8188E_MUSB(
 	IN	OUT pu1Byte Array
 )

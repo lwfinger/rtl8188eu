@@ -95,7 +95,7 @@ void rtl8188e_RF_ChangeTxPath(IN	PADAPTER	Adapter,
  *
  * Note:		For RF type 0222D
  *---------------------------------------------------------------------------*/
-VOID
+void
 rtl8188e_PHY_RF6052SetBandwidth(
 	IN	PADAPTER				Adapter,
 	IN	CHANNEL_WIDTH		Bandwidth)	/* 20M or 40M */

@@ -1981,7 +1981,7 @@ struct beamforming_entry	*beamforming_get_entry_by_addr(struct mlme_priv *pmlmep
 	return NULL;
 }
 
-BEAMFORMING_CAP beamforming_get_entry_beam_cap_by_mac_id(PVOID pmlmepriv , u8 mac_id)
+BEAMFORMING_CAP beamforming_get_entry_beam_cap_by_mac_id(void * pmlmepriv , u8 mac_id)
 {
 	u8	i = 0;
 	struct beamforming_info	*pBeamInfo = GET_BEAMFORM_INFO((struct mlme_priv *)pmlmepriv);
@@ -2785,7 +2785,7 @@ void	beamforming_check_sounding_success(PADAPTER Adapter, BOOLEAN status)
 	}
 }
 
-void	beamforming_enter(PADAPTER adapter, PVOID psta)
+void	beamforming_enter(PADAPTER adapter, void * psta)
 {
 	u8	idx = 0xff;
 
@@ -2982,7 +2982,7 @@ void	beamforming_wk_hdl(_adapter *padapter, u8 type, u8 *pbuf)
 #if (BEAMFORMING_SUPPORT == 1) /*(BEAMFORMING_SUPPORT == 1)- for PHYDM beamfoming*/
 	switch (type) {
 	case BEAMFORMING_CTRL_ENTER: {
-		struct sta_info	*psta = (PVOID)pbuf;
+		struct sta_info	*psta = (void *)pbuf;
 		u16			staIdx = psta->mac_id;
 
 		beamforming_enter(pDM_Odm, staIdx);
@@ -2998,7 +2998,7 @@ void	beamforming_wk_hdl(_adapter *padapter, u8 type, u8 *pbuf)
 #else /*(BEAMFORMING_SUPPORT == 0)- for drv beamfoming*/
 	switch (type) {
 	case BEAMFORMING_CTRL_ENTER:
-		beamforming_enter(padapter, (PVOID)pbuf);
+		beamforming_enter(padapter, (void *)pbuf);
 		break;
 
 	case BEAMFORMING_CTRL_LEAVE:

@@ -8405,7 +8405,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		}
 		RTW_INFO("%s: cnts=%d\n", __func__, cnts);
 
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN , (PVOID)&max_available_len, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN , (void *)&max_available_len, _FALSE);
 		if ((addr + cnts) > max_available_len) {
 			RTW_INFO("%s: addr(0x%X)+cnts(%d) parameter error!\n", __func__, addr, cnts);
 			err = -EINVAL;
@@ -8431,7 +8431,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		u32 blksz = 0x200; /* The size of one time show, default 512 */
 
 		addr = 0;
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_REAL_CONTENT_LEN , (PVOID)&mapLen, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_REAL_CONTENT_LEN , (void *)&mapLen, _FALSE);
 		RTW_INFO("Real content len = %d\n",mapLen );
 
 		if (rtw_efuse_access(padapter, _FALSE, addr, mapLen, rawdata) == _FAIL) {
@@ -8470,7 +8470,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		u32 blksz = 0x200; /* The size of one time show, default 512 */
 
 		addr = 0;
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_BT, TYPE_EFUSE_REAL_CONTENT_LEN, (PVOID)&mapLen, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_BT, TYPE_EFUSE_REAL_CONTENT_LEN, (void *)&mapLen, _FALSE);
 		RTW_INFO("Real content len = %d\n", mapLen);
 #ifdef RTW_HALMAC
 		if (rtw_efuse_bt_access(padapter, _FALSE, 0, mapLen, rawdata) == _FAIL) {
@@ -8520,7 +8520,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		addr = hal_efuse_macaddr_offset(padapter);
 		cnts = 6;
 
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (PVOID)&max_available_len, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&max_available_len, _FALSE);
 		if ((addr + cnts) > max_available_len) {
 			RTW_INFO("%s: addr(0x%02x)+cnts(%d) parameter error!\n", __func__, addr, cnts);
 			err = -EFAULT;
@@ -8548,7 +8548,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		addr = EEPROM_VID_88EU;
 		cnts = 4;
 
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (PVOID)&max_available_len, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&max_available_len, _FALSE);
 		if ((addr + cnts) > max_available_len) {
 			RTW_INFO("%s: addr(0x%02x)+cnts(%d) parameter error!\n", __func__, addr, cnts);
 			err = -EFAULT;
@@ -8673,7 +8673,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
 		}
 		RTW_INFO("%s: cnts=%d\n", __func__, cnts);
 #ifndef RTW_HALMAC
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_BT, TYPE_EFUSE_MAP_LEN, (PVOID)&max_available_len, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_BT, TYPE_EFUSE_MAP_LEN, (void *)&max_available_len, _FALSE);
 		if ((addr + cnts) > max_available_len) {
 			RTW_INFO("%s: addr(0x%X)+cnts(%d) parameter error!\n", __func__, addr, cnts);
 			err = -EFAULT;
@@ -8974,7 +8974,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		for (jj = 0, kk = 0; jj < cnts; jj++, kk += 2)
 			setdata[jj] = key_2char2num(tmp[2][kk], tmp[2][kk + 1]);
 
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (PVOID)&max_available_len, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&max_available_len, _FALSE);
 
 		if ((addr + cnts) > max_available_len) {
 			RTW_INFO("%s: addr(0x%X)+cnts(%d) parameter error!\n", __func__, addr, cnts);
@@ -9113,7 +9113,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		for (jj = 0, kk = 0; jj < cnts; jj++, kk += 2)
 			setdata[jj] = key_2char2num(tmp[1][kk], tmp[1][kk + 1]);
 
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (PVOID)&max_available_len, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&max_available_len, _FALSE);
 
 		if ((addr + cnts) > max_available_len) {
 			RTW_INFO("%s: addr(0x%X)+cnts(%d) parameter error!\n", __func__, addr, cnts);
@@ -9152,7 +9152,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		for (jj = 0, kk = 0; jj < cnts; jj++, kk += 2)
 			setdata[jj] = key_2char2num(tmp[1][kk], tmp[1][kk + 1]);
 
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (PVOID)&max_available_len, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&max_available_len, _FALSE);
 		if ((addr + cnts) > max_available_len) {
 			RTW_INFO("%s: addr(0x%X)+cnts(%d) parameter error!\n", __func__, addr, cnts);
 			err = -EFAULT;
@@ -9223,7 +9223,7 @@ static int rtw_mp_efuse_set(struct net_device *dev,
 		for (jj = 0, kk = 0; jj < cnts; jj++, kk += 2)
 			setdata[jj] = key_2char2num(tmp[2][kk], tmp[2][kk + 1]);
 #ifndef RTW_HALMAC
-		EFUSE_GetEfuseDefinition(padapter, EFUSE_BT, TYPE_EFUSE_MAP_LEN, (PVOID)&max_available_len, _FALSE);
+		EFUSE_GetEfuseDefinition(padapter, EFUSE_BT, TYPE_EFUSE_MAP_LEN, (void *)&max_available_len, _FALSE);
 		if ((addr + cnts) > max_available_len) {
 			RTW_INFO("%s: addr(0x%X)+cnts(%d) parameter error!\n", __func__, addr, cnts);
 			err = -EFAULT;
