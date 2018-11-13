@@ -589,14 +589,11 @@ u8 rtw_btcoex_parse_BT_info_notify_cmd(_adapter *padapter, u8 *pcmd, u16 cmdlen)
 
 	_rtw_memset(btinfo, 0, BT_INFO_LENGTH);
 
-#if 1
 	if (BT_INFO_LENGTH != btInfoLen) {
 		status = HCI_STATUS_INVALID_HCI_CMD_PARA_VALUE;
 		RTW_INFO("Error BT Info Length: %d\n", btInfoLen);
 		/* return _FAIL; */
-	} else
-#endif
-	{
+	} else {
 		if (0x1 == btInfoReason || 0x2 == btInfoReason) {
 			_rtw_memcpy(btinfo, &pcmd[4], btInfoLen);
 			btinfo[0] = btInfoReason;

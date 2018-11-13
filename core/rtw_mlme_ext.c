@@ -13628,7 +13628,6 @@ exit:
 	set_channel_bwmode(padapter, cur_channel, cur_ch_offset, cur_bwmode);
 }
 
-#if 1
 /**
  * sitesurvey_ps_annc - check and doing ps announcement for all the adapters of given @dvobj
  * @padapter
@@ -13645,43 +13644,6 @@ static u8 sitesurvey_ps_annc(_adapter *padapter, bool ps)
 		ps_anc = 1;
 	return ps_anc;
 }
-#else
-/**
- * sitesurvey_ps_annc - check and doing ps announcement for all the adapters of given @dvobj
- * @dvobj: the dvobj to check
- * @ps: power saving or not
- *
- * Returns: 0: no ps announcement is doing. 1: ps announcement is doing
- */
-
-u8 sitesurvey_ps_annc(struct dvobj_priv *dvobj, bool ps)
-{
-	_adapter *adapter;
-	int i;
-	u8 ps_anc = 0;
-
-	for (i = 0; i < dvobj->iface_nums; i++) {
-		adapter = dvobj->padapters[i];
-		if (!adapter)
-			continue;
-
-		if (ps) {
-			if (is_client_associated_to_ap(adapter) == _TRUE) {
-				/* TODO: TDLS peers */
-				issue_nulldata(adapter, NULL, 1, 3, 500);
-				ps_anc = 1;
-			}
-		} else {
-			if (is_client_associated_to_ap(adapter) == _TRUE) {
-				/* TODO: TDLS peers */
-				issue_nulldata(adapter, NULL, 0, 3, 500);
-				ps_anc = 1;
-			}
-		}
-	}
-	return ps_anc;
-}
-#endif
 
 static void sitesurvey_set_igi(_adapter *adapter)
 {

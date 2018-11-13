@@ -51,8 +51,6 @@
 #define Rtl8188E_NIC_LPS_ENTER_FLOW			rtl8188E_enter_lps_flow
 #define Rtl8188E_NIC_LPS_LEAVE_FLOW			rtl8188E_leave_lps_flow
 
-
-#if 1 /* download firmware related data structure */
 #define MAX_FW_8188E_SIZE			0x8000 /* 32768, 32k / 16384, 16k */
 
 #define FW_8188E_SIZE				0x4000 /* 16384, 16k */
@@ -107,7 +105,6 @@ typedef struct _RT_8188E_FIRMWARE_HDR {
 	__le32		Rsvd4;
 	__le32		Rsvd5;
 } RT_8188E_FIRMWARE_HDR, *PRT_8188E_FIRMWARE_HDR;
-#endif /* download firmware related data structure */
 
 
 #define DRIVER_EARLY_INT_TIME_8188E			0x05

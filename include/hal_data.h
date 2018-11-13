@@ -20,8 +20,6 @@
 #ifndef __HAL_DATA_H__
 #define __HAL_DATA_H__
 
-#if 1/* def  CONFIG_SINGLE_IMG */
-
 #include "../hal/phydm/phydm_precomp.h"
 #ifdef CONFIG_BT_COEXIST
 	#include <hal_btcoex.h>
@@ -638,7 +636,6 @@ typedef struct hal_com_data HAL_DATA_TYPE, *PHAL_DATA_TYPE;
 #define is_boot_from_eeprom(adapter)			(GET_HAL_DATA(adapter)->EepromOrEfuse)
 #define rtw_get_hw_init_completed(adapter)		(GET_HAL_DATA(adapter)->hw_init_completed)
 #define rtw_is_hw_init_completed(adapter)		(GET_HAL_DATA(adapter)->hw_init_completed == _TRUE)
-#endif
 
 #ifdef CONFIG_AUTO_CHNL_SEL_NHM
 #define GET_ACS_STATE(padapter)					(ATOMIC_READ(&GET_HAL_DATA(padapter)->acs.state))

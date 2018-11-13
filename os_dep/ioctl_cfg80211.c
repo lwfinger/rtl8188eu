@@ -500,16 +500,8 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(_adapter *padapter, struct wlan_net
 		RTW_INFO("%s, got p2p_ie\n", __func__);
 	#endif
 
-#if 1
 	bss = cfg80211_inform_bss_frame(wiphy, notify_channel, (struct ieee80211_mgmt *)pbuf,
 					len, notify_signal, GFP_ATOMIC);
-#else
-
-	bss = cfg80211_inform_bss(wiphy, notify_channel, (const u8 *)pnetwork->network.MacAddress,
-		notify_timestamp, notify_capability, notify_interval, notify_ie,
-		notify_ielen, notify_signal, GFP_ATOMIC/*GFP_KERNEL*/);
-#endif
-
 	if (unlikely(!bss)) {
 		RTW_INFO(FUNC_ADPT_FMT" bss NULL\n", FUNC_ADPT_ARG(padapter));
 		goto exit;
@@ -5866,7 +5858,6 @@ static int cfg80211_rtw_tdls_mgmt(struct wiphy *wiphy,
 	_rtw_memcpy(txmgmt.buf, (void *)buf, txmgmt.len);
 
 	/* Debug purpose */
-#if 1
 	RTW_INFO("%s %d\n", __func__, __LINE__);
 	RTW_INFO("peer:"MAC_FMT", action code:%d, dialog:%d, status code:%d\n",
 		MAC_ARG(txmgmt.peer), txmgmt.action_code,
@@ -5877,7 +5868,6 @@ static int cfg80211_rtw_tdls_mgmt(struct wiphy *wiphy,
 			printk("%02x ", *(txmgmt.buf + i));
 		RTW_INFO("len:%d\n", (u32)txmgmt.len);
 	}
-#endif
 
 	switch (txmgmt.action_code) {
 	case TDLS_SETUP_REQUEST:

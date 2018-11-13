@@ -3137,10 +3137,8 @@ int proc_get_best_channel(struct seq_file *m, void *v)
 				best_channel_5G = pmlmeext->channel_set[i].ChannelNum;
 			}
 		}
-#if 1 /* debug */
 		RTW_PRINT_SEL(m, "The rx cnt of channel %3d = %d\n",
 			pmlmeext->channel_set[i].ChannelNum, pmlmeext->channel_set[i].rx_count);
-#endif
 	}
 
 	RTW_PRINT_SEL(m, "best_channel_5G = %d\n", best_channel_5G);
@@ -4415,7 +4413,6 @@ ssize_t proc_set_mcc_policy_table(struct file *file, const char __user *buffer, 
 	}
 
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
-		#if 1
 		struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 		_adapter *iface = NULL;
 		u8 i = 0;
@@ -4441,7 +4438,6 @@ ssize_t proc_set_mcc_policy_table(struct file *file, const char __user *buffer, 
 		}
 
 		rtw_hal_mcc_update_switch_channel_policy_table(padapter);
-		#endif
 	}
 
 	return count;

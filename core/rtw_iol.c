@@ -28,7 +28,6 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
 	struct pkt_attrib	*pattrib;
 	struct xmit_priv	*pxmitpriv = &(adapter->xmitpriv);
 
-#if 1
 	xmit_frame = rtw_alloc_xmitframe(pxmitpriv);
 	if (xmit_frame == NULL) {
 		RTW_INFO("%s rtw_alloc_xmitframe return null\n", __func__);
@@ -54,22 +53,9 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(ADAPTER *adapter)
 	pattrib->subtype = WIFI_BEACON;
 	pattrib->pktlen = pattrib->last_txcmdsz = 0;
 
-#else
-	xmit_frame = alloc_mgtxmitframe(pxmitpriv);
-	if (xmit_frame == NULL)
-		RTW_INFO("%s alloc_mgtxmitframe return null\n", __func__);
-	else {
-		pattrib = &xmit_frame->attrib;
-		update_mgntframe_attrib(adapter, pattrib);
-		pattrib->qsel = QSLT_BEACON;
-		pattrib->pktlen = pattrib->last_txcmdsz = 0;
-	}
-#endif
-
 exit:
 	return xmit_frame;
 }
-
 
 int rtw_IOL_append_cmds(struct xmit_frame *xmit_frame, u8 *IOL_cmds, u32 cmd_len)
 {

@@ -2379,11 +2379,7 @@ static void read_chip_version_8188e(PADAPTER padapter)
 	pHalData->MultiFunc = RT_MULTI_FUNC_NONE;
 
 	rtw_hal_config_rftype(padapter);
-
-#if 1
 	dump_chip_info(pHalData->version_id);
-#endif
-
 }
 
 void rtl8188e_start_thread(_adapter *padapter)

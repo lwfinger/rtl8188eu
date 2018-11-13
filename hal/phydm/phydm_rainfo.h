@@ -186,7 +186,6 @@ struct _odm_ra_info_ {
 	u8 ra_waiting_counter;
 	u8 ra_pending_counter;
 	u8 ra_drop_after_down;
-#if 1 /* POWER_TRAINING_ACTIVE == 1 */ /* For compile  pass only~! */
 	u8 pt_active;  /* on or off */
 	u8 pt_try_state;  /* 0 trying state, 1 for decision state */
 	u8 pt_stage;  /* 0~6 */
@@ -196,7 +195,6 @@ struct _odm_ra_info_ {
 	u8 pt_mode_ss;  /* decide whitch rate should do PT */
 	u8 ra_stage;  /* StageRA, decide how many times RA will be done between PT */
 	u8 pt_smooth_factor;
-#endif
 };
 #endif
 

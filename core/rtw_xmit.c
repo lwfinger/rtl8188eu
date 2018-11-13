@@ -3554,7 +3554,6 @@ static int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 		{
 			/*			if (priv->dev->br_port &&
 			 *				 !memcmp(skb->data+MACADDRLEN, priv->br_mac, MACADDRLEN)) { */
-#if 1
 			if (*((__be16 *)(skb->data + MACADDRLEN * 2)) == __constant_htons(ETH_P_8021Q)) {
 				is_vlan_tag = 1;
 				vlan_hdr = *((unsigned short *)(skb->data + MACADDRLEN * 2 + 2));
@@ -3589,7 +3588,6 @@ static int rtw_br_client_tx(_adapter *padapter, struct sk_buff **pskb)
 				}
 			}
 			_exit_critical_bh(&padapter->br_ext_lock, &irqL);
-#endif /* 1 */
 			if (do_nat25) {
 				if (nat25_db_handle(padapter, skb, NAT25_CHECK) == 0) {
 					struct sk_buff *newskb;

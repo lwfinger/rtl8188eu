@@ -2101,7 +2101,6 @@ sint validate_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
 	sc = (pattrib->seq_num << 4) | pattrib->frag_num;
 #endif
 
-#if 1 /* Dump rx packets */
 	{
 		u8 bDumpRxPkt = 0;
 
@@ -2113,7 +2112,6 @@ sint validate_recv_frame(_adapter *adapter, union recv_frame *precv_frame)
 		else if ((bDumpRxPkt == 3) && (type == WIFI_DATA_TYPE))
 			dump_rx_packet(ptr);
 	}
-#endif
 	switch (type) {
 	case WIFI_MGT_TYPE: /* mgnt */
 		DBG_COUNTER(adapter->rx_logs.core_rx_pre_mgmt);
@@ -2210,9 +2208,7 @@ exit:
 
 
 /* remove the wlanhdr and add the eth_hdr */
-#if 1
 
-sint wlanhdr_to_ethhdr(union recv_frame *precvframe);
 sint wlanhdr_to_ethhdr(union recv_frame *precvframe)
 {
 	sint	rmv_len;
@@ -2325,103 +2321,6 @@ exiting:
 	return ret;
 
 }
-
-#else
-
-sint wlanhdr_to_ethhdr(union recv_frame *precvframe)
-{
-	sint rmv_len;
-	u16 eth_type;
-	u8	bsnaphdr;
-	u8	*psnap_type;
-	struct ieee80211_snap_hdr	*psnap;
-
-	sint ret = _SUCCESS;
-	_adapter	*adapter = precvframe->u.hdr.adapter;
-	struct	mlme_priv	*pmlmepriv = &adapter->mlmepriv;
-
-	u8 *ptr = get_recvframe_data(precvframe) ; /* point to frame_ctrl field */
-	struct rx_pkt_attrib *pattrib = &precvframe->u.hdr.attrib;
-	struct _vlan *pvlan = NULL;
-
-
-	psnap = (struct ieee80211_snap_hdr *)(ptr + pattrib->hdrlen + pattrib->iv_len);
-	psnap_type = ptr + pattrib->hdrlen + pattrib->iv_len + SNAP_SIZE;
-	if (psnap->dsap == 0xaa && psnap->ssap == 0xaa && psnap->ctrl == 0x03) {
-		if (_rtw_memcmp(psnap->oui, oui_rfc1042, WLAN_IEEE_OUI_LEN))
-			bsnaphdr = _TRUE; /* wlan_pkt_format = WLAN_PKT_FORMAT_SNAP_RFC1042;	 */
-		else if (_rtw_memcmp(psnap->oui, SNAP_HDR_APPLETALK_DDP, WLAN_IEEE_OUI_LEN) &&
-			_rtw_memcmp(psnap_type, SNAP_ETH_TYPE_APPLETALK_DDP, 2))
-			bsnaphdr = _TRUE;	/* wlan_pkt_format = WLAN_PKT_FORMAT_APPLETALK; */
-		else if (_rtw_memcmp(psnap->oui, oui_8021h, WLAN_IEEE_OUI_LEN))
-			bsnaphdr = _TRUE;	/* wlan_pkt_format = WLAN_PKT_FORMAT_SNAP_TUNNEL; */
-		else {
-			ret = _FAIL;
-			goto exit;
-		}
-
-	} else
-		bsnaphdr = _FALSE; /* wlan_pkt_format = WLAN_PKT_FORMAT_OTHERS; */
-
-	rmv_len = pattrib->hdrlen + pattrib->iv_len + (bsnaphdr ? SNAP_SIZE : 0);
-
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == _TRUE) {
-		ptr += rmv_len ;
-		*ptr = 0x87;
-		*(ptr + 1) = 0x12;
-
-		/* back to original pointer */
-		ptr -= rmv_len;
-	}
-
-	ptr += rmv_len ;
-
-	_rtw_memcpy(&eth_type, ptr, 2);
-	eth_type = ntohs((unsigned short)eth_type); /* pattrib->ether_type */
-	ptr += 2;
-
-	if (pattrib->encrypt)
-		recvframe_pull_tail(precvframe, pattrib->icv_len);
-
-	if (eth_type == 0x8100) { /* vlan */
-		pvlan = (struct _vlan *) ptr;
-
-		/* eth_type = get_vlan_encap_proto(pvlan); */
-		/* eth_type = pvlan->h_vlan_encapsulated_proto; */ /* ? */
-		rmv_len += 4;
-		ptr += 4;
-	}
-
-	if (eth_type == 0x0800) { /* ip */
-		/* struct iphdr*  piphdr = (struct iphdr*) ptr; */
-		/* __u8 tos = (unsigned char)(pattrib->priority & 0xff); */
-
-		/* piphdr->tos = tos; */
-
-	} else if (eth_type == 0x8712) { /* append rx status for mp test packets */
-		/* ptr -= 16; */
-		/* _rtw_memcpy(ptr, get_rxmem(precvframe), 16); */
-	}
-
-	if (eth_type == 0x8712) { /* append rx status for mp test packets */
-		ptr = recvframe_pull(precvframe, (rmv_len - sizeof(struct ethhdr) + 2) - 24);
-		_rtw_memcpy(ptr, get_rxmem(precvframe), 24);
-		ptr += 24;
-	} else
-		ptr = recvframe_pull(precvframe, (rmv_len - sizeof(struct ethhdr) + 2));
-
-	_rtw_memcpy(ptr, pattrib->dst, ETH_ALEN);
-	_rtw_memcpy(ptr + ETH_ALEN, pattrib->src, ETH_ALEN);
-
-	eth_type = htons((unsigned short)eth_type) ;
-	_rtw_memcpy(ptr + 12, &eth_type, 2);
-
-exit:
-
-
-	return ret;
-}
-#endif
 
 /* perform defrag */
 union recv_frame *recvframe_defrag(_adapter *adapter, _queue *defrag_q);

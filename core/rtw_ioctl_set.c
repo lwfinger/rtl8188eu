@@ -502,7 +502,6 @@ u8 rtw_set_802_11_disassociate(_adapter *padapter)
 	return _TRUE;
 }
 
-#if 1
 u8 rtw_set_802_11_bssid_list_scan(_adapter *padapter, NDIS_802_11_SSID *pssid, int ssid_max_num, struct rtw_ieee80211_channel *ch, int ch_num)
 {
 	_irqL	irqL;
@@ -516,45 +515,6 @@ u8 rtw_set_802_11_bssid_list_scan(_adapter *padapter, NDIS_802_11_SSID *pssid, i
 	return res;
 }
 
-#else
-u8 rtw_set_802_11_bssid_list_scan(_adapter *padapter, NDIS_802_11_SSID *pssid, int ssid_max_num, struct rtw_ieee80211_channel *ch, int ch_num)
-{
-	_irqL	irqL;
-	struct	mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-	u8	res = _TRUE;
-
-	if (padapter == NULL) {
-		res = _FALSE;
-		goto exit;
-	}
-	if (!rtw_is_hw_init_completed(padapter)) {
-		res = _FALSE;
-		goto exit;
-	}
-
-	if ((check_fwstate(pmlmepriv, _FW_UNDER_SURVEY | _FW_UNDER_LINKING) == _TRUE) ||
-	    (pmlmepriv->LinkDetectInfo.bBusyTraffic == _TRUE)) {
-		/* Scan or linking is in progress, do nothing. */
-		res = _TRUE;
-
-	} else {
-		if (rtw_is_scan_deny(padapter)) {
-			RTW_INFO(FUNC_ADPT_FMT": scan deny\n", FUNC_ADPT_ARG(padapter));
-			indicate_wx_scan_complete_event(padapter);
-			return _SUCCESS;
-		}
-
-		_enter_critical_bh(&pmlmepriv->lock, &irqL);
-
-		res = rtw_sitesurvey_cmd(padapter, pssid, ssid_max_num, NULL, 0, ch, ch_num);
-
-		_exit_critical_bh(&pmlmepriv->lock, &irqL);
-	}
-exit:
-
-	return res;
-}
-#endif
 u8 rtw_set_802_11_authentication_mode(_adapter *padapter, NDIS_802_11_AUTHENTICATION_MODE authmode)
 {
 	struct security_priv *psecuritypriv = &padapter->securitypriv;

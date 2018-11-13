@@ -882,7 +882,6 @@ static s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 	h2c_parameter[4] = (p_ra_table->RA_threshold_offset & 0x7f) | (p_ra_table->RA_offset_direction << 7);
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RA_threshold_offset = (( %s%d ))\n", ((p_ra_table->RA_threshold_offset == 0) ? " " : ((p_ra_table->RA_offset_direction) ? "+" : "-")), p_ra_table->RA_threshold_offset));
 
-#if 1
 	if (first_connect) {
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_RATE_ADAPTIVE, ODM_DBG_LOUD, ("%s mac_id:%u, mac:"MAC_FMT", rssi:%d\n", __func__,
 			p_entry->mac_id, MAC_ARG(p_entry->hwaddr), p_entry->rssi_stat.undecorated_smoothed_pwdb));
@@ -891,16 +890,13 @@ static s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 			(UL_DL_STATE) ? "DL" : "UL", (tx_bf_en) ? "EN" : "DIS", (STBC_TX) ? "EN" : "DIS",
 			(p_dm_odm->noisy_decision) ? "True" : "False", (first_connect) ? "True" : "False"));
 	}
-#endif
 
 	if (p_hal_data->fw_ractrl == _TRUE) {
-#if (RTL8188E_SUPPORT == 1)
 		if (p_dm_odm->support_ic_type == ODM_RTL8188E)
 			cmdlen = 3;
-#endif
 		odm_fill_h2c_cmd(p_dm_odm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
 	} else {
-#if ((RTL8188E_SUPPORT == 1) && (RATE_ADAPTIVE_SUPPORT == 1))
+#if ((RATE_ADAPTIVE_SUPPORT == 1))
 		if (p_dm_odm->support_ic_type == ODM_RTL8188E)
 			odm_ra_set_rssi_8188e(p_dm_odm, (u8)(p_entry->mac_id & 0xFF), p_entry->rssi_stat.undecorated_smoothed_pwdb & 0x7F);
 #endif

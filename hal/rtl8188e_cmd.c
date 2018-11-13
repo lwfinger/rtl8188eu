@@ -689,8 +689,6 @@ void rtl8188e_set_p2p_ps_offload_cmd(_adapter *padapter, u8 p2p_ps_state)
 	struct P2P_PS_Offload_t	*p2p_ps_offload = (struct P2P_PS_Offload_t *)(&pHalData->p2p_ps_offload);
 	u8	i;
 
-
-#if 1
 	switch (p2p_ps_state) {
 	case P2P_PS_DISABLE:
 		RTW_INFO("P2P_PS_DISABLE\n");
@@ -756,9 +754,6 @@ void rtl8188e_set_p2p_ps_offload_cmd(_adapter *padapter, u8 p2p_ps_state)
 	}
 
 	FillH2CCmd_88E(padapter, H2C_PS_P2P_OFFLOAD, 1, (u8 *)p2p_ps_offload);
-#endif
-
-
 }
 #endif /* CONFIG_P2P_PS */
 

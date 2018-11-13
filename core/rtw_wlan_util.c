@@ -1501,7 +1501,6 @@ void flush_all_cam_entry(_adapter *padapter)
 				rtw_clearstakey_cmd(padapter, psta, _FALSE);
 		}
 	} else if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) {
-#if 1
 		int cam_id = -1;
 		u8 *addr = adapter_mac_addr(padapter);
 
@@ -1510,23 +1509,7 @@ void flush_all_cam_entry(_adapter *padapter)
 			clear_cam_entry(padapter, cam_id);
 			rtw_camid_free(padapter, cam_id);
 		}
-#else
-		/* clear default key */
-		int i, cam_id;
-		u8 null_addr[ETH_ALEN] = {0, 0, 0, 0, 0, 0};
-
-		for (i = 0; i < 4; i++) {
-			cam_id = rtw_camid_search(padapter, null_addr, i, -1);
-			if (cam_id >= 0) {
-				clear_cam_entry(padapter, cam_id);
-				rtw_camid_free(padapter, cam_id);
-			}
-		}
-		/* clear default key related key search setting */
-		rtw_hal_set_hwreg(padapter, HW_VAR_SEC_DK_CFG, (u8 *)_FALSE);
-#endif
 	}
-
 #else /*NON CONFIG_CONCURRENT_MODE*/
 
 	invalidate_cam_all(padapter);

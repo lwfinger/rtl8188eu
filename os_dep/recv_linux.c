@@ -32,21 +32,12 @@ int rtw_os_recvframe_duplicate_skb(_adapter *padapter, union recv_frame *pclonef
 		RTW_INFO("%s [WARN] skb == NULL, drop frag frame\n", __func__);
 		return _FAIL;
 	}
-#if 1
 	pkt_copy = rtw_skb_copy(pskb);
 
 	if (pkt_copy == NULL) {
 		RTW_INFO("%s [WARN] rtw_skb_copy fail , drop frag frame\n", __func__);
 		return _FAIL;
 	}
-#else
-	pkt_copy = rtw_skb_clone(pskb);
-
-	if (pkt_copy == NULL) {
-		RTW_INFO("%s [WARN] rtw_skb_clone fail , drop frag frame\n", __func__);
-		return _FAIL;
-	}
-#endif
 	pkt_copy->dev = padapter->pnetdev;
 
 	pcloneframe->u.hdr.pkt = pkt_copy;
@@ -453,12 +444,7 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 				/* DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n"); */
 				/* return FAIL; */
 
-#if 1
 				/* bypass this frame to upper layer!! */
-#else
-				rtw_skb_free(sub_skb);
-				continue;
-#endif
 			}
 		}
 #endif /* CONFIG_BR_EXT */
@@ -728,21 +714,11 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 		RTW_INFO("recv eapol packet\n");
 
 #ifdef CONFIG_AUTO_AP_MODE
-#if 1 /* for testing */
-#if 1
 	if (0x8899 == pattrib->eth_type) {
 		rtw_os_ksocket_send(padapter, precv_frame);
 
 		/* goto _recv_indicatepkt_drop; */
 	}
-#else
-	if (0x8899 == pattrib->eth_type) {
-		rtw_auto_ap_mode_rx(padapter, precv_frame);
-
-		goto _recv_indicatepkt_end;
-	}
-#endif
-#endif
 #endif /* CONFIG_AUTO_AP_MODE */
 
 	/* TODO: move to core */

@@ -2873,11 +2873,7 @@ odm_process_rssi_for_ant_div(
 				pdm_sat_table->pkt_rssi_cnt[p_dm_fat_table->antsel_rx_keep_0][pdm_sat_table->fast_training_beam_num]++;
 				pdm_sat_table->pkt_counter++;
 
-#if 1
 				train_pkt_number = pdm_sat_table->beam_train_cnt[p_dm_fat_table->rx_idle_ant - 1][pdm_sat_table->fast_training_beam_num];
-#else
-				train_pkt_number =  pdm_sat_table->per_beam_training_pkt_num;
-#endif
 
 				/*Swich Antenna erery N pkts*/
 				if (pdm_sat_table->pkt_counter == train_pkt_number) {

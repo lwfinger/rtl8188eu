@@ -110,33 +110,10 @@ phydm_dynamic_rx_path(
 		training_set_timmer_en = true;
 
 	} else if (p_dm_drp_table->drp_state == DRP_TRAINING_STATE_1) {
-
 		phydm_drp_get_statistic(p_dm_odm);
-
 		p_dm_drp_table->curr_cca_all_cnt_1 = false_alm_cnt->cnt_cca_all;
 		p_dm_drp_table->curr_fa_all_cnt_1 = false_alm_cnt->cnt_all;
-
-#if 1
 		p_dm_drp_table->drp_state  = DRP_DECISION_STATE;
-#else
-
-		if (p_dm_odm->mp_mode) {
-			rx_ok_cal = p_dm_odm->phy_dbg_info.num_qry_phy_status_cck + p_dm_odm->phy_dbg_info.num_qry_phy_status_ofdm;
-			RSSI = (rx_ok_cal != 0) ? p_dm_odm->rx_pwdb_ave / rx_ok_cal : 0;
-			ODM_RT_TRACE(p_dm_odm, ODM_COMP_DYNAMIC_RX_PATH, ODM_DBG_LOUD, ("MP RSSI = ((%d))\n", RSSI));
-		}
-
-		if (RSSI > p_dm_drp_table->rssi_threshold)
-
-			p_dm_drp_table->drp_state  = DRP_DECISION_STATE;
-
-		else  {
-
-			p_dm_drp_table->drp_state  = DRP_TRAINING_STATE_2;
-			p_dm_drp_table->curr_rx_path = PHYDM_A;
-			training_set_timmer_en = true;
-		}
-#endif
 	} else if (p_dm_drp_table->drp_state == DRP_TRAINING_STATE_2) {
 
 		phydm_drp_get_statistic(p_dm_odm);
