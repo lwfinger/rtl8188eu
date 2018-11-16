@@ -106,7 +106,7 @@ PHY_RFShadowWrite(
 }	/* PHY_RFShadowWrite */
 
 
-BOOLEAN
+bool
 PHY_RFShadowCompare(
 	PADAPTER		Adapter,
 	u8				eRFPath,

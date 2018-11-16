@@ -95,7 +95,7 @@ void hal_mpt_GetPowerTracking(PADAPTER padapter, u8 *enable)
 }
 
 
-void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
+void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 {
 	u32		TempVal = 0, TempVal2 = 0, TempVal3 = 0;
 	u32		CurrCCKSwingVal = 0, CCKSwingIndex = 12;

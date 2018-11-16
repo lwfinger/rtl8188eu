@@ -212,8 +212,8 @@ rtl8188e_HalDmWatchDog(
 	PADAPTER	Adapter
 )
 {
-	BOOLEAN		bFwCurrentInPSMode = _FALSE;
-	BOOLEAN		bFwPSAwake = _TRUE;
+	bool		bFwCurrentInPSMode = _FALSE;
+	bool		bFwPSAwake = _TRUE;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT		*pDM_Odm = &(pHalData->odmpriv);
 

@@ -410,7 +410,7 @@ void halbtcoutsrc_DisableLowPower(PBTC_COEXIST pBtCoexist, u8 bLowPwrDisable)
 void halbtcoutsrc_AggregationCheck(PBTC_COEXIST pBtCoexist)
 {
 	PADAPTER padapter;
-	BOOLEAN bNeedToAct = _FALSE;
+	bool bNeedToAct = _FALSE;
 	static u32 preTime = 0;
 	u32 curTime = 0;
 
@@ -1286,10 +1286,10 @@ void halbtcoutsrc_DisplayWifiStatus(PBTC_COEXIST pBtCoexist)
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	u8			*cliBuf = pBtCoexist->cli_buf;
 	s32			wifiRssi = 0, btHsRssi = 0;
-	BOOLEAN	bScan = _FALSE, bLink = _FALSE, bRoam = _FALSE, bWifiBusy = _FALSE, bWifiUnderBMode = _FALSE;
+	bool	bScan = _FALSE, bLink = _FALSE, bRoam = _FALSE, bWifiBusy = _FALSE, bWifiUnderBMode = _FALSE;
 	u32			wifiBw = BTC_WIFI_BW_HT20, wifiTrafficDir = BTC_WIFI_TRAFFIC_TX, wifiFreq = BTC_FREQ_2_4G;
 	u32			wifiLinkStatus = 0x0;
-	BOOLEAN	bBtHsOn = _FALSE, bLowPower = _FALSE;
+	bool	bBtHsOn = _FALSE, bLowPower = _FALSE;
 	u8			wifiChnl = 0, wifiP2PChnl = 0, nScanAPNum = 0, FwPSState;
 	u32			iqk_cnt_total = 0, iqk_cnt_ok = 0, iqk_cnt_fail = 0;
 
@@ -1582,7 +1582,7 @@ u8 halbtcoutsrc_SetBtAntDetection(void *pBtcContext, u8 txTime, u8 btChnl)
 	return _FALSE;
 }
 
-BOOLEAN
+bool
 halbtcoutsrc_SetBtTRXMASK(
 	IN	void *			pBtcContext,
 	IN	u1Byte			bt_trx_mask

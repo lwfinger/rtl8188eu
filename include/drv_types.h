@@ -257,7 +257,7 @@ struct registry_priv {
 	u8	bt_ampdu;
 	u8	ant_num;
 #endif
-	BOOLEAN	bAcceptAddbaReq;
+	bool	bAcceptAddbaReq;
 
 	u8	antdiv_cfg;
 	u8	antdiv_type;
@@ -343,7 +343,7 @@ struct registry_priv {
 	s8 adaptivity_th_edcca_hl_diff;
 
 	u8 boffefusemask;
-	BOOLEAN bFileMaskEfuse;
+	bool bFileMaskEfuse;
 #ifdef CONFIG_AUTO_CHNL_SEL_NHM
 	u8 acs_mode;
 	u8 acs_auto_scan;

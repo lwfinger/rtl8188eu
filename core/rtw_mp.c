@@ -282,7 +282,7 @@ void free_mp_priv(struct mp_priv *pmp_priv)
 
 static void PHY_IQCalibrate_default(
 	PADAPTER	pAdapter,
-	BOOLEAN	bReCovery
+	bool	bReCovery
 )
 {
 	RTW_INFO("%s\n", __func__);
@@ -297,7 +297,7 @@ static void PHY_LCCalibrate_default(
 
 static void PHY_SetRFPathSwitch_default(
 	PADAPTER	pAdapter,
-	BOOLEAN		bMain
+	bool		bMain
 )
 {
 	RTW_INFO("%s\n", __func__);
@@ -329,7 +329,7 @@ static u8 PHY_QueryRFPathSwitch(PADAPTER padapter)
 	return 0;
 }
 
-static void  PHY_SetRFPathSwitch(PADAPTER padapter , BOOLEAN bMain) {
+static void  PHY_SetRFPathSwitch(PADAPTER padapter , bool bMain) {
 
 	if (IS_HARDWARE_TYPE_8188E(padapter))
 		phy_set_rf_path_switch_8188e(padapter, bMain);
@@ -744,7 +744,7 @@ static void mpt_SwitchRfSetting(PADAPTER pAdapter)
 
 /*---------------------------hal\rtl8192c\MPT_Phy.c---------------------------*/
 /*---------------------------hal\rtl8192c\MPT_HelperFunc.c---------------------------*/
-static void MPT_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
+static void MPT_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 {
 	hal_mpt_CCKTxPowerAdjust(Adapter, bInCH14);
 }
@@ -802,7 +802,7 @@ void SetDataRate(PADAPTER pAdapter)
 	hal_mpt_SetDataRate(pAdapter);
 }
 
-void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter , BOOLEAN bMain)
+void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter , bool bMain)
 {
 
 	PHY_SetRFPathSwitch(pAdapter, bMain);

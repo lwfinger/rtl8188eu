@@ -266,16 +266,16 @@ typedef struct hal_com_data {
 	u8				CurrentCenterFrequencyIndex1;
 	u8				nCur40MhzPrimeSC;	/* Control channel sub-carrier */
 	u8				nCur80MhzPrimeSC;   /* used for primary 40MHz of 80MHz mode */
-	BOOLEAN		bSwChnlAndSetBWInProgress;
+	bool		bSwChnlAndSetBWInProgress;
 	u8				bDisableSWChannelPlan; /* flag of disable software change channel plan	 */
 	u16				BasicRateSet;
 	u32				ReceiveConfig;
 	u8				rx_tsf_addr_filter_config; /* for 8822B/8821C USE */
-	BOOLEAN			bSwChnl;
-	BOOLEAN			bSetChnlBW;
-	BOOLEAN			bSWToBW40M;
-	BOOLEAN			bSWToBW80M;
-	BOOLEAN			bChnlBWInitialized;
+	bool			bSwChnl;
+	bool			bSetChnlBW;
+	bool			bSWToBW40M;
+	bool			bSWToBW80M;
+	bool			bChnlBWInitialized;
 	u32				BackUp_BB_REG_4_2nd_CCA[3];
 #ifdef CONFIG_AUTO_CHNL_SEL_NHM
 	struct auto_chan_sel acs;
@@ -455,7 +455,7 @@ typedef struct hal_com_data {
 	u32	RfRegChnlVal[MAX_RF_PATH];
 
 	/* RDG enable */
-	BOOLEAN	 bRDGEnable;
+	bool	 bRDGEnable;
 
 	u8	RegTxPause;
 	/* Beacon function related global variable. */
@@ -494,7 +494,7 @@ typedef struct hal_com_data {
 
 
 	/* 2010/08/09 MH Add CU power down mode. */
-	BOOLEAN		pwrdown;
+	bool		pwrdown;
 
 	/* Add for dual MAC  0--Mac0 1--Mac1 */
 	u32	interfaceIndex;
@@ -524,10 +524,10 @@ typedef struct hal_com_data {
 
 
 	/* 2010/12/10 MH Add for USB aggreation mode dynamic shceme. */
-	BOOLEAN		UsbRxHighSpeedMode;
-	BOOLEAN		UsbTxVeryHighSpeedMode;
+	bool		UsbRxHighSpeedMode;
+	bool		UsbTxVeryHighSpeedMode;
 	u32			UsbBulkOutSize;
-	BOOLEAN		bSupportUSB3;
+	bool		bSupportUSB3;
 	u8			usb_intf_start;
 
 	/* Interrupt relatd register information. */
@@ -587,7 +587,7 @@ typedef struct hal_com_data {
 #endif
 	u8	RfKFreeEnable;
 	u8	RfKFree_ch_group;
-	BOOLEAN				bCCKinCH14;
+	bool				bCCKinCH14;
 	BB_INIT_REGISTER	RegForRecover[5];
 
 	u32 RxGainOffset[4]; /*{2G, 5G_Low, 5G_Middle, G_High}*/

@@ -808,7 +808,7 @@ SwLedBlink7(
 {
 	PADAPTER Adapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN bStopBlinking = _FALSE;
+	bool bStopBlinking = _FALSE;
 
 	/* Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON) {
@@ -915,7 +915,7 @@ SwLedBlink9(
 {
 	PADAPTER Adapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN bStopBlinking = _FALSE;
+	bool bStopBlinking = _FALSE;
 
 	/* Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON) {
@@ -1142,7 +1142,7 @@ SwLedBlink10(
 {
 	PADAPTER Adapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN bStopBlinking = _FALSE;
+	bool bStopBlinking = _FALSE;
 
 	/* Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON) {
@@ -1331,7 +1331,7 @@ SwLedBlink11(
 {
 	PADAPTER Adapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN bStopBlinking = _FALSE;
+	bool bStopBlinking = _FALSE;
 
 	/* Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON) {
@@ -1402,7 +1402,7 @@ SwLedBlink12(
 {
 	PADAPTER Adapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN bStopBlinking = _FALSE;
+	bool bStopBlinking = _FALSE;
 
 	/* Change LED according to BlinkingLedState specified. */
 	if (pLed->BlinkingLedState == RTW_LED_ON) {
@@ -1470,7 +1470,7 @@ SwLedBlink13(
 {
 	PADAPTER Adapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN bStopBlinking = _FALSE;
+	bool bStopBlinking = _FALSE;
 	static u8	LinkBlinkCnt = 0;
 
 	/* Change LED according to BlinkingLedState specified. */
@@ -1531,7 +1531,7 @@ SwLedBlink14(
 {
 	PADAPTER Adapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN bStopBlinking = _FALSE;
+	bool bStopBlinking = _FALSE;
 	static u8	LinkBlinkCnt = 0;
 
 	/* Change LED according to BlinkingLedState specified. */
@@ -1582,7 +1582,7 @@ SwLedBlink15(
 {
 	PADAPTER Adapter = pLed->padapter;
 	struct mlme_priv	*pmlmepriv = &(Adapter->mlmepriv);
-	BOOLEAN bStopBlinking = _FALSE;
+	bool bStopBlinking = _FALSE;
 	static u8	LinkBlinkCnt = 0;
 	/* Change LED according to BlinkingLedState specified. */
 
@@ -1617,7 +1617,7 @@ SwLedBlink15(
 		break;
 
 	case LED_BLINK_NO_LINK: {
-		static BOOLEAN		bLedOn = _TRUE;
+		static bool		bLedOn = _TRUE;
 		if (bLedOn) {
 			bLedOn = _FALSE;
 			pLed->BlinkingLedState = RTW_LED_OFF;
@@ -1631,7 +1631,7 @@ SwLedBlink15(
 	break;
 
 	case LED_BLINK_LINK_IDEL: {
-		static BOOLEAN		bLedOn = _TRUE;
+		static bool		bLedOn = _TRUE;
 		if (bLedOn) {
 			bLedOn = _FALSE;
 			pLed->BlinkingLedState = RTW_LED_OFF;
@@ -3075,7 +3075,7 @@ SwLedControlMode9(
 	PLED_USB	pLed = &(ledpriv->SwLed0);
 	PLED_USB	pLed1 = &(ledpriv->SwLed1);
 	PLED_USB	pLed2 = &(ledpriv->SwLed2);
-	BOOLEAN  bWPSOverLap = _FALSE;
+	bool  bWPSOverLap = _FALSE;
 	/* RTW_INFO("LedAction=%d\n", LedAction); */
 	switch (LedAction) {
 	case LED_CTL_START_TO_LINK:

@@ -3773,7 +3773,7 @@ static int
 		enum nl80211_iftype type,
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 12, 0))
 		u32 *flags,
-	#endif
+#endif
 		struct vif_params *params)
 {
 	int ret = 0;

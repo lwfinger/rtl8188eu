@@ -1797,7 +1797,7 @@ exit:
 * Return	TRUE if c is null character
 *		FALSE otherwise.
 */
-inline BOOLEAN is_null(char c)
+inline bool is_null(char c)
 {
 	if (c == '\0')
 		return _TRUE;
@@ -1811,7 +1811,7 @@ inline BOOLEAN is_null(char c)
 * Return	TRUE if c is represent for EOL (end of line)
 *		FALSE otherwise.
 */
-inline BOOLEAN is_eol(char c)
+inline bool is_eol(char c)
 {
 	if (c == '\r' || c == '\n')
 		return _TRUE;
@@ -1825,7 +1825,7 @@ inline BOOLEAN is_eol(char c)
 * Return	TRUE if c is represent for space
 *		FALSE otherwise.
 */
-inline BOOLEAN is_space(char c)
+inline bool is_space(char c)
 {
 	if (c == ' ' || c == '\t')
 		return _TRUE;
@@ -1839,7 +1839,7 @@ inline BOOLEAN is_space(char c)
 * Return	TRUE if chTmp is represent for hex digit
 *		FALSE otherwise.
 */
-inline BOOLEAN IsHexDigit(char chTmp)
+inline bool IsHexDigit(char chTmp)
 {
 	if ((chTmp >= '0' && chTmp <= '9') ||
 		(chTmp >= 'a' && chTmp <= 'f') ||
@@ -1855,7 +1855,7 @@ inline BOOLEAN IsHexDigit(char chTmp)
 * Return	TRUE if chTmp is represent for alphabet
 *		FALSE otherwise.
 */
-inline BOOLEAN is_alpha(char chTmp)
+inline bool is_alpha(char chTmp)
 {
 	if ((chTmp >= 'a' && chTmp <= 'z') ||
 		(chTmp >= 'A' && chTmp <= 'Z'))

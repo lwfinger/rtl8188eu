@@ -52,10 +52,6 @@
 	#define UINT u32
 	#define ULONG u32
 
-	#if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 19))
-		typedef _Bool bool;
-	#endif
-
 	typedef void (*proc_t)(void *);
 
 	typedef	__kernel_size_t	SIZE_T;
@@ -277,8 +273,6 @@
 
 /* Get the N-bytes aligment offset from the current length */
 #define N_BYTE_ALIGMENT(__Value, __Aligment) ((__Aligment == 1) ? (__Value) : (((__Value + __Aligment - 1) / __Aligment) * __Aligment))
-
-typedef unsigned char	BOOLEAN, *PBOOLEAN, boolean;
 
 #define TEST_FLAG(__Flag, __testFlag)		(((__Flag) & (__testFlag)) != 0)
 #define SET_FLAG(__Flag, __setFlag)			((__Flag) |= __setFlag)

@@ -701,7 +701,7 @@ static void hal_load_pg_txpwr_info(
 	TxPowerInfo24G *pwr_info_2g,
 	TxPowerInfo5G *pwr_info_5g,
 	u8 *pg_data,
-	BOOLEAN AutoLoadFail
+	bool AutoLoadFail
 )
 {
 	struct hal_spec_t *hal_spec = GET_HAL_SPEC(adapter);
@@ -1204,7 +1204,7 @@ phy_SetTxPowerByRateBase(
 		pHalData->TxPwrByRateBase5G[RfPath][TxNum][RateSection - 1] = Value;
 }
 
-static inline BOOLEAN phy_is_txpwr_by_rate_undefined_of_band_path(_adapter *adapter, u8 band, u8 path)
+static inline bool phy_is_txpwr_by_rate_undefined_of_band_path(_adapter *adapter, u8 band, u8 path)
 {
 	struct hal_spec_t *hal_spec = GET_HAL_SPEC(adapter);
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
@@ -1949,10 +1949,10 @@ exit:
 	return;
 }
 
-static BOOLEAN phy_GetChnlIndex(u8 Channel, u8 *ChannelIdx)
+static bool phy_GetChnlIndex(u8 Channel, u8 *ChannelIdx)
 {
 	u8  i = 0;
-	BOOLEAN bIn24G = _TRUE;
+	bool bIn24G = _TRUE;
 
 	if (Channel <= 14) {
 		bIn24G = _TRUE;
@@ -1978,7 +1978,7 @@ PHY_GetTxPowerIndexBase(
 	u8				Rate,
 	CHANNEL_WIDTH	BandWidth,
 	u8				Channel,
-	PBOOLEAN		bIn24G
+	bool *		bIn24G
 )
 {
 	PHAL_DATA_TYPE		pHalData = GET_HAL_DATA(pAdapter);
@@ -2562,7 +2562,7 @@ phy_set_tx_power_level_by_path(
 )
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
-	BOOLEAN bIsIn24G = (pHalData->current_band_type == BAND_ON_2_4G);
+	bool bIsIn24G = (pHalData->current_band_type == BAND_ON_2_4G);
 
 	/* if ( pMgntInfo->RegNByteAccess == 0 ) */
 	{
@@ -2651,7 +2651,7 @@ static s8 _phy_get_txpwr_lmt(
 	u8					RfPath,
 	u8					DataRate,
 	u8					Channel,
-	BOOLEAN no_sc
+	bool no_sc
 )
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(Adapter);
@@ -2816,7 +2816,7 @@ PHY_GetTxPowerLimit(
 	u8					Channel
 )
 {
-	BOOLEAN no_sc = _FALSE;
+	bool no_sc = _FALSE;
 
 	/* MP mode channel don't use secondary channel */
 	if (rtw_mi_mp_mode_check(Adapter) == _TRUE)
@@ -4157,7 +4157,7 @@ static int phy_ParseBBPgParaFile(PADAPTER Adapter, char *buffer)
 	char	*szLine, *ptmp;
 	u32	u4bRegOffset, u4bRegMask, u4bRegValue;
 	u32	u4bMove;
-	BOOLEAN firstLine = _TRUE;
+	bool firstLine = _TRUE;
 	u8	tx_num = 0;
 	u8	band = 0, rf_path = 0;
 

@@ -52,14 +52,14 @@ _ConfigNormalChipOutEP_8188E(
 
 }
 
-static BOOLEAN HalUsbSetQueuePipeMapping8188EUsb(
+static bool HalUsbSetQueuePipeMapping8188EUsb(
 	PADAPTER	pAdapter,
 	u8		NumInPipe,
 	u8		NumOutPipe
 )
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
-	BOOLEAN			result		= _FALSE;
+	bool			result		= _FALSE;
 
 	_ConfigNormalChipOutEP_8188E(pAdapter, NumOutPipe);
 
@@ -303,7 +303,7 @@ _InitQueueReservedPage(
 	u32			numPubQ	= 0x00;
 	u32			value32;
 	u8			value8;
-	BOOLEAN			bWiFiConfig	= pregistrypriv->wifi_spec;
+	bool			bWiFiConfig	= pregistrypriv->wifi_spec;
 
 	if (bWiFiConfig || pregistrypriv->qos_opt_enable) {
 		if (pHalData->OutEpQueueSel & TX_SELE_HQ)
@@ -669,7 +669,7 @@ _InitEDCA(
 static void
 _InitBeaconMaxError(
 	PADAPTER	Adapter,
-	BOOLEAN		InfraMode
+	bool		InfraMode
 )
 {
 
@@ -872,7 +872,7 @@ InitUsbAggregationSetting(
 static void
 HalRxAggr8188EUsb(
 	PADAPTER Adapter,
-	BOOLEAN	Value
+	bool	Value
 )
 {
 }
@@ -966,8 +966,8 @@ _InitRFType(
 static void
 _BeaconFunctionEnable(
 	PADAPTER		Adapter,
-	BOOLEAN			Enable,
-	BOOLEAN			Linked
+	bool			Enable,
+	bool			Linked
 )
 {
 	rtw_write8(Adapter, REG_BCN_CTRL, (BIT4 | BIT3 | BIT1));
@@ -1682,7 +1682,7 @@ static void
 _ReadLEDSetting(
 	PADAPTER	Adapter,
 	u8		*PROMContent,
-	BOOLEAN		AutoloadFail
+	bool		AutoloadFail
 )
 {
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
@@ -1705,7 +1705,7 @@ static void
 _ReadRFSetting(
 	PADAPTER	Adapter,
 	u8	*PROMContent,
-	BOOLEAN	AutoloadFail
+	bool	AutoloadFail
 )
 {
 }
@@ -1721,7 +1721,7 @@ static void
 Hal_EfuseParsePIDVID_8188EU(
 	PADAPTER		pAdapter,
 	u8				*hwinfo,
-	BOOLEAN			AutoLoadFail
+	bool			AutoLoadFail
 )
 {
 

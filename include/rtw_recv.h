@@ -331,7 +331,7 @@ struct recv_priv {
 #endif /* CONFIG_NEW_SIGNAL_STAT_PROCESS */
 	u16 sink_udpport, pre_rtp_rxseq, cur_rtp_rxseq;
 
-	BOOLEAN store_law_data_flag;
+	bool store_law_data_flag;
 };
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS

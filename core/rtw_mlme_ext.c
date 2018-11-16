@@ -10333,7 +10333,7 @@ Following are some utitity fuctions for WiFi MLME
 
 *****************************************************************************/
 
-BOOLEAN IsLegal5GChannel(
+bool IsLegal5GChannel(
 	PADAPTER			Adapter,
 	u8			channel)
 {

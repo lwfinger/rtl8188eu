@@ -246,7 +246,7 @@ inline void rtw_odm_radar_detect_enable(_adapter *adapter)
 	phydm_radar_detect_enable(GET_ODM(adapter));
 }
 
-inline BOOLEAN rtw_odm_radar_detect(_adapter *adapter)
+inline bool rtw_odm_radar_detect(_adapter *adapter)
 {
 	return phydm_radar_detect(GET_ODM(adapter));
 }

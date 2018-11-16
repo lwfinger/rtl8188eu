@@ -3608,7 +3608,7 @@ static int proc_tdls_display_tdls_function_info(struct seq_file *m)
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	u8 SpaceBtwnItemAndValue = TDLS_DBG_INFO_SPACE_BTWN_ITEM_AND_VALUE;
 	u8 SpaceBtwnItemAndValueTmp = 0;
-	BOOLEAN FirstMatchFound = _FALSE;
+	bool FirstMatchFound = _FALSE;
 	int j = 0;
 
 	RTW_PRINT_SEL(m, "============[TDLS Function Info]============\n");
@@ -3812,7 +3812,7 @@ static int proc_tdls_display_tdls_sta_info(struct seq_file *m)
 	u8 SpaceBtwnItemAndValue = TDLS_DBG_INFO_SPACE_BTWN_ITEM_AND_VALUE;
 	u8 SpaceBtwnItemAndValueTmp = 0;
 	u8 NumOfTdlsStaToShow = 0;
-	BOOLEAN FirstMatchFound = _FALSE;
+	bool FirstMatchFound = _FALSE;
 
 	/* Search for TDLS sta info to display */
 	_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
@@ -3984,7 +3984,7 @@ int proc_get_tdls_info(struct seq_file *m, void *v)
 	u8 SpaceBtwnItemAndValue = 41;
 	u8 SpaceBtwnItemAndValueTmp = 0;
 	u8 NumOfTdlsStaToShow = 0;
-	BOOLEAN FirstMatchFound = _FALSE;
+	bool FirstMatchFound = _FALSE;
 
 	if (hal_chk_wl_func(padapter, WL_FUNC_TDLS) == _FALSE) {
 		RTW_PRINT_SEL(m, "No tdls info can be shown since hal doesn't support tdls\n");

@@ -3708,9 +3708,9 @@ void	rtw_ht_use_default_setting(_adapter *padapter)
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	struct ht_priv		*phtpriv = &pmlmepriv->htpriv;
 	struct registry_priv	*pregistrypriv = &padapter->registrypriv;
-	BOOLEAN		bHwLDPCSupport = _FALSE, bHwSTBCSupport = _FALSE;
+	bool		bHwLDPCSupport = _FALSE, bHwSTBCSupport = _FALSE;
 #ifdef CONFIG_BEAMFORMING
-	BOOLEAN		bHwSupportBeamformer = _FALSE, bHwSupportBeamformee = _FALSE;
+	bool		bHwSupportBeamformer = _FALSE, bHwSupportBeamformee = _FALSE;
 #endif /* CONFIG_BEAMFORMING */
 
 	if (pregistrypriv->wifi_spec)

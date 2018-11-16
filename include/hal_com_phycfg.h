@@ -191,7 +191,7 @@ PHY_GetTxPowerIndexBase(
 	u8				Rate,
 	CHANNEL_WIDTH	BandWidth,
 	u8				Channel,
-	PBOOLEAN		bIn24G
+	bool *		bIn24G
 );
 
 s8

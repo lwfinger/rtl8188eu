@@ -575,8 +575,8 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct sta_info *psta = NULL;
 #endif
-	BOOLEAN		bSendBeacon = _FALSE;
-	BOOLEAN		bcn_valid = _FALSE;
+	bool		bSendBeacon = _FALSE;
+	bool		bcn_valid = _FALSE;
 	u8	DLBcnCount = 0;
 	u32 poll = 0;
 

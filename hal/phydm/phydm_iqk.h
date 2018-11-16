@@ -37,8 +37,8 @@
 /*---------------------------End Define Parameters-------------------------------*/
 
 struct _IQK_INFORMATION {
-	boolean		LOK_fail[NUM];
-	boolean		IQK_fail[2][NUM];
+	bool		LOK_fail[NUM];
+	bool		IQK_fail[2][NUM];
 	u32		iqc_matrix[2][NUM];
 	u8      iqk_times;
 	u32		rf_reg18;
@@ -48,7 +48,7 @@ struct _IQK_INFORMATION {
 	u8		kcount;
 
 	u32		iqk_channel[2];
-	boolean		IQK_fail_report[2][4][2]; /*channel/path/TRX(TX:0, RX:1) */
+	bool		IQK_fail_report[2][4][2]; /*channel/path/TRX(TX:0, RX:1) */
 	u32		IQK_CFIR_real[2][4][2][8]; /*channel / path / TRX(TX:0, RX:1) / CFIR_real*/
 	u32		IQK_CFIR_imag[2][4][2][8]; /*channel / path / TRX(TX:0, RX:1) / CFIR_imag*/
 	u8		retry_count[2][4][3]; /* channel / path / (TXK:0, RXK1:1, RXK2:2) */
@@ -58,8 +58,8 @@ struct _IQK_INFORMATION {
 	u16		RXIQK_AGC[2][4];	 /*channel / path*/
 	u32		bypass_iqk[2][4];	/*channel / 0xc94/0xe94*/
 	u32		tmp_GNTWL;
-	boolean		is_BTG;
-	boolean		isbnd;
+	bool		is_BTG;
+	bool		isbnd;
 };
 
 #endif

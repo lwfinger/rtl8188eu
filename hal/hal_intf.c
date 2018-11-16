@@ -277,7 +277,7 @@ u8 rtw_hal_get_def_var(_adapter *padapter, HAL_DEF_VARIABLE eVariable, void * pV
 	return padapter->hal_func.get_hal_def_var_handler(padapter, eVariable, pValue);
 }
 
-void rtw_hal_set_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1, BOOLEAN bSet)
+void rtw_hal_set_odm_var(_adapter *padapter, HAL_ODM_VARIABLE eVariable, void * pValue1, bool bSet)
 {
 	padapter->hal_func.SetHalODMVarHandler(padapter, eVariable, pValue1, bSet);
 }

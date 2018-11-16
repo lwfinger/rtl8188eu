@@ -192,17 +192,17 @@ typedef struct _LED_USB {
 	LED_PIN			LedPin;	/* Identify how to implement this SW led. */
 
 	LED_STATE			CurrLedState; /* Current LED state. */
-	BOOLEAN				bLedOn; /* TRUE if LED is ON, FALSE if LED is OFF. */
+	bool				bLedOn; /* TRUE if LED is ON, FALSE if LED is OFF. */
 
-	BOOLEAN				bSWLedCtrl;
+	bool				bSWLedCtrl;
 
-	BOOLEAN				bLedBlinkInProgress; /* TRUE if it is blinking, FALSE o.w.. */
+	bool				bLedBlinkInProgress; /* TRUE if it is blinking, FALSE o.w.. */
 	/* ALPHA, added by chiyoko, 20090106 */
-	BOOLEAN				bLedNoLinkBlinkInProgress;
-	BOOLEAN				bLedLinkBlinkInProgress;
-	BOOLEAN				bLedStartToLinkBlinkInProgress;
-	BOOLEAN				bLedScanBlinkInProgress;
-	BOOLEAN				bLedWPSBlinkInProgress;
+	bool				bLedNoLinkBlinkInProgress;
+	bool				bLedLinkBlinkInProgress;
+	bool				bLedStartToLinkBlinkInProgress;
+	bool				bLedScanBlinkInProgress;
+	bool				bLedWPSBlinkInProgress;
 
 	u32					BlinkTimes; /* Number of times to toggle led state for blinking. */
 	u8					BlinkCounter; /* Added for turn off overlap led after blinking a while, by page, 20120821 */

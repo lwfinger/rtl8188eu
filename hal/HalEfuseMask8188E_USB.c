@@ -82,7 +82,7 @@ EFUSE_GetMaskArray_MP_8188E_MUSB(
 	for (i = 0; i < len; ++i)
 		Array[i] = Array_MP_8188E_MUSB[i];
 }
-BOOLEAN
+bool
 EFUSE_IsAddressMasked_MP_8188E_MUSB(
 	u2Byte  Offset
 )

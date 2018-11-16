@@ -399,8 +399,7 @@ enum phy_reg_pg_type {
 
 /*2011/09/22 MH Copy from SD4 defined structure. We use to support PHY DM integration.*/
 
-	struct PHY_DM_STRUCT
-{
+struct PHY_DM_STRUCT {
 	/*Add for different team use temporarily*/
 	struct _ADAPTER		*adapter;		/*For CE/NIC team*/
 	struct rtl8192cd_priv	*priv;			/*For AP/ADSL team*/

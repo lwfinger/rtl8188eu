@@ -599,11 +599,11 @@ u8 map_read8(const struct map_t *map, u16 offset);
 
 /* String handler */
 
-BOOLEAN is_null(char c);
-BOOLEAN is_eol(char c);
-BOOLEAN is_space(char c);
-BOOLEAN IsHexDigit(char chTmp);
-BOOLEAN is_alpha(char chTmp);
+bool is_null(char c);
+bool is_eol(char c);
+bool is_space(char c);
+bool IsHexDigit(char chTmp);
+bool is_alpha(char chTmp);
 char alpha_to_upper(char c);
 
 /*

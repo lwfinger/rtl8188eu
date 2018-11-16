@@ -47,7 +47,7 @@ u8 rtw_odm_dfs_domain_unknown(_adapter *adapter);
 void rtw_odm_radar_detect_reset(_adapter *adapter);
 void rtw_odm_radar_detect_disable(_adapter *adapter);
 void rtw_odm_radar_detect_enable(_adapter *adapter);
-BOOLEAN rtw_odm_radar_detect(_adapter *adapter);
+bool rtw_odm_radar_detect(_adapter *adapter);
 #endif /* CONFIG_DFS_MASTER */
 
 void rtw_odm_parse_rx_phy_status_chinfo(union recv_frame *rframe, u8 *phys);

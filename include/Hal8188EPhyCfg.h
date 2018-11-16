@@ -91,7 +91,7 @@ int	rtl8188e_PHY_ConfigRFWithParaFile(PADAPTER Adapter, u8 *pFileName, u8 eRFPat
 /*
  * RF Power setting
  */
-/* extern	BOOLEAN	PHY_SetRFPowerState(PADAPTER			Adapter,
+/* extern	bool	PHY_SetRFPowerState(PADAPTER			Adapter,
  *									RT_RF_POWER_STATE	eRFPowerState); */
 
 /*
@@ -101,7 +101,7 @@ void	PHY_GetTxPowerLevel8188E(PADAPTER		Adapter,
 				 s32		*powerlevel);
 void	PHY_SetTxPowerLevel8188E(PADAPTER		Adapter,
 				 u8			channel);
-BOOLEAN	PHY_UpdateTxPowerDbm8188E(PADAPTER	Adapter,
+bool	PHY_UpdateTxPowerDbm8188E(PADAPTER	Adapter,
 				  int		powerInDbm);
 
 void
@@ -133,7 +133,7 @@ void	PHY_SetBWMode8188E(PADAPTER			pAdapter,
 /*
  * Set FW CMD IO for 8192S.
  */
-/* extern	BOOLEAN HalSetIO8192C(PADAPTER			Adapter,
+/* extern	bool HalSetIO8192C(PADAPTER			Adapter,
  *									IO_TYPE				IOType); */
 
 /*
@@ -179,7 +179,7 @@ PHY_EnableHostClkReq(
 	PADAPTER			Adapter
 );
 
-BOOLEAN
+bool
 SetAntennaConfig92C(
 	PADAPTER	Adapter,
 	u8		DefaultAnt

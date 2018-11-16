@@ -49,12 +49,12 @@
  *   */
 
 #if (SIC_ENABLE == 1)
-static BOOLEAN
+static bool
 sic_IsSICReady(
 	PADAPTER	Adapter
 )
 {
-	BOOLEAN		bRet = _FALSE;
+	bool		bRet = _FALSE;
 	u32		retryCnt = 0;
 	u8		sic_cmd = 0xff;
 
@@ -264,7 +264,7 @@ SIC_Init(
 #endif
 }
 
-static BOOLEAN
+static bool
 SIC_LedOff(
 	PADAPTER	Adapter
 )
@@ -1237,7 +1237,7 @@ PHY_GetTxPowerIndex_8188E(
 	u8 base_idx = 0, power_idx = 0;
 	s8 by_rate_diff = 0, limit = 0, tpt_offset = 0, extra_bias = 0;
 	u8 txNum = phy_GetCurrentTxNum_8188E(pAdapter, Rate);
-	BOOLEAN bIn24G = _FALSE;
+	bool bIn24G = _FALSE;
 
 	base_idx = PHY_GetTxPowerIndexBase(pAdapter, RFPath, Rate, BandWidth, Channel, &bIn24G);
 
@@ -1274,7 +1274,7 @@ PHY_GetTxPowerIndex_8188E(
  *		A mode.
  *	By Bruce, 2008-02-04.
  *   */
-BOOLEAN
+bool
 PHY_UpdateTxPowerDbm8188E(
 	PADAPTER	Adapter,
 	int		powerInDbm
@@ -1545,7 +1545,7 @@ PHY_SwChnl8188E(/* Call after initialization */
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	tmpchannel = pHalData->current_channel;
-	BOOLEAN  bResult = _TRUE;
+	bool  bResult = _TRUE;
 
 	if (pHalData->rf_chip == RF_PSEUDO_11N)
 		return; 								/* return immediately if it is peudo-phy */
@@ -1607,8 +1607,8 @@ PHY_SetSwChnlBWMode8188E(
 
 static void _PHY_SetRFPathSwitch(
 	PADAPTER	pAdapter,
-	BOOLEAN		bMain,
-	BOOLEAN		is2T
+	bool		bMain,
+	bool		is2T
 )
 {
 	u8	u1bTmp;
@@ -1637,9 +1637,9 @@ static void _PHY_SetRFPathSwitch(
 
 /* return value TRUE => Main; FALSE => Aux */
 
-static BOOLEAN _PHY_QueryRFPathSwitch(
+static bool _PHY_QueryRFPathSwitch(
 	PADAPTER	pAdapter,
-	BOOLEAN		is2T
+	bool		is2T
 )
 {
 	/*	if(is2T)

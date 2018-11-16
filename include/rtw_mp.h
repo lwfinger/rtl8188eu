@@ -156,18 +156,18 @@ typedef struct _RT_PMAC_TX_INFO {
 typedef void (*MPT_WORK_ITEM_HANDLER)(void * Adapter);
 typedef struct _MPT_CONTEXT {
 	/* Indicate if we have started Mass Production Test. */
-	BOOLEAN			bMassProdTest;
+	bool			bMassProdTest;
 
 	/* Indicate if the driver is unloading or unloaded. */
-	BOOLEAN			bMptDrvUnload;
+	bool			bMptDrvUnload;
 
 	_sema			MPh2c_Sema;
 	struct timer_list 		MPh2c_timeout_timer;
 	/* Event used to sync H2c for BT control */
 
-	BOOLEAN		MptH2cRspEvent;
-	BOOLEAN		MptBtC2hEvent;
-	BOOLEAN		bMPh2c_timeout;
+	bool		MptH2cRspEvent;
+	bool		MptBtC2hEvent;
+	bool		bMPh2c_timeout;
 
 	/* 8190 PCI does not support NDIS_WORK_ITEM. */
 	/* Work Item for Mass Production Test. */
@@ -178,7 +178,7 @@ typedef struct _MPT_CONTEXT {
 	/* To protect the following variables.
 	*	NDIS_SPIN_LOCK		MptWorkItemSpinLock; */
 	/* Indicate a MptWorkItem is scheduled and not yet finished. */
-	BOOLEAN			bMptWorkItemInProgress;
+	bool			bMptWorkItemInProgress;
 	/* An instance which implements function and context of MptWorkItem. */
 	MPT_WORK_ITEM_HANDLER	CurrMptAct;
 
@@ -215,30 +215,30 @@ typedef struct _MPT_CONTEXT {
 	/* Content of RCR Regsiter for Mass Production Test. */
 	ULONG			MptRCR;
 	/* TRUE if we only receive packets with specific pattern. */
-	BOOLEAN			bMptFilterPattern;
+	bool			bMptFilterPattern;
 	/* Rx OK count, statistics used in Mass Production Test. */
 	ULONG			MptRxOkCnt;
 	/* Rx CRC32 error count, statistics used in Mass Production Test. */
 	ULONG			MptRxCrcErrCnt;
 
-	BOOLEAN			bCckContTx;	/* TRUE if we are in CCK Continuous Tx test. */
-	BOOLEAN			bOfdmContTx;	/* TRUE if we are in OFDM Continuous Tx test. */
+	bool			bCckContTx;	/* TRUE if we are in CCK Continuous Tx test. */
+	bool			bOfdmContTx;	/* TRUE if we are in OFDM Continuous Tx test. */
 		/* TRUE if we have start Continuous Tx test. */
-	BOOLEAN			is_start_cont_tx;
+	bool			is_start_cont_tx;
 
 	/* TRUE if we are in Single Carrier Tx test. */
-	BOOLEAN			bSingleCarrier;
+	bool			bSingleCarrier;
 	/* TRUE if we are in Carrier Suppression Tx Test. */
 
-	BOOLEAN			is_carrier_suppression;
+	bool			is_carrier_suppression;
 
 	/* TRUE if we are in Single Tone Tx test. */
 
-	BOOLEAN			is_single_tone;
+	bool			is_single_tone;
 
 
 	/* ACK counter asked by K.Y.. */
-	BOOLEAN			bMptEnableAckCounter;
+	bool			bMptEnableAckCounter;
 	ULONG			MptAckCounter;
 
 	/* SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~! */
@@ -247,7 +247,7 @@ typedef struct _MPT_CONTEXT {
 	/* s4Byte			RfReadLine[2]; */
 
 	u8		APK_bound[2];	/* for APK	path A/path B */
-	BOOLEAN		bMptIndexEven;
+	bool		bMptIndexEven;
 
 	u8		backup0xc50;
 	u8		backup0xc58;
@@ -268,8 +268,8 @@ typedef struct _MPT_CONTEXT {
 	RT_PMAC_PKT_INFO	PMacPktInfo;
 	u8 HWTxmode;
 
-	BOOLEAN			bldpc;
-	BOOLEAN			bstbc;
+	bool			bldpc;
+	bool			bstbc;
 } MPT_CONTEXT, *PMPT_CONTEXT;
 /* #endif */
 
@@ -358,7 +358,7 @@ struct mp_priv {
 	u32 rx_pktcount_filter_out;
 	u32 rx_crcerrpktcount;
 	u32 rx_pktloss;
-	BOOLEAN  rx_bindicatePkt;
+	bool  rx_bindicatePkt;
 	struct recv_stat rxstat;
 
 	/* RF/BB relative */
@@ -391,11 +391,11 @@ struct mp_priv {
 	u8 *pmp_xmtframe_buf;
 	_queue free_mp_xmitqueue;
 	u32 free_mp_xmitframe_cnt;
-	BOOLEAN bSetRxBssid;
-	BOOLEAN bTxBufCkFail;
-	BOOLEAN bRTWSmbCfg;
-	BOOLEAN bloopback;
-	BOOLEAN bloadefusemap;
+	bool bSetRxBssid;
+	bool bTxBufCkFail;
+	bool bRTWSmbCfg;
+	bool bloopback;
+	bool bloadefusemap;
 
 	MPT_CONTEXT	mpt_ctx;
 
@@ -689,7 +689,7 @@ void	rtw_mp_trigger_lck(PADAPTER padapter);
 void hal_mpt_SwitchRfSetting(PADAPTER pAdapter);
 s32 hal_mpt_SetPowerTracking(PADAPTER padapter, u8 enable);
 void hal_mpt_GetPowerTracking(PADAPTER padapter, u8 *enable);
-void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14);
+void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14);
 void hal_mpt_SetChannel(PADAPTER pAdapter);
 void hal_mpt_SetBandwidth(PADAPTER pAdapter);
 void hal_mpt_SetTxPower(PADAPTER pAdapter);
@@ -704,7 +704,7 @@ void hal_mpt_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart);
 void hal_mpt_SetSingleToneTx(PADAPTER pAdapter, u8 bStart);
 void hal_mpt_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart);
 void mpt_ProSetPMacTx(PADAPTER	Adapter);
-void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter , BOOLEAN bMain);
+void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter , bool bMain);
 u8 MP_PHY_QueryRFPathSwitch(PADAPTER pAdapter);
 ULONG mpt_ProQueryCalTxPower(PADAPTER	pAdapter, u8 RfPath);
 void MPT_PwrCtlDM(PADAPTER padapter, u32 bstart);

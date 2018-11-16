@@ -1646,7 +1646,7 @@ void odm_fast_ant_training_callback(struct timer_list *t)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 	struct PHY_DM_STRUCT *p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 #else
-	struct PHY_DM_STRUCT *p_dm_odm = from_timer(p_gm_odm, t, fast_ant_training_timer);
+	struct PHY_DM_STRUCT *p_dm_odm = from_timer(p_dm_odm, t, fast_ant_training_timer);
 #endif
 	struct _ADAPTER	*padapter = p_dm_odm->adapter;
 

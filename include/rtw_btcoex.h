@@ -117,7 +117,7 @@ typedef struct _HCI_EXT_CONFIG {
 	u1Byte					CurrentBTStatus;
 	u2Byte					HCIExtensionVer;
 
-	BOOLEAN					bEnableWifiScanNotify;
+	bool					bEnableWifiScanNotify;
 } HCI_EXT_CONFIG, *PHCI_EXT_CONFIG;
 
 typedef struct _HCI_PHY_LINK_BSS_INFO {
@@ -314,10 +314,10 @@ typedef enum _HCI_EXT_BT_OPERATION {
 } HCI_EXT_BT_OPERATION, *PHCI_EXT_BT_OPERATION;
 
 typedef struct _BT_MGNT {
-	BOOLEAN				bBTConnectInProgress;
-	BOOLEAN				bLogLinkInProgress;
-	BOOLEAN				bPhyLinkInProgress;
-	BOOLEAN				bPhyLinkInProgressStartLL;
+	bool				bBTConnectInProgress;
+	bool				bLogLinkInProgress;
+	bool				bPhyLinkInProgress;
+	bool				bPhyLinkInProgressStartLL;
 	u1Byte				BtCurrentPhyLinkhandle;
 	u2Byte				BtCurrentLogLinkhandle;
 	u1Byte				CurrentConnectEntryNum;
@@ -327,21 +327,21 @@ typedef struct _BT_MGNT {
 	BT_CONNECT_TYPE		BTReceiveConnectPkt;
 	u1Byte				BTAuthCount;
 	u1Byte				BTAsocCount;
-	BOOLEAN				bStartSendSupervisionPkt;
-	BOOLEAN				BtOperationOn;
-	BOOLEAN				BTNeedAMPStatusChg;
-	BOOLEAN				JoinerNeedSendAuth;
+	bool				bStartSendSupervisionPkt;
+	bool				BtOperationOn;
+	bool				BTNeedAMPStatusChg;
+	bool				JoinerNeedSendAuth;
 	HCI_PHY_LINK_BSS_INFO	bssDesc;
 	HCI_EXT_CONFIG		ExtConfig;
-	BOOLEAN				bNeedNotifyAMPNoCap;
-	BOOLEAN				bCreateSpportQos;
-	BOOLEAN				bSupportProfile;
+	bool				bNeedNotifyAMPNoCap;
+	bool				bCreateSpportQos;
+	bool				bSupportProfile;
 	u1Byte				BTChannel;
-	BOOLEAN				CheckChnlIsSuit;
-	BOOLEAN				bBtScan;
-	BOOLEAN				btLogoTest;
-	BOOLEAN				bRfStatusNotified;
-	BOOLEAN				bBtRsvedPageDownload;
+	bool				CheckChnlIsSuit;
+	bool				bBtScan;
+	bool				btLogoTest;
+	bool				bRfStatusNotified;
+	bool				bBtRsvedPageDownload;
 } BT_MGNT, *PBT_MGNT;
 
 struct bt_coex_info {

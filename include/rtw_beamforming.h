@@ -310,8 +310,8 @@ typedef enum _SOUNDING_MODE {
 } SOUNDING_MODE, *PSOUNDING_MODE;
 
 struct beamforming_entry {
-	BOOLEAN	bUsed;
-	BOOLEAN	bSound;
+	bool	bUsed;
+	bool	bSound;
 	u16	aid;			/* Used to construct AID field of NDPA packet. */
 	u16	mac_id;		/* Used to Set Reg42C in IBSS mode. */
 	u16	p_aid;		/* Used to fill Reg42C & Reg714 to compare with P_AID of Tx DESC. */
@@ -330,7 +330,7 @@ struct beamforming_entry {
 	u8	LogStatusFailCnt;
 	u8	PreCsiReport[327];
 	u8	DefaultCsiCnt;
-	BOOLEAN	bDefaultCSI;
+	bool	bDefaultCSI;
 };
 
 struct sounding_info {
@@ -360,10 +360,10 @@ BEAMFORMING_CAP beamforming_get_entry_beam_cap_by_mac_id(void * pmlmepriv , u8 m
 void	beamforming_notify(PADAPTER adapter);
 BEAMFORMING_CAP beamforming_get_beamform_cap(struct beamforming_info	*pBeamInfo);
 
-BOOLEAN	beamforming_send_ht_ndpa_packet(PADAPTER Adapter, u8 *ra, CHANNEL_WIDTH bw, u8 qidx);
-BOOLEAN	beamforming_send_vht_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, CHANNEL_WIDTH bw, u8 qidx);
+bool	beamforming_send_ht_ndpa_packet(PADAPTER Adapter, u8 *ra, CHANNEL_WIDTH bw, u8 qidx);
+bool	beamforming_send_vht_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, CHANNEL_WIDTH bw, u8 qidx);
 
-void	beamforming_check_sounding_success(PADAPTER Adapter, BOOLEAN status);
+void	beamforming_check_sounding_success(PADAPTER Adapter, bool status);
 
 void	beamforming_watchdog(PADAPTER Adapter);
 #endif /*#if (BEAMFORMING_SUPPORT ==0)- for diver defined beamforming*/

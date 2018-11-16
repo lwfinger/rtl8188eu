@@ -244,7 +244,7 @@ u8 hal_com_config_channel_plan(
 	char *sw_alpha2,
 	u8 sw_chplan,
 	u8 def_chplan,
-	BOOLEAN AutoLoadFail
+	bool AutoLoadFail
 )
 {
 	PHAL_DATA_TYPE	pHalData;
@@ -326,13 +326,13 @@ done:
 	return chplan;
 }
 
-BOOLEAN
+bool
 HAL_IsLegalChannel(
 	PADAPTER	Adapter,
 	u32			Channel
 )
 {
-	BOOLEAN bLegalChannel = _TRUE;
+	bool bLegalChannel = _TRUE;
 
 	if (Channel > 14) {
 		if (is_supported_5g(Adapter->registrypriv.wireless_mode) == _FALSE) {
@@ -960,7 +960,7 @@ _OneOutPipeMapping(
 static void
 _TwoOutPipeMapping(
 	PADAPTER	pAdapter,
-	BOOLEAN		bWIFICfg
+	bool		bWIFICfg
 )
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
@@ -1004,7 +1004,7 @@ _TwoOutPipeMapping(
 
 static void _ThreeOutPipeMapping(
 	PADAPTER	pAdapter,
-	BOOLEAN		bWIFICfg
+	bool		bWIFICfg
 )
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
@@ -1046,7 +1046,7 @@ static void _ThreeOutPipeMapping(
 }
 static void _FourOutPipeMapping(
 	PADAPTER	pAdapter,
-	BOOLEAN		bWIFICfg
+	bool		bWIFICfg
 )
 {
 	struct dvobj_priv	*pdvobjpriv = adapter_to_dvobj(pAdapter);
@@ -1086,7 +1086,7 @@ static void _FourOutPipeMapping(
 	}
 
 }
-BOOLEAN
+bool
 Hal_MappingOutPipe(
 	PADAPTER	pAdapter,
 	u8		NumOutPipe
@@ -1094,9 +1094,9 @@ Hal_MappingOutPipe(
 {
 	struct registry_priv *pregistrypriv = &pAdapter->registrypriv;
 
-	BOOLEAN	 bWIFICfg = (pregistrypriv->wifi_spec) ? _TRUE : _FALSE;
+	bool	 bWIFICfg = (pregistrypriv->wifi_spec) ? _TRUE : _FALSE;
 
-	BOOLEAN result = _TRUE;
+	bool result = _TRUE;
 
 	switch (NumOutPipe) {
 	case 2:
@@ -5634,7 +5634,7 @@ void rtw_hal_construct_NullFunctionData(
 }
 
 static void rtw_hal_construct_ProbeRsp(_adapter *padapter, u8 *pframe, u32 *pLength,
-				u8 *StaAddr, BOOLEAN bHideSSID)
+				u8 *StaAddr, bool bHideSSID)
 {
 	struct rtw_ieee80211_hdr	*pwlanhdr;
 	__le16 *fctrl;
@@ -8399,7 +8399,7 @@ void SetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
-	BOOLEAN					bSet)
+	bool					bSet)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT *podmpriv = &pHalData->odmpriv;
@@ -8649,7 +8649,7 @@ u32 rtw_phydm_ability_ops(_adapter *adapter, HAL_PHYDM_OPS ops, u32 ability)
 }
 
 
-BOOLEAN
+bool
 eqNByte(
 	u8	*str1,
 	u8	*str2,
@@ -8691,7 +8691,7 @@ MapCharToHexDigit(
  *	Description:
  *		Parse hex number from the string pucStr.
  *   */
-BOOLEAN
+bool
 GetHexValueFromString(
 		char			*szStr,
 	u32			*pu4bVal,
@@ -8740,7 +8740,7 @@ GetHexValueFromString(
 	return _TRUE;
 }
 
-BOOLEAN
+bool
 GetFractionValueFromString(
 		char			*szStr,
 	u8				*pInteger,
@@ -8791,7 +8791,7 @@ GetFractionValueFromString(
  *	Description:
  * Return TRUE if szStr is comment out with leading " */ /* ".
  *   */
-BOOLEAN
+bool
 IsCommentString(
 		char			*szStr
 )
@@ -8802,7 +8802,7 @@ IsCommentString(
 		return _FALSE;
 }
 
-BOOLEAN
+bool
 GetU1ByteIntegerFromStringInDecimal(
 		char	*Str,
 	u8		*pInt
@@ -8826,7 +8826,7 @@ GetU1ByteIntegerFromStringInDecimal(
 /* <20121004, Kordan> For example,
  * ParseQualifiedString(inString, 0, outString, '[', ']') gets "Kordan" from a string "Hello [Kordan]".
  * If RightQualifier does not exist, it will hang on in the while loop */
-BOOLEAN
+bool
 ParseQualifiedString(
 		char	*In,
 		u32	*Start,
@@ -8850,7 +8850,7 @@ ParseQualifiedString(
 	return _TRUE;
 }
 
-BOOLEAN
+bool
 isAllSpaceOrTab(
 	u8	*data,
 	u8	size

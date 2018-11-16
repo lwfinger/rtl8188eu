@@ -354,12 +354,12 @@ u8 hal_com_config_channel_plan(
 	char *sw_alpha2,
 	u8 sw_chplan,
 	u8 def_chplan,
-	BOOLEAN AutoLoadFail
+	bool AutoLoadFail
 );
 
 int hal_config_macaddr(_adapter *adapter, bool autoload_fail);
 
-BOOLEAN
+bool
 HAL_IsLegalChannel(
 	PADAPTER	Adapter,
 	u32			Channel
@@ -374,7 +374,7 @@ void	HalSetBrateCfg(
 	u8			*mBratesOS,
 	u16			*pBrateCfg);
 
-BOOLEAN
+bool
 Hal_MappingOutPipe(
 	PADAPTER	pAdapter,
 	u8		NumOutPipe
@@ -424,7 +424,7 @@ void rtw_hal_reqtxrpt(_adapter *padapter, u8 macid);
 u8 SetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
 u8 GetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
 
-BOOLEAN
+bool
 eqNByte(
 	u8	*str1,
 	u8	*str2,
@@ -436,14 +436,14 @@ MapCharToHexDigit(
 	char	chTmp
 );
 
-BOOLEAN
+bool
 GetHexValueFromString(
 		char			*szStr,
 	u32			*pu4bVal,
 	u32			*pu4bMove
 );
 
-BOOLEAN
+bool
 GetFractionValueFromString(
 		char		*szStr,
 	u8			*pInteger,
@@ -451,12 +451,12 @@ GetFractionValueFromString(
 	u32		*pu4bMove
 );
 
-BOOLEAN
+bool
 IsCommentString(
 		char		*szStr
 );
 
-BOOLEAN
+bool
 ParseQualifiedString(
 	char *In,
 	u32 *Start,
@@ -465,13 +465,13 @@ ParseQualifiedString(
 	char  RightQualifier
 );
 
-BOOLEAN
+bool
 GetU1ByteIntegerFromStringInDecimal(
 		char *Str,
 	u8 *pInt
 );
 
-BOOLEAN
+bool
 isAllSpaceOrTab(
 	u8	*data,
 	u8	size
@@ -514,7 +514,7 @@ void SetHalODMVar(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	void *					pValue1,
-	BOOLEAN					bSet);
+	bool					bSet);
 
 #ifdef CONFIG_BACKGROUND_NOISE_MONITOR
 struct noise_info {
