@@ -214,7 +214,6 @@ _OUTSRC_FILES := hal/phydm/phydm_debug.o	\
 
 
 EXTRA_CFLAGS += -I$(src)/platform
-_PLATFORM_FILES := platform/platform_ops.o
 
 EXTRA_CFLAGS += -I$(src)/hal/btc
 
@@ -542,7 +541,6 @@ EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
 EXTRA_CFLAGS += -DCONFIG_RADIO_WORK
 
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-_PLATFORM_FILES += platform/platform_ARM_SUNxI_usb.o
 
 ARCH := arm64
 # ===Cross compile setting for Android 5.1(64) SDK ===
@@ -685,7 +683,6 @@ endif
 ifeq ($(CONFIG_PLATFORM_RTK_DMP), y)
 EXTRA_CFLAGS += -DRTK_DMP_PLATFORM  -DCONFIG_WIRELESS_EXT
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
-_PLATFORM_FILES += platform/platform_RTK_DMP_usb.o
 ARCH:=mips
 CROSS_COMPILE:=mipsel-linux-
 KVER:=
@@ -877,7 +874,6 @@ EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-_PLATFORM_FILES += platform/platform_ARM_SUNxI_usb.o
 
 ARCH := arm
 #CROSS_COMPILE := arm-none-linux-gnueabi-
@@ -897,7 +893,6 @@ EXTRA_CFLAGS +=  -DCONFIG_QOS_OPTIMIZATION
 
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-_PLATFORM_FILES += platform/platform_ARM_SUNxI_usb.o
 
 ARCH := arm
 # ==== Cross compile setting for kitkat-a3x_v4.5 =====
@@ -915,7 +910,6 @@ EXTRA_CFLAGS +=  -DCONFIG_QOS_OPTIMIZATION
 
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-_PLATFORM_FILES += platform/platform_ARM_SUNxI_usb.o
 
 ARCH := arm
 # ===Cross compile setting for Android 4.2 SDK ===
@@ -939,7 +933,6 @@ EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-_PLATFORM_FILES += platform/platform_ARM_SUNxI_usb.o
 
 ARCH := arm
 # ===Cross compile setting for Android 4.2 SDK ===
@@ -963,7 +956,6 @@ EXTRA_CFLAGS += -DCONFIG_RADIO_WORK
 
 EXTRA_CFLAGS += -DCONFIG_PLATFORM_OPS
 EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
-_PLATFORM_FILES += platform/platform_ARM_SUNxI_usb.o
 
 ARCH := arm
 # ===Cross compile setting for Android L SDK ===
@@ -1166,7 +1158,6 @@ $(MODULE_NAME)-$(CONFIG_WAPI_SUPPORT) += core/rtw_wapi.o	\
 $(MODULE_NAME)-y += $(_OS_INTFS_FILES)
 $(MODULE_NAME)-y += $(_HAL_INTFS_FILES)
 $(MODULE_NAME)-y += $(_OUTSRC_FILES)
-$(MODULE_NAME)-y += $(_PLATFORM_FILES)
 
 $(MODULE_NAME)-$(CONFIG_MP_INCLUDED) += core/rtw_mp.o
 

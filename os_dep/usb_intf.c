@@ -22,8 +22,6 @@
 #include <drv_types.h>
 #include <hal_data.h>
 
-#include <platform_ops.h>
-
 #ifdef CONFIG_GLOBAL_UI_PID
 int ui_pid[3] = {0, 0, 0};
 #endif
