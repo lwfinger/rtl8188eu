@@ -692,7 +692,7 @@ void rtl8188e_set_p2p_ps_offload_cmd(_adapter *padapter, u8 p2p_ps_state)
 	switch (p2p_ps_state) {
 	case P2P_PS_DISABLE:
 		RTW_INFO("P2P_PS_DISABLE\n");
-		_rtw_memset(p2p_ps_offload, 0 , 1);
+		memset(p2p_ps_offload, 0 , 1);
 		break;
 	case P2P_PS_ENABLE:
 		RTW_INFO("P2P_PS_ENABLE\n");

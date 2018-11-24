@@ -174,7 +174,7 @@ void rtw_hal_power_off(_adapter *padapter)
 {
 	struct macid_ctl_t *macid_ctl = &padapter->dvobj->macid_ctl;
 
-	_rtw_memset(macid_ctl->h2c_msr, 0, MACID_NUM_SW_LIMIT);
+	memset(macid_ctl->h2c_msr, 0, MACID_NUM_SW_LIMIT);
 
 	padapter->hal_func.hal_power_off(padapter);
 }
@@ -430,7 +430,7 @@ void rtw_update_ramask(_adapter *padapter, struct sta_info *psta, u32 mac_id, u8
 		rtw_warn_on(1);
 		return;
 	}
-	_rtw_memset(&h2c_macid_cfg, 0, sizeof(struct macid_cfg));
+	memset(&h2c_macid_cfg, 0, sizeof(struct macid_cfg));
 
 	bw =  rtw_get_tx_bw_mode(padapter, psta);
 	short_gi = query_ra_short_GI(psta, bw);

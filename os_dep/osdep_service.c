@@ -712,11 +712,6 @@ int	_rtw_memcmp(const void *dst, const void *src, u32 sz)
 		return _FALSE;
 }
 
-void _rtw_memset(void *pbuf, int c, u32 sz)
-{
-	memset(pbuf, c, sz);
-}
-
 void _rtw_init_listhead(_list *list)
 {
 	INIT_LIST_HEAD(list);
@@ -1727,7 +1722,7 @@ int map_readN(const struct map_t *map, u16 offset, u16 len, u8 *buf)
 		goto exit;
 	}
 
-	_rtw_memset(buf, map->init_value, len);
+	memset(buf, map->init_value, len);
 
 	for (i = 0; i < map->seg_num; i++) {
 		u8 *c_dst, *c_src;

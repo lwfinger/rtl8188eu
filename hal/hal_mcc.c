@@ -711,7 +711,7 @@ static void rtw_hal_set_mcc_IQK_offload_cmd(PADAPTER padapter)
 
 		for (rf_path_idx = 0; rf_path_idx < total_rf_path; rf_path_idx ++) {
 
-			_rtw_memset(cmd, 0, H2C_MCC_IQK_PARAM_LEN);
+			memset(cmd, 0, H2C_MCC_IQK_PARAM_LEN);
 			TX_X = pmccadapriv->mcc_iqk_arr[rf_path_idx].TX_X & 0x7ff;/* [10:0]  */
 			TX_Y = pmccadapriv->mcc_iqk_arr[rf_path_idx].TX_Y & 0x7ff;/* [10:0]  */
 			RX_X = pmccadapriv->mcc_iqk_arr[rf_path_idx].RX_X & 0x3ff;/* [9:0]  */

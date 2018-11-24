@@ -437,7 +437,7 @@ int usb_writeN(struct intf_hdl *pintfhdl, u32 addr, u32 length, u8 *pdata)
 
 void usb_set_intf_ops(_adapter *padapter, struct _io_ops *pops)
 {
-	_rtw_memset((u8 *)pops, 0, sizeof(struct _io_ops));
+	memset((u8 *)pops, 0, sizeof(struct _io_ops));
 
 	pops->_read8 = &usb_read8;
 	pops->_read16 = &usb_read16;

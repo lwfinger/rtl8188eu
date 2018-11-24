@@ -702,7 +702,7 @@ u8 rtw_efuse_map_write(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 	if (map == NULL)
 		return _FAIL;
 
-	_rtw_memset(map, 0xFF, mapLen);
+	memset(map, 0xFF, mapLen);
 
 	ret = rtw_efuse_map_read(padapter, 0, mapLen, map);
 	if (ret == _FAIL)
@@ -1137,19 +1137,19 @@ Efuse_InitSomeVar(
 {
 	u8 i;
 
-	_rtw_memset((void *)&fakeEfuseContent[0], 0xff, EFUSE_MAX_HW_SIZE);
-	_rtw_memset((void *)&fakeEfuseInitMap[0], 0xff, EFUSE_MAX_MAP_LEN);
-	_rtw_memset((void *)&fakeEfuseModifiedMap[0], 0xff, EFUSE_MAX_MAP_LEN);
+	memset((void *)&fakeEfuseContent[0], 0xff, EFUSE_MAX_HW_SIZE);
+	memset((void *)&fakeEfuseInitMap[0], 0xff, EFUSE_MAX_MAP_LEN);
+	memset((void *)&fakeEfuseModifiedMap[0], 0xff, EFUSE_MAX_MAP_LEN);
 
 	for (i = 0; i < EFUSE_MAX_BT_BANK; i++)
-		_rtw_memset((void *)&BTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
-	_rtw_memset((void *)&BTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
-	_rtw_memset((void *)&BTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
+		memset((void *)&BTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
+	memset((void *)&BTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
+	memset((void *)&BTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 
 	for (i = 0; i < EFUSE_MAX_BT_BANK; i++)
-		_rtw_memset((void *)&fakeBTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
-	_rtw_memset((void *)&fakeBTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
-	_rtw_memset((void *)&fakeBTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
+		memset((void *)&fakeBTEfuseContent[i][0], 0xff, EFUSE_MAX_HW_SIZE);
+	memset((void *)&fakeBTEfuseInitMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
+	memset((void *)&fakeBTEfuseModifiedMap[0], 0xff, EFUSE_BT_MAX_MAP_LEN);
 }
 
 /*  11/16/2008 MH Add description. Get current efuse area enabled word!!. */
@@ -1234,7 +1234,7 @@ void EFUSE_ShadowMapUpdate(
 	EFUSE_GetEfuseDefinition(pAdapter, efuseType, TYPE_EFUSE_MAP_LEN, (void *)&mapLen, bPseudoTest);
 
 	if (pHalData->bautoload_fail_flag == _TRUE)
-		_rtw_memset(pHalData->efuse_eeprom_data, 0xFF, mapLen);
+		memset(pHalData->efuse_eeprom_data, 0xFF, mapLen);
 	else {
 #ifdef CONFIG_ADAPTOR_INFO_CACHING_FILE
 		if (_SUCCESS != retriveAdaptorInfoFile(pAdapter->registrypriv.adaptor_info_caching_file_path, pHalData->efuse_eeprom_data)) {
@@ -1423,7 +1423,7 @@ u32 rtw_read_efuse_from_file(const char *path, u8 *buf, int map_size)
 		RTW_ERR("%s rtw_vmalloc(%d) fail\n", __func__, map_size);
 		goto exit;
 	}
-	_rtw_memset(map, 0xff, map_size);
+	memset(map, 0xff, map_size);
 
 	temp[2] = 0; /* end of string '\0' */
 

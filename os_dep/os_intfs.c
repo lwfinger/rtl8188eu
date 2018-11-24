@@ -755,7 +755,7 @@ uint loadparam(_adapter *padapter)
 	) {
 		if (rtw_country_code != rtw_country_unspecified)
 			RTW_ERR("%s discard rtw_country_code not in alpha2\n", __func__);
-		_rtw_memset(registry_par->alpha2, 0xFF, 2);
+		memset(registry_par->alpha2, 0xFF, 2);
 	} else
 		_rtw_memcpy(registry_par->alpha2, rtw_country_code, 2);
 
@@ -1735,7 +1735,7 @@ struct dvobj_priv *devobj_init(void)
 
 #ifdef CONFIG_RTW_CUSTOMER_STR
 	_rtw_mutex_init(&pdvobj->customer_str_mutex);
-	_rtw_memset(pdvobj->customer_str, 0xFF, RTW_CUSTOMER_STR_LEN);
+	memset(pdvobj->customer_str, 0xFF, RTW_CUSTOMER_STR_LEN);
 #endif
 
 	pdvobj->processing_dev_remove = _FALSE;
@@ -1972,7 +1972,7 @@ u8 rtw_init_drv_sw(_adapter *padapter)
 	spin_lock_init(&padapter->security_key_mutex);
 
 	/* We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
-	/* _rtw_memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
+	/* memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
 
 	/* _init_timer(&(padapter->securitypriv.tkip_timer), padapter->pifp, rtw_use_tkipkey_handler, padapter); */
 
@@ -2002,7 +2002,7 @@ u8 rtw_init_drv_sw(_adapter *padapter)
 
 	rtw_init_pwrctrl_priv(padapter);
 
-	/* _rtw_memset((u8 *)&padapter->qospriv, 0, sizeof (struct qos_priv)); */ /* move to mlme_priv */
+	/* memset((u8 *)&padapter->qospriv, 0, sizeof (struct qos_priv)); */ /* move to mlme_priv */
 
 #ifdef CONFIG_MP_INCLUDED
 	if (init_mp_priv(padapter) == _FAIL)

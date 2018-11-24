@@ -78,8 +78,8 @@ struct rtw_wdev_invit_info {
 #define rtw_wdev_invit_info_init(invit_info) \
 	do { \
 		(invit_info)->state = 0xff; \
-		_rtw_memset((invit_info)->peer_mac, 0, ETH_ALEN); \
-		_rtw_memset((invit_info)->group_bssid, 0, ETH_ALEN); \
+		memset((invit_info)->peer_mac, 0, ETH_ALEN); \
+		memset((invit_info)->group_bssid, 0, ETH_ALEN); \
 		(invit_info)->active = 0xff; \
 		(invit_info)->token = 0; \
 		(invit_info)->flags = 0x00; \
@@ -107,9 +107,9 @@ struct rtw_wdev_nego_info {
 #define rtw_wdev_nego_info_init(nego_info) \
 	do { \
 		(nego_info)->state = 0xff; \
-		_rtw_memset((nego_info)->iface_addr, 0, ETH_ALEN); \
-		_rtw_memset((nego_info)->peer_mac, 0, ETH_ALEN); \
-		_rtw_memset((nego_info)->peer_iface_addr, 0, ETH_ALEN); \
+		memset((nego_info)->iface_addr, 0, ETH_ALEN); \
+		memset((nego_info)->peer_mac, 0, ETH_ALEN); \
+		memset((nego_info)->peer_iface_addr, 0, ETH_ALEN); \
 		(nego_info)->active = 0xff; \
 		(nego_info)->token = 0; \
 		(nego_info)->status = 0xff; \

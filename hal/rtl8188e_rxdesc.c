@@ -43,7 +43,7 @@ void rtl8188e_query_rx_desc_status(
 	prxreport = (PRXREPORT)&report;
 
 	pattrib = &precvframe->u.hdr.attrib;
-	_rtw_memset(pattrib, 0, sizeof(struct rx_pkt_attrib));
+	memset(pattrib, 0, sizeof(struct rx_pkt_attrib));
 
 	pattrib->crc_err = (u8)((le32_to_cpu(report.rxdw0) >> 14) & 0x1);;/* (u8)prxreport->crc32;	 */
 

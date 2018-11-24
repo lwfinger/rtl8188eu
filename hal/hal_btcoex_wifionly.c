@@ -116,7 +116,7 @@ void hal_btcoex_wifionly_initlizevariables(PADAPTER padapter)
 	struct wifi_only_haldata	*pwifionly_haldata = &pwifionlycfg->haldata_info;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
-	_rtw_memset(&GLBtCoexistWifiOnly, 0, sizeof(GLBtCoexistWifiOnly));
+	memset(&GLBtCoexistWifiOnly, 0, sizeof(GLBtCoexistWifiOnly));
 
 	pwifionlycfg->Adapter = padapter;
 

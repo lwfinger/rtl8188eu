@@ -240,7 +240,7 @@ void rtw_reset_securitypriv(_adapter *adapter)
 		/* Backup the btkip_countermeasure information. */
 		/* When the countermeasure is trigger, the driver have to disconnect with AP for 60 seconds. */
 
-		_rtw_memset(&backupPMKIDList[0], 0x00, sizeof(RT_PMKID_LIST) * NUM_PMKID_CACHE);
+		memset(&backupPMKIDList[0], 0x00, sizeof(RT_PMKID_LIST) * NUM_PMKID_CACHE);
 
 		_rtw_memcpy(&backupPMKIDList[0], &adapter->securitypriv.PMKIDList[0], sizeof(RT_PMKID_LIST) * NUM_PMKID_CACHE);
 		backupPMKIDIndex = adapter->securitypriv.PMKIDIndex;
@@ -250,7 +250,7 @@ void rtw_reset_securitypriv(_adapter *adapter)
 		/* reset RX BIP packet number */
 		pmlmeext->mgnt_80211w_IPN_rx = 0;
 #endif /* CONFIG_IEEE80211W */
-		_rtw_memset((unsigned char *)&adapter->securitypriv, 0, sizeof(struct security_priv));
+		memset((unsigned char *)&adapter->securitypriv, 0, sizeof(struct security_priv));
 		/* _init_timer(&(adapter->securitypriv.tkip_timer),adapter->pnetdev, rtw_use_tkipkey_handler, adapter); */
 
 		/* Added by Albert 2009/02/18 */
@@ -336,7 +336,7 @@ void rtw_report_sec_ie(_adapter *adapter, u8 authmode, u8 *sec_ie)
 
 		p += sprintf(p, ")");
 
-		_rtw_memset(&wrqu, 0, sizeof(wrqu));
+		memset(&wrqu, 0, sizeof(wrqu));
 
 		wrqu.data.length = p - buff;
 

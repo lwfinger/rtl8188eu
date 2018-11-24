@@ -528,7 +528,7 @@ void rtw_handle_tkip_mic_err(_adapter *padapter, struct sta_info *sta, u8 bgroup
 	cfg80211_michael_mic_failure(padapter->pnetdev, sta->hwaddr, key_type, -1, NULL, GFP_ATOMIC);
 #endif
 
-	_rtw_memset(&ev, 0x00, sizeof(ev));
+	memset(&ev, 0x00, sizeof(ev));
 	if (bgroup)
 		ev.flags |= IW_MICFAILURE_GROUP;
 	else
@@ -537,7 +537,7 @@ void rtw_handle_tkip_mic_err(_adapter *padapter, struct sta_info *sta, u8 bgroup
 	ev.src_addr.sa_family = ARPHRD_ETHER;
 	_rtw_memcpy(ev.src_addr.sa_data, sta->hwaddr, ETH_ALEN);
 
-	_rtw_memset(&wrqu, 0x00, sizeof(wrqu));
+	memset(&wrqu, 0x00, sizeof(wrqu));
 	wrqu.data.length = sizeof(ev);
 
 #ifndef CONFIG_IOCTL_CFG80211
@@ -577,7 +577,7 @@ void rtw_hostapd_mlme_rx(_adapter *padapter, union recv_frame *precv_frame)
 	skb_reset_mac_header(skb);
 
 	/* skb_pull(skb, 24); */
-	_rtw_memset(skb->cb, 0, sizeof(skb->cb));
+	memset(skb->cb, 0, sizeof(skb->cb));
 
 	rtw_netif_rx(pmgnt_netdev, skb);
 

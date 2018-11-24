@@ -113,7 +113,7 @@ static void _init_mp_priv_(struct mp_priv *pmp_priv)
 {
 	WLAN_BSSID_EX *pnetwork;
 
-	_rtw_memset(pmp_priv, 0, sizeof(struct mp_priv));
+	memset(pmp_priv, 0, sizeof(struct mp_priv));
 
 	pmp_priv->mode = MP_OFF;
 
@@ -206,11 +206,11 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
 
 	/* init xmitframe attribute */
 	pattrib = &pmptx->attrib;
-	_rtw_memset(pattrib, 0, sizeof(struct pkt_attrib));
-	_rtw_memset(pmptx->desc, 0, TXDESC_SIZE);
+	memset(pattrib, 0, sizeof(struct pkt_attrib));
+	memset(pmptx->desc, 0, TXDESC_SIZE);
 
 	pattrib->ether_type = 0x8712;
-	_rtw_memset(pattrib->dst, 0xFF, ETH_ALEN);
+	memset(pattrib->dst, 0xFF, ETH_ALEN);
 
 	pattrib->ack_policy = 0;
 	pattrib->hdrlen = WLAN_HDR_A3_LEN;
@@ -491,7 +491,7 @@ void MPT_PwrCtlDM(PADAPTER padapter, u32 bstart)
 		{
 			struct _TXPWRTRACK_CFG	c;
 			u1Byte	chnl = 0 ;
-			_rtw_memset(&c, 0, sizeof(struct _TXPWRTRACK_CFG));
+			memset(&c, 0, sizeof(struct _TXPWRTRACK_CFG));
 			configure_txpower_track(pDM_Odm, &c);
 			odm_clear_txpowertracking_state(pDM_Odm);
 			if (*c.odm_tx_pwr_track_set_pwr) {
@@ -531,7 +531,7 @@ u32 mp_join(PADAPTER padapter, u8 mode)
 	struct wireless_dev *pwdev = padapter->rtw_wdev;
 #endif /* #ifdef CONFIG_IOCTL_CFG80211 */
 	/* 1. initialize a new WLAN_BSSID_EX */
-	_rtw_memset(&bssid, 0, sizeof(WLAN_BSSID_EX));
+	memset(&bssid, 0, sizeof(WLAN_BSSID_EX));
 	RTW_INFO("%s ,pmppriv->network_macaddr=%x %x %x %x %x %x\n", __func__,
 		pmppriv->network_macaddr[0], pmppriv->network_macaddr[1], pmppriv->network_macaddr[2], pmppriv->network_macaddr[3], pmppriv->network_macaddr[4],
 		 pmppriv->network_macaddr[5]);
@@ -710,7 +710,7 @@ void mp_stop_test(PADAPTER padapter)
 		init_fwstate(pmlmepriv, pmppriv->prev_fw_state);
 
 		/* flush the cur_network */
-		_rtw_memset(tgt_network, 0, sizeof(struct wlan_network));
+		memset(tgt_network, 0, sizeof(struct wlan_network));
 
 		_clr_fwstate_(pmlmepriv, WIFI_MP_STATE);
 
@@ -1071,7 +1071,7 @@ void SetPacketTx(PADAPTER padapter)
 	pmp_priv->tx.buf = (u8 *)N_BYTE_ALIGMENT((SIZE_PTR)(pmp_priv->tx.pallocated_buf), XMITBUF_ALIGN_SZ);
 	ptr = pmp_priv->tx.buf;
 
-	_rtw_memset(pmp_priv->tx.desc, 0, TXDESC_SIZE);
+	memset(pmp_priv->tx.desc, 0, TXDESC_SIZE);
 	pkt_start = ptr;
 	pkt_end = pkt_start + pkt_size;
 
@@ -1119,7 +1119,7 @@ void SetPacketTx(PADAPTER padapter)
 
 	/* startPlace = (u32)(rtw_random32() % 3450); */
 	_rtw_memcpy(ptr, pmp_priv->TXradomBuffer, pkt_end - ptr);
-	/* _rtw_memset(ptr, payload, pkt_end - ptr); */
+	/* memset(ptr, payload, pkt_end - ptr); */
 	rtw_mfree(pmp_priv->TXradomBuffer, 4096);
 
 	/* 3 6. start thread */
@@ -1946,7 +1946,7 @@ void CCK_generator(
 
 	CRC16_generator(crc16_out, crc16_in, 32);
 
-	_rtw_memset(pPMacTxInfo->CRC16, 0, 2);
+	memset(pPMacTxInfo->CRC16, 0, 2);
 	ByteToBit(pPMacTxInfo->CRC16, crc16_out, 2);
 
 }
@@ -2366,7 +2366,7 @@ void L_SIG_generator(
 		sig_bi[i] = 0;
 
 	/* dump_buf(sig_bi,24);*/
-	_rtw_memset(pPMacTxInfo->LSIG, 0, 3);
+	memset(pPMacTxInfo->LSIG, 0, 3);
 	ByteToBit(pPMacTxInfo->LSIG, (bool *)sig_bi, 3);
 }
 
@@ -2456,7 +2456,7 @@ void HT_SIG_generator(
 	for (i = 42; i < 48; i++)
 		sig_bi[i] = 0;
 
-	_rtw_memset(pPMacTxInfo->HT_SIG, 0, 6);
+	memset(pPMacTxInfo->HT_SIG, 0, 6);
 	ByteToBit(pPMacTxInfo->HT_SIG, sig_bi, 6);
 }
 
@@ -2476,8 +2476,8 @@ void VHT_SIG_A_generator(
 	UINT i;
 	bool sig_bi[48], crc8[8];
 
-	_rtw_memset(sig_bi, 0, 48);
-	_rtw_memset(crc8, 0, 8);
+	memset(sig_bi, 0, 48);
+	memset(crc8, 0, 8);
 
 	/*	BW Setting*/
 	for (i = 0; i < 2; i++)
@@ -2524,7 +2524,7 @@ void VHT_SIG_A_generator(
 	for (i = 42; i < 48; i++)
 		sig_bi[i] = 0;
 
-	_rtw_memset(pPMacTxInfo->VHT_SIG_A, 0, 6);
+	memset(pPMacTxInfo->VHT_SIG_A, 0, 6);
 	ByteToBit(pPMacTxInfo->VHT_SIG_A, sig_bi, 6);
 }
 
@@ -2540,8 +2540,8 @@ void VHT_SIG_B_generator(
 	UINT i, len, res, tail = 6, total_len, crc8_in_len;
 	UINT sigb_len;
 
-	_rtw_memset(sig_bi, 0, 32);
-	_rtw_memset(crc8_bi, 0, 8);
+	memset(sig_bi, 0, 32);
+	memset(crc8_bi, 0, 8);
 
 	/*Sounding Packet*/
 	if (pPMacTxInfo->NDP_sound == 1) {
@@ -2593,7 +2593,7 @@ void VHT_SIG_B_generator(
 			sig_bi[len + res + i] = 0;
 	}
 
-	_rtw_memset(pPMacTxInfo->VHT_SIG_B, 0, 4);
+	memset(pPMacTxInfo->VHT_SIG_B, 0, 4);
 	ByteToBit(pPMacTxInfo->VHT_SIG_B, sig_bi, 4);
 
 	pPMacTxInfo->VHT_SIG_B_CRC = 0;
@@ -2628,7 +2628,7 @@ void VHT_Delimiter_generator(
 	for (j = 24; j < 32; j++) /* Delimiter[31:24]: Signature ('4E' in Hex, 78 in Dec)*/
 		sig_bi[j]	= (78 >> (j - 24)) % 2;
 
-	_rtw_memset(pPMacTxInfo->VHT_Delimiter, 0, 4);
+	memset(pPMacTxInfo->VHT_Delimiter, 0, 4);
 	ByteToBit(pPMacTxInfo->VHT_Delimiter, sig_bi, 4);
 }
 
