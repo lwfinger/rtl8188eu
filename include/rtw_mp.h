@@ -106,18 +106,17 @@ struct mp_tx {
 #define s8Byte		s64
 #define ps8Byte		s64*
 
-#define UCHAR u8
 #define USHORT u16
 #define UINT u32
 #define ULONG u32
 #define PULONG u32*
 
 typedef struct _RT_PMAC_PKT_INFO {
-	UCHAR			MCS;
-	UCHAR			Nss;
-	UCHAR			Nsts;
+	u8			MCS;
+	u8			Nss;
+	u8			Nsts;
 	UINT			N_sym;
-	UCHAR			SIGA2B3;
+	u8			SIGA2B3;
 } RT_PMAC_PKT_INFO, *PRT_PMAC_PKT_INFO;
 
 typedef struct _RT_PMAC_TX_INFO {

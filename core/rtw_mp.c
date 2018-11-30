@@ -1819,11 +1819,11 @@ static inline void dump_buf(u8 *buf, u32 len)
 }
 
 void ByteToBit(
-	UCHAR	*out,
+	u8	*out,
 	bool	*in,
-	UCHAR	in_size)
+	u8	in_size)
 {
-	UCHAR i = 0, j = 0;
+	u8 i = 0, j = 0;
 
 	for (i = 0; i < in_size; i++) {
 		for (j = 0; j < 8; j++) {
@@ -1837,10 +1837,10 @@ void ByteToBit(
 void CRC16_generator(
 	bool *out,
 	bool *in,
-	UCHAR in_size
+	u8 in_size
 )
 {
-	UCHAR i = 0;
+	u8 i = 0;
 	bool temp = 0, reg[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 	for (i = 0; i < in_size; i++) {/* take one's complement and bit reverse*/
@@ -1885,7 +1885,7 @@ void CCK_generator(
 	bool LengthExtBit;
 	double LengthExact;
 	double LengthPSDU;
-	UCHAR i;
+	u8 i;
 	UINT PacketLength = pPMacTxInfo->PacketLength;
 
 	if (pPMacTxInfo->bSPreamble)
@@ -1957,8 +1957,8 @@ void PMAC_Get_Pkt_Param(
 	PRT_PMAC_PKT_INFO	pPMacPktInfo)
 {
 
-	UCHAR		TX_RATE_HEX = 0, MCS = 0;
-	UCHAR		TX_RATE = pPMacTxInfo->TX_RATE;
+	u8		TX_RATE_HEX = 0, MCS = 0;
+	u8		TX_RATE = pPMacTxInfo->TX_RATE;
 
 	/*	TX_RATE & Nss	*/
 	if (MPT_IS_2SS_RATE(TX_RATE))
@@ -2109,7 +2109,7 @@ void PMAC_Nsym_generator(
 	PRT_PMAC_PKT_INFO	pPMacPktInfo)
 {
 	UINT	SIGA2B3 = 0;
-	UCHAR	TX_RATE = pPMacTxInfo->TX_RATE;
+	u8	TX_RATE = pPMacTxInfo->TX_RATE;
 
 	UINT R, R_list[10] = {0, 0, 2, 0, 2, 1, 2, 3, 2, 3};
 	double CR = 0;
@@ -2127,7 +2127,7 @@ void PMAC_Nsym_generator(
 		N_SD = 234;
 
 	if (MPT_IS_HT_RATE(TX_RATE)) {
-		UCHAR MCS_temp;
+		u8 MCS_temp;
 
 		if (pPMacPktInfo->MCS > 23)
 			MCS_temp = pPMacPktInfo->MCS - 24;
@@ -2268,7 +2268,7 @@ void L_SIG_generator(
 		mode = pPMacPktInfo->MCS;
 		LENGTH = pPMacTxInfo->PacketLength;
 	} else {
-		UCHAR	N_LTF;
+		u8	N_LTF;
 		double	T_data;
 		UINT	OFDM_symbol;
 
@@ -2374,10 +2374,10 @@ void L_SIG_generator(
 void CRC8_generator(
 	bool	*out,
 	bool	*in,
-	UCHAR	in_size
+	u8	in_size
 )
 {
-	UCHAR i = 0;
+	u8 i = 0;
 	bool temp = 0, reg[] = {1, 1, 1, 1, 1, 1, 1, 1};
 
 	for (i = 0; i < in_size; i++) { /* take one's complement and bit reverse*/
