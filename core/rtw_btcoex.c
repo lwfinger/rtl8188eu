@@ -819,7 +819,7 @@ u8 rtw_btcoex_parse_HCI_link_status_notify_cmd(_adapter *padapter, u8 *pcmd, u16
 			RTW_INFO("Connection_Handle=0x%x, BTProfile=%d, BTSpec=%d\n", conHandle, btProfile, btCoreSpec);
 			pTriple += 4;
 		} else if (pBtMgnt->ExtConfig.HCIExtensionVer >= 1) {
-			conHandle = *((pu2Byte)&pTriple[0]);
+			conHandle = *((u16 *)&pTriple[0]);
 			btProfile = pTriple[2];
 			btCoreSpec = pTriple[3];
 			linkRole = pTriple[4];
@@ -1542,7 +1542,7 @@ void rtw_btcoex_SendEventExtBtCoexControl(PADAPTER padapter, u8 bNeedDbgRsp, u8 
 	u8 			localBuf[32] = "";
 	u8			*pRetPar;
 	u8			opCode = 0;
-	u8			*pInBuf = (pu1Byte)pData;
+	u8			*pInBuf = (u8 *)pData;
 	u8			*pOpCodeContent;
 	rtw_HCI_event *pEvent;
 

@@ -41,7 +41,7 @@ typedef enum _BTC_MSG_COMP_TYPE {
 	COMP_COEX		= 0,
 	COMP_MAX
 } BTC_MSG_COMP_TYPE;
-extern u4Byte GLBtcDbgType[];
+extern u32 GLBtcDbgType[];
 
 #define DBG_OFF			0
 #define DBG_SEC			1

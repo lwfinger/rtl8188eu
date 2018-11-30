@@ -93,35 +93,35 @@ typedef enum _BTCOEX_SUSPEND_STATE {
 #define BT_INFO_LEN 8
 
 typedef struct _HCI_LINK_INFO {
-	u2Byte					ConnectHandle;
-	u1Byte					IncomingTrafficMode;
-	u1Byte					OutgoingTrafficMode;
-	u1Byte					BTProfile;
-	u1Byte					BTCoreSpec;
+	u16					ConnectHandle;
+	u8					IncomingTrafficMode;
+	u8					OutgoingTrafficMode;
+	u8					BTProfile;
+	u8					BTCoreSpec;
 	s1Byte					BT_RSSI;
-	u1Byte					TrafficProfile;
-	u1Byte					linkRole;
+	u8					TrafficProfile;
+	u8					linkRole;
 } HCI_LINK_INFO, *PHCI_LINK_INFO;
 
 #define	MAX_BT_ACL_LINK_NUM				8
 
 typedef struct _HCI_EXT_CONFIG {
 	HCI_LINK_INFO				aclLink[MAX_BT_ACL_LINK_NUM];
-	u1Byte					btOperationCode;
-	u2Byte					CurrentConnectHandle;
-	u1Byte					CurrentIncomingTrafficMode;
-	u1Byte					CurrentOutgoingTrafficMode;
+	u8					btOperationCode;
+	u16					CurrentConnectHandle;
+	u8					CurrentIncomingTrafficMode;
+	u8					CurrentOutgoingTrafficMode;
 
-	u1Byte					NumberOfACL;
-	u1Byte					NumberOfSCO;
-	u1Byte					CurrentBTStatus;
-	u2Byte					HCIExtensionVer;
+	u8					NumberOfACL;
+	u8					NumberOfSCO;
+	u8					CurrentBTStatus;
+	u16					HCIExtensionVer;
 
 	bool					bEnableWifiScanNotify;
 } HCI_EXT_CONFIG, *PHCI_EXT_CONFIG;
 
 typedef struct _HCI_PHY_LINK_BSS_INFO {
-	u2Byte						bdCap;			/* capability information */
+	u16						bdCap;			/* capability information */
 
 	/* Qos related. Added by Annie, 2005-11-01. */
 	/* BSS_QOS						BssQos;		 */
@@ -318,15 +318,15 @@ typedef struct _BT_MGNT {
 	bool				bLogLinkInProgress;
 	bool				bPhyLinkInProgress;
 	bool				bPhyLinkInProgressStartLL;
-	u1Byte				BtCurrentPhyLinkhandle;
-	u2Byte				BtCurrentLogLinkhandle;
-	u1Byte				CurrentConnectEntryNum;
-	u1Byte				DisconnectEntryNum;
-	u1Byte				CurrentBTConnectionCnt;
+	u8				BtCurrentPhyLinkhandle;
+	u16				BtCurrentLogLinkhandle;
+	u8				CurrentConnectEntryNum;
+	u8				DisconnectEntryNum;
+	u8				CurrentBTConnectionCnt;
 	BT_CONNECT_TYPE		BTCurrentConnectType;
 	BT_CONNECT_TYPE		BTReceiveConnectPkt;
-	u1Byte				BTAuthCount;
-	u1Byte				BTAsocCount;
+	u8				BTAuthCount;
+	u8				BTAsocCount;
 	bool				bStartSendSupervisionPkt;
 	bool				BtOperationOn;
 	bool				BTNeedAMPStatusChg;
@@ -336,7 +336,7 @@ typedef struct _BT_MGNT {
 	bool				bNeedNotifyAMPNoCap;
 	bool				bCreateSpportQos;
 	bool				bSupportProfile;
-	u1Byte				BTChannel;
+	u8				BTChannel;
 	bool				CheckChnlIsSuit;
 	bool				bBtScan;
 	bool				btLogoTest;

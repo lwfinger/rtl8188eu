@@ -4191,7 +4191,7 @@ static int phy_ParseBBPgParaFile(PADAPTER Adapter, char *buffer)
 					/* RTW_INFO("The values in PHY_REG_PG are exact values ok\n"); */
 					firstLine = _FALSE;
 					continue;
-				} else if (eqNByte(szLine + 5, (pu1Byte)("[Relative]#"), 11)) {
+				} else if (eqNByte(szLine + 5, (u8 *)("[Relative]#"), 11)) {
 					pHalData->odmpriv.phy_reg_pg_value_type = PHY_REG_PG_RELATIVE_VALUE;
 					/* RTW_INFO("The values in PHY_REG_PG are relative values ok\n"); */
 					firstLine = _FALSE;

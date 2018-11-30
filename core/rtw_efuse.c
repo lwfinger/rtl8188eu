@@ -127,13 +127,13 @@ u8 rtw_efuse_mask_map_read(PADAPTER padapter, u16 addr, u16 cnts, u8 *data)
 
 static void efuse_PreUpdateAction(
 	PADAPTER	pAdapter,
-	pu4Byte	BackupRegs)
+	u32 *	BackupRegs)
 {
 }
 
 static void efuse_PostUpdateAction(
 	PADAPTER	pAdapter,
-	pu4Byte	BackupRegs)
+	u32 *	BackupRegs)
 {
 }
 

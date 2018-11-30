@@ -236,10 +236,10 @@ u8 rtl8188e_set_raid_cmd(_adapter *padapter, u32 bitmap, u8 *arg, u8 bw)
 		}
 	}
 
-	H2CCommand[3] = (u1Byte)(bitmap & 0x000000ff);
-	H2CCommand[4] = (u1Byte)((bitmap & 0x0000ff00) >> 8);
-	H2CCommand[5] = (u1Byte)((bitmap & 0x00ff0000) >> 16);
-	H2CCommand[6] = (u1Byte)((bitmap & 0xff000000) >> 24);
+	H2CCommand[3] = (u8)(bitmap & 0x000000ff);
+	H2CCommand[4] = (u8)((bitmap & 0x0000ff00) >> 8);
+	H2CCommand[5] = (u8)((bitmap & 0x00ff0000) >> 16);
+	H2CCommand[6] = (u8)((bitmap & 0xff000000) >> 24);
 
 	FillH2CCmd_88E(padapter, H2C_DM_MACID_CFG, 7, H2CCommand);
 

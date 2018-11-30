@@ -30,7 +30,7 @@
 *                           MUSB.TXT
 ******************************************************************************/
 
-static u1Byte Array_MP_8188E_MUSB[] = {
+static u8 Array_MP_8188E_MUSB[] = {
 	0xFF,
 	0xF3,
 	0x00,
@@ -66,25 +66,25 @@ static u1Byte Array_MP_8188E_MUSB[] = {
 
 };
 
-u2Byte
+u16
 EFUSE_GetArrayLen_MP_8188E_MUSB(void)
 {
-	return sizeof(Array_MP_8188E_MUSB) / sizeof(u1Byte);
+	return sizeof(Array_MP_8188E_MUSB) / sizeof(u8);
 }
 
 void
 EFUSE_GetMaskArray_MP_8188E_MUSB(
-	pu1Byte Array
+	u8 * Array
 )
 {
-	u2Byte len = EFUSE_GetArrayLen_MP_8188E_MUSB(), i = 0;
+	u16 len = EFUSE_GetArrayLen_MP_8188E_MUSB(), i = 0;
 
 	for (i = 0; i < len; ++i)
 		Array[i] = Array_MP_8188E_MUSB[i];
 }
 bool
 EFUSE_IsAddressMasked_MP_8188E_MUSB(
-	u2Byte  Offset
+	u16  Offset
 )
 {
 	int r = Offset / 16;

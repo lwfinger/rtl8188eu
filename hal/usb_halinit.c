@@ -564,7 +564,7 @@ _InitWMACSetting(
 	PADAPTER Adapter
 )
 {
-	/* u4Byte			value32; */
+	/* u32			value32; */
 	/* u16			value16; */
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 

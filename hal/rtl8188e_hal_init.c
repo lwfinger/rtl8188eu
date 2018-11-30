@@ -199,7 +199,7 @@ efuse_phymap_to_logical(u8 *phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 					/* RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8)); 				 */
 
 					efuse_utilized++;
-					eFuseWord[offset][i] |= (((u2Byte)rtemp8 << 8) & 0xff00);
+					eFuseWord[offset][i] |= (((u16)rtemp8 << 8) & 0xff00);
 
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
@@ -240,7 +240,7 @@ efuse_phymap_to_logical(u8 *phymap, u16 _offset, u16 _size_byte, u8  *pbuf)
 	/*  */
 	/* 5. Calculate Efuse utilization. */
 	/*  */
-	efuse_usage = (u1Byte)((efuse_utilized * 100) / EFUSE_REAL_CONTENT_LEN_88E);
+	efuse_usage = (u8)((efuse_utilized * 100) / EFUSE_REAL_CONTENT_LEN_88E);
 	/* rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&efuse_utilized); */
 
 exit:
@@ -1208,7 +1208,7 @@ Hal_EfuseReadEFuse88E(
 					/* RTPRINT(FEEPROM, EFUSE_READ_ALL, ("Data=0x%x\n", *rtemp8)); 				 */
 
 					efuse_utilized++;
-					eFuseWord[offset][i] |= (((u2Byte)*rtemp8 << 8) & 0xff00);
+					eFuseWord[offset][i] |= (((u16)*rtemp8 << 8) & 0xff00);
 
 					if (eFuse_Addr >= EFUSE_REAL_CONTENT_LEN_88E)
 						break;
@@ -1263,7 +1263,7 @@ Hal_EfuseReadEFuse88E(
 	/*  */
 	/* 5. Calculate Efuse utilization. */
 	/*  */
-	efuse_usage = (u1Byte)((eFuse_Addr * 100) / EFUSE_REAL_CONTENT_LEN_88E);
+	efuse_usage = (u8)((eFuse_Addr * 100) / EFUSE_REAL_CONTENT_LEN_88E);
 	rtw_hal_set_hwreg(Adapter, HW_VAR_EFUSE_BYTES, (u8 *)&eFuse_Addr);
 
 exit:
@@ -1385,8 +1385,8 @@ rtl8188e_ReadEFuse(
 static void
 Hal_EFUSEGetEfuseDefinition88E(
 		PADAPTER	pAdapter,
-		u1Byte		efuseType,
-		u1Byte		type,
+		u8		efuseType,
+		u8		type,
 		void *		pOut
 )
 {
@@ -1453,38 +1453,38 @@ Hal_EFUSEGetEfuseDefinition_Pseudo88E(
 	switch (type) {
 	case TYPE_EFUSE_MAX_SECTION: {
 		u8		*pMax_section;
-		pMax_section = (pu1Byte)pOut;
+		pMax_section = (u8 *)pOut;
 		*pMax_section = EFUSE_MAX_SECTION_88E;
 	}
 	break;
 	case TYPE_EFUSE_REAL_CONTENT_LEN: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
+		pu2Tmp = (u16 *)pOut;
 		*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
 	}
 	break;
 	case TYPE_EFUSE_CONTENT_LEN_BANK: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
+		pu2Tmp = (u16 *)pOut;
 		*pu2Tmp = EFUSE_REAL_CONTENT_LEN_88E;
 	}
 	break;
 	case TYPE_AVAILABLE_EFUSE_BYTES_BANK: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
-		*pu2Tmp = (u2Byte)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+		pu2Tmp = (u16 *)pOut;
+		*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
 	}
 	break;
 	case TYPE_AVAILABLE_EFUSE_BYTES_TOTAL: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
-		*pu2Tmp = (u2Byte)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
+		pu2Tmp = (u16 *)pOut;
+		*pu2Tmp = (u16)(EFUSE_REAL_CONTENT_LEN_88E-EFUSE_OOB_PROTECT_BYTES_88E);
 	}
 	break;
 	case TYPE_EFUSE_MAP_LEN: {
 		u16 *pu2Tmp;
-		pu2Tmp = (pu2Byte)pOut;
-		*pu2Tmp = (u2Byte)EFUSE_MAP_LEN_88E;
+		pu2Tmp = (u16 *)pOut;
+		*pu2Tmp = (u16)EFUSE_MAP_LEN_88E;
 	}
 	break;
 	case TYPE_EFUSE_PROTECT_BYTES_BANK: {
@@ -2658,7 +2658,7 @@ Hal_InitPGData88E(PADAPTER	padapter)
 		if (is_boot_from_eeprom(padapter)) {
 			/* Read all Content from EEPROM or EFUSE. */
 			for (i = 0; i < HWSET_MAX_SIZE; i += 2) {
-				/*				value16 = EF2Byte(ReadEEprom(pAdapter, (u2Byte) (i>>1)));
+				/*				value16 = EF2Byte(ReadEEprom(pAdapter, (u16) (i>>1)));
 				 *				*((u16*)(&PROMContent[i])) = value16; */
 			}
 		} else {
@@ -2845,7 +2845,7 @@ Hal_ReadPAType_8188E(
 void
 Hal_ReadAmplifierType_8188E(
 	PADAPTER	Adapter,
-	pu1Byte		PROMContent,
+	u8 *		PROMContent,
 	bool		AutoloadFail
 )
 {
@@ -2883,7 +2883,7 @@ Hal_ReadAmplifierType_8188E(
 void
 Hal_ReadRFEType_8188E(
 	PADAPTER	Adapter,
-	pu1Byte		PROMContent,
+	u8 *		PROMContent,
 	bool		AutoloadFail
 )
 {
@@ -3045,7 +3045,7 @@ Hal_ReadThermalMeter_88E(
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
-	u1Byte			tempval;
+	u8			tempval;
 
 	/*  */
 	/* ThermalMeter from EEPROM */

@@ -369,11 +369,11 @@ MPT_InitializeAdapter(
 
 	PHY_SetRFPathSwitch(pAdapter, 1/*pHalData->bDefaultAntenna*/); /* default use Main */
 
-	pMptCtx->backup0xc50 = (u1Byte)phy_query_bb_reg(pAdapter, rOFDM0_XAAGCCore1, bMaskByte0);
-	pMptCtx->backup0xc58 = (u1Byte)phy_query_bb_reg(pAdapter, rOFDM0_XBAGCCore1, bMaskByte0);
-	pMptCtx->backup0xc30 = (u1Byte)phy_query_bb_reg(pAdapter, rOFDM0_RxDetector1, bMaskByte0);
-	pMptCtx->backup0x52_RF_A = (u1Byte)phy_query_rf_reg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
-	pMptCtx->backup0x52_RF_B = (u1Byte)phy_query_rf_reg(pAdapter, RF_PATH_B, RF_0x52, 0x000F0);
+	pMptCtx->backup0xc50 = (u8)phy_query_bb_reg(pAdapter, rOFDM0_XAAGCCore1, bMaskByte0);
+	pMptCtx->backup0xc58 = (u8)phy_query_bb_reg(pAdapter, rOFDM0_XBAGCCore1, bMaskByte0);
+	pMptCtx->backup0xc30 = (u8)phy_query_bb_reg(pAdapter, rOFDM0_RxDetector1, bMaskByte0);
+	pMptCtx->backup0x52_RF_A = (u8)phy_query_rf_reg(pAdapter, RF_PATH_A, RF_0x52, 0x000F0);
+	pMptCtx->backup0x52_RF_B = (u8)phy_query_rf_reg(pAdapter, RF_PATH_B, RF_0x52, 0x000F0);
 	rtw_write32(pAdapter, REG_MACID_NO_LINK_0, 0x0);
 	rtw_write32(pAdapter, REG_MACID_NO_LINK_1, 0x0);
 	return	rtStatus;
@@ -490,7 +490,7 @@ void MPT_PwrCtlDM(PADAPTER padapter, u32 bstart)
 		padapter->mppriv.mp_dm = 0;
 		{
 			struct _TXPWRTRACK_CFG	c;
-			u1Byte	chnl = 0 ;
+			u8	chnl = 0 ;
 			memset(&c, 0, sizeof(struct _TXPWRTRACK_CFG));
 			configure_txpower_track(pDM_Odm, &c);
 			odm_clear_txpowertracking_state(pDM_Odm);
@@ -1787,7 +1787,7 @@ u32 mpt_ProQueryCalTxPower(
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.mpt_ctx);
 
 	u32			TxPower = 1;
-	u1Byte			rate = 0;
+	u8			rate = 0;
 	struct txpwr_idx_comp tic;
 	u8 mgn_rate = mpt_to_mgnt_rate(pMptCtx->mpt_rate_index);
 

@@ -122,11 +122,11 @@ sic_Read4Byte(
 		/* RTPRINT(FPHY, PHY_SICR, ("write cmdreg 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_PREREAD)); */
 #endif
 		rtw_write8(Adapter, SIC_ADDR_REG, (u8)(offset & 0xff));
-		/* PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG, (u1Byte)(offset&0xff)); */
-		/* RTPRINT(FPHY, PHY_SICR, ("write 0x%x = 0x%x\n", SIC_ADDR_REG, (u1Byte)(offset&0xff))); */
+		/* PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG, (u8)(offset&0xff)); */
+		/* RTPRINT(FPHY, PHY_SICR, ("write 0x%x = 0x%x\n", SIC_ADDR_REG, (u8)(offset&0xff))); */
 		rtw_write8(Adapter, SIC_ADDR_REG + 1, (u8)((offset & 0xff00) >> 8));
-		/* PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG+1, (u1Byte)((offset&0xff00)>>8)); */
-		/* RTPRINT(FPHY, PHY_SICR, ("write 0x%x = 0x%x\n", SIC_ADDR_REG+1, (u1Byte)((offset&0xff00)>>8))); */
+		/* PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8)); */
+		/* RTPRINT(FPHY, PHY_SICR, ("write 0x%x = 0x%x\n", SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8))); */
 		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_READ);
 		/* PlatformEFIOWrite1Byte(Adapter, SIC_CMD_REG, SIC_CMD_READ); */
 		/* RTPRINT(FPHY, PHY_SICR, ("write cmdreg 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_READ)); */
@@ -172,13 +172,13 @@ sic_Write4Byte(
 		/* RTPRINT(FPHY, PHY_SICW, ("write data 0x%x = 0x%x\n", SIC_CMD_REG, SIC_CMD_PREWRITE)); */
 #endif
 		rtw_write8(Adapter, SIC_ADDR_REG, (u8)(offset & 0xff));
-		/* PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG, (u1Byte)(offset&0xff)); */
-		/* RTPRINT(FPHY, PHY_SICW, ("write 0x%x=0x%x\n", SIC_ADDR_REG, (u1Byte)(offset&0xff))); */
+		/* PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG, (u8)(offset&0xff)); */
+		/* RTPRINT(FPHY, PHY_SICW, ("write 0x%x=0x%x\n", SIC_ADDR_REG, (u8)(offset&0xff))); */
 		rtw_write8(Adapter, SIC_ADDR_REG + 1, (u8)((offset & 0xff00) >> 8));
-		/* PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG+1, (u1Byte)((offset&0xff00)>>8)); */
-		/* RTPRINT(FPHY, PHY_SICW, ("write 0x%x=0x%x\n", (SIC_ADDR_REG+1), (u1Byte)((offset&0xff00)>>8))); */
+		/* PlatformEFIOWrite1Byte(Adapter, SIC_ADDR_REG+1, (u8)((offset&0xff00)>>8)); */
+		/* RTPRINT(FPHY, PHY_SICW, ("write 0x%x=0x%x\n", (SIC_ADDR_REG+1), (u8)((offset&0xff00)>>8))); */
 		rtw_write32(Adapter, SIC_DATA_REG, (u32)data);
-		/* PlatformEFIOWrite4Byte(Adapter, SIC_DATA_REG, (u4Byte)data); */
+		/* PlatformEFIOWrite4Byte(Adapter, SIC_DATA_REG, (u32)data); */
 		/* RTPRINT(FPHY, PHY_SICW, ("write data 0x%x = 0x%x\n", SIC_DATA_REG, data)); */
 		rtw_write8(Adapter, SIC_CMD_REG, SIC_CMD_WRITE);
 		/* PlatformEFIOWrite1Byte(Adapter, SIC_CMD_REG, SIC_CMD_WRITE); */
@@ -282,11 +282,11 @@ SIC_LedOff(
 *
 * Input:
 *			PADAPTER		Adapter,
-*			u4Byte			RegAddr,		//The target address to be readback
-*			u4Byte			BitMask		//The target bit position in the target address
+*			u32			RegAddr,		//The target address to be readback
+*			u32			BitMask		//The target bit position in the target address
 *										//to be readback
 * Output:	None
-* Return:		u4Byte			Data			//The readback register value
+* Return:		u32			Data			//The readback register value
 * Note:		This function is equal to "GetRegSetting" in PHY programming guide
 */
 u32
@@ -326,10 +326,10 @@ PHY_QueryBBReg8188E(
 *
 * Input:
 *			PADAPTER		Adapter,
-*			u4Byte			RegAddr,		//The target address to be modified
-*			u4Byte			BitMask		//The target bit position in the target address
+*			u32			RegAddr,		//The target address to be modified
+*			u32			BitMask		//The target bit position in the target address
 *										//to be modified
-*			u4Byte			Data			//The new register value in the target bit position
+*			u32			Data			//The new register value in the target bit position
 *										//of the target address
 *
 * Output:	None
@@ -383,10 +383,10 @@ PHY_SetBBReg8188E(
 * Input:
 *			PADAPTER		Adapter,
 *			u8				eRFPath,	//Radio path of A/B/C/D
-*			u4Byte			Offset,		//The target address to be read
+*			u32			Offset,		//The target address to be read
 *
 * Output:	None
-* Return:		u4Byte			reback value
+* Return:		u32			reback value
 * Note:		Threre are three types of serial operations:
 *			1. Software serial write
 *			2. Hardware LSSI-Low Speed Serial Interface
@@ -472,8 +472,8 @@ phy_RFSerialRead(
 * Input:
 *			PADAPTER		Adapter,
 *			u8				eRFPath,	//Radio path of A/B/C/D
-*			u4Byte			Offset,		//The target address to be read
-*			u4Byte			Data			//The new register Data in the target bit position
+*			u32			Offset,		//The target address to be read
+*			u32			Data			//The new register Data in the target bit position
 *										//of the target to be read
 *
 * Output:	None
@@ -540,12 +540,12 @@ phy_RFSerialWrite(
 * Input:
 *			PADAPTER		Adapter,
 *			u8				eRFPath,	//Radio path of A/B/C/D
-*			u4Byte			RegAddr,		//The target address to be read
-*			u4Byte			BitMask		//The target bit position in the target address
+*			u32			RegAddr,		//The target address to be read
+*			u32			BitMask		//The target bit position in the target address
 *										//to be read
 *
 * Output:	None
-* Return:		u4Byte			Readback value
+* Return:		u32			Readback value
 * Note:		This function is equal to "GetRFRegSetting" in PHY programming guide
 */
 u32
@@ -582,10 +582,10 @@ PHY_QueryRFReg8188E(
 * Input:
 *			PADAPTER		Adapter,
 *			u8				eRFPath,	//Radio path of A/B/C/D
-*			u4Byte			RegAddr,		//The target address to be modified
-*			u4Byte			BitMask		//The target bit position in the target address
+*			u32			RegAddr,		//The target address to be modified
+*			u32			BitMask		//The target bit position in the target address
 *										//to be modified
-*			u4Byte			Data			//The new register Data in the target bit position
+*			u32			Data			//The new register Data in the target bit position
 *										//of the target address
 *
 * Output:	None
@@ -603,7 +603,7 @@ PHY_SetRFReg8188E(
 {
 
 	/* HAL_DATA_TYPE	*pHalData		= GET_HAL_DATA(Adapter); */
-	/* u1Byte			RFWaitCounter	= 0; */
+	/* u8			RFWaitCounter	= 0; */
 	u32		Original_Value, BitShift;
 	/* _irqL	irqL; */
 
@@ -961,7 +961,7 @@ PHY_GetTxPowerLevel8188E(
  *			We must consider RF path later!!!!!!!
  *
  * Input:       PADAPTER		Adapter
- *			u1Byte		channel
+ *			u8		channel
  *
  * Output:      NONE
  *
@@ -1343,8 +1343,8 @@ _PHY_SetBWMode88E(
 	/* return; */
 
 	/* Added it for 20/40 mhz switch time evaluation by guangan 070531 */
-	/* u4Byte				NowL, NowH; */
-	/* u8Byte				BeginTime, EndTime; */
+	/* u32				NowL, NowH; */
+	/* u64				BeginTime, EndTime; */
 
 	if (pHalData->rf_chip == RF_PSEUDO_11N) {
 		/* pHalData->SetBWModeInProgress= _FALSE; */
@@ -1361,7 +1361,7 @@ _PHY_SetBWMode88E(
 	/* Added it for 20/40 mhz switch time evaluation by guangan 070531 */
 	/* NowL = PlatformEFIORead4Byte(Adapter, TSFR); */
 	/* NowH = PlatformEFIORead4Byte(Adapter, TSFR+4); */
-	/* BeginTime = ((u8Byte)NowH << 32) + NowL; */
+	/* BeginTime = ((u64)NowH << 32) + NowL; */
 
 	/* 3 */
 	/* 3 */ /* <1>Set MAC register */
@@ -1370,7 +1370,7 @@ _PHY_SetBWMode88E(
 
 	regBwOpMode = rtw_read8(Adapter, REG_BWOPMODE);
 	regRRSR_RSC = rtw_read8(Adapter, REG_RRSR + 2);
-	/* regBwOpMode = rtw_hal_get_hwreg(Adapter,HW_VAR_BWMODE,(pu1Byte)&regBwOpMode); */
+	/* regBwOpMode = rtw_hal_get_hwreg(Adapter,HW_VAR_BWMODE,(u8 *)&regBwOpMode); */
 
 	switch (pHalData->current_channel_bw) {
 	case CHANNEL_WIDTH_20:
@@ -1430,7 +1430,7 @@ _PHY_SetBWMode88E(
 	/* Added it for 20/40 mhz switch time evaluation by guangan 070531 */
 	/* NowL = PlatformEFIORead4Byte(Adapter, TSFR); */
 	/* NowH = PlatformEFIORead4Byte(Adapter, TSFR+4); */
-	/* EndTime = ((u8Byte)NowH << 32) + NowL; */
+	/* EndTime = ((u64)NowH << 32) + NowL; */
 
 	/* 3<3>Set RF related register */
 	switch (pHalData->rf_chip) {

@@ -102,9 +102,9 @@ void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 	u8		i;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PMPT_CONTEXT		pMptCtx = &(Adapter->mppriv.mpt_ctx);
-	u1Byte				u1Channel = pHalData->current_channel;
+	u8				u1Channel = pHalData->current_channel;
 	u32				ulRateIdx = pMptCtx->mpt_rate_index;
-	u1Byte				DataRate = 0xFF;
+	u8				DataRate = 0xFF;
 
 	DataRate = mpt_to_mgnt_rate(ulRateIdx);
 
@@ -216,8 +216,8 @@ static void mpt_SetTxPower_Old(PADAPTER pAdapter, MPT_TXPWR_DEF Rate, u8 *pTxPow
 {
 	switch (Rate) {
 	case MPT_CCK: {
-		u4Byte	TxAGC = 0, pwr = 0;
-		u1Byte	rf;
+		u32	TxAGC = 0, pwr = 0;
+		u8	rf;
 
 		pwr = pTxPower[ODM_RF_PATH_A];
 		if (pwr < 0x3f) {
@@ -235,8 +235,8 @@ static void mpt_SetTxPower_Old(PADAPTER pAdapter, MPT_TXPWR_DEF Rate, u8 *pTxPow
 	break;
 
 	case MPT_OFDM_AND_HT: {
-		u4Byte	TxAGC = 0;
-		u1Byte	pwr = 0, rf;
+		u32	TxAGC = 0;
+		u8	pwr = 0, rf;
 
 		pwr = pTxPower[0];
 		if (pwr < 0x3f) {
@@ -274,17 +274,17 @@ static void
 mpt_SetTxPower(
 	PADAPTER		pAdapter,
 	MPT_TXPWR_DEF	Rate,
-	pu1Byte	pTxPower
+	u8 *	pTxPower
 )
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 
-	u1Byte path = 0 , i = 0, MaxRate = MGN_6M;
-	u1Byte StartPath = ODM_RF_PATH_A, EndPath = ODM_RF_PATH_B;
+	u8 path = 0 , i = 0, MaxRate = MGN_6M;
+	u8 StartPath = ODM_RF_PATH_A, EndPath = ODM_RF_PATH_B;
 
 	switch (Rate) {
 	case MPT_CCK: {
-		u1Byte rate[] = {MGN_1M, MGN_2M, MGN_5_5M, MGN_11M};
+		u8 rate[] = {MGN_1M, MGN_2M, MGN_5_5M, MGN_11M};
 
 		for (path = StartPath; path <= EndPath; path++)
 			for (i = 0; i < sizeof(rate); ++i)
@@ -292,7 +292,7 @@ mpt_SetTxPower(
 	}
 	break;
 	case MPT_OFDM: {
-		u1Byte rate[] = {
+		u8 rate[] = {
 			MGN_6M, MGN_9M, MGN_12M, MGN_18M,
 			MGN_24M, MGN_36M, MGN_48M, MGN_54M,
 		};
@@ -303,7 +303,7 @@ mpt_SetTxPower(
 	}
 	break;
 	case MPT_HT: {
-		u1Byte rate[] = {
+		u8 rate[] = {
 			MGN_MCS0, MGN_MCS1, MGN_MCS2, MGN_MCS3, MGN_MCS4,
 			MGN_MCS5, MGN_MCS6, MGN_MCS7, MGN_MCS8, MGN_MCS9,
 			MGN_MCS10, MGN_MCS11, MGN_MCS12, MGN_MCS13, MGN_MCS14,
@@ -328,7 +328,7 @@ mpt_SetTxPower(
 	}
 	break;
 	case MPT_VHT: {
-		u1Byte rate[] = {
+		u8 rate[] = {
 			MGN_VHT1SS_MCS0, MGN_VHT1SS_MCS1, MGN_VHT1SS_MCS2, MGN_VHT1SS_MCS3, MGN_VHT1SS_MCS4,
 			MGN_VHT1SS_MCS5, MGN_VHT1SS_MCS6, MGN_VHT1SS_MCS7, MGN_VHT1SS_MCS8, MGN_VHT1SS_MCS9,
 			MGN_VHT2SS_MCS0, MGN_VHT2SS_MCS1, MGN_VHT2SS_MCS2, MGN_VHT2SS_MCS3, MGN_VHT2SS_MCS4,
@@ -407,12 +407,12 @@ static void mpt_SetRFPath_819X(PADAPTER	pAdapter)
 {
 	HAL_DATA_TYPE			*pHalData	= GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.mpt_ctx);
-	u4Byte			ulAntennaTx, ulAntennaRx;
+	u32			ulAntennaTx, ulAntennaRx;
 	R_ANTENNA_SELECT_OFDM	*p_ofdm_tx;	/* OFDM Tx register */
 	R_ANTENNA_SELECT_CCK	*p_cck_txrx;
-	u1Byte		r_rx_antenna_ofdm = 0, r_ant_select_cck_val = 0;
-	u1Byte		chgTx = 0, chgRx = 0;
-	u4Byte		r_ant_sel_cck_val = 0, r_ant_select_ofdm_val = 0, r_ofdm_tx_en_val = 0;
+	u8		r_rx_antenna_ofdm = 0, r_ant_select_cck_val = 0;
+	u8		chgTx = 0, chgRx = 0;
+	u32		r_ant_sel_cck_val = 0, r_ant_select_ofdm_val = 0, r_ofdm_tx_en_val = 0;
 
 	ulAntennaTx = pHalData->antenna_tx_path;
 	ulAntennaRx = pHalData->AntennaRxPath;
@@ -597,7 +597,7 @@ u8 hal_mpt_ReadRFThermalMeter(PADAPTER pAdapter)
 {
 	u32 ThermalValue = 0;
 
-	ThermalValue = (u1Byte)phy_query_rf_reg(pAdapter, ODM_RF_PATH_A, 0x42, 0xfc00);	/*0x42: RF Reg[15:10]*/
+	ThermalValue = (u8)phy_query_rf_reg(pAdapter, ODM_RF_PATH_A, 0x42, 0xfc00);	/*0x42: RF Reg[15:10]*/
 	return (u8)ThermalValue;
 
 }
@@ -647,8 +647,8 @@ void hal_mpt_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.mpt_ctx);
-	u4Byte			ulAntennaTx = pHalData->antenna_tx_path;
-	static u4Byte		regRF = 0, regBB0 = 0, regBB1 = 0, regBB2 = 0, regBB3 = 0;
+	u32			ulAntennaTx = pHalData->antenna_tx_path;
+	static u32		regRF = 0, regBB0 = 0, regBB1 = 0, regBB2 = 0, regBB3 = 0;
 	u8 rfPath;
 
 	switch (ulAntennaTx) {
@@ -763,7 +763,7 @@ static	void mpt_StopCckContTx(
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.mpt_ctx);
-	u1Byte			u1bReg;
+	u8			u1bReg;
 
 	pMptCtx->bCckContTx = FALSE;
 	pMptCtx->bOfdmContTx = FALSE;
@@ -787,8 +787,8 @@ static	void mpt_StopOfdmContTx(
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.mpt_ctx);
-	u1Byte			u1bReg;
-	u4Byte			data;
+	u8			u1bReg;
+	u32			data;
 
 	pMptCtx->bCckContTx = FALSE;
 	pMptCtx->bOfdmContTx = FALSE;
@@ -812,7 +812,7 @@ static	void mpt_StartCckContTx(
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.mpt_ctx);
-	u4Byte			cckrate;
+	u32			cckrate;
 
 	/* 1. if CCK block on */
 	if (!phy_query_bb_reg(pAdapter, rFPGA0_RFMOD, bCCKEn))

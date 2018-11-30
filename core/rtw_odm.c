@@ -28,7 +28,7 @@ void rtw_odm_init_ic_type(_adapter *adapter)
 {
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
 	struct PHY_DM_STRUCT *odm = &hal_data->odmpriv;
-	u4Byte ic_type = chip_type_to_odm_ic_type(rtw_get_chip_type(adapter));
+	u32 ic_type = chip_type_to_odm_ic_type(rtw_get_chip_type(adapter));
 
 	rtw_warn_on(!ic_type);
 

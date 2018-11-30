@@ -33,10 +33,10 @@ static RF_SHADOW_T RF_Shadow[RF6052_MAX_PATH][RF6052_MAX_REG];
 * OverView:	Get shifted position of the BitMask
 *
 * Input:
-*			u4Byte		BitMask,
+*			u32		BitMask,
 *
 * Output:	none
-* Return:		u4Byte		Return the shift bit bit position of the mask
+* Return:		u32		Return the shift bit bit position of the mask
 */
 u32
 PHY_CalculateBitShift(
