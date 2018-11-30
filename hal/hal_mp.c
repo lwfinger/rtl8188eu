@@ -54,8 +54,8 @@ void hal_mpt_SwitchRfSetting(PADAPTER	pAdapter)
 	HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.mpt_ctx);
 	u8				ChannelToSw = pMptCtx->MptChannelToSw;
-	ULONG				ulRateIdx = pMptCtx->mpt_rate_index;
-	ULONG				ulbandwidth = pMptCtx->MptBandWidth;
+	u32				ulRateIdx = pMptCtx->mpt_rate_index;
+	u32				ulbandwidth = pMptCtx->MptBandWidth;
 
 	/* <20120525, Kordan> Dynamic mechanism for APK, asked by Dennis.*/
 	if (IS_HARDWARE_TYPE_8188E(pAdapter)) {
@@ -103,7 +103,7 @@ void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	PMPT_CONTEXT		pMptCtx = &(Adapter->mppriv.mpt_ctx);
 	u1Byte				u1Channel = pHalData->current_channel;
-	ULONG				ulRateIdx = pMptCtx->mpt_rate_index;
+	u32				ulRateIdx = pMptCtx->mpt_rate_index;
 	u1Byte				DataRate = 0xFF;
 
 	DataRate = mpt_to_mgnt_rate(ulRateIdx);

@@ -390,7 +390,7 @@ struct registry_priv {
 };
 
 /* For registry parameters */
-#define RGTRY_OFT(field) ((ULONG)FIELD_OFFSET(struct registry_priv, field))
+#define RGTRY_OFT(field) ((u32)FIELD_OFFSET(struct registry_priv, field))
 #define RGTRY_SZ(field)   sizeof(((struct registry_priv *) 0)->field)
 
 #define GetRegAmplifierType2G(_Adapter)	(_Adapter->registrypriv.AmplifierType_2G)
@@ -404,7 +404,7 @@ struct registry_priv {
 #define GetRegGLNAType(_Adapter)	(_Adapter->registrypriv.GLNA_Type)
 #define GetRegPowerTrackingType(_Adapter)	(_Adapter->registrypriv.PowerTracking_Type)
 
-#define BSSID_OFT(field) ((ULONG)FIELD_OFFSET(WLAN_BSSID_EX, field))
+#define BSSID_OFT(field) ((u32)FIELD_OFFSET(WLAN_BSSID_EX, field))
 #define BSSID_SZ(field)   sizeof(((PWLAN_BSSID_EX) 0)->field)
 
 #define BW_MODE_2G(bw_mode) ((bw_mode) & 0x0F)

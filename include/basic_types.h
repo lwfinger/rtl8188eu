@@ -49,8 +49,8 @@
 
 	#define u8 u8
 	#define u16 u16
-	#define UINT u32
-	#define ULONG u32
+	#define u32 u32
+	#define u32 u32
 
 	typedef void (*proc_t)(void *);
 

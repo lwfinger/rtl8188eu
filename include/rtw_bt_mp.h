@@ -178,9 +178,9 @@ NDIS_STATUS
 MPTBT_SendOidBT(
 	IN	PADAPTER		pAdapter,
 	IN	void *			InformationBuffer,
-	IN	ULONG			InformationBufferLength,
-	OUT	PULONG			BytesRead,
-	OUT	PULONG			BytesNeeded
+	IN	u32			InformationBufferLength,
+	OUT	u32 *			BytesRead,
+	OUT	u32 *			BytesNeeded
 );
 
 void

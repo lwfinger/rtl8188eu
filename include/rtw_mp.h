@@ -106,15 +106,11 @@ struct mp_tx {
 #define s8Byte		s64
 #define ps8Byte		s64*
 
-#define UINT u32
-#define ULONG u32
-#define PULONG u32*
-
 typedef struct _RT_PMAC_PKT_INFO {
 	u8			MCS;
 	u8			Nss;
 	u8			Nsts;
-	UINT			N_sym;
+	u32			N_sym;
 	u8			SIGA2B3;
 } RT_PMAC_PKT_INFO, *PRT_PMAC_PKT_INFO;
 
@@ -133,8 +129,8 @@ typedef struct _RT_PMAC_TX_INFO {
 	u8			BandWidth:3;		/* 0: 20 1:40 2:80Mhz */
 	u8			m_STBC;			/* bSTBC + 1 */
 	u16			PacketPeriod;
-	UINT		PacketCount;
-	UINT		PacketLength;
+	u32		PacketCount;
+	u32		PacketLength;
 	u8			PacketPattern;
 	u16			SFD;
 	u8			SignalField;
@@ -181,27 +177,27 @@ typedef struct _MPT_CONTEXT {
 	MPT_WORK_ITEM_HANDLER	CurrMptAct;
 
 	/* 1=Start, 0=Stop from UI. */
-	ULONG			MptTestStart;
+	u32			MptTestStart;
 	/* _TEST_MODE, defined in MPT_Req2.h */
-	ULONG			MptTestItem;
+	u32			MptTestItem;
 	/* Variable needed in each implementation of CurrMptAct. */
-	ULONG			MptActType;	/* Type of action performed in CurrMptAct. */
+	u32			MptActType;	/* Type of action performed in CurrMptAct. */
 	/* The Offset of IO operation is depend of MptActType. */
-	ULONG			MptIoOffset;
+	u32			MptIoOffset;
 	/* The Value of IO operation is depend of MptActType. */
-	ULONG			MptIoValue;
+	u32			MptIoValue;
 	/* The RfPath of IO operation is depend of MptActType. */
 
-	ULONG			mpt_rf_path;
+	u32			mpt_rf_path;
 
 
 	WIRELESS_MODE		MptWirelessModeToSw;	/* Wireless mode to switch. */
 	u8			MptChannelToSw;	/* Channel to switch. */
 	u8			MptInitGainToSet;	/* Initial gain to set. */
-	/* ULONG			bMptAntennaA;		 */ /* TRUE if we want to use antenna A. */
-	ULONG			MptBandWidth;		/* bandwidth to switch. */
+	/* u32			bMptAntennaA;		 */ /* TRUE if we want to use antenna A. */
+	u32			MptBandWidth;		/* bandwidth to switch. */
 
-	ULONG			mpt_rate_index;/* rate index. */
+	u32			mpt_rate_index;/* rate index. */
 
 	/* Register value kept for Single Carrier Tx test. */
 	u8			btMpCckTxPower;
@@ -211,13 +207,13 @@ typedef struct _MPT_CONTEXT {
 	u8			TxPwrLevel[4];	/* rf-A, rf-B*/
 	u32			RegTxPwrLimit;
 	/* Content of RCR Regsiter for Mass Production Test. */
-	ULONG			MptRCR;
+	u32			MptRCR;
 	/* TRUE if we only receive packets with specific pattern. */
 	bool			bMptFilterPattern;
 	/* Rx OK count, statistics used in Mass Production Test. */
-	ULONG			MptRxOkCnt;
+	u32			MptRxOkCnt;
 	/* Rx CRC32 error count, statistics used in Mass Production Test. */
-	ULONG			MptRxCrcErrCnt;
+	u32			MptRxCrcErrCnt;
 
 	bool			bCckContTx;	/* TRUE if we are in CCK Continuous Tx test. */
 	bool			bOfdmContTx;	/* TRUE if we are in OFDM Continuous Tx test. */
@@ -237,7 +233,7 @@ typedef struct _MPT_CONTEXT {
 
 	/* ACK counter asked by K.Y.. */
 	bool			bMptEnableAckCounter;
-	ULONG			MptAckCounter;
+	u32			MptAckCounter;
 
 	/* SD3 Willis For 8192S to save 1T/2T RF table for ACUT	Only fro ACUT delete later ~~~! */
 	/* s1Byte		BufOfLines[2][MAX_LINES_HWCONFIG_TXT][MAX_BYTES_LINE_HWCONFIG_TXT]; */
@@ -260,7 +256,7 @@ typedef struct _MPT_CONTEXT {
 	u1Byte			c2hBuf[32];
 
 	u1Byte          btInBuf[100];
-	ULONG			mptOutLen;
+	u32			mptOutLen;
 	u1Byte          mptOutBuf[100];
 	RT_PMAC_TX_INFO	PMacTxInfo;
 	RT_PMAC_PKT_INFO	PMacPktInfo;
@@ -704,7 +700,7 @@ void hal_mpt_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart);
 void mpt_ProSetPMacTx(PADAPTER	Adapter);
 void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter , bool bMain);
 u8 MP_PHY_QueryRFPathSwitch(PADAPTER pAdapter);
-ULONG mpt_ProQueryCalTxPower(PADAPTER	pAdapter, u8 RfPath);
+u32 mpt_ProQueryCalTxPower(PADAPTER	pAdapter, u8 RfPath);
 void MPT_PwrCtlDM(PADAPTER padapter, u32 bstart);
 u8 mpt_to_mgnt_rate(u32	MptRateIdx);
 u8 rtw_mpRateParseFunc(PADAPTER pAdapter, u8 *targetStr);
@@ -728,7 +724,7 @@ PMAC_Nsym_generator(
 );
 void
 L_SIG_generator(
-	UINT	N_SYM,		/* Max: 750*/
+	u32	N_SYM,		/* Max: 750*/
 	PRT_PMAC_TX_INFO	pPMacTxInfo,
 	PRT_PMAC_PKT_INFO	pPMacPktInfo
 );
