@@ -106,7 +106,6 @@ struct mp_tx {
 #define s8Byte		s64
 #define ps8Byte		s64*
 
-#define USHORT u16
 #define UINT u32
 #define ULONG u32
 #define PULONG u32*
@@ -133,14 +132,14 @@ typedef struct _RT_PMAC_TX_INFO {
 	u8			NDP_sound:1;
 	u8			BandWidth:3;		/* 0: 20 1:40 2:80Mhz */
 	u8			m_STBC;			/* bSTBC + 1 */
-	USHORT			PacketPeriod;
+	u16			PacketPeriod;
 	UINT		PacketCount;
 	UINT		PacketLength;
 	u8			PacketPattern;
-	USHORT			SFD;
+	u16			SFD;
 	u8			SignalField;
 	u8			ServiceField;
-	USHORT			LENGTH;
+	u16			LENGTH;
 	u8			CRC16[2];
 	u8			LSIG[3];
 	u8			HT_SIG[6];

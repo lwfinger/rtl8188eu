@@ -203,13 +203,13 @@ void mptbt_BtControlProcess(
 typedef struct _BT_REQ_CMD {
 	u8       opCodeVer;
 	u8       OpCode;
-	USHORT      paraLength;
+	u16      paraLength;
 	u8       pParamStart[100];
 } BT_REQ_CMD, *PBT_REQ_CMD;
 
 typedef struct _BT_RSP_CMD {
-	USHORT      status;
-	USHORT      paraLength;
+	u16      status;
+	u16      paraLength;
 	u8       pParamStart[100];
 } BT_RSP_CMD, *PBT_RSP_CMD;
 

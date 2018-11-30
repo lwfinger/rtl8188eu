@@ -48,7 +48,7 @@
 	typedef	signed int sint;
 
 	#define u8 u8
-	#define USHORT u16
+	#define u16 u16
 	#define UINT u32
 	#define ULONG u32
 
