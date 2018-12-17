@@ -379,10 +379,10 @@ bool match_mstat_sniff_rules(const enum mstat_f flags, const size_t size)
 		if (mstat_sniff_rules[i].flags == flags
 			&& mstat_sniff_rules[i].lb <= size
 			&& mstat_sniff_rules[i].hb >= size)
-			return _TRUE;
+			return true;
 	}
 
-	return _FALSE;
+	return false;
 }
 
 inline u8 *dbg_rtw_vmalloc(u32 sz, const enum mstat_f flags, const char *func, const int line)
@@ -707,9 +707,9 @@ int	_rtw_memcmp(const void *dst, const void *src, u32 sz)
 {
 	/* under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0 */
 	if (!(memcmp(dst, src, sz)))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 void _rtw_init_listhead(_list *list)
@@ -726,9 +726,9 @@ Otherwise, there will be racing condition.
 u32	rtw_is_list_empty(_list *phead)
 {
 	if (list_empty(phead))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 void rtw_list_insert_head(_list *plist, _list *phead)
@@ -826,9 +826,9 @@ u32	  _rtw_queue_empty(_queue	*pqueue)
 u32 rtw_end_of_queue_search(_list *head, _list *plist)
 {
 	if (head == plist)
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 
@@ -1345,28 +1345,28 @@ static int storeToFile(const char *path, u8 *buf, u32 sz)
 /*
 * Test if the specifi @param path is a file and readable
 * @param path the path of the file to test
-* @return _TRUE or _FALSE
+* @return true or false
 */
 int rtw_is_file_readable(const char *path)
 {
 	if (isFileReadable(path, NULL) == 0)
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 /*
 * Test if the specifi @param path is a file and readable.
 * If readable, @param sz is got
 * @param path the path of the file to test
-* @return _TRUE or _FALSE
+* @return true or false
 */
 int rtw_is_file_readable_with_size(const char *path, u32 *sz)
 {
 	if (isFileReadable(path, sz) == 0)
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 /*
@@ -1608,22 +1608,22 @@ keep_ori:
  * rtw_cbuf_full - test if cbuf is full
  * @cbuf: pointer of struct rtw_cbuf
  *
- * Returns: _TRUE if cbuf is full
+ * Returns: true if cbuf is full
  */
 inline bool rtw_cbuf_full(struct rtw_cbuf *cbuf)
 {
-	return (cbuf->write == cbuf->read - 1) ? _TRUE : _FALSE;
+	return (cbuf->write == cbuf->read - 1) ? true : false;
 }
 
 /**
  * rtw_cbuf_empty - test if cbuf is empty
  * @cbuf: pointer of struct rtw_cbuf
  *
- * Returns: _TRUE if cbuf is empty
+ * Returns: true if cbuf is empty
  */
 inline bool rtw_cbuf_empty(struct rtw_cbuf *cbuf)
 {
-	return (cbuf->write == cbuf->read) ? _TRUE : _FALSE;
+	return (cbuf->write == cbuf->read) ? true : false;
 }
 
 /**
@@ -1632,7 +1632,7 @@ inline bool rtw_cbuf_empty(struct rtw_cbuf *cbuf)
  * @buf: pointer to push in
  *
  * Lock free operation, be careful of the use scheme
- * Returns: _TRUE push success
+ * Returns: true push success
  */
 bool rtw_cbuf_push(struct rtw_cbuf *cbuf, void *buf)
 {
@@ -1789,74 +1789,74 @@ exit:
 /**
 * is_null -
 *
-* Return	TRUE if c is null character
-*		FALSE otherwise.
+* Return	true if c is null character
+*		false otherwise.
 */
 inline bool is_null(char c)
 {
 	if (c == '\0')
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 /**
 * is_eol -
 *
-* Return	TRUE if c is represent for EOL (end of line)
-*		FALSE otherwise.
+* Return	true if c is represent for EOL (end of line)
+*		false otherwise.
 */
 inline bool is_eol(char c)
 {
 	if (c == '\r' || c == '\n')
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 /**
 * is_space -
 *
-* Return	TRUE if c is represent for space
-*		FALSE otherwise.
+* Return	true if c is represent for space
+*		false otherwise.
 */
 inline bool is_space(char c)
 {
 	if (c == ' ' || c == '\t')
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 /**
 * IsHexDigit -
 *
-* Return	TRUE if chTmp is represent for hex digit
-*		FALSE otherwise.
+* Return	true if chTmp is represent for hex digit
+*		false otherwise.
 */
 inline bool IsHexDigit(char chTmp)
 {
 	if ((chTmp >= '0' && chTmp <= '9') ||
 		(chTmp >= 'a' && chTmp <= 'f') ||
 		(chTmp >= 'A' && chTmp <= 'F'))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 /**
 * is_alpha -
 *
-* Return	TRUE if chTmp is represent for alphabet
-*		FALSE otherwise.
+* Return	true if chTmp is represent for alphabet
+*		false otherwise.
 */
 inline bool is_alpha(char chTmp)
 {
 	if ((chTmp >= 'a' && chTmp <= 'z') ||
 		(chTmp >= 'A' && chTmp <= 'Z'))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 inline char alpha_to_upper(char c)

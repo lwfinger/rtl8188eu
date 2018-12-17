@@ -534,17 +534,17 @@ odm_txpowertracking_thermal_meter_init(
 	struct _ADAPTER		*adapter = p_dm_odm->adapter;
 	HAL_DATA_TYPE	*p_hal_data = GET_HAL_DATA(adapter);
 
-	p_rf_calibrate_info->is_txpowertracking = _TRUE;
+	p_rf_calibrate_info->is_txpowertracking = true;
 	p_rf_calibrate_info->tx_powercount = 0;
-	p_rf_calibrate_info->is_txpowertracking_init = _FALSE;
+	p_rf_calibrate_info->is_txpowertracking_init = false;
 
 	if (p_dm_odm->mp_mode == false)
-		p_rf_calibrate_info->txpowertrack_control = _TRUE;
+		p_rf_calibrate_info->txpowertrack_control = true;
 	else
-		p_rf_calibrate_info->txpowertrack_control = _FALSE;
+		p_rf_calibrate_info->txpowertrack_control = false;
 
 	if (p_dm_odm->mp_mode == false)
-		p_rf_calibrate_info->txpowertrack_control = _TRUE;
+		p_rf_calibrate_info->txpowertrack_control = true;
 
 	ODM_RT_TRACE(p_dm_odm, ODM_COMP_CALIBRATION, ODM_DBG_LOUD, ("p_dm_odm txpowertrack_control = %d\n", p_rf_calibrate_info->txpowertrack_control));
 

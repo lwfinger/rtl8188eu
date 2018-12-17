@@ -826,7 +826,7 @@ u32 rtw_tkip_decrypt(_adapter *padapter, u8 *precvframe)
 				static u32 no_gkey_bc_cnt = 0;
 				static u32 no_gkey_mc_cnt = 0;
 
-				if (psecuritypriv->binstallGrpkey == _FALSE) {
+				if (psecuritypriv->binstallGrpkey == false) {
 					res = _FAIL;
 
 					if (start == 0)
@@ -1953,7 +1953,7 @@ u32	rtw_aes_decrypt(_adapter *padapter, u8 *precvframe)
 
 				/* RTW_INFO("rx bc/mc packets, to perform sw rtw_aes_decrypt\n"); */
 				/* prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey; */
-				if (psecuritypriv->binstallGrpkey == _FALSE) {
+				if (psecuritypriv->binstallGrpkey == false) {
 					res = _FAIL;
 
 					if (start == 0)
@@ -3030,7 +3030,7 @@ void rtw_use_tkipkey_handler(RTW_TIMER_HDL_ARGS)
 		}
 		*/
 
-	padapter->securitypriv.busetkipkey = _TRUE;
+	padapter->securitypriv.busetkipkey = true;
 
 
 
@@ -3046,9 +3046,9 @@ void rtw_sec_restore_wep_key(_adapter *adapter)
 		for (keyid = 0; keyid < 4; keyid++) {
 			if (securitypriv->key_mask & BIT(keyid)) {
 				if (keyid == securitypriv->dot11PrivacyKeyIndex)
-					rtw_set_key(adapter, securitypriv, keyid, 1, _FALSE);
+					rtw_set_key(adapter, securitypriv, keyid, 1, false);
 				else
-					rtw_set_key(adapter, securitypriv, keyid, 0, _FALSE);
+					rtw_set_key(adapter, securitypriv, keyid, 0, false);
 			}
 		}
 	}
@@ -3059,12 +3059,12 @@ u8 rtw_handle_tkip_countermeasure(_adapter *adapter, const char *caller)
 	struct security_priv *securitypriv = &(adapter->securitypriv);
 	u8 status = _SUCCESS;
 
-	if (securitypriv->btkip_countermeasure == _TRUE) {
+	if (securitypriv->btkip_countermeasure == true) {
 		u32 passing_ms = rtw_get_passing_time_ms(securitypriv->btkip_countermeasure_time);
 		if (passing_ms > 60 * 1000) {
 			RTW_PRINT("%s("ADPT_FMT") countermeasure time:%ds > 60s\n",
 				  caller, ADPT_ARG(adapter), passing_ms / 1000);
-			securitypriv->btkip_countermeasure = _FALSE;
+			securitypriv->btkip_countermeasure = false;
 			securitypriv->btkip_countermeasure_time = 0;
 		} else {
 			RTW_PRINT("%s("ADPT_FMT") countermeasure time:%ds < 60s\n",

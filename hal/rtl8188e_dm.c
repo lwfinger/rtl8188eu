@@ -55,7 +55,7 @@ dm_CheckStatistics(
 static void dm_CheckPbcGPIO(_adapter *padapter)
 {
 	u8	tmp1byte;
-	u8	bPbcPressed = _FALSE;
+	u8	bPbcPressed = false;
 
 	if (!padapter->registrypriv.hw_wps_pbc)
 		return;
@@ -77,9 +77,9 @@ static void dm_CheckPbcGPIO(_adapter *padapter)
 		return ;
 
 	if (tmp1byte & HAL_8188E_HW_GPIO_WPS_BIT)
-		bPbcPressed = _TRUE;
+		bPbcPressed = true;
 
-	if (_TRUE == bPbcPressed) {
+	if (true == bPbcPressed) {
 		/* Here we only set bPbcPressed to true */
 		/* After trigger PBC, the variable will be set to false */
 		RTW_INFO("CheckPbcGPIO - PBC is pressed\n");
@@ -160,7 +160,7 @@ static void Update_ODM_ComInfo_88E(PADAPTER	Adapter)
 			 /*		| ODM_BB_PWR_TRAIN */
 			 ;
 
-	if (rtw_odm_adaptivity_needed(Adapter) == _TRUE) {
+	if (rtw_odm_adaptivity_needed(Adapter) == true) {
 		rtw_odm_adaptivity_config_msg(RTW_DBGDUMP, Adapter);
 		SupportAbility |= ODM_BB_ADAPTIVITY;
 	}
@@ -212,8 +212,8 @@ rtl8188e_HalDmWatchDog(
 	PADAPTER	Adapter
 )
 {
-	bool		bFwCurrentInPSMode = _FALSE;
-	bool		bFwPSAwake = _TRUE;
+	bool		bFwCurrentInPSMode = false;
+	bool		bFwPSAwake = true;
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT		*pDM_Odm = &(pHalData->odmpriv);
 
@@ -230,7 +230,7 @@ rtl8188e_HalDmWatchDog(
 	/* Fw is under p2p powersaving mode, driver should stop dynamic mechanism. */
 	/* modifed by thomas. 2011.06.11. */
 	if (Adapter->wdinfo.p2p_ps_mode)
-		bFwPSAwake = _FALSE;
+		bFwPSAwake = false;
 #endif /* CONFIG_P2P_PS */
 
 	if ((rtw_is_hw_init_completed(Adapter))
@@ -243,16 +243,16 @@ rtl8188e_HalDmWatchDog(
 
 	/* ODM */
 	if (rtw_is_hw_init_completed(Adapter)) {
-		u8	bLinked = _FALSE;
-		u8	bsta_state = _FALSE;
+		u8	bLinked = false;
+		u8	bsta_state = false;
 #ifdef CONFIG_DISABLE_ODM
 		pHalData->odmpriv.support_ability = 0;
 #endif
 
 		if (rtw_mi_check_status(Adapter, MI_ASSOC)) {
-			bLinked = _TRUE;
+			bLinked = true;
 			if (rtw_mi_check_status(Adapter, MI_STA_LINKED))
-				bsta_state = _TRUE;
+				bsta_state = true;
 		}
 
 		odm_cmn_info_update(&pHalData->odmpriv , ODM_CMNINFO_LINK, bLinked);

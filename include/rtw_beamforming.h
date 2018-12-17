@@ -93,7 +93,7 @@ enum _SOUNDING_STATE {
 };
 
 struct beamformee_entry {
-	u8 used;	/* _TRUE/_FALSE */
+	u8 used;	/* true/false */
 	u8 txbf;
 	u8 sounding;
 	/* Used to construct AID field of NDPA packet */
@@ -143,7 +143,7 @@ struct beamformee_entry {
 	u8 user_position[16];
 
 	/* For 8822B C-cut workaround */
-	/* If the flag set to _TRUE, do not sound this STA */
+	/* If the flag set to true, do not sound this STA */
 	u8 bSuspendSUCap;
 };
 

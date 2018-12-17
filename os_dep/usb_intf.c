@@ -50,8 +50,8 @@ static void rtw_dev_shutdown(struct device *dev)
 				if (!rtw_is_surprise_removed(adapter)) {
 					struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(adapter);
 					#ifdef CONFIG_WOWLAN
-					if (pwrctl->wowlan_mode == _TRUE)
-						RTW_INFO("%s wowlan_mode ==_TRUE do not run rtw_hal_deinit()\n", __func__);
+					if (pwrctl->wowlan_mode == true)
+						RTW_INFO("%s wowlan_mode ==true do not run rtw_hal_deinit()\n", __func__);
 					else
 					#endif
 					{
@@ -435,10 +435,10 @@ static int usb_reprobe_switch_usb_mode(PADAPTER Adapter)
 {
 	struct registry_priv *registry_par = &Adapter->registrypriv;
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
-	u8 ret = _FALSE;
+	u8 ret = false;
 
 	/* efuse not allow driver to switch usb mode */
-	if (pHalData->EEPROMUsbSwitch == _FALSE)
+	if (pHalData->EEPROMUsbSwitch == false)
 		goto exit;
 
 	/* registry not allow driver to switch usb mode */
@@ -474,7 +474,7 @@ static void usb_intf_start(_adapter *padapter)
 	PHAL_DATA_TYPE hal = GET_HAL_DATA(padapter);
 
 	rtw_hal_inirp_init(padapter);
-	hal->usb_intf_start = _TRUE;
+	hal->usb_intf_start = true;
 
 
 }
@@ -497,7 +497,7 @@ static void usb_intf_stop(_adapter *padapter)
 
 	/* todo:cancel other irps */
 
-	hal->usb_intf_start = _FALSE;
+	hal->usb_intf_start = false;
 
 }
 
@@ -541,7 +541,7 @@ int rtw_hw_suspend(_adapter *padapter)
 	if (NULL == padapter)
 		goto error_exit;
 
-	if ((_FALSE == padapter->bup) || RTW_CANNOT_RUN(padapter)) {
+	if ((false == padapter->bup) || RTW_CANNOT_RUN(padapter)) {
 		RTW_INFO("padapter->bup=%d bDriverStopped=%s bSurpriseRemoved = %s\n"
 			 , padapter->bup
 			 , rtw_is_drv_stopped(padapter) ? "True" : "False"
@@ -557,8 +557,8 @@ int rtw_hw_suspend(_adapter *padapter)
 
 	RTW_INFO("==> rtw_hw_suspend\n");
 	_enter_pwrlock(&pwrpriv->lock);
-	pwrpriv->bips_processing = _TRUE;
-	/* padapter->net_closed = _TRUE; */
+	pwrpriv->bips_processing = true;
+	/* padapter->net_closed = true; */
 	/* s1. */
 	if (pnetdev) {
 		netif_carrier_off(pnetdev);
@@ -566,7 +566,7 @@ int rtw_hw_suspend(_adapter *padapter)
 	}
 
 	/* s2. */
-	rtw_disassoc_cmd(padapter, 500, _FALSE);
+	rtw_disassoc_cmd(padapter, 500, false);
 
 	/* s2-2.  indicate disconnect to os */
 	/* rtw_indicate_disconnect(padapter); */
@@ -576,7 +576,7 @@ int rtw_hw_suspend(_adapter *padapter)
 			_clr_fwstate_(pmlmepriv, _FW_LINKED);
 			rtw_led_control(padapter, LED_CTL_NO_LINK);
 
-			rtw_os_indicate_disconnect(padapter, 0, _FALSE);
+			rtw_os_indicate_disconnect(padapter, 0, false);
 
 #ifdef CONFIG_LPS
 			/* donnot enqueue cmd */
@@ -588,12 +588,12 @@ int rtw_hw_suspend(_adapter *padapter)
 	rtw_free_assoc_resources(padapter, 1);
 
 	/* s2-4. */
-	rtw_free_network_queue(padapter, _TRUE);
+	rtw_free_network_queue(padapter, true);
 #ifdef CONFIG_IPS
 	rtw_ips_dev_unload(padapter);
 #endif
 	pwrpriv->rf_pwrstate = rf_off;
-	pwrpriv->bips_processing = _FALSE;
+	pwrpriv->bips_processing = false;
 	_exit_pwrlock(&pwrpriv->lock);
 
 	return 0;
@@ -612,10 +612,10 @@ int rtw_hw_resume(_adapter *padapter)
 
 	RTW_INFO("==> rtw_hw_resume\n");
 	_enter_pwrlock(&pwrpriv->lock);
-	pwrpriv->bips_processing = _TRUE;
+	pwrpriv->bips_processing = true;
 	rtw_reset_drv_sw(padapter);
 
-	if (pm_netdev_open(pnetdev, _FALSE) != 0) {
+	if (pm_netdev_open(pnetdev, false) != 0) {
 		_exit_pwrlock(&pwrpriv->lock);
 		goto error_exit;
 	}
@@ -624,11 +624,11 @@ int rtw_hw_resume(_adapter *padapter)
 
 	rtw_netif_wake_queue(pnetdev);
 
-	pwrpriv->bkeepfwalive = _FALSE;
-	pwrpriv->brfoffbyhw = _FALSE;
+	pwrpriv->bkeepfwalive = false;
+	pwrpriv->brfoffbyhw = false;
 
 	pwrpriv->rf_pwrstate = rf_on;
-	pwrpriv->bips_processing = _FALSE;
+	pwrpriv->bips_processing = false;
 	_exit_pwrlock(&pwrpriv->lock);
 
 
@@ -653,7 +653,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 	pdbgpriv = &dvobj->drv_dbg;
 	padapter = dvobj_get_primary_adapter(dvobj);
 
-	if (pwrpriv->bInSuspend == _TRUE) {
+	if (pwrpriv->bInSuspend == true) {
 		RTW_INFO("%s bInSuspend = %d\n", __func__, pwrpriv->bInSuspend);
 		pdbgpriv->dbg_suspend_error_cnt++;
 		goto exit;
@@ -666,7 +666,7 @@ static int rtw_suspend(struct usb_interface *pusb_intf, pm_message_t message)
 #ifdef SUPPORT_HW_RFOFF_DETECTED
 			/* The FW command register update must after MAC and FW init ready. */
 			if ((padapter->bFWReady) && (pwrpriv->bHWPwrPindetect) && (padapter->registrypriv.usbss_enable)) {
-				u8 bOpen = _TRUE;
+				u8 bOpen = true;
 				rtw_interface_ps_func(padapter, HAL_USB_SELECT_SUSPEND, &bOpen);
 			}
 #endif/* SUPPORT_HW_RFOFF_DETECTED */
@@ -688,7 +688,7 @@ static int rtw_resume_process(_adapter *padapter)
 	struct debug_priv *pdbgpriv = &pdvobj->drv_dbg;
 
 
-	if (pwrpriv->bInSuspend == _FALSE) {
+	if (pwrpriv->bInSuspend == false) {
 		pdbgpriv->dbg_resume_error_cnt++;
 		RTW_INFO("%s bInSuspend = %d\n", __func__, pwrpriv->bInSuspend);
 		return -1;
@@ -704,9 +704,9 @@ static int rtw_resume_process(_adapter *padapter)
 #endif /* kernel < 2.6.32 */
 
 	RTW_INFO("pwrpriv->bAutoResume (%x)\n", pwrpriv->bAutoResume);
-	if (_TRUE == pwrpriv->bAutoResume) {
-		pwrpriv->bInternalAutoSuspend = _FALSE;
-		pwrpriv->bAutoResume = _FALSE;
+	if (true == pwrpriv->bAutoResume) {
+		pwrpriv->bInternalAutoSuspend = false;
+		pwrpriv->bAutoResume = false;
 		RTW_INFO("pwrpriv->bAutoResume (%x)  pwrpriv->bInternalAutoSuspend(%x)\n", pwrpriv->bAutoResume, pwrpriv->bInternalAutoSuspend);
 
 	}
@@ -714,7 +714,7 @@ static int rtw_resume_process(_adapter *padapter)
 
 	/*
 	 * Due to usb wow suspend flow will cancel read/write port via intf_stop and
-	 * bReadPortCancel and bWritePortCancel are set _TRUE in intf_stop.
+	 * bReadPortCancel and bWritePortCancel are set true in intf_stop.
 	 * But they will not be clear in intf_start during wow resume flow.
 	 * It should move to os_intf in the feature.
 	 */
@@ -728,22 +728,22 @@ static int rtw_resume_process(_adapter *padapter)
 #ifdef SUPPORT_HW_RFOFF_DETECTED
 		/* The FW command register update must after MAC and FW init ready. */
 		if ((padapter->bFWReady) && (pwrpriv->bHWPwrPindetect) && (padapter->registrypriv.usbss_enable)) {
-			u8 bOpen = _FALSE;
+			u8 bOpen = false;
 			rtw_interface_ps_func(padapter, HAL_USB_SELECT_SUSPEND, &bOpen);
 		}
 #endif
 #ifdef CONFIG_BT_COEXIST /* for 8723as-vau */
 		RTW_INFO("pwrpriv->bAutoResume (%x)\n", pwrpriv->bAutoResume);
-		if (_TRUE == pwrpriv->bAutoResume) {
-			pwrpriv->bInternalAutoSuspend = _FALSE;
-			pwrpriv->bAutoResume = _FALSE;
+		if (true == pwrpriv->bAutoResume) {
+			pwrpriv->bInternalAutoSuspend = false;
+			pwrpriv->bAutoResume = false;
 			RTW_INFO("pwrpriv->bAutoResume (%x)  pwrpriv->bInternalAutoSuspend(%x)\n", pwrpriv->bAutoResume, pwrpriv->bInternalAutoSuspend);
 		}
 
 #else	/* #ifdef CONFIG_BT_COEXIST */
-		pwrpriv->bInternalAutoSuspend = _FALSE;
+		pwrpriv->bInternalAutoSuspend = false;
 #endif	/* #ifdef CONFIG_BT_COEXIST */
-		pwrpriv->brfoffbyhw = _FALSE;
+		pwrpriv->brfoffbyhw = false;
 	}
 #endif/* CONFIG_AUTOSUSPEND */
 
@@ -783,7 +783,7 @@ static int rtw_resume(struct usb_interface *pusb_intf)
 #else
 			if (rtw_is_earlysuspend_registered(pwrpriv)) {
 				/* jeff: bypass resume here, do in late_resume */
-				rtw_set_do_late_resume(pwrpriv, _TRUE);
+				rtw_set_do_late_resume(pwrpriv, true);
 			} else {
 				rtw_resume_lock_suspend();
 				ret = rtw_resume_process(padapter);
@@ -809,8 +809,8 @@ void autosuspend_enter(_adapter *padapter)
 
 	RTW_INFO("==>autosuspend_enter...........\n");
 
-	pwrpriv->bInternalAutoSuspend = _TRUE;
-	pwrpriv->bips_processing = _TRUE;
+	pwrpriv->bInternalAutoSuspend = true;
+	pwrpriv->bips_processing = true;
 
 	if (rf_off == pwrpriv->change_rfpwrstate) {
 #ifndef	CONFIG_BT_COEXIST
@@ -868,7 +868,7 @@ int autoresume_enter(_adapter *padapter)
 	RTW_INFO("====> autoresume_enter\n");
 
 	if (rf_off == pwrpriv->rf_pwrstate) {
-		pwrpriv->ps_flag = _FALSE;
+		pwrpriv->ps_flag = false;
 #ifndef	CONFIG_BT_COEXIST
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 33))
 		if (usb_autopm_get_interface(dvobj->pusbintf) < 0) {
@@ -888,7 +888,7 @@ int autoresume_enter(_adapter *padapter)
 		RTW_INFO("...pm_usage_cnt(%d).....\n", dvobj->pusbintf->pm_usage_cnt);
 #endif
 #else	/* #ifndef	CONFIG_BT_COEXIST */
-		pwrpriv->bAutoResume = _TRUE;
+		pwrpriv->bAutoResume = true;
 		if (0 == pwrpriv->autopm_cnt) {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 33))
 			if (usb_autopm_get_interface(dvobj->pusbintf) < 0) {
@@ -953,7 +953,7 @@ static _adapter *rtw_usb_primary_adapter_init(struct dvobj_priv *dvobj,
 	padapter->iface_id = IFACE_ID0;
 
 	/* set adapter_type/iface type for primary padapter */
-	padapter->isprimary = _TRUE;
+	padapter->isprimary = true;
 	padapter->adapter_type = PRIMARY_ADAPTER;
 #ifdef CONFIG_MI_WITH_MBSSID_CAM/*Configure all IFACE to PORT0-MBSSID*/
 	padapter->hw_port = HW_PORT0;
@@ -1082,10 +1082,10 @@ static void rtw_usb_primary_adapter_deinit(_adapter *padapter)
 	RTW_INFO(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 
 	if (check_fwstate(pmlmepriv, _FW_LINKED))
-		rtw_disassoc_cmd(padapter, 0, _FALSE);
+		rtw_disassoc_cmd(padapter, 0, false);
 
 #ifdef CONFIG_AP_MODE
-	if (check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == _TRUE) {
+	if (check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == true) {
 		free_mlme_ap_info(padapter);
 		#ifdef CONFIG_HOSTAPD_MLME
 		hostapd_mode_unload(padapter);
@@ -1096,7 +1096,7 @@ static void rtw_usb_primary_adapter_deinit(_adapter *padapter)
 	/*rtw_cancel_all_timer(if1);*/
 
 #ifdef CONFIG_WOWLAN
-	pwrctl->wowlan_mode = _FALSE;
+	pwrctl->wowlan_mode = false;
 #endif /* CONFIG_WOWLAN */
 
 	rtw_dev_unload(padapter);
@@ -1160,7 +1160,7 @@ static int rtw_drv_init(struct usb_interface *pusb_intf, const struct usb_device
 		goto free_dvobj;
 	}
 
-	if (usb_reprobe_switch_usb_mode(padapter) == _TRUE)
+	if (usb_reprobe_switch_usb_mode(padapter) == true)
 		goto free_if_prim;
 
 #ifdef CONFIG_CONCURRENT_MODE
@@ -1233,19 +1233,19 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 
 	RTW_INFO("+rtw_dev_remove\n");
 
-	dvobj->processing_dev_remove = _TRUE;
+	dvobj->processing_dev_remove = true;
 
 	/* TODO: use rtw_os_ndevs_deinit instead at the first stage of driver's dev deinit function */
 	rtw_os_ndevs_unregister(dvobj);
 
-	if (usb_drv.drv_registered == _TRUE) {
-		/* RTW_INFO("r871xu_dev_remove():padapter->bSurpriseRemoved == _TRUE\n"); */
+	if (usb_drv.drv_registered == true) {
+		/* RTW_INFO("r871xu_dev_remove():padapter->bSurpriseRemoved == true\n"); */
 		rtw_set_surprise_removed(padapter);
 	}
 	/*else
 	{
 
-		padapter->HalData->hw_init_completed = _FALSE;
+		padapter->HalData->hw_init_completed = false;
 	}*/
 
 
@@ -1253,7 +1253,7 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	rtw_unregister_early_suspend(pwrctl);
 #endif
 
-	if (padapter->bFWReady == _TRUE) {
+	if (padapter->bFWReady == true) {
 		rtw_pm_set_ips(padapter, IPS_NONE);
 		rtw_pm_set_lps(padapter, PS_MODE_ACTIVE);
 
@@ -1306,7 +1306,7 @@ static int __init rtw_drv_entry(void)
 	RTW_INFO(DRV_NAME" BT-Coex version = %s\n", BTCOEXVERSION);
 #endif /* BTCOEXVERSION */
 
-	usb_drv.drv_registered = _TRUE;
+	usb_drv.drv_registered = true;
 	rtw_suspend_lock_init();
 	rtw_drv_proc_init();
 	rtw_ndev_notifier_register();
@@ -1314,7 +1314,7 @@ static int __init rtw_drv_entry(void)
 	ret = usb_register(&usb_drv.usbdrv);
 
 	if (ret != 0) {
-		usb_drv.drv_registered = _FALSE;
+		usb_drv.drv_registered = false;
 		rtw_suspend_lock_uninit();
 		rtw_drv_proc_deinit();
 		rtw_ndev_notifier_unregister();
@@ -1330,7 +1330,7 @@ static void __exit rtw_drv_halt(void)
 {
 	RTW_INFO("module exit start\n");
 
-	usb_drv.drv_registered = _FALSE;
+	usb_drv.drv_registered = false;
 
 	usb_deregister(&usb_drv.usbdrv);
 

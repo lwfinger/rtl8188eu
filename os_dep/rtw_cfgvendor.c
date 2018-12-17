@@ -612,7 +612,7 @@ static int wl_cfgvendor_enable_full_scan_result(struct wiphy *wiphy,
 	int err = 0;
 	struct bcm_cfg80211 *cfg = wiphy_priv(wiphy);
 	int type;
-	bool real_time = FALSE;
+	bool real_time = false;
 
 	type = nla_type(data);
 

@@ -61,14 +61,14 @@ enum RTW_USB_SPEED {
 
 static inline u8 rtw_usb_bulk_size_boundary(_adapter *padapter, int buf_len)
 {
-	u8 rst = _TRUE;
+	u8 rst = true;
 
 	if (IS_SUPER_SPEED_USB(padapter))
-		rst = (0 == (buf_len) % USB_SUPER_SPEED_BULK_SIZE) ? _TRUE : _FALSE;
+		rst = (0 == (buf_len) % USB_SUPER_SPEED_BULK_SIZE) ? true : false;
 	if (IS_HIGH_SPEED_USB(padapter))
-		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE) ? _TRUE : _FALSE;
+		rst = (0 == (buf_len) % USB_HIGH_SPEED_BULK_SIZE) ? true : false;
 	else
-		rst = (0 == (buf_len) % USB_FULL_SPEED_BULK_SIZE) ? _TRUE : _FALSE;
+		rst = (0 == (buf_len) % USB_FULL_SPEED_BULK_SIZE) ? true : false;
 	return rst;
 }
 

@@ -203,7 +203,7 @@ SetAntennaConfig92C(
  * 	2) "#define RTL8723_FPGA_VERIFICATION	1"				in Precomp.h.WlanE.Windows
  * 	3) "#define RTL8190_Download_Firmware_From_Header	0"	in Precomp.h.WlanE.Windows if needed.
  *   */
-#if (RTL8188E_FPGA_TRUE_PHY_VERIFICATION == 1)
+#if (RTL8188E_FPGAtrue_PHY_VERIFICATION == 1)
 	#define	SIC_ENABLE				1
 	#define	SIC_HW_SUPPORT		1
 #else

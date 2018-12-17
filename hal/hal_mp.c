@@ -74,13 +74,13 @@ s32 hal_mpt_SetPowerTracking(PADAPTER padapter, u8 enable)
 		return _FAIL;
 	}
 
-	if (check_fwstate(&padapter->mlmepriv, WIFI_MP_STATE) == _FALSE) {
+	if (check_fwstate(&padapter->mlmepriv, WIFI_MP_STATE) == false) {
 		return _FAIL;
 	}
 	if (enable)
-		pDM_Odm->rf_calibrate_info.txpowertrack_control = _TRUE;
+		pDM_Odm->rf_calibrate_info.txpowertrack_control = true;
 	else
-		pDM_Odm->rf_calibrate_info.txpowertrack_control = _FALSE;
+		pDM_Odm->rf_calibrate_info.txpowertrack_control = false;
 
 	return _SUCCESS;
 }
@@ -109,9 +109,9 @@ void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, bool bInCH14)
 	DataRate = mpt_to_mgnt_rate(ulRateIdx);
 
 	if (u1Channel == 14 && IS_CCK_RATE(DataRate))
-		pHalData->bCCKinCH14 = TRUE;
+		pHalData->bCCKinCH14 = true;
 	else
-		pHalData->bCCKinCH14 = FALSE;
+		pHalData->bCCKinCH14 = false;
 
 	/* get current cck swing value and check 0xa22 & 0xa23 later to match the table.*/
 	CurrCCKSwingVal = read_bbreg(Adapter, rCCK0_TxFilter1, bMaskHWord);
@@ -185,8 +185,8 @@ void hal_mpt_SetChannel(PADAPTER pAdapter)
 
 	hal_mpt_SwitchRfSetting(pAdapter);
 
-	pHalData->bSwChnl = _TRUE;
-	pHalData->bSetChnlBW = _TRUE;
+	pHalData->bSwChnl = true;
+	pHalData->bSetChnlBW = true;
 	rtw_hal_set_chnl_bw(pAdapter, channel, bandwidth, 0, 0);
 
 	hal_mpt_CCKTxPowerAdjust(pAdapter, pHalData->bCCKinCH14);
@@ -205,8 +205,8 @@ void hal_mpt_SetBandwidth(PADAPTER pAdapter)
 	u8		channel = pmp->channel;
 	u8		bandwidth = pmp->bandwidth;
 
-	pHalData->bSwChnl = _TRUE;
-	pHalData->bSetChnlBW = _TRUE;
+	pHalData->bSwChnl = true;
+	pHalData->bSetChnlBW = true;
 	rtw_hal_set_chnl_bw(pAdapter, channel, bandwidth, 0, 0);
 
 	hal_mpt_SwitchRfSetting(pAdapter);
@@ -568,7 +568,7 @@ s32 hal_mpt_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
 	}
 
 
-	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == _FALSE) {
+	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == false) {
 		return _FAIL;
 	}
 
@@ -765,8 +765,8 @@ static	void mpt_StopCckContTx(
 	PMPT_CONTEXT	pMptCtx = &(pAdapter->mppriv.mpt_ctx);
 	u8			u1bReg;
 
-	pMptCtx->bCckContTx = FALSE;
-	pMptCtx->bOfdmContTx = FALSE;
+	pMptCtx->bCckContTx = false;
+	pMptCtx->bOfdmContTx = false;
 
 	phy_set_bb_reg(pAdapter, rCCK0_System, bCCKBBMode, 0x0);	/*normal mode*/
 	phy_set_bb_reg(pAdapter, rCCK0_System, bCCKScramble, 0x1);	/*turn on scramble setting*/
@@ -790,8 +790,8 @@ static	void mpt_StopOfdmContTx(
 	u8			u1bReg;
 	u32			data;
 
-	pMptCtx->bCckContTx = FALSE;
-	pMptCtx->bOfdmContTx = FALSE;
+	pMptCtx->bCckContTx = false;
+	pMptCtx->bOfdmContTx = false;
 
 	phy_set_bb_reg(pAdapter, rOFDM1_LSTF, BIT30 | BIT29 | BIT28, OFDM_ALL_OFF);
 
@@ -837,8 +837,8 @@ static	void mpt_StartCckContTx(
 	phy_set_bb_reg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
 	phy_set_bb_reg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
 
-	pMptCtx->bCckContTx = TRUE;
-	pMptCtx->bOfdmContTx = FALSE;
+	pMptCtx->bCckContTx = true;
+	pMptCtx->bOfdmContTx = false;
 
 }	/* mpt_StartCckContTx */
 
@@ -869,8 +869,8 @@ static	void mpt_StartOfdmContTx(
 	phy_set_bb_reg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
 	phy_set_bb_reg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
 
-	pMptCtx->bCckContTx = FALSE;
-	pMptCtx->bOfdmContTx = TRUE;
+	pMptCtx->bCckContTx = false;
+	pMptCtx->bOfdmContTx = true;
 }	/* mpt_StartOfdmContTx */
 
 void hal_mpt_SetContinuousTx(PADAPTER pAdapter, u8 bStart)

@@ -778,7 +778,7 @@ void hal_load_txpwr_info(
 	u8 rfpath, ch_idx, group, tx_idx;
 
 	/* load from pg data (or default value) */
-	hal_load_pg_txpwr_info(adapter, pwr_info_2g, pwr_info_5g, pg_data, _FALSE);
+	hal_load_pg_txpwr_info(adapter, pwr_info_2g, pwr_info_5g, pg_data, false);
 
 	/* transform to hal_data */
 	for (rfpath = 0; rfpath < MAX_RF_PATH; rfpath++) {
@@ -1115,14 +1115,14 @@ static bool rtw_regsty_chk_target_tx_power_valid(_adapter *adapter)
 
 				target = rtw_regsty_get_target_tx_power(adapter, band, path, rs);
 				if (target == -1) {
-					RTW_PRINT("%s return _FALSE for band:%d, path:%d, rs:%d, t:%d\n", __func__, band, path, rs, target);
-					return _FALSE;
+					RTW_PRINT("%s return false for band:%d, path:%d, rs:%d, t:%d\n", __func__, band, path, rs, target);
+					return false;
 				}
 			}
 		}
 	}
 
-	return _TRUE;
+	return true;
 }
 
 /*
@@ -1220,7 +1220,7 @@ static inline bool phy_is_txpwr_by_rate_undefined_of_band_path(_adapter *adapter
 	}
 
 exit:
-	return (tx_num >= hal_spec->max_tx_cnt || tx_num >= hal_spec->tx_nss_num) ? _TRUE : _FALSE;
+	return (tx_num >= hal_spec->max_tx_cnt || tx_num >= hal_spec->tx_nss_num) ? true : false;
 }
 
 static inline void phy_txpwr_by_rate_duplicate_band_path(_adapter *adapter, u8 band, u8 s_path, u8 t_path)
@@ -1333,7 +1333,7 @@ phy_StoreTxPowerByRateBase(
 				if (IS_VHT_RATE_SECTION(rs))
 					continue;
 
-				if (regsty->target_tx_pwr_valid == _TRUE)
+				if (regsty->target_tx_pwr_valid == true)
 					base = 2 * rtw_regsty_get_target_tx_power(pAdapter, band, path, rs);
 				else
 					base = _PHY_GetTxPowerByRate(pAdapter, band, path, tx_num, rate_sec_base[rs]);
@@ -1952,13 +1952,13 @@ exit:
 static bool phy_GetChnlIndex(u8 Channel, u8 *ChannelIdx)
 {
 	u8  i = 0;
-	bool bIn24G = _TRUE;
+	bool bIn24G = true;
 
 	if (Channel <= 14) {
-		bIn24G = _TRUE;
+		bIn24G = true;
 		*ChannelIdx = Channel - 1;
 	} else {
-		bIn24G = _FALSE;
+		bIn24G = false;
 
 		for (i = 0; i < CENTER_CH_5G_ALL_NUM; ++i) {
 			if (center_ch_5g_all[i] == Channel) {
@@ -1987,7 +1987,7 @@ PHY_GetTxPowerIndexBase(
 	u8					txPower = 0;
 	u8					chnlIdx = (Channel - 1);
 
-	if (HAL_IsLegalChannel(pAdapter, Channel) == _FALSE) {
+	if (HAL_IsLegalChannel(pAdapter, Channel) == false) {
 		chnlIdx = 0;
 		RTW_INFO("Illegal channel!!\n");
 	}
@@ -2143,7 +2143,7 @@ PHY_GetTxPowerTrackingOffset(
 	struct PHY_DM_STRUCT			*pDM_Odm = &pHalData->odmpriv;
 	s8	offset = 0;
 
-	if (pDM_Odm->rf_calibrate_info.txpowertrack_control  == _FALSE)
+	if (pDM_Odm->rf_calibrate_info.txpowertrack_control  == false)
 		return offset;
 
 	if ((Rate == MGN_1M) || (Rate == MGN_2M) || (Rate == MGN_5_5M) || (Rate == MGN_11M)) {
@@ -2722,7 +2722,7 @@ static s8 _phy_get_txpwr_lmt(
 		goto exit;
 	}
 
-	if (no_sc == _TRUE) {
+	if (no_sc == true) {
 		/* use the input center channel and bandwidth directly */
 		cch = Channel;
 		bw_bmp = ch_width_to_bw_cap(Bandwidth);
@@ -2755,7 +2755,7 @@ static s8 _phy_get_txpwr_lmt(
 		if (!(ch_width_to_bw_cap(bw) & bw_bmp))
 			continue;
 
-		if (no_sc == _FALSE) {
+		if (no_sc == false) {
 			if (bw == CHANNEL_WIDTH_20)
 				cch = hal_data->cch_20;
 			else if (bw == CHANNEL_WIDTH_40)
@@ -2816,11 +2816,11 @@ PHY_GetTxPowerLimit(
 	u8					Channel
 )
 {
-	bool no_sc = _FALSE;
+	bool no_sc = false;
 
 	/* MP mode channel don't use secondary channel */
-	if (rtw_mi_mp_mode_check(Adapter) == _TRUE)
-		no_sc = _TRUE;
+	if (rtw_mi_mp_mode_check(Adapter) == true)
+		no_sc = true;
 
 	return _phy_get_txpwr_lmt(Adapter, RegPwrTblSel, Band, Bandwidth, RfPath, DataRate, Channel, no_sc);
 }
@@ -2836,7 +2836,7 @@ PHY_GetTxPowerLimit_no_sc(
 	u8					Channel
 )
 {
-	return _phy_get_txpwr_lmt(Adapter, RegPwrTblSel, Band, Bandwidth, RfPath, DataRate, Channel, _TRUE);
+	return _phy_get_txpwr_lmt(Adapter, RegPwrTblSel, Band, Bandwidth, RfPath, DataRate, Channel, true);
 }
 
 #ifdef CONFIG_PHYDM_POWERTRACK_BY_TSSI
@@ -3281,8 +3281,8 @@ phy_set_tx_power_limit(
 		RTW_INFO("Index of power limit table [band %s][regulation %s][bw %s][rate section %s][rf path %s][chnl %s][val %s]\n"
 			, Band, Regulation, Bandwidth, RateSection, RfPath, Channel, PowerLimit);
 
-	if (GetU1ByteIntegerFromStringInDecimal((s8 *)Channel, &channel) == _FALSE
-		|| GetU1ByteIntegerFromStringInDecimal((s8 *)PowerLimit, &powerLimit) == _FALSE
+	if (GetU1ByteIntegerFromStringInDecimal((s8 *)Channel, &channel) == false
+		|| GetU1ByteIntegerFromStringInDecimal((s8 *)PowerLimit, &powerLimit) == false
 	) {
 		RTW_PRINT("Illegal index of power limit table [ch %s][val %s]\n", Channel, PowerLimit);
 		return;
@@ -3484,8 +3484,8 @@ bool phy_is_tx_power_limit_needed(_adapter *adapter)
 
 	if (regsty->RegEnableTxPowerLimit == 1
 		|| (regsty->RegEnableTxPowerLimit == 2 && hal_data->EEPROMRegulatory == 1))
-		return _TRUE;
-	return _FALSE;
+		return true;
+	return false;
 }
 
 bool phy_is_tx_power_by_rate_needed(_adapter *adapter)
@@ -3495,8 +3495,8 @@ bool phy_is_tx_power_by_rate_needed(_adapter *adapter)
 
 	if (regsty->RegEnableTxPowerByRate == 1
 		|| (regsty->RegEnableTxPowerByRate == 2 && hal_data->EEPROMRegulatory != 2))
-		return _TRUE;
-	return _FALSE;
+		return true;
+	return false;
 }
 
 int phy_load_tx_power_by_rate(_adapter *adapter, u8 chk_file)
@@ -3555,7 +3555,7 @@ int phy_load_tx_power_limit(_adapter *adapter, u8 chk_file)
 	hal_data->txpwr_limit_loaded = 0;
 	PHY_InitTxPowerLimit(adapter);
 
-	if (!hal_data->txpwr_by_rate_loaded && regsty->target_tx_pwr_valid != _TRUE) {
+	if (!hal_data->txpwr_by_rate_loaded && regsty->target_tx_pwr_valid != true) {
 		RTW_ERR("%s():Read Tx power limit before target tx power is specify\n", __func__);
 		goto exit;
 	}
@@ -3598,7 +3598,7 @@ void phy_load_tx_power_ext_info(_adapter *adapter, u8 chk_file)
 
 	/* power by rate and limit */
 	if (phy_is_tx_power_by_rate_needed(adapter)
-		|| (phy_is_tx_power_limit_needed(adapter) && regsty->target_tx_pwr_valid != _TRUE)
+		|| (phy_is_tx_power_limit_needed(adapter) && regsty->target_tx_pwr_valid != true)
 	)
 		phy_load_tx_power_by_rate(adapter, chk_file);
 
@@ -3621,7 +3621,7 @@ void dump_tx_power_ext_info(void *sel, _adapter *adapter)
 	struct registry_priv *regsty = adapter_to_regsty(adapter);
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
 
-	if (regsty->target_tx_pwr_valid == _TRUE)
+	if (regsty->target_tx_pwr_valid == true)
 		RTW_PRINT_SEL(sel, "target_tx_power: from registry\n");
 	else if (phy_is_tx_power_by_rate_needed(adapter))
 		RTW_PRINT_SEL(sel, "target_tx_power: from power by rate\n"); 
@@ -3658,7 +3658,7 @@ void dump_target_tx_power(void *sel, _adapter *adapter)
 				break;
 
 			RTW_PRINT_SEL(sel, "[%s][%c]%s\n", band_str(band), rf_path_char(path)
-				, (regsty->target_tx_pwr_valid == _FALSE && hal_data->txpwr_by_rate_undefined_band_path[band][path]) ? "(dup)" : "");
+				, (regsty->target_tx_pwr_valid == false && hal_data->txpwr_by_rate_undefined_band_path[band][path]) ? "(dup)" : "");
 
 			for (rs = 0; rs < RATE_SECTION_NUM; rs++) {
 				tx_num = rate_section_to_tx_num(rs);
@@ -3936,10 +3936,10 @@ int rtw_get_phy_file_path(_adapter *adapter, const char *file_name)
 		#endif
 		len += snprintf(rtw_phy_para_file_path + len, PATH_LENGTH_MAX - len, "%s", file_name);
 
-		return _TRUE;
+		return true;
 	}
 #endif
-	return _FALSE;
+	return false;
 }
 
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
@@ -3961,7 +3961,7 @@ phy_ConfigMACWithParaFile(
 
 	if ((pHalData->mac_reg_len == 0) && (pHalData->mac_reg == NULL)) {
 		rtw_get_phy_file_path(Adapter, pFileName);
-		if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
+		if (rtw_is_file_readable(rtw_phy_para_file_path) == true) {
 			rlen = rtw_retrieve_from_file(rtw_phy_para_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
 			if (rlen > 0) {
 				rtStatus = _SUCCESS;
@@ -4040,7 +4040,7 @@ phy_ConfigBBWithParaFile(
 
 	if ((pBufLen != NULL) && (*pBufLen == 0) && (pBuf == NULL)) {
 		rtw_get_phy_file_path(Adapter, pFileName);
-		if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
+		if (rtw_is_file_readable(rtw_phy_para_file_path) == true) {
 			rlen = rtw_retrieve_from_file(rtw_phy_para_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
 			if (rlen > 0) {
 				rtStatus = _SUCCESS;
@@ -4157,7 +4157,7 @@ static int phy_ParseBBPgParaFile(PADAPTER Adapter, char *buffer)
 	char	*szLine, *ptmp;
 	u32	u4bRegOffset, u4bRegMask, u4bRegValue;
 	u32	u4bMove;
-	bool firstLine = _TRUE;
+	bool firstLine = true;
 	u8	tx_num = 0;
 	u8	band = 0, rf_path = 0;
 
@@ -4189,12 +4189,12 @@ static int phy_ParseBBPgParaFile(PADAPTER Adapter, char *buffer)
 				if (eqNByte(szLine + 5, (u8 *)("[Exact]#"), 8)) {
 					pHalData->odmpriv.phy_reg_pg_value_type = PHY_REG_PG_EXACT_VALUE;
 					/* RTW_INFO("The values in PHY_REG_PG are exact values ok\n"); */
-					firstLine = _FALSE;
+					firstLine = false;
 					continue;
 				} else if (eqNByte(szLine + 5, (u8 *)("[Relative]#"), 11)) {
 					pHalData->odmpriv.phy_reg_pg_value_type = PHY_REG_PG_RELATIVE_VALUE;
 					/* RTW_INFO("The values in PHY_REG_PG are relative values ok\n"); */
-					firstLine = _FALSE;
+					firstLine = false;
 					continue;
 				} else {
 					RTW_INFO("The values in PHY_REG_PG are invalid %s\n", szLine);
@@ -4418,7 +4418,7 @@ phy_ConfigBBWithPgParaFile(
 
 	if (pHalData->bb_phy_reg_pg == NULL) {
 		rtw_get_phy_file_path(Adapter, pFileName);
-		if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
+		if (rtw_is_file_readable(rtw_phy_para_file_path) == true) {
 			rlen = rtw_retrieve_from_file(rtw_phy_para_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
 			if (rlen > 0) {
 				rtStatus = _SUCCESS;
@@ -4467,7 +4467,7 @@ phy_ConfigBBWithMpParaFile(
 
 	if ((pHalData->bb_phy_reg_mp_len == 0) && (pHalData->bb_phy_reg_mp == NULL)) {
 		rtw_get_phy_file_path(Adapter, pFileName);
-		if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
+		if (rtw_is_file_readable(rtw_phy_para_file_path) == true) {
 			rlen = rtw_retrieve_from_file(rtw_phy_para_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
 			if (rlen > 0) {
 				rtStatus = _SUCCESS;
@@ -4571,7 +4571,7 @@ PHY_ConfigRFWithParaFile(
 
 	if ((pBufLen != NULL) && (*pBufLen == 0) && (pBuf == NULL)) {
 		rtw_get_phy_file_path(Adapter, pFileName);
-		if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
+		if (rtw_is_file_readable(rtw_phy_para_file_path) == true) {
 			rlen = rtw_retrieve_from_file(rtw_phy_para_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
 			if (rlen > 0) {
 				rtStatus = _SUCCESS;
@@ -4766,7 +4766,7 @@ PHY_ConfigRFWithTxPwrTrackParaFile(
 
 	if ((pHalData->rf_tx_pwr_track_len == 0) && (pHalData->rf_tx_pwr_track == NULL)) {
 		rtw_get_phy_file_path(Adapter, pFileName);
-		if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
+		if (rtw_is_file_readable(rtw_phy_para_file_path) == true) {
 			rlen = rtw_retrieve_from_file(rtw_phy_para_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
 			if (rlen > 0) {
 				rtStatus = _SUCCESS;
@@ -5083,7 +5083,7 @@ PHY_ConfigRFWithPowerLimitTableParaFile(
 
 	if (pHalData->rf_tx_pwr_lmt == NULL) {
 		rtw_get_phy_file_path(Adapter, pFileName);
-		if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
+		if (rtw_is_file_readable(rtw_phy_para_file_path) == true) {
 			rlen = rtw_retrieve_from_file(rtw_phy_para_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
 			if (rlen > 0) {
 				rtStatus = _SUCCESS;

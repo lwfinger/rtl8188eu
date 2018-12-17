@@ -20,9 +20,6 @@
 #ifndef __HAL_VERSION_DEF_H__
 #define __HAL_VERSION_DEF_H__
 
-#define TRUE	_TRUE
-#define FALSE	_FALSE
-
 /* HAL_IC_TYPE_E */
 typedef enum tag_HAL_IC_Type_Definition {
 	CHIP_8192S	=	0,
@@ -109,67 +106,67 @@ typedef	struct tag_HAL_VERSION {
  * HAL_VERSION VersionID */
 
 /* HAL_IC_TYPE_E */
-#define IS_8188E(version)			((GET_CVID_IC_TYPE(version) == CHIP_8188E) ? TRUE : FALSE)
-#define IS_8188F(version)			((GET_CVID_IC_TYPE(version) == CHIP_8188F) ? TRUE : FALSE)
-#define IS_8192E(version)			((GET_CVID_IC_TYPE(version) == CHIP_8192E) ? TRUE : FALSE)
-#define IS_8812_SERIES(version)			((GET_CVID_IC_TYPE(version) == CHIP_8812) ? TRUE : FALSE)
-#define IS_8821_SERIES(version)			((GET_CVID_IC_TYPE(version) == CHIP_8821) ? TRUE : FALSE)
-#define IS_8814A_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8814A) ? TRUE : FALSE)
-#define IS_8723B_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8723B) ? TRUE : FALSE)
-#define IS_8703B_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8703B) ? TRUE : FALSE)
-#define IS_8822B_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8822B) ? TRUE : FALSE)
-#define IS_8821C_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8821C) ? TRUE : FALSE)
+#define IS_8188E(version)			((GET_CVID_IC_TYPE(version) == CHIP_8188E) ? true : false)
+#define IS_8188F(version)			((GET_CVID_IC_TYPE(version) == CHIP_8188F) ? true : false)
+#define IS_8192E(version)			((GET_CVID_IC_TYPE(version) == CHIP_8192E) ? true : false)
+#define IS_8812_SERIES(version)			((GET_CVID_IC_TYPE(version) == CHIP_8812) ? true : false)
+#define IS_8821_SERIES(version)			((GET_CVID_IC_TYPE(version) == CHIP_8821) ? true : false)
+#define IS_8814A_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8814A) ? true : false)
+#define IS_8723B_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8723B) ? true : false)
+#define IS_8703B_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8703B) ? true : false)
+#define IS_8822B_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8822B) ? true : false)
+#define IS_8821C_SERIES(version)		((GET_CVID_IC_TYPE(version) == CHIP_8821C) ? true : false)
 #define IS_8723D_SERIES(version)\
-	((GET_CVID_IC_TYPE(version) == CHIP_8723D) ? TRUE : FALSE)
+	((GET_CVID_IC_TYPE(version) == CHIP_8723D) ? true : false)
 /* HAL_CHIP_TYPE_E */
-#define IS_TEST_CHIP(version)			((GET_CVID_CHIP_TYPE(version) == TEST_CHIP) ? TRUE : FALSE)
-#define IS_NORMAL_CHIP(version)			((GET_CVID_CHIP_TYPE(version) == NORMAL_CHIP) ? TRUE : FALSE)
+#define IS_TEST_CHIP(version)			((GET_CVID_CHIP_TYPE(version) == TEST_CHIP) ? true : false)
+#define IS_NORMAL_CHIP(version)			((GET_CVID_CHIP_TYPE(version) == NORMAL_CHIP) ? true : false)
 
 /* HAL_CUT_VERSION_E */
-#define IS_A_CUT(version)			((GET_CVID_CUT_VERSION(version) == A_CUT_VERSION) ? TRUE : FALSE)
-#define IS_B_CUT(version)			((GET_CVID_CUT_VERSION(version) == B_CUT_VERSION) ? TRUE : FALSE)
-#define IS_C_CUT(version)			((GET_CVID_CUT_VERSION(version) == C_CUT_VERSION) ? TRUE : FALSE)
-#define IS_D_CUT(version)			((GET_CVID_CUT_VERSION(version) == D_CUT_VERSION) ? TRUE : FALSE)
-#define IS_E_CUT(version)			((GET_CVID_CUT_VERSION(version) == E_CUT_VERSION) ? TRUE : FALSE)
-#define IS_F_CUT(version)			((GET_CVID_CUT_VERSION(version) == F_CUT_VERSION) ? TRUE : FALSE)
-#define IS_I_CUT(version)			((GET_CVID_CUT_VERSION(version) == I_CUT_VERSION) ? TRUE : FALSE)
-#define IS_J_CUT(version)			((GET_CVID_CUT_VERSION(version) == J_CUT_VERSION) ? TRUE : FALSE)
-#define IS_K_CUT(version)			((GET_CVID_CUT_VERSION(version) == K_CUT_VERSION) ? TRUE : FALSE)
+#define IS_A_CUT(version)			((GET_CVID_CUT_VERSION(version) == A_CUT_VERSION) ? true : false)
+#define IS_B_CUT(version)			((GET_CVID_CUT_VERSION(version) == B_CUT_VERSION) ? true : false)
+#define IS_C_CUT(version)			((GET_CVID_CUT_VERSION(version) == C_CUT_VERSION) ? true : false)
+#define IS_D_CUT(version)			((GET_CVID_CUT_VERSION(version) == D_CUT_VERSION) ? true : false)
+#define IS_E_CUT(version)			((GET_CVID_CUT_VERSION(version) == E_CUT_VERSION) ? true : false)
+#define IS_F_CUT(version)			((GET_CVID_CUT_VERSION(version) == F_CUT_VERSION) ? true : false)
+#define IS_I_CUT(version)			((GET_CVID_CUT_VERSION(version) == I_CUT_VERSION) ? true : false)
+#define IS_J_CUT(version)			((GET_CVID_CUT_VERSION(version) == J_CUT_VERSION) ? true : false)
+#define IS_K_CUT(version)			((GET_CVID_CUT_VERSION(version) == K_CUT_VERSION) ? true : false)
 
 /* HAL_VENDOR_E */
-#define IS_CHIP_VENDOR_TSMC(version)	((GET_CVID_MANUFACTUER(version) == CHIP_VENDOR_TSMC) ? TRUE : FALSE)
-#define IS_CHIP_VENDOR_UMC(version)	((GET_CVID_MANUFACTUER(version) == CHIP_VENDOR_UMC) ? TRUE : FALSE)
-#define IS_CHIP_VENDOR_SMIC(version)	((GET_CVID_MANUFACTUER(version) == CHIP_VENDOR_SMIC) ? TRUE : FALSE)
+#define IS_CHIP_VENDOR_TSMC(version)	((GET_CVID_MANUFACTUER(version) == CHIP_VENDOR_TSMC) ? true : false)
+#define IS_CHIP_VENDOR_UMC(version)	((GET_CVID_MANUFACTUER(version) == CHIP_VENDOR_UMC) ? true : false)
+#define IS_CHIP_VENDOR_SMIC(version)	((GET_CVID_MANUFACTUER(version) == CHIP_VENDOR_SMIC) ? true : false)
 
 /* HAL_RF_TYPE_E */
-#define IS_1T1R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_1T1R) ? TRUE : FALSE)
-#define IS_1T2R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_1T2R) ? TRUE : FALSE)
-#define IS_2T2R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_2T2R) ? TRUE : FALSE)
-#define IS_3T3R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_3T3R) ? TRUE : FALSE)
-#define IS_3T4R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_3T4R) ? TRUE : FALSE)
-#define IS_4T4R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_4T4R) ? TRUE : FALSE)
+#define IS_1T1R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_1T1R) ? true : false)
+#define IS_1T2R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_1T2R) ? true : false)
+#define IS_2T2R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_2T2R) ? true : false)
+#define IS_3T3R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_3T3R) ? true : false)
+#define IS_3T4R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_3T4R) ? true : false)
+#define IS_4T4R(version)					((GET_CVID_RF_TYPE(version) == RF_TYPE_4T4R) ? true : false)
 
 
 
 /* ----------------------------------------------------------------------------
  * Chip version Macro. --
  * ---------------------------------------------------------------------------- */
-#define IS_VENDOR_8188E_I_CUT_SERIES(_Adapter)		((IS_8188E(GET_HAL_DATA(_Adapter)->version_id)) ? ((GET_CVID_CUT_VERSION(GET_HAL_DATA(_Adapter)->version_id) >= I_CUT_VERSION) ? TRUE : FALSE) : FALSE)
-#define IS_VENDOR_8812A_TEST_CHIP(_Adapter)		((IS_8812_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? FALSE : TRUE) : FALSE)
-#define IS_VENDOR_8812A_MP_CHIP(_Adapter)		((IS_8812_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? TRUE : FALSE) : FALSE)
-#define IS_VENDOR_8812A_C_CUT(_Adapter)			((IS_8812_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((GET_CVID_CUT_VERSION(GET_HAL_DATA(_Adapter)->version_id) == C_CUT_VERSION) ? TRUE : FALSE) : FALSE)
+#define IS_VENDOR_8188E_I_CUT_SERIES(_Adapter)		((IS_8188E(GET_HAL_DATA(_Adapter)->version_id)) ? ((GET_CVID_CUT_VERSION(GET_HAL_DATA(_Adapter)->version_id) >= I_CUT_VERSION) ? true : false) : false)
+#define IS_VENDOR_8812A_TEST_CHIP(_Adapter)		((IS_8812_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? false : true) : false)
+#define IS_VENDOR_8812A_MP_CHIP(_Adapter)		((IS_8812_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? true : false) : false)
+#define IS_VENDOR_8812A_C_CUT(_Adapter)			((IS_8812_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((GET_CVID_CUT_VERSION(GET_HAL_DATA(_Adapter)->version_id) == C_CUT_VERSION) ? true : false) : false)
 
-#define IS_VENDOR_8821A_TEST_CHIP(_Adapter)	((IS_8821_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? FALSE : TRUE) : FALSE)
-#define IS_VENDOR_8821A_MP_CHIP(_Adapter)		((IS_8821_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? TRUE : FALSE) : FALSE)
+#define IS_VENDOR_8821A_TEST_CHIP(_Adapter)	((IS_8821_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? false : true) : false)
+#define IS_VENDOR_8821A_MP_CHIP(_Adapter)		((IS_8821_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? true : false) : false)
 
-#define IS_VENDOR_8192E_B_CUT(_Adapter)		((GET_CVID_CUT_VERSION(GET_HAL_DATA(_Adapter)->version_id) == B_CUT_VERSION) ? TRUE : FALSE)
+#define IS_VENDOR_8192E_B_CUT(_Adapter)		((GET_CVID_CUT_VERSION(GET_HAL_DATA(_Adapter)->version_id) == B_CUT_VERSION) ? true : false)
 
-#define IS_VENDOR_8723B_TEST_CHIP(_Adapter)	((IS_8723B_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? FALSE : TRUE) : FALSE)
-#define IS_VENDOR_8723B_MP_CHIP(_Adapter)		((IS_8723B_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? TRUE : FALSE) : FALSE)
+#define IS_VENDOR_8723B_TEST_CHIP(_Adapter)	((IS_8723B_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? false : true) : false)
+#define IS_VENDOR_8723B_MP_CHIP(_Adapter)		((IS_8723B_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? true : false) : false)
 
-#define IS_VENDOR_8703B_TEST_CHIP(_Adapter)	((IS_8703B_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? FALSE : TRUE) : FALSE)
-#define IS_VENDOR_8703B_MP_CHIP(_Adapter)		((IS_8703B_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? TRUE : FALSE) : FALSE)
-#define IS_VENDOR_8814A_TEST_CHIP(_Adapter)	((IS_8814A_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? FALSE : TRUE) : FALSE)
-#define IS_VENDOR_8814A_MP_CHIP(_Adapter)		((IS_8814A_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? TRUE : FALSE) : FALSE)
+#define IS_VENDOR_8703B_TEST_CHIP(_Adapter)	((IS_8703B_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? false : true) : false)
+#define IS_VENDOR_8703B_MP_CHIP(_Adapter)		((IS_8703B_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? true : false) : false)
+#define IS_VENDOR_8814A_TEST_CHIP(_Adapter)	((IS_8814A_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? false : true) : false)
+#define IS_VENDOR_8814A_MP_CHIP(_Adapter)		((IS_8814A_SERIES(GET_HAL_DATA(_Adapter)->version_id)) ? ((IS_NORMAL_CHIP(GET_HAL_DATA(_Adapter)->version_id)) ? true : false) : false)
 
 #endif

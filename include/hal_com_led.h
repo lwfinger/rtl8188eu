@@ -192,11 +192,11 @@ typedef struct _LED_USB {
 	LED_PIN			LedPin;	/* Identify how to implement this SW led. */
 
 	LED_STATE			CurrLedState; /* Current LED state. */
-	bool				bLedOn; /* TRUE if LED is ON, FALSE if LED is OFF. */
+	bool				bLedOn; /* true if LED is ON, false if LED is OFF. */
 
 	bool				bSWLedCtrl;
 
-	bool				bLedBlinkInProgress; /* TRUE if it is blinking, FALSE o.w.. */
+	bool				bLedBlinkInProgress; /* true if it is blinking, false o.w.. */
 	/* ALPHA, added by chiyoko, 20090106 */
 	bool				bLedNoLinkBlinkInProgress;
 	bool				bLedLinkBlinkInProgress;

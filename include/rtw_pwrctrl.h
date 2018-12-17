@@ -199,7 +199,7 @@ typedef enum _rt_rf_power_state {
 #define	RT_RF_LPS_DISALBE_2R			BIT(30)	/* When LPS is on, disable 2R if no packet is received or transmittd. */
 #define	RT_RF_LPS_LEVEL_ASPM			BIT(31)	/* LPS with ASPM */
 
-#define	RT_IN_PS_LEVEL(ppsc, _PS_FLAG)		((ppsc->cur_ps_level & _PS_FLAG) ? _TRUE : _FALSE)
+#define	RT_IN_PS_LEVEL(ppsc, _PS_FLAG)		((ppsc->cur_ps_level & _PS_FLAG) ? true : false)
 #define	RT_CLEAR_PS_LEVEL(ppsc, _PS_FLAG)	(ppsc->cur_ps_level &= (~(_PS_FLAG)))
 #define	RT_SET_PS_LEVEL(ppsc, _PS_FLAG)		(ppsc->cur_ps_level |= _PS_FLAG)
 
@@ -528,8 +528,8 @@ void rtw_set_do_late_resume(struct pwrctrl_priv *pwrpriv, bool enable);
 void rtw_register_early_suspend(struct pwrctrl_priv *pwrpriv);
 void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv);
 #else
-#define rtw_is_earlysuspend_registered(pwrpriv) _FALSE
-#define rtw_is_do_late_resume(pwrpriv) _FALSE
+#define rtw_is_earlysuspend_registered(pwrpriv) false
+#define rtw_is_do_late_resume(pwrpriv) false
 #define rtw_set_do_late_resume(pwrpriv, enable) do {} while (0)
 #define rtw_register_early_suspend(pwrpriv) do {} while (0)
 #define rtw_unregister_early_suspend(pwrpriv) do {} while (0)

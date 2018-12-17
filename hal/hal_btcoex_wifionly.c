@@ -90,19 +90,19 @@ void halwifionly_phy_set_bb_reg(void * pwifionlyContext, u32 RegAddr, u32 BitMas
 void hal_btcoex_wifionly_switchband_notify(PADAPTER padapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	u8 is_5g = _FALSE;
+	u8 is_5g = false;
 
 	if (pHalData->current_band_type == BAND_ON_5G)
-		is_5g = _TRUE;
+		is_5g = true;
 }
 
 void hal_btcoex_wifionly_scan_notify(PADAPTER padapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
-	u8 is_5g = _FALSE;
+	u8 is_5g = false;
 
 	if (pHalData->current_band_type == BAND_ON_5G)
-		is_5g = _TRUE;
+		is_5g = true;
 }
 
 void hal_btcoex_wifionly_hw_config(PADAPTER padapter)

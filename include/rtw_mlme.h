@@ -106,7 +106,7 @@ void rtw_wfd_st_switch(struct sta_info *sta, bool on);
 #endif /* !CONFIG_P2P */
 
 #if defined(CONFIG_IOCTL_CFG80211) && defined(CONFIG_P2P)
-#define MLME_IS_ROCH(adapter) (rtw_cfg80211_get_is_roch(adapter) == _TRUE)
+#define MLME_IS_ROCH(adapter) (rtw_cfg80211_get_is_roch(adapter) == true)
 #else
 #define MLME_IS_ROCH(adapter) 0
 #endif
@@ -446,7 +446,7 @@ struct wifidirect_info {
 struct tdls_ss_record {	/* signal strength record */
 	u8		macaddr[ETH_ALEN];
 	u8		RxPWDBAll;
-	u8		is_tdls_sta;	/* _TRUE: direct link sta, _FALSE: else */
+	u8		is_tdls_sta;	/* true: direct link sta, false: else */
 };
 
 struct tdls_temp_mgmt {
@@ -920,12 +920,12 @@ __inline static sint check_fwstate(struct mlme_priv *pmlmepriv, sint state)
 {
 	if ((state == WIFI_NULL_STATE) &&
 		(pmlmepriv->fw_state == WIFI_NULL_STATE))
-		return _TRUE;
+		return true;
 
 	if (pmlmepriv->fw_state & state)
-		return _TRUE;
+		return true;
 
-	return _FALSE;
+	return false;
 }
 
 __inline static sint get_fwstate(struct mlme_priv *pmlmepriv)
@@ -948,7 +948,7 @@ static inline void set_fwstate(struct mlme_priv *pmlmepriv, sint state)
 
 	/*bScanInProcess hook in phydm*/
 	if (_FW_UNDER_SURVEY == state)
-		pmlmepriv->bScanInProcess = _TRUE;
+		pmlmepriv->bScanInProcess = true;
 
 	rtw_mi_update_iface_status(pmlmepriv, state);
 }
@@ -958,7 +958,7 @@ static inline void init_fwstate(struct mlme_priv *pmlmepriv, sint state)
 
 	/*bScanInProcess hook in phydm*/
 	if (_FW_UNDER_SURVEY == state)
-		pmlmepriv->bScanInProcess = _TRUE;
+		pmlmepriv->bScanInProcess = true;
 
 	rtw_mi_update_iface_status(pmlmepriv, state);
 }
@@ -969,7 +969,7 @@ static inline void _clr_fwstate_(struct mlme_priv *pmlmepriv, sint state)
 
 	/*bScanInProcess hook in phydm*/
 	if (_FW_UNDER_SURVEY == state)
-		pmlmepriv->bScanInProcess = _FALSE;
+		pmlmepriv->bScanInProcess = false;
 
 	rtw_mi_update_iface_status(pmlmepriv, state);
 }
@@ -1052,7 +1052,7 @@ void rtw_clear_scan_deny(_adapter *adapter);
 void rtw_set_scan_deny_timer_hdl(_adapter *adapter);
 void rtw_set_scan_deny(_adapter *adapter, u32 ms);
 #else
-#define rtw_is_scan_deny(adapter) _FALSE
+#define rtw_is_scan_deny(adapter) false
 #define rtw_clear_scan_deny(adapter) do {} while (0)
 #define rtw_set_scan_deny_timer_hdl(adapter) do {} while (0)
 #define rtw_set_scan_deny(adapter, ms) do {} while (0)

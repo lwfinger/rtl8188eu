@@ -22,7 +22,7 @@
 
 /* #define CONFIG_DISABLE_ODM */
 /* for FPGA VERIFICATION config */
-#define RTL8188E_FPGA_TRUE_PHY_VERIFICATION 0
+#define RTL8188E_FPGAtrue_PHY_VERIFICATION 0
 
 /* ***** temporarily flag ******* */
 /*

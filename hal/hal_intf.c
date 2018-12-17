@@ -197,7 +197,7 @@ void rtw_hal_init_opmode(_adapter *padapter)
 	else
 		return;
 
-	rtw_setopmode_cmd(padapter, networkType, _FALSE);
+	rtw_setopmode_cmd(padapter, networkType, false);
 }
 
 uint	 rtw_hal_init(_adapter *padapter)
@@ -210,7 +210,7 @@ uint	 rtw_hal_init(_adapter *padapter)
 	status = padapter->hal_func.hal_init(padapter);
 
 	if (status == _SUCCESS) {
-		pHalData->hw_init_completed = _TRUE;
+		pHalData->hw_init_completed = true;
 		rtw_restore_mac_addr(padapter);
 
 		if (padapter->registrypriv.notch_filter == 1)
@@ -230,7 +230,7 @@ uint	 rtw_hal_init(_adapter *padapter)
 #endif /*CONFIG_RF_POWER_TRIM*/
 
 	} else {
-		pHalData->hw_init_completed = _FALSE;
+		pHalData->hw_init_completed = false;
 		RTW_INFO("rtw_hal_init: hal_init fail\n");
 	}
 
@@ -250,7 +250,7 @@ uint rtw_hal_deinit(_adapter *padapter)
 
 	if (status == _SUCCESS) {
 		rtw_led_control(padapter, LED_CTL_POWER_OFF);
-		pHalData->hw_init_completed = _FALSE;
+		pHalData->hw_init_completed = false;
 	} else
 		RTW_INFO("\n rtw_hal_deinit: hal_init fail\n");
 
@@ -298,7 +298,7 @@ void rtw_hal_disable_interrupt(_adapter *padapter)
 
 u8 rtw_hal_check_ips_status(_adapter *padapter)
 {
-	u8 val = _FALSE;
+	u8 val = false;
 	if (padapter->hal_func.check_ips_status)
 		val = padapter->hal_func.check_ips_status(padapter);
 	else
@@ -370,18 +370,18 @@ s32	rtw_hal_mgnt_xmit(_adapter *padapter, struct xmit_frame *pmgntframe)
 	/* _rtw_memcpy(pmgntframe->attrib.ra, pwlanhdr->addr1, ETH_ALEN); */
 
 #ifdef CONFIG_IEEE80211W
-	if (padapter->securitypriv.binstallBIPkey == _TRUE && (subtype == WIFI_DEAUTH || subtype == WIFI_DISASSOC ||
+	if (padapter->securitypriv.binstallBIPkey == true && (subtype == WIFI_DEAUTH || subtype == WIFI_DISASSOC ||
 			subtype == WIFI_ACTION)) {
 		if (IS_MCAST(pmgntframe->attrib.ra) && pmgntframe->attrib.key_type != IEEE80211W_NO_KEY) {
 			pmgntframe->attrib.encrypt = _BIP_;
-			/* pmgntframe->attrib.bswenc = _TRUE; */
+			/* pmgntframe->attrib.bswenc = true; */
 		} else if (pmgntframe->attrib.key_type != IEEE80211W_NO_KEY) {
 			psta = rtw_get_stainfo(pstapriv, pmgntframe->attrib.ra);
-			if (psta && psta->bpairwise_key_installed == _TRUE) {
+			if (psta && psta->bpairwise_key_installed == true) {
 				pmgntframe->attrib.encrypt = _AES_;
-				pmgntframe->attrib.bswenc = _TRUE;
+				pmgntframe->attrib.bswenc = true;
 			} else {
-				RTW_INFO("%s, %d, bpairwise_key_installed is FALSE\n", __func__, __LINE__);
+				RTW_INFO("%s, %d, bpairwise_key_installed is false\n", __func__, __LINE__);
 				goto no_mgmt_coalesce;
 			}
 		}
@@ -420,7 +420,7 @@ void rtw_update_ramask(_adapter *padapter, struct sta_info *psta, u32 mac_id, u8
 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info *pmlmeinfo = &(pmlmeext->mlmext_info);
 	HAL_DATA_TYPE	*hal_data = GET_HAL_DATA(padapter);
-	u8 disable_cck_rate = FALSE, MimoPs_enable = FALSE;
+	u8 disable_cck_rate = false, MimoPs_enable = false;
 	u32 ratr_bitmap_msb = 0, ratr_bitmap_lsb = 0;
 	u64	mask = 0, rate_bitmap = 0;
 	u8 bw, short_gi;
@@ -497,7 +497,7 @@ void rtw_hal_update_ra_mask(struct sta_info *psta, u8 rssi_level, u8 is_update_b
 
 	pmlmepriv = &(padapter->mlmepriv);
 
-	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE)
+	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true)
 		add_RATid(padapter, psta, rssi_level, is_update_bw);
 	else {
 		psta->raid = rtw_hal_networktype_to_raid(padapter, psta);
@@ -574,12 +574,12 @@ void	rtw_hal_set_chnl_bw(_adapter *padapter, u8 channel, CHANNEL_WIDTH Bandwidth
 	u8 cch_20 = Bandwidth == CHANNEL_WIDTH_20 ? channel : 0;
 
 	odm_acquire_spin_lock(pDM_Odm, RT_IQK_SPINLOCK);
-	if (pDM_Odm->rf_calibrate_info.is_iqk_in_progress == _TRUE)
+	if (pDM_Odm->rf_calibrate_info.is_iqk_in_progress == true)
 		RTW_ERR("%s, %d, IQK may race condition\n", __func__, __LINE__);
 	odm_release_spin_lock(pDM_Odm, RT_IQK_SPINLOCK);
 
 	/* MP mode channel don't use secondary channel */
-	if (rtw_mi_mp_mode_check(padapter) == _FALSE) {
+	if (rtw_mi_mp_mode_check(padapter) == false) {
 		if (cch_80 != 0)
 			cch_40 = rtw_get_scch_by_cch_offset(cch_80, CHANNEL_WIDTH_80, Offset80);
 		if (cch_40 != 0)
@@ -633,7 +633,7 @@ void	rtw_hal_dm_watchdog_in_lps(_adapter *padapter)
 #endif
 #endif
 
-	if (adapter_to_pwrctl(padapter)->bFwCurrentInPSMode == _TRUE) {
+	if (adapter_to_pwrctl(padapter)->bFwCurrentInPSMode == true) {
 		padapter->hal_func.hal_dm_watchdog_in_lps(padapter);/* this function caller is in interrupt context					 */
 	}
 }
@@ -847,7 +847,7 @@ s32 c2h_handler(_adapter *adapter, u8 id, u8 seq, u8 plen, u8 *payload)
 		/* no handle, goto default */
 
 	default:
-		if (phydm_c2H_content_parsing(odm, id, plen, payload) != TRUE)
+		if (phydm_c2H_content_parsing(odm, id, plen, payload) != true)
 			ret = _FAIL;
 		break;
 	}
@@ -886,9 +886,9 @@ s32 rtw_hal_c2h_id_handle_directly(_adapter *adapter, u8 id, u8 seq, u8 plen, u8
 	case C2H_BCN_EARLY_RPT:
 	case C2H_AP_REQ_TXRPT:
 	case C2H_SPC_STAT:
-		return _TRUE;
+		return true;
 	default:
-		return _FALSE;
+		return false;
 	}
 }
 #endif /* !RTW_HALMAC */
@@ -904,9 +904,9 @@ s32 rtw_hal_macid_sleep(PADAPTER padapter, u8 macid)
 	struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj);
 	u8 support;
 
-	support = _FALSE;
+	support = false;
 	rtw_hal_get_def_var(padapter, HAL_DEF_MACID_SLEEP, &support);
-	if (_FALSE == support)
+	if (false == support)
 		return _FAIL;
 
 	if (macid >= macid_ctl->num) {
@@ -926,9 +926,9 @@ s32 rtw_hal_macid_wakeup(PADAPTER padapter, u8 macid)
 	struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj);
 	u8 support;
 
-	support = _FALSE;
+	support = false;
 	rtw_hal_get_def_var(padapter, HAL_DEF_MACID_SLEEP, &support);
-	if (_FALSE == support)
+	if (false == support)
 		return _FAIL;
 
 	if (macid >= macid_ctl->num) {
@@ -946,7 +946,7 @@ s32 rtw_hal_fill_h2c_cmd(PADAPTER padapter, u8 ElementID, u32 CmdLen, u8 *pCmdBu
 {
 	_adapter *pri_adapter = GET_PRIMARY_ADAPTER(padapter);
 
-	if (pri_adapter->bFWReady == _TRUE)
+	if (pri_adapter->bFWReady == true)
 		return padapter->hal_func.fill_h2c_cmd(padapter, ElementID, CmdLen, pCmdBuffer);
 	else if (padapter->registrypriv.mp_mode == 0)
 		RTW_PRINT(FUNC_ADPT_FMT" FW doesn't exit when no MP mode, by pass H2C id:0x%02x\n"
@@ -1011,8 +1011,8 @@ u8 rtw_hal_get_tx_power_index(PADAPTER padapter, u8 rfpath, u8 rate, u8 bandwidt
  *	Initialize MAC registers
  *
  * Return:
- *	_TRUE	success
- *	_FALSE	fail
+ *	true	success
+ *	false	fail
  */
 u8 rtw_hal_init_mac_register(PADAPTER adapter)
 {
@@ -1024,8 +1024,8 @@ u8 rtw_hal_init_mac_register(PADAPTER adapter)
  *	Initialize PHY(BB/RF) related functions
  *
  * Return:
- *	_TRUE	success
- *	_FALSE	fail
+ *	true	success
+ *	false	fail
  */
 u8 rtw_hal_init_phy(PADAPTER adapter)
 {
@@ -1042,7 +1042,7 @@ bool rtw_hal_rfkill_poll(_adapter *adapter, u8 *valid)
 		ret = adapter->hal_func.hal_radio_onoff_check(adapter, valid);
 	else {
 		*valid = 0;
-		ret = _FALSE;
+		ret = false;
 	}
 	return ret;
 }

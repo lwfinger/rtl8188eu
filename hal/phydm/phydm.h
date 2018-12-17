@@ -703,8 +703,8 @@ struct PHY_DM_STRUCT {
 #endif
 	struct _dynamic_primary_cca					dm_pri_cca;
 	struct _rate_adaptive_table_						dm_ra_table;
-	struct _FALSE_ALARM_STATISTICS		false_alm_cnt;
-	struct _FALSE_ALARM_STATISTICS		flase_alm_cnt_buddy_adapter;
+	struct false_ALARM_STATISTICS		false_alm_cnt;
+	struct false_ALARM_STATISTICS		flase_alm_cnt_buddy_adapter;
 	struct _sw_antenna_switch_						dm_swat_table;
 	struct _CFO_TRACKING_				dm_cfo_track;
 	struct _ACS_							dm_acs;
@@ -793,7 +793,7 @@ struct PHY_DM_STRUCT {
 };
 
 enum phydm_structure_type {
-	PHYDM_FALSEALMCNT,
+	PHYDMfalseALMCNT,
 	PHYDM_CFOTRACK,
 	PHYDM_ADAPTIVITY,
 	PHYDM_ROMINFO,

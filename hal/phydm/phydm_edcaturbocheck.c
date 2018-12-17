@@ -91,8 +91,8 @@ odm_edca_turbo_check_ce(
 	u32	edca_param;
 	u64	cur_tx_bytes = 0;
 	u64	cur_rx_bytes = 0;
-	u8	bbtchange = _TRUE;
-	u8	is_bias_on_rx = _FALSE;
+	u8	bbtchange = true;
+	u8	is_bias_on_rx = false;
 	HAL_DATA_TYPE		*p_hal_data = GET_HAL_DATA(adapter);
 	struct dvobj_priv		*pdvobjpriv = adapter_to_dvobj(adapter);
 	struct xmit_priv		*pxmitpriv = &(adapter->xmitpriv);
@@ -101,13 +101,13 @@ odm_edca_turbo_check_ce(
 	struct mlme_ext_priv	*pmlmeext = &(adapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
-	if (p_dm_odm->is_linked != _TRUE) {
-		precvpriv->is_any_non_be_pkts = _FALSE;
+	if (p_dm_odm->is_linked != true) {
+		precvpriv->is_any_non_be_pkts = false;
 		return;
 	}
 
 	if ((pregpriv->wifi_spec == 1)) { /* || (pmlmeinfo->HT_enable == 0)) */
-		precvpriv->is_any_non_be_pkts = _FALSE;
+		precvpriv->is_any_non_be_pkts = false;
 		return;
 	}
 
@@ -117,13 +117,13 @@ odm_edca_turbo_check_ce(
 	iot_peer = pmlmeinfo->assoc_AP_vendor;
 
 	if (iot_peer >=  HT_IOT_PEER_MAX) {
-		precvpriv->is_any_non_be_pkts = _FALSE;
+		precvpriv->is_any_non_be_pkts = false;
 		return;
 	}
 
 	if (p_dm_odm->support_ic_type & ODM_RTL8188E) {
 		if ((iot_peer == HT_IOT_PEER_RALINK) || (iot_peer == HT_IOT_PEER_ATHEROS))
-			is_bias_on_rx = _TRUE;
+			is_bias_on_rx = true;
 	}
 
 	/* Check if the status needs to be changed. */
@@ -192,7 +192,7 @@ odm_edca_turbo_check_ce(
 			p_dm_odm->dm_edca_table.prv_traffic_idx = traffic_index;
 		}
 
-		p_dm_odm->dm_edca_table.is_current_turbo_edca = _TRUE;
+		p_dm_odm->dm_edca_table.is_current_turbo_edca = true;
 	} else {
 		/*  */
 		/* Turn Off EDCA turbo here. */
@@ -200,7 +200,7 @@ odm_edca_turbo_check_ce(
 		/*  */
 		if (p_dm_odm->dm_edca_table.is_current_turbo_edca) {
 			rtw_write32(adapter, REG_EDCA_BE_PARAM, p_hal_data->ac_param_be);
-			p_dm_odm->dm_edca_table.is_current_turbo_edca = _FALSE;
+			p_dm_odm->dm_edca_table.is_current_turbo_edca = false;
 		}
 	}
 }

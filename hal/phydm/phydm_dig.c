@@ -114,7 +114,7 @@ odm_forbidden_igi_check(
 {
 	struct PHY_DM_STRUCT					*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _dynamic_initial_gain_threshold_						*p_dm_dig_table = &p_dm_odm->dm_dig_table;
-	struct _FALSE_ALARM_STATISTICS	*p_false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS	*p_false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 	u8						rx_gain_range_min = p_dm_dig_table->rx_gain_range_min;
 
 	if (p_dm_dig_table->large_fa_timeout) {
@@ -502,8 +502,8 @@ odm_dig_init(
 	p_dm_dig_table->pre_ig_value = 0;
 	p_dm_dig_table->rssi_low_thresh	= DM_DIG_THRESH_LOW;
 	p_dm_dig_table->rssi_high_thresh	= DM_DIG_THRESH_HIGH;
-	p_dm_dig_table->fa_low_thresh	= DM_FALSEALARM_THRESH_LOW;
-	p_dm_dig_table->fa_high_thresh	= DM_FALSEALARM_THRESH_HIGH;
+	p_dm_dig_table->fa_low_thresh	= DMfalseALARM_THRESH_LOW;
+	p_dm_dig_table->fa_high_thresh	= DMfalseALARM_THRESH_HIGH;
 	p_dm_dig_table->backoff_val = DM_DIG_BACKOFF_DEFAULT;
 	p_dm_dig_table->backoff_val_range_max = DM_DIG_BACKOFF_MAX;
 	p_dm_dig_table->backoff_val_range_min = DM_DIG_BACKOFF_MIN;
@@ -549,7 +549,7 @@ odm_DIG(
 
 	/* Common parameters */
 	struct _dynamic_initial_gain_threshold_						*p_dm_dig_table = &p_dm_odm->dm_dig_table;
-	struct _FALSE_ALARM_STATISTICS		*p_false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS		*p_false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 	bool						first_connect, first_dis_connect;
 	u8						dig_max_of_min, dig_dynamic_min;
 	u8						dm_dig_max, dm_dig_min;
@@ -813,7 +813,7 @@ odm_dig_by_rssi_lps(
 )
 {
 	struct PHY_DM_STRUCT					*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _FALSE_ALARM_STATISTICS		*p_false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS		*p_false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 
 	u8	rssi_lower = DM_DIG_MIN_NIC; /* 0x1E or 0x1C */
 	u8	current_igi = p_dm_odm->rssi_min;
@@ -866,7 +866,7 @@ odm_false_alarm_counter_statistics(
 )
 {
 	struct PHY_DM_STRUCT					*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _FALSE_ALARM_STATISTICS	*false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS	*false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 #if (PHYDM_LA_MODE_SUPPORT == 1)
 	struct _RT_ADCSMP					*adc_smp = &(p_dm_odm->adcsmp);
 #endif
@@ -1235,7 +1235,7 @@ odm_cck_packet_detection_thresh(
 {
 	struct PHY_DM_STRUCT				*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _dynamic_initial_gain_threshold_					*p_dm_dig_table = &p_dm_odm->dm_dig_table;
-	struct _FALSE_ALARM_STATISTICS	*false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS	*false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 	u8					cur_cck_cca_thres = p_dm_dig_table->cur_cck_cca_thres, RSSI_thd = 35;
 
 	if ((!(p_dm_odm->support_ability & ODM_BB_CCK_PD)) || (!(p_dm_odm->support_ability & ODM_BB_FA_CNT))) {

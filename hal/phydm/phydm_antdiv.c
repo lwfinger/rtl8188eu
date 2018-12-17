@@ -1335,7 +1335,7 @@ void odm_sw_antdiv_callback(istruct timer_list *t)
 	struct PHY_DM_STRUCT	*p_dm_odm = timer_list(p_dm_odm, t, dm_swat_table.phydm_sw_antenna_switch_timer);
 #endif
 	struct _ADAPTER	*padapter = p_dm_odm->adapter;
-	if (padapter->net_closed == _TRUE)
+	if (padapter->net_closed == true)
 		return;
 
 	rtw_run_in_thread_cmd(padapter, odm_sw_antdiv_workitem_callback, padapter);
@@ -1650,7 +1650,7 @@ void odm_fast_ant_training_callback(struct timer_list *t)
 #endif
 	struct _ADAPTER	*padapter = p_dm_odm->adapter;
 
-	if (padapter->net_closed == _TRUE)
+	if (padapter->net_closed == true)
 		return;
 	/* if(*p_dm_odm->p_is_net_closed == true) */
 	/* return; */

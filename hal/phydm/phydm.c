@@ -481,7 +481,7 @@ phydm_get_structure(
 	void	*p_struct = NULL;
 
 	switch (structure_type) {
-	case	PHYDM_FALSEALMCNT:
+	case	PHYDMfalseALMCNT:
 		p_struct = &(p_dm_odm->false_alm_cnt);
 		break;
 	case	PHYDM_CFOTRACK:
@@ -1371,7 +1371,7 @@ phydm_cmn_info_query(
 	enum phydm_info_query_e			info_type
 )
 {
-	struct _FALSE_ALARM_STATISTICS	*false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS	*false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 
 	switch (info_type) {
 	case PHYDM_INFO_FA_OFDM:
@@ -1658,7 +1658,7 @@ odm_update_power_training_state(
 	struct PHY_DM_STRUCT	*p_dm_odm
 )
 {
-	struct _FALSE_ALARM_STATISTICS	*false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS	*false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 	struct _dynamic_initial_gain_threshold_						*p_dm_dig_table = &p_dm_odm->dm_dig_table;
 	u32						score = 0;
 

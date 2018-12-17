@@ -875,7 +875,7 @@ phydm_basic_dbg_message
 )
 {
 	struct PHY_DM_STRUCT		*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
-	struct _FALSE_ALARM_STATISTICS *false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS *false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 	struct _CFO_TRACKING_				*p_cfo_track = (struct _CFO_TRACKING_ *)phydm_get_structure(p_dm_odm, PHYDM_CFOTRACK);
 	struct _dynamic_initial_gain_threshold_	*p_dm_dig_table = &p_dm_odm->dm_dig_table;
 	struct _rate_adaptive_table_	*p_ra_table = &p_dm_odm->dm_ra_table;

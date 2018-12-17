@@ -59,7 +59,7 @@ static bool HalUsbSetQueuePipeMapping8188EUsb(
 )
 {
 	HAL_DATA_TYPE	*pHalData	= GET_HAL_DATA(pAdapter);
-	bool			result		= _FALSE;
+	bool			result		= false;
 
 	_ConfigNormalChipOutEP_8188E(pAdapter, NumOutPipe);
 
@@ -123,10 +123,10 @@ static u32 _InitPowerOn_8188EU(_adapter *padapter)
 {
 	u16 value16;
 	/* HW Power on sequence */
-	u8 bMacPwrCtrlOn = _FALSE;
+	u8 bMacPwrCtrlOn = false;
 
 	rtw_hal_get_hwreg(padapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
-	if (bMacPwrCtrlOn == _TRUE)
+	if (bMacPwrCtrlOn == true)
 		return _SUCCESS;
 
 	if (!HalPwrSeqCmdParsing(padapter, PWR_CUT_ALL_MSK, PWR_FAB_ALL_MSK, PWR_INTF_USB_MSK, Rtl8188E_NIC_PWR_ON_FLOW)) {
@@ -146,7 +146,7 @@ static u32 _InitPowerOn_8188EU(_adapter *padapter)
 
 	rtw_write16(padapter, REG_CR, value16);
 
-	bMacPwrCtrlOn = _TRUE;
+	bMacPwrCtrlOn = true;
 	rtw_hal_set_hwreg(padapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 
 	return _SUCCESS;
@@ -172,7 +172,7 @@ static void _InitPABias(_adapter *padapter)
 
 	/* FIXED PA current issue */
 	/* efuse_one_byte_read(padapter, 0x1FA, &pa_setting); */
-	efuse_OneByteRead(padapter, 0x1FA, &pa_setting, _FALSE);
+	efuse_OneByteRead(padapter, 0x1FA, &pa_setting, false);
 
 	if (!(pa_setting & BIT0)) {
 		phy_set_rf_reg(padapter, RF_PATH_A, 0x15, 0x0FFFFF, 0x0F406);
@@ -408,7 +408,7 @@ _InitNormalChipOneOutEpPriority(
 		value = QUEUE_NORMAL;
 		break;
 	default:
-		/* RT_ASSERT(FALSE,("Shall not reach here!\n")); */
+		/* RT_ASSERT(false,("Shall not reach here!\n")); */
 		break;
 	}
 
@@ -449,7 +449,7 @@ _InitNormalChipTwoOutEpPriority(
 		valueLow = QUEUE_NORMAL;
 		break;
 	default:
-		/* RT_ASSERT(FALSE,("Shall not reach here!\n")); */
+		/* RT_ASSERT(false,("Shall not reach here!\n")); */
 		break;
 	}
 
@@ -517,7 +517,7 @@ _InitQueuePriority(
 		_InitNormalChipThreeOutEpPriority(Adapter);
 		break;
 	default:
-		/* RT_ASSERT(FALSE,("Shall not reach here!\n")); */
+		/* RT_ASSERT(false,("Shall not reach here!\n")); */
 		break;
 	}
 
@@ -741,7 +741,7 @@ usb_AggSettingTxUpdate(
 	u32			value32;
 
 	if (Adapter->registrypriv.wifi_spec)
-		pHalData->UsbTxAggMode = _FALSE;
+		pHalData->UsbTxAggMode = false;
 
 	if (pHalData->UsbTxAggMode) {
 		value32 = rtw_read32(Adapter, REG_TDECTRL);
@@ -846,7 +846,7 @@ usb_AggSettingRxUpdate(
 		pHalData->HwRxPageSize = 1024;
 		break;
 	default:
-		/* RT_ASSERT(FALSE, ("RX_PAGE_SIZE_REG_VALUE definition is incorrect!\n")); */
+		/* RT_ASSERT(false, ("RX_PAGE_SIZE_REG_VALUE definition is incorrect!\n")); */
 		break;
 	}
 #endif
@@ -866,7 +866,7 @@ InitUsbAggregationSetting(
 	usb_AggSettingRxUpdate(Adapter);
 
 	/* 201/12/10 MH Add for USB agg mode dynamic switch. */
-	pHalData->UsbRxHighSpeedMode = _FALSE;
+	pHalData->UsbRxHighSpeedMode = false;
 }
 
 static void
@@ -1144,12 +1144,12 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 		_ps_open_RF(Adapter);
 
 		if (pHalData->bIQKInitialized) {
-			/*			PHY_IQCalibrate(padapter, _TRUE); */
-			phy_iq_calibrate_8188e(Adapter, _TRUE);
+			/*			PHY_IQCalibrate(padapter, true); */
+			phy_iq_calibrate_8188e(Adapter, true);
 		} else {
-			/*			PHY_IQCalibrate(padapter, _FALSE); */
-			phy_iq_calibrate_8188e(Adapter, _FALSE);
-			pHalData->bIQKInitialized = _TRUE;
+			/*			PHY_IQCalibrate(padapter, false); */
+			phy_iq_calibrate_8188e(Adapter, false);
+			pHalData->bIQKInitialized = true;
 		}
 
 		/*		dm_check_txpowertracking(padapter);
@@ -1172,7 +1172,7 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 	/* Save target channel */
 	/* <Roger_Notes> Current Channel will be updated again later. */
 	pHalData->current_channel = 6;/* default set to 6 */
-	if (pwrctrlpriv->reg_rfoff == _TRUE)
+	if (pwrctrlpriv->reg_rfoff == true)
 		pwrctrlpriv->rf_pwrstate = rf_off;
 
 	/* 2010/08/09 MH We need to check if we need to turnon or off RF after detecting */
@@ -1200,18 +1200,18 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 
 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_DOWNLOAD_FW);
 	if (Adapter->registrypriv.mp_mode == 0) {
-		status = rtl8188e_FirmwareDownload(Adapter, _FALSE);
+		status = rtl8188e_FirmwareDownload(Adapter, false);
 		if (status != _SUCCESS) {
 			RTW_INFO("%s: Download Firmware failed!!\n", __func__);
-			Adapter->bFWReady = _FALSE;
-			pHalData->fw_ractrl = _FALSE;
+			Adapter->bFWReady = false;
+			pHalData->fw_ractrl = false;
 			return status;
 		} else {
-			Adapter->bFWReady = _TRUE;
+			Adapter->bFWReady = true;
 #ifdef CONFIG_SFW_SUPPORTED
-			pHalData->fw_ractrl = IS_VENDOR_8188E_I_CUT_SERIES(Adapter) ? _TRUE : _FALSE;
+			pHalData->fw_ractrl = IS_VENDOR_8188E_I_CUT_SERIES(Adapter) ? true : false;
 #else
-			pHalData->fw_ractrl = _FALSE;
+			pHalData->fw_ractrl = false;
 #endif
 		}
 	}
@@ -1277,7 +1277,7 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 	InitUsbAggregationSetting(Adapter);
 	_InitOperationMode(Adapter);/* todo */
 	_InitBeaconParameters(Adapter);
-	_InitBeaconMaxError(Adapter, _TRUE);
+	_InitBeaconMaxError(Adapter, true);
 
 	/*  */
 	/* Init CR MACTXEN, MACRXEN after setting RxFF boundary REG_TRXFF_BNDY to patch */
@@ -1433,10 +1433,10 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 		/* 2010/08/26 MH Merge from 8192CE. */
 		if (pwrctrlpriv->rf_pwrstate == rf_on) {
 			if (pHalData->bIQKInitialized)
-				phy_iq_calibrate_8188e(Adapter, _TRUE);
+				phy_iq_calibrate_8188e(Adapter, true);
 			else {
-				phy_iq_calibrate_8188e(Adapter, _FALSE);
-				pHalData->bIQKInitialized = _TRUE;
+				phy_iq_calibrate_8188e(Adapter, false);
+				pHalData->bIQKInitialized = true;
 			}
 
 			HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_PW_TRACK);
@@ -1499,10 +1499,10 @@ hal_poweroff_8188eu(
 	u8	val8;
 	u16	val16;
 	u32	val32;
-	u8 bMacPwrCtrlOn = _FALSE;
+	u8 bMacPwrCtrlOn = false;
 
 	rtw_hal_get_hwreg(Adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
-	if (bMacPwrCtrlOn == _FALSE)
+	if (bMacPwrCtrlOn == false)
 		return ;
 
 	/* Stop Tx Report Timer. 0x4EC[Bit1]=b'0 */
@@ -1562,9 +1562,9 @@ hal_poweroff_8188eu(
 	rtw_write8(Adapter, REG_GPIO_IO_SEL + 1, val8 | 0x0F); /* Reg0x43 */
 	rtw_write32(Adapter, REG_BB_PAD_CTRL, 0x00080808);/* set LNA ,TRSW,EX_PA Pin to output mode */
 
-	Adapter->bFWReady = _FALSE;
+	Adapter->bFWReady = false;
 
-	bMacPwrCtrlOn = _FALSE;
+	bMacPwrCtrlOn = false;
 	rtw_hal_set_hwreg(Adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 }
 static void rtl8188eu_hw_power_down(_adapter *padapter)
@@ -1631,7 +1631,7 @@ static unsigned int rtl8188eu_inirp_init(PADAPTER Adapter)
 	/* issue Rx irp to receive data	 */
 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
 	for (i = 0; i < NR_RECVBUFF; i++) {
-		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == _FALSE) {
+		if (_read_port(pintfhdl, precvpriv->ff_hwaddr, 0, (unsigned char *)precvbuf) == false) {
 			status = _FAIL;
 			goto exit;
 		}
@@ -1647,7 +1647,7 @@ static unsigned int rtl8188eu_inirp_init(PADAPTER Adapter)
 		goto exit;
 	}
 	_read_interrupt = pintfhdl->io_ops._read_interrupt;
-	if (_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == _FALSE) {
+	if (_read_interrupt(pintfhdl, RECV_INT_IN_ADDR) == false) {
 		status = _FAIL;
 	}
 #endif
@@ -1688,14 +1688,14 @@ _ReadLEDSetting(
 	struct led_priv *pledpriv = &(Adapter->ledpriv);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 #ifdef CONFIG_SW_LED
-	pledpriv->bRegUseLed = _TRUE;
+	pledpriv->bRegUseLed = true;
 
 	switch (pHalData->CustomerID) {
 	default:
 		pledpriv->LedStrategy = SW_LED_MODE1;
 		break;
 	}
-	pHalData->bLedOpenDrain = _TRUE;/* Support Open-drain arrangement for controlling the LED. Added by Roger, 2009.10.16. */
+	pHalData->bLedOpenDrain = true;/* Support Open-drain arrangement for controlling the LED. Added by Roger, 2009.10.16. */
 #else /* HW LED */
 	pledpriv->LedStrategy = HW_LED;
 #endif /* CONFIG_SW_LED */
@@ -1798,8 +1798,8 @@ static void _ReadPROMContent(
 
 	/* check system boot selection */
 	eeValue = rtw_read8(Adapter, REG_9346CR);
-	pHalData->EepromOrEfuse		= (eeValue & BOOT_FROM_EEPROM) ? _TRUE : _FALSE;
-	pHalData->bautoload_fail_flag	= (eeValue & EEPROM_EN) ? _FALSE : _TRUE;
+	pHalData->EepromOrEfuse		= (eeValue & BOOT_FROM_EEPROM) ? true : false;
+	pHalData->bautoload_fail_flag	= (eeValue & EEPROM_EN) ? false : true;
 
 	RTW_INFO("Boot from %s, Autoload %s !\n", (pHalData->EepromOrEfuse ? "EEPROM" : "EFUSE"),
 		 (pHalData->bautoload_fail_flag ? "Fail" : "OK"));
@@ -1933,7 +1933,7 @@ GetHalDefVar8188EUsb(
 
 	case HAL_DEF_TX_LDPC:
 	case HAL_DEF_RX_LDPC:
-		*((u8 *)pValue) = _FALSE;
+		*((u8 *)pValue) = false;
 		break;
 	case HAL_DEF_TX_STBC:
 		*((u8 *)pValue) = 0;
@@ -2029,7 +2029,7 @@ static void SetBeaconRelatedRegisters8188EUsb(PADAPTER padapter)
 	rtw_write8(padapter,  REG_RXTSF_OFFSET_CCK, 0x50);
 	rtw_write8(padapter, REG_RXTSF_OFFSET_OFDM, 0x50);
 
-	_BeaconFunctionEnable(padapter, _TRUE, _TRUE);
+	_BeaconFunctionEnable(padapter, true, true);
 
 	ResumeTxBeacon(padapter);
 
@@ -2055,14 +2055,14 @@ static void rtl8188eu_init_default_value(_adapter *padapter)
 	rtl8188e_init_default_value(padapter);
 
 	/* init default value */
-	pHalData->fw_ractrl = _FALSE;
+	pHalData->fw_ractrl = false;
 	if (!pwrctrlpriv->bkeepfwalive)
 		pHalData->LastHMEBoxNum = 0;
 
 	/* init dm default value */
-	pHalData->bIQKInitialized = _FALSE;
+	pHalData->bIQKInitialized = false;
 	pHalData->odmpriv.rf_calibrate_info.tm_trigger = 0;/* for IQK */
-	/* pdmpriv->binitialized = _FALSE;
+	/* pdmpriv->binitialized = false;
 	*	pdmpriv->prv_traffic_idx = 3;
 	*	pdmpriv->initialize = 0; */
 	pHalData->odmpriv.rf_calibrate_info.thermal_value_hp_index = 0;
@@ -2078,7 +2078,7 @@ static void rtl8188eu_init_default_value(_adapter *padapter)
 
 static u8 rtl8188eu_ps_func(PADAPTER Adapter, HAL_INTF_PS_FUNC efunc_id, u8 *val)
 {
-	u8 bResult = _TRUE;
+	u8 bResult = true;
 	switch (efunc_id) {
 
 #if defined(CONFIG_AUTOSUSPEND) && defined(SUPPORT_HW_RFOFF_DETECTED)

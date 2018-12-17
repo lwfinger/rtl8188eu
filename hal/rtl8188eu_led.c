@@ -65,7 +65,7 @@ SwLedOn_8188EU(
 		break;
 	}
 
-	pLed->bLedOn = _TRUE;
+	pLed->bLedOn = true;
 }
 
 
@@ -90,7 +90,7 @@ SwLedOff_8188EU(
 
 	switch (pLed->LedPin) {
 	case LED_PIN_LED0:
-		if (pHalData->bLedOpenDrain == _TRUE) { /* Open-drain arrangement for controlling the LED) */
+		if (pHalData->bLedOpenDrain == true) { /* Open-drain arrangement for controlling the LED) */
 			LedCfg &= 0x90; /* Set to software control.				 */
 			rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT3));
 			LedCfg = rtw_read8(padapter, REG_MAC_PINMUX_CFG);
@@ -109,7 +109,7 @@ SwLedOff_8188EU(
 		break;
 	}
 exit:
-	pLed->bLedOn = _FALSE;
+	pLed->bLedOn = false;
 
 }
 

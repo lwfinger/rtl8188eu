@@ -50,7 +50,7 @@ phydm_drp_get_statistic(
 {
 	struct PHY_DM_STRUCT					*p_dm_odm = (struct PHY_DM_STRUCT *)p_dm_void;
 	struct _DYNAMIC_RX_PATH_						*p_dm_drp_table = &(p_dm_odm->dm_drp_table);
-	struct _FALSE_ALARM_STATISTICS		*false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS		*false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 
 	odm_false_alarm_counter_statistics(p_dm_odm);
 
@@ -72,7 +72,7 @@ phydm_dynamic_rx_path(
 	u8		curr_drp_state;
 	u32		rx_ok_cal;
 	u32		RSSI = 0;
-	struct _FALSE_ALARM_STATISTICS		*false_alm_cnt = (struct _FALSE_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDM_FALSEALMCNT);
+	struct false_ALARM_STATISTICS		*false_alm_cnt = (struct false_ALARM_STATISTICS *)phydm_get_structure(p_dm_odm, PHYDMfalseALMCNT);
 
 	if (!(p_dm_odm->support_ability & ODM_BB_DYNAMIC_RX_PATH)) {
 		ODM_RT_TRACE(p_dm_odm, ODM_COMP_DYNAMIC_RX_PATH, ODM_DBG_LOUD, ("[Return Init]   Not Support Dynamic RX PAth\n"));
@@ -170,7 +170,7 @@ phydm_dynamic_rx_path_callback(
 	struct PHY_DM_STRUCT	*p_dm_odm = (struct PHY_DM_STRUCT *)function_context;
 	struct _ADAPTER	*padapter = p_dm_odm->adapter;
 
-	if (padapter->net_closed == _TRUE)
+	if (padapter->net_closed == true)
 		return;
 }
 

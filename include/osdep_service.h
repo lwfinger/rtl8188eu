@@ -29,15 +29,6 @@
 #define RTW_RBUF_UNAVAIL		5
 #define RTW_RBUF_PKT_UNAVAIL	6
 
-/* #define RTW_STATUS_TIMEDOUT -110 */
-
-#undef _TRUE
-#define _TRUE		1
-
-#undef _FALSE
-#define _FALSE		0
-
-
 #include <osdep_service_linux.h>
 
 #define RTW_TIMER_HDL_NAME(name) rtw_##name##_timer_hdl
@@ -352,7 +343,7 @@ __inline static void rtw_dump_stack(void)
 
 __inline static int rtw_bug_check(void *parg1, void *parg2, void *parg3, void *parg4)
 {
-	int ret = _TRUE;
+	int ret = true;
 
 	return ret;
 }

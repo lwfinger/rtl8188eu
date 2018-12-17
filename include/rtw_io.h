@@ -343,10 +343,10 @@ extern int dbg_rtw_writeN(_adapter *adapter, u32 addr , u32 length , u8 *data, c
 #define rtw_write_port_cancel(adapter) _rtw_write_port_cancel(adapter)
 
 #else /* DBG_IO */
-#define match_read_sniff_ranges(addr, len) _FALSE
-#define match_write_sniff_ranges(addr, len) _FALSE
-#define match_rf_read_sniff_ranges(path, addr, mask) _FALSE
-#define match_rf_write_sniff_ranges(path, addr, mask) _FALSE
+#define match_read_sniff_ranges(addr, len) false
+#define match_write_sniff_ranges(addr, len) false
+#define match_rf_read_sniff_ranges(path, addr, mask) false
+#define match_rf_write_sniff_ranges(path, addr, mask) false
 #define rtw_read8(adapter, addr) _rtw_read8((adapter), (addr))
 #define rtw_read16(adapter, addr) _rtw_read16((adapter), (addr))
 #define rtw_read32(adapter, addr) _rtw_read32((adapter), (addr))

@@ -54,18 +54,18 @@ sic_IsSICReady(
 	PADAPTER	Adapter
 )
 {
-	bool		bRet = _FALSE;
+	bool		bRet = false;
 	u32		retryCnt = 0;
 	u8		sic_cmd = 0xff;
 
 	while (1) {
 		if (retryCnt++ >= SIC_MAX_POLL_CNT) {
-			/* RTPRINT(FPHY, (PHY_SICR|PHY_SICW), ("[SIC], sic_IsSICReady() return FALSE\n")); */
-			return _FALSE;
+			/* RTPRINT(FPHY, (PHY_SICR|PHY_SICW), ("[SIC], sic_IsSICReady() return false\n")); */
+			return false;
 		}
 
 		/* if(RT_SDIO_CANNOT_IO(Adapter)) */
-		/*	return _FALSE; */
+		/*	return false; */
 
 		sic_cmd = rtw_read8(Adapter, SIC_CMD_REG);
 		/* sic_cmd = PlatformEFIORead1Byte(Adapter, SIC_CMD_REG); */
@@ -74,7 +74,7 @@ sic_IsSICReady(
 #endif
 		/* RTPRINT(FPHY, (PHY_SICR|PHY_SICW), ("[SIC], sic_IsSICReady(), readback 0x%x=0x%x\n", SIC_CMD_REG, sic_cmd)); */
 		if (sic_cmd == SIC_CMD_READY)
-			return _TRUE;
+			return true;
 		else {
 			rtw_msleep_os(1);
 			/* delay_ms(1); */
@@ -271,7 +271,7 @@ SIC_LedOff(
 {
 	/* When SIC is enabled, led pin will be used as debug pin, */
 	/* so don't execute led function when SIC is enabled. */
-	return _TRUE;
+	return true;
 }
 #endif
 
@@ -758,7 +758,7 @@ phy_BB8190_Config_HardCode(
 	PADAPTER	Adapter
 )
 {
-	/* RT_ASSERT(FALSE, ("This function is not implement yet!!\n")); */
+	/* RT_ASSERT(false, ("This function is not implement yet!!\n")); */
 	return _SUCCESS;
 }
 
@@ -1237,7 +1237,7 @@ PHY_GetTxPowerIndex_8188E(
 	u8 base_idx = 0, power_idx = 0;
 	s8 by_rate_diff = 0, limit = 0, tpt_offset = 0, extra_bias = 0;
 	u8 txNum = phy_GetCurrentTxNum_8188E(pAdapter, Rate);
-	bool bIn24G = _FALSE;
+	bool bIn24G = false;
 
 	base_idx = PHY_GetTxPowerIndexBase(pAdapter, RFPath, Rate, BandWidth, Channel, &bIn24G);
 
@@ -1280,7 +1280,7 @@ PHY_UpdateTxPowerDbm8188E(
 	int		powerInDbm
 )
 {
-	return _TRUE;
+	return true;
 }
 
 static void
@@ -1347,7 +1347,7 @@ _PHY_SetBWMode88E(
 	/* u64				BeginTime, EndTime; */
 
 	if (pHalData->rf_chip == RF_PSEUDO_11N) {
-		/* pHalData->SetBWModeInProgress= _FALSE; */
+		/* pHalData->SetBWModeInProgress= false; */
 		return;
 	}
 
@@ -1457,11 +1457,11 @@ _PHY_SetBWMode88E(
 		break;
 
 	default:
-		/* RT_ASSERT(FALSE, ("Unknown RFChipID: %d\n", pHalData->RFChipID)); */
+		/* RT_ASSERT(false, ("Unknown RFChipID: %d\n", pHalData->RFChipID)); */
 		break;
 	}
 
-	/* pHalData->SetBWModeInProgress= FALSE; */
+	/* pHalData->SetBWModeInProgress= false; */
 
 }
 
@@ -1495,7 +1495,7 @@ PHY_SetBWMode8188E(
 	/* if(pHalData->SetBWModeInProgress) */
 	/*	return; */
 
-	/* pHalData->SetBWModeInProgress= TRUE; */
+	/* pHalData->SetBWModeInProgress= true; */
 
 	pHalData->current_channel_bw = Bandwidth;
 
@@ -1506,7 +1506,7 @@ PHY_SetBWMode8188E(
 		if (IS_VENDOR_8188E_I_CUT_SERIES(Adapter))
 			phy_SpurCalibration_8188E(Adapter);
 	} else {
-		/* pHalData->SetBWModeInProgress= FALSE; */
+		/* pHalData->SetBWModeInProgress= false; */
 		pHalData->current_channel_bw = tmpBW;
 	}
 
@@ -1545,7 +1545,7 @@ PHY_SwChnl8188E(/* Call after initialization */
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	u8	tmpchannel = pHalData->current_channel;
-	bool  bResult = _TRUE;
+	bool  bResult = true;
 
 	if (pHalData->rf_chip == RF_PSEUDO_11N)
 		return; 								/* return immediately if it is peudo-phy */
@@ -1635,7 +1635,7 @@ static void _PHY_SetRFPathSwitch(
 
 }
 
-/* return value TRUE => Main; FALSE => Aux */
+/* return value true => Main; false => Aux */
 
 static bool _PHY_QueryRFPathSwitch(
 	PADAPTER	pAdapter,
@@ -1643,7 +1643,7 @@ static bool _PHY_QueryRFPathSwitch(
 )
 {
 	/*	if(is2T)
-	 *		return _TRUE; */
+	 *		return true; */
 
 	if (!rtw_is_hw_init_completed(pAdapter)) {
 		phy_set_bb_reg(pAdapter, REG_LEDCFG0, BIT23, 0x01);
@@ -1652,14 +1652,14 @@ static bool _PHY_QueryRFPathSwitch(
 
 	if (is2T) {
 		if (phy_query_bb_reg(pAdapter, rFPGA0_XB_RFInterfaceOE, BIT5 | BIT6) == 0x01)
-			return _TRUE;
+			return true;
 		else
-			return _FALSE;
+			return false;
 	} else {
 		if (phy_query_bb_reg(pAdapter, rFPGA0_XA_RFInterfaceOE, 0x300) == 0x02)
-			return _TRUE;
+			return true;
 		else
-			return _FALSE;
+			return false;
 	}
 }
 

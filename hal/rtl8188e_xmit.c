@@ -64,17 +64,17 @@ void handle_txrpt_ccx_88e(_adapter *adapter, u8 *buf)
 void _dbg_dump_tx_info(_adapter	*padapter, int frame_tag, struct tx_desc *ptxdesc)
 {
 	u8 bDumpTxPkt;
-	u8 bDumpTxDesc = _FALSE;
+	u8 bDumpTxDesc = false;
 	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DUMP_TXPKT, &(bDumpTxPkt));
 
 	if (bDumpTxPkt == 1) { /* dump txdesc for data frame */
 		RTW_INFO("dump tx_desc for data frame\n");
 		if ((frame_tag & 0x0f) == DATA_FRAMETAG)
-			bDumpTxDesc = _TRUE;
+			bDumpTxDesc = true;
 	} else if (bDumpTxPkt == 2) { /* dump txdesc for mgnt frame */
 		RTW_INFO("dump tx_desc for mgnt frame\n");
 		if ((frame_tag & 0x0f) == MGNT_FRAMETAG)
-			bDumpTxDesc = _TRUE;
+			bDumpTxDesc = true;
 	} else if (bDumpTxPkt == 3) { /* dump early info */
 	}
 

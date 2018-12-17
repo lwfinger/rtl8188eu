@@ -966,22 +966,22 @@ struct dvobj_priv {
 
 static inline void dev_set_surprise_removed(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->bSurpriseRemoved, _TRUE);
+	ATOMIC_SET(&dvobj->bSurpriseRemoved, true);
 }
 static inline void dev_clr_surprise_removed(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->bSurpriseRemoved, _FALSE);
+	ATOMIC_SET(&dvobj->bSurpriseRemoved, false);
 }
 static inline void dev_set_drv_stopped(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->bDriverStopped, _TRUE);
+	ATOMIC_SET(&dvobj->bDriverStopped, true);
 }
 static inline void dev_clr_drv_stopped(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->bDriverStopped, _FALSE);
+	ATOMIC_SET(&dvobj->bDriverStopped, false);
 }
-#define dev_is_surprise_removed(dvobj)	(ATOMIC_READ(&dvobj->bSurpriseRemoved) == _TRUE)
-#define dev_is_drv_stopped(dvobj)		(ATOMIC_READ(&dvobj->bDriverStopped) == _TRUE)
+#define dev_is_surprise_removed(dvobj)	(ATOMIC_READ(&dvobj->bSurpriseRemoved) == true)
+#define dev_is_drv_stopped(dvobj)		(ATOMIC_READ(&dvobj->bDriverStopped) == true)
 
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 {

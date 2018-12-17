@@ -518,8 +518,8 @@ u32 rtw_get_ch_waiting_ms(_adapter *adapter, u8 ch, u8 bw, u8 offset, u32 *r_non
 void rtw_reset_cac(_adapter *adapter, u8 ch, u8 bw, u8 offset);
 #else
 #define CH_IS_NON_OCP(rt_ch_info) 0
-#define rtw_chset_is_ch_non_ocp(ch_set, ch, bw, offset) _FALSE
-#define rtw_rfctl_is_tx_blocked_by_ch_waiting(rfctl) _FALSE
+#define rtw_chset_is_ch_non_ocp(ch_set, ch, bw, offset) false
+#define rtw_rfctl_is_tx_blocked_by_ch_waiting(rfctl) false
 #endif
 
 enum {
@@ -664,9 +664,9 @@ struct mlme_ext_priv {
 static inline u8 check_mlmeinfo_state(struct mlme_ext_priv *plmeext, sint state)
 {
 	if ((plmeext->mlmext_info.state & 0x03) == state)
-		return _TRUE;
+		return true;
 
-	return _FALSE;
+	return false;
 }
 
 #define mlmeext_msr(mlmeext) ((mlmeext)->mlmext_info.state & 0x03)

@@ -128,10 +128,10 @@ bool rtw_odm_adaptivity_needed(_adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 	struct mlme_priv *mlme = &adapter->mlmepriv;
-	bool ret = _FALSE;
+	bool ret = false;
 
 	if (regsty->adaptivity_en == RTW_ADAPTIVITY_EN_ENABLE)
-		ret = _TRUE;
+		ret = true;
 
 	return ret;
 }

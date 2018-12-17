@@ -255,9 +255,9 @@ bool rtw_fwdl_test_trigger_chksum_fail(void)
 	if (fwdl_test_chksum_fail) {
 		RTW_PRINT("fwdl test case: trigger chksum_fail\n");
 		fwdl_test_chksum_fail--;
-		return _TRUE;
+		return true;
 	}
-	return _FALSE;
+	return false;
 }
 
 bool rtw_fwdl_test_trigger_wintint_rdy_fail(void)
@@ -265,9 +265,9 @@ bool rtw_fwdl_test_trigger_wintint_rdy_fail(void)
 	if (fwdl_test_wintint_rdy_fail) {
 		RTW_PRINT("fwdl test case: trigger wintint_rdy_fail\n");
 		fwdl_test_wintint_rdy_fail--;
-		return _TRUE;
+		return true;
 	}
-	return _FALSE;
+	return false;
 }
 
 static u32 g_wait_hiq_empty_ms = 0;
@@ -284,9 +284,9 @@ bool rtw_del_rx_ampdu_test_trigger_no_tx_fail(void)
 	if (del_rx_ampdu_test_no_tx_fail) {
 		RTW_PRINT("del_rx_ampdu test case: trigger no_tx_fail\n");
 		del_rx_ampdu_test_no_tx_fail--;
-		return _TRUE;
+		return true;
 	}
-	return _FALSE;
+	return false;
 }
 
 void rtw_sink_rtp_seq_dbg(_adapter *adapter, _pkt *pkt)
@@ -684,16 +684,16 @@ int proc_get_rx_stat(struct seq_file *m, void *v)
 	for (i = 0; i < NUM_STA; i++) {
 		phead = &(pstapriv->sta_hash[i]);
 		plist = get_next(phead);
-		while ((rtw_end_of_queue_search(phead, plist)) == _FALSE) {
+		while ((rtw_end_of_queue_search(phead, plist)) == false) {
 			psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 			plist = get_next(plist);
 			pstats = &psta->sta_stats;
 
 			if (pstats == NULL)
 				continue;
-			if ((_rtw_memcmp(psta->hwaddr, bc_addr, 6) !=  _TRUE)
-				&& (_rtw_memcmp(psta->hwaddr, null_addr, 6) != _TRUE)
-				&& (_rtw_memcmp(psta->hwaddr, adapter_mac_addr(adapter), 6) != _TRUE)) {
+			if ((_rtw_memcmp(psta->hwaddr, bc_addr, 6) !=  true)
+				&& (_rtw_memcmp(psta->hwaddr, null_addr, 6) != true)
+				&& (_rtw_memcmp(psta->hwaddr, adapter_mac_addr(adapter), 6) != true)) {
 				RTW_PRINT_SEL(m, "MAC :\t\t"MAC_FMT "\n", MAC_ARG(psta->hwaddr));
 				RTW_PRINT_SEL(m, "data_rx_cnt :\t%llu\n", pstats->rx_data_pkts - pstats->rx_data_last_pkts);
 				pstats->rx_data_last_pkts = pstats->rx_data_pkts;
@@ -734,12 +734,12 @@ int proc_get_tx_stat(struct seq_file *m, void *v)
 		sta_rec[i] = NULL;
 		phead = &(pstapriv->sta_hash[i]);
 		plist = get_next(phead);
-		while ((rtw_end_of_queue_search(phead, plist)) == _FALSE) {
+		while ((rtw_end_of_queue_search(phead, plist)) == false) {
 			psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 			plist = get_next(plist);
-			if ((_rtw_memcmp(psta->hwaddr, bc_addr, 6) !=  _TRUE)
-				&& (_rtw_memcmp(psta->hwaddr, null_addr, 6) != _TRUE)
-				&& (_rtw_memcmp(psta->hwaddr, adapter_mac_addr(adapter), 6) != _TRUE)) {
+			if ((_rtw_memcmp(psta->hwaddr, bc_addr, 6) !=  true)
+				&& (_rtw_memcmp(psta->hwaddr, null_addr, 6) != true)
+				&& (_rtw_memcmp(psta->hwaddr, adapter_mac_addr(adapter), 6) != true)) {
 				sta_rec[macid_rec_idx++] = psta;
 			}
 		}
@@ -1255,14 +1255,14 @@ int proc_get_survey_info(struct seq_file *m, void *v)
 
 	RTW_PRINT_SEL(m, "%5s  %-17s  %3s  %-3s  %-4s  %-4s  %5s  %32s  %32s\n", "index", "bssid", "ch", "RSSI", "SdBm", "Noise", "age", "flag", "ssid");
 	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == _TRUE)
+		if (rtw_end_of_queue_search(phead, plist) == true)
 			break;
 
 		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
 		if (!pnetwork)
 			break;
 
-		if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE &&
+		if (check_fwstate(pmlmepriv, _FW_LINKED) == true &&
 		    is_same_network(&pmlmepriv->cur_network.network, &pnetwork->network, 0)) {
 			notify_signal = translate_percentage_to_dbm(padapter->recvpriv.signal_strength);/* dbm */
 		} else {
@@ -1311,8 +1311,8 @@ ssize_t proc_set_survey_info(struct file *file, const char __user *buffer, size_
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
-	bool need_indicate_scan_done = _FALSE;
-	u8 _status = _FALSE;
+	bool need_indicate_scan_done = false;
+	u8 _status = false;
 	NDIS_802_11_SSID ssid[RTW_SSID_SCAN_AMOUNT];
 
 	if (count < 1)
@@ -1338,8 +1338,8 @@ ssize_t proc_set_survey_info(struct file *file, const char __user *buffer, size_
 		goto cancel_ps_deny;
 	}
 
-	if (rtw_mi_busy_traffic_check(padapter, _FALSE)) {
-		RTW_INFO("scan abort!! BusyTraffic == _TRUE\n");
+	if (rtw_mi_busy_traffic_check(padapter, false)) {
+		RTW_INFO("scan abort!! BusyTraffic == true\n");
 		goto cancel_ps_deny;
 	}
 
@@ -1347,7 +1347,7 @@ ssize_t proc_set_survey_info(struct file *file, const char __user *buffer, size_
 		RTW_INFO("scan abort!! AP mode process WPS\n");
 		goto cancel_ps_deny;
 	}
-	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY | _FW_UNDER_LINKING) == _TRUE) {
+	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY | _FW_UNDER_LINKING) == true) {
 		RTW_INFO("scan abort!! fwstate=0x%x\n", pmlmepriv->fw_state);
 		goto cancel_ps_deny;
 	}
@@ -1476,7 +1476,7 @@ int proc_get_dis_pwt(struct seq_file *m, void *v)
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	u8 dis_pwt = 0;
 	rtw_hal_get_def_var(padapter, HAL_DEF_DBG_DIS_PWT, &(dis_pwt));
-	RTW_PRINT_SEL(m, " Tx Power training mode:%s\n", (dis_pwt == _TRUE) ? "Disable" : "Enable");
+	RTW_PRINT_SEL(m, " Tx Power training mode:%s\n", (dis_pwt == true) ? "Disable" : "Enable");
 	return 0;
 }
 ssize_t proc_set_dis_pwt(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
@@ -1497,7 +1497,7 @@ ssize_t proc_set_dis_pwt(struct file *file, const char __user *buffer, size_t co
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
 
 		int num = sscanf(tmp, "%hhx", &dis_pwt);
-		RTW_INFO("Set Tx Power training mode:%s\n", (dis_pwt == _TRUE) ? "Disable" : "Enable");
+		RTW_INFO("Set Tx Power training mode:%s\n", (dis_pwt == true) ? "Disable" : "Enable");
 
 		if (num >= 1)
 			rtw_hal_set_def_var(padapter, HAL_DEF_DBG_DIS_PWT, &(dis_pwt));
@@ -2169,7 +2169,7 @@ int proc_get_trx_info_debug(struct seq_file *m, void *v)
 	rtw_hal_get_def_var(padapter, HW_DEF_RA_INFO_DUMP, m);
 
 	/*============  rx info ============	*/
-	rtw_hal_set_odm_var(padapter, HAL_ODM_RX_INFO_DUMP, m, _FALSE);
+	rtw_hal_set_odm_var(padapter, HAL_ODM_RX_INFO_DUMP, m, false);
 
 
 	return 0;
@@ -2997,7 +2997,7 @@ int proc_get_all_sta_info(struct seq_file *m, void *v)
 		phead = &(pstapriv->sta_hash[i]);
 		plist = get_next(phead);
 
-		while ((rtw_end_of_queue_search(phead, plist)) == _FALSE) {
+		while ((rtw_end_of_queue_search(phead, plist)) == false) {
 			psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 
 			plist = get_next(plist);
@@ -3410,7 +3410,7 @@ ssize_t proc_set_pattern_info(struct file *file, const char __user *buffer,
 					    pwrpriv->patterns[index].content,
 					    &pwrpriv->patterns[index].len,
 					    pwrpriv->patterns[index].mask);
-			if (ret == _TRUE)
+			if (ret == true)
 				pwrpriv->wowlan_pattern_idx++;
 		}
 	}
@@ -3494,8 +3494,8 @@ int proc_get_p2p_wowlan_info(struct seq_file *m, void *v)
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 	struct p2p_wowlan_info	 peerinfo = pwdinfo->p2p_wow_info;
-	if (_TRUE == peerinfo.is_trigger) {
-		RTW_PRINT_SEL(m, "is_trigger: TRUE\n");
+	if (true == peerinfo.is_trigger) {
+		RTW_PRINT_SEL(m, "is_trigger: true\n");
 		switch (peerinfo.wowlan_recv_frame_type) {
 		case P2P_WOWLAN_RECV_NEGO_REQ:
 			RTW_PRINT_SEL(m, "Frame Type: Nego Request\n");
@@ -3608,15 +3608,15 @@ static int proc_tdls_display_tdls_function_info(struct seq_file *m)
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	u8 SpaceBtwnItemAndValue = TDLS_DBG_INFO_SPACE_BTWN_ITEM_AND_VALUE;
 	u8 SpaceBtwnItemAndValueTmp = 0;
-	bool FirstMatchFound = _FALSE;
+	bool FirstMatchFound = false;
 	int j = 0;
 
 	RTW_PRINT_SEL(m, "============[TDLS Function Info]============\n");
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Prohibited", (ptdlsinfo->ap_prohibited == _TRUE) ? "_TRUE" : "_FALSE");
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Channel Switch Prohibited", (ptdlsinfo->ch_switch_prohibited == _TRUE) ? "_TRUE" : "_FALSE");
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Link Established", (ptdlsinfo->link_established == _TRUE) ? "_TRUE" : "_FALSE");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Prohibited", (ptdlsinfo->ap_prohibited == true) ? "true" : "false");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Channel Switch Prohibited", (ptdlsinfo->ch_switch_prohibited == true) ? "true" : "false");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Link Established", (ptdlsinfo->link_established == true) ? "true" : "false");
 	RTW_PRINT_SEL(m, "%-*s = %d/%d\n", SpaceBtwnItemAndValue, "TDLS STA Num (Linked/Allowed)", ptdlsinfo->sta_cnt, MAX_ALLOWED_TDLS_STA_NUM);
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Allowed STA Num Reached", (ptdlsinfo->sta_maximum == _TRUE) ? "_TRUE" : "_FALSE");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Allowed STA Num Reached", (ptdlsinfo->sta_maximum == true) ? "true" : "false");
 
 #ifdef CONFIG_TDLS_CH_SW
 	RTW_PRINT_SEL(m, "%-*s =", SpaceBtwnItemAndValue, "TDLS CH SW State");
@@ -3625,9 +3625,9 @@ static int proc_tdls_display_tdls_function_info(struct seq_file *m)
 	else {
 		for (j = 0; j < 32; j++) {
 			if (ptdlsinfo->chsw_info.ch_sw_state & BIT(j)) {
-				if (FirstMatchFound ==  _FALSE) {
+				if (FirstMatchFound ==  false) {
 					SpaceBtwnItemAndValueTmp = 1;
-					FirstMatchFound = _TRUE;
+					FirstMatchFound = true;
 				} else
 					SpaceBtwnItemAndValueTmp = SpaceBtwnItemAndValue + 3;
 				switch (BIT(j)) {
@@ -3666,17 +3666,17 @@ static int proc_tdls_display_tdls_function_info(struct seq_file *m)
 		}
 	}
 
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS CH SW On", (ATOMIC_READ(&ptdlsinfo->chsw_info.chsw_on) == _TRUE) ? "_TRUE" : "_FALSE");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS CH SW On", (ATOMIC_READ(&ptdlsinfo->chsw_info.chsw_on) == true) ? "true" : "false");
 	RTW_PRINT_SEL(m, "%-*s = %d\n", SpaceBtwnItemAndValue, "TDLS CH SW Off-Channel Num", ptdlsinfo->chsw_info.off_ch_num);
 	RTW_PRINT_SEL(m, "%-*s = %d\n", SpaceBtwnItemAndValue, "TDLS CH SW Channel Offset", ptdlsinfo->chsw_info.ch_offset);
 	RTW_PRINT_SEL(m, "%-*s = %d\n", SpaceBtwnItemAndValue, "TDLS CH SW Current Time", ptdlsinfo->chsw_info.cur_time);
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS CH SW Delay Switch Back", (ptdlsinfo->chsw_info.delay_switch_back == _TRUE) ? "_TRUE" : "_FALSE");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS CH SW Delay Switch Back", (ptdlsinfo->chsw_info.delay_switch_back == true) ? "true" : "false");
 	RTW_PRINT_SEL(m, "%-*s = %d\n", SpaceBtwnItemAndValue, "TDLS CH SW Dump Back", ptdlsinfo->chsw_info.dump_stack);
 #endif
 
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Device Discovered", (ptdlsinfo->dev_discovered == _TRUE) ? "_TRUE" : "_FALSE");
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Enable", (ptdlsinfo->tdls_enable == _TRUE) ? "_TRUE" : "_FALSE");
-	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Driver Setup", (ptdlsinfo->driver_setup == _TRUE) ? "_TRUE" : "_FALSE");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Device Discovered", (ptdlsinfo->dev_discovered == true) ? "true" : "false");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Enable", (ptdlsinfo->tdls_enable == true) ? "true" : "false");
+	RTW_PRINT_SEL(m, "%-*s = %s\n", SpaceBtwnItemAndValue, "TDLS Driver Setup", (ptdlsinfo->driver_setup == true) ? "true" : "false");
 
 	return 0;
 }
@@ -3812,14 +3812,14 @@ static int proc_tdls_display_tdls_sta_info(struct seq_file *m)
 	u8 SpaceBtwnItemAndValue = TDLS_DBG_INFO_SPACE_BTWN_ITEM_AND_VALUE;
 	u8 SpaceBtwnItemAndValueTmp = 0;
 	u8 NumOfTdlsStaToShow = 0;
-	bool FirstMatchFound = _FALSE;
+	bool FirstMatchFound = false;
 
 	/* Search for TDLS sta info to display */
 	_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 	for (i = 0; i < NUM_STA; i++) {
 		phead = &(pstapriv->sta_hash[i]);
 		plist = get_next(phead);
-		while ((rtw_end_of_queue_search(phead, plist)) == _FALSE) {
+		while ((rtw_end_of_queue_search(phead, plist)) == false) {
 			psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 			plist = get_next(plist);
 			if (psta->tdls_sta_state != TDLS_STATE_NONE) {
@@ -3828,12 +3828,12 @@ static int proc_tdls_display_tdls_sta_info(struct seq_file *m)
 				RTW_PRINT_SEL(m, "%-*s = "MAC_FMT"\n", SpaceBtwnItemAndValue, "Mac Address", MAC_ARG(psta->hwaddr));
 				RTW_PRINT_SEL(m, "%-*s =", SpaceBtwnItemAndValue, "TDLS STA State");
 				SpaceBtwnItemAndValueTmp = 0;
-				FirstMatchFound = _FALSE;
+				FirstMatchFound = false;
 				for (j = 0; j < 32; j++) {
 					if (psta->tdls_sta_state & BIT(j)) {
-						if (FirstMatchFound ==  _FALSE) {
+						if (FirstMatchFound ==  false) {
 							SpaceBtwnItemAndValueTmp = 1;
-							FirstMatchFound = _TRUE;
+							FirstMatchFound = true;
 						} else
 							SpaceBtwnItemAndValueTmp = SpaceBtwnItemAndValue + 3;
 						switch (BIT(j)) {
@@ -3984,9 +3984,9 @@ int proc_get_tdls_info(struct seq_file *m, void *v)
 	u8 SpaceBtwnItemAndValue = 41;
 	u8 SpaceBtwnItemAndValueTmp = 0;
 	u8 NumOfTdlsStaToShow = 0;
-	bool FirstMatchFound = _FALSE;
+	bool FirstMatchFound = false;
 
-	if (hal_chk_wl_func(padapter, WL_FUNC_TDLS) == _FALSE) {
+	if (hal_chk_wl_func(padapter, WL_FUNC_TDLS) == false) {
 		RTW_PRINT_SEL(m, "No tdls info can be shown since hal doesn't support tdls\n");
 		return 0;
 	}
@@ -4061,7 +4061,7 @@ int proc_get_efuse_map(struct seq_file *m, void *v)
 	u8 ips_mode = IPS_NUM;
 	u16 mapLen;
 
-	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&mapLen, _FALSE);
+	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN, (void *)&mapLen, false);
 	if (mapLen > EFUSE_MAX_MAP_LEN)
 		mapLen = EFUSE_MAX_MAP_LEN;
 
@@ -4153,12 +4153,12 @@ ssize_t proc_set_tx_sa_query(struct file *file, const char __user *buffer, size_
 		RTW_INFO("0: set sa query request , key_type=%d\n", key_type);
 	}
 
-	if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == _TRUE)
-	    && (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) && padapter->securitypriv.binstallBIPkey == _TRUE) {
+	if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == true)
+	    && (check_fwstate(pmlmepriv, _FW_LINKED) == true) && padapter->securitypriv.binstallBIPkey == true) {
 		RTW_INFO("STA:"MAC_FMT"\n", MAC_ARG(get_my_bssid(&(pmlmeinfo->network))));
 		/* TX unicast sa_query to AP */
 		issue_action_SA_Query(padapter, get_my_bssid(&(pmlmeinfo->network)), 0, 0, (u8)key_type);
-	} else if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE && padapter->securitypriv.binstallBIPkey == _TRUE) {
+	} else if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true && padapter->securitypriv.binstallBIPkey == true) {
 		/* TX unicast sa_query to every client STA */
 		_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 		for (index = 0; index < NUM_STA; index++) {
@@ -4167,7 +4167,7 @@ ssize_t proc_set_tx_sa_query(struct file *file, const char __user *buffer, size_
 			phead = &(pstapriv->sta_hash[index]);
 			plist = get_next(phead);
 
-			while ((rtw_end_of_queue_search(phead, plist)) == _FALSE) {
+			while ((rtw_end_of_queue_search(phead, plist)) == false) {
 				psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 				plist = get_next(plist);
 				_rtw_memcpy(&mac_addr[psta->mac_id][0], psta->hwaddr, ETH_ALEN);
@@ -4236,13 +4236,13 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 	if (key_type < 0 || key_type > 4)
 		return count;
 
-	if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == _TRUE)
-	    && (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)) {
+	if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == true)
+	    && (check_fwstate(pmlmepriv, _FW_LINKED) == true)) {
 		if (key_type == 3) /* key_type 3 only for AP mode */
 			return count;
 		/* TX unicast deauth to AP */
 		issue_deauth_11w(padapter, get_my_bssid(&(pmlmeinfo->network)), 0, (u8)key_type);
-	} else if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) {
+	} else if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
 
 		if (key_type == 3)
 			issue_deauth_11w(padapter, bc_addr, 0, IEEE80211W_RIGHT_KEY);
@@ -4255,7 +4255,7 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 			phead = &(pstapriv->sta_hash[index]);
 			plist = get_next(phead);
 
-			while ((rtw_end_of_queue_search(phead, plist)) == _FALSE) {
+			while ((rtw_end_of_queue_search(phead, plist)) == false) {
 				psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 				plist = get_next(plist);
 				_rtw_memcpy(&mac_addr[psta->mac_id][0], psta->hwaddr, ETH_ALEN);
@@ -4271,13 +4271,13 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 
 					psta = rtw_get_stainfo(pstapriv, &mac_addr[index][0]);
 					if (psta && key_type != IEEE80211W_WRONG_KEY && key_type != IEEE80211W_NO_KEY) {
-						u8 updated = _FALSE;
+						u8 updated = false;
 
 						_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-						if (rtw_is_list_empty(&psta->asoc_list) == _FALSE) {
+						if (rtw_is_list_empty(&psta->asoc_list) == false) {
 							rtw_list_delete(&psta->asoc_list);
 							pstapriv->asoc_list_cnt--;
-							updated = ap_free_sta(padapter, psta, _FALSE, WLAN_REASON_PREV_AUTH_NOT_VALID, _TRUE);
+							updated = ap_free_sta(padapter, psta, false, WLAN_REASON_PREV_AUTH_NOT_VALID, true);
 
 						}
 						_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
@@ -4339,8 +4339,8 @@ ssize_t proc_set_tx_auth(struct file *file, const char __user *buffer, size_t co
 		RTW_INFO("1: setnd auth, 2: send assoc request. tx_auth=%d\n", tx_auth);
 	}
 
-	if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == _TRUE)
-	    && (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE)) {
+	if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == true)
+	    && (check_fwstate(pmlmepriv, _FW_LINKED) == true)) {
 		if (tx_auth == 1) {
 			/* TX unicast auth to AP */
 			issue_auth(padapter, NULL, 0);

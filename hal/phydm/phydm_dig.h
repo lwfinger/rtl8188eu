@@ -95,7 +95,7 @@ struct _dynamic_initial_gain_threshold_ {
 	enum dig_goupcheck_level		dig_go_up_check_level;
 };
 
-struct _FALSE_ALARM_STATISTICS {
+struct false_ALARM_STATISTICS {
 	u32		cnt_parity_fail;
 	u32		cnt_rate_illegal;
 	u32		cnt_crc8_fail;
@@ -196,8 +196,8 @@ enum phydm_pause_level {
 #define		DM_DIG_THRESH_HIGH			40
 #define		DM_DIG_THRESH_LOW			35
 
-#define		DM_FALSEALARM_THRESH_LOW	400
-#define		DM_FALSEALARM_THRESH_HIGH	1000
+#define		DMfalseALARM_THRESH_LOW	400
+#define		DMfalseALARM_THRESH_HIGH	1000
 
 #define		DM_DIG_MAX_NIC				0x3e
 #define		DM_DIG_MIN_NIC				0x20

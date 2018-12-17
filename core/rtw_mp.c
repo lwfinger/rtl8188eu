@@ -141,11 +141,11 @@ static void _init_mp_priv_(struct mp_priv *pmp_priv)
 	pmp_priv->network_macaddr[4] = 0x66;
 	pmp_priv->network_macaddr[5] = 0x55;
 
-	pmp_priv->bSetRxBssid = _FALSE;
-	pmp_priv->bRTWSmbCfg = _FALSE;
-	pmp_priv->bloopback = _FALSE;
+	pmp_priv->bSetRxBssid = false;
+	pmp_priv->bRTWSmbCfg = false;
+	pmp_priv->bloopback = false;
 
-	pmp_priv->bloadefusemap = _FALSE;
+	pmp_priv->bloadefusemap = false;
 
 	pnetwork = &pmp_priv->mp_network.network;
 	_rtw_memcpy(pnetwork->MacAddress, pmp_priv->network_macaddr, ETH_ALEN);
@@ -219,8 +219,8 @@ static void mp_init_xmit_attrib(struct mp_tx *pmptx, PADAPTER padapter)
 	pattrib->qsel = pattrib->priority;
 	pattrib->nr_frags = 1;
 	pattrib->encrypt = 0;
-	pattrib->bswenc = _FALSE;
-	pattrib->qos_en = _FALSE;
+	pattrib->bswenc = false;
+	pattrib->qos_en = false;
 
 	pattrib->pktlen = 1500;
 }
@@ -237,7 +237,7 @@ s32 init_mp_priv(PADAPTER padapter)
 	pmppriv->mp_dm = 0;
 	pmppriv->tx.stop = 1;
 	pmppriv->bSetTxPower = 0;		/*for  manually set tx power*/
-	pmppriv->bTxBufCkFail = _FALSE;
+	pmppriv->bTxBufCkFail = false;
 	pmppriv->pktInterval = 0;
 	pmppriv->pktLength = 1000;
 
@@ -347,15 +347,15 @@ MPT_InitializeAdapter(
 	u32		ledsetting;
 	struct mlme_priv *pmlmepriv = &pAdapter->mlmepriv;
 
-	pMptCtx->bMptDrvUnload = _FALSE;
-	pMptCtx->bMassProdTest = _FALSE;
-	pMptCtx->bMptIndexEven = _TRUE;	/* default gain index is -6.0db */
+	pMptCtx->bMptDrvUnload = false;
+	pMptCtx->bMassProdTest = false;
+	pMptCtx->bMptIndexEven = true;	/* default gain index is -6.0db */
 	pMptCtx->h2cReqNum = 0x0;
 	/* init for BT MP */
 
 	mpt_InitHWConfig(pAdapter);
 
-	pMptCtx->bMptWorkItemInProgress = _FALSE;
+	pMptCtx->bMptWorkItemInProgress = false;
 	pMptCtx->CurrMptAct = NULL;
 	pMptCtx->mpt_rf_path = ODM_RF_PATH_A;
 	/* ------------------------------------------------------------------------- */
@@ -365,7 +365,7 @@ MPT_InitializeAdapter(
 	ledsetting = rtw_read32(pAdapter, REG_LEDCFG0);
 
 	PHY_LCCalibrate(pAdapter);
-	PHY_IQCalibrate(pAdapter, _FALSE);
+	PHY_IQCalibrate(pAdapter, false);
 
 	PHY_SetRFPathSwitch(pAdapter, 1/*pHalData->bDefaultAntenna*/); /* default use Main */
 
@@ -403,20 +403,20 @@ MPT_DeInitAdapter(
 {
 	PMPT_CONTEXT		pMptCtx = &pAdapter->mppriv.mpt_ctx;
 
-	pMptCtx->bMptDrvUnload = _TRUE;
+	pMptCtx->bMptDrvUnload = true;
 }
 
 static u8 mpt_ProStartTest(PADAPTER padapter)
 {
 	PMPT_CONTEXT pMptCtx = &padapter->mppriv.mpt_ctx;
 
-	pMptCtx->bMassProdTest = _TRUE;
-	pMptCtx->is_start_cont_tx = _FALSE;
-	pMptCtx->bCckContTx = _FALSE;
-	pMptCtx->bOfdmContTx = _FALSE;
-	pMptCtx->bSingleCarrier = _FALSE;
-	pMptCtx->is_carrier_suppression = _FALSE;
-	pMptCtx->is_single_tone = _FALSE;
+	pMptCtx->bMassProdTest = true;
+	pMptCtx->is_start_cont_tx = false;
+	pMptCtx->bCckContTx = false;
+	pMptCtx->bOfdmContTx = false;
+	pMptCtx->bSingleCarrier = false;
+	pMptCtx->is_carrier_suppression = false;
+	pMptCtx->is_single_tone = false;
 	pMptCtx->HWTxmode = PACKETS_TX;
 
 	return _SUCCESS;
@@ -438,7 +438,7 @@ void GetPowerTracking(PADAPTER padapter, u8 *enable)
 
 void rtw_mp_trigger_iqk(PADAPTER padapter)
 {
-	PHY_IQCalibrate(padapter, _FALSE);
+	PHY_IQCalibrate(padapter, false);
 }
 
 void rtw_mp_trigger_lck(PADAPTER padapter)
@@ -462,7 +462,7 @@ static void disable_dm(PADAPTER padapter)
 	rtw_phydm_func_disable_all(padapter);
 
 	/* enable APK, LCK and IQK but disable power tracking */
-	pDM_Odm->rf_calibrate_info.txpowertrack_control = _FALSE;
+	pDM_Odm->rf_calibrate_info.txpowertrack_control = false;
 	rtw_phydm_func_set(padapter, ODM_RF_CALIBRATION);
 
 	/* #ifdef CONFIG_BT_COEXIST */
@@ -480,13 +480,13 @@ void MPT_PwrCtlDM(PADAPTER padapter, u32 bstart)
 		RTW_INFO("in MPT_PwrCtlDM start\n");
 		rtw_phydm_func_set(padapter, ODM_RF_TX_PWR_TRACK | ODM_RF_CALIBRATION);
 
-		pDM_Odm->rf_calibrate_info.txpowertrack_control = _TRUE;
+		pDM_Odm->rf_calibrate_info.txpowertrack_control = true;
 		padapter->mppriv.mp_dm = 1;
 
 	} else {
 		RTW_INFO("in MPT_PwrCtlDM stop\n");
 		disable_dm(padapter);
-		pDM_Odm->rf_calibrate_info.txpowertrack_control = _FALSE;
+		pDM_Odm->rf_calibrate_info.txpowertrack_control = false;
 		padapter->mppriv.mp_dm = 0;
 		{
 			struct _TXPWRTRACK_CFG	c;
@@ -561,13 +561,13 @@ u32 mp_join(PADAPTER padapter, u8 mode)
 
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
-	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == _TRUE)
+	if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == true)
 		goto end_of_mp_start_test;
 
 	/* init mp_start_test status */
-	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) {
-		rtw_disassoc_cmd(padapter, 500, _TRUE);
-		rtw_indicate_disconnect(padapter, 0, _FALSE);
+	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
+		rtw_disassoc_cmd(padapter, 500, true);
+		rtw_indicate_disconnect(padapter, 0, false);
 		rtw_free_assoc_resources(padapter, 1);
 	}
 	pmppriv->prev_fw_state = get_fwstate(pmlmepriv);
@@ -693,11 +693,11 @@ void mp_stop_test(PADAPTER padapter)
 	if (pmppriv->mode == MP_ON) {
 		pmppriv->bSetTxPower = 0;
 		_enter_critical_bh(&pmlmepriv->lock, &irqL);
-		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == _FALSE)
+		if (check_fwstate(pmlmepriv, WIFI_MP_STATE) == false)
 			goto end_of_mp_stop_test;
 
 		/* 3 1. disconnect psudo AdHoc */
-		rtw_indicate_disconnect(padapter, 0, _FALSE);
+		rtw_indicate_disconnect(padapter, 0, false);
 
 		/* 3 2. clear psta used in mp test mode.
 		*	rtw_free_assoc_resources(padapter, 1); */
@@ -781,7 +781,7 @@ int SetTxPower(PADAPTER pAdapter)
 {
 
 	hal_mpt_SetTxPower(pAdapter);
-	return _TRUE;
+	return true;
 }
 
 static void SetTxAGCOffset(PADAPTER pAdapter, u32 ulTxAGCOffset)
@@ -1143,7 +1143,7 @@ void SetPacketRx(PADAPTER pAdapter, u8 bStartRx, u8 bAB)
 		pHalData->ReceiveConfig |= RCR_ACRC32;
 		pHalData->ReceiveConfig |= RCR_APP_PHYST_RXFF | RCR_APP_ICV | RCR_APP_MIC;
 
-		if (pmppriv->bSetRxBssid == _TRUE) {
+		if (pmppriv->bSetRxBssid == true) {
 			RTW_INFO("%s: pmppriv->network_macaddr=" MAC_FMT "\n", __func__,
 				 MAC_ARG(pmppriv->network_macaddr));
 			pHalData->ReceiveConfig = 0;
@@ -1259,7 +1259,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
 		return 0;
 	}
 
-	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == _FALSE) {
+	if (check_fwstate(&pAdapter->mlmepriv, WIFI_MP_STATE) == false) {
 		return 0;
 	}
 
@@ -2159,7 +2159,7 @@ void PMAC_Nsym_generator(
 		N_CBPS = N_BPSC * N_SD * pPMacPktInfo->Nss;
 		N_DBPS = (u32)((double)N_CBPS * CR);
 
-		if (pPMacTxInfo->bLDPC == FALSE) {
+		if (pPMacTxInfo->bLDPC == false) {
 			N_ES = (u32)ceil((double)(N_DBPS * pPMacPktInfo->Nss) / 4. / 300.);
 			RTW_INFO("N_ES = %d\n", N_ES);
 
@@ -2203,7 +2203,7 @@ void PMAC_Nsym_generator(
 		N_BPSC = N_BPSC_list[pPMacPktInfo->MCS];
 		N_CBPS = N_BPSC * N_SD * pPMacPktInfo->Nss;
 		N_DBPS = (u32)((double)N_CBPS * CR);
-		if (pPMacTxInfo->bLDPC == FALSE) {
+		if (pPMacTxInfo->bLDPC == false) {
 			if (pPMacTxInfo->bSGI)
 				N_ES = (u32)ceil((double)(N_DBPS) / 3.6 / 600.);
 			else
@@ -2437,7 +2437,7 @@ void HT_SIG_generator(
 	/* Short GI*/
 	sig_bi[31] = pPMacTxInfo->bSGI;
 	/* N_ELTFs*/
-	if (pPMacTxInfo->NDP_sound == FALSE) {
+	if (pPMacTxInfo->NDP_sound == false) {
 		sig_bi[32]	= 0;
 		sig_bi[33]	= 0;
 	} else {

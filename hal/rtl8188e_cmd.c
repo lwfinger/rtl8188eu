@@ -32,7 +32,7 @@
 
 static u8 _is_fw_read_cmd_down(_adapter *padapter, u8 msgbox_num)
 {
-	u8	read_down = _FALSE;
+	u8	read_down = false;
 	int	retry_cnts = 100;
 
 	u8 valid;
@@ -42,7 +42,7 @@ static u8 _is_fw_read_cmd_down(_adapter *padapter, u8 msgbox_num)
 	do {
 		valid = rtw_read8(padapter, REG_HMETFR) & BIT(msgbox_num);
 		if (0 == valid)
-			read_down = _TRUE;
+			read_down = true;
 		else
 			rtw_msleep_os(1);
 	} while ((!read_down) && (retry_cnts--));
@@ -78,7 +78,7 @@ s32 FillH2CCmd_88E(PADAPTER padapter, u8 ElementID, u32 CmdLen, u8 *pCmdBuffer)
 	padapter = GET_PRIMARY_ADAPTER(padapter);
 	pHalData = GET_HAL_DATA(padapter);
 
-	if (padapter->bFWReady == _FALSE) {
+	if (padapter->bFWReady == false) {
 		RTW_INFO("FillH2CCmd_88E(): return H2C cmd because fw is not ready\n");
 		return ret;
 	}
@@ -172,7 +172,7 @@ u8 rtl8188e_set_rssi_cmd(_adapter *padapter, u8 *param)
 	u8	res = _SUCCESS;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
-	if (pHalData->fw_ractrl == _FALSE) {
+	if (pHalData->fw_ractrl == false) {
 		RTW_INFO("==>%s fw dont support RA\n", __func__);
 		return _FAIL;
 	}
@@ -189,11 +189,11 @@ u8 rtl8188e_set_raid_cmd(_adapter *padapter, u32 bitmap, u8 *arg, u8 bw)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct sta_info	*psta = NULL;
 	struct macid_ctl_t *macid_ctl = &padapter->dvobj->macid_ctl;
-	u8 macid, init_rate, raid, shortGIrate = _FALSE;
+	u8 macid, init_rate, raid, shortGIrate = false;
 	u8 H2CCommand[7] = {0};
-	u8 ignore_bw = _FALSE;
+	u8 ignore_bw = false;
 
-	if (pHalData->fw_ractrl == _FALSE) {
+	if (pHalData->fw_ractrl == false) {
 		RTW_INFO("==>%s fw dont support RA\n", __func__);
 		return _FAIL;
 	}
@@ -219,8 +219,8 @@ u8 rtl8188e_set_raid_cmd(_adapter *padapter, u32 bitmap, u8 *arg, u8 bw)
 		H2CCommand[2] |= BIT(3);
 
 #ifdef CONFIG_INTEL_PROXIM
-	if (padapter->proximity.proxim_on == _TRUE)
-		pHalData->bDisableTXPowerTraining = _FALSE;
+	if (padapter->proximity.proxim_on == true)
+		pHalData->bDisableTXPowerTraining = false;
 #endif
 
 	/* DisableTXPowerTraining */
@@ -484,7 +484,7 @@ static void ConstructNullFunctionData(
 
 	SetSeqNum(pwlanhdr, 0);
 
-	if (bQoS == _TRUE) {
+	if (bQoS == true) {
 		struct rtw_ieee80211_hdr_3addr_qos *pwlanqoshdr;
 
 		set_frame_sub_type(pframe, WIFI_QOS_DATA_NULL);
@@ -575,8 +575,8 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct sta_info *psta = NULL;
 #endif
-	bool		bSendBeacon = _FALSE;
-	bool		bcn_valid = _FALSE;
+	bool		bSendBeacon = false;
+	bool		bcn_valid = false;
 	u8	DLBcnCount = 0;
 	u32 poll = 0;
 
@@ -607,7 +607,7 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 
 		if (pHalData->RegFwHwTxQCtrl & BIT6) {
 			RTW_INFO("HalDownloadRSVDPage(): There is an Adapter is sending beacon.\n");
-			bSendBeacon = _TRUE;
+			bSendBeacon = true;
 		}
 
 		/* Set FWHW_TXQ_CTRL 0x422[6]=0 to tell Hw the packet is not a real beacon frame. */
@@ -620,7 +620,7 @@ void rtl8188e_set_FwJoinBssReport_cmd(PADAPTER padapter, u8 mstatus)
 		poll = 0;
 		do {
 			/* download rsvd page.*/
-			rtw_hal_set_fw_rsvd_page(padapter, _FALSE);
+			rtw_hal_set_fw_rsvd_page(padapter, false);
 			DLBcnCount++;
 			do {
 				rtw_yield_os();
@@ -789,7 +789,7 @@ int reset_tsf(PADAPTER Adapter, u8 reset_port)
 	u32 reg_bcncrtl = (HW_PORT0 == reset_port) ?
 			  REG_BCN_CTRL_1 : REG_BCN_CTRL;
 
-	rtw_mi_buddy_scan_abort(Adapter, _FALSE);	/*	site survey will cause reset_tsf fail	*/
+	rtw_mi_buddy_scan_abort(Adapter, false);	/*	site survey will cause reset_tsf fail	*/
 	reset_cnt_after = reset_cnt_before = rtw_read8(Adapter, reg_reset_tsf_cnt);
 	rtl8188e_reset_tsf(Adapter, reset_port);
 
@@ -799,7 +799,7 @@ int reset_tsf(PADAPTER Adapter, u8 reset_port)
 		reset_cnt_after = rtw_read8(Adapter, reg_reset_tsf_cnt);
 	}
 
-	return (loop_cnt >= 10) ? _FAIL : _TRUE;
+	return (loop_cnt >= 10) ? _FAIL : true;
 }
 
 

@@ -178,7 +178,7 @@ static void rtw_hal_mcc_update_go_p2p_ie(PADAPTER padapter)
 		}
 		printk("\n");
 	}
-	update_beacon(padapter, _VENDOR_SPECIFIC_IE_, P2P_OUI, _TRUE);
+	update_beacon(padapter, _VENDOR_SPECIFIC_IE_, P2P_OUI, true);
 }
 
 /**
@@ -195,19 +195,19 @@ static void rtw_hal_mcc_remove_go_p2p_ie(PADAPTER padapter)
 		return;
 
 	pmccadapriv->p2p_go_noa_ie_len = 0;
-	update_beacon(padapter, _VENDOR_SPECIFIC_IE_, P2P_OUI, _TRUE);
+	update_beacon(padapter, _VENDOR_SPECIFIC_IE_, P2P_OUI, true);
 }
 
 /* restore IQK value for all interface */
 void rtw_hal_mcc_restore_iqk_val(PADAPTER padapter)
 {
-	u8 take_care_iqk = _FALSE;
+	u8 take_care_iqk = false;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	_adapter *iface = NULL;
 	u8 i = 0;
 
 	rtw_hal_get_hwreg(padapter, HW_VAR_CH_SW_NEED_TO_TAKE_CARE_IQK_INFO, &take_care_iqk);
-	if (take_care_iqk == _TRUE && MCC_EN(padapter)) {
+	if (take_care_iqk == true && MCC_EN(padapter)) {
 		for (i = 0; i < dvobj->iface_nums; i++) {
 			iface = dvobj->padapters[i];
 			if (iface == NULL)
@@ -226,9 +226,9 @@ u8 rtw_hal_check_mcc_status(PADAPTER padapter, u8 mcc_status)
 	struct mcc_obj_priv *pmccobjpriv = &(adapter_to_dvobj(padapter)->mcc_objpriv);
 
 	if (pmccobjpriv->mcc_status & (mcc_status))
-		return _TRUE;
+		return true;
 	else
-		return _FALSE;
+		return false;
 }
 
 void rtw_hal_set_mcc_status(PADAPTER padapter, u8 mcc_status)
@@ -553,9 +553,9 @@ u8 rtw_hal_dl_mcc_fw_rsvd_page(_adapter *adapter, u8 *pframe, u16 *index,
 
 			_rtw_memcpy(bssid, get_my_bssid(&pmlmeinfo->network), ETH_ALEN);
 			rtw_hal_construct_NullFunctionData(iface
-				, &pframe[*index], &len, bssid, _FALSE, 0, 0, _FALSE);
+				, &pframe[*index], &len, bssid, false, 0, 0, false);
 			rtw_hal_fill_fake_txdesc(iface, &pframe[*index-tx_desc],
-				len, _FALSE, _FALSE, _FALSE);
+				len, false, false, false);
 
 			CurtPktPageNum = (u8)PageNum(tx_desc + len, page_size);
 			*page_num += CurtPktPageNum;
@@ -570,7 +570,7 @@ u8 rtw_hal_dl_mcc_fw_rsvd_page(_adapter *adapter, u8 *pframe, u16 *index,
 			len = 0;
 			rtw_hal_construct_CTS(iface, &pframe[*index], &len);
 			rtw_hal_fill_fake_txdesc(iface, &pframe[*index-tx_desc],
-				len, _FALSE, _FALSE, _FALSE);
+				len, false, false, false);
 
 			CurtPktPageNum = (u8)PageNum(tx_desc + len, page_size);
 			*page_num += CurtPktPageNum;
@@ -858,7 +858,7 @@ static void rtw_hal_set_mcc_ctrl_cmd(PADAPTER padapter, u8 stop)
 		duration = iface->mcc_adapterpriv.mcc_duration;
 		role = iface->mcc_adapterpriv.role;
 
-		incurch = _FALSE;
+		incurch = false;
 
 		if (IS_HARDWARE_TYPE_8812(padapter))
 			rfetype = pHalData->rfe_type; /* RFETYPE (only for 8812)*/
@@ -957,7 +957,7 @@ static u8 rtw_hal_set_mcc_start_setting(PADAPTER padapter, u8 status)
 	rtw_hal_set_mcc_macid_cmd(padapter);
 
 	/* set mcc parameter  */
-	rtw_hal_set_mcc_ctrl_cmd(padapter, _FALSE);
+	rtw_hal_set_mcc_ctrl_cmd(padapter, false);
 
 exit:
 	return ret;
@@ -982,7 +982,7 @@ static void rtw_hal_set_mcc_stop_setting(PADAPTER padapter, u8 status)
 				continue;
 			/* use other interface to set cmd */
 			if (iface != padapter) {
-				rtw_hal_set_mcc_ctrl_cmd(iface, _TRUE);
+				rtw_hal_set_mcc_ctrl_cmd(iface, true);
 				break;
 			}
 		}
@@ -1058,7 +1058,7 @@ static u8 rtw_hal_set_mcc_setting(PADAPTER padapter, u8 status)
 {
 	u8 ret = _FAIL;
 	struct mcc_obj_priv *pmccobjpriv = &(adapter_to_dvobj(padapter)->mcc_objpriv);
-	u8 stop = (status < MCC_SETCMD_STATUS_START_CONNECT) ? _TRUE : _FALSE;
+	u8 stop = (status < MCC_SETCMD_STATUS_START_CONNECT) ? true : false;
 	u32 start_time = rtw_get_current_time();
 
 	RTW_INFO("===> "FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
@@ -1066,7 +1066,7 @@ static u8 rtw_hal_set_mcc_setting(PADAPTER padapter, u8 status)
 	rtw_sctx_init(&pmccobjpriv->mcc_sctx, MCC_EXPIRE_TIME);
 	pmccobjpriv->mcc_c2h_status = MCC_RPT_MAX;
 
-	if (stop == _FALSE) {
+	if (stop == false) {
 		/* handle mcc start */
 		if (rtw_hal_set_mcc_start_setting(padapter, status) == _FAIL)
 			goto exit;
@@ -1122,8 +1122,8 @@ static void rtw_hal_mcc_check_case_not_limit_traffic(PADAPTER cur_iface, PADAPTE
 
 	/* for both interface are VHT80, doesn't limit_traffic according to iperf results */
 	if (cur_bw == CHANNEL_WIDTH_80 && next_bw == CHANNEL_WIDTH_80) {
-		cur_iface->mcc_adapterpriv.mcc_tp_limit = _FALSE;
-		next_iface->mcc_adapterpriv.mcc_tp_limit = _FALSE;
+		cur_iface->mcc_adapterpriv.mcc_tp_limit = false;
+		next_iface->mcc_adapterpriv.mcc_tp_limit = false;
 	}
 }
 
@@ -1173,20 +1173,20 @@ static void rtw_hal_mcc_sw_ch_fw_notify_hdl(PADAPTER padapter)
 	/* check single TX or cuncurrnet TX */
 	if (next_mccadapriv->mcc_tp < single_tx_cri) {
 		/* single TX, does not stop */
-		cur_mccadapriv->mcc_tx_stop = _FALSE;
-		cur_mccadapriv->mcc_tp_limit = _FALSE;
+		cur_mccadapriv->mcc_tx_stop = false;
+		cur_mccadapriv->mcc_tp_limit = false;
 	} else {
 		/* concurrent TX, stop */
-		cur_mccadapriv->mcc_tx_stop = _TRUE;
-		cur_mccadapriv->mcc_tp_limit = _TRUE;
+		cur_mccadapriv->mcc_tx_stop = true;
+		cur_mccadapriv->mcc_tp_limit = true;
 	}
 
 	if (cur_mccadapriv->mcc_tp < single_tx_cri) {
-		next_mccadapriv->mcc_tx_stop  = _FALSE;
-		next_mccadapriv->mcc_tp_limit = _FALSE;
+		next_mccadapriv->mcc_tx_stop  = false;
+		next_mccadapriv->mcc_tp_limit = false;
 	} else {
-		next_mccadapriv->mcc_tx_stop = _FALSE;
-		next_mccadapriv->mcc_tp_limit = _TRUE;
+		next_mccadapriv->mcc_tx_stop = false;
+		next_mccadapriv->mcc_tp_limit = true;
 		next_mccadapriv->mcc_tx_bytes_to_port = 0;
 	}
 
@@ -1402,7 +1402,7 @@ void rtw_hal_mcc_sw_status_check(PADAPTER padapter)
  */
 u8 rtw_hal_mcc_change_scan_flag(PADAPTER padapter, u8 *ch, u8 *bw, u8 *offset)
 {
-	u8 need_ch_setting_union = _TRUE, i = 0, flags = 0, role = 0;
+	u8 need_ch_setting_union = true, i = 0, flags = 0, role = 0;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct mcc_adapter_priv *pmccadapriv = NULL;
 	struct mlme_ext_priv *pmlmeext = NULL;
@@ -1427,7 +1427,7 @@ u8 rtw_hal_mcc_change_scan_flag(PADAPTER padapter, u8 *ch, u8 *bw, u8 *offset)
 			*ch = pmlmeext->cur_channel;
 			*bw = pmlmeext->cur_bwmode;
 			*offset = pmlmeext->cur_ch_offset;
-			need_ch_setting_union = _FALSE;
+			need_ch_setting_union = false;
 			break;
 		case MCC_ROLE_STA:
 		case MCC_ROLE_GC:
@@ -1505,15 +1505,15 @@ inline u8 rtw_hal_mcc_stop_tx_bytes_to_port(PADAPTER padapter)
 		if (rtw_hal_check_mcc_status(padapter, MCC_STATUS_DOING_MCC)) {
 			if (pmccadapriv->mcc_tp_limit) {
 				if (pmccadapriv->mcc_tx_bytes_to_port >= pmccadapriv->mcc_target_tx_bytes_to_port) {
-					pmccadapriv->mcc_tx_stop = _TRUE;
+					pmccadapriv->mcc_tx_stop = true;
 					rtw_netif_stop_queue(padapter->pnetdev);
-					return _TRUE;
+					return true;
 				}
 			}
 		}
 	}
 
-	return _FALSE;
+	return false;
 }
 
 /**
@@ -1577,7 +1577,7 @@ u8 rtw_hal_set_mcc_setting_start_bss_network(PADAPTER padapter, u8 chbw_allow)
 
 	if (MCC_EN(padapter)) {
 		/* channel bw offset can not be allowed, start MCC */
-		if (chbw_allow == _FALSE) {
+		if (chbw_allow == false) {
 				struct mcc_obj_priv *pmccobjpriv = &(adapter_to_dvobj(padapter)->mcc_objpriv);
 
 				rtw_hal_mcc_restore_iqk_val(padapter);
@@ -1626,7 +1626,7 @@ u8 rtw_hal_set_mcc_setting_join_done_chk_ch(PADAPTER padapter)
 		rtw_mi_status_no_self(padapter, &mstate);
 
 		if (MSTATE_STA_LD_NUM(&mstate) || MSTATE_STA_LG_NUM(&mstate) || MSTATE_AP_NUM(&mstate)) {
-			bool chbw_allow = _TRUE;
+			bool chbw_allow = true;
 			u8 u_ch, u_offset, u_bw;
 			struct mlme_ext_priv *cur_mlmeext = &padapter->mlmeextpriv;
 			struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
@@ -1648,7 +1648,7 @@ u8 rtw_hal_set_mcc_setting_join_done_chk_ch(PADAPTER padapter)
 				, FUNC_ADPT_ARG(padapter), chbw_allow);
 
 			/* if chbw_allow = false, start MCC setting */
-			if (chbw_allow == _FALSE) {
+			if (chbw_allow == false) {
 				struct mcc_obj_priv *pmccobjpriv = &dvobj->mcc_objpriv;
 
 				rtw_hal_mcc_restore_iqk_val(padapter);
@@ -1674,10 +1674,10 @@ u8 rtw_hal_set_mcc_setting_chk_start_clnt_join(PADAPTER padapter, u8 *ch, u8 *bw
 {
 	u8 ret = _FAIL;
 
-	/* if chbw_allow = false under en_mcc = TRUE, we do not change channel related setting  */
+	/* if chbw_allow = false under en_mcc = true, we do not change channel related setting  */
 	if (MCC_EN(padapter)) {
 		/* restore union channel related setting to current channel related setting */
-		if (chbw_allow == _FALSE) {
+		if (chbw_allow == false) {
 			struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
 
 			*ch = pmlmeext->cur_channel;
@@ -1782,7 +1782,7 @@ inline void update_mcc_mgntframe_attrib(_adapter *padapter, struct pkt_attrib *p
 
 inline u8 rtw_hal_mcc_link_status_chk(_adapter *padapter, const char *msg)
 {
-	u8 ret = _TRUE, i = 0;
+	u8 ret = true, i = 0;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	_adapter *iface;
 	struct mlme_ext_priv *mlmeext;
@@ -1796,7 +1796,7 @@ inline u8 rtw_hal_mcc_link_status_chk(_adapter *padapter, const char *msg)
 					#ifdef DBG_EXPIRATION_CHK
 						RTW_INFO(FUNC_ADPT_FMT" don't enter %s under scan for MCC mode\n", FUNC_ADPT_ARG(padapter), msg);
 					#endif
-					ret = _FALSE;
+					ret = false;
 					goto exit;
 				}
 			}
@@ -1820,7 +1820,7 @@ void rtw_hal_mcc_issue_null_data(_adapter *padapter, u8 chbw_allow, u8 ps_mode)
 	if (rtw_hal_check_mcc_status(padapter, MCC_STATUS_DOING_MCC))
 		return;
 
-	if (chbw_allow == _TRUE)
+	if (chbw_allow == true)
 		return;
 
 	for (i = 0; i < dvobj->iface_nums; i++) {

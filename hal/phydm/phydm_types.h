@@ -111,10 +111,6 @@ enum rt_spinlock_type {
 		#define	ODM_ENDIAN_TYPE			ODM_ENDIAN_BIG
 	#endif
 
-	#define true	_TRUE
-	#define false	_FALSE
-
-
 	#define SET_TX_DESC_ANTSEL_A_88E(__ptx_desc, __value) SET_BITS_TO_LE_4BYTE(__ptx_desc+8, 24, 1, __value)
 	#define SET_TX_DESC_ANTSEL_B_88E(__ptx_desc, __value) SET_BITS_TO_LE_4BYTE(__ptx_desc+8, 25, 1, __value)
 	#define SET_TX_DESC_ANTSEL_C_88E(__ptx_desc, __value) SET_BITS_TO_LE_4BYTE(__ptx_desc+28, 29, 1, __value)

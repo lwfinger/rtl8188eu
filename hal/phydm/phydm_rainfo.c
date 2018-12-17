@@ -811,7 +811,7 @@ static s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 	HAL_DATA_TYPE *p_hal_data = GET_HAL_DATA(adapter);
 	u8 h2c_parameter[H2C_0X42_LENGTH] = {0};
 	u8 UL_DL_STATE = 0, STBC_TX = 0, tx_bf_en = 0;
-	u8 cmdlen = H2C_0X42_LENGTH, first_connect = _FALSE;
+	u8 cmdlen = H2C_0X42_LENGTH, first_connect = false;
 	u64	cur_tx_ok_cnt = 0, cur_rx_ok_cnt = 0;
 	struct sta_info *p_entry = p_dm_odm->p_odm_sta_info[mac_id];
 
@@ -872,11 +872,11 @@ static s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 	if (p_dm_odm->noisy_decision)
 		h2c_parameter[3] |= RAINFO_NOISY_STATE;
 
-	if ((p_entry->ra_rpt_linked == _FALSE) && (p_entry->rssi_stat.is_send_rssi == RA_RSSI_STATE_SEND)) {
+	if ((p_entry->ra_rpt_linked == false) && (p_entry->rssi_stat.is_send_rssi == RA_RSSI_STATE_SEND)) {
 		h2c_parameter[3] |= RAINFO_INIT_RSSI_RATE_STATE;
-		p_entry->ra_rpt_linked = _TRUE;
+		p_entry->ra_rpt_linked = true;
 		p_entry->rssi_stat.is_send_rssi = RA_RSSI_STATE_HOLD;
-		first_connect = _TRUE;
+		first_connect = true;
 	}
 
 	h2c_parameter[4] = (p_ra_table->RA_threshold_offset & 0x7f) | (p_ra_table->RA_offset_direction << 7);
@@ -891,7 +891,7 @@ static s8 phydm_rssi_report(struct PHY_DM_STRUCT *p_dm_odm, u8 mac_id)
 			(p_dm_odm->noisy_decision) ? "True" : "False", (first_connect) ? "True" : "False"));
 	}
 
-	if (p_hal_data->fw_ractrl == _TRUE) {
+	if (p_hal_data->fw_ractrl == true) {
 		if (p_dm_odm->support_ic_type == ODM_RTL8188E)
 			cmdlen = 3;
 		odm_fill_h2c_cmd(p_dm_odm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
@@ -916,7 +916,7 @@ static void phydm_ra_rssi_rpt_wk_hdl(void *p_context)
 		if (IS_STA_VALID(p_entry)) {
 			if (IS_MCAST(p_entry->hwaddr))  /*if(psta->mac_id ==1)*/
 				continue;
-			if (p_entry->ra_rpt_linked == _FALSE) {
+			if (p_entry->ra_rpt_linked == false) {
 				mac_id = i;
 				break;
 			}
@@ -945,7 +945,7 @@ odm_rssi_monitor_check_ce(
 	int	tmp_entry_max_pwdb = 0, tmp_entry_min_pwdb = 0xff;
 	u8	sta_cnt = 0;
 
-	if (p_dm_odm->is_linked != _TRUE)
+	if (p_dm_odm->is_linked != true)
 		return;
 
 	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
@@ -1030,9 +1030,9 @@ odm_rate_adaptive_mask_init(
 
 	p_odm_ra->type = dm_type_by_driver;
 	if (p_odm_ra->type == dm_type_by_driver)
-		p_dm_odm->is_use_ra_mask = _TRUE;
+		p_dm_odm->is_use_ra_mask = true;
 	else
-		p_dm_odm->is_use_ra_mask = _FALSE;
+		p_dm_odm->is_use_ra_mask = false;
 
 	p_odm_ra->ratr_state = DM_RATR_STA_INIT;
 
@@ -1593,7 +1593,7 @@ odm_refresh_rate_adaptive_mask_ce(
 					p_entry->rssi_level, ratr_state_new, p_entry->rssi_stat.undecorated_smoothed_pwdb));
 
 				p_entry->rssi_level = ratr_state_new;
-				rtw_hal_update_ra_mask(p_entry, p_entry->rssi_level, _FALSE);
+				rtw_hal_update_ra_mask(p_entry, p_entry->rssi_level, false);
 			} else {
 				ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Stay in RA level  = (( %d ))\n\n", ratr_state_new));
 				/**/
@@ -1602,10 +1602,10 @@ odm_refresh_rate_adaptive_mask_ce(
 			if (true == odm_ra_state_check(p_dm_odm, p_entry->rssi_stat.undecorated_smoothed_pwdb, false, &p_entry->rssi_level)) {
 				ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RSSI:%d, RSSI_LEVEL:%d\n", p_entry->rssi_stat.undecorated_smoothed_pwdb, p_entry->rssi_level));
 				/* printk("RSSI:%d, RSSI_LEVEL:%d\n", pstat->rssi_stat.undecorated_smoothed_pwdb, pstat->rssi_level); */
-				rtw_hal_update_ra_mask(p_entry, p_entry->rssi_level, _FALSE);
+				rtw_hal_update_ra_mask(p_entry, p_entry->rssi_level, false);
 			} else if (p_dm_odm->is_change_state) {
 				ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("Change Power Training state, is_disable_power_training = %d\n", p_dm_odm->is_disable_power_training));
-				rtw_hal_update_ra_mask(p_entry, p_entry->rssi_level, _FALSE);
+				rtw_hal_update_ra_mask(p_entry, p_entry->rssi_level, false);
 			}
 #endif
 
@@ -1884,7 +1884,7 @@ find_minimum_rssi(
 
 	/*Determine the minimum RSSI*/
 
-	if ((p_dm_odm->is_linked != _TRUE) &&
+	if ((p_dm_odm->is_linked != true) &&
 	    (p_hal_data->entry_min_undecorated_smoothed_pwdb == 0)) {
 		p_hal_data->min_undecorated_pwdb_for_dm = 0;
 		/*ODM_RT_TRACE(p_dm_odm,COMP_BB_POWERSAVING, DBG_LOUD, ("Not connected to any\n"));*/

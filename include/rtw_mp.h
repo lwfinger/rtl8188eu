@@ -167,7 +167,7 @@ typedef struct _MPT_CONTEXT {
 	WIRELESS_MODE		MptWirelessModeToSw;	/* Wireless mode to switch. */
 	u8			MptChannelToSw;	/* Channel to switch. */
 	u8			MptInitGainToSet;	/* Initial gain to set. */
-	/* u32			bMptAntennaA;		 */ /* TRUE if we want to use antenna A. */
+	/* u32			bMptAntennaA;		 */ /* true if we want to use antenna A. */
 	u32			MptBandWidth;		/* bandwidth to switch. */
 
 	u32			mpt_rate_index;/* rate index. */
@@ -181,25 +181,25 @@ typedef struct _MPT_CONTEXT {
 	u32			RegTxPwrLimit;
 	/* Content of RCR Regsiter for Mass Production Test. */
 	u32			MptRCR;
-	/* TRUE if we only receive packets with specific pattern. */
+	/* true if we only receive packets with specific pattern. */
 	bool			bMptFilterPattern;
 	/* Rx OK count, statistics used in Mass Production Test. */
 	u32			MptRxOkCnt;
 	/* Rx CRC32 error count, statistics used in Mass Production Test. */
 	u32			MptRxCrcErrCnt;
 
-	bool			bCckContTx;	/* TRUE if we are in CCK Continuous Tx test. */
-	bool			bOfdmContTx;	/* TRUE if we are in OFDM Continuous Tx test. */
-		/* TRUE if we have start Continuous Tx test. */
+	bool			bCckContTx;	/* true if we are in CCK Continuous Tx test. */
+	bool			bOfdmContTx;	/* true if we are in OFDM Continuous Tx test. */
+		/* true if we have start Continuous Tx test. */
 	bool			is_start_cont_tx;
 
-	/* TRUE if we are in Single Carrier Tx test. */
+	/* true if we are in Single Carrier Tx test. */
 	bool			bSingleCarrier;
-	/* TRUE if we are in Carrier Suppression Tx Test. */
+	/* true if we are in Carrier Suppression Tx Test. */
 
 	bool			is_carrier_suppression;
 
-	/* TRUE if we are in Single Tone Tx test. */
+	/* true if we are in Single Tone Tx test. */
 
 	bool			is_single_tone;
 
@@ -402,8 +402,8 @@ typedef struct _MP_FIRMWARE {
 
 /* *********************************************************************** */
 
-#define LOWER	_TRUE
-#define RAISE	_FALSE
+#define LOWER	true
+#define RAISE	false
 
 /* Hardware Registers */
 #define BB_REG_BASE_ADDR		0x800
