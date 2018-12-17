@@ -371,7 +371,7 @@ void usb_read_port_cancel(struct intf_hdl *pintfhdl)
 
 static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	int i;
 	struct xmit_buf *pxmitbuf = (struct xmit_buf *)purb->context;
 	/* struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data; */
@@ -507,7 +507,7 @@ check_completion:
 
 u32 usb_write_port(struct intf_hdl *pintfhdl, u32 addr, u32 cnt, u8 *wmem)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	unsigned int pipe;
 	int status;
 	u32 ret = _FAIL, bwritezero = _FALSE;

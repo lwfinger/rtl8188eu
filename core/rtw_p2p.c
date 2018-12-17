@@ -45,7 +45,7 @@ static int is_any_client_associated(_adapter *padapter)
 
 static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	_list	*phead, *plist;
 	u32 len = 0;
 	u16 attr_len = 0;
@@ -2439,7 +2439,7 @@ u32 process_p2p_devdisc_req(struct wifidirect_info *pwdinfo, u8 *pframe, uint le
 			    _rtw_memcmp(pwdinfo->p2p_group_ssid, groupid + ETH_ALEN, pwdinfo->p2p_group_ssid_len)) {
 				attr_contentlen = 0;
 				if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_DEVICE_ID, dev_addr, &attr_contentlen)) {
-					_irqL irqL;
+					unsigned long irqL;
 					_list	*phead, *plist;
 
 					_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
@@ -3075,7 +3075,7 @@ static void find_phase_handler(_adapter	*padapter)
 	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
 	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
 	NDIS_802_11_SSID	ssid;
-	_irqL				irqL;
+	unsigned long				irqL;
 	u8					_status = 0;
 
 
@@ -4620,7 +4620,7 @@ static void pre_tx_scan_timer_process(struct timer_list *t)
 	_adapter *adapter = from_timer(adapter, t, wdinfo.pre_tx_scan_timer);
 #endif
 	struct	wifidirect_info				*pwdinfo = &adapter->wdinfo;
-	_irqL							irqL;
+	unsigned long							irqL;
 	struct mlme_priv					*pmlmepriv = &adapter->mlmepriv;
 	u8								_status = 0;
 

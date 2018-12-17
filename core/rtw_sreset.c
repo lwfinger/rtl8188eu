@@ -55,7 +55,7 @@ u8 sreset_get_wifi_status(_adapter *padapter)
 
 	u8 status = WIFI_STATUS_SUCCESS;
 	u32 val32 = 0;
-	_irqL irqL;
+	unsigned long irqL;
 	if (psrtpriv->silent_reset_inprogress == _TRUE)
 		return status;
 	val32 = rtw_read32(padapter, REG_TXDMA_STATUS);
@@ -271,7 +271,7 @@ void sreset_reset(_adapter *padapter)
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
-	_irqL irqL;
+	unsigned long irqL;
 	u32 start = rtw_get_current_time();
 	struct dvobj_priv *psdpriv = padapter->dvobj;
 	struct debug_priv *pdbgpriv = &psdpriv->drv_dbg;

@@ -82,7 +82,7 @@ void rtw_hal_read_sta_dk_key(_adapter *adapter, u8 key_id)
 	struct security_priv *psecuritypriv = &adapter->securitypriv;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 	u8 get_key[16];
 
 	memset(get_key, 0, sizeof(get_key));
@@ -2066,7 +2066,7 @@ void rtw_mbid_cam_deinit(struct dvobj_priv *dvobj)
 
 void rtw_mbid_cam_reset(_adapter *adapter)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct mbid_cam_ctl_t *mbid_cam_ctl = &dvobj->mbid_cam_ctl;
 
@@ -2096,7 +2096,7 @@ static u8 _rtw_mbid_cam_search_by_macaddr(_adapter *adapter, u8 *mac_addr)
 
 u8 rtw_mbid_cam_search_by_macaddr(_adapter *adapter, u8 *mac_addr)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	u8 cam_id = INVALID_CAM_ID;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
@@ -2129,7 +2129,7 @@ static u8 _rtw_mbid_cam_search_by_ifaceid(_adapter *adapter, u8 iface_id)
 
 u8 rtw_mbid_cam_search_by_ifaceid(_adapter *adapter, u8 iface_id)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 cam_id = INVALID_CAM_ID;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct mbid_cam_ctl_t *mbid_cam_ctl = &dvobj->mbid_cam_ctl;
@@ -2142,7 +2142,7 @@ u8 rtw_mbid_cam_search_by_ifaceid(_adapter *adapter, u8 iface_id)
 }
 u8 rtw_get_max_mbid_cam_id(_adapter *adapter)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	s8 i;
 	u8 cam_id = INVALID_CAM_ID;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
@@ -2185,7 +2185,7 @@ static inline void mbid_cam_cache_clr(struct mbid_cam_cache *pmbid_cam)
 
 u8 rtw_mbid_camid_alloc(_adapter *adapter, u8 *mac_addr)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 cam_id = INVALID_CAM_ID, i;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct mbid_cam_ctl_t *mbid_cam_ctl = &dvobj->mbid_cam_ctl;
@@ -2225,7 +2225,7 @@ exit:
 
 u8 rtw_mbid_cam_info_change(_adapter *adapter, u8 *mac_addr)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 entry_id = INVALID_CAM_ID;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct mbid_cam_ctl_t *mbid_cam_ctl = &dvobj->mbid_cam_ctl;
@@ -2242,7 +2242,7 @@ u8 rtw_mbid_cam_info_change(_adapter *adapter, u8 *mac_addr)
 
 u8 rtw_mbid_cam_assign(_adapter *adapter, u8 *mac_addr, u8 camid)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 ret = _FALSE;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct mbid_cam_ctl_t *mbid_cam_ctl = &dvobj->mbid_cam_ctl;
@@ -2279,7 +2279,7 @@ exit:
 
 void rtw_mbid_camid_clean(_adapter *adapter, u8 mbss_canid)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct mbid_cam_ctl_t *mbid_cam_ctl = &dvobj->mbid_cam_ctl;
 
@@ -2296,7 +2296,7 @@ void rtw_mbid_camid_clean(_adapter *adapter, u8 mbss_canid)
 }
 int rtw_mbid_cam_cache_dump(void *sel, const char *fun_name, _adapter *adapter)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 i;
 	_adapter *iface;
 	u8 iface_id;
@@ -2369,7 +2369,7 @@ static void read_mbssid_cam(_adapter *padapter, u8 cam_addr, u8 *mac)
 }
 int rtw_mbid_cam_dump(void *sel, const char *fun_name, _adapter *adapter)
 {
-	/*_irqL irqL;*/
+	/*unsigned long irqL;*/
 	u8 i;
 	u8 mac_addr[ETH_ALEN];
 
@@ -3475,7 +3475,7 @@ static void rtw_hal_update_gtk_offload_info(_adapter *adapter)
 	struct security_priv *psecuritypriv = &adapter->securitypriv;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 	u8 get_key[16];
 	u8 gtk_id = 0, offset = 0, i = 0, sz = 0;
 	u64 replay_count = 0;
@@ -4203,7 +4203,7 @@ static void rtw_hal_construct_P2PBeacon(_adapter *padapter, u8 *pframe, u32 *pLe
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 	u32	pktlen;
 	/* #if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
-	/*	_irqL irqL;
+	/*	unsigned long irqL;
 	 *	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	 * #endif */ /* #if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
@@ -8403,7 +8403,7 @@ void SetHalODMVar(
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT *podmpriv = &pHalData->odmpriv;
-	/* _irqL irqL; */
+	/* unsigned long irqL; */
 	switch (eVariable) {
 	case HAL_ODM_STA_INFO: {
 		struct sta_info *psta = (struct sta_info *)pValue1;
@@ -8991,7 +8991,7 @@ void rtw_dump_raw_rssi_info(_adapter *padapter, void *sel)
 #ifdef DBG_RX_DFRAME_RAW_DATA
 void rtw_dump_rx_dframe_info(_adapter *padapter, void *sel)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 isCCKrate, rf_path;
 	struct recv_priv *precvpriv = &(padapter->recvpriv);
 	PHAL_DATA_TYPE	pHalData =  GET_HAL_DATA(padapter);

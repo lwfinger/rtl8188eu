@@ -1836,7 +1836,7 @@ exit:
 void rtw_cfg80211_indicate_scan_done(_adapter *adapter, bool aborted)
 {
 	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(adapter);
-	_irqL	irqL;
+	unsigned long	irqL;
 
 #if (KERNEL_VERSION(4, 7, 0) <= LINUX_VERSION_CODE)
 	struct cfg80211_scan_info info;
@@ -1952,7 +1952,7 @@ exit:
 
 static void _rtw_cfg80211_surveydone_event_callback(_adapter *padapter, struct cfg80211_scan_request *scan_req)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list					*plist, *phead;
 	struct	mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	_queue				*queue	= &(pmlmepriv->scanned_queue);
@@ -2113,7 +2113,7 @@ u8 rtw_cfg80211_scan_via_buddy(_adapter *padapter, struct cfg80211_scan_request 
 	int i;
 	u8 ret = _FALSE;
 	_adapter *iface = NULL;
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(padapter);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
@@ -2163,7 +2163,7 @@ void rtw_cfg80211_indicate_scan_done_for_buddy(_adapter *padapter, bool bscan_ab
 	int i;
 	u8 ret = 0;
 	_adapter *iface = NULL;
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct mlme_priv *mlmepriv;
 	struct rtw_wdev_priv *wdev_priv;
@@ -2210,7 +2210,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	NDIS_802_11_SSID ssid[RTW_SSID_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel ch[RTW_CHANNEL_SCAN_AMOUNT];
 	struct rtw_ieee80211_channel *pch;
-	_irqL	irqL;
+	unsigned long	irqL;
 	u8 *wps_ie = NULL;
 	uint wps_ielen = 0;
 	u8 *p2p_ie = NULL;
@@ -2943,7 +2943,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
 				struct cfg80211_connect_params *sme)
 {
 	int ret = 0;
-	_irqL irqL;
+	unsigned long irqL;
 	_list *phead;
 	struct wlan_network *pnetwork = NULL;
 	NDIS_802_11_AUTHENTICATION_MODE authmode;
@@ -4172,7 +4172,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 )
 {
 	int ret = 0;
-	_irqL irqL;
+	unsigned long irqL;
 	_list	*phead, *plist;
 	u8 updated = _FALSE;
 	const u8 *target_mac;
@@ -4300,7 +4300,7 @@ static int	cfg80211_rtw_dump_station(struct wiphy *wiphy, struct net_device *nde
 {
 
 	int ret = 0;
-	_irqL irqL;
+	unsigned long irqL;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(ndev);
 	struct sta_info *psta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -4874,7 +4874,7 @@ static s32 cfg80211_rtw_update_ft_ies(struct wiphy *wiphy,
 	_adapter *padapter = NULL;
 	struct mlme_priv *pmlmepriv = NULL;
 	ft_priv *pftpriv = NULL;
-	_irqL irqL;
+	unsigned long irqL;
 	u8 *p;
 	u8 *pie = NULL;
 	u32 ie_len = 0;
@@ -5217,7 +5217,7 @@ inline int rtw_cfg80211_is_p2p_scan(_adapter *adapter)
 		* 2. RTW_DEDICATED_P2P_DEVICE not defined
 		*/
 		struct rtw_wdev_priv *wdev_data = adapter_wdev_data(adapter);
-		_irqL irqL;
+		unsigned long irqL;
 		int is_p2p_scan = 0;
 
 		_enter_critical_bh(&wdev_data->scan_req_lock, &irqL);
@@ -5344,7 +5344,7 @@ inline int rtw_cfg80211_is_scan_by_pd_wdev(_adapter *adapter)
 	struct wiphy *wiphy = adapter_to_wiphy(adapter);
 	struct rtw_wdev_priv *wdev_data = adapter_wdev_data(adapter);
 	struct wireless_dev *wdev = NULL;
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&wdev_data->scan_req_lock, &irqL);
 	if (wdev_data->scan_request)

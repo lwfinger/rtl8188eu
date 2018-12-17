@@ -773,7 +773,7 @@ void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode
 #endif /* CONFIG_P2P */
 #ifdef CONFIG_TDLS
 	struct sta_priv *pstapriv = &padapter->stapriv;
-	_irqL irqL;
+	unsigned long irqL;
 	int i, j;
 	_list	*plist, *phead;
 	struct sta_info *ptdls_sta;

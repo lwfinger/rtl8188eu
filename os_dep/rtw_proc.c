@@ -601,7 +601,7 @@ static int proc_get_rx_info_msg(struct seq_file *m, void *v)
 }
 static int proc_get_tx_info_msg(struct seq_file *m, void *v)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct net_device *dev = m->private;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);

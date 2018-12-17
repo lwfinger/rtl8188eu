@@ -655,7 +655,7 @@ u32 halbtcoutsrc_GetBtPatchVer(PBTC_COEXIST pBtCoexist)
 {
 	if (pBtCoexist->bt_info.get_bt_fw_ver_cnt <= 5) {
 		if (halbtcoutsrc_IsHwMailboxExist(pBtCoexist) == _TRUE) {
-			_irqL irqL;
+			unsigned long irqL;
 			u8 ret;
 
 			_enter_critical_mutex(&GLBtcBtMpOperLock, &irqL);
@@ -706,7 +706,7 @@ u32 halbtcoutsrc_GetBtCoexSupportedFeature(void *pBtcContext)
 
 	if (halbtcoutsrc_IsHwMailboxExist(pBtCoexist) == _TRUE) {
 		u8 buf[3] = {0};
-		_irqL irqL;
+		unsigned long irqL;
 		u8 op_code;
 		u8 status;
 
@@ -737,7 +737,7 @@ u32 halbtcoutsrc_GetBtCoexSupportedVersion(void *pBtcContext)
 
 	if (halbtcoutsrc_IsHwMailboxExist(pBtCoexist) == _TRUE) {
 		u8 buf[3] = {0};
-		_irqL irqL;
+		unsigned long irqL;
 		u8 op_code;
 		u8 status;
 
@@ -1549,7 +1549,7 @@ u16 halbtcoutsrc_SetBtReg(void *pBtcContext, u8 RegType, u32 RegAddr, u32 Data)
 
 	if (halbtcoutsrc_IsHwMailboxExist(pBtCoexist) == _TRUE) {
 		u8 buf[3] = {0};
-		_irqL irqL;
+		unsigned long irqL;
 		u8 op_code;
 		u8 status;
 
@@ -1601,7 +1601,7 @@ u16 halbtcoutsrc_GetBtReg_with_status(void *pBtcContext, u8 RegType, u32 RegAddr
 
 	if (halbtcoutsrc_IsHwMailboxExist(pBtCoexist) == _TRUE) {
 		u8 buf[3] = {0};
-		_irqL irqL;
+		unsigned long irqL;
 		u8 op_code;
 		u8 status;
 
@@ -1764,7 +1764,7 @@ u8 halbtcoutsrc_GetBleScanTypeFromBt(void *pBtcContext)
 
 	if (halbtcoutsrc_IsHwMailboxExist(pBtCoexist) == _TRUE) {
 		u8 buf[3] = {0};
-		_irqL irqL;
+		unsigned long irqL;
 		u8 op_code;
 		u8 status;
 
@@ -1796,7 +1796,7 @@ u32 halbtcoutsrc_GetBleScanParaFromBt(void *pBtcContext, u8 scanType)
 
 	if (halbtcoutsrc_IsHwMailboxExist(pBtCoexist) == _TRUE) {
 		u8 buf[3] = {0};
-		_irqL irqL;
+		unsigned long irqL;
 		u8 op_code;
 		u8 status;
 		
@@ -1822,7 +1822,7 @@ u8 halbtcoutsrc_GetBtAFHMapFromBt(void *pBtcContext, u8 mapType, u8 *afhMap)
 {
 	struct btc_coexist *pBtCoexist = (struct btc_coexist *)pBtcContext;
 	u8 buf[2] = {0};
-	_irqL irqL;
+	unsigned long irqL;
 	u8 op_code;
 	u32 *AfhMapL = (u32 *)&(afhMap[0]);
 	u32 *AfhMapM = (u32 *)&(afhMap[4]);

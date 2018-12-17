@@ -559,7 +559,7 @@ PHY_QueryRFReg8188E(
 	u32 Original_Value, Readback_Value, BitShift;
 	/* HAL_DATA_TYPE		*pHalData = GET_HAL_DATA(Adapter); */
 	/* u8	RFWaitCounter = 0; */
-	/* _irqL	irqL; */
+	/* unsigned long	irqL; */
 
 #if (DISABLE_BB_RF == 1)
 	return 0;
@@ -605,7 +605,7 @@ PHY_SetRFReg8188E(
 	/* HAL_DATA_TYPE	*pHalData		= GET_HAL_DATA(Adapter); */
 	/* u8			RFWaitCounter	= 0; */
 	u32		Original_Value, BitShift;
-	/* _irqL	irqL; */
+	/* unsigned long	irqL; */
 
 #if (DISABLE_BB_RF == 1)
 	return;

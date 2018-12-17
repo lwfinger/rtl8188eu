@@ -70,7 +70,7 @@ typedef struct _DR_VARIABLE_STRUCT_ {
 
 /* int mp_start_joinbss(_adapter *padapter, NDIS_802_11_SSID *pssid); */
 
-/* void _irqlevel_changed_(_irqL *irqlevel, boolunsigned char bLower); */
+/* void _irqlevel_changed_(unsigned long *irqlevel, boolunsigned char bLower); */
 #define _irqlevel_changed_(a, b)
 
 /* oid_rtl_seg_81_80_00 */

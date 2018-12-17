@@ -669,7 +669,7 @@ ssize_t proc_set_read_reg(struct file *file, const char __user *buffer, size_t c
 
 int proc_get_rx_stat(struct seq_file *m, void *v)
 {
-	_irqL	 irqL;
+	unsigned long	 irqL;
 	_list	*plist, *phead;
 	struct net_device *dev = m->private;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -717,7 +717,7 @@ int proc_get_rx_stat(struct seq_file *m, void *v)
 
 int proc_get_tx_stat(struct seq_file *m, void *v)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list	*plist, *phead;
 	struct net_device *dev = m->private;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
@@ -1229,7 +1229,7 @@ ssize_t proc_set_backop_flags_ap(struct file *file, const char __user *buffer, s
 
 int proc_get_survey_info(struct seq_file *m, void *v)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct net_device *dev = m->private;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -1307,7 +1307,7 @@ exit:
 
 ssize_t proc_set_survey_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
@@ -2982,7 +2982,7 @@ ssize_t proc_set_txbf_cap(struct file *file, const char __user *buffer, size_t c
 int proc_get_all_sta_info(struct seq_file *m, void *v)
 {
 	struct net_device *dev = m->private;
-	_irqL irqL;
+	unsigned long irqL;
 	struct sta_info *psta;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct sta_priv *pstapriv = &padapter->stapriv;
@@ -3807,7 +3807,7 @@ static int proc_tdls_display_tdls_sta_info(struct seq_file *m)
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	struct sta_info *psta;
 	int i = 0, j = 0;
-	_irqL irqL;
+	unsigned long irqL;
 	_list	*plist, *phead;
 	u8 SpaceBtwnItemAndValue = TDLS_DBG_INFO_SPACE_BTWN_ITEM_AND_VALUE;
 	u8 SpaceBtwnItemAndValueTmp = 0;
@@ -3979,7 +3979,7 @@ int proc_get_tdls_info(struct seq_file *m, void *v)
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	struct sta_info *psta;
 	int i = 0, j = 0;
-	_irqL irqL;
+	unsigned long irqL;
 	_list	*plist, *phead;
 	u8 SpaceBtwnItemAndValue = 41;
 	u8 SpaceBtwnItemAndValueTmp = 0;
@@ -4131,7 +4131,7 @@ ssize_t proc_set_tx_sa_query(struct file *file, const char __user *buffer, size_
 	struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj);
 	struct sta_info *psta;
 	_list	*plist, *phead;
-	_irqL	 irqL;
+	unsigned long	 irqL;
 	char tmp[16];
 	u8	mac_addr[NUM_STA][ETH_ALEN];
 	u32 key_type;
@@ -4210,7 +4210,7 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 	struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj);
 	struct sta_info *psta;
 	_list	*plist, *phead;
-	_irqL	 irqL;
+	unsigned long	 irqL;
 	char tmp[16];
 	u8	mac_addr[NUM_STA][ETH_ALEN];
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
@@ -4315,7 +4315,7 @@ ssize_t proc_set_tx_auth(struct file *file, const char __user *buffer, size_t co
 	struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj);
 	struct sta_info *psta;
 	_list	*plist, *phead;
-	_irqL	 irqL;
+	unsigned long	 irqL;
 	char tmp[16];
 	u8	mac_addr[NUM_STA][ETH_ALEN];
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};

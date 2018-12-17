@@ -844,7 +844,7 @@ void invalidate_cam_all(_adapter *padapter)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 	u8 val8 = 0;
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_CAM_INVALID_ALL, &val8);
@@ -883,7 +883,7 @@ inline void write_cam_from_cache(_adapter *adapter, u8 id)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 	struct sec_cam_ent cache;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
@@ -896,7 +896,7 @@ void write_cam_cache(_adapter *adapter, u8 id, u16 ctrl, u8 *mac, u8 *key)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
 
@@ -911,7 +911,7 @@ void clear_cam_cache(_adapter *adapter, u8 id)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
 
@@ -942,7 +942,7 @@ inline void rtw_camctl_set_flags(_adapter *adapter, u32 flags)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
 	_rtw_camctl_set_flags(adapter, flags);
@@ -961,7 +961,7 @@ inline void rtw_camctl_clr_flags(_adapter *adapter, u32 flags)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
 	_rtw_camctl_clr_flags(adapter, flags);
@@ -1123,7 +1123,7 @@ exit:
 
 inline bool rtw_sec_camid_is_used(struct cam_ctl_t *cam_ctl, u8 id)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	bool ret;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
@@ -1137,7 +1137,7 @@ u8 rtw_get_sec_camid(_adapter *adapter, u8 max_bk_key_num, u8 *sec_key_id)
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 	u8 sec_cam_num = 0;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
@@ -1177,7 +1177,7 @@ inline bool rtw_camid_is_gk(_adapter *adapter, u8 cam_id)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 	bool ret;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
@@ -1235,7 +1235,7 @@ s16 rtw_camid_search(_adapter *adapter, u8 *addr, s16 kid, s8 gk)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 	s16 cam_id = -1;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
@@ -1304,7 +1304,7 @@ s16 rtw_camid_alloc(_adapter *adapter, struct sta_info *sta, u8 kid, bool *used)
 	struct mlme_ext_info *mlmeinfo = &adapter->mlmeextpriv.mlmext_info;
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 	s16 cam_id = -1;
 
 	*used = _FALSE;
@@ -1359,7 +1359,7 @@ static void rtw_camid_set(_adapter *adapter, u8 cam_id)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
 
@@ -1373,7 +1373,7 @@ void rtw_camid_free(_adapter *adapter, u8 cam_id)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
 
@@ -1389,7 +1389,7 @@ inline void rtw_sec_cam_swap(_adapter *adapter, u8 cam_id_a, u8 cam_id_b)
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
 	struct sec_cam_ent cache_a, cache_b;
-	_irqL irqL;
+	unsigned long irqL;
 	bool cam_a_used, cam_b_used;
 
 	if (1)
@@ -1442,7 +1442,7 @@ static s16 rtw_get_empty_cam_entry(_adapter *adapter, u8 start_camid)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	struct cam_ctl_t *cam_ctl = &dvobj->cam_ctl;
-	_irqL irqL;
+	unsigned long irqL;
 	int i;
 	s16 cam_id = -1;
 
@@ -3231,7 +3231,7 @@ inline s8 rtw_macid_get_ch_g(struct macid_ctl_t *macid_ctl, u8 id)
 void rtw_alloc_macid(_adapter *padapter, struct sta_info *psta)
 {
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj);
@@ -3350,7 +3350,7 @@ exit:
 
 void rtw_release_macid(_adapter *padapter, struct sta_info *psta)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj);
@@ -3422,7 +3422,7 @@ u8 rtw_search_max_mac_id(_adapter *padapter)
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	struct macid_ctl_t *macid_ctl = dvobj_to_macidctl(dvobj);
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 
 	/* TODO: Only search for connected macid? */
 

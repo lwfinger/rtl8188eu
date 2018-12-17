@@ -42,7 +42,7 @@ inline void rtw_st_ctl_init(struct st_ctl_t *st_ctl)
 
 inline void rtw_st_ctl_clear_tracker_q(struct st_ctl_t *st_ctl)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	_list *plist, *phead;
 	struct session_tracker *st;
 
@@ -133,7 +133,7 @@ inline bool rtw_st_ctl_chk_reg_rule(struct st_ctl_t *st_ctl, _adapter *adapter, 
 void dump_st_ctl(void *sel, struct st_ctl_t *st_ctl)
 {
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 	_list *plist, *phead;
 	struct session_tracker *st;
 
@@ -352,7 +352,7 @@ void rtw_mfree_stainfo(struct sta_info *psta)
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv);
 void rtw_mfree_all_stainfo(struct sta_priv *pstapriv)
 {
-	_irqL	 irqL;
+	unsigned long	 irqL;
 	_list	*plist, *phead;
 	struct sta_info *psta = NULL;
 
@@ -394,7 +394,7 @@ void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 
 u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list	*phead, *plist;
 	struct sta_info *psta = NULL;
 	struct recv_reorder_ctrl *preorder_ctrl;
@@ -443,7 +443,7 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 /* struct	sta_info *rtw_alloc_stainfo(_queue *pfree_sta_queue, unsigned char *hwaddr) */
 struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 {
-	_irqL irqL, irqL2;
+	unsigned long irqL, irqL2;
 	uint tmp_aid;
 	s32	index;
 	_list	*phash_list;
@@ -560,7 +560,7 @@ exit:
 u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 {
 	int i;
-	_irqL irqL0;
+	unsigned long irqL0;
 	_queue *pfree_sta_queue;
 	struct recv_reorder_ctrl *preorder_ctrl;
 	struct	sta_xmit_priv	*pstaxmitpriv;
@@ -665,7 +665,7 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 
 	/* for A-MPDU Rx reordering buffer control, cancel reordering_ctrl_timer */
 	for (i = 0; i < 16 ; i++) {
-		_irqL irqL;
+		unsigned long irqL;
 		_list	*phead, *plist;
 		union recv_frame *prframe;
 		_queue *ppending_recvframe_queue;
@@ -773,7 +773,7 @@ exit:
 /* free all stainfo which in sta_hash[all] */
 void rtw_free_all_stainfo(_adapter *padapter)
 {
-	_irqL	 irqL;
+	unsigned long	 irqL;
 	_list	*plist, *phead;
 	s32	index;
 	struct sta_info *psta = NULL;
@@ -826,7 +826,7 @@ exit:
 struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 {
 
-	_irqL	 irqL;
+	unsigned long	 irqL;
 
 	_list	*plist, *phead;
 
@@ -931,7 +931,7 @@ const char *const _acl_mode_str[] = {
 u8 rtw_access_ctrl(_adapter *adapter, u8 *mac_addr)
 {
 	u8 res = _TRUE;
-	_irqL irqL;
+	unsigned long irqL;
 	_list *list, *head;
 	struct rtw_wlan_acl_node *acl_node;
 	u8 match = _FALSE;
@@ -988,7 +988,7 @@ bool rtw_is_pre_link_sta(struct sta_priv *stapriv, u8 *addr)
 	struct sta_info *sta = NULL;
 	u8 exist = _FALSE;
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&(pre_link_sta_ctl->lock), &irqL);
 	for (i = 0; i < RTW_PRE_LINK_STA_NUM; i++) {
@@ -1015,7 +1015,7 @@ struct sta_info *rtw_pre_link_sta_add(struct sta_priv *stapriv, u8 *hwaddr)
 	struct sta_info *sta = NULL;
 	u8 exist = _FALSE;
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 
 	if (rtw_check_invalid_mac_address(hwaddr, _FALSE) == _TRUE)
 		goto exit;
@@ -1068,7 +1068,7 @@ void rtw_pre_link_sta_del(struct sta_priv *stapriv, u8 *hwaddr)
 	struct sta_info *sta = NULL;
 	u8 exist = _FALSE;
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 
 	if (rtw_check_invalid_mac_address(hwaddr, _FALSE) == _TRUE)
 		goto exit;
@@ -1110,7 +1110,7 @@ void rtw_pre_link_sta_ctl_reset(struct sta_priv *stapriv)
 	struct pre_link_sta_node_t *node = NULL;
 	struct sta_info *sta = NULL;
 	int i, j = 0;
-	_irqL irqL;
+	unsigned long irqL;
 
 	u8 addrs[RTW_PRE_LINK_STA_NUM][ETH_ALEN];
 

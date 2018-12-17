@@ -1614,7 +1614,7 @@ _continue:
 #ifdef CONFIG_AUTO_AP_MODE
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE &&
 	    pmlmepriv->cur_network.join_res == _TRUE) {
-		_irqL	irqL;
+		unsigned long	irqL;
 		struct sta_info	*psta;
 		u8 *mac_addr, *peer_addr;
 		struct sta_priv *pstapriv = &padapter->stapriv;
@@ -2025,7 +2025,7 @@ unsigned int OnBeacon(_adapter *padapter, union recv_frame *precv_frame)
 					rtw_enable_hw_update_tsf_cmd(padapter);
 			}
 		} else if ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) {
-			_irqL irqL;
+			unsigned long irqL;
 			u8 rate_set[16];
 			u8 rate_num = 0;
 
@@ -2076,7 +2076,7 @@ _END_ONBEACON_:
 unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_AP_MODE
-	_irqL irqL;
+	unsigned long irqL;
 	unsigned int	auth_mode, seq, ie_len;
 	unsigned char	*sa, *p;
 	u16	algorithm;
@@ -2435,7 +2435,7 @@ authclnt_fail:
 unsigned int OnAssocReq(_adapter *padapter, union recv_frame *precv_frame)
 {
 #ifdef CONFIG_AP_MODE
-	_irqL irqL;
+	unsigned long irqL;
 	u16 capab_info, listen_interval;
 	struct rtw_ieee802_11_elems elems;
 	struct sta_info	*pstat;
@@ -3109,7 +3109,7 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
 
 #ifdef CONFIG_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) {
-		_irqL irqL;
+		unsigned long irqL;
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -3199,7 +3199,7 @@ unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
 
 #ifdef CONFIG_AP_MODE
 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == _TRUE) {
-		_irqL irqL;
+		unsigned long irqL;
 		struct sta_info *psta;
 		struct sta_priv *pstapriv = &padapter->stapriv;
 
@@ -3654,7 +3654,7 @@ u16 rtw_rx_ampdu_apply(_adapter *adapter)
 			adj_cnt += rx_ampdu_apply_sta(adapter, sta, accept, size);
 
 	} else if (mlmeext_msr(mlmeext) == WIFI_FW_AP_STATE) {
-		_irqL irqL;
+		unsigned long irqL;
 		_list *phead, *plist;
 		u8 peer_num = 0;
 		char peers[NUM_STA];
@@ -6806,7 +6806,7 @@ unsigned int OnAction_ft(_adapter *padapter, union recv_frame *precv_frame)
 	struct mlme_priv *pmlmepriv = NULL;
 	struct wlan_network *proam_target = NULL;
 	ft_priv *pftpriv = NULL;
-	_irqL  irqL;
+	unsigned long  irqL;
 
 	pmlmeext = &padapter->mlmeextpriv;
 	pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -7267,7 +7267,7 @@ void dump_mgntframe(_adapter *padapter, struct xmit_frame *pmgntframe)
 s32 dump_mgntframe_and_wait(_adapter *padapter, struct xmit_frame *pmgntframe, int timeout_ms)
 {
 	s32 ret = _FAIL;
-	_irqL irqL;
+	unsigned long irqL;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct xmit_buf *pxmitbuf = pmgntframe->pxmitbuf;
 	struct submit_ctx sctx;
@@ -7396,7 +7396,7 @@ void issue_beacon(_adapter *padapter, int timeout_ms)
 	unsigned int	rate_len;
 	struct xmit_priv	*pxmitpriv = &(padapter->xmitpriv);
 #if defined(CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME)
-	_irqL irqL;
+	unsigned long irqL;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 #endif /* #if defined (CONFIG_AP_MODE) && defined (CONFIG_NATIVEAP_MLME) */
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
@@ -9399,7 +9399,7 @@ exit:
 
 void issue_action_spct_ch_switch(_adapter *padapter, u8 *ra, u8 new_ch, u8 ch_offset)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list		*plist, *phead;
 	struct xmit_frame			*pmgntframe;
 	struct pkt_attrib			*pattrib;
@@ -9892,7 +9892,7 @@ exit:
 
 static void issue_action_BSSCoexistPacket(_adapter *padapter)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	_list		*plist, *phead;
 	unsigned char category, action;
 	struct xmit_frame			*pmgntframe;
@@ -10668,7 +10668,7 @@ void start_clnt_join(_adapter *padapter)
 			_list *pos = get_next(head);
 			struct wlan_network *scanned = NULL;
 			u8 ie_offset = 0;
-			_irqL irqL;
+			unsigned long irqL;
 			bool has_p2p_ie = _FALSE;
 
 			_enter_critical_bh(&(padapter->mlmepriv.scanned_queue.lock), &irqL);
@@ -11481,7 +11481,7 @@ Following are the event callback functions
 /* for sta/adhoc mode */
 void update_sta_info(_adapter *padapter, struct sta_info *psta)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
@@ -11809,7 +11809,7 @@ void _linked_info_dump(_adapter *padapter)
 			RTW_INFO("AP[" MAC_FMT "] - undecorated_smoothed_pwdb:%d\n",
 				MAC_ARG(padapter->mlmepriv.cur_network.network.MacAddress), undecorated_smoothed_pwdb);
 		} else if ((pmlmeinfo->state & 0x03) == _HW_STATE_AP_) {
-			_irqL irqL;
+			unsigned long irqL;
 			_list	*phead, *plist;
 
 			struct sta_info *psta = NULL;
@@ -11977,7 +11977,7 @@ void linked_status_chk_tdls(_adapter *padapter)
 		u8 addr[ETH_ALEN];
 	};
 	struct sta_priv *pstapriv = &padapter->stapriv;
-	_irqL irqL;
+	unsigned long irqL;
 	u8 ack_chk;
 	struct sta_info *psta;
 	int i, num_teardown = 0, num_checkalive = 0;
@@ -12254,7 +12254,7 @@ bypass_active_keep_alive:
 		} /* end of if ((psta = rtw_get_stainfo(pstapriv, passoc_res->network.MacAddress)) != NULL) */
 
 	} else if (is_client_associated_to_ibss(padapter)) {
-		_irqL irqL;
+		unsigned long irqL;
 		_list *phead, *plist, dlist;
 
 		_rtw_init_listhead(&dlist);
@@ -12488,7 +12488,7 @@ void clnt_sa_query_timeout(_adapter *padapter)
 void sa_query_timer_hdl(struct sta_info *psta)
 {
 	_adapter *padapter = psta->padapter;
-	_irqL irqL;
+	unsigned long irqL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
@@ -12624,7 +12624,7 @@ void report_ft_event(_adapter *padapter)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	WLAN_BSSID_EX		*pnetwork = (WLAN_BSSID_EX *)(&(pmlmeinfo->network));
 	struct cfg80211_ft_event_params ft_evt_parms;
-	_irqL irqL;
+	unsigned long irqL;
 
 	memset(&ft_evt_parms, 0, sizeof(ft_evt_parms));
 	rtw_update_ft_stainfo(padapter, pnetwork);
@@ -14532,7 +14532,7 @@ u8 h2c_msg_hdl(_adapter *padapter, unsigned char *pbuf)
 u8 chk_bmc_sleepq_hdl(_adapter *padapter, unsigned char *pbuf)
 {
 #ifdef CONFIG_AP_MODE
-	_irqL irqL;
+	unsigned long irqL;
 	struct sta_info *psta_bmc;
 	_list	*xmitframe_plist, *xmitframe_phead;
 	struct xmit_frame *pxmitframe = NULL;
@@ -15027,7 +15027,7 @@ u8 set_csa_hdl(_adapter *padapter, unsigned char *pbuf)
 u8 tdls_hdl(_adapter *padapter, unsigned char *pbuf)
 {
 #ifdef CONFIG_TDLS
-	_irqL irqL;
+	unsigned long irqL;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 #ifdef CONFIG_TDLS_CH_SW

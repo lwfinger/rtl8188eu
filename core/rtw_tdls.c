@@ -268,7 +268,7 @@ void free_tdls_sta(_adapter *padapter, struct sta_info *ptdls_sta)
 {
 	struct tdls_info *ptdlsinfo = &padapter->tdlsinfo;
 	struct sta_priv *pstapriv = &padapter->stapriv;
-	_irqL irqL;
+	unsigned long irqL;
 
 	/* free peer sta_info */
 	_enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL);
@@ -887,7 +887,7 @@ int issue_tdls_setup_req(_adapter *padapter, struct tdls_txmgmt *ptxmgmt, int wa
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct sta_info *ptdls_sta = NULL;
-	_irqL irqL;
+	unsigned long irqL;
 	int ret = _FAIL;
 	/* Retry timer should be set at least 301 sec, using TPK_count counting 301 times. */
 	u32 timeout_interval = TDLS_TPK_RESEND_COUNT;
@@ -966,7 +966,7 @@ int _issue_tdls_teardown(_adapter *padapter, struct tdls_txmgmt *ptxmgmt, u8 wai
 	struct xmit_priv			*pxmitpriv = &(padapter->xmitpriv);
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct sta_info	*ptdls_sta = NULL;
-	_irqL irqL;
+	unsigned long irqL;
 	int ret = _FAIL;
 
 	RTW_INFO("[TDLS] %s\n", __func__);
@@ -1487,7 +1487,7 @@ sint On_TDLS_Setup_Req(_adapter *padapter, union recv_frame *precv_frame)
 	u8 *ptr = precv_frame->u.hdr.rx_data;
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
-	_irqL irqL;
+	unsigned long irqL;
 	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
 	u8 *prsnie, *ppairwise_cipher;
 	u8 i, k;
@@ -1686,7 +1686,7 @@ int On_TDLS_Setup_Rsp(_adapter *padapter, union recv_frame *precv_frame)
 	struct sta_info *ptdls_sta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	u8 *ptr = precv_frame->u.hdr.rx_data;
-	_irqL irqL;
+	unsigned long irqL;
 	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
 	u8 *psa;
 	u16 status_code = 0;
@@ -1863,7 +1863,7 @@ int On_TDLS_Setup_Cfm(_adapter *padapter, union recv_frame *precv_frame)
 	struct sta_info *ptdls_sta = NULL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	u8 *ptr = precv_frame->u.hdr.rx_data;
-	_irqL irqL;
+	unsigned long irqL;
 	struct rx_pkt_attrib	*prx_pkt_attrib = &precv_frame->u.hdr.attrib;
 	u8 *psa;
 	u16 status_code = 0;
@@ -2039,7 +2039,7 @@ int On_TDLS_Teardown(_adapter *padapter, union recv_frame *precv_frame)
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct sta_priv	*pstapriv = &padapter->stapriv;
 	struct sta_info *ptdls_sta = NULL;
-	_irqL irqL;
+	unsigned long irqL;
 	u8 reason;
 
 	reason = *(ptr + prx_pkt_attrib->hdrlen + prx_pkt_attrib->iv_len + LLC_HEADER_SIZE + ETH_TYPE_LEN + PAYLOAD_TYPE_LEN + 2);
@@ -2102,7 +2102,7 @@ int On_TDLS_Peer_Traffic_Rsp(_adapter *padapter, union recv_frame *precv_frame)
 	/* If it's a direct link and have buffered frame */
 	if (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE) {
 		if (wmmps_ac) {
-			_irqL irqL;
+			unsigned long irqL;
 			_list	*xmitframe_plist, *xmitframe_phead;
 			struct xmit_frame *pxmitframe = NULL;
 

@@ -1268,7 +1268,7 @@ void rtw_hal_mcc_c2h_handler(PADAPTER padapter, u8 buflen, u8 *tmpBuf)
 	struct mcc_obj_priv *pmccobjpriv = &(adapter_to_dvobj(padapter)->mcc_objpriv);
 	struct mcc_adapter_priv *pmccadapriv = &padapter->mcc_adapterpriv;
 	struct submit_ctx *mcc_sctx = &pmccobjpriv->mcc_sctx;
-	_irqL irqL;
+	unsigned long irqL;
 
 	/* RTW_INFO("[length]=%d, [C2H data]="MAC_FMT"\n", buflen, MAC_ARG(tmpBuf)); */
 	/* To avoid reg is set, but driver recive c2h to set wrong oper_channel */
@@ -1330,7 +1330,7 @@ void rtw_hal_mcc_sw_status_check(PADAPTER padapter)
 	struct mcc_obj_priv *pmccobjpriv = &(dvobj->mcc_objpriv);
 	struct pwrctrl_priv	*pwrpriv = dvobj_to_pwrctl(dvobj);
 	u8 cur_cnt = 0, prev_cnt = 0, diff_cnt = 0, check_ret = _FAIL;
-	_irqL irqL;
+	unsigned long irqL;
 
 /* #define MCC_RESTART 1 */
 

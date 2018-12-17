@@ -254,7 +254,7 @@ extern u8 dump_cmd_id;
 
 sint _rtw_enqueue_cmd(_queue *queue, struct cmd_obj *obj, bool to_head)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 
 	if (obj == NULL)
@@ -315,7 +315,7 @@ exit:
 
 struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct cmd_obj *obj;
 
 
@@ -544,7 +544,7 @@ thread_return rtw_cmd_thread(thread_context context)
 	PADAPTER padapter = (PADAPTER)context;
 	struct cmd_priv *pcmdpriv = &(padapter->cmdpriv);
 	struct drvextra_cmd_parm *extra_parm = NULL;
-	_irqL irqL;
+	unsigned long irqL;
 
 	thread_enter("RTW_CMD_THREAD");
 
@@ -743,7 +743,7 @@ post_process:
 #ifdef CONFIG_EVENT_THREAD_MODE
 u32 rtw_enqueue_evt(struct evt_priv *pevtpriv, struct evt_obj *obj)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	int	res;
 	_queue *queue = &pevtpriv->evt_queue;
 
@@ -771,7 +771,7 @@ exit:
 
 struct evt_obj *rtw_dequeue_evt(_queue *queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct	evt_obj	*pevtobj;
 
 
@@ -4177,7 +4177,7 @@ static void session_tracker_chk_for_sta(_adapter *adapter, struct sta_info *sta)
 {
 	struct st_ctl_t *st_ctl = &sta->st_ctl;
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 	_list *plist, *phead, *pnext;
 	_list dlist;
 	struct session_tracker *st = NULL;
@@ -4256,7 +4256,7 @@ static void session_tracker_chk_for_adapter(_adapter *adapter)
 	struct sta_priv *stapriv = &adapter->stapriv;
 	struct sta_info *sta;
 	int i;
-	_irqL irqL;
+	unsigned long irqL;
 	_list *plist, *phead;
 	u8 op_wfd_mode = MIRACAST_DISABLED;
 
@@ -4303,7 +4303,7 @@ static void session_tracker_cmd_hdl(_adapter *adapter, struct st_cmd_parm *parm)
 		u32 remote_naddr = parm->remote_naddr;
 		u16 remote_port = parm->remote_port;
 		struct session_tracker *st = NULL;
-		_irqL irqL;
+		unsigned long irqL;
 		_list *plist, *phead;
 		u8 free_st = 0;
 		u8 alloc_st = 0;
@@ -4536,7 +4536,7 @@ void rtw_survey_cmd_callback(_adapter	*padapter ,  struct cmd_obj *pcmd)
 }
 void rtw_disassoc_cmd_callback(_adapter	*padapter,  struct cmd_obj *pcmd)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 
@@ -4585,7 +4585,7 @@ void rtw_joinbss_cmd_callback(_adapter	*padapter,  struct cmd_obj *pcmd)
 
 void rtw_create_ibss_post_hdl(_adapter *padapter, int status)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	u8 timer_cancelled;
 	struct sta_info *psta = NULL;
 	struct wlan_network *pwlan = NULL;
@@ -4601,7 +4601,7 @@ void rtw_create_ibss_post_hdl(_adapter *padapter, int status)
 	_enter_critical_bh(&pmlmepriv->lock, &irqL);
 
 	{
-		_irqL irqL;
+		unsigned long irqL;
 
 		pwlan = _rtw_alloc_network(pmlmepriv);
 		_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
@@ -4657,7 +4657,7 @@ exit:
 }
 void rtw_setassocsta_cmdrsp_callback(_adapter	*padapter,  struct cmd_obj *pcmd)
 {
-	_irqL	irqL;
+	unsigned long	irqL;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
 	struct set_assocsta_parm *passocsta_parm = (struct set_assocsta_parm *)(pcmd->parmbuf);

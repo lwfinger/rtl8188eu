@@ -239,7 +239,7 @@ union recv_frame *_rtw_alloc_recvframe(_queue *pfree_recv_queue)
 
 union recv_frame *rtw_alloc_recvframe(_queue *pfree_recv_queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	union recv_frame  *precvframe;
 
 	_enter_critical_bh(&pfree_recv_queue->lock, &irqL);
@@ -261,7 +261,7 @@ void rtw_init_recvframe(union recv_frame *precvframe, struct recv_priv *precvpri
 
 int rtw_free_recvframe(union recv_frame *precvframe, _queue *pfree_recv_queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	_adapter *padapter = precvframe->u.hdr.adapter;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 
@@ -325,7 +325,7 @@ sint _rtw_enqueue_recvframe(union recv_frame *precvframe, _queue *queue)
 sint rtw_enqueue_recvframe(union recv_frame *precvframe, _queue *queue)
 {
 	sint ret;
-	_irqL irqL;
+	unsigned long irqL;
 
 	/* _spinlock(&pfree_recv_queue->lock); */
 	_enter_critical_bh(&queue->lock, &irqL);
@@ -397,7 +397,7 @@ u32 rtw_free_uc_swdec_pending_queue(_adapter *adapter)
 
 sint rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, _queue *queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_bh(&queue->lock, &irqL);
 
@@ -410,7 +410,7 @@ sint rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, _queue *queue)
 
 sint rtw_enqueue_recvbuf(struct recv_buf *precvbuf, _queue *queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 
 	_enter_critical_ex(&queue->lock, &irqL);
 
@@ -423,7 +423,7 @@ sint rtw_enqueue_recvbuf(struct recv_buf *precvbuf, _queue *queue)
 
 struct recv_buf *rtw_dequeue_recvbuf(_queue *queue)
 {
-	_irqL irqL;
+	unsigned long irqL;
 	struct recv_buf *precvbuf;
 	_list	*plist, *phead;
 
@@ -1591,7 +1591,7 @@ sint validate_recv_ctrl_frame(_adapter *padapter, union recv_frame *precv_frame)
 		}
 
 		if ((psta->state & WIFI_SLEEP_STATE) && (pstapriv->sta_dz_bitmap & BIT(psta->aid))) {
-			_irqL irqL;
+			unsigned long irqL;
 			_list	*xmitframe_plist, *xmitframe_phead;
 			struct xmit_frame *pxmitframe = NULL;
 			struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
@@ -2708,7 +2708,7 @@ void recv_indicatepkts_pkt_loss_cnt(struct debug_priv *pdbgpriv, u64 prev_seq, u
 int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *preorder_ctrl, int bforced);
 int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *preorder_ctrl, int bforced)
 {
-	/* _irqL irql; */
+	/* unsigned long irql; */
 	/* u8 bcancelled; */
 	_list	*phead, *plist;
 	union recv_frame *prframe;
@@ -2800,7 +2800,7 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 
 static int recv_indicatepkt_reorder(_adapter *padapter, union recv_frame *prframe)
 {
-	_irqL irql;
+	unsigned long irql;
 	int retval = _SUCCESS;
 	struct rx_pkt_attrib *pattrib = &prframe->u.hdr.attrib;
 	struct recv_reorder_ctrl *preorder_ctrl = prframe->u.hdr.preorder_ctrl;
@@ -2952,7 +2952,7 @@ _err_exit:
 
 void rtw_reordering_ctrl_timeout_handler(void *pcontext)
 {
-	_irqL irql;
+	unsigned long irql;
 	struct recv_reorder_ctrl *preorder_ctrl = (struct recv_reorder_ctrl *)pcontext;
 	_adapter *padapter = preorder_ctrl->padapter;
 	_queue *ppending_recvframe_queue = &preorder_ctrl->pending_recvframe_queue;
@@ -4060,7 +4060,7 @@ void rx_query_phy_status(
 	struct sta_info *psta = NULL;
 	struct dvobj_priv *psdpriv = padapter->dvobj;
 	struct debug_priv *pdbgpriv = &psdpriv->drv_dbg;
-	/* _irqL		irqL; */
+	/* unsigned long		irqL; */
 
 	pkt_info.is_packet_match_bssid = _FALSE;
 	pkt_info.is_packet_to_self = _FALSE;
