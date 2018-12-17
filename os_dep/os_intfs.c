@@ -2787,7 +2787,7 @@ int _netdev_open(struct net_device *pnetdev)
 #endif /* CONFIG_BR_EXT */
 
 #ifdef CONFIG_BT_COEXIST_SOCKET_TRX
-	if (is_primary_adapter(padapter) && (true == pHalData->EEPROMBluetoothCoexist)) {
+	if (is_primary_adapter(padapter) && (pHalData->EEPROMBluetoothCoexist)) {
 		rtw_btcoex_init_socket(padapter);
 		padapter->coex_info.BtMgnt.ExtConfig.HCIExtensionVer = 0x04;
 		rtw_btcoex_SetHciVersion(padapter, 0x04);
@@ -2964,7 +2964,7 @@ int pm_netdev_open(struct net_device *pnetdev, u8 bnormal)
 
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(pnetdev);
 
-	if (true == bnormal) {
+	if (bnormal) {
 		_enter_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
 		status = _netdev_open(pnetdev);
 		_exit_critical_mutex(&(adapter_to_dvobj(padapter)->hw_init_mutex), NULL);
@@ -3051,7 +3051,7 @@ static int netdev_close(struct net_device *pnetdev)
 	rtw_wapi_disable_tx(padapter);
 #endif
 #ifdef CONFIG_BT_COEXIST_SOCKET_TRX
-	if (is_primary_adapter(padapter) && (true == pHalData->EEPROMBluetoothCoexist))
+	if (is_primary_adapter(padapter) && (pHalData->EEPROMBluetoothCoexist))
 		rtw_btcoex_close_socket(padapter);
 	else
 		RTW_INFO("CONFIG_BT_COEXIST: VIRTUAL_ADAPTER\n");
@@ -3827,7 +3827,7 @@ int rtw_suspend_common(_adapter *padapter)
 #ifdef CONFIG_P2P_WOWLAN
 		if (!rtw_p2p_chk_state(&padapter->wdinfo, P2P_STATE_NONE) || P2P_ROLE_DISABLE != padapter->wdinfo.role)
 			pwrpriv->wowlan_p2p_mode = true;
-		if (true == pwrpriv->wowlan_p2p_mode)
+		if (pwrpriv->wowlan_p2p_mode)
 			pwrpriv->wowlan_mode |= pwrpriv->wowlan_p2p_mode;
 #endif /* CONFIG_P2P_WOWLAN */
 

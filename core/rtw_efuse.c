@@ -566,7 +566,7 @@ u8 rtw_efuse_access(PADAPTER padapter, u8 bWrite, u16 start_addr, u16 cnts, u8 *
 	if (start_addr > real_content_len)
 		return _FAIL;
 
-	if (true == bWrite) {
+	if (bWrite) {
 		if ((start_addr + cnts) > max_available_size)
 			return _FAIL;
 		rw8 = &efuse_write8;

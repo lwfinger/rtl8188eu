@@ -746,7 +746,7 @@ u8 *rtw_tdls_set_wmm_params(_adapter *padapter, u8 *pframe, struct pkt_attrib *p
 
 	if (&pmlmeinfo->WMM_param) {
 		_rtw_memcpy(wmm_param_ele, WMM_PARA_OUI, 6);
-		if (_rtw_memcmp(&pmlmeinfo->WMM_param, &wmm_param_ele[6], 18) == true)
+		if (!memcmp(&pmlmeinfo->WMM_param, &wmm_param_ele[6], 18) == true)
 			/* Use default WMM Param */
 			_rtw_memcpy(wmm_param_ele + 6, (u8 *)&TDLS_WMM_PARAM_IE, sizeof(TDLS_WMM_PARAM_IE));
 		else
@@ -1436,7 +1436,7 @@ int On_TDLS_Dis_Rsp(_adapter *padapter, union recv_frame *precv_frame)
 	if (ptdls_sta != NULL) {
 		/* Record the tdls sta with lowest signal strength */
 		if (ptdlsinfo->sta_maximum == true && ptdls_sta->alive_count >= 1) {
-			if (_rtw_memcmp(ptdlsinfo->ss_record.macaddr, empty_addr, ETH_ALEN)) {
+			if (!memcmp(ptdlsinfo->ss_record.macaddr, empty_addr, ETH_ALEN)) {
 				_rtw_memcpy(ptdlsinfo->ss_record.macaddr, psa, ETH_ALEN);
 				ptdlsinfo->ss_record.RxPWDBAll = pattrib->phy_info.RxPWDBAll;
 			} else {
@@ -1448,7 +1448,7 @@ int On_TDLS_Dis_Rsp(_adapter *padapter, union recv_frame *precv_frame)
 		}
 	} else {
 		if (ptdlsinfo->sta_maximum == true) {
-			if (_rtw_memcmp(ptdlsinfo->ss_record.macaddr, empty_addr, ETH_ALEN)) {
+			if (!memcmp(ptdlsinfo->ss_record.macaddr, empty_addr, ETH_ALEN)) {
 				/* All traffics are busy, do not set up another direct link. */
 				ret = _FAIL;
 				goto exit;
@@ -1581,7 +1581,7 @@ sint On_TDLS_Setup_Req(_adapter *padapter, union recv_frame *precv_frame)
 					_rtw_memcpy(ptdls_sta->TDLS_RSNIE, pIE->data, pIE->Length);
 					pairwise_count = *(u16 *)(ppairwise_cipher - 2);
 					for (k = 0; k < pairwise_count; k++) {
-						if (_rtw_memcmp(ppairwise_cipher + 4 * k, RSN_CIPHER_SUITE_CCMP, 4) == true)
+						if (!memcmp(ppairwise_cipher + 4 * k, RSN_CIPHER_SUITE_CCMP, 4) == true)
 							ccmp_included = 1;
 					}
 
@@ -1609,7 +1609,7 @@ sint On_TDLS_Setup_Req(_adapter *padapter, union recv_frame *precv_frame)
 			case EID_BSSCoexistence:
 				break;
 			case _LINK_ID_IE_:
-				if (_rtw_memcmp(get_bssid(pmlmepriv), pIE->data, 6) == false)
+				if (!memcmp(get_bssid(pmlmepriv), pIE->data, 6) == false)
 					txmgmt.status_code = _STATS_NOT_IN_SAME_BSS_;
 				break;
 			default:
@@ -1759,13 +1759,13 @@ int On_TDLS_Setup_Rsp(_adapter *padapter, union recv_frame *precv_frame)
 			ppairwise_cipher = prsnie + 10;
 			_rtw_memcpy(&pairwise_count, (u16 *)(ppairwise_cipher - 2), 2);
 			for (k = 0; k < pairwise_count; k++) {
-				if (_rtw_memcmp(ppairwise_cipher + 4 * k, RSN_CIPHER_SUITE_CCMP, 4) == true)
+				if (!memcmp(ppairwise_cipher + 4 * k, RSN_CIPHER_SUITE_CCMP, 4) == true)
 					verify_ccmp = 1;
 			}
 		case _EXT_CAP_IE_:
 			break;
 		case _VENDOR_SPECIFIC_IE_:
-			if (_rtw_memcmp((u8 *)pIE + 2, WMM_INFO_OUI, 6) == true) {
+			if (!memcmp((u8 *)pIE + 2, WMM_INFO_OUI, 6) == true) {
 				/* WMM Info ID and OUI */
 				if ((pregistrypriv->wmm_enable == true) || (padapter->mlmepriv.htpriv.ht_option == true))
 					ptdls_sta->qos_option = true;
@@ -1912,7 +1912,7 @@ int On_TDLS_Setup_Cfm(_adapter *padapter, union recv_frame *precv_frame)
 			prsnie = (u8 *)pIE;
 			break;
 		case _VENDOR_SPECIFIC_IE_:
-			if (_rtw_memcmp((u8 *)pIE + 2, WMM_PARA_OUI, 6) == true) {
+			if (!memcmp((u8 *)pIE + 2, WMM_PARA_OUI, 6) == true) {
 				/* WMM Parameter ID and OUI */
 				ptdls_sta->qos_option = true;
 			}
@@ -2012,7 +2012,7 @@ int On_TDLS_Dis_Req(_adapter *padapter, union recv_frame *precv_frame)
 			if (psta_ap == NULL)
 				goto exit;
 			dst = pIE->data + 12;
-			if (MacAddr_isBcst(dst) == false && (_rtw_memcmp(adapter_mac_addr(padapter), dst, 6) == false))
+			if (MacAddr_isBcst(dst) == false && (!memcmp(adapter_mac_addr(padapter), dst, 6) == false))
 				goto exit;
 			break;
 		default:
@@ -2260,7 +2260,7 @@ sint On_TDLS_Ch_Switch_Req(_adapter *padapter, union recv_frame *precv_frame)
 	txmgmt.status_code = 0;
 	_rtw_memcpy(txmgmt.peer, psa, ETH_ALEN);
 
-	if (_rtw_memcmp(pchsw_info->addr, zaddr, ETH_ALEN) == true)
+	if (!memcmp(pchsw_info->addr, zaddr, ETH_ALEN) == true)
 		_rtw_memcpy(pchsw_info->addr, ptdls_sta->hwaddr, ETH_ALEN);
 
 	if (ATOMIC_READ(&pchsw_info->chsw_on) == false)

@@ -703,15 +703,6 @@ inline void _rtw_memmove(void *dst, const void *src, u32 sz)
 	memmove(dst, src, sz);
 }
 
-int	_rtw_memcmp(const void *dst, const void *src, u32 sz)
-{
-	/* under Linux/GNU/GLibc, the return value of memcmp for two same mem. chunk is 0 */
-	if (!(memcmp(dst, src, sz)))
-		return true;
-	else
-		return false;
-}
-
 void _rtw_init_listhead(_list *list)
 {
 	INIT_LIST_HEAD(list);

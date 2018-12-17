@@ -105,7 +105,7 @@ void rtl8188e_fill_fake_txdesc(
 		ptxdesc->txdw3 |= cpu_to_le32((8 << 28)); /* set bit3 to 1. Suugested by TimChen. 2009.12.29. */
 	}
 
-	if (true == IsBTQosNull) {
+	if (IsBTQosNull) {
 		ptxdesc->txdw2 |= cpu_to_le32(BIT(23)); /* BT NULL */
 	}
 
@@ -115,7 +115,7 @@ void rtl8188e_fill_fake_txdesc(
 	/*  */
 	/* Encrypt the data frame if under security mode excepct null data. Suggested by CCW. */
 	/*  */
-	if (true == bDataFrame) {
+	if (bDataFrame) {
 		u32 EncAlg;
 
 		EncAlg = padapter->securitypriv.dot11PrivacyAlgrthm;

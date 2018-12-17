@@ -1772,7 +1772,7 @@ s32 rtw_hal_customer_str_write(_adapter *adapter, const u8 *cs)
 	_enter_critical_mutex(&dvobj->customer_str_mutex, NULL);
 	dvobj->customer_str_sctx = NULL;
 	if (sctx.status == RTW_SCTX_DONE_SUCCESS) {
-		if (_rtw_memcmp(cs, dvobj->customer_str, RTW_CUSTOMER_STR_LEN) != true) {
+		if (memcmp(cs, dvobj->customer_str, RTW_CUSTOMER_STR_LEN)) {
 			RTW_WARN("%s read back check fail\n", __func__);
 			RTW_INFO_DUMP("write req: ", cs, RTW_CUSTOMER_STR_LEN);
 			RTW_INFO_DUMP("read back: ", dvobj->customer_str, RTW_CUSTOMER_STR_LEN);
@@ -2084,7 +2084,7 @@ static u8 _rtw_mbid_cam_search_by_macaddr(_adapter *adapter, u8 *mac_addr)
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 
 	for (i = 0; i < TOTAL_MBID_CAM_NUM; i++) {
-		if (mac_addr && _rtw_memcmp(dvobj->mbid_cam_cache[i].mac_addr, mac_addr, ETH_ALEN) == true) {
+		if (mac_addr && !memcmp(dvobj->mbid_cam_cache[i].mac_addr, mac_addr, ETH_ALEN) == true) {
 			cam_id = i;
 			break;
 		}
@@ -3248,7 +3248,7 @@ static u8 rtw_hal_pause_rx_dma(_adapter *adapter)
 	do {
 		if ((rtw_read32(adapter, REG_RXPKT_NUM) & RXDMA_IDLE)) {
 			/* stop interface before leave */
-			if (true == hal->usb_intf_start) {
+			if (hal->usb_intf_start) {
 				rtw_intf_stop(adapter);
 				RTW_ENABLE_FUNC(adapter, DF_RX_BIT);
 				RTW_ENABLE_FUNC(adapter, DF_TX_BIT);
@@ -3807,7 +3807,7 @@ static u8 rtw_hal_set_remote_wake_ctrl_cmd(_adapter *adapter, u8 enable)
 #endif
 
 #ifdef CONFIG_P2P_WOWLAN
-	if (true == ppwrpriv->wowlan_p2p_mode) {
+	if (ppwrpriv->wowlan_p2p_mode) {
 		RTW_INFO("P2P OFFLOAD ENABLE\n");
 		SET_H2CCMD_REMOTE_WAKE_CTRL_P2P_OFFLAD_EN(u1H2CRemoteWakeCtrlParm, 1);
 	} else {
@@ -4575,7 +4575,7 @@ static void rtw_hal_construct_P2PProbeRsp(_adapter *padapter, u8 *pframe, u32 *p
 #ifdef CONFIG_INTEL_WIDI
 		/*	Commented by Kurt */
 		/*	Appended WiDi info. only if we did issued_probereq_widi(), and then we saved ven. ext. in pmlmepriv->sa_ext. */
-		if (_rtw_memcmp(pmlmepriv->sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN) == false
+		if (!memcmp(pmlmepriv->sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN) == false
 		    || pmlmepriv->num_p2p_sdt != 0) {
 			/* Sec dev type */
 			*(u16 *)(wpsie + wpsielen) = cpu_to_be16(WPS_ATTR_SEC_DEV_TYPE_LIST);
@@ -4597,7 +4597,7 @@ static void rtw_hal_construct_P2PProbeRsp(_adapter *padapter, u8 *pframe, u32 *p
 			*(u16 *)(wpsie + wpsielen) = cpu_to_be16(WPS_PDT_SCID_WIDI_CONSUMER_SINK);
 			wpsielen += 2;
 
-			if (_rtw_memcmp(pmlmepriv->sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN) == false) {
+			if (!memcmp(pmlmepriv->sa_ext, zero_array_check, L2SDTA_SERVICE_VE_LEN) == false) {
 				/*	Vendor Extension */
 				_rtw_memcpy(wpsie + wpsielen, pmlmepriv->sa_ext, L2SDTA_SERVICE_VE_LEN);
 				wpsielen += L2SDTA_SERVICE_VE_LEN;
@@ -5697,9 +5697,9 @@ static void rtw_hal_append_tkip_mic(PADAPTER padapter,
 	psta = rtw_get_stainfo(&padapter->stapriv,
 			get_my_bssid(&(pmlmeinfo->network)));
 	if (psta != NULL) {
-		res = _rtw_memcmp(&psta->dot11tkiptxmickey.skey[0],
+		res = !memcmp(&psta->dot11tkiptxmickey.skey[0],
 				  null_key, 16);
-		if (res == true)
+		if (res)
 			RTW_INFO("%s(): STA dot11tkiptxmickey==0\n", __func__);
 		rtw_secmicsetkey(&micdata, &psta->dot11tkiptxmickey.skey[0]);
 	}
@@ -7911,7 +7911,7 @@ void rtw_hal_set_fw_rsvd_page(_adapter *adapter, bool finished)
 #endif /* CONFIG_WOWLAN */
 
 #ifdef CONFIG_P2P_WOWLAN
-	if (true == pwrctl->wowlan_p2p_mode) {
+	if (pwrctl->wowlan_p2p_mode) {
 		rtw_hal_set_p2p_wow_fw_rsvd_page(adapter, ReservedPagePacket,
 						 BufIndex, TxDescLen, PageSize,
 				 &TotalPageNum, &TotalPacketLen, &RsvdPageLoc);
@@ -7985,7 +7985,7 @@ download_page:
 #endif /* CONFIG_PNO_SUPPORT */
 	}
 #ifdef CONFIG_P2P_WOWLAN
-	if (true == pwrctl->wowlan_p2p_mode)
+	if (pwrctl->wowlan_p2p_mode)
 		rtw_hal_set_FwP2PRsvdPage_cmd(adapter, &RsvdPageLoc);
 #endif /* CONFIG_P2P_WOWLAN */
 	return;
@@ -9019,9 +9019,9 @@ void rtw_dump_rx_dframe_info(_adapter *padapter, void *sel)
 
 				if (psta) {
 					psta_dframe_info = &psta->sta_dframe_info;
-					if ((_rtw_memcmp(psta->hwaddr, bc_addr, 6)  !=   true)
-					    && (_rtw_memcmp(psta->hwaddr, null_addr, 6)  !=  true)
-					    && (_rtw_memcmp(psta->hwaddr, adapter_mac_addr(padapter), 6)  !=  true)) {
+					if ((memcmp(psta->hwaddr, bc_addr, 6))
+					    && (memcmp(psta->hwaddr, null_addr, 6))
+					    && (memcmp(psta->hwaddr, adapter_mac_addr(padapter), 6))) {
 
 
 						isCCKrate = (psta_dframe_info->sta_data_rate <= DESC_RATE11M) ? true : false;
@@ -9114,7 +9114,7 @@ void rtw_store_phy_info(_adapter *padapter, union recv_frame *prframe)
 			if (psta) {
 				psta_dframe_info = &psta->sta_dframe_info;
 				/*RTW_INFO("=>%s psta->hwaddr="MAC_FMT" !\n", __func__, MAC_ARG(psta->hwaddr));*/
-				if ((_rtw_memcmp(psta->hwaddr, bc_addr, ETH_ALEN) != true) || (padapter->registrypriv.mp_mode == 1)) {
+				if ((memcmp(psta->hwaddr, bc_addr, ETH_ALEN)) || (padapter->registrypriv.mp_mode == 1)) {
 					psta_dframe_info->sta_data_rate = pattrib->data_rate;
 					psta_dframe_info->sta_sgi = pattrib->sgi;
 					psta_dframe_info->sta_bw_mode = pattrib->bw;
@@ -10099,7 +10099,7 @@ void update_IOT_info(_adapter *padapter)
 #ifdef CONFIG_AUTO_CHNL_SEL_NHM
 void rtw_acs_start(_adapter *padapter, bool bStart)
 {
-	if (true == bStart) {
+	if (bStart) {
 		ACS_OP acs_op = ACS_INIT;
 
 		rtw_hal_set_odm_var(padapter, HAL_ODM_AUTO_CHNL_SEL, &acs_op, true);
@@ -10513,37 +10513,37 @@ static void rtw_dump_phy_cap_by_hal(void *sel, _adapter *adapter)
 
 	/* STBC */
 	rtw_hal_get_def_var(adapter, HAL_DEF_TX_STBC, (u8 *)&phy_cap);
-	RTW_PRINT_SEL(sel, "[HAL] STBC Tx : %s\n", (true == phy_cap) ? "Supported" : "N/A");
+	RTW_PRINT_SEL(sel, "[HAL] STBC Tx : %s\n", (phy_cap) ? "Supported" : "N/A");
 
 	phy_cap = false;
 	rtw_hal_get_def_var(adapter, HAL_DEF_RX_STBC, (u8 *)&phy_cap);
-	RTW_PRINT_SEL(sel, "[HAL] STBC Rx : %s\n\n", (true == phy_cap) ? "Supported" : "N/A");
+	RTW_PRINT_SEL(sel, "[HAL] STBC Rx : %s\n\n", (phy_cap) ? "Supported" : "N/A");
 
 	/* LDPC support */
 	phy_cap = false;
 	rtw_hal_get_def_var(adapter, HAL_DEF_TX_LDPC, (u8 *)&phy_cap);
-	RTW_PRINT_SEL(sel, "[HAL] LDPC Tx : %s\n", (true == phy_cap) ? "Supported" : "N/A");
+	RTW_PRINT_SEL(sel, "[HAL] LDPC Tx : %s\n", (phy_cap) ? "Supported" : "N/A");
 
 	phy_cap = false;
 	rtw_hal_get_def_var(adapter, HAL_DEF_RX_LDPC, (u8 *)&phy_cap);
-	RTW_PRINT_SEL(sel, "[HAL] LDPC Rx : %s\n\n", (true == phy_cap) ? "Supported" : "N/A");
+	RTW_PRINT_SEL(sel, "[HAL] LDPC Rx : %s\n\n", (phy_cap) ? "Supported" : "N/A");
 	
 	#ifdef CONFIG_BEAMFORMING
 	phy_cap = false;
 	rtw_hal_get_def_var(adapter, HAL_DEF_EXPLICIT_BEAMFORMER, (u8 *)&phy_cap);
-	RTW_PRINT_SEL(sel, "[HAL] Beamformer: %s\n", (true == phy_cap) ? "Supported" : "N/A");
+	RTW_PRINT_SEL(sel, "[HAL] Beamformer: %s\n", (phy_cap) ? "Supported" : "N/A");
 
 	phy_cap = false;
 	rtw_hal_get_def_var(adapter, HAL_DEF_EXPLICIT_BEAMFORMEE, (u8 *)&phy_cap);
-	RTW_PRINT_SEL(sel, "[HAL] Beamformee: %s\n", (true == phy_cap) ? "Supported" : "N/A");
+	RTW_PRINT_SEL(sel, "[HAL] Beamformee: %s\n", (phy_cap) ? "Supported" : "N/A");
 
 	phy_cap = false;
 	rtw_hal_get_def_var(adapter, HAL_DEF_VHT_MU_BEAMFORMER, &phy_cap);
-	RTW_PRINT_SEL(sel, "[HAL] VHT MU Beamformer: %s\n", (true == phy_cap) ? "Supported" : "N/A");
+	RTW_PRINT_SEL(sel, "[HAL] VHT MU Beamformer: %s\n", (phy_cap) ? "Supported" : "N/A");
 
 	phy_cap = false;
 	rtw_hal_get_def_var(adapter, HAL_DEF_VHT_MU_BEAMFORMEE, &phy_cap);
-	RTW_PRINT_SEL(sel, "[HAL] VHT MU Beamformee: %s\n", (true == phy_cap) ? "Supported" : "N/A");
+	RTW_PRINT_SEL(sel, "[HAL] VHT MU Beamformee: %s\n", (phy_cap) ? "Supported" : "N/A");
 	#endif
 }
 #endif

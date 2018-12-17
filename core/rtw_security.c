@@ -2070,7 +2070,7 @@ u32	rtw_BIP_verify(_adapter *padapter, u8 *precvframe)
 			goto BIP_exit;
 
 		/* MIC field should be last 8 bytes of packet (packet without FCS) */
-		if (_rtw_memcmp(mic, pframe + pattrib->pkt_len - 8, 8)) {
+		if (!memcmp(mic, pframe + pattrib->pkt_len - 8, 8)) {
 			pmlmeext->mgnt_80211w_IPN_rx = temp_ipn;
 			res = _SUCCESS;
 		} else

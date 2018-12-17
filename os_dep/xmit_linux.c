@@ -374,9 +374,9 @@ int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 		}
 
 		/* avoid come from STA1 and send back STA1 */
-		if (_rtw_memcmp(psta->hwaddr, &skb->data[6], 6) == true
-			|| _rtw_memcmp(psta->hwaddr, null_addr, 6) == true
-			|| _rtw_memcmp(psta->hwaddr, bc_addr, 6) == true
+		if (!memcmp(psta->hwaddr, &skb->data[6], 6)
+			|| !memcmp(psta->hwaddr, null_addr, 6)
+			|| !memcmp(psta->hwaddr, bc_addr, 6)
 		) {
 			DBG_COUNTER(padapter->tx_logs.os_tx_m2u_ignore_self);
 			continue;
@@ -441,7 +441,7 @@ int _rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
 
 #ifdef CONFIG_TX_MCAST2UNI
 	if (!rtw_mc2u_disable
-		&& check_fwstate(pmlmepriv, WIFI_AP_STATE) == true
+		&& check_fwstate(pmlmepriv, WIFI_AP_STATE)
 		&& (IP_MCAST_MAC(pkt->data)
 			|| ICMPV6_MCAST_MAC(pkt->data)
 			#ifdef CONFIG_TX_BCAST2UNI
@@ -452,7 +452,7 @@ int _rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
 	) {
 		if (pxmitpriv->free_xmitframe_cnt > (NR_XMITFRAME / 4)) {
 			res = rtw_mlcst2unicst(padapter, pkt);
-			if (res == true)
+			if (res)
 				goto exit;
 		} else {
 			/* RTW_INFO("Stop M2U(%d, %d)! ", pxmitpriv->free_xmitframe_cnt, pxmitpriv->free_xmitbuf_cnt); */
@@ -489,7 +489,7 @@ int rtw_xmit_entry(_pkt *pkt, _nic_hdl pnetdev)
 	int ret = 0;
 
 	if (pkt) {
-		if (check_fwstate(pmlmepriv, WIFI_MONITOR_STATE) == true) {
+		if (check_fwstate(pmlmepriv, WIFI_MONITOR_STATE)) {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
 			rtw_monitor_xmit_entry((struct sk_buff *)pkt, pnetdev);
 #endif

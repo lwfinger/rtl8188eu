@@ -520,7 +520,7 @@ static void _sounding_update_min_period(PADAPTER adapter, u16 period, u8 leave)
 
 	info = GET_BEAMFORM_INFO(adapter);
 
-	if (true == leave) {
+	if (leave) {
 		/*
 		 * When a BFee left,
 		 * we need to find the latest min sounding period
@@ -764,7 +764,7 @@ static void _sounding_handler(PADAPTER adapter)
 		/* Reset sounding timeout flag for the new sounding */
 		bfee->bSoundingTimeout = false;
 
-		if (true == bfee->bDeleteSounding) {
+		if (bfee->bDeleteSounding) {
 			u8 res = false;
 			rtw_bf_cmd(adapter, BEAMFORMING_CTRL_END_PERIOD, &res, 1, 0);
 			return;
@@ -954,7 +954,7 @@ static struct beamformer_entry *_bfer_get_entry_by_addr(PADAPTER adapter, u8 *ra
 		bfer = &info->bfer_entry[i];
 		if (bfer->used == false)
 			continue;
-		if (_rtw_memcmp(ra, bfer->mac_addr, ETH_ALEN) == true)
+		if (!memcmp(ra, bfer->mac_addr, ETH_ALEN) == true)
 			return bfer;
 	}
 
@@ -1086,7 +1086,7 @@ static struct beamformee_entry *_bfee_get_entry_by_addr(PADAPTER adapter, u8 *ra
 		bfee = &info->bfee_entry[i];
 		if (bfee->used == false)
 			continue;
-		if (_rtw_memcmp(ra, bfee->mac_addr, ETH_ALEN) == true)
+		if (!memcmp(ra, bfee->mac_addr, ETH_ALEN) == true)
 			return bfee;
 	}
 
@@ -1204,7 +1204,7 @@ static struct beamformee_entry *_bfee_add_entry(PADAPTER adapter,
 		info->beamformee_mu_cnt += 1;
 		info->first_mu_bfee_index = _bfee_get_first_mu_entry_idx(adapter, NULL);
 
-		if (true == info->bEnableSUTxBFWorkAround) {
+		if (info->bEnableSUTxBFWorkAround) {
 			/* When the first MU BFee added, discard SU BFee bfee's capability */
 			if ((info->beamformee_mu_cnt == 1) && (info->beamformee_su_cnt > 0)) {
 				if (info->TargetSUBFee) {
@@ -1233,7 +1233,7 @@ static struct beamformee_entry *_bfee_add_entry(PADAPTER adapter,
 	} else if (TEST_FLAG(bf_cap, BEAMFORMEE_CAP_VHT_SU|BEAMFORMEE_CAP_HT_EXPLICIT)) {
 		info->beamformee_su_cnt += 1;
 
-		if (true == info->bEnableSUTxBFWorkAround) {
+		if (info->bEnableSUTxBFWorkAround) {
 			/* Record the first SU BFee index. We only allow the first SU BFee to be sound */
 			if ((info->beamformee_su_cnt == 1) && (info->beamformee_mu_cnt == 0)) {
 				info->TargetSUBFee = bfee;
@@ -1273,7 +1273,7 @@ static void _bfee_remove_entry(PADAPTER adapter, struct beamformee_entry *entry)
 		info->beamformee_mu_cnt -= 1;
 		info->first_mu_bfee_index = _bfee_get_first_mu_entry_idx(adapter, entry);
 
-		if (true == info->bEnableSUTxBFWorkAround) {
+		if (info->bEnableSUTxBFWorkAround) {
 			if ((info->beamformee_mu_cnt == 0) && (info->beamformee_su_cnt > 0)) {
 				idx = _bfee_get_first_su_entry_idx(adapter, NULL);
 				info->TargetSUBFee = &info->bfee_entry[idx];
@@ -1285,7 +1285,7 @@ static void _bfee_remove_entry(PADAPTER adapter, struct beamformee_entry *entry)
 		info->beamformee_su_cnt -= 1;
 
 		/* When the target SU BFee leaves, disable workaround */
-		if ((true == info->bEnableSUTxBFWorkAround)
+		if ((info->bEnableSUTxBFWorkAround)
 		    && (entry == info->TargetSUBFee)) {
 			entry->bSuspendSUCap = true;
 			info->TargetSUBFee = NULL;
@@ -1483,18 +1483,18 @@ static void _beamforming_sounding_down(PADAPTER adapter, u8 status)
 		 *	old sound down event happens in the new sounding period.
 		 *	2015.12.10
 		 */
-		if (true == bfee->bSoundingTimeout) {
+		if (bfee->bSoundingTimeout) {
 			RTW_WARN("%s: The entry[%d] is bSoundingTimeout!\n", __func__, sounding->su_bfee_curidx);
 			bfee->bSoundingTimeout = false;
 			return;
 		}
 
-		if (true == status) {
+		if (status) {
 			/* success */
 			bfee->LogStatusFailCnt = 0;
 			info->SetHalSoundownOnDemandCnt++;
 			rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_STATUS, &status);
-		} else if (true == bfee->bDeleteSounding) {
+		} else if (bfee->bDeleteSounding) {
 			RTW_WARN("%s: Delete entry[%d] sounding info!\n", __func__, sounding->su_bfee_curidx);
 			rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_STATUS, &status);
 			bfee->bDeleteSounding = false;
@@ -1626,7 +1626,7 @@ u32 rtw_bf_get_report_packet(PADAPTER adapter, union recv_frame *precv_frame)
 	}
 
 	/* Update current CSI report info */
-	if ((true == info->bEnableSUTxBFWorkAround)
+	if ((info->bEnableSUTxBFWorkAround)
 	    && (info->TargetSUBFee == bfee)) {
 		if ((info->TargetCSIInfo.Nc != Nc) || (info->TargetCSIInfo.Nr != Nr) ||
 			(info->TargetCSIInfo.ChnlWidth != CH_W) || (info->TargetCSIInfo.Ng != Ng) ||
@@ -1945,7 +1945,7 @@ void rtw_bf_update_traffic(PADAPTER adapter)
 				set_timer = true;
 			}
 		} else {
-			if (true == bfee->bApplySounding) {
+			if (bfee->bApplySounding) {
 				bfee->bApplySounding = false;
 				bfee->bDeleteSounding = true;
 				bfee->SoundCnt = 0;
@@ -1954,7 +1954,7 @@ void rtw_bf_update_traffic(PADAPTER adapter)
 		}
 	}
 
-	if (true == set_timer) {
+	if (set_timer) {
 		if (SOUNDING_STATE_NONE == info->sounding_info.state) {
 			info->sounding_info.state = SOUNDING_STATE_INIT;
 			_set_timer(&info->sounding_timer, 0);
@@ -1972,7 +1972,7 @@ struct beamforming_entry	*beamforming_get_entry_by_addr(struct mlme_priv *pmlmep
 
 	for (i = 0; i < BEAMFORMING_ENTRY_NUM; i++) {
 		if (pBeamInfo->beamforming_entry[i].bUsed &&
-		    (_rtw_memcmp(ra, pBeamInfo->beamforming_entry[i].mac_addr, ETH_ALEN))) {
+		    (!memcmp(ra, pBeamInfo->beamforming_entry[i].mac_addr, ETH_ALEN))) {
 			*idx = i;
 			return &(pBeamInfo->beamforming_entry[i]);
 		}
@@ -2880,7 +2880,7 @@ u32	rtw_beamforming_get_report_frame(PADAPTER	 Adapter, union recv_frame *precv_
 
 	/*RTW_INFO("%s MacId %d offset=%d\n", __func__, pBeamformEntry->mac_id, offset);*/
 
-	if (_rtw_memcmp(pBeamformEntry->PreCsiReport + offset, pframe + offset, frame_len - offset) == false)
+	if (!memcmp(pBeamformEntry->PreCsiReport + offset, pframe + offset, frame_len - offset) == false)
 		pBeamformEntry->DefaultCsiCnt = 0;
 	else
 		pBeamformEntry->DefaultCsiCnt++;

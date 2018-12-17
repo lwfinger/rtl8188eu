@@ -216,7 +216,7 @@ s32 odm_compare_memory(
 	u32          length
 )
 {
-	return _rtw_memcmp(p_buf1, p_buf2, length);
+	return !memcmp(p_buf1, p_buf2, length);
 }
 
 /*

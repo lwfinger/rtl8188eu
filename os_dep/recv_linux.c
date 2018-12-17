@@ -289,9 +289,9 @@ _pkt *rtw_os_alloc_msdu_pkt(union recv_frame *prframe, u16 nSubframe_Length, u8 
 	eth_type = RTW_GET_BE16(&sub_skb->data[6]);
 
 	if (sub_skb->len >= 8 &&
-	    ((_rtw_memcmp(sub_skb->data, rtw_rfc1042_header, SNAP_SIZE) &&
+	    ((!memcmp(sub_skb->data, rtw_rfc1042_header, SNAP_SIZE) &&
 	      eth_type != ETH_P_AARP && eth_type != ETH_P_IPX) ||
-	     _rtw_memcmp(sub_skb->data, rtw_bridge_tunnel_header, SNAP_SIZE))) {
+	     !memcmp(sub_skb->data, rtw_bridge_tunnel_header, SNAP_SIZE))) {
 		/* remove RFC1042 or Bridge-Tunnel encapsulation and replace EtherType */
 		skb_pull(sub_skb, SNAP_SIZE);
 		_rtw_memcpy(skb_push(sub_skb, ETH_ALEN), pattrib->src, ETH_ALEN);
@@ -338,7 +338,7 @@ static int napi_recv(_adapter *padapter, int budget)
 			rx_ok = true;
 
 next:
-		if (rx_ok == true) {
+		if (rx_ok ) {
 			work_done++;
 			DBG_COUNTER(padapter->rx_logs.os_netif_ok);
 		} else {
@@ -383,7 +383,7 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 
 	/* Indicat the packets to upper layer */
 	if (pkt) {
-		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
+		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) ) {
 			_pkt *pskb2 = NULL;
 			struct sta_info *psta = NULL;
 			struct sta_priv *pstapriv = &padapter->stapriv;
@@ -391,7 +391,7 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 
 			/* RTW_INFO("bmcast=%d\n", bmcast); */
 
-			if (_rtw_memcmp(pattrib->dst, adapter_mac_addr(padapter), ETH_ALEN) == false) {
+			if (!memcmp(pattrib->dst, adapter_mac_addr(padapter), ETH_ALEN) == false) {
 				/* RTW_INFO("not ap psta=%p, addr=%pM\n", psta, pattrib->dst); */
 
 				if (bmcast) {
@@ -438,7 +438,7 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 #endif /* (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 
 
-		if (br_port && (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE) == true)) {
+		if (br_port && (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE) )) {
 			if (nat25_handle_frame(padapter, pkt) == -1) {
 				/* priv->ext_stats.rx_data_drops++; */
 				/* DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n"); */
@@ -734,11 +734,11 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 			u8 *ip = pkt->data + 14;
 
 			if (GET_IPV4_PROTOCOL(ip) == 0x06  /* TCP */
-			    && rtw_st_ctl_chk_reg_s_proto(&sta->st_ctl, 0x06) == true
+			    && rtw_st_ctl_chk_reg_s_proto(&sta->st_ctl, 0x06) 
 			   ) {
 				u8 *tcp = ip + GET_IPV4_IHL(ip) * 4;
 
-				if (rtw_st_ctl_chk_reg_rule(&sta->st_ctl, padapter, IPV4_DST(ip), TCP_DST(tcp), IPV4_SRC(ip), TCP_SRC(tcp)) == true) {
+				if (rtw_st_ctl_chk_reg_rule(&sta->st_ctl, padapter, IPV4_DST(ip), TCP_DST(tcp), IPV4_SRC(ip), TCP_SRC(tcp)) ) {
 					if (GET_TCP_SYN(tcp) && GET_TCP_ACK(tcp)) {
 						session_tracker_add_cmd(padapter, sta
 							, IPV4_DST(ip), TCP_DST(tcp)

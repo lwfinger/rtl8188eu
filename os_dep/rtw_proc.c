@@ -636,9 +636,9 @@ static int proc_get_tx_info_msg(struct seq_file *m, void *v)
 
 			plist = get_next(plist);
 
-			if ((_rtw_memcmp(psta->hwaddr, bc_addr, 6)  !=  true)
-				&& (_rtw_memcmp(psta->hwaddr, null_addr, 6) != true)
-				&& (_rtw_memcmp(psta->hwaddr, adapter_mac_addr(padapter), 6) != true)) {
+			if ((memcmp(psta->hwaddr, bc_addr, 6))
+				&& (memcmp(psta->hwaddr, null_addr, 6))
+				&& (memcmp(psta->hwaddr, adapter_mac_addr(padapter), 6))) {
 
 				switch (psta->bw_mode) {
 

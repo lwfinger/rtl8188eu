@@ -345,7 +345,7 @@ static u8 _rtw_mi_process(_adapter *padapter, bool exclude_self,
 				continue;
 
 			if (ops_func)
-				if (true == ops_func(iface, data))
+				if (ops_func(iface, data))
 					ret++;
 		}
 	}
@@ -749,7 +749,7 @@ static u8 _rtw_mi_check_fwstate(_adapter *padapter, void *data)
 	if ((state == WIFI_FW_NULL_STATE) &&
 	    (padapter->mlmepriv.fw_state == WIFI_FW_NULL_STATE))
 		ret = true;
-	else if (true == check_fwstate(&padapter->mlmepriv, state))
+	else if (check_fwstate(&padapter->mlmepriv, state))
 		ret = true;
 #ifdef DBG_DUMP_FW_STATE
 	if (ret)
@@ -1034,7 +1034,7 @@ _adapter *rtw_get_iface_by_macddr(_adapter *padapter, u8 *mac_addr)
 
 	for (i = 0; i < dvobj->iface_nums; i++) {
 		iface = dvobj->padapters[i];
-		if ((iface) && (_rtw_memcmp(mac_addr, adapter_mac_addr(iface), ETH_ALEN))) {
+		if ((iface) && (!memcmp(mac_addr, adapter_mac_addr(iface), ETH_ALEN))) {
 			bmatch = true;
 			break;
 		}
@@ -1105,10 +1105,10 @@ static void rtw_dbg_skb_process(_adapter *padapter, union recv_frame *precvframe
 	if (precvframe->u.hdr.len != pcloneframe->u.hdr.len)
 		RTW_INFO("%s [WARN]  recv_frame length(%d:%d) compare failed\n", __func__, precvframe->u.hdr.len, pcloneframe->u.hdr.len);
 
-	if (_rtw_memcmp(&precvframe->u.hdr.attrib, &pcloneframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib)) == false)
+	if (!memcmp(&precvframe->u.hdr.attrib, &pcloneframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib)) == false)
 		RTW_INFO("%s [WARN]  recv_frame attrib compare failed\n", __func__);
 
-	if (_rtw_memcmp(precvframe->u.hdr.rx_data, pcloneframe->u.hdr.rx_data, precvframe->u.hdr.len) == false)
+	if (!memcmp(precvframe->u.hdr.rx_data, pcloneframe->u.hdr.rx_data, precvframe->u.hdr.len) == false)
 		RTW_INFO("%s [WARN]  recv_frame rx_data compare failed\n", __func__);
 
 }

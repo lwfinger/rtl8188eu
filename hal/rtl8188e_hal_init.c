@@ -1335,7 +1335,7 @@ ReadEFuseByIC(
 exit:
 
 #ifdef DBG_IOL_READ_EFUSE_MAP
-	if (_rtw_memcmp(logical_map, pHalData->efuse_eeprom_data, 0x130) == false) {
+	if (!memcmp(logical_map, pHalData->efuse_eeprom_data, 0x130) == false) {
 		int i;
 		RTW_INFO("%s compare first 0x130 byte fail\n", __func__);
 		for (i = 0; i < 512; i++) {

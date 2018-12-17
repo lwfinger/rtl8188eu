@@ -2963,7 +2963,7 @@ u8 rtw_antenna_select_cmd(_adapter *padapter, u8 antenna, u8 enqueue)
 			return _FAIL;
 	}
 
-	if (true == enqueue) {
+	if (enqueue) {
 		ph2c = (struct cmd_obj *)rtw_zmalloc(sizeof(struct cmd_obj));
 		if (ph2c == NULL) {
 			res = _FAIL;

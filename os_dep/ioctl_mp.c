@@ -749,7 +749,7 @@ int rtw_mp_ctx(struct net_device *dev,
 	if (sscanf(extra, "pktlen=%d", &pktlen) > 0)
 		RTW_INFO("pktlen= %d\n", pktlen);
 
-	if (_rtw_memcmp(extra, "destmac=", 8)) {
+	if (!memcmp(extra, "destmac=", 8)) {
 		wrqu->length -= 8;
 		rtw_set_ctx_destAddr(dev, info, wrqu, &extra[8]);
 		sprintf(extra, "Set dest mac OK !\n");

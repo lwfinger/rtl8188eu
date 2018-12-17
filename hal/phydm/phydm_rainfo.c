@@ -1599,7 +1599,7 @@ odm_refresh_rate_adaptive_mask_ce(
 				/**/
 			}
 #else
-			if (true == odm_ra_state_check(p_dm_odm, p_entry->rssi_stat.undecorated_smoothed_pwdb, false, &p_entry->rssi_level)) {
+			if (odm_ra_state_check(p_dm_odm, p_entry->rssi_stat.undecorated_smoothed_pwdb, false, &p_entry->rssi_level)) {
 				ODM_RT_TRACE(p_dm_odm, ODM_COMP_RA_MASK, ODM_DBG_LOUD, ("RSSI:%d, RSSI_LEVEL:%d\n", p_entry->rssi_stat.undecorated_smoothed_pwdb, p_entry->rssi_level));
 				/* printk("RSSI:%d, RSSI_LEVEL:%d\n", pstat->rssi_stat.undecorated_smoothed_pwdb, pstat->rssi_level); */
 				rtw_hal_update_ra_mask(p_entry, p_entry->rssi_level, false);

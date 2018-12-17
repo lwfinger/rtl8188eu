@@ -704,7 +704,7 @@ static int rtw_resume_process(_adapter *padapter)
 #endif /* kernel < 2.6.32 */
 
 	RTW_INFO("pwrpriv->bAutoResume (%x)\n", pwrpriv->bAutoResume);
-	if (true == pwrpriv->bAutoResume) {
+	if (pwrpriv->bAutoResume) {
 		pwrpriv->bInternalAutoSuspend = false;
 		pwrpriv->bAutoResume = false;
 		RTW_INFO("pwrpriv->bAutoResume (%x)  pwrpriv->bInternalAutoSuspend(%x)\n", pwrpriv->bAutoResume, pwrpriv->bInternalAutoSuspend);
@@ -734,7 +734,7 @@ static int rtw_resume_process(_adapter *padapter)
 #endif
 #ifdef CONFIG_BT_COEXIST /* for 8723as-vau */
 		RTW_INFO("pwrpriv->bAutoResume (%x)\n", pwrpriv->bAutoResume);
-		if (true == pwrpriv->bAutoResume) {
+		if (pwrpriv->bAutoResume) {
 			pwrpriv->bInternalAutoSuspend = false;
 			pwrpriv->bAutoResume = false;
 			RTW_INFO("pwrpriv->bAutoResume (%x)  pwrpriv->bInternalAutoSuspend(%x)\n", pwrpriv->bAutoResume, pwrpriv->bInternalAutoSuspend);

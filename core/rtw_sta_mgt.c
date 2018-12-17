@@ -859,7 +859,7 @@ struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
 
 		psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 
-		if ((_rtw_memcmp(psta->hwaddr, addr, ETH_ALEN)) == true) {
+		if ((!memcmp(psta->hwaddr, addr, ETH_ALEN)) == true) {
 			/* if found the matched address */
 			break;
 		}
@@ -946,7 +946,7 @@ u8 rtw_access_ctrl(_adapter *adapter, u8 *mac_addr)
 		acl_node = LIST_CONTAINOR(list, struct rtw_wlan_acl_node, list);
 		list = get_next(list);
 
-		if (_rtw_memcmp(acl_node->addr, mac_addr, ETH_ALEN)) {
+		if (!memcmp(acl_node->addr, mac_addr, ETH_ALEN)) {
 			if (acl_node->valid == true) {
 				match = true;
 				break;
@@ -993,7 +993,7 @@ bool rtw_is_pre_link_sta(struct sta_priv *stapriv, u8 *addr)
 	_enter_critical_bh(&(pre_link_sta_ctl->lock), &irqL);
 	for (i = 0; i < RTW_PRE_LINK_STA_NUM; i++) {
 		if (pre_link_sta_ctl->node[i].valid == true
-			&& _rtw_memcmp(pre_link_sta_ctl->node[i].addr, addr, ETH_ALEN) == true
+			&& !memcmp(pre_link_sta_ctl->node[i].addr, addr, ETH_ALEN) == true
 		) {
 			exist = true;
 			break;
@@ -1023,7 +1023,7 @@ struct sta_info *rtw_pre_link_sta_add(struct sta_priv *stapriv, u8 *hwaddr)
 	_enter_critical_bh(&(pre_link_sta_ctl->lock), &irqL);
 	for (i = 0; i < RTW_PRE_LINK_STA_NUM; i++) {
 		if (pre_link_sta_ctl->node[i].valid == true
-			&& _rtw_memcmp(pre_link_sta_ctl->node[i].addr, hwaddr, ETH_ALEN) == true
+			&& !memcmp(pre_link_sta_ctl->node[i].addr, hwaddr, ETH_ALEN) == true
 		) {
 			node = &pre_link_sta_ctl->node[i];
 			exist = true;
@@ -1076,7 +1076,7 @@ void rtw_pre_link_sta_del(struct sta_priv *stapriv, u8 *hwaddr)
 	_enter_critical_bh(&(pre_link_sta_ctl->lock), &irqL);
 	for (i = 0; i < RTW_PRE_LINK_STA_NUM; i++) {
 		if (pre_link_sta_ctl->node[i].valid == true
-			&& _rtw_memcmp(pre_link_sta_ctl->node[i].addr, hwaddr, ETH_ALEN) == true
+			&& !memcmp(pre_link_sta_ctl->node[i].addr, hwaddr, ETH_ALEN) == true
 		) {
 			node = &pre_link_sta_ctl->node[i];
 			exist = true;

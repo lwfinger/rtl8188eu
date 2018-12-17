@@ -691,9 +691,9 @@ int proc_get_rx_stat(struct seq_file *m, void *v)
 
 			if (pstats == NULL)
 				continue;
-			if ((_rtw_memcmp(psta->hwaddr, bc_addr, 6) !=  true)
-				&& (_rtw_memcmp(psta->hwaddr, null_addr, 6) != true)
-				&& (_rtw_memcmp(psta->hwaddr, adapter_mac_addr(adapter), 6) != true)) {
+			if ((memcmp(psta->hwaddr, bc_addr, 6))
+				&& (memcmp(psta->hwaddr, null_addr, 6))
+				&& (memcmp(psta->hwaddr, adapter_mac_addr(adapter), 6))) {
 				RTW_PRINT_SEL(m, "MAC :\t\t"MAC_FMT "\n", MAC_ARG(psta->hwaddr));
 				RTW_PRINT_SEL(m, "data_rx_cnt :\t%llu\n", pstats->rx_data_pkts - pstats->rx_data_last_pkts);
 				pstats->rx_data_last_pkts = pstats->rx_data_pkts;
@@ -737,9 +737,9 @@ int proc_get_tx_stat(struct seq_file *m, void *v)
 		while ((rtw_end_of_queue_search(phead, plist)) == false) {
 			psta = LIST_CONTAINOR(plist, struct sta_info, hash_list);
 			plist = get_next(plist);
-			if ((_rtw_memcmp(psta->hwaddr, bc_addr, 6) !=  true)
-				&& (_rtw_memcmp(psta->hwaddr, null_addr, 6) != true)
-				&& (_rtw_memcmp(psta->hwaddr, adapter_mac_addr(adapter), 6) != true)) {
+			if ((memcmp(psta->hwaddr, bc_addr, 6))
+				&& (memcmp(psta->hwaddr, null_addr, 6))
+				&& (memcmp(psta->hwaddr, adapter_mac_addr(adapter), 6))) {
 				sta_rec[macid_rec_idx++] = psta;
 			}
 		}
@@ -3494,7 +3494,7 @@ int proc_get_p2p_wowlan_info(struct seq_file *m, void *v)
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct wifidirect_info	*pwdinfo = &(padapter->wdinfo);
 	struct p2p_wowlan_info	 peerinfo = pwdinfo->p2p_wow_info;
-	if (true == peerinfo.is_trigger) {
+	if (peerinfo.is_trigger) {
 		RTW_PRINT_SEL(m, "is_trigger: true\n");
 		switch (peerinfo.wowlan_recv_frame_type) {
 		case P2P_WOWLAN_RECV_NEGO_REQ:
@@ -4177,7 +4177,7 @@ ssize_t proc_set_tx_sa_query(struct file *file, const char __user *buffer, size_
 
 		for (index = 0; index < macid_ctl->num && index < NUM_STA; index++) {
 			if (rtw_macid_is_used(macid_ctl, index) && !rtw_macid_is_bmc(macid_ctl, index)) {
-				if (!_rtw_memcmp(get_my_bssid(&(pmlmeinfo->network)), &mac_addr[index][0], ETH_ALEN)
+				if (memcmp(get_my_bssid(&(pmlmeinfo->network)), &mac_addr[index][0], ETH_ALEN)
 				    && !IS_MCAST(&mac_addr[index][0])) {
 					issue_action_SA_Query(padapter, &mac_addr[index][0], 0, 0, (u8)key_type);
 					RTW_INFO("STA[%u]:"MAC_FMT"\n", index , MAC_ARG(&mac_addr[index][0]));
@@ -4265,7 +4265,7 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 
 		for (index = 0; index < macid_ctl->num && index < NUM_STA; index++) {
 			if (rtw_macid_is_used(macid_ctl, index) && !rtw_macid_is_bmc(macid_ctl, index)) {
-				if (!_rtw_memcmp(get_my_bssid(&(pmlmeinfo->network)), &mac_addr[index][0], ETH_ALEN)) {
+				if (memcmp(get_my_bssid(&(pmlmeinfo->network)), &mac_addr[index][0], ETH_ALEN)) {
 					if (key_type != 3)
 						issue_deauth_11w(padapter, &mac_addr[index][0], 0, (u8)key_type);
 

@@ -357,7 +357,7 @@ void rtw_ps_processor(_adapter *padapter)
 				pwrpriv->ps_flag = true;
 
 #if defined(CONFIG_BT_COEXIST) && defined (CONFIG_AUTOSUSPEND)
-			if (true == pwrpriv->bInternalAutoSuspend)
+			if (pwrpriv->bInternalAutoSuspend)
 				RTW_INFO("<==%s .pwrpriv->bInternalAutoSuspend)(%x)\n", __func__, pwrpriv->bInternalAutoSuspend);
 			else {
 				pwrpriv->change_rfpwrstate = rf_off;
@@ -600,14 +600,14 @@ static u8 PS_RDY_CHECK(_adapter *padapter)
 #endif /* CONFIG_P2P */
 
 #if defined(CONFIG_WOWLAN) || defined(CONFIG_AP_WOWLAN)
-	if (true == pwrpriv->bInSuspend && pwrpriv->wowlan_mode)
+	if (pwrpriv->bInSuspend && pwrpriv->wowlan_mode)
 		return true;
-	else if (true == pwrpriv->bInSuspend && pwrpriv->wowlan_ap_mode)
+	else if (pwrpriv->bInSuspend && pwrpriv->wowlan_ap_mode)
 		return true;
-	else if (true == pwrpriv->bInSuspend)
+	else if (pwrpriv->bInSuspend)
 		return false;
 #else
-	if (true == pwrpriv->bInSuspend)
+	if (pwrpriv->bInSuspend)
 		return false;
 #endif
 
@@ -905,7 +905,7 @@ void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode
 			&& (rtw_btcoex_IsLpsOn(padapter) == true))
 #endif
 #ifdef CONFIG_P2P_WOWLAN
-		    || (true == pwrpriv->wowlan_p2p_mode)
+		    || (pwrpriv->wowlan_p2p_mode)
 #endif /* CONFIG_P2P_WOWLAN */
 		   ) {
 			u8 pslv;
@@ -997,7 +997,7 @@ s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms)
 	start_time = rtw_get_current_time();
 	while (1) {
 		rtw_hal_get_hwreg(padapter, HW_VAR_FWLPS_RF_ON, &bAwake);
-		if (true == bAwake)
+		if (bAwake)
 			break;
 
 		if (rtw_is_surprise_removed(padapter)) {
@@ -1330,7 +1330,7 @@ void LPS_Leave_check(
 
 		_exit_pwrlock(&pwrpriv->lock);
 
-		if (true == bReady)
+		if (bReady)
 			break;
 
 		if (rtw_get_passing_time_ms(start_time) > 100) {
@@ -2307,7 +2307,7 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 	}
 
 	/* System suspend is not allowed to wakeup */
-	if ((pwrpriv->bInternalAutoSuspend == false) && (true == pwrpriv->bInSuspend)) {
+	if ((pwrpriv->bInternalAutoSuspend == false) && (pwrpriv->bInSuspend)) {
 		ret = _FAIL;
 		goto exit;
 	}
@@ -2321,7 +2321,7 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 	/* I think this should be check in IPS, LPS, autosuspend functions... */
 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true) {
 #if defined(CONFIG_BT_COEXIST) && defined (CONFIG_AUTOSUSPEND)
-		if (true == pwrpriv->bInternalAutoSuspend) {
+		if (pwrpriv->bInternalAutoSuspend) {
 			if (0 == pwrpriv->autopm_cnt) {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 33))
 				if (usb_autopm_get_interface(adapter_to_dvobj(padapter)->pusbintf) < 0)

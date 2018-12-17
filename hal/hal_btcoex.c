@@ -503,12 +503,12 @@ static u32 _halbtcoutsrc_GetWifiLinkStatus(PADAPTER padapter)
 
 	if (check_fwstate(pmlmepriv, WIFI_ASOC_STATE) == true) {
 		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
-			if (true == bp2p)
+			if (bp2p)
 				portConnectedStatus |= WIFI_P2P_GO_CONNECTED;
 			else
 				portConnectedStatus |= WIFI_AP_CONNECTED;
 		} else {
-			if (true == bp2p)
+			if (bp2p)
 				portConnectedStatus |= WIFI_P2P_GC_CONNECTED;
 			else
 				portConnectedStatus |= WIFI_STA_CONNECTED;
@@ -1234,7 +1234,7 @@ u8 halbtcoutsrc_UnderIps(PBTC_COEXIST pBtCoexist)
 	pwrpriv = &padapter->dvobj->pwrctl_priv;
 	bMacPwrCtrlOn = false;
 
-	if ((true == pwrpriv->bips_processing)
+	if ((pwrpriv->bips_processing)
 	    && (IPS_NONE != pwrpriv->ips_mode_req)
 	   )
 		return true;
