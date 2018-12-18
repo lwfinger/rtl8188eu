@@ -131,7 +131,7 @@ u8 rtw_do_join(_adapter *padapter)
 				pibss = padapter->registrypriv.dev_network.MacAddress;
 
 				memset(&pdev_network->Ssid, 0, sizeof(NDIS_802_11_SSID));
-				_rtw_memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(NDIS_802_11_SSID));
+				memcpy(&pdev_network->Ssid, &pmlmepriv->assoc_ssid, sizeof(NDIS_802_11_SSID));
 
 				rtw_update_registrypriv_dev_network(padapter);
 
@@ -224,7 +224,7 @@ handle_tkip_countermeasure:
 	}
 
 	memset(&pmlmepriv->assoc_ssid, 0, sizeof(NDIS_802_11_SSID));
-	_rtw_memcpy(&pmlmepriv->assoc_bssid, bssid, ETH_ALEN);
+	memcpy(&pmlmepriv->assoc_bssid, bssid, ETH_ALEN);
 	pmlmepriv->assoc_by_bssid = true;
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) )
@@ -319,7 +319,7 @@ handle_tkip_countermeasure:
 		goto release_mlme_lock;
 	}
 
-	_rtw_memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(NDIS_802_11_SSID));
+	memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(NDIS_802_11_SSID));
 	pmlmepriv->assoc_by_bssid = false;
 
 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY) )
@@ -380,12 +380,12 @@ handle_tkip_countermeasure:
 	}
 
 	if (ssid && ssid_valid)
-		_rtw_memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(NDIS_802_11_SSID));
+		memcpy(&pmlmepriv->assoc_ssid, ssid, sizeof(NDIS_802_11_SSID));
 	else
 		memset(&pmlmepriv->assoc_ssid, 0, sizeof(NDIS_802_11_SSID));
 
 	if (bssid && bssid_valid) {
-		_rtw_memcpy(&pmlmepriv->assoc_bssid, bssid, ETH_ALEN);
+		memcpy(&pmlmepriv->assoc_bssid, bssid, ETH_ALEN);
 		pmlmepriv->assoc_by_bssid = true;
 	} else
 		pmlmepriv->assoc_by_bssid = false;
@@ -571,7 +571,7 @@ u8 rtw_set_802_11_add_wep(_adapter *padapter, NDIS_802_11_WEP *wep)
 		break;
 	}
 
-	_rtw_memcpy(&(psecuritypriv->dot11DefKey[keyid].skey[0]), &(wep->KeyMaterial), wep->KeyLength);
+	memcpy(&(psecuritypriv->dot11DefKey[keyid].skey[0]), &(wep->KeyMaterial), wep->KeyLength);
 
 	psecuritypriv->dot11DefKeylen[keyid] = wep->KeyLength;
 
@@ -767,8 +767,8 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 		wep->KeyIndex = keyindex ;
 		wep->KeyLength = key->KeyLength;
 
-		_rtw_memcpy(wep->KeyMaterial, key->KeyMaterial, key->KeyLength);
-		_rtw_memcpy(&(padapter->securitypriv.dot11DefKey[keyindex].skey[0]), key->KeyMaterial, key->KeyLength);
+		memcpy(wep->KeyMaterial, key->KeyMaterial, key->KeyLength);
+		memcpy(&(padapter->securitypriv.dot11DefKey[keyindex].skey[0]), key->KeyMaterial, key->KeyLength);
 
 		padapter->securitypriv.dot11DefKeylen[keyindex] = key->KeyLength;
 		padapter->securitypriv.dot11PrivacyKeyIndex = keyindex;
@@ -783,10 +783,10 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 		/* SetRSC */
 		if (bgroup ) {
 			NDIS_802_11_KEY_RSC keysrc = key->KeyRSC & 0x00FFFFFFFFFFFFULL;
-			_rtw_memcpy(&padapter->securitypriv.dot11Grprxpn, &keysrc, 8);
+			memcpy(&padapter->securitypriv.dot11Grprxpn, &keysrc, 8);
 		} else {
 			NDIS_802_11_KEY_RSC keysrc = key->KeyRSC & 0x00FFFFFFFFFFFFULL;
-			_rtw_memcpy(&padapter->securitypriv.dot11Grptxpn, &keysrc, 8);
+			memcpy(&padapter->securitypriv.dot11Grptxpn, &keysrc, 8);
 		}
 
 	}
@@ -809,17 +809,17 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 		memset(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], 0, 16);
 
 		if ((key->KeyIndex & 0x10000000)) {
-			_rtw_memcpy(&padapter->securitypriv.dot118021XGrptxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 16, 8);
-			_rtw_memcpy(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 24, 8);
+			memcpy(&padapter->securitypriv.dot118021XGrptxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 16, 8);
+			memcpy(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 24, 8);
 
 		} else {
-			_rtw_memcpy(&padapter->securitypriv.dot118021XGrptxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 24, 8);
-			_rtw_memcpy(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 16, 8);
+			memcpy(&padapter->securitypriv.dot118021XGrptxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 24, 8);
+			memcpy(&padapter->securitypriv.dot118021XGrprxmickey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial + 16, 8);
 
 		}
 
 		/* set group key by index */
-		_rtw_memcpy(&padapter->securitypriv.dot118021XGrpKey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial, key->KeyLength);
+		memcpy(&padapter->securitypriv.dot118021XGrpKey[(u8)((key->KeyIndex) & 0x03)], key->KeyMaterial, key->KeyLength);
 
 		key->KeyIndex = key->KeyIndex & 0x03;
 
@@ -843,7 +843,7 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 		if (stainfo != NULL) {
 			memset(&stainfo->dot118021x_UncstKey, 0, 16); /* clear keybuffer */
 
-			_rtw_memcpy(&stainfo->dot118021x_UncstKey, key->KeyMaterial, 16);
+			memcpy(&stainfo->dot118021x_UncstKey, key->KeyMaterial, 16);
 
 			if (encryptionalgo == _TKIP_) {
 				padapter->securitypriv.busetkipkey = false;
@@ -852,12 +852,12 @@ u8 rtw_set_802_11_add_key(_adapter *padapter, NDIS_802_11_KEY *key)
 
 				/* if TKIP, save the Receive/Transmit MIC key in KeyMaterial[128-255] */
 				if ((key->KeyIndex & 0x10000000)) {
-					_rtw_memcpy(&stainfo->dot11tkiptxmickey, key->KeyMaterial + 16, 8);
-					_rtw_memcpy(&stainfo->dot11tkiprxmickey, key->KeyMaterial + 24, 8);
+					memcpy(&stainfo->dot11tkiptxmickey, key->KeyMaterial + 16, 8);
+					memcpy(&stainfo->dot11tkiprxmickey, key->KeyMaterial + 24, 8);
 
 				} else {
-					_rtw_memcpy(&stainfo->dot11tkiptxmickey, key->KeyMaterial + 24, 8);
-					_rtw_memcpy(&stainfo->dot11tkiprxmickey, key->KeyMaterial + 16, 8);
+					memcpy(&stainfo->dot11tkiptxmickey, key->KeyMaterial + 24, 8);
+					memcpy(&stainfo->dot11tkiprxmickey, key->KeyMaterial + 16, 8);
 
 				}
 

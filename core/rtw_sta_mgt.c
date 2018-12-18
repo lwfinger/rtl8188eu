@@ -474,7 +474,7 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 
 	psta->padapter = pstapriv->padapter;
 
-	_rtw_memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
+	memcpy(psta->hwaddr, hwaddr, ETH_ALEN);
 
 	index = wifi_mac_hash(hwaddr);
 
@@ -499,7 +499,7 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 	 * So, we initialize the tid_rxseq variable as the 0xffff. */
 
 	for (i = 0; i < 16; i++) {
-		_rtw_memcpy(&psta->sta_recvpriv.rxcache.tid_rxseq[i], &wRxSeqInitialValue, 2);
+		memcpy(&psta->sta_recvpriv.rxcache.tid_rxseq[i], &wRxSeqInitialValue, 2);
 		memset(&psta->sta_recvpriv.rxcache.iv[i], 0, sizeof(psta->sta_recvpriv.rxcache.iv[i]));
 	}
 
@@ -1035,7 +1035,7 @@ struct sta_info *rtw_pre_link_sta_add(struct sta_priv *stapriv, u8 *hwaddr)
 	}
 
 	if (exist == false && node) {
-		_rtw_memcpy(node->addr, hwaddr, ETH_ALEN);
+		memcpy(node->addr, hwaddr, ETH_ALEN);
 		node->valid = true;
 		pre_link_sta_ctl->num++;
 	}
@@ -1120,7 +1120,7 @@ void rtw_pre_link_sta_ctl_reset(struct sta_priv *stapriv)
 	for (i = 0; i < RTW_PRE_LINK_STA_NUM; i++) {
 		if (pre_link_sta_ctl->node[i].valid == false)
 			continue;
-		_rtw_memcpy(&(addrs[j][0]), pre_link_sta_ctl->node[i].addr, ETH_ALEN);
+		memcpy(&(addrs[j][0]), pre_link_sta_ctl->node[i].addr, ETH_ALEN);
 		pre_link_sta_ctl->node[i].valid = false;
 		pre_link_sta_ctl->num--;
 		j++;

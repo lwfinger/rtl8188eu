@@ -1244,7 +1244,7 @@ s32 rtl8188eu_hostap_mgnt_xmit_entry(_adapter *padapter, _pkt *pkt)
 	/*  */
 	skb_put(pxmit_skb, len + TXDESC_SIZE);
 	pxmitbuf = pxmitbuf + TXDESC_SIZE;
-	_rtw_memcpy(pxmitbuf, skb->data, len);
+	memcpy(pxmitbuf, skb->data, len);
 
 	/* RTW_INFO("mgnt_xmit, len=%x\n", pxmit_skb->len); */
 

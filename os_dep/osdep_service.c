@@ -693,16 +693,6 @@ void rtw_mfree2d(void *pbuf, int h, int w, int size)
 	rtw_mfree((u8 *)pbuf, h * sizeof(void *) + w * h * size);
 }
 
-void _rtw_memcpy(void *dst, const void *src, u32 sz)
-{
-	memcpy(dst, src, sz);
-}
-
-inline void _rtw_memmove(void *dst, const void *src, u32 sz)
-{
-	memmove(dst, src, sz);
-}
-
 void _rtw_init_listhead(_list *list)
 {
 	INIT_LIST_HEAD(list);
@@ -1494,7 +1484,7 @@ int rtw_change_ifname(_adapter *padapter, const char *ifname)
 
 	rtw_init_netdev_name(pnetdev, ifname);
 
-	_rtw_memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
+	memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
 
 	if (rtnl_lock_needed)
 		ret = register_netdev(pnetdev);
@@ -1577,7 +1567,7 @@ void rtw_buf_update(u8 **buf, u32 *buf_len, u8 *src, u32 src_len)
 	dup = rtw_malloc(src_len);
 	if (dup) {
 		dup_len = src_len;
-		_rtw_memcpy(dup, src, dup_len);
+		memcpy(dup, src, dup_len);
 	}
 
 keep_ori:
@@ -1739,7 +1729,7 @@ int map_readN(const struct map_t *map, u16 offset, u16 len, u8 *buf)
 				c_len = seg->sa + seg->len - offset;
 		}
 			
-		_rtw_memcpy(c_dst, c_src, c_len);
+		memcpy(c_dst, c_src, c_len);
 	}
 
 exit:

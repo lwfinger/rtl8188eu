@@ -196,7 +196,7 @@ odm_move_memory(
 	u32		length
 )
 {
-	_rtw_memcpy(p_dest, p_src, length);
+	memcpy(p_dest, p_src, length);
 }
 
 void odm_memory_set(

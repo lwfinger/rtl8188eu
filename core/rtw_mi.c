@@ -223,7 +223,7 @@ inline void rtw_mi_update_iface_status(struct mlme_priv *pmlmepriv, sint state)
 		RTW_INFO("%s => will change or clean state to 0x%08x\n", __func__, state);
 
 	rtw_mi_status(adapter, &tmp_mstate);
-	_rtw_memcpy(iface_state, &tmp_mstate, sizeof(struct mi_state));
+	memcpy(iface_state, &tmp_mstate, sizeof(struct mi_state));
 
 	if (rtw_mi_get_ch_setting_union(adapter, &u_ch, &u_bw, &u_offset))
 		rtw_mi_update_union_chan_inf(adapter , u_ch, u_offset , u_bw);
@@ -1128,7 +1128,7 @@ static s32 _rtw_mi_buddy_clone_bcmc_packet(_adapter *adapter, union recv_frame *
 		pcloneframe->u.hdr.precvbuf = NULL;	/*can't access the precvbuf for new arch.*/
 		pcloneframe->u.hdr.len = 0;
 
-		_rtw_memcpy(&pcloneframe->u.hdr.attrib, &precvframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib));
+		memcpy(&pcloneframe->u.hdr.attrib, &precvframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib));
 
 		pattrib = &pcloneframe->u.hdr.attrib;
 #ifdef CONFIG_SKB_ALLOCATED

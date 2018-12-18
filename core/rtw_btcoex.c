@@ -516,7 +516,7 @@ u8 rtw_btcoex_btinfo_cmd(_adapter *adapter, u8 *buf, u16 len)
 	pdrvextra_cmd_parm->size = len;
 	pdrvextra_cmd_parm->pbuf = btinfo;
 
-	_rtw_memcpy(btinfo, buf, len);
+	memcpy(btinfo, buf, len);
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
 
@@ -595,7 +595,7 @@ u8 rtw_btcoex_parse_BT_info_notify_cmd(_adapter *padapter, u8 *pcmd, u16 cmdlen)
 		/* return _FAIL; */
 	} else {
 		if (0x1 == btInfoReason || 0x2 == btInfoReason) {
-			_rtw_memcpy(btinfo, &pcmd[4], btInfoLen);
+			memcpy(btinfo, &pcmd[4], btInfoLen);
 			btinfo[0] = btInfoReason;
 			rtw_btcoex_btinfo_cmd(padapter, btinfo, btInfoLen);
 		} else
@@ -1273,7 +1273,7 @@ void rtw_btcoex_recvmsgbysocket(void *data)
 		/*important: cut the udp header from skb->data! header length is 8 byte*/
 		recv_length = skb->len - 8;
 		memset(recv_data, 0, sizeof(recv_data));
-		_rtw_memcpy(recv_data, skb->data + 8, recv_length);
+		memcpy(recv_data, skb->data + 8, recv_length);
 
 		parse_res = rtw_btcoex_parse_recv_data(recv_data, recv_length);
 		switch (parse_res) {
@@ -1560,7 +1560,7 @@ void rtw_btcoex_SendEventExtBtCoexControl(PADAPTER padapter, u8 bNeedDbgRsp, u8 
 
 	/* Return parameters starts from here */
 	pRetPar = &pEvent->Data[len];
-	_rtw_memcpy(&pRetPar[0], pData, dataLen);
+	memcpy(&pRetPar[0], pData, dataLen);
 
 	len += dataLen;
 
@@ -1598,7 +1598,7 @@ void rtw_btcoex_SendEventExtBtInfoControl(PADAPTER padapter, u8 dataLen, void *p
 
 	/* Return parameters starts from here */
 	pRetPar = &pEvent->Data[len];
-	_rtw_memcpy(&pRetPar[0], pData, dataLen);
+	memcpy(&pRetPar[0], pData, dataLen);
 
 	len += dataLen;
 

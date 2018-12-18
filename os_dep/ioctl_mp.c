@@ -67,7 +67,7 @@ int rtw_mp_write_reg(struct net_device *dev,
 	*pnext = 0;
 	/*addr = simple_strtoul(pch, &ptmp, 16);
 	memset(buf, '\0', sizeof(buf));
-	_rtw_memcpy(buf, pch, pnext-pch);
+	memcpy(buf, pch, pnext-pch);
 	ret = kstrtoul(buf, 16, &addr);*/
 	ret = sscanf(pch, "%x", &addr);
 	if (addr > 0x3FFF)

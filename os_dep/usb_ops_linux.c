@@ -97,7 +97,7 @@ int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u16 inde
 		} else {
 			pipe = usb_sndctrlpipe(udev, 0);/* write_out */
 			reqtype =  REALTEK_USB_VENQT_WRITE;
-			_rtw_memcpy(pIo_buf, pdata, len);
+			memcpy(pIo_buf, pdata, len);
 		}
 
 		status = rtw_usb_control_msg(udev, pipe, request, reqtype, value, index, pIo_buf, len, RTW_USB_CONTROL_MSG_TIMEOUT);
@@ -106,7 +106,7 @@ int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u16 inde
 			rtw_reset_continual_io_error(pdvobjpriv);
 			if (requesttype == 0x01) {
 				/* For Control read transfer, we have to copy the read data from pIo_buf to pdata. */
-				_rtw_memcpy(pdata, pIo_buf,  len);
+				memcpy(pdata, pIo_buf,  len);
 			}
 		} else { /* error cases */
 			RTW_INFO("reg 0x%x, usb %s %u fail, status:%d value=0x%x, vendorreq_times:%d\n"
@@ -127,7 +127,7 @@ int usbctrl_vendorreq(struct intf_hdl *pintfhdl, u8 request, u16 value, u16 inde
 				if (status > 0) {
 					if (requesttype == 0x01) {
 						/* For Control read transfer, we have to copy the read data from pIo_buf to pdata. */
-						_rtw_memcpy(pdata, pIo_buf,  len);
+						memcpy(pdata, pIo_buf,  len);
 					}
 				}
 			}
@@ -209,7 +209,7 @@ int _usbctrl_vendorreq_async_write(struct usb_device *udev, u8 request,
 	dr->wIndex = cpu_to_le16(index);
 	dr->wLength = cpu_to_le16(len);
 
-	_rtw_memcpy(buf, pdata, len);
+	memcpy(buf, pdata, len);
 
 	usb_fill_control_urb(urb, udev, pipe, (unsigned char *)dr, buf, len,
 		_usbctrl_vendorreq_async_callback, buf);

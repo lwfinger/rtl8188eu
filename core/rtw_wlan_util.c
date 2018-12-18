@@ -372,7 +372,7 @@ void get_rate_set(_adapter *padapter, unsigned char *pbssrate, int *bssrate_len)
 
 	memset(supportedrates, 0, NumRates);
 	*bssrate_len = ratetbl2rateset(padapter, supportedrates);
-	_rtw_memcpy(pbssrate, supportedrates, *bssrate_len);
+	memcpy(pbssrate, supportedrates, *bssrate_len);
 }
 
 void set_mcs_rate_by_mask(u8 *mcs_set, u32 mask)
@@ -770,7 +770,7 @@ __inline u8 *get_my_bssid(WLAN_BSSID_EX *pnetwork)
 u16 get_beacon_interval(WLAN_BSSID_EX *bss)
 {
 	__le16  val;
-	_rtw_memcpy((unsigned char *)&val, rtw_get_beacon_interval_from_ie(bss->IEs), 2);
+	memcpy((unsigned char *)&val, rtw_get_beacon_interval_from_ie(bss->IEs), 2);
 
 	return le16_to_cpu(val);
 }
@@ -887,7 +887,7 @@ inline void write_cam_from_cache(_adapter *adapter, u8 id)
 	struct sec_cam_ent cache;
 
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
-	_rtw_memcpy(&cache, &dvobj->cam_cache[id], sizeof(struct sec_cam_ent));
+	memcpy(&cache, &dvobj->cam_cache[id], sizeof(struct sec_cam_ent));
 	_exit_critical_bh(&cam_ctl->lock, &irqL);
 
 	rtw_sec_write_cam_ent(adapter, id, cache.ctrl, cache.mac, cache.key);
@@ -901,8 +901,8 @@ void write_cam_cache(_adapter *adapter, u8 id, u16 ctrl, u8 *mac, u8 *key)
 	_enter_critical_bh(&cam_ctl->lock, &irqL);
 
 	dvobj->cam_cache[id].ctrl = ctrl;
-	_rtw_memcpy(dvobj->cam_cache[id].mac, mac, ETH_ALEN);
-	_rtw_memcpy(dvobj->cam_cache[id].key, key, 16);
+	memcpy(dvobj->cam_cache[id].mac, mac, ETH_ALEN);
+	memcpy(dvobj->cam_cache[id].key, key, 16);
 
 	_exit_critical_bh(&cam_ctl->lock, &irqL);
 }
@@ -1409,10 +1409,10 @@ inline void rtw_sec_cam_swap(_adapter *adapter, u8 cam_id_a, u8 cam_id_b)
 	cam_b_used = _rtw_sec_camid_is_used(cam_ctl, cam_id_b);
 
 	if (cam_a_used)
-		_rtw_memcpy(&cache_a, &dvobj->cam_cache[cam_id_a], sizeof(struct sec_cam_ent));
+		memcpy(&cache_a, &dvobj->cam_cache[cam_id_a], sizeof(struct sec_cam_ent));
 
 	if (cam_b_used)
-		_rtw_memcpy(&cache_b, &dvobj->cam_cache[cam_id_b], sizeof(struct sec_cam_ent));
+		memcpy(&cache_b, &dvobj->cam_cache[cam_id_b], sizeof(struct sec_cam_ent));
 
 	_exit_critical_bh(&cam_ctl->lock, &irqL);
 
@@ -1568,7 +1568,7 @@ int WMM_param_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs	pIE)
 	if (!memcmp(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element)))
 		return false;
 	else
-		_rtw_memcpy(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element));
+		memcpy(&(pmlmeinfo->WMM_param), (pIE->data + 6), sizeof(struct WMM_para_element));
 	pmlmeinfo->WMM_enable = 1;
 	return true;
 }
@@ -1998,7 +1998,7 @@ void HT_info_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 		return;
 
 	pmlmeinfo->HT_info_enable = 1;
-	_rtw_memcpy(&(pmlmeinfo->HT_info), pIE->data, pIE->Length);
+	memcpy(&(pmlmeinfo->HT_info), pIE->data, pIE->Length);
 	return;
 }
 
@@ -2043,7 +2043,7 @@ void ERP_IE_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE)
 		return;
 
 	pmlmeinfo->ERP_enable = 1;
-	_rtw_memcpy(&(pmlmeinfo->ERP_IE), pIE->data, pIE->Length);
+	memcpy(&(pmlmeinfo->ERP_IE), pIE->data, pIE->Length);
 }
 
 void VCS_update(_adapter *padapter, struct sta_info *psta)
@@ -2196,7 +2196,7 @@ int rtw_get_bcn_keys(ADAPTER *Adapter, u8 *pframe, u32 packet_len,
 
 	/* Checking for channel */
 	if (elems.ds_params && elems.ds_params_len == sizeof(recv_beacon->bcn_channel))
-		_rtw_memcpy(&recv_beacon->bcn_channel, elems.ds_params,
+		memcpy(&recv_beacon->bcn_channel, elems.ds_params,
 			    sizeof(recv_beacon->bcn_channel));
 	else if (pht_info)
 		/* In 5G, some ap do not have DSSET IE checking HT info for channel */
@@ -2212,7 +2212,7 @@ int rtw_get_bcn_keys(ADAPTER *Adapter, u8 *pframe, u32 packet_len,
 		if (elems.ssid_len > sizeof(recv_beacon->ssid))
 			return false;
 
-		_rtw_memcpy(recv_beacon->ssid, elems.ssid, elems.ssid_len);
+		memcpy(recv_beacon->ssid, elems.ssid, elems.ssid_len);
 		recv_beacon->ssid_len = elems.ssid_len;
 	} else
 		; /* means hidden ssid */
@@ -2242,7 +2242,7 @@ void rtw_dump_bcn_keys(struct beacon_keys *recv_beacon)
 	char *p;
 	u8 ssid[IW_ESSID_MAX_SIZE + 1];
 
-	_rtw_memcpy(ssid, recv_beacon->ssid, recv_beacon->ssid_len);
+	memcpy(ssid, recv_beacon->ssid, recv_beacon->ssid_len);
 	ssid[recv_beacon->ssid_len] = '\0';
 
 	RTW_INFO("%s: ssid = %s\n", __func__, ssid);
@@ -2283,7 +2283,7 @@ int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len)
 
 	/* don't care hidden ssid, use current beacon ssid directly */
 	if (recv_beacon.ssid_len == 0) {
-		_rtw_memcpy(recv_beacon.ssid, pmlmepriv->cur_beacon_keys.ssid,
+		memcpy(recv_beacon.ssid, pmlmepriv->cur_beacon_keys.ssid,
 			    pmlmepriv->cur_beacon_keys.ssid_len);
 		recv_beacon.ssid_len = pmlmepriv->cur_beacon_keys.ssid_len;
 	}
@@ -2409,7 +2409,7 @@ void process_csa_ie(_adapter *padapter, u8 *pframe, uint pkt_len)
 		switch (pIE->ElementID) {
 		case _CH_SWTICH_ANNOUNCE_:
 			padapter->mlmepriv.handle_dfs = true;
-			_rtw_memcpy(&new_ch_no, pIE->data + 1, 1);
+			memcpy(&new_ch_no, pIE->data + 1, 1);
 			rtw_set_csa_cmd(padapter, new_ch_no);
 			break;
 		default:
@@ -2681,11 +2681,11 @@ void update_tx_basic_rate(_adapter *padapter, u8 wirelessmode)
 		wirelessmode &= ~(WIRELESS_11B);
 
 	if ((wirelessmode & WIRELESS_11B) && (wirelessmode == WIRELESS_11B))
-		_rtw_memcpy(supported_rates, rtw_basic_rate_cck, 4);
+		memcpy(supported_rates, rtw_basic_rate_cck, 4);
 	else if (wirelessmode & WIRELESS_11B)
-		_rtw_memcpy(supported_rates, rtw_basic_rate_mix, 7);
+		memcpy(supported_rates, rtw_basic_rate_mix, 7);
 	else
-		_rtw_memcpy(supported_rates, rtw_basic_rate_ofdm, 3);
+		memcpy(supported_rates, rtw_basic_rate_ofdm, 3);
 
 	if (wirelessmode & WIRELESS_11B)
 		update_mgnt_tx_rate(padapter, IEEE80211_CCK_RATE_1MB);
@@ -2898,10 +2898,10 @@ void update_sta_basic_rate(struct sta_info *psta, u8 wireless_mode)
 {
 	if (IsSupportedTxCCK(wireless_mode)) {
 		/* Only B, B/G, and B/G/N AP could use CCK rate */
-		_rtw_memcpy(psta->bssrateset, rtw_basic_rate_cck, 4);
+		memcpy(psta->bssrateset, rtw_basic_rate_cck, 4);
 		psta->bssratelen = 4;
 	} else {
-		_rtw_memcpy(psta->bssrateset, rtw_basic_rate_ofdm, 3);
+		memcpy(psta->bssrateset, rtw_basic_rate_ofdm, 3);
 		psta->bssratelen = 3;
 	}
 }
@@ -2920,13 +2920,13 @@ int rtw_ies_get_supported_rate(u8 *ies, uint ies_len, u8 *rate_set, u8 *rate_num
 	if (ie == NULL)
 		goto ext_rate;
 
-	_rtw_memcpy(rate_set, ie + 2, ie_len);
+	memcpy(rate_set, ie + 2, ie_len);
 	*rate_num = ie_len;
 
 ext_rate:
 	ie = rtw_get_ie(ies, _EXT_SUPPORTEDRATES_IE_, &ie_len, ies_len);
 	if (ie) {
-		_rtw_memcpy(rate_set + *rate_num, ie + 2, ie_len);
+		memcpy(rate_set + *rate_num, ie + 2, ie_len);
 		*rate_num += ie_len;
 	}
 
@@ -3575,7 +3575,7 @@ void rtw_get_current_ip_address(PADAPTER padapter, u8 *pcurrentip)
 				ipaddress[3] = my_ifa_list->ifa_address >> 24;
 				RTW_INFO("%s: %d.%d.%d.%d ==========\n", __func__,
 					ipaddress[0], ipaddress[1], ipaddress[2], ipaddress[3]);
-				_rtw_memcpy(pcurrentip, ipaddress, 4);
+				memcpy(pcurrentip, ipaddress, 4);
 			}
 		}
 	}
@@ -3704,43 +3704,43 @@ u8 rtw_set_default_pattern(_adapter *adapter)
 	for (index = 0 ; index < DEFAULT_PATTERN_NUM ; index++) {
 		switch (index) {
 		case 0:
-			_rtw_memcpy(pwrpriv->patterns[index].content,
+			memcpy(pwrpriv->patterns[index].content,
 				    adapter_mac_addr(adapter),
 				    ETH_ALEN);
-			_rtw_memcpy(pwrpriv->patterns[index].content + ETH_TYPE_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + ETH_TYPE_OFFSET,
 				    &ip_protocol, sizeof(ip_protocol));
-			_rtw_memcpy(pwrpriv->patterns[index].content + PROTOCOL_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + PROTOCOL_OFFSET,
 				    &tcp_protocol, sizeof(tcp_protocol));
-			_rtw_memcpy(pwrpriv->patterns[index].content + IP_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + IP_OFFSET,
 				    &currentip, sizeof(currentip));
-			_rtw_memcpy(pwrpriv->patterns[index].mask,
+			memcpy(pwrpriv->patterns[index].mask,
 				    &unicast_mask, sizeof(unicast_mask));
 			pwrpriv->patterns[index].len = IP_OFFSET + sizeof(currentip);
 			break;
 		case 1:
-			_rtw_memcpy(pwrpriv->patterns[index].content,
+			memcpy(pwrpriv->patterns[index].content,
 				    adapter_mac_addr(adapter),
 				    ETH_ALEN);
-			_rtw_memcpy(pwrpriv->patterns[index].content + ETH_TYPE_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + ETH_TYPE_OFFSET,
 				    &ip_protocol, sizeof(ip_protocol));
-			_rtw_memcpy(pwrpriv->patterns[index].content + PROTOCOL_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + PROTOCOL_OFFSET,
 				    &icmp_protocol, sizeof(icmp_protocol));
-			_rtw_memcpy(pwrpriv->patterns[index].content + IP_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + IP_OFFSET,
 				    &currentip, sizeof(currentip));
-			_rtw_memcpy(pwrpriv->patterns[index].mask,
+			memcpy(pwrpriv->patterns[index].mask,
 				    &unicast_mask, sizeof(unicast_mask));
 			pwrpriv->patterns[index].len = IP_OFFSET + sizeof(currentip);
 			break;
 		case 2:
-			_rtw_memcpy(pwrpriv->patterns[index].content, &multicast_addr,
+			memcpy(pwrpriv->patterns[index].content, &multicast_addr,
 				    sizeof(multicast_addr));
-			_rtw_memcpy(pwrpriv->patterns[index].content + ETH_TYPE_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + ETH_TYPE_OFFSET,
 				    &ip_protocol, sizeof(ip_protocol));
-			_rtw_memcpy(pwrpriv->patterns[index].content + PROTOCOL_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + PROTOCOL_OFFSET,
 				    &udp_protocol, sizeof(udp_protocol));
-			_rtw_memcpy(pwrpriv->patterns[index].content + IP_OFFSET,
+			memcpy(pwrpriv->patterns[index].content + IP_OFFSET,
 				    &multicast_ip, sizeof(multicast_ip));
-			_rtw_memcpy(pwrpriv->patterns[index].mask,
+			memcpy(pwrpriv->patterns[index].mask,
 				    &multicast_mask, sizeof(multicast_mask));
 			pwrpriv->patterns[index].len =
 				IP_OFFSET + sizeof(multicast_ip);
@@ -4011,7 +4011,7 @@ int rtw_dev_ssid_list_set(struct pno_ssid_list *pno_ssid_list,
 		num = MAX_PNO_LIST_COUNT;
 
 	for (i = 0 ; i < num ; i++) {
-		_rtw_memcpy(&pno_ssid_list->node[i].SSID,
+		memcpy(&pno_ssid_list->node[i].SSID,
 			    ssid[i].SSID, ssid[i].SSID_len);
 		pno_ssid_list->node[i].SSID_len = ssid[i].SSID_len;
 	}
