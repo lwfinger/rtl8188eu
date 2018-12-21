@@ -122,7 +122,7 @@ int recvbuf2recvframe(PADAPTER padapter, void *ptr)
 			goto _exit_recvbuf2recvframe;
 		}
 
-		_rtw_init_listhead(&precvframe->u.hdr.list);
+		INIT_LIST_HEAD(&precvframe->u.hdr.list);
 		precvframe->u.hdr.precvbuf = NULL;	/* can't access the precvbuf for new arch. */
 		precvframe->u.hdr.len = 0;
 

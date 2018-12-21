@@ -693,37 +693,6 @@ void rtw_mfree2d(void *pbuf, int h, int w, int size)
 	rtw_mfree((u8 *)pbuf, h * sizeof(void *) + w * h * size);
 }
 
-void _rtw_init_listhead(_list *list)
-{
-	INIT_LIST_HEAD(list);
-}
-
-
-/*
-For the following list_xxx operations,
-caller must guarantee the atomic context.
-Otherwise, there will be racing condition.
-*/
-u32	rtw_is_list_empty(_list *phead)
-{
-	if (list_empty(phead))
-		return true;
-	else
-		return false;
-}
-
-void rtw_list_insert_head(_list *plist, _list *phead)
-{
-	list_add(plist, phead);
-}
-
-void rtw_list_insert_tail(_list *plist, _list *phead)
-{
-	list_add_tail(plist, phead);
-}
-
-/* Caller must check if the list is empty before calling rtw_list_delete */
-
 void _rtw_init_sema(_sema	*sema, int init_val)
 {
 	sema_init(sema, init_val);
@@ -789,7 +758,7 @@ void	_rtw_spinunlock_ex(_lock *plock)
 
 void _rtw_init_queue(_queue *pqueue)
 {
-	_rtw_init_listhead(&(pqueue->queue));
+	INIT_LIST_HEAD(&(pqueue->queue));
 	spin_lock_init(&(pqueue->lock));
 }
 
@@ -800,7 +769,7 @@ void _rtw_deinit_queue(_queue *pqueue)
 
 u32	  _rtw_queue_empty(_queue	*pqueue)
 {
-	return rtw_is_list_empty(&(pqueue->queue));
+	return list_empty(&(pqueue->queue));
 }
 
 

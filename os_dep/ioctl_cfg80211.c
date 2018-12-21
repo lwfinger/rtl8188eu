@@ -4232,7 +4232,7 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
 			else {
 				RTW_INFO("free psta=%p, aid=%d\n", psta, psta->aid);
 
-				rtw_list_delete(&psta->asoc_list);
+				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 
 				/* _exit_critical_bh(&pstapriv->asoc_list_lock, &irqL); */

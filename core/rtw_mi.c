@@ -1124,7 +1124,7 @@ static s32 _rtw_mi_buddy_clone_bcmc_packet(_adapter *adapter, union recv_frame *
 	if (pcloneframe) {
 		pcloneframe->u.hdr.adapter = adapter;
 
-		_rtw_init_listhead(&pcloneframe->u.hdr.list);
+		INIT_LIST_HEAD(&pcloneframe->u.hdr.list);
 		pcloneframe->u.hdr.precvbuf = NULL;	/*can't access the precvbuf for new arch.*/
 		pcloneframe->u.hdr.len = 0;
 

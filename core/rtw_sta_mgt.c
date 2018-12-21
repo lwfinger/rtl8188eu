@@ -52,7 +52,7 @@ inline void rtw_st_ctl_clear_tracker_q(struct st_ctl_t *st_ctl)
 	while (rtw_end_of_queue_search(phead, plist) == false) {
 		st = LIST_CONTAINOR(plist, struct session_tracker, list);
 		plist = get_next(plist);
-		rtw_list_delete(&st->list);
+		list_del_init(&st->list);
 		rtw_mfree((u8 *)st, sizeof(struct session_tracker));
 	}
 	_exit_critical_bh(&st_ctl->tracker_q.lock, &irqL);
@@ -164,11 +164,11 @@ void _rtw_init_stainfo(struct sta_info *psta)
 	memset((u8 *)psta, 0, sizeof(struct sta_info));
 
 	spin_lock_init(&psta->lock);
-	_rtw_init_listhead(&psta->list);
-	_rtw_init_listhead(&psta->hash_list);
-	/* _rtw_init_listhead(&psta->asoc_list); */
-	/* _rtw_init_listhead(&psta->sleep_list); */
-	/* _rtw_init_listhead(&psta->wakeup_list);	 */
+	INIT_LIST_HEAD(&psta->list);
+	INIT_LIST_HEAD(&psta->hash_list);
+	/* INIT_LIST_HEAD(&psta->asoc_list); */
+	/* INIT_LIST_HEAD(&psta->sleep_list); */
+	/* INIT_LIST_HEAD(&psta->wakeup_list);	 */
 
 	_rtw_init_queue(&psta->sleep_q);
 	psta->sleepq_len = 0;
@@ -178,9 +178,9 @@ void _rtw_init_stainfo(struct sta_info *psta)
 
 #ifdef CONFIG_AP_MODE
 
-	_rtw_init_listhead(&psta->asoc_list);
+	INIT_LIST_HEAD(&psta->asoc_list);
 
-	_rtw_init_listhead(&psta->auth_list);
+	INIT_LIST_HEAD(&psta->auth_list);
 
 	psta->expire_to = 0;
 
@@ -246,9 +246,9 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 	for (i = 0; i < NUM_STA; i++) {
 		_rtw_init_stainfo(psta);
 
-		_rtw_init_listhead(&(pstapriv->sta_hash[i]));
+		INIT_LIST_HEAD(&(pstapriv->sta_hash[i]));
 
-		rtw_list_insert_tail(&psta->list, get_list_head(&pstapriv->free_sta_queue));
+		list_add_tail(&psta->list, get_list_head(&pstapriv->free_sta_queue));
 
 		psta++;
 	}
@@ -260,8 +260,8 @@ u32	_rtw_init_sta_priv(struct	sta_priv *pstapriv)
 	pstapriv->sta_dz_bitmap = 0;
 	pstapriv->tim_bitmap = 0;
 
-	_rtw_init_listhead(&pstapriv->asoc_list);
-	_rtw_init_listhead(&pstapriv->auth_list);
+	INIT_LIST_HEAD(&pstapriv->asoc_list);
+	INIT_LIST_HEAD(&pstapriv->auth_list);
 	spin_lock_init(&pstapriv->asoc_list_lock);
 	spin_lock_init(&pstapriv->auth_list_lock);
 	pstapriv->asoc_list_cnt = 0;
@@ -464,7 +464,7 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 	}
 	psta = LIST_CONTAINOR(get_next(&pfree_sta_queue->queue), struct sta_info, list);
 
-	rtw_list_delete(&(psta->list));
+	list_del_init(&(psta->list));
 
 	/* _exit_critical_bh(&(pfree_sta_queue->lock), &irqL); */
 
@@ -487,7 +487,7 @@ struct	sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, u8 *hwaddr)
 
 	/* _enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL2); */
 
-	rtw_list_insert_tail(&psta->hash_list, phash_list);
+	list_add_tail(&psta->hash_list, phash_list);
 
 	pstapriv->asoc_sta_count++;
 
@@ -577,7 +577,7 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 
 	if (is_pre_link_sta == false) {
 		_enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL0);
-		rtw_list_delete(&psta->hash_list);
+		list_del_init(&psta->hash_list);
 		pstapriv->asoc_sta_count--;
 		_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL0);
 		rtw_mi_update_iface_status(&(padapter->mlmepriv), 0);
@@ -596,9 +596,9 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 
 	pstaxmitpriv = &psta->sta_xmitpriv;
 
-	/* rtw_list_delete(&psta->sleep_list); */
+	/* list_del_init(&psta->sleep_list); */
 
-	/* rtw_list_delete(&psta->wakeup_list); */
+	/* list_del_init(&psta->wakeup_list); */
 
 	_enter_critical_bh(&pxmitpriv->lock, &irqL0);
 
@@ -608,7 +608,7 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 	/* vo */
 	/* _enter_critical_bh(&(pxmitpriv->vo_pending.lock), &irqL0); */
 	rtw_free_xmitframe_queue(pxmitpriv, &pstaxmitpriv->vo_q.sta_pending);
-	rtw_list_delete(&(pstaxmitpriv->vo_q.tx_pending));
+	list_del_init(&(pstaxmitpriv->vo_q.tx_pending));
 	phwxmit = pxmitpriv->hwxmits;
 	phwxmit->accnt -= pstaxmitpriv->vo_q.qcnt;
 	pending_qcnt[0] = pstaxmitpriv->vo_q.qcnt;
@@ -618,7 +618,7 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 	/* vi */
 	/* _enter_critical_bh(&(pxmitpriv->vi_pending.lock), &irqL0); */
 	rtw_free_xmitframe_queue(pxmitpriv, &pstaxmitpriv->vi_q.sta_pending);
-	rtw_list_delete(&(pstaxmitpriv->vi_q.tx_pending));
+	list_del_init(&(pstaxmitpriv->vi_q.tx_pending));
 	phwxmit = pxmitpriv->hwxmits + 1;
 	phwxmit->accnt -= pstaxmitpriv->vi_q.qcnt;
 	pending_qcnt[1] = pstaxmitpriv->vi_q.qcnt;
@@ -628,7 +628,7 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 	/* be */
 	/* _enter_critical_bh(&(pxmitpriv->be_pending.lock), &irqL0); */
 	rtw_free_xmitframe_queue(pxmitpriv, &pstaxmitpriv->be_q.sta_pending);
-	rtw_list_delete(&(pstaxmitpriv->be_q.tx_pending));
+	list_del_init(&(pstaxmitpriv->be_q.tx_pending));
 	phwxmit = pxmitpriv->hwxmits + 2;
 	phwxmit->accnt -= pstaxmitpriv->be_q.qcnt;
 	pending_qcnt[2] = pstaxmitpriv->be_q.qcnt;
@@ -638,7 +638,7 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 	/* bk */
 	/* _enter_critical_bh(&(pxmitpriv->bk_pending.lock), &irqL0); */
 	rtw_free_xmitframe_queue(pxmitpriv, &pstaxmitpriv->bk_q.sta_pending);
-	rtw_list_delete(&(pstaxmitpriv->bk_q.tx_pending));
+	list_del_init(&(pstaxmitpriv->bk_q.tx_pending));
 	phwxmit = pxmitpriv->hwxmits + 3;
 	phwxmit->accnt -= pstaxmitpriv->bk_q.qcnt;
 	pending_qcnt[3] = pstaxmitpriv->bk_q.qcnt;
@@ -683,12 +683,12 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 		phead =	get_list_head(ppending_recvframe_queue);
 		plist = get_next(phead);
 
-		while (!rtw_is_list_empty(phead)) {
+		while (!list_empty(phead)) {
 			prframe = LIST_CONTAINOR(plist, union recv_frame, u);
 
 			plist = get_next(plist);
 
-			rtw_list_delete(&(prframe->u.hdr.list));
+			list_del_init(&(prframe->u.hdr.list));
 
 			rtw_free_recvframe(prframe, pfree_recv_queue);
 		}
@@ -709,12 +709,12 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 
 	/*
 		_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL0);
-		rtw_list_delete(&psta->asoc_list);
+		list_del_init(&psta->asoc_list);
 		_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL0);
 	*/
 	_enter_critical_bh(&pstapriv->auth_list_lock, &irqL0);
-	if (!rtw_is_list_empty(&psta->auth_list)) {
-		rtw_list_delete(&psta->auth_list);
+	if (!list_empty(&psta->auth_list)) {
+		list_del_init(&psta->auth_list);
 		pstapriv->auth_list_cnt--;
 	}
 	_exit_critical_bh(&pstapriv->auth_list_lock, &irqL0);
@@ -761,7 +761,7 @@ u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta)
 
 		/* _enter_critical_bh(&(pfree_sta_queue->lock), &irqL0); */
 		_enter_critical_bh(&(pstapriv->sta_hash_lock), &irqL0);
-		rtw_list_insert_tail(&psta->list, get_list_head(pfree_sta_queue));
+		list_add_tail(&psta->list, get_list_head(pfree_sta_queue));
 		_exit_critical_bh(&(pstapriv->sta_hash_lock), &irqL0);
 		/* _exit_critical_bh(&(pfree_sta_queue->lock), &irqL0); */
 	}
@@ -800,7 +800,7 @@ void rtw_free_all_stainfo(_adapter *padapter)
 
 			if (pbcmc_stainfo != psta) {
 				if (rtw_is_pre_link_sta(pstapriv, psta->hwaddr) == false)
-					rtw_list_delete(&psta->hash_list);
+					list_del_init(&psta->hash_list);
 
 				stainfo_offset = rtw_stainfo_offset(pstapriv, psta);
 				if (stainfo_offset_valid(stainfo_offset))
@@ -899,8 +899,8 @@ u32 rtw_init_bcmc_stainfo(_adapter *padapter)
 	/*
 		_enter_critical(&pstapending->lock, &irqL0);
 
-		if (rtw_is_list_empty(&ptxservq->tx_pending))
-			rtw_list_insert_tail(&ptxservq->tx_pending, get_list_head(pstapending));
+		if (list_empty(&ptxservq->tx_pending))
+			list_add_tail(&ptxservq->tx_pending, get_list_head(pstapending));
 
 		_exit_critical(&pstapending->lock, &irqL0);
 	*/

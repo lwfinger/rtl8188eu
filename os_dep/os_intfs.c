@@ -1909,7 +1909,7 @@ u8 rtw_init_drv_sw(_adapter *padapter)
 {
 	u8	ret8 = _SUCCESS;
 
-	_rtw_init_listhead(&padapter->list);
+	INIT_LIST_HEAD(&padapter->list);
 	ret8 = rtw_init_default_value(padapter);
 
 	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL) {

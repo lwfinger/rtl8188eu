@@ -264,9 +264,9 @@ sint _rtw_enqueue_cmd(_queue *queue, struct cmd_obj *obj, bool to_head)
 	_enter_critical(&queue->lock, &irqL);
 
 	if (to_head)
-		rtw_list_insert_head(&obj->list, &queue->queue);
+		list_add(&obj->list, &queue->queue);
 	else
-		rtw_list_insert_tail(&obj->list, &queue->queue);
+		list_add_tail(&obj->list, &queue->queue);
 
 #ifdef DBG_CMD_QUEUE
 	if (dump_cmd_id) {
@@ -330,7 +330,7 @@ struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
 #endif /* DBG_CMD_QUEUE */
 
 
-	if (rtw_is_list_empty(&(queue->queue)))
+	if (list_empty(&(queue->queue)))
 		obj = NULL;
 	else {
 		obj = LIST_CONTAINOR(get_next(&(queue->queue)), struct cmd_obj, list);
@@ -363,7 +363,7 @@ struct	cmd_obj	*_rtw_dequeue_cmd(_queue *queue)
 		}
 #endif /* DBG_CMD_QUEUE */
 
-		rtw_list_delete(&obj->list);
+		list_del_init(&obj->list);
 	}
 
 	/* _exit_critical_bh(&(queue->lock), &irqL); */
@@ -577,7 +577,7 @@ thread_return rtw_cmd_thread(thread_context context)
 		}
 
 		_enter_critical(&pcmdpriv->cmd_queue.lock, &irqL);
-		if (rtw_is_list_empty(&(pcmdpriv->cmd_queue.queue))) {
+		if (list_empty(&(pcmdpriv->cmd_queue.queue))) {
 			/* RTW_INFO("%s: cmd queue is empty!\n", __func__); */
 			_exit_critical(&pcmdpriv->cmd_queue.lock, &irqL);
 			continue;
@@ -757,7 +757,7 @@ u32 rtw_enqueue_evt(struct evt_priv *pevtpriv, struct evt_obj *obj)
 
 	_enter_critical_bh(&queue->lock, &irqL);
 
-	rtw_list_insert_tail(&obj->list, &queue->queue);
+	list_add_tail(&obj->list, &queue->queue);
 
 	_exit_critical_bh(&queue->lock, &irqL);
 
@@ -777,11 +777,11 @@ struct evt_obj *rtw_dequeue_evt(_queue *queue)
 
 	_enter_critical_bh(&queue->lock, &irqL);
 
-	if (rtw_is_list_empty(&(queue->queue)))
+	if (list_empty(&(queue->queue)))
 		pevtobj = NULL;
 	else {
 		pevtobj = LIST_CONTAINOR(get_next(&(queue->queue)), struct evt_obj, list);
-		rtw_list_delete(&pevtobj->list);
+		list_del_init(&pevtobj->list);
 	}
 
 	_exit_critical_bh(&queue->lock, &irqL);
@@ -1141,7 +1141,7 @@ u8 rtw_getbbreg_cmd(_adapter  *padapter, u8 offset, u8 *pval)
 		return _FAIL;
 	}
 
-	_rtw_init_listhead(&ph2c->list);
+	INIT_LIST_HEAD(&ph2c->list);
 	ph2c->cmdcode = GEN_CMD_CODE(_GetBBReg);
 	ph2c->parmbuf = (unsigned char *)prdbbparm;
 	ph2c->cmdsz =  sizeof(struct readBB_parm);
@@ -1205,7 +1205,7 @@ u8 rtw_getrfreg_cmd(_adapter  *padapter, u8 offset, u8 *pval)
 		goto exit;
 	}
 
-	_rtw_init_listhead(&ph2c->list);
+	INIT_LIST_HEAD(&ph2c->list);
 	ph2c->cmdcode = GEN_CMD_CODE(_GetRFReg);
 	ph2c->parmbuf = (unsigned char *)prdrfparm;
 	ph2c->cmdsz =  sizeof(struct readRF_parm);
@@ -1498,7 +1498,7 @@ u8 rtw_joinbss_cmd(_adapter  *padapter, struct wlan_network *pnetwork)
 	}
 #endif
 	pcmd->cmdsz = sizeof(WLAN_BSSID_EX);
-	_rtw_init_listhead(&pcmd->list);
+	INIT_LIST_HEAD(&pcmd->list);
 	pcmd->cmdcode = _JoinBss_CMD_;/* GEN_CMD_CODE(_JoinBss) */
 	pcmd->parmbuf = (unsigned char *)psecnetwork;
 	pcmd->rsp = NULL;
@@ -1763,7 +1763,7 @@ u8 rtw_getrttbl_cmd(_adapter  *padapter, struct getratable_rsp *pval)
 
 	/*	init_h2fwcmd_w_parm_no_rsp(ph2c, psetrttblparm, GEN_CMD_CODE(_SetRaTable)); */
 
-	_rtw_init_listhead(&ph2c->list);
+	INIT_LIST_HEAD(&ph2c->list);
 	ph2c->cmdcode = GEN_CMD_CODE(_GetRaTable);
 	ph2c->parmbuf = (unsigned char *)pgetrttblparm;
 	ph2c->cmdsz =  sizeof(struct getratable_parm);
@@ -4196,7 +4196,7 @@ static void session_tracker_chk_for_sta(_adapter *adapter, struct sta_info *sta)
 	if (i >= SESSION_TRACKER_REG_ID_NUM)
 		goto chk_sta;
 
-	_rtw_init_listhead(&dlist);
+	INIT_LIST_HEAD(&dlist);
 
 	_enter_critical_bh(&st_ctl->tracker_q.lock, &irqL);
 
@@ -4211,8 +4211,8 @@ static void session_tracker_chk_for_sta(_adapter *adapter, struct sta_info *sta)
 		if (st->status != ST_STATUS_ESTABLISH
 			&& rtw_get_passing_time_ms(st->set_time) > ST_EXPIRE_MS
 		) {
-			rtw_list_delete(&st->list);
-			rtw_list_insert_tail(&st->list, &dlist);
+			list_del_init(&st->list);
+			list_add_tail(&st->list, &dlist);
 		}
 
 		/* TODO: check OS for status update */
@@ -4342,7 +4342,7 @@ static void session_tracker_cmd_hdl(_adapter *adapter, struct st_cmd_parm *parm)
 		switch (cmd) {
 		case ST_CMD_DEL:
 			if (st) {
-				rtw_list_delete(plist);
+				list_del_init(plist);
 				free_st = 1;
 			}
 			goto unlock;
@@ -4372,7 +4372,7 @@ unlock:
 			st->status = ST_STATUS_CHECK;
 
 			_enter_critical_bh(&st_ctl->tracker_q.lock, &irqL);
-			rtw_list_insert_tail(&st->list, phead);
+			list_add_tail(&st->list, phead);
 			_exit_critical_bh(&st_ctl->tracker_q.lock, &irqL);
 		}
 	}
@@ -4613,7 +4613,7 @@ void rtw_create_ibss_post_hdl(_adapter *padapter, int status)
 			}
 			pwlan->last_scanned = rtw_get_current_time();
 		} else
-			rtw_list_insert_tail(&(pwlan->list), &pmlmepriv->scanned_queue.queue);
+			list_add_tail(&(pwlan->list), &pmlmepriv->scanned_queue.queue);
 
 		pdev_network->Length = get_WLAN_BSSID_EX_sz(pdev_network);
 		memcpy(&(pwlan->network), pdev_network, pdev_network->Length);

@@ -67,9 +67,9 @@ static sint _rtw_init_mlme_priv(_adapter *padapter)
 	pnetwork = (struct wlan_network *)pbuf;
 
 	for (i = 0; i < MAX_BSS_CNT; i++) {
-		_rtw_init_listhead(&(pnetwork->list));
+		INIT_LIST_HEAD(&(pnetwork->list));
 
-		rtw_list_insert_tail(&(pnetwork->list), &(pmlmepriv->free_bss_pool.queue));
+		list_add_tail(&(pnetwork->list), &(pmlmepriv->free_bss_pool.queue));
 
 		pnetwork++;
 	}
@@ -293,7 +293,7 @@ static sint	_rtw_enqueue_network(_queue *queue, struct wlan_network *pnetwork)
 
 	_enter_critical_bh(&queue->lock, &irqL);
 
-	rtw_list_insert_tail(&pnetwork->list, &queue->queue);
+	list_add_tail(&pnetwork->list, &queue->queue);
 
 	_exit_critical_bh(&queue->lock, &irqL);
 
@@ -321,7 +321,7 @@ struct	wlan_network *_rtw_dequeue_network(_queue *queue)
 	{
 		pnetwork = LIST_CONTAINOR(get_next(&queue->queue), struct wlan_network, list);
 
-		rtw_list_delete(&(pnetwork->list));
+		list_del_init(&(pnetwork->list));
 	}
 
 	_exit_critical_bh(&queue->lock, &irqL);
@@ -349,7 +349,7 @@ struct	wlan_network *_rtw_alloc_network(struct	mlme_priv *pmlmepriv) /* (_queue 
 
 	pnetwork = LIST_CONTAINOR(plist , struct wlan_network, list);
 
-	rtw_list_delete(&pnetwork->list);
+	list_del_init(&pnetwork->list);
 
 	pnetwork->network_type = 0;
 	pnetwork->fixed = false;
@@ -392,9 +392,9 @@ void _rtw_free_network(struct	mlme_priv *pmlmepriv , struct wlan_network *pnetwo
 
 	_enter_critical_bh(&free_queue->lock, &irqL);
 
-	rtw_list_delete(&(pnetwork->list));
+	list_del_init(&(pnetwork->list));
 
-	rtw_list_insert_tail(&(pnetwork->list), &(free_queue->queue));
+	list_add_tail(&(pnetwork->list), &(free_queue->queue));
 
 	pmlmepriv->num_of_scanned--;
 
@@ -421,9 +421,9 @@ void _rtw_free_network_nolock(struct	mlme_priv *pmlmepriv, struct wlan_network *
 
 	/* _enter_critical(&free_queue->lock, &irqL); */
 
-	rtw_list_delete(&(pnetwork->list));
+	list_del_init(&(pnetwork->list));
 
-	rtw_list_insert_tail(&(pnetwork->list), get_list_head(free_queue));
+	list_add_tail(&(pnetwork->list), get_list_head(free_queue));
 
 	pmlmepriv->num_of_scanned--;
 
@@ -961,7 +961,7 @@ void rtw_update_scanned_network(_adapter *adapter, WLAN_BSSID_EX *target)
 			if (pnetwork->network.PhyInfo.SignalQuality == 101)
 				pnetwork->network.PhyInfo.SignalQuality = 0;
 
-			rtw_list_insert_tail(&(pnetwork->list), &(queue->queue));
+			list_add_tail(&(pnetwork->list), &(queue->queue));
 
 		}
 	} else {
@@ -1323,8 +1323,8 @@ static void free_scanqueue(struct	mlme_priv *pmlmepriv)
 
 	while (plist != phead) {
 		ptemp = get_next(plist);
-		rtw_list_delete(plist);
-		rtw_list_insert_tail(plist, &free_queue->queue);
+		list_del_init(plist);
+		list_add_tail(plist, &free_queue->queue);
 		plist = ptemp;
 		pmlmepriv->num_of_scanned--;
 	}
@@ -2236,8 +2236,8 @@ void rtw_sta_timeout_event_callback(_adapter *adapter, u8 *pbuf)
 		u8 updated = false;
 
 		_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-		if (rtw_is_list_empty(&psta->asoc_list) == false) {
-			rtw_list_delete(&psta->asoc_list);
+		if (list_empty(&psta->asoc_list) == false) {
+			list_del_init(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
 			updated = ap_free_sta(adapter, psta, true, WLAN_REASON_PREV_AUTH_NOT_VALID, true);
 		}
@@ -3279,7 +3279,7 @@ sint rtw_set_auth(_adapter *adapter, struct security_priv *psecuritypriv)
 	pcmd->rspsz = 0;
 
 
-	_rtw_init_listhead(&pcmd->list);
+	INIT_LIST_HEAD(&pcmd->list);
 
 
 	res = rtw_enqueue_cmd(pcmdpriv, pcmd);
@@ -3363,7 +3363,7 @@ sint rtw_set_key(_adapter *adapter, struct security_priv *psecuritypriv, sint ke
 		pcmd->rsp = NULL;
 		pcmd->rspsz = 0;
 
-		_rtw_init_listhead(&pcmd->list);
+		INIT_LIST_HEAD(&pcmd->list);
 
 		/* _rtw_init_sema(&(pcmd->cmd_sem), 0); */
 

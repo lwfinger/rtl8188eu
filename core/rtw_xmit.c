@@ -28,7 +28,7 @@ static u8 RFC1042_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0x00 };
 
 static void _init_txservq(struct tx_servq *ptxservq)
 {
-	_rtw_init_listhead(&ptxservq->tx_pending);
+	INIT_LIST_HEAD(&ptxservq->tx_pending);
 	_rtw_init_queue(&ptxservq->sta_pending);
 	ptxservq->qcnt = 0;
 }
@@ -47,8 +47,8 @@ void	_rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv)
 	_init_txservq(&psta_xmitpriv->bk_q);
 	_init_txservq(&psta_xmitpriv->vi_q);
 	_init_txservq(&psta_xmitpriv->vo_q);
-	_rtw_init_listhead(&psta_xmitpriv->legacy_dz);
-	_rtw_init_listhead(&psta_xmitpriv->apsd);
+	INIT_LIST_HEAD(&psta_xmitpriv->legacy_dz);
+	INIT_LIST_HEAD(&psta_xmitpriv->apsd);
 
 }
 
@@ -107,7 +107,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	pxframe = (struct xmit_frame *) pxmitpriv->pxmit_frame_buf;
 
 	for (i = 0; i < NR_XMITFRAME; i++) {
-		_rtw_init_listhead(&(pxframe->list));
+		INIT_LIST_HEAD(&(pxframe->list));
 
 		pxframe->padapter = padapter;
 		pxframe->frame_tag = NULL_FRAMETAG;
@@ -117,7 +117,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 		pxframe->buf_addr = NULL;
 		pxframe->pxmitbuf = NULL;
 
-		rtw_list_insert_tail(&(pxframe->list), &(pxmitpriv->free_xmit_queue.queue));
+		list_add_tail(&(pxframe->list), &(pxmitpriv->free_xmit_queue.queue));
 
 		pxframe++;
 	}
@@ -144,7 +144,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
 
 	for (i = 0; i < NR_XMITBUFF; i++) {
-		_rtw_init_listhead(&pxmitbuf->list);
+		INIT_LIST_HEAD(&pxmitbuf->list);
 
 		pxmitbuf->priv_data = NULL;
 		pxmitbuf->padapter = padapter;
@@ -160,7 +160,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 		}
 		pxmitbuf->flags = XMIT_VO_QUEUE;
 
-		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmitbuf_queue.queue));
+		list_add_tail(&pxmitbuf->list, &(pxmitpriv->free_xmitbuf_queue.queue));
 #ifdef DBG_XMIT_BUF
 		pxmitbuf->no = i;
 #endif
@@ -185,7 +185,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	pxframe = (struct xmit_frame *)pxmitpriv->xframe_ext;
 
 	for (i = 0; i < NR_XMIT_EXTBUFF; i++) {
-		_rtw_init_listhead(&(pxframe->list));
+		INIT_LIST_HEAD(&(pxframe->list));
 
 		pxframe->padapter = padapter;
 		pxframe->frame_tag = NULL_FRAMETAG;
@@ -197,7 +197,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 
 		pxframe->ext_tag = 1;
 
-		rtw_list_insert_tail(&(pxframe->list), &(pxmitpriv->free_xframe_ext_queue.queue));
+		list_add_tail(&(pxframe->list), &(pxmitpriv->free_xframe_ext_queue.queue));
 
 		pxframe++;
 	}
@@ -218,7 +218,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
 
 	for (i = 0; i < NR_XMIT_EXTBUFF; i++) {
-		_rtw_init_listhead(&pxmitbuf->list);
+		INIT_LIST_HEAD(&pxmitbuf->list);
 
 		pxmitbuf->priv_data = NULL;
 		pxmitbuf->padapter = padapter;
@@ -230,7 +230,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 			goto exit;
 		}
 
-		rtw_list_insert_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
+		list_add_tail(&pxmitbuf->list, &(pxmitpriv->free_xmit_extbuf_queue.queue));
 #ifdef DBG_XMIT_BUF_EXT
 		pxmitbuf->no = i;
 #endif
@@ -243,7 +243,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	for (i = 0; i < CMDBUF_MAX; i++) {
 		pxmitbuf = &pxmitpriv->pcmd_xmitbuf[i];
 		if (pxmitbuf) {
-			_rtw_init_listhead(&pxmitbuf->list);
+			INIT_LIST_HEAD(&pxmitbuf->list);
 
 			pxmitbuf->priv_data = NULL;
 			pxmitbuf->padapter = padapter;
@@ -2822,7 +2822,7 @@ struct xmit_buf *rtw_alloc_xmitbuf_ext(struct xmit_priv *pxmitpriv)
 
 		pxmitbuf = LIST_CONTAINOR(plist, struct xmit_buf, list);
 
-		rtw_list_delete(&(pxmitbuf->list));
+		list_del_init(&(pxmitbuf->list));
 	}
 
 	if (pxmitbuf !=  NULL) {
@@ -2855,9 +2855,9 @@ s32 rtw_free_xmitbuf_ext(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 
 	_enter_critical(&pfree_queue->lock, &irqL);
 
-	rtw_list_delete(&pxmitbuf->list);
+	list_del_init(&pxmitbuf->list);
 
-	rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_queue));
+	list_add_tail(&(pxmitbuf->list), get_list_head(pfree_queue));
 	pxmitpriv->free_xmit_extbuf_cnt++;
 #ifdef DBG_XMIT_BUF_EXT
 	RTW_INFO("DBG_XMIT_BUF_EXT FREE no=%d, free_xmit_extbuf_cnt=%d\n", pxmitbuf->no , pxmitpriv->free_xmit_extbuf_cnt);
@@ -2889,7 +2889,7 @@ struct xmit_buf *rtw_alloc_xmitbuf(struct xmit_priv *pxmitpriv)
 
 		pxmitbuf = LIST_CONTAINOR(plist, struct xmit_buf, list);
 
-		rtw_list_delete(&(pxmitbuf->list));
+		list_del_init(&(pxmitbuf->list));
 	}
 
 	if (pxmitbuf !=  NULL) {
@@ -2937,9 +2937,9 @@ s32 rtw_free_xmitbuf(struct xmit_priv *pxmitpriv, struct xmit_buf *pxmitbuf)
 	else {
 		_enter_critical(&pfree_xmitbuf_queue->lock, &irqL);
 
-		rtw_list_delete(&pxmitbuf->list);
+		list_del_init(&pxmitbuf->list);
 
-		rtw_list_insert_tail(&(pxmitbuf->list), get_list_head(pfree_xmitbuf_queue));
+		list_add_tail(&(pxmitbuf->list), get_list_head(pfree_xmitbuf_queue));
 
 		pxmitpriv->free_xmitbuf_cnt++;
 		/* RTW_INFO("FREE, free_xmitbuf_cnt=%d\n", pxmitpriv->free_xmitbuf_cnt); */
@@ -3016,7 +3016,7 @@ struct xmit_frame *rtw_alloc_xmitframe(struct xmit_priv *pxmitpriv)/* (_queue *p
 
 		pxframe = LIST_CONTAINOR(plist, struct xmit_frame, list);
 
-		rtw_list_delete(&(pxframe->list));
+		list_del_init(&(pxframe->list));
 		pxmitpriv->free_xmitframe_cnt--;
 	}
 
@@ -3043,7 +3043,7 @@ struct xmit_frame *rtw_alloc_xmitframe_ext(struct xmit_priv *pxmitpriv)
 		plist = get_next(phead);
 		pxframe = LIST_CONTAINOR(plist, struct xmit_frame, list);
 
-		rtw_list_delete(&(pxframe->list));
+		list_del_init(&(pxframe->list));
 		pxmitpriv->free_xframe_ext_cnt--;
 	}
 
@@ -3114,8 +3114,8 @@ s32 rtw_free_xmitframe(struct xmit_priv *pxmitpriv, struct xmit_frame *pxmitfram
 
 	_enter_critical_bh(&queue->lock, &irqL);
 
-	rtw_list_delete(&pxmitframe->list);
-	rtw_list_insert_tail(&pxmitframe->list, get_list_head(queue));
+	list_del_init(&pxmitframe->list);
+	list_add_tail(&pxmitframe->list, get_list_head(queue));
 	if (pxmitframe->ext_tag == 0) {
 		pxmitpriv->free_xmitframe_cnt++;
 	} else if (pxmitframe->ext_tag == 1) {
@@ -3181,7 +3181,7 @@ static struct xmit_frame *dequeue_one_xmitframe(struct xmit_priv *pxmitpriv, str
 	while ((rtw_end_of_queue_search(xmitframe_phead, xmitframe_plist)) == false) {
 		pxmitframe = LIST_CONTAINOR(xmitframe_plist, struct xmit_frame, list);
 
-		rtw_list_delete(&pxmitframe->list);
+		list_del_init(&pxmitframe->list);
 
 		ptxservq->qcnt--;
 		break;
@@ -3310,7 +3310,7 @@ struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
 
 				/* Remove sta node when there is no pending packets. */
 				if (_rtw_queue_empty(pframe_queue)) /* must be done after get_next and before break */
-					rtw_list_delete(&ptxservq->tx_pending);
+					list_del_init(&ptxservq->tx_pending);
 
 				/* _exit_critical_ex(&phwxmit->sta_queue->lock, &irqL0); */
 
@@ -3417,12 +3417,12 @@ s32 rtw_xmit_classifier(_adapter *padapter, struct xmit_frame *pxmitframe)
 
 	/* _enter_critical(&pstapending->lock, &irqL0); */
 
-	if (rtw_is_list_empty(&ptxservq->tx_pending))
-		rtw_list_insert_tail(&ptxservq->tx_pending, get_list_head(phwxmits[ac_index].sta_queue));
+	if (list_empty(&ptxservq->tx_pending))
+		list_add_tail(&ptxservq->tx_pending, get_list_head(phwxmits[ac_index].sta_queue));
 
 	/* _enter_critical(&ptxservq->sta_pending.lock, &irqL1); */
 
-	rtw_list_insert_tail(&pxmitframe->list, get_list_head(&ptxservq->sta_pending));
+	list_add_tail(&pxmitframe->list, get_list_head(&ptxservq->sta_pending));
 	ptxservq->qcnt++;
 	phwxmits[ac_index].accnt++;
 
@@ -3512,7 +3512,7 @@ void rtw_init_hwxmits(struct hw_xmit *phwxmit, sint entry)
 	sint i;
 	for (i = 0; i < entry; i++, phwxmit++) {
 		/* spin_lock_init(&phwxmit->xmit_lock); */
-		/* _rtw_init_listhead(&phwxmit->pending);		 */
+		/* INIT_LIST_HEAD(&phwxmit->pending);		 */
 		/* phwxmit->txcmdcnt = 0; */
 		phwxmit->accnt = 0;
 	}
@@ -4026,11 +4026,11 @@ sint xmitframe_enqueue_for_tdls_sleeping_sta(_adapter *padapter, struct xmit_fra
 		_enter_critical_bh(&ptdls_sta->sleep_q.lock, &irqL);
 
 		if (ptdls_sta->state & WIFI_SLEEP_STATE) {
-			rtw_list_delete(&pxmitframe->list);
+			list_del_init(&pxmitframe->list);
 
 			/* _enter_critical_bh(&psta->sleep_q.lock, &irqL);	 */
 
-			rtw_list_insert_tail(&pxmitframe->list, get_list_head(&ptdls_sta->sleep_q));
+			list_add_tail(&pxmitframe->list, get_list_head(&ptdls_sta->sleep_q));
 
 			ptdls_sta->sleepq_len++;
 			ptdls_sta->sleepq_ac_len++;
@@ -4179,11 +4179,11 @@ sint xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *p
 		if (pstapriv->sta_dz_bitmap) { /* if anyone sta is in ps mode */
 			/* pattrib->qsel = QSLT_HIGH; */ /* HIQ */
 
-			rtw_list_delete(&pxmitframe->list);
+			list_del_init(&pxmitframe->list);
 
 			/*_enter_critical_bh(&psta->sleep_q.lock, &irqL);*/
 
-			rtw_list_insert_tail(&pxmitframe->list, get_list_head(&psta->sleep_q));
+			list_add_tail(&pxmitframe->list, get_list_head(&psta->sleep_q));
 
 			psta->sleepq_len++;
 
@@ -4222,11 +4222,11 @@ sint xmitframe_enqueue_for_sleeping_sta(_adapter *padapter, struct xmit_frame *p
 		u8 wmmps_ac = 0;
 
 		if (pstapriv->sta_dz_bitmap & BIT(psta->aid)) {
-			rtw_list_delete(&pxmitframe->list);
+			list_del_init(&pxmitframe->list);
 
 			/* _enter_critical_bh(&psta->sleep_q.lock, &irqL);	 */
 
-			rtw_list_insert_tail(&pxmitframe->list, get_list_head(&psta->sleep_q));
+			list_add_tail(&pxmitframe->list, get_list_head(&psta->sleep_q));
 
 			psta->sleepq_len++;
 
@@ -4348,16 +4348,16 @@ void stop_sta_xmit(_adapter *padapter, struct sta_info *psta)
 		pstapriv->sta_dz_bitmap |= BIT(psta->aid);
 
 	dequeue_xmitframes_to_sleeping_queue(padapter, psta, &pstaxmitpriv->vo_q.sta_pending);
-	rtw_list_delete(&(pstaxmitpriv->vo_q.tx_pending));
+	list_del_init(&(pstaxmitpriv->vo_q.tx_pending));
 
 	dequeue_xmitframes_to_sleeping_queue(padapter, psta, &pstaxmitpriv->vi_q.sta_pending);
-	rtw_list_delete(&(pstaxmitpriv->vi_q.tx_pending));
+	list_del_init(&(pstaxmitpriv->vi_q.tx_pending));
 
 	dequeue_xmitframes_to_sleeping_queue(padapter, psta, &pstaxmitpriv->be_q.sta_pending);
-	rtw_list_delete(&(pstaxmitpriv->be_q.tx_pending));
+	list_del_init(&(pstaxmitpriv->be_q.tx_pending));
 
 	dequeue_xmitframes_to_sleeping_queue(padapter, psta, &pstaxmitpriv->bk_q.sta_pending);
-	rtw_list_delete(&(pstaxmitpriv->bk_q.tx_pending));
+	list_del_init(&(pstaxmitpriv->bk_q.tx_pending));
 
 #ifdef CONFIG_TDLS
 	if (!(psta->tdls_sta_state & TDLS_LINKED_STATE) && (psta_bmc != NULL)) {
@@ -4366,7 +4366,7 @@ void stop_sta_xmit(_adapter *padapter, struct sta_info *psta)
 		/* for BC/MC Frames */
 		pstaxmitpriv = &psta_bmc->sta_xmitpriv;
 		dequeue_xmitframes_to_sleeping_queue(padapter, psta_bmc, &pstaxmitpriv->be_q.sta_pending);
-		rtw_list_delete(&(pstaxmitpriv->be_q.tx_pending));
+		list_del_init(&(pstaxmitpriv->be_q.tx_pending));
 
 #ifdef CONFIG_TDLS
 	}
@@ -4398,7 +4398,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 
 		xmitframe_plist = get_next(xmitframe_plist);
 
-		rtw_list_delete(&pxmitframe->list);
+		list_del_init(&pxmitframe->list);
 
 		switch (pxmitframe->attrib.priority) {
 		case 1:
@@ -4496,7 +4496,7 @@ void wakeup_sta_to_xmit(_adapter *padapter, struct sta_info *psta)
 
 			xmitframe_plist = get_next(xmitframe_plist);
 
-			rtw_list_delete(&pxmitframe->list);
+			list_del_init(&pxmitframe->list);
 
 			psta_bmc->sleepq_len--;
 			if (psta_bmc->sleepq_len > 0)
@@ -4591,7 +4591,7 @@ void xmit_delivery_enabled_frames(_adapter *padapter, struct sta_info *psta)
 		if (!wmmps_ac)
 			continue;
 
-		rtw_list_delete(&pxmitframe->list);
+		list_del_init(&pxmitframe->list);
 
 		psta->sleepq_len--;
 		psta->sleepq_ac_len--;
@@ -4646,8 +4646,8 @@ void enqueue_pending_xmitbuf(
 	pqueue = &pxmitpriv->pending_xmitbuf_queue;
 
 	_enter_critical_bh(&pqueue->lock, &irql);
-	rtw_list_delete(&pxmitbuf->list);
-	rtw_list_insert_tail(&pxmitbuf->list, get_list_head(pqueue));
+	list_del_init(&pxmitbuf->list);
+	list_add_tail(&pxmitbuf->list, get_list_head(pqueue));
 	_exit_critical_bh(&pqueue->lock, &irql);
 	_rtw_up_sema(&(pri_adapter->xmitpriv.xmit_sema));
 }
@@ -4660,8 +4660,8 @@ void enqueue_pending_xmitbuf_to_head(
 	_queue *pqueue = &pxmitpriv->pending_xmitbuf_queue;
 
 	_enter_critical_bh(&pqueue->lock, &irql);
-	rtw_list_delete(&pxmitbuf->list);
-	rtw_list_insert_head(&pxmitbuf->list, get_list_head(pqueue));
+	list_del_init(&pxmitbuf->list);
+	list_add(&pxmitbuf->list, get_list_head(pqueue));
 	_exit_critical_bh(&pqueue->lock, &irql);
 }
 
@@ -4683,7 +4683,7 @@ struct xmit_buf *dequeue_pending_xmitbuf(
 		phead = get_list_head(pqueue);
 		plist = get_next(phead);
 		pxmitbuf = LIST_CONTAINOR(plist, struct xmit_buf, list);
-		rtw_list_delete(&pxmitbuf->list);
+		list_del_init(&pxmitbuf->list);
 	}
 
 	_exit_critical_bh(&pqueue->lock, &irql);
@@ -4726,7 +4726,7 @@ static struct xmit_buf *dequeue_pending_xmitbuf_under_survey(
 			if ((type == WIFI_PROBEREQ) ||
 			    (type == WIFI_DATA_NULL) ||
 			    (type == WIFI_QOS_DATA_NULL)) {
-				rtw_list_delete(&pxmitbuf->list);
+				list_del_init(&pxmitbuf->list);
 				break;
 			}
 			pxmitbuf = NULL;
@@ -4764,7 +4764,7 @@ static struct xmit_buf *dequeue_pending_xmitbuf_ext(
 			pxmitbuf = LIST_CONTAINOR(plist, struct xmit_buf, list);
 
 			if (pxmitbuf->buf_tag == XMITBUF_MGNT) {
-				rtw_list_delete(&pxmitbuf->list);
+				list_del_init(&pxmitbuf->list);
 				break;
 			}
 			pxmitbuf = NULL;

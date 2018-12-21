@@ -866,7 +866,7 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 			pxmitframe->pkt_offset = 1;
 			break;
 		}
-		rtw_list_delete(&pxmitframe->list);
+		list_del_init(&pxmitframe->list);
 		ptxservq->qcnt--;
 		phwxmit->accnt--;
 
@@ -927,11 +927,11 @@ s32 rtl8188eu_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 		}
 	} /* end while( aggregate same priority and same DA(AP or STA) frames) */
 	if (_rtw_queue_empty(&ptxservq->sta_pending) == true)
-		rtw_list_delete(&ptxservq->tx_pending);
+		list_del_init(&ptxservq->tx_pending);
 	else if (single_sta_in_queue == false) {
 		/* Re-arrange the order of stations in this ac queue to balance the service for these stations */
-		rtw_list_delete(&ptxservq->tx_pending);
-		rtw_list_insert_tail(&ptxservq->tx_pending, get_list_head(phwxmit->sta_queue));
+		list_del_init(&ptxservq->tx_pending);
+		list_add_tail(&ptxservq->tx_pending, get_list_head(phwxmit->sta_queue));
 	}
 
 	_exit_critical_bh(&pxmitpriv->lock, &irqL);

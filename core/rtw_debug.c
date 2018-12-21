@@ -4274,8 +4274,8 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 						u8 updated = false;
 
 						_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-						if (rtw_is_list_empty(&psta->asoc_list) == false) {
-							rtw_list_delete(&psta->asoc_list);
+						if (list_empty(&psta->asoc_list) == false) {
+							list_del_init(&psta->asoc_list);
 							pstapriv->asoc_list_cnt--;
 							updated = ap_free_sta(padapter, psta, false, WLAN_REASON_PREV_AUTH_NOT_VALID, true);
 

@@ -327,7 +327,7 @@ void	expire_timeout_chk(_adapter *padapter)
 		if (psta->expire_to > 0) {
 			psta->expire_to--;
 			if (psta->expire_to == 0) {
-				rtw_list_delete(&psta->auth_list);
+				list_del_init(&psta->auth_list);
 				pstapriv->auth_list_cnt--;
 
 				RTW_INFO("auth expire %02X%02X%02X%02X%02X%02X\n",
@@ -495,7 +495,7 @@ void	expire_timeout_chk(_adapter *padapter)
 				continue;
 			}
 #endif /* CONFIG_ACTIVE_KEEP_ALIVE_CHECK */
-			rtw_list_delete(&psta->asoc_list);
+			list_del_init(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
 			RTW_INFO("asoc expire "MAC_FMT", state=0x%x\n", MAC_ARG(psta->hwaddr), psta->state);
 			updated = ap_free_sta(padapter, psta, false, WLAN_REASON_DEAUTH_LEAVING, true);
@@ -575,8 +575,8 @@ void	expire_timeout_chk(_adapter *padapter)
 			psta->keep_alive_trycnt = 0;
 			RTW_INFO("asoc expire "MAC_FMT", state=0x%x\n", MAC_ARG(psta->hwaddr), psta->state);
 			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-			if (!rtw_is_list_empty(&psta->asoc_list)) {
-				rtw_list_delete(&psta->asoc_list);
+			if (!list_empty(&psta->asoc_list)) {
+				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated = ap_free_sta(padapter, psta, false, WLAN_REASON_DEAUTH_LEAVING, true);
 			}
@@ -1330,8 +1330,8 @@ update_beacon:
 
 #ifdef CONFIG_SWTIMER_BASED_TXBCN
 		_enter_critical_bh(&pdvobj->ap_if_q.lock, &irqL);
-		if (rtw_is_list_empty(&padapter->list)) {
-			rtw_list_insert_tail(&padapter->list, get_list_head(&pdvobj->ap_if_q));
+		if (list_empty(&padapter->list)) {
+			list_add_tail(&padapter->list, get_list_head(&pdvobj->ap_if_q));
 			pdvobj->nr_ap_if++;
 			pdvobj->inter_bcn_space = DEFAULT_BCN_INTERVAL / pdvobj->nr_ap_if;
 		}
@@ -1785,11 +1785,11 @@ static void rtw_macaddr_acl_init(_adapter *adapter)
 	unsigned long irqL;
 
 	_enter_critical_bh(&(acl_node_q->lock), &irqL);
-	_rtw_init_listhead(&(acl_node_q->queue));
+	INIT_LIST_HEAD(&(acl_node_q->queue));
 	acl->num = 0;
 	acl->mode = RTW_ACL_MODE_DISABLED;
 	for (i = 0; i < NUM_ACL; i++) {
-		_rtw_init_listhead(&acl->aclnode[i].list);
+		INIT_LIST_HEAD(&acl->aclnode[i].list);
 		acl->aclnode[i].valid = false;
 	}
 	_exit_critical_bh(&(acl_node_q->lock), &irqL);
@@ -1813,7 +1813,7 @@ static void rtw_macaddr_acl_deinit(_adapter *adapter)
 
 		if (acl_node->valid ) {
 			acl_node->valid = false;
-			rtw_list_delete(&acl_node->list);
+			list_del_init(&acl_node->list);
 			acl->num--;
 		}
 	}
@@ -1876,11 +1876,11 @@ int rtw_acl_add_sta(_adapter *adapter, const u8 *addr)
 		acl_node = &acl->aclnode[i];
 		if (acl_node->valid == false) {
 
-			_rtw_init_listhead(&acl_node->list);
+			INIT_LIST_HEAD(&acl_node->list);
 			memcpy(acl_node->addr, addr, ETH_ALEN);
 			acl_node->valid = true;
 
-			rtw_list_insert_tail(&acl_node->list, get_list_head(acl_node_q));
+			list_add_tail(&acl_node->list, get_list_head(acl_node_q));
 			acl->num++;
 			break;
 		}
@@ -1924,7 +1924,7 @@ int rtw_acl_remove_sta(_adapter *adapter, const u8 *addr)
 		if (is_baddr || !memcmp(acl_node->addr, addr, ETH_ALEN)) {
 			if (acl_node->valid ) {
 				acl_node->valid = false;
-				rtw_list_delete(&acl_node->list);
+				list_del_init(&acl_node->list);
 				acl->num--;
 				match = 1;
 			}
@@ -2035,7 +2035,7 @@ static int rtw_ap_set_key(_adapter *padapter, u8 *key, u8 alg, int keyid, u8 set
 	pcmd->rspsz = 0;
 
 
-	_rtw_init_listhead(&pcmd->list);
+	INIT_LIST_HEAD(&pcmd->list);
 
 	res = rtw_enqueue_cmd(pcmdpriv, pcmd);
 
@@ -2109,7 +2109,7 @@ static u8 rtw_ap_bmc_frames_hdl(_adapter *padapter)
 
 			xmitframe_plist = get_next(xmitframe_plist);
 
-			rtw_list_delete(&pxmitframe->list);
+			list_del_init(&pxmitframe->list);
 
 			psta_bmc->sleepq_len--;
 			tx_counts++;
@@ -3090,7 +3090,7 @@ int rtw_sta_flush(_adapter *padapter, bool enqueue)
 		psta = LIST_CONTAINOR(plist, struct sta_info, asoc_list);
 		plist = get_next(plist);
 
-		rtw_list_delete(&psta->asoc_list);
+		list_del_init(&psta->asoc_list);
 		pstapriv->asoc_list_cnt--;
 
 		stainfo_offset = rtw_stainfo_offset(pstapriv, psta);
@@ -3331,7 +3331,7 @@ void stop_ap_mode(_adapter *padapter)
 		else
 			pdvobj->inter_bcn_space = DEFAULT_BCN_INTERVAL;
 
-		rtw_list_delete(&padapter->list);
+		list_del_init(&padapter->list);
 		_exit_critical_bh(&pdvobj->ap_if_q.lock, &irqL);
 
 		rtw_hal_set_hwreg(padapter, HW_VAR_BEACON_INTERVAL, (u8 *)(&pdvobj->inter_bcn_space));
@@ -3685,7 +3685,7 @@ void tx_beacon_handler(struct dvobj_priv *pdvobj)
 
 	/* get first ap mode interface */
 	_enter_critical_bh(&pdvobj->ap_if_q.lock, &irqL);
-	if (rtw_is_list_empty(&pdvobj->ap_if_q.queue) || (pdvobj->nr_ap_if == 0)) {
+	if (list_empty(&pdvobj->ap_if_q.queue) || (pdvobj->nr_ap_if == 0)) {
 		RTW_INFO("[%s] ERROR: ap_if_q is empty!or nr_ap = %d\n", __func__, pdvobj->nr_ap_if);
 		_exit_critical_bh(&pdvobj->ap_if_q.lock, &irqL);
 		return;

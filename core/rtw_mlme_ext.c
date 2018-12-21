@@ -1652,9 +1652,9 @@ _continue:
 			}
 
 			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-			if (rtw_is_list_empty(&psta->asoc_list)) {
+			if (list_empty(&psta->asoc_list)) {
 				psta->expire_to = pstapriv->expire_to;
-				rtw_list_insert_tail(&psta->asoc_list, &pstapriv->asoc_list);
+				list_add_tail(&psta->asoc_list, &pstapriv->asoc_list);
 				pstapriv->asoc_list_cnt++;
 			}
 			_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
@@ -2178,8 +2178,8 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 		{
 
 			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-			if (rtw_is_list_empty(&pstat->asoc_list) == false) {
-				rtw_list_delete(&pstat->asoc_list);
+			if (list_empty(&pstat->asoc_list) == false) {
+				list_del_init(&pstat->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				if (pstat->expire_to > 0)
 					;/* TODO: STA re_auth within expire_to */
@@ -2197,9 +2197,9 @@ unsigned int OnAuth(_adapter *padapter, union recv_frame *precv_frame)
 #endif /* CONFIG_IEEE80211W */
 	{
 		_enter_critical_bh(&pstapriv->auth_list_lock, &irqL);
-		if (rtw_is_list_empty(&pstat->auth_list)) {
+		if (list_empty(&pstat->auth_list)) {
 
-			rtw_list_insert_tail(&pstat->auth_list, &pstapriv->auth_list);
+			list_add_tail(&pstat->auth_list, &pstapriv->auth_list);
 			pstapriv->auth_list_cnt++;
 		}
 		_exit_critical_bh(&pstapriv->auth_list_lock, &irqL);
@@ -2869,16 +2869,16 @@ bypass_ht_chk:
 #endif /* CONFIG_IEEE80211W */
 	{
 		_enter_critical_bh(&pstapriv->auth_list_lock, &irqL);
-		if (!rtw_is_list_empty(&pstat->auth_list)) {
-			rtw_list_delete(&pstat->auth_list);
+		if (!list_empty(&pstat->auth_list)) {
+			list_del_init(&pstat->auth_list);
 			pstapriv->auth_list_cnt--;
 		}
 		_exit_critical_bh(&pstapriv->auth_list_lock, &irqL);
 
 		_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-		if (rtw_is_list_empty(&pstat->asoc_list)) {
+		if (list_empty(&pstat->asoc_list)) {
 			pstat->expire_to = pstapriv->expire_to;
-			rtw_list_insert_tail(&pstat->asoc_list, &pstapriv->asoc_list);
+			list_add_tail(&pstat->asoc_list, &pstapriv->asoc_list);
 			pstapriv->asoc_list_cnt++;
 		}
 		_exit_critical_bh(&pstapriv->asoc_list_lock, &irqL);
@@ -3125,8 +3125,8 @@ unsigned int OnDeAuth(_adapter *padapter, union recv_frame *precv_frame)
 			u8 updated = false;
 
 			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-			if (rtw_is_list_empty(&psta->asoc_list) == false) {
-				rtw_list_delete(&psta->asoc_list);
+			if (list_empty(&psta->asoc_list) == false) {
+				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated = ap_free_sta(padapter, psta, false, reason, true);
 
@@ -3215,8 +3215,8 @@ unsigned int OnDisassoc(_adapter *padapter, union recv_frame *precv_frame)
 			u8 updated = false;
 
 			_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-			if (rtw_is_list_empty(&psta->asoc_list) == false) {
-				rtw_list_delete(&psta->asoc_list);
+			if (list_empty(&psta->asoc_list) == false) {
+				list_del_init(&psta->asoc_list);
 				pstapriv->asoc_list_cnt--;
 				updated = ap_free_sta(padapter, psta, false, reason, true);
 
@@ -11088,7 +11088,7 @@ void report_survey_event(_adapter *padapter, union recv_frame *precv_frame)
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -11143,7 +11143,7 @@ void report_surveydone_event(_adapter *padapter)
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -11191,7 +11191,7 @@ u32 report_join_res(_adapter *padapter, int res)
 		goto exit;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -11243,7 +11243,7 @@ void report_wmm_edca_update(_adapter *padapter)
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -11315,7 +11315,7 @@ u32 report_del_sta_event(_adapter *padapter, unsigned char *MacAddr, unsigned sh
 			goto exit;
 		}
 
-		_rtw_init_listhead(&pcmd_obj->list);
+		INIT_LIST_HEAD(&pcmd_obj->list);
 		pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
 		pcmd_obj->cmdsz = cmdsz;
 		pcmd_obj->parmbuf = pevtcmd;
@@ -11355,7 +11355,7 @@ void report_add_sta_event(_adapter *padapter, unsigned char *MacAddr)
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -12257,7 +12257,7 @@ bypass_active_keep_alive:
 		unsigned long irqL;
 		_list *phead, *plist, dlist;
 
-		_rtw_init_listhead(&dlist);
+		INIT_LIST_HEAD(&dlist);
 
 		_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 
@@ -12278,8 +12278,8 @@ bypass_active_keep_alive:
 					psta->expire_to--;
 
 				if (psta->expire_to <= 0) {
-					rtw_list_delete(&psta->list);
-					rtw_list_insert_tail(&psta->list, &dlist);
+					list_del_init(&psta->list);
+					list_add_tail(&psta->list, &dlist);
 				}
 			}
 		}
@@ -12290,7 +12290,7 @@ bypass_active_keep_alive:
 		while (rtw_end_of_queue_search(&dlist, plist) == false) {
 			psta = LIST_CONTAINOR(plist, struct sta_info, list);
 			plist = get_next(plist);
-			rtw_list_delete(&psta->list);
+			list_del_init(&psta->list);
 			RTW_INFO(FUNC_ADPT_FMT" ibss expire "MAC_FMT"\n"
 				, FUNC_ADPT_ARG(padapter), MAC_ARG(psta->hwaddr));
 			report_del_sta_event(padapter, psta->hwaddr, WLAN_REASON_EXPIRATION_CHK, from_timer ? true : false, false);
@@ -12441,7 +12441,7 @@ void report_sta_timeout_event(_adapter *padapter, u8 *MacAddr, unsigned short re
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
@@ -12682,7 +12682,7 @@ void report_ft_reassoc_event(_adapter *padapter, u8 *pMacAddr)
 		return;
 	}
 
-	_rtw_init_listhead(&pcmd_obj->list);
+	INIT_LIST_HEAD(&pcmd_obj->list);
 	pcmd_obj->cmdcode = GEN_CMD_CODE(_Set_MLME_EVT);
 	pcmd_obj->cmdsz = cmdsz;
 	pcmd_obj->parmbuf = pevtcmd;
@@ -14559,7 +14559,7 @@ u8 chk_bmc_sleepq_hdl(_adapter *padapter, unsigned char *pbuf)
 
 			xmitframe_plist = get_next(xmitframe_plist);
 
-			rtw_list_delete(&pxmitframe->list);
+			list_del_init(&pxmitframe->list);
 
 			psta_bmc->sleepq_len--;
 			if (psta_bmc->sleepq_len > 0)

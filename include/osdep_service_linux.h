@@ -270,11 +270,6 @@ __inline static void _exit_critical_mutex(_mutex *pmutex, unsigned long *pirqL)
 #endif
 }
 
-__inline static void rtw_list_delete(_list *plist)
-{
-	list_del_init(plist);
-}
-
 #define RTW_TIMER_HDL_ARGS void *FunctionContext
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)

@@ -7229,8 +7229,8 @@ static int rtw_del_sta(struct net_device *dev, struct ieee_param *param)
 		/* RTW_INFO("free psta=%p, aid=%d\n", psta, psta->aid); */
 
 		_enter_critical_bh(&pstapriv->asoc_list_lock, &irqL);
-		if (rtw_is_list_empty(&psta->asoc_list) == false) {
-			rtw_list_delete(&psta->asoc_list);
+		if (list_empty(&psta->asoc_list) == false) {
+			list_del_init(&psta->asoc_list);
 			pstapriv->asoc_list_cnt--;
 			updated = ap_free_sta(padapter, psta, true, WLAN_REASON_DEAUTH_LEAVING, true);
 
