@@ -218,10 +218,7 @@ void _rtw_free_evt_priv(struct	evt_priv *pevtpriv)
 
 void _rtw_free_cmd_priv(struct	cmd_priv *pcmdpriv)
 {
-
 	if (pcmdpriv) {
-		_rtw_spinlock_free(&(pcmdpriv->cmd_queue.lock));
-
 		if (pcmdpriv->cmd_allocated_buf)
 			rtw_mfree(pcmdpriv->cmd_allocated_buf, MAX_CMDSZ + CMDBUFF_ALIGN_SZ);
 

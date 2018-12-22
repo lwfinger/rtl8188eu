@@ -46,8 +46,6 @@ void free_mlme_ap_info(_adapter *padapter)
 	struct mlme_priv *pmlmepriv = &(padapter->mlmepriv);
 
 	stop_ap_mode(padapter);
-	_rtw_spinlock_free(&pmlmepriv->bcn_update_lock);
-
 }
 
 static void update_BCNTIM(_adapter *padapter)
@@ -3290,9 +3288,7 @@ void stop_ap_mode(_adapter *padapter)
 	RTW_INFO("%s -"ADPT_FMT"\n", __func__, ADPT_ARG(padapter));
 
 	pmlmepriv->update_bcn = false;
-	/*pmlmeext->bstart_bss = false;*/
 	padapter->netif_up = false;
-	/* _rtw_spinlock_free(&pmlmepriv->bcn_update_lock); */
 
 	/* reset and init security priv , this can refine with rtw_reset_securitypriv */
 	memset((unsigned char *)&padapter->securitypriv, 0, sizeof(struct security_priv));

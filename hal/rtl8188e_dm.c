@@ -287,6 +287,5 @@ void rtl8188e_deinit_dm_priv(PADAPTER Adapter)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(Adapter);
 	struct PHY_DM_STRUCT		*podmpriv = &pHalData->odmpriv;
-	/* _rtw_spinlock_free(&pHalData->odm_stainfo_lock); */
 	odm_cancel_all_timers(podmpriv);
 }

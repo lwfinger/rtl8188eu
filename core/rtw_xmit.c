@@ -309,19 +309,8 @@ exit:
 	return res;
 }
 
-void  rtw_mfree_xmit_priv_lock(struct xmit_priv *pxmitpriv);
 void  rtw_mfree_xmit_priv_lock(struct xmit_priv *pxmitpriv)
 {
-	_rtw_spinlock_free(&pxmitpriv->lock);
-	_rtw_spinlock_free(&pxmitpriv->be_pending.lock);
-	_rtw_spinlock_free(&pxmitpriv->bk_pending.lock);
-	_rtw_spinlock_free(&pxmitpriv->vi_pending.lock);
-	_rtw_spinlock_free(&pxmitpriv->vo_pending.lock);
-	_rtw_spinlock_free(&pxmitpriv->bm_pending.lock);
-
-	_rtw_spinlock_free(&pxmitpriv->free_xmit_queue.lock);
-	_rtw_spinlock_free(&pxmitpriv->free_xmitbuf_queue.lock);
-	_rtw_spinlock_free(&pxmitpriv->pending_xmitbuf_queue.lock);
 }
 
 void _rtw_free_xmit_priv(struct xmit_priv *pxmitpriv)
@@ -365,10 +354,6 @@ void _rtw_free_xmit_priv(struct xmit_priv *pxmitpriv)
 	}
 	if (pxmitpriv->xframe_ext_alloc_addr)
 		rtw_vmfree(pxmitpriv->xframe_ext_alloc_addr, NR_XMIT_EXTBUFF * sizeof(struct xmit_frame) + 4);
-	_rtw_spinlock_free(&pxmitpriv->free_xframe_ext_queue.lock);
-
-	/* free xmit extension buff */
-	_rtw_spinlock_free(&pxmitpriv->free_xmit_extbuf_queue.lock);
 
 	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
 	for (i = 0; i < NR_XMIT_EXTBUFF; i++) {

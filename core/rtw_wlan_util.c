@@ -3504,7 +3504,6 @@ inline void rtw_macid_ctl_init(struct macid_ctl_t *macid_ctl)
 
 inline void rtw_macid_ctl_deinit(struct macid_ctl_t *macid_ctl)
 {
-	_rtw_spinlock_free(&macid_ctl->lock);
 }
 
 _adapter *dvobj_get_port0_adapter(struct dvobj_priv *dvobj)

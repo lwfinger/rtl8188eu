@@ -1789,7 +1789,6 @@ void devobj_deinit(struct dvobj_priv *pdvobj)
 
 #ifdef CONFIG_MCC_MODE
 	_rtw_mutex_free(&(pdvobj->mcc_objpriv.mcc_mutex));
-	_rtw_spinlock_free(&pdvobj->mcc_objpriv.mcc_lock);
 #endif /* CONFIG_MCC_MODE */
 
 	_rtw_mutex_free(&pdvobj->hw_init_mutex);
@@ -1807,14 +1806,11 @@ void devobj_deinit(struct dvobj_priv *pdvobj)
 #endif
 
 	rtw_macid_ctl_deinit(&pdvobj->macid_ctl);
-	_rtw_spinlock_free(&pdvobj->cam_ctl.lock);
 	_rtw_mutex_free(&pdvobj->cam_ctl.sec_cam_access_mutex);
 
 #ifdef CONFIG_MBSSID_CAM
 	rtw_mbid_cam_deinit(pdvobj);
 #endif
-
-	_rtw_spinlock_free(&(pdvobj->ap_if_q.lock));
 
 	rtw_mfree((u8 *)pdvobj, sizeof(*pdvobj));
 }
@@ -2131,12 +2127,6 @@ u8 rtw_free_drv_sw(_adapter *padapter)
 		}
 	}
 	#endif
-	/* add for CONFIG_IEEE80211W, none 11w also can use */
-	_rtw_spinlock_free(&padapter->security_key_mutex);
-
-#ifdef CONFIG_BR_EXT
-	_rtw_spinlock_free(&padapter->br_ext_lock);
-#endif /* CONFIG_BR_EXT */
 
 #ifdef CONFIG_INTEL_WIDI
 	rtw_free_intel_widi(padapter);

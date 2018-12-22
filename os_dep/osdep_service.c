@@ -716,10 +716,6 @@ void	_rtw_mutex_free(_mutex *pmutex)
 #endif
 }
 
-void	_rtw_spinlock_free(_lock *plock)
-{
-}
-
 void	_rtw_spinlock(_lock	*plock)
 {
 	spin_lock(plock);
@@ -748,7 +744,6 @@ void _rtw_init_queue(_queue *pqueue)
 
 void _rtw_deinit_queue(_queue *pqueue)
 {
-	_rtw_spinlock_free(&(pqueue->lock));
 }
 
 u32	  _rtw_queue_empty(_queue	*pqueue)

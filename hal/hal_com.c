@@ -2059,9 +2059,6 @@ void rtw_mbid_cam_init(struct dvobj_priv *dvobj)
 
 void rtw_mbid_cam_deinit(struct dvobj_priv *dvobj)
 {
-	struct mbid_cam_ctl_t *mbid_cam_ctl = &dvobj->mbid_cam_ctl;
-
-	_rtw_spinlock_free(&mbid_cam_ctl->lock);
 }
 
 void rtw_mbid_cam_reset(_adapter *adapter)

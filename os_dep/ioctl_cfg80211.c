@@ -6953,7 +6953,6 @@ void rtw_wdev_free(struct wireless_dev *wdev)
 		_adapter *adapter = (_adapter *)rtw_netdev_priv(wdev_to_ndev(wdev));
 		struct rtw_wdev_priv *wdev_priv = adapter_wdev_data(adapter);
 
-		_rtw_spinlock_free(&wdev_priv->scan_req_lock);
 		_rtw_mutex_free(&wdev_priv->roch_mutex);
 	}
 
