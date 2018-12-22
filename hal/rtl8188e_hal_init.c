@@ -63,7 +63,7 @@ static s32 iol_execute(PADAPTER padapter, u8 control)
 	/* RTW_INFO("%s reg_0x88:0x%02x, write 0x%02x\n", __func__, reg_0x88, reg_0x88|control); */
 	rtw_write8(padapter, REG_HMEBOX_E0,  reg_0x88 | control);
 
-	t1 = start = rtw_get_current_time();
+	t1 = start = jiffies;
 	while (
 		/* (reg_1c7 = rtw_read8(padapter, 0x1c7) >1) && */
 		(reg_0x88 = rtw_read8(padapter, REG_HMEBOX_E0)) & control
@@ -77,7 +77,7 @@ static s32 iol_execute(PADAPTER padapter, u8 control)
 	status = (reg_0x88 & control) ? _FAIL : _SUCCESS;
 	if (reg_0x88 & control << 4)
 		status = _FAIL;
-	t2 = rtw_get_current_time();
+	t2 = jiffies;
 
 	return status;
 }
@@ -287,7 +287,7 @@ static void efuse_read_phymap_from_txpktbuf(
 
 		/* RTW_INFO("%s write reg_0x143:0x00\n", __func__); */
 		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
-		start = rtw_get_current_time();
+		start = jiffies;
 		while (!(reg_0x143 = rtw_read8(adapter, REG_TXPKTBUF_DBG)) /* dbg */
 		       /* while(rtw_read8(adapter, REG_TXPKTBUF_DBG) & BIT0 */
 		       && (passing_time = rtw_get_passing_time_ms(start)) < 1000
@@ -410,7 +410,7 @@ static s32 iol_ioconfig(
 static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit_frame, u32 max_wating_ms, u32 bndy_cnt)
 {
 
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 	u32 passing_time_ms;
 	u8 polling_ret, i;
 	int ret = _FAIL;
@@ -432,7 +432,7 @@ static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit
 
 	dump_mgntframe_and_wait(adapter, xmit_frame, max_wating_ms);
 
-	t1 =	rtw_get_current_time();
+	t1 =	jiffies;
 	iol_mode_enable(adapter, 1);
 	for (i = 0; i < bndy_cnt; i++) {
 		u8 page_no = 0;
@@ -442,7 +442,7 @@ static int rtl8188e_IOL_exec_cmds_sync(ADAPTER *adapter, struct xmit_frame *xmit
 			break;
 	}
 	iol_mode_enable(adapter, 0);
-	t2 = rtw_get_current_time();
+	t2 = jiffies;
 exit:
 	/* restore BCN_HEAD */
 	rtw_write8(adapter, REG_TDECTRL + 1, 0);
@@ -693,7 +693,7 @@ static s32 polling_fwdl_chksum(_adapter *adapter, u32 min_cnt, u32 timeout_ms)
 {
 	s32 ret = _FAIL;
 	u32 value32;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	u32 cnt = 0;
 
 	/* polling CheckSum report */
@@ -724,7 +724,7 @@ static s32 _FWFreeToGo(_adapter *adapter, u32 min_cnt, u32 timeout_ms)
 {
 	s32 ret = _FAIL;
 	u32	value32;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	u32 cnt = 0;
 
 	value32 = rtw_read32(adapter, REG_MCUFWDL);
@@ -909,7 +909,7 @@ s32 rtl8188e_FirmwareDownload(PADAPTER padapter, bool  bUsedWoWLANFw)
 	}
 
 	_FWDownloadEnable_8188E(padapter, true);
-	fwdl_start_time = rtw_get_current_time();
+	fwdl_start_time = jiffies;
 	while (!RTW_CANNOT_IO(padapter)
 	       && (write_fw++ < 3 || rtw_get_passing_time_ms(fwdl_start_time) < 500)) {
 		/* reset FWDL chksum */
@@ -4174,7 +4174,7 @@ void SetHwReg8188E(_adapter *adapter, u8 variable, u8 *val)
 		u16 val16;
 		u32 reg_200 = 0, reg_204 = 0;
 		u32 init_reg_200 = 0, init_reg_204 = 0;
-		u32 start = rtw_get_current_time();
+		u32 start = jiffies;
 		u32 pass_ms;
 		int i = 0;
 

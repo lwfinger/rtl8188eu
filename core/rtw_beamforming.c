@@ -1912,7 +1912,7 @@ void rtw_bf_update_traffic(PADAPTER adapter)
 
 		last_timestamp = bfee->tx_timestamp;
 		last_bytes = bfee->tx_bytes;
-		bfee->tx_timestamp = rtw_get_current_time();
+		bfee->tx_timestamp = jiffies;
 		bfee->tx_bytes = sta->sta_stats.tx_bytes;
 		if (last_timestamp) {
 			if (bfee->tx_bytes >= last_bytes)

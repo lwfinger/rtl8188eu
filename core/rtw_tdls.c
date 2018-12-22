@@ -222,7 +222,7 @@ int issue_nulldata_to_TDLS_peer_STA(_adapter *padapter, unsigned char *da, unsig
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -669,7 +669,7 @@ s32 rtw_tdls_do_ch_sw(_adapter *padapter, struct sta_info *ptdls_sta, u8 chnl_ty
 	u8 take_care_iqk;
 	s32 ret = _FAIL;
 
-	ch_sw_time_start = rtw_systime_to_ms(rtw_get_current_time());
+	ch_sw_time_start = rtw_systime_to_ms(jiffies);
 
 	rtw_tdls_chsw_oper_init(padapter, TDLS_CH_SWITCH_OPER_OFFLOAD_TIMEOUT);
 
@@ -710,7 +710,7 @@ s32 rtw_tdls_do_ch_sw(_adapter *padapter, struct sta_info *ptdls_sta, u8 chnl_ty
 			if (take_care_iqk == true)
 				rtw_hal_ch_sw_iqk_info_restore(padapter, CH_SW_USE_CASE_TDLS);
 
-			ch_sw_time_spent = rtw_systime_to_ms(rtw_get_current_time()) - ch_sw_time_start;
+			ch_sw_time_spent = rtw_systime_to_ms(jiffies) - ch_sw_time_start;
 
 			if (chnl_type == TDLS_CH_SW_OFF_CHNL) {
 				if ((u32)ch_switch_time / 1000 > ch_sw_time_spent)
@@ -2464,7 +2464,7 @@ void rtw_build_tdls_setup_req_ies(_adapter *padapter, struct xmit_frame *pxmitfr
 	/* SNonce */
 	if (pattrib->encrypt) {
 		for (i = 0; i < 8; i++) {
-			time = rtw_get_current_time();
+			time = jiffies;
 			memcpy(&ptdls_sta->SNonce[4 * i], (u8 *)&time, 4);
 		}
 	}
@@ -2532,7 +2532,7 @@ void rtw_build_tdls_setup_rsp_ies(_adapter *padapter, struct xmit_frame *pxmitfr
 
 	if (pattrib->encrypt && ptdls_sta != NULL) {
 		for (k = 0; k < 8; k++) {
-			time = rtw_get_current_time();
+			time = jiffies;
 			memcpy(&ptdls_sta->ANonce[4 * k], (u8 *)&time, 4);
 		}
 	}

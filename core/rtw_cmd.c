@@ -592,7 +592,7 @@ _next:
 			continue;
 		}
 
-		cmd_start_time = rtw_get_current_time();
+		cmd_start_time = jiffies;
 		pcmdpriv->cmd_issued_cnt++;
 
 		if (pcmd->cmdsz > MAX_CMDSZ) {
@@ -915,7 +915,7 @@ u8 rtw_sitesurvey_cmd(_adapter  *padapter, NDIS_802_11_SSID *ssid, int ssid_num,
 
 	if (res == _SUCCESS) {
 
-		pmlmepriv->scan_start_time = rtw_get_current_time();
+		pmlmepriv->scan_start_time = jiffies;
 
 #ifdef CONFIG_SCAN_BACKOP
 		if (rtw_mi_buddy_check_mlmeinfo_state(padapter, WIFI_FW_AP_STATE)) {
@@ -2690,7 +2690,7 @@ void lps_ctrl_wk_hdl(_adapter *padapter, u8 lps_ctrl_type)
 		break;
 	case LPS_CTRL_SPECIAL_PACKET:
 		/* RTW_INFO("LPS_CTRL_SPECIAL_PACKET\n"); */
-		pwrpriv->DelayLPSLastTimeStamp = rtw_get_current_time();
+		pwrpriv->DelayLPSLastTimeStamp = jiffies;
 #ifdef CONFIG_BT_COEXIST
 		rtw_btcoex_SpecialPacketNotify(padapter, PACKET_DHCP);
 #endif /* CONFIG_BT_COEXIST */
@@ -3228,7 +3228,7 @@ static void rtw_chk_hi_queue_hdl(_adapter *padapter)
 {
 	struct sta_info *psta_bmc;
 	struct sta_priv *pstapriv = &padapter->stapriv;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	u8 empty = false;
 
 	psta_bmc = rtw_get_bcmc_stainfo(padapter);
@@ -4358,7 +4358,7 @@ unlock:
 			st->local_port = cpu_to_be16(local_port);
 			st->remote_naddr = remote_naddr;
 			st->remote_port = cpu_to_be16(remote_port);
-			st->set_time = rtw_get_current_time();
+			st->set_time = jiffies;
 			st->status = ST_STATUS_CHECK;
 
 			_enter_critical_bh(&st_ctl->tracker_q.lock, &irqL);
@@ -4601,7 +4601,7 @@ void rtw_create_ibss_post_hdl(_adapter *padapter, int status)
 				_exit_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 				goto createbss_cmd_fail;
 			}
-			pwlan->last_scanned = rtw_get_current_time();
+			pwlan->last_scanned = jiffies;
 		} else
 			list_add_tail(&(pwlan->list), &pmlmepriv->scanned_queue.queue);
 

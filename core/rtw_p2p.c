@@ -3338,7 +3338,7 @@ static int cancel_ro_ch_handler(_adapter *padapter, u8 *buf)
 
 	rtw_cfg80211_set_is_roch(padapter, false);
 	pcfg80211_wdinfo->ro_ch_wdev = NULL;
-	pcfg80211_wdinfo->last_ro_ch_time = rtw_get_current_time();
+	pcfg80211_wdinfo->last_ro_ch_time = jiffies;
 
 	rtw_cfg80211_remain_on_channel_expired(wdev
 		, pcfg80211_wdinfo->remain_on_ch_cookie
@@ -5048,7 +5048,7 @@ void init_wifidirect_info(_adapter *padapter, enum P2P_ROLE role)
 
 	rtw_p2p_findphase_ex_set(pwdinfo, P2P_FINDPHASE_EX_NONE);
 
-	pwdinfo->listen_dwell = (u8)((rtw_get_current_time() % 3) + 1);
+	pwdinfo->listen_dwell = (u8)((jiffies % 3) + 1);
 	/* RTW_INFO( "[%s] listen_dwell time is %d00ms\n", __func__, pwdinfo->listen_dwell ); */
 
 	memset(&pwdinfo->tx_prov_disc_info, 0x00, sizeof(struct tx_provdisc_req_info));

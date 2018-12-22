@@ -195,7 +195,7 @@ static bool rtw_pwr_unassociated_idle(_adapter *adapter)
 		goto exit;
 	}
 
-	if (adapter_to_pwrctl(adapter)->ips_deny_time >= rtw_get_current_time()) {
+	if (adapter_to_pwrctl(adapter)->ips_deny_time >= jiffies) {
 		/* RTW_INFO("%s ips_deny_time\n", __func__); */
 		goto exit;
 	}
@@ -419,7 +419,7 @@ void	traffic_check_for_leave_lps(PADAPTER padapter, u8 tx, u32 tx_packets)
 		xmit_cnt += tx_packets;
 
 		if (start_time == 0)
-			start_time = rtw_get_current_time();
+			start_time = jiffies;
 
 		if (rtw_get_passing_time_ms(start_time) > 2000) { /* 2 sec == watch dog timer */
 			if (xmit_cnt > 8) {
@@ -434,7 +434,7 @@ void	traffic_check_for_leave_lps(PADAPTER padapter, u8 tx, u32 tx_packets)
 				}
 			}
 
-			start_time = rtw_get_current_time();
+			start_time = jiffies;
 			xmit_cnt = 0;
 		}
 
@@ -542,7 +542,7 @@ void rtw_set_rpwm(PADAPTER padapter, u8 pslv)
 		u8 cpwm_now;
 		u8 poll_cnt = 0;
 
-		start_time = rtw_get_current_time();
+		start_time = jiffies;
 
 		/* polling cpwm */
 		do {
@@ -611,7 +611,7 @@ static u8 PS_RDY_CHECK(_adapter *padapter)
 		return false;
 #endif
 
-	curr_time = rtw_get_current_time();
+	curr_time = jiffies;
 
 	delta_time = curr_time - pwrpriv->DelayLPSLastTimeStamp;
 
@@ -735,7 +735,7 @@ void rtw_set_fw_in_ips_mode(PADAPTER padapter, u8 enable)
 		adapter_to_pwrctl(padapter)->tog = (val8 + 0x80) & 0x80;
 
 		/* do polling cpwm */
-		start_time = rtw_get_current_time();
+		start_time = jiffies;
 		do {
 
 			rtw_mdelay_os(1);
@@ -868,7 +868,7 @@ void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode
 				u32 start_time, delay_ms;
 				u8 val8;
 				delay_ms = 20;
-				start_time = rtw_get_current_time();
+				start_time = jiffies;
 				do {
 					rtw_hal_get_hwreg(padapter, HW_VAR_SYS_CLKR, &val8);
 					if (!(val8 & BIT(4))) { /* 0x08 bit4 =1 --> in 32k, bit4 = 0 --> leave 32k */
@@ -994,7 +994,7 @@ s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms)
 	s32 err = 0;
 
 
-	start_time = rtw_get_current_time();
+	start_time = jiffies;
 	while (1) {
 		rtw_hal_get_hwreg(padapter, HW_VAR_FWLPS_RF_ON, &bAwake);
 		if (bAwake)
@@ -1164,7 +1164,7 @@ void LeaveAllPowerSaveModeDirect(PADAPTER Adapter)
 
 #ifndef CONFIG_DETECT_CPWM_BY_POLLING
 
-		start_time = rtw_get_current_time();
+		start_time = jiffies;
 
 		/* polling cpwm */
 		do {
@@ -1314,7 +1314,7 @@ void LPS_Leave_check(
 	pwrpriv = adapter_to_pwrctl(padapter);
 
 	bReady = false;
-	start_time = rtw_get_current_time();
+	start_time = jiffies;
 
 	rtw_yield_os();
 
@@ -2241,7 +2241,7 @@ u8 rtw_interface_ps_func(_adapter *padapter, HAL_INTF_PS_FUNC efunc_id, u8 *val)
 inline void rtw_set_ips_deny(_adapter *padapter, u32 ms)
 {
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
-	pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ms);
+	pwrpriv->ips_deny_time = jiffies + rtw_ms_to_systime(ms);
 }
 
 /*
@@ -2258,7 +2258,7 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 	struct mlme_priv *pmlmepriv;
 	int ret = _SUCCESS;
 	int i;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	/* for LPS */
 	LeaveAllPowerSaveMode(padapter);
@@ -2267,8 +2267,8 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 	padapter = GET_PRIMARY_ADAPTER(padapter);
 	pmlmepriv = &padapter->mlmepriv;
 
-	if (pwrpriv->ips_deny_time < rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms))
-		pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms);
+	if (pwrpriv->ips_deny_time < jiffies + rtw_ms_to_systime(ips_deffer_ms))
+		pwrpriv->ips_deny_time = jiffies + rtw_ms_to_systime(ips_deffer_ms);
 
 
 	if (pwrpriv->ps_processing) {
@@ -2383,8 +2383,8 @@ int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller)
 	}
 
 exit:
-	if (pwrpriv->ips_deny_time < rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms))
-		pwrpriv->ips_deny_time = rtw_get_current_time() + rtw_ms_to_systime(ips_deffer_ms);
+	if (pwrpriv->ips_deny_time < jiffies + rtw_ms_to_systime(ips_deffer_ms))
+		pwrpriv->ips_deny_time = jiffies + rtw_ms_to_systime(ips_deffer_ms);
 	return ret;
 
 }

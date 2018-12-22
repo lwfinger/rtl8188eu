@@ -272,7 +272,7 @@ void sreset_reset(_adapter *padapter)
 	struct mlme_priv	*pmlmepriv = &(padapter->mlmepriv);
 	struct xmit_priv	*pxmitpriv = &padapter->xmitpriv;
 	unsigned long irqL;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	struct dvobj_priv *psdpriv = padapter->dvobj;
 	struct debug_priv *pdbgpriv = &psdpriv->drv_dbg;
 

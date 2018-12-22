@@ -1059,7 +1059,7 @@ static u8 rtw_hal_set_mcc_setting(PADAPTER padapter, u8 status)
 	u8 ret = _FAIL;
 	struct mcc_obj_priv *pmccobjpriv = &(adapter_to_dvobj(padapter)->mcc_objpriv);
 	u8 stop = (status < MCC_SETCMD_STATUS_START_CONNECT) ? true : false;
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 
 	RTW_INFO("===> "FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
 
@@ -1289,14 +1289,14 @@ void rtw_hal_mcc_c2h_handler(PADAPTER padapter, u8 buflen, u8 *tmpBuf)
 		RTW_INFO("[MCC] TXNULL FAIL\n");
 		break;
 	case MCC_RPT_STOPMCC:
-		RTW_INFO("[MCC] MCC stop (time:%d)\n", rtw_get_current_time());
+		RTW_INFO("[MCC] MCC stop (time:%d)\n", jiffies);
 		pmccobjpriv->mcc_c2h_status = MCC_RPT_STOPMCC;
 		rtw_sctx_done(&mcc_sctx);
 		break;
 	case MCC_RPT_READY:
 		_enter_critical_bh(&pmccobjpriv->mcc_lock, &irqL);
 		/* initialize counter & time */
-		pmccobjpriv->mcc_launch_time = rtw_get_current_time();
+		pmccobjpriv->mcc_launch_time = jiffies;
 		pmccobjpriv->mcc_c2h_status = MCC_RPT_READY;
 		pmccobjpriv->cur_mcc_success_cnt = 0;
 		pmccobjpriv->prev_mcc_success_cnt = 0;
@@ -1811,7 +1811,7 @@ void rtw_hal_mcc_issue_null_data(_adapter *padapter, u8 chbw_allow, u8 ps_mode)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
 	_adapter *iface = NULL;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	u8 i = 0;
 
 	if (!MCC_EN(padapter))

@@ -771,8 +771,8 @@ struct rf_ctl_t {
 
 #define RTW_CAC_STOPPED 0
 #define IS_CAC_STOPPED(rfctl) ((rfctl)->cac_end_time == RTW_CAC_STOPPED)
-#define IS_CH_WAITING(rfctl) (!IS_CAC_STOPPED(rfctl) && time_after((unsigned long)(rfctl)->cac_end_time, (unsigned long)rtw_get_current_time()))
-#define IS_UNDER_CAC(rfctl) (IS_CH_WAITING(rfctl) && time_after((unsigned long)rtw_get_current_time(), (unsigned long)(rfctl)->cac_start_time))
+#define IS_CH_WAITING(rfctl) (!IS_CAC_STOPPED(rfctl) && time_after((unsigned long)(rfctl)->cac_end_time, (unsigned long)jiffies))
+#define IS_UNDER_CAC(rfctl) (IS_CH_WAITING(rfctl) && time_after((unsigned long)jiffies, (unsigned long)(rfctl)->cac_start_time))
 
 #ifdef CONFIG_MBSSID_CAM
 #define TOTAL_MBID_CAM_NUM	8

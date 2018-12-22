@@ -453,7 +453,7 @@ inline void rtw_set_oper_ch(_adapter *adapter, u8 ch)
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 
 	if (dvobj->oper_channel != ch) {
-		dvobj->on_oper_ch_time = rtw_get_current_time();
+		dvobj->on_oper_ch_time = jiffies;
 
 #ifdef DBG_CH_SWITCH
 		cnt += snprintf(msg + cnt, len - cnt, "switch to ch %3u", ch);

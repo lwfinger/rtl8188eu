@@ -2894,7 +2894,7 @@ int rtw_ips_pwr_up(_adapter *padapter)
 #ifdef DBG_CONFIG_ERROR_DETECT
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
 #endif/* #ifdef DBG_CONFIG_ERROR_DETECT */
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 	RTW_INFO("===>  rtw_ips_pwr_up..............\n");
 
 #if defined(CONFIG_SWLPS_IN_IPS) || defined(CONFIG_FWLPS_IN_IPS)
@@ -2915,7 +2915,7 @@ int rtw_ips_pwr_up(_adapter *padapter)
 
 void rtw_ips_pwr_down(_adapter *padapter)
 {
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 	RTW_INFO("===> rtw_ips_pwr_down...................\n");
 
 	padapter->net_closed = true;
@@ -3770,7 +3770,7 @@ int rtw_suspend_common(_adapter *padapter)
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 
 	int ret = 0;
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 
 	RTW_INFO(" suspend start\n");
 	RTW_INFO("==> %s (%s:%d)\n", __func__, current->comm, current->pid);
@@ -4226,7 +4226,7 @@ exit:
 int rtw_resume_common(_adapter *padapter)
 {
 	int ret = 0;
-	u32 start_time = rtw_get_current_time();
+	u32 start_time = jiffies;
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 

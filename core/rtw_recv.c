@@ -1396,7 +1396,7 @@ sint ap2sta_data_frame(
 				/* RTW_INFO("After send deauth , %u ms has elapsed.\n", rtw_get_passing_time_ms(send_issue_deauth_time)); */
 
 				if (rtw_get_passing_time_ms(send_issue_deauth_time) > 10000 || send_issue_deauth_time == 0) {
-					send_issue_deauth_time = rtw_get_current_time();
+					send_issue_deauth_time = jiffies;
 
 					RTW_INFO("issue_deauth to the ap=" MAC_FMT " for the reason(7)\n", MAC_ARG(pattrib->bssid));
 
@@ -4076,7 +4076,7 @@ void rx_query_phy_status(
 
 		if ((start_time == 0) || (rtw_get_passing_time_ms(start_time) > 5000)) {
 			RTW_PRINT("Warning!!! %s: Confilc mac addr!!\n", __func__);
-			start_time = rtw_get_current_time();
+			start_time = jiffies;
 		}
 		pdbgpriv->dbg_rx_conflic_mac_addr_cnt++;
 	} else {

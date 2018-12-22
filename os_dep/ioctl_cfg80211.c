@@ -1877,7 +1877,7 @@ u32 rtw_cfg80211_wait_scan_req_empty(_adapter *adapter, u32 timeout_ms)
 	u32 start;
 	u32 pass_ms;
 
-	start = rtw_get_current_time();
+	start = jiffies;
 
 	while (rtw_get_passing_time_ms(start) <= timeout_ms) {
 
@@ -5027,7 +5027,7 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 		RTW_INFO(FUNC_ADPT_FMT" init listen_channel %u\n"
 			, FUNC_ADPT_ARG(padapter), padapter->wdinfo.listen_channel);
 	} else if (rtw_p2p_chk_state(pwdinfo , P2P_STATE_LISTEN)
-		&& (time_after_eq((unsigned long)rtw_get_current_time(), (unsigned long)pwdev_priv->probe_resp_ie_update_time)
+		&& (time_after_eq((unsigned long)jiffies, (unsigned long)pwdev_priv->probe_resp_ie_update_time)
 			&& rtw_get_passing_time_ms(pwdev_priv->probe_resp_ie_update_time) < 50)
 	) {
 		if (padapter->wdinfo.listen_channel != remain_ch) {
@@ -5069,7 +5069,7 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 	rtw_cfg80211_set_is_roch(padapter, true);
 	pcfg80211_wdinfo->ro_ch_wdev = wdev;
 	pcfg80211_wdinfo->remain_on_ch_cookie = *cookie;
-	pcfg80211_wdinfo->last_ro_ch_time = rtw_get_current_time();
+	pcfg80211_wdinfo->last_ro_ch_time = jiffies;
 	memcpy(&pcfg80211_wdinfo->remain_on_ch_channel, channel, sizeof(struct ieee80211_channel));
 	#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 8, 0))
 	pcfg80211_wdinfo->remain_on_ch_type = channel_type;
@@ -5592,7 +5592,7 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
 	u8 category, action;
 	u8 frame_styp;
 	int type = (-1);
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	_adapter *padapter;
 	struct dvobj_priv *dvobj;
 	struct rtw_wdev_priv *pwdev_priv;
@@ -6373,7 +6373,7 @@ int rtw_cfg80211_set_mgnt_wpsp2pie(struct net_device *net, char *buf, int len,
 				ret = rtw_cfg80211_set_probe_resp_wpsp2pie(net, buf, len);
 				#ifdef CONFIG_P2P
 				if (ret == 0)
-					adapter_wdev_data((_adapter *)rtw_netdev_priv(net))->probe_resp_ie_update_time = rtw_get_current_time();
+					adapter_wdev_data((_adapter *)rtw_netdev_priv(net))->probe_resp_ie_update_time = jiffies;
 				#endif
 				break;
 			case 0x4: /* ASSOC_RESP */
@@ -6920,7 +6920,7 @@ int rtw_wdev_alloc(_adapter *padapter, struct wiphy *wiphy)
 	spin_lock_init(&pwdev_priv->scan_req_lock);
 
 	pwdev_priv->p2p_enabled = false;
-	pwdev_priv->probe_resp_ie_update_time = rtw_get_current_time();
+	pwdev_priv->probe_resp_ie_update_time = jiffies;
 	pwdev_priv->provdisc_req_issued = false;
 	rtw_wdev_invit_info_init(&pwdev_priv->invit_info);
 	rtw_wdev_nego_info_init(&pwdev_priv->nego_info);

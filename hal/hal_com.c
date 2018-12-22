@@ -1333,7 +1333,7 @@ int c2h_iqk_offload_wait(_adapter *adapter, u32 timeout_ms)
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
 	struct submit_ctx *iqk_sctx = &hal_data->iqk_sctx;
 
-	iqk_sctx->submit_time = rtw_get_current_time();
+	iqk_sctx->submit_time = jiffies;
 	iqk_sctx->timeout_ms = timeout_ms;
 	iqk_sctx->status = RTW_SCTX_SUBMITTED;
 
@@ -1480,7 +1480,7 @@ int hal_read_mac_hidden_rpt(_adapter *adapter)
 	int ret = _FAIL;
 	int ret_fwdl;
 	u8 mac_hidden_rpt[MAC_HIDDEN_RPT_LEN + MAC_HIDDEN_RPT_2_LEN] = {0};
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	u32 cnt = 0;
 	u32 timeout_ms = 800;
 	u32 min_cnt = 10;
@@ -1504,7 +1504,7 @@ int hal_read_mac_hidden_rpt(_adapter *adapter)
 		goto mac_hidden_rpt_hdl;
 
 	/* polling for data ready */
-	start = rtw_get_current_time();
+	start = jiffies;
 	do {
 		cnt++;
 		id = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL);
@@ -1876,7 +1876,7 @@ u32 rtw_sec_read_cam(_adapter *adapter, u8 addr)
 
 	rtw_write32(adapter, REG_CAMCMD, CAM_POLLINIG | addr);
 
-	start = rtw_get_current_time();
+	start = jiffies;
 	while (1) {
 		if (rtw_is_surprise_removed(adapter)) {
 			sr = 1;
@@ -1892,7 +1892,7 @@ u32 rtw_sec_read_cam(_adapter *adapter, u8 addr)
 			break;
 		}
 	}
-	end = rtw_get_current_time();
+	end = jiffies;
 
 	rdata = rtw_read32(adapter, REG_CAMREAD);
 
@@ -1919,7 +1919,7 @@ void rtw_sec_write_cam(_adapter *adapter, u8 addr, u32 wdata)
 	rtw_write32(adapter, REG_CAMWRITE, wdata);
 	rtw_write32(adapter, REG_CAMCMD, CAM_POLLINIG | CAM_WRITE | addr);
 
-	start = rtw_get_current_time();
+	start = jiffies;
 	while (1) {
 		if (rtw_is_surprise_removed(adapter)) {
 			sr = 1;
@@ -1935,7 +1935,7 @@ void rtw_sec_write_cam(_adapter *adapter, u8 addr, u32 wdata)
 			break;
 		}
 	}
-	end = rtw_get_current_time();
+	end = jiffies;
 
 	_exit_critical_mutex(mutex, NULL);
 
@@ -6917,7 +6917,7 @@ static u32 _rtw_wow_pattern_read_cam(_adapter *adapter, u8 addr)
 
 	rtw_write32(adapter, REG_WKFMCAM_CMD, BIT_WKFCAM_POLLING_V1 | BIT_WKFCAM_ADDR_V2(addr));
 
-	start = rtw_get_current_time();
+	start = jiffies;
 	while (1) {
 		if (rtw_is_surprise_removed(adapter))
 			break;
@@ -6988,7 +6988,7 @@ static void _rtw_wow_pattern_write_cam(_adapter *adapter, u8 addr, u32 wdata)
 	rtw_write32(adapter, REG_WKFMCAM_RWD, wdata);
 	rtw_write32(adapter, REG_WKFMCAM_CMD, BIT_WKFCAM_POLLING_V1 | BIT_WKFCAM_WE | BIT_WKFCAM_ADDR_V2(addr));
 
-	start = rtw_get_current_time();
+	start = jiffies;
 	while (1) {
 		if (rtw_is_surprise_removed(adapter))
 			break;
@@ -7002,7 +7002,7 @@ static void _rtw_wow_pattern_write_cam(_adapter *adapter, u8 addr, u32 wdata)
 			break;
 		}
 	}
-	end = rtw_get_current_time();
+	end = jiffies;
 
 	_exit_critical_mutex(mutex, NULL);
 
@@ -7055,7 +7055,7 @@ static u8 _rtw_wow_pattern_clean_cam(_adapter *adapter)
 	_enter_critical_mutex(mutex, NULL);
 	rtw_write32(adapter, REG_WKFMCAM_CMD, BIT_WKFCAM_POLLING_V1 | BIT_WKFCAM_CLR_V1);
 
-	start = rtw_get_current_time();
+	start = jiffies;
 	while (1) {
 		if (rtw_is_surprise_removed(adapter))
 			break;

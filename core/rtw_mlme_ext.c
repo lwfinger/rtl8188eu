@@ -485,7 +485,7 @@ u32 rtw_chset_get_ch_non_ocp_ms(RT_CHANNEL_INFO *ch_set, u8 ch, u8 bw, u8 offset
 	if (rtw_chbw_to_freq_range(ch, bw, offset, &hi, &lo) == false)
 		goto exit;
 
-	current_time = rtw_get_current_time();
+	current_time = jiffies;
 
 	for (i = 0; ch_set[i].ChannelNum != 0; i++) {
 		if (!rtw_ch2freq(ch_set[i].ChannelNum)) {
@@ -534,9 +534,9 @@ static void _rtw_chset_update_non_ocp(RT_CHANNEL_INFO *ch_set, u8 ch, u8 bw, u8 
 			&& rtw_ch2freq(ch_set[i].ChannelNum) <= hi
 		) {
 			if (ms >= 0)
-				ch_set[i].non_ocp_end_time = rtw_get_current_time() + rtw_ms_to_systime(ms);
+				ch_set[i].non_ocp_end_time = jiffies + rtw_ms_to_systime(ms);
 			else
-				ch_set[i].non_ocp_end_time = rtw_get_current_time() + rtw_ms_to_systime(NON_OCP_TIME_MS);
+				ch_set[i].non_ocp_end_time = jiffies + rtw_ms_to_systime(NON_OCP_TIME_MS);
 		}
 	}
 
@@ -588,7 +588,7 @@ u32 rtw_get_ch_waiting_ms(_adapter *adapter, u8 ch, u8 bw, u8 offset, u32 *r_non
 		cac_ms = 0;
 	else if (in_rd_range && !non_ocp_ms) {
 		if (IS_CH_WAITING(rfctl))
-			cac_ms = rtw_systime_to_ms(rfctl->cac_end_time - rtw_get_current_time());
+			cac_ms = rtw_systime_to_ms(rfctl->cac_end_time - jiffies);
 		else
 			cac_ms = 0;
 	} else if (rtw_is_long_cac_ch(ch, bw, offset, rtw_odm_get_dfs_domain(adapter)))
@@ -618,7 +618,7 @@ void rtw_reset_cac(_adapter *adapter, u8 ch, u8 bw, u8 offset)
 		, &cac_ms
 	);
 
-	rfctl->cac_start_time = rtw_get_current_time() + rtw_ms_to_systime(non_ocp_ms);
+	rfctl->cac_start_time = jiffies + rtw_ms_to_systime(non_ocp_ms);
 	rfctl->cac_end_time = rfctl->cac_start_time + rtw_ms_to_systime(cac_ms);
 
 	/* skip special value */
@@ -817,7 +817,7 @@ void dump_chset(void *sel, RT_CHANNEL_INFO *ch_set)
 		if (rtw_is_dfs_ch(ch_set[i].ChannelNum, CHANNEL_WIDTH_20, HAL_PRIME_CHNL_OFFSET_DONT_CARE)) {
 			if (CH_IS_NON_OCP(&ch_set[i]))
 				_RTW_PRINT_SEL(sel, ", non_ocp:%d"
-					, rtw_systime_to_ms(ch_set[i].non_ocp_end_time - rtw_get_current_time()));
+					, rtw_systime_to_ms(ch_set[i].non_ocp_end_time - jiffies));
 			else
 				_RTW_PRINT_SEL(sel, ", non_ocp:N/A");
 		}
@@ -1247,7 +1247,7 @@ static u8 init_channel_set(_adapter *padapter, u8 ChannelPlan, RT_CHANNEL_INFO *
 
 	#ifdef CONFIG_DFS_MASTER
 	for (i = 0; i < chanset_size; i++)
-		channel_set[i].non_ocp_end_time = rtw_get_current_time();
+		channel_set[i].non_ocp_end_time = jiffies;
 	#endif
 #endif /* CONFIG_IEEE80211_BAND_5GHZ */
 
@@ -6262,7 +6262,7 @@ int issue_probereq_p2p_ex(_adapter *adapter, u8 *da, int try_cnt, int wait_ms)
 {
 	int ret;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	do {
 		ret = _issue_probereq_p2p(adapter, da, wait_ms > 0 ? true : false);
@@ -8076,7 +8076,7 @@ int issue_probereq_ex(_adapter *padapter, NDIS_802_11_SSID *pssid, u8 *da, u8 ch
 {
 	int ret = _FAIL;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	if (rtw_rfctl_is_tx_blocked_by_ch_waiting(adapter_to_rfctl(padapter)))
 		goto exit;
@@ -9025,7 +9025,7 @@ int issue_nulldata(_adapter *padapter, unsigned char *da, unsigned int power_mod
 {
 	int ret = _FAIL;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 	struct sta_info *psta;
@@ -9217,7 +9217,7 @@ int issue_qos_nulldata(_adapter *padapter, unsigned char *da, u16 tid, int try_c
 {
 	int ret = _FAIL;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 	struct mlme_ext_priv	*pmlmeext = &(padapter->mlmeextpriv);
 	struct mlme_ext_info	*pmlmeinfo = &(pmlmeext->mlmext_info);
 
@@ -9358,7 +9358,7 @@ int issue_deauth_ex(_adapter *padapter, u8 *da, unsigned short reason, int try_c
 {
 	int ret = _FAIL;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	if (rtw_rfctl_is_tx_blocked_by_ch_waiting(adapter_to_rfctl(padapter)))
 		goto exit;
@@ -9772,7 +9772,7 @@ inline u8 issue_addba_rsp_wait_ack(_adapter *adapter, unsigned char *ra, u8 tid,
 {
 	int ret = _FAIL;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	if (rtw_rfctl_is_tx_blocked_by_ch_waiting(adapter_to_rfctl(adapter)))
 		goto exit;
@@ -9850,7 +9850,7 @@ int issue_del_ba_ex(_adapter *adapter, unsigned char *ra, u8 tid, u16 reason, u8
 {
 	int ret = _FAIL;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	if (rtw_rfctl_is_tx_blocked_by_ch_waiting(adapter_to_rfctl(adapter)))
 		goto exit;
@@ -10130,7 +10130,7 @@ int issue_action_SM_PS_wait_ack(_adapter *padapter, unsigned char *raddr, u8 New
 {
 	int ret = _FAIL;
 	int i = 0;
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	if (rtw_rfctl_is_tx_blocked_by_ch_waiting(adapter_to_rfctl(padapter)))
 		goto exit;
@@ -10291,7 +10291,7 @@ unsigned int send_beacon(_adapter *padapter)
 	return _SUCCESS;
 #endif
 
-	u32 start = rtw_get_current_time();
+	u32 start = jiffies;
 
 	rtw_hal_set_hwreg(padapter, HW_VAR_BCN_VALID, NULL);
 	rtw_hal_set_hwreg(padapter, HW_VAR_DL_BCN_SEL, NULL);
@@ -13194,7 +13194,7 @@ static u8 rtw_scan_sparse(_adapter *adapter, struct rtw_ieee80211_channel *ch, u
 		goto exit;
 
 	if (mlmeext->last_scan_time == 0)
-		mlmeext->last_scan_time = rtw_get_current_time();
+		mlmeext->last_scan_time = jiffies;
 
 	interval = rtw_get_passing_time_ms(mlmeext->last_scan_time);
 
@@ -13250,7 +13250,7 @@ static u8 rtw_scan_sparse(_adapter *adapter, struct rtw_ieee80211_channel *ch, u
 		memset(&ch[k], 0, sizeof(struct rtw_ieee80211_channel));
 
 		ret_num = k;
-		mlmeext->last_scan_time = rtw_get_current_time();
+		mlmeext->last_scan_time = jiffies;
 	}
 
 exit:
@@ -13934,7 +13934,7 @@ operation_by_state:
 		}
 
 		mlmeext_set_scan_state(pmlmeext, SCAN_BACK_OP);
-		ss->backop_time = rtw_get_current_time();
+		ss->backop_time = jiffies;
 
 		if (mlmeext_chk_scan_backop_flags(pmlmeext, SS_BACKOP_TX_RESUME))
 			rtw_mi_os_xmit_schedule(padapter);

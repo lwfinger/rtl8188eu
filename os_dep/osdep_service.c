@@ -352,7 +352,7 @@ void rtw_mstat_update(const enum mstat_f flags, const MSTAT_STATUS status, u32 s
 
 	/* if (rtw_get_passing_time_ms(update_time) > 5000) { */
 	/*	rtw_mstat_dump(RTW_DBGDUMP); */
-	update_time = rtw_get_current_time();
+	update_time = jiffies;
 	/* } */
 }
 
@@ -754,12 +754,6 @@ u32 rtw_end_of_queue_search(_list *head, _list *plist)
 		return true;
 	else
 		return false;
-}
-
-
-u32	rtw_get_current_time(void)
-{
-	return jiffies;
 }
 
 inline u32 rtw_systime_to_ms(u32 systime)

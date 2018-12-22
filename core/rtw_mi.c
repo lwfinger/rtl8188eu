@@ -658,7 +658,7 @@ static u8 _rtw_mi_busy_traffic_check(_adapter *padapter, void *data)
 		if (check_sc_interval) {
 			/* Miracast can't do AP scan*/
 			passtime = rtw_get_passing_time_ms(pmlmepriv->lastscantime);
-			pmlmepriv->lastscantime = rtw_get_current_time();
+			pmlmepriv->lastscantime = jiffies;
 			if (passtime > BUSY_TRAFFIC_SCAN_DENY_PERIOD) {
 				RTW_INFO(ADPT_FMT" bBusyTraffic == true\n", ADPT_ARG(padapter));
 				return true;

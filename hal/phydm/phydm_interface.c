@@ -430,7 +430,7 @@ odm_get_current_time(
 	struct PHY_DM_STRUCT		*p_dm_odm
 )
 {
-	return (u64)rtw_get_current_time();
+	return (u64)jiffies;
 }
 
 u64
