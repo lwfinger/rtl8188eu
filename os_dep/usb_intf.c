@@ -384,7 +384,7 @@ static struct dvobj_priv *usb_dvobj_init(struct usb_interface *usb_intf, const s
 	rtw_decide_chip_type_by_usb_info(pdvobjpriv, pdid);
 
 	/* .3 misc */
-	_rtw_init_sema(&(pdvobjpriv->usb_suspend_sema), 0);
+	sema_init(&(pdvobjpriv->usb_suspend_sema), 0);
 	rtw_reset_continual_io_error(pdvobjpriv);
 
 	usb_get_dev(pusbd);

@@ -36,9 +36,9 @@ sint	_rtw_init_cmd_priv(struct	cmd_priv *pcmdpriv)
 	sint res = _SUCCESS;
 
 
-	_rtw_init_sema(&(pcmdpriv->cmd_queue_sema), 0);
-	/* _rtw_init_sema(&(pcmdpriv->cmd_done_sema), 0); */
-	_rtw_init_sema(&(pcmdpriv->terminate_cmdthread_sema), 0);
+	sema_init(&(pcmdpriv->cmd_queue_sema), 0);
+	/* sema_init(&(pcmdpriv->cmd_done_sema), 0); */
+	sema_init(&(pcmdpriv->terminate_cmdthread_sema), 0);
 
 
 	_rtw_init_queue(&(pcmdpriv->cmd_queue));
@@ -138,7 +138,7 @@ sint _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 
 
 #ifdef CONFIG_H2CLBK
-	_rtw_init_sema(&(pevtpriv->lbkevt_done), 0);
+	sema_init(&(pevtpriv->lbkevt_done), 0);
 	pevtpriv->lbkevt_limit = 0;
 	pevtpriv->lbkevt_num = 0;
 	pevtpriv->cmdevt_parm = NULL;
@@ -150,8 +150,8 @@ sint _rtw_init_evt_priv(struct evt_priv *pevtpriv)
 
 #ifdef CONFIG_EVENT_THREAD_MODE
 
-	_rtw_init_sema(&(pevtpriv->evt_notify), 0);
-	_rtw_init_sema(&(pevtpriv->terminate_evtthread_sema), 0);
+	sema_init(&(pevtpriv->evt_notify), 0);
+	sema_init(&(pevtpriv->terminate_evtthread_sema), 0);
 
 	pevtpriv->evt_allocated_buf = rtw_zmalloc(MAX_EVTSZ + 4);
 	if (pevtpriv->evt_allocated_buf == NULL) {
@@ -194,10 +194,6 @@ void _rtw_free_evt_priv(struct	evt_priv *pevtpriv)
 
 
 #ifdef CONFIG_EVENT_THREAD_MODE
-	_rtw_free_sema(&(pevtpriv->evt_notify));
-	_rtw_free_sema(&(pevtpriv->terminate_evtthread_sema));
-
-
 	if (pevtpriv->evt_allocated_buf)
 		rtw_mfree(pevtpriv->evt_allocated_buf, MAX_EVTSZ + 4);
 #endif
@@ -225,9 +221,6 @@ void _rtw_free_cmd_priv(struct	cmd_priv *pcmdpriv)
 
 	if (pcmdpriv) {
 		_rtw_spinlock_free(&(pcmdpriv->cmd_queue.lock));
-		_rtw_free_sema(&(pcmdpriv->cmd_queue_sema));
-		/* _rtw_free_sema(&(pcmdpriv->cmd_done_sema)); */
-		_rtw_free_sema(&(pcmdpriv->terminate_cmdthread_sema));
 
 		if (pcmdpriv->cmd_allocated_buf)
 			rtw_mfree(pcmdpriv->cmd_allocated_buf, MAX_CMDSZ + CMDBUFF_ALIGN_SZ);
@@ -476,7 +469,7 @@ u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 	res = _rtw_enqueue_cmd(&pcmdpriv->cmd_queue, cmd_obj, 0);
 
 	if (res == _SUCCESS)
-		_rtw_up_sema(&pcmdpriv->cmd_queue_sema);
+		up(&pcmdpriv->cmd_queue_sema);
 
 exit:
 
@@ -497,7 +490,7 @@ struct	cmd_obj	*rtw_dequeue_cmd(struct cmd_priv *pcmdpriv)
 void rtw_cmd_clr_isr(struct	cmd_priv *pcmdpriv)
 {
 	pcmdpriv->cmd_done_cnt++;
-	/* _rtw_up_sema(&(pcmdpriv->cmd_done_sema)); */
+	/* up(&(pcmdpriv->cmd_done_sema)); */
 }
 
 void rtw_free_cmd_obj(struct cmd_obj *pcmd)
@@ -527,7 +520,7 @@ void rtw_stop_cmd_thread(_adapter *adapter)
 	    ATOMIC_READ(&(adapter->cmdpriv.cmdthd_running)) == true &&
 	    adapter->cmdpriv.stop_req == 0) {
 		adapter->cmdpriv.stop_req = 1;
-		_rtw_up_sema(&adapter->cmdpriv.cmd_queue_sema);
+		up(&adapter->cmdpriv.cmd_queue_sema);
 		_rtw_down_sema(&adapter->cmdpriv.terminate_cmdthread_sema);
 	}
 }
@@ -553,7 +546,7 @@ thread_return rtw_cmd_thread(thread_context context)
 
 	pcmdpriv->stop_req = 0;
 	ATOMIC_SET(&(pcmdpriv->cmdthd_running), true);
-	_rtw_up_sema(&pcmdpriv->terminate_cmdthread_sema);
+	up(&pcmdpriv->terminate_cmdthread_sema);
 
 
 	while (1) {
@@ -732,7 +725,7 @@ post_process:
 		rtw_free_cmd_obj(pcmd);
 	} while (1);
 
-	_rtw_up_sema(&pcmdpriv->terminate_cmdthread_sema);
+	up(&pcmdpriv->terminate_cmdthread_sema);
 
 
 	thread_exit();
@@ -803,7 +796,7 @@ void rtw_free_evt_obj(struct evt_obj *pevtobj)
 void rtw_evt_notify_isr(struct evt_priv *pevtpriv)
 {
 	pevtpriv->evt_done_cnt++;
-	_rtw_up_sema(&(pevtpriv->evt_notify));
+	up(&(pevtpriv->evt_notify));
 }
 #endif
 

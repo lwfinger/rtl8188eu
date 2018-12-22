@@ -64,8 +64,8 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 
 	spin_lock_init(&pxmitpriv->lock);
 	spin_lock_init(&pxmitpriv->lock_sctx);
-	_rtw_init_sema(&pxmitpriv->xmit_sema, 0);
-	_rtw_init_sema(&pxmitpriv->terminate_xmitthread_sema, 0);
+	sema_init(&pxmitpriv->xmit_sema, 0);
+	sema_init(&pxmitpriv->terminate_xmitthread_sema, 0);
 
 	/*
 	Please insert all the queue initializaiton using _rtw_init_queue below
@@ -266,7 +266,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 
 	pxmitpriv->txirp_cnt = 1;
 
-	_rtw_init_sema(&(pxmitpriv->tx_retevt), 0);
+	sema_init(&(pxmitpriv->tx_retevt), 0);
 
 	/* per AC pending irp */
 	pxmitpriv->beq_cnt = 0;
@@ -313,17 +313,11 @@ void  rtw_mfree_xmit_priv_lock(struct xmit_priv *pxmitpriv);
 void  rtw_mfree_xmit_priv_lock(struct xmit_priv *pxmitpriv)
 {
 	_rtw_spinlock_free(&pxmitpriv->lock);
-	_rtw_free_sema(&pxmitpriv->xmit_sema);
-	_rtw_free_sema(&pxmitpriv->terminate_xmitthread_sema);
-
 	_rtw_spinlock_free(&pxmitpriv->be_pending.lock);
 	_rtw_spinlock_free(&pxmitpriv->bk_pending.lock);
 	_rtw_spinlock_free(&pxmitpriv->vi_pending.lock);
 	_rtw_spinlock_free(&pxmitpriv->vo_pending.lock);
 	_rtw_spinlock_free(&pxmitpriv->bm_pending.lock);
-
-	/* _rtw_spinlock_free(&pxmitpriv->legacy_dz_queue.lock); */
-	/* _rtw_spinlock_free(&pxmitpriv->apsd_queue.lock); */
 
 	_rtw_spinlock_free(&pxmitpriv->free_xmit_queue.lock);
 	_rtw_spinlock_free(&pxmitpriv->free_xmitbuf_queue.lock);
@@ -4649,7 +4643,7 @@ void enqueue_pending_xmitbuf(
 	list_del_init(&pxmitbuf->list);
 	list_add_tail(&pxmitbuf->list, get_list_head(pqueue));
 	_exit_critical_bh(&pqueue->lock, &irql);
-	_rtw_up_sema(&(pri_adapter->xmitpriv.xmit_sema));
+	up(&(pri_adapter->xmitpriv.xmit_sema));
 }
 
 void enqueue_pending_xmitbuf_to_head(
@@ -4826,7 +4820,7 @@ thread_return rtw_xmit_thread(thread_context context)
 		flush_signals_thread();
 	} while (_SUCCESS == err);
 
-	_rtw_up_sema(&padapter->xmitpriv.terminate_xmitthread_sema);
+	up(&padapter->xmitpriv.terminate_xmitthread_sema);
 
 	thread_exit();
 }

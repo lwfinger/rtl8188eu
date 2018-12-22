@@ -77,8 +77,8 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter)
 	spin_lock_init(&precvpriv->lock);
 
 #ifdef CONFIG_RECV_THREAD_MODE
-	_rtw_init_sema(&precvpriv->recv_sema, 0);
-	_rtw_init_sema(&precvpriv->terminate_recvthread_sema, 0);
+	sema_init(&precvpriv->recv_sema, 0);
+	sema_init(&precvpriv->terminate_recvthread_sema, 0);
 #endif
 
 	_rtw_init_queue(&precvpriv->free_recv_queue);
@@ -132,7 +132,7 @@ sint _rtw_init_recv_priv(struct recv_priv *precvpriv, _adapter *padapter)
 
        ATOMIC_SET(&(precvpriv->rx_pending_cnt), 1);
 
-       _rtw_init_sema(&precvpriv->allrxreturnevt, 0);
+       sema_init(&precvpriv->allrxreturnevt, 0);
 
 	res = rtw_hal_init_recv_priv(padapter);
 
@@ -159,11 +159,6 @@ exit:
 static void rtw_mfree_recv_priv_lock(struct recv_priv *precvpriv)
 {
 	_rtw_spinlock_free(&precvpriv->lock);
-#ifdef CONFIG_RECV_THREAD_MODE
-	_rtw_free_sema(&precvpriv->recv_sema);
-	_rtw_free_sema(&precvpriv->terminate_recvthread_sema);
-#endif
-
 	_rtw_spinlock_free(&precvpriv->free_recv_queue.lock);
 	_rtw_spinlock_free(&precvpriv->recv_pending_queue.lock);
 
@@ -4208,7 +4203,7 @@ thread_return rtw_recv_thread(thread_context context)
 			|| err == RTW_RFRAME_PKT_UNAVAIL
 		) {
 			rtw_msleep_os(1);
-			_rtw_up_sema(&recvpriv->recv_sema);
+			up(&recvpriv->recv_sema);
 		}
 
 		flush_signals_thread();
@@ -4216,7 +4211,7 @@ thread_return rtw_recv_thread(thread_context context)
 	} while (err != _FAIL);
 
 exit:
-	_rtw_up_sema(&adapter->recvpriv.terminate_recvthread_sema);
+	up(&adapter->recvpriv.terminate_recvthread_sema);
 	RTW_INFO(FUNC_ADPT_FMT" exit\n", FUNC_ADPT_ARG(adapter));
 	thread_exit();
 }

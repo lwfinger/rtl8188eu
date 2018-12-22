@@ -1582,21 +1582,21 @@ void rtw_stop_drv_threads(_adapter *padapter)
 		rtw_stop_cmd_thread(padapter);
 
 #ifdef CONFIG_EVENT_THREAD_MODE
-	_rtw_up_sema(&padapter->evtpriv.evt_notify);
+	up(&padapter->evtpriv.evt_notify);
 	if (padapter->evtThread)
 		_rtw_down_sema(&padapter->evtpriv.terminate_evtthread_sema);
 #endif
 
 #ifdef CONFIG_XMIT_THREAD_MODE
 	/* Below is to termindate tx_thread... */
-	_rtw_up_sema(&padapter->xmitpriv.xmit_sema);
+	up(&padapter->xmitpriv.xmit_sema);
 	_rtw_down_sema(&padapter->xmitpriv.terminate_xmitthread_sema);
 #endif
 
 #ifdef CONFIG_RECV_THREAD_MODE
 	if (is_primary_adapter(padapter)) {
 		/* Below is to termindate rx_thread... */
-		_rtw_up_sema(&padapter->recvpriv.recv_sema);
+		up(&padapter->recvpriv.recv_sema);
 		_rtw_down_sema(&padapter->recvpriv.terminate_recvthread_sema);
 	}
 #endif

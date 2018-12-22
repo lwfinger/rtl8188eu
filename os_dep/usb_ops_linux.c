@@ -435,7 +435,7 @@ static void usb_write_port_complete(struct urb *purb, struct pt_regs *regs)
 
 		if(pxmitpriv->txirp_cnt==0)
 		{
-			_rtw_up_sema(&(pxmitpriv->tx_retevt));
+			up(&(pxmitpriv->tx_retevt));
 		}
 	*/
 	/* rtw_free_xmitframe(pxmitpriv, pxmitframe); */

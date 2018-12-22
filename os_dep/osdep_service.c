@@ -693,28 +693,12 @@ void rtw_mfree2d(void *pbuf, int h, int w, int size)
 	rtw_mfree((u8 *)pbuf, h * sizeof(void *) + w * h * size);
 }
 
-void _rtw_init_sema(_sema	*sema, int init_val)
-{
-	sema_init(sema, init_val);
-}
-
-void _rtw_free_sema(_sema	*sema)
-{
-}
-
-void _rtw_up_sema(_sema	*sema)
-{
-	up(sema);
-}
-
 u32 _rtw_down_sema(_sema *sema)
 {
 	if (down_interruptible(sema))
 		return _FAIL;
 	return _SUCCESS;
 }
-
-
 
 void	_rtw_mutex_init(_mutex *pmutex)
 {

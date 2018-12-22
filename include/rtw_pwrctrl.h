@@ -153,12 +153,11 @@ typedef _sema _pwrlock;
 
 __inline static void _init_pwrlock(_pwrlock *plock)
 {
-	_rtw_init_sema(plock, 1);
+	sema_init(plock, 1);
 }
 
 __inline static void _free_pwrlock(_pwrlock *plock)
 {
-	_rtw_free_sema(plock);
 }
 
 
@@ -170,7 +169,7 @@ __inline static void _enter_pwrlock(_pwrlock *plock)
 
 __inline static void _exit_pwrlock(_pwrlock *plock)
 {
-	_rtw_up_sema(plock);
+	up(plock);
 }
 
 #define LPS_DELAY_TIME	1*HZ /* 1 sec */

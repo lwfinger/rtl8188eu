@@ -558,7 +558,7 @@ static void _btmpoper_timer_hdl(void *p)
 {
 	if (GLBtcBtMpRptWait) {
 		GLBtcBtMpRptWait = 0;
-		_rtw_up_sema(&GLBtcBtMpRptSema);
+		up(&GLBtcBtMpRptSema);
 	}
 }
 
@@ -2009,7 +2009,7 @@ u8 EXhalbtcoutsrc_InitlizeVariables(void *padapter)
 	GLBtcBtMpOperSeq = 0;
 	_rtw_mutex_init(&GLBtcBtMpOperLock);
 	_init_timer(&GLBtcBtMpOperTimer, ((PADAPTER)padapter)->pnetdev, _btmpoper_timer_hdl, pBtCoexist);
-	_rtw_init_sema(&GLBtcBtMpRptSema, 0);
+	sema_init(&GLBtcBtMpRptSema, 0);
 	GLBtcBtMpRptSeq = 0;
 	GLBtcBtMpRptStatus = 0;
 	memset(GLBtcBtMpRptRsp, 0, C2H_MAX_SIZE);
@@ -3341,7 +3341,7 @@ void hal_btcoex_BtMpRptNotify(PADAPTER padapter, u8 length, u8 *tmpBuf)
 	GLBtcBtMpRptStatus = status;
 	memcpy(GLBtcBtMpRptRsp, tmpBuf + 3, len);
 	GLBtcBtMpRptRspSize = len;
-	_rtw_up_sema(&GLBtcBtMpRptSema);
+	up(&GLBtcBtMpRptSema);
 }
 
 void hal_btcoex_SuspendNotify(PADAPTER padapter, u8 state)

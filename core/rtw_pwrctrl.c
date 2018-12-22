@@ -1377,10 +1377,10 @@ void cpwm_int_hdl(
 
 	if (pwrpriv->cpwm >= PS_STATE_S2) {
 		if (pwrpriv->alives & CMD_ALIVE)
-			_rtw_up_sema(&padapter->cmdpriv.cmd_queue_sema);
+			up(&padapter->cmdpriv.cmd_queue_sema);
 
 		if (pwrpriv->alives & XMIT_ALIVE)
-			_rtw_up_sema(&padapter->xmitpriv.xmit_sema);
+			up(&padapter->xmitpriv.xmit_sema);
 	}
 
 	_exit_pwrlock(&pwrpriv->lock);
