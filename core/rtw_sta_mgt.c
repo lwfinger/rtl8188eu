@@ -61,7 +61,6 @@ inline void rtw_st_ctl_clear_tracker_q(struct st_ctl_t *st_ctl)
 inline void rtw_st_ctl_deinit(struct st_ctl_t *st_ctl)
 {
 	rtw_st_ctl_clear_tracker_q(st_ctl);
-	_rtw_deinit_queue(&st_ctl->tracker_q);
 }
 
 inline void rtw_st_ctl_register(struct st_ctl_t *st_ctl, u8 st_reg_id, struct st_register *reg)
@@ -389,10 +388,6 @@ u32	_rtw_free_sta_priv(struct	sta_priv *pstapriv)
 		/*===============================*/
 
 		rtw_mfree_sta_priv_lock(pstapriv);
-
-#if CONFIG_RTW_MACADDR_ACL
-		_rtw_deinit_queue(&(pstapriv->acl_list.acl_node_q));
-#endif
 
 #if CONFIG_RTW_PRE_LINK_STA
 		rtw_pre_link_sta_ctl_deinit(pstapriv);

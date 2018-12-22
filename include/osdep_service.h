@@ -265,7 +265,6 @@ extern void	_rtw_spinlock_ex(_lock	*plock);
 extern void	_rtw_spinunlock_ex(_lock	*plock);
 
 extern void	_rtw_init_queue(_queue *pqueue);
-extern void _rtw_deinit_queue(_queue *pqueue);
 extern u32	_rtw_queue_empty(_queue	*pqueue);
 extern u32	rtw_end_of_queue_search(_list *queue, _list *pelement);
 

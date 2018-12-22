@@ -742,10 +742,6 @@ void _rtw_init_queue(_queue *pqueue)
 	spin_lock_init(&(pqueue->lock));
 }
 
-void _rtw_deinit_queue(_queue *pqueue)
-{
-}
-
 u32	  _rtw_queue_empty(_queue	*pqueue)
 {
 	return list_empty(&(pqueue->queue));
