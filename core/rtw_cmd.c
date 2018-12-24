@@ -2255,11 +2255,11 @@ u8 rtw_tdls_cmd(_adapter *padapter, u8 *addr, u8 option)
 		goto exit;
 	}
 
-	_rtw_spinlock(&(padapter->tdlsinfo.cmd_lock));
+	spin_lock(&(padapter->tdlsinfo.cmd_lock));
 	if (addr != NULL)
 		memcpy(TDLSoption->addr, addr, 6);
 	TDLSoption->option = option;
-	_rtw_spinunlock(&(padapter->tdlsinfo.cmd_lock));
+	spin_unlock(&(padapter->tdlsinfo.cmd_lock));
 	init_h2fwcmd_w_parm_no_rsp(pcmdobj, TDLSoption, GEN_CMD_CODE(_TDLS));
 	res = rtw_enqueue_cmd(pcmdpriv, pcmdobj);
 

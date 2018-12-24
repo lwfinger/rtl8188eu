@@ -316,7 +316,7 @@ sint rtw_enqueue_recvframe(union recv_frame *precvframe, _queue *queue)
 	/* _spinlock(&pfree_recv_queue->lock); */
 	_enter_critical_bh(&queue->lock, &irqL);
 	ret = _rtw_enqueue_recvframe(precvframe, queue);
-	/* _rtw_spinunlock(&pfree_recv_queue->lock); */
+	/* spin_unlock(&pfree_recv_queue->lock); */
 	_exit_critical_bh(&queue->lock, &irqL);
 
 	return ret;
@@ -345,7 +345,7 @@ void rtw_free_recvframe_queue(_queue *pframequeue,  _queue *pfree_recv_queue)
 	union	recv_frame	*precvframe;
 	_list	*plist, *phead;
 
-	_rtw_spinlock(&pframequeue->lock);
+	spin_lock(&pframequeue->lock);
 
 	phead = get_list_head(pframequeue);
 	plist = get_next(phead);
@@ -360,7 +360,7 @@ void rtw_free_recvframe_queue(_queue *pframequeue,  _queue *pfree_recv_queue)
 		rtw_free_recvframe(precvframe, pfree_recv_queue);
 	}
 
-	_rtw_spinunlock(&pframequeue->lock);
+	spin_unlock(&pframequeue->lock);
 
 
 }
@@ -2443,10 +2443,10 @@ union recv_frame *recvframe_chk_defrag(PADAPTER padapter, union recv_frame *prec
 
 			/* Then enqueue the 0~(n-1) fragment into the defrag_q */
 
-			/* _rtw_spinlock(&pdefrag_q->lock); */
+			/* spin_lock(&pdefrag_q->lock); */
 			phead = get_list_head(pdefrag_q);
 			list_add_tail(&pfhdr->list, phead);
-			/* _rtw_spinunlock(&pdefrag_q->lock); */
+			/* spin_unlock(&pdefrag_q->lock); */
 
 
 			prtnframe = NULL;
@@ -2463,10 +2463,10 @@ union recv_frame *recvframe_chk_defrag(PADAPTER padapter, union recv_frame *prec
 		/* the last fragment frame */
 		/* enqueue the last fragment */
 		if (pdefrag_q != NULL) {
-			/* _rtw_spinlock(&pdefrag_q->lock); */
+			/* spin_lock(&pdefrag_q->lock); */
 			phead = get_list_head(pdefrag_q);
 			list_add_tail(&pfhdr->list, phead);
-			/* _rtw_spinunlock(&pdefrag_q->lock); */
+			/* spin_unlock(&pdefrag_q->lock); */
 
 			/* call recvframe_defrag to defrag */
 			precv_frame = recvframe_defrag(padapter, pdefrag_q);
@@ -2641,7 +2641,7 @@ static int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, un
 	/* DbgPrint("+enqueue_reorder_recvframe()\n"); */
 
 	/* _enter_critical_ex(&ppending_recvframe_queue->lock, &irql); */
-	/* _rtw_spinlock_ex(&ppending_recvframe_queue->lock); */
+	/* spin_lock(&ppending_recvframe_queue->lock); */
 
 
 	phead = get_list_head(ppending_recvframe_queue);
@@ -2668,13 +2668,13 @@ static int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, un
 
 
 	/* _enter_critical_ex(&ppending_recvframe_queue->lock, &irql); */
-	/* _rtw_spinlock_ex(&ppending_recvframe_queue->lock); */
+	/* spin_lock(&ppending_recvframe_queue->lock); */
 
 	list_del_init(&(prframe->u.hdr.list));
 
 	list_add_tail(&(prframe->u.hdr.list), plist);
 
-	/* _rtw_spinunlock_ex(&ppending_recvframe_queue->lock); */
+	/* spin_unlock(&ppending_recvframe_queue->lock); */
 	/* _exit_critical_ex(&ppending_recvframe_queue->lock, &irql); */
 
 
@@ -2711,7 +2711,7 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 	/* DbgPrint("+recv_indicatepkts_in_order\n"); */
 
 	/* _enter_critical_ex(&ppending_recvframe_queue->lock, &irql); */
-	/* _rtw_spinlock_ex(&ppending_recvframe_queue->lock); */
+	/* spin_lock(&ppending_recvframe_queue->lock); */
 
 	phead =	get_list_head(ppending_recvframe_queue);
 	plist = get_next(phead);
@@ -2721,7 +2721,7 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 		pdbgpriv->dbg_rx_ampdu_forced_indicate_count++;
 		if (list_empty(phead)) {
 			/* _exit_critical_ex(&ppending_recvframe_queue->lock, &irql); */
-			/* _rtw_spinunlock_ex(&ppending_recvframe_queue->lock); */
+			/* spin_unlock(&ppending_recvframe_queue->lock); */
 			return true;
 		}
 

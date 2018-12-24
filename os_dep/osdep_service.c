@@ -716,26 +716,6 @@ void	_rtw_mutex_free(_mutex *pmutex)
 #endif
 }
 
-void	_rtw_spinlock(_lock	*plock)
-{
-	spin_lock(plock);
-}
-
-void	_rtw_spinunlock(_lock *plock)
-{
-	spin_unlock(plock);
-}
-
-void	_rtw_spinlock_ex(_lock	*plock)
-{
-	spin_lock(plock);
-}
-
-void	_rtw_spinunlock_ex(_lock *plock)
-{
-	spin_unlock(plock);
-}
-
 void _rtw_init_queue(_queue *pqueue)
 {
 	INIT_LIST_HEAD(&(pqueue->queue));
