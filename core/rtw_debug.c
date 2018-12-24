@@ -3079,20 +3079,6 @@ int proc_get_rtkm_info(struct seq_file *m, void *v)
 }
 #endif /* CONFIG_PREALLOC_RX_SKB_BUFFER */
 
-#ifdef DBG_MEMORY_LEAK
-#include <asm/atomic.h>
-extern atomic_t _malloc_cnt;;
-extern atomic_t _malloc_size;;
-
-int proc_get_malloc_cnt(struct seq_file *m, void *v)
-{
-	RTW_PRINT_SEL(m, "_malloc_cnt=%d\n", atomic_read(&_malloc_cnt));
-	RTW_PRINT_SEL(m, "_malloc_size=%d\n", atomic_read(&_malloc_size));
-
-	return 0;
-}
-#endif /* DBG_MEMORY_LEAK */
-
 #ifdef CONFIG_FIND_BEST_CHANNEL
 int proc_get_best_channel(struct seq_file *m, void *v)
 {
