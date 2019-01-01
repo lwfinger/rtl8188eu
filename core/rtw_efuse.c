@@ -1406,9 +1406,9 @@ u32 rtw_read_efuse_from_file(const char *path, u8 *buf, int map_size)
 		goto exit;
 	}
 
-	file_data = rtw_vmalloc(file_size);
+	file_data = vmalloc(file_size);
 	if (!file_data) {
-		RTW_ERR("%s rtw_vmalloc(%d) fail\n", __func__, file_size);
+		RTW_ERR("%s vmalloc(%d) fail\n", __func__, file_size);
 		goto exit;
 	}
 
@@ -1418,9 +1418,9 @@ u32 rtw_read_efuse_from_file(const char *path, u8 *buf, int map_size)
 		goto exit;
 	}
 
-	map = rtw_vmalloc(map_size);
+	map = vmalloc(map_size);
 	if (!map) {
-		RTW_ERR("%s rtw_vmalloc(%d) fail\n", __func__, map_size);
+		RTW_ERR("%s vmalloc(%d) fail\n", __func__, map_size);
 		goto exit;
 	}
 	memset(map, 0xff, map_size);

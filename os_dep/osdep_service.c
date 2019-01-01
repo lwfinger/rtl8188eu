@@ -62,15 +62,10 @@ u32 rtw_atoi(u8 *s)
 
 }
 
-inline u8 *_rtw_vmalloc(u32 sz)
-{
-	return vmalloc(sz);
-}
-
 inline u8 *_rtw_zvmalloc(u32 sz)
 {
 	u8	*pbuf;
-	pbuf = _rtw_vmalloc(sz);
+	pbuf = vmalloc(sz);
 	if (pbuf != NULL)
 		memset(pbuf, 0, sz);
 	return pbuf;
@@ -360,7 +355,7 @@ inline u8 *dbg_rtw_vmalloc(u32 sz, const enum mstat_f flags, const char *func, c
 	if (match_mstat_sniff_rules(flags, sz))
 		RTW_INFO("DBG_MEM_ALLOC %s:%d %s(%d)\n", func, line, __func__, (sz));
 
-	p = _rtw_vmalloc((sz));
+	p = vmalloc((sz));
 
 	rtw_mstat_update(
 		flags
