@@ -398,8 +398,7 @@ endif
 EXTRA_CFLAGS += -DDM_ODM_SUPPORT_TYPE=0x04
 
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
-SUBARCH := $(shell uname -m | sed -e s/i.86/i386/)
-SUBARCH := $(shell uname -m | sed -e s/ppc/powerpc/)
+SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/ | sed -e s/armv.l/arm/)
 ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
 KVER  := $(shell uname -r)
