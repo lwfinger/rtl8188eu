@@ -8176,12 +8176,11 @@ void issue_auth(_adapter *padapter, struct sta_info *psta, unsigned short status
 		/* setting auth algo number */
 		val16 = (u16)psta->authalg;
 
-		if (status != _STATS_SUCCESSFUL_)
-			le_val16 = 0;
-
 		if (val16)	{
 			le_val16 = cpu_to_le16(val16);
 			use_shared_key = 1;
+		} else {
+			le_val16 = 0;
 		}
 
 		pframe = rtw_set_fixed_ie(pframe, _AUTH_ALGM_NUM_, (unsigned char *)&le_val16, &(pattrib->pktlen));
