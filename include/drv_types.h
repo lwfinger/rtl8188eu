@@ -1395,6 +1395,7 @@ void *scdb_findEntry(_adapter *priv, unsigned char *macAddr,
 void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb);
 int rtw_suspend_free_assoc_resource(_adapter *padapter);
 int recvbuf2recvframe(PADAPTER padapter, void *ptr);
+int rtw_change_ifname(_adapter *padapter, const char *ifname);
 
 #ifdef CONFIG_WOWLAN
 	int rtw_suspend_wow(_adapter *padapter);

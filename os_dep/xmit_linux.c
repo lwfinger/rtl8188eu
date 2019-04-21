@@ -332,7 +332,7 @@ void rtw_os_wake_queue_at_free_stainfo(_adapter *padapter, int *qcnt_freed)
 }
 
 #ifdef CONFIG_TX_MCAST2UNI
-int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
+static int rtw_mlcst2unicst(_adapter *padapter, struct sk_buff *skb)
 {
 	struct	sta_priv *pstapriv = &padapter->stapriv;
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;

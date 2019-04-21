@@ -136,9 +136,9 @@ void _dynamic_check_timer_handler(struct timer_list *t)
 
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
+istatic void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 #else
-void _rtw_set_scan_deny_timer_hdl(struct timer_list *t)
+static void _rtw_set_scan_deny_timer_hdl(struct timer_list *t)
 #endif
 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
@@ -353,9 +353,9 @@ void rtw_report_sec_ie(_adapter *adapter, u8 authmode, u8 *sec_ie)
 }
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-void _survey_timer_hdl(void *FunctionContext)
+static void _survey_timer_hdl(void *FunctionContext)
 #else
-void _survey_timer_hdl(struct timer_list *t)
+static void _survey_timer_hdl(struct timer_list *t)
 #endif
 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
@@ -368,9 +368,9 @@ void _survey_timer_hdl(struct timer_list *t)
 }
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-void _link_timer_hdl(void *FunctionContext)
+static void _link_timer_hdl(void *FunctionContext)
 #else
-void _link_timer_hdl(struct timer_list *t)
+static void _link_timer_hdl(struct timer_list *t)
 #endif
 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
@@ -415,9 +415,9 @@ void _ft_roam_timer_hdl(struct timer_list *t);
 #endif
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-void _addba_timer_hdl(void *FunctionContext)
+static void _addba_timer_hdl(void *FunctionContext)
 #else
-void _addba_timer_hdl(struct timer_list *t)
+static void _addba_timer_hdl(struct timer_list *t)
 #endif
 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)

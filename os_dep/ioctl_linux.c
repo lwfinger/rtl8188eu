@@ -5788,7 +5788,6 @@ static int rtw_cta_test_start(struct net_device *dev,
 }
 
 
-extern int rtw_change_ifname(_adapter *padapter, const char *ifname);
 static int rtw_rereg_nd_name(struct net_device *dev,
 			     struct iw_request_info *info,
 			     union iwreq_data *wrqu, char *extra)

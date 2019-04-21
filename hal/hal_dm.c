@@ -22,7 +22,7 @@
 #include <hal_data.h>
 
 /* A mapping from HalData to ODM. */
-enum odm_board_type_e boardType(u8 InterfaceSel)
+static enum odm_board_type_e boardType(u8 InterfaceSel)
 {
 	enum odm_board_type_e        board	= ODM_BOARD_DEFAULT;
 

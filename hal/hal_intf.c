@@ -179,7 +179,7 @@ void rtw_hal_power_off(_adapter *padapter)
 }
 
 
-void rtw_hal_init_opmode(_adapter *padapter)
+static void rtw_hal_init_opmode(_adapter *padapter)
 {
 	NDIS_802_11_NETWORK_INFRASTRUCTURE networkType = Ndis802_11InfrastructureMax;
 	struct  mlme_priv *pmlmepriv = &(padapter->mlmepriv);

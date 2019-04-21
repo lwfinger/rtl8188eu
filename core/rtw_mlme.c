@@ -119,7 +119,7 @@ exit:
 	return res;
 }
 
-void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
+static void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
 {
 }
 

@@ -312,27 +312,12 @@ inline struct sta_info *rtw_get_stainfo_by_offset(struct sta_priv *stapriv, int 
 	return (struct sta_info *)(stapriv->pstainfo_buf + offset * sizeof(struct sta_info));
 }
 
-void	_rtw_free_sta_xmit_priv_lock(struct sta_xmit_priv *psta_xmitpriv)
-{
-}
-
-static void	_rtw_free_sta_recv_priv_lock(struct sta_recv_priv *psta_recvpriv)
-{
-}
-
-void rtw_mfree_stainfo(struct sta_info *psta)
-{
-	_rtw_free_sta_xmit_priv_lock(&psta->sta_xmitpriv);
-	_rtw_free_sta_recv_priv_lock(&psta->sta_recvpriv);
-}
-
 /* this function is used to free the memory of lock || sema for all stainfos */
-void rtw_mfree_all_stainfo(struct sta_priv *pstapriv)
+static void rtw_mfree_all_stainfo(struct sta_priv *pstapriv)
 {
 	unsigned long	 irqL;
 	_list	*plist, *phead;
 	struct sta_info *psta = NULL;
-
 
 	_enter_critical_bh(&pstapriv->sta_hash_lock, &irqL);
 
@@ -342,17 +327,12 @@ void rtw_mfree_all_stainfo(struct sta_priv *pstapriv)
 	while ((rtw_end_of_queue_search(phead, plist)) == false) {
 		psta = LIST_CONTAINOR(plist, struct sta_info , list);
 		plist = get_next(plist);
-
-		rtw_mfree_stainfo(psta);
 	}
 
 	_exit_critical_bh(&pstapriv->sta_hash_lock, &irqL);
-
-
 }
 
-void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv);
-void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
+static void rtw_mfree_sta_priv_lock(struct	sta_priv *pstapriv)
 {
 	rtw_mfree_all_stainfo(pstapriv); /* be done before free sta_hash_lock */
 }

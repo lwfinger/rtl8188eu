@@ -1084,7 +1084,7 @@ static int writeFile(struct file *fp, char *buf, int len)
 		return -EPERM;
 
 	while (sum < len) {
-		wlen = fp->f_op->write(fp, buf + sum, len - sum, &fp->f_pos);
+		wlen = fp->f_op->write(fp, (char __user *)buf + sum, len - sum, &fp->f_pos);
 		if (wlen > 0)
 			sum += wlen;
 		else if (0 != wlen)

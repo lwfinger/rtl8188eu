@@ -650,7 +650,7 @@ union recv_frame *decryptor(_adapter *padapter, union recv_frame *precv_frame)
 	return return_packet;
 }
 /* ###set the security information in the recv_frame */
-union recv_frame *portctrl(_adapter *adapter, union recv_frame *precv_frame)
+static union recv_frame *portctrl(_adapter *adapter, union recv_frame *precv_frame)
 {
 	u8 *psta_addr = NULL;
 	u8 *ptr;
@@ -2194,7 +2194,7 @@ exit:
 
 /* remove the wlanhdr and add the eth_hdr */
 
-sint wlanhdr_to_ethhdr(union recv_frame *precvframe)
+static sint wlanhdr_to_ethhdr(union recv_frame *precvframe)
 {
 	sint	rmv_len;
 	u16	eth_type, len;
@@ -2308,7 +2308,7 @@ exiting:
 }
 
 /* perform defrag */
-union recv_frame *recvframe_defrag(_adapter *adapter, _queue *defrag_q)
+static union recv_frame *recvframe_defrag(_adapter *adapter, _queue *defrag_q)
 {
 	_list	*plist, *phead;
 	u8	*data, wlanhdr_offset;
