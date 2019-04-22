@@ -1,22 +1,6 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 */
+/* Copyright(c) 2007 - 2016 Realtek Corporation. All rights reserved. */
+
 
 #ifndef	__HALDMOUTSRC_H__
 #define __HALDMOUTSRC_H__
@@ -435,7 +419,7 @@ struct PHY_DM_STRUCT {
 	u8			support_platform;
 	/* ODM Platform info WIN/AP/CE = 1/2/3 */
 	u8			normal_rx_path;
-	/*ODM Support Ability DIG/RATR/TX_PWR_TRACK/ ¡K¡K = 1/2/3/¡K*/
+	/*ODM Support Ability DIG/RATR/TX_PWR_TRACK/ ï¿½Kï¿½K = 1/2/3/ï¿½K*/
 	u32			support_ability;
 	/*ODM PCIE/USB/SDIO = 1/2/3*/
 	u8			support_interface;
