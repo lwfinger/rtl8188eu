@@ -120,7 +120,7 @@ void _dynamic_check_timer_handler(struct timer_list *t)
 
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-istatic void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
+static void _rtw_set_scan_deny_timer_hdl(void *FunctionContext)
 #else
 static void _rtw_set_scan_deny_timer_hdl(struct timer_list *t)
 #endif
