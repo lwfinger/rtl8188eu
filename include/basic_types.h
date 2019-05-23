@@ -83,7 +83,7 @@
 * Write host byte order data to memory in LE order
 */
 #define WriteLE4Byte(_ptr, _val)	((*((__le32 *)(_ptr))) = cpu_to_le32(_val))
-#define WriteLE2Byte(_ptr, _val)	((*((i__le16 *)(_ptr))) = cpu_to_le16(_val))
+#define WriteLE2Byte(_ptr, _val)	((*((__le16 *)(_ptr))) = cpu_to_le16(_val))
 #define WriteLE1Byte(_ptr, _val)	((*((u8 *)(_ptr))) = ((u8)(_val)))
 
 /*
