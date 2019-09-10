@@ -100,7 +100,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/ | sed 
 ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
 KVER  := $(shell uname -r)
-KSRC := /lib/modules/$(KVER)/build
+KERNEL_SRC ?= /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
 INSTALL_PREFIX :=
 
@@ -150,7 +150,10 @@ export CONFIG_RTL8188EU = m
 all: modules
 
 modules:
-	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
+	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KERNEL_SRC) M=$(shell pwd) modules
+
+modules_install:
+	$(MAKE) -C $(KERNEL_SRC) M=$(shell pwd) modules_install
 
 strip:
 	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
