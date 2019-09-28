@@ -162,6 +162,9 @@ install:
 	mkdir -p /lib/firmware/rtlwifi
 	cp rtl8188eufw.bin /lib/firmware/rtlwifi/.
 
+modules_install:
+	$(MAKE) -C $(KSRC) M=$(shell pwd) modules_install
+
 uninstall:
 	rm -f $(MODDESTDIR)/8188eu.ko
 	/sbin/depmod -a ${KVER}
