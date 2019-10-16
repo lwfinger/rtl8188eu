@@ -122,6 +122,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x2001, 0x331B), .driver_info = RTL8188E}, /* D-Link DWA-121 rev B1 */
 	{USB_DEVICE(0x056E, 0x4008), .driver_info = RTL8188E}, /* Elecom WDC-150SU2M */
 	{USB_DEVICE(0x2357, 0x010c), .driver_info = RTL8188E}, /* TP-Link TL-WN722N v2 */
+	{USB_DEVICE(0x2357, 0x0111), .driver_info = RTL8188E} /* TP-Link TL-WN727N v5.21 */
 	{}	/* Terminating entry */
 };
 
