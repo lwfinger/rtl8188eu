@@ -1400,7 +1400,7 @@ void mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame)
 			ptable->func = &OnAuth;
 		else
 			ptable->func = &OnAuthClient;
-		__attribute__ ((fallthrough));/* FALL THRU */
+		__attribute__ ((__fallthrough__));/* FALL THRU */
 	case WIFI_ASSOCREQ:
 	case WIFI_REASSOCREQ:
 		_mgt_dispatcher(padapter, ptable, precv_frame);

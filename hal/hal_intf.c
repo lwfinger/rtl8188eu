@@ -827,7 +827,7 @@ s32 c2h_handler(_adapter *adapter, u8 id, u8 seq, u8 plen, u8 *payload)
 
 	case C2H_EXTEND:
 		sub_id = payload[0];
-		__attribute__ ((fallthrough));/* FALL THRU */
+		__attribute__ ((__fallthrough__));/* FALL THRU */
 	default:
 		if (phydm_c2H_content_parsing(odm, id, plen, payload) != true)
 			ret = _FAIL;
