@@ -2863,6 +2863,7 @@ static void GetHwReg8188EU(struct adapter *Adapter, u8 variable, u8* val)
 	{
 		case HW_VAR_BASIC_RATE:
 			*((u16 *)(val)) = pHalData->BasicRateSet;
+			__attribute__ ((__fallthrough__));
 		case HW_VAR_TXPAUSE:
 			val[0] = rtw_read8(Adapter, REG_TXPAUSE);
 			break;
