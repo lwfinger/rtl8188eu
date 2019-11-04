@@ -27,6 +27,7 @@ CONFIG_DRVEXT_MODULE = n
 
 export TopDIR ?= $(shell pwd)
 
+MSG="Directory .git does not exist indicating that you downloaded the source as a zip file. Only the 'git clone' method is now supported."
 
 OUTSRC_FILES := hal/odm_debug.o	\
 		hal/odm_interface.o\
@@ -147,7 +148,10 @@ else
 
 export CONFIG_RTL8188EU = m
 
-all: modules
+all: test modules
+
+test:
+	@if [ !  -e  ./.git ] ; then echo $(MSG); exit 1; fi;
 
 modules:
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KERNEL_SRC) M=$(shell pwd) modules
