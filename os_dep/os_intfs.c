@@ -98,6 +98,8 @@ static uint rtw_tx_bw_mode = 0x21;
 module_param(rtw_tx_bw_mode, uint, 0644);
 MODULE_PARM_DESC(rtw_tx_bw_mode, "The max tx bw for 2.4G and 5G. format is the same as rtw_bw_mode");
 
+static int rtw_led_enable = 1;
+
 int rtw_ht_enable = 1;
 /* 0: 20 MHz, 1: 40 MHz, 2: 80 MHz, 3: 160MHz, 4: 80+80MHz
 * 2.4G use bit 0 ~ 3, 5G use bit 4 ~ 7
@@ -283,7 +285,7 @@ module_param(rtw_wmm_enable, int, 0644);
 module_param(rtw_vrtl_carrier_sense, int, 0644);
 module_param(rtw_vcs_type, int, 0644);
 module_param(rtw_busy_thresh, int, 0644);
-
+module_param(rtw_led_enable, int, 0644);
 module_param(rtw_ht_enable, int, 0644);
 module_param(rtw_bw_mode, int, 0644);
 module_param(rtw_ampdu_enable, int, 0644);
@@ -707,7 +709,7 @@ uint loadparam(_adapter *padapter)
 	registry_par->uapsd_acvo_en = (u8)rtw_uapsd_acvo_en;
 
 	registry_par->RegPwrTrimEnable = (u8)rtw_pwrtrim_enable;
-
+	registry_par->led_enable = (u8)rtw_led_enable;
 	registry_par->tx_bw_mode = (u8)rtw_tx_bw_mode;
 
 	registry_par->ht_enable = (u8)rtw_ht_enable;

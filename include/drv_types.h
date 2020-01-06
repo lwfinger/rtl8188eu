@@ -191,7 +191,8 @@ struct registry_priv {
 	u8	uapsd_acvi_en;
 	u8	uapsd_acvo_en;
 	WLAN_BSSID_EX    dev_network;
-	u8 tx_bw_mode;
+	u8	tx_bw_mode;
+	u8	led_enable;
 	u8	ht_enable;
 	/* 0: 20 MHz, 1: 40 MHz, 2: 80 MHz, 3: 160MHz */
 	/* 2.4G use bit 0 ~ 3, 5G use bit 4 ~ 7 */
