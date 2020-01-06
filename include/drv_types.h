@@ -114,6 +114,8 @@ struct registry_priv {
 	u8	uapsd_acvi_en;
 	u8	uapsd_acvo_en;
 
+	u8	led_enable;
+
 	struct wlan_bssid_ex    dev_network;
 
 	u8	ht_enable;

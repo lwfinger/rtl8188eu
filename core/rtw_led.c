@@ -1652,12 +1652,17 @@ void BlinkHandler(struct LED_871x *pLed)
 void LedControl8188eu(struct adapter *padapter, enum LED_CTL_MODE LedAction)
 {
 	struct led_priv *ledpriv = &(padapter->ledpriv);
+	struct registry_priv *registry_par;
 
        if ((padapter->bSurpriseRemoved) || (padapter->bDriverStopped) ||
 	   (!padapter->hw_init_completed))
 		return;
 
 	if (!ledpriv->bRegUseLed)
+		return;
+
+	registry_par = &padapter->registrypriv;
+	if (!registry_par->led_enable)
 		return;
 
 	if ((padapter->pwrctrlpriv.rf_pwrstate != rf_on &&
