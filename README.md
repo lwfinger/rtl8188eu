@@ -1,6 +1,6 @@
 IMPORTANT - PLEASE READ:
 
-Beginning on Novemger 4, 2019, I will NO LONGER support people that have downloaded the source
+Beginning on November 4, 2019, I will NO LONGER support people that have downloaded the source
 as a zip file. Using git has much more flexibility. In addition, there is much less liklihood
 that a user will contact me with a problem that is ALREADY fixed.
 
