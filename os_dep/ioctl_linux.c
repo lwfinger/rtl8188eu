@@ -6720,21 +6720,16 @@ static int wpa_supplicant_ioctl(struct net_device *dev, struct iw_point *p)
 
 	/* down(&ieee->wx_sem);	 */
 
-	if (p->length < sizeof(struct ieee_param) || !p->pointer) {
-		ret = -EINVAL;
-		goto out;
-	}
+	if (!p->pointer || p->length != sizeof(struct ieee_param))
+		return -EINVAL;
 
 	param = (struct ieee_param *)rtw_malloc(p->length);
-	if (param == NULL) {
-		ret = -ENOMEM;
-		goto out;
-	}
+	if (param == NULL)
+		return -ENOMEM;
 
 	if (copy_from_user(param, p->pointer, p->length)) {
 		rtw_mfree((u8 *)param, p->length);
-		ret = -EFAULT;
-		goto out;
+		return -EFAULT;
 	}
 
 	switch (param->cmd) {
@@ -6767,13 +6762,7 @@ static int wpa_supplicant_ioctl(struct net_device *dev, struct iw_point *p)
 		ret = -EFAULT;
 
 	rtw_mfree((u8 *)param, p->length);
-
-out:
-
-	/* up(&ieee->wx_sem); */
-
 	return ret;
-
 }
 
 #ifdef CONFIG_AP_MODE
@@ -7574,31 +7563,20 @@ static int rtw_hostapd_ioctl(struct net_device *dev, struct iw_point *p)
 	* so, we just check hw_init_completed
 	*/
 
-	if (!rtw_is_hw_init_completed(padapter)) {
-		ret = -EPERM;
-		goto out;
-	}
+	if (!rtw_is_hw_init_completed(padapter))
+		return -EPERM;
 
-
-	/* if (p->length < sizeof(struct ieee_param) || !p->pointer){ */
-	if (!p->pointer) {
-		ret = -EINVAL;
-		goto out;
-	}
+	if (!p->pointer || p->length != sizeof(struct ieee_param))
+		return -EINVAL;
 
 	param = (struct ieee_param *)rtw_malloc(p->length);
-	if (param == NULL) {
-		ret = -ENOMEM;
-		goto out;
-	}
+	if (param == NULL)
+		return -ENOMEM;
 
 	if (copy_from_user(param, p->pointer, p->length)) {
 		rtw_mfree((u8 *)param, p->length);
-		ret = -EFAULT;
-		goto out;
+		return -EFAULT;
 	}
-
-	/* RTW_INFO("%s, cmd=%d\n", __func__, param->cmd); */
 
 	switch (param->cmd) {
 	case RTL871X_HOSTAPD_FLUSH:
@@ -7692,10 +7670,7 @@ static int rtw_hostapd_ioctl(struct net_device *dev, struct iw_point *p)
 
 	rtw_mfree((u8 *)param, p->length);
 
-out:
-
 	return ret;
-
 }
 #endif
 
