@@ -45,3 +45,12 @@ Frequently asked Questions
 ### The network manager says: "Device is not ready"!
 Make sure you copied the firmware (rtl8188eufw.bin) to /lib/firmware/rtlwifi/
 
+### NetworkManager does not list SSID
+NetworkManager changes the Wi-Fi MAC address during scanning to improve privacy but this adapter does not support it. To adress this issue, please create `/etc/NetworkManager/conf.d/80-wifi.conf` with content:
+
+```
+[device]
+wifi.scan-rand-mac-address=no
+```
+
+and run `systemctl restart NetworkManager`
