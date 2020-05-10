@@ -98,7 +98,7 @@ SUBARCH := $(shell uname -m | sed -e "s/i.86/i386/; s/ppc.*/powerpc/; s/armv.l/a
 
 ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
-KVER  := $(shell uname -r)
+KVER  ?= $(if $(KERNELRELEASE),$(KERNELRELEASE),$(shell uname -r))
 KSRC ?= /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless
 INSTALL_PREFIX :=
