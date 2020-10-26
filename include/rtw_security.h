@@ -193,7 +193,7 @@ struct security_priv
 	u8 bWepDefaultKeyIdxSet;
 };
 
-struct sha256_state {
+struct rtl_sha256_state {
 	u64 length;
 	u32 state[8], curlen;
 	u8 buf[64];

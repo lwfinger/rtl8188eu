@@ -335,18 +335,14 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 	u8 *notify_ie;
 	size_t notify_ielen;
 	s32 notify_signal;
-	u8 buf[MAX_BSSINFO_LEN], *pbuf;
+	u8 *buf, *pbuf;
 	size_t len,bssinf_len=0;
 	struct rtw_ieee80211_hdr *pwlanhdr;
 	__le16 *fctrl;
 	u8	bc_addr[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-
 	struct wireless_dev *wdev = padapter->rtw_wdev;
 	struct wiphy *wiphy = wdev->wiphy;
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-
-
-	/* DBG_8192C("%s\n", __func__); */
 
 	bssinf_len = pnetwork->network.IELength+sizeof (struct rtw_ieee80211_hdr_3addr);
 	if (bssinf_len > MAX_BSSINFO_LEN) {
@@ -416,6 +412,9 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 	} else {
 		notify_signal = 100*translate_percentage_to_dbm(pnetwork->network.PhyInfo.SignalStrength);/* dbm */
 	}
+	buf = kzalloc(MAX_BSSINFO_LEN, GFP_KERNEL);
+	if (!buf)
+		goto exit;
 	pbuf = buf;
 
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pbuf;
@@ -455,7 +454,7 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 		len, notify_signal, GFP_ATOMIC);
 	if (unlikely(!bss)) {
 		DBG_8192C(FUNC_ADPT_FMT" bss NULL\n", FUNC_ADPT_ARG(padapter));
-		goto exit;
+		goto free_buf;
 	}
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38))
@@ -472,30 +471,13 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 #endif /* COMPAT_KERNEL_RELEASE */
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) */
 
-/*
-	{
-		if ( bss->information_elements == bss->proberesp_ies)
-		{
-			if ( bss->len_information_elements !=  bss->len_proberesp_ies)
-			{
-				DBG_8192C("error!, len_information_elements !=  bss->len_proberesp_ies\n");
-			}
-
-		}
-		else if (bss->len_information_elements <  bss->len_beacon_ies)
-		{
-			bss->information_elements = bss->beacon_ies;
-			bss->len_information_elements =  bss->len_beacon_ies;
-		}
-	}
-*/
-
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0)
 	cfg80211_put_bss(wiphy, bss);
 #else
 	cfg80211_put_bss(bss);
 #endif
-
+free_buf:
+	kfree(buf);
 exit:
 	return bss;
 
@@ -4427,9 +4409,17 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
 #else
 	struct net_device *ndev,
 #endif
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
+	struct mgmt_frame_regs *upd)
+#else
 	u16 frame_type, bool reg)
+#endif
 {
 	struct adapter *adapter = wiphy_to_adapter(wiphy);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
+	u16 frame_type = BIT(upd->global_stypes << 4);
+	bool reg = false;
+#endif
 
 #ifdef CONFIG_DEBUG_CFG80211
 	DBG_88E(FUNC_ADPT_FMT" frame_type:%x, reg:%d\n", FUNC_ADPT_ARG(adapter),
@@ -4859,7 +4849,12 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
 	.mgmt_tx = cfg80211_rtw_mgmt_tx,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
+	.update_mgmt_frame_registrations = cfg80211_rtw_mgmt_frame_register,
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
 	.mgmt_frame_register = cfg80211_rtw_mgmt_frame_register,
+#endif
+
 #elif  (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,34) && LINUX_VERSION_CODE<=KERNEL_VERSION(2,6,35))
 	.action = cfg80211_rtw_mgmt_tx,
 #endif
