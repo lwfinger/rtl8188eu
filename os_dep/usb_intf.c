@@ -126,6 +126,7 @@ static struct usb_device_id rtw_usb_id_tbl[] = {
 	{USB_DEVICE(0x2357, 0x0111), .driver_info = RTL8188E}, /* TP-Link TL-WN727N v5.21 */
 	{USB_DEVICE(0x2C4E, 0x0102), .driver_info = RTL8188E}, /* MERCUSYS MW150US v2 */
 	{USB_DEVICE(0x0B05, 0x18F0), .driver_info = RTL8188E}, /* ASUS USB-N10 Nano B1 */
+	{USB_DEVICE(0x7392, 0xb811), .driver_info = RTL8188E}, /* Edimax EW-7811Un V2 */
 	{}	/* Terminating entry */
 };
 
