@@ -312,8 +312,12 @@ static int napi_recv(_adapter *padapter, int budget)
 
 #ifdef CONFIG_RTW_GRO
 		if (pregistrypriv->en_gro) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 12, 0)
 			if (rtw_napi_gro_receive(&padapter->napi, pskb) != GRO_DROP)
 				rx_ok = true;
+#else
+			rx_ok = true;
+#endif
 			goto next;
 		}
 #endif /* CONFIG_RTW_GRO */
