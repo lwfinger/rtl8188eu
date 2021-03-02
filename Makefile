@@ -400,7 +400,8 @@ endif
 EXTRA_CFLAGS += -DDM_ODM_SUPPORT_TYPE=0x04
 
 EXTRA_CFLAGS += -DRTW_USE_CFG80211_STA_EVENT
-SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ | sed -e s/ppc/powerpc/ | sed -e s/armv.l/arm/)
+
+SUBARCH := $(shell uname -m | sed -e "s/i.86/i386/; s/ppc.*/powerpc/; s/armv.l/arm/; s/aarch64/arm64/;")
 ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
 KVER  ?= $(if $(KERNELRELEASE),$(KERNELRELEASE),$(shell uname -r))
