@@ -82,7 +82,7 @@ CONFIG_PLATFORM_I386_PC = y
 
 CONFIG_DRVEXT_MODULE = n
 
-export TopDIR ?= $(shell pwd)
+export TopDIR ?= $(CURDIR)
 
 MSG="Directory .git does not exist indicating that you downloaded the source as a zip file. Only the 'git clone' method is now supported."
 
@@ -476,7 +476,7 @@ test:
 	@if [ !  -e  ./.git ] ; then echo $(MSG); exit 1; fi;
 
 modules:
-	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
+	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(CURDIR)  modules
 
 strip:
 	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
@@ -497,7 +497,7 @@ config_r:
 .PHONY: modules clean
 
 clean:
-	#$(MAKE) -C $(KSRC) M=$(shell pwd) clean
+	#$(MAKE) -C $(KSRC) M=$(CURDIR) clean
 	cd hal ; rm -fr */*/*/*.mod.c */*/*/*.mod */*/*/*.o */*/*/.*.cmd */*/*/*.ko
 	cd hal ; rm -fr */*/*.mod.c */*/*.mod */*/*.o */*/.*.cmd */*/*.ko
 	cd hal ; rm -fr */*.mod.c */*.mod */*.o */.*.cmd */*.ko
