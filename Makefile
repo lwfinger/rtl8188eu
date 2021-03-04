@@ -27,10 +27,6 @@ EXTRA_CFLAGS += -I$(src)/hal/phydm
 
 CONFIG_AUTOCFG_CP = n
 
-########################## WIFI IC ############################
-CONFIG_RTL8188EU = m
-######################### Interface ###########################
-CONFIG_USB_HCI = y
 ########################## Features ###########################
 CONFIG_MP_INCLUDED = y
 CONFIG_POWER_SAVING = y
@@ -466,7 +462,7 @@ ifeq ($(CONFIG_RTL8723B), y)
 8188eu-$(CONFIG_MP_INCLUDED)+= core/rtw_bt_mp.o
 endif
 
-obj-$(CONFIG_RTL8188EU) := 8188eu.o
+obj-m := 8188eu.o
 
 else
 
