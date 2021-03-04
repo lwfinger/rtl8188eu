@@ -28,7 +28,7 @@ EXTRA_CFLAGS += -I$(src)/hal/phydm
 CONFIG_AUTOCFG_CP = n
 
 ########################## WIFI IC ############################
-CONFIG_RTL8188E = y
+CONFIG_RTL8188EU = m
 ######################### Interface ###########################
 CONFIG_USB_HCI = y
 ########################## Features ###########################
@@ -151,8 +151,6 @@ EXTRA_CFLAGS += -I$(src)/platform
 EXTRA_CFLAGS += -I$(src)/hal/btc
 
 RTL871X = rtl8188e
-
-EXTRA_CFLAGS += -DCONFIG_RTL8188E
 
 _HAL_INTFS_FILES +=	hal/HalPwrSeqCmd.o \
 					hal/Hal8188EPwrSeq.o\
@@ -471,8 +469,6 @@ endif
 obj-$(CONFIG_RTL8188EU) := 8188eu.o
 
 else
-
-export CONFIG_RTL8188EU = m
 
 all: test modules
 
