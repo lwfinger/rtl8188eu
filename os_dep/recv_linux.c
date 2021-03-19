@@ -160,8 +160,8 @@ void rtw_os_recv_resource_free(struct recv_priv *precvpriv)
 {
 	sint i;
 	union recv_frame *precvframe;
-	precvframe = (union recv_frame *) precvpriv->precv_frame_buf;
 
+	precvframe = (union recv_frame *) precvpriv->precv_frame_buf;
 
 #ifdef CONFIG_RTW_NAPI
 	if (skb_queue_len(&precvpriv->rx_napi_skb_queue))
@@ -301,7 +301,6 @@ static int napi_recv(_adapter *padapter, int budget)
 	struct registry_priv *pregistrypriv = &padapter->registrypriv;
 	u8 rx_ok;
 
-
 	while ((work_done < budget) &&
 	       (!skb_queue_empty(&precvpriv->rx_napi_skb_queue))) {
 		pskb = skb_dequeue(&precvpriv->rx_napi_skb_queue);
@@ -325,15 +324,16 @@ static int napi_recv(_adapter *padapter, int budget)
 		if (rtw_netif_receive_skb(padapter->pnetdev, pskb) == NET_RX_SUCCESS)
 			rx_ok = true;
 
+#ifdef CONFIG_RTW_GRO
 next:
-		if (rx_ok ) {
+#endif /* CONFIG_RTW_GRO */
+		if (rx_ok) {
 			work_done++;
 			DBG_COUNTER(padapter->rx_logs.os_netif_ok);
 		} else {
 			DBG_COUNTER(padapter->rx_logs.os_netif_err);
 		}
 	}
-
 	return work_done;
 }
 
@@ -343,14 +343,12 @@ int rtw_recv_napi_poll(struct napi_struct *napi, int budget)
 	int work_done = 0;
 	struct recv_priv *precvpriv = &padapter->recvpriv;
 
-
 	work_done = napi_recv(padapter, budget);
 	if (work_done < budget) {
 		napi_complete(napi);
 		if (!skb_queue_empty(&precvpriv->rx_napi_skb_queue))
 			napi_schedule(napi);
 	}
-
 	return work_done;
 }
 #endif /* CONFIG_RTW_NAPI */
@@ -369,19 +367,15 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 #endif
 	int ret;
 
-	/* Indicat the packets to upper layer */
+	/* Indicate the packets to upper layer */
 	if (pkt) {
-		if (check_fwstate(pmlmepriv, WIFI_AP_STATE) ) {
+		if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
 			_pkt *pskb2 = NULL;
 			struct sta_info *psta = NULL;
 			struct sta_priv *pstapriv = &padapter->stapriv;
 			int bmcast = IS_MCAST(pattrib->dst);
 
-			/* RTW_INFO("bmcast=%d\n", bmcast); */
-
 			if (!memcmp(pattrib->dst, adapter_mac_addr(padapter), ETH_ALEN) == false) {
-				/* RTW_INFO("not ap psta=%p, addr=%pM\n", psta, pattrib->dst); */
-
 				if (bmcast) {
 					psta = rtw_get_bcmc_stainfo(padapter);
 					pskb2 = rtw_skb_clone(pkt);
@@ -391,9 +385,6 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 				if (psta) {
 					struct net_device *pnetdev = (struct net_device *)padapter->pnetdev;
 
-					/* RTW_INFO("directly forwarding to the rtw_xmit_entry\n"); */
-
-					/* skb->ip_summed = CHECKSUM_NONE; */
 					pkt->dev = pnetdev;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
 					skb_set_queue_mapping(pkt, rtw_recv_select_queue(pkt));
@@ -410,7 +401,6 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 					}
 				}
 			} else { /* to APself */
-				/* RTW_INFO("to APSelf\n"); */
 				DBG_COUNTER(padapter->rx_logs.os_indicate_ap_self);
 			}
 		}
@@ -425,32 +415,27 @@ void rtw_os_recv_indicate_pkt(_adapter *padapter, _pkt *pkt, struct rx_pkt_attri
 		rcu_read_unlock();
 #endif /* (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35)) */
 
-
-		if (br_port && (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE) )) {
-			if (nat25_handle_frame(padapter, pkt) == -1) {
-				/* priv->ext_stats.rx_data_drops++; */
-				/* DEBUG_ERR("RX DROP: nat25_handle_frame fail!\n"); */
-				/* return FAIL; */
-
-				/* bypass this frame to upper layer!! */
-			}
-		}
 #endif /* CONFIG_BR_EXT */
 		if (precvpriv->sink_udpport > 0)
 			rtw_sink_rtp_seq_dbg(padapter, pkt);
 #ifdef DBG_UDP_PKT_LOSE_11AC
 		/* After eth_type_trans process , pkt->data pointer will move from ethrnet header to ip header ,
-		*	we have to check ethernet type , so this debug must be print before eth_type_trans
-		*/
+		 * we have to check ethernet type , so this debug must be print before eth_type_trans
+		 */
 		if (*((unsigned short *)(pkt->data + ETH_ALEN * 2)) == htons(ETH_P_ARP)) {
 			/* ARP Payload length will be 42bytes or 42+18(tailer)=60bytes*/
 			if (pkt->len != 42 && pkt->len != 60)
-				RTW_INFO("Error !!%s,ARP Payload length %u not correct\n" , __func__ , pkt->len);
+				RTW_INFO("Error !!%s,ARP Payload length %u not correct\n",
+					 __func__, pkt->len);
 		} else if (*((unsigned short *)(pkt->data + ETH_ALEN * 2)) == htons(ETH_P_IP)) {
-			if (be16_to_cpu(*((u16 *)(pkt->data + PAYLOAD_LEN_LOC_OF_IP_HDR))) != (pkt->len) - ETH_HLEN) {
-				RTW_INFO("Error !!%s,Payload length not correct\n" , __func__);
-				RTW_INFO("%s, IP header describe Total length=%u\n" , __func__ , be16_to_cpu(*((u16 *)(pkt->data + PAYLOAD_LEN_LOC_OF_IP_HDR))));
-				RTW_INFO("%s, Pkt real length=%u\n" , __func__ , (pkt->len) - ETH_HLEN);
+			if (be16_to_cpu(*((u16 *)(pkt->data + PAYLOAD_LEN_LOC_OF_IP_HDR))) !=
+					(pkt->len) - ETH_HLEN) {
+				RTW_INFO("Error !!%s,Payload length not correct\n", __func__);
+				RTW_INFO("%s, IP header describe Total length=%u\n",
+					 __func__, be16_to_cpu(*((u16 *)(pkt->data +
+							       PAYLOAD_LEN_LOC_OF_IP_HDR))));
+				RTW_INFO("%s, Pkt real length=%u\n", __func__,
+					 (pkt->len) - ETH_HLEN);
 			}
 		}
 #endif
@@ -494,9 +479,9 @@ void rtw_handle_tkip_mic_err(_adapter *padapter, struct sta_info *sta, u8 bgroup
 	struct security_priv	*psecuritypriv = &padapter->securitypriv;
 	u32 cur_time = 0;
 
-	if (psecuritypriv->last_mic_err_time == 0)
+	if (psecuritypriv->last_mic_err_time == 0) {
 		psecuritypriv->last_mic_err_time = jiffies;
-	else {
+	} else {
 		cur_time = jiffies;
 
 		if (cur_time - psecuritypriv->last_mic_err_time < 60 * HZ) {
@@ -541,31 +526,22 @@ void rtw_hostapd_mlme_rx(_adapter *padapter, union recv_frame *precv_frame)
 	struct hostapd_priv *phostapdpriv  = padapter->phostapdpriv;
 	struct net_device *pmgnt_netdev = phostapdpriv->pmgnt_netdev;
 
-
 	skb = precv_frame->u.hdr.pkt;
 
-	if (skb == NULL)
+	if (!skb)
 		return;
 
 	skb->data = precv_frame->u.hdr.rx_data;
 	skb->tail = precv_frame->u.hdr.rx_tail;
 	skb->len = precv_frame->u.hdr.len;
 
-	/* pskb_copy = rtw_skb_copy(skb);
-	*	if(skb == NULL) goto _exit; */
-
 	skb->dev = pmgnt_netdev;
 	skb->ip_summed = CHECKSUM_NONE;
 	skb->pkt_type = PACKET_OTHERHOST;
-	/* skb->protocol = __constant_htons(0x0019); ETH_P_80211_RAW */
-	skb->protocol = __constant_htons(0x0003); /*ETH_P_80211_RAW*/
+	skb->protocol = htons(0x0003); /*ETH_P_80211_RAW*/
 
-	/* RTW_INFO("(1)data=0x%x, head=0x%x, tail=0x%x, mac_header=0x%x, len=%d\n", skb->data, skb->head, skb->tail, skb->mac_header, skb->len); */
-
-	/* skb->mac.raw = skb->data; */
 	skb_reset_mac_header(skb);
 
-	/* skb_pull(skb, 24); */
 	memset(skb->cb, 0, sizeof(skb->cb));
 
 	rtw_netif_rx(pmgnt_netdev, skb);
@@ -594,14 +570,11 @@ static void rtw_os_ksocket_send(_adapter *padapter, union recv_frame *precv_fram
 		if (rx_pid == psta->pid) {
 			int i;
 			u16 len = *(u16 *)(skb->data + ETH_HLEN + 2);
-			/* u16 ctrl_type = *(u16*)(skb->data+ETH_HLEN+4); */
 
-			/* RTW_INFO("eth, RC: len=0x%x, ctrl_type=0x%x\n", len, ctrl_type);  */
 			RTW_INFO("eth, RC: len=0x%x\n", len);
 
 			for (i = 0; i < len; i++)
 				RTW_INFO("0x%x\n", *(skb->data + ETH_HLEN + 4 + i));
-			/* RTW_INFO("0x%x\n", *(skb->data+ETH_HLEN+6+i)); */
 
 			RTW_INFO("eth, RC-end\n");
 
@@ -621,7 +594,7 @@ int rtw_recv_monitor(_adapter *padapter, union recv_frame *precv_frame)
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct rx_pkt_attrib *pattrib;
 
-	if (NULL == precv_frame)
+	if (!precv_frame)
 		goto _recv_drop;
 
 	pattrib = &precv_frame->u.hdr.attrib;
@@ -629,7 +602,7 @@ int rtw_recv_monitor(_adapter *padapter, union recv_frame *precv_frame)
 	pfree_recv_queue = &(precvpriv->free_recv_queue);
 
 	skb = precv_frame->u.hdr.pkt;
-	if (skb == NULL) {
+	if (!skb) {
 		RTW_INFO("%s :skb==NULL something wrong!!!!\n", __func__);
 		goto _recv_drop;
 	}
@@ -655,7 +628,35 @@ _recv_drop:
 		rtw_free_recvframe(precv_frame, pfree_recv_queue);
 
 	return ret;
+}
 
+static inline void check_reg_rule(struct sta_info *sta, u8 *ip, _adapter *padapter)
+{
+	u8 *tcp = ip + GET_IPV4_IHL(ip) * 4;
+
+	if (rtw_st_ctl_chk_reg_rule(&sta->st_ctl, padapter, IPV4_DST(ip),
+				    TCP_DST(tcp), IPV4_SRC(ip), TCP_SRC(tcp))) {
+		if (GET_TCP_SYN(tcp) && GET_TCP_ACK(tcp)) {
+			session_tracker_add_cmd(padapter, sta, IPV4_DST(ip),
+						TCP_DST(tcp), IPV4_SRC(ip),
+						TCP_SRC(tcp));
+			if (DBG_SESSION_TRACKER)
+				RTW_INFO(FUNC_ADPT_FMT" local:"IP_FMT":"PORT_FMT", remote:"IP_FMT":"PORT_FMT" SYN-ACK\n",
+					 FUNC_ADPT_ARG(padapter),
+					 IP_ARG(IPV4_DST(ip)), PORT_ARG(TCP_DST(tcp)),
+					 IP_ARG(IPV4_SRC(ip)), PORT_ARG(TCP_SRC(tcp)));
+		}
+		if (GET_TCP_FIN(tcp)) {
+			session_tracker_del_cmd(padapter, sta,
+						IPV4_DST(ip), TCP_DST(tcp),
+						IPV4_SRC(ip), TCP_SRC(tcp));
+			if (DBG_SESSION_TRACKER)
+				RTW_INFO(FUNC_ADPT_FMT" local:"IP_FMT":"PORT_FMT", remote:"IP_FMT":"PORT_FMT" FIN\n",
+					 FUNC_ADPT_ARG(padapter),
+					 IP_ARG(IPV4_DST(ip)), PORT_ARG(TCP_DST(tcp)),
+					 IP_ARG(IPV4_SRC(ip)), PORT_ARG(TCP_SRC(tcp)));
+		}
+	}
 }
 
 int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
@@ -666,7 +667,7 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
 	struct rx_pkt_attrib *pattrib;
 
-	if (NULL == precv_frame)
+	if (!precv_frame)
 		goto _recv_indicatepkt_drop;
 
 	DBG_COUNTER(padapter->rx_logs.os_indicate);
@@ -687,10 +688,8 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 #endif
 
 	skb = precv_frame->u.hdr.pkt;
-	if (skb == NULL) {
+	if (!skb)
 		goto _recv_indicatepkt_drop;
-	}
-
 
 	skb->data = precv_frame->u.hdr.rx_data;
 
@@ -703,7 +702,7 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 		RTW_INFO("recv eapol packet\n");
 
 #ifdef CONFIG_AUTO_AP_MODE
-	if (0x8899 == pattrib->eth_type) {
+	if (pattrib->eth_type == 0x8899) {
 		rtw_os_ksocket_send(padapter, precv_frame);
 
 		/* goto _recv_indicatepkt_drop; */
@@ -723,34 +722,8 @@ int rtw_recv_indicatepkt(_adapter *padapter, union recv_frame *precv_frame)
 			u8 *ip = pkt->data + 14;
 
 			if (GET_IPV4_PROTOCOL(ip) == 0x06  /* TCP */
-			    && rtw_st_ctl_chk_reg_s_proto(&sta->st_ctl, 0x06) 
-			   ) {
-				u8 *tcp = ip + GET_IPV4_IHL(ip) * 4;
-
-				if (rtw_st_ctl_chk_reg_rule(&sta->st_ctl, padapter, IPV4_DST(ip), TCP_DST(tcp), IPV4_SRC(ip), TCP_SRC(tcp)) ) {
-					if (GET_TCP_SYN(tcp) && GET_TCP_ACK(tcp)) {
-						session_tracker_add_cmd(padapter, sta
-							, IPV4_DST(ip), TCP_DST(tcp)
-							, IPV4_SRC(ip), TCP_SRC(tcp));
-						if (DBG_SESSION_TRACKER)
-							RTW_INFO(FUNC_ADPT_FMT" local:"IP_FMT":"PORT_FMT", remote:"IP_FMT":"PORT_FMT" SYN-ACK\n"
-								, FUNC_ADPT_ARG(padapter)
-								, IP_ARG(IPV4_DST(ip)), PORT_ARG(TCP_DST(tcp))
-								, IP_ARG(IPV4_SRC(ip)), PORT_ARG(TCP_SRC(tcp)));
-					}
-					if (GET_TCP_FIN(tcp)) {
-						session_tracker_del_cmd(padapter, sta
-							, IPV4_DST(ip), TCP_DST(tcp)
-							, IPV4_SRC(ip), TCP_SRC(tcp));
-						if (DBG_SESSION_TRACKER)
-							RTW_INFO(FUNC_ADPT_FMT" local:"IP_FMT":"PORT_FMT", remote:"IP_FMT":"PORT_FMT" FIN\n"
-								, FUNC_ADPT_ARG(padapter)
-								, IP_ARG(IPV4_DST(ip)), PORT_ARG(TCP_DST(tcp))
-								, IP_ARG(IPV4_SRC(ip)), PORT_ARG(TCP_SRC(tcp)));
-					}
-				}
-
-			}
+			    && rtw_st_ctl_chk_reg_s_proto(&sta->st_ctl, 0x06))
+				check_reg_rule(sta, ip, padapter);
 		}
 bypass_session_tracker:
 		;
@@ -758,13 +731,9 @@ bypass_session_tracker:
 
 	rtw_os_recv_indicate_pkt(padapter, skb, pattrib);
 
-_recv_indicatepkt_end:
-
 	precv_frame->u.hdr.pkt = NULL; /* pointers to NULL before rtw_free_recvframe() */
 
 	rtw_free_recvframe(precv_frame, pfree_recv_queue);
-
-
 
 	return _SUCCESS;
 
@@ -777,7 +746,6 @@ _recv_indicatepkt_drop:
 	DBG_COUNTER(padapter->rx_logs.os_indicate_err);
 
 	return _FAIL;
-
 }
 
 void rtw_os_read_port(_adapter *padapter, struct recv_buf *precvbuf)
