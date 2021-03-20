@@ -444,7 +444,7 @@ odm_rx_phy_status92c_series_parsing(
 #if (RTL8188F_SUPPORT == 1)
 			else if (p_dm_odm->support_ic_type & (ODM_RTL8188F)) {
 
-				rx_pwr_all = odm_CCKRSSI_8188F(LNA_idx, VGA_idx);
+				rx_pwr_all = odm_CCKRSSI_8188E(p_dm_odm, LNA_idx, VGA_idx);
 				/**/
 			}
 #endif
