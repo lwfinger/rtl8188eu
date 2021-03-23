@@ -11517,9 +11517,9 @@ void update_sta_info(_adapter *padapter, struct sta_info *psta)
 
 	update_ldpc_stbc_cap(psta);
 
-	_enter_critical_bh(&psta->lock, &irqL);
+	_enter_critical_ex(&psta->lock, &irqL);
 	psta->state = _FW_LINKED;
-	_exit_critical_bh(&psta->lock, &irqL);
+	_exit_critical_ex(&psta->lock, &irqL);
 
 }
 
