@@ -412,7 +412,7 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
 	} else {
 		notify_signal = 100*translate_percentage_to_dbm(pnetwork->network.PhyInfo.SignalStrength);/* dbm */
 	}
-	buf = kzalloc(MAX_BSSINFO_LEN, GFP_KERNEL);
+	buf = kzalloc(MAX_BSSINFO_LEN, GFP_ATOMIC);
 	if (!buf)
 		goto exit;
 	pbuf = buf;
@@ -4417,10 +4417,13 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
 {
 	struct adapter *adapter = wiphy_to_adapter(wiphy);
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
-	u16 frame_type = BIT(upd->global_stypes << 4);
+	u16 frame_type;
 	bool reg = false;
 #endif
-
+	if (upd->global_stypes < 11)
+		frame_type = (u16)BIT(upd->global_stypes << 4);
+	else
+		frame_type = 0;
 #ifdef CONFIG_DEBUG_CFG80211
 	DBG_88E(FUNC_ADPT_FMT" frame_type:%x, reg:%d\n", FUNC_ADPT_ARG(adapter),
 		frame_type, reg);
