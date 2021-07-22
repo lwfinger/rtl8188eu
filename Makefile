@@ -21,7 +21,7 @@ EXTRA_CFLAGS += -Wno-date-time	# Fix compile error && warning on gcc 4.9 and lat
 endif
 
 EXTRA_CFLAGS += -I$(src)/include
-EXTRA_CFLAGS += -I$(src)/hal/phydm
+EXTRA_CFLAGS += -I$(src)/hal
 
 #EXTRA_LDFLAGS += --strip-debug
 
@@ -117,29 +117,29 @@ _HAL_INTFS_FILES :=	hal/hal_intf.o \
 			hal/hal_$(HCI_NAME)_led.o
 
 			
-_OUTSRC_FILES := hal/phydm/phydm_debug.o	\
-		hal/phydm/phydm_antdiv.o\
-		hal/phydm/phydm_antdect.o\
-		hal/phydm/phydm_interface.o\
-		hal/phydm/phydm_hwconfig.o\
-		hal/phydm/phydm.o\
-		hal/phydm/halphyrf_ce.o\
-		hal/phydm/phydm_edcaturbocheck.o\
-		hal/phydm/phydm_dig.o\
-		hal/phydm/phydm_pathdiv.o\
-		hal/phydm/phydm_rainfo.o\
-		hal/phydm/phydm_dynamicbbpowersaving.o\
-		hal/phydm/phydm_powertracking_ce.o\
-		hal/phydm/phydm_dynamictxpower.o\
-		hal/phydm/phydm_adaptivity.o\
-		hal/phydm/phydm_cfotracking.o\
-		hal/phydm/phydm_noisemonitor.o\
-		hal/phydm/phydm_acs.o\
-		hal/phydm/phydm_dfs.o\
-		hal/phydm/txbf/phydm_hal_txbf_api.o\
-		hal/phydm/phydm_adc_sampling.o\
-		hal/phydm/phydm_kfree.o\
-		hal/phydm/phydm_ccx.o
+_OUTSRC_FILES := hal/phydm_debug.o	\
+		hal/phydm_antdiv.o\
+		hal/phydm_antdect.o\
+		hal/phydm_interface.o\
+		hal/phydm_hwconfig.o\
+		hal/phydm.o\
+		hal/halphyrf_ce.o\
+		hal/phydm_edcaturbocheck.o\
+		hal/phydm_dig.o\
+		hal/phydm_pathdiv.o\
+		hal/phydm_rainfo.o\
+		hal/phydm_dynamicbbpowersaving.o\
+		hal/phydm_powertracking_ce.o\
+		hal/phydm_dynamictxpower.o\
+		hal/phydm_adaptivity.o\
+		hal/phydm_cfotracking.o\
+		hal/phydm_noisemonitor.o\
+		hal/phydm_acs.o\
+		hal/phydm_dfs.o\
+		hal/phydm_hal_txbf_api.o\
+		hal/phydm_adc_sampling.o\
+		hal/phydm_kfree.o\
+		hal/phydm_ccx.o
 
 
 EXTRA_CFLAGS += -I$(src)/platform
@@ -171,13 +171,13 @@ _HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
 _HAL_INTFS_FILES +=hal/HalEfuseMask8188E_USB.o
 
 #hal/OUTSRC/Hal8188EFWImg_CE.o
-_OUTSRC_FILES += hal/phydm/halhwimg8188e_mac.o\
-		hal/phydm/halhwimg8188e_bb.o\
-		hal/phydm/halhwimg8188e_rf.o\
-		hal/phydm/halphyrf_8188e_ce.o\
-		hal/phydm/phydm_regconfig8188e.o\
-		hal/phydm/hal8188erateadaptive.o\
-		hal/phydm/phydm_rtl8188e.o
+_OUTSRC_FILES += hal/halhwimg8188e_mac.o\
+		hal/halhwimg8188e_bb.o\
+		hal/halhwimg8188e_rf.o\
+		hal/halphyrf_8188e_ce.o\
+		hal/phydm_regconfig8188e.o\
+		hal/hal8188erateadaptive.o\
+		hal/phydm_rtl8188e.o
 
 ########### AUTO_CFG  #################################
 

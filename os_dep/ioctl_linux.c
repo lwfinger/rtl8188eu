@@ -7,7 +7,7 @@
 #include <rtw_mp.h>
 #include <rtw_mp_ioctl.h>
 #include <rtw_mlme.h>
-#include "../../hal/phydm/phydm_precomp.h"
+#include "../../hal/phydm_precomp.h"
 #ifdef RTW_HALMAC
 #include "../../hal/hal_halmac.h"
 #endif

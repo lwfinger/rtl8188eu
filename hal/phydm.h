@@ -25,7 +25,7 @@
 #include "phydm_iqk.h"
 #include "phydm_dfs.h"
 #include "phydm_ccx.h"
-#include "txbf/phydm_hal_txbf_api.h"
+#include "phydm_hal_txbf_api.h"
 
 #include "phydm_adc_sampling.h"
 #include "phydm_dynamic_rx_path.h"

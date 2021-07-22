@@ -6,7 +6,7 @@
 #include <drv_types.h>
 #include <rtw_mp.h>
 #include <rtw_mp_ioctl.h>
-#include "../../hal/phydm/phydm_precomp.h"
+#include "../../hal/phydm_precomp.h"
 
 /*
  * Input Format: %s,%d,%d
