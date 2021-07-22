@@ -5,7 +5,7 @@
 #define __RTW_ODM_H__
 
 #include <drv_types.h>
-#include "../hal/phydm_types.h"
+#include "../phydm_types.h"
 /*
 * This file provides utilities/wrappers for rtw driver to use ODM
 */

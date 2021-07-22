@@ -7,9 +7,9 @@
 #include <rtw_mp.h>
 #include <rtw_mp_ioctl.h>
 #include <rtw_mlme.h>
-#include "../../hal/phydm_precomp.h"
+#include "../phydm_precomp.h"
 #ifdef RTW_HALMAC
-#include "../../hal/hal_halmac.h"
+#include "../hal_halmac.h"
 #endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 27))

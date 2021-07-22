@@ -104,80 +104,80 @@ ifeq ($(CONFIG_MP_INCLUDED), y)
 _OS_INTFS_FILES += os_dep/ioctl_mp.o
 endif
 
-_HAL_INTFS_FILES :=	hal/hal_intf.o \
-			hal/hal_com.o \
-			hal/hal_com_phycfg.o \
-			hal/hal_phy.o \
-			hal/hal_dm.o \
-			hal/hal_btcoex_wifionly.o \
-			hal/hal_btcoex.o \
-			hal/hal_mp.o \
-			hal/hal_mcc.o \
-			hal/hal_$(HCI_NAME).o \
-			hal/hal_$(HCI_NAME)_led.o
+_HAL_INTFS_FILES :=	hal_intf.o \
+			hal_com.o \
+			hal_com_phycfg.o \
+			hal_phy.o \
+			hal_dm.o \
+			hal_btcoex_wifionly.o \
+			hal_btcoex.o \
+			hal_mp.o \
+			hal_mcc.o \
+			hal_$(HCI_NAME).o \
+			hal_$(HCI_NAME)_led.o
 
 			
-_OUTSRC_FILES := hal/phydm_debug.o	\
-		hal/phydm_antdiv.o\
-		hal/phydm_antdect.o\
-		hal/phydm_interface.o\
-		hal/phydm_hwconfig.o\
-		hal/phydm.o\
-		hal/halphyrf_ce.o\
-		hal/phydm_edcaturbocheck.o\
-		hal/phydm_dig.o\
-		hal/phydm_pathdiv.o\
-		hal/phydm_rainfo.o\
-		hal/phydm_dynamicbbpowersaving.o\
-		hal/phydm_powertracking_ce.o\
-		hal/phydm_dynamictxpower.o\
-		hal/phydm_adaptivity.o\
-		hal/phydm_cfotracking.o\
-		hal/phydm_noisemonitor.o\
-		hal/phydm_acs.o\
-		hal/phydm_dfs.o\
-		hal/phydm_hal_txbf_api.o\
-		hal/phydm_adc_sampling.o\
-		hal/phydm_kfree.o\
-		hal/phydm_ccx.o
+_OUTSRC_FILES := phydm_debug.o	\
+		phydm_antdiv.o\
+		phydm_antdect.o\
+		phydm_interface.o\
+		phydm_hwconfig.o\
+		phydm.o\
+		halphyrf_ce.o\
+		phydm_edcaturbocheck.o\
+		phydm_dig.o\
+		phydm_pathdiv.o\
+		phydm_rainfo.o\
+		phydm_dynamicbbpowersaving.o\
+		phydm_powertracking_ce.o\
+		phydm_dynamictxpower.o\
+		phydm_adaptivity.o\
+		phydm_cfotracking.o\
+		phydm_noisemonitor.o\
+		phydm_acs.o\
+		phydm_dfs.o\
+		phydm_hal_txbf_api.o\
+		phydm_adc_sampling.o\
+		phydm_kfree.o\
+		phydm_ccx.o
 
 
 EXTRA_CFLAGS += -I$(src)/platform
 
-EXTRA_CFLAGS += -I$(src)/hal/btc
+EXTRA_CFLAGS += -I$(src)/btc
 
 RTL871X = rtl8188e
 
-_HAL_INTFS_FILES +=	hal/HalPwrSeqCmd.o \
-					hal/Hal8188EPwrSeq.o\
- 					hal/$(RTL871X)_xmit.o\
-					hal/$(RTL871X)_sreset.o
+_HAL_INTFS_FILES +=	HalPwrSeqCmd.o \
+					Hal8188EPwrSeq.o\
+ 					$(RTL871X)_xmit.o\
+					$(RTL871X)_sreset.o
 
-_HAL_INTFS_FILES +=	hal/$(RTL871X)_hal_init.o \
-			hal/$(RTL871X)_phycfg.o \
-			hal/$(RTL871X)_rf6052.o \
-			hal/$(RTL871X)_dm.o \
-			hal/$(RTL871X)_rxdesc.o \
-			hal/$(RTL871X)_cmd.o \
-			hal/hal8188e_s_fw.o \
-			hal/hal8188e_t_fw.o \
-			hal/$(HCI_NAME)_halinit.o \
-			hal/rtl8188eu_led.o \
-			hal/rtl8188eu_xmit.o \
-			hal/rtl8188eu_recv.o
+_HAL_INTFS_FILES +=	$(RTL871X)_hal_init.o \
+			$(RTL871X)_phycfg.o \
+			$(RTL871X)_rf6052.o \
+			$(RTL871X)_dm.o \
+			$(RTL871X)_rxdesc.o \
+			$(RTL871X)_cmd.o \
+			hal8188e_s_fw.o \
+			hal8188e_t_fw.o \
+			$(HCI_NAME)_halinit.o \
+			rtl8188eu_led.o \
+			rtl8188eu_xmit.o \
+			rtl8188eu_recv.o
 
-_HAL_INTFS_FILES += hal/$(HCI_NAME)_ops_linux.o
+_HAL_INTFS_FILES += $(HCI_NAME)_ops_linux.o
 
-_HAL_INTFS_FILES +=hal/HalEfuseMask8188E_USB.o
+_HAL_INTFS_FILES +=HalEfuseMask8188E_USB.o
 
-#hal/OUTSRC/Hal8188EFWImg_CE.o
-_OUTSRC_FILES += hal/halhwimg8188e_mac.o\
-		hal/halhwimg8188e_bb.o\
-		hal/halhwimg8188e_rf.o\
-		hal/halphyrf_8188e_ce.o\
-		hal/phydm_regconfig8188e.o\
-		hal/hal8188erateadaptive.o\
-		hal/phydm_rtl8188e.o
+#OUTSRC/Hal8188EFWImg_CE.o
+_OUTSRC_FILES += halhwimg8188e_mac.o\
+		halhwimg8188e_bb.o\
+		halhwimg8188e_rf.o\
+		halphyrf_8188e_ce.o\
+		phydm_regconfig8188e.o\
+		hal8188erateadaptive.o\
+		phydm_rtl8188e.o
 
 ########### AUTO_CFG  #################################
 
@@ -497,7 +497,7 @@ clean:
 	cd hal ; rm -fr */*/*/*.mod.c */*/*/*.mod */*/*/*.o */*/*/.*.cmd */*/*/*.ko
 	cd hal ; rm -fr */*/*.mod.c */*/*.mod */*/*.o */*/.*.cmd */*/*.ko
 	cd hal ; rm -fr */*.mod.c */*.mod */*.o */.*.cmd */*.ko
-	cd hal/led ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko .*.cmd
+	cd led ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko .*.cmd
 	cd core ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd os_dep/linux ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd os_dep ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
