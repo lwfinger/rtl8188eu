@@ -141,10 +141,7 @@ _OUTSRC_FILES := phydm_debug.o	\
 		phydm_kfree.o\
 		phydm_ccx.o
 
-
-EXTRA_CFLAGS += -I$(src)/platform
-
-EXTRA_CFLAGS += -I$(src)/btc
+EXTRA_CFLAGS += -I$(src)
 
 RTL871X = rtl8188e
 
