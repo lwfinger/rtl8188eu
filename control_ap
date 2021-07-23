@@ -136,15 +136,15 @@ wmm_ac_vo_txop_limit=47
 wmm_enabled=1
 EOF
 	echo "interface=$NET_AP" >> ~/hostapd.conf
-	echo "ssid=$AP_SSID" >> ~/hostapd.conf 
-	echo "driver=$DRIVER" >> ~/hostapd.conf 
-	echo "hw_mode=g" >> ~/hostapd.conf 
-	echo "channel=$AP_CHANNEL" >> ~/hostapd.conf 
-	echo "wpa=$ENCRYPT_MODE" >> ~/hostapd.conf 
-	echo "wpa_key_mgmt=WPA-PSK" >> ~/hostapd.conf 
-	echo "wpa_pairwise=TKIP CCMP" >> ~/hostapd.conf 
+	echo "ssid=$AP_SSID" >> ~/hostapd.conf
+	echo "driver=$DRIVER" >> ~/hostapd.conf
+	echo "hw_mode=g" >> ~/hostapd.conf
+	echo "channel=$AP_CHANNEL" >> ~/hostapd.conf
+	echo "wpa=$ENCRYPT_MODE" >> ~/hostapd.conf
+	echo "wpa_key_mgmt=WPA-PSK" >> ~/hostapd.conf
+	echo "wpa_pairwise=TKIP CCMP" >> ~/hostapd.conf
 	echo "rsn_pairwise=CCMP" >> ~/hostapd.conf
-	echo "wpa_passphrase=$WPA_SECRET" >> ~/hostapd.conf 
+	echo "wpa_passphrase=$WPA_SECRET" >> ~/hostapd.conf
         # Enable packet forwarding
         echo 1 > /proc/sys/net/ipv4/ip_forward
         # Bring up hostapd
@@ -159,4 +159,3 @@ stop)
 	rm -f ~/dhcpd.conf
         ;;
 esac
-

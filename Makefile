@@ -128,7 +128,7 @@ rtk_core :=				\
 		core/rtw_sreset.o	\
 		core/rtw_sta_mgt.o	\
 		core/rtw_wlan_util.o	\
-		core/rtw_xmit.o	
+		core/rtw_xmit.o
 
 8188eu-y += $(rtk_core)
 
@@ -190,4 +190,3 @@ clean: $(clean_more)
 	cd core ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd hal ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	cd os_dep ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-
