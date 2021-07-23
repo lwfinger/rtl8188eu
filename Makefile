@@ -1,12 +1,5 @@
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
 EXTRA_CFLAGS += -O1 -g
-#EXTRA_CFLAGS += -O3
-#EXTRA_CFLAGS += -Wall
-#EXTRA_CFLAGS += -Wextra
-#EXTRA_CFLAGS += -Werror
-#EXTRA_CFLAGS += -pedantic
-#EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
-
 EXTRA_CFLAGS += -Wno-unused-variable
 EXTRA_CFLAGS += -Wno-unused-value
 EXTRA_CFLAGS += -Wno-unused-label
@@ -22,60 +15,30 @@ endif
 
 EXTRA_CFLAGS += -I$(src)
 
-#EXTRA_LDFLAGS += --strip-debug
-
 CONFIG_AUTOCFG_CP = n
 
 ########################## Features ###########################
 CONFIG_MP_INCLUDED = y
 CONFIG_POWER_SAVING = y
-CONFIG_USB_AUTOSUSPEND = n
-CONFIG_HW_PWRP_DETECTION = n
-CONFIG_WIFI_TEST = n
-CONFIG_BT_COEXIST = n
-CONFIG_INTEL_WIDI = n
-CONFIG_WAPI_SUPPORT = n
 CONFIG_EFUSE_CONFIG_FILE = y
-CONFIG_EXT_CLK = n
 CONFIG_TRAFFIC_PROTECT = y
 CONFIG_LOAD_PHY_PARA_FROM_FILE = y
-CONFIG_TXPWR_BY_RATE_EN = n
-CONFIG_TXPWR_LIMIT_EN = n
 CONFIG_RTW_ADAPTIVITY_EN = disable
 CONFIG_RTW_ADAPTIVITY_MODE = normal
-CONFIG_SIGNAL_SCALE_MAPPING = n
-CONFIG_80211W = n
-CONFIG_REDUCE_TX_CPU_LOADING = n
 CONFIG_BR_EXT = y
-CONFIG_TDLS = n
-CONFIG_WIFI_MONITOR = n
-CONFIG_MCC_MODE = n
-CONFIG_APPEND_VENDOR_IE_ENABLE = n
 CONFIG_RTW_NAPI = y
 CONFIG_RTW_GRO = y
 ########################## Debug ###########################
 CONFIG_RTW_DEBUG = y
-# default log level is _DRV_INFO_ = 4,
 # please refer to "How_to_set_driver_debug_log_level.doc" to set the available level.
 CONFIG_RTW_LOG_LEVEL = 2
 ######################## Wake On Lan ##########################
-CONFIG_WOWLAN = n
-CONFIG_GPIO_WAKEUP = n
-CONFIG_DEFAULT_PATTERNS_EN = n
 CONFIG_WAKEUP_GPIO_IDX = default
-CONFIG_HIGH_ACTIVE = n
-CONFIG_PNO_SUPPORT = n
-CONFIG_PNO_SET_DEBUG = n
-CONFIG_AP_WOWLAN = n
 ######### Notify SDIO Host Keep Power During Syspend ##########
 CONFIG_RTW_SDIO_PM_KEEP_POWER = y
-###################### MP HW TX MODE FOR VHT #######################
-CONFIG_MP_VHT_HW_TX_MODE = n
 ###################### Platform Related #######################
 CONFIG_PLATFORM_I386_PC = y
 ###############################################################
-
-CONFIG_DRVEXT_MODULE = n
 
 export TopDIR ?= $(CURDIR)
 
@@ -87,8 +50,8 @@ HCI_NAME = usb
 
 _OS_INTFS_FILES :=	osdep_service.o \
 			os_intfs.o \
-			$(HCI_NAME)_intf.o \
-			$(HCI_NAME)_ops2_linux.o \
+			usb_intf.o \
+			usb_ops2_linux.o \
 			ioctl_linux.o \
 			xmit_linux.o \
 			mlme_linux.o \
@@ -112,8 +75,8 @@ _HAL_INTFS_FILES :=	hal_intf.o \
 			hal_btcoex.o \
 			hal_mp.o \
 			hal_mcc.o \
-			hal_$(HCI_NAME).o \
-			hal_$(HCI_NAME)_led.o
+			hal_usb.o \
+			hal_usb_led.o
 
 			
 _OUTSRC_FILES := phydm_debug.o	\
@@ -140,33 +103,28 @@ _OUTSRC_FILES := phydm_debug.o	\
 		phydm_kfree.o\
 		phydm_ccx.o
 
-EXTRA_CFLAGS += -I$(src)
-
-RTL871X = rtl8188e
-
 _HAL_INTFS_FILES +=	HalPwrSeqCmd.o \
 					Hal8188EPwrSeq.o\
- 					$(RTL871X)_xmit.o\
-					$(RTL871X)_sreset.o
+ 					rtl8188e_xmit.o\
+					rtl8188e_sreset.o
 
-_HAL_INTFS_FILES +=	$(RTL871X)_hal_init.o \
-			$(RTL871X)_phycfg.o \
-			$(RTL871X)_rf6052.o \
-			$(RTL871X)_dm.o \
-			$(RTL871X)_rxdesc.o \
-			$(RTL871X)_cmd.o \
+_HAL_INTFS_FILES +=	rtl8188e_hal_init.o \
+			rtl8188e_phycfg.o \
+			rtl8188e_rf6052.o \
+			rtl8188e_dm.o \
+			rtl8188e_rxdesc.o \
+			rtl8188e_cmd.o \
 			hal8188e_s_fw.o \
 			hal8188e_t_fw.o \
-			$(HCI_NAME)_halinit.o \
+			usb_halinit.o \
 			rtl8188eu_led.o \
 			rtl8188eu_xmit.o \
 			rtl8188eu_recv.o
 
-_HAL_INTFS_FILES += $(HCI_NAME)_ops_linux.o
+_HAL_INTFS_FILES += usb_ops_linux.o
 
 _HAL_INTFS_FILES +=HalEfuseMask8188E_USB.o
 
-#OUTSRC/Hal8188EFWImg_CE.o
 _OUTSRC_FILES += halhwimg8188e_mac.o\
 		halhwimg8188e_bb.o\
 		halhwimg8188e_rf.o\
@@ -247,8 +205,6 @@ endif
 
 ifeq ($(CONFIG_LOAD_PHY_PARA_FROM_FILE), y)
 EXTRA_CFLAGS += -DCONFIG_LOAD_PHY_PARA_FROM_FILE
-#EXTRA_CFLAGS += -DREALTEK_CONFIG_PATH_WITH_IC_NAME_FOLDER
-#EXTRA_CFLAGS += -DREALTEK_CONFIG_PATH=\"/lib/firmware/\"
 EXTRA_CFLAGS += -DREALTEK_CONFIG_PATH=\"\"
 endif
 
