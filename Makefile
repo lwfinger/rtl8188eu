@@ -20,8 +20,7 @@ ifeq ($(GCC_VER_49),1)
 EXTRA_CFLAGS += -Wno-date-time	# Fix compile error && warning on gcc 4.9 and later
 endif
 
-EXTRA_CFLAGS += -I$(src)/include
-EXTRA_CFLAGS += -I$(src)/hal
+EXTRA_CFLAGS += -I$(src)
 
 #EXTRA_LDFLAGS += --strip-debug
 
@@ -176,15 +175,6 @@ _OUTSRC_FILES += halhwimg8188e_mac.o\
 		hal8188erateadaptive.o\
 		phydm_rtl8188e.o
 
-########### AUTO_CFG  #################################
-
-ifeq ($(CONFIG_AUTOCFG_CP), y)
-
-ifeq ($(CONFIG_MULTIDRV), y)
-$(shell cp $(TopDIR)/autoconf_multidrv_$(HCI_NAME)_linux.h $(TopDIR)/include/autoconf.h)
-endif
-
-endif
 
 ########### END OF PATH  #################################
 

@@ -4,7 +4,7 @@
 #ifndef __HAL_DATA_H__
 #define __HAL_DATA_H__
 
-#include "../phydm_precomp.h"
+#include "phydm_precomp.h"
 #ifdef CONFIG_BT_COEXIST
 	#include <hal_btcoex.h>
 #endif

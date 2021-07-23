@@ -10,7 +10,7 @@
 #include "hal_phy_reg.h"
 #include "hal_com_reg.h"
 #include "hal_com_phycfg.h"
-#include "../hal_com_c2h.h"
+#include "hal_com_c2h.h"
 
 /*------------------------------ Tx Desc definition Macro ------------------------*/
 /* #pragma mark -- Tx Desc related definition. -- */

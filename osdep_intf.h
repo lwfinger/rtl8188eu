@@ -85,10 +85,10 @@ u16 rtw_recv_select_queue(struct sk_buff *skb);
 int rtw_ndev_notifier_register(void);
 void rtw_ndev_notifier_unregister(void);
 
-#include "../rtw_proc.h"
+#include "rtw_proc.h"
 
 #ifdef CONFIG_IOCTL_CFG80211
-	#include "../ioctl_cfg80211.h"
+	#include "ioctl_cfg80211.h"
 #endif /* CONFIG_IOCTL_CFG80211 */
 
 u8 rtw_rtnl_lock_needed(struct dvobj_priv *dvobj);

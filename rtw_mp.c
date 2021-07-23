@@ -4,7 +4,7 @@
 #define _RTW_MP_C_
 #include <drv_types.h>
 
-#include "../phydm_precomp.h"
+#include "phydm_precomp.h"
 
 #ifdef CONFIG_MP_VHT_HW_TX_MODE
 #define CEILING_POS(X) ((X - (int)(X)) > 0 ? (int)(X + 1) : (int)(X))
