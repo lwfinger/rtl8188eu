@@ -86,22 +86,22 @@ MSG="Directory .git does not exist indicating that you downloaded the source as 
 
 HCI_NAME = usb
 
-_OS_INTFS_FILES :=	os_dep/osdep_service.o \
-			os_dep/os_intfs.o \
-			os_dep/$(HCI_NAME)_intf.o \
-			os_dep/$(HCI_NAME)_ops_linux.o \
-			os_dep/ioctl_linux.o \
-			os_dep/xmit_linux.o \
-			os_dep/mlme_linux.o \
-			os_dep/recv_linux.o \
-			os_dep/ioctl_cfg80211.o \
-			os_dep/rtw_cfgvendor.o \
-			os_dep/wifi_regd.o \
-			os_dep/rtw_android.o \
-			os_dep/rtw_proc.o
+_OS_INTFS_FILES :=	osdep_service.o \
+			os_intfs.o \
+			$(HCI_NAME)_intf.o \
+			$(HCI_NAME)_ops2_linux.o \
+			ioctl_linux.o \
+			xmit_linux.o \
+			mlme_linux.o \
+			recv_linux.o \
+			ioctl_cfg80211.o \
+			rtw_cfgvendor.o \
+			wifi_regd.o \
+			rtw_android.o \
+			rtw_proc.o
 
 ifeq ($(CONFIG_MP_INCLUDED), y)
-_OS_INTFS_FILES += os_dep/ioctl_mp.o
+_OS_INTFS_FILES += ioctl_mp.o
 endif
 
 _HAL_INTFS_FILES :=	hal_intf.o \
@@ -491,14 +491,7 @@ config_r:
 
 clean:
 	#$(MAKE) -C $(KSRC) M=$(CURDIR) clean
-	cd hal ; rm -fr */*/*/*.mod.c */*/*/*.mod */*/*/*.o */*/*/.*.cmd */*/*/*.ko
-	cd hal ; rm -fr */*/*.mod.c */*/*.mod */*/*.o */*/.*.cmd */*/*.ko
-	cd hal ; rm -fr */*.mod.c */*.mod */*.o */.*.cmd */*.ko
-	cd led ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko .*.cmd
 	cd core ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-	cd os_dep/linux ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-	cd os_dep ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
-	cd platform ; rm -fr *.mod.c *.mod *.o .*.cmd *.ko
 	rm -fr Module.symvers ; rm -fr Module.markers ; rm -fr modules.order
 	rm -fr *.mod.c *.mod *.o .*.cmd *.ko *~
 	rm -fr .tmp_versions
