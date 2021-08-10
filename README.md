@@ -10,6 +10,8 @@ the kernel for which the headers have been installed. The necessary steps are
 dependent on which distro you are using. Creating a new issue and asking at
 GitHub will not be productive.
 
+Your kernel configuration MUST have CONFIG_WIRELESS_EXT set.
+
 Unsolicited E-mail sent to my private address will be ignored!!
 
 If a build fails that previously worked, perform a 'git pull' and retry before
