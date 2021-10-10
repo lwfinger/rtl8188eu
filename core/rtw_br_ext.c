@@ -21,7 +21,10 @@
 
 #include <linux/if_arp.h>
 #include <net/ip.h>
+#include <linux/version.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
 #include <net/ipx.h>
+#endif
 #include <linux/atalk.h>
 #include <linux/udp.h>
 #include <linux/if_pppox.h>
@@ -149,6 +152,7 @@ static inline void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr
 	memcpy(networkAddr+7, (unsigned char *)ipAddr, 4);
 }
 
+#ifdef _NET_INET_IPX_H_
 static inline void __nat25_generate_ipx_network_addr_with_node(unsigned char *networkAddr,
 				unsigned int *ipxNetAddr, unsigned char *ipxNodeAddr)
 {
@@ -168,6 +172,7 @@ static inline void __nat25_generate_ipx_network_addr_with_socket(unsigned char *
 	memcpy(networkAddr+1, (unsigned char *)ipxNetAddr, 4);
 	memcpy(networkAddr+5, (unsigned char *)ipxSocketAddr, 2);
 }
+#endif
 
 static inline void __nat25_generate_apple_network_addr(unsigned char *networkAddr,
 				unsigned short *network, unsigned char *node)
@@ -282,6 +287,7 @@ static inline int __nat25_network_hash(unsigned char *networkAddr)
 		x = networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10];
 
 		return x & (NAT25_HASH_SIZE - 1);
+#ifdef _NET_INET_IPX_H_
 	} else if (networkAddr[0] == NAT25_IPX) {
 		unsigned long x;
 
@@ -289,6 +295,7 @@ static inline int __nat25_network_hash(unsigned char *networkAddr)
 			networkAddr[6] ^ networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10];
 
 		return x & (NAT25_HASH_SIZE - 1);
+#endif
 	} else if (networkAddr[0] == NAT25_APPLE) {
 		unsigned long x;
 
@@ -600,6 +607,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		default:
 			return -1;
 		}
+#ifdef _NET_INET_IPX_H_
 	} else if ((protocol == ETH_P_IPX) ||
 		   (protocol <= ETH_FRAME_LEN)) {
 		/*---------------------------------------------------*/
@@ -797,6 +805,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
 		}
 
 		return -1;
+#endif
 	} else if ((protocol == ETH_P_PPP_DISC) ||
 		   (protocol == ETH_P_PPP_SES)) {
 		/*---------------------------------------------------*/
