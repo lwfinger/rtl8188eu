@@ -32,9 +32,9 @@ esac
 # Symbols for needed programs
 
 IPTABLES=/sbin/iptables
-IFCONFIG=/sbin/ifconfig
-DHCPD=/usr/sbin/dhcpd
-HOSTAPD=/home/finger/rtl8188eu/hostapd-0.8/hostapd/hostapd
+IFCONFIG=/usr/bin/ifconfig
+DHCPD=/sbin/dhcpd
+HOSTAPD=/home/finger/rtl8188eu/hostapd-2.9/hostapd/hostapd
 
 # Symbols for AP and external interfaces
 
@@ -80,31 +80,30 @@ start)
                 touch /var/lib/dhcp/db/dhcpd.leases
         fi
 	# Write the DHCP server configuration file
-	echo "option domain-name-servers $NAME_SERVER;" > ~/dhcpd.conf
-	echo "default-lease-time 600;" >> ~/dhcpd.conf
-	echo "max-lease-time 7200;" >> ~/dhcpd.conf
-	echo "ddns-update-style none; ddns-updates off;" >> ~/dhcpd.conf
-	echo "subnet $AP_ADDR.0 netmask 255.255.255.0 {" >> ~/dhcpd.conf
-	echo "        range $AP_ADDR.200 $AP_ADDR.229;" >> ~/dhcpd.conf
-	echo "        option subnet-mask 255.255.255.0;" >> ~/dhcpd.conf
-	echo "        option broadcast-address $AP_ADDR.255;" >> ~/dhcpd.conf
-	echo "        option routers $AP_ADDR.1;" >> ~/dhcpd.conf
-	echo "}" >> ~/dhcpd.conf
+	echo "option domain-name-servers $NAME_SERVER;" > dhcpd.conf
+	echo "default-lease-time 600;" >> dhcpd.conf
+	echo "ddns-update-style none; ddns-updates off;" >> dhcpd.conf
+	echo "subnet $AP_ADDR.0 netmask 255.255.255.0 {" >> dhcpd.conf
+	echo "        max-lease-time 7200;" >> dhcpd.conf
+	echo "        range $AP_ADDR.200 $AP_ADDR.229;" >> dhcpd.conf
+	echo "        option subnet-mask 255.255.255.0;" >> dhcpd.conf
+	echo "        option broadcast-address $AP_ADDR.255;" >> dhcpd.conf
+	echo "        option routers $AP_ADDR.1;" >> dhcpd.conf
+	echo "}" >> dhcpd.conf
         # Bring up the DHCP server
-        $DHCPD -cf ~/dhcpd.conf $NET_AP
+        $DHCPD -cf dhcpd.conf $NET_AP
 	# Write the hostapd configuration file
-	cat > ~/hostapd.conf << EOF
+	cat > hostapd << EOF
 auth_algs=1
 beacon_int=100
 country_code=US
 ctrl_interface_group=0
 ctrl_interface=/var/run/hostapd
 dtim_period=2
-dump_file=/tmp/hostapd.dump
 fragm_threshold=2346
 #ht_capab=[HT40-][SHORT-GI-20][SHORT-GI-40][MAX-AMSDU-7935][DSSS_CCK-40]
 #ieee80211d=1
-ieee80211n=1
+#ieee80211n=1
 ignore_broadcast_ssid=0
 logger_stdout=-1
 logger_stdout_level=2
@@ -135,27 +134,27 @@ wmm_ac_vo_cwmin=2
 wmm_ac_vo_txop_limit=47
 wmm_enabled=1
 EOF
-	echo "interface=$NET_AP" >> ~/hostapd.conf
-	echo "ssid=$AP_SSID" >> ~/hostapd.conf
-	echo "driver=$DRIVER" >> ~/hostapd.conf
-	echo "hw_mode=g" >> ~/hostapd.conf
-	echo "channel=$AP_CHANNEL" >> ~/hostapd.conf
-	echo "wpa=$ENCRYPT_MODE" >> ~/hostapd.conf
-	echo "wpa_key_mgmt=WPA-PSK" >> ~/hostapd.conf
-	echo "wpa_pairwise=TKIP CCMP" >> ~/hostapd.conf
-	echo "rsn_pairwise=CCMP" >> ~/hostapd.conf
-	echo "wpa_passphrase=$WPA_SECRET" >> ~/hostapd.conf
+	echo "interface=$NET_AP" >> hostapd
+	echo "ssid=$AP_SSID" >> hostapd
+	echo "driver=$DRIVER" >> hostapd
+	echo "hw_mode=g" >> hostapd
+	echo "channel=$AP_CHANNEL" >> hostapd
+	echo "wpa=$ENCRYPT_MODE" >> hostapd
+	echo "wpa_key_mgmt=WPA-PSK" >> hostapd
+	echo "wpa_pairwise=TKIP CCMP" >> hostapd
+	echo "rsn_pairwise=CCMP" >> hostapd
+	echo "wpa_passphrase=$WPA_SECRET" >> hostapd
         # Enable packet forwarding
         echo 1 > /proc/sys/net/ipv4/ip_forward
         # Bring up hostapd
-        $HOSTAPD -dd -B ~/hostapd.conf
+        $HOSTAPD -dd -B hostapd
         ;;
 stop)
         echo "Stopping AP mode"
         # Stop hostapd and dhcpd daemons
         killall hostapd
         killall dhcpd
-	rm -f ~/hostapd.conf
-	rm -f ~/dhcpd.conf
+	rm -f hostapd
+	rm -f dhcpd.conf
         ;;
 esac
