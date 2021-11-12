@@ -177,6 +177,7 @@ void ODM_SetTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer, u32 
 	_set_timer(pTimer, msDelay); /* ms */
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer,
 			 void *CallBackFunc, void *pContext,
 			 const char *szID)
@@ -184,6 +185,7 @@ void ODM_InitializeTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTime
 	struct adapter *Adapter = pDM_Odm->Adapter;
 	_init_timer(pTimer, Adapter->pnetdev, CallBackFunc, pDM_Odm);
 }
+#endif
 
 void ODM_CancelTimer(struct odm_dm_struct *pDM_Odm, struct timer_list *pTimer)
 {
