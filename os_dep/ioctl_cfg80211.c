@@ -4419,11 +4419,11 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
 	u16 frame_type;
 	bool reg = false;
-#endif
 	if (upd->global_stypes < 11)
 		frame_type = (u16)BIT(upd->global_stypes << 4);
 	else
 		frame_type = 0;
+#endif
 #ifdef CONFIG_DEBUG_CFG80211
 	DBG_88E(FUNC_ADPT_FMT" frame_type:%x, reg:%d\n", FUNC_ADPT_ARG(adapter),
 		frame_type, reg);
