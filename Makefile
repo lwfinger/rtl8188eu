@@ -421,6 +421,7 @@ strip:
 	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
 
 install:
+	@mkdir -p $(MODDESTDIR)
 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
 	/sbin/depmod -a ${KVER}
 
