@@ -540,9 +540,6 @@ MODULE_PARM_DESC(rtw_trx_share_mode, "TRx FIFO Shared");
 int _netdev_open(struct net_device *pnetdev);
 int netdev_open(struct net_device *pnetdev);
 static int netdev_close(struct net_device *pnetdev);
-#ifdef CONFIG_PLATFORM_INTEL_BYT
-extern int rtw_sdio_set_power(int on);
-#endif /* CONFIG_PLATFORM_INTEL_BYT */
 
 #ifdef CONFIG_MCC_MODE
 /* enable MCC mode or not */
@@ -2182,32 +2179,6 @@ int _netdev_vir_if_open(struct net_device *pnetdev)
 	if (!primary_padapter)
 		goto _netdev_virtual_iface_open_error;
 
-#ifdef CONFIG_PLATFORM_INTEL_BYT
-	if (padapter->bup == false) {
-		u8 mac[ETH_ALEN];
-
-		/* get mac address from primary_padapter */
-		if (primary_padapter->bup == false)
-			rtw_macaddr_cfg(adapter_mac_addr(primary_padapter), get_hal_mac_addr(primary_padapter));
-
-		memcpy(mac, adapter_mac_addr(primary_padapter), ETH_ALEN);
-
-		/*
-		* If the BIT1 is 0, the address is universally administered.
-		* If it is 1, the address is locally administered
-		*/
-		mac[0] |= BIT(1);
-
-		memcpy(adapter_mac_addr(padapter), mac, ETH_ALEN);
-
-#ifdef CONFIG_MI_WITH_MBSSID_CAM
-		rtw_mbid_camid_alloc(padapter, adapter_mac_addr(padapter));
-#endif
-		rtw_init_wifidirect_addrs(padapter, adapter_mac_addr(padapter), adapter_mac_addr(padapter));
-		memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
-	}
-#endif /*CONFIG_PLATFORM_INTEL_BYT*/
-
 	if (primary_padapter->bup == false || !rtw_is_hw_init_completed(primary_padapter))
 		_netdev_open(primary_padapter->pnetdev);
 
@@ -2687,25 +2658,12 @@ int _netdev_open(struct net_device *pnetdev)
 
 	padapter->netif_up = true;
 
-#ifdef CONFIG_PLATFORM_INTEL_BYT
-	rtw_sdio_set_power(1);
-#endif /* CONFIG_PLATFORM_INTEL_BYT */
-
 	if (pwrctrlpriv->ps_flag == true) {
 		padapter->net_closed = false;
 		goto netdev_open_normal_process;
 	}
 
 	if (padapter->bup == false) {
-#ifdef CONFIG_PLATFORM_INTEL_BYT
-		rtw_macaddr_cfg(adapter_mac_addr(padapter),  get_hal_mac_addr(padapter));
-#ifdef CONFIG_MI_WITH_MBSSID_CAM
-		rtw_mbid_camid_alloc(padapter, adapter_mac_addr(padapter));
-#endif
-		rtw_init_wifidirect_addrs(padapter, adapter_mac_addr(padapter), adapter_mac_addr(padapter));
-		memcpy(pnetdev->dev_addr, adapter_mac_addr(padapter), ETH_ALEN);
-#endif /* CONFIG_PLATFORM_INTEL_BYT */
-
 		rtw_clr_surprise_removed(padapter);
 		rtw_clr_drv_stopped(padapter);
 
@@ -2742,12 +2700,6 @@ int _netdev_open(struct net_device *pnetdev)
 
 		padapter->bup = true;
 		pwrctrlpriv->bips_processing = false;
-
-#ifdef CONFIG_PLATFORM_INTEL_BYT
-#ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_IpsNotify(padapter, IPS_NONE);
-#endif /* CONFIG_BT_COEXIST */
-#endif /* CONFIG_PLATFORM_INTEL_BYT		 */
 	}
 	padapter->net_closed = false;
 
@@ -2965,7 +2917,6 @@ static int netdev_close(struct net_device *pnetdev)
 #endif /* CONFIG_BT_COEXIST_SOCKET_TRX */
 
 	RTW_INFO(FUNC_NDEV_FMT" , bup=%d\n", FUNC_NDEV_ARG(pnetdev), padapter->bup);
-#ifndef CONFIG_PLATFORM_INTEL_BYT
 	if (pwrctl->bInternalAutoSuspend == true) {
 		/* rtw_pwr_wakeup(padapter); */
 		if (pwrctl->rf_pwrstate == rf_off)
@@ -3034,26 +2985,6 @@ static int netdev_close(struct net_device *pnetdev)
 	else
 		RTW_INFO("CONFIG_BT_COEXIST: VIRTUAL_ADAPTER\n");
 #endif /* CONFIG_BT_COEXIST_SOCKET_TRX */
-#else /* !CONFIG_PLATFORM_INTEL_BYT */
-
-	if (pwrctl->bInSuspend == true) {
-		RTW_INFO("+871x_drv - drv_close, bInSuspend=%d\n", pwrctl->bInSuspend);
-		return 0;
-	}
-
-	rtw_scan_abort(padapter); /* stop scanning process before wifi is going to down */
-#ifdef CONFIG_IOCTL_CFG80211
-	rtw_cfg80211_wait_scan_req_empty(padapter, 200);
-#endif
-
-	RTW_INFO("netdev_close, bips_processing=%d\n", pwrctl->bips_processing);
-	while (pwrctl->bips_processing == true) /* waiting for ips_processing done before call rtw_dev_unload() */
-		rtw_msleep_os(1);
-
-	rtw_dev_unload(padapter);
-	rtw_sdio_set_power(0);
-
-#endif /* !CONFIG_PLATFORM_INTEL_BYT */
 
 	RTW_INFO("-871x_drv - drv_close, bup=%d\n", padapter->bup);
 

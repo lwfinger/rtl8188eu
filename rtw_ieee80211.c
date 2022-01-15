@@ -3,9 +3,6 @@
 
 #define _IEEE80211_C
 
-#ifdef CONFIG_PLATFORM_INTEL_BYT
-	#include <linux/fs.h>
-#endif
 #include <drv_types.h>
 #include <hal_data.h>
 
@@ -1267,35 +1264,6 @@ u8 convert_ip_addr(u8 hch, u8 mch, u8 lch)
 	return (key_char2num(hch) * 100) + (key_char2num(mch) * 10) + key_char2num(lch);
 }
 
-#ifdef CONFIG_PLATFORM_INTEL_BYT
-#define MAC_ADDRESS_LEN 12
-
-int rtw_get_mac_addr_intel(unsigned char *buf)
-{
-	int ret = 0;
-	int i;
-	struct file *fp = NULL;
-	mm_segment_t oldfs;
-	unsigned char c_mac[MAC_ADDRESS_LEN];
-	char fname[] = "/config/wifi/mac.txt";
-	int jj, kk;
-
-	RTW_INFO("%s Enter\n", __func__);
-
-	ret = rtw_retrieve_from_file(fname, c_mac, MAC_ADDRESS_LEN);
-	if (ret < MAC_ADDRESS_LEN)
-		return -1;
-
-	for (jj = 0, kk = 0; jj < ETH_ALEN; jj++, kk += 2)
-		buf[jj] = key_2char2num(c_mac[kk], c_mac[kk + 1]);
-
-	RTW_INFO("%s: read from file mac address: "MAC_FMT"\n",
-		 __func__, MAC_ARG(buf));
-
-	return 0;
-}
-#endif /* CONFIG_PLATFORM_INTEL_BYT */
-
 /*
  * Description:
  * rtw_check_invalid_mac_address:
@@ -1367,12 +1335,6 @@ void rtw_macaddr_cfg(u8 *out, const u8 *hw_mac_addr)
 
 		goto err_chk;
 	}
-
-	/* platform specified */
-#ifdef CONFIG_PLATFORM_INTEL_BYT
-	if (rtw_get_mac_addr_intel(mac) == 0)
-		goto err_chk;
-#endif
 
 	/* Use the mac address stored in the Efuse */
 	if (hw_mac_addr) {
