@@ -6514,9 +6514,6 @@ void rtw_cfg80211_init_wiphy(_adapter *padapter)
 			rtw_cfg80211_init_ht_capab(padapter, &bands->ht_cap, NL80211_BAND_5GHZ, rf_type);
 	}
 #endif
-	/* init regulary domain */
-	rtw_regd_init(padapter);
-
 	/* copy mac_addr to wiphy */
 	memcpy(wiphy->perm_addr, adapter_mac_addr(padapter), ETH_ALEN);
 
@@ -6927,6 +6924,9 @@ int rtw_wdev_alloc(_adapter *padapter, struct wiphy *wiphy)
 #ifdef CONFIG_CONCURRENT_MODE
 	ATOMIC_SET(&pwdev_priv->switch_ch_to, 1);
 #endif
+
+	/* init regulary domain */
+	rtw_regd_init(padapter);
 
 exit:
 	return ret;
