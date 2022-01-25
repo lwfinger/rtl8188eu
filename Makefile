@@ -123,7 +123,7 @@ _HAL_INTFS_FILES +=	rtl8188e_hal_init.o \
 
 _HAL_INTFS_FILES += usb_ops_linux.o
 
-_HAL_INTFS_FILES +=HalEfuseMask8188E_USB.o
+	_HAL_INTFS_FILES +=HalEfuseMask8188E_USB.o
 
 _OUTSRC_FILES += halhwimg8188e_mac.o\
 		halhwimg8188e_bb.o\
@@ -336,6 +336,7 @@ endif
 
 EXTRA_CFLAGS += -DDM_ODM_SUPPORT_TYPE=0x04
 
+EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211
 EXTRA_CFLAGS += -DRTW_USE_CFG80211_STA_EVENT
 
 SUBARCH := $(shell uname -m | sed -e "s/i.86/i386/; s/ppc.*/powerpc/; s/armv.l/arm/; s/aarch64/arm64/;")
