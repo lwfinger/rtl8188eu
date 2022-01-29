@@ -946,7 +946,11 @@ static int rtw_net_set_mac_address(struct net_device *pnetdev, void *addr)
 	}
 
 	memcpy(adapter_mac_addr(padapter), sa->sa_data, ETH_ALEN); /* set mac addr to adapter */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
 	memcpy((void *)pnetdev->dev_addr, sa->sa_data, ETH_ALEN); /* set mac addr to net_device */
+#else
+	dev_addr_set(pnetdev, sa->sa_data);
+#endif
 
 	rtw_ps_deny(padapter, PS_DENY_IOCTL);
 	LeaveAllPowerSaveModeDirect(padapter); /* leave PS mode for guaranteeing to access hw register successfully */
@@ -1328,8 +1332,11 @@ static int rtw_os_ndev_register(_adapter *adapter, const char *name)
 
 	/* alloc netdev name */
 	rtw_init_netdev_name(ndev, name);
-
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
 	memcpy((void *)ndev->dev_addr, adapter_mac_addr(adapter), ETH_ALEN);
+#else
+	dev_addr_set(adapter->pnetdev, adapter_mac_addr(adapter));
+#endif
 
 	/* Tell the network stack we exist */
 
