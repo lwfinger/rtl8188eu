@@ -1,25 +1,7 @@
-/******************************************************************************
-*
-* Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of version 2 of the GNU General Public License as
-* published by the Free Software Foundation.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-* more details.
-*
-* You should have received a copy of the GNU General Public License along with
-* this program; if not, write to the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
-*
-*
-******************************************************************************/
+// SPDX-License-Identifier: GPL-2.0
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
 
-#include "odm_precomp.h"
-#include <rtw_iol.h>
+#include "../include/rtw_iol.h"
 
 static bool Checkcondition(const u32  condition, const u32  hex)
 {
@@ -146,14 +128,11 @@ static u32 array_MAC_REG_8188E[] = {
 
 enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 {
-	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = array[i]; v2 = array[i+1]; } while (0)
+	#define READ_NEXT_PAIR(v1, v2, i) do { i += 2; v1 = array[i]; v2 = array[i + 1]; } while (0)
 
 	u32     hex         = 0;
 	u32     i;
-	u8     platform    = dm_odm->SupportPlatform;
-	u8     interface_val   = dm_odm->SupportInterface;
-	u8     board       = dm_odm->BoardType;
-	u32     array_len    = sizeof(array_MAC_REG_8188E)/sizeof(u32);
+	u32     array_len    = sizeof(array_MAC_REG_8188E) / sizeof(u32);
 	u32    *array       = array_MAC_REG_8188E;
 	bool	biol = false;
 
@@ -161,16 +140,15 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 	struct xmit_frame	*pxmit_frame = NULL;
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
-	hex += board;
-	hex += interface_val << 8;
-	hex += platform << 16;
+	hex += ODM_ITRF_USB << 8;
+	hex += ODM_CE << 16;
 	hex += 0xFF000000;
 
 	biol = rtw_IOL_applied(adapt);
 
 	if (biol) {
 		pxmit_frame = rtw_IOL_accquire_xmit_frame(adapt);
-		if (pxmit_frame == NULL) {
+		if (!pxmit_frame) {
 			pr_info("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
 		}
@@ -178,7 +156,7 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 
 	for (i = 0; i < array_len; i += 2) {
 		u32 v1 = array[i];
-		u32 v2 = array[i+1];
+		u32 v2 = array[i + 1];
 
 		/*  This (offset, data) pair meets the condition. */
 		if (v1 < 0xCDCDCDCD) {
@@ -221,7 +199,7 @@ enum HAL_STATUS ODM_ReadAndConfig_MAC_REG_8188E(struct odm_dm_struct *dm_odm)
 		}
 	}
 	if (biol) {
-		if (!rtw_IOL_exec_cmds_sync(dm_odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
+		if (!rtl8188e_IOL_exec_cmds_sync(dm_odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
 			pr_info("~~~ MAC IOL_exec_cmds Failed !!!\n");
 			rst = HAL_STATUS_FAILURE;
 		}

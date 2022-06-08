@@ -1,22 +1,6 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+
 #ifndef __WLAN_BSSDEF_H__
 #define __WLAN_BSSDEF_H__
 
@@ -77,7 +61,7 @@ struct ndis_802_11_fixed_ie {
 struct ndis_802_11_var_ie {
 	u8  ElementID;
 	u8  Length;
-	u8  data[1];
+	u8  data[];
 };
 
 /*
@@ -270,7 +254,7 @@ static inline uint get_wlan_bssid_ex_sz(struct wlan_bssid_ex *bss)
 
 struct	wlan_network {
 	struct list_head list;
-	int	network_type;	/* refer to ieee80211.h for WIRELESS_11A/B/G */
+	int	network_type;	/* refer to ieee80211.h for WIRELESS_11B/G */
 	int	fixed;		/*  set fixed when not to be removed
 				 *  in site-surveying */
 	unsigned long	last_scanned; /* timestamp for the network */

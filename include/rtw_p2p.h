@@ -1,26 +1,10 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+
 #ifndef __RTW_P2P_H_
 #define __RTW_P2P_H_
 
-#include <drv_types.h>
+#include "drv_types.h"
 
 u32 build_beacon_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 build_probe_resp_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
@@ -29,7 +13,6 @@ u32 build_prov_disc_request_p2p_ie(struct wifidirect_info *pwdinfo,
 				   u8 *pdev_raddr);
 u32 build_assoc_resp_p2p_ie(struct wifidirect_info *pwdinfo,
 			    u8 *pbuf, u8 status_code);
-u32 build_deauth_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pbuf);
 u32 process_probe_req_p2p_ie(struct wifidirect_info *pwdinfo,
 			     u8 *pframe, uint len);
 u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo,

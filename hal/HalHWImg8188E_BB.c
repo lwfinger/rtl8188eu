@@ -1,47 +1,23 @@
-/******************************************************************************
-*
-* Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of version 2 of the GNU General Public License as
-* published by the Free Software Foundation.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-* more details.
-*
-* You should have received a copy of the GNU General Public License along with
-* this program; if not, write to the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
-*
-*
-******************************************************************************/
+// SPDX-License-Identifier: GPL-2.0
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
 
-#include "odm_precomp.h"
-
-#include <rtw_iol.h>
+#include "../include/rtw_iol.h"
 
 #define read_next_pair(array, v1, v2, i)		\
 	 do {						\
 		 i += 2;				\
 		 v1 = array[i];				\
-		 v2 = array[i+1];			\
+		 v2 = array[i + 1];			\
 	 } while (0)
 
 static bool CheckCondition(const u32  condition, const u32  hex)
 {
-	u32 _board     = (hex & 0x000000FF);
 	u32 _interface = (hex & 0x0000FF00) >> 8;
 	u32 _platform  = (hex & 0x00FF0000) >> 16;
 	u32 cond = condition;
 
 	if (condition == 0xCDCDCDCD)
 		return true;
-
-	cond = condition & 0x000000FF;
-	if ((_board == cond) && cond != 0x00)
-		return false;
 
 	cond = condition & 0x0000FF00;
 	cond = cond >> 8;
@@ -194,10 +170,7 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 {
 	u32     hex         = 0;
 	u32     i           = 0;
-	u8     platform    = dm_odm->SupportPlatform;
-	u8     interfaceValue   = dm_odm->SupportInterface;
-	u8     board       = dm_odm->BoardType;
-	u32     arraylen    = sizeof(array_agc_tab_1t_8188e)/sizeof(u32);
+	u32     arraylen    = sizeof(array_agc_tab_1t_8188e) / sizeof(u32);
 	u32    *array       = array_agc_tab_1t_8188e;
 	bool		biol = false;
 	struct adapter *adapter =  dm_odm->Adapter;
@@ -205,15 +178,14 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 
-	hex += board;
-	hex += interfaceValue << 8;
-	hex += platform << 16;
+	hex += ODM_ITRF_USB << 8;
+	hex += ODM_CE << 16;
 	hex += 0xFF000000;
 	biol = rtw_IOL_applied(adapter);
 
 	if (biol) {
 		pxmit_frame = rtw_IOL_accquire_xmit_frame(adapter);
-		if (pxmit_frame == NULL) {
+		if (!pxmit_frame) {
 			pr_info("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
 		}
@@ -221,7 +193,7 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 
 	for (i = 0; i < arraylen; i += 2) {
 		u32 v1 = array[i];
-		u32 v2 = array[i+1];
+		u32 v2 = array[i + 1];
 
 		/*  This (offset, data) pair meets the condition. */
 		if (v1 < 0xCDCDCDCD) {
@@ -264,7 +236,7 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
 		}
 	}
 	if (biol) {
-		if (!rtw_IOL_exec_cmds_sync(dm_odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
+		if (!rtl8188e_IOL_exec_cmds_sync(dm_odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
 			printk("~~~ %s IOL_exec_cmds Failed !!!\n", __func__);
 			rst = HAL_STATUS_FAILURE;
 		}
@@ -474,25 +446,21 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 {
 	u32     hex         = 0;
 	u32     i           = 0;
-	u8     platform    = dm_odm->SupportPlatform;
-	u8     interfaceValue   = dm_odm->SupportInterface;
-	u8     board       = dm_odm->BoardType;
-	u32     arraylen    = sizeof(array_phy_reg_1t_8188e)/sizeof(u32);
+	u32     arraylen    = sizeof(array_phy_reg_1t_8188e) / sizeof(u32);
 	u32    *array       = array_phy_reg_1t_8188e;
 	bool	biol = false;
 	struct adapter *adapter =  dm_odm->Adapter;
 	struct xmit_frame *pxmit_frame = NULL;
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
-	hex += board;
-	hex += interfaceValue << 8;
-	hex += platform << 16;
+	hex += ODM_ITRF_USB << 8;
+	hex += ODM_CE << 16;
 	hex += 0xFF000000;
 	biol = rtw_IOL_applied(adapter);
 
 	if (biol) {
 		pxmit_frame = rtw_IOL_accquire_xmit_frame(adapter);
-		if (pxmit_frame == NULL) {
+		if (!pxmit_frame) {
 			pr_info("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
 		}
@@ -500,7 +468,7 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 
 	for (i = 0; i < arraylen; i += 2) {
 		u32 v1 = array[i];
-		u32 v2 = array[i+1];
+		u32 v2 = array[i + 1];
 
 		/*  This (offset, data) pair meets the condition. */
 		if (v1 < 0xCDCDCDCD) {
@@ -557,7 +525,7 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 5);
 						} else if (v1 == 0xf9) {
 							rtw_IOL_append_DELAY_US_cmd(pxmit_frame, 1);
-						} else{
+						} else {
 							if (v1 == 0xa24)
 								dm_odm->RFCalibrateInfo.RegA24 = v2;
 
@@ -575,7 +543,7 @@ enum HAL_STATUS ODM_ReadAndConfig_PHY_REG_1T_8188E(struct odm_dm_struct *dm_odm)
 		}
 	}
 	if (biol) {
-		if (!rtw_IOL_exec_cmds_sync(dm_odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
+		if (!rtl8188e_IOL_exec_cmds_sync(dm_odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
 			rst = HAL_STATUS_FAILURE;
 			pr_info("~~~ IOL Config %s Failed !!!\n", __func__);
 		}
@@ -683,19 +651,16 @@ void ODM_ReadAndConfig_PHY_REG_PG_8188E(struct odm_dm_struct *dm_odm)
 {
 	u32  hex;
 	u32  i           = 0;
-	u8  platform    = dm_odm->SupportPlatform;
-	u8  interfaceValue   = dm_odm->SupportInterface;
-	u8  board       = dm_odm->BoardType;
 	u32  arraylen    = sizeof(array_phy_reg_pg_8188e) / sizeof(u32);
 	u32 *array       = array_phy_reg_pg_8188e;
 
-	hex = board + (interfaceValue << 8);
-	hex += (platform << 16) + 0xFF000000;
+	hex = ODM_ITRF_USB << 8;
+	hex += (ODM_CE << 16) + 0xFF000000;
 
 	for (i = 0; i < arraylen; i += 3) {
 		u32 v1 = array[i];
-		u32 v2 = array[i+1];
-		u32 v3 = array[i+2];
+		u32 v2 = array[i + 1];
+		u32 v3 = array[i + 2];
 
 		/*  this line is a line of pure_body */
 		if (v1 < 0xCDCDCDCD) {
@@ -706,13 +671,13 @@ void ODM_ReadAndConfig_PHY_REG_PG_8188E(struct odm_dm_struct *dm_odm)
 				/*  don't need the hw_body */
 				i += 2; /*  skip the pair of expression */
 				v1 = array[i];
-				v2 = array[i+1];
-				v3 = array[i+2];
+				v2 = array[i + 1];
+				v3 = array[i + 2];
 				while (v2 != 0xDEAD) {
 					i += 3;
 					v1 = array[i];
-					v2 = array[i+1];
-					v3 = array[i+1];
+					v2 = array[i + 1];
+					v3 = array[i + 1];
 				}
 			}
 		}

@@ -1,28 +1,12 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
-#include <osdep_service.h>
-#include <drv_types.h>
+// SPDX-License-Identifier: GPL-2.0
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
 
-#include <hal_intf.h>
-#include <hal_com.h>
-#include <rtl8188e_hal.h>
+#include "../include/osdep_service.h"
+#include "../include/drv_types.h"
+
+#include "../include/hal_intf.h"
+#include "../include/hal_com.h"
+#include "../include/rtl8188e_hal.h"
 
 #define _HAL_INIT_C_
 
@@ -31,47 +15,36 @@ void dump_chip_info(struct HAL_VERSION	chip_vers)
 	uint cnt = 0;
 	char buf[128];
 
-	if (IS_81XXC(chip_vers)) {
-		cnt += sprintf((buf+cnt), "Chip Version Info: %s_",
-			       IS_92C_SERIAL(chip_vers) ?
-			       "CHIP_8192C" : "CHIP_8188C");
-	} else if (IS_92D(chip_vers)) {
-		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8192D_");
-	} else if (IS_8723_SERIES(chip_vers)) {
-		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8723A_");
-	} else if (IS_8188E(chip_vers)) {
-		cnt += sprintf((buf+cnt), "Chip Version Info: CHIP_8188E_");
+	cnt += sprintf((buf + cnt), "Chip Version Info: CHIP_8188E_");
+	cnt += sprintf((buf + cnt), "%s_", IS_NORMAL_CHIP(chip_vers) ?
+		       "Normal_Chip" : "Test_Chip");
+	cnt += sprintf((buf + cnt), "%s_", IS_CHIP_VENDOR_TSMC(chip_vers) ?
+		       "TSMC" : "UMC");
+
+	switch (chip_vers.CUTVersion) {
+	case A_CUT_VERSION:
+		cnt += sprintf((buf + cnt), "A_CUT_");
+		break;
+	case B_CUT_VERSION:
+		cnt += sprintf((buf + cnt), "B_CUT_");
+		break;
+	case C_CUT_VERSION:
+		cnt += sprintf((buf + cnt), "C_CUT_");
+		break;
+	case D_CUT_VERSION:
+		cnt += sprintf((buf + cnt), "D_CUT_");
+		break;
+	case E_CUT_VERSION:
+		cnt += sprintf((buf + cnt), "E_CUT_");
+		break;
+	default:
+		cnt += sprintf((buf + cnt), "UNKNOWN_CUT(%d)_", chip_vers.CUTVersion);
+		break;
 	}
 
-	cnt += sprintf((buf+cnt), "%s_", IS_NORMAL_CHIP(chip_vers) ?
-		       "Normal_Chip" : "Test_Chip");
-	cnt += sprintf((buf+cnt), "%s_", IS_CHIP_VENDOR_TSMC(chip_vers) ?
-		       "TSMC" : "UMC");
-	if (IS_A_CUT(chip_vers))
-		cnt += sprintf((buf+cnt), "A_CUT_");
-	else if (IS_B_CUT(chip_vers))
-		cnt += sprintf((buf+cnt), "B_CUT_");
-	else if (IS_C_CUT(chip_vers))
-		cnt += sprintf((buf+cnt), "C_CUT_");
-	else if (IS_D_CUT(chip_vers))
-		cnt += sprintf((buf+cnt), "D_CUT_");
-	else if (IS_E_CUT(chip_vers))
-		cnt += sprintf((buf+cnt), "E_CUT_");
-	else
-		cnt += sprintf((buf+cnt), "UNKNOWN_CUT(%d)_",
-			       chip_vers.CUTVersion);
+	cnt += sprintf((buf + cnt), "1T1R_");
 
-	if (IS_1T1R(chip_vers))
-		cnt += sprintf((buf+cnt), "1T1R_");
-	else if (IS_1T2R(chip_vers))
-		cnt += sprintf((buf+cnt), "1T2R_");
-	else if (IS_2T2R(chip_vers))
-		cnt += sprintf((buf+cnt), "2T2R_");
-	else
-		cnt += sprintf((buf+cnt), "UNKNOWN_RFTYPE(%d)_",
-			       chip_vers.RFType);
-
-	cnt += sprintf((buf+cnt), "RomVer(%d)\n", chip_vers.ROMVer);
+	cnt += sprintf((buf + cnt), "RomVer(%d)\n", chip_vers.ROMVer);
 
 	pr_info("%s", buf);
 }
@@ -314,22 +287,11 @@ bool Hal_MappingOutPipe(struct adapter *adapter, u8 numoutpipe)
 	return result;
 }
 
-void hal_init_macaddr(struct adapter *adapter)
-{
-	rtw_hal_set_hwreg(adapter, HW_VAR_MAC_ADDR,
-			  adapter->eeprompriv.mac_addr);
-}
-
 /*
 * C2H event format:
 * Field	 TRIGGER		CONTENT	   CMD_SEQ	CMD_LEN		 CMD_ID
 * BITS	 [127:120]	[119:16]      [15:8]		  [7:4]		   [3:0]
 */
-
-void c2h_evt_clear(struct adapter *adapter)
-{
-	rtw_write8(adapter, REG_C2HEVT_CLEAR, C2H_EVT_HOST_CLOSE);
-}
 
 s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 {
@@ -338,7 +300,7 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 	int i;
 	u8 trigger;
 
-	if (buf == NULL)
+	if (!buf)
 		goto exit;
 
 	trigger = rtw_read8(adapter, REG_C2HEVT_CLEAR);
@@ -353,19 +315,12 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
 	memset(c2h_evt, 0, 16);
 
 	*buf = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL);
-	*(buf+1) = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1);
-
-	RT_PRINT_DATA(_module_hal_init_c_, _drv_info_, "c2h_evt_read(): ",
-		      &c2h_evt , sizeof(c2h_evt));
+	*(buf + 1) = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1);
 
 	/* Read the content */
 	for (i = 0; i < c2h_evt->plen; i++)
 		c2h_evt->payload[i] = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL +
 						sizeof(*c2h_evt) + i);
-
-	RT_PRINT_DATA(_module_hal_init_c_, _drv_info_,
-		      "c2h_evt_read(): Command Content:\n",
-		      c2h_evt->payload, c2h_evt->plen);
 
 	ret = _SUCCESS;
 
@@ -375,7 +330,7 @@ clear_evt:
 	* If this field isn't clear, the FW won't update the next
 	* command message.
 	*/
-	c2h_evt_clear(adapter);
+	rtw_write8(adapter, REG_C2HEVT_CLEAR, C2H_EVT_HOST_CLOSE);
 exit:
 	return ret;
 }

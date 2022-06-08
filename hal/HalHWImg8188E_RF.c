@@ -1,40 +1,16 @@
-/******************************************************************************
-*
-* Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of version 2 of the GNU General Public License as
-* published by the Free Software Foundation.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-* more details.
-*
-* You should have received a copy of the GNU General Public License along with
-* this program; if not, write to the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
-*
-*
-******************************************************************************/
+// SPDX-License-Identifier: GPL-2.0
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
 
-#include "odm_precomp.h"
-
-#include <rtw_iol.h>
+#include "../include/rtw_iol.h"
 
 static bool CheckCondition(const u32  Condition, const u32  Hex)
 {
-	u32 _board     = (Hex & 0x000000FF);
 	u32 _interface = (Hex & 0x0000FF00) >> 8;
 	u32 _platform  = (Hex & 0x00FF0000) >> 16;
 	u32 cond = Condition;
 
 	if (Condition == 0xCDCDCDCD)
 		return true;
-
-	cond = Condition & 0x000000FF;
-	if ((_board == cond) && cond != 0x00)
-		return false;
 
 	cond = Condition & 0x0000FF00;
 	cond = cond >> 8;
@@ -158,14 +134,11 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 {
 	#define READ_NEXT_PAIR(v1, v2, i) do	\
 		 { i += 2; v1 = Array[i];	\
-		 v2 = Array[i+1]; } while (0)
+		 v2 = Array[i + 1]; } while (0)
 
 	u32     hex         = 0;
 	u32     i           = 0;
-	u8     platform    = pDM_Odm->SupportPlatform;
-	u8     interfaceValue   = pDM_Odm->SupportInterface;
-	u8     board       = pDM_Odm->BoardType;
-	u32     ArrayLen    = sizeof(Array_RadioA_1T_8188E)/sizeof(u32);
+	u32     ArrayLen    = sizeof(Array_RadioA_1T_8188E) / sizeof(u32);
 	u32    *Array       = Array_RadioA_1T_8188E;
 	bool		biol = false;
 	struct adapter *Adapter =  pDM_Odm->Adapter;
@@ -173,15 +146,14 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 	u8 bndy_cnt = 1;
 	enum HAL_STATUS rst = HAL_STATUS_SUCCESS;
 
-	hex += board;
-	hex += interfaceValue << 8;
-	hex += platform << 16;
+	hex += ODM_ITRF_USB << 8;
+	hex += ODM_CE << 16;
 	hex += 0xFF000000;
 	biol = rtw_IOL_applied(Adapter);
 
 	if (biol) {
 		pxmit_frame = rtw_IOL_accquire_xmit_frame(Adapter);
-		if (pxmit_frame == NULL) {
+		if (!pxmit_frame) {
 			pr_info("rtw_IOL_accquire_xmit_frame failed\n");
 			return HAL_STATUS_FAILURE;
 		}
@@ -189,7 +161,7 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 
 	for (i = 0; i < ArrayLen; i += 2) {
 		u32 v1 = Array[i];
-		u32 v2 = Array[i+1];
+		u32 v2 = Array[i + 1];
 
 		/*  This (offset, data) pair meets the condition. */
 		if (v1 < 0xCDCDCDCD) {
@@ -214,7 +186,7 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 			} else {
 				odm_ConfigRF_RadioA_8188E(pDM_Odm, v1, v2);
 			}
-		    continue;
+			continue;
 		} else { /*  This line is the start line of branch. */
 			if (!CheckCondition(Array[i], hex)) {
 				/*  Discard the following (offset, data) pairs. */
@@ -259,7 +231,7 @@ enum HAL_STATUS ODM_ReadAndConfig_RadioA_1T_8188E(struct odm_dm_struct *pDM_Odm)
 		}
 	}
 	if (biol) {
-		if (!rtw_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
+		if (!rtl8188e_IOL_exec_cmds_sync(pDM_Odm->Adapter, pxmit_frame, 1000, bndy_cnt)) {
 			rst = HAL_STATUS_FAILURE;
 			pr_info("~~~ IOL Config %s Failed !!!\n", __func__);
 		}

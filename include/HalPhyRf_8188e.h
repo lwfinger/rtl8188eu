@@ -1,22 +1,5 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
 
 #ifndef __HAL_PHY_RF_8188E_H__
 #define __HAL_PHY_RF_8188E_H__
@@ -47,12 +30,7 @@ void PHY_DigitalPredistortion_8188E(struct adapter *pAdapter);
 void _PHY_SaveADDARegisters(struct adapter *pAdapter, u32 *ADDAReg,
 			    u32 *ADDABackup, u32 RegisterNum);
 
-void _PHY_PathADDAOn(struct adapter *pAdapter, u32 *ADDAReg,
-		     bool isPathAOn, bool is2T);
-
 void _PHY_MACSettingCalibration(struct adapter *pAdapter, u32 *MACReg,
 				u32 *MACBackup);
-
-void _PHY_PathAStandBy(struct adapter *pAdapter);
 
 #endif	/*  #ifndef __HAL_PHY_RF_8188E_H__ */

@@ -1,28 +1,12 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+// SPDX-License-Identifier: GPL-2.0
+/* Copyright(c) 2007 - 2011 Realtek Corporation. i*/
 
 #define _MLME_OSDEP_C_
 
-#include <osdep_service.h>
-#include <drv_types.h>
-#include <mlme_osdep.h>
+#include "../include/osdep_service.h"
+#include "../include/drv_types.h"
+#include "../include/mlme_osdep.h"
+#include <linux/version.h>
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
 void rtw_join_timeout_handler (void *FunctionContext)
@@ -66,8 +50,6 @@ static void _dynamic_check_timer_handlder(struct timer_list *t)
 	struct adapter *adapter = from_timer(adapter, t, mlmepriv.dynamic_chk_timer);
 #endif
 
-	if (adapter->registrypriv.mp_mode == 1)
-		return;
 	rtw_dynamic_check_timer_handlder(adapter);
 	_set_timer(&adapter->mlmepriv.dynamic_chk_timer, 2000);
 }
@@ -150,8 +132,7 @@ void rtw_os_indicate_disconnect(struct adapter *adapter)
 
 	netif_carrier_off(adapter->pnetdev); /*  Do it first for tx broadcast pkt after disconnection issue! */
 	rtw_indicate_wx_disassoc_event(adapter);
-	 rtw_reset_securitypriv(adapter);
-
+	rtw_reset_securitypriv(adapter);
 }
 
 void rtw_report_sec_ie(struct adapter *adapter, u8 authmode, u8 *sec_ie)
@@ -160,25 +141,20 @@ void rtw_report_sec_ie(struct adapter *adapter, u8 authmode, u8 *sec_ie)
 	u8	*buff, *p, i;
 	union iwreq_data wrqu;
 
-	RT_TRACE(_module_mlme_osdep_c_, _drv_info_,
-		 ("+rtw_report_sec_ie, authmode=%d\n", authmode));
 	buff = NULL;
 	if (authmode == _WPA_IE_ID_) {
-		RT_TRACE(_module_mlme_osdep_c_, _drv_info_,
-			 ("rtw_report_sec_ie, authmode=%d\n", authmode));
-		buff = rtw_malloc(IW_CUSTOM_MAX);
+		buff = kzalloc(IW_CUSTOM_MAX, GFP_ATOMIC);
 		if (!buff)
 			return;
-		memset(buff, 0, IW_CUSTOM_MAX);
 		p = buff;
 		p += sprintf(p, "ASSOCINFO(ReqIEs =");
-		len = sec_ie[1]+2;
+		len = sec_ie[1] + 2;
 		len =  (len < IW_CUSTOM_MAX) ? len : IW_CUSTOM_MAX;
 		for (i = 0; i < len; i++)
 			p += sprintf(p, "%02x", sec_ie[i]);
 		p += sprintf(p, ")");
 		memset(&wrqu, 0, sizeof(wrqu));
-		wrqu.data.length = p-buff;
+		wrqu.data.length = p - buff;
 		wrqu.data.length = (wrqu.data.length < IW_CUSTOM_MAX) ?
 				   wrqu.data.length : IW_CUSTOM_MAX;
 		wireless_send_event(adapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
@@ -251,14 +227,12 @@ void init_mlme_ext_timer(struct adapter *padapter)
 #endif
 }
 
-#ifdef CONFIG_88EU_AP_MODE
-
 void rtw_indicate_sta_assoc_event(struct adapter *padapter, struct sta_info *psta)
 {
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	if (psta == NULL)
+	if (!psta)
 		return;
 
 	if (psta->aid > NUM_STA)
@@ -270,8 +244,6 @@ void rtw_indicate_sta_assoc_event(struct adapter *padapter, struct sta_info *pst
 	wrqu.addr.sa_family = ARPHRD_ETHER;
 
 	memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
-
-	DBG_88E("+rtw_indicate_sta_assoc_event\n");
 
 	wireless_send_event(padapter->pnetdev, IWEVREGISTERED, &wrqu, NULL);
 }
@@ -281,7 +253,7 @@ void rtw_indicate_sta_disassoc_event(struct adapter *padapter, struct sta_info *
 	union iwreq_data wrqu;
 	struct sta_priv *pstapriv = &padapter->stapriv;
 
-	if (psta == NULL)
+	if (!psta)
 		return;
 
 	if (psta->aid > NUM_STA)
@@ -294,9 +266,5 @@ void rtw_indicate_sta_disassoc_event(struct adapter *padapter, struct sta_info *
 
 	memcpy(wrqu.addr.sa_data, psta->hwaddr, ETH_ALEN);
 
-	DBG_88E("+rtw_indicate_sta_disassoc_event\n");
-
 	wireless_send_event(padapter->pnetdev, IWEVEXPIRED, &wrqu, NULL);
 }
-
-#endif

@@ -1,29 +1,13 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+
 #ifndef __RTW_MLME_H_
 #define __RTW_MLME_H_
 
-#include <osdep_service.h>
-#include <mlme_osdep.h>
-#include <drv_types.h>
-#include <wlan_bssdef.h>
+#include "osdep_service.h"
+#include "mlme_osdep.h"
+#include "drv_types.h"
+#include "wlan_bssdef.h"
 
 #define	MAX_BSS_CNT	128
 #define   MAX_JOIN_TIMEOUT	6500
@@ -259,18 +243,6 @@ struct wifidirect_info {
 	 * by using the sta_preset CAPI. */
 	/*	0: disable */
 	/*	1: enable */
-	u8 wfd_tdls_enable; /* Flag to enable or disable the TDLS by WFD Sigma*/
-			    /* 0: disable */
-			    /*	1: enable */
-	u8 wfd_tdls_weaksec; /* Flag to enable or disable the weak security
-			      * function for TDLS by WFD Sigma */
-			     /* 0: disable */
-			     /* In this case, the driver can't issue the tdsl
-			      * setup request frame. */
-			     /*	1: enable */
-			     /* In this case, the driver can issue the tdls
-			      * setup request frame */
-			     /*	even the current security is weak security. */
 
 	/* This field will store the WPS value (PIN value or PBC) that UI had
 	 * got from the user. */
@@ -329,16 +301,21 @@ struct tdls_info {
 	u8 enable;
 };
 
+struct qos_priv {
+	/* bit mask option: u-apsd,
+	 * s-apsd, ts, block ack... */
+	unsigned int qos_option;
+};
+
 struct mlme_priv {
 	spinlock_t lock;
 	int fw_state;	/* shall we protect this variable? maybe not necessarily... */
-	u8 bScanInProcess;
+	bool bScanInProcess;
 	u8 to_join; /* flag */
 	u8 to_roaming; /*  roaming trying times */
 
 	u8 *nic_hdl;
 
-	u8 not_indic_disco;
 	struct list_head *pscanned;
 	struct __queue free_bss_pool;
 	struct __queue scanned_queue;
@@ -389,7 +366,6 @@ struct mlme_priv {
 	u8 *assoc_rsp;
 	u32 assoc_rsp_len;
 
-#if defined (CONFIG_88EU_AP_MODE)
 	/* Number of associated Non-ERP stations (i.e., stations using 802.11b
 	 * in 802.11g BSS) */
 	int num_sta_non_erp;
@@ -438,18 +414,10 @@ struct mlme_priv {
 	u32 p2p_assoc_req_ie_len;
 	spinlock_t bcn_update_lock;
 	u8		update_bcn;
-#endif /* if defined (CONFIG_88EU_AP_MODE) */
-};
-
-#ifdef CONFIG_88EU_AP_MODE
-
-struct hostapd_priv {
-	struct adapter *padapter;
 };
 
 int hostapd_mode_init(struct adapter *padapter);
 void hostapd_mode_unload(struct adapter *padapter);
-#endif
 
 extern unsigned char WPA_TKIP_CIPHER[4];
 extern unsigned char RSN_TKIP_CIPHER[4];
@@ -463,19 +431,12 @@ void rtw_surveydone_event_callback(struct adapter *adapter, u8 *pbuf);
 void rtw_joinbss_event_callback(struct adapter *adapter, u8 *pbuf);
 void rtw_stassoc_event_callback(struct adapter *adapter, u8 *pbuf);
 void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf);
-void rtw_atimdone_event_callback(struct adapter *adapter, u8 *pbuf);
-void rtw_cpwm_event_callback(struct adapter *adapter, u8 *pbuf);
 void indicate_wx_scan_complete_event(struct adapter *padapter);
 void rtw_indicate_wx_assoc_event(struct adapter *padapter);
 void rtw_indicate_wx_disassoc_event(struct adapter *padapter);
 int event_thread(void *context);
-#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
-void rtw_join_timeout_handler (void *FunctionContext);
-void _rtw_scan_timeout_handler(void *FunctionContext);
-#else
 void rtw_join_timeout_handler (struct timer_list *t);
 void _rtw_scan_timeout_handler (struct timer_list *t);
-#endif
 void rtw_free_network_queue(struct adapter *adapter, u8 isfreeall);
 int rtw_init_mlme_priv(struct adapter *adapter);
 void rtw_free_mlme_priv (struct mlme_priv *pmlmepriv);
@@ -490,7 +451,7 @@ static inline u8 *get_bssid(struct mlme_priv *pmlmepriv)
 	return pmlmepriv->cur_network.network.MacAddress;
 }
 
-static inline int check_fwstate(struct mlme_priv *pmlmepriv, int state)
+static inline bool check_fwstate(struct mlme_priv *pmlmepriv, int state)
 {
 	if (pmlmepriv->fw_state & state)
 		return true;
@@ -533,7 +494,7 @@ static inline void _clr_fwstate_(struct mlme_priv *pmlmepriv, int state)
 static inline void clr_fwstate(struct mlme_priv *pmlmepriv, int state)
 {
 	spin_lock_bh(&pmlmepriv->lock);
-	if (check_fwstate(pmlmepriv, state) == true)
+	if (check_fwstate(pmlmepriv, state))
 		pmlmepriv->fw_state ^= state;
 	spin_unlock_bh(&pmlmepriv->lock);
 }
@@ -579,7 +540,6 @@ void rtw_free_assoc_resources(struct adapter *adapter, int lock_scanned_queue);
 void rtw_indicate_disconnect(struct adapter *adapter);
 void rtw_indicate_connect(struct adapter *adapter);
 void rtw_indicate_scan_done( struct adapter *padapter, bool aborted);
-void rtw_scan_abort(struct adapter *adapter);
 
 int rtw_restruct_sec_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie,
 			uint in_len);
@@ -588,8 +548,6 @@ int rtw_restruct_wmm_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie,
 void rtw_init_registrypriv_dev_network(struct adapter *adapter);
 
 void rtw_update_registrypriv_dev_network(struct adapter *adapter);
-
-void rtw_get_encrypt_decrypt_from_registrypriv(struct adapter *adapter);
 
 void _rtw_join_timeout_handler(struct adapter *adapter);
 void rtw_scan_timeout_handler(struct adapter *adapter);
@@ -606,10 +564,6 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv);
 
 void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv);
 
-int _rtw_enqueue_network(struct __queue *queue, struct wlan_network *pnetwork);
-
-struct wlan_network *_rtw_dequeue_network(struct __queue *queue);
-
  struct wlan_network *_rtw_alloc_network(struct mlme_priv *pmlmepriv);
 
 void _rtw_free_network(struct mlme_priv *pmlmepriv,
@@ -624,7 +578,6 @@ void _rtw_free_network_queue(struct adapter *padapter, u8 isfreeall);
 int rtw_if_up(struct adapter *padapter);
 
 u8 *rtw_get_capability_from_ie(u8 *ie);
-u8 *rtw_get_timestampe_from_ie(u8 *ie);
 u8 *rtw_get_beacon_interval_from_ie(u8 *ie);
 
 void rtw_joinbss_reset(struct adapter *padapter);

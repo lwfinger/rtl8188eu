@@ -1,28 +1,12 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+
 #ifndef __RTW_MLME_EXT_H_
 #define __RTW_MLME_EXT_H_
 
-#include <osdep_service.h>
-#include <drv_types.h>
-#include <wlan_bssdef.h>
+#include "osdep_service.h"
+#include "drv_types.h"
+#include "wlan_bssdef.h"
 
 /*	Commented by Albert 20101105 */
 /*	Increase the SURVEY_TO value from 100 to 150  ( 100ms to 150ms ) */
@@ -128,7 +112,6 @@ enum RT_CHANNEL_DOMAIN {
 	RT_CHANNEL_DOMAIN_JAPAN = 0x10,
 	RT_CHANNEL_DOMAIN_FCC_NO_DFS = 0x11,
 	RT_CHANNEL_DOMAIN_JAPAN_NO_DFS = 0x12,
-	RT_CHANNEL_DOMAIN_WORLD_WIDE_5G = 0x13,
 	RT_CHANNEL_DOMAIN_TAIWAN_NO_DFS = 0x14,
 
 	/*  new channel plan mapping, (2GDOMAIN_5GDOMAIN) ===== */
@@ -176,11 +159,6 @@ enum RT_CHANNEL_DOMAIN_2G {
 
 struct rt_channel_plan {
 	unsigned char	Channel[MAX_CHANNEL_NUM];
-	unsigned char	Len;
-};
-
-struct rt_channel_plan_2g {
-	unsigned char	Channel[MAX_CHANNEL_NUM_2G];
 	unsigned char	Len;
 };
 
@@ -398,7 +376,7 @@ struct p2p_oper_class_map {
 struct mlme_ext_priv {
 	struct adapter	*padapter;
 	u8	mlmeext_init;
-	ATOMIC_T	event_seq;
+	atomic_t event_seq;
 	u16	mgnt_seq;
 
 	unsigned char	cur_channel;
@@ -433,9 +411,7 @@ struct mlme_ext_priv {
 
 	u64 TSFValue;
 
-#ifdef CONFIG_88EU_AP_MODE
 	unsigned char bstart_bss;
-#endif
 	u8 update_channel_plan_by_ap_done;
 	/* recv_decache check for Action_public frame */
 	u8 action_public_dialog_token;
@@ -464,9 +440,7 @@ void Set_MSR(struct adapter *padapter, u8 type);
 
 u8 rtw_get_oper_ch(struct adapter *adapter);
 void rtw_set_oper_ch(struct adapter *adapter, u8 ch);
-u8 rtw_get_oper_bw(struct adapter *adapter);
 void rtw_set_oper_bw(struct adapter *adapter, u8 bw);
-u8 rtw_get_oper_choffset(struct adapter *adapter);
 void rtw_set_oper_choffset(struct adapter *adapter, u8 offset);
 
 void set_channel_bwmode(struct adapter *padapter, unsigned char channel,
@@ -481,7 +455,6 @@ void write_cam(struct adapter *padapter, u8 entry, u16 ctrl, u8 *mac, u8 *key);
 void clear_cam_entry(struct adapter *padapter, u8 entry);
 
 void invalidate_cam_all(struct adapter *padapter);
-void CAM_empty_entry(struct adapter * Adapter, u8 ucIndex);
 
 int allocate_fw_sta_entry(struct adapter *padapter);
 void flush_all_cam_entry(struct adapter *padapter);
@@ -492,7 +465,6 @@ u8 collect_bss_info(struct adapter *padapter, struct recv_frame *precv_frame,
 void update_network(struct wlan_bssid_ex *dst, struct wlan_bssid_ex *src,
 		    struct adapter *adapter, bool update_ie);
 
-int get_bsstype(unsigned short capability);
 u8 *get_my_bssid(struct wlan_bssid_ex *pnetwork);
 u16 get_beacon_interval(struct wlan_bssid_ex *bss);
 
@@ -536,9 +508,7 @@ unsigned int receive_disconnect(struct adapter *padapter,
 
 unsigned char get_highest_rate_idx(u32 mask);
 int support_short_GI(struct adapter *padapter, struct HT_caps_element *caps);
-unsigned int is_ap_in_tkip(struct adapter *padapter);
-unsigned int is_ap_in_wep(struct adapter *padapter);
-unsigned int should_forbid_n_rate(struct adapter *padapter);
+bool is_ap_in_tkip(struct adapter *padapter);
 
 void report_join_res(struct adapter *padapter, int res);
 void report_survey_event(struct adapter *padapter, struct recv_frame *precv_frame);
@@ -561,18 +531,14 @@ s32 dump_mgntframe_and_wait(struct adapter *padapter,
 s32 dump_mgntframe_and_wait_ack(struct adapter *padapter,
 				struct xmit_frame *pmgntframe);
 
-#ifdef CONFIG_88EU_P2P
 void issue_probersp_p2p(struct adapter *padapter, unsigned char *da);
 void issue_p2p_provision_request(struct adapter *padapter, u8 *pssid,
 				 u8 ussidlen, u8 *pdev_raddr);
 void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr);
 void issue_probereq_p2p(struct adapter *padapter, u8 *da);
-int issue_probereq_p2p_ex(struct adapter *adapter, u8 *da, int try_cnt,
-			  int wait_ms);
 void issue_p2p_invitation_response(struct adapter *padapter, u8 *raddr,
 				   u8 dialogToken, u8 success);
 void issue_p2p_invitation_request(struct adapter *padapter, u8* raddr);
-#endif /* CONFIG_88EU_P2P */
 void issue_beacon(struct adapter *padapter, int timeout_ms);
 void issue_probersp(struct adapter *padapter, unsigned char *da,
 		    u8 is_valid_p2p_probereq);
@@ -593,8 +559,6 @@ int issue_deauth(struct adapter *padapter, unsigned char *da,
 		 unsigned short reason);
 int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason,
 		    int try_cnt, int wait_ms);
-void issue_action_spct_ch_switch(struct adapter *padapter, u8 *ra, u8 new_ch,
-				 u8 ch_offset);
 void issue_action_BA(struct adapter *padapter, unsigned char *raddr,
 		     unsigned char action, unsigned short status);
 unsigned int send_delba(struct adapter *padapter, u8 initiator, u8 *addr);
@@ -668,8 +632,8 @@ void addba_timer_hdl(struct sta_info *psta);
 		_set_timer(&(mlmeext)->link_timer, (ms)); \
 	} while (0)
 
-int cckrates_included(unsigned char *rate, int ratelen);
-int cckratesonly_included(unsigned char *rate, int ratelen);
+bool cckrates_included(unsigned char *rate, int ratelen);
+bool cckratesonly_included(unsigned char *rate, int ratelen);
 
 void process_addba_req(struct adapter *padapter, u8 *paddba_req, u8 *addr);
 
@@ -855,7 +819,7 @@ static struct fwevent wlanevents[] = {
 	{0, &rtw_joinbss_event_callback},		/*10*/
 	{sizeof(struct stassoc_event), &rtw_stassoc_event_callback},
 	{sizeof(struct stadel_event), &rtw_stadel_event_callback},
-	{0, &rtw_atimdone_event_callback},
+	{0, NULL},
 	{0, rtw_dummy_event_callback},
 	{0, NULL},	/*15*/
 	{0, NULL},
@@ -865,7 +829,7 @@ static struct fwevent wlanevents[] = {
 	{0, NULL},	 /*20*/
 	{0, NULL},
 	{0, NULL},
-	{0, &rtw_cpwm_event_callback},
+	{0, NULL},
 	{0, NULL},
 };
 

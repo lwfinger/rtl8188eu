@@ -1,22 +1,6 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. i*/
+
 #ifndef __IOCTL_CFG80211_H__
 #define __IOCTL_CFG80211_H__
 
@@ -77,13 +61,11 @@ void rtw_cfg80211_indicate_disconnect(struct adapter *padapter);
 void rtw_cfg80211_indicate_scan_done(struct rtw_wdev_priv *pwdev_priv,
 				     bool aborted);
 
-#ifdef CONFIG_88EU_AP_MODE
 void rtw_cfg80211_indicate_sta_assoc(struct adapter *padapter,
 				     u8 *pmgmt_frame, uint frame_len);
 void rtw_cfg80211_indicate_sta_disassoc(struct adapter *padapter,
 					unsigned char *da,
 					unsigned short reason);
-#endif /* CONFIG_88EU_AP_MODE */
 
 void rtw_cfg80211_issue_p2p_provision_request(struct adapter *padapter,
 					      const u8 *buf, size_t len);

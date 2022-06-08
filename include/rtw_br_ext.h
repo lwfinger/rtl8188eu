@@ -1,31 +1,9 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+
 #ifndef _RTW_BR_EXT_H_
 #define _RTW_BR_EXT_H_
 
-#define MACADDRLEN		6
-#define _DEBUG_ERR		DBG_88E
-#define _DEBUG_INFO		DBG_88E
-#define DEBUG_WARN		DBG_88E
-#define DEBUG_INFO		DBG_88E
-#define DEBUG_ERR		DBG_88E
 #define GET_MY_HWADDR(padapter)		((padapter)->eeprompriv.mac_addr)
 
 #define NAT25_HASH_BITS		4
@@ -47,7 +25,6 @@ enum NAT25_METHOD {
 	NAT25_MIN,
 	NAT25_CHECK,
 	NAT25_INSERT,
-	NAT25_LOOKUP,
 	NAT25_PARSE,
 	NAT25_MAX
 };
@@ -57,7 +34,7 @@ struct br_ext_info {
 	unsigned int	macclone_enable;
 	unsigned int	dhcp_bcst_disable;
 	int	addPPPoETag;		/* 1: Add PPPoE relay-SID, 0: disable */
-	unsigned char	nat25_dmzMac[MACADDRLEN];
+	unsigned char	nat25_dmzMac[ETH_ALEN];
 	unsigned int	nat25sc_disable;
 };
 

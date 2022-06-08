@@ -1,28 +1,12 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+
 #ifndef __STA_INFO_H_
 #define __STA_INFO_H_
 
-#include <osdep_service.h>
-#include <drv_types.h>
-#include <wifi.h>
+#include "osdep_service.h"
+#include "drv_types.h"
+#include "wifi.h"
 
 #define IBSS_START_MAC_ID	2
 #define NUM_STA 32
@@ -140,7 +124,6 @@ struct sta_info {
 	/* sta_info: (AP & STA) CAP/INFO */
 
 	struct list_head asoc_list;
-#ifdef CONFIG_88EU_AP_MODE
 	struct list_head auth_list;
 
 	unsigned int expire_to;
@@ -180,9 +163,7 @@ struct sta_info {
 
 	u8 has_legacy_ac;
 	unsigned int sleepq_ac_len;
-#endif	/*  CONFIG_88EU_AP_MODE */
 
-#ifdef CONFIG_88EU_P2P
 	/* p2p priv data */
 	u8 is_p2p_device;
 	u8 p2p_status_code;
@@ -196,7 +177,6 @@ struct sta_info {
 	u8 secdev_types_list[32];/*  32/8 == 4; */
 	u16 dev_name_len;
 	u8 dev_name[32];
-#endif /* CONFIG_88EU_P2P */
 	u8 under_exist_checking;
 	u8 keep_alive_trycnt;
 
@@ -230,22 +210,11 @@ struct sta_info {
 	+ sta->sta_stats.rx_ctrl_pkts \
 	+ sta->sta_stats.rx_data_pkts)
 
-#define sta_last_rx_pkts(sta) \
-	(sta->sta_stats.last_rx_mgnt_pkts \
-	+ sta->sta_stats.last_rx_ctrl_pkts \
-	+ sta->sta_stats.last_rx_data_pkts)
-
 #define sta_rx_data_pkts(sta) \
 	(sta->sta_stats.rx_data_pkts)
 
 #define sta_last_rx_data_pkts(sta) \
 	(sta->sta_stats.last_rx_data_pkts)
-
-#define sta_rx_mgnt_pkts(sta) \
-	(sta->sta_stats.rx_mgnt_pkts)
-
-#define sta_last_rx_mgnt_pkts(sta) \
-	(sta->sta_stats.last_rx_mgnt_pkts)
 
 #define sta_rx_beacon_pkts(sta) \
 	(sta->sta_stats.rx_beacon_pkts)
@@ -253,29 +222,11 @@ struct sta_info {
 #define sta_last_rx_beacon_pkts(sta) \
 	(sta->sta_stats.last_rx_beacon_pkts)
 
-#define sta_rx_probereq_pkts(sta) \
-	(sta->sta_stats.rx_probereq_pkts)
-
-#define sta_last_rx_probereq_pkts(sta) \
-	(sta->sta_stats.last_rx_probereq_pkts)
-
 #define sta_rx_probersp_pkts(sta) \
 	(sta->sta_stats.rx_probersp_pkts)
 
 #define sta_last_rx_probersp_pkts(sta) \
 	(sta->sta_stats.last_rx_probersp_pkts)
-
-#define sta_rx_probersp_bm_pkts(sta) \
-	(sta->sta_stats.rx_probersp_bm_pkts)
-
-#define sta_last_rx_probersp_bm_pkts(sta) \
-	(sta->sta_stats.last_rx_probersp_bm_pkts)
-
-#define sta_rx_probersp_uo_pkts(sta) \
-	(sta->sta_stats.rx_probersp_uo_pkts)
-
-#define sta_last_rx_probersp_uo_pkts(sta) \
-	(sta->sta_stats.last_rx_probersp_uo_pkts)
 
 #define sta_update_last_rx_pkts(sta) \
 do { \
@@ -288,23 +239,6 @@ do { \
 	sta->sta_stats.last_rx_ctrl_pkts = sta->sta_stats.rx_ctrl_pkts; \
 	sta->sta_stats.last_rx_data_pkts = sta->sta_stats.rx_data_pkts; \
 } while (0)
-
-#define STA_RX_PKTS_ARG(sta) \
-	sta->sta_stats.rx_mgnt_pkts \
-	, sta->sta_stats.rx_ctrl_pkts \
-	, sta->sta_stats.rx_data_pkts
-
-#define STA_LAST_RX_PKTS_ARG(sta) \
-	sta->sta_stats.last_rx_mgnt_pkts \
-	, sta->sta_stats.last_rx_ctrl_pkts \
-	, sta->sta_stats.last_rx_data_pkts
-
-#define STA_RX_PKTS_DIFF_ARG(sta) \
-	sta->sta_stats.rx_mgnt_pkts - sta->sta_stats.last_rx_mgnt_pkts \
-	, sta->sta_stats.rx_ctrl_pkts - sta->sta_stats.last_rx_ctrl_pkts \
-	, sta->sta_stats.rx_data_pkts - sta->sta_stats.last_rx_data_pkts
-
-#define STA_PKTS_FMT "(m:%llu, c:%llu, d:%llu)"
 
 struct	sta_priv {
 	u8 *pallocated_stainfo_buf;
@@ -322,7 +256,6 @@ struct	sta_priv {
 	spinlock_t asoc_list_lock;
 	struct list_head asoc_list;
 
-#ifdef CONFIG_88EU_AP_MODE
 	struct list_head auth_list;
 	spinlock_t auth_list_lock;
 	u8 asoc_list_cnt;
@@ -346,8 +279,6 @@ struct	sta_priv {
 	u16 max_num_sta;
 
 	struct wlan_acl_pool acl_list;
-#endif
-
 };
 
 static inline u32 wifi_mac_hash(u8 *mac)
@@ -367,7 +298,7 @@ static inline u32 wifi_mac_hash(u8 *mac)
 }
 
 extern u32	_rtw_init_sta_priv(struct sta_priv *pstapriv);
-extern u32	_rtw_free_sta_priv(struct sta_priv *pstapriv);
+extern void _rtw_free_sta_priv(struct sta_priv *pstapriv);
 
 #define stainfo_offset_valid(offset) (offset < NUM_STA && offset >= 0)
 int rtw_stainfo_offset(struct sta_priv *stapriv, struct sta_info *sta);

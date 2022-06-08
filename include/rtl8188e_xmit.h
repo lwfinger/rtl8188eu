@@ -1,22 +1,6 @@
-/******************************************************************************
- *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
- ******************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+
 #ifndef __RTL8188E_XMIT_H__
 #define __RTL8188E_XMIT_H__
 
@@ -34,24 +18,22 @@
 #define QSLT_CMD						0x13
 
 /* For 88e early mode */
-#define SET_EARLYMODE_PKTNUM(__pAddr, __Value)			\
-	SET_BITS_TO_LE_4BYTE(__pAddr, 0, 3, __Value)
+#define SET_EARLYMODE_PKTNUM(__paddr, __value)			\
+	le32p_replace_bits((__le32 *)__paddr, __value, GENMASK(2, 0))
 #define SET_EARLYMODE_LEN0(__pAddr, __Value)			\
-	SET_BITS_TO_LE_4BYTE(__pAddr, 4, 12, __Value)
-#define SET_EARLYMODE_LEN1(__pAddr, __Value)			\
-	SET_BITS_TO_LE_4BYTE(__pAddr, 16, 12, __Value)
-#define SET_EARLYMODE_LEN2_1(__pAddr, __Value)			\
-	SET_BITS_TO_LE_4BYTE(__pAddr, 28, 4, __Value)
-#define SET_EARLYMODE_LEN2_2(__pAddr, __Value)			\
-	SET_BITS_TO_LE_4BYTE(__pAddr+4, 0, 8, __Value)
+	le32p_replace_bits((__le32 *)__paddr, __value, GENMASK(15, 4))
+#define SET_EARLYMODE_LEN1(__paddr, __value)			\
+	le32p_replace_bits((__le32 *)__paddr, __value, GENMASK(27, 16))
+#define SET_EARLYMODE_LEN2_1(__pdr, __vValue)			\
+	le32p_replace_bits((__le32 *)__paddr, __value, GENMASK(31, 28))
+#define SET_EARLYMODE_LEN2_2(__paddr, __value)			\
+	le32p_replace_bits((__le32 *)(__paddr + 4), __value, GENMASK(7, 0))
 #define SET_EARLYMODE_LEN3(__pAddr, __Value)			\
-	SET_BITS_TO_LE_4BYTE(__pAddr+4, 8, 12, __Value)
-#define SET_EARLYMODE_LEN4(__pAddr, __Value)			\
-	SET_BITS_TO_LE_4BYTE(__pAddr+4, 20, 12, __Value)
+	le32p_replace_bits((__le32 *)(__paddr + 4), __value, GENMASK(19, 8))
+#define SET_EARLYMODE_LEN4(__paAddr, __vValue)			\
+	le32p_replace_bits((__le32 *)(__paddr + 4), __value, GENMASK(31, 20))
 
-/*  */
 /* defined for TX DESC Operation */
-/*  */
 
 #define MAX_TID (15)
 
@@ -111,6 +93,8 @@ enum TXDESC_SC {
 #define SGI			BIT(6)
 #define USB_TXAGG_NUM_SHT	24
 
+#define USB_TXAGG_DESC_NUM	0x6
+
 #define txdesc_set_ccx_sw_88e(txdesc, value) \
 	do { \
 		((struct txdesc_88e *)(txdesc))->sw1 = (((value)>>8) & 0x0f); \
@@ -151,27 +135,18 @@ struct txrpt_ccx_88e {
 	u8 sw0;
 };
 
-#define txrpt_ccx_sw_88e(txrpt_ccx) ((txrpt_ccx)->sw0 + ((txrpt_ccx)->sw1<<8))
-#define txrpt_ccx_qtime_88e(txrpt_ccx)			\
-	((txrpt_ccx)->ccx_qtime0+((txrpt_ccx)->ccx_qtime1<<8))
-
 void rtl8188e_fill_fake_txdesc(struct adapter *padapter, u8 *pDesc,
 			       u32 BufferLen, u8 IsPsPoll, u8 IsBTQosNull);
 s32 rtl8188eu_init_xmit_priv(struct adapter *padapter);
-void rtl8188eu_free_xmit_priv(struct adapter *padapter);
 s32 rtl8188eu_hal_xmit(struct adapter *padapter, struct xmit_frame *frame);
 s32 rtl8188eu_mgnt_xmit(struct adapter *padapter, struct xmit_frame *frame);
 s32 rtl8188eu_xmit_buf_handler(struct adapter *padapter);
 #define hal_xmit_handler rtl8188eu_xmit_buf_handler
-void rtl8188eu_xmit_tasklet(void *priv);
-s32 rtl8188eu_xmitframe_complete(struct adapter *padapter,
+void rtl8188eu_xmit_tasklet(unsigned long priv);
+bool rtl8188eu_xmitframe_complete(struct adapter *padapter,
 				 struct xmit_priv *pxmitpriv,
 				 struct xmit_buf *pxmitbuf);
 
-void dump_txrpt_ccx_88e(void *buf);
 void handle_txrpt_ccx_88e(struct adapter *adapter, u8 *buf);
-
-void _dbg_dump_tx_info(struct adapter *padapter, int frame_tag,
-		       struct tx_desc *ptxdesc);
 
 #endif /* __RTL8188E_XMIT_H__ */
