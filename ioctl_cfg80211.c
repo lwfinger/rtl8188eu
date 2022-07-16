@@ -3212,7 +3212,13 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
 	enum tx_power_setting type, int dbm)
 #endif
 {
-	RTW_INFO("%s\n", __func__);
+	_adapter *padapter = wiphy_to_adapter(wiphy);
+	int dbm = MBM_TO_DBM(mbm);
+
+	if (dbm > 18)
+		dbm = 18;
+	padapter->mppriv.txpoweridx = (u8)dbm;
+	SetTxPower(padapter);
 	return 0;
 }
 
@@ -3222,9 +3228,9 @@ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
 #endif
 	int *dbm)
 {
-	RTW_INFO("%s\n", __func__);
+	_adapter *padapter = wiphy_to_adapter(wiphy);
 
-	*dbm = (12);
+	*dbm = padapter->mppriv.txpoweridx;
 
 	return 0;
 }
