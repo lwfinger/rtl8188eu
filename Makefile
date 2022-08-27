@@ -344,7 +344,7 @@ ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
 KVER  ?= $(if $(KERNELRELEASE),$(KERNELRELEASE),$(shell uname -r))
 KSRC := /lib/modules/$(KVER)/build
-MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
+MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/staging/r8188eu/
 INSTALL_PREFIX :=
 
 ifeq ($(CONFIG_MULTIDRV), y)
