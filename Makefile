@@ -100,7 +100,7 @@ ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
 KVER  ?= $(if $(KERNELRELEASE),$(KERNELRELEASE),$(shell uname -r))
 KSRC ?= $(if $(KERNEL_SRC),$(KERNEL_SRC),/lib/modules/$(KVER)/build)
-MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless
+MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/staging/r8188eu/
 INSTALL_PREFIX :=
 
 ifneq ($(KERNELRELEASE),)
@@ -162,9 +162,8 @@ install:
 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
 	@if [ -a /lib/modules/$(KVER)/kernel/drivers/staging/rtl8188eu/r8188eu.ko ] ; then modprobe -r r8188eu; fi;
 	@echo "blacklist r8188eu" > /etc/modprobe.d/50-8188eu.conf
-	cp rtl8188eufw.bin /lib/firmware/.
 	/sbin/depmod -a ${KVER}
-	mkdir -p /lib/firmware/rtlwifi
+	@mkdir -p /lib/firmware/rtlwifi
 	cp rtl8188eufw.bin /lib/firmware/rtlwifi/.
 
 modules_install:
