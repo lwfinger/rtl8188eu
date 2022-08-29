@@ -343,7 +343,7 @@ SUBARCH := $(shell uname -m | sed -e "s/i.86/i386/; s/ppc.*/powerpc/; s/armv.l/a
 ARCH ?= $(SUBARCH)
 CROSS_COMPILE ?=
 KVER  ?= $(if $(KERNELRELEASE),$(KERNELRELEASE),$(shell uname -r))
-KSRC := /lib/modules/$(KVER)/build
+KSRC ?= $(if $(KERNEL_SRC),$(KERNEL_SRC),/lib/modules/$(KVER)/build)
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/staging/r8188eu/
 INSTALL_PREFIX :=
 
