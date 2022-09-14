@@ -3269,7 +3269,7 @@ struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
 				if (_rtw_queue_empty(pframe_queue)) /* must be done after get_next and before break */
 					list_del_init(&ptxservq->tx_pending);
 
-				/* _exit_critical_ex(&phwxmit->sta_queue->lock, &irqL0); */
+				/* spin_unlock_irqrestore(&phwxmit->sta_queue->lock, irqL0); */
 
 				goto exit;
 			}
@@ -3278,7 +3278,7 @@ struct xmit_frame *rtw_dequeue_xframe(struct xmit_priv *pxmitpriv, struct hw_xmi
 
 		}
 
-		/* _exit_critical_ex(&phwxmit->sta_queue->lock, &irqL0); */
+		/* rtw_xmit.c(&phwxmit->sta_queue->lock, irqL0); */
 
 	}
 

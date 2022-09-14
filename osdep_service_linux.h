@@ -243,11 +243,6 @@ __inline static void _enter_critical_ex(_lock *plock, unsigned long *pirqL)
 }
 
 #endif
-__inline static void _exit_critical_ex(_lock *plock, unsigned long *pirqL)
-{
-	spin_unlock_irqrestore(plock, *pirqL);
-}
-
 __inline static void _enter_critical_bh(_lock *plock, unsigned long *pirqL)
 {
 	spin_lock_bh(plock);

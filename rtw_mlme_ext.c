@@ -11519,7 +11519,7 @@ void update_sta_info(_adapter *padapter, struct sta_info *psta)
 
 	_enter_critical_ex(&psta->lock, &irqL);
 	psta->state = _FW_LINKED;
-	_exit_critical_ex(&psta->lock, &irqL);
+	spin_unlock_irqrestore(&psta->lock, irqL);
 
 }
 

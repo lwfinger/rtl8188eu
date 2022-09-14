@@ -387,7 +387,7 @@ sint rtw_enqueue_recvbuf(struct recv_buf *precvbuf, _queue *queue)
 	list_del_init(&precvbuf->list);
 
 	list_add_tail(&precvbuf->list, get_list_head(queue));
-	_exit_critical_ex(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, irqL);
 	return _SUCCESS;
 }
 
@@ -411,7 +411,7 @@ struct recv_buf *rtw_dequeue_recvbuf(_queue *queue)
 		list_del_init(&precvbuf->list);
 	}
 
-	_exit_critical_ex(&queue->lock, &irqL);
+	spin_unlock_irqrestore(&queue->lock, irqL);
 
 	return precvbuf;
 }
@@ -2637,7 +2637,7 @@ static int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, un
 		else if (SN_EQUAL(pnextattrib->seq_num, pattrib->seq_num)) {
 			/* Duplicate entry is found!! Do not insert current entry. */
 
-			/* _exit_critical_ex(&ppending_recvframe_queue->lock, &irql); */
+			/* spin_unlock_irqrestore(&ppending_recvframe_queue->lock, irql); */
 
 			return false;
 		} else
@@ -2656,7 +2656,7 @@ static int enqueue_reorder_recvframe(struct recv_reorder_ctrl *preorder_ctrl, un
 	list_add_tail(&(prframe->u.hdr.list), plist);
 
 	/* spin_unlock(&ppending_recvframe_queue->lock); */
-	/* _exit_critical_ex(&ppending_recvframe_queue->lock, &irql); */
+	/* spin_unlock_irqrestore(&ppending_recvframe_queue->lock, irql); */
 
 
 	return true;
@@ -2701,7 +2701,7 @@ int recv_indicatepkts_in_order(_adapter *padapter, struct recv_reorder_ctrl *pre
 	if (bforced) {
 		pdbgpriv->dbg_rx_ampdu_forced_indicate_count++;
 		if (list_empty(phead)) {
-			/* _exit_critical_ex(&ppending_recvframe_queue->lock, &irql); */
+			/* spin_unlock_irqrestore(&ppending_recvframe_queue->lock); */
 			/* spin_unlock(&ppending_recvframe_queue->lock); */
 			return true;
 		}
