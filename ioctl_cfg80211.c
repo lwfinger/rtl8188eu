@@ -4618,7 +4618,7 @@ void rtw_cfg80211_rx_p2p_action_public(_adapter *adapter, union recv_frame *rfra
 
 indicate:
 	#if defined(RTW_DEDICATED_P2P_DEVICE)
-	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), get_ra(frame), &wdev))
+	if (rtw_cfg80211_redirect_pd_wdev(dvobj_to_wiphy(dvobj), wifi_get_ra(frame), &wdev))
 		if (0)
 			RTW_INFO("redirect to pd_wdev:%p\n", wdev);
 	#endif
