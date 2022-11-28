@@ -33,7 +33,7 @@ s32	rtl8188eu_init_xmit_priv(struct adapter *padapter)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
 	tasklet_init(&pxmitpriv->xmit_tasklet,
-	     (void(*)(unsigned long))rtl8188eu_xmit_tasklet,
+	     (void(*))rtl8188eu_xmit_tasklet,
 	     (unsigned long)padapter);
 
 	return _SUCCESS;

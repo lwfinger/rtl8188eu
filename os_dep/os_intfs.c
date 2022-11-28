@@ -626,7 +626,11 @@ void rtw_unregister_netdevs(struct dvobj_priv *dvobj)
 		if (padapter->DriverState != DRIVER_DISAPPEAR) {
 			struct wireless_dev *wdev = padapter->rtw_wdev;
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 19, 2)
 			wdev->current_bss = NULL;
+#else
+			wdev->connected = 0;
+#endif
 			pnetdev->reg_state = NETREG_REGISTERED;
 			unregister_netdev(pnetdev); /* will call netdev_close() */
 			rtw_proc_remove_one(pnetdev);
@@ -1031,7 +1035,11 @@ static int _rtw_drv_register_netdev(struct adapter *padapter, char *name)
 	/* alloc netdev name */
 	rtw_init_netdev_name(pnetdev, name);
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 17, 0)
 	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
+#else
+	dev_addr_set(pnetdev, padapter->eeprompriv.mac_addr);
+#endif
 
 	/* Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0) {

@@ -116,7 +116,11 @@ int pm_netdev_open(struct net_device *pnetdev,u8 bnormal);
 		spinlock_t	lock;
 	};
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 17, 0)
 	#define thread_exit() complete_and_exit(NULL, 0)
+#else
+	#define thread_exit() kthread_complete_and_exit(NULL, 0);
+#endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24))
 	#define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
