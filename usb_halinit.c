@@ -1339,6 +1339,14 @@ static u32 rtl8188eu_hal_init(PADAPTER Adapter)
 	_InitHWLed(Adapter);
 #endif /* CONFIG_LED */
 
+	if (Adapter->registrypriv.led_enable) {
+		value8 = rtw_read8(Adapter, REG_LEDCFG2) | BIT(5) | BIT(1);
+		/* Set bits 5 and 1 in REG_LEDCFG2
+		 * These changes will enable hardware LED blinking
+		 */
+		rtw_write8(Adapter, REG_LEDCFG2, value8);
+	}
+
 	/*  */
 	/* Joseph Note: Keep RfRegChnlVal for later use. */
 	/*  */
