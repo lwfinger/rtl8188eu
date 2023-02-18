@@ -410,10 +410,7 @@ obj-m := 8188eu.o
 
 else
 
-all: test modules
-
-test:
-	@if [ !  -e  ./.git ] ; then echo $(MSG); exit 1; fi;
+all: modules
 
 modules:
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(CURDIR)  modules
