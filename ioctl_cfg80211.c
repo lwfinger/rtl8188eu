@@ -2023,6 +2023,8 @@ static int rtw_cfg80211_set_probe_req_wpsp2pie(_adapter *padapter, char *buf, in
 	RTW_INFO("%s, ielen=%d\n", __func__, len);
 #endif
 
+	if (!pmlmepriv)
+		return -EINVAL;
 	if (len > 0) {
 		wps_ie = rtw_get_wps_ie(buf, len, NULL, &wps_ielen);
 		if (wps_ie) {
