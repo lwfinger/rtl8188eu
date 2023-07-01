@@ -12892,13 +12892,13 @@ u8 createbss_hdl(_adapter *padapter, u8 *pbuf)
 		flush_all_cam_entry(padapter);
 
 		pdev_network->Length = get_WLAN_BSSID_EX_sz(pdev_network);
-		memcpy(pnetwork, pdev_network, FIELD_OFFSET(WLAN_BSSID_EX, IELength));
-		pnetwork->IELength = pdev_network->IELength;
-
-		if (pnetwork->IELength > MAX_IE_SZ) {
+		if (FIELD_OFFSET(WLAN_BSSID_EX, IELength) > MAX_IE_SZ) {
 			ret = H2C_PARAMETERS_ERROR;
 			goto ibss_post_hdl;
 		}
+
+		memcpy(pnetwork, pdev_network, FIELD_OFFSET(WLAN_BSSID_EX, IELength));
+		pnetwork->IELength = pdev_network->IELength;
 
 		memcpy(pnetwork->IEs, pdev_network->IEs, pnetwork->IELength);
 		start_create_ibss(padapter);
