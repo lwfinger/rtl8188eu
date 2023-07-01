@@ -5,7 +5,7 @@
 #define __WLAN_BSSDEF_H__
 
 
-#define MAX_IE_SZ	1024
+#define MAX_IE_SZ	768
 
 #define NDIS_802_11_LENGTH_SSID         32
 #define NDIS_802_11_LENGTH_RATES        8
