@@ -12864,6 +12864,8 @@ u8 createbss_hdl(_adapter *padapter, u8 *pbuf)
 
 	/* below is for ad-hoc master */
 	if (parm->adhoc) {
+		int tmp_len;
+
 		rtw_warn_on(pdev_network->InfrastructureMode != Ndis802_11IBSS);
 		rtw_joinbss_reset(padapter);
 
@@ -12892,12 +12894,14 @@ u8 createbss_hdl(_adapter *padapter, u8 *pbuf)
 		flush_all_cam_entry(padapter);
 
 		pdev_network->Length = get_WLAN_BSSID_EX_sz(pdev_network);
-		if (FIELD_OFFSET(WLAN_BSSID_EX, IELength) > MAX_IE_SZ) {
+		tmp_len = FIELD_OFFSET(WLAN_BSSID_EX, IELength);
+		if (tmp_len >= MAX_IE_SZ || tmp_len >= sizeof(pnetwork)){
+			pr_info("********** tmp_len too large, value = 0x%x\n", tmp_len);
 			ret = H2C_PARAMETERS_ERROR;
 			goto ibss_post_hdl;
 		}
 
-		memcpy(pnetwork, pdev_network, FIELD_OFFSET(WLAN_BSSID_EX, IELength));
+		memcpy(pnetwork, pdev_network, tmp_len);
 		pnetwork->IELength = pdev_network->IELength;
 
 		memcpy(pnetwork->IEs, pdev_network->IEs, pnetwork->IELength);
