@@ -8,7 +8,7 @@
 	#include <rtw_wifi_regd.h>
 #endif /* CONFIG_IOCTL_CFG80211 */
 #include <hal_data.h>
-
+#include <linux/printk.h>
 
 static struct mlme_handler mlme_sta_tbl[] = {
 	{WIFI_ASSOCREQ,		"OnAssocReq",	&OnAssocReq},
@@ -12894,7 +12894,7 @@ u8 createbss_hdl(_adapter *padapter, u8 *pbuf)
 		flush_all_cam_entry(padapter);
 
 		pdev_network->Length = get_WLAN_BSSID_EX_sz(pdev_network);
-		tmp_len = FIELD_OFFSET(WLAN_BSSID_EX, IELength);
+		tmp_len = pdev_network->IELength;
 		if (tmp_len >= MAX_IE_SZ || tmp_len >= sizeof(pnetwork)){
 			pr_info("********** tmp_len too large, value = 0x%x\n", tmp_len);
 			ret = H2C_PARAMETERS_ERROR;
@@ -12907,7 +12907,7 @@ u8 createbss_hdl(_adapter *padapter, u8 *pbuf)
 		memcpy(pnetwork->IEs, pdev_network->IEs, pnetwork->IELength);
 		start_create_ibss(padapter);
 	} else {
-		rtw_warn_on(1);
+		pr_info("NOT an ad-hoc master\n");
 		ret = H2C_PARAMETERS_ERROR;
 	}
 
