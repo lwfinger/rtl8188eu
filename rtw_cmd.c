@@ -1170,15 +1170,14 @@ static u8 rtw_createbss_cmd(_adapter  *adapter, int flags, bool adhoc,
 		res = _FAIL;
 		goto exit;
 	}
-	if (adhoc) {
-		/* for now, adhoc doesn't support ch,bw,offset request */
-		parm->adhoc = 1;
-	} else {
-		parm->adhoc = 0;
-		parm->req_ch = req_ch;
-		parm->req_bw = req_bw;
-		parm->req_offset = req_offset;
-	}
+	/* LWF July 6, 2023
+	 * Disable the setting of parm->adhoc as it seems to screw up
+	 AP operations.
+	 */
+	parm->adhoc = 0;
+	parm->req_ch = req_ch;
+	parm->req_bw = req_bw;
+	parm->req_offset = req_offset;
 
 	if (flags & RTW_CMDF_DIRECTLY) {
 		/* no need to enqueue, do the cmd hdl directly and free cmd parameter */
@@ -1219,19 +1218,19 @@ exit:
 inline u8 rtw_create_ibss_cmd(_adapter *adapter, int flags)
 {
 /* for now, adhoc doesn't support ch,bw,offset request */
-	return rtw_createbss_cmd(adapter, flags, 1,
+	return rtw_createbss_cmd(adapter, flags, true,
 				 0, -1, -1);
 }
 
 inline u8 rtw_startbss_cmd(_adapter *adapter, int flags)
 {
 /* excute entire AP setup cmd */
-	return rtw_createbss_cmd(adapter, flags, 0, 0, -1, -1);
+	return rtw_createbss_cmd(adapter, flags, false, 0, -1, -1);
 }
 
 inline u8 rtw_change_bss_chbw_cmd(_adapter *adapter, int flags, s16 req_ch, s8 req_bw, s8 req_offset)
 {
-	return rtw_createbss_cmd(adapter, flags, 0,
+	return rtw_createbss_cmd(adapter, flags, false,
 				 req_ch, req_bw, req_offset);
 }
 

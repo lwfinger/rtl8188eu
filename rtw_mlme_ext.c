@@ -12908,7 +12908,7 @@ u8 createbss_hdl(_adapter *padapter, u8 *pbuf)
 		start_create_ibss(padapter);
 	} else {
 		pr_info("NOT an ad-hoc master\n");
-		ret = H2C_PARAMETERS_ERROR;
+		return  H2C_PARAMETERS_ERROR;
 	}
 
 ibss_post_hdl:
