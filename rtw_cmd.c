@@ -1174,7 +1174,7 @@ static u8 rtw_createbss_cmd(_adapter  *adapter, int flags, bool adhoc,
 	 * Disable the setting of parm->adhoc as it seems to screw up
 	 AP operations.
 	 */
-	parm->adhoc = 0;
+	parm->adhoc = false;
 	parm->req_ch = req_ch;
 	parm->req_bw = req_bw;
 	parm->req_offset = req_offset;
@@ -1218,8 +1218,9 @@ exit:
 inline u8 rtw_create_ibss_cmd(_adapter *adapter, int flags)
 {
 /* for now, adhoc doesn't support ch,bw,offset request */
-	return rtw_createbss_cmd(adapter, flags, true,
-				 0, -1, -1);
+//	return rtw_createbss_cmd(adapter, flags, true,
+//				 0, -1, -1);
+	return 0;
 }
 
 inline u8 rtw_startbss_cmd(_adapter *adapter, int flags)
@@ -1269,7 +1270,7 @@ u8 rtw_joinbss_cmd(_adapter  *padapter, struct wlan_network *pnetwork)
 	if (check_fwstate(pmlmepriv, WIFI_STATION_STATE | WIFI_ADHOC_STATE) != true) {
 		switch (ndis_network_mode) {
 		case Ndis802_11IBSS:
-			set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
+//			set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
 			break;
 		case Ndis802_11Infrastructure:
 			set_fwstate(pmlmepriv, WIFI_STATION_STATE);

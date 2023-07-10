@@ -1178,7 +1178,7 @@ void rtw_surveydone_event_callback(_adapter	*adapter, u8 *pbuf)
 					rtw_generate_random_ibss(pibss);
 
 					/*pmlmepriv->fw_state = WIFI_ADHOC_MASTER_STATE;*/
-					init_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
+//					init_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
 
 					if (rtw_create_ibss_cmd(adapter, 0) != _SUCCESS)
 						RTW_ERR("rtw_create_ibss_cmd FAIL\n");
@@ -2480,7 +2480,7 @@ void rtw_stadel_event_callback(_adapter *adapter, u8 *pbuf)
 			rtw_generate_random_ibss(pibss);
 
 			if (check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)) {
-				set_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
+//				set_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
 				_clr_fwstate_(pmlmepriv, WIFI_ADHOC_STATE);
 			}
 

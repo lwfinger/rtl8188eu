@@ -196,7 +196,7 @@ u8 rtw_set_802_11_bssid(_adapter *padapter, u8 *bssid)
 
 			if ((check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) )) {
 				_clr_fwstate_(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
-				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
+//				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
 			}
 		}
 	}
@@ -266,7 +266,7 @@ u8 rtw_set_802_11_ssid(_adapter *padapter, NDIS_802_11_SSID *ssid)
 
 					if (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) ) {
 						_clr_fwstate_(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
-						set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
+//						set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
 					}
 				} else {
 					goto release_mlme_lock;/* it means driver is in WIFI_ADHOC_MASTER_STATE, we needn't create bss again. */
@@ -287,7 +287,7 @@ u8 rtw_set_802_11_ssid(_adapter *padapter, NDIS_802_11_SSID *ssid)
 
 			if (check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) ) {
 				_clr_fwstate_(pmlmepriv, WIFI_ADHOC_MASTER_STATE);
-				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
+//				set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
 			}
 		}
 	}
@@ -429,7 +429,7 @@ u8 rtw_set_802_11_infrastructure_mode(_adapter *padapter,
 
 		switch (networktype) {
 		case Ndis802_11IBSS:
-			set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
+//			set_fwstate(pmlmepriv, WIFI_ADHOC_STATE);
 			break;
 
 		case Ndis802_11Infrastructure:
