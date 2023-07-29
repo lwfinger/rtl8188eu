@@ -382,7 +382,7 @@ int rtw_change_ifname(struct adapter *padapter, const char *ifname)
 
 	rtw_init_netdev_name(pnetdev, ifname);
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 17, 0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
 	memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 #else
 	dev_addr_set(pnetdev, padapter->eeprompriv.mac_addr);
